@@ -1,7 +1,7 @@
 ﻿#region License
 
 /*
- * Copyright 2002-2010 the original author or authors.
+ * Copyright 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,9 +25,6 @@ using System.Collections.Generic;
 
 namespace Spring.Util
 {
-    // TODO : Check .NET 3.5 class
-    // TODO : Back to original Java behavior Expand(params string[]) method ?
-
     /// <summary>
     /// Represents a URI template. An URI template is a URI-like String that contained variables 
     /// marked of in braces {}, which can be expanded to produce a URI.
@@ -38,8 +35,11 @@ namespace Spring.Util
     public class UriTemplate
     {
         /** Captures URI template variable names. */
+#if SILVERLIGHT
+        private static Regex VARIABLENAMES_REGEX = new Regex(@"\{([^/]+?)\}");
+#else
         private static Regex VARIABLENAMES_REGEX = new Regex(@"\{([^/]+?)\}", RegexOptions.Compiled);
-        //private static Regex VARIABLENAMES_REGEX = new Regex(@"\{[^{}]+\}", RegexOptions.Compiled);
+#endif
         
         /** Replaces template variables in the URI template. */
 	    private static string VARIABLEVALUE_PATTERN = "(?<{0}>.*)";
@@ -110,20 +110,6 @@ namespace Spring.Util
             }
 
             return new Uri(uri, UriKind.RelativeOrAbsolute);
-
-            //string[] uriVariableValues = new String[this.variableNames.Length];
-            //for (int i = 0; i < this.variableNames.Length; i++)
-            //{
-            //    string variableName = this.variableNames[i];
-            //    if (!uriVariables.ContainsKey(variableName))
-            //    {
-            //        throw new ArgumentException(String.Format(
-            //            "'uriVariables' dictionary has no value for '{0}'",
-            //            variableName));
-            //    }
-            //    uriVariableValues[i] = uriVariables[variableName];
-            //}
-            //return Expand(uriVariableValues);
         }
 
         /// <summary>
@@ -208,33 +194,14 @@ namespace Spring.Util
             return this.uriTemplate;
         }
 
-        //private static string[] GetVariableNames(string uriTemplate)
-        //{
-        //    List<string> variableNames = new List<string>();
-        //    foreach (Match match in VARIABLENAMES_REGEX.Matches(uriTemplate))
-        //    {
-        //        string token = match.Value;
-        //        token = token.Substring(1, token.Length - 2);
-
-        //        if (!variableNames.Contains(token))
-        //        {
-        //            variableNames.Add(token);
-        //        }
-        //    }
-
-        //    return variableNames.ToArray();
-        //}
-
         private static string Replace(string uriTemplate, string token, string value)
         {
             string quotedToken = BRACE_LEFT + token + BRACE_RIGHT;
             return uriTemplate.Replace(quotedToken, value);
-        }
-
-        /**
-	     * Static inner class to parse uri template strings into a matching regular expression.
-	     */
-	    private class Parser 
+        }	    
+        
+        // Static inner class to parse uri template strings into a matching regular expression.
+        private class Parser 
         {
 		    private List<String> variableNames = new List<String>();
 		    private StringBuilder patternBuilder = new StringBuilder();
@@ -277,7 +244,7 @@ namespace Spring.Util
 
             public Regex GetMatchRegex() 
             {
-			    return new Regex(this.patternBuilder.ToString(), RegexOptions.Compiled);
+                return new Regex(this.patternBuilder.ToString());
 		    }
 	    }
     }

@@ -1,7 +1,7 @@
 ﻿#region License
 
 /*
- * Copyright 2002-2010 the original author or authors.
+ * Copyright 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,11 +19,7 @@
 #endregion
 
 using System;
-using System.IO;
-using System.Net;
 using System.Collections.Generic;
-
-using Spring.Util;
 
 namespace Spring.Http.Converters
 {
@@ -33,7 +29,7 @@ namespace Spring.Http.Converters
     /// <remarks>
     /// This base class adds support for setting supported <see cref="MediaType"/>s, through the
     /// <see cref="P:SupportedMediaTypes"/> property. 
-    /// It also adds support for 'Content-Type' when writing to the HTTP request.
+    /// It also adds support for 'Content-Type' when writing to the HTTP message.
     /// </remarks>
     /// <author>Arjen Poutsma</author>
     /// <author>Juergen Hoeller</author>
@@ -41,21 +37,12 @@ namespace Spring.Http.Converters
     public abstract class AbstractHttpMessageConverter : IHttpMessageConverter
     {
         #region Logging
-
+#if !SILVERLIGHT
         private static readonly Common.Logging.ILog LOG = Common.Logging.LogManager.GetLogger(typeof(AbstractHttpMessageConverter));
-
+#endif
         #endregion
 
         private IList<MediaType> _supportedMediaTypes = new List<MediaType>();
-
-        /// <summary>
-        /// Gets or sets the list of <see cref="MediaType"/> objects supported by this converter.
-        /// </summary>
-        public IList<MediaType> SupportedMediaTypes
-        {
-            get { return _supportedMediaTypes; }
-            set { _supportedMediaTypes = value; }
-        }
 
         #region Constructor(s)
 
@@ -118,7 +105,16 @@ namespace Spring.Http.Converters
 		}
 
         /// <summary>
-        /// Read an object of the given type form the given HTTP response, and returns it.
+        /// Gets or sets the list of <see cref="MediaType"/> objects supported by this converter.
+        /// </summary>
+        public IList<MediaType> SupportedMediaTypes
+        {
+            get { return _supportedMediaTypes; }
+            set { _supportedMediaTypes = value; }
+        }
+
+        /// <summary>
+        /// Read an object of the given type form the given HTTP message, and returns it.
         /// </summary>
         /// <remarks>
         /// This implementation simple delegates to <see cre="ReadInternal"/> method. 
@@ -128,44 +124,47 @@ namespace Spring.Http.Converters
         /// The type of object to return. This type must have previously been passed to the 
         /// <see cref="M:CanRead"/> method of this interface, which must have returned <see langword="true"/>.
         /// </typeparam>
-        /// <param name="response">The HTTP response to read from.</param>
+        /// <param name="message">The HTTP message to read from.</param>
         /// <returns>The converted object.</returns>
-        public T Read<T>(HttpWebResponse response) where T : class
+        /// <exception cref="HttpMessageNotReadableException">In case of conversion errors</exception>
+        public T Read<T>(IHttpInputMessage message) where T : class
         {
-            return ReadInternal<T>(response);
+            return ReadInternal<T>(message);
         }
 
         /// <summary>
-        /// Write an given object to the given HTTP request.
+        /// Write an given object to the given HTTP message.
         /// </summary>
         /// <remarks>
         /// This implementation delegates to <see cref="M:GetDefaultContentType"/> method if a content 
         /// type was not provided, and calls <see cref="M:WriteInternal"/>.
         /// </remarks>
         /// <param name="content">
-        /// The object to write to the HTTP request. The type of this object must have previously been 
+        /// The object to write to the HTTP message. The type of this object must have previously been 
         /// passed to the <see cref="M:CanWrite"/> method of this interface, which must have returned <see langword="true"/>.
         /// </param>
-        /// <param name="mediaType">
+        /// <param name="contentType">
         /// The content type to use when writing. May be null to indicate that the default content type of the converter must be used. 
         /// If not null, this media type must have previously been passed to the <see cref="M:CanWrite"/> method of this interface, 
         /// which must have returned <see langword="true"/>.
         /// </param>
-        /// <param name="request">The HTTP request to write to.</param>
-        public void Write(object content, MediaType mediaType, HttpWebRequest request)
+        /// <param name="message">The HTTP message to write to.</param>
+        /// <exception cref="HttpMessageNotWritableException">In case of conversion errors</exception>
+        public void Write(object content, MediaType contentType, IHttpOutputMessage message)
         {
-            if (!StringUtils.HasText(request.ContentType))
+            HttpHeaders headers = message.Headers;
+            if (headers.ContentType == null)
             {
-                if (mediaType == null || mediaType.IsWildcardType || mediaType.IsWildcardSubtype)
+                if (contentType == null || contentType.IsWildcardType || contentType.IsWildcardSubtype)
                 {
-                    mediaType = GetDefaultContentType(content.GetType());
+                    contentType = GetDefaultContentType(content.GetType());
                 }
-                if (mediaType != null)
+                if (contentType != null)
                 {
-                    request.ContentType = mediaType.ToString();
+                    headers.ContentType = contentType;
                 }
             }
-            WriteInternal(content, request);
+            WriteInternal(content, message);
         }
 
         #endregion
@@ -245,51 +244,17 @@ namespace Spring.Http.Converters
         /// Abstract template method that reads the actualy object. Invoked from <see cref="M:Read"/>.
         /// </summary>
         /// <typeparam name="T">The type of object to return.</typeparam>
-        /// <param name="response">The HTTP response to read from.</param>
+        /// <param name="message">The HTTP message to read from.</param>
         /// <returns>The converted object.</returns>
-        protected abstract T ReadInternal<T>(HttpWebResponse response) where T : class;
+        /// <exception cref="HttpMessageNotReadableException">In case of conversion errors</exception>
+        protected abstract T ReadInternal<T>(IHttpInputMessage message) where T : class;
 
         /// <summary>
         /// Abstract template method that writes the actual body. Invoked from <see cref="M:Write"/>.
         /// </summary>
-        /// <param name="content">The object to write to the HTTP request.</param>
-        /// <param name="request">The HTTP request to write to.</param>
-        protected abstract void WriteInternal(object content, HttpWebRequest request);
-
-        #region Inner class definitions
-
-        // TODO : Move this class ?
-        internal class IgnoreCloseMemoryStream : MemoryStream
-        {
-            public IgnoreCloseMemoryStream()
-                : base()
-            {
-            }
-
-            public override void Close()
-            {
-            }
-
-            public void CopyToAndClose(Stream destination)
-            {
-                this.Position = 0;
-
-#if NET_4_0
-                this.CopyTo(destination);
-#else
-                // From .NET 4.0 Stream.CopyTo method
-                int bytesCount;
-                byte[] buffer = new byte[0x1000];
-                while ((bytesCount = this.Read(buffer, 0, buffer.Length)) != 0)
-                {
-                    destination.Write(buffer, 0, bytesCount);
-                }
-#endif
-
-                base.Close();
-            }
-        }
-
-        #endregion
+        /// <param name="content">The object to write to the HTTP message.</param>
+        /// <param name="message">The HTTP message to write to.</param>
+        /// <exception cref="HttpMessageNotWritableException">In case of conversion errors</exception>
+        protected abstract void WriteInternal(object content, IHttpOutputMessage message);
     }
 }

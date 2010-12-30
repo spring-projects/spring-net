@@ -1,7 +1,8 @@
-﻿#region License
+﻿#if !SILVERLIGHT
+#region License
 
 /*
- * Copyright 2002-2010 the original author or authors.
+ * Copyright 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +29,8 @@ namespace Spring.Http.Rest
     /// Interface specifying a basic set of RESTful operations. 
     /// </summary>
     /// <remarks>
-    /// Not often used directly, but a useful option to enhance testability, as it can easily be mocked or stubbed.
+    /// Not often used directly, but a useful option to enhance testability, 
+    /// as it can easily be mocked or stubbed.
     /// </remarks>
     /// <see cref="RestTemplate"/>
     /// <author>Arjen Poutsma</author>
@@ -36,6 +38,9 @@ namespace Spring.Http.Rest
     /// <author>Bruno Baia (.NET)</author>
     public interface IRestOperations
     {
+        // TODO : use object[] instead of string[]
+        // TODO : use IDictionary<string, object> instead of IDictionary<string, string>
+
         #region GET
 
         /// <summary>
@@ -121,7 +126,7 @@ namespace Spring.Http.Rest
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>All HTTP headers of that resource</returns>
-        WebHeaderCollection HeadForHeaders(string url, params string[] uriVariables);
+        HttpHeaders HeadForHeaders(string url, params string[] uriVariables);
 
         /// <summary>
         /// Retrieve all headers of the resource specified by the URI template.
@@ -132,14 +137,14 @@ namespace Spring.Http.Rest
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         /// <returns>All HTTP headers of that resource</returns>
-        WebHeaderCollection HeadForHeaders(string url, IDictionary<string, string> uriVariables);
+        HttpHeaders HeadForHeaders(string url, IDictionary<string, string> uriVariables);
 
         /// <summary>
         /// Retrieve all headers of the resource specified by the URI template.
         /// </summary>
         /// <param name="url">The URL.</param>
         /// <returns>All HTTP headers of that resource</returns>
-        WebHeaderCollection HeadForHeaders(Uri url); //throws RestClientException;
+        HttpHeaders HeadForHeaders(Uri url);
 
         #endregion
 
@@ -155,7 +160,7 @@ namespace Spring.Http.Rest
         /// URI Template variables are expanded using the given URI variables, if any.
         /// </para>
         /// <para>
-        /// The request parameter can be a <see cref="HttpRequestMessage"/> in order to add additional HTTP headers to the request.
+        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
         /// </para>
         /// </remarks>
         /// <param name="url">The URL.</param>
@@ -174,7 +179,7 @@ namespace Spring.Http.Rest
         /// URI Template variables are expanded using the given dictionary.
         /// </para>
         /// <para>
-        /// The request parameter can be a <see cref="HttpRequestMessage"/> in order to add additional HTTP headers to the request.
+        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
         /// </para>
         /// </remarks>
         /// <param name="url">The URL.</param>
@@ -189,7 +194,7 @@ namespace Spring.Http.Rest
         /// This header typically indicates where the new resource is stored.
         /// </summary>
         /// <remarks>
-        /// The request parameter can be a <see cref="HttpRequestMessage"/> in order to add additional HTTP headers to the request.
+        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
         /// </remarks>
         /// <param name="url">The URL.</param>
         /// <param name="request">The Object to be POSTed, may be null.</param>
@@ -205,7 +210,7 @@ namespace Spring.Http.Rest
         /// URI Template variables are expanded using the given URI variables, if any.
         /// </para>
         /// <para>
-        /// The request parameter can be a <see cref="HttpRequestMessage"/> in order to add additional HTTP headers to the request.
+        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
         /// </para>
         /// </remarks>
         /// <typeparam name="T">The type of the response value.</typeparam>
@@ -224,7 +229,7 @@ namespace Spring.Http.Rest
         /// URI Template variables are expanded using the given dictionary.
         /// </para>
         /// <para>
-        /// The request parameter can be a <see cref="HttpRequestMessage"/> in order to add additional HTTP headers to the request.
+        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
         /// </para>
         /// </remarks>
         /// <typeparam name="T">The type of the response value.</typeparam>
@@ -239,7 +244,7 @@ namespace Spring.Http.Rest
         /// and returns the representation found in the response. 
         /// </summary>
         /// <remarks>
-        /// The request parameter can be a <see cref="HttpRequestMessage"/> in order to add additional HTTP headers to the request.
+        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
         /// </remarks>
         /// <typeparam name="T">The type of the response value.</typeparam>
         /// <param name="url">The URL.</param>
@@ -256,7 +261,7 @@ namespace Spring.Http.Rest
         /// URI Template variables are expanded using the given URI variables, if any.
         /// </para>
         /// <para>
-        /// The request parameter can be a <see cref="HttpRequestMessage"/> in order to add additional HTTP headers to the request.
+        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
         /// </para>
         /// </remarks>
         /// <typeparam name="T">The type of the response value.</typeparam>
@@ -275,7 +280,7 @@ namespace Spring.Http.Rest
         /// URI Template variables are expanded using the given dictionary.
         /// </para>
         /// <para>
-        /// The request parameter can be a <see cref="HttpRequestMessage"/> in order to add additional HTTP headers to the request.
+        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
         /// </para>
         /// </remarks>
         /// <typeparam name="T">The type of the response value.</typeparam>
@@ -290,7 +295,7 @@ namespace Spring.Http.Rest
         /// and returns the response as <see cref="HttpResponseMessage{T}"/>. 
         /// </summary>
         /// <remarks>
-        /// The request parameter can be a <see cref="HttpRequestMessage"/> in order to add additional HTTP headers to the request.
+        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
         /// </remarks>
         /// <typeparam name="T">The type of the response value.</typeparam>
         /// <param name="url">The URL.</param>
@@ -307,7 +312,7 @@ namespace Spring.Http.Rest
         /// URI Template variables are expanded using the given URI variables, if any.
         /// </para>
         /// <para>
-        /// The request parameter can be a <see cref="HttpRequestMessage"/> in order to add additional HTTP headers to the request.
+        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
         /// </para>
         /// </remarks>
         /// <param name="url">The URL.</param>
@@ -325,7 +330,7 @@ namespace Spring.Http.Rest
         /// URI Template variables are expanded using the given dictionary.
         /// </para>
         /// <para>
-        /// The request parameter can be a <see cref="HttpRequestMessage"/> in order to add additional HTTP headers to the request.
+        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
         /// </para>
         /// </remarks>
         /// <param name="url">The URL.</param>
@@ -339,7 +344,7 @@ namespace Spring.Http.Rest
         /// and returns the response with no entity as <see cref="HttpResponseMessage"/>. 
         /// </summary>
         /// <remarks>
-        /// The request parameter can be a <see cref="HttpRequestMessage"/> in order to add additional HTTP headers to the request.
+        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
         /// </remarks>
         /// <param name="url">The URL.</param>
         /// <param name="request">The Object to be POSTed, may be null.</param>
@@ -358,7 +363,7 @@ namespace Spring.Http.Rest
         /// URI Template variables are expanded using the given URI variables, if any.
         /// </para>
         /// <para>
-        /// The request parameter can be a <see cref="HttpRequestMessage"/> in order to add additional HTTP headers to the request.
+        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
         /// </para>
         /// </remarks>
         /// <param name="url">The URL.</param>
@@ -374,7 +379,7 @@ namespace Spring.Http.Rest
         /// URI Template variables are expanded using the given dictionary.
         /// </para>
         /// <para>
-        /// The request parameter can be a <see cref="HttpRequestMessage"/> in order to add additional HTTP headers to the request.
+        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
         /// </para>
         /// </remarks>
         /// <param name="url">The URL.</param>
@@ -386,7 +391,7 @@ namespace Spring.Http.Rest
         /// Create or update a resource by PUTting the given object to the URI.
         /// </summary>
         /// <remarks>
-        /// The request parameter can be a <see cref="HttpRequestMessage"/> in order to add additional HTTP headers to the request.
+        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
         /// </remarks>
         /// <param name="url">The URL.</param>
         /// <param name="request">The Object to be PUT, may be null.</param>
@@ -461,7 +466,7 @@ namespace Spring.Http.Rest
         #region Exchange
 
         /// <summary>
-        /// Execute the HTTP request to the given URI template, writing the given request message to the request, 
+        /// Execute the HTTP method to the given URI template, writing the given request message to the request, 
         /// and returns the response as <see cref="HttpResponseMessage{T}"/>.
         /// </summary>
         /// <remarks>
@@ -469,13 +474,16 @@ namespace Spring.Http.Rest
         /// </remarks>
         /// <typeparam name="T">The type of the response value.</typeparam>
         /// <param name="url">The URL.</param>
-        /// <param name="requestMessage">The HTTP request message to write to the request.</param>
+        /// <param name="method">The HTTP method (GET, POST, etc.)</param>
+        /// <param name="requestEntity">
+        /// The HTTP entity (headers and/or body) to write to the request, may be <see langword="null"/>.
+        /// </param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>The HTTP response message.</returns>
-        HttpResponseMessage<T> Exchange<T>(string url, HttpRequestMessage requestMessage, params string[] uriVariables) where T : class;
+        HttpResponseMessage<T> Exchange<T>(string url, HttpMethod method, HttpEntity requestEntity, params string[] uriVariables) where T : class;
 
         /// <summary>
-        /// Execute the HTTP request to the given URI template, writing the given request message to the request, 
+        /// Execute the HTTP method to the given URI template, writing the given request message to the request, 
         /// and returns the response as <see cref="HttpResponseMessage{T}"/>.
         /// </summary>
         /// <remarks>
@@ -483,62 +491,77 @@ namespace Spring.Http.Rest
         /// </remarks>
         /// <typeparam name="T">The type of the response value.</typeparam>
         /// <param name="url">The URL.</param>
-        /// <param name="requestMessage">The HTTP request message to write to the request.</param>
+        /// <param name="method">The HTTP method (GET, POST, etc.)</param>
+        /// <param name="requestEntity">
+        /// The HTTP entity (headers and/or body) to write to the request, may be <see langword="null"/>.
+        /// </param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         /// <returns>The HTTP response message.</returns>
-        HttpResponseMessage<T> Exchange<T>(string url, HttpRequestMessage requestMessage, IDictionary<string, string> uriVariables) where T : class;
+        HttpResponseMessage<T> Exchange<T>(string url, HttpMethod method, HttpEntity requestEntity, IDictionary<string, string> uriVariables) where T : class;
 
         /// <summary>
-        /// Execute the HTTP request to the given URI template, writing the given request message to the request, 
+        /// Execute the HTTP method to the given URI template, writing the given request message to the request, 
         /// and returns the response as <see cref="HttpResponseMessage{T}"/>.
         /// </summary>
         /// <typeparam name="T">The type of the response value.</typeparam>
         /// <param name="url">The URL.</param>
-        /// <param name="requestMessage">The HTTP request message to write to the request.</param>
+        /// <param name="method">The HTTP method (GET, POST, etc.)</param>
+        /// <param name="requestEntity">
+        /// The HTTP entity (headers and/or body) to write to the request, may be <see langword="null"/>.
+        /// </param>
         /// <returns>The HTTP response message.</returns>
-        HttpResponseMessage<T> Exchange<T>(Uri url, HttpRequestMessage requestMessage) where T : class;
+        HttpResponseMessage<T> Exchange<T>(Uri url, HttpMethod method, HttpEntity requestEntity) where T : class;
 
         /// <summary>
-        /// Execute the HTTP request to the given URI template, writing the given request message to the request, 
+        /// Execute the HTTP method to the given URI template, writing the given request message to the request, 
         /// and returns the response with no entity as <see cref="HttpResponseMessage"/>.
         /// </summary>
         /// <remarks>
         /// URI Template variables are expanded using the given URI variables, if any.
         /// </remarks>
         /// <param name="url">The URL.</param>
-        /// <param name="requestMessage">The HTTP request message to write to the request.</param>
+        /// <param name="method">The HTTP method (GET, POST, etc.)</param>
+        /// <param name="requestEntity">
+        /// The HTTP entity (headers and/or body) to write to the request, may be <see langword="null"/>.
+        /// </param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>The HTTP response message with no entity.</returns>
-        HttpResponseMessage Exchange(string url, HttpRequestMessage requestMessage, params string[] uriVariables);
+        HttpResponseMessage Exchange(string url, HttpMethod method, HttpEntity requestEntity, params string[] uriVariables);
 
         /// <summary>
-        /// Execute the HTTP request to the given URI template, writing the given request message to the request, 
+        /// Execute the HTTP method to the given URI template, writing the given request message to the request, 
         /// and returns the response with no entity as <see cref="HttpResponseMessage"/>.
         /// </summary>
         /// <remarks>
         /// URI Template variables are expanded using the given dictionary.
         /// </remarks>
         /// <param name="url">The URL.</param>
-        /// <param name="requestMessage">The HTTP request message to write to the request.</param>
+        /// <param name="method">The HTTP method (GET, POST, etc.)</param>
+        /// <param name="requestEntity">
+        /// The HTTP entity (headers and/or body) to write to the request, may be <see langword="null"/>.
+        /// </param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         /// <returns>The HTTP response message with no entity.</returns>
-        HttpResponseMessage Exchange(string url, HttpRequestMessage requestMessage, IDictionary<string, string> uriVariables);
+        HttpResponseMessage Exchange(string url, HttpMethod method, HttpEntity requestEntity, IDictionary<string, string> uriVariables);
 
         /// <summary>
-        /// Execute the HTTP request to the given URI template, writing the given request message to the request, 
+        /// Execute the HTTP method to the given URI template, writing the given request message to the request, 
         /// and returns the response with no entity as <see cref="HttpResponseMessage"/>.
         /// </summary>
         /// <param name="url">The URL.</param>
-        /// <param name="requestMessage">The HTTP request message to write to the request.</param>
+        /// <param name="method">The HTTP method (GET, POST, etc.)</param>
+        /// <param name="requestEntity">
+        /// The HTTP entity (headers and/or body) to write to the request, may be <see langword="null"/>.
+        /// </param>
         /// <returns>The HTTP response message with no entity.</returns>
-        HttpResponseMessage Exchange(Uri url, HttpRequestMessage requestMessage);
+        HttpResponseMessage Exchange(Uri url, HttpMethod method, HttpEntity requestEntity);
 
         #endregion
 
         #region General execution
 
         /// <summary>
-        /// Execute the HTTP request to the given URI template, preparing the request with the 
+        /// Execute the HTTP method to the given URI template, preparing the request with the 
         /// <see cref="IRequestCallback"/>, and reading the response with an <see cref="IResponseExtractor{T}"/>.
         /// </summary>
         /// <remarks>
@@ -546,14 +569,15 @@ namespace Spring.Http.Rest
         /// </remarks>
         /// <typeparam name="T">The type of the response value.</typeparam>
         /// <param name="url">The URL.</param>
+        /// <param name="method">The HTTP method (GET, POST, etc.)</param>
         /// <param name="requestCallback">Object that prepares the request.</param>
         /// <param name="responseExtractor">Object that extracts the return value from the response.</param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>An arbitrary object, as returned by the <see cref="IResponseExtractor{T}"/>.</returns>        
-        T Execute<T>(string url, IRequestCallback requestCallback, IResponseExtractor<T> responseExtractor, params string[] uriVariables) where T : class; //throws RestClientException;
+        T Execute<T>(string url, HttpMethod method, IRequestCallback requestCallback, IResponseExtractor<T> responseExtractor, params string[] uriVariables) where T : class;
 
         /// <summary>
-        /// Execute the HTTP request to the given URI template, preparing the request with the 
+        /// Execute the HTTP method to the given URI template, preparing the request with the 
         /// <see cref="IRequestCallback"/>, and reading the response with an <see cref="IResponseExtractor{T}"/>.
         /// </summary>
         /// <remarks>
@@ -561,23 +585,26 @@ namespace Spring.Http.Rest
         /// </remarks>
         /// <typeparam name="T">The type of the response value.</typeparam>
         /// <param name="url">The URL.</param>
+        /// <param name="method">The HTTP method (GET, POST, etc.)</param>
         /// <param name="requestCallback">Object that prepares the request.</param>
         /// <param name="responseExtractor">Object that extracts the return value from the response.</param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         /// <returns>An arbitrary object, as returned by the <see cref="IResponseExtractor{T}"/>.</returns>   
-        T Execute<T>(string url, IRequestCallback requestCallback, IResponseExtractor<T> responseExtractor, IDictionary<string, string> uriVariables) where T : class;
+        T Execute<T>(string url, HttpMethod method, IRequestCallback requestCallback, IResponseExtractor<T> responseExtractor, IDictionary<string, string> uriVariables) where T : class;
 
         /// <summary>
-        /// Execute the HTTP request to the given URI template, preparing the request with the 
+        /// Execute the HTTP method to the given URI template, preparing the request with the 
         /// <see cref="IRequestCallback"/>, and reading the response with an <see cref="IResponseExtractor{T}"/>.
         /// </summary>
         /// <typeparam name="T">The type of the response value.</typeparam>
         /// <param name="url">The URL.</param>
+        /// <param name="method">The HTTP method (GET, POST, etc.)</param>
         /// <param name="requestCallback">Object that prepares the request.</param>
         /// <param name="responseExtractor">Object that extracts the return value from the response.</param>
         /// <returns>An arbitrary object, as returned by the <see cref="IResponseExtractor{T}"/>.</returns>   
-        T Execute<T>(Uri url, IRequestCallback requestCallback, IResponseExtractor<T> responseExtractor) where T : class;
+        T Execute<T>(Uri url, HttpMethod method, IRequestCallback requestCallback, IResponseExtractor<T> responseExtractor) where T : class;
 
         #endregion
     }
 }
+#endif

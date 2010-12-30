@@ -2,7 +2,7 @@
 #region License
 
 /*
- * Copyright 2002-2010 the original author or authors.
+ * Copyright 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -89,7 +89,7 @@ namespace Spring.Http.Converters.Json
 
             HttpResponseMessage result = template.PostForMessage("user", user);
             Assert.IsNull(result.Body, "Invalid content");
-            Assert.AreEqual(new Uri(new Uri(uri), "/user/3"), new Uri(result.Headers[HttpResponseHeader.Location]), "Invalid location");
+            Assert.AreEqual(new Uri(new Uri(uri), "/user/3"), result.Headers.Location, "Invalid location");
             Assert.AreEqual(HttpStatusCode.Created, result.StatusCode, "Invalid status code");
             Assert.AreEqual("User id '3' created with 'Lisa Baia'", result.StatusDescription, "Invalid status description");
         }
@@ -146,7 +146,7 @@ namespace Spring.Http.Converters.Json
                 UriTemplateMatch match = context.IncomingRequest.UriTemplateMatch;
                 UriTemplate template = new UriTemplate("/user/{id}");
 
-                MediaType mediaType = MediaType.ParseMediaType(context.IncomingRequest.ContentType);
+                MediaType mediaType = MediaType.Parse(context.IncomingRequest.ContentType);
 
                 if (!String.IsNullOrEmpty(user.ID))
                 {

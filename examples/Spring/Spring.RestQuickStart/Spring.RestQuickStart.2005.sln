@@ -4,7 +4,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Http.2005", "..\..\.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Http.Tests.2005", "..\..\..\test\Spring\Spring.Http.Tests\Spring.Http.Tests.2005.csproj", "{9437475B-3897-A399-46BF-45F04CEE1821}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.RestQuickStart.2005", "src\Spring.RestQuickStart\Spring.RestQuickStart.2005.csproj", "{5B47D309-31C9-4282-86E2-11FC63DFF55B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.RestQuickStart.2005", "src\Spring.RestQuickStart.2005\Spring.RestQuickStart.2005.csproj", "{5B47D309-31C9-4282-86E2-11FC63DFF55B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

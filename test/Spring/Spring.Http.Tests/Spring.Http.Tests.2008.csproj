@@ -107,10 +107,12 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Http\Converters\ByteArrayHttpMessageConverterTests.cs" />
-    <Compile Include="Http\Converters\UrlEncodedFormHttpMessageConverterTests.cs" />
     <Compile Include="Http\Converters\Feed\Atom10FeedHttpMessageConverterTests.cs" />
     <Compile Include="Http\Converters\Feed\FeedHttpMessageConverterIntegrationTests.cs" />
     <Compile Include="Http\Converters\Feed\Rss20FeedHttpMessageConverterTests.cs" />
+    <Compile Include="Http\Converters\FormHttpMessageConverterTests.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Http\Converters\Json\JsonHttpMessageConverterIntegrationTests.cs" />
     <Compile Include="Http\Converters\Json\JsonHttpMessageConverterTests.cs" />
     <Compile Include="Http\Converters\StringHttpMessageConverterTests.cs" />
@@ -119,8 +121,11 @@
     <Compile Include="Http\Converters\Xml\XmlDocumentHttpMessageConverterTests.cs" />
     <Compile Include="Http\Converters\Xml\XmlHttpMessageConverterIntegrationTests.cs" />
     <Compile Include="Http\Converters\Xml\XmlSerializableHttpMessageConverterTests.cs" />
+    <Compile Include="Http\HttpHeadersTests.cs" />
     <Compile Include="Http\MediaTypeTests.cs" />
+    <Compile Include="Http\Rest\HttpStatusCodeExceptionTests.cs" />
     <Compile Include="Http\Rest\RestTemplateIntegrationTests.cs" />
+    <Compile Include="Util\SerializationTestUtils.cs" />
     <Compile Include="Util\UriTemplateTests.cs" />
     <Compile Include="Http\Rest\RestTemplateTests.cs" />
   </ItemGroup>

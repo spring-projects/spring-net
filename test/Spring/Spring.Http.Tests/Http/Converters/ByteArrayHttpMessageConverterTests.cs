@@ -1,7 +1,7 @@
 ﻿#region License
 
 /*
- * Copyright 2002-2010 the original author or authors.
+ * Copyright 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -67,13 +67,15 @@ namespace Spring.Http.Converters
         {
             byte[] body = new byte[] { 0x1, 0x2 };
 
-            HttpWebResponse webResponse = mocks.CreateMock<HttpWebResponse>();
-            Expect.Call<Stream>(webResponse.GetResponseStream()).Return(new MemoryStream(body));
-            Expect.Call<long>(webResponse.ContentLength).Return(2);
+            IHttpInputMessage message = mocks.CreateMock<IHttpInputMessage>();
+            Expect.Call<Stream>(message.Body).Return(new MemoryStream(body));
+            HttpHeaders headers = new HttpHeaders();
+            headers.ContentLength = body.Length;
+            Expect.Call<HttpHeaders>(message.Headers).Return(headers).Repeat.Any();
 
             mocks.ReplayAll();
             
-            byte[] result = converter.Read<byte[]>(webResponse);
+            byte[] result = converter.Read<byte[]>(message);
             Assert.AreEqual(body.Length, result.Length, "Invalid result");
             Assert.AreEqual(body[0], result[0], "Invalid result");
             Assert.AreEqual(body[1], result[1], "Invalid result");
@@ -88,17 +90,20 @@ namespace Spring.Http.Converters
 
             byte[] body = new byte[] { 0x1, 0x2 };
 
-            HttpWebRequest webRequest = mocks.CreateMock<HttpWebRequest>();
-            Expect.Call(webRequest.ContentType = "application/octet-stream").PropertyBehavior();
-            Expect.Call(webRequest.ContentLength = 2).PropertyBehavior();
-            Expect.Call<Stream>(webRequest.GetRequestStream()).Return(requestStream);
+            IHttpOutputMessage message = mocks.CreateMock<IHttpOutputMessage>();
+            Expect.Call(message.Body).PropertyBehavior();
+            HttpHeaders headers = new HttpHeaders();
+            Expect.Call<HttpHeaders>(message.Headers).Return(headers).Repeat.Any();
 
             mocks.ReplayAll();
 
-            converter.Write(body, null, webRequest);
+            converter.Write(body, null, message);
 
+            message.Body(requestStream);
             byte[] result = requestStream.ToArray();
             Assert.AreEqual(body, result, "Invalid result");
+            Assert.AreEqual(new MediaType("application", "octet-stream"), message.Headers.ContentType, "Invalid content-type");
+            //Assert.AreEqual(2, message.Headers.ContentLength, "Invalid content-length");
 
             mocks.VerifyAll();
         }

@@ -1,7 +1,7 @@
 ﻿#region License
 
 /*
- * Copyright 2002-2010 the original author or authors.
+ * Copyright 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,28 +28,10 @@ namespace Spring.Http
     /// </summary>
     /// <typeparam name="T">The type of the response body.</typeparam>
     /// <author>Bruno Baia</author>
-    public class HttpResponseMessage<T> where T : class
+    public class HttpResponseMessage<T> : HttpEntity<T> where T : class
     {
-        private WebHeaderCollection headers;
-        private T body;
         private HttpStatusCode statusCode;
         private string statusDescription;
-
-        /// <summary>
-        /// Gets the response headers.
-        /// </summary>
-        public WebHeaderCollection Headers
-        {
-            get { return this.headers; }
-        }
-
-        /// <summary>
-        /// Gets the response body. May be null.
-        /// </summary>
-        public T Body
-        {
-            get { return this.body; }
-        }
 
         /// <summary>
         /// Gets the HTTP status code of the response.
@@ -94,7 +76,7 @@ namespace Spring.Http
         /// <param name="headers">The response headers.</param>
         /// <param name="statusCode">The HTTP status code.</param>
         /// <param name="statusDescription">The HTTP status description.</param>
-        public HttpResponseMessage(WebHeaderCollection headers, HttpStatusCode statusCode, string statusDescription) :
+        public HttpResponseMessage(HttpHeaders headers, HttpStatusCode statusCode, string statusDescription) :
             this(null, headers, statusCode, statusDescription)
         {
         }
@@ -106,12 +88,11 @@ namespace Spring.Http
         /// <param name="headers">The response headers.</param>
         /// <param name="statusCode">The HTTP status code.</param>
         /// <param name="statusDescription">The HTTP status description.</param>
-        public HttpResponseMessage(T body, WebHeaderCollection headers, HttpStatusCode statusCode, string statusDescription)
+        public HttpResponseMessage(T body, HttpHeaders headers, HttpStatusCode statusCode, string statusDescription) :
+            base(body, headers)
         {
             this.statusCode = statusCode;
             this.statusDescription = statusDescription;
-            this.body = body;
-            this.headers = headers;
         }
     }
 }

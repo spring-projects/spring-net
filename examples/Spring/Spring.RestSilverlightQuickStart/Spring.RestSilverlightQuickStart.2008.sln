@@ -1,0 +1,38 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.RestSilverlightQuickStart.2008", "src\Spring.RestSilverlightQuickStart\Spring.RestSilverlightQuickStart.2008.csproj", "{0B34E41F-8D4E-427A-A7C4-A3F9ADEE8EB3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Http.2008-SL", "..\..\..\src\Spring\Spring.Http\Spring.Http.2008-SL.csproj", "{5A955F0B-EEC7-427C-9E6B-A26B8B51558D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.RestSilverlightQuickStart.Web.2008", "src\Spring.RestSilverlightQuickStart.Web.2008\Spring.RestSilverlightQuickStart.Web.2008.csproj", "{AFE006E7-F67F-45F9-826C-1273791D1574}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Http.Tests.2008-SL", "..\..\..\test\Spring\Spring.Http.Tests\Spring.Http.Tests.2008-SL.csproj", "{AEA0D437-A442-4381-B682-5873D66DB72C}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0B34E41F-8D4E-427A-A7C4-A3F9ADEE8EB3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0B34E41F-8D4E-427A-A7C4-A3F9ADEE8EB3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0B34E41F-8D4E-427A-A7C4-A3F9ADEE8EB3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0B34E41F-8D4E-427A-A7C4-A3F9ADEE8EB3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5A955F0B-EEC7-427C-9E6B-A26B8B51558D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5A955F0B-EEC7-427C-9E6B-A26B8B51558D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5A955F0B-EEC7-427C-9E6B-A26B8B51558D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5A955F0B-EEC7-427C-9E6B-A26B8B51558D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFE006E7-F67F-45F9-826C-1273791D1574}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFE006E7-F67F-45F9-826C-1273791D1574}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFE006E7-F67F-45F9-826C-1273791D1574}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFE006E7-F67F-45F9-826C-1273791D1574}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AEA0D437-A442-4381-B682-5873D66DB72C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AEA0D437-A442-4381-B682-5873D66DB72C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AEA0D437-A442-4381-B682-5873D66DB72C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AEA0D437-A442-4381-B682-5873D66DB72C}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

@@ -2,9 +2,9 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Http.2010", "..\..\..\src\Spring\Spring.Http\Spring.Http.2010.csproj", "{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Http.Tests.2010", "..\..\..\test\Spring\Spring.Http.Tests\Spring.Http.Tests.2010.csproj", "{4594CEE7-3897-A3BF-9946-5B4374F01821}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.RestQuickStart.2010", "src\Spring.RestQuickStart\Spring.RestQuickStart.2010.csproj", "{5B47D309-31C9-4282-86E2-11FC63DFF55B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Http.Tests.2010", "..\..\..\test\Spring\Spring.Http.Tests\Spring.Http.Tests.2010.csproj", "{4594CEE7-3897-A3BF-9946-5B4374F01821}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -16,14 +16,14 @@ Global
 		{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}.Release|Any CPU.Build.0 = Release|Any CPU
-		{4594CEE7-3897-A3BF-9946-5B4374F01821}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4594CEE7-3897-A3BF-9946-5B4374F01821}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4594CEE7-3897-A3BF-9946-5B4374F01821}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4594CEE7-3897-A3BF-9946-5B4374F01821}.Release|Any CPU.Build.0 = Release|Any CPU
 		{5B47D309-31C9-4282-86E2-11FC63DFF55B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{5B47D309-31C9-4282-86E2-11FC63DFF55B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5B47D309-31C9-4282-86E2-11FC63DFF55B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5B47D309-31C9-4282-86E2-11FC63DFF55B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4594CEE7-3897-A3BF-9946-5B4374F01821}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4594CEE7-3897-A3BF-9946-5B4374F01821}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4594CEE7-3897-A3BF-9946-5B4374F01821}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4594CEE7-3897-A3BF-9946-5B4374F01821}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

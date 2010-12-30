@@ -1,7 +1,7 @@
 ﻿#region License
 
 /*
- * Copyright 2002-2010 the original author or authors.
+ * Copyright 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,14 +42,22 @@ namespace Spring.Http.Converters
         /// <summary>
         /// Default encoding for strings.
         /// </summary>
+#if SILVERLIGHT
+        public static readonly Encoding DEFAULT_CHARSET = new UTF8Encoding(false); // Remove byte Order Mask (BOM)
+#else
         public static readonly Encoding DEFAULT_CHARSET = Encoding.GetEncoding("ISO-8859-1");
+#endif
 
         /// <summary>
         /// Creates a new instance of the <see cref="ByteArrayHttpMessageConverter"/> 
         /// with 'text/plain; charset=ISO-8859-1', and '*/*' media types.
         /// </summary>
         public StringHttpMessageConverter() :
+#if SILVERLIGHT
+            base(new MediaType("text", "plain", "UTF-8"), MediaType.ALL)
+#else
             base(new MediaType("text", "plain", "ISO-8859-1"), MediaType.ALL)
+#endif
         {
         }
 
@@ -67,13 +75,14 @@ namespace Spring.Http.Converters
         /// Abstract template method that reads the actualy object. Invoked from <see cref="M:Read"/>.
         /// </summary>
         /// <typeparam name="T">The type of object to return.</typeparam>
-        /// <param name="response">The HTTP response to read from.</param>
+        /// <param name="message">The HTTP message to read from.</param>
         /// <returns>The converted object.</returns>
-        protected override T ReadInternal<T>(HttpWebResponse response)
+        /// <exception cref="HttpMessageNotReadableException">In case of conversion errors</exception>
+        protected override T ReadInternal<T>(IHttpInputMessage message)
         {
-            // Get the response encoding
+            // Get the message encoding
             Encoding encoding;
-            MediaType mediaType = MediaType.ParseMediaType(response.ContentType);
+            MediaType mediaType = message.Headers.ContentType;
             if (mediaType == null || !StringUtils.HasText(mediaType.CharSet))
             {
                 encoding = DEFAULT_CHARSET;
@@ -83,8 +92,8 @@ namespace Spring.Http.Converters
                 encoding = Encoding.GetEncoding(mediaType.CharSet);
             }
 
-            // Get the response stream  
-            using (StreamReader reader = new StreamReader(response.GetResponseStream(), encoding))
+            // Read from the message stream
+            using (StreamReader reader = new StreamReader(message.Body, encoding))
             {
                 return reader.ReadToEnd() as T;
             }
@@ -93,13 +102,14 @@ namespace Spring.Http.Converters
         /// <summary>
         /// Abstract template method that writes the actual body. Invoked from <see cref="M:Write"/>.
         /// </summary>
-        /// <param name="content">The object to write to the HTTP request.</param>
-        /// <param name="request">The HTTP request to write to.</param>
-        protected override void WriteInternal(object content, HttpWebRequest request)
+        /// <param name="content">The object to write to the HTTP message.</param>
+        /// <param name="message">The HTTP message to write to.</param>
+        /// <exception cref="HttpMessageNotWritableException">In case of conversion errors</exception>
+        protected override void WriteInternal(object content, IHttpOutputMessage message)
         {
-            // Get the request encoding
+            // Get the message encoding
             Encoding encoding;
-            MediaType mediaType = MediaType.ParseMediaType(request.ContentType);
+            MediaType mediaType = message.Headers.ContentType;
             if (mediaType == null || !StringUtils.HasText(mediaType.CharSet))
             {
                 encoding = DEFAULT_CHARSET;
@@ -112,14 +122,16 @@ namespace Spring.Http.Converters
             // Create a byte array of the data we want to send  
             byte[] byteData = encoding.GetBytes(content as string);
 
-            // Set the content length in the request headers  
-            request.ContentLength = byteData.Length;
+//#if !SILVERLIGHT
+//            // Set the content length in the message headers  
+//            message.Headers.ContentLength = byteData.Length;
+//#endif
 
-            // Write to the request
-            using (Stream postStream = request.GetRequestStream())
+            // Write to the message stream
+            message.Body = delegate(Stream stream) 
             {
-                postStream.Write(byteData, 0, byteData.Length);
-            }
+                stream.Write(byteData, 0, byteData.Length);
+            };
         }
     }
 }

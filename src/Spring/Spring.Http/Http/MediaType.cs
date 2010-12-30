@@ -1,7 +1,7 @@
 ﻿#region License
 
 /*
- * Copyright 2002-2010 the original author or authors.
+ * Copyright 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -255,8 +255,8 @@ namespace Spring.Http
             AssertUtils.ArgumentHasText(subtype, "'subtype' must not be empty");
             //checkToken(type);
             //checkToken(subtype);
-            this.type = type.ToLowerInvariant();
-            this.subtype = subtype.ToLowerInvariant();
+            this.type = type.ToLower(CultureInfo.InvariantCulture);
+            this.subtype = subtype.ToLower(CultureInfo.InvariantCulture);
             this.parameters = new Dictionary<string, string>(parameters, StringComparer.InvariantCultureIgnoreCase);
             //if (parameters.Count > 0) 
             //{
@@ -550,9 +550,12 @@ namespace Spring.Http
         /// <summary>
         /// Parse the given String into a single <see cref="MediaType"/>.
         /// </summary>
+        /// <remarks>
+        /// This method can be used to parse a 'Content-Type' header.
+        /// </remarks>
         /// <param name="mediaType">The string to parse.</param>
         /// <returns>The media type.</returns>
-        public static MediaType ParseMediaType(string mediaType)
+        public static MediaType Parse(string mediaType)
         {
             if (!StringUtils.HasText(mediaType))
             {
@@ -601,29 +604,6 @@ namespace Spring.Http
         }
 
         /// <summary>
-        /// Parse the given, comma-seperated string into a list of <see cref="MediaType"/> objects.
-        /// </summary>
-        /// <remarks>
-        /// This method can be used to parse an 'Accept' or 'Content-Type' header.
-        /// </remarks>
-        /// <param name="mediaTypes">The string to parse.</param>
-        /// <returns>The list of media types.</returns>
-        public static List<MediaType> ParseMediaTypes(string mediaTypes)
-        {
-            List<MediaType> mediaTypeList = new List<MediaType>();
-            if (!StringUtils.HasText(mediaTypes))
-            {
-                return mediaTypeList;
-            }
-            string[] tokens = mediaTypes.Split(',');
-            foreach (string token in tokens)
-            {
-                mediaTypeList.Add(ParseMediaType(token));
-            }
-            return mediaTypeList;
-        }
-
-        /// <summary>
         /// Return a string representation of the given list of <see cref="MediaType"/> objects.
         /// </summary>
         /// <remarks>
@@ -638,7 +618,7 @@ namespace Spring.Http
             {
                 if (builder.Length > 0)
                 {
-                    builder.Append(", ");
+                    builder.Append(',');
                 }
                 builder.Append(mediaType);
             }

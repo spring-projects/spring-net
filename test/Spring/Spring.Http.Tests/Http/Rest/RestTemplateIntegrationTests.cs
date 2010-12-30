@@ -2,7 +2,7 @@
 #region License
 
 /*
- * Copyright 2002-2010 the original author or authors.
+ * Copyright 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -91,7 +91,7 @@ namespace Spring.Http.Rest
         }
 
         [Test]
-        [ExpectedException(typeof(RestClientException),
+        [ExpectedException(typeof(HttpClientErrorException),
             ExpectedMessage = "The server returned 'User with id '5' not found' with the status code 404 - NotFound.")]
         public void GetStringError()
         {
@@ -103,7 +103,7 @@ namespace Spring.Http.Rest
         {
             HttpResponseMessage<string> result = template.GetForMessage<string>("user/{id}", "1");
             Assert.AreEqual("Bruno Baïa", result.Body, "Invalid content");
-            Assert.AreEqual(contentType, MediaType.ParseMediaType(result.Headers[HttpResponseHeader.ContentType]), "Invalid content-type");
+            Assert.AreEqual(contentType, result.Headers.ContentType, "Invalid content-type");
             Assert.AreEqual(HttpStatusCode.OK, result.StatusCode, "Invalid status code");
             Assert.AreEqual("OK", result.StatusDescription, "Invalid status description");
         }
@@ -119,8 +119,8 @@ namespace Spring.Http.Rest
         [Test]
         public void HeadForHeaders()
         {
-            WebHeaderCollection result = template.HeadForHeaders("head");
-            Assert.AreEqual(new MediaType("text", "plain"), MediaType.ParseMediaType(result[HttpResponseHeader.ContentType]), "Invalid content-type");
+            HttpHeaders result = template.HeadForHeaders("head");
+            Assert.AreEqual(new MediaType("text", "plain"), result.ContentType, "Invalid content-type");
         }
 
         [Test]
@@ -134,7 +134,7 @@ namespace Spring.Http.Rest
         public void PostStringForMessage()
         {
             HttpResponseMessage<string> result = template.PostForMessage<string>("user", "Lisa Baia");
-            Assert.AreEqual(new Uri(new Uri(uri), "/user/3"), new Uri(result.Headers[HttpResponseHeader.Location]), "Invalid location");
+            Assert.AreEqual(new Uri(new Uri(uri), "/user/3"), result.Headers.Location, "Invalid location");
             Assert.AreEqual(HttpStatusCode.Created, result.StatusCode, "Invalid status code");
             Assert.AreEqual("User id '3' created with 'Lisa Baia'", result.StatusDescription, "Invalid status description");
             Assert.AreEqual("3", result.Body, "Invalid content");
@@ -148,11 +148,19 @@ namespace Spring.Http.Rest
         }
 
         [Test]
-        [ExpectedException(typeof(RestClientException),
+        [ExpectedException(typeof(HttpClientErrorException),
             ExpectedMessage = "The server returned 'Content cannot be null or empty' with the status code 400 - BadRequest.")]
         public void PostStringForObjectWithError()
         {
             string result = template.PostForObject<string>("user", "");
+        }
+
+        [Test]
+        [ExpectedException(typeof(HttpClientErrorException),
+            ExpectedMessage = "The server returned 'Content cannot be null or empty' with the status code 400 - BadRequest.")]
+        public void PostStringNull()
+        {
+            template.PostForObject<string>("user", null);
         }
 
         [Test]
@@ -168,7 +176,7 @@ namespace Spring.Http.Rest
         }
 
         [Test]
-        [ExpectedException(typeof(RestClientException),
+        [ExpectedException(typeof(HttpClientErrorException),
             ExpectedMessage = "The server returned 'User id '4' does not exist' with the status code 400 - BadRequest.")]
         public void PutWithError()
         {
@@ -188,7 +196,7 @@ namespace Spring.Http.Rest
         }
 
         [Test]
-        [ExpectedException(typeof(RestClientException),
+        [ExpectedException(typeof(HttpClientErrorException),
             ExpectedMessage = "The server returned 'User id '10' does not exist' with the status code 400 - BadRequest.")]
         public void DeleteWithError()
         {
@@ -206,10 +214,10 @@ namespace Spring.Http.Rest
         }
 
         [Test]
-        public void ExchangePost()
+        public void ExchangeForResponse()
         {
             HttpResponseMessage<string> result = template.Exchange<string>(
-                "user", new HttpRequestMessage("Maryse Baia", HttpMethod.POST));
+                "user", HttpMethod.POST, new HttpEntity("Maryse Baia"));
 
             Assert.AreEqual("3", result.Body, "Invalid content");
             Assert.AreEqual(HttpStatusCode.Created, result.StatusCode, "Invalid status code");
@@ -217,27 +225,64 @@ namespace Spring.Http.Rest
         }
 
         [Test]
-        public void ExchangePut()
+        public void ExchangeForMessage()
         {
             HttpResponseMessage result = template.Exchange(
-                "user/1", new HttpRequestMessage("Bruno Baia", HttpMethod.PUT));
+                "user/1", HttpMethod.PUT, new HttpEntity("Bruno Baia"));
 
             Assert.AreEqual(HttpStatusCode.OK, result.StatusCode, "Invalid status code");
             Assert.AreEqual("User id '1' updated with 'Bruno Baia'", result.StatusDescription, "Invalid status description");
         }
 
         [Test]
-        [ExpectedException(ExpectedMessage = "The server returned 'Not Found' with the status code 404 - NotFound.")]
-        public void ClientError()
+        public void ExchangeWithHeaders()
         {
-            template.Execute<object>("clienterror", null, null);
+            HttpHeaders headers = new HttpHeaders();
+            headers.ContentLength = 11;
+            HttpEntity entity = new HttpEntity("Maryse Baia", headers);
+
+            HttpResponseMessage<string> result = template.Exchange<string>(
+                "user", HttpMethod.POST, entity);
+
+            Assert.AreEqual("3", result.Body, "Invalid content");
+            Assert.AreEqual(HttpStatusCode.Created, result.StatusCode, "Invalid status code");
+            Assert.AreEqual("User id '3' created with 'Maryse Baia'", result.StatusDescription, "Invalid status description");
         }
 
         [Test]
-        [ExpectedException(ExpectedMessage = "The server returned 'Internal Server Error' with the status code 500 - InternalServerError.")]
+        public void ExchangeWithSpecialHeaders() // releated to HttpWebRequest implementation
+        {
+            HttpHeaders headers = new HttpHeaders();
+            // Accept & Content-Type automatically set by RestTemplate
+            headers["Connection"] = "close";
+            headers.ContentLength = 10;
+            headers.Date = DateTime.Now;
+            headers["Expect"] = "bla";
+            headers.IfModifiedSince = DateTime.Now;
+            headers["Referer"] = "http://www.springframework.net/";
+            //headers["Transfer-Encoding"] = "Identity";
+            headers["User-Agent"] = "Unit tests";
+            HttpEntity entity = new HttpEntity("Bruno Baia", headers);
+
+            HttpResponseMessage<string> result = template.Exchange<string>(
+                "user", HttpMethod.POST, entity);
+        }
+
+
+        [Test]
+        [ExpectedException(typeof(HttpClientErrorException), 
+            ExpectedMessage = "The server returned 'Not Found' with the status code 404 - NotFound.")]
+        public void ClientError()
+        {
+            template.Execute<object>("clienterror", HttpMethod.GET, null, null);
+        }
+
+        [Test]
+        [ExpectedException(typeof(HttpServerErrorException), 
+            ExpectedMessage = "The server returned 'Internal Server Error' with the status code 500 - InternalServerError.")]
         public void ServerError()
         {
-            template.Execute<object>("servererror", null, null);
+            template.Execute<object>("servererror", HttpMethod.GET, null, null);
         }
 
         #region REST test service
@@ -315,11 +360,12 @@ namespace Spring.Http.Rest
                 UriTemplateMatch match = context.IncomingRequest.UriTemplateMatch;
                 UriTemplate template = new UriTemplate("/user/{id}");
 
-                MediaType mediaType = MediaType.ParseMediaType(context.IncomingRequest.ContentType);
+                MediaType mediaType = MediaType.Parse(context.IncomingRequest.ContentType);
+                Encoding encoding = (mediaType == null) ? Encoding.UTF8 : Encoding.GetEncoding(mediaType.CharSet);
 
                 string id = (users.Count + 1).ToString(); // generate new ID
                 string name;
-                using (StreamReader reader = new StreamReader(stream, Encoding.GetEncoding(mediaType.CharSet)))
+                using (StreamReader reader = new StreamReader(stream, encoding))
                 {
                     name = reader.ReadToEnd();
                 }
@@ -352,7 +398,7 @@ namespace Spring.Http.Rest
                     return;
                 }
 
-                MediaType mediaType = MediaType.ParseMediaType(context.IncomingRequest.ContentType);
+                MediaType mediaType = MediaType.Parse(context.IncomingRequest.ContentType);
 
                 string name;
                 using (StreamReader reader = new StreamReader(stream, Encoding.GetEncoding(mediaType.CharSet)))

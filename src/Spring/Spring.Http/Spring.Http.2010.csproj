@@ -113,48 +113,97 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Http\Converters\Feed\Rss20FeedHttpMessageConverter.cs" />
-    <Compile Include="Http\Converters\UrlEncodedFormHttpMessageConverter.cs" />
-    <Compile Include="Http\HttpResponseMessage.cs" />
-    <Compile Include="Http\HttpResponseMessage`1.cs" />
-    <Compile Include="Http\DefaultHttpWebRequestFactory.cs" />
+    <Compile Include="Collections\Specialized\NameValueCollection.cs" />
+    <Compile Include="Http\Client\ExecuteCompletedEventArgs.cs" />
+    <Compile Include="Http\Client\IClientHttpRequest.cs" />
+    <Compile Include="Http\Client\IClientHttpRequestFactory.cs" />
+    <Compile Include="Http\Client\IClientHttpResponse.cs" />
+    <Compile Include="Http\Client\WebClientHttpRequest.cs" />
+    <Compile Include="Http\Client\WebClientHttpRequestFactory.cs" />
+    <Compile Include="Http\Client\WebClientHttpResponse.cs" />
     <Compile Include="Http\Converters\AbstractHttpMessageConverter.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Http\Converters\ByteArrayHttpMessageConverter.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Http\Converters\Feed\AbstractFeedHttpMessageConverter.cs" />
-    <Compile Include="Http\Converters\Feed\Atom10FeedHttpMessageConverter.cs" />
+    <Compile Include="Http\Converters\Feed\AbstractFeedHttpMessageConverter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Http\Converters\Feed\Atom10FeedHttpMessageConverter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Http\Converters\Feed\Rss20FeedHttpMessageConverter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Http\Converters\FileInfoHttpMessageConverter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Http\Converters\FormHttpMessageConverter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Http\Converters\HttpMessageConversionException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Http\Converters\HttpMessageNotReadableException.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Http\Converters\HttpMessageNotWritableException.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Http\Converters\IHttpMessageConverter.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Http\Converters\Json\JsonHttpMessageConverter.cs" />
+    <Compile Include="Http\Converters\Json\JsonHttpMessageConverter.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Http\Converters\StringHttpMessageConverter.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Http\Converters\Xml\AbstractXmlHttpMessageConverter.cs" />
-    <Compile Include="Http\Converters\Xml\DataContractHttpMessageConverter.cs" />
-    <Compile Include="Http\Converters\Xml\XElementHttpMessageConverter.cs" />
-    <Compile Include="Http\Converters\Xml\XmlDocumentHttpMessageConverter.cs" />
-    <Compile Include="Http\Converters\Xml\XmlSerializableHttpMessageConverter.cs" />
+    <Compile Include="Http\Converters\Xml\AbstractXmlHttpMessageConverter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Http\Converters\Xml\DataContractHttpMessageConverter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Http\Converters\Xml\XElementHttpMessageConverter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Http\Converters\Xml\XmlDocumentHttpMessageConverter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Http\Converters\Xml\XmlSerializableHttpMessageConverter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Http\IHttpInputMessage.cs" />
+    <Compile Include="Http\IHttpOutputMessage.cs" />
+    <Compile Include="Http\HttpEntity.cs" />
+    <Compile Include="Http\HttpEntity`1.cs" />
+    <Compile Include="Http\HttpHeaders.cs" />
+    <Compile Include="Http\HttpResponseMessage.cs" />
+    <Compile Include="Http\HttpResponseMessage`1.cs" />
     <Compile Include="Http\HttpMethod.cs" />
-    <Compile Include="Http\HttpRequestMessage.cs" />
-    <Compile Include="Http\IHttpWebRequestFactory.cs" />
     <Compile Include="Http\MediaType.cs" />
+    <Compile Include="Http\Rest\HttpClientErrorException.cs" />
+    <Compile Include="Http\Rest\HttpServerErrorException.cs" />
+    <Compile Include="Http\Rest\HttpStatusCodeException.cs" />
     <Compile Include="Http\Rest\IRequestCallback.cs" />
+    <Compile Include="Http\Rest\IResponseErrorHandler.cs" />
     <Compile Include="Http\Rest\IResponseExtractor.cs" />
+    <Compile Include="Http\Rest\IRestAsyncOperations.cs" />
     <Compile Include="Http\Rest\IRestOperations.cs" />
+    <Compile Include="Http\Rest\MethodCompletedEventArgs.cs" />
     <Compile Include="Http\Rest\RestClientException.cs" />
     <Compile Include="Http\Rest\RestTemplate.cs" />
     <Compile Include="Http\Rest\Support\AcceptHeaderRequestCallback.cs" />
+    <Compile Include="Http\Rest\Support\DefaultResponseErrorHandler.cs" />
+    <Compile Include="Http\Rest\Support\HttpEntityRequestCallback.cs" />
     <Compile Include="Http\Rest\Support\HttpMessageResponseExtractor`1.cs" />
     <Compile Include="Http\Rest\Support\HeadersResponseExtractor.cs" />
-    <Compile Include="Http\Rest\Support\HttpMessageRequestCallback.cs" />
     <Compile Include="Http\Rest\Support\HttpMessageResponseExtractor.cs" />
     <Compile Include="Http\Rest\Support\MessageConverterResponseExtractor.cs" />
-    <Compile Include="Http\Rest\Support\MethodRequestCallback.cs" />
     <Compile Include="Util\AssertUtils.cs" />
+    <Compile Include="Util\IoUtils.cs" />
     <Compile Include="Util\StringUtils.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -177,6 +226,7 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>

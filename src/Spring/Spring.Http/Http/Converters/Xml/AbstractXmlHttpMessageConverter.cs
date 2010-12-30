@@ -1,7 +1,7 @@
 ﻿#region License
 
 /*
- * Copyright 2002-2010 the original author or authors.
+ * Copyright 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -40,26 +40,7 @@ namespace Spring.Http.Converters.Xml
         /// <summary>
         /// Default encoding for XML.
         /// </summary>
-        public static readonly Encoding DEFAULT_CHARSET = new UTF8Encoding(false); // Remove byte Order Mask (BOM) when using XmlTextWriter
-
-        private XmlReaderSettings _xmlReaderSettings;
-
-        /// <summary>
-        /// Gets or sets the <see cref="XmlReaderSettings">XmlReader settings</see> 
-        /// used by this converter to read from the HTTP response.
-        /// </summary>
-        public XmlReaderSettings XmlReaderSettings
-        {
-            get 
-            {
-                if (_xmlReaderSettings == null)
-                {
-                    _xmlReaderSettings = this.GetDefaultXmlReaderSettings();
-                }
-                return _xmlReaderSettings; 
-            }
-            set { _xmlReaderSettings = value; }
-        }
+        public static readonly Encoding DEFAULT_CHARSET = new UTF8Encoding(false); // Remove byte Order Mask (BOM)
 
         /// <summary>
         /// Creates a new instance of the <see cref="AbstractHttpMessageConverter"/> 
@@ -84,29 +65,31 @@ namespace Spring.Http.Converters.Xml
         /// Abstract template method that reads the actualy object. Invoked from <see cref="M:Read"/>.
         /// </summary>
         /// <typeparam name="T">The type of object to return.</typeparam>
-        /// <param name="response">The HTTP response to read from.</param>
+        /// <param name="message">The HTTP message to read from.</param>
         /// <returns>The converted object.</returns>
-        protected override T ReadInternal<T>(HttpWebResponse response)
+        /// <exception cref="HttpMessageNotReadableException">In case of conversion errors</exception>
+        protected override T ReadInternal<T>(IHttpInputMessage message)
         {
-            using (Stream stream = response.GetResponseStream())
+            XmlReaderSettings settings = this.GetXmlReaderSettings();
+
+            // Read from the message stream  
+            using (XmlReader xmlReader = XmlReader.Create(message.Body, settings))
             {
-                using (XmlReader xmlReader = XmlReader.Create(stream, this.XmlReaderSettings))
-                {
-                    return ReadXml<T>(xmlReader, response);
-                }                
+                return ReadXml<T>(xmlReader);
             }
         }
 
         /// <summary>
         /// Abstract template method that writes the actual body. Invoked from <see cref="M:Write"/>.
         /// </summary>
-        /// <param name="content">The object to write to the HTTP request.</param>
-        /// <param name="request">The HTTP request to write to.</param>
-        protected override void WriteInternal(object content, HttpWebRequest request)
+        /// <param name="content">The object to write to the HTTP message.</param>
+        /// <param name="message">The HTTP message to write to.</param>
+        /// <exception cref="HttpMessageNotWritableException">In case of conversion errors</exception>
+        protected override void WriteInternal(object content, IHttpOutputMessage message)
         {
-            // Get the request encoding
+            // Get the message encoding
             Encoding encoding;
-            MediaType mediaType = MediaType.ParseMediaType(request.ContentType);
+            MediaType mediaType = message.Headers.ContentType;
             if (mediaType == null || !StringUtils.HasText(mediaType.CharSet))
             {
                 encoding = DEFAULT_CHARSET;
@@ -116,22 +99,17 @@ namespace Spring.Http.Converters.Xml
                 encoding = Encoding.GetEncoding(mediaType.CharSet);
             }
 
-            // Write to the request
-            using (IgnoreCloseMemoryStream requestStream = new IgnoreCloseMemoryStream())
+            XmlWriterSettings settings = this.GetXmlWriterSettings();
+            settings.Encoding = encoding;
+
+            // Write to the message stream
+            message.Body = delegate(Stream stream)
             {
-                using (XmlTextWriter xmlWriter = new XmlTextWriter(requestStream, encoding))
+                using (XmlWriter xmlWriter = XmlWriter.Create(stream, settings))
                 {
-                    WriteXml(xmlWriter, content, request);
+                    WriteXml(xmlWriter, content);
                 }
-
-                // Set the content length in the request headers  
-                request.ContentLength = requestStream.Length;
-
-                using (Stream postStream = request.GetRequestStream())
-                {
-                    requestStream.CopyToAndClose(postStream);
-                }
-            }
+            };
         }
 
         /// <summary>
@@ -139,30 +117,43 @@ namespace Spring.Http.Converters.Xml
         /// </summary>
         /// <typeparam name="T">The type of object to return.</typeparam>
         /// <param name="xmlReader">The XmlReader to use.</param>
-        /// <param name="response">The HTTP response to read from.</param>
         /// <returns>The converted object.</returns>
-        protected abstract T ReadXml<T>(XmlReader xmlReader, HttpWebResponse response) where T : class;
+        protected abstract T ReadXml<T>(XmlReader xmlReader) where T : class;
 
         /// <summary>
         /// Abstract template method that writes the actual body using a <see cref="XmlWriter"/>. Invoked from <see cref="M:WriteInternal"/>.
         /// </summary>
         /// <param name="xmlWriter">The XmlWriter to use.</param>
-        /// <param name="content">The object to write to the HTTP request.</param>
-        /// <param name="request">The HTTP request to write to.</param>
-        protected abstract void WriteXml(XmlWriter xmlWriter, object content, HttpWebRequest request);
+        /// <param name="content">The object to write to the HTTP message.</param>
+        protected abstract void WriteXml(XmlWriter xmlWriter, object content);
 
         /// <summary>
-        /// Returns the default <see cref="XmlReaderSettings">XmlReader settings</see> 
-        /// used by this converter to read from the HTTP response.
+        /// Returns the <see cref="XmlReaderSettings">XmlReader settings</see> 
+        /// used by this converter to read from the HTTP message.
         /// </summary>
         /// <returns>The XmlReader settings.</returns>
-        protected virtual XmlReaderSettings GetDefaultXmlReaderSettings()
+        protected virtual XmlReaderSettings GetXmlReaderSettings()
         {
             XmlReaderSettings settings = new XmlReaderSettings();
             settings.ConformanceLevel = ConformanceLevel.Auto;
             settings.CloseInput = true;
             settings.IgnoreProcessingInstructions = true;
             settings.IgnoreWhitespace = true;
+            return settings;
+        }
+
+        /// <summary>
+        /// Returns the <see cref="XmlWriterSettings">XmlWriter settings</see> 
+        /// used by this converter to write to the HTTP message.
+        /// </summary>
+        /// <returns>The XmlWriter settings.</returns>
+        protected virtual XmlWriterSettings GetXmlWriterSettings()
+        {
+            XmlWriterSettings settings = new XmlWriterSettings();
+            settings.CloseOutput = false;
+            settings.NewLineHandling = NewLineHandling.Entitize;
+            settings.OmitXmlDeclaration = true;
+            settings.CheckCharacters = false;
             return settings;
         }
     }

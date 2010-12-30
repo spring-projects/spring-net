@@ -1,7 +1,7 @@
 ﻿#region License
 
 /*
- * Copyright 2002-2010 the original author or authors.
+ * Copyright 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,7 +25,7 @@ namespace Spring.Http
     /// <a href="http://tools.ietf.org/html/rfc2616#section-5.1.1">HTTP 1.1, section 6</a>
     /// </summary>
     /// <author>Arjen Poutsma</author>
-    /// <author>Bruno Baia</author>
+    /// <author>Bruno Baia (.NET)</author>
     public enum HttpMethod
     {
         /// <summary>

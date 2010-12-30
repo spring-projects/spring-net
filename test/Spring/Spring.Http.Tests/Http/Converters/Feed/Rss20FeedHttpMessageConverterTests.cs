@@ -2,7 +2,7 @@
 #region License
 
 /*
- * Copyright 2002-2010 the original author or authors.
+ * Copyright 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -78,12 +78,12 @@ namespace Spring.Http.Converters.Feed
             string body = String.Format("<rss xmlns:a10=\"http://www.w3.org/2005/Atom\" version=\"2.0\"><channel><title>Test Feed</title><link>http://www.springframework.net/Feed</link><description>This is a test feed</description><copyright>Copyright 2010</copyright><managingEditor>bruno.baia@springframework.net</managingEditor><lastBuildDate>{0}</lastBuildDate><a10:id>Atom10FeedHttpMessageConverterTests.Write</a10:id></channel></rss>",
                 now.ToString("ddd, dd MMM yyyy HH:mm:ss zzz", CultureInfo.InvariantCulture).Remove(29, 1));
 
-            HttpWebResponse webResponse = mocks.CreateMock<HttpWebResponse>();
-            Expect.Call<Stream>(webResponse.GetResponseStream()).Return(new MemoryStream(Encoding.UTF8.GetBytes(body)));
+            IHttpInputMessage message = mocks.CreateMock<IHttpInputMessage>();
+            Expect.Call<Stream>(message.Body).Return(new MemoryStream(Encoding.UTF8.GetBytes(body)));
 
             mocks.ReplayAll();
 
-            SyndicationFeed result = converter.Read<SyndicationFeed>(webResponse);
+            SyndicationFeed result = converter.Read<SyndicationFeed>(message);
             Assert.IsNotNull(result, "Invalid result");
             Assert.AreEqual("Atom10FeedHttpMessageConverterTests.Write", result.Id, "Invalid result");
             Assert.AreEqual("Test Feed", result.Title.Text, "Invalid result");
@@ -112,17 +112,20 @@ namespace Spring.Http.Converters.Feed
             body.Authors.Add(sp);
             body.Copyright = new TextSyndicationContent("Copyright 2010");
 
-            HttpWebRequest webRequest = mocks.CreateMock<HttpWebRequest>();
-            Expect.Call(webRequest.ContentType = "application/rss+xml").PropertyBehavior();
-            Expect.Call(webRequest.ContentLength = 1337).PropertyBehavior();
-            Expect.Call<Stream>(webRequest.GetRequestStream()).Return(requestStream);
+            IHttpOutputMessage message = mocks.CreateMock<IHttpOutputMessage>();
+            Expect.Call(message.Body).PropertyBehavior();
+            HttpHeaders headers = new HttpHeaders();
+            Expect.Call<HttpHeaders>(message.Headers).Return(headers).Repeat.Any();
 
             mocks.ReplayAll();
 
-            converter.Write(body, null, webRequest);
+            converter.Write(body, null, message);
 
+            message.Body(requestStream);
             byte[] result = requestStream.ToArray();
             Assert.AreEqual(expectedBody, Encoding.UTF8.GetString(result), "Invalid result");
+            Assert.AreEqual(new MediaType("application", "rss+xml"), message.Headers.ContentType, "Invalid content-type");
+            //Assert.IsTrue(message.Headers.ContentLength > -1, "Invalid content-length");
 
             mocks.VerifyAll();
         }

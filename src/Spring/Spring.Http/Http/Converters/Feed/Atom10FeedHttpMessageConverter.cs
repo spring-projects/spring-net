@@ -1,8 +1,8 @@
-﻿#if NET_3_5
+﻿#if NET_3_5 && !SILVERLIGHT
 #region License
 
 /*
- * Copyright 2002-2010 the original author or authors.
+ * Copyright 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -49,9 +49,8 @@ namespace Spring.Http.Converters.Feed
         /// Abstract template method that writes the actual body using a <see cref="XmlWriter"/>. Invoked from <see cref="M:WriteInternal"/>.
         /// </summary>
         /// <param name="xmlWriter">The XmlWriter to use.</param>
-        /// <param name="content">The object to write to the HTTP request.</param>
-        /// <param name="request">The HTTP request to write to.</param>
-        protected override void WriteXml(XmlWriter xmlWriter, object content, HttpWebRequest request)
+        /// <param name="content">The object to write to the HTTP message.</param>
+        protected override void WriteXml(XmlWriter xmlWriter, object content)
         {
             if (content is SyndicationFeed)
             {

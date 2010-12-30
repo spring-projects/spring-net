@@ -1,7 +1,7 @@
 ﻿#region License
 
 /*
- * Copyright 2002-2010 the original author or authors.
+ * Copyright 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,7 +28,9 @@ namespace Spring.Http.Rest
     /// </summary>
     /// <author>Arjen Poutsma</author>
     /// <author>Bruno Baia (.NET)</author>
+#if !SILVERLIGHT
     [Serializable]
+#endif
     public class RestClientException : Exception
     {
         /// <summary>
@@ -63,6 +65,7 @@ namespace Spring.Http.Rest
         {
         }
 
+#if !SILVERLIGHT
         /// <summary>
         /// Creates a new instance of the <see cref="RestClientException"/> class.
         /// </summary>
@@ -78,5 +81,6 @@ namespace Spring.Http.Rest
             : base(info, context)
         {
         }
+#endif
     }
 }

@@ -1,7 +1,7 @@
-﻿#region License
+#region License
 
 /*
- * Copyright 2002-2010 the original author or authors.
+ * Copyright 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,22 +19,29 @@
 #endregion
 
 using System;
-using System.Net;
+using System.IO;
 
 namespace Spring.Http
 {
     /// <summary>
-    /// Factory for <see cref="HttpWebRequest"/> objects. Requests are created by the <see cref="M:CreateRequest"/> method.
+    /// Represents an HTTP message, consisting of <see cref="P:Headers">headers</see> 
+    /// and a writable <see cref="P:Body">body</see>.
     /// </summary>
+    /// <remarks>
+    /// Typically implemented by an HTTP request on the client-side, or a response on the server-side.
+    /// </remarks>
     /// <author>Arjen Poutsma</author>
     /// <author>Bruno Baia (.NET)</author>
-    public interface IHttpWebRequestFactory
+    public interface IHttpOutputMessage
     {
         /// <summary>
-        /// Create a new <see cref="HttpWebRequest"/> for the specified URI.
+        /// Gets the message headers.
         /// </summary>
-        /// <param name="uri">The URI to create a request for.</param>
-        /// <returns>The created request</returns>
-        HttpWebRequest CreateRequest(Uri uri);
+        HttpHeaders Headers { get; }
+
+        /// <summary>
+        /// Sets the delegate that writes the body message as a stream.
+        /// </summary>
+        Action<Stream> Body { get; set; }
     }
 }

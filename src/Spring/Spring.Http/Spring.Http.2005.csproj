@@ -78,6 +78,7 @@
       <Name>System</Name>
     </Reference>
     <Reference Include="System.Configuration" />
+    <Reference Include="System.Data" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -87,7 +88,13 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Http\Converters\UrlEncodedFormHttpMessageConverter.cs" />
+    <Compile Include="Collections\Specialized\NameValueCollection.cs" />
+    <Compile Include="Http\Client\ExecuteCompletedEventArgs.cs" />
+    <Compile Include="Http\Converters\FileInfoHttpMessageConverter.cs" />
+    <Compile Include="Http\Converters\FormHttpMessageConverter.cs" />
+    <Compile Include="Http\Converters\HttpMessageConversionException.cs" />
+    <Compile Include="Http\Converters\HttpMessageNotReadableException.cs" />
+    <Compile Include="Http\Converters\HttpMessageNotWritableException.cs" />
     <Compile Include="Http\Converters\Feed\Atom10FeedHttpMessageConverter.cs" />
     <Compile Include="Http\Converters\Feed\AbstractFeedHttpMessageConverter.cs" />
     <Compile Include="Http\Converters\Feed\Rss20FeedHttpMessageConverter.cs" />
@@ -97,15 +104,28 @@
     <Compile Include="Http\Converters\Xml\XmlDocumentHttpMessageConverter.cs" />
     <Compile Include="Http\Converters\Xml\XmlSerializableHttpMessageConverter.cs" />
     <Compile Include="Http\Converters\Xml\DataContractHttpMessageConverter.cs" />
-    <Compile Include="Http\DefaultHttpWebRequestFactory.cs" />
+    <Compile Include="Http\Client\IClientHttpRequestFactory.cs" />
+    <Compile Include="Http\Client\IClientHttpResponse.cs" />
+    <Compile Include="Http\HttpEntity.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Http\HttpEntity`1.cs" />
+    <Compile Include="Http\HttpHeaders.cs" />
     <Compile Include="Http\HttpResponseMessage.cs" />
     <Compile Include="Http\HttpResponseMessage`1.cs" />
-    <Compile Include="Http\IHttpWebRequestFactory.cs" />
-    <Compile Include="Http\HttpRequestMessage.cs" />
+    <Compile Include="Http\Client\IClientHttpRequest.cs" />
+    <Compile Include="Http\IHttpInputMessage.cs" />
+    <Compile Include="Http\IHttpOutputMessage.cs" />
+    <Compile Include="Http\Rest\HttpClientErrorException.cs" />
+    <Compile Include="Http\Rest\HttpServerErrorException.cs" />
+    <Compile Include="Http\Rest\HttpStatusCodeException.cs" />
+    <Compile Include="Http\Rest\IResponseErrorHandler.cs" />
+    <Compile Include="Http\Rest\IRestAsyncOperations.cs" />
+    <Compile Include="Http\Rest\MethodCompletedEventArgs.cs" />
     <Compile Include="Http\Rest\Support\AcceptHeaderRequestCallback.cs" />
+    <Compile Include="Http\Rest\Support\DefaultResponseErrorHandler.cs" />
+    <Compile Include="Http\Rest\Support\HttpEntityRequestCallback.cs" />
     <Compile Include="Http\Rest\Support\HttpMessageResponseExtractor`1.cs" />
-    <Compile Include="Http\Rest\Support\MethodRequestCallback.cs" />
-    <Compile Include="Http\Rest\Support\HttpMessageRequestCallback.cs" />
     <Compile Include="Http\Rest\Support\HeadersResponseExtractor.cs" />
     <Compile Include="Http\Rest\Support\HttpMessageResponseExtractor.cs" />
     <Compile Include="Http\Converters\AbstractHttpMessageConverter.cs" />
@@ -120,7 +140,11 @@
     <Compile Include="Http\Rest\RestClientException.cs" />
     <Compile Include="Http\Rest\RestTemplate.cs" />
     <Compile Include="Http\Converters\StringHttpMessageConverter.cs" />
+    <Compile Include="Http\Client\WebClientHttpRequest.cs" />
+    <Compile Include="Http\Client\WebClientHttpRequestFactory.cs" />
+    <Compile Include="Http\Client\WebClientHttpResponse.cs" />
     <Compile Include="Util\AssertUtils.cs" />
+    <Compile Include="Util\IoUtils.cs" />
     <Compile Include="Util\StringUtils.cs" />
     <Compile Include="Util\UriTemplate.cs" />
   </ItemGroup>

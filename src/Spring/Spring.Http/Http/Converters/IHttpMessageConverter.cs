@@ -1,7 +1,7 @@
 ﻿#region License
 
 /*
- * Copyright 2002-2010 the original author or authors.
+ * Copyright 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,13 +21,12 @@
 using System;
 using System.Net;
 using System.Collections.Generic;
+using System.IO;
 
 namespace Spring.Http.Converters
 {
-    // TODO: HttpMessageNotReadableException & HttpMessageNotWritableException exceptions ?
-
     /// <summary>
-    /// Strategy interface that specifies a converter that can convert from and to HTTP requests and responses.
+    /// Strategy interface that specifies a converter that can convert from and to HTTP messages.
     /// </summary>
     /// <author>Arjen Poutsma</author>
     /// <author>Juergen Hoeller</author>
@@ -60,29 +59,31 @@ namespace Spring.Http.Converters
         IList<MediaType> SupportedMediaTypes { get; }
         
         /// <summary>
-        /// Read an object of the given type form the given HTTP response, and returns it.
+        /// Read an object of the given type form the given HTTP message, and returns it.
         /// </summary>
         /// <typeparam name="T">
         /// The type of object to return. This type must have previously been passed to the 
         /// <see cref="M:CanRead"/> method of this interface, which must have returned <see langword="true"/>.
         /// </typeparam>
-        /// <param name="response">The HTTP response to read from.</param>
+        /// <param name="message">The HTTP message to read from.</param>
         /// <returns>The converted object.</returns>
-        T Read<T>(HttpWebResponse response) where T : class;
+        /// <exception cref="HttpMessageNotReadableException">In case of conversion errors</exception>
+        T Read<T>(IHttpInputMessage message) where T : class;
 
         /// <summary>
-        /// Write an given object to the given HTTP request.
+        /// Write an given object to the given HTTP message.
         /// </summary>
         /// <param name="content">
-        /// The object to write to the HTTP request. The type of this object must have previously been 
+        /// The object to write to the HTTP message. The type of this object must have previously been 
         /// passed to the <see cref="M:CanWrite"/> method of this interface, which must have returned <see langword="true"/>.
         /// </param>
-        /// <param name="mediaType">
+        /// <param name="contentType">
         /// The content type to use when writing. May be null to indicate that the default content type of the converter must be used. 
         /// If not null, this media type must have previously been passed to the <see cref="M:CanWrite"/> method of this interface, 
         /// which must have returned <see langword="true"/>.
         /// </param>
-        /// <param name="request">The HTTP request to write to.</param>
-        void Write(object content, MediaType mediaType, HttpWebRequest request);
+        /// <param name="message">The HTTP message to write to.</param>
+        /// <exception cref="HttpMessageNotWritableException">In case of conversion errors</exception>
+        void Write(object content, MediaType contentType, IHttpOutputMessage message);
     }
 }

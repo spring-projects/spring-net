@@ -1,7 +1,7 @@
 ﻿#region License
 
 /*
- * Copyright 2002-2010 the original author or authors.
+ * Copyright 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -112,10 +112,10 @@ namespace Spring.Http
         }
 
         [Test]
-        public void ParseMediaType()
+        public void Parse()
         {
             string s = "audio/*; q=0.2";
-            MediaType mediaType = MediaType.ParseMediaType(s);
+            MediaType mediaType = MediaType.Parse(s);
             Assert.AreEqual("audio", mediaType.Type, "Invalid type");
             Assert.AreEqual("*", mediaType.Subtype, "Invalid subtype");
             Assert.AreEqual(0.2, mediaType.QualityValue, "Invalid quality factor");
@@ -123,31 +123,31 @@ namespace Spring.Http
 
         [Test]
         [ExpectedException(typeof(ArgumentException))]
-        public void ParseMediaTypeNoSubtype() 
+        public void ParseNoSubtype() 
         {
-            MediaType.ParseMediaType("audio");
+            MediaType.Parse("audio");
         }
 
         [Test]
         [ExpectedException(typeof(ArgumentException))]
-        public void ParseMediaTypeNoSubtypeSlash() 
+        public void ParseNoSubtypeSlash() 
         {
-            MediaType.ParseMediaType("audio/");
+            MediaType.Parse("audio/");
         }
 
         //[Test](expected = IllegalArgumentException.class)
-        //public void parseMediaTypeIllegalType() {
-        //    MediaType.parseMediaType("audio(/basic");
+        //public void parseIllegalType() {
+        //    MediaType.parse("audio(/basic");
         //}
 
         //[Test](expected = IllegalArgumentException.class)
-        //public void parseMediaTypeIllegalSubtype() {
-        //    MediaType.parseMediaType("audio/basic)");
+        //public void parseIllegalSubtype() {
+        //    MediaType.parse("audio/basic)");
         //}
 
         //[Test](expected = IllegalArgumentException.class)
-        //public void parseMediaTypeEmptyParameterAttribute() {
-        //    MediaType.parseMediaType("audio/*;=value");
+        //public void parseEmptyParameterAttribute() {
+        //    MediaType.parse("audio/*;=value");
         //}
 
         //[Test](expected = IllegalArgumentException.class)
@@ -156,39 +156,39 @@ namespace Spring.Http
         //}
 
         //[Test](expected = IllegalArgumentException.class)
-        //public void parseMediaTypeIllegalParameterAttribute() {
-        //    MediaType.parseMediaType("audio/*;attr<=value");
+        //public void parseIllegalParameterAttribute() {
+        //    MediaType.parse("audio/*;attr<=value");
         //}
 
         //[Test](expected = IllegalArgumentException.class)
-        //public void parseMediaTypeIllegalParameterValue() {
-        //    MediaType.parseMediaType("audio/*;attr=v>alue");
+        //public void parseIllegalParameterValue() {
+        //    MediaType.parse("audio/*;attr=v>alue");
         //}
 
         //[Test](expected = IllegalArgumentException.class)
-        //public void parseMediaTypeIllegalQualityFactor() {
-        //    MediaType.parseMediaType("audio/basic;q=1.1");
+        //public void parseIllegalQualityFactor() {
+        //    MediaType.parse("audio/basic;q=1.1");
         //}
 
         //[Test](expected = IllegalArgumentException.class)
-        //public void parseMediaTypeIllegalCharset() {
-        //    MediaType.parseMediaType("text/html; charset=foo-bar");
+        //public void parseIllegalCharset() {
+        //    MediaType.parse("text/html; charset=foo-bar");
         //}
 
         //[Test]
-        //public void parseMediaTypeQuotedParameterValue() {
-        //    MediaType.parseMediaType("audio/*;attr=\"v>alue\"");
+        //public void parseQuotedParameterValue() {
+        //    MediaType.parse("audio/*;attr=\"v>alue\"");
         //}
 
         //[Test](expected = IllegalArgumentException.class)
-        //public void parseMediaTypeIllegalQuotedParameterValue() {
-        //    MediaType.parseMediaType("audio/*;attr=\"");
+        //public void parseIllegalQuotedParameterValue() {
+        //    MediaType.parse("audio/*;attr=\"");
         //}
 
         //[Test]
         //public void parseCharset() throws Exception {
         //    String s = "text/html; charset=iso-8859-1";
-        //    MediaType mediaType = MediaType.parseMediaType(s);
+        //    MediaType mediaType = MediaType.parse(s);
         //    Assert.AreEqual("Invalid type", "text", mediaType.getType());
         //    Assert.AreEqual("Invalid subtype", "html", mediaType.getSubtype());
         //    Assert.AreEqual("Invalid charset", Charset.forName("ISO-8859-1"), mediaType.getCharSet());
@@ -197,7 +197,7 @@ namespace Spring.Http
         //[Test]
         //public void parseQuotedCharset() {
         //    String s = "application/xml;charset=\"utf-8\"";
-        //    MediaType mediaType = MediaType.parseMediaType(s);
+        //    MediaType mediaType = MediaType.parse(s);
         //    Assert.AreEqual("Invalid type", "application", mediaType.getType());
         //    Assert.AreEqual("Invalid subtype", "xml", mediaType.getSubtype());
         //    Assert.AreEqual("Invalid charset", Charset.forName("UTF-8"), mediaType.getCharSet());
@@ -207,23 +207,10 @@ namespace Spring.Http
         public void ParseURLConnectionMediaType()
         {
             string s = "*; q=.2";
-            MediaType mediaType = MediaType.ParseMediaType(s);
+            MediaType mediaType = MediaType.Parse(s);
             Assert.AreEqual(mediaType.Type, "*", "Invalid type");
             Assert.AreEqual("*", mediaType.Subtype, "Invalid subtype");
             Assert.AreEqual(0.2, mediaType.QualityValue, "Invalid quality factor");
-        }
-
-        [Test]
-        public void ParseMediaTypes() 
-        {
-            string s = "text/plain; q=0.5, text/html, text/x-dvi; q=0.8, text/x-c";
-            List<MediaType> mediaTypes = MediaType.ParseMediaTypes(s);
-            Assert.NotNull(mediaTypes, "No media types returned");
-            Assert.AreEqual(4, mediaTypes.Count, "Invalid amount of media types");
-
-            mediaTypes = MediaType.ParseMediaTypes(null);
-            Assert.NotNull(mediaTypes, "No media types returned");
-            Assert.AreEqual(0, mediaTypes.Count, "Invalid amount of media types");
         }
 
         [Test]
@@ -266,15 +253,15 @@ namespace Spring.Http
         [Test]
         public void CompareToConsistentWithEquals()
         {
-            MediaType m1 = MediaType.ParseMediaType("text/html; q=0.7; charset=iso-8859-1");
-            MediaType m2 = MediaType.ParseMediaType("text/html; charset=iso-8859-1; q=0.7");
+            MediaType m1 = MediaType.Parse("text/html; q=0.7; charset=iso-8859-1");
+            MediaType m2 = MediaType.Parse("text/html; charset=iso-8859-1; q=0.7");
 
             Assert.AreEqual(m1, m2, "Media types not equal");
             Assert.AreEqual(0, m1.CompareTo(m2), "compareTo() not consistent with equals");
             Assert.AreEqual(0, m2.CompareTo(m1), "compareTo() not consistent with equals");
 
-            m1 = MediaType.ParseMediaType("text/html; q=0.7; charset=iso-8859-1");
-            m2 = MediaType.ParseMediaType("text/html; Q=0.7; charset=iso-8859-1");
+            m1 = MediaType.Parse("text/html; q=0.7; charset=iso-8859-1");
+            m2 = MediaType.Parse("text/html; Q=0.7; charset=iso-8859-1");
             Assert.AreEqual(m1, m2, "Media types not equal");
             Assert.AreEqual(0, m1.CompareTo(m2), "compareTo() not consistent with equals");
             Assert.AreEqual(0, m2.CompareTo(m1), "compareTo() not consistent with equals");

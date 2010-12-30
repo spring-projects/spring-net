@@ -1,7 +1,7 @@
 ﻿#region License
 
 /*
- * Copyright 2002-2010 the original author or authors.
+ * Copyright 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,6 +18,7 @@
 
 #endregion
 
+using System;
 using System.IO;
 using System.Net;
 using System.Text;
@@ -71,13 +72,15 @@ namespace Spring.Http.Converters
             Encoding charSetEncoding = Encoding.GetEncoding(charSet);
             MediaType mediaType = new MediaType("text", "plain", charSet);
 
-            HttpWebResponse webResponse = mocks.CreateMock<HttpWebResponse>();
-            Expect.Call<Stream>(webResponse.GetResponseStream()).Return(new MemoryStream(Encoding.UTF8.GetBytes(body)));
-            Expect.Call<string>(webResponse.ContentType).Return(mediaType.ToString());
+            IHttpInputMessage message = mocks.CreateMock<IHttpInputMessage>();
+            Expect.Call<Stream>(message.Body).Return(new MemoryStream(Encoding.UTF8.GetBytes(body)));
+            HttpHeaders headers = new HttpHeaders();
+            headers.ContentType = mediaType;
+            Expect.Call<HttpHeaders>(message.Headers).Return(headers).Repeat.Any();
 
             mocks.ReplayAll();
             
-            string result = converter.Read<string>(webResponse);
+            string result = converter.Read<string>(message);
             Assert.AreEqual(body, result, "Invalid result");
 
             mocks.VerifyAll();
@@ -93,17 +96,20 @@ namespace Spring.Http.Converters
             Encoding charSetEncoding = Encoding.GetEncoding(charSet);
             MediaType mediaType = new MediaType("text", "plain", charSet);
 
-            HttpWebRequest webRequest = mocks.CreateMock<HttpWebRequest>();
-            Expect.Call(webRequest.ContentType = mediaType.ToString()).PropertyBehavior();
-            Expect.Call(webRequest.ContentLength = 1337).PropertyBehavior();
-            Expect.Call<Stream>(webRequest.GetRequestStream()).Return(requestStream);
+            IHttpOutputMessage message = mocks.CreateMock<IHttpOutputMessage>();
+            Expect.Call(message.Body).PropertyBehavior();
+            HttpHeaders headers = new HttpHeaders();
+            Expect.Call<HttpHeaders>(message.Headers).Return(headers).Repeat.Any();
 
             mocks.ReplayAll();
 
-            converter.Write(body, null, webRequest);
+            converter.Write(body, null, message);
 
+            message.Body(requestStream);
             byte[] result = requestStream.ToArray();
             Assert.AreEqual(body, charSetEncoding.GetString(result), "Invalid result");
+            Assert.AreEqual(mediaType, message.Headers.ContentType, "Invalid content-type");
+            //Assert.AreEqual(charSetEncoding.GetBytes(body).Length, message.Headers.ContentLength, "Invalid content-length");
 
             mocks.VerifyAll();
         }
@@ -118,17 +124,20 @@ namespace Spring.Http.Converters
             Encoding charSetEncoding = Encoding.GetEncoding(charSet);
             MediaType mediaType = new MediaType("text", "plain", charSet);
 
-            HttpWebRequest webRequest = mocks.CreateMock<HttpWebRequest>();
-            Expect.Call(webRequest.ContentType = mediaType.ToString()).PropertyBehavior();
-            Expect.Call(webRequest.ContentLength = 1337).PropertyBehavior();
-            Expect.Call<Stream>(webRequest.GetRequestStream()).Return(requestStream);
+            IHttpOutputMessage message = mocks.CreateMock<IHttpOutputMessage>();
+            Expect.Call(message.Body).PropertyBehavior();
+            HttpHeaders headers = new HttpHeaders();
+            Expect.Call<HttpHeaders>(message.Headers).Return(headers).Repeat.Any();
 
             mocks.ReplayAll();
 
-            converter.Write(body, mediaType, webRequest);
+            converter.Write(body, mediaType, message);
 
+            message.Body(requestStream);
             byte[] result = requestStream.ToArray();
             Assert.AreEqual(body, charSetEncoding.GetString(result), "Invalid result");
+            Assert.AreEqual(mediaType, message.Headers.ContentType, "Invalid content-type");
+            //Assert.AreEqual(charSetEncoding.GetBytes(body).Length, message.Headers.ContentLength, "Invalid content-length");
 
             mocks.VerifyAll();
         }

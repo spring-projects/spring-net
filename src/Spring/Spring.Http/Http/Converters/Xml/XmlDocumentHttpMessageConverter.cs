@@ -1,7 +1,8 @@
-﻿#region License
+﻿#if !SILVERLIGHT
+#region License
 
 /*
- * Copyright 2002-2010 the original author or authors.
+ * Copyright 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,9 +60,8 @@ namespace Spring.Http.Converters.Xml
         /// </summary>
         /// <typeparam name="T">The type of object to return.</typeparam>
         /// <param name="xmlReader">The XmlReader to use.</param>
-        /// <param name="response">The HTTP response to read from.</param>
         /// <returns>The converted object.</returns>
-        protected override T ReadXml<T>(XmlReader xmlReader, HttpWebResponse response)
+        protected override T ReadXml<T>(XmlReader xmlReader)
         {
             XmlDocument document = new XmlDocument();
             document.Load(xmlReader);
@@ -72,12 +72,12 @@ namespace Spring.Http.Converters.Xml
         /// Abstract template method that writes the actual body using a <see cref="XmlWriter"/>. Invoked from <see cref="M:WriteInternal"/>.
         /// </summary>
         /// <param name="xmlWriter">The XmlWriter to use.</param>
-        /// <param name="content">The object to write to the HTTP request.</param>
-        /// <param name="request">The HTTP request to write to.</param>
-        protected override void WriteXml(XmlWriter xmlWriter, object content, HttpWebRequest request)
+        /// <param name="content">The object to write to the HTTP message.</param>
+        protected override void WriteXml(XmlWriter xmlWriter, object content)
         {
             XmlDocument document = content as XmlDocument;
             document.WriteTo(xmlWriter);
         }
     }
 }
+#endif

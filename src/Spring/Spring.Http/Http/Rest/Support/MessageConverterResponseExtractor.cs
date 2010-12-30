@@ -1,7 +1,7 @@
 ﻿#region License
 
 /*
- * Copyright 2002-2010 the original author or authors.
+ * Copyright 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,6 +23,7 @@ using System.Net;
 using System.Collections.Generic;
 
 using Spring.Util;
+using Spring.Http.Client;
 using Spring.Http.Converters;
 
 namespace Spring.Http.Rest.Support
@@ -36,9 +37,9 @@ namespace Spring.Http.Rest.Support
     public class MessageConverterResponseExtractor<T> : IResponseExtractor<T> where T : class
     {
         #region Logging
-
+#if !SILVERLIGHT
         private static readonly Common.Logging.ILog LOG = Common.Logging.LogManager.GetLogger(typeof(MessageConverterResponseExtractor<T>));
-
+#endif
         #endregion
 
         private IList<IHttpMessageConverter> messageConverters;
@@ -53,32 +54,31 @@ namespace Spring.Http.Rest.Support
         }
 
         /// <summary>
-        /// Gets called by <see cref="RestTemplate"/> with an opened <see cref="HttpWebResponse"/> to extract data. 
+        /// Gets called by <see cref="RestTemplate"/> with an opened <see cref="IClientHttpResponse"/> to extract data. 
         /// Does not need to care about closing the request or about handling errors: 
         /// this will all be handled by the <see cref="RestTemplate"/> class.
         /// </summary>
         /// <param name="response">The active HTTP request.</param>
-        public T ExtractData(HttpWebResponse response)
+        public T ExtractData(IClientHttpResponse response)
         {
-            string contentType = response.Headers[HttpResponseHeader.ContentType];
-            if (!StringUtils.HasText(contentType))
+            MediaType mediaType = response.Headers.ContentType;
+            if (mediaType == null)
             {
                 throw new RestClientException("Could not extract response: no Content-Type found");
             }
-            MediaType mediaType = MediaType.ParseMediaType(contentType);
             foreach(IHttpMessageConverter messageConverter in messageConverters) 
             {
                 if (messageConverter.CanRead(typeof(T), mediaType))
                 {
                     #region Instrumentation
-
+#if !SILVERLIGHT
                     if (LOG.IsDebugEnabled) 
                     {
                         LOG.Debug(String.Format(
                             "Reading [{0}] as '{1}' using [{2}]", 
                             typeof(T).FullName, mediaType, messageConverter));
                     }
-
+#endif
                     #endregion
 
                     return messageConverter.Read<T>(response);

@@ -1,9 +1,9 @@
 ﻿using System;
-#if NET_3_5
+using System.Net;
 using System.Linq;
 using System.Xml.Linq;
-#endif
 
+using Spring.Http;
 using Spring.Http.Rest;
 
 namespace Spring.RestQuickStart
@@ -16,30 +16,44 @@ namespace Spring.RestQuickStart
             {
                 RestTemplate rt = new RestTemplate("http://twitter.com");
 
-#if NET_3_5
-                XElement result = rt.GetForObject<XElement>("/statuses/user_timeline.xml?id={id}&count={2}", "SpringForNet", "10");
-                var tweets = from el in result.Elements("status")
-                             select el.Element("text").Value;
-                foreach (string tweet in tweets)
+                // Exemple sync call
+                Console.WriteLine("Resource headers : ");
+                HttpHeaders headers = rt.HeadForHeaders("/statuses/");
+                foreach (string header in headers)
                 {
-                    Console.WriteLine(String.Format("* {0}", tweet));
-                    Console.WriteLine();
+                    Console.WriteLine(String.Format("{0}: {1}", header, headers[header]));
                 }
-#else
-                string result = rt.GetForObject<string>("/statuses/user_timeline.xml?id={id}&count={2}", "SpringForNet", "10");
-                Console.WriteLine(result);
-#endif
 
+                // Exemple async call
+                rt.GetForObjectAsync<XElement>("/statuses/user_timeline.xml?screen_name={name}", new string[] { "SpringForNet" },
+                    r =>
+                    {
+                        if (r.Error != null)
+                        {
+                            Console.WriteLine(r.Error);
+                        }
+                        else
+                        {
+                            var tweets = from el in r.Response.Elements("status")
+                                         select el.Element("text").Value;
+                            foreach (string tweet in tweets)
+                            {
+                                Console.WriteLine(String.Format("* {0}", tweet));
+                                Console.WriteLine();
+                            }
+                        }
+
+                    });
             }
             catch (Exception ex)
             {
                 Console.WriteLine(ex);
             }
-			finally
-			{
-				Console.WriteLine("--- hit <return> to quit ---");
-				Console.ReadLine();
-			}
+            finally
+            {
+                Console.WriteLine("--- hit <return> to quit ---");
+                Console.ReadLine();
+            }
         }
     }
 }

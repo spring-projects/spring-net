@@ -1,8 +1,8 @@
-﻿#if NET_3_5
+﻿#if NET_3_5 && !SILVERLIGHT
 #region License
 
 /*
- * Copyright 2002-2010 the original author or authors.
+ * Copyright 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -60,9 +60,8 @@ namespace Spring.Http.Converters.Feed
         /// </summary>
         /// <typeparam name="T">The type of object to return.</typeparam>
         /// <param name="xmlReader">The XmlReader to use.</param>
-        /// <param name="response">The HTTP response to read from.</param>
         /// <returns>The converted object.</returns>
-        protected override T ReadXml<T>(XmlReader xmlReader, HttpWebResponse response)
+        protected override T ReadXml<T>(XmlReader xmlReader)
         {
             if (typeof(SyndicationFeed).Equals(typeof(T)))
             {
@@ -76,16 +75,16 @@ namespace Spring.Http.Converters.Feed
         }
 
         /// <summary>
-        /// Returns the default <see cref="XmlReaderSettings">XmlReader settings</see> 
-        /// used by this converter to read from the HTTP response.
+        /// Returns the <see cref="XmlReaderSettings">XmlReader settings</see> 
+        /// used by this converter to read from the HTTP message.
         /// </summary>
         /// <returns>The XmlReader settings.</returns>
-        protected override XmlReaderSettings GetDefaultXmlReaderSettings()
+        protected override XmlReaderSettings GetXmlReaderSettings()
         {
             XmlReaderSettings settings = new XmlReaderSettings();
             settings.CloseInput = true;
             settings.IgnoreProcessingInstructions = true;
-#if NET_4_0
+#if NET_4_0 || SILVERLIGHT
             settings.DtdProcessing = DtdProcessing.Ignore;
 #else
             settings.ProhibitDtd = false;            

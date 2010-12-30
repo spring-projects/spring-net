@@ -1,8 +1,8 @@
-﻿#if NET_3_5
+﻿#if NET_3_5 || WINDOWS_PHONE
 #region License
 
 /*
- * Copyright 2002-2010 the original author or authors.
+ * Copyright 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,18 +20,17 @@
 #endregion
 
 using System;
-using System.Xml;
 using System.IO;
 using System.Net;
+using System.Xml;
 using System.Text;
+using System.Collections.Generic;
 using System.Runtime.Serialization.Json;
 
 using Spring.Util;
 
 namespace Spring.Http.Converters.Json
 {
-    // TODO : Support for known types, etc...
-
     /// <summary>
     /// Implementation of <see cref="IHttpMessageConverter"/> that can read and write JSON.
     /// </summary>
@@ -45,7 +44,18 @@ namespace Spring.Http.Converters.Json
         /// <summary>
         /// Default encoding for JSON.
         /// </summary>
-        public static readonly Encoding DEFAULT_CHARSET = Encoding.UTF8;
+        public static readonly Encoding DEFAULT_CHARSET = new UTF8Encoding(false); // Remove byte Order Mask (BOM)
+
+        private IEnumerable<Type> _knownTypes;
+
+        /// <summary>
+        /// Gets or sets types that may be present in the object graph.
+        /// </summary>
+        public IEnumerable<Type> KnownTypes
+        {
+            get { return _knownTypes; }
+            set { _knownTypes = value; }
+        }
 
         /// <summary>
         /// Creates a new instance of the <see cref="JsonHttpMessageConverter"/> 
@@ -70,27 +80,34 @@ namespace Spring.Http.Converters.Json
         /// Abstract template method that reads the actualy object. Invoked from <see cref="M:Read"/>.
         /// </summary>
         /// <typeparam name="T">The type of object to return.</typeparam>
-        /// <param name="response">The HTTP response to read from.</param>
+        /// <param name="message">The HTTP message to read from.</param>
         /// <returns>The converted object.</returns>
-        protected override T ReadInternal<T>(HttpWebResponse response)
+        /// <exception cref="HttpMessageNotReadableException">In case of conversion errors</exception>
+        protected override T ReadInternal<T>(IHttpInputMessage message)
         {
-            DataContractJsonSerializer serializer = new DataContractJsonSerializer(typeof(T));
-            using (Stream stream = response.GetResponseStream())
-            {
-                return (T)serializer.ReadObject(stream) as T;
-            }
+            DataContractJsonSerializer serializer = this.GetSerializer(typeof(T));
+            return (T)serializer.ReadObject(message.Body) as T;
         }
 
         /// <summary>
         /// Abstract template method that writes the actual body. Invoked from <see cref="M:Write"/>.
         /// </summary>
-        /// <param name="content">The object to write to the HTTP request.</param>
-        /// <param name="request">The HTTP request to write to.</param>
-        protected override void WriteInternal(object content, HttpWebRequest request)
+        /// <param name="content">The object to write to the HTTP message.</param>
+        /// <param name="message">The HTTP message to write to.</param>
+        /// <exception cref="HttpMessageNotWritableException">In case of conversion errors</exception>
+        protected override void WriteInternal(object content, IHttpOutputMessage message)
         {
-            // Get the request encoding
+#if SILVERLIGHT
+            // Write to the message stream
+            message.Body = delegate(Stream stream)
+            {
+                DataContractJsonSerializer serializer = this.GetSerializer(content.GetType());
+                serializer.WriteObject(stream, content);
+            };
+#else
+            // Get the message encoding
             Encoding encoding;
-            MediaType mediaType = MediaType.ParseMediaType(request.ContentType);
+            MediaType mediaType = message.Headers.ContentType;
             if (mediaType == null || !StringUtils.HasText(mediaType.CharSet))
             {
                 encoding = DEFAULT_CHARSET;
@@ -100,23 +117,35 @@ namespace Spring.Http.Converters.Json
                 encoding = Encoding.GetEncoding(mediaType.CharSet);
             }
 
-            DataContractJsonSerializer serializer = new DataContractJsonSerializer(content.GetType());
+            DataContractJsonSerializer serializer = this.GetSerializer(content.GetType());
             
-            // Write to the request
-            using (IgnoreCloseMemoryStream requestStream = new IgnoreCloseMemoryStream())
+            // Write to the message stream
+            message.Body = delegate(Stream stream)
             {
-                using (XmlDictionaryWriter jsonWriter = JsonReaderWriterFactory.CreateJsonWriter(requestStream, encoding, false))
+                // Using JsonReaderWriterFactory directly to set encoding
+                using (XmlDictionaryWriter jsonWriter = JsonReaderWriterFactory.CreateJsonWriter(stream, encoding, false))
                 {
                     serializer.WriteObject(jsonWriter, content);
                 }
+            };
+#endif
+        }
 
-                // Set the content length in the request headers  
-                request.ContentLength = requestStream.Length;
-
-                using (Stream postStream = request.GetRequestStream())
-                {
-                    requestStream.CopyToAndClose(postStream);
-                }
+        /// <summary>
+        /// Creates an instance of <see cref="DataContractJsonSerializer"/> to 
+        /// serialize or deserialize an object of the specified type.
+        /// </summary>
+        /// <param name="type">The type of instances to serialize or deserialize.</param>
+        /// <returns>The serializer to use.</returns>
+        protected virtual DataContractJsonSerializer GetSerializer(Type type)
+        {
+            if (this._knownTypes == null)
+            {
+                return new DataContractJsonSerializer(type);
+            }
+            else
+            {
+                return new DataContractJsonSerializer(type, this._knownTypes);
             }
         }
     }

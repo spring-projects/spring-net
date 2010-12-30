@@ -1,7 +1,7 @@
 ﻿#region License
 
 /*
- * Copyright 2002-2010 the original author or authors.
+ * Copyright 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -23,7 +23,7 @@ using System.Net;
 namespace Spring.Http
 {
     /// <summary>
-    /// Represents a HTTP response message with no entity.
+    /// Represents a HTTP response message with no body.
     /// </summary>
     /// <author>Bruno Baia</author>
     public class HttpResponseMessage : HttpResponseMessage<object>
@@ -44,7 +44,7 @@ namespace Spring.Http
         /// <param name="headers">The response headers.</param>
         /// <param name="statusCode">The HTTP status code.</param>
         /// <param name="statusDescription">The HTTP status description.</param>
-        public HttpResponseMessage(WebHeaderCollection headers, HttpStatusCode statusCode, string statusDescription) :
+        public HttpResponseMessage(HttpHeaders headers, HttpStatusCode statusCode, string statusDescription) :
             base(null, headers, statusCode, statusDescription)
         {
         }

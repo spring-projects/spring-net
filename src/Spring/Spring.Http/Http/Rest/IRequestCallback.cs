@@ -1,7 +1,7 @@
 ﻿#region License
 
 /*
- * Copyright 2002-2010 the original author or authors.
+ * Copyright 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,19 +18,22 @@
 
 #endregion
 
+using System.IO;
 using System.Net;
+
+using Spring.Http.Client;
 
 namespace Spring.Http.Rest
 {
     /// <summary>
-    /// Callback interface for code that operates on a <see cref="HttpWebRequest"/>. 
+    /// Callback interface for code that operates on a <see cref="IClientHttpRequest"/>. 
     /// Allows to manipulate the request headers, and write to the request body.
     /// </summary>
     /// <remarks>
     /// <para>
     /// Callback interface used by <see cref="RestTemplate"/>'s senders methods. 
     /// Implementations of this interface perform the actual work of writing data 
-    /// to a <see cref="HttpWebRequest"/>, but don't need to worry about exception 
+    /// to a <see cref="IClientHttpRequest"/>, but don't need to worry about exception 
     /// handling or closing resources.
     /// </para>
     /// <para>
@@ -42,11 +45,13 @@ namespace Spring.Http.Rest
     public interface IRequestCallback
     {
         /// <summary>
-        /// Gets called by <see cref="RestTemplate"/> with an opened <see cref="HttpWebRequest"/> to write data. 
+        /// Gets called by <see cref="RestTemplate"/> with an <see cref="IClientHttpRequest"/> to write data. 
+        /// </summary>
+        /// <remarks>
         /// Does not need to care about closing the request or about handling errors: 
         /// this will all be handled by the <see cref="RestTemplate"/> class.
-        /// </summary>
+        /// </remarks>
         /// <param name="request">The active HTTP request.</param>
-        void DoWithRequest(HttpWebRequest request);
+        void DoWithRequest(IClientHttpRequest request);
     }
 }

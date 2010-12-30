@@ -1,7 +1,7 @@
 ﻿#region License
 
 /*
- * Copyright 2002-2010 the original author or authors.
+ * Copyright 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,16 +19,20 @@
 #endregion
 
 using System;
+using System.IO;
 using System.Net;
+using System.Threading;
+using System.ComponentModel;
 using System.Collections.Generic;
 
+using Spring.Http.Client;
 using Spring.Http.Converters;
 using Spring.Http.Converters.Xml;
-#if NET_3_5
+#if NET_3_5 && !SILVERLIGHT
 using Spring.Http.Converters.Feed;
 #endif
 using Spring.Http.Rest.Support;
-using UriTemplate = Spring.Util.UriTemplate; // UriTemplate in .NET Framework since 3.5
+using UriTemplate = Spring.Util.UriTemplate; // UriTemplate exists in .NET Framework since 3.5
 using AssertUtils = Spring.Util.AssertUtils;
 using StringUtils = Spring.Util.StringUtils;
 
@@ -51,8 +55,9 @@ namespace Spring.Http.Rest
     ///     <tr><td>OPTIONS</td><td><see cref="M:OptionsForAllow"/></td></tr>
     ///     <tr><td>POST</td><td><see cref="M:PostForLocation"/></td></tr>
     ///     <tr><td></td><td><see cref="M:PostForObject"/></td></tr>
+    ///     <tr><td></td><td><see cref="M:PostForMessage"/></td></tr>
     ///     <tr><td>PUT</td><td><see cref="M:Put"/></td></tr>
-    ///     <tr><td>any</td><td><see cref="M:Exchange"/></td></tr>
+    ///     <tr><td>Any</td><td><see cref="M:Exchange"/></td></tr>
     ///     <tr><td></td><td><see cref="M:Execute"/></td></tr>
     /// </table>
     /// </para>
@@ -88,20 +93,28 @@ namespace Spring.Http.Rest
     /// but you can also write your own converter and register it via the <see cref="P:MessageConverters"/> property.
     /// </para>
     /// <para>
-    /// This template uses a <see cref="T:DefaultHttpWebRequestFactory"/> as default strategy for creating HTTP connections. 
+    /// This template uses a <see cref="WebClientHttpRequestFactory"/> and a <see cref="DefaultResponseErrorHandler"/> 
+    /// as default strategies for creating HTTP connections or handling HTTP errors, respectively. 
+    /// These defaults can be overridden through the <see cref="P:RequestFactory"/> and <see cref="P:ErrorHandler"/> properties.
     /// </para>
     /// </remarks>
+    /// <see cref="IClientHttpRequestFactory"/>
+    /// <see cref="IResponseErrorHandler"/>
     /// <see cref="IHttpMessageConverter"/>
     /// <see cref="IRequestCallback"/>
     /// <see cref="IResponseExtractor{T}"/>
     /// <author>Arjen Poutsma</author>
     /// <author>Bruno Baia (.NET)</author>
-    public class RestTemplate : IRestOperations
+    public class RestTemplate : 
+#if !SILVERLIGHT
+        IRestOperations, 
+#endif
+        IRestAsyncOperations
     {
         #region Logging
-
+#if !SILVERLIGHT
         private static readonly Common.Logging.ILog LOG = Common.Logging.LogManager.GetLogger(typeof(RestTemplate));
-
+#endif
         #endregion
 
         #region Fields / Properties
@@ -109,9 +122,10 @@ namespace Spring.Http.Rest
         private Uri _baseAddress;
         private bool _throwExceptionOnError;
         private IList<IHttpMessageConverter> _messageConverters;
-        private IHttpWebRequestFactory _requestFactory;
+        private IClientHttpRequestFactory _requestFactory;
+        private IResponseErrorHandler _errorHandler;
 
-        private IResponseExtractor<WebHeaderCollection> headersExtractor;
+        private IResponseExtractor<HttpHeaders> headersExtractor;
 
 
         /// <summary>
@@ -155,12 +169,27 @@ namespace Spring.Http.Rest
         }
 
         /// <summary>
-        /// Gets or sets the request factory that this class uses for obtaining for <see cref="HttpWebRequest"/> objects.
+        /// Gets or sets the request factory that this class uses for obtaining for <see cref="IClientHttpRequest"/> objects.
         /// </summary>
-        public IHttpWebRequestFactory RequestFactory
+        /// <remarks>
+        /// Default value is <see cref="WebClientHttpRequestFactory"/>.
+        /// </remarks>
+        public IClientHttpRequestFactory RequestFactory
         {
             get { return this._requestFactory; }
             set { this._requestFactory = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets the error handler.
+        /// </summary>
+        /// <remarks>
+        /// Default value is <see cref="DefaultResponseErrorHandler"/>.
+        /// </remarks>
+        public IResponseErrorHandler ErrorHandler
+        {
+            get { return this._errorHandler; }
+            set { this._errorHandler = value; }
         }
 
         #endregion
@@ -194,30 +223,39 @@ namespace Spring.Http.Rest
         {
             this._throwExceptionOnError = true;
             this.headersExtractor = new HeadersResponseExtractor();
-            this._requestFactory = new DefaultHttpWebRequestFactory();
+
+            this._requestFactory = new WebClientHttpRequestFactory();
+            this._errorHandler = new DefaultResponseErrorHandler();
 
             this._messageConverters = new List<IHttpMessageConverter>();
 
             this._messageConverters.Add(new ByteArrayHttpMessageConverter());
             this._messageConverters.Add(new StringHttpMessageConverter());
-            this._messageConverters.Add(new UrlEncodedFormHttpMessageConverter());
+            this._messageConverters.Add(new FormHttpMessageConverter());
+#if !SILVERLIGHT
             this._messageConverters.Add(new XmlDocumentHttpMessageConverter());
-#if NET_3_0
+#endif
+#if NET_3_0 || SILVERLIGHT
             this._messageConverters.Add(new DataContractHttpMessageConverter());
 #else // NET_2_0 only
             this._messageConverters.Add(new XmlSerializableHttpMessageConverter());
 #endif
-#if NET_3_5
+#if NET_3_5 || WINDOWS_PHONE
             this._messageConverters.Add(new XElementHttpMessageConverter());
+#if NET_3_5
             this._messageConverters.Add(new Rss20FeedHttpMessageConverter());
             this._messageConverters.Add(new Atom10FeedHttpMessageConverter());
-            //this._messageConverters.Add(new JsonHttpMessageConverter());            
 #endif
+#endif
+            //this._messageConverters.Add(new JsonHttpMessageConverter());            
         }
 
         #endregion
 
         #region IRestOperations Membres
+
+#if !SILVERLIGHT
+        #region GET
 
         /// <summary>
         /// Retrieve a representation by doing a GET on the specified URL. 
@@ -232,9 +270,9 @@ namespace Spring.Http.Rest
         /// <returns>The converted object</returns>
         public T GetForObject<T>(string url, params string[] uriVariables) where T : class
         {
-            AcceptHeaderRequestCallback requestCallback = new AcceptHeaderRequestCallback(HttpMethod.GET, typeof(T), this._messageConverters);
+            AcceptHeaderRequestCallback requestCallback = new AcceptHeaderRequestCallback(typeof(T), this._messageConverters);
             MessageConverterResponseExtractor<T> responseExtractor = new MessageConverterResponseExtractor<T>(this._messageConverters);
-            return this.Execute<T>(url, requestCallback, responseExtractor, uriVariables);
+            return this.Execute<T>(url, HttpMethod.GET, requestCallback, responseExtractor, uriVariables);
         }
 
         /// <summary>
@@ -250,9 +288,9 @@ namespace Spring.Http.Rest
         /// <returns>The converted object</returns>
         public T GetForObject<T>(string url, IDictionary<string, string> uriVariables) where T : class
         {
-            AcceptHeaderRequestCallback requestCallback = new AcceptHeaderRequestCallback(HttpMethod.GET, typeof(T), this._messageConverters);
+            AcceptHeaderRequestCallback requestCallback = new AcceptHeaderRequestCallback(typeof(T), this._messageConverters);
             MessageConverterResponseExtractor<T> responseExtractor = new MessageConverterResponseExtractor<T>(this._messageConverters);
-            return this.Execute<T>(url, requestCallback, responseExtractor, uriVariables);
+            return this.Execute<T>(url, HttpMethod.GET, requestCallback, responseExtractor, uriVariables);
         }
 
         /// <summary>
@@ -264,9 +302,9 @@ namespace Spring.Http.Rest
         /// <returns>The converted object</returns>
         public T GetForObject<T>(Uri url) where T : class
         {
-            AcceptHeaderRequestCallback requestCallback = new AcceptHeaderRequestCallback(HttpMethod.GET, typeof(T), this._messageConverters);
+            AcceptHeaderRequestCallback requestCallback = new AcceptHeaderRequestCallback(typeof(T), this._messageConverters);
             MessageConverterResponseExtractor<T> responseExtractor = new MessageConverterResponseExtractor<T>(this._messageConverters);
-            return this.Execute<T>(url, requestCallback, responseExtractor);
+            return this.Execute<T>(url, HttpMethod.GET, requestCallback, responseExtractor);
         }
 
         /// <summary>
@@ -282,9 +320,9 @@ namespace Spring.Http.Rest
         /// <returns>The HTTP response message.</returns>
         public HttpResponseMessage<T> GetForMessage<T>(string url, params string[] uriVariables) where T : class
         {
-            AcceptHeaderRequestCallback requestCallback = new AcceptHeaderRequestCallback(HttpMethod.GET, typeof(T), this._messageConverters);
+            AcceptHeaderRequestCallback requestCallback = new AcceptHeaderRequestCallback(typeof(T), this._messageConverters);
             HttpMessageResponseExtractor<T> responseExtractor = new HttpMessageResponseExtractor<T>(this._messageConverters);
-            return this.Execute<HttpResponseMessage<T>>(url, requestCallback, responseExtractor, uriVariables);
+            return this.Execute<HttpResponseMessage<T>>(url, HttpMethod.GET, requestCallback, responseExtractor, uriVariables);
         }
 
         /// <summary>
@@ -300,9 +338,9 @@ namespace Spring.Http.Rest
         /// <returns>The HTTP response message.</returns>
         public HttpResponseMessage<T> GetForMessage<T>(string url, IDictionary<string, string> uriVariables) where T : class
         {
-            AcceptHeaderRequestCallback requestCallback = new AcceptHeaderRequestCallback(HttpMethod.GET, typeof(T), this._messageConverters);
+            AcceptHeaderRequestCallback requestCallback = new AcceptHeaderRequestCallback(typeof(T), this._messageConverters);
             HttpMessageResponseExtractor<T> responseExtractor = new HttpMessageResponseExtractor<T>(this._messageConverters);
-            return this.Execute<HttpResponseMessage<T>>(url, requestCallback, responseExtractor, uriVariables);
+            return this.Execute<HttpResponseMessage<T>>(url, HttpMethod.GET, requestCallback, responseExtractor, uriVariables);
         }
 
         /// <summary>
@@ -314,10 +352,14 @@ namespace Spring.Http.Rest
         /// <returns>The HTTP response message.</returns>
         public HttpResponseMessage<T> GetForMessage<T>(Uri url) where T : class
         {
-            AcceptHeaderRequestCallback requestCallback = new AcceptHeaderRequestCallback(HttpMethod.GET, typeof(T), this._messageConverters);
+            AcceptHeaderRequestCallback requestCallback = new AcceptHeaderRequestCallback(typeof(T), this._messageConverters);
             HttpMessageResponseExtractor<T> responseExtractor = new HttpMessageResponseExtractor<T>(this._messageConverters);
-            return this.Execute<HttpResponseMessage<T>>(url, requestCallback, responseExtractor);
+            return this.Execute<HttpResponseMessage<T>>(url, HttpMethod.GET, requestCallback, responseExtractor);
         }
+
+        #endregion
+
+        #region HEAD
 
         /// <summary>
         /// Retrieve all headers of the resource specified by the URI template.
@@ -328,10 +370,9 @@ namespace Spring.Http.Rest
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>All HTTP headers of that resource</returns>
-        public WebHeaderCollection HeadForHeaders(string url, params string[] uriVariables)
+        public HttpHeaders HeadForHeaders(string url, params string[] uriVariables)
         {
-            MethodRequestCallback requestCallback = new MethodRequestCallback(HttpMethod.HEAD);
-            return this.Execute<WebHeaderCollection>(url, requestCallback, this.headersExtractor, uriVariables);
+            return this.Execute<HttpHeaders>(url, HttpMethod.HEAD, null, this.headersExtractor, uriVariables);
         }
 
         /// <summary>
@@ -343,10 +384,9 @@ namespace Spring.Http.Rest
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         /// <returns>All HTTP headers of that resource</returns>
-        public WebHeaderCollection HeadForHeaders(string url, IDictionary<string, string> uriVariables)
+        public HttpHeaders HeadForHeaders(string url, IDictionary<string, string> uriVariables)
         {
-            MethodRequestCallback requestCallback = new MethodRequestCallback(HttpMethod.HEAD);
-            return this.Execute<WebHeaderCollection>(url, requestCallback, this.headersExtractor, uriVariables);
+            return this.Execute<HttpHeaders>(url, HttpMethod.HEAD, null, this.headersExtractor, uriVariables);
         }
 
         /// <summary>
@@ -354,11 +394,14 @@ namespace Spring.Http.Rest
         /// </summary>
         /// <param name="url">The URL.</param>
         /// <returns>All HTTP headers of that resource</returns>
-        public WebHeaderCollection HeadForHeaders(Uri url)
+        public HttpHeaders HeadForHeaders(Uri url)
         {
-            MethodRequestCallback requestCallback = new MethodRequestCallback(HttpMethod.HEAD);
-            return this.Execute<WebHeaderCollection>(url, requestCallback, this.headersExtractor);
+            return this.Execute<HttpHeaders>(url, HttpMethod.HEAD, null, this.headersExtractor);
         }
+
+        #endregion
+
+        #region POST
 
         /// <summary>
         /// Create a new resource by POSTing the given object to the URI template, 
@@ -370,7 +413,7 @@ namespace Spring.Http.Rest
         /// URI Template variables are expanded using the given URI variables, if any.
         /// </para>
         /// <para>
-        /// The request parameter can be a <see cref="HttpRequestMessage"/> in order to add additional HTTP headers to the request.
+        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
         /// </para>
         /// </remarks>
         /// <param name="url">The URL.</param>
@@ -379,12 +422,10 @@ namespace Spring.Http.Rest
         /// <returns>The value for the Location header.</returns>
         public Uri PostForLocation(string url, object request, params string[] uriVariables)
         {
-            HttpMessageRequestCallback requestCallback = new HttpMessageRequestCallback(
-                HttpMethod.POST, request, this._messageConverters);
-            WebHeaderCollection headers = this.Execute<WebHeaderCollection>(
-                url, requestCallback, this.headersExtractor, uriVariables);
-            string location = headers[HttpResponseHeader.Location];
-            return StringUtils.HasText(location) ? new Uri(location) : null;
+            HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, this._messageConverters);
+            HttpHeaders headers = this.Execute<HttpHeaders>(
+                url, HttpMethod.POST, requestCallback, this.headersExtractor, uriVariables);
+            return headers.Location;
         }
 
         /// <summary>
@@ -397,7 +438,7 @@ namespace Spring.Http.Rest
         /// URI Template variables are expanded using the given dictionary.
         /// </para>
         /// <para>
-        /// The request parameter can be a <see cref="HttpRequestMessage"/> in order to add additional HTTP headers to the request.
+        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
         /// </para>
         /// </remarks>
         /// <param name="url">The URL.</param>
@@ -406,12 +447,10 @@ namespace Spring.Http.Rest
         /// <returns>The value for the Location header.</returns>
         public Uri PostForLocation(string url, object request, IDictionary<string, string> uriVariables)
         {
-            HttpMessageRequestCallback requestCallback = new HttpMessageRequestCallback(
-                HttpMethod.POST, request, this._messageConverters);
-            WebHeaderCollection headers = this.Execute<WebHeaderCollection>(
-                url, requestCallback, this.headersExtractor, uriVariables);
-            string location = headers[HttpResponseHeader.Location];
-            return StringUtils.HasText(location) ? new Uri(location) : null;
+            HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, this._messageConverters);
+            HttpHeaders headers = this.Execute<HttpHeaders>(
+                url, HttpMethod.POST, requestCallback, this.headersExtractor, uriVariables);
+            return headers.Location;
         }
 
         /// <summary>
@@ -420,19 +459,17 @@ namespace Spring.Http.Rest
         /// This header typically indicates where the new resource is stored.
         /// </summary>
         /// <remarks>
-        /// The request parameter can be a <see cref="HttpRequestMessage"/> in order to add additional HTTP headers to the request.
+        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
         /// </remarks>
         /// <param name="url">The URL.</param>
         /// <param name="request">The Object to be POSTed, may be null.</param>
         /// <returns>The value for the Location header.</returns>
         public Uri PostForLocation(Uri url, object request)
         {
-            HttpMessageRequestCallback requestCallback = new HttpMessageRequestCallback(
-                HttpMethod.POST, request, this._messageConverters);
-            WebHeaderCollection headers = this.Execute<WebHeaderCollection>(
-                url, requestCallback, this.headersExtractor);
-            string location = headers[HttpResponseHeader.Location];
-            return StringUtils.HasText(location) ? new Uri(location) : null;
+            HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, this._messageConverters);
+            HttpHeaders headers = this.Execute<HttpHeaders>(
+                url, HttpMethod.POST, requestCallback, this.headersExtractor);
+            return headers.Location;
         }
 
         /// <summary>
@@ -444,7 +481,7 @@ namespace Spring.Http.Rest
         /// URI Template variables are expanded using the given URI variables, if any.
         /// </para>
         /// <para>
-        /// The request parameter can be a <see cref="HttpRequestMessage"/> in order to add additional HTTP headers to the request.
+        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
         /// </para>
         /// </remarks>
         /// <typeparam name="T">The type of the response value.</typeparam>
@@ -454,10 +491,9 @@ namespace Spring.Http.Rest
         /// <returns>The converted object.</returns>
         public T PostForObject<T>(string url, object request, params string[] uriVariables) where T : class
         {
-            HttpMessageRequestCallback requestCallback = new HttpMessageRequestCallback(
-                HttpMethod.POST, request, typeof(T), this._messageConverters);
+            HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, typeof(T), this._messageConverters);
             MessageConverterResponseExtractor<T> responseExtractor = new MessageConverterResponseExtractor<T>(this._messageConverters);
-            return this.Execute<T>(url, requestCallback, responseExtractor, uriVariables);
+            return this.Execute<T>(url, HttpMethod.POST, requestCallback, responseExtractor, uriVariables);
         }
 
         /// <summary>
@@ -469,7 +505,7 @@ namespace Spring.Http.Rest
         /// URI Template variables are expanded using the given dictionary.
         /// </para>
         /// <para>
-        /// The request parameter can be a <see cref="HttpRequestMessage"/> in order to add additional HTTP headers to the request.
+        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
         /// </para>
         /// </remarks>
         /// <typeparam name="T">The type of the response value.</typeparam>
@@ -479,10 +515,9 @@ namespace Spring.Http.Rest
         /// <returns>The converted object.</returns>
         public T PostForObject<T>(string url, object request, IDictionary<string, string> uriVariables) where T : class
         {
-            HttpMessageRequestCallback requestCallback = new HttpMessageRequestCallback(
-                HttpMethod.POST, request, typeof(T), this._messageConverters);
+            HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, typeof(T), this._messageConverters);
             MessageConverterResponseExtractor<T> responseExtractor = new MessageConverterResponseExtractor<T>(this._messageConverters);
-            return this.Execute<T>(url, requestCallback, responseExtractor, uriVariables);
+            return this.Execute<T>(url, HttpMethod.POST, requestCallback, responseExtractor, uriVariables);
         }
 
         /// <summary>
@@ -490,7 +525,7 @@ namespace Spring.Http.Rest
         /// and returns the representation found in the response. 
         /// </summary>
         /// <remarks>
-        /// The request parameter can be a <see cref="HttpRequestMessage"/> in order to add additional HTTP headers to the request.
+        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
         /// </remarks>
         /// <typeparam name="T">The type of the response value.</typeparam>
         /// <param name="url">The URL.</param>
@@ -498,10 +533,9 @@ namespace Spring.Http.Rest
         /// <returns>The converted object.</returns>
         public T PostForObject<T>(Uri url, object request) where T : class
         {
-            HttpMessageRequestCallback requestCallback = new HttpMessageRequestCallback(
-                HttpMethod.POST, request, typeof(T), this._messageConverters);
+            HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, typeof(T), this._messageConverters);
             MessageConverterResponseExtractor<T> responseExtractor = new MessageConverterResponseExtractor<T>(this._messageConverters);
-            return this.Execute<T>(url, requestCallback, responseExtractor);
+            return this.Execute<T>(url, HttpMethod.POST, requestCallback, responseExtractor);
         }
 
         /// <summary>
@@ -513,7 +547,7 @@ namespace Spring.Http.Rest
         /// URI Template variables are expanded using the given URI variables, if any.
         /// </para>
         /// <para>
-        /// The request parameter can be a <see cref="HttpRequestMessage"/> in order to add additional HTTP headers to the request.
+        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
         /// </para>
         /// </remarks>
         /// <typeparam name="T">The type of the response value.</typeparam>
@@ -523,10 +557,9 @@ namespace Spring.Http.Rest
         /// <returns>The HTTP response message.</returns>
         public HttpResponseMessage<T> PostForMessage<T>(string url, object request, params string[] uriVariables) where T : class
         {
-            HttpMessageRequestCallback requestCallback = new HttpMessageRequestCallback(
-                HttpMethod.POST, request, typeof(T), this._messageConverters);
+            HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, typeof(T), this._messageConverters);
             HttpMessageResponseExtractor<T> responseExtractor = new HttpMessageResponseExtractor<T>(this._messageConverters);
-            return this.Execute<HttpResponseMessage<T>>(url, requestCallback, responseExtractor, uriVariables);
+            return this.Execute<HttpResponseMessage<T>>(url, HttpMethod.POST, requestCallback, responseExtractor, uriVariables);
         }
 
         /// <summary>
@@ -538,7 +571,7 @@ namespace Spring.Http.Rest
         /// URI Template variables are expanded using the given dictionary.
         /// </para>
         /// <para>
-        /// The request parameter can be a <see cref="HttpRequestMessage"/> in order to add additional HTTP headers to the request.
+        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
         /// </para>
         /// </remarks>
         /// <typeparam name="T">The type of the response value.</typeparam>
@@ -548,10 +581,9 @@ namespace Spring.Http.Rest
         /// <returns>The HTTP response message.</returns>
         public HttpResponseMessage<T> PostForMessage<T>(string url, object request, IDictionary<string, string> uriVariables) where T : class
         {
-            HttpMessageRequestCallback requestCallback = new HttpMessageRequestCallback(
-                HttpMethod.POST, request, typeof(T), this._messageConverters);
+            HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, typeof(T), this._messageConverters);
             HttpMessageResponseExtractor<T> responseExtractor = new HttpMessageResponseExtractor<T>(this._messageConverters);
-            return this.Execute<HttpResponseMessage<T>>(url, requestCallback, responseExtractor, uriVariables);
+            return this.Execute<HttpResponseMessage<T>>(url, HttpMethod.POST, requestCallback, responseExtractor, uriVariables);
         }
 
         /// <summary>
@@ -559,7 +591,7 @@ namespace Spring.Http.Rest
         /// and returns the response as <see cref="HttpResponseMessage{T}"/>. 
         /// </summary>
         /// <remarks>
-        /// The request parameter can be a <see cref="HttpRequestMessage"/> in order to add additional HTTP headers to the request.
+        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
         /// </remarks>
         /// <typeparam name="T">The type of the response value.</typeparam>
         /// <param name="url">The URL.</param>
@@ -567,10 +599,9 @@ namespace Spring.Http.Rest
         /// <returns>The HTTP response message.</returns>
         public HttpResponseMessage<T> PostForMessage<T>(Uri url, object request) where T : class
         {
-            HttpMessageRequestCallback requestCallback = new HttpMessageRequestCallback(
-                HttpMethod.POST, request, typeof(T), this._messageConverters);
+            HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, typeof(T), this._messageConverters);
             HttpMessageResponseExtractor<T> responseExtractor = new HttpMessageResponseExtractor<T>(this._messageConverters);
-            return this.Execute<HttpResponseMessage<T>>(url, requestCallback, responseExtractor);
+            return this.Execute<HttpResponseMessage<T>>(url, HttpMethod.POST, requestCallback, responseExtractor);
         }
 
         /// <summary>
@@ -582,7 +613,7 @@ namespace Spring.Http.Rest
         /// URI Template variables are expanded using the given URI variables, if any.
         /// </para>
         /// <para>
-        /// The request parameter can be a <see cref="HttpRequestMessage"/> in order to add additional HTTP headers to the request.
+        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
         /// </para>
         /// </remarks>
         /// <param name="url">The URL.</param>
@@ -591,10 +622,9 @@ namespace Spring.Http.Rest
         /// <returns>The HTTP response message with no entity.</returns>
         public HttpResponseMessage PostForMessage(string url, object request, params string[] uriVariables)
         {
-            HttpMessageRequestCallback requestCallback = new HttpMessageRequestCallback(
-                HttpMethod.POST, request, this._messageConverters);
+            HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, this._messageConverters);
             HttpMessageResponseExtractor responseExtractor = new HttpMessageResponseExtractor();
-            return this.Execute<HttpResponseMessage>(url, requestCallback, responseExtractor, uriVariables);
+            return this.Execute<HttpResponseMessage>(url, HttpMethod.POST, requestCallback, responseExtractor, uriVariables);
         }
 
         /// <summary>
@@ -606,7 +636,7 @@ namespace Spring.Http.Rest
         /// URI Template variables are expanded using the given dictionary.
         /// </para>
         /// <para>
-        /// The request parameter can be a <see cref="HttpRequestMessage"/> in order to add additional HTTP headers to the request.
+        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
         /// </para>
         /// </remarks>
         /// <param name="url">The URL.</param>
@@ -615,10 +645,9 @@ namespace Spring.Http.Rest
         /// <returns>The HTTP response message with no entity.</returns>
         public HttpResponseMessage PostForMessage(string url, object request, IDictionary<string, string> uriVariables)
         {
-            HttpMessageRequestCallback requestCallback = new HttpMessageRequestCallback(
-                HttpMethod.POST, request, this._messageConverters);
+            HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, this._messageConverters);
             HttpMessageResponseExtractor responseExtractor = new HttpMessageResponseExtractor();
-            return this.Execute<HttpResponseMessage>(url, requestCallback, responseExtractor, uriVariables);
+            return this.Execute<HttpResponseMessage>(url, HttpMethod.POST, requestCallback, responseExtractor, uriVariables);
         }
 
         /// <summary>
@@ -626,18 +655,21 @@ namespace Spring.Http.Rest
         /// and returns the response with no entity as <see cref="HttpResponseMessage"/>. 
         /// </summary>
         /// <remarks>
-        /// The request parameter can be a <see cref="HttpRequestMessage"/> in order to add additional HTTP headers to the request.
+        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
         /// </remarks>
         /// <param name="url">The URL.</param>
         /// <param name="request">The Object to be POSTed, may be null.</param>
         /// <returns>The HTTP response message with no entity.</returns>
         public HttpResponseMessage PostForMessage(Uri url, object request)
         {
-            HttpMessageRequestCallback requestCallback = new HttpMessageRequestCallback(
-                HttpMethod.POST, request, this._messageConverters);
+            HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, this._messageConverters);
             HttpMessageResponseExtractor responseExtractor = new HttpMessageResponseExtractor();
-            return this.Execute<HttpResponseMessage>(url, requestCallback, responseExtractor);
+            return this.Execute<HttpResponseMessage>(url, HttpMethod.POST, requestCallback, responseExtractor);
         }
+
+        #endregion
+
+        #region PUT
 
         /// <summary>
         /// Create or update a resource by PUTting the given object to the URI.
@@ -647,7 +679,7 @@ namespace Spring.Http.Rest
         /// URI Template variables are expanded using the given URI variables, if any.
         /// </para>
         /// <para>
-        /// The request parameter can be a <see cref="HttpRequestMessage"/> in order to add additional HTTP headers to the request.
+        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
         /// </para>
         /// </remarks>
         /// <param name="url">The URL.</param>
@@ -655,9 +687,8 @@ namespace Spring.Http.Rest
         /// <param name="uriVariables">The variables to expand the template.</param>
         public void Put(string url, object request, params string[] uriVariables)
         {
-            HttpMessageRequestCallback requestCallback = new HttpMessageRequestCallback(
-                HttpMethod.PUT, request, this._messageConverters);
-            this.Execute<object>(url, requestCallback, null, uriVariables);
+            HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, this._messageConverters);
+            this.Execute<object>(url, HttpMethod.PUT, requestCallback, null, uriVariables);
         }
 
         /// <summary>
@@ -668,7 +699,7 @@ namespace Spring.Http.Rest
         /// URI Template variables are expanded using the given dictionary.
         /// </para>
         /// <para>
-        /// The request parameter can be a <see cref="HttpRequestMessage"/> in order to add additional HTTP headers to the request.
+        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
         /// </para>
         /// </remarks>
         /// <param name="url">The URL.</param>
@@ -676,25 +707,27 @@ namespace Spring.Http.Rest
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         public void Put(string url, object request, IDictionary<string, string> uriVariables)
         {
-            HttpMessageRequestCallback requestCallback = new HttpMessageRequestCallback(
-                HttpMethod.PUT, request, this._messageConverters);
-            this.Execute<object>(url, requestCallback, null, uriVariables);
+            HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, this._messageConverters);
+            this.Execute<object>(url, HttpMethod.PUT, requestCallback, null, uriVariables);
         }
 
         /// <summary>
         /// Create or update a resource by PUTting the given object to the URI.
         /// </summary>
         /// <remarks>
-        /// The request parameter can be a <see cref="HttpRequestMessage"/> in order to add additional HTTP headers to the request.
+        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
         /// </remarks>
         /// <param name="url">The URL.</param>
         /// <param name="request">The Object to be PUT, may be null.</param>
         public void Put(Uri url, object request)
         {
-            HttpMessageRequestCallback requestCallback = new HttpMessageRequestCallback(
-                HttpMethod.PUT, request, this._messageConverters);
-            this.Execute<object>(url, requestCallback, null);
+            HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, this._messageConverters);
+            this.Execute<object>(url, HttpMethod.PUT, requestCallback, null);
         }
+
+        #endregion
+
+        #region DELETE
 
         /// <summary>
         /// Delete the resources at the specified URI.
@@ -706,8 +739,7 @@ namespace Spring.Http.Rest
         /// <param name="uriVariables">The variables to expand the template.</param>
         public void Delete(string url, params string[] uriVariables)
         {
-            MethodRequestCallback requestCallback = new MethodRequestCallback(HttpMethod.DELETE);
-            this.Execute<object>(url, requestCallback, null, uriVariables);
+            this.Execute<object>(url, HttpMethod.DELETE, null, null, uriVariables);
         }
 
         /// <summary>
@@ -720,8 +752,7 @@ namespace Spring.Http.Rest
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         public void Delete(string url, IDictionary<string, string> uriVariables)
         {
-            MethodRequestCallback requestCallback = new MethodRequestCallback(HttpMethod.DELETE);
-            this.Execute<object>(url, requestCallback, null, uriVariables);
+            this.Execute<object>(url, HttpMethod.DELETE, null, null, uriVariables);
         }
 
         /// <summary>
@@ -730,9 +761,12 @@ namespace Spring.Http.Rest
         /// <param name="url">The URL.</param>
         public void Delete(Uri url)
         {
-            MethodRequestCallback requestCallback = new MethodRequestCallback(HttpMethod.DELETE);
-            this.Execute<object>(url, requestCallback, null);
+            this.Execute<object>(url, HttpMethod.DELETE, null, null);
         }
+
+        #endregion
+
+        #region OPTIONS
 
         /// <summary>
         /// Return the value of the Allow header for the given URI.
@@ -745,12 +779,9 @@ namespace Spring.Http.Rest
         /// <returns>The value of the allow header.</returns>
         public IList<HttpMethod> OptionsForAllow(string url, params string[] uriVariables)
         {
-            MethodRequestCallback requestCallback = new MethodRequestCallback(HttpMethod.OPTIONS);
-            WebHeaderCollection headers = this.Execute<WebHeaderCollection>(
-                url, requestCallback, this.headersExtractor, uriVariables);
-            string allow = headers[HttpResponseHeader.Allow];
-
-            return ParseAllowHeader(allow);
+            HttpHeaders headers = this.Execute<HttpHeaders>(
+                url, HttpMethod.OPTIONS, null, this.headersExtractor, uriVariables);
+            return new List<HttpMethod>(headers.Allow);
         }
 
         /// <summary>
@@ -764,11 +795,9 @@ namespace Spring.Http.Rest
         /// <returns>The value of the allow header.</returns>
         public IList<HttpMethod> OptionsForAllow(string url, IDictionary<string, string> uriVariables)
         {
-            MethodRequestCallback requestCallback = new MethodRequestCallback(HttpMethod.OPTIONS);
-            WebHeaderCollection headers = this.Execute<WebHeaderCollection>(url, requestCallback, this.headersExtractor, uriVariables);
-            string allow = headers[HttpResponseHeader.Allow];
-
-            return ParseAllowHeader(allow);
+            HttpHeaders headers = this.Execute<HttpHeaders>(
+                url, HttpMethod.OPTIONS, null, this.headersExtractor, uriVariables);
+            return new List<HttpMethod>(headers.Allow);
         }
 
         /// <summary>
@@ -778,224 +807,539 @@ namespace Spring.Http.Rest
         /// <returns>The value of the allow header.</returns>
         public IList<HttpMethod> OptionsForAllow(Uri url)
         {
-            MethodRequestCallback requestCallback = new MethodRequestCallback(HttpMethod.OPTIONS);
-            WebHeaderCollection headers = this.Execute<WebHeaderCollection>(url, requestCallback, this.headersExtractor);
-            string allow = headers[HttpResponseHeader.Allow];
-
-            return ParseAllowHeader(allow);
-        }
-
-        /// <summary>
-        /// Execute the HTTP request to the given URI template, writing the given request message to the request, 
-        /// and returns the response as <see cref="HttpResponseMessage{T}"/>.
-        /// </summary>
-        /// <remarks>
-        /// URI Template variables are expanded using the given URI variables, if any.
-        /// </remarks>
-        /// <typeparam name="T">The type of the response value.</typeparam>
-        /// <param name="url">The URL.</param>
-        /// <param name="requestMessage">The HTTP request message to write to the request.</param>
-        /// <param name="uriVariables">The variables to expand the template.</param>
-        /// <returns>The HTTP response message.</returns>
-        public HttpResponseMessage<T> Exchange<T>(string url, HttpRequestMessage requestMessage, params string[] uriVariables) where T : class
-        {
-            HttpMessageRequestCallback requestCallback = new HttpMessageRequestCallback(requestMessage, typeof(T), this._messageConverters);
-            HttpMessageResponseExtractor<T> responseExtractor = new HttpMessageResponseExtractor<T>(this._messageConverters);
-            return this.Execute<HttpResponseMessage<T>>(url, requestCallback, responseExtractor, uriVariables);
-        }
-
-        /// <summary>
-        /// Execute the HTTP request to the given URI template, writing the given request message to the request, 
-        /// and returns the response as <see cref="HttpResponseMessage{T}"/>.
-        /// </summary>
-        /// <remarks>
-        /// URI Template variables are expanded using the given dictionary.
-        /// </remarks>
-        /// <typeparam name="T">The type of the response value.</typeparam>
-        /// <param name="url">The URL.</param>
-        /// <param name="requestMessage">The HTTP request message to write to the request.</param>
-        /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
-        /// <returns>The HTTP response message.</returns>
-        public HttpResponseMessage<T> Exchange<T>(string url, HttpRequestMessage requestMessage, IDictionary<string, string> uriVariables) where T : class
-        {
-            HttpMessageRequestCallback requestCallback = new HttpMessageRequestCallback(requestMessage, typeof(T), this._messageConverters);
-            HttpMessageResponseExtractor<T> responseExtractor = new HttpMessageResponseExtractor<T>(this._messageConverters);
-            return this.Execute<HttpResponseMessage<T>>(url, requestCallback, responseExtractor, uriVariables);
-        }
-
-        /// <summary>
-        /// Execute the HTTP request to the given URI template, writing the given request message to the request, 
-        /// and returns the response as <see cref="HttpResponseMessage{T}"/>.
-        /// </summary>
-        /// <typeparam name="T">The type of the response value.</typeparam>
-        /// <param name="url">The URL.</param>
-        /// <param name="requestMessage">The HTTP request message to write to the request.</param>
-        /// <returns>The HTTP response message.</returns>
-        public HttpResponseMessage<T> Exchange<T>(Uri url, HttpRequestMessage requestMessage) where T : class
-        {
-            HttpMessageRequestCallback requestCallback = new HttpMessageRequestCallback(requestMessage, typeof(T), this._messageConverters);
-            HttpMessageResponseExtractor<T> responseExtractor = new HttpMessageResponseExtractor<T>(this._messageConverters);
-            return this.Execute<HttpResponseMessage<T>>(url, requestCallback, responseExtractor);
-        }
-
-        /// <summary>
-        /// Execute the HTTP request to the given URI template, writing the given request message to the request, 
-        /// and returns the response with no entity as <see cref="HttpResponseMessage"/>.
-        /// </summary>
-        /// <remarks>
-        /// URI Template variables are expanded using the given URI variables, if any.
-        /// </remarks>
-        /// <param name="url">The URL.</param>
-        /// <param name="requestMessage">The HTTP request message to write to the request.</param>
-        /// <param name="uriVariables">The variables to expand the template.</param>
-        /// <returns>The HTTP response message with no entity.</returns>
-        public HttpResponseMessage Exchange(string url, HttpRequestMessage requestMessage, params string[] uriVariables)
-        {
-            HttpMessageRequestCallback requestCallback = new HttpMessageRequestCallback(requestMessage, this._messageConverters);
-            HttpMessageResponseExtractor responseExtractor = new HttpMessageResponseExtractor();
-            return this.Execute<HttpResponseMessage>(url, requestCallback, responseExtractor, uriVariables);
-        }
-
-        /// <summary>
-        /// Execute the HTTP request to the given URI template, writing the given request message to the request, 
-        /// and returns the response with no entity as <see cref="HttpResponseMessage"/>.
-        /// </summary>
-        /// <remarks>
-        /// URI Template variables are expanded using the given dictionary.
-        /// </remarks>
-        /// <param name="url">The URL.</param>
-        /// <param name="requestMessage">The HTTP request message to write to the request.</param>
-        /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
-        /// <returns>The HTTP response message with no entity.</returns>
-        public HttpResponseMessage Exchange(string url, HttpRequestMessage requestMessage, IDictionary<string, string> uriVariables)
-        {
-            HttpMessageRequestCallback requestCallback = new HttpMessageRequestCallback(requestMessage, this._messageConverters);
-            HttpMessageResponseExtractor responseExtractor = new HttpMessageResponseExtractor();
-            return this.Execute<HttpResponseMessage>(url, requestCallback, responseExtractor, uriVariables);
-        }
-
-        /// <summary>
-        /// Execute the HTTP request to the given URI template, writing the given request message to the request, 
-        /// and returns the response with no entity as <see cref="HttpResponseMessage"/>.
-        /// </summary>
-        /// <param name="url">The URL.</param>
-        /// <param name="requestMessage">The HTTP request message to write to the request.</param>
-        /// <returns>The HTTP response message with no entity.</returns>
-        public HttpResponseMessage Exchange(Uri url, HttpRequestMessage requestMessage)
-        {
-            HttpMessageRequestCallback requestCallback = new HttpMessageRequestCallback(requestMessage, this._messageConverters);
-            HttpMessageResponseExtractor responseExtractor = new HttpMessageResponseExtractor();
-            return this.Execute<HttpResponseMessage>(url, requestCallback, responseExtractor);
-        }
-
-        /// <summary>
-        /// Execute the HTTP request to the given URI template, preparing the request with the 
-        /// <see cref="IRequestCallback"/>, and reading the response with an <see cref="IResponseExtractor{T}"/>.
-        /// </summary>
-        /// <remarks>
-        /// URI Template variables are expanded using the given URI variables, if any.
-        /// </remarks>
-        /// <typeparam name="T">The type of the response value.</typeparam>
-        /// <param name="url">The URL.</param>
-        /// <param name="requestCallback">Object that prepares the request.</param>
-        /// <param name="responseExtractor">Object that extracts the return value from the response.</param>
-        /// <param name="uriVariables">The variables to expand the template.</param>
-        /// <returns>An arbitrary object, as returned by the <see cref="IResponseExtractor{T}"/>.</returns>        
-        public T Execute<T>(string url, IRequestCallback requestCallback, IResponseExtractor<T> responseExtractor, params string[] uriVariables) where T : class
-        {
-            UriTemplate uriTemplate = new UriTemplate(url);
-            Uri uri = uriTemplate.Expand(uriVariables);
-            return this.DoExecute<T>(uri, requestCallback, responseExtractor);
-        }
-
-        /// <summary>
-        /// Execute the HTTP request to the given URI template, preparing the request with the 
-        /// <see cref="IRequestCallback"/>, and reading the response with an <see cref="IResponseExtractor{T}"/>.
-        /// </summary>
-        /// <remarks>
-        /// URI Template variables are expanded using the given dictionary.
-        /// </remarks>
-        /// <typeparam name="T">The type of the response value.</typeparam>
-        /// <param name="url">The URL.</param>
-        /// <param name="requestCallback">Object that prepares the request.</param>
-        /// <param name="responseExtractor">Object that extracts the return value from the response.</param>
-        /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
-        /// <returns>An arbitrary object, as returned by the <see cref="IResponseExtractor{T}"/>.</returns>   
-        public T Execute<T>(string url, IRequestCallback requestCallback, IResponseExtractor<T> responseExtractor, IDictionary<string, string> uriVariables) where T : class
-        {
-            UriTemplate uriTemplate = new UriTemplate(url);
-            Uri uri = uriTemplate.Expand(uriVariables);
-            return this.DoExecute<T>(uri, requestCallback, responseExtractor);
-        }
-
-        /// <summary>
-        /// Execute the HTTP request to the given URI template, preparing the request with the 
-        /// <see cref="IRequestCallback"/>, and reading the response with an <see cref="IResponseExtractor{T}"/>.
-        /// </summary>
-        /// <typeparam name="T">The type of the response value.</typeparam>
-        /// <param name="url">The URL.</param>
-        /// <param name="requestCallback">Object that prepares the request.</param>
-        /// <param name="responseExtractor">Object that extracts the return value from the response.</param>
-        /// <returns>An arbitrary object, as returned by the <see cref="IResponseExtractor{T}"/>.</returns>   
-        public T Execute<T>(Uri url, IRequestCallback requestCallback, IResponseExtractor<T> responseExtractor) where T : class
-        {
-            return this.DoExecute<T>(url, requestCallback, responseExtractor);
+            HttpHeaders headers = this.Execute<HttpHeaders>(
+                url, HttpMethod.OPTIONS, null, this.headersExtractor);
+            return new List<HttpMethod>(headers.Allow);
         }
 
         #endregion
 
+
+        #region Exchange
+
+        /// <summary>
+        /// Execute the HTTP method to the given URI template, writing the given request message to the request, 
+        /// and returns the response as <see cref="HttpResponseMessage{T}"/>.
+        /// </summary>
+        /// <remarks>
+        /// URI Template variables are expanded using the given URI variables, if any.
+        /// </remarks>
+        /// <typeparam name="T">The type of the response value.</typeparam>
+        /// <param name="url">The URL.</param>
+        /// <param name="method">The HTTP method (GET, POST, etc.)</param>
+        /// <param name="requestEntity">
+        /// The HTTP entity (headers and/or body) to write to the request, may be <see langword="null"/>.
+        /// </param>
+        /// <param name="uriVariables">The variables to expand the template.</param>
+        /// <returns>The HTTP response message.</returns>
+        public HttpResponseMessage<T> Exchange<T>(string url, HttpMethod method, HttpEntity requestEntity, params string[] uriVariables) where T : class
+        {
+            HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(requestEntity, typeof(T), this._messageConverters);
+            HttpMessageResponseExtractor<T> responseExtractor = new HttpMessageResponseExtractor<T>(this._messageConverters);
+            return this.Execute<HttpResponseMessage<T>>(url, method, requestCallback, responseExtractor, uriVariables);
+        }
+
+        /// <summary>
+        /// Execute the HTTP method to the given URI template, writing the given request message to the request, 
+        /// and returns the response as <see cref="HttpResponseMessage{T}"/>.
+        /// </summary>
+        /// <remarks>
+        /// URI Template variables are expanded using the given dictionary.
+        /// </remarks>
+        /// <typeparam name="T">The type of the response value.</typeparam>
+        /// <param name="url">The URL.</param>
+        /// <param name="method">The HTTP method (GET, POST, etc.)</param>
+        /// <param name="requestEntity">
+        /// The HTTP entity (headers and/or body) to write to the request, may be <see langword="null"/>.
+        /// </param>
+        /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
+        /// <returns>The HTTP response message.</returns>
+        public HttpResponseMessage<T> Exchange<T>(string url, HttpMethod method, HttpEntity requestEntity, IDictionary<string, string> uriVariables) where T : class
+        {
+            HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(requestEntity, typeof(T), this._messageConverters);
+            HttpMessageResponseExtractor<T> responseExtractor = new HttpMessageResponseExtractor<T>(this._messageConverters);
+            return this.Execute<HttpResponseMessage<T>>(url, method, requestCallback, responseExtractor, uriVariables);
+        }
+
+        /// <summary>
+        /// Execute the HTTP method to the given URI template, writing the given request message to the request, 
+        /// and returns the response as <see cref="HttpResponseMessage{T}"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the response value.</typeparam>
+        /// <param name="url">The URL.</param>
+        /// <param name="method">The HTTP method (GET, POST, etc.)</param>
+        /// <param name="requestEntity">
+        /// The HTTP entity (headers and/or body) to write to the request, may be <see langword="null"/>.
+        /// </param>
+        /// <returns>The HTTP response message.</returns>
+        public HttpResponseMessage<T> Exchange<T>(Uri url, HttpMethod method, HttpEntity requestEntity) where T : class
+        {
+            HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(requestEntity, typeof(T), this._messageConverters);
+            HttpMessageResponseExtractor<T> responseExtractor = new HttpMessageResponseExtractor<T>(this._messageConverters);
+            return this.Execute<HttpResponseMessage<T>>(url, method, requestCallback, responseExtractor);
+        }
+
+        /// <summary>
+        /// Execute the HTTP method to the given URI template, writing the given request message to the request, 
+        /// and returns the response with no entity as <see cref="HttpResponseMessage"/>.
+        /// </summary>
+        /// <remarks>
+        /// URI Template variables are expanded using the given URI variables, if any.
+        /// </remarks>
+        /// <param name="url">The URL.</param>
+        /// <param name="method">The HTTP method (GET, POST, etc.)</param>
+        /// <param name="requestEntity">
+        /// The HTTP entity (headers and/or body) to write to the request, may be <see langword="null"/>.
+        /// </param>
+        /// <param name="uriVariables">The variables to expand the template.</param>
+        /// <returns>The HTTP response message with no entity.</returns>
+        public HttpResponseMessage Exchange(string url, HttpMethod method, HttpEntity requestEntity, params string[] uriVariables)
+        {
+            HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(requestEntity, this._messageConverters);
+            HttpMessageResponseExtractor responseExtractor = new HttpMessageResponseExtractor();
+            return this.Execute<HttpResponseMessage>(url, method, requestCallback, responseExtractor, uriVariables);
+        }
+
+        /// <summary>
+        /// Execute the HTTP method to the given URI template, writing the given request message to the request, 
+        /// and returns the response with no entity as <see cref="HttpResponseMessage"/>.
+        /// </summary>
+        /// <remarks>
+        /// URI Template variables are expanded using the given dictionary.
+        /// </remarks>
+        /// <param name="url">The URL.</param>
+        /// <param name="method">The HTTP method (GET, POST, etc.)</param>
+        /// <param name="requestEntity">
+        /// The HTTP entity (headers and/or body) to write to the request, may be <see langword="null"/>.
+        /// </param>
+        /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
+        /// <returns>The HTTP response message with no entity.</returns>
+        public HttpResponseMessage Exchange(string url, HttpMethod method, HttpEntity requestEntity, IDictionary<string, string> uriVariables)
+        {
+            HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(requestEntity, this._messageConverters);
+            HttpMessageResponseExtractor responseExtractor = new HttpMessageResponseExtractor();
+            return this.Execute<HttpResponseMessage>(url, method, requestCallback, responseExtractor, uriVariables);
+        }
+
+        /// <summary>
+        /// Execute the HTTP method to the given URI template, writing the given request message to the request, 
+        /// and returns the response with no entity as <see cref="HttpResponseMessage"/>.
+        /// </summary>
+        /// <param name="url">The URL.</param>
+        /// <param name="method">The HTTP method (GET, POST, etc.)</param>
+        /// <param name="requestEntity">
+        /// The HTTP entity (headers and/or body) to write to the request, may be <see langword="null"/>.
+        /// </param>
+        /// <returns>The HTTP response message with no entity.</returns>
+        public HttpResponseMessage Exchange(Uri url, HttpMethod method, HttpEntity requestEntity)
+        {
+            HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(requestEntity, this._messageConverters);
+            HttpMessageResponseExtractor responseExtractor = new HttpMessageResponseExtractor();
+            return this.Execute<HttpResponseMessage>(url, method, requestCallback, responseExtractor);
+        }
+
+        #endregion
+
+        #region General execution
+
+        /// <summary>
+        /// Execute the HTTP request to the given URI template, preparing the request with the 
+        /// <see cref="IRequestCallback"/>, and reading the response with an <see cref="IResponseExtractor{T}"/>.
+        /// </summary>
+        /// <remarks>
+        /// URI Template variables are expanded using the given URI variables, if any.
+        /// </remarks>
+        /// <typeparam name="T">The type of the response value.</typeparam>
+        /// <param name="url">The URL.</param>
+        /// <param name="method">The HTTP method (GET, POST, etc.)</param>
+        /// <param name="requestCallback">Object that prepares the request.</param>
+        /// <param name="responseExtractor">Object that extracts the return value from the response.</param>
+        /// <param name="uriVariables">The variables to expand the template.</param>
+        /// <returns>An arbitrary object, as returned by the <see cref="IResponseExtractor{T}"/>.</returns>        
+        public T Execute<T>(string url, HttpMethod method, IRequestCallback requestCallback, IResponseExtractor<T> responseExtractor, params string[] uriVariables) where T : class
+        {
+            return this.DoExecute<T>(this.BuildUri(this._baseAddress, url, uriVariables), method, requestCallback, responseExtractor);
+        }
+
+        /// <summary>
+        /// Execute the HTTP request to the given URI template, preparing the request with the 
+        /// <see cref="IRequestCallback"/>, and reading the response with an <see cref="IResponseExtractor{T}"/>.
+        /// </summary>
+        /// <remarks>
+        /// URI Template variables are expanded using the given dictionary.
+        /// </remarks>
+        /// <typeparam name="T">The type of the response value.</typeparam>
+        /// <param name="url">The URL.</param>
+        /// <param name="method">The HTTP method (GET, POST, etc.)</param>
+        /// <param name="requestCallback">Object that prepares the request.</param>
+        /// <param name="responseExtractor">Object that extracts the return value from the response.</param>
+        /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
+        /// <returns>An arbitrary object, as returned by the <see cref="IResponseExtractor{T}"/>.</returns>   
+        public T Execute<T>(string url, HttpMethod method, IRequestCallback requestCallback, IResponseExtractor<T> responseExtractor, IDictionary<string, string> uriVariables) where T : class
+        {
+            return this.DoExecute<T>(this.BuildUri(this._baseAddress, url, uriVariables), method, requestCallback, responseExtractor);
+        }
+
+        /// <summary>
+        /// Execute the HTTP request to the given URI template, preparing the request with the 
+        /// <see cref="IRequestCallback"/>, and reading the response with an <see cref="IResponseExtractor{T}"/>.
+        /// </summary>
+        /// <typeparam name="T">The type of the response value.</typeparam>
+        /// <param name="url">The URL.</param>
+        /// <param name="method">The HTTP method (GET, POST, etc.)</param>
+        /// <param name="requestCallback">Object that prepares the request.</param>
+        /// <param name="responseExtractor">Object that extracts the return value from the response.</param>
+        /// <returns>An arbitrary object, as returned by the <see cref="IResponseExtractor{T}"/>.</returns>   
+        public T Execute<T>(Uri url, HttpMethod method, IRequestCallback requestCallback, IResponseExtractor<T> responseExtractor) where T : class
+        {
+            return this.DoExecute<T>(this.BuildUri(this._baseAddress, url), method, requestCallback, responseExtractor);
+        }
+
+        #endregion
+#endif
+
+        #endregion
+
+        #region IRestAsyncOperations Membres
+
+        #region GET
+
+        public void GetForObjectAsync<T>(string url, string[] uriVariables, Action<MethodCompletedEventArgs<T>> getCompleted) where T : class
+        {
+            AcceptHeaderRequestCallback requestCallback = new AcceptHeaderRequestCallback(typeof(T), this._messageConverters);
+            MessageConverterResponseExtractor<T> responseExtractor = new MessageConverterResponseExtractor<T>(this._messageConverters);
+            this.ExecuteAsync<T>(url, HttpMethod.GET, requestCallback, responseExtractor, uriVariables, getCompleted);
+        }
+
+        public void GetForObjectAsync<T>(string url, IDictionary<string, string> uriVariables, Action<MethodCompletedEventArgs<T>> getCompleted) where T : class
+        {
+            AcceptHeaderRequestCallback requestCallback = new AcceptHeaderRequestCallback(typeof(T), this._messageConverters);
+            MessageConverterResponseExtractor<T> responseExtractor = new MessageConverterResponseExtractor<T>(this._messageConverters);
+            this.ExecuteAsync<T>(url, HttpMethod.GET, requestCallback, responseExtractor, uriVariables, getCompleted);
+        }
+
+        public void GetForObjectAsync<T>(Uri url, Action<MethodCompletedEventArgs<T>> getCompleted) where T : class
+        {
+            AcceptHeaderRequestCallback requestCallback = new AcceptHeaderRequestCallback(typeof(T), this._messageConverters);
+            MessageConverterResponseExtractor<T> responseExtractor = new MessageConverterResponseExtractor<T>(this._messageConverters);
+            this.ExecuteAsync<T>(url, HttpMethod.GET, requestCallback, responseExtractor, getCompleted);
+        }
+
+        public void GetForMessageAsync<T>(string url, string[] uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> getCompleted) where T : class
+        {
+            AcceptHeaderRequestCallback requestCallback = new AcceptHeaderRequestCallback(typeof(T), this._messageConverters);
+            HttpMessageResponseExtractor<T> responseExtractor = new HttpMessageResponseExtractor<T>(this._messageConverters);
+            this.ExecuteAsync<HttpResponseMessage<T>>(url, HttpMethod.GET, requestCallback, responseExtractor, uriVariables, getCompleted);
+        }
+
+        public void GetForMessageAsync<T>(string url, IDictionary<string, string> uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> getCompleted) where T : class
+        {
+            AcceptHeaderRequestCallback requestCallback = new AcceptHeaderRequestCallback(typeof(T), this._messageConverters);
+            HttpMessageResponseExtractor<T> responseExtractor = new HttpMessageResponseExtractor<T>(this._messageConverters);
+            this.ExecuteAsync<HttpResponseMessage<T>>(url, HttpMethod.GET, requestCallback, responseExtractor, uriVariables, getCompleted);
+        }
+
+        public void GetForMessageAsync<T>(Uri url, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> getCompleted) where T : class
+        {
+            AcceptHeaderRequestCallback requestCallback = new AcceptHeaderRequestCallback(typeof(T), this._messageConverters);
+            HttpMessageResponseExtractor<T> responseExtractor = new HttpMessageResponseExtractor<T>(this._messageConverters);
+            this.ExecuteAsync<HttpResponseMessage<T>>(url, HttpMethod.GET, requestCallback, responseExtractor, getCompleted);
+        }
+
+        #endregion
+
+        #region HEAD
+
+        public void HeadForHeadersAsync(string url, string[] uriVariables, Action<MethodCompletedEventArgs<HttpHeaders>> headCompleted)
+        {
+            this.ExecuteAsync<HttpHeaders>(url, HttpMethod.HEAD, null, this.headersExtractor, uriVariables, headCompleted);
+        }
+
+        public void HeadForHeadersAsync(string url, IDictionary<string, string> uriVariables, Action<MethodCompletedEventArgs<HttpHeaders>> headCompleted)
+        {
+            this.ExecuteAsync<HttpHeaders>(url, HttpMethod.HEAD, null, this.headersExtractor, uriVariables, headCompleted);
+        }
+
+        public void HeadForHeadersAsync(Uri url, Action<MethodCompletedEventArgs<HttpHeaders>> headCompleted)
+        {
+            this.ExecuteAsync<HttpHeaders>(url, HttpMethod.HEAD, null, this.headersExtractor, headCompleted);
+        }
+
+        #endregion
+
+        #region POST
+
+        public void PostForLocationAsync(string url, object request, string[] uriVariables, Action<Uri> postCompleted)
+        {
+            HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, this._messageConverters);
+            this.ExecuteAsync<HttpHeaders>(url, HttpMethod.POST, requestCallback, this.headersExtractor, uriVariables,
+                delegate (MethodCompletedEventArgs<HttpHeaders> args) 
+                {
+                    postCompleted(args.Response.Location);
+                });
+        }
+
+        public void PostForLocationAsync(string url, object request, IDictionary<string, string> uriVariables, Action<Uri> postCompleted)
+        {
+            HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, this._messageConverters);
+            this.ExecuteAsync<HttpHeaders>(url, HttpMethod.POST, requestCallback, this.headersExtractor, uriVariables,
+                delegate(MethodCompletedEventArgs<HttpHeaders> args) 
+                {
+                    postCompleted(args.Response.Location);
+                });
+        }
+
+        public void PostForLocationAsync(Uri url, object request, Action<Uri> postCompleted)
+        {
+            HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, this._messageConverters);
+            this.ExecuteAsync<HttpHeaders>(url, HttpMethod.POST, requestCallback, this.headersExtractor,
+                delegate(MethodCompletedEventArgs<HttpHeaders> args) 
+                {
+                    postCompleted(args.Response.Location);
+                });
+        }
+
+        public void PostForObjectAsync<T>(string url, object request, string[] uriVariables, Action<MethodCompletedEventArgs<T>> postCompleted) where T : class
+        {
+            HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, typeof(T), this._messageConverters);
+            MessageConverterResponseExtractor<T> responseExtractor = new MessageConverterResponseExtractor<T>(this._messageConverters);
+            this.ExecuteAsync<T>(url, HttpMethod.POST, requestCallback, responseExtractor, uriVariables, postCompleted);
+        }
+
+        public void PostForObjectAsync<T>(string url, object request, IDictionary<string, string> uriVariables, Action<MethodCompletedEventArgs<T>> postCompleted) where T : class
+        {
+            HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, typeof(T), this._messageConverters);
+            MessageConverterResponseExtractor<T> responseExtractor = new MessageConverterResponseExtractor<T>(this._messageConverters);
+            this.ExecuteAsync<T>(url, HttpMethod.POST, requestCallback, responseExtractor, uriVariables, postCompleted);
+        }
+
+        public void PostForObjectAsync<T>(Uri url, object request, Action<MethodCompletedEventArgs<T>> postCompleted) where T : class
+        {
+            HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, typeof(T), this._messageConverters);
+            MessageConverterResponseExtractor<T> responseExtractor = new MessageConverterResponseExtractor<T>(this._messageConverters);
+            this.ExecuteAsync<T>(url, HttpMethod.POST, requestCallback, responseExtractor, postCompleted);
+        }
+
+        public void PostForMessageAsync<T>(string url, object request, string[] uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> postCompleted) where T : class
+        {
+            HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, typeof(T), this._messageConverters);
+            HttpMessageResponseExtractor<T> responseExtractor = new HttpMessageResponseExtractor<T>(this._messageConverters);
+            this.ExecuteAsync<HttpResponseMessage<T>>(url, HttpMethod.POST, requestCallback, responseExtractor, uriVariables, postCompleted);
+        }
+
+        public void PostForMessageAsync<T>(string url, object request, IDictionary<string, string> uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> postCompleted) where T : class
+        {
+            HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, typeof(T), this._messageConverters);
+            HttpMessageResponseExtractor<T> responseExtractor = new HttpMessageResponseExtractor<T>(this._messageConverters);
+            this.ExecuteAsync<HttpResponseMessage<T>>(url, HttpMethod.POST, requestCallback, responseExtractor, uriVariables, postCompleted);
+        }
+
+        public void PostForMessageAsync<T>(Uri url, object request, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> postCompleted) where T : class
+        {
+            HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, typeof(T), this._messageConverters);
+            HttpMessageResponseExtractor<T> responseExtractor = new HttpMessageResponseExtractor<T>(this._messageConverters);
+            this.ExecuteAsync<HttpResponseMessage<T>>(url, HttpMethod.POST, requestCallback, responseExtractor, postCompleted);
+        }
+
+        public void PostForMessageAsync(string url, object request, string[] uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage>> postCompleted)
+        {
+            HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, this._messageConverters);
+            HttpMessageResponseExtractor responseExtractor = new HttpMessageResponseExtractor();
+            this.ExecuteAsync<HttpResponseMessage>(url, HttpMethod.POST, requestCallback, responseExtractor, uriVariables, postCompleted);
+        }
+
+        public void PostForMessageAsync(string url, object request, IDictionary<string, string> uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage>> postCompleted)
+        {
+            HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, this._messageConverters);
+            HttpMessageResponseExtractor responseExtractor = new HttpMessageResponseExtractor();
+            this.ExecuteAsync<HttpResponseMessage>(url, HttpMethod.POST, requestCallback, responseExtractor, uriVariables, postCompleted);
+        }
+
+        public void PostForMessageAsync(Uri url, object request, Action<MethodCompletedEventArgs<HttpResponseMessage>> postCompleted)
+        {
+            HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, this._messageConverters);
+            HttpMessageResponseExtractor responseExtractor = new HttpMessageResponseExtractor();
+            this.ExecuteAsync<HttpResponseMessage>(url, HttpMethod.POST, requestCallback, responseExtractor, postCompleted);
+        }
+
+        #endregion
+
+        #region PUT
+
+        public void PutAsync(string url, object request, string[] uriVariables, Action<MethodCompletedEventArgs<object>> putCompleted)
+        {
+            HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, this._messageConverters);
+            this.ExecuteAsync<object>(url, HttpMethod.PUT, requestCallback, null, uriVariables, putCompleted);
+        }
+
+        public void PutAsync(string url, object request, IDictionary<string, string> uriVariables, Action<MethodCompletedEventArgs<object>> putCompleted)
+        {
+            HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, this._messageConverters);
+            this.ExecuteAsync<object>(url, HttpMethod.PUT, requestCallback, null, uriVariables, putCompleted);
+        }
+
+        public void PutAsync(Uri url, object request, Action<MethodCompletedEventArgs<object>> putCompleted)
+        {
+            HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, this._messageConverters);
+            this.ExecuteAsync<object>(url, HttpMethod.PUT, requestCallback, null, putCompleted);
+        }
+
+        #endregion
+
+        #region DELETE
+
+        public void DeleteAsync(string url, string[] uriVariables, Action<MethodCompletedEventArgs<object>> deleteCompleted)
+        {
+            this.ExecuteAsync<object>(url, HttpMethod.DELETE, null, null, uriVariables, deleteCompleted);
+        }
+
+        public void DeleteAsync(string url, IDictionary<string, string> uriVariables, Action<MethodCompletedEventArgs<object>> deleteCompleted)
+        {
+            this.ExecuteAsync<object>(url, HttpMethod.DELETE, null, null, uriVariables, deleteCompleted);
+        }
+
+        public void DeleteAsync(Uri url, Action<MethodCompletedEventArgs<object>> deleteCompleted)
+        {
+            this.ExecuteAsync<object>(url, HttpMethod.DELETE, null, null, deleteCompleted);
+        }
+
+        #endregion
+
+        #region OPTIONS
+
+        public void OptionsForAllowAsync(string url, string[] uriVariables, Action<IList<HttpMethod>> optionsCompleted)
+        {
+            this.ExecuteAsync<HttpHeaders>(url, HttpMethod.OPTIONS, null, this.headersExtractor, uriVariables,
+                delegate(MethodCompletedEventArgs<HttpHeaders> args) 
+                {
+                    optionsCompleted(args.Response.Allow);
+                });
+        }
+
+        public void OptionsForAllowAsync(string url, IDictionary<string, string> uriVariables, Action<IList<HttpMethod>> optionsCompleted)
+        {
+            this.ExecuteAsync<HttpHeaders>(url, HttpMethod.OPTIONS, null, this.headersExtractor, uriVariables,
+                delegate(MethodCompletedEventArgs<HttpHeaders> args) 
+                {
+                    optionsCompleted(args.Response.Allow);
+                });
+        }
+
+        public void OptionsForAllowAsync(Uri url, Action<IList<HttpMethod>> optionsCompleted)
+        {
+            this.ExecuteAsync<HttpHeaders>(url, HttpMethod.OPTIONS, null, this.headersExtractor,
+                delegate(MethodCompletedEventArgs<HttpHeaders> args) 
+                {
+                    optionsCompleted(args.Response.Allow);
+                });
+        }
+
+        #endregion
+
+
+        #region Exchange
+
+        public void ExchangeAsync<T>(string url, HttpMethod method, HttpEntity requestEntity, string[] uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> methodCompleted) where T : class
+        {
+            HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(requestEntity, typeof(T), this._messageConverters);
+            HttpMessageResponseExtractor<T> responseExtractor = new HttpMessageResponseExtractor<T>(this._messageConverters);
+            this.ExecuteAsync<HttpResponseMessage<T>>(url, method, requestCallback, responseExtractor, uriVariables, methodCompleted);
+        }
+
+        public void ExchangeAsync<T>(string url, HttpMethod method, HttpEntity requestEntity, IDictionary<string, string> uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> methodCompleted) where T : class
+        {
+            HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(requestEntity, typeof(T), this._messageConverters);
+            HttpMessageResponseExtractor<T> responseExtractor = new HttpMessageResponseExtractor<T>(this._messageConverters);
+            this.ExecuteAsync<HttpResponseMessage<T>>(url, method, requestCallback, responseExtractor, uriVariables, methodCompleted);
+        }
+
+        public void ExchangeAsync<T>(Uri url, HttpMethod method, HttpEntity requestEntity, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> methodCompleted) where T : class
+        {
+            HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(requestEntity, typeof(T), this._messageConverters);
+            HttpMessageResponseExtractor<T> responseExtractor = new HttpMessageResponseExtractor<T>(this._messageConverters);
+            this.ExecuteAsync<HttpResponseMessage<T>>(url, method, requestCallback, responseExtractor, methodCompleted);
+        }
+
+        public void ExchangeAsync(string url, HttpMethod method, HttpEntity requestEntity, string[] uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage>> methodCompleted)
+        {
+            HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(requestEntity, this._messageConverters);
+            HttpMessageResponseExtractor responseExtractor = new HttpMessageResponseExtractor();
+            this.ExecuteAsync<HttpResponseMessage>(url, method, requestCallback, responseExtractor, uriVariables, methodCompleted);
+        }
+
+        public void ExchangeAsync(string url, HttpMethod method, HttpEntity requestEntity, IDictionary<string, string> uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage>> methodCompleted)
+        {
+            HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(requestEntity, this._messageConverters);
+            HttpMessageResponseExtractor responseExtractor = new HttpMessageResponseExtractor();
+            this.ExecuteAsync<HttpResponseMessage>(url, method, requestCallback, responseExtractor, uriVariables, methodCompleted);
+        }
+
+        public void ExchangeAsync(Uri url, HttpMethod method, HttpEntity requestEntity, Action<MethodCompletedEventArgs<HttpResponseMessage>> methodCompleted)
+        {
+            HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(requestEntity, this._messageConverters);
+            HttpMessageResponseExtractor responseExtractor = new HttpMessageResponseExtractor();
+            this.ExecuteAsync<HttpResponseMessage>(url, method, requestCallback, responseExtractor, methodCompleted);
+        }
+
+        #endregion
+
+        #region General execution
+
+        public void ExecuteAsync<T>(string url, HttpMethod method, IRequestCallback requestCallback, IResponseExtractor<T> responseExtractor, string[] uriVariables, Action<MethodCompletedEventArgs<T>> methodCompleted) where T : class
+        {
+            this.DoExecuteAsync<T>(BuildUri(this._baseAddress, url, uriVariables), method, 
+                requestCallback, responseExtractor, methodCompleted);
+        }
+
+        public void ExecuteAsync<T>(string url, HttpMethod method, IRequestCallback requestCallback, IResponseExtractor<T> responseExtractor, IDictionary<string, string> uriVariables, Action<MethodCompletedEventArgs<T>> methodCompleted) where T : class
+        {
+            this.DoExecuteAsync<T>(BuildUri(this._baseAddress, url, uriVariables), method, 
+                requestCallback, responseExtractor, methodCompleted);
+        }
+
+        public void ExecuteAsync<T>(Uri url, HttpMethod method, IRequestCallback requestCallback, IResponseExtractor<T> responseExtractor, Action<MethodCompletedEventArgs<T>> methodCompleted) where T : class
+        {
+            this.DoExecuteAsync<T>(BuildUri(this._baseAddress, url), method, 
+                requestCallback, responseExtractor, methodCompleted);
+        }
+
+        #endregion
+
+        #endregion
+
+        #region DoExecute
+#if !SILVERLIGHT
         /// <summary>
         /// Execute the HTTP request to the given URI, preparing the request with the 
         /// <see cref="IRequestCallback"/>, and reading the response with an <see cref="IResponseExtractor{T}"/>.
         /// </summary>
         /// <typeparam name="T">The type of the response value.</typeparam>
         /// <param name="uri">The fully-expanded URI to connect to.</param>
+        /// <param name="method">The HTTP method (GET, POST, etc.)</param>
         /// <param name="requestCallback">Object that prepares the request.</param>
         /// <param name="responseExtractor">Object that extracts the return value from the response.</param>
         /// <returns>An arbitrary object, as returned by the <see cref="IResponseExtractor{T}"/>.</returns>  
-        protected virtual T DoExecute<T>(Uri uri, IRequestCallback requestCallback, IResponseExtractor<T> responseExtractor) where T : class
+        protected virtual T DoExecute<T>(Uri uri, HttpMethod method, IRequestCallback requestCallback, IResponseExtractor<T> responseExtractor) where T : class
         {
-            HttpWebRequest request;
-            HttpWebResponse response = null;
-
-            Uri finalUri = uri;
-            if (!uri.IsAbsoluteUri)
-            {
-                if (this._baseAddress != null)
-                {
-                    finalUri = new Uri(this._baseAddress, uri);
-                }
-                else
-                {
-                    throw new ArgumentException(String.Format("'{0}' is not an absolute URI", uri), "uri");
-                }
-            }
-
-            // Create and initialize the web request  
-            request = this._requestFactory.CreateRequest(finalUri);
+            IClientHttpRequest request = this._requestFactory.CreateRequest(uri, method);
 
             if (requestCallback != null)
             {
                 requestCallback.DoWithRequest(request);
             }
 
-            try
+            using (IClientHttpResponse response = request.Execute())
             {
-                // Get response  
-                response = request.GetResponse() as HttpWebResponse;
-
-                if (request.HaveResponse == true && response != null)
+                if (response != null)
                 {
-                    #region Instrumentation
-
-                    if (LOG.IsDebugEnabled)
+                    if (this._errorHandler.HasError(response))
                     {
-                        LOG.Debug(String.Format(
-                            "Request for '{0}' resulted in {1:d} - {1} ({2})", 
-                            finalUri, response.StatusCode, response.StatusDescription));
+                        this.HandleResponseError(uri, method, response);
                     }
-
-                    #endregion
+                    else
+                    {
+                        this.LogResponseStatus(uri, method, response);
+                    }
 
                     if (responseExtractor != null)
                     {
@@ -1003,57 +1347,167 @@ namespace Spring.Http.Rest
                     }
                 }
             }
-            catch (WebException ex)
+
+            return null;
+        }
+#endif
+        #endregion
+
+        #region DoExecuteAsync
+
+        /// <param name="uri">The fully-expanded URI to connect to.</param>
+        /// <param name="method">The HTTP method (GET, POST, etc.)</param>
+        protected virtual void DoExecuteAsync<T>(Uri uri, HttpMethod method,
+            IRequestCallback requestCallback, IResponseExtractor<T> responseExtractor,
+            Action<MethodCompletedEventArgs<T>> methodCompleted) where T : class
+        {
+            IClientHttpRequest request = this._requestFactory.CreateRequest(uri, method);
+
+            ExecuteState<T> state = new ExecuteState<T>(uri, method, responseExtractor, methodCompleted);
+
+            if (requestCallback != null)
             {
-                // This exception will be raised if the server didn't return 200 - OK  
-                // Try to retrieve more information about the network error  
-                if (ex.Response != null)
+                requestCallback.DoWithRequest(request);
+            }
+
+            request.ExecuteAsync(state, ResponseReceivedCallback<T>);
+        }
+
+        private void ResponseReceivedCallback<T>(ExecuteCompletedEventArgs responseReceived) where T : class
+        {
+            ExecuteState<T> state = (ExecuteState<T>)responseReceived.UserState;
+            if (responseReceived.Error == null)
+            {
+                using (IClientHttpResponse response = responseReceived.Response)
                 {
-                    using (HttpWebResponse errorResponse = (HttpWebResponse)ex.Response)
+                    if (response == null)
                     {
-                        if (this._throwExceptionOnError)
+                        state.MethodCompleted(new MethodCompletedEventArgs<T>(null, null, false, null));
+                    }
+                    else
+                    {
+                        T value = null;
+                        Exception exception = null;
+                        try
                         {
-                            throw new RestClientException(String.Format(
-                                "The server returned '{0}' with the status code {1:d} - {1}.",
-                                errorResponse.StatusDescription, errorResponse.StatusCode),
-                                ex);
-                        }
-                        else
-                        {
-                            if (responseExtractor != null)
+                            if (this._errorHandler.HasError(response))
                             {
-                                return responseExtractor.ExtractData(errorResponse);
+                                this.HandleResponseError(state.Uri, state.Method, response);
                             }
+                            else
+                            {
+                                this.LogResponseStatus(state.Uri, state.Method, response);
+                            }
+
+                            if (state.ResponseExtractor != null)
+                            {
+                                value = state.ResponseExtractor.ExtractData(response);
+                            }
+                        }
+                        catch (Exception ex)
+                        {
+                            exception = ex;
+                        }
+                        finally
+                        {
+                            state.MethodCompleted(new MethodCompletedEventArgs<T>(value, exception, false, null));
                         }
                     }
                 }
             }
-            finally
+            else
             {
-                if (response != null) 
-                { 
-                    response.Close(); 
-                }
+                state.MethodCompleted(new MethodCompletedEventArgs<T>(null, responseReceived.Error, false, null));
             }
+        }
 
-            return null;
-	    }
-
-        private static IList<HttpMethod> ParseAllowHeader(string allow)
+        private class ExecuteState<T> where T : class
         {
-            IList<HttpMethod> methods = new List<HttpMethod>();
+            public Uri Uri;
+            public HttpMethod Method;
+            public IResponseExtractor<T> ResponseExtractor;
+            public Action<MethodCompletedEventArgs<T>> MethodCompleted;
 
-            if (StringUtils.HasText(allow))
+            public ExecuteState(Uri uri, HttpMethod method, 
+                IResponseExtractor<T> responseExtractor, 
+                Action<MethodCompletedEventArgs<T>> methodCompleted)
             {
-                string[] methodsArray = allow.Split(',');
+                this.Uri = uri;
+                this.Method = method;
+                this.ResponseExtractor = responseExtractor;
+                this.MethodCompleted = methodCompleted;
+            }
+        }
 
-                foreach (string method in methodsArray)
+        #endregion
+
+        #region BuildUri
+
+        // TODO : Add IRequestUriBuilder interface to support .NET 3.5 UriTemplate class ?
+        // Problems with silverlight implementation :
+        // - UriTemplate.BindByPosition is not supported in Silverlight
+        // - UriTemplate class is not included in the Silverlight core dlls
+
+        protected virtual Uri BuildUri(Uri baseAddress, string url, string[] uriVariables)
+        {
+            UriTemplate uriTemplate = new UriTemplate(url);
+            Uri uri = uriTemplate.Expand(uriVariables);
+            return BuildUri(baseAddress, uri);
+        }
+
+        protected virtual Uri BuildUri(Uri baseAddress, string url, IDictionary<string, string> uriVariables)
+        {
+            UriTemplate uriTemplate = new UriTemplate(url);
+            Uri uri = uriTemplate.Expand(uriVariables);
+            return BuildUri(baseAddress, uri);
+        }
+
+        protected virtual Uri BuildUri(Uri baseAddress, Uri uri)
+        {
+            if (!uri.IsAbsoluteUri)
+            {
+                if (baseAddress != null)
                 {
-                    methods.Add((HttpMethod)Enum.Parse(typeof(HttpMethod), method.Trim(), true));
+                    return new Uri(baseAddress, uri);
+                }
+                else
+                {
+                    throw new ArgumentException(String.Format("'{0}' is not an absolute URI", uri), "uri");
                 }
             }
+            return uri;
+        }
 
-            return methods;
+        #endregion
+
+        private void LogResponseStatus(Uri uri, HttpMethod method, IClientHttpResponse response) 
+        {
+            #region Instrumentation
+#if !SILVERLIGHT
+            if (LOG.IsDebugEnabled)
+            {
+                LOG.Debug(String.Format(
+                    "{0} request for '{1}' resulted in {2:d} - {2} ({3})",
+                    method, uri, response.StatusCode, response.StatusDescription));
+            }
+#endif
+            #endregion
+        }
+
+        private void HandleResponseError(Uri uri, HttpMethod method, IClientHttpResponse response) 
+        {
+            #region Instrumentation
+#if !SILVERLIGHT
+            if (LOG.IsWarnEnabled)
+            {
+                LOG.Warn(String.Format(
+                    "{0} request for '{1}' resulted in {2:d} - {2} ({3}); invoking error handler",
+                    method, uri, response.StatusCode, response.StatusDescription));
+            }
+#endif
+            #endregion
+
+            this._errorHandler.HandleError(response);
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿#region License
 
 /*
- * Copyright 2002-2010 the original author or authors.
+ * Copyright 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,10 +19,12 @@
 #endregion
 
 using System;
+using System.IO;
 using System.Net;
 using System.Collections.Generic;
 
 using Spring.Util;
+using Spring.Http.Client;
 using Spring.Http.Converters;
 
 namespace Spring.Http.Rest.Support
@@ -32,12 +34,12 @@ namespace Spring.Http.Rest.Support
     /// </summary>
     /// <author>Arjen Poutsma</author>
     /// <author>Bruno Baia (.NET)</author>
-    public class AcceptHeaderRequestCallback : MethodRequestCallback
+    public class AcceptHeaderRequestCallback : IRequestCallback
     {
         #region Logging
-
+#if !SILVERLIGHT
         private static readonly Common.Logging.ILog LOG = Common.Logging.LogManager.GetLogger(typeof(AcceptHeaderRequestCallback));
-
+#endif
         #endregion
 
         /// <summary>
@@ -53,26 +55,26 @@ namespace Spring.Http.Rest.Support
         /// <summary>
         /// Creates a new instance of <see cref="AcceptHeaderRequestCallback"/>.
         /// </summary>
-        /// <param name="method">The HTTP method.</param>
         /// <param name="responseType">The expected response body type.</param>
         /// <param name="messageConverters">The list of <see cref="IHttpMessageConverter"/> to use.</param>
-        public AcceptHeaderRequestCallback(HttpMethod method, Type responseType, IList<IHttpMessageConverter> messageConverters) :
-            base(method)
+        public AcceptHeaderRequestCallback(Type responseType, IList<IHttpMessageConverter> messageConverters)
         {
             this.responseType = responseType;
             this.messageConverters = messageConverters;
         }
 
+        #region IRequestCallback Membres
+
         /// <summary>
-        /// Gets called by <see cref="RestTemplate"/> with an opened <see cref="HttpWebRequest"/> to write data. 
+        /// Gets called by <see cref="RestTemplate"/> with an <see cref="IClientHttpRequest"/> to write data. 
+        /// </summary>
+        /// <remarks>
         /// Does not need to care about closing the request or about handling errors: 
         /// this will all be handled by the <see cref="RestTemplate"/> class.
-        /// </summary>
+        /// </remarks>
         /// <param name="request">The active HTTP request.</param>
-        public override void DoWithRequest(HttpWebRequest request)
+        public virtual void DoWithRequest(IClientHttpRequest request)
         {
-            base.DoWithRequest(request);
-
             if (responseType != null)
             {
                 List<MediaType> allSupportedMediaTypes = new List<MediaType>();
@@ -99,19 +101,21 @@ namespace Spring.Http.Rest.Support
                     MediaType.SortBySpecificity(allSupportedMediaTypes);
 
                     #region Instrumentation
-
+#if !SILVERLIGHT
                     if (LOG.IsDebugEnabled)
                     {
                         LOG.Debug(String.Format(
                             "Setting request Accept header to '{0}'",
                             MediaType.ToString(allSupportedMediaTypes)));
                     }
-
+#endif
                     #endregion
 
-                    request.Accept = MediaType.ToString(allSupportedMediaTypes);
+                    request.Headers.Accept = allSupportedMediaTypes.ToArray();
                 }
             }
         }
+
+        #endregion
     }
 }
