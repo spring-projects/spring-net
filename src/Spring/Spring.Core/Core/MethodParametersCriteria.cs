@@ -102,14 +102,14 @@ namespace Spring.Core
                     satisfied = true;
                     for (int i = 0; i < _parameters.Length; ++i)
                     {
-                        foreach (ParameterInfo paramInfo in parameterInfosBeingChecked)
+                        if (parameterInfosBeingChecked[i].ParameterType == _parameters[i])
                         {
-                            if (paramInfo.ParameterType == _parameters[i])
-                            {
-                                satisfied = true;
-                                continue;
-                            }
+                            satisfied = true;
+                        }
+                        else
+                        {
                             satisfied = false;
+                            break;
                         }
                     }
                 }

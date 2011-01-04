@@ -52,6 +52,15 @@ namespace Spring.Core
             Assert.IsTrue (criteria.IsSatisfied (method), "Was not satisified with a method that takes no parameters by default.");
         }
 
+	    [Test]
+	    public void IsNotSatisfiedWhenOnlyFinalParamMatches()
+	    {
+            MethodParametersCriteria criteria = new MethodParametersCriteria(
+          new Type[] { typeof(object), typeof(object), typeof(TestObject) });
+            MethodInfo method = GetType().GetMethod("BoJangles");
+            Assert.IsFalse(criteria.IsSatisfied(method), "Was satisified with a method that only matches on the final parameter.");
+	    }
+
         [Test]
         public void IsSatisfied () 
         {
