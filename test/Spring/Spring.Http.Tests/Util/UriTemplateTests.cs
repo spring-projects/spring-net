@@ -60,8 +60,8 @@ namespace Spring.Util
         public void MultipleExpandVarArgs()
         {
             UriTemplate template = new UriTemplate("http://example.com/hotels/{hotel}/bookings/{booking}");
-            Uri result = template.Expand("2", "21");
-            result = template.Expand("1", "42");
+            Uri result = template.Expand("2", 21);
+            result = template.Expand(1, "42");
             Assert.AreEqual(new Uri("http://example.com/hotels/1/bookings/42"), result, "Invalid expanded template");
         }
 
@@ -72,7 +72,7 @@ namespace Spring.Util
         public void ExpandVarArgsInvalidAmountVariables()
         {
             UriTemplate template = new UriTemplate("http://example.com/hotels/{hotel}/bookings/{booking}");
-            template.Expand("1", "42", "100");
+            template.Expand("1", "42", 100);
         }
 
         [Test]
@@ -87,9 +87,9 @@ namespace Spring.Util
         [Test]
         public void ExpandDictionary()
         {
-            IDictionary<string, string> uriVariables = new Dictionary<String, String>(2);
+            IDictionary<string, object> uriVariables = new Dictionary<string, object>(2);
             uriVariables.Add("booking", "42");
-            uriVariables.Add("hotel", "1");
+            uriVariables.Add("hotel", 1);
 
             // absolute
             UriTemplate template = new UriTemplate("http://example.com/hotels/{hotel}/bookings/{booking}");
@@ -107,12 +107,12 @@ namespace Spring.Util
         {
             UriTemplate template = new UriTemplate("http://example.com/hotels/{hotel}/bookings/{booking}");
 
-            IDictionary<string, string> uriVariables = new Dictionary<String, String>(2);
-            uriVariables.Add("booking", "21");
+            IDictionary<string, object> uriVariables = new Dictionary<string, object>(2);
+            uriVariables.Add("booking", 21);
             uriVariables.Add("hotel", "2");
             Uri result = template.Expand(uriVariables);
 
-            uriVariables = new Dictionary<String, String>(2);
+            uriVariables = new Dictionary<string, object>(2);
             uriVariables.Add("booking", "42");
             uriVariables.Add("hotel", "1");
             result = template.Expand(uriVariables);
@@ -126,8 +126,8 @@ namespace Spring.Util
             ExpectedMessage = "Invalid amount of variables values in 'http://example.com/hotels/{hotel}/bookings/{booking}': expected 2; got 1")]
         public void ExpandDictionaryInvalidAmountVariables() 
         {
-            IDictionary<string, string> uriVariables = new Dictionary<String, String>(2);
-            uriVariables.Add("hotel", "1");
+            IDictionary<string, object> uriVariables = new Dictionary<string, object>(2);
+            uriVariables.Add("hotel", 1);
 
             UriTemplate template = new UriTemplate("http://example.com/hotels/{hotel}/bookings/{booking}");
             template.Expand(uriVariables);
@@ -139,9 +139,9 @@ namespace Spring.Util
             ExpectedMessage = "'uriVariables' dictionary has no value for 'hotel'")]
         public void ExpandDictionaryUnboundVariables() 
         {
-            IDictionary<string, string> uriVariables = new Dictionary<String, String>(2);
+            IDictionary<string, object> uriVariables = new Dictionary<string, object>(2);
             uriVariables.Add("booking", "42");
-            uriVariables.Add("bar", "1");
+            uriVariables.Add("bar", 1);
 
             UriTemplate template = new UriTemplate("http://example.com/hotels/{hotel}/bookings/{booking}");
             template.Expand(uriVariables);

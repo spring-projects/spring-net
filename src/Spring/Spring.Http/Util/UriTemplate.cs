@@ -79,16 +79,16 @@ namespace Spring.Util
         /// <example>
         /// <code>
         /// UriTemplate template = new UriTemplate("http://example.com/hotels/{hotel}/bookings/{booking}");
-        /// IDictionary&lt;string, string&gt; uriVariables = new Dictionary&lt;String, String&gt;();
+        /// IDictionary&lt;string, object&gt; uriVariables = new Dictionary&lt;string, object&gt;();
         /// uriVariables.Add("booking", "42");
-        /// uriVariables.Add("hotel", "1");
+        /// uriVariables.Add("hotel", 1);
         /// Console.Out.WriteLine(template.Expand(uriVariables));
         /// </code>
         /// will print: <blockquote>http://example.com/hotels/1/bookings/42</blockquote>
         /// </example>
         /// <param name="uriVariables">The dictionary of URI variables.</param>
         /// <returns>The expanded URI</returns>
-        public Uri Expand(IDictionary<string, string> uriVariables)
+        public Uri Expand(IDictionary<string, object> uriVariables)
         {
             if (uriVariables.Count != this.variableNames.Length)
             {
@@ -119,13 +119,13 @@ namespace Spring.Util
         /// <example>
         /// <code>
         /// UriTemplate template = new UriTemplate("http://example.com/hotels/{hotel}/bookings/{booking}");
-        /// Console.Out.WriteLine(template.Expand("1", "42"));
+        /// Console.Out.WriteLine(template.Expand(1, "42"));
         /// </code>
         /// will print: <blockquote>http://example.com/hotels/1/bookings/42</blockquote>
         /// </example>
         /// <param name="uriVariableValues">The array of URI variables.</param>
         /// <returns>The expanded URI</returns>
-        public Uri Expand(params string[] uriVariableValues)
+        public Uri Expand(params object[] uriVariableValues)
         {
             if (uriVariableValues.Length != this.variableNames.Length)
             {
@@ -194,10 +194,10 @@ namespace Spring.Util
             return this.uriTemplate;
         }
 
-        private static string Replace(string uriTemplate, string token, string value)
+        private static string Replace(string uriTemplate, string token, object value)
         {
             string quotedToken = BRACE_LEFT + token + BRACE_RIGHT;
-            return uriTemplate.Replace(quotedToken, value);
+            return uriTemplate.Replace(quotedToken, (value == null) ? String.Empty : value.ToString());
         }	    
         
         // Static inner class to parse uri template strings into a matching regular expression.

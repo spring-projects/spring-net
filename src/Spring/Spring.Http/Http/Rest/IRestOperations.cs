@@ -54,7 +54,7 @@ namespace Spring.Http.Rest
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>The converted object</returns>
-        T GetForObject<T>(string url, params string[] uriVariables) where T : class;
+        T GetForObject<T>(string url, params object[] uriVariables) where T : class;
 
         /// <summary>
         /// Retrieve a representation by doing a GET on the specified URL. 
@@ -67,7 +67,7 @@ namespace Spring.Http.Rest
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         /// <returns>The converted object</returns>
-        T GetForObject<T>(string url, IDictionary<string, string> uriVariables) where T : class;
+        T GetForObject<T>(string url, IDictionary<string, object> uriVariables) where T : class;
 
         /// <summary>
         /// Retrieve a representation by doing a GET on the specified URL. 
@@ -89,7 +89,7 @@ namespace Spring.Http.Rest
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>The HTTP response message.</returns>
-        HttpResponseMessage<T> GetForMessage<T>(string url, params string[] uriVariables) where T : class;
+        HttpResponseMessage<T> GetForMessage<T>(string url, params object[] uriVariables) where T : class;
 
         /// <summary>
         /// Retrieve an entity by doing a GET on the specified URL. 
@@ -102,7 +102,7 @@ namespace Spring.Http.Rest
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         /// <returns>The HTTP response message.</returns>
-        HttpResponseMessage<T> GetForMessage<T>(string url, IDictionary<string, string> uriVariables) where T : class;
+        HttpResponseMessage<T> GetForMessage<T>(string url, IDictionary<string, object> uriVariables) where T : class;
 
         /// <summary>
         /// Retrieve an entity by doing a GET on the specified URL. 
@@ -126,7 +126,7 @@ namespace Spring.Http.Rest
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>All HTTP headers of that resource</returns>
-        HttpHeaders HeadForHeaders(string url, params string[] uriVariables);
+        HttpHeaders HeadForHeaders(string url, params object[] uriVariables);
 
         /// <summary>
         /// Retrieve all headers of the resource specified by the URI template.
@@ -137,7 +137,7 @@ namespace Spring.Http.Rest
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         /// <returns>All HTTP headers of that resource</returns>
-        HttpHeaders HeadForHeaders(string url, IDictionary<string, string> uriVariables);
+        HttpHeaders HeadForHeaders(string url, IDictionary<string, object> uriVariables);
 
         /// <summary>
         /// Retrieve all headers of the resource specified by the URI template.
@@ -167,7 +167,7 @@ namespace Spring.Http.Rest
         /// <param name="request">The Object to be POSTed, may be null.</param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>The value for the Location header.</returns>
-        Uri PostForLocation(string url, object request, params string[] uriVariables);
+        Uri PostForLocation(string url, object request, params object[] uriVariables);
 
         /// <summary>
         /// Create a new resource by POSTing the given object to the URI template, 
@@ -186,7 +186,7 @@ namespace Spring.Http.Rest
         /// <param name="request">The Object to be POSTed, may be null.</param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         /// <returns>The value for the Location header.</returns>
-        Uri PostForLocation(string url, object request, IDictionary<string, string> uriVariables);
+        Uri PostForLocation(string url, object request, IDictionary<string, object> uriVariables);
 
         /// <summary>
         /// Create a new resource by POSTing the given object to the URI template, 
@@ -218,7 +218,7 @@ namespace Spring.Http.Rest
         /// <param name="request">The Object to be POSTed, may be null.</param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>The converted object.</returns>
-        T PostForObject<T>(string url, object request, params string[] uriVariables) where T : class;
+        T PostForObject<T>(string url, object request, params object[] uriVariables) where T : class;
 
         /// <summary>
         /// Create a new resource by POSTing the given object to the URI template, 
@@ -237,7 +237,7 @@ namespace Spring.Http.Rest
         /// <param name="request">The Object to be POSTed, may be null.</param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         /// <returns>The converted object.</returns>
-        T PostForObject<T>(string url, object request, IDictionary<string, string> uriVariables) where T : class;
+        T PostForObject<T>(string url, object request, IDictionary<string, object> uriVariables) where T : class;
 
         /// <summary>
         /// Create a new resource by POSTing the given object to the URI template, 
@@ -269,7 +269,7 @@ namespace Spring.Http.Rest
         /// <param name="request">The Object to be POSTed, may be null.</param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>The HTTP response message.</returns>
-        HttpResponseMessage<T> PostForMessage<T>(string url, object request, params string[] uriVariables) where T : class;
+        HttpResponseMessage<T> PostForMessage<T>(string url, object request, params object[] uriVariables) where T : class;
 
         /// <summary>
         /// Create a new resource by POSTing the given object to the URI template, 
@@ -288,7 +288,7 @@ namespace Spring.Http.Rest
         /// <param name="request">The Object to be POSTed, may be null.</param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         /// <returns>The HTTP response message.</returns>
-        HttpResponseMessage<T> PostForMessage<T>(string url, object request, IDictionary<string, string> uriVariables) where T : class;
+        HttpResponseMessage<T> PostForMessage<T>(string url, object request, IDictionary<string, object> uriVariables) where T : class;
 
         /// <summary>
         /// Create a new resource by POSTing the given object to the URI template, 
@@ -319,7 +319,7 @@ namespace Spring.Http.Rest
         /// <param name="request">The Object to be POSTed, may be null.</param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>The HTTP response message with no entity.</returns>
-        HttpResponseMessage PostForMessage(string url, object request, params string[] uriVariables);
+        HttpResponseMessage PostForMessage(string url, object request, params object[] uriVariables);
 
         /// <summary>
         /// Create a new resource by POSTing the given object to the URI template, 
@@ -337,7 +337,7 @@ namespace Spring.Http.Rest
         /// <param name="request">The Object to be POSTed, may be null.</param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         /// <returns>The HTTP response message with no entity.</returns>
-        HttpResponseMessage PostForMessage(string url, object request, IDictionary<string, string> uriVariables);
+        HttpResponseMessage PostForMessage(string url, object request, IDictionary<string, object> uriVariables);
 
         /// <summary>
         /// Create a new resource by POSTing the given object to the URI template, 
@@ -369,7 +369,7 @@ namespace Spring.Http.Rest
         /// <param name="url">The URL.</param>
         /// <param name="request">The Object to be PUT, may be null.</param>
         /// <param name="uriVariables">The variables to expand the template.</param>
-        void Put(string url, object request, params string[] uriVariables);
+        void Put(string url, object request, params object[] uriVariables);
 
         /// <summary>
         /// Create or update a resource by PUTting the given object to the URI.
@@ -385,7 +385,7 @@ namespace Spring.Http.Rest
         /// <param name="url">The URL.</param>
         /// <param name="request">The Object to be PUT, may be null.</param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
-        void Put(string url, object request, IDictionary<string, string> uriVariables);
+        void Put(string url, object request, IDictionary<string, object> uriVariables);
 
         /// <summary>
         /// Create or update a resource by PUTting the given object to the URI.
@@ -409,7 +409,7 @@ namespace Spring.Http.Rest
         /// </remarks>
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The variables to expand the template.</param>
-        void Delete(string url, params string[] uriVariables);
+        void Delete(string url, params object[] uriVariables);
 
         /// <summary>
         /// Delete the resources at the specified URI.
@@ -419,7 +419,7 @@ namespace Spring.Http.Rest
         /// </remarks>
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
-        void Delete(string url, IDictionary<string, string> uriVariables);
+        void Delete(string url, IDictionary<string, object> uriVariables);
 
         /// <summary>
         /// Delete the resources at the specified URI.
@@ -440,7 +440,7 @@ namespace Spring.Http.Rest
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>The value of the allow header.</returns>
-        IList<HttpMethod> OptionsForAllow(string url, params string[] uriVariables);
+        IList<HttpMethod> OptionsForAllow(string url, params object[] uriVariables);
 
         /// <summary>
         /// Return the value of the Allow header for the given URI.
@@ -451,7 +451,7 @@ namespace Spring.Http.Rest
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         /// <returns>The value of the allow header.</returns>
-        IList<HttpMethod> OptionsForAllow(string url, IDictionary<string, string> uriVariables);
+        IList<HttpMethod> OptionsForAllow(string url, IDictionary<string, object> uriVariables);
 
         /// <summary>
         /// Return the value of the Allow header for the given URI.
@@ -480,7 +480,7 @@ namespace Spring.Http.Rest
         /// </param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>The HTTP response message.</returns>
-        HttpResponseMessage<T> Exchange<T>(string url, HttpMethod method, HttpEntity requestEntity, params string[] uriVariables) where T : class;
+        HttpResponseMessage<T> Exchange<T>(string url, HttpMethod method, HttpEntity requestEntity, params object[] uriVariables) where T : class;
 
         /// <summary>
         /// Execute the HTTP method to the given URI template, writing the given request message to the request, 
@@ -497,7 +497,7 @@ namespace Spring.Http.Rest
         /// </param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         /// <returns>The HTTP response message.</returns>
-        HttpResponseMessage<T> Exchange<T>(string url, HttpMethod method, HttpEntity requestEntity, IDictionary<string, string> uriVariables) where T : class;
+        HttpResponseMessage<T> Exchange<T>(string url, HttpMethod method, HttpEntity requestEntity, IDictionary<string, object> uriVariables) where T : class;
 
         /// <summary>
         /// Execute the HTTP method to the given URI template, writing the given request message to the request, 
@@ -526,7 +526,7 @@ namespace Spring.Http.Rest
         /// </param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>The HTTP response message with no entity.</returns>
-        HttpResponseMessage Exchange(string url, HttpMethod method, HttpEntity requestEntity, params string[] uriVariables);
+        HttpResponseMessage Exchange(string url, HttpMethod method, HttpEntity requestEntity, params object[] uriVariables);
 
         /// <summary>
         /// Execute the HTTP method to the given URI template, writing the given request message to the request, 
@@ -542,7 +542,7 @@ namespace Spring.Http.Rest
         /// </param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         /// <returns>The HTTP response message with no entity.</returns>
-        HttpResponseMessage Exchange(string url, HttpMethod method, HttpEntity requestEntity, IDictionary<string, string> uriVariables);
+        HttpResponseMessage Exchange(string url, HttpMethod method, HttpEntity requestEntity, IDictionary<string, object> uriVariables);
 
         /// <summary>
         /// Execute the HTTP method to the given URI template, writing the given request message to the request, 
@@ -574,7 +574,7 @@ namespace Spring.Http.Rest
         /// <param name="responseExtractor">Object that extracts the return value from the response.</param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>An arbitrary object, as returned by the <see cref="IResponseExtractor{T}"/>.</returns>        
-        T Execute<T>(string url, HttpMethod method, IRequestCallback requestCallback, IResponseExtractor<T> responseExtractor, params string[] uriVariables) where T : class;
+        T Execute<T>(string url, HttpMethod method, IRequestCallback requestCallback, IResponseExtractor<T> responseExtractor, params object[] uriVariables) where T : class;
 
         /// <summary>
         /// Execute the HTTP method to the given URI template, preparing the request with the 
@@ -590,7 +590,7 @@ namespace Spring.Http.Rest
         /// <param name="responseExtractor">Object that extracts the return value from the response.</param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         /// <returns>An arbitrary object, as returned by the <see cref="IResponseExtractor{T}"/>.</returns>   
-        T Execute<T>(string url, HttpMethod method, IRequestCallback requestCallback, IResponseExtractor<T> responseExtractor, IDictionary<string, string> uriVariables) where T : class;
+        T Execute<T>(string url, HttpMethod method, IRequestCallback requestCallback, IResponseExtractor<T> responseExtractor, IDictionary<string, object> uriVariables) where T : class;
 
         /// <summary>
         /// Execute the HTTP method to the given URI template, preparing the request with the 

@@ -77,15 +77,15 @@ namespace Spring.Http.Rest
         [Test]
         public void GetStringVarArgsTemplateVariables()
         {
-            string result = template.GetForObject<string>("user/{id}", "1");
+            string result = template.GetForObject<string>("user/{id}", 1);
             Assert.AreEqual("Bruno Baïa", result, "Invalid content");
         }
 
         [Test]
         public void GetStringDictionaryTemplateVariables()
         {
-            IDictionary<string, string> uriVariables = new Dictionary<string, string>(1);
-            uriVariables.Add("id", "2");
+            IDictionary<string, object> uriVariables = new Dictionary<string, object>(1);
+            uriVariables.Add("id", 2);
             string result = template.GetForObject<string>("user/{id}", uriVariables);
             Assert.AreEqual("Marie Baia", result, "Invalid content");
         }
@@ -95,13 +95,13 @@ namespace Spring.Http.Rest
             ExpectedMessage = "The server returned 'User with id '5' not found' with the status code 404 - NotFound.")]
         public void GetStringError()
         {
-            string result = template.GetForObject<string>("user/{id}", "5");
+            string result = template.GetForObject<string>("user/{id}", 5);
         }
 
         [Test]
         public void GetStringForMessage()
         {
-            HttpResponseMessage<string> result = template.GetForMessage<string>("user/{id}", "1");
+            HttpResponseMessage<string> result = template.GetForMessage<string>("user/{id}", 1);
             Assert.AreEqual("Bruno Baïa", result.Body, "Invalid content");
             Assert.AreEqual(contentType, result.Headers.ContentType, "Invalid content-type");
             Assert.AreEqual(HttpStatusCode.OK, result.StatusCode, "Invalid status code");

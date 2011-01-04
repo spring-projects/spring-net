@@ -268,7 +268,7 @@ namespace Spring.Http.Rest
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>The converted object</returns>
-        public T GetForObject<T>(string url, params string[] uriVariables) where T : class
+        public T GetForObject<T>(string url, params object[] uriVariables) where T : class
         {
             AcceptHeaderRequestCallback requestCallback = new AcceptHeaderRequestCallback(typeof(T), this._messageConverters);
             MessageConverterResponseExtractor<T> responseExtractor = new MessageConverterResponseExtractor<T>(this._messageConverters);
@@ -286,7 +286,7 @@ namespace Spring.Http.Rest
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         /// <returns>The converted object</returns>
-        public T GetForObject<T>(string url, IDictionary<string, string> uriVariables) where T : class
+        public T GetForObject<T>(string url, IDictionary<string, object> uriVariables) where T : class
         {
             AcceptHeaderRequestCallback requestCallback = new AcceptHeaderRequestCallback(typeof(T), this._messageConverters);
             MessageConverterResponseExtractor<T> responseExtractor = new MessageConverterResponseExtractor<T>(this._messageConverters);
@@ -318,7 +318,7 @@ namespace Spring.Http.Rest
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>The HTTP response message.</returns>
-        public HttpResponseMessage<T> GetForMessage<T>(string url, params string[] uriVariables) where T : class
+        public HttpResponseMessage<T> GetForMessage<T>(string url, params object[] uriVariables) where T : class
         {
             AcceptHeaderRequestCallback requestCallback = new AcceptHeaderRequestCallback(typeof(T), this._messageConverters);
             HttpMessageResponseExtractor<T> responseExtractor = new HttpMessageResponseExtractor<T>(this._messageConverters);
@@ -336,7 +336,7 @@ namespace Spring.Http.Rest
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         /// <returns>The HTTP response message.</returns>
-        public HttpResponseMessage<T> GetForMessage<T>(string url, IDictionary<string, string> uriVariables) where T : class
+        public HttpResponseMessage<T> GetForMessage<T>(string url, IDictionary<string, object> uriVariables) where T : class
         {
             AcceptHeaderRequestCallback requestCallback = new AcceptHeaderRequestCallback(typeof(T), this._messageConverters);
             HttpMessageResponseExtractor<T> responseExtractor = new HttpMessageResponseExtractor<T>(this._messageConverters);
@@ -370,7 +370,7 @@ namespace Spring.Http.Rest
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>All HTTP headers of that resource</returns>
-        public HttpHeaders HeadForHeaders(string url, params string[] uriVariables)
+        public HttpHeaders HeadForHeaders(string url, params object[] uriVariables)
         {
             return this.Execute<HttpHeaders>(url, HttpMethod.HEAD, null, this.headersExtractor, uriVariables);
         }
@@ -384,7 +384,7 @@ namespace Spring.Http.Rest
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         /// <returns>All HTTP headers of that resource</returns>
-        public HttpHeaders HeadForHeaders(string url, IDictionary<string, string> uriVariables)
+        public HttpHeaders HeadForHeaders(string url, IDictionary<string, object> uriVariables)
         {
             return this.Execute<HttpHeaders>(url, HttpMethod.HEAD, null, this.headersExtractor, uriVariables);
         }
@@ -420,7 +420,7 @@ namespace Spring.Http.Rest
         /// <param name="request">The Object to be POSTed, may be null.</param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>The value for the Location header.</returns>
-        public Uri PostForLocation(string url, object request, params string[] uriVariables)
+        public Uri PostForLocation(string url, object request, params object[] uriVariables)
         {
             HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, this._messageConverters);
             HttpHeaders headers = this.Execute<HttpHeaders>(
@@ -445,7 +445,7 @@ namespace Spring.Http.Rest
         /// <param name="request">The Object to be POSTed, may be null.</param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         /// <returns>The value for the Location header.</returns>
-        public Uri PostForLocation(string url, object request, IDictionary<string, string> uriVariables)
+        public Uri PostForLocation(string url, object request, IDictionary<string, object> uriVariables)
         {
             HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, this._messageConverters);
             HttpHeaders headers = this.Execute<HttpHeaders>(
@@ -489,7 +489,7 @@ namespace Spring.Http.Rest
         /// <param name="request">The Object to be POSTed, may be null.</param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>The converted object.</returns>
-        public T PostForObject<T>(string url, object request, params string[] uriVariables) where T : class
+        public T PostForObject<T>(string url, object request, params object[] uriVariables) where T : class
         {
             HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, typeof(T), this._messageConverters);
             MessageConverterResponseExtractor<T> responseExtractor = new MessageConverterResponseExtractor<T>(this._messageConverters);
@@ -513,7 +513,7 @@ namespace Spring.Http.Rest
         /// <param name="request">The Object to be POSTed, may be null.</param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         /// <returns>The converted object.</returns>
-        public T PostForObject<T>(string url, object request, IDictionary<string, string> uriVariables) where T : class
+        public T PostForObject<T>(string url, object request, IDictionary<string, object> uriVariables) where T : class
         {
             HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, typeof(T), this._messageConverters);
             MessageConverterResponseExtractor<T> responseExtractor = new MessageConverterResponseExtractor<T>(this._messageConverters);
@@ -555,7 +555,7 @@ namespace Spring.Http.Rest
         /// <param name="request">The Object to be POSTed, may be null.</param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>The HTTP response message.</returns>
-        public HttpResponseMessage<T> PostForMessage<T>(string url, object request, params string[] uriVariables) where T : class
+        public HttpResponseMessage<T> PostForMessage<T>(string url, object request, params object[] uriVariables) where T : class
         {
             HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, typeof(T), this._messageConverters);
             HttpMessageResponseExtractor<T> responseExtractor = new HttpMessageResponseExtractor<T>(this._messageConverters);
@@ -579,7 +579,7 @@ namespace Spring.Http.Rest
         /// <param name="request">The Object to be POSTed, may be null.</param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         /// <returns>The HTTP response message.</returns>
-        public HttpResponseMessage<T> PostForMessage<T>(string url, object request, IDictionary<string, string> uriVariables) where T : class
+        public HttpResponseMessage<T> PostForMessage<T>(string url, object request, IDictionary<string, object> uriVariables) where T : class
         {
             HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, typeof(T), this._messageConverters);
             HttpMessageResponseExtractor<T> responseExtractor = new HttpMessageResponseExtractor<T>(this._messageConverters);
@@ -620,7 +620,7 @@ namespace Spring.Http.Rest
         /// <param name="request">The Object to be POSTed, may be null.</param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>The HTTP response message with no entity.</returns>
-        public HttpResponseMessage PostForMessage(string url, object request, params string[] uriVariables)
+        public HttpResponseMessage PostForMessage(string url, object request, params object[] uriVariables)
         {
             HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, this._messageConverters);
             HttpMessageResponseExtractor responseExtractor = new HttpMessageResponseExtractor();
@@ -643,7 +643,7 @@ namespace Spring.Http.Rest
         /// <param name="request">The Object to be POSTed, may be null.</param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         /// <returns>The HTTP response message with no entity.</returns>
-        public HttpResponseMessage PostForMessage(string url, object request, IDictionary<string, string> uriVariables)
+        public HttpResponseMessage PostForMessage(string url, object request, IDictionary<string, object> uriVariables)
         {
             HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, this._messageConverters);
             HttpMessageResponseExtractor responseExtractor = new HttpMessageResponseExtractor();
@@ -685,7 +685,7 @@ namespace Spring.Http.Rest
         /// <param name="url">The URL.</param>
         /// <param name="request">The Object to be PUT, may be null.</param>
         /// <param name="uriVariables">The variables to expand the template.</param>
-        public void Put(string url, object request, params string[] uriVariables)
+        public void Put(string url, object request, params object[] uriVariables)
         {
             HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, this._messageConverters);
             this.Execute<object>(url, HttpMethod.PUT, requestCallback, null, uriVariables);
@@ -705,7 +705,7 @@ namespace Spring.Http.Rest
         /// <param name="url">The URL.</param>
         /// <param name="request">The Object to be PUT, may be null.</param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
-        public void Put(string url, object request, IDictionary<string, string> uriVariables)
+        public void Put(string url, object request, IDictionary<string, object> uriVariables)
         {
             HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, this._messageConverters);
             this.Execute<object>(url, HttpMethod.PUT, requestCallback, null, uriVariables);
@@ -737,7 +737,7 @@ namespace Spring.Http.Rest
         /// </remarks>
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The variables to expand the template.</param>
-        public void Delete(string url, params string[] uriVariables)
+        public void Delete(string url, params object[] uriVariables)
         {
             this.Execute<object>(url, HttpMethod.DELETE, null, null, uriVariables);
         }
@@ -750,7 +750,7 @@ namespace Spring.Http.Rest
         /// </remarks>
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
-        public void Delete(string url, IDictionary<string, string> uriVariables)
+        public void Delete(string url, IDictionary<string, object> uriVariables)
         {
             this.Execute<object>(url, HttpMethod.DELETE, null, null, uriVariables);
         }
@@ -777,7 +777,7 @@ namespace Spring.Http.Rest
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>The value of the allow header.</returns>
-        public IList<HttpMethod> OptionsForAllow(string url, params string[] uriVariables)
+        public IList<HttpMethod> OptionsForAllow(string url, params object[] uriVariables)
         {
             HttpHeaders headers = this.Execute<HttpHeaders>(
                 url, HttpMethod.OPTIONS, null, this.headersExtractor, uriVariables);
@@ -793,7 +793,7 @@ namespace Spring.Http.Rest
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         /// <returns>The value of the allow header.</returns>
-        public IList<HttpMethod> OptionsForAllow(string url, IDictionary<string, string> uriVariables)
+        public IList<HttpMethod> OptionsForAllow(string url, IDictionary<string, object> uriVariables)
         {
             HttpHeaders headers = this.Execute<HttpHeaders>(
                 url, HttpMethod.OPTIONS, null, this.headersExtractor, uriVariables);
@@ -832,7 +832,7 @@ namespace Spring.Http.Rest
         /// </param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>The HTTP response message.</returns>
-        public HttpResponseMessage<T> Exchange<T>(string url, HttpMethod method, HttpEntity requestEntity, params string[] uriVariables) where T : class
+        public HttpResponseMessage<T> Exchange<T>(string url, HttpMethod method, HttpEntity requestEntity, params object[] uriVariables) where T : class
         {
             HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(requestEntity, typeof(T), this._messageConverters);
             HttpMessageResponseExtractor<T> responseExtractor = new HttpMessageResponseExtractor<T>(this._messageConverters);
@@ -854,7 +854,7 @@ namespace Spring.Http.Rest
         /// </param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         /// <returns>The HTTP response message.</returns>
-        public HttpResponseMessage<T> Exchange<T>(string url, HttpMethod method, HttpEntity requestEntity, IDictionary<string, string> uriVariables) where T : class
+        public HttpResponseMessage<T> Exchange<T>(string url, HttpMethod method, HttpEntity requestEntity, IDictionary<string, object> uriVariables) where T : class
         {
             HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(requestEntity, typeof(T), this._messageConverters);
             HttpMessageResponseExtractor<T> responseExtractor = new HttpMessageResponseExtractor<T>(this._messageConverters);
@@ -893,7 +893,7 @@ namespace Spring.Http.Rest
         /// </param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>The HTTP response message with no entity.</returns>
-        public HttpResponseMessage Exchange(string url, HttpMethod method, HttpEntity requestEntity, params string[] uriVariables)
+        public HttpResponseMessage Exchange(string url, HttpMethod method, HttpEntity requestEntity, params object[] uriVariables)
         {
             HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(requestEntity, this._messageConverters);
             HttpMessageResponseExtractor responseExtractor = new HttpMessageResponseExtractor();
@@ -914,7 +914,7 @@ namespace Spring.Http.Rest
         /// </param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         /// <returns>The HTTP response message with no entity.</returns>
-        public HttpResponseMessage Exchange(string url, HttpMethod method, HttpEntity requestEntity, IDictionary<string, string> uriVariables)
+        public HttpResponseMessage Exchange(string url, HttpMethod method, HttpEntity requestEntity, IDictionary<string, object> uriVariables)
         {
             HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(requestEntity, this._messageConverters);
             HttpMessageResponseExtractor responseExtractor = new HttpMessageResponseExtractor();
@@ -956,7 +956,7 @@ namespace Spring.Http.Rest
         /// <param name="responseExtractor">Object that extracts the return value from the response.</param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>An arbitrary object, as returned by the <see cref="IResponseExtractor{T}"/>.</returns>        
-        public T Execute<T>(string url, HttpMethod method, IRequestCallback requestCallback, IResponseExtractor<T> responseExtractor, params string[] uriVariables) where T : class
+        public T Execute<T>(string url, HttpMethod method, IRequestCallback requestCallback, IResponseExtractor<T> responseExtractor, params object[] uriVariables) where T : class
         {
             return this.DoExecute<T>(this.BuildUri(this._baseAddress, url, uriVariables), method, requestCallback, responseExtractor);
         }
@@ -975,7 +975,7 @@ namespace Spring.Http.Rest
         /// <param name="responseExtractor">Object that extracts the return value from the response.</param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         /// <returns>An arbitrary object, as returned by the <see cref="IResponseExtractor{T}"/>.</returns>   
-        public T Execute<T>(string url, HttpMethod method, IRequestCallback requestCallback, IResponseExtractor<T> responseExtractor, IDictionary<string, string> uriVariables) where T : class
+        public T Execute<T>(string url, HttpMethod method, IRequestCallback requestCallback, IResponseExtractor<T> responseExtractor, IDictionary<string, object> uriVariables) where T : class
         {
             return this.DoExecute<T>(this.BuildUri(this._baseAddress, url, uriVariables), method, requestCallback, responseExtractor);
         }
@@ -1004,14 +1004,14 @@ namespace Spring.Http.Rest
 
         #region GET
 
-        public void GetForObjectAsync<T>(string url, string[] uriVariables, Action<MethodCompletedEventArgs<T>> getCompleted) where T : class
+        public void GetForObjectAsync<T>(string url, object[] uriVariables, Action<MethodCompletedEventArgs<T>> getCompleted) where T : class
         {
             AcceptHeaderRequestCallback requestCallback = new AcceptHeaderRequestCallback(typeof(T), this._messageConverters);
             MessageConverterResponseExtractor<T> responseExtractor = new MessageConverterResponseExtractor<T>(this._messageConverters);
             this.ExecuteAsync<T>(url, HttpMethod.GET, requestCallback, responseExtractor, uriVariables, getCompleted);
         }
 
-        public void GetForObjectAsync<T>(string url, IDictionary<string, string> uriVariables, Action<MethodCompletedEventArgs<T>> getCompleted) where T : class
+        public void GetForObjectAsync<T>(string url, IDictionary<string, object> uriVariables, Action<MethodCompletedEventArgs<T>> getCompleted) where T : class
         {
             AcceptHeaderRequestCallback requestCallback = new AcceptHeaderRequestCallback(typeof(T), this._messageConverters);
             MessageConverterResponseExtractor<T> responseExtractor = new MessageConverterResponseExtractor<T>(this._messageConverters);
@@ -1025,14 +1025,14 @@ namespace Spring.Http.Rest
             this.ExecuteAsync<T>(url, HttpMethod.GET, requestCallback, responseExtractor, getCompleted);
         }
 
-        public void GetForMessageAsync<T>(string url, string[] uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> getCompleted) where T : class
+        public void GetForMessageAsync<T>(string url, object[] uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> getCompleted) where T : class
         {
             AcceptHeaderRequestCallback requestCallback = new AcceptHeaderRequestCallback(typeof(T), this._messageConverters);
             HttpMessageResponseExtractor<T> responseExtractor = new HttpMessageResponseExtractor<T>(this._messageConverters);
             this.ExecuteAsync<HttpResponseMessage<T>>(url, HttpMethod.GET, requestCallback, responseExtractor, uriVariables, getCompleted);
         }
 
-        public void GetForMessageAsync<T>(string url, IDictionary<string, string> uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> getCompleted) where T : class
+        public void GetForMessageAsync<T>(string url, IDictionary<string, object> uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> getCompleted) where T : class
         {
             AcceptHeaderRequestCallback requestCallback = new AcceptHeaderRequestCallback(typeof(T), this._messageConverters);
             HttpMessageResponseExtractor<T> responseExtractor = new HttpMessageResponseExtractor<T>(this._messageConverters);
@@ -1050,12 +1050,12 @@ namespace Spring.Http.Rest
 
         #region HEAD
 
-        public void HeadForHeadersAsync(string url, string[] uriVariables, Action<MethodCompletedEventArgs<HttpHeaders>> headCompleted)
+        public void HeadForHeadersAsync(string url, object[] uriVariables, Action<MethodCompletedEventArgs<HttpHeaders>> headCompleted)
         {
             this.ExecuteAsync<HttpHeaders>(url, HttpMethod.HEAD, null, this.headersExtractor, uriVariables, headCompleted);
         }
 
-        public void HeadForHeadersAsync(string url, IDictionary<string, string> uriVariables, Action<MethodCompletedEventArgs<HttpHeaders>> headCompleted)
+        public void HeadForHeadersAsync(string url, IDictionary<string, object> uriVariables, Action<MethodCompletedEventArgs<HttpHeaders>> headCompleted)
         {
             this.ExecuteAsync<HttpHeaders>(url, HttpMethod.HEAD, null, this.headersExtractor, uriVariables, headCompleted);
         }
@@ -1069,7 +1069,7 @@ namespace Spring.Http.Rest
 
         #region POST
 
-        public void PostForLocationAsync(string url, object request, string[] uriVariables, Action<Uri> postCompleted)
+        public void PostForLocationAsync(string url, object request, object[] uriVariables, Action<Uri> postCompleted)
         {
             HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, this._messageConverters);
             this.ExecuteAsync<HttpHeaders>(url, HttpMethod.POST, requestCallback, this.headersExtractor, uriVariables,
@@ -1079,7 +1079,7 @@ namespace Spring.Http.Rest
                 });
         }
 
-        public void PostForLocationAsync(string url, object request, IDictionary<string, string> uriVariables, Action<Uri> postCompleted)
+        public void PostForLocationAsync(string url, object request, IDictionary<string, object> uriVariables, Action<Uri> postCompleted)
         {
             HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, this._messageConverters);
             this.ExecuteAsync<HttpHeaders>(url, HttpMethod.POST, requestCallback, this.headersExtractor, uriVariables,
@@ -1099,14 +1099,14 @@ namespace Spring.Http.Rest
                 });
         }
 
-        public void PostForObjectAsync<T>(string url, object request, string[] uriVariables, Action<MethodCompletedEventArgs<T>> postCompleted) where T : class
+        public void PostForObjectAsync<T>(string url, object request, object[] uriVariables, Action<MethodCompletedEventArgs<T>> postCompleted) where T : class
         {
             HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, typeof(T), this._messageConverters);
             MessageConverterResponseExtractor<T> responseExtractor = new MessageConverterResponseExtractor<T>(this._messageConverters);
             this.ExecuteAsync<T>(url, HttpMethod.POST, requestCallback, responseExtractor, uriVariables, postCompleted);
         }
 
-        public void PostForObjectAsync<T>(string url, object request, IDictionary<string, string> uriVariables, Action<MethodCompletedEventArgs<T>> postCompleted) where T : class
+        public void PostForObjectAsync<T>(string url, object request, IDictionary<string, object> uriVariables, Action<MethodCompletedEventArgs<T>> postCompleted) where T : class
         {
             HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, typeof(T), this._messageConverters);
             MessageConverterResponseExtractor<T> responseExtractor = new MessageConverterResponseExtractor<T>(this._messageConverters);
@@ -1120,14 +1120,14 @@ namespace Spring.Http.Rest
             this.ExecuteAsync<T>(url, HttpMethod.POST, requestCallback, responseExtractor, postCompleted);
         }
 
-        public void PostForMessageAsync<T>(string url, object request, string[] uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> postCompleted) where T : class
+        public void PostForMessageAsync<T>(string url, object request, object[] uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> postCompleted) where T : class
         {
             HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, typeof(T), this._messageConverters);
             HttpMessageResponseExtractor<T> responseExtractor = new HttpMessageResponseExtractor<T>(this._messageConverters);
             this.ExecuteAsync<HttpResponseMessage<T>>(url, HttpMethod.POST, requestCallback, responseExtractor, uriVariables, postCompleted);
         }
 
-        public void PostForMessageAsync<T>(string url, object request, IDictionary<string, string> uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> postCompleted) where T : class
+        public void PostForMessageAsync<T>(string url, object request, IDictionary<string, object> uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> postCompleted) where T : class
         {
             HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, typeof(T), this._messageConverters);
             HttpMessageResponseExtractor<T> responseExtractor = new HttpMessageResponseExtractor<T>(this._messageConverters);
@@ -1141,14 +1141,14 @@ namespace Spring.Http.Rest
             this.ExecuteAsync<HttpResponseMessage<T>>(url, HttpMethod.POST, requestCallback, responseExtractor, postCompleted);
         }
 
-        public void PostForMessageAsync(string url, object request, string[] uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage>> postCompleted)
+        public void PostForMessageAsync(string url, object request, object[] uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage>> postCompleted)
         {
             HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, this._messageConverters);
             HttpMessageResponseExtractor responseExtractor = new HttpMessageResponseExtractor();
             this.ExecuteAsync<HttpResponseMessage>(url, HttpMethod.POST, requestCallback, responseExtractor, uriVariables, postCompleted);
         }
 
-        public void PostForMessageAsync(string url, object request, IDictionary<string, string> uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage>> postCompleted)
+        public void PostForMessageAsync(string url, object request, IDictionary<string, object> uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage>> postCompleted)
         {
             HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, this._messageConverters);
             HttpMessageResponseExtractor responseExtractor = new HttpMessageResponseExtractor();
@@ -1166,13 +1166,13 @@ namespace Spring.Http.Rest
 
         #region PUT
 
-        public void PutAsync(string url, object request, string[] uriVariables, Action<MethodCompletedEventArgs<object>> putCompleted)
+        public void PutAsync(string url, object request, object[] uriVariables, Action<MethodCompletedEventArgs<object>> putCompleted)
         {
             HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, this._messageConverters);
             this.ExecuteAsync<object>(url, HttpMethod.PUT, requestCallback, null, uriVariables, putCompleted);
         }
 
-        public void PutAsync(string url, object request, IDictionary<string, string> uriVariables, Action<MethodCompletedEventArgs<object>> putCompleted)
+        public void PutAsync(string url, object request, IDictionary<string, object> uriVariables, Action<MethodCompletedEventArgs<object>> putCompleted)
         {
             HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, this._messageConverters);
             this.ExecuteAsync<object>(url, HttpMethod.PUT, requestCallback, null, uriVariables, putCompleted);
@@ -1188,12 +1188,12 @@ namespace Spring.Http.Rest
 
         #region DELETE
 
-        public void DeleteAsync(string url, string[] uriVariables, Action<MethodCompletedEventArgs<object>> deleteCompleted)
+        public void DeleteAsync(string url, object[] uriVariables, Action<MethodCompletedEventArgs<object>> deleteCompleted)
         {
             this.ExecuteAsync<object>(url, HttpMethod.DELETE, null, null, uriVariables, deleteCompleted);
         }
 
-        public void DeleteAsync(string url, IDictionary<string, string> uriVariables, Action<MethodCompletedEventArgs<object>> deleteCompleted)
+        public void DeleteAsync(string url, IDictionary<string, object> uriVariables, Action<MethodCompletedEventArgs<object>> deleteCompleted)
         {
             this.ExecuteAsync<object>(url, HttpMethod.DELETE, null, null, uriVariables, deleteCompleted);
         }
@@ -1207,7 +1207,7 @@ namespace Spring.Http.Rest
 
         #region OPTIONS
 
-        public void OptionsForAllowAsync(string url, string[] uriVariables, Action<IList<HttpMethod>> optionsCompleted)
+        public void OptionsForAllowAsync(string url, object[] uriVariables, Action<IList<HttpMethod>> optionsCompleted)
         {
             this.ExecuteAsync<HttpHeaders>(url, HttpMethod.OPTIONS, null, this.headersExtractor, uriVariables,
                 delegate(MethodCompletedEventArgs<HttpHeaders> args) 
@@ -1216,7 +1216,7 @@ namespace Spring.Http.Rest
                 });
         }
 
-        public void OptionsForAllowAsync(string url, IDictionary<string, string> uriVariables, Action<IList<HttpMethod>> optionsCompleted)
+        public void OptionsForAllowAsync(string url, IDictionary<string, object> uriVariables, Action<IList<HttpMethod>> optionsCompleted)
         {
             this.ExecuteAsync<HttpHeaders>(url, HttpMethod.OPTIONS, null, this.headersExtractor, uriVariables,
                 delegate(MethodCompletedEventArgs<HttpHeaders> args) 
@@ -1239,14 +1239,14 @@ namespace Spring.Http.Rest
 
         #region Exchange
 
-        public void ExchangeAsync<T>(string url, HttpMethod method, HttpEntity requestEntity, string[] uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> methodCompleted) where T : class
+        public void ExchangeAsync<T>(string url, HttpMethod method, HttpEntity requestEntity, object[] uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> methodCompleted) where T : class
         {
             HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(requestEntity, typeof(T), this._messageConverters);
             HttpMessageResponseExtractor<T> responseExtractor = new HttpMessageResponseExtractor<T>(this._messageConverters);
             this.ExecuteAsync<HttpResponseMessage<T>>(url, method, requestCallback, responseExtractor, uriVariables, methodCompleted);
         }
 
-        public void ExchangeAsync<T>(string url, HttpMethod method, HttpEntity requestEntity, IDictionary<string, string> uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> methodCompleted) where T : class
+        public void ExchangeAsync<T>(string url, HttpMethod method, HttpEntity requestEntity, IDictionary<string, object> uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> methodCompleted) where T : class
         {
             HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(requestEntity, typeof(T), this._messageConverters);
             HttpMessageResponseExtractor<T> responseExtractor = new HttpMessageResponseExtractor<T>(this._messageConverters);
@@ -1260,14 +1260,14 @@ namespace Spring.Http.Rest
             this.ExecuteAsync<HttpResponseMessage<T>>(url, method, requestCallback, responseExtractor, methodCompleted);
         }
 
-        public void ExchangeAsync(string url, HttpMethod method, HttpEntity requestEntity, string[] uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage>> methodCompleted)
+        public void ExchangeAsync(string url, HttpMethod method, HttpEntity requestEntity, object[] uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage>> methodCompleted)
         {
             HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(requestEntity, this._messageConverters);
             HttpMessageResponseExtractor responseExtractor = new HttpMessageResponseExtractor();
             this.ExecuteAsync<HttpResponseMessage>(url, method, requestCallback, responseExtractor, uriVariables, methodCompleted);
         }
 
-        public void ExchangeAsync(string url, HttpMethod method, HttpEntity requestEntity, IDictionary<string, string> uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage>> methodCompleted)
+        public void ExchangeAsync(string url, HttpMethod method, HttpEntity requestEntity, IDictionary<string, object> uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage>> methodCompleted)
         {
             HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(requestEntity, this._messageConverters);
             HttpMessageResponseExtractor responseExtractor = new HttpMessageResponseExtractor();
@@ -1285,13 +1285,13 @@ namespace Spring.Http.Rest
 
         #region General execution
 
-        public void ExecuteAsync<T>(string url, HttpMethod method, IRequestCallback requestCallback, IResponseExtractor<T> responseExtractor, string[] uriVariables, Action<MethodCompletedEventArgs<T>> methodCompleted) where T : class
+        public void ExecuteAsync<T>(string url, HttpMethod method, IRequestCallback requestCallback, IResponseExtractor<T> responseExtractor, object[] uriVariables, Action<MethodCompletedEventArgs<T>> methodCompleted) where T : class
         {
             this.DoExecuteAsync<T>(BuildUri(this._baseAddress, url, uriVariables), method, 
                 requestCallback, responseExtractor, methodCompleted);
         }
 
-        public void ExecuteAsync<T>(string url, HttpMethod method, IRequestCallback requestCallback, IResponseExtractor<T> responseExtractor, IDictionary<string, string> uriVariables, Action<MethodCompletedEventArgs<T>> methodCompleted) where T : class
+        public void ExecuteAsync<T>(string url, HttpMethod method, IRequestCallback requestCallback, IResponseExtractor<T> responseExtractor, IDictionary<string, object> uriVariables, Action<MethodCompletedEventArgs<T>> methodCompleted) where T : class
         {
             this.DoExecuteAsync<T>(BuildUri(this._baseAddress, url, uriVariables), method, 
                 requestCallback, responseExtractor, methodCompleted);
@@ -1448,14 +1448,14 @@ namespace Spring.Http.Rest
         // - UriTemplate.BindByPosition is not supported in Silverlight
         // - UriTemplate class is not included in the Silverlight core dlls
 
-        protected virtual Uri BuildUri(Uri baseAddress, string url, string[] uriVariables)
+        protected virtual Uri BuildUri(Uri baseAddress, string url, object[] uriVariables)
         {
             UriTemplate uriTemplate = new UriTemplate(url);
             Uri uri = uriTemplate.Expand(uriVariables);
             return BuildUri(baseAddress, uri);
         }
 
-        protected virtual Uri BuildUri(Uri baseAddress, string url, IDictionary<string, string> uriVariables)
+        protected virtual Uri BuildUri(Uri baseAddress, string url, IDictionary<string, object> uriVariables)
         {
             UriTemplate uriTemplate = new UriTemplate(url);
             Uri uri = uriTemplate.Expand(uriVariables);

@@ -50,7 +50,7 @@ namespace Spring.Http.Rest
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>The converted object</returns>
-        void GetForObjectAsync<T>(string url, string[] uriVariables, Action<MethodCompletedEventArgs<T>> getCompleted) where T : class;
+        void GetForObjectAsync<T>(string url, object[] uriVariables, Action<MethodCompletedEventArgs<T>> getCompleted) where T : class;
 
         /// <summary>
         /// Retrieve a representation by doing a GET on the specified URL. 
@@ -63,7 +63,7 @@ namespace Spring.Http.Rest
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         /// <returns>The converted object</returns>
-        void GetForObjectAsync<T>(string url, IDictionary<string, string> uriVariables, Action<MethodCompletedEventArgs<T>> getCompleted) where T : class;
+        void GetForObjectAsync<T>(string url, IDictionary<string, object> uriVariables, Action<MethodCompletedEventArgs<T>> getCompleted) where T : class;
 
         /// <summary>
         /// Retrieve a representation by doing a GET on the specified URL. 
@@ -85,7 +85,7 @@ namespace Spring.Http.Rest
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>The HTTP response message.</returns>
-        void GetForMessageAsync<T>(string url, string[] uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> getCompleted) where T : class;
+        void GetForMessageAsync<T>(string url, object[] uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> getCompleted) where T : class;
 
         /// <summary>
         /// Retrieve an entity by doing a GET on the specified URL. 
@@ -98,7 +98,7 @@ namespace Spring.Http.Rest
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         /// <returns>The HTTP response message.</returns>
-        void GetForMessageAsync<T>(string url, IDictionary<string, string> uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> getCompleted) where T : class;
+        void GetForMessageAsync<T>(string url, IDictionary<string, object> uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> getCompleted) where T : class;
 
         /// <summary>
         /// Retrieve an entity by doing a GET on the specified URL. 
@@ -122,7 +122,7 @@ namespace Spring.Http.Rest
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>All HTTP headers of that resource</returns>
-        void HeadForHeadersAsync(string url, string[] uriVariables, Action<MethodCompletedEventArgs<HttpHeaders>> headCompleted);
+        void HeadForHeadersAsync(string url, object[] uriVariables, Action<MethodCompletedEventArgs<HttpHeaders>> headCompleted);
 
         /// <summary>
         /// Retrieve all headers of the resource specified by the URI template.
@@ -133,7 +133,7 @@ namespace Spring.Http.Rest
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         /// <returns>All HTTP headers of that resource</returns>
-        void HeadForHeadersAsync(string url, IDictionary<string, string> uriVariables, Action<MethodCompletedEventArgs<HttpHeaders>> headCompleted);
+        void HeadForHeadersAsync(string url, IDictionary<string, object> uriVariables, Action<MethodCompletedEventArgs<HttpHeaders>> headCompleted);
 
         /// <summary>
         /// Retrieve all headers of the resource specified by the URI template.
@@ -163,7 +163,7 @@ namespace Spring.Http.Rest
         /// <param name="request">The Object to be POSTed, may be null.</param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>The value for the Location header.</returns>
-        void PostForLocationAsync(string url, object request, string[] uriVariables, Action<Uri> postCompleted);
+        void PostForLocationAsync(string url, object request, object[] uriVariables, Action<Uri> postCompleted);
 
         /// <summary>
         /// Create a new resource by POSTing the given object to the URI template, 
@@ -182,7 +182,7 @@ namespace Spring.Http.Rest
         /// <param name="request">The Object to be POSTed, may be null.</param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         /// <returns>The value for the Location header.</returns>
-        void PostForLocationAsync(string url, object request, IDictionary<string, string> uriVariables, Action<Uri> postCompleted);
+        void PostForLocationAsync(string url, object request, IDictionary<string, object> uriVariables, Action<Uri> postCompleted);
 
         /// <summary>
         /// Create a new resource by POSTing the given object to the URI template, 
@@ -214,7 +214,7 @@ namespace Spring.Http.Rest
         /// <param name="request">The Object to be POSTed, may be null.</param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>The converted object.</returns>
-        void PostForObjectAsync<T>(string url, object request, string[] uriVariables, Action<MethodCompletedEventArgs<T>> postCompleted) where T : class;
+        void PostForObjectAsync<T>(string url, object request, object[] uriVariables, Action<MethodCompletedEventArgs<T>> postCompleted) where T : class;
 
         /// <summary>
         /// Create a new resource by POSTing the given object to the URI template, 
@@ -233,7 +233,7 @@ namespace Spring.Http.Rest
         /// <param name="request">The Object to be POSTed, may be null.</param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         /// <returns>The converted object.</returns>
-        void PostForObjectAsync<T>(string url, object request, IDictionary<string, string> uriVariables, Action<MethodCompletedEventArgs<T>> postCompleted) where T : class;
+        void PostForObjectAsync<T>(string url, object request, IDictionary<string, object> uriVariables, Action<MethodCompletedEventArgs<T>> postCompleted) where T : class;
 
         /// <summary>
         /// Create a new resource by POSTing the given object to the URI template, 
@@ -265,7 +265,7 @@ namespace Spring.Http.Rest
         /// <param name="request">The Object to be POSTed, may be null.</param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>The HTTP response message.</returns>
-        void PostForMessageAsync<T>(string url, object request, string[] uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> postCompleted) where T : class;
+        void PostForMessageAsync<T>(string url, object request, object[] uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> postCompleted) where T : class;
 
         /// <summary>
         /// Create a new resource by POSTing the given object to the URI template, 
@@ -284,7 +284,7 @@ namespace Spring.Http.Rest
         /// <param name="request">The Object to be POSTed, may be null.</param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         /// <returns>The HTTP response message.</returns>
-        void PostForMessageAsync<T>(string url, object request, IDictionary<string, string> uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> postCompleted) where T : class;
+        void PostForMessageAsync<T>(string url, object request, IDictionary<string, object> uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> postCompleted) where T : class;
 
         /// <summary>
         /// Create a new resource by POSTing the given object to the URI template, 
@@ -315,7 +315,7 @@ namespace Spring.Http.Rest
         /// <param name="request">The Object to be POSTed, may be null.</param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>The HTTP response message with no entity.</returns>
-        void PostForMessageAsync(string url, object request, string[] uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage>> postCompleted);
+        void PostForMessageAsync(string url, object request, object[] uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage>> postCompleted);
 
         /// <summary>
         /// Create a new resource by POSTing the given object to the URI template, 
@@ -333,7 +333,7 @@ namespace Spring.Http.Rest
         /// <param name="request">The Object to be POSTed, may be null.</param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         /// <returns>The HTTP response message with no entity.</returns>
-        void PostForMessageAsync(string url, object request, IDictionary<string, string> uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage>> postCompleted);
+        void PostForMessageAsync(string url, object request, IDictionary<string, object> uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage>> postCompleted);
 
         /// <summary>
         /// Create a new resource by POSTing the given object to the URI template, 
@@ -365,7 +365,7 @@ namespace Spring.Http.Rest
         /// <param name="url">The URL.</param>
         /// <param name="request">The Object to be PUT, may be null.</param>
         /// <param name="uriVariables">The variables to expand the template.</param>
-        void PutAsync(string url, object request, string[] uriVariables, Action<MethodCompletedEventArgs<object>> putCompleted);
+        void PutAsync(string url, object request, object[] uriVariables, Action<MethodCompletedEventArgs<object>> putCompleted);
 
         /// <summary>
         /// Create or update a resource by PUTting the given object to the URI.
@@ -381,7 +381,7 @@ namespace Spring.Http.Rest
         /// <param name="url">The URL.</param>
         /// <param name="request">The Object to be PUT, may be null.</param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
-        void PutAsync(string url, object request, IDictionary<string, string> uriVariables, Action<MethodCompletedEventArgs<object>> putCompleted);
+        void PutAsync(string url, object request, IDictionary<string, object> uriVariables, Action<MethodCompletedEventArgs<object>> putCompleted);
 
         /// <summary>
         /// Create or update a resource by PUTting the given object to the URI.
@@ -405,7 +405,7 @@ namespace Spring.Http.Rest
         /// </remarks>
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The variables to expand the template.</param>
-        void DeleteAsync(string url, string[] uriVariables, Action<MethodCompletedEventArgs<object>> deleteCompleted);
+        void DeleteAsync(string url, object[] uriVariables, Action<MethodCompletedEventArgs<object>> deleteCompleted);
 
         /// <summary>
         /// Delete the resources at the specified URI.
@@ -415,7 +415,7 @@ namespace Spring.Http.Rest
         /// </remarks>
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
-        void DeleteAsync(string url, IDictionary<string, string> uriVariables, Action<MethodCompletedEventArgs<object>> deleteCompleted);
+        void DeleteAsync(string url, IDictionary<string, object> uriVariables, Action<MethodCompletedEventArgs<object>> deleteCompleted);
 
         /// <summary>
         /// Delete the resources at the specified URI.
@@ -436,7 +436,7 @@ namespace Spring.Http.Rest
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>The value of the allow header.</returns>
-        void OptionsForAllowAsync(string url, string[] uriVariables, Action<IList<HttpMethod>> optionsCompleted);
+        void OptionsForAllowAsync(string url, object[] uriVariables, Action<IList<HttpMethod>> optionsCompleted);
 
         /// <summary>
         /// Return the value of the Allow header for the given URI.
@@ -447,7 +447,7 @@ namespace Spring.Http.Rest
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         /// <returns>The value of the allow header.</returns>
-        void OptionsForAllowAsync(string url, IDictionary<string, string> uriVariables, Action<IList<HttpMethod>> optionsCompleted);
+        void OptionsForAllowAsync(string url, IDictionary<string, object> uriVariables, Action<IList<HttpMethod>> optionsCompleted);
 
         /// <summary>
         /// Return the value of the Allow header for the given URI.
@@ -476,7 +476,7 @@ namespace Spring.Http.Rest
         /// </param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>The HTTP response message.</returns>
-        void ExchangeAsync<T>(string url, HttpMethod method, HttpEntity requestEntity, string[] uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> methodCompleted) where T : class;
+        void ExchangeAsync<T>(string url, HttpMethod method, HttpEntity requestEntity, object[] uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> methodCompleted) where T : class;
 
         /// <summary>
         /// Execute the HTTP method to the given URI template, writing the given request message to the request, 
@@ -493,7 +493,7 @@ namespace Spring.Http.Rest
         /// </param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         /// <returns>The HTTP response message.</returns>
-        void ExchangeAsync<T>(string url, HttpMethod method, HttpEntity requestEntity, IDictionary<string, string> uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> methodCompleted) where T : class;
+        void ExchangeAsync<T>(string url, HttpMethod method, HttpEntity requestEntity, IDictionary<string, object> uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> methodCompleted) where T : class;
 
         /// <summary>
         /// Execute the HTTP method to the given URI template, writing the given request message to the request, 
@@ -522,7 +522,7 @@ namespace Spring.Http.Rest
         /// </param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>The HTTP response message with no entity.</returns>
-        void ExchangeAsync(string url, HttpMethod method, HttpEntity requestEntity, string[] uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage>> methodCompleted);
+        void ExchangeAsync(string url, HttpMethod method, HttpEntity requestEntity, object[] uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage>> methodCompleted);
 
         /// <summary>
         /// Execute the HTTP method to the given URI template, writing the given request message to the request, 
@@ -538,7 +538,7 @@ namespace Spring.Http.Rest
         /// </param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         /// <returns>The HTTP response message with no entity.</returns>
-        void ExchangeAsync(string url, HttpMethod method, HttpEntity requestEntity, IDictionary<string, string> uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage>> methodCompleted);
+        void ExchangeAsync(string url, HttpMethod method, HttpEntity requestEntity, IDictionary<string, object> uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage>> methodCompleted);
 
         /// <summary>
         /// Execute the HTTP method to the given URI template, writing the given request message to the request, 
@@ -570,7 +570,7 @@ namespace Spring.Http.Rest
         /// <param name="responseExtractor">Object that extracts the return value from the response.</param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>An arbitrary object, as returned by the <see cref="IResponseExtractor{T}"/>.</returns>        
-        void ExecuteAsync<T>(string url, HttpMethod method, IRequestCallback requestCallback, IResponseExtractor<T> responseExtractor, string[] uriVariables, Action<MethodCompletedEventArgs<T>> methodCompleted) where T : class;
+        void ExecuteAsync<T>(string url, HttpMethod method, IRequestCallback requestCallback, IResponseExtractor<T> responseExtractor, object[] uriVariables, Action<MethodCompletedEventArgs<T>> methodCompleted) where T : class;
 
         /// <summary>
         /// Execute the HTTP method to the given URI template, preparing the request with the 
@@ -586,7 +586,7 @@ namespace Spring.Http.Rest
         /// <param name="responseExtractor">Object that extracts the return value from the response.</param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         /// <returns>An arbitrary object, as returned by the <see cref="IResponseExtractor{T}"/>.</returns>   
-        void ExecuteAsync<T>(string url, HttpMethod method, IRequestCallback requestCallback, IResponseExtractor<T> responseExtractor, IDictionary<string, string> uriVariables, Action<MethodCompletedEventArgs<T>> methodCompleted) where T : class;
+        void ExecuteAsync<T>(string url, HttpMethod method, IRequestCallback requestCallback, IResponseExtractor<T> responseExtractor, IDictionary<string, object> uriVariables, Action<MethodCompletedEventArgs<T>> methodCompleted) where T : class;
 
         /// <summary>
         /// Execute the HTTP method to the given URI template, preparing the request with the 
