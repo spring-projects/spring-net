@@ -25,30 +25,57 @@ using System.Collections.Generic;
 
 namespace Spring.Collections.Specialized
 {
+    /// <summary>
+    /// Represents a collection of associated string keys and multiple string values.
+    /// </summary>
+    /// <remarks>
+    /// Silverlight's implementation, based on a dictionary, of the .NET Framework NameValueCollection class.
+    /// </remarks>
+    /// <author>Bruno Baia</author>
     public class NameValueCollection : IEnumerable<string>
     {
         private Dictionary<string, List<string>> innerCollection;
 
+        /// <summary>
+        /// Creates a new instance of the <see cref="NameValueCollection"/> class. 
+        /// </summary>
         public NameValueCollection()
         {
             innerCollection = new Dictionary<string, List<string>>();
         }
 
+        /// <summary>
+        /// Creates a new instance of the <see cref="NameValueCollection"/> class 
+        /// with the specified initial capacity.
+        /// </summary>
         public NameValueCollection(int capacity)
         {
             innerCollection = new Dictionary<string, List<string>>(capacity);
         }
 
+        /// <summary>
+        /// Creates a new instance of the <see cref="NameValueCollection"/> class 
+        /// with the specified comparer.
+        /// </summary>
         public NameValueCollection(IEqualityComparer<string> comparer)
         {
             innerCollection = new Dictionary<string, List<string>>(comparer);
         }
 
+        /// <summary>
+        /// Creates a new instance of the <see cref="NameValueCollection"/> class 
+        /// with the specified initial capacity and comparer.
+        /// </summary>
         public NameValueCollection(int capacity, IEqualityComparer<string> comparer)
         {
             innerCollection = new Dictionary<string, List<string>>(capacity, comparer);
         }
 
+        /// <summary>
+        /// Adds the given single value to the current list of values for the given key.
+        /// </summary>
+        /// <param name="name">The key to use.</param>
+        /// <param name="value">The value to add.</param>
         public virtual void Add(string name, string value)
         {
             List<string> list;
@@ -60,6 +87,11 @@ namespace Spring.Collections.Specialized
             this.innerCollection[name] = list;
         }
 
+        /// <summary>
+        /// Returns values for the given key as a comma-delimited string.
+        /// </summary>
+        /// <param name="name">The key that contains the values to get.</param>
+        /// <returns>A comma-delimited string, if found; otherwise <see langword="null"/>.</returns>
         public virtual string Get(string name)
         {
             string str = null;
@@ -85,6 +117,11 @@ namespace Spring.Collections.Specialized
             return str;
         }
 
+        /// <summary>
+        /// Returns values for the given key as a string array.
+        /// </summary>
+        /// <param name="name">The key that contains the values to get.</param>
+        /// <returns>A string array, if found; otherwise, <see langword="null"/>.</returns>
         public virtual string[] GetValues(string name)
         {
             List<string> list;
@@ -95,18 +132,34 @@ namespace Spring.Collections.Specialized
             return null;
         }
 
-        public virtual void Set(string key, string value)
+        /// <summary>
+        /// Sets the given single value under the given key.
+        /// </summary>
+        /// <param name="name">The key to use.</param>
+        /// <param name="value">The value to set.</param>
+        public virtual void Set(string name, string value)
         {
             List<string> list = new List<string>();
             list.Add(value);
-            this.innerCollection[key] = list;
+            this.innerCollection[name] = list;
         }
 
-        public virtual bool Remove(string key)
+        /// <summary>
+        /// Removes the given key from the collection.
+        /// </summary>
+        /// <param name="name">The key to remove.</param>
+        /// <returns>
+        /// <see langword="true"/> if the key have been found and removed from the collection; 
+        /// otherwise, <see langword="false"/>.
+        /// </returns>
+        public virtual bool Remove(string name)
         {
-            return this.innerCollection.Remove(key);
+            return this.innerCollection.Remove(name);
         }
 
+        /// <summary>
+        /// Gets all the keys in the collection.
+        /// </summary>
         public virtual string[] AllKeys
         {
             get
@@ -118,6 +171,9 @@ namespace Spring.Collections.Specialized
             }
         }
 
+        /// <summary>
+        /// Gets the number of keys contained in the collection.
+        /// </summary>
         public virtual int Count
         {
             get
@@ -126,6 +182,11 @@ namespace Spring.Collections.Specialized
             }
         }
 
+        /// <summary>
+        /// Gets values as a comma-delimited string or sets a single value for the given key.
+        /// </summary>
+        /// <param name="name">The key to use.</param>
+        /// <returns>A comma-delimited string, if found; otherwise <see langword="null"/>.</returns>
         public virtual string this[string name]
         {
             get

@@ -23,6 +23,8 @@ using System.Globalization;
 
 namespace Spring.Util
 {
+    // From Spring.Core
+
 	/// <summary>
 	/// Assertion utility methods that simplify things such as argument checks.
 	/// </summary>

@@ -59,8 +59,21 @@ namespace Spring.Http.Client
 	    IClientHttpResponse Execute();
 #endif
 
+        /// <summary>
+        /// Execute this request asynchronously.
+        /// </summary>
+        /// <param name="state">
+        /// An optional user-defined object that is passed to the method invoked 
+        /// when the asynchronous operation completes.
+        /// </param>
+        /// <param name="executeCompleted">
+        /// The <see cref="Action{ExecuteCompletedEventArgs}"/> to perform when the asynchronous execution completes.
+        /// </param>
         void ExecuteAsync(object state, Action<ExecuteCompletedEventArgs> executeCompleted);
 
+        /// <summary>
+        /// Cancels a pending asynchronous operation.
+        /// </summary>
         void CancelAsync();
     }
 }

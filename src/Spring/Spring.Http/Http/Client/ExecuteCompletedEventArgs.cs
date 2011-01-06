@@ -23,24 +23,40 @@ using System.ComponentModel;
 
 namespace Spring.Http.Client
 {
+    // TODO: Rename this to HttpRequestCompletedEventArgs or something ?
+
+    /// <summary>
+    /// Provides data when an asynchronous HTTP request execution completes.
+    /// </summary>
+    /// <see cref="IClientHttpRequest"/>
     public class ExecuteCompletedEventArgs : AsyncCompletedEventArgs
     {
         private IClientHttpResponse response;
 
+        /// <summary>
+        /// Gets the <see cref="IClientHttpResponse">response</see> result of the execution.
+        /// </summary>
+        /// <exception cref="System.InvalidOperationException">If the execution was canceled.</exception>
+        /// <exception cref="System.Reflection.TargetInvocationException">If the execution failed.</exception>
         public IClientHttpResponse Response
         {
             get
             {
-                // Raise an exception if the operation failed or 
-                // was canceled.
+                // Raise an exception if the operation failed or was canceled.
                 base.RaiseExceptionIfNecessary();
 
-                // If the operation was successful, return the 
-                // property value.
+                // If the operation was successful, return the value.
                 return response;
             }
         }
 
+        /// <summary>
+        /// Creates a new instance of <see cref="ExecuteCompletedEventArgs"/>.
+        /// </summary>
+        /// <param name="response">The response of the execution.</param>
+        /// <param name="exception">Any error that occurred during the asynchronous execution.</param>
+        /// <param name="cancelled">A value indicating whether the asynchronous execution was canceled.</param>
+        /// <param name="userState">The optional user-supplied state object.</param>
         public ExecuteCompletedEventArgs(IClientHttpResponse response, Exception exception, bool cancelled, object userState)
             : base(exception, cancelled, userState)
         {

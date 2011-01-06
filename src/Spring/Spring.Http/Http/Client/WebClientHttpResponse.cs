@@ -37,7 +37,7 @@ namespace Spring.Http.Client
         private HttpWebResponse httpWebResponse;
 
         /// <summary>
-        /// Gets the <see cref="HttpWebResponse"/> instance used.
+        /// Gets the <see cref="HttpWebResponse"/> instance used by the response.
         /// </summary>
         public HttpWebResponse HttpWebResponse
         {
@@ -56,39 +56,7 @@ namespace Spring.Http.Client
             this.httpWebResponse = response;
             this.headers = new HttpHeaders();
 
-#if NET_2_0 || WINDOWS_PHONE
-            foreach (string header in this.httpWebResponse.Headers)
-            {
-                this.headers[header] = this.httpWebResponse.Headers[header];
-            }
-#endif
-#if SILVERLIGHT_3
-            try
-            {
-                foreach (string header in this.httpWebResponse.Headers)
-                {
-                    this.headers[header] = this.httpWebResponse.Headers[header];
-                }
-            }
-            catch(NotImplementedException)
-            {
-                this.headers.ContentLength = this.httpWebResponse.ContentLength;
-                this.headers["Content-Type"] = this.httpWebResponse.ContentType;
-            }
-#elif SILVERLIGHT
-            if (this.httpWebResponse.SupportsHeaders)
-            {
-                foreach (string header in this.httpWebResponse.Headers)
-                {
-                    this.headers[header] = this.httpWebResponse.Headers[header];
-                }
-            }
-            else
-            {
-                this.headers.ContentLength = this.httpWebResponse.ContentLength;
-                this.headers["Content-Type"] = this.httpWebResponse.ContentType;
-            }
-#endif
+            this.Initialize();
         }
 
         #region IClientHttpResponse Membres
@@ -148,5 +116,48 @@ namespace Spring.Http.Client
         }
 
         #endregion
+
+        /// <summary>
+        /// Initialize the response.
+        /// </summary>
+        /// <remarks>
+        /// Default implementation copies headers from the .NET response. Can be overridden in subclasses.
+        /// </remarks>
+        protected virtual void Initialize()
+        {
+#if NET_2_0 || WINDOWS_PHONE
+            foreach (string header in this.httpWebResponse.Headers)
+            {
+                this.headers[header] = this.httpWebResponse.Headers[header];
+            }
+#endif
+#if SILVERLIGHT_3
+            try
+            {
+                foreach (string header in this.httpWebResponse.Headers)
+                {
+                    this.headers[header] = this.httpWebResponse.Headers[header];
+                }
+            }
+            catch(NotImplementedException)
+            {
+                this.headers.ContentLength = this.httpWebResponse.ContentLength;
+                this.headers["Content-Type"] = this.httpWebResponse.ContentType;
+            }
+#elif SILVERLIGHT
+            if (this.httpWebResponse.SupportsHeaders)
+            {
+                foreach (string header in this.httpWebResponse.Headers)
+                {
+                    this.headers[header] = this.httpWebResponse.Headers[header];
+                }
+            }
+            else
+            {
+                this.headers.ContentLength = this.httpWebResponse.ContentLength;
+                this.headers["Content-Type"] = this.httpWebResponse.ContentType;
+            }
+#endif
+        }
     }
 }

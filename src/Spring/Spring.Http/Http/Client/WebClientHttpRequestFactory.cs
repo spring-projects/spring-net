@@ -102,6 +102,13 @@ namespace Spring.Http.Client
 
 #if SILVERLIGHT && !WINDOWS_PHONE
         private WebRequestCreatorType _webRequestCreator;
+        /// <summary>
+        /// Gets or sets a value that indicates how HTTP requests and responses will be handled. 
+        /// </summary>
+        /// <remarks>
+        /// By default, this factory will use the default Silverlight behavior for HTTP methods GET and POST, 
+        /// and force the client HTTP stack for other HTTP methods.
+        /// </remarks>
         public WebRequestCreatorType WebRequestCreator
         {
             get { return this._webRequestCreator; }
@@ -127,7 +134,7 @@ namespace Spring.Http.Client
         public WebClientHttpRequestFactory()
         {
 #if SILVERLIGHT && !WINDOWS_PHONE
-            this._webRequestCreator = WebRequestCreatorType.Default;
+            this._webRequestCreator = WebRequestCreatorType.Unknown;
 #endif
         }
 
@@ -150,7 +157,7 @@ namespace Spring.Http.Client
                 case WebRequestCreatorType.BrowserHttp:
                     this.httpWebRequest = (HttpWebRequest)System.Net.Browser.WebRequestCreator.BrowserHttp.Create(uri);
                     break;
-                case WebRequestCreatorType.Default:
+                case WebRequestCreatorType.Unknown:
                     if (method == HttpMethod.GET || method == HttpMethod.POST)
                     {
                         this.httpWebRequest = WebRequest.Create(uri) as HttpWebRequest;
@@ -203,10 +210,22 @@ namespace Spring.Http.Client
     }
 
 #if SILVERLIGHT && !WINDOWS_PHONE
+    /// <summary>
+    /// Defines identifiers for supported Silverlight HTTP handling stacks.  
+    /// </summary>
     public enum WebRequestCreatorType
     {
-        Default,
+        /// <summary>
+        /// Specifies an unknown HTTP handling stack.
+        /// </summary>
+        Unknown,
+        /// <summary>
+        /// Specifies browser HTTP handling stack.
+        /// </summary>
         BrowserHttp,
+        /// <summary>
+        /// Specifies client HTTP handling stack.
+        /// </summary>
         ClientHttp
     }
 #endif

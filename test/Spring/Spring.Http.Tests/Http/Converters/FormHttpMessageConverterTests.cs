@@ -129,7 +129,7 @@ namespace Spring.Http.Converters
         }
 
         [Test]
-        [Ignore] //TODO: relative path
+        [Ignore] //TODO: relative path (needs IResource ?)
         public void WriteMultipart()
         {
             MemoryStream requestStream = new MemoryStream();

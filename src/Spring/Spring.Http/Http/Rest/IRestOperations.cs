@@ -38,9 +38,6 @@ namespace Spring.Http.Rest
     /// <author>Bruno Baia (.NET)</author>
     public interface IRestOperations
     {
-        // TODO : use object[] instead of string[]
-        // TODO : use IDictionary<string, object> instead of IDictionary<string, string>
-
         #region GET
 
         /// <summary>
@@ -159,12 +156,11 @@ namespace Spring.Http.Rest
         /// <para>
         /// URI Template variables are expanded using the given URI variables, if any.
         /// </para>
-        /// <para>
-        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
-        /// </para>
         /// </remarks>
         /// <param name="url">The URL.</param>
-        /// <param name="request">The Object to be POSTed, may be null.</param>
+        /// <param name="request">
+        /// The object to be POSTed, may be a <see cref="HttpEntity"/> in order to add additional HTTP headers.
+        /// </param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>The value for the Location header.</returns>
         Uri PostForLocation(string url, object request, params object[] uriVariables);
@@ -178,12 +174,11 @@ namespace Spring.Http.Rest
         /// <para>
         /// URI Template variables are expanded using the given dictionary.
         /// </para>
-        /// <para>
-        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
-        /// </para>
         /// </remarks>
         /// <param name="url">The URL.</param>
-        /// <param name="request">The Object to be POSTed, may be null.</param>
+        /// <param name="request">
+        /// The object to be POSTed, may be a <see cref="HttpEntity"/> in order to add additional HTTP headers.
+        /// </param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         /// <returns>The value for the Location header.</returns>
         Uri PostForLocation(string url, object request, IDictionary<string, object> uriVariables);
@@ -193,11 +188,10 @@ namespace Spring.Http.Rest
         /// and returns the value of the 'Location' header. 
         /// This header typically indicates where the new resource is stored.
         /// </summary>
-        /// <remarks>
-        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
-        /// </remarks>
         /// <param name="url">The URL.</param>
-        /// <param name="request">The Object to be POSTed, may be null.</param>
+        /// <param name="request">
+        /// The object to be POSTed, may be a <see cref="HttpEntity"/> in order to add additional HTTP headers.
+        /// </param>
         /// <returns>The value for the Location header.</returns>
         Uri PostForLocation(Uri url, object request);
 
@@ -209,13 +203,12 @@ namespace Spring.Http.Rest
         /// <para>
         /// URI Template variables are expanded using the given URI variables, if any.
         /// </para>
-        /// <para>
-        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
-        /// </para>
         /// </remarks>
         /// <typeparam name="T">The type of the response value.</typeparam>
         /// <param name="url">The URL.</param>
-        /// <param name="request">The Object to be POSTed, may be null.</param>
+        /// <param name="request">
+        /// The object to be POSTed, may be a <see cref="HttpEntity"/> in order to add additional HTTP headers.
+        /// </param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>The converted object.</returns>
         T PostForObject<T>(string url, object request, params object[] uriVariables) where T : class;
@@ -228,13 +221,12 @@ namespace Spring.Http.Rest
         /// <para>
         /// URI Template variables are expanded using the given dictionary.
         /// </para>
-        /// <para>
-        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
-        /// </para>
         /// </remarks>
         /// <typeparam name="T">The type of the response value.</typeparam>
         /// <param name="url">The URL.</param>
-        /// <param name="request">The Object to be POSTed, may be null.</param>
+        /// <param name="request">
+        /// The object to be POSTed, may be a <see cref="HttpEntity"/> in order to add additional HTTP headers.
+        /// </param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         /// <returns>The converted object.</returns>
         T PostForObject<T>(string url, object request, IDictionary<string, object> uriVariables) where T : class;
@@ -243,12 +235,11 @@ namespace Spring.Http.Rest
         /// Create a new resource by POSTing the given object to the URI template, 
         /// and returns the representation found in the response. 
         /// </summary>
-        /// <remarks>
-        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
-        /// </remarks>
         /// <typeparam name="T">The type of the response value.</typeparam>
         /// <param name="url">The URL.</param>
-        /// <param name="request">The Object to be POSTed, may be null.</param>
+        /// <param name="request">
+        /// The object to be POSTed, may be a <see cref="HttpEntity"/> in order to add additional HTTP headers.
+        /// </param>
         /// <returns>The converted object.</returns>
         T PostForObject<T>(Uri url, object request) where T : class;
 
@@ -260,13 +251,12 @@ namespace Spring.Http.Rest
         /// <para>
         /// URI Template variables are expanded using the given URI variables, if any.
         /// </para>
-        /// <para>
-        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
-        /// </para>
         /// </remarks>
         /// <typeparam name="T">The type of the response value.</typeparam>
         /// <param name="url">The URL.</param>
-        /// <param name="request">The Object to be POSTed, may be null.</param>
+        /// <param name="request">
+        /// The object to be POSTed, may be a <see cref="HttpEntity"/> in order to add additional HTTP headers.
+        /// </param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>The HTTP response message.</returns>
         HttpResponseMessage<T> PostForMessage<T>(string url, object request, params object[] uriVariables) where T : class;
@@ -279,13 +269,12 @@ namespace Spring.Http.Rest
         /// <para>
         /// URI Template variables are expanded using the given dictionary.
         /// </para>
-        /// <para>
-        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
-        /// </para>
         /// </remarks>
         /// <typeparam name="T">The type of the response value.</typeparam>
         /// <param name="url">The URL.</param>
-        /// <param name="request">The Object to be POSTed, may be null.</param>
+        /// <param name="request">
+        /// The object to be POSTed, may be a <see cref="HttpEntity"/> in order to add additional HTTP headers.
+        /// </param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         /// <returns>The HTTP response message.</returns>
         HttpResponseMessage<T> PostForMessage<T>(string url, object request, IDictionary<string, object> uriVariables) where T : class;
@@ -294,12 +283,11 @@ namespace Spring.Http.Rest
         /// Create a new resource by POSTing the given object to the URI template, 
         /// and returns the response as <see cref="HttpResponseMessage{T}"/>. 
         /// </summary>
-        /// <remarks>
-        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
-        /// </remarks>
         /// <typeparam name="T">The type of the response value.</typeparam>
         /// <param name="url">The URL.</param>
-        /// <param name="request">The Object to be POSTed, may be null.</param>
+        /// <param name="request">
+        /// The object to be POSTed, may be a <see cref="HttpEntity"/> in order to add additional HTTP headers.
+        /// </param>
         /// <returns>The HTTP response message.</returns>
         HttpResponseMessage<T> PostForMessage<T>(Uri url, object request) where T : class;
 
@@ -311,12 +299,11 @@ namespace Spring.Http.Rest
         /// <para>
         /// URI Template variables are expanded using the given URI variables, if any.
         /// </para>
-        /// <para>
-        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
-        /// </para>
         /// </remarks>
         /// <param name="url">The URL.</param>
-        /// <param name="request">The Object to be POSTed, may be null.</param>
+        /// <param name="request">
+        /// The object to be POSTed, may be a <see cref="HttpEntity"/> in order to add additional HTTP headers.
+        /// </param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>The HTTP response message with no entity.</returns>
         HttpResponseMessage PostForMessage(string url, object request, params object[] uriVariables);
@@ -329,12 +316,11 @@ namespace Spring.Http.Rest
         /// <para>
         /// URI Template variables are expanded using the given dictionary.
         /// </para>
-        /// <para>
-        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
-        /// </para>
         /// </remarks>
         /// <param name="url">The URL.</param>
-        /// <param name="request">The Object to be POSTed, may be null.</param>
+        /// <param name="request">
+        /// The object to be POSTed, may be a <see cref="HttpEntity"/> in order to add additional HTTP headers.
+        /// </param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         /// <returns>The HTTP response message with no entity.</returns>
         HttpResponseMessage PostForMessage(string url, object request, IDictionary<string, object> uriVariables);
@@ -343,11 +329,10 @@ namespace Spring.Http.Rest
         /// Create a new resource by POSTing the given object to the URI template, 
         /// and returns the response with no entity as <see cref="HttpResponseMessage"/>. 
         /// </summary>
-        /// <remarks>
-        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
-        /// </remarks>
         /// <param name="url">The URL.</param>
-        /// <param name="request">The Object to be POSTed, may be null.</param>
+        /// <param name="request">
+        /// The object to be POSTed, may be a <see cref="HttpEntity"/> in order to add additional HTTP headers.
+        /// </param>
         /// <returns>The HTTP response message with no entity.</returns>
         HttpResponseMessage PostForMessage(Uri url, object request);
 
@@ -362,12 +347,11 @@ namespace Spring.Http.Rest
         /// <para>
         /// URI Template variables are expanded using the given URI variables, if any.
         /// </para>
-        /// <para>
-        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
-        /// </para>
         /// </remarks>
         /// <param name="url">The URL.</param>
-        /// <param name="request">The Object to be PUT, may be null.</param>
+        /// <param name="request">
+        /// The object to be POSTed, may be a <see cref="HttpEntity"/> in order to add additional HTTP headers.
+        /// </param>
         /// <param name="uriVariables">The variables to expand the template.</param>
         void Put(string url, object request, params object[] uriVariables);
 
@@ -378,23 +362,21 @@ namespace Spring.Http.Rest
         /// <para>
         /// URI Template variables are expanded using the given dictionary.
         /// </para>
-        /// <para>
-        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
-        /// </para>
         /// </remarks>
         /// <param name="url">The URL.</param>
-        /// <param name="request">The Object to be PUT, may be null.</param>
+        /// <param name="request">
+        /// The object to be POSTed, may be a <see cref="HttpEntity"/> in order to add additional HTTP headers.
+        /// </param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
         void Put(string url, object request, IDictionary<string, object> uriVariables);
 
         /// <summary>
         /// Create or update a resource by PUTting the given object to the URI.
         /// </summary>
-        /// <remarks>
-        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
-        /// </remarks>
         /// <param name="url">The URL.</param>
-        /// <param name="request">The Object to be PUT, may be null.</param>
+        /// <param name="request">
+        /// The object to be POSTed, may be a <see cref="HttpEntity"/> in order to add additional HTTP headers.
+        /// </param>
         void Put(Uri url, object request);
 
         #endregion

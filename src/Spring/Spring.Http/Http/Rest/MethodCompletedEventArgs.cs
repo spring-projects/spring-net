@@ -23,24 +23,42 @@ using System.ComponentModel;
 
 namespace Spring.Http.Rest
 {
+    // TODO: Rename this to RestOperationCompletedEventArgs or RestAsyncCompletedEventArgs ?
+
+    /// <summary>
+    /// Provides data when an asynchronous REST operation completes.
+    /// </summary>
+    /// <typeparam name="T">The type of the response value.</typeparam>
+    /// <see cref="IRestAsyncOperations"/>
+    /// <see cref="RestTemplate"/>
     public class MethodCompletedEventArgs<T> : AsyncCompletedEventArgs where T : class
     {
         private T response;
 
+        /// <summary>
+        /// Gest the response of the REST operation.
+        /// </summary>
+        /// <exception cref="System.InvalidOperationException">If the operation was canceled.</exception>
+        /// <exception cref="System.Reflection.TargetInvocationException">If the operation failed.</exception>
         public T Response
         {
             get
             {
-                // Raise an exception if the operation failed or 
-                // was canceled.
+                // Raise an exception if the operation failed or was canceled.
                 base.RaiseExceptionIfNecessary();
 
-                // If the operation was successful, return the 
-                // property value.
+                // If the operation was successful, return the value.
                 return response;
             }
         }
 
+        /// <summary>
+        /// Creates a new instance of <see cref="MethodCompletedEventArgs{T}"/>.
+        /// </summary>
+        /// <param name="response">The response of the REST operation.</param>
+        /// <param name="exception">Any error that occurred during the asynchronous operation.</param>
+        /// <param name="cancelled">A value indicating whether the asynchronous operation was canceled.</param>
+        /// <param name="userState">The optional user-supplied state object.</param>
         public MethodCompletedEventArgs(T response, Exception exception, bool cancelled, object userState)
             : base(exception, cancelled, userState)
         {

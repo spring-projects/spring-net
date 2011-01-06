@@ -45,7 +45,7 @@ namespace Spring.Http.Client
         private bool isCancelled;
 
         /// <summary>
-        /// Gets the <see cref="HttpWebRequest"/> instance used.
+        /// Gets the <see cref="HttpWebRequest"/> instance used by the request.
         /// </summary>
         public HttpWebRequest HttpWebRequest
         {
@@ -111,6 +111,7 @@ namespace Spring.Http.Client
         /// Execute this request, resulting in a <see cref="IClientHttpResponse" /> that can be read.
         /// </summary>
         /// <returns>The response result of the execution</returns>
+        /// <see cref="InvalidOperationException">If the request is already executed or is currently executing.</see>
         public IClientHttpResponse Execute()
         {
             this.EnsureNotExecuted();
@@ -118,7 +119,7 @@ namespace Spring.Http.Client
             try
             {
                 // Prepare
-                this.PrepareRequest();
+                this.PrepareForExecution();
 
                 // Write
                 if (this.body != null)
@@ -133,7 +134,7 @@ namespace Spring.Http.Client
                 HttpWebResponse httpWebResponse = this.httpWebRequest.GetResponse() as HttpWebResponse;
                 if (this.httpWebRequest.HaveResponse && httpWebResponse != null)
                 {
-                    return new WebClientHttpResponse(httpWebResponse);
+                    return this.CreateClientHttpResponse(httpWebResponse);
                 }
             }
             catch (WebException ex)
@@ -144,7 +145,7 @@ namespace Spring.Http.Client
                 if (httpWebResponse != null)
                 {
                     this.isExecuted = true;
-                    return new WebClientHttpResponse(httpWebResponse);
+                    return this.CreateClientHttpResponse(httpWebResponse);
                 }
                 throw;
             }
@@ -153,6 +154,17 @@ namespace Spring.Http.Client
         }
 #endif
 
+        /// <summary>
+        /// Execute this request asynchronously.
+        /// </summary>
+        /// <param name="state">
+        /// An optional user-defined object that is passed to the method invoked 
+        /// when the asynchronous operation completes.
+        /// </param>
+        /// <param name="executeCompleted">
+        /// The <see cref="Action{ExecuteCompletedEventArgs}"/> to perform when the asynchronous execution completes.
+        /// </param>
+        /// <see cref="InvalidOperationException">If the request is already executed or is currently executing.</see>
         public void ExecuteAsync(object state, Action<ExecuteCompletedEventArgs> executeCompleted)
         {
             this.EnsureNotExecuted();
@@ -163,7 +175,7 @@ namespace Spring.Http.Client
             try
             {
                 // Prepare
-                this.PrepareRequest();
+                this.PrepareForExecution();
 
                 // Post request
                 if (this.body != null)
@@ -190,6 +202,9 @@ namespace Spring.Http.Client
             }
         }
 
+        /// <summary>
+        /// Cancels a pending asynchronous operation.
+        /// </summary>
         public void CancelAsync()
         {
             this.isCancelled = true;
@@ -249,7 +264,7 @@ namespace Spring.Http.Client
                 HttpWebResponse httpWebResponse = this.httpWebRequest.EndGetResponse(result) as HttpWebResponse;
                 if (this.httpWebRequest.HaveResponse == true && httpWebResponse != null)
                 {
-                    response = new WebClientHttpResponse(httpWebResponse);
+                    response = this.CreateClientHttpResponse(httpWebResponse);
                 }
             }
             catch (Exception ex)
@@ -267,7 +282,7 @@ namespace Spring.Http.Client
                     if (httpWebResponse != null)
                     {
                         exception = null;
-                        response = new WebClientHttpResponse(httpWebResponse);
+                        response = this.CreateClientHttpResponse(httpWebResponse);
                     }
                 }
             }
@@ -326,6 +341,10 @@ namespace Spring.Http.Client
 
         #endregion
 
+        /// <summary>
+        /// Ensures that the request can be executed.
+        /// </summary>
+        /// <see cref="InvalidOperationException">If the request is already executed or is currently executing.</see>
         protected void EnsureNotExecuted()
         {
             if (this.isExecuted)
@@ -335,12 +354,25 @@ namespace Spring.Http.Client
         }
 
         /// <summary>
+        /// Creates and returns an <see cref="IClientHttpResponse"/> implementation associated 
+        /// with the request. 
+        /// </summary>
+        /// <param name="response">The <see cref="HttpWebResponse"/> instance to use.</param>
+        /// <returns>
+        /// An <see cref="IClientHttpResponse"/> implementation associated with the request.
+        /// </returns>
+        protected virtual IClientHttpResponse CreateClientHttpResponse(HttpWebResponse response)
+        {
+            return new WebClientHttpResponse(response);
+        }
+
+        /// <summary>
         /// Prepare the request for execution.
         /// </summary>
         /// <remarks>
-        /// Default implementation copies headers to the request. Can be overridden in subclasses.
+        /// Default implementation copies headers to the .NET request. Can be overridden in subclasses.
         /// </remarks>
-        protected virtual void PrepareRequest()
+        protected virtual void PrepareForExecution()
         {
             // Copy headers
             foreach (string header in this.headers)

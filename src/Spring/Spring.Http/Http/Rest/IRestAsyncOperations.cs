@@ -25,23 +25,23 @@ using System.Collections.Generic;
 namespace Spring.Http.Rest
 {
     /// <summary>
-    /// Interface specifying a basic set of RESTful operations. 
+    /// Interface specifying a basic set of RESTful asynchrone operations. 
     /// </summary>
     /// <remarks>
     /// Not often used directly, but a useful option to enhance testability, 
     /// as it can easily be mocked or stubbed.
     /// </remarks>
     /// <see cref="RestTemplate"/>
+    /// <author>Bruno Baia (.NET)</author>
     /// <author>Arjen Poutsma</author>
     /// <author>Juergen Hoeller</author>
-    /// <author>Bruno Baia (.NET)</author>
     public interface IRestAsyncOperations
     {
         #region GET
 
         /// <summary>
-        /// Retrieve a representation by doing a GET on the specified URL. 
-        /// The response (if any) is converted and returned.
+        /// Asynchronously retrieve a representation by doing a GET on the specified URL. 
+        /// The response (if any) is converted.
         /// </summary>
         /// <remarks>
         /// URI Template variables are expanded using the given URI variables, if any.
@@ -49,12 +49,14 @@ namespace Spring.Http.Rest
         /// <typeparam name="T">The type of the response value.</typeparam>
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The variables to expand the template.</param>
-        /// <returns>The converted object</returns>
+        /// <param name="getCompleted">
+        /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous GET method completes.
+        /// </param>
         void GetForObjectAsync<T>(string url, object[] uriVariables, Action<MethodCompletedEventArgs<T>> getCompleted) where T : class;
 
         /// <summary>
-        /// Retrieve a representation by doing a GET on the specified URL. 
-        /// The response (if any) is converted and returned.
+        /// Asynchronously retrieve a representation by doing a GET on the specified URL. 
+        /// The response (if any) is converted.
         /// </summary>
         /// <remarks>
         /// URI Template variables are expanded using the given dictionary.
@@ -62,20 +64,24 @@ namespace Spring.Http.Rest
         /// <typeparam name="T">The type of the response value.</typeparam>
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
-        /// <returns>The converted object</returns>
+        /// <param name="getCompleted">
+        /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous GET method completes.
+        /// </param>
         void GetForObjectAsync<T>(string url, IDictionary<string, object> uriVariables, Action<MethodCompletedEventArgs<T>> getCompleted) where T : class;
 
         /// <summary>
-        /// Retrieve a representation by doing a GET on the specified URL. 
-        /// The response (if any) is converted and returned.
+        /// Asynchronously retrieve a representation by doing a GET on the specified URL. 
+        /// The response (if any) is converted.
         /// </summary>
         /// <typeparam name="T">The type of the response value.</typeparam>
         /// <param name="url">The URL.</param>
-        /// <returns>The converted object</returns>
+        /// <param name="getCompleted">
+        /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous GET method completes.
+        /// </param>
         void GetForObjectAsync<T>(Uri url, Action<MethodCompletedEventArgs<T>> getCompleted) where T : class;
 
         /// <summary>
-        /// Retrieve an entity by doing a GET on the specified URL. 
+        /// Asynchronously retrieve an entity by doing a GET on the specified URL. 
         /// The response is converted and stored in an <see cref="HttpResponseMessage{T}"/>.
         /// </summary>
         /// <remarks>
@@ -84,11 +90,13 @@ namespace Spring.Http.Rest
         /// <typeparam name="T">The type of the response value.</typeparam>
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The variables to expand the template.</param>
-        /// <returns>The HTTP response message.</returns>
+        /// <param name="getCompleted">
+        /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous GET method completes.
+        /// </param>
         void GetForMessageAsync<T>(string url, object[] uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> getCompleted) where T : class;
 
         /// <summary>
-        /// Retrieve an entity by doing a GET on the specified URL. 
+        /// Asynchronously retrieve an entity by doing a GET on the specified URL. 
         /// The response is converted and stored in an <see cref="HttpResponseMessage{T}"/>.
         /// </summary>
         /// <remarks>
@@ -97,16 +105,20 @@ namespace Spring.Http.Rest
         /// <typeparam name="T">The type of the response value.</typeparam>
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
-        /// <returns>The HTTP response message.</returns>
+        /// <param name="getCompleted">
+        /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous GET method completes.
+        /// </param>
         void GetForMessageAsync<T>(string url, IDictionary<string, object> uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> getCompleted) where T : class;
 
         /// <summary>
-        /// Retrieve an entity by doing a GET on the specified URL. 
+        /// Asynchronously retrieve an entity by doing a GET on the specified URL. 
         /// The response is converted and stored in an <see cref="HttpResponseMessage{T}"/>.
         /// </summary>
         /// <typeparam name="T">The type of the response value.</typeparam>
         /// <param name="url">The URL.</param>
-        /// <returns>The HTTP response message.</returns>
+        /// <param name="getCompleted">
+        /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous GET method completes.
+        /// </param>
         void GetForMessageAsync<T>(Uri url, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> getCompleted) where T : class;
 
         #endregion
@@ -114,32 +126,38 @@ namespace Spring.Http.Rest
         #region HEAD
 
         /// <summary>
-        /// Retrieve all headers of the resource specified by the URI template.
+        /// Asynchronously retrieve all headers of the resource specified by the URI template.
         /// </summary>
         /// <remarks>
         /// URI Template variables are expanded using the given URI variables, if any.
         /// </remarks>
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The variables to expand the template.</param>
-        /// <returns>All HTTP headers of that resource</returns>
+        /// <param name="headCompleted">
+        /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous HEAD method completes.
+        /// </param>
         void HeadForHeadersAsync(string url, object[] uriVariables, Action<MethodCompletedEventArgs<HttpHeaders>> headCompleted);
 
         /// <summary>
-        /// Retrieve all headers of the resource specified by the URI template.
+        /// Asynchronously retrieve all headers of the resource specified by the URI template.
         /// </summary>
         /// <remarks>
         /// URI Template variables are expanded using the given dictionary.
         /// </remarks>
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
-        /// <returns>All HTTP headers of that resource</returns>
+        /// <param name="headCompleted">
+        /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous HEAD method completes.
+        /// </param>
         void HeadForHeadersAsync(string url, IDictionary<string, object> uriVariables, Action<MethodCompletedEventArgs<HttpHeaders>> headCompleted);
 
         /// <summary>
-        /// Retrieve all headers of the resource specified by the URI template.
+        /// Asynchronously retrieve all headers of the resource specified by the URI template.
         /// </summary>
         /// <param name="url">The URL.</param>
-        /// <returns>All HTTP headers of that resource</returns>
+        /// <param name="headCompleted">
+        /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous HEAD method completes.
+        /// </param>
         void HeadForHeadersAsync(Uri url, Action<MethodCompletedEventArgs<HttpHeaders>> headCompleted);
 
         #endregion
@@ -147,7 +165,7 @@ namespace Spring.Http.Rest
         #region POST
 
         /// <summary>
-        /// Create a new resource by POSTing the given object to the URI template, 
+        /// Asynchronously create a new resource by POSTing the given object to the URI template, 
         /// and returns the value of the 'Location' header. 
         /// This header typically indicates where the new resource is stored.
         /// </summary>
@@ -155,18 +173,19 @@ namespace Spring.Http.Rest
         /// <para>
         /// URI Template variables are expanded using the given URI variables, if any.
         /// </para>
-        /// <para>
-        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
-        /// </para>
         /// </remarks>
         /// <param name="url">The URL.</param>
-        /// <param name="request">The Object to be POSTed, may be null.</param>
+        /// <param name="request">
+        /// The object to be POSTed, may be a <see cref="HttpEntity"/> in order to add additional HTTP headers.
+        /// </param>
         /// <param name="uriVariables">The variables to expand the template.</param>
-        /// <returns>The value for the Location header.</returns>
+        /// <param name="postCompleted">
+        /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous POST method completes.
+        /// </param>
         void PostForLocationAsync(string url, object request, object[] uriVariables, Action<Uri> postCompleted);
 
         /// <summary>
-        /// Create a new resource by POSTing the given object to the URI template, 
+        /// Asynchronously create a new resource by POSTing the given object to the URI template, 
         /// and returns the value of the 'Location' header. 
         /// This header typically indicates where the new resource is stored.
         /// </summary>
@@ -174,177 +193,188 @@ namespace Spring.Http.Rest
         /// <para>
         /// URI Template variables are expanded using the given dictionary.
         /// </para>
-        /// <para>
-        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
-        /// </para>
         /// </remarks>
         /// <param name="url">The URL.</param>
-        /// <param name="request">The Object to be POSTed, may be null.</param>
+        /// <param name="request">
+        /// The object to be POSTed, may be a <see cref="HttpEntity"/> in order to add additional HTTP headers.
+        /// </param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
-        /// <returns>The value for the Location header.</returns>
+        /// <param name="postCompleted">
+        /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous POST method completes.
+        /// </param>
         void PostForLocationAsync(string url, object request, IDictionary<string, object> uriVariables, Action<Uri> postCompleted);
 
         /// <summary>
-        /// Create a new resource by POSTing the given object to the URI template, 
+        /// Asynchronously create a new resource by POSTing the given object to the URI template, 
         /// and returns the value of the 'Location' header. 
         /// This header typically indicates where the new resource is stored.
         /// </summary>
-        /// <remarks>
-        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
-        /// </remarks>
         /// <param name="url">The URL.</param>
-        /// <param name="request">The Object to be POSTed, may be null.</param>
-        /// <returns>The value for the Location header.</returns>
+        /// <param name="request">
+        /// The object to be POSTed, may be a <see cref="HttpEntity"/> in order to add additional HTTP headers.
+        /// </param>
+        /// <param name="postCompleted">
+        /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous POST method completes.
+        /// </param>
         void PostForLocationAsync(Uri url, object request, Action<Uri> postCompleted);
 
         /// <summary>
-        /// Create a new resource by POSTing the given object to the URI template, 
+        /// Asynchronously create a new resource by POSTing the given object to the URI template, 
         /// and returns the representation found in the response. 
         /// </summary>
         /// <remarks>
         /// <para>
         /// URI Template variables are expanded using the given URI variables, if any.
         /// </para>
-        /// <para>
-        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
-        /// </para>
         /// </remarks>
         /// <typeparam name="T">The type of the response value.</typeparam>
         /// <param name="url">The URL.</param>
-        /// <param name="request">The Object to be POSTed, may be null.</param>
+        /// <param name="request">
+        /// The object to be POSTed, may be a <see cref="HttpEntity"/> in order to add additional HTTP headers.
+        /// </param>
         /// <param name="uriVariables">The variables to expand the template.</param>
-        /// <returns>The converted object.</returns>
+        /// <param name="postCompleted">
+        /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous POST method completes.
+        /// </param>
         void PostForObjectAsync<T>(string url, object request, object[] uriVariables, Action<MethodCompletedEventArgs<T>> postCompleted) where T : class;
 
         /// <summary>
-        /// Create a new resource by POSTing the given object to the URI template, 
+        /// Asynchronously create a new resource by POSTing the given object to the URI template, 
         /// and returns the representation found in the response. 
         /// </summary>
         /// <remarks>
         /// <para>
         /// URI Template variables are expanded using the given dictionary.
         /// </para>
-        /// <para>
-        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
-        /// </para>
         /// </remarks>
         /// <typeparam name="T">The type of the response value.</typeparam>
         /// <param name="url">The URL.</param>
-        /// <param name="request">The Object to be POSTed, may be null.</param>
+        /// <param name="request">
+        /// The object to be POSTed, may be a <see cref="HttpEntity"/> in order to add additional HTTP headers.
+        /// </param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
-        /// <returns>The converted object.</returns>
+        /// <param name="postCompleted">
+        /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous POST method completes.
+        /// </param>
         void PostForObjectAsync<T>(string url, object request, IDictionary<string, object> uriVariables, Action<MethodCompletedEventArgs<T>> postCompleted) where T : class;
 
         /// <summary>
-        /// Create a new resource by POSTing the given object to the URI template, 
+        /// Asynchronously create a new resource by POSTing the given object to the URI template, 
         /// and returns the representation found in the response. 
         /// </summary>
-        /// <remarks>
-        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
-        /// </remarks>
         /// <typeparam name="T">The type of the response value.</typeparam>
         /// <param name="url">The URL.</param>
-        /// <param name="request">The Object to be POSTed, may be null.</param>
-        /// <returns>The converted object.</returns>
+        /// <param name="request">
+        /// The object to be POSTed, may be a <see cref="HttpEntity"/> in order to add additional HTTP headers.
+        /// </param>
+        /// <param name="postCompleted">
+        /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous POST method completes.
+        /// </param>
         void PostForObjectAsync<T>(Uri url, object request, Action<MethodCompletedEventArgs<T>> postCompleted) where T : class;
 
         /// <summary>
-        /// Create a new resource by POSTing the given object to the URI template, 
+        /// Asynchronously create a new resource by POSTing the given object to the URI template, 
         /// and returns the response as <see cref="HttpResponseMessage{T}"/>. 
         /// </summary>
         /// <remarks>
         /// <para>
         /// URI Template variables are expanded using the given URI variables, if any.
         /// </para>
-        /// <para>
-        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
-        /// </para>
         /// </remarks>
         /// <typeparam name="T">The type of the response value.</typeparam>
         /// <param name="url">The URL.</param>
-        /// <param name="request">The Object to be POSTed, may be null.</param>
+        /// <param name="request">
+        /// The object to be POSTed, may be a <see cref="HttpEntity"/> in order to add additional HTTP headers.
+        /// </param>
         /// <param name="uriVariables">The variables to expand the template.</param>
-        /// <returns>The HTTP response message.</returns>
+        /// <param name="postCompleted">
+        /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous POST method completes.
+        /// </param>
         void PostForMessageAsync<T>(string url, object request, object[] uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> postCompleted) where T : class;
 
         /// <summary>
-        /// Create a new resource by POSTing the given object to the URI template, 
+        /// Asynchronously create a new resource by POSTing the given object to the URI template, 
         /// and returns the response as <see cref="HttpResponseMessage{T}"/>. 
         /// </summary>
         /// <remarks>
         /// <para>
         /// URI Template variables are expanded using the given dictionary.
         /// </para>
-        /// <para>
-        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
-        /// </para>
         /// </remarks>
         /// <typeparam name="T">The type of the response value.</typeparam>
         /// <param name="url">The URL.</param>
-        /// <param name="request">The Object to be POSTed, may be null.</param>
+        /// <param name="request">
+        /// The object to be POSTed, may be a <see cref="HttpEntity"/> in order to add additional HTTP headers.
+        /// </param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
-        /// <returns>The HTTP response message.</returns>
+        /// <param name="postCompleted">
+        /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous POST method completes.
+        /// </param>
         void PostForMessageAsync<T>(string url, object request, IDictionary<string, object> uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> postCompleted) where T : class;
 
         /// <summary>
-        /// Create a new resource by POSTing the given object to the URI template, 
+        /// Asynchronously create a new resource by POSTing the given object to the URI template, 
         /// and returns the response as <see cref="HttpResponseMessage{T}"/>. 
         /// </summary>
-        /// <remarks>
-        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
-        /// </remarks>
         /// <typeparam name="T">The type of the response value.</typeparam>
         /// <param name="url">The URL.</param>
-        /// <param name="request">The Object to be POSTed, may be null.</param>
-        /// <returns>The HTTP response message.</returns>
+        /// <param name="request">
+        /// The object to be POSTed, may be a <see cref="HttpEntity"/> in order to add additional HTTP headers.
+        /// </param>
+        /// <param name="postCompleted">
+        /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous POST method completes.
+        /// </param>
         void PostForMessageAsync<T>(Uri url, object request, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> postCompleted) where T : class;
 
         /// <summary>
-        /// Create a new resource by POSTing the given object to the URI template, 
+        /// Asynchronously create a new resource by POSTing the given object to the URI template, 
         /// and returns the response with no entity as <see cref="HttpResponseMessage"/>. 
         /// </summary>
         /// <remarks>
         /// <para>
         /// URI Template variables are expanded using the given URI variables, if any.
         /// </para>
-        /// <para>
-        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
-        /// </para>
         /// </remarks>
         /// <param name="url">The URL.</param>
-        /// <param name="request">The Object to be POSTed, may be null.</param>
+        /// <param name="request">
+        /// The object to be POSTed, may be a <see cref="HttpEntity"/> in order to add additional HTTP headers.
+        /// </param>
         /// <param name="uriVariables">The variables to expand the template.</param>
-        /// <returns>The HTTP response message with no entity.</returns>
+        /// <param name="postCompleted">
+        /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous POST method completes.
+        /// </param>
         void PostForMessageAsync(string url, object request, object[] uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage>> postCompleted);
 
         /// <summary>
-        /// Create a new resource by POSTing the given object to the URI template, 
+        /// Asynchronously create a new resource by POSTing the given object to the URI template, 
         /// and returns the response with no entity as <see cref="HttpResponseMessage"/>. 
         /// </summary>
         /// <remarks>
         /// <para>
         /// URI Template variables are expanded using the given dictionary.
         /// </para>
-        /// <para>
-        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
-        /// </para>
         /// </remarks>
         /// <param name="url">The URL.</param>
-        /// <param name="request">The Object to be POSTed, may be null.</param>
+        /// <param name="request">
+        /// The object to be POSTed, may be a <see cref="HttpEntity"/> in order to add additional HTTP headers.
+        /// </param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
-        /// <returns>The HTTP response message with no entity.</returns>
+        /// <param name="postCompleted">
+        /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous POST method completes.
+        /// </param>
         void PostForMessageAsync(string url, object request, IDictionary<string, object> uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage>> postCompleted);
 
         /// <summary>
-        /// Create a new resource by POSTing the given object to the URI template, 
+        /// Asynchronously create a new resource by POSTing the given object to the URI template, 
         /// and returns the response with no entity as <see cref="HttpResponseMessage"/>. 
         /// </summary>
-        /// <remarks>
-        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
-        /// </remarks>
         /// <param name="url">The URL.</param>
-        /// <param name="request">The Object to be POSTed, may be null.</param>
-        /// <returns>The HTTP response message with no entity.</returns>
+        /// <param name="request">
+        /// The object to be POSTed, may be a <see cref="HttpEntity"/> in order to add additional HTTP headers.
+        /// </param>
+        /// <param name="postCompleted">
+        /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous POST method completes.
+        /// </param>
         void PostForMessageAsync(Uri url, object request, Action<MethodCompletedEventArgs<HttpResponseMessage>> postCompleted);
 
         #endregion
@@ -352,45 +382,51 @@ namespace Spring.Http.Rest
         #region PUT
 
         /// <summary>
-        /// Create or update a resource by PUTting the given object to the URI.
+        /// Asynchronously create or update a resource by PUTting the given object to the URI.
         /// </summary>
         /// <remarks>
         /// <para>
         /// URI Template variables are expanded using the given URI variables, if any.
         /// </para>
-        /// <para>
-        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
-        /// </para>
         /// </remarks>
         /// <param name="url">The URL.</param>
-        /// <param name="request">The Object to be PUT, may be null.</param>
+        /// <param name="request">
+        /// The object to be POSTed, may be a <see cref="HttpEntity"/> in order to add additional HTTP headers.
+        /// </param>
         /// <param name="uriVariables">The variables to expand the template.</param>
+        /// <param name="putCompleted">
+        /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous PUT method completes.
+        /// </param>
         void PutAsync(string url, object request, object[] uriVariables, Action<MethodCompletedEventArgs<object>> putCompleted);
 
         /// <summary>
-        /// Create or update a resource by PUTting the given object to the URI.
+        /// Asynchronously create or update a resource by PUTting the given object to the URI.
         /// </summary>
         /// <remarks>
         /// <para>
         /// URI Template variables are expanded using the given dictionary.
         /// </para>
-        /// <para>
-        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
-        /// </para>
         /// </remarks>
         /// <param name="url">The URL.</param>
-        /// <param name="request">The Object to be PUT, may be null.</param>
+        /// <param name="request">
+        /// The object to be POSTed, may be a <see cref="HttpEntity"/> in order to add additional HTTP headers.
+        /// </param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
+        /// <param name="putCompleted">
+        /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous PUT method completes.
+        /// </param>
         void PutAsync(string url, object request, IDictionary<string, object> uriVariables, Action<MethodCompletedEventArgs<object>> putCompleted);
 
         /// <summary>
-        /// Create or update a resource by PUTting the given object to the URI.
+        /// Asynchronously create or update a resource by PUTting the given object to the URI.
         /// </summary>
-        /// <remarks>
-        /// The request parameter can be a <see cref="HttpEntity"/> in order to add additional HTTP headers to the request.
-        /// </remarks>
         /// <param name="url">The URL.</param>
-        /// <param name="request">The Object to be PUT, may be null.</param>
+        /// <param name="request">
+        /// The object to be POSTed, may be a <see cref="HttpEntity"/> in order to add additional HTTP headers.
+        /// </param>
+        /// <param name="putCompleted">
+        /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous PUT method completes.
+        /// </param>
         void PutAsync(Uri url, object request, Action<MethodCompletedEventArgs<object>> putCompleted);
 
         #endregion
@@ -398,29 +434,38 @@ namespace Spring.Http.Rest
         #region DELETE
 
         /// <summary>
-        /// Delete the resources at the specified URI.
+        /// Asynchronously delete the resources at the specified URI.
         /// </summary>
         /// <remarks>
         /// URI Template variables are expanded using the given URI variables, if any.
         /// </remarks>
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The variables to expand the template.</param>
+        /// <param name="deleteCompleted">
+        /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous PUT method completes.
+        /// </param>
         void DeleteAsync(string url, object[] uriVariables, Action<MethodCompletedEventArgs<object>> deleteCompleted);
 
         /// <summary>
-        /// Delete the resources at the specified URI.
+        /// Asynchronously delete the resources at the specified URI.
         /// </summary>
         /// <remarks>
         /// URI Template variables are expanded using the given dictionary.
         /// </remarks>
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
+        /// <param name="deleteCompleted">
+        /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous PUT method completes.
+        /// </param>
         void DeleteAsync(string url, IDictionary<string, object> uriVariables, Action<MethodCompletedEventArgs<object>> deleteCompleted);
 
         /// <summary>
-        /// Delete the resources at the specified URI.
+        /// Asynchronously delete the resources at the specified URI.
         /// </summary>
         /// <param name="url">The URL.</param>
+        /// <param name="deleteCompleted">
+        /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous PUT method completes.
+        /// </param>
         void DeleteAsync(Uri url, Action<MethodCompletedEventArgs<object>> deleteCompleted);
 
         #endregion
@@ -428,32 +473,38 @@ namespace Spring.Http.Rest
         #region OPTIONS
 
         /// <summary>
-        /// Return the value of the Allow header for the given URI.
+        /// Asynchronously return the value of the Allow header for the given URI.
         /// </summary>
         /// <remarks>
         /// URI Template variables are expanded using the given URI variables, if any.
         /// </remarks>
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The variables to expand the template.</param>
-        /// <returns>The value of the allow header.</returns>
+        /// <param name="optionsCompleted">
+        /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous OPTIONS method completes.
+        /// </param>
         void OptionsForAllowAsync(string url, object[] uriVariables, Action<IList<HttpMethod>> optionsCompleted);
 
         /// <summary>
-        /// Return the value of the Allow header for the given URI.
+        /// Asynchronously return the value of the Allow header for the given URI.
         /// </summary>
         /// <remarks>
         /// URI Template variables are expanded using the given dictionary.
         /// </remarks>
         /// <param name="url">The URL.</param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
-        /// <returns>The value of the allow header.</returns>
+        /// <param name="optionsCompleted">
+        /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous OPTIONS method completes.
+        /// </param>
         void OptionsForAllowAsync(string url, IDictionary<string, object> uriVariables, Action<IList<HttpMethod>> optionsCompleted);
 
         /// <summary>
-        /// Return the value of the Allow header for the given URI.
+        /// Asynchronously return the value of the Allow header for the given URI.
         /// </summary>
         /// <param name="url">The URL.</param>
-        /// <returns>The value of the allow header.</returns>
+        /// <param name="optionsCompleted">
+        /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous OPTIONS method completes.
+        /// </param>
         void OptionsForAllowAsync(Uri url, Action<IList<HttpMethod>> optionsCompleted);
 
         #endregion
@@ -462,7 +513,7 @@ namespace Spring.Http.Rest
         #region Exchange
 
         /// <summary>
-        /// Execute the HTTP method to the given URI template, writing the given request message to the request, 
+        /// Asynchronously execute the HTTP method to the given URI template, writing the given request message to the request, 
         /// and returns the response as <see cref="HttpResponseMessage{T}"/>.
         /// </summary>
         /// <remarks>
@@ -475,11 +526,13 @@ namespace Spring.Http.Rest
         /// The HTTP entity (headers and/or body) to write to the request, may be <see langword="null"/>.
         /// </param>
         /// <param name="uriVariables">The variables to expand the template.</param>
-        /// <returns>The HTTP response message.</returns>
+        /// <param name="methodCompleted">
+        /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous method completes.
+        /// </param>
         void ExchangeAsync<T>(string url, HttpMethod method, HttpEntity requestEntity, object[] uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> methodCompleted) where T : class;
 
         /// <summary>
-        /// Execute the HTTP method to the given URI template, writing the given request message to the request, 
+        /// Asynchronously execute the HTTP method to the given URI template, writing the given request message to the request, 
         /// and returns the response as <see cref="HttpResponseMessage{T}"/>.
         /// </summary>
         /// <remarks>
@@ -492,11 +545,13 @@ namespace Spring.Http.Rest
         /// The HTTP entity (headers and/or body) to write to the request, may be <see langword="null"/>.
         /// </param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
-        /// <returns>The HTTP response message.</returns>
+        /// <param name="methodCompleted">
+        /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous method completes.
+        /// </param>
         void ExchangeAsync<T>(string url, HttpMethod method, HttpEntity requestEntity, IDictionary<string, object> uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> methodCompleted) where T : class;
 
         /// <summary>
-        /// Execute the HTTP method to the given URI template, writing the given request message to the request, 
+        /// Asynchronously execute the HTTP method to the given URI template, writing the given request message to the request, 
         /// and returns the response as <see cref="HttpResponseMessage{T}"/>.
         /// </summary>
         /// <typeparam name="T">The type of the response value.</typeparam>
@@ -505,11 +560,13 @@ namespace Spring.Http.Rest
         /// <param name="requestEntity">
         /// The HTTP entity (headers and/or body) to write to the request, may be <see langword="null"/>.
         /// </param>
-        /// <returns>The HTTP response message.</returns>
+        /// <param name="methodCompleted">
+        /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous method completes.
+        /// </param>
         void ExchangeAsync<T>(Uri url, HttpMethod method, HttpEntity requestEntity, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> methodCompleted) where T : class;
 
         /// <summary>
-        /// Execute the HTTP method to the given URI template, writing the given request message to the request, 
+        /// Asynchronously execute the HTTP method to the given URI template, writing the given request message to the request, 
         /// and returns the response with no entity as <see cref="HttpResponseMessage"/>.
         /// </summary>
         /// <remarks>
@@ -521,11 +578,13 @@ namespace Spring.Http.Rest
         /// The HTTP entity (headers and/or body) to write to the request, may be <see langword="null"/>.
         /// </param>
         /// <param name="uriVariables">The variables to expand the template.</param>
-        /// <returns>The HTTP response message with no entity.</returns>
+        /// <param name="methodCompleted">
+        /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous method completes.
+        /// </param>
         void ExchangeAsync(string url, HttpMethod method, HttpEntity requestEntity, object[] uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage>> methodCompleted);
 
         /// <summary>
-        /// Execute the HTTP method to the given URI template, writing the given request message to the request, 
+        /// Asynchronously execute the HTTP method to the given URI template, writing the given request message to the request, 
         /// and returns the response with no entity as <see cref="HttpResponseMessage"/>.
         /// </summary>
         /// <remarks>
@@ -537,11 +596,13 @@ namespace Spring.Http.Rest
         /// The HTTP entity (headers and/or body) to write to the request, may be <see langword="null"/>.
         /// </param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
-        /// <returns>The HTTP response message with no entity.</returns>
+        /// <param name="methodCompleted">
+        /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous method completes.
+        /// </param>
         void ExchangeAsync(string url, HttpMethod method, HttpEntity requestEntity, IDictionary<string, object> uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage>> methodCompleted);
 
         /// <summary>
-        /// Execute the HTTP method to the given URI template, writing the given request message to the request, 
+        /// Asynchronously execute the HTTP method to the given URI template, writing the given request message to the request, 
         /// and returns the response with no entity as <see cref="HttpResponseMessage"/>.
         /// </summary>
         /// <param name="url">The URL.</param>
@@ -549,7 +610,9 @@ namespace Spring.Http.Rest
         /// <param name="requestEntity">
         /// The HTTP entity (headers and/or body) to write to the request, may be <see langword="null"/>.
         /// </param>
-        /// <returns>The HTTP response message with no entity.</returns>
+        /// <param name="methodCompleted">
+        /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous method completes.
+        /// </param>
         void ExchangeAsync(Uri url, HttpMethod method, HttpEntity requestEntity, Action<MethodCompletedEventArgs<HttpResponseMessage>> methodCompleted);
 
         #endregion
@@ -557,7 +620,7 @@ namespace Spring.Http.Rest
         #region General execution
 
         /// <summary>
-        /// Execute the HTTP method to the given URI template, preparing the request with the 
+        /// Asynchronously execute the HTTP method to the given URI template, preparing the request with the 
         /// <see cref="IRequestCallback"/>, and reading the response with an <see cref="IResponseExtractor{T}"/>.
         /// </summary>
         /// <remarks>
@@ -569,11 +632,13 @@ namespace Spring.Http.Rest
         /// <param name="requestCallback">Object that prepares the request.</param>
         /// <param name="responseExtractor">Object that extracts the return value from the response.</param>
         /// <param name="uriVariables">The variables to expand the template.</param>
-        /// <returns>An arbitrary object, as returned by the <see cref="IResponseExtractor{T}"/>.</returns>        
+        /// <param name="methodCompleted">
+        /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous method completes.
+        /// </param>       
         void ExecuteAsync<T>(string url, HttpMethod method, IRequestCallback requestCallback, IResponseExtractor<T> responseExtractor, object[] uriVariables, Action<MethodCompletedEventArgs<T>> methodCompleted) where T : class;
 
         /// <summary>
-        /// Execute the HTTP method to the given URI template, preparing the request with the 
+        /// Asynchronously execute the HTTP method to the given URI template, preparing the request with the 
         /// <see cref="IRequestCallback"/>, and reading the response with an <see cref="IResponseExtractor{T}"/>.
         /// </summary>
         /// <remarks>
@@ -585,11 +650,13 @@ namespace Spring.Http.Rest
         /// <param name="requestCallback">Object that prepares the request.</param>
         /// <param name="responseExtractor">Object that extracts the return value from the response.</param>
         /// <param name="uriVariables">The dictionary containing variables for the URI template.</param>
-        /// <returns>An arbitrary object, as returned by the <see cref="IResponseExtractor{T}"/>.</returns>   
+        /// <param name="methodCompleted">
+        /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous method completes.
+        /// </param>   
         void ExecuteAsync<T>(string url, HttpMethod method, IRequestCallback requestCallback, IResponseExtractor<T> responseExtractor, IDictionary<string, object> uriVariables, Action<MethodCompletedEventArgs<T>> methodCompleted) where T : class;
 
         /// <summary>
-        /// Execute the HTTP method to the given URI template, preparing the request with the 
+        /// Asynchronously execute the HTTP method to the given URI template, preparing the request with the 
         /// <see cref="IRequestCallback"/>, and reading the response with an <see cref="IResponseExtractor{T}"/>.
         /// </summary>
         /// <typeparam name="T">The type of the response value.</typeparam>
@@ -597,7 +664,9 @@ namespace Spring.Http.Rest
         /// <param name="method">The HTTP method (GET, POST, etc.)</param>
         /// <param name="requestCallback">Object that prepares the request.</param>
         /// <param name="responseExtractor">Object that extracts the return value from the response.</param>
-        /// <returns>An arbitrary object, as returned by the <see cref="IResponseExtractor{T}"/>.</returns>   
+        /// <param name="methodCompleted">
+        /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous method completes.
+        /// </param>  
         void ExecuteAsync<T>(Uri url, HttpMethod method, IRequestCallback requestCallback, IResponseExtractor<T> responseExtractor, Action<MethodCompletedEventArgs<T>> methodCompleted) where T : class;
 
         #endregion

@@ -22,6 +22,8 @@ using System;
 
 namespace Spring.Util
 {
+    // From Spring.Core
+
     /// <summary>
     /// Miscellaneous <see cref="System.String"/> utility methods.
     /// </summary>
