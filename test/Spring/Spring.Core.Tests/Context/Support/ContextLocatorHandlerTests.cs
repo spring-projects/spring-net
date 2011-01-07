@@ -50,6 +50,12 @@ namespace Spring.Context.Support
 			ContextRegistry.Clear();
 		}
 
+		[TearDown]
+		public void TearDown()
+		{
+			ContextRegistry.Clear();
+		}
+
 		[Test]
 		public void CreateContextSuccessful()
 		{
