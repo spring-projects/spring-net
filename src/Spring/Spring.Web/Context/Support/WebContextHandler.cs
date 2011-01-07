@@ -70,7 +70,7 @@ namespace Spring.Context.Support
         /// </summary>
         protected override string GetContextName(object configContext, XmlElement contextElement)
         {
-            string contextName = ((HttpConfigurationContext) configContext).VirtualPath;
+            string contextName = GetVirtualPath(configContext);
             // NET 2.0 returns "/" for root path
             if (contextName == "/")
             {
@@ -104,8 +104,6 @@ namespace Spring.Context.Support
                                                                   string contextName, Type contextType,
                                                                   bool caseSensitive, string[] resources)
         {
-            HttpConfigurationContext httpConfigurationContext = (HttpConfigurationContext) configContext;
-
             // ASP.NET may scavenge it's configuration section cache if memory usage is too high.
             // Thus a handler may be called more than once for the same context.
             // Return registered context in this case.
@@ -122,13 +120,23 @@ namespace Spring.Context.Support
             }
 
             // for rewriting path during context instantiation
-            string vpath = httpConfigurationContext.VirtualPath;
+            string vpath = GetVirtualPath(configContext);
             if (!vpath.EndsWith("/")) vpath = vpath + "/";
             using (new HttpContextSwitch(vpath))
             {
                 return
                     base.InstantiateContext(parent, configContext, contextName, contextType, caseSensitive, resources);
             }
+        }
+
+        private String GetVirtualPath(Object configContext)
+        {
+            HttpConfigurationContext httpConfigurationContext = (HttpConfigurationContext)configContext;
+            if (httpConfigurationContext != null)
+            {
+                return httpConfigurationContext.VirtualPath;
+            }
+            return String.Empty;
         }
     }
 }

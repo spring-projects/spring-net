@@ -288,7 +288,7 @@ namespace Spring.Context.Support
 	        	// finally create the context instance
 				context = InstantiateContext(parentContext, configContext, contextName, contextType, caseSensitive, resources);
                 // and register with global context registry
-                if (AutoRegisterWithContextRegistry)
+                if (AutoRegisterWithContextRegistry && !ContextRegistry.IsContextRegistered(context.Name))
                 {
                     ContextRegistry.RegisterContext(context);                    
                 }
