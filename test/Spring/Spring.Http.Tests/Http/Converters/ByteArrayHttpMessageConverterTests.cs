@@ -18,11 +18,7 @@
 
 #endregion
 
-using System.IO;
-using System.Net;
-
 using NUnit.Framework;
-using Rhino.Mocks;
 
 namespace Spring.Http.Converters
 {
@@ -35,12 +31,10 @@ namespace Spring.Http.Converters
     public class ByteArrayHttpMessageConverterTests
     {
         private ByteArrayHttpMessageConverter converter;
-        private MockRepository mocks;
 
 	    [SetUp]
 	    public void SetUp() 
         {
-            mocks = new MockRepository();
 		    converter = new ByteArrayHttpMessageConverter();
 	    }
 
@@ -67,45 +61,27 @@ namespace Spring.Http.Converters
         {
             byte[] body = new byte[] { 0x1, 0x2 };
 
-            IHttpInputMessage message = mocks.CreateMock<IHttpInputMessage>();
-            Expect.Call<Stream>(message.Body).Return(new MemoryStream(body));
-            HttpHeaders headers = new HttpHeaders();
-            headers.ContentLength = body.Length;
-            Expect.Call<HttpHeaders>(message.Headers).Return(headers).Repeat.Any();
-
-            mocks.ReplayAll();
+            MockHttpInputMessage message = new MockHttpInputMessage(body);
+            message.Headers.ContentLength = body.Length;
             
             byte[] result = converter.Read<byte[]>(message);
             Assert.AreEqual(body.Length, result.Length, "Invalid result");
             Assert.AreEqual(body[0], result[0], "Invalid result");
             Assert.AreEqual(body[1], result[1], "Invalid result");
-
-            mocks.VerifyAll();
         }
 
         [Test]
         public void Write()
         {
-            MemoryStream requestStream = new MemoryStream();
-
             byte[] body = new byte[] { 0x1, 0x2 };
 
-            IHttpOutputMessage message = mocks.CreateMock<IHttpOutputMessage>();
-            Expect.Call(message.Body).PropertyBehavior();
-            HttpHeaders headers = new HttpHeaders();
-            Expect.Call<HttpHeaders>(message.Headers).Return(headers).Repeat.Any();
-
-            mocks.ReplayAll();
+            MockHttpOutputMessage message = new MockHttpOutputMessage();
 
             converter.Write(body, null, message);
 
-            message.Body(requestStream);
-            byte[] result = requestStream.ToArray();
-            Assert.AreEqual(body, result, "Invalid result");
+            Assert.AreEqual(body, message.GetBodyAsBytes(), "Invalid result");
             Assert.AreEqual(new MediaType("application", "octet-stream"), message.Headers.ContentType, "Invalid content-type");
             //Assert.AreEqual(2, message.Headers.ContentLength, "Invalid content-length");
-
-            mocks.VerifyAll();
         }
     }
 }

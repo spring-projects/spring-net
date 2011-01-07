@@ -20,14 +20,11 @@
 #endregion
 
 using System;
-using System.IO;
-using System.Net;
 using System.Text;
 using System.Globalization;
 using System.ServiceModel.Syndication;
 
 using NUnit.Framework;
-using Rhino.Mocks;
 
 namespace Spring.Http.Converters.Feed
 {
@@ -39,12 +36,10 @@ namespace Spring.Http.Converters.Feed
     public class Atom10FeedHttpMessageConverterTests
     {
         private Atom10FeedHttpMessageConverter converter;
-        private MockRepository mocks;
 
 	    [SetUp]
 	    public void SetUp() 
         {
-            mocks = new MockRepository();
             converter = new Atom10FeedHttpMessageConverter();
 	    }
 
@@ -77,10 +72,7 @@ namespace Spring.Http.Converters.Feed
             string body = String.Format("<feed xmlns=\"http://www.w3.org/2005/Atom\"><title type=\"text\">Test Feed</title><subtitle type=\"text\">This is a test feed</subtitle><id>Atom10FeedHttpMessageConverterTests.Write</id><rights type=\"text\">Copyright 2010</rights><updated>{0}</updated><author><name>Bruno Baïa</name><uri>http://www.springframework.net/bbaia</uri><email>bruno.baia@springframework.net</email></author><link rel=\"alternate\" href=\"http://www.springframework.net/Feed\" /></feed>",
                 now.ToString("yyyy-MM-ddTHH:mm:sszzz", CultureInfo.InvariantCulture));
 
-            IHttpInputMessage message = mocks.CreateMock<IHttpInputMessage>();
-            Expect.Call<Stream>(message.Body).Return(new MemoryStream(Encoding.UTF8.GetBytes(body)));
-
-            mocks.ReplayAll();
+            MockHttpInputMessage message = new MockHttpInputMessage(body, Encoding.UTF8);
 
             SyndicationFeed result = converter.Read<SyndicationFeed>(message);
             Assert.IsNotNull(result, "Invalid result");
@@ -94,15 +86,11 @@ namespace Spring.Http.Converters.Feed
             Assert.AreEqual("Bruno Baïa", result.Authors[0].Name, "Invalid result");
             Assert.AreEqual("bruno.baia@springframework.net", result.Authors[0].Email, "Invalid result");
             Assert.AreEqual("http://www.springframework.net/bbaia", result.Authors[0].Uri, "Invalid result");
-
-            mocks.VerifyAll();
         }
 
         [Test]
         public void Write()
         {
-            MemoryStream requestStream = new MemoryStream();
-
             DateTime now = DateTime.Now;
 
             string expectedBody = String.Format("<feed xmlns=\"http://www.w3.org/2005/Atom\"><title type=\"text\">Test Feed</title><subtitle type=\"text\">This is a test feed</subtitle><id>Atom10FeedHttpMessageConverterTests.Write</id><rights type=\"text\">Copyright 2010</rights><updated>{0}</updated><author><name>Bruno Baïa</name><uri>http://www.springframework.net/bbaia</uri><email>bruno.baia@springframework.net</email></author><link rel=\"alternate\" href=\"http://www.springframework.net/Feed\" /></feed>", 
@@ -113,22 +101,13 @@ namespace Spring.Http.Converters.Feed
             body.Authors.Add(sp);
             body.Copyright = new TextSyndicationContent("Copyright 2010");
 
-            IHttpOutputMessage message = mocks.CreateMock<IHttpOutputMessage>();
-            Expect.Call(message.Body).PropertyBehavior();
-            HttpHeaders headers = new HttpHeaders();
-            Expect.Call<HttpHeaders>(message.Headers).Return(headers).Repeat.Any();
-
-            mocks.ReplayAll();
+            MockHttpOutputMessage message = new MockHttpOutputMessage();
 
             converter.Write(body, null, message);
 
-            message.Body(requestStream);
-            byte[] result = requestStream.ToArray();
-            Assert.AreEqual(expectedBody, Encoding.UTF8.GetString(result), "Invalid result");
+            Assert.AreEqual(expectedBody, message.GetBodyAsString(Encoding.UTF8), "Invalid result");
             Assert.AreEqual(new MediaType("application", "atom+xml"), message.Headers.ContentType, "Invalid content-type");
             //Assert.IsTrue(message.Headers.ContentLength > -1, "Invalid content-length");
-
-            mocks.VerifyAll();
         }
     }
 }

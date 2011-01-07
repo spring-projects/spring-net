@@ -125,6 +125,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Http\Converters\Feed\Rss20FeedHttpMessageConverterTests.cs" />
+    <Compile Include="Http\Converters\FileInfoHttpMessageConverterTests.cs" />
     <Compile Include="Http\Converters\FormHttpMessageConverterTests.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -138,6 +139,8 @@
     <Compile Include="Http\Converters\Xml\XmlDocumentHttpMessageConverterTests.cs" />
     <Compile Include="Http\HttpHeadersTests.cs" />
     <Compile Include="Http\MediaTypeTests.cs" />
+    <Compile Include="Http\MockHttpInputMessage.cs" />
+    <Compile Include="Http\MockHttpOuputMessage.cs" />
     <Compile Include="Http\Rest\HttpStatusCodeExceptionTests.cs" />
     <Compile Include="Http\Rest\RestTemplateIntegrationTests.cs" />
     <Compile Include="Http\Rest\RestTemplateTests.cs" />

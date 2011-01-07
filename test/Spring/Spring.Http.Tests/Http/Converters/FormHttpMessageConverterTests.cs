@@ -20,13 +20,11 @@
 
 using System;
 using System.IO;
-using System.Net;
 using System.Text;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 
 using NUnit.Framework;
-using Rhino.Mocks;
 
 namespace Spring.Http.Converters
 {
@@ -39,12 +37,10 @@ namespace Spring.Http.Converters
     public class FormHttpMessageConverterTests
     {
         private FormHttpMessageConverter converter;
-        private MockRepository mocks;
 
 	    [SetUp]
 	    public void SetUp() 
         {
-            mocks = new MockRepository();
             converter = new FormHttpMessageConverter();
 	    }
 
@@ -76,13 +72,8 @@ namespace Spring.Http.Converters
             Encoding charSetEncoding = Encoding.GetEncoding(charSet);
             MediaType mediaType = new MediaType("application", "x-www-form-urlencoded", charSet);
 
-            IHttpInputMessage message = mocks.CreateMock<IHttpInputMessage>();
-            Expect.Call<Stream>(message.Body).Return(new MemoryStream(Encoding.UTF8.GetBytes(body)));
-            HttpHeaders headers = new HttpHeaders();
-            headers.ContentType = mediaType;
-            Expect.Call<HttpHeaders>(message.Headers).Return(headers).Repeat.Any();
-
-            mocks.ReplayAll();
+            MockHttpInputMessage message = new MockHttpInputMessage(body, charSetEncoding);
+            message.Headers.ContentType = mediaType;
 
             NameValueCollection result = converter.Read<NameValueCollection>(message);
             Assert.AreEqual(3, result.Count, "Invalid result");
@@ -92,15 +83,11 @@ namespace Spring.Http.Converters
             Assert.AreEqual("value 2+1", result.GetValues("name 2")[0], "Invalid result");
             Assert.AreEqual("value 2+2", result.GetValues("name 2")[1], "Invalid result");
             Assert.IsNull(result["name 3"], "Invalid result");
-
-            mocks.VerifyAll();
         }
 
         [Test]
         public void WriteForm()
         {
-            MemoryStream requestStream = new MemoryStream();
-
             string expectedBody = "name+1=value+1&name+2=value+2%2b1&name+2=value+2%2b2&name+3";
             NameValueCollection body = new NameValueCollection();
             body.Add("name 1", "value 1");
@@ -110,30 +97,19 @@ namespace Spring.Http.Converters
             string charSet = "ISO-8859-1";
             Encoding charSetEncoding = Encoding.GetEncoding(charSet);
 
-            IHttpOutputMessage message = mocks.CreateMock<IHttpOutputMessage>();
-            Expect.Call(message.Body).PropertyBehavior();
-            HttpHeaders headers = new HttpHeaders();
-            Expect.Call<HttpHeaders>(message.Headers).Return(headers).Repeat.Any();
-
-            mocks.ReplayAll();
+            MockHttpOutputMessage message = new MockHttpOutputMessage();
 
             converter.Write(body, MediaType.APPLICATION_FORM_URLENCODED, message);
 
-            message.Body(requestStream);
-            byte[] result = requestStream.ToArray();
-            Assert.AreEqual(expectedBody, charSetEncoding.GetString(result), "Invalid result");
+            Assert.AreEqual(expectedBody, message.GetBodyAsString(charSetEncoding), "Invalid result");
             Assert.AreEqual(new MediaType("application", "x-www-form-urlencoded"), message.Headers.ContentType, "Invalid content-type");
             //Assert.AreEqual(charSetEncoding.GetBytes(expectedBody).Length, message.Headers.ContentLength, "Invalid content-length");
-
-            mocks.VerifyAll();
         }
 
         [Test]
         [Ignore] //TODO: relative path (needs IResource ?)
         public void WriteMultipart()
         {
-            MemoryStream requestStream = new MemoryStream();
-
 		    IDictionary<string, object> parts = new Dictionary<string, object>();
             parts.Add("name 1", "value 1");
             parts.Add("name 2", "value 2+1");
@@ -142,12 +118,7 @@ namespace Spring.Http.Converters
             parts.Add("xml", entity);
             parts.Add("logo", new FileInfo(@"C:\Users\Bruno\Pictures\Hero\downloadfile.jpeg"));
 
-		    IHttpOutputMessage message = mocks.CreateMock<IHttpOutputMessage>();
-            Expect.Call(message.Body).PropertyBehavior();
-            HttpHeaders headers = new HttpHeaders();
-            Expect.Call<HttpHeaders>(message.Headers).Return(headers).Repeat.Any();
-
-            mocks.ReplayAll();
+            MockHttpOutputMessage message = new MockHttpOutputMessage();
 
 		    converter.Write(parts, MediaType.MULTIPART_FORM_DATA, message);
 
@@ -158,15 +129,11 @@ namespace Spring.Http.Converters
             string boundary = contentType.GetParameter("boundary");
             Assert.IsNotNull(boundary, "Invalid content-type");
 
-            message.Body(requestStream);
-            byte[] result = requestStream.ToArray();
-            string resultAsString = Encoding.UTF8.GetString(result);
-            Assert.IsTrue(resultAsString.Contains("--" + boundary + "\r\nContent-Disposition: form-data; name=\"name 1\"\r\nContent-Type: text/plain;charset=ISO-8859-1\r\n\r\nvalue 1\r\n"), "Invalid content-disposition");
-            Assert.IsTrue(resultAsString.Contains("--" + boundary + "\r\nContent-Disposition: form-data; name=\"name 2\"\r\nContent-Type: text/plain;charset=ISO-8859-1\r\n\r\nvalue 2+1\r\n"), "Invalid content-disposition");
-            Assert.IsTrue(resultAsString.Contains("--" + boundary + "\r\nContent-Disposition: form-data; name=\"xml\"\r\nContent-Type: text/xml\r\n\r\n<root><child/></root>\r\n"), "Invalid content-disposition");
-            Assert.IsTrue(resultAsString.Contains("--" + boundary + "\r\nContent-Disposition: form-data; name=\"logo\"; filename=\"C:\\Users\\Bruno\\Pictures\\Hero\\downloadfile.jpeg\"\r\nContent-Type: application/octet-stream\r\n\r\n"), "Invalid content-disposition");
-
-            mocks.VerifyAll();
+            string result = message.GetBodyAsString(Encoding.UTF8);
+            Assert.IsTrue(result.Contains("--" + boundary + "\r\nContent-Disposition: form-data; name=\"name 1\"\r\nContent-Type: text/plain;charset=ISO-8859-1\r\n\r\nvalue 1\r\n"), "Invalid content-disposition");
+            Assert.IsTrue(result.Contains("--" + boundary + "\r\nContent-Disposition: form-data; name=\"name 2\"\r\nContent-Type: text/plain;charset=ISO-8859-1\r\n\r\nvalue 2+1\r\n"), "Invalid content-disposition");
+            Assert.IsTrue(result.Contains("--" + boundary + "\r\nContent-Disposition: form-data; name=\"xml\"\r\nContent-Type: text/xml\r\n\r\n<root><child/></root>\r\n"), "Invalid content-disposition");
+            Assert.IsTrue(result.Contains("--" + boundary + "\r\nContent-Disposition: form-data; name=\"logo\"; filename=\"C:\\Users\\Bruno\\Pictures\\Hero\\downloadfile.jpeg\"\r\nContent-Type: image/jpeg\r\n\r\n"), "Invalid content-disposition");
         }
     }
 }

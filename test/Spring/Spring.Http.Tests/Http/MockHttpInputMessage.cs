@@ -1,4 +1,4 @@
-#region License
+﻿#region License
 
 /*
  * Copyright 2002-2011 the original author or authors.
@@ -20,28 +20,39 @@
 
 using System;
 using System.IO;
+using System.Text;
 
 namespace Spring.Http
 {
     /// <summary>
-    /// Represents an HTTP message, consisting of <see cref="P:Headers">headers</see> 
-    /// and a writable <see cref="P:Body">body</see>.
+    /// Mocked IHttpInputMessage implementation.
     /// </summary>
-    /// <remarks>
-    /// Typically implemented by an HTTP request on the client-side, or a response on the server-side.
-    /// </remarks>
     /// <author>Arjen Poutsma</author>
     /// <author>Bruno Baia (.NET)</author>
-    public interface IHttpOutputMessage
+    public class MockHttpInputMessage : IHttpInputMessage
     {
-        /// <summary>
-        /// Gets the message headers.
-        /// </summary>
-        HttpHeaders Headers { get; }
+        private HttpHeaders headers;
+        private Stream body;
 
-        /// <summary>
-        /// Sets the delegate that writes the body message as a stream.
-        /// </summary>
-        Action<Stream> Body { set; }
+        public MockHttpInputMessage(byte[] body)
+        {
+            this.headers = new HttpHeaders();
+            this.body = new MemoryStream(body);
+        }
+
+        public MockHttpInputMessage(string body, Encoding charset)
+            : this(charset.GetBytes(body))
+        {
+        }
+
+        public HttpHeaders Headers
+        {
+            get { return this.headers; }
+        }
+
+        public Stream Body
+        {
+            get { return this.body;  }
+        }
     }
 }

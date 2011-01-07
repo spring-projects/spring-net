@@ -20,14 +20,11 @@
 #endregion
 
 using System;
-using System.IO;
-using System.Net;
 using System.Text;
 using System.Linq;
 using System.Xml.Linq;
 
 using NUnit.Framework;
-using Rhino.Mocks;
 
 namespace Spring.Http.Converters.Xml
 {
@@ -39,12 +36,10 @@ namespace Spring.Http.Converters.Xml
     public class XElementHttpMessageConverterTests
     {
         private XElementHttpMessageConverter converter;
-        private MockRepository mocks;
 
 	    [SetUp]
 	    public void SetUp() 
         {
-            mocks = new MockRepository();
             converter = new XElementHttpMessageConverter();
 	    }
 
@@ -73,10 +68,7 @@ namespace Spring.Http.Converters.Xml
         {
             string body = "<?xml version='1.0' encoding='UTF-8' ?><Root><TestElement testAttribute='value'/><TestElement testAttribute='novalue'/></Root>";
 
-            IHttpInputMessage message = mocks.CreateMock<IHttpInputMessage>();
-            Expect.Call<Stream>(message.Body).Return(new MemoryStream(Encoding.UTF8.GetBytes(body)));
-
-            mocks.ReplayAll();
+            MockHttpInputMessage message = new MockHttpInputMessage(body, Encoding.UTF8);
 
             XElement result = converter.Read<XElement>(message);
             Assert.IsNotNull(result, "Invalid result");
@@ -88,35 +80,22 @@ namespace Spring.Http.Converters.Xml
                                 select el)
                                .Single();
             Assert.IsNotNull(xResult, "Invalid result");
-
-            mocks.VerifyAll();
         }
 
         [Test]
         public void Write()
         {
-            MemoryStream requestStream = new MemoryStream();
-
             XElement body = new XElement("Root",
                 new XElement("TestElement", 1),
                 new XElement("TestElement", 2));
 
-            IHttpOutputMessage message = mocks.CreateMock<IHttpOutputMessage>();
-            Expect.Call(message.Body).PropertyBehavior();
-            HttpHeaders headers = new HttpHeaders();
-            Expect.Call<HttpHeaders>(message.Headers).Return(headers).Repeat.Any();
-
-            mocks.ReplayAll();
+            MockHttpOutputMessage message = new MockHttpOutputMessage();
 
             converter.Write(body, null, message);
 
-            message.Body(requestStream);
-            byte[] result = requestStream.ToArray();
-            Assert.AreEqual(body.ToString(SaveOptions.DisableFormatting), Encoding.UTF8.GetString(result), "Invalid result");
+            Assert.AreEqual(body.ToString(SaveOptions.DisableFormatting), message.GetBodyAsString(Encoding.UTF8), "Invalid result");
             Assert.AreEqual(new MediaType("application", "xml"), message.Headers.ContentType, "Invalid content-type");
             //Assert.IsTrue(message.Headers.ContentLength > -1, "Invalid content-length");
-
-            mocks.VerifyAll();
         }
     }
 }

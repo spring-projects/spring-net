@@ -102,7 +102,6 @@ namespace Spring.Http.Client
         /// </summary>
         public Action<Stream> Body
         {
-            get { return this.body; }
             set { this.body = value; }
         }
 

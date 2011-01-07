@@ -18,13 +18,9 @@
 
 #endregion
 
-using System;
-using System.IO;
-using System.Net;
 using System.Text;
 
 using NUnit.Framework;
-using Rhino.Mocks;
 
 namespace Spring.Http.Converters
 {
@@ -37,12 +33,10 @@ namespace Spring.Http.Converters
     public class StringHttpMessageConverterTests
     {
         private StringHttpMessageConverter converter;
-        private MockRepository mocks;
 
 	    [SetUp]
 	    public void SetUp() 
         {
-            mocks = new MockRepository();
             converter = new StringHttpMessageConverter();
 	    }
 
@@ -72,74 +66,45 @@ namespace Spring.Http.Converters
             Encoding charSetEncoding = Encoding.GetEncoding(charSet);
             MediaType mediaType = new MediaType("text", "plain", charSet);
 
-            IHttpInputMessage message = mocks.CreateMock<IHttpInputMessage>();
-            Expect.Call<Stream>(message.Body).Return(new MemoryStream(Encoding.UTF8.GetBytes(body)));
-            HttpHeaders headers = new HttpHeaders();
-            headers.ContentType = mediaType;
-            Expect.Call<HttpHeaders>(message.Headers).Return(headers).Repeat.Any();
-
-            mocks.ReplayAll();
+            MockHttpInputMessage message = new MockHttpInputMessage(body, charSetEncoding);
+            message.Headers.ContentType = mediaType;
             
             string result = converter.Read<string>(message);
             Assert.AreEqual(body, result, "Invalid result");
-
-            mocks.VerifyAll();
 	    }
 
         [Test]
         public void WriteDefaultCharset()
         {
-            MemoryStream requestStream = new MemoryStream();
-
             string body = "H\u00e9llo W\u00f6rld";
             string charSet = "ISO-8859-1";
             Encoding charSetEncoding = Encoding.GetEncoding(charSet);
             MediaType mediaType = new MediaType("text", "plain", charSet);
 
-            IHttpOutputMessage message = mocks.CreateMock<IHttpOutputMessage>();
-            Expect.Call(message.Body).PropertyBehavior();
-            HttpHeaders headers = new HttpHeaders();
-            Expect.Call<HttpHeaders>(message.Headers).Return(headers).Repeat.Any();
-
-            mocks.ReplayAll();
+            MockHttpOutputMessage message = new MockHttpOutputMessage();
 
             converter.Write(body, null, message);
 
-            message.Body(requestStream);
-            byte[] result = requestStream.ToArray();
-            Assert.AreEqual(body, charSetEncoding.GetString(result), "Invalid result");
+            Assert.AreEqual(body, message.GetBodyAsString(charSetEncoding), "Invalid result");
             Assert.AreEqual(mediaType, message.Headers.ContentType, "Invalid content-type");
             //Assert.AreEqual(charSetEncoding.GetBytes(body).Length, message.Headers.ContentLength, "Invalid content-length");
-
-            mocks.VerifyAll();
         }
 
         [Test]
         public void WriteUTF8()
         {
-            MemoryStream requestStream = new MemoryStream();
-
             string body = "H\u00e9llo W\u00f6rld";
             string charSet = "UTF-8";
             Encoding charSetEncoding = Encoding.GetEncoding(charSet);
             MediaType mediaType = new MediaType("text", "plain", charSet);
 
-            IHttpOutputMessage message = mocks.CreateMock<IHttpOutputMessage>();
-            Expect.Call(message.Body).PropertyBehavior();
-            HttpHeaders headers = new HttpHeaders();
-            Expect.Call<HttpHeaders>(message.Headers).Return(headers).Repeat.Any();
-
-            mocks.ReplayAll();
+            MockHttpOutputMessage message = new MockHttpOutputMessage();
 
             converter.Write(body, mediaType, message);
 
-            message.Body(requestStream);
-            byte[] result = requestStream.ToArray();
-            Assert.AreEqual(body, charSetEncoding.GetString(result), "Invalid result");
+            Assert.AreEqual(body, message.GetBodyAsString(charSetEncoding), "Invalid result");
             Assert.AreEqual(mediaType, message.Headers.ContentType, "Invalid content-type");
             //Assert.AreEqual(charSetEncoding.GetBytes(body).Length, message.Headers.ContentLength, "Invalid content-length");
-
-            mocks.VerifyAll();
         }
     }
 }

@@ -1843,11 +1843,11 @@ namespace Spring.Http.Rest
                 {
                     if (this._errorHandler.HasError(response))
                     {
-                        this.HandleResponseError(uri, method, response);
+                        HandleResponseError(uri, method, response, this._errorHandler);
                     }
                     else
                     {
-                        this.LogResponseStatus(uri, method, response);
+                        LogResponseStatus(uri, method, response);
                     }
 
                     if (responseExtractor != null)
@@ -1883,7 +1883,7 @@ namespace Spring.Http.Rest
         {
             IClientHttpRequest request = this._requestFactory.CreateRequest(uri, method);
 
-            ExecuteState<T> state = new ExecuteState<T>(uri, method, responseExtractor, methodCompleted);
+            ExecuteState<T> state = new ExecuteState<T>(uri, method, responseExtractor, this._errorHandler, methodCompleted);
 
             if (requestCallback != null)
             {
@@ -1900,7 +1900,7 @@ namespace Spring.Http.Rest
             }
         }
 
-        private void ResponseReceivedCallback<T>(ExecuteCompletedEventArgs responseReceived) where T : class
+        private static void ResponseReceivedCallback<T>(ExecuteCompletedEventArgs responseReceived) where T : class
         {
             ExecuteState<T> state = (ExecuteState<T>)responseReceived.UserState;
             if (responseReceived.Error == null)
@@ -1917,13 +1917,13 @@ namespace Spring.Http.Rest
                         Exception exception = null;
                         try
                         {
-                            if (this._errorHandler.HasError(response))
+                            if (state.ResponseErrorHandler.HasError(response))
                             {
-                                this.HandleResponseError(state.Uri, state.Method, response);
+                                HandleResponseError(state.Uri, state.Method, response, state.ResponseErrorHandler);
                             }
                             else
                             {
-                                this.LogResponseStatus(state.Uri, state.Method, response);
+                                LogResponseStatus(state.Uri, state.Method, response);
                             }
 
                             if (state.ResponseExtractor != null)
@@ -1948,20 +1948,23 @@ namespace Spring.Http.Rest
             }
         }
 
-        private class ExecuteState<T> where T : class
+        private sealed class ExecuteState<T> where T : class
         {
             public Uri Uri;
             public HttpMethod Method;
             public IResponseExtractor<T> ResponseExtractor;
+            public IResponseErrorHandler ResponseErrorHandler;
             public Action<MethodCompletedEventArgs<T>> MethodCompleted;
 
             public ExecuteState(Uri uri, HttpMethod method, 
                 IResponseExtractor<T> responseExtractor, 
+                IResponseErrorHandler responseErrorHandler, 
                 Action<MethodCompletedEventArgs<T>> methodCompleted)
             {
                 this.Uri = uri;
                 this.Method = method;
                 this.ResponseExtractor = responseExtractor;
+                this.ResponseErrorHandler = responseErrorHandler;
                 this.MethodCompleted = methodCompleted;
             }
         }
@@ -2030,7 +2033,7 @@ namespace Spring.Http.Rest
 
         #endregion
 
-        private void LogResponseStatus(Uri uri, HttpMethod method, IClientHttpResponse response) 
+        private static void LogResponseStatus(Uri uri, HttpMethod method, IClientHttpResponse response) 
         {
             #region Instrumentation
 #if !SILVERLIGHT
@@ -2044,7 +2047,8 @@ namespace Spring.Http.Rest
             #endregion
         }
 
-        private void HandleResponseError(Uri uri, HttpMethod method, IClientHttpResponse response) 
+        private static void HandleResponseError(Uri uri, HttpMethod method, IClientHttpResponse response, 
+            IResponseErrorHandler errorHandler) 
         {
             #region Instrumentation
 #if !SILVERLIGHT
@@ -2057,7 +2061,7 @@ namespace Spring.Http.Rest
 #endif
             #endregion
 
-            this._errorHandler.HandleError(response);
+            errorHandler.HandleError(response);
         }
     }
 }

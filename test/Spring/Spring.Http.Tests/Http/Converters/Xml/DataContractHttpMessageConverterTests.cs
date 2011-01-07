@@ -19,14 +19,11 @@
 
 #endregion
 
-using System.IO;
-using System.Net;
 using System.Text;
 using System.Runtime.Serialization;
 using System.Collections.Generic;
 
 using NUnit.Framework;
-using Rhino.Mocks;
 
 namespace Spring.Http.Converters.Xml
 {
@@ -38,12 +35,10 @@ namespace Spring.Http.Converters.Xml
     public class DataContractHttpMessageConverterTests
     {
         private DataContractHttpMessageConverter converter;
-        private MockRepository mocks;
 
 	    [SetUp]
 	    public void SetUp() 
         {
-            mocks = new MockRepository();
             converter = new DataContractHttpMessageConverter();
 	    }
 
@@ -77,43 +72,27 @@ namespace Spring.Http.Converters.Xml
                     <ID>1</ID><Name>Bruno Baïa</Name>
                 </DataContractHttpMessageConverterTests.DataContractClass>";
 
-            IHttpInputMessage message = mocks.CreateMock<IHttpInputMessage>();
-            Expect.Call<Stream>(message.Body).Return(new MemoryStream(Encoding.UTF8.GetBytes(body)));
-
-            mocks.ReplayAll();
+            MockHttpInputMessage message = new MockHttpInputMessage(body, Encoding.UTF8);
 
             DataContractClass result = converter.Read<DataContractClass>(message);
             Assert.IsNotNull(result, "Invalid result");
             Assert.AreEqual("1", result.ID, "Invalid result");
             Assert.AreEqual("Bruno Baïa", result.Name, "Invalid result");
-
-            mocks.VerifyAll();
         }
 
         [Test]
         public void Write()
         {
-            MemoryStream requestStream = new MemoryStream();
-
             string expectedBody = "<DataContractHttpMessageConverterTests.DataContractClass xmlns:i=\"http://www.w3.org/2001/XMLSchema-instance\" xmlns=\"http://schemas.datacontract.org/2004/07/Spring.Http.Converters.Xml\"><ID>1</ID><Name>Bruno Baïa</Name></DataContractHttpMessageConverterTests.DataContractClass>";
             DataContractClass body = new DataContractClass("1", "Bruno Baïa");
 
-            IHttpOutputMessage message = mocks.CreateMock<IHttpOutputMessage>();
-            Expect.Call(message.Body).PropertyBehavior();
-            HttpHeaders headers = new HttpHeaders();
-            Expect.Call<HttpHeaders>(message.Headers).Return(headers).Repeat.Any();
-
-            mocks.ReplayAll();
+            MockHttpOutputMessage message = new MockHttpOutputMessage();
 
             converter.Write(body, null, message);
 
-            message.Body(requestStream);
-            byte[] result = requestStream.ToArray();
-            Assert.AreEqual(expectedBody, Encoding.UTF8.GetString(result), "Invalid result");
+            Assert.AreEqual(expectedBody, message.GetBodyAsString(Encoding.UTF8), "Invalid result");
             Assert.AreEqual(new MediaType("application", "xml"), message.Headers.ContentType, "Invalid content-type");
             //Assert.IsTrue(message.Headers.ContentLength > -1, "Invalid content-length");
-
-            mocks.VerifyAll();
         }
 
         #region Test classes
