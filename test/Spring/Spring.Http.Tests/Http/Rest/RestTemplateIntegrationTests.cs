@@ -62,7 +62,7 @@ namespace Spring.Http.Rest
         }
 
         [TearDown]
-        public void TearDownClass()
+        public void TearDown()
         {
             webServiceHost.Close();
         }
@@ -248,26 +248,6 @@ namespace Spring.Http.Rest
             Assert.AreEqual(HttpStatusCode.Created, result.StatusCode, "Invalid status code");
             Assert.AreEqual("User id '3' created with 'Maryse Baia'", result.StatusDescription, "Invalid status description");
         }
-
-        [Test]
-        public void ExchangeWithSpecialHeaders() // releated to HttpWebRequest implementation
-        {
-            HttpHeaders headers = new HttpHeaders();
-            // Accept & Content-Type automatically set by RestTemplate
-            headers["Connection"] = "close";
-            headers.ContentLength = 10;
-            headers.Date = DateTime.Now;
-            headers["Expect"] = "bla";
-            headers.IfModifiedSince = DateTime.Now;
-            headers["Referer"] = "http://www.springframework.net/";
-            //headers["Transfer-Encoding"] = "Identity";
-            headers["User-Agent"] = "Unit tests";
-            HttpEntity entity = new HttpEntity("Bruno Baia", headers);
-
-            HttpResponseMessage<string> result = template.Exchange<string>(
-                "user", HttpMethod.POST, entity);
-        }
-
 
         [Test]
         [ExpectedException(typeof(HttpClientErrorException), 

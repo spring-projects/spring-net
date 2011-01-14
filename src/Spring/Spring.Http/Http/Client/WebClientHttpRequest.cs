@@ -114,7 +114,7 @@ namespace Spring.Http.Client
         public IClientHttpResponse Execute()
         {
             this.EnsureNotExecuted();
-          
+
             try
             {
                 // Prepare
@@ -138,17 +138,20 @@ namespace Spring.Http.Client
             }
             catch (WebException ex)
             {
-                // This exception will be raised if the server didn't return 200 - OK  
-                // Try to retrieve more information about the network error  
+                // This exception can be raised with some status code 
+                // Try to retrieve the response from the error
                 HttpWebResponse httpWebResponse = ex.Response as HttpWebResponse;
                 if (httpWebResponse != null)
                 {
-                    this.isExecuted = true;
                     return this.CreateClientHttpResponse(httpWebResponse);
                 }
                 throw;
             }
-            this.isExecuted = true;
+            finally
+            {
+                this.isExecuted = true;
+            }
+
             return null;
         }
 #endif
@@ -273,8 +276,8 @@ namespace Spring.Http.Client
                     throw;
                 }
                 exception = ex;
-                // This exception will be raised if the server didn't return 200 - OK  
-                // Try to retrieve more information about the network error  
+                // This exception can be raised with some status code 
+                // Try to retrieve the response from the error
                 if (ex is WebException)
                 {
                     HttpWebResponse httpWebResponse = ((WebException)ex).Response as HttpWebResponse;

@@ -28,6 +28,7 @@ namespace Spring.Http.Client
     /// <see cref="IClientHttpRequestFactory"/> implementation that uses 
     /// .NET <see cref="HttpWebRequest"/>'s class to create requests.
     /// </summary>
+    /// <see cref="WebClientHttpRequest"/>
     /// <author>Bruno Baia</author>
     public class WebClientHttpRequestFactory : IClientHttpRequestFactory
     {
@@ -87,8 +88,7 @@ namespace Spring.Http.Client
 
         private int? _timeout;
         /// <summary>
-        /// Gets or sets the time-out value in milliseconds for the <see cref="M:System.Net.HttpWebRequest.GetResponse()"/> 
-        /// and <see cref="M:System.Net.HttpWebRequest.GetRequestStream()"/> methods.
+        /// Gets or sets the time-out value in milliseconds for synchrone request only.
         /// </summary>
         /// <remarks>
         /// The default is 100,000 milliseconds (100 seconds).

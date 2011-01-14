@@ -90,6 +90,9 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.IdentityModel">
+      <RequiredTargetFramework>3.0</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Runtime.Serialization">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
@@ -106,6 +109,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Http\Client\AbstractClientHttpRequestFactoryIntegrationTests.cs" />
+    <Compile Include="Http\Client\WebClientHttpRequestFactoryIntegrationTests.cs" />
     <Compile Include="Http\Converters\ByteArrayHttpMessageConverterTests.cs" />
     <Compile Include="Http\Converters\FileInfoHttpMessageConverterTests.cs" />
     <Compile Include="Http\Converters\Feed\Atom10FeedHttpMessageConverterTests.cs" />

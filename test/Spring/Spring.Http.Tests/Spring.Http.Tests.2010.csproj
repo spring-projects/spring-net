@@ -109,6 +109,7 @@
       <Name>System</Name>
     </Reference>
     <Reference Include="System.Core" />
+    <Reference Include="System.IdentityModel" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.ServiceModel.Web" />
@@ -119,6 +120,8 @@
     <Compile Include="AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Http\Client\AbstractClientHttpRequestFactoryIntegrationTests.cs" />
+    <Compile Include="Http\Client\WebClientHttpRequestFactoryIntegrationTests.cs" />
     <Compile Include="Http\Converters\ByteArrayHttpMessageConverterTests.cs" />
     <Compile Include="Http\Converters\Feed\Atom10FeedHttpMessageConverterTests.cs" />
     <Compile Include="Http\Converters\Feed\FeedHttpMessageConverterIntegrationTests.cs">

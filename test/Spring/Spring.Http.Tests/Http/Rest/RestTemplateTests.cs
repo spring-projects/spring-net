@@ -121,28 +121,20 @@ namespace Spring.Http.Rest
             template.Execute<object>("hotels/{hotel}/bookings/{booking}", HttpMethod.GET, null, null, "42", "21");
         }
 
-        //[Test]
-        //public void errorHandling() {
-        //    Expect.Call(requestFactory.createRequest(new URI("http://example.com"), HttpMethod.GET)).andReturn(request);
-        //    Expect.Call(request.execute()).andReturn(response);
-        //    Expect.Call(errorHandler.hasError(response)).andReturn(true);
-        //    Expect.Call(response.getStatusCode()).andReturn(HttpStatus.INTERNAL_SERVER_ERROR);
-        //    Expect.Call(response.getStatusText()).andReturn("Internal Server Error");
-        //    errorHandler.handleError(response);
-        //    expectLastCall().andThrow(new HttpServerErrorException(HttpStatus.INTERNAL_SERVER_ERROR));
-        //    response.close();
+        [Test]
+        [ExpectedException(typeof(HttpServerErrorException), ExpectedMessage = "The server returned 'InternalServerError' with the status code 500.")]
+        public void ErrorHandling()
+        {
+            Expect.Call<IClientHttpRequest>(requestFactory.CreateRequest(new Uri("http://example.com"), HttpMethod.GET))
+                .Return(request);
+            ExpectGetResponse();
+            Expect.Call<bool>(errorHandler.HasError(response)).Return(true);
+            Expect.Call(delegate() { errorHandler.HandleError(response); }).Throw(new HttpServerErrorException(HttpStatusCode.InternalServerError));
 
-        //    mocks.ReplayAll();
+            mocks.ReplayAll();
 
-        //    try {
-        //        template.execute("http://example.com", HttpMethod.GET, null, null);
-        //        fail("HttpServerErrorException expected");
-        //    }
-        //    catch (HttpServerErrorException ex) {
-        //        // expected
-        //    }
-        //    mocks.ReplayAll();
-        //}
+            template.Execute<object>("http://example.com", HttpMethod.GET, null, null);
+        }
 
         [Test]
         public void GetForObject() 

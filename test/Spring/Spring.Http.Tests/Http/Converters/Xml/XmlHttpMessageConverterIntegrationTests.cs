@@ -62,7 +62,7 @@ namespace Spring.Http.Converters.Xml
         }
 
         [TearDown]
-        public void TearDownClass()
+        public void TearDown()
         {
             webServiceHost.Close();
         }

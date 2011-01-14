@@ -20,6 +20,8 @@
 
 using System.Net;
 
+using Spring.Util;
+
 namespace Spring.Http
 {
     /// <summary>
@@ -60,6 +62,14 @@ namespace Spring.Http
         }
 
         /// <summary>
+        /// Creates a new, empty instance of <see cref="HttpEntity{T}"/> with no body or headers.
+        /// </summary>
+        public HttpEntity()
+            : this(null, new HttpHeaders())
+        {
+        }
+
+        /// <summary>
         /// Creates a new instance of <see cref="HttpEntity{T}"/> with the given body.
         /// </summary>
         /// <param name="body">The entity body.</param>
@@ -84,6 +94,8 @@ namespace Spring.Http
         /// <param name="headers">The entity headers.</param>
         public HttpEntity(T body, HttpHeaders headers)
         {
+            AssertUtils.ArgumentNotNull(headers, "headers");
+
             this.body = body;
             this.headers = headers;
         }

@@ -61,7 +61,7 @@ namespace Spring.Http.Converters.Feed
         }
 
         [TearDown]
-        public void TearDownClass()
+        public void TearDown()
         {
             webServiceHost.Close();
         }

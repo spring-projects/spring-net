@@ -30,6 +30,14 @@ namespace Spring.Http
     public class HttpEntity : HttpEntity<object>
     {
         /// <summary>
+        /// Creates a new, empty instance of <see cref="HttpEntity"/> with no body or headers.
+        /// </summary>
+        public HttpEntity()
+            : base()
+        {
+        }
+
+        /// <summary>
         /// Creates a new instance of <see cref="HttpEntity"/> with the given body.
         /// </summary>
         /// <param name="body">The entity body.</param>

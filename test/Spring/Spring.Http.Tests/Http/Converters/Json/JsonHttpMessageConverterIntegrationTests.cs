@@ -64,7 +64,7 @@ namespace Spring.Http.Converters.Json
         }
 
         [TearDown]
-        public void TearDownClass()
+        public void TearDown()
         {
             webServiceHost.Close();
         }
