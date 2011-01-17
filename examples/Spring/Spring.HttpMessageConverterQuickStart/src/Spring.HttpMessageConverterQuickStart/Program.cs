@@ -19,8 +19,8 @@ namespace Spring.HttpMessageConverterQuickStart
             {
                 RestTemplate rt = new RestTemplate("http://twitter.com");
                 rt.MessageConverters.Add(new NJsonHttpMessageConverter());
-
-                rt.GetForObjectAsync<JArray>("/statuses/user_timeline.json?screen_name={name}&count={count}", new string[] { "SpringForNet", "10" }, 
+#if SILVERLIGHT
+                rt.GetForObjectAsync<JArray>("/statuses/user_timeline.json?screen_name={name}&count={count}", 
                     r =>
                     {
                         if (r.Error == null)
@@ -37,7 +37,17 @@ namespace Spring.HttpMessageConverterQuickStart
                         {
                             Console.WriteLine(r.Error);
                         }
-                    });
+                    }, "SpringForNet", 10);
+#else
+                JArray jArray = rt.GetForObject<JArray>("/statuses/user_timeline.json?screen_name={name}&count={count}", "SpringForNet", 10);
+                var tweets = from el in jArray.Children()
+                             select el.Value<string>("text");
+                foreach (string tweet in tweets)
+                {
+                    Console.WriteLine(String.Format("* {0}", tweet));
+                    Console.WriteLine();
+                }
+#endif
             }
             catch (Exception ex)
             {

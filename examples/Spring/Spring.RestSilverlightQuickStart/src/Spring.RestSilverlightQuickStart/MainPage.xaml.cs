@@ -19,7 +19,7 @@ namespace Spring.RestSilverlightQuickStart
         {
             RestTemplate rt = new RestTemplate("http://localhost:12345/Services/Service.svc/");
 
-            rt.PostForMessageAsync<string>("user", "Lisa Baia", new string[] { },
+            rt.PostForMessageAsync<string>("user", "Lisa Baia", 
                 r =>
                 {
                     if (r.Error != null)

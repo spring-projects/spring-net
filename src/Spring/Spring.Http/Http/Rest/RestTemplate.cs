@@ -998,15 +998,15 @@ namespace Spring.Http.Rest
         /// </remarks>
         /// <typeparam name="T">The type of the response value.</typeparam>
         /// <param name="url">The URL.</param>
-        /// <param name="uriVariables">The variables to expand the template.</param>
         /// <param name="getCompleted">
         /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous GET method completes.
         /// </param>
-        public void GetForObjectAsync<T>(string url, object[] uriVariables, Action<MethodCompletedEventArgs<T>> getCompleted) where T : class
+        /// <param name="uriVariables">The variables to expand the template.</param>
+        public void GetForObjectAsync<T>(string url, Action<MethodCompletedEventArgs<T>> getCompleted, params object[] uriVariables) where T : class
         {
             AcceptHeaderRequestCallback requestCallback = new AcceptHeaderRequestCallback(typeof(T), this._messageConverters);
             MessageConverterResponseExtractor<T> responseExtractor = new MessageConverterResponseExtractor<T>(this._messageConverters);
-            this.ExecuteAsync<T>(url, HttpMethod.GET, requestCallback, responseExtractor, uriVariables, getCompleted);
+            this.ExecuteAsync<T>(url, HttpMethod.GET, requestCallback, responseExtractor, getCompleted, uriVariables);
         }
 
         /// <summary>
@@ -1054,15 +1054,15 @@ namespace Spring.Http.Rest
         /// </remarks>
         /// <typeparam name="T">The type of the response value.</typeparam>
         /// <param name="url">The URL.</param>
-        /// <param name="uriVariables">The variables to expand the template.</param>
         /// <param name="getCompleted">
         /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous GET method completes.
         /// </param>
-        public void GetForMessageAsync<T>(string url, object[] uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> getCompleted) where T : class
+        /// <param name="uriVariables">The variables to expand the template.</param>
+        public void GetForMessageAsync<T>(string url, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> getCompleted, params object[] uriVariables) where T : class
         {
             AcceptHeaderRequestCallback requestCallback = new AcceptHeaderRequestCallback(typeof(T), this._messageConverters);
             HttpMessageResponseExtractor<T> responseExtractor = new HttpMessageResponseExtractor<T>(this._messageConverters);
-            this.ExecuteAsync<HttpResponseMessage<T>>(url, HttpMethod.GET, requestCallback, responseExtractor, uriVariables, getCompleted);
+            this.ExecuteAsync<HttpResponseMessage<T>>(url, HttpMethod.GET, requestCallback, responseExtractor, getCompleted, uriVariables);
         }
 
         /// <summary>
@@ -1112,13 +1112,13 @@ namespace Spring.Http.Rest
         /// URI Template variables are expanded using the given URI variables, if any.
         /// </remarks>
         /// <param name="url">The URL.</param>
-        /// <param name="uriVariables">The variables to expand the template.</param>
         /// <param name="headCompleted">
         /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous HEAD method completes.
         /// </param>
-        public void HeadForHeadersAsync(string url, object[] uriVariables, Action<MethodCompletedEventArgs<HttpHeaders>> headCompleted)
+        /// <param name="uriVariables">The variables to expand the template.</param>
+        public void HeadForHeadersAsync(string url, Action<MethodCompletedEventArgs<HttpHeaders>> headCompleted, params object[] uriVariables)
         {
-            this.ExecuteAsync<HttpHeaders>(url, HttpMethod.HEAD, null, this.headersExtractor, uriVariables, headCompleted);
+            this.ExecuteAsync<HttpHeaders>(url, HttpMethod.HEAD, null, this.headersExtractor, headCompleted, uriVariables);
         }
 
         /// <summary>
@@ -1167,18 +1167,19 @@ namespace Spring.Http.Rest
         /// <param name="request">
         /// The object to be POSTed, may be a <see cref="HttpEntity"/> in order to add additional HTTP headers.
         /// </param>
-        /// <param name="uriVariables">The variables to expand the template.</param>
         /// <param name="postCompleted">
         /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous POST method completes.
         /// </param>
-        public void PostForLocationAsync(string url, object request, object[] uriVariables, Action<Uri> postCompleted)
+        /// <param name="uriVariables">The variables to expand the template.</param>
+        public void PostForLocationAsync(string url, object request, Action<Uri> postCompleted, params object[] uriVariables)
         {
             HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, this._messageConverters);
-            this.ExecuteAsync<HttpHeaders>(url, HttpMethod.POST, requestCallback, this.headersExtractor, uriVariables,
+            this.ExecuteAsync<HttpHeaders>(url, HttpMethod.POST, requestCallback, this.headersExtractor, 
                 delegate (MethodCompletedEventArgs<HttpHeaders> args) 
                 {
                     postCompleted(args.Response.Location);
-                });
+                }, 
+                uriVariables);
         }
 
         /// <summary>
@@ -1245,15 +1246,15 @@ namespace Spring.Http.Rest
         /// <param name="request">
         /// The object to be POSTed, may be a <see cref="HttpEntity"/> in order to add additional HTTP headers.
         /// </param>
-        /// <param name="uriVariables">The variables to expand the template.</param>
         /// <param name="postCompleted">
         /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous POST method completes.
         /// </param>
-        public void PostForObjectAsync<T>(string url, object request, object[] uriVariables, Action<MethodCompletedEventArgs<T>> postCompleted) where T : class
+        /// <param name="uriVariables">The variables to expand the template.</param>
+        public void PostForObjectAsync<T>(string url, object request, Action<MethodCompletedEventArgs<T>> postCompleted, params object[] uriVariables) where T : class
         {
             HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, typeof(T), this._messageConverters);
             MessageConverterResponseExtractor<T> responseExtractor = new MessageConverterResponseExtractor<T>(this._messageConverters);
-            this.ExecuteAsync<T>(url, HttpMethod.POST, requestCallback, responseExtractor, uriVariables, postCompleted);
+            this.ExecuteAsync<T>(url, HttpMethod.POST, requestCallback, responseExtractor, postCompleted, uriVariables);
         }
 
         /// <summary>
@@ -1314,15 +1315,15 @@ namespace Spring.Http.Rest
         /// <param name="request">
         /// The object to be POSTed, may be a <see cref="HttpEntity"/> in order to add additional HTTP headers.
         /// </param>
-        /// <param name="uriVariables">The variables to expand the template.</param>
         /// <param name="postCompleted">
         /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous POST method completes.
         /// </param>
-        public void PostForMessageAsync<T>(string url, object request, object[] uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> postCompleted) where T : class
+        /// <param name="uriVariables">The variables to expand the template.</param>
+        public void PostForMessageAsync<T>(string url, object request, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> postCompleted, params object[] uriVariables) where T : class
         {
             HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, typeof(T), this._messageConverters);
             HttpMessageResponseExtractor<T> responseExtractor = new HttpMessageResponseExtractor<T>(this._messageConverters);
-            this.ExecuteAsync<HttpResponseMessage<T>>(url, HttpMethod.POST, requestCallback, responseExtractor, uriVariables, postCompleted);
+            this.ExecuteAsync<HttpResponseMessage<T>>(url, HttpMethod.POST, requestCallback, responseExtractor, postCompleted, uriVariables);
         }
 
         /// <summary>
@@ -1382,15 +1383,15 @@ namespace Spring.Http.Rest
         /// <param name="request">
         /// The object to be POSTed, may be a <see cref="HttpEntity"/> in order to add additional HTTP headers.
         /// </param>
-        /// <param name="uriVariables">The variables to expand the template.</param>
         /// <param name="postCompleted">
         /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous POST method completes.
         /// </param>
-        public void PostForMessageAsync(string url, object request, object[] uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage>> postCompleted)
+        /// <param name="uriVariables">The variables to expand the template.</param>
+        public void PostForMessageAsync(string url, object request, Action<MethodCompletedEventArgs<HttpResponseMessage>> postCompleted, params object[] uriVariables)
         {
             HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, this._messageConverters);
             HttpMessageResponseExtractor responseExtractor = new HttpMessageResponseExtractor();
-            this.ExecuteAsync<HttpResponseMessage>(url, HttpMethod.POST, requestCallback, responseExtractor, uriVariables, postCompleted);
+            this.ExecuteAsync<HttpResponseMessage>(url, HttpMethod.POST, requestCallback, responseExtractor, postCompleted, uriVariables);
         }
 
         /// <summary>
@@ -1451,14 +1452,14 @@ namespace Spring.Http.Rest
         /// <param name="request">
         /// The object to be POSTed, may be a <see cref="HttpEntity"/> in order to add additional HTTP headers.
         /// </param>
-        /// <param name="uriVariables">The variables to expand the template.</param>
         /// <param name="putCompleted">
         /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous PUT method completes.
         /// </param>
-        public void PutAsync(string url, object request, object[] uriVariables, Action<MethodCompletedEventArgs<object>> putCompleted)
+        /// <param name="uriVariables">The variables to expand the template.</param>
+        public void PutAsync(string url, object request, Action<MethodCompletedEventArgs<object>> putCompleted, params object[] uriVariables)
         {
             HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(request, this._messageConverters);
-            this.ExecuteAsync<object>(url, HttpMethod.PUT, requestCallback, null, uriVariables, putCompleted);
+            this.ExecuteAsync<object>(url, HttpMethod.PUT, requestCallback, null, putCompleted, uriVariables);
         }
 
         /// <summary>
@@ -1510,13 +1511,13 @@ namespace Spring.Http.Rest
         /// URI Template variables are expanded using the given URI variables, if any.
         /// </remarks>
         /// <param name="url">The URL.</param>
-        /// <param name="uriVariables">The variables to expand the template.</param>
         /// <param name="deleteCompleted">
         /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous PUT method completes.
         /// </param>
-        public void DeleteAsync(string url, object[] uriVariables, Action<MethodCompletedEventArgs<object>> deleteCompleted)
+        /// <param name="uriVariables">The variables to expand the template.</param>
+        public void DeleteAsync(string url, Action<MethodCompletedEventArgs<object>> deleteCompleted, params object[] uriVariables)
         {
-            this.ExecuteAsync<object>(url, HttpMethod.DELETE, null, null, uriVariables, deleteCompleted);
+            this.ExecuteAsync<object>(url, HttpMethod.DELETE, null, null, deleteCompleted, uriVariables);
         }
 
         /// <summary>
@@ -1558,17 +1559,18 @@ namespace Spring.Http.Rest
         /// URI Template variables are expanded using the given URI variables, if any.
         /// </remarks>
         /// <param name="url">The URL.</param>
-        /// <param name="uriVariables">The variables to expand the template.</param>
         /// <param name="optionsCompleted">
         /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous OPTIONS method completes.
         /// </param>
-        public void OptionsForAllowAsync(string url, object[] uriVariables, Action<IList<HttpMethod>> optionsCompleted)
+        /// <param name="uriVariables">The variables to expand the template.</param>
+        public void OptionsForAllowAsync(string url, Action<IList<HttpMethod>> optionsCompleted, params object[] uriVariables)
         {
-            this.ExecuteAsync<HttpHeaders>(url, HttpMethod.OPTIONS, null, this.headersExtractor, uriVariables,
+            this.ExecuteAsync<HttpHeaders>(url, HttpMethod.OPTIONS, null, this.headersExtractor, 
                 delegate(MethodCompletedEventArgs<HttpHeaders> args) 
                 {
                     optionsCompleted(args.Response.Allow);
-                });
+                },
+                uriVariables);
         }
 
         /// <summary>
@@ -1625,15 +1627,15 @@ namespace Spring.Http.Rest
         /// <param name="requestEntity">
         /// The HTTP entity (headers and/or body) to write to the request, may be <see langword="null"/>.
         /// </param>
-        /// <param name="uriVariables">The variables to expand the template.</param>
         /// <param name="methodCompleted">
         /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous method completes.
         /// </param>
-        public void ExchangeAsync<T>(string url, HttpMethod method, HttpEntity requestEntity, object[] uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> methodCompleted) where T : class
+        /// <param name="uriVariables">The variables to expand the template.</param>
+        public void ExchangeAsync<T>(string url, HttpMethod method, HttpEntity requestEntity, Action<MethodCompletedEventArgs<HttpResponseMessage<T>>> methodCompleted, params object[] uriVariables) where T : class
         {
             HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(requestEntity, typeof(T), this._messageConverters);
             HttpMessageResponseExtractor<T> responseExtractor = new HttpMessageResponseExtractor<T>(this._messageConverters);
-            this.ExecuteAsync<HttpResponseMessage<T>>(url, method, requestCallback, responseExtractor, uriVariables, methodCompleted);
+            this.ExecuteAsync<HttpResponseMessage<T>>(url, method, requestCallback, responseExtractor, methodCompleted, uriVariables);
         }
 
         /// <summary>
@@ -1692,15 +1694,15 @@ namespace Spring.Http.Rest
         /// <param name="requestEntity">
         /// The HTTP entity (headers and/or body) to write to the request, may be <see langword="null"/>.
         /// </param>
-        /// <param name="uriVariables">The variables to expand the template.</param>
         /// <param name="methodCompleted">
         /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous method completes.
         /// </param>
-        public void ExchangeAsync(string url, HttpMethod method, HttpEntity requestEntity, object[] uriVariables, Action<MethodCompletedEventArgs<HttpResponseMessage>> methodCompleted)
+        /// <param name="uriVariables">The variables to expand the template.</param>
+        public void ExchangeAsync(string url, HttpMethod method, HttpEntity requestEntity, Action<MethodCompletedEventArgs<HttpResponseMessage>> methodCompleted, params object[] uriVariables)
         {
             HttpEntityRequestCallback requestCallback = new HttpEntityRequestCallback(requestEntity, this._messageConverters);
             HttpMessageResponseExtractor responseExtractor = new HttpMessageResponseExtractor();
-            this.ExecuteAsync<HttpResponseMessage>(url, method, requestCallback, responseExtractor, uriVariables, methodCompleted);
+            this.ExecuteAsync<HttpResponseMessage>(url, method, requestCallback, responseExtractor, methodCompleted, uriVariables);
         }
 
         /// <summary>
@@ -1761,11 +1763,11 @@ namespace Spring.Http.Rest
         /// <param name="method">The HTTP method (GET, POST, etc.)</param>
         /// <param name="requestCallback">Object that prepares the request.</param>
         /// <param name="responseExtractor">Object that extracts the return value from the response.</param>
-        /// <param name="uriVariables">The variables to expand the template.</param>
         /// <param name="methodCompleted">
         /// The <code>Action&lt;T&gt;</code> to perform when the asynchronous method completes.
         /// </param>   
-        public void ExecuteAsync<T>(string url, HttpMethod method, IRequestCallback requestCallback, IResponseExtractor<T> responseExtractor, object[] uriVariables, Action<MethodCompletedEventArgs<T>> methodCompleted) where T : class
+        /// <param name="uriVariables">The variables to expand the template.</param>
+        public void ExecuteAsync<T>(string url, HttpMethod method, IRequestCallback requestCallback, IResponseExtractor<T> responseExtractor, Action<MethodCompletedEventArgs<T>> methodCompleted, params object[] uriVariables) where T : class
         {
             this.DoExecuteAsync<T>(BuildUri(this._baseAddress, url, uriVariables), method, 
                 requestCallback, responseExtractor, methodCompleted);
@@ -1986,7 +1988,7 @@ namespace Spring.Http.Rest
         /// <param name="uriVariables">The variables to expand the template.</param>
         /// <returns>The absolute build URI.</returns>
         /// <exception cref="ArgumentException">If an absolute URI can't be build.</exception>
-        protected virtual Uri BuildUri(Uri baseAddress, string url, object[] uriVariables)
+        protected virtual Uri BuildUri(Uri baseAddress, string url, params object[] uriVariables)
         {
             UriTemplate uriTemplate = new UriTemplate(url);
             Uri uri = uriTemplate.Expand(uriVariables);

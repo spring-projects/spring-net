@@ -25,7 +25,7 @@ namespace Spring.RestQuickStart
                 }
 
                 // Exemple async call
-                rt.GetForObjectAsync<XElement>("/statuses/user_timeline.xml?screen_name={name}", new string[] { "SpringForNet" },
+                rt.GetForObjectAsync<XElement>("/statuses/user_timeline.xml?screen_name={name}", 
                     r =>
                     {
                         if (r.Error != null)
@@ -43,7 +43,7 @@ namespace Spring.RestQuickStart
                             }
                         }
 
-                    });
+                    }, "SpringForNet");
             }
             catch (Exception ex)
             {

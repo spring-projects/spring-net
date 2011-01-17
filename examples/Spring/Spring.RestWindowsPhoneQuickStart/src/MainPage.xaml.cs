@@ -21,16 +21,16 @@ namespace Spring.RestWindowsPhoneQuickStart
         {
             RestTemplate rt = new RestTemplate("http://twitter.com");
 
-            rt.GetForObjectAsync<TwitterStatuses>("/statuses/user_timeline.xml?screen_name={name}", new string[] { this.TwitterAccountTextBox.Text },
+            rt.GetForObjectAsync<TwitterStatuses>("/statuses/user_timeline.xml?screen_name={name}", 
                 args =>
                 {
                     if (args.Error == null)
                     {
                         this.StatusesListBox.ItemsSource = args.Response;
                     }
-                });
+                }, this.TwitterAccountTextBox.Text);
 
-            //rt.GetForObjectAsync<XElement>("/1/statuses/user_timeline.xml?screen_name={name}", new string[] { this.TwitterAccountTextBox.Text }, 
+            //rt.GetForObjectAsync<XElement>("/statuses/user_timeline.xml?screen_name={name}",  
             //    args =>
             //    {
             //        if (args.Error == null)
@@ -43,7 +43,7 @@ namespace Spring.RestWindowsPhoneQuickStart
             //                                                   UserName = tweet.Element("user").Element("screen_name").Value
             //                                               };
             //        }
-            //    });
+            //    }, this.TwitterAccountTextBox.Text);
         }
     }
 

@@ -32,6 +32,12 @@ namespace Spring.Http.Client
     /// <author>Bruno Baia</author>
     public class WebClientHttpRequestFactory : IClientHttpRequestFactory
     {
+        /// <summary>
+        /// The .NET <see cref="HttpWebRequest"/> used by this factory 
+        /// or <see langword="null"/> if not created.
+        /// </summary>
+        private HttpWebRequest httpWebRequest;
+
         #region Properties
 
 #if !SILVERLIGHT_3
@@ -116,27 +122,17 @@ namespace Spring.Http.Client
         }
 #endif
 
-        private HttpWebRequest httpWebRequest;
-        /// <summary>
-        /// Gets the .NET <see cref="HttpWebRequest"/> used by this factory 
-        /// or <see langword="null"/> if not created.
-        /// </summary>
-        public HttpWebRequest HttpWebRequest
-        {
-            get { return this.httpWebRequest; }
-        }
-
         #endregion
 
+#if SILVERLIGHT && !WINDOWS_PHONE
         /// <summary>
         /// Creates a new instance of <see cref="WebClientHttpRequestFactory"/>.
         /// </summary>
         public WebClientHttpRequestFactory()
         {
-#if SILVERLIGHT && !WINDOWS_PHONE
             this._webRequestCreator = WebRequestCreatorType.Unknown;
-#endif
         }
+#endif
 
         #region IClientHttpRequestFactory Membres
 
