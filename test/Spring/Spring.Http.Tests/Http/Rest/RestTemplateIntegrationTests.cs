@@ -1,4 +1,4 @@
-﻿#if NET_4_0
+﻿#if NET_3_5
 #region License
 
 /*
@@ -23,6 +23,7 @@ using System;
 using System.Net;
 using System.IO;
 using System.Text;
+using System.Threading;
 using System.Collections.Generic;
 using System.ServiceModel;
 using System.ServiceModel.Web;
@@ -67,6 +68,8 @@ namespace Spring.Http.Rest
             webServiceHost.Close();
         }
 
+        #region Sync
+
         [Test]
         public void GetString()
         {
@@ -103,7 +106,7 @@ namespace Spring.Http.Rest
         {
             HttpResponseMessage<string> result = template.GetForMessage<string>("user/{id}", 1);
             Assert.AreEqual("Bruno Baïa", result.Body, "Invalid content");
-            Assert.AreEqual(contentType, result.Headers.ContentType, "Invalid content-type");
+            Assert.AreEqual(new MediaType("text", "plain", "utf-8"), result.Headers.ContentType, "Invalid content-type");
             Assert.AreEqual(HttpStatusCode.OK, result.StatusCode, "Invalid status code");
             Assert.AreEqual("OK", result.StatusDescription, "Invalid status description");
         }
@@ -120,7 +123,7 @@ namespace Spring.Http.Rest
         public void HeadForHeaders()
         {
             HttpHeaders result = template.HeadForHeaders("head");
-            Assert.AreEqual(new MediaType("text", "plain"), result.ContentType, "Invalid content-type");
+            Assert.AreEqual("MyValue", result["MyHeader"], "Invalid header");
         }
 
         [Test]
@@ -265,6 +268,231 @@ namespace Spring.Http.Rest
             template.Execute<object>("servererror", HttpMethod.GET, null, null);
         }
 
+        #endregion
+
+        #region Async
+
+        [Test]
+        public void GetStringAsync()
+        {
+            ManualResetEvent manualEvent = new ManualResetEvent(false);
+            Exception exception = null;
+
+            template.GetForObjectAsync<string>("users",
+                delegate(MethodCompletedEventArgs<string> args)
+                {
+                    try
+                    {
+                        Assert.IsNull(args.Error, "Invalid response");
+                        Assert.IsFalse(args.Cancelled, "Invalid response");
+                        Assert.AreEqual("2", args.Response, "Invalid content");
+                    }
+                    catch (Exception ex)
+                    {
+                        exception = ex;
+                    }
+                    finally
+                    {
+                        manualEvent.Set();
+                    }
+                });
+
+            manualEvent.WaitOne();
+            if (exception != null)
+            {
+                throw exception;
+            }
+        }
+
+        [Test]
+        public void GetStringForMessageAsync()
+        {
+            ManualResetEvent manualEvent = new ManualResetEvent(false);
+            Exception exception = null;
+
+            template.GetForMessageAsync<string>("user/{id}",
+                delegate(MethodCompletedEventArgs<HttpResponseMessage<string>> args)
+                {
+                    try
+                    {
+                        Assert.IsNull(args.Error, "Invalid response");
+                        Assert.IsFalse(args.Cancelled, "Invalid response");
+                        Assert.AreEqual("Bruno Baïa", args.Response.Body, "Invalid content");
+                        Assert.AreEqual(new MediaType("text", "plain", "utf-8"), args.Response.Headers.ContentType, "Invalid content-type");
+                        Assert.AreEqual(HttpStatusCode.OK, args.Response.StatusCode, "Invalid status code");
+                        Assert.AreEqual("OK", args.Response.StatusDescription, "Invalid status description");
+                    }
+                    catch (Exception ex)
+                    {
+                        exception = ex;
+                    }
+                    finally
+                    {
+                        manualEvent.Set();
+                    }
+                }, 1);
+
+            manualEvent.WaitOne();
+            if (exception != null)
+            {
+                throw exception;
+            }
+        }
+
+        [Test]
+        public void PostStringForMessageAsync()
+        {
+            ManualResetEvent manualEvent = new ManualResetEvent(false);
+            Exception exception = null;
+
+            template.PostForMessageAsync<string>("user", "Lisa Baia", 
+                delegate(MethodCompletedEventArgs<HttpResponseMessage<string>> args)
+                {
+                    try
+                    {
+                        Assert.IsNull(args.Error, "Invalid response");
+                        Assert.IsFalse(args.Cancelled, "Invalid response");
+                        Assert.AreEqual(new Uri(new Uri(uri), "/user/3"), args.Response.Headers.Location, "Invalid location");
+                        Assert.AreEqual(HttpStatusCode.Created, args.Response.StatusCode, "Invalid status code");
+                        Assert.AreEqual("User id '3' created with 'Lisa Baia'", args.Response.StatusDescription, "Invalid status description");
+                        Assert.AreEqual("3", args.Response.Body, "Invalid content");
+                    }
+                    catch (Exception ex)
+                    {
+                        exception = ex;
+                    }
+                    finally
+                    {
+                        manualEvent.Set();
+                    }
+                });
+
+            manualEvent.WaitOne();
+            if (exception != null)
+            {
+                throw exception;
+            }
+        }
+
+        [Test]
+        public void DeleteAsyncWithNoAction()
+        {
+            string result = template.GetForObject<string>("users");
+            Assert.AreEqual("2", result, "Invalid content");
+
+            template.DeleteAsync("user/2", null);
+
+            Thread.Sleep(TimeSpan.FromSeconds(1));
+
+            result = template.GetForObject<string>("users");
+            Assert.AreEqual("1", result, "Invalid content");
+        }
+
+        [Test]
+        public void ExchangeForMessageAsync()
+        {
+            ManualResetEvent manualEvent = new ManualResetEvent(false);
+            Exception exception = null;
+
+            template.ExchangeAsync("user/1", HttpMethod.PUT, new HttpEntity("Bruno Baia"), 
+                delegate(MethodCompletedEventArgs<HttpResponseMessage> args)
+                {
+                    try
+                    {
+                        Assert.IsNull(args.Error, "Invalid response");
+                        Assert.IsFalse(args.Cancelled, "Invalid response");
+                        Assert.AreEqual(HttpStatusCode.OK, args.Response.StatusCode, "Invalid status code");
+                        Assert.AreEqual("User id '1' updated with 'Bruno Baia'", args.Response.StatusDescription, "Invalid status description");
+                    }
+                    catch (Exception ex)
+                    {
+                        exception = ex;
+                    }
+                    finally
+                    {
+                        manualEvent.Set();
+                    }
+                });
+
+            manualEvent.WaitOne();
+            if (exception != null)
+            {
+                throw exception;
+            }
+        }
+
+        [Test]
+        [ExpectedException(typeof(HttpClientErrorException),
+            ExpectedMessage = "The server returned 'Not Found' with the status code 404 - NotFound.")]
+        public void ClientErrorAsync()
+        {
+            ManualResetEvent manualEvent = new ManualResetEvent(false);
+            Exception exception = null;
+
+            template.ExecuteAsync<object>("clienterror", HttpMethod.GET, null, null, 
+                delegate(MethodCompletedEventArgs<object> args)
+                {
+                    try
+                    {
+                        Assert.IsFalse(args.Cancelled, "Invalid response");
+
+                        Assert.IsNotNull(args.Error, "Invalid response");
+                        exception = args.Error;
+                    }
+                    catch (Exception ex)
+                    {
+                        exception = ex;
+                    }
+                    finally
+                    {
+                        manualEvent.Set();
+                    }
+                });
+
+            manualEvent.WaitOne();
+            if (exception != null)
+            {
+                throw exception;
+            }
+        }
+
+        [Test]
+        [ExpectedException(typeof(HttpServerErrorException),
+            ExpectedMessage = "The server returned 'Internal Server Error' with the status code 500 - InternalServerError.")]
+        public void ServerErrorAsync()
+        {
+            ManualResetEvent manualEvent = new ManualResetEvent(false);
+            Exception exception = null;
+
+            template.ExecuteAsync<object>("servererror", HttpMethod.GET, null, null,
+                delegate(MethodCompletedEventArgs<object> args)
+                {
+                    try
+                    {
+                        Assert.IsFalse(args.Cancelled, "Invalid response");
+
+                        Assert.IsNotNull(args.Error, "Invalid response");
+                        exception = args.Error;
+                    }
+                    catch (Exception ex)
+                    {
+                        exception = ex;
+                    }
+                    finally
+                    {
+                        manualEvent.Set();
+                    }
+                });
+
+            manualEvent.WaitOne();
+            if (exception != null)
+            {
+                throw exception;
+            }
+        }
+
+        #endregion
+
         #region REST test service
 
         [ServiceContract]
@@ -280,60 +508,68 @@ namespace Spring.Http.Rest
                 users.Add("2", "Marie Baia");
             }
 
+            [OperationContract]
             [WebGet(UriTemplate = "clienterror")]
             public void ClientError()
             {
                 WebOperationContext.Current.OutgoingResponse.SetStatusAsNotFound();
             }
 
+            [OperationContract]
             [WebGet(UriTemplate = "servererror")]
             public void ServerError()
             {
                 WebOperationContext.Current.OutgoingResponse.StatusCode = HttpStatusCode.InternalServerError;
             }
 
+            [OperationContract]
             [WebInvoke(UriTemplate = "allow", Method = "OPTIONS")]
             public void Allow()
             {
                 WebOperationContext.Current.OutgoingResponse.Headers[HttpResponseHeader.Allow] = "GET, HEAD, PUT";
             }
 
+            [OperationContract]
             [WebInvoke(UriTemplate = "head", Method = "HEAD")]
             public void Head()
             {
-                WebOperationContext.Current.OutgoingResponse.Headers[HttpResponseHeader.ContentType] = "text/plain";
+                WebOperationContext.Current.OutgoingResponse.Headers["MyHeader"] = "MyValue";
             }
 
+            [OperationContract]
             [WebGet(UriTemplate = "user/{id}")]
-            public Message GetUser(string id)
+            public Stream GetUser(string id)
             {
                 WebOperationContext context = WebOperationContext.Current;
 
                 if (!users.ContainsKey(id))
                 {
                     context.OutgoingResponse.SetStatusAsNotFound(String.Format("User with id '{0}' not found", id));
-                    return context.CreateTextResponse(null);
+                    return null;
                 }
 
-                return context.CreateTextResponse(users[id]);
+                return CreateTextResponse(context, users[id]);
             }
 
+            [OperationContract]
             [WebGet(UriTemplate = "users")]
-            public Message GetUsersCount()
+            public Stream GetUsersCount()
             {
                 WebOperationContext context = WebOperationContext.Current;
 
-                return context.CreateTextResponse(users.Count.ToString());
+                return CreateTextResponse(context, users.Count.ToString());
             }
 
+            [OperationContract]
             [WebGet(UriTemplate = "nothing")]
             public void GetNothing()
             {
                 WebOperationContext.Current.OutgoingResponse.SuppressEntityBody = true;
             }
 
+            [OperationContract]
             [WebInvoke(UriTemplate = "user", Method = "POST")]
-            public Message Post(Stream stream)
+            public Stream Post(Stream stream)
             {
                 WebOperationContext context = WebOperationContext.Current;
 
@@ -354,7 +590,7 @@ namespace Spring.Http.Rest
                 {
                     context.OutgoingResponse.StatusCode = HttpStatusCode.BadRequest;
                     context.OutgoingResponse.StatusDescription = "Content cannot be null or empty";
-                    return WebOperationContext.Current.CreateTextResponse("");
+                    return CreateTextResponse(context, "");
                 }
 
                 users.Add(id, name);
@@ -363,9 +599,10 @@ namespace Spring.Http.Rest
                 context.OutgoingResponse.SetStatusAsCreated(uri);
                 context.OutgoingResponse.StatusDescription = String.Format("User id '{0}' created with '{1}'", id, name);
 
-                return WebOperationContext.Current.CreateTextResponse(id);
+                return CreateTextResponse(context, id);
             }
 
+            [OperationContract]
             [WebInvoke(UriTemplate = "user/{id}", Method = "PUT")]
             public void Update(string id, Stream stream)
             {
@@ -391,6 +628,7 @@ namespace Spring.Http.Rest
                 context.OutgoingResponse.StatusDescription = String.Format("User id '{0}' updated with '{1}'", id, name);
             }
 
+            [OperationContract]
             [WebInvoke(UriTemplate = "user/{id}", Method = "DELETE")]
             public void Delete(string id)
             {
@@ -407,6 +645,12 @@ namespace Spring.Http.Rest
 
                 context.OutgoingResponse.StatusCode = HttpStatusCode.OK;
                 context.OutgoingResponse.StatusDescription = String.Format("User id '{0}' have been removed", id);
+            }
+
+            private Stream CreateTextResponse(WebOperationContext context, string text)
+            {
+                context.OutgoingResponse.ContentType = "text/plain; charset=utf-8";
+                return new MemoryStream(Encoding.UTF8.GetBytes(text));
             }
         }
 

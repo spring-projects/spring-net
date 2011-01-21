@@ -1,4 +1,4 @@
-﻿#if NET_4_0
+﻿#if NET_3_5
 #region License
 
 /*
@@ -55,7 +55,6 @@ namespace Spring.Http.Converters.Json
         {
             template = new RestTemplate(uri);
             template.MessageConverters = new List<IHttpMessageConverter>();
-            //template.MessageConverters.Add(new StringHttpMessageConverter()); // for debugging purpose
 
             contentType = new MediaType("application", "json");
 
@@ -70,18 +69,42 @@ namespace Spring.Http.Converters.Json
         }
 
         [Test]
+        public void GetForJson()
+        {
+            template.MessageConverters.Add(new StringHttpMessageConverter());
+
+            string resultAsString = template.GetForObject<string>("user/{id}", 1);
+            Assert.AreEqual("{\"ID\":\"1\",\"Name\":\"Bruno Baïa\"}", resultAsString, "Invalid content");
+        }
+
+        [Test]
         public void GetForObject()
         {
             template.MessageConverters.Add(new JsonHttpMessageConverter());
 
-            User result = template.GetForObject<User>("user/{id}", "1");
+            User result = template.GetForObject<User>("user/{id}", 1);
             Assert.IsNotNull(result, "Invalid content");
             Assert.AreEqual("1", result.ID, "Invalid content");
             Assert.AreEqual("Bruno Baïa", result.Name, "Invalid content");
         }
 
         [Test]
-        public void PostForMessage()
+        public void PostJsonForMessage()
+        {
+            template.MessageConverters.Add(new StringHttpMessageConverter());
+
+            HttpEntity entity = new HttpEntity("{\"Name\":\"Lisa Baia\"}");
+            entity.Headers.ContentType = MediaType.APPLICATION_JSON;
+
+            HttpResponseMessage result = template.PostForMessage("user", entity);
+            Assert.IsNull(result.Body, "Invalid content");
+            Assert.AreEqual(new Uri(new Uri(uri), "/user/3"), result.Headers.Location, "Invalid location");
+            Assert.AreEqual(HttpStatusCode.Created, result.StatusCode, "Invalid status code");
+            Assert.AreEqual("User id '3' created with 'Lisa Baia'", result.StatusDescription, "Invalid status description");
+        }
+
+        [Test]
+        public void PostObjectForMessage()
         {
             template.MessageConverters.Add(new JsonHttpMessageConverter());
 
@@ -119,11 +142,11 @@ namespace Spring.Http.Converters.Json
                 users.Add(new User() { ID = "2", Name = "Marie Baia" });
             }
 
-            [WebGet(UriTemplate = "user/{id}")]
+            [OperationContract]
+            [WebGet(UriTemplate = "user/{id}", ResponseFormat = WebMessageFormat.Json)]
             public User GetUser(string id)
             {
                 WebOperationContext context = WebOperationContext.Current;
-                context.OutgoingResponse.Format = WebMessageFormat.Json;
 
                 foreach (User user in this.users)
                 {
@@ -137,11 +160,11 @@ namespace Spring.Http.Converters.Json
                 return null;
             }
 
-            [WebInvoke(UriTemplate = "user", Method = "POST")]
+            [OperationContract]
+            [WebInvoke(UriTemplate = "user", Method = "POST", RequestFormat = WebMessageFormat.Json)]
             public void Create(User user)
             {
                 WebOperationContext context = WebOperationContext.Current;
-                context.OutgoingResponse.Format = WebMessageFormat.Json;
 
                 UriTemplateMatch match = context.IncomingRequest.UriTemplateMatch;
                 UriTemplate template = new UriTemplate("/user/{id}");

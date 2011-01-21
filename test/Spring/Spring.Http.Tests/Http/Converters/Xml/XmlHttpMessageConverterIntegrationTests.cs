@@ -1,4 +1,4 @@
-﻿#if NET_4_0
+﻿#if NET_3_5
 #region License
 
 /*
@@ -143,6 +143,7 @@ namespace Spring.Http.Converters.Xml
                 users.Add(new User() { ID = "2", Name = "Marie Baia" });
             }
 
+            [OperationContract]
             [WebGet(UriTemplate = "user/dc/{id}")]
             public User GetUserDataContract(string id)
             {
@@ -160,6 +161,7 @@ namespace Spring.Http.Converters.Xml
                 return null;
             }
 
+            [OperationContract]
             [WebInvoke(UriTemplate = "user/dc", Method = "POST")]
             public void CreateDataContract(User user)
             {
@@ -186,6 +188,7 @@ namespace Spring.Http.Converters.Xml
                 context.OutgoingResponse.StatusDescription = String.Format("User id '{0}' created with '{1}'", user.ID, user.Name);
             }
 
+            [OperationContract]
             [WebGet(UriTemplate = "user/xml/{id}")]
             public XElement GetUserXElement(string id)
             {
@@ -205,6 +208,7 @@ namespace Spring.Http.Converters.Xml
                 return null;
             }
 
+            [OperationContract]
             [WebInvoke(UriTemplate = "user/xml", Method = "POST")]
             public void CreateXElement(XElement user)
             {

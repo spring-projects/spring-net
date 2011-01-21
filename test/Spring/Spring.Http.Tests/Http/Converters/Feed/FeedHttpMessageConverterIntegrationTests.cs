@@ -1,4 +1,4 @@
-﻿#if NET_4_0
+﻿#if NET_3_5
 #region License
 
 /*
@@ -123,6 +123,7 @@ namespace Spring.Http.Converters.Feed
         [ServiceKnownType(typeof(Rss20ItemFormatter))]
         public class TestService
         {
+            [OperationContract]
             [WebGet(UriTemplate = "feed/", BodyStyle = WebMessageBodyStyle.Bare)]
             public SyndicationFeedFormatter CreateFeed()
             {
@@ -152,6 +153,7 @@ namespace Spring.Http.Converters.Feed
                 return formatter;
             }
 
+            [OperationContract]
             [WebInvoke(UriTemplate = "feed/entry")]
             public void AddEntry(SyndicationItemFormatter item)
             {
