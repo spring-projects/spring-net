@@ -283,6 +283,7 @@
     ################################################### -->
   <!-- Verbatim text formatting (programlistings) -->
   <xsl:attribute-set name="monospace.verbatim.properties">
+	<xsl:attribute name="wrap-option">wrap</xsl:attribute>
     <xsl:attribute name="font-size">
       <xsl:value-of select="$body.font.small * 0.9"/>
       <xsl:text>pt</xsl:text>
