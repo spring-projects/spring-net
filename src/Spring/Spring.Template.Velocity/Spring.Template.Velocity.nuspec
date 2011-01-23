@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<package xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<metadata xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
+		<id>Spring.Template.Velocity</id>
+		<projectUrl>http://www.springframework.net/</projectUrl>
+		<licenseUrl>http://www.springframework.net/license.html</licenseUrl>
+		<version>SPRING_VERSION</version>
+		<authors>SpringSource</authors>
+		<description></description>
+		<summary></summary>
+		<language>en-US</language>
+		<dependencies>
+			<dependency id="Common.Logging" version="1.2.0" />
+			<dependency id="NVelocity" version="1.0.3" />
+			<dependency id="Spring.Core" version="SPRING_VERSION" />
+		</dependencies>
+	</metadata>
+</package>
