@@ -168,6 +168,7 @@ Michiel Hendriks <elmuerte at users.sourceforge.net>
 		<keyword>unsafe</keyword>
 		<keyword>ushort</keyword>
 		<keyword>using</keyword>
+		<keyword>var</keyword>
 		<keyword>virtual</keyword>
 		<keyword>void</keyword>
 		<keyword>volatile</keyword>

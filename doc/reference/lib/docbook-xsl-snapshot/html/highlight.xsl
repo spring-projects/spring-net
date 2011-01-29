@@ -19,7 +19,7 @@
 </xsl:template>
 
 <xsl:template match='xslthl:string' mode="xslthl">
-  <span style="color: #000000"><xsl:apply-templates mode="xslthl"/></span>
+  <span style="color: #A31515"><xsl:apply-templates mode="xslthl"/></span>
 </xsl:template>
 
 <xsl:template match='xslthl:comment' mode="xslthl">

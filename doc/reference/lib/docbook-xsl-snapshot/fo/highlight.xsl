@@ -20,7 +20,7 @@
 </xsl:template>
 
 <xsl:template match='xslthl:string' mode="xslthl">
-  <fo:inline color="#000000"><xsl:apply-templates mode="xslthl"/></fo:inline>
+  <fo:inline color="#A31515"><xsl:apply-templates mode="xslthl"/></fo:inline>
 </xsl:template>
 
 <xsl:template match='xslthl:comment' mode="xslthl">
