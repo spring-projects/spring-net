@@ -106,11 +106,6 @@ Rebuilding Solutions using Nant and "solutions.build":
           <!-- <include name="*.2005.sln" /> -->
           <include name="*.2008.sln" />
           <exclude name="Spring.NET.2008.sln"/>
-          <!-- Exclude REST quickstart -->
-          <exclude name="examples/Spring/Spring.HttpMessageConverterQuickStart/**/*.sln"/>
-          <exclude name="examples/Spring/Spring.RestQuickStart/**/*.sln"/>
-          <exclude name="examples/Spring/Spring.RestSilverlightQuickStart/**/*.sln"/>
-          <exclude name="examples/Spring/Spring.RestWindowsPhoneQuickStart/**/*.sln"/>
         </items>
       </in>
       <do>

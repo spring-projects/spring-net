@@ -1,1 +1,0 @@
-﻿<%@ ServiceHost Language="C#" Debug="true" Service="Spring.RestSilverlightQuickStart.Services.Service" CodeBehind="Service.svc.cs" Factory="System.ServiceModel.Activation.WebServiceHostFactory" %>
