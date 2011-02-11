@@ -1801,7 +1801,7 @@ public class MixedIocObject
         the '<literal>id'</literal> attribute of the target object, or one of
         the values in the '<literal>name'</literal> attribute of the target
         object, and the target object must be in a parent container to the
-        current one. You us ethis object reference variant mainly when you
+        current one. You use this object reference variant mainly when you
         have a hierarchy of containers and you want to wrap an existing object
         in a parent container with some sort of proxy which will have the same
         name as the parent object.<programlisting language="myxml">&lt;!-- in the parent context --&gt;
