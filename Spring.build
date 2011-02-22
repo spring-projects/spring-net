@@ -1015,7 +1015,9 @@ Commandline Examples:
     <!-- build all binaries -->
     <call target="build-all-function"/>
     <call target="package-cvs"/>
+	<!-- disabled due to changes in upload NIGHTLY target location; re-enable once new upload location is tested and working
 	<call target="upload-cvs-release"/>
+	-->
   </target>
 
   <target name="build-all-function" description="Build what is in cvs taking into account approrpiate clr versions and root target name">
