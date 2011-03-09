@@ -184,11 +184,11 @@ ${project.name}   : (optional), the name of the assembly
 ${tool.dir}       : dir for tools
     -->
     <target name="common.run-tests">
-
-      <call target="common.run-tests.nunit" />
 <!--  
+      <call target="common.run-tests.nunit" />
+--> 
       <call target="common.run-tests.ncover" />
-  -->        
+         
 
     </target>
 
