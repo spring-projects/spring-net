@@ -1015,9 +1015,7 @@ Commandline Examples:
     <!-- build all binaries -->
     <call target="build-all-function"/>
     <call target="package-cvs"/>
-	<!-- disabled due to changes in upload NIGHTLY target location; re-enable once new upload location is tested and working
 	<call target="upload-cvs-release"/>
-	-->
   </target>
 
   <target name="build-all-function" description="Build what is in cvs taking into account approrpiate clr versions and root target name">
@@ -1168,13 +1166,13 @@ Commandline Examples:
   <target name="upload-cvs-release">
     <call target="set-package-configuration"/>
     <property name="filetoupload" value="${project.name}-${package.version}.zip"/>
-    <property name="spring.ssh.server" value="spring02.managed.contegix.com" />
+    <property name="spring.ssh.server" value="s2-prod-wwworg-p1.vmware.com" />
     <property name="spring.web.path" value="/var/www/domains/springframework.net/www/htdocs" />
     <!-- setup property that holds partial path to be used by scp -->
     <property name="serverpart" value="${spring.ssh.server + ':' + spring.web.path}" />
     <property name="nightly.builds.path" value="downloads/nightly"/>
 
-    <echo message="uploading ${filetoupload} to spring02.managed.contegix.com"/>
+    <echo message="uploading ${filetoupload} to s2-prod-wwworg-p1.vmware.com"/>
     <exec workingdir="${package.dir}" program="scp_spring02.bat" verbose="true">
       <arg value="${filetoupload}" />
       <arg value="${serverpart}/${nightly.builds.path}/${filetoupload}" />
