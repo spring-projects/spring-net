@@ -21,8 +21,7 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>Spring.Data.NHibernate31.xml</DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <NoWarn>
-    </NoWarn>
+    <NoWarn>0618</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -33,6 +32,7 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>Spring.Data.NHibernate31.xml</DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>0618</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Common.Logging, Version=1.0.2.0, Culture=neutral, PublicKeyToken=af08829b84f0328e">

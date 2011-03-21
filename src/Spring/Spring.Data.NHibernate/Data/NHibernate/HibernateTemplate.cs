@@ -2246,10 +2246,7 @@ namespace Spring.Data.NHibernate
         public object DoInHibernate(ISession session)
         {
             outer.CheckWriteOperationAllowed(session);
-            // As of NH 3.1 SaveOrUpdateCopy is obsolete, disable compiler warning for now
-#pragma warning disable 618
             return session.SaveOrUpdateCopy(entity);
-#pragma warning restore 618
         }
     }
 
