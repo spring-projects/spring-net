@@ -679,6 +679,26 @@ namespace Spring.Data.NHibernate
               return Execute(new SaveOrUpdateCopyHibernateCallback(this, entity),true);
         }
 
+#if !NH_1_2
+        /// <summary>
+        /// Copy the state of the given object onto the persistent object with the same identifier. 
+        /// If there is no persistent instance currently associated with the session, it will be loaded.
+        /// Return the persistent instance. If the given instance is unsaved, 
+        /// save a copy of and return it as a newly persistent instance.
+        /// The given instance does not become associated with the session. 
+        /// This operation cascades to associated instances if the association is mapped with cascade="merge".
+        /// The semantics of this method are defined by JSR-220. 
+        /// </summary>
+        /// <param name="entity">The persistent object to merge.
+        /// (<i>not</i> necessarily to be associated with the Hibernate Session)
+        /// </param>
+        /// <returns>An updated persistent instance</returns>
+        /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
+        public object Merge(object entity)
+        {
+            return Execute(new MergeHibernateCallback(this, entity), true);
+        }
+#endif
 
         /// <summary>
         /// Remove all objects from the Session cache, and cancel all pending saves,
@@ -2230,6 +2250,37 @@ namespace Spring.Data.NHibernate
         }
     }
 
+#if !NH_1_2
+    internal class MergeHibernateCallback : IHibernateCallback
+    {
+        private HibernateTemplate outer;
+        private object entity;
+
+        public MergeHibernateCallback(HibernateTemplate template, object entity)
+        {
+            this.outer = template;
+            this.entity = entity;
+        }
+
+        /// <summary>
+        /// Gets called by HibernateTemplate with an active
+        /// Hibernate Session. Does not need to care about activating or closing
+        /// the Session, or handling transactions.
+        /// </summary>
+        /// <remarks>
+        /// <p>
+        /// Allows for returning a result object created within the callback, i.e.
+        /// a domain object or a collection of domain objects. Note that there's
+        /// special support for single step actions: see HibernateTemplate.find etc.
+        /// </p>
+        /// </remarks>
+        public object DoInHibernate(ISession session)
+        {
+            outer.CheckWriteOperationAllowed(session);
+            return session.Merge(entity);
+        }
+    }
+#endif
 
     #endregion
     

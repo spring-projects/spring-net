@@ -17,7 +17,7 @@
         </copy>
 
 		<!-- build Spring.Data.NHibernate12 -->
-		<csc target="library" define="${current.build.defines.csc}"
+		<csc target="library" define="${current.build.defines.csc},NH_1_2"
                      warnaserror="true"
 		     optimize="${build.optimize}"
 		     debug="${current.build.debug}"

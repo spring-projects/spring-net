@@ -603,6 +603,27 @@ namespace Spring.Data.NHibernate.Generic
             return classicHibernateTemplate.SaveOrUpdateCopy(entity);
         }
 
+#if !NH_1_2
+        /// <summary>
+        /// Copy the state of the given object onto the persistent object with the same identifier. 
+        /// If there is no persistent instance currently associated with the session, it will be loaded.
+        /// Return the persistent instance. If the given instance is unsaved, 
+        /// save a copy of and return it as a newly persistent instance.
+        /// The given instance does not become associated with the session. 
+        /// This operation cascades to associated instances if the association is mapped with cascade="merge".
+        /// The semantics of this method are defined by JSR-220. 
+        /// </summary>
+        /// <param name="entity">The persistent object to merge.
+        /// (<i>not</i> necessarily to be associated with the Hibernate Session)
+        /// </param>
+        /// <returns>An updated persistent instance</returns>
+        /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
+        public object Merge(object entity)
+        {
+            return classicHibernateTemplate.Merge(entity);
+        }
+#endif
+
         #endregion
 
         #region IHibernateOperations Gets
