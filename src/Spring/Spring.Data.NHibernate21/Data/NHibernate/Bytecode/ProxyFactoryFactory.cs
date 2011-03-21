@@ -51,6 +51,13 @@ namespace Spring.Data.NHibernate.Bytecode
             return false;
         }
 
+        /// <summary>
+        /// </summary>
+        public bool IsProxy(object entity)
+        {
+            return (entity is INHibernateProxy);
+        }
+
         ///<summary>
         ///</summary>
         public IProxyValidator ProxyValidator
