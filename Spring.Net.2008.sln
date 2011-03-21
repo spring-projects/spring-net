@@ -70,6 +70,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate30.Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate21.Integration.Tests.2008", "test\Spring\Spring.Data.NHibernate21.Integration.Tests\Spring.Data.NHibernate21.Integration.Tests.2008.csproj", "{4A07E150-ED90-407C-8CAD-4760444DDFD9}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate31.2008", "src\Spring\Spring.Data.NHibernate31\Spring.Data.NHibernate31.2008.csproj", "{1C8E0481-A70D-445E-AB4D-4A963CF7DC83}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate31.Tests.2008", "test\Spring\Spring.Data.NHibernate31.Tests\Spring.Data.NHibernate31.Tests.2008.csproj", "{231512F3-4F1D-45E1-BADE-D01F68DB9A80}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|.NET = Debug|.NET
@@ -410,6 +414,26 @@ Global
 		{4A07E150-ED90-407C-8CAD-4760444DDFD9}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4A07E150-ED90-407C-8CAD-4760444DDFD9}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{4A07E150-ED90-407C-8CAD-4760444DDFD9}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{1C8E0481-A70D-445E-AB4D-4A963CF7DC83}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{1C8E0481-A70D-445E-AB4D-4A963CF7DC83}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1C8E0481-A70D-445E-AB4D-4A963CF7DC83}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1C8E0481-A70D-445E-AB4D-4A963CF7DC83}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{1C8E0481-A70D-445E-AB4D-4A963CF7DC83}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{1C8E0481-A70D-445E-AB4D-4A963CF7DC83}.Release|.NET.ActiveCfg = Release|Any CPU
+		{1C8E0481-A70D-445E-AB4D-4A963CF7DC83}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1C8E0481-A70D-445E-AB4D-4A963CF7DC83}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1C8E0481-A70D-445E-AB4D-4A963CF7DC83}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{1C8E0481-A70D-445E-AB4D-4A963CF7DC83}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{231512F3-4F1D-45E1-BADE-D01F68DB9A80}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{231512F3-4F1D-45E1-BADE-D01F68DB9A80}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{231512F3-4F1D-45E1-BADE-D01F68DB9A80}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{231512F3-4F1D-45E1-BADE-D01F68DB9A80}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{231512F3-4F1D-45E1-BADE-D01F68DB9A80}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{231512F3-4F1D-45E1-BADE-D01F68DB9A80}.Release|.NET.ActiveCfg = Release|Any CPU
+		{231512F3-4F1D-45E1-BADE-D01F68DB9A80}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{231512F3-4F1D-45E1-BADE-D01F68DB9A80}.Release|Any CPU.Build.0 = Release|Any CPU
+		{231512F3-4F1D-45E1-BADE-D01F68DB9A80}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{231512F3-4F1D-45E1-BADE-D01F68DB9A80}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
