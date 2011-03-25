@@ -1193,7 +1193,7 @@ Commandline Examples:
     <property name="nightly.builds.path" value="downloads/nightly"/>
 
     <echo message="uploading ${filetoupload} to AmazonS3..."/>
-    <exec workingdir="${spring.base.dir}" program="powershell.exe" verbose="true">
+    <exec workingdir="${spring.basedir}" program="powershell.exe" verbose="true">
       <arg value=".\s3-nightly-upload.ps1 -scrFolderPath ${package.dir} -srcFilename ${filetoupload}" />
     </exec>
 	
