@@ -103,7 +103,7 @@ Commandline Examples:
   global DIAGNOSTICS setting, applied to EVERY instance of <copy> task via verbose="${copy-verbose}" attribute
   so as to be toggled in ONE place and affect ALL copy operations; leave FALSE except for debugging/troubleshooting the build
 -->
-  <property name="copy-verbose" value="true" />
+  <property name="copy-verbose" value="false" />
 
   <!-- global project settings -->
   <property name="project.name" value="Spring.NET"/>
@@ -1033,9 +1033,9 @@ Commandline Examples:
     <!-- build all binaries -->
     <call target="build-all-function"/>
     <call target="package-cvs"/>
-	<!-- DISABLED until new strategy for posting build package to site for download can be worked out
+	
 	<call target="upload-cvs-release"/>
-	-->
+	
   </target>
 
   <target name="build-all-function" description="Build what is in cvs taking into account approrpiate clr versions and root target name">
@@ -1192,19 +1192,17 @@ Commandline Examples:
     <property name="serverpart" value="${spring.ssh.server + ':' + spring.web.path}" />
     <property name="nightly.builds.path" value="downloads/nightly"/>
 
-    <echo message="uploading ${filetoupload} to s2-prod-wwworg-p1.vmware.com"/>
-    <exec workingdir="${package.dir}" program="scp_spring02.bat" verbose="true">
-      <arg value="${filetoupload}" />
-      <arg value="${serverpart}/${nightly.builds.path}/${filetoupload}" />
+    <echo message="uploading ${filetoupload} to AmazonS3..."/>
+    <exec workingdir="${spring.base.dir}" program="powershell.exe" verbose="true">
+      <arg value=".\s3-nightly-upload.ps1 -scrFolderPath ${package.dir} -srcFilename ${filetoupload}" />
+    </exec>
+	
+	<echo message="Deleting outdated files on AmazonS3..."/>
+	<exec workingdir="${spring.basedir}" program="powershell.exe" verbose="true">
+      <arg value=".\s3-nightly-delete-old-files.ps1 -leaveLatest 10" />
     </exec>
 
-    <echo message="extracting ${filetoupload} to downloads/latest"/>
-    <property name="extract.command" value="cd website/downloads/nightly/; ./update-latest.sh"/>
-    <exec workingdir="${package.dir}" program="ssh_spring02.bat" verbose="true">
-      <arg value="${spring.ssh.server}" />
-      <arg value="${extract.command}" />
-    </exec>
-
+	
   </target>
 
   <target name="package-release-files" depends="set-package-configuration">
