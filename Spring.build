@@ -1194,12 +1194,12 @@ Commandline Examples:
 
     <echo message="uploading ${filetoupload} to AmazonS3..."/>
     <exec workingdir="${spring.basedir}" program="cmd.exe" verbose="true">
-      <arg value="/c powershell.exe .\s3-nightly-upload.ps1 -srcFolderPath ${package.dir} -srcFilename ${filetoupload} >> powershelllog.txt" />
+      <arg value="/c powershell-invoker .\s3-nightly-upload.ps1 -srcFolderPath ${package.dir} -srcFilename ${filetoupload}" />
     </exec>
 	
 	<echo message="Deleting outdated files on AmazonS3..."/>
 	<exec workingdir="${spring.basedir}" program="cmd.exe" verbose="true">
-      <arg value="/c powershell.exe .\s3-nightly-delete-old-files.ps1 -leaveLatest 10 >> powershelllog.txt" />
+      <arg value="/c powershell-invoker .\s3-nightly-delete-old-files.ps1 -leaveLatest 10" />
     </exec>
 
 	
