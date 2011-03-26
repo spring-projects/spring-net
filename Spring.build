@@ -109,8 +109,8 @@ Commandline Examples:
   <property name="project.name" value="Spring.NET"/>
   <property name="project.name.full" value="Spring.NET Framework"/>
   <property name="spring.basedir" value="${project::get-base-directory()}"/>
-  <property name="spring.nonredistdir" value="${spring.basedir}/../nonredist"/>
-  <property name="tool.dir" value="${project::get-base-directory()}/build-support/tools"/>
+  <property name="spring.nonredistdir" value="${spring.basedir}\..\nonredist"/>
+  <property name="tool.dir" value="${project::get-base-directory()}\build-support\tools"/>
 
   <!-- build SDK docs with NDoc -->
   <property name="doc.sdk" value="false"/>
@@ -180,7 +180,7 @@ Commandline Examples:
     <fail message="A package version has not been specified." if="${not property::exists('package.version')}"/>
   </target>
   <target name="check-package-dir">
-    <property name="package.dir" value="build/package" overwrite="false"/>
+    <property name="package.dir" value="build\package" overwrite="false"/>
     <mkdir dir="${package.dir}"/>
   </target>
   <target name="check-current-package-dir">
