@@ -1193,13 +1193,13 @@ Commandline Examples:
     <property name="nightly.builds.path" value="downloads/nightly"/>
 
     <echo message="uploading ${filetoupload} to AmazonS3..."/>
-    <exec workingdir="${spring.basedir}" program="powershell.exe" verbose="true">
-      <arg value=".\s3-nightly-upload.ps1 -scrFolderPath ${package.dir} -srcFilename ${filetoupload}" />
+    <exec workingdir="${spring.basedir}" program="cmd.exe" verbose="true">
+      <arg value="/c | powershell.exe .\s3-nightly-upload.ps1 -scrFolderPath ${package.dir} -srcFilename ${filetoupload}" />
     </exec>
 	
 	<echo message="Deleting outdated files on AmazonS3..."/>
-	<exec workingdir="${spring.basedir}" program="powershell.exe" verbose="true">
-      <arg value=".\s3-nightly-delete-old-files.ps1 -leaveLatest 10" />
+	<exec workingdir="${spring.basedir}" program="cmd.exe" verbose="true">
+      <arg value="/c | powershell.exe .\s3-nightly-delete-old-files.ps1 -leaveLatest 10" />
     </exec>
 
 	
