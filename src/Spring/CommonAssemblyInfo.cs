@@ -15,7 +15,7 @@ using System.Reflection;
 #endif
 [assembly: AssemblyCompany("http://www.springframework.net")]
 [assembly: AssemblyProduct("Spring.NET Framework 1.3.1")]
-[assembly: AssemblyCopyright("Copyright 2002-2010 Spring.NET Framework Team.")]
+[assembly: AssemblyCopyright("Copyright 2002-2011 Spring.NET Framework Team.")]
 [assembly: AssemblyTrademark("Apache License, Version 2.0")]
 [assembly: AssemblyCulture("")]
 
@@ -35,17 +35,17 @@ using System.Reflection;
 // (e.g., add any new ones at the TOP of this construct!)
 
 #if NET_4_0
-[assembly: AssemblyVersion("1.3.1.40001")]
+[assembly: AssemblyVersion("1.3.2.40001")]
 #elif NET_3_5
-[assembly: AssemblyVersion("1.3.1.35001")]
+[assembly: AssemblyVersion("1.3.2.35001")]
 #elif NET_3_0
-[assembly: AssemblyVersion("1.3.1.30001")]
+[assembly: AssemblyVersion("1.3.2.30001")]
 #elif NET_2_0
-[assembly: AssemblyVersion("1.3.1.20001")]
+[assembly: AssemblyVersion("1.3.2.20001")]
 #elif NET_1_1
-[assembly: AssemblyVersion("1.3.1.11001")]
+[assembly: AssemblyVersion("1.3.2.11001")]
 #elif NET_1_0
-[assembly: AssemblyVersion("1.3.1.10001")]
+[assembly: AssemblyVersion("1.3.2.10001")]
 #endif
 
 

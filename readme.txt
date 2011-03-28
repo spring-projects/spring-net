@@ -1,11 +1,11 @@
-THE SPRING.NET FRAMEWORK, Release 1.3.1  (December 10, 2010)
+THE SPRING.NET FRAMEWORK, Release 1.3.2  (April 1, 2011)
 --------------------------------------------------------------------
 http://www.springframework.net/
 
 
 1. INTRODUCTION
 
-The 1.3.1 release of Spring.NET contains
+The 1.3.2 release of Spring.NET contains
 
      * A full featured Inversion of Control container
      * An Aspect Oriented Programming framework
@@ -20,7 +20,7 @@ The 1.3.1 release of Spring.NET contains
      * Portable Service Abstractions
        - Export plain .NET objects via .NET Remoting, Web Service or .NET Serviced Component and create client side proxies based on endpoint URL and service interface.
      * NHibernate Integation
-       - NHibernate 1.0, 1.2, 2.0, 2.1, and 3.0 integration to simplify use of NHibernate and participate in Spring's declarative transaction management functionality.
+       - NHibernate 1.0, 1.2, 2.0, 2.1, 3.0, and 3.1 integration to simplify use of NHibernate and participate in Spring's declarative transaction management functionality.
      * ASP.NET AJAX Integration
        - Exporter to expose plain object on which Dependency Injection and AOP have been applied to JavaScript.
      * NUnit and MSTest integration
@@ -65,6 +65,7 @@ Release contents:
 * "lib/NHibernate20" contains NHibernate 2.0 dlls
 * "lib/NHibernate21" contains NHibernate 2.1 dlls
 * "lib/NHibernate30" contains NHibernate 3.0 dlls
+* "lib/NHibernate31" contains NHibernate 3.1 dlls
 * "doc" contains reference documentation, MSDN-style API help, and the Spring.NET xsd.
 * "examples" contains sample applications.
 * "build-support" contains additonal applications need to build using NAnt as some convenience
@@ -110,6 +111,10 @@ The "bin" directory contains the following distinct dll files for use in applica
 
 * "Spring.Data.NHibernate30" (~90 KB)
 - Contents: NHibernate 3.0 integration
+- Dependencies: Spring.Core, Spring.Aop, Spring.Data, NHibernate
+
+* "Spring.Data.NHibernate31" (~90 KB)
+- Contents: NHibernate 3.1 integration
 - Dependencies: Spring.Core, Spring.Aop, Spring.Data, NHibernate
 
 * "Spring.Services" (~70 KB)
@@ -179,8 +184,9 @@ Documented sample applications can be found in "examples":
 
 VS.NET
 ------
-There are four solution file for different version of VS.NET
+There are five solution file for different version of VS.NET
 
+* Spring.Net.2002.sln for use with VS.NET 2002
 * Spring.Net.2003.sln for use with VS.NET 2003
 * Spring.Net.2005.sln for use with VS.NET 2005
 * Spring.Net.2008.sln for use with VS.NET 2008
@@ -190,10 +196,10 @@ Note:
 When building on Vista/Windows7 with activated UAC, you might get an error:
 
 xcopy
-"C:\Spring.Net\Spring.NET-1.3.0\Spring.NET\test\Spring\Spring.Core.Tests\Spring.Core.Tests.dll.config"
+"C:\Spring.Net\Spring.NET-1.3.2\Spring.NET\test\Spring\Spring.Core.Tests\Spring.Core.Tests.dll.config"
 ..\..\..\..\build\VS.Net.2008\Spring.Core.Tests\Debug\ /y /s /q-Command exited with Code 9009.	Spring.Core.Tests.2008
 
-In this case you need to run Visual Studio with Administrator-permissions.
+In this case you need to run Visual Studio with Administrator-permissions. (note that the first part of this path is an example only)
 
 NAnt
 ----
@@ -204,7 +210,7 @@ To build the source and run the unit tests type
 
 build test
 
-If you want to run the build to create strongly signed assemblies you can generate a key file by executing the following command
+If you want to run the build to create strongly signed assemblies you can generate a key file by executing the following command (assuming that sn.exe is properly on your search path):
 
 sn -k Spring.Net.snk
 
