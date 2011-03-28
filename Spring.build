@@ -598,8 +598,9 @@ Commandline Examples:
     <property name="build-msmq" value="false" overwrite="true" />
     <property name="build-msmq-tests" value="false" overwrite="true" />
     <property name="build-velocity" value="false" overwrite="true" />
+	<property name="build-data" value="true" overwrite="true" />
 	
-	<!-- Do not call compile-test target - only build Spring.Services and Spring.Scheduling.Quartz and related tests in .NET 3.5 -->
+	<!-- Do not call compile-test target - only build the following projects and related tests in .NET 3.5 -->
     <property name="lib.dir" value="${spring.basedir}/lib/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
     <call target="copylibtobin"/>
     <nant buildfile="src/Spring/Spring.Services/Spring.Services.build" target="build" if="${build-services}"/>
@@ -1575,6 +1576,14 @@ Commandline Examples:
 			<include name="*/Spring.Web.Extensions.dll"/>
             <include name="*/Spring.Web.Extensions.xml"/>
             <include name="*/Spring.Web.Extensions.pdb"/>
+			
+			<include name="*/Spring.Data.NHibernate30.dll"/>
+			<include name="*/Spring.Data.NHibernate30.xml"/>
+			<include name="*/Spring.Data.NHibernate30.pdb"/>		  
+		  
+			<include name="*/Spring.Data.NHibernate31.dll"/>
+			<include name="*/Spring.Data.NHibernate31.xml"/>
+			<include name="*/Spring.Data.NHibernate31.pdb"/>		
 			
           </fileset>
         </copy>
