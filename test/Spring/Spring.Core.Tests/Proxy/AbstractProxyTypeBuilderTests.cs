@@ -707,8 +707,10 @@ namespace Spring.Proxy
     {
     }
 
+    [Marker]
     public interface IAnotherMarkerInterface
     {
+        [Marker]
         void MarkerMethod();
     }
 

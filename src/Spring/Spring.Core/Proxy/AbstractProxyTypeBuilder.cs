@@ -362,7 +362,8 @@ namespace Spring.Proxy
         {
             ArrayList attributes = new ArrayList();
 
-            if (this.ProxyTargetAttributes)
+            if (this.ProxyTargetAttributes && 
+                !type.Equals(typeof(object)))
             {
                 // add attributes that apply to the target type
                 attributes.AddRange(ReflectionUtils.GetCustomAttributes(type));
@@ -388,7 +389,8 @@ namespace Spring.Proxy
         {
             ArrayList attributes = new ArrayList();
 
-            if (this.ProxyTargetAttributes)
+            if (this.ProxyTargetAttributes && 
+                !method.DeclaringType.IsInterface)
             {
                 // add attributes that apply to the target method
                 attributes.AddRange(ReflectionUtils.GetCustomAttributes(method));
@@ -427,7 +429,8 @@ namespace Spring.Proxy
         {
             ArrayList attributes = new ArrayList();
 
-            if (this.ProxyTargetAttributes)
+            if (this.ProxyTargetAttributes &&
+                !method.DeclaringType.IsInterface)
             {
                 // add attributes that apply to the target method' return type
                 object[] attrs = method.ReturnTypeCustomAttributes.GetCustomAttributes(false);
@@ -476,7 +479,8 @@ namespace Spring.Proxy
         {
             ArrayList attributes = new ArrayList();
 
-            if (this.ProxyTargetAttributes)
+            if (this.ProxyTargetAttributes &&
+                !method.DeclaringType.IsInterface)
             {
                 // add attributes that apply to the target method's parameter
 #if NET_2_0
