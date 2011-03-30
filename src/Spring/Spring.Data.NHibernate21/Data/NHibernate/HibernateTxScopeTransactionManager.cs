@@ -723,7 +723,21 @@ namespace Spring.Data.NHibernate
             }
             try
             {
-                txObject.SessionHolder.Transaction.Rollback();
+                IDbTransaction adoTx = GetIDbTransaction(txObject.SessionHolder.Transaction);
+
+                if (adoTx != null && adoTx.Connection != null)
+                {
+                    txObject.SessionHolder.Transaction.Rollback();
+                }
+                else
+                {
+                    if (status.Debug)
+                    {
+                        log.Debug("Unable to RollBack Hibernate transaction; connection for Hibernate transaction on Session [" +
+                            txObject.SessionHolder.Session + "] was null");
+                    }
+                }
+                
             }
             catch (HibernateTransactionException ex)
             {
