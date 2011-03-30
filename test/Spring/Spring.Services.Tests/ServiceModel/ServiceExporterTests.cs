@@ -66,15 +66,7 @@ namespace Spring.ServiceModel
                 se = new ServiceExporter();
                 se.ObjectFactory = objectFactory;
             }
-
-
-
-            
-
-
-
         }
-
 
         [Test]
         //SPRNET-1262
@@ -97,7 +89,6 @@ namespace Spring.ServiceModel
                         </property>
                     </object>
                 </objects>";
-
 
             using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(xml)))
             {
@@ -129,6 +120,20 @@ namespace Spring.ServiceModel
         {
             se.ObjectName = "NullConfig";
             se.AfterPropertiesSet();
+        }
+
+        [Test] // SPRNET-1416
+        public void CallProxy()
+        {
+            se.ObjectName = "ProxiesContractInterface";
+            se.TargetName = "service";
+            se.AfterPropertiesSet();
+
+            Type proxyType = se.GetObject() as Type;
+            Assert.IsNotNull(proxyType);
+            IContract proxy = Activator.CreateInstance(proxyType) as IContract;
+            Assert.IsNotNull(proxyType);
+            Assert.AreEqual("1979", proxy.SomeMethod(1979));
         }
 
         [Test]
@@ -355,7 +360,6 @@ namespace Spring.ServiceModel
         //}
 
         #endregion
-
     }
 }
 #endif
