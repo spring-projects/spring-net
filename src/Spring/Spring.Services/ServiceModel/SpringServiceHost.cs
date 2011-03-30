@@ -108,8 +108,8 @@ namespace Spring.ServiceModel
                 return objectFactory.GetObject(serviceName) as Type;
             }
 
-            return new ServiceProxyTypeBuilder(serviceName, objectFactory.GetType(serviceName), useServiceProxyTypeCache)
-                .BuildProxyType(objectFactory);                    
+            return new ServiceProxyTypeBuilder(serviceName, objectFactory, useServiceProxyTypeCache)
+                .BuildProxyType();                    
         }
 
         #endregion

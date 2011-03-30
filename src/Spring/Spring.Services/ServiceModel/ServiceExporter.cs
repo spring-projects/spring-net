@@ -377,8 +377,8 @@ namespace Spring.ServiceModel
         protected virtual void GenerateProxy()
         {
             IProxyTypeBuilder builder = new ConfigurableServiceProxyTypeBuilder(
-                TargetName, objectFactory.GetType(TargetName), this.objectName, _useServiceProxyTypeCache, 
-                Name, Namespace, ConfigurationName, CallbackContract, ProtectionLevel, SessionMode, this.objectFactory);
+                TargetName, this.objectName, this.objectFactory, _useServiceProxyTypeCache, 
+                Name, Namespace, ConfigurationName, CallbackContract, ProtectionLevel, SessionMode);
 
             if (ContractInterface != null)
             {
@@ -409,8 +409,8 @@ namespace Spring.ServiceModel
             private CustomAttributeBuilder serviceContractAttribute;
             private DefaultListableObjectFactory objectFactory;
 
-            public ConfigurableServiceProxyTypeBuilder(string targetName, Type targetType, string objectName, bool useServiceProxyTypeCache, string name, string ns, string configurationName, Type callbackContract, ProtectionLevel protectionLevel, SessionMode sessionMode, DefaultListableObjectFactory objectFactory)
-                : base(targetName, targetType, objectName, useServiceProxyTypeCache)
+            public ConfigurableServiceProxyTypeBuilder(string targetName, string objectName, DefaultListableObjectFactory objectFactory, bool useServiceProxyTypeCache, string name, string ns, string configurationName, Type callbackContract, ProtectionLevel protectionLevel, SessionMode sessionMode)
+                : base(targetName, objectName, objectFactory, useServiceProxyTypeCache)
             {
                 this.objectFactory = objectFactory;
                 if (!StringUtils.HasText(configurationName))
