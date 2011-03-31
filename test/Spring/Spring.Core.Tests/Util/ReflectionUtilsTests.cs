@@ -226,6 +226,13 @@ namespace Spring.Util
             public Foo()
             {
             }
+
+#if NET_2_0
+
+            public void MethodWithNullableIntegerArg(int? nullableInteger)
+            {
+            }
+#endif
         }
 
         #endregion
@@ -637,8 +644,8 @@ namespace Spring.Util
 
         internal class TestClassHavingAttributeWithEnumArraySetInConstructor : IHaveSomeMethod
         {
-            
-            [AttributeWithEnumArraySetInConstructor(new TheTestEnumThing[]{TheTestEnumThing.One, TheTestEnumThing.Two})]
+
+            [AttributeWithEnumArraySetInConstructor(new TheTestEnumThing[] { TheTestEnumThing.One, TheTestEnumThing.Two })]
             public void SomeMethod()
             {
 
@@ -681,7 +688,7 @@ namespace Spring.Util
         {
             public AttributeWithTypeAttribute(Type T)
             {
-                
+
 
 
             }
@@ -919,6 +926,39 @@ namespace Spring.Util
             Assert.AreSame(candidateMethods[1], resolvedMethod);
         }
 
+#if NET_2_0
+
+        [Test]
+        public void GetMethodByArgumentValuesMatchesNullableArgs()
+        {
+            GetMethodByArgumentValuesTarget.DummyArgumentType[] typedArg = new GetMethodByArgumentValuesTarget.DummyArgumentType[] { };
+            GetMethodByArgumentValuesTarget foo = new GetMethodByArgumentValuesTarget(1, typedArg);
+
+            Type type = typeof(GetMethodByArgumentValuesTarget);
+            MethodInfo[] candidateMethods = new MethodInfo[]
+                {
+                    type.GetMethod("MethodWithSimilarArguments", new Type[] {typeof(int), typeof(ICollection)})
+                    , type.GetMethod("MethodWithSimilarArguments", new Type[] {typeof(int), typeof(GetMethodByArgumentValuesTarget.DummyArgumentType[])})
+                    , type.GetMethod("MethodWithSimilarArguments", new Type[] {typeof(int), typeof(object[])})
+                    , type.GetMethod("MethodWithNullableArgument", new Type[] {typeof(int?)})
+                };
+
+            // ensure noone changed our test class
+            Assert.IsNotNull(candidateMethods[0]);
+            Assert.IsNotNull(candidateMethods[1]);
+            Assert.IsNotNull(candidateMethods[2]);
+            Assert.IsNotNull(candidateMethods[3]);
+            Assert.AreEqual("ParamArrayMatch", foo.MethodWithSimilarArguments(1, new object()));
+            Assert.AreEqual("ExactMatch", foo.MethodWithSimilarArguments(1, (GetMethodByArgumentValuesTarget.DummyArgumentType[])typedArg));
+            Assert.AreEqual("AssignableMatch", foo.MethodWithSimilarArguments(1, (ICollection)typedArg));
+            Assert.AreEqual("NullableArgumentMatch", foo.MethodWithNullableArgument(null));
+
+            MethodInfo resolvedMethod = ReflectionUtils.GetMethodByArgumentValues(candidateMethods, new object[] { null });
+            Assert.AreSame(candidateMethods[3], resolvedMethod);
+        }
+
+#endif
+
         [Test]
         public void GetConstructorByArgumentValuesResolvesToExactMatchIfAvailable()
         {
@@ -1150,6 +1190,22 @@ namespace Spring.Util
             Type type = typeof(PublicType).GetNestedType("PrivateNestedType", BindingFlags.NonPublic);
             Assert.IsFalse(ReflectionUtils.IsTypeVisible(type, FRIENDLY_ASSEMBLY_NAME));
         }
+
+        [Test]
+        public void IsTypeNullable_WhenTrue()
+        {
+            Type type = typeof (int?);
+            Assert.That(ReflectionUtils.IsNullableType(type), Is.True);
+        }
+
+        [Test]
+        public void IsTypeNullable_WhenFalse()
+        {
+            Type type = typeof (int);
+            Assert.That(ReflectionUtils.IsNullableType(type), Is.False);
+        }
+
+
 #endif
 
         [Test]
@@ -1227,7 +1283,7 @@ namespace Spring.Util
         public void CanGetFriendlyNamesForGenericTypes()
         {
             Type t = typeof(System.Collections.Generic.List<System.Collections.Generic.Dictionary<string, int>>);
-            
+
             Assert.AreEqual("System.Collections.Generic.List<System.Collections.Generic.Dictionary<string, int>>", ReflectionUtils.GetTypeFriendlyName(t));
         }
 #endif
@@ -1474,6 +1530,12 @@ namespace Spring.Util
         {
             return "AssignableMatch";
         }
+#if NET_2_0
+        public string MethodWithNullableArgument(int? nullableInteger)
+        {
+            return "NullableArgumentMatch";
+        }
+#endif
     }
 
     public sealed class MyCustomAttribute : Attribute

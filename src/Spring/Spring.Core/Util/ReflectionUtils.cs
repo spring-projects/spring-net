@@ -310,12 +310,25 @@ namespace Spring.Util
                         {
                             Type paramType = parameters[i].ParameterType;
                             object paramValue = paramValues[i];
+
+
+#if !NET_2_0
                             if ((paramValue == null && paramType.IsValueType)
                                 || (paramValue != null && !paramType.IsAssignableFrom(paramValue.GetType())))
                             {
                                 isMatch = false;
                                 break;
                             }
+#endif
+
+#if NET_2_0
+                            if ((paramValue == null && paramType.IsValueType && !IsNullableType(paramType))
+                                || (paramValue != null && !paramType.IsAssignableFrom(paramValue.GetType())))
+                            {
+                                isMatch = false;
+                                break;
+                            }
+#endif
                             if (paramValue == null || paramType != paramValue.GetType())
                             {
                                 isExactMatch = false;
@@ -1285,6 +1298,21 @@ namespace Spring.Util
         {
             return IsTypeVisible(type, null);
         }
+
+#if NET_2_0
+
+        /// <summary>
+        /// Determines whether the specified type is nullable.
+        /// </summary>
+        /// <param name="type">The type.</param>
+        /// <returns>
+        /// 	<c>true</c> if the specified type is ullable]; otherwise, <c>false</c>.
+        /// </returns>
+        public static bool IsTypeNullable(Type type)
+        {
+            return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
+        }
+#endif
 
         /// <summary>
         /// Is the supplied <paramref name="type"/> can be accessed 
