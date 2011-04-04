@@ -1133,6 +1133,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Objects\Factory\Config\ConfigurableVariableSourceTests.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Objects\Factory\Config\ConstructorArgumentValuesTests.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

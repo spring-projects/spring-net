@@ -2086,6 +2086,11 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Objects\Factory\Config\ConfigurableVariableSource.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Objects\Factory\Config\ConstructorArgumentValues.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

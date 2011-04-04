@@ -5006,6 +5006,10 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
           <listitem>
             <para><literal>ConnectionStringsVariableSource</literal></para>
           </listitem>
+
+          <listitem>
+            <para><literal>ConfigurableVariableSource</literal></para>
+          </listitem>
         </itemizedlist>
 
         <para>You use this by defining an instance of
