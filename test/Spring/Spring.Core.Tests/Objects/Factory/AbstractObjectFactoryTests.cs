@@ -22,9 +22,12 @@
 
 using System;
 using NUnit.Framework;
+using Spring.Context;
+using Spring.Core.IO;
 using Spring.Expressions;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
+using Spring.Objects.Factory.Xml;
 using Spring.Threading;
 using System.Threading;
 using System.Diagnostics;
@@ -576,6 +579,102 @@ namespace Spring.Objects.Factory
         }
 
     }
+
+    [TestFixture]
+    public class SPRNET_1334
+    {
+        public static AbstractObjectFactory CreateObjectFactory(bool caseSensitive)
+        {
+            return new DefaultListableObjectFactory(caseSensitive);
+        }
+
+        [Test]
+        public void CanDisposeFactoryWhenDependentObjectCallsFactoryInDispose()
+        {
+            AbstractObjectFactory factory = CreateObjectFactory(false);
+            ConfigureObjectFactory(factory as IObjectDefinitionRegistry);
+
+            ParentClass parent = (ParentClass)factory.GetObject("Parent");
+            Assert.That(parent, Is.Not.Null);
+
+            DisposableClass innerObject = (DisposableClass)parent.InnerObject;
+            innerObject.ObjectFactory = factory;
+
+            factory.Dispose();
+
+            Assert.Pass("Test concluded successfully.");
+        }
+
+        private void ConfigureObjectFactory(IObjectDefinitionRegistry factory)
+        {
+            XmlObjectDefinitionReader reader = new XmlObjectDefinitionReader(factory);
+            reader.LoadObjectDefinitions(new StringResource(@"<?xml version='1.0' encoding='UTF-8' ?>
+                <objects xmlns='http://www.springframework.net'
+                          xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+                          xsi:schemaLocation='http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd'>
+
+                      <object id='Parent' type='Spring.Objects.Factory.SPRNET_1334+ParentClass, Spring.Core.Tests'>
+                        <property name='Name' value='Foo!'/>
+			                <property name='InnerObject'>
+				                <object type='Spring.Objects.Factory.SPRNET_1334+DisposableClass, Spring.Core.Tests'/>
+			                </property>
+                      </object>
+<!--
+                      <object id='Parent' type='Spring.Objects.Factory.SPRNET_1334+ParentClass, Spring.Core.Tests'>
+                        <property name='Name' value='Foo!'/>
+			                <property name='InnerObject' ref='Inner'/>
+                      </object>
+
+                      <object id='Inner' type='Spring.Objects.Factory.SPRNET_1334+DisposableClass, Spring.Core.Tests'/>
+-->			          
+                      
+                </objects>
+            "));
+        }
+
+        public class ParentClass
+        {
+            private string _name;
+
+            public string Name
+            {
+                get { return _name; }
+                set { _name = value; }
+            }
+
+            private IDisposable _innerObject;
+
+            public IDisposable InnerObject
+            {
+                get { return _innerObject; }
+                set { _innerObject = value; }
+            }
+        }
+
+        public class DisposableClass : IDisposable
+        {
+            private AbstractObjectFactory _objectFactory;
+            public AbstractObjectFactory ObjectFactory
+            {
+                get { return _objectFactory; }
+                set { _objectFactory = value; }
+            }
+
+            public void Dispose()
+            {
+                Console.WriteLine("DisposableClass.Dispose()");
+                if (ObjectFactory == null)
+                    return;
+
+                object parent = ObjectFactory.GetObject("Parent");
+                if (parent == null)
+                    Console.WriteLine("parent == null");
+            }
+
+        }
+    }
+
+
 #if NET_2_0
     [TestFixture]
     public class SPRNET_1338

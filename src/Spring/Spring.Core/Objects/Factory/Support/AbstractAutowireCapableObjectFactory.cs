@@ -446,11 +446,23 @@ namespace Spring.Objects.Factory.Support
         /// </remarks>
         public override void Dispose()
         {
+            //TODO: fix the calls to GetObject(...) etc. so that they are invalid during container shutdown rather than attempting to resolve
+            //  objects and permitting calling code to even get this far; considered too invasive a breaking change for 1.3.2; recommend impl
+            //  of this change for the 2.0 release
+
             base.Dispose();
-            foreach (object o in DisposableInnerObjects)
+
+            //have to clone the collection before iterating it to avoid arbitrary code in the objects' Dispose()
+            // that might permit re-entering the DisposableInnerObjects collections during the iteration to destroy them
+            // see https://jira.springframework.org/browse/SPRNET-1334
+            
+            ISet clone = (ISet) DisposableInnerObjects.Clone();
+
+            foreach (object o in clone)
             {
                 DestroyObject(string.Format(CultureInfo.InvariantCulture, "(Inner object of Type '{0}')", o.GetType().FullName), o);
             }
+
             DisposableInnerObjects.Clear();
         }
 
