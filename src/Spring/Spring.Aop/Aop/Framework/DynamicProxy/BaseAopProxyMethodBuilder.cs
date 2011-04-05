@@ -76,8 +76,10 @@ namespace Spring.Aop.Framework.DynamicProxy
         {
             if (method.IsVirtual && !method.IsFinal)
             {
+                string methodId = GenerateMethodCacheFieldId(method);
+
                 // generate proxy method
-                MethodBuilder baseMethod = typeBuilder.DefineMethod("proxy_" + method.Name,
+                MethodBuilder baseMethod = typeBuilder.DefineMethod("proxy_" + methodId,
                     MethodAttributes.Public | MethodAttributes.HideBySig,
                     CallingConventions.Standard,
                     method.ReturnType, ReflectionUtils.GetParameterTypes(method));
@@ -99,7 +101,6 @@ namespace Spring.Aop.Framework.DynamicProxy
                 localIL.Emit(OpCodes.Ret);
 
                 // create static field that will cache proxy method
-                string methodId = GenerateMethodCacheFieldId(method);
                 onProxyTargetMethods.Add(methodId, method);
 
                 onProxyTargetMethodCacheField = typeBuilder.DefineField(

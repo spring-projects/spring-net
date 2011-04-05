@@ -166,6 +166,25 @@ namespace Spring.Aop.Framework.DynamicProxy
             Assert.AreEqual(1, ni.Count);
         }
 
+        [Test]
+        // SPRNET-1429
+        public void InterceptVirtualGenericMethodWithGenericParameter()
+        {
+            NopInterceptor ni = new NopInterceptor();
+
+            AdvisedSupport advised = new AdvisedSupport();
+            advised.Target = new AnotherTestObject();
+            advised.AddAdvice(ni);
+
+            object proxy = CreateProxy(advised);
+            //DynamicProxyManager.SaveAssembly();
+
+            Assert.IsTrue(proxy is AnotherTestObject);
+            AnotherTestObject proxiedClass = proxy as AnotherTestObject;
+            Assert.AreEqual("Hello", proxiedClass.AnotherGenericMethod<string>("Hello"));
+            Assert.AreEqual(1, ni.Count);
+        }
+
         public class AnotherTestObject
         {
             public virtual Type GenericMethod<T>()
@@ -177,6 +196,11 @@ namespace Spring.Aop.Framework.DynamicProxy
             public virtual Type GenericMethod()
             {
                 return typeof(string);
+            }
+
+            public virtual T AnotherGenericMethod<T>(T arg)
+            {
+                return arg;
             }
         }
 #endif

@@ -26,7 +26,6 @@ using System.Runtime.Serialization;
 using System.Reflection;
 using System.Reflection.Emit;
 
-using Spring.Core;
 using Spring.Proxy;
 using Spring.Util;
 
@@ -182,39 +181,11 @@ namespace Spring.Aop.Framework.DynamicProxy
             foreach (DictionaryEntry entry in proxyMethods)
             {
                 FieldInfo field = proxyType.GetField((string)entry.Key, BindingFlags.NonPublic | BindingFlags.Static);
-                field.SetValue(proxyType, FindProxyMethod(proxyType, (MethodInfo)entry.Value));
+                MethodInfo proxyMethod = proxyType.GetMethod("proxy_" + (string)entry.Key, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                field.SetValue(proxyType, proxyMethod);
             }
 
             return proxyType;
-        }
-
-        private MethodInfo FindProxyMethod(Type targetType, MethodInfo method)
-        {
-            ParameterInfo[] parameters = method.GetParameters();
-
-            ComposedCriteria searchCriteria = new ComposedCriteria();
-            searchCriteria.Add(new MethodNameMatchCriteria("proxy_" + method.Name));
-            searchCriteria.Add(new MethodParametersCountCriteria(parameters.Length));
-#if NET_2_0
-            searchCriteria.Add(new MethodGenericArgumentsCountCriteria(
-                method.GetGenericArguments().Length));
-#endif
-            searchCriteria.Add(new MethodParametersCriteria(ReflectionUtils.GetParameterTypes(parameters)));
-
-            MemberInfo[] matchingMethods = targetType.FindMembers(
-                MemberTypes.Method,
-                BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic,
-                new MemberFilter(new CriteriaMemberFilter().FilterMemberByCriteria),
-                searchCriteria);
-
-            if (matchingMethods != null && matchingMethods.Length == 1)
-            {
-                return matchingMethods[0] as MethodInfo;
-            }
-            else
-            {
-                throw new AmbiguousMatchException();
-            }
         }
 
         #endregion
