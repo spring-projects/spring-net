@@ -6,7 +6,7 @@
 		<title>Spring.Data</title>
 		<projectUrl>http://www.springframework.net/</projectUrl>
 		<licenseUrl>http://www.springframework.net/license.html</licenseUrl>
-		<version>SPRING_VERSION</version>
+		<version>0.0.0</version>
 		<authors>SpringSource</authors>
 		<description>Interfaces and classes that provide Data access support in Spring.Net</description>
 		<summary>Interfaces and classes that provide Data access support in Spring.Net</summary>

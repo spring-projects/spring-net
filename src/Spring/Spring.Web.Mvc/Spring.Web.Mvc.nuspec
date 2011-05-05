@@ -5,7 +5,7 @@
 		<id>Spring.Web.Mvc</id>
 		<projectUrl>http://www.springframework.net/</projectUrl>
 		<licenseUrl>http://www.springframework.net/license.html</licenseUrl>
-		<version>SPRING_VERSION</version>
+		<version>0.0.0</version>
 		<authors>SpringSource</authors>
 		<description></description>
 		<summary></summary>
