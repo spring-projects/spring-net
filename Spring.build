@@ -1925,7 +1925,7 @@ Commandline Examples:
 
 		
     
-    <exec program="${tool.dir}\NuGet\NuGet.exe" workingdir="${spring.basedir}" verbose="true" failonerror="false">
+    <exec program="${tool.dir}\NuGet\NuGet.exe" workingdir="${spring.basedir}" verbose="true">
       <arg value="pack" />
       <arg value="${filename}" />
 	  <arg value="-Version" />
@@ -1939,7 +1939,7 @@ Commandline Examples:
 
 <target name="update-nuspec-metadata">  
 
-	<property name="nuget.package.dir" value="${spring.basedir}\NuGet-Packages" />
+	<property name="nuget.package.dir" value="${spring.basedir}\nuget-packages" />
 
 	<call target="clean-nuget-package-dir" />
 	<call target="check-package-version" />
@@ -1963,6 +1963,7 @@ Commandline Examples:
 			<!--
 				update the version number of the dependent packages; assumes all Spring.* packages are updated at the same time to the same version
 				NOTE: must set fail-on-errror to false b/c Spring.Core (ex.) has no Spring.* deps and so this XPATH expr. won't find a match in that case
+				       and so would fail this XMLPOKE operation otherwise
 			-->
 			<xmlpoke file="${filename}" xpath="/n:package/n:metadata/n:dependencies/n:dependency[starts-with(@id, 'Spring.')]/@version" value="${package.version}" failonerror="false" >
 				<namespaces>

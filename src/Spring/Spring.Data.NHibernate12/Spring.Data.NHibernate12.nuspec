@@ -1,22 +1,37 @@
 <?xml version="1.0"?>
-
 <package xmlns="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd">
-	<metadata>
-		<id>Spring.Data.NHibernate12</id>
-		<title>Spring.Net NHibernate 1.2 support</title>
-		<projectUrl>http://www.springframework.net/</projectUrl>
-		<licenseUrl>http://www.springframework.net/license.html</licenseUrl>
-		<version>0.0.0</version>
-		<authors>SpringSource</authors>
-		<description>Interfaces and classes that provide NHibernate 1.2 support in Spring.Net</description>
-		<summary>Interfaces and classes that provide NHibernate 1.2 support in Spring.Net</summary>
-		<language>en-US</language>
-		<dependencies>
-			<dependency id="Common.Logging" version="1.2.0" />
-			<dependency id="NHibernate" version="1.2.1" />
-			<dependency id="Spring.Aop" version="SPRING_VERSION" />
-			<dependency id="Spring.Core" version="SPRING_VERSION" />
-			<dependency id="Spring.Data" version="SPRING_VERSION" />
-		</dependencies>
-	</metadata>
+  <metadata>
+    <id>Spring.Data.NHibernate12</id>
+    <title>Spring.Net NHibernate 1.2 support</title>
+    <projectUrl>http://www.springframework.net/</projectUrl>
+    <licenseUrl>http://www.springframework.net/license.html</licenseUrl>
+    <iconUrl>http://springframework.net/images/SpringSource_Leaves32x32.png</iconUrl>
+    <version>0.0.0</version>
+    <!-- this value is a placeholder replaced by build script -->
+    <authors>SpringSource</authors>
+    <description>Interfaces and classes that provide NHibernate 1.2 support in Spring.Net</description>
+    <summary>Interfaces and classes that provide NHibernate 1.2 support in Spring.Net</summary>
+    <language>en-US</language>
+    <dependencies>
+      <dependency id="Common.Logging" version="1.2.0" />
+      <dependency id="NHibernate" version="1.2.1" />
+      <dependency id="Spring.Aop" version="1.3.1" />
+      <dependency id="Spring.Core" version="1.3.1" />
+      <dependency id="Spring.Data" version="1.3.1" />
+    </dependencies>
+  </metadata>
+  <files>
+    <file src="..\..\..\build\net\1.1\release\Spring.Data.NHibernate12.dll" target="lib\net11" />
+    <file src="..\..\..\build\net\1.1\release\Spring.Data.NHibernate12.pdb" target="lib\net11" />
+    <file src="..\..\..\build\net\1.1\release\Spring.Data.NHibernate12.xml" target="lib\net11" />
+    <file src="..\..\..\build\net\2.0\release\Spring.Data.NHibernate12.dll" target="lib\net20" />
+    <file src="..\..\..\build\net\2.0\release\Spring.Data.NHibernate12.pdb" target="lib\net20" />
+    <file src="..\..\..\build\net\2.0\release\Spring.Data.NHibernate12.xml" target="lib\net20" />
+    <file src="..\..\..\build\net\3.0\release\Spring.Data.NHibernate12.dll" target="lib\net30" />
+    <file src="..\..\..\build\net\3.0\release\Spring.Data.NHibernate12.pdb" target="lib\net30" />
+    <file src="..\..\..\build\net\3.0\release\Spring.Data.NHibernate12.xml" target="lib\net30" />
+    <file src="..\..\..\build\net\3.5\release\Spring.Data.NHibernate12.dll" target="lib\net35" />
+    <file src="..\..\..\build\net\3.5\release\Spring.Data.NHibernate12.pdb" target="lib\net35" />
+    <file src="..\..\..\build\net\3.5\release\Spring.Data.NHibernate12.xml" target="lib\net35" />
+  </files>
 </package>

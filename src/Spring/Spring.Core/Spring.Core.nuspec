@@ -6,7 +6,9 @@
 		<title>Spring.Core</title>
 		<projectUrl>http://www.springframework.net/</projectUrl>
 		<licenseUrl>http://www.springframework.net/license.html</licenseUrl>
-		<version>0.0.0</version>
+    <iconUrl>http://springframework.net/images/SpringSource_Leaves32x32.png</iconUrl>
+    <version>0.0.0</version>
+    <!-- this value is a placeholder replaced by build script -->
 		<authors>SpringSource</authors>
 		<description>Core functionality for Spring.Net IoC container</description>
 		<summary>Core functionality for Spring.Net IoC container</summary>
@@ -15,4 +17,21 @@
 			<dependency id="Common.Logging" version="1.2.0" />
 		</dependencies>
 	</metadata>
+ <files>
+    <file src="..\..\..\build\net\1.1\release\Spring.Core.dll" target="lib\net11" />
+    <file src="..\..\..\build\net\1.1\release\Spring.Core.pdb" target="lib\net11" />
+    <file src="..\..\..\build\net\1.1\release\Spring.Core.xml" target="lib\net11" />
+    <file src="..\..\..\build\net\2.0\release\Spring.Core.dll" target="lib\net20" />
+    <file src="..\..\..\build\net\2.0\release\Spring.Core.pdb" target="lib\net20" />
+    <file src="..\..\..\build\net\2.0\release\Spring.Core.xml" target="lib\net20" />
+    <file src="..\..\..\build\net\3.0\release\Spring.Core.dll" target="lib\net30" />
+    <file src="..\..\..\build\net\3.0\release\Spring.Core.pdb" target="lib\net30" />
+    <file src="..\..\..\build\net\3.0\release\Spring.Core.xml" target="lib\net30" />
+    <file src="..\..\..\build\net\3.5\release\Spring.Core.dll" target="lib\net35" />
+    <file src="..\..\..\build\net\3.5\release\Spring.Core.pdb" target="lib\net35" />
+    <file src="..\..\..\build\net\3.5\release\Spring.Core.xml" target="lib\net35" />
+    <file src="..\..\..\build\net\4.0\release\Spring.Core.dll" target="lib\net40" />
+    <file src="..\..\..\build\net\4.0\release\Spring.Core.pdb" target="lib\net40" />
+    <file src="..\..\..\build\net\4.0\release\Spring.Core.xml" target="lib\net40" />
+  </files>	
 </package>
