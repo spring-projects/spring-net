@@ -120,7 +120,15 @@
     <Compile Include="Collections\DictionarySet.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Collections\Generic\DictionarySet.cs" />
+    <Compile Include="Collections\Generic\HashedSet.cs" />
+    <Compile Include="Collections\Generic\ImmutableSet.cs" />
+    <Compile Include="Collections\Generic\ISet.cs" />
+    <Compile Include="Collections\Generic\OrderedSet.cs" />
     <Compile Include="Collections\Generic\ReadOnlyDictionary.cs" />
+    <Compile Include="Collections\Generic\Set.cs" />
+    <Compile Include="Collections\Generic\SortedSet.cs" />
+    <Compile Include="Collections\Generic\SynchronizedSet.cs" />
     <Compile Include="Collections\HashedSet.cs">
       <SubType>Code</SubType>
     </Compile>

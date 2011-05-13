@@ -39,7 +39,7 @@ namespace Spring.Objects.Factory.Xml
 	/// <author>Rick Evans</author>
 	/// <author>Mark Pollack (.NET)</author>
 	[TestFixture]
-    [Ignore("SPRNET-1242 Support for collection merging with generic collections")]
+    [Description("SPRNET-1242 Support for collection merging with generic collections")]
 	public class CollectionMergingGenericTests
 	{
 	    private DefaultListableObjectFactory objectFactory;
