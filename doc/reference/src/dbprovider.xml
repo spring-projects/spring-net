@@ -278,7 +278,19 @@
       <listitem>
         <para><literal>SQLite-1.0.65</literal> (aliased to System.Data.SQLite)
         - SQLite provider 1.0.65 for .NET Framework 2.0</para>
+      </listitem>
 
+      <listitem>
+        <para><literal>SQLite-1.0.65</literal> - SQLite provider 1.0.66 for
+        .NET Framework 2.0</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>SQLite-1.0.72</literal> - SQLite provider 1.0.72 for
+        .NET Framework 2.0 from http://sqlite.phxsoftware.com/ </para>
+      </listitem>
+
+      <listitem>
         <note>
           <para>The default parameter prefix used in SQLite is : and not @,
           please write your SQL accordingly or define a provider definition

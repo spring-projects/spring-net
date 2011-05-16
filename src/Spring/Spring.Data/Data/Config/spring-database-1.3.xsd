@@ -247,6 +247,16 @@
               <xs:documentation>SQLite 1.0.65 provider</xs:documentation>
             </xs:annotation>
           </xs:enumeration>
+          <xs:enumeration value="SQLite-1.0.66">
+            <xs:annotation>
+              <xs:documentation>SQLite 1.0.66 provider</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="SQLite-1.0.72">
+            <xs:annotation>
+              <xs:documentation>SQLite 1.0.72 provider</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>          
           <xs:enumeration value="System.Data.SQLite">
             <xs:annotation>
               <xs:documentation>SQLite 1.0.65 provider</xs:documentation>
