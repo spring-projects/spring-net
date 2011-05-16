@@ -5,9 +5,6 @@
 -->
 <objects xmlns='http://www.springframework.net'>
 
-	<!-- TODO Provide Schema to make it less verbose to configure -->
-  
-
   <!-- SQL SERVER -->
   
   <object id="SqlServer-1.1" type="Spring.Data.Common.DbProvider, Spring.Data" singleton="false">
@@ -1402,7 +1399,7 @@
         <constructor-arg name="bindByName" value="true"/>
         <!-- this is only true for .net 1.1 kept it here just in case we want to revert back to this strategy for
              obtaining error codes-->
-        <constructor-arg name="errorCodeExceptionExpression" value="Number.ToString()"/>
+        <constructor-arg name="errorCodeExceptionExpression" value="ErrorCode.ToString('D')"/>
 
         <property name="ErrorCodes.badSqlGrammarCodes">
           <value></value>
@@ -1588,9 +1585,185 @@
     </constructor-arg>
   </object>
 
+  <!-- INFORMIX -->
+  <!-- initial version based on CSDK 3.50.TC7 -->
+  <object id="IfxOdbc" type="Spring.Data.Common.DbProvider, Spring.Data" singleton="false">
+    <constructor-arg name="dbMetaData">
+      <object type="Spring.Data.Common.DbMetadata">
+        <constructor-arg name="productName" value="Informix, ODBC provider in framework .NET V2"/>
+        <constructor-arg name="assemblyName" value="System.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+        <constructor-arg name="connectionType" value="System.Data.Odbc.OdbcConnection, System.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"/>
+        <constructor-arg name="commandType" value="System.Data.Odbc.OdbcCommand, System.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+        <constructor-arg name="parameterType" value="System.Data.Odbc.OdbcParameter, System.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+        <constructor-arg name="dataAdapterType" value="System.Data.Odbc.OdbcDataAdapter, System.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+        <constructor-arg name="commandBuilderType" value="System.Data.Odbc.OdbcCommandBuilder, System.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+        <constructor-arg name="commandBuilderDeriveParametersMethod" value="DeriveParameters"/>
+        <constructor-arg name="parameterDbType" value="System.Data.Odbc.OdbcType, System.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+        <constructor-arg name="parameterDbTypeProperty" value="OdbcType"/>
+        <constructor-arg name="parameterIsNullableProperty" value="IsNullable"/>
+        <constructor-arg name="parameterNamePrefix" value="?"/>
+        <constructor-arg name="exceptionType" value="System.Data.Odbc.OdbcException, System.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"/>
+        <constructor-arg name="useParameterNamePrefixInParameterCollection" value="false"/>
+        <constructor-arg name="useParameterPrefixInSql" value="false"/>
+        <constructor-arg name="bindByName" value="false"/>
+        <constructor-arg name="errorCodeExceptionExpression" value="Errors[0].NativeError.ToString()"/>
+        <property name="ErrorCodes.BadSqlGrammarCodes">
+          <value>
+            -200, -201, -202, -203, -204, -205, -206, -217, -218, -220, -223, -235, -236, -253,
+            -282, -283, -294, -300, -324, -681, -696, -11012, -11021, -11035, -11038
+          </value>
+        </property>
+        <property name="ErrorCodes.PermissionDeniedCodes">
+          <value>-272, -273, -274, -275, -329, -387, -388, -389, -706</value>
+        </property>
+        <property name="ErrorCodes.DuplicateKeyCodes">
+          <value>-100, -108, -239, -268</value>
+        </property>
+        <property name="ErrorCodes.DataAccessResourceFailureCodes">
+          <value>-284, -306, -674</value>
+        </property>
+        <property name="ErrorCodes.DataIntegrityViolationCodes">
+          <value>
+            -391, -691, -692, -746, -1200, -1201, -1202, -1204, -1205, -1206, -1207, -1213, -1214, -1215, -1226,
+            -11003, -11023, -11025, -11027, -11028, -11029, -11030, -23103, -23104, -23105
+          </value>
+        </property>
+        <property name="ErrorCodes.TransientAccessResourceFailureCodes">
+          <value>-213, -221, -458, -908, -11015, -11017, -11020, -11301, -11353, -11354</value>
+        </property>
+        <property name="ErrorCodes.CannotAcquireLockCodes">
+          <value>
+            -106, -107, -113, -134, -144, -154, -233, -243, -244, -245, -246, -263, -289, -347, -378
+          </value>
+        </property>
+        <property name="ErrorCodes.CannotSerializeTransactionCodes">
+          <value>-124, -128, -237, -238, -241, -248, -255, -256, -278, -535, -627, -628, -629, -715, -716, -11037</value>
+        </property>
+        <property name="ErrorCodes.DeadlockLoserCodes">
+          <value>-143</value>
+        </property>
+      </object>
+    </constructor-arg>
+  </object>
 
-  <!-- ODBC -->
+  <object id="IfxSQLI-3.0.0.2" type="Spring.Data.Common.DbProvider, Spring.Data" singleton="false">
+    <constructor-arg name="dbMetaData">
+      <object type="Spring.Data.Common.DbMetadata">
+        <constructor-arg name="productName" value="Informix, old native provider"/>
+        <constructor-arg name="assemblyName" value="IBM.Data.Informix, Version=3.0.0.2, Culture=neutral, PublicKeyToken=7c307b91aa13d208" />
+        <constructor-arg name="connectionType" value="IBM.Data.Informix.IfxConnection, IBM.Data.Informix, Version=3.0.0.2, Culture=neutral, PublicKeyToken=7c307b91aa13d208"/>
+        <constructor-arg name="commandType" value="IBM.Data.Informix.IfxCommand, IBM.Data.Informix, Version=3.0.0.2, Culture=neutral, PublicKeyToken=7c307b91aa13d208" />
+        <constructor-arg name="parameterType" value="IBM.Data.Informix.IfxParameter, IBM.Data.Informix, Version=3.0.0.2, Culture=neutral, PublicKeyToken=7c307b91aa13d208" />
+        <constructor-arg name="dataAdapterType" value="IBM.Data.Informix.IfxDataAdapter, IBM.Data.Informix, Version=3.0.0.2, Culture=neutral, PublicKeyToken=7c307b91aa13d208" />
+        <constructor-arg name="commandBuilderType" value="IBM.Data.Informix.IfxCommandBuilder, IBM.Data.Informix, Version=3.0.0.2, Culture=neutral, PublicKeyToken=7c307b91aa13d208" />
+        <constructor-arg name="commandBuilderDeriveParametersMethod" value="DeriveParameters"/>
+        <constructor-arg name="parameterDbType" value="IBM.Data.Informix.IfxType, IBM.Data.Informix, Version=3.0.0.2, Culture=neutral, PublicKeyToken=7c307b91aa13d208" />
+        <constructor-arg name="parameterDbTypeProperty" value="IfxType"/>
+        <constructor-arg name="parameterIsNullableProperty" value="IsNullable"/>
+        <constructor-arg name="parameterNamePrefix" value="?"/>
+        <constructor-arg name="exceptionType" value="IBM.Data.Informix.IfxException, IBM.Data.Informix, Version=3.0.0.2, Culture=neutral, PublicKeyToken=7c307b91aa13d208"/>
+        <constructor-arg name="useParameterNamePrefixInParameterCollection" value="false"/>
+        <constructor-arg name="useParameterPrefixInSql" value="false"/>
+        <constructor-arg name="bindByName" value="false"/>
+        <constructor-arg name="errorCodeExceptionExpression" value="Errors[0].NativeError.ToString()"/>
+        <property name="ErrorCodes.BadSqlGrammarCodes">
+          <value>
+            -200, -201, -202, -203, -204, -205, -206, -217, -218, -220, -223, -235, -236, -253,
+            -282, -283, -294, -300, -324, -681, -696, -11012, -11021, -11035, -11038
+          </value>
+        </property>
+        <property name="ErrorCodes.PermissionDeniedCodes">
+          <value>-272, -273, -274, -275, -329, -387, -388, -389, -706</value>
+        </property>
+        <property name="ErrorCodes.DuplicateKeyCodes">
+          <value>-100, -108, -239, -268</value>
+        </property>
+        <property name="ErrorCodes.DataAccessResourceFailureCodes">
+          <value>-284, -306, -674</value>
+        </property>
+        <property name="ErrorCodes.DataIntegrityViolationCodes">
+          <value>
+            -391, -691, -692, -746, -1200, -1201, -1202, -1204, -1205, -1206, -1207, -1213, -1214, -1215, -1226,
+            -11003, -11023, -11025, -11027, -11028, -11029, -11030, -23103, -23104, -23105
+          </value>
+        </property>
+        <property name="ErrorCodes.TransientAccessResourceFailureCodes">
+          <value>-213, -221, -458, -908, -11015, -11017, -11020, -11301, -11353, -11354</value>
+        </property>
+        <property name="ErrorCodes.CannotAcquireLockCodes">
+          <value>
+            -106, -107, -113, -134, -144, -154, -233, -243, -244, -245, -246, -263, -289, -347, -378
+          </value>
+        </property>
+        <property name="ErrorCodes.CannotSerializeTransactionCodes">
+          <value>-124, -128, -237, -238, -241, -248, -255, -256, -278, -535, -627, -628, -629, -715, -716, -11037</value>
+        </property>
+        <property name="ErrorCodes.DeadlockLoserCodes">
+          <value>-143</value>
+        </property>
+      </object>
+    </constructor-arg>
+  </object>
 
+  <object id="IfxDRDA-9.0.0.2" type="Spring.Data.Common.DbProvider, Spring.Data" singleton="false">
+    <constructor-arg name="dbMetaData">
+      <object type="Spring.Data.Common.DbMetadata">
+        <constructor-arg name="productName" value="Informix, IBM.Data.DB2 9.7"/>
+        <constructor-arg name="assemblyName" value="IBM.Data.DB2, Version=9.0.0.2, Culture=neutral, PublicKeyToken=7c307b91aa13d208"/>
+        <constructor-arg name="connectionType" value="IBM.Data.DB2.DB2Connection, IBM.Data.DB2, Version=9.0.0.2, Culture=neutral, PublicKeyToken=7c307b91aa13d208"/>
+        <constructor-arg name="commandType" value="IBM.Data.DB2.DB2Command, IBM.Data.DB2, Version=9.0.0.2, Culture=neutral, PublicKeyToken=7c307b91aa13d208"/>
+        <constructor-arg name="parameterType" value="IBM.Data.DB2.DB2Parameter, IBM.Data.DB2, Version=9.0.0.2, Culture=neutral, PublicKeyToken=7c307b91aa13d208"/>
+        <constructor-arg name="dataAdapterType" value="IBM.Data.DB2.DB2DataAdapter, IBM.Data.DB2, Version=9.0.0.2, Culture=neutral, PublicKeyToken=7c307b91aa13d208"/>
+        <constructor-arg name="commandBuilderType" value="IBM.Data.DB2.DB2CommandBuilder, IBM.Data.DB2, Version=9.0.0.2, Culture=neutral, PublicKeyToken=7c307b91aa13d208"/>
+        <constructor-arg name="commandBuilderDeriveParametersMethod" value="DeriveParameters"/>
+        <constructor-arg name="parameterDbType" value="IBM.Data.DB2.DB2Type, IBM.Data.DB2, Version=9.0.0.2, Culture=neutral, PublicKeyToken=7c307b91aa13d208"/>
+        <constructor-arg name="parameterDbTypeProperty" value="DB2Type"/>
+        <constructor-arg name="parameterIsNullableProperty" value="IsNullable"/>
+        <constructor-arg name="parameterNamePrefix" value="@"/>
+        <constructor-arg name="exceptionType" value="IBM.Data.DB2.DB2Exception, IBM.Data.DB2, Version=9.0.0.2, Culture=neutral, PublicKeyToken=7c307b91aa13d208"/>
+        <constructor-arg name="useParameterNamePrefixInParameterCollection" value="true"/>
+        <constructor-arg name="useParameterPrefixInSql" value="true"/>
+        <constructor-arg name="bindByName" value="true"/>
+        <constructor-arg name="errorCodeExceptionExpression" value="Errors[0].NativeError.ToString()"/>
+        <property name="ErrorCodes.BadSqlGrammarCodes">
+          <value>
+            -200, -201, -202, -203, -204, -205, -206, -217, -218, -220, -223, -235, -236, -253,
+            -282, -283, -294, -300, -324, -681, -696, -11012, -11021, -11035, -11038
+          </value>
+        </property>
+        <property name="ErrorCodes.PermissionDeniedCodes">
+          <value>-272, -273, -274, -275, -329, -387, -388, -389, -706</value>
+        </property>
+        <property name="ErrorCodes.DuplicateKeyCodes">
+          <value>-100, -108, -239, -268</value>
+        </property>
+        <property name="ErrorCodes.DataAccessResourceFailureCodes">
+          <value>-284, -306, -674</value>
+        </property>
+        <property name="ErrorCodes.DataIntegrityViolationCodes">
+          <value>
+            -391, -691, -692, -746, -1200, -1201, -1202, -1204, -1205, -1206, -1207, -1213, -1214, -1215, -1226,
+            -11003, -11023, -11025, -11027, -11028, -11029, -11030, -23103, -23104, -23105
+          </value>
+        </property>
+        <property name="ErrorCodes.TransientAccessResourceFailureCodes">
+          <value>-213, -221, -458, -908, -11015, -11017, -11020, -11301, -11353, -11354</value>
+        </property>
+        <property name="ErrorCodes.CannotAcquireLockCodes">
+          <value>
+            -106, -107, -113, -134, -144, -154, -233, -243, -244, -245, -246, -263, -289, -347, -378
+          </value>
+        </property>
+        <property name="ErrorCodes.CannotSerializeTransactionCodes">
+          <value>-124, -128, -237, -238, -241, -248, -255, -256, -278, -535, -627, -628, -629, -715, -716, -11037</value>
+        </property>
+        <property name="ErrorCodes.DeadlockLoserCodes">
+          <value>-143</value>
+        </property>
+      </object>
+    </constructor-arg>
+  </object> 
+  
   <object id="Odbc-1.1" type="Spring.Data.Common.DbProvider, Spring.Data" singleton="false">
     <constructor-arg name="dbMetaData">
       <object type="Spring.Data.Common.DbMetadata">

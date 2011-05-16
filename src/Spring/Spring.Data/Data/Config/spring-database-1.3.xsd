@@ -297,6 +297,21 @@
               <xs:documentation>InterSystems CacheConnection Version 2.0.0.1 in framework .NET V2</xs:documentation>
             </xs:annotation>
           </xs:enumeration>
+          <xs:enumeration value="IfxOdbc">
+            <xs:annotation>
+              <xs:documentation>Informix via Odbc</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="IfxSQLI">
+            <xs:annotation>
+              <xs:documentation>Informix old native driver</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>
+          <xs:enumeration value="IfxDRDA">
+            <xs:annotation>
+              <xs:documentation>Informix DRDA (DB2) driver</xs:documentation>
+            </xs:annotation>
+          </xs:enumeration>          
         </xs:restriction>
       </xs:simpleType>
     </xs:union>

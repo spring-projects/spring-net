@@ -322,6 +322,21 @@
         <literal>InterSystems.Data.CacheClient</literal>) - Cache provider
         Version 2.0.0.1 in framework .NET V2</para>
       </listitem>
+
+      <listitem>
+        <para><literal>IfxOdbc</literal> - Informix, ODBC provider in
+        framework .NET V2</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>IfxSQLI-3.0.0.2</literal> - Informix, old native
+        provider</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>IfxDRDA-9.0.0.2</literal> - Informix, IBM.Data.DB2
+        9.7</para>
+      </listitem>
     </itemizedlist>
 
     <note>
