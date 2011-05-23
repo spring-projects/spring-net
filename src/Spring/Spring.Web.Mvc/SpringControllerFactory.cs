@@ -116,7 +116,7 @@ namespace Spring.Web.Mvc
                 var controllers = ApplicationContext.GetObjectsOfType(controllerType);
                 if (controllers.Count > 0)
                 {
-                    controller = (IController)controllers.Cast<DictionaryEntry>().First<DictionaryEntry>().Value;
+                    controller = (IController)controllers.Cast<DictionaryEntry>().First().Value;
                 }
             }
             else
