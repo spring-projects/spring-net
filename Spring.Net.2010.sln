@@ -82,6 +82,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Web.Mvc3.2010", "src
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Web.Mvc3.Tests.2010", "test\Spring\Spring.Web.Mvc3.Tests\Spring.Web.Mvc3.Tests.2010.csproj", "{1E8E7C0A-4474-44F6-AA67-FABB40FA9784}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Testing.Microsoft.2010", "src\Spring\Spring.Testing.Microsoft\Spring.Testing.Microsoft.2010.csproj", "{2E10A8D3-B8FF-4699-90B8-E621659C58DD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|.NET = Debug|.NET
@@ -482,6 +484,16 @@ Global
 		{1E8E7C0A-4474-44F6-AA67-FABB40FA9784}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1E8E7C0A-4474-44F6-AA67-FABB40FA9784}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{1E8E7C0A-4474-44F6-AA67-FABB40FA9784}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{2E10A8D3-B8FF-4699-90B8-E621659C58DD}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{2E10A8D3-B8FF-4699-90B8-E621659C58DD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E10A8D3-B8FF-4699-90B8-E621659C58DD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E10A8D3-B8FF-4699-90B8-E621659C58DD}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{2E10A8D3-B8FF-4699-90B8-E621659C58DD}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{2E10A8D3-B8FF-4699-90B8-E621659C58DD}.Release|.NET.ActiveCfg = Release|Any CPU
+		{2E10A8D3-B8FF-4699-90B8-E621659C58DD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E10A8D3-B8FF-4699-90B8-E621659C58DD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E10A8D3-B8FF-4699-90B8-E621659C58DD}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{2E10A8D3-B8FF-4699-90B8-E621659C58DD}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
