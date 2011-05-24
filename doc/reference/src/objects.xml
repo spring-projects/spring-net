@@ -5335,7 +5335,7 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
       &lt;section name="objects" type="Spring.Context.Support.DefaultSectionHandler, Spring.Core" /&gt;
         
       &lt;section name="parsers" type="Spring.Context.Support.NamespaceParsersSectionHandler, Spring.Core"/&gt; 
-      &lt;section name="resources" type="Spring.Context.Support.<literal>ResourceHandlersSectionHandler</literal>, Spring.Core"/&gt;         
+      &lt;section name="resourceHandlers" type="Spring.Context.Support.ResourceHandlersSectionHandler, Spring.Core"/&gt;         
       &lt;section name="typeAliases" type="Spring.Context.Support.TypeAliasesSectionHandler, Spring.Core"/&gt;
       &lt;section name="typeConverters" type="Spring.Context.Support.TypeConvertersSectionHandler, Spring.Core"/&gt;
         
@@ -5348,9 +5348,9 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
       &lt;parser type="Spring.Data.Config.DatabaseNamespaceParser, Spring.Data" /&gt; 
     &lt;/parsers&gt; 
                                             
-    &lt;resources&gt; 
+    &lt;resourceHandlers&gt; 
       &lt;handler protocol="db" type="MyCompany.MyApp.Resources.MyDbResource"/&gt; 
-    &lt;/resources&gt; 
+    &lt;/resourceHandlers&gt; 
         
     &lt;context caseSensitive="false"&gt;
       &lt;resource uri="config://spring/objects"/&gt;
@@ -5465,7 +5465,7 @@ IApplicationContext context =
       as you would any other Spring managed object. An example of the latter
       is shown below:</para>
 
-      <programlisting language="myxml">&lt;object id="myResourceHandlers" type="Spring.Objects.Factory.Config.<literal>ResourceHandlersSectionHandler</literal>, Spring.Core"&gt;
+      <programlisting language="myxml">&lt;object id="myResourceHandlers" type="Spring.Objects.Factory.Config.ResourceHandlerConfigurer, Spring.Core"&gt;
       &lt;property name="ResourceHandlers"&gt;
           &lt;dictionary&gt;
               &lt;entry key="db" value="MyCompany.MyApp.Resources.MyDbResource, MyAssembly"/&gt;
