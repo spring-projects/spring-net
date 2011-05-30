@@ -42,8 +42,8 @@ namespace Spring.Web.Mvc.Tests
         public void _TestSetup()
         {
             ContextRegistry.Clear();
-            _context = new MvcApplicationContext("file://objects.xml");
-            _mvcNamedContext = new MvcApplicationContext("named", false, "file://namedContextObjects.xml");
+            _context = new MvcApplicationContext("file://objectsMvc3.xml");
+            _mvcNamedContext = new MvcApplicationContext("named", false, "file://namedContextObjectsMvc3.xml");
 
             ContextRegistry.RegisterContext(_context);
             ContextRegistry.RegisterContext(_mvcNamedContext);
