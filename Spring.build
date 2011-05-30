@@ -562,7 +562,13 @@ Commandline Examples:
 
   <target name="compile-net-2.0" description="Builds .NET Framework 2.0 version"
           depends="set-net-2.0-runtime-configuration, check-spring-basedir, clean-current-bin-dir">
-    <call target="copykeys" if="${project.build.sign}"/>
+	<if test="${property::exists('mstest.exe')}">
+		<property name="mstest.exe.current" value="${string::replace(property::get-value('mstest.exe'), 'Microsoft Visual Studio 10.0', 'Microsoft Visual Studio 9.0')}" />
+	</if>
+	<if test="${property::exists('mstest.exe')}">
+		<property name="vs-net.mstest.bin.dir.current" value="${string::replace(property::get-value('vs-net.mstest.bin.dir'), 'Microsoft Visual Studio 10.0', 'Microsoft Visual Studio 9.0')}" />
+	</if>
+	<call target="copykeys" if="${project.build.sign}"/>
     <call target="common.generate-assemblyinfo"/>
     <call target="compile-test" />
   </target>
@@ -618,7 +624,14 @@ Commandline Examples:
 
   <target name="compile-net-4.0" description="Builds .NET Framework 4.0 version"
         depends="set-net-4.0-runtime-configuration, check-spring-basedir, clean-current-bin-dir">
-    	<property name="lib.dir" value="${spring.basedir}/lib/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
+	<if test="${property::exists('mstest.exe')}">
+		<property name="mstest.exe.current" value="${string::replace(property::get-value('mstest.exe'), 'Microsoft Visual Studio 9.0', 'Microsoft Visual Studio 10.0')}" />
+	</if>
+	<if test="${property::exists('mstest.exe')}">
+		<property name="vs-net.mstest.bin.dir.current" value="${string::replace(property::get-value('vs-net.mstest.bin.dir'), 'Microsoft Visual Studio 9.0', 'Microsoft Visual Studio 10.0')}" />
+	</if>
+	<echo message="STEVE mstest.exe.current: ${mstest.exe.current} , vs-net.mstest.bin.dir.current: ${vs-net.mstest.bin.dir.current}" />
+	<property name="lib.dir" value="${spring.basedir}/lib/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
     <call target="copykeys" if="${project.build.sign}"/>
 	<call target="copylibs" />
     <call target="common.generate-assemblyinfo"/>

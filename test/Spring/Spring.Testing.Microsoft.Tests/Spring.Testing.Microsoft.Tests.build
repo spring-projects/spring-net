@@ -32,7 +32,7 @@
 				<include name="Spring.Data.dll" />
 				<include name="Spring.Core.Tests.dll" />
 				<include name="Spring.Data.Tests.dll" />
-				<include name="${vs-net.mstest.bin.dir}\PublicAssemblies\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll" />
+				<include name="${vs-net.mstest.bin.dir.current}\PublicAssemblies\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll" />
 				<include name="*.dll" />
 				<exclude name="${project::get-name()}.dll" />
 				<exclude name="CloverRuntime.dll" />

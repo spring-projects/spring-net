@@ -209,7 +209,7 @@ ${tool.dir}       : dir for tools
 
     <echo message="Unit Testing ${project.name} in ${test.bin.dir}" />
 
-    <exec program="${mstest.exe}" workingdir="${test.bin.dir}" verbose="false">
+    <exec program="${mstest.exe.current}" workingdir="${test.bin.dir}" verbose="false">
       <arg value="/testcontainer:${test.bin.dir}/${test.assemblyname}.dll"/>
       <arg value="/resultsfile:${test.assemblyname}.dll-MsTestResults.trx"/>
       <arg value="/nologo" />
