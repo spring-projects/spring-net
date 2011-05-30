@@ -630,7 +630,6 @@ Commandline Examples:
 	<if test="${property::exists('mstest.exe')}">
 		<property name="vs-net.mstest.bin.dir.current" value="${string::replace(property::get-value('vs-net.mstest.bin.dir'), 'Microsoft Visual Studio 9.0', 'Microsoft Visual Studio 10.0')}" />
 	</if>
-	<echo message="STEVE mstest.exe.current: ${mstest.exe.current} , vs-net.mstest.bin.dir.current: ${vs-net.mstest.bin.dir.current}" />
 	<property name="lib.dir" value="${spring.basedir}/lib/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
     <call target="copykeys" if="${project.build.sign}"/>
 	<call target="copylibs" />
