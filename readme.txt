@@ -168,6 +168,7 @@ Documented sample applications can be found in "examples":
 * IoCQuickStart.AppContext - Show use of various IApplicationContext features.
 * IoCQuickStart.EventRegistry - Show use of loosely coupled eventing features.
 * AopQuickStart - Show use of AOP features.
+* CachingQuickStart - Show use of Caching abstraction.
 * SpringAir - Show use of Spring.Web features.
 * Calculator - Show use of Spring.Services features.
 * WebQuickStart - Show step by step usage of Spring.Web features.
@@ -177,7 +178,7 @@ Documented sample applications can be found in "examples":
 * Data.NHibernate.Northwind - Show use of Spring's NHibernate features.
 * WCFQuickStart - Show use of DI and AOP with WCF
 * NMSQuickStart - Sample application using NMS
-* MSMQ QuickStart - Sample applicaiton usingMSMQ
+* MSMQ QuickStart - Sample application using MSMQ
 * Quartz Example - Scheduling using Quartz
 
 7. How to build
