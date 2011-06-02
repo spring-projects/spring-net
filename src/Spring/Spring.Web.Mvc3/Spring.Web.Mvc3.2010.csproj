@@ -65,6 +65,10 @@
       <Name>Spring.Core.2010</Name>
       <Private>True</Private>
     </ProjectReference>
+    <ProjectReference Include="..\Spring.Web\Spring.Web.2010.csproj">
+      <Project>{BA4789EB-281A-48EA-8763-28B9F0596A18}</Project>
+      <Name>Spring.Web.2010</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

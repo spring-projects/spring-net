@@ -47,7 +47,29 @@ namespace Spring.Web.Mvc
 
             //the Spring HTTP Module won't have built the context for us until now so we have to delay until the init
             ConfigureApplicationContext();
-            RegisterResolver();
+        }
+
+        /// <summary>
+        /// Handles the BeginRequest event of the Application control.
+        /// </summary>
+        /// <param name="sender">The source of the event.</param>
+        /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
+        protected virtual void Application_BeginRequest(object sender, EventArgs e)
+        {
+            var resolver = BuildDependencyResolver();
+            RegisterDependencyResolver(resolver);
+        }
+
+
+        /// <summary>
+        /// Builds the dependency resolver.
+        /// </summary>
+        /// <returns>The <see cref="IDependencyResolver"/> instance.</returns>
+        /// You must override this method in a derived class to control the manner in which the
+        /// <see cref="IDependencyResolver"/> is created.
+        protected virtual IDependencyResolver BuildDependencyResolver()
+        {
+            return new SpringMvcDependencyResolver(ContextRegistry.GetContext());
         }
 
         /// <summary>
@@ -62,7 +84,6 @@ namespace Spring.Web.Mvc
 
         }
 
-
         /// <summary>
         /// Registers the DependencyResolver implementation with the MVC runtime.
         /// <remarks>
@@ -70,9 +91,42 @@ namespace Spring.Web.Mvc
         /// <see cref="SpringMvcDependencyResolver"/> is registered.
         /// </remarks>
         /// </summary>
-        public virtual void RegisterResolver()
+        public virtual void RegisterDependencyResolver(IDependencyResolver resolver)
         {
-            DependencyResolver.SetResolver(new SpringMvcDependencyResolver(ContextRegistry.GetContext()));
+            ThreadSafeDependencyResolverRegistrar.Register(resolver);
+        }
+
+        /// <summary>
+        /// Thread-safe class that ensures that the <see cref="IDependencyResolver"/> is registered only once.
+        /// </summary>
+        protected static class ThreadSafeDependencyResolverRegistrar
+        {
+            private static bool _isInitialized = false;
+            private static readonly Object @lock = new Object();
+
+            /// <summary>
+            /// Registers the specified resolver.
+            /// </summary>
+            /// <param name="resolver">The resolver.</param>
+            public static void Register(IDependencyResolver resolver)
+            {
+                if (_isInitialized)
+                {
+                    return;
+                }
+
+                lock (@lock)
+                {
+                    if (_isInitialized)
+                    {
+                        return;
+                    }
+
+                    DependencyResolver.SetResolver(resolver);
+
+                    _isInitialized = true;
+                }
+            }
         }
 
     }
