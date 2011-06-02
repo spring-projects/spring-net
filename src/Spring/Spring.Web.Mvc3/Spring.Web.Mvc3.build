@@ -32,6 +32,7 @@
 				<include name="antlr.runtime.dll" />
 				<include name="Spring.Core.dll" />
 				<include name="Spring.Aop.dll" />
+				<include name="Spring.Web.dll" />
 				<include name="System.Configuration.dll" />
  				<include name="System.Web.dll" />
 				<include name="System.Web.Routing.dll"/>
