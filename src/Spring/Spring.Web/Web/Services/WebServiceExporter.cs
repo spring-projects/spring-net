@@ -505,30 +505,20 @@ namespace Spring.Web.Services
             protected override void ImplementConstructors(TypeBuilder builder)
             {
                 MethodAttributes attributes = MethodAttributes.Public |
-					MethodAttributes.HideBySig | MethodAttributes.SpecialName |
-					MethodAttributes.RTSpecialName;
+                    MethodAttributes.HideBySig | MethodAttributes.SpecialName |
+                    MethodAttributes.RTSpecialName;
 
                 ConstructorBuilder cb = builder.DefineConstructor(
                     attributes, CallingConventions.Standard, Type.EmptyTypes);
 
                 ILGenerator il = cb.GetILGenerator();
-                il.Emit(OpCodes.Ret);
-            }
 
-            /// <summary>
-            /// Generates the IL instructions that pushes 
-            /// the target instance on which calls should be delegated to.
-            /// </summary>
-            /// <remarks>
-            /// This will cause the builder to generate 
-            /// <c>WebServiceExporter.GetTarget( EXPORTER_ID ).&lt;targetmethod&gt;(..)</c>
-            /// for each exported method.
-            /// </remarks>
-            /// <param name="il">The IL generator to use.</param>
-            public override void PushTarget( ILGenerator il )
-            {
-                il.Emit( OpCodes.Ldstr, this.exporter.EXPORTER_ID );
+                il.Emit(OpCodes.Ldarg_0);
+                il.Emit(OpCodes.Ldstr, this.exporter.EXPORTER_ID);
                 il.Emit( OpCodes.Call, WebServiceExporter_GetTargetInstance );
+                il.Emit(OpCodes.Stfld, targetInstance);
+
+                il.Emit(OpCodes.Ret);
             }
 
             protected override IList GetTypeAttributes(Type type)
