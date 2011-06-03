@@ -76,9 +76,6 @@
     <ErrorReport>prompt</ErrorReport>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Domain\DivisionResult.cs" />
     <Compile Include="Interfaces\IAdvancedCalculator.cs">
       <SubType>Code</SubType>
