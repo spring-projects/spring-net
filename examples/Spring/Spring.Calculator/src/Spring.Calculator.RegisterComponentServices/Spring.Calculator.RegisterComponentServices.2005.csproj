@@ -35,7 +35,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>TRACE;DEBUG;NET_2_0</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
@@ -77,18 +77,13 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <Compile Include="AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <None Include="Spring.Calculator.EnterpriseServices.dll.config" />
+    <None Include="Spring.Calculator.EnterpriseServices.exe.config" />
     <Compile Include="Program.cs">
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Spring.Aspects\Spring.Aspects.2005.csproj">
-      <Project>{6B34626E-8D2A-4387-BBB6-CB352D4DBDEC}</Project>
-      <Name>Spring.Aspects.2005</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Spring.Calculator.Contract\Spring.Calculator.Contract.2005.csproj">
       <Project>{284C0873-BBB4-4399-B6F7-CB7EDBD001C7}</Project>
       <Name>Spring.Calculator.Contract.2005</Name>
@@ -110,9 +105,6 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Config\services.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Spring.Calculator.EnterpriseServices.dll.spring-context.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

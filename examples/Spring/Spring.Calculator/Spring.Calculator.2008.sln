@@ -18,26 +18,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Aspects.2008", "src\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Calculator.RegisterComponentServices.2008", "src\Spring.Calculator.RegisterComponentServices\Spring.Calculator.RegisterComponentServices.2008.csproj", "{75E2042D-1FCF-42F1-8FB9-0C6C40AE4ACD}"
 EndProject
-Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Spring.Calculator.Web.2005", "src\Spring.Calculator.Web.2005\", "{9697F719-BA0B-492E-ABAE-6132A8FCEC45}"
-	ProjectSection(WebsiteProperties) = preProject
-		TargetFramework = "2.0"
-		ProjectReferences = "{6B34626E-8D2A-4387-BBB6-CB352D4DBDEC}|Spring.Aspects.dll;{284C0873-BBB4-4399-B6F7-CB7EDBD001C7}|Spring.Calculator.Contract.dll;{D9FB04E5-D636-4EC2-A3AB-FAB1C4F37827}|Spring.Calculator.Services.dll;"
-		Debug.AspNetCompiler.VirtualPath = "/Spring.Calculator.Web.2005"
-		Debug.AspNetCompiler.PhysicalPath = "Spring.Calculator.Web.2005\"
-		Debug.AspNetCompiler.TargetPath = "PrecompiledWeb\Spring.Calculator.Web.2005\"
-		Debug.AspNetCompiler.Updateable = "true"
-		Debug.AspNetCompiler.ForceOverwrite = "true"
-		Debug.AspNetCompiler.FixedNames = "false"
-		Debug.AspNetCompiler.Debug = "True"
-		Release.AspNetCompiler.VirtualPath = "/Spring.Calculator.Web.2005"
-		Release.AspNetCompiler.PhysicalPath = "Spring.Calculator.Web.2005\"
-		Release.AspNetCompiler.TargetPath = "PrecompiledWeb\Spring.Calculator.Web.2005\"
-		Release.AspNetCompiler.Updateable = "true"
-		Release.AspNetCompiler.ForceOverwrite = "true"
-		Release.AspNetCompiler.FixedNames = "false"
-		Release.AspNetCompiler.Debug = "False"
-		VWDPort = "1643"
-	EndProjectSection
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Calculator.Web.2008", "src\Spring.Calculator.Web\Spring.Calculator.Web.2008.csproj", "{C89AD3E9-1B03-4CCC-ADA2-7681C6976AD8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -109,16 +90,16 @@ Global
 		{75E2042D-1FCF-42F1-8FB9-0C6C40AE4ACD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{75E2042D-1FCF-42F1-8FB9-0C6C40AE4ACD}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{75E2042D-1FCF-42F1-8FB9-0C6C40AE4ACD}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{9697F719-BA0B-492E-ABAE-6132A8FCEC45}.Debug|.NET.ActiveCfg = Debug|.NET
-		{9697F719-BA0B-492E-ABAE-6132A8FCEC45}.Debug|.NET.Build.0 = Debug|.NET
-		{9697F719-BA0B-492E-ABAE-6132A8FCEC45}.Debug|Any CPU.ActiveCfg = Debug|.NET
-		{9697F719-BA0B-492E-ABAE-6132A8FCEC45}.Debug|Mixed Platforms.ActiveCfg = Debug|.NET
-		{9697F719-BA0B-492E-ABAE-6132A8FCEC45}.Debug|Mixed Platforms.Build.0 = Debug|.NET
-		{9697F719-BA0B-492E-ABAE-6132A8FCEC45}.Release|.NET.ActiveCfg = Debug|.NET
-		{9697F719-BA0B-492E-ABAE-6132A8FCEC45}.Release|.NET.Build.0 = Debug|.NET
-		{9697F719-BA0B-492E-ABAE-6132A8FCEC45}.Release|Any CPU.ActiveCfg = Debug|.NET
-		{9697F719-BA0B-492E-ABAE-6132A8FCEC45}.Release|Mixed Platforms.ActiveCfg = Debug|.NET
-		{9697F719-BA0B-492E-ABAE-6132A8FCEC45}.Release|Mixed Platforms.Build.0 = Debug|.NET
+		{C89AD3E9-1B03-4CCC-ADA2-7681C6976AD8}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{C89AD3E9-1B03-4CCC-ADA2-7681C6976AD8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C89AD3E9-1B03-4CCC-ADA2-7681C6976AD8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C89AD3E9-1B03-4CCC-ADA2-7681C6976AD8}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{C89AD3E9-1B03-4CCC-ADA2-7681C6976AD8}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{C89AD3E9-1B03-4CCC-ADA2-7681C6976AD8}.Release|.NET.ActiveCfg = Release|Any CPU
+		{C89AD3E9-1B03-4CCC-ADA2-7681C6976AD8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C89AD3E9-1B03-4CCC-ADA2-7681C6976AD8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C89AD3E9-1B03-4CCC-ADA2-7681C6976AD8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{C89AD3E9-1B03-4CCC-ADA2-7681C6976AD8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

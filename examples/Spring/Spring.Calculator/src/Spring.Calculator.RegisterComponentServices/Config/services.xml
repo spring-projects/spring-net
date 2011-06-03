@@ -3,6 +3,7 @@
     <description>Definitions of objects to be registered.</description>
 
     <!-- Aspect -->
+    <!--
     <object id="CommonLoggingAroundAdvice" type="Spring.Aspects.Logging.CommonLoggingAroundAdvice, Spring.Aspects">
         <property name="Level" value="Debug"/>
     </object>
@@ -20,6 +21,7 @@
             </list>
         </property>
     </object>
+    -->
 
     <!-- Service -->
     <object id="simpleCalculatorService" type="Spring.Calculator.Services.Calculator, Spring.Calculator.Services" />

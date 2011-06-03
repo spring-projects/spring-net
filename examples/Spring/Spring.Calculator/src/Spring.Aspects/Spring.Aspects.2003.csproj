@@ -84,11 +84,6 @@
         <Files>
             <Include>
                 <File
-                    RelPath = "AssemblyInfo.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
                     RelPath = "Logging\CommonLoggingAroundAdvice.cs"
                     SubType = "Code"
                     BuildAction = "Compile"

@@ -28,7 +28,9 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>3.5</OldToolsVersion>
-    <TargetFrameworkVersion>v3.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkProfile />
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -41,10 +43,8 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>bin\Debug\</OutputPath>
@@ -53,7 +53,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>TRACE;DEBUG;NET_2_0</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
@@ -97,21 +97,16 @@
   </PropertyGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <Compile Include="AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Program.cs">
       <SubType>Code</SubType>
     </Compile>
     <None Include="Spring.Calculator.EnterpriseServices.dll.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="Spring.Calculator.EnterpriseServices.exe.config" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Config\services.xml">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Spring.Calculator.EnterpriseServices.dll.spring-context.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
@@ -133,18 +128,6 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\src\Spring\Spring.Core\Spring.Core.2010.csproj">
-      <Project>{710961A3-0DF4-49E4-A26E-F5B9C044AC84}</Project>
-      <Name>Spring.Core.2010</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\src\Spring\Spring.Services\Spring.Services.2010.csproj">
-      <Project>{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</Project>
-      <Name>Spring.Services.2010</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Spring.Aspects\Spring.Aspects.2010.csproj">
-      <Project>{6B34626E-8D2A-4387-BBB6-CB352D4DBDEC}</Project>
-      <Name>Spring.Aspects.2010</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Spring.Calculator.Contract\Spring.Calculator.Contract.2010.csproj">
       <Project>{284C0873-BBB4-4399-B6F7-CB7EDBD001C7}</Project>
       <Name>Spring.Calculator.Contract.2010</Name>
@@ -153,6 +136,15 @@
       <Project>{D9FB04E5-D636-4EC2-A3AB-FAB1C4F37827}</Project>
       <Name>Spring.Calculator.Services.2010</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Spring.Core">
+      <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Spring.Services, Version=0.0.0.20709, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Services.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

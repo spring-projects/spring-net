@@ -1,7 +1,7 @@
 ﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>8.0.50727</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{F202BB75-CEFD-400B-9CD3-0914F466EBF5}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -27,6 +27,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>2.0</OldToolsVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>bin\Debug\</OutputPath>
@@ -35,7 +36,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>TRACE;DEBUG;NET_2_0</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
@@ -59,7 +60,7 @@
     <CheckForOverflowUnderflow>false</CheckForOverflowUnderflow>
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
-    <DefineConstants>TRACE;NET_2_0</DefineConstants>
+    <DefineConstants>TRACE</DefineConstants>
     <DocumentationFile>
     </DocumentationFile>
     <DebugSymbols>false</DebugSymbols>
@@ -99,9 +100,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\bin\net\2.0\debug\Spring.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Spring.Services, Version=1.1.0.2, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Spring.Services, Version=0.0.0.35883, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\bin\net\2.0\debug\Spring.Services.dll</HintPath>
+      <HintPath>..\..\..\..\..\bin\net\3.5\debug\Spring.Services.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>system</Name>
@@ -112,9 +113,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <Compile Include="AssemblyInfo.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <EmbeddedResource Include="Config\WebServices\calculatorService.wsdl" />
     <Compile Include="Program.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -128,11 +127,10 @@
     <EmbeddedResource Include="Config\Remoting\saoSingleCall.xml" />
     <EmbeddedResource Include="Config\Remoting\saoSingleton-aop.xml" />
     <EmbeddedResource Include="Config\Remoting\saoSingleton.xml" />
-    <EmbeddedResource Include="Config\WebServices2005\webServices-aop.xml" />
-    <EmbeddedResource Include="Config\WebServices2005\webServices.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Config\WebServices2005\calculatorService.wsdl" />
+    <EmbeddedResource Include="Config\WebServices\webServices-aop.xml" />
+    <EmbeddedResource Include="Config\WebServices\webServices.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
