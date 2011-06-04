@@ -103,6 +103,7 @@ Rebuilding Solutions using Nant and "solutions.build":
           <include name="examples/Spring/Spring.Data.NHibernate/Spring.Northwind.sln" />
           <!-- Does not build on bamboo server SPRNET-1283 -->
           <exclude name="examples/Spring/Spring.MsmqQuickStart/**/*.2005.sln"/>
+          <exclude name="examples/Spring/Spring.Calculator/**/*.2008.sln"/>
           <!-- <include name="*.2005.sln" /> -->
           <include name="*.2008.sln" />
           <exclude name="Spring.NET.2008.sln"/>
