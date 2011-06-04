@@ -20,12 +20,10 @@
 				<include name="**/*.xml" />
 			</resources>
 			<references basedir="${current.bin.dir}">
-				<include name="log4net.dll" />
 			        <include name="Common.Logging.dll"/>
 				<include name="Spring.Core.dll" />
 				<include name="Spring.Aop.dll" />
 				<include name="Spring.Services.dll" />
-				<include name="Spring.Aspects.dll" />
 				<include name="Spring.Calculator.Contract.dll" />
 				<include name="Spring.Calculator.Services.dll" />
 			</references>
