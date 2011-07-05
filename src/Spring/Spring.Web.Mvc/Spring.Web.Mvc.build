@@ -28,10 +28,11 @@
 				<include name="**/*" />
 			</resources>
 			<references basedir="${current.bin.dir}">
-			        <include name="Common.Logging.dll"/>
+				<include name="Common.Logging.dll"/>
 				<include name="antlr.runtime.dll" />
 				<include name="Spring.Core.dll" />
 				<include name="Spring.Aop.dll" />
+				<include name="Spring.Web.dll" />
 				<include name="System.Configuration.dll" />
  				<include name="System.Web.dll" />
 				<include name="System.Web.Routing.dll" if="${nant.settings.currentframework=='net-4.0'}" />
