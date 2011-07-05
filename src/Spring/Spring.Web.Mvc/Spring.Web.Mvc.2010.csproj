@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Spring.Web.Mvc</RootNamespace>
     <AssemblyName>Spring.Web.Mvc</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -65,6 +65,10 @@
       <Project>{710961A3-0DF4-49E4-A26E-F5B9C044AC84}</Project>
       <Name>Spring.Core.2010</Name>
       <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Spring.Web\Spring.Web.2010.csproj">
+      <Project>{BA4789EB-281A-48EA-8763-28B9F0596A18}</Project>
+      <Name>Spring.Web.2010</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

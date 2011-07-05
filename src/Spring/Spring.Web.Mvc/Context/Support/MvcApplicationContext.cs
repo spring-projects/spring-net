@@ -31,7 +31,7 @@ namespace Spring.Context.Support
     /// <summary>
     /// Application Context for ASP.NET MVC Applications
     /// </summary>
-    public class MvcApplicationContext : AbstractXmlApplicationContext
+    public class MvcApplicationContext : WebApplicationContext
     {
         private readonly string[] _configurationLocations;
 

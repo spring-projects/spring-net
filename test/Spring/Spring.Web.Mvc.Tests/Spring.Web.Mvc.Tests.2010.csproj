@@ -69,6 +69,14 @@
       <Project>{5166CE3A-14BE-478A-88DA-729A39DE1E29}</Project>
       <Name>Spring.Web.Mvc.2010</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Web\Spring.Web.2010.csproj">
+      <Project>{BA4789EB-281A-48EA-8763-28B9F0596A18}</Project>
+      <Name>Spring.Web.2010</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Spring.Web.Tests\Spring.Web.Tests.2010.csproj">
+      <Project>{C67E47AA-1ACD-41B4-A465-4D336A2319CA}</Project>
+      <Name>Spring.Web.Tests.2010</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="objects.xml">

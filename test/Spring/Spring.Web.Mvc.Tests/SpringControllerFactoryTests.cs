@@ -29,6 +29,7 @@ using Spring.Core.IO;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Xml;
 using System.Web.Mvc;
+using Spring.TestSupport;
 using Spring.Web.Mvc.Tests.Controllers;
 using Spring.Context.Support;
 using System.Reflection;
@@ -49,26 +50,29 @@ namespace Spring.Web.Mvc.Tests
         [SetUp]
         public void _TestSetup()
         {
-            ContextRegistry.Clear();
-            _context = new MvcApplicationContext("file://objects.xml");
-            _mvcNamedContext = new MvcApplicationContext("named", false, "file://namedContextObjects.xml");
-
-            ContextRegistry.RegisterContext(_context);
-            ContextRegistry.RegisterContext(_mvcNamedContext);
-
-            _factory = new SpringControllerFactory();
-
-            //due to ridiculous internal methods in DefaultControllerFactory, have to set the ControllerTypeCache using this extension method
-            // see http://stackoverflow.com/questions/727181/asp-net-mvc-system-web-compilation-compilationlock for more info
-            _factory.InitializeWithControllerTypes(new[] 
+            using (new VirtualEnvironmentMock("/somedir/some.file", null, null, "/", true))
             {
-                typeof(FirstContainerRegisteredController),
-                typeof(SecondContainerRegisteredController),
-                typeof(NotInContainerController),
-                typeof(NamedContextController),
-            });
+                ContextRegistry.Clear();
+                _context = new MvcApplicationContext("file://objects.xml");
+                _mvcNamedContext = new MvcApplicationContext("named", false, "file://namedContextObjects.xml");
 
-            SpringControllerFactory.ApplicationContextName = string.Empty;
+                ContextRegistry.RegisterContext(_context);
+                ContextRegistry.RegisterContext(_mvcNamedContext);
+
+                _factory = new SpringControllerFactory();
+
+                //due to ridiculous internal methods in DefaultControllerFactory, have to set the ControllerTypeCache using this extension method
+                // see http://stackoverflow.com/questions/727181/asp-net-mvc-system-web-compilation-compilationlock for more info
+                _factory.InitializeWithControllerTypes(new[]
+                                                           {
+                                                               typeof (FirstContainerRegisteredController),
+                                                               typeof (SecondContainerRegisteredController),
+                                                               typeof (NotInContainerController),
+                                                               typeof (NamedContextController),
+                                                           });
+
+                SpringControllerFactory.ApplicationContextName = string.Empty;
+            }
         }
 
         [Test]
@@ -87,11 +91,13 @@ namespace Spring.Web.Mvc.Tests
         [Test]
         public void CanRevertToTypeMatchIfIdMatchUnsuccessful()
         {
-            MvcApplicationContext context = new MvcApplicationContext("file://objectsMatchByType.xml");
+            using (new VirtualEnvironmentMock("/somedir/some.file", null, null, "/", true))
+            {
+                MvcApplicationContext context = new MvcApplicationContext("file://objectsMatchByType.xml");
 
-            ContextRegistry.Clear();
-            ContextRegistry.RegisterContext(context);
-
+                ContextRegistry.Clear();
+                ContextRegistry.RegisterContext(context);
+            }
             IController controller = _factory.CreateController(new RequestContext(new MockContext(), new RouteData()), "FirstContainerRegistered");
 
             Assert.AreEqual("Should_Be_Matched_By_Type", ((FirstContainerRegisteredController)controller).TestValue);
