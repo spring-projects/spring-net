@@ -62,6 +62,7 @@
 
   <object id="transactionManager"
           type="Spring.Data.Core.TxScopeTransactionManager, Spring.Data">
+          <property name="TransactionSynchronization" value="Always" />
   </object>
 
   <object id="AccountCreditDao" type="Spring.Data.NHibernate.AccountCreditDao, Spring.Data.NHibernate21.Integration.Tests">
