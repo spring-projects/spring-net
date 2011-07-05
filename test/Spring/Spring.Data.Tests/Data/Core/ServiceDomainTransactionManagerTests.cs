@@ -78,8 +78,10 @@ namespace Spring.Data.Core
 
             mocks.ReplayAll();
 
-            IPlatformTransactionManager tm = new ServiceDomainPlatformTransactionManager(txAdapter);
+            ServiceDomainPlatformTransactionManager tm = new ServiceDomainPlatformTransactionManager(txAdapter);
             TransactionTemplate tt = new TransactionTemplate(tm);
+            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
+
             tt.Execute(new TransactionDelegate(TransactionCommitMethod));
 
             Assert.IsFalse(TransactionSynchronizationManager.SynchronizationActive);
@@ -117,7 +119,9 @@ namespace Spring.Data.Core
 
             mocks.ReplayAll();
 
-            IPlatformTransactionManager tm = new ServiceDomainPlatformTransactionManager(txAdapter);
+            ServiceDomainPlatformTransactionManager tm = new ServiceDomainPlatformTransactionManager(txAdapter);
+            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
+
             TransactionTemplate tt = new TransactionTemplate(tm);
 
             Assert.IsTrue(!TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
@@ -183,7 +187,9 @@ namespace Spring.Data.Core
 
             mocks.ReplayAll();
 
-            IPlatformTransactionManager tm = new ServiceDomainPlatformTransactionManager(txAdapter);
+            ServiceDomainPlatformTransactionManager tm = new ServiceDomainPlatformTransactionManager(txAdapter);
+            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
+
             TransactionTemplate tt = new TransactionTemplate(tm);
             tt.PropagationBehavior = TransactionPropagation.RequiresNew;
             tt.Execute(new PropagationRequiresNewWithExistingTransactionCallbackSD(tt));

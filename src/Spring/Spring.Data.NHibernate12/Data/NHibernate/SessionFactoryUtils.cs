@@ -260,7 +260,7 @@ namespace Spring.Data.NHibernate
                     // Spring transaction management is active ->
                     // register pre-bound Session with it for transactional flushing.
                     session = sessionHolder.ValidatedSession;
-                    if (!sessionHolder.SynchronizedWithTransaction) 
+                    if (session != null && !sessionHolder.SynchronizedWithTransaction) 
                     {
                         log.Debug("Registering Spring transaction synchronization for existing Hibernate Session");
                         TransactionSynchronizationManager.RegisterSynchronization(

@@ -45,6 +45,29 @@ namespace Spring.Data.NHibernate
     [TestFixture]
     public class HibernateTransactionManagerTests
     {
+        private class TestableHibernateTransactionManager : HibernateTransactionManager
+        {
+            private IDbTransaction _stubbedTransactionWithExpectedConnection;
+
+            public TestableHibernateTransactionManager()
+            {
+            }
+
+            public TestableHibernateTransactionManager(ISessionFactory sessionFactory) : base(sessionFactory)
+            {
+            }
+
+            public IDbTransaction StubbedTransactionThatReturnsExpectedConnection
+            {
+                set { _stubbedTransactionWithExpectedConnection = value; }
+            }
+
+            protected override IDbTransaction GetIDbTransaction(ITransaction hibernateTx)
+            {
+                return _stubbedTransactionWithExpectedConnection;
+            }
+        }
+
         private MockRepository mocks;
 
         [SetUp]
@@ -88,6 +111,7 @@ namespace Spring.Data.NHibernate
             Assert.IsNotNull(sfProxy);
 
             HibernateTransactionManager tm = new HibernateTransactionManager();
+            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
             tm.AdoExceptionTranslator = new FallbackExceptionTranslator();
             tm.SessionFactory = sfProxy;
             tm.DbProvider = provider;
@@ -95,19 +119,19 @@ namespace Spring.Data.NHibernate
 
             tt.TransactionIsolationLevel = IsolationLevel.Serializable;
 
-            Assert.IsTrue(!TransactionSynchronizationManager.HasResource(sfProxy),"Hasn't thread session");
-            Assert.IsTrue(!TransactionSynchronizationManager.HasResource(provider), "Hasn't thread db provider");
-            Assert.IsTrue(!TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
-            Assert.IsTrue(!TransactionSynchronizationManager.ActualTransactionActive, "Actual transaction not active");
+            Assert.IsFalse(TransactionSynchronizationManager.HasResource(sfProxy),"Hasn't thread session");
+            Assert.IsFalse(TransactionSynchronizationManager.HasResource(provider), "Hasn't thread db provider");
+            Assert.IsFalse(TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
+            Assert.IsFalse(TransactionSynchronizationManager.ActualTransactionActive, "Actual transaction not active");
 
             object result = tt.Execute(new TransactionCommitTxCallback(sfProxy, provider));
 
             Assert.IsTrue(result == list, "Incorrect result list");
 
-            Assert.IsTrue(!TransactionSynchronizationManager.HasResource(sfProxy), "Hasn't thread session");
-            Assert.IsTrue(!TransactionSynchronizationManager.HasResource(provider), "Hasn't thread db provider");
-            Assert.IsTrue(!TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
-            Assert.IsTrue(!TransactionSynchronizationManager.ActualTransactionActive, "Actual transaction not active");
+            Assert.IsFalse(TransactionSynchronizationManager.HasResource(sfProxy), "Hasn't thread session");
+            Assert.IsFalse(TransactionSynchronizationManager.HasResource(provider), "Hasn't thread db provider");
+            Assert.IsFalse(TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
+            Assert.IsFalse(TransactionSynchronizationManager.ActualTransactionActive, "Actual transaction not active");
 
 
             mocks.VerifyAll();
@@ -124,6 +148,7 @@ namespace Spring.Data.NHibernate
             ISessionFactory sessionFactory = (ISessionFactory)mocks.CreateMock(typeof(ISessionFactory));
             ISession session = (ISession)mocks.CreateMock(typeof(ISession));
             ITransaction transaction = (ITransaction)mocks.CreateMock(typeof(ITransaction));
+            IDbTransaction adoTransaction = (IDbTransaction)mocks.CreateMock(typeof(IDbTransaction));
 
             using (mocks.Ordered())
             {
@@ -132,6 +157,9 @@ namespace Spring.Data.NHibernate
                 Expect.Call(session.BeginTransaction(IsolationLevel.ReadCommitted)).Return(transaction);
                 Expect.Call(session.IsOpen).Return(true);
 
+                Expect.Call(adoTransaction.Connection).Return(connection);
+                LastCall.On(adoTransaction).Repeat.Once();
+
                 transaction.Rollback();
                 LastCall.On(transaction).Repeat.Once();
 
@@ -139,11 +167,14 @@ namespace Spring.Data.NHibernate
             }
             mocks.ReplayAll();
 
-            HibernateTransactionManager tm = new HibernateTransactionManager(sessionFactory);
+            TestableHibernateTransactionManager tm = new TestableHibernateTransactionManager(sessionFactory);
+            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
+            tm.StubbedTransactionThatReturnsExpectedConnection = adoTransaction;
+
             TransactionTemplate tt = new TransactionTemplate(tm);
 
-            Assert.IsTrue(!TransactionSynchronizationManager.HasResource(sessionFactory), "Hasn't thread session");
-            Assert.IsTrue(!TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
+            Assert.IsFalse(TransactionSynchronizationManager.HasResource(sessionFactory), "Hasn't thread session");
+            Assert.IsFalse(TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
 
             try
             {
@@ -154,8 +185,8 @@ namespace Spring.Data.NHibernate
                 
             }
 
-            Assert.IsTrue(!TransactionSynchronizationManager.HasResource(sessionFactory), "Hasn't thread session");
-            Assert.IsTrue(!TransactionSynchronizationManager.HasResource(provider), "Hasn't thread db provider");
+            Assert.IsFalse(TransactionSynchronizationManager.HasResource(sessionFactory), "Hasn't thread session");
+            Assert.IsFalse(TransactionSynchronizationManager.HasResource(provider), "Hasn't thread db provider");
             
             mocks.VerifyAll();
         }
@@ -167,6 +198,7 @@ namespace Spring.Data.NHibernate
             ISessionFactory sessionFactory = (ISessionFactory)mocks.CreateMock(typeof(ISessionFactory));
             ISession session = (ISession)mocks.CreateMock(typeof(ISession));
             ITransaction transaction = (ITransaction)mocks.CreateMock(typeof(ITransaction));
+            IDbTransaction adoTransaction = (IDbTransaction)mocks.CreateMock(typeof(IDbTransaction));
 
             using (mocks.Ordered())
             {
@@ -177,6 +209,10 @@ namespace Spring.Data.NHibernate
                 Expect.Call(session.FlushMode).Return(FlushMode.Auto);
                 session.Flush();
                 LastCall.On(session).Repeat.Once();
+
+                Expect.Call(adoTransaction.Connection).Return(connection);
+                LastCall.On(adoTransaction).Repeat.Once();
+
                 transaction.Rollback();
                 LastCall.On(transaction).Repeat.Once();
                 Expect.Call(session.Close()).Return(null);
@@ -184,14 +220,17 @@ namespace Spring.Data.NHibernate
             mocks.ReplayAll();
 
 
-            HibernateTransactionManager tm = new HibernateTransactionManager(sessionFactory);
+            TestableHibernateTransactionManager tm = new TestableHibernateTransactionManager(sessionFactory);
+            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
+            tm.StubbedTransactionThatReturnsExpectedConnection = adoTransaction;
+
             TransactionTemplate tt = new TransactionTemplate(tm);
 
-            Assert.IsTrue(!TransactionSynchronizationManager.HasResource(sessionFactory), "Hasn't thread session");
+            Assert.IsFalse(TransactionSynchronizationManager.HasResource(sessionFactory), "Shouldn't have a thread session");
 
             tt.Execute(new TransactionRollbackOnlyTxCallback(sessionFactory));
 
-            Assert.IsTrue(!TransactionSynchronizationManager.HasResource(sessionFactory), "Hasn't thread session");
+            Assert.IsFalse(TransactionSynchronizationManager.HasResource(sessionFactory), "Shouldn't have a thread session");
             
             mocks.VerifyAll();
             
@@ -222,6 +261,8 @@ namespace Spring.Data.NHibernate
             mocks.ReplayAll();
 
             HibernateTransactionManager tm = new HibernateTransactionManager(sessionFactory);
+            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
+
             TransactionTemplate tt = new TransactionTemplate(tm);
             IList list = new ArrayList();
             list.Add("test");
@@ -240,6 +281,7 @@ namespace Spring.Data.NHibernate
             ISessionFactory sessionFactory = (ISessionFactory) mocks.CreateMock(typeof (ISessionFactory));
             ISession session = (ISession) mocks.CreateMock(typeof (ISession));
             ITransaction transaction = (ITransaction) mocks.CreateMock(typeof (ITransaction));
+            IDbTransaction adoTransaction = (IDbTransaction)mocks.CreateMock(typeof(IDbTransaction));
 
             using (mocks.Ordered())
             {
@@ -249,6 +291,9 @@ namespace Spring.Data.NHibernate
                 Expect.Call(session.IsOpen).Return(true);
                 Expect.Call(session.FlushMode).Return(FlushMode.Auto);
 
+                Expect.Call(adoTransaction.Connection).Return(connection);
+                LastCall.On(adoTransaction).Repeat.Once();
+
                 transaction.Rollback();
                 LastCall.On(transaction).Repeat.Once();
                 Expect.Call(session.Close()).Return(null);
@@ -256,7 +301,10 @@ namespace Spring.Data.NHibernate
             mocks.ReplayAll();
 
 
-            HibernateTransactionManager tm = new HibernateTransactionManager(sessionFactory);
+            TestableHibernateTransactionManager tm = new TestableHibernateTransactionManager(sessionFactory);
+            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
+            tm.StubbedTransactionThatReturnsExpectedConnection = adoTransaction;
+
             TransactionTemplate tt = new TransactionTemplate(tm);
             try
             {
@@ -278,6 +326,7 @@ namespace Spring.Data.NHibernate
             ISessionFactory sessionFactory = (ISessionFactory)mocks.CreateMock(typeof(ISessionFactory));
             ISession session = (ISession)mocks.CreateMock(typeof(ISession));
             ITransaction transaction = (ITransaction)mocks.CreateMock(typeof(ITransaction));
+            IDbTransaction adoTransaction = (IDbTransaction)mocks.CreateMock(typeof(IDbTransaction));
 
             using (mocks.Ordered())
             {
@@ -286,6 +335,9 @@ namespace Spring.Data.NHibernate
                 Expect.Call(session.BeginTransaction(IsolationLevel.ReadCommitted)).Return(transaction);
                 Expect.Call(session.IsOpen).Return(true);
 
+                Expect.Call(adoTransaction.Connection).Return(connection);
+                LastCall.On(adoTransaction).Repeat.Once();
+
                 transaction.Rollback();
                 LastCall.On(transaction).Repeat.Once();
                 Expect.Call(session.Close()).Return(null);
@@ -293,7 +345,10 @@ namespace Spring.Data.NHibernate
             mocks.ReplayAll();
 
 
-            HibernateTransactionManager tm = new HibernateTransactionManager(sessionFactory);
+            TestableHibernateTransactionManager tm = new TestableHibernateTransactionManager(sessionFactory);
+            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
+            tm.StubbedTransactionThatReturnsExpectedConnection = adoTransaction;
+
             TransactionTemplate tt = new TransactionTemplate(tm);
             IList list = new ArrayList();
             list.Add("test");
@@ -345,6 +400,8 @@ namespace Spring.Data.NHibernate
             mocks.ReplayAll();
 
             HibernateTransactionManager tm = new HibernateTransactionManager(sessionFactory);
+            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
+
             TransactionTemplate tt = new TransactionTemplate(tm);
             tt.PropagationBehavior = TransactionPropagation.RequiresNew;
 
@@ -389,6 +446,8 @@ namespace Spring.Data.NHibernate
 
 
             HibernateTransactionManager tm = new HibernateTransactionManager(sessionFactory);
+            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
+
             TransactionTemplate tt = new TransactionTemplate(tm);
             tt.PropagationBehavior = TransactionPropagation.RequiresNew;
 
@@ -431,6 +490,8 @@ namespace Spring.Data.NHibernate
             Assert.IsNotNull(sfProxy);
 
             HibernateTransactionManager tm = new HibernateTransactionManager(sessionFactory);
+            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
+
             TransactionTemplate tt = new TransactionTemplate(tm);
             tt.PropagationBehavior = TransactionPropagation.Supports;
 
@@ -485,6 +546,7 @@ namespace Spring.Data.NHibernate
             Assert.IsNotNull(sfProxy);
 
             HibernateTransactionManager tm = new HibernateTransactionManager(sessionFactory);
+            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
             
             TransactionTemplate tt = new TransactionTemplate(tm);
             tt.PropagationBehavior = TransactionPropagation.Supports;
@@ -536,6 +598,8 @@ namespace Spring.Data.NHibernate
             ISessionFactory sessionFactory = (ISessionFactory)mocks.CreateMock(typeof(ISessionFactory));
             ISession session = (ISession)mocks.CreateMock(typeof(ISession));
             ITransaction transaction = (ITransaction)mocks.CreateMock(typeof(ITransaction));
+            IDbTransaction adoTransaction = (IDbTransaction)mocks.CreateMock(typeof(IDbTransaction));
+            
             Exception rootCause = null;
             using (mocks.Ordered())
             {
@@ -562,6 +626,9 @@ namespace Spring.Data.NHibernate
                     LastCall.On(transaction).Throw(rootCause);
                 }
 
+                Expect.Call(adoTransaction.Connection).Return(connection);
+                LastCall.On(adoTransaction).Repeat.Once();
+
                 transaction.Rollback();
                 LastCall.On(transaction).Repeat.Once();
                 Expect.Call(session.Close()).Return(null);
@@ -572,8 +639,10 @@ namespace Spring.Data.NHibernate
             mocks.ReplayAll();
 
 
-            HibernateTransactionManager tm = new HibernateTransactionManager(sessionFactory);
+            TestableHibernateTransactionManager tm = new TestableHibernateTransactionManager(sessionFactory);
+            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
             tm.DbProvider = provider;
+            tm.StubbedTransactionThatReturnsExpectedConnection = adoTransaction;
 
             TransactionTemplate tt = new TransactionTemplate(tm);
             Assert.IsTrue(!TransactionSynchronizationManager.HasResource(sessionFactory), "Hasn't thread session");

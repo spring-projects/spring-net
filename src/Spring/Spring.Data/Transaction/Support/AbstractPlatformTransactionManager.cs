@@ -121,7 +121,7 @@ namespace Spring.Transaction.Support
 
         #region Private Variables
 
-        private TransactionSynchronizationState _transactionSyncState = TransactionSynchronizationState.Always;
+        private TransactionSynchronizationState _transactionSyncState = TransactionSynchronizationState.Never;
         private bool _nestedTransactionsAllowed;
         private bool _rollbackOnCommitFailure;
         private bool _failEarlyOnGlobalRollbackOnly;
@@ -129,7 +129,8 @@ namespace Spring.Transaction.Support
 
         #region Logging Definition
 
-        [NonSerialized()] protected readonly ILog log;
+        [NonSerialized()]
+        protected readonly ILog log;
 
         #endregion
 
@@ -230,7 +231,7 @@ namespace Spring.Transaction.Support
                 if (_defaultTimeout < DefaultTransactionDefinition.TIMEOUT_DEFAULT)
                 {
                     throw new InvalidTimeoutException("Invalid default timeout", _defaultTimeout);
-                } 
+                }
                 _defaultTimeout = value;
             }
         }
@@ -441,12 +442,12 @@ namespace Spring.Transaction.Support
         /// <seealso cref="ITransactionSynchronization.AfterCompletion"/>
         /// <seealso cref="TransactionSynchronizationStatus.Unknown"/>
         protected virtual void RegisterAfterCompletionWithExistingTransaction(Object transaction, IList synchronizations)
-		{
+        {
 
-		    log.Debug("Cannot register Spring after-completion synchronization with existing transaction - " +
-				"processing Spring after-completion callbacks immediately, with outcome status 'unknown'");
-		    InvokeAfterCompletion(synchronizations, TransactionSynchronizationStatus.Unknown);
-	    }
+            log.Debug("Cannot register Spring after-completion synchronization with existing transaction - " +
+                "processing Spring after-completion callbacks immediately, with outcome status 'unknown'");
+            InvokeAfterCompletion(synchronizations, TransactionSynchronizationStatus.Unknown);
+        }
 
         /// <summary>
         /// Cleanup resources after transaction completion.
@@ -513,7 +514,6 @@ namespace Spring.Transaction.Support
         {
             object transaction = DoGetTransaction();
             bool debugEnabled = log.IsDebugEnabled;
-            bool newSynchronization;
 
             if (debugEnabled)
             {
@@ -553,24 +553,50 @@ namespace Spring.Transaction.Support
                 }
                 try
                 {
+                    bool newSynchronization = (_transactionSyncState != TransactionSynchronizationState.Never);
+                    DefaultTransactionStatus status = NewTransactionStatus(definition, transaction, true, newSynchronization, debugEnabled,
+                                                                                             suspendedResources);
                     DoBegin(transaction, definition);
-                } catch (TransactionException)
+                    PrepareSynchronization(status, definition);
+                    return status;
+                }
+                catch (TransactionException)
                 {
                     Resume(null, suspendedResources);
                     throw;
                 }
-                newSynchronization = (_transactionSyncState != TransactionSynchronizationState.Never);
-                return NewTransactionStatus(definition, transaction, true, newSynchronization, debugEnabled,
-                                            suspendedResources);
             }
             else
             {
                 // Create "empty" transaction: no actual transaction, but potentially synchronization.
-                newSynchronization = (_transactionSyncState == TransactionSynchronizationState.Always);
-                return NewTransactionStatus(definition, null, false, newSynchronization, debugEnabled, null);
+                bool newSynchronization = (_transactionSyncState == TransactionSynchronizationState.Always);
+                return PrepareTransactionStatus(definition, null, true, newSynchronization, debugEnabled, null);
 
             }
 
+        }
+
+        protected DefaultTransactionStatus PrepareTransactionStatus(
+            ITransactionDefinition definition, Object transaction, bool newTransaction,
+            bool newSynchronization, bool debug, Object suspendedResources)
+        {
+            DefaultTransactionStatus status = NewTransactionStatus(
+                    definition, transaction, newTransaction, newSynchronization, debug, suspendedResources);
+            PrepareSynchronization(status, definition);
+            return status;
+        }
+
+
+        protected void PrepareSynchronization(DefaultTransactionStatus status, ITransactionDefinition definition)
+        {
+            if (status.NewSynchronization)
+            {
+                TransactionSynchronizationManager.ActualTransactionActive = status.HasTransaction();
+                TransactionSynchronizationManager.CurrentTransactionIsolationLevel = definition.TransactionIsolationLevel != System.Data.IsolationLevel.Unspecified ? definition.TransactionIsolationLevel : IsolationLevel.Unspecified;
+                TransactionSynchronizationManager.CurrentTransactionReadOnly = definition.ReadOnly;
+                TransactionSynchronizationManager.CurrentTransactionName = definition.Name;
+                TransactionSynchronizationManager.InitSynchronization();
+            }
         }
 
         private ITransactionStatus HandleExistingTransaction(ITransactionDefinition definition, object transaction, bool debugEnabled)
@@ -590,7 +616,7 @@ namespace Spring.Transaction.Support
                 object suspendedResources = Suspend(transaction);
                 bool newSynchronization = (_transactionSyncState == TransactionSynchronizationState.Always);
                 return
-                    NewTransactionStatus(definition, null, false, newSynchronization, debugEnabled,
+                    PrepareTransactionStatus(definition, null, false, newSynchronization, debugEnabled,
                                          suspendedResources);
             }
 
@@ -604,13 +630,20 @@ namespace Spring.Transaction.Support
                 object suspendedResources = Suspend(transaction);
                 try
                 {
+                    bool newSynchronization = (_transactionSyncState != TransactionSynchronizationState.Never);
+                    DefaultTransactionStatus status = NewTransactionStatus(
+                        definition, transaction, true, newSynchronization, debugEnabled, suspendedResources);
+                    PrepareSynchronization(status, definition);
                     DoBegin(transaction, definition);
+                    return status;
                 }
                 catch (TransactionException beginEx)
                 {
                     try
                     {
                         Resume(transaction, suspendedResources);
+                        //TODO: java code rethrows the ex here...should we do so as well?
+                        //throw;
                     }
                     catch (TransactionException resumeEx)
                     {
@@ -622,9 +655,6 @@ namespace Spring.Transaction.Support
                     }
                     throw;
                 }
-                bool newSynchronization = (_transactionSyncState != TransactionSynchronizationState.Never);
-                return
-                    NewTransactionStatus(definition, transaction, true, newSynchronization, debugEnabled, suspendedResources);
             }
             if (definition.PropagationBehavior == TransactionPropagation.Nested)
             {
@@ -642,24 +672,55 @@ namespace Spring.Transaction.Support
                 if (UseSavepointForNestedTransaction())
                 {
                     DefaultTransactionStatus status =
-                        NewTransactionStatus(definition, transaction, false, false, debugEnabled, null);
+                        PrepareTransactionStatus(definition, transaction, false, false, debugEnabled, null);
                     status.CreateAndHoldSavepoint(DateTime.Now.ToLongTimeString());
                     return status;
                 }
                 else
                 {
-                    DoBegin(transaction, definition);
                     bool newSynchronization = (_transactionSyncState != TransactionSynchronizationState.Never);
-                    return NewTransactionStatus(definition, transaction, true, newSynchronization, debugEnabled, null);
+                    DefaultTransactionStatus status = NewTransactionStatus(definition, transaction, true, newSynchronization, debugEnabled, null);
+                    PrepareSynchronization(status, definition);
+                    DoBegin(transaction, definition);
+                    return status;
 
                 }
             }
             // Assumably PROPAGATION_SUPPORTS.
-            if (debugEnabled) {
-			    log.Debug("Participating in existing transaction");
-		    }
+            if (debugEnabled)
+            {
+                log.Debug("Participating in existing transaction");
+            }
+
+            //TODO: this block related to un-ported java feature permitting setting the ValidateExistingTransaction flag 
+            //  default is FALSE anyway so skipping this validation block should have no effect on code excecution path
+            /*if (isValidateExistingTransaction())
+            {
+                if (definition.getIsolationLevel() != TransactionDefinition.ISOLATION_DEFAULT)
+                {
+                    Integer currentIsolationLevel = TransactionSynchronizationManager.getCurrentTransactionIsolationLevel();
+                    if (currentIsolationLevel == null || currentIsolationLevel != definition.getIsolationLevel())
+                    {
+                        Constants isoConstants = DefaultTransactionDefinition.constants;
+                        throw new IllegalTransactionStateException("Participating transaction with definition [" +
+                                definition + "] specifies isolation level which is incompatible with existing transaction: " +
+                                (currentIsolationLevel != null ?
+                                        isoConstants.toCode(currentIsolationLevel, DefaultTransactionDefinition.PREFIX_ISOLATION) :
+                                        "(unknown)"));
+                    }
+                }*/
+
+                if (!definition.ReadOnly)
+                {
+                    if (TransactionSynchronizationManager.CurrentTransactionReadOnly)
+                    {
+                        throw new IllegalTransactionStateException("Participating transaction with definition [" +
+                                definition + "] is not marked as read-only but existing transaction is");
+                    }
+                }
+            
             bool newSynch = (_transactionSyncState != TransactionSynchronizationState.Never);
-            return NewTransactionStatus(definition, transaction, false, newSynch, debugEnabled, null);
+            return PrepareTransactionStatus(definition, transaction, false, newSynch, debugEnabled, null);
 
         }
 
@@ -684,7 +745,7 @@ namespace Spring.Transaction.Support
                     "Transaction is already completed - do not call commit or rollback more than once per transaction");
             }
 
-            DefaultTransactionStatus defaultStatus = (DefaultTransactionStatus) transactionStatus;
+            DefaultTransactionStatus defaultStatus = (DefaultTransactionStatus)transactionStatus;
             if (defaultStatus.LocalRollbackOnly)
             {
                 if (defaultStatus.Debug)
@@ -694,7 +755,7 @@ namespace Spring.Transaction.Support
                 ProcessRollback(defaultStatus);
                 return;
             }
-            if ( !ShouldCommitOnGlobalRollbackOnly && defaultStatus.GlobalRollbackOnly)
+            if (!ShouldCommitOnGlobalRollbackOnly && defaultStatus.GlobalRollbackOnly)
             {
                 if (defaultStatus.Debug)
                 {
@@ -711,7 +772,7 @@ namespace Spring.Transaction.Support
                 return;
             }
             ProcessCommit(defaultStatus);
-           
+
         }
 
         protected virtual bool ShouldCommitOnGlobalRollbackOnly
@@ -848,7 +909,7 @@ namespace Spring.Transaction.Support
                 throw new IllegalTransactionStateException(
                     "Transaction is already completed - do not call commit or rollback more than once per transaction");
             }
-            DefaultTransactionStatus defaultStatus = (DefaultTransactionStatus) transactionStatus;
+            DefaultTransactionStatus defaultStatus = (DefaultTransactionStatus)transactionStatus;
             ProcessRollback(defaultStatus);
         }
 
@@ -879,7 +940,7 @@ namespace Spring.Transaction.Support
                     {
                         if (status.LocalRollbackOnly)
                         {
-                            if(status.Debug)
+                            if (status.Debug)
                             {
                                 log.Debug("Participating transaction failed - marking existing transaction as rollback-only");
                             }
@@ -915,15 +976,15 @@ namespace Spring.Transaction.Support
         {
             bool actualNewSynchronization = newSynchronization &&
                                 !TransactionSynchronizationManager.SynchronizationActive;
-            if (actualNewSynchronization)
-            {
-                TransactionSynchronizationManager.ActualTransactionActive = (transaction != null);
-                TransactionSynchronizationManager.CurrentTransactionIsolationLevel =
-                    definition.TransactionIsolationLevel;
-                TransactionSynchronizationManager.CurrentTransactionReadOnly = definition.ReadOnly;
-                TransactionSynchronizationManager.CurrentTransactionName = definition.Name;
-                TransactionSynchronizationManager.InitSynchronization();
-            }
+            //            if (actualNewSynchronization)
+            //            {
+            //                TransactionSynchronizationManager.ActualTransactionActive = (transaction != null);
+            //                TransactionSynchronizationManager.CurrentTransactionIsolationLevel =
+            //                    definition.TransactionIsolationLevel;
+            //                TransactionSynchronizationManager.CurrentTransactionReadOnly = definition.ReadOnly;
+            //                TransactionSynchronizationManager.CurrentTransactionName = definition.Name;
+            //                TransactionSynchronizationManager.InitSynchronization();
+            //            }
             return
                 new DefaultTransactionStatus(transaction, newTransaction, actualNewSynchronization, definition.ReadOnly, debug,
                                              suspendedResources);
@@ -985,7 +1046,8 @@ namespace Spring.Transaction.Support
                     return new SuspendedResourcesHolder(suspendedSynchronizations, suspendedResources,
                         name, readOnly, isolationLevel, wasActive);
 
-                } catch (TransactionException)
+                }
+                catch (TransactionException)
                 {
                     // DoSuspend failed - original transaction is still active
                     DoResumeSynchronization(suspendedSynchronizations);
@@ -996,7 +1058,7 @@ namespace Spring.Transaction.Support
             {
                 // Transaction active but no synchronization active.
                 object suspendedResources = DoSuspend(transaction);
-                return new SuspendedResourcesHolder(suspendedResources);                
+                return new SuspendedResourcesHolder(suspendedResources);
             }
             else
             {
@@ -1035,7 +1097,7 @@ namespace Spring.Transaction.Support
         /// <param name="suspendedResources"> the object that holds suspended resources, as returned by suspend</param>
         private void Resume(object transaction, object suspendedResources)
         {
-            SuspendedResourcesHolder resourcesHolder = (SuspendedResourcesHolder) suspendedResources;
+            SuspendedResourcesHolder resourcesHolder = (SuspendedResourcesHolder)suspendedResources;
             if (resourcesHolder != null)
             {
                 object suspendedResourcesObject = resourcesHolder.SuspendedResources;
@@ -1052,7 +1114,7 @@ namespace Spring.Transaction.Support
                     TransactionSynchronizationManager.CurrentTransactionName = resourcesHolder.Name;
                     DoResumeSynchronization(suspendedSynchronizations);
                 }
-                
+
             }
         }
 
@@ -1176,7 +1238,8 @@ namespace Spring.Transaction.Support
                 try
                 {
                     synchronization.AfterCompletion(status);
-                } catch (Exception e)
+                }
+                catch (Exception e)
                 {
                     log.Error("TransactionSynchronization.AfterCompletion threw exception", e);
                 }
@@ -1193,7 +1256,7 @@ namespace Spring.Transaction.Support
             status.Completed = true;
             if (status.NewSynchronization)
             {
-                TransactionSynchronizationManager.Clear();                
+                TransactionSynchronizationManager.Clear();
             }
             if (status.IsNewTransaction)
             {

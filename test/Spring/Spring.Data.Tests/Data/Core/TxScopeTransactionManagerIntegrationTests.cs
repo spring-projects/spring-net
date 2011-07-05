@@ -65,6 +65,8 @@ namespace Spring.Data.Core
         public void Commit()
         {
             TxScopeTransactionManager tm = new TxScopeTransactionManager();
+            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
+
             TransactionTemplate tt = new TransactionTemplate(tm);
 
             //tt.Name = "txName";
@@ -91,6 +93,8 @@ namespace Spring.Data.Core
         public void TransactionInformation()
         {
             TxScopeTransactionManager tm = new TxScopeTransactionManager();
+            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
+
             TransactionTemplate tt = new TransactionTemplate(tm);
             tt.TransactionIsolationLevel = System.Data.IsolationLevel.ReadUncommitted;
             tt.Execute(TransactionInformationTxDelegate);
@@ -121,6 +125,8 @@ namespace Spring.Data.Core
 
 
             TxScopeTransactionManager tm = new TxScopeTransactionManager();
+            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
+
             TransactionTemplate tt = new TransactionTemplate(tm);
             tt.TransactionTimeout = 10;
             tt.Name = "txName";

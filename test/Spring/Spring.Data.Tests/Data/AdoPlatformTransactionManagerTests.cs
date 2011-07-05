@@ -86,6 +86,7 @@ namespace Spring.Data
             mocks.ReplayAll();
 
             AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
+            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
 
             TransactionTemplate tt = new TransactionTemplate(tm);
 
@@ -127,6 +128,8 @@ namespace Spring.Data
             mocks.ReplayAll();
 
             AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
+            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
+
             TransactionTemplate tt = new TransactionTemplate(tm);
 
             Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
@@ -171,9 +174,10 @@ namespace Spring.Data
             mocks.ReplayAll();
 
             AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
+            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
 
-            Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
-            Assert.IsTrue(!TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
+            Assert.IsFalse(TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
+            Assert.IsFalse(TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
 
             ITransactionStatus ts = tm.GetTransaction(new DefaultTransactionDefinition());
             TestTransactionSynchronization synch =
@@ -201,7 +205,7 @@ namespace Spring.Data
                 Assert.IsTrue(outerTransactionBoundaryReached);
             }
 
-            Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
+            Assert.IsFalse(TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
             Assert.IsFalse(synch.beforeCommitCalled);
             Assert.IsTrue(synch.beforeCompletionCalled);
             Assert.IsFalse(synch.afterCommitCalled);
@@ -249,6 +253,8 @@ namespace Spring.Data
             mocks.ReplayAll();
 
             AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
+            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
+
 
             TransactionTemplate tt = new TransactionTemplate(tm);
             tt.PropagationBehavior = TransactionPropagation.RequiresNew;
@@ -293,10 +299,14 @@ namespace Spring.Data
             mocks.ReplayAll();
 
             AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
+            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
+
             TransactionTemplate tt = new TransactionTemplate(tm);
             tt.PropagationBehavior = TransactionPropagation.RequiresNew;
 
             AdoPlatformTransactionManager tm2 = new AdoPlatformTransactionManager(dbProvider2);
+            tm2.TransactionSynchronization = TransactionSynchronizationState.Always;
+
             TransactionTemplate tt2 = new TransactionTemplate(tm2);
             tt2.PropagationBehavior = TransactionPropagation.RequiresNew;
 
@@ -342,6 +352,8 @@ namespace Spring.Data
             mocks.ReplayAll();
 
             AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
+            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
+
             TransactionTemplate tt = new TransactionTemplate(tm);
             tt.PropagationBehavior = TransactionPropagation.RequiresNew;
 
@@ -393,6 +405,8 @@ namespace Spring.Data
             mocks.ReplayAll();
 
             AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
+            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
+
             TransactionTemplate tt = new TransactionTemplate(tm);
             tt.PropagationBehavior = TransactionPropagation.RequiresNew;
             Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
@@ -428,6 +442,8 @@ namespace Spring.Data
             mocks.ReplayAll();
 
             AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
+            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
+
             TransactionTemplate tt = new TransactionTemplate(tm);
             tt.PropagationBehavior = TransactionPropagation.RequiresNew;
             Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
@@ -475,6 +491,8 @@ namespace Spring.Data
             mocks.ReplayAll();
 
             AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
+            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
+
             TransactionTemplate tt = new TransactionTemplate(tm);
             tt.PropagationBehavior = TransactionPropagation.Supports;
             Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
@@ -513,6 +531,8 @@ namespace Spring.Data
             mocks.ReplayAll();
 
             AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
+            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
+
             TransactionTemplate tt = new TransactionTemplate(tm);
             tt.PropagationBehavior = TransactionPropagation.RequiresNew;
             tt.TransactionIsolationLevel = IsolationLevel.Serializable;
@@ -573,6 +593,8 @@ namespace Spring.Data
             mocks.ReplayAll();
 
             AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
+            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
+
             TransactionTemplate tt = new TransactionTemplate(tm);
             tt.TransactionTimeout = timeout;
 
@@ -616,6 +638,8 @@ namespace Spring.Data
             mocks.ReplayAll();
 
             AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
+            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
+
             TransactionTemplate tt = new TransactionTemplate(tm);
             try
             {
@@ -661,6 +685,8 @@ namespace Spring.Data
             mocks.ReplayAll();
 
             AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
+            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
+
             TransactionTemplate tt = new TransactionTemplate(tm);
             
             try
@@ -703,6 +729,8 @@ namespace Spring.Data
             mocks.ReplayAll();
 
             AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
+            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
+
             tm.RollbackOnCommitFailure = true;
             TransactionTemplate tt = new TransactionTemplate(tm);
 
@@ -747,6 +775,8 @@ namespace Spring.Data
             mocks.ReplayAll();
 
             AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
+            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
+
             TransactionTemplate tt = new TransactionTemplate(tm);
 
             try
@@ -778,6 +808,8 @@ namespace Spring.Data
             mocks.ReplayAll();
 
             AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
+            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
+
             TransactionTemplate tt = new TransactionTemplate(tm);
             tt.PropagationBehavior = TransactionPropagation.Supports;
 
@@ -797,6 +829,8 @@ namespace Spring.Data
             mocks.ReplayAll();
 
             AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
+            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
+
             TransactionTemplate tt = new TransactionTemplate(tm);
             tt.PropagationBehavior = TransactionPropagation.NotSupported;
 
@@ -816,6 +850,8 @@ namespace Spring.Data
             mocks.ReplayAll();
 
             AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
+            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
+
             TransactionTemplate tt = new TransactionTemplate(tm);
             tt.PropagationBehavior = TransactionPropagation.Never;
 
@@ -852,6 +888,8 @@ namespace Spring.Data
             mocks.ReplayAll();
 
             AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
+            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
+
             TransactionTemplate tt = new TransactionTemplate(tm);
             tt.PropagationBehavior = TransactionPropagation.Nested;
             
@@ -896,6 +934,8 @@ namespace Spring.Data
             mocks.ReplayAll();
 
             AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
+            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
+
             TransactionTemplate tt = new TransactionTemplate(tm);
             tt.PropagationBehavior = TransactionPropagation.Nested;
 
@@ -941,6 +981,8 @@ namespace Spring.Data
             mocks.ReplayAll();
 
             AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
+            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
+
             TransactionTemplate tt = new TransactionTemplate(tm);
             tt.PropagationBehavior = TransactionPropagation.Nested;
 

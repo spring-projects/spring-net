@@ -68,7 +68,9 @@ namespace Spring.Data.Core
             }
             mocks.ReplayAll();
 
-            IPlatformTransactionManager tm = new TxScopeTransactionManager(txAdapter);
+            TxScopeTransactionManager tm = new TxScopeTransactionManager(txAdapter);
+            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
+
             TransactionTemplate tt = new TransactionTemplate(tm);
             tt.Execute(delegate(ITransactionStatus status)
                            {
@@ -100,7 +102,9 @@ namespace Spring.Data.Core
             }
             mocks.ReplayAll();
 
-            IPlatformTransactionManager tm = new TxScopeTransactionManager(txAdapter);
+            TxScopeTransactionManager tm = new TxScopeTransactionManager(txAdapter);
+            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
+            
             TransactionTemplate tt = new TransactionTemplate(tm);
 
             Assert.IsTrue(!TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
@@ -155,7 +159,9 @@ namespace Spring.Data.Core
             }
             mocks.ReplayAll();
 
-            IPlatformTransactionManager tm = new TxScopeTransactionManager(txAdapter);
+            TxScopeTransactionManager tm = new TxScopeTransactionManager(txAdapter);
+            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
+
             TransactionTemplate tt = new TransactionTemplate(tm);
             tt.PropagationBehavior = TransactionPropagation.RequiresNew;
             tt.Execute(delegate(ITransactionStatus status)

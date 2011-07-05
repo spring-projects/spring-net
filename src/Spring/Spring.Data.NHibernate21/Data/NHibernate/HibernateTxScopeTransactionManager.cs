@@ -716,6 +716,20 @@ namespace Spring.Data.NHibernate
         protected override void DoRollback(DefaultTransactionStatus status)
         {
             HibernateTransactionObject txObject = (HibernateTransactionObject)status.Transaction;
+
+            if (!txObject.NewSessionHolder)
+            {
+                // Clear all pending inserts/updates/deletes in the Session.
+                // Necessary for pre-bound Sessions, to avoid inconsistent state.
+                txObject.SessionHolder.Session.Clear();
+            }
+            
+            DoTxScopeRollback(status);
+            return;
+
+
+/*            HibernateTransactionObject txObject = (HibernateTransactionObject)status.Transaction;
+
             if (status.Debug)
             {
                 log.Debug("Rolling back Hibernate transaction on Session [" +
@@ -723,6 +737,11 @@ namespace Spring.Data.NHibernate
             }
             try
             {
+                if (txObject.SessionHolder.Session != null && txObject.SessionHolder.Transaction != null && !txObject.SessionHolder.Transaction.IsActive)
+                {
+                    return;
+                }
+
                 IDbTransaction adoTx = GetIDbTransaction(txObject.SessionHolder.Transaction);
 
                 if (adoTx != null && adoTx.Connection != null)
@@ -737,7 +756,7 @@ namespace Spring.Data.NHibernate
                             txObject.SessionHolder.Session + "] was null");
                     }
                 }
-                
+
             }
             catch (HibernateTransactionException ex)
             {
@@ -757,7 +776,7 @@ namespace Spring.Data.NHibernate
                     txObject.SessionHolder.Session.Clear();
                 }
                 DoTxScopeRollback(status);
-            }
+            }*/
         }
 
         /// <summary>
