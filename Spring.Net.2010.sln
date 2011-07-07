@@ -89,6 +89,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Testing.Microsoft.20
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Testing.Microsoft.Tests.2010", "test\Spring\Spring.Testing.Microsoft.Tests\Spring.Testing.Microsoft.Tests.2010.csproj", "{7321149A-47C6-4FBA-9D1A-26FD6815381B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate32.2010", "src\Spring\Spring.Data.NHibernate32\Spring.Data.NHibernate32.2010.csproj", "{9F0F739C-876E-4C4B-AA55-9AC9242C25C8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate32.Tests.2010", "test\Spring\Spring.Data.NHibernate32.Tests\Spring.Data.NHibernate32.Tests.2010.csproj", "{C33C6A06-885D-49D2-8029-422D38CBC6D7}"
+EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Spring.Net.2010.vsmdi
@@ -512,6 +516,26 @@ Global
 		{7321149A-47C6-4FBA-9D1A-26FD6815381B}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7321149A-47C6-4FBA-9D1A-26FD6815381B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{7321149A-47C6-4FBA-9D1A-26FD6815381B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{9F0F739C-876E-4C4B-AA55-9AC9242C25C8}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{9F0F739C-876E-4C4B-AA55-9AC9242C25C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9F0F739C-876E-4C4B-AA55-9AC9242C25C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9F0F739C-876E-4C4B-AA55-9AC9242C25C8}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{9F0F739C-876E-4C4B-AA55-9AC9242C25C8}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{9F0F739C-876E-4C4B-AA55-9AC9242C25C8}.Release|.NET.ActiveCfg = Release|Any CPU
+		{9F0F739C-876E-4C4B-AA55-9AC9242C25C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9F0F739C-876E-4C4B-AA55-9AC9242C25C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9F0F739C-876E-4C4B-AA55-9AC9242C25C8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{9F0F739C-876E-4C4B-AA55-9AC9242C25C8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{C33C6A06-885D-49D2-8029-422D38CBC6D7}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{C33C6A06-885D-49D2-8029-422D38CBC6D7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C33C6A06-885D-49D2-8029-422D38CBC6D7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C33C6A06-885D-49D2-8029-422D38CBC6D7}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{C33C6A06-885D-49D2-8029-422D38CBC6D7}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{C33C6A06-885D-49D2-8029-422D38CBC6D7}.Release|.NET.ActiveCfg = Release|Any CPU
+		{C33C6A06-885D-49D2-8029-422D38CBC6D7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C33C6A06-885D-49D2-8029-422D38CBC6D7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C33C6A06-885D-49D2-8029-422D38CBC6D7}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{C33C6A06-885D-49D2-8029-422D38CBC6D7}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

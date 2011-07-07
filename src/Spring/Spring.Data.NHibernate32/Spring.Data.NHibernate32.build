@@ -1,0 +1,61 @@
+<?xml version="1.0" ?>
+<project name="Spring.Data.NHibernate32" default="build" xmlns="http://nant.sf.net/schemas/nant.xsd">
+<!--
+    Required properties:
+      * current.bin.dir           - (path) root level to build to
+      * current.build.debug       - (true|false) debug build?
+      * current.build.defines.csc - framework-specific build defines for C# compiler
+ -->
+	<target name="build">
+
+		<echo message="${nh32.lib.dir}" />
+		<copy todir="${current.bin.dir}" overwrite="true">
+			<fileset basedir="${nh32.lib.dir}">
+				<include name="**/*.dll" />
+			</fileset>
+		</copy>		
+
+		<!-- build Spring.Data.NHibernate32 -->
+		<csc target="library" define="${current.build.defines.csc},NH_2_0,NH_2_1"
+                     warnaserror="true"
+		     optimize="${build.optimize}"
+		     debug="${current.build.debug}"
+                     output="${current.bin.dir}/${project::get-name()}.dll"
+                     doc="${current.bin.dir}/${project::get-name()}.xml">
+			<arg line="${compiler.args}"/>
+			<nowarn>
+				<warning number="${nowarn.numbers.test},0169,0618" />
+				<warning number="0219" if="${nant.settings.currentframework=='mono-2.0'}"/>
+			</nowarn>
+			<sources failonempty="true">
+				<include name="**/*.cs" />
+				<include name="../Spring.Data.NHibernate/Data/**/*.cs" />
+				<include name="../Spring.Data.NHibernate/Support/**/*.cs" />
+				<include name="../Spring.Data.NHibernate12/Data/**/*.cs" />
+				<include name="../Spring.Data.NHibernate12/Support/**/*.cs" />
+				<include name="../Spring.Data.NHibernate20/Data/**/*.cs" />				
+				<include name="../Spring.Data.NHibernate21/Data/**/*.cs" />				
+				<exclude name="../Spring.Data.NHibernate/Data/**/HibernateAccessor.cs" />
+				<exclude name="../Spring.Data.NHibernate/Data/**/SpringSessionSynchronization.cs" />
+				<exclude name="../Spring.Data.NHibernate/Data/**/LocalSessionFactoryObject.cs" />
+				<exclude name="../Spring.Data.NHibernate/Data/**/HibernateAccessor.cs" />
+				<exclude name="../Spring.Data.NHibernate/Data/**/HibernateObjectRetrievalFailureException.cs" />
+				<exclude name="../Spring.Data.NHibernate/Data/**/HibernateOptimisticLockingFailureException.cs" />
+				<exclude name="../Spring.Data.NHibernate/Data/**/SessionFactoryUtils.cs" />	
+				<exclude name="../Spring.Data.NHibernate12/Data/**/HibernateOptimisticLockingFailureException.cs" />				
+				<exclude name="../Spring.Data.NHibernate12/Data/**/LocalSessionFactoryObject.cs" />
+				<include name="../GenCommonAssemblyInfo.cs" />
+			</sources>
+			<references basedir="${current.bin.dir}">
+				<include name="System.Data.dll" />
+				<include name="System.Web.dll" />
+				<include name="System.EnterpriseServices.dll" />
+				<include name="*NHibernate.dll" />
+				<include name="*.dll" />
+				<exclude name="Spring.Data.NHibernate*.dll" />
+				<exclude name="Spring.Data.NHibernate*.*.dll" />
+				<exclude name="CloverRuntime.dll" />
+			</references>
+		</csc>
+	</target>
+</project>
