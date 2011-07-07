@@ -2009,31 +2009,16 @@ Commandline Examples:
 		<in>
 			<items basedir="${spring.basedir}/src/spring">
 				<include name="**/*.nuspec" />
-				
 				<!--
-				NOTE: must exclude Spring.Core.nuspec b/c it has no Spring.* deps and so this XPATH expr. won't find a match in that case
-				       and so would fail this XMLPOKE operation otherwise
+				NOTE: must exclude Spring.Core.nuspec b/c it has no Spring.* deps and so the XPATH expr. won't find a match in that case
+				       and so would fail the XMLPOKE operation otherwise
 				-->
 				<exclude name="**/Spring.Core.nuspec" />
 			</items>
 		</in>
 		<do>
 			<echo message="Processing nuspec file: ${filename}" />
-			<!-- update the actual version number for the actual package -->
-			<!-- disabled: NuGet 1.3 introduced passing "-version" command line arg to override this value so no longer need the XMLPOKE call
-			<xmlpoke file="${filename}" xpath="/n:package/n:metadata/n:version" value="${package.version}">
-				<namespaces>
-					<namespace prefix="n" uri="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd" />
-				</namespaces>
-			</xmlpoke>
-			-->
-			
-			<!--
-				update the version number of the dependent packages; assumes all Spring.* packages are updated at the same time to the same version
-				NOTE: must set fail-on-errror to false b/c Spring.Core (ex.) has no Spring.* deps and so this XPATH expr. won't find a match in that case
-				       and so would fail this XMLPOKE operation otherwise
-			-->
-			<xmlpoke file="${filename}" xpath="/n:package/n:metadata/n:dependencies/n:dependency[starts-with(@id, 'Spring.')]/@version" value="${package.version}"> <!-- failonerror="false" > -->
+			<xmlpoke file="${filename}" xpath="/n:package/n:metadata/n:dependencies/n:dependency[starts-with(@id, 'Spring.')]/@version" value="${package.version}">
 				<namespaces>
 					<namespace prefix="n" uri="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd" />
 				</namespaces>
