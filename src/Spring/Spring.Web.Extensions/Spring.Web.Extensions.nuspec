@@ -13,8 +13,8 @@
     <summary>Interfaces and classes that provide ASP.NET AJAX 1.0 support in Spring.Net</summary>
     <language>en-US</language>
     <dependencies>
-      <dependency id="Spring.Core" version="1.3.1" />
-      <dependency id="Spring.Web" version="1.3.1" />
+      <dependency id="Spring.Core" version="1.3.2" />
+      <dependency id="Spring.Web" version="1.3.2" />
     </dependencies>
   </metadata>
   <files>
