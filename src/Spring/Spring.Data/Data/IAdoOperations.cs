@@ -96,14 +96,12 @@ namespace Spring.Data
         object QueryWithResultSetExtractor(CommandType cmdType, string cmdText, IResultSetExtractor resultSetExtractor);
 
 
-	    // Parameterized Queries
-	    
-
-        //only input parameters can be used...
+	    // Parameterized Queries	    
+        // Only input parameters can be used...
 
 
         /// <summary>
-        /// Execute a query given IDbCommand's type and text with parameters set
+        /// Execute a query given the CommandType and text with parameters set
         /// via the command setter, processing a 
         /// single result set with an instance of IResultSetExtractor
         /// </summary>
@@ -118,12 +116,39 @@ namespace Spring.Data
         object QueryWithResultSetExtractor(CommandType cmdType, string cmdText, IResultSetExtractor resultSetExtractor, 
                                            ICommandSetter commandSetter);
 
-        //only input parameters can be used.
-        object QueryWithResultSetExtractor(CommandType commandType, string cmdText, IResultSetExtractor resultSetExtractor,
+        /// <summary>
+        /// Execute a query given the CommandType and text specifying a single parameter and process a single result set with an
+        /// instance of IResultSetExtractor.  
+        /// </summary>
+        /// <remarks>Convention is to use 0 For the size if it does not make sense for the given data type
+        /// </remarks>
+        /// <param name="cmdType">The command type.</param>
+        /// <param name="cmdText">The command text to execute.</param>
+        /// <param name="resultSetExtractor">The result set extractor.</param>
+        /// <param name="parameterName">The name of the parameters</param>
+        /// <param name="dbType">The enumeration of the parameter type </param>
+        /// <param name="size">The size of the parmeter - e.g. string length. Use 0 if not relevant for specific data type</param>
+        /// <param name="parameterValue">The value of the parameters</param>
+        /// <returns>An arbitrary result object, as returned by the IResultSetExtractor</returns>
+        /// <exception cref="Spring.Dao.DataAccessException">
+        /// If there is any problem executing the query.
+        /// </exception>
+        object QueryWithResultSetExtractor(CommandType cmdType, string cmdText, IResultSetExtractor resultSetExtractor,
                                            string parameterName, Enum dbType, int size, object parameterValue);
 
-        //iterate over one or more result sets and then assign output parameters.
-        object QueryWithResultSetExtractor(CommandType commandType, string cmdText, IResultSetExtractor resultSetExtractor,
+        /// <summary>
+        /// Execute a query given the CommandType and text specifying a collection of parameters and process a single result set with an
+        /// instance of IResultSetExtractor.  
+        /// </summary>
+        /// <param name="cmdType">The command type.</param>
+        /// <param name="cmdText">The command text to execute.</param>
+        /// <param name="resultSetExtractor">The result set extractor.</param>
+        /// <param name="parameters">The query parameters</param>
+        /// <returns>An arbitrary result object, as returned by the IResultSetExtractor</returns>
+        /// <exception cref="Spring.Dao.DataAccessException">
+        /// If there is any problem executing the query.
+        /// </exception>
+        object QueryWithResultSetExtractor(CommandType cmdType, string cmdText, IResultSetExtractor resultSetExtractor,
                                            IDbParameters parameters);
 
 	    
@@ -139,7 +164,7 @@ namespace Spring.Data
         /// </summary>
         /// <param name="cmdType">The type of command.</param>
         /// <param name="cmdText">The command text.</param>
-        /// <param name="resultSetExtractorDelegate">Delegate that will extract all rows of a result set</param>
+        /// <param name="resultSetExtractorDelegate">Delegate that will process all rows of a result set</param>
         /// <returns>An arbitrary result object, as returned by the IResultSetExtractor</returns>
         /// <exception cref="Spring.Dao.DataAccessException">
         /// If there is any problem executing the query.
@@ -148,25 +173,73 @@ namespace Spring.Data
 
 
         // Parameterized Queries
+        // only input parameters can be used...
 
-
-        //only input parameters can be used...
-        object QueryWithResultSetExtractorDelegate(CommandType commandType, string sql, ResultSetExtractorDelegate resultSetExtractorDelegate, 
+        /// <summary>
+        /// Execute a query given the CommandType and text with parameters set
+        /// via the command setter, processing a 
+        /// single result set with an instance of IResultSetExtractor
+        /// </summary>
+        /// <param name="cmdType">The command type.</param>
+        /// <param name="cmdText">The command text to execute.</param>
+        /// <param name="resultSetExtractorDelegate">Delegate that will process all rows of a result set</param>
+        /// <param name="commandSetter">The command setter.</param>
+        /// <returns>An arbitrary result object, as returned by the IResultSetExtractor</returns>
+        /// <exception cref="Spring.Dao.DataAccessException">
+        /// If there is any problem executing the query.
+        /// </exception>
+        object QueryWithResultSetExtractorDelegate(CommandType cmdType, string cmdText, ResultSetExtractorDelegate resultSetExtractorDelegate, 
                                                    ICommandSetter commandSetter);
 
-        //only input parameters can be used.
-        object QueryWithResultSetExtractorDelegate(CommandType commandType, string sql, ResultSetExtractorDelegate resultSetExtractorDelegate,
+
+        /// <summary>
+        /// Execute a query given the CommandType and text specifying a single parameter and process a single result set with an
+        /// instance of IResultSetExtractor.  
+        /// </summary>
+        /// <remarks>Convention is to use 0 For the size if it does not make sense for the given data type
+        /// </remarks>
+        /// <param name="cmdType">The command type.</param>
+        /// <param name="cmdText">The command text to execute.</param>
+        /// <param name="resultSetExtractorDelegate">Delegate that will process all rows of a result set</param>
+        /// <param name="parameterName">The name of the parameters</param>
+        /// <param name="dbType">The enumeration of the parameter type </param>
+        /// <param name="size">The size of the parmeter - e.g. string length. Use 0 if not relevant for specific data type</param>
+        /// <param name="parameterValue">The value of the parameters</param>
+        /// <returns>An arbitrary result object, as returned by the IResultSetExtractor</returns>
+        /// <exception cref="Spring.Dao.DataAccessException">
+        /// If there is any problem executing the query.
+        /// </exception>
+        object QueryWithResultSetExtractorDelegate(CommandType cmdType, string cmdText, ResultSetExtractorDelegate resultSetExtractorDelegate,
                                                    string parameterName, Enum dbType, int size, object parameterValue);
 
-        //iterate over one or more result sets and then assign output parameters.
-        object QueryWithResultSetExtractorDelegate(CommandType commandType, string sql, ResultSetExtractorDelegate resultSetExtractorDelegate, 
-                                                   IDbParameters parameter);
+        /// <summary>
+        /// Execute a query given the CommandType and text specifying a collection of parameters and process a single result set with an
+        /// instance of IResultSetExtractor.  
+        /// </summary>
+        /// <param name="cmdType">The command type.</param>
+        /// <param name="cmdText">The command text to execute.</param>
+        /// <param name="resultSetExtractorDelegate">Delegate that will process all rows of a result set</param>
+        /// <param name="parameters">The query parameters</param>
+        /// <returns>An arbitrary result object, as returned by the IResultSetExtractor</returns>
+        /// <exception cref="Spring.Dao.DataAccessException">
+        /// If there is any problem executing the query.
+        /// </exception>
+        object QueryWithResultSetExtractorDelegate(CommandType cmdType, string cmdText, ResultSetExtractorDelegate resultSetExtractorDelegate, 
+                                                   IDbParameters parameters);
 
 
         #endregion
 	    
         #region Queries with RowMapperDelegate
 
+        /// <summary>
+        /// Execute a query given static SQL, mapping each row to a .NET object
+        /// via a RowMapper
+        /// </summary>
+        /// <param name="cmdType">The type of command</param>
+        /// <param name="cmdText">SQL query to execute</param>
+        /// <param name="rowMapperDelgate">delegate/lambda that will map one object per row</param>
+        /// <returns>The result list containing mapped objects</returns>
         IList QueryWithRowMapperDelegate(CommandType cmdType, string cmdText, RowMapperDelegate rowMapperDelgate);
 
         IList QueryWithRowMapperDelegate(CommandType cmdType, string cmdText, RowMapperDelegate rowMapperDelgate, ICommandSetter commandSetter);
@@ -186,7 +259,7 @@ namespace Spring.Data
 
         /// <summary>
         /// Execute a query given static SQL, mapping each row to a .NET object
-        /// iva a RowMapper
+        /// via a RowMapper
         /// </summary>
         /// <param name="cmdType">The type of command</param>
         /// <param name="cmdText">SQL query to execute</param>

@@ -87,6 +87,47 @@
 
 	</object>
 
+  <object id="SqlServer-4.0" type="Spring.Data.Common.DbProvider, Spring.Data" singleton="false">
+    <constructor-arg name="dbMetaData">
+      <object type="Spring.Data.Common.DbMetadata">
+        <constructor-arg name="productName" value="Microsoft SQL Server, provider V4.0.0.0 in framework .NET V4.0" />
+        <constructor-arg name="assemblyName" value="System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"/>
+        <constructor-arg name="connectionType" value="System.Data.SqlClient.SqlConnection, System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"/>
+        <constructor-arg name="commandType" value="System.Data.SqlClient.SqlCommand, System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"/>
+        <constructor-arg name="parameterType" value="System.Data.SqlClient.SqlParameter, System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"/>
+        <constructor-arg name="dataAdapterType" value="System.Data.SqlClient.SqlDataAdapter, System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"/>
+        <constructor-arg name="commandBuilderType" value="System.Data.SqlClient.SqlCommandBuilder, System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"/>
+        <constructor-arg name="commandBuilderDeriveParametersMethod" value="DeriveParameters"/>
+        <constructor-arg name="parameterDbType" value="System.Data.SqlDbType, System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"/>
+        <constructor-arg name="parameterDbTypeProperty" value="SqlDbType"/>
+        <constructor-arg name="parameterIsNullableProperty" value="IsNullable"/>
+        <constructor-arg name="parameterNamePrefix" value="@"/>
+        <constructor-arg name="exceptionType" value="System.Data.SqlClient.SqlException, System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"/>
+        <constructor-arg name="useParameterNamePrefixInParameterCollection" value="true"/>
+        <constructor-arg name="useParameterPrefixInSql" value="true"/>
+        <constructor-arg name="bindByName" value="true"/>
+        <!-- this is only true for .net 1.1 kept it here just in case we want to revert back to this strategy for
+             obtaining error codes-->
+        <constructor-arg name="errorCodeExceptionExpression" value="Errors[0].Number.ToString()"/>
+
+        <!-- TODO select form system db all errors that have 'incorrect syntax' at the start of the error string-->
+        <property name="ErrorCodes.BadSqlGrammarCodes">
+          <value>156,170,207,208</value>
+        </property>
+        <property name="ErrorCodes.PermissionDeniedCodes">
+          <value>229</value>
+        </property>
+        <property name="ErrorCodes.DataIntegrityViolationCodes">
+          <value>544,2627,8114,8115</value>
+        </property>
+        <property name="ErrorCodes.DeadlockLoserCodes">
+          <value>1205</value>
+        </property>
+      </object>
+    </constructor-arg>
+
+  </object>
+
   <alias name="SqlServer-2.0" alias="System.Data.SqlClient"/>
 
   
@@ -233,6 +274,48 @@
         <constructor-arg name="exceptionType" value="System.Data.OleDb.OleDbException, System.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"/>
         <constructor-arg name="useParameterNamePrefixInParameterCollection" value="false"/>
         <constructor-arg name="useParameterPrefixInSql" value="false"/>        
+        <constructor-arg name="bindByName" value="false"/>
+        <!-- TODO should parse out high/low values in the native error...yuk!-->
+        <constructor-arg name="errorCodeExceptionExpression" value="Errors[0].NativeError.ToString()"/>
+
+        <!-- TODO where is the definitive list of the error.  Anyway, until parse out high low error there isn't any
+             exception mapping yet for this provider. 
+         -->
+        <property name="ErrorCodes.BadSqlGrammarCodes">
+          <value>156,170,207,208</value>
+        </property>
+        <property name="ErrorCodes.PermissionDeniedCodes">
+          <value>229</value>
+        </property>
+        <property name="ErrorCodes.DataIntegrityViolationCodes">
+          <value>2627,8114,8115</value>
+        </property>
+        <property name="ErrorCodes.DeadlockLoserCodes">
+          <value>1205</value>
+        </property>
+      </object>
+    </constructor-arg>
+
+  </object>
+
+  <object id="OleDb-4.0" type="Spring.Data.Common.DbProvider, Spring.Data" singleton="false">
+    <constructor-arg name="dbMetaData">
+      <object type="Spring.Data.Common.DbMetadata">
+        <constructor-arg name="productName" value="OleDb, provider V4.0.0.0 in framework .NET V4"/>
+        <constructor-arg name="assemblyName" value="System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+        <constructor-arg name="connectionType" value="System.Data.OleDb.OleDbConnection, System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"/>
+        <constructor-arg name="commandType" value="System.Data.OleDb.OleDbCommand, System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+        <constructor-arg name="parameterType" value="System.Data.OleDb.OleDbParameter, System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+        <constructor-arg name="dataAdapterType" value="System.Data.OleDb.OleDbDataAdapter, System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+        <constructor-arg name="commandBuilderType" value="System.Data.OleDb.OleDbCommandBuilder, System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+        <constructor-arg name="commandBuilderDeriveParametersMethod" value="DeriveParameters"/>
+        <constructor-arg name="parameterDbType" value="System.Data.OleDb.OleDbType, System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+        <constructor-arg name="parameterDbTypeProperty" value="OleDbType"/>
+        <constructor-arg name="parameterIsNullableProperty" value="IsNullable"/>
+        <constructor-arg name="parameterNamePrefix" value="?"/>
+        <constructor-arg name="exceptionType" value="System.Data.OleDb.OleDbException, System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"/>
+        <constructor-arg name="useParameterNamePrefixInParameterCollection" value="false"/>
+        <constructor-arg name="useParameterPrefixInSql" value="false"/>
         <constructor-arg name="bindByName" value="false"/>
         <!-- TODO should parse out high/low values in the native error...yuk!-->
         <constructor-arg name="errorCodeExceptionExpression" value="Errors[0].NativeError.ToString()"/>
@@ -1889,6 +1972,31 @@
         <constructor-arg name="parameterIsNullableProperty" value="IsNullable"/>
         <constructor-arg name="parameterNamePrefix" value="?"/>
         <constructor-arg name="exceptionType" value="System.Data.Odbc.OdbcException, System.Data, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"/>
+        <constructor-arg name="useParameterNamePrefixInParameterCollection" value="false"/>
+        <constructor-arg name="useParameterPrefixInSql" value="false"/>
+        <constructor-arg name="bindByName" value="false"/>
+        <constructor-arg name="errorCodeExceptionExpression" value="Errors[0].NativeError.ToString()"/>
+      </object>
+    </constructor-arg>
+
+  </object>
+
+  <object id="Odbc-4.0" type="Spring.Data.Common.DbProvider, Spring.Data" singleton="false">
+    <constructor-arg name="dbMetaData">
+      <object type="Spring.Data.Common.DbMetadata">
+        <constructor-arg name="productName" value="Microsoft ODBC, provider V4.0.0.0 in framework .NET V4"/>
+        <constructor-arg name="assemblyName" value="System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+        <constructor-arg name="connectionType" value="System.Data.Odbc.OdbcConnection, System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"/>
+        <constructor-arg name="commandType" value="System.Data.Odbc.OdbcCommand, System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+        <constructor-arg name="parameterType" value="System.Data.Odbc.OdbcParameter, System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+        <constructor-arg name="dataAdapterType" value="System.Data.Odbc.OdbcDataAdapter, System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+        <constructor-arg name="commandBuilderType" value="System.Data.Odbc.OdbcCommandBuilder, System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+        <constructor-arg name="commandBuilderDeriveParametersMethod" value="DeriveParameters"/>
+        <constructor-arg name="parameterDbType" value="System.Data.Odbc.OdbcType, System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+        <constructor-arg name="parameterDbTypeProperty" value="OdbcType"/>
+        <constructor-arg name="parameterIsNullableProperty" value="IsNullable"/>
+        <constructor-arg name="parameterNamePrefix" value="?"/>
+        <constructor-arg name="exceptionType" value="System.Data.Odbc.OdbcException, System.Data, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"/>
         <constructor-arg name="useParameterNamePrefixInParameterCollection" value="false"/>
         <constructor-arg name="useParameterPrefixInSql" value="false"/>
         <constructor-arg name="bindByName" value="false"/>

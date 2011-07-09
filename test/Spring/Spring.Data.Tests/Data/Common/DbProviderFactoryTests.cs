@@ -109,7 +109,7 @@ namespace Spring.Data.Common
         }
 
         [Test]
-        public void DefaultInstanceWithSqlServer2005()
+        public void DefaultInstanceWithSqlServer20()
         {
             Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US", false);
             //IApplicationContext ctx = DbProviderFactory.ApplicationContext;            
@@ -155,7 +155,37 @@ namespace Spring.Data.Common
             Assert.AreEqual(":Foo", provider.CreateParameterName("Foo"));
         }
 #endif
+
+#if NET_4_0
        
+        [Test]
+        public void DefaultInstanceWithSqlServer40()
+        {
+            IDbProvider provider = DbProviderFactory.GetDbProvider("SqlServer-4.0");
+            AssertIsSqlServer40(provider);
+            Assert.IsNull(provider.ConnectionString);
+            Assert.IsNotNull(provider.CreateCommand());
+            Assert.IsNotNull(provider.CreateCommandBuilder());
+            Assert.IsNotNull(provider.CreateConnection());
+            Assert.IsNotNull(provider.CreateDataAdapter());
+            Assert.IsNotNull(provider.CreateParameter());
+            Assert.AreEqual("@Foo", provider.CreateParameterName("Foo"));
+        }
+
+        [Test]
+        public void DefaultInstanceWithOleDb40()
+        {
+            IDbProvider provider = DbProviderFactory.GetDbProvider("OleDb-4.0");
+            Assert.AreEqual("OleDb, provider V4.0.0.0 in framework .NET V4", provider.DbMetadata.ProductName);
+            Assert.IsNotNull(provider.CreateCommand());
+            Assert.IsNotNull(provider.CreateCommandBuilder());
+            Assert.IsNotNull(provider.CreateConnection());
+            Assert.IsNotNull(provider.CreateDataAdapter());
+            Assert.IsNotNull(provider.CreateParameter());
+            Assert.AreEqual("?", provider.CreateParameterName("Foo"));
+        }
+#endif
+
         //[Test]   
         //Comment in for specific testing with oracle as can't put oracle client in public code repository
         public void DefaultInstanceWithOracleClient20()
@@ -185,7 +215,7 @@ namespace Spring.Data.Common
         */
 
         [Test]
-        public void TestDb2()
+        public void TestSqlServer20Names()
         {
             //Initialize internal application context. factory
             DbProviderFactory.GetDbProvider("SqlServer-2.0");
@@ -235,6 +265,13 @@ namespace Spring.Data.Common
         private void AssertIsSqlServer2005(IDbProvider provider)
         {
             Assert.AreEqual("Microsoft SQL Server, provider V2.0.0.0 in framework .NET V2.0",
+                            provider.DbMetadata.ProductName);
+            AssertCommonSqlServerErrorCodes(provider);
+        }
+
+        private void AssertIsSqlServer40(IDbProvider provider)
+        {
+            Assert.AreEqual("Microsoft SQL Server, provider V4.0.0.0 in framework .NET V4.0",
                             provider.DbMetadata.ProductName);
             AssertCommonSqlServerErrorCodes(provider);
         }
