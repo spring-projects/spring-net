@@ -6818,13 +6818,24 @@
             Unmarshalls the next command object from the stream
             </summary>
         </member>
+        <member name="P:Apache.NMS.ActiveMQ.Transport.IWireFormat.Transport">
+            <summary>
+            Gets the Transport that own this WireFormat instnace.
+            </summary>
+        </member>
+        <member name="P:Apache.NMS.ActiveMQ.Transport.IWireFormat.Version">
+            <summary>
+            Gets the current version of the protocol that this WireFormat instance
+            supports
+            </summary>
+        </member>
         <member name="T:Apache.NMS.ActiveMQ.State.ConnectionStateTracker">
             <summary>
             Tracks the state of a connection so a newly established transport can be
             re-initialized to the state that was tracked.
             </summary>
         </member>
-        <member name="M:Apache.NMS.ActiveMQ.State.ConnectionStateTracker.track(Apache.NMS.ActiveMQ.Commands.Command)">
+        <member name="M:Apache.NMS.ActiveMQ.State.ConnectionStateTracker.Track(Apache.NMS.ActiveMQ.Commands.Command)">
             <summary>
             </summary>
             <param name="command"></param>
@@ -6947,12 +6958,60 @@
             <param name="timeout"></param>
         </member>
         <member name="T:Apache.NMS.ActiveMQ.Threads.TaskRunnerFactory">
+             <summary>
+             Manages the thread pool for long running tasks. Long running tasks are not
+             always active but when they are active, they may need a few iterations of
+             processing for them to become idle. The manager ensures that each task is
+             processes but that no one task overtakes the system. This is kina like
+             cooperative multitasking.
+            
+             If your OS/JVM combination has a good thread model, you may want to avoid
+             using a thread pool to run tasks and use a DedicatedTaskRunner instead.
+             </summary>
+        </member>
+        <member name="T:Apache.NMS.ActiveMQ.Threads.ThreadPoolExecutor">
             <summary>
-            Manages the thread pool for long running tasks. Long running tasks are not
-            always active but when they are active, they may need a few iterations of
-            processing for them to become idle. The manager ensures that each task is
-            processes but that no one task overtakes the system. This is kina like
-            cooperative multitasking.
+            This class provides a wrapper around the ThreadPool mechanism in .NET
+            to allow for serial execution of jobs in the ThreadPool and provide
+            a means of shutting down the execution of jobs in a deterministic
+            way.
+            </summary>
+        </member>
+        <member name="T:Apache.NMS.ActiveMQ.Threads.ThreadPoolExecutor.Future">
+            <summary>
+            Represents an asynchronous task that is executed on the ThreadPool
+            at some point in the future.
+            </summary>
+        </member>
+        <member name="T:Apache.NMS.ActiveMQ.Transactions.IRecoveryLogger">
+            <summary>
+            Interface for a Logger object used to store and retrieve Recovery
+            Information needed to recover distributed transactions that operate
+            in the Microsoft Distributed Transaction Context.
+            </summary>
+        </member>
+        <member name="P:Apache.NMS.ActiveMQ.Transactions.RecoveryFileLogger.ResourceManagerId">
+            <summary>
+            The Unique Id of the Resource Manager that this logger is currently
+            logging recovery information for.
+            </summary>
+        </member>
+        <member name="P:Apache.NMS.ActiveMQ.Transactions.RecoveryFileLogger.Location">
+            <summary>
+            The Path to the location on disk where the recovery log is written
+            to and read from.
+            </summary>
+        </member>
+        <member name="P:Apache.NMS.ActiveMQ.Transactions.RecoveryFileLogger.AutoCreateLocation">
+            <summary>
+            Indiciate that the Logger should create and sibdirs of the
+            given location that don't currently exist.
+            </summary>
+        </member>
+        <member name="T:Apache.NMS.ActiveMQ.Transactions.RecoveryLoggerFactoryAttribute">
+            <summary>
+            Attribute that decorates IRecoveryLoggerFactory implementations to allow
+            the Recovery Policy to find all the available factories dynamically.
             </summary>
         </member>
         <member name="F:Apache.NMS.ActiveMQ.Transport.Discovery.Multicast.MulticastDiscoveryAgent.remoteBrokers">
@@ -7090,6 +7149,12 @@
             Returns true if this Transport can accept updated lists of connection Uri's.
             </summary>
         </member>
+        <member name="P:Apache.NMS.ActiveMQ.Transport.ITransport.WireFormat">
+            <summary>
+            Returns the IWireFormat object that this transport uses to marshal and
+            unmarshal Command objects.
+            </summary>
+        </member>
         <member name="M:Apache.NMS.ActiveMQ.Transport.ICompositeTransport.Add(System.Boolean,System.Uri[])">
             <summary>
             Adds a new set of Uris to the list of Uris that this Transport can connect to.
@@ -7113,12 +7178,6 @@
             <param name="uris">
             A <see cref="T:System.Uri"/>
             </param>
-        </member>
-        <member name="M:Apache.NMS.ActiveMQ.Transport.Failover.FailoverTransport.IsShutdownCommand(Apache.NMS.ActiveMQ.Commands.Command)">
-            <summary>
-            </summary>
-            <param name="command"></param>
-            <returns>Returns true if the command is one sent when a connection is being closed.</returns>
         </member>
         <member name="P:Apache.NMS.ActiveMQ.Transport.Failover.FailoverTransport.AsyncConnect">
             <summary>
@@ -7290,6 +7349,12 @@
             <summary>
             Override in a subclass to create the specific type of transport that is
             being implemented.
+            </summary>
+        </member>
+        <member name="T:Apache.NMS.ActiveMQ.Transport.ActiveMQTransportFactoryAttribute">
+            <summary>
+            Attribute that decorates ITransportFactory implementations to allow
+            the TransportFactory to find all the available factories dynamically.
             </summary>
         </member>
         <member name="T:Apache.NMS.ActiveMQ.Transport.FutureResponse">
@@ -7480,6 +7545,32 @@
             As we have to find the hostname as a side-affect of generating a unique
             stub, we allow it's easy retrevial here
             </summary>
+        </member>
+        <member name="T:Apache.NMS.ActiveMQ.Util.IntrospectionSupport">
+            <summary>
+            Utility class used to provide conveince methods that apply named property
+            settings to objects.
+            </summary>
+        </member>
+        <member name="M:Apache.NMS.ActiveMQ.Util.IntrospectionSupport.SetProperties(System.Object,System.Collections.Specialized.StringDictionary)">
+            <summary>
+            Sets the public properties of a target object using a string map.
+            This method uses .Net reflection to identify public properties of
+            the target object matching the keys from the passed map.
+            </summary>
+            <param name="target">The object whose properties will be set.</param>
+            <param name="map">Map of key/value pairs.</param>
+        </member>
+        <member name="M:Apache.NMS.ActiveMQ.Util.IntrospectionSupport.SetProperties(System.Object,System.Collections.Specialized.StringDictionary,System.String)">
+            <summary>
+            Sets the public properties of a target object using a string map.
+            This method uses .Net reflection to identify public properties of
+            the target object matching the keys from the passed map.
+            </summary>
+            <param name="target">The object whose properties will be set.</param>
+            <param name="map">Map of key/value pairs.</param>
+            <param name="prefix">Key value prefix.  This is prepended to the property name
+            before searching for a matching key value.</param>
         </member>
         <member name="T:Apache.NMS.ActiveMQ.Util.MemoryUsage">
             <summary>
@@ -7834,6 +7925,14 @@
             An object capable of receiving messages from some destination
             </summary>
         </member>
+        <member name="M:Apache.NMS.ActiveMQ.MessageConsumer.Shutdown">
+            <summary>
+            Called from the parent Session of this Consumer to indicate that its
+            parent session is closing and this Consumer should close down but not
+            send any message to the Broker as the parent close will take care of
+            removing its child resources at the broker.
+            </summary>
+        </member>
         <member name="M:Apache.NMS.ActiveMQ.MessageConsumer.Dequeue(System.TimeSpan)">
             <summary>
             Used to get an enqueued message from the unconsumedMessages list. The
@@ -7861,15 +7960,26 @@
             An object capable of sending messages to some destination
             </summary>
         </member>
-        <member name="T:Apache.NMS.ActiveMQ.PrefetchPolicy">
+        <member name="M:Apache.NMS.ActiveMQ.MessageProducer.Shutdown">
             <summary>
-            Class used to define the various limits that should be used for the Prefetch
-            limit on destination based on the type of Destination in use.
+            Called from the Parent session to deactivate this Producer, when a parent
+            is closed all children are automatically removed from the broker so this
+            method circumvents the need to send a Remove command to the broker.
             </summary>
         </member>
-        <member name="T:Apache.NMS.ActiveMQ.RequestTimedOutException">
+        <member name="T:Apache.NMS.ActiveMQ.NetTxConnection">
+             <summary>
+             Extends the basic Connection class to provide a transacted Connection
+             instance that operates within the bounds of a .NET Scoped Transaction.
+            
+             The default Session creation methods of Connection are overriden here
+             to always return a TX capable session instance.
+             </summary>
+        </member>
+        <member name="T:Apache.NMS.ActiveMQ.NetTxRecoveryPolicy">
             <summary>
-            Exception thrown when an Request times out.
+            Policy class used to configure the options associated with TX
+            recovery.
             </summary>
         </member>
         <member name="T:Apache.NMS.ActiveMQ.Session">
@@ -7952,9 +8062,46 @@
             The Session instance sets the delegate on each Producer it creates.
             </summary>
         </member>
+        <member name="M:Apache.NMS.ActiveMQ.NetTxSession.Enlist(System.Transactions.Transaction)">
+            <summary>
+            Manually Enlists in the given Transaction.  This can be used to when the
+            client is using the Session in Asynchronous listener mode since the Session
+            cannot atuomatically join in this case as there is no Ambient transaction in
+            the Message Dispatch thread.  This also allows for clients to use the explicit
+            exception model when necessary.  
+            </summary>
+        </member>
+        <member name="P:Apache.NMS.ActiveMQ.NetTxSession.IsTransacted">
+            <summary>
+            Reports Transacted whenever there is an Ambient Transaction or the internal
+            TransactionContext is still involed in a .NET Transaction beyond the lifetime
+            of an ambient transaction (can happen during a scoped transaction disposing
+            without Complete being called and a Rollback is in progress.)
+            </summary>
+        </member>
+        <member name="T:Apache.NMS.ActiveMQ.PrefetchPolicy">
+            <summary>
+            Class used to define the various limits that should be used for the Prefetch
+            limit on destination based on the type of Destination in use.
+            </summary>
+        </member>
+        <member name="T:Apache.NMS.ActiveMQ.RequestTimedOutException">
+            <summary>
+            Exception thrown when an Request times out.
+            </summary>
+        </member>
         <member name="M:Apache.NMS.ActiveMQ.TransactionContext.AddSynchronization(Apache.NMS.ActiveMQ.ISynchronization)">
             <summary>
             Method AddSynchronization
+            </summary>
+        </member>
+        <member name="M:Apache.NMS.ActiveMQ.TransactionContext.InitializeDtcTxContext">
+            <summary>
+            Should be called from NetTxSession when created to check if any TX
+            data is stored for recovery and whether the Broker has matching info
+            stored.  If an Transaction is found that belongs to this client and is
+            still alive on the Broker it will be recovered, otherwise the stored 
+            data should be cleared.
             </summary>
         </member>
     </members>
