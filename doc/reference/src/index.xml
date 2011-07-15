@@ -21,6 +21,7 @@
   <!ENTITY templating           SYSTEM "templating.xml">
   <!ENTITY web                  SYSTEM "web.xml">
   <!ENTITY web-mvc              SYSTEM "web-mvc.xml">
+  <!ENTITY web-mvc3             SYSTEM "web-mvc3.xml">  
   <!ENTITY ajax                 SYSTEM "ajax.xml">
   <!ENTITY services             SYSTEM "services.xml">
   <!ENTITY webservices          SYSTEM "webservices.xml">
@@ -281,11 +282,15 @@
 		<listitem>
           <xref linkend="web-mvc" />
         </listitem>
+		<listitem>
+          <xref linkend="web-mvc3" />
+        </listitem>
       </itemizedlist>
     </partintro>
     &web;
     &ajax;
 	&web-mvc;
+	&web-mvc3;
   </part>
   <part xml:id="spring-services">
     <title>Services</title>

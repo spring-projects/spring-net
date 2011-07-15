@@ -16,38 +16,42 @@
  * limitations under the License.
  */
 -->
-<chapter version="5" xml:id="web-mvc" xmlns="http://docbook.org/ns/docbook"
+<chapter version="5" xml:id="web-mvc3" xmlns="http://docbook.org/ns/docbook"
          xmlns:ns6="http://www.w3.org/1999/xlink"
          xmlns:ns5="http://www.w3.org/1998/Math/MathML"
          xmlns:ns4="http://www.w3.org/1999/xhtml"
          xmlns:ns3="http://www.w3.org/2000/svg"
          xmlns:ns="http://docbook.org/ns/docbook">
-  <title>Spring.NET ASP.NET MVC Infrastructure for ASP.NET MVC 2.0</title>
+  <title>Spring.NET ASP.NET MVC Infrastructure for ASP.NET MVC 3.0</title>
 
   <sect1 xml:id="web-mvc-introduction">
     <title>Introduction to Spring.NET ASP.NET MVC Infrastructure</title>
 
     <para>The Spring.NET for ASP.NET MVC Infrastructure increases your
-    productivity when you write ASP.NET MVC 2.0 applications by making the
+    productivity when you write ASP.NET MVC 3.0 applications by making the
     full power of the Spring.NET framework available to your MVC
     projects.</para>
 
-    <para>Highlights of the Spring.NET for ASP.NET MVC Infrastructure (also
-    referred to in this document as Spring.Web.Mvc) are:</para>
+    <para>Highlights of the Spring.NET for ASP.NET MVC Infrastructure for
+    ASP.NET MVC 3.0 (also referred to in this document as Spring.Web.Mvc)
+    are:</para>
 
     <itemizedlist>
       <listitem>
-        <para>Dependency Injection of Controllers and ActionFilters. <!--GLOBAL: In pdf, these links are not highlighted in any way, so the reader does not know to click on them. Can we fix this?-->ASP.NET
-        MVC 2.0 provides two primary extensbility points for Dependency
-        Injection: <literal>Controllers</literal> and
-        <literal>ActionFilters</literal>. Spring.Web.Mvc makes it extremely
-        simple to inject dependencies into either your MVC
-        <literal>Controllers</literal> or <literal>ActionFilters</literal>.
-        Simply register your <literal>Controllers</literal> and
-        <literal>ActionFilters</literal> with the context using any one of the
-        typical object definition approaches supported by Spring.NET and the
-        Spring.Web.Mvc infrastructure will ensure these objects are assembled
-        correctly when the ASP.NET MVC run-time has need of them.</para>
+        <para>Spring.NET-specific Implementation of
+        <literal>IDependencyResolver</literal> for Injection of
+        <literal>Controllers</literal>, <literal>ActionFilters</literal>, and
+        all other types requested by the ASP.NET MVC 3.0 runtime. <!--GLOBAL: In pdf, these links are not highlighted in any way, so the reader does not know to click on them. Can we fix this?-->ASP.NET
+        MVC 3.0 finally centralizes the previous multiple extensbility points
+        for Dependency Injection into a single, central responsibility: any
+        imlementation of the <literal>IDependencyResolver</literal> interface.
+        Spring.Web.Mvc makes it extremely simple to inject dependencies of any
+        type into your MVC applications. Simply register your
+        <literal>Controllers</literal>, <literal>ActionFilters</literal>, etc.
+        with the context using any one of the typical object definition
+        approaches supported by Spring.NET and the Spring.Web.Mvc
+        infrastructure will ensure these objects are assembled correctly when
+        the ASP.NET MVC run-time has need of them.</para>
       </listitem>
 
       <listitem>
@@ -72,11 +76,11 @@
       <title>Configuration of a ASP.NET MVC Application</title>
 
       <para>Spring.Web.Mvc builds on top of the Spring.NET IoC container.
-      <literal>Controllers</literal> and <literal>ActionFilters</literal> that
-      make up a typical Spring.Web.Mvc-enabled application are configured with
-      the same standard Spring.NET XML configuration syntax used for non web
-      objects. To integrate with the ASP.NET MVC runtime you need to make a
-      few modifications to your <literal>Web.config</literal> file and your
+      Object Definitions that make up a typical Spring.Web.Mvc-enabled
+      application are configured with the same standard Spring.NET XML
+      configuration syntax used for non web objects. To integrate with the
+      ASP.NET MVC runtime you need to make a few modifications to your
+      <literal>Web.config</literal> file and your
       <literal>Global.asax</literal>.</para>
 
       <para>The instantiation and configuration of the Spring.NET IoC
@@ -93,8 +97,7 @@
       <programlisting language="csharp">    public class MvcApplication : SpringMvcApplication
     {
         
-    }
-</programlisting>
+    }</programlisting>
 
       <para>Note that the <literal>SpringMvcApplication</literal> class is
       abstract so that developers may only use it indirectly as a superclass
@@ -120,15 +123,14 @@
 
     &lt;spring&gt;
         &lt;context&gt;
-            &lt;resource uri="~/Config/Controllers.xml"/&gt;
-            &lt;resource uri="~/Config/Filters.xml"/&gt;
-            &lt;resource uri="~/Config/Production/Services.xml"/&gt;
-            &lt;resource uri="~/Config/Production/Dao.xml"/&gt;
+            &lt;resource uri="file://~/Config/Controllers.xml"/&gt;
+            &lt;resource uri="file://~/Config/Filters.xml"/&gt;
+            &lt;resource uri="file://~/Config/Production/Services.xml"/&gt;
+            &lt;resource uri="file://~/Config/Production/Dao.xml"/&gt;
         &lt;/context&gt;
     &lt;/spring&gt;
 
-&lt;/configuration&gt;
-</programlisting>
+&lt;/configuration&gt;</programlisting>
 
       <para>Notes about the preceding configuration:</para>
 
@@ -194,29 +196,29 @@
       that the underlying reponsibilities of that method in the base class are
       satisfied by your overloaded implementation. Without either ensuring
       this or invoking the base class implementation within your overridden
-      method, the underlying behavior of the ASP.NET MVC runtime (and its
-      integration with Spring.NET) is unlikley to function as intended.</para>
+      method, the underlying behavior of the ASP.NET MVC integration with
+      Spring.NET is unlikley to function as intended.</para>
 
-      <sect3 xml:id="mvc-application-start-method">
-        <title>Application_Start(object sender, EventArgs e)</title>
+      <sect3 xml:id="mvc-application-begin-request-method">
+        <title>Application_BeginRequest(object sender, EventArgs e)</title>
 
         <para>This method is provided by the Microsoft base
         <literal>HttpApplication</literal> class and is overridden in the
         <literal>SpringMvcApplication</literal> base class to be responsible
         for invoking the <link
-        linkend="mvc-register-routes-method"><literal>RegisterRoutes()</literal></link>
+        linkend="mvc-build-dependency-resolver-method"><literal>BuildDependencyResolver</literal></link>
         and <link
-        linkend="mvc-register-areas-method"><literal>RegisterAreas()</literal></link>
+        linkend="mvc-register-dependency-resolver-method"><literal>RegisterDependencyResolver</literal></link>
         methods. If you choose to override the
-        <literal>Application_Start()</literal> implementation of the
+        <literal>Application_BeginRequest</literal> implementation of the
         <literal>SpringMvcApplication</literal> class in your own
         implementation, ensure that you either call
-        <literal>base.Application_Start()</literal> or explicitly invoke both
-        the <literal><link
-        linkend="mvc-register-routes-method">RegisterRoutes()</link></literal>
+        <literal>base.Application_BeginRequest</literal> or explicitly invoke
+        both the <literal><link
+        linkend="mvc-build-dependency-resolver-method">BuildDependencyResolver</link></literal>
         and <link
-        linkend="mvc-register-areas-method"><literal>RegisterAreas()</literal></link>
-        methods within your within your override of this method.</para>
+        linkend="mvc-register-dependency-resolver-method"><literal>RegisterDependencyResolver</literal></link>
+        methods within your override of this method.</para>
       </sect3>
 
       <sect3 xml:id="mvc-configure-application-context-method">
@@ -238,66 +240,42 @@
         application startup/context configuration lifecycle.</para>
       </sect3>
 
-      <sect3 xml:id="mvc-register-spring-controller-factory-method">
-        <title>RegisterSpringControllerFactory()</title>
+      <sect3 xml:id="mvc-build-dependency-resolver-method">
+        <title>BuildDependencyResolver()</title>
+
+        <para>This method is responsible for assembling and returning the
+        Spring.NET-specific implementation of the ASP.NET MVC framework's
+        <literal>IDependencyResolver</literal> interface. The provided
+        implementation of this method In the
+        <literal>SpringMvcApplication</literal> class returns an instance of
+        the <literal>SpringMvcDependencyResolver</literal> class wired up to
+        use the configured <literal>IApplicationContext</literal>. For
+        fine-grained control of the manner in which the
+        <literal>IDependencyResolver</literal> implementation is constructed,
+        this method may be overriddem in a class of your own derived from
+        <literal>SpringMvcApplication</literal>.</para>
+      </sect3>
+
+      <sect3 xml:id="mvc-register-dependency-resolver-method">
+        <title>RegisterDependencyResolver(IDependencyResolver
+        resolver)</title>
 
         <para>This method is responsible for registering the
-        <literal>SpringControllerFactory</literal> with the ASP.NET MVC
-        framework, in effect telling ASP.NET MVC "please use the
-        <literal>SpringControllerFactory</literal> to create
-        <literal>Controllers</literal>." This is the manner in which the
-        Spring.NET container is subsequently invoked to satisfy dependencies
-        on <literal>Controllers</literal> when they are instantiated by
-        ASP.NET MVC in response to an Http Request. Generally, there should be
-        little need for the developer to override this method, but if you do
-        you must ensure that your either invoke the base implementation of
-        <literal>RegisterSpringControllerFactory()</literal> from within your
+        <literal>SpringDependencyResolver</literal> with the ASP.NET MVC
+        framework, in effect telling ASP.NET MVC "please use this
+        <literal>SpringDependencyResolver</literal> to create objects when
+        ASP.NET MVC requests them". This is the manner in which the Spring.NET
+        container is subsequently invoked to satisfy dependencies on
+        <literal>Controllers, ActionFilters</literal>, and other object types
+        when they are instantiated by ASP.NET MVC in response to an Http
+        Request. Generally, there should be little need for the developer to
+        override this method, but if you do you must ensure that your either
+        invoke the base implementation of
+        <literal>RegisterDependencyResolver</literal> from within your
         implementation or that you explicitly register the
-        <literal>SpringControllerFactory</literal> with the ASP.NET MVC
+        <literal>SpringMvcDependencyResolver</literal> with the ASP.NET MVC
         infrastructure yourself from witihin this method (or elsewhere at the
         appropriate time).</para>
-      </sect3>
-
-      <sect3 xml:id="mvc-register-routes-method">
-        <title>RegisterRoutes(RouteCollection routes)</title>
-
-        <para>This method is responsible for registering ASP.NET MVC Routes
-        during application startup and is automatically invoked from within
-        the <link
-        linkend="mvc-application-start-method"><literal>Application_Start()</literal></link>
-        method in the <literal>SpringMvcApplication</literal> base class. The
-        provided implementation of this method in the
-        <literal>SpringMvcApplication</literal> class merely registers the
-        same <literal>Default</literal> route as is present in any new ASP.NET
-        MVC project that Visual Studio creates (e.g.,
-        "<literal>{controller}/{action}/{id}</literal>"). As such it is
-        expected that most developers will override this method and provide
-        their own implementation wherein they will register their own routes.
-        Unless you desire to retain the out-of-the-box
-        <literal>Default</literal> routing configuration of
-        "<literal>{controller}/{action}/{id}</literal>" it is not necessary
-        for developers to call the <literal>RegisterRoutes() </literal>method
-        of the <literal>SpringMvcApplication</literal> base class from within
-        their own overrides of this method.</para>
-      </sect3>
-
-      <sect3 xml:id="mvc-register-areas-method">
-        <title>RegisterAreas()</title>
-
-        <para>This method is responsible for registering ASP.NET MVC Areas
-        during application startup and is automatically invoked from within
-        the <link
-        linkend="mvc-application-start-method"><literal>Application_Start()</literal></link>
-        method in the <literal>SpringMvcApplication</literal> base class. The
-        provided implementation of this method in the
-        <literal>SpringMvcApplication</literal> class merely invokes
-        <literal>AreaRegistration.RegisterAllAreas()</literal> in the ASP.NET
-        MVC framework. As such, it is not common to have to override this
-        method as provided in the <literal>SpringMvcApplication</literal> base
-        class unless you desire more fine-grained control over registering
-        areas. If you choose to override this method in your own derived
-        class, you are assuming the responsibility of registering all Areas
-        with the ASP.NET MVC runtime.</para>
       </sect3>
     </sect2>
   </sect1>
