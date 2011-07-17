@@ -24,7 +24,7 @@
          xmlns:ns="http://docbook.org/ns/docbook">
   <title>Spring.NET ASP.NET MVC Infrastructure for ASP.NET MVC 3.0</title>
 
-  <sect1 xml:id="web-mvc-introduction">
+  <sect1 xml:id="web-mvc3-introduction">
     <title>Introduction to Spring.NET ASP.NET MVC Infrastructure</title>
 
     <para>The Spring.NET for ASP.NET MVC Infrastructure increases your
@@ -55,7 +55,7 @@
       </listitem>
 
       <listitem>
-        <para><link linkend="web-mvc-objectscope">Web object scopes</link>.
+        <para><link linkend="web-mvc3-objectscope">Web object scopes</link>.
         Just as with the Spring.NET Web Infrastructure for ASP.NET Webforms,
         Spring.Web.Mvc objects can be defined at the application, session, or
         request scope. This capability makes it easy to inject, for example, a
@@ -69,10 +69,10 @@
     integrate Spring.Web.Mvc into your own ASP.NET MVC applications.</para>
   </sect1>
 
-  <sect1 xml:id="web-mvc-contexts">
+  <sect1 xml:id="web-mvc3-contexts">
     <title>Automatic context loading and hierarchical contexts</title>
 
-    <sect2 xml:id="web-mvc-configuration">
+    <sect2 xml:id="web-mvc3-configuration">
       <title>Configuration of a ASP.NET MVC Application</title>
 
       <para>Spring.Web.Mvc builds on top of the Spring.NET IoC container.
@@ -199,35 +199,35 @@
       method, the underlying behavior of the ASP.NET MVC integration with
       Spring.NET is unlikley to function as intended.</para>
 
-      <sect3 xml:id="mvc-application-begin-request-method">
+      <sect3 xml:id="mvc3-application-begin-request-method">
         <title>Application_BeginRequest(object sender, EventArgs e)</title>
 
         <para>This method is provided by the Microsoft base
         <literal>HttpApplication</literal> class and is overridden in the
         <literal>SpringMvcApplication</literal> base class to be responsible
         for invoking the <link
-        linkend="mvc-build-dependency-resolver-method"><literal>BuildDependencyResolver</literal></link>
+        linkend="mvc3-build-dependency-resolver-method"><literal>BuildDependencyResolver</literal></link>
         and <link
-        linkend="mvc-register-dependency-resolver-method"><literal>RegisterDependencyResolver</literal></link>
+        linkend="mvc3-register-dependency-resolver-method"><literal>RegisterDependencyResolver</literal></link>
         methods. If you choose to override the
         <literal>Application_BeginRequest</literal> implementation of the
         <literal>SpringMvcApplication</literal> class in your own
         implementation, ensure that you either call
         <literal>base.Application_BeginRequest</literal> or explicitly invoke
         both the <literal><link
-        linkend="mvc-build-dependency-resolver-method">BuildDependencyResolver</link></literal>
+        linkend="mvc3-build-dependency-resolver-method">BuildDependencyResolver</link></literal>
         and <link
-        linkend="mvc-register-dependency-resolver-method"><literal>RegisterDependencyResolver</literal></link>
+        linkend="mvc3-register-dependency-resolver-method"><literal>RegisterDependencyResolver</literal></link>
         methods within your override of this method.</para>
       </sect3>
 
-      <sect3 xml:id="mvc-configure-application-context-method">
+      <sect3 xml:id="mvc3-configure-application-context-method">
         <title>ConfigureApplicationContext()</title>
 
         <para>This method is invoked by the
         <literal>SpringMvcApplication</literal> class after it has been
         configured with all of its object definitions and other settings (as
-        detailed in <link linkend="web-mvc-configuration">Configuration of a
+        detailed in <link linkend="web-mvc3-configuration">Configuration of a
         ASP.NET MVC Application)</link> but immediately prior to its being
         handed off to the ASP.NET MVC infrastructure for its use. Overridding
         this method provides you with your last possible moment to make any
@@ -240,7 +240,7 @@
         application startup/context configuration lifecycle.</para>
       </sect3>
 
-      <sect3 xml:id="mvc-build-dependency-resolver-method">
+      <sect3 xml:id="mvc3-build-dependency-resolver-method">
         <title>BuildDependencyResolver()</title>
 
         <para>This method is responsible for assembling and returning the
@@ -256,7 +256,7 @@
         <literal>SpringMvcApplication</literal>.</para>
       </sect3>
 
-      <sect3 xml:id="mvc-register-dependency-resolver-method">
+      <sect3 xml:id="mvc3-register-dependency-resolver-method">
         <title>RegisterDependencyResolver(IDependencyResolver
         resolver)</title>
 
@@ -280,7 +280,7 @@
     </sect2>
   </sect1>
 
-  <sect1 xml:id="web-mvc-objectscope">
+  <sect1 xml:id="web-mvc3-objectscope">
     <title>Web object scopes</title>
 
     <para>Spring.NET web applications support an additional attribute within
