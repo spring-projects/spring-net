@@ -1,4 +1,4 @@
-Spring.NET 1.3.1 supports .NET 1.1, 2.0, 3.0, 3.5 and 4.0
+Spring.NET 1.3.2 supports .NET 1.1, 2.0, 3.0, 3.5 and 4.0
 
 To use Spring.NET with .NET 3.5 use the assemblies in the bin\net\3.5\debug or bin\net\3.5\release directory.  
 

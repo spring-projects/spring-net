@@ -1963,7 +1963,7 @@ Commandline Examples:
   <target name="check-nuget-package-dir">
     <fail message="The NuGet package directory has not been specified."
           if="${not property::exists('nuget.package.dir')}"/>
-    <mkdir dir="${nuget.package.dir}"/>
+    <!-- <mkdir dir="${nuget.package.dir}"/> -->
   </target>
   
   
@@ -2004,7 +2004,10 @@ Commandline Examples:
 </target>
 
 <target name="update-nuspec-metadata">  
-
+<!--
+	INFO: this task assumes that all SPRNET components are versioned coincident with each other and
+			updates all version dependencies betw. SPRNET components at once
+-->
 	<foreach item="File" property="filename">
 		<in>
 			<items basedir="${spring.basedir}/src/spring">

@@ -2,6 +2,64 @@ SPRING.NET FRAMEWORK CHANGELOG
 ==============================
 http://www.springframework.net
 
+*****************************************************************************************
+Release Version 1.3.2 Auguest 1, 2011
+
+Release Notes - Spring.NET - Version 1.3.2
+
+Bug
+SPRNET-951] - AmbiguousMatchException when use overriden 'New' properties on a subclass ( like
+SPRNET-1331] - WebApplicationContext sometimes tries to duplicate application context within same appdomain
+SPRNET-1339] - GetMethodBaseByArgumentValues can't resolve an overloaded method when a null value is passed to a Nullable type parameter
+SPRNET-1373] - Web service can't be reentered when web service is under subdirectory
+SPRNET-1391] - ExceptionTranslation doesnt work for SQLite
+SPRNET-1410] - HibernateTxScopeTransactionManager throws "could not rollback hibernate transaction" if it dioes not check for zombied transaction
+SPRNET-1416] - Fixed Spring.ServiceModel.ServiceExporter
+SPRNET-1417] - NHibernate 3.1 NH-2455 breakes Spring 1.3.1 NH support
+SPRNET-1424] - Interfaces attributes should not be 'proxied' when targeting a transparent proxy
+SPRNET-1429] - InheritanceAopProxyTypeBuilder does not support generic parameters
+SPRNET-1430] - ASP.NET MVC 3 throws an InvalidOperationException when trying to create controller that is not configured via Spring
+SPRNET-1432] - Spring.Testing.Microsoft not available in nightly snapshots
+SPRNET-1438] - Extraneous NHibernate Session created and used for transactions that begin in the scope of TransactionPropagation.Supports with OpenSessionInViewModule or SessionScope
+SPRNET-1440] - ValidationErrors ReadXml serialization bug
+SPRNET-1446] - WebContextHandler returns "Request is not available in this context" under IIS7 + Integrated Pipeline mode
+SPRNET-1448] - WebServiceExporter invokes service constructor twice when configured as non singleton
+SPRNET-1450] - Web object scopes not working in MvcApplicationContext
+
+Defect
+SPRNET-1334] - if new disposable inner object(s) is created during the container disposal, a cryptic exception "Collection was modified; enumeration operation may not execute." is thrown.
+
+Improvement
+SPRNET-791] - Logging of parameter values in AdoTemplate, in particular on exception.
+SPRNET-1180] - Document use of HttpApplicationConfigurer.ApplicationTemplate for configuring HttpApplication instances
+SPRNET-1242] - Support for collection merging with generic collections
+SPRNET-1351] - Add support for Informix dbprovider
+SPRNET-1352] - Typing mistakes
+SPRNET-1385] - update README for first time checkout and build
+SPRNET-1408] - Add data providers in System.Data.dll to be accessed via Spring's IDbProvider interface.
+SPRNET-1411] - Support NMS 1.5/1.5.1
+SPRNET-1422] - HibernateTemplate should support Merge
+SPRNET-1426] - Create ConfigurableVariableSource to allow inline variables definitions with VariablePlaceholderConfigurer
+SPRNET-1454] - Add Support for NHibernate 3.2
+
+New Feature
+SPRNET-1421] - NHibernate 3.1 support
+SPRNET-1437] - Automate NuGet Packaing into Build/Release Script Process
+SPRNET-1443] - Support for ASP.NET MVC3
+
+Task
+SPRNET-1397] - update version references for VS2008 templates in dev-support\vs.net-2008\templates\
+SPRNET-1400] - Update installer for 1.3.2 release
+SPRNET-1402] - Add documentation for LocalDelegatingSessionFactoryObject for NH
+SPRNET-1412] - Please include Spring.Messaging.Ems in 1.3.1 (or future) release
+SPRNET-1414] - Modify DAILY build script to upload NIGHTLY build to new hosted site server
+SPRNET-1419] - Spring.Data.NHibernate shows wrong description
+SPRNET-1425] - Update Version info to reflect 1.3.2
+SPRNET-1447] - Add Caching quick start
+SPRNET-1451] - Create Ref Docs for MVC3 Support
+SPRNET-1455] - Update NuGet dependency versions to reflect 1.3.2 versions of dependent SPRNET libs
+
+*****************************************************************************************
 Release Version 1.3.1 December 10, 2010
 
 Release Notes - Spring.NET - Version 1.3.1
@@ -143,7 +201,7 @@ Task
 [SPRNET-1403] - Fix build configuration to link .NET 3.5 build with System.Web.Extensions 3.5 libraries
 [SPRNET-1404] - Add custom ActionInvoker to SpringControllerFactory impl
 
-
+*****************************************************************************************
 Release Version 1.3.0 December 17, 2009
 
 Release Notes - Spring.NET - Version 1.3.0
@@ -201,7 +259,7 @@ Task
 [SPRNET-1298] - Copy edit the Spring reference documentation chapter on the web framework
 [SPRNET-1299] - Move older ways of configuring transaction management, using HibernateTemplate, to a 'Classic Spring Usage' section 
 
-
+*****************************************************************************************
 Release Version 1.3.0 RC1 August 3, 2009
 
 Release Notes - Spring.NET - Version 1.3.0 RC1
@@ -318,7 +376,7 @@ Task
 [SPRNET-1218] - Update to use Apache NMS 1.1
 [SPRNET-1239] - Check for package cycles with NDepend
 
-
+*****************************************************************************************
 Release Version 1.2.0, November 10, 2008
 
 Release Notes - Spring.NET - Version 1.2.0
@@ -376,7 +434,7 @@ Task
 [SPRNET-1067] - Add MySql 5.2.3 ado.net provider
 [SPRNET-1082] - Bad packaging in 3.5 lib directory
 
-
+*****************************************************************************************
 Release Version 1.2.0 RC1, October 16, 2008
 
 
@@ -431,7 +489,7 @@ Task
 [SPRNET-1048] - Drop IProcess support from Spring.Web
 [SPRNET-1050] - Provide sample configuration for using MultiDelegatingDbProvider
 
-
+*****************************************************************************************
 Release 1.2.0 M1, August 15, 2008
 
 
@@ -487,6 +545,7 @@ Task
 [SPRNET-990] - Removed IResourceLoaderAware.ResourceLoader getter from the interface.
 [SPRNET-991] - ContextRegistry.GetContext(string name) should throw an exception if no context has been registered under that name.
 
+*****************************************************************************************
 Release 1.1.2, May 6, 2008
 
 Bug
@@ -510,8 +569,7 @@ Task
 [SPRNET-925] - Update documentation for DI in ASP.NET regarding use of name attribute and object definition inheritance
 [SPRNET-938] - Add documentation for authoring custom namespace parsers
 
-
-
+*****************************************************************************************
 Release 1.1.1, April 7, 2008
 
 Bug
@@ -613,8 +671,7 @@ Task
 [SPRNET-885] - Add doc for <spring:Panel> server control usage
 [SPRNET-909] - Document that WebServiceExporter does not add WebServiceBinding attribute with WSI basic profile 1.1 by default.
 
-
-
+*****************************************************************************************
 Release 1.1 final, December 7, 2007
 
 Bug
@@ -676,6 +733,7 @@ Task
 [SPRNET-788] - integrate Spring.Web.Tests with NUnitAspEx to support real HttpRuntime-integrated tests 
 [SPRNET-798] - Add overview documentation from web site into reference docs 
 
+*****************************************************************************************
 Release 1.1 RC2, October 15, 2007
 
 (Note: A bug in the dbproviders.xml file was discovered shortly after the initial release of 1.1 RC2.  A new version was uploaded with the same name.  This should not present a problem, but if you have trouble creating an OracleODP-2.0 provider, please download again as it may take up to a day for the proxy servers to get updated)
@@ -821,6 +879,7 @@ Task
 [SPRNET-638] - Additional documentation regarding how NHibernateSessions are managed by both HibernateTransactionManager and OSIV 
 [SPRNET-646] - Document use of Client Certificates in WebServiceProxyFactory 
 
+*****************************************************************************************
 Release 1.1 Milestone 2, July 11, 2007
 
 Summary:  Primarily a bug fix release
@@ -869,8 +928,7 @@ Task
 [SPRNET-601] - Add tests for the new ProxyTargetAttributes property (Spring.Proxy and Spring.Aop) 
 [SPRNET-618] - Change MySql.Data.MySqlClient alias to refer to MySql 5.1 provider 
 
-
-
+*****************************************************************************************
 Release 1.1 Milestone 1, June 1, 2007
 
 Summary:  In addition to bug fixes and various improvements to existing features, this
@@ -985,6 +1043,7 @@ Task
 [SPRNET-512] - Merge WebServiceClientFactory & WebServiceProxyFactory 
 [SPRNET-566] - Update to NUnit 2.4.1  
 
+*****************************************************************************************
 Release 1.1 Preview 3, December 6, 2006
 
 Summary:  This release is contains bug fixes and various improvements to existing features. 
@@ -1101,8 +1160,7 @@ Task
 [SPRNET-412] - Create docs for Common.Logging 
 [SPRNET-418] - Create Data Access quick start application showing using of Spring.Data ADO.NET framework 
 
------------------------------
-
+*****************************************************************************************
 Release 1.0.2, April 27, 2006
 
 Summary:  This release is contains bug fixes, new features and various improvements to existing features.
@@ -1156,9 +1214,7 @@ Task
 [SPRNET-300] - Documentation for Expressions support
 [SPRNET-314] - Use InstallShield instead of VS.NET solution to generate distribution file.
 
-
-----------------------------------------
-
+*****************************************************************************************
 Release 1.1 Preview 2, November 16, 2005
 Release 1.0.1, November 16, 2005
 
@@ -1208,9 +1264,7 @@ Improvement
 [SPRNET-238] - Expose UserCulture setter within UserControl, in addition to getter
 [SPRNET-239] - Use CultureInfo.CreateSpecificCulture instead of new CultureInfo to create culture instances
 
-
----------------------------------
-
+*****************************************************************************************
 Release 1.0.0, September 14, 2005
 
 Summary:
@@ -1255,8 +1309,8 @@ This release is primarly a bug fix and documentation enhancement release.  Minor
 	       Added the missing AddAdvice / RemoveAdvice to the IAdvised interface.
 	       Removed convenience Add/Remove methods for BeforeAdvice, ThrowsAdvice and Interceptor
 
---------------------------------
 
+*****************************************************************************************
 Release 1.0 RC1, August 14, 2005
 
 Summary:
@@ -1342,7 +1396,7 @@ Spring.Context namespace
  - GenericApplicationContext detects a passed-in ResourceLoader that implements ResourcePatternResolver and uses it 
 
 
-------------------------------------------------
+*****************************************************************************************
 Release 0.6 Release Candidate 3  March 30, 2005.
 
 Summary:
@@ -1358,36 +1412,36 @@ Changes:
 
 
 ** Bug
-    * [SPRNET-54] - ConfigurationReader does not close resource stream
-    * [SPRNET-57] - Empty string not allowed as value for name-values collection
-    * [SPRNET-59] - Remove delay signing and generate stronly named assemblies.
-    * [SPRNET-62] - Inner IDisposable objects belonging to prototypes were autodestroyed
-    * [SPRNET-63] - Set default namespace if omitted.
-    * [SPRNET-68] - Invoke in EventUitls not throwing base exception.
+SPRNET-54] - ConfigurationReader does not close resource stream
+SPRNET-57] - Empty string not allowed as value for name-values collection
+SPRNET-59] - Remove delay signing and generate stronly named assemblies.
+SPRNET-62] - Inner IDisposable objects belonging to prototypes were autodestroyed
+SPRNET-63] - Set default namespace if omitted.
+SPRNET-68] - Invoke in EventUitls not throwing base exception.
 
 ** New Feature
-    * [SPRNET-33] - Add support for configuration of existing objects.  Refer to the configure methods on IObjectFactory.
-    * [SPRNET-38] - Create IObjectPostProcessor for environment variable expansion
-    * [SPRNET-46] - Add factory class to create log4net log object
-    * [SPRNET-53] - Type converter for Color from RGB CSV
+SPRNET-33] - Add support for configuration of existing objects.  Refer to the configure methods on IObjectFactory.
+SPRNET-38] - Create IObjectPostProcessor for environment variable expansion
+SPRNET-46] - Add factory class to create log4net log object
+SPRNET-53] - Type converter for Color from RGB CSV
 
 ** Task
-    * [SPRNET-37] - Update to NAnt 0.85rc1
-    * [SPRNET-49] - Documentation for MethodInvokingFactoryObject 
-    * [SPRNET-64] - Upgrade to NUnit 2.2
-    * [SPRNET-65] - Upgrade to .NET Mock 0.7.4
+SPRNET-37] - Update to NAnt 0.85rc1
+SPRNET-49] - Documentation for MethodInvokingFactoryObject 
+SPRNET-64] - Upgrade to NUnit 2.2
+SPRNET-65] - Upgrade to .NET Mock 0.7.4
 
 ** Improvement
-    * [SPRNET-29] - Add support for schema validation and drop DTD
-    * [SPRNET-51] - argument names for contructors and MessageInvocationFactory
-    * [SPRNET-61] - Add convenience methods to load Properties
-    * [SPRNET-66] - Display line numbers in errors and object definition resource descriptor
-    * [SPRNET-69] - Sync with Spring.Java APIs and refactorings.
-    * [SPRNET-72] - Release with strongly named assemblies
+SPRNET-29] - Add support for schema validation and drop DTD
+SPRNET-51] - argument names for contructors and MessageInvocationFactory
+SPRNET-61] - Add convenience methods to load Properties
+SPRNET-66] - Display line numbers in errors and object definition resource descriptor
+SPRNET-69] - Sync with Spring.Java APIs and refactorings.
+SPRNET-72] - Release with strongly named assemblies
     * Various miscellaneous documentation improvements and code cleanup.
 
 
--------------------------------------------------
+*****************************************************************************************
 Release 0.6 Release Candidate 2  February 6, 2005.
 
 Summary: 

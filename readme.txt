@@ -1,4 +1,4 @@
-THE SPRING.NET FRAMEWORK, Release 1.3.2  (April 1, 2011)
+THE SPRING.NET FRAMEWORK, Release 1.3.2  (August 1, 2011)
 --------------------------------------------------------------------
 http://www.springframework.net/
 
@@ -20,7 +20,7 @@ The 1.3.2 release of Spring.NET contains
      * Portable Service Abstractions
        - Export plain .NET objects via .NET Remoting, Web Service or .NET Serviced Component and create client side proxies based on endpoint URL and service interface.
      * NHibernate Integation
-       - NHibernate 1.0, 1.2, 2.0, 2.1, 3.0, and 3.1 integration to simplify use of NHibernate and participate in Spring's declarative transaction management functionality.
+       - NHibernate 1.0, 1.2, 2.0, 2.1, 3.0, 3.1, and 3.2 integration to simplify use of NHibernate and participate in Spring's declarative transaction management functionality.
      * ASP.NET AJAX Integration
        - Exporter to expose plain object on which Dependency Injection and AOP have been applied to JavaScript.
      * NUnit and MSTest integration
@@ -44,7 +44,7 @@ Spring.NET is a port of the Java based Spring Framework. In turn, the Java/J2EE 
 
 2. SUPPORTED .NET FRAMEWORK VERSIONS
 
-Spring.NET 1.3.1 supports .NET 1.1, 2.0, 3.0, 3.5, and 4.0.  In the directories bin\net\3.0, bin\net\3.5, and bin\net\4.0  are framework-specific DLLs for each of .NET 3.0, 3.5, and 4.0 framework versions.
+Spring.NET 1.3.2 supports .NET 1.1, 2.0, 3.0, 3.5, and 4.0.  In the directories bin\net\3.0, bin\net\3.5, and bin\net\4.0  are framework-specific DLLs for each of .NET 3.0, 3.5, and 4.0 framework versions.
 
 
 3. KNOWN ISSUES
@@ -66,6 +66,7 @@ Release contents:
 * "lib/NHibernate21" contains NHibernate 2.1 dlls
 * "lib/NHibernate30" contains NHibernate 3.0 dlls
 * "lib/NHibernate31" contains NHibernate 3.1 dlls
+* "lib/NHibernate32" contains NHibernate 3.2 dlls
 * "doc" contains reference documentation, MSDN-style API help, and the Spring.NET xsd.
 * "examples" contains sample applications.
 * "build-support" contains additonal applications need to build using NAnt as some convenience
@@ -117,6 +118,10 @@ The "bin" directory contains the following distinct dll files for use in applica
 - Contents: NHibernate 3.1 integration
 - Dependencies: Spring.Core, Spring.Aop, Spring.Data, NHibernate
 
+* "Spring.Data.NHibernate32" (~90 KB)
+- Contents: NHibernate 3.2 integration
+- Dependencies: Spring.Core, Spring.Aop, Spring.Data, NHibernate
+
 * "Spring.Services" (~70 KB)
 - Contents: Web Services, Remoting, and Enterprise Component based services.
 - Dependencies: Spring.Core, Spring.Aop
@@ -130,8 +135,12 @@ The "bin" directory contains the following distinct dll files for use in applica
 - Dependencies: Spring.Core, Spring.Aop, System.Web.Extensions
 
 * "Spring.Web.Mvc" (~8 KB)
-- Contents: ASP.NET MVC Integartion
-- Dependencies: Spring.Core
+- Contents: ASP.NET MVC2 Integartion
+- Dependencies: Spring.Core, Spring.Web
+
+* "Spring.Web.Mvc3" (~8 KB)
+- Contents: ASP.NET MVC3 Integartion
+- Dependencies: Spring.Core, Spring.Web
 
 * "Spring.Testing.NUnit" (~24 KB)
 - Contents: NUnit Integration
@@ -180,6 +189,8 @@ Documented sample applications can be found in "examples":
 * NMSQuickStart - Sample application using NMS
 * MSMQ QuickStart - Sample application using MSMQ
 * Quartz Example - Scheduling using Quartz
+* MvcQuickStart - Show the configuration of the Mvc2 support
+* Mvc3QuickStart - Show the configuration of the Mvc3 support
 
 7. How to build
 
