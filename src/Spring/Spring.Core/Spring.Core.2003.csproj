@@ -2076,17 +2076,17 @@
                     BuildAction = "Compile"
                 />
                 <File
+                    RelPath = "Objects\Factory\Config\ConfigurableVariableSource.cs"
+                    SubType = "Code"
+                    BuildAction = "Compile"
+                />
+                <File
                     RelPath = "Objects\Factory\Config\ConfigurationReader.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Objects\Factory\Config\ConnectionStringsVariableSource.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "Objects\Factory\Config\ConfigurableVariableSource.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -2372,22 +2372,27 @@
                 />
                 <File
                     RelPath = "Objects\Factory\Parsing\FailFastProblemReporter.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Objects\Factory\Parsing\IProblemReporter.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Objects\Factory\Parsing\Location.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Objects\Factory\Parsing\ObjectDefinitionParsingException.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File
                     RelPath = "Objects\Factory\Parsing\Problem.cs"
+                    SubType = "Code"
                     BuildAction = "Compile"
                 />
                 <File

@@ -169,7 +169,6 @@
                 />
                 <File
                     RelPath = "Data\NHibernate\HibernateOptimisticLockingFailureException.cs"
-                    Link = "..\Spring.Data.NHibernate\Data\NHibernate\HibernateOptimisticLockingFailureException.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
@@ -222,7 +221,6 @@
                 />
                 <File
                     RelPath = "Data\NHibernate\SessionFactoryUtils.cs"
-                    Link = "..\Spring.Data.NHibernate\Data\NHibernate\SessionFactoryUtils.cs"
                     SubType = "Code"
                     BuildAction = "Compile"
                 />
