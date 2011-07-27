@@ -946,6 +946,8 @@ Commandline Examples:
         <delete dir="test/Spring/Spring.Testing.NUnit.Tests/obj" failonerror="false"/>
         <delete dir="test/Spring/Spring.Testing.NUnit.Tests/bin" failonerror="false"/>
 
+        <delete dir="examples/Spring/Spring.CachingQuickStart/src/Spring.CachingQuickStart.Web/bin" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.CachingQuickStart/src/Spring.CachingQuickStart.Web/obj" failonerror="false"/>
 
         <delete dir="examples/Spring/Spring.Calculator/src/Spring.Aspects/obj" failonerror="false"/>
         <delete dir="examples/Spring/Spring.Calculator/src/Spring.Aspects/bin" failonerror="false"/>
@@ -1904,6 +1906,7 @@ Commandline Examples:
       <include name="examples/Spring/Spring.IoCQuickStart.AppContext/**"/>
       <include name="examples/Spring/Spring.IoCQuickStart.EventRegistry/**"/>
       <include name="examples/Spring/Spring.IoCQuickStart.MovieFinder/**"/>
+      <include name="examples/Spring/Spring.CachingQuickStart/**"/>
       <include name="examples/Spring/Spring.Calculator/**"/>
       <include name="examples/Spring/Spring.Calculator/src/Spring.Calculator.Web.2005/Bin/*.refresh"/>
       <include name="examples/Spring/Spring.WebQuickStart/**"/>

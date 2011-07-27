@@ -164,7 +164,6 @@
     </Compile>
     <Compile Include="Objects\Factory\Support\ChildWebObjectDefinition.cs" />
     <Compile Include="Objects\Factory\Support\IWebObjectDefinition.cs" />
-    <Compile Include="Objects\Factory\Support\ObjectScope.cs" />
     <Compile Include="Objects\Factory\Support\RootWebObjectDefinition.cs" />
     <Compile Include="Objects\Factory\Support\WebInstantiationStrategy.cs" />
     <Compile Include="Objects\Factory\Support\WebObjectDefinitionFactory.cs" />

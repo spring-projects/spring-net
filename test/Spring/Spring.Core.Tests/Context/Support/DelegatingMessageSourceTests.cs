@@ -259,7 +259,6 @@ namespace Spring.Context.Support
 		[Test]
 		public void ApplyResources()
 		{
-			const string expectedName = "Rick Evans";
 		    MockMessageSource.ApplyResources((object) 12, "rick", CultureInfo.InvariantCulture);
 			DelegatingMessageSource source
 				= new DelegatingMessageSource(MockMessageSource);

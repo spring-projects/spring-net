@@ -14,6 +14,7 @@
     <AssemblyName>Spring.MvcQuickStart</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
+    <UseIISExpress>false</UseIISExpress>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -38,6 +39,9 @@
     </Reference>
     <Reference Include="Spring.Data">
       <HintPath>..\..\..\..\..\bin\net\2.0\debug\Spring.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Spring.Web">
+      <HintPath>..\..\..\..\..\bin\net\2.0\debug\Spring.Web.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Web.Mvc">
       <HintPath>..\..\..\..\..\bin\net\3.5\debug\Spring.Web.Mvc.dll</HintPath>
