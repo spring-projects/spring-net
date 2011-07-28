@@ -152,31 +152,21 @@ NamespaceParserRegistry.RegisterParser(typeof(TxNamespaceParser));
   <sect1>
     <title>Support for .NET 4</title>
 
-    <para>Beginning with the 1.3.1 release of Spring.NET, initial
-    compatibility with the .NET 4 Common Language Runtime (CLR) is provided
-    via the .NET 4 Framework's support for In-Process Side-by-Side deployment
-    of .NET assemblies. This approach is typically refered to as
-    <emphasis>In-Proc SxS</emphasis>.</para>
+    <para>Beginning with the 1.3.2 release of Spring.NET, full compatibility
+    with the .NET 4 Common Language Runtime (CLR) is provided via a
+    comprehensive collection of Spring.NET compiled assemblies specifically
+    targeting the .NET 4 framework. Spring.NET 1.3.1 provided interim support
+    for .NET 4 via the approach typically refered to as <emphasis>In-Process
+    Side-by-Side</emphasis> or just <emphasis>In-Proc SxS</emphasis>.</para>
 
     <note>
       <para>For more information on the In-Process Side-by-Side support
       introduced into the .NET 4 Framework, see the MSDN Magazine article
-      located here:
-      <uri>http://msdn.microsoft.com/en-us/magazine/ee819091.aspx</uri>
-      </para>
+      located here: <uri
+      ns6:href="http://msdn.microsoft.com/en-us/magazine/ee819091.aspx">http://msdn.microsoft.com/en-us/magazine/ee819091.aspx</uri></para>
     </note>
 
-    <para><emphasis>In-Prox SxS</emphasis> permits applicaitons that target
-    the .NET 4 Framework (and later) to reference and execute assemblies that
-    target earlier versions of the .NET Framework CLR transparently within the
-    same process space. By using this approach, Spring.NET ensures maximum
-    backwards-compatibility with prior .NET Framework releases.</para>
-
-    <para>Subsequent releases of Spring.NET will be compiled to target the
-    .NET 4 Framework directly but during this transition period where
-    significant users are using Spring.NET to target pre-.NET 4 applications
-    while at the same time other users are beginning to target the .NET 4
-    Framework CLR, supporting <emphasis>In-Proc SxS</emphasis> will permit
-    maximum flexibility for Spring.NET users.</para>
+    <para>Beginning with Spring.NET 1.3.2, this approach is no longer
+    necessary and fuill native support of .NET is now provided.</para>
   </sect1>
 </chapter>

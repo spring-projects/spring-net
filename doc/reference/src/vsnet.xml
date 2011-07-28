@@ -53,9 +53,10 @@
     2002/2003 do not recognize the <literal>xsi:schemaLocation</literal>
     element. If you reference the Spring.NET XML schema as shown below, you
     can get intellisense and validation support while editing a Spring
-    configuration file in VS.NET 2005/2008. In order to get this functionality
-    in VS.NET 2002/2003 you will need to register the schema with VS.NET or
-    include the schema as part of your application project.</para>
+    configuration file in VS.NET 2005/2008/2010. In order to get this
+    functionality in VS.NET 2002/2003 you will need to register the schema
+    with VS.NET or include the schema as part of your application
+    project.</para>
 
     <programlisting language="myxml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;objects xmlns="http://www.springframework.net"
@@ -71,9 +72,10 @@
 &lt;/objects&gt;</programlisting>
 
     <para>It is typically more convenient to install the schema in VS.NET,
-    even for VS.NET 2005/2008, as it makes the xml a little less verbose and
-    you don't need to keep copying the XSD file for each project you create.
-    For VS.NET 2003 the schema directory is</para>
+    even for VS.NET 2005/2008/2010, as it makes the xml a little less verbose
+    and you don't need to keep copying the XSD file for each project you
+    create. The following table lists the schema directories for each version
+    of VS.NET:</para>
 
     <table>
       <title></title>
@@ -83,7 +85,8 @@
           <row>
             <entry align="center">Visual Studio Version </entry>
 
-            <entry align="center">Directory to put Spring .XSD files </entry>
+            <entry align="center">Directory in which to place Spring .XSD
+            files </entry>
           </row>
         </thead>
 
@@ -107,6 +110,13 @@
 
             <entry><literal>C:\Program Files\Microsoft Visual Studio
             9.0\Xml\Schemas</literal></entry>
+          </row>
+
+          <row>
+            <entry>VS.NET 2010</entry>
+
+            <entry><literal>C:\Program Files\Microsoft Visual Studio
+            10.0\Xml\Schemas</literal></entry>
           </row>
         </tbody>
       </tgroup>
@@ -184,6 +194,58 @@
     of your configuration information. Conventional wisdom is do quick
     prototyping with App.config and use another IResource location, file or
     embedded assembly resource, for serious development.</para>
+  </sect1>
+
+  <sect1>
+    <title>Enhancing the XML Editing and Validation Experience using the
+    Spring.NET Visual Studio 2010 Extension</title>
+
+    <para>If you are using VS.NET 2010, you are encouraged to install the
+    Spring.NET Visual Studio 2010 Extension. For more information and to
+    download the latest version of this 100% free tool, visit <link
+    ns2:arcrole=""
+    ns2:href="http://springframework.net/vsaddin/">http://springframework.net/vsaddin/</link>.</para>
+
+    <para>The latest release of the Spring.NET Visual Studio 2010 Extension
+    provides Intellisense<superscript>tm</superscript> support in VS.NET 2010
+    for the following areas of editing Spring XML configuration files:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Type completion</para>
+      </listitem>
+
+      <listitem>
+        <para>Property name completion</para>
+      </listitem>
+
+      <listitem>
+        <para>Constructor argument name completion</para>
+      </listitem>
+
+      <listitem>
+        <para>Property value completion for property of type 'Type', 'Enum'
+        and 'Boolean'</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>In addition, this tool also provides for the following enhancements
+    to the Visual Studio 2010 XML Editor experience:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para>Snippets integration (inline or by menu)</para>
+      </listitem>
+
+      <listitem>
+        <para>Quickinfo tooltip for properties and types</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>A brief screencast demonstrating the use of this tool can be viewed
+    here: <link ns2:arcrole=""
+    ns2:href="http://maruxelo.free.fr/spring/index2.html">http://maruxelo.free.fr/spring/index2.html</link>
+    </para>
   </sect1>
 
   <sect1>
@@ -417,9 +479,9 @@
 
     <para>Spring provides API documentation that can be integrated within
     Visual Studio. There are two versions of the documentation, one for .NET
-    1.1 and one for .NET 2.0/3.0. They differ only in the format applied and
-    the versions of VS.NET that supported. There is also standalone HTMLHELP
-    format API documentation. You will need to download the help file
+    1.1 and one for .NET 2.0 and later. They differ only in the format applied
+    and the versions of VS.NET that supported. There is also standalone
+    HTMLHELP format API documentation. You will need to download the help file
     seperately from the distribution.</para>
   </sect1>
 </chapter>

@@ -163,9 +163,13 @@
     effectively address common pain-points in ASP.NET such as data binding,
     validation, and ASP.NET page/control/module/provider configuration.</para>
 
-    <para>Spring.Web.Mvc - Use this module to integrate the functionality of
-    the Spring.Core and Spring.Aop modules into your ASP.NET MVC 2
-    projects.</para>
+    <para><link linkend="web-mvc">Spring.Web.Mvc</link> - Use this module to
+    integrate the functionality of the Spring.Core and Spring.Aop modules into
+    your ASP.NET MVC 2 projects.</para>
+
+    <para><link linkend="web-mvc3">Spring.Web.Mvc3</link> - Use this module to
+    integrate the functionality of the Spring.Core and Spring.Aop modules into
+    your ASP.NET MVC 3 projects.</para>
 
     <para><link linkend="ajax">Spring.Web.Extensions</link> - Use this module
     to raise the level of abstraction when writing ASP.NET web applications
@@ -289,8 +293,8 @@
       <listitem>
         <para><link linkend="remoting-quickstart">Distributed Computing</link>
         - A calculator demonstrating remote service abstractions that let you
-        'export' a plain CLR object (POCO) via .NET Remoting, Web Services,
-        or an EnterpriseService ServiceComponent. Corresponding client side
+        'export' a plain CLR object (POCO) via .NET Remoting, Web Services, or
+        an EnterpriseService ServiceComponent. Corresponding client side
         proxies are also demonstrated.</para>
       </listitem>
 
@@ -314,6 +318,18 @@
       </listitem>
 
       <listitem>
+        <para>ASP.NET MVC2 - Introductory example showing use of dependency
+        injection and container integration into the ASP.NET MVC2
+        framework.</para>
+      </listitem>
+
+      <listitem>
+        <para>ASP.NET MVC3 - Introductory example showing use of dependency
+        injection and container integration into the ASP.NET MVC3
+        framework.</para>
+      </listitem>
+
+      <listitem>
         <para><link linkend="data-quickstart">Data Access</link> -
         Demonstrates the ADO.NET framework showing how to simplify developing
         ADO.NET based data access layers.</para>
@@ -326,7 +342,7 @@
       </listitem>
 
       <listitem>
-        <para>AJAX : Demonstrates how to access a plain CLR object as a
+        <para>AJAX : Demonstrates how to access a plain CLR object (POCO) as a
         webservice in client side JavaScript</para>
       </listitem>
 
@@ -344,16 +360,98 @@
         scheduling.</para>
       </listitem>
 
-      <!--<listitem>
-        <para><link lang="" linkend="msmq-quickstart">MSMQ</link> -
-        Application demonstrating MSMQ helper classes.</para>
-      </listitem>-->
+      <listitem>
+        <para><link linkend="msmq-quickstart">MSMQ</link> - Application
+        demonstrating MSMQ helper classes.</para>
+      </listitem>
 
       <listitem>
         <para><link linkend="nms-quickstart">NMS</link> - Applicatoin
         demonstrating NMS helper classes.</para>
       </listitem>
     </itemizedlist>
+  </sect1>
+
+  <sect1>
+    <title>Associated Spring.NET Projects</title>
+
+    <para>There is a lot more to Spring.NET than just the Spring.NET project
+    itself. Spring.NET is enriched and empowered by a collection of supporting
+    projects that provide additional capabilities beyond those found in the
+    core Spring.NET Framework. Ranging from configuration-enhancing tools and
+    libraries to REST clients to support for additional messaging frameworks
+    and standards, the list of associated projects is growing rapidly and
+    includes some of the following:</para>
+
+    <para>Spring.NET CodeConfig</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>Spring.NET CodeConfig</emphasis> provides the ability
+        to configure a Spring container using standard .NET code instead of or
+        in addition to XML configuration.</para>
+      </listitem>
+
+      <listitem>
+        <para>See <uri
+        ns6:href="http://springframework.net/codeconfig/">http://springframework.net/codeconfig/</uri>
+        for resources, downloads, and more information</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Spring.NET REST Client</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>Spring.NET REST Client</emphasis> simplifies
+        communication with HTTP servers, and enforces RESTful principles. It
+        handles HTTP connections, leaving application code to provide URLs
+        (with possible template variables) and extract results.</para>
+      </listitem>
+
+      <listitem>
+        <para>See <uri
+        ns6:href="http://springframework.net/rest/">http://springframework.net/rest/</uri>
+        for resources, downloads, and more information</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Spring.NET AMQP</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>Spring.NET AMQP</emphasis> supports the Spring
+        programming model with AMQP, especially but not limited to
+        RabbitMQ</para>
+      </listitem>
+
+      <listitem>
+        <para>See <uri
+        ns6:href="http://springframework.net/amqp/">http://springframework.net/amqp/</uri>
+        for resources, downloads, and more information</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Spring.NET Visual Studio Add-In</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>Spring.NET Visual Studio Add-In</emphasis> provides
+        intellisense assistance in authoring Spring XML configuration files in
+        VS.NET 2010</para>
+      </listitem>
+
+      <listitem>
+        <para>See <uri
+        ns6:href="http://springframework.net/amqp/">http://springframework.net/vsaddin/</uri>
+        for resources, downloads, and more information</para>
+      </listitem>
+    </itemizedlist>
+
+    <para>Adopters of Spring.NET are encouraged to explore these projects (and
+    more!) that help to round out the comprehensive Spring.NET experience and
+    provide additional capabilities beyond those of the core Spring.NET
+    Framework to increase developer efficiency and effectiveness.</para>
   </sect1>
 
   <sect1>
