@@ -32,6 +32,7 @@
 <P>&nbsp;</P>
 <P>&nbsp;</P>]]></c>
 <c eid="Spring.Web" tid="##PROJECT_GETTINGSTARTED" q="" cd="39756.7015277778"><![CDATA[The <A href="http://www.springframework.net/doc-latest/reference/html/web.html">ASP.NET Web Framework section</A> of the reference documentation and QuickStart applications (<A href="http://www.springframework.net/doc-latest/reference/html/springair.html">SpringAir</A> and Spring.WebQuickStart) &nbsp;are the best places to get started using the functionality contained in Spring.Web.]]></c>
+<c eid="Spring.Web" tid="##SUMMARY" q="" cd="40756.6756134259">Spring support for developing ASP.NET Web Form applications</c>
 <c eid="Spring.Web~Spring.Caching_namespace" tid="##SUMMARY" q="" cd="39423.5224537037">Caching provider based on ASP.NET cache</c>
 <c eid="Spring.Web~Spring.Context.Support_namespace" tid="##SUMMARY" q="" cd="39053.8687731481">Contains implementation of IoC Container for the web environment.</c>
 <c eid="Spring.Web~Spring.Core.IO_namespace" tid="##SUMMARY" q="" cd="39423.5229282407">Abstraction for web resources</c>
@@ -42,7 +43,6 @@
 <c eid="Spring.Web~Spring.Objects.Factory.Xml_namespace" tid="##SUMMARY" q="" cd="39053.8729166667">Support classes for web based IoC container.</c>
 <c eid="Spring.Web~Spring.Threading_namespace" tid="##SUMMARY" q="" cd="39423.5231597222">Support classes for thread local storage</c>
 <c eid="Spring.Web~Spring.Util_namespace" tid="##SUMMARY" q="" cd="39053.8736111111">Miscellaneous utility classes</c>
-<c eid="Spring.Web~Spring.Web.Process_namespace" tid="##SUMMARY" q="" cd="39053.8749189815">Support for processing across multiple distinct requests.</c>
 <c eid="Spring.Web~Spring.Web.Services_namespace" tid="##SUMMARY" q="" cd="39053.8785763889">Exporters to create server and client side web service proxies that support dependency injection and AOP.</c>
 <c eid="Spring.Web~Spring.Web.Support_namespace" tid="##SUMMARY" q="" cd="39053.8791666667">Support classes for web based IoC container.</c>
 <c eid="Spring.Web~Spring.Web.UI_namespace" tid="##SUMMARY" q="" cd="39053.8796759259">Master Pages support for .NET 1.1 and Spring Page/UserControl base classes.</c>

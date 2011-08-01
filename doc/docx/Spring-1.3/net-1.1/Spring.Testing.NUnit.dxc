@@ -19,5 +19,6 @@
 <P>The Spring Framework provides first class support for integration testing in the form of the classes that are packaged in the <FONT color=#000000><CODE class=filename>Spring.Testing.NUnit.dll</CODE> library</FONT></P>]]></c>
 <c eid="Spring.Testing.NUnit" tid="##SUMMARY" q="" cd="39756.6931944444"><![CDATA[<P>Superclasses for tests requiring Spring application contexts, including support for transactional execution of test cases,<BR>with automatic rollback on completion. Useful as base classes for application-specific tests.</P>
 <P>The superclasses in this package are ideal for integration testing. Unit testing should not normally involve the Spring container,<BR>but should test classes in isolation.<BR></P>]]></c>
+<c eid="Spring.Testing.NUnit~Spring.Testing.Ado_namespace" tid="##SUMMARY" q="" cd="40756.6845833333">Classes for integration testing with ADO.NET</c>
 <c eid="Spring.Testing.NUnit~Spring.Testing.NUnit_namespace" tid="##SUMMARY" q="" cd="39423.5247569444">Classes for Applicationcontext-ased and transactional tests with NUnit</c>
     </DocumentXComments>

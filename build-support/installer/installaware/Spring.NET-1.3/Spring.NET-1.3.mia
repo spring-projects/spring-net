@@ -265,18 +265,6 @@ Install Files
 Create Shortcut
 Install Files
 Install Files
-Create Shortcut
-Install Files
-Install Files
-Install Files
-Install Files
-Create Shortcut
-Install Files
-Install Files
-Create Shortcut
-Create Shortcut
-Create Shortcut
-Install Files
 Install Files
 Install Files
 Install Files
@@ -284,6 +272,14 @@ Install Files
 Install Files
 Install Files
 Create Shortcut
+Create Shortcut
+Install Files
+Install Files
+Install Files
+Install Files
+Install Files
+Install Files
+Install Files
 Install Files
 Install Files
 Install Files
@@ -449,8 +445,6 @@ Create Folder
 Create Folder
 Create Folder
 Create Folder
-Create Shortcut
-Create Shortcut
 Create Folder
 Create Folder
 Create Folder
@@ -750,17 +744,14 @@ $
 {5A87C33D-BE83-407F-97BE-8B6CD2ED03DD}
 {6A34B8C8-F35E-439C-8397-2FFC974CA3FD}
 {01A69B5D-C70A-4131-BBC9-5E69BCF169B9}
-{135C4B66-A160-4CF9-8FD0-7774A8A5287D}
 {6CD84B9A-CC5E-4AC0-931A-1FF969A0F231}
 {E6CA9FFC-1A47-433D-B53D-CD57E174C420}
 {14E58D7B-5DD5-4E5F-AA1E-DEFB78AC04C0}
 {C0A0E478-2A63-465A-9EDD-E0785D4D39C9}
-{8C0C5FB2-212C-47CC-9225-6209613EEB69}
 {C238131E-450C-476B-83D6-B41661F70FE0}
 {B6A21161-EEF2-471F-8F48-1012FA6543DF}
 {37C851AE-6F70-48CE-BEC4-7CA7A9BFF6B0}
 {87C3E54F-ADE2-4862-A766-D820F7DBF714}
-{E775FFA3-8577-42E4-AC31-74E701678510}
 {30632419-C6D8-45D4-970A-B215CCF55B9E}
 {496E3EA4-9863-4FBF-A54D-FD67CB4D73B9}
 {C8BD2A6D-0C12-4A8C-8F25-B542F0FBE384}
@@ -768,7 +759,6 @@ $
 {1CA2F886-B436-4DF8-A2E2-7EE5B24058C8}
 {83531F87-FC34-45A4-8D5C-4683DC901232}
 {2C8655F0-AEB2-41DC-95DC-26B33BB586D5}
-{1EBEBD7B-E867-4B48-B72A-EE2FF9A4AF9A}
 {7DB471CE-20C2-4A1E-8DA5-8F6618667155}
 {9540B7BC-DDF3-4893-B7B8-311C1BA2F097}
 {4A383D13-EDFC-479A-B9F2-17DAC9F606DE}
@@ -934,8 +924,6 @@ $
 {6C857EE3-3AEE-44A8-B7E6-C320954DBA78}
 {D26AA284-2996-4710-995C-015D2B369F8A}
 {0DC8E03C-98EE-4D12-9BEE-E76972C1209D}
-{CD6019F0-6679-4D83-9FCC-42AC661E449F}
-{CCE4AAA1-79EE-45BC-A4AD-D5F971F78420}
 {BA703A7F-2531-46FA-A4C5-7A1F25AE0352}
 {76F77979-EF90-47A6-8F03-FC390BEDDBEE}
 {19AA5EA0-F41D-40D7-8629-DBEC533D6C56}
@@ -3675,66 +3663,6 @@ $SHORTCUTFOLDER$\Source Code
 
 
 0
-{135C4B66-A160-4CF9-8FD0-7774A8A5287D}
-$TARGETDIR$\examples\Spring\Spring.MsmqQuickStart\Spring.MsmqQuickStart.2008.sln
-MSMQ Messaging
-$SHORTCUTFOLDER$\Examples\.NET 2.0
-
-
-
-
-
-0|
-{CD6019F0-6679-4D83-9FCC-42AC661E449F}
-$TARGETDIR$\examples\Spring\Spring.NmsQuickStart\Spring.NmsQuickStart.2005.sln
-ActiveMQ NMS Messaging
-$SHORTCUTFOLDER$\Examples\.NET 2.0
-
-
-
-
-
-0|
-{CCE4AAA1-79EE-45BC-A4AD-D5F971F78420}
-$TARGETDIR$\examples\Spring\Spring.Scheduling.Quartz.Example\Spring.Scheduling.Quartz.Example.2005.sln
-Quartz Scheduling
-$SHORTCUTFOLDER$\Examples\.NET 2.0
-
-
-
-
-
-0
-{8C0C5FB2-212C-47CC-9225-6209613EEB69}
-$TARGETDIR$\examples\Spring\Spring.Scheduling.Quartz.Example\Spring.Scheduling.Quartz.Example.2003.sln
-Quartz Scheduling
-$SHORTCUTFOLDER$\Examples\.NET 1.1
-
-
-
-
-
-0
-{E775FFA3-8577-42E4-AC31-74E701678510}
-$TARGETDIR$\examples\Spring\Spring.WcfQuickStart\Spring.WcfQuickStart.2008.sln
-WCF
-$SHORTCUTFOLDER$\Examples\.NET 3.0
-
-
-
-
-
-0
-{1EBEBD7B-E867-4B48-B72A-EE2FF9A4AF9A}
-$TARGETDIR$\examples\Spring\Spring.EmsQuickStart\Spring.EmsQuickStart.2008.sln
-TIBCO EMS Messaging
-$SHORTCUTFOLDER$\Examples\.NET 2.0
-
-
-
-
-
-0|
 {E17366C9-1D58-47A6-AB49-211012C21A75}
 $TARGETDIR$\Spring.Net.2010.sln
 VS.NET 2010 Solution
@@ -3807,7 +3735,7 @@ $SHORTCUTFOLDER$\Examples\VS2010
 0|
 {3C01EADE-12DC-4E5A-B584-9E977C60F5C7}
 $TARGETDIR$\examples\Spring\Spring.DataQuickStart\Spring.DataQuickStart.2008.sln
-Data Access
+ADO.NET Data Access
 $SHORTCUTFOLDER$\Examples\VS2008
 
 
@@ -3817,7 +3745,7 @@ $SHORTCUTFOLDER$\Examples\VS2008
 0|
 {1AA6A98B-221B-4DF2-93C0-44A7DECF292D}
 $TARGETDIR$\examples\Spring\Spring.DataQuickStart\Spring.DataQuickStart.2008.sln
-Data Access
+ADO.NET Data Access
 $SHORTCUTFOLDER$\Examples\VS2010
 
 
@@ -3937,7 +3865,7 @@ $SHORTCUTFOLDER$\Examples\VS2010
 0|
 {7A7302DD-AEC7-4D23-964A-D62F0B62976A}
 $TARGETDIR$\examples\Spring\Spring.MvcQuickStart\Spring.MvcQuickStart.2010.sln
-ASP.NET MVC
+ASP.NET MVC2
 $SHORTCUTFOLDER$\Examples\VS2010
 
 
@@ -4697,19 +4625,7 @@ C
 
 
 
-
-
-
-
-
-
 $
-
-
-
-
-
-
 
 
 

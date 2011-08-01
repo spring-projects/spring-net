@@ -411,8 +411,6 @@ Create Shortcut
 Install Files
 Create Shortcut
 Install Files
-Install Files
-Install Files
 Create Shortcut
 Install Files
 Create Shortcut
@@ -897,8 +895,6 @@ $
 {4DDA33DE-3081-440C-A819-61EF469D7D68}
 {2534696B-A2B4-4B7E-B78A-281BAB2BA3AB}
 {B2CDDB20-B86F-4CB2-B2F4-6D90EE817EE1}
-{8D562C10-27C6-4860-BA44-9A599252E406}
-{51295255-7E6D-44C1-A980-B5EF68629770}
 {68284F99-2BAC-4789-B108-3950FCCA7D63}
 {405E73EA-4333-4BD2-BBBA-6EDF598112B4}
 {2FBF9330-7DA1-4133-891C-1D5EDF7C4CCE}
@@ -3550,32 +3546,6 @@ FALSE
 FALSE
 FALSE
 FALSE
-{8D562C10-27C6-4860-BA44-9A599252E406}
-L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.WebQuickStart\test\*.*
-TRUE|
-$TARGETDIR$\examples\Spring\Spring.WebQuickStart\test
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-{51295255-7E6D-44C1-A980-B5EF68629770}
-L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.WebQuickStart\test.integration\*.*
-TRUE|
-$TARGETDIR$\examples\Spring\Spring.WebQuickStart\test.integration
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
-FALSE
 {68284F99-2BAC-4789-B108-3950FCCA7D63}
 L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\SpringAir\SpringAir.2008.sln
 FALSE|
@@ -4733,11 +4703,7 @@ C
 
 
 
-
-
 $
-
-
 
 
 

@@ -410,8 +410,6 @@ else
   Create Shortcut $SHORTCUTFOLDER$\Examples\VS2010\AJAX to $TARGETDIR$\examples\Spring\Spring.Web.Extensions.Example\Spring.Web.Extensions.Example.2010.sln
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.WebQuickStart\Spring.WebQuickStart.2010.sln to $TARGETDIR$\examples\Spring\Spring.WebQuickStart
   Create Shortcut $SHORTCUTFOLDER$\Examples\VS2010\ASP.NET Web Forms to $TARGETDIR$\examples\Spring\Spring.WebQuickStart\Spring.WebQuickStart.2010.sln
-  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.WebQuickStart\test\*.* to $TARGETDIR$\examples\Spring\Spring.WebQuickStart\test, include subfolders
-  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.WebQuickStart\test.integration\*.* to $TARGETDIR$\examples\Spring\Spring.WebQuickStart\test.integration, include subfolders
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\SpringAir\SpringAir.2008.sln to $TARGETDIR$\examples\Spring\SpringAir
   Create Shortcut $SHORTCUTFOLDER$\Examples\VS2008\Spring Air to $TARGETDIR$\examples\Spring\SpringAir\SpringAir.2008.sln
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\SpringAir\SpringAir.2010.sln to $TARGETDIR$\examples\Spring\SpringAir
