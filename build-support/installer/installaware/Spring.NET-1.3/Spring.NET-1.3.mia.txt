@@ -53,7 +53,7 @@ end
  
 [DEFINE REGION: Define Setup Globals]
 Comment: Define Setup Components
-Define Component: Spring for .NET 1.3.0
+Define Component: Spring for .NET 1.3.2
  
 Comment: Initialize Setup Globals
 Get System Setting Windows NT Kernel (NT4, 2000, XP, 2003, Vista, 2008) into ISNT
@@ -126,10 +126,10 @@ else
 end
 Comment: TO-DO: Customize your minimum setup here
 if Variable MINIMUM Equals TRUE
-  Deselect Component: Spring for .NET 1.3.0
+  Deselect Component: Spring for .NET 1.3.2
 else
   if Variable COMPLETE Equals TRUE
-    Select Component: Spring for .NET 1.3.0
+    Select Component: Spring for .NET 1.3.2
   end
 end
 label: Custom Setup
@@ -210,7 +210,7 @@ else
   [END REGION]
   [DEFINE REGION: Perform First Time or Maintenance Installation]
   Comment: Install/Re-Install product
-  Create Shortcut $SHORTCUTFOLDER$\Uninstall Spring.NET 1.3.0 to $UNINSTALLLINK$
+  Create Shortcut $SHORTCUTFOLDER$\Uninstall Spring.NET 1.3.2 to $UNINSTALLLINK$
   [OFFLINE CONTENT]
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\readme.txt to $TARGETDIR$
   Create Shortcut $SHORTCUTFOLDER$\View readme to $TARGETDIR$\readme.txt
@@ -221,9 +221,7 @@ else
   Create Shortcut $SHORTCUTFOLDER$\View license to $TARGETDIR$\license.txt
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\bin\*.* to $TARGETDIR$\bin, include subfolders
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\Spring.Net.2005.sln to $TARGETDIR$
-  Create Shortcut $SHORTCUTFOLDER$\Source Code\VS.NET 2005 Solution to $TARGETDIR$\Spring.Net.2005.sln
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\Spring.Net.2003.sln to $TARGETDIR$
-  Create Shortcut $SHORTCUTFOLDER$\Source Code\VS.NET 2003 Solution to $TARGETDIR$\Spring.Net.2003.sln
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\lib\*.* to $TARGETDIR$\lib, include subfolders
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\src\*.* to $TARGETDIR$\src, include subfolders
   Create Shortcut $SHORTCUTFOLDER$\Documentation\Reference - HTML to $TARGETDIR$\doc\reference\html\index.html
@@ -232,66 +230,30 @@ else
   Create Shortcut $SHORTCUTFOLDER$\Documentation\Reference - PDF to $TARGETDIR$\doc\reference\pdf\spring-net-reference.pdf
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\doc\schema\*.* to $TARGETDIR$\doc\schema, include subfolders
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.AopQuickStart\readme.txt to $TARGETDIR$\examples\Spring\Spring.AopQuickStart
-  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.AopQuickStart\Spring.AopQuickStart.2003.sln to $TARGETDIR$\examples\Spring\Spring.AopQuickStart
-  Create Shortcut $SHORTCUTFOLDER$\Examples\.NET 1.1\AOP to $TARGETDIR$\examples\Spring\Spring.AopQuickStart\Spring.AopQuickStart.2003.sln
-  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.AopQuickStart\Spring.AopQuickStart.2005.sln to $TARGETDIR$\examples\Spring\Spring.AopQuickStart
-  Create Shortcut $SHORTCUTFOLDER$\Examples\.NET 2.0\AOP to $TARGETDIR$\examples\Spring\Spring.AopQuickStart\Spring.AopQuickStart.2005.sln
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.AopQuickStart\src\*.* to $TARGETDIR$\examples\Spring\Spring.AopQuickStart\src, include subfolders
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.AopQuickStart\Spring.AopQuickStart.build to $TARGETDIR$\examples\Spring\Spring.AopQuickStart
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.Calculator\Spring.Calculator.snk to $TARGETDIR$\examples\Spring\Spring.Calculator
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.Calculator\Spring.Calculator.build to $TARGETDIR$\examples\Spring\Spring.Calculator
-  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.Calculator\Spring.Calculator.2005.sln to $TARGETDIR$\examples\Spring\Spring.Calculator
-  Create Shortcut $SHORTCUTFOLDER$\Examples\.NET 2.0\Calculator to $TARGETDIR$\examples\Spring\Spring.Calculator\Spring.Calculator.2005.sln
-  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.Calculator\Spring.Calculator.2003.sln to $TARGETDIR$\examples\Spring\Spring.Calculator
-  Create Shortcut $SHORTCUTFOLDER$\Examples\.NET 1.1\Calculator to $TARGETDIR$\examples\Spring\Spring.Calculator\Spring.Calculator.2003.sln
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.Calculator\readme.txt to $TARGETDIR$\examples\Spring\Spring.Calculator
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.Calculator\lib\*.* to $TARGETDIR$\examples\Spring\Spring.Calculator\lib, include subfolders
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.Calculator\src\*.* to $TARGETDIR$\examples\Spring\Spring.Calculator\src, include subfolders
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.Data.NHibernate.Northwind\test_northwind.sql to $TARGETDIR$\examples\Spring\Spring.Data.NHibernate.Northwind
-  Create Shortcut $SHORTCUTFOLDER$\Examples\.NET 2.0\Northwind NHibernate to $TARGETDIR$\examples\Spring\Spring.Data.NHibernate.Northwind\Spring.Northwind.2008.sln
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.Data.NHibernate.Northwind\src\*.* to $TARGETDIR$\examples\Spring\Spring.Data.NHibernate.Northwind\src, include subfolders
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.Data.NHibernate.Northwind\test\*.* to $TARGETDIR$\examples\Spring\Spring.Data.NHibernate.Northwind\test, include subfolders
-  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.DataQuickStart\Spring.DataQuickStart.2005.sln to $TARGETDIR$\examples\Spring\Spring.DataQuickStart
-  Create Shortcut $SHORTCUTFOLDER$\Examples\.NET 2.0\Data Access to $TARGETDIR$\examples\Spring\Spring.DataQuickStart\Spring.DataQuickStart.2005.sln
-  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.DataQuickStart\Spring.DataQuickStart.2003.sln to $TARGETDIR$\examples\Spring\Spring.DataQuickStart
-  Create Shortcut $SHORTCUTFOLDER$\Examples\.NET 1.1\Data Access to $TARGETDIR$\examples\Spring\Spring.DataQuickStart\Spring.DataQuickStart.2003.sln
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.DataQuickStart\src\*.* to $TARGETDIR$\examples\Spring\Spring.DataQuickStart\src, include subfolders
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.DataQuickStart\test\*.* to $TARGETDIR$\examples\Spring\Spring.DataQuickStart\test, include subfolders
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.IoCQuickStart.AppContext\Spring.IocQuickStart.AppContext.build to $TARGETDIR$\examples\Spring\Spring.IoCQuickStart.AppContext
-  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.IoCQuickStart.AppContext\Spring.IocQuickStart.AppContext.2005.sln to $TARGETDIR$\examples\Spring\Spring.IoCQuickStart.AppContext
-  Create Shortcut $SHORTCUTFOLDER$\Examples\.NET 2.0\Application Context to $TARGETDIR$\examples\Spring\Spring.IoCQuickStart.AppContext\Spring.IocQuickStart.AppContext.2005.sln
-  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.IoCQuickStart.AppContext\Spring.IocQuickStart.AppContext.2003.sln to $TARGETDIR$\examples\Spring\Spring.IoCQuickStart.AppContext
-  Create Shortcut $SHORTCUTFOLDER$\Examples\.NET 1.1\Application Context to $TARGETDIR$\examples\Spring\Spring.IoCQuickStart.AppContext\Spring.IocQuickStart.AppContext.2003.sln
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.IoCQuickStart.AppContext\src\*.* to $TARGETDIR$\examples\Spring\Spring.IoCQuickStart.AppContext\src, include subfolders
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.IoCQuickStart.EventRegistry\Spring.IocQuickStart.EventRegistry.build to $TARGETDIR$\examples\Spring\Spring.IoCQuickStart.EventRegistry
-  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.IoCQuickStart.EventRegistry\Spring.IocQuickStart.EventRegistry.2005.sln to $TARGETDIR$\examples\Spring\Spring.IoCQuickStart.EventRegistry
-  Create Shortcut $SHORTCUTFOLDER$\Examples\.NET 2.0\Event Registry to $TARGETDIR$\examples\Spring\Spring.IoCQuickStart.EventRegistry\Spring.IocQuickStart.EventRegistry.2005.sln
-  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.IoCQuickStart.EventRegistry\Spring.IocQuickStart.EventRegistry.2003.sln to $TARGETDIR$\examples\Spring\Spring.IoCQuickStart.EventRegistry
-  Create Shortcut $SHORTCUTFOLDER$\Examples\.NET 1.1\Event Registry to $TARGETDIR$\examples\Spring\Spring.IoCQuickStart.EventRegistry\Spring.IocQuickStart.EventRegistry.2003.sln
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.IoCQuickStart.EventRegistry\src\*.* to $TARGETDIR$\examples\Spring\Spring.IoCQuickStart.EventRegistry\src, include subfolders
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.IoCQuickStart.MovieFinder\Spring.IocQuickStart.MovieFinder.build to $TARGETDIR$\examples\Spring\Spring.IoCQuickStart.MovieFinder
-  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.IoCQuickStart.MovieFinder\Spring.IocQuickStart.MovieFinder.2005.sln to $TARGETDIR$\examples\Spring\Spring.IoCQuickStart.MovieFinder
-  Create Shortcut $SHORTCUTFOLDER$\Examples\.NET 2.0\Movie Finder to $TARGETDIR$\examples\Spring\Spring.IoCQuickStart.MovieFinder\Spring.IocQuickStart.MovieFinder.2005.sln
-  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.IoCQuickStart.MovieFinder\Spring.IocQuickStart.MovieFinder.2003.sln to $TARGETDIR$\examples\Spring\Spring.IoCQuickStart.MovieFinder
-  Create Shortcut $SHORTCUTFOLDER$\Examples\.NET 1.1\Movie Finder to $TARGETDIR$\examples\Spring\Spring.IoCQuickStart.MovieFinder\Spring.IocQuickStart.MovieFinder.2003.sln
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.IoCQuickStart.MovieFinder\lib\*.* to $TARGETDIR$\examples\Spring\Spring.IoCQuickStart.MovieFinder\lib, include subfolders
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.IoCQuickStart.MovieFinder\src\*.* to $TARGETDIR$\examples\Spring\Spring.IoCQuickStart.MovieFinder\src, include subfolders
-  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.TxQuickStart\Spring.TxQuickStart.2005.sln to $TARGETDIR$\examples\Spring\Spring.TxQuickStart
-  Create Shortcut $SHORTCUTFOLDER$\Examples\.NET 2.0\Transactions to $TARGETDIR$\examples\Spring\Spring.TxQuickStart\Spring.TxQuickStart.2005.sln
-  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.TxQuickStart\Spring.TxQuickStart.2003.sln to $TARGETDIR$\examples\Spring\Spring.TxQuickStart
-  Create Shortcut $SHORTCUTFOLDER$\Examples\.NET 1.1\Transactions to $TARGETDIR$\examples\Spring\Spring.TxQuickStart\Spring.TxQuickStart.2003.sln
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.TxQuickStart\src\*.* to $TARGETDIR$\examples\Spring\Spring.TxQuickStart\src, include subfolders
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.TxQuickStart\test\*.* to $TARGETDIR$\examples\Spring\Spring.TxQuickStart\test, include subfolders
-  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.Web.Extensions.Example\Spring.Web.Extensions.Example.2005.sln to $TARGETDIR$\examples\Spring\Spring.Web.Extensions.Example
-  Create Shortcut $SHORTCUTFOLDER$\Examples\.NET 2.0\AJAX to $TARGETDIR$\examples\Spring\Spring.Web.Extensions.Example\Spring.Web.Extensions.Example.2005.sln
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.Web.Extensions.Example\src\*.* to $TARGETDIR$\examples\Spring\Spring.Web.Extensions.Example\src, include subfolders
-  Create Shortcut $SHORTCUTFOLDER$\Examples\.NET 2.0\Web to $TARGETDIR$\examples\Spring\Spring.WebQuickStart\Spring.WebQuickStart.2008.sln
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.WebQuickStart\src\*.* to $TARGETDIR$\examples\Spring\Spring.WebQuickStart\src, include subfolders
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\SpringAir\SpringAir.build to $TARGETDIR$\examples\Spring\SpringAir
-  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\SpringAir\SpringAir.2005.sln to $TARGETDIR$\examples\Spring\SpringAir
-  Create Shortcut $SHORTCUTFOLDER$\Examples\.NET 2.0\Spring Air to $TARGETDIR$\examples\Spring\SpringAir\SpringAir.2005.sln
-  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\SpringAir\SpringAir.2003.sln to $TARGETDIR$\examples\Spring\SpringAir
-  Create Shortcut $SHORTCUTFOLDER$\Examples\.NET 1.1\SpringAir to $TARGETDIR$\examples\Spring\SpringAir\SpringAir.2003.sln
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\SpringAir\readme.txt to $TARGETDIR$\examples\Spring\SpringAir
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\SpringAir\data\*.* to $TARGETDIR$\examples\Spring\SpringAir\data, include subfolders
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\SpringAir\src\*.* to $TARGETDIR$\examples\Spring\SpringAir\src, include subfolders
@@ -306,14 +268,13 @@ else
   Create Shortcut $SHORTCUTFOLDER$\Examples\.NET 2.0\MSMQ Messaging to $TARGETDIR$\examples\Spring\Spring.MsmqQuickStart\Spring.MsmqQuickStart.2008.sln
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.MsmqQuickStart\src\*.* to $TARGETDIR$\examples\Spring\Spring.MsmqQuickStart\src, include subfolders
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.MsmqQuickStart\test\*.* to $TARGETDIR$\examples\Spring\Spring.MsmqQuickStart\test, include subfolders
-  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.NmsQuickStart\Spring.NmsQuickStart.2005.sln to $TARGETDIR$\examples\Spring\Spring.NmsQuickStart
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.NmsQuickStart\src\*.* to $TARGETDIR$\examples\Spring\Spring.NmsQuickStart\src, include subfolders
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.NmsQuickStart\test\*.* to $TARGETDIR$\examples\Spring\Spring.NmsQuickStart\test, include subfolders
-  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.Scheduling.Quartz.Example\Spring.Scheduling.Quartz.Example.2005.sln to $TARGETDIR$\examples\Spring\Spring.Scheduling.Quartz.Example
-  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.Scheduling.Quartz.Example\Spring.Scheduling.Quartz.Example.2003.sln to $TARGETDIR$\examples\Spring\Spring.Scheduling.Quartz.Example
   Create Shortcut $SHORTCUTFOLDER$\Examples\.NET 1.1\Quartz Scheduling to $TARGETDIR$\examples\Spring\Spring.Scheduling.Quartz.Example\Spring.Scheduling.Quartz.Example.2003.sln
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.Scheduling.Quartz.Example\src\*.* to $TARGETDIR$\examples\Spring\Spring.Scheduling.Quartz.Example\src, include subfolders
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.WcfQuickStart\Spring.WcfQuickStart.2008.sln to $TARGETDIR$\examples\Spring\Spring.WcfQuickStart
+  Create Shortcut $SHORTCUTFOLDER$\Examples\VS2010\WCF to $TARGETDIR$\examples\Spring\Spring.WcfQuickStart\Spring.WcfQuickStart.2008.sln
+  Create Shortcut $SHORTCUTFOLDER$\Examples\VS2008\WCF to $TARGETDIR$\examples\Spring\Spring.WcfQuickStart\Spring.WcfQuickStart.2008.sln
   Create Shortcut $SHORTCUTFOLDER$\Examples\.NET 3.0\WCF to $TARGETDIR$\examples\Spring\Spring.WcfQuickStart\Spring.WcfQuickStart.2008.sln
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.WcfQuickStart\src\*.* to $TARGETDIR$\examples\Spring\Spring.WcfQuickStart\src, include subfolders
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\doc\reference\html\styles\html.css to $TARGETDIR$\doc\reference\html\styles
@@ -386,16 +347,77 @@ else
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\doc\reference\html\webservices.html to $TARGETDIR$\doc\reference\html
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\doc\reference\html\xsd-config.html to $TARGETDIR$\doc\reference\html
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.EmsQuickStart\Spring.EmsQuickStart.2008.sln to $TARGETDIR$\examples\Spring\Spring.EmsQuickStart
+  Create Shortcut $SHORTCUTFOLDER$\Examples\VS2010\TIBCO EMS Messaging to $TARGETDIR$\examples\Spring\Spring.EmsQuickStart\Spring.EmsQuickStart.2008.sln
+  Create Shortcut $SHORTCUTFOLDER$\Examples\VS2008\TIBCO EMS Messaging to $TARGETDIR$\examples\Spring\Spring.EmsQuickStart\Spring.EmsQuickStart.2008.sln
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\dev-support\*.* to $TARGETDIR$\dev-support, include subfolders
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.Data.NHibernate.Northwind\readme.txt to $TARGETDIR$\examples\Spring\Spring.Data.NHibernate.Northwind
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.Data.NHibernate.Northwind\Spring.Northwind.2008.sln to $TARGETDIR$\examples\Spring\Spring.Data.NHibernate.Northwind
+  Create Shortcut $SHORTCUTFOLDER$\Examples\VS2008\Northwind NHibernate to $TARGETDIR$\examples\Spring\Spring.Data.NHibernate.Northwind\Spring.Northwind.2008.sln
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.Data.NHibernate.Northwind\lib\*.* to $TARGETDIR$\examples\Spring\Spring.Data.NHibernate.Northwind\lib, include subfolders
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.WebQuickStart\Spring.WebQuickStart.2008.sln to $TARGETDIR$\examples\Spring\Spring.WebQuickStart
+  Create Shortcut $SHORTCUTFOLDER$\Examples\VS2008\ASP.NET Web Forms to $TARGETDIR$\examples\Spring\Spring.WebQuickStart\Spring.WebQuickStart.2008.sln
   Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.MsmqQuickStart\Spring.MsmqQuickStart.2008.sln to $TARGETDIR$\examples\Spring\Spring.MsmqQuickStart
-  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.MsmqQuickStart\Spring.MsmqQuickStart.2005.sln to $TARGETDIR$\examples\Spring\Spring.MsmqQuickStart
-  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.WebQuickStart\Spring.WebQuickStart.2005.sln to $TARGETDIR$\examples\Spring\Spring.WebQuickStart
-  [DEFINE WEB MEDIA Spring for .NET 1.3.0]
-  Get Component Spring for .NET 1.3.0 Selection State into Variable SELECTED
+  Create Shortcut $SHORTCUTFOLDER$\Examples\VS2010\MSMQ Messaging to $TARGETDIR$\examples\Spring\Spring.MsmqQuickStart\Spring.MsmqQuickStart.2008.sln
+  Create Shortcut $SHORTCUTFOLDER$\Examples\VS2008\MSMQ Messaging to $TARGETDIR$\examples\Spring\Spring.MsmqQuickStart\Spring.MsmqQuickStart.2008.sln
+  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\doc\reference\html\classic-spring.html to $TARGETDIR$\doc\reference\html
+  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\doc\reference\html\spring-appendices.html to $TARGETDIR$\doc\reference\html
+  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\doc\reference\html\web-mvc3.html to $TARGETDIR$\doc\reference\html
+  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\doc\reference\html\web-quickstart.html to $TARGETDIR$\doc\reference\html
+  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.Mvc3QuickStart\packages\*.* to $TARGETDIR$\examples\Spring\Spring.Mvc3QuickStart\packages, include subfolders
+  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.Mvc3QuickStart\src\*.* to $TARGETDIR$\examples\Spring\Spring.Mvc3QuickStart\src, include subfolders
+  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.Mvc3QuickStart\Spring.Mvc3QuickStart.sln to $TARGETDIR$\examples\Spring\Spring.Mvc3QuickStart
+  Create Shortcut $SHORTCUTFOLDER$\Examples\VS2010\ASP.NET MVC3 to $TARGETDIR$\examples\Spring\Spring.Mvc3QuickStart\Spring.Mvc3QuickStart.sln
+  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.MvcQuickStart\Spring.MvcQuickStart.2010.sln to $TARGETDIR$\examples\Spring\Spring.MvcQuickStart
+  Create Shortcut $SHORTCUTFOLDER$\Examples\VS2010\ASP.NET MVC to $TARGETDIR$\examples\Spring\Spring.MvcQuickStart\Spring.MvcQuickStart.2010.sln
+  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.MvcQuickStart\src\*.* to $TARGETDIR$\examples\Spring\Spring.MvcQuickStart\src, include subfolders
+  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.AopQuickStart\Spring.AopQuickStart.2008.sln to $TARGETDIR$\examples\Spring\Spring.AopQuickStart
+  Create Shortcut $SHORTCUTFOLDER$\Examples\VS2008\AOP to $TARGETDIR$\examples\Spring\Spring.AopQuickStart\Spring.AopQuickStart.2008.sln
+  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.AopQuickStart\Spring.AopQuickStart.2010.sln to $TARGETDIR$\examples\Spring\Spring.AopQuickStart
+  Create Shortcut $SHORTCUTFOLDER$\Examples\VS2010\AOP to $TARGETDIR$\examples\Spring\Spring.AopQuickStart\Spring.AopQuickStart.2010.sln
+  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.Calculator\Spring.Calculator.2008.sln to $TARGETDIR$\examples\Spring\Spring.Calculator
+  Create Shortcut $SHORTCUTFOLDER$\Examples\VS2008\Calculator to $TARGETDIR$\examples\Spring\Spring.Calculator\Spring.Calculator.2008.sln
+  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.Calculator\Spring.Calculator.2010.sln to $TARGETDIR$\examples\Spring\Spring.Calculator
+  Create Shortcut $SHORTCUTFOLDER$\Examples\VS2010\Calculator to $TARGETDIR$\examples\Spring\Spring.Calculator\Spring.Calculator.2010.sln
+  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.Data.NHibernate.Northwind\Spring.Northwind.2010.sln to $TARGETDIR$\examples\Spring\Spring.Data.NHibernate.Northwind
+  Create Shortcut $SHORTCUTFOLDER$\Examples\VS2010\Northwind NHibernate to $TARGETDIR$\examples\Spring\Spring.Data.NHibernate.Northwind\Spring.Northwind.2010.sln
+  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.DataQuickStart\Spring.DataQuickStart.2008.sln to $TARGETDIR$\examples\Spring\Spring.DataQuickStart
+  Create Shortcut $SHORTCUTFOLDER$\Examples\VS2010\Data Access to $TARGETDIR$\examples\Spring\Spring.DataQuickStart\Spring.DataQuickStart.2008.sln
+  Create Shortcut $SHORTCUTFOLDER$\Examples\VS2008\Data Access to $TARGETDIR$\examples\Spring\Spring.DataQuickStart\Spring.DataQuickStart.2008.sln
+  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.IoCQuickStart.AppContext\Spring.IocQuickStart.AppContext.2008.sln to $TARGETDIR$\examples\Spring\Spring.IoCQuickStart.AppContext
+  Create Shortcut $SHORTCUTFOLDER$\Examples\VS2008\Application Context to $TARGETDIR$\examples\Spring\Spring.IoCQuickStart.AppContext\Spring.IocQuickStart.AppContext.2008.sln
+  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.IoCQuickStart.AppContext\Spring.IocQuickStart.AppContext.2010.sln to $TARGETDIR$\examples\Spring\Spring.IoCQuickStart.AppContext
+  Create Shortcut $SHORTCUTFOLDER$\Examples\VS2010\Application Context to $TARGETDIR$\examples\Spring\Spring.IoCQuickStart.AppContext\Spring.IocQuickStart.AppContext.2010.sln
+  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.IoCQuickStart.EventRegistry\Spring.IocQuickStart.EventRegistry.2008.sln to $TARGETDIR$\examples\Spring\Spring.IoCQuickStart.EventRegistry
+  Create Shortcut $SHORTCUTFOLDER$\Examples\VS2008\Event Registry to $TARGETDIR$\examples\Spring\Spring.IoCQuickStart.EventRegistry\Spring.IocQuickStart.EventRegistry.2008.sln
+  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.IoCQuickStart.EventRegistry\Spring.IocQuickStart.EventRegistry.2010.sln to $TARGETDIR$\examples\Spring\Spring.IoCQuickStart.EventRegistry
+  Create Shortcut $SHORTCUTFOLDER$\Examples\VS2010\Event Registry to $TARGETDIR$\examples\Spring\Spring.IoCQuickStart.EventRegistry\Spring.IocQuickStart.EventRegistry.2010.sln
+  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.IoCQuickStart.MovieFinder\Spring.IocQuickStart.MovieFinder.2008.sln to $TARGETDIR$\examples\Spring\Spring.IoCQuickStart.MovieFinder
+  Create Shortcut $SHORTCUTFOLDER$\Examples\VS2008\Movie Finder to $TARGETDIR$\examples\Spring\Spring.IoCQuickStart.MovieFinder\Spring.IocQuickStart.MovieFinder.2008.sln
+  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.IoCQuickStart.MovieFinder\Spring.IocQuickStart.MovieFinder.2010.sln to $TARGETDIR$\examples\Spring\Spring.IoCQuickStart.MovieFinder
+  Create Shortcut $SHORTCUTFOLDER$\Examples\VS2010\Movie Finder to $TARGETDIR$\examples\Spring\Spring.IoCQuickStart.MovieFinder\Spring.IocQuickStart.MovieFinder.2010.sln
+  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.NmsQuickStart\Spring.NmsQuickStart.2008.sln to $TARGETDIR$\examples\Spring\Spring.NmsQuickStart
+  Create Shortcut $SHORTCUTFOLDER$\Examples\VS2010\ActiveMQ NMS Messaging to $TARGETDIR$\examples\Spring\Spring.NmsQuickStart\Spring.NmsQuickStart.2008.sln
+  Create Shortcut $SHORTCUTFOLDER$\Examples\VS2008\ActiveMQ NMS Messaging to $TARGETDIR$\examples\Spring\Spring.NmsQuickStart\Spring.NmsQuickStart.2008.sln
+  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.Scheduling.Quartz.Example\Spring.Scheduling.Quartz.Example.2008.sln to $TARGETDIR$\examples\Spring\Spring.Scheduling.Quartz.Example
+  Create Shortcut $SHORTCUTFOLDER$\Examples\VS2010\Quartz Scheduling to $TARGETDIR$\examples\Spring\Spring.Scheduling.Quartz.Example\Spring.Scheduling.Quartz.Example.2008.sln
+  Create Shortcut $SHORTCUTFOLDER$\Examples\VS2008\Quartz Scheduling to $TARGETDIR$\examples\Spring\Spring.Scheduling.Quartz.Example\Spring.Scheduling.Quartz.Example.2008.sln
+  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.TxQuickStart\Spring.TxQuickStart.2008.sln to $TARGETDIR$\examples\Spring\Spring.TxQuickStart
+  Create Shortcut $SHORTCUTFOLDER$\Examples\VS2010\Transactions to $TARGETDIR$\examples\Spring\Spring.TxQuickStart\Spring.TxQuickStart.2008.sln
+  Create Shortcut $SHORTCUTFOLDER$\Examples\VS2008\Transactions to $TARGETDIR$\examples\Spring\Spring.TxQuickStart\Spring.TxQuickStart.2008.sln
+  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.Web.Extensions.Example\Spring.Web.Extensions.Example.2008.sln to $TARGETDIR$\examples\Spring\Spring.Web.Extensions.Example
+  Create Shortcut $SHORTCUTFOLDER$\Examples\VS2008\AJAX to $TARGETDIR$\examples\Spring\Spring.Web.Extensions.Example\Spring.Web.Extensions.Example.2008.sln
+  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.Web.Extensions.Example\Spring.Web.Extensions.Example.2010.sln to $TARGETDIR$\examples\Spring\Spring.Web.Extensions.Example
+  Create Shortcut $SHORTCUTFOLDER$\Examples\VS2010\AJAX to $TARGETDIR$\examples\Spring\Spring.Web.Extensions.Example\Spring.Web.Extensions.Example.2010.sln
+  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\Spring.WebQuickStart\Spring.WebQuickStart.2010.sln to $TARGETDIR$\examples\Spring\Spring.WebQuickStart
+  Create Shortcut $SHORTCUTFOLDER$\Examples\VS2010\ASP.NET Web Forms to $TARGETDIR$\examples\Spring\Spring.WebQuickStart\Spring.WebQuickStart.2010.sln
+  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\SpringAir\SpringAir.2008.sln to $TARGETDIR$\examples\Spring\SpringAir
+  Create Shortcut $SHORTCUTFOLDER$\Examples\VS2008\Spring Air to $TARGETDIR$\examples\Spring\SpringAir\SpringAir.2008.sln
+  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\examples\Spring\SpringAir\SpringAir.2010.sln to $TARGETDIR$\examples\Spring\SpringAir
+  Create Shortcut $SHORTCUTFOLDER$\Examples\VS2010\Spring Air to $TARGETDIR$\examples\Spring\SpringAir\SpringAir.2010.sln
+  Install Files L:\projects\spring-net\trunk\build\package\Spring.NET\Spring.Net.2010.sln to $TARGETDIR$
+  Create Shortcut $SHORTCUTFOLDER$\Source Code\VS.NET 2010 Solution to $TARGETDIR$\Spring.Net.2010.sln
+  [DEFINE WEB MEDIA Spring for .NET 1.3.2]
+  Get Component Spring for .NET 1.3.2 Selection State into Variable SELECTED
   if Variable SELECTED Equals TRUE
   end
   Comment: TO-DO: Insert any additional install commands here
@@ -430,6 +452,8 @@ else
     Create Shortcut $SHORTCUTFOLDER$\Examples\.NET 2.0\ActiveMQ NMS Messaging to $TARGETDIR$\examples\Spring\Spring.NmsQuickStart\Spring.NmsQuickStart.2005.sln
     Create Shortcut $SHORTCUTFOLDER$\Examples\.NET 2.0\Quartz Scheduling to $TARGETDIR$\examples\Spring\Spring.Scheduling.Quartz.Example\Spring.Scheduling.Quartz.Example.2005.sln
     Create Folder $TARGETDIR$\doc\reference\html\styles
+    Create Folder $TARGETDIR$\examples\Spring\Spring.Mvc3QuickStart
+    Create Folder $TARGETDIR$\examples\Spring\Spring.MvcQuickStart
     Apply Install (get result into variable SUCCESS)
   end
   [compiler end]
