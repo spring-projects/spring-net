@@ -1,3 +1,13 @@
+Changes (1.3.1 to 1.3.2)
+========================
+
+Spring.Data
+
+1. Changed AbstractPlatformTransactionManager to set default Transaction Synchronizcation to TransactionSynchronization.NeverChange from TransactionSynchronizationState.Never.  Use the setter 'TransactionSynchonization' to change.  This was changed so as to avoid an issue with NHibernate Open Session In View functionality and some nested declarative transaction management settings.  See https://jira.springsource.org/browse/SPRNET-1438 for more details.  
+
+Note: This functionality is an advanced feature of Spring, so if you are using it, you probably know all about it, otherwise you can safely ignore this message.
+
+
 Changes (1.3 RC1 to 1.3 GA or greater)
 ========================
 
