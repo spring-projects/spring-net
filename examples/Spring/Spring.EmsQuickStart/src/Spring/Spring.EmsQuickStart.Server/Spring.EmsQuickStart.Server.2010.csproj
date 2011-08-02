@@ -1,4 +1,5 @@
-﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -11,9 +12,11 @@
     <AssemblyName>Spring.EmsQuickStart.Server</AssemblyName>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
-    <OldToolsVersion>2.0</OldToolsVersion>
+    <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <PublishUrl>http://localhost/Spring.EmsQuickStart.Server/</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
@@ -26,7 +29,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>true</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -38,6 +40,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -46,30 +49,20 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Common.Logging, Version=1.2.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\lib\Net\2.0\Common.Logging.dll</HintPath>
     </Reference>
-    <Reference Include="Spring.Aop, Version=1.3.2.20942, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\bin\net\2.0\release\Spring.Aop.dll</HintPath>
-    </Reference>
-    <Reference Include="Spring.Core, Version=1.3.2.20942, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Spring.Core">
       <HintPath>..\..\..\..\..\..\bin\net\2.0\release\Spring.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Spring.Data, Version=1.3.2.20942, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\bin\net\2.0\release\Spring.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Spring.Messaging, Version=1.3.2.20942, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Spring.Messaging">
       <HintPath>..\..\..\..\..\..\bin\net\2.0\release\Spring.Messaging.dll</HintPath>
     </Reference>
-    <Reference Include="Spring.Messaging.Ems, Version=1.3.2.20942, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Spring.Messaging.Ems">
       <HintPath>..\..\..\..\..\..\bin\net\2.0\release\Spring.Messaging.Ems.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -98,9 +91,9 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Spring.EmsQuickStart.Common\Spring.EmsQuickStart.Common.csproj">
+    <ProjectReference Include="..\Spring.EmsQuickStart.Common\Spring.EmsQuickStart.Common.2010.csproj">
       <Project>{AC5A3035-75DD-48E5-ABCA-38FBC8193F22}</Project>
-      <Name>Spring.EmsQuickStart.Common</Name>
+      <Name>Spring.EmsQuickStart.Common.2010</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -117,7 +110,7 @@
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>
-      <ProductName>.NET Framework Client Profile</ProductName>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">

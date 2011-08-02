@@ -1,20 +1,23 @@
-﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{AC5A3035-75DD-48E5-ABCA-38FBC8193F22}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{27AAD98C-4281-4DD4-9E20-1371C58C5283}</ProjectGuid>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Spring.EmsQuickStart.Common</RootNamespace>
-    <AssemblyName>Spring.EmsQuickStart.Common</AssemblyName>
+    <RootNamespace>Spring.WcfQuickStart</RootNamespace>
+    <AssemblyName>Spring.WcfQuickStart.ServerApp</AssemblyName>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
-    <OldToolsVersion>2.0</OldToolsVersion>
+    <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
-    <PublishUrl>http://localhost/Spring.EmsQuickStart.Common/</PublishUrl>
+    <TargetFrameworkVersion>v3.0</TargetFrameworkVersion>
+    <IsWebBootstrapper>true</IsWebBootstrapper>
+    <PublishUrl>http://localhost/Spring.WcfQuickStart.ServerApp/</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -26,7 +29,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>true</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -35,9 +37,11 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -46,66 +50,38 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Spring.Aop, Version=1.3.2.20942, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
+    <Reference Include="Spring.Aop, Version=1.2.0.20311, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\bin\net\2.0\release\Spring.Aop.dll</HintPath>
+      <HintPath>..\..\..\..\..\bin\net\2.0\debug\Spring.Aop.dll</HintPath>
     </Reference>
-    <Reference Include="Spring.Core, Version=1.3.2.20942, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
+    <Reference Include="Spring.Core, Version=1.2.0.20311, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\bin\net\2.0\release\Spring.Core.dll</HintPath>
+      <HintPath>..\..\..\..\..\bin\net\2.0\debug\Spring.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Spring.Data, Version=1.3.2.20942, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
+    <Reference Include="Spring.Services, Version=1.2.0.30311, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\bin\net\2.0\release\Spring.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Spring.Messaging, Version=1.3.2.20942, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\bin\net\2.0\release\Spring.Messaging.dll</HintPath>
-    </Reference>
-    <Reference Include="Spring.Messaging.Ems, Version=1.3.2.20942, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\bin\net\2.0\release\Spring.Messaging.Ems.dll</HintPath>
+      <HintPath>..\..\..\..\..\bin\net\3.0\debug\Spring.Services.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.ServiceModel, Version=3.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
     <Reference Include="System.Xml" />
-    <Reference Include="TIBCO.EMS, Version=1.0.0.0, Culture=neutral, PublicKeyToken=5b83db8ff05c64ba, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\lib\Net\2.0\TIBCO.EMS.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Converters\ITypeMapper.cs" />
-    <Compile Include="Converters\TypeMapper.cs" />
-    <Compile Include="Converters\XmlMessageConverter.cs" />
-    <Compile Include="Data\TradeResponse.cs">
-      <DependentUpon>TradeResponse.xsd</DependentUpon>
-    </Compile>
-    <Compile Include="Data\TradeRequest.cs">
-      <DependentUpon>TradeRequest.xsd</DependentUpon>
-    </Compile>
+    <Compile Include="CalculatorService.cs" />
+    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Data\TradeResponse.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Data\TradeResponse.xsx">
-      <DependentUpon>TradeResponse.xsd</DependentUpon>
-    </None>
-    <None Include="Data\TradeRequest.xsd">
-      <SubType>Designer</SubType>
-    </None>
-    <None Include="Data\TradeRequest.xsx">
-      <DependentUpon>TradeRequest.xsd</DependentUpon>
-    </None>
+    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>
-      <ProductName>.NET Framework Client Profile</ProductName>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
     <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
@@ -128,6 +104,16 @@
       <ProductName>.NET Framework 3.5 SP1</ProductName>
       <Install>false</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Spring.WcfQuickStart.Aspects\Spring.WcfQuickStart.Aspects.csproj">
+      <Project>{B52BBAA3-1B30-4905-827C-1D81EBA56A15}</Project>
+      <Name>Spring.WcfQuickStart.Aspects</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Spring.WcfQuickStart.Contracts\Spring.WcfQuickStart.Contracts.csproj">
+      <Project>{53263837-0643-45FE-96A2-46D425E1A36F}</Project>
+      <Name>Spring.WcfQuickStart.Contracts</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
