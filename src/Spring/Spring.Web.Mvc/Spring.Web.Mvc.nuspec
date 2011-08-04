@@ -18,11 +18,11 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="..\..\..\build\net\3.5\release\Spring.Web.Mvc.dll" target="lib\net35" />
-    <file src="..\..\..\build\net\3.5\release\Spring.Web.Mvc.pdb" target="lib\net35" />
-    <file src="..\..\..\build\net\3.5\release\Spring.Web.Mvc.xml" target="lib\net35" />
-    <file src="..\..\..\build\net\4.0\release\Spring.Web.Mvc.dll" target="lib\net40" />
-    <file src="..\..\..\build\net\4.0\release\Spring.Web.Mvc.pdb" target="lib\net40" />
-    <file src="..\..\..\build\net\4.0\release\Spring.Web.Mvc.xml" target="lib\net40" />
+    <file src="build\net\3.5\release\Spring.Web.Mvc.dll" target="lib\net35" />
+    <file src="build\net\3.5\release\Spring.Web.Mvc.pdb" target="lib\net35" />
+    <file src="build\net\3.5\release\Spring.Web.Mvc.xml" target="lib\net35" />
+    <file src="build\net\4.0\release\Spring.Web.Mvc.dll" target="lib\net40" />
+    <file src="build\net\4.0\release\Spring.Web.Mvc.pdb" target="lib\net40" />
+    <file src="build\net\4.0\release\Spring.Web.Mvc.xml" target="lib\net40" />
   </files>
 </package>

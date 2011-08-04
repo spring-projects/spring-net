@@ -1999,6 +1999,8 @@ Commandline Examples:
       <arg value="${filename}" />
 	  <arg value="-Version" />
 	  <arg value="${package.version}" />
+	  <arg value="-basepath" />
+	  <arg value="${spring.basedir}" />
 	  <arg value="-OutputDirectory" />
 	  <arg value="${nuget.package.dir}" />
     </exec>

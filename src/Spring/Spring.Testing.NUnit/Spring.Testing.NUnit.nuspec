@@ -20,20 +20,20 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="..\..\..\build\net\1.1\release\Spring.Testing.Nunit.dll" target="lib\net11" />
-    <file src="..\..\..\build\net\1.1\release\Spring.Testing.Nunit.pdb" target="lib\net11" />
-    <file src="..\..\..\build\net\1.1\release\Spring.Testing.Nunit.xml" target="lib\net11" />
-    <file src="..\..\..\build\net\2.0\release\Spring.Testing.Nunit.dll" target="lib\net20" />
-    <file src="..\..\..\build\net\2.0\release\Spring.Testing.Nunit.pdb" target="lib\net20" />
-    <file src="..\..\..\build\net\2.0\release\Spring.Testing.Nunit.xml" target="lib\net20" />
-    <file src="..\..\..\build\net\3.0\release\Spring.Testing.Nunit.dll" target="lib\net30" />
-    <file src="..\..\..\build\net\3.0\release\Spring.Testing.Nunit.pdb" target="lib\net30" />
-    <file src="..\..\..\build\net\3.0\release\Spring.Testing.Nunit.xml" target="lib\net30" />
-    <file src="..\..\..\build\net\3.5\release\Spring.Testing.Nunit.dll" target="lib\net35" />
-    <file src="..\..\..\build\net\3.5\release\Spring.Testing.Nunit.pdb" target="lib\net35" />
-    <file src="..\..\..\build\net\3.5\release\Spring.Testing.Nunit.xml" target="lib\net35" />
-    <file src="..\..\..\build\net\4.0\release\Spring.Testing.Nunit.dll" target="lib\net40" />
-    <file src="..\..\..\build\net\4.0\release\Spring.Testing.Nunit.pdb" target="lib\net40" />
-    <file src="..\..\..\build\net\4.0\release\Spring.Testing.Nunit.xml" target="lib\net40" />
+    <file src="build\net\1.1\release\Spring.Testing.Nunit.dll" target="lib\net11" />
+    <file src="build\net\1.1\release\Spring.Testing.Nunit.pdb" target="lib\net11" />
+    <file src="build\net\1.1\release\Spring.Testing.Nunit.xml" target="lib\net11" />
+    <file src="build\net\2.0\release\Spring.Testing.Nunit.dll" target="lib\net20" />
+    <file src="build\net\2.0\release\Spring.Testing.Nunit.pdb" target="lib\net20" />
+    <file src="build\net\2.0\release\Spring.Testing.Nunit.xml" target="lib\net20" />
+    <file src="build\net\3.0\release\Spring.Testing.Nunit.dll" target="lib\net30" />
+    <file src="build\net\3.0\release\Spring.Testing.Nunit.pdb" target="lib\net30" />
+    <file src="build\net\3.0\release\Spring.Testing.Nunit.xml" target="lib\net30" />
+    <file src="build\net\3.5\release\Spring.Testing.Nunit.dll" target="lib\net35" />
+    <file src="build\net\3.5\release\Spring.Testing.Nunit.pdb" target="lib\net35" />
+    <file src="build\net\3.5\release\Spring.Testing.Nunit.xml" target="lib\net35" />
+    <file src="build\net\4.0\release\Spring.Testing.Nunit.dll" target="lib\net40" />
+    <file src="build\net\4.0\release\Spring.Testing.Nunit.pdb" target="lib\net40" />
+    <file src="build\net\4.0\release\Spring.Testing.Nunit.xml" target="lib\net40" />
   </files>
 </package>

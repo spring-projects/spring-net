@@ -19,17 +19,17 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="..\..\..\build\net\2.0\release\Spring.Messaging.dll" target="lib\net20" />
-    <file src="..\..\..\build\net\2.0\release\Spring.Messaging.pdb" target="lib\net20" />
-    <file src="..\..\..\build\net\2.0\release\Spring.Messaging.xml" target="lib\net20" />
-    <file src="..\..\..\build\net\3.0\release\Spring.Messaging.dll" target="lib\net30" />
-    <file src="..\..\..\build\net\3.0\release\Spring.Messaging.pdb" target="lib\net30" />
-    <file src="..\..\..\build\net\3.0\release\Spring.Messaging.xml" target="lib\net30" />
-    <file src="..\..\..\build\net\3.5\release\Spring.Messaging.dll" target="lib\net35" />
-    <file src="..\..\..\build\net\3.5\release\Spring.Messaging.pdb" target="lib\net35" />
-    <file src="..\..\..\build\net\3.5\release\Spring.Messaging.xml" target="lib\net35" />
-    <file src="..\..\..\build\net\4.0\release\Spring.Messaging.dll" target="lib\net40" />
-    <file src="..\..\..\build\net\4.0\release\Spring.Messaging.pdb" target="lib\net40" />
-    <file src="..\..\..\build\net\4.0\release\Spring.Messaging.xml" target="lib\net40" />
+    <file src="build\net\2.0\release\Spring.Messaging.dll" target="lib\net20" />
+    <file src="build\net\2.0\release\Spring.Messaging.pdb" target="lib\net20" />
+    <file src="build\net\2.0\release\Spring.Messaging.xml" target="lib\net20" />
+    <file src="build\net\3.0\release\Spring.Messaging.dll" target="lib\net30" />
+    <file src="build\net\3.0\release\Spring.Messaging.pdb" target="lib\net30" />
+    <file src="build\net\3.0\release\Spring.Messaging.xml" target="lib\net30" />
+    <file src="build\net\3.5\release\Spring.Messaging.dll" target="lib\net35" />
+    <file src="build\net\3.5\release\Spring.Messaging.pdb" target="lib\net35" />
+    <file src="build\net\3.5\release\Spring.Messaging.xml" target="lib\net35" />
+    <file src="build\net\4.0\release\Spring.Messaging.dll" target="lib\net40" />
+    <file src="build\net\4.0\release\Spring.Messaging.pdb" target="lib\net40" />
+    <file src="build\net\4.0\release\Spring.Messaging.xml" target="lib\net40" />
   </files>
 </package>

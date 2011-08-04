@@ -18,8 +18,8 @@
     </dependencies>
   </metadata>
   <files>
-    <file src="..\..\..\build\net\4.0\release\Spring.Web.Mvc3.dll" target="lib\net40" />
-    <file src="..\..\..\build\net\4.0\release\Spring.Web.Mvc3.pdb" target="lib\net40" />
-    <file src="..\..\..\build\net\4.0\release\Spring.Web.Mvc3.xml" target="lib\net40" />
+    <file src="build\net\4.0\release\Spring.Web.Mvc3.dll" target="lib\net40" />
+    <file src="build\net\4.0\release\Spring.Web.Mvc3.pdb" target="lib\net40" />
+    <file src="build\net\4.0\release\Spring.Web.Mvc3.xml" target="lib\net40" />
   </files>
 </package>
