@@ -212,11 +212,9 @@ namespace Spring.Data.Common
 
             IDbDataAdapter mockDataAdapter = (IDbDataAdapter) mocks.CreateMock(typeof (IDbDataAdapter));
             Expect.Call(dbProvider.CreateDataAdapter()).Return(mockDataAdapter).Repeat.Once();
-#if !NET_1_1
 
             DbCommandBuilder mockDbCommandBuilder = (DbCommandBuilder) mocks.CreateMock(typeof (DbCommandBuilder));
             Expect.Call(dbProvider.CreateCommandBuilder()).Return(mockDbCommandBuilder).Repeat.Once();
-#endif
 
             Expect.Call(dbProvider.CreateParameterName("p1")).Return("@p1").Repeat.Once();
             Expect.Call(dbProvider.CreateParameterNameForCollection("c1")).Return("cc1");
@@ -226,9 +224,7 @@ namespace Spring.Data.Common
 
             Exception e = new Exception("foo");
             Expect.Call(dbProvider.ExtractError(e)).Return("badsql").Repeat.Once();
-#if !NET_1_1
             DbException dbException = (DbException) mocks.CreateMock(typeof (DbException));
-#endif
 
             
             MultiDelegatingDbProvider multiDbProvider = new MultiDelegatingDbProvider();
@@ -245,19 +241,12 @@ namespace Spring.Data.Common
             Assert.IsNotNull(multiDbProvider.CreateCommand());
             Assert.IsNotNull(multiDbProvider.CreateParameter());
             Assert.IsNotNull(multiDbProvider.CreateDataAdapter());
-           
-#if !NET_1_1
-
             Assert.IsNotNull(multiDbProvider.CreateCommandBuilder() as DbCommandBuilder);
-#endif
             Assert.AreEqual("@p1", multiDbProvider.CreateParameterName("p1"));
             Assert.AreEqual("cc1", multiDbProvider.CreateParameterNameForCollection("c1"));
             Assert.IsNotNull(multiDbProvider.DbMetadata);
             Assert.AreEqual("badsql", multiDbProvider.ExtractError(e));
-
-#if !NET_1_1
             Assert.IsTrue(multiDbProvider.IsDataAccessException(dbException));
-#endif
             Assert.IsFalse(multiDbProvider.IsDataAccessException(e));
             mocks.VerifyAll();
         }

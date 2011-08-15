@@ -80,27 +80,14 @@ namespace Spring.Context.Support
                             msgSource.ToString());
         }
 
-
         [Test]
         public void ApplyResources()
         {
             TestObject value = new TestObject();
             StaticMessageSource msgSource = new StaticMessageSource();
-#if ! NET_1_0
             msgSource.ApplyResources(value, "testObject", CultureInfo.InvariantCulture);
             Assert.AreEqual("Mark", value.Name, "Name property value not applied.");
             Assert.AreEqual(35, value.Age, "Age property value not applied.");
-#else
-            try
-            {
-                msgSource.ApplyResources(value, "testObject", CultureInfo.InvariantCulture);
-                Assert.Fail("Should not be supported in 1.0");
-            } catch (NotSupportedException e)
-            {
-                Assert.AreEqual("Operation not supported in .NET 1.0 Release.",
-                                e.Message);
-            }
-#endif
         }
 
         [Test]
@@ -108,21 +95,9 @@ namespace Spring.Context.Support
         {
             TestObject value = new TestObject();
             StaticMessageSource msgSource = new StaticMessageSource();
-#if ! NET_1_0
             msgSource.ApplyResources(null, "testObject", CultureInfo.InvariantCulture);
             Assert.AreEqual(null, value.Name);
             Assert.AreEqual(0, value.Age);
-#else
-            try
-            {
-                msgSource.ApplyResources(null, "testObject", CultureInfo.InvariantCulture);
-                Assert.Fail("Should not be supported in 1.0");
-            } catch (NotSupportedException e)
-            {
-                Assert.AreEqual("Operation not supported in .NET 1.0 Release.",
-                                e.Message);
-            }
-#endif
         }
 
         [Test]
@@ -130,7 +105,7 @@ namespace Spring.Context.Support
         {
             TestObject value = new TestObject();
             StaticMessageSource msgSource = new StaticMessageSource();
-#if ! NET_1_0
+
             try 
             {
                 msgSource.ApplyResources(value, null, CultureInfo.InvariantCulture);
@@ -141,18 +116,6 @@ namespace Spring.Context.Support
             }
             Assert.AreEqual(null, value.Name);
             Assert.AreEqual(0, value.Age);
-#else
-            try
-            {
-                msgSource.ApplyResources(value, null, CultureInfo.InvariantCulture);
-                Assert.Fail("Should not be supported in 1.0");
-            } 
-            catch (NotSupportedException e)
-            {
-                Assert.AreEqual("Operation not supported in .NET 1.0 Release.",
-                                e.Message);                
-            }
-#endif
         }
 
         [Test]

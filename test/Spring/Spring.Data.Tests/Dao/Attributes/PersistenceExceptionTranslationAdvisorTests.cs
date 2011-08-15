@@ -18,11 +18,9 @@
 
 #endregion
 
-#if !NET_1_0
 #region Imports
 
 using System;
-using System.Collections;
 using System.Runtime.Serialization;
 using NUnit.Framework;
 using Spring.Aop.Framework;
@@ -229,4 +227,3 @@ namespace Spring.Dao.Attributes
     }
 
 }
-#endif

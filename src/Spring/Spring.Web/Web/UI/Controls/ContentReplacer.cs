@@ -71,19 +71,8 @@ namespace Spring.Web.UI.Controls
 			if (!Visible) return;
 
             //log.Debug(string.Format("OnPreRender Content['{0}']", this.contentPlaceHolderID));
-#if NET_1_1
-            Control ctlRoot = this.Page;
-            if (ctlRoot is Spring.Web.UI.Page)
-            {
-				MasterPage masterPage = ((Spring.Web.UI.Page) ctlRoot).Master;
-				if (masterPage != null)
-				{
-					ctlRoot = masterPage;
-				}
-            }
-#else
             Control ctlRoot = (this.Page.Master != null) ? (Control)this.Page.Master : (Control)this.Page;
-#endif
+
             Control ctl = ctlRoot.FindControl(this.contentPlaceHolderID);
             if (ctl != null)
             {

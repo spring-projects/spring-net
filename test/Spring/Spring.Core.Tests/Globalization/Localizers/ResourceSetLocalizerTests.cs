@@ -31,8 +31,6 @@ using Spring.Context.Support;
 
 #endregion
 
-#if ! NET_1_0
-
 namespace Spring.Globalization.Localizers
 {
     /// <summary>
@@ -64,5 +62,3 @@ namespace Spring.Globalization.Localizers
         }
     }
 }
-
-#endif

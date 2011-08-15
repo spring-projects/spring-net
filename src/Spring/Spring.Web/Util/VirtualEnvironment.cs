@@ -24,12 +24,10 @@ using System;
 using System.Collections;
 using System.Collections.Specialized;
 using System.IO;
-using System.Reflection;
 using System.Web;
 using System.Web.Caching;
 using System.Web.Compilation;
 using System.Web.SessionState;
-using System.Web.UI;
 using Common.Logging;
 
 #endregion
@@ -236,16 +234,6 @@ namespace Spring.Util
 
             private static readonly ILog log = LogManager.GetLogger(typeof (HttpRuntimeEnvironment));
 
-#if NET_1_1   
-            // Required method for resolving control types
-    	    private static MethodInfo miGetCompiledUserControlType = null;
-        	
-    	    static HttpRuntimeEnvironment()
-    	    {
-			    Type tUserControlParser = typeof(System.Web.UI.UserControl).Assembly.GetType("System.Web.UI.UserControlParser");    		
-			    miGetCompiledUserControlType = tUserControlParser.GetMethod("GetCompiledUserControlType", BindingFlags.Static | BindingFlags.NonPublic);					
-    	    }
-#endif
             private class RewriteContext : IDisposable
             {
                 private string originalPath;
@@ -269,11 +257,8 @@ namespace Spring.Util
                     {
                         originalPath = ctx.Request.Url.PathAndQuery;
                         string newPath = newVirtualPath + "currentcontext.dummy";
-#if NET_1_1
-                        ctx.RewritePath(newPath);
-#else
+
                         ctx.RewritePath(newPath, rebaseClientPath);
-#endif
 
                         #region Instrumentation
 
@@ -294,11 +279,8 @@ namespace Spring.Util
                         {
                             log.Debug("restoring path from " + ctx.Request.FilePath + " back to " + originalPath);
                         }
-#if NET_1_1
-                        ctx.RewritePath(originalPath);
-#else
+
                         ctx.RewritePath(originalPath, rebaseClientPath);
-#endif
                     }
                 }
             }
@@ -340,9 +322,7 @@ namespace Spring.Util
                 {
                     return ctx.Request.MapPath(virtualPath);
                 }
-#if NET_1_1
-                throw new ArgumentException("can't map context relative path outside a context");
-#else
+
                 if (VirtualPathUtility.IsAbsolute(virtualPath) && virtualPath.StartsWith(HttpRuntime.AppDomainAppVirtualPath))
                 {
                     virtualPath = VirtualPathUtility.ToAppRelative(virtualPath);
@@ -354,7 +334,6 @@ namespace Spring.Util
                     return physicalPath;
                 }
                 return virtualPath;
-#endif
             }
 
             public IDisposable RewritePath(string virtualDirectory, bool rebaseClientPath)
@@ -381,33 +360,15 @@ namespace Spring.Util
             {
                 string rootedVPath = WebUtils.CombineVirtualPaths(CurrentExecutionFilePath, virtualPath);
 
-                Type type = null;
-#if NET_1_1
-                if (virtualPath.EndsWith(".aspx"))
-                {
-                    type = CreateInstanceFromVirtualPath(virtualPath, typeof(Page)).GetType();
-                }
-                else if (virtualPath.EndsWith(".ascx"))
-                {
-                    type = (Type)miGetCompiledUserControlType.Invoke(null, new object[] { rootedVPath, null, HttpContext.Current });
-                }
-#else
-                type = BuildManager.GetCompiledType(rootedVPath); // requires rooted virtual path!
-#endif
+                Type type = BuildManager.GetCompiledType(rootedVPath);
+
                 return type;
             }
 
             public object CreateInstanceFromVirtualPath(string virtualPath, Type requiredBaseType)
             {
                 string rootedVPath = WebUtils.CombineVirtualPaths(CurrentExecutionFilePath, virtualPath);
-                object result;
-#if NET_1_1
-                HttpContext ctx = HttpContext.Current;
-                string physicalPath = ctx.Server.MapPath(rootedVPath);
-                result = PageParser.GetCompiledPageInstance(virtualPath, physicalPath, ctx);
-#else
-                result = BuildManager.CreateInstanceFromVirtualPath(rootedVPath, requiredBaseType);
-#endif
+                object result = BuildManager.CreateInstanceFromVirtualPath(rootedVPath, requiredBaseType);
                 if (!requiredBaseType.IsAssignableFrom(result.GetType()))
                 {
                     throw new HttpException(string.Format("Type '{0}' from virtual path '{1}' does not inherit from '{2}'", result.GetType(), rootedVPath, requiredBaseType));

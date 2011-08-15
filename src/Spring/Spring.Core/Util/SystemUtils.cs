@@ -118,11 +118,7 @@ namespace Spring.Util
                 }
                 else
                 {
-#if NET_1_0 || NET_1_1
-                    return Thread.CurrentThread.GetHashCode().ToString();
-#else
                     return Thread.CurrentThread.ManagedThreadId.ToString();
-#endif
                 }
             }
         }

@@ -18,8 +18,6 @@
 
 #endregion
 
-#if (!NET_1_0)
-
 #region Imports
 
 using System;
@@ -397,5 +395,3 @@ namespace Spring.Data.Core
         }
     }
 }
-
-#endif // (!NET_1_0)

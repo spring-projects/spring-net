@@ -59,9 +59,6 @@ namespace Spring.Util
         /// <returns>Object created by a corresponding <see cref="IConfigurationSectionHandler"/>.</returns>
         public static object GetSection(string sectionName)
         {
-#if !NET_2_0
-            return ConfigurationSettings.GetConfig(sectionName.TrimEnd('/'));
-#else
             try
             {
                 return ConfigurationManager.GetSection(sectionName.TrimEnd('/'));
@@ -72,9 +69,8 @@ namespace Spring.Util
             }
             catch (Exception ex)
             {
-                throw ConfigurationUtils.CreateConfigurationException(string.Format("Error reading section {0}", sectionName), ex);
+                throw CreateConfigurationException(string.Format("Error reading section {0}", sectionName), ex);
             }
-#endif
         }
 
         /// <summary>
@@ -94,11 +90,7 @@ namespace Spring.Util
         /// <param name="sectionName">Name of the configuration section.</param>
         public static void RefreshSection(string sectionName)
         {
-#if !NET_2_0
-            // TODO : Add support for .NET 1.x
-#else
             ConfigurationManager.RefreshSection(sectionName);
-#endif
         }
 
         /// <summary>
@@ -111,11 +103,7 @@ namespace Spring.Util
         /// <returns>Configuration exception.</returns>
         public static Exception CreateConfigurationException(string message, Exception inner, string fileName, int line)
         {
-#if !NET_2_0
-            return new ConfigurationException(message, inner, fileName, line);
-#else
             return new ConfigurationErrorsException(message, inner, fileName, line);
-#endif
         }
 
         /// <summary>
@@ -139,11 +127,7 @@ namespace Spring.Util
         /// <returns>Configuration exception.</returns>
         public static Exception CreateConfigurationException(string message, Exception inner, XmlNode node)
         {
-#if !NET_2_0
-            return new ConfigurationException(message, inner, node);
-#else
             return new ConfigurationErrorsException(message, inner, node);
-#endif
         }
 
         /// <summary>
@@ -165,11 +149,7 @@ namespace Spring.Util
         /// <returns>Configuration exception.</returns>
         public static Exception CreateConfigurationException(string message, Exception inner)
         {
-#if !NET_2_0
-            return new ConfigurationException(message, inner);
-#else
             return new ConfigurationErrorsException(message, inner);
-#endif
         }
 
         /// <summary>
@@ -200,11 +180,7 @@ namespace Spring.Util
         /// </returns>
         public static bool IsConfigurationException(Exception exception)
         {
-#if !NET_2_0
-            return exception is ConfigurationException;
-#else
             return exception is ConfigurationErrorsException;
-#endif
         }
 
         /// <summary>
@@ -218,11 +194,7 @@ namespace Spring.Util
             {
                 return ((ITextPosition)node).LineNumber;
             }
-#if !NET_2_0
-            return ConfigurationException.GetXmlNodeLineNumber(node);
-#else
             return ConfigurationErrorsException.GetLineNumber(node);
-#endif
         }
 
         /// <summary>
@@ -236,11 +208,7 @@ namespace Spring.Util
             {
                 return ((ITextPosition)node).Filename;
             }
-#if !NET_2_0
-            return ConfigurationException.GetXmlNodeFilename(node);
-#else
             return ConfigurationErrorsException.GetFilename(node);
-#endif
         }
 
 
@@ -304,7 +272,6 @@ namespace Spring.Util
         /// </summary>
         public static void ResetConfigurationSystem()
         {
-#if NET_2_0
             if (SystemUtils.MonoRuntime)
             {
                 return;
@@ -312,18 +279,6 @@ namespace Spring.Util
             FieldInfo initStateRef = typeof(ConfigurationManager).GetField("s_initState", BindingFlags.NonPublic | BindingFlags.Static);
             object notStarted = Activator.CreateInstance(initStateRef.FieldType);
             initStateRef.SetValue(null, notStarted);
-#endif
-#if NET_1_1
-            FieldInfo initStateRef = typeof(ConfigurationSettings).GetField("_initState",BindingFlags.NonPublic|BindingFlags.Static);
-            object notStarted = Activator.CreateInstance(initStateRef.FieldType);
-            initStateRef.SetValue(null,notStarted);
-#endif
-#if NET_1_0
-            FieldInfo initStateRef = typeof(ConfigurationSettings).GetField("_configurationInitialized",BindingFlags.NonPublic|BindingFlags.Static);
-            FieldInfo configSystemRef = typeof(ConfigurationSettings).GetField("_configSystem",BindingFlags.NonPublic|BindingFlags.Static);
-            initStateRef.SetValue(null,false);		
-            configSystemRef.SetValue(null,null);
-#endif
         }
         //        private static T CreateDelegate<T>(MethodInfo method)
         //        {

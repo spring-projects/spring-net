@@ -26,7 +26,6 @@ using NUnit.Framework;
 
 using Spring.Objects;
 using Spring.Aop.Interceptor;
-using Spring.Proxy;
 using System.Reflection;
 using Spring.Expressions;
 
@@ -229,7 +228,6 @@ namespace Spring.Aop.Framework.DynamicProxy
             Assert.AreEqual(3, ni.Count);
         }
 
-#if !NET_1_0
         [Test]
         public void DoesNotInterceptInternalMethod()
         {
@@ -247,7 +245,6 @@ namespace Spring.Aop.Framework.DynamicProxy
             proxiedClass.InternalToDo();
             Assert.AreEqual(0, ni.Count);
         }
-#endif
 
         [Test]
         public void InterceptVirtualMethodThatBelongsToAnInterface()
@@ -426,15 +423,12 @@ namespace Spring.Aop.Framework.DynamicProxy
 
         }
 
-#if !NET_1_0
         // "internal virtual" is not supported on net 1.0 CLR
         // see http://support.microsoft.com/?scid=kb%3Ben-us%3B317129&x=11&y=12
         internal virtual void InternalToDo()
         {
             
         }
-
-#endif
 
         internal protected virtual void InternalProtectedToDo()
         {

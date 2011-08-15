@@ -141,15 +141,11 @@ namespace Spring.Context.Support
 		/// </exception>
 		protected override void ApplyResourcesToObject(object value, string objectName, CultureInfo culture)
 		{
-#if !NET_1_0
 		    if(value != null) 
 		    {
 		        ComponentResourceManager crm = new ComponentResourceManager(value.GetType());
 		        crm.ApplyResources(value, objectName, culture);
 		    }
-#else
-		    throw new NotSupportedException("Operation not supported in .NET 1.0 Release.");
-#endif 
 		}
 
 	    /// <summary>

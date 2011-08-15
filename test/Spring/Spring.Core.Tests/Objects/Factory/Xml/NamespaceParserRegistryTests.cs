@@ -20,10 +20,7 @@
 
 #region Imports
 
-using System;
-using System.IO;
 using System.Xml;
-using System.Xml.Schema;
 using NUnit.Framework;
 using Spring.Core.IO;
 using Spring.Objects.Factory.Config;
@@ -69,7 +66,6 @@ namespace Spring.Objects.Factory.Xml
             NamespaceParserRegistry.Reset();
         }
 
-#if !NET_1_0
         /// <summary>
         /// This test doesn't work on .NET 1.0 because there are no XmlResolvers for schema loading...
         /// </summary>
@@ -85,6 +81,5 @@ namespace Spring.Objects.Factory.Xml
             ConfigXmlDocument newDoc = new ConfigXmlDocument();
             newDoc.Load(vr);
         }
-#endif
     }
 }

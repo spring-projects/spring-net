@@ -179,28 +179,12 @@ namespace Spring.Objects.Factory.Support
         {
             this.log = LogManager.GetLogger(this.GetType());
             this.caseSensitive = caseSensitive;
-#if NET_1_0 || NET_1_1
-            if (caseSensitive)
-            {
-                this.aliasMap = new Hashtable();
-                this.singletonCache = new Hashtable();
-                this.singletonLocks = new Hashtable();
-                this.singletonsInCreation = new Hashtable();
-            }
-            else
-            {
-                this.aliasMap = new CaseInsensitiveHashtable();
-                this.singletonCache = new CaseInsensitiveHashtable();
-                this.singletonLocks = new CaseInsensitiveHashtable();
-                this.singletonsInCreation = new CaseInsensitiveHashtable();
-            }
-#else
+
             IEqualityComparer comparer = (caseSensitive) ? StringComparer.Ordinal : StringComparer.OrdinalIgnoreCase;
             this.aliasMap = new OrderedDictionary(comparer);
             this.singletonCache = new OrderedDictionary(comparer);
             this.singletonLocks = new OrderedDictionary(comparer);
             this.singletonsInCreation = new OrderedDictionary(comparer);
-#endif
             this.prototypesInCreation = new LogicalThreadContextSetVariable();
         }
 
@@ -1941,14 +1925,8 @@ namespace Spring.Objects.Factory.Support
             try
             {
                 string objectName = TransformedObjectName(name);
-#if NET_1_1
-                lock (monitor)
-                {
-                    nestingCount++;
-                }
-#else
                 Interlocked.Increment(ref nestingCount);
-#endif
+
                 #region Instrumentation
                 if (log.IsDebugEnabled)
                 {

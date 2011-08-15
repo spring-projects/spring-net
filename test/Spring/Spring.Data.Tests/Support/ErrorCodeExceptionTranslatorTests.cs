@@ -1,4 +1,3 @@
-#if !NET_1_0
 #region Licence
 
 /*
@@ -107,4 +106,3 @@ namespace Spring.Support
 	    }
 	}
 }
-#endif

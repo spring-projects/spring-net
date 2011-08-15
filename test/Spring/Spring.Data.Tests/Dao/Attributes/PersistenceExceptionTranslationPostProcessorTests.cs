@@ -17,7 +17,7 @@
  */
 
 #endregion
-#if !NET_1_0
+
 #region Imports
 
 using NUnit.Framework;
@@ -99,4 +99,3 @@ namespace Spring.Dao.Attributes
         }
     }
 }
-#endif

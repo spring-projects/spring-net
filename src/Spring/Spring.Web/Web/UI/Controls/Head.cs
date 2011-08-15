@@ -78,11 +78,8 @@ namespace Spring.Web.UI.Controls
         /// <param name="writer">The <see langword="HtmlTextWriter"/> object that receives the server control content.</param>
         protected override void Render(HtmlTextWriter writer)
         {
-#if NET_1_1
-            bool hasIntrinsicHead = false;
-#else
             bool hasIntrinsicHead = (this.Page.Header != null);
-#endif
+
             // don't render begin/end element if we are nested within an ASP.NET <head> control
             if (!hasIntrinsicHead)
             {

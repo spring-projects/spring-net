@@ -18,16 +18,8 @@
 
 #endregion
 
-#if !NET_1_1
-using System.Web.Compilation;
-#endif
-#if NET_1_1
-using System.Reflection;
-using System.Web.UI;
-#endif
 using System;
 using System.IO;
-//using System.Web;
 using Common.Logging;
 using Spring.Util;
 using IHttpHandler = System.Web.IHttpHandler;
@@ -44,18 +36,6 @@ namespace Spring.Objects.Factory.Support
         private static ILog s_log = LogManager.GetLogger( typeof( WebObjectUtils ) );
 
         // CLOVER:OFF
-
-#if NET_1_1   
-        // Required method for resolving control types
-    	private static MethodInfo miGetCompiledUserControlType = null;
-    	
-    	static WebObjectUtils()
-    	{
-			Type tUserControlParser = typeof(System.Web.UI.UserControl).Assembly.GetType("System.Web.UI.UserControlParser");    		
-			miGetCompiledUserControlType =
-				tUserControlParser.GetMethod("GetCompiledUserControlType", BindingFlags.Static | BindingFlags.NonPublic);					
-    	}
-#endif
 
         /// <summary>
         /// Creates a new instance of the <see cref="Spring.Util.WebUtils"/> class.

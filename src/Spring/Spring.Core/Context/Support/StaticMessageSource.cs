@@ -128,14 +128,10 @@ namespace Spring.Context.Support
 		/// <seealso cref="Spring.Context.Support.AbstractMessageSource.ApplyResourcesToObject(object, string, CultureInfo)"/>
 		protected override void ApplyResourcesToObject(object value, string objectName, CultureInfo cultureInfo)
 		{
-#if !NET_1_0
 		    if(value != null) 
 		    {
 		        new ComponentResourceManager(value.GetType()).ApplyResources(value, objectName, cultureInfo);
 		    }
-#else
-		    throw new System.NotSupportedException("Operation not supported in .NET 1.0 Release.");
-#endif 
 		}
 
         /// <summary>

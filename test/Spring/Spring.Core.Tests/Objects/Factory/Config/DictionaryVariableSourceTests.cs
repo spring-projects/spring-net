@@ -123,7 +123,7 @@ namespace Spring.Objects.Factory.Config
             Assert.AreEqual("value2", dvs.ResolveVariable("key2"));
         }
 
-#if (!NET_2_0 && !NET_1_0 && !NET_1_1)
+#if !NET_2_0
         [Test]
         public void Initialize_WithInlineDictionarySyntax()
         {

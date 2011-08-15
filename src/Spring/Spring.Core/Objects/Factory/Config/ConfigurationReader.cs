@@ -318,14 +318,13 @@ namespace Spring.Objects.Factory.Config
                 return ((IConfigurationSectionHandler)handler).Create(null, null, sectionContent);
             }
 
-#if !NET_1_0 && !NET_1_1
             // NET 2.0 ConfigurationSection
             if (typeof(ConfigurationSection).IsAssignableFrom(handlerType))
             {
                 ConfigurationSection section = CreateConfigurationSection(handlerType, new XmlNodeReader(sectionContent));
                 return section;
             }
-#endif
+
             // Not supported
             throw ConfigurationUtils.CreateConfigurationException("Configuration section '" + configSectionName + "' is neither of type IConfigurationSectionHandler nor ConfigurationSection.");
         }
@@ -379,7 +378,6 @@ namespace Spring.Objects.Factory.Config
         }
 
 
-#if !NET_1_0 && !NET_1_1
         private delegate void DeserializeSectionMethod(ConfigurationSection section, XmlReader reader);
         private static DeserializeSectionMethod deserialized = (DeserializeSectionMethod)Delegate.CreateDelegate(typeof(DeserializeSectionMethod),
                                                                                                    typeof(ConfigurationSection).GetMethod("DeserializeSection",
@@ -392,7 +390,6 @@ namespace Spring.Objects.Factory.Config
             deserialized(section, reader);
             return section;
         }
-#endif
 
         /// <summary>
         /// Populates the supplied <paramref name="properties"/> with values from

@@ -63,18 +63,12 @@ namespace Spring.Data
         {
             LOG.Debug("TransactionActive = " + TransactionSynchronizationManager.ActualTransactionActive);
         }
-#if !NET_1_0 && !NET_1_1
+
         [Transaction(TransactionPropagation.Required, IsolationLevel.Unspecified, Timeout = 50,
            RollbackFor = new Type[]{typeof(ArgumentNullException)},
            ReadOnly = false,
            EnterpriseServicesInteropOption = System.Transactions.EnterpriseServicesInteropOption.Automatic,
            NoRollbackFor = new Type[] { typeof(ArithmeticException), typeof(NotSupportedException) })]
-#else
-        [Transaction(TransactionPropagation.Required, IsolationLevel.Unspecified, Timeout = 50,
-           RollbackFor = new Type[]{typeof(ArgumentNullException)},
-           ReadOnly = false,
-           NoRollbackFor = new Type[] { typeof(ArithmeticException), typeof(NotSupportedException) })]
-#endif
 	    public void DeleteTwoTestObjects(string name1, string name2)
         {
         }

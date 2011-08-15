@@ -323,15 +323,7 @@ namespace Spring.Context.Support
                             {
                                 s_weblog.Error(string.Format("failed creating context '{0}', Stacktrace:\n{1}", contextName, new StackTrace()), ex);
                             }
-#if NET_1_1
-                            if (ConfigurationUtils.IsConfigurationException(ex))
-                            {
-                                if (ex.InnerException != null)
-                                {
-                                    throw ex.InnerException;
-                                }
-                            }
-#endif
+
                             throw;
                         }
                     }

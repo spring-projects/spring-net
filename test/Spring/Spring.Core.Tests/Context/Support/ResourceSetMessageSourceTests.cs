@@ -334,7 +334,6 @@ namespace Spring.Context.Support
             return sbText.ToString();
         }
 
-#if ! NET_1_0
         /// <summary>
         /// Test applying a family of resources to an object.
         /// </summary>
@@ -351,7 +350,6 @@ namespace Spring.Context.Support
             Assert.AreEqual("Mark", to.Name);
             Assert.AreEqual(35, to.Age);
         }
-#endif
 
         /// <summary>
         /// Test when the code being resolves itself implements IMessageResolvable.

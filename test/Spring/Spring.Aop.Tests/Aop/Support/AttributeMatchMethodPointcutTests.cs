@@ -178,7 +178,7 @@ namespace Spring.Aop.Support
             Assert.IsTrue(matches, "Implementing method from subclass was not decorated with the target attribute " +
                 "but the method from an indirectly implemented interface was, so this must match.");
         }
-#if !NET_1_0 && !NET_1_1
+
         /// <summary>
         /// Confirms that methods, explicitly implemented in the derived classes will match
         /// </summary>
@@ -198,7 +198,7 @@ namespace Spring.Aop.Support
             }
 
         }
-#endif
+
         #region Helper classes definitions
 
         [AttributeUsage(AttributeTargets.Method)]

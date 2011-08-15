@@ -11,17 +11,3 @@ using System.Web.UI;
 [assembly: AllowPartiallyTrustedCallers]
 [assembly: SecurityCritical]
 #endif
-
-#if NET_1_0 || NET_1_1
-namespace System.Security
-{
-    ///<summary>
-    ///</summary>
-    [AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Method)]
-    internal class SecurityCriticalAttribute : Attribute
-    { }
-    [AttributeUsage(AttributeTargets.Method)]
-    internal class SecurityTreatAsSafeAttribute : Attribute
-    { }
-}
-#endif

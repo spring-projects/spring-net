@@ -212,14 +212,6 @@ Commandline Examples:
 
   <!-- Displays configuration info, usefull for working out why Spring.NET doesn't build -->
   <target name="display-setup" depends="check-htmlhelp-compiler">
-    <!-- .NET Framework 1.1 -->
-    <if test="${framework::exists('net-1.1')}">
-      <property name="nant.settings.currentframework" value="net-1.1"/>
-      <call target="display-target-framework"/>
-    </if>
-    <if test="${not framework::exists('net-1.1')}">
-      <echo message=".NET Framework 1.1 runtime is not available."/>
-    </if>
     <!-- .NET Framework 2.0 -->
     <if test="${framework::exists('net-2.0')}">
       <property name="nant.settings.currentframework" value="net-2.0"/>
@@ -227,22 +219,6 @@ Commandline Examples:
     </if>
     <if test="${not framework::exists('net-2.0')}">
       <echo message=".NET Framework 2.0 runtime is not available."/>
-    </if>
-    <!-- .NET Compact Framework 1.0 -->
-    <if test="${framework::exists('netcf-1.0')}">
-      <property name="nant.settings.currentframework" value="netcf-1.0"/>
-      <call target="display-target-framework"/>
-    </if>
-    <if test="${not framework::exists('netcf-1.0')}">
-      <echo message=".NET Compact Framework 1.0 runtime is not available."/>
-    </if>
-    <!-- Mono 1.0 -->
-    <if test="${framework::exists('mono-1.0')}">
-      <property name="nant.settings.currentframework" value="mono-1.0"/>
-      <call target="display-target-framework"/>
-    </if>
-    <if test="${not framework::exists('mono-1.0')}">
-      <echo message="Mono 1.0 runtime is not available."/>
     </if>
     <!-- Mono 2.0 -->
     <if test="${framework::exists('mono-2.0')}">
@@ -319,7 +295,6 @@ Commandline Examples:
   <target name="compile-build" description="Compile current build configurations for all runtime configurations">
     <echo message="Compiling all framework versions for the ${current.build.config} build configuration."/>
 
-    <call target="compile-build-1.1"/>
     <call target="compile-build-2.0"/>
     <call target="compile-build-3.0"/>
     <call target="compile-build-3.5"/>
@@ -329,20 +304,6 @@ Commandline Examples:
 
   </target>
 -->
-  <target name="compile-build-1.1" description="Builds for .NET 1.1 if available">>
-    <if test="${framework::exists('net-1.1')}">
-      <call target="compile-net-1.1"/>
-    </if>
-
-    <if test="${not framework::exists('net-1.1')}">
-      <if test="${property::exists('project.build.package') and project.build.package}">
-        <fail message="The .NET Framework 1.1 is not available."/>
-      </if>
-      <if test="${not(property::exists('project.build.package') and project.build.package)}">
-        <echo message="The .NET Framework 1.1 is not available. Build skipped."/>
-      </if>
-    </if>
-  </target>
 
   <target name="compile-build-2.0" description="Builds for .NET 2.0 if available">
     <if test="${framework::exists('net-2.0')}">
@@ -474,7 +435,7 @@ Commandline Examples:
 	  <nant buildfile="src/Spring/Spring.Web.Mvc/Spring.Web.Mvc.build" target="build" if="${nant.settings.currentframework == 'net-4.0'}"/>
 	  <nant buildfile="src/Spring/Spring.Web.Mvc3/Spring.Web.Mvc3.build" target="build" if="${nant.settings.currentframework == 'net-4.0'}"/>
     <nant buildfile="src/Spring/Spring.Data/Spring.Data.build" target="build" if="${build-data}"/>
-    <nant buildfile="src/Spring/Spring.Data.NHibernate12/Spring.Data.NHibernate12.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-1.1' or nant.settings.currentframework == 'net-2.0' or nant.settings.currentframework == 'mono-2.0')}"/>
+    <nant buildfile="src/Spring/Spring.Data.NHibernate12/Spring.Data.NHibernate12.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-2.0' or nant.settings.currentframework == 'mono-2.0')}"/>
     <nant buildfile="src/Spring/Spring.Data.NHibernate20/Spring.Data.NHibernate20.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-2.0' or nant.settings.currentframework == 'net-3.5' or nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'mono-2.0')}"/>
     <nant buildfile="src/Spring/Spring.Data.NHibernate21/Spring.Data.NHibernate21.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-2.0' or nant.settings.currentframework == 'net-3.5' or nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'mono-2.0')}"/>
     <nant buildfile="src/Spring/Spring.Data.NHibernate30/Spring.Data.NHibernate30.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-3.5' or nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'mono-2.0')}"/>
@@ -482,7 +443,7 @@ Commandline Examples:
     <nant buildfile="src/Spring/Spring.Data.NHibernate32/Spring.Data.NHibernate32.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-3.5' or nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'mono-2.0')}"/>
     <nant buildfile="src/Spring/Spring.Services/Spring.Services.build" target="build" if="${build-services}"/>
     <nant buildfile="src/Spring/Spring.Testing.NUnit/Spring.Testing.NUnit.build" target="build" if="${build-testing-nunit}"/>
-    <nant buildfile="src/Spring/Spring.Testing.Microsoft/Spring.Testing.Microsoft.build" target="build" if="${build-testing-microsoft  and nant.settings.currentframework != 'net-1.1'}"/>
+    <nant buildfile="src/Spring/Spring.Testing.Microsoft/Spring.Testing.Microsoft.build" target="build" if="${build-testing-microsoft}"/>
     <nant buildfile="src/Spring/Spring.Messaging.Ems/Spring.Messaging.Ems.build" target="build" if="${build-ems  and (nant.settings.currentframework == 'net-2.0' or nant.settings.currentframework == 'net-4.0' )}"/>
     <nant buildfile="src/Spring/Spring.Messaging.Nms/Spring.Messaging.Nms.build" target="build" if="${build-nms}"/>
     <nant buildfile="src/Spring/Spring.Scheduling.Quartz/Spring.Scheduling.Quartz.build" target="build" if="${build-quartz}"/>
@@ -532,7 +493,7 @@ Commandline Examples:
 	<nant buildfile="test/Spring/Spring.Web.Mvc.Tests/Spring.Web.Mvc.Tests.build" target="test" if="${nant.settings.currentframework == 'net-4.0'}"/>
 	<nant buildfile="test/Spring/Spring.Web.Mvc3.Tests/Spring.Web.Mvc3.Tests.build" target="test" if="${nant.settings.currentframework == 'net-4.0'}"/>
     <nant buildfile="test/Spring/Spring.Testing.NUnit.Tests/Spring.Testing.NUnit.Tests.build" target="test" if="${build-testing-nunit}"/>
-    <nant buildfile="test/Spring/Spring.Testing.Microsoft.Tests/Spring.Testing.Microsoft.Tests.build" target="test" if="${build-testing-microsoft and nant.settings.currentframework != 'net-1.1'}"/>
+    <nant buildfile="test/Spring/Spring.Testing.Microsoft.Tests/Spring.Testing.Microsoft.Tests.build" target="test" if="${build-testing-microsoft}"/>
     <nant buildfile="test/Spring/Spring.Messaging.Ems.Tests/Spring.Messaging.Ems.Tests.build" target="test" if="${build-ems and (nant.settings.currentframework == 'net-2.0' or nant.settings.currentframework == 'net-4.0' ) and not net-3.0}"/>
     <nant buildfile="test/Spring/Spring.Messaging.Ems.Integration.Tests/Spring.Messaging.Ems.Integration.Tests.build" target="test" if="${build-ems and (nant.settings.currentframework == 'net-2.0' or nant.settings.currentframework == 'net-4.0') and not net-3.0}"/>
     <nant buildfile="test/Spring/Spring.Messaging.Nms.Tests/Spring.Messaging.Nms.Tests.build" target="test" if="${build-nms}"/>
@@ -553,21 +514,6 @@ Commandline Examples:
 			<arg path="${current.bin.dir}/*-TestCoverage.xml" />
 		</exec>
 
-  </target>
-
-
-  <target name="compile-net-1.1" description="Builds .NET Framework 1.1 version"
-          depends="set-net-1.1-runtime-configuration, check-spring-basedir, clean-current-bin-dir">
-    <call target="copykeys" if="${project.build.sign}"/>
-    <call target="common.generate-assemblyinfo"/>
-    <property name="build-ems" value="false" overwrite="true" />
-    <property name="build-nms" value="false" overwrite="true" />
-    <property name="build-msmq" value="false" overwrite="true" />
-    <property name="build-msmq-tests" value="false" overwrite="true" />
-    <property name="build-velocity" value="false" overwrite="true" />
-    <property name="build-testing-microsoft" value="false" overwrite="true" />
-	<property name="build-quartz" value="false" overwrite="true" />
-    <call target="compile-test" />
   </target>
 
   <target name="compile-net-2.0" description="Builds .NET Framework 2.0 version"
@@ -1075,10 +1021,6 @@ Commandline Examples:
   </target>
 
   <target name="build-all-function" description="Build what is in cvs taking into account approrpiate clr versions and root target name">
-
-    <!-- net-1.0 dropped since 1.3.0 -->
-
-	<call target="${nant.target.root.name}-1.1" />
 
     <call target="${nant.target.root.name}-2.0" />
 
@@ -1710,28 +1652,9 @@ Commandline Examples:
 
     <property name="sdk.src.dir" value="l:/release/Spring.NET" overwrite="false"/>
 
-    <!-- Copy htmlhelp 1.0 files for .NET 1.1 and 2.0 assemblies -->
-    <copy todir="${current.package.dir}/doc/sdk/1.1/htmlhelp"
-          file="${sdk.src.dir}/doc/sdk/Spring-1.3/net-1.1/htmlhelp1and2/Spring.NET.chm"/>
-
+    <!-- Copy htmlhelp 1.0 files for 2.0 assemblies -->
     <copy todir="${current.package.dir}/doc/sdk/2.0/htmlhelp"
           file="${sdk.src.dir}/doc/sdk/Spring-1.3/net-2.0/htmlhelp1and2/Spring.NET.chm"/>
-
-    <!-- Copy generated htmlhelp 2.x files, install scripts, -->
-    <!-- and install utility for .NET 1.1 assemblies         -->
-    <copy todir="${current.package.dir}/doc/sdk/1.1/vsnet2003" verbose="${copy-verbose}">
-      <fileset basedir="${sdk.src.dir}/doc/sdk/Spring-1.3/net-1.1/htmlhelp1and2">
-        <include name="COL_*.*"/>
-      </fileset>
-    </copy>
-    <copy todir="${current.package.dir}/doc/sdk/1.1/vsnet2003"
-          file="${sdk.src.dir}/doc/sdk/Spring-1.3/net-1.1/htmlhelp1and2/Spring.NET.hxs"/>
-    <copy todir="${current.package.dir}/doc/sdk/1.1/vsnet2003"
-          file="doc/InnovaHxReg.exe"/>
-    <copy todir="${current.package.dir}/doc/sdk/1.1/vsnet2003"
-          file="doc\docx\Spring-1.3\net-1.1\RegisterHelp2.bat"/>
-    <copy todir="${current.package.dir}/doc/sdk/1.1/vsnet2003"
-          file="doc\docx\Spring-1.3\net-1.1\UnRegisterHelp2.bat"/>
 
     <!-- Copy generated htmlhelp 2.x files, install scripts, -->
     <!-- and install utility for .NET 2.0 assemblies         -->

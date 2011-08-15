@@ -998,11 +998,8 @@ namespace Spring.Objects.Factory.Support
         {
             string[] candidateNames =
                 ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(this, requiredType, true, descriptor.Eager);
-#if NET_1_0 || NET_1_1
-            IDictionary result = new Hashtable();
-#else
             IDictionary result = new OrderedDictionary(candidateNames.Length);
-#endif
+
             foreach (DictionaryEntry entry in resolvableDependencies)
             {
                 Type autoWiringType = (Type)entry.Key;

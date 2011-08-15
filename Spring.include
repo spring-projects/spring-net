@@ -295,7 +295,6 @@
 		<attribute type="AssemblyVersionAttribute" value="${assembly.version}" />
 
 		<attribute type="AssemblyDelaySignAttribute" value="false"/>
-		<attribute type="AssemblyKeyFileAttribute" value="${assembly.keyfile}" if="${(nant.settings.currentframework == 'net-1.0' or nant.settings.currentframework == 'net-1.1') and project.build.sign}" />
 
 
 		<!--
@@ -347,45 +346,6 @@
             <fail message="The current target framework (${framework::get-description(framework::get-target-framework())}) is not supported by Spring.NET."/>
         </if>
         <call target="set-${framework::get-target-framework()}-runtime-configuration"/>
-    </target>
-    <target name="set-net-1.0-runtime-configuration"
-            depends="check-bin-dir, check-sdkdoc-dir, check-sdkdoc-debug, check-current-build-config, check-build-debug, check-build-defines">
-        <property name="nant.settings.currentframework" value="net-1.0"/>
-        <property name="nant.settings.currentframework.number" value="1.0"/>
-        <property name="nant.settings.currentframework.revisionnumber" value="10"/>
-        <property name="current.build.debug" value="${build.debug}" dynamic="true"/>
-        <property name="current.build.defines.csc" value="${build.defines.csc},NET,NET_1_0" dynamic="true"/>
-        <property name="current.build.defines.jsc" value="${build.defines.jsc},NET,NET_1_0" dynamic="true"/>
-        <property name="current.build.defines.vbc" value="${build.defines.vbc},NET=True,NET_1_0=True" dynamic="true"/>
-        <property name="current.build.defines.vjc" value="${build.defines.vjc},NET,NET_1_0" dynamic="true"/>
-        <property name="current.build.defines.cl" value="${build.defines.cl} /D NET /D NET_1_0" dynamic="true"/>
-        <property name="current.bin.dir"
-                  value="${bin.dir}/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}/${current.build.config}"/>
-        <property name="current.sdkdoc.dir"
-                  value="${sdkdoc.dir}/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
-        <property name="current.sdkdoc.debug" value="${sdkdoc.debug}" dynamic="true"/>
-        <property name="link.sdkdoc.version" value="SDK_v1_0"/>
-        <property name="nowarn.numbers.test" value="${nowarn.numbers.test.default}"/>
-
-    </target>
-    <target name="set-net-1.1-runtime-configuration"
-            depends="check-bin-dir, check-sdkdoc-dir, check-sdkdoc-debug, check-current-build-config, check-build-debug, check-build-defines">
-        <property name="nant.settings.currentframework" value="net-1.1"/>
-        <property name="nant.settings.currentframework.number" value="1.1"/>
-        <property name="nant.settings.currentframework.revisionnumber" value="11"/>
-        <property name="current.build.debug" value="${build.debug}" dynamic="true"/>
-        <property name="current.build.defines.csc" value="${build.defines.csc},NET,NET_1_1" dynamic="true"/>
-        <property name="current.build.defines.jsc" value="${build.defines.jsc},NET,NET_1_1" dynamic="true"/>
-        <property name="current.build.defines.vbc" value="${build.defines.vbc},NET=True,NET_1_1=True" dynamic="true"/>
-        <property name="current.build.defines.vjc" value="${build.defines.vjc},NET,NET_1_1" dynamic="true"/>
-        <property name="current.build.defines.cl" value="${build.defines.cl} /D NET /D NET_1_1" dynamic="true"/>
-        <property name="current.bin.dir"
-                  value="${bin.dir}/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}/${current.build.config}"/>
-        <property name="current.sdkdoc.dir"
-                  value="${sdkdoc.dir}/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
-        <property name="current.sdkdoc.debug" value="${sdkdoc.debug}" dynamic="true"/>
-        <property name="link.sdkdoc.version" value="SDK_v1_1"/>
-        <property name="nowarn.numbers.test" value="${nowarn.numbers.test.default}"/>
     </target>
     <target name="set-net-2.0-runtime-configuration"
             depends="check-bin-dir, check-sdkdoc-dir, check-sdkdoc-debug, check-current-build-config, check-build-debug, check-build-defines">
@@ -534,19 +494,6 @@
                   value="${sdkdoc.dir}/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
         <property name="current.sdkdoc.debug" value="${sdkdoc.debug}" dynamic="true"/>
         <property name="link.sdkdoc.version" value="MsdnOnline"/>
-        <property name="nowarn.numbers.test" value="${nowarn.numbers.test.default}"/>
-    </target>
-    <target name="set-cli-1.0-configuration" depends="check-bin-dir">
-        <property name="nant.settings.currentframework" value="net-1.0"/>
-        <property name="current.build.debug" value="${build.debug}" dynamic="true"/>
-        <property name="current.build.defines.csc" value="${build.defines.csc},CLI,CLI_1_0" dynamic="true"/>
-        <property name="current.build.defines.jsc" value="${build.defines.jsc},CLI,CLI_1_0" dynamic="true"/>
-        <property name="current.build.defines.vbc" value="${build.defines.vbc},CLI=True,CLI_1_0=True" dynamic="true"/>
-        <property name="current.build.defines.vjc" value="${build.defines.vjc},CLI,CLI_1_0" dynamic="true"/>
-        <property name="current.build.defines.cl" value="${build.defines.cl} /D CLI /D CLI_1_0" dynamic="true"/>
-        <property name="current.bin.dir" value="${bin.dir}/cli/1.0/${current.build.config}"/>
-        <property name="current.sdkdoc.dir" value="${sdkdoc.dir}"/>
-        <property name="current.sdkdoc.debug" value="${sdkdoc.debug}" dynamic="true"/>
         <property name="nowarn.numbers.test" value="${nowarn.numbers.test.default}"/>
     </target>
 </project>

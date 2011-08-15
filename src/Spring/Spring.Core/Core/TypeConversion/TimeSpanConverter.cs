@@ -30,58 +30,9 @@ using System.Text.RegularExpressions;
 namespace Spring.Core.TypeConversion
 {
     #region Specifier parsers
-
-    #if NET_1_1
-
-    /// <summary>
-    /// Nullable TimeSpan
-    /// </summary>
-    /// <remarks>
-    /// Can be replaced with a TimeSpan? in .NET 2
-    /// </remarks>
-    class TimeSpanNullable {
-
-        readonly bool _hasValue;
-        readonly TimeSpan _value;
-
-        /// <summary>
-        /// ctor without Value;
-        /// </summary>
-        public TimeSpanNullable() {
-            _hasValue = false;
-        }
-
-        /// <summary>
-        /// ctor with Value
-        /// </summary>
-        /// <param name="timeSpan"></param>
-        public TimeSpanNullable(TimeSpan timeSpan) {
-            _hasValue = true;
-            _value = timeSpan;
-        }
-
-        /// <summary>
-        /// HasValue
-        /// </summary>
-        public bool HasValue {
-            get { return _hasValue; }
-        }
-
-        /// <summary>
-        /// Value if HasValue==true
-        /// </summary>
-        public TimeSpan Value {
-            get { return _value; }
-        }
-    }
-    
-    #else
-
+ 
     using TimeSpanNullable = Nullable<TimeSpan>;
     
-    #endif
-    
-
     /// <summary>
     /// Base parser for <see cref="TimeSpanConverter"/> custom specifiers.
     /// </summary>

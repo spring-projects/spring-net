@@ -139,11 +139,7 @@ namespace Spring.Context.Support
                     {
                         if (modules[moduleKey] is SessionStateModule)
                         {
-#if !NET_1_1
                             HookSessionEvent((SessionStateModule)modules[moduleKey]);
-#else
-                            HookSessionEvent11();
-#endif
                         }
                     }
                 }
@@ -315,7 +311,6 @@ namespace Spring.Context.Support
             }
         }
 
-#if !NET_1_1
         private static void HookSessionEvent(SessionStateModule sessionStateModule)
         {
             // Hook only into InProcState - all others ignore SessionEnd anyway
@@ -362,58 +357,6 @@ namespace Spring.Context.Support
                                           , CultureInfo.InvariantCulture
                                           );
         }
-#else
-        private static Type t_SessionDictionary;
-
-        private static void HookSessionEvent11()
-        {
-            // Hook only into InProcState - all others ignore SessionEnd anyway
-            t_SessionDictionary = typeof(HttpSessionState).Assembly.GetType("System.Web.SessionState.SessionDictionary");
-
-            Type t_InProcStateClientManager =
-                typeof(HttpSessionState).Assembly.GetType("System.Web.SessionState.InProcStateClientManager");
-
-            TypeRegistry.RegisterType( "InProcStateClientManager", t_InProcStateClientManager );
-
-            CacheItemRemovedCallback circ = new CacheItemRemovedCallback( OnCacheItemRemoved );
-            CACHEKEYPREFIXLENGTH = (int)ExpressionEvaluator.GetValue(null, "InProcStateClientManager.CACHEKEYPREFIXLENGTH");
-            s_originalCallback = (CacheItemRemovedCallback)ExpressionEvaluator.GetValue(null, "InProcStateClientManager.s_callback");
-            ExpressionEvaluator.SetValue(null, "InProcStateClientManager.s_callback", circ);
-        }
-
-        private static HttpSessionState CreateSessionState(string key, object state1)
-        {
-            string id = key.Substring(CACHEKEYPREFIXLENGTH);
-            object dict = ExpressionEvaluator.GetValue(state1, "dict");
-            if (dict == null)
-            {
-                dict = Activator.CreateInstance(t_SessionDictionary, true);
-            }
-            object staticObjects = ExpressionEvaluator.GetValue(state1, "staticObjects");
-            int timeout = (int)ExpressionEvaluator.GetValue(state1, "timeout");
-            bool isCookieless = (bool)ExpressionEvaluator.GetValue(state1, "isCookieless");
-
-            HttpSessionState state2 = (HttpSessionState)Activator.CreateInstance(
-                typeof(HttpSessionState)
-                , BindingFlags.Instance|BindingFlags.NonPublic
-                , null
-                , new object[]
-                    {
-                        id,
-                        dict,
-                        staticObjects,
-                        timeout,
-                        false,
-                        isCookieless,
-                        SessionStateMode.InProc,
-                        true
-                    }
-                , CultureInfo.InvariantCulture
-                );
-            return state2;
-        }
-#endif
-
         #endregion Session Handling Stuff
     }
 }

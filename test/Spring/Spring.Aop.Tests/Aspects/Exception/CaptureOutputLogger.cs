@@ -1,9 +1,3 @@
-
-
-using System;
-using System.Collections;
-using System.Globalization;
-using System.Text;
 using Common.Logging;
 using Common.Logging.Simple;
 
@@ -12,17 +6,12 @@ namespace Spring.Aspects.Exceptions
     public class CaptureOutputLogger : TraceLogger
     {
         public static readonly string NAME = "capturingLogger";
-#if NET_1_0 || NET_1_1
-        public CaptureOutputLogger() 
-            : base(NAME, LogLevel.All, false, false, null)
-        {}
-#else
         public CaptureOutputLogger()
             : base(NAME, LogLevel.All, false, false, null)
+
 // TODO: use this line when upgrading to Common.Logging 2.0:
 //          : base(false, NAME, LogLevel.All, true, false, false, null)
         { }
-#endif
 
 //        private LogLevel _currentLogLevel = LogLevel.All;
 //

@@ -49,11 +49,7 @@ namespace Spring.Web.UI.Controls
     [PersistChildren(true),
     ToolboxData("<{0}:Panel runat=\"server\" Width=\"125px\" Height=\"50px\"> </{0}:Panel>"),
     ParseChildren(false),
-#if NET_1_1
-    Designer("System.Web.UI.Design.WebControls.PanelDesigner, System.Design, Version=1.0.5000.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"), 
-#else
     Designer("System.Web.UI.Design.WebControls.PanelContainerDesigner, System.Design, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a"),
-#endif
     AspNetHostingPermission(SecurityAction.InheritanceDemand, Level = AspNetHostingPermissionLevel.Minimal),
     AspNetHostingPermission(SecurityAction.LinkDemand, Level = AspNetHostingPermissionLevel.Minimal)]
     public class Panel : System.Web.UI.WebControls.Panel, ISupportsWebDependencyInjection

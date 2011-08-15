@@ -62,7 +62,6 @@ namespace Spring.Globalization.Localizers
         /// <returns>A list of resources to apply.</returns>
         protected override IList LoadResources(object target, IMessageSource messageSource, CultureInfo culture)
         {
-#if ! NET_1_0
             IList resources;
             resources = new ArrayList();
 
@@ -102,10 +101,6 @@ namespace Spring.Globalization.Localizers
                 }
             }
             return resources;
-#else
-            throw new NotSupportedException("Operation not supported in .NET 1.0 Release.");
-#endif 
         }
-
     }
 }

@@ -18,7 +18,7 @@
 
 #endregion
 
-#if (NET_2_0 && !MONO)
+#if !MONO
 
 #region Imports
 
@@ -215,4 +215,4 @@ namespace Spring.EnterpriseServices
     }
 }
 
-#endif // (!NET_1_0)
+#endif // !MONO

@@ -32,10 +32,6 @@ using System.Runtime.CompilerServices;
 [assembly: AssemblyVersion("1.3.1.30001")]
 #elif NET_2_0
 [assembly: AssemblyVersion("1.3.1.20001")]
-#elif NET_1_1
-[assembly: AssemblyVersion("1.3.1.11001")]
-#elif NET_1_0
-[assembly: AssemblyVersion("1.3.1.10001")]
 #endif
 
 //

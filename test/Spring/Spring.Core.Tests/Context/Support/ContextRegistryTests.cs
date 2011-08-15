@@ -30,7 +30,6 @@ using NUnit.Framework;
 using Spring.Objects;
 using Spring.Proxy;
 using Spring.Objects.Factory.Support;
-using Spring.Reflection.Dynamic;
 using Spring.Util;
 
 #endregion
@@ -53,7 +52,6 @@ namespace Spring.Context.Support
 
         private static void ResetConfigurationSystem()
         {
-#if NET_2_0
             if (SystemUtils.MonoRuntime)
             {
                 return;
@@ -61,28 +59,6 @@ namespace Spring.Context.Support
             FieldInfo initStateRef = typeof(ConfigurationManager).GetField("s_initState", BindingFlags.NonPublic | BindingFlags.Static);
             object notStarted = Activator.CreateInstance(initStateRef.FieldType);
             initStateRef.SetValue(null, notStarted);
-#endif
-#if NET_1_1
-            FieldInfo initStateRef = typeof(ConfigurationSettings).GetField("_initState",BindingFlags.NonPublic|BindingFlags.Static);
-            
-            if (initStateRef!=null)
-            {
-                object notStarted = Activator.CreateInstance(initStateRef.FieldType);
-                initStateRef.SetValue(null,notStarted);
-            }
-            else
-            {
-                FieldInfo configurationInitializedRef = typeof(ConfigurationSettings).GetField("_configurationInitialized",BindingFlags.NonPublic|BindingFlags.Static);
-                configurationInitializedRef.SetValue(null, false);
-            }
-
-#endif
-#if NET_1_0
-            FieldInfo initStateRef = typeof(ConfigurationSettings).GetField("_configurationInitialized",BindingFlags.NonPublic|BindingFlags.Static);
-            FieldInfo configSystemRef = typeof(ConfigurationSettings).GetField("_configSystem",BindingFlags.NonPublic|BindingFlags.Static);
-            initStateRef.SetValue(null,false);		
-            configSystemRef.SetValue(null,null);
-#endif
         }
 
         /// <summary>
@@ -100,7 +76,7 @@ namespace Spring.Context.Support
         {
             return ContextRegistry.GetContext(); // this must fail!
         }
-#if !NET_1_1
+
         [Test]
         public void ThrowsInvalidOperationExceptionOnRecursiveCallsToGetContext()
         {
@@ -119,7 +95,6 @@ namespace Spring.Context.Support
                 }
             }
         }
-#endif
 
         [Test]
         public void RegisterRootContext()

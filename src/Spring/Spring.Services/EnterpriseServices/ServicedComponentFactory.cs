@@ -18,16 +18,13 @@
 
 #endregion
 
-#if (!NET_1_0 && !MONO)
+#if !MONO
 
 #region Imports
 
 using System;
-using System.Diagnostics;
 using System.Reflection;
-using Spring.Util;
 using Spring.Objects.Factory;
-using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Config;
 
 #endregion
@@ -186,4 +183,4 @@ namespace Spring.EnterpriseServices
     }
 }
 
-#endif // (!NET_1_0)
+#endif // !MONO

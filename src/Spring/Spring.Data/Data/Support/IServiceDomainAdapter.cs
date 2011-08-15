@@ -18,8 +18,6 @@
 
 #endregion
 
-#if (!NET_1_0)
-
 using System.EnterpriseServices;
 
 namespace Spring.Data.Support
@@ -72,5 +70,3 @@ namespace Spring.Data.Support
 
     }
 }
-
-#endif

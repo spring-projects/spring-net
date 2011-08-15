@@ -225,43 +225,6 @@ namespace Spring.Data.Common
 
         }
 
-
-#if NET_1_1
-
-        [Test]
-        public void DefaultInstanceWithOleDb11()
-        {
-            IDbProvider provider = DbProviderFactory.GetDbProvider("OleDb-1.1");
-            Assert.AreEqual("OleDb, provider V1.0.5000.0 in framework .NET V1.1", provider.DbMetadata.ProductName);
-            Assert.IsNotNull(provider.CreateCommand());
-            Assert.IsNotNull(provider.CreateCommandBuilder());
-            Assert.IsNotNull(provider.CreateConnection());
-            Assert.IsNotNull(provider.CreateDataAdapter());
-            Assert.IsNotNull(provider.CreateParameter());
-            Assert.AreEqual("?", provider.CreateParameterName("Foo"));
-        }
-
-        [Test]
-        public void DefaultInstanceWithSqlServer2000()
-        {
-            IDbProvider provider = DbProviderFactory.GetDbProvider("SqlServer-1.1");
-            AssertIsSqlServer2000(provider);
-            Assert.IsNull(provider.ConnectionString);
-            Assert.IsNotNull(provider.CreateCommand());
-            Assert.IsNotNull(provider.CreateCommandBuilder());
-            Assert.IsNotNull(provider.CreateConnection());
-            Assert.IsNotNull(provider.CreateDataAdapter());
-            Assert.IsNotNull(provider.CreateParameter());
-            Assert.AreEqual("@Foo", provider.CreateParameterName("Foo"));
-        }
-
-        private void AssertIsSqlServer2000(IDbProvider provider)
-        {
-            Assert.AreEqual("Microsoft SQL Server, provider V1.0.5000.0 in framework .NET V1.1",
-                            provider.DbMetadata.ProductName);
-            AssertCommonSqlServerErrorCodes(provider);
-        }
-#endif
         private void AssertIsSqlServer2005(IDbProvider provider)
         {
             Assert.AreEqual("Microsoft SQL Server, provider V2.0.0.0 in framework .NET V2.0",
@@ -286,7 +249,5 @@ namespace Spring.Data.Common
             // This had better NOT be
             Assert.IsFalse(Array.IndexOf(codes.BadSqlGrammarCodes, "1xx56") >= 0);
         }
-
-
     }
 }

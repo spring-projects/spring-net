@@ -18,14 +18,9 @@
 
 #endregion
 
-#if !NET_1_1
 #region Imports
 
-using System;
-using System.Collections;
-using System.Collections.Specialized;
 using NUnit.Framework;
-using Spring.Collections;
 using Spring.Objects.Factory.Support;
 
 #endregion
@@ -65,4 +60,3 @@ namespace Spring.Objects.Factory.Xml
 
 	}
 }
-#endif

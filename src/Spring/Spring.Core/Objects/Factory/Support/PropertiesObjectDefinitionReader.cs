@@ -243,7 +243,6 @@ namespace Spring.Objects.Factory.Support
         /// <returns>The number of object definitions registered.</returns>
         public int RegisterObjectDefinitions(ResourceSet rs, string prefix)
         {
-#if ! NET_1_0
             // Simply create a map and call overloaded method
             IDictionary id = new Hashtable();
             foreach (DictionaryEntry de in rs)
@@ -251,9 +250,6 @@ namespace Spring.Objects.Factory.Support
                 id.Add(de.Key, de.Value);
             }
             return RegisterObjectDefinitions(id, prefix);
-#else
-			throw new NotSupportedException("Operation not supported on NET 1.0");
-#endif
         }
 
         /// <summary>

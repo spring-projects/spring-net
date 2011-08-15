@@ -18,23 +18,20 @@
 
 #endregion
 
-#if (!NET_1_0 && !MONO)
+#if !MONO
 
 #region Imports
 
 using System;
-using System.Configuration;
 using System.Diagnostics;
 using System.EnterpriseServices;
 using System.IO;
 using System.Reflection;
-using System.Xml;
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.Core.IO;
 using Spring.Objects.Factory.Config;
 using Spring.Util;
-using ConfigXmlDocument = Spring.Util.ConfigXmlDocument;
 
 #endregion
 

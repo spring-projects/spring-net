@@ -8,11 +8,7 @@ using System.Reflection;
 // associated with an assembly.
 //
 
-#if !NET_2_0
-[assembly: AssemblyConfiguration("net-1.1.win32; Release")]
-#else
 [assembly: AssemblyConfiguration("net-2.0.win32; Release")]
-#endif
 [assembly: AssemblyCompany("http://www.springframework.net")]
 [assembly: AssemblyProduct("Spring.NET Framework 1.3.1")]
 [assembly: AssemblyCopyright("Copyright 2002-2011 Spring.NET Framework Team.")]
@@ -42,10 +38,6 @@ using System.Reflection;
 [assembly: AssemblyVersion("1.3.2.30001")]
 #elif NET_2_0
 [assembly: AssemblyVersion("1.3.2.20001")]
-#elif NET_1_1
-[assembly: AssemblyVersion("1.3.2.11001")]
-#elif NET_1_0
-[assembly: AssemblyVersion("1.3.2.10001")]
 #endif
 
 

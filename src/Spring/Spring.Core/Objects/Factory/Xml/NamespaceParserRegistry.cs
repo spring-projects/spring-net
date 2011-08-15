@@ -402,17 +402,8 @@ namespace Spring.Objects.Factory.Xml
             IResource schema = resourceLoader.GetResource(schemaLocation);
             try
             {
-#if NET_1_0
-                XmlTextReader schemaDocument = new XmlTextReader(schemaLocation, schema.InputStream);
-                schemas.Add(namespaceUri, schemaDocument);
-#elif NET_1_1
-                XmlTextReader schemaDocument = new XmlTextReader(schemaLocation, schema.InputStream);
-                schemas.Add(namespaceUri, schemaDocument, new XmlResourceUrlResolver());
-#else
                 XmlTextReader schemaDocument = new XmlTextReader(schema.Uri.AbsoluteUri, schema.InputStream);
                 schemas.Add(namespaceUri, schemaDocument);
-
-#endif
             }
             catch (Exception e)
             {
