@@ -88,6 +88,7 @@ namespace Spring.Transaction.Interceptor
                     rbta.PropagationBehavior = ta.TransactionPropagation;
                     rbta.TransactionIsolationLevel = ta.IsolationLevel;
                     rbta.ReadOnly = ta.ReadOnly;
+                    rbta.TransactionTimeout = ta.Timeout;
 
 #if NET_2_0
                     rbta.EnterpriseServicesInteropOption = ta.EnterpriseServicesInteropOption;
