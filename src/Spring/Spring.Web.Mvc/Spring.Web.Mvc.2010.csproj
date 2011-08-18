@@ -35,7 +35,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Common.Logging">
-      <HintPath>..\..\..\lib\Net\3.5\Common.Logging.dll</HintPath>
+      <HintPath>..\..\..\lib\Net\2.0\Common.Logging.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
