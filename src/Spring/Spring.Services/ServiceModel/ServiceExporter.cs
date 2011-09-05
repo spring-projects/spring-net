@@ -377,22 +377,11 @@ namespace Spring.ServiceModel
         protected virtual void GenerateProxy()
         {
             IProxyTypeBuilder builder = new ConfigurableServiceProxyTypeBuilder(
-                TargetName, this.objectName, this.objectFactory, _useServiceProxyTypeCache, 
+                TargetName, this.objectName, this.objectFactory, _useServiceProxyTypeCache, ContractInterface, 
                 Name, Namespace, ConfigurationName, CallbackContract, ProtectionLevel, SessionMode);
 
-            if (ContractInterface != null)
-            {
-                builder.Interfaces = new Type[] { ContractInterface };
-            }
             builder.TypeAttributes = TypeAttributes;
             builder.MemberAttributes = MemberAttributes;
-
-            if (builder.Interfaces.Length > 1)
-            {
-                throw new ArgumentException(String.Format(
-                    "ServiceExporter cannot export service type '{0}' as a WCF service because it implements multiple interfaces. Specify the contract interface to expose via the ContractInterface property.",
-                    builder.TargetType));
-            }
 
             proxyType = builder.BuildProxyType();
         }
@@ -406,13 +395,15 @@ namespace Spring.ServiceModel
         /// </summary>
         private sealed class ConfigurableServiceProxyTypeBuilder : ServiceProxyTypeBuilder
         {
+            private Type contractInterface;
             private CustomAttributeBuilder serviceContractAttribute;
             private DefaultListableObjectFactory objectFactory;
 
-            public ConfigurableServiceProxyTypeBuilder(string targetName, string objectName, DefaultListableObjectFactory objectFactory, bool useServiceProxyTypeCache, string name, string ns, string configurationName, Type callbackContract, ProtectionLevel protectionLevel, SessionMode sessionMode)
+            public ConfigurableServiceProxyTypeBuilder(string targetName, string objectName, DefaultListableObjectFactory objectFactory, bool useServiceProxyTypeCache, Type contractInterface, string name, string ns, string configurationName, Type callbackContract, ProtectionLevel protectionLevel, SessionMode sessionMode)
                 : base(targetName, objectName, objectFactory, useServiceProxyTypeCache)
             {
                 this.objectFactory = objectFactory;
+                this.contractInterface = contractInterface;
                 if (!StringUtils.HasText(configurationName))
                 {
                     name = this.Interfaces[0].Name;
@@ -505,9 +496,21 @@ namespace Spring.ServiceModel
 
             protected override Type[] GetProxiableInterfaces(Type[] interfaces)
             {
-                Type[] proxiableInterfaces = base.GetProxiableInterfaces(interfaces);
-
-                return proxiableInterfaces;
+                if (contractInterface == null)
+                {
+                    Type[] proxiableInterfaces = base.GetProxiableInterfaces(interfaces);
+                    if (proxiableInterfaces.Length > 1)
+                    {
+                        throw new ArgumentException(String.Format(
+                            "ServiceExporter cannot export service type '{0}' as a WCF service because it implements multiple interfaces. Specify the contract interface to expose via the ContractInterface property.",
+                            this.TargetType));
+                    }
+                    return proxiableInterfaces;
+                }
+                else
+                {
+                    return base.GetProxiableInterfaces(new Type[] { this.contractInterface });
+                }
             }
 
             /// <summary>

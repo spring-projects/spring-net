@@ -58,6 +58,7 @@ namespace Spring.ServiceModel
 	        <object id='service' type='Spring.ServiceModel.ServiceExporterTests+Service, Spring.Services.Tests'/>
 	        <object id='serviceWithMultipleInterfaces' type='Spring.ServiceModel.ServiceExporterTests+ServiceWithMultipleInterfaces, Spring.Services.Tests'/>
             <object id='decoratedService' type='Spring.ServiceModel.ServiceExporterTests+DecoratedService, Spring.Services.Tests'/>
+            <object id='anotherService' type='Spring.ServiceModel.ServiceExporterTests+AnotherService, Spring.Services.Tests'/>
         </objects>";
 
             using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(xml)))
@@ -159,6 +160,19 @@ namespace Spring.ServiceModel
             Type proxyType = se.GetObject() as Type;
             Assert.IsNotNull(proxyType);
             Assert.IsTrue(typeof(IContract).IsAssignableFrom(proxyType));
+        }
+
+        [Test(Description = "https://jira.springsource.org/browse/SPRNET-1464")]
+        public void ProxiesInheritedContractInterface()
+        {
+            se.ObjectName = "ProxiesInheritedContractInterface";
+            se.TargetName = "anotherService";
+            se.ContractInterface = typeof(IInheritedContract);
+            se.AfterPropertiesSet();
+
+            Type proxyType = se.GetObject() as Type;
+            Assert.IsNotNull(proxyType);
+            Assert.IsTrue(typeof(IInheritedContract).IsAssignableFrom(proxyType));
         }
 
         [Test(Description = "http://jira.springframework.org/browse/SPRNET-1179")]
@@ -339,6 +353,24 @@ namespace Spring.ServiceModel
         {
             [OperationContract(Name = "MySomeMethod")]
             public string SomeMethod(int param)
+            {
+                return param.ToString();
+            }
+        }
+
+        public interface IInheritedContract : IContract
+        {
+            string AnotherMethod(int param);
+        }
+
+        public class AnotherService : IInheritedContract
+        {
+            public string SomeMethod(int param)
+            {
+                return param.ToString();
+            }
+
+            public string AnotherMethod(int param)
             {
                 return param.ToString();
             }
