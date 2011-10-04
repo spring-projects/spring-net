@@ -185,7 +185,7 @@
       <echo message="Copying spring-database.xsd to ${vsXXXX.version} installation."/>
       <echo message="----------------------------------------------------------"/>
       <echo message=""/>
-      <copy file="spring-database-1.1.xsd" todir="${vsXXXX.xml.schemas}${vsXXXX.relative.dir}" 
+      <copy file="spring-database-1.3.xsd" todir="${vsXXXX.xml.schemas}${vsXXXX.relative.dir}" 
             verbose="true"
             overwrite="true"/>
 
@@ -201,7 +201,7 @@
       <echo message="Copying spring-nms-1.3.xsd to ${vsXXXX.version} installation."/>
       <echo message="----------------------------------------------------------"/>
       <echo message=""/>
-      <copy file="spring-nms-1.3.xsd" todir="${vsXXXX.xml.schemas}${vsXXXX.relative.dir}" b
+      <copy file="spring-nms-1.3.xsd" todir="${vsXXXX.xml.schemas}${vsXXXX.relative.dir}"
             verbose="true"
             overwrite="true"/>
 
@@ -218,6 +218,14 @@
       <echo message="----------------------------------------------------------"/>
       <echo message=""/>
       <copy file="spring-nvelocity-1.3.xsd" todir="${vsXXXX.xml.schemas}${vsXXXX.relative.dir}" 
+            verbose="true"
+            overwrite="true"/>
+			
+	  <echo message="----------------------------------------------------------"/>
+      <echo message="Copying spring-wcf-1.3.xsd to ${vsXXXX.version} installation."/>
+      <echo message="----------------------------------------------------------"/>
+      <echo message=""/>
+      <copy file="spring-wcf-1.3.xsd" todir="${vsXXXX.xml.schemas}${vsXXXX.relative.dir}" 
             verbose="true"
             overwrite="true"/>
 
