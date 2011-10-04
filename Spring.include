@@ -240,7 +240,8 @@
             	    DateTime start = new DateTime(startYear, 1, 1);
                     TimeSpan ts = DateTime.Now - start;
                     int days = ts.Days;
-                    string version = project.Properties["package.version"].ToString() + "." + frameworkRevisionNumber + days.ToString();
+                    /* string version = project.Properties["package.version"].ToString() + "." + frameworkRevisionNumber + days.ToString(); */
+					string version = project.Properties["package.version"].ToString() + "." + frameworkRevisionNumber + project.Properties["package.buildincrement"].ToString();
             	    project.Properties["project.version.numeric"] = version.ToString();
 
                 }
