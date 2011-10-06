@@ -1,0 +1,422 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>OpenCover.Framework</name>
+    </assembly>
+    <members>
+        <member name="T:OpenCover.Framework.CommandLineParser">
+            <summary>
+            Parse the command line arguments and set the appropriate properties
+            </summary>
+        </member>
+        <member name="T:OpenCover.Framework.CommandLineParserBase">
+            <summary>
+            Parse the command line arguments based on the following syntax: <br/>
+            [-argument[:optional-value]] [-argument[:optional-value]]
+            </summary>
+        </member>
+        <member name="M:OpenCover.Framework.CommandLineParserBase.HasArgument(System.String)">
+            <summary>
+            Check if an argument of the name given was part of the supplied arguments
+            </summary>
+            <param name="argument">an argument name</param>
+            <returns>true - if argument was supplied</returns>
+        </member>
+        <member name="M:OpenCover.Framework.CommandLineParserBase.GetArgumentValue(System.String)">
+            <summary>
+            Get the the value of a named argument
+            </summary>
+            <param name="argument">an argument name</param>
+            <returns>the value supplied by an argument</returns>
+        </member>
+        <member name="P:OpenCover.Framework.CommandLineParserBase.ArgumentCount">
+            <summary>
+            Get the number of extracted arguments
+            </summary>
+        </member>
+        <member name="T:OpenCover.Framework.ICommandLine">
+            <summary>
+            properties exposed by the command line object for use in other entities
+            </summary>
+        </member>
+        <member name="P:OpenCover.Framework.ICommandLine.TargetDir">
+            <summary>
+            the target directory
+            </summary>
+        </member>
+        <member name="P:OpenCover.Framework.ICommandLine.MergeByHash">
+            <summary>
+            If specified then results to be merged by matching hash 
+            </summary>
+        </member>
+        <member name="P:OpenCover.Framework.ICommandLine.ShowUnvisited">
+            <summary>
+            Show the unvisited classes/methods at the end of the coverage run
+            </summary>
+        </member>
+        <member name="M:OpenCover.Framework.CommandLineParser.#ctor(System.String[])">
+            <summary>
+            Constructs the parser
+            </summary>
+            <param name="arguments">An array of command line arguments</param>
+        </member>
+        <member name="M:OpenCover.Framework.CommandLineParser.Usage">
+            <summary>
+            Get the usage string 
+            </summary>
+            <returns>The usage string</returns>
+        </member>
+        <member name="M:OpenCover.Framework.CommandLineParser.ExtractAndValidateArguments">
+            <summary>
+            Extract the arguments and validate them; also validate the supplied options when simple
+            </summary>
+        </member>
+        <member name="P:OpenCover.Framework.CommandLineParser.Register">
+            <summary>
+            the switch -register was supplied
+            </summary>
+        </member>
+        <member name="P:OpenCover.Framework.CommandLineParser.UserRegistration">
+            <summary>
+            the switch -register with the user argument was supplied i.e. -register:user
+            </summary>
+        </member>
+        <member name="P:OpenCover.Framework.CommandLineParser.Target">
+            <summary>
+            The target executable that is to be profiles
+            </summary>
+        </member>
+        <member name="P:OpenCover.Framework.CommandLineParser.TargetDir">
+            <summary>
+            The working directory that the action is to take place
+            </summary>
+        </member>
+        <member name="P:OpenCover.Framework.CommandLineParser.TargetArgs">
+            <summary>
+            The arguments that are to be passed to the Target
+            </summary>
+        </member>
+        <member name="P:OpenCover.Framework.CommandLineParser.PrintUsage">
+            <summary>
+            Requests that the user wants to see the commandline help
+            </summary>
+        </member>
+        <member name="P:OpenCover.Framework.CommandLineParser.OutputFile">
+            <summary>
+            The name of the output file
+            </summary>
+        </member>
+        <member name="P:OpenCover.Framework.CommandLineParser.NoDefaultFilters">
+            <summary>
+            If specified then the default filters should not be applied
+            </summary>
+        </member>
+        <member name="P:OpenCover.Framework.CommandLineParser.MergeByHash">
+            <summary>
+            If specified then results to be merged by matching hash 
+            </summary>
+        </member>
+        <member name="P:OpenCover.Framework.CommandLineParser.ShowUnvisited">
+            <summary>
+            Show the unvisited classes/methods at the end of the coverage run
+            </summary>
+        </member>
+        <member name="P:OpenCover.Framework.CommandLineParser.ReturnTargetCode">
+            <summary>
+            Show the unvisited classes/methods at the end of the coverage run
+            </summary>
+        </member>
+        <member name="P:OpenCover.Framework.CommandLineParser.Filters">
+            <summary>
+            A list of filters
+            </summary>
+        </member>
+        <member name="P:OpenCover.Framework.CommandLineParser.ReturnCodeOffset">
+            <summary>
+            The offset for the return code - this is to help avoid collisions between opencover return codes and the target
+            </summary>
+        </member>
+        <member name="T:OpenCover.Framework.Manager.ProfilerManager">
+            <summary>
+            This is the core manager for integrating the host the target 
+            application and the profiler 
+            </summary>
+            <remarks>It probably does too much!</remarks>
+        </member>
+        <member name="T:OpenCover.Framework.Model.BranchPoint">
+            <summary>
+            a branch point
+            </summary>
+        </member>
+        <member name="T:OpenCover.Framework.Model.InstrumentationPoint">
+            <summary>
+            An instrumentable point
+            </summary>
+        </member>
+        <member name="M:OpenCover.Framework.Model.InstrumentationPoint.GetCount(System.UInt32)">
+            <summary>
+            Get the number of recorded visit points for this identifier
+            </summary>
+            <param name="spid">the sequence point identifier - NOTE 0 is not used</param>
+        </member>
+        <member name="M:OpenCover.Framework.Model.InstrumentationPoint.AddCount(System.UInt32,System.Int32)">
+            <summary>
+            Add a number of recorded visit pints against this identifier
+            </summary>
+            <param name="spid">the sequence point identifier - NOTE 0 is not used</param>
+            <param name="sum">the number of visit points to add</param>
+        </member>
+        <member name="P:OpenCover.Framework.Model.BranchPoint.Path">
+            <summary>
+            A path that can be taken
+            </summary>
+        </member>
+        <member name="T:OpenCover.Framework.Persistance.IPersistance">
+            <summary>
+            A persistant entiry
+            </summary>
+        </member>
+        <member name="M:OpenCover.Framework.Persistance.IPersistance.PersistModule(OpenCover.Framework.Model.Module)">
+            <summary>
+            A module that is to be persisted
+            </summary>
+            <param name="module"></param>
+        </member>
+        <member name="M:OpenCover.Framework.Persistance.IPersistance.Commit">
+            <summary>
+            Save the instrumented data
+            </summary>
+        </member>
+        <member name="M:OpenCover.Framework.Persistance.IPersistance.GetSequencePointsForFunction(System.String,System.Int32,OpenCover.Framework.Model.InstrumentationPoint[]@)">
+            <summary>
+            Get the sequence points for a function
+            </summary>
+            <param name="modulePath">The identifying path to the module</param>
+            <param name="functionToken">The token of the function</param>
+            <param name="sequencePoints">The sequence points that make up that function</param>
+            <returns>true - if sequence points exist</returns>
+        </member>
+        <member name="M:OpenCover.Framework.Persistance.IPersistance.GetBranchPointsForFunction(System.String,System.Int32,OpenCover.Framework.Model.BranchPoint[]@)">
+            <summary>
+            Get the branch points for a function
+            </summary>
+            <param name="modulePath">The identifying path to the module</param>
+            <param name="functionToken">The token of the function</param>
+            <param name="branchPoints">The branch points that make up that function</param>
+            <returns>true - if sequence points exist</returns>
+        </member>
+        <member name="M:OpenCover.Framework.Persistance.IPersistance.IsTracking(System.String)">
+            <summary>
+            Check if the module is to be tracked i.e. instrumented
+            </summary>
+            <param name="modulePath"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OpenCover.Framework.Persistance.IPersistance.GetClassFullName(System.String,System.Int32)">
+            <summary>
+            Get the full class name i.e. including namespace that the function is contained in
+            </summary>
+            <param name="modulePath"></param>
+            <param name="functionToken"></param>
+            <returns></returns>
+        </member>
+        <member name="M:OpenCover.Framework.Persistance.IPersistance.SaveVisitData(System.Byte[])">
+            <summary>
+            extract and save the visit data
+            </summary>
+            <param name="data"></param>
+        </member>
+        <member name="P:OpenCover.Framework.Persistance.IPersistance.CoverageSession">
+            <summary>
+            The coverage session - this is the root entity of a persisted document
+            </summary>
+        </member>
+        <member name="T:OpenCover.Framework.IFilter">
+            <summary>
+            A filter that is used to decide whether an assembly/class pair is instrumented
+            </summary>
+        </member>
+        <member name="M:OpenCover.Framework.IFilter.AddFilter(System.String)">
+            <summary>
+            Add a filter
+            </summary>
+            <param name="assemblyClassName">A filter is of the format (+ or -)[assemblyName]className, wildcards are allowed. <br/>
+            i.e. -[mscorlib], -[System.*]*, +[App.*]*, +[*]*
+            
+            </param>
+        </member>
+        <member name="M:OpenCover.Framework.IFilter.UseAssembly(System.String)">
+            <summary>
+            Decides whether an assembly should be included in the instrumentation
+            </summary>
+            <param name="assemblyName">the name of the assembly under profile</param>
+            <returns>the name of the class under profile</returns>
+            <remarks>All assemblies matching either the inclusion or exclusion filter should be included 
+            as it is the class that is being filtered within these unless the class filter is *</remarks>
+        </member>
+        <member name="M:OpenCover.Framework.IFilter.InstrumentClass(System.String,System.String)">
+            <summary>
+            Determine if an [assemblyname]classname pair matches the current Exclusion or Inclusion filters  
+            </summary>
+            <param name="assemblyName">the name of the assembly under profile</param>
+            <param name="className">the name of the class under profile</param>
+            <returns>false - if pair matches the exclusion filter or matches no filters, true - if pair matches in the inclusion filter</returns>
+        </member>
+        <member name="T:OpenCover.Framework.FilterType">
+            <summary>
+            The type of filter, an exclusion filter takes precedence over inclusion filter
+            </summary>
+        </member>
+        <member name="F:OpenCover.Framework.FilterType.Inclusion">
+            <summary>
+            The filter is an inclusion type, i.e. if a assembly/class pair 
+            matches the filter then it is included for instrumentation
+            </summary>
+        </member>
+        <member name="F:OpenCover.Framework.FilterType.Exclusion">
+            <summary>
+            The filter is an exclusion type, i.e. if a assembly/class pair 
+            matches the filter then it is excluded for instrumentation
+            </summary>
+        </member>
+        <member name="T:OpenCover.Framework.Filter">
+            <summary>
+             A filter that is used to decide whether an assembly/class pair is instrumented
+            </summary>
+        </member>
+        <member name="M:OpenCover.Framework.Filter.#ctor">
+            <summary>
+            Standard constructor
+            </summary>
+        </member>
+        <member name="M:OpenCover.Framework.Model.InstrumentationModelBuilder.#ctor(OpenCover.Framework.Symbols.ISymbolManager,OpenCover.Framework.IFilter)">
+            <summary>
+            Standard constructor
+            </summary>
+            <param name="symbolManager">the symbol manager that will provide the data</param>
+            <param name="filter">A filter to decide whether to include or exclude an assembly or its classes</param>
+        </member>
+        <member name="T:OpenCover.Framework.Model.Class">
+            <summary>
+            An entity that contains methods
+            </summary>
+        </member>
+        <member name="T:OpenCover.Framework.Model.CoverageSession">
+            <summary>
+            A coverage session
+            </summary>
+        </member>
+        <member name="P:OpenCover.Framework.Model.CoverageSession.SessionId">
+            <summary>
+            A unique session identifier
+            </summary>
+        </member>
+        <member name="P:OpenCover.Framework.Model.CoverageSession.Modules">
+            <summary>
+            A list of modules that have been profiled under the session
+            </summary>
+        </member>
+        <member name="T:OpenCover.Framework.Model.FileRef">
+            <summary>
+            A file reference within the coverage session and is used to point to an existing File entity
+            </summary>
+        </member>
+        <member name="T:OpenCover.Framework.Model.File">
+            <summary>
+            File details of a source file
+            </summary>
+        </member>
+        <member name="M:OpenCover.Framework.Model.File.#ctor">
+            <summary>
+            A standard constructor
+            </summary>
+        </member>
+        <member name="P:OpenCover.Framework.Model.File.FullPath">
+            <summary>
+            The path to file
+            </summary>
+        </member>
+        <member name="T:OpenCover.Framework.Model.Method">
+            <summary>
+            An entity that can be instrumented
+            </summary>
+        </member>
+        <member name="T:OpenCover.Framework.Model.Module">
+            <summary>
+            The details of a module
+            </summary>
+        </member>
+        <member name="M:OpenCover.Framework.Model.Module.#ctor">
+            <summary>
+            simple constructor
+            </summary>
+        </member>
+        <member name="P:OpenCover.Framework.Model.Module.FullName">
+            <summary>
+            The full path name to the module
+            </summary>
+        </member>
+        <member name="P:OpenCover.Framework.Model.Module.Aliases">
+            <summary>
+            A list of aliases
+            </summary>
+        </member>
+        <member name="P:OpenCover.Framework.Model.Module.ModuleName">
+            <summary>
+            The name of the module
+            </summary>
+        </member>
+        <member name="P:OpenCover.Framework.Model.Module.Files">
+            <summary>
+            The files that make up the module
+            </summary>
+        </member>
+        <member name="P:OpenCover.Framework.Model.Module.Classes">
+            <summary>
+            The classes that make up the module
+            </summary>
+        </member>
+        <member name="P:OpenCover.Framework.Model.Module.ModuleHash">
+            <summary>
+            A hash of the file used to group them together (especially when running against mstest)
+            </summary>
+        </member>
+        <member name="T:OpenCover.Framework.Model.SequencePoint">
+            <summary>
+            a sequence point
+            </summary>
+        </member>
+        <member name="T:OpenCover.Framework.ProfilerRegistration">
+            <summary>
+            Used to register and unregister the profiler 
+            </summary>
+            <remarks>
+            Intentionally not unit tested - as this is calling regsvr32 which does what it does and does not need more testing from me
+            </remarks>
+        </member>
+        <member name="M:OpenCover.Framework.ProfilerRegistration.Register(System.Boolean)">
+            <summary>
+            Register the profiler using %SystemRoot%\system\regsvr32.exe
+            </summary>
+            <param name="userRegistration">true - user the /n /i:user switches</param>
+        </member>
+        <member name="M:OpenCover.Framework.ProfilerRegistration.Unregister(System.Boolean)">
+            <summary>
+            Unregister the profiler using %SystemRoot%\system\regsvr32.exe
+            </summary>
+            <param name="userRegistration">true - user the /n /i:user switches</param>
+        </member>
+        <member name="M:OpenCover.Framework.ProfilerRegistration.GetAssemblyLocation">
+            <summary>
+            Get the current location of this assembly
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:OpenCover.Framework.ProfilerRegistration.GetProfilerPath(System.Boolean)">
+            <summary>
+            
+            </summary>
+            <returns></returns>
+        </member>
+    </members>
+</doc>

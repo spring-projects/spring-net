@@ -183,14 +183,16 @@ ${current.bin.dir}: the binary directory to pick the assembly + app.config from
 ${project.name}   : (optional), the name of the assembly
 ${tool.dir}       : dir for tools
     -->
-    <target name="common.run-tests">
-<!--  
-      <call target="common.run-tests.nunit" />
---> 
-      <call target="common.run-tests.ncover" />
-         
-
-    </target>
+	<target name="common.run-tests">
+		<if test="${test.withcoverage}" >
+			<call target="common.run-tests.opencover" />
+		</if>
+		
+		<if test="${not test.withcoverage}" >
+			<call target="common.run-tests.nunit" />
+		</if>
+		<property name="test.withcoverage" value="false"/>
+	</target>
 
   <!--
 *******************************************************************************
@@ -297,6 +299,27 @@ ${tool.dir}       : dir for tools
 -->
     </target>
 
+ <target name="common.run-tests.opencover" description="Run NUnit tests">
+
+        <property name="test.assemblyname" value="${project::get-name()}" overwrite="false" />
+        <property name="test.assemblyfile" value="${test.assemblyname}.dll" overwrite="false" />
+        <property name="test.assemblyname.tocover" value="${string::substring(test.assemblyname,0,string::last-index-of(test.assemblyname, '.Tests') )}" overwrite="false" />
+
+        <property name="test.bin.dir" value="${current.bin.dir}" if="${not property::exists('test.bin.dir')}" />
+
+        <echo message="Coverage Testing ${test.assemblyname} in ${test.bin.dir}" />
+
+		<exec program="${tool.dir}/opencover/OpenCover.Console.exe" workingdir="${test.bin.dir}" verbose="true">
+			<arg value="-register:user" />
+			<arg value="-target:${tool.dir}/nunit/net-2.0/nunit-console-x86.exe" />
+			<arg value="-targetargs:${test.assemblyfile} /xml:${test.assemblyname}.dll-TestResults.xml /noshadow /nologo /framework:${nant.settings.currentframework}" />
+			<arg value="-filter:&quot;+[Spring*]* -[*Test*]* -[*nunit*]*&quot;" />
+			<arg value="-output:${test.bin.dir}/${test.assemblyname}.dll-TestCoverage.xml" />
+		</exec>
+</target>
+	
+	
+	
     <target name="common.run-tests.partcover" description="Run NUnit tests">
 
         <exec program="${tool.dir}\partcover\partcover.exe"

@@ -131,6 +131,8 @@ Commandline Examples:
   <property name="project.build.config" value="debug"/>
   <property name="project.build.package" value="false"/>
   <property name="project.build.sign" value="false" overwrite="false" />
+  
+  <property name="test.withcoverage" value="false" />
 
   <!-- import non-redistributables if available -->
   <!-- to build certain libraries (e.g. Spring.Messaging.Ems), 3rd party libraries are required
@@ -585,6 +587,9 @@ Commandline Examples:
 
   <target name="compile-net-4.0" description="Builds .NET Framework 4.0 version"
         depends="set-net-4.0-runtime-configuration, check-spring-basedir, clean-current-bin-dir">
+	
+	<property name="test.withcoverage" value="true"/>
+	
 	<if test="${property::exists('mstest.exe')}">
 		<property name="mstest.exe.current" value="${string::replace(property::get-value('mstest.exe'), 'Microsoft Visual Studio 9.0', 'Microsoft Visual Studio 10.0')}" />
 	</if>
@@ -602,6 +607,18 @@ Commandline Examples:
     <property name="build-msmq-tests" value="true" overwrite="true" />
     <property name="build-velocity" value="true" overwrite="true" />
     <call target="compile-test" />
+	
+	<call target="GenerateCoverageReport" />
+	
+  </target>
+  
+  
+  <target name="GenerateCoverageReport" >
+  		<exec program="${tool.dir}\ReporterGenerator\bin\ReportGenerator.exe" workingdir="${spring.basedir}\build\net\4.0\debug" verbose="true">
+			<!-- <arg path="${spring.basedir}\build\net\4.0\debug\Spring.Core.Tests.dll-TestCoverage.xml" /> -->
+			<arg value="Spring.Aop.Tests.dll-TestCoverage.xml;Spring.Core.Tests.dll-TestCoverage.xml;Spring.Data.NHibernate30.Tests.dll-TestCoverage.xml;Spring.Data.NHibernate31.Tests.dll-TestCoverage.xml;Spring.Data.NHibernate32.Tests.dll-TestCoverage.xml;Spring.Data.Tests.dll-TestCoverage.xml;Spring.Messaging.Nms.Tests.dll-TestCoverage.xml;Spring.Template.Velocity.Tests.dll-TestCoverage.xml;Spring.Testing.NUnit.Tests.dll-TestCoverage.xml;Spring.Web.Mvc.Tests.dll-TestCoverage.xml;Spring.Web.Mvc3.Tests.dll-TestCoverage.xml;Spring.Web.Tests.dll-TestCoverage.xml" />
+			<arg path="${spring.basedir}\build\net\4.0\debug\CoverageReport" />
+		</exec>
   </target>
 
   <target name="compile-mono-2.0" description="Builds MONO Framework 2.0 version"

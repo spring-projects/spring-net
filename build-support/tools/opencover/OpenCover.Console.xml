@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>OpenCover.Console</name>
+    </assembly>
+    <members>
+        <member name="M:OpenCover.Console.Program.Main(System.String[])">
+            <summary>
+            This is the initial console harness - it may become the full thing
+            </summary>
+            <param name="args"></param>
+            <returns></returns>
+        </member>
+    </members>
+</doc>
