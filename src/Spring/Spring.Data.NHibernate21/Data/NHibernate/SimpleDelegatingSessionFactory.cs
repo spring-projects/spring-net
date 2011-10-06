@@ -94,7 +94,7 @@ namespace Spring.Data.NHibernate
 
                     ISessionFactory factory = _targetSessionFactories[connectionString] as ISessionFactory;
 
-                    System.Diagnostics.Trace.WriteLine(String.Format("{0} =  {1}", System.Threading.Thread.CurrentThread.GetHashCode(), ((ISessionFactoryImplementor)factory).ConnectionProvider.GetConnection().ConnectionString));
+                    System.Diagnostics.Trace.WriteLine(String.Format("{0} =  {1}", System.Threading.Thread.CurrentThread.GetHashCode(), connectionString));
                     
                     return factory;
                 }
