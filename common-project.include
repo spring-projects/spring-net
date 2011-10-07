@@ -190,7 +190,7 @@ ${tool.dir}       : dir for tools
 		</if>
 
 		<if test="${test.withcoverage}" >
-			<call target="common.run-tests.opencover" />
+			<call target="common.run-tests.ncover" />
 		</if>
 		
 	</target>
