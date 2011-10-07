@@ -89,7 +89,7 @@ namespace Spring.Web.Mvc
         public IEnumerable<object> GetServices(Type serviceType)
         {
             var services = ApplicationContext.GetObjectsOfType(serviceType);
-            return services.Cast<object>();
+            return services.Values.Cast<object>();
         }
     }
 }

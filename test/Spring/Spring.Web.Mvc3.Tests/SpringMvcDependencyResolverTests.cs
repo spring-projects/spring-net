@@ -89,6 +89,11 @@ namespace Spring.Web.Mvc.Tests
         {
             var services = _resolver.GetServices(typeof(FirstContainerRegisteredController));
             Assert.That(services.Count(), Is.EqualTo(2));
+
+            foreach (var service in services)
+            {
+                Assert.That(service,  Is.TypeOf(typeof(FirstContainerRegisteredController)), "Service Returned was not of the expected Type.");
+            }
         }
 
         [Test]
