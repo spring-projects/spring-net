@@ -184,14 +184,15 @@ ${project.name}   : (optional), the name of the assembly
 ${tool.dir}       : dir for tools
     -->
 	<target name="common.run-tests">
+
+		<if test="${not test.withcoverage}" >
+			<call target="common.run-tests.nunit" />
+		</if>
+
 		<if test="${test.withcoverage}" >
 			<call target="common.run-tests.opencover" />
 		</if>
 		
-		<if test="${not test.withcoverage}" >
-			<call target="common.run-tests.nunit" />
-		</if>
-		<property name="test.withcoverage" value="false"/>
 	</target>
 
   <!--
@@ -315,6 +316,11 @@ ${tool.dir}       : dir for tools
 			<arg value="-targetargs:${test.assemblyfile} /xml:${test.assemblyname}.dll-TestResults.xml /noshadow /nologo /framework:${nant.settings.currentframework}" />
 			<arg value="-filter:&quot;+[Spring*]* -[*Test*]* -[*nunit*]*&quot;" />
 			<arg value="-output:${test.bin.dir}/${test.assemblyname}.dll-TestCoverage.xml" />
+		</exec>
+		
+  		<exec program="${tool.dir}\ReporterGenerator\bin\ReportGenerator.exe" workingdir="${test.bin.dir}" verbose="true">
+			<arg value="${test.assemblyname}.dll-TestCoverage.xml" />
+			<arg path="${test.bin.dir}\CoverageReport\${test.assemblyname}" />
 		</exec>
 </target>
 	
