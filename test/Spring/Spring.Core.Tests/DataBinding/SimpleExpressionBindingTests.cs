@@ -50,21 +50,21 @@ namespace Spring.DataBinding
 
         [Test]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void WithNullMesageId()
+        public void WithNullMessageId()
         {
             new SimpleExpressionBinding("exp", "exp").SetErrorMessage(null, "errors");
         }
 
         [Test]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void WithEmptyMesageId()
+        public void WithEmptyMessageId()
         {
             new SimpleExpressionBinding("exp", "exp").SetErrorMessage("", "errors");
         }
 
         [Test]
         [ExpectedException(typeof(ArgumentNullException))]
-        public void WithWhitespaceMesageId()
+        public void WithWhitespaceMessageId()
         {
             new SimpleExpressionBinding("exp", "exp").SetErrorMessage("\t   ", "errors");
         }

@@ -198,7 +198,7 @@ namespace Spring.DataBinding
         {
             foreach (IBinding binding in bindings)
             {
-                binding.BindSourceToTarget(source, target, validationErrors);
+                binding.BindSourceToTarget(source, target, validationErrors, variables);
             }
         }
 
@@ -239,7 +239,7 @@ namespace Spring.DataBinding
         {
             foreach (IBinding binding in bindings)
             {
-                binding.BindTargetToSource(source, target, validationErrors);
+                binding.BindTargetToSource(source, target, validationErrors, variables);
             }
         }
 
