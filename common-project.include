@@ -179,9 +179,10 @@ ${current.build.defines}
 Runs standard unit test configuration of the current ${project::get-name()}.dll
 
 Arguments:
-${current.bin.dir}: the binary directory to pick the assembly + app.config from
-${project.name}   : (optional), the name of the assembly
-${tool.dir}       : dir for tools
+${current.bin.dir}  : the binary directory to pick the assembly + app.config from
+${project.name}     : (optional), the name of the assembly
+${tool.dir}         : dir for tools
+${test.withcoverage}: flag indicating whether to invoke tests with test-coverage profiler or not
     -->
 	<target name="common.run-tests">
 
@@ -190,7 +191,7 @@ ${tool.dir}       : dir for tools
 		</if>
 
 		<if test="${test.withcoverage}" >
-			<call target="common.run-tests.ncover" />
+			<call target="common.run-tests.opencover" />
 		</if>
 		
 	</target>

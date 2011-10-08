@@ -1,1 +1,0 @@
-..\..\..\tools\ReportGenerator\ReportGenerator.exe opencovertests.xml report

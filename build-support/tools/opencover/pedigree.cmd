@@ -1,1 +1,0 @@
-OpenCover.Console.exe -register:user -target:dogfood.cmd -filter:+[OpenCover*]* -output:pedigree_results.xml
