@@ -524,7 +524,7 @@ Commandline Examples:
   <target name="compile-net-2.0" description="Builds .NET Framework 2.0 version"
           depends="set-net-2.0-runtime-configuration, check-spring-basedir, clean-current-bin-dir">
 	
-	<property name="test.withcoverage" value="false" overwrite="true"/>
+	<property name="test.withcoverage" value="true" overwrite="true"/>
 	
 	<if test="${property::exists('mstest.exe')}">
 		<property name="mstest.exe.current" value="${string::replace(property::get-value('mstest.exe'), 'Microsoft Visual Studio 10.0', 'Microsoft Visual Studio 9.0')}" />
@@ -540,7 +540,7 @@ Commandline Examples:
   <target name="compile-net-3.0" description="Builds .NET Framework 3.0 version"
           depends="set-net-3.0-runtime-configuration, check-spring-basedir, clean-current-bin-dir">
 
-	<property name="test.withcoverage" value="false" overwrite="true"/>		  
+	<property name="test.withcoverage" value="true" overwrite="true"/>		  
 
  <call target="copykeys" if="${project.build.sign}"/>
     <call target="common.generate-assemblyinfo"/>
@@ -562,7 +562,7 @@ Commandline Examples:
   <target name="compile-net-3.5" description="Builds .NET Framework 3.5 version"
         depends="set-net-3.5-runtime-configuration, check-spring-basedir, clean-current-bin-dir">
 		
-	<property name="test.withcoverage" value="false" overwrite="true"/>		  
+	<property name="test.withcoverage" value="true" overwrite="true"/>		  
 		
 	<property name="lib.dir" value="${spring.basedir}/lib/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
 	<property name="nh30.lib.dir" value="${spring.basedir}/lib/NHibernate30/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
@@ -597,7 +597,7 @@ Commandline Examples:
   <target name="compile-net-4.0" description="Builds .NET Framework 4.0 version"
         depends="set-net-4.0-runtime-configuration, check-spring-basedir, clean-current-bin-dir">
 	
-	<property name="test.withcoverage" value="true" overwrite="true"/>
+	<property name="test.withcoverage" value="false" overwrite="true"/>
 	
 	<if test="${property::exists('mstest.exe')}">
 		<property name="mstest.exe.current" value="${string::replace(property::get-value('mstest.exe'), 'Microsoft Visual Studio 9.0', 'Microsoft Visual Studio 10.0')}" />
