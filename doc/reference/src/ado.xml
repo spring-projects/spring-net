@@ -1954,7 +1954,6 @@ public delegate T DataAdapterDelegate&lt;T&gt;(IDbDataAdapter dataAdapter);</pro
     order for them to correctly participate with a surrounding transactional
     context. The reason for this is by default the code generated is
     explicitly managing the connections and transactions. This issue is very
-    explicitly managing the connections and transactions. This issue is very
     well described in the article <ulink
     url="http://www.code-magazine.com/Article.aspx?quickid=0605031">System.Transactions
     and ADO.NET 2.0</ulink> by ADO.NET guru Sahil Malik. Spring offers a
