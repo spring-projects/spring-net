@@ -2052,50 +2052,21 @@ public static void ApplyConnectionAndTx(object typedDataSetAdapter, IDbProvider 
       <literal>MappingadoQueryWithParameters</literal> (See SDK docs for
       details).</para>
 
-      <para>The <literal>AdoNonQuery</literal> class encapsulates an
-      IDbCommand 's ExecuteNonQuery method functionality. Like the
-      <literal>AdoQuery</literal> object, an <literal>AdoNonQuery</literal>
-      object is reusable, and like all <literal>AdoOperation</literal>
-      classes, an <literal>AdoNonQuery</literal> can have parameters and is
-      defined in SQL. This class provides two execute methods</para>
+<!--
 
-      <itemizedlist>
-        <listitem>
-          <para><literal>IDictionary ExecuteNonQuery(params object[]
-          inParameterValues)</literal></para>
-        </listitem>
-
-        <listitem>
-          <para><literal>IDictionary ExecuteNonQueryByNamedParam(IDictionary
-          inParams)</literal></para>
-        </listitem>
-      </itemizedlist>
-
-      <para>This class is concrete. Although it can be subclassed (for example
-      to add a custom update method) it can easily be parameterized by setting
-      SQL and declaring parameters.</para>
-
+TODO: add example of subclassing AdoQuery here
+	  
       <para>An example of an AdoQuery subclass to encapsulate an insert
       statement for a 'TestObject' (consisting only name and age columns) is
       shown below</para>
 
-      <programlisting language="csharp">public class CreateTestObjectNonQuery : AdoNonQuery
+      <programlisting language="csharp">public class CreateTestObjectNonQuery : AdoQuery
 {
-  private static string sql = "insert into TestObjects(Age,Name) values (@Age,@Name)";
-   
-  public CreateTestObjectNonQuery(IDbProvider dbProvider) : base(dbProvider, sql)
-  {
-    DeclaredParameters.Add("Age", DbType.Int32);
-    DeclaredParameters.Add("Name", SqlDbType.NVarChar, 16);
-    Compile();
-  }
-
-  public void Create(string name, int age)
-  {
-     ExecuteNonQuery(name, age);
-  }
-
+  //...
 }</programlisting>
+
+-->
+
     </sect2>
 
     <sect2 xml:id="ado-mappingadoquery">
