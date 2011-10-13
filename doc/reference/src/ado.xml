@@ -2011,7 +2011,7 @@ public static void ApplyConnectionAndTx(object typedDataSetAdapter, IDbProvider 
   <sect1 xml:id="ado-objects">
     <title>Database operations as Objects</title>
 
-    <para>The <literal>Spring.Data.Objects and Spring.Data.Objects.Generic
+    <para>The <literal>Spring.Data.Objects</literal> and <literal>Spring.Data.Objects.Generic
     </literal>namespaces contains classes that allow one to access the
     database in a more object-oriented manner. By way of an example, one can
     execute queries and get the results back as a list containing business
