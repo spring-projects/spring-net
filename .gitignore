@@ -36,3 +36,6 @@ TIBCO.EMS.*
 
 #Documentation output
 doc/reference/target/
+
+#Build log
+buildlog.txt
