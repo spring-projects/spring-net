@@ -241,7 +241,8 @@ Bug and issue tracking can be found at http://jira.springframework.org/secure/Br
 
 A Fisheye repository browser is located at https://fisheye.springframework.org/browse/spring-net
 
-To get the sources, check them out at the Subversion repository at https://src.springframework.org/svn/spring-net
+To get the sources, fork us on github at https://github.com/SpringSource/spring-net
+
 We are always happy to receive your feedback on the forums. If you think you found a bug, have an improvement suggestion or feature request, please submit a ticket in JIRA (see link above).
 
 A word on bug reports: If at all possible, try to download one of the nightly snapshots at http://www.springframework.net/downloads/nightly/ and see, if this bug has already been fixed. If the problem still persists, don't forget to mention the version of Spring.NET you are using (check the file versions of Spring.NET dlls), the .NET version you are running on and a description how to reproduce the problem.
