@@ -2047,7 +2047,7 @@ public static void ApplyConnectionAndTx(object typedDataSetAdapter, IDbProvider 
       <literal>AdoQuery</literal> class is rarely used directly since the
       <literal>MappingAdoQuery</literal> subclass provides a much more
       convenient implementation for mapping rows to .NET classes. Another
-      implementations that extends <literal>AdoQuery</literal> is
+      implementation that extends <literal>AdoQuery</literal> is
       <literal>MappingadoQueryWithParameters</literal> (See SDK docs for
       details).</para>
 
