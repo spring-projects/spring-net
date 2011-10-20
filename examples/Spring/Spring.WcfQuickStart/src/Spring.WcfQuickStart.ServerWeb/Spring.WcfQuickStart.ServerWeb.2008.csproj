@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Spring.WcfQuickStart</RootNamespace>
     <AssemblyName>Spring.WcfQuickStart.ServerWeb</AssemblyName>
-    <TargetFrameworkVersion>v3.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -30,26 +30,41 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Spring.Aop, Version=1.2.0.20336, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Spring.Aop, Version=0.0.0.20000, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\bin\net\3.0\debug\Spring.Aop.dll</HintPath>
     </Reference>
-    <Reference Include="Spring.Core, Version=1.2.0.20313, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Spring.Core, Version=0.0.0.20000, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\bin\net\2.0\debug\Spring.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Spring.Services, Version=1.2.0.30313, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Spring.Services, Version=0.0.0.35000, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\bin\net\3.0\debug\Spring.Services.dll</HintPath>
+      <HintPath>..\..\..\..\..\bin\net\3.5\debug\Spring.Services.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.ServiceModel">
       <RequiredTargetFramework>3.0</RequiredTargetFramework>
     </Reference>
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Web.Extensions.Design, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Xml" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Web.Services" />
+    <Reference Include="System.Xml.Linq, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Web.config" />
@@ -60,11 +75,11 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Spring.WcfQuickStart.Aspects\Spring.WcfQuickStart.Aspects.csproj">
+    <ProjectReference Include="..\Spring.WcfQuickStart.Aspects\Spring.WcfQuickStart.Aspects.2008.csproj">
       <Project>{B52BBAA3-1B30-4905-827C-1D81EBA56A15}</Project>
       <Name>Spring.WcfQuickStart.Aspects</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Spring.WcfQuickStart.Contracts\Spring.WcfQuickStart.Contracts.csproj">
+    <ProjectReference Include="..\Spring.WcfQuickStart.Contracts\Spring.WcfQuickStart.Contracts.2008.csproj">
       <Project>{53263837-0643-45FE-96A2-46D425E1A36F}</Project>
       <Name>Spring.WcfQuickStart.Contracts</Name>
     </ProjectReference>
