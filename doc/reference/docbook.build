@@ -17,7 +17,8 @@
     <echo message="project.basedir = ${project.basedir}"/>
     <echo message="project.targetdir = ${project.targetdir}"/>
   </target>
-  <target name="all" depends="html,html-help,pdf"/>
+  
+  <target name="all" depends="html,pdf,html-help"/>
 
   <target name="html">
     <echo message="Generating HTML format..." />

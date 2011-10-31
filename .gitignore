@@ -33,3 +33,9 @@ TIBCO.EMS.*
 
 # Office Temp Files
 ~$*
+
+#Documentation output
+doc/reference/target/
+
+#Build log
+buildlog.txt

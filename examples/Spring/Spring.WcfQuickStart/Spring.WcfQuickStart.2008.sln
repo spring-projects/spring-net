@@ -10,9 +10,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.WcfQuickStart.Server
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.WcfQuickStart.ServerWeb.2008", "src\Spring.WcfQuickStart.ServerWeb\Spring.WcfQuickStart.ServerWeb.2008.csproj", "{EEC5B531-104B-44E6-975B-44C0C8973405}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.WcfQuickStart.Contracts", "src\Spring.WcfQuickStart.Contracts\Spring.WcfQuickStart.Contracts.csproj", "{53263837-0643-45FE-96A2-46D425E1A36F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.WcfQuickStart.Contracts.2008", "src\Spring.WcfQuickStart.Contracts\Spring.WcfQuickStart.Contracts.2008.csproj", "{53263837-0643-45FE-96A2-46D425E1A36F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.WcfQuickStart.Aspects", "src\Spring.WcfQuickStart.Aspects\Spring.WcfQuickStart.Aspects.csproj", "{B52BBAA3-1B30-4905-827C-1D81EBA56A15}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.WcfQuickStart.Aspects.2008", "src\Spring.WcfQuickStart.Aspects\Spring.WcfQuickStart.Aspects.2008.csproj", "{B52BBAA3-1B30-4905-827C-1D81EBA56A15}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
