@@ -319,7 +319,7 @@ ${tool.dir}       : dir for tools
 			<arg value="-output:${test.bin.dir}/${test.assemblyname}.dll-TestCoverage.xml" />
 		</exec>
 		
-  		<exec program="${tool.dir}\ReporterGenerator\bin\ReportGenerator.exe" workingdir="${test.bin.dir}" verbose="true">
+  		<exec program="${tool.dir}\ReportGenerator\bin\ReportGenerator.exe" workingdir="${test.bin.dir}" verbose="true">
 			<arg value="${test.assemblyname}.dll-TestCoverage.xml" />
 			<arg path="${test.bin.dir}\CoverageReport\${test.assemblyname}" />
 		</exec>
