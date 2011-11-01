@@ -273,6 +273,10 @@ namespace Spring.Objects
             set { this.someGenericStringList = value; }
 	    }
 
+        public virtual IList<int> SomeGenericIListInt32 { get; set; }
+        public virtual IDictionary<string, int> SomeGenericIDictionaryStringInt32 { get; set; }
+        public virtual IEnumerable<int> SomeGenericIEnumerableInt32 { get; set; }
+
 	    public virtual NameValueCollection SomeNameValueCollection
 	    {
             get { return someNameValueCollection; }
