@@ -5010,6 +5010,10 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
           <listitem>
             <para><literal>ConfigurableVariableSource</literal></para>
           </listitem>
+		  
+          <listitem>
+            <para><literal>AppSettingsVariableSource</literal></para>
+          </listitem>
         </itemizedlist>
 
         <para>You use this by defining an instance of
