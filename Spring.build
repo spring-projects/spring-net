@@ -148,6 +148,7 @@ Commandline Examples:
 
   <!-- Include spring helpers -->
   <include buildfile="${spring.basedir}/Spring.include"/>
+  <include buildfile="${spring.basedir}/common-project.include" />
 
   <property name="package.version" value="0.0.0" overwrite="false"/>
   <!-- change this to sync the sdk doc version generated -->
@@ -509,7 +510,7 @@ Commandline Examples:
 
     <!-- Main solutions and examples are compiled via task build-solutions -->
 
-    <!-- build coverage summary -->
+    <!-- build coverage summary 
 		<exec program="${tool.dir}/ncoverexplorer/ncoverexplorer.console.exe" workingdir="${current.bin.dir}" failonerror="false">
 			<arg value="/xml:&quot;${current.bin.dir}/TestCoverageSummary.xml&quot;" />
 			<arg value="/report:ModuleClassFunctionSummary" />
@@ -518,13 +519,14 @@ Commandline Examples:
 			<arg value="/q" />
 			<arg path="${current.bin.dir}/*-TestCoverage.xml" />
 		</exec>
+	-->
 
   </target>
 
   <target name="compile-net-2.0" description="Builds .NET Framework 2.0 version"
           depends="set-net-2.0-runtime-configuration, check-spring-basedir, clean-current-bin-dir">
 	
-	<property name="test.withcoverage" value="true" overwrite="true"/>
+	<property name="test.withcoverage" value="false" overwrite="true"/>
 	
 	<if test="${property::exists('mstest.exe')}">
 		<property name="mstest.exe.current" value="${string::replace(property::get-value('mstest.exe'), 'Microsoft Visual Studio 10.0', 'Microsoft Visual Studio 9.0')}" />
@@ -540,7 +542,7 @@ Commandline Examples:
   <target name="compile-net-3.0" description="Builds .NET Framework 3.0 version"
           depends="set-net-3.0-runtime-configuration, check-spring-basedir, clean-current-bin-dir">
 
-	<property name="test.withcoverage" value="true" overwrite="true"/>		  
+	<property name="test.withcoverage" value="false" overwrite="true"/>		  
 
  <call target="copykeys" if="${project.build.sign}"/>
     <call target="common.generate-assemblyinfo"/>
@@ -562,7 +564,7 @@ Commandline Examples:
   <target name="compile-net-3.5" description="Builds .NET Framework 3.5 version"
         depends="set-net-3.5-runtime-configuration, check-spring-basedir, clean-current-bin-dir">
 		
-	<property name="test.withcoverage" value="true" overwrite="true"/>		  
+	<property name="test.withcoverage" value="false" overwrite="true"/>		  
 		
 	<property name="lib.dir" value="${spring.basedir}/lib/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
 	<property name="nh30.lib.dir" value="${spring.basedir}/lib/NHibernate30/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
@@ -597,7 +599,7 @@ Commandline Examples:
   <target name="compile-net-4.0" description="Builds .NET Framework 4.0 version"
         depends="set-net-4.0-runtime-configuration, check-spring-basedir, clean-current-bin-dir">
 	
-	<property name="test.withcoverage" value="false" overwrite="true"/>
+	<property name="test.withcoverage" value="true" overwrite="true"/>
 	
 	<if test="${property::exists('mstest.exe')}">
 		<property name="mstest.exe.current" value="${string::replace(property::get-value('mstest.exe'), 'Microsoft Visual Studio 9.0', 'Microsoft Visual Studio 10.0')}" />
@@ -616,6 +618,9 @@ Commandline Examples:
     <property name="build-msmq-tests" value="true" overwrite="true" />
     <property name="build-velocity" value="true" overwrite="true" />
     <call target="compile-test" />
+	
+	<call target="common.run-tests.aggregated.opencover" />
+	
   </target>
   
   <target name="compile-mono-2.0" description="Builds MONO Framework 2.0 version"
