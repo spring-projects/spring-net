@@ -190,11 +190,9 @@ ${test.withcoverage}: flag indicating whether to invoke tests with test-coverage
 			<call target="common.run-tests.nunit" />
 		</if>
 
-		<!-- if coverage, don't run ANY tests at all b/c all tests will be invoked AFTER all compilation is completed...
-				<if test="${test.withcoverage}" >
+		<if test="${test.withcoverage}" >
 			<call target="common.run-tests.ncover" />
 		</if>
-		-->
 		
 	</target>
 
@@ -349,105 +347,6 @@ ${tool.dir}       : dir for tools
         </exec>
 
     </target>
-	
-	
-	
-<!-- NOTE: Depends on XmlInsertNode custom task to function properly -->
-<target name="common.run-tests.aggregated.opencover" description="Run all NUnit Tests together with OpenCover coverage">
-
-	<property name="test.bin.dir" value="${current.bin.dir}" if="${not property::exists('test.bin.dir')}" />
-
-	<property name="spring.tests.nunit.filename" value="${test.bin.dir}/Spring.Tests.nunit" />
-
-	<!-- write the empty NUNIT project file contents to disk -->
-	<echo file="${spring.tests.nunit.filename}">
-	&lt;NUnitProject&gt;
-	  &lt;Settings activeconfig="Default" /&gt;
-	  &lt;Config name="Default" binpathtype="Auto"&gt;
-	  &lt;/Config&gt;
-	&lt;/NUnitProject&gt;
-	</echo>
-
-<!-- append the node for each test assembly to the NUNIT project file -->
-	<foreach item="File" property="filename">
-		<in>
-			<items basedir="${test.bin.dir}">
-				<include name="*.Tests.dll" />
-			</items>
-		</in>
-		<do>
-		<echo message="Adding file to NUNIT project file ${spring.tests.nunit.filename}: ${filename}" />  
-		<xmlinsertnode filename="${spring.tests.nunit.filename}" xpath="//NUnitProject/Config" fragment="&lt;assembly path=&quot;${filename}&quot; /&gt;" />
-		</do>
-	</foreach>
-		
-<!-- invoke OpenCover passing the NUNIT project file to the NUNIT test runner -->
-	<exec program="${tool.dir}/opencover/OpenCover.Console.exe" workingdir="${test.bin.dir}" verbose="true">
-		<arg value="-register:user" />
-		<arg value="-mergebyhash" />
-		<arg value="-target:${tool.dir}/nunit/net-2.0/nunit-console-x86.exe" />
-		<arg value="-targetargs:${spring.tests.nunit.filename} /xml:Spring.Tests-TestResults.xml /noshadow /nologo /framework:${nant.settings.currentframework}" />
-		<arg value="-filter:&quot;+[Spring*]* -[*Tests*]*&quot;" />
-		<arg value="-output:${test.bin.dir}/Spring.Tests-TestCoverage.xml" />
-	</exec>
-
-<!-- invoke the report generator to convert the aggregated test coverage results into a single HTML report -->
-	<exec program="${tool.dir}\ReportGenerator\bin\ReportGenerator.exe" workingdir="${test.bin.dir}" verbose="true">
-		<arg value="${test.bin.dir}/Spring.Tests-TestCoverage.xml" />
-		<arg path="${test.bin.dir}/CoverageReport" />
-	</exec>
-
-</target>
-
-<!-- script that appends new XML nodes to an existing xml file -->
-<script language="C#" prefix="test" >
-        <references>
-            <include name="System.Xml.dll" />
-        </references>
-        <code>
-            <![CDATA[
-              [TaskName("xmlinsertnode")]
-              public class TestTask : Task {
-                #region Private Instance Fields
-                private string _filename;
-                private string _xpath;
-                private string _fragment;
-                #endregion Private Instance Fields
-
-                #region Public Instance Properties
-                [TaskAttribute("filename", Required=true)]
-                public string FileName {
-                    get { return _filename; }
-                    set { _filename = value; }
-                }
-
-                [TaskAttribute("xpath", Required=true)]
-                public string XPath {
-                    get { return _xpath; }
-                    set { _xpath = value; }
-                }
-
-                [TaskAttribute("fragment", Required=true)]
-                public string Fragment {
-                    get { return _fragment; }
-                    set { _fragment = value; }
-                }
-
-                #endregion Public Instance Properties
-
-                #region Override implementation of Task
-                protected override void ExecuteTask() {
-                    System.Xml.XmlDocument document = new System.Xml.XmlDocument();
-                    document.Load(_filename);
-                    System.Xml.XPath.XPathNavigator navigator = document.CreateNavigator();
-                    navigator.SelectSingleNode(_xpath).AppendChild(_fragment);
-                    document.Save(_filename);
-                }
-                #endregion Override implementation of Task
-              }
-            ]]>
-        </code>
-</script>
 
 	<readregistry property="net35.install.dir" key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.5\InstallPath" hive="LocalMachine" failonerror="true"/>
   <property name="msbuild.exe" value="${net35.install.dir}\msbuild.exe"/>
