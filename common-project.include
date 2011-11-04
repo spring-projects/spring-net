@@ -386,7 +386,7 @@ ${tool.dir}       : dir for tools
 		<arg value="-register:user" />
 		<arg value="-mergebyhash" />
 		<arg value="-target:${tool.dir}/nunit/net-2.0/nunit-console-x86.exe" />
-		<arg value="-targetargs:${spring.tests.nunit.filename} /xml:Spring.Tests-TestResults.xml /noshadow /nologo /framework:${nant.settings.currentframework}" />
+		<arg value="-targetargs:&quot;${spring.tests.nunit.filename} /xml:Spring.Tests-TestResults.xml /noshadow /nologo /framework:${nant.settings.currentframework}&quot;" />
 		<arg value="-filter:&quot;+[Spring*]* -[*Tests*]*&quot;" />
 		<arg value="-output:${test.bin.dir}/Spring.Tests-TestCoverage.xml" />
 	</exec>
