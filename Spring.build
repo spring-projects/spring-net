@@ -109,7 +109,7 @@ Commandline Examples:
   <property name="project.name" value="Spring.NET"/>
   <property name="project.name.full" value="Spring.NET Framework"/>
   <property name="spring.basedir" value="${project::get-base-directory()}"/>
-  <property name="spring.nonredistdir" value="${spring.basedir}\..\nonredist"/>
+  <property name="spring.nonredistdir" value="${spring.basedir}\..\..\nonredist"/>
   <property name="tool.dir" value="${project::get-base-directory()}\build-support\tools"/>
 
   <!-- build SDK docs with NDoc -->
@@ -609,7 +609,7 @@ Commandline Examples:
     <call target="copykeys" if="${project.build.sign}"/>
 	<call target="copylibs" />
     <call target="common.generate-assemblyinfo"/>
-    <property name="build-ems" value="true" overwrite="true" />
+    <property name="build-ems" value="false" overwrite="true" />
     <property name="build-nms" value="true" overwrite="true" />
     <property name="build-quartz" value="true" overwrite="true" />
     <property name="build-msmq" value="true" overwrite="true" />

@@ -52,7 +52,7 @@ Rebuilding Solutions using Nant and "solutions.build":
       </in>
       <do>
         <delete dir="${dirname}" failonerror="false"/>
-        <sleep seconds="1"/>
+        <sleep seconds="2"/>
         <delete dir="${dirname}" />
       </do>
     </foreach>

@@ -28,6 +28,7 @@ using System.Collections.Generic;
 
 using System.ComponentModel;
 using Spring.Util;
+using System.Reflection;
 
 #endregion
 
@@ -107,6 +108,45 @@ namespace Spring.Core.TypeConversion
 
                 // if required type is some IList<T>, convert all the elements
                 if (requiredType != null && requiredType.IsGenericType && TypeImplementsGenericInterface(requiredType, typeof(IList<>)))
+                {
+                    // convert individual elements to array elements
+                    Type componentType = requiredType.GetGenericArguments()[0];
+                    if (newValue is ICollection)
+                    {
+                        ICollection elements = (ICollection)newValue;
+                        return ToTypedCollectionWithTypeConversion(typeof(List<>), componentType, elements, propertyName);
+                    }
+                }
+
+                // if required type is some IDictionary<K,V>, convert all the elements
+                if (requiredType != null && requiredType.IsGenericType && TypeImplementsGenericInterface(requiredType, typeof(IDictionary<,>)))
+                {
+                    Type[] typeParameters = requiredType.GetGenericArguments();
+                    Type keyType = typeParameters[0];
+                    Type valueType = typeParameters[1];
+                    if (newValue is IDictionary)
+                    {
+                        IDictionary elements = (IDictionary)newValue;
+                        Type targetCollectionType = typeof(Dictionary<,>);
+                        Type collectionType = targetCollectionType.MakeGenericType(new Type[] { keyType, valueType });
+                        object typedCollection = Activator.CreateInstance(collectionType);
+
+                        MethodInfo addMethod = collectionType.GetMethod("Add", new Type[] { keyType, valueType });
+                        int i = 0;
+                        foreach (DictionaryEntry entry in elements)
+                        {
+                            string propertyExpr = BuildIndexedPropertyName(propertyName, i);
+                            object key = ConvertValueIfNecessary(keyType, entry.Key, propertyExpr + ".Key");
+                            object value = ConvertValueIfNecessary(valueType, entry.Value, propertyExpr + ".Value");
+                            addMethod.Invoke(typedCollection, new object[] { key, value });
+                            i++;
+                        }
+                        return typedCollection;
+                    }
+                }
+
+                // if required type is some IEnumerable<T>, convert all the elements
+                if (requiredType != null && requiredType.IsGenericType && TypeImplementsGenericInterface(requiredType, typeof(IEnumerable<>)))
                 {
                     // convert individual elements to array elements
                     Type componentType = requiredType.GetGenericArguments()[0];
@@ -289,18 +329,16 @@ namespace Spring.Core.TypeConversion
                 throw new ArgumentException("matchingInterface Type must be an Interface Type", "matchingInterface");
             }
 
-            bool match = false;
+            if (candidateType.IsInterface && IsMatchingGenericInterface(candidateType, matchingInterface))
+            {
+                return true;
+            }
 
+            bool match = false;
             Type[] implementedInterfaces = candidateType.GetInterfaces();
             foreach (Type interfaceType in implementedInterfaces)
             {
-                if (false == interfaceType.IsGenericType)
-                {
-                    continue;
-                }
-
-                Type genericType = interfaceType.GetGenericTypeDefinition();
-                if (genericType == matchingInterface)
+                if (IsMatchingGenericInterface(interfaceType, matchingInterface))
                 {
                     match = true;
                     break;
@@ -308,6 +346,11 @@ namespace Spring.Core.TypeConversion
             }
 
             return match;
+        }
+
+        private static bool IsMatchingGenericInterface(Type candidateInterfaceType, Type matchingGenericInterface)
+        {
+            return candidateInterfaceType.IsGenericType && candidateInterfaceType.GetGenericTypeDefinition() == matchingGenericInterface;
         }
 #endif
     }
