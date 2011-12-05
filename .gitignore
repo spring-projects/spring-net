@@ -39,3 +39,7 @@ doc/reference/target/
 
 #Build log
 buildlog.txt
+
+# XMLmind temporary files
+*.xml~
+

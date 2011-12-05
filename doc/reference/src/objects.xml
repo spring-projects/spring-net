@@ -204,7 +204,7 @@
 &lt;/objects&gt;</programlisting>The following example shows the data access
       objects <literal>(daos.xml)</literal> configuration file:</para>
 
-      <programlisting>&lt;objects xmlns="http://www.springframework.net"&gt; 
+      <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"&gt; 
 
   &lt;object id="AccountDao" type="Petstore.Dao.HibernateAccountDao, PetStore"&gt;
     &lt;!-- additional collaborators and configuration for this object go here --&gt;
@@ -695,7 +695,7 @@ IList userList = service.GetUserNames();
           all three names refer to the same object you add to the MyApp
           configuration metadata the following aliases definitions:</para>
 
-          <programlisting>&lt;alias name="SubsystemA-DbProvider" alias="SubsystemB-DbProvider"/&gt;
+          <programlisting language="myxml">&lt;alias name="SubsystemA-DbProvider" alias="SubsystemB-DbProvider"/&gt;
 &lt;alias name="SubsystemA-DbProvider" alias="MyApp-DbProvider"/&gt;</programlisting>
 
           <para>Now each component and the main app can refer to the
@@ -1552,7 +1552,7 @@ public class ExampleObject
 
 &lt;object id="anotherExampleObject" type="Examples.AnotherObject, ExamplesLibrary"/&gt;
 &lt;object id="yetAnotherObject" type="Examples.YetAnotherObject, ExamplesLibrary"/&gt;</programlisting>
-        <programlisting language="csharp">[Visual Basic.NET]
+        <programlisting language="vb">[Visual Basic.NET]
 Public Class ExampleObject
 
     Private myObjectOne As AnotherObject
@@ -1807,7 +1807,7 @@ public class MixedIocObject
         name as the parent object.<programlisting language="myxml">&lt;!-- in the parent context --&gt;
 &lt;object id="AccountService" type="MyApp.SimpleAccountService, MyApp"&gt;
   &lt;!-- insert dependencies as required as here --&gt;
-&lt;/object&gt;</programlisting><programlisting>&lt;!-- in the child (descendant) context --&gt;
+&lt;/object&gt;</programlisting><programlisting language="myxml">&lt;!-- in the child (descendant) context --&gt;
 &lt;object id="AccountService" &lt;-- notice that the name of this object is the same as the name of the 'parent' object
         type="Spring.Aop.Framework.ProxyFactoryObject, Spring.Aop"&gt;
   &lt;property name="target"&gt;
@@ -2058,24 +2058,24 @@ public class MixedIocObject
 
         <para>The following example demonstrates collection merging:</para>
 
-        <programlisting>  &lt;object id="parent" abstract="true" type="Example.ComplexObject, Examples"&gt;
-    &lt;property name="AdminEmails"&gt;
-      &lt;name-values&gt;
-        &lt;add key="administrator" value="administrator@example.com"/&gt;
-        &lt;add key="support" value="support@example.com"/&gt;
-      &lt;/name-values&gt;
-    &lt;/property&gt;
-  &lt;/object&gt;
+        <programlisting language="myxml">&lt;object id="parent" abstract="true" type="Example.ComplexObject, Examples"&gt;
+  &lt;property name="AdminEmails"&gt;
+    &lt;name-values&gt;
+      &lt;add key="administrator" value="administrator@example.com"/&gt;
+      &lt;add key="support" value="support@example.com"/&gt;
+    &lt;/name-values&gt;
+  &lt;/property&gt;
+&lt;/object&gt;
 
-  &lt;object id="child" parent="parent" &gt;
-    &lt;property name="AdminEmails"&gt;
-      &lt;!-- the merge is specified on the *child* collection definition --&gt;
-      &lt;name-values merge="true"&gt;
-        &lt;add key="sales" value="sales@example.com"/&gt;
-        &lt;add key="support" value="support@example.co.uk"/&gt;                
-      &lt;/name-values&gt;
-    &lt;/property&gt;
-  &lt;/object&gt;</programlisting>
+&lt;object id="child" parent="parent" &gt;
+  &lt;property name="AdminEmails"&gt;
+    &lt;!-- the merge is specified on the *child* collection definition --&gt;
+    &lt;name-values merge="true"&gt;
+      &lt;add key="sales" value="sales@example.com"/&gt;
+      &lt;add key="support" value="support@example.co.uk"/&gt;                
+    &lt;/name-values&gt;
+  &lt;/property&gt;
+&lt;/object&gt;</programlisting>
 
         <para>Notice the use of the <literal>merge=true</literal> attribute on
         the <literal>&lt;name-values/&gt;</literal> element of the
@@ -2085,11 +2085,11 @@ public class MixedIocObject
         <literal>AdminEmails</literal> Properties collection that contains the
         result of the merging of the child's <literal>AdminEmails</literal>
         collection with the parent's <literal>AdminEmails</literal>
-        collection.</para>
+        collection:</para>
 
-        <programlisting>administrator=administrator@example.com
-sales=sales@example.com
-support=support@example.co.uk</programlisting>
+        <programlisting>administrator=administrator@example.com  // from parent
+sales=sales@example.com                  // from child
+support=support@example.co.uk            // overriden by child</programlisting>
 
         <para>The child Properties collection's value set inherits all
         property elements from the parent
@@ -3920,17 +3920,21 @@ public sealed class Font : MarshalByRefObject, ICloneable, ISerializable, IDispo
         specify the name of the method that has a void no-argument signature.
         For example, the following definition:</para>
 
-        <para><programlisting language="myxml">&lt;object id="exampleInitObject" type="Examples.ExampleObject" init-method="init"/&gt;
-[C#]
-public class ExampleObject
-{
-    public void Init()
+        <para><programlisting language="myxml">&lt;object id="exampleInitObject" type="Examples.ExampleObject" init-method="init"/&gt;</programlisting></para>
+
+        <para> <programlisting language="csharp">[C#] 
+public class ExampleObject 
+{ 
+    public void Init() 
     {
-        // do some initialization work
-    }
-}</programlisting>...is exactly the same as... <programlisting
-        language="myxml">&lt;object id="exampleInitObject" type="Examples.AnotherExampleObject"/&gt;
-[C#]
+        // do some initialization work 
+    }   
+}</programlisting></para>
+
+        <para>...is exactly the same as...</para>
+
+        <para><programlisting language="myxml">&lt;object id="exampleInitObject" type="Examples.AnotherExampleObject"/&gt;</programlisting><programlisting
+        language="csharp">[C#]
 public class AnotherExampleObject : IInitializingObject
 {
     public void AfterPropertiesSet()
@@ -3968,16 +3972,9 @@ public class AnotherExampleObject : IInitializingObject
         method that has a void no-argument signature. For example, the
         following definition:</para>
 
-        <para><programlisting language="myxml">&lt;object id="exampleInitObject" type="Examples.ExampleObject" destroy-method="cleanup"/&gt;
-[C#]
-public class ExampleObject
-{
-    public void cleanup()
-    {
-        // do some destruction work (such as closing any open connection (s))
-    }
-}</programlisting> is exactly the same as: <programlisting language="myxml">&lt;object id="exampleInitObject" type="Examples.AnotherExampleObject"/&gt;
-[C#]
+        <para><programlisting language="myxml">&lt;object id="exampleInitObject" type="Examples.AnotherExampleObject" /&gt;</programlisting></para>
+
+        <para><programlisting language="csharp">[C#]
 public class AnotherExampleObject : IDisposable
 {
     public void Dispose()
@@ -3996,10 +3993,9 @@ public class AnotherExampleObject : IDisposable
       interface, the class is provided with a reference to that
       <classname>IApplicationContext</classname>.</para>
 
-      <programlisting>public interface IApplicationContextAware {    
-    IApplicationContext ApplicationContext { 
-      set; 
-    }
+      <programlisting language="csharp">public interface IApplicationContextAware 
+{    
+    IApplicationContext ApplicationContext { set; }
 }</programlisting>
 
       <para>Thus objects can manipulate programmatically the
@@ -4026,10 +4022,9 @@ public class AnotherExampleObject : IDisposable
         the class is provided with a reference to the name defined in its
         associated object definition.</para>
 
-        <programlisting>public interface IObjectNameAware {
-  string ObjectName {
-     set; 
-  }
+        <programlisting language="csharp">public interface IObjectNameAware 
+{
+    string ObjectName { set; }
 }</programlisting>
 
         <para>The callback is invoked after population of normal object
@@ -4835,11 +4830,9 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
           <para>In an ASP.NET environment you must specify the full, four-part
           name of the assembly when using a
           <literal>NameValueFileSectionHandler</literal> <programlisting
-          language="myxml">
-            &lt;section name="hibernateConfiguration"
-            type="System.Configuration.NameValueFileSectionHandler, System,
-            Version=1.0.3300.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"/&gt;
-          </programlisting></para>
+          language="myxml">&lt;section name="hibernateConfiguration"
+         type="System.Configuration.NameValueFileSectionHandler, System,
+               Version=1.0.3300.0, Culture=neutral, PublicKeyToken=b77a5c561934e089"/&gt;</programlisting></para>
         </note>
 
         <sect4>
@@ -4937,8 +4930,8 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
 &lt;/configuration&gt;</programlisting> Then the value of 1000 will be used to
         overlay the value of 2000 set in the Spring.NET configuration file
         shown below <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net" 
-        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-        xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd" &gt;
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd" &gt;
 
     &lt;object name="productDao" type="PropPlayApp.SimpleProductDao, PropPlayApp " &gt;
       &lt;property name="maxResults" value="2000"/&gt;
