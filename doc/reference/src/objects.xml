@@ -3922,7 +3922,7 @@ public sealed class Font : MarshalByRefObject, ICloneable, ISerializable, IDispo
 
         <para><programlisting language="myxml">&lt;object id="exampleInitObject" type="Examples.ExampleObject" init-method="init"/&gt;</programlisting></para>
 
-        <para> <programlisting language="csharp">[C#] 
+        <para><programlisting language="csharp">[C#] 
 public class ExampleObject 
 { 
     public void Init() 
@@ -4741,10 +4741,10 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
         with a database connection and also a value for the maximum number of
         results to return in a query. Instead of hard coding the values into
         the main Spring.NET configuration file we use place holders, in the
-        NAnt style of ${variableName}, and obtain their values from
-        NameValueSections in the standard .NET application configuration file.
-        The Spring.NET configuration file looks like: <programlisting
-        language="myxml">&lt;configuration&gt;
+        NAnt style of <literal>${variableName}</literal>, and obtain their
+        values from <literal>NameValueSections</literal> in the standard .NET
+        application configuration file. The Spring.NET configuration file
+        looks like: <programlisting language="myxml">&lt;configuration&gt;
 
   &lt;configSections&gt;
     &lt;sectionGroup name="spring"&gt;
@@ -4770,9 +4770,9 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
 
 &lt;/configuration&gt;</programlisting></para>
 
-        <para>Notice the presence of two NameValueSections in the
-        configuration file. These name value pairs will be referred to in the
-        Spring.NET configuration file. In this example we are using an
+        <para>Notice the presence of two <literal>NameValueSection</literal>s
+        in the configuration file. These name value pairs will be referred to
+        in the Spring.NET configuration file. In this example we are using an
         embedded assembly resource for the location of the Spring.NET
         configuration file so as to reduce the chance of accidental tampering
         in deployment. This Spring.NET configuration file is shown
@@ -4783,29 +4783,29 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
          xsi:schemaLocation="http://www.springframework.net
          http://www.springframework.net/xsd/spring-objects.xsd" &gt;
     
-    &lt;object name="productDao" type="DaoApp.SimpleProductDao, DaoApp "&gt;
-      &lt;property name="maxResults" value="${maxResults}"/&gt;
-      &lt;property name="dbConnection" ref="myConnection"/&gt;
-    &lt;/object&gt;
-    
-    &lt;object name="myConnection" type="System.Data.Odbc.OdbcConnection, System.Data"&gt; 
-      &lt;property name="connectionstring" value="${connection.string}"/&gt; 
-    &lt;/object&gt;
+  &lt;object name="productDao" type="DaoApp.SimpleProductDao, DaoApp "&gt;
+    &lt;property name="maxResults" value="${maxResults}"/&gt;
+    &lt;property name="dbConnection" ref="myConnection"/&gt;
+  &lt;/object&gt;
+   
+  &lt;object name="myConnection" type="System.Data.Odbc.OdbcConnection, System.Data"&gt; 
+    &lt;property name="connectionstring" value="${connection.string}"/&gt; 
+  &lt;/object&gt;
 
-    &lt;object name="appConfigPropertyHolder" 
-            type="Spring.Objects.Factory.Config.PropertyPlaceholderConfigurer, Spring.Core"&gt;
+  &lt;object name="appConfigPropertyHolder" 
+          type="Spring.Objects.Factory.Config.PropertyPlaceholderConfigurer, Spring.Core"&gt;
+    &lt;property name="configSections"&gt;          
+      &lt;value&gt;DaoConfiguration,DatabaseConfiguration&lt;/value&gt;                              
+    &lt;/property&gt;              
+  &lt;/object&gt;
 
-        &lt;property name="configSections"&gt;          
-          &lt;value&gt;DaoConfiguration,DatabaseConfiguration&lt;/value&gt;                              
-        &lt;/property&gt;              
-       
-    &lt;/object&gt;
 &lt;/objects&gt;</programlisting>
 
         <para>The values of <literal>${maxResults}</literal> and
         <literal>${connection.string}</literal> match the key names used in
-        the two NameValueSectionHandlers <literal>DaoConfiguration</literal>
-        and <literal>DatabaseConfiguration</literal>. The
+        the two <literal>NameValueSectionHandler</literal>s
+        <literal>DaoConfiguration</literal> and
+        <literal>DatabaseConfiguration</literal>. The
         <literal>PropertyPlaceholderConfigurer</literal> refers to these two
         sections via a comma delimited list of section names in the
         <literal>configSections</literal> property. If you are using section
@@ -4846,8 +4846,10 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
 
           <para>If the class is unable to be resolved at runtime to a valid
           type, resolution of the object will fail once it is about to be
-          created (which is during the PreInstantiateSingletons() phase of an
-          ApplicationContext for a non-lazy-init object.)</para>
+          created (which is during the
+          <literal>PreInstantiateSingletons()</literal> phase of an
+          <literal>ApplicationContext</literal> for a non-lazy-init
+          object.)</para>
 
           <para>Similarly you can replace 'ref' and 'expression' metadata, as
           shown below</para>
@@ -4961,14 +4963,14 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
       <sect3 xml:id="objects-variablesource">
         <title>IVariableSource</title>
 
-        <para>The IVariableSource is the base interface for providing the
-        ability to get the value of property placeholders (name-value) pairs
-        from a variety of sources. Out of the box, Spring.NET supports a
-        number of variable sources that allow users to obtain variable values
-        from .NET config files, java-style property files, environment
-        variables, command line arguments and the registry and the new
-        connection strings configuration section in .NET 2.0. The list of
-        implementing classes is listed below. Please refer to the SDK
+        <para>The <literal>IVariableSource</literal> is the base interface for
+        providing the ability to get the value of property placeholders
+        (name-value) pairs from a variety of sources. Out of the box,
+        Spring.NET supports a number of variable sources that allow users to
+        obtain variable values from .NET config files, java-style property
+        files, environment variables, command line arguments and the registry
+        and the new connection strings configuration section in .NET 2.0. The
+        list of implementing classes is listed below. Please refer to the SDK
         documentation for more information.</para>
 
         <itemizedlist>
@@ -5015,17 +5017,17 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
         property defined in multiple <literal>IVariableSource</literal>
         implementations, the first one in the list that contains the property
         value will be used. <programlisting language="myxml">&lt;object type="Spring.Objects.Factory.Config.VariablePlaceholderConfigurer, Spring.Core"&gt;
-   &lt;property name="VariableSources"&gt;
-      &lt;list&gt;
-         &lt;object type="Spring.Objects.Factory.Config.PropertyFileVariableSource, Spring.Core"&gt;
-           &lt;property name="Location" value="~\application.properties" /&gt;
-           &lt;property name="IgnoreMissingResources" value="true"/&gt;
-         &lt;/object&gt;
-         &lt;object type="Spring.Objects.Factory.Config.ConfigSectionVariableSource, Spring.Core"&gt;
-            &lt;property name="SectionNames" value="CryptedConfiguration" /&gt;
-         &lt;/object&gt;
-      &lt;/list&gt;
-   &lt;/property&gt;
+  &lt;property name="VariableSources"&gt;
+    &lt;list&gt;
+      &lt;object type="Spring.Objects.Factory.Config.PropertyFileVariableSource, Spring.Core"&gt;
+        &lt;property name="Location" value="~\application.properties" /&gt;
+        &lt;property name="IgnoreMissingResources" value="true"/&gt;
+      &lt;/object&gt;
+      &lt;object type="Spring.Objects.Factory.Config.ConfigSectionVariableSource, Spring.Core"&gt;
+        &lt;property name="SectionNames" value="CryptedConfiguration" /&gt;
+      &lt;/object&gt;
+    &lt;/list&gt;
+  &lt;/property&gt;
 &lt;/object&gt;
         </programlisting><note>
             <para>The use of the <property>IgnoreMissingResources</property>
