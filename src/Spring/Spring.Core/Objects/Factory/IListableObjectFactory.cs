@@ -120,6 +120,33 @@ namespace Spring.Objects.Factory
 		/// </returns>
 		string[] GetObjectNamesForType(Type type);
 
+
+        /// <summary>
+        /// Return the names of objects matching the given <see cref="System.Type"/>
+        /// (including subclasses), judging from the object definitions.
+        /// </summary>
+        /// <remarks>
+        /// <p>
+        /// Does consider objects created by <see cref="Spring.Objects.Factory.IFactoryObject"/>s,
+        /// or rather it considers the type of objects created by
+        /// <see cref="Spring.Objects.Factory.IFactoryObject"/> (which means that
+        /// <see cref="Spring.Objects.Factory.IFactoryObject"/>s will be instantiated).
+        /// </p>
+        /// <p>
+        /// Does not consider any hierarchy this factory may participate in.
+        /// </p>
+        /// </remarks>
+        /// <typeparam name="T">
+        /// The <see cref="System.Type"/> (class or interface) to match, or <see langword="null"/>
+        /// for all object names.
+        /// </typeparam>
+        /// <returns>
+        /// The names of all objects defined in this factory, or an empty array if none
+        /// are defined.
+        /// </returns>
+        string[] GetObjectNamesForType<T>();
+
+
 		/// <summary>
 		/// Return the names of objects matching the given <see cref="System.Type"/>
 		/// (including subclasses), judging from the object definitions.
@@ -157,6 +184,43 @@ namespace Spring.Objects.Factory
 		/// </returns>
 		string[] GetObjectNamesForType(Type type, bool includePrototypes, bool includeFactoryObjects);
 
+        /// <summary>
+		/// Return the names of objects matching the given <see cref="System.Type"/>
+		/// (including subclasses), judging from the object definitions.
+		/// </summary>
+		/// <remarks>
+		/// <p>
+		/// Does consider objects created by <see cref="Spring.Objects.Factory.IFactoryObject"/>s,
+		/// or rather it considers the type of objects created by
+		/// <see cref="Spring.Objects.Factory.IFactoryObject"/> (which means that
+		/// <see cref="Spring.Objects.Factory.IFactoryObject"/>s will be instantiated).
+		/// </p>
+		/// <p>
+		/// Does not consider any hierarchy this factory may participate in.
+        /// Use <see cref="ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(Spring.Objects.Factory.IListableObjectFactory,System.Type,bool,bool)"/>
+        /// to include beans in ancestor factories too.
+        /// &lt;p&gt;Note: Does &lt;i&gt;not&lt;/i&gt; ignore singleton objects that have been registered
+        /// by other means than bean definitions.
+		/// </p>
+		/// </remarks>
+		/// <typeparam name="T">
+		/// The <see cref="System.Type"/> (class or interface) to match, or <see langword="null"/>
+		/// for all object names.
+		/// </typeparam>
+		/// <param name="includePrototypes">
+		/// Whether to include prototype objects too or just singletons (also applies to
+		/// <see cref="Spring.Objects.Factory.IFactoryObject"/>s).
+		/// </param>
+		/// <param name="includeFactoryObjects">
+		/// Whether to include <see cref="Spring.Objects.Factory.IFactoryObject"/>s too
+		/// or just normal objects.
+		/// </param>
+		/// <returns>
+		/// The names of all objects defined in this factory, or an empty array if none
+		/// are defined.
+		/// </returns>
+		string[] GetObjectNamesForType<T>(bool includePrototypes, bool includeFactoryObjects);
+
 		/// <summary>
 		/// Return the object instances that match the given object
 		/// <see cref="System.Type"/> (including subclasses), judging from either object
@@ -185,6 +249,35 @@ namespace Spring.Objects.Factory
 		/// If the objects could not be created.
 		/// </exception>
 		IDictionary GetObjectsOfType(Type type);
+		
+        /// <summary>
+		/// Return the object instances that match the given object
+		/// <see cref="System.Type"/> (including subclasses), judging from either object
+		/// definitions or the value of
+		/// <see cref="Spring.Objects.Factory.IFactoryObject.ObjectType"/> in the case of
+		/// <see cref="Spring.Objects.Factory.IFactoryObject"/>s.
+		/// </summary>
+		/// <remarks>
+		/// <p>
+		/// This version of the <see cref="IListableObjectFactory.GetObjectsOfType(Type,bool,bool)"/>
+		/// method matches all kinds of object definitions, be they singletons, prototypes, or
+		/// <see cref="Spring.Objects.Factory.IFactoryObject"/>s. Typically, the results
+		/// of this method call will be the same as a call to
+		/// <code>IListableObjectFactory.GetObjectsOfType(type,true,true)</code> .
+		/// </p>
+		/// </remarks>
+		/// <typeparam name="T">
+		/// The <see cref="System.Type"/> (class or interface) to match.
+		/// </typeparam>
+		/// <returns>
+		/// A <see cref="System.Collections.IDictionary"/> of the matching objects,
+		/// containing the object names as keys and the corresponding object instances
+		/// as values.
+		/// </returns>
+		/// <exception cref="Spring.Objects.ObjectsException">
+		/// If the objects could not be created.
+		/// </exception>
+		IDictionary GetObjectsOfType<T>();
 
 		/// <summary>
 		/// Return the object instances that match the given object
@@ -212,9 +305,65 @@ namespace Spring.Objects.Factory
 		/// <exception cref="Spring.Objects.ObjectsException">
 		/// If the objects could not be created.
 		/// </exception>
-		IDictionary GetObjectsOfType(
-			Type type, bool includePrototypes, bool includeFactoryObjects);
+		IDictionary GetObjectsOfType(Type type, bool includePrototypes, bool includeFactoryObjects);
 
+        /// <summary>
+		/// Return the object instances that match the given object
+		/// <see cref="System.Type"/> (including subclasses), judging from either object
+		/// definitions or the value of
+		/// <see cref="Spring.Objects.Factory.IFactoryObject.ObjectType"/> in the case of
+		/// <see cref="Spring.Objects.Factory.IFactoryObject"/>s.
+		/// </summary>
+		/// <typeparam name="T">
+		/// The <see cref="System.Type"/> (class or interface) to match.
+		/// </typeparam>
+		/// <param name="includePrototypes">
+		/// Whether to include prototype objects too or just singletons (also applies to
+		/// <see cref="Spring.Objects.Factory.IFactoryObject"/>s).
+		/// </param>
+		/// <param name="includeFactoryObjects">
+		/// Whether to include <see cref="Spring.Objects.Factory.IFactoryObject"/>s too
+		/// or just normal objects.
+		/// </param>
+		/// <returns>
+		/// A <see cref="System.Collections.IDictionary"/> of the matching objects,
+		/// containing the object names as keys and the corresponding object instances
+		/// as values.
+		/// </returns>
+		/// <exception cref="Spring.Objects.ObjectsException">
+		/// If the objects could not be created.
+		/// </exception>
+		IDictionary GetObjectsOfType<T>(bool includePrototypes, bool includeFactoryObjects);
 
+        /// <summary>
+        /// Return an instance (possibly shared or independent) of the given object name.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// This method allows an object factory to be used as a replacement for the
+        /// Singleton or Prototype design pattern.
+        /// </para>
+        /// <para>
+        /// Note that callers should retain references to returned objects. There is no
+        /// guarantee that this method will be implemented to be efficient. For example,
+        /// it may be synchronized, or may need to run an RDBMS query.
+        /// </para>
+        /// <para>
+        /// Will ask the parent factory if the object cannot be found in this factory
+        /// instance.
+        /// </para>
+        /// </remarks>
+        /// <typeparam name="T">The type of the object to return.</typeparam>
+        /// <returns>The instance of the object.</returns>
+        /// <exception cref="Spring.Objects.Factory.NoSuchObjectDefinitionException">
+        /// If there's no such object definition.
+        /// </exception>
+        /// <exception cref="Spring.Objects.Factory.ObjectDefinitionStoreException">
+        /// If there is more than a single object of the requested type defined in the factory.
+        /// </exception>
+        /// <exception cref="Spring.Objects.ObjectsException">
+        /// If the object could not be created.
+        /// </exception>
+        T GetObject<T>();
 	}
 }

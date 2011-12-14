@@ -25,7 +25,7 @@ using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization.Formatters.Binary;
 using AopAlliance.Intercept;
-using DotNetMock.Dynamic;
+using Rhino.Mocks;
 using NUnit.Framework;
 using Spring.Caching;
 using Spring.Context;
@@ -43,22 +43,24 @@ namespace Spring.Aspects.Cache
     {
         object[] IGNORED_ARGS = null;
 
-        private IDynamicMock mockInvocation;
-        private IDynamicMock mockContext;
+        private IMethodInvocation mockInvocation;
+        private IApplicationContext mockContext;
         private CacheResultAdvice advice;
         private ICache resultCache;
         private ICache itemCache;
         private ICache binaryFormatterCache;
         private CacheResultTarget cacheResultTarget = new CacheResultTarget();
+        private MockRepository mocks;
 
         [SetUp]
         public void SetUp()
         {
-            mockInvocation = new DynamicMock( typeof( IMethodInvocation ) );
-            mockContext = new DynamicMock( typeof( IApplicationContext ) );
+            mocks = new MockRepository();
+            mockInvocation = mocks.CreateMock<IMethodInvocation>();
+            mockContext = mocks.CreateMock<IApplicationContext>();
 
             advice = new CacheResultAdvice();
-            advice.ApplicationContext = (IApplicationContext)mockContext.Object;
+            advice.ApplicationContext = mockContext;
 
             resultCache = new NonExpiringCache();
             itemCache = new NonExpiringCache();
@@ -72,275 +74,298 @@ namespace Spring.Aspects.Cache
         [Test]
         public void CacheResultOfMethodThatReturnsNull()
         {
-            MethodInfo method = new VoidMethod( cacheResultTarget.ReturnsNothing ).Method;
+            MethodInfo method = new VoidMethod(cacheResultTarget.ReturnsNothing).Method;
             object expectedReturnValue = null;
 
-            ExpectAttributeRetrieval( method );
-            ExpectCacheKeyGeneration( method, null );
-            ExpectCacheInstanceRetrieval( "results", resultCache );
-            ExpectCallToProceed( expectedReturnValue );
+            using (mocks.Record())
+            {
+                ExpectAttributeRetrieval(method);
+                ExpectCacheKeyGeneration(method, null);
+                ExpectCacheInstanceRetrieval("results", resultCache);
+                ExpectCallToProceed(expectedReturnValue);
+            }
 
-            // check that the null retVal is cached as well - it might be 
-            // the result of an expensive webservice/database call etc.
-            object returnValue = advice.Invoke( (IMethodInvocation)mockInvocation.Object );
-            Assert.AreEqual( expectedReturnValue, returnValue );
-            Assert.AreEqual( 1, resultCache.Count );
+            using (mocks.Playback())
+            {
+                // check that the null retVal is cached as well - it might be 
+                // the result of an expensive webservice/database call etc.
+                object returnValue = advice.Invoke(mockInvocation);
+                Assert.AreEqual(expectedReturnValue, returnValue);
+                Assert.AreEqual(1, resultCache.Count);
+            }
 
-            mockInvocation.Verify();
-            mockContext.Verify();
+
         }
 
         [Test]
         public void CacheResultOfMethodThatReturnsNullWithSerializingCache()
         {
-		    MethodInfo method = new VoidMethod(cacheResultTarget.ReturnsNothing).Method;
-		    object expectedReturnValue = null;
+            MethodInfo method = new VoidMethod(cacheResultTarget.ReturnsNothing).Method;
+            object expectedReturnValue = null;
 
-		    ExpectAttributeRetrieval(method);
-		    ExpectCacheKeyGeneration(method, null);
-		    ExpectCacheInstanceRetrieval("results", binaryFormatterCache);
-		    ExpectCallToProceed(expectedReturnValue);
+            using (mocks.Record())
+            {
+                ExpectAttributeRetrieval(method);
+                ExpectCacheKeyGeneration(method, null);
+                ExpectCacheInstanceRetrieval("results", binaryFormatterCache);
+                ExpectCallToProceed(expectedReturnValue);
+            }
 
-		    // check that the null retVal is cached as well - it might be 
-		    // the result of an expensive webservice/database call etc.
-		    object returnValue = advice.Invoke((IMethodInvocation) mockInvocation.Object);
-		    Assert.AreEqual(expectedReturnValue, returnValue);
-            Assert.AreEqual(1, binaryFormatterCache.Count);
+            using (mocks.Playback())
+            {
+                // check that the null retVal is cached as well - it might be 
+                // the result of an expensive webservice/database call etc.
+                object returnValue = advice.Invoke(mockInvocation);
+                Assert.AreEqual(expectedReturnValue, returnValue);
+                Assert.AreEqual(1, binaryFormatterCache.Count);
 
-            // and again, but without Proceed()...
-            ExpectAttributeRetrieval(method);
-            ExpectCacheKeyGeneration(method, null);
-            ExpectCacheInstanceRetrieval("results", binaryFormatterCache);
-
-            // cached value should be returned
-            object cachedValue = advice.Invoke((IMethodInvocation)mockInvocation.Object);
-            Assert.IsNull(cachedValue, "Should recognize cached value as null-value marker.");
-
-		    mockInvocation.Verify();
-		    mockContext.Verify();
+                // cached value should be returned
+                object cachedValue = advice.Invoke(mockInvocation);
+                Assert.IsNull(cachedValue, "Should recognize cached value as null-value marker.");
+            }
         }
 
         [Test]
         public void CacheResultOfMethodThatReturnsObject()
         {
-            MethodInfo method = new IntMethod( cacheResultTarget.ReturnsScalar ).Method;
+            MethodInfo method = new IntMethod(cacheResultTarget.ReturnsScalar).Method;
             object expectedReturnValue = CacheResultTarget.Scalar;
 
-            ExpectAttributeRetrieval( method );
-            ExpectCacheKeyGeneration( method, null );
-            ExpectCacheInstanceRetrieval( "results", resultCache );
-            ExpectCallToProceed( expectedReturnValue );
+            using (mocks.Record())
+            {
+                ExpectAttributeRetrieval(method);
+                ExpectCacheKeyGeneration(method, null);
+                ExpectCacheInstanceRetrieval("results", resultCache);
+                ExpectCallToProceed(expectedReturnValue);
+            }
 
-            // return value should be added to cache
-            object returnValue = advice.Invoke( (IMethodInvocation)mockInvocation.Object );
-            Assert.AreEqual( expectedReturnValue, returnValue );
-            Assert.AreEqual( 1, resultCache.Count );
+            using (mocks.Playback())
+            {
+                // return value should be added to cache
+                object returnValue = advice.Invoke(mockInvocation);
+                Assert.AreEqual(expectedReturnValue, returnValue);
+                Assert.AreEqual(1, resultCache.Count);
 
-            // and again, but without Proceed()...
-            ExpectAttributeRetrieval( method );
-            ExpectCacheKeyGeneration( method, null );
-            ExpectCacheInstanceRetrieval( "results", resultCache );
-
-            // cached value should be returned
-            object cachedValue = advice.Invoke( (IMethodInvocation)mockInvocation.Object );
-            Assert.AreEqual( expectedReturnValue, cachedValue );
-            Assert.AreEqual( 1, resultCache.Count );
-            Assert.AreSame( returnValue, cachedValue );
-
-            mockInvocation.Verify();
-            mockContext.Verify();
+                // cached value should be returned
+                object cachedValue = advice.Invoke(mockInvocation);
+                Assert.AreEqual(expectedReturnValue, cachedValue);
+                Assert.AreEqual(1, resultCache.Count);
+                Assert.AreSame(returnValue, cachedValue);
+            }
         }
 
         [Test]
         public void CacheResultOfMethodThatReturnsCollection()
         {
-            MethodInfo method = new EnumerableResultMethod( cacheResultTarget.ReturnsCollection ).Method;
-            object expectedReturnValue = new object[] {"one", "two", "three"};
+            MethodInfo method = new EnumerableResultMethod(cacheResultTarget.ReturnsCollection).Method;
+            object expectedReturnValue = new object[] { "one", "two", "three" };
 
-            ExpectAttributeRetrieval(method);
-            ExpectCacheKeyGeneration(method, 5, expectedReturnValue);
-            ExpectCacheInstanceRetrieval("results", resultCache);
-            ExpectCallToProceed(new object[] { "one", "two", "three" });
+            using (mocks.Record())
+            {
+                ExpectAttributeRetrieval(method);
+                ExpectCacheKeyGeneration(method, 5, expectedReturnValue);
+                ExpectCacheInstanceRetrieval("results", resultCache);
+                ExpectCallToProceed(new object[] { "one", "two", "three" });
+            }
 
-            // return value should be added to cache
-            object returnValue = advice.Invoke((IMethodInvocation)mockInvocation.Object);
-            Assert.AreEqual(expectedReturnValue, returnValue);
-            Assert.AreEqual(1, resultCache.Count);
+            using (mocks.Playback())
+            {
+                // return value should be added to cache
+                object returnValue = advice.Invoke(mockInvocation);
+                Assert.AreEqual(expectedReturnValue, returnValue);
+                Assert.AreEqual(1, resultCache.Count);
 
-            // and again, but without Proceed()...
-            ExpectAttributeRetrieval(method);
-            ExpectCacheKeyGeneration(method, 5, expectedReturnValue);
-            ExpectCacheInstanceRetrieval("results", resultCache);
-
-            // cached value should be returned
-            object cachedValue = advice.Invoke((IMethodInvocation)mockInvocation.Object);
-            Assert.AreEqual(expectedReturnValue, cachedValue);
-            Assert.AreNotSame(expectedReturnValue, cachedValue);
-            Assert.AreEqual(expectedReturnValue, resultCache.Get(5));
-            Assert.AreEqual( 1, resultCache.Count );
-            Assert.AreSame( returnValue, cachedValue );
-            Assert.AreSame( cachedValue, resultCache.Get( 5 ) );
-
-            mockInvocation.Verify();
-            mockContext.Verify();
+                // cached value should be returned
+                object cachedValue = advice.Invoke(mockInvocation);
+                Assert.AreEqual(expectedReturnValue, cachedValue);
+                Assert.AreNotSame(expectedReturnValue, cachedValue);
+                Assert.AreEqual(expectedReturnValue, resultCache.Get(5));
+                Assert.AreEqual(1, resultCache.Count);
+                Assert.AreSame(returnValue, cachedValue);
+                Assert.AreSame(cachedValue, resultCache.Get(5));
+            }
         }
 
         [Test]
         public void CacheResultAndItemsOfMethodThatReturnsCollection()
         {
-            MethodInfo method = new EnumerableResultMethod( cacheResultTarget.ReturnsCollectionAndItems ).Method;
+            MethodInfo method = new EnumerableResultMethod(cacheResultTarget.ReturnsCollectionAndItems).Method;
             object expectedReturnValue = new object[] { "one", "two", "three" };
 
-            ExpectAttributeRetrieval(method);
-            ExpectCacheKeyGeneration(method, 5, expectedReturnValue);
-            ExpectCacheInstanceRetrieval("results", resultCache);
-            ExpectCallToProceed(new object[] { "one", "two", "three" });
-            ExpectCacheInstanceRetrieval("items", itemCache);
+            using (mocks.Record())
+            {
+                ExpectAttributeRetrieval(method);
+                ExpectCacheKeyGeneration(method, 5, expectedReturnValue);
+                ExpectCacheInstanceRetrieval("results", resultCache);
+                ExpectCallToProceed(new object[] { "one", "two", "three" });
+                ExpectCacheInstanceRetrieval("items", itemCache);
 
-            // return value should be added to result cache and each item to item cache
-            object returnValue = advice.Invoke((IMethodInvocation)mockInvocation.Object);
-            Assert.AreEqual(expectedReturnValue, returnValue);
-            Assert.AreEqual(1, resultCache.Count);
-            Assert.AreEqual(3, itemCache.Count);
+            }
 
-            // and again, but without Proceed() and item cache access...
-            ExpectAttributeRetrieval(method);
-            ExpectCacheKeyGeneration(method, 5, expectedReturnValue);
-            ExpectCacheInstanceRetrieval("results", resultCache);
+            using (mocks.Playback())
+            {
+                // return value should be added to result cache and each item to item cache
+                object returnValue = advice.Invoke(mockInvocation);
+                Assert.AreEqual(expectedReturnValue, returnValue);
+                Assert.AreEqual(1, resultCache.Count);
+                Assert.AreEqual(3, itemCache.Count);
 
-            // cached value should be returned
-            object cachedValue = advice.Invoke((IMethodInvocation)mockInvocation.Object);
-            Assert.AreEqual(expectedReturnValue, cachedValue);
-            Assert.AreNotSame(expectedReturnValue, cachedValue);
-            Assert.AreEqual(expectedReturnValue, resultCache.Get(5));
-            Assert.AreEqual( 1, resultCache.Count );
-            Assert.AreEqual( 3, itemCache.Count );
-            Assert.AreSame( returnValue, cachedValue );
-            Assert.AreSame( cachedValue, resultCache.Get( 5 ) );
+                // cached value should be returned
+                object cachedValue = advice.Invoke(mockInvocation);
+                Assert.AreEqual(expectedReturnValue, cachedValue);
+                Assert.AreNotSame(expectedReturnValue, cachedValue);
+                Assert.AreEqual(expectedReturnValue, resultCache.Get(5));
+                Assert.AreEqual(1, resultCache.Count);
+                Assert.AreEqual(3, itemCache.Count);
+                Assert.AreSame(returnValue, cachedValue);
+                Assert.AreSame(cachedValue, resultCache.Get(5));
 
-            mockInvocation.Verify();
-            mockContext.Verify();
+            }
         }
 
         [Test]
         public void CacheOnlyItemsOfMethodThatReturnsCollection()
         {
-            MethodInfo method = new EnumerableResultMethod( cacheResultTarget.ReturnsItems ).Method;
+            MethodInfo method = new EnumerableResultMethod(cacheResultTarget.ReturnsItems).Method;
             object expectedReturnValue = new object[] { "one", "two", "three" };
+
+            mocks.Record();
 
             ExpectAttributeRetrieval(method);
             ExpectCacheKeyGeneration(method, 5, expectedReturnValue);
             ExpectCallToProceed(new object[] { "one", "two", "three" });
             ExpectCacheInstanceRetrieval("items", itemCache);
 
+            mocks.ReplayAll();
+
             // return value should be added to result cache and each item to item cache
-            object returnValue = advice.Invoke((IMethodInvocation)mockInvocation.Object);
+            object returnValue = advice.Invoke(mockInvocation);
             Assert.AreEqual(expectedReturnValue, returnValue);
             Assert.AreEqual(0, resultCache.Count);
             Assert.AreEqual(3, itemCache.Count);
 
-            // and again, but without Proceed() and item cache access...
+            mocks.Verify(mockInvocation);
+
+            mocks.BackToRecord(mockInvocation);
+
             ExpectAttributeRetrieval(method);
             ExpectCallToProceed(new object[] { "one", "two", "three" });
-            ExpectCacheInstanceRetrieval( "items", itemCache );
+            ExpectCacheKeyGeneration(method, 5, expectedReturnValue);
 
-            // new return value should be returned
-            object newReturnValue = advice.Invoke( (IMethodInvocation)mockInvocation.Object );
-            Assert.AreEqual( expectedReturnValue, newReturnValue );
-            Assert.AreEqual( 0, resultCache.Count );
-            Assert.AreEqual( 3, itemCache.Count );
-            Assert.AreEqual( "two", itemCache.Get( "two" ) );
-            Assert.AreNotSame( returnValue, newReturnValue );
+            mocks.Replay(mockInvocation);
 
-            mockInvocation.Verify();
-            mockContext.Verify();
+            object newReturnValue = advice.Invoke(mockInvocation);
+            Assert.AreEqual(expectedReturnValue, newReturnValue);
+            Assert.AreEqual(0, resultCache.Count);
+            Assert.AreEqual(3, itemCache.Count);
+            Assert.AreEqual("two", itemCache.Get("two"));
+            Assert.AreNotSame(returnValue, newReturnValue);
+
+            mocks.VerifyAll();
         }
+
 
         [Test]
         public void CacheOnlyItemsOfMethodThatReturnsCollectionWithinTwoDifferentCaches()
         {
-            MethodInfo method = new EnumerableResultMethod( cacheResultTarget.MultipleCacheResultItems ).Method;
+            MethodInfo method = new EnumerableResultMethod(cacheResultTarget.MultipleCacheResultItems).Method;
             object expectedReturnValue = new object[] { "one", "two", "three" };
+
+            mocks.Record();
 
             ExpectAttributeRetrieval(method);
             ExpectCacheKeyGeneration(method, 5, expectedReturnValue);
             ExpectCallToProceed(new object[] { "one", "two", "three" });
-            ExpectCacheInstanceRetrieval( "items", itemCache );
-            ExpectCacheInstanceRetrieval( "items", itemCache );
+            ExpectCacheInstanceRetrieval("items", itemCache);
+
+            mocks.ReplayAll();
 
             // return value should be added to result cache and each item to item cache
-            object returnValue = advice.Invoke( (IMethodInvocation)mockInvocation.Object );
-            Assert.AreEqual( expectedReturnValue, returnValue );
-            Assert.AreEqual( 0, resultCache.Count );
-            Assert.AreEqual( 6, itemCache.Count );
+            object returnValue = advice.Invoke(mockInvocation);
+            Assert.AreEqual(expectedReturnValue, returnValue);
+            Assert.AreEqual(0, resultCache.Count);
+            Assert.AreEqual(6, itemCache.Count);
+
+            mocks.Verify(mockInvocation);
+
+            mocks.BackToRecord(mockInvocation);
 
             // and again, but without Proceed() and item cache access...
-            ExpectAttributeRetrieval( method );
-            ExpectCallToProceed( new object[] { "one", "two", "three" } );
-            ExpectCacheInstanceRetrieval( "items", itemCache );
-            ExpectCacheInstanceRetrieval( "items", itemCache );
+            ExpectAttributeRetrieval(method);
+            ExpectCacheKeyGeneration(method, 5, expectedReturnValue);
+            ExpectCallToProceed(new object[] { "one", "two", "three" });
+
+            mocks.Replay(mockInvocation);
 
             // new return value should be returned
-            object newReturnValue = advice.Invoke( (IMethodInvocation)mockInvocation.Object );
-            Assert.AreEqual( expectedReturnValue, newReturnValue );
-            Assert.AreEqual( 0, resultCache.Count );
-            Assert.AreEqual( 6, itemCache.Count );
-            Assert.AreEqual( "two", itemCache.Get( "two" ) );
-            Assert.AreEqual( "two", itemCache.Get( "TWO" ) );
-            Assert.AreNotSame( returnValue, newReturnValue );
+            object newReturnValue = advice.Invoke(mockInvocation);
+            Assert.AreEqual(expectedReturnValue, newReturnValue);
+            Assert.AreEqual(0, resultCache.Count);
+            Assert.AreEqual(6, itemCache.Count);
+            Assert.AreEqual("two", itemCache.Get("two"));
+            Assert.AreEqual("two", itemCache.Get("TWO"));
+            Assert.AreNotSame(returnValue, newReturnValue);
 
-            mockInvocation.Verify();
-            mockContext.Verify();
+            mocks.VerifyAll();
         }
 
         [Test]
         public void CacheOnlyItemsOfMethodThatReturnsCollectionOnCondition()
         {
-            MethodInfo method = new EnumerableResultMethod( cacheResultTarget.CacheResultItemsWithCondition ).Method;
+            MethodInfo method = new EnumerableResultMethod(cacheResultTarget.CacheResultItemsWithCondition).Method;
             object expectedReturnValue = new object[] { "one", "two", "three" };
 
-            ExpectAttributeRetrieval(method);
-            ExpectCacheKeyGeneration(method, 5, expectedReturnValue);
-            ExpectCallToProceed(new object[] { "one", "two", "three" });
-            ExpectCacheInstanceRetrieval( "items", itemCache );
+            using (mocks.Record())
+            {
+                ExpectAttributeRetrieval(method);
+                ExpectCacheKeyGeneration(method, 5, expectedReturnValue);
+                ExpectCallToProceed(new object[] { "one", "two", "three" });
+                ExpectCacheInstanceRetrieval("items", itemCache);
+            }
 
-            // return value should be added to result cache and each item to item cache
-            object returnValue = advice.Invoke( (IMethodInvocation)mockInvocation.Object );
-            Assert.AreEqual( expectedReturnValue, returnValue );
-            Assert.AreEqual( 2, itemCache.Count );
-            Assert.AreEqual( "two", itemCache.Get( "two" ) );
-            Assert.AreEqual( "three", itemCache.Get( "three" ) );
+            using (mocks.Playback())
+            {
+                // return value should be added to result cache and each item to item cache
+                object returnValue = advice.Invoke(mockInvocation);
+                Assert.AreEqual(expectedReturnValue, returnValue);
+                Assert.AreEqual(2, itemCache.Count);
+                Assert.AreEqual("two", itemCache.Get("two"));
+                Assert.AreEqual("three", itemCache.Get("three"));
+            }
 
-            mockInvocation.Verify();
-            mockContext.Verify();
         }
 
         [Test]
         public void CacheResultOfMethodThatReturnsCollectionOnCondition()
         {
-            MethodInfo method = new EnumerableResultMethod( cacheResultTarget.CacheResultWithCondition ).Method;
+            MethodInfo method = new EnumerableResultMethod(cacheResultTarget.CacheResultWithCondition).Method;
             object expectedReturnValue = new object[] { };
 
-            ExpectAttributeRetrieval(method);
-            ExpectCacheKeyGeneration(method, 5, expectedReturnValue);
-            ExpectCacheInstanceRetrieval("results", resultCache);
-            ExpectCallToProceed(new object[] { });
+            using (mocks.Record())
+            {
+                ExpectAttributeRetrieval(method);
+                ExpectCacheKeyGeneration(method, 5, expectedReturnValue);
+                ExpectCacheInstanceRetrieval("results", resultCache);
+                ExpectCallToProceed(new object[] { });
+            }
 
-            // return value should not be added to cache
-            object returnValue = advice.Invoke( (IMethodInvocation)mockInvocation.Object );
-            Assert.AreEqual( expectedReturnValue, returnValue );
-            Assert.AreEqual( 0, resultCache.Count );
-
-            mockInvocation.Verify();
-            mockContext.Verify();
+            using (mocks.Playback())
+            {
+                // return value should not be added to cache
+                object returnValue = advice.Invoke(mockInvocation);
+                Assert.AreEqual(expectedReturnValue, returnValue);
+                Assert.AreEqual(0, resultCache.Count);
+            }
         }
 
         [Test]
         public void AcceptsEnumerableOnlyReturn()
         {
-            MethodInfo method = new EnumerableResultMethod( cacheResultTarget.ReturnsEnumerableOnlyAndItems ).Method;
+            MethodInfo method = new EnumerableResultMethod(cacheResultTarget.ReturnsEnumerableOnlyAndItems).Method;
             object[] args = new object[] { "one", "two", "three" };
             EnumerableOnlyResult expectedReturnValue = new EnumerableOnlyResult(args);
+
+            mocks.Record();
 
             ExpectAttributeRetrieval(method);
             ExpectCacheKeyGeneration(method, 5, expectedReturnValue.InnerArray);
@@ -348,63 +373,77 @@ namespace Spring.Aspects.Cache
             ExpectCallToProceed(expectedReturnValue);
             ExpectCacheInstanceRetrieval("items", itemCache);
 
+            mocks.ReplayAll();
+
             // return value should be added to result cache and each item to item cache
-            object returnValue = advice.Invoke((IMethodInvocation)mockInvocation.Object);
+            object returnValue = advice.Invoke(mockInvocation);
             Assert.AreEqual(1, resultCache.Count);
             Assert.AreEqual(3, itemCache.Count);
             Assert.AreSame(expectedReturnValue, returnValue);
             Assert.AreSame(expectedReturnValue, resultCache.Get(5));
 
+            mocks.Verify(mockInvocation);
+
+            mocks.BackToRecord(mockInvocation);
+
             // and again, but without Proceed() and item cache access...
             ExpectAttributeRetrieval(method);
             ExpectCacheKeyGeneration(method, 5, IGNORED_ARGS);
-            ExpectCacheInstanceRetrieval("results", resultCache);
+
+            mocks.Replay(mockInvocation);
 
             // cached value should be returned, cache remains unchanged
-            object cachedValue = advice.Invoke((IMethodInvocation)mockInvocation.Object);
+            object cachedValue = advice.Invoke(mockInvocation);
             Assert.AreSame(expectedReturnValue, cachedValue);
-            Assert.AreSame(returnValue, cachedValue );
+            Assert.AreSame(returnValue, cachedValue);
             Assert.AreSame(expectedReturnValue, resultCache.Get(5));
-            Assert.AreEqual( 1, resultCache.Count );
-            Assert.AreEqual( 3, itemCache.Count );
+            Assert.AreEqual(1, resultCache.Count);
+            Assert.AreEqual(3, itemCache.Count);
 
-            mockInvocation.Verify();
-            mockContext.Verify();
+            mocks.VerifyAll();
         }
-
+        
         [Test]
         public void CacheResultOfMethodThatReturnsCollectionContainingNullItems()
         {
-            MethodInfo method = new EnumerableResultMethod( cacheResultTarget.ReturnsEnumerableOnlyAndItems ).Method;
+            MethodInfo method = new EnumerableResultMethod(cacheResultTarget.ReturnsEnumerableOnlyAndItems).Method;
             object expectedReturnValue = new object[] { null, "two", null };
 
-            ExpectAttributeRetrieval( method );
-            ExpectCacheKeyGeneration( method, 5, expectedReturnValue );
-            ExpectCacheInstanceRetrieval( "results", resultCache );
-            ExpectCallToProceed( expectedReturnValue );
-            ExpectCacheInstanceRetrieval( "items", itemCache );
+            mocks.Record();
+
+            ExpectAttributeRetrieval(method);
+            ExpectCacheKeyGeneration(method, 5, expectedReturnValue);
+            ExpectCacheInstanceRetrieval("results", resultCache);
+            ExpectCallToProceed(expectedReturnValue);
+            ExpectCacheInstanceRetrieval("items", itemCache);
+
+            mocks.ReplayAll();
 
             // return value should be added to result cache and each item to item cache
-            object returnValue = advice.Invoke( (IMethodInvocation)mockInvocation.Object );
-            Assert.AreSame( expectedReturnValue, returnValue );
-            Assert.AreEqual( 1, resultCache.Count );
-            Assert.AreEqual( 2, itemCache.Count ); // 2 null items result into 1 cached item
+            object returnValue = advice.Invoke(mockInvocation);
+            Assert.AreSame(expectedReturnValue, returnValue);
+            Assert.AreEqual(1, resultCache.Count);
+            Assert.AreEqual(2, itemCache.Count); // 2 null items result into 1 cached item
 
+            mocks.Verify(mockInvocation);
+
+            mocks.BackToRecord(mockInvocation);
+            
             // and again, but without Proceed() and item cache access...
-            ExpectAttributeRetrieval( method );
-            ExpectCacheKeyGeneration( method, 5, IGNORED_ARGS );
-            ExpectCacheInstanceRetrieval( "results", resultCache );
+            ExpectAttributeRetrieval(method);
+            ExpectCacheKeyGeneration(method, 5, IGNORED_ARGS);
+
+            mocks.Replay(mockInvocation);
 
             // cached value should be returned
-            object cachedValue = advice.Invoke( (IMethodInvocation)mockInvocation.Object );
+            object cachedValue = advice.Invoke(mockInvocation);
             Assert.AreSame(expectedReturnValue, cachedValue);
-            Assert.AreSame(returnValue, cachedValue );
+            Assert.AreSame(returnValue, cachedValue);
             Assert.AreSame(expectedReturnValue, resultCache.Get(5));
-            Assert.AreEqual( 1, resultCache.Count );
-            Assert.AreEqual( 2, itemCache.Count );
+            Assert.AreEqual(1, resultCache.Count);
+            Assert.AreEqual(2, itemCache.Count);
 
-            mockInvocation.Verify();
-            mockContext.Verify();
+            mocks.VerifyAll();
         }
 
         [Test]
@@ -413,19 +452,22 @@ namespace Spring.Aspects.Cache
             MethodInfo method = new EnumerableResultMethod(cacheResultTarget.CacheResultWithMethodInfo).Method;
             object expectedReturnValue = new object[] { "one", "two", "three" };
 
-            ExpectAttributeRetrieval(method);
-            ExpectCacheKeyGeneration(method, 5, expectedReturnValue);
-            ExpectCacheInstanceRetrieval("results", resultCache);
-            ExpectCallToProceed(new object[] { "one", "two", "three" });
+            using (mocks.Record())
+            {
+                ExpectAttributeRetrieval(method);
+                ExpectCacheKeyGeneration(method, 5, expectedReturnValue);
+                ExpectCacheInstanceRetrieval("results", resultCache);
+                ExpectCallToProceed(new object[] { "one", "two", "three" });
+            }
 
-            // return value should be added to cache
-            object returnValue = advice.Invoke((IMethodInvocation)mockInvocation.Object);
-            Assert.AreEqual(expectedReturnValue, returnValue);
-            Assert.AreEqual(1, resultCache.Count);
-            Assert.AreEqual(returnValue, resultCache.Get("CacheResultWithMethodInfo-5"));
-
-            mockInvocation.Verify();
-            mockContext.Verify();
+            using (mocks.Playback())
+            {
+                // return value should be added to cache
+                object returnValue = advice.Invoke(mockInvocation);
+                Assert.AreEqual(expectedReturnValue, returnValue);
+                Assert.AreEqual(1, resultCache.Count);
+                Assert.AreEqual(returnValue, resultCache.Get("CacheResultWithMethodInfo-5"));
+            }
         }
 
         [Test]
@@ -434,44 +476,57 @@ namespace Spring.Aspects.Cache
             MethodInfo method = new EnumerableResultMethod(cacheResultTarget.CacheResultItemsWithMethodInfo).Method;
             object expectedReturnValue = new object[] { "one", "two", "three" };
 
-            ExpectAttributeRetrieval(method);
-            ExpectCacheKeyGeneration(method, 5, expectedReturnValue);
-            ExpectCallToProceed(new object[] { "one", "two", "three" });
-            ExpectCacheInstanceRetrieval("items", itemCache);
+            using (mocks.Record())
+            {
+                ExpectAttributeRetrieval(method);
+                ExpectCacheKeyGeneration(method, 5, expectedReturnValue);
+                ExpectCallToProceed(new object[] { "one", "two", "three" });
+                ExpectCacheInstanceRetrieval("items", itemCache);
+            }
 
-            // return value should be added to result cache and each item to item cache
-            object returnValue = advice.Invoke((IMethodInvocation)mockInvocation.Object);
-            Assert.AreEqual(expectedReturnValue, returnValue);
-            Assert.AreEqual(0, resultCache.Count);
-            Assert.AreEqual(3, itemCache.Count);
-            Assert.AreEqual("two", itemCache.Get("CacheResultItemsWithMethodInfo-two"));
+            using (mocks.Playback())
+            {
+                // return value should be added to result cache and each item to item cache
+                object returnValue = advice.Invoke(mockInvocation);
+                Assert.AreEqual(expectedReturnValue, returnValue);
+                Assert.AreEqual(0, resultCache.Count);
+                Assert.AreEqual(3, itemCache.Count);
+                Assert.AreEqual("two", itemCache.Get("CacheResultItemsWithMethodInfo-two"));
+            }
 
-            mockInvocation.Verify();
-            mockContext.Verify();
         }
 
 
         #region Helper methods
 
-        private void ExpectAttributeRetrieval( MethodInfo method )
+        private void ExpectAttributeRetrieval(MethodInfo method)
         {
-            mockInvocation.SetValue( "Method", method );
+            Expect.Call(mockInvocation.Method).Return(method).Repeat.AtLeastOnce();
         }
 
-        private void ExpectCacheKeyGeneration( MethodInfo method, params object[] arguments )
+        private void ExpectCacheKeyGeneration(MethodInfo method, params object[] arguments)
         {
-//            mockInvocation.ExpectAndReturn( "Method", method );
-            mockInvocation.SetValue( "Arguments", arguments );
+            Expect.Call(mockInvocation.Arguments).Return(arguments).Repeat.AtLeastOnce();
         }
 
-        private void ExpectCacheInstanceRetrieval( string cacheName, ICache cache )
+        private void ExpectCacheInstanceRetrieval(string cacheName, ICache cache)
         {
-            mockContext.ExpectAndReturn( "GetObject", cache, cacheName );
+            Expect.Call(mockContext.GetObject(cacheName)).Return(cache).Repeat.AtLeastOnce();
         }
 
-        private void ExpectCallToProceed( object expectedReturnValue )
+        private void ExpectCacheInstanceRetrieval(string cacheName, ICache cache, int repeatTimes)
         {
-            mockInvocation.ExpectAndReturn( "Proceed", expectedReturnValue );
+            Expect.Call(mockContext.GetObject(cacheName)).Return(cache).Repeat.Times(repeatTimes);
+        }
+
+        private void ExpectCallToProceed(object expectedReturnValue, int repeatTimes)
+        {
+            Expect.Call(mockInvocation.Proceed()).Return(expectedReturnValue).Repeat.Times(repeatTimes);
+        }
+
+        private void ExpectCallToProceed(object expectedReturnValue)
+        {
+            Expect.Call(mockInvocation.Proceed()).Return(expectedReturnValue);
         }
 
         #endregion
@@ -482,13 +537,13 @@ namespace Spring.Aspects.Cache
 
     public delegate void VoidMethod();
     public delegate int IntMethod();
-    public delegate IEnumerable EnumerableResultMethod( int key, params object[] elements );
+    public delegate IEnumerable EnumerableResultMethod(int key, params object[] elements);
 
     public class EnumerableOnlyResult : IEnumerable
     {
         private object[] _args;
 
-        public EnumerableOnlyResult( params object[] args )
+        public EnumerableOnlyResult(params object[] args)
         {
             _args = args;
         }
@@ -498,9 +553,9 @@ namespace Spring.Aspects.Cache
             return _args.GetEnumerator();
         }
 
-        public override bool Equals( object obj )
+        public override bool Equals(object obj)
         {
-            Assert.AreEqual(_args, ((EnumerableOnlyResult)obj)._args );
+            Assert.AreEqual(_args, ((EnumerableOnlyResult)obj)._args);
             return true;
         }
 
@@ -526,55 +581,55 @@ namespace Spring.Aspects.Cache
     {
         void ReturnsNothing();
         int ReturnsScalar();
-        IEnumerable ReturnsCollection( int key, params object[] elements );
-        IEnumerable ReturnsCollectionAndItems( int key, params object[] elements );
-        IEnumerable ReturnsItems( int key, params object[] elements );
+        IEnumerable ReturnsCollection(int key, params object[] elements);
+        IEnumerable ReturnsCollectionAndItems(int key, params object[] elements);
+        IEnumerable ReturnsItems(int key, params object[] elements);
     }
 
     public sealed class CacheResultTarget : ICacheResultTarget
     {
         public const int Scalar = int.MaxValue;
 
-        [CacheResult( "results", "'key'" )]
+        [CacheResult("results", "'key'")]
         public void ReturnsNothing()
         {
         }
 
-        [CacheResult( "results", "'key'" )]
+        [CacheResult("results", "'key'")]
         public int ReturnsScalar()
         {
             return Scalar;
         }
 
-        [CacheResult( "results", "#key" )]
-        public IEnumerable ReturnsCollection( int key, params object[] elements )
+        [CacheResult("results", "#key")]
+        public IEnumerable ReturnsCollection(int key, params object[] elements)
         {
             return elements;
         }
 
-        [CacheResult( "results", "#key" )]
-        [CacheResultItems( "items", "''+#this" )]
-        public IEnumerable ReturnsCollectionAndItems( int key, params object[] elements )
+        [CacheResult("results", "#key")]
+        [CacheResultItems("items", "''+#this")]
+        public IEnumerable ReturnsCollectionAndItems(int key, params object[] elements)
         {
             return elements;
         }
 
-        [CacheResult( "results", "#key" )]
-        [CacheResultItems( "items", "''+#this" )]
-        public IEnumerable ReturnsEnumerableOnlyAndItems( int key, params object[] elements )
+        [CacheResult("results", "#key")]
+        [CacheResultItems("items", "''+#this")]
+        public IEnumerable ReturnsEnumerableOnlyAndItems(int key, params object[] elements)
         {
             return new EnumerableOnlyResult(elements);
         }
 
-        [CacheResultItems( "items", "#this" )]
-        public IEnumerable ReturnsItems( int key, params object[] elements )
+        [CacheResultItems("items", "#this")]
+        public IEnumerable ReturnsItems(int key, params object[] elements)
         {
             return elements;
         }
 
-        [CacheResultItems( "items", "#this" )]
-        [CacheResultItems( "items", "#this.ToUpper()" )]
-        public IEnumerable MultipleCacheResultItems( int key, params object[] elements )
+        [CacheResultItems("items", "#this")]
+        [CacheResultItems("items", "#this.ToUpper()")]
+        public IEnumerable MultipleCacheResultItems(int key, params object[] elements)
         {
             return elements;
         }
@@ -591,14 +646,14 @@ namespace Spring.Aspects.Cache
             return elements;
         }
 
-        [CacheResultItems( "items", "#this", Condition = "#this.StartsWith('t')" )]
-        public IEnumerable CacheResultItemsWithCondition( int key, params object[] elements )
+        [CacheResultItems("items", "#this", Condition = "#this.StartsWith('t')")]
+        public IEnumerable CacheResultItemsWithCondition(int key, params object[] elements)
         {
             return elements;
         }
 
-        [CacheResult( "results", "#key", Condition = "#this.Length > 0" )]
-        public IEnumerable CacheResultWithCondition( int key, params object[] elements )
+        [CacheResult("results", "#key", Condition = "#this.Length > 0")]
+        public IEnumerable CacheResultWithCondition(int key, params object[] elements)
         {
             return elements;
         }
@@ -623,7 +678,7 @@ namespace Spring.Aspects.Cache
 
         public override object Get(object key)
         {
-            byte[] bytes = (byte[]) base.Get(key);
+            byte[] bytes = (byte[])base.Get(key);
 
             if (bytes == null)
             {

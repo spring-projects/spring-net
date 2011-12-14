@@ -123,13 +123,23 @@ namespace Spring.Context.Support
 				return null;
 			}
 
-			public string[] GetObjectNamesForType(
+		    public string[] GetObjectNamesForType<T>()
+		    {
+		        return null;
+		    }
+
+		    public string[] GetObjectNamesForType(
 				Type type, bool includePrototypes, bool includeFactoryObjects)
 			{
 				return null;
 			}
 
-			string[] IListableObjectFactory.GetObjectDefinitionNames()
+		    public string[] GetObjectNamesForType<T>(bool includePrototypes, bool includeFactoryObjects)
+		    {
+		        return null;
+		    }
+
+		    string[] IListableObjectFactory.GetObjectDefinitionNames()
 			{
 				return null;
 			}
@@ -139,12 +149,27 @@ namespace Spring.Context.Support
 				return null;
 			}
 
-			public IDictionary GetObjectsOfType(Type type, bool includePrototypes, bool includeFactoryObjects)
+		    public IDictionary GetObjectsOfType<T>()
+		    {
+		        return null;
+		    }
+
+		    public IDictionary GetObjectsOfType(Type type, bool includePrototypes, bool includeFactoryObjects)
 			{
 				return null;
 			}
 
-			public int ObjectDefinitionCount
+		    public IDictionary GetObjectsOfType<T>(bool includePrototypes, bool includeFactoryObjects)
+		    {
+		        return null;
+		    }
+
+		    public T GetObject<T>()
+		    {
+		        throw new NotImplementedException();
+		    }
+
+		    public int ObjectDefinitionCount
 			{
 				get { return 0; }
 			}
@@ -178,12 +203,22 @@ namespace Spring.Context.Support
 				return null;
 			}
 
+		    public bool IsTypeMatch<T>(string name)
+		    {
+                return false;
+            }
+
 		    public object CreateObject(string name, Type requiredType, object[] arguments)
 		    {
 		        return null;
 		    }
 
-			public object GetObject(string name, Type requiredType)
+		    public T CreateObject<T>(string name, object[] arguments)
+		    {
+		        return Activator.CreateInstance<T>();
+		    }
+
+		    public object GetObject(string name, Type requiredType)
 			{
 				return null;
 			}
@@ -193,10 +228,20 @@ namespace Spring.Context.Support
 				return null;
 			}
 
+		    public T GetObject<T>(string name)
+		    {
+                return Activator.CreateInstance<T>();
+            }
+
 		    public object GetObject(string name, object[] arguments)
 		    {
 		        return null;
 		    }
+
+		    public T GetObject<T>(string name, object[] arguments)
+		    {
+                return Activator.CreateInstance<T>();
+            }
 
 		    public object GetObject(string name, Type requiredType, object[] arguments)
 		    {

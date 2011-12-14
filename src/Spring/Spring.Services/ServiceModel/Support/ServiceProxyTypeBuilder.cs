@@ -28,6 +28,7 @@ using System.Reflection.Emit;
 
 using Spring.Objects.Factory;
 using Spring.Proxy;
+using Spring.Util;
 
 #endregion
 
@@ -42,7 +43,8 @@ namespace Spring.ServiceModel.Support
         #region Fields
 
         private static readonly MethodInfo GetObject =
-            typeof(IObjectFactory).GetMethod("GetObject", new Type[] { typeof(string) });
+            //typeof(IObjectFactory).GetMethod("GetObject", new Type[] { typeof(string) });
+            ReflectionUtils.GetMethod(typeof (IObjectFactory), "GetObject", new Type[] {typeof (string)});
 
         private IObjectFactory objectFactory;
         private static Hashtable s_serviceTypeCache = new Hashtable();
