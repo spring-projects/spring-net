@@ -4969,11 +4969,10 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
         of the box, Spring.NET supports a number of variable sources that
         allow users to obtain variable values from .NET config files,
         java-style property files, environment variables, command line
-        arguments and the registry and the new connection strings
-        configuration section in .NET 2.0. It is possible to add your own
-        variable sources to a <literal>VariablePlaceholderConfigurer</literal>
-        by implementing the <literal>IVariableSource</literal>
-        interface.</para>
+        arguments, the registry and the new connection strings configuration
+        section in .NET 2.0. It is possible to add your own variable sources
+        to a <literal>VariablePlaceholderConfigurer</literal> by implementing
+        the <literal>IVariableSource</literal> interface.</para>
 
         <para>You use this by defining an instance of
         <literal>Spring.Objects.Factory.Config.VariablePlaceholderConfigurer</literal>
@@ -5043,19 +5042,18 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
           <para>By simply configuring the appropriate section, you can use the
           <literal>ConfigSectionVariableSource</literal> to retrieve variables
           from application settings and user settings. Assuming your
-          application's root namespace is
-          <literal>Spring.IocQuickStart</literal>, then your application- and
-          user settings can be loaded as variables by configuring the
-          following variable sources:</para>
+          application's root namespace is <literal>MyApp</literal>, then your
+          application- and user settings can be loaded as variables by
+          configuring the following variable sources:</para>
 
           <programlisting language="myxml">&lt;!-- From .net's ApplicationSettings: --&gt;
 &lt;object type="Spring.Objects.Factory.Config.ConfigSectionVariableSource, Spring.Core"&gt;
-  &lt;property name="SectionNames" value="applicationSettings/Spring.IocQuickStart.Properties.Settings" /&gt;
+  &lt;property name="SectionNames" value="applicationSettings/MyApp.Properties.Settings" /&gt;
 &lt;/object&gt;
 
 &lt;!-- From .net's UserSettings: --&gt;
 &lt;object type="Spring.Objects.Factory.Config.ConfigSectionVariableSource, Spring.Core"&gt;
-  &lt;property name="SectionNames" value="userSettings/Spring.IocQuickStart.Properties.Settings" /&gt;
+  &lt;property name="SectionNames" value="userSettings/MyApp.Properties.Settings" /&gt;
 &lt;/object&gt;
 </programlisting>
 
@@ -5076,7 +5074,7 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
           <para>A <literal>PropertyFileVariableSource</literal> allows to read
           properties defined in a Java-style property file as variables.
           Assume a file named <literal>application.properties</literal> in
-          your application folder containing:</para>
+          your application folder containing the following lines:</para>
 
           <programlisting>joan_name=Joan Harris
 joan_age=35</programlisting>
@@ -5147,16 +5145,15 @@ joan_age=35</programlisting>
           <title><literal>EnvironmentVariableSource</literal></title>
 
           <para>You can configure an
-          <literal>EnvironmentVariableSource</literal> an to retrieve
-          variables from environment variables available through <link
+          <literal>EnvironmentVariableSource</literal> to retrieve variables
+          from environment variables available through <link
           ns6:href="http://msdn.microsoft.com/en-us/library/system.environment.aspx">.NET's
           <literal>System.Environment</literal> class</link>:</para>
 
           <programlisting language="myxml">&lt;object type="Spring.Objects.Factory.Config.EnvironmentVariableSource, Spring.Core" /&gt;
 </programlisting>
 
-          <para>To retrieve a value for a variable named
-          <literal>ken_name</literal>, the
+          <para>To resolve a variable named <literal>ken_name</literal>, the
           <literal>EnvironmentVariableSource</literal> will directly call
           <literal>System.Environment.GetEnvironmentVariable("ken_name")</literal>.</para>
         </sect4>
@@ -5164,15 +5161,15 @@ joan_age=35</programlisting>
         <sect4>
           <title><literal>ConnectionStringsVariableSource</literal></title>
 
-          <para>Visual Studio has good support for configuring database
-          connection strings in a <literal>connectionStrings</literal> section
-          in you application configuration file. You can retrieve these
-          connections as variables by configuring a
+          <para>Visual Studio has support for configuring database connection
+          strings in a <literal>connectionStrings</literal> section in your
+          application configuration file. You can retrieve these connections
+          as variables by configuring a
           <literal>ConnectionStringsVariableSource</literal>:</para>
 
           <programlisting language="myxml">&lt;object type="Spring.Objects.Factory.Config.ConnectionStringsVariableSource, Spring.Core" /&gt;</programlisting>
 
-          <para>Assume the following connection string section in your
+          <para>Assuming the following connection strings section in your
           application configuration file:</para>
 
           <programlisting language="myxml">&lt;connectionStrings&gt;
@@ -5182,7 +5179,7 @@ joan_age=35</programlisting>
 &lt;/connectionStrings&gt;</programlisting>
 
           <para>Then you would use the variables as in following object
-          definition: </para>
+          definition:</para>
 
           <programlisting language="myxml">&lt;object type="Example.MyClass, MyAssembly"&gt;
   &lt;property name="ConnectionString" value="${myConnection.connectionString}" /&gt;
@@ -5195,12 +5192,11 @@ joan_age=35</programlisting>
               connection name to get the provider name.</para>
             </note><note>
               <para>When adding a connection using Visual Studio's application
-              settings, your connection will be named similar to
-              <literal>MyNamespace.Properties.Settings.myConnection</literal>
-              and the corresponding variable name for the connection string
-              would become
-              <literal>MyNamespace.Properties.Settings.myConnection.connectionString</literal>.
-              </para>
+              settings user interface, your connection will be named similar
+              to <literal>MyApp.Properties.Settings.myConnection</literal> and
+              the corresponding variable name for the connection string would
+              become
+              <literal>MyApp.Properties.Settings.myConnection.connectionString</literal>.</para>
             </note></para>
         </sect4>
 
@@ -5224,7 +5220,7 @@ joan_age=35</programlisting>
 
           <para>Any entry in the <link
           ns6:href="http://msdn.microsoft.com/library/system.environment.specialfolder.aspx">System.Environment.SpecialFolder</link>
-          enumeration can be used as a variable name. </para>
+          enumeration can be used as a variable name.</para>
         </sect4>
 
         <sect4>
@@ -5233,8 +5229,8 @@ joan_age=35</programlisting>
 
           <para>The <literal>IVariableSource</literal> is the base interface
           for providing the ability to get the value of property placeholders
-          (name-value) pairs from a variety of sources. The IVariableSource
-          interface is shown below:</para>
+          (name-value) pairs from a variety of sources. The
+          <literal>IVariableSource</literal> interface is shown below:</para>
 
           <programlisting language="csharp">public interface IVariableSource
 {
