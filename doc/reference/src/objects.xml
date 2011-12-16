@@ -4961,51 +4961,19 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
       </sect3>
 
       <sect3 xml:id="objects-variablesource">
-        <title>IVariableSource</title>
+        <title>Example: The
+        <literal>VariablePlaceholderConfigurer</literal></title>
 
-        <para>The <literal>IVariableSource</literal> is the base interface for
-        providing the ability to get the value of property placeholders
-        (name-value) pairs from a variety of sources. Out of the box,
-        Spring.NET supports a number of variable sources that allow users to
-        obtain variable values from .NET config files, java-style property
-        files, environment variables, command line arguments and the registry
-        and the new connection strings configuration section in .NET 2.0. The
-        list of implementing classes is listed below. Please refer to the SDK
-        documentation for more information.</para>
-
-        <itemizedlist>
-          <listitem>
-            <para><literal>ConfigSectionVariableSource</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal>PropertyFileVariableSource</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal>EnvironmentVariableSource</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal>CommandLineArgsVariableSource</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal>RegistryVariableSource</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal>SpecialFolderVariableSource</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal>ConnectionStringsVariableSource</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal>ConfigurableVariableSource</literal></para>
-          </listitem>
-        </itemizedlist>
+        <para>The <literal>VariablePlaceholderConfigurer</literal> is an
+        evolution of the <literal>PropertyPlaceHolderConfigurer</literal>. Out
+        of the box, Spring.NET supports a number of variable sources that
+        allow users to obtain variable values from .NET config files,
+        java-style property files, environment variables, command line
+        arguments and the registry and the new connection strings
+        configuration section in .NET 2.0. It is possible to add your own
+        variable sources to a <literal>VariablePlaceholderConfigurer</literal>
+        by implementing the <literal>IVariableSource</literal>
+        interface.</para>
 
         <para>You use this by defining an instance of
         <literal>Spring.Objects.Factory.Config.VariablePlaceholderConfigurer</literal>
