@@ -5064,8 +5064,8 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
                 <imagedata fileref="images/applicationsettings.png"></imagedata>
               </imageobject>
             </mediaobject>Then you can use <literal>${peggy_name}</literal>
-          and <literal>${peter_age}</literal> as variable placeholders in your
-          object definitions.</para>
+          and <literal>${peter_age}</literal> as variables in your object
+          definitions.</para>
         </sect4>
 
         <sect4>
@@ -5080,8 +5080,8 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
 joan_age=35</programlisting>
 
           <para>You can use the <literal>${joan_name}</literal> and
-          <literal>${joan_age}</literal> variable placeholders if you
-          configure the following variable source:</para>
+          <literal>${joan_age}</literal> variables if you configure the
+          following variable source:</para>
 
           <programlisting language="myxml">&lt;object type="Spring.Objects.Factory.Config.PropertyFileVariableSource, Spring.Core"&gt;
   &lt;property name="Location" value="~\application.properties" /&gt;
@@ -5093,8 +5093,8 @@ joan_age=35</programlisting>
 
           <para>A <literal>ConfigurableVariableSource</literal> allows you
           define variables inline in a variable source definition. To
-          configure the variables <literal>midge_name</literal> and
-          <literal>midge_age</literal>, you can use the following
+          configure the variables <literal>${midge_name}</literal> and
+          <literal>${midge_age}</literal>, you can use the following
           <literal>ConfigurableVariableSource</literal> definition:</para>
 
           <programlisting language="myxml">&lt;object type="Spring.Objects.Factory.Config.ConfigurableVariableSource, Spring.Core"&gt;
@@ -5111,7 +5111,8 @@ joan_age=35</programlisting>
           <title><literal>CommandLineArgsVariableSource</literal></title>
 
           <para>You can use commandline arguments as a source for variables.
-          Assume you issue the following command to start myapp:</para>
+          Assume you issue the following command to start your application
+          <literal>myapp</literal>:</para>
 
           <para><programlisting>myapp /roger_name:"Roger Sterling" /roger_age:57</programlisting></para>
 
@@ -5133,8 +5134,8 @@ joan_age=35</programlisting>
           <literal>HKEY_CURRENT_USER\MyKey</literal> with entries
           <literal>freddy_name (String)</literal> and <literal>freddy_age
           (DWord)</literal>, then you can configure the following variable
-          source to use <literal>freddy_name</literal> and
-          <literal>freddy_age</literal> as variables:</para>
+          source to use <literal>${freddy_name}</literal> and
+          <literal>${freddy_age}</literal> as variables:</para>
 
           <programlisting language="myxml">&lt;object type="Spring.Objects.Factory.Config.RegistryVariableSource, Spring.Core"&gt;
   &lt;property name="Key" value="HKEY_CURRENT_USER\MyKey" /&gt;
@@ -5153,8 +5154,8 @@ joan_age=35</programlisting>
           <programlisting language="myxml">&lt;object type="Spring.Objects.Factory.Config.EnvironmentVariableSource, Spring.Core" /&gt;
 </programlisting>
 
-          <para>To resolve a variable named <literal>ken_name</literal>, the
-          <literal>EnvironmentVariableSource</literal> will directly call
+          <para>To resolve a variable named <literal>${ken_name}</literal>,
+          the <literal>EnvironmentVariableSource</literal> will directly call
           <literal>System.Environment.GetEnvironmentVariable("ken_name")</literal>.</para>
         </sect4>
 
