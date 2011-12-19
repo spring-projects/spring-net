@@ -4664,9 +4664,9 @@ DEBUG - MovieApp Done.</programlisting>
       includes a number of pre-existing object factory post-processors, such
       as <literal>PropertyResourceConfigurer</literal> and
       <literal>PropertyPlaceHolderConfigurer</literal>, both described below
-      and ObjectNameAutoProxyCreator, which is very useful for wrapping other
-      objects transactionally or with any other kind of proxy, as described
-      later in this manual.</para>
+      and <literal>ObjectNameAutoProxyCreator</literal>, which is very useful
+      for wrapping other objects transactionally or with any other kind of
+      proxy, as described later in this manual.</para>
 
       <para>In an <literal>IObjectFactory</literal>, the process of applying
       an <literal>IObjectFactoryPostProcessor</literal> is manual, and will be
@@ -4717,9 +4717,9 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
         excellent solution when you want to externalize a few properties from
         a file containing object definitions. This is useful to allow the
         person deploying an application to customize environment specific
-        properties (for example database configuration strings, usernames, and
-        passwords), without the complexity or risk of modifying the main XML
-        definition file or files for the container.</para>
+        properties (for example database configuration strings, user names,
+        and passwords), without the complexity or risk of modifying the main
+        XML definition file or files for the container.</para>
 
         <para>Variable substitution is performed on simple property values,
         lists, dictionaries, sets, constructor values, object type name, and
@@ -4967,8 +4967,8 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
         <para>The <literal>VariablePlaceholderConfigurer</literal> is an
         evolution of the <literal>PropertyPlaceHolderConfigurer</literal>. Out
         of the box, Spring.NET supports a number of variable sources that
-        allow users to obtain variable values from .NET config files,
-        java-style property files, environment variables, command line
+        allow users to obtain variable values from .NET configuration files,
+        Java-style property files, environment variables, command line
         arguments, the registry and the new connection strings configuration
         section in .NET 2.0. It is possible to add your own variable sources
         to a <literal>VariablePlaceholderConfigurer</literal> by implementing
@@ -5109,7 +5109,7 @@ joan_age=35</programlisting>
           <title><literal>ConfigurableVariableSource</literal></title>
 
           <para>A <literal>ConfigurableVariableSource</literal> allows you
-          define variables inline in a variable source definition. To
+          define variables in-line in a variable source definition. To
           configure the variables <literal>${midge_name}</literal> and
           <literal>${midge_age}</literal>, you can use the following
           <literal>ConfigurableVariableSource</literal> definition:</para>
@@ -5257,9 +5257,9 @@ joan_age=35</programlisting>
 }</programlisting>
 
           <para>This is a simple contract to implement if you should decide to
-          create your own custom implemention. Look at the source code of the
-          current implementations for some inspiration if you go that route.
-          To register your own custom implemenation, simply configure
+          create your own custom implementation. Look at the source code of
+          the current implementations for some inspiration if you go that
+          route. To register your own custom implementation, simply configure
           <literal>VariablePlaceholderConfigurer</literal> to refer to your
           class.</para>
         </sect4>
