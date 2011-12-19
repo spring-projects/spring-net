@@ -5057,9 +5057,23 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
               <imageobject>
                 <imagedata fileref="images/applicationsettings.png"></imagedata>
               </imageobject>
-            </mediaobject>Then you can use <literal>${peggy_name}</literal>
-          and <literal>${peter_age}</literal> as variables in your object
-          definitions.</para>
+            </mediaobject>Then you can use <literal>${peggy_name}</literal>,
+          <literal>${peggy_age}</literal>,
+          <literal>&amp;{peter_name}</literal> and
+          <literal>${peter_age}</literal> as variables in your object
+          definitions. They will be retrieved using the appropriate
+          scope.<note>
+              <para>Changes to user settings during the lifetime of your
+              application context will <emphasis>not</emphasis> be be visible
+              to the <literal>ConfigSectionVariableSource</literal>. Although
+              variables based on user settings will be resolved using user
+              scope, variables will <emphasis>only be resolved when the
+              <literal>VariablePlaceholderConfigurer</literal> is
+              initialized</emphasis>: that is when the context is created. Any
+              object (including lazy-loaded singletons and non-singletons) you
+              retrieve from the context will have the variable values injected
+              as they were when the context was loaded.</para>
+            </note></para>
         </sect4>
 
         <sect4>
