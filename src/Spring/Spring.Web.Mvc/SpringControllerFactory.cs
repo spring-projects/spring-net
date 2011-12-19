@@ -119,12 +119,13 @@ namespace Spring.Web.Mvc
                     controller = (IController)controllers.Cast<DictionaryEntry>().First().Value;
                 }
             }
-            else
+
+            if (controller == null)
             {
                 //pass to base class for remainder of handling if can't find it in the context
                 controller = base.GetControllerInstance(requestContext, controllerType);
             }
-
+            
             AddActionInvokerTo(controller);
 
             return controller;
