@@ -23,32 +23,32 @@
 using System;
 using Common.Logging;
 using Common.Logging.Simple;
-using DotNetMock.Dynamic;
 using NUnit.Framework;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Xml;
+using Rhino.Mocks;
 
 #endregion
 
 namespace Spring.Aop.Target
 {
-	/// <summary>
-	/// Unit tests for the PrototypeTargetSource class.
-	/// </summary>
-	/// <author>Rod Johnson</author>
-	/// <author>Federico Spinazzi</author>
-	[TestFixture]
-	public sealed class PrototypeTargetSourceTests
-	{
-		/// <summary>
-		/// The setup logic executed before the execution of this test fixture.
-		/// </summary>
-		[TestFixtureSetUp]
-		public void FixtureSetUp()
-		{
-			// enable (null appender) logging, just to ensure that the logging code is correct
-            LogManager.Adapter = new NoOpLoggerFactoryAdapter(); 
-		}
+    /// <summary>
+    /// Unit tests for the PrototypeTargetSource class.
+    /// </summary>
+    /// <author>Rod Johnson</author>
+    /// <author>Federico Spinazzi</author>
+    [TestFixture]
+    public sealed class PrototypeTargetSourceTests
+    {
+        /// <summary>
+        /// The setup logic executed before the execution of this test fixture.
+        /// </summary>
+        [TestFixtureSetUp]
+        public void FixtureSetUp()
+        {
+            // enable (null appender) logging, just to ensure that the logging code is correct
+            LogManager.Adapter = new NoOpLoggerFactoryAdapter();
+        }
 
         /// <summary>
         ///  Test that multiple invocations of the prototype object will result
@@ -60,83 +60,106 @@ namespace Spring.Aop.Target
         {
             int initialCount = 10;
             IObjectFactory of = new XmlObjectFactory(new ReadOnlyXmlTestResource("prototypeTargetSourceTests.xml", GetType()));
-            ISideEffectObject singleton = (ISideEffectObject) of.GetObject("singleton");
+            ISideEffectObject singleton = (ISideEffectObject)of.GetObject("singleton");
             Assert.AreEqual(initialCount, singleton.Count);
             singleton.doWork();
             Assert.AreEqual(initialCount + 1, singleton.Count);
 
-            ISideEffectObject prototype = (ISideEffectObject) of.GetObject("prototype");
+            ISideEffectObject prototype = (ISideEffectObject)of.GetObject("prototype");
             Assert.AreEqual(initialCount, prototype.Count);
             singleton.doWork();
             Assert.AreEqual(initialCount, prototype.Count);
 
-            ISideEffectObject prototypeByName = (ISideEffectObject) of.GetObject("prototypeByName");
+            ISideEffectObject prototypeByName = (ISideEffectObject)of.GetObject("prototypeByName");
             Assert.AreEqual(initialCount, prototypeByName.Count);
             singleton.doWork();
             Assert.AreEqual(initialCount, prototypeByName.Count);
         }
 
-		[Test]
-		public void TargetType()
-		{
-			SideEffectObject target = new SideEffectObject();
-			IDynamicMock mock = new DynamicMock(typeof (IObjectFactory));
-			mock.ExpectAndReturn("IsPrototype", true, null);
-			mock.ExpectAndReturn("GetType", typeof(SideEffectObject), null);
-			PrototypeTargetSource source = new PrototypeTargetSource();
-			source.ObjectFactory = (IObjectFactory) mock.Object;
-			Assert.AreEqual(target.GetType(), source.TargetType, "Wrong TargetType being returned.");
-			mock.Verify();
-		}
+        [Test]
+        public void TargetType()
+        {
+            MockRepository mocks = new MockRepository();
+            SideEffectObject target = new SideEffectObject();
 
-		[Test]
-		public void IsStatic()
-		{
-			PrototypeTargetSource source = new PrototypeTargetSource();
-			Assert.IsFalse(source.IsStatic, "Must not be static.");
-		}
+            IObjectFactory factory = mocks.CreateMock<IObjectFactory>();
 
-		[Test]
-		public void WithNonSingletonTargetObject()
-		{
-			IDynamicMock mock = new DynamicMock(typeof (IObjectFactory));
-			const string objectName = "Foo";
-			mock.ExpectAndReturn("IsPrototype", false, objectName);
-			PrototypeTargetSource source = new PrototypeTargetSource();
-			source.TargetObjectName = objectName;
-			try
-			{
-				source.ObjectFactory = (IObjectFactory) mock.Object;
-				Assert.Fail("Should have thrown an ObjectDefinitionStoreException by this point.");
-			}
-			catch (ObjectDefinitionStoreException)
-			{
-				mock.Verify();
-			}
-		}
+            using (mocks.Record())
+            {
+                Expect.Call(factory.IsPrototype(null)).Return(true);
+                Expect.Call(factory.GetType(null)).Return(typeof(SideEffectObject));
+            }
 
-		[Test]
-		public void GetTarget()
-		{
-			SideEffectObject target = new SideEffectObject();
-			IDynamicMock mock = new DynamicMock(typeof (IObjectFactory));;
-			mock.ExpectAndReturn("IsPrototype", true, "foo");
-			mock.ExpectAndReturn("GetObject", target, "foo");
-		    mock.ExpectAndReturn("GetType", typeof (string), "foo");
-			PrototypeTargetSource source = new PrototypeTargetSource();
-            source.TargetObjectName = "foo";
-			source.ObjectFactory = (IObjectFactory) mock.Object;
-			Assert.IsTrue(object.ReferenceEquals(source.GetTarget(), target),
-			              "Initial target source reference not being returned by GetTarget().");
-			mock.Verify();
-		}
+            using (mocks.Playback())
+            {
+                PrototypeTargetSource source = new PrototypeTargetSource();
+                source.ObjectFactory = factory;
+                Assert.AreEqual(target.GetType(), source.TargetType, "Wrong TargetType being returned.");
+            }
 
-		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-		public void AfterPropertiesSetWithoutTargetObjectNameBeingSet()
-		{
-			PrototypeTargetSource source = new PrototypeTargetSource();
-			source.AfterPropertiesSet();
-		}
-	}
+        }
+
+        [Test]
+        public void IsStatic()
+        {
+            PrototypeTargetSource source = new PrototypeTargetSource();
+            Assert.IsFalse(source.IsStatic, "Must not be static.");
+        }
+
+        [Test]
+        public void WithNonSingletonTargetObject()
+        {
+            MockRepository mocks = new MockRepository();
+
+            IObjectFactory factory = mocks.CreateMock<IObjectFactory>();
+            const string objectName = "Foo";
+
+            using (mocks.Record())
+            {
+                Expect.Call(factory.IsPrototype(objectName)).Return(false);
+            }
+
+            using (mocks.Playback())
+            {
+                PrototypeTargetSource source = new PrototypeTargetSource();
+                source.TargetObjectName = objectName;
+
+                Assert.Throws<ObjectDefinitionStoreException>(delegate { source.ObjectFactory = factory; });
+            }
+        }
+
+        [Test]
+        public void GetTarget()
+        {
+            MockRepository mocks = new MockRepository();
+
+            IObjectFactory factory = mocks.CreateMock<IObjectFactory>();
+            SideEffectObject target = new SideEffectObject();
+
+            using (mocks.Record())
+            {
+                Expect.Call(factory.IsPrototype("foo")).Return(true);
+                Expect.Call(factory.GetObject("foo")).Return(target);
+                Expect.Call(factory.GetType("foo")).Return(typeof(string));
+            }
+
+            using (mocks.Playback())
+            {
+                PrototypeTargetSource source = new PrototypeTargetSource();
+                source.TargetObjectName = "foo";
+                source.ObjectFactory = factory;
+                Assert.IsTrue(object.ReferenceEquals(source.GetTarget(), target),
+                              "Initial target source reference not being returned by GetTarget().");
+            }
+
+        }
+
+        [Test]
+        [ExpectedException(typeof(ArgumentNullException))]
+        public void AfterPropertiesSetWithoutTargetObjectNameBeingSet()
+        {
+            PrototypeTargetSource source = new PrototypeTargetSource();
+            source.AfterPropertiesSet();
+        }
+    }
 }

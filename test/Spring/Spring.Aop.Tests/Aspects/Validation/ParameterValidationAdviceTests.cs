@@ -22,7 +22,7 @@
 
 using System;
 using System.Reflection;
-using DotNetMock.Dynamic;
+using Rhino.Mocks;
 using NUnit.Framework;
 using Spring.Context;
 using Spring.Validation;
@@ -39,17 +39,19 @@ namespace Spring.Aspects.Validation
     [TestFixture]
     public sealed class ParameterValidationAdviceTests
     {
-        private IDynamicMock mockContext;
+        private IApplicationContext mockContext;
         private ParameterValidationAdvice advice;
         private RequiredValidator requiredValidator;
+        private MockRepository mocks;
 
         [SetUp]
         public void SetUp()
         {
-            mockContext = new DynamicMock(typeof (IApplicationContext));
+            mocks = new MockRepository();
+            mockContext = mocks.CreateMock<IApplicationContext>();
 
             advice = new ParameterValidationAdvice();
-            advice.ApplicationContext = (IApplicationContext) mockContext.Object;
+            advice.ApplicationContext = mockContext;
 
             requiredValidator = new RequiredValidator();
             requiredValidator.Actions.Add(new ErrorMessageAction("error.required", "errors"));
@@ -63,13 +65,18 @@ namespace Spring.Aspects.Validation
             ValidationTarget target = new ValidationTarget();
             object[] args = new object[] {inventor};
 
-            ExpectValidatorRetrieval("required", requiredValidator);
-            advice.Before(method, args, target);
-            method.Invoke(target, args);
+            using (mocks.Record())
+            {
+                ExpectValidatorRetrieval("required", requiredValidator);
+            }
 
-            Assert.AreEqual("NIKOLA TESLA", inventor.Name);
+            using (mocks.Playback())
+            {
+                advice.Before(method, args, target);
+                method.Invoke(target, args);
+                Assert.AreEqual("NIKOLA TESLA", inventor.Name);
+            }
 
-            mockContext.Verify();
         }
 
         [Test]
@@ -78,16 +85,22 @@ namespace Spring.Aspects.Validation
         {
             MethodInfo method = typeof(ValidationTarget).GetMethod("Save");
 
-            ExpectValidatorRetrieval("required", requiredValidator);
-            advice.Before(method, new object[] { null }, new ValidationTarget());
-            mockContext.Verify();
+            using (mocks.Record())
+            {
+                ExpectValidatorRetrieval("required", requiredValidator);
+            }
+
+            using (mocks.Playback())
+            {
+                advice.Before(method, new object[] { null }, new ValidationTarget());
+            }            
         }
 
         #region Helper methods
 
         private void ExpectValidatorRetrieval(string validatorName, IValidator validator)
         {
-            mockContext.ExpectAndReturn("GetObject", validator, validatorName);
+            Expect.Call(mockContext.GetObject(validatorName)).Return(validator);
         }
 
         #endregion

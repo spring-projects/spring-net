@@ -125,16 +125,80 @@ namespace Spring.Util
         /// <returns>The target method.</returns>
         /// <seealso cref="MapInterfaceMethodToImplementationIfNecessary"/>
         public static MethodInfo GetMethod(
-            Type targetType, string method, Type[] argumentTypes)
+                    Type targetType, string method, Type[] argumentTypes)
+        {
+            return GetMethod(targetType, method, argumentTypes, 0);
+        }
+
+        /// <summary>
+        /// Returns method for the specified <see cref="System.Type"/>, method
+        /// name and argument
+        /// <see cref="System.Type"/>s.
+        /// </summary>
+        /// <remarks>
+        /// <para>Searches with BindingFlags</para>
+        /// <para>When dealing with interface methods, you probable want to 'normalize' method references by calling 
+        /// <see cref="MapInterfaceMethodToImplementationIfNecessary"/>. 
+        /// </para>
+        /// </remarks>
+        /// <param name="targetType">
+        /// The target <see cref="System.Type"/> to find the method on.
+        /// </param>
+        /// <param name="method">The method to find.</param>
+        /// <param name="argumentTypes">
+        /// The argument <see cref="System.Type"/>s. May be
+        /// <see langword="null"/> if the method has no arguments.
+        /// </param>
+        /// <param name="genericArgumentsCount">Number of Generic Arguments in the method</param>
+        /// <returns>The target method.</returns>
+        /// <seealso cref="MapInterfaceMethodToImplementationIfNecessary"/>
+        public static MethodInfo GetMethod(
+            Type targetType, string method, Type[] argumentTypes, int genericArgumentsCount)
         {
             AssertUtils.ArgumentNotNull(targetType, "Type must not be null");
-            // try method exactly as specified first...
-            MethodInfo retMethod = targetType.GetMethod(
-                method,
-                ReflectionUtils.AllMembersCaseInsensitiveFlags,
-                null,
-                argumentTypes == null ? Type.EmptyTypes : argumentTypes,
-                null);
+            
+            MethodInfo retMethod = null;
+
+            MethodInfo[] methods = targetType.GetMethods(ReflectionUtils.AllMembersCaseInsensitiveFlags);
+
+            foreach (MethodInfo candidate in methods)
+            {
+                if (candidate.Name.ToLower() == method.ToLower())
+                {
+                    Type[] parameterTypes = Array.ConvertAll<ParameterInfo, Type>(candidate.GetParameters(), delegate(ParameterInfo i) { return i.ParameterType; });
+                    bool typesMatch = false;
+
+                    bool zeroTypeArguments = argumentTypes.Length == 0;
+
+                    if (parameterTypes.Length == argumentTypes.Length && !zeroTypeArguments)
+                    {
+                        for (int i = 0; i < parameterTypes.Length; i++)
+                        {
+                            typesMatch = parameterTypes[i] == argumentTypes[i];
+                            if (!typesMatch)
+                            {
+                                break;
+                            }
+                        }
+                    }
+
+                    if (typesMatch || zeroTypeArguments)
+                    {
+                        if (candidate.GetGenericArguments().Length == genericArgumentsCount)
+                        {
+                            retMethod = candidate;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            /*return (from method in type.GetMethods()
+                    where method.Name == name
+                    where parameterTypes.SequenceEqual(method.GetParameters().Select(p => p.ParameterType))
+                    where method.GetGenericArguments().Count() == genericArguments
+                    select method).Single();*/
+
 
             if (retMethod == null)
             {
@@ -247,6 +311,79 @@ namespace Spring.Util
                 names[i] = args[i].Name;
             }
             return names;
+        }
+
+        public static MethodInfo GetGenericMethod(Type type, string methodName, Type[] typeArguments, Type[] parameterTypes)
+        {
+            MethodInfo methodInfo = null;
+
+            if (typeArguments == null)
+            {
+                // Non-Generic Method
+                methodInfo = type.GetMethod(methodName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance, null, parameterTypes, null);
+            }
+            else
+            {
+                // Generic Method
+                MethodInfo[] methods = type.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                // Loop thru all Methods
+                foreach (MethodInfo method in methods)
+                {
+                    if (method.Name != methodName)
+                    {
+                        // Name does not match
+                        continue;
+                    }
+
+                    if (!method.IsGenericMethod)
+                    {
+                        // Non-Generic
+                        continue;
+                    }
+
+                    // Compare the Method Parameters
+                    bool paramsOk = false;
+                    if (method.GetParameters().Length == parameterTypes.Length)
+                    {
+                        // Count Matches
+                        paramsOk = true;
+                        // Check each Type
+                        for (int i = 0; i < method.GetParameters().Length; i++)
+                        {
+                            if (method.GetParameters()[i].ParameterType != parameterTypes[i])
+                            {
+                                // Parameter Type doesn't Match
+                                paramsOk = false;
+                                break;
+                            }
+                        }
+                    }
+                    if (!paramsOk)
+                    {
+                        // Parameters didn't match
+                        continue;
+                    }
+
+                    // Check the Generic Arguments
+                    bool argsOk = false;
+                    if (method.GetGenericArguments().Length == typeArguments.Length)
+                    {
+                        // Count Matches
+                        argsOk = true;
+                        // TODO: Check for "where" Limitation in the Generic Definition
+                    }
+                    if (!argsOk)
+                    {
+                        // Generic Arguments didn't match
+                        continue;
+                    }
+
+                    // If we're here, we got the right Method
+                    methodInfo = method.MakeGenericMethod(typeArguments);
+                    break;
+                }
+            }
+            return methodInfo;
         }
 #endif
 

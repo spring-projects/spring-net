@@ -286,7 +286,39 @@ namespace Spring.Objects.Factory
 		/// If the object could not be created.
 		/// </exception>
 		object GetObject(string name);
-	    
+		
+        /// <summary>
+		/// Return an instance (possibly shared or independent) of the given object name.
+		/// </summary>
+		/// <remarks>
+		/// <para>
+		/// This method allows an object factory to be used as a replacement for the
+		/// Singleton or Prototype design pattern.
+		/// </para>
+		/// <para>
+		/// Note that callers should retain references to returned objects. There is no
+		/// guarantee that this method will be implemented to be efficient. For example,
+		/// it may be synchronized, or may need to run an RDBMS query.
+		/// </para>
+		/// <para>
+		/// Will ask the parent factory if the object cannot be found in this factory
+		/// instance.
+		/// </para>
+		/// </remarks>
+		/// <typeparam name="T">The type of the object to return.</typeparam>
+        /// <param name="name">The name of the object to return.</param>
+		/// <returns>The instance of the object.</returns>
+		/// <exception cref="Spring.Objects.Factory.NoSuchObjectDefinitionException">
+		/// If there's no such object definition.
+		/// </exception>
+        /// <exception cref="Spring.Objects.Factory.ObjectNotOfRequiredTypeException">
+        /// If the object is not of the required type.
+		/// </exception>
+		/// <exception cref="Spring.Objects.ObjectsException">
+		/// If the object could not be created.
+		/// </exception>
+		T GetObject<T>(string name);
+
         /// <summary>
         /// Return an instance (possibly shared or independent) of the given object name.
         /// </summary>
@@ -323,6 +355,46 @@ namespace Spring.Objects.Factory
         /// If the supplied <paramref name="name"/> is <see langword="null"/>.
         /// </exception>
         object GetObject(string name, object[] arguments);
+        
+        /// <summary>
+        /// Return an instance (possibly shared or independent) of the given object name.
+        /// </summary>
+        /// <remarks>
+        /// <para>
+        /// This method allows an object factory to be used as a replacement for the
+        /// Singleton or Prototype design pattern.
+        /// </para>
+        /// <para>
+        /// Note that callers should retain references to returned objects. There is no
+        /// guarantee that this method will be implemented to be efficient. For example,
+        /// it may be synchronized, or may need to run an RDBMS query.
+        /// </para>
+        /// <para>
+        /// Will ask the parent factory if the object cannot be found in this factory
+        /// instance.
+        /// </para>
+        /// </remarks>
+        /// <param name="name">The name of the object to return.</param>
+        /// <param name="arguments">
+        /// The arguments to use if creating a prototype using explicit arguments to
+        /// a static factory method. If there is no factory method and the
+        /// arguments are not null, then match the argument values by type and
+        /// call the object's constructor.
+        /// </param>
+        /// <returns>The instance of the object.</returns>
+        /// <exception cref="Spring.Objects.Factory.NoSuchObjectDefinitionException">
+        /// If there's no such object definition.
+        /// </exception>
+        /// <exception cref="Spring.Objects.ObjectsException">
+        /// If the object could not be created.
+        /// </exception>
+        /// <exception cref="Spring.Objects.Factory.ObjectNotOfRequiredTypeException">
+        /// If the object is not of the required type.
+        /// </exception>
+        /// <exception cref="System.ArgumentNullException">
+        /// If the supplied <paramref name="name"/> is <see langword="null"/>.
+        /// </exception>
+        T GetObject<T>(string name, object[] arguments);
 	    
         /// <summary>
         /// Return an instance (possibly shared or independent) of the given object name.
@@ -435,6 +507,24 @@ namespace Spring.Objects.Factory
 	    bool IsTypeMatch(string name, Type targetType);
 
         /// <summary>
+        /// Determines whether the object with the given name matches the specified type.
+        /// </summary>
+        /// <remarks>More specifically, check whether a GetObject call for the given name
+        /// would return an object that is assignable to the specified target type.
+        /// Translates aliases back to the corresponding canonical bean name.
+        /// Will ask the parent factory if the bean cannot be found in this factory instance.
+        /// </remarks>
+        /// <param name="name">The name of the object to query.</param>
+        /// <typeparam name="T">Type of the target to match against.</typeparam>
+        /// <returns>
+        /// 	<c>true</c> if the object type matches; otherwise, <c>false</c>
+        /// if it doesn't match or cannot be determined yet.
+        /// </returns>
+        /// <exception cref="NoSuchObjectDefinitionException">Ff there is no object with the given name
+        /// </exception>
+	    bool IsTypeMatch<T>(string name);
+
+        /// <summary>
         /// Return an unconfigured(!) instance (possibly shared or independent) of the given object name.
         /// </summary>
         /// <param name="name">The name of the object to return.</param>
@@ -468,6 +558,41 @@ namespace Spring.Objects.Factory
         ///  This method will only <b>instantiate</b> the requested object. It does <b>NOT</b> inject any dependencies!
         /// </remarks>
         object CreateObject(string name, Type requiredType, object[] arguments);
+
+        /// <summary>
+        /// Return an unconfigured(!) instance (possibly shared or independent) of the given object name.
+        /// </summary>
+        /// <param name="name">The name of the object to return.</param>
+        /// <typeparam name="T">
+        /// The <see cref="System.Type"/> the object may match. Can be an interface or
+        /// superclass of the actual class. For example, if the value is the
+        /// <see cref="System.Object"/> class, this method will succeed whatever the
+        /// class of the returned instance.
+        /// </typeparam>
+        /// <param name="arguments">
+        /// The arguments to use if creating a prototype using explicit arguments to
+        /// a <see lang="static"/> factory method. If there is no factory method and the
+        /// supplied <paramref name="arguments"/> array is not <see lang="null"/>, then
+        /// match the argument values by type and call the object's constructor.
+        /// </param>
+        /// <returns>The unconfigured(!) instance of the object.</returns>
+        /// <exception cref="Spring.Objects.Factory.NoSuchObjectDefinitionException">
+        /// If there's no such object definition.
+        /// </exception>
+        /// <exception cref="Spring.Objects.ObjectsException">
+        /// If the object could not be created.
+        /// </exception>
+        /// <exception cref="Spring.Objects.Factory.ObjectNotOfRequiredTypeException">
+        /// If the object is not of the required type.
+        /// </exception>
+        /// <exception cref="System.ArgumentNullException">
+        /// If the supplied <paramref name="name"/> is <see langword="null"/>.
+        /// </exception>
+        /// <seealso cref="Spring.Objects.Factory.IObjectFactory.GetObject(string, Type, object[])"/>
+        /// <remarks>
+        ///  This method will only <b>instantiate</b> the requested object. It does <b>NOT</b> inject any dependencies!
+        /// </remarks>
+        T CreateObject<T>(string name, object[] arguments);
 
 		/// <summary>
 		/// Injects dependencies into the supplied <paramref name="target"/> instance
