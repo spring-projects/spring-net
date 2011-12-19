@@ -5009,7 +5009,7 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
           <title><literal>ConfigSectionVariableSource</literal></title>
 
           <para>The <literal>ConfigSectionVariableSource</literal> allows you
-          to define variables in a custom configuration section in you
+          to define variables in a custom configuration section in your
           configuration file:</para>
 
           <programlisting language="myxml">&lt;!-- app.config: --&gt;
@@ -5041,7 +5041,7 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
 
           <para>By simply configuring the appropriate section, you can use the
           <literal>ConfigSectionVariableSource</literal> to retrieve variables
-          from application settings and user settings. Assuming your
+          from .NET's application settings and user settings. Assuming your
           application's root namespace is <literal>MyApp</literal>, then your
           application- and user settings can be loaded as variables by
           configuring the following variable sources:</para>
@@ -5118,7 +5118,7 @@ joan_age=35</programlisting>
 
           <para>The following variable source configuration allows you to use
           <literal>${roger_name}</literal> and <literal>${roger_age}</literal>
-          as variable placeholders:</para>
+          as variables:</para>
 
           <programlisting language="myxml">&lt;object type="Spring.Objects.Factory.Config.CommandLineArgsVariableSource, Spring.Core"&gt;
   &lt;property name="ArgumentPrefix" value ="/" /&gt; &lt;!-- optional; default: "/" --&gt;
@@ -5132,9 +5132,9 @@ joan_age=35</programlisting>
           <para>Entries in the Windows registry can be used as variables. When
           your registry contains the key
           <literal>HKEY_CURRENT_USER\MyKey</literal> with entries
-          <literal>freddy_name (String)</literal> and <literal>freddy_age
-          (DWord)</literal>, then you can configure the following variable
-          source to use <literal>${freddy_name}</literal> and
+          <literal>freddy_name</literal> and <literal>freddy_age</literal>,
+          then you can configure the following variable source to use
+          <literal>${freddy_name}</literal> and
           <literal>${freddy_age}</literal> as variables:</para>
 
           <programlisting language="myxml">&lt;object type="Spring.Objects.Factory.Config.RegistryVariableSource, Spring.Core"&gt;
