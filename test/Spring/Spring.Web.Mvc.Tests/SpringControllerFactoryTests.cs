@@ -85,7 +85,8 @@ namespace Spring.Web.Mvc.Tests
         [Test]
         public void CanRetrieveControllersNotRegisteredWithContainer()
         {
-            _factory.CreateController(new RequestContext(new MockContext(), new RouteData()), "NotInContainer");
+            IController controller = _factory.CreateController(new RequestContext(new MockContext(), new RouteData()), "NotInContainer");
+            Assert.IsInstanceOf(typeof(NotInContainerController), controller);
         }
 
         [Test]
