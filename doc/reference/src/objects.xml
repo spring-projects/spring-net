@@ -4607,7 +4607,7 @@ DEBUG - MovieApp Done.</programlisting>
 
     <sect2 xml:id="objects-factory-customizing-factory-postprocessors">
       <title>Customizing configuration metadata with
-      ObjectFactoryPostProcessors</title>
+      <literal>IObjectFactoryPostProcessors</literal></title>
 
       <para>The next extension point that we will look at is the
       <literal>Spring.Objects.Factory.Config.IObjectFactoryPostProcessor</literal>.
@@ -4658,11 +4658,11 @@ DEBUG - MovieApp Done.</programlisting>
       </note>
 
       <para>An object factory post-processor is executed manually (in the case
-      of a IObjectFactory) or automatically (in the case of an
-      IApplicationContext) to apply changes of some sort to the configuration
-      metadata that defines a container. Spring.NET includes a number of
-      pre-existing object factory post-processors, such as
-      <literal>PropertyResourceConfigurer</literal> and
+      of a <literal>IObjectFactory</literal>) or automatically (in the case of
+      an <literal>IApplicationContext</literal>) to apply changes of some sort
+      to the configuration metadata that defines a container. Spring.NET
+      includes a number of pre-existing object factory post-processors, such
+      as <literal>PropertyResourceConfigurer</literal> and
       <literal>PropertyPlaceHolderConfigurer</literal>, both described below
       and ObjectNameAutoProxyCreator, which is very useful for wrapping other
       objects transactionally or with any other kind of proxy, as described
@@ -4987,20 +4987,14 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
   &lt;property name="VariableSources"&gt;
     &lt;list&gt;
       &lt;object type="Spring.Objects.Factory.Config.PropertyFileVariableSource, Spring.Core"&gt;
-        &lt;property name="Location" value="~\application.properties" /&gt;
-        &lt;property name="IgnoreMissingResources" value="true"/&gt;
+        &lt;property name="Location" value="~\application.properties" /&gt;        
       &lt;/object&gt;
       &lt;object type="Spring.Objects.Factory.Config.ConfigSectionVariableSource, Spring.Core"&gt;
         &lt;property name="SectionNames" value="CryptedConfiguration" /&gt;
       &lt;/object&gt;
     &lt;/list&gt;
   &lt;/property&gt;
-&lt;/object&gt;     </programlisting><note>
-            <para>The use of the <property>IgnoreMissingResources</property>
-            property above will mean that if the property file is not found it
-            will be silently ignored and the resolution will continue to
-            <classname>ConfigSectionVariableSource</classname>.</para>
-          </note></para>
+&lt;/object&gt;     </programlisting></para>
 
         <para>The variable sources that Spring.NET provides out of the box are
         described in the following sections.</para>
@@ -5080,12 +5074,21 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
 joan_age=35</programlisting>
 
           <para>You can use the <literal>${joan_name}</literal> and
-          <literal>${joan_age}</literal> variables if you configure the
-          following variable source:</para>
+          <literal>${joan_age}</literal> variables in your object definitions
+          if you configure the following variable source:</para>
 
-          <programlisting language="myxml">&lt;object type="Spring.Objects.Factory.Config.PropertyFileVariableSource, Spring.Core"&gt;
+          <para><programlisting>&lt;object type="Spring.Objects.Factory.Config.PropertyFileVariableSource, Spring.Core"&gt;
   &lt;property name="Location" value="~\application.properties" /&gt;
-&lt;/object&gt;</programlisting>
+  &lt;property name="IgnoreMissingResources" value="true"/&gt;
+&lt;/object&gt;</programlisting></para>
+
+          <para><note>
+              <para>The use of the <property>IgnoreMissingResources</property>
+              property above will mean that if the property file is not found
+              it will be silently ignored and the resolution will continue to
+              the next variable source(s) of the
+              <literal>VariablePlaceholderConfigurer</literal>.</para>
+            </note></para>
         </sect4>
 
         <sect4>
