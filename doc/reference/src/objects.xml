@@ -5017,15 +5017,15 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
   &lt;/DonConfiguration&gt;
 &lt;/configuration&gt;
 
+&lt;!-- VariableSource configuration: --&gt;
+&lt;object type="Spring.Objects.Factory.Config.ConfigSectionVariableSource, Spring.Core"&gt;
+  &lt;property name="SectionNames" value="DonConfiguration" /&gt;
+&lt;/object&gt;
+
 &lt;!-- consume variables: --&gt;
 &lt;object type="Example.Person, Spring.IocQuickStart.VariableSources"&gt;
   &lt;property name="Name" value="${don_name}" /&gt;
   &lt;property name="Age" value="${don_age}" /&gt;
-&lt;/object&gt;
-
-&lt;!-- VariableSource configuration: --&gt;
-&lt;object type="Spring.Objects.Factory.Config.ConfigSectionVariableSource, Spring.Core"&gt;
-  &lt;property name="SectionNames" value="DonConfiguration" /&gt;
 &lt;/object&gt;
 </programlisting>
 
