@@ -5168,6 +5168,13 @@ joan_age=35</programlisting>
           <programlisting language="myxml">&lt;object type="Spring.Objects.Factory.Config.RegistryVariableSource, Spring.Core"&gt;
   &lt;property name="Key" value="HKEY_CURRENT_USER\MyKey" /&gt;
 &lt;/object&gt;</programlisting>
+
+          <para><note>
+              <para>The key must be present in the registry when the
+              configuration is read, otherwise an
+              <literal>ObjectCreationException</literal> will be
+              thrown.</para>
+            </note></para>
         </sect4>
 
         <sect4>
