@@ -5091,8 +5091,9 @@ joan_age=35</programlisting>
           <literal>${joan_age}</literal> variables in your object definitions
           if you configure the following variable source:</para>
 
-          <para><programlisting>&lt;object type="Spring.Objects.Factory.Config.PropertyFileVariableSource, Spring.Core"&gt;
-  &lt;property name="Location" value="~\application.properties" /&gt;
+          <para><programlisting language="myxml">&lt;object type="Spring.Objects.Factory.Config.PropertyFileVariableSource, Spring.Core"&gt;
+  &lt;property name="Location" value="~\application.properties" /&gt;               &lt;!-- specify a single ...  --&gt;
+  &lt;property name="Locations" value="~\file1.properties,~\file2.properties" /&gt; &lt;!-- or multiple locations --&gt;
   &lt;property name="IgnoreMissingResources" value="true"/&gt;
 &lt;/object&gt;</programlisting></para>
 
@@ -5103,12 +5104,22 @@ joan_age=35</programlisting>
               the next variable source(s) of the
               <literal>VariablePlaceholderConfigurer</literal>.</para>
             </note></para>
+
+          <para>Within <literal>PropertyFileVariableSource</literal>s,
+          precedence rules differ from the configuration of
+          <literal>VariableSource</literal>s in the
+          <literal>VariablePlaceholderConfigurer</literal>. When the same
+          property occurs more than once in a property file, the value of the
+          <emphasis>last</emphasis> entry will be used. Same goes for
+          specifying the same variable in more than one location in a single
+          <literal>PropertyFileVariableSource</literal>: the entry from the
+          last file will be used.</para>
         </sect4>
 
         <sect4>
           <title><literal>ConfigurableVariableSource</literal></title>
 
-          <para>A <literal>ConfigurableVariableSource</literal> allows you
+          <para>A <literal>ConfigurableVariableSource</literal> allows you to
           define variables in-line in a variable source definition. To
           configure the variables <literal>${midge_name}</literal> and
           <literal>${midge_age}</literal>, you can use the following
