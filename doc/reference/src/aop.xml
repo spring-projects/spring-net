@@ -1589,7 +1589,7 @@ MyInterface myProxyObject2 = (MyInterface)ctx.GetObject("MyObject");
     <title>Proxying mechanisms</title>
 
     <para>Spring creates AOP proxies built at runtime through the use of the
-    TypeBuilder API.</para>
+    <literal>TypeBuilder</literal> API.</para>
 
     <para>Two types of proxies can be created, composition based or
     inheritance based. If the target object implements at least one interface
@@ -1608,22 +1608,23 @@ MyInterface myProxyObject2 = (MyInterface)ctx.GetObject("MyObject");
     if needed. Please note that in both cases a target method implementation
     that calls other methods on the target object will not be advised. To
     force inheritance based proxies you should either set the
-    <literal>ProxyTargetType</literal> to true property of a ProxyFactory or
-    set the XML namespace element <literal>proxy-target-type = true</literal>
-    when using an AOP schema based configuration.</para>
+    <literal>ProxyTargetType</literal> property of a
+    <literal>ProxyFactory</literal> to true or set the XML namespace element
+    <literal>proxy-target-type = true</literal> when using an AOP schema based
+    configuration.</para>
 
     <note>
       <para>An important alternative approach to inheritance based proxies is
-      disucssed in the next section.</para>
+      discussed in the next section.</para>
     </note>
 
-    <para>In .NET 2.0 you can define the assembly level attribute,
-    InternalsVisibleTo, to allow access of internal interfaces/classes to
+    <para>In .NET 2.0 you can define the <literal>InternalsVisibleTo</literal>
+    assembly level attribute to allow access of internal interfaces/classes to
     specified 'friend' assemblies. If you need to create an AOP proxy on an
-    internal class/interface add the following code, [assembly:
-    InternalsVisibleTo("Spring.Proxy")] and [assembly:
-    InternalsVisibleTo("Spring.DynamicReflection")] to your to AssemblyInfo
-    file.</para>
+    internal class/interface <literal>[assembly:
+    InternalsVisibleTo("Spring.Proxy")]</literal> and <literal>[assembly:
+    InternalsVisibleTo("Spring.DynamicReflection")]</literal> to your to
+    <literal>AssemblyInfo</literal> file.</para>
 
     <sect2 xml:id="aop-inheritancebasedaopconfigurer">
       <title>InheritanceBasedAopConfigurer</title>
@@ -1638,10 +1639,11 @@ MyInterface myProxyObject2 = (MyInterface)ctx.GetObject("MyObject");
       private 'target' field. Interception advice is added directly in the
       method body before invoking the base class method.</para>
 
-      <para>To use this new inheritance based proxy described in the note
-      above, declare an instance of the InheritanceBasedAopConfigurer, and
-      IObjectFactoryPostProcessor, in yoru configuraiton file. Here is an
-      example.</para>
+      <para>To use this inheritance based proxy described in the note above,
+      declare an instance of the
+      <literal>InheritanceBasedAopConfigurer</literal>, and
+      <literal>IObjectFactoryPostProcessor</literal>, in your configuration
+      file. Here is an example:</para>
 
       <programlisting language="myxml">&lt;object type="Spring.Aop.Framework.AutoProxy.InheritanceBasedAopConfigurer, Spring.Aop"&gt;
   &lt;property name="ObjectNames"&gt;
@@ -1659,9 +1661,9 @@ MyInterface myProxyObject2 = (MyInterface)ctx.GetObject("MyObject");
 
 &lt;object id="debugInterceptor" type="AopPlay.DebugInterceptor, AopPlay"/&gt;</programlisting>
 
-      <para>This configuraiton style is similar to the autoproxy by name
+      <para>This configuration style is similar to the autoproxy by name
       approach described <link linkend="aop-nameautoproxy">here</link> and is
-      particuarly appropriate when you want to apply advice to WinForm
+      particularly appropriate when you want to apply advice to Winform
       classes.</para>
     </sect2>
   </sect1>
