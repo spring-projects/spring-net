@@ -94,10 +94,9 @@
       <literal>SpringMvcApplication</literal> class as shown in the following
       snippet:</para>
 
-      <programlisting language="csharp">    public class MvcApplication : SpringMvcApplication
-    {
-        
-    }</programlisting>
+      <programlisting language="csharp">public class MvcApplication : SpringMvcApplication
+{
+}</programlisting>
 
       <para>Note that the <literal>SpringMvcApplication</literal> class is
       abstract so that developers may only use it indirectly as a superclass
@@ -117,7 +116,7 @@
 
     &lt;configSections&gt;
         &lt;sectionGroup name="spring"&gt;
-          &lt;section name="context" type="Spring.Context.Support.MvcContextHandler, Spring.Web.Mvc"/&gt;
+          &lt;section name="context" type="Spring.Context.Support.MvcContextHandler, Spring.Web.Mvc3"/&gt;
         &lt;/sectionGroup&gt;
     &lt;/configSections&gt;
 
