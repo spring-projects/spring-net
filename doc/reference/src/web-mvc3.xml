@@ -64,9 +64,9 @@
       </listitem>
     </itemizedlist>
 
-    <para>The Spring.NET distribution ships with a Web.Mvc Quick Start
-    application. The Web.Mvc QuickStart is the best way to see how to
-    integrate Spring.Web.Mvc into your own ASP.NET MVC applications.</para>
+    <para>The Spring.NET distribution ships with a Spring.Mvc3QuickStart
+    application. This QuickStart is the best way to see how to integrate
+    Spring.Web.Mvc into your own ASP.NET MVC applications.</para>
   </sect1>
 
   <sect1 xml:id="web-mvc3-contexts">
