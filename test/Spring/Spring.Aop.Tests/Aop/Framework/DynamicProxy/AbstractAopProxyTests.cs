@@ -27,16 +27,12 @@ using System.Runtime.Serialization.Formatters;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
 using System.Reflection;
-using System.Collections;
 using System.Web;
-using System.Diagnostics;
 using System.Runtime.Remoting;
 
 using AopAlliance.Aop;
 using AopAlliance.Intercept;
 using Rhino.Mocks;
-using Spring.Aop.Target;
-using Spring.Aop.Framework;
 using Spring.Aop.Framework.Adapter;
 using Spring.Aop.Interceptor;
 using Spring.Aop.Support;
@@ -61,7 +57,6 @@ namespace Spring.Aop.Framework.DynamicProxy
     public abstract class AbstractAopProxyTests
     {
         protected MockTargetSource mockTargetSource = new MockTargetSource();
-        private MockRepository mocks;
 
         /*
          * Make a clean target source available if code wants to use it.
@@ -78,7 +73,6 @@ namespace Spring.Aop.Framework.DynamicProxy
         [SetUp]
         protected void SetUp()
         {
-            mocks = new MockRepository();
             mockTargetSource.Reset();
         }
 
@@ -294,14 +288,11 @@ namespace Spring.Aop.Framework.DynamicProxy
         [Test(Description = "http://jira.springframework.org/browse/SPRNET-1174")]
         public void ImplementsInterfaceHierarchy()
         {
-            MockRepository mocks = new MockRepository();
+            IMethodInterceptor mi = MockRepository.GenerateMock<IMethodInterceptor>();
 
-            IMethodInterceptor mi = (IMethodInterceptor)mocks.DynamicMock(typeof(IMethodInterceptor));
-
-            Expect.Call(mi.Invoke(null)).IgnoreArguments().Return((long)5);
-            Expect.Call(mi.Invoke(null)).IgnoreArguments().Return("Customer Name");
-            Expect.Call(mi.Invoke(null)).IgnoreArguments().Return("Customer Company");
-            mocks.ReplayAll();
+            mi.Stub(x => x.Invoke(Arg<IMethodInvocation>.Is.NotNull)).Return((long)5).Repeat.Once();
+            mi.Stub(x => x.Invoke(Arg<IMethodInvocation>.Is.NotNull)).Return("Customer Name").Repeat.Once();
+            mi.Stub(x => x.Invoke(Arg<IMethodInvocation>.Is.NotNull)).Return("Customer Company").Repeat.Once();
 
             AdvisedSupport advised = new AdvisedSupport();
             advised.AddAdvice(mi);
@@ -312,8 +303,6 @@ namespace Spring.Aop.Framework.DynamicProxy
             Assert.AreEqual((long)5, to.Id, "Incorrect Id");
             Assert.AreEqual("Customer Name", to.Name, "Incorrect Name");
             Assert.AreEqual("Customer Company", to.Company, "Incorrect Company");
-
-            mocks.VerifyAll();
         }
 
         //[Test] - to be called from derived fixtures
@@ -424,9 +413,8 @@ namespace Spring.Aop.Framework.DynamicProxy
         public void InterceptorHandledCallWithNoTarget()
         {
             int age = 26;
-            IMethodInterceptor mock = (IMethodInterceptor) mocks.CreateMock(typeof(IMethodInterceptor));
-            Expect.Call(mock.Invoke(null)).IgnoreArguments().Return(age);
-            mocks.ReplayAll();
+            IMethodInterceptor mock = MockRepository.GenerateMock<IMethodInterceptor>();
+            mock.Stub(x => x.Invoke(Arg<IMethodInvocation>.Is.NotNull)).Return(age);
 
             AdvisedSupport advised = new AdvisedSupport();
             advised.AddAdvice(mock);
@@ -435,8 +423,6 @@ namespace Spring.Aop.Framework.DynamicProxy
             ITestObject to = CreateProxy(advised) as ITestObject;
             Assert.IsNotNull(to);
             Assert.IsTrue(to.Age == age, "Incorrect age");
-        
-            mocks.VerifyAll();
         }
 
         [Test]
