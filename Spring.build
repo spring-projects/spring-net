@@ -430,6 +430,8 @@ Commandline Examples:
     <property name="nh30.lib.dir" value="${spring.basedir}/lib/NHibernate30/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
     <property name="nh31.lib.dir" value="${spring.basedir}/lib/NHibernate31/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
     <property name="nh32.lib.dir" value="${spring.basedir}/lib/NHibernate32/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
+    <property name="quartz.lib.dir" value="${spring.basedir}/lib/Quartz10/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
+    <property name="quartz20.lib.dir" value="${spring.basedir}/lib/Quartz20/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
     <call target="copylibtobin"/>
 
     <!-- build assemblies -->
@@ -568,6 +570,8 @@ Commandline Examples:
 	<property name="nh30.lib.dir" value="${spring.basedir}/lib/NHibernate30/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
 	<property name="nh31.lib.dir" value="${spring.basedir}/lib/NHibernate31/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
 	<property name="nh32.lib.dir" value="${spring.basedir}/lib/NHibernate32/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
+    <property name="quartz.lib.dir" value="${spring.basedir}/lib/Quartz10/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
+    <property name="quartz20.lib.dir" value="${spring.basedir}/lib/Quartz20/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
 	<call target="copykeys" if="${project.build.sign}"/>
 	<call target="copylibs" />
 	<call target="common.generate-assemblyinfo"/>
@@ -845,6 +849,8 @@ Commandline Examples:
         <delete dir="src/Spring/Spring.Messaging/bin" failonerror="false"/>
         <delete dir="src/Spring/Spring.Scheduling.Quartz/obj" failonerror="false"/>
         <delete dir="src/Spring/Spring.Scheduling.Quartz/bin" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Scheduling.Quartz20/obj" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Scheduling.Quartz20/bin" failonerror="false"/>
         <delete dir="src/Spring/Spring.Template.Velocity/obj" failonerror="false"/>
         <delete dir="src/Spring/Spring.Template.Velocity/bin" failonerror="false"/>
         <delete dir="src/Spring/Spring.Testing.NUnit/obj" failonerror="false"/>
@@ -900,6 +906,8 @@ Commandline Examples:
         <delete dir="test/Spring/Spring.Messaging.Tests/bin" failonerror="false"/>
         <delete dir="test/Spring/Spring.Scheduling.Quartz.Tests/obj" failonerror="false"/>
         <delete dir="test/Spring/Spring.Scheduling.Quartz.Tests/bin" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Scheduling.Quartz20.Tests/obj" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Scheduling.Quartz20.Tests/bin" failonerror="false"/>
         <delete dir="test/Spring/Spring.Template.Velocity.Tests/obj" failonerror="false"/>
         <delete dir="test/Spring/Spring.Template.Velocity.Tests/bin" failonerror="false"/>
         <delete dir="test/Spring/Spring.Web.Tests/obj" failonerror="false"/>
@@ -1545,9 +1553,14 @@ Commandline Examples:
           <include name="*/*/Spring.Messaging.xml"/>
           <include name="*/*/Spring.Messaging.pdb"/>
 
+		  <!--
           <include name="*/*/Spring.Scheduling.Quartz.dll"/>
           <include name="*/*/Spring.Scheduling.Quartz.xml"/>
           <include name="*/*/Spring.Scheduling.Quartz.pdb"/>
+		  -->
+          <include name="*/*/Spring.Scheduling.Quartz20.dll"/>
+          <include name="*/*/Spring.Scheduling.Quartz20.xml"/>
+          <include name="*/*/Spring.Scheduling.Quartz20.pdb"/>
 
           <include name="*/*/Spring.Template.Velocity.dll"/>
           <include name="*/*/Spring.Template.Velocity.xml"/>
@@ -1579,9 +1592,14 @@ Commandline Examples:
             <include name="*/Spring.Services.xml"/>
             <include name="*/Spring.Services.pdb"/>
 			
-			<include name="*/Spring.Scheduling.Quartz.dll"/>
-            <include name="*/Spring.Scheduling.Quartz.xml"/>
-            <include name="*/Spring.Scheduling.Quartz.pdb"/>
+		  <!--
+          <include name="*/*/Spring.Scheduling.Quartz.dll"/>
+          <include name="*/*/Spring.Scheduling.Quartz.xml"/>
+          <include name="*/*/Spring.Scheduling.Quartz.pdb"/>
+		  -->
+          <include name="*/*/Spring.Scheduling.Quartz20.dll"/>
+          <include name="*/*/Spring.Scheduling.Quartz20.xml"/>
+          <include name="*/*/Spring.Scheduling.Quartz20.pdb"/>
 			
 			<include name="*/Spring.Web.Mvc.dll"/>
             <include name="*/Spring.Web.Mvc.xml"/>
@@ -1802,6 +1820,7 @@ Commandline Examples:
       <include name="src/Spring/Spring.Messaging.Nms/**"/>
       <include name="src/Spring/Spring.Messaging.Ems/**"/>
       <include name="src/Spring/Spring.Scheduling.Quartz/**"/>
+      <include name="src/Spring/Spring.Scheduling.Quartz20/**"/>
       <include name="src/Spring/Spring.Template.Velocity/**"/>
       <include name="src/Spring/Spring.Testing.NUnit/**"/>
       <include name="src/Spring/Spring.Testing.Microsoft/**"/>
@@ -1832,6 +1851,7 @@ Commandline Examples:
       <include name="test/Spring/Spring.Messaging.Nms.Integration.Tests/**"/>
       <include name="test/Spring/Spring.Messaging.Ems.Tests/**"/>
       <include name="test/Spring/Spring.Scheduling.Quartz.Tests/**"/>
+      <include name="test/Spring/Spring.Scheduling.Quartz20.Tests/**"/>
       <include name="test/Spring/Spring.Template.Velocity.Tests/**"/>
       <include name="test/Spring/Spring.Testing.NUnit.Tests/**"/>
       <include name="test/Spring/Spring.Testing.Microsoft.Tests/**"/>

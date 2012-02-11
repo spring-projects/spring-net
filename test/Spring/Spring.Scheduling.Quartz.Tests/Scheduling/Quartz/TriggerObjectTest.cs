@@ -22,6 +22,10 @@ using Quartz;
 
 using Spring.Objects.Factory;
 
+#if QUARTZ_2_0
+using Trigger = Quartz.Spi.IOperableTrigger;
+#endif
+
 namespace Spring.Scheduling.Quartz
 {
     /// <summary>
@@ -31,6 +35,7 @@ namespace Spring.Scheduling.Quartz
     public abstract class TriggerObjectTest
     {
         private Trigger trigger;
+
         /// <summary>
         /// Constant name for tested triggers.
         /// </summary>
@@ -52,11 +57,17 @@ namespace Spring.Scheduling.Quartz
         {
             ((IInitializingObject) trigger).AfterPropertiesSet();
 
+#if QUARTZ_2_0
+            Assert.AreEqual(TRIGGER_NAME, trigger.Key.Name, "trigger name mismatch");
+            Assert.AreEqual(SchedulerConstants.DefaultGroup, trigger.Key.Group, "trigger group name mismatch");
+            Assert.IsNull(trigger.JobKey, "trigger job name not null");
+#else
             Assert.AreEqual(TRIGGER_NAME, trigger.Name, "trigger name mismatch");
             Assert.AreEqual(SchedulerConstants.DefaultGroup, trigger.Group, "trigger group name mismatch");
-            AssertDateTimesEqualityWithAllowedDelta(DateTime.UtcNow, trigger.StartTimeUtc, 1000);
             Assert.IsNull(trigger.JobName, "trigger job name not null");
             Assert.AreEqual(SchedulerConstants.DefaultGroup, trigger.JobGroup, "trigger job group was not default");
+#endif
+            AssertDateTimesEqualityWithAllowedDelta(DateTime.UtcNow, trigger.StartTimeUtc, 1000);
         }
 
         /// <summary>
@@ -69,12 +80,18 @@ namespace Spring.Scheduling.Quartz
 
             const string NAME = "newName";
             const string GROUP = "newGroup";
-            DateTime START_TIME = new DateTime(10000000);
+            DateTime START_TIME = new DateTime(1982, 6, 28, 13, 10, 0);
+            trigger.StartTimeUtc = START_TIME;
+#if QUARTZ_2_0
+            trigger.Key = new TriggerKey(NAME, GROUP);
+            Assert.AreEqual(NAME, trigger.Key.Name, "trigger name mismatch");
+            Assert.AreEqual(GROUP, trigger.Key.Group, "trigger group name mismatch");
+#else
             trigger.Name = NAME;
             trigger.Group = GROUP;
-            trigger.StartTimeUtc = START_TIME;
             Assert.AreEqual(NAME, trigger.Name, "trigger name mismatch");
             Assert.AreEqual(GROUP, trigger.Group, "trigger group name mismatch");
+#endif
             AssertDateTimesEqualityWithAllowedDelta(START_TIME, trigger.StartTimeUtc, 1000);
         }
 
@@ -88,10 +105,42 @@ namespace Spring.Scheduling.Quartz
             
             const string jobName = "jobName";
             const string jobGroup = "jobGroup";
+#if QUARTZ_2_0
+            Assert.AreEqual(jobName, trigger.JobKey.Name, "trigger job name was not from job detail");
+            Assert.AreEqual(jobGroup, trigger.JobKey.Group, "trigger job group was not from job detail");
+#else
             Assert.AreEqual(jobName, trigger.JobName, "trigger job name was not from job detail");
             Assert.AreEqual(jobGroup, trigger.JobGroup, "trigger job group was not from job detail");
+#endif
         }
 
+#if QUARTZ_2_0
+        /// <summary>
+        /// Tests whether two datetimes are close enough.
+        /// </summary>
+        /// <param name="d1"></param>
+        /// <param name="d2"></param>
+        /// <param name="allowedDeltaInMilliseconds"></param>
+        protected static void AssertDateTimesEqualityWithAllowedDelta(DateTimeOffset d1, DateTimeOffset d2, int allowedDeltaInMilliseconds)
+        {
+            int diffInMillis = (int) Math.Abs((d1 - d2).TotalMilliseconds);
+            Assert.LessOrEqual(diffInMillis, allowedDeltaInMilliseconds, "too much difference in times");
+        }
+#else
+
+        /// <summary>
+        /// Tests whether two datetimes are close enough.
+        /// </summary>
+        /// <param name="d1"></param>
+        /// <param name="d2"></param>
+        /// <param name="allowedDeltaInMilliseconds"></param>
+        protected static void AssertDateTimesEqualityWithAllowedDelta(DateTime d1, DateTime d2, int allowedDeltaInMilliseconds)
+        {
+            int diffInMillis = (int)Math.Abs((d1 - d2).TotalMilliseconds);
+            Assert.LessOrEqual(diffInMillis, allowedDeltaInMilliseconds, "too much difference in times");
+        }
+
+        
         /// <summary>
         /// Tests that TriggerObject defaults values as expected in AfterPropertiesSet.
         /// </summary>
@@ -104,18 +153,7 @@ namespace Spring.Scheduling.Quartz
             trigger.TriggerListenerNames = LISTENER_NAMES;
             CollectionAssert.AreEqual(LISTENER_NAMES, trigger.TriggerListenerNames, "Trigger listeners were not equal");
         }
-
-        /// <summary>
-        /// Tests whether two datetimes are close enough.
-        /// </summary>
-        /// <param name="d1"></param>
-        /// <param name="d2"></param>
-        /// <param name="allowedDeltaInMilliseconds"></param>
-        protected static void AssertDateTimesEqualityWithAllowedDelta(DateTime d1, DateTime d2, int allowedDeltaInMilliseconds)
-        {
-            int diffInMillis = (int) Math.Abs((d1 - d2).TotalMilliseconds);
-            Assert.LessOrEqual(diffInMillis, allowedDeltaInMilliseconds, "too much difference in times");
-        }
+#endif
     }
 
 }

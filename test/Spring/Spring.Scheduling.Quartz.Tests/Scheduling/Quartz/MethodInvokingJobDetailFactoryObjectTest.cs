@@ -18,6 +18,10 @@ using NUnit.Framework;
 
 using Quartz;
 
+#if QUARTZ_2_0
+using JobDetail = Quartz.Impl.JobDetailImpl;
+#endif
+
 namespace Spring.Scheduling.Quartz
 {
     /// <summary>
@@ -54,7 +58,9 @@ namespace Spring.Scheduling.Quartz
             Assert.AreEqual(FACTORY_NAME, jd.Name, "job name did not default to factory name");
             Assert.AreEqual(jd.JobType, typeof(MethodInvokingJob), "factory did not create method invoking job");
             Assert.IsTrue(jd.Durable, "job was not durable");
+#if !QUARTZ_2_0
             Assert.IsTrue(jd.Volatile, "job was not volatile");
+#endif
         }
 
         /// <summary>
@@ -70,6 +76,7 @@ namespace Spring.Scheduling.Quartz
             Assert.AreEqual(jd.JobType, typeof(StatefulMethodInvokingJob), "factory did not create stateful method invoking job");
         }
 
+#if !QUARTZ_2_0
         /// <summary>
         /// Tests JobDetail retrieval and it's set properties.
         /// </summary>
@@ -82,6 +89,7 @@ namespace Spring.Scheduling.Quartz
             JobDetail jd = (JobDetail)factory.GetObject();
             CollectionAssert.AreEquivalent(LISTENER_NAMES, jd.JobListenerNames);
         }
+#endif
 
     }
 }

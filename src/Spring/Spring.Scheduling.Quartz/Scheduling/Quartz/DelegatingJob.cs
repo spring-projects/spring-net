@@ -13,12 +13,17 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-using System;
 using System.Threading;
 
 using Quartz;
 
 using Spring.Util;
+
+#if QUARTZ_2_0
+using JobExecutionContext = Quartz.IJobExecutionContext;
+#else
+using JobExecutionContext = Quartz.JobExecutionContext;
+#endif
 
 namespace Spring.Scheduling.Quartz
 {

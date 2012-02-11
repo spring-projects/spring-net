@@ -2,7 +2,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{E4328F68-C3FC-43E2-9D63-30CEC55215B0}</ProjectGuid>
     <OutputType>Library</OutputType>
@@ -33,9 +33,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\net\2.0\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="Quartz, Version=0.7.0.15571, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Quartz, Version=1.0.3.2, Culture=neutral, PublicKeyToken=f6b8c98a402cc8a4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\net\2.0\Quartz.dll</HintPath>
+      <HintPath>..\..\..\lib\Quartz10\net\2.0\Quartz.dll</HintPath>
     </Reference>
     <Reference Include="Rhino.Mocks, Version=2.9.6.40380, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

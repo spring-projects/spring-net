@@ -19,6 +19,11 @@ using System;
 using Quartz;
 using Quartz.Spi;
 
+#if QUARTZ_2_0
+using JobDetail = Quartz.Impl.JobDetailImpl;
+using Trigger = Quartz.Spi.IOperableTrigger;
+#endif
+
 namespace Spring.Scheduling.Quartz
 {
     /// <summary>

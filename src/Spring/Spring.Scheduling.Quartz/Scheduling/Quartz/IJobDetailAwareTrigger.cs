@@ -13,7 +13,12 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-using Quartz;
+
+#if QUARTZ_2_0
+using JobDetail = Quartz.IJobDetail;
+#else
+using JobDetail = Quartz.JobDetail;
+#endif
 
 namespace Spring.Scheduling.Quartz
 {
@@ -36,8 +41,6 @@ namespace Spring.Scheduling.Quartz
 	/// <author>Juergen Hoeller</author>
 	/// <seealso cref="SchedulerAccessor.Triggers" />
 	/// <seealso cref="SchedulerAccessor.JobDetails" />
-	/// <seealso cref="Trigger.JobName" />
-	/// <seealso cref="Trigger.JobGroup" />
 	public interface IJobDetailAwareTrigger
 	{
 		/// <summary> 

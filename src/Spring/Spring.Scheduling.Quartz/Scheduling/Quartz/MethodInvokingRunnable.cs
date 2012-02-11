@@ -56,7 +56,7 @@ namespace Spring.Scheduling.Quartz
         /// <summary>
         /// Logger instance shared by this instance and its sub-class instances.
         /// </summary>
-        protected ILog logger;
+        private readonly ILog logger;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MethodInvokingRunnable"/> class.
@@ -66,6 +66,13 @@ namespace Spring.Scheduling.Quartz
             logger = LogManager.GetLogger(GetType());
         }
 
+        /// <summary>
+        /// Logger instance.
+        /// </summary>
+        protected ILog Logger
+        {
+            get { return logger; }
+        }
 
         /// <summary>
         /// Gets the invocation failure message.

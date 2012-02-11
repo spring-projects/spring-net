@@ -14,7 +14,14 @@
 * limitations under the License.
 */
 using Quartz;
+
 using Spring.Objects;
+
+#if QUARTZ_2_0
+using JobExecutionContext = Quartz.IJobExecutionContext;
+#else
+using JobExecutionContext = Quartz.JobExecutionContext;
+#endif
 
 namespace Spring.Scheduling.Quartz
 {

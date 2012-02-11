@@ -1,0 +1,134 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{E823D54C-CE82-4868-929F-5F95A999F123}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Spring</RootNamespace>
+    <AssemblyName>Spring.Scheduling.Quartz20</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\build\VS.NET.2010\Spring.Scheduling.Quartz20\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NET_2_0,QUARTZ_2_0</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\..\..\build\VS.NET.2010\Spring.Scheduling.Quartz20\Debug\Spring.Scheduling.Quartz20.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\..\build\VS.NET.2010\Spring.Scheduling.Quartz20\Release\</OutputPath>
+    <DefineConstants>TRACE;NET_2_0</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="C5">
+      <HintPath>..\..\..\lib\Quartz20\net\3.5\C5.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging, Version=1.1.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\net\2.0\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Quartz">
+      <HintPath>..\..\..\lib\Quartz20\net\3.5\Quartz.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Spring.Scheduling.Quartz\Scheduling\Quartz\AdaptableJobFactory.cs">
+      <Link>Scheduling\Quartz\AdaptableJobFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Scheduling.Quartz\Scheduling\Quartz\DelegatingJob.cs">
+      <Link>Scheduling\Quartz\DelegatingJob.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Scheduling.Quartz\Scheduling\Quartz\IJobDetailAwareTrigger.cs">
+      <Link>Scheduling\Quartz\IJobDetailAwareTrigger.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Scheduling.Quartz\Scheduling\Quartz\ISchedulerContextAware.cs">
+      <Link>Scheduling\Quartz\ISchedulerContextAware.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Scheduling.Quartz\Scheduling\Quartz\ISchedulingTaskExecutor.cs">
+      <Link>Scheduling\Quartz\ISchedulingTaskExecutor.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Scheduling.Quartz\Scheduling\Quartz\ITaskExecutor.cs">
+      <Link>Scheduling\Quartz\ITaskExecutor.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Scheduling.Quartz\Scheduling\Quartz\LocalDataSourceJobStore.cs">
+      <Link>Scheduling\Quartz\LocalDataSourceJobStore.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Scheduling.Quartz\Scheduling\Quartz\LocalTaskExecutorThreadPool.cs">
+      <Link>Scheduling\Quartz\LocalTaskExecutorThreadPool.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Scheduling.Quartz\Scheduling\Quartz\MethodInvokingJob.cs">
+      <Link>Scheduling\Quartz\MethodInvokingJob.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Scheduling.Quartz\Scheduling\Quartz\MethodInvokingRunnable.cs">
+      <Link>Scheduling\Quartz\MethodInvokingRunnable.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Scheduling.Quartz\Scheduling\Quartz\QuartzJobObject.cs">
+      <Link>Scheduling\Quartz\QuartzJobObject.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Scheduling.Quartz\Scheduling\Quartz\SchedulerAccessorObject.cs">
+      <Link>Scheduling\Quartz\SchedulerAccessorObject.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Scheduling.Quartz\Scheduling\Quartz\SchedulerFactoryObject.cs">
+      <Link>Scheduling\Quartz\SchedulerFactoryObject.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Scheduling.Quartz\Scheduling\Quartz\SchedulingException.cs">
+      <Link>Scheduling\Quartz\SchedulingException.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Scheduling.Quartz\Scheduling\Quartz\SimpleThreadPoolTaskExecutor.cs">
+      <Link>Scheduling\Quartz\SimpleThreadPoolTaskExecutor.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Scheduling.Quartz\Scheduling\Quartz\SpringDbProviderAdapter.cs">
+      <Link>Scheduling\Quartz\SpringDbProviderAdapter.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Scheduling.Quartz\Scheduling\Quartz\SpringObjectJobFactory.cs">
+      <Link>Scheduling\Quartz\SpringObjectJobFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Scheduling.Quartz\Scheduling\Quartz\TaskRejectedException.cs">
+      <Link>Scheduling\Quartz\TaskRejectedException.cs</Link>
+    </Compile>
+    <Compile Include="JobMethodInvocationFailedException.cs" />
+    <Compile Include="Scheduling\Quartz\CronTriggerObject.cs" />
+    <Compile Include="Scheduling\Quartz\JobDetailObject.cs" />
+    <Compile Include="Scheduling\Quartz\MethodInvokingJobDetailFactoryObject.cs" />
+    <Compile Include="Scheduling\Quartz\SchedulerAccessor.cs" />
+    <Compile Include="Scheduling\Quartz\SimpleTriggerObject.cs" />
+    <Compile Include="Scheduling\Quartz\StatefulMethodInvokingJob.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Spring.Core\Spring.Core.2010.csproj">
+      <Project>{710961A3-0DF4-49E4-A26E-F5B9C044AC84}</Project>
+      <Name>Spring.Core.2010</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Spring.Data\Spring.Data.2010.csproj">
+      <Project>{AE00E5AB-C39A-436F-86D2-33BFE33E2E40}</Project>
+      <Name>Spring.Data.2010</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -13,7 +13,6 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
-using System.Threading;
 
 using Common.Logging;
 using Quartz;
@@ -32,11 +31,11 @@ namespace Spring.Scheduling.Quartz
         /// <summary>
         /// Logger available to subclasses.
         /// </summary>
-        protected ILog logger;
+        private readonly ILog logger;
 
         private ITaskExecutor taskExecutor;
-        
-        /// <summary>
+
+	    /// <summary>
         /// Initializes a new instance of the <see cref="LocalTaskExecutorThreadPool"/> class.
         /// </summary>
 		public LocalTaskExecutorThreadPool()
@@ -45,6 +44,14 @@ namespace Spring.Scheduling.Quartz
 		}
 
         /// <summary>
+        /// Logger instance.
+        /// </summary>
+	    protected ILog Logger
+	    {
+	        get { return logger; }
+	    }
+
+	    /// <summary>
         /// Gets the size of the pool.
         /// </summary>
         /// <value>The size of the pool.</value>
@@ -53,7 +60,25 @@ namespace Spring.Scheduling.Quartz
 			get { return - 1; }
 		}
 
-        /// <summary>
+	    /// <summary>
+	    /// Inform the <see cref="T:Quartz.Spi.IThreadPool"/> of the Scheduler instance's Id, 
+	    ///             prior to initialize being invoked.
+	    /// </summary>
+	    public string InstanceId
+	    {
+            set { }
+	    }
+
+	    /// <summary>
+	    /// Inform the <see cref="T:Quartz.Spi.IThreadPool"/> of the Scheduler instance's name, 
+	    ///             prior to initialize being invoked.
+	    /// </summary>
+	    public string InstanceName
+	    {
+	        set { }
+	    }
+
+	    /// <summary>
         /// Called by the QuartzScheduler before the <see cref="T:System.Threading.ThreadPool"/> is
         /// used, in order to give the it a chance to Initialize.
         /// </summary>
@@ -99,7 +124,7 @@ namespace Spring.Scheduling.Quartz
 			}
 			try
 			{
-				taskExecutor.Execute(new ThreadStart(runnable.Run));
+				taskExecutor.Execute(runnable.Run);
 				return true;
 			}
 			catch (TaskRejectedException ex)

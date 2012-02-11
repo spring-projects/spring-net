@@ -14,14 +14,10 @@
 * limitations under the License.
 */
 using System;
-
 using NUnit.Framework;
-
 using Quartz;
 using Quartz.Job;
 using Quartz.Spi;
-
-using Spring.Scheduling.Quartz;
 
 namespace Spring.Scheduling.Quartz
 {
@@ -52,8 +48,12 @@ namespace Spring.Scheduling.Quartz
             try
             {
                 // this actually fails already in Quartz level
-                TriggerFiredBundle bundle = TestUtil.CreateMinimalFiredBundleWithTypedJobDetail(typeof(object));
+                TriggerFiredBundle bundle = TestUtil.CreateMinimalFiredBundleWithTypedJobDetail(typeof (object));
+#if QUARTZ_2_0
+                jobFactory.NewJob(bundle, null);
+#else
                 jobFactory.NewJob(bundle);
+#endif
                 Assert.Fail("Created job which was not an IJob");
             }
             catch (ArgumentException)
@@ -85,14 +85,15 @@ namespace Spring.Scheduling.Quartz
         [Test]
         public void TestNewJob_NormalIJob()
         {
-            TriggerFiredBundle bundle = TestUtil.CreateMinimalFiredBundleWithTypedJobDetail(typeof(NoOpJob));
+            TriggerFiredBundle bundle = TestUtil.CreateMinimalFiredBundleWithTypedJobDetail(typeof (NoOpJob));
+#if QUARTZ_2_0
+            IJob job = jobFactory.NewJob(bundle, null);
+#else
             IJob job = jobFactory.NewJob(bundle);
+#endif
+
             Assert.IsNotNull(job, "Returned job was null");
         }
-
-
-
-
     }
 
     internal class NoOpThreadStartJob : NoOpJob

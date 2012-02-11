@@ -27,6 +27,12 @@ using Rhino.Mocks;
 
 using Spring.Objects.Support;
 
+#if QUARTZ_2_0
+using JobExecutionContext = Quartz.Impl.JobExecutionContextImpl;
+using JobDetail = Quartz.Impl.JobDetailImpl;
+using SimpleTrigger = Quartz.Impl.Triggers.SimpleTriggerImpl;
+#endif
+
 namespace Spring.Scheduling.Quartz
 {
     /// <summary>

@@ -16,20 +16,26 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using System.Threading;
-
 using NUnit.Framework;
 
 using Quartz;
 using Quartz.Impl;
-
+using Quartz.Spi;
 using Rhino.Mocks;
 
 using Spring.Core.IO;
+
+#if QUARTZ_2_0
+using Trigger = Quartz.ITrigger;
+using JobExecutionContext = Quartz.IJobExecutionContext;
+using JobDetail = Quartz.IJobDetail;
+using SimpleTrigger = Quartz.Impl.Triggers.SimpleTriggerImpl;
+#endif
 
 namespace Spring.Scheduling.Quartz
 {
@@ -42,7 +48,6 @@ namespace Spring.Scheduling.Quartz
     {
         private static readonly MethodInfo m_InitSchedulerFactory = typeof(SchedulerFactoryObject).GetMethod("InitSchedulerFactory",
                                                         BindingFlags.Instance | BindingFlags.NonPublic);
-        private MockRepository mockery;
         private SchedulerFactoryObject factory;
 
         /// <summary>
@@ -52,12 +57,9 @@ namespace Spring.Scheduling.Quartz
         public void SetUp()
         {
             factory = new SchedulerFactoryObject();
-            TestSchedulerFactory.Mockery.BackToRecordAll();
 
-            Expect
-                .Call(TestSchedulerFactory.MockScheduler.SchedulerName)
-                .Return("scheduler")
-                .Repeat.Any();
+            TestSchedulerFactory.Initialize();
+            TestSchedulerFactory.MockScheduler.Stub(x => x.SchedulerName).Return("scheduler").Repeat.Any();
         }
 
         /// <summary>
@@ -67,7 +69,6 @@ namespace Spring.Scheduling.Quartz
         public void TestAfterPropertiesSet_Defaults()
         {
             factory.AfterPropertiesSet();
-            TestSchedulerFactory.Mockery.ReplayAll();
         }
 
         /// <summary>
@@ -78,7 +79,6 @@ namespace Spring.Scheduling.Quartz
         {
             factory.JobFactory = null;  
             factory.AfterPropertiesSet();
-            TestSchedulerFactory.Mockery.ReplayAll();
         }
 
         /// <summary>
@@ -89,67 +89,63 @@ namespace Spring.Scheduling.Quartz
         {
             // set expectations
             TestSchedulerFactory.MockScheduler.JobFactory = null;
-            LastCall.IgnoreArguments();
-            TestSchedulerFactory.Mockery.ReplayAll();
 
             factory.SchedulerFactoryType = typeof(TestSchedulerFactory);
             factory.AutoStartup = false;
             factory.AfterPropertiesSet();
+
+            TestSchedulerFactory.MockScheduler.AssertWasCalled(x => x.JobFactory = null);
         }
 
+#if !QUARTZ_2_0
         /// <summary>
         /// Tests AfterPropertiesSet behavior.
         /// </summary>
         [Test]
         public void TestAfterPropertiesSet_AddListeners()
         {
-            mockery = new MockRepository();
             InitForAfterPropertiesSetTest();
             
-            factory.SchedulerListeners = new ISchedulerListener[] { (ISchedulerListener)mockery.CreateMock(typeof(ISchedulerListener)) };
+            factory.SchedulerListeners = new ISchedulerListener[] { MockRepository.GenerateMock<ISchedulerListener>() };
             TestSchedulerFactory.MockScheduler.AddSchedulerListener(null);
             LastCall.IgnoreArguments();
-            
-            factory.GlobalJobListeners = new IJobListener[] { (IJobListener)mockery.CreateMock(typeof(IJobListener)) };
+
+            factory.GlobalJobListeners = new IJobListener[] { MockRepository.GenerateMock<IJobListener>() };
             TestSchedulerFactory.MockScheduler.AddGlobalJobListener(null);
             LastCall.IgnoreArguments();
 
-            factory.JobListeners = new IJobListener[] { (IJobListener)mockery.CreateMock(typeof(IJobListener)) };
+            factory.JobListeners = new IJobListener[] { MockRepository.GenerateMock<IJobListener>() };
             TestSchedulerFactory.MockScheduler.AddJobListener(null);
             LastCall.IgnoreArguments();
 
-            factory.GlobalTriggerListeners = new ITriggerListener[] { (ITriggerListener)mockery.CreateMock(typeof(ITriggerListener)) };
+            factory.GlobalTriggerListeners = new ITriggerListener[] { MockRepository.GenerateMock<ITriggerListener>() };
             TestSchedulerFactory.MockScheduler.AddGlobalTriggerListener(null);
             LastCall.IgnoreArguments();
-            
-            factory.TriggerListeners = new ITriggerListener[] { (ITriggerListener)mockery.CreateMock(typeof(ITriggerListener)) };
+
+            factory.TriggerListeners = new ITriggerListener[] { MockRepository.GenerateMock<ITriggerListener>() };
             TestSchedulerFactory.MockScheduler.AddTriggerListener(null);
             LastCall.IgnoreArguments();
 
-            TestSchedulerFactory.Mockery.ReplayAll();
-            mockery.ReplayAll();
             factory.AfterPropertiesSet();
         }
-
+#endif
         /// <summary>
         /// Tests AfterPropertiesSet behavior.
         /// </summary>
         [Test]
         public void TestAfterPropertiesSet_Calendars()
         {
-            mockery = new MockRepository();
             InitForAfterPropertiesSetTest();
 
             const string calendarName = "calendar";
-            ICalendar cal = (ICalendar) mockery.CreateMock(typeof (ICalendar));
+            ICalendar cal = MockRepository.GenerateMock<ICalendar>();
             Hashtable calTable = new Hashtable();
             calTable[calendarName] = cal;
             factory.Calendars = calTable;
-            TestSchedulerFactory.MockScheduler.AddCalendar(calendarName, cal, true, true);
 
-            TestSchedulerFactory.Mockery.ReplayAll();
-            mockery.ReplayAll();
             factory.AfterPropertiesSet();
+
+            TestSchedulerFactory.MockScheduler.AssertWasCalled(x => x.AddCalendar(calendarName, cal, true, true));
         }
 
         /// <summary>
@@ -158,7 +154,6 @@ namespace Spring.Scheduling.Quartz
         [Test]
         public void TestAfterPropertiesSet_Trigger_TriggerExists()
         {
-            mockery = new MockRepository();
             InitForAfterPropertiesSetTest();
 
             const string TRIGGER_NAME = "trigName";
@@ -166,10 +161,12 @@ namespace Spring.Scheduling.Quartz
             SimpleTrigger trigger = new SimpleTrigger(TRIGGER_NAME, TRIGGER_GROUP);
             factory.Triggers = new Trigger[] { trigger };
 
-            Expect.Call(TestSchedulerFactory.MockScheduler.GetTrigger(TRIGGER_NAME, TRIGGER_GROUP)).Return(trigger);
+#if QUARTZ_2_0
+            TestSchedulerFactory.MockScheduler.Stub(x => x.GetTrigger(new TriggerKey(TRIGGER_NAME, TRIGGER_GROUP))).Return(trigger);
+#else
+            TestSchedulerFactory.MockScheduler.Stub(x => x.GetTrigger(TRIGGER_NAME, TRIGGER_GROUP)).Return(trigger);
+#endif
 
-            TestSchedulerFactory.Mockery.ReplayAll();
-            mockery.ReplayAll();
             factory.AfterPropertiesSet();
         }
 
@@ -179,7 +176,6 @@ namespace Spring.Scheduling.Quartz
         [Test]
         public void TestAfterPropertiesSet_Trigger_TriggerDoesntExist()
         {
-            mockery = new MockRepository();
             InitForAfterPropertiesSetTest();
 
             const string TRIGGER_NAME = "trigName";
@@ -187,15 +183,9 @@ namespace Spring.Scheduling.Quartz
             SimpleTrigger trigger = new SimpleTrigger(TRIGGER_NAME, TRIGGER_GROUP);
             factory.Triggers = new Trigger[] { trigger };
 
-            Expect.Call(TestSchedulerFactory.MockScheduler.GetTrigger(TRIGGER_NAME, TRIGGER_GROUP)).Return(null);
-            TestSchedulerFactory.MockScheduler.ScheduleJob(trigger);
-            LastCall.IgnoreArguments().Return(DateTime.UtcNow);
-                
-
-            TestSchedulerFactory.Mockery.ReplayAll();
-            mockery.ReplayAll();
             factory.AfterPropertiesSet();
 
+            TestSchedulerFactory.MockScheduler.AssertWasCalled(x => x.ScheduleJob(trigger));
         }
 
 
@@ -205,7 +195,6 @@ namespace Spring.Scheduling.Quartz
             // set expectations
             factory.SchedulerFactoryType = typeof(TestSchedulerFactory);
             TestSchedulerFactory.MockScheduler.JobFactory = null;
-            LastCall.IgnoreArguments();
         }
 
         /// <summary>
@@ -214,16 +203,13 @@ namespace Spring.Scheduling.Quartz
         [Test]
         public void TestStart()
         {
-            // set expectations
-            TestSchedulerFactory.MockScheduler.JobFactory = null;
-            LastCall.IgnoreArguments();
-            TestSchedulerFactory.MockScheduler.Start();
-            TestSchedulerFactory.Mockery.ReplayAll();
-
             factory.SchedulerFactoryType = typeof(TestSchedulerFactory);
             factory.AutoStartup = false;
             factory.AfterPropertiesSet();
             factory.Start();
+
+            TestSchedulerFactory.MockScheduler.AssertWasCalled(x => x.JobFactory = Arg<IJobFactory>.Is.NotNull);
+            TestSchedulerFactory.MockScheduler.AssertWasCalled(x => x.Start());
         }
 
         /// <summary>
@@ -232,16 +218,13 @@ namespace Spring.Scheduling.Quartz
         [Test]
         public void TestStop()
         {
-            // set expectations
-            TestSchedulerFactory.MockScheduler.JobFactory = null;
-            LastCall.IgnoreArguments();
-            TestSchedulerFactory.MockScheduler.Standby();
-            TestSchedulerFactory.Mockery.ReplayAll();
-
             factory.SchedulerFactoryType = typeof(TestSchedulerFactory);
             factory.AutoStartup = false;
             factory.AfterPropertiesSet();
             factory.Stop();
+
+            TestSchedulerFactory.MockScheduler.AssertWasCalled(x => x.JobFactory = Arg<IJobFactory>.Is.NotNull);
+            TestSchedulerFactory.MockScheduler.AssertWasCalled(x => x.Standby());
         }
 
         /// <summary>
@@ -251,7 +234,6 @@ namespace Spring.Scheduling.Quartz
         public void TestGetObject()
         {
             factory.AfterPropertiesSet();
-            TestSchedulerFactory.Mockery.ReplayAll(); 
             IScheduler sched = (IScheduler)factory.GetObject();
             Assert.IsNotNull(sched, "scheduler was null");
         }
@@ -263,7 +245,6 @@ namespace Spring.Scheduling.Quartz
         [ExpectedException(typeof(ArgumentException))]
         public void TestSchedulerFactoryType_InvalidType()
         {
-            TestSchedulerFactory.Mockery.ReplayAll(); 
             factory.SchedulerFactoryType = typeof(SchedulerFactoryObjectTest);
         }
 
@@ -273,7 +254,6 @@ namespace Spring.Scheduling.Quartz
         [Test]
         public void TestSchedulerFactoryType_ValidType()
         {
-            TestSchedulerFactory.Mockery.ReplayAll(); 
             factory.SchedulerFactoryType = typeof(StdSchedulerFactory);
         }
 
@@ -283,8 +263,6 @@ namespace Spring.Scheduling.Quartz
         [Test]
         public void TestInitSchedulerFactory_MinimalDefaults()
         {
-            TestSchedulerFactory.Mockery.ReplayAll();
-
             factory.SchedulerName = "testFactoryObject";
             StdSchedulerFactory factoryToPass = new StdSchedulerFactory();
             m_InitSchedulerFactory.Invoke(factory, new object[] { factoryToPass });
@@ -315,8 +293,6 @@ ConnectionStringKey+ " = " + ConnectionStringValue + Environment.NewLine +
             // intercept call
             InterceptingStdSChedulerFactory factoryToPass = new InterceptingStdSChedulerFactory();
 
-            TestSchedulerFactory.Mockery.ReplayAll();
-
             factory.ConfigLocation = new TestConfigLocation(ms, "description");
             
             m_InitSchedulerFactory.Invoke(factory, new object[] { factoryToPass });
@@ -324,21 +300,6 @@ ConnectionStringKey+ " = " + ConnectionStringValue + Environment.NewLine +
             Assert.AreEqual(ConnectionStringValue, factoryToPass.Properties[ConnectionStringKey]);
 
         }
-
-        /// <summary>
-        /// Cleans this test instance.
-        /// </summary>
-        [TearDown]
-        public void TearDown()
-        {
-            TestSchedulerFactory.Mockery.VerifyAll();
-            if (mockery != null)
-            {
-                mockery.VerifyAll();
-            }
-        }
-
-
     }
 
     internal class TestConfigLocation : InputStreamResource
@@ -353,21 +314,7 @@ ConnectionStringKey+ " = " + ConnectionStringValue + Environment.NewLine +
     /// </summary>
     public class TestSchedulerFactory : ISchedulerFactory
     {
-        private static readonly MockRepository mockery = new MockRepository();
-        private static readonly IScheduler mockScheduler;
-
-        static TestSchedulerFactory()
-        {
-            mockScheduler = (IScheduler) mockery.CreateMock(typeof (IScheduler));
-        }
-
-        /// <summary>
-        /// MockRepository intance.
-        /// </summary>
-        public static MockRepository Mockery
-        {
-            get { return mockery; }
-        }
+        private static IScheduler mockScheduler;
 
         /// <summary>
         /// The mocked scheduler.
@@ -394,11 +341,25 @@ ConnectionStringKey+ " = " + ConnectionStringValue + Environment.NewLine +
             return mockScheduler;
         }
 
+#if QUARTZ_2_0
+        ///<summary>
+        ///</summary>
+        public ICollection<IScheduler> AllSchedulers
+        {
+            get { return new List<IScheduler>(); }
+        }
+#else
         ///<summary>
         ///</summary>
         public ICollection AllSchedulers
         {
             get { return new ArrayList(); }
+        }
+#endif
+
+        public static void Initialize()
+        {
+            mockScheduler = MockRepository.GenerateMock<IScheduler>();
         }
     }
 

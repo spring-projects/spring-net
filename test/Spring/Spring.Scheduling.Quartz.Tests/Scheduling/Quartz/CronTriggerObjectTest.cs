@@ -16,11 +16,15 @@
 
 using System;
 using System.Collections;
-
+using System.Collections.Generic;
 using NUnit.Framework;
 
 using Quartz;
 using Quartz.Job;
+
+#if QUARTZ_2_0
+using JobDetail = Quartz.Impl.JobDetailImpl;
+#endif
 
 namespace Spring.Scheduling.Quartz
 {
@@ -79,7 +83,7 @@ namespace Spring.Scheduling.Quartz
         [Test]
         public void TestJobDataAsMap()
         {
-            Hashtable data = new Hashtable();
+            IDictionary data = new Dictionary<string, object>();
             data["foo"] = "bar";
             data["number"] = 123;
             cronTrigger.JobDataAsMap = data;

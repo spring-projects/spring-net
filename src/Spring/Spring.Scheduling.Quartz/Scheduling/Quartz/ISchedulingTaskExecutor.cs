@@ -16,21 +16,17 @@
 
 namespace Spring.Scheduling
 {
-	/// <summary>
-	/// 
-	/// </summary>
-	public interface ISchedulingTaskExecutor : ITaskExecutor
-	{
-		/// <summary>
-		/// Gets a value indicating whether´this instance prefers short lived tasks.
-		/// </summary>
-		/// <value>
-		/// 	<c>true</c> if prefers short lived tasks; otherwise, <c>false</c>.
-		/// </value>
-		bool PrefersShortLivedTasks
-		{
-			get;
-		}
-
-	}
+    /// <summary>
+    /// 
+    /// </summary>
+    public interface ISchedulingTaskExecutor : ITaskExecutor
+    {
+        /// <summary>
+        /// Gets a value indicating whether´this instance prefers short lived tasks.
+        /// </summary>
+        /// <value>
+        /// 	<c>true</c> if prefers short lived tasks; otherwise, <c>false</c>.
+        /// </value>
+        bool PrefersShortLivedTasks { get; }
+    }
 }

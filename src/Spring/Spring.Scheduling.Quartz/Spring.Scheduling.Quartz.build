@@ -7,6 +7,14 @@
       * current.build.defines.csc - framework-specific build defines for C# compiler
  -->
     <target name="build">
+	
+		<echo message="${quartz.lib.dir}" />
+		<copy todir="${current.bin.dir}" overwrite="true">
+			<fileset basedir="${quartz.lib.dir}">
+				<include name="**/*.dll" />
+			</fileset>
+		</copy>		
+		
         <csc target="library" define="${current.build.defines.csc}"
             warnaserror="true"
             optimize="${build.optimize}"
