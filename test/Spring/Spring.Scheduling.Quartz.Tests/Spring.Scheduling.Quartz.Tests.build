@@ -11,6 +11,10 @@
     -->
 	<target name="build">
 
+		<!-- use .NET 3.5 compiler for tests to allow lambdas etc -->
+		<property name="temp.nant.settings.currentframework" value="${nant.settings.currentframework}" />
+		<property name="nant.settings.currentframework" value="net-3.5" />
+
 		<csc target="library" define="${current.build.defines.csc}"
 		     warnaserror="true"
 		     optimize="${build.optimize}"
@@ -30,6 +34,9 @@
 				<exclude if="${net-4.0}" name="System.Web.Extensions.dll" />
 			</references>
 		</csc>
+
+		<!-- restore old framework setting -->
+		<property name="nant.settings.currentframework" value="${temp.nant.settings.currentframework}" />
 		
 		<copy todir="${current.bin.dir}" verbose="true">
 			<fileset basedir="${project::get-base-directory()}">
