@@ -875,7 +875,7 @@ namespace Spring.Scheduling.Quartz
             factoryObject.AfterPropertiesSet();
             factoryObject.Start();
 
-            DummyRunnable.runEvent.WaitOne(500);
+            Thread.Sleep(500);
             Assert.AreEqual(10, DummyRunnable.param);
             Assert.IsTrue(DummyRunnable.count > 0);
 

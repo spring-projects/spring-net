@@ -118,7 +118,11 @@ namespace Spring.Scheduling.Quartz
         [Test]
         public void TestJobDataAsMap()
         {
+#if QUARTZ_2_0
             IDictionary data = new Dictionary<string, object>();
+#else
+            Hashtable data = new Hashtable();
+#endif
             data["foo"] = "bar";
             data["number"] = 123;
             simpleTrigger.JobDataAsMap = data;

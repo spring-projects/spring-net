@@ -107,26 +107,22 @@ namespace Spring.Scheduling.Quartz
             InitForAfterPropertiesSetTest();
             
             factory.SchedulerListeners = new ISchedulerListener[] { MockRepository.GenerateMock<ISchedulerListener>() };
-            TestSchedulerFactory.MockScheduler.AddSchedulerListener(null);
-            LastCall.IgnoreArguments();
 
             factory.GlobalJobListeners = new IJobListener[] { MockRepository.GenerateMock<IJobListener>() };
-            TestSchedulerFactory.MockScheduler.AddGlobalJobListener(null);
-            LastCall.IgnoreArguments();
 
             factory.JobListeners = new IJobListener[] { MockRepository.GenerateMock<IJobListener>() };
-            TestSchedulerFactory.MockScheduler.AddJobListener(null);
-            LastCall.IgnoreArguments();
 
             factory.GlobalTriggerListeners = new ITriggerListener[] { MockRepository.GenerateMock<ITriggerListener>() };
-            TestSchedulerFactory.MockScheduler.AddGlobalTriggerListener(null);
-            LastCall.IgnoreArguments();
 
             factory.TriggerListeners = new ITriggerListener[] { MockRepository.GenerateMock<ITriggerListener>() };
-            TestSchedulerFactory.MockScheduler.AddTriggerListener(null);
-            LastCall.IgnoreArguments();
 
             factory.AfterPropertiesSet();
+
+            TestSchedulerFactory.MockScheduler.AssertWasCalled(x => x.AddSchedulerListener(Arg<ISchedulerListener>.Is.NotNull));
+            TestSchedulerFactory.MockScheduler.AssertWasCalled(x => x.AddGlobalJobListener(Arg<IJobListener>.Is.NotNull));
+            TestSchedulerFactory.MockScheduler.AssertWasCalled(x => x.AddJobListener(Arg<IJobListener>.Is.NotNull));
+            TestSchedulerFactory.MockScheduler.AssertWasCalled(x => x.AddGlobalTriggerListener(Arg<ITriggerListener>.Is.NotNull));
+            TestSchedulerFactory.MockScheduler.AssertWasCalled(x => x.AddTriggerListener(Arg<ITriggerListener>.Is.NotNull));
         }
 #endif
         /// <summary>
