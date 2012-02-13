@@ -17,6 +17,7 @@
  */
 
 #endregion
+
 #region License
 
 /*
@@ -42,8 +43,11 @@
 using System.Collections;
 using System.Data;
 using System.Data.SqlClient;
+
 using NUnit.Framework;
+
 using Rhino.Mocks;
+
 using Spring.Dao;
 using Spring.Data.Common;
 
@@ -58,31 +62,26 @@ namespace Spring.Data.Objects
     [TestFixture]
     public class AdoQueryTests : AbstractAdoQueryTests
     {
-
         private static string SELECT_ID_WHERE = "select id from custmr";
         private static string[] COLUMN_NAMES = new string[] {"id", "forename"};
-	    private static DbType[] COLUMN_TYPES = new DbType[] {DbType.Int32, DbType.String};
+        private static DbType[] COLUMN_TYPES = new DbType[] {DbType.Int32, DbType.String};
 
         [SetUp]
         public void Setup()
         {
             SetUpMocks();
-
-            
         }
-
 
         [Test]
         public void MappingAdoQueryWithContextWithoutParams()
         {
-            IDataReader reader = (IDataReader)mocks.DynamicMock(typeof(IDataReader));
-            Expect.Call(reader.Read()).Return(true);
-            Expect.Call(reader.GetInt32(0)).Return(1);
-            Expect.Call(reader.Read()).Return(false);
+            IDataReader reader = MockRepository.GenerateMock<IDataReader>();
+            reader.Stub(x => x.Read()).Return(true).Repeat.Once();
+            reader.Stub(x => x.GetInt32(0)).Return(1).Repeat.Once();
+            reader.Stub(x => x.Read()).Return(false).Repeat.Once();
 
-            Expect.Call(command.ExecuteReader()).Return(reader);
+            command.Stub(x => x.ExecuteReader()).Return(reader);
 
-            mocks.ReplayAll();
             IntMappingQueryWithContext queryWithNoContext = new IntMappingQueryWithContext(provider);
             queryWithNoContext.Compile();
             IList list = queryWithNoContext.QueryByNamedParam(null, null);
@@ -91,23 +90,19 @@ namespace Spring.Data.Objects
             {
                 Assert.AreEqual(1, count);
             }
-
-            mocks.VerifyAll();
         }
- 
+
         [Test]
-        [ExpectedException(typeof(InvalidDataAccessApiUsageException))]
+        [ExpectedException(typeof (InvalidDataAccessApiUsageException))]
         public void QueryWithoutEnoughParams()
         {
-            SqlParameter sqlParameter1 = new SqlParameter();         
-            Expect.Call(command.CreateParameter()).Return(sqlParameter1);
-            Expect.Call(provider.CreateParameterNameForCollection(COLUMN_NAMES[0])).Return("@" + COLUMN_NAMES[0]);
+            SqlParameter sqlParameter1 = new SqlParameter();
+            command.Stub(x => x.CreateParameter()).Return(sqlParameter1).Repeat.Once();
+            provider.Stub(x => x.CreateParameterNameForCollection(COLUMN_NAMES[0])).Return("@" + COLUMN_NAMES[0]).Repeat.Once();
 
             SqlParameter sqlParameter2 = new SqlParameter();
-            Expect.Call(command.CreateParameter()).Return(sqlParameter2);
-            Expect.Call(provider.CreateParameterNameForCollection(COLUMN_NAMES[1])).Return("@" + COLUMN_NAMES[1]);
-            
-            mocks.ReplayAll();
+            command.Stub(x => x.CreateParameter()).Return(sqlParameter2);
+            provider.Stub(x => x.CreateParameterNameForCollection(COLUMN_NAMES[1])).Return("@" + COLUMN_NAMES[1]);
 
             IntMappingAdoQuery query = new IntMappingAdoQuery();
             query.DbProvider = provider;
@@ -116,10 +111,7 @@ namespace Spring.Data.Objects
             query.DeclaredParameters.Add(COLUMN_NAMES[1], COLUMN_TYPES[1]);
             query.Compile();
             query.Query();
-
-            mocks.VerifyAll();
         }
-
 
         public class IntMappingQueryWithContext : MappingAdoQueryWithContext
         {
@@ -130,7 +122,6 @@ namespace Spring.Data.Objects
             {
                 CommandType = CommandType.Text;
             }
-
 
             protected override object MapRow(IDataReader reader, int rowNum, IDictionary inParams,
                                              IDictionary callingContext)
@@ -148,6 +139,5 @@ namespace Spring.Data.Objects
                 return reader.GetInt32(0);
             }
         }
-        
     }
 }

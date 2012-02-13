@@ -20,7 +20,7 @@
 
 		<!-- use .NET 3.5 compiler for tests to allow lambdas etc -->
 		<property name="temp.nant.settings.currentframework" value="${nant.settings.currentframework}" />
-		<property name="nant.settings.currentframework" value="net-3.5" />
+		<property name="nant.settings.currentframework" value="net-3.5" if="${nant.settings.currentframework == 'net-2.0' or nant.settings.currentframework == 'net-3.0'}" />
 		
 		<csc target="library" define="${current.build.defines.csc}"
 		     warnaserror="true"

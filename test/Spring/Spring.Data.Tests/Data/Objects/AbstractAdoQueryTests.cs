@@ -29,36 +29,31 @@ namespace Spring.Data.Objects
     /// </summary>
     public abstract class AbstractAdoQueryTests
     {
-
-        protected MockRepository mocks;
         protected IDbProvider provider;
         protected IDbCommand command;
-        
 
         public void SetUpMocks()
         {
-            mocks = new MockRepository();
-            provider = (IDbProvider)mocks.DynamicMock(typeof(IDbProvider));
+            provider = MockRepository.GenerateMock<IDbProvider>();
+            IDbConnection connection = MockRepository.GenerateMock<IDbConnection>();
 
-            IDbConnection connection = (IDbConnection)mocks.DynamicMock(typeof(IDbConnection));
-
-            Expect.Call(provider.CreateConnection()).Return(connection);
+            provider.Stub(x => x.CreateConnection()).Return(connection).Repeat.Once();
 
             // Creating a query (setting DbProvider property)
             // will call new DbParameters(IDbProvider), which is a real pain to mock.
             // to store the declared parameters.
 
-            command = (IDbCommand)mocks.DynamicMock(typeof(IDbCommand));
+            command = MockRepository.GenerateMock<IDbCommand>();
             //This IDbCommand is used as a container for the underlying parameter collection.	
-            Expect.Call(provider.CreateCommand()).Return(command);
+            provider.Stub(x => x.CreateCommand()).Return(command).Repeat.Once();
 
             //Create a real instance of IDbParameters to stored the declared parameters
             IDbProvider realDbProvider = DbProviderFactory.GetDbProvider("System.Data.SqlClient");
             IDbParameters dbParameters = new DbParameters(realDbProvider);
 
             //Pass real instance into mock instance.
-            Expect.Call(command.Parameters).Return(dbParameters.DataParameterCollection);
-            Expect.Call(provider.CreateCommand()).Return(command);
+            command.Stub(x => x.Parameters).Return(dbParameters.DataParameterCollection).Repeat.Once();
+            provider.Stub(x => x.CreateCommand()).Return(command).Repeat.Once();
 
             // done with init of DbParameters mock/stubbing
         }

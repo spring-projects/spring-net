@@ -17,6 +17,7 @@
  */
 
 #endregion
+
 #region License
 
 /*
@@ -42,8 +43,11 @@
 using System;
 using System.Data;
 using System.Data.SqlClient;
+
 using NUnit.Framework;
+
 using Rhino.Mocks;
+
 using Spring.Data.Common;
 
 #endregion
@@ -67,28 +71,19 @@ namespace Spring.Data.Objects
         public void NullArg()
         {
             SqlParameter sqlParameter1 = new SqlParameter();
-            Expect.Call(command.CreateParameter()).Return(sqlParameter1);
-            Expect.Call(provider.CreateParameterNameForCollection("ptest")).Return("@ptest");
+            command.Stub(x => x.CreateParameter()).Return(sqlParameter1);
+            provider.Stub(x => x.CreateParameterNameForCollection("ptest")).Return("@ptest");
 
             //Create a real instance of IDbParameters to store the executable parameters
             //IDbProvider realDbProvider = DbProviderFactory.GetDbProvider("System.Data.SqlClient");
             //IDbParameters dbParameters = new DbParameters(realDbProvider);
             IDataParameterCollection dbParamCollection = new SqlCommand().Parameters;
-            Expect.Call(command.Parameters).Return(dbParamCollection);
-
             //provide the same instance to another call to extract output params
-            Expect.Call(command.Parameters).Return(dbParamCollection);
+            command.Stub(x => x.Parameters).Return(dbParamCollection).Repeat.Twice();
 
-
-            mocks.ReplayAll();
             NullArg na = new NullArg(provider);
             na.Execute(null);
-            mocks.VerifyAll();
         }
-
-
-
-        
     }
 
     internal class NullArg : StoredProcedure
