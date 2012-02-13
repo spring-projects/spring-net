@@ -9,7 +9,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Spring</RootNamespace>
     <AssemblyName>Spring.Scheduling.Quartz</AssemblyName>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -40,6 +40,10 @@
       <HintPath>..\..\..\lib\Quartz10\net\2.0\Quartz.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+      <HintPath>C:\Program Files (x86)\Reference Assemblies\Microsoft\Framework\v3.5\System.Core.dll</HintPath>
+    </Reference>
     <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
