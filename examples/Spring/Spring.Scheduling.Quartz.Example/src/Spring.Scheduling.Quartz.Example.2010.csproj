@@ -99,7 +99,7 @@
     </Reference>
     <Reference Include="Quartz">
       <Name>Quartz</Name>
-      <HintPath>..\..\..\..\lib\net\2.0\Quartz.dll</HintPath>
+      <HintPath>..\..\..\..\lib\Quartz10\net\2.0\Quartz.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Core">
       <SpecificVersion>False</SpecificVersion>
