@@ -22,9 +22,7 @@
 
 using System;
 using System.Collections;
-#if NET_2_0
 using System.Collections.Generic;
-#endif
 
 using System.ComponentModel;
 using Spring.Util;
@@ -93,7 +91,6 @@ namespace Spring.Core.TypeConversion
                         return result;
                     }
                 }
-#if NET_2_0
                 // if required type is some ISet<T>, convert all the elements
                 if (requiredType != null && requiredType.IsGenericType && TypeImplementsGenericInterface(requiredType, typeof(Spring.Collections.Generic.ISet<>)))
                 {
@@ -156,7 +153,6 @@ namespace Spring.Core.TypeConversion
                         return ToTypedCollectionWithTypeConversion(typeof(List<>), componentType, elements, propertyName);
                     }
                 }
-#endif
 
                 // try to convert using type converter
                 try
@@ -223,13 +219,7 @@ namespace Spring.Core.TypeConversion
                     throw new TypeMismatchException(
                         CreatePropertyChangeEventArgs(propertyName, null, newValue), requiredType, ex);
                 }
-#if NET_2_0
-                if (newValue == null
-                    && (requiredType == null
-                        || !Type.GetType("System.Nullable`1").Equals(requiredType.GetGenericTypeDefinition())))
-#else                
-                if (newValue == null)
-#endif
+                if (newValue == null && (requiredType == null || !Type.GetType("System.Nullable`1").Equals(requiredType.GetGenericTypeDefinition())))
                 {
                     throw new TypeMismatchException(
                         CreatePropertyChangeEventArgs(propertyName, null, newValue), requiredType);
@@ -251,7 +241,6 @@ namespace Spring.Core.TypeConversion
             return destination;
         }
 
-#if NET_2_0
         private static object ToTypedCollectionWithTypeConversion(Type targetCollectionType, Type componentType, ICollection elements, string propertyName)
         {
             if (!TypeImplementsGenericInterface(targetCollectionType, typeof(ICollection<>)))
@@ -274,7 +263,6 @@ namespace Spring.Core.TypeConversion
             return typedCollection;
         }
 
-#endif
         private static string BuildIndexedPropertyName(string propertyName, int index)
         {
             return (propertyName != null ?
@@ -314,8 +302,6 @@ namespace Spring.Core.TypeConversion
             return new PropertyChangeEventArgs(fullPropertyName, oldValue, newValue);
         }
 
-
-#if NET_2_0
         /// <summary>
         /// Determines if a Type implements a specific generic interface.
         /// </summary>
@@ -352,6 +338,5 @@ namespace Spring.Core.TypeConversion
         {
             return candidateInterfaceType.IsGenericType && candidateInterfaceType.GetGenericTypeDefinition() == matchingGenericInterface;
         }
-#endif
     }
 }

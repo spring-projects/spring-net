@@ -198,34 +198,6 @@ namespace Spring.Core.IO
             get { return false; }
         }
 
-#if !NET_2_0
-        /// <summary>
-        /// Returns the <see cref="System.Uri"/> handle for this resource.
-        /// </summary>
-        /// <remarks>
-        /// <p>
-        /// This, the default implementation, always throws a
-        /// <see cref="System.IO.FileNotFoundException"/>, assuming that the
-        /// resource cannot be exposed as a <see cref="System.Uri"/>.
-        /// </p>
-        /// </remarks>
-        /// <value>
-        /// The <see cref="System.Uri"/> handle for this resource.
-        /// </value>
-        /// <exception cref="System.IO.FileNotFoundException">
-        /// This, the default implementation, <b>always</b> throws a
-        /// <see cref="System.IO.FileNotFoundException"/>.
-        /// </exception>
-        /// <seealso cref="Spring.Core.IO.IResource.Uri"/>
-        public virtual Uri Uri
-        {
-            get
-            {
-                throw new FileNotFoundException(
-                    Description + " cannot be resolved to a Uri.");
-            }
-        }
-#else
         /// <summary>
         /// Returns the <see cref="System.Uri"/> handle for this resource.
         /// </summary>
@@ -237,7 +209,7 @@ namespace Spring.Core.IO
                 return new Uri(resourceName);
             }
         }
-#endif
+
         /// <summary>
         /// Returns a <see cref="System.IO.FileInfo"/> handle for this resource.
         /// </summary>

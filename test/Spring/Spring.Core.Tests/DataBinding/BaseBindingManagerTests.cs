@@ -24,7 +24,6 @@ using System.Collections;
 using NUnit.Framework;
 using Spring.Core;
 using Spring.Globalization.Formatters;
-using Spring.Objects;
 using Spring.Validation;
 
 namespace Spring.DataBinding
@@ -44,9 +43,7 @@ namespace Spring.DataBinding
             mgr = new BaseBindingManager();
             mgr.AddBinding("['name']", "Name");
             mgr.AddBinding("['dob']", "DOB");
-#if NET_2_0 // test nullable type
             mgr.AddBinding("['dateofgraduation']", "DateOfGraduation");
-#endif
             mgr.AddBinding("['inventions']", "Inventions");
             mgr.AddBinding("['cityOfBirth']", "PlaceOfBirth.City");
             mgr.AddBinding("['countryOfBirth']", "PlaceOfBirth.Country");
@@ -60,10 +57,9 @@ namespace Spring.DataBinding
 
             source["name"] = "Nikola Tesla";
             source["dob"] = new DateTime(1856, 7, 9);
-#if NET_2_0
+
             // I know this is pupin's graduation year but I need a date here
             source["dateofgraduation"] = new DateTime(1883,1,1);
-#endif
             source["inventions"] = new string[] {"One", "Two"};
 
             mgr.BindSourceToTarget(source, target, null);
@@ -97,10 +93,9 @@ namespace Spring.DataBinding
             source["name"] = "Nikola Tesla";
             source["dob"] = "1856-7-9";
             source["inventions"] = "One,Two";
-#if NET_2_0
+
             // I know this is pupin's graduation year but I need a date here
             source["dateofgraduation"] = "1883-1-1";
-#endif
 
             mgr.BindSourceToTarget(source, target, null);
 
@@ -125,7 +120,6 @@ namespace Spring.DataBinding
 
         }
 
-#if NET_2_0
         [Test]
         public void BindNullValues()
         {
@@ -167,7 +161,6 @@ namespace Spring.DataBinding
             mgr.BindSourceToTarget(source, target, null);
             Assert.IsNull(target.DateOfGraduation);
         }
-#endif
 
         [Test]
         public void UnhandledTypeConversionExceptionSourceToTarget()

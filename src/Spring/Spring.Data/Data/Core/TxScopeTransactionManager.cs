@@ -1,5 +1,3 @@
-#if NET_2_0
-
 #region License
 
 /*
@@ -285,4 +283,3 @@ namespace Spring.Data.Core
         }
     }
 }
-#endif

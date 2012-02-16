@@ -126,7 +126,6 @@ namespace Spring.Core.TypeConversion
                 {
                     throw new ArgumentException("Empty value set for the assembly name in ResourceManager string.");
                 }
-#if NET_2_0
                 if (assemblyName == APP_GLOBALRESOURCES_ASSEMBLYNAME)
                 {
                     try
@@ -142,9 +141,6 @@ namespace Spring.Core.TypeConversion
                     }
                 }
                 Assembly ass = Assembly.LoadWithPartialName(assemblyName);
-#else
-                Assembly ass = Assembly.LoadWithPartialName(assemblyName);
-#endif
                 if (ass == null)
                 {
                     throw new ArgumentException("Could not find assembly with name = '" + assemblyName + "'.");

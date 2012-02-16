@@ -123,18 +123,6 @@ namespace Spring.Objects.Factory.Config
             Assert.AreEqual("value2", dvs.ResolveVariable("key2"));
         }
 
-#if !NET_2_0
-        [Test]
-        public void Initialize_WithInlineDictionarySyntax()
-        {
-            DictionaryVariableSource dvs = new DictionaryVariableSource() { { "key1", "value1" }, { "key2", "value2" } };
-
-            Assert.AreEqual("value1", dvs.ResolveVariable("key1"));
-            Assert.AreEqual("value2", dvs.ResolveVariable("key2"));
-
-        }
-#endif
-
         [Test]
         public void Requesting_KeyNotFound_ThrowsException()
         {

@@ -261,13 +261,9 @@ namespace Spring.Util
             // to determine "correct" order of bubbling control->page->masterpage, 
             // the trick below is necessary because technically the hierarchy goes 
             // control->masterpage->page
-            if (control is System.Web.UI.Page)
+            if (control is Page)
             {
-#if !NET_2_0
-                control = ((Spring.Web.UI.Page)control).Master;
-#else
-                control = ((System.Web.UI.Page)control).Master;
-#endif
+                control = ((Page)control).Master;
             }
             else if (IsMaster(control))
             {
@@ -286,11 +282,7 @@ namespace Spring.Util
 
         private static bool IsMaster(Control control)
         {
-#if !NET_2_0
-            return (control is Spring.Web.UI.MasterPage);
-#else
-            return (control is System.Web.UI.MasterPage);
-#endif            
+            return (control is MasterPage);
         }
 
         /// <summary>

@@ -375,20 +375,6 @@ namespace Spring.Context.Support
             messageSource.GetMessage("MyNonExistantMessage", CultureInfo.CurrentCulture, new object[] { "Spring", ".NET" });
         }
 
-#if !NET_2_0
-		/// <summary>
-		/// Test resource whose value is null
-		/// </summary>
-		[Test]
-		public void ResourceSetMessageSourceGetNullResource()
-		{
-			messageSource.ResourceManagers = resourceManagerList;
-			object resource = messageSource.GetResourceObject("MyNullMessage", CultureInfo.InvariantCulture);
-			Assert.AreEqual(String.Empty, resource, "should've returned empty string");
-		}
-#endif
-
-#if NET_2_0
         /// <summary>
         /// Test resource whose value is null.
         /// </summary>
@@ -400,7 +386,6 @@ namespace Spring.Context.Support
             object resource = messageSource.GetResourceObject("MyNullMessage", CultureInfo.InvariantCulture);
             Assert.AreEqual(String.Empty, resource, "should've returned empty string");
         }
-#endif
 
         /// <summary>
         /// Exercise repeated requests to hit the cache of MessageSets.  Note order of test is not assured

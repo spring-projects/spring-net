@@ -117,11 +117,7 @@ namespace Spring.Context.Support
 		/// Expect failure when using a type that does not inherit from IApplicationContext
 		/// </summary>
 		[Test]
-#if NET_2_0
         [ExpectedException(typeof(ConfigurationErrorsException))]
-#else
-        [ExpectedException(typeof(ConfigurationException))]
-#endif
 		public void ContextNotOfCorrectType()
 		{
 			const string xmlData =
@@ -134,11 +130,7 @@ namespace Spring.Context.Support
 		}
 
 		[Test]
-#if NET_2_0
         [ExpectedException(typeof(ConfigurationErrorsException))]
-#else
-        [ExpectedException(typeof(ConfigurationException))]
-#endif
 		public void CreatedFromNullXmlElement()
 		{
 			ContextHandler ctxHandler = new ContextHandler();
@@ -159,11 +151,7 @@ namespace Spring.Context.Support
 			                "Default type is not the XmlApplicationContext type; it must be.");
 		}
 
-#if NET_2_0
         [ExpectedException(typeof(ConfigurationErrorsException))]
-#else
-        [ExpectedException(typeof(ConfigurationException))]
-#endif
         [Test(Description="SPRNET-105")]
 		public void ChokesIfChildContextsUseTheSameName()
 		{

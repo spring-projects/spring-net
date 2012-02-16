@@ -38,11 +38,10 @@
         <include name="System.Data.dll" />
         <include name="System.EnterpriseServices.dll" />
         <include name="*.dll" />
-        <include name="Spring.Data.NHibernate20.dll" />
-        <exclude name="Spring.Data.NHibernate.dll" />
-        <exclude name="Spring.Data.NHibernate12*.dll" />
-        <exclude name="Spring.Data.NHibernate21*.dll" />
-        <exclude name="Spring.Data.NHibernate*.Tests.dll" />
+		<exclude name="Spring.Data.NHibernate1*.dll" />
+		<exclude name="Spring.Data.NHibernate21*.dll" />
+		<exclude name="Spring.Data.NHibernate3*.dll" />
+		<exclude name="Spring.Data.NHibernate*Tests*.dll" />
 		<exclude if="${net-4.0}" name="System.Web.Extensions.dll" />
       </references>
       <resources prefix="Spring" dynamicprefix="true" failonempty="true">

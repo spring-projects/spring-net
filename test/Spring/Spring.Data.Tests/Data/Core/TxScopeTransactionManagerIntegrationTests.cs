@@ -1,5 +1,3 @@
-#if NET_2_0
-
 #region License
 
 /*
@@ -22,11 +20,8 @@
 
 #region Imports
 
-using System.Reflection;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Spring.Data.Core;
-using Spring.Objects;
 using Spring.Transaction;
 using Spring.Transaction.Support;
 
@@ -152,4 +147,3 @@ namespace Spring.Data.Core
 
     }
 }
-#endif

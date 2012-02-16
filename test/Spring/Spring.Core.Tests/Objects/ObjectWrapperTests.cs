@@ -22,9 +22,7 @@
 
 using System;
 using System.Collections;
-#if NET_2_0
 using System.Collections.Generic;
-#endif
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Globalization;
@@ -112,7 +110,6 @@ namespace Spring.Objects
 
         }
 
-#if NET_2_0	    
 	    public class GenericPerson
         {
             private List<string> favoriteNames = new List<string>();
@@ -143,7 +140,6 @@ namespace Spring.Objects
             }
 
         }
-#endif
 	    
         public class AltPerson
         {

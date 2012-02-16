@@ -18,8 +18,6 @@
 
 #endregion
 
-#if NET_2_0
-
 using NUnit.Framework;
 using Spring.Context;
 using Spring.Context.Support;
@@ -76,5 +74,3 @@ namespace Spring.Objects.Factory.Config
         }
     }
 }
-
-#endif

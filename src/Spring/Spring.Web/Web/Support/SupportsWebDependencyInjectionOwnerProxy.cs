@@ -23,10 +23,8 @@ using System.Security;
 using System.Security.Permissions;
 using System.Web.UI;
 using Spring.Context;
-using Spring.Context.Support;
 using Spring.Reflection.Dynamic;
 using Spring.Util;
-using Spring.Web.Support;
 
 #endregion
 
@@ -92,7 +90,6 @@ namespace Spring.Web.Support
     internal class NamingContainerSupportsWebDependencyInjectionOwnerProxy : SupportsWebDependencyInjectionOwnerProxy
         , INamingContainer
     {
-#if NET_2_0
         private static readonly SafeField refOccasionalFields;
 
         static NamingContainerSupportsWebDependencyInjectionOwnerProxy()
@@ -104,14 +101,11 @@ namespace Spring.Web.Support
             });
             refOccasionalFields = fld;
         }
-#endif
 
         public NamingContainerSupportsWebDependencyInjectionOwnerProxy(IApplicationContext defaultApplicationContext, Control targetControl) : base(defaultApplicationContext, targetControl)
         {
-#if NET_2_0
             object targetOccasionalFields = refOccasionalFields.GetValue(targetControl);
             refOccasionalFields.SetValue(this, targetOccasionalFields);
-#endif            
         }
     }
 }

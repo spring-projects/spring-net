@@ -25,7 +25,6 @@ using System.CodeDom.Compiler;
 using System.IO;
 using System.Reflection;
 using System.Text;
-using Microsoft.VisualBasic;
 using NUnit.Framework;
 using Spring.Util;
 
@@ -109,7 +108,6 @@ namespace Spring.Reflection.Dynamic
             Assert.AreEqual("Arg3", ThisArg2.GetValue(o));
         }
 
-#if NET_2_0
         [Test]
         public void TestForRestrictiveSetterWithSafeWrapper()
         {
@@ -143,7 +141,6 @@ namespace Spring.Reflection.Dynamic
             //this should not cause MethodAccessException, "first" is createtd using "CreateSafe"
             Assert.AreEqual(123, first.GetValue(something));
         }	
-#endif
 
         #region VB TestClass Code
 
@@ -166,14 +163,10 @@ namespace Spring.Reflection.Dynamic
                 args.GenerateInMemory = true;
                 args.GenerateExecutable = false;
                 args.IncludeDebugInformation = true;
-#if NET_2_0
+
                 CodeDomProvider provider = CodeDomProvider.CreateProvider( "VisualBasic" );
                 CompilerResults results = provider.CompileAssemblyFromSource( args, vbSourceCode );
-#else
-                CodeDomProvider provider = new VBCodeProvider();
-                ICodeCompiler compiler = provider.CreateCompiler();
-                CompilerResults results = compiler.CompileAssemblyFromSource( args, vbSourceCode );
-#endif
+
                 if (results.Errors.HasErrors)
                 {
                     StringBuilder sb = new StringBuilder();

@@ -25,7 +25,6 @@ using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Globalization;
-using System.Reflection;
 using System.Resources;
 using System.Security.Permissions;
 using System.Threading;
@@ -41,9 +40,6 @@ using Spring.Objects;
 using Spring.Util;
 using Spring.Validation;
 using Spring.Web.Support;
-#if NET_2_0
-using System.Web.Compilation;
-#endif
 using IValidator = Spring.Validation.IValidator;
 
 #endregion
@@ -86,31 +82,11 @@ namespace Spring.Web.UI
         private static readonly object EventDataBindingsInitialized = new object();
         private static readonly object EventDataBound = new object();
         private static readonly object EventDataUnbound = new object();
-#if !NET_2_0
-        private static readonly object EventPreInit = new object();
-        private static readonly object EventInitComplete = new object();
-#else
-//        internal static readonly MethodInfo GetLocalResourceProvider =
-//                typeof( ResourceExpressionBuilder ).GetMethod( "GetLocalResourceProvider", BindingFlags.NonPublic | BindingFlags.Static, null,
-//                                                            new Type[] { typeof( TemplateControl ) }, null );
-#endif
 
         #endregion
 
         #region Instance Fields
 
-#if !NET_2_0
-        private static readonly FieldInfo _fiRequestValueCollection =
-            typeof(System.Web.UI.Page).GetField("_requestValueCollection",
-                                                BindingFlags.Instance | BindingFlags.NonPublic);
-
-        private bool passedPreInit = false;
-        private bool passedInit = false;
-        private bool passedTrackViewState = false;
-
-        private MasterPage master;
-        private String masterPageFile;
-#endif
         private object controller;
         private IDictionary sharedState;
 
@@ -147,72 +123,11 @@ namespace Spring.Web.UI
             InitializeNavigationSupport();
         }
 
-#if !NET_2_0
-        /// <summary>
-        /// Determines the type of request made for the Page class.
-        /// </summary>
-        /// <returns>
-        /// If the post back used the POST method, the form information is returned from the Context object.
-        /// If the postback used the GET method, the query string information is returned.
-        /// If the page is being requested for the first time, a null reference (Nothing in Visual Basic) is returned.
-        /// </returns>
-        /// <remarks>
-        /// Adds support for OnPreInit() in NET 1.1.<br/>
-        /// Overriding this method is the closest match to NET 2.0 OnPreInit()-behaviour.
-        /// </remarks>
-        protected override NameValueCollection DeterminePostBackMode()
-        {
-            NameValueCollection requestValueCollection = base.DeterminePostBackMode();
-            if (!passedPreInit)
-            {
-                _fiRequestValueCollection.SetValue(this, requestValueCollection);
-                passedPreInit = true;
-                OnPreInit(EventArgs.Empty);
-            }
-            return requestValueCollection;
-        }
-
-        /// <summary>
-        /// Overridden to add support for <see cref="OnInitComplete"/>.
-        /// </summary>
-        protected override void TrackViewState()
-        {
-            base.TrackViewState();
-            if (passedInit && !passedTrackViewState)
-            {
-                passedTrackViewState = true;
-                OnInitComplete(EventArgs.Empty);
-            }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether view state is enabled for this page.
-        /// </summary>
-        protected internal bool IsViewStateEnabled
-        {
-            get
-            {
-                for (Control parent = this; parent != null; parent = parent.Parent)
-                {
-                    if (!parent.EnableViewState)
-                    {
-                        return false;
-                    }
-                }
-                return true;
-            }
-        }
-#endif
-
         /// <summary>
         /// Initializes Spring.NET page internals and raises the PreInit event.
         /// </summary>
         /// <param name="e">The <see cref="System.EventArgs"/> instance containing the event data.</param>
-#if !NET_2_0
-        protected virtual void OnPreInit(EventArgs e)
-#else
         protected override void OnPreInit( EventArgs e )
-#endif
         {
             if (SharedState == null)
             {
@@ -220,36 +135,14 @@ namespace Spring.Web.UI
             }
             InitializeCulture();
             InitializeMessageSource();
-#if !NET_2_0
-            EventHandler handler = (EventHandler) base.Events[EventPreInit];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
-#else
-            base.OnPreInit( e );
-#endif
-        }
 
-#if !NET_2_0
-        /// <summary>
-        /// PreInit event.
-        /// </summary>
-        public event EventHandler PreInit
-        {
-            add { base.Events.AddHandler(EventPreInit, value); }
-            remove { base.Events.RemoveHandler(EventPreInit, value); }
+            base.OnPreInit( e );
         }
-#endif
 
         /// <summary>
         /// Initializes the culture.
         /// </summary>
-#if !NET_2_0
-        protected virtual void InitializeCulture()
-#else
         protected override void InitializeCulture()
-#endif
         {
             CultureInfo userCulture = this.UserCulture;
             Thread.CurrentThread.CurrentUICulture = userCulture;
@@ -262,19 +155,6 @@ namespace Spring.Web.UI
                 Thread.CurrentThread.CurrentCulture = userCulture;
             }
         }
-
-#if !NET_2_0
-        /// <summary>
-        /// Gets a value indicating whether this instance is in design mode.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if this instance is in design mode; otherwise, <c>false</c>.
-        /// </value>
-        protected bool DesignMode
-        {
-            get { return this.Context == null; }
-        }
-#endif
 
         /// <summary>
         /// Initializes data model and controls.
@@ -292,48 +172,13 @@ namespace Spring.Web.UI
                 LoadModel( LoadModelFromPersistenceMedium() );
             }
 
-#if !NET_2_0
-            if (HasMaster)
-            {
-                Trace.Write(traceCategory, "Initialize Master");
-                master = (MasterPage) this.LoadControl(MasterPageFile);
-                master.Initialize(this);
-            }
-#endif
             base.OnInit( e );
 
             // initialize controls
             Trace.Write( traceCategory, "Initialize Controls" );
             OnInitializeControls( EventArgs.Empty );
-
-#if !NET_2_0
-            passedInit = true;
-#endif
         }
 
-
-#if !NET_2_0
-        /// <summary>
-        /// Raises the <see cref="InitComplete"/> event after page initialization.
-        /// </summary>
-        protected virtual void OnInitComplete(EventArgs e)
-        {
-            EventHandler handler = (EventHandler) base.Events[EventInitComplete];
-            if (handler != null)
-            {
-                handler(this, e);
-            }
-        }
-
-        /// <summary>
-        /// InitComplete event.
-        /// </summary>
-        public event EventHandler InitComplete
-        {
-            add { base.Events.AddHandler(EventInitComplete, value); }
-            remove { base.Events.RemoveHandler(EventInitComplete, value); }
-        }
-#endif
         /// <summary>
         /// Raises the <see cref="PreLoadViewState"/> event after page initialization.
         /// </summary>
@@ -562,7 +407,6 @@ namespace Spring.Web.UI
             return control;
         }
 
-#if NET_2_0
         /// <summary>
         /// Obtains a <see cref="T:System.Web.UI.UserControl"/> object by type
         /// and injects dependencies according to Spring config file.
@@ -578,7 +422,6 @@ namespace Spring.Web.UI
             control = WebDependencyInjectionUtils.InjectDependenciesRecursive( defaultApplicationContext, control );
             return control;
         }
-#endif
 
         #endregion
 
@@ -742,7 +585,6 @@ namespace Spring.Web.UI
 
         #endregion
 
-#if NET_2_0
         /// <summary>
         /// Overrides the default PreviousPage property to return an instance of <see cref="Spring.Web.UI.Page"/>,
         /// and to work properly during server-side transfers and executes.
@@ -751,7 +593,7 @@ namespace Spring.Web.UI
         {
             get { return this.Context.PreviousHandler as Page; }
         }
-#endif
+
         ///<summary>
         /// Publish <see cref="HttpContext"/> associated with this page for convenient usage in Binding Expressions
         ///</summary>
@@ -765,54 +607,6 @@ namespace Spring.Web.UI
 
         #region Master Page support
 
-#if !NET_2_0
-        /// <summary>
-        /// Reference to a master page template.
-        /// </summary>
-        /// <remarks>
-        /// <p>
-        /// Master page can be any user control that defines form element and one or more &lt;spring:ContentPlaceHolder/&gt; controls.
-        /// Placeholders in the master page can contain default content that will be replaced by the content defined in child pages.
-        /// </p>
-        /// <p>
-        /// Child pages should only define content they want to override using appropriate &lt;spring:Content/&gt; control
-        /// that references appropriate content placeholder in the master page. Child pages don't have to define
-        /// content elements for every placeholder in the master page. In that case, child page will simply inherit
-        /// default content from the placeholder.
-        /// </p>
-        /// </remarks>
-        [Browsable(false)]
-        [DesignerSerializationVisibility(DesignerSerializationVisibility.Hidden)]
-        public MasterPage Master
-        {
-            get { return master; }
-        }
-
-        /// <summary>
-        /// Convinience property that allows users to specify master page using its file name
-        /// </summary>
-        public String MasterPageFile
-        {
-            get { return masterPageFile; }
-            set { masterPageFile = value; }
-        }
-
-        /// <summary>
-        /// Renders this page, taking master page into account.
-        /// </summary>
-        /// <param name="writer">The <see langword="HtmlTextWriter"/> object that receives the server control content.</param>
-        protected override void Render(HtmlTextWriter writer)
-        {
-            if (HasMaster)
-            {
-                Master.RenderControl(writer);
-            }
-            else
-            {
-                base.Render(writer);
-            }
-        }
-#else
         /// <summary>
         /// Gets the master page that determines the overall look of the page.
         /// </summary>
@@ -822,8 +616,6 @@ namespace Spring.Web.UI
         {
             get { return (MasterPage)base.Master; }
         }
-
-#endif
 
         /// <summary>
         /// Returns true if page uses master page, false otherwise.
@@ -1227,7 +1019,6 @@ namespace Spring.Web.UI
             base.Validate();
         }
 
-#if NET_2_0
         ///<summary>
         ///Instructs the validation controls in the specified validation group to validate their assigned information.
         ///</summary>
@@ -1237,7 +1028,6 @@ namespace Spring.Web.UI
         {
             base.Validate(validationGroup);
         }
-#endif
 
         /// <summary>
         /// Evaluates specified validators and returns <c>True</c> if all of them are valid.
@@ -1646,11 +1436,7 @@ namespace Spring.Web.UI
         /// <returns>Local ResourceManager instance.</returns>
         private ResourceManager GetLocalResourceManager()
         {
-#if !NET_2_0
-            return new ResourceManager(GetType().BaseType);
-#else
             return LocalResourceManager.GetLocalResourceManager(this);
-#endif
         }
 
         /// <summary>

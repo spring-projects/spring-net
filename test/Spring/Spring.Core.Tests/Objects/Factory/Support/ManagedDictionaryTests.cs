@@ -20,13 +20,10 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using NUnit.Framework;
 
 using Spring.Objects.Factory.Config;
-
-#if NET_2_0
-using System.Collections.Generic;
-#endif
 
 namespace Spring.Objects.Factory.Support
 {
@@ -102,7 +99,6 @@ namespace Spring.Objects.Factory.Support
             Assert.AreEqual("fork", mergedMap["one"]);
         }
 
-#if NET_2_0
         internal class InternalType
         {
             public string Value = "OK";
@@ -150,6 +146,5 @@ namespace Spring.Objects.Factory.Support
             Assert.AreEqual(1, resolved.Count);
             Assert.AreEqual(typeof(List<string>), resolved["key"].GetType());
         }
-#endif
     }
 }

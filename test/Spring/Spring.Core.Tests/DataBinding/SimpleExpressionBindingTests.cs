@@ -30,7 +30,6 @@ namespace Spring.DataBinding
     [TestFixture]
     public class SimpleExpressionBindingTests
     {
-#if NET_2_0
         private class BindToNullable_TestEntity
         {
             private Nullable<short> sortOrder;
@@ -46,7 +45,6 @@ namespace Spring.DataBinding
             new SimpleExpressionBinding("Text", "SortOrder").BindSourceToTarget(textBox, entity, null);
             Assert.IsNull(entity.SortOrder);
         }
-#endif
 
         [Test]
         [ExpectedException(typeof(ArgumentNullException))]

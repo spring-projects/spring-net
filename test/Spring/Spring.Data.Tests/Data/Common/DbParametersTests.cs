@@ -18,11 +18,9 @@
 
 #endregion
 
-#if (NET_2_0)
 #region Imports
 
 using System.Data;
-using System.Data.OracleClient;
 using NUnit.Framework;
 
 #endregion
@@ -72,4 +70,3 @@ namespace Spring.Data.Common
 
     }
 }
-#endif

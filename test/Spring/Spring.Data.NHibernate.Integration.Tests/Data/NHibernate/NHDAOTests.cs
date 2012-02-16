@@ -88,13 +88,9 @@ namespace Spring.Data.NHibernate
 
             ISessionFactory sf = ctx["SessionFactory"] as ISessionFactory;
             IDbProvider dbProvider = SessionFactoryUtils.GetDbProvider(sf);
-#if NET_2_0            
+
             Assert.AreEqual("Microsoft SQL Server, provider V2.0.0.0 in framework .NET V2.0",
                                 dbProvider.DbMetadata.ProductName);
-#else
-            Assert.AreEqual("Microsoft SQL Server, provider V1.0.5000.0 in framework .NET V1.1",
-                    dbProvider.DbMetadata.ProductName);
-#endif            
         }
 
 	    

@@ -22,16 +22,13 @@
 
 using System;
 using System.Collections;
-#if NET_2_0
 using System.Collections.Generic;
-#endif
 using System.Collections.Specialized;
 using System.Globalization;
 
 using Spring.Core;
 using Spring.Core.TypeConversion;
 using Spring.Core.TypeResolution;
-using Spring.Objects.Factory.Config;
 using Spring.Util;
 
 #endregion
@@ -122,7 +119,7 @@ namespace Spring.Objects.Factory.Config
             {
                 valueType = TypeResolutionUtils.ResolveType(this.valueTypeName);
             }
-#if NET_2_0
+
             if ((keyType == null) && (valueType == null))
             {
                 dictionary = new HybridDictionary();
@@ -137,9 +134,7 @@ namespace Spring.Objects.Factory.Config
 
                 dictionary = (IDictionary)ObjectUtils.InstantiateType(type);
             }
-#else
-            dictionary = new HybridDictionary();
-#endif
+
             foreach (object key in this.Keys)
 			{
 				string elementName = string.Format(CultureInfo.InvariantCulture, "{0}[{1}]", propertyName, key);

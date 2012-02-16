@@ -21,21 +21,15 @@
 #region Imports
 
 using System;
-using System.Collections.Specialized;
 using System.Data;
 using System.Web.UI.WebControls;
-using Common.Logging;
-using Common.Logging.Simple;
 using NUnit.Framework;
 using Spring.Context;
 using Spring.Context.Support;
-using Spring.Objects.Factory.Support;
 using Spring.TestSupport;
 
-#if NET_2_0
 using System.Collections;
 using System.Collections.Generic;
-#endif
 
 #endregion
 
@@ -124,7 +118,6 @@ namespace Spring.Util
             }
         }
 
-#if NET_2_0
         [Test, Explicit]
         public void TestHashtableVsDictionary()
         {
@@ -155,6 +148,5 @@ namespace Spring.Util
                 }
             }
         }
-#endif
     }
 }

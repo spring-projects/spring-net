@@ -22,10 +22,7 @@
 
 using System;
 using System.Collections;
-#if NET_2_0
-using System.Collections.ObjectModel;
 using System.Collections.Generic;
-#endif
 using System.Globalization;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -33,7 +30,6 @@ using System.Security;
 using System.Security.Permissions;
 using System.Text;
 using System.Runtime.CompilerServices;
-using System.Diagnostics;
 
 #endregion
 
@@ -70,11 +66,7 @@ namespace Spring.Util
         /// </summary>
         public static bool IsNullableType(Type type)
         {
-#if NET_2_0
             return (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>));
-#else
-            return false;
-#endif
         }
 
         /// <summary>
@@ -276,7 +268,6 @@ namespace Spring.Util
             return types;
         }
 
-#if NET_2_0
         /// <summary>
         /// Returns an array of <see langword="string"/>s that represent 
         /// the names of the generic type parameter.
@@ -385,7 +376,6 @@ namespace Spring.Util
             }
             return methodInfo;
         }
-#endif
 
         /// <summary>
         /// From a given list of methods, selects the method having an exact match on the given <paramref name="argValues"/>' types.
@@ -448,24 +438,13 @@ namespace Spring.Util
                             Type paramType = parameters[i].ParameterType;
                             object paramValue = paramValues[i];
 
-
-#if !NET_2_0
-                            if ((paramValue == null && paramType.IsValueType)
-                                || (paramValue != null && !paramType.IsAssignableFrom(paramValue.GetType())))
-                            {
-                                isMatch = false;
-                                break;
-                            }
-#endif
-
-#if NET_2_0
                             if ((paramValue == null && paramType.IsValueType && !IsNullableType(paramType))
                                 || (paramValue != null && !paramType.IsAssignableFrom(paramValue.GetType())))
                             {
                                 isMatch = false;
                                 break;
                             }
-#endif
+
                             if (paramValue == null || paramType != paramValue.GetType())
                             {
                                 isExactMatch = false;
@@ -839,10 +818,7 @@ namespace Spring.Util
             //TODO: investigate whether there is another equivalent manner of providing this functionality under MONO
             return type.ToString();
 #endif
-#if NET_2_0
             return (new Microsoft.CSharp.CSharpCodeProvider()).GetTypeOutput(new System.CodeDom.CodeTypeReference(type));
-#endif
-            return type.ToString();
         }
 
 
@@ -1093,7 +1069,6 @@ namespace Spring.Util
             return CreateCustomAttribute(type, ctorArgs, null);
         }
 
-#if NET_2_0
         /// <summary>
         /// Creates a <see cref="System.Reflection.Emit.CustomAttributeBuilder"/>.
         /// </summary>
@@ -1242,8 +1217,6 @@ namespace Spring.Util
             return arguments;
         }
 
-#endif
-
         /// <summary>
         /// Calculates and returns the list of attributes that apply to the
         /// specified type or method.
@@ -1258,7 +1231,6 @@ namespace Spring.Util
             ArrayList attributes = new ArrayList();
 
             // add attributes that apply to the target type or method
-#if NET_2_0
             object[] attrs = member.GetCustomAttributes(false);
             try
             {
@@ -1314,9 +1286,6 @@ namespace Spring.Util
                 // http://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=161522
                 attributes.AddRange(attrs);
             }
-#else
-            attributes.AddRange(member.GetCustomAttributes(false));
-#endif
             return attributes;
         }
 
@@ -1393,13 +1362,8 @@ namespace Spring.Util
         }
 
 
-#if NET_2_0
         private static readonly MethodInfo Exception_InternalPreserveStackTrace =
             typeof(Exception).GetMethod("InternalPreserveStackTrace", BindingFlags.Instance | BindingFlags.NonPublic);
-#else
-        private static readonly FieldInfo Exception_RemoteStackTraceString = 
-            typeof(Exception).GetField("_remoteStackTraceString", BindingFlags.Instance | BindingFlags.NonPublic);
-#endif
 
         /// <summary>
         /// Unwraps the supplied <see cref="System.Reflection.TargetInvocationException"/> 
@@ -1411,15 +1375,11 @@ namespace Spring.Util
         /// <returns>The unwrapped exception.</returns>
         public static Exception UnwrapTargetInvocationException(TargetInvocationException ex)
         {
-#if NET_2_0
             if (SystemUtils.MonoRuntime)
             {
                 return ex.InnerException;
             }
             Exception_InternalPreserveStackTrace.Invoke(ex.InnerException, new Object[] { });
-#else
-            Exception_RemoteStackTraceString.SetValue(ex.InnerException, ex.InnerException.StackTrace + Environment.NewLine);
-#endif
             return ex.InnerException;
         }
 
@@ -1436,8 +1396,6 @@ namespace Spring.Util
             return IsTypeVisible(type, null);
         }
 
-#if NET_2_0
-
         /// <summary>
         /// Determines whether the specified type is nullable.
         /// </summary>
@@ -1449,7 +1407,6 @@ namespace Spring.Util
         {
             return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
         }
-#endif
 
         /// <summary>
         /// Is the supplied <paramref name="type"/> can be accessed 
@@ -1463,7 +1420,6 @@ namespace Spring.Util
         /// </returns>
         public static bool IsTypeVisible(Type type, string friendlyAssemblyName)
         {
-#if NET_2_0
             if (type.IsVisible)
             {
                 return true;
@@ -1485,12 +1441,6 @@ namespace Spring.Util
                     }
                 }
             }
-#else
-            if (type.IsPublic || (type.IsNestedPublic && type.DeclaringType.IsPublic))
-            {
-                return true;
-            }
-#endif
             return false;
         }
 
@@ -1638,10 +1588,6 @@ namespace Spring.Util
             }
         }
 
-
-
-
-#if NET_2_0
         private static void MemberwiseCopyInternal(object fromObject, object toObject, Type smallerType)
         {
             MemberwiseCopyHandler impl = GetImpl(smallerType);
@@ -1694,17 +1640,6 @@ namespace Spring.Util
             }
             return handler;
         }
-#else
-        private static void MemberwiseCopyInternal(object fromObject, object toObject, Type smallerType)
-        {
-            FieldInfo[] fields = GetFields(smallerType);
-            for (int i = 0; i < fields.Length; i++)
-            {
-                FieldInfo field = fields[i];
-                field.SetValue(toObject, field.GetValue(fromObject));
-            }
-        }
-#endif
 
         #region Field Cache Management for "MemberwiseCopy"
 

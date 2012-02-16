@@ -12,7 +12,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Spring.MvcQuickStart</RootNamespace>
     <AssemblyName>Spring.MvcQuickStart</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>false</UseIISExpress>
   </PropertyGroup>
@@ -35,13 +35,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Spring.Core">
-      <HintPath>..\..\..\..\..\bin\net\2.0\debug\Spring.Core.dll</HintPath>
+      <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Core.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Data">
-      <HintPath>..\..\..\..\..\bin\net\2.0\debug\Spring.Data.dll</HintPath>
+      <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Data.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Web">
-      <HintPath>..\..\..\..\..\bin\net\2.0\debug\Spring.Web.dll</HintPath>
+      <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Web.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Web.Mvc">
       <HintPath>..\..\..\..\..\bin\net\3.5\debug\Spring.Web.Mvc.dll</HintPath>

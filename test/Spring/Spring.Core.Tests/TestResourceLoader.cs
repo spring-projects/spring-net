@@ -111,15 +111,9 @@ namespace Spring
             using (Stream stm = GetStream(context, ext))
             {
 
-#if !NET_2_0
-                XmlValidatingReader validatingReader = new XmlValidatingReader(stm, XmlNodeType.Document, null);
-                validatingReader.ValidationType = ValidationType.Schema;
-                XmlSchemaCollection schemas = validatingReader.Schemas;
-#else
                 XmlReaderSettings settings = new XmlReaderSettings();
                 settings.ValidationType = ValidationType.Schema;
                 XmlSchemaSet schemas = settings.Schemas;
-#endif
 
                 foreach (IResource schemaResource in schemaResources)
                 {
@@ -133,9 +127,7 @@ namespace Spring
                     schemas.Add(targetNamespace, new XmlNodeReader(schemaDoc));
                 }
 
-#if NET_2_0
                 XmlReader validatingReader = XmlReader.Create(stm, settings);
-#endif
                 XmlDocument xmlDoc = new XmlDocument();
                 xmlDoc.Load(validatingReader);
                 validatingReader.Close();

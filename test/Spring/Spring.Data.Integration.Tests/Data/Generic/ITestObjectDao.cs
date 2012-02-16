@@ -19,8 +19,6 @@
 #endregion
 
 
-#if NET_2_0
-
 using System.Collections.Generic;
 using Spring.Objects;
 
@@ -31,5 +29,3 @@ namespace Spring.Data.Generic
         IList<TestObject> FindAll();
     }
 }
-
-#endif

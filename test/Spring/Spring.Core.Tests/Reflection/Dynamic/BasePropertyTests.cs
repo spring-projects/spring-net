@@ -127,7 +127,6 @@ namespace Spring.Reflection.Dynamic
             Assert.AreEqual("here we go...", myProperty.GetValue(null));
         }
 
-#if NET_2_0
         [Test, Ignore("test N/A anymore due to System.Reflection.Emit.DynamicMethod")]
         [ExpectedException(typeof(MethodAccessException))]
         public void TestForRestrictiveGetter()
@@ -164,7 +163,6 @@ namespace Spring.Reflection.Dynamic
             //this should never execute
             Assert.AreEqual(123, second.GetValue(something));
         }
-#endif
 
         #region Performance tests
 
@@ -341,7 +339,6 @@ namespace Spring.Reflection.Dynamic
         }
     }
 
-#if NET_2_0
     public class Something
     {
         public int First
@@ -372,7 +369,4 @@ namespace Spring.Reflection.Dynamic
         private int third;
 
     }
-#endif
-
 }
-

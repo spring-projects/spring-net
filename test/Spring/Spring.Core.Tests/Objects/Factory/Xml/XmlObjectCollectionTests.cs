@@ -719,7 +719,6 @@ namespace Spring.Objects.Factory.Xml
             Assert.IsTrue((bool)obj["3"].GetValue());
         }
 
-#if NET_2_0
         [Test]
         public void TypedGenericList()
         {
@@ -741,7 +740,6 @@ namespace Spring.Objects.Factory.Xml
             Assert.AreEqual("ALEKSANDAR SEOVIC", obj["2"].GetValue());
             Assert.IsTrue((bool)obj["3"].GetValue());
         }
-#endif
     }
 
     #region Helper classes
@@ -772,7 +770,6 @@ namespace Spring.Objects.Factory.Xml
         }
     }
 
-#if NET_2_0
     public class GenericExpressionHolder
     {
         private System.Collections.Generic.IList<IExpression> expressionsList;
@@ -798,11 +795,6 @@ namespace Spring.Objects.Factory.Xml
             get { return this.expressionsDictionary[key]; }
         }
     }
-#else
-    public class GenericExpressionHolder : NonGenericExpressionHolder
-    {}
-#endif
     
     #endregion
-    
 }

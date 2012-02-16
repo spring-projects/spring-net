@@ -75,7 +75,6 @@ namespace Spring.Objects.Factory
 			Assert.AreEqual(6, names.Count);
 		}
 
-#if NET_2_0
         [Test]
         public void ObjectNamesIncludingAncestorsPreserveOrderOfRegistration()
         {            
@@ -95,7 +94,6 @@ namespace Spring.Objects.Factory
 
             mocks.VerifyAll();
         }
-#endif
 
 		[Test]
         public void ObjectNamesForTypeIncludingAncestors()
@@ -126,7 +124,6 @@ namespace Spring.Objects.Factory
 			Assert.AreEqual(0, names.Count);
 		}
 
-#if NET_2_0
         [Test]
         public void ObjectNamesForTypeIncludingAncestorsPreserveOrderOfRegistration()
         {
@@ -169,7 +166,6 @@ namespace Spring.Objects.Factory
 
             mocks.VerifyAll();
         }
-#endif
 
 		[Test]
 		public void CountObjectsIncludingAncestorsWithNonHierarchicalFactory()

@@ -30,11 +30,7 @@ namespace Spring.Remoting
                         }
 
                         channel = new TcpChannel(8005);
-#if !NET_2_0 
-                        ChannelServices.RegisterChannel(channel);
-#else
                         ChannelServices.RegisterChannel(channel, false);
-#endif
                     }
                     catch
                     {

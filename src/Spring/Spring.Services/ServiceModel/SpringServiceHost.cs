@@ -1,5 +1,4 @@
-﻿#if NET_3_0
-#region License
+﻿#region License
 
 /*
  * Copyright © 2002-2011 the original author or authors.
@@ -115,4 +114,3 @@ namespace Spring.ServiceModel
         #endregion
     }
 }
-#endif

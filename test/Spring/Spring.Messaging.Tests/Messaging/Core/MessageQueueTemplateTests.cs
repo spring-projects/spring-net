@@ -51,9 +51,6 @@ namespace Spring.Messaging.Core
             base.SetUp();
         }
 
-
-
-#if NET_2_0 || NET_3_0
         [Test]
         public void MessageCreator()
         {
@@ -82,8 +79,6 @@ namespace Spring.Messaging.Core
 
         }
 
-
-#endif
         public class SimpleCreator
         {
             public MessageQueue CreateQueue()
@@ -91,8 +86,6 @@ namespace Spring.Messaging.Core
                 return new MessageQueue();
             }
         }
-  
-        
   
         [Test]
         [ExpectedException(typeof (ArgumentNullException))]
@@ -199,7 +192,7 @@ namespace Spring.Messaging.Core
             ReceiveHelloWorld(messageQueueObjectName, q, 2);
             ReceiveHelloWorld(messageQueueObjectName, q, 3);
         }
-#if NET_2_0
+
         private static void SendUsingMessageTx(string messageQueueObjectName, MessageQueueTemplate q)
         {
             IPlatformTransactionManager txManager = new MessageQueueTransactionManager();
@@ -233,7 +226,7 @@ namespace Spring.Messaging.Core
                                                 return null;
                                             });
         }
-#endif
+
         #endregion
 
         protected override string[] ConfigLocations

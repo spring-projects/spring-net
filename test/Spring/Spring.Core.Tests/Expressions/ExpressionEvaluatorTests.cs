@@ -750,7 +750,6 @@ namespace Spring.Expressions
             Assert.AreEqual(typeof(ExpressionEvaluator), ExpressionEvaluator.GetValue(null, string.Format("T({0})", typeof(ExpressionEvaluator).AssemblyQualifiedName)));
         }
 
-#if NET_2_0
         /// <summary>
         /// Tests type node
         /// </summary>
@@ -787,7 +786,7 @@ namespace Spring.Expressions
         {
             Assert.AreEqual(typeof(int?[,]), ExpressionEvaluator.GetValue(null, "T(System.Nullable`1[[System.Int32, mscorlib]][,], mscorlib)"));
         }
-#endif
+
         /// <summary>
         /// Tests constructor node
         /// </summary>
@@ -1339,9 +1338,6 @@ namespace Spring.Expressions
         /// Tests LIKE operator.
         /// </summary>
         [Test]
-#if !NET_2_0
-        [ExpectedException(typeof(NotSupportedException))]
-#endif
         public void TestLikeOperator()
         {
             Assert.IsTrue((bool)ExpressionEvaluator.GetValue(null, "'A' like '?'"));
@@ -2084,8 +2080,6 @@ namespace Spring.Expressions
             ExpressionEvaluator.SetValue(null, "DateTime", 20);
         }
 
-#if NET_2_0
-
         /// <summary>
         /// Reproduce SPRNET-408.
         /// </summary>
@@ -2124,7 +2118,6 @@ namespace Spring.Expressions
             Assert.IsTrue((bool)ExpressionEvaluator.GetValue(test, "#root == null"));
             Assert.IsNull(ExpressionEvaluator.GetValue(test, "#root"));
         }
-#endif
 
         /// <summary>
         /// Reproduce SPRNET-462.
@@ -2980,12 +2973,10 @@ namespace Spring.Expressions
     internal class Foo
     {
         private FooType type;
-#if NET_2_0
         private Nullable<DateTime> nullableDate;
         private Nullable<Int32> nullableInt;
-#endif
-        public Foo()
-            : this(FooType.One)
+
+        public Foo() : this(FooType.One)
         {
         }
 
@@ -3031,8 +3022,6 @@ namespace Spring.Expressions
             get { return type; }
         }
 
-#if NET_2_0
-
         public DateTime? NullableDate
         {
             get { return nullableDate; }
@@ -3044,7 +3033,6 @@ namespace Spring.Expressions
             get { return nullableInt; }
             set { nullableInt = value; }
         }
-#endif
 
         public string MethodWithSimilarArguments(int flags, Bar[] bars)
         {

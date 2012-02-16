@@ -28,7 +28,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>3.5</OldToolsVersion>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -103,11 +103,11 @@
     </Reference>
     <Reference Include="Spring.Core">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\bin\net\2.0\debug\Spring.Core.dll</HintPath>
+      <HintPath>..\..\..\..\bin\net\4.0\debug\Spring.Core.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Scheduling.Quartz, Version=1.1.2.20220, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\bin\net\2.0\debug\Spring.Scheduling.Quartz.dll</HintPath>
+      <HintPath>..\..\..\..\bin\net\4.0\debug\Spring.Scheduling.Quartz.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>

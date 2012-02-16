@@ -110,12 +110,10 @@ namespace Spring.Transaction
         /// </remarks>
         string Name { get; }
 
-#if NET_2_0
         /// <summary>
         /// Gets the enterprise services interop option.
         /// </summary>
         /// <value>The enterprise services interop option.</value>
         System.Transactions.EnterpriseServicesInteropOption EnterpriseServicesInteropOption { get;}
-#endif
 	}
 }

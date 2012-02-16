@@ -8,7 +8,7 @@ Main build targets:
   builds debug builds for all projects for all available target platforms
 
 "compile-build-<framework id>":
-  builds all projects for a specific platform, e.g. compile-build-2.0 for net-2.0
+  builds all projects for a specific platform, e.g. compile-build-3.5 for net-3.5
 
 "doc":
   builds the reference and sdk documentation
@@ -92,7 +92,7 @@ Commandline Examples:
   nant clean package -f:spring.build -D:project.build.sign=true -D:package.version=1.3.0
 
 *) to build a specific target platform
-  nant compile-build-2.0
+  nant compile-build-3.5
 
 *) to build just debug builds for all available platforms and execute tests
   nant test
@@ -217,14 +217,6 @@ Commandline Examples:
 
   <!-- Displays configuration info, usefull for working out why Spring.NET doesn't build -->
   <target name="display-setup" depends="check-htmlhelp-compiler">
-    <!-- .NET Framework 2.0 -->
-    <if test="${framework::exists('net-2.0')}">
-      <property name="nant.settings.currentframework" value="net-2.0"/>
-      <call target="display-target-framework"/>
-    </if>
-    <if test="${not framework::exists('net-2.0')}">
-      <echo message=".NET Framework 2.0 runtime is not available."/>
-    </if>
     <!-- Mono 2.0 -->
     <if test="${framework::exists('mono-2.0')}">
       <property name="nant.settings.currentframework" value="mono-2.0"/>
@@ -244,7 +236,6 @@ Commandline Examples:
     <!-- HTML Help Compiler -->
     <echo message="htmlhelp.compiler: ${htmlhelp.compiler}"/>
   </target>
-
 
   <target name="display-target-framework">
     <echo message=""/>
@@ -300,8 +291,6 @@ Commandline Examples:
   <target name="compile-build" description="Compile current build configurations for all runtime configurations">
     <echo message="Compiling all framework versions for the ${current.build.config} build configuration."/>
 
-    <call target="compile-build-2.0"/>
-    <call target="compile-build-3.0"/>
     <call target="compile-build-3.5"/>
     <call target="compile-build-4.0"/>
   
@@ -309,42 +298,6 @@ Commandline Examples:
 
   </target>
 -->
-
-  <target name="compile-build-2.0" description="Builds for .NET 2.0 if available">
-    <if test="${framework::exists('net-2.0')}">
-      <call target="compile-net-2.0"/>
-    </if>
-
-    <if test="${not framework::exists('net-2.0')}">
-      <if test="${property::exists('project.build.package') and project.build.package}">
-        .NET 2.0 Build Skipped for Package
-        <fail message="The .NET Framework 2.0 is not available."/>
-        <echo message="The .NET Framework 2.0 is not available. Build skipped during package."/>
-      </if>
-      <if test="${not(property::exists('project.build.package') and project.build.package)}">
-        <echo message="The .NET Framework 2.0 is not available. Build skipped."/>
-      </if>
-    </if>
-  </target>
-
-  <target name="compile-build-3.0" description="Builds for .NET 3.0 if available">
-
-    <if test="${net-3.0.installed}">
-      <call target="compile-net-3.0"/>
-    </if>
-
-    <if test="${not net-3.0.installed}">
-      <if test="${property::exists('project.build.package') and project.build.package}">
-        .NET 3.0 Build Skipped for Package
-        <fail message="The .NET Framework 3.0 is not available."/>
-        <echo message="The .NET Framework 3.0 is not available. Build skipped during package."/>
-      </if>
-      <if test="${not(property::exists('project.build.package') and project.build.package)}">
-        <echo message="The .NET Framework 3.0 is not available. Build skipped."/>
-      </if>
-    </if>
-  </target>
-
 
   <target name="compile-build-3.5" description="Builds for .NET 3.5 if available">
 
@@ -424,9 +377,9 @@ Commandline Examples:
   <target name="compile-test"> <!-- used as configurable template by all compile-{net|mono|netcf}-x.x targets -->
     <property name="lib.dir" value="${spring.basedir}/lib/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
     <property name="nh.lib.dir" value="${spring.basedir}/lib/NHibernate10/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
-    <property name="nh12.lib.dir" value="${spring.basedir}/lib/NHibernate12/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
-    <property name="nh20.lib.dir" value="${spring.basedir}/lib/NHibernate20/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
-    <property name="nh21.lib.dir" value="${spring.basedir}/lib/NHibernate21/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
+    <property name="nh12.lib.dir" value="${spring.basedir}/lib/NHibernate12/${framework::get-family(framework::get-target-framework())}/2.0"/>
+    <property name="nh20.lib.dir" value="${spring.basedir}/lib/NHibernate20/${framework::get-family(framework::get-target-framework())}/2.0"/>
+    <property name="nh21.lib.dir" value="${spring.basedir}/lib/NHibernate21/${framework::get-family(framework::get-target-framework())}/2.0"/>
     <property name="nh30.lib.dir" value="${spring.basedir}/lib/NHibernate30/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
     <property name="nh31.lib.dir" value="${spring.basedir}/lib/NHibernate31/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
     <property name="nh32.lib.dir" value="${spring.basedir}/lib/NHibernate32/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
@@ -438,20 +391,20 @@ Commandline Examples:
     <nant buildfile="src/Spring/Spring.Core/Spring.Core.build" target="build" />
     <nant buildfile="src/Spring/Spring.Aop/Spring.Aop.build" target="build" if="${build-aop}"/>
     <nant buildfile="src/Spring/Spring.Web/Spring.Web.build" target="build" if="${build-web}"/>
-    <nant buildfile="src/Spring/Spring.Web.Extensions/Spring.Web.Extensions.build" target="build" if="${build-web and (nant.settings.currentframework == 'net-2.0' or nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'mono-2.0')}"/>
-	  <nant buildfile="src/Spring/Spring.Web.Mvc/Spring.Web.Mvc.build" target="build" if="${nant.settings.currentframework == 'net-4.0'}"/>
-	  <nant buildfile="src/Spring/Spring.Web.Mvc3/Spring.Web.Mvc3.build" target="build" if="${nant.settings.currentframework == 'net-4.0'}"/>
+    <nant buildfile="src/Spring/Spring.Web.Extensions/Spring.Web.Extensions.build" target="build" if="${build-web and (nant.settings.currentframework == 'net-3.5' or nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'mono-2.0')}"/>
+    <nant buildfile="src/Spring/Spring.Web.Mvc/Spring.Web.Mvc.build" target="build" if="${nant.settings.currentframework == 'net-4.0'}"/>
+    <nant buildfile="src/Spring/Spring.Web.Mvc3/Spring.Web.Mvc3.build" target="build" if="${nant.settings.currentframework == 'net-4.0'}"/>
     <nant buildfile="src/Spring/Spring.Data/Spring.Data.build" target="build" if="${build-data}"/>
-    <nant buildfile="src/Spring/Spring.Data.NHibernate12/Spring.Data.NHibernate12.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-2.0' or nant.settings.currentframework == 'mono-2.0')}"/>
-    <nant buildfile="src/Spring/Spring.Data.NHibernate20/Spring.Data.NHibernate20.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-2.0' or nant.settings.currentframework == 'net-3.5' or nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'mono-2.0')}"/>
-    <nant buildfile="src/Spring/Spring.Data.NHibernate21/Spring.Data.NHibernate21.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-2.0' or nant.settings.currentframework == 'net-3.5' or nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'mono-2.0')}"/>
+    <nant buildfile="src/Spring/Spring.Data.NHibernate12/Spring.Data.NHibernate12.build" target="build" if="${build-data and (nant.settings.currentframework == 'mono-2.0')}"/>
+    <nant buildfile="src/Spring/Spring.Data.NHibernate20/Spring.Data.NHibernate20.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-3.5' or nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'mono-2.0')}"/>
+    <nant buildfile="src/Spring/Spring.Data.NHibernate21/Spring.Data.NHibernate21.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-3.5' or nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'mono-2.0')}"/>
     <nant buildfile="src/Spring/Spring.Data.NHibernate30/Spring.Data.NHibernate30.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-3.5' or nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'mono-2.0')}"/>
     <nant buildfile="src/Spring/Spring.Data.NHibernate31/Spring.Data.NHibernate31.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-3.5' or nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'mono-2.0')}"/>
     <nant buildfile="src/Spring/Spring.Data.NHibernate32/Spring.Data.NHibernate32.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-3.5' or nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'mono-2.0')}"/>
     <nant buildfile="src/Spring/Spring.Services/Spring.Services.build" target="build" if="${build-services}"/>
     <nant buildfile="src/Spring/Spring.Testing.NUnit/Spring.Testing.NUnit.build" target="build" if="${build-testing-nunit}"/>
     <nant buildfile="src/Spring/Spring.Testing.Microsoft/Spring.Testing.Microsoft.build" target="build" if="${build-testing-microsoft}"/>
-    <nant buildfile="src/Spring/Spring.Messaging.Ems/Spring.Messaging.Ems.build" target="build" if="${build-ems  and (nant.settings.currentframework == 'net-2.0' or nant.settings.currentframework == 'net-4.0' )}"/>
+    <nant buildfile="src/Spring/Spring.Messaging.Ems/Spring.Messaging.Ems.build" target="build" if="${build-ems  and (nant.settings.currentframework == 'net-3.5' or nant.settings.currentframework == 'net-4.0' )}"/>
     <nant buildfile="src/Spring/Spring.Messaging.Nms/Spring.Messaging.Nms.build" target="build" if="${build-nms}"/>
     <nant buildfile="src/Spring/Spring.Scheduling.Quartz/Spring.Scheduling.Quartz.build" target="build" if="${build-quartz}"/>
     <nant buildfile="src/Spring/Spring.Messaging/Spring.Messaging.build" target="build" if="${build-msmq}"/>
@@ -464,13 +417,13 @@ Commandline Examples:
     <nant buildfile="test/Spring/Spring.Data.Tests/Spring.Data.Tests.build" target="test" if="${build-data}"/>
     <nant buildfile="test/Spring/Spring.Data.Integration.Tests/Spring.Data.Integration.Tests.build" target="test" if="${build-data}"/>
     <nant buildfile="test/Spring/Spring.Data.NHibernate20.Tests/Spring.Data.NHibernate20.Tests.build" target="test"
-                 if="${build-data and nant.settings.currentframework == 'net-2.0'}"/>
+                 if="${build-data and nant.settings.currentframework == 'net-3.5'}"/>
     <nant buildfile="test/Spring/Spring.Data.NHibernate20.Integration.Tests/Spring.Data.NHibernate20.Integration.Tests.build" target="test"
-                 if="${build-data and nant.settings.currentframework == 'net-2.0'}"/>
+                 if="${build-data and nant.settings.currentframework == 'net-3.5'}"/>
     <nant buildfile="test/Spring/Spring.Data.NHibernate21.Tests/Spring.Data.NHibernate21.Tests.build" target="test"
-                 if="${build-data and nant.settings.currentframework == 'net-2.0'}"/>
+                 if="${build-data and nant.settings.currentframework == 'net-3.5'}"/>
     <nant buildfile="test/Spring/Spring.Data.NHibernate21.Integration.Tests/Spring.Data.NHibernate21.Integration.Tests.build" target="test"
-                 if="${build-data and nant.settings.currentframework == 'net-2.0'}"/>
+                 if="${build-data and nant.settings.currentframework == 'net-3.5'}"/>
     <nant buildfile="test/Spring/Spring.Data.NHibernate30.Tests/Spring.Data.NHibernate30.Tests.build" target="test"
                  if="${build-data and nant.settings.currentframework == 'net-3.5'}"/>
     <nant buildfile="test/Spring/Spring.Data.NHibernate30.Integration.Tests/Spring.Data.NHibernate30.Integration.Tests.build" target="test"
@@ -501,8 +454,8 @@ Commandline Examples:
 	<nant buildfile="test/Spring/Spring.Web.Mvc3.Tests/Spring.Web.Mvc3.Tests.build" target="test" if="${nant.settings.currentframework == 'net-4.0'}"/>
     <nant buildfile="test/Spring/Spring.Testing.NUnit.Tests/Spring.Testing.NUnit.Tests.build" target="test" if="${build-testing-nunit}"/>
     <nant buildfile="test/Spring/Spring.Testing.Microsoft.Tests/Spring.Testing.Microsoft.Tests.build" target="test" if="${build-testing-microsoft}"/>
-    <nant buildfile="test/Spring/Spring.Messaging.Ems.Tests/Spring.Messaging.Ems.Tests.build" target="test" if="${build-ems and (nant.settings.currentframework == 'net-2.0' or nant.settings.currentframework == 'net-4.0' ) and not net-3.0}"/>
-    <nant buildfile="test/Spring/Spring.Messaging.Ems.Integration.Tests/Spring.Messaging.Ems.Integration.Tests.build" target="test" if="${build-ems and (nant.settings.currentframework == 'net-2.0' or nant.settings.currentframework == 'net-4.0') and not net-3.0}"/>
+    <nant buildfile="test/Spring/Spring.Messaging.Ems.Tests/Spring.Messaging.Ems.Tests.build" target="test" if="${build-ems and (nant.settings.currentframework == 'net-3.5' or nant.settings.currentframework == 'net-4.0' ) and not net-3.0}"/>
+    <nant buildfile="test/Spring/Spring.Messaging.Ems.Integration.Tests/Spring.Messaging.Ems.Integration.Tests.build" target="test" if="${build-ems and (nant.settings.currentframework == 'net-3.5' or nant.settings.currentframework == 'net-4.0') and not net-3.0}"/>
     <nant buildfile="test/Spring/Spring.Messaging.Nms.Tests/Spring.Messaging.Nms.Tests.build" target="test" if="${build-nms}"/>
     <nant buildfile="test/Spring/Spring.Messaging.Nms.Integration.Tests/Spring.Messaging.Nms.Integration.Tests.build" target="test" if="${build-nms}"/>
     <nant buildfile="test/Spring/Spring.Scheduling.Quartz.Tests/Spring.Scheduling.Quartz.Tests.build" target="build" if="${build-quartz}"/>
@@ -523,80 +476,31 @@ Commandline Examples:
 
   </target>
 
-  <target name="compile-net-2.0" description="Builds .NET Framework 2.0 version"
-          depends="set-net-2.0-runtime-configuration, check-spring-basedir, clean-current-bin-dir">
-	
-	<property name="test.withcoverage" value="true" overwrite="true"/>
-	
+  <target name="compile-net-3.5" description="Builds .NET Framework 3.5 version"
+        depends="set-net-3.5-runtime-configuration, check-spring-basedir, clean-current-bin-dir">
+		
+	<property name="test.withcoverage" value="true" overwrite="true"/>		  
+
 	<if test="${property::exists('mstest.exe')}">
 		<property name="mstest.exe.current" value="${string::replace(property::get-value('mstest.exe'), 'Microsoft Visual Studio 10.0', 'Microsoft Visual Studio 9.0')}" />
 	</if>
 	<if test="${property::exists('mstest.exe')}">
 		<property name="vs-net.mstest.bin.dir.current" value="${string::replace(property::get-value('vs-net.mstest.bin.dir'), 'Microsoft Visual Studio 10.0', 'Microsoft Visual Studio 9.0')}" />
 	</if>
+
 	<call target="copykeys" if="${project.build.sign}"/>
     <call target="common.generate-assemblyinfo"/>
-    <call target="compile-test" />
-  </target>
-
-  <target name="compile-net-3.0" description="Builds .NET Framework 3.0 version"
-          depends="set-net-3.0-runtime-configuration, check-spring-basedir, clean-current-bin-dir">
-
-	<property name="test.withcoverage" value="true" overwrite="true"/>		  
-
- <call target="copykeys" if="${project.build.sign}"/>
-    <call target="common.generate-assemblyinfo"/>
-    <property name="build-ems" value="false" overwrite="true" />
-    <property name="build-nms" value="false" overwrite="true" />
-    <property name="build-quartz" value="false" overwrite="true" />
-    <property name="build-msmq" value="false" overwrite="true" />
-    <property name="build-msmq-tests" value="false" overwrite="true" />
-    <property name="build-velocity" value="false" overwrite="true" />
-
-    <!-- Do not call compile-test target - only build Spring.Services and tests which uses WCF in .NET 3.0 -->
-    <property name="lib.dir" value="${spring.basedir}/lib/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
-    <call target="copylibtobin"/>
-    <nant buildfile="src/Spring/Spring.Services/Spring.Services.build" target="build" if="${build-services and not net-3.5}"/>
-    <nant buildfile="test/Spring/Spring.Services.Tests/Spring.Services.Tests.build" target="test" if="${build-services and not net-3.5}"/>
-
-  </target>
-
-  <target name="compile-net-3.5" description="Builds .NET Framework 3.5 version"
-        depends="set-net-3.5-runtime-configuration, check-spring-basedir, clean-current-bin-dir">
-		
-	<property name="test.withcoverage" value="true" overwrite="true"/>		  
-		
-	<property name="lib.dir" value="${spring.basedir}/lib/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
-	<property name="nh30.lib.dir" value="${spring.basedir}/lib/NHibernate30/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
-	<property name="nh31.lib.dir" value="${spring.basedir}/lib/NHibernate31/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
-	<property name="nh32.lib.dir" value="${spring.basedir}/lib/NHibernate32/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
-    <property name="quartz.lib.dir" value="${spring.basedir}/lib/Quartz10/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
-    <property name="quartz20.lib.dir" value="${spring.basedir}/lib/Quartz20/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
-	<call target="copykeys" if="${project.build.sign}"/>
-	<call target="copylibs" />
-	<call target="common.generate-assemblyinfo"/>
-    <property name="build-ems" value="false" overwrite="true" />
-    <property name="build-nms" value="false" overwrite="true" />
-    <property name="build-quartz" value="true" overwrite="true" />
-    <property name="build-msmq" value="false" overwrite="true" />
-    <property name="build-msmq-tests" value="false" overwrite="true" />
-    <property name="build-velocity" value="false" overwrite="true" />
-	<property name="build-data" value="true" overwrite="true" />
 	
-	<!-- Do not call compile-test target - only build the following projects and related tests in .NET 3.5 -->
-    <property name="lib.dir" value="${spring.basedir}/lib/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
-    <call target="copylibtobin"/>
-    <nant buildfile="src/Spring/Spring.Services/Spring.Services.build" target="build" if="${build-services}"/>
-    <nant buildfile="test/Spring/Spring.Services.Tests/Spring.Services.Tests.build" target="test" if="${build-services}"/>
-	<nant buildfile="src/Spring/Spring.Scheduling.Quartz/Spring.Scheduling.Quartz.build" target="build" if="${build-quartz}"/>
-	<nant buildfile="test/Spring/Spring.Scheduling.Quartz.Tests/Spring.Scheduling.Quartz.Tests.build" target="test" if="${build-quartz}"/>
-	<nant buildfile="src/Spring/Spring.Web.Mvc/Spring.Web.Mvc.build" target="build"/>
-	<nant buildfile="test/Spring/Spring.Web.Mvc.Tests/Spring.Web.Mvc.Tests.build" target="test"/>
-	<nant buildfile="src/Spring/Spring.Web.Extensions/Spring.Web.Extensions.build" target="build"/>
-	<nant buildfile="src/Spring/Spring.Data.NHibernate30/Spring.Data.NHibernate30.build" target="build" if="${build-data}" />
-	<nant buildfile="src/Spring/Spring.Data.NHibernate31/Spring.Data.NHibernate31.build" target="build" if="${build-data}" />
-	<nant buildfile="src/Spring/Spring.Data.NHibernate32/Spring.Data.NHibernate32.build" target="build" if="${build-data}" />
-  </target>
+    <property name="build-ems" value="false" overwrite="true" />
+    <property name="build-nms" value="true" overwrite="true" />
+    <property name="build-quartz" value="true" overwrite="true" />
+    <property name="build-msmq" value="true" overwrite="true" />
+    <property name="build-msmq-tests" value="true" overwrite="true" />
+    <property name="build-velocity" value="true" overwrite="true" />
+	
+    <call target="compile-test" />
+
+	</target>
 
   <target name="compile-net-4.0" description="Builds .NET Framework 4.0 version"
         depends="set-net-4.0-runtime-configuration, check-spring-basedir, clean-current-bin-dir">
@@ -609,16 +513,17 @@ Commandline Examples:
 	<if test="${property::exists('mstest.exe')}">
 		<property name="vs-net.mstest.bin.dir.current" value="${string::replace(property::get-value('vs-net.mstest.bin.dir'), 'Microsoft Visual Studio 9.0', 'Microsoft Visual Studio 10.0')}" />
 	</if>
-	<property name="lib.dir" value="${spring.basedir}/lib/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
-    <call target="copykeys" if="${project.build.sign}"/>
-	<call target="copylibs" />
+	
+	<call target="copykeys" if="${project.build.sign}"/>
     <call target="common.generate-assemblyinfo"/>
+
     <property name="build-ems" value="false" overwrite="true" />
     <property name="build-nms" value="true" overwrite="true" />
     <property name="build-quartz" value="true" overwrite="true" />
     <property name="build-msmq" value="true" overwrite="true" />
     <property name="build-msmq-tests" value="true" overwrite="true" />
     <property name="build-velocity" value="true" overwrite="true" />
+	
     <call target="compile-test" />
   </target>
   
@@ -680,75 +585,17 @@ Commandline Examples:
         <include name="*.dll"/>
 		<exclude if="${net-4.0}" name="**/System.Web.Extensions.dll"/>
 		<exclude if="${net-3.5}" name="**/System.Web.Extensions.dll"/>
-		<exclude if="${net-3.5}" name="**/Quartz.dll"/>
-		<exclude if="${net-4.0}" name="**/Quartz.dll"/>
         <include name="*.xml"/>
       </fileset>
     </copy>
   </target>
-
-  
-  
+ 
   <!-- Top level targets -->
   <!-- target for developers to do just debug build and test everything in CVS -->
   <target name="test">
     <echo message="Compiling debug configuration for all runtime configurations."/>
     <property name="nant.target.root.name" value="build"/>
     <call target="build-all-function"/>
-  </target>
-
-  <target name="build-1.1">
-    <call target="set-build-namespaces-release"/>
-    <echo message="------------------------"/>
-    <echo message="Building .NET 1.1 DEBUG "/>
-    <echo message="------------------------"/>
-    <call target="set-debug-build-configuration"/>
-    <call target="compile-build-1.1"/>
-
-    <if test="${property::exists('project.build.package') and project.build.package}">
-      <echo message="------------------------"/>
-      <echo message="Building .NET 1.1 DEBUG "/>
-      <echo message="------------------------"/>
-      <call target="set-release-build-configuration"/>
-      <call target="compile-build-1.1"/>
-    </if>
-  </target>
-
-  <target name="build-2.0">
-    <call target="set-build-namespaces-release"/>
-    <echo message="------------------------"/>
-    <echo message="Building .NET 2.0 DEBUG "/>
-    <echo message="------------------------"/>
-    <call target="set-debug-build-configuration"/>
-    <call target="compile-build-2.0"/>
-
-
-    <if test="${property::exists('project.build.package') and project.build.package}">
-    <echo message="--------------------------"/>
-    <echo message="Building .NET 2.0 RELEASE "/>
-    <echo message="--------------------------"/>
-      <call target="set-release-build-configuration"/>
-      <call target="compile-build-2.0"/>
-    </if>
-  </target>
-
-
-  <target name="build-3.0">
-    <call target="set-build-namespaces-release"/>
-    <echo message="------------------------"/>
-    <echo message="Building .NET 3.0 DEBUG "/>
-    <echo message="------------------------"/>
-    <call target="set-debug-build-configuration"/>
-    <call target="compile-build-3.0"/>
-
-
-    <if test="${property::exists('project.build.package') and project.build.package}">
-    <echo message="--------------------------"/>
-    <echo message="Building .NET 3.0 RELEASE "/>
-    <echo message="--------------------------"/>
-      <call target="set-release-build-configuration"/>
-      <call target="compile-build-3.0"/>
-    </if>
   </target>
 
   <target name="build-3.5">
@@ -1047,10 +894,6 @@ Commandline Examples:
 
   <target name="build-all-function" description="Build what is in cvs taking into account approrpiate clr versions and root target name">
 
-    <call target="${nant.target.root.name}-2.0" />
-
-    <call target="${nant.target.root.name}-3.0" />
-
     <call target="${nant.target.root.name}-3.5" />
 
 	<call target="${nant.target.root.name}-4.0" />
@@ -1064,37 +907,6 @@ Commandline Examples:
 
   </target>
 
-  <target name="daily-build-1.1">
-    <call target="set-build-namespaces-all"/>
-    <call target="set-package-configuration"/>
-
-    <call target="set-debug-build-configuration"/>
-    <call target="compile-build-1.1"/>
-    <call target="set-release-build-configuration"/>
-    <call target="compile-build-1.1"/>
-
-  </target>
-
-  <target name="daily-build-2.0">
-    <call target="set-build-namespaces-all"/>
-    <call target="set-package-configuration"/>
-
-    <call target="set-debug-build-configuration"/>
-    <call target="compile-build-2.0"/>
-    <call target="set-release-build-configuration"/>
-    <call target="compile-build-2.0"/>
-
-  </target>
-
-  <target name="daily-build-3.0">
-    <call target="set-build-namespaces-all"/>
-    <call target="set-package-configuration"/>
-    <call target="set-debug-build-configuration"/>
-    <call target="compile-build-3.0"/>
-    <call target="set-release-build-configuration"/>
-    <call target="compile-build-3.0"/>
-  </target>
-
   <target name="daily-build-3.5">
     <call target="set-build-namespaces-all"/>
     <call target="set-package-configuration"/>
@@ -1103,8 +915,7 @@ Commandline Examples:
     <call target="set-release-build-configuration"/>
     <call target="compile-build-3.5"/>
   </target>
-
-  
+ 
   <target name="daily-build-4.0">
     <call target="set-build-namespaces-all"/>
     <call target="set-package-configuration"/>
@@ -1566,23 +1377,8 @@ Commandline Examples:
           <include name="*/*/Spring.Template.Velocity.xml"/>
           <include name="*/*/Spring.Template.Velocity.pdb"/>
 
-          <exclude name="3.0/**"/>
-          <exclude name="3.5/**"/>
-
         </fileset>
       </copy>
-
-<!--      <if test="${net-3.0.installed}"> -->
-        <mkdir dir="${current.package.dir}/bin/net/3.0"/>
-        <copy todir="${current.package.dir}/bin/net/3.0" verbose="${copy-verbose}">
-          <fileset basedir="./build/net/3.0">
-            <include name="*/Spring.Services.dll"/>
-            <include name="*/Spring.Services.xml"/>
-            <include name="*/Spring.Services.pdb"/>
-          </fileset>
-        </copy>
-<!--      </if> -->
-	  
 	  
         <mkdir dir="${current.package.dir}/bin/net/3.5"/>
         <copy todir="${current.package.dir}/bin/net/3.5" verbose="${copy-verbose}">

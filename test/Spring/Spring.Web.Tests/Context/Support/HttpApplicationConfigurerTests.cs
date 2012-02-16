@@ -139,11 +139,7 @@ namespace Spring.Context.Support
         }
 
         [Test]
-#if NET_2_0
         [ExpectedException(typeof(ConfigurationErrorsException))]
-#else
-        [ExpectedException(typeof(System.Configuration.ConfigurationException))]
-#endif
         public void ThrowsOnUnapplicableModuleTemplate()
         {
             StaticApplicationContext appContext = CreateTestContext();

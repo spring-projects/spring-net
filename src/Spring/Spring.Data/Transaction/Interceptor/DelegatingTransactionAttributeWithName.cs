@@ -19,9 +19,7 @@
 #endregion
 
 using System;
-#if NET_2_0
 using System.Transactions;
-#endif
 using IsolationLevel=System.Data.IsolationLevel;
 
 namespace Spring.Transaction.Interceptor
@@ -145,8 +143,6 @@ namespace Spring.Transaction.Interceptor
             get { return joinpointIdentification; }
         }
 
-#if NET_2_0
-
         /// <summary>
         /// Gets the enterprise services interop option.
         /// </summary>
@@ -155,7 +151,6 @@ namespace Spring.Transaction.Interceptor
         {
             get { return targetAttribute.EnterpriseServicesInteropOption;  }
         }
-#endif
 
         /// <summary> 
         /// Return a description of this transaction attribute.

@@ -55,7 +55,6 @@ namespace Spring.Context.Support
 			Assert.AreEqual(typeof (TestObject), type, "The type alias was not registered by the TypeAliasesSectionHandler.");
 		}
 
-#if NET_2_0
         [Test]
         public void WithGenericType()
         {
@@ -80,7 +79,6 @@ namespace Spring.Context.Support
             TypeAliasesSectionHandler handler = new TypeAliasesSectionHandler();
             handler.Create(null, null, BuildConfigurationSection(xml));
         }
-#endif
 
 		[Test]
 		[ExpectedException(typeof (TypeLoadException))]
@@ -179,11 +177,7 @@ namespace Spring.Context.Support
 		}
 
 		[Test]
-#if NET_2_0
         [ExpectedException(typeof(ConfigurationErrorsException))]
-#else
-        [ExpectedException(typeof (ConfigurationException))]
-#endif
 		public void WithAliasElementThatIsMissingTheNameAttribute()
 		{
 			const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
@@ -196,11 +190,7 @@ namespace Spring.Context.Support
 		}
 
 		[Test]
-#if NET_2_0
         [ExpectedException(typeof(ConfigurationErrorsException))]
-#else
-        [ExpectedException(typeof (ConfigurationException))]
-#endif
 		public void WithAliasElementThatIsMissingTheTypeAttribute()
 		{
 			const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>

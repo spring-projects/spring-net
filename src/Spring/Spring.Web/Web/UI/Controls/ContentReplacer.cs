@@ -118,7 +118,6 @@ namespace Spring.Web.UI.Controls
             // do nothing
         }
 
-#if NET_2_0
         private static readonly PropertyInfo piRareFieldsEnsured =
             typeof(Control).GetProperty("RareFieldsEnsured", BindingFlags.NonPublic | BindingFlags.Instance);
         private static readonly FieldInfo fiRenderMethod = 
@@ -130,16 +129,5 @@ namespace Spring.Web.UI.Controls
             RenderMethod myRenderMethod = (RenderMethod) fiRenderMethod.GetValue(o);
             return myRenderMethod;
         }
-#else
-        private static readonly FieldInfo fiRenderMethod = 
-            typeof(Control).GetField("_renderMethod", BindingFlags.NonPublic | BindingFlags.Instance);
-
-        private RenderMethod GetRenderMethod()
-        {
-            RenderMethod myRenderMethod = (RenderMethod)fiRenderMethod.GetValue(this);
-            return myRenderMethod;
-        }
-#endif
-
     }
 }

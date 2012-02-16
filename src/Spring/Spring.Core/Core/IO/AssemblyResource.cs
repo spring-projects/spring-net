@@ -95,11 +95,7 @@ namespace Spring.Core.IO
             {
                 throw new UriFormatException(string.Format("Invalid resource name. Name has to be in 'assembly:<assemblyName>/<namespace>/<resourceName>' format:{0}", resourceName));
             }
-#if NET_2_0
             this._assembly = Assembly.Load(info[0]);
-#else
-	        this._assembly = Assembly.LoadWithPartialName(info[0]);
-#endif
             if (this._assembly == null)
             {
                 throw new FileNotFoundException("Unable to load assembly [" + info[0] + "]");

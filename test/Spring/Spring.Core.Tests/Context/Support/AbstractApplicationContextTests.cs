@@ -63,7 +63,6 @@ namespace Spring.Context.Support
             
         }
 
-#if NET_2_0
 	    [Test]
 	    public void ExecutesAllContextEventHandlersAndRethrowsExceptionsThrownDuringContextEventHandlingByDefault()
 	    {
@@ -93,7 +92,6 @@ namespace Spring.Context.Support
             Assert.AreEqual("dummy", resultException.Message);
             Assert.IsTrue(secondHandlerExecuted);
         }
-#endif
 
         [Test]
         public void DoesNotSearchParentContextForMessageSource()

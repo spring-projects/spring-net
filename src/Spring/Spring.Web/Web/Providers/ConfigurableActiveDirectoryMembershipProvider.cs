@@ -18,7 +18,7 @@
 
 #endregion
 
-#if NET_2_0 && !MONO
+#if !MONO
 
 #region Imports
 

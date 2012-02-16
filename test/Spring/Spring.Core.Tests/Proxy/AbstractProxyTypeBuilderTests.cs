@@ -282,10 +282,6 @@ namespace Spring.Proxy
 #if !MONO
         // http://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=94803
         [Test]
-#if !NET_2_0
-        [Ignore("GetCustomAttributes() does not return SecurityAttribute in .NET 1.x")]
-#endif
-
         public void ProxySecurityAttribute()
         {
             IProxyTypeBuilder builder = GetProxyBuilder();
@@ -473,7 +469,6 @@ namespace Spring.Proxy
             Assert.AreEqual(0, attrs.Length, "Should not have attribute applied to the method's parameter.");
         }
 
-#if NET_2_0
         [Test]
         public void ProxyTargetMethodReturnValueAttributes()
         {
@@ -670,7 +665,6 @@ namespace Spring.Proxy
         }
 
         #endregion
-#endif
 
         protected abstract IProxyTypeBuilder GetProxyBuilder();
 

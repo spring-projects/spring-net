@@ -18,8 +18,6 @@
 
 #endregion
 
-#if NET_2_0
-
 using System.Data;
 
 namespace Spring.Data.Generic
@@ -34,5 +32,3 @@ namespace Spring.Data.Generic
     /// in the result set.</returns>
     public delegate T RowMapperDelegate<T>(IDataReader dataReader, int rowNum);
 }
-
-#endif

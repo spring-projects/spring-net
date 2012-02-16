@@ -89,10 +89,8 @@ namespace Spring.Transaction.Interceptor
                     rbta.TransactionIsolationLevel = ta.IsolationLevel;
                     rbta.ReadOnly = ta.ReadOnly;
                     rbta.TransactionTimeout = ta.Timeout;
-
-#if NET_2_0
                     rbta.EnterpriseServicesInteropOption = ta.EnterpriseServicesInteropOption;
-#endif
+
                     Type[] rbf = ta.RollbackFor;
 
                     IList rollBackRules = new ArrayList();

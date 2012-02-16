@@ -146,7 +146,6 @@ namespace Spring.Aspects.Cache
             IList items = store.GetAll();
         }
 
-#if NET_2_0
         [Test(Description = "http://jira.springframework.org/browse/SPRNET-959")]
         public void UseMethodInfoForKeyGeneration()
         {
@@ -167,7 +166,6 @@ namespace Spring.Aspects.Cache
             // but it returns the NullValue marker created by the CacheResultAttribute
             Assert.IsNotNull(cache.Get("String_1"));
         }
-#endif
     }
 
     #region Inner Class : CacheParameterTarget
@@ -229,7 +227,6 @@ namespace Spring.Aspects.Cache
         }
     }
 
-#if NET_2_0
     public interface IGenericDao<T, IdT>
     {
         T Load(IdT id);
@@ -243,7 +240,6 @@ namespace Spring.Aspects.Cache
             return default(T);
         }
     }
-#endif
 
     #endregion
 }

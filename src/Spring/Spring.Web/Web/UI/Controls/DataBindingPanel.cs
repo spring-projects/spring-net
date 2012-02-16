@@ -322,12 +322,10 @@ namespace Spring.Web.UI.Controls
             {
                 return "Text";
             }
-#if NET_2_0
             else if (wc is HiddenField)
             {
                 return "Value";
             }
-#endif
             else if (wc is RadioButtonGroup)
             {
                 return "Value";

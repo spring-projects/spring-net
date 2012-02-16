@@ -316,7 +316,6 @@ namespace Spring.Core.TypeResolution
         /// </summary>
         public const string ObjectArrayAliasVB = "Object()";
 
-#if NET_2_0
         /// <summary>
         /// The alias around the 'int?' type.
         /// </summary>
@@ -426,7 +425,6 @@ namespace Spring.Core.TypeResolution
         /// The alias around the 'bool?[]' array type.
         /// </summary>
         public const string NullableBoolArrayAlias = "bool?[]";
-#endif
 
         #endregion
 
@@ -517,7 +515,6 @@ namespace Spring.Core.TypeResolution
                 types[ObjectArrayAlias] = typeof(object[]);
                 types[ObjectArrayAliasVB] = typeof(object[]);
 
-#if NET_2_0
                 types[NullableInt32Alias] = typeof(int?);
                 types[NullableInt32ArrayAlias] = typeof(int?[]);
 
@@ -550,7 +547,6 @@ namespace Spring.Core.TypeResolution
 
                 types[NullableBoolAlias] = typeof(bool?);
                 types[NullableBoolArrayAlias] = typeof(bool?[]);
-#endif
 
                 // register user-configured type aliases
                 ConfigurationUtils.GetSection(TypeAliasesSectionName);
@@ -592,10 +588,10 @@ namespace Spring.Core.TypeResolution
             AssertUtils.ArgumentHasText(typeName, "typeName");
 
             Type type = TypeResolutionUtils.ResolveType(typeName);
-#if NET_2_0
+
             if (type.IsGenericTypeDefinition)
                 alias += ("`" + type.GetGenericArguments().Length);
-#endif
+
             RegisterType(alias, type);
         }
 

@@ -18,13 +18,10 @@
 
 #endregion
 
-#if NET_2_0
-
 #region Imports
 
 using System.Collections.Generic;
 using System.Data;
-using Spring.Data.Support;
 using Spring.Util;
 
 #endregion
@@ -146,5 +143,3 @@ namespace Spring.Data.Generic
         #endregion
     }
 }
-
-#endif

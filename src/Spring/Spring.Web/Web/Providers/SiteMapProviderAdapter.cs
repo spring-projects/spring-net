@@ -18,19 +18,15 @@
 
 #endregion
 
-#if NET_2_0
-
 #region Imports
 
 using System;
 using System.Collections.Specialized;
-using System.Configuration.Provider;
 using System.Security.Permissions;
 using System.Web;
 using Spring.Context.Support;
 
 #endregion
-
 
 namespace Spring.Web.Providers
 {
@@ -365,4 +361,3 @@ namespace Spring.Web.Providers
 
     }
 }
-#endif

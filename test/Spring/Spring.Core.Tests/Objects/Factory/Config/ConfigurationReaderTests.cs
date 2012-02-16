@@ -53,7 +53,6 @@ namespace Spring.Objects.Factory.Config
     </foo>
 </configuration>";
 
-#if NET_2_0
         /// <summary>
         /// Unfortunately ConfigurationManager doesn't accept uri's.
         /// </summary>
@@ -70,7 +69,6 @@ namespace Spring.Objects.Factory.Config
                 Assert.IsInstanceOf(typeof(ArgumentException), cfgex.InnerException);
             }
         }
-#endif
 
         [Test]
         public void ReadSunnyDay()
@@ -92,8 +90,6 @@ namespace Spring.Objects.Factory.Config
 
             string machineConfig = RuntimeEnvironment.SystemConfigurationFile;
         }
-
-#if NET_2_0
 
         [Test]
         public void GetSectionLocalSectionHandler()
@@ -141,8 +137,6 @@ namespace Spring.Objects.Factory.Config
                 Assert.AreEqual("server=myserver;database=Products;uid=user name;pwd=secure password", css.ConnectionStrings["Sales"].ConnectionString);
             }
         }
-
-#endif
 
         [Test]
         public void GetSectionSunnyDay()
@@ -227,11 +221,7 @@ namespace Spring.Objects.Factory.Config
         }
 
         [Test]
-#if !NET_2_0
-        [ExpectedException(typeof(ConfigurationException), ExpectedMessage = "Cannot read config section 'ELNOMBRE' - section not found.")]
-#else
         [ExpectedException(typeof(ConfigurationErrorsException), ExpectedMessage = "Cannot read config section 'ELNOMBRE' - section not found.")]
-#endif
         public void TryReadFromNonExistantConfigSection()
         {
             using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(SunnyDayXml)))

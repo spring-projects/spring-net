@@ -244,7 +244,6 @@ namespace Spring.Objects.Factory.Config
             }
         }
 
-#if NET_2_0
         /// <summary>
         /// Returns the typed section from the specified resource with the given section name
         /// </summary>
@@ -280,7 +279,7 @@ namespace Spring.Objects.Factory.Config
             }
             return (TResult)result;
         }
-#endif
+
         /// <summary>
         /// Reads the specified configuration section from the given <see cref="XmlDocument"/>
         /// </summary>

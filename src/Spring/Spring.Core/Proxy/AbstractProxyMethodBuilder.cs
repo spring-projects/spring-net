@@ -189,9 +189,7 @@ namespace Spring.Proxy
                 method.CallingConvention, method.ReturnType,
                 ReflectionUtils.GetParameterTypes(method.GetParameters()));
 
-#if NET_2_0
             DefineGenericParameters(methodBuilder, method);
-#endif
             //DefineParameters(methodBuilder, method);
 
             return methodBuilder;
@@ -216,7 +214,6 @@ namespace Spring.Proxy
         }
         */
 
-#if NET_2_0
         /// <summary>
         /// Defines generic method parameters based on proxied method metadata.
         /// </summary>
@@ -252,7 +249,6 @@ namespace Spring.Proxy
                 }
             }
         }
-#endif
 
         /// <summary>
         /// Generates the proxy method.

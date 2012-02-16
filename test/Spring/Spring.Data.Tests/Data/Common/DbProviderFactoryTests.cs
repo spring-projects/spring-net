@@ -74,8 +74,6 @@ namespace Spring.Data.Common
             ctx = new XmlApplicationContext("assembly://Spring.Data.Tests/Spring.Data.Common/DbProviderFactoryTests.xml");
         }
 
-#if NET_2_0   
-     
         [Test]
         public void ThreadSafety()
         {
@@ -154,7 +152,6 @@ namespace Spring.Data.Common
             Assert.IsNotNull(provider.CreateParameter());
             Assert.AreEqual(":Foo", provider.CreateParameterName("Foo"));
         }
-#endif
 
 #if NET_4_0
        

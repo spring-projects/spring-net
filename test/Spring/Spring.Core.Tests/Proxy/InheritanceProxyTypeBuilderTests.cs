@@ -274,7 +274,6 @@ namespace Spring.Proxy
             Assert.AreEqual(0, attrs.Length, "Should not have attribute applied to the method's parameter.");
         }
 
-#if NET_2_0
         [Test]
         public void ProxyTargetVirtualMethodReturnValueAttributes()
         {
@@ -321,7 +320,6 @@ namespace Spring.Proxy
             Assert.IsNotNull(attrs);
             Assert.AreEqual(0, attrs.Length, "Should not have attribute applied to the method's return value.");
         }
-#endif
 
         protected override IProxyTypeBuilder GetProxyBuilder()
         {

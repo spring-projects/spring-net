@@ -20,10 +20,7 @@
 
 using System;
 using System.Collections;
-using System.Collections.Specialized;
 using System.Reflection;
-using System.Reflection.Emit;
-using Spring.Collections;
 using Spring.Util;
 
 namespace Spring.Reflection.Dynamic
@@ -74,7 +71,6 @@ namespace Spring.Reflection.Dynamic
             get { return methodInfo.DeclaringType; }
         }
 
-#if NET_2_0
         #region Generated Function Cache
 
         private class SafeMethodState
@@ -155,74 +151,10 @@ namespace Spring.Reflection.Dynamic
 
             return this.state.method(target, arguments);
         }
-#else
-        private IDynamicMethod dynamicMethod;
-        private bool isOptimized = false;
-
-        /// <summary>
-        /// Creates a new instance of the safe method wrapper.
-        /// </summary>
-        /// <param name="method">Method to wrap.</param>
-        public SafeMethod(MethodInfo method)
-        {
-            this.methodInfo = method;
-            if (method.IsPublic && 
-                ReflectionUtils.IsTypeVisible(method.DeclaringType, DynamicReflectionManager.ASSEMBLY_NAME))
-            {
-                this.dynamicMethod = DynamicMethod.Create(method);
-                this.isOptimized = true;
-            }
-        }
-
-        /// <summary>
-        /// Invokes dynamic method.
-        /// </summary>
-        /// <param name="target">
-        /// Target object to invoke method on.
-        /// </param>
-        /// <param name="arguments">
-        /// Method arguments.
-        /// </param>
-        /// <returns>
-        /// A method return value.
-        /// </returns>
-        public object Invoke(object target, object[] arguments)
-        {
-            if (isOptimized)
-            {
-                // try dynamic method first but fall back to standard reflection 
-                // if arguments are causing InvalidCastExceptions
-                try
-                {
-                    return dynamicMethod.Invoke(target, arguments);
-                }
-                catch (InvalidCastException e)
-                {
-                    // Only attempt if DynamicReflection code itself threw the exception.
-                    if (!ExceptionFromDynamicReflection(e))
-                    {
-                        throw;
-                    }
-                    isOptimized = false;
-                    return methodInfo.Invoke(target, arguments);
-                }
-            }
-            else
-            {
-                return methodInfo.Invoke(target, arguments);
-            }
-        }
-
-        private bool ExceptionFromDynamicReflection(InvalidCastException e)
-        {
-            return e.TargetSite.DeclaringType.FullName.IndexOf(DynamicReflectionManager.ASSEMBLY_NAME) >= 0;
-        }
-#endif
     }
 
     #endregion
 
-#if NET_2_0
     /// <summary>
     /// Factory class for dynamic methods.
     /// </summary>
@@ -242,86 +174,4 @@ namespace Spring.Reflection.Dynamic
             return dynamicMethod;
         }
     }
-#else
-    /// <summary>
-    /// Factory class for dynamic methods.
-    /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    public class DynamicMethod : BaseDynamicMember
-    {
-        private class DynamicMethodImpl : IDynamicMethod
-        {
-            private readonly object[] nullArguments;
-            private readonly MethodInfo methodInfo;
-            private readonly IDynamicMethod method;
-
-            public DynamicMethodImpl(MethodInfo methodInfo, IDynamicMethod generatedMethod)
-            {
-                this.nullArguments = new object[methodInfo.GetParameters().Length];
-                this.methodInfo = methodInfo;
-                this.method = generatedMethod;
-            }
-
-            public object Invoke(object target, params object[] arguments)
-            {
-                // special case - when calling Invoke(null,null) it is undecidible if the second null is an argument or the argument array
-                if (arguments==null && nullArguments.Length==1) arguments=nullArguments;
-                int arglen = (arguments==null?0:arguments.Length);
-                AssertUtils.IsTrue(
-                    nullArguments.Length == arglen
-                    , string.Format("Invalid number of arguments passed into method {0} - expected {1}, but was {2}", methodInfo.Name, nullArguments.Length, arglen)
-                );
-
-                return this.method.Invoke(target, arguments);                
-            }
-        }
-
-        private static readonly CreateMethodCallback s_createMethodCallback = new CreateMethodCallback(CreateInternal);
-
-    #region Create Method
-
-        /// <summary>
-        /// Creates dynamic method instance for the specified <see cref="MethodInfo"/>.
-        /// </summary>
-        /// <param name="method">Method info to create dynamic method for.</param>
-        /// <returns>Dynamic method for the specified <see cref="MethodInfo"/>.</returns>
-        public static IDynamicMethod Create(MethodInfo method)
-        {
-            AssertUtils.ArgumentNotNull(method, "You cannot create a dynamic method for a null value.");
-
-            IDynamicMethod dynamicMethod = DynamicReflectionManager.GetDynamicMethod(method, s_createMethodCallback);
-            return new DynamicMethodImpl(method, dynamicMethod);
-        }
-
-        private static IDynamicMethod CreateInternal(MethodInfo method)
-        {
-            IDynamicMethod dynamicMethod = null;
-
-            TypeBuilder tb = DynamicReflectionManager.CreateTypeBuilder("Method_" + method.Name);
-            tb.AddInterfaceImplementation(typeof(IDynamicMethod));
-
-            GenerateInvoke(tb, method);
-
-            Type dynamicMethodType = tb.CreateType();
-            ConstructorInfo ctor = dynamicMethodType.GetConstructor(Type.EmptyTypes);
-            dynamicMethod = (IDynamicMethod) ctor.Invoke(ObjectUtils.EmptyObjects);
-
-            return dynamicMethod;
-        }
-
-        private static void GenerateInvoke(TypeBuilder tb, MethodInfo method)
-        {
-            MethodBuilder invokeMethod = 
-                tb.DefineMethod("Invoke", METHOD_ATTRIBUTES, typeof(object), new Type[] {typeof(object), typeof(object[])});
-            invokeMethod.DefineParameter(1, ParameterAttributes.None, "target");
-            invokeMethod.DefineParameter(2, ParameterAttributes.None, "args");
-
-            ILGenerator il = invokeMethod.GetILGenerator();
-            DynamicReflectionManager.EmitInvokeMethod(il, method, true);
-        }
-
-        #endregion
-    }
-
-#endif
 }

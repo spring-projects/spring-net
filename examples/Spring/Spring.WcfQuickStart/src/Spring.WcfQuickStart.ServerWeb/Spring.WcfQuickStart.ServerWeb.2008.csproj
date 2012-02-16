@@ -36,7 +36,7 @@
     </Reference>
     <Reference Include="Spring.Core, Version=0.0.0.20000, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\bin\net\2.0\debug\Spring.Core.dll</HintPath>
+      <HintPath>..\..\..\..\..\bin\net\3.5\debug\Spring.Core.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Services, Version=0.0.0.35000, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

@@ -84,9 +84,7 @@ namespace Spring.Aop.Framework.DynamicProxy
                     CallingConventions.Standard,
                     method.ReturnType, ReflectionUtils.GetParameterTypes(method));
 
-#if NET_2_0
                 DefineGenericParameters(baseMethod, method);
-#endif
                 //DefineParameters(baseMethod, method);
 
                 ILGenerator localIL = baseMethod.GetILGenerator();
@@ -106,9 +104,7 @@ namespace Spring.Aop.Framework.DynamicProxy
                 onProxyTargetMethodCacheField = typeBuilder.DefineField(
                     methodId, typeof(MethodInfo), FieldAttributes.Private | FieldAttributes.Static | FieldAttributes.InitOnly);
 
-#if NET_2_0
                 MakeGenericMethod(il, method, onProxyTargetMethodCacheField, genericOnProxyTargetMethod);
-#endif
             }
         }
 

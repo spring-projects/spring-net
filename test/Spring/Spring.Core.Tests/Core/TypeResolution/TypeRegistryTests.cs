@@ -546,7 +546,6 @@ namespace Spring.Core.TypeResolution
 			                TypeRegistry.ResolveType(TypeRegistry.DoubleArrayAliasVB));
 		}
 
-#if NET_2_0
         [Test]
         public void ResolveNullableChar()
         {
@@ -722,7 +721,6 @@ namespace Spring.Core.TypeResolution
             Assert.AreEqual(typeof(double?[]),
                             TypeRegistry.ResolveType(TypeRegistry.NullableDoubleArrayAlias));
         }
-#endif
 	}
 
 	internal class Foo

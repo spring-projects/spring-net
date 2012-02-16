@@ -146,7 +146,6 @@ namespace Spring.Aop.Framework.DynamicProxy
             }
         }
 
-#if NET_2_0
         [Test]
         public void InterceptVirtualGenericMethod()
         {
@@ -202,7 +201,6 @@ namespace Spring.Aop.Framework.DynamicProxy
                 return arg;
             }
         }
-#endif
 
         [Test]
         public void DoesNotInterceptFinalMethod()

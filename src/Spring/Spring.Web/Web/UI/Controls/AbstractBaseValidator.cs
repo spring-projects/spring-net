@@ -34,14 +34,13 @@ namespace Spring.Web.UI.Controls
 	/// but are unfortunately not accessible from <see cref="BaseValidator"/>
 	/// </summary>
 	/// <author>Erich Eichinger</author>
-	public abstract class AbstractBaseValidator : System.Web.UI.WebControls.BaseValidator
+	public abstract class AbstractBaseValidator : BaseValidator
     {
 		/// <summary>
 		/// Registers a javascript-block to be rendered.
 		/// </summary>
 		protected void RegisterClientScriptBlock(Type type, string key, string script)
 		{
-#if NET_2_0
                 this.Page.ClientScript.RegisterClientScriptBlock(
                     typeof(RequiredCheckBoxValidator)
                     , "RequiredCheckBoxValidatorEvaluateIsChecked"
@@ -57,23 +56,6 @@ function RequiredCheckBoxValidatorEvaluateIsChecked(val)
 </script>
 "
                     );
-#else
-			key = type.FullName + "." + key;
-			this.Page.RegisterClientScriptBlock(
-				key
-				,
-				@"
-<script type=""text/javascript"">
-function RequiredCheckBoxValidatorEvaluateIsChecked(val)
-{
-  var control;
-  control = document.getElementById(val.controltovalidate);
-  return control.checked;
-}
-</script>
-"
-				);
-#endif
 		}
 
 		/// <summary>
@@ -81,11 +63,7 @@ function RequiredCheckBoxValidatorEvaluateIsChecked(val)
 		/// </summary>
     	protected bool IsClientScriptBlockRegistered(Type type, string key)
     	{
-#if NET_2_0
 			return this.Page.ClientScript.IsClientScriptBlockRegistered(type, key);
-#else
-    		return this.Page.IsClientScriptBlockRegistered( type.FullName + "." + key );
-#endif
     	}
 
 		/// <summary>
@@ -93,22 +71,14 @@ function RequiredCheckBoxValidatorEvaluateIsChecked(val)
 		/// </summary>
         protected void AddExpandoAttribute(HtmlTextWriter writer, string controlId, string attributeName, string attributeValue, bool encode)
         {
-#if NET_2_0
-
-            typeof(System.Web.UI.WebControls.BaseValidator).InvokeMember("AddExpandoAttribute"
-                                                                         ,
-                                                                         BindingFlags.InvokeMethod | BindingFlags.NonPublic
-                                                                         | BindingFlags.Instance
-                                                                         , null
-                                                                         , this
-                                                                         , new object[] {writer, controlId, attributeName, attributeValue, encode}
+            typeof(BaseValidator).InvokeMember("AddExpandoAttribute"
+                                                ,
+                                                BindingFlags.InvokeMethod | BindingFlags.NonPublic
+                                                | BindingFlags.Instance
+                                                , null
+                                                , this
+                                                , new object[] {writer, controlId, attributeName, attributeValue, encode}
                 );
-#else
-			if (writer != null)
-			{
-				writer.AddAttribute(attributeName, attributeValue);
-			}
-#endif
         }
 
 		/// <summary>
@@ -118,14 +88,9 @@ function RequiredCheckBoxValidatorEvaluateIsChecked(val)
         {
             get
             {
-#if NET_2_0
-                return
-                    (bool) typeof(System.Web.UI.WebControls.BaseValidator).GetProperty("EnableLegacyRendering",
+                return (bool) typeof(BaseValidator).GetProperty("EnableLegacyRendering",
                                                                                        BindingFlags.Instance
                                                                                        | BindingFlags.NonPublic).GetValue(this, null);
-#else
-				return (this.Page != null);
-#endif
             }
         }
     }

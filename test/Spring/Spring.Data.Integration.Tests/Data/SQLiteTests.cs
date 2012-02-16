@@ -18,12 +18,11 @@
 
 #endregion
 
-#if NET_2_0 && !MONO
+#if !MONO
 
 #region Imports
 
 using System;
-//using System.Collections;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
@@ -33,7 +32,6 @@ using NUnit.Framework;
 using Spring.Data.Common;
 using Spring.Data.Generic;
 using Spring.Data.Objects;
-//using Sybase.Data.AseClient;
 
 #endregion
 

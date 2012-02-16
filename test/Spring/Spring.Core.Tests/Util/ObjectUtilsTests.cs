@@ -22,16 +22,12 @@
 
 using System;
 using System.Collections;
-#if NET_2_0
 using System.Collections.Generic;
-#endif
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Security.Policy;
 using NUnit.Framework;
 using Spring.Objects;
-using Spring.Objects.Factory;
-using Spring.Util;
 
 #endregion
 
@@ -134,7 +130,6 @@ namespace Spring.Util
             }
         }
 
-#if NET_2_0
         [Test]
         [ExpectedException(typeof(FatalReflectionException))]
         public void InstantiateTypeWithOpenGenericType()
@@ -147,7 +142,6 @@ namespace Spring.Util
         {
 //            ObjectUtils.InstantiateType(typeof(Dictionary<string, int>), new object[] { new object() } );
         }
-#endif
 
         [Test]
         [ExpectedException(typeof(FatalReflectionException))]

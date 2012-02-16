@@ -28,7 +28,6 @@ using Spring.Aop.Config;
 using Spring.Core.IO;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
-using Spring.Validation;
 
 #endregion
 
@@ -68,7 +67,6 @@ namespace Spring.Objects.Factory.Xml
                     new DefaultListableObjectFactory());
             reader.LoadObjectDefinitions(new ReadOnlyXmlTestResource("/dev/null"));
         }
-#if NET_2_0
 
         [Test]
         public void AutoRegistersAllWellknownNamespaceParsers_Common()
@@ -90,10 +88,6 @@ namespace Spring.Objects.Factory.Xml
             }
         }
     
-#endif
-
-#if NET_3_0
-
         [Test]
         public void AutoRegistersAllWellknownNamespaceParsers_3_0()
         {
@@ -105,7 +99,6 @@ namespace Spring.Objects.Factory.Xml
                     string.Format("Parser for Namespace {0} could not be auto-registered.", ns));
             }
         }
-#endif
 
         [Test]
         [Ignore] //this test cannot co-exist with AutoRegistersAllWellknownNamespaceParsers b/c that test will have already loaded the Spring.Data ass'y

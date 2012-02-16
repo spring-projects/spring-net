@@ -18,9 +18,6 @@
 
 #endregion
 
-using System.ComponentModel;
-using System.Web.UI;
-
 namespace Spring.Web.UI.Controls
 {
     /// <summary>
@@ -33,42 +30,8 @@ namespace Spring.Web.UI.Controls
     /// by defining matching <see cref="Spring.Web.UI.Controls.Content"/> control.
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-#if NET_2_0
 	public class ContentPlaceHolder : System.Web.UI.WebControls.ContentPlaceHolder
-	{}
-#else
-    [Designer("System.Web.UI.Design.ReadWriteControlDesigner, System.Design")]
-    [PersistChildren(true)]
-    [ParseChildren(false)]
-    public class ContentPlaceHolder : Control
     {
-        private Content content;
-
-        /// <summary>
-        /// Association to content control defined in the child page
-        /// </summary>
-        public Content Content
-        {
-            get { return content; }
-            set { content = value; }
-        }
-
-        /// <summary>
-        /// Renders either its own (default) content or content defined if the associated
-        /// <see cref="Spring.Web.UI.Controls.Content"/> control.
-        /// </summary>
-        /// <param name="writer">HtmlTextWriter that should be used for output</param>
-        protected override void Render(HtmlTextWriter writer)
-        {
-            if (content == null)
-            {
-                base.Render(writer);
-            }
-            else
-            {
-                content.RenderControl(writer);
-            }
-        }
+        
     }
-#endif	
 }

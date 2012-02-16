@@ -92,17 +92,11 @@ namespace Spring.Web.Support
                     IHttpHandlerFactory phf = (IHttpHandlerFactory)Activator.CreateInstance(typeof(System.Web.UI.Page).Assembly.GetType("System.Web.UI.PageHandlerFactory"), true);
                     phf.GetHandler(HttpContext.Current, "GET", ctx.HttpWorkerRequest.GetFilePath(), ctx.HttpWorkerRequest.GetFilePathTranslated());
                 }
-#if NET_2_0
                 catch (HttpException e)
                 {
                     Assert.AreEqual(404, e.GetHttpCode());
                     Assert.IsTrue(e.Message.IndexOf(ctx.HttpWorkerRequest.GetFilePath()) > 0);
                 }
-#else
-                catch (FileNotFoundException)
-                {
-                }
-#endif
             }
         }
 
@@ -126,21 +120,15 @@ namespace Spring.Web.Support
                     IHttpHandlerFactory phf = new PageHandlerFactory();
                     phf.GetHandler(HttpContext.Current, "GET", ctx.HttpWorkerRequest.GetFilePath(), ctx.HttpWorkerRequest.GetFilePathTranslated());
                 }
-#if NET_2_0
                 catch (HttpException e)
                 {
                     Assert.AreEqual(404, e.GetHttpCode());
                     Assert.IsTrue(e.Message.IndexOf(ctx.HttpWorkerRequest.GetFilePath()) > 0);
                 }
-#else
-                catch (FileNotFoundException)
-                {
-                }
-#endif
             }
         }
 
-#if NET_2_0 && ! NET_4_0
+#if !NET_4_0
         [Test]
         public void TransferAfterSetResult()
         {

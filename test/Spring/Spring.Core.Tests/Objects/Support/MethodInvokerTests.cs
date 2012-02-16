@@ -87,7 +87,6 @@ namespace Spring.Objects.Support
             Assert.AreEqual(27, (int)actual);
         }
 
-#if NET_2_0
         [Test]
         public void InvokeWithGenericStaticMethod()
         {
@@ -99,7 +98,6 @@ namespace Spring.Objects.Support
             Assert.IsNotNull(actual);
             Assert.AreEqual(typeof(TestObject), actual.GetType());
         }
-#endif
 
 		[Test]
 		public void InvokeWithOKArguments()

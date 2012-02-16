@@ -60,10 +60,8 @@ namespace Spring.Transaction.Interceptor
         private bool _readOnly = false;
         private Type[] _rollbackTypes = Type.EmptyTypes;
         private Type[] _noRollbackTypes = Type.EmptyTypes;
-#if NET_2_0
 	    private System.Transactions.EnterpriseServicesInteropOption _esInteropOption =
             System.Transactions.EnterpriseServicesInteropOption.Automatic;
-#endif	
 
 		#endregion
 
@@ -179,8 +177,6 @@ namespace Spring.Transaction.Interceptor
 	        set { _noRollbackTypes = value; }
 	    }
 
-       
-#if NET_2_0
         /// <summary>
         /// Gets or sets the enterprise services interop option.
         /// </summary>
@@ -190,7 +186,6 @@ namespace Spring.Transaction.Interceptor
 	        get { return _esInteropOption;}
             set { _esInteropOption = value; }
 	    }
-#endif
 
 	    #endregion
 

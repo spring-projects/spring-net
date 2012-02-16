@@ -18,14 +18,10 @@
 
 #endregion
 
-#if NET_2_0
-
 #region Imports
 
 using System;
 using System.Reflection;
-
-using Spring.Core;
 
 #endregion
 
@@ -136,5 +132,3 @@ namespace Spring.Core
         #endregion
     }
 }
-
-#endif

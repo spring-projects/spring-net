@@ -20,8 +20,6 @@
 
 #region Imports
 
-using System;
-using System.Configuration;
 using System.Xml;
 using System.IO;
 using System.Xml.Schema;
@@ -36,46 +34,6 @@ namespace Spring.Util
     /// <author>Aleksandar Seovic</author>
     public class XmlUtils
     {
-#if !NET_2_0
-        /// <summary>
-        /// Gets an appropriate <see cref="System.Xml.XmlReader"/> implementation
-        /// for the supplied <see cref="System.IO.Stream"/>.
-        /// </summary>
-        /// <param name="stream">The XML <see cref="System.IO.Stream"/> that is going to be read.</param>
-        /// <param name="schemas">XML schemas that should be used for validation.</param>
-        /// <param name="eventHandler">Validation event handler.</param>
-        /// <returns>
-        /// A validating <see cref="System.Xml.XmlReader"/> implementation.
-        /// </returns>
-        public static XmlReader CreateValidatingReader(Stream stream, XmlSchemaCollection schemas, ValidationEventHandler eventHandler)
-        {
-            return CreateValidatingReader(stream, new XmlUrlResolver(), schemas, eventHandler);
-        }
-
-		/// <summary>
-		/// Gets an appropriate <see cref="System.Xml.XmlReader"/> implementation
-		/// for the supplied <see cref="System.IO.Stream"/>.
-		/// </summary>
-		/// <param name="stream">The XML <see cref="System.IO.Stream"/> that is going to be read.</param>
-		/// <param name="xmlResolver"><see cref="XmlResolver"/> to be used for resolving external references</param>
-		/// <param name="schemas">XML schemas that should be used for validation.</param>
-		/// <param name="eventHandler">Validation event handler.</param>
-		/// <returns>
-		/// A validating <see cref="System.Xml.XmlReader"/> implementation.
-		/// </returns>
-		public static XmlReader CreateValidatingReader(Stream stream, XmlResolver xmlResolver, XmlSchemaCollection schemas, ValidationEventHandler eventHandler)
-		{
-			XmlValidatingReader reader = new XmlValidatingReader(new XmlTextReader(stream));
-			reader.XmlResolver = xmlResolver;
-			reader.Schemas.Add(schemas);
-			reader.ValidationType = ValidationType.Schema;
-			if (eventHandler != null)
-			{
-				reader.ValidationEventHandler += eventHandler;
-			}
-			return reader;
-		}
-#else
         /// <summary>
         /// Gets an appropriate <see cref="System.Xml.XmlReader"/> implementation
         /// for the supplied <see cref="System.IO.Stream"/>.
@@ -123,23 +81,6 @@ namespace Spring.Util
                 return XmlReader.Create(stream, settings);
             }
         }
-#endif
-
-
-#if !NET_2_0
-        /// <summary>
-        /// Gets an <see cref="System.Xml.XmlTextReader"/> implementation 
-        /// for the supplied <see cref="System.IO.Stream"/>.
-        /// </summary>
-        /// <param name="stream">The XML <see cref="System.IO.Stream"/> that is going to be read.</param>
-        /// <returns>
-        /// A non-validating <see cref="System.Xml.XmlReader"/> implementation.
-        /// </returns>
-        public static XmlReader CreateReader(Stream stream)
-        {
-            return new XmlTextReader(stream);
-        }
-#else
 
         /// <summary>
         /// Gets an appropriate <see cref="System.Xml.XmlReader"/> implementation 
@@ -153,6 +94,5 @@ namespace Spring.Util
         {
             return XmlReader.Create(stream);
         }
-#endif
     }
 }

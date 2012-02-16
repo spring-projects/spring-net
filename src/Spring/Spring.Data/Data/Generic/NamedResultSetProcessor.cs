@@ -18,16 +18,6 @@
 
 #endregion
 
-#if NET_2_0
-
-#region Imports
-
-
-
-#endregion
-
-using Spring.Data.Support;
-
 namespace Spring.Data.Generic
 {
 	/// <summary>
@@ -118,5 +108,3 @@ namespace Spring.Data.Generic
 
 	}
 }
-
-#endif

@@ -186,14 +186,12 @@ namespace Spring.Util
                     string.Format(
                         CultureInfo.InvariantCulture, "Cannot instantiate an abstract class [{0}].", type));
             }
-#if NET_2_0
             if (type.ContainsGenericParameters)
             {
                 throw new FatalReflectionException(
                     string.Format(
                         CultureInfo.InvariantCulture, "Cannot instantiate an open generic type [{0}].", type));
             }
-#endif
         }
 
         /// <summary>
@@ -238,14 +236,12 @@ namespace Spring.Util
                     string.Format(
                         CultureInfo.InvariantCulture, "Cannot instantiate an abstract class [{0}].", constructor.DeclaringType));
             }
-#if NET_2_0
             if (constructor.DeclaringType.ContainsGenericParameters)
             {
                 throw new FatalReflectionException(
                     string.Format(
                         CultureInfo.InvariantCulture, "Cannot instantiate an open generic type [{0}].", constructor.DeclaringType));
             }
-#endif
             try
             {
                 // replaced with SafeConstructor() to avoid nasty "TargetInvocationException"s in NET >= 2.0

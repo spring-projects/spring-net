@@ -18,11 +18,10 @@
 
 #endregion
 
+using System.Configuration.Internal;
+
 namespace Spring.Util
 {
-#if NET_2_0
-    using System.Configuration.Internal;
-
     /// <summary>
     /// Implement this interface to create your own, delegating <see cref="IInternalConfigSystem"/>
     /// and set them using <see cref="ConfigurationUtils.SetConfigurationSystem"/>
@@ -35,5 +34,4 @@ namespace Spring.Util
         /// <param name="innerConfigSystem"></param>
         void SetInnerConfigurationSystem(IInternalConfigSystem innerConfigSystem);
     }
-#endif
 }

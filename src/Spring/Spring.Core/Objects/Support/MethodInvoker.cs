@@ -27,8 +27,6 @@ using System.Reflection;
 
 using Spring.Core;
 using Spring.Core.TypeResolution;
-using Spring.Objects;
-using Spring.Util;
 
 #endregion
 
@@ -397,22 +395,15 @@ namespace Spring.Objects.Support
         {
             MethodInfo theMethod = null;
             Type targetType = (TargetObject != null) ? TargetObject.GetType() : TargetType;
-#if NET_2_0
             GenericArgumentsHolder genericInfo = new GenericArgumentsHolder(TargetMethod);
-#endif
+
             // if we don't have any named arguments, we can try to get the exact method first...
 			if (NamedArguments.Count == 0)
 			{
                 ComposedCriteria searchCriteria = new ComposedCriteria();
-#if NET_2_0
                 searchCriteria.Add(new MethodNameMatchCriteria(genericInfo.GenericMethodName));
                 searchCriteria.Add(new MethodParametersCountCriteria(ArgumentCount));
-                searchCriteria.Add(new MethodGenericArgumentsCountCriteria(
-                    genericInfo.GetGenericArguments().Length));
-#else
-                searchCriteria.Add(new MethodNameMatchCriteria(TargetMethod));
-                searchCriteria.Add(new MethodParametersCountCriteria(ArgumentCount));
-#endif
+                searchCriteria.Add(new MethodGenericArgumentsCountCriteria(genericInfo.GetGenericArguments().Length));
                 searchCriteria.Add(new MethodArgumentsCriteria(Arguments));
 
                 MemberInfo[] matchingMethods = targetType.FindMembers(
@@ -430,15 +421,10 @@ namespace Spring.Objects.Support
             {
                 // search for a method with a matching signature... 
                 ComposedCriteria searchCriteria = new ComposedCriteria();
-#if NET_2_0
                 searchCriteria.Add(new MethodNameMatchCriteria(genericInfo.GenericMethodName));
                 searchCriteria.Add(new MethodParametersCountCriteria(ArgumentCount));
-                searchCriteria.Add(new MethodGenericArgumentsCountCriteria(
-                    genericInfo.GetGenericArguments().Length));
-#else
-                searchCriteria.Add(new MethodNameMatchCriteria(TargetMethod));
-                searchCriteria.Add(new MethodParametersCountCriteria(ArgumentCount));
-#endif
+                searchCriteria.Add(new MethodGenericArgumentsCountCriteria(genericInfo.GetGenericArguments().Length));
+
                 MemberInfo[] matchingMethods = targetType.FindMembers(
                     MemberTypes.Method,
                     MethodSearchingFlags,
@@ -459,7 +445,7 @@ namespace Spring.Objects.Support
                 }
                 theMethod = matchingMethods[0] as MethodInfo;
             }
-#if NET_2_0
+
             if (genericInfo.ContainsGenericArguments)
             {
                 string[] unresolvedGenericArgs = genericInfo.GetGenericArguments();
@@ -470,7 +456,7 @@ namespace Spring.Objects.Support
                 }
                 theMethod = theMethod.MakeGenericMethod(genericArgs);
             }
-#endif
+
             return theMethod;
         }
 

@@ -19,11 +19,8 @@
 #endregion
 
 
-#if NET_2_0
-
 using System.Data;
 using Spring.Objects;
-using Spring.Data.Generic;
 
 namespace Spring.Data.Generic
 {
@@ -47,5 +44,3 @@ namespace Spring.Data.Generic
         }
     }
 }
-
-#endif

@@ -1,5 +1,3 @@
-#if NET_2_0
-
 #region License
 
 /*
@@ -51,5 +49,3 @@ namespace Spring.Objects.Factory.Config
         }
     }
 }
-
-#endif

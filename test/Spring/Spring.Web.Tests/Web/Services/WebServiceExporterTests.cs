@@ -121,7 +121,6 @@ namespace Spring.Web.Services
             Assert.AreEqual(wse.Namespace, wsa.Namespace);
         }
 
-#if NET_2_0
         [Test]
         public void CreatesDefaultWebServiceBindingAttribute()
         {
@@ -170,7 +169,6 @@ namespace Spring.Web.Services
             WebServiceBindingAttribute wsba = attrs[0] as WebServiceBindingAttribute;
             Assert.AreEqual(WsiProfiles.None, wsba.ConformsTo);
         }
-#endif
 
         [Test]
         public void CreatesDefaultWebMethodAttributeWithNoDecoratedMethod()
@@ -315,9 +313,7 @@ namespace Spring.Web.Services
         }
 
         [WebService(Name = "Decorated service")]
-#if NET_2_0
         [WebServiceBinding(ConformsTo=WsiProfiles.None)]
-#endif
         public class DecoratedService : IService
         {
             [WebMethod(Description="SomeMethod description")]

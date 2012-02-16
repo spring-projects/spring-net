@@ -38,7 +38,6 @@ namespace Spring.Objects.Factory.Config
 	[TestFixture]
 	public class MethodInvokingFactoryObjectTests
 	{
-#if NET_2_0
         [Test]
         public void InvokeGenericMethod()
         {
@@ -52,8 +51,8 @@ namespace Spring.Objects.Factory.Config
             Assert.IsNotNull(obj);
             Assert.IsTrue(obj is TestObject);
         }
-#endif
-		[Test]
+
+        [Test]
 		public void GetSingletonNonStatic()
 		{
 			TestClass1 tc1 = new TestClass1();

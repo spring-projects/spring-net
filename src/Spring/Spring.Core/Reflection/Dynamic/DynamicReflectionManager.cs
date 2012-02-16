@@ -30,9 +30,7 @@ using System.Security;
 using System.Security.Permissions;
 using Spring.Util;
 
-#if NET_2_0
 using NetDynamicMethod = System.Reflection.Emit.DynamicMethod;
-#endif
 
 #endregion
 
@@ -281,7 +279,6 @@ namespace Spring.Reflection.Dynamic
 
         #endregion
 
-#if NET_2_0
         /// <summary>
         /// Create a new Get method delegate for the specified field using <see cref="System.Reflection.Emit.DynamicMethod"/>
         /// </summary>
@@ -484,7 +481,6 @@ namespace Spring.Reflection.Dynamic
                                 {
                                     return false;
                                 }
-        #if NET_2_0
                                 if (type.IsGenericType)
                                 {
                                     foreach(Type genericTypeArg in type.GetGenericArguments())
@@ -495,7 +491,6 @@ namespace Spring.Reflection.Dynamic
                                         }
                                     }
                                 }
-        #endif
                                 return true;
                             }
                         default:
@@ -503,7 +498,6 @@ namespace Spring.Reflection.Dynamic
                     }
                 }
         */
-#endif
 
         #region Shared Code Generation
 
@@ -774,12 +768,7 @@ namespace Spring.Reflection.Dynamic
 
         private static void EmitUnbox(ILGenerator il, Type argumentType)
         {
-#if NET_2_0
             il.Emit(OpCodes.Unbox_Any, argumentType);
-#else
-                il.Emit(OpCodes.Unbox, argumentType);
-                il.Emit(OpCodes.Ldobj, argumentType);
-#endif
         }
 
         /// <summary>
@@ -831,12 +820,12 @@ namespace Spring.Reflection.Dynamic
             }
 
             Type valueType = value.GetType();
-#if NET_2_0
+
             if (ReflectionUtils.IsNullableType(targetType))
             {
                 targetType = Nullable.GetUnderlyingType(targetType);
             }
-#endif
+
             // no conversion necessary?
             if (valueType == targetType)
             {

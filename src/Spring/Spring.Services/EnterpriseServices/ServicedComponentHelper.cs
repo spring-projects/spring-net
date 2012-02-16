@@ -117,7 +117,6 @@ namespace Spring.EnterpriseServices
 
             if (isRunningOutOfProcess)
             {
-#if NET_2_0
                 Trace.WriteLine(string.Format("configuring COM OutProc Server '{0}' using '{1}'", componentAssemblyFile.FullName, configFile.FullName));
                 // read in config file
                 ExeConfigurationSystem comConfig = new ExeConfigurationSystem(assemblyFile.FullName);
@@ -125,9 +124,6 @@ namespace Spring.EnterpriseServices
                 // existing configuration that might already have been loaded
                 ConfigurationUtils.SetConfigurationSystem(comConfig, true);
                 _appContext = ContextRegistry.GetContext();
-#else
-                _appContext = (IApplicationContext) ConfigurationReader.GetSection(new FileSystemResource(configFile.FullName),"spring/context");
-#endif
             }
             else
             {

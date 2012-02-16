@@ -169,28 +169,8 @@ namespace Spring.Util
         public void BitwiseOr()
         {
             Assert.AreEqual( ((Byte)2) | ((Byte)3), NumberUtils.BitwiseOr((Byte)2, (Byte)3));
-#if NET_2_0
             Assert.AreEqual(((SByte)2) | ((SByte)3), NumberUtils.BitwiseOr((SByte)2, (SByte)3));
-#else
-            try
-            {
-                NumberUtils.BitwiseOr((SByte)2, (SByte)3);
-                Assert.Fail();
-            }
-            catch (ArgumentException)
-            { }
-#endif
-#if NET_2_0
             Assert.AreEqual(((Int16)2) | ((Int16)3), NumberUtils.BitwiseOr((Int16)2, (Int16)3));
-#else
-            try 
-            {
-                NumberUtils.BitwiseOr((Int16) 2, (Int16) 3); 
-                Assert.Fail();
-            } 
-            catch(ArgumentException)
-            {}
-#endif
             Assert.AreEqual(((UInt16)2) | ((UInt16)3), NumberUtils.BitwiseOr((UInt16)2, (UInt16)3));
             Assert.AreEqual(((Int32)2) | ((Int32)3), NumberUtils.BitwiseOr((Int32)2, (Int32)3));
             Assert.AreEqual(((UInt32)2) | ((UInt32)3), NumberUtils.BitwiseOr((UInt32)2, (UInt32)3));

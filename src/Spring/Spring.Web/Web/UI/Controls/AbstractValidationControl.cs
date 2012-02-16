@@ -40,36 +40,6 @@ namespace Spring.Web.UI.Controls
         private IValidationErrors _validationErrors;
         private IMessageSource _messageSource;
 
-#if !NET_2_0
-        private bool initialized;
-
-        /// <summary>
-        /// Raises the <see cref="E:System.Web.UI.Control.Init"/> event.
-        /// </summary>
-        protected override void OnInit(System.EventArgs e)
-        {
-            initialized = true;
-            base.OnInit(e);
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether this instance is in design mode.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if this instance is in design mode; otherwise, <c>false</c>.
-        /// </value>
-        protected bool DesignMode
-        {
-            get
-            {
-                if (this.Site != null)
-                {
-                    return this.Site.DesignMode;
-                }
-                return initialized && (this.Context == null);
-            }
-        }
-#endif
         /// <summary>
         /// Set a particular message source to be used for
         /// resolving error messages to display texts.

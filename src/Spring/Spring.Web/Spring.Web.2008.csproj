@@ -22,7 +22,7 @@
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
     <StartupObject>
     </StartupObject>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <SignAssembly>false</SignAssembly>
     <AssemblyOriginatorKeyFile>..\..\..\Spring.Net.snk</AssemblyOriginatorKeyFile>
   </PropertyGroup>
@@ -242,7 +242,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Web\UI\Controls\ContentReplacer.cs" />
-    <Compile Include="Web\UI\Controls\ControlState.cs" />
     <Compile Include="Web\UI\Controls\DataBindingAdapter.cs" />
     <Compile Include="Web\UI\Controls\DataBindingPanel.cs" />
     <Compile Include="Web\UI\Controls\Form.cs" />
@@ -252,7 +251,6 @@
     <Compile Include="Web\UI\Controls\LocalizedImage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Web\UI\Controls\MultiView.cs" />
     <Compile Include="Web\UI\Controls\Panel.cs" />
     <Compile Include="Web\UI\Controls\RadioButtonGroup.cs">
       <SubType>Code</SubType>
@@ -269,8 +267,6 @@
     <Compile Include="Web\UI\Controls\ValidationSummary.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Web\UI\Controls\View.cs" />
-    <Compile Include="Web\UI\Controls\ViewCollection.cs" />
     <Compile Include="Web\UI\DialogAttribute.cs">
       <SubType>Code</SubType>
     </Compile>

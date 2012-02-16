@@ -18,13 +18,9 @@
 
 #endregion
 
-#if NET_2_0
-
 #region Imports
 
 using System;
-using System.Data;
-
 using NUnit.Framework;
 using Spring.Objects;
 
@@ -130,5 +126,3 @@ namespace Spring.Core.TypeResolution
         }
     }
 }
-
-#endif

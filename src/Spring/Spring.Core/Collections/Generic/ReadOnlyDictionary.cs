@@ -1,5 +1,3 @@
-#if NET_2_0
-
 #region License
 
 /*
@@ -428,4 +426,3 @@ namespace Spring.Collections.Generic
         }
     }
 }
-#endif

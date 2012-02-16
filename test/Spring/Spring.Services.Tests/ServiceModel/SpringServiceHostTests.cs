@@ -1,4 +1,3 @@
-#if NET_3_0
 #region License
 
 /*
@@ -59,5 +58,3 @@ namespace Spring.ServiceModel
         }
     }
 }
-
-#endif // NET_3_0

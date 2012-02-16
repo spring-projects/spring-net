@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.IO;
 using System.Text;
 using NUnit.Framework;
@@ -52,7 +51,6 @@ namespace Spring.Core.IO
             Assert.AreEqual("test", reader.ReadToEnd());
         }
 
-#if NET_2_0
         [Test]
         public void OpensReaderWithAutoDetectEncoding()
         {
@@ -84,7 +82,7 @@ namespace Spring.Core.IO
             Assert.AreEqual(Encoding.UTF8.GetString(resourceData), actual);
             Assert.AreEqual(Encoding.UTF8.EncodingName, reader.CurrentEncoding.EncodingName);
         }
-#endif
+
         /// <summary>
         /// Returns the text bytes including the encoding's preamble (<see cref="Encoding.GetPreamble"/>), if any.
         /// </summary>

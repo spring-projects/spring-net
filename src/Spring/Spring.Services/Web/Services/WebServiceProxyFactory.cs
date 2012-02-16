@@ -22,8 +22,6 @@
 
 using System;
 using System.Collections;
-using System.Globalization;
-using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using System.Net;
@@ -33,15 +31,11 @@ using System.Web.Services;
 using System.Web.Services.Description;
 using System.Web.Services.Protocols;
 using System.Web.Services.Discovery;
-
-using Spring.Core;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
 using Spring.Proxy;
 using Spring.Util;
-using Spring.Objects;
 using Spring.Core.IO;
-using Spring.Expressions;
 
 #endregion
 
@@ -400,11 +394,7 @@ namespace Spring.Web.Services
             {
                 if (webProxy == null)
                 {
-#if !NET_2_0
-                    webProxy = GlobalProxySelection.Select;
-#else
                     webProxy = WebRequest.DefaultWebProxy;
-#endif
                 }
                 webProxy.Credentials = ProxyCredential;
             }
@@ -596,7 +586,6 @@ namespace Spring.Web.Services
                 return attrs;
             }
 
-#if NET_2_0
             protected override IList GetMethodReturnTypeAttributes(MethodInfo method)
             {
                 IList attrs = base.GetMethodReturnTypeAttributes(method);
@@ -663,7 +652,7 @@ namespace Spring.Web.Services
 
                 return attrs;
             }
-#endif
+
 /*
             protected override IList GetMethodParameterAttributes(MethodInfo method, ParameterInfo paramInfo)
             {
@@ -824,7 +813,6 @@ namespace Spring.Web.Services
             /// </summary>
             private XmlMembersMapping GetMembersMapping(string messageName, MessagePartCollection messageParts, SoapBodyBinding soapBodyBinding, SoapBindingStyle soapBindingStyle)
             {
-#if NET_2_0
                 if (soapBindingStyle == SoapBindingStyle.Rpc)
                 {
                     SoapSchemaMember[] soapSchemaMembers = new SoapSchemaMember[messageParts.Count];
@@ -841,9 +829,6 @@ namespace Spring.Web.Services
                 {
                     return this.schemaImporter.ImportMembersMapping(messageParts[0].Element);
                 }
-#else
-				return this.schemaImporter.ImportMembersMapping(messageParts[0].Element);
-#endif
             }
 
             private void MoveToMethod(MethodInfo targetMethod)
@@ -855,13 +840,6 @@ namespace Spring.Web.Services
                 string inputMessageName = (!StringUtils.IsNullOrEmpty(operationBinding.Input.Name) && (soapOperationBinding.Style != SoapBindingStyle.Rpc)) ? operationBinding.Input.Name : operation.Name;
                 SoapBodyBinding inputSoapBodyBinding = (SoapBodyBinding)operationBinding.Input.Extensions.Find(typeof(SoapBodyBinding));
 
-#if !NET_2_0
-				if (soapOperationBinding.Style == SoapBindingStyle.Rpc &&
-					inputSoapBodyBinding.Use == SoapBindingUse.Literal)
-				{
-					throw new NotSupportedException("rpc-literal SOAP messages are not supported on .NET Framework 1.1");
-				}
-#endif
                 if (inputSoapBodyBinding.Use != SoapBindingUse.Literal)
                 {
                     throw new NotSupportedException("WebServiceProxyFactory only supports document-literal and rpc-literal SOAP messages to conform to WS-I Basic Profiles.");
@@ -894,14 +872,6 @@ namespace Spring.Web.Services
                 return cabb.Build();
             }
 
-#if !NET_2_0
-            private static readonly PropertyInfo XmlMembersMapping_ElementName =
-                typeof(XmlMembersMapping).GetProperty("ElementName");
-
-            private static readonly PropertyInfo XmlMembersMapping_Namespace = 
-                typeof(XmlMembersMapping).GetProperty("Namespace");
-#endif
-
             /// <summary>
             /// Creates a <see cref="SoapDocumentMethodAttribute"/> or a <see cref="SoapRpcMethodAttribute"/>
             /// that should be applied to proxy method.
@@ -912,14 +882,8 @@ namespace Spring.Web.Services
             {
                 ReflectionUtils.CustomAttributeBuilderBuilder cabb;
 
-#if !NET_2_0
-                // Access XmlMembersMapping.ElementName and .Namespace property using reflection [SPRNET-520]
-                string inputMembersMappingElementName = XmlMembersMapping_ElementName.GetValue(inputMembersMapping, null) as string;
-                string inputMembersMappingNamespace = XmlMembersMapping_Namespace.GetValue(inputMembersMapping, null) as string;
-#else
                 string inputMembersMappingElementName = inputMembersMapping.ElementName;
                 string inputMembersMappingNamespace = inputMembersMapping.Namespace;
-#endif
 
                 if (soapOperationBinding.Style == SoapBindingStyle.Rpc)
                 {
@@ -932,15 +896,7 @@ namespace Spring.Web.Services
                 }
 
                 cabb.AddContructorArgument(soapOperationBinding.SoapAction);
-
-#if NET_2_0
                 cabb.AddPropertyValue("Use", SoapBindingUse.Literal);
-#else
-                if (soapOperationBinding.Style != SoapBindingStyle.Rpc)
-                {
-                    cabb.AddPropertyValue("Use", SoapBindingUse.Literal);
-                }
-#endif
 
                 if (inputMembersMappingElementName.Length > 0 &&
                     inputMembersMappingElementName != operation.Name)
@@ -959,14 +915,9 @@ namespace Spring.Web.Services
                 }
                 else
                 {
-#if !NET_2_0
-                    // Access XmlMembersMapping.ElementName and .Namespace property using reflection [SPRNET-520]
-                    string outputMembersMappingElementName = XmlMembersMapping_ElementName.GetValue(outputMembersMapping, null) as string;
-                    string outputMembersMappingNamespace = XmlMembersMapping_Namespace.GetValue(outputMembersMapping, null) as string;
-#else
                     string outputMembersMappingElementName = outputMembersMapping.ElementName;
                     string outputMembersMappingNamespace = outputMembersMapping.Namespace;
-#endif
+
                     if (outputMembersMappingElementName.Length > 0 &&
                         outputMembersMappingElementName != (operation.Name + "Response"))
                     {

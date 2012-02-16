@@ -22,9 +22,7 @@
 
 using System;
 using System.Collections;
-#if NET_2_0
 using System.Collections.Generic;
-#endif
 using System.Globalization;
 
 using Spring.Core;
@@ -102,7 +100,7 @@ namespace Spring.Objects.Factory.Config
             {
                 elementType = TypeResolutionUtils.ResolveType(this.elementTypeName);
             }
-#if NET_2_0
+
             if (elementType == null)
             {
                 list = new ArrayList();
@@ -117,9 +115,7 @@ namespace Spring.Objects.Factory.Config
                 list = (IList)ObjectUtils.InstantiateType(type);
                 // CLOVER:OFF
             }
-#else
-            list = new ArrayList();
-#endif
+
             for (int i = 0; i < Count; ++i)
             {
                 object element = this[i];

@@ -18,20 +18,15 @@
 
 #endregion
 
-#if NET_2_0
 #region Imports
 
 using System;
 using System.Data.SqlClient;
 using System.Transactions;
 using NUnit.Framework;
-using Spring.Aop.Config;
 using Spring.Context;
 using Spring.Context.Support;
-using Spring.Data.Config;
 using Spring.Objects;
-using Spring.Objects.Factory.Xml;
-using Spring.Transaction.Config;
 
 #endregion
 
@@ -94,4 +89,3 @@ namespace Spring.Data
         }
     }
 }
-#endif

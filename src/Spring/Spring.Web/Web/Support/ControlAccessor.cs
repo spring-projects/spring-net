@@ -46,111 +46,42 @@ namespace Spring.Web.Support
         private static readonly MethodInfo s_miClear;
         private static readonly SafeField ControlsArrayField;
 
-#if NET_2_0
         private static readonly CreateControlCollectionDelegate BaseCreateControlCollection;
         private static readonly AddedControlDelegate BaseAddedControl;
         private static readonly RemovedControlDelegate BaseRemovedControl;
         private static readonly VoidMethodDelegate BaseClearNamingContainer;
 
-#else
-        private class DynamicMethodWrapper
-        {
-            private IDynamicMethod _method;
-
-            public DynamicMethodWrapper(IDynamicMethod method)
-            {
-                _method = method;
-            }
-
-            public static CreateControlCollectionDelegate CreateControlCollection(MethodInfo methodInfo)
-            {
-                IDynamicMethod method = new SafeMethod(methodInfo);
-                return new CreateControlCollectionDelegate(new DynamicMethodWrapper(method).CreateControlCollectionInternal);
-            }
-
-            public static AddedControlDelegate AddedControl(MethodInfo methodInfo)
-            {
-                IDynamicMethod method = new SafeMethod(methodInfo);
-                return new AddedControlDelegate(new DynamicMethodWrapper(method).AddedControlInternal);
-            }
-
-            public static RemovedControlDelegate RemovedControl(MethodInfo methodInfo)
-            {
-                IDynamicMethod method = new SafeMethod(methodInfo);
-                return new RemovedControlDelegate(new DynamicMethodWrapper(method).RemovedControlInternal);
-            }
-
-            public static VoidMethodDelegate ClearNamingContainer(MethodInfo methodInfo)
-            {
-                IDynamicMethod method = new SafeMethod(methodInfo);
-                return new VoidMethodDelegate(new DynamicMethodWrapper(method).ClearNamingContainerInternal);
-            }
-
-            private ControlCollection CreateControlCollectionInternal(Control target)
-            {
-                return (ControlCollection) _method.Invoke(target, null);
-            }
-
-            private void AddedControlInternal(Control target, Control control, int index)
-            {
-                _method.Invoke(target, new object[] { control, index });
-            }
-
-            private void RemovedControlInternal(Control target, Control control)
-            {
-                _method.Invoke(target, new object[] { control });
-            }
-
-            private void ClearNamingContainerInternal(Control target)
-            {
-                _method.Invoke(target, null);
-            }
-        }
-
-        private static readonly CreateControlCollectionDelegate BaseCreateControlCollection = DynamicMethodWrapper.CreateControlCollection(GetMethod("CreateControlCollection"));
-        private static readonly AddedControlDelegate BaseAddedControl = DynamicMethodWrapper.AddedControl(GetMethod("AddedControl"));
-        private static readonly RemovedControlDelegate BaseRemovedControl = DynamicMethodWrapper.RemovedControl(GetMethod("RemovedControl"));
-        private static readonly VoidMethodDelegate BaseClearNamingContainer = DynamicMethodWrapper.ClearNamingContainer(GetMethod("ClearNamingContainer"));
-#endif
-
         static ControlAccessor()
         {
             SafeField fldControls = null;
             MethodInfo fnClear = null;
-#if NET_2_0
+
             SecurityCritical.ExecutePrivileged(new PermissionSet(PermissionState.Unrestricted), delegate
             {
-#endif
                 fnClear = GetMethod("Clear");
                 fldControls = new SafeField(typeof(ControlCollection).GetField("_controls", BindingFlags.Instance | BindingFlags.NonPublic));
-#if NET_2_0
             });
-#endif
+
             s_miClear = fnClear;
             ControlsArrayField = fldControls;
 
-#if NET_2_0
             CreateControlCollectionDelegate fnBaseCreateControlCollection = null;
             AddedControlDelegate fnBaseAddedControl = null;
             RemovedControlDelegate fnBaseRemovedControl = null;
             VoidMethodDelegate fnBaseClearNamingContainer = null;
-#if NET_2_0
+
             SecurityCritical.ExecutePrivileged(new PermissionSet(PermissionState.Unrestricted), delegate
             {
-#endif
                 fnBaseCreateControlCollection = (CreateControlCollectionDelegate)Delegate.CreateDelegate(typeof(CreateControlCollectionDelegate), GetMethod("CreateControlCollection"));
                 fnBaseAddedControl = (AddedControlDelegate)Delegate.CreateDelegate(typeof(AddedControlDelegate), GetMethod("AddedControl"));
                 fnBaseRemovedControl = (RemovedControlDelegate)Delegate.CreateDelegate(typeof(RemovedControlDelegate), GetMethod("RemovedControl"));
                 fnBaseClearNamingContainer = (VoidMethodDelegate)Delegate.CreateDelegate(typeof(VoidMethodDelegate), GetMethod("ClearNamingContainer"));
-#if NET_2_0
             });
-#endif
+
             BaseCreateControlCollection = fnBaseCreateControlCollection;
             BaseAddedControl = fnBaseAddedControl;
             BaseRemovedControl = fnBaseRemovedControl;
             BaseClearNamingContainer = fnBaseClearNamingContainer;
-#endif
-
         }
 
         private static MethodInfo GetMethod(string name)
@@ -239,7 +170,6 @@ namespace Spring.Web.Support
             controls[index] = control;
         }
 
-#if NET_2_0
         private delegate ControlCollection GetControlsDelegate(Control target);
         private delegate void SetControlsDelegate(Control target, ControlCollection controls);
 
@@ -365,18 +295,5 @@ namespace Spring.Web.Support
             }
             return handler;
         }
-#else
-	    private static readonly IDynamicField fControls = new SafeField(GetField("_controls"));
-
-		private ControlCollection GetChildControlCollection()
-		{
-		    return (ControlCollection)fControls.GetValue(_targetControl);
-		}
-
-		private void SetChildControlCollection(ControlCollection controls)
-		{
-            fControls.SetValue(_targetControl, controls);
-		}
-#endif
     }
 }

@@ -1,4 +1,3 @@
-#if NET_3_0
 #region License
 
 /*
@@ -29,8 +28,6 @@ using System.ServiceModel;
 using System.Net.Security;
 using Spring.Objects.Factory.Config;
 using Spring.Util;
-using Spring.Context;
-using Spring.Core.TypeResolution;
 using Spring.Objects;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Support;
@@ -528,13 +525,11 @@ namespace Spring.ServiceModel
                     {
                         typeBuilder.SetCustomAttribute((CustomAttributeBuilder)attr);
                     }
-#if NET_2_0
                     else if (attr is CustomAttributeData)
                     {
                         typeBuilder.SetCustomAttribute(
                             ReflectionUtils.CreateCustomAttribute((CustomAttributeData)attr));
                     }
-#endif
                     else if (attr is Attribute)
                     {
                         typeBuilder.SetCustomAttribute(
@@ -595,4 +590,3 @@ namespace Spring.ServiceModel
         #endregion
     }
 }
-#endif

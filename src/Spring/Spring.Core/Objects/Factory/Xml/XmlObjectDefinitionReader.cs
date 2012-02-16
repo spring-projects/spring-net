@@ -65,29 +65,6 @@ namespace Spring.Objects.Factory.Xml
             { }
         }
 
-#if !NET_2_0
-        private class ValidationEventHandlerWrapper
-        {
-            private XmlReader _sender;
-            private XmlObjectDefinitionReader _owner;
-
-            public XmlReader Reader
-            {
-                set { _sender = value; }
-            }
-
-            public ValidationEventHandlerWrapper(XmlObjectDefinitionReader owner)
-            {
-                _owner = owner;
-            }
-
-            public void HandleValidation(object sender, ValidationEventArgs args)
-            {
-                _owner.HandleValidation(_sender,args);
-            }
-        }
-#endif
-
         #endregion
 
         #region Fields
@@ -357,15 +334,7 @@ namespace Spring.Objects.Factory.Xml
             }
             else
             {
-#if !NET_2_0
-                // only because 1.0/1.1 don't pass the sender into the handler callback...
-                ValidationEventHandlerWrapper validationEventHandlerWrapper = new ValidationEventHandlerWrapper(this);
-                reader = XmlUtils.CreateValidatingReader(stream, Resolver, NamespaceParserRegistry.GetSchemas(),
-                                                         new ValidationEventHandler(validationEventHandlerWrapper.HandleValidation));       
-                validationEventHandlerWrapper.Reader = reader;
-#else
                 reader = XmlUtils.CreateValidatingReader(stream, Resolver, NamespaceParserRegistry.GetSchemas(), HandleValidation);
-#endif
             }
 
             #region Instrumentation
@@ -390,11 +359,7 @@ namespace Spring.Objects.Factory.Xml
             {
                 XmlSchemaException ex = args.Exception;
                 XmlReader xmlReader = (XmlReader)sender;
-                if (!NamespaceParserRegistry.GetSchemas().Contains(xmlReader.NamespaceURI)
-#if NET_2_0
- && ex is XmlSchemaValidationException
-#endif
-)
+                if (!NamespaceParserRegistry.GetSchemas().Contains(xmlReader.NamespaceURI) && ex is XmlSchemaValidationException)
                 {
                     // try wellknown parsers
                     bool registered = NamespaceParserRegistry.RegisterWellknownNamespaceParserType(xmlReader.NamespaceURI);
@@ -403,13 +368,6 @@ namespace Spring.Objects.Factory.Xml
                         throw new RetryParseException();
                     }
                 }
-#if !NET_2_0
-                // ignore validation errors for well-known 'xml' namespace. This seems to be a bug in net 1.0 + 1.1
-                if (ex.Message.IndexOf("http://www.w3.org/XML/1998/namespace:") > -1)
-                {
-                    return;
-                }
-#endif
                 throw ex;
             }
             else

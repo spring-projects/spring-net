@@ -18,11 +18,8 @@
 
 #endregion
 
-#if NET_2_0
-
 #region Imports
 
-using System.Collections;
 using System.Text.RegularExpressions;
 using Spring.Util;
 
@@ -362,5 +359,3 @@ namespace Spring.Core.TypeResolution
         #endregion
     }
 }
-
-#endif

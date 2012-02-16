@@ -201,7 +201,6 @@ namespace Spring.Context.Support
             Assert.AreEqual("Baia", to2.Name);
         }
 
-#if NET_2_0
         // TODO : Add support for .NET 1.x
         [Test]
         public void ClearWithConfigurationSection()
@@ -212,7 +211,6 @@ namespace Spring.Context.Support
 
             Assert.AreNotSame(ctx1, ctx2);
         }
-#endif
 
         [Test(Description = "SPRNET-105")]
         [ExpectedException(typeof(ApplicationContextException))]

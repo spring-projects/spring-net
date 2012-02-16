@@ -699,7 +699,6 @@ namespace Spring.Aop.Framework.DynamicProxy
 
         #region ProxyGenericMethodWithRefOutParameters
 
-#if NET_2_0
         [Test]
         public void ProxyGenericMethodWithRefOutParametersWithDirectCall()
         {
@@ -799,7 +798,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         internal class InternalRefOutGenericTestObject : PublicRefOutGenericTestObject
         {
         }
-#endif
+
         #endregion
 
         [Test]
@@ -816,7 +815,6 @@ namespace Spring.Aop.Framework.DynamicProxy
             Assert.AreEqual(target.ToString(), proxy.ToString(), "ToString() not equal");
         }
 
-#if NET_2_0
         [Test]
         public void InterceptGenericMethod()
         {
@@ -886,7 +884,6 @@ namespace Spring.Aop.Framework.DynamicProxy
 
             Assert.AreEqual(2, ni.Count);
         }
-#endif
 
         #region MultiThreadedProxyCreation
 
@@ -1060,7 +1057,6 @@ namespace Spring.Aop.Framework.DynamicProxy
             Assert.AreEqual(0, attrs.Length, "Should not have attribute applied to the method's parameter.");
         }
 
-#if NET_2_0
         [Test]
         public void ProxyTargetMethodReturnValueAttributes()
         {
@@ -1110,7 +1106,6 @@ namespace Spring.Aop.Framework.DynamicProxy
             Assert.IsNotNull(attrs);
             Assert.AreEqual(0, attrs.Length, "Should not have attribute applied to the method's return value.");
         }
-#endif
 
         public sealed class MarkerAttribute : Attribute
         {

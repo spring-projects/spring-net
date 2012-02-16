@@ -153,7 +153,6 @@ namespace Spring.Aop.Target
             Assert.AreEqual (2, ((IThreadLocalTargetSourceStats) apartment).Objects);
         }
 
-#if NET_2_0
         private static bool multiThreadedTestFailed = false;
 
         [Test]
@@ -227,6 +226,5 @@ namespace Spring.Aop.Target
         }
 
         #endregion
-#endif
     }
 }

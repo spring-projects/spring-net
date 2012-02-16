@@ -18,8 +18,6 @@
 
 #endregion
 
-#if NET_2_0
-
 #region Imports
 
 using System;
@@ -514,4 +512,3 @@ namespace Spring.Web.Providers
         #endregion
     }        
 }
-#endif

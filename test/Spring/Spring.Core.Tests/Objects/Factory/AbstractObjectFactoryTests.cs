@@ -426,7 +426,6 @@ namespace Spring.Objects.Factory
                 .RegisterSingleton(null, DBNull.Value);
         }
 
-#if NET_2_0
         [Test]
         public void GetSingletonNamesReflectsOrderOfRegistration()
         {
@@ -443,7 +442,6 @@ namespace Spring.Objects.Factory
             of.RegisterSingleton("B", new object());
             Assert.AreEqual(new string[] { "A", "C", "B" }, of.GetSingletonNames(typeof(object)));
         }
-#endif
 
         [Test]
         [ExpectedException(typeof(ArgumentNullException))]
@@ -674,8 +672,6 @@ namespace Spring.Objects.Factory
         }
     }
 
-
-#if NET_2_0
     [TestFixture]
     public class SPRNET_1338
     {
@@ -1031,6 +1027,4 @@ namespace Spring.Objects.Factory
         }
 
     }
-
-#endif
 }

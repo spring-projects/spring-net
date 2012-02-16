@@ -26,13 +26,6 @@ using System.Web.UI;
 using Spring.Context;
 using Spring.Proxy;
 using Spring.Util;
-using Spring.Web.Support;
-
-#if NET_2_0
-using System.Collections.Generic;
-#else
-using Spring.Reflection.Dynamic;
-#endif
 
 #endregion
 
@@ -119,7 +112,6 @@ namespace Spring.Web.Support
         private delegate ControlCollection CreateControlCollectionDelegate(Control owner);
         private static readonly Hashtable s_collectionFactoryCache = new Hashtable();
 
-#if NET_2_0
         private static CreateControlCollectionDelegate GetInterceptedCollectionFactory(Type ownerType, Type collectionType)
         {
             AssertUtils.State( typeof(Control).IsAssignableFrom(ownerType), "ownerType must be of type Control" );
@@ -151,46 +143,6 @@ namespace Spring.Web.Support
             }
             return factoryMethod;
         }
-#else
-        private class CreateControlCollectionWrapper
-        {
-            private IDynamicConstructor _ctor;
-
-            public CreateControlCollectionWrapper(IDynamicConstructor ctor)
-            {
-                _ctor = ctor;
-            }
-
-            public ControlCollection Create(Control owner)
-            {
-                return (ControlCollection) _ctor.Invoke(new object[] {owner});
-            }
-        }
-
-        private static CreateControlCollectionDelegate GetInterceptedCollectionFactory(Type controlType, Type controlCollectionType)
-        {
-            AssertUtils.State( typeof(Control).IsAssignableFrom(controlType), "controlType must be of type Control" );
-            AssertUtils.State( typeof(ControlCollection).IsAssignableFrom(controlCollectionType), "controlCollectionType must be of type ControlCollection" );
-
-            CreateControlCollectionDelegate factoryMethod = (CreateControlCollectionDelegate)s_collectionFactoryCache[controlType];
-            if (factoryMethod == null)
-            {
-                lock (s_collectionFactoryCache)
-                {
-                    factoryMethod = (CreateControlCollectionDelegate)s_collectionFactoryCache[controlType];
-                    if (factoryMethod == null)
-                    {
-                        Type interceptedCollectionType = GetInterceptedCollectionType(controlCollectionType, new InjectDependenciesCallbackHandler(WebDependencyInjectionUtils.InjectDependenciesRecursive));
-
-                        ConstructorInfo ctor = interceptedCollectionType.GetConstructor(new Type[] {typeof (Control)});
-                        IDynamicConstructor dynCtor = new SafeConstructor(ctor);
-                        s_collectionFactoryCache[controlType] = new CreateControlCollectionDelegate(new CreateControlCollectionWrapper(dynCtor).Create);
-                    }
-                }
-            }
-            return factoryMethod;
-        }
-#endif
 
         private static Type GetInterceptedCollectionType(Type controlCollectionType, InjectDependenciesCallbackHandler staticCallback)
         {

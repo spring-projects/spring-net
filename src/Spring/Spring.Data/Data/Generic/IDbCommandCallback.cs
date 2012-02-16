@@ -18,8 +18,6 @@
 
 #endregion
 
-#if NET_2_0
-
 using System.Data;
 
 namespace Spring.Data.Generic
@@ -62,5 +60,3 @@ namespace Spring.Data.Generic
         T DoInCommand(IDbCommand command);
     }
 }
-
-#endif

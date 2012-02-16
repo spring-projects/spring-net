@@ -97,15 +97,7 @@ namespace Spring.Remoting
         public bool EnsureSecurity
         {
             get { return _ensureSecurity; }
-            set
-            {
-#if NET_2_0
-                _ensureSecurity = value;
-#else
-                throw new NotSupportedException(
-                    "The EnsureSecurity property is supported only on .Net Framework 2.0.");
-#endif
-            }
+            set { _ensureSecurity = value; }
         }
         
         #endregion
@@ -129,11 +121,9 @@ namespace Spring.Remoting
                     ? AppDomain.CurrentDomain.SetupInformation.ConfigurationFile 
                     : Filename.File.FullName;
             }
-#if NET_2_0
+
             RemotingConfiguration.Configure(filename, EnsureSecurity);
-#else
-            RemotingConfiguration.Configure(filename);
-#endif
+            
             #region Instrumentation
 
             if (log.IsDebugEnabled)

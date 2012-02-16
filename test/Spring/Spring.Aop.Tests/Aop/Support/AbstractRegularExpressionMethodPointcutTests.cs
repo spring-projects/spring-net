@@ -74,7 +74,7 @@ namespace Spring.Aop.Support
 			ExactMatchTests(pointcut);
 		}
 
-#if NET_2_0
+
         protected void ExactMatchWithGenericTypeTests(AbstractRegularExpressionMethodPointcut rpc)
         {
             // assumes rpc.setPattern("System.Collections.Generic.List<string>");
@@ -106,7 +106,6 @@ namespace Spring.Aop.Support
             Assert.IsTrue(pointcut.Matches(typeof(System.Collections.Generic.List<string>).GetMethod("Add"), typeof(int)));
             Assert.IsFalse(pointcut.Matches(typeof(System.Collections.Generic.List<string>).GetMethod("GetType"), typeof(Type)));
         }
-#endif
 
         protected void ExactMatchTests(AbstractRegularExpressionMethodPointcut rpc)
         {

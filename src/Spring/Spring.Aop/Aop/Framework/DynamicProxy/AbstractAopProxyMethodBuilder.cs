@@ -27,7 +27,6 @@ using System.Reflection.Emit;
 using System.Runtime.Serialization;
 
 using Spring.Proxy;
-using Spring.Util;
 
 #endregion
 
@@ -81,7 +80,6 @@ namespace Spring.Aop.Framework.DynamicProxy
         /// </summary>
         protected LocalBuilder returnValue;
 
-#if NET_2_0
         /// <summary>
         /// The local variable to store the closed generic method 
         /// when the target method is generic.
@@ -93,7 +91,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         /// when the target method defined on the proxy is generic.
         /// </summary>
         protected LocalBuilder genericOnProxyTargetMethod;
-#endif
+
         /// <summary>
         /// The field to cache the target <see cref="System.Reflection.MethodInfo"/>.
         /// </summary>
@@ -239,9 +237,7 @@ namespace Spring.Aop.Framework.DynamicProxy
             targetMethodCacheField = typeBuilder.DefineField(methodId, typeof(MethodInfo), 
                 FieldAttributes.Private | FieldAttributes.Static | FieldAttributes.InitOnly);
 
-#if NET_2_0
             MakeGenericMethod(il, method, targetMethodCacheField, genericTargetMethod);
-#endif
         }
 
         /// <summary>
@@ -254,7 +250,6 @@ namespace Spring.Aop.Framework.DynamicProxy
         {
         }
 
-#if NET_2_0
         /// <summary>
         /// Create a closed generic method for the current call 
         /// if target method is a generic definition.
@@ -300,7 +295,6 @@ namespace Spring.Aop.Framework.DynamicProxy
                 il.Emit(OpCodes.Stloc, localMethod);
             }
         }
-#endif
 
         /// <summary>
         /// Generates the IL instructions that pushes 
@@ -331,13 +325,11 @@ namespace Spring.Aop.Framework.DynamicProxy
         /// <param name="method">The method to proxy.</param>
         protected virtual void PushTargetMethodInfo(ILGenerator il, MethodInfo method)
         {
-#if NET_2_0
             if (method.IsGenericMethodDefinition)
             {
                 il.Emit(OpCodes.Ldloc, genericTargetMethod);
                 return;
             }
-#endif
             il.Emit(OpCodes.Ldsfld, targetMethodCacheField);
         }
 
@@ -350,13 +342,11 @@ namespace Spring.Aop.Framework.DynamicProxy
         {
             if (onProxyTargetMethodCacheField != null)
             {
-#if NET_2_0
                 if (method.IsGenericMethodDefinition)
                 {
                     il.Emit(OpCodes.Ldloc, genericOnProxyTargetMethod);
                     return;
                 }
-#endif
                 il.Emit(OpCodes.Ldsfld, onProxyTargetMethodCacheField);
             }
             else
@@ -376,13 +366,11 @@ namespace Spring.Aop.Framework.DynamicProxy
             targetType = il.DeclareLocal(typeof(Type));
             arguments = il.DeclareLocal(typeof(Object[]));
             
-#if NET_2_0
             if (method.IsGenericMethodDefinition)
             {
                 genericTargetMethod = il.DeclareLocal(typeof(MethodInfo));
                 genericOnProxyTargetMethod = il.DeclareLocal(typeof(MethodInfo));
             }
-#endif
             if (methodReturnsValue)
             {
                 returnValue = il.DeclareLocal(method.ReturnType);
@@ -392,13 +380,13 @@ namespace Spring.Aop.Framework.DynamicProxy
             interceptors.SetLocalSymInfo("interceptors");
             targetType.SetLocalSymInfo("targetType");
             arguments.SetLocalSymInfo("arguments");
-#if NET_2_0
+
             if (method.IsGenericMethodDefinition)
             {
                 genericTargetMethod.SetLocalSymInfo("genericTargetMethod");
                 genericOnProxyTargetMethod.SetLocalSymInfo("genericOnProxyTargetMethod");
             }
-#endif
+
             if (methodReturnsValue)
             {
                 returnValue.SetLocalSymInfo("returnValue");
@@ -567,11 +555,7 @@ namespace Spring.Aop.Framework.DynamicProxy
                         EmitLoadValueIndirect(il, type);
                     }
 
-#if NET_2_0
                     if (type.IsValueType || type.IsGenericParameter)
-#else
-                    if (type.IsValueType)
-#endif
                     {
                         il.Emit(OpCodes.Box, type);
                     }
@@ -686,18 +670,10 @@ namespace Spring.Aop.Framework.DynamicProxy
         /// <param name="type">The type specified in the instruction.</param>
         protected static void EmitUnboxIfNeeded(ILGenerator il, Type type)
         {
-#if NET_2_0
             if (type.IsValueType || type.IsGenericParameter)
             {
                 il.Emit(OpCodes.Unbox_Any, type);
             }
-#else
-            if (type.IsValueType)
-            {
-                il.Emit(OpCodes.Unbox, type);
-                il.Emit(OpCodes.Ldobj, type);
-            }
-#endif
         }
 
         #endregion
@@ -764,10 +740,8 @@ namespace Spring.Aop.Framework.DynamicProxy
         public static readonly MethodInfo GetTypeFromHandle = 
             typeof(Type).GetMethod("GetTypeFromHandle", new Type[] { typeof(RuntimeTypeHandle) });
 
-#if NET_2_0
         public static readonly MethodInfo MakeGenericMethod =
             typeof(MethodInfo).GetMethod("MakeGenericMethod", new Type[] { typeof(Type[]) });
-#endif
 
         public static readonly MethodInfo DisposeMethod =
             typeof(IDisposable).GetMethod("Dispose", Type.EmptyTypes);

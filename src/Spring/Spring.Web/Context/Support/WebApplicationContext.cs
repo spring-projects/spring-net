@@ -158,7 +158,7 @@ namespace Spring.Context.Support
             // register for ContextRegistry.Cleared event - we need to discard our cache in this case
             ContextRegistry.Cleared += new EventHandler(OnContextRegistryCleared);
 
-#if NET_2_0 && !MONO_2_0
+#if !MONO_2_0
             if (HttpRuntime.AppDomainAppVirtualPath != null) // check if we're within an ASP.NET AppDomain!
             {
                 // ensure HttpRuntime has been fully initialized!

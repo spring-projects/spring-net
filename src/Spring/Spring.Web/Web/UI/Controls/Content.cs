@@ -38,25 +38,6 @@ namespace Spring.Web.UI.Controls
     /// within the master page
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
-#if NET_2_0
 	public class Content : System.Web.UI.WebControls.Content
 	{}
-#else
-    [Designer("System.Web.UI.Design.ReadWriteControlDesigner, System.Design")]
-    [PersistChildren(true)]
-    [ParseChildren(false)]
-    public class Content : Control
-    {
-        private String contentPlaceHolderID;
-
-        /// <summary>
-        /// Id of the <see cref="Spring.Web.UI.Controls.ContentPlaceHolder"/> to override.
-        /// </summary>
-        public String ContentPlaceHolderID
-        {
-            get { return contentPlaceHolderID; }
-            set { contentPlaceHolderID = value; }
-        }
-    }
-#endif
 }

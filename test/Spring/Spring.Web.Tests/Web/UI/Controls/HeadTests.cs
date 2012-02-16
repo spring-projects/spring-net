@@ -41,7 +41,6 @@ namespace Spring.Web.UI.Controls
     {
         private const string CRLF = "\r\n";
 
-#if NET_2_0
         [Test]
         public void DontRenderHeadTagIfNestedWithinStandardHeadControl()
         {
@@ -61,7 +60,6 @@ namespace Spring.Web.UI.Controls
                 Assert.AreEqual(expect, result);
             }
         }
-#endif
 
         [Test]
         public void StyleBlockRendersTypeAttribute()

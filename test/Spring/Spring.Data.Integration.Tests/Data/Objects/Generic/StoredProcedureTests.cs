@@ -19,8 +19,6 @@
 #endregion
 
 
-#if NET_2_0
-
 #region Imports
 
 using System;
@@ -30,7 +28,6 @@ using System.Reflection;
 using NUnit.Framework;
 using Spring.Data.Common;
 using Spring.Data.Generic;
-using Spring.Data.Objects.Generic;
 using Spring.Objects;
 
 #endregion
@@ -175,5 +172,3 @@ namespace Spring.Data.Objects.Generic
 
     }
 }
-
-#endif

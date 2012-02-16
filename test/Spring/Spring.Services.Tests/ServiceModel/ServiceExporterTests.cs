@@ -1,4 +1,3 @@
-#if NET_3_0
 #region License
 
 /*
@@ -29,8 +28,6 @@ using System.Net.Security;
 using System.ServiceModel;
 
 using NUnit.Framework;
-using Spring.Objects.Factory.Config;
-using Spring.ServiceModel;
 using Spring.Core.IO;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Xml;
@@ -394,4 +391,3 @@ namespace Spring.ServiceModel
         #endregion
     }
 }
-#endif

@@ -72,10 +72,7 @@ namespace Spring.Transaction.Support
 		private int _timeout = DefaultTransactionDefinition.TIMEOUT_DEFAULT;
 	    private bool _readOnly = false;
         private string _name = null;
-#if NET_2_0
 	    private System.Transactions.EnterpriseServicesInteropOption _esInteropOption;
-
-#endif
 		
 		/// <summary>
         /// Creates a new instance of the
@@ -204,7 +201,6 @@ namespace Spring.Transaction.Support
             set { _name = value;}
 	    }
 
-#if NET_2_0
         /// <summary>
         /// Gets the enterprise services interop option.
         /// </summary>
@@ -214,7 +210,6 @@ namespace Spring.Transaction.Support
             get { return _esInteropOption; }
             set { _esInteropOption = value; }
         }
-#endif
 
 	    #endregion
 

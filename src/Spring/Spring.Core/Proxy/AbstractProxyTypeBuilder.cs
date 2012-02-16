@@ -25,10 +25,7 @@ using System.Collections;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.Serialization;
-using System.Security.Permissions;
-
 using Common.Logging;
-using Spring.Collections;
 using Spring.Core.TypeResolution;
 using Spring.Util;
 
@@ -234,17 +231,14 @@ namespace Spring.Proxy
 				{
                     typeBuilder.SetCustomAttribute((CustomAttributeBuilder)attr);
 				}
-#if NET_2_0
                 else if (attr is CustomAttributeData)
                 {
                     typeBuilder.SetCustomAttribute(
                         ReflectionUtils.CreateCustomAttribute((CustomAttributeData)attr));
                 }
-#endif
 				else if (attr is Attribute)
 				{
-                    typeBuilder.SetCustomAttribute(
-                        ReflectionUtils.CreateCustomAttribute((Attribute)attr));
+                    typeBuilder.SetCustomAttribute(ReflectionUtils.CreateCustomAttribute((Attribute)attr));
 				}
 			}
 		}
@@ -264,13 +258,11 @@ namespace Spring.Proxy
                 {
                     methodBuilder.SetCustomAttribute((CustomAttributeBuilder)attr);
                 }
-#if NET_2_0
                 else if (attr is CustomAttributeData)
                 {
                     methodBuilder.SetCustomAttribute(
                         ReflectionUtils.CreateCustomAttribute((CustomAttributeData)attr));
                 }
-#endif
                 else if (attr is Attribute)
                 {
                     methodBuilder.SetCustomAttribute(
@@ -278,13 +270,10 @@ namespace Spring.Proxy
                 }
             }
 
-#if NET_2_0
             ApplyMethodReturnTypeAttributes(methodBuilder, targetMethod);
-#endif
             ApplyMethodParameterAttributes(methodBuilder, targetMethod);
         }
 
-#if NET_2_0
         /// <summary>
         /// Applies attributes to the proxied method's return type.
         /// </summary>
@@ -312,7 +301,6 @@ namespace Spring.Proxy
                 }
             }
         }
-#endif
 
         /// <summary>
         /// Applies attributes to proxied method's parameters.
@@ -332,13 +320,11 @@ namespace Spring.Proxy
                     {
                         parameterBuilder.SetCustomAttribute((CustomAttributeBuilder)attr);
                     }
-#if NET_2_0
                     else if (attr is CustomAttributeData)
                     {
                         parameterBuilder.SetCustomAttribute(
                             ReflectionUtils.CreateCustomAttribute((CustomAttributeData)attr));
                     }
-#endif
                     else if (attr is Attribute)
                     {
                         parameterBuilder.SetCustomAttribute(
@@ -415,7 +401,6 @@ namespace Spring.Proxy
             return attributes;
         }
 
-#if NET_2_0
         /// <summary>
         /// Calculates and returns the list of attributes that apply to the
         /// specified method's return type.
@@ -463,7 +448,6 @@ namespace Spring.Proxy
 
             return attributes;
         }
-#endif
 
         /// <summary>
         /// Calculates and returns the list of attributes that apply to the
@@ -483,7 +467,6 @@ namespace Spring.Proxy
                 !method.DeclaringType.IsInterface)
             {
                 // add attributes that apply to the target method's parameter
-#if NET_2_0
                 object[] attrs = paramInfo.GetCustomAttributes(false);
                 try
                 {
@@ -508,9 +491,6 @@ namespace Spring.Proxy
                     // http://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=296032
                     attributes.AddRange(attrs);
                 }
-#else
-                attributes.AddRange(paramInfo.GetCustomAttributes(false));
-#endif
             }
 
             // TODO: add attributes defined by configuration
@@ -549,12 +529,10 @@ namespace Spring.Proxy
             {
                 return (attrType == attr.GetType());
             }
-#if NET_2_0
             else if (attr is CustomAttributeData)
             {
                 return (attrType == ((CustomAttributeData)attr).Constructor.DeclaringType);
             }
-#endif
             else if (attr is CustomAttributeBuilder)
             {
                 return (attrType == ((ConstructorInfo)CustomAttributeConstructorField.GetValue(attr)).DeclaringType);

@@ -41,7 +41,6 @@ namespace Spring.Aop.Framework
 
 		}
 
-#if NET_2_0
         [Category("Performance")]
         [Test, Explicit]
         public void InstantiationPerformance()
@@ -56,6 +55,5 @@ namespace Spring.Aop.Framework
             watch.Stop();
             Console.WriteLine("Instantiation time: {0}ms", watch.ElapsedMilliseconds);
         }
-#endif
 	}
 }

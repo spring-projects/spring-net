@@ -36,7 +36,6 @@ namespace Spring.Web.UI.Controls
 	[ToolboxData("<{0}:TabularView runat=\"server\"></{0}:TabularView>")]
 	public class TabularView : View
 	{
-#if NET_2_0
 		private static readonly PropertyInfo s_fiActive =
 			typeof(View).GetProperty("Active", BindingFlags.Instance | BindingFlags.NonPublic);
 
@@ -47,8 +46,8 @@ namespace Spring.Web.UI.Controls
 		{
 			get { return (bool) s_fiActive.GetValue(this, null); }
 		}
-#endif
-		private string m_TabToolTip;
+
+        private string m_TabToolTip;
 
 		/// <summary>
 		/// Get or Set the name of the tab item associated with this view.

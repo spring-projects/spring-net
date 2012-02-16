@@ -18,8 +18,6 @@
 
 #endregion
 
-#if NET_2_0
-
 #region Imports
 
 using System.Collections.Specialized;
@@ -98,5 +96,3 @@ namespace Spring.Web.Providers
         }
     }
 }
-
-#endif

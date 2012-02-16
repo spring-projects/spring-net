@@ -36,9 +36,7 @@ using Spring.Objects.Factory.Attributes;
 
 #endregion
 
-#if NET_2_0
 [assembly: InternalsVisibleTo("ReflectionUtils.IsTypeVisible.AssemblyTestName")]
-#endif
 
 namespace Spring.Util
 {
@@ -227,12 +225,9 @@ namespace Spring.Util
             {
             }
 
-#if NET_2_0
-
             public void MethodWithNullableIntegerArg(int? nullableInteger)
             {
             }
-#endif
         }
 
         #endregion
@@ -546,7 +541,7 @@ namespace Spring.Util
 
             // TODO : actually emit the attribute and check it...
         }
-#if NET_2_0
+
         [Test]
         public void CreatCustomAttriubtesFromCustomAttributeData()
         {
@@ -640,7 +635,6 @@ namespace Spring.Util
 
             }
         }
-
 
         internal class TestClassHavingAttributeWithEnumArraySetInConstructor : IHaveSomeMethod
         {
@@ -736,8 +730,6 @@ namespace Spring.Util
 
         }
 
-
-#endif
         [Test]
         public void CreateCustomAttributeUsingDefaultValuesForTheConstructor()
         {
@@ -926,8 +918,6 @@ namespace Spring.Util
             Assert.AreSame(candidateMethods[1], resolvedMethod);
         }
 
-#if NET_2_0
-
         [Test]
         public void GetMethodByArgumentValuesMatchesNullableArgs()
         {
@@ -956,8 +946,6 @@ namespace Spring.Util
             MethodInfo resolvedMethod = ReflectionUtils.GetMethodByArgumentValues(candidateMethods, new object[] { null });
             Assert.AreSame(candidateMethods[3], resolvedMethod);
         }
-
-#endif
 
         [Test]
         public void GetConstructorByArgumentValuesResolvesToExactMatchIfAvailable()
@@ -1104,7 +1092,6 @@ namespace Spring.Util
             Assert.IsFalse(ReflectionUtils.IsTypeVisible(type));
         }
 
-#if NET_2_0
         private static readonly string FRIENDLY_ASSEMBLY_NAME = "ReflectionUtils.IsTypeVisible.AssemblyTestName";
 
         [Test]
@@ -1205,9 +1192,6 @@ namespace Spring.Util
             Assert.That(ReflectionUtils.IsNullableType(type), Is.False);
         }
 
-
-#endif
-
         [Test]
         public void GetCustomAttributesOnType()
         {
@@ -1268,7 +1252,6 @@ namespace Spring.Util
             Assert.AreEqual(ex, appEx);
         }
 
-#if NET_2_0
         [Test]
         public void CanGetFriendlyNamesForGenericTypes()
         {
@@ -1276,7 +1259,7 @@ namespace Spring.Util
 
             Assert.AreEqual("System.Collections.Generic.List<System.Collections.Generic.Dictionary<string, int>>", ReflectionUtils.GetTypeFriendlyName(t));
         }
-#endif
+
         #endregion
 
         #region Helper Methods
@@ -1520,12 +1503,11 @@ namespace Spring.Util
         {
             return "AssignableMatch";
         }
-#if NET_2_0
+
         public string MethodWithNullableArgument(int? nullableInteger)
         {
             return "NullableArgumentMatch";
         }
-#endif
     }
 
     public sealed class MyCustomAttribute : Attribute

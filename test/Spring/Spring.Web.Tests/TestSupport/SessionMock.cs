@@ -17,9 +17,8 @@ namespace Spring.TestSupport
         private SessionStateMode _mode;
         private string _sessionID;
         private int _codePage;
-#if NET_2_0
         private HttpCookieMode _cookieMode;
-#endif
+
         public SessionMock() : base(CaseInsensitiveHashCodeProvider.Default, CaseInsensitiveComparer.Default)
         {
             Reset();
@@ -32,9 +31,7 @@ namespace Spring.TestSupport
             _isCookieless = false;
             _mode = SessionStateMode.InProc;
             _codePage = -1;
-#if NET_2_0
             _cookieMode = HttpCookieMode.AutoDetect;
-#endif
         }
 
         public void Abandon()
@@ -78,12 +75,10 @@ namespace Spring.TestSupport
             set { _codePage = value; }
         }
 
-#if NET_2_0
         public HttpCookieMode CookieMode
         {
             get { return _cookieMode; }
             set { _cookieMode = value; }
         }
-#endif
     }
 }

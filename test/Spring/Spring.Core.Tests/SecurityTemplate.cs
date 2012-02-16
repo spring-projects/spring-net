@@ -18,8 +18,6 @@
 
 #endregion
 
-#if NET_2_0
-
 using System;
 using System.Configuration;
 using System.Data.SqlClient;
@@ -161,9 +159,7 @@ namespace Spring
                 securityPermissionFlag |= SecurityPermissionFlag.UnmanagedCode;
             }
             mediumTrustPermissionSet.AddPermission(new SecurityPermission(securityPermissionFlag));
-#if NET_2_0
             mediumTrustPermissionSet.AddPermission(new System.Net.Mail.SmtpPermission(System.Net.Mail.SmtpAccess.Connect));
-#endif
             mediumTrustPermissionSet.AddPermission(new SqlClientPermission(PermissionState.Unrestricted));
             mediumTrustPermissionSet.AddPermission(new WebPermission());
             pLevel.AddNamedPermissionSet(mediumTrustPermissionSet);
@@ -521,5 +517,3 @@ namespace Spring
 //        }
     }
 }
-
-#endif

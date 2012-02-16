@@ -34,10 +34,6 @@ using System.Reflection;
 [assembly: AssemblyVersion("1.3.2.40001")]
 #elif NET_3_5
 [assembly: AssemblyVersion("1.3.2.35001")]
-#elif NET_3_0
-[assembly: AssemblyVersion("1.3.2.30001")]
-#elif NET_2_0
-[assembly: AssemblyVersion("1.3.2.20001")]
 #endif
 
 
@@ -80,7 +76,4 @@ using System.Reflection;
 //
 #if STRONG
 [assembly: AssemblyDelaySign(false)]
-#if !NET_2_0
-[assembly: AssemblyKeyFile("Spring.Net.snk")]
-#endif
 #endif

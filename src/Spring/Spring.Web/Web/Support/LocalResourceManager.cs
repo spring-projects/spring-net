@@ -29,14 +29,10 @@ using System.Security.Permissions;
 using System.Web;
 using System.Web.Compilation;
 using System.Web.UI;
-using Spring.Expressions;
-using Spring.Globalization;
 using Spring.Reflection.Dynamic;
 using Spring.Util;
 
 #endregion
-
-#if NET_2_0
 
 namespace Spring.Web.Support
 {
@@ -232,5 +228,3 @@ namespace Spring.Web.Support
         #endregion
     }
 }
-
-#endif

@@ -106,11 +106,7 @@ namespace Spring.Objects.Factory.Config
             Assembly assembly;
             try
             {
-#if NET_2_0
                 assembly = Assembly.Load(AssemblyName);
-#else
-                assembly = Assembly.LoadWithPartialName(AssemblyName);
-#endif
             }
             catch (FileLoadException)
             {

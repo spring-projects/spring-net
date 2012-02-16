@@ -171,11 +171,9 @@ namespace Spring.Transaction
 		private TransactionPropagation _transactionPropagation = TransactionPropagation.NotSupported;
 		private bool _readOnly = false;
         private string _name = null;
-#if NET_2_0
         private System.Transactions.EnterpriseServicesInteropOption _esInteropOption;
 
-#endif
-		#region ITransactionDefinition Members
+        #region ITransactionDefinition Members
 
 		public bool ReadOnly
 		{
@@ -229,14 +227,11 @@ namespace Spring.Transaction
             }
         }
 
-
-#if NET_2_0
         public System.Transactions.EnterpriseServicesInteropOption EnterpriseServicesInteropOption
         {
             get { return _esInteropOption; }
             set { _esInteropOption = value; }
         }
-#endif
 
 		#endregion
 

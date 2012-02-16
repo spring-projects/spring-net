@@ -76,7 +76,6 @@ namespace Spring.TestSupport
             HttpContext ctx = new HttpContext(wr);
             HttpContext.Current = ctx;
             HttpBrowserCapabilities browser = new HttpBrowserCapabilities();
-#if NET_2_0
             browser.Capabilities = new CaseInsensitiveHashtable(); //CollectionsUtil.CreateCaseInsensitiveHashtable();
             browser.Capabilities[string.Empty] = "Test User Agent"; // string.Empty is the key for "user agent"
 
@@ -85,7 +84,7 @@ namespace Spring.TestSupport
             object cachedPathData = ExpressionEvaluator.GetValue(null, "T(System.Web.CachedPathData).GetRootWebPathData()");
             ExpressionEvaluator.SetValue(cachedPathData, "_virtualPath", virtualPathObject);
             ExpressionEvaluator.SetValue(cachedPathData, "_physicalPath", appPath);
-#endif
+
             ctx.Request.Browser = browser;
             string filePath = ctx.Request.FilePath;
             _wr = wr;

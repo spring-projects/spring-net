@@ -211,8 +211,6 @@ namespace Spring.Util
             return ConfigurationErrorsException.GetFilename(node);
         }
 
-
-#if NET_2_0
         /// <summary>
         /// Sets the current <see cref="System.Configuration.Internal.IInternalConfigSystem"/> to be used by <see cref="ConfigurationManager"/>.
         /// </summary>
@@ -290,7 +288,6 @@ namespace Spring.Util
         //        private static SetConfigurationSystemHandler setConfigurationSystem =
         //            CreateDelegate<SetConfigurationSystemHandler>(typeof(ConfigurationManager).GetMethod("SetConfigurationSystem"
         //                                                         , BindingFlags.Static | BindingFlags.NonPublic));
-#endif
 
     }
 }

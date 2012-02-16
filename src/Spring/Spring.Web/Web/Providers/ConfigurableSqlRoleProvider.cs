@@ -18,11 +18,8 @@
 
 #endregion
 
-#if NET_2_0
-
 #region Imports
 
-using System;
 using System.Collections.Specialized;
 using System.Security.Permissions;
 using System.Web;
@@ -99,5 +96,3 @@ namespace Spring.Web.Providers
         }
     }
 }
-
-#endif

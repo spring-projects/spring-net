@@ -45,13 +45,8 @@ namespace Spring.Core.TypeResolution
     {
         #region Fields
 
-#if NET_2_0
         private static readonly ITypeResolver internalTypeResolver
             = new CachedTypeResolver(new GenericTypeResolver());
-#else
-        private static readonly ITypeResolver internalTypeResolver
-            = new CachedTypeResolver(new TypeResolver());
-#endif
 
         #endregion
 

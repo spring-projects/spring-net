@@ -53,7 +53,6 @@ namespace Spring.Util
 			Assert.AreEqual(i1, i2);
 		}
 
-#if NET_2_0
 		[Test]
 		public void MediumTrustAllowsCopyingBetweenTypesFromSameModule()
 		{
@@ -92,7 +91,6 @@ namespace Spring.Util
                 ReflectionUtils.MemberwiseCopy(a, b);
             }
         }
-#endif
     }
 	
 	#region Test Support Classes

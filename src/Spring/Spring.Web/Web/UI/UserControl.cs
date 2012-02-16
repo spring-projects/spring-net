@@ -25,17 +25,12 @@ using System.Collections;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Globalization;
-using System.Reflection;
 using System.Resources;
 using System.Web;
-#if NET_2_0
-using System.Web.Compilation;
-#endif
 using System.Web.UI;
 using Spring.Collections;
 using Spring.Context;
 using Spring.Context.Support;
-using Spring.Core;
 using Spring.DataBinding;
 using Spring.Globalization;
 using Spring.Util;
@@ -88,37 +83,6 @@ namespace Spring.Web.UI
         {
             InitializeNavigationSupport();
         }
-
-#if !NET_2_0
-        /// <summary>
-        /// Gets a value indicating whether this instance is in design mode.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if this instance is in design mode; otherwise, <c>false</c>.
-        /// </value>
-        protected bool DesignMode
-        {
-            get { return this.Context == null; }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether view state is enabled for this page.
-        /// </summary>
-        protected internal bool IsViewStateEnabled
-        {
-            get
-            {
-                for (Control parent = this; parent != null; parent = parent.Parent)
-                {
-                    if (!parent.EnableViewState)
-                    {
-                        return false;
-                    }
-                }
-                return true;
-            }
-        }
-#endif
 
         /// <summary>
         /// Initializes user control.
@@ -297,7 +261,6 @@ namespace Spring.Web.UI
             return control;
         }
 
-#if NET_2_0
         /// <summary>
         /// Obtains a <see cref="T:System.Web.UI.UserControl"/> object by type
         /// and injects dependencies according to Spring config file.
@@ -313,7 +276,6 @@ namespace Spring.Web.UI
             control = WebDependencyInjectionUtils.InjectDependenciesRecursive( defaultApplicationContext, control );
             return control;
         }
-#endif
 
         #endregion
 
@@ -1046,11 +1008,7 @@ namespace Spring.Web.UI
         /// <returns>Local ResourceManager instance.</returns>
         private ResourceManager GetLocalResourceManager()
         {
-#if !NET_2_0
-            return new ResourceManager(GetType().BaseType);
-#else
             return LocalResourceManager.GetLocalResourceManager(this);
-#endif
         }
 
         /// <summary>

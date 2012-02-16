@@ -305,12 +305,8 @@ namespace Spring.Objects.Factory.Support
                 factoryClass = definition.ObjectType;
             }
 
-#if NET_2_0
             GenericArgumentsHolder genericArgsInfo = new GenericArgumentsHolder(definition.FactoryMethodName);
             MethodInfo[] factoryMethodCandidates = FindMethods(genericArgsInfo.GenericMethodName, expectedArgCount, isStatic, factoryClass);
-#else
-            MethodInfo[] factoryMethodCandidates = FindMethods(definition.FactoryMethodName, expectedArgCount, isStatic, factoryClass);
-#endif
 
             bool autowiring = (definition.AutowireMode == AutoWiringMode.Constructor);
 
@@ -318,7 +314,6 @@ namespace Spring.Objects.Factory.Support
             for (int i = 0; i < factoryMethodCandidates.Length; i++)
             {
                 MethodInfo factoryMethodCandidate = factoryMethodCandidates[i];
-#if NET_2_0
                 if (genericArgsInfo.ContainsGenericArguments)
                 {
                     string[] unresolvedGenericArgs = genericArgsInfo.GetGenericArguments();
@@ -332,7 +327,6 @@ namespace Spring.Objects.Factory.Support
                     }
                     factoryMethodCandidate = factoryMethodCandidate.MakeGenericMethod(paramTypes);
                 }
-#endif
                 if (arguments == null || arguments.Length == 0)
                 {
                     Type[] paramTypes = ReflectionUtils.GetParameterTypes(factoryMethodCandidate.GetParameters());

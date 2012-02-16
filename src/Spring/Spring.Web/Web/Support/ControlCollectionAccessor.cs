@@ -40,18 +40,15 @@ namespace Spring.Web.Support
         static ControlCollectionAccessor()
         {
             IDynamicField owner = null;
-#if NET_2_0
+
             SecurityCritical.ExecutePrivileged( new PermissionSet(PermissionState.Unrestricted), delegate 
             {
-#endif
 #if MONO_2_0
                 owner = new SafeField(typeof (ControlCollection).GetField("owner", BindingFlags.Instance | BindingFlags.NonPublic));
 #else
                 owner = new SafeField(typeof (ControlCollection).GetField("_owner", BindingFlags.Instance | BindingFlags.NonPublic));
 #endif
-#if NET_2_0
             });
-#endif
             _owner = owner;
         }
 

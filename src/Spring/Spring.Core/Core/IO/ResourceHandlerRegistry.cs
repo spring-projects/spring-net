@@ -115,9 +115,7 @@ namespace Spring.Core.IO
                 RegisterResourceHandler("file", typeof(FileSystemResource));
                 RegisterResourceHandler("http", typeof(UrlResource));
                 RegisterResourceHandler("https", typeof(UrlResource));
-#if NET_2_0
                 RegisterResourceHandler("ftp", typeof(UrlResource));
-#endif
                 RegisterResourceHandler("assembly", typeof(AssemblyResource));
 
                 // register custom resource handlers
@@ -245,7 +243,6 @@ namespace Spring.Core.IO
 
             lock (resourceHandlers.SyncRoot)
             {
-#if NET_2_0
                 SecurityCritical.ExecutePrivileged( new SecurityPermission(SecurityPermissionFlag.Infrastructure), delegate
                 {
                     // register generic uri parser for this scheme
@@ -254,13 +251,11 @@ namespace Spring.Core.IO
                         UriParser.Register(new TolerantUriParser(), protocolName, 0);
                     }
                 });
-#endif
                 IDynamicConstructor ctor = GetResourceConstructor(handlerType);
                 resourceHandlers[protocolName] = ctor;
             }
         }
 
-#if NET_2_0
         /// <summary>
         /// Allows to create any arbitrary Url format
         /// </summary>
@@ -274,7 +269,6 @@ namespace Spring.Core.IO
                 : base(DefaultOptions)
             { }
         }
-#endif
 
         private static IDynamicConstructor GetResourceConstructor(Type handlerType)
         {

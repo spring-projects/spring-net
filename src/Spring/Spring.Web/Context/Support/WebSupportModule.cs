@@ -80,11 +80,10 @@ namespace Spring.Context.Support
         // Required for Session End event handling
         private static int CACHEKEYPREFIXLENGTH = 0;
         private static CacheItemRemovedCallback s_originalCallback;
-#if NET_2_0
+
         // required to enable accessing HttpContext.Request during IHttpModule.Init() in integrated mode
         private static readonly FieldInfo fiHideRequestResponse;
         private static readonly SafeField ContextHideRequestResponse;
-#endif
 
         /// <summary>
         /// For webapplications always
@@ -97,7 +96,7 @@ namespace Spring.Context.Support
         static WebSupportModule()
         {
             s_log = LogManager.GetLogger(typeof(WebSupportModule));
-#if NET_2_0
+
             // required to enable accessing HttpContext.Request during IHttpModule.Init() in integrated mode
             ContextHideRequestResponse = null;
             try
@@ -110,7 +109,6 @@ namespace Spring.Context.Support
             {
                 s_log.Warn(string.Format("failed reflecting field HttpContext.HideRequestResponse due to security restrictions {0}", sec));
             }
-#endif
 
             // register additional resource handler
             ResourceHandlerRegistry.RegisterResourceHandler(WebUtils.DEFAULT_RESOURCE_PROTOCOL, typeof(WebResource));
@@ -153,7 +151,6 @@ namespace Spring.Context.Support
             app.PreRequestHandlerExecute += new EventHandler(OnConfigureHandler);
             app.EndRequest += new EventHandler(VirtualEnvironment.RaiseEndRequest);
 
-#if NET_2_0
             // TODO: this is only a workaround to get us up & running in IIS7/integrated mode
             // We must review all code for relative virtual paths - they must be resolved to application-relative paths
             // during parsing of the object definitions
@@ -164,7 +161,6 @@ namespace Spring.Context.Support
                 ContextHideRequestResponse.SetValue(app.Context, false);
             }
             
-#endif
             try
             {
                 // ensure context is instantiated
@@ -179,9 +175,7 @@ namespace Spring.Context.Support
             }
             finally
             {
-#if NET_2_0
                 if (ContextHideRequestResponse!=null) ContextHideRequestResponse.SetValue(app.Context, hideRequestResponse);
-#endif
             }
         }
 

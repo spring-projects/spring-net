@@ -131,7 +131,6 @@ namespace Spring.EnterpriseServices
             }
         }
 
-#if NET_2_0
         [Test, Explicit("causes troubles due to registry pollution by COM registration")]
         public void CanExportAopProxyToServer()
         {
@@ -154,7 +153,6 @@ namespace Spring.EnterpriseServices
                 exporter.UnregisterServicedComponents(assemblyFile);
             }
         }
-#endif
 
         private Type ExportObject(EnterpriseServicesExporter exporter, FileInfo assemblyFile, IConfigurableApplicationContext appCtx, string objectName)
         {

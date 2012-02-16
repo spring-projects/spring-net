@@ -208,7 +208,6 @@ namespace Spring.Objects.Factory.Support
             ISet returnTypes = new HybridSet();
             foreach (MethodInfo factoryMethod in candidates)
             {
-#if NET_2_0
                 GenericArgumentsHolder genericArgsInfo = new GenericArgumentsHolder(definition.FactoryMethodName);
                 if (factoryMethod.IsStatic == isStatic && factoryMethod.Name.Equals(genericArgsInfo.GenericMethodName)
                     && ReflectionUtils.GetParameterTypes(factoryMethod).Length >= minNrOfArgs
@@ -229,13 +228,6 @@ namespace Spring.Objects.Factory.Support
                         returnTypes.Add(factoryMethod.ReturnType);
                     }
                 }
-#else
-                if (factoryMethod.IsStatic == isStatic && factoryMethod.Name.Equals(definition.FactoryMethodName)
-                    && ReflectionUtils.GetParameterTypes(factoryMethod).Length >= minNrOfArgs)
-                {
-                    returnTypes.Add(factoryMethod.ReturnType);
-                }
-#endif
             }
             if (returnTypes.Count == 1)
             {

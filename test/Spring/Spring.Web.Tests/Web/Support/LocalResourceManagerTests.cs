@@ -23,8 +23,6 @@ using NUnit.Framework;
 using NUnitAspEx.Client;
 using Spring.TestSupport;
 
-#if NET_2_0
-
 namespace Spring.Web.Support
 {
     /// <summary>
@@ -56,5 +54,3 @@ namespace Spring.Web.Support
         }
     }
 }
-
-#endif // NET_2_0

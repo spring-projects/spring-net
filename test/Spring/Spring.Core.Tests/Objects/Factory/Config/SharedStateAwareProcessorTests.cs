@@ -178,53 +178,13 @@ namespace Spring.Objects.Factory.Config
 
         private static IDisposable Record( MockRepository mocks )
         {
-#if NET_2_0
             return mocks.Record();
-#else
-            return new RecordModeChanger(mocks);
-#endif
         }
 
         private static IDisposable Playback( MockRepository mocks )
         {
-#if NET_2_0
             return mocks.Playback();
-#else
-            return new PlaybackModeChanger(mocks);
-#endif
         }
-
-#if !NET_2_0
-        private class RecordModeChanger : IDisposable
-        {
-            private MockRepository _mocks;
-
-            public RecordModeChanger(MockRepository mocks)
-            {
-                _mocks = mocks;
-            }
-
-            public void Dispose()
-            {
-                _mocks.ReplayAll();
-            }
-        }
-
-        private class PlaybackModeChanger : IDisposable
-        {
-            private MockRepository _mocks;
-
-            public PlaybackModeChanger(MockRepository mocks)
-            {
-                _mocks = mocks;
-            }
-
-            public void Dispose()
-            {
-                _mocks.VerifyAll();
-            }
-        }
-#endif
 
         #endregion Rhino.Mocks Compatibility Adapter
     }

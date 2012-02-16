@@ -45,7 +45,6 @@ namespace Spring.Util
             Assert.AreEqual("Iron Brew", dude.Soda); // should have got through before exception was thrown
         }
 
-#if NET_2_0
         [Test]
         public void RaiseSwallowsExceptionRaisedByHandlerButCallsAllOtherHandlers()
         {
@@ -68,6 +67,5 @@ namespace Spring.Util
             Assert.IsTrue(secondCall);
             Assert.IsTrue(thirdCall);
         }
-#endif
     }
 }

@@ -18,12 +18,8 @@
 
 #endregion
 
-#if NET_2_0
-
 #region Imports
 
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using Spring.Util.Generic;
 
@@ -72,4 +68,3 @@ namespace Spring.Dao.Support.Generic
 	}
 
 }
-#endif

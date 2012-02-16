@@ -20,7 +20,7 @@
 
 using System;
 using System.Runtime.Serialization;
-#if NET_2_0  && !MONO_2_0
+#if !MONO_2_0
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
 #endif
@@ -59,7 +59,7 @@ namespace Spring.Expressions
         /// </returns>
         protected override object Get(object context, EvaluationContext evalContext)
         {
-#if NET_2_0 && !MONO_2_0
+#if !MONO_2_0
             string text = GetLeftValue( context, evalContext ) as string;
             string pattern = GetRightValue( context, evalContext ) as string;
 

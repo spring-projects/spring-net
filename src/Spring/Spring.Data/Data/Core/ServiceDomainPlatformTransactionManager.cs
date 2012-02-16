@@ -220,7 +220,6 @@ namespace Spring.Data.Core
                 case System.Data.IsolationLevel.Serializable:
                     serviceConfig.IsolationLevel = TransactionIsolationLevel.Serializable;
                     break;
-#if NET_2_0
                 case System.Data.IsolationLevel.Snapshot:
                     if (log.IsInfoEnabled)
                     {
@@ -228,7 +227,6 @@ namespace Spring.Data.Core
                     }   
                     serviceConfig.IsolationLevel = TransactionIsolationLevel.ReadCommitted;  //err on the side of consistency
                     break;
-#endif
                 case System.Data.IsolationLevel.Unspecified:
                     serviceConfig.IsolationLevel = TransactionIsolationLevel.Any;
                     break;

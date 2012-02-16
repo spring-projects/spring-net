@@ -24,10 +24,6 @@ using System;
 using NUnit.Framework;
 using Spring.Objects;
 
-#if NET_2_0
-using System.Collections.Generic;
-#endif
-
 #endregion
 
 namespace Spring.Core.TypeResolution
@@ -59,7 +55,6 @@ namespace Spring.Core.TypeResolution
             Assert.AreEqual(null, tah.AssemblyName);
         }
 
-#if NET_2_0
         [Test]
         public void CanTakeUnqualifiedGenericType()
         {
@@ -79,6 +74,5 @@ namespace Spring.Core.TypeResolution
             Assert.AreEqual(testType.FullName, tah.TypeName);
             Assert.AreEqual(testType.Assembly.FullName, tah.AssemblyName);
         }
-#endif
     }
 }

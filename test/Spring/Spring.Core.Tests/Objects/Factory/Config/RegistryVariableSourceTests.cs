@@ -42,10 +42,8 @@ namespace Spring.Objects.Factory.Config
         {
             key = Registry.CurrentUser.CreateSubKey("RegistryVariableSourceTests");
             key.SetValue("name", "Aleks Seovic");
-#if NET_2_0 
             key.SetValue("computer_name", "%COMPUTERNAME% is the name of my computer", RegistryValueKind.ExpandString);
             key.SetValue("age", 32, RegistryValueKind.DWord);
-#endif            
 			key.SetValue("family", new string[] {"Marija", "Ana", "Nadja"});
             key.SetValue("bday", new byte[] {24, 8, 74});
 			key.Flush();
@@ -65,11 +63,9 @@ namespace Spring.Objects.Factory.Config
 
             // existing vars
             Assert.AreEqual("Aleks Seovic", rvs.ResolveVariable("name"));
-#if NET_2_0 
             Assert.AreEqual(Environment.GetEnvironmentVariable("COMPUTERNAME") + " is the name of my computer",
                             rvs.ResolveVariable("computer_name"));
             Assert.AreEqual("32", rvs.ResolveVariable("age"));
-#endif            
 			// multi_sz
 			Assert.AreEqual( "Marija,Ana,Nadja", rvs.ResolveVariable("family"));
 			// binary

@@ -18,8 +18,6 @@
 
 #endregion
 
-#if NET_2_0
-
 using System.Data;
 
 namespace Spring.Data.Generic
@@ -36,5 +34,3 @@ namespace Spring.Data.Generic
     /// <returns>An arbitrary result object or null if none.</returns>
     public delegate T ResultSetExtractorDelegate<T>(IDataReader reader);
 }
-
-#endif

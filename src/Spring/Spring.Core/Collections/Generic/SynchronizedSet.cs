@@ -1,8 +1,5 @@
 /* Copyright © 2002-2011 by Aidant Systems, Inc., and by Jason Smith. */
 
-#if NET_2_0
-
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -264,6 +261,3 @@ namespace Spring.Collections.Generic
         }
     }
 }
-
-
-#endif

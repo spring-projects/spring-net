@@ -65,7 +65,7 @@ namespace Spring.Objects.Factory.Config
             // non-existant variable
             Assert.IsNull(vs.ResolveVariable("dummy"));
         }
-#if NET_2_0 && !NET_3_5
+#if !NET_3_5
         [Test]
         public void TestVariableResolutionFromApplicationSettingsSchema()
         {

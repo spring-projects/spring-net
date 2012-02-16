@@ -29,14 +29,8 @@ using System.Web.Services;
 
 using Spring.Context;
 using Spring.Context.Support;
-using Spring.Objects.Factory.Config;
 using Spring.Util;
 using Spring.Web.Support;
-
-#if NET_2_0
-using WSConfig = System.Web.Services.Configuration.WebServicesSection;
-using WSProtocol = System.Web.Services.Configuration.WebServiceProtocols;
-#endif
 
 #if MONO_2_0
 using System.Web.Compilation;
@@ -126,11 +120,7 @@ namespace Spring.Web.Services
 
             if (serviceType == null)
             {
-#if NET_2_0
                 serviceType = WebServiceParser.GetCompiledType(url, context);
-#else
-                serviceType = WebServiceParser.GetCompiledType(path, context);
-#endif
             }
 			
 

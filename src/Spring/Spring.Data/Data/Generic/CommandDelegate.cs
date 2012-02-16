@@ -18,8 +18,6 @@
 
 #endregion
 
-#if NET_2_0
-
 using System.Data.Common;
 
 namespace Spring.Data.Generic
@@ -46,4 +44,3 @@ namespace Spring.Data.Generic
     /// <author>Mark Pollack</author>
     public delegate T CommandDelegate<T>(DbCommand command);
 }
-#endif

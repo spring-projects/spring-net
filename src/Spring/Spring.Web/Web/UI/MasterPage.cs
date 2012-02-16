@@ -26,80 +26,20 @@ using System.Collections.Specialized;
 using System.Web.UI;
 using Spring.Collections;
 using Spring.Validation;
-using Spring.Web.UI.Controls;
 using IValidator = Spring.Validation.IValidator;
 
-#if NET_2_0
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.Globalization;
-using Spring.Util;
 using System.ComponentModel;
 using System.Globalization;
-using System.Reflection;
 using System.Resources;
-using System.Web;
-using System.Web.Compilation;
 using Spring.Web.Support;
-#endif
 
 #endregion Imports
 
 namespace Spring.Web.UI
 {
-#if !NET_2_0
-    
-    #region ASP.NET 1.1 Spring Master Page Implementation
-
-    /// <summary>
-    /// Spring.NET Master Page implementation for ASP.NET 1.1
-    /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    public class MasterPage : UserControl
-    {
-        /// <summary>
-        /// Initializes master page.
-        /// </summary>
-        public void Initialize(Page childPage)
-        {
-            InitializeAsUserControl(childPage);
-            this.ID = "masterPage";
-
-            Control[] controls = new Control[childPage.Controls.Count];
-            childPage.Controls.CopyTo(controls, 0);
-
-            for (int i = 0; i < controls.Length; i++)
-            {
-                if (controls[i] is Content)
-                {
-                    Content content = (Content) controls[i];
-                    ContentPlaceHolder placeholder = (ContentPlaceHolder) this.FindControl(content.ContentPlaceHolderID);
-                    if (placeholder == null)
-                    {
-                        throw new ArgumentException("Content placeholder " + content.ContentPlaceHolderID + " does not exist in the master page.");
-                    }
-                    
-                    placeholder.Content = content;
-                }
-            }
-
-            childPage.Controls.AddAt(0, this);
-        }
-
-
-		/// <summary>
-		/// Delegate validation errors to the owning page.
-		/// </summary>
-    	public override IValidationErrors ValidationErrors
-    	{
-    		get { return Page.ValidationErrors; }
-    	}
-    }
-
-    #endregion    
-
-#else
-
     #region ASP.NET 2.0 Spring Master Page Implementation
     
     /// <summary>
@@ -674,6 +614,4 @@ namespace Spring.Web.UI
     }
 
     #endregion
-
-#endif
 }

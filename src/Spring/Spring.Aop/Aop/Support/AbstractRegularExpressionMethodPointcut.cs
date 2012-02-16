@@ -252,7 +252,6 @@ namespace Spring.Aop.Support
             string patt = string.Empty;
             patt = String.Format("{0}.{1}", method.DeclaringType, method.Name);
 
-#if NET_2_0
             if (method.DeclaringType.IsGenericType)
             {
                 patt = String.Format("{0}.{1}", ReflectionUtils.GetTypeFriendlyName(method.DeclaringType), method.Name);
@@ -261,7 +260,7 @@ namespace Spring.Aop.Support
             {
                 patt = String.Format("{0}.{1}", method.DeclaringType, method.Name);
             }
-#endif            
+
             for (int i = 0; i < this.Patterns.Length; ++i)
             {
                 bool matched = Matches(patt, i);

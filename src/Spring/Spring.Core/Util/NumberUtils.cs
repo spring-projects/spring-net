@@ -283,10 +283,8 @@ namespace Spring.Util
                 return (bool)m | (bool)n;
             else if (n is Int32)
                 return (Int32)m | (Int32)n;
-#if NET_2_0
             else if (n is Int16)
                 return (Int16)m | (Int16)n;
-#endif
             else if (n is Int64)
                 return (Int64)m | (Int64)n;
             else if (n is UInt16)
@@ -297,7 +295,6 @@ namespace Spring.Util
                 return (UInt64)m | (UInt64)n;
             else if (n is Byte)
                 return (Byte)m | (Byte)n;
-#if NET_2_0
             else if (n is SByte)
             {
                 if (SystemUtils.MonoRuntime)
@@ -309,7 +306,6 @@ namespace Spring.Util
                 }
                 return (SByte) ((SByte) m | (SByte) n);
             }
-#endif
             throw new ArgumentException(string.Format("'{0}' and/or '{1}' are not one of the supported integral types.", m, n));
         }
 

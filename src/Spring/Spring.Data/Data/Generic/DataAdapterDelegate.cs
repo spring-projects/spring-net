@@ -18,8 +18,6 @@
 
 #endregion
 
-#if NET_2_0
-
 using System.Data;
 
 namespace Spring.Data.Generic
@@ -36,4 +34,3 @@ namespace Spring.Data.Generic
     public delegate T DataAdapterDelegate<T>(IDbDataAdapter dataAdapter);
    
 }
-#endif

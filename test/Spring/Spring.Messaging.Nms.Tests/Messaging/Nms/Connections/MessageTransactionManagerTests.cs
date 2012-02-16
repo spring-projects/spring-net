@@ -20,11 +20,9 @@
 
 #region Imports
 
-using System;
 using Apache.NMS;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Spring.Messaging.Nms.Connections;
 using Spring.Messaging.Nms.Core;
 using Spring.Transaction;
 using Spring.Transaction.Support;
@@ -96,7 +94,6 @@ namespace Spring.Messaging.Nms.Connections
         /**
          * TODO because using anonymous delegates - refactor to support .net 1.1 later.
          */
-#if NET_2_0
         [Test]
         public void ParticipatingTransactionWithCommit()
         {
@@ -262,7 +259,6 @@ namespace Spring.Messaging.Nms.Connections
             mocks.VerifyAll();
 
         }
-#endif
 
         private static void SetupRollbackExpectations(IConnection connection, IConnectionFactory connectionFactory, ISession session)
         {

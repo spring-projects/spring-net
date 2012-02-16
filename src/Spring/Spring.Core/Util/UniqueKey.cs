@@ -49,10 +49,7 @@ namespace Spring.Util
 	/// </example>
     [Serializable]
     [TypeConverter(typeof(UniqueKeyConverter))]
-    public sealed class UniqueKey 
-#if NET_2_0
-        : IEquatable<UniqueKey>
-#endif
+    public sealed class UniqueKey : IEquatable<UniqueKey>
     {
         private readonly string _generatedKey;
 

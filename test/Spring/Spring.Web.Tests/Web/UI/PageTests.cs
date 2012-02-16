@@ -75,7 +75,6 @@ namespace Spring.Web.UI
             Page child;
             MockValidator mockValidator;
 
-#if NET_2_0
             child = new Page();
             mockValidator = new MockValidator();
             mockValidator.ValidationGroup = "theValidationGroup";
@@ -83,7 +82,6 @@ namespace Spring.Web.UI
 
             child.Validate(mockValidator.ValidationGroup);
             Assert.IsTrue(mockValidator.WasCalled);
-#endif
 
             child = new Page();
             mockValidator = new MockValidator();

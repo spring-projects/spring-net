@@ -162,7 +162,7 @@ namespace Spring.Objects.Factory
             IDictionary objs = lof.GetObjectsOfType(typeof(TestObject));
             Assert.AreEqual(1, objs.Count);
         }
-#if NET_2_0
+
         [Test(Description = "http://opensource2.atlassian.com/projects/spring/browse/SPRNET-112")]
         public void ObjectCreatedViaStaticGenericFactoryMethodUsesReturnTypeOfGenericFactoryMethodAsTheObjectType()
         {
@@ -188,7 +188,7 @@ namespace Spring.Objects.Factory
             IDictionary objs = lof.GetObjectsOfType(typeof(TestGenericObject<string, int>));
             Assert.AreEqual(1, objs.Count);
         }
-#endif
+
         /// <summary>
         /// Object instantiation through factory method should not require type attribute.
         /// </summary>

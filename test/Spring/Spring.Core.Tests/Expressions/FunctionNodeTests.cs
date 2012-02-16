@@ -79,7 +79,6 @@ namespace Spring.Expressions
             return string.Format("{0},{1},{2}", this.GetHashCode(), arg1, arg2);
         }
 
-#if NET_2_0
         [Category("Performance")]
         [Test, Explicit]
         public void ExecutesDelegatePerformance()
@@ -116,6 +115,5 @@ namespace Spring.Expressions
                 }
             }
         }
-#endif
     }
 }

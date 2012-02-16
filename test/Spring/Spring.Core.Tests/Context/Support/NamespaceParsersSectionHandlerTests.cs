@@ -100,11 +100,7 @@ namespace Spring.Context.Support
 		}
 
 		[Test]
-#if NET_2_0
         [ExpectedException(typeof(ConfigurationErrorsException))]
-#else
-        [ExpectedException(typeof (ConfigurationException))]
-#endif
 		public void WithParserElementThatIsMissingTheTypeAttribute()
 		{
 			const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>

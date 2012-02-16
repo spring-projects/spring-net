@@ -28,9 +28,7 @@ namespace Spring
         public string Name;
         public string Nationality;
         public string[] Inventions;
-#if NET_2_0
         public DateTime? DateOfGraduation;
-#endif
         private DateTime dob;
         private Place pob;
 

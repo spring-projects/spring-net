@@ -81,12 +81,7 @@ namespace Spring.Objects.Factory.Xml
 
         private static IDictionary parsers;
         private readonly static IDictionary wellknownNamespaceParserTypeNames;
-
-#if !NET_2_0
-        private static XmlSchemaCollection schemas;
-#else
         private static XmlSchemaSet schemas;
-#endif
 
         #endregion
 
@@ -117,12 +112,8 @@ namespace Spring.Objects.Factory.Xml
         public static void Reset()
         {
             parsers = new HybridDictionary();
-#if !NET_2_0
-            schemas = new XmlSchemaCollection();
-#else
             schemas = new XmlSchemaSet();
             schemas.XmlResolver = new XmlResourceUrlResolver();            
-#endif
 
             RegisterParser(new ObjectsNamespaceParser());
             // register custom config parsers
@@ -203,11 +194,7 @@ namespace Spring.Objects.Factory.Xml
         /// <returns>
         /// A schema collection containing validation schemas for all registered parsers.
         /// </returns>
-#if !NET_2_0
-        public static XmlSchemaCollection GetSchemas()
-#else
         public static XmlSchemaSet GetSchemas()
-#endif
         {
             return schemas;
         }

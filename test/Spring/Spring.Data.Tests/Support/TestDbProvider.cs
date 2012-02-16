@@ -98,7 +98,6 @@ namespace Spring.Support
 
         public bool IsDataAccessException(Exception e)
         {
-#if NET_2_0
             if (e is System.Data.Common.DbException)
             {
                 return true;
@@ -107,9 +106,6 @@ namespace Spring.Support
             {
                 return false;
             }
-#else       
-            return IsDataAccessExceptionBCL11(e);
-#endif
         }
 
 	    public bool IsDataAccessExceptionBCL11(Exception e)

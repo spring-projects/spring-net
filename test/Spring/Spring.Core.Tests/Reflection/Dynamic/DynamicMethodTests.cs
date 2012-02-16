@@ -83,7 +83,6 @@ namespace Spring.Reflection.Dynamic
 
         #endregion
 
-#if NET_2_0
         private string RespectsPermissionsPrivateMethod()
         {
             return "Result";
@@ -131,7 +130,6 @@ namespace Spring.Reflection.Dynamic
             catch (MethodAccessException)
             { }
         }
-#endif
 
         [Test]
         public void TestInstanceMethods()
@@ -158,8 +156,6 @@ namespace Spring.Reflection.Dynamic
             Assert.IsTrue((bool)isNullOrEmpty.Invoke(null, new object[] { String.Empty }));
             Assert.IsFalse((bool)isNullOrEmpty.Invoke(null, new object[] { "Ana Maria" }));
         }
-
-#if NET_2_0
 
         internal class TheClassAsArgument { }
 
@@ -192,7 +188,7 @@ namespace Spring.Reflection.Dynamic
 
             Assert.AreEqual(dt, dm.Invoke(null, dt));
         }
-#endif
+
         [Test]
         public void PassInvalidNumberOfArguments()
         {
@@ -340,7 +336,7 @@ namespace Spring.Reflection.Dynamic
             {
                 return arg;
             }
-#if NET_2_0
+
             public static object Invoke(object target, object[] args)
             {
                 return PassNullableArgumentStatic((DateTime?)(args[0]));
@@ -355,7 +351,6 @@ namespace Spring.Reflection.Dynamic
             {
                 return arg;
             }
-#endif
         }
         #endregion
     }

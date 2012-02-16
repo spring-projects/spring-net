@@ -244,10 +244,7 @@ namespace Spring.Transaction.Interceptor
                 ComposedCriteria searchCriteria = new ComposedCriteria();
                 searchCriteria.Add(new MethodNameMatchCriteria(method.Name));
                 searchCriteria.Add(new MethodParametersCountCriteria(parameters.Length));
-#if NET_2_0
-                searchCriteria.Add(new MethodGenericArgumentsCountCriteria(
-                    method.GetGenericArguments().Length));
-#endif
+                searchCriteria.Add(new MethodGenericArgumentsCountCriteria(method.GetGenericArguments().Length));
                 searchCriteria.Add(new MethodParametersCriteria(ReflectionUtils.GetParameterTypes(parameters)));
 
                 MemberInfo[] matchingMethods = targetType.FindMembers(

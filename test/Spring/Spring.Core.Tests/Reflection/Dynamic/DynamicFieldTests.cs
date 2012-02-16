@@ -132,9 +132,6 @@ namespace Spring.Reflection.Dynamic
             Assert.AreEqual(s1, s2);
         }
 
-
-#if NET_2_0
-
         [Test]
         public void CanReadPrivateReadOnlyField()
         {
@@ -165,7 +162,6 @@ namespace Spring.Reflection.Dynamic
                 Assert.IsTrue( sex.Message.IndexOf("ReflectionPermission") > -1 );
             }
         }
-#endif
 
         [Test]
         public void CannotSetStaticReadOnlyField()

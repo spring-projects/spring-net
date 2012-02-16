@@ -21,17 +21,11 @@
 #region Imports
 
 using System;
-using System.Globalization;
 using System.Collections;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Web.Services;
-
-using Spring.Context;
-using Spring.Context.Support;
-using Spring.Core;
 using Spring.Core.TypeResolution;
-using Spring.Objects;
 using Spring.Objects.Factory;
 using Spring.Util;
 using Spring.Proxy;
@@ -90,9 +84,7 @@ namespace Spring.Web.Services
 
         #region Fields
 
-#if NET_2_0
         private WsiProfiles _wsiProfile = WsiProfiles.BasicProfile1_1;
-#endif
         private readonly string EXPORTER_ID = Guid.NewGuid().ToString();
         private Type _webServiceBaseType = typeof(WebService);
         private string _targetName;
@@ -174,7 +166,6 @@ namespace Spring.Web.Services
 
         #region Properties
 
-#if NET_2_0
         /// <summary>
         /// Gets or Sets the Web Services Interoperability (WSI) specification 
         /// to which the Web Service claims to conform.
@@ -187,7 +178,6 @@ namespace Spring.Web.Services
             get { return _wsiProfile; }
             set { _wsiProfile = value; }
         }
-#endif
 
         /// <summary>
         /// Gets or sets the base type that web service should inherit.
@@ -397,11 +387,7 @@ namespace Spring.Web.Services
         /// </summary>
         protected virtual void GenerateProxy()
         {
-#if NET_2_0
             IProxyTypeBuilder builder = new WebServiceProxyTypeBuilder(this, Description, Name, Namespace, WsiProfile);
-#else
-            IProxyTypeBuilder builder = new WebServiceProxyTypeBuilder(this, Description, Name, Namespace);
-#endif
             builder.Name = WebUtils.GetPageName(objectName);
             builder.BaseType = WebServiceBaseType;
             builder.TargetType = objectFactory.GetType(TargetName);
@@ -431,9 +417,7 @@ namespace Spring.Web.Services
             private static readonly MethodInfo WebServiceExporter_GetTargetInstance = typeof(WebServiceExporter).GetMethod( "GetTarget", new Type[] { typeof( string ) } );
             private WebServiceExporter exporter;
             private CustomAttributeBuilder webServiceAttribute;
-#if NET_2_0
             private CustomAttributeBuilder webServiceBindingAttribute;
-#endif
 
             #endregion
 
@@ -446,7 +430,7 @@ namespace Spring.Web.Services
                 // Creates a WebServiceAttribute from configuration info
                 this.webServiceAttribute = CreateWebServiceAttribute(description, name, ns);
             }
-#if NET_2_0
+
             public WebServiceProxyTypeBuilder(WebServiceExporter exporter, string description, string name, string ns, WsiProfiles wsiProfile)
             {
                 this.exporter = exporter;
@@ -468,7 +452,6 @@ namespace Spring.Web.Services
                 }
                 return cabb.Build();
             }
-#endif
 
             private static CustomAttributeBuilder CreateWebServiceAttribute(string description, string name, string ns)
             {
@@ -526,9 +509,8 @@ namespace Spring.Web.Services
                 IList attrs = base.GetTypeAttributes(type);
 
                 bool containsWebServiceAttribute = false;
-#if NET_2_0
                 bool containsWebServiceBindingAttribute = false;
-#endif
+
                 for (int i = 0; i < attrs.Count; i++)
                 {
                     if (IsAttributeMatchingType(attrs[i], typeof(WebServiceAttribute)))
@@ -537,12 +519,10 @@ namespace Spring.Web.Services
                         containsWebServiceAttribute = true;
                         attrs[i] = webServiceAttribute;
                     } 
-#if NET_2_0
                     else if (IsAttributeMatchingType(attrs[i], typeof(WebServiceBindingAttribute)))
                     {
                         containsWebServiceBindingAttribute = true;
                     }
-#endif
                 }
 
                 // Add missing WebServiceAttribute
@@ -551,13 +531,11 @@ namespace Spring.Web.Services
                     attrs.Add(webServiceAttribute);
                 }
 
-#if NET_2_0
                 // Add missing WebServiceBindingAttribute
                 if (!containsWebServiceBindingAttribute)
                 {
                     attrs.Add(webServiceBindingAttribute);
                 }
-#endif
 
                 return attrs;
             }

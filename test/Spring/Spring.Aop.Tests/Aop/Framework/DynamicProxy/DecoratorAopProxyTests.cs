@@ -230,14 +230,12 @@ namespace Spring.Aop.Framework.DynamicProxy
  	        base.ProxyMethodWithRefOutParametersWithStandardReflection();
         }
 
-#if NET_2_0
         [Test]
         [ExpectedException(typeof(AopConfigException), ExpectedMessage="Cannot create decorator-based IAopProxy for a non visible class [Spring.Aop.Framework.DynamicProxy.AbstractAopProxyTests+InternalRefOutGenericTestObject]")]
         public override void ProxyGenericMethodWithRefOutParametersWithStandardReflection()
         {
             base.ProxyGenericMethodWithRefOutParametersWithStandardReflection();
         }
-#endif
 
         #region Attributes
 
@@ -325,7 +323,6 @@ namespace Spring.Aop.Framework.DynamicProxy
             Assert.AreEqual(0, attrs.Length, "Should not have attribute applied to the method's parameter.");
         }
 
-#if NET_2_0
         [Test]
         public void ProxyTargetVirtualMethodReturnValueAttributes()
         {
@@ -367,7 +364,6 @@ namespace Spring.Aop.Framework.DynamicProxy
             Assert.IsNotNull(attrs);
             Assert.AreEqual(0, attrs.Length, "Should not have attribute applied to the method's return value.");
         }
-#endif
 
         #endregion
 

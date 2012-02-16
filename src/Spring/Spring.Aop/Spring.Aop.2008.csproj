@@ -23,7 +23,7 @@
     <StartupObject>
     </StartupObject>
     <SignAssembly>false</SignAssembly>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <PublishUrl>http://localhost/Spring.Aop/</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>

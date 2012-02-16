@@ -26,12 +26,8 @@ using System.Xml.Serialization;
 using System.Web.Services;
 using System.Web.Services.Protocols;
 using System.Web.Services.Description;
-#if NET_3_0
 using System.ServiceModel;
 using System.ServiceModel.Description;
-using System.Runtime.Serialization;
-#endif
-
 using NUnit.Framework;
 using Spring.Core.IO;
 using Spring.Context;
@@ -172,7 +168,6 @@ namespace Spring.Web.Services
             ObjectUtils.InstantiateType(proxyType);
         }
 
-#if NET_2_0
         [Test]
         public void DocumentLiteralWithNamedOutParameter()
         {
@@ -450,7 +445,6 @@ namespace Spring.Web.Services
             // Try to instantiate the proxy type
             ObjectUtils.InstantiateType(proxyType);
         }
-#endif
 
         [Test]
         public void WrapProxyType()
@@ -569,7 +563,6 @@ namespace Spring.Web.Services
 
         #endregion
 
-#if NET_3_0
         public void WcfBasicHttpBinding()
         {
             using (ServiceHost host = new ServiceHost(typeof(WcfServiceImpl), new Uri("http://localhost:8000/WcfBasicHttpBinding/Service")))
@@ -613,7 +606,6 @@ namespace Spring.Web.Services
                 return count.ToString();
             }
         }
-#endif
 
         #region Test Classes
 
