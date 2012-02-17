@@ -81,7 +81,6 @@
       <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Data.NHibernate21.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Core, Version=3.5.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
