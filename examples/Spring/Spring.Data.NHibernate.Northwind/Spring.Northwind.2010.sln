@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Spring.Northwind.Web", "src\Spring.Northwind.Web\", "{3E321CBC-75B0-45C4-AFEF-7CEED28368AE}"
 	ProjectSection(WebsiteProperties) = preProject
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv3.5"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
 		ProjectReferences = "{7F45EEA2-50AC-44E2-85A6-2FFB02E38C44}|Spring.Northwind.Dao.dll;{6E4F55A0-C281-4706-A08B-BDEC2D2FBDA4}|Spring.Northwind.Dao.NHibernate.dll;{9E15876F-E9E0-43B7-9874-B54F163757D6}|Spring.Northwind.Service.dll;{FD89FEBE-4914-45F3-9123-B2CB954810DD}|Spring.Northwind.Web.References.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/Spring.Northwind.Web"
 		Debug.AspNetCompiler.PhysicalPath = "src\Spring.Northwind.Web\"
@@ -43,16 +43,16 @@ Global
 		Release|Mixed Platforms = Release|Mixed Platforms
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{3E321CBC-75B0-45C4-AFEF-7CEED28368AE}.Debug|.NET.ActiveCfg = Debug|.NET
-		{3E321CBC-75B0-45C4-AFEF-7CEED28368AE}.Debug|.NET.Build.0 = Debug|.NET
-		{3E321CBC-75B0-45C4-AFEF-7CEED28368AE}.Debug|Any CPU.ActiveCfg = Debug|.NET
-		{3E321CBC-75B0-45C4-AFEF-7CEED28368AE}.Debug|Mixed Platforms.ActiveCfg = Debug|.NET
-		{3E321CBC-75B0-45C4-AFEF-7CEED28368AE}.Debug|Mixed Platforms.Build.0 = Debug|.NET
-		{3E321CBC-75B0-45C4-AFEF-7CEED28368AE}.Release|.NET.ActiveCfg = Debug|.NET
-		{3E321CBC-75B0-45C4-AFEF-7CEED28368AE}.Release|.NET.Build.0 = Debug|.NET
-		{3E321CBC-75B0-45C4-AFEF-7CEED28368AE}.Release|Any CPU.ActiveCfg = Debug|.NET
-		{3E321CBC-75B0-45C4-AFEF-7CEED28368AE}.Release|Mixed Platforms.ActiveCfg = Debug|.NET
-		{3E321CBC-75B0-45C4-AFEF-7CEED28368AE}.Release|Mixed Platforms.Build.0 = Debug|.NET
+		{3E321CBC-75B0-45C4-AFEF-7CEED28368AE}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{3E321CBC-75B0-45C4-AFEF-7CEED28368AE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E321CBC-75B0-45C4-AFEF-7CEED28368AE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3E321CBC-75B0-45C4-AFEF-7CEED28368AE}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{3E321CBC-75B0-45C4-AFEF-7CEED28368AE}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{3E321CBC-75B0-45C4-AFEF-7CEED28368AE}.Release|.NET.ActiveCfg = Debug|Any CPU
+		{3E321CBC-75B0-45C4-AFEF-7CEED28368AE}.Release|Any CPU.ActiveCfg = Debug|Any CPU
+		{3E321CBC-75B0-45C4-AFEF-7CEED28368AE}.Release|Any CPU.Build.0 = Debug|Any CPU
+		{3E321CBC-75B0-45C4-AFEF-7CEED28368AE}.Release|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{3E321CBC-75B0-45C4-AFEF-7CEED28368AE}.Release|Mixed Platforms.Build.0 = Debug|Any CPU
 		{9E15876F-E9E0-43B7-9874-B54F163757D6}.Debug|.NET.ActiveCfg = Debug|Any CPU
 		{9E15876F-E9E0-43B7-9874-B54F163757D6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{9E15876F-E9E0-43B7-9874-B54F163757D6}.Debug|Any CPU.Build.0 = Debug|Any CPU

@@ -404,9 +404,12 @@ Commandline Examples:
     <nant buildfile="src/Spring/Spring.Services/Spring.Services.build" target="build" if="${build-services}"/>
     <nant buildfile="src/Spring/Spring.Testing.NUnit/Spring.Testing.NUnit.build" target="build" if="${build-testing-nunit}"/>
     <nant buildfile="src/Spring/Spring.Testing.Microsoft/Spring.Testing.Microsoft.build" target="build" if="${build-testing-microsoft}"/>
-    <nant buildfile="src/Spring/Spring.Messaging.Ems/Spring.Messaging.Ems.build" target="build" if="${build-ems  and (nant.settings.currentframework == 'net-3.5' or nant.settings.currentframework == 'net-4.0' )}"/>
+    <nant buildfile="src/Spring/Spring.Messaging.Ems/Spring.Messaging.Ems.build" target="build" if="${build-ems and (nant.settings.currentframework == 'net-3.5' or nant.settings.currentframework == 'net-4.0' )}"/>
     <nant buildfile="src/Spring/Spring.Messaging.Nms/Spring.Messaging.Nms.build" target="build" if="${build-nms}"/>
     <nant buildfile="src/Spring/Spring.Scheduling.Quartz/Spring.Scheduling.Quartz.build" target="build" if="${build-quartz}"/>
+    <!--
+	<nant buildfile="src/Spring/Spring.Scheduling.Quartz20/Spring.Scheduling.Quartz20.build" target="build" if="${build-quartz}"/>
+	-->
     <nant buildfile="src/Spring/Spring.Messaging/Spring.Messaging.build" target="build" if="${build-msmq}"/>
     <nant buildfile="src/Spring/Spring.Template.Velocity/Spring.Template.Velocity.build" target="build" if="${build-velocity}"/>
 
@@ -459,6 +462,9 @@ Commandline Examples:
     <nant buildfile="test/Spring/Spring.Messaging.Nms.Tests/Spring.Messaging.Nms.Tests.build" target="test" if="${build-nms}"/>
     <nant buildfile="test/Spring/Spring.Messaging.Nms.Integration.Tests/Spring.Messaging.Nms.Integration.Tests.build" target="test" if="${build-nms}"/>
     <nant buildfile="test/Spring/Spring.Scheduling.Quartz.Tests/Spring.Scheduling.Quartz.Tests.build" target="build" if="${build-quartz}"/>
+    <!--
+	<nant buildfile="test/Spring/Spring.Scheduling.Quartz20.Tests/Spring.Scheduling.Quartz20.Tests.build" target="build" if="${build-quartz}"/>
+	-->
     <nant buildfile="test/Spring/Spring.Messaging.Tests/Spring.Messaging.Tests.build" target="test" if="${build-msmq}"/>
     <nant buildfile="test/Spring/Spring.Template.Velocity.Tests/Spring.Template.Velocity.Tests.build" target="test" if="${build-velocity}"/>
 
@@ -1362,11 +1368,10 @@ Commandline Examples:
           <include name="*/*/Spring.Messaging.xml"/>
           <include name="*/*/Spring.Messaging.pdb"/>
 
-		  <!--
           <include name="*/*/Spring.Scheduling.Quartz.dll"/>
           <include name="*/*/Spring.Scheduling.Quartz.xml"/>
           <include name="*/*/Spring.Scheduling.Quartz.pdb"/>
-		  -->
+
           <include name="*/*/Spring.Scheduling.Quartz20.dll"/>
           <include name="*/*/Spring.Scheduling.Quartz20.xml"/>
           <include name="*/*/Spring.Scheduling.Quartz20.pdb"/>
@@ -1386,14 +1391,12 @@ Commandline Examples:
             <include name="*/Spring.Services.xml"/>
             <include name="*/Spring.Services.pdb"/>
 			
-		  <!--
-          <include name="*/*/Spring.Scheduling.Quartz.dll"/>
-          <include name="*/*/Spring.Scheduling.Quartz.xml"/>
-          <include name="*/*/Spring.Scheduling.Quartz.pdb"/>
-		  -->
-          <include name="*/*/Spring.Scheduling.Quartz20.dll"/>
-          <include name="*/*/Spring.Scheduling.Quartz20.xml"/>
-          <include name="*/*/Spring.Scheduling.Quartz20.pdb"/>
+			<include name="*/*/Spring.Scheduling.Quartz.dll"/>
+			<include name="*/*/Spring.Scheduling.Quartz.xml"/>
+			<include name="*/*/Spring.Scheduling.Quartz.pdb"/>
+			<include name="*/*/Spring.Scheduling.Quartz20.dll"/>
+			<include name="*/*/Spring.Scheduling.Quartz20.xml"/>
+			<include name="*/*/Spring.Scheduling.Quartz20.pdb"/>
 			
 			<include name="*/Spring.Web.Mvc.dll"/>
             <include name="*/Spring.Web.Mvc.xml"/>
