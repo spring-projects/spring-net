@@ -10,28 +10,6 @@
       * current.build.defines.csc - framework-specific build defines for C# compiler
 -->
   <target name="build">
-    <if test="${net-3.0.installed and net-3.0}">
-      <property name="bin.dir.to.use" value="${current.bin.dir}\..\..\2.0\${project.build.config}"/>
-      <copy todir="${current.bin.dir}" verbose="${copy-verbose}">
-        <fileset basedir="${bin.dir.to.use}">
-          <include name="*.dll"/>
-          <include name="*.pdb"/>
-          <include name="*.xml"/>
-          <include name="System.Web.Services.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
-          <include name="System.Web.Services.Protocols.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
-          <include name="System.Web.Services.Description.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
-          <include name="System.ServiceModel.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
-          <include name="System.Xml.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
-          <exclude name="System.Web.Extensions.dll" if="${net-3.5}"/>
-          <exclude name="System.Web.Extensions.dll" if="${net-4.0}"/>	
-          <exclude name="Quartz.dll" if="${net-3.5}"/>
-          <exclude name="Quartz.dll" if="${net-4.0}"/>	
-		  <exclude name="Spring.Services.dll"/>
-          <exclude name="Spring.Services.pdb"/>
-          <exclude name="Spring.Services.xml"/>
-        </fileset>
-      </copy>
-    </if>
 
     <!-- build Spring.Services.Tests -->
     <csc target="library" define="${current.build.defines.csc}"

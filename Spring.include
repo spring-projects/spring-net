@@ -17,31 +17,6 @@
               value="${spring.basedir}/bin/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}/${current.build.config}"
               dynamic="true"/>
 
-
-  <!-- detect if .net 3.0 is installed -->
-    <property name="net-3.0" value="false"/>
-    <property name="registry.net-3.0.installed" value="0" overwrite="false"/>
-
-    <readregistry property="registry.net-3.0.installed"
-		  key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.0\Install"
-		  hive="LocalMachine"
-		  failonerror="false" />
-
-    <readregistry property="registry.dotnet.v3.0.Installed"
-		  key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.0\Setup\InstallSuccess"
-		  hive="LocalMachine"
-		  unless="${property::exists('registry.net-3.0.installed')}"
-		  failonerror="false" />
-
-    <property name="net-3.0.installed" value="${registry.net-3.0.installed == '1'}" />
-
-    <if test="${net-3.0.installed}">
-      <readregistry property="net-3.0.ReferenceInstallPath"
-		    key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.0\Setup\Windows Communication Foundation\ReferenceInstallPath"
-		    hive="LocalMachine"
-		    if="${net-3.0.installed}" />
-    </if>
-
   <!-- detect if .net 3.5 is installed -->
   <property name="net-3.5" value="false"/>
   <property name="registry.net-3.5.installed" value="0" overwrite="false"/>
