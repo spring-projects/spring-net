@@ -21,7 +21,6 @@
 #region Imports
 
 using System;
-using log4net.Config;
 using NHibernate;
 using NUnit.Framework;
 using Spring.Context;
@@ -36,31 +35,9 @@ namespace Spring.Data.NHibernate
 	[TestFixture]
 	public class NHDAOTests 
 	{
-		#region Fields
-
 	    private IApplicationContext ctx;
-	    
-		#endregion
 
-		#region Constructor (s)
-		/// <summary>
-		/// Initializes a new instance of the <see cref="NHDAOTests"/> class.
-        /// </summary>
-		public 	NHDAOTests()
-		{
-
-		}
-
-		#endregion
-	   	    
-		#region Properties
-
-		#endregion
-
-	    
-		#region Methods
-
-        [SetUp]
+	    [SetUp]
         public void SetUp()
         {
             //BasicConfigurator.Configure();
@@ -89,11 +66,10 @@ namespace Spring.Data.NHibernate
             ISessionFactory sf = ctx["SessionFactory"] as ISessionFactory;
             IDbProvider dbProvider = SessionFactoryUtils.GetDbProvider(sf);
 
-            Assert.AreEqual("Microsoft SQL Server, provider V2.0.0.0 in framework .NET V2.0",
-                                dbProvider.DbMetadata.ProductName);
+            Assert.IsTrue(dbProvider.DbMetadata.ProductName.Contains("Microsoft SQL Server, provider"));
+            Assert.IsTrue(dbProvider.DbMetadata.ProductName.Contains("in framework .NET"));
         }
 
-	    
         [Test]
         public void SessionScopeOutsideTransaction()
         {
@@ -102,7 +78,7 @@ namespace Spring.Data.NHibernate
             {
                 IAccountManager mgr = null;
                 mgr = ctx["accountManager"] as IAccountManager;
-                Assert.IsNotNull(mgr, "accountManager not of expected type. Type = " + ctx["accountManager"].GetType().ToString());
+                Assert.IsNotNull(mgr, "accountManager not of expected type. Type = " + ctx["accountManager"].GetType());
                 mgr.DoTransfer(transferAmount, transferAmount);
             }
         }
@@ -141,8 +117,5 @@ namespace Spring.Data.NHibernate
 	        //to be done
 	        return true;
 	    }
-
-	    #endregion
-
 	}
 }
