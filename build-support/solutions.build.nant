@@ -83,6 +83,7 @@ Rebuilding Solutions using Nant and "solutions.build":
           <include name="*.2008.sln" />
           <exclude name="Spring.NET.2008.sln"/>
           <exclude name="examples/Spring/Spring.EmsQuickStart/**/*.sln" unless="${build-ems}"/>
+          <exclude name="examples/**/Spring.Examples.Pool.2008.sln"/>
         </items>
       </in>
       <do>

@@ -37,7 +37,8 @@
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <DocumentationFile>Spring.Scheduling.Quartz.Example.xml</DocumentationFile>
+    <DocumentationFile>
+	</DocumentationFile>
     <DebugSymbols>true</DebugSymbols>
     <FileAlignment>4096</FileAlignment>
     <NoStdLib>false</NoStdLib>
@@ -81,13 +82,13 @@
     </Reference>
     <Reference Include="Quartz">
       <Name>Quartz</Name>
-      <HintPath>..\..\..\..\lib\Quartz10\net\2.0\Quartz.dll</HintPath>
+      <HintPath>..\..\..\..\lib\Quartz10\net\3.5\Quartz.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Core">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\bin\net\3.5\debug\Spring.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Spring.Scheduling.Quartz, Version=1.1.2.20220, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Spring.Scheduling.Quartz">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\bin\net\3.5\debug\Spring.Scheduling.Quartz.dll</HintPath>
     </Reference>

@@ -37,12 +37,15 @@ TIBCO.EMS.*
 #Documentation output
 doc/reference/target/
 
-#Build log
+#Build log and other log files
 buildlog.txt
+log.txt*
 
 # XMLmind temporary files
 *.xml~
 
+# web site model pre-compiled files
+PrecompiledWeb
 
 *.dotCover
 /src/Spring/Spring.Aop/Spring.Aop.xml

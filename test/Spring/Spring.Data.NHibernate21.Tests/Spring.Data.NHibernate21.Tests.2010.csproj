@@ -22,7 +22,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\..\build\VS.Net.2010\Spring.Data.NHibernate21.Tests\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NET_2_0,NH_2_0,NH_2_1</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET_4_0,NH_2_0,NH_2_1</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -30,7 +30,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\..\..\build\VS.Net.2010\Spring.Data.NHibernate21.Tests\Release\</OutputPath>
-    <DefineConstants>TRACE;NET_2_0,NH_2_1</DefineConstants>
+    <DefineConstants>TRACE;NET_4_0,NH_2_1</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
