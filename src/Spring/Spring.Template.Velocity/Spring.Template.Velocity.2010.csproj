@@ -46,12 +46,12 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\..\build\VS.NET.2005\Spring.Template.Velocity\Release\</OutputPath>
+    <OutputPath>..\..\..\build\VS.NET.2010\Spring.Template.Velocity\Release\</OutputPath>
     <DefineConstants>TRACE;NET_4_0</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DocumentationFile>..\..\..\build\VS.NET.2005\Spring.Template.Velocity\Release\Spring.Template.Velocity.XML</DocumentationFile>
+    <DocumentationFile>..\..\..\build\VS.NET.2010\Spring.Template.Velocity\Release\Spring.Template.Velocity.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Common.Logging, Version=1.2.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e">

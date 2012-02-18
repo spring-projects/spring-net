@@ -395,12 +395,13 @@ Commandline Examples:
     <nant buildfile="src/Spring/Spring.Web.Mvc/Spring.Web.Mvc.build" target="build" if="${nant.settings.currentframework == 'net-4.0'}"/>
     <nant buildfile="src/Spring/Spring.Web.Mvc3/Spring.Web.Mvc3.build" target="build" if="${nant.settings.currentframework == 'net-4.0'}"/>
     <nant buildfile="src/Spring/Spring.Data/Spring.Data.build" target="build" if="${build-data}"/>
-    <nant buildfile="src/Spring/Spring.Data.NHibernate12/Spring.Data.NHibernate12.build" target="build" if="${build-data and (nant.settings.currentframework == 'mono-2.0')}"/>
-    <nant buildfile="src/Spring/Spring.Data.NHibernate20/Spring.Data.NHibernate20.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-3.5' or nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'mono-2.0')}"/>
-    <nant buildfile="src/Spring/Spring.Data.NHibernate21/Spring.Data.NHibernate21.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-3.5' or nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'mono-2.0')}"/>
-    <nant buildfile="src/Spring/Spring.Data.NHibernate30/Spring.Data.NHibernate30.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-3.5' or nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'mono-2.0')}"/>
-    <nant buildfile="src/Spring/Spring.Data.NHibernate31/Spring.Data.NHibernate31.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-3.5' or nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'mono-2.0')}"/>
-    <nant buildfile="src/Spring/Spring.Data.NHibernate32/Spring.Data.NHibernate32.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-3.5' or nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'mono-2.0')}"/>
+
+    <nant buildfile="src/Spring/Spring.Data.NHibernate20/Spring.Data.NHibernate20.build" target="build" if="${build-data}"/>
+    <nant buildfile="src/Spring/Spring.Data.NHibernate21/Spring.Data.NHibernate21.build" target="build" if="${build-data}"/>
+    <nant buildfile="src/Spring/Spring.Data.NHibernate30/Spring.Data.NHibernate30.build" target="build" if="${build-data}"/>
+    <nant buildfile="src/Spring/Spring.Data.NHibernate31/Spring.Data.NHibernate31.build" target="build" if="${build-data}"/>
+    <nant buildfile="src/Spring/Spring.Data.NHibernate32/Spring.Data.NHibernate32.build" target="build" if="${build-data}"/>
+
     <nant buildfile="src/Spring/Spring.Services/Spring.Services.build" target="build" if="${build-services}"/>
     <nant buildfile="src/Spring/Spring.Testing.NUnit/Spring.Testing.NUnit.build" target="build" if="${build-testing-nunit}"/>
     <nant buildfile="src/Spring/Spring.Testing.Microsoft/Spring.Testing.Microsoft.build" target="build" if="${build-testing-microsoft}"/>
@@ -419,51 +420,31 @@ Commandline Examples:
     <nant buildfile="test/Spring/Spring.Aop.Tests/Spring.Aop.Tests.build" target="test" if="${build-aop}"/>
     <nant buildfile="test/Spring/Spring.Data.Tests/Spring.Data.Tests.build" target="test" if="${build-data}"/>
     <nant buildfile="test/Spring/Spring.Data.Integration.Tests/Spring.Data.Integration.Tests.build" target="test" if="${build-data}"/>
-    <nant buildfile="test/Spring/Spring.Data.NHibernate20.Tests/Spring.Data.NHibernate20.Tests.build" target="test"
-                 if="${build-data and nant.settings.currentframework == 'net-3.5'}"/>
-    <nant buildfile="test/Spring/Spring.Data.NHibernate20.Integration.Tests/Spring.Data.NHibernate20.Integration.Tests.build" target="test"
-                 if="${build-data and nant.settings.currentframework == 'net-3.5'}"/>
-    <nant buildfile="test/Spring/Spring.Data.NHibernate21.Tests/Spring.Data.NHibernate21.Tests.build" target="test"
-                 if="${build-data and nant.settings.currentframework == 'net-3.5'}"/>
-    <nant buildfile="test/Spring/Spring.Data.NHibernate21.Integration.Tests/Spring.Data.NHibernate21.Integration.Tests.build" target="test"
-                 if="${build-data and nant.settings.currentframework == 'net-3.5'}"/>
-    <nant buildfile="test/Spring/Spring.Data.NHibernate30.Tests/Spring.Data.NHibernate30.Tests.build" target="test"
-                 if="${build-data and nant.settings.currentframework == 'net-3.5'}"/>
-    <nant buildfile="test/Spring/Spring.Data.NHibernate30.Integration.Tests/Spring.Data.NHibernate30.Integration.Tests.build" target="test"
-                 if="${build-data and nant.settings.currentframework == 'net-3.5'}"/>
-	<nant buildfile="test/Spring/Spring.Data.NHibernate30.Tests/Spring.Data.NHibernate30.Tests.build" target="test"
-                 if="${build-data and nant.settings.currentframework == 'net-4.0'}"/>
-    <nant buildfile="test/Spring/Spring.Data.NHibernate30.Integration.Tests/Spring.Data.NHibernate30.Integration.Tests.build" target="test"
-                 if="${build-data and nant.settings.currentframework == 'net-4.0'}"/>
-    <nant buildfile="test/Spring/Spring.Data.NHibernate31.Tests/Spring.Data.NHibernate31.Tests.build" target="test"
-                 if="${build-data and nant.settings.currentframework == 'net-3.5'}"/>
-    <nant buildfile="test/Spring/Spring.Data.NHibernate31.Integration.Tests/Spring.Data.NHibernate31.Integration.Tests.build" target="test"
-                 if="${build-data and nant.settings.currentframework == 'net-3.5'}"/>
-	<nant buildfile="test/Spring/Spring.Data.NHibernate31.Tests/Spring.Data.NHibernate31.Tests.build" target="test"
-                 if="${build-data and nant.settings.currentframework == 'net-4.0'}"/>
-    <nant buildfile="test/Spring/Spring.Data.NHibernate31.Integration.Tests/Spring.Data.NHibernate31.Integration.Tests.build" target="test"
-                 if="${build-data and nant.settings.currentframework == 'net-4.0'}"/>
-    <nant buildfile="test/Spring/Spring.Data.NHibernate32.Tests/Spring.Data.NHibernate32.Tests.build" target="test"
-                 if="${build-data and nant.settings.currentframework == 'net-3.5'}"/>
-    <nant buildfile="test/Spring/Spring.Data.NHibernate32.Integration.Tests/Spring.Data.NHibernate32.Integration.Tests.build" target="test"
-                 if="${build-data and nant.settings.currentframework == 'net-3.5'}"/>
-	<nant buildfile="test/Spring/Spring.Data.NHibernate32.Tests/Spring.Data.NHibernate32.Tests.build" target="test"
-                 if="${build-data and nant.settings.currentframework == 'net-4.0'}"/>
-    <nant buildfile="test/Spring/Spring.Data.NHibernate32.Integration.Tests/Spring.Data.NHibernate32.Integration.Tests.build" target="test"
-                 if="${build-data and nant.settings.currentframework == 'net-4.0'}"/>
-    <nant buildfile="test/Spring/Spring.Services.Tests/Spring.Services.Tests.build" target="test" if="${build-services and not net-3.5}"/>
+    
+	<nant buildfile="test/Spring/Spring.Data.NHibernate20.Tests/Spring.Data.NHibernate20.Tests.build" target="test" if="${build-data}"/>
+    <nant buildfile="test/Spring/Spring.Data.NHibernate20.Integration.Tests/Spring.Data.NHibernate20.Integration.Tests.build" target="test" if="${build-data}"/>
+    <nant buildfile="test/Spring/Spring.Data.NHibernate21.Tests/Spring.Data.NHibernate21.Tests.build" target="test" if="${build-data}"/>
+    <nant buildfile="test/Spring/Spring.Data.NHibernate21.Integration.Tests/Spring.Data.NHibernate21.Integration.Tests.build" target="test" if="${build-data}"/>
+	<nant buildfile="test/Spring/Spring.Data.NHibernate30.Tests/Spring.Data.NHibernate30.Tests.build" target="test" if="${build-data}"/>
+    <nant buildfile="test/Spring/Spring.Data.NHibernate30.Integration.Tests/Spring.Data.NHibernate30.Integration.Tests.build" target="test" if="${build-data}"/>
+    <nant buildfile="test/Spring/Spring.Data.NHibernate31.Tests/Spring.Data.NHibernate31.Tests.build" target="test" if="${build-data}"/>
+    <nant buildfile="test/Spring/Spring.Data.NHibernate31.Integration.Tests/Spring.Data.NHibernate31.Integration.Tests.build" target="test" if="${build-data}"/>
+    <nant buildfile="test/Spring/Spring.Data.NHibernate32.Tests/Spring.Data.NHibernate32.Tests.build" target="test" if="${build-data}"/>
+    <nant buildfile="test/Spring/Spring.Data.NHibernate32.Integration.Tests/Spring.Data.NHibernate32.Integration.Tests.build" target="test" if="${build-data}"/>
+	
+    <nant buildfile="test/Spring/Spring.Services.Tests/Spring.Services.Tests.build" target="test" if="${build-services}"/>
     <nant buildfile="test/Spring/Spring.Web.Tests/Spring.Web.Tests.build" target="test" if="${build-web}"/>
-	<nant buildfile="test/Spring/Spring.Web.Mvc.Tests/Spring.Web.Mvc.Tests.build" target="test" if="${nant.settings.currentframework == 'net-4.0'}"/>
-	<nant buildfile="test/Spring/Spring.Web.Mvc3.Tests/Spring.Web.Mvc3.Tests.build" target="test" if="${nant.settings.currentframework == 'net-4.0'}"/>
+	<nant buildfile="test/Spring/Spring.Web.Mvc.Tests/Spring.Web.Mvc.Tests.build" target="test" if="${build-web and nant.settings.currentframework == 'net-4.0'}"/>
+	<nant buildfile="test/Spring/Spring.Web.Mvc3.Tests/Spring.Web.Mvc3.Tests.build" target="test" if="${build-web and nant.settings.currentframework == 'net-4.0'}"/>
     <nant buildfile="test/Spring/Spring.Testing.NUnit.Tests/Spring.Testing.NUnit.Tests.build" target="test" if="${build-testing-nunit}"/>
     <nant buildfile="test/Spring/Spring.Testing.Microsoft.Tests/Spring.Testing.Microsoft.Tests.build" target="test" if="${build-testing-microsoft}"/>
-    <nant buildfile="test/Spring/Spring.Messaging.Ems.Tests/Spring.Messaging.Ems.Tests.build" target="test" if="${build-ems and (nant.settings.currentframework == 'net-3.5' or nant.settings.currentframework == 'net-4.0' )}"/>
-    <nant buildfile="test/Spring/Spring.Messaging.Ems.Integration.Tests/Spring.Messaging.Ems.Integration.Tests.build" target="test" if="${build-ems and (nant.settings.currentframework == 'net-3.5' or nant.settings.currentframework == 'net-4.0')}"/>
+    <nant buildfile="test/Spring/Spring.Messaging.Ems.Tests/Spring.Messaging.Ems.Tests.build" target="test" if="${build-ems}"/>
+    <nant buildfile="test/Spring/Spring.Messaging.Ems.Integration.Tests/Spring.Messaging.Ems.Integration.Tests.build" target="test" if="${build-ems}"/>
     <nant buildfile="test/Spring/Spring.Messaging.Nms.Tests/Spring.Messaging.Nms.Tests.build" target="test" if="${build-nms}"/>
     <nant buildfile="test/Spring/Spring.Messaging.Nms.Integration.Tests/Spring.Messaging.Nms.Integration.Tests.build" target="test" if="${build-nms}"/>
-    <nant buildfile="test/Spring/Spring.Scheduling.Quartz.Tests/Spring.Scheduling.Quartz.Tests.build" target="build" if="${build-quartz}"/>
+    <nant buildfile="test/Spring/Spring.Scheduling.Quartz.Tests/Spring.Scheduling.Quartz.Tests.build" target="test" if="${build-quartz}"/>
     <!--
-	<nant buildfile="test/Spring/Spring.Scheduling.Quartz20.Tests/Spring.Scheduling.Quartz20.Tests.build" target="build" if="${build-quartz}"/>
+	<nant buildfile="test/Spring/Spring.Scheduling.Quartz20.Tests/Spring.Scheduling.Quartz20.Tests.build" target="test" if="${build-quartz}"/>
 	-->
     <nant buildfile="test/Spring/Spring.Messaging.Tests/Spring.Messaging.Tests.build" target="test" if="${build-msmq}"/>
     <nant buildfile="test/Spring/Spring.Template.Velocity.Tests/Spring.Template.Velocity.Tests.build" target="test" if="${build-velocity}"/>

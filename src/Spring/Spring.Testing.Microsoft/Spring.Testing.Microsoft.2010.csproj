@@ -37,22 +37,24 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\build\VS.NET.2008\Spring.Testing.Microsoft\Debug\</OutputPath>
+    <OutputPath>..\..\..\build\VS.NET.2010\Spring.Testing.Microsoft\Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG;NET_4_0</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\..\build\VS.NET.2008\Spring.Testing.Microsoft\Debug\Spring.Testing.Microsoft.xml</DocumentationFile>
+    <DocumentationFile>..\..\..\build\VS.NET.2010\Spring.Testing.Microsoft\Debug\Spring.Testing.Microsoft.xml</DocumentationFile>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\..\build\VS.NET.2008\Spring.Testing.Microsoft\Release\</OutputPath>
+    <OutputPath>..\..\..\build\VS.NET.2010\Spring.Testing.Microsoft\Release\</OutputPath>
     <DefineConstants>TRACE;NET_4_0</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <DocumentationFile>..\..\..\build\VS.NET.2010\Spring.Testing.Microsoft\Release\Spring.Testing.Microsoft.XML</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Common.Logging, Version=1.2.0.0, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
