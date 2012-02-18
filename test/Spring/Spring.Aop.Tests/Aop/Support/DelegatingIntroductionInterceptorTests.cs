@@ -15,14 +15,12 @@
  * limitations under the License.
  */
 #endregion
+
 #region Imports
 using System;
-using System.Collections;
-
 using NUnit.Framework;
-using DotNetMock.Dynamic;
-
 using AopAlliance.Aop;
+using Rhino.Mocks;
 using Spring.Aop.Framework;
 using Spring.Objects;
 #endregion
@@ -56,23 +54,20 @@ namespace Spring.Aop.Support
 		}
 
 		[Test]
-		public void testIntroductionInterceptorWithDelegation()
+		public void TestIntroductionInterceptorWithDelegation()
 		{
 			TestObject raw = new TestObject();
 			Assert.IsTrue(! (raw is ITimeStamped));
 			ProxyFactory factory = new ProxyFactory(raw);
 	
-			IDynamicMock tsControl = new DynamicMock(typeof(ITimeStampedIntroduction));
-			ITimeStampedIntroduction ts = (ITimeStampedIntroduction) tsControl.Object;
-			tsControl.ExpectAndReturn("TimeStamp", EXPECTED_TIMESTAMP);
+			ITimeStampedIntroduction ts = MockRepository.GenerateMock<ITimeStampedIntroduction>();
+			ts.Stub(x => x.TimeStamp).Return(EXPECTED_TIMESTAMP);
 
 			DefaultIntroductionAdvisor advisor = new DefaultIntroductionAdvisor(ts);
 			factory.AddIntroduction(advisor);
 
 			ITimeStamped tsp = (ITimeStamped) factory.GetProxy();
 			Assert.IsTrue(tsp.TimeStamp == EXPECTED_TIMESTAMP);
-	
-			tsControl.Verify();
 		}
 
 		// we have to mark the ISubTimeStamped interface with the IAdvice marker
@@ -81,15 +76,14 @@ namespace Spring.Aop.Support
 		{
 		}
 	
-		public void testIntroductionInterceptorWithInterfaceHierarchy() 
+		public void TestIntroductionInterceptorWithInterfaceHierarchy() 
 		{
 			TestObject raw = new TestObject();
 			Assert.IsTrue(! (raw is ISubTimeStamped));
 			ProxyFactory factory = new ProxyFactory(raw);
 
-			IDynamicMock tsControl = new DynamicMock(typeof(ISubTimeStampedIntroduction));
-			ISubTimeStampedIntroduction ts = (ISubTimeStampedIntroduction) tsControl.Object;
-			tsControl.ExpectAndReturn("TimeStamp", EXPECTED_TIMESTAMP);
+            ISubTimeStampedIntroduction ts = MockRepository.GenerateMock<ISubTimeStampedIntroduction>();
+			ts.Stub(x => x.TimeStamp).Return(EXPECTED_TIMESTAMP);
 
 			DefaultIntroductionAdvisor advisor = new DefaultIntroductionAdvisor(ts);
 			// we must add introduction, not an advisor
@@ -98,19 +92,16 @@ namespace Spring.Aop.Support
 			object proxy = factory.GetProxy();
 			ISubTimeStamped tsp = (ISubTimeStamped) proxy;
 			Assert.IsTrue(tsp.TimeStamp == EXPECTED_TIMESTAMP);
-
-			tsControl.Verify();
 		}
 
-		public void testIntroductionInterceptorWithSuperInterface()  
+		public void TestIntroductionInterceptorWithSuperInterface()  
 		{
 			TestObject raw = new TestObject();
 			Assert.IsTrue(! (raw is ITimeStamped));
 			ProxyFactory factory = new ProxyFactory(raw);
 
-			IDynamicMock tsControl = new DynamicMock(typeof(ISubTimeStampedIntroduction));
-			ISubTimeStamped ts = (ISubTimeStamped) tsControl.Object;
-			tsControl.ExpectAndReturn("TimeStamp", EXPECTED_TIMESTAMP);
+            ISubTimeStamped ts = MockRepository.GenerateMock<ISubTimeStampedIntroduction>();
+			ts.Stub(x => x.TimeStamp).Return(EXPECTED_TIMESTAMP);
 
 			factory.AddIntroduction(0, new DefaultIntroductionAdvisor(
 				(ISubTimeStampedIntroduction)ts,
@@ -120,8 +111,6 @@ namespace Spring.Aop.Support
 			ITimeStamped tsp = (ITimeStamped) factory.GetProxy();
 			Assert.IsTrue(!(tsp is ISubTimeStamped));
 			Assert.IsTrue(tsp.TimeStamp == EXPECTED_TIMESTAMP);
-
-			tsControl.Verify();
 		}
 
 		/// <summary>
@@ -137,7 +126,7 @@ namespace Spring.Aop.Support
 			{
 				_timestamp = timestamp;
 			}
-			public void foo() 
+			public void Foo() 
 			{
 			}
 			public DateTime TimeStamp 
@@ -149,7 +138,7 @@ namespace Spring.Aop.Support
 			}
 		}
 
-		public void testAutomaticInterfaceRecognitionInDelegate() 
+		public void TestAutomaticInterfaceRecognitionInDelegate() 
 		{
 			IIntroductionAdvisor ia = new DefaultIntroductionAdvisor(new Test(EXPECTED_TIMESTAMP));
 		
@@ -160,7 +149,7 @@ namespace Spring.Aop.Support
 			ITimeStamped ts = (ITimeStamped) pf.GetProxy();
 		
 			Assert.IsTrue(ts.TimeStamp == EXPECTED_TIMESTAMP);
-			((ITest) ts).foo();
+			((ITest) ts).Foo();
 		
 			int age = ((ITestObject) ts).Age;
 		}
@@ -178,7 +167,7 @@ namespace Spring.Aop.Support
 		// interfaces that it intends to expose.
 		public interface ITest 
 		{
-			void foo();
+			void Foo();
 		}
 
 		public interface ISubTimeStamped : ITimeStamped 

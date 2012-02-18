@@ -24,13 +24,11 @@ using System;
 using System.Runtime.Serialization;
 using AopAlliance.Aop;
 using AopAlliance.Intercept;
-using DotNetMock.Dynamic;
 using NUnit.Framework;
 using Rhino.Mocks;
 using Spring.Aop.Interceptor;
 using Spring.Aop.Support;
 using Spring.Objects;
-using Spring.Proxy;
 using Spring.Util;
 
 #endregion
@@ -545,12 +543,7 @@ namespace Spring.Aop.Framework
         [Test]
         public void AdvisedSupportListenerMethodsAreCalledAppropriately()
         {
-            IDynamicMock mock = new DynamicMock(typeof(IAdvisedSupportListener));
-            IAdvisedSupportListener listener = (IAdvisedSupportListener)mock.Object;
-
-            mock.Expect("Activated");
-            mock.Expect("AdviceChanged");
-            mock.Expect("InterfacesChanged");
+            IAdvisedSupportListener listener = MockRepository.GenerateMock<IAdvisedSupportListener>();
 
             ProxyFactory factory = new ProxyFactory(new TestObject());
             factory.AddListener(listener);
@@ -562,14 +555,15 @@ namespace Spring.Aop.Framework
             // must fire the InterfacesChanged callback...
             factory.AddInterface(typeof(ISerializable));
 
-            mock.Verify();
+            listener.AssertWasCalled(x => x.Activated(Arg<AdvisedSupport>.Is.NotNull));
+            listener.AssertWasCalled(x => x.AdviceChanged(Arg<AdvisedSupport>.Is.NotNull));
+            listener.AssertWasCalled(x => x.InterfacesChanged(Arg<AdvisedSupport>.Is.NotNull));
         }
 
         [Test]
         public void AdvisedSupportListenerMethodsAre_NOT_CalledIfProxyHasNotBeenCreated()
         {
-            IDynamicMock mock = new DynamicMock(typeof(IAdvisedSupportListener));
-            IAdvisedSupportListener listener = (IAdvisedSupportListener)mock.Object;
+            IAdvisedSupportListener listener = MockRepository.GenerateMock<IAdvisedSupportListener>();
 
             ProxyFactory factory = new ProxyFactory(new TestObject());
             factory.AddListener(listener);
@@ -579,7 +573,8 @@ namespace Spring.Aop.Framework
             // must not fire the InterfacesChanged callback...
             factory.AddInterface(typeof(ISerializable));
 
-            mock.Verify();
+            listener.AssertWasNotCalled(x => x.AdviceChanged(Arg<AdvisedSupport>.Is.Anything));
+            listener.AssertWasNotCalled(x => x.InterfacesChanged(Arg<AdvisedSupport>.Is.Anything));
         }
 
         [Test]
@@ -599,8 +594,7 @@ namespace Spring.Aop.Framework
         [Test]
         public void RemoveAdvisedSupportListener()
         {
-            IDynamicMock mock = new DynamicMock(typeof(IAdvisedSupportListener));
-            IAdvisedSupportListener listener = (IAdvisedSupportListener)mock.Object;
+            IAdvisedSupportListener listener = MockRepository.GenerateMock<IAdvisedSupportListener>();
 
             ProxyFactory factory = new ProxyFactory(new TestObject());
             factory.AddListener(listener);
@@ -609,7 +603,9 @@ namespace Spring.Aop.Framework
             factory.GetProxy();
 
             // check that no lifecycle callback methods were invoked on the listener...
-            mock.Verify();
+            listener.AssertWasNotCalled(x => x.Activated(Arg<AdvisedSupport>.Is.Anything));
+            listener.AssertWasNotCalled(x => x.AdviceChanged(Arg<AdvisedSupport>.Is.Anything));
+            listener.AssertWasNotCalled(x => x.InterfacesChanged(Arg<AdvisedSupport>.Is.Anything));
         }
 
         [Test]

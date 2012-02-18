@@ -1,5 +1,5 @@
-using System;
 using NUnit.Framework;
+using Rhino.Mocks;
 
 namespace Spring.Transaction.Support
 {
@@ -18,16 +18,17 @@ namespace Spring.Transaction.Support
                 TransactionSynchronizationManager.ClearSynchronization();
             }
         }
+
         [TearDown]
         public void Destroy()
         {
-            _mockTxnMgr.Verify();
             _mockTxnMgr = null;
             if (TransactionSynchronizationManager.SynchronizationActive)
             {
                 TransactionSynchronizationManager.Clear();
             }
         }
+
         [Test]
         public void VanillaProperties()
         {
@@ -43,16 +44,18 @@ namespace Spring.Transaction.Support
             Assert.IsTrue(_mockTxnMgr.NestedTransactionsAllowed);
             Assert.IsTrue(_mockTxnMgr.RollbackOnCommitFailure);
         }
+
         [Test]
-        [ExpectedException(typeof(InvalidTimeoutException), ExpectedMessage = "Invalid transaction timeout")]
+        [ExpectedException(typeof (InvalidTimeoutException), ExpectedMessage = "Invalid transaction timeout")]
         public void DefinitionInvalidTimeoutException()
         {
             MockTxnDefinition def = new MockTxnDefinition();
             def.TransactionTimeout = -1000;
             _mockTxnMgr.GetTransaction(def);
         }
+
         [Test]
-        [ExpectedException(typeof(IllegalTransactionStateException), ExpectedMessage = "Transaction propagation 'mandatory' but no existing transaction found")]
+        [ExpectedException(typeof (IllegalTransactionStateException), ExpectedMessage = "Transaction propagation 'mandatory' but no existing transaction found")]
         public void DefinitionInvalidPropagationState()
         {
             MockTxnDefinition def = new MockTxnDefinition();
@@ -61,38 +64,46 @@ namespace Spring.Transaction.Support
         }
 
         [Test]
-        [ExpectedException(typeof(IllegalTransactionStateException), ExpectedMessage = "Transaction propagation 'never' but existing transaction found.")]
+        [ExpectedException(typeof (IllegalTransactionStateException), ExpectedMessage = "Transaction propagation 'never' but existing transaction found.")]
         public void NeverPropagateState()
         {
             MockTxnDefinition def = new MockTxnDefinition();
             def.PropagationBehavior = TransactionPropagation.Never;
-            setGeneralGetTransactionExpectations();
+            SetGeneralGetTransactionExpectations();
+
             _mockTxnMgr.GetTransaction(def);
+            AssertVanillaGetTransactionExpectations();
         }
+
         [Test]
-        [ExpectedException(typeof(NestedTransactionNotSupportedException), ExpectedMessage = "Transaction manager does not allow nested transactions by default - specify 'NestedTransactionsAllowed' property with value 'true'")]
+        [ExpectedException(typeof (NestedTransactionNotSupportedException), ExpectedMessage = "Transaction manager does not allow nested transactions by default - specify 'NestedTransactionsAllowed' property with value 'true'")]
         public void NoNestedTransactionsAllowed()
         {
             MockTxnDefinition def = new MockTxnDefinition();
             def.PropagationBehavior = TransactionPropagation.Nested;
-            setGeneralGetTransactionExpectations();
+            SetGeneralGetTransactionExpectations();
+
             _mockTxnMgr.GetTransaction(def);
+            AssertVanillaGetTransactionExpectations();
         }
+
         [Test]
         public void TransactionSuspendedSuccessfully()
         {
             MockTxnDefinition def = new MockTxnDefinition();
             def.PropagationBehavior = TransactionPropagation.NotSupported;
             def.ReadOnly = false;
-            setGeneralGetTransactionExpectations();
+            SetGeneralGetTransactionExpectations();
 
-            DefaultTransactionStatus status = (DefaultTransactionStatus)_mockTxnMgr.GetTransaction(def);
+            DefaultTransactionStatus status = (DefaultTransactionStatus) _mockTxnMgr.GetTransaction(def);
             Assert.IsNull(status.Transaction);
             Assert.IsTrue(!status.IsNewTransaction);
             Assert.IsTrue(status.NewSynchronization);
             Assert.IsTrue(!status.ReadOnly);
             Assert.IsNotNull(status.SuspendedResources);
+            AssertVanillaGetTransactionExpectations();
         }
+
         [Test]
         public void TransactionCreatedSuccessfully()
         {
@@ -100,15 +111,17 @@ namespace Spring.Transaction.Support
             def.PropagationBehavior = TransactionPropagation.RequiresNew;
             def.ReadOnly = false;
 
-            setGeneralGetTransactionExpectations();
+            SetGeneralGetTransactionExpectations();
 
-            DefaultTransactionStatus status = (DefaultTransactionStatus)_mockTxnMgr.GetTransaction(def);
+            DefaultTransactionStatus status = (DefaultTransactionStatus) _mockTxnMgr.GetTransaction(def);
             Assert.AreEqual(_mockTxnMgr.Transaction, status.Transaction);
             Assert.IsTrue(status.IsNewTransaction);
             Assert.IsTrue(status.NewSynchronization);
             Assert.IsTrue(!status.ReadOnly);
             Assert.IsNotNull(status.SuspendedResources);
+            AssertVanillaGetTransactionExpectations();
         }
+
         [Test]
         public void NestedTransactionSuccessfully()
         {
@@ -116,17 +129,19 @@ namespace Spring.Transaction.Support
             def.PropagationBehavior = TransactionPropagation.Nested;
             def.ReadOnly = false;
 
-            setGeneralGetTransactionExpectations();
-            _mockTxnMgr.SetExpectedCalls("DoBegin", 1);
+            SetGeneralGetTransactionExpectations();
             _mockTxnMgr.Savepoints = false;
             _mockTxnMgr.NestedTransactionsAllowed = true;
 
-            DefaultTransactionStatus status = (DefaultTransactionStatus)_mockTxnMgr.GetTransaction(def);
+            DefaultTransactionStatus status = (DefaultTransactionStatus) _mockTxnMgr.GetTransaction(def);
             Assert.AreEqual(_mockTxnMgr.Transaction, status.Transaction);
             Assert.IsTrue(status.IsNewTransaction);
             Assert.AreEqual(true, status.NewSynchronization);
             Assert.IsTrue(!status.ReadOnly);
             Assert.IsNull(status.SuspendedResources);
+
+            AssertVanillaGetTransactionExpectations();
+            Assert.AreEqual(1, _mockTxnMgr.DoBeginCallCount);
         }
 
         [Test]
@@ -135,87 +150,94 @@ namespace Spring.Transaction.Support
             MockTxnDefinition def = new MockTxnDefinition();
             def.PropagationBehavior = TransactionPropagation.Nested;
             def.ReadOnly = false;
-            setVanillaGetTransactionExpectations();
-            _mockTxnMgr.SetTransaction(new MyMockTxnObjectSavepointMgr());
-            _mockTxnMgr.SetExpectedCalls("DoBegin", 0);
+            ISavepointManager saveMgr = MockRepository.GenerateMock<ISavepointManager>();
+            _mockTxnMgr.SetTransaction(saveMgr);
             _mockTxnMgr.Savepoints = true;
             _mockTxnMgr.NestedTransactionsAllowed = true;
 
-            DefaultTransactionStatus status = (DefaultTransactionStatus)_mockTxnMgr.GetTransaction(def);
+            DefaultTransactionStatus status = (DefaultTransactionStatus) _mockTxnMgr.GetTransaction(def);
             Assert.AreEqual(_mockTxnMgr.Transaction, status.Transaction);
             Assert.IsFalse(status.IsNewTransaction);
             Assert.IsFalse(status.NewSynchronization);
             Assert.IsTrue(!status.ReadOnly);
             Assert.IsNull(status.SuspendedResources);
+
+            AssertVanillaGetTransactionExpectations();
+            Assert.AreEqual(0, _mockTxnMgr.DoBeginCallCount);
         }
+
         [Test]
         public void DefaultPropagationBehavior()
         {
             MockTxnDefinition def = new MockTxnDefinition();
             def.PropagationBehavior = TransactionPropagation.Required;
             def.ReadOnly = true;
-            setGeneralGetTransactionExpectations();
+            SetGeneralGetTransactionExpectations();
 
-            DefaultTransactionStatus status = (DefaultTransactionStatus)_mockTxnMgr.GetTransaction(def);
+            DefaultTransactionStatus status = (DefaultTransactionStatus) _mockTxnMgr.GetTransaction(def);
             Assert.AreEqual(_mockTxnMgr.Transaction, status.Transaction);
             Assert.IsTrue(!status.IsNewTransaction);
             Assert.IsTrue(status.NewSynchronization);
             Assert.IsTrue(status.ReadOnly);
             Assert.IsNull(status.SuspendedResources);
+            AssertVanillaGetTransactionExpectations();
         }
+
         [Test]
         public void DefaultPropagationBehaviorWithNullDefinition()
         {
-            setGeneralGetTransactionExpectations();
+            SetGeneralGetTransactionExpectations();
 
-            DefaultTransactionStatus status = (DefaultTransactionStatus)_mockTxnMgr.GetTransaction(null);
+            DefaultTransactionStatus status = (DefaultTransactionStatus) _mockTxnMgr.GetTransaction(null);
             Assert.AreEqual(_mockTxnMgr.Transaction, status.Transaction);
             Assert.IsFalse(status.IsNewTransaction);
             Assert.IsTrue(status.NewSynchronization);
             Assert.IsFalse(status.ReadOnly);
             Assert.IsNull(status.SuspendedResources);
+            AssertVanillaGetTransactionExpectations();
         }
+
         [Test]
         public void DefaultNoExistingTransaction()
         {
-            setVanillaGetTransactionExpectations();
-            _mockTxnMgr.SetExpectedCalls("DoBegin", 1);
-
-            DefaultTransactionStatus status = (DefaultTransactionStatus)_mockTxnMgr.GetTransaction(null);
+            DefaultTransactionStatus status = (DefaultTransactionStatus) _mockTxnMgr.GetTransaction(null);
             Assert.IsNotNull(status.Transaction);
             Assert.IsTrue(status.IsNewTransaction);
             Assert.IsTrue(status.NewSynchronization);
             Assert.IsTrue(!status.ReadOnly);
             Assert.IsNull(status.SuspendedResources);
+            Assert.AreEqual(1, _mockTxnMgr.DoBeginCallCount);
+
+            AssertVanillaGetTransactionExpectations();
         }
+
         [Test]
         public void DefaultBehaviorDefaultPropagationNoExistingTransaction()
         {
-            setVanillaGetTransactionExpectations();
-            _mockTxnMgr.SetExpectedCalls("DoBegin", 0);
-
             MockTxnDefinition def = new MockTxnDefinition();
             def.PropagationBehavior = TransactionPropagation.Never;
             def.ReadOnly = true;
 
-            DefaultTransactionStatus status = (DefaultTransactionStatus)_mockTxnMgr.GetTransaction(def);
+            DefaultTransactionStatus status = (DefaultTransactionStatus) _mockTxnMgr.GetTransaction(def);
             Assert.IsNull(status.Transaction);
             Assert.IsTrue(!status.IsNewTransaction);
             Assert.IsTrue(status.NewSynchronization);
             Assert.IsTrue(status.ReadOnly);
             Assert.IsNull(status.SuspendedResources);
+            Assert.AreEqual(0, _mockTxnMgr.DoBeginCallCount);
+
+            AssertVanillaGetTransactionExpectations();
         }
-        private void setGeneralGetTransactionExpectations()
+
+        private void SetGeneralGetTransactionExpectations()
         {
             _mockTxnMgr.SetTransaction(new object());
-            setVanillaGetTransactionExpectations();
         }
 
-        private void setVanillaGetTransactionExpectations()
+        private void AssertVanillaGetTransactionExpectations()
         {
-            _mockTxnMgr.SetExpectedCalls("DoGetTransaction", 1);
-            _mockTxnMgr.SetExpectedCalls("IsExistingTransaction", 1);
+            Assert.AreEqual(1, _mockTxnMgr.DoGetTransactionCallCount);
+            Assert.AreEqual(1, _mockTxnMgr.IsExistingTransactionCallCount);
         }
-
     }
 }
