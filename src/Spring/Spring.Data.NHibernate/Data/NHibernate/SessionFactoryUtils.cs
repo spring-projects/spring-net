@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2010 the original author or authors.
+ * Copyright © 2002-2011 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -260,7 +260,7 @@ namespace Spring.Data.NHibernate
                     // Spring transaction management is active ->
                     // register pre-bound Session with it for transactional flushing.
                     session = sessionHolder.ValidatedSession;
-                    if (!sessionHolder.SynchronizedWithTransaction) 
+                    if (session != null && !sessionHolder.SynchronizedWithTransaction) 
                     {
                         log.Debug("Registering Spring transaction synchronization for existing Hibernate Session");
                         TransactionSynchronizationManager.RegisterSynchronization(
@@ -402,6 +402,38 @@ namespace Spring.Data.NHibernate
         #endregion
 
         /// <summary>
+        /// Converts a Hibernate ADOException to a Spring DataAccessExcption, extracting the underlying error code from 
+        /// ADO.NET.  Will extract the ADOException Message and SqlString properties and pass them to the translate method
+        /// of the provided IAdoExceptionTranslator.
+        /// </summary>
+        /// <param name="translator">The IAdoExceptionTranslator, may be a user provided implementation as configured on
+        /// HibernateTemplate.
+        /// </param>
+        /// <param name="ex">The ADOException throw</param>
+        /// <returns>The translated DataAccessException or UncategorizedAdoException in case of an error in translation
+        /// itself.</returns>
+        public static DataAccessException ConvertAdoAccessException(IAdoExceptionTranslator translator, ADOException ex)
+        {
+            try
+            {
+                string sqlString = (ex.SqlString != null)
+                                       ? ex.SqlString.ToString()
+                                       : string.Empty;
+                return translator.Translate(
+                    "Hibernate operation: " + ex.Message, sqlString, ex.InnerException);
+            } catch (Exception e)
+            {
+                log.Error("Exception thrown during exception translation. Message = [" + e.Message + "]", e);
+                log.Error("Exception that was attempted to be translated was [" + ex.Message + "]", ex);                
+                if (ex.InnerException != null)
+                {
+                    log.Error("  Inner Exception was [" + ex.InnerException.Message + "]", ex.InnerException);
+                }
+                throw new UncategorizedAdoException(e.Message, "", "", e);
+            }
+        }
+
+        /// <summary>
         /// Convert the given HibernateException to an appropriate exception from the
         /// <code>Spring.Dao</code> hierarchy. Note that it is advisable to
         /// handle AdoException specifically by using a AdoExceptionTranslator for the
@@ -433,10 +465,15 @@ namespace Spring.Data.NHibernate
             {
                 return new HibernateOptimisticLockingFailureException((StaleObjectStateException) ex);
             }
+            if (ex is StaleStateException)
+            {
+                return new HibernateOptimisticLockingFailureException((StaleStateException)ex);
+            }
             if (ex is QueryException)
             {
                 return new HibernateQueryException((QueryException) ex);
             }
+
             if (ex is PersistentObjectException)
             {
                 return new InvalidDataAccessApiUsageException(ex.Message, ex);
@@ -641,7 +678,7 @@ namespace Spring.Data.NHibernate
 	        if (sfi != null)
 	        {
 	            
-                IConnectionProvider cp = sfi.ConnectionProvider as IConnectionProvider;
+                ConnectionProvider cp = sfi.ConnectionProvider as ConnectionProvider;
 	            if (cp != null)
 	            {
                     IConfigurableApplicationContext ctx =
@@ -652,11 +689,8 @@ namespace Spring.Data.NHibernate
                             "Implementations of IApplicationContext must also implement IConfigurableApplicationContext");
                     }
 
-#if NET_1_1
-					DriverBase db = cp.Driver as DriverBase;
-#else
-                    IDriver db = cp.Driver;
-#endif
+
+                    DriverBase db = cp.Driver as DriverBase;
                     if (db != null)
                     {
                         Type hibCommandType = db.CreateCommand().GetType();
@@ -668,7 +702,7 @@ namespace Spring.Data.NHibernate
                             IObjectDefinition objectdef = ctx.ObjectFactory.GetObjectDefinition(providerName);
                             ConstructorArgumentValues ctorArgs = objectdef.ConstructorArgumentValues;
                             ConstructorArgumentValues.ValueHolder vh = ctorArgs.NamedArgumentValues["dbmetadata"] as ConstructorArgumentValues.ValueHolder;
-                            IObjectDefinition od = ((ObjectDefinitionHolder) vh.Value).ObjectDefinition;
+                            IObjectDefinition od = ((ObjectDefinitionHolder)vh.Value).ObjectDefinition;
                             ConstructorArgumentValues dbmdCtorArgs = od.ConstructorArgumentValues;
                             string commandType = dbmdCtorArgs.GetArgumentValue("commandType", typeof(string)).Value as string;
                             

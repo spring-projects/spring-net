@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2010 the original author or authors.
+ * Copyright © 2002-2011 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -35,8 +35,9 @@ namespace Spring.Data.NHibernate
     /// <remarks>
     /// Converts Hibernate's StaleObjectStateException.
     /// </remarks>
-    /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
+    /// <version>$Id: HibernateOptimisticLockingFailureException.cs,v 1.2 2008/04/23 11:41:41 lahma Exp $</version>
+    /// 
     [Serializable]
     public class HibernateOptimisticLockingFailureException : ObjectOptimisticLockingFailureException
     {
@@ -54,10 +55,42 @@ namespace Spring.Data.NHibernate
         }
 
         /// <summary>
+        /// Creates a new instance of the
+        /// <see cref="HibernateOptimisticLockingFailureException"/> class.
+        /// </summary>
+        /// <param name="message">
+        /// A message about the exception.
+        /// </param>
+        public HibernateOptimisticLockingFailureException(string message) : base(message) { }
+
+        /// <summary>
         /// Initializes a new instance of the <see cref="HibernateOptimisticLockingFailureException"/> class.
         /// </summary>
-        /// <param name="ex">The StaleObjectStateException.</param>
-        public HibernateOptimisticLockingFailureException(StaleObjectStateException ex) : base(ex.PersistentType, ex.Identifier, ex.Message, ex)
+        /// <param name="ex">The ex.</param>
+        public HibernateOptimisticLockingFailureException(StaleObjectStateException ex) : base(ex.EntityName, ex.Identifier, ex.Message, ex)
+        {
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HibernateOptimisticLockingFailureException"/> class.
+        /// </summary>
+        /// <param name="ex">The StaleStateException.</param>
+        public HibernateOptimisticLockingFailureException(StaleStateException ex) : base(ex.Message, ex)
+ 	    {
+ 	    }
+
+        /// <summary>
+        /// Creates a new instance of the HibernateOptimisticLockingFailureException class with the specified message
+        /// and root cause.
+        /// </summary>
+        /// <param name="message">
+        /// A message about the exception.
+        /// </param>
+        /// <param name="rootCause">
+        /// The root exception that is being wrapped.
+        /// </param>
+        public HibernateOptimisticLockingFailureException(string message, Exception rootCause)
+            : base(message, rootCause)
         {
         }
 
@@ -76,6 +109,8 @@ namespace Spring.Data.NHibernate
         protected HibernateOptimisticLockingFailureException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
+
+
 
         #endregion
 

@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns='http://www.springframework.net'
+         xmlns:db="http://www.springframework.net/database"
+         xmlns:tx="http://www.springframework.net/tx">
+
+  <tx:attribute-driven/>
+
+  <!-- The DAO object that performs multiple data access operations -->
+    <object id="accountManager"
+            type="Spring.Data.NHibernate.AccountManager">
+      <property name="AccountCreditDao" ref="AccountCreditDao"/>
+      <property name="AccountDebitDao" ref="AccountDebitDao"/>
+    </object>
+
+
+
+
+
+
+
+
+    <!-- Transactional Proxy for TestObjectManager using the ProxyFactoryObject -->
+  <!--
+    <object id="accountManager"
+            type="Spring.Aop.Framework.ProxyFactoryObject, Spring.Aop">
+
+        <property name="Target" ref="accountManagerTarget"/>
+
+        <property name="InterceptorNames">
+            <value>transactionInterceptor</value>
+        </property>
+
+    </object>
+    -->
+
+    <!-- Transaction Interceptor based on attribute [Transaction()] -->
+
+  <!-- note do not have converter from string to this property type registered -->
+  <!--
+    <object id="transactionInterceptor"
+            type="Spring.Transaction.Interceptor.TransactionInterceptor, Spring.Data">
+        <property name="TransactionManager" ref="hibernateTransactionManager"/>
+        
+        <property name="TransactionAttributeSource">
+            <object type="Spring.Transaction.Interceptor.AttributesTransactionAttributeSource, Spring.Data"/>
+        </property>
+    </object>
+  
+  -->
+  
+
+</objects>

@@ -37,6 +37,7 @@ namespace Spring.Data.NHibernate
 	/// ObjectDeletedException, and WrongClassException.
 	/// </remarks>
 	/// <author>Mark Pollack (.NET)</author>
+	/// <version>$Id: HibernateObjectRetrievalFailureException.cs,v 1.1 2008/04/07 20:12:53 lahma Exp $</version>
 	[Serializable]
 	public class HibernateObjectRetrievalFailureException : ObjectRetrievalFailureException
 	{
@@ -49,6 +50,15 @@ namespace Spring.Data.NHibernate
 		public HibernateObjectRetrievalFailureException()
 		{
 		}
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HibernateObjectRetrievalFailureException"/> class.
+        /// </summary>
+        /// <param name="message">The message.</param>
+        public HibernateObjectRetrievalFailureException(string message)
+            : base(message)
+        {
+        }
 
 
         /// <summary>
@@ -82,10 +92,26 @@ namespace Spring.Data.NHibernate
         /// Initializes a new instance of the <see cref="HibernateObjectRetrievalFailureException"/> class.
         /// </summary>
         /// <param name="ex">The ex.</param>
-        public HibernateObjectRetrievalFailureException(WrongClassException ex) : base(ex.Type, ex.Identifier, ex.Message, ex)
-        {
-          
+        public HibernateObjectRetrievalFailureException(WrongClassException ex) : base(ex.EntityName, ex.Identifier, ex.Message, ex)
+        {          
         }
+
+        /// <summary>
+        /// Creates a new instance of the HibernateObjectRetrievalFailureException class with the specified message
+        /// and root cause.
+        /// </summary>
+        /// <param name="message">
+        /// A message about the exception.
+        /// </param>
+        /// <param name="rootCause">
+        /// The root exception that is being wrapped.
+        /// </param>
+        public HibernateObjectRetrievalFailureException(string message, Exception rootCause)
+            : base(message, rootCause)
+        {
+        }
+
+
         /// <summary>
         /// Creates a new instance of the
         /// <see cref="HibernateObjectRetrievalFailureException"/> class.

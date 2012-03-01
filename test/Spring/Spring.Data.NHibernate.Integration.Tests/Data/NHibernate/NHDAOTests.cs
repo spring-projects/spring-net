@@ -60,7 +60,7 @@ namespace Spring.Data.NHibernate
         }
 
         [Test]
-        public void DbProviderTransalation()
+        public void DbProviderTranslation()
         {
 
             ISessionFactory sf = ctx["SessionFactory"] as ISessionFactory;

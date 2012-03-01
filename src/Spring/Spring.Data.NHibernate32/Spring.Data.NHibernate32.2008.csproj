@@ -16,7 +16,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\..\build\VS.Net.2008\Spring.Data.NHibernate32\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NET_2_0,NH_2_1</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>Spring.Data.NHibernate32.xml</DocumentationFile>
@@ -26,8 +26,8 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\..\build\VS.Net.2008\Spring.Data.NHibernate31\Release\</OutputPath>
-    <DefineConstants>TRACE;NET_2_0,NH_2_1</DefineConstants>
+    <OutputPath>..\..\..\build\VS.Net.2008\Spring.Data.NHibernate32\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>Spring.Data.NHibernate32.xml</DocumentationFile>
@@ -45,6 +45,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -52,59 +53,68 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\Spring.Data.NHibernate12\Data\NHibernate\Generic\FindHibernateDelegate.cs">
-      <Link>Data\NHibernate\Generic\FindHibernateDelegate.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Data.NHibernate12\Data\NHibernate\Generic\HibernateDaoSupport.cs">
-      <Link>Data\NHibernate\Generic\HibernateDaoSupport.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Data.NHibernate12\Data\NHibernate\Generic\HibernateDelegate.cs">
-      <Link>Data\NHibernate\Generic\HibernateDelegate.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Data.NHibernate12\Data\NHibernate\Generic\HibernateTemplate.cs">
-      <Link>Data\NHibernate\Generic\HibernateTemplate.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Data.NHibernate12\Data\NHibernate\Generic\IFindHibernateCallback.cs">
-      <Link>Data\NHibernate\Generic\IFindHibernateCallback.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Data.NHibernate12\Data\NHibernate\Generic\IHibernateCallback.cs">
-      <Link>Data\NHibernate\Generic\IHibernateCallback.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Data.NHibernate12\Data\NHibernate\Generic\IHibernateOperations.cs">
-      <Link>Data\NHibernate\Generic\IHibernateOperations.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Data.NHibernate12\Data\NHibernate\HibernateAccessor.cs">
-      <Link>Data\NHibernate\HibernateAccessor.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Data.NHibernate12\Data\NHibernate\SpringSessionContext.cs">
-      <Link>Data\NHibernate\SpringSessionContext.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Data.NHibernate12\Data\NHibernate\SpringSessionSynchronization.cs">
-      <Link>Data\NHibernate\SpringSessionSynchronization.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Data.NHibernate21\Data\NHibernate\Bytecode\BytecodeProvider.cs">
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\Bytecode\BytecodeProvider.cs">
       <Link>Data\NHibernate\Bytecode\BytecodeProvider.cs</Link>
     </Compile>
-    <Compile Include="..\Spring.Data.NHibernate21\Data\NHibernate\Bytecode\LazyInitializer.cs">
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\Bytecode\LazyInitializer.cs">
       <Link>Data\NHibernate\Bytecode\LazyInitializer.cs</Link>
     </Compile>
-    <Compile Include="..\Spring.Data.NHibernate21\Data\NHibernate\Bytecode\ObjectsFactory.cs">
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\Bytecode\ObjectsFactory.cs">
       <Link>Data\NHibernate\Bytecode\ObjectsFactory.cs</Link>
     </Compile>
-    <Compile Include="..\Spring.Data.NHibernate21\Data\NHibernate\Bytecode\ProxyFactory.cs">
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\Bytecode\ProxyFactory.cs">
       <Link>Data\NHibernate\Bytecode\ProxyFactory.cs</Link>
     </Compile>
-    <Compile Include="..\Spring.Data.NHibernate21\Data\NHibernate\Bytecode\ProxyFactoryFactory.cs">
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\Bytecode\ProxyFactoryFactory.cs">
       <Link>Data\NHibernate\Bytecode\ProxyFactoryFactory.cs</Link>
     </Compile>
-    <Compile Include="..\Spring.Data.NHibernate21\Data\NHibernate\Bytecode\ReflectionOptimizer.cs">
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\Bytecode\ReflectionOptimizer.cs">
       <Link>Data\NHibernate\Bytecode\ReflectionOptimizer.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\DelegatingLocalSessionFactoryObject.cs">
+      <Link>Data\NHibernate\DelegatingLocalSessionFactoryObject.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\DelegatingSessionFactory.cs">
+      <Link>Data\NHibernate\DelegatingSessionFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\FilterDefinitionFactoryObject.cs">
+      <Link>Data\NHibernate\FilterDefinitionFactoryObject.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\Generic\FindHibernateDelegate.cs">
+      <Link>Data\NHibernate\Generic\FindHibernateDelegate.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\Generic\HibernateDaoSupport.cs">
+      <Link>Data\NHibernate\Generic\HibernateDaoSupport.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\Generic\HibernateDelegate.cs">
+      <Link>Data\NHibernate\Generic\HibernateDelegate.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\Generic\HibernateTemplate.cs">
+      <Link>Data\NHibernate\Generic\HibernateTemplate.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\Generic\IFindHibernateCallback.cs">
+      <Link>Data\NHibernate\Generic\IFindHibernateCallback.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\Generic\IHibernateCallback.cs">
+      <Link>Data\NHibernate\Generic\IHibernateCallback.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\Generic\IHibernateOperations.cs">
+      <Link>Data\NHibernate\Generic\IHibernateOperations.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\HibernateAccessor.cs">
+      <Link>Data\NHibernate\HibernateAccessor.cs</Link>
     </Compile>
     <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\HibernateAdoException.cs">
       <Link>Data\NHibernate\HibernateAdoException.cs</Link>
     </Compile>
     <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\HibernateDelegate.cs">
       <Link>Data\NHibernate\HibernateDelegate.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\HibernateObjectRetrievalFailureException.cs">
+      <Link>Data\NHibernate\HibernateObjectRetrievalFailureException.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\HibernateOptimisticLockingFailureException.cs">
+      <Link>Data\NHibernate\HibernateOptimisticLockingFailureException.cs</Link>
     </Compile>
     <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\HibernateQueryException.cs">
       <Link>Data\NHibernate\HibernateQueryException.cs</Link>
@@ -118,6 +128,9 @@
     <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\HibernateTransactionManager.cs">
       <Link>Data\NHibernate\HibernateTransactionManager.cs</Link>
     </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\HibernateTxScopeTransactionManager.cs">
+      <Link>Data\NHibernate\HibernateTxScopeTransactionManager.cs</Link>
+    </Compile>
     <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\ICommonHibernateOperations.cs">
       <Link>Data\NHibernate\ICommonHibernateOperations.cs</Link>
     </Compile>
@@ -127,11 +140,23 @@
     <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\IHibernateOperations.cs">
       <Link>Data\NHibernate\IHibernateOperations.cs</Link>
     </Compile>
-    <Compile Include="..\Spring.Data.NHibernate12\Data\NHibernate\SessionFactoryUtils.cs">
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\LocalSessionFactoryObject.cs">
+      <Link>Data\NHibernate\LocalSessionFactoryObject.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\SessionFactoryUtils.cs">
       <Link>Data\NHibernate\SessionFactoryUtils.cs</Link>
     </Compile>
     <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\SessionHolder.cs">
       <Link>Data\NHibernate\SessionHolder.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\SimpleDelegatingSessionFactory.cs">
+      <Link>Data\NHibernate\SimpleDelegatingSessionFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\SpringSessionContext.cs">
+      <Link>Data\NHibernate\SpringSessionContext.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\SpringSessionSynchronization.cs">
+      <Link>Data\NHibernate\SpringSessionSynchronization.cs</Link>
     </Compile>
     <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\Support\ConfigSectionSessionScopeSettings.cs">
       <Link>Data\NHibernate\Support\ConfigSectionSessionScopeSettings.cs</Link>
@@ -150,18 +175,6 @@
     </Compile>
     <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\TemplateFlushMode.cs">
       <Link>Data\NHibernate\TemplateFlushMode.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Data.NHibernate20\Data\NHibernate\FilterDefiniitionFactoryObject.cs">
-      <Link>Data\NHibernate\FilterDefiniitionFactoryObject.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Data.NHibernate20\Data\NHibernate\HibernateObjectRetrievalFailureException.cs">
-      <Link>Data\NHibernate\HibernateObjectRetrievalFailureException.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Data.NHibernate20\Data\NHibernate\HibernateOptimisticLockingFailureException.cs">
-      <Link>Data\NHibernate\HibernateOptimisticLockingFailureException.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Data.NHibernate20\Data\NHibernate\LocalSessionFactoryObject.cs">
-      <Link>Data\NHibernate\LocalSessionFactoryObject.cs</Link>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
   </ItemGroup>

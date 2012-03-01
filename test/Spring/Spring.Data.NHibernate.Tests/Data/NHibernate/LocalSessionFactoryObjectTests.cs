@@ -20,6 +20,7 @@
 
 using System.Collections;
 using System.IO;
+
 using NHibernate;
 using NHibernate.Cfg;
 using NHibernate.Connection;
@@ -28,12 +29,9 @@ using NHibernate.Driver;
 
 using Spring.Context.Support;
 using Spring.Data.Common;
-
-using NUnit.Framework;
-#if NH_2_1
 using Spring.Data.NHibernate.Bytecode;
 
-#endif
+using NUnit.Framework;
 
 namespace Spring.Data.NHibernate
 {
@@ -59,11 +57,9 @@ namespace Spring.Data.NHibernate
             properties.Add(Environment.ConnectionDriver, typeof(SqlClientDriver).AssemblyQualifiedName);
             properties.Add(Environment.ConnectionProvider, typeof(DriverConnectionProvider).AssemblyQualifiedName);
 
-#if NH_2_1
             // since 2.1. "hbm2ddl.keywords = 'keywords'" is the default which causes the SessionFactory to connect to the db upon creation
             // we don't want this in this unit test
             properties.Add(Environment.Hbm2ddlKeyWords, "none");
-#endif
             sfo.HibernateProperties = properties;
             sfo.AfterPropertiesSet();
 
@@ -72,11 +68,9 @@ namespace Spring.Data.NHibernate
             Assert.AreEqual(sfo.Configuration.Properties[Environment.ConnectionDriver], typeof(SqlClientDriver).AssemblyQualifiedName);
             Assert.AreEqual(sfo.Configuration.Properties[Environment.Dialect], typeof(MsSql2000Dialect).AssemblyQualifiedName);
 
-#if NH_2_1
             Assert.AreEqual(sfo.Configuration.Properties[Environment.ProxyFactoryFactoryClass], typeof(ProxyFactoryFactory).AssemblyQualifiedName);
             // Spring's IBytecodeProvider should be the default
             // Assert.AreEqual(typeof(BytecodeProvider), Environment.BytecodeProvider.GetType(), "default IBytecodeProvider was not Spring's BytecodeProvider");
-#endif
         }
 
         [Test]
@@ -101,6 +95,4 @@ namespace Spring.Data.NHibernate
             sfo.AfterPropertiesSet();
         }
     }
-
-   
 }

@@ -15,7 +15,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\..\build\VS.Net.2008\Spring.Data.NHibernate32.Integration.Tests\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NET_2_0,NH_2_0,NH_2_1</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -23,7 +23,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\..\..\build\VS.Net.2008\Spring.Data.NHibernate32.Integration.Tests\Release\</OutputPath>
-    <DefineConstants>TRACE;NET_2_0,NH_2_0,NH_2_1</DefineConstants>
+    <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -50,9 +50,13 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Transactions" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\AccountController.cs">
+      <Link>Data\NHibernate\AccountController.cs</Link>
+    </Compile>
     <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\AccountCreditDao.cs">
       <Link>Data\NHibernate\AccountCreditDao.cs</Link>
     </Compile>
@@ -65,6 +69,24 @@
     <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\AuditDao.cs">
       <Link>Data\NHibernate\AuditDao.cs</Link>
     </Compile>
+    <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\Bytecode\AbstractInjectableUserTypeFixture.cs">
+      <Link>Data\Bytecode\AbstractInjectableUserTypeFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\Bytecode\Foo.cs">
+      <Link>Data\Bytecode\Foo.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\Bytecode\IDelimiter.cs">
+      <Link>Data\Bytecode\IDelimiter.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\Bytecode\InjectableStringUserType.cs">
+      <Link>Data\Bytecode\InjectableStringUserType.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\Bytecode\InjectableUserTypeFixture.cs">
+      <Link>Data\Bytecode\InjectableUserTypeFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\Bytecode\Product.cs">
+      <Link>Data\Bytecode\Product.cs</Link>
+    </Compile>
     <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\Credit.cs">
       <Link>Data\NHibernate\Credit.cs</Link>
     </Compile>
@@ -73,6 +95,12 @@
     </Compile>
     <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\Debit.cs">
       <Link>Data\NHibernate\Debit.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\HibernateTxScopeTransactionManagerTests.cs">
+      <Link>Data\NHibernate\HibernateTxScopeTransactionManagerTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\IAccountController.cs">
+      <Link>Data\NHibernate\IAccountController.cs</Link>
     </Compile>
     <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\IAccountCreditDao.cs">
       <Link>Data\NHibernate\IAccountCreditDao.cs</Link>
@@ -103,6 +131,9 @@
     </Compile>
     <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\NHTestObjectDao.cs">
       <Link>Data\NHibernate\NHTestObjectDao.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\SimpleTestDao.cs">
+      <Link>Data\NHibernate\SimpleTestDao.cs</Link>
     </Compile>
     <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\TemplateTests.cs">
       <Link>Data\NHibernate\TemplateTests.cs</Link>
@@ -148,6 +179,19 @@
   <ItemGroup>
     <EmbeddedResource Include="Data\NHibernate\dbProviderTemplateTests.xml" />
     <EmbeddedResource Include="Data\NHibernate\templateTests.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\Controllers.xml">
+      <Link>Data\NHibernate\Controllers.xml</Link>
+    </EmbeddedResource>
+    <Content Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\HibernateTxScopeTransactionManagerTests.xml">
+      <Link>Data\NHibernate\HibernateTxScopeTransactionManagerTests.xml</Link>
+    </Content>
+    <EmbeddedResource Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\Services.xml">
+      <Link>Data\NHibernate\Services.xml</Link>
+    </EmbeddedResource>
+    <Content Include="Data\NHibernate\Bytecode\Foo.Spechbm.xml" />
+    <EmbeddedResource Include="Data\NHibernate\Dao.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

@@ -9,7 +9,7 @@
 	<target name="build">
 
 		<!-- build Spring.Data.NHibernate32.Integration.Tests -->
-		<csc target="library" define="${current.build.defines.csc},NH_2_0,NH_2_1"
+		<csc target="library" define="${current.build.defines.csc}"
 				warnaserror="true"
 		                optimize="${build.optimize}"
 				debug="${current.build.debug}"
@@ -32,9 +32,6 @@
 				<include name="NHibernate.dll" />
 				<include name="*.dll" />
 				<exclude name="${project::get-name()}.dll" />
-				<exclude name="Spring.Data.NHibernate1*.dll" />
-				<exclude name="Spring.Data.NHibernate2*.dll" />
-				<exclude name="Spring.Data.NHibernate30*.dll" />
 				<exclude name="Spring.Data.NHibernate31*.dll" />
 				<exclude name="Spring.Data.NHibernate*Tests*.dll" />
 				<exclude name="CloverRuntime.dll" />

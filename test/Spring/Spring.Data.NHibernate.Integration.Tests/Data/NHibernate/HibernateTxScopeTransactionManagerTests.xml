@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns='http://www.springframework.net'
+		 xmlns:db="http://www.springframework.net/database"
+		 xmlns:tx="http://www.springframework.net/tx">
+
+<!-- NOTE: Critical that the Max Pool Size parameter is present in the connection string to limit conn pool size for these tests-->
+  <db:provider   id="DbProvider"
+                 provider="SqlServer-2.0"
+                 connectionString="Data Source=SPRINGQA;Database=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False;Max Pool Size=10;"/>
+
+  <object id="SessionFactory" type="Spring.Data.NHibernate.LocalSessionFactoryObject, Spring.Data.NHibernate21">
+    <property name="DbProvider" ref="DbProvider"/>
+    <property name="MappingResources">
+      <list>
+        <value>assembly://Spring.Data.NHibernate21.Integration.Tests/Spring.Data.NHibernate/TestObject.hbm.xml</value>
+      </list>
+    </property>
+
+    <property name="HibernateProperties">
+      <dictionary>
+        <entry key="dialect" value="NHibernate.Dialect.MsSql2000Dialect"/>
+        <entry key="connection.driver_class" value="NHibernate.Driver.SqlClientDriver"/>
+      </dictionary>
+    </property>
+
+  </object>
+
+  <object id="transactionManager" type="Spring.Data.NHibernate.HibernateTxScopeTransactionManager, Spring.Data.NHibernate21">
+    <property name="DbProvider" ref="DbProvider"/>
+    <property name="sessionFactory" ref="SessionFactory"/>
+  </object>
+
+  <tx:attribute-driven />
+
+</objects>

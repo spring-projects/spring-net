@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2010 the original author or authors.
+ * Copyright © 2002-2011 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -59,7 +59,7 @@ namespace Spring.Data.NHibernate
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SpringSessionSynchronization"/> class.
         /// </summary>
-        public SpringSessionSynchronization(SessionHolder sessionHolder, ISessionFactory sessionFactory,
+        public 	SpringSessionSynchronization(SessionHolder sessionHolder, ISessionFactory sessionFactory,
                	                             IAdoExceptionTranslator adoExceptionTranslator, bool newSession)
 		{
             this.sessionHolder = sessionHolder;
@@ -239,22 +239,23 @@ namespace Spring.Data.NHibernate
 	    /// </remarks>
 	    public override void AfterCompletion(TransactionSynchronizationStatus status)
 	    {
+	        if (!newSession)
+	        {
+                ISession session = sessionHolder.Session;
+                
+                // Provide correct transaction status for releasing the Session's cache locks,
+                // if possible. Else, closing will release all cache locks assuming a rollback.
+                ISessionImplementor sessionImplementor = session as ISessionImplementor;
+	            if (sessionImplementor != null)
+	            {
+                    sessionImplementor.AfterTransactionCompletion(status == TransactionSynchronizationStatus.Committed, sessionHolder.Transaction);
+	            }
 
-            ISession session = sessionHolder.Session;
-
-            // Provide correct transaction status for releasing the Session's cache locks,
-            // if possible. Else, closing will release all cache locks assuming a rollback.
-            ISessionImplementor sessionImplementor = session as ISessionImplementor;
-            if (sessionImplementor != null)
-            {
-                sessionImplementor.AfterTransactionCompletion(status == TransactionSynchronizationStatus.Committed);
-            }
-
-            if (newSession)
-            {
-                SessionFactoryUtils.CloseSessionOrRegisterDeferredClose(session, sessionFactory);
-            }	            	            
-
+                if (newSession)
+                {
+                    SessionFactoryUtils.CloseSessionOrRegisterDeferredClose(session, sessionFactory);
+                }	            	            
+	        }
             if (!newSession && status != TransactionSynchronizationStatus.Committed)
             {
                 // Clear all pending inserts/updates/deletes in the Session.

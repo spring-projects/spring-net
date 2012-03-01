@@ -10,7 +10,7 @@
             * current.build.defines.csc - framework-specific build defines
     -->
 	<target name="build">
-		<csc target="library" define="${current.build.defines.csc},NH_2_0,NH_2_1"
+		<csc target="library" define="${current.build.defines.csc}"
 		     warnaserror="true"
 		     optimize="${build.optimize}"
 		     debug="${current.build.debug}"
@@ -50,7 +50,7 @@
 
 		<!-- copy nh libs -->
 		<copy todir="${current.bin.dir}" overwrite="true">
-			<fileset basedir="${nh.lib.dir}">
+			<fileset basedir="${nh32.lib.dir}">
 				<include name="**/*.dll" />
 			</fileset>
 		</copy>

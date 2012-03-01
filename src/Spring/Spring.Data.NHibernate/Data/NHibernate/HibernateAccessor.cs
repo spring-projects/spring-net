@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2010 the original author or authors.
+ * Copyright © 2002-2011 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -186,6 +186,7 @@ namespace Spring.Data.NHibernate
         /// to set the interceptor reference directly in such a scenario.
         /// </p>
         /// </remarks>
+        /// <value>The name of the entity interceptor in the object factory/application context.</value>
         public abstract string EntityInterceptorObjectName
         {
             set;
@@ -205,6 +206,7 @@ namespace Spring.Data.NHibernate
         /// <summary>
         /// Set the object factory instance.
         /// </summary>
+        /// <value>The object factory instance.</value>
         public abstract IObjectFactory ObjectFactory
         {
             set;
@@ -442,10 +444,9 @@ namespace Spring.Data.NHibernate
         /// <returns>
         /// the corresponding DataAccessException instance
         /// </returns>
-        protected virtual DataAccessException ConvertAdoAccessException(ADOException ex) 
+        protected virtual DataAccessException ConvertAdoAccessException(ADOException ex)
         {
-                return AdoExceptionTranslator.Translate(
-                    "Hibernate operation: " + ex.Message, null, ex.InnerException);            
+            return SessionFactoryUtils.ConvertAdoAccessException(AdoExceptionTranslator, ex);         
         }
 
         /// <summary>
@@ -631,6 +632,7 @@ namespace Spring.Data.NHibernate
         /// <summary>
         /// Ensure SessionFactory is not null
         /// </summary>
+        /// <exception cref="ArgumentException">If SessionFactory property is null.</exception>
 	    public virtual void AfterPropertiesSet()
 	    {
             if (SessionFactory == null) 

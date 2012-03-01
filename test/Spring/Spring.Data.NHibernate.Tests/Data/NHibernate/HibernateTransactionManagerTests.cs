@@ -436,11 +436,7 @@ namespace Spring.Data.NHibernate
                 LastCall.On(session).Repeat.Twice();
                 transaction.Commit();
                 LastCall.On(transaction).Repeat.Once();
-#if NH_2_0
                 Expect.Call(session.Close()).Return(null).Repeat.Once();
-#else
-                Expect.Call(session.Close()).Return(null).Repeat.Twice();
-#endif
             //}
             mocks.ReplayAll();
 
@@ -476,10 +472,6 @@ namespace Spring.Data.NHibernate
             LastCall.IgnoreArguments();
             session.FlushMode = FlushMode.Never;
             Expect.Call(session.FlushMode).Return(FlushMode.Never);
-#if NH_2_0
-#else
-            Expect.Call(session.Close()).Return(null);
-#endif
 
             mocks.ReplayAll();
 
@@ -618,11 +610,7 @@ namespace Spring.Data.NHibernate
                 }
                 else
                 {
-#if NH_2_0 || NH_2_1
                     rootCause = new PropertyValueException("mymsg", typeof(string).Name, "Name");
-#else
-                    rootCause = new PropertyValueException("mymsg", typeof(string), "Name");
-#endif
                     LastCall.On(transaction).Throw(rootCause);
                 }
 

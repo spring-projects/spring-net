@@ -16,7 +16,7 @@
 		</copy>		
 
 		<!-- build Spring.Data.NHibernate32 -->
-		<csc target="library" define="${current.build.defines.csc},NH_2_0,NH_2_1"
+		<csc target="library" define="${current.build.defines.csc}"
                      warnaserror="true"
 		     optimize="${build.optimize}"
 		     debug="${current.build.debug}"
@@ -30,20 +30,6 @@
 			<sources failonempty="true">
 				<include name="**/*.cs" />
 				<include name="../Spring.Data.NHibernate/Data/**/*.cs" />
-				<include name="../Spring.Data.NHibernate/Support/**/*.cs" />
-				<include name="../Spring.Data.NHibernate12/Data/**/*.cs" />
-				<include name="../Spring.Data.NHibernate12/Support/**/*.cs" />
-				<include name="../Spring.Data.NHibernate20/Data/**/*.cs" />				
-				<include name="../Spring.Data.NHibernate21/Data/**/*.cs" />				
-				<exclude name="../Spring.Data.NHibernate/Data/**/HibernateAccessor.cs" />
-				<exclude name="../Spring.Data.NHibernate/Data/**/SpringSessionSynchronization.cs" />
-				<exclude name="../Spring.Data.NHibernate/Data/**/LocalSessionFactoryObject.cs" />
-				<exclude name="../Spring.Data.NHibernate/Data/**/HibernateAccessor.cs" />
-				<exclude name="../Spring.Data.NHibernate/Data/**/HibernateObjectRetrievalFailureException.cs" />
-				<exclude name="../Spring.Data.NHibernate/Data/**/HibernateOptimisticLockingFailureException.cs" />
-				<exclude name="../Spring.Data.NHibernate/Data/**/SessionFactoryUtils.cs" />	
-				<exclude name="../Spring.Data.NHibernate12/Data/**/HibernateOptimisticLockingFailureException.cs" />				
-				<exclude name="../Spring.Data.NHibernate12/Data/**/LocalSessionFactoryObject.cs" />
 				<include name="../GenCommonAssemblyInfo.cs" />
 			</sources>
 			<references basedir="${current.bin.dir}">
