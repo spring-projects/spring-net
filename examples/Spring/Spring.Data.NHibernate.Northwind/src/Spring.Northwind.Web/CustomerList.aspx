@@ -1,4 +1,4 @@
-<%@ Page Language="C#" MasterPageFile="~/Shared/MasterPage.master" CodeFile="CustomerList.aspx.cs" Inherits="CustomerList" %>
+<%@ Page Language="C#" MasterPageFile="~/Shared/MasterPage.master" Inherits="CustomerList" Codebehind="CustomerList.aspx.cs" %>
 <%@ Reference page="CustomerEditor.aspx" %>
 
 <asp:Content ID="content" ContentPlaceHolderID="content" runat="server">

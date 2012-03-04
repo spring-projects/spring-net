@@ -1,5 +1,5 @@
-<%@ Page Language="C#" MasterPageFile="~/Shared/MasterPage.master" CodeFile="CustomerView.aspx.cs"
-    Inherits="CustomerView" %>
+<%@ Page Language="C#" MasterPageFile="~/Shared/MasterPage.master"
+    Inherits="CustomerView" Codebehind="CustomerView.aspx.cs" %>
 
 <asp:Content ID="content" ContentPlaceHolderID="content" runat="server">
     <div align="center">

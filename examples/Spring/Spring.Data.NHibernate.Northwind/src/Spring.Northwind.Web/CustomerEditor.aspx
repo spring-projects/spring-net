@@ -1,5 +1,5 @@
-<%@ Page Language="C#" MasterPageFile="~/Shared/MasterPage.master" CodeFile="CustomerEditor.aspx.cs"
-    Inherits="CustomerEditor" %>
+<%@ Page Language="C#" MasterPageFile="~/Shared/MasterPage.master"
+    Inherits="CustomerEditor" Codebehind="CustomerEditor.aspx.cs" %>
 
 <asp:Content ID="content" ContentPlaceHolderID="content" runat="server">
     <h1>

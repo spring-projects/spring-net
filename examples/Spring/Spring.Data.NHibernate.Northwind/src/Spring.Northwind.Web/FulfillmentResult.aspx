@@ -1,5 +1,4 @@
-﻿<%@ Page Language="C#" MasterPageFile="~/Shared/MasterPage.master" AutoEventWireup="true"
-    CodeFile="FulfillmentResult.aspx.cs" Inherits="FullfillmentResult" %>
+﻿<%@ Page Language="C#" MasterPageFile="~/Shared/MasterPage.master" AutoEventWireup="true" Inherits="FullfillmentResult" Codebehind="FulfillmentResult.aspx.cs" %>
 
 <%@ Register Assembly="System.Web.Extensions, Version=3.5.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35"
     Namespace="System.Web.UI" TagPrefix="asp" %>

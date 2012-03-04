@@ -1,5 +1,4 @@
-<%@ Page Language="C#" MasterPageFile="~/Shared/MasterPage.master" AutoEventWireup="true"
-    CodeFile="CustomerOrders.aspx.cs" Inherits="CustomerOrders" %>
+<%@ Page Language="C#" MasterPageFile="~/Shared/MasterPage.master" AutoEventWireup="true" Inherits="CustomerOrders" Codebehind="CustomerOrders.aspx.cs" %>
 
 <asp:Content ID="content" ContentPlaceHolderID="content" runat="server">
 

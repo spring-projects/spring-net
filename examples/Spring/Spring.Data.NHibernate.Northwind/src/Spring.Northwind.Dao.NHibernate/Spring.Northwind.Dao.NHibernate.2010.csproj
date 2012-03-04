@@ -99,12 +99,6 @@
     <EmbeddedResource Include="Mappings\Order.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Spring.Northwind.Dao\Spring.Northwind.Dao.2008.csproj">
-      <Project>{7F45EEA2-50AC-44E2-85A6-2FFB02E38C44}</Project>
-      <Name>Spring.Northwind.Dao</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Mappings\OrderDetail.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -126,6 +120,12 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Spring.Northwind.Dao\Spring.Northwind.Dao.2010.csproj">
+      <Project>{7F45EEA2-50AC-44E2-85A6-2FFB02E38C44}</Project>
+      <Name>Spring.Northwind.Dao.2010</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

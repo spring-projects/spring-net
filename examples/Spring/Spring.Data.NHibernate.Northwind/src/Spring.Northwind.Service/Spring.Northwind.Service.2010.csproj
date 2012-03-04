@@ -71,13 +71,13 @@
     <Compile Include="Service\FulfillmentService.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Spring.Northwind.Dao.NHibernate\Spring.Northwind.Dao.NHibernate.2008.csproj">
+    <ProjectReference Include="..\Spring.Northwind.Dao.NHibernate\Spring.Northwind.Dao.NHibernate.2010.csproj">
       <Project>{6E4F55A0-C281-4706-A08B-BDEC2D2FBDA4}</Project>
-      <Name>Spring.Northwind.Dao.NHibernate</Name>
+      <Name>Spring.Northwind.Dao.NHibernate.2010</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Spring.Northwind.Dao\Spring.Northwind.Dao.2008.csproj">
+    <ProjectReference Include="..\Spring.Northwind.Dao\Spring.Northwind.Dao.2010.csproj">
       <Project>{7F45EEA2-50AC-44E2-85A6-2FFB02E38C44}</Project>
-      <Name>Spring.Northwind.Dao</Name>
+      <Name>Spring.Northwind.Dao.2010</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -102,20 +102,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\src\Spring.Northwind.Dao.NHibernate\Spring.Northwind.Dao.NHibernate.2008.csproj">
-      <Project>{6E4F55A0-C281-4706-A08B-BDEC2D2FBDA4}</Project>
-      <Name>Spring.Northwind.Dao.NHibernate</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\Spring.Northwind.Dao\Spring.Northwind.Dao.2008.csproj">
-      <Project>{7F45EEA2-50AC-44E2-85A6-2FFB02E38C44}</Project>
-      <Name>Spring.Northwind.Dao</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\Spring.Northwind.Service\Spring.Northwind.Service.2008.csproj">
-      <Project>{9E15876F-E9E0-43B7-9874-B54F163757D6}</Project>
-      <Name>Spring.Northwind.Service</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
       <Visible>False</Visible>
       <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
@@ -131,6 +117,20 @@
       <ProductName>Windows Installer 3.1</ProductName>
       <Install>true</Install>
     </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Spring.Northwind.Dao.NHibernate\Spring.Northwind.Dao.NHibernate.2010.csproj">
+      <Project>{6E4F55A0-C281-4706-A08B-BDEC2D2FBDA4}</Project>
+      <Name>Spring.Northwind.Dao.NHibernate.2010</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Spring.Northwind.Dao\Spring.Northwind.Dao.2010.csproj">
+      <Project>{7F45EEA2-50AC-44E2-85A6-2FFB02E38C44}</Project>
+      <Name>Spring.Northwind.Dao.2010</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\src\Spring.Northwind.Service\Spring.Northwind.Service.2010.csproj">
+      <Project>{9E15876F-E9E0-43B7-9874-B54F163757D6}</Project>
+      <Name>Spring.Northwind.Service.2010</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
