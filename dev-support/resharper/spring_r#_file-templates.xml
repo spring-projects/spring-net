@@ -14,7 +14,7 @@
       <Property key="ValidateFileName" value="False" />
     </CustomProperties>
   </Template>
-  <Template uid="b55397cb-9ad8-4b70-98aa-d5fa5fba17b0" shortcut="" description="Spring Object Definitions" text="&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;&#xA;&lt;objects xmlns=&quot;http://www.springframework.net&quot;&#xD;&#xA;         xmlns:v='http://www.springframework.net/validation'&#xD;&#xA;         xmlns:aop=&quot;http://www.springframework.net/aop&quot;&#xD;&#xA;         xmlns:db=&quot;http://www.springframework.net/db&quot;&#xD;&#xA;         xmlns:r=&quot;http://www.springframework.net/remoting&quot;&gt;&#xD;&#xA;&#xA;  &lt;!-- add object definitions here --&gt;&#xA;  $END$&#xA;  &#xA;&lt;/objects&gt;" reformat="True" shortenQualifiedReferences="True">
+  <Template uid="b55397cb-9ad8-4b70-98aa-d5fa5fba17b0" shortcut="" description="Spring Object Definitions" text="&lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;&#xA;&lt;objects xmlns=&quot;http://www.springframework.net&quot;&#xD;&#xA;         xmlns:v='http://www.springframework.net/validation'&#xD;&#xA;         xmlns:aop=&quot;http://www.springframework.net/aop&quot;&#xD;&#xA;         xmlns:db=&quot;http://www.springframework.net/database&quot;&#xD;&#xA;         xmlns:r=&quot;http://www.springframework.net/remoting&quot;&gt;&#xD;&#xA;&#xA;  &lt;!-- add object definitions here --&gt;&#xA;  $END$&#xA;  &#xA;&lt;/objects&gt;" reformat="True" shortenQualifiedReferences="True">
     <Categories />
     <Variables />
     <CustomProperties>
