@@ -1,5 +1,4 @@
 using System.Collections;
-
 using NHibernate;
 using NHibernate.Cfg;
 using NhCfg = NHibernate.Cfg;
@@ -22,6 +21,10 @@ namespace Spring.Data.NHibernate
         /// Connection string config element name
         /// </summary>
         public const string CONNECTION_STRING = "SimpleDelegatingSessionFactory.ConnectionString";
+        /// <summary>
+        /// Cache region prefix config element name
+        /// </summary>
+        public const string CACHE_REGION_PREFIX_STRING = "SimpleDelegatingSessionFactory.CacheRegionPrefix";
 
         private Configuration _configuration;
 
@@ -78,6 +81,18 @@ namespace Spring.Data.NHibernate
                     {
                         System.Diagnostics.Trace.WriteLine(System.Threading.Thread.CurrentThread.GetHashCode().ToString() + " = (created) ");
 
+						string originalPrefix = string.Empty;
+						if(_configuration.Properties.ContainsKey(NhCfg.Environment.CacheRegionPrefix))
+							originalPrefix = _configuration.Properties[NhCfg.Environment.CacheRegionPrefix];
+
+                    	string cacheRegionPrefix = LogicalThreadContext.GetData(CACHE_REGION_PREFIX_STRING) as string;
+                        if(!string.IsNullOrEmpty(cacheRegionPrefix))
+                        {
+                            _configuration.Properties[NhCfg.Environment.CacheRegionPrefix] = originalPrefix + cacheRegionPrefix;
+
+                            System.Diagnostics.Trace.WriteLine(String.Format("{0} = (cache region prefix) {1}", System.Threading.Thread.CurrentThread.GetHashCode(), cacheRegionPrefix));
+                        }
+
                         _configuration.Properties[NhCfg.Environment.ConnectionString] = connectionString;
                         ISessionFactory sessionFactory = _configuration.BuildSessionFactory();
 
@@ -87,6 +102,10 @@ namespace Spring.Data.NHibernate
                             dbProviderWrapper.DbProvider = (IDbProvider)ContextRegistry.GetContext().GetObject("DbProvider");
                         }
 
+						//Reset the Cache Region Prefix to the original value
+						// This is so other cache region prefixes are not appended together.
+						_configuration.Properties[NhCfg.Environment.CacheRegionPrefix] = originalPrefix;
+						
                         _targetSessionFactories[connectionString] = sessionFactory;
                     }
                     else
