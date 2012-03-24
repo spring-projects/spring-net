@@ -22,7 +22,7 @@
 
 using System;
 using System.Collections;
-using Spring.Context;
+
 using Spring.Objects.Factory;
 
 #endregion

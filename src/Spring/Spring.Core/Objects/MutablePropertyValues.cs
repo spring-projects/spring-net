@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using Spring.Util;
@@ -53,7 +54,7 @@ namespace Spring.Objects
         /// <summary>
         /// The list of <see cref="Spring.Objects.PropertyValue"/> objects.
         /// </summary>
-        private IList propertyValuesList = new ArrayList();
+        private List<PropertyValue> propertyValuesList = new List<PropertyValue>();
 
         #endregion
 		
@@ -121,7 +122,7 @@ namespace Spring.Objects
         /// </summary>
         public PropertyValue[] PropertyValues
         {
-            get { return (PropertyValue[]) ArrayList.Adapter (propertyValuesList).ToArray (typeof (PropertyValue)); }
+            get { return propertyValuesList.ToArray(); }
         }
 
         #endregion

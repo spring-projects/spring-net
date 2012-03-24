@@ -21,12 +21,14 @@
 #region Imports
 
 using System;
+using System.Collections.Generic;
 using System.Reflection;
+
 using Common.Logging;
+
 using Spring.Caching;
 using Spring.Context;
 using Spring.Expressions;
-using System.Collections;
 
 #endregion
 
@@ -104,9 +106,9 @@ namespace Spring.Aspects.Cache
         /// <returns>
         /// A dictionary containing all method arguments, keyed by method name.
         /// </returns>
-        protected static IDictionary PrepareVariables(MethodInfo method, object[] arguments)
+        protected static IDictionary<string, object> PrepareVariables(MethodInfo method, object[] arguments)
         {
-            IDictionary vars = new Hashtable();
+            IDictionary<string, object> vars = new Dictionary<string, object>();
 
             vars[method.Name] = method;
 
@@ -141,7 +143,7 @@ namespace Spring.Aspects.Cache
         /// If the SpEL expression could not be successfuly resolved to a boolean.
         /// </exception>
         protected static bool EvalCondition(string condition, 
-            IExpression conditionExpression, object context, IDictionary variables)
+            IExpression conditionExpression, object context, IDictionary<string, object> variables)
         {
             if (conditionExpression == null)
             {

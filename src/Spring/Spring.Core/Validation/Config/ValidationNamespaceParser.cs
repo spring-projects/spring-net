@@ -21,18 +21,16 @@
 #region Imports
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Xml;
 
 using Spring.Core.TypeResolution;
-using Spring.Context.Support;
 using Spring.Expressions;
 using Spring.Objects;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Xml;
-using Spring.Threading;
 using Spring.Util;
 
 #endregion
@@ -251,7 +249,7 @@ namespace Spring.Validation.Config
         {
             string messageId = GetAttributeValue(message, MessageConstants.IdAttribute);
             string[] providers = GetAttributeValue(message, MessageConstants.ProvidersAttribute).Split(',');
-            ArrayList parameters = new ArrayList();
+            List<IExpression> parameters = new List<IExpression>();
 
             foreach (XmlElement param in message.ChildNodes)
             {
@@ -272,7 +270,7 @@ namespace Spring.Validation.Config
             }
             if (parameters.Count > 0)
             {
-                properties.Add("Parameters", parameters.ToArray(typeof(IExpression)));
+                properties.Add("Parameters", parameters.ToArray());
             }
 
             IConfigurableObjectDefinition action =

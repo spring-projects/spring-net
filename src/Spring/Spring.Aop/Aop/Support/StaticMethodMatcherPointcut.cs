@@ -19,7 +19,6 @@
 #endregion
 
 using System;
-using System.Reflection;
 
 namespace Spring.Aop.Support
 {

@@ -11,7 +11,6 @@
 
 #region Imports
 
-using System;
 using AopAlliance.Aop;
 
 #endregion

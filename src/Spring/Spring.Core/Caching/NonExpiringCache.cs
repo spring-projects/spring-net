@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Spring.Caching
 {
@@ -30,7 +31,8 @@ namespace Spring.Caching
     /// <author>Aleksandar Seovic</author>
     public class NonExpiringCache : AbstractCache
     {
-        private readonly IDictionary itemStore = new Hashtable();
+        private readonly object syncRoot = new object();
+        private readonly IDictionary<object, object> itemStore = new Dictionary<object, object>();
 
         /// <summary>
         /// Gets the number of items in the cache.
@@ -39,7 +41,7 @@ namespace Spring.Caching
         {
             get
             {
-                lock (itemStore.SyncRoot)
+                lock (syncRoot)
                 {
                     return itemStore.Count;
                 }
@@ -53,9 +55,9 @@ namespace Spring.Caching
         {
             get
             {
-                lock (itemStore.SyncRoot)
+                lock (syncRoot)
                 {
-                    return itemStore.Keys;
+                    return (ICollection) itemStore.Keys;
                 }
             }
         }
@@ -71,9 +73,11 @@ namespace Spring.Caching
         /// </returns>
         public override object Get(object key)
         {
-            lock (itemStore.SyncRoot)
+            lock (syncRoot)
             {
-                return itemStore[key];
+                object value;
+                itemStore.TryGetValue(key, out value);
+                return value;
             }
         }
 
@@ -85,7 +89,7 @@ namespace Spring.Caching
         /// </param>
         public override void Remove(object key)
         {
-            lock (itemStore.SyncRoot)
+            lock (syncRoot)
             {
                 itemStore.Remove(key);
             }
@@ -99,7 +103,7 @@ namespace Spring.Caching
         /// </param>
         public override void RemoveAll(ICollection keys)
         {
-            lock (itemStore.SyncRoot)
+            lock (syncRoot)
             {
                 foreach (object key in keys)
                 {
@@ -113,7 +117,7 @@ namespace Spring.Caching
         /// </summary>
         public override void Clear()
         {
-            lock (itemStore.SyncRoot)
+            lock (syncRoot)
             {
                 itemStore.Clear();
             }
@@ -133,7 +137,7 @@ namespace Spring.Caching
         /// </param>
         protected override void DoInsert(object key, object value, TimeSpan timeToLive)
         {
-            lock (itemStore.SyncRoot)
+            lock (syncRoot)
             {
                 itemStore[key] = value;
             }

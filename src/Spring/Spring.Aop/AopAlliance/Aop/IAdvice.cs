@@ -9,12 +9,6 @@
 
 #endregion
 
-#region Imports
-
-using System;
-
-#endregion
-
 namespace AopAlliance.Aop
 {
 	/// <summary>

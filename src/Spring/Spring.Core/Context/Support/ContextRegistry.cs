@@ -21,14 +21,12 @@
 #region Imports
 
 using System;
-using System.Collections;
-using System.Collections.Specialized;
-using System.Configuration;
+using System.Collections.Generic;
+
 using Common.Logging;
+
 using Spring.Context.Events;
 using Spring.Util;
-using Spring.Objects.Factory;
-using Spring.Objects.Factory.Support;
 
 #endregion
 
@@ -63,7 +61,7 @@ namespace Spring.Context.Support
         private static readonly ContextRegistry instance = new ContextRegistry();
         private static string rootContextName = null;
 
-        private IDictionary contextMap = CollectionsUtil.CreateCaseInsensitiveHashtable();
+        private IDictionary<string, IApplicationContext> contextMap = new Dictionary<string, IApplicationContext>(StringComparer.OrdinalIgnoreCase);
 
         #region Constructor (s) / Destructor
 
@@ -108,7 +106,7 @@ namespace Spring.Context.Support
         {
             IApplicationContext parent = context.ParentContext;
 
-            Hashtable contexts = new Hashtable();
+            Dictionary<int, IApplicationContext> contexts = new Dictionary<int, IApplicationContext>();
 
             int contextIndex = 0;
 
@@ -125,7 +123,7 @@ namespace Spring.Context.Support
 
             for (int i = contextIndex; i > 0; i--)
             {
-                IApplicationContext contextToUpdate = (IApplicationContext)contexts[i];
+                IApplicationContext contextToUpdate = contexts[i];
 
                 if (prefix != string.Empty)
                     prefix = string.Format("{0}/{1}", prefix, contextToUpdate.Name);
@@ -171,22 +169,20 @@ namespace Spring.Context.Support
 
             lock (syncRoot)
             {
-                if (instance.contextMap.Contains(context.Name))
+                IApplicationContext ctx;
+                if (instance.contextMap.TryGetValue(context.Name, out ctx))
                 {
-                    IApplicationContext ctx = (IApplicationContext)instance.contextMap[context.Name];
-                    throw new ApplicationContextException(
-                        string.Format("Existing context '{0}' already registered under name '{1}'.",
-                                      ctx, context.Name));
+                    throw new ApplicationContextException(string.Format("Existing context '{0}' already registered under name '{1}'.", ctx, context.Name));
                 }
+
                 instance.contextMap[context.Name] = context;
-                context.ContextEvent += new ApplicationEventHandler(OnContextEvent);
+                context.ContextEvent += OnContextEvent;
 
                 #region Instrumentation
 
                 if (log.IsDebugEnabled)
                 {
-                    log.Debug(String.Format(
-                        "Registering context '{0}' under name '{1}'.", context, context.Name));
+                    log.Debug(String.Format("Registering context '{0}' under name '{1}'.", context, context.Name));
                 }
 
                 #endregion
@@ -290,8 +286,8 @@ namespace Spring.Context.Support
                 lock (syncRoot)
                 {
                     InitializeContextIfNeeded();
-                    IApplicationContext ctx = (IApplicationContext)instance.contextMap[name];
-                    if (ctx == null)
+                    IApplicationContext ctx;
+                    if (!instance.contextMap.TryGetValue(name, out ctx))
                     {
                         throw new ApplicationContextException(String.Format(
                             "No context registered under name '{0}'. Use the 'RegisterContext' method or the 'spring/context' section from your configuration file.",
@@ -325,7 +321,7 @@ namespace Spring.Context.Support
         {
             lock (syncRoot)
             {
-                ArrayList contexts = new ArrayList(instance.contextMap.Values);
+                ICollection<IApplicationContext> contexts = new List<IApplicationContext>(instance.contextMap.Values);
                 foreach (IApplicationContext ctx in contexts)
                 {
                     ctx.Dispose();
@@ -369,7 +365,9 @@ namespace Spring.Context.Support
         {
             lock (instance)
             {
-                return (instance.contextMap[name] != null);
+                IApplicationContext temp;
+                instance.contextMap.TryGetValue(name, out temp);
+                return temp != null;
             }
         }
 

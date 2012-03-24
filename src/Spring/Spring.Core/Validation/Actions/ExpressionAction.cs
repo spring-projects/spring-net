@@ -19,7 +19,7 @@
 #endregion
 
 using System.Collections;
-
+using System.Collections.Generic;
 using Spring.Expressions;
 
 namespace Spring.Validation.Actions
@@ -87,7 +87,7 @@ namespace Spring.Validation.Actions
         /// <param name="validationContext">Validation context.</param>
         /// <param name="contextParams">Additional context parameters.</param>
         /// <param name="errors">Validation errors container.</param>
-        protected override void OnValid(object validationContext, IDictionary contextParams, IValidationErrors errors)
+        protected override void OnValid(object validationContext, IDictionary<string, object> contextParams, IValidationErrors errors)
         {
             if (Valid != null)
             {
@@ -101,7 +101,7 @@ namespace Spring.Validation.Actions
         /// <param name="validationContext">Validation context.</param>
         /// <param name="contextParams">Additional context parameters.</param>
         /// <param name="errors">Validation errors container.</param>
-        protected override void OnInvalid(object validationContext, IDictionary contextParams, IValidationErrors errors)
+        protected override void OnInvalid(object validationContext, IDictionary<string, object> contextParams, IValidationErrors errors)
         {
             if (Invalid != null)
             {

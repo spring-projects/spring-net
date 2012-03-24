@@ -59,13 +59,13 @@ namespace Spring.Caching
         /// </param>
         void Remove(object key);
 
-        /// <summary>
-        /// Removes collection of items from the cache.
-        /// </summary>
-        /// <param name="keys">
-        /// Collection of keys to remove.
-        /// </param>
-        void RemoveAll(ICollection keys);
+	    /// <summary>
+	    /// Removes collection of items from the cache.
+	    /// </summary>
+	    /// <param name="keys">
+	    /// Collection of keys to remove.
+	    /// </param>
+	    void RemoveAll(ICollection keys);
 
         /// <summary>
         /// Removes all items from the cache.

@@ -21,7 +21,7 @@
 #region Imports
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
@@ -91,18 +91,18 @@ namespace Spring.Validation
                 reader.Read();
                 while (reader.Name == "Provider")
                 {
-                    object key = reader.GetAttribute("Id");
+                    string key = reader.GetAttribute("Id");
                     reader.Read();
                     while (reader.Name == "ErrorMessage")
                     {
                         XmlSerializer xs = new XmlSerializer(typeof(ErrorMessage));
-                        object value = xs.Deserialize(reader);
+                        ErrorMessage value = (ErrorMessage) xs.Deserialize(reader);
 
-                        IList mapValue = (IList)errorMap[key];
+                        List<ErrorMessage> mapValue;
 
-                        if (mapValue == null)
+                        if (!errorMap.TryGetValue(key, out mapValue))
                         {
-                            mapValue = new ArrayList();
+                            mapValue = new List<ErrorMessage>();
                             errorMap[key] = mapValue;
                         }
 
@@ -122,17 +122,16 @@ namespace Spring.Validation
         /// </param>
         public void WriteXml(XmlWriter writer)
         {
-            foreach (DictionaryEntry entry in errorMap)
+            foreach (KeyValuePair<string, List<ErrorMessage>> entry in errorMap)
             {
                 writer.WriteStartElement("Provider");
-                writer.WriteAttributeString("Id", entry.Key as String);
+                writer.WriteAttributeString("Id", entry.Key);
 
                 if (entry.Value != null)
                 {
-                    ArrayList errorsList = (ArrayList)entry.Value;
-                    foreach (object o in errorsList)
+                    IList<ErrorMessage> errorsList = entry.Value;
+                    foreach (ErrorMessage error in errorsList)
                     {
-                        ErrorMessage error = (ErrorMessage)o;
                         XmlSerializer xs = new XmlSerializer(typeof(ErrorMessage));
                         xs.Serialize(writer, error);
                     }
@@ -164,9 +163,9 @@ namespace Spring.Validation
         /// <summary>
         /// Gets the list of all providers.
         /// </summary>
-        public IList Providers
+        public IList<string> Providers
         {
-            get { return new ArrayList(this.errorMap.Keys); }
+            get { return new List<string>(this.errorMap.Keys); }
         }
 
         /// <summary>
@@ -186,10 +185,10 @@ namespace Spring.Validation
             AssertUtils.ArgumentNotNull(provider, "provider");
             AssertUtils.ArgumentNotNull(message, "errorMessage");
 
-            IList errors = (IList) errorMap[provider];
-            if (errors == null)
+            List<ErrorMessage> errors;
+            if (!errorMap.TryGetValue(provider, out errors))
             {
-                errors = new ArrayList();
+                errors = new List<ErrorMessage>();
                 errorMap[provider] = errors;
             }
             errors.Add(message);
@@ -214,15 +213,15 @@ namespace Spring.Validation
             {
                 foreach(string provider in errorsToMerge.Providers)
                 {
-                    ArrayList errList = (ArrayList) this.errorMap[provider];
-                    IList other = errorsToMerge.GetErrors(provider);
-                    if (errList == null)
+                    List<ErrorMessage> errList;
+                    List<ErrorMessage> other = new List<ErrorMessage>(errorsToMerge.GetErrors(provider));
+                    if (!errorMap.TryGetValue(provider, out errList))
                     {
                         this.errorMap[provider] = other;
                     }
                     else
                     {
-                        errList.AddRange((IList) other);
+                        errList.AddRange(other);
                     }
                 }
 //                foreach (DictionaryEntry errorEntry in errorsToMerge.errorMap)
@@ -253,10 +252,11 @@ namespace Spring.Validation
         /// <returns>
         /// A list of all <see cref="ErrorMessage"/>s for the supplied lookup <paramref name="provider"/>.
         /// </returns>
-        public IList GetErrors(string provider)
+        public IList<ErrorMessage> GetErrors(string provider)
         {
-            IList errors = (IList) errorMap[provider];
-            return errors == null ? ObjectUtils.EmptyObjects : errors;
+            List<ErrorMessage> errors;
+            errorMap.TryGetValue(provider, out errors);
+            return errors ?? new List<ErrorMessage>(0);
         }
 
         /// <summary>
@@ -273,14 +273,13 @@ namespace Spring.Validation
         /// <returns>
         /// A list of resolved error messages for the supplied lookup <paramref name="provider"/>.
         /// </returns>
-        public IList GetResolvedErrors(string provider, IMessageSource messageSource)
+        public IList<string> GetResolvedErrors(string provider, IMessageSource messageSource)
         {
             AssertUtils.ArgumentNotNull(provider, "provider");
 
-            IList messages = new ArrayList();
-            IList errors = (IList) errorMap[provider];
-            
-            if (errors != null)
+            IList<string> messages = new List<string>();
+            List<ErrorMessage> errors;
+            if (errorMap.TryGetValue(provider, out errors))
             {
                 foreach (ErrorMessage error in errors)
                 {
@@ -295,7 +294,7 @@ namespace Spring.Validation
         
         #region Data members
 
-        private readonly IDictionary errorMap = new Hashtable();
+        private readonly IDictionary<string, List<ErrorMessage>> errorMap = new Dictionary<string, List<ErrorMessage>>();
 
         #endregion
     }

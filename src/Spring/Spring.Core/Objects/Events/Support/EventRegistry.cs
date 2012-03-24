@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 
 #endregion
@@ -35,21 +36,21 @@ namespace Spring.Objects.Events.Support
     /// <author>Griffin Caprio</author>
     public class EventRegistry : IEventRegistry
     {
-        private readonly IList _publishers;
+        private readonly IList<object> _publishers;
 
         /// <summary>
         /// Creates a new instance of the EventRegistry class.
         /// </summary>
         public EventRegistry()
         {
-            _publishers = new ArrayList();
+            _publishers = new List<object>();
         }
 
         /// <summary>
         /// The list of event publishers.
         /// </summary>
         /// <value>The list of event publishers.</value>
-        protected IList Publishers
+        protected IList<object> Publishers
         {
             get { return _publishers; }
         }

@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Spring.Expressions.Processors;
 
@@ -47,7 +48,7 @@ namespace Spring.Expressions
         [Test]
         public void CallCustomCollectionProcessor()
         {
-            Hashtable vars = new Hashtable();
+            Dictionary<string, object> vars = new Dictionary<string, object>();
             vars["myCollProc"] = new MyTestCollectionProcessor();
 
             MethodNode mn = new MethodNode();

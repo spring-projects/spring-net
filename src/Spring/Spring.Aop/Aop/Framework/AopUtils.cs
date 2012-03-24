@@ -21,8 +21,8 @@
 #region Imports
 
 using System;
-using System.Collections;
 using System.Reflection;
+
 using Spring.Collections;
 using Spring.Util;
 

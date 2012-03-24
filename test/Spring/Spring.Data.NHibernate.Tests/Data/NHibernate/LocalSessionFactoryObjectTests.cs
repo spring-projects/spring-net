@@ -19,6 +19,7 @@
 #endregion
 
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 
 using NHibernate;
@@ -52,7 +53,7 @@ namespace Spring.Data.NHibernate
             sfo.DbProvider = dbProvider;
             sfo.ApplicationContext = new StaticApplicationContext();
 
-            IDictionary properties = new Hashtable();
+            Dictionary<string, string> properties = new Dictionary<string, string>();
             properties.Add(Environment.Dialect, typeof(MsSql2000Dialect).AssemblyQualifiedName);
             properties.Add(Environment.ConnectionDriver, typeof(SqlClientDriver).AssemblyQualifiedName);
             properties.Add(Environment.ConnectionProvider, typeof(DriverConnectionProvider).AssemblyQualifiedName);
@@ -88,7 +89,7 @@ namespace Spring.Data.NHibernate
         public void LocalSessionFactoryObjectWithInvalidProperties()
         {
             LocalSessionFactoryObject sfo = new LocalSessionFactoryObject();
-            IDictionary properties = new Hashtable();
+            Dictionary<string, string> properties = new Dictionary<string, string>();
             properties.Add(Environment.Dialect, typeof(MsSql2000Dialect).AssemblyQualifiedName);
             properties.Add(Environment.ConnectionProvider, "myClass");
             sfo.HibernateProperties = properties;

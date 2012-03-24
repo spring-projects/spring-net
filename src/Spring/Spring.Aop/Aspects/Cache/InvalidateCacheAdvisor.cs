@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using Spring.Aop.Support;
 using Spring.Caching;
 using Spring.Context;

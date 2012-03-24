@@ -24,9 +24,9 @@ using System;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
+
 using AopAlliance.Aop;
-using Spring.Core;
-using Spring.Objects;
+
 using Spring.Util;
 
 #endregion

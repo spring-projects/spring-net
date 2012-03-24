@@ -21,11 +21,11 @@
 #region Imports
 
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 
 using Spring.Aop;
 using Spring.Caching;
-using Spring.Util;
 
 #endregion
 
@@ -103,7 +103,7 @@ namespace Spring.Aspects.Cache
 
             if (cacheInfoArray.Length > 0)
             {
-                IDictionary vars = PrepareVariables(method, arguments);
+                IDictionary<string, object> vars = PrepareVariables(method, arguments);
                 foreach (InvalidateCacheAttribute cacheInfo in cacheInfoArray)
                 {
                     if (EvalCondition(cacheInfo.Condition, cacheInfo.ConditionExpression, returnValue, vars))
@@ -121,7 +121,7 @@ namespace Spring.Aspects.Cache
                                     logger.Debug(string.Format("Removing objects for keys [{0}] from cache [{1}].", keys, cacheInfo.CacheName));
                                 }
                                 #endregion
-                                cache.RemoveAll(keys as ICollection);
+                                cache.RemoveAll((ICollection) keys);
                             }
                             else
                             {

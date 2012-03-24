@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Spring.Core;
@@ -184,7 +185,7 @@ namespace Spring.Expressions
         /// <param name="context">Context to resolve property against.</param>
         /// <param name="variables">Expression variables map.</param>
         /// <returns>PropertyInfo for this node.</returns>
-        internal PropertyInfo GetPropertyInfo(object context, IDictionary variables)
+        internal PropertyInfo GetPropertyInfo(object context, IDictionary<string, object> variables)
         {
             lock (this)
             {

@@ -120,7 +120,7 @@ namespace Spring.Aop.Framework.DynamicProxy
             foreach (DictionaryEntry entry in targetMethods)
 			{
 				FieldInfo field = proxyType.GetField((string) entry.Key, BindingFlags.NonPublic | BindingFlags.Static);
-				field.SetValue(proxyType, (MethodInfo) entry.Value);
+				field.SetValue(proxyType, entry.Value);
 			}
 
 			return proxyType;

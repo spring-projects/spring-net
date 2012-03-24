@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Threading;
 using NUnit.Framework;
 using Spring.Collections;
@@ -40,7 +41,7 @@ namespace Spring.Expressions
         [Test]
         public void ExecutesLambdaFunction()
         {
-            Hashtable vars = new Hashtable();
+            Dictionary<string, object> vars = new Dictionary<string, object>();
             Expression.RegisterFunction("ident", "{|n| $n}", vars);
 
             FunctionNode fn = new FunctionNode();
@@ -56,7 +57,7 @@ namespace Spring.Expressions
         [Test]
         public void ExecutesDelegate()
         {
-            Hashtable vars = new Hashtable();
+            Dictionary<string, object> vars = new Dictionary<string, object>();
             vars["concat"] = new TestCallback(Concat);
 
             FunctionNode fn = new FunctionNode();
@@ -83,7 +84,7 @@ namespace Spring.Expressions
         [Test, Explicit]
         public void ExecutesDelegatePerformance()
         {
-            Hashtable vars = new Hashtable(5);
+            Dictionary<string, object> vars = new Dictionary<string, object>(5);
             WaitCallback noop = delegate (object arg)
                                       {
                                           // noop

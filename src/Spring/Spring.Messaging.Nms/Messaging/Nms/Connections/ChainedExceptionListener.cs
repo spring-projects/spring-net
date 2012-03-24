@@ -20,7 +20,8 @@
 
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
+
 using Spring.Messaging.Nms.Core;
 using Spring.Util;
 
@@ -34,7 +35,7 @@ namespace Spring.Messaging.Nms.Connections
     /// <author>Mark Pollack (.NET)</author>
     public class ChainedExceptionListener : IExceptionListener
     {
-        private ArrayList listeners = new ArrayList(2);
+        private List<IExceptionListener> listeners = new List<IExceptionListener>(2);
 
         /// <summary>
         /// Adds the exception listener to the chain
@@ -64,10 +65,7 @@ namespace Spring.Messaging.Nms.Connections
         /// <value>The exception listeners.</value>
         public IExceptionListener[] Listeners
         {
-            get
-            {
-                return (IExceptionListener[]) listeners.ToArray(typeof (IExceptionListener));
-            }
+            get { return listeners.ToArray(); }
         }
     }
 }

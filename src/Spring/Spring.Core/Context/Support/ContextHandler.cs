@@ -21,7 +21,7 @@
 #region Imports
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Reflection;
 using System.Xml;
@@ -29,7 +29,6 @@ using System.Xml;
 using Common.Logging;
 using Spring.Core;
 using Spring.Core.TypeResolution;
-using Spring.Objects;
 using Spring.Reflection.Dynamic;
 using Spring.Util;
 
@@ -449,7 +448,7 @@ namespace Spring.Context.Support
 	    /// </summary>
 	    private string[] GetResources( XmlElement contextElement )
 	    {
-	        ArrayList resourceNodes = new ArrayList(contextElement.ChildNodes.Count);
+            List<string> resourceNodes = new List<string>(contextElement.ChildNodes.Count);
 	        foreach (XmlNode possibleResourceNode in contextElement.ChildNodes)
 	        {
 	            XmlElement possibleResourceElement = possibleResourceNode as XmlElement;
@@ -463,7 +462,7 @@ namespace Spring.Context.Support
 	                }
 	            }
 	        }
-	        return (string[]) resourceNodes.ToArray(typeof(string));
+	        return resourceNodes.ToArray();
 	    }
 
         /// <summary>
@@ -471,7 +470,7 @@ namespace Spring.Context.Support
         /// </summary>
         private XmlNode[] GetChildContexts(XmlElement contextElement)
         {
-            ArrayList contextNodes = new ArrayList(contextElement.ChildNodes.Count);
+            List<XmlNode> contextNodes = new List<XmlNode>(contextElement.ChildNodes.Count);
             foreach (XmlNode possibleContextNode in contextElement.ChildNodes)
             {
                 XmlElement possibleContextElement = possibleContextNode as XmlElement;
@@ -481,7 +480,7 @@ namespace Spring.Context.Support
                     contextNodes.Add(possibleContextElement);
                 }
             }
-            return (XmlNode[])contextNodes.ToArray(typeof(XmlNode));
+            return contextNodes.ToArray();
         }
 
 	    #region Inner Class : ContextInstantiator

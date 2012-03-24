@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using NUnit.Framework;
 using Spring.Core.IO;
@@ -144,22 +145,22 @@ namespace Spring.Context.Support
 				return null;
 			}
 
-			public IDictionary GetObjectsOfType(Type type)
+			public IDictionary<string, object> GetObjectsOfType(Type type)
 			{
 				return null;
 			}
 
-		    public IDictionary GetObjectsOfType<T>()
+		    public IDictionary<string, T> GetObjectsOfType<T>()
 		    {
 		        return null;
 		    }
 
-		    public IDictionary GetObjectsOfType(Type type, bool includePrototypes, bool includeFactoryObjects)
+		    public IDictionary<string, object> GetObjectsOfType(Type type, bool includePrototypes, bool includeFactoryObjects)
 			{
 				return null;
 			}
 
-		    public IDictionary GetObjectsOfType<T>(bool includePrototypes, bool includeFactoryObjects)
+		    public IDictionary<string, T> GetObjectsOfType<T>(bool includePrototypes, bool includeFactoryObjects)
 		    {
 		        return null;
 		    }

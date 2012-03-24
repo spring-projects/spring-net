@@ -22,9 +22,11 @@
 
 using System;
 using System.Reflection;
+
 using Common.Logging;
+
 using NUnit.Framework;
-using Spring.Aop.Framework.DynamicProxy;
+
 using Spring.Aop.Support;
 using Spring.Context.Support;
 using Spring.Objects;

@@ -19,11 +19,14 @@
 #endregion
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
 using System.Threading;
+
 using AopAlliance.Intercept;
+
 using Common.Logging;
+
 using Spring.Core.TypeConversion;
 using Spring.Expressions;
 
@@ -149,7 +152,7 @@ namespace Spring.Aspects
         /// </exception>
         public override object Invoke(IMethodInvocation invocation)
         {
-            IDictionary callContextDictionary = new Hashtable();
+            IDictionary<string, object> callContextDictionary = new Dictionary<string, object>();
             callContextDictionary.Add("method", invocation.Method);
             callContextDictionary.Add("args", invocation.Arguments);
             callContextDictionary.Add("target", invocation.Target);
@@ -195,7 +198,7 @@ namespace Spring.Aspects
             return returnVal;
         }
 
-        private static void Sleep(RetryExceptionHandler handler, IDictionary callContextDictionary, SleepHandler sleepHandler)
+        private static void Sleep(RetryExceptionHandler handler, IDictionary<string, object> callContextDictionary, SleepHandler sleepHandler)
         {
             if (handler.IsDelayBased)
             {

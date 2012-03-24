@@ -21,7 +21,8 @@
 #region Imports
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
+
 using Spring.Util;
 
 #endregion
@@ -34,7 +35,7 @@ namespace Spring.Web.Support
     /// <author>Erich Eichinger</author>
     public class MimeMediaType
     {
-        private static readonly ArrayList ContentTypes = new ArrayList( new string[] {
+        private static readonly List<string> ContentTypes = new List<string>( new string[] {
                                                             "application", "audio", "example", "image", "message",
                                                             "model", "multipart", "text", "video"
                                                         });

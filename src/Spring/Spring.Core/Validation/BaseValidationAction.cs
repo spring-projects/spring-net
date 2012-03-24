@@ -20,7 +20,7 @@
 
 using System;
 using System.Collections;
-
+using System.Collections.Generic;
 using Spring.Expressions;
 
 namespace Spring.Validation
@@ -77,7 +77,7 @@ namespace Spring.Validation
         /// <param name="validationContext">Validation context.</param>
         /// <param name="contextParams">Additional context parameters.</param>
         /// <param name="errors">Validation errors container.</param>
-        public virtual void Execute(bool isValid, object validationContext, IDictionary contextParams, IValidationErrors errors)
+        public virtual void Execute(bool isValid, object validationContext, IDictionary<string, object> contextParams, IValidationErrors errors)
         {
             if (EvaluateWhen(validationContext, contextParams))
             {
@@ -102,7 +102,7 @@ namespace Spring.Validation
         /// <param name="validationContext">Validation context.</param>
         /// <param name="contextParams">Additional context parameters.</param>
         /// <param name="errors">Validation errors container.</param>
-        protected virtual void OnValid(object validationContext, IDictionary contextParams, IValidationErrors errors)
+        protected virtual void OnValid(object validationContext, IDictionary<string, object> contextParams, IValidationErrors errors)
         {}
 
         /// <summary>
@@ -111,7 +111,7 @@ namespace Spring.Validation
         /// <param name="validationContext">Validation context.</param>
         /// <param name="contextParams">Additional context parameters.</param>
         /// <param name="errors">Validation errors container.</param>
-        protected virtual void OnInvalid(object validationContext, IDictionary contextParams, IValidationErrors errors)
+        protected virtual void OnInvalid(object validationContext, IDictionary<string, object> contextParams, IValidationErrors errors)
         {}
 
         // CLOVER:ON
@@ -126,7 +126,7 @@ namespace Spring.Validation
         /// <param name="rootContext">Root context to use for expression evaluation.</param>
         /// <param name="contextParams">Additional context parameters.</param>
         /// <returns><c>True</c> if the condition is true, <c>False</c> otherwise.</returns>
-        protected bool EvaluateWhen(object rootContext, IDictionary contextParams)
+        protected bool EvaluateWhen(object rootContext, IDictionary<string, object> contextParams)
         {
             if (When == null)
             {

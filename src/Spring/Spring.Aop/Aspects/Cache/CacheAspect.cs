@@ -21,7 +21,8 @@
 #region Imports
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
+
 using Spring.Aop;
 using Spring.Context;
 
@@ -59,7 +60,7 @@ namespace Spring.Aspects.Cache
         /// <value>
         /// A list of advisors for this aspect.
         /// </value>
-        public IList Advisors
+        public IList<IAdvisor> Advisors
 	    {
 	        get { return advisors; }
 	        set { throw new NotSupportedException("Cache aspect advisors cannot be set externally."); }

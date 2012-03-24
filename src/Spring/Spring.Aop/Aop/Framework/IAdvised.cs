@@ -24,7 +24,7 @@ using System;
 using System.Collections;
 
 using AopAlliance.Aop;
-using Spring.Aop;
+
 using Spring.Proxy;
 
 #endregion

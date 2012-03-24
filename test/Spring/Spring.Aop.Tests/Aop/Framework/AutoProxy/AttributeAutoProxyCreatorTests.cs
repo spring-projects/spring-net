@@ -21,9 +21,10 @@
 #region Imports
 
 using System;
+
 using NUnit.Framework;
+
 using Spring.Objects;
-using Spring.Stereotype;
 
 #endregion
 

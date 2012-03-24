@@ -20,7 +20,7 @@
 
 #region Imports
 
-using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using Spring.Util;
 
@@ -76,7 +76,7 @@ namespace Spring.Reflection.Dynamic
 
         #region Cache
 
-        private static readonly IDictionary fieldCache = new Hashtable();
+        private static readonly IDictionary<FieldInfo, DynamicFieldCacheEntry> fieldCache = new Dictionary<FieldInfo, DynamicFieldCacheEntry>();
 
         /// <summary>
         /// Holds cached Getter/Setter delegates for a Field
@@ -98,8 +98,8 @@ namespace Spring.Reflection.Dynamic
         /// </summary>
         private static DynamicFieldCacheEntry GetOrCreateDynamicField(FieldInfo field)
         {
-            DynamicFieldCacheEntry fieldInfo = (DynamicFieldCacheEntry)fieldCache[field];
-            if (fieldInfo == null)
+            DynamicFieldCacheEntry fieldInfo;
+            if (!fieldCache.TryGetValue(field, out fieldInfo))
             {
                 fieldInfo = new DynamicFieldCacheEntry(DynamicReflectionManager.CreateFieldGetter(field), DynamicReflectionManager.CreateFieldSetter(field));
                 lock (fieldCache)

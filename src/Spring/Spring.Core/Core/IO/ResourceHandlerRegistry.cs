@@ -19,10 +19,10 @@
 #endregion
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
-using System.Security;
 using System.Security.Permissions;
+
 using Spring.Context.Support;
 using Spring.Core.TypeResolution;
 using Spring.Util;
@@ -102,14 +102,15 @@ namespace Spring.Core.IO
         /// </summary>
         private const string ResourcesSectionName = "spring/resourceHandlers";
 
-        private static IDictionary resourceHandlers = new Hashtable();
+        private static object syncRoot = new object();
+        private static IDictionary<string, IDynamicConstructor> resourceHandlers = new Dictionary<string, IDynamicConstructor>();
 
         /// <summary>
         /// Registers standard and user-configured resource handlers.
         /// </summary>
         static ResourceHandlerRegistry()
         {
-            lock (resourceHandlers.SyncRoot)
+            lock (syncRoot)
             {
                 RegisterResourceHandler("config", typeof(ConfigSectionResource));
                 RegisterResourceHandler("file", typeof(FileSystemResource));
@@ -139,7 +140,9 @@ namespace Spring.Core.IO
         public static IDynamicConstructor GetResourceHandler(string protocolName)
         {
             AssertUtils.ArgumentNotNull(protocolName, "protocolName");
-            return (IDynamicConstructor)resourceHandlers[protocolName];
+            IDynamicConstructor constructor;
+            resourceHandlers.TryGetValue(protocolName, out constructor);
+            return constructor;
         }
 
         /// <summary>
@@ -153,7 +156,7 @@ namespace Spring.Core.IO
         /// <exception cref="ArgumentNullException">If <paramref name="protocolName"/> is <c>null</c>.</exception>
         public static bool IsHandlerRegistered(string protocolName)
         {
-            return resourceHandlers.Contains(protocolName);
+            return resourceHandlers.ContainsKey(protocolName);
         }
 
         /// <summary>
@@ -241,7 +244,7 @@ namespace Spring.Core.IO
 
             #endregion
 
-            lock (resourceHandlers.SyncRoot)
+            lock (syncRoot)
             {
                 SecurityCritical.ExecutePrivileged( new SecurityPermission(SecurityPermissionFlag.Infrastructure), delegate
                 {

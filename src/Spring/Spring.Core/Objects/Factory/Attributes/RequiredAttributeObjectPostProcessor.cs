@@ -20,13 +20,11 @@
 
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+
 using Spring.Collections;
-using Spring.Objects;
-using Spring.Objects.Factory;
-using Spring.Objects.Factory.Attributes;
 using Spring.Objects.Factory.Config;
 using Spring.Util;
 
@@ -114,7 +112,7 @@ namespace Spring.Objects.Factory.Attributes
         {
             if (!validatedObjectNames.Contains(objectName))
             {
-                ArrayList invalidProperties = new ArrayList();
+                List<string> invalidProperties = new List<string>();
 
                 foreach (PropertyInfo pi in pis)
                 {
@@ -126,7 +124,7 @@ namespace Spring.Objects.Factory.Attributes
                 if (invalidProperties.Count != 0)
                 {
                     throw new ObjectInitializationException(
-                        BuildExceptionMessage((string[]) invalidProperties.ToArray(typeof (string)), objectName));
+                        BuildExceptionMessage(invalidProperties.ToArray(), objectName));
                 }
                 validatedObjectNames.Add(objectName);
             }

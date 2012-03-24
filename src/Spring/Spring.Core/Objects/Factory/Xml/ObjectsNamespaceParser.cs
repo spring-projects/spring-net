@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.IO;
@@ -407,7 +408,7 @@ namespace Spring.Objects.Factory.Xml
         /// A calculated object definition id.
         /// </returns>
         [Obsolete("This method will be dropped, override ObjectDefinitionParserHelper.PostProcessObjectNameAndAliases instead", false)]
-        protected internal virtual string CalculateId(XmlElement element, ArrayList aliases)
+        protected internal virtual string CalculateId(XmlElement element, List<string> aliases)
         {
             return null;
         }

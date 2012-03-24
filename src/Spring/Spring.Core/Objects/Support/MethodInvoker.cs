@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 
@@ -330,7 +331,7 @@ namespace Spring.Objects.Support
 				// lets slot in all of the named arguments first...
 				ParameterInfo[] parameters = _methodObject.GetParameters();
 				// lets figure out the index og each of the method parameters...
-				IDictionary argumentNamesToIndexes = new Hashtable();
+				IDictionary<string, int> argumentNamesToIndexes = new Dictionary<string, int>();
 				for (int i = 0; i < parameters.Length; ++i)
 				{
 					ParameterInfo parameter = parameters[i];
@@ -341,7 +342,7 @@ namespace Spring.Objects.Support
 				{
 					string argumentName = ((string) namedArgument.Key).ToLower(CultureInfo.InvariantCulture);
 					object argumentValue = namedArgument.Value;
-					if (!argumentNamesToIndexes.Contains(argumentName))
+					if (!argumentNamesToIndexes.ContainsKey(argumentName))
 					{
 						// whoa (Nelly); the named argument does not exist on the method...
 						throw new ArgumentException(string.Format(
@@ -358,7 +359,7 @@ namespace Spring.Objects.Support
 				}
 				// and then fill in any remaining blanks with the plain vanilla arguments...
 				int plainVanillaIndex = 0;
-				int[] sortedIndexes = (int[]) new ArrayList(argumentNamesToIndexes.Values).ToArray(typeof (int));
+				int[] sortedIndexes = new List<int>(argumentNamesToIndexes.Values).ToArray();
 				Array.Sort(sortedIndexes);
 				foreach (int argumentIndex in sortedIndexes)
 				{
@@ -431,8 +432,7 @@ namespace Spring.Objects.Support
                     new MemberFilter(new CriteriaMemberFilter().FilterMemberByCriteria),
                     searchCriteria);
 
-                if (matchingMethods == null
-                    || matchingMethods.Length == 0)
+                if (matchingMethods.Length == 0)
                 {
                     throw new MissingMethodException(targetType.Name, TargetMethod);
                 }

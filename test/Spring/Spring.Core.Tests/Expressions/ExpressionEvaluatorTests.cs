@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.EnterpriseServices;
 using System.Globalization;
@@ -68,10 +69,10 @@ namespace Spring.Expressions
             private IExpression exp;
             private object rootContext;
             private object expected;
-            private IDictionary variables;
+            private IDictionary<string, object> variables;
 
             public AsyncTestExpressionEvaluation(int iterations, IExpression exp, object rootContext, object expected,
-                                                 IDictionary variables)
+                                                 IDictionary<string, object> variables)
                 : base(iterations)
             {
                 this.exp = exp;
@@ -296,7 +297,7 @@ namespace Spring.Expressions
         [Test(Description = "http://jira.springframework.org/browse/SPRNET-944")]
         public void TestDateVariableExpression()
         {
-            Hashtable vars = new Hashtable();
+            Dictionary<string, object> vars = new Dictionary<string, object>();
             vars["date"] = "2008-05-15";
             object value = ExpressionEvaluator.GetValue(null, "#date", vars);
             Assert.That(value, Is.EqualTo("2008-05-15"));
@@ -305,7 +306,7 @@ namespace Spring.Expressions
         [Test(Description = "http://jira.springframework.org/browse/SPRNET-1155")]
         public void TestDateVariableExpressionCamelCased()
         {
-            Hashtable vars = new Hashtable();
+            Dictionary<string, object> vars = new Dictionary<string, object>();
             vars["Date"] = "2008-05-15";
             object value = ExpressionEvaluator.GetValue(null, "#Date", vars);
             Assert.That(value, Is.EqualTo("2008-05-15"));
@@ -583,7 +584,7 @@ namespace Spring.Expressions
                             ExpressionEvaluator.GetValue(ieee, "Officers['advisors'][0].Inventions[2]"));
 
             // maps with non-literal parameters
-            IDictionary vars = new Hashtable();
+            Dictionary<string, object> vars = new Dictionary<string, object>();
             vars["prez"] = "president";
             Assert.AreEqual(pupin, ExpressionEvaluator.GetValue(ieee, "Officers[#prez]", vars));
 
@@ -651,7 +652,7 @@ namespace Spring.Expressions
         {
             IExpression expression = Expression.Parse("Foo(#var1)");
             MethodInvokationCases testContext = new MethodInvokationCases();
-            Hashtable args = new Hashtable();
+            Dictionary<string, object> args = new Dictionary<string, object>();
             args["var1"] = "myString";
             Assert.AreEqual("myString", expression.GetValue(testContext, args));
             args["var1"] = 12;
@@ -891,7 +892,7 @@ namespace Spring.Expressions
         [Test]
         public void TestVariableNode()
         {
-            IDictionary vars = new Hashtable();
+            Dictionary<string, object> vars = new Dictionary<string, object>();
             vars["newName"] = "Aleksandar Seovic";
             Assert.AreEqual("Ana Maria Seovic",
                             ExpressionEvaluator.GetValue(null, "#newName = 'Ana Maria Seovic'", vars));
@@ -943,7 +944,7 @@ namespace Spring.Expressions
             Assert.AreEqual("falseExp", ExpressionEvaluator.GetValue(null, "(false ? 'trueExp' : 'falseExp')"));
 
             ExpressionEvaluator.SetValue(ieee, "Name", "IEEE");
-            IDictionary vars = new Hashtable();
+            Dictionary<string, object> vars = new Dictionary<string, object>();
             vars["queryName"] = "Nikola Tesla";
             string expression =
                 @"IsMember(#queryName)
@@ -1000,7 +1001,7 @@ namespace Spring.Expressions
         {
             Assert.AreEqual(1 & 3, ExpressionEvaluator.GetValue(null, "1 and 3"));
             Assert.AreEqual(1 & -1, ExpressionEvaluator.GetValue(null, "1 and -1"));
-            Hashtable vars = new Hashtable();
+            Dictionary<string, object> vars = new Dictionary<string, object>();
             vars["ALL"] = (RegexOptions) 0xFFFF;
             Assert.AreEqual(RegexOptions.IgnoreCase, ExpressionEvaluator.GetValue(null, "T(System.Text.RegularExpressions.RegexOptions).IgnoreCase and #ALL", vars));
         }
@@ -1386,7 +1387,7 @@ namespace Spring.Expressions
         [ExpectedException(typeof(ArgumentException))]
         public void TestComparisonOfInstancesThatDoNotImplementIComparable()
         {
-            IDictionary vars = new Hashtable();
+            Dictionary<string, object> vars = new Dictionary<string, object>();
             vars["tesla"] = tesla;
             vars["pupin"] = pupin;
             ExpressionEvaluator.GetValue(null, "#tesla > #pupin", vars);
@@ -1419,7 +1420,7 @@ namespace Spring.Expressions
             DateTime anaDOB = new DateTime(2004, 8, 14);
             DateTime aleksDOB = new DateTime(1974, 8, 24);
             TimeSpan diff = anaDOB - aleksDOB;
-            IDictionary vars = new Hashtable();
+            IDictionary<string, object> vars = new Dictionary<string, object>();
             vars["ts"] = diff;
 
             Assert.AreEqual(anaDOB, ExpressionEvaluator.GetValue(null, "date('1974-08-24') + #ts", vars));
@@ -1456,7 +1457,7 @@ namespace Spring.Expressions
             DateTime anaDOB = new DateTime(2004, 8, 14);
             DateTime aleksDOB = new DateTime(1974, 8, 24);
             TimeSpan diff = anaDOB - aleksDOB;
-            IDictionary vars = new Hashtable();
+            Dictionary<string, object> vars = new Dictionary<string, object>();
             vars["ts"] = diff;
 
             Assert.AreEqual(aleksDOB, ExpressionEvaluator.GetValue(null, "date('2004-08-14') - #ts", vars));
@@ -1714,12 +1715,12 @@ namespace Spring.Expressions
         public void TestDelegateFunctionExpressions()
         {
             //for purposes of an example in documentation
-            Hashtable vars = new Hashtable();
+            Dictionary<string, object> vars = new Dictionary<string, object>();
             vars["sqrt"] = new DoubleFunction(Sqrt);
             double result = (double)ExpressionEvaluator.GetValue(null, "#sqrt(64)", vars);
             Assert.AreEqual(8, result);
 
-            vars = new Hashtable();
+            vars = new Dictionary<string, object>();
             vars["max"] = new DoubleFunctionTwoArgs(Max);
             result = (double) ExpressionEvaluator.GetValue(null, "#max(5,25)", vars);
             Assert.AreEqual(25, result);
@@ -1751,25 +1752,25 @@ namespace Spring.Expressions
 
             // simple function
             Assert.AreEqual(4,
-                            ExpressionEvaluator.GetValue(null, "(#add = {|x, y| $x + $y}; #add(2, 2))", new Hashtable()));
+                            ExpressionEvaluator.GetValue(null, "(#add = {|x, y| $x + $y}; #add(2, 2))", new Dictionary<string, object>()));
             Assert.AreEqual(25,
                             ExpressionEvaluator.GetValue(null, "(#max = {|x, y| $x > $y ? $x : $y }; #max(5,25))",
-                                                         new Hashtable()));
+                                                         new Dictionary<string, object>()));
 
             // recursive function
             Assert.AreEqual(120,
                             ExpressionEvaluator.GetValue(null,
                                                          "(#fact = {|n| $n <= 1 ? 1 : $n * #fact($n-1) }; #fact(5))",
-                                                         new Hashtable()));
+                                                         new Dictionary<string, object>()));
 
             // function invoked within projection expression
             string expr = "(#upper = {|txt| $txt.ToUpper() }; !{ #upper(Name) })";
-            IList upperNames = (IList)ExpressionEvaluator.GetValue(ieee.Members, expr, new Hashtable());
+            IList upperNames = (IList)ExpressionEvaluator.GetValue(ieee.Members, expr, new Dictionary<string, object>());
             Assert.AreEqual("NIKOLA TESLA", upperNames[0]);
             Assert.AreEqual("MIHAJLO PUPIN", upperNames[1]);
 
             // function that delegates to a function passed as a parameter
-            IDictionary vars = new Hashtable();
+            Dictionary<string, object> vars = new Dictionary<string, object>();
             Expression.RegisterFunction("sqrt", "{|n| Math.Sqrt($n)}", vars);
             Expression.RegisterFunction("fact", "{|n| $n <= 1 ? 1 : $n * #fact($n-1)}", vars);
             string expr2 =
@@ -1788,7 +1789,7 @@ namespace Spring.Expressions
             Assert.AreEqual(120,
                             ExpressionEvaluator.GetValue(null,
                                                          "(#fact = {|n| $n <= 1 ? 1 : $n * #fact($n-1) }; #f = #fact; #f(5))",
-                                                         new Hashtable()));
+                                                         new Dictionary<string, object>()));
         }
 
         #region Collection Processor and Aggregator tests
@@ -1806,7 +1807,7 @@ namespace Spring.Expressions
         public void TestCustomCollectionProcessor()
         {
             // Test for the purposes of creating documentation example.  
-            Hashtable vars = new Hashtable();
+            Dictionary<string, object> vars = new Dictionary<string, object>();
             vars["EvenSum"] = new IntEvenSumCollectionProcessor();
             Assert.AreEqual(6, ExpressionEvaluator.GetValue(null, "{1, 2, 3, 4}.EvenSum()", vars));
 
@@ -2043,7 +2044,7 @@ namespace Spring.Expressions
         [Test]
         public void TestSetValue()
         {
-            IDictionary vars = new Hashtable();
+            Dictionary<string, object> vars = new Dictionary<string, object>();
             vars["tesla"] = tesla;
             vars["pupin"] = pupin;
             ExpressionEvaluator.SetValue(null, "#tesla.Name", vars, "Tesla, Nikola");
@@ -2204,7 +2205,7 @@ namespace Spring.Expressions
         [Test]
         public void TestMethodResolutionResolvesToExactMatchOfArgumentTypes()
         {
-            Hashtable args = new Hashtable();
+            Dictionary<string, object> args = new Dictionary<string, object>();
             args["bars"] = new Bar[] { new Bar() };
             Foo foo = new Foo();
 
@@ -2218,7 +2219,7 @@ namespace Spring.Expressions
         [Test]
         public void TestIndexerResolutionResolvesToExactMatchOfArgumentTypes()
         {
-            Hashtable args = new Hashtable();
+            Dictionary<string, object> args = new Dictionary<string, object>();
             args["bars"] = new Bar[] { new Bar() };
             Foo foo = new Foo();
 
@@ -2234,7 +2235,7 @@ namespace Spring.Expressions
         public void TestCtorResolutionResolvesToExactMatchOfArgumentTypes()
         {
             TypeRegistry.RegisterType(typeof(Foo));
-            Hashtable args = new Hashtable();
+            Dictionary<string, object> args = new Dictionary<string, object>();
             args["bars"] = new Bar[] { new Bar() };
 
             // ensure noone changed our test class
@@ -2454,8 +2455,8 @@ namespace Spring.Expressions
 
             IExpression exp2 = Expression.Parse("(#fact = {|n| $n <= 1 ? 1 : $n * #fact($n-1) }; #fact(#root))");
 
-            AsyncTestTask t4 = new AsyncTestExpressionEvaluation(2000, exp2, 5, 120, new Hashtable()).Start();
-            AsyncTestTask t5 = new AsyncTestExpressionEvaluation(2000, exp2, 6, 720, new Hashtable()).Start();
+            AsyncTestTask t4 = new AsyncTestExpressionEvaluation(2000, exp2, 5, 120, new Dictionary<string, object>()).Start();
+            AsyncTestTask t5 = new AsyncTestExpressionEvaluation(2000, exp2, 6, 720, new Dictionary<string, object>()).Start();
 
             t1.AssertNoException();
             t2.AssertNoException();
@@ -2538,12 +2539,12 @@ namespace Spring.Expressions
 
             // case #root != #this in Projection - ToString() will be applied to #this
             exp = Expression.Parse("(ToString(); #noop ={|val| $val}; !{#noop(ToString()) } )");
-            result = exp.GetValue(new int[] { 100, 200 }, new Hashtable());
+            result = exp.GetValue(new int[] { 100, 200 }, new Dictionary<string, object>());
             Assert.AreEqual(new string[] { "100", "200" }, result);
 
             // case #root != #this in Selection - ToString() will be applied to #this
             exp = Expression.Parse("(#noop ={|val| $val}; ?{#noop(ToString()=='100')} )");
-            result = exp.GetValue(new int[] { 100, 200 }, new Hashtable());
+            result = exp.GetValue(new int[] { 100, 200 }, new Dictionary<string, object>());
             IList list = new ArrayList();
             list.Add(100);
             Assert.AreEqual(list, result);
@@ -2772,7 +2773,7 @@ namespace Spring.Expressions
         {
             int n = 10000000;
             object x = "";
-            IDictionary vars = new Hashtable();
+            IDictionary<string, object> vars = new Dictionary<string, object>();
 
             // tesla.PlaceOfBirth
             start = DateTime.Now;

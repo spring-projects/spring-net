@@ -89,7 +89,7 @@ namespace Spring.Data.NHibernate
 
 	    private string[] configFilenames;
 
-        private IDictionary hibernateProperties;
+        private IDictionary<string, string> hibernateProperties;
 
         private IDbProvider dbProvider;
 
@@ -223,13 +223,13 @@ namespace Spring.Data.NHibernate
         /// provider settings and use a Spring-set IDbProvider instead.
         /// </p>
         /// </remarks>
-	    public IDictionary HibernateProperties
+	    public IDictionary<string, string> HibernateProperties
 	    {
 	        get
 	        {
 	            if (hibernateProperties == null)
 	            {
-	                hibernateProperties = new Hashtable();
+	                hibernateProperties = new Dictionary<string, string>();
 	            }
                 return hibernateProperties;
 	        }
@@ -506,7 +506,7 @@ namespace Spring.Data.NHibernate
             {
                 // Register specified Hibernate type definitions.
                 IDictionary<string, string> typedProperties = new  Dictionary<string, string>();
-                foreach (DictionaryEntry entry in hibernateProperties)
+                foreach (KeyValuePair<string, string> entry in hibernateProperties)
                 {
                     typedProperties.Add((string) entry.Key, (string) entry.Value);
                 }
@@ -536,7 +536,7 @@ namespace Spring.Data.NHibernate
 
             // check whether proxy factory has been initialized
             if (config.GetProperty(Environment.ProxyFactoryFactoryClass) == null
-                && (hibernateProperties == null || !hibernateProperties.Contains(Environment.ProxyFactoryFactoryClass)))
+                && (hibernateProperties == null || !hibernateProperties.ContainsKey(Environment.ProxyFactoryFactoryClass)))
             {
                 // nothing set by user, lets use Spring.NET's proxy factory factory
                 #region Logging
@@ -552,7 +552,7 @@ namespace Spring.Data.NHibernate
             if (this.hibernateProperties != null)
             {
                 if (config.GetProperty(Environment.ConnectionProvider) != null &&
-                    hibernateProperties.Contains(Environment.ConnectionProvider))
+                    hibernateProperties.ContainsKey(Environment.ConnectionProvider))
                 {
                     #region Logging
                     if (log.IsInfoEnabled)
@@ -565,9 +565,9 @@ namespace Spring.Data.NHibernate
                 }
 
                 Dictionary<string, string> genericHibernateProperties = new Dictionary<string, string>();
-                foreach (DictionaryEntry entry in hibernateProperties)
+                foreach (KeyValuePair<string, string> entry in hibernateProperties)
                 {
-                    genericHibernateProperties.Add((string) entry.Key, (string) entry.Value);
+                    genericHibernateProperties.Add(entry.Key, entry.Value);
                 }
                 config.AddProperties(genericHibernateProperties);
             }

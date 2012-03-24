@@ -21,6 +21,7 @@
 #region Imports
 
 using System.Collections;
+using System.Collections.Generic;
 
 #endregion
 
@@ -69,13 +70,13 @@ namespace Spring.Validation
         /// <param name="validationContext">The object to validate.</param>
         /// <param name="contextParams">Additional context parameters.</param>
         /// <param name="errors">
-        /// The <see cref="ValidationErrors"/> instance to add any error
-        /// messages to in the case of validation failure.
+        ///   The <see cref="ValidationErrors"/> instance to add any error
+        ///   messages to in the case of validation failure.
         /// </param>
         /// <returns>
         /// <see lang="true"/> if validation was successful.
         /// </returns>
-        bool Validate(object validationContext, IDictionary contextParams, IValidationErrors errors);
+        bool Validate(object validationContext, IDictionary<string, object> contextParams, IValidationErrors errors);
 
     }
 }

@@ -22,10 +22,13 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 using AopAlliance.Aop;
 using AopAlliance.Intercept;
+
 using Common.Logging;
+
 using Spring.Aop.Framework.Adapter;
 using Spring.Aop.Support;
 using Spring.Aop.Target;
@@ -453,8 +456,8 @@ namespace Spring.Aop.Framework
 
             // The copy needs a fresh advisor chain, and a fresh TargetSource.
             ITargetSource targetSource = FreshTargetSource();
-            IList advisorChain = FreshAdvisorChain();
-            IList introductionChain = FreshIntroductionChain();
+            IList<IAdvisor> advisorChain = FreshAdvisorChain();
+            IList<IAdvisor> introductionChain = FreshIntroductionChain();
             AdvisedSupport copy = new AdvisedSupport();
             copy.CopyConfigurationFrom(this, targetSource, advisorChain, introductionChain);
 
@@ -628,8 +631,8 @@ namespace Spring.Aop.Framework
                 ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(objectFactory, typeof(IAdvisor));
             string[] globalInterceptorNames =
                 ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(objectFactory, typeof(IInterceptor));
-            ArrayList objects = new ArrayList();
-            Hashtable names = new Hashtable();
+            List<object> objects = new List<object>();
+            Dictionary<object, string> names = new Dictionary<object, string>();
 
             for (int i = 0; i < globalAspectNames.Length; i++)
             {
@@ -672,10 +675,10 @@ namespace Spring.Aop.Framework
                     names[obj] = name;
                 }
             }
-            ((ArrayList)objects).Sort(new OrderComparator());
+            objects.Sort(new OrderComparator());
             foreach (object obj in objects)
             {
-                string name = (string)names[obj];
+                string name = names[obj];
                 AddAdvisorOnChainCreation(obj, name);
             }
         }
@@ -741,7 +744,7 @@ namespace Spring.Aop.Framework
             string[] globalIntroductionNames =
                 ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(objectFactory, typeof(IAdvice));
             ArrayList objects = new ArrayList();
-            Hashtable names = new Hashtable();
+            Dictionary<object, string> names = new Dictionary<object, string>();
 
             for (int i = 0; i < globalAspectNames.Length; i++)
             {
@@ -791,7 +794,7 @@ namespace Spring.Aop.Framework
             objects.Sort(new OrderComparator());
             foreach (object obj in objects)
             {
-                string name = (string)names[obj];
+                string name = names[obj];
                 AddIntroductionOnChainCreation(obj, name);
             }
         }
@@ -845,10 +848,10 @@ namespace Spring.Aop.Framework
         /// We need to do this every time a new prototype instance is returned,
         /// to return distinct instances of prototype interfaces and pointcuts.
         /// </summary>
-        private IList FreshAdvisorChain()
+        private IList<IAdvisor> FreshAdvisorChain()
         {
             IAdvisor[] advisors = Advisors;
-            ArrayList freshAdvisors = new ArrayList();
+            List<IAdvisor> freshAdvisors = new List<IAdvisor>();
             foreach (IAdvisor advisor in advisors)
             {
                 if (advisor is PrototypePlaceholder)
@@ -878,10 +881,10 @@ namespace Spring.Aop.Framework
         /// We need to do this every time a new prototype instance is returned,
         /// to return distinct instances of prototype interfaces and pointcuts.
         /// </summary>
-        private IList FreshIntroductionChain()
+        private IList<IAdvisor> FreshIntroductionChain()
         {
             IIntroductionAdvisor[] introductions = Introductions;
-            ArrayList freshIntroductions = new ArrayList();
+            List<IAdvisor> freshIntroductions = new List<IAdvisor>();
             foreach (IIntroductionAdvisor introduction in introductions)
             {
                 if (introduction is PrototypePlaceholder)

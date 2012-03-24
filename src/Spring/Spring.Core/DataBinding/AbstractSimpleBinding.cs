@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using Common.Logging;
 using Spring.Globalization;
@@ -60,19 +61,18 @@ namespace Spring.DataBinding
         /// Binds source object to target object.
         /// </summary>
         /// <param name="source">
-        /// The source object.
+        ///   The source object.
         /// </param>
         /// <param name="target">
-        /// The target object.
+        ///   The target object.
         /// </param>
         /// <param name="validationErrors">
-        /// Validation errors collection that type conversion errors should be added to.
+        ///   Validation errors collection that type conversion errors should be added to.
         /// </param>
         /// <param name="variables">
-        /// Variables that should be used during expression evaluation.
+        ///   Variables that should be used during expression evaluation.
         /// </param>
-        public override void BindSourceToTarget(object source, object target, IValidationErrors validationErrors,
-                                                IDictionary variables)
+        public override void BindSourceToTarget(object source, object target, IValidationErrors validationErrors, IDictionary<string, object> variables)
         {
             if (this.IsValid(validationErrors)
                 && (this.Direction == BindingDirection.Bidirectional || this.Direction == BindingDirection.SourceToTarget))
@@ -92,15 +92,15 @@ namespace Spring.DataBinding
         /// Concrete implementation if source to target binding.
         /// </summary>
         /// <param name="source">
-        /// The source object.
+        ///   The source object.
         /// </param>
         /// <param name="target">
-        /// The target object.
+        ///   The target object.
         /// </param>
         /// <param name="variables">
-        /// Variables that should be used during expression evaluation.
+        ///   Variables that should be used during expression evaluation.
         /// </param>
-        protected virtual void DoBindSourceToTarget(object source, object target, IDictionary variables)
+        protected virtual void DoBindSourceToTarget(object source, object target, IDictionary<string, object> variables)
         {
             object value = this.GetSourceValue(source, variables);
             if (this.Formatter != null && value is string)
@@ -114,19 +114,18 @@ namespace Spring.DataBinding
         /// Binds target object to source object.
         /// </summary>
         /// <param name="source">
-        /// The source object.
+        ///   The source object.
         /// </param>
         /// <param name="target">
-        /// The target object.
+        ///   The target object.
         /// </param>
         /// <param name="validationErrors">
-        /// Validation errors collection that type conversion errors should be added to.
+        ///   Validation errors collection that type conversion errors should be added to.
         /// </param>
         /// <param name="variables">
-        /// Variables that should be used during expression evaluation.
+        ///   Variables that should be used during expression evaluation.
         /// </param>
-        public override void BindTargetToSource(object source, object target, IValidationErrors validationErrors,
-                                                IDictionary variables)
+        public override void BindTargetToSource(object source, object target, IValidationErrors validationErrors, IDictionary<string, object> variables)
         {
             if (this.IsValid(validationErrors)
                 && (this.Direction == BindingDirection.Bidirectional || this.Direction == BindingDirection.TargetToSource))
@@ -147,15 +146,15 @@ namespace Spring.DataBinding
         /// Concrete implementation of target to source binding.
         /// </summary>
         /// <param name="source">
-        /// The source object.
+        ///   The source object.
         /// </param>
         /// <param name="target">
-        /// The target object.
+        ///   The target object.
         /// </param>
         /// <param name="variables">
-        /// Variables that should be used during expression evaluation.
+        ///   Variables that should be used during expression evaluation.
         /// </param>
-        protected virtual void DoBindTargetToSource(object source, object target, IDictionary variables)
+        protected virtual void DoBindTargetToSource(object source, object target, IDictionary<string, object> variables)
         {
             object value = this.GetTargetValue(target, variables);
             if (this.Formatter != null)
@@ -173,57 +172,57 @@ namespace Spring.DataBinding
         /// Gets the source value for the binding.
         /// </summary>
         /// <param name="source">
-        /// Source object to extract value from.
+        ///   Source object to extract value from.
         /// </param>
         /// <param name="variables">
-        /// Variables for expression evaluation.
+        ///   Variables for expression evaluation.
         /// </param>
         /// <returns>
         /// The source value for the binding.
         /// </returns>
-        protected abstract object GetSourceValue(object source, IDictionary variables);
+        protected abstract object GetSourceValue(object source, IDictionary<string, object> variables);
 
         /// <summary>
         /// Sets the source value for the binding.
         /// </summary>
         /// <param name="source">
-        /// The source object to set the value on.
+        ///   The source object to set the value on.
         /// </param>
         /// <param name="value">
-        /// The value to set.
+        ///   The value to set.
         /// </param>
         /// <param name="variables">
-        /// Variables for expression evaluation.
+        ///   Variables for expression evaluation.
         /// </param>
-        protected abstract void SetSourceValue(object source, object value, IDictionary variables);
+        protected abstract void SetSourceValue(object source, object value, IDictionary<string, object> variables);
 
         /// <summary>
         /// Gets the target value for the binding.
         /// </summary>
         /// <param name="target">
-        /// Source object to extract value from.
+        ///   Source object to extract value from.
         /// </param>
         /// <param name="variables">
-        /// Variables for expression evaluation.
+        ///   Variables for expression evaluation.
         /// </param>
         /// <returns>
         /// The target value for the binding.
         /// </returns>
-        protected abstract object GetTargetValue(object target, IDictionary variables);
+        protected abstract object GetTargetValue(object target, IDictionary<string, object> variables);
 
         /// <summary>
         /// Sets the target value for the binding.
         /// </summary>
         /// <param name="target">
-        /// The target object to set the value on.
+        ///   The target object to set the value on.
         /// </param>
         /// <param name="value">
-        /// The value to set.
+        ///   The value to set.
         /// </param>
         /// <param name="variables">
-        /// Variables for expression evaluation.
+        ///   Variables for expression evaluation.
         /// </param>
-        protected abstract void SetTargetValue(object target, object value, IDictionary variables);
+        protected abstract void SetTargetValue(object target, object value, IDictionary<string, object> variables);
 
         #endregion
     }

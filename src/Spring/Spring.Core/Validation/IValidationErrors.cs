@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using Spring.Context;
 
 namespace Spring.Validation
@@ -24,7 +25,7 @@ namespace Spring.Validation
         /// <summary>
         /// Gets the list of all error providers.
         /// </summary>
-        IList Providers { get; }
+        IList<string> Providers { get; }
 
         /// <summary>
         /// Adds the supplied <paramref name="message"/> to this
@@ -68,7 +69,7 @@ namespace Spring.Validation
         /// <returns>
         /// A list of all <see cref="ErrorMessage"/>s for the supplied lookup <paramref name="provider"/>.
         /// </returns>
-        IList GetErrors(string provider);
+        IList<ErrorMessage> GetErrors(string provider);
 
         /// <summary>
         /// Gets the list of resolved error messages for the supplied lookup <paramref name="provider"/>.
@@ -84,6 +85,6 @@ namespace Spring.Validation
         /// <returns>
         /// A list of resolved error messages for the supplied lookup <paramref name="provider"/>.
         /// </returns>
-        IList GetResolvedErrors(string provider, IMessageSource messageSource);
+        IList<string> GetResolvedErrors(string provider, IMessageSource messageSource);
     }
 }

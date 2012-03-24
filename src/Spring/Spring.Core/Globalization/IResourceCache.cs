@@ -19,6 +19,7 @@
 #endregion
 
 using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace Spring.Globalization
@@ -35,7 +36,7 @@ namespace Spring.Globalization
         /// <param name="target">Target to get a list of resources for.</param>
         /// <param name="culture">Resource culture.</param>
         /// <returns>A list of cached resources for the specified target object and culture.</returns>
-        IList GetResources(object target, CultureInfo culture);
+        IList<Resource> GetResources(object target, CultureInfo culture);
 
         /// <summary>
         /// Puts the list of resources in the cache.
@@ -44,6 +45,6 @@ namespace Spring.Globalization
         /// <param name="culture">Resource culture.</param>
         /// <param name="resources">A list of resources to cache.</param>
         /// <returns>A list of cached resources for the specified target object and culture.</returns>
-        void PutResources(object target, CultureInfo culture, IList resources);
+        void PutResources(object target, CultureInfo culture, IList<Resource> resources);
     }
 }

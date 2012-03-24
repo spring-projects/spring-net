@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Messaging;
 using Common.Logging;
 using Spring.Context;
@@ -460,7 +461,7 @@ namespace Spring.Messaging.Listener
         /// <returns>The result returned from the listener method</returns>
         protected virtual object InvokeListenerMethod(string methodName, object[] arguments)
         {
-            IDictionary vars = new Hashtable();
+            IDictionary<string,object> vars = new Dictionary<string, object>();
             vars["convertedObject"] = arguments[0];
             if (methodName.CompareTo(DefaultHandlerMethod) != 0)
             {

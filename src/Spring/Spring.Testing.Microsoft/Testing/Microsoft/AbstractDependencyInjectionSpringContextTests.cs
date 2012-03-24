@@ -19,13 +19,12 @@
 #endregion
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 using Spring.Context;
-using Spring.Context.Support;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
@@ -231,7 +230,7 @@ namespace Spring.Testing.Microsoft
         /// </summary>
         protected virtual void InitManagedVariableNames()
         {
-            ArrayList managedVarNames = new ArrayList();
+            List<string> managedVarNames = new List<string>();
             Type type = GetType();
 
             do
@@ -273,7 +272,7 @@ namespace Spring.Testing.Microsoft
                 type = type.BaseType;
             } while (type != typeof (AbstractDependencyInjectionSpringContextTests));
 
-            this.managedVariableNames = (string[]) managedVarNames.ToArray(typeof (string));
+            this.managedVariableNames = managedVarNames.ToArray();
         }
 
         private static bool IsProtectedInstanceField(FieldInfo field)

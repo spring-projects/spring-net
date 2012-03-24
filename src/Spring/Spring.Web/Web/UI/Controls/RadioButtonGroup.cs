@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Web.UI;
@@ -40,7 +41,7 @@ namespace Spring.Web.UI.Controls
     {
         private static readonly object EventSelectionChanged = new object();
 
-        private ArrayList options = new ArrayList();
+        private List<Control> options = new List<Control>();
 
 		/// <summary>
 		/// Overloaded to track addition of contained <see cref="RadioButton"/> controls.

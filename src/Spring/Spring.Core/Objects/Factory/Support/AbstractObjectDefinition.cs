@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 using System.Text;
@@ -740,12 +741,12 @@ namespace Spring.Objects.Factory.Support
             }
             if (ArrayUtils.HasLength(other.DependsOn))
             {
-                ArrayList deps = new ArrayList(other.DependsOn);
+                List<string> deps = new List<string>(other.DependsOn);
                 if (ArrayUtils.HasLength(DependsOn))
                 {
                     deps.AddRange(DependsOn);
                 }
-                DependsOn = (string[]) deps.ToArray(typeof(string));
+                DependsOn = deps.ToArray();
             }
             AutowireMode = other.AutowireMode;
             ResourceDescription = other.ResourceDescription;

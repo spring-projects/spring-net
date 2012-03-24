@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
@@ -148,7 +149,7 @@ namespace Spring.Util
             {
                 return new string[0];
             }
-            if (delimiters==null || delimiters.Length==0)
+            if (string.IsNullOrEmpty(delimiters))
             {
                 return new string[] { s };
             }
@@ -164,7 +165,7 @@ namespace Spring.Util
             int[] delimiterPositions = new int[s.Length];
             int count = MakeDelimiterPositionList(s, delimiterChars, quoteChars, delimiterPositions);
 
-            ArrayList tokens = new ArrayList(count+1);
+            List<string> tokens = new List<string>(count+1);
             int startIndex = 0;
             for (int ixSep = 0; ixSep < count; ixSep++)
             {
@@ -200,7 +201,7 @@ namespace Spring.Util
                 }
             }
 
-            return (string[])tokens.ToArray(typeof(string));
+            return tokens.ToArray();
         }
 
         private static int MakeDelimiterPositionList(string s, char[] delimiters, string quoteChars, int[] delimiterPositions)
@@ -534,9 +535,9 @@ namespace Spring.Util
         /// If any of the expressions in the supplied <paramref name="text"/>
         /// is empty (<c>${}</c>).
         /// </exception>
-        public static IList GetAntExpressions(string text)
+        public static IList<string> GetAntExpressions(string text)
         {
-            IList expressions = new ArrayList();
+            List<string> expressions = new List<string>();
             if (StringUtils.HasText(text))
             {
                 int start = text.IndexOf(AntExpressionPrefix);

@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
 using NUnit.Framework;
@@ -49,7 +50,7 @@ namespace Spring.Validation
         {
             ValidationErrors errors = new ValidationErrors();
             errors.AddError(string.Empty, ErrorMessageOne);
-            IList resolvedErrors = errors.GetResolvedErrors(string.Empty, null);
+            IList<string> resolvedErrors = errors.GetResolvedErrors(string.Empty, null);
             Assert.AreEqual(ErrorMessageOne.Id, (string)resolvedErrors[0]);
         }
 		[Test]
@@ -101,11 +102,11 @@ namespace Spring.Validation
         {
             IValidationErrors errors = new ValidationErrors();
 
-            IList typedErrors = errors.GetErrors("xyz");
+            IList<ErrorMessage> typedErrors = errors.GetErrors("xyz");
             Assert.IsNotNull(typedErrors);
             Assert.AreEqual(0, typedErrors.Count);
 
-            IList resolvedErrors = errors.GetResolvedErrors("xyz", new NullMessageSource());
+            IList<string> resolvedErrors = errors.GetResolvedErrors("xyz", new NullMessageSource());
             Assert.IsNotNull(resolvedErrors);
             Assert.AreEqual(0, resolvedErrors.Count);
         }
@@ -138,13 +139,13 @@ namespace Spring.Validation
 			errors.MergeErrors(otherErrors);
 
 			Assert.IsFalse(errors.IsEmpty);
-		    IList mergedErrors = errors.GetErrors(GoodErrorKey);
+		    IList<ErrorMessage> mergedErrors = errors.GetErrors(GoodErrorKey);
 		    Assert.IsNotNull(mergedErrors);
 			Assert.AreEqual(2, mergedErrors.Count);
             Assert.AreEqual(ErrorMessageOne, mergedErrors[0]);
             Assert.AreEqual(ErrorMessageTwo, mergedErrors[1]);
 
-			IList otherErrorsForKey = errors.GetErrors(anotherKey);
+			IList<ErrorMessage> otherErrorsForKey = errors.GetErrors(anotherKey);
 			Assert.IsNotNull(otherErrorsForKey);
             Assert.AreEqual(1, otherErrorsForKey.Count);
             Assert.AreEqual(ErrorMessageTwo, otherErrorsForKey[0]);

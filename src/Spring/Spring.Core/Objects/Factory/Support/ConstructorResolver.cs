@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 using Common.Logging;
@@ -540,7 +541,7 @@ namespace Spring.Objects.Factory.Support
 //            ObjectDefinitionValueResolver valueResolver = new ObjectDefinitionValueResolver(objectFactory);
             int minNrOfArgs = cargs.ArgumentCount;
 
-            foreach (DictionaryEntry entry in cargs.IndexedArgumentValues)
+            foreach (KeyValuePair<int, ConstructorArgumentValues.ValueHolder> entry in cargs.IndexedArgumentValues)
             {
                 int index = Convert.ToInt32(entry.Key);
                 if (index < 0)
@@ -552,8 +553,7 @@ namespace Spring.Objects.Factory.Support
                 {
                     minNrOfArgs = index + 1;
                 }
-                ConstructorArgumentValues.ValueHolder valueHolder =
-                    (ConstructorArgumentValues.ValueHolder)entry.Value;
+                ConstructorArgumentValues.ValueHolder valueHolder = entry.Value;
                 string argName = "constructor argument with index " + index;
                 object resolvedValue =
                     valueResolver.ResolveValueIfNecessary(objectName, definition, argName, valueHolder.Value);
@@ -575,9 +575,9 @@ namespace Spring.Objects.Factory.Support
                                                                  AssemblyQualifiedName
                                                            : null);
             }
-            foreach (DictionaryEntry namedArgumentEntry in definition.ConstructorArgumentValues.NamedArgumentValues)
+            foreach (KeyValuePair<string, object> namedArgumentEntry in definition.ConstructorArgumentValues.NamedArgumentValues)
             {
-                string argumentName = (string)namedArgumentEntry.Key;
+                string argumentName = namedArgumentEntry.Key;
                 string syntheticArgumentName = "constructor argument with name " + argumentName;
                 ConstructorArgumentValues.ValueHolder valueHolder =
                     (ConstructorArgumentValues.ValueHolder)namedArgumentEntry.Value;

@@ -20,9 +20,7 @@
 
 #region Imports
 
-using System;
-using System.Collections;
-using AopAlliance.Aop;
+using System.Collections.Generic;
 
 #endregion
 
@@ -41,6 +39,6 @@ namespace Spring.Aop
         /// <value>
         /// A list of advisors.
         /// </value>
-		IList Advisors { get; set; }
+		IList<IAdvisor> Advisors { get; set; }
 	}
 }

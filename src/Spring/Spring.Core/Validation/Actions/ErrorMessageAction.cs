@@ -20,7 +20,7 @@
 
 using System;
 using System.Collections;
-
+using System.Collections.Generic;
 using Spring.Expressions;
 using Spring.Util;
 
@@ -69,7 +69,7 @@ namespace Spring.Validation.Actions
         /// <param name="validationContext">Validation context.</param>
         /// <param name="contextParams">Additional context parameters.</param>
         /// <param name="errors">Validation errors container.</param>
-        protected override void OnInvalid(object validationContext, IDictionary contextParams, IValidationErrors errors)
+        protected override void OnInvalid(object validationContext, IDictionary<string, object> contextParams, IValidationErrors errors)
         {
             ErrorMessage error = CreateErrorMessage(validationContext, contextParams);
             foreach (string provider in this.providers)
@@ -84,7 +84,7 @@ namespace Spring.Validation.Actions
         /// <param name="validationContext">Validation context to resolve message parameters against.</param>
         /// <param name="contextParams">Additional context parameters.</param>
         /// <returns>Resolved error message</returns>
-        private ErrorMessage CreateErrorMessage(object validationContext, IDictionary contextParams)
+        private ErrorMessage CreateErrorMessage(object validationContext, IDictionary<string, object> contextParams)
         {
             if (messageParams != null && messageParams.Length > 0)
             {
@@ -104,7 +104,7 @@ namespace Spring.Validation.Actions
         /// <param name="validationContext">Validation context to resolve parameters against.</param>
         /// <param name="contextParams">Additional context parameters.</param>
         /// <returns>Resolved message parameters.</returns>
-        private object[] ResolveMessageParameters(IList messageParams, object validationContext, IDictionary contextParams)
+        private object[] ResolveMessageParameters(IList messageParams, object validationContext, IDictionary<string, object> contextParams)
         {
             object[] parameters = new object[messageParams.Count];
             for (int i = 0; i < messageParams.Count; i++)

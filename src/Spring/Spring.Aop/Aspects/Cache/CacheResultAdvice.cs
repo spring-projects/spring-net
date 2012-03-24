@@ -21,11 +21,12 @@
 #region Imports
 
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
+
 using AopAlliance.Intercept;
-using Common.Logging;
+
 using Spring.Caching;
-using Spring.Expressions;
 using Spring.Util;
 using System;
 
@@ -137,7 +138,7 @@ namespace Spring.Aspects.Cache
             CacheResultInfo cacheResultInfo = GetCacheResultInfo(invocation.Method);
 
             // prepare variables for SpEL expressions
-            IDictionary vars = PrepareVariables(invocation.Method, invocation.Arguments);
+            IDictionary<string, object> vars = PrepareVariables(invocation.Method, invocation.Arguments);
 
             bool cacheHit = false;
             object returnValue = GetReturnValue(invocation, cacheResultInfo.ResultInfo, vars, out cacheHit);
@@ -171,7 +172,7 @@ namespace Spring.Aspects.Cache
         /// <returns>
         /// Return value for the specified <paramref name="invocation"/>.
         /// </returns>
-        private object GetReturnValue(IMethodInvocation invocation, CacheResultAttribute resultInfo, IDictionary vars, out bool cacheHit)
+        private object GetReturnValue(IMethodInvocation invocation, CacheResultAttribute resultInfo, IDictionary<string, object> vars, out bool cacheHit)
         {
             if (resultInfo != null)
             {
@@ -258,7 +259,7 @@ namespace Spring.Aspects.Cache
         /// <param name="vars">
         /// Variables for expression evaluation.
         /// </param>
-        private void CacheResultItems(IEnumerable items, CacheResultItemsAttribute[] itemInfoArray, IDictionary vars)
+        private void CacheResultItems(IEnumerable items, CacheResultItemsAttribute[] itemInfoArray, IDictionary<string, object> vars)
         {
             foreach (CacheResultItemsAttribute itemInfo in itemInfoArray)
             {

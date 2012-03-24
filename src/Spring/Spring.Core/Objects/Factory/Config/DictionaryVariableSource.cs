@@ -20,7 +20,7 @@
 
 using System;
 using System.Collections;
-using System.Collections.Specialized;
+using System.Collections.Generic;
 
 namespace Spring.Objects.Factory.Config
 {
@@ -28,9 +28,9 @@ namespace Spring.Objects.Factory.Config
     /// A very simple, hashtable-based implementation of <see cref="IVariableSource"/>
     /// </summary>
     /// <author>Erich Eichinger</author>
-    public class DictionaryVariableSource : IVariableSource, IEnumerable
+    public class DictionaryVariableSource : IVariableSource, IEnumerable<KeyValuePair<string, string>>
     {
-        private readonly Hashtable variables;
+        private readonly Dictionary<string, string> variables;
 
         /// <summary>
         /// Creates a new, empty variable source
@@ -95,11 +95,11 @@ namespace Spring.Objects.Factory.Config
         {
             if (ignoreCase)
             {
-                variables = CollectionsUtil.CreateCaseInsensitiveHashtable();
+                variables = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             }
             else
             {
-                variables = new Hashtable();
+                variables = new Dictionary<string, string>();
             }
 
             if (dictionary != null)
@@ -140,16 +140,22 @@ namespace Spring.Objects.Factory.Config
         /// </summary>
         public string ResolveVariable(string name)
         {
-            if (!variables.ContainsKey(name))
+            string value;
+            if (!variables.TryGetValue(name, out value))
             {
                 throw new ArgumentException(string.Format("variable '{0}' cannot be resolved", name));
             }
-            return (string)variables[name];
+            return value;
+        }
+
+        IEnumerator<KeyValuePair<string, string>> IEnumerable<KeyValuePair<string, string>>.GetEnumerator()
+        {
+            return variables.GetEnumerator();
         }
 
         public IEnumerator GetEnumerator()
         {
-            return (variables as IEnumerable).GetEnumerator() ;
+            return variables.GetEnumerator();
         }
     }
 }

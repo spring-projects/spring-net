@@ -19,7 +19,7 @@
 #endregion
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 
 namespace Spring.Web.UI.Controls
@@ -64,19 +64,19 @@ namespace Spring.Web.UI.Controls
 
         private string DetermineLocalizedUrl()
         {
-            ArrayList localeParts = new ArrayList(Page.UserCulture.Name.Split('-'));
+            List<string> localeParts = new List<string>(Page.UserCulture.Name.Split('-'));
             while (localeParts.Count > 0 && !FileExists(localeParts))
             {
                 localeParts.RemoveAt(localeParts.Count - 1);
             }
 
-            string locale = String.Join("-", (string[]) localeParts.ToArray(typeof(string)));
+            string locale = String.Join("-", localeParts.ToArray());
             return Page.ImagesRoot + (locale.Length > 0 ? "/" + locale : "") + "/" + this.ImageName;
         }
 
-        private bool FileExists(ArrayList localeParts)
+        private bool FileExists(List<string> localeParts)
         {
-            string locale = String.Join("-", (string[]) localeParts.ToArray(typeof(string)));
+            string locale = String.Join("-", localeParts.ToArray());
             string url = Page.ImagesRoot + "/" + locale + "/" + this.ImageName;
             return File.Exists(Page.Server.MapPath(url));
         }

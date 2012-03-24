@@ -22,9 +22,7 @@
 
 using System;
 using System.Text;
-using System.Reflection;
-using Spring.Aop.Framework.DynamicProxy;
-using Spring.Core.TypeResolution;
+
 using Spring.Util;
 using Spring.Reflection.Dynamic;
 

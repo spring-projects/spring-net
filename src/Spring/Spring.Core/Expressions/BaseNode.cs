@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 namespace Spring.Expressions
@@ -99,7 +100,7 @@ namespace Spring.Expressions
             /// <summary>
             /// Gets/Sets global variables of the current evaluation
             /// </summary>
-            public IDictionary Variables;
+            public IDictionary<string, object> Variables;
             /// <summary>
             /// Gets/Sets local variables of the current evaluation
             /// </summary>
@@ -110,7 +111,7 @@ namespace Spring.Expressions
             /// </summary>
             /// <param name="rootContext">The root context for this evaluation</param>
             /// <param name="globalVariables">dictionary of global variables used during this evaluation</param>
-            public EvaluationContext(object rootContext, IDictionary globalVariables)
+            public EvaluationContext(object rootContext, IDictionary<string, object> globalVariables)
             {
                 this.RootContext = rootContext;
                 this.ThisContext = rootContext;
@@ -175,7 +176,7 @@ namespace Spring.Expressions
         /// <param name="context">Object to evaluate node against.</param>
         /// <param name="variables">Expression variables map.</param>
         /// <returns>Node's value.</returns>
-        public object GetValue(object context, IDictionary variables)
+        public object GetValue(object context, IDictionary<string, object> variables)
         {
             EvaluationContext evalContext = new EvaluationContext(context, variables);
             return Get(context, evalContext);
@@ -211,7 +212,7 @@ namespace Spring.Expressions
         /// <param name="context">Object to evaluate node against.</param>
         /// <param name="variables">Expression variables map.</param>
         /// <param name="newValue">New value for this node.</param>
-        public void SetValue(object context, IDictionary variables, object newValue)
+        public void SetValue(object context, IDictionary<string, object> variables, object newValue)
         {
             EvaluationContext evalContext = new EvaluationContext(context, variables);
             Set(context, evalContext, newValue);

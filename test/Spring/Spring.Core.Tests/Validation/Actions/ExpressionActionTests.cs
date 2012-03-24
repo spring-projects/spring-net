@@ -20,7 +20,7 @@
 
 using System;
 using System.Collections;
-
+using System.Collections.Generic;
 using NUnit.Framework;
 
 using Spring.Expressions;
@@ -38,7 +38,7 @@ namespace Spring.Validation.Actions
         public void WhenValid()
         {
             Inventor context = new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian");
-            IDictionary vars = new Hashtable();
+            Dictionary<string, object> vars = new Dictionary<string, object>();
 
             ExpressionAction action = new ExpressionAction("#result = 'valid'", "#result = 'invalid'");
             action.Execute(true, context, vars, null);
@@ -57,14 +57,14 @@ namespace Spring.Validation.Actions
             vars.Clear();
             action = new ExpressionAction(null, "#result = 'invalid'");
             action.Execute(true, context, vars, null);
-            Assert.IsFalse(vars.Contains("result"), "Result should not exist when valid expression is null.");
+            Assert.IsFalse(vars.ContainsKey("result"), "Result should not exist when valid expression is null.");
         }
 
         [Test]
         public void WhenInvalid()
         {
             Inventor context = new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian");
-            IDictionary vars = new Hashtable();
+            Dictionary<string, object> vars = new Dictionary<string, object>();
 
             ExpressionAction action = new ExpressionAction("#result = 'valid'", "#result = 'invalid'");
             action.Execute(false, context, vars, null);
@@ -83,19 +83,19 @@ namespace Spring.Validation.Actions
             vars.Clear();
             action = new ExpressionAction("#result = 'valid'", null);
             action.Execute(false, context, vars, null);
-            Assert.IsFalse(vars.Contains("result"), "Result should not exist when invalid expression is null.");
+            Assert.IsFalse(vars.ContainsKey("result"), "Result should not exist when invalid expression is null.");
         }
 
         [Test]
         public void WhenActionIsNotExecutedBecauseWhenExpressionReturnsFalse()
         {
             Inventor context = new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian");
-            IDictionary vars = new Hashtable();
+            Dictionary<string, object> vars = new Dictionary<string, object>();
 
             ExpressionAction action = new ExpressionAction("#result = 'valid'", "#result = 'invalid'");
             action.When = Expression.Parse("false");
             action.Execute(true, context, vars, null);
-            Assert.IsFalse(vars.Contains("result"));
+            Assert.IsFalse(vars.ContainsKey("result"));
         }
 
     }

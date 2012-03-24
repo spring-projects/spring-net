@@ -19,6 +19,7 @@
 #endregion
 
 using System.Collections;
+using System.Collections.Generic;
 using Spring.Expressions;
 using Spring.Globalization;
 
@@ -104,15 +105,15 @@ namespace Spring.DataBinding
         /// Gets the source value for the binding.
         /// </summary>
         /// <param name="source">
-        /// Source object to extract value from.
+        ///   Source object to extract value from.
         /// </param>
         /// <param name="variables">
-        /// Variables for expression evaluation.
+        ///   Variables for expression evaluation.
         /// </param>
         /// <returns>
         /// The source value for the binding.
         /// </returns>
-        protected override object GetSourceValue(object source, IDictionary variables)
+        protected override object GetSourceValue(object source, IDictionary<string, object> variables)
         {
             return this.SourceExpression.GetValue(source, variables);
         }
@@ -121,15 +122,15 @@ namespace Spring.DataBinding
         /// Sets the source value for the binding.
         /// </summary>
         /// <param name="source">
-        /// The source object to set the value on.
+        ///   The source object to set the value on.
         /// </param>
         /// <param name="value">
-        /// The value to set.
+        ///   The value to set.
         /// </param>
         /// <param name="variables">
-        /// Variables for expression evaluation.
+        ///   Variables for expression evaluation.
         /// </param>
-        protected override void SetSourceValue(object source, object value, IDictionary variables)
+        protected override void SetSourceValue(object source, object value, IDictionary<string, object> variables)
         {
             this.SourceExpression.SetValue(source, variables, value);
         }
@@ -138,15 +139,15 @@ namespace Spring.DataBinding
         /// Gets the target value for the binding.
         /// </summary>
         /// <param name="target">
-        /// Source object to extract value from.
+        ///   Source object to extract value from.
         /// </param>
         /// <param name="variables">
-        /// Variables for expression evaluation.
+        ///   Variables for expression evaluation.
         /// </param>
         /// <returns>
         /// The target value for the binding.
         /// </returns>
-        protected override object GetTargetValue(object target, IDictionary variables)
+        protected override object GetTargetValue(object target, IDictionary<string, object> variables)
         {
             return this.TargetExpression.GetValue(target, variables);
         }
@@ -155,15 +156,15 @@ namespace Spring.DataBinding
         /// Sets the target value for the binding.
         /// </summary>
         /// <param name="target">
-        /// The target object to set the value on.
+        ///   The target object to set the value on.
         /// </param>
         /// <param name="value">
-        /// The value to set.
+        ///   The value to set.
         /// </param>
         /// <param name="variables">
-        /// Variables for expression evaluation.
+        ///   Variables for expression evaluation.
         /// </param>
-        protected override void SetTargetValue(object target, object value, IDictionary variables)
+        protected override void SetTargetValue(object target, object value, IDictionary<string, object> variables)
         {
             this.TargetExpression.SetValue(target, variables, value);
         }

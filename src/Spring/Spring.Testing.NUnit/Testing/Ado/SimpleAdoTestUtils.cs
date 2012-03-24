@@ -19,12 +19,14 @@
 #endregion
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
+
 using Common.Logging;
+
 using Spring.Core.IO;
 using Spring.Dao;
 using Spring.Data;
@@ -153,7 +155,7 @@ namespace Spring.Testing.Ado
                 blockDelimiter = BLOCKDELIM_ALL_EXP;
             }
 
-            ArrayList statements = new ArrayList();
+            List<string> statements = new List<string>();
             try
             {
                 GetScriptBlocks(resource, statements, blockDelimiter);
@@ -183,7 +185,7 @@ namespace Spring.Testing.Ado
         /// <summary>
         /// TBD
         /// </summary>
-        public static void GetScriptBlocks(EncodedResource encodedResource, IList blockCollector, params Regex[] blockDelimiterPatterns)
+        public static void GetScriptBlocks(EncodedResource encodedResource, IList<string> blockCollector, params Regex[] blockDelimiterPatterns)
         {
             AssertUtils.ArgumentNotNull(blockCollector, "blockCollector");
 
@@ -209,7 +211,7 @@ namespace Spring.Testing.Ado
             }
         }
 
-        private static void Split(string text, Regex exp, IList blockCollector)
+        private static void Split(string text, Regex exp, IList<string> blockCollector)
         {
             //            string[] blocks = exp.Split(text);
             //            foreach(string block in blocks)

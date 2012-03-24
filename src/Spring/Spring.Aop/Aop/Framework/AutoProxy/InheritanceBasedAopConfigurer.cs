@@ -22,14 +22,14 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 using AopAlliance.Aop;
+
 using Spring.Util;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
-using Spring.Aop;
-using Spring.Aop.Framework;
 using Spring.Aop.Framework.Adapter;
 using Spring.Aop.Framework.DynamicProxy;
 using Spring.Core;
@@ -309,7 +309,7 @@ namespace Spring.Aop.Framework.AutoProxy
 
         private IAdvisor[] ResolveInterceptorNames()
         {
-            ArrayList advisors = new ArrayList();
+            List<IAdvisor> advisors = new List<IAdvisor>();
             foreach (string name in interceptorNames)
             {
                 object next = objectFactory.GetObject(name);
@@ -322,7 +322,7 @@ namespace Spring.Aop.Framework.AutoProxy
                     advisors.Add(advisorAdapterRegistry.Wrap(next));
                 }
             }
-            return (IAdvisor[])advisors.ToArray(typeof(IAdvisor));
+            return advisors.ToArray();
         }
 
         #endregion

@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Web.UI.WebControls;
 using Spring.DataBinding;
 using Spring.Globalization;
@@ -35,7 +36,7 @@ namespace Spring.DataBinding
         /// <summary>
         /// Actually performs unbinding the ListControl's selected values into the target's <see cref="IList"/>
         /// </summary>
-        protected override void DoBindSourceToTarget(object source, object target, IDictionary variables)
+        protected override void DoBindSourceToTarget(object source, object target, IDictionary<string, object> variables)
         {
             // retrieve targetlist
             IList targetList = this.GetTargetValue(target,variables) as IList;
@@ -89,7 +90,7 @@ namespace Spring.DataBinding
         /// <summary>
         /// Actually performs binding the targetlist to the ListControl.
         /// </summary>
-        protected override void DoBindTargetToSource(object source, object target, IDictionary variables)
+        protected override void DoBindTargetToSource(object source, object target, IDictionary<string, object> variables)
         {
             // retrieve targetlist
             IList targetList = this.GetTargetValue(target, variables) as IList;
@@ -147,7 +148,7 @@ namespace Spring.DataBinding
         /// <summary>
         /// Setting source value is not allowed in this bindingType.
         /// </summary>
-        protected override void SetSourceValue(object source, object value, IDictionary variables)
+        protected override void SetSourceValue(object source, object value, IDictionary<string, object> variables)
         {
             throw new InvalidOperationException(string.Format("Setting source value in '{0}' is not allowed.",this.GetType().FullName));
         }
@@ -155,7 +156,7 @@ namespace Spring.DataBinding
         /// <summary>
         /// Setting target value is not allowed in this bindingType.
         /// </summary>
-        protected override void SetTargetValue(object target, object value, IDictionary variables)
+        protected override void SetTargetValue(object target, object value, IDictionary<string, object> variables)
         {
             throw new InvalidOperationException(string.Format("Setting target value in '{0}' is not allowed.", this.GetType().FullName));
         }

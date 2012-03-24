@@ -19,8 +19,8 @@
 #region Imports
 
 using System;
-using System.Collections;
-using Spring.Objects.Factory;
+using System.Collections.Generic;
+
 using Spring.Objects.Factory.Config;
 using Spring.Util;
 
@@ -56,7 +56,7 @@ namespace Spring.Objects.Factory.Support
         /// <summary>
         /// Map from object name to object instance.
         /// </summary>
-        private Hashtable objects = new Hashtable();
+        private Dictionary<string, object> objects = new Dictionary<string, object>();
 
         /// <summary>
         /// Determine whether this object factory treats object names case-sensitive or not.
@@ -552,8 +552,8 @@ namespace Spring.Objects.Factory.Support
         /// </returns>
         public string[] GetObjectDefinitionNames()
         {
-            ArrayList names = new ArrayList(objects.Keys);
-            return (string[])names.ToArray(typeof(string));
+            List<string> names = new List<string>(objects.Keys);
+            return names.ToArray();
         }
 
         /// <summary>
@@ -576,7 +576,7 @@ namespace Spring.Objects.Factory.Support
         /// </returns>
         public string[] GetObjectDefinitionNames(Type type)
         {
-            ArrayList matches = new ArrayList();
+            List<string> matches = new List<string>();
             foreach (string name in objects.Keys)
             {
                 Type t = objects[name].GetType();
@@ -585,7 +585,7 @@ namespace Spring.Objects.Factory.Support
                     matches.Add(name);
                 }
             }
-            return (string[])matches.ToArray(typeof(string));
+            return matches.ToArray();
         }
 
         /// <summary>
@@ -677,7 +677,7 @@ namespace Spring.Objects.Factory.Support
             Type type, bool includePrototypes, bool includeFactoryObjects)
         {
             bool isFactoryType = (type != null && typeof(IFactoryObject).IsAssignableFrom(type));
-            IList matches = new ArrayList();
+            List<string> matches = new List<string>();
             foreach (string name in objects.Keys)
             {
                 object instance = objects[name];
@@ -700,7 +700,7 @@ namespace Spring.Objects.Factory.Support
                     }
                 }
             }
-            return (string[])ArrayList.Adapter(matches).ToArray(typeof(string));
+            return matches.ToArray();
         }
 
         /// <summary>
@@ -783,7 +783,7 @@ namespace Spring.Objects.Factory.Support
         /// <exception cref="Spring.Objects.ObjectsException">
         /// If the objects could not be created.
         /// </exception>
-        public IDictionary GetObjectsOfType(Type type)
+        public IDictionary<string, object> GetObjectsOfType(Type type)
         {
             return GetObjectsOfType(type, true, true);
         }
@@ -815,9 +815,9 @@ namespace Spring.Objects.Factory.Support
         /// <exception cref="Spring.Objects.ObjectsException">
         /// If the objects could not be created.
         /// </exception>
-        public IDictionary GetObjectsOfType<T>()
+        public IDictionary<string, T> GetObjectsOfType<T>()
         {
-            return GetObjectsOfType(typeof(T));
+            return (IDictionary<string, T>) GetObjectsOfType(typeof(T));
         }
 
         /// <summary>
@@ -846,10 +846,10 @@ namespace Spring.Objects.Factory.Support
         /// <exception cref="Spring.Objects.ObjectsException">
         /// If the objects could not be created.
         /// </exception>
-        public IDictionary GetObjectsOfType(Type type, bool includePrototypes, bool includeFactoryObjects)
+        public IDictionary<string, object> GetObjectsOfType(Type type, bool includePrototypes, bool includeFactoryObjects)
         {
             bool isFactoryType = (type != null && typeof(IFactoryObject).IsAssignableFrom(type));
-            IDictionary matches = new Hashtable();
+            IDictionary<string, object> matches = new Dictionary<string, object>();
             foreach (string name in objects.Keys)
             {
                 object instance = objects[name];
@@ -894,12 +894,12 @@ namespace Spring.Objects.Factory.Support
         /// The <see cref="System.Type"/> (class or interface) to match.
         /// </typeparam>
         /// <param name="includePrototypes">
-        /// Whether to include prototype objects too or just singletons (also applies to
-        /// <see cref="Spring.Objects.Factory.IFactoryObject"/>s).
+        ///   Whether to include prototype objects too or just singletons (also applies to
+        ///   <see cref="Spring.Objects.Factory.IFactoryObject"/>s).
         /// </param>
         /// <param name="includeFactoryObjects">
-        /// Whether to include <see cref="Spring.Objects.Factory.IFactoryObject"/>s too
-        /// or just normal objects.
+        ///   Whether to include <see cref="Spring.Objects.Factory.IFactoryObject"/>s too
+        ///   or just normal objects.
         /// </param>
         /// <returns>
         /// A <see cref="System.Collections.IDictionary"/> of the matching objects,
@@ -909,9 +909,9 @@ namespace Spring.Objects.Factory.Support
         /// <exception cref="Spring.Objects.ObjectsException">
         /// If the objects could not be created.
         /// </exception>
-        public IDictionary GetObjectsOfType<T>(bool includePrototypes, bool includeFactoryObjects)
+        public IDictionary<string, T> GetObjectsOfType<T>(bool includePrototypes, bool includeFactoryObjects)
         {
-            return GetObjectsOfType(typeof(T), includePrototypes, includeFactoryObjects);
+            return (IDictionary<string, T>) GetObjectsOfType(typeof(T), includePrototypes, includeFactoryObjects);
         }
 
         /// <summary>

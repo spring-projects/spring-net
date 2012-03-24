@@ -17,16 +17,14 @@
 #endregion
 
 #region Imports
-using System;
-using System.Text;
 
 using NUnit.Framework;
 
-using Spring.Aop;
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.Objects;
 using Spring.Objects.Factory.Xml;
+
 #endregion
 
 namespace Spring.Aop.Framework.Adapter

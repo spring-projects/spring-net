@@ -20,16 +20,16 @@
 
 using System;
 using System.Collections;
-using System.Collections.Specialized;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+
 using AopAlliance.Aop;
 using AopAlliance.Intercept;
-using Spring.Aop;
+
 using Spring.Aop.Support;
 using Spring.Aop.Target;
 using Spring.Util;
-using Spring.Proxy;
 
 namespace Spring.Aop.Framework
 {
@@ -65,7 +65,7 @@ namespace Spring.Aop.Framework
         /// will be wrapped in an advice before being added to this list. 
         /// </p>
         /// </remarks>
-        private IList _advisors = new ArrayList();
+        private List<IAdvisor> _advisors = new List<IAdvisor>();
 
         /// <summary> 
         /// Array updated on changes to the advisors list, which is easier to
@@ -76,7 +76,7 @@ namespace Spring.Aop.Framework
         /// <summary> 
         /// List of introductions. 
         /// </summary>
-        private ArrayList _introductions = new ArrayList();
+        private List<IIntroductionAdvisor> _introductions = new List<IIntroductionAdvisor>();
 
         /// <summary>
         /// Interface map specifying which object should interface methods be
@@ -88,7 +88,7 @@ namespace Spring.Aop.Framework
         /// to the target object.
         /// </p>
         /// </remarks>
-        private readonly IDictionary interfaceMap = new ListDictionary();
+        private readonly Dictionary<Type, IIntroductionAdvisor> interfaceMap = new Dictionary<Type, IIntroductionAdvisor>();
 
         /// <summary>
         /// The <see cref="Spring.Aop.ITargetSource"/> for this instance.
@@ -108,7 +108,7 @@ namespace Spring.Aop.Framework
         /// <summary>
         /// The list of <see cref="Spring.Aop.Framework.AdvisedSupport"/> event listeners.
         /// </summary>
-        private readonly IList listeners = new ArrayList();
+        private readonly IList<IAdvisedSupportListener> listeners = new List<IAdvisedSupportListener>();
 
         /// <summary>
         /// The advisor chain factory.
@@ -274,7 +274,7 @@ namespace Spring.Aop.Framework
 
                     for (int i = 0; i < this._introductions.Count; i++)
                     {
-                        IIntroductionAdvisor advisor = (IIntroductionAdvisor) this._introductions[i];
+                        IIntroductionAdvisor advisor = this._introductions[i];
                         canBeSerialized = advisor.GetType().IsSerializable
                                           && advisor.Advice.GetType().IsSerializable;
                         if (!canBeSerialized) return false;
@@ -425,7 +425,7 @@ namespace Spring.Aop.Framework
             {
                 lock (this.SyncRoot)
                 {
-                    return (IIntroductionAdvisor[])this._introductions.ToArray(typeof(IIntroductionAdvisor));
+                    return this._introductions.ToArray();
                 }
             }
         }
@@ -680,7 +680,7 @@ namespace Spring.Aop.Framework
                         "Introduction index " + index + " is out of bounds: Only have " + _introductions.Count +
                         " introductions.");
                 }
-                IIntroductionAdvisor advisor = (IIntroductionAdvisor)_introductions[index];
+                IIntroductionAdvisor advisor = _introductions[index];
                 // remove all interfaces introduced by the advisor...
                 foreach (Type intf in advisor.Interfaces)
                 {
@@ -830,8 +830,7 @@ namespace Spring.Aop.Framework
                 int pos = this._introductions.Count;
                 for (int i = 0; i < pos; i++)
                 {
-                    IIntroductionAdvisor introduction
-                        = (IIntroductionAdvisor)this._introductions[i];
+                    IIntroductionAdvisor introduction = this._introductions[i];
                     if (introduction.Advice.GetType() == introductionType)
                     {
                         pos = i;
@@ -1123,7 +1122,7 @@ namespace Spring.Aop.Framework
             DieIfFrozen("Cannot remove interface: configuration is frozen.");
             lock (this.SyncRoot)
             {
-                if (intf != null && this.interfaceMap.Contains(intf))
+                if (intf != null && this.interfaceMap.ContainsKey(intf))
                 {
                     this.interfaceMap.Remove(intf);
                     InterfacesChanged();
@@ -1188,7 +1187,7 @@ namespace Spring.Aop.Framework
             {
                 for (int i = 0; i < this._advisors.Count; ++i)
                 {
-                    IAdvisor advisor = (IAdvisor)this._advisors[i];
+                    IAdvisor advisor = this._advisors[i];
                     if (advisor.Advice == advice)
                     {
                         return i;
@@ -1492,7 +1491,7 @@ namespace Spring.Aop.Framework
         /// </param>
         protected internal virtual void CopyConfigurationFrom(AdvisedSupport other)
         {
-            CopyConfigurationFrom(other, other.TargetSource, new ArrayList(other.Advisors), new ArrayList(other.Introductions));
+            CopyConfigurationFrom(other, other.TargetSource, new List<IAdvisor>(other.Advisors), new List<IAdvisor>(other.Introductions));
         }
 
         /// <summary>
@@ -1515,7 +1514,7 @@ namespace Spring.Aop.Framework
         /// <param name="targetSource">the new target source</param>
         /// <param name="advisors">the advisors for the chain</param>
         /// <param name="introductions">the introductions for the chain</param>
-        protected internal virtual void CopyConfigurationFrom(AdvisedSupport other, ITargetSource targetSource, IList advisors, IList introductions)
+        protected internal virtual void CopyConfigurationFrom(AdvisedSupport other, ITargetSource targetSource, IList<IAdvisor> advisors, IList<IAdvisor> introductions)
         {
             CopyFrom(other);
             this.AdvisorChainFactory = other.advisorChainFactory;
@@ -1527,13 +1526,13 @@ namespace Spring.Aop.Framework
             {
                 this.interfaceMap[intf] = other.interfaceMap[intf];
             }
-            this._advisors = new ArrayList();
+            this._advisors = new List<IAdvisor>();
             foreach (IAdvisor advisor in advisors)
             {
 			    AssertUtils.ArgumentNotNull(advisor, "Advisor must not be null");
                 AddAdvisor(advisor);
             }
-            this._introductions = new ArrayList();
+            this._introductions = new List<IIntroductionAdvisor>();
             foreach (IIntroductionAdvisor advisor in introductions)
             {
                 // TODO (EE): implement
@@ -1575,7 +1574,7 @@ namespace Spring.Aop.Framework
             foreach (Type intf in this.interfaceMap.Keys)
             {
                 buffer.Append(separator).Append("[").Append(intf.FullName).Append("] -> ");
-                IIntroductionAdvisor advisor = this.interfaceMap[intf] as IIntroductionAdvisor;
+                IIntroductionAdvisor advisor = this.interfaceMap[intf];
                 if (advisor == null)
                 {
                     if (TargetSource.TargetType != null)

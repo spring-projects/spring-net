@@ -22,27 +22,46 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 #endregion
 
 namespace Spring.Core
 {
-	/// <summary>
-	/// Comparator implementation for <see cref="Spring.Core.IOrdered"/> objects, sorting by
-	/// order value ascending (resp. by priority descending).
-	/// </summary>
-	/// <remarks>
-	/// <p>
-	/// Non-<see cref="Spring.Core.IOrdered"/> objects are treated as greatest order values,
-	/// thus ending up at the end of a list, in arbitrary order (just like same order values of
-	/// <see cref="Spring.Core.IOrdered"/> objects).
-	/// </p>
-	/// </remarks>
-	/// <author>Juergen Hoeller</author>
+    /// <summary>
+    /// Comparator implementation for <see cref="Spring.Core.IOrdered"/> objects, sorting by
+    /// order value ascending (resp. by priority descending).
+    /// </summary>
+    /// <remarks>
+    /// <p>
+    /// Non-<see cref="Spring.Core.IOrdered"/> objects are treated as greatest order values,
+    /// thus ending up at the end of a list, in arbitrary order (just like same order values of
+    /// <see cref="Spring.Core.IOrdered"/> objects).
+    /// </p>
+    /// </remarks>
+    /// <author>Juergen Hoeller</author>
     /// <author>Aleksandar Seovic (.Net)</author>
     [Serializable]
-    public class OrderComparator : IComparer
-	{
+    public class OrderComparator : OrderComparator<object>, IComparer
+    {
+    }
+
+    /// <summary>
+    /// Comparator implementation for <see cref="Spring.Core.IOrdered"/> objects, sorting by
+    /// order value ascending (resp. by priority descending).
+    /// </summary>
+    /// <remarks>
+    /// <p>
+    /// Non-<see cref="Spring.Core.IOrdered"/> objects are treated as greatest order values,
+    /// thus ending up at the end of a list, in arbitrary order (just like same order values of
+    /// <see cref="Spring.Core.IOrdered"/> objects).
+    /// </p>
+    /// </remarks>
+    /// <author>Juergen Hoeller</author>
+    /// <author>Aleksandar Seovic (.Net)</author>
+    [Serializable]
+    public class OrderComparator<T> : IComparer<T>
+    {
         /// <summary>
         /// Compares two objects and returns a value indicating whether one is less than,
         /// equal to or greater than the other.
@@ -58,12 +77,12 @@ namespace Spring.Core
         /// <returns>
         /// -1 if first object is less then second, 1 if it is greater, or 0 if they are equal.
         /// </returns>
-		public virtual int Compare(object o1, object o2)
-		{
-			IOrdered o1lhs = o1 as IOrdered;
-			IOrdered o2rhs = o2 as IOrdered;
-			int lhs = o1lhs != null ? o1lhs.Order : Int32.MaxValue;
-			int rhs = o2rhs != null ? o2rhs.Order : Int32.MaxValue;
+        public virtual int Compare(T o1, T o2)
+        {
+            IOrdered o1lhs = o1 as IOrdered;
+            IOrdered o2rhs = o2 as IOrdered;
+            int lhs = o1lhs != null ? o1lhs.Order : Int32.MaxValue;
+            int rhs = o2rhs != null ? o2rhs.Order : Int32.MaxValue;
             if (lhs < rhs)
             {
                 return - 1;
@@ -76,7 +95,7 @@ namespace Spring.Core
             {
                 return CompareEqualOrder(o1, o2);
             }
-		}
+        }
 
         /// <summary>
         /// Handle the case when both objects have equal sort order priority. By default returns 0, 
@@ -87,9 +106,9 @@ namespace Spring.Core
         /// <returns>
         /// -1 if first object is less then second, 1 if it is greater, or 0 if they are equal.
         /// </returns>
-        protected virtual int CompareEqualOrder(object o1, object o2)
+        protected virtual int CompareEqualOrder(T o1, T o2)
         {
             return 0;
         }
-	}
+    }
 }

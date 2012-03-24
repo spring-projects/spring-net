@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Common.Logging;
 using Spring.Expressions;
 
@@ -128,8 +129,6 @@ namespace Spring.Aspects
 
         #endregion
 
-
-
         /// <summary>
         /// Determines whether this instance can handle the exception the specified exception.
         /// </summary>
@@ -138,7 +137,7 @@ namespace Spring.Aspects
         /// <returns>
         /// 	<c>true</c> if this instance can handle the specified exception; otherwise, <c>false</c>.
         /// </returns>
-        public bool CanHandleException(Exception ex, IDictionary callContextDictionary)
+        public bool CanHandleException(Exception ex, IDictionary<string, object> callContextDictionary)
         {
             if (SourceExceptionNames != null)
             {
@@ -176,7 +175,7 @@ namespace Spring.Aspects
         /// Handles the exception.
         /// </summary>
         /// <returns>The return value from handling the exception, if not rethrown or a new exception is thrown.</returns>
-        public abstract object HandleException(IDictionary callContextDictionary);
+        public abstract object HandleException(IDictionary<string, object> callContextDictionary);
 
         #endregion
     }

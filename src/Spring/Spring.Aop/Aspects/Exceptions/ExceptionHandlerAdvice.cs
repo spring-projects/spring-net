@@ -20,11 +20,13 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
+
 using AopAlliance.Intercept;
+
 using Common.Logging;
-using Spring.Context;
-using Spring.Objects.Factory.Config;
+
 using Spring.Util;
 
 namespace Spring.Aspects.Exceptions
@@ -287,7 +289,7 @@ namespace Spring.Aspects.Exceptions
         /// <returns>The output of <see cref="IExceptionHandler.HandleException"/> </returns>
         protected virtual object InvokeHandlers(Exception ex, IMethodInvocation invocation)
         {
-            IDictionary callContextDictionary = new Hashtable();
+            Dictionary<string, object> callContextDictionary = new Dictionary<string, object>();
             callContextDictionary.Add("method", invocation.Method);
             callContextDictionary.Add("args", invocation.Arguments);
             callContextDictionary.Add("target", invocation.Target);

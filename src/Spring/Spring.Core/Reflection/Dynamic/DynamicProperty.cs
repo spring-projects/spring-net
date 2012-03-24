@@ -20,9 +20,11 @@
 
 #region Imports
 
-using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
+
 using Common.Logging;
+
 using Spring.Util;
 
 #endregion
@@ -103,7 +105,7 @@ namespace Spring.Reflection.Dynamic
 
         #region Cache
 
-        private static readonly IDictionary propertyCache = new Hashtable();
+        private static readonly IDictionary<PropertyInfo, DynamicPropertyCacheEntry> propertyCache = new Dictionary<PropertyInfo, DynamicPropertyCacheEntry>();
 
         /// <summary>
         /// Holds cached Getter/Setter delegates for a Property
@@ -125,8 +127,8 @@ namespace Spring.Reflection.Dynamic
         /// </summary>
         private static DynamicPropertyCacheEntry GetOrCreateDynamicProperty(PropertyInfo property)
         {
-            DynamicPropertyCacheEntry propertyInfo = (DynamicPropertyCacheEntry)propertyCache[property];
-            if (propertyInfo == null)
+            DynamicPropertyCacheEntry propertyInfo;
+            if (!propertyCache.TryGetValue(property, out propertyInfo))
             {
                 propertyInfo = new DynamicPropertyCacheEntry(DynamicReflectionManager.CreatePropertyGetter(property), DynamicReflectionManager.CreatePropertySetter(property));
                 lock (propertyCache)

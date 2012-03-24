@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using Spring.Collections;
 using Spring.Core;
@@ -356,7 +357,7 @@ namespace Spring.Objects.Factory.Support
         /// <returns>the filtered list. Is never <c>null</c></returns>
         public static PropertyInfo[] GetUnsatisfiedDependencies(PropertyInfo[] propertyInfos, IPropertyValues properties, DependencyCheckingMode dependencyCheck)
         {
-            ArrayList unsatisfiedDependenciesList = new ArrayList();
+            List<PropertyInfo> unsatisfiedDependenciesList = new List<PropertyInfo>();
             foreach (PropertyInfo property in propertyInfos)
             {
                 if (property.CanWrite && properties.GetPropertyValue(property.Name) == null)
@@ -370,7 +371,7 @@ namespace Spring.Objects.Factory.Support
                     }
                 }
             }
-            return (PropertyInfo[])unsatisfiedDependenciesList.ToArray(typeof(PropertyInfo));
+            return unsatisfiedDependenciesList.ToArray();
         }
 	}
 }

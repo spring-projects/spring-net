@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.Serialization;
 
@@ -189,7 +190,7 @@ namespace Spring.Expressions
         private static ConstructorInfo[] GetCandidateConstructors(Type type, int argCount)
         {
             ConstructorInfo[] ctors = type.GetConstructors(BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic);
-            ArrayList matches = new ArrayList();
+            List<ConstructorInfo> matches = new List<ConstructorInfo>();
 
             foreach (ConstructorInfo ctor in ctors)
             {
@@ -208,7 +209,7 @@ namespace Spring.Expressions
                 }
             }
 
-            return (ConstructorInfo[]) matches.ToArray(typeof(ConstructorInfo));
+            return matches.ToArray();
         }
 
     }

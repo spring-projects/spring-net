@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 #endregion
 
@@ -248,7 +249,7 @@ namespace Spring.Objects.Factory
 		/// <exception cref="Spring.Objects.ObjectsException">
 		/// If the objects could not be created.
 		/// </exception>
-		IDictionary GetObjectsOfType(Type type);
+		IDictionary<string, object> GetObjectsOfType(Type type);
 		
         /// <summary>
 		/// Return the object instances that match the given object
@@ -277,7 +278,7 @@ namespace Spring.Objects.Factory
 		/// <exception cref="Spring.Objects.ObjectsException">
 		/// If the objects could not be created.
 		/// </exception>
-		IDictionary GetObjectsOfType<T>();
+		IDictionary<string, T> GetObjectsOfType<T>();
 
 		/// <summary>
 		/// Return the object instances that match the given object
@@ -305,35 +306,35 @@ namespace Spring.Objects.Factory
 		/// <exception cref="Spring.Objects.ObjectsException">
 		/// If the objects could not be created.
 		/// </exception>
-		IDictionary GetObjectsOfType(Type type, bool includePrototypes, bool includeFactoryObjects);
+		IDictionary<string, object> GetObjectsOfType(Type type, bool includePrototypes, bool includeFactoryObjects);
 
-        /// <summary>
-		/// Return the object instances that match the given object
-		/// <see cref="System.Type"/> (including subclasses), judging from either object
-		/// definitions or the value of
-		/// <see cref="Spring.Objects.Factory.IFactoryObject.ObjectType"/> in the case of
-		/// <see cref="Spring.Objects.Factory.IFactoryObject"/>s.
-		/// </summary>
-		/// <typeparam name="T">
-		/// The <see cref="System.Type"/> (class or interface) to match.
-		/// </typeparam>
-		/// <param name="includePrototypes">
-		/// Whether to include prototype objects too or just singletons (also applies to
-		/// <see cref="Spring.Objects.Factory.IFactoryObject"/>s).
-		/// </param>
-		/// <param name="includeFactoryObjects">
-		/// Whether to include <see cref="Spring.Objects.Factory.IFactoryObject"/>s too
-		/// or just normal objects.
-		/// </param>
-		/// <returns>
-		/// A <see cref="System.Collections.IDictionary"/> of the matching objects,
-		/// containing the object names as keys and the corresponding object instances
-		/// as values.
-		/// </returns>
-		/// <exception cref="Spring.Objects.ObjectsException">
-		/// If the objects could not be created.
-		/// </exception>
-		IDictionary GetObjectsOfType<T>(bool includePrototypes, bool includeFactoryObjects);
+	    /// <summary>
+	    /// Return the object instances that match the given object
+	    /// <see cref="System.Type"/> (including subclasses), judging from either object
+	    /// definitions or the value of
+	    /// <see cref="Spring.Objects.Factory.IFactoryObject.ObjectType"/> in the case of
+	    /// <see cref="Spring.Objects.Factory.IFactoryObject"/>s.
+	    /// </summary>
+	    /// <typeparam name="T">
+	    /// The <see cref="System.Type"/> (class or interface) to match.
+	    /// </typeparam>
+	    /// <param name="includePrototypes">
+	    ///   Whether to include prototype objects too or just singletons (also applies to
+	    ///   <see cref="Spring.Objects.Factory.IFactoryObject"/>s).
+	    /// </param>
+	    /// <param name="includeFactoryObjects">
+	    ///   Whether to include <see cref="Spring.Objects.Factory.IFactoryObject"/>s too
+	    ///   or just normal objects.
+	    /// </param>
+	    /// <returns>
+	    /// A <see cref="System.Collections.IDictionary"/> of the matching objects,
+	    /// containing the object names as keys and the corresponding object instances
+	    /// as values.
+	    /// </returns>
+	    /// <exception cref="Spring.Objects.ObjectsException">
+	    /// If the objects could not be created.
+	    /// </exception>
+	    IDictionary<string, T> GetObjectsOfType<T>(bool includePrototypes, bool includeFactoryObjects);
 
         /// <summary>
         /// Return an instance (possibly shared or independent) of the given object name.

@@ -20,7 +20,7 @@
 
 #region Imports
 
-using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Text;
@@ -47,8 +47,8 @@ namespace Spring.Context.Support
 	/// <seealso cref="Spring.Context.Support.DelegatingMessageSource"/>
     public class StaticMessageSource : AbstractMessageSource
     {
-        private Hashtable _messages;
-        private Hashtable _objects;
+        private Dictionary<string, string> _messages;
+        private Dictionary<string, object> _objects;
 
 		/// <summary>
 		/// Creates a new instance of the
@@ -56,8 +56,8 @@ namespace Spring.Context.Support
 		/// </summary>
         public StaticMessageSource()
         {
-            _messages = new Hashtable();
-            _objects = new Hashtable();
+            _messages = new Dictionary<string, string>();
+            _objects = new Dictionary<string, object>();
         }
 
 		/// <summary>
@@ -73,11 +73,14 @@ namespace Spring.Context.Support
 		/// </returns>
 		/// <seealso cref="Spring.Context.Support.AbstractMessageSource.ResolveMessage(string, CultureInfo)"/>
 		protected override string ResolveMessage(string code, CultureInfo cultureInfo)
-        {
-            return (string) _messages[GetLookupKey(code, cultureInfo)];
-        }
+		{
+		    string key = GetLookupKey(code, cultureInfo);
+		    string message;
+		    _messages.TryGetValue(key, out message);
+		    return message;
+		}
 
-		/// <summary>
+        /// <summary>
 		/// Resolves an object (typically an icon or bitmap).
 		/// </summary>
 		/// <param name="code">The code of the object to resolve.</param>
@@ -91,7 +94,10 @@ namespace Spring.Context.Support
 		/// <seealso cref="Spring.Context.Support.AbstractMessageSource.ResolveObject(string, CultureInfo)"/>
         protected override object ResolveObject(string code, CultureInfo cultureInfo)
         {
-            return _objects[GetLookupKey(code, cultureInfo)];
+            string key = GetLookupKey(code, cultureInfo);
+            object obj;
+            _objects.TryGetValue(key, out obj);
+            return obj;
         }
 
 

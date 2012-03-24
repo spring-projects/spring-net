@@ -20,6 +20,8 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -47,7 +49,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         /// <summary>
         /// Optimization fields
         /// </summary>
-        private static IList EmptyList = ArrayList.ReadOnly(new ArrayList());
+        private static IList<object> EmptyList = new ReadOnlyCollection<object>(new object[0]);
 
         /// <summary>
         /// IAdvised delegate
@@ -214,7 +216,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         /// <param name="targetType">target type</param>
         /// <param name="method">target method</param>
         /// <returns>list of inteceptors for the specified method</returns>
-        public IList GetInterceptors(Type targetType, MethodInfo method)
+        public IList<object> GetInterceptors(Type targetType, MethodInfo method)
         {
             if (m_advised.Advisors.Length == 0)
             {

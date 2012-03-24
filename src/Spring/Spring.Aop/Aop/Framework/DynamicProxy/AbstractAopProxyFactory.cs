@@ -1,5 +1,6 @@
 using System;
-using System.Collections;
+using System.Collections.Generic;
+
 using Spring.Aop.Support;
 using Spring.Aop.Target;
 
@@ -57,14 +58,14 @@ namespace Spring.Aop.Framework.DynamicProxy
             {
                 IAdvised innerProxy = (IAdvised)advisedSupport.TargetSource.GetTarget();
                 // eliminate duplicate advisors
-                ArrayList thisAdvisors = new ArrayList(advisedSupport.Advisors);
+                List<IAdvisor> thisAdvisors = new List<IAdvisor>(advisedSupport.Advisors);
                 foreach (IAdvisor innerAdvisor in innerProxy.Advisors)
                 {
                     foreach (IAdvisor thisAdvisor in thisAdvisors)
                     {
                         if (ReferenceEquals(thisAdvisor, innerAdvisor)
                             || (thisAdvisor.GetType() == typeof(DefaultPointcutAdvisor)
-                                && ((DefaultPointcutAdvisor)thisAdvisor).Equals(innerAdvisor)
+                                && thisAdvisor.Equals(innerAdvisor)
                                )
                             )
                         {

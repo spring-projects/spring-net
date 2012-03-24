@@ -22,18 +22,21 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Runtime.Serialization;
+
 using Common.Logging;
 
 using Spring.Collections;
+using Spring.Collections.Generic;
 using Spring.Core;
 using Spring.Core.TypeConversion;
 using Spring.Objects.Factory.Config;
 using Spring.Threading;
 using Spring.Util;
 using System.Threading;
+using System.Linq;
 
 #endregion
 
@@ -140,7 +143,7 @@ namespace Spring.Objects.Factory.Support
         /// <summary>
         /// Cache of singleton objects created by <see cref="IFactoryObject"/>s: FactoryObject name -> product
         /// </summary>
-        private readonly Hashtable factoryObjectProductCache = new Hashtable();
+        private readonly Dictionary<string, object> factoryObjectProductCache = new Dictionary<string, object>();
 
         #region Constructor (s) / Destructor
 
@@ -904,7 +907,7 @@ namespace Spring.Objects.Factory.Support
 
             if (rod == null)
             {
-                resultInstance = factoryObjectProductCache[canonicalName];
+                factoryObjectProductCache.TryGetValue(canonicalName, out resultInstance);
             }
 
             if (resultInstance == null)
@@ -926,10 +929,9 @@ namespace Spring.Objects.Factory.Support
 
                 if (factory.IsSingleton && ContainsSingleton(canonicalName))
                 {
-                    lock (factoryObjectProductCache.SyncRoot)
+                    lock (factoryObjectProductCache)
                     {
-                        resultInstance = factoryObjectProductCache[canonicalName];
-                        if (resultInstance == null)
+                        if (!factoryObjectProductCache.TryGetValue(canonicalName, out resultInstance))
                         {
                             resultInstance = GetObjectFromFactoryObject(factory, canonicalName, rod);
                             if (resultInstance != null)
@@ -1213,7 +1215,7 @@ namespace Spring.Objects.Factory.Support
         {
             lock (singletonCache)
             {
-                ArrayList matches = new ArrayList();
+                List<string> matches = new List<string>();
                 foreach (string name in singletonCache.Keys)
                 {
                     object singletonObject = singletonCache[name];
@@ -1223,7 +1225,7 @@ namespace Spring.Objects.Factory.Support
                         matches.Add(name);
                     }
                 }
-                return (string[])matches.ToArray(typeof(string));
+                return matches.ToArray();
             }
         }
 
@@ -1450,8 +1452,8 @@ namespace Spring.Objects.Factory.Support
         {
             lock (singletonCache)
             {
-                ICollection keys = singletonCache.Keys;
-                return (string[])new ArrayList(keys).ToArray(typeof(string));
+                IEnumerable<string> keys = singletonCache.Keys.Cast<string>();
+                return new List<string>(keys).ToArray();
             }
         }
 
@@ -1613,9 +1615,9 @@ namespace Spring.Objects.Factory.Support
         private bool hasDestructionAwareBeanPostProcessors;
 
         private bool caseSensitive;
-        private IDictionary aliasMap;
-        private IDictionary singletonCache;
-        private IDictionary singletonLocks;
+        private OrderedDictionary aliasMap;
+        private OrderedDictionary singletonCache;
+        private OrderedDictionary singletonLocks;
 
         /// <summary>
         /// Set of registered singletons, containing the bean names in registration order 
@@ -1821,18 +1823,18 @@ namespace Spring.Objects.Factory.Support
             if (isInSingletonCache || ContainsObjectDefinition(objectName))
             {
                 // if found, gather aliases...
-                ArrayList matches = new ArrayList();
+                List<string> matches = new List<string>();
                 lock (aliasMap)
                 {
                     foreach (DictionaryEntry aliasEntry in aliasMap)
                     {
                         if (0 == string.Compare((string)aliasEntry.Value, objectName, !this.IsCaseSensitive))
                         {
-                            matches.Add(aliasEntry.Key);
+                            matches.Add((string) aliasEntry.Key);
                         }
                     }
                 }
-                return (string[])matches.ToArray(typeof(string));
+                return matches.ToArray();
             }
 
             // not found, so check parent...

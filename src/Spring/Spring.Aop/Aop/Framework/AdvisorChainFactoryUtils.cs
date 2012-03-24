@@ -21,9 +21,11 @@
 #region Imports
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
+
 using AopAlliance.Intercept;
+
 using Spring.Aop.Framework.Adapter;
 
 #endregion
@@ -62,10 +64,10 @@ namespace Spring.Aop.Framework
 		/// <see cref="AopAlliance.Intercept.IMethodInterceptor"/> (if there's
 		/// a dynamic method matcher that needs evaluation at runtime).
 		/// </returns>
-		public static IList CalculateInterceptors(
+		public static IList<object> CalculateInterceptors(
 			IAdvised config, object proxy, MethodInfo method, Type targetType)
 		{
-			IList interceptors = new ArrayList(config.Advisors.Length);
+            IList<object> interceptors = new List<object>(config.Advisors.Length);
 			foreach (IAdvisor advisor in config.Advisors)
 			{
 				if (advisor is IPointcutAdvisor)

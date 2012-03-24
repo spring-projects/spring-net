@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Text.RegularExpressions;
 using System.Reflection;
@@ -126,7 +127,7 @@ namespace Spring.Core.TypeResolution
         {
             AssertUtils.ArgumentNotNull(interfaceNames, "interfaceNames");
 
-            ArrayList interfaces = new ArrayList();
+            List<Type> interfaces = new List<Type>();
             for (int i = 0; i < interfaceNames.Length; i++)
             {
                 string interfaceName = interfaceNames[i];
@@ -143,7 +144,7 @@ namespace Spring.Core.TypeResolution
                 interfaces.Add(resolvedInterface);
                 interfaces.AddRange(resolvedInterface.GetInterfaces());
             }
-            return (Type[])interfaces.ToArray(typeof(Type));
+            return interfaces.ToArray();
         }
 
         #region MethodMatch

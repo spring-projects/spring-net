@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Diagnostics;
 using System.Globalization;
@@ -786,10 +787,10 @@ namespace Spring.Objects.Factory.Xml
 
             // abstract objects should not match
             //TODO add overloaded GetObjectOfType with 1 arg
-            IDictionary tbs = parent.GetObjectsOfType(typeof(TestObject), true, true);
+            IDictionary<string, object> tbs = parent.GetObjectsOfType(typeof(TestObject), true, true);
             Assert.AreEqual(2, tbs.Count);
-            Assert.IsTrue(tbs.Contains("inheritedTestObjectPrototype"));
-            Assert.IsTrue(tbs.Contains("inheritedTestObjectSingleton"));
+            Assert.IsTrue(tbs.ContainsKey("inheritedTestObjectPrototype"));
+            Assert.IsTrue(tbs.ContainsKey("inheritedTestObjectSingleton"));
 
             // non-abstract object should work, even if it serves as parent
             object o1 = parent.GetObject("inheritedTestObjectPrototype");

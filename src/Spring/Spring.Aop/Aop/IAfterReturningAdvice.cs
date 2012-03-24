@@ -20,8 +20,8 @@
 
 #region Imports
 
-using System;
 using System.Reflection;
+
 using AopAlliance.Aop;
 
 #endregion

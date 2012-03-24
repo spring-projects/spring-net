@@ -22,17 +22,14 @@
 
 using System;
 using System.Collections;
-using System.Collections.Specialized;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
-using System.Runtime.Remoting;
+
 using Common.Logging;
+
 using Spring.Collections;
-using Spring.Core;
-using Spring.Core.TypeConversion;
 using Spring.Core.TypeResolution;
-using Spring.Expressions;
-using Spring.Objects;
 using Spring.Objects.Factory.Config;
 using Spring.Util;
 
@@ -701,7 +698,7 @@ namespace Spring.Objects.Factory.Support
             {
                 // look for a matching type
                 Type requiredType = wrapper.GetPropertyType(propertyName);
-                IDictionary matchingObjects = FindMatchingObjects(requiredType);
+                IDictionary<string, object> matchingObjects = FindMatchingObjects(requiredType);
                 if (matchingObjects != null && matchingObjects.Count == 1)
                 {
                     properties.Add(propertyName, ObjectUtils.EnumerateFirstElement(matchingObjects.Values));
@@ -1202,21 +1199,21 @@ namespace Spring.Objects.Factory.Support
         {
             lock (filteredPropertyDescriptorsCache)
             {
-                PropertyInfo[] filtered = (PropertyInfo[])filteredPropertyDescriptorsCache[wrapper.WrappedType];
-                if (filtered == null)
+                PropertyInfo[] filtered;
+                if (!filteredPropertyDescriptorsCache.TryGetValue(wrapper.WrappedType, out filtered))
                 {
 
-                    ArrayList list = new ArrayList(wrapper.GetPropertyInfos());
+                    List<PropertyInfo> list = new List<PropertyInfo>(wrapper.GetPropertyInfos());
                     for (int i = list.Count - 1; i >= 0; i--)
                     {
-                        PropertyInfo pi = (PropertyInfo)list[i];
+                        PropertyInfo pi = list[i];
                         if (IsExcludedFromDependencyCheck(pi))
                         {
                             list.RemoveAt(i);
                         }
                     }
 
-                    filtered = (PropertyInfo[])list.ToArray(typeof(PropertyInfo));
+                    filtered = list.ToArray();
                     filteredPropertyDescriptorsCache.Add(wrapper.WrappedType, filtered);
                 }
                 return filtered;
@@ -1747,7 +1744,7 @@ namespace Spring.Objects.Factory.Support
         /// </p>
         /// </remarks>
         /// <param name="requiredType">
-        /// The <see cref="System.Type"/> of the objects to look up.
+        ///   The <see cref="System.Type"/> of the objects to look up.
         /// </param>
         /// <returns>
         /// An <see cref="IDictionary"/> of object names and object
@@ -1757,7 +1754,7 @@ namespace Spring.Objects.Factory.Support
         /// <exception cref="Spring.Objects.ObjectsException">
         /// In case of errors.
         /// </exception>
-        protected abstract IDictionary FindMatchingObjects(Type requiredType);
+        protected abstract IDictionary<string, object> FindMatchingObjects(Type requiredType);
 
         /// <summary>
         /// Return the names of the objects that depend on the given object.
@@ -2083,7 +2080,7 @@ namespace Spring.Objects.Factory.Support
         /// <summary>
         /// Cache of filtered PropertyInfos: object Type -> PropertyInfo array 
         /// </summary>
-        private IDictionary filteredPropertyDescriptorsCache = new Hashtable();
+        private IDictionary<Type, PropertyInfo[]> filteredPropertyDescriptorsCache = new Dictionary<Type, PropertyInfo[]>();
 
         /// <summary>
         /// Dependency interfaces to ignore on dependency check and autowire, as Set of

@@ -20,6 +20,8 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
+
 using Common.Logging;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
@@ -66,7 +68,7 @@ namespace Spring.Aop.Framework.AutoProxy
         {
             string[] advisorNames = GetAdvisorCandidateNames(targetType, targetName);
 
-            ArrayList advisors = new ArrayList();
+            List<IAdvisor> advisors = new List<IAdvisor>();
 
             if (advisorNames.Length == 0)
             {
@@ -111,12 +113,12 @@ namespace Spring.Aop.Framework.AutoProxy
         /// </summary>
         /// <param name="advisors">the advisor list</param>
         /// <param name="advisorName">the object name of the advisor to add</param>
-        private void AddAdvisorCandidate(ArrayList advisors, string advisorName)
+        private void AddAdvisorCandidate(List<IAdvisor> advisors, string advisorName)
         {
             object advisorCandidate = _objectFactory.GetObject(advisorName);
             if (advisorCandidate is IAdvisor)
             {
-                advisors.Add(advisorCandidate);
+                advisors.Add((IAdvisor) advisorCandidate);
             } 
             else if (advisorCandidate is IAdvisors)
             {
@@ -143,12 +145,12 @@ namespace Spring.Aop.Framework.AutoProxy
                 {
                     if (_cachedObjectNames == null)
                     {
-                        ArrayList candidateNameList = new ArrayList();
+                        List<string> candidateNameList = new List<string>();
                         string[] advisorCandidateNames = ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors( _objectFactory, typeof(IAdvisor), true, false);
                         candidateNameList.AddRange(advisorCandidateNames);
                         string[] advisorsCandidateNames = ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(_objectFactory, typeof(IAdvisors), true, false);
                         candidateNameList.AddRange(advisorsCandidateNames);
-                        _cachedObjectNames = (string[]) candidateNameList.ToArray(typeof(string));
+                        _cachedObjectNames = candidateNameList.ToArray();
                     }
                 }
             }

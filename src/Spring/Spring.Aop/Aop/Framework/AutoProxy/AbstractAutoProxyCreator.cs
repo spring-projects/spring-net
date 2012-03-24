@@ -20,10 +20,14 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.Remoting;
+
 using AopAlliance.Aop;
+
 using Common.Logging;
+
 using Spring.Aop.Framework.Adapter;
 using Spring.Aop.Target;
 using Spring.Collections;
@@ -31,7 +35,6 @@ using Spring.Core;
 using Spring.Objects;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
-using Spring.Util;
 
 namespace Spring.Aop.Framework.AutoProxy
 {
@@ -583,7 +586,7 @@ namespace Spring.Aop.Framework.AutoProxy
 
         private IAdvisor[] ResolveInterceptorNames()
         {
-            ArrayList advisors = new ArrayList();
+            List<IAdvisor> advisors = new List<IAdvisor>();
             foreach (string name in interceptorNames)
             {
                 object next = owningObjectFactory.GetObject(name);
@@ -596,7 +599,7 @@ namespace Spring.Aop.Framework.AutoProxy
                     advisors.Add(advisorAdapterRegistry.Wrap(next));
                 }
             }
-            return (IAdvisor[])advisors.ToArray(typeof(IAdvisor));
+            return advisors.ToArray();
         }
 
         #endregion

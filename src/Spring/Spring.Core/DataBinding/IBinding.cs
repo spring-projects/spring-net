@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using Spring.Validation;
 
 namespace Spring.DataBinding
@@ -27,18 +28,18 @@ namespace Spring.DataBinding
         /// Binds source object to target object.
         /// </summary>
         /// <param name="source">
-        /// The source object.
+        ///   The source object.
         /// </param>
         /// <param name="target">
-        /// The target object.
+        ///   The target object.
         /// </param>
         /// <param name="validationErrors">
-        /// Validation errors collection that type conversion errors should be added to.
+        ///   Validation errors collection that type conversion errors should be added to.
         /// </param>
         /// <param name="variables">
-        /// Variables that should be used during expression evaluation.
+        ///   Variables that should be used during expression evaluation.
         /// </param>
-        void BindSourceToTarget(object source, object target, IValidationErrors validationErrors, IDictionary variables);
+        void BindSourceToTarget(object source, object target, IValidationErrors validationErrors, IDictionary<string, object> variables);
 
         /// <summary>
         /// Binds target object to source object.
@@ -58,18 +59,18 @@ namespace Spring.DataBinding
         /// Binds target object to source object.
         /// </summary>
         /// <param name="source">
-        /// The source object.
+        ///   The source object.
         /// </param>
         /// <param name="target">
-        /// The target object.
+        ///   The target object.
         /// </param>
         /// <param name="validationErrors">
-        /// Validation errors collection that type conversion errors should be added to.
+        ///   Validation errors collection that type conversion errors should be added to.
         /// </param>
         /// <param name="variables">
-        /// Variables that should be used during expression evaluation.
+        ///   Variables that should be used during expression evaluation.
         /// </param>
-        void BindTargetToSource(object source, object target, IValidationErrors validationErrors, IDictionary variables);
+        void BindTargetToSource(object source, object target, IValidationErrors validationErrors, IDictionary<string, object> variables);
 
         /// <summary>
         /// Sets error message that should be displayed in the case 
