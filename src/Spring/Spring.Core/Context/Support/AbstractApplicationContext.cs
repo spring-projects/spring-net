@@ -516,7 +516,7 @@ namespace Spring.Context.Support
                 IDictionary<string, IObjectDefinitionRegistryPostProcessor> objectMap = objectFactory.GetObjectsOfType<IObjectDefinitionRegistryPostProcessor>(true, false);
 
                 List<IObjectDefinitionRegistryPostProcessor> registryPostProcessorObjects = new List<IObjectDefinitionRegistryPostProcessor>(objectMap.Values);
-                registryPostProcessorObjects.Sort(new OrderComparator());
+                registryPostProcessorObjects.Sort(new OrderComparator<IObjectDefinitionRegistryPostProcessor>());
 
                 foreach (object processor in registryPostProcessorObjects)
                 {
@@ -589,7 +589,7 @@ namespace Spring.Context.Support
             {
                 orderedFactoryProcessors.Add(ObjectFactory.GetObject<IObjectFactoryPostProcessor>(orderedFactoryProcessorsName));
             }
-            orderedFactoryProcessors.Sort(new OrderComparator());
+            orderedFactoryProcessors.Sort(new OrderComparator<IObjectFactoryPostProcessor>());
             InvokeObjectFactoryPostProcessors(orderedFactoryProcessors, ObjectFactory);
 
             // and then the unordered ones...
@@ -616,7 +616,7 @@ namespace Spring.Context.Support
 
         protected virtual void InvokePriorityOrderedObjectFactoryPostProcessors(List<string> factoryProcessorNames, List<IObjectFactoryPostProcessor> priorityOrderedFactoryProcessors)
         {
-            priorityOrderedFactoryProcessors.Sort(new OrderComparator());
+            priorityOrderedFactoryProcessors.Sort(new OrderComparator<IObjectFactoryPostProcessor>());
             InvokeObjectFactoryPostProcessors(priorityOrderedFactoryProcessors, ObjectFactory);
 
             // Now will find any additional IObjectFactoryPostProcessors that implement IPriorityOrdered that may have been
@@ -634,7 +634,7 @@ namespace Spring.Context.Support
                 }
             }
             // Second, invoke newly discovered IObjectFactoryPostProcessors that implement IPriorityOrdered.
-            priorityOrderedFactoryProcessors.Sort(new OrderComparator());
+            priorityOrderedFactoryProcessors.Sort(new OrderComparator<IObjectFactoryPostProcessor>());
             InvokeObjectFactoryPostProcessors(priorityOrderedFactoryProcessors, ObjectFactory);
         }
 
