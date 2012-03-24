@@ -19,6 +19,7 @@
 #region Imports
 
 using System;
+using System.Collections;
 using System.Collections.Generic;
 
 using Spring.Objects.Factory.Config;
@@ -817,7 +818,9 @@ namespace Spring.Objects.Factory.Support
         /// </exception>
         public IDictionary<string, T> GetObjectsOfType<T>()
         {
-            return (IDictionary<string, T>) GetObjectsOfType(typeof(T));
+            Dictionary<string, T> collector = new Dictionary<string, T>();
+            DoGetObjectsOfType(typeof(T), true, true, collector);
+            return collector;
         }
 
         /// <summary>
@@ -848,8 +851,14 @@ namespace Spring.Objects.Factory.Support
         /// </exception>
         public IDictionary<string, object> GetObjectsOfType(Type type, bool includePrototypes, bool includeFactoryObjects)
         {
+            Dictionary<string, object> collector = new Dictionary<string, object>();
+            DoGetObjectsOfType(type, includeFactoryObjects, includePrototypes, collector);
+            return collector;
+        }
+
+        private void DoGetObjectsOfType(Type type, bool includeFactoryObjects, bool includePrototypes, IDictionary collector)
+        {
             bool isFactoryType = (type != null && typeof(IFactoryObject).IsAssignableFrom(type));
-            IDictionary<string, object> matches = new Dictionary<string, object>();
             foreach (string name in objects.Keys)
             {
                 object instance = objects[name];
@@ -864,7 +873,7 @@ namespace Spring.Objects.Factory.Support
                         object createdObject = GetObject(name);
                         if (type.IsInstanceOfType(createdObject))
                         {
-                            matches[name] = createdObject;
+                            collector[name] = createdObject;
                         }
                     }
                 }
@@ -872,15 +881,14 @@ namespace Spring.Objects.Factory.Support
                 {
                     if (isFactoryType)
                     {
-                        matches[ObjectFactoryUtils.BuildFactoryObjectName(name)] = instance;
+                        collector[ObjectFactoryUtils.BuildFactoryObjectName(name)] = instance;
                     }
                     else
                     {
-                        matches[name] = instance;
+                        collector[name] = instance;
                     }
                 }
             }
-            return matches;
         }
 
         /// <summary>
@@ -911,7 +919,9 @@ namespace Spring.Objects.Factory.Support
         /// </exception>
         public IDictionary<string, T> GetObjectsOfType<T>(bool includePrototypes, bool includeFactoryObjects)
         {
-            return (IDictionary<string, T>) GetObjectsOfType(typeof(T), includePrototypes, includeFactoryObjects);
+            Dictionary<string, T> collector = new Dictionary<string, T>();
+            DoGetObjectsOfType(typeof(T), includeFactoryObjects, includePrototypes, collector);
+            return collector; 
         }
 
         /// <summary>

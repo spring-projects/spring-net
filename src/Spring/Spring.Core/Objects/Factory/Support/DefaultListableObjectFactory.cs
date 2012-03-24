@@ -27,7 +27,7 @@ using System.Collections.Specialized;
 using System.Globalization;
 
 using Common.Logging;
-using Spring.Collections.Generic;
+
 using Spring.Core;
 using Spring.Core.TypeConversion;
 using Spring.Objects.Factory.Config;

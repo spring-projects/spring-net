@@ -1444,7 +1444,7 @@ namespace Spring.Context.Support
         /// </exception>
         public IDictionary<string, T> GetObjectsOfType<T>()
         {
-            return (IDictionary<string, T>) GetObjectsOfType(typeof(T));
+            return ObjectFactory.GetObjectsOfType<T>(true, true);
         }
 
         /// <summary>

@@ -21,12 +21,10 @@
 using System;
 using System.Web.Mvc;
 using System.Web.Routing;
-using Spring.Objects.Factory;
-using Spring.Core;
+
 using Spring.Context;
 using Spring.Context.Support;
 using System.Linq;
-using System.Collections;
 
 namespace Spring.Web.Mvc
 {
@@ -116,7 +114,7 @@ namespace Spring.Web.Mvc
                 var controllers = ApplicationContext.GetObjectsOfType(controllerType);
                 if (controllers.Count > 0)
                 {
-                    controller = (IController)controllers.Cast<DictionaryEntry>().First().Value;
+                    controller = (IController)controllers.First().Value;
                 }
             }
 
