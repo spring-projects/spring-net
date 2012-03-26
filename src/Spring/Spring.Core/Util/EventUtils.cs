@@ -47,14 +47,14 @@ namespace Spring.Util
                 get { return _eventExceptions.Count > 0; }
             }
 
-            public Delegate[] Sources
+            public IList<Delegate> Sources
             {
-                get { return new List<Delegate>(_eventExceptions.Keys).ToArray(); }
+                get { return new List<Delegate>(_eventExceptions.Keys); }
             }
 
-            public Exception[] Exceptions
+            public IList<Exception> Exceptions
             {
-                get { return new List<Exception>(_eventExceptions.Values).ToArray(); }
+                get { return new List<Exception>(_eventExceptions.Values); }
             }
 
             public Exception this[Delegate source]

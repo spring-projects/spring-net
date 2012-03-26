@@ -21,6 +21,7 @@
 #region Imports
 
 using System;
+using System.Collections.Generic;
 
 #endregion
 
@@ -58,7 +59,7 @@ namespace Spring.Aop.Framework.AutoProxy
         /// Always <see cref="AbstractAutoProxyCreator.PROXY_WITHOUT_ADDITIONAL_INTERCEPTORS"/> to indicate, that the object shall be proxied.
         /// </returns>
         /// <seealso cref="AbstractAutoProxyCreator.PROXY_WITHOUT_ADDITIONAL_INTERCEPTORS"/>
-        protected override object[] GetAdvicesAndAdvisorsForObject( Type targetType, string targetName, ITargetSource customTargetSource )
+        protected override IList<object> GetAdvicesAndAdvisorsForObject(Type targetType, string targetName, ITargetSource customTargetSource)
         {
             return PROXY_WITHOUT_ADDITIONAL_INTERCEPTORS;
         }

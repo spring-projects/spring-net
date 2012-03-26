@@ -19,6 +19,7 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using Common.Logging;
 
@@ -282,21 +283,21 @@ namespace Spring.Context.Support
         /// </exception>
         public string GetMessage(IMessageSourceResolvable resolvable, CultureInfo culture)
         {
-            string[] codes = resolvable.GetCodes();
+            IList<string> codes = resolvable.GetCodes();
             if (codes == null) codes = new string[0];
-            for (int i = 0; i < codes.Length; i++)
+            for (int i = 0; i < codes.Count; i++)
             {
                 string msg = GetMessageInternal(codes[i], resolvable.GetArguments(), culture);
                 if (msg != null) return msg;
             }
             if (resolvable.DefaultMessage != null)
                 return RenderDefaultMessage(resolvable.DefaultMessage, resolvable.GetArguments(), culture);
-            if (codes.Length > 0)
+            if (codes.Count > 0)
             {
                 string fallback = GetDefaultMessage(codes[0]);
                 if (fallback != null) return fallback;
             }
-            throw new NoSuchMessageException(codes.Length > 0 ? codes[codes.Length - 1] : null, culture);
+            throw new NoSuchMessageException(codes.Count > 0 ? codes[codes.Count - 1] : null, culture);
         }
 
         /// <summary>

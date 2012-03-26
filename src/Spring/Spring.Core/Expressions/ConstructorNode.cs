@@ -179,15 +179,15 @@ namespace Spring.Expressions
 
         private static ConstructorInfo GetBestConstructor(Type type, object[] argValues)
         {
-            ConstructorInfo[] candidates = GetCandidateConstructors(type, argValues.Length);
-            if (candidates.Length > 0)
+            IList<ConstructorInfo> candidates = GetCandidateConstructors(type, argValues.Length);
+            if (candidates.Count > 0)
             {
                 return ReflectionUtils.GetConstructorByArgumentValues(candidates, argValues);
             }
             return null;
         }
 
-        private static ConstructorInfo[] GetCandidateConstructors(Type type, int argCount)
+        private static IList<ConstructorInfo> GetCandidateConstructors(Type type, int argCount)
         {
             ConstructorInfo[] ctors = type.GetConstructors(BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic);
             List<ConstructorInfo> matches = new List<ConstructorInfo>();
@@ -209,7 +209,7 @@ namespace Spring.Expressions
                 }
             }
 
-            return matches.ToArray();
+            return matches;
         }
 
     }

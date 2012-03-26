@@ -294,7 +294,7 @@ namespace Spring.Aop.Framework
         /// to be (or that are being) proxied by this proxy.
         /// </value>
         /// <seealso cref="Spring.Aop.Framework.IAdvised.Interfaces"/>
-        public virtual Type[] Interfaces
+        public virtual IList<Type> Interfaces
         {
             get
             {
@@ -318,12 +318,12 @@ namespace Spring.Aop.Framework
         /// <summary>
         /// Set interfaces to be proxied, bypassing locking and <see cref="ProxyConfig.IsFrozen"/>
         /// </summary>
-        protected void SetInterfacesInternal(Type[] value)
+        protected void SetInterfacesInternal(IList<Type> value)
         {
             this.interfaceMap.Clear();
             if (value != null)
             {
-                for (int i = 0; i < value.Length; i++)
+                for (int i = 0; i < value.Count; i++)
                 {
                     AddInterfaceInternal(value[i]);
                 }
@@ -392,14 +392,9 @@ namespace Spring.Aop.Framework
         /// instances that have been applied to this proxy.
         /// </value>
         /// <seealso cref="Spring.Aop.Framework.IAdvised.Advisors"/>
-        public virtual IAdvisor[] Advisors
+        public virtual IList<IAdvisor> Advisors
         {
-            get
-            {
-                {
-                    return _advisorsArray;
-                }
-            }
+            get { return _advisorsArray; }
         }
 
         /// <summary>
@@ -419,13 +414,13 @@ namespace Spring.Aop.Framework
         /// instances that have been applied to this proxy.
         /// </value>
         /// <seealso cref="Spring.Aop.Framework.IAdvised.Introductions"/>
-        public virtual IIntroductionAdvisor[] Introductions
+        public virtual IList<IIntroductionAdvisor> Introductions
         {
             get
             {
                 lock (this.SyncRoot)
                 {
-                    return this._introductions.ToArray();
+                    return this._introductions;
                 }
             }
         }
@@ -1491,7 +1486,7 @@ namespace Spring.Aop.Framework
         /// </param>
         protected internal virtual void CopyConfigurationFrom(AdvisedSupport other)
         {
-            CopyConfigurationFrom(other, other.TargetSource, new List<IAdvisor>(other.Advisors), new List<IAdvisor>(other.Introductions));
+            CopyConfigurationFrom(other, other.TargetSource, new List<IAdvisor>(other.Advisors), new List<IIntroductionAdvisor>(other.Introductions));
         }
 
         /// <summary>
@@ -1514,14 +1509,14 @@ namespace Spring.Aop.Framework
         /// <param name="targetSource">the new target source</param>
         /// <param name="advisors">the advisors for the chain</param>
         /// <param name="introductions">the introductions for the chain</param>
-        protected internal virtual void CopyConfigurationFrom(AdvisedSupport other, ITargetSource targetSource, IList<IAdvisor> advisors, IList<IAdvisor> introductions)
+        protected internal virtual void CopyConfigurationFrom(AdvisedSupport other, ITargetSource targetSource, IList<IAdvisor> advisors, IList<IIntroductionAdvisor> introductions)
         {
             CopyFrom(other);
             this.AdvisorChainFactory = other.advisorChainFactory;
             this.m_targetSource = targetSource;
 //            this.cachedProxyType = other.cachedProxyType;
 //            this.cachedProxyConstructor = other.cachedProxyConstructor;
-            this.Interfaces = (Type[]) CollectionUtils.ToArray(other.Interfaces, typeof(Type));
+            this.Interfaces = new List<Type>(other.Interfaces);
             foreach (Type intf in other.interfaceMap.Keys)
             {
                 this.interfaceMap[intf] = other.interfaceMap[intf];

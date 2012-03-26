@@ -31,6 +31,8 @@ using Spring.Core.TypeResolution;
 using Spring.Objects.Factory.Config;
 using Spring.Util;
 
+using System.Linq;
+
 namespace Spring.Objects.Factory.Support
 {
     /// <summary>
@@ -307,12 +309,12 @@ namespace Spring.Objects.Factory.Support
             }
 
             GenericArgumentsHolder genericArgsInfo = new GenericArgumentsHolder(definition.FactoryMethodName);
-            MethodInfo[] factoryMethodCandidates = FindMethods(genericArgsInfo.GenericMethodName, expectedArgCount, isStatic, factoryClass);
+            IList<MethodInfo> factoryMethodCandidates = FindMethods(genericArgsInfo.GenericMethodName, expectedArgCount, isStatic, factoryClass);
 
             bool autowiring = (definition.AutowireMode == AutoWiringMode.Constructor);
 
             // try all matching methods to see if they match the constructor arguments...
-            for (int i = 0; i < factoryMethodCandidates.Length; i++)
+            for (int i = 0; i < factoryMethodCandidates.Count; i++)
             {
                 MethodInfo factoryMethodCandidate = factoryMethodCandidates[i];
                 if (genericArgsInfo.ContainsGenericArguments)
@@ -610,16 +612,14 @@ namespace Spring.Objects.Factory.Support
         /// <see cref="System.Reflection.MethodInfo">methods</see> exposed on the
         /// <paramref name="searchType"/> that match the supplied criteria.
         /// </returns>
-        private static MethodInfo[] FindMethods(string methodName, int expectedArgumentCount, bool isStatic, Type searchType)
+        private static IList<MethodInfo> FindMethods(string methodName, int expectedArgumentCount, bool isStatic, Type searchType)
         {
             ComposedCriteria methodCriteria = new ComposedCriteria();
             methodCriteria.Add(new MethodNameMatchCriteria(methodName));
             methodCriteria.Add(new MethodParametersCountCriteria(expectedArgumentCount));
             BindingFlags methodFlags = BindingFlags.Public | BindingFlags.IgnoreCase | (isStatic ? BindingFlags.Static : BindingFlags.Instance);
-            MemberInfo[] methods =
-                    searchType.FindMembers(MemberTypes.Method, methodFlags, new MemberFilter(new CriteriaMemberFilter().FilterMemberByCriteria),
-                                           methodCriteria);
-            return (MethodInfo[])ArrayList.Adapter(methods).ToArray(typeof(MethodInfo));
+            MemberInfo[] methods = searchType.FindMembers(MemberTypes.Method, methodFlags, new CriteriaMemberFilter().FilterMemberByCriteria, methodCriteria);
+            return methods.Cast<MethodInfo>().ToArray();
         }
         internal class ArgumentsHolder
         {

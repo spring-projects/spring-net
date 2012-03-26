@@ -217,16 +217,15 @@ namespace Spring.Objects.Factory.Support
         /// <exception cref="Spring.Objects.ObjectsException">
         /// In case of errors.
         /// </exception>
-        protected override string[] GetDependingObjectNames(string objectName)
+        protected override IList<string> GetDependingObjectNames(string objectName)
         {
             List<string> dependingObjectNames = new List<string>();
-            string[] allObjectDefinitionNames = GetObjectDefinitionNames();
+            IList<string> allObjectDefinitionNames = GetObjectDefinitionNames();
             foreach (string name in allObjectDefinitionNames)
             {
                 if (ContainsObjectDefinition(name))
                 {
-                    RootObjectDefinition rod
-                        = GetMergedObjectDefinition(name, false);
+                    RootObjectDefinition rod = GetMergedObjectDefinition(name, false);
                     if (rod.DependsOn != null)
                     {
                         HashSet<string> dependsOn = new HashSet<string>(rod.DependsOn);
@@ -249,7 +248,7 @@ namespace Spring.Objects.Factory.Support
                     }
                 }
             }
-            return dependingObjectNames.ToArray();
+            return dependingObjectNames;
         }
 
         /// <summary>
@@ -604,9 +603,9 @@ namespace Spring.Objects.Factory.Support
         /// are defined.
         /// </returns>
         /// <seealso cref="Spring.Objects.Factory.IListableObjectFactory.GetObjectDefinitionNames()"/>
-        public string[] GetObjectDefinitionNames()
+        public IList<string> GetObjectDefinitionNames()
         {
-            return objectDefinitionNames.ToArray();
+            return objectDefinitionNames;
         }
 
         /// <summary>
@@ -622,7 +621,7 @@ namespace Spring.Objects.Factory.Support
         /// are defined.
         /// </returns>
         /// <seealso cref="Spring.Objects.Factory.IListableObjectFactory.GetObjectDefinitionNames()"/>
-        public string[] GetObjectDefinitionNames(Type type)
+        public IList<string> GetObjectDefinitionNames(Type type)
         {
             List<string> matches = new List<string>();
             foreach (string name in objectDefinitionNames)
@@ -632,7 +631,7 @@ namespace Spring.Objects.Factory.Support
                     matches.Add(name);
                 }
             }
-            return matches.ToArray();
+            return matches;
         }
 
         /// <summary>
@@ -648,7 +647,7 @@ namespace Spring.Objects.Factory.Support
         /// are defined.
         /// </returns>
         /// <seealso cref="Spring.Objects.Factory.IListableObjectFactory.GetObjectNamesForType(Type)"/>
-        public string[] GetObjectNamesForType(Type type)
+        public IList<string> GetObjectNamesForType(Type type)
         {
             return GetObjectNamesForType(type, true, true);
         }
@@ -676,7 +675,7 @@ namespace Spring.Objects.Factory.Support
         /// The names of all objects defined in this factory, or an empty array if none
         /// are defined.
         /// </returns>
-        public string[] GetObjectNamesForType<T>()
+        public IList<string> GetObjectNames<T>()
         {
             return GetObjectNamesForType(typeof (T));
         }
@@ -702,10 +701,10 @@ namespace Spring.Objects.Factory.Support
         /// are defined.
         /// </returns>
         /// <seealso cref="Spring.Objects.Factory.IListableObjectFactory.GetObjectNamesForType(Type, bool, bool)"/>
-        public string[] GetObjectNamesForType(Type type, bool includePrototypes, bool includeFactoryObjects)
+        public IList<string> GetObjectNamesForType(Type type, bool includePrototypes, bool includeFactoryObjects)
         {
             List<string> objectNames = DoGetObjectNamesForType(type, includePrototypes, includeFactoryObjects);
-            return objectNames.ToArray();
+            return objectNames;
         }
 
         /// <summary>
@@ -743,7 +742,7 @@ namespace Spring.Objects.Factory.Support
         /// The names of all objects defined in this factory, or an empty array if none
         /// are defined.
         /// </returns>
-        public string[] GetObjectNamesForType<T>(bool includePrototypes, bool includeFactoryObjects)
+        public IList<string> GetObjectNames<T>(bool includePrototypes, bool includeFactoryObjects)
         {
             return GetObjectNamesForType(typeof (T), includePrototypes, includeFactoryObjects);
         }
@@ -799,7 +798,7 @@ namespace Spring.Objects.Factory.Support
         /// <exception cref="Spring.Objects.ObjectsException">
         /// If the objects could not be created.
         /// </exception>
-        public IDictionary<string, T> GetObjectsOfType<T>()
+        public IDictionary<string, T> GetObjects<T>()
         {
             Dictionary<string, T> result = new Dictionary<string, T>();
             DoGetObjectsOfType(typeof (T), true, true, result);
@@ -896,7 +895,7 @@ namespace Spring.Objects.Factory.Support
         /// <exception cref="Spring.Objects.ObjectsException">
         /// If the objects could not be created.
         /// </exception>
-        public IDictionary<string, T> GetObjectsOfType<T>(bool includePrototypes, bool includeFactoryObjects)
+        public IDictionary<string, T> GetObjects<T>(bool includePrototypes, bool includeFactoryObjects)
         {
             Dictionary<string, T> result = new Dictionary<string, T>();
             DoGetObjectsOfType(typeof (T), includePrototypes, includeFactoryObjects, result);
@@ -934,13 +933,13 @@ namespace Spring.Objects.Factory.Support
         /// </exception>
         public T GetObject<T>()
         {
-            string[] objectNamesForType = GetObjectNamesForType(typeof(T));
-            if ((objectNamesForType == null) || (objectNamesForType.Length == 0))
+            IList<string> objectNamesForType = GetObjectNamesForType(typeof(T));
+            if ((objectNamesForType == null) || (objectNamesForType.Count == 0))
             {
                 throw new NoSuchObjectDefinitionException(typeof(T).FullName, "Requested Type not Defined in the Context.");
             }
 
-            if (objectNamesForType.Length > 1)
+            if (objectNamesForType.Count > 1)
             {
                 throw new ObjectDefinitionStoreException(string.Format("More than one definition for {0} found in the Context.", typeof(T).FullName));
             }
@@ -975,7 +974,7 @@ namespace Spring.Objects.Factory.Support
         protected List<string> DoGetObjectNamesForType(Type type, bool includeNonSingletons, bool allowEagerInit)
         {
             List<string> result = new List<string>();
-            string[] objectNames = GetObjectDefinitionNames();
+            IList<string> objectNames = GetObjectDefinitionNames();
             foreach (string s in objectNames)
             {
                 string objectName = s;
@@ -1033,7 +1032,7 @@ namespace Spring.Objects.Factory.Support
             }
 
             // check singletons too, to catch manually registered singletons...
-            string[] singletonNames = GetSingletonNames();
+            IList<string> singletonNames = GetSingletonNames();
             foreach (string s in singletonNames)
             {
                 string objectName = s;
@@ -1170,9 +1169,9 @@ namespace Spring.Objects.Factory.Support
 
         private IDictionary FindAutowireCandidates(string objectName, Type requiredType, DependencyDescriptor descriptor)
         {
-            string[] candidateNames =
+            IList<string> candidateNames =
                 ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(this, requiredType, true, descriptor.Eager);
-            IDictionary result = new OrderedDictionary(candidateNames.Length);
+            IDictionary result = new OrderedDictionary(candidateNames.Count);
 
             foreach (DictionaryEntry entry in resolvableDependencies)
             {
@@ -1187,7 +1186,7 @@ namespace Spring.Objects.Factory.Support
                     }
                 }
             }
-            for (int i = 0; i < candidateNames.Length; i++)
+            for (int i = 0; i < candidateNames.Count; i++)
             {
                 string candidateName = candidateNames[i];
                 if (!candidateName.Equals(objectName) && IsAutowireCandidate(candidateName, descriptor))

@@ -21,12 +21,11 @@
 #region Imports
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 using System.Text;
-using Spring.Core;
+
 using Spring.Core.TypeResolution;
 using Spring.Objects.Factory.Config;
 using Spring.Util;
@@ -135,9 +134,8 @@ namespace Spring.Objects.Factory.Support
 
             InitMethodName = other.InitMethodName;
             DestroyMethodName = other.DestroyMethodName;
-            DependsOn = new string[other.DependsOn.Length];
             IsAutowireCandidate = other.IsAutowireCandidate;
-            Array.Copy(other.DependsOn, DependsOn, other.DependsOn.Length);
+            DependsOn = new List<string>(other.DependsOn);
             FactoryMethodName = other.FactoryMethodName;
             FactoryObjectName = other.FactoryObjectName;
             AutowireMode = other.AutowireMode;
@@ -524,10 +522,10 @@ namespace Spring.Objects.Factory.Support
         /// preparation on startup.
         /// </note>
         /// </remarks>
-        public string[] DependsOn
+        public IList<string> DependsOn
         {
             get { return dependsOn; }
-            set { dependsOn = value == null ? StringUtils.EmptyStrings : value; }
+            set { dependsOn = value ?? StringUtils.EmptyStrings; }
         }
 
         /// <summary>
@@ -739,14 +737,14 @@ namespace Spring.Objects.Factory.Support
             {
                 FactoryMethodName = other.FactoryMethodName;
             }
-            if (ArrayUtils.HasLength(other.DependsOn))
+            if (other.DependsOn != null && other.DependsOn.Count > 0)
             {
                 List<string> deps = new List<string>(other.DependsOn);
-                if (ArrayUtils.HasLength(DependsOn))
+                if (DependsOn != null && DependsOn.Count > 0)
                 {
                     deps.AddRange(DependsOn);
                 }
-                DependsOn = deps.ToArray();
+                DependsOn = deps;
             }
             AutowireMode = other.AutowireMode;
             ResourceDescription = other.ResourceDescription;
@@ -811,7 +809,7 @@ namespace Spring.Objects.Factory.Support
         private object objectType;
         private AutoWiringMode autowireMode = AutoWiringMode.No;
         private DependencyCheckingMode dependencyCheck = DependencyCheckingMode.None;
-        private string[] dependsOn;
+        private IList<string> dependsOn;
         private bool autowireCandidate = true;
         private string initMethodName = null;
         private string destroyMethodName = null;

@@ -15,6 +15,7 @@
  */
 
 using System;
+using System.Collections.Generic;
 
 using Quartz;
 using Quartz.Impl;
@@ -132,8 +133,8 @@ namespace Spring.Scheduling.Quartz
             if (objectFactory is IListableObjectFactory)
             {
                 IListableObjectFactory lbf = (IListableObjectFactory) objectFactory;
-                string[] objectNames = lbf.GetObjectNamesForType(typeof(IScheduler));
-                for (int i = 0; i < objectNames.Length; i++)
+                IList<string> objectNames = lbf.GetObjectNamesForType(typeof(IScheduler));
+                for (int i = 0; i < objectNames.Count; i++)
                 {
                     IScheduler schedulerObject = (IScheduler)lbf.GetObject(objectNames[i]);
                     if (schedulerName.Equals(schedulerObject.SchedulerName))

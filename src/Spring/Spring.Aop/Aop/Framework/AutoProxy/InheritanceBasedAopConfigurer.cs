@@ -176,8 +176,8 @@ namespace Spring.Aop.Framework.AutoProxy
         /// </remarks>
         public void PostProcessObjectFactory(IConfigurableListableObjectFactory factory)
         {
-            string[] objectDefinitionNames = factory.GetObjectDefinitionNames();
-            for (int i = 0; i < objectDefinitionNames.Length; ++i)
+            IList<string> objectDefinitionNames = factory.GetObjectDefinitionNames();
+            for (int i = 0; i < objectDefinitionNames.Count; ++i)
             {
                 string name = objectDefinitionNames[i];
                 if (IsObjectNameMatch(name))
@@ -260,7 +260,7 @@ namespace Spring.Aop.Framework.AutoProxy
                 proxyFactory.Interfaces = Type.EmptyTypes;
             }
 
-            IAdvisor[] advisors = ResolveInterceptorNames();
+            IList<IAdvisor> advisors = ResolveInterceptorNames();
             foreach (IAdvisor advisor in advisors)
             {
                 if (advisor is IIntroductionAdvisor)
@@ -307,7 +307,7 @@ namespace Spring.Aop.Framework.AutoProxy
 
         #region Private Methods
 
-        private IAdvisor[] ResolveInterceptorNames()
+        private IList<IAdvisor> ResolveInterceptorNames()
         {
             List<IAdvisor> advisors = new List<IAdvisor>();
             foreach (string name in interceptorNames)
@@ -322,7 +322,7 @@ namespace Spring.Aop.Framework.AutoProxy
                     advisors.Add(advisorAdapterRegistry.Wrap(next));
                 }
             }
-            return advisors.ToArray();
+            return advisors;
         }
 
         #endregion

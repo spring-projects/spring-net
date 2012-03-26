@@ -399,7 +399,7 @@ namespace Spring.Aop.Framework
             advSup.AddAdvisor(advisor1);
             advSup.AddAdvisor(advisor1);
 
-            Assert.AreEqual(1, advSup.Advisors.Length);
+            Assert.AreEqual(1, advSup.Advisors.Count);
         }
 
         private class AnonymousClassTimeStamped : ITimeStamped
@@ -454,7 +454,7 @@ namespace Spring.Aop.Framework
             // Extend to get new interface
             TestObjectSubclass raw = new TestObjectSubclass();
             ProxyFactory factory = new ProxyFactory(raw);
-            Assert.AreEqual(8, factory.Interfaces.Length, "Found correct number of interfaces");
+            Assert.AreEqual(8, factory.Interfaces.Count, "Found correct number of interfaces");
             //System.out.println("Proxied interfaces are " + StringUtils.arrayToDelimitedString(factory.getProxiedInterfaces(), ","));
             ITestObject tb = (ITestObject)factory.GetProxy();
             Assert.IsTrue(tb is IOther, "Picked up secondary interface");
@@ -465,14 +465,14 @@ namespace Spring.Aop.Framework
             DateTime t = new DateTime(2004, 8, 1);
             TimestampIntroductionInterceptor ti = new TimestampIntroductionInterceptor(t);
 
-            Console.WriteLine(StringUtils.ArrayToDelimitedString(factory.Interfaces, "/"));
+            Console.WriteLine(StringUtils.CollectionToDelimitedString(factory.Interfaces, "/"));
 
             //factory.addAdvisor(0, new DefaultIntroductionAdvisor(ti, typeof(ITimeStamped)));
             factory.AddIntroduction(
                 new DefaultIntroductionAdvisor(ti, typeof(ITimeStamped))
                 );
 
-            Console.WriteLine(StringUtils.ArrayToDelimitedString(factory.Interfaces, "/"));
+            Console.WriteLine(StringUtils.CollectionToDelimitedString(factory.Interfaces, "/"));
 
             ITimeStamped ts = (ITimeStamped)factory.GetProxy();
             Assert.IsTrue(ts.TimeStamp == t);

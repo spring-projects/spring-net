@@ -54,7 +54,7 @@ namespace Spring.TxQuickStart
             NamespaceParserRegistry.RegisterParser(typeof(TxNamespaceParser));
             NamespaceParserRegistry.RegisterParser(typeof(AopNamespaceParser));
             IApplicationContext context = CreateContextFromXml();
-            IDictionary<string, IAccountManager> dict = context.GetObjectsOfType<IAccountManager>();
+            IDictionary<string, IAccountManager> dict = context.GetObjects<IAccountManager>();
             accountManager = context["accountManager"] as IAccountManager;  
             CleanDb(context);
         }

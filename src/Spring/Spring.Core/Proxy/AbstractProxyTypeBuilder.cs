@@ -62,7 +62,7 @@ namespace Spring.Proxy
         private string _name;
 		private Type _targetType;
 		private Type _baseType = typeof (object);
-        private Type[] _interfaces;
+        private IList<Type> _interfaces;
         private bool _proxyTargetAttributes = true;
 		private IList _typeAttributes = new ArrayList();
 		private IDictionary _memberAttributes = new Hashtable();
@@ -126,7 +126,7 @@ namespace Spring.Proxy
         /// The default value of this property is all the interfaces 
         /// implemented or inherited by the target type.
         /// </remarks>
-        public Type[] Interfaces
+        public IList<Type> Interfaces
         {
             get
             {
@@ -873,22 +873,22 @@ namespace Spring.Proxy
 
         #endregion
 
-        /// <summary>
-        /// Returns an array of <see cref="System.Type"/>s that represent 
-        /// the proxiable interfaces.
-        /// </summary>
-        /// <remarks>
-        /// An interface is proxiable if it's not marked with the 
-        /// <see cref="ProxyIgnoreAttribute"/>.
-        /// </remarks>
-        /// <param name="interfaces">
-        /// The array of interfaces from which 
-        /// we want to get the proxiable interfaces.
-        /// </param>
-        /// <returns>
-        /// An array containing the interface <see cref="System.Type"/>s.
-        /// </returns>
-        protected virtual Type[] GetProxiableInterfaces(Type[] interfaces)
+	    /// <summary>
+	    /// Returns an array of <see cref="System.Type"/>s that represent 
+	    /// the proxiable interfaces.
+	    /// </summary>
+	    /// <remarks>
+	    /// An interface is proxiable if it's not marked with the 
+	    /// <see cref="ProxyIgnoreAttribute"/>.
+	    /// </remarks>
+	    /// <param name="interfaces">
+	    /// The array of interfaces from which 
+	    /// we want to get the proxiable interfaces.
+	    /// </param>
+	    /// <returns>
+	    /// An array containing the interface <see cref="System.Type"/>s.
+	    /// </returns>
+	    protected virtual IList<Type> GetProxiableInterfaces(IList<Type> interfaces)
         {
             List<Type>  proxiableInterfaces = new List<Type>();
 
@@ -914,7 +914,7 @@ namespace Spring.Proxy
                 }
             }
 
-            return proxiableInterfaces.ToArray();
+            return proxiableInterfaces;
         }
 
         /// <summary>

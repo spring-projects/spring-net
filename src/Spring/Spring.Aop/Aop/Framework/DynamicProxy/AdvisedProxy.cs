@@ -165,8 +165,8 @@ namespace Spring.Aop.Framework.DynamicProxy
             this.m_targetType = advised.TargetSource.TargetType;
 
             // initialize introduction advice
-            this.m_introductions = new IAdvice[advised.Introductions.Length];
-            for (int i = 0; i < advised.Introductions.Length; i++)
+            this.m_introductions = new IAdvice[advised.Introductions.Count];
+            for (int i = 0; i < advised.Introductions.Count; i++)
             {
                 this.m_introductions[i] = advised.Introductions[i].Advice;
 
@@ -218,7 +218,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         /// <returns>list of inteceptors for the specified method</returns>
         public IList<object> GetInterceptors(Type targetType, MethodInfo method)
         {
-            if (m_advised.Advisors.Length == 0)
+            if (m_advised.Advisors.Count == 0)
             {
                 return EmptyList;
             }
@@ -252,17 +252,17 @@ namespace Spring.Aop.Framework.DynamicProxy
             get { return m_advised.ProxyTargetAttributes; }
         }
 
-        IAdvisor[] IAdvised.Advisors
+        IList<IAdvisor> IAdvised.Advisors
         {
             get { return m_advised.Advisors; }
         }
 
-        IIntroductionAdvisor[] IAdvised.Introductions
+        IList<IIntroductionAdvisor> IAdvised.Introductions
         {
             get { return m_advised.Introductions; }
         }
 
-        Type[] IAdvised.Interfaces
+        IList<Type> IAdvised.Interfaces
         {
             get { return m_advised.Interfaces; }
         }

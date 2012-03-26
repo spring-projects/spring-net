@@ -21,7 +21,6 @@
 #region Imports
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Text.RegularExpressions;
@@ -123,7 +122,7 @@ namespace Spring.Core.TypeResolution
         /// If <paramref name="interfaceNames"/> (or any of its elements ) is
         /// <see langword="null"/>.
         /// </exception>
-        public static Type[] ResolveInterfaceArray(string[] interfaceNames)
+        public static IList<Type> ResolveInterfaceArray(string[] interfaceNames)
         {
             AssertUtils.ArgumentNotNull(interfaceNames, "interfaceNames");
 
@@ -144,7 +143,7 @@ namespace Spring.Core.TypeResolution
                 interfaces.Add(resolvedInterface);
                 interfaces.AddRange(resolvedInterface.GetInterfaces());
             }
-            return interfaces.ToArray();
+            return interfaces;
         }
 
         #region MethodMatch

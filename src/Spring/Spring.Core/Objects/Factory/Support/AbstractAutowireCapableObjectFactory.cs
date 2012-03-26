@@ -349,15 +349,15 @@ namespace Spring.Objects.Factory.Support
         /// </remarks>
         protected void ApplyPropertyValues(string name, RootObjectDefinition definition, IObjectWrapper wrapper, IPropertyValues properties)
         {
-            if (properties == null || properties.PropertyValues.Length == 0)
+            if (properties == null || properties.PropertyValues.Count == 0)
             {
                 return;
             }
             ObjectDefinitionValueResolver valueResolver = CreateValueResolver();
 
             MutablePropertyValues deepCopy = new MutablePropertyValues(properties);
-            PropertyValue[] copiedProperties = deepCopy.PropertyValues;
-            for (int i = 0; i < copiedProperties.Length; ++i)
+            IList<PropertyValue> copiedProperties = deepCopy.PropertyValues;
+            for (int i = 0; i < copiedProperties.Count; ++i)
             {
                 PropertyValue copiedProperty = copiedProperties[i];
                 //(string name, RootObjectDefinition definition, string argumentName, object argumentValue)
@@ -500,7 +500,7 @@ namespace Spring.Objects.Factory.Support
 
             if (wrapper == null)
             {
-                if (properties.PropertyValues.Length > 0)
+                if (properties.PropertyValues.Count > 0)
                 {
                     throw new ObjectCreationException(definition.ResourceDescription,
                         name, "Cannot apply property values to null instance.");
@@ -534,7 +534,7 @@ namespace Spring.Objects.Factory.Support
 
             if (hasInstAwareOpps || needsDepCheck)
             {
-                PropertyInfo[] filteredPropInfo = FilterPropertyInfoForDependencyCheck(wrapper);
+                IList<PropertyInfo> filteredPropInfo = FilterPropertyInfoForDependencyCheck(wrapper);
                 if (hasInstAwareOpps)
                 {
                     foreach (IObjectPostProcessor processor in ObjectPostProcessors)
@@ -834,7 +834,7 @@ namespace Spring.Objects.Factory.Support
         protected internal override object InstantiateObject(string name, RootObjectDefinition definition, object[] arguments, bool allowEagerCaching, bool suppressConfigure)
         {
             // guarantee the initialization of objects that the current one depends on..
-            if (definition.DependsOn != null && definition.DependsOn.Length > 0)
+            if (definition.DependsOn != null && definition.DependsOn.Count > 0)
             {
                 foreach (string dependant in definition.DependsOn)
                 {
@@ -1155,7 +1155,7 @@ namespace Spring.Objects.Factory.Support
                 return;
             }
 
-            PropertyInfo[] filteredPropInfo = FilterPropertyInfoForDependencyCheck(wrapper);
+            IList<PropertyInfo> filteredPropInfo = FilterPropertyInfoForDependencyCheck(wrapper);
             if (HasInstantiationAwareBeanPostProcessors)
             {
                 foreach (IObjectPostProcessor processor in ObjectPostProcessors)
@@ -1177,12 +1177,12 @@ namespace Spring.Objects.Factory.Support
             CheckDependencies(name, definition, filteredPropInfo, properties);
         }
 
-        private void CheckDependencies(string name, IConfigurableObjectDefinition definition, PropertyInfo[] filteredPropInfo, IPropertyValues properties)
+        private void CheckDependencies(string name, IConfigurableObjectDefinition definition, IList<PropertyInfo> filteredPropInfo, IPropertyValues properties)
         {
             DependencyCheckingMode dependencyCheck = definition.DependencyCheck;
-            PropertyInfo[] unsatisfiedDependencies = AutowireUtils.GetUnsatisfiedDependencies(filteredPropInfo, properties, dependencyCheck);
+            IList<PropertyInfo> unsatisfiedDependencies = AutowireUtils.GetUnsatisfiedDependencies(filteredPropInfo, properties, dependencyCheck);
 
-            if (unsatisfiedDependencies.Length > 0)
+            if (unsatisfiedDependencies.Count > 0)
             {
                 throw new UnsatisfiedDependencyException(definition.ResourceDescription, name, unsatisfiedDependencies[0].Name,
                     "Set this property value or disable dependency checking for this object.");                
@@ -1195,11 +1195,11 @@ namespace Spring.Objects.Factory.Support
         /// </summary>
         /// <param name="wrapper">The object wrapper the object was created with.</param>
         /// <returns>The filtered PropertyInfos</returns>
-        private PropertyInfo[] FilterPropertyInfoForDependencyCheck(IObjectWrapper wrapper)
+        private IList<PropertyInfo> FilterPropertyInfoForDependencyCheck(IObjectWrapper wrapper)
         {
             lock (filteredPropertyDescriptorsCache)
             {
-                PropertyInfo[] filtered;
+                IList<PropertyInfo> filtered;
                 if (!filteredPropertyDescriptorsCache.TryGetValue(wrapper.WrappedType, out filtered))
                 {
 
@@ -1213,7 +1213,7 @@ namespace Spring.Objects.Factory.Support
                         }
                     }
 
-                    filtered = list.ToArray();
+                    filtered = list;
                     filteredPropertyDescriptorsCache.Add(wrapper.WrappedType, filtered);
                 }
                 return filtered;
@@ -1461,7 +1461,7 @@ namespace Spring.Objects.Factory.Support
         /// </param>
         private void DestroyDependantObjects(string name)
         {
-            string[] dependingObjects = GetDependingObjectNames(name);
+            IList<string> dependingObjects = GetDependingObjectNames(name);
             foreach (string doName in dependingObjects)
             {
                 DestroySingleton(doName);
@@ -1769,7 +1769,7 @@ namespace Spring.Objects.Factory.Support
         /// <exception cref="Spring.Objects.ObjectsException">
         /// In case of errors.
         /// </exception>
-        protected abstract string[] GetDependingObjectNames(string name);
+        protected abstract IList<string> GetDependingObjectNames(string name);
 
         /// <summary>
         /// Injects dependencies into the supplied <paramref name="target"/> instance
@@ -2080,7 +2080,7 @@ namespace Spring.Objects.Factory.Support
         /// <summary>
         /// Cache of filtered PropertyInfos: object Type -> PropertyInfo array 
         /// </summary>
-        private IDictionary<Type, PropertyInfo[]> filteredPropertyDescriptorsCache = new Dictionary<Type, PropertyInfo[]>();
+        private IDictionary<Type, IList<PropertyInfo>> filteredPropertyDescriptorsCache = new Dictionary<Type, IList<PropertyInfo>>();
 
         /// <summary>
         /// Dependency interfaces to ignore on dependency check and autowire, as Set of

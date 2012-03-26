@@ -47,7 +47,7 @@ namespace Spring.AopQuickStart
             {
                 // Create AOP proxy using Spring.NET IoC container.
                 IApplicationContext ctx = ContextRegistry.GetContext();
-                IDictionary<string, ICommand> commands = ctx.GetObjectsOfType<ICommand>();
+                IDictionary<string, ICommand> commands = ctx.GetObjects<ICommand>();
 
                 foreach (ICommand command in commands.Values)
                 {

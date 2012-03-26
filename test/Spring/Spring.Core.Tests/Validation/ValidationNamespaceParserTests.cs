@@ -20,6 +20,7 @@
 
 #region Imports
 
+using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 using NUnit.Framework;
@@ -64,8 +65,8 @@ namespace Spring.Validation
                     parser.ParseElement(element, parserContext);
                 }
             }
-            IObjectDefinition[] defs = registry.GetObjectDefinitions();
-            Assert.AreEqual(9, defs.Length);
+            IList<IObjectDefinition> defs = registry.GetObjectDefinitions();
+            Assert.AreEqual(9, defs.Count);
 
             IObjectDefinition def = registry.GetObjectDefinition("destinationAirportValidator");
             Assert.IsTrue(def.IsSingleton);

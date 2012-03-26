@@ -63,9 +63,9 @@ namespace Spring.Messaging.Nms.Connections
         /// Gets the exception listeners as an array.
         /// </summary>
         /// <value>The exception listeners.</value>
-        public IExceptionListener[] Listeners
+        public IList<IExceptionListener> Listeners
         {
-            get { return listeners.ToArray(); }
+            get { return listeners; }
         }
     }
 }

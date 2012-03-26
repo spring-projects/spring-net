@@ -19,6 +19,8 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
+
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 
@@ -109,7 +111,7 @@ namespace Spring.Objects.Factory
 	        get { throw new NotImplementedException(); }
 	    }
 
-	    public string[] DependsOn
+	    public IList<string> DependsOn
 	    {
 	        get { throw new NotImplementedException(); }
 	    }

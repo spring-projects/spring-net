@@ -21,6 +21,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Remoting;
 
@@ -82,13 +83,13 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <summary>
         /// Convenience constant for subclasses: Return value for "do not proxy".
         /// </summary>
-        protected static readonly object[] DO_NOT_PROXY = null;
+        protected static readonly IList<object> DO_NOT_PROXY = null;
 
         /// <summary>
         /// Convenience constant for subclasses: Return value for
         /// "proxy without additional interceptors, just the common ones".
         /// </summary>
-        protected static readonly object[] PROXY_WITHOUT_ADDITIONAL_INTERCEPTORS = new object[0];
+        protected static readonly IList<object> PROXY_WITHOUT_ADDITIONAL_INTERCEPTORS = new List<object>(0);
 
         #endregion
 
@@ -286,8 +287,7 @@ namespace Spring.Aop.Framework.AutoProxy
             }
 
             //ITargetSource targetSource = GetCustomTargetSource(obj.GetType(), objectName);
-            object[] specificInterceptors;
-            specificInterceptors = GetAdvicesAndAdvisorsForObject(objectType, objectName, null);
+            IList<object> specificInterceptors = GetAdvicesAndAdvisorsForObject(objectType, objectName, null);
 
 
             // proxy if we have advice or if a TargetSourceCreator wants to do some
@@ -458,11 +458,11 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <param name="targetType">the new object instance</param>
         /// <param name="targetName">the name of the object</param>
         /// <param name="customTargetSource">targetSource returned by TargetSource property:
-        /// may be ignored. Will be null unless a custom target source is in use.</param>
+        ///   may be ignored. Will be null unless a custom target source is in use.</param>
         /// <returns>an array of additional interceptors for the particular object;
         /// or an empty array if no additional interceptors but just the common ones;
         /// or null if no proxy at all, not even with the common interceptors.</returns>
-        protected abstract object[] GetAdvicesAndAdvisorsForObject(Type targetType, string targetName, ITargetSource customTargetSource);
+        protected abstract IList<object> GetAdvicesAndAdvisorsForObject(Type targetType, string targetName, ITargetSource customTargetSource);
 
         /// <summary>
         /// Create an AOP proxy for the given object.
@@ -470,10 +470,10 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <param name="targetType">Type of the object.</param>
         /// <param name="targetName">The name of the object.</param>
         /// <param name="specificInterceptors">The set of interceptors that is specific to this
-        /// object (may be empty but not null)</param>
+        ///   object (may be empty but not null)</param>
         /// <param name="targetSource">The target source for the proxy, already pre-configured to access the object.</param>
         /// <returns>The AOP Proxy for the object.</returns>
-        protected virtual object CreateProxy(Type targetType, string targetName, object[] specificInterceptors, ITargetSource targetSource)
+        protected virtual object CreateProxy(Type targetType, string targetName, IList<object> specificInterceptors, ITargetSource targetSource)
         {
             ProxyFactory proxyFactory = CreateProxyFactory();
             // copy our properties (proxyTargetClass) inherited from ProxyConfig
@@ -494,7 +494,7 @@ namespace Spring.Aop.Framework.AutoProxy
             }
 
 
-            IAdvisor[] advisors = BuildAdvisors(targetName, specificInterceptors);
+            IList<IAdvisor> advisors = BuildAdvisors(targetName, specificInterceptors);
 
             foreach (IAdvisor advisor in advisors)
             {
@@ -529,14 +529,14 @@ namespace Spring.Aop.Framework.AutoProxy
         /// </summary>
         /// <param name="targetName">The name of the object.</param>
         /// <param name="specificInterceptors">The set of interceptors that is specific to this
-        /// object (may be empty, but not null)</param>
+        ///   object (may be empty, but not null)</param>
         /// <returns>The list of Advisors for the given object</returns>
-        protected virtual IAdvisor[] BuildAdvisors(string targetName, object[] specificInterceptors)
+        protected virtual IList<IAdvisor> BuildAdvisors(string targetName, IList<object> specificInterceptors)
         {
             // handle prototypes correctly
-            IAdvisor[] commonInterceptors = ResolveInterceptorNames();
+            IList<IAdvisor> commonInterceptors = ResolveInterceptorNames();
 
-            ArrayList allInterceptors = new ArrayList();
+            List<object> allInterceptors = new List<object>();
             if (specificInterceptors != null)
             {
                 allInterceptors.AddRange(specificInterceptors);
@@ -544,26 +544,26 @@ namespace Spring.Aop.Framework.AutoProxy
                 {
                     if (applyCommonInterceptorsFirst)
                     {
-                        allInterceptors.InsertRange(0, commonInterceptors);
+                        allInterceptors.InsertRange(0, commonInterceptors.Cast<object>());
                     }
                     else
                     {
-                        allInterceptors.AddRange(commonInterceptors);
+                        allInterceptors.AddRange(commonInterceptors.Cast<object>());
                     }
                 }
             }
             if (logger.IsInfoEnabled)
             {
-                int nrOfCommonInterceptors = commonInterceptors != null ? commonInterceptors.Length : 0;
-                int nrOfSpecificInterceptors = specificInterceptors != null ? specificInterceptors.Length : 0;
+                int nrOfCommonInterceptors = commonInterceptors != null ? commonInterceptors.Count : 0;
+                int nrOfSpecificInterceptors = specificInterceptors != null ? specificInterceptors.Count : 0;
                 logger.Info(string.Format("Creating implicit proxy for object '{0}' with {1} common interceptors and {2} specific interceptors", targetName, nrOfCommonInterceptors, nrOfSpecificInterceptors));
             }
 
 
-            IAdvisor[] advisors = new IAdvisor[allInterceptors.Count];
+            List<IAdvisor> advisors = new List<IAdvisor>(allInterceptors.Count);
             for (int i = 0; i < allInterceptors.Count; i++)
             {
-                advisors[i] = advisorAdapterRegistry.Wrap(allInterceptors[i]);
+                advisors.Add(advisorAdapterRegistry.Wrap(allInterceptors[i]));
             }
             return advisors;
         }
@@ -584,7 +584,7 @@ namespace Spring.Aop.Framework.AutoProxy
 
         #region Private Methods
 
-        private IAdvisor[] ResolveInterceptorNames()
+        private IList<IAdvisor> ResolveInterceptorNames()
         {
             List<IAdvisor> advisors = new List<IAdvisor>();
             foreach (string name in interceptorNames)
@@ -599,7 +599,7 @@ namespace Spring.Aop.Framework.AutoProxy
                     advisors.Add(advisorAdapterRegistry.Wrap(next));
                 }
             }
-            return advisors.ToArray();
+            return advisors;
         }
 
         #endregion
@@ -659,7 +659,7 @@ namespace Spring.Aop.Framework.AutoProxy
             if (targetSource != null)
             {
                 targetSourcedObjects.Add(objectName);
-                object[] specificInterceptors = GetAdvicesAndAdvisorsForObject(objectType, objectName, targetSource);
+                IList<object> specificInterceptors = GetAdvicesAndAdvisorsForObject(objectType, objectName, targetSource);
                 return CreateProxy(objectType, objectName, specificInterceptors, targetSource);
             }
             return null;
@@ -687,8 +687,7 @@ namespace Spring.Aop.Framework.AutoProxy
         /// been set.</param>
         /// <param name="objectName">Name of the object.</param>
         /// <returns>The passed in PropertyValues</returns>
-        public IPropertyValues PostProcessPropertyValues(IPropertyValues pvs, PropertyInfo[] pis, object objectInstance,
-                                                         string objectName)
+        public IPropertyValues PostProcessPropertyValues(IPropertyValues pvs, IList<PropertyInfo> pis, object objectInstance, string objectName)
         {
             return pvs;
         }

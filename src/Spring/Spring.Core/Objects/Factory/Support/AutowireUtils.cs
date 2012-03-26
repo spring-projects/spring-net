@@ -24,10 +24,10 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+
 using Spring.Collections;
 using Spring.Core;
 using Spring.Objects.Factory.Config;
-using Spring.Objects.Support;
 using Spring.Util;
 
 #endregion
@@ -355,7 +355,7 @@ namespace Spring.Objects.Factory.Support
         /// Returns the list of <paramref name="propertyInfos"/> that are not satisfied by <paramref name="properties"/>.
         /// </summary>
         /// <returns>the filtered list. Is never <c>null</c></returns>
-        public static PropertyInfo[] GetUnsatisfiedDependencies(PropertyInfo[] propertyInfos, IPropertyValues properties, DependencyCheckingMode dependencyCheck)
+        public static IList<PropertyInfo> GetUnsatisfiedDependencies(IList<PropertyInfo> propertyInfos, IPropertyValues properties, DependencyCheckingMode dependencyCheck)
         {
             List<PropertyInfo> unsatisfiedDependenciesList = new List<PropertyInfo>();
             foreach (PropertyInfo property in propertyInfos)
@@ -371,7 +371,7 @@ namespace Spring.Objects.Factory.Support
                     }
                 }
             }
-            return unsatisfiedDependenciesList.ToArray();
+            return unsatisfiedDependenciesList;
         }
 	}
 }

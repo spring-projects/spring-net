@@ -21,10 +21,12 @@
 #region Imports
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
+
 using Common.Logging;
+
 using Spring.Collections;
 
 #endregion
@@ -228,10 +230,10 @@ namespace Spring.Objects.Factory.Config
 		protected override void ProcessProperties(IConfigurableListableObjectFactory factory, NameValueCollection props)
 		{
             PlaceholderResolveHandlerAdapter resolveAdapter = new PlaceholderResolveHandlerAdapter(this, props);
-            ObjectDefinitionVisitor visitor = new ObjectDefinitionVisitor(new ObjectDefinitionVisitor.ResolveHandler(resolveAdapter.ParseAndResolveVariables));
+            ObjectDefinitionVisitor visitor = new ObjectDefinitionVisitor(resolveAdapter.ParseAndResolveVariables);
 
-			string[] objectDefinitionNames = factory.GetObjectDefinitionNames();
-			for (int i = 0; i < objectDefinitionNames.Length; ++i)
+			IList<string> objectDefinitionNames = factory.GetObjectDefinitionNames();
+			for (int i = 0; i < objectDefinitionNames.Count; ++i)
 			{
 				string name = objectDefinitionNames[i];
 				IObjectDefinition definition = factory.GetObjectDefinition(name);

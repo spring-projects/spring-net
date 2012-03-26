@@ -119,28 +119,27 @@ namespace Spring.Context.Support
 				return null;
 			}
 
-			public string[] GetObjectNamesForType(Type type)
+			public IList<string> GetObjectNamesForType(Type type)
 			{
 				return null;
 			}
 
-		    public string[] GetObjectNamesForType<T>()
+		    public IList<string> GetObjectNames<T>()
 		    {
 		        return null;
 		    }
 
-		    public string[] GetObjectNamesForType(
-				Type type, bool includePrototypes, bool includeFactoryObjects)
+		    public IList<string> GetObjectNamesForType(Type type, bool includePrototypes, bool includeFactoryObjects)
 			{
 				return null;
 			}
 
-		    public string[] GetObjectNamesForType<T>(bool includePrototypes, bool includeFactoryObjects)
+		    public IList<string> GetObjectNames<T>(bool includePrototypes, bool includeFactoryObjects)
 		    {
 		        return null;
 		    }
 
-		    string[] IListableObjectFactory.GetObjectDefinitionNames()
+		    IList<string> IListableObjectFactory.GetObjectDefinitionNames()
 			{
 				return null;
 			}
@@ -150,7 +149,7 @@ namespace Spring.Context.Support
 				return null;
 			}
 
-		    public IDictionary<string, T> GetObjectsOfType<T>()
+		    public IDictionary<string, T> GetObjects<T>()
 		    {
 		        return null;
 		    }
@@ -160,7 +159,7 @@ namespace Spring.Context.Support
 				return null;
 			}
 
-		    public IDictionary<string, T> GetObjectsOfType<T>(bool includePrototypes, bool includeFactoryObjects)
+		    public IDictionary<string, T> GetObjects<T>(bool includePrototypes, bool includeFactoryObjects)
 		    {
 		        return null;
 		    }
@@ -199,7 +198,7 @@ namespace Spring.Context.Support
 				return false;
 			}
 
-			public string[] GetAliases(string name)
+			public IList<string> GetAliases(string name)
 			{
 				return null;
 			}

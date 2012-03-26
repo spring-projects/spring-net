@@ -20,6 +20,8 @@
 
 #region Imports
 
+using System.Collections.Generic;
+
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
 
@@ -69,7 +71,7 @@ namespace Spring.Objects.Factory.Support
         /// The names of all objects defined in this registry, or an empty array
         /// if none defined
         /// </returns>
-        string [] GetObjectDefinitionNames ();
+        IList<string> GetObjectDefinitionNames ();
 		
         /// <summary>
         /// Check if this registry contains a object definition with the given name.
@@ -126,25 +128,25 @@ namespace Spring.Objects.Factory.Support
         /// If the object definition is invalid.
         /// </exception>
         void RegisterObjectDefinition (string name, IObjectDefinition definition);
-		
-        /// <summary>
-        /// Return the aliases for the given object name, if defined.
-        /// </summary>
-        /// <param name="name">the object name to check for aliases
-        /// </param>
-        /// <remarks>
-        /// <p>
-        /// Will ask the parent factory if the object cannot be found in this
-        /// factory instance.
-        /// </p>
-        /// </remarks>
-        /// <returns>
-        /// The aliases, or an empty array if none.
-        /// </returns>
-        /// <exception cref="Spring.Objects.Factory.NoSuchObjectDefinitionException">
-        /// If there's no such object definition.
-        /// </exception>
-        string [] GetAliases (string name);
+
+	    /// <summary>
+	    /// Return the aliases for the given object name, if defined.
+	    /// </summary>
+	    /// <param name="name">the object name to check for aliases
+	    /// </param>
+	    /// <remarks>
+	    /// <p>
+	    /// Will ask the parent factory if the object cannot be found in this
+	    /// factory instance.
+	    /// </p>
+	    /// </remarks>
+	    /// <returns>
+	    /// The aliases, or an empty array if none.
+	    /// </returns>
+	    /// <exception cref="Spring.Objects.Factory.NoSuchObjectDefinitionException">
+	    /// If there's no such object definition.
+	    /// </exception>
+	    IList<string> GetAliases (string name);
 		
         /// <summary>
         /// Given a object name, create an alias. We typically use this method to

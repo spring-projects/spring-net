@@ -70,8 +70,8 @@ namespace Spring.Objects
         /// <see cref="Spring.Objects.PropertyValue"/>s can be added with the various
         /// overloaded <see cref="Spring.Objects.MutablePropertyValues.Add(PropertyValue)"/>,
         /// <see cref="Spring.Objects.MutablePropertyValues.Add(string, object)"/>,
-        /// <see cref="Spring.Objects.MutablePropertyValues.AddAll(IDictionary)"/>,
-        /// and <see cref="Spring.Objects.MutablePropertyValues.AddAll(IList)"/>
+        /// <see cref="Spring.Objects.MutablePropertyValues.AddAll(IDictionary{string, object})"/>,
+        /// and <see cref="Spring.Objects.MutablePropertyValues.AddAll(IList{PropertyValue})"/>
         /// methods.
         /// </p>
         /// </remarks>
@@ -96,7 +96,7 @@ namespace Spring.Objects
         {
             if (other != null)
             {
-                AddAll (other.PropertyValues);
+                AddAll(other.PropertyValues);
             }
         }
 
@@ -108,7 +108,7 @@ namespace Spring.Objects
         /// The <see cref="System.Collections.IDictionary"/> with property values
         /// keyed by property name, which must be a <see cref="System.String"/>.
         /// </param>
-        public MutablePropertyValues (IDictionary map)
+        public MutablePropertyValues (IDictionary<string, object> map)
         {
             AddAll (map);
         }
@@ -120,9 +120,9 @@ namespace Spring.Objects
         /// <summary>
         /// Property to retrieve the array of property values.
         /// </summary>
-        public PropertyValue[] PropertyValues
+        public IList<PropertyValue> PropertyValues
         {
-            get { return propertyValuesList.ToArray(); }
+            get { return propertyValuesList; }
         }
 
         #endregion
@@ -154,7 +154,7 @@ namespace Spring.Objects
         {
             for (int i = 0; i < propertyValuesList.Count; ++i)
             {
-                PropertyValue currentPv = (PropertyValue) propertyValuesList [i];
+                PropertyValue currentPv = propertyValuesList [i];
                 if (currentPv.Name.Equals (pv.Name))
                 {
                     pv = MergeIfRequired(pv, currentPv);
@@ -196,13 +196,13 @@ namespace Spring.Objects
         /// The map of property values, the keys of which must be
         /// <see cref="System.String"/>s.
         /// </param>
-        public void AddAll (IDictionary map) 
+        public void AddAll (IDictionary<string, object>  map) 
         {
             if (map != null) 
             {
-                foreach (string key in map.Keys) 
+                foreach (KeyValuePair<string, object> pair in map) 
                 {
-                    Add (new PropertyValue (key, map [key]));
+                    Add (new PropertyValue (pair.Key, pair.Value));
                 }
             }
         }
@@ -214,7 +214,7 @@ namespace Spring.Objects
         /// <param name="values">
         /// The list of <see cref="Spring.Objects.PropertyValue"/>s to be added.
         /// </param>
-        public void AddAll (IList values) 
+        public void AddAll(IList<PropertyValue> values) 
         {
             if (values != null) 
             {
@@ -357,10 +357,10 @@ namespace Spring.Objects
         /// </returns>
         public override string ToString ()
         {
-            PropertyValue[] pvs = PropertyValues;
+            IList<PropertyValue> pvs = PropertyValues;
             StringBuilder sb
                 = new StringBuilder (
-                    "MutablePropertyValues: length=").Append (pvs.Length).Append ("; ");
+                    "MutablePropertyValues: length=").Append (pvs.Count).Append ("; ");
             sb.Append (StringUtils.ArrayToDelimitedString (pvs, ","));
             return sb.ToString ();
         }

@@ -21,13 +21,12 @@
 #region Imports
 
 using System;
-using System.IO;
-using System.Reflection;
-using System.Web;
+using System.Collections.Generic;
 using System.Web.Configuration;
-using System.Web.Hosting;
 using System.Xml;
+
 using Common.Logging;
+
 using Spring.Util;
 
 #endregion
@@ -86,11 +85,10 @@ namespace Spring.Context.Support
         /// Nesting contexts in webapplications is done by explicitly declaring
         /// spring context sections for each directory.
         /// </remarks>
-        protected override void CreateChildContexts(IApplicationContext parentContext, object configContext,
-                                                    XmlNode[] childContexts)
+        protected override void CreateChildContexts(IApplicationContext parentContext, object configContext, IList<XmlNode> childContexts)
         {
             // disable child contexts in webapps
-            if (childContexts.Length > 0)
+            if (childContexts.Count > 0)
             {
                 throw ConfigurationUtils.CreateConfigurationException(
                     String.Format("Nested Child Contexts are not allowed in Web Applications. Use Web.config hierarchy instead."), childContexts[0]);
@@ -100,9 +98,7 @@ namespace Spring.Context.Support
         /// <summary>
         /// Handles web specific details of context instantiation.
         /// </summary>
-        protected override IApplicationContext InstantiateContext(IApplicationContext parent, object configContext,
-                                                                  string contextName, Type contextType,
-                                                                  bool caseSensitive, string[] resources)
+        protected override IApplicationContext InstantiateContext(IApplicationContext parent, object configContext, string contextName, Type contextType, bool caseSensitive, IList<string> resources)
         {
             // ASP.NET may scavenge it's configuration section cache if memory usage is too high.
             // Thus a handler may be called more than once for the same context.
@@ -124,8 +120,7 @@ namespace Spring.Context.Support
             if (!vpath.EndsWith("/")) vpath = vpath + "/";
             using (new HttpContextSwitch(vpath))
             {
-                return
-                    base.InstantiateContext(parent, configContext, contextName, contextType, caseSensitive, resources);
+                return base.InstantiateContext(parent, configContext, contextName, contextType, caseSensitive, resources);
             }
         }
 

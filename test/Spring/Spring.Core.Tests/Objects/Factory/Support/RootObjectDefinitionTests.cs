@@ -89,7 +89,7 @@ namespace Spring.Objects.Factory.Support
             Assert.AreEqual( "Ohhh", def.ResourceDescription );
             Assert.IsTrue( def.HasConstructorArgumentValues );
             Assert.AreEqual( other.ConstructorArgumentValues.ArgumentCount, def.ConstructorArgumentValues.ArgumentCount );
-            Assert.AreEqual( other.PropertyValues.PropertyValues.Length, def.PropertyValues.PropertyValues.Length );
+            Assert.AreEqual( other.PropertyValues.PropertyValues.Count, def.PropertyValues.PropertyValues.Count );
             Assert.AreEqual( other.EventHandlerValues.Events.Count, def.EventHandlerValues.Events.Count );
         }
 
@@ -148,14 +148,14 @@ namespace Spring.Objects.Factory.Support
             Assert.AreEqual( "InitChild", rod.InitMethodName );
             Assert.AreEqual( "DestroyChild", rod.DestroyMethodName );
             Assert.AreEqual( DependencyCheckingMode.None, rod.DependencyCheck );
-            Assert.AreEqual( 4, rod.DependsOn.Length);
+            Assert.AreEqual( 4, rod.DependsOn.Count);
             Assert.AreEqual( false, rod.IsAbstract );
             Assert.AreEqual( false, rod.IsLazyInit );
             Assert.AreEqual( "ChildFactoryMethodName", rod.FactoryMethodName );
             Assert.AreEqual( "ChildFactoryObjectName", rod.FactoryObjectName );
             Assert.AreEqual( "ChildResourceDescription", rod.ResourceDescription );
             Assert.AreEqual( 2, rod.ConstructorArgumentValues.ArgumentCount );
-            Assert.AreEqual( 2, rod.PropertyValues.PropertyValues.Length );
+            Assert.AreEqual( 2, rod.PropertyValues.PropertyValues.Count );
             Assert.AreEqual( "Val1", rod.PropertyValues.GetPropertyValue("Prop1").Value);
             Assert.AreEqual( 50, rod.PropertyValues.GetPropertyValue("Age").Value);
             Assert.AreEqual( 2, rod.EventHandlerValues.Events.Count );
@@ -183,7 +183,7 @@ namespace Spring.Objects.Factory.Support
                 "Must be empty if null was passed to the ctor." );
             Assert.IsNotNull( def.PropertyValues,
                 "Must never be null, but rather just empty." );
-            Assert.AreEqual( 0, def.PropertyValues.PropertyValues.Length,
+            Assert.AreEqual( 0, def.PropertyValues.PropertyValues.Count,
                 "Must be empty if null was passed to the ctor." );
         }
     }

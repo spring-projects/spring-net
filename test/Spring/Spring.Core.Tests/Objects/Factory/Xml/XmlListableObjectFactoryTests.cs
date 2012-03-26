@@ -22,6 +22,8 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
+
 using NUnit.Framework;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
@@ -83,11 +85,11 @@ namespace Spring.Objects.Factory.Xml
 		protected void SetUp()
 		{
 			parent = new DefaultListableObjectFactory();
-			IDictionary m = new Hashtable();
+			IDictionary<string, object> m = new Dictionary<string, object>();
 			m["name"] = "Albert";
 			parent.RegisterObjectDefinition("father", new RootObjectDefinition(typeof (TestObject), new MutablePropertyValues(m)));
-			m = new Hashtable();
-			m["name"] = "Roderick";
+            m = new Dictionary<string, object>();
+            m["name"] = "Roderick";
 			parent.RegisterObjectDefinition("rod", new RootObjectDefinition(typeof (TestObject), new MutablePropertyValues(m)));
 
             // for testing dynamic ctor arguments + parent.GetObject() call propagation 

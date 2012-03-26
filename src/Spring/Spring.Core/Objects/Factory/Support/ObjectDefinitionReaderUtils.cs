@@ -21,9 +21,9 @@
 #region Imports
 
 using System;
-using System.Text;
+using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using Spring.Objects.Factory;
+
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Xml;
 using Spring.Objects.Support;
@@ -96,8 +96,8 @@ namespace Spring.Objects.Factory.Support
             AssertUtils.ArgumentNotNull(registry, "registry");
 
             registry.RegisterObjectDefinition(objectDefinition.ObjectName, objectDefinition.ObjectDefinition);
-            string[] aliases = objectDefinition.Aliases;
-            for (int i = 0; i < aliases.Length; ++i)
+            IList<string> aliases = objectDefinition.Aliases;
+            for (int i = 0; i < aliases.Count; ++i)
             {
                 string alias = aliases[i];
                 registry.RegisterAlias(objectDefinition.ObjectName, alias);

@@ -357,7 +357,7 @@ namespace Spring.Aop.Framework
 		{
 			StringBuilder buffer = new StringBuilder("Invocation: method '");
 			buffer.Append(Method.Name).Append("', ").Append("arguments ");
-			buffer.Append(this.arguments != null ? StringUtils.ArrayToCommaDelimitedString(this.arguments) : "[none]");
+            buffer.Append(this.arguments != null ? StringUtils.CollectionToCommaDelimitedString(this.arguments) : "[none]");
 			buffer.Append("; ");
 			if (this.target == null)
 			{

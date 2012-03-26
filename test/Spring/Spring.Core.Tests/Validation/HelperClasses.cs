@@ -92,14 +92,14 @@ namespace Spring.Validation
             get { return this.objects.Count; }
         }
 
-        public string[] GetObjectDefinitionNames()
+        public IList<string> GetObjectDefinitionNames()
         {
-            return new List<string>(this.objects.Keys).ToArray();
+            return new List<string>(this.objects.Keys);
         }
 
-        public IObjectDefinition[] GetObjectDefinitions()
+        public IList<IObjectDefinition> GetObjectDefinitions()
         {
-            return new List<IObjectDefinition>(this.objects.Values).ToArray();
+            return new List<IObjectDefinition>(this.objects.Values);
         }
 
         public bool ContainsObjectDefinition(string name)
@@ -119,7 +119,7 @@ namespace Spring.Validation
             this.objects[name] = definition;
         }
 
-        public string[] GetAliases(string name)
+        public IList<string> GetAliases(string name)
         {
             throw new NotImplementedException();
         }

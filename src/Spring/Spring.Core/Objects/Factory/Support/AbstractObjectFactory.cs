@@ -29,7 +29,6 @@ using System.ComponentModel;
 using Common.Logging;
 
 using Spring.Collections;
-using Spring.Collections.Generic;
 using Spring.Core;
 using Spring.Core.TypeConversion;
 using Spring.Objects.Factory.Config;
@@ -1211,7 +1210,7 @@ namespace Spring.Objects.Factory.Support
         /// The names of objects in the singleton cache that match the given
         /// object type (including subclasses), or an empty array if none.
         /// </returns>
-        public virtual string[] GetSingletonNames(Type type)
+        public virtual IList<string> GetSingletonNames(Type type)
         {
             lock (singletonCache)
             {
@@ -1225,7 +1224,7 @@ namespace Spring.Objects.Factory.Support
                         matches.Add(name);
                     }
                 }
-                return matches.ToArray();
+                return matches;
             }
         }
 
@@ -1448,12 +1447,12 @@ namespace Spring.Objects.Factory.Support
         /// </p>
         /// </remarks>
         /// <returns>The names of the objects in the singleton cache.</returns>
-        public virtual string[] GetSingletonNames()
+        public virtual IList<string> GetSingletonNames()
         {
             lock (singletonCache)
             {
                 IEnumerable<string> keys = singletonCache.Keys.Cast<string>();
-                return new List<string>(keys).ToArray();
+                return new List<string>(keys);
             }
         }
 
@@ -1622,7 +1621,7 @@ namespace Spring.Objects.Factory.Support
         /// <summary>
         /// Set of registered singletons, containing the bean names in registration order 
         /// </summary>
-        private ISet registeredSingletons = new HashedSet();
+        private HashSet<string> registeredSingletons = new HashSet<string>();
 
         private readonly IDictionary singletonsInCreation;
 
@@ -1815,7 +1814,7 @@ namespace Spring.Objects.Factory.Support
         /// Return the aliases for the given object name, if defined.
         /// </summary>
         /// <see cref="Spring.Objects.Factory.IObjectFactory.GetAliases"/>.
-        public string[] GetAliases(string name)
+        public IList<string> GetAliases(string name)
         {
             string objectName = TransformedObjectName(name);
             // check if object actually exists in this object factory...
@@ -1834,7 +1833,7 @@ namespace Spring.Objects.Factory.Support
                         }
                     }
                 }
-                return matches.ToArray();
+                return matches;
             }
 
             // not found, so check parent...
@@ -2534,7 +2533,7 @@ namespace Spring.Objects.Factory.Support
         /// <see cref="RegisterSingleton"/>
         /// <see cref="Spring.Objects.Factory.Support.IObjectDefinitionRegistry.GetObjectDefinitionNames"/>
         /// <see cref="Spring.Objects.Factory.IListableObjectFactory.GetObjectDefinitionNames"/>
-        public string[] SingletonNames
+        public IList<string> SingletonNames
         {
             get
             {

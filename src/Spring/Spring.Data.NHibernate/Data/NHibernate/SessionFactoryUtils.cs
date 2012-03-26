@@ -22,6 +22,8 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
+
 using Common.Logging;
 using NHibernate;
 using NHibernate.Connection;
@@ -695,7 +697,7 @@ namespace Spring.Data.NHibernate
                     {
                         Type hibCommandType = db.CreateCommand().GetType();
 
-                        string[] providerNames = ctx.GetObjectNamesForType(typeof(DbProvider), true, false);
+                        IList<string> providerNames = ctx.GetObjectNamesForType(typeof(DbProvider), true, false);
                         string hibCommandAQN = hibCommandType.AssemblyQualifiedName;
                         foreach (string providerName in providerNames)
                         {

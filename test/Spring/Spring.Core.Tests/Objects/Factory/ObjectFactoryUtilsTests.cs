@@ -72,7 +72,7 @@ namespace Spring.Objects.Factory
 		[Test]
 		public void ObjectNamesIncludingAncestors()
 		{
-			IList names = ObjectFactoryUtils.ObjectNamesIncludingAncestors(_factory);
+			IList<string> names = ObjectFactoryUtils.ObjectNamesIncludingAncestors(_factory);
 			Assert.AreEqual(6, names.Count);
 		}
 
@@ -89,8 +89,8 @@ namespace Spring.Objects.Factory
 
             mocks.ReplayAll();
           
-            string[] names = ObjectFactoryUtils.ObjectNamesIncludingAncestors(of);
-            Assert.AreEqual(5, names.Length);
+            IList<string> names = ObjectFactoryUtils.ObjectNamesIncludingAncestors(of);
+            Assert.AreEqual(5, names.Count);
             Assert.AreEqual(new string[] { "objA","objB","objC","obj2A","obj2C" }, names);
 
             mocks.VerifyAll();
@@ -99,7 +99,7 @@ namespace Spring.Objects.Factory
 		[Test]
         public void ObjectNamesForTypeIncludingAncestors()
 		{
-			IList names = ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(_factory, typeof (ITestObject));
+			IList<string> names = ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(_factory, typeof (ITestObject));
 			// includes 2 TestObjects from IFactoryObjects (DummyFactory definitions)
 			Assert.AreEqual(4, names.Count);
 			Assert.IsTrue(names.Contains("test"));
@@ -116,7 +116,7 @@ namespace Spring.Objects.Factory
             DefaultListableObjectFactory child = new DefaultListableObjectFactory(root);
             child.RegisterObjectDefinition("excludeLocalObject", new RootObjectDefinition(typeof(Hashtable)));
 
-			IList names = ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(child, typeof (ArrayList));
+			IList<string> names = ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(child, typeof (ArrayList));
 			// "excludeLocalObject" matches on the parent, but not the local object definition
 			Assert.AreEqual(0, names.Count);
 
@@ -139,8 +139,8 @@ namespace Spring.Objects.Factory
 
             mocks.ReplayAll();
 
-            string[] names = ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(of, EXPECTEDTYPE);
-            Assert.AreEqual(5, names.Length);
+            IList<string> names = ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(of, EXPECTEDTYPE);
+            Assert.AreEqual(5, names.Count);
             Assert.AreEqual(new string[] { "objA", "objB", "objC", "obj2A", "obj2C" }, names);
 
             mocks.VerifyAll();
@@ -160,8 +160,8 @@ namespace Spring.Objects.Factory
 
             mocks.ReplayAll();
 
-            string[] names = ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(of, EXPECTEDTYPE, false, false);
-            Assert.AreEqual(5, names.Length);
+            IList<string> names = ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(of, EXPECTEDTYPE, false, false);
+            Assert.AreEqual(5, names.Count);
             Assert.AreEqual(new string[] { "objA", "objB", "objC", "obj2A", "obj2C" }, names);
 
 

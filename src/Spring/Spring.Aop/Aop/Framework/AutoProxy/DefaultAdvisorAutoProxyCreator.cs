@@ -22,7 +22,7 @@
 
 using System;
 using System.Collections;
-
+using System.Collections.Generic;
 using Spring.Objects.Factory;
 
 #endregion
@@ -45,7 +45,7 @@ namespace Spring.Aop.Framework.AutoProxy
         public static readonly string SEPARATOR = ".";
         private bool usePrefix;
         private string advisorObjectNamePrefix;
-        private IList cachedAdvisors;
+        private IList<IAdvisor> cachedAdvisors;
 
         #region Properties
 
@@ -108,7 +108,7 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <param name="targetType">the type of the object to be advised</param>
         /// <param name="targetName">the name of the object to be advised</param>
         /// <returns>the list of candidate advisors</returns>
-        protected override IList FindCandidateAdvisors(Type targetType, string targetName)
+        protected override IList<IAdvisor> FindCandidateAdvisors(Type targetType, string targetName)
         {
             if (cachedAdvisors == null) {
                 cachedAdvisors = base.FindCandidateAdvisors(targetType, targetName);

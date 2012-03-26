@@ -21,6 +21,7 @@
 #region Imports
 
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 using Common.Logging;
@@ -93,10 +94,10 @@ namespace Spring.Aop.Framework.AutoProxy
             _logger.Trace("Created instance");
         }
 
-        protected override object[] GetAdvicesAndAdvisorsForObject(Type targetType, string targetName, ITargetSource customTargetSource)
+        protected override IList<object> GetAdvicesAndAdvisorsForObject(Type targetType, string targetName, ITargetSource customTargetSource)
         {
             _logger.Trace("GetAdvicesAndAdvisorsForObject begin");
-            object[] advices = base.GetAdvicesAndAdvisorsForObject(targetType, targetName, customTargetSource);
+            IList<object> advices = base.GetAdvicesAndAdvisorsForObject(targetType, targetName, customTargetSource);
             _logger.Trace("GetAdvicesAndAdvisorsForObject end");
             return advices;
         }

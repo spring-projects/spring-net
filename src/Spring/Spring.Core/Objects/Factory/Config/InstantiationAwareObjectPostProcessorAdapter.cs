@@ -19,6 +19,7 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace Spring.Objects.Factory.Config
@@ -153,8 +154,7 @@ namespace Spring.Objects.Factory.Config
         /// <param name="objectName">Name of the object.</param>
         /// <returns>The actual property values to apply to the given object (can be the 
         /// passed-in PropertyValues instances0 or null to skip property population.</returns>
-        public virtual IPropertyValues PostProcessPropertyValues(IPropertyValues pvs, PropertyInfo[] pis, object objectInstance,
-                                                         string objectName)
+        public virtual IPropertyValues PostProcessPropertyValues(IPropertyValues pvs, IList<PropertyInfo> pis, object objectInstance, string objectName)
         {
             return pvs;
         }

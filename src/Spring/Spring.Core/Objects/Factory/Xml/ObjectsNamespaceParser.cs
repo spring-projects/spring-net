@@ -26,13 +26,11 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.IO;
-using System.Text;
 using System.Xml;
-using System.Xml.Schema;
+
 using Common.Logging;
 
 using Spring.Collections;
-using Spring.Core;
 using Spring.Core.IO;
 using Spring.Core.TypeResolution;
 using Spring.Objects.Factory.Config;

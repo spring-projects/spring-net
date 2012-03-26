@@ -21,6 +21,7 @@
 #region Imports
 
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 using NUnit.Framework;
@@ -75,9 +76,9 @@ namespace Spring.Core.TypeResolution
         {
             Type[] expected = new Type[] { typeof(IFoo) };
             string[] input = new string[] { typeof(IFoo).AssemblyQualifiedName };
-            Type[] actual = TypeResolutionUtils.ResolveInterfaceArray(input);
+            IList<Type> actual = TypeResolutionUtils.ResolveInterfaceArray(input);
             Assert.IsNotNull(actual);
-            Assert.AreEqual(expected.Length, actual.Length);
+            Assert.AreEqual(expected.Length, actual.Count);
             Assert.AreEqual(expected[0], actual[0]);
         }
 

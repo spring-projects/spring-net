@@ -24,15 +24,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Xml;
+
 using NVelocity.Runtime;
-using NVelocity.Runtime.Resource.Loader;
+
 using Spring.Core.TypeResolution;
 using Spring.Objects;
-using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Xml;
-using Spring.Template.Velocity;
 using Spring.Util;
 
 #endregion
@@ -226,8 +225,9 @@ namespace Spring.Template.Velocity.Config {
         /// <param name="elements">a list of nv:file elements defining the paths to template files</param>
         /// <param name="properties">the properties used to initialize the velocity engine</param>
         private void AppendFileLoaderProperties(XmlNodeList elements, IDictionary<string, object> properties) {
-            IList paths = new List<string>(elements.Count);
-            foreach (XmlElement element in elements) {
+            IList<string> paths = new List<string>(elements.Count);
+            foreach (XmlElement element in elements) 
+            {
                 paths.Add(GetAttributeValue(element, VelocityConstants.Path));
             }
             properties.Add(RuntimeConstants.RESOURCE_LOADER, VelocityConstants.File);
@@ -241,7 +241,7 @@ namespace Spring.Template.Velocity.Config {
         /// <param name="elements">a list of nv:assembly elements defining the assemblies</param>
         /// <param name="properties">the properties used to initialize the velocity engine</param>
         private void AppendAssemblyLoaderProperties(XmlNodeList elements, IDictionary<string, object> properties) {
-            IList assemblies = new List<string>(elements.Count);
+            IList<string> assemblies = new List<string>(elements.Count);
             foreach (XmlElement element in elements) {
                 assemblies.Add(GetAttributeValue(element, VelocityConstants.Name));
             }

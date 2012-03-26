@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using AopAlliance.Aop;
 using NUnit.Framework;
 using Spring.Objects.Factory.Config;
@@ -37,7 +38,7 @@ namespace Spring.Aop.Framework.AutoProxy
         {
             public ArrayList CheckedAdvisors = new ArrayList();
 
-            public object[] GetAdvicesAndAdvisorsForObject(Type targetType, string targetName)
+            public IList<object> GetAdvicesAndAdvisorsForObject(Type targetType, string targetName)
             {
                 return base.GetAdvicesAndAdvisorsForObject(targetType, targetName, null);
             }
@@ -87,8 +88,8 @@ namespace Spring.Aop.Framework.AutoProxy
 
             TestAdvisorAutoProxyCreator apc = new TestAdvisorAutoProxyCreator();
             apc.ObjectFactory = of;
-            object[] advisors = apc.GetAdvicesAndAdvisorsForObject(typeof (object), "dummyTarget");
-            Assert.AreEqual(1, advisors.Length);
+            IList<object> advisors = apc.GetAdvicesAndAdvisorsForObject(typeof (object), "dummyTarget");
+            Assert.AreEqual(1, advisors.Count);
             Assert.AreEqual( "RegularAdvisor", ((TestAdvisor)advisors[0]).Name );
 
             Assert.AreEqual(1, apc.CheckedAdvisors.Count);

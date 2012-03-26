@@ -85,7 +85,7 @@ namespace Spring.Objects.Factory.Xml
             return objectName;
         }
 
-        protected override ObjectDefinitionHolder CreateObjectDefinitionHolder(XmlElement element, IConfigurableObjectDefinition definition, string objectName, string[] aliasesArray)
+        protected override ObjectDefinitionHolder CreateObjectDefinitionHolder(XmlElement element, IConfigurableObjectDefinition definition, string objectName, IList<string> aliasesArray)
         {
             IWebObjectDefinition webDefinition = definition as IWebObjectDefinition;
 

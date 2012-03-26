@@ -67,7 +67,7 @@ namespace Spring.Messaging.Core
             MessageQueueFactoryObject mqfo = new MessageQueueFactoryObject();
             mqfo.MessageCreatorDelegate = messageQueueCreatorDelegate;
             applicationContext.ObjectFactory.RegisterSingleton(messageQueueObjectName, mqfo);
-            IDictionary<string, MessageQueueMetadataCache> caches = applicationContext.GetObjectsOfType<MessageQueueMetadataCache>();
+            IDictionary<string, MessageQueueMetadataCache> caches = applicationContext.GetObjects<MessageQueueMetadataCache>();
             foreach (KeyValuePair<string, MessageQueueMetadataCache> entry in caches)
             {
                 entry.Value.Insert(mqfo.Path, new MessageQueueMetadata(mqfo.RemoteQueue, mqfo.RemoteQueueIsTransactional));

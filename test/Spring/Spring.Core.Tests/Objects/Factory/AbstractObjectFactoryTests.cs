@@ -80,7 +80,7 @@ namespace Spring.Objects.Factory
                 Assert.IsTrue(-1 < ex.Message.IndexOf("already registered"));
             }
 
-            Assert.AreEqual(1, of.GetAliases("nAmE").Length);
+            Assert.AreEqual(1, of.GetAliases("nAmE").Count);
             Assert.AreEqual(testObject, of.GetObject("nAmE"));
             Assert.AreEqual(testObject, of.GetObject("ALIAS"));
         }

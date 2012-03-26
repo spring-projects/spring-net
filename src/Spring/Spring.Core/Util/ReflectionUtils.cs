@@ -386,7 +386,7 @@ namespace Spring.Util
         /// <exception cref="AmbiguousMatchException">
         /// If more than 1 matching methods are found in the <paramref name="methods"/> list.
         /// </exception>
-        public static MethodInfo GetMethodByArgumentValues(MethodInfo[] methods, object[] argValues)
+        public static MethodInfo GetMethodByArgumentValues<T>(IEnumerable<T> methods, object[] argValues) where T : MethodBase
         {
             return (MethodInfo)GetMethodBaseByArgumentValues("method", methods, argValues);
         }
@@ -401,8 +401,7 @@ namespace Spring.Util
         /// <exception cref="AmbiguousMatchException">
         /// If more than 1 matching methods are found in the <paramref name="methods"/> list.
         /// </exception>
-        private static MethodBase GetMethodBaseByArgumentValues(string methodTypeName, MethodBase[] methods,
-                                                                object[] argValues)
+        private static MethodBase GetMethodBaseByArgumentValues<T>(string methodTypeName, IEnumerable<T> methods, object[] argValues) where T : MethodBase
         {
             MethodBase match = null;
             int matchCount = 0;
@@ -490,7 +489,7 @@ namespace Spring.Util
         /// <exception cref="AmbiguousMatchException">
         /// If more than 1 matching methods are found in the <paramref name="methods"/> list.
         /// </exception>
-        public static ConstructorInfo GetConstructorByArgumentValues(ConstructorInfo[] methods, object[] argValues)
+        public static ConstructorInfo GetConstructorByArgumentValues<T>(IList<T> methods, object[] argValues) where T : MethodBase
         {
             return (ConstructorInfo)GetMethodBaseByArgumentValues("constructor", methods, argValues);
         }
@@ -540,7 +539,7 @@ namespace Spring.Util
         /// <exception cref="System.ArgumentNullException">
         /// If <paramref name="intf"/> is <see langword="null"/>.
         /// </exception>
-        public static Type[] ToInterfaceArray(Type intf)
+        public static IList<Type> ToInterfaceArray(Type intf)
         {
             AssertUtils.ArgumentNotNull(intf, "intf");
 
@@ -555,7 +554,7 @@ namespace Spring.Util
             List<Type> interfaces = new List<Type>(intf.GetInterfaces());
             interfaces.Add(intf);
 
-            return interfaces.ToArray();
+            return interfaces;
         }
 
         /// <summary>

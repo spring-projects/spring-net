@@ -498,7 +498,7 @@ namespace Spring.Objects.Factory.Support
         /// <exception cref="Spring.Objects.Factory.NoSuchObjectDefinitionException">
         /// If there's no such object definition.
         /// </exception>
-        public string[] GetAliases(string name)
+        public IList<string> GetAliases(string name)
         {
             return StringUtils.EmptyStrings;
         }
@@ -551,10 +551,10 @@ namespace Spring.Objects.Factory.Support
         /// The names of all objects defined in this factory, or an empty array if none
         /// are defined.
         /// </returns>
-        public string[] GetObjectDefinitionNames()
+        public IList<string> GetObjectDefinitionNames()
         {
             List<string> names = new List<string>(objects.Keys);
-            return names.ToArray();
+            return names;
         }
 
         /// <summary>
@@ -575,7 +575,7 @@ namespace Spring.Objects.Factory.Support
         /// The names of all objects defined in this factory, or an empty array if none
         /// are defined.
         /// </returns>
-        public string[] GetObjectDefinitionNames(Type type)
+        public IList<string> GetObjectDefinitionNames(Type type)
         {
             List<string> matches = new List<string>();
             foreach (string name in objects.Keys)
@@ -586,7 +586,7 @@ namespace Spring.Objects.Factory.Support
                     matches.Add(name);
                 }
             }
-            return matches.ToArray();
+            return matches;
         }
 
         /// <summary>
@@ -612,7 +612,7 @@ namespace Spring.Objects.Factory.Support
         /// The names of all objects defined in this factory, or an empty array if none
         /// are defined.
         /// </returns>
-        public string[] GetObjectNamesForType(Type type)
+        public IList<string> GetObjectNamesForType(Type type)
         {
             return GetObjectNamesForType(type, true, true);
         }
@@ -640,7 +640,7 @@ namespace Spring.Objects.Factory.Support
         /// The names of all objects defined in this factory, or an empty array if none
         /// are defined.
         /// </returns>
-        public string[] GetObjectNamesForType<T>()
+        public IList<string> GetObjectNames<T>()
         {
             return GetObjectNamesForType(typeof(T));
         }
@@ -674,8 +674,7 @@ namespace Spring.Objects.Factory.Support
         /// are defined.
         /// </returns>
         /// <seealso cref="Spring.Objects.Factory.IListableObjectFactory.GetObjectNamesForType(Type, bool, bool)"/>
-        public string[] GetObjectNamesForType(
-            Type type, bool includePrototypes, bool includeFactoryObjects)
+        public IList<string> GetObjectNamesForType(Type type, bool includePrototypes, bool includeFactoryObjects)
         {
             bool isFactoryType = (type != null && typeof(IFactoryObject).IsAssignableFrom(type));
             List<string> matches = new List<string>();
@@ -701,7 +700,7 @@ namespace Spring.Objects.Factory.Support
                     }
                 }
             }
-            return matches.ToArray();
+            return matches;
         }
 
         /// <summary>
@@ -739,7 +738,7 @@ namespace Spring.Objects.Factory.Support
         /// The names of all objects defined in this factory, or an empty array if none
         /// are defined.
         /// </returns>
-        public string[] GetObjectNamesForType<T>(bool includePrototypes, bool includeFactoryObjects)
+        public IList<string> GetObjectNames<T>(bool includePrototypes, bool includeFactoryObjects)
         {
             return GetObjectNamesForType(typeof(T), includePrototypes, includeFactoryObjects);
         }
@@ -816,7 +815,7 @@ namespace Spring.Objects.Factory.Support
         /// <exception cref="Spring.Objects.ObjectsException">
         /// If the objects could not be created.
         /// </exception>
-        public IDictionary<string, T> GetObjectsOfType<T>()
+        public IDictionary<string, T> GetObjects<T>()
         {
             Dictionary<string, T> collector = new Dictionary<string, T>();
             DoGetObjectsOfType(typeof(T), true, true, collector);
@@ -917,7 +916,7 @@ namespace Spring.Objects.Factory.Support
         /// <exception cref="Spring.Objects.ObjectsException">
         /// If the objects could not be created.
         /// </exception>
-        public IDictionary<string, T> GetObjectsOfType<T>(bool includePrototypes, bool includeFactoryObjects)
+        public IDictionary<string, T> GetObjects<T>(bool includePrototypes, bool includeFactoryObjects)
         {
             Dictionary<string, T> collector = new Dictionary<string, T>();
             DoGetObjectsOfType(typeof(T), includeFactoryObjects, includePrototypes, collector);
@@ -955,13 +954,13 @@ namespace Spring.Objects.Factory.Support
         /// </exception>
         public T GetObject<T>()
         {
-            string[] objectNamesForType = GetObjectNamesForType(typeof(T));
-            if ((objectNamesForType == null) || (objectNamesForType.Length == 0))
+            IList<string> objectNamesForType = GetObjectNamesForType(typeof(T));
+            if ((objectNamesForType == null) || (objectNamesForType.Count == 0))
             {
                 throw new NoSuchObjectDefinitionException(typeof(T).FullName, "Requested Type not Defined in the Context.");
             }
 
-            if (objectNamesForType.Length > 1)
+            if (objectNamesForType.Count > 1)
             {
                 throw new ObjectDefinitionStoreException(string.Format("More than one definition for {0} found in the Context.", typeof(T).FullName));
             }

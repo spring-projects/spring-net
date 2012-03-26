@@ -13,6 +13,9 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+
+using System.Collections;
+
 using Quartz;
 using Quartz.Spi;
 using Spring.Objects;
@@ -76,10 +79,19 @@ namespace Spring.Scheduling.Quartz
                 MutablePropertyValues pvs = new MutablePropertyValues();
                 if (schedulerContext != null)
                 {
-                    pvs.AddAll(schedulerContext);
+                    foreach (DictionaryEntry entry in schedulerContext)
+                    {
+                        pvs.Add(entry.Key.ToString(), entry.Value);
+                    }
                 }
-                pvs.AddAll(bundle.JobDetail.JobDataMap);
-                pvs.AddAll(bundle.Trigger.JobDataMap);
+                foreach (DictionaryEntry entry in bundle.JobDetail.JobDataMap)
+                {
+                    pvs.Add(entry.Key.ToString(), entry.Value);
+                }
+                foreach (DictionaryEntry entry in bundle.Trigger.JobDataMap)
+                {
+                    pvs.Add(entry.Key.ToString(), entry.Value);
+                }
                 if (ignoredUnknownProperties != null)
                 {
                     for (int i = 0; i < ignoredUnknownProperties.Length; i++)

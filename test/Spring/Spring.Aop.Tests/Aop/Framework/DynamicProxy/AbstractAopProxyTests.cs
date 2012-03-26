@@ -1222,7 +1222,7 @@ namespace Spring.Aop.Framework.DynamicProxy
             IAdvised a1 = (IAdvised)p;
             IAdvised a2 = (IAdvised)p2;
             // Check we can manipulate state of p2
-            Assert.AreEqual(a1.Advisors.Length, a2.Advisors.Length);
+            Assert.AreEqual(a1.Advisors.Count, a2.Advisors.Count);
 
             // This should work as SerializablePerson is equal
             Assert.AreEqual(p, p2, "Proxies should be equal, even after one was serialized");
@@ -1706,7 +1706,7 @@ namespace Spring.Aop.Framework.DynamicProxy
             Assert.AreEqual(2, ni.Count);
 
             IAdvised advised = (IAdvised)ito;
-            Assert.AreEqual(1, advised.Advisors.Length, "Have 1 advisor");
+            Assert.AreEqual(1, advised.Advisors.Count, "Have 1 advisor");
             Assert.AreEqual(ni, advised.Advisors[0].Advice);
             NopInterceptor ni2 = new NopInterceptor();
             advised.AddAdvice(1, ni2);
@@ -1750,7 +1750,7 @@ namespace Spring.Aop.Framework.DynamicProxy
 
             // Check it still works: proxy factory state shouldn't have been corrupted
             Assert.AreEqual(target.Age, proxied.Age);
-            Assert.AreEqual(1, ((IAdvised)proxied).Advisors.Length);
+            Assert.AreEqual(1, ((IAdvised)proxied).Advisors.Count);
         }
 
         [Test(Description = "Check that casting to Advised can't get around advice freeze.")]
@@ -1778,7 +1778,7 @@ namespace Spring.Aop.Framework.DynamicProxy
 
             // Check it still works: proxy factory state shouldn't have been corrupted
             Assert.AreEqual(target.Age, proxied.Age);
-            Assert.AreEqual(1, advised.Advisors.Length);
+            Assert.AreEqual(1, advised.Advisors.Count);
         }
 
         [Test]
@@ -1805,13 +1805,13 @@ namespace Spring.Aop.Framework.DynamicProxy
             }
 
             // Didn't get removed
-            Assert.AreEqual(1, advised.Advisors.Length);
+            Assert.AreEqual(1, advised.Advisors.Count);
             pf.IsFrozen = false;
             // Can now remove it
             advised.RemoveAdvisor(0);
             // Check it still works: proxy factory state shouldn't have been corrupted
             Assert.AreEqual(target.Age, proxied.Age);
-            Assert.AreEqual(0, advised.Advisors.Length);
+            Assert.AreEqual(0, advised.Advisors.Count);
         }
 
         [Test(Description = "Check that the string is informative.")]

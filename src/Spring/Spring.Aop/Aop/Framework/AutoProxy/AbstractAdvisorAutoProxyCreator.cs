@@ -22,13 +22,14 @@
 
 using System;
 using System.Collections;
-
+using System.Collections.Generic;
 using Common.Logging;
 
 using Spring.Core;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
 using Spring.Util;
+using System.Linq;
 
 #endregion
 
@@ -125,20 +126,20 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <param name="targetType">the type of the target object</param>
         /// <param name="targetName">the name of the target object</param>
         /// <param name="customTargetSource">targetSource returned by TargetSource property:
-        /// may be ignored. Will be null unless a custom target source is in use.</param>
+        ///   may be ignored. Will be null unless a custom target source is in use.</param>
         /// <returns>
         /// an array of additional interceptors for the particular object;
         /// or an empty array if no additional interceptors but just the common ones;
         /// or null if no proxy at all, not even with the common interceptors.
         /// </returns>
-        protected override object[] GetAdvicesAndAdvisorsForObject(Type targetType, string targetName, ITargetSource customTargetSource)
+        protected override IList<object> GetAdvicesAndAdvisorsForObject(Type targetType, string targetName, ITargetSource customTargetSource)
         {
-            IList advisors = FindEligibleAdvisors(targetType, targetName);
+            IList<IAdvisor> advisors = FindEligibleAdvisors(targetType, targetName);
             if (advisors.Count == 0)
             {
                 return DO_NOT_PROXY;
             }
-            return (object[]) CollectionUtils.ToArray(advisors, typeof (object));
+            return advisors.Cast<object>().ToArray();
         }
 
         /// <summary>
@@ -150,10 +151,10 @@ namespace Spring.Aop.Framework.AutoProxy
         /// the empty list, not null, if there are no pointcuts or interceptors. 
         /// The by-order sorted list of advisors otherwise
         /// </returns>
-        protected IList FindEligibleAdvisors(Type targetType, string targetName)
+        protected IList<IAdvisor> FindEligibleAdvisors(Type targetType, string targetName)
         {
-            IList candidateAdvisors = FindCandidateAdvisors(targetType, targetName);
-            IList eligibleAdvisors =  FindAdvisorsThatCanApply(candidateAdvisors, targetType, targetName);
+            IList<IAdvisor> candidateAdvisors = FindCandidateAdvisors(targetType, targetName);
+            IList<IAdvisor> eligibleAdvisors = FindAdvisorsThatCanApply(candidateAdvisors, targetType, targetName);
 
             ExtendAdvisors(eligibleAdvisors, targetType, targetName);
             eligibleAdvisors = SortAdvisors(eligibleAdvisors);
@@ -167,7 +168,7 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <param name="targetType">the type of the object to be advised</param>
         /// <param name="targetName">the name of the object to be advised</param>
         /// <returns>the list of candidate advisors</returns>
-        protected virtual IList FindCandidateAdvisors(Type targetType, string targetName)
+        protected virtual IList<IAdvisor> FindCandidateAdvisors(Type targetType, string targetName)
         {
             return _advisorRetrievalHelper.FindAdvisorObjects(targetType, targetName);
         }
@@ -180,14 +181,14 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <param name="targetType">the target object's type</param>
         /// <param name="targetName">the target object's name</param>
         /// <returns>the list of applicable advisors</returns>
-        protected virtual IList FindAdvisorsThatCanApply(IList candidateAdvisors, Type targetType, string targetName)
+        protected virtual IList<IAdvisor> FindAdvisorsThatCanApply(IList<IAdvisor> candidateAdvisors, Type targetType, string targetName)
         {
             if (candidateAdvisors.Count==0)
             {
                 return candidateAdvisors;
             }
 
-            ArrayList eligibleAdvisors = new ArrayList();
+            List<IAdvisor> eligibleAdvisors = new List<IAdvisor>();
             foreach(IAdvisor candidate in candidateAdvisors)
             {
                 if (candidate is IIntroductionAdvisor && AopUtils.CanApply(candidate, targetType, null))
@@ -230,14 +231,16 @@ namespace Spring.Aop.Framework.AutoProxy
         /// </summary>
         /// <param name="advisors">The advisors.</param>
         /// <returns></returns>
-        protected virtual IList SortAdvisors(IList advisors)
+        protected virtual IList<IAdvisor> SortAdvisors(IList<IAdvisor> advisors)
         {
             if (advisors.Count==0)
             {
                 return advisors;
-            } 
+            }
 
-            if (advisors is ArrayList)
+            if (advisors is List<IAdvisor>)
+                ((List<IAdvisor>)advisors).Sort(new OrderComparator<IAdvisor>());
+            else if (advisors is ArrayList)
                 ((ArrayList) advisors).Sort(new OrderComparator());
             else if (advisors is Array)
                 Array.Sort((Array) advisors, new OrderComparator());
@@ -257,7 +260,7 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <param name="advisors">Advisors that have already been identified as applying to a given object</param>
         /// <param name="objectType">the type of the object to be advised</param>
         /// <param name="objectName">the name of the object to be advised</param>
-        protected virtual void ExtendAdvisors(IList advisors, Type objectType, string objectName)
+        protected virtual void ExtendAdvisors(IList<IAdvisor> advisors, Type objectType, string objectName)
         {}
 
         /// <summary>

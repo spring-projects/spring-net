@@ -115,7 +115,7 @@ namespace Spring.Objects.Factory.Config
             MutablePropertyValues pvs = objectDefinition.PropertyValues;
             if (pvs != null)
             {
-                for (int j = 0; j < pvs.PropertyValues.Length; j++)
+                for (int j = 0; j < pvs.PropertyValues.Count; j++)
                 {
                     PropertyValue pv = pvs.PropertyValues[j];
                     object newVal = ResolveValue(pv.Value);

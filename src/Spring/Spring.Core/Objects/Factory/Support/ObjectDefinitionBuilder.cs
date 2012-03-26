@@ -397,7 +397,7 @@ namespace Spring.Objects.Factory.Support
                 List<string> arrayList = new List<string>();
                 arrayList.AddRange(objectDefinition.DependsOn);
                 arrayList.AddRange(new string[]{ objectName});
-                objectDefinition.DependsOn = arrayList.ToArray();
+                objectDefinition.DependsOn = arrayList;
             }
             return this;
         }

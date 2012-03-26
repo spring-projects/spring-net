@@ -19,13 +19,12 @@
 #endregion
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 
 using NUnit.Framework;
 
 using Spring.Context;
-using Spring.Context.Support;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
@@ -90,7 +89,7 @@ namespace Spring.Testing.NUnit
         /// <summary>
         /// Holds names of the fields that should be used for field injection.
         /// </summary>
-        protected string[] managedVariableNames;
+        protected IList<string> managedVariableNames;
         private int loadCount = 0;
 
         /// <summary>
@@ -231,7 +230,7 @@ namespace Spring.Testing.NUnit
         /// </summary>
         protected virtual void InitManagedVariableNames()
         {
-            ArrayList managedVarNames = new ArrayList();
+            List<string> managedVarNames = new List<string>();
             Type type = GetType();
 
             do
@@ -273,7 +272,7 @@ namespace Spring.Testing.NUnit
                 type = type.BaseType;
             } while (type != typeof (AbstractDependencyInjectionSpringContextTests));
 
-            this.managedVariableNames = (string[]) managedVarNames.ToArray(typeof (string));
+            this.managedVariableNames = managedVarNames;
         }
 
         private static bool IsProtectedInstanceField(FieldInfo field)
@@ -286,7 +285,7 @@ namespace Spring.Testing.NUnit
         /// </summary>
         protected virtual void InjectProtectedVariables()
         {
-            for (int i = 0; i < this.managedVariableNames.Length; i++)
+            for (int i = 0; i < this.managedVariableNames.Count; i++)
             {
                 string fieldName = this.managedVariableNames[i];
                 Object obj = null;

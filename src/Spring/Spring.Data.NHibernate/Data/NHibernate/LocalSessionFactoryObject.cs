@@ -610,7 +610,7 @@ namespace Spring.Data.NHibernate
                 // Register cache strategies for mapped entities.
                 foreach (string className in this.entityCacheStrategies.Keys)
                 {
-                    String[] strategyAndRegion = StringUtils.CommaDelimitedListToStringArray(this.entityCacheStrategies.GetProperty(className));
+                    string[] strategyAndRegion = StringUtils.CommaDelimitedListToStringArray(this.entityCacheStrategies.GetProperty(className));
                     if (strategyAndRegion.Length > 1)
                     {
                         config.SetCacheConcurrencyStrategy(className, strategyAndRegion[0], strategyAndRegion[1]);

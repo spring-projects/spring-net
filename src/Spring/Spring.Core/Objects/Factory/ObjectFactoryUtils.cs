@@ -111,7 +111,7 @@ namespace Spring.Objects.Factory
         /// </returns>
         public static int CountObjectsIncludingAncestors(IListableObjectFactory factory)
         {
-            return ObjectNamesIncludingAncestors(factory).Length;
+            return ObjectNamesIncludingAncestors(factory).Count;
         }
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace Spring.Objects.Factory
         /// </summary>
         /// <param name="factory">The object factory.</param>
         /// <returns>The array of object names, or an empty array if none.</returns>
-        public static string[] ObjectNamesIncludingAncestors(IListableObjectFactory factory)
+        public static IList<string> ObjectNamesIncludingAncestors(IListableObjectFactory factory)
         {
             return ObjectNamesForTypeIncludingAncestors(factory, typeof(object));
         }
@@ -159,7 +159,7 @@ namespace Spring.Objects.Factory
         /// <returns>
         /// The array of object names, or an empty array if none.
         /// </returns>
-        public static string[] ObjectNamesForTypeIncludingAncestors(
+        public static IList<string> ObjectNamesForTypeIncludingAncestors(
             IListableObjectFactory factory, Type type,
             bool includePrototypes, bool includeFactoryObjects)
         {
@@ -169,7 +169,7 @@ namespace Spring.Objects.Factory
             if (pof != null)
             {
                 IHierarchicalObjectFactory hof = (IHierarchicalObjectFactory)factory;
-                string[] parentsResult = ObjectNamesForTypeIncludingAncestors(pof, type, includePrototypes, includeFactoryObjects);
+                IList<string> parentsResult = ObjectNamesForTypeIncludingAncestors(pof, type, includePrototypes, includeFactoryObjects);
                 foreach (string objectName in parentsResult)
                 {
                     if (!result.Contains(objectName) && !hof.ContainsLocalObject(objectName))
@@ -178,7 +178,7 @@ namespace Spring.Objects.Factory
                     }
                 }
             }
-            return result.ToArray();
+            return result;
         }
 
         /// <summary>
@@ -209,7 +209,7 @@ namespace Spring.Objects.Factory
         /// <returns>
         /// The array of object names, or an empty array if none.
         /// </returns>
-        public static string[] ObjectNamesForTypeIncludingAncestors(
+        public static IList<string> ObjectNamesForTypeIncludingAncestors(
             IListableObjectFactory factory, Type type)
         {
             List<string> result = new List<string>();
@@ -218,7 +218,7 @@ namespace Spring.Objects.Factory
             if (pof != null)
             {
                 IHierarchicalObjectFactory hof = (IHierarchicalObjectFactory)factory;
-                string[] parentsResult = ObjectNamesForTypeIncludingAncestors(pof, type);
+                IList<string> parentsResult = ObjectNamesForTypeIncludingAncestors(pof, type);
                 foreach (string objectName in parentsResult)
                 {
                     if (!result.Contains(objectName) && !hof.ContainsLocalObject(objectName))
@@ -227,7 +227,7 @@ namespace Spring.Objects.Factory
                     }
                 }
             }
-            return result.ToArray();
+            return result;
         }
 
         /// <summary>

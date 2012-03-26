@@ -73,14 +73,14 @@ namespace Spring.Messaging.Nms.Config
         [Test]
         public void ObjectsCreated()
         {
-            IDictionary<string, SimpleMessageListenerContainer> containers = ctx.GetObjectsOfType<SimpleMessageListenerContainer>();
+            IDictionary<string, SimpleMessageListenerContainer> containers = ctx.GetObjects<SimpleMessageListenerContainer>();
             Assert.AreEqual(3, containers.Count);
         }
 
         [Test]
         public void ContainerConfiguration()
         {
-            IDictionary<string, SimpleMessageListenerContainer> containers = ctx.GetObjectsOfType<SimpleMessageListenerContainer>();
+            IDictionary<string, SimpleMessageListenerContainer> containers = ctx.GetObjects<SimpleMessageListenerContainer>();
             IConnectionFactory defaultConnectionFactory = (IConnectionFactory) ctx.GetObject(DEFAULT_CONNECTION_FACTORY);
             IConnectionFactory explicitConnectionFactory = (IConnectionFactory) ctx.GetObject(EXPLICIT_CONNECTION_FACTORY);
             

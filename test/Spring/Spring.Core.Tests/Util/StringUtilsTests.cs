@@ -21,7 +21,6 @@
 #region Imports
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 
 using NUnit.Framework;
@@ -121,7 +120,7 @@ namespace Spring.Util
 			Assert.AreEqual(
 				":Foo,:Bar", StringUtils.CollectionToCommaDelimitedString(arr));
 
-			Assert.AreEqual("null", StringUtils.CollectionToCommaDelimitedString(null));
+			Assert.AreEqual("null", StringUtils.CollectionToCommaDelimitedString<object>(null));
 		}
 
 		[Test]
@@ -129,8 +128,8 @@ namespace Spring.Util
 		{
 			Foo[] arr = new Foo[] {new Foo("Foo"), new Foo("Bar")};
 			Assert.AreEqual(
-				":Foo,:Bar", StringUtils.ArrayToCommaDelimitedString(arr));
-			Assert.AreEqual("null", StringUtils.ArrayToCommaDelimitedString(null));
+				":Foo,:Bar", StringUtils.CollectionToCommaDelimitedString(arr));
+			Assert.AreEqual("null", StringUtils.CollectionToCommaDelimitedString<object>(null));
 		}
 
 		[Test]

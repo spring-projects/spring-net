@@ -31,7 +31,7 @@ namespace Spring.Aop.Framework.DynamicProxy
             {
                 throw new AopConfigException("Cannot create IAopProxy with null ProxyConfig");
             }
-            if (advisedSupport.Advisors.Length == 0 && advisedSupport.TargetSource == EmptyTargetSource.Empty)
+            if (advisedSupport.Advisors.Count == 0 && advisedSupport.TargetSource == EmptyTargetSource.Empty)
             {
                 throw new AopConfigException("Cannot create IAopProxy with no advisors and no target source");
             }

@@ -21,6 +21,7 @@
 #region Imports
 
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using Spring.Util;
 
@@ -44,7 +45,7 @@ namespace Spring.Context.Support
 	[Serializable]
 	public class DefaultMessageSourceResolvable : IMessageSourceResolvable
 	{
-		private string[] codes;
+		private IList<string> codes;
 		private object[] arguments;
 		private string defaultMessage;
 
@@ -97,7 +98,7 @@ namespace Spring.Context.Support
 		/// The default message used if no code could be resolved.
 		/// </param>
 		public DefaultMessageSourceResolvable(
-			string[] codes, object[] arguments, string defaultMessage)
+			IList<string> codes, object[] arguments, string defaultMessage)
 		{
 			this.codes = codes;
 			this.arguments = arguments;
@@ -141,9 +142,9 @@ namespace Spring.Context.Support
 		{
 			get
 			{
-				if (codes != null && codes.Length > 0)
+				if (codes != null && codes.Count > 0)
 				{
-					return codes[codes.Length - 1];
+					return codes[codes.Count - 1];
 				}
 				else
 				{
@@ -181,16 +182,16 @@ namespace Spring.Context.Support
 
 		#region IMessageSourceResolvable Members
 
-		/// <summary>
-		/// Return the codes to be used to resolve this message, in the order
-		/// that they are to be tried.
-		/// </summary>
-		/// <returns>
-		/// A <see cref="System.String"/> array of codes which are associated
-		/// with this message.
-		/// </returns>
-		/// <seealso cref="Spring.Context.IMessageSourceResolvable.GetCodes"/>
-		public string[] GetCodes()
+	    /// <summary>
+	    /// Return the codes to be used to resolve this message, in the order
+	    /// that they are to be tried.
+	    /// </summary>
+	    /// <returns>
+	    /// A <see cref="System.String"/> array of codes which are associated
+	    /// with this message.
+	    /// </returns>
+	    /// <seealso cref="Spring.Context.IMessageSourceResolvable.GetCodes"/>
+	    public IList<string> GetCodes()
 		{
 			return codes;
 		}

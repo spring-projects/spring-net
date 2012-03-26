@@ -21,6 +21,7 @@
 #region Imports
 
 using System;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 
 using Spring.Aop;
@@ -71,7 +72,7 @@ namespace Spring.Transaction.Interceptor
 	{
 		private TransactionInterceptor _transactionInterceptor;
 		private object _target;
-		private Type[] _proxyInterfaces;
+		private IList<Type> _proxyInterfaces;
 		private TruePointcut _pointcut;
 		private object[] _preInterceptors;
 		private object[] _postInterceptors;

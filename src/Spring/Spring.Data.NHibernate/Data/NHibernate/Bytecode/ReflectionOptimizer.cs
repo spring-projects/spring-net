@@ -21,6 +21,7 @@
 #region Imports
 
 using System;
+using System.Collections.Generic;
 
 using NHibernate.Properties;
 
@@ -57,8 +58,8 @@ namespace Spring.Data.NHibernate.Bytecode
         /// <returns>The new instance.</returns>
         public override object CreateInstance()
         {
-            string[] namesForType = listableObjectFactory.GetObjectNamesForType(mappedType);
-            if (namesForType.Length > 0)
+            IList<string> namesForType = listableObjectFactory.GetObjectNamesForType(mappedType);
+            if (namesForType.Count > 0)
             {
                 return listableObjectFactory.GetObject(namesForType[0], mappedType);
             }

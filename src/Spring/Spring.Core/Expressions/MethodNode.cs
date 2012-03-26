@@ -234,8 +234,8 @@ namespace Spring.Expressions
             catch (AmbiguousMatchException)
             {
 
-                MethodInfo[] overloads = GetCandidateMethods(type, methodName, bindingFlags, argValues.Length);
-                if (overloads.Length > 0)
+                IList<MethodInfo> overloads = GetCandidateMethods(type, methodName, bindingFlags, argValues.Length);
+                if (overloads.Count > 0)
                 {
                     mi = ReflectionUtils.GetMethodByArgumentValues(overloads, argValues);
                 }
@@ -245,7 +245,7 @@ namespace Spring.Expressions
 
 
 
-        private static MethodInfo[] GetCandidateMethods(Type type, string methodName, BindingFlags bindingFlags, int argCount)
+        private static IList<MethodInfo> GetCandidateMethods(Type type, string methodName, BindingFlags bindingFlags, int argCount)
         {
             MethodInfo[] methods = type.GetMethods(bindingFlags | BindingFlags.FlattenHierarchy);
             List<MethodInfo> matches = new List<MethodInfo>();
@@ -270,7 +270,7 @@ namespace Spring.Expressions
                 }
             }
 
-            return matches.ToArray();
+            return matches;
         }
 
         // used to calculate signature hash while caring for arg positions

@@ -20,6 +20,8 @@
 
 #region Imports
 
+using System.Collections.Generic;
+
 using NUnit.Framework;
 
 using Spring.Aop.Framework;
@@ -70,8 +72,8 @@ namespace Spring.Aop.Config
 
             IAdvised advised = testObject as IAdvised;
             Assert.IsNotNull(advised);            
-            IAdvisor[] advisors = advised.Advisors;
-            Assert.IsTrue(advisors.Length > 0, "Advisors should not be empty");
+            IList<IAdvisor> advisors = advised.Advisors;
+            Assert.IsTrue(advisors.Count > 0, "Advisors should not be empty");
             
            
         }

@@ -13,6 +13,9 @@
 * See the License for the specific language governing permissions and
 * limitations under the License.
 */
+
+using System.Collections;
+
 using Quartz;
 
 using Spring.Objects;
@@ -68,8 +71,14 @@ namespace Spring.Scheduling.Quartz
 			{
 				ObjectWrapper bw = new ObjectWrapper(this);
 				MutablePropertyValues pvs = new MutablePropertyValues();
-				pvs.AddAll(context.Scheduler.Context);
-				pvs.AddAll(context.MergedJobDataMap);
+                foreach (DictionaryEntry entry in context.Scheduler.Context)
+			    {
+                    pvs.Add(entry.Key.ToString(), entry.Value);
+                }
+                foreach (DictionaryEntry entry in context.MergedJobDataMap)
+                {
+                    pvs.Add(entry.Key.ToString(), entry.Value);
+                }
 				bw.SetPropertyValues(pvs, true);
 			}
 			catch (SchedulerException ex)

@@ -67,7 +67,7 @@ namespace Spring.Aop.Framework
 		public static IList<object> CalculateInterceptors(
 			IAdvised config, object proxy, MethodInfo method, Type targetType)
 		{
-            IList<object> interceptors = new List<object>(config.Advisors.Length);
+            IList<object> interceptors = new List<object>(config.Advisors.Count);
 			foreach (IAdvisor advisor in config.Advisors)
 			{
 				if (advisor is IPointcutAdvisor)

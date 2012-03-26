@@ -21,6 +21,7 @@
 #region Imports
 
 using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Collections;
 
@@ -123,27 +124,27 @@ namespace Spring.Aop.Framework.DynamicProxy
         /// </summary>
         private sealed class ProxyTypeCacheKey
         {
-            private sealed class HashCodeComparer : IComparer
+            private sealed class HashCodeComparer : IComparer<Type>
             {
-                public int Compare(object x, object y)
+                public int Compare(Type x, Type y)
                 {
                     return x.GetHashCode().CompareTo(y.GetHashCode());
                 }
             }
 
-            private static IComparer interfaceComparer = new HashCodeComparer();
+            private static HashCodeComparer interfaceComparer = new HashCodeComparer();
 
             private Type baseType;
             private Type targetType;
-            private Type[] interfaceTypes;
+            private List<Type> interfaceTypes;
             private bool proxyTargetAttributes;
 
-            public ProxyTypeCacheKey(Type baseType, Type targetType, Type[] interfaceTypes, bool proxyTargetAttributes)
+            public ProxyTypeCacheKey(Type baseType, Type targetType, IList<Type> interfaceTypes, bool proxyTargetAttributes)
             {
                 this.baseType = baseType;
                 this.targetType = targetType;
-                Array.Sort(interfaceTypes, interfaceComparer); // sort by GetHashcode()? to have a defined order
-                this.interfaceTypes = interfaceTypes;
+                this.interfaceTypes = new List<Type>(interfaceTypes);
+                this.interfaceTypes.Sort(interfaceComparer); // sort by GetHashcode()? to have a defined order
                 this.proxyTargetAttributes = proxyTargetAttributes;
             }
 
@@ -166,7 +167,7 @@ namespace Spring.Aop.Framework.DynamicProxy
                 {
                     return false;
                 }
-                for (int i = 0; i < interfaceTypes.Length; i++)
+                for (int i = 0; i < interfaceTypes.Count; i++)
                 {
                     if (!Equals(interfaceTypes[i], proxyTypeCacheKey.interfaceTypes[i]))
                     {
@@ -184,7 +185,7 @@ namespace Spring.Aop.Framework.DynamicProxy
             {
                 int result = baseType.GetHashCode();
                 result = 29*result + targetType.GetHashCode();
-                for (int i = 0; i < interfaceTypes.Length; i++)
+                for (int i = 0; i < interfaceTypes.Count; i++)
                 {
                     result = 29 * result + interfaceTypes[i].GetHashCode();
                 }

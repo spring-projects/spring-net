@@ -69,7 +69,7 @@ namespace Spring.Aop.Framework.DynamicProxy
             {
                 IProxyTypeBuilder typeBuilder;
                 if ((advisedSupport.ProxyTargetType) ||
-                    (advisedSupport.Interfaces.Length == 0))
+                    (advisedSupport.Interfaces.Count == 0))
                 {
                     typeBuilder = new DecoratorAopProxyTypeBuilder(advisedSupport);
                 }

@@ -146,7 +146,7 @@ namespace Spring.Objects.Factory
             def.FactoryMethodName = "CreateTestObject";
             DefaultListableObjectFactory lof = new DefaultListableObjectFactory();
             lof.RegisterObjectDefinition("factoryObject", def);
-            IDictionary<string, TestObject> objs = lof.GetObjectsOfType<TestObject>();
+            IDictionary<string, TestObject> objs = lof.GetObjects<TestObject>();
             Assert.AreEqual(1, objs.Count);
         }
 
@@ -160,7 +160,7 @@ namespace Spring.Objects.Factory
             DefaultListableObjectFactory lof = new DefaultListableObjectFactory();
             lof.RegisterObjectDefinition("factoryObject", def);
             lof.RegisterObjectDefinition("target", new RootObjectDefinition(typeof(TestObjectCreator)));
-            IDictionary<string, TestObject> objs = lof.GetObjectsOfType<TestObject>();
+            IDictionary<string, TestObject> objs = lof.GetObjects<TestObject>();
             Assert.AreEqual(1, objs.Count);
         }
 
@@ -404,8 +404,7 @@ namespace Spring.Objects.Factory
 
             #region IInstantiationAwareObjectPostProcessor Members
 
-            public IPropertyValues PostProcessPropertyValues(IPropertyValues pvs, PropertyInfo[] pis, object objectInstance,
-                                                             string objectName)
+            public IPropertyValues PostProcessPropertyValues(IPropertyValues pvs, IList<PropertyInfo> pis, object objectInstance, string objectName)
             {
                 return pvs;
             }
@@ -455,8 +454,7 @@ namespace Spring.Objects.Factory
 
             #region IInstantiationAwareObjectPostProcessor Members
 
-            public IPropertyValues PostProcessPropertyValues(IPropertyValues pvs, PropertyInfo[] pis, object objectInstance,
-                                                             string objectName)
+            public IPropertyValues PostProcessPropertyValues(IPropertyValues pvs, IList<PropertyInfo> pis, object objectInstance, string objectName)
             {
                 return pvs;
             }
@@ -532,7 +530,7 @@ namespace Spring.Objects.Factory
         {
             IListableObjectFactory lof = new DefaultListableObjectFactory();
             Assert.IsTrue(lof.GetObjectDefinitionNames() != null, "No objects defined --> array != null");
-            Assert.IsTrue(lof.GetObjectDefinitionNames().Length == 0, "No objects defined after no arg constructor");
+            Assert.IsTrue(lof.GetObjectDefinitionNames().Count == 0, "No objects defined after no arg constructor");
             Assert.IsTrue(lof.ObjectDefinitionCount == 0, "No objects defined after no arg constructor");
         }
 
@@ -640,7 +638,7 @@ namespace Spring.Objects.Factory
             lof.RegisterSingleton("singletonObject", singletonObject);
             Assert.IsTrue(lof.ContainsObject("singletonObject"));
             Assert.IsTrue(lof.IsSingleton("singletonObject"));
-            Assert.AreEqual(0, lof.GetAliases("singletonObject").Length);
+            Assert.AreEqual(0, lof.GetAliases("singletonObject").Count);
             DependenciesObject test = (DependenciesObject)lof.GetObject("test");
             Assert.AreEqual(singletonObject, lof.GetObject("singletonObject"));
             Assert.AreEqual(singletonObject, test.Spouse);
@@ -1751,8 +1749,8 @@ namespace Spring.Objects.Factory
             DefaultListableObjectFactory of = new DefaultListableObjectFactory();
             of.RegisterObjectDefinition("mod", new RootObjectDefinition(typeof(A)));
 
-            string[] names = of.GetObjectNamesForType(typeof (ISerializable), false, false);
-            Assert.IsNotEmpty(names);
+            IList<string> names = of.GetObjectNamesForType(typeof (ISerializable), false, false);
+            Assert.IsNotEmpty((ICollection) names);
             Assert.AreEqual("&mod", names[0]);
         }
 

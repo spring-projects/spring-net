@@ -20,6 +20,7 @@
 
 #region Imports
 
+using System.Collections.Generic;
 using System.Globalization;
 
 using Spring.Util;
@@ -352,8 +353,8 @@ namespace Spring.Context.Support
                 {
                     return resolvable.DefaultMessage;
                 }
-                string[] codes = resolvable.GetCodes();
-                string code = (codes != null && codes.Length > 0 ? codes[0] : string.Empty);
+                IList<string> codes = resolvable.GetCodes();
+                string code = (codes != null && codes.Count > 0 ? codes[0] : string.Empty);
                 throw new NoSuchMessageException(code, culture);
             }
 

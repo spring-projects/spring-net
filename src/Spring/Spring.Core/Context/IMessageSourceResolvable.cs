@@ -21,6 +21,7 @@
 #region Imports
 
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 
 #endregion
@@ -46,16 +47,16 @@ namespace Spring.Context
         /// Return the codes to be used to resolve this message, in the order
         /// that they are to be tried.
         /// </summary>
-		/// <remarks>
-		/// <p>
-		/// The last code will therefore be the default one.
-		/// </p>
-		/// </remarks>
+        /// <remarks>
+        /// <p>
+        /// The last code will therefore be the default one.
+        /// </p>
+        /// </remarks>
         /// <returns>
         /// A <see cref="System.String"/> array of codes which are associated
         /// with this message.
         /// </returns>
-        string[] GetCodes();
+        IList<string> GetCodes();
 
         /// <summary>
         /// Return the array of arguments to be used to resolve this message.
