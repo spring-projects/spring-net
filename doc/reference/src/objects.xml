@@ -3922,7 +3922,7 @@ public sealed class Font : MarshalByRefObject, ICloneable, ISerializable, IDispo
 
         <para><programlisting language="myxml">&lt;object id="exampleInitObject" type="Examples.ExampleObject" init-method="init"/&gt;</programlisting></para>
 
-        <para> <programlisting language="csharp">[C#] 
+        <para><programlisting language="csharp">[C#] 
 public class ExampleObject 
 { 
     public void Init() 
@@ -4607,7 +4607,7 @@ DEBUG - MovieApp Done.</programlisting>
 
     <sect2 xml:id="objects-factory-customizing-factory-postprocessors">
       <title>Customizing configuration metadata with
-      ObjectFactoryPostProcessors</title>
+      <literal>IObjectFactoryPostProcessors</literal></title>
 
       <para>The next extension point that we will look at is the
       <literal>Spring.Objects.Factory.Config.IObjectFactoryPostProcessor</literal>.
@@ -4658,15 +4658,15 @@ DEBUG - MovieApp Done.</programlisting>
       </note>
 
       <para>An object factory post-processor is executed manually (in the case
-      of a IObjectFactory) or automatically (in the case of an
-      IApplicationContext) to apply changes of some sort to the configuration
-      metadata that defines a container. Spring.NET includes a number of
-      pre-existing object factory post-processors, such as
-      <literal>PropertyResourceConfigurer</literal> and
+      of a <literal>IObjectFactory</literal>) or automatically (in the case of
+      an <literal>IApplicationContext</literal>) to apply changes of some sort
+      to the configuration metadata that defines a container. Spring.NET
+      includes a number of pre-existing object factory post-processors, such
+      as <literal>PropertyResourceConfigurer</literal> and
       <literal>PropertyPlaceHolderConfigurer</literal>, both described below
-      and ObjectNameAutoProxyCreator, which is very useful for wrapping other
-      objects transactionally or with any other kind of proxy, as described
-      later in this manual.</para>
+      and <literal>ObjectNameAutoProxyCreator</literal>, which is very useful
+      for wrapping other objects transactionally or with any other kind of
+      proxy, as described later in this manual.</para>
 
       <para>In an <literal>IObjectFactory</literal>, the process of applying
       an <literal>IObjectFactoryPostProcessor</literal> is manual, and will be
@@ -4717,9 +4717,9 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
         excellent solution when you want to externalize a few properties from
         a file containing object definitions. This is useful to allow the
         person deploying an application to customize environment specific
-        properties (for example database configuration strings, usernames, and
-        passwords), without the complexity or risk of modifying the main XML
-        definition file or files for the container.</para>
+        properties (for example database configuration strings, user names,
+        and passwords), without the complexity or risk of modifying the main
+        XML definition file or files for the container.</para>
 
         <para>Variable substitution is performed on simple property values,
         lists, dictionaries, sets, constructor values, object type name, and
@@ -4741,10 +4741,10 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
         with a database connection and also a value for the maximum number of
         results to return in a query. Instead of hard coding the values into
         the main Spring.NET configuration file we use place holders, in the
-        NAnt style of ${variableName}, and obtain their values from
-        NameValueSections in the standard .NET application configuration file.
-        The Spring.NET configuration file looks like: <programlisting
-        language="myxml">&lt;configuration&gt;
+        NAnt style of <literal>${variableName}</literal>, and obtain their
+        values from <literal>NameValueSections</literal> in the standard .NET
+        application configuration file. The Spring.NET configuration file
+        looks like: <programlisting language="myxml">&lt;configuration&gt;
 
   &lt;configSections&gt;
     &lt;sectionGroup name="spring"&gt;
@@ -4770,9 +4770,9 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
 
 &lt;/configuration&gt;</programlisting></para>
 
-        <para>Notice the presence of two NameValueSections in the
-        configuration file. These name value pairs will be referred to in the
-        Spring.NET configuration file. In this example we are using an
+        <para>Notice the presence of two <literal>NameValueSection</literal>s
+        in the configuration file. These name value pairs will be referred to
+        in the Spring.NET configuration file. In this example we are using an
         embedded assembly resource for the location of the Spring.NET
         configuration file so as to reduce the chance of accidental tampering
         in deployment. This Spring.NET configuration file is shown
@@ -4783,29 +4783,29 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
          xsi:schemaLocation="http://www.springframework.net
          http://www.springframework.net/xsd/spring-objects.xsd" &gt;
     
-    &lt;object name="productDao" type="DaoApp.SimpleProductDao, DaoApp "&gt;
-      &lt;property name="maxResults" value="${maxResults}"/&gt;
-      &lt;property name="dbConnection" ref="myConnection"/&gt;
-    &lt;/object&gt;
-    
-    &lt;object name="myConnection" type="System.Data.Odbc.OdbcConnection, System.Data"&gt; 
-      &lt;property name="connectionstring" value="${connection.string}"/&gt; 
-    &lt;/object&gt;
+  &lt;object name="productDao" type="DaoApp.SimpleProductDao, DaoApp "&gt;
+    &lt;property name="maxResults" value="${maxResults}"/&gt;
+    &lt;property name="dbConnection" ref="myConnection"/&gt;
+  &lt;/object&gt;
+   
+  &lt;object name="myConnection" type="System.Data.Odbc.OdbcConnection, System.Data"&gt; 
+    &lt;property name="connectionstring" value="${connection.string}"/&gt; 
+  &lt;/object&gt;
 
-    &lt;object name="appConfigPropertyHolder" 
-            type="Spring.Objects.Factory.Config.PropertyPlaceholderConfigurer, Spring.Core"&gt;
+  &lt;object name="appConfigPropertyHolder" 
+          type="Spring.Objects.Factory.Config.PropertyPlaceholderConfigurer, Spring.Core"&gt;
+    &lt;property name="configSections"&gt;          
+      &lt;value&gt;DaoConfiguration,DatabaseConfiguration&lt;/value&gt;                              
+    &lt;/property&gt;              
+  &lt;/object&gt;
 
-        &lt;property name="configSections"&gt;          
-          &lt;value&gt;DaoConfiguration,DatabaseConfiguration&lt;/value&gt;                              
-        &lt;/property&gt;              
-       
-    &lt;/object&gt;
 &lt;/objects&gt;</programlisting>
 
         <para>The values of <literal>${maxResults}</literal> and
         <literal>${connection.string}</literal> match the key names used in
-        the two NameValueSectionHandlers <literal>DaoConfiguration</literal>
-        and <literal>DatabaseConfiguration</literal>. The
+        the two <literal>NameValueSectionHandler</literal>s
+        <literal>DaoConfiguration</literal> and
+        <literal>DatabaseConfiguration</literal>. The
         <literal>PropertyPlaceholderConfigurer</literal> refers to these two
         sections via a comma delimited list of section names in the
         <literal>configSections</literal> property. If you are using section
@@ -4846,8 +4846,10 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
 
           <para>If the class is unable to be resolved at runtime to a valid
           type, resolution of the object will fail once it is about to be
-          created (which is during the PreInstantiateSingletons() phase of an
-          ApplicationContext for a non-lazy-init object.)</para>
+          created (which is during the
+          <literal>PreInstantiateSingletons()</literal> phase of an
+          <literal>ApplicationContext</literal> for a non-lazy-init
+          object.)</para>
 
           <para>Similarly you can replace 'ref' and 'expression' metadata, as
           shown below</para>
@@ -4959,51 +4961,18 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
       </sect3>
 
       <sect3 xml:id="objects-variablesource">
-        <title>IVariableSource</title>
+        <title>Example: The
+        <literal>VariablePlaceholderConfigurer</literal></title>
 
-        <para>The IVariableSource is the base interface for providing the
-        ability to get the value of property placeholders (name-value) pairs
-        from a variety of sources. Out of the box, Spring.NET supports a
-        number of variable sources that allow users to obtain variable values
-        from .NET config files, java-style property files, environment
-        variables, command line arguments and the registry and the new
-        connection strings configuration section in .NET 2.0. The list of
-        implementing classes is listed below. Please refer to the SDK
-        documentation for more information.</para>
-
-        <itemizedlist>
-          <listitem>
-            <para><literal>ConfigSectionVariableSource</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal>PropertyFileVariableSource</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal>EnvironmentVariableSource</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal>CommandLineArgsVariableSource</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal>RegistryVariableSource</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal>SpecialFolderVariableSource</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal>ConnectionStringsVariableSource</literal></para>
-          </listitem>
-
-          <listitem>
-            <para><literal>ConfigurableVariableSource</literal></para>
-          </listitem>
-        </itemizedlist>
+        <para>The <literal>VariablePlaceholderConfigurer</literal> is an
+        evolution of the <literal>PropertyPlaceHolderConfigurer</literal>. Out
+        of the box, Spring.NET supports a number of variable sources that
+        allow users to obtain variable values from .NET configuration files,
+        Java-style property files, environment variables, command line
+        arguments, the registry and the new connection strings configuration
+        section in .NET 2.0. It is possible to add your own variable sources
+        to a <literal>VariablePlaceholderConfigurer</literal> by implementing
+        the <literal>IVariableSource</literal> interface.</para>
 
         <para>You use this by defining an instance of
         <literal>Spring.Objects.Factory.Config.VariablePlaceholderConfigurer</literal>
@@ -5015,35 +4984,303 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
         property defined in multiple <literal>IVariableSource</literal>
         implementations, the first one in the list that contains the property
         value will be used. <programlisting language="myxml">&lt;object type="Spring.Objects.Factory.Config.VariablePlaceholderConfigurer, Spring.Core"&gt;
-   &lt;property name="VariableSources"&gt;
-      &lt;list&gt;
-         &lt;object type="Spring.Objects.Factory.Config.PropertyFileVariableSource, Spring.Core"&gt;
-           &lt;property name="Location" value="~\application.properties" /&gt;
-           &lt;property name="IgnoreMissingResources" value="true"/&gt;
-         &lt;/object&gt;
-         &lt;object type="Spring.Objects.Factory.Config.ConfigSectionVariableSource, Spring.Core"&gt;
-            &lt;property name="SectionNames" value="CryptedConfiguration" /&gt;
-         &lt;/object&gt;
-      &lt;/list&gt;
-   &lt;/property&gt;
-&lt;/object&gt;
-        </programlisting><note>
-            <para>The use of the <property>IgnoreMissingResources</property>
-            property above will mean that if the property file is not found it
-            will be silently ignored and the resolution will continue to
-            <classname>ConfigSectionVariableSource</classname>.</para>
-          </note>The IVariableSource interface is shown below</para>
+  &lt;property name="VariableSources"&gt;
+    &lt;list&gt;
+      &lt;object type="Spring.Objects.Factory.Config.PropertyFileVariableSource, Spring.Core"&gt;
+        &lt;property name="Location" value="~\application.properties" /&gt;        
+      &lt;/object&gt;
+      &lt;object type="Spring.Objects.Factory.Config.ConfigSectionVariableSource, Spring.Core"&gt;
+        &lt;property name="SectionNames" value="CryptedConfiguration" /&gt;
+      &lt;/object&gt;
+    &lt;/list&gt;
+  &lt;/property&gt;
+&lt;/object&gt;     </programlisting></para>
 
-        <programlisting language="csharp">public interface IVariableSource
+        <para>The variable sources that Spring.NET provides out of the box are
+        described in the following sections.</para>
+
+        <sect4>
+          <title><literal>ConfigSectionVariableSource</literal></title>
+
+          <para>The <literal>ConfigSectionVariableSource</literal> allows you
+          to define variables in a custom configuration section in your
+          configuration file:</para>
+
+          <programlisting language="myxml">&lt;!-- app.config: --&gt;
+&lt;configuration&gt;
+  &lt;configSections&gt;
+    &lt;section name="DonConfiguration" type="System.Configuration.NameValueSectionHandler"/&gt;
+  &lt;/configSections&gt;
+  &lt;DonConfiguration&gt;
+    &lt;add key="don_name" value="Dick Whitman"/&gt;
+    &lt;add key="don_age" value="41" /&gt;
+  &lt;/DonConfiguration&gt;
+&lt;/configuration&gt;
+
+&lt;!-- VariableSource configuration: --&gt;
+&lt;object type="Spring.Objects.Factory.Config.ConfigSectionVariableSource, Spring.Core"&gt;
+  &lt;property name="SectionNames" value="DonConfiguration" /&gt;
+&lt;/object&gt;
+
+&lt;!-- consume variables: --&gt;
+&lt;object type="Example.Person, Spring.IocQuickStart.VariableSources"&gt;
+  &lt;property name="Name" value="${don_name}" /&gt;
+  &lt;property name="Age" value="${don_age}" /&gt;
+&lt;/object&gt;
+</programlisting>
+
+          <para>This is similar to using the
+          <literal>PropertyPlaceHolderConfigurer</literal> described
+          above.</para>
+
+          <para>By simply configuring the appropriate section, you can use the
+          <literal>ConfigSectionVariableSource</literal> to retrieve variables
+          from .NET's application settings and user settings. Assuming your
+          application's root namespace is <literal>MyApp</literal>, then your
+          application- and user settings can be loaded as variables by
+          configuring the following variable sources:</para>
+
+          <programlisting language="myxml">&lt;!-- From .net's ApplicationSettings: --&gt;
+&lt;object type="Spring.Objects.Factory.Config.ConfigSectionVariableSource, Spring.Core"&gt;
+  &lt;property name="SectionNames" value="applicationSettings/MyApp.Properties.Settings" /&gt;
+&lt;/object&gt;
+
+&lt;!-- From .net's UserSettings: --&gt;
+&lt;object type="Spring.Objects.Factory.Config.ConfigSectionVariableSource, Spring.Core"&gt;
+  &lt;property name="SectionNames" value="userSettings/MyApp.Properties.Settings" /&gt;
+&lt;/object&gt;
+</programlisting>
+
+          <para>If you configured your application settings as such:</para>
+
+          <para><mediaobject>
+              <imageobject>
+                <imagedata fileref="images/applicationsettings.png"></imagedata>
+              </imageobject>
+            </mediaobject>Then you can use <literal>${peggy_name}</literal>,
+          <literal>${peggy_age}</literal>,
+          <literal>&amp;{peter_name}</literal> and
+          <literal>${peter_age}</literal> as variables in your object
+          definitions. They will be retrieved using the appropriate
+          scope.<note>
+              <para>Changes to user settings during the lifetime of your
+              application context will <emphasis>not</emphasis> be be visible
+              to the <literal>ConfigSectionVariableSource</literal>. Although
+              variables based on user settings will be resolved using user
+              scope, variables will <emphasis>only be resolved when the
+              <literal>VariablePlaceholderConfigurer</literal> is
+              initialized</emphasis>: that is when the context is created. Any
+              object (including lazy-loaded singletons and non-singletons) you
+              retrieve from the context will have the variable values injected
+              as they were when the context was loaded.</para>
+            </note></para>
+        </sect4>
+
+        <sect4>
+          <title><literal>PropertyFileVariableSource</literal></title>
+
+          <para>A <literal>PropertyFileVariableSource</literal> allows to read
+          properties defined in a Java-style property file as variables.
+          Assume a file named <literal>application.properties</literal> in
+          your application folder containing the following lines:</para>
+
+          <programlisting>joan_name=Joan Harris
+joan_age=35</programlisting>
+
+          <para>You can use the <literal>${joan_name}</literal> and
+          <literal>${joan_age}</literal> variables in your object definitions
+          if you configure the following variable source:</para>
+
+          <para><programlisting language="myxml">&lt;object type="Spring.Objects.Factory.Config.PropertyFileVariableSource, Spring.Core"&gt;
+  &lt;property name="Location" value="~\application.properties" /&gt;               &lt;!-- specify a single ...  --&gt;
+  &lt;property name="Locations" value="~\file1.properties,~\file2.properties" /&gt; &lt;!-- or multiple locations --&gt;
+  &lt;property name="IgnoreMissingResources" value="true"/&gt;
+&lt;/object&gt;</programlisting></para>
+
+          <para><note>
+              <para>The use of the <property>IgnoreMissingResources</property>
+              property above will mean that if the property file is not found
+              it will be silently ignored and the resolution will continue to
+              the next variable source(s) of the
+              <literal>VariablePlaceholderConfigurer</literal>.</para>
+            </note></para>
+
+          <para>Within <literal>PropertyFileVariableSource</literal>s,
+          precedence rules differ from the configuration of
+          <literal>VariableSource</literal>s in the
+          <literal>VariablePlaceholderConfigurer</literal>. When the same
+          property occurs more than once in a property file, the value of the
+          <emphasis>last</emphasis> entry will be used. Same goes for
+          specifying the same variable in more than one location in a single
+          <literal>PropertyFileVariableSource</literal>: the entry from the
+          last file will be used.</para>
+        </sect4>
+
+        <sect4>
+          <title><literal>ConfigurableVariableSource</literal></title>
+
+          <para>A <literal>ConfigurableVariableSource</literal> allows you to
+          define variables in-line in a variable source definition. To
+          configure the variables <literal>${midge_name}</literal> and
+          <literal>${midge_age}</literal>, you can use the following
+          <literal>ConfigurableVariableSource</literal> definition:</para>
+
+          <programlisting language="myxml">&lt;object type="Spring.Objects.Factory.Config.ConfigurableVariableSource, Spring.Core"&gt;
+  &lt;property name="Variables"&gt;
+    &lt;name-values&gt;
+      &lt;add key="midge_name" value="Midge Daniels"/&gt;
+      &lt;add key="midge_age" value="33"/&gt;
+    &lt;/name-values&gt;
+  &lt;/property&gt;
+&lt;/object&gt;</programlisting>
+        </sect4>
+
+        <sect4>
+          <title><literal>CommandLineArgsVariableSource</literal></title>
+
+          <para>You can use commandline arguments as a source for variables.
+          Assume you issue the following command to start your application
+          <literal>myapp</literal>:</para>
+
+          <para><programlisting>myapp /roger_name:"Roger Sterling" /roger_age:57</programlisting></para>
+
+          <para>The following variable source configuration allows you to use
+          <literal>${roger_name}</literal> and <literal>${roger_age}</literal>
+          as variables:</para>
+
+          <programlisting language="myxml">&lt;object type="Spring.Objects.Factory.Config.CommandLineArgsVariableSource, Spring.Core"&gt;
+  &lt;property name="ArgumentPrefix" value ="/" /&gt; &lt;!-- optional; default: "/" --&gt;
+  &lt;property name="ValueSeparator" value=":" /&gt;  &lt;!-- optional; default: ":" --&gt;
+&lt;/object&gt;</programlisting>
+        </sect4>
+
+        <sect4>
+          <title><literal>RegistryVariableSource</literal></title>
+
+          <para>Entries in the Windows registry can be used as variables. When
+          your registry contains the key
+          <literal>HKEY_CURRENT_USER\MyKey</literal> with entries
+          <literal>freddy_name</literal> and <literal>freddy_age</literal>,
+          then you can configure the following variable source to use
+          <literal>${freddy_name}</literal> and
+          <literal>${freddy_age}</literal> as variables:</para>
+
+          <programlisting language="myxml">&lt;object type="Spring.Objects.Factory.Config.RegistryVariableSource, Spring.Core"&gt;
+  &lt;property name="Key" value="HKEY_CURRENT_USER\MyKey" /&gt;
+&lt;/object&gt;</programlisting>
+
+          <para><note>
+              <para>The key must be present in the registry when the
+              configuration is read, otherwise an
+              <literal>ObjectCreationException</literal> will be
+              thrown.</para>
+            </note></para>
+        </sect4>
+
+        <sect4>
+          <title><literal>EnvironmentVariableSource</literal></title>
+
+          <para>You can configure an
+          <literal>EnvironmentVariableSource</literal> to retrieve variables
+          from environment variables available through <link
+          ns6:href="http://msdn.microsoft.com/en-us/library/system.environment.aspx">.NET's
+          <literal>System.Environment</literal> class</link>:</para>
+
+          <programlisting language="myxml">&lt;object type="Spring.Objects.Factory.Config.EnvironmentVariableSource, Spring.Core" /&gt;
+</programlisting>
+
+          <para>To resolve a variable named <literal>${ken_name}</literal>,
+          the <literal>EnvironmentVariableSource</literal> will directly call
+          <literal>System.Environment.GetEnvironmentVariable("ken_name")</literal>.</para>
+        </sect4>
+
+        <sect4>
+          <title><literal>ConnectionStringsVariableSource</literal></title>
+
+          <para>Visual Studio has support for configuring database connection
+          strings in a <literal>connectionStrings</literal> section in your
+          application configuration file. You can retrieve these connections
+          as variables by configuring a
+          <literal>ConnectionStringsVariableSource</literal>:</para>
+
+          <programlisting language="myxml">&lt;object type="Spring.Objects.Factory.Config.ConnectionStringsVariableSource, Spring.Core" /&gt;</programlisting>
+
+          <para>Assuming the following connection strings section in your
+          application configuration file:</para>
+
+          <programlisting language="myxml">&lt;connectionStrings&gt;
+  &lt;add name="myConnection" 
+       connectionString="Data Source=myserver;Integrated Security=True;..." 
+       providerName="System.Data.SqlClient" /&gt;
+&lt;/connectionStrings&gt;</programlisting>
+
+          <para>Then you would use the variables as in following object
+          definition:</para>
+
+          <programlisting language="myxml">&lt;object type="Example.MyClass, MyAssembly"&gt;
+  &lt;property name="ConnectionString" value="${myConnection.connectionString}" /&gt;
+  &lt;property name="ProviderName" value="${myConnection.providerName}" /&gt;
+&lt;/object&gt; </programlisting>
+
+          <para><note>
+              <para>Append ".connectionString" to the connection name to get
+              the connection string and append ".providerName" to the
+              connection name to get the provider name.</para>
+            </note><note>
+              <para>When adding a connection using Visual Studio's application
+              settings user interface, your connection will be named similar
+              to <literal>MyApp.Properties.Settings.myConnection</literal> and
+              the corresponding variable name for the connection string would
+              become
+              <literal>MyApp.Properties.Settings.myConnection.connectionString</literal>.</para>
+            </note></para>
+        </sect4>
+
+        <sect4>
+          <title><literal>SpecialFolderVariableSource</literal></title>
+
+          <para>The <literal>SpecialFolderVariableSource</literal> resolves
+          the full path for variable names against special folders as defined
+          by the <literal>System.Environment.SpecialFolder</literal>
+          enumeration. Add it to your variable sources as:</para>
+
+          <para><programlisting language="myxml">&lt;object type="Spring.Objects.Factory.Config.SpecialFolderVariableSource, Spring.Core" /&gt;</programlisting></para>
+
+          <para>Now you can inject the full path to the current user's
+          desktop, or to this machine's program files folders:</para>
+
+          <programlisting language="myxml">&lt;object id="specials" type="Example.Specials, Spring.IocQuickStart.VariableSources"&gt;
+  &lt;property name="FullPathToDesktop" value="${Desktop}" /&gt;
+  &lt;property name="FullPathToPrgramFiles" value="${ProgramFiles}" /&gt;
+&lt;/object&gt;</programlisting>
+
+          <para>Any entry in the <link
+          ns6:href="http://msdn.microsoft.com/library/system.environment.specialfolder.aspx">System.Environment.SpecialFolder</link>
+          enumeration can be used as a variable name.</para>
+        </sect4>
+
+        <sect4>
+          <title>Custom <literal>IVariableSource</literal>
+          implementations</title>
+
+          <para>The <literal>IVariableSource</literal> is the base interface
+          for providing the ability to get the value of property placeholders
+          (name-value) pairs from a variety of sources. The
+          <literal>IVariableSource</literal> interface is shown below:</para>
+
+          <programlisting language="csharp">public interface IVariableSource
 {
+  bool CanResolveVariable(string name);
   string ResolveVariable(string name);
 }</programlisting>
 
-        <para>This is a simple contract to implement if you should decide to
-        create your own custom implemention. Look at the source code of the
-        current implementations for some inspiration if you go that route. To
-        register your own custom implemenation, simply configure
-        VariablePlaceholderConfigurer to refer to your class.</para>
+          <para>This is a simple contract to implement if you should decide to
+          create your own custom implementation. Look at the source code of
+          the current implementations for some inspiration if you go that
+          route. To register your own custom implementation, simply configure
+          <literal>VariablePlaceholderConfigurer</literal> to refer to your
+          class.</para>
+        </sect4>
       </sect3>
     </sect2>
 
