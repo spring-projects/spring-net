@@ -299,7 +299,9 @@
     <Compile Include="Transaction\UnexpectedRollbackException.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Data\Common\dbproviders.xml" />
+    <EmbeddedResource Include="Data\Common\dbproviders.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Data\Config\spring-database-1.1.xsd">
