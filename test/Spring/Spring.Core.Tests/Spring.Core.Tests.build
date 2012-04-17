@@ -92,22 +92,8 @@
 			</fileset>
 		</copy>
 
-		<copy file="${project::get-base-directory()}/${project::get-name()}.dll-1.1.config"
-                      tofile="${current.bin.dir}/${project::get-name()}.dll.config"
-                      if="${framework::get-target-framework() != 'net-2.0'}"/>
-
-                <copy file="${project::get-base-directory()}/${project::get-name()}.dll.config"
-                      tofile="${current.bin.dir}/${project::get-name()}.dll.config"
-                      if="${framework::get-target-framework() == 'net-2.0'}"/>
-					  
-				<copy file="${project::get-base-directory()}/${project::get-name()}.dll.config"
-                      tofile="${current.bin.dir}/${project::get-name()}.dll.config"
-                      if="${framework::get-target-framework() == 'net-4.0'}"/>
-					  
-
-                <copy file="${project::get-base-directory()}/${project::get-name()}.dll.config"
-                      tofile="${current.bin.dir}/${project::get-name()}.dll.config"
-                      if="${framework::get-target-framework() == 'mono-2.0'}"/>
+        <copy file="${project::get-base-directory()}/${project::get-name()}.dll.config"
+                      tofile="${current.bin.dir}/${project::get-name()}.dll.config"/>
 
         </target>
 
