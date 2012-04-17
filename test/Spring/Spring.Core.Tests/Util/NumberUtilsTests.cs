@@ -65,19 +65,50 @@ namespace Spring.Util
 		}
 
 		[Test]
-		public void IsNumber()
+       public void IsNumber()
 		{
-			Assert.IsTrue(NumberUtils.IsNumber(10));
-			Assert.IsTrue(NumberUtils.IsNumber(10L));
-			Assert.IsTrue(NumberUtils.IsNumber((short) 10));
-			Assert.IsFalse(NumberUtils.IsNumber('e'));
-			Assert.IsFalse(NumberUtils.IsNumber(null));
-			Assert.IsTrue(NumberUtils.IsNumber(9.5D));
-			Assert.IsTrue(NumberUtils.IsNumber(9.5F));
-			Assert.IsFalse(NumberUtils.IsNumber(this));
-			Assert.IsFalse(NumberUtils.IsNumber(null));
-			Assert.IsFalse(NumberUtils.IsNumber(string.Empty));
+            Assert.IsTrue(NumberUtils.IsNumber(10));
+            Assert.IsTrue(NumberUtils.IsNumber(10L));
+            Assert.IsTrue(NumberUtils.IsNumber((short)10));
+            Assert.IsFalse(NumberUtils.IsNumber('e'));
+            Assert.IsFalse(NumberUtils.IsNumber(null));
+            Assert.IsTrue(NumberUtils.IsNumber(9.5D));
+            Assert.IsTrue(NumberUtils.IsNumber(9.5F));
+            Assert.IsFalse(NumberUtils.IsNumber(this));
+            Assert.IsFalse(NumberUtils.IsNumber(null));
+            Assert.IsFalse(NumberUtils.IsNumber(string.Empty));
 		}
+
+        [Test]
+        public void IsZero()
+        {
+            Assert.IsFalse(NumberUtils.IsZero((Int16)2));
+            Assert.IsTrue(NumberUtils.IsZero((Int16)0));
+
+            Assert.IsFalse(NumberUtils.IsZero((Int32)2));
+            Assert.IsTrue(NumberUtils.IsZero((Int32)0));
+
+            Assert.IsFalse(NumberUtils.IsZero((Int64)2));
+            Assert.IsTrue(NumberUtils.IsZero((Int64)0));
+
+            Assert.IsFalse(NumberUtils.IsZero((UInt16)2));
+            Assert.IsTrue(NumberUtils.IsZero((UInt16)0));
+
+            Assert.IsFalse(NumberUtils.IsZero((UInt32)2));
+            Assert.IsTrue(NumberUtils.IsZero((UInt32)0));
+
+            Assert.IsFalse(NumberUtils.IsZero((UInt64)2));
+            Assert.IsTrue(NumberUtils.IsZero((UInt64)0));
+
+            Assert.IsFalse(NumberUtils.IsZero((decimal)2));
+            Assert.IsTrue(NumberUtils.IsZero((decimal)0));
+
+            Assert.IsTrue(NumberUtils.IsZero((Byte?)0));
+            Assert.IsFalse(NumberUtils.IsZero((Byte)2));
+
+            Assert.IsTrue(NumberUtils.IsZero((SByte?)0));
+            Assert.IsFalse(NumberUtils.IsZero((SByte)2));
+        }
 
 		[Test]
 		[ExpectedException(typeof(ArgumentException))]
@@ -90,7 +121,7 @@ namespace Spring.Util
 		[ExpectedException(typeof(ArgumentException))]
 		public void NegateString()
 		{
-			NumberUtils.Negate(null);
+			NumberUtils.Negate(string.Empty);
 		}
 
 		[Test]

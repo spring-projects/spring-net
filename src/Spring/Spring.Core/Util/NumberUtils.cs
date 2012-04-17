@@ -141,15 +141,15 @@ namespace Spring.Util
             else if (number is Int64)
                 return ((Int64)number) == 0;
             else if (number is UInt16)
-                return ((Int32)number) == 0;
+                return ((UInt16)number) == 0;
             else if (number is UInt32)
-                return ((Int64)number) == 0;
+                return ((UInt32)number) == 0;
             else if (number is UInt64)
                 return (Convert.ToDecimal(number) == 0);
             else if (number is Byte)
-                return ((Int16)number) == 0;
+                return ((Byte)number) == 0;
             else if (number is SByte)
-                return ((Int16)number) == 0;
+                return ((SByte)number) == 0;
             else if (number is Single)
                 return ((Single)number) == 0f;
             else if (number is Double)
