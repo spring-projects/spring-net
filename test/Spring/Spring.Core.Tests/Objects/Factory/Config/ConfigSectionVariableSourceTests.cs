@@ -65,7 +65,7 @@ namespace Spring.Objects.Factory.Config
             // non-existant variable
             Assert.IsNull(vs.ResolveVariable("dummy"));
         }
-#if !NET_3_5
+
         [Test]
         public void TestVariableResolutionFromApplicationSettingsSchema()
         {
@@ -75,7 +75,6 @@ namespace Spring.Objects.Factory.Config
             Assert.AreEqual(@"Provider=Microsoft.Jet.OLEDB.4.0; Data Source=c:\Northwind.mdb;User ID=Admin;Password=;",
                 vs.ResolveVariable("connection.string"));
         }
-#endif
     }
 
 }
