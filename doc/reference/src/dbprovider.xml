@@ -287,7 +287,15 @@
 
       <listitem>
         <para><literal>SQLite-1.0.72</literal> - SQLite provider 1.0.72 for
-        .NET Framework 2.0 from http://sqlite.phxsoftware.com/ </para>
+        .NET Framework 2.0 from http://sqlite.phxsoftware.com/</para>
+      </listitem>
+
+      <listitem>
+        <para><literal>SQLite-1.0.80</literal> - SQLite provider 1.0.80 for
+        .NET Framework 2.0 SP2 and higher; from
+        http://system.data.sqlite.org/. For the
+        <literal>System.Data.SQLite.Linq</literal> assembly, .NET Framework
+        3.5 SP1 is required.</para>
       </listitem>
 
       <listitem>
