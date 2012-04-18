@@ -129,6 +129,8 @@ namespace Spring.Messaging.Nms.Connections
         /// <returns>A message producer.</returns>
         public IMessageProducer CreateProducer(IDestination destination)
         {
+            AssertUtils.ArgumentNotNull(destination,"destination");
+
             if (shouldCacheProducers)
             {
                 IMessageProducer producer = (IMessageProducer)cachedProducers[destination];
