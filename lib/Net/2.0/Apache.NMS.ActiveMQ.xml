@@ -310,6 +310,15 @@
             </summary>
             <returns>Returns the Destination type</returns>
         </member>
+        <member name="M:Apache.NMS.ActiveMQ.Commands.ActiveMQDestination.GetDestinationTypeAsString">
+            <summary>
+            Gets the Destination Type of this Destination as a String value which is one
+            of {Queue,Topic,TempQueue,TempTopic}.
+            </summary>
+            <returns>
+            The Destination Type as a String.
+            </returns>
+        </member>
         <member name="M:Apache.NMS.ActiveMQ.Commands.ActiveMQDestination.ToString">
             <summary>
             </summary>
@@ -7116,6 +7125,18 @@
             A <see cref="T:System.Uri"/>
             </param>
         </member>
+        <member name="P:Apache.NMS.ActiveMQ.Transport.ITransport.Timeout">
+            <summary>
+            Timeout in milliseconds to wait for sending synchronous messages or commands.
+            Set to -1 for infinite timeout.
+            </summary>
+        </member>
+        <member name="P:Apache.NMS.ActiveMQ.Transport.ITransport.AsyncTimeout">
+            <summary>
+            Timeout in milliseconds to wait for sending asynchronous messages or commands.
+            Set to -1 for infinite timeout.
+            </summary>
+        </member>
         <member name="P:Apache.NMS.ActiveMQ.Transport.ITransport.IsDisposed">
             <value>
             Indicates if this Transport has already been disposed and can no longer
@@ -7266,6 +7287,18 @@
             A <see cref="P:Apache.NMS.ActiveMQ.Transport.Mock.MockTransport.Command"/>
             </param>
         </member>
+        <member name="P:Apache.NMS.ActiveMQ.Transport.Mock.MockTransport.Timeout">
+            <summary>
+            Timeout in milliseconds to wait for sending synchronous messages or commands.
+            Set to -1 for infinite timeout.
+            </summary>
+        </member>
+        <member name="P:Apache.NMS.ActiveMQ.Transport.Mock.MockTransport.AsyncTimeout">
+            <summary>
+            Timeout in milliseconds to wait for sending asynchronous messages or commands.
+            Set to -1 for infinite timeout.
+            </summary>
+        </member>
         <member name="T:Apache.NMS.ActiveMQ.Transport.Mock.MockTransportFactory">
             <summary>
             Factory class to create the MockTransport when given on a URI as mock://XXX
@@ -7289,6 +7322,18 @@
         <member name="P:Apache.NMS.ActiveMQ.Transport.Tcp.TcpTransport.IsStarted">
             <summary>
             Property IsStarted
+            </summary>
+        </member>
+        <member name="P:Apache.NMS.ActiveMQ.Transport.Tcp.TcpTransport.Timeout">
+            <summary>
+            Timeout in milliseconds to wait for sending synchronous messages or commands.
+            Set to -1 for infinite timeout.
+            </summary>
+        </member>
+        <member name="P:Apache.NMS.ActiveMQ.Transport.Tcp.TcpTransport.AsyncTimeout">
+            <summary>
+            Timeout in milliseconds to wait for sending asynchronous messages or commands.
+            Set to -1 for infinite timeout.
             </summary>
         </member>
         <member name="P:Apache.NMS.ActiveMQ.Transport.Tcp.SslTransport.ServerName">
@@ -7415,6 +7460,18 @@
         <member name="P:Apache.NMS.ActiveMQ.Transport.TransportFilter.IsStarted">
             <summary>
             Property IsStarted
+            </summary>
+        </member>
+        <member name="P:Apache.NMS.ActiveMQ.Transport.TransportFilter.Timeout">
+            <summary>
+            Timeout in milliseconds to wait for sending synchronous messages or commands.
+            Set to -1 for infinite timeout.
+            </summary>
+        </member>
+        <member name="P:Apache.NMS.ActiveMQ.Transport.TransportFilter.AsyncTimeout">
+            <summary>
+            Timeout in milliseconds to wait for sending asynchronous messages or commands.
+            Set to -1 for infinite timeout.
             </summary>
         </member>
         <member name="M:Apache.NMS.ActiveMQ.Transport.InactivityMonitor.#ctor(Apache.NMS.ActiveMQ.Transport.ITransport)">
@@ -7627,6 +7684,18 @@
             A <see cref="T:System.Boolean"/>
             </returns>
         </member>
+        <member name="T:Apache.NMS.ActiveMQ.AdvisoryConsumer">
+            <summary>
+            Consumes Advisory Messages for Temp Destination creation on deletion so that
+            the connection can track valid destinations for its sessions, and session resources.
+            </summary>
+        </member>
+        <member name="T:Apache.NMS.ActiveMQ.IDispatcher">
+            <summary>
+            Interface that provides for a Class to provide dispatching service for
+            an OpenWire MessageDispatch command.
+            </summary>
+        </member>
         <member name="T:Apache.NMS.ActiveMQ.BrokerException">
             <summary>
             Exception thrown when the broker returns an error
@@ -7700,6 +7769,20 @@
              Performs a synchronous request-response with the broker
              </summary>
             
+        </member>
+        <member name="M:Apache.NMS.ActiveMQ.Connection.SyncRequest(Apache.NMS.ActiveMQ.Commands.Command,System.TimeSpan)">
+            <summary>
+            Performs a synchronous request-response with the broker for requested timeout duration.
+            </summary>
+            <param name="command"></param>
+            <param name="requestTimeout"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Apache.NMS.ActiveMQ.Connection.CheckConnected">
+            <summary>
+            Check and ensure that the connection objcet is connected.  If it is not
+            connected or is closed, a ConnectionClosedException is thrown.
+            </summary>
         </member>
         <member name="M:Apache.NMS.ActiveMQ.Connection.OnCommand(Apache.NMS.ActiveMQ.Transport.ITransport,Apache.NMS.ActiveMQ.Commands.Command)">
             <summary>
@@ -7870,6 +7953,20 @@
             Session it creates which then passes that along to the Producers it creates.
             </summary>
         </member>
+        <member name="T:Apache.NMS.ActiveMQ.ConnectionFailedException">
+            <summary>
+            Exception thrown when a connection is used that it has failed in some way.
+            </summary>
+        </member>
+        <member name="M:Apache.NMS.ActiveMQ.ConnectionFailedException.#ctor(System.Runtime.Serialization.SerializationInfo,System.Runtime.Serialization.StreamingContext)">
+            <summary>
+            Initializes a new instance of the ConnectionFailedException class with serialized data.
+            Throws System.ArgumentNullException if the info parameter is null.
+            Throws System.Runtime.Serialization.SerializationException if the class name is null or System.Exception.HResult is zero (0).
+            </summary>
+            <param name="info">The SerializationInfo that holds the serialized object data about the exception being thrown.</param>
+            <param name="context">The StreamingContext that contains contextual information about the source or destination.</param>
+        </member>
         <member name="T:Apache.NMS.ActiveMQ.ConnectionMetaData">
             <summary>
             Implements the Connection Meta-Data feature for Apache.NMS.ActiveMQ
@@ -7892,12 +7989,6 @@
         <member name="T:Apache.NMS.ActiveMQ.DestinationFilter">
             <summary>
             Summary description for DestinationFilter.
-            </summary>
-        </member>
-        <member name="T:Apache.NMS.ActiveMQ.IDispatcher">
-            <summary>
-            Interface that provides for a Class to provide dispatching service for
-            an OpenWire MessageDispatch command.
             </summary>
         </member>
         <member name="T:Apache.NMS.ActiveMQ.IOException">
