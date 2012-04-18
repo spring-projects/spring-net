@@ -534,21 +534,6 @@ namespace Spring.Data.NHibernate
                 }
             }
 
-            // check whether proxy factory has been initialized
-            if (config.GetProperty(Environment.ProxyFactoryFactoryClass) == null
-                && (hibernateProperties == null || !hibernateProperties.Contains(Environment.ProxyFactoryFactoryClass)))
-            {
-                // nothing set by user, lets use Spring.NET's proxy factory factory
-                #region Logging
-                if (log.IsInfoEnabled)
-                {
-                    log.Info("Setting proxy factory to Spring provided one as user did not specify any");
-                }
-                #endregion
-                config.Properties.Add(
-                    Environment.ProxyFactoryFactoryClass, typeof(Bytecode.ProxyFactoryFactory).AssemblyQualifiedName);
-            }
-
             if (this.hibernateProperties != null)
             {
                 if (config.GetProperty(Environment.ConnectionProvider) != null &&

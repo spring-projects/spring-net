@@ -19,6 +19,7 @@
 #endregion
 
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 
 using NHibernate;
@@ -68,9 +69,13 @@ namespace Spring.Data.NHibernate
             Assert.AreEqual(sfo.Configuration.Properties[Environment.ConnectionDriver], typeof(SqlClientDriver).AssemblyQualifiedName);
             Assert.AreEqual(sfo.Configuration.Properties[Environment.Dialect], typeof(MsSql2000Dialect).AssemblyQualifiedName);
 
-            Assert.AreEqual(sfo.Configuration.Properties[Environment.ProxyFactoryFactoryClass], typeof(ProxyFactoryFactory).AssemblyQualifiedName);
-            // Spring's IBytecodeProvider should be the default
-            // Assert.AreEqual(typeof(BytecodeProvider), Environment.BytecodeProvider.GetType(), "default IBytecodeProvider was not Spring's BytecodeProvider");
+            Assert.Throws<KeyNotFoundException>(() =>
+                                                    {
+                                                        var x =
+                                                          sfo.Configuration.Properties[Environment.ProxyFactoryFactoryClass];
+                                                    }, "ProxyFactoryFactory should not be explicitly set!");
+            
+            Assert.AreNotEqual(typeof(BytecodeProvider), Environment.BytecodeProvider.GetType(), "default IBytecodeProvider should not be Spring's BytecodeProvider!");
         }
 
         [Test]
@@ -78,7 +83,7 @@ namespace Spring.Data.NHibernate
         public void LocalSessionFactoryObjectWithInvalidMapping()
         {
             LocalSessionFactoryObject sfo = new LocalSessionFactoryObject();
-            sfo.MappingResources = new string[] { "mapping.hbm.xml"};
+            sfo.MappingResources = new string[] { "mapping.hbm.xml" };
             sfo.AfterPropertiesSet();
 
         }
