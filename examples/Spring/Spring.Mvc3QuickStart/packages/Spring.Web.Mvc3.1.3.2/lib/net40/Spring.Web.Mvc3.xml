@@ -1,0 +1,218 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Spring.Web.Mvc3</name>
+    </assembly>
+    <members>
+        <member name="T:Spring.Context.Support.MvcApplicationContext">
+            <summary>
+            Application Context for ASP.NET MVC Applications
+            </summary>
+        </member>
+        <member name="M:Spring.Context.Support.MvcApplicationContext.#ctor(System.String,System.Boolean,System.String[])">
+            <summary>
+            Create a new MvcApplicationContext, loading the definitions
+            from the given XML resource.
+            </summary>
+            <param name="name">The application context name.</param>
+            <param name="caseSensitive">Flag specifying whether to make this context case sensitive or not.</param>
+            <param name="configurationLocations">Names of configuration resources.</param>
+        </member>
+        <member name="M:Spring.Context.Support.MvcApplicationContext.#ctor(System.String,System.Boolean,Spring.Context.IApplicationContext,System.String[])">
+            <summary>
+            Create a new MvcApplicationContext with the given parent,
+            loading the definitions from the given XML resources.
+            </summary>
+            <param name="name">The application context name.</param>
+            <param name="caseSensitive">Flag specifying whether to make this context case sensitive or not.</param>
+            <param name="parentContext">The parent context.</param>
+            <param name="configurationLocations">Names of configuration resources.</param>
+        </member>
+        <member name="M:Spring.Context.Support.MvcApplicationContext.#ctor(Spring.Context.Support.MvcApplicationContextArgs)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Spring.Context.Support.MvcApplicationContext"/> class.
+            </summary>
+            <param name="args">The args.</param>
+        </member>
+        <member name="M:Spring.Context.Support.MvcApplicationContext.#ctor(System.String,System.Boolean,System.String[],Spring.Core.IO.IResource[])">
+            <summary>
+            Create a new MvcApplicationContext, loading the definitions
+            from the given XML resource.
+            </summary>
+            <param name="name">The application context name.</param>
+            <param name="caseSensitive">Flag specifying whether to make this context case sensitive or not.</param>
+            <param name="configurationLocations">Names of configuration resources.</param>
+            <param name="configurationResources">Configuration resources.</param>
+        </member>
+        <member name="M:Spring.Context.Support.MvcApplicationContext.#ctor(System.String[])">
+            <summary>
+            Create a new MvcApplicationContext, loading the definitions
+            from the given XML resource.
+            </summary>
+            <param name="configurationLocations">Names of configuration resources.</param>
+        </member>
+        <member name="P:Spring.Context.Support.MvcApplicationContext.ConfigurationLocations">
+            <summary>
+            An array of resource locations, referring to the XML object
+            definition files that this context is to be built with.
+            </summary>
+            <value></value>
+            <remarks>
+            	<p>
+            Examples of the format of the various strings that would be
+            returned by accessing this property can be found in the overview
+            documentation of with the <see cref="T:Spring.Context.Support.XmlApplicationContext"/>
+            class.
+            </p>
+            </remarks>
+            <returns>
+            An array of resource locations, or <see langword="null"/> if none.
+            </returns>
+        </member>
+        <member name="P:Spring.Context.Support.MvcApplicationContext.ConfigurationResources">
+            <summary>
+            An array of resources that this context is to be built with.
+            </summary>
+            <value></value>
+            <remarks>
+            	<p>
+            Examples of the format of the various strings that would be
+            returned by accessing this property can be found in the overview
+            documentation of with the <see cref="T:Spring.Context.Support.XmlApplicationContext"/>
+            class.
+            </p>
+            </remarks>
+            <returns>
+            An array of <see cref="T:Spring.Core.IO.IResource"/>s, or <see langword="null"/> if none.
+            </returns>
+        </member>
+        <member name="T:Spring.Context.Support.MvcApplicationContextArgs">
+            <summary>
+            Encapsulates arguments to the <see cref="T:Spring.Context.Support.MvcApplicationContext"/> class.
+            </summary>
+        </member>
+        <member name="M:Spring.Context.Support.MvcApplicationContextArgs.#ctor">
+            <summary>
+            Initializes a new instance of the MvcApplicationContextArgs class.
+            </summary>
+        </member>
+        <member name="M:Spring.Context.Support.MvcApplicationContextArgs.#ctor(System.String,Spring.Context.IApplicationContext,System.String[],Spring.Core.IO.IResource[])">
+            <summary>
+            Initializes a new instance of the MvcApplicationContextArgs class.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="parentContext">The parent context.</param>
+            <param name="configurationLocations">The configuration locations.</param>
+            <param name="configurationResources">The configuration resources.</param>
+        </member>
+        <member name="M:Spring.Context.Support.MvcApplicationContextArgs.#ctor(System.String,Spring.Context.IApplicationContext,System.String[],Spring.Core.IO.IResource[],System.Boolean)">
+            <summary>
+            Initializes a new instance of the MvcApplicationContextArgs class.
+            </summary>
+            <param name="name">The name.</param>
+            <param name="parentContext">The parent context.</param>
+            <param name="configurationLocations">The configuration locations.</param>
+            <param name="configurationResources">The configuration resources.</param>
+            <param name="caseSensitive">if set to <c>true</c> [case sensitive].</param>
+        </member>
+        <member name="T:Spring.Context.Support.MvcContextHandler">
+            <summary>
+            Context Handler for ASP.NET MVC Applications
+            </summary>
+        </member>
+        <member name="T:Spring.Web.Mvc.SpringMvcApplication">
+            <summary>
+            Spring.NET-specific HttpApplication for ASP.NET MVC integration.
+            </summary>
+        </member>
+        <member name="M:Spring.Web.Mvc.SpringMvcApplication.Init">
+            <summary>
+            Executes custom initialization code after all event handler modules have been added.
+            </summary>
+        </member>
+        <member name="M:Spring.Web.Mvc.SpringMvcApplication.Application_BeginRequest(System.Object,System.EventArgs)">
+            <summary>
+            Handles the BeginRequest event of the Application control.
+            </summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+        </member>
+        <member name="M:Spring.Web.Mvc.SpringMvcApplication.BuildDependencyResolver">
+            <summary>
+            Builds the dependency resolver.
+            </summary>
+            <returns>The <see cref="T:System.Web.Mvc.IDependencyResolver"/> instance.</returns>
+            You must override this method in a derived class to control the manner in which the
+            <see cref="T:System.Web.Mvc.IDependencyResolver"/> is created.
+        </member>
+        <member name="M:Spring.Web.Mvc.SpringMvcApplication.ConfigureApplicationContext">
+            <summary>
+            Configures the <see cref="T:Spring.Context.IApplicationContext"/> instance.
+            </summary>
+            <remarks>
+            You must override this method in a derived class to control the manner in which the
+            <see cref="T:Spring.Context.IApplicationContext"/> is configured.
+            </remarks>        
+        </member>
+        <member name="M:Spring.Web.Mvc.SpringMvcApplication.RegisterDependencyResolver(System.Web.Mvc.IDependencyResolver)">
+            <summary>
+            Registers the DependencyResolver implementation with the MVC runtime.
+            <remarks>
+            You must override this method in a derived class to control the manner in which the
+            <see cref="T:Spring.Web.Mvc.SpringMvcDependencyResolver"/> is registered.
+            </remarks>
+            </summary>
+        </member>
+        <member name="T:Spring.Web.Mvc.SpringMvcApplication.ThreadSafeDependencyResolverRegistrar">
+            <summary>
+            Thread-safe class that ensures that the <see cref="T:System.Web.Mvc.IDependencyResolver"/> is registered only once.
+            </summary>
+        </member>
+        <member name="M:Spring.Web.Mvc.SpringMvcApplication.ThreadSafeDependencyResolverRegistrar.Register(System.Web.Mvc.IDependencyResolver)">
+            <summary>
+            Registers the specified resolver.
+            </summary>
+            <param name="resolver">The resolver.</param>
+        </member>
+        <member name="T:Spring.Web.Mvc.SpringMvcDependencyResolver">
+            <summary>
+            Spring-based implementation of the <see cref="T:System.Web.Mvc.IDependencyResolver"/> interface.
+            </summary>
+        </member>
+        <member name="M:Spring.Web.Mvc.SpringMvcDependencyResolver.#ctor(Spring.Context.IApplicationContext)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Spring.Web.Mvc.SpringMvcDependencyResolver"/> class.
+            </summary>
+            <param name="context">The context.</param>
+        </member>
+        <member name="M:Spring.Web.Mvc.SpringMvcDependencyResolver.GetService(System.Type)">
+            <summary>
+            Resolves singly registered services that support arbitrary object creation.
+            </summary>
+            <param name="serviceType">The type of the requested service or object.</param>
+            <returns>The requested service or object.</returns>
+        </member>
+        <member name="M:Spring.Web.Mvc.SpringMvcDependencyResolver.GetServices(System.Type)">
+            <summary>
+            Resolves multiply registered services.
+            </summary>
+            <param name="serviceType">The type of the requested services.</param>
+            <returns>The requested services.</returns>
+        </member>
+        <member name="P:Spring.Web.Mvc.SpringMvcDependencyResolver.ApplicationContext">
+            <summary>
+            Gets the application context.
+            </summary>
+            <value>The application context.</value>
+        </member>
+        <member name="P:Spring.Web.Mvc.SpringMvcDependencyResolver.ApplicationContextName">
+            <summary>
+            Gets or sets the name of the application context.
+            </summary>
+            <remarks>
+            Defaults to using the root (default) Application Context.
+            </remarks>
+            <value>The name of the application context.</value>
+        </member>
+    </members>
+</doc>
