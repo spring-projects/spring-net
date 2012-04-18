@@ -6653,8 +6653,7 @@
         <member name="M:Quartz.Impl.Calendar.WeeklyCalendar.SetDayExcluded(System.DayOfWeek,System.Boolean)">
             <summary>
             Redefine a certain day of the week to be excluded (true) or included
-            (false). Use java.util.Calendar's constants like MONDAY to determine the
-            wday.
+            (false). Use <see cref="T:System.DayOfWeek"/> enum to determine the weekday.
             </summary>
         </member>
         <member name="M:Quartz.Impl.Calendar.WeeklyCalendar.AreAllDaysExcluded">
@@ -7669,6 +7668,61 @@
             Get the number of times the <see cref="T:Quartz.ICalendarIntervalTrigger"/> has already fired.
             </summary>
         </member>
+        <member name="P:Quartz.ICalendarIntervalTrigger.TimeZone">
+            <summary>
+            Gets the time zone within which time calculations related to this trigger will be performed.
+            </summary>
+            <remarks>
+            If null, the system default TimeZone will be used.
+            </remarks>
+        </member>
+        <member name="P:Quartz.ICalendarIntervalTrigger.PreserveHourOfDayAcrossDaylightSavings">
+            <summary>
+             If intervals are a day or greater, this property (set to true) will 
+             cause the firing of the trigger to always occur at the same time of day,
+             (the time of day of the startTime) regardless of daylight saving time 
+             transitions.  Default value is false.
+             </summary>
+             <remarks>
+             <para>
+             For example, without the property set, your trigger may have a start 
+             time of 9:00 am on March 1st, and a repeat interval of 2 days.  But 
+             after the daylight saving transition occurs, the trigger may start 
+             firing at 8:00 am every other day.
+             </para>
+             <para>
+             If however, the time of day does not exist on a given day to fire
+             (e.g. 2:00 am in the United States on the days of daylight saving
+             transition), the trigger will go ahead and fire one hour off on 
+             that day, and then resume the normal hour on other days.  If
+             you wish for the trigger to never fire at the "wrong" hour, then
+             you should set the property skipDayIfHourDoesNotExist.
+             </para>
+            </remarks>
+             <seealso cref="P:Quartz.ICalendarIntervalTrigger.SkipDayIfHourDoesNotExist"/>
+             <seealso cref="P:Quartz.ICalendarIntervalTrigger.TimeZone"/>
+             <seealso cref="M:Quartz.TriggerBuilder.StartAt(System.DateTimeOffset)"/>
+        </member>
+        <member name="P:Quartz.ICalendarIntervalTrigger.SkipDayIfHourDoesNotExist">
+            <summary>
+            If intervals are a day or greater, and 
+            preserveHourOfDayAcrossDaylightSavings property is set to true, and the
+            hour of the day does not exist on a given day for which the trigger 
+            would fire, the day will be skipped and the trigger advanced a second
+            interval if this property is set to true.  Defaults to false.
+            </summary>
+            <remarks>
+            <b>CAUTION!</b>  If you enable this property, and your hour of day happens 
+            to be that of daylight savings transition (e.g. 2:00 am in the United 
+            States) and the trigger's interval would have had the trigger fire on
+            that day, then you may actually completely miss a firing on the day of 
+            transition if that hour of day does not exist on that day!  In such a 
+            case the next fire time of the trigger will be computed as double (if 
+            the interval is 2 days, then a span of 4 days between firings will 
+            occur).
+            </remarks>
+            <seealso cref="P:Quartz.ICalendarIntervalTrigger.PreserveHourOfDayAcrossDaylightSavings"/>
+        </member>
         <member name="M:Quartz.Impl.Triggers.CalendarIntervalTriggerImpl.#ctor">
             <summary>
             Create a <see cref="T:Quartz.ICalendarIntervalTrigger"/> with no settings.
@@ -7876,6 +7930,53 @@
             fire time (in the set repeat interval unit) in order to calculate the time of the 
             next trigger repeat.
             </summary>
+        </member>
+        <member name="P:Quartz.Impl.Triggers.CalendarIntervalTriggerImpl.PreserveHourOfDayAcrossDaylightSavings">
+            <summary>
+             If intervals are a day or greater, this property (set to true) will 
+             cause the firing of the trigger to always occur at the same time of day,
+             (the time of day of the startTime) regardless of daylight saving time 
+             transitions.  Default value is false.
+             </summary>
+             <remarks>
+             <para>
+             For example, without the property set, your trigger may have a start 
+             time of 9:00 am on March 1st, and a repeat interval of 2 days.  But 
+             after the daylight saving transition occurs, the trigger may start 
+             firing at 8:00 am every other day.
+             </para>
+             <para>
+             If however, the time of day does not exist on a given day to fire
+             (e.g. 2:00 am in the United States on the days of daylight saving
+             transition), the trigger will go ahead and fire one hour off on 
+             that day, and then resume the normal hour on other days.  If
+             you wish for the trigger to never fire at the "wrong" hour, then
+             you should set the property skipDayIfHourDoesNotExist.
+             </para>
+            </remarks>
+             <seealso cref="P:Quartz.ICalendarIntervalTrigger.SkipDayIfHourDoesNotExist"/>
+             <seealso cref="P:Quartz.ICalendarIntervalTrigger.TimeZone"/>
+             <seealso cref="M:Quartz.TriggerBuilder.StartAt(System.DateTimeOffset)"/>
+        </member>
+        <member name="P:Quartz.Impl.Triggers.CalendarIntervalTriggerImpl.SkipDayIfHourDoesNotExist">
+            <summary>
+            If intervals are a day or greater, and 
+            preserveHourOfDayAcrossDaylightSavings property is set to true, and the
+            hour of the day does not exist on a given day for which the trigger 
+            would fire, the day will be skipped and the trigger advanced a second
+            interval if this property is set to true.  Defaults to false.
+            </summary>
+            <remarks>
+            <b>CAUTION!</b>  If you enable this property, and your hour of day happens 
+            to be that of daylight savings transition (e.g. 2:00 am in the United 
+            States) and the trigger's interval would have had the trigger fire on
+            that day, then you may actually completely miss a firing on the day of 
+            transition if that hour of day does not exist on that day!  In such a 
+            case the next fire time of the trigger will be computed as double (if 
+            the interval is 2 days, then a span of 4 days between firings will 
+            occur).
+            </remarks>
+            <seealso cref="P:Quartz.ICalendarIntervalTrigger.PreserveHourOfDayAcrossDaylightSavings"/>
         </member>
         <member name="P:Quartz.Impl.Triggers.CalendarIntervalTriggerImpl.TimesTriggered">
             <summary>
@@ -10734,10 +10835,13 @@
             <summary>
             Delete the identified <see cref="T:Quartz.ICalendar"/> from the Scheduler.
             </summary>
+            <remarks>
+            If removal of the <code>Calendar</code> would result in
+            <see cref="T:Quartz.ITrigger"/>s pointing to non-existent calendars, then a
+            <see cref="T:Quartz.SchedulerException"/> will be thrown.
+            </remarks>
             <param name="calName">Name of the calendar.</param>
-            <returns>
-            true if the Calendar was found and deleted.
-            </returns>
+            <returns>true if the Calendar was found and deleted.</returns>
         </member>
         <member name="M:Quartz.IScheduler.GetCalendar(System.String)">
             <summary>
@@ -10802,6 +10906,7 @@
             <param nane="fireInstanceId">
             the unique identifier of the job instance to  be interrupted (see <see cref="P:Quartz.IJobExecutionContext.FireInstanceId"/>
             </param>
+            <param name="fireInstanceId"> </param>
             <returns>true if the identified job instance was found and interrupted.</returns>
         </member>
         <member name="M:Quartz.IScheduler.CheckExists(Quartz.JobKey)">
@@ -11749,16 +11854,16 @@
             </remarks>
             <param name="context">The execution context.</param>
         </member>
-        <member name="F:Quartz.Job.DirectoryScanJob.DIRECTORY_NAME">
+        <member name="F:Quartz.Job.DirectoryScanJob.DirectoryName">
             <see cref="T:Quartz.JobDataMap"/> key with which to specify the directory to be 
              monitored - an absolute path is recommended. 
         </member>
-        <member name="F:Quartz.Job.DirectoryScanJob.DIRECTORY_SCAN_LISTENER_NAME">
+        <member name="F:Quartz.Job.DirectoryScanJob.DirectoryScanListenerName">
             <see cref="T:Quartz.JobDataMap"/> key with which to specify the 
             <see cref="T:Quartz.Job.IDirectoryScanListener"/> to be 
             notified when the directory contents change.  
         </member>
-        <member name="F:Quartz.Job.DirectoryScanJob.MINIMUM_UPDATE_AGE">
+        <member name="F:Quartz.Job.DirectoryScanJob.MinimumUpdateAge">
             <see cref="T:Quartz.JobDataMap"/> key with which to specify a <see cref="T:System.Int64"/>
             value that represents the minimum number of milliseconds that must have
             passed since the file's last modified time in order to consider the file
@@ -14280,6 +14385,24 @@
             Returns the cluster wide value for this scheduler instance's id, based on a system property.
             </summary>
         </member>
+        <member name="P:Quartz.Simpl.SystemPropertyInstanceIdGenerator.Prepend">
+            <summary>
+            A string of text to prepend (add to the beginning) to the instanceId found in the system property.
+            </summary>
+        </member>
+        <member name="P:Quartz.Simpl.SystemPropertyInstanceIdGenerator.Postpend">
+            <summary>
+            A string of text to postpend (add to the end) to the instanceId found in the system property.
+            </summary>
+        </member>
+        <member name="P:Quartz.Simpl.SystemPropertyInstanceIdGenerator.SystemPropertyName">
+            <summary>
+            The name of the system property from which to obtain the instanceId.
+            </summary>
+            <remarks>
+            Defaults to <see cref="F:Quartz.Simpl.SystemPropertyInstanceIdGenerator.SystemProperty"/>.
+            </remarks>
+        </member>
         <member name="T:Quartz.Simpl.ZeroSizeThreadPool">
             <summary>
             This is class is a simple implementation of a zero size thread pool, based on the
@@ -15925,6 +16048,62 @@
             <returns>the updated CalendarIntervalScheduleBuilder</returns>
             <seealso cref="F:Quartz.MisfireInstruction.CalendarIntervalTrigger.FireOnceNow"/>
         </member>
+        <member name="M:Quartz.CalendarIntervalScheduleBuilder.InTimeZone(System.TimeZoneInfo)">
+            <summary>
+            TimeZone in which to base the schedule.
+            </summary>
+            <param name="timezone">the time-zone for the schedule</param>
+            <returns>the updated CalendarIntervalScheduleBuilder</returns>
+            <seealso cref="P:Quartz.ICalendarIntervalTrigger.TimeZone"/>
+        </member>
+        <member name="M:Quartz.CalendarIntervalScheduleBuilder.PreserveHourOfDayAcrossDaylightSavings(System.Boolean)">
+            <summary>
+             If intervals are a day or greater, this property (set to true) will 
+             cause the firing of the trigger to always occur at the same time of day,
+             (the time of day of the startTime) regardless of daylight saving time 
+             transitions.  Default value is false.
+             </summary>
+             <remarks>
+             <para>
+             For example, without the property set, your trigger may have a start 
+             time of 9:00 am on March 1st, and a repeat interval of 2 days.  But 
+             after the daylight saving transition occurs, the trigger may start 
+             firing at 8:00 am every other day.
+             </para>
+             <para>
+             If however, the time of day does not exist on a given day to fire
+             (e.g. 2:00 am in the United States on the days of daylight saving
+             transition), the trigger will go ahead and fire one hour off on 
+             that day, and then resume the normal hour on other days.  If
+             you wish for the trigger to never fire at the "wrong" hour, then
+             you should set the property skipDayIfHourDoesNotExist.
+             </para>
+            </remarks>
+             <seealso cref="M:Quartz.CalendarIntervalScheduleBuilder.SkipDayIfHourDoesNotExist(System.Boolean)"/>
+             <seealso cref="T:System.TimeZone"/>
+             <seealso cref="M:Quartz.CalendarIntervalScheduleBuilder.InTimeZone(System.TimeZoneInfo)"/>
+             <seealso cref="M:Quartz.TriggerBuilder.StartAt(System.DateTimeOffset)"/>
+        </member>
+        <member name="M:Quartz.CalendarIntervalScheduleBuilder.SkipDayIfHourDoesNotExist(System.Boolean)">
+            <summary>
+            If intervals are a day or greater, and 
+            preserveHourOfDayAcrossDaylightSavings property is set to true, and the
+            hour of the day does not exist on a given day for which the trigger 
+            would fire, the day will be skipped and the trigger advanced a second
+            interval if this property is set to true.  Defaults to false.
+            </summary>
+            <remarks>
+            <b>CAUTION!</b>  If you enable this property, and your hour of day happens 
+            to be that of daylight savings transition (e.g. 2:00 am in the United 
+            States) and the trigger's interval would have had the trigger fire on
+            that day, then you may actually completely miss a firing on the day of 
+            transition if that hour of day does not exist on that day!  In such a 
+            case the next fire time of the trigger will be computed as double (if 
+            the interval is 2 days, then a span of 4 days between firings will 
+            occur).
+            </remarks>
+            <seealso cref="M:Quartz.CalendarIntervalScheduleBuilder.PreserveHourOfDayAcrossDaylightSavings(System.Boolean)"/>
+        </member>
         <member name="T:Quartz.CalendarIntervalTriggerBuilderExtensions">
             <summary>
             Extension methods that attach <see cref="T:Quartz.CalendarIntervalScheduleBuilder"/> to <see cref="T:Quartz.TriggerBuilder"/>.
@@ -17269,10 +17448,8 @@
         </member>
         <member name="M:Quartz.DateBuilder.NextGivenSecondDate(System.Nullable{System.DateTimeOffset},System.Int32)">
             <summary>
-            <para>
             Returns a date that is rounded to the next even multiple of the given
             minute.
-            </para>
             </summary>
             <remarks>
             The rules for calculating the second are the same as those for
