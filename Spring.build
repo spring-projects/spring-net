@@ -155,14 +155,15 @@ Commandline Examples:
   <!-- make system environment variables available as NAnt properties -->
 
   <property name="package.buildincrement" value="000" overwrite="false"/>
-
+  <call target="check-package.passedbuildincrement" />
+  
   <sysinfo failonerror="false" />
 
   <property name="project.company" value="SpringSource"/>
   <property name="project.copyright" value="Copyright 2002-2011 Spring.NET Framework Team."/>
 
   <property name="key.file" value="Spring.Net.snk"/>
-  <property name="project.year" value="2011"/>
+  <property name="project.year" value="2010"/>
 
   <!-- Targets that are always executed -->
   <call target="set-build-configuration"/>
@@ -177,6 +178,14 @@ Commandline Examples:
     <call target="set-build-namespaces-all"/>
   </if>
 
+  <!-- no matter what, we can only use the last 3 digits of the passed-in build-increment value so ensure this is the case -->
+  <target name="check-package.passedbuildincrement">
+	  <if test="${property::exists('package.passedbuildincrement') and string::get-length(package.passedbuildincrement) > 3}">
+		<property name="package.buildincrement" value="${string::substring(package.passedbuildincrement, string::get-length(package.passedbuildincrement) -3, 3)}" overwrite="true" />
+	  </if>
+  </target>
+  
+  
   <!-- call target="set-framework-configuration"/ -->
   <call target="set-user-overrides"/>
 
