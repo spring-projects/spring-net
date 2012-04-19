@@ -162,7 +162,7 @@ Commandline Examples:
   <property name="project.copyright" value="Copyright 2002-2011 Spring.NET Framework Team."/>
 
   <property name="key.file" value="Spring.Net.snk"/>
-  <property name="project.year" value="2010"/>
+  <property name="project.year" value="2011"/>
 
   <!-- Targets that are always executed -->
   <call target="set-build-configuration"/>
