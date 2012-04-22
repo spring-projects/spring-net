@@ -386,6 +386,7 @@ Commandline Examples:
   <target name="compile-test"> <!-- used as configurable template by all compile-{net|mono|netcf}-x.x targets -->
     <property name="lib.dir" value="${spring.basedir}/lib/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
     <property name="nh32.lib.dir" value="${spring.basedir}/lib/NHibernate32/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
+    <property name="nh33.lib.dir" value="${spring.basedir}/lib/NHibernate33/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
     <property name="quartz.lib.dir" value="${spring.basedir}/lib/Quartz10/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
     <property name="quartz20.lib.dir" value="${spring.basedir}/lib/Quartz20/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
     <call target="copylibtobin"/>
@@ -400,6 +401,7 @@ Commandline Examples:
     <nant buildfile="src/Spring/Spring.Data/Spring.Data.build" target="build" if="${build-data}"/>
 
     <nant buildfile="src/Spring/Spring.Data.NHibernate32/Spring.Data.NHibernate32.build" target="build" if="${build-data}"/>
+    <nant buildfile="src/Spring/Spring.Data.NHibernate33/Spring.Data.NHibernate33.build" target="build" if="${build-data}"/>
 
     <nant buildfile="src/Spring/Spring.Services/Spring.Services.build" target="build" if="${build-services}"/>
     <nant buildfile="src/Spring/Spring.Testing.NUnit/Spring.Testing.NUnit.build" target="build" if="${build-testing-nunit}"/>
@@ -422,6 +424,8 @@ Commandline Examples:
     
     <nant buildfile="test/Spring/Spring.Data.NHibernate32.Tests/Spring.Data.NHibernate32.Tests.build" target="test" if="${build-data}"/>
     <nant buildfile="test/Spring/Spring.Data.NHibernate32.Integration.Tests/Spring.Data.NHibernate32.Integration.Tests.build" target="test" if="${build-data}"/>
+    <nant buildfile="test/Spring/Spring.Data.NHibernate33.Tests/Spring.Data.NHibernate33.Tests.build" target="test" if="${build-data}"/>
+    <nant buildfile="test/Spring/Spring.Data.NHibernate33.Integration.Tests/Spring.Data.NHibernate33.Integration.Tests.build" target="test" if="${build-data}"/>
 	
     <nant buildfile="test/Spring/Spring.Services.Tests/Spring.Services.Tests.build" target="test" if="${build-services}"/>
     <nant buildfile="test/Spring/Spring.Web.Tests/Spring.Web.Tests.build" target="test" if="${build-web}"/>
@@ -656,6 +660,8 @@ Commandline Examples:
         <delete dir="src/Spring/Spring.Data/bin" failonerror="false"/>
         <delete dir="src/Spring/Spring.Data.NHibernate32/obj" failonerror="false"/>
         <delete dir="src/Spring/Spring.Data.NHibernate32/bin" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Data.NHibernate33/obj" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Data.NHibernate33/bin" failonerror="false"/>
         <delete dir="src/Spring/Spring.Services/obj" failonerror="false"/>
         <delete dir="src/Spring/Spring.Services/bin" failonerror="false"/>
         <delete dir="src/Spring/Spring.Messaging.Nms/obj" failonerror="false"/>
@@ -691,6 +697,10 @@ Commandline Examples:
         <delete dir="test/Spring/Spring.Data.NHibernate32.Tests/bin" failonerror="false"/>
         <delete dir="test/Spring/Spring.Data.NHibernate32.Integration.Tests/obj" failonerror="false"/>
         <delete dir="test/Spring/Spring.Data.NHibernate32.Integration.Tests/bin" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Data.NHibernate33.Tests/obj" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Data.NHibernate33.Tests/bin" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Data.NHibernate33.Integration.Tests/obj" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Data.NHibernate33.Integration.Tests/bin" failonerror="false"/>
         <delete dir="test/Spring/Spring.Services.Tests/obj" failonerror="false"/>
         <delete dir="test/Spring/Spring.Services.Tests/bin" failonerror="false"/>
         <delete dir="test/Spring/Spring.Messaging.Nms.Tests/obj" failonerror="false"/>
@@ -1050,7 +1060,19 @@ Commandline Examples:
 		  <exclude name="mono/**"/>
         </fileset>
       </copy>
-    </if>	
+    </if>
+	
+	<mkdir dir="${current.package.dir}/lib/NHibernate33"/>
+    <if test="${property::exists('build.allnamespaces') and not build.allnamespaces}">
+      <copy todir="${current.package.dir}/lib/NHibernate33" verbose="${copy-verbose}">
+        <fileset basedir="lib/NHibernate33">
+          <include name="**/*.dll"/>
+          <include name="**/*.xml"/>
+          <include name="**/*.license.txt"/>
+		  <exclude name="mono/**"/>
+        </fileset>
+      </copy>
+    </if>		
 	
     <if test="${property::exists('build.allnamespaces') and build.allnamespaces}">
       <copy todir="${current.package.dir}/lib" verbose="${copy-verbose}">
@@ -1184,9 +1206,9 @@ Commandline Examples:
           <include name="*/*/Spring.Data.xml"/>
           <include name="*/*/Spring.Data.pdb"/>
 
-          <include name="*/*/Spring.Data.NHibernate32.dll"/>
-          <include name="*/*/Spring.Data.NHibernate32.xml"/>
-          <include name="*/*/Spring.Data.NHibernate32.pdb"/>
+          <include name="*/*/Spring.Data.NHibernate*.dll"/>
+          <include name="*/*/Spring.Data.NHibernate*.xml"/>
+          <include name="*/*/Spring.Data.NHibernate*.pdb"/>
 		  
           <include name="*/*/Spring.Web.dll"/>
           <include name="*/*/Spring.Web.xml"/>
@@ -1266,17 +1288,9 @@ Commandline Examples:
             <include name="*/Spring.Web.Extensions.xml"/>
             <include name="*/Spring.Web.Extensions.pdb"/>
 			
-			<include name="*/Spring.Data.NHibernate30.dll"/>
-			<include name="*/Spring.Data.NHibernate30.xml"/>
-			<include name="*/Spring.Data.NHibernate30.pdb"/>		  
-		  
-			<include name="*/Spring.Data.NHibernate31.dll"/>
-			<include name="*/Spring.Data.NHibernate31.xml"/>
-			<include name="*/Spring.Data.NHibernate31.pdb"/>
-
-			<include name="*/Spring.Data.NHibernate32.dll"/>
-			<include name="*/Spring.Data.NHibernate32.xml"/>
-			<include name="*/Spring.Data.NHibernate32.pdb"/>
+			<include name="*/Spring.Data.NHibernate*.dll"/>
+			<include name="*/Spring.Data.NHibernate*.xml"/>
+			<include name="*/Spring.Data.NHibernate*.pdb"/>
 			
           </fileset>
         </copy>
@@ -1461,12 +1475,13 @@ Commandline Examples:
       <include name="src/Spring/Spring.Core/**"/>
       <include name="src/Spring/Spring.Aop/**"/>
       <include name="src/Spring/Spring.Web/**"/>
-    <include name="src/Spring/Spring.Web.Mvc/**"/>
-	    <include name="src/Spring/Spring.Web.Mvc3/**"/>
+      <include name="src/Spring/Spring.Web.Mvc/**"/>
+      <include name="src/Spring/Spring.Web.Mvc3/**"/>
       <include name="src/Spring/Spring.Web.Extensions/**"/>
       <include name="src/Spring/Spring.Services/**"/>
       <include name="src/Spring/Spring.Data/**"/>
       <include name="src/Spring/Spring.Data.NHibernate32/**"/>
+      <include name="src/Spring/Spring.Data.NHibernate33/**"/>
       <include name="src/Spring/Spring.Messaging/**"/>
       <include name="src/Spring/Spring.Messaging.Nms/**"/>
       <include name="src/Spring/Spring.Messaging.Ems/**"/>
@@ -1487,6 +1502,8 @@ Commandline Examples:
       <include name="test/Spring/Spring.Data.Integration.Tests/**"/>
 	  <include name="test/Spring/Spring.Data.NHibernate32.Tests/**"/>
       <include name="test/Spring/Spring.Data.NHibernate32.Integration.Tests/**"/>	  
+	  <include name="test/Spring/Spring.Data.NHibernate33.Tests/**"/>
+      <include name="test/Spring/Spring.Data.NHibernate33.Integration.Tests/**"/>	  
       <include name="test/Spring/Spring.Messaging.Tests/**"/>
       <include name="test/Spring/Spring.Messaging.Nms.Tests/**"/>
       <include name="test/Spring/Spring.Messaging.Nms.Integration.Tests/**"/>

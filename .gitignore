@@ -50,12 +50,12 @@ PrecompiledWeb
 *.dotCover
 /src/Spring/Spring.Aop/Spring.Aop.xml
 /src/Spring/Spring.Core/Spring.Core.xml
-/src/Spring/Spring.Data.NHibernate12/Spring.Data.NHibernate12.xml
 /src/Spring/Spring.Data.NHibernate20/Spring.Data.NHibernate20.xml
 /src/Spring/Spring.Data.NHibernate21/Spring.Data.NHibernate21.xml
 /src/Spring/Spring.Data.NHibernate30/Spring.Data.NHibernate30.xml
 /src/Spring/Spring.Data.NHibernate31/Spring.Data.NHibernate31.xml
 /src/Spring/Spring.Data.NHibernate32/Spring.Data.NHibernate32.xml
+/src/Spring/Spring.Data.NHibernate33/Spring.Data.NHibernate33.xml
 /src/Spring/Spring.Messaging.Nms/Spring.Messaging.Nms.xml
 /src/Spring/Spring.Messaging/Spring.Messaging.xml
 /src/Spring/Spring.Data/Spring.Data.xml
