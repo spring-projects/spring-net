@@ -47,6 +47,8 @@ namespace Spring.Aop.Framework
         private const string COMPOSITION_PROXY_TYPE_NAME = "CompositionAopProxy";
 
         private const string DECORATOR_PROXY_TYPE_NAME = "DecoratorAopProxy";
+        
+        private const string INHERITANCE_PROXY_TYPE_NAME = "InheritanceAopProxy";
 
         /// <summary>
         /// Is the supplied <paramref name="objectType"/> an AOP proxy?
@@ -128,6 +130,30 @@ namespace Spring.Aop.Framework
         public static bool IsDecoratorAopProxyType(Type objectType)
         {
             return ((objectType != null) && objectType.FullName.StartsWith(DECORATOR_PROXY_TYPE_NAME));
+        }
+
+
+        /// <summary>
+        /// Is the supplied <paramref name="instance"/> an inheritance based AOP proxy?
+        /// </summary>
+        /// <param name="instance">The instance to be checked.</param>
+        /// <returns>
+        /// <see langword="true"/> if the supplied <paramref name="instance"/> is
+        /// an inheritacne based AOP proxy.
+        /// </returns>
+        public static bool IsInheritanceAopProxy(Object instance)
+        {
+            return instance != null && IsInheritanceAopProxyType(instance.GetType());
+        }
+
+        /// <summary>
+        /// Is the supplied <paramref name="objectType"/> an inheritance based AOP proxy type?
+        /// </summary>
+        /// <param name="objectType">The type to be checked.</param>
+        /// <returns><see langword="true"/> if the supplied <paramref name="objectType"/> is an inheritance based AOP proxy type.</returns>
+        public static bool IsInheritanceAopProxyType(Type objectType)
+        {
+            return ((objectType != null) && objectType.FullName.StartsWith(INHERITANCE_PROXY_TYPE_NAME));
         }
 
         /// <summary>
@@ -379,5 +405,6 @@ namespace Spring.Aop.Framework
             }
             return candidate.GetType();
         }
+
     }
 }
