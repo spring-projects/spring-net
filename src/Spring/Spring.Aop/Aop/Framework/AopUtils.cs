@@ -60,7 +60,7 @@ namespace Spring.Aop.Framework
         /// <returns><see langword="true"/> if the supplied <paramref name="objectType"/> is an AOP proxy type.</returns>
         public static bool IsAopProxyType(Type objectType)
         {
-            return IsCompositionAopProxyType(objectType) || IsDecoratorAopProxyType(objectType);
+            return IsCompositionAopProxyType(objectType) || IsDecoratorAopProxyType(objectType) || IsInheritanceAopProxyType(objectType);
         }
 
         /// <summary>
@@ -77,7 +77,7 @@ namespace Spring.Aop.Framework
         /// </returns>
         public static bool IsAopProxy(object instance)
         {
-            return IsCompositionAopProxy(instance) || IsDecoratorAopProxy(instance);
+            return IsCompositionAopProxy(instance) || IsDecoratorAopProxy(instance) || IsInheritanceAopProxy(instance);
         }
 
         /// <summary>

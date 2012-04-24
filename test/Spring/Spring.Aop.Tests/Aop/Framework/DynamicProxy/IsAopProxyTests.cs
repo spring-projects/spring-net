@@ -22,6 +22,8 @@ namespace Spring.Aop.Framework.DynamicProxy
         public void TargetIsNotAProxy()
         {
             Assert.False(AopUtils.IsAopProxy(_target));
+            Assert.False(AopUtils.IsInheritanceAopProxy(_target));
+            Assert.False(AopUtils.IsInheritanceAopProxyType(_target.GetType()));
         }
 
         [Test]
@@ -69,8 +71,12 @@ namespace Spring.Aop.Framework.DynamicProxy
             {
                 var proxy = (TestObject)ctx["michael"];
                 Assert.AreEqual("Michael", proxy.Name);
+                
                 Assert.True(AopUtils.IsInheritanceAopProxyType(proxy.GetType()));
+                Assert.True(AopUtils.IsAopProxyType(proxy.GetType()));
+
                 Assert.True(AopUtils.IsInheritanceAopProxy(proxy));
+                Assert.True(AopUtils.IsAopProxy(proxy));
             }
         }
     }
