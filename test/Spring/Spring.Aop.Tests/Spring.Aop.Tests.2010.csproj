@@ -153,6 +153,7 @@
     <Compile Include="Aop\Framework\DynamicProxy\InheritanceAopProxyTests.cs" />
     <Compile Include="Aop\Framework\DynamicProxy\DecoratorAopProxyTests.cs" />
     <Compile Include="Aop\Framework\DynamicProxy\DefaultAopProxyFactoryTests.cs" />
+    <Compile Include="Aop\Framework\DynamicProxy\IsAopProxyTests.cs" />
     <Compile Include="Aop\Framework\DynamicProxy\MockTargetSource.cs" />
     <Compile Include="Aop\Framework\HashtableCachingAdvisorChainFactoryTests.cs">
       <SubType>Code</SubType>
@@ -277,6 +278,7 @@
     <EmbeddedResource Include="Data\Spring\Aop\Framework\adapter\withBPPContext.xml" />
     <EmbeddedResource Include="Data\Spring\Aop\Framework\adapter\withoutBPPContext.xml" />
     <EmbeddedResource Include="Aop\Framework\AutoProxy\advisorAutoProxyCreatorCircularReferencesTests.xml" />
+    <EmbeddedResource Include="Aop\Framework\DynamicProxy\IsAopProxyTests.xml" />
     <Content Include="Data\Spring\Aop\Framework\AutoProxy\advisorAutoProxyCreator.xml" />
     <Content Include="Data\Spring\Aop\Framework\AutoProxy\objectNameAutoProxyCreatorTests.xml" />
     <Content Include="Data\Spring\Aop\Framework\innerBeanTarget.xml" />
