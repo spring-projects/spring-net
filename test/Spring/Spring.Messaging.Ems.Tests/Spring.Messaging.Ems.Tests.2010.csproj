@@ -89,6 +89,10 @@
       <Project>{AE00E5AB-C39A-436F-86D2-33BFE33E2E40}</Project>
       <Name>Spring.Data.2010</Name>
     </ProjectReference>
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Messaging.Ems\Spring.Messaging.Ems.2010.csproj">
+      <Project>{900E3839-301E-48B1-BAEB-B6645620ACFF}</Project>
+      <Name>Spring.Messaging.Ems.2010</Name>
+    </ProjectReference>
     <ProjectReference Include="..\..\..\src\Spring\Spring.Testing.NUnit\Spring.Testing.NUnit.2010.csproj">
       <Project>{ED204A7B-832F-44C7-BFE3-504AEBE1BCC8}</Project>
       <Name>Spring.Testing.NUnit.2010</Name>
