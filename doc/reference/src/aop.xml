@@ -1603,11 +1603,11 @@ MyInterface myProxyObject2 = (MyInterface)ctx.GetObject("MyObject");
     advice before or after making the target object method call on the target
     object.</para>
 
-    <para>The inheritance based mechanism creates a dynamic type where that
-    inherits from the target type. This lets you downcast to the target type
-    if needed. Please note that in both cases a target method implementation
-    that calls other methods on the target object will not be advised. To
-    force inheritance based proxies you should either set the
+    <para>The inheritance based mechanism creates a dynamic type that inherits
+    from the target type. This lets you downcast to the target type if needed.
+    Please note that in both cases a target method implementation that calls
+    other methods on the target object will not be advised. To force
+    inheritance based proxies you should either set the
     <literal>ProxyTargetType</literal> property of a
     <literal>ProxyFactory</literal> to true or set the XML namespace element
     <literal>proxy-target-type = true</literal> when using an AOP schema based
@@ -1633,7 +1633,7 @@ MyInterface myProxyObject2 = (MyInterface)ctx.GetObject("MyObject");
       described above, all methods that manipulate the state of the object
       should be declared as virtual. Otherwise some method invocations get
       directed to the private 'target' field member and others to the base
-      class. Winform object are an example of case where this approach does
+      class. Winform objects are an example of a case where this approach does
       not apply. To address this limitation, a new post-processing mechanism
       was introduced in version 1.2 that creates a proxy type without the
       private 'target' field. Interception advice is added directly in the

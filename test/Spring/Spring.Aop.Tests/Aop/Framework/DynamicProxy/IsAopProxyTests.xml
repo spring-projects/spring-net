@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects xmlns="http://www.springframework.net"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:aop="http://www.springframework.net/aop">
+
+  <object type="Spring.Aop.Framework.AutoProxy.InheritanceBasedAopConfigurer, Spring.Aop">
+    <property name="ObjectNames">
+      <list>
+        <value>michael</value>
+      </list>
+    </property>
+    <property name="InterceptorNames">
+      <list>
+        <value>debugInterceptor</value>
+      </list>
+    </property>
+  </object>
+
+  <object id="michael" type="Spring.Objects.TestObject, Spring.Core.Tests">
+    <property name="Age" value="23" />
+    <property name="Name" value="Michael" />
+  </object>
+
+  <object id="debugInterceptor" type="Spring.Aop.Advice.DebugAdvice, Spring.Aop.Tests" />
+
+</objects>
