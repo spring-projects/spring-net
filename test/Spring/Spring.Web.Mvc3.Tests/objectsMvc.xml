@@ -4,16 +4,16 @@
                 xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
   
   <!--id/name intentionally excluded from this definition so that we can ensure retrieve-by-type-match works-->
-  <object singleton="false" type="Spring.Web.Mvc.Tests.Controllers.FirstContainerRegisteredController, Spring.Web.Mvc3.Tests">
+  <object singleton="false" type="Spring.Web.Mvc.Tests.Controllers.FirstContainerRegisteredController">
     <property name="TestValue" value="First Definition of Type" />
   </object>
 
   <!--this object defintion matches the controller name that would be retrieved based on the actual request-->
-  <object id="FirstContainerRegistered" singleton="false" type="Spring.Web.Mvc.Tests.Controllers.FirstContainerRegisteredController, Spring.Web.Mvc3.Tests">
+  <object id="FirstContainerRegistered" singleton="false" type="Spring.Web.Mvc.Tests.Controllers.FirstContainerRegisteredController">
     <property name="TestValue" value="Not First Definition of Type" />
   </object>
   
-  <object id="SecondContainerRegisteredController" singleton="false" type="Spring.Web.Mvc.Tests.Controllers.SecondContainerRegisteredController, Spring.Web.Mvc3.Tests"/>
+  <object id="SecondContainerRegisteredController" singleton="false" type="Spring.Web.Mvc.Tests.Controllers.SecondContainerRegisteredController"/>
   
 </objects>
 

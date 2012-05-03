@@ -42,8 +42,8 @@ namespace Spring.Web.Mvc.Tests
         public void _TestSetup()
         {
             ContextRegistry.Clear();
-            _context = new MvcApplicationContext("file://objectsMvc3.xml");
-            _mvcNamedContext = new MvcApplicationContext("named", false, "file://namedContextObjectsMvc3.xml");
+            _context = new MvcApplicationContext("file://objectsMvc.xml");
+            _mvcNamedContext = new MvcApplicationContext("named", false, "file://namedContextObjectsMvc.xml");
 
             ContextRegistry.RegisterContext(_context);
             ContextRegistry.RegisterContext(_mvcNamedContext);
@@ -71,9 +71,9 @@ namespace Spring.Web.Mvc.Tests
         [Test]
         public void CanUseUnnamedContextToResolveType()
         {
-            Assert.That(SpringMvcDependencyResolver.ApplicationContextName, Is.Empty, "PRECONDITION: Resolver has named-context improperly set!");
+            Assume.That(SpringMvcDependencyResolver.ApplicationContextName, Is.Empty, "Resolver should not have a named-context set for this test!");
             
-            var service = _resolver.GetService(typeof (FirstContainerRegisteredController));
+            var service = _resolver.GetService<FirstContainerRegisteredController>();
             Assert.NotNull(service);
         }
 
@@ -87,7 +87,7 @@ namespace Spring.Web.Mvc.Tests
         [Test]
         public void CanReturnCollectionOfTypes()
         {
-            var services = _resolver.GetServices(typeof(FirstContainerRegisteredController));
+            var services = _resolver.GetServices<FirstContainerRegisteredController>();
             Assert.That(services.Count(), Is.EqualTo(2));
 
             foreach (var service in services)
@@ -99,21 +99,21 @@ namespace Spring.Web.Mvc.Tests
         [Test]
         public void RequestForSingleInstanceOfMultiplyRegisteredTypeReturnsFirstDefinition()
         {
-            var service = (FirstContainerRegisteredController)_resolver.GetService(typeof(FirstContainerRegisteredController));
+            var service = _resolver.GetService<FirstContainerRegisteredController>();
             Assert.That(service.TestValue, Is.EqualTo("First Definition of Type"));
         }
 
         [Test]
         public void RequestForSingleUndefinedTypeReturnsNull()
         {
-            var service = _resolver.GetService(typeof(NotInContainerController));
+            var service = _resolver.GetService<NotInContainerController>();
             Assert.That(service, Is.Null);
         }
 
         [Test]
         public void RequestForCollectionOfUndefinedTypesReturnsEmptyCollection()
         {
-            var services = _resolver.GetServices(typeof(NotInContainerController));
+            var services = _resolver.GetServices<NotInContainerController>();
             Assert.That(services, Is.Empty);
         }
         

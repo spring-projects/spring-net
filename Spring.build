@@ -398,6 +398,7 @@ Commandline Examples:
     <nant buildfile="src/Spring/Spring.Web.Extensions/Spring.Web.Extensions.build" target="build" if="${build-web and (nant.settings.currentframework == 'net-3.5' or nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'mono-2.0')}"/>
     <nant buildfile="src/Spring/Spring.Web.Mvc/Spring.Web.Mvc.build" target="build" if="${nant.settings.currentframework == 'net-4.0'}"/>
     <nant buildfile="src/Spring/Spring.Web.Mvc3/Spring.Web.Mvc3.build" target="build" if="${nant.settings.currentframework == 'net-4.0'}"/>
+	<nant buildfile="src/Spring/Spring.Web.Mvc4/Spring.Web.Mvc4.build" target="build" if="${nant.settings.currentframework == 'net-4.0'}"/>
     <nant buildfile="src/Spring/Spring.Data/Spring.Data.build" target="build" if="${build-data}"/>
 
     <nant buildfile="src/Spring/Spring.Data.NHibernate32/Spring.Data.NHibernate32.build" target="build" if="${build-data}"/>
@@ -431,6 +432,7 @@ Commandline Examples:
     <nant buildfile="test/Spring/Spring.Web.Tests/Spring.Web.Tests.build" target="test" if="${build-web}"/>
 	<nant buildfile="test/Spring/Spring.Web.Mvc.Tests/Spring.Web.Mvc.Tests.build" target="test" if="${build-web and nant.settings.currentframework == 'net-4.0'}"/>
 	<nant buildfile="test/Spring/Spring.Web.Mvc3.Tests/Spring.Web.Mvc3.Tests.build" target="test" if="${build-web and nant.settings.currentframework == 'net-4.0'}"/>
+	<nant buildfile="test/Spring/Spring.Web.Mvc4.Tests/Spring.Web.Mvc4.Tests.build" target="test" if="${build-web and nant.settings.currentframework == 'net-4.0'}"/>
     <nant buildfile="test/Spring/Spring.Testing.NUnit.Tests/Spring.Testing.NUnit.Tests.build" target="test" if="${build-testing-nunit}"/>
     <nant buildfile="test/Spring/Spring.Testing.Microsoft.Tests/Spring.Testing.Microsoft.Tests.build" target="test" if="${build-testing-microsoft}"/>
     <nant buildfile="test/Spring/Spring.Messaging.Ems.Tests/Spring.Messaging.Ems.Tests.build" target="test" if="${build-ems}"/>
@@ -1221,6 +1223,10 @@ Commandline Examples:
 		  <include name="*/*/Spring.Web.Mvc3.dll"/>
           <include name="*/*/Spring.Web.Mvc3.xml"/>
           <include name="*/*/Spring.Web.Mvc3.pdb"/>
+		  
+		  <include name="*/*/Spring.Web.Mvc4.dll"/>
+          <include name="*/*/Spring.Web.Mvc4.xml"/>
+          <include name="*/*/Spring.Web.Mvc4.pdb"/>
 
           <include name="*/*/Spring.Web.Extensions.dll"/>
           <include name="*/*/Spring.Web.Extensions.xml"/>
@@ -1477,6 +1483,7 @@ Commandline Examples:
       <include name="src/Spring/Spring.Web/**"/>
       <include name="src/Spring/Spring.Web.Mvc/**"/>
       <include name="src/Spring/Spring.Web.Mvc3/**"/>
+	  <include name="src/Spring/Spring.Web.Mvc4/**"/>
       <include name="src/Spring/Spring.Web.Extensions/**"/>
       <include name="src/Spring/Spring.Services/**"/>
       <include name="src/Spring/Spring.Data/**"/>
@@ -1497,6 +1504,7 @@ Commandline Examples:
       <include name="test/Spring/Spring.Web.Tests/**"/>
 	  <include name="test/Spring/Spring.Web.Mvc.Tests/**"/>
 	  <include name="test/Spring/Spring.Web.Mvc3.Tests/**"/>
+	  <include name="test/Spring/Spring.Web.Mvc4.Tests/**"/>
       <include name="test/Spring/Spring.Services.Tests/**"/>
       <include name="test/Spring/Spring.Data.Tests/**"/>
       <include name="test/Spring/Spring.Data.Integration.Tests/**"/>
@@ -1530,6 +1538,7 @@ Commandline Examples:
       <include name="examples/Spring/Spring.WebQuickStart/**"/>
       <include name="examples/Spring/Spring.MvcQuickStart/**"/>
 	  <include name="examples/Spring/Spring.Mvc3QuickStart/**"/>
+	  <include name="examples/Spring/Spring.Mvc4QuickStart/**"/>
 	  <include name="examples/Spring/Spring.Web.Extensions.Example/**"/>
       <include name="examples/Spring/Spring.Web.Extensions.Example/src/Spring.Web.Extensions.Example.2005/Bin/*.refresh"/>
       <include name="examples/Spring/SpringAir/**"/>
