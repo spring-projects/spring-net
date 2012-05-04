@@ -35,14 +35,16 @@
 				<include name="Spring.Web.dll" />
 				<include name="System.Configuration.dll" />
  				<include name="System.Web.dll" />
-				<include name="System.Web.Http" />				
-				<include name="System.Web.Http.WebHost" />				
 				<include name="System.Web.Routing.dll"/>
 				<include name="System.Web.Abstractions.dll"/>
  				<include name="System.Web.Services.dll" />
 			
 				<include name="C:\Program Files\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies\System.Web.Mvc.dll" />
 				<include name="C:\Program Files (x86)\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies\System.Web.Mvc.dll" />
+				<include name="C:\Program Files\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies\System.Web.Http.dll" />
+				<include name="C:\Program Files (x86)\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies\System.Web.Http.dll" />
+				<include name="C:\Program Files\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies\System.Web.Http.WebHost.dll" />
+				<include name="C:\Program Files (x86)\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies\System.Web.Http.WebHost.dll" />
 				
 				<include name="System.Web.ApplicationServices.dll" />        
 			</references>
