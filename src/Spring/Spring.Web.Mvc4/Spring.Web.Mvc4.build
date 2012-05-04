@@ -35,6 +35,8 @@
 				<include name="Spring.Web.dll" />
 				<include name="System.Configuration.dll" />
  				<include name="System.Web.dll" />
+				<include name="System.Web.Http" />				
+				<include name="System.Web.Http.WebHost" />				
 				<include name="System.Web.Routing.dll"/>
 				<include name="System.Web.Abstractions.dll"/>
  				<include name="System.Web.Services.dll" />
