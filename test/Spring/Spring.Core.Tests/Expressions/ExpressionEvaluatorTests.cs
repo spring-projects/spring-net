@@ -293,8 +293,37 @@ namespace Spring.Expressions
             object value = ExpressionEvaluator.GetValue(null, "'123' + 1");
             Assert.AreEqual("1231", value);
         }
-        
-        [Test(Description="SPRNET-944")]
+#if NET_4_0
+        [Test(Description = "SPRNET-1507 - Test 1")]
+        public void TestExpandoObject()
+        {
+            dynamic dynamicObject = new System.Dynamic.ExpandoObject();
+            //add property at run-time
+            dynamicObject.IssueId = "1507";
+
+            object value = ExpressionEvaluator.GetValue(dynamicObject, "IssueId");
+            Assert.AreEqual("1507", value);
+        }
+
+        [Test(Description = "SPRNET-1507 - Test 2")]
+        public void TestExpandoObjectWithNotExistedProperty()
+        {
+            try
+            {
+                dynamic dynamicObject = new System.Dynamic.ExpandoObject();
+
+                ExpressionEvaluator.GetValue(dynamicObject, "PropertyName");
+                Assert.Fail();
+            }
+            catch (InvalidPropertyException ex)
+            {
+                Assert.AreEqual(
+                    "'PropertyName' node cannot be resolved for the specified context [System.Dynamic.ExpandoObject].",
+                    ex.Message);
+            }
+        }
+#endif
+        [Test(Description = "SPRNET-944")]
         public void DateTests()
         {
             string dateLiteral = (string)ExpressionEvaluator.GetValue(null, "'date'"); 
