@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<project name="Spring.Web.Mvc3.Tests" default="test" xmlns="http://nant.sf.net/schemas/nant.xsd">
+<project name="Spring.Web.Mvc4.Tests" default="test" xmlns="http://nant.sf.net/schemas/nant.xsd">
 
     <include buildfile="${spring.basedir}/common-project.include" />
     <!--
