@@ -37,6 +37,10 @@ TIBCO.EMS.*
 #Documentation output
 doc/reference/target/
 
+#Packaging Output
+packages/
+nuget-packages/
+
 #Build log and other log files
 buildlog.txt
 log.txt*
