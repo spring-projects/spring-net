@@ -59,6 +59,8 @@
 				<exclude if="${net-4.0}" name="System.Web.Extensions.dll" />
 				<exclude name="Spring.Web.Mvc3.dll" />
 				<exclude name="Spring.Web.Mvc3.Tests.dll" />
+				<exclude name="Spring.Web.Mvc4.dll" />
+				<exclude name="Spring.Web.Mvc4.Tests.dll" />
             </references>
         </csc>
         <copy todir="${current.bin.dir}">

@@ -60,6 +60,8 @@
 				<exclude name="System.Web.Extensions.dll" />
 				<exclude name="Spring.Web.Mvc.dll" />
 				<exclude name="Spring.Web.Mvc.Tests.dll" />
+				<exclude name="Spring.Web.Mvc3.dll" />
+				<exclude name="Spring.Web.Mvc3.Tests.dll" />
             </references>
         </csc>
         <copy todir="${current.bin.dir}">
