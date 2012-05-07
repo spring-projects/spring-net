@@ -37,6 +37,8 @@ using Spring.Reflection.Dynamic;
 
 namespace Spring.Expressions
 {
+    using System.Collections.Generic;
+
     /// <summary>
     /// Represents node that navigates to object's property or public field.
     /// </summary>
@@ -87,8 +89,13 @@ namespace Spring.Expressions
                 // initialize this node if necessary
                 if (contextType != null && accessor == null)
                 {
+                    // try to initialize node as ExpandoObject value
+                    if (contextType == typeof(System.Dynamic.ExpandoObject))
+                    {
+                        accessor = new ExpandoObjectValueAccessor(memberName);
+                    }
                     // try to initialize node as enum value first
-                    if (contextType.IsEnum)
+                    else if (contextType.IsEnum)
                     {
                         try
                         {
@@ -690,6 +697,38 @@ namespace Spring.Expressions
             public override void Set(object context, object value)
             {
                 throw new NotSupportedException("Cannot set the value of an enum.");
+            }
+        }
+
+        #endregion
+
+        #region ExpandoObjectValueAccessor implementation
+
+        private class ExpandoObjectValueAccessor : BaseValueAccessor
+        {
+            private string memberName;
+
+            public ExpandoObjectValueAccessor(string memberName)
+            {
+                this.memberName = memberName;
+            }
+
+            public override object Get(object context)
+            {
+                var dictionary = context as IDictionary<string, object>;
+
+                object value;
+                if (dictionary.TryGetValue(memberName, out value))
+                    return value;
+                throw new InvalidPropertyException(typeof(System.Dynamic.ExpandoObject), memberName,
+                                                   "'" + memberName +
+                                                   "' node cannot be resolved for the specified context [" +
+                                                   context + "].");
+            }
+
+            public override void Set(object context, object value)
+            {
+                throw new NotSupportedException("Cannot set the value of an expando object.");
             }
         }
 
