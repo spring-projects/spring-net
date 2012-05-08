@@ -1602,17 +1602,21 @@ Commandline Examples:
     <delete dir="${nuget.package.dir}" if="${directory::exists(nuget.package.dir)}"/>
     <mkdir dir="${nuget.package.dir}"/>
   </target>
-  
-<target name="package-nuget" depends="update-nuspec-metadata">
 
-	<property name="nuget.package.dir" value="${spring.basedir}\nuget-packages" />
-	
+<target name="set-nuget-package-version" >
+
 	<!-- assume version of nuget package matches version of assemblies contained within it -->
 	<property name="nuget.package.version" value="${package.version}" />
 	
 	<!-- if suffix is passed in, use it -->
 	<property name="nuget.package.version" value="${package.version + '-' + nuget.version.suffix}" if="${property::exists('nuget.version.suffix')}" />
 
+</target>
+  
+<target name="package-nuget" depends="set-nuget-package-version,update-nuspec-metadata">
+
+	<property name="nuget.package.dir" value="${spring.basedir}\nuget-packages" />
+	
 	<call target="clean-nuget-package-dir" />
 	<call target="check-package-version" />
 	
@@ -1628,8 +1632,6 @@ Commandline Examples:
 		<do>
 			<echo message="Generating NuGet Package from nuspec file: ${filename}" />  
 
-		
-    
     <exec program="${tool.dir}\NuGet\NuGet.exe" workingdir="${spring.basedir}" verbose="true">
       <arg value="pack" />
       <arg value="${filename}" />
@@ -1644,7 +1646,7 @@ Commandline Examples:
 	</foreach>
 </target>
 
-<target name="update-nuspec-metadata">  
+<target name="update-nuspec-metadata" depends="set-nuget-package-version">  
 <!--
 	INFO: this task assumes that all SPRNET components are versioned coincident with each other and
 			updates all version dependencies betw. SPRNET components at once
@@ -1662,7 +1664,7 @@ Commandline Examples:
 		</in>
 		<do>
 			<echo message="Processing nuspec file: ${filename}" />
-			<xmlpoke file="${filename}" xpath="/n:package/n:metadata/n:dependencies/n:dependency[starts-with(@id, 'Spring.')]/@version" value="${package.version}">
+			<xmlpoke file="${filename}" xpath="/n:package/n:metadata/n:dependencies/n:dependency[starts-with(@id, 'Spring.')]/@version" value="${nuget.package.version}">
 				<namespaces>
 					<namespace prefix="n" uri="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd" />
 				</namespaces>
