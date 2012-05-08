@@ -16,6 +16,7 @@
                      doc="${current.bin.dir}/${project::get-name()}.xml">
 			<arg line="${compiler.args}"/>
 			<nowarn>
+				<warning number="${nowarn.numbers}" />
 				<warning number="1591,0169,0168" />
 				<warning number="0414,1584" if="${nant.settings.currentframework=='mono-2.0'}"/>
 			</nowarn>

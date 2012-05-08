@@ -16,6 +16,7 @@
             >
             <arg line="${compiler.args}"/>
             <nowarn>
+				<warning number="${nowarn.numbers}" />
                 <warning number="219" />
                 <warning number="162" />
                 <warning number="1591" />

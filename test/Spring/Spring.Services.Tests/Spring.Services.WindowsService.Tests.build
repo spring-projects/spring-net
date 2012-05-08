@@ -46,6 +46,7 @@
 			output="${current.bin.dir}/${project::get-name()}.dll" >
             <nowarn>
                 <warning number="${nowarn.numbers}" />
+				<warning number="${nowarn.numbers.test}" />
             </nowarn>
             <sources failonempty="true">
                 <include name="WindowsService/Common/**/*.cs" />
