@@ -160,7 +160,7 @@ Commandline Examples:
   <sysinfo failonerror="false" />
 
   <property name="project.company" value="SpringSource"/>
-  <property name="project.copyright" value="Copyright 2002-2011 Spring.NET Framework Team."/>
+  <property name="project.copyright" value="Copyright 2002-2012 Spring.NET Framework Team."/>
 
   <property name="key.file" value="Spring.Net.snk"/>
   <property name="project.year" value="2010"/>
@@ -1607,9 +1607,12 @@ Commandline Examples:
 
 	<property name="nuget.package.dir" value="${spring.basedir}\nuget-packages" />
 	
-	<!-- ensure that we have an empty suffix if none is specified on the command-line -->
-	<property name="nuget.version.suffix" value="" overwrite="false" />
+	<!-- assume version of nuget package matches version of assemblies contained within it -->
+	<property name="nuget.package.version" value="${package.version}" />
 	
+	<!-- if suffix is passed in, use it -->
+	<property name="nuget.package.version" value="${package.version + '-' + nuget.version.suffix}" if="${property::exists('nuget.version.suffix')}" />
+
 	<call target="clean-nuget-package-dir" />
 	<call target="check-package-version" />
 	
@@ -1631,7 +1634,7 @@ Commandline Examples:
       <arg value="pack" />
       <arg value="${filename}" />
 	  <arg value="-Version" />
-	  <arg value="${package.version + '-' + nuget.version.suffix}" />
+	  <arg value="${nuget.package.version}" />
 	  <arg value="-basepath" />
 	  <arg value="${spring.basedir}" />
 	  <arg value="-OutputDirectory" />

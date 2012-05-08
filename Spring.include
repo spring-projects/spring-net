@@ -185,10 +185,11 @@
         <!-- 1591 - do not report warnings for missing XML comments -->
         <!-- 0618 - do not report deprecation warnings -->
         <!-- 0067 - do not report uncalled events -->
-        <property name="nowarn.numbers" value="0618"/>
+		<!-- 1607 - disable AssemblyInformationalVersionAttribute is not in the normal 'major.minor.build.revision' format msgs -->
+        <property name="nowarn.numbers" value="0618,1607"/>
         <!-- use a different set of warnings for building the tests -->
         <!-- TODO: "nowarn.numbers.test.default" should be "current.nowarn.numbers.test" -->
-        <property name="nowarn.numbers.test.default" value="1591,0618,0067"/>
+        <property name="nowarn.numbers.test.default" value="1591,0618,0067,1607"/>
         <if test="${not target::exists('set-' + current.build.config + '-build-configuration')}">
             <fail message="The ${current.build.config} build configuration is not supported by ${project.name}."/>
         </if>
@@ -243,10 +244,12 @@
 	<property name="assembly.delay.sign" value="false" />
 	<property name="assembly.keyfile" value="${key.file}" />
 
+	<property name="assembly.version.informational" value="${project.version.numeric}" />
+	<property name="assembly.version.informational" value="${project.version.numeric + '-' + nuget.version.suffix}" if="${property::exists('nuget.version.suffix')}" />
+	
         <!--
 	<property name="assembly.title" value="${project::get-name()}" />
 	<property name="assembly.description" value="" />
-	<property name="assembly.version.informational" value="${project.version.numeric}" />
 	-->
 
     </target>
@@ -271,12 +274,11 @@
 		<attribute type="AssemblyVersionAttribute" value="${assembly.version}" />
 
 		<attribute type="AssemblyDelaySignAttribute" value="false"/>
-
+		<attribute type="AssemblyInformationalVersionAttribute" value="${assembly.version.informational}" />
 
 		<!--
 		<attribute type="AssemblyTitleAttribute" value="${assembly.title}" />
 		<attribute type="AssemblyDescriptionAttribute" value="${assembly.description}" />
-		<attribute type="AssemblyInformationalVersionAttribute" value="${assembly.version.informational}" />
 		<attribute type="AssemblyFileVersionAttribute" value="${assembly.version.file}" />
 		-->
             </attributes>
