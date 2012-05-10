@@ -7,10 +7,7 @@ namespace Spring.Aspects.Exceptions
     {
         public static readonly string NAME = "capturingLogger";
         public CaptureOutputLogger()
-            : base(NAME, LogLevel.All, false, false, null)
-
-// TODO: use this line when upgrading to Common.Logging 2.0:
-//          : base(false, NAME, LogLevel.All, true, false, false, null)
+          : base(false, NAME, LogLevel.All, true, false, false, null)
         { }
 
 //        private LogLevel _currentLogLevel = LogLevel.All;

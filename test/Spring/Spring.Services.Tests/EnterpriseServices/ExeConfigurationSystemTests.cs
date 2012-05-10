@@ -21,7 +21,7 @@
 using System.Configuration;
 using System.Configuration.Internal;
 using System.IO;
-using Common.Logging;
+using Common.Logging.Configuration;
 using Common.Logging.Simple;
 using NUnit.Framework;
 using Spring.Util;
@@ -44,7 +44,7 @@ namespace Spring.EnterpriseServices
             {
                 ExeConfigurationSystem ccs = new ExeConfigurationSystem(exePath);
                 prevConfig = ConfigurationUtils.SetConfigurationSystem(ccs, true);
-                LogSetting settings = (LogSetting) ConfigurationManager.GetSection("common/logging");
+                LogSetting settings = (LogSetting) ConfigurationManager.GetSection("logging");
                 Assert.AreEqual(typeof (TraceLoggerFactoryAdapter), settings.FactoryAdapterType);
 
                 Assert.AreEqual("from custom config!", ConfigurationManager.AppSettings["key"]);
