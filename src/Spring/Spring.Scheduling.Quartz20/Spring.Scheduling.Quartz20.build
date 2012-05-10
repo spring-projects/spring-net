@@ -36,7 +36,6 @@
 				<exclude name="../Spring.Scheduling.Quartz/**/SchedulerAccessor.cs" />
 				<exclude name="../Spring.Scheduling.Quartz/**/SimpleTriggerObject.cs" />
 				<exclude name="../Spring.Scheduling.Quartz/**/StatefulMethodInvokingJob.cs" />
-				<exclude name="../Spring.Scheduling.Quartz/**/JobMethodInvocationFailedException.cs" />
 				<exclude name="../Spring.Scheduling.Quartz/**/ResourceJobSchedulingDataProcessor.cs" />
                 <include name="../GenCommonAssemblyInfo.cs" />
             </sources>
