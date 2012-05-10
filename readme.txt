@@ -1,11 +1,11 @@
-THE SPRING.NET FRAMEWORK, Release 1.3.2  (August 1, 2011)
+THE SPRING.NET FRAMEWORK, Release 2.0.0  (PRE-RELEASE)
 ---------------------------------------------------------
 http://www.springframework.net/
 
 
 1. INTRODUCTION
 
-The 1.3.2 release of Spring.NET contains
+The 2.0.0 release of Spring.NET contains
 
      * A full featured Inversion of Control container
      * An Aspect Oriented Programming framework
@@ -13,6 +13,8 @@ The 1.3.2 release of Spring.NET contains
      * UI-agnostic validation framework
      * ASP.NET Framework
        - Dependency Injection for pages and user controls, bi-directional data binding, and more.
+     * ASP.NET MVC and ASP.NET WebAPI Framework
+       - Dependency Injection for MVC3, MVC4 (including MVC4 WebAPI).
      * Declarative transaction management abstraction
        - Declarative transaction management via use of common XML configuration and attributes across different transaction APIs
      * ADO.NET framework
@@ -20,7 +22,7 @@ The 1.3.2 release of Spring.NET contains
      * Portable Service Abstractions
        - Export plain .NET objects via .NET Remoting, Web Service or .NET Serviced Component and create client side proxies based on endpoint URL and service interface.
      * NHibernate Integation
-       - NHibernate 1.0, 1.2, 2.0, 2.1, 3.0, 3.1, and 3.2 integration to simplify use of NHibernate and participate in Spring's declarative transaction management functionality.
+       - NHibernate 3.2, and 3.3 integration to simplify use of NHibernate and participate in Spring's declarative transaction management functionality.
      * ASP.NET AJAX Integration
        - Exporter to expose plain object on which Dependency Injection and AOP have been applied to JavaScript.
      * NUnit and MSTest integration
@@ -44,12 +46,12 @@ Spring.NET is a port of the Java based Spring Framework. In turn, the Java/J2EE 
 
 2. SUPPORTED .NET FRAMEWORK VERSIONS
 
-Spring.NET 1.3.2 supports .NET 1.1, 2.0, 3.0, 3.5, and 4.0.  In the directories bin\net\3.0, bin\net\3.5, and bin\net\4.0  are framework-specific DLLs for each of .NET 3.0, 3.5, and 4.0 framework versions.
+Spring.NET 2.0.0 supports .NET 3.5 and 4.0.  In the directories bin\net\3.5 and bin\net\4.0 are framework-specific DLLs for each of .NET 3.5 and 4.0 framework versions.
 
 
 3. KNOWN ISSUES
 
-The fallback rules for localized resources seem to have a bug that is fixed by applying Service Pack 1 for .NET 1.1.  This affects the use of IMessageSource.GetMessage methods that specify CultureInfo.
+<none>
 
 
 4. RELEASE INFO
@@ -60,13 +62,8 @@ Release contents:
 * "test" contains the C# source files for Spring.NET's test suite
 * "bin" contains various Spring.NET distribution dll files
 * "lib/Net" contains shared third-party libraries needed for building the framework
-* "lib/NHibernate10" contains NHibernate 1.0 dlls
-* "lib/NHibernate12" contains NHibernate 1.2 dlls
-* "lib/NHibernate20" contains NHibernate 2.0 dlls
-* "lib/NHibernate21" contains NHibernate 2.1 dlls
-* "lib/NHibernate30" contains NHibernate 3.0 dlls
-* "lib/NHibernate31" contains NHibernate 3.1 dlls
-* "lib/NHibernate32" contains NHibernate 3.2 dlls
+* "lib/NHibernate31" contains NHibernate 3.2 dlls
+* "lib/NHibernate32" contains NHibernate 3.3 dlls
 * "doc" contains reference documentation, MSDN-style API help, and the Spring.NET xsd.
 * "examples" contains sample applications.
 * "build-support" contains additonal applications need to build using NAnt as some convenience
@@ -98,28 +95,12 @@ The "bin" directory contains the following distinct dll files for use in applica
 - Contents: Transaction and ADO.NET Framework.
 - Dependencies: Spring.Core, Spring.Aop
 
-* "Spring.Data.NHibernate12" (~84 KB)
-- Contents: NHibernate 1.2 integration
-- Dependencies: Spring.Core, Spring.Aop, Spring.Data, NHibernate
-
-* "Spring.Data.NHibernate20" (~90 KB)
-- Contents: NHibernate 2.0 RC1 integration
-- Dependencies: Spring.Core, Spring.Aop, Spring.Data, NHibernate
-
-* "Spring.Data.NHibernate21" (~90 KB)
-- Contents: NHibernate 2.1 integration
-- Dependencies: Spring.Core, Spring.Aop, Spring.Data, NHibernate
-
-* "Spring.Data.NHibernate30" (~90 KB)
-- Contents: NHibernate 3.0 integration
-- Dependencies: Spring.Core, Spring.Aop, Spring.Data, NHibernate
-
-* "Spring.Data.NHibernate31" (~90 KB)
-- Contents: NHibernate 3.1 integration
-- Dependencies: Spring.Core, Spring.Aop, Spring.Data, NHibernate
-
 * "Spring.Data.NHibernate32" (~90 KB)
 - Contents: NHibernate 3.2 integration
+- Dependencies: Spring.Core, Spring.Aop, Spring.Data, NHibernate
+
+* "Spring.Data.NHibernate33" (~90 KB)
+- Contents: NHibernate 3.3 integration
 - Dependencies: Spring.Core, Spring.Aop, Spring.Data, NHibernate
 
 * "Spring.Services" (~70 KB)
@@ -140,6 +121,10 @@ The "bin" directory contains the following distinct dll files for use in applica
 
 * "Spring.Web.Mvc3" (~8 KB)
 - Contents: ASP.NET MVC3 Integartion
+- Dependencies: Spring.Core, Spring.Web
+
+* "Spring.Web.Mvc4" (~8 KB)
+- Contents: ASP.NET MVC4 and WebAPI Integartion
 - Dependencies: Spring.Core, Spring.Web
 
 * "Spring.Testing.NUnit" (~24 KB)
@@ -191,16 +176,14 @@ Documented sample applications can be found in "examples":
 * Quartz Example - Scheduling using Quartz
 * MvcQuickStart - Show the configuration of the Mvc2 support
 * Mvc3QuickStart - Show the configuration of the Mvc3 support
+* Mvc4QuickStart - Show the configuration of the Mvc4 support
 
 7. How to build
 
 VS.NET
 ------
-There are five solution file for different version of VS.NET
+There are two solution file for different version of VS.NET
 
-* Spring.Net.2002.sln for use with VS.NET 2002
-* Spring.Net.2003.sln for use with VS.NET 2003
-* Spring.Net.2005.sln for use with VS.NET 2005
 * Spring.Net.2008.sln for use with VS.NET 2008
 * Spring.Net.2010.sln for use with VS.NET 2010
 
@@ -237,7 +220,7 @@ InnovaSys Document X! is used to generate the SDK documentation.
 
 The user forums at http://forum.springframework.net/ are available for you to submit questions, support requests, and interact with other Spring.NET users.
 
-Bug and issue tracking can be found at http://jira.springframework.org/secure/BrowseProject.jspa?id=10020
+Bug and issue tracking can be found at https://jira.springsource.org/browse/SPRNET
 
 A Fisheye repository browser is located at https://fisheye.springframework.org/browse/spring-net
 
