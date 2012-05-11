@@ -94,7 +94,7 @@
       <Name>Spring.Core.2008</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\src\Spring\Spring.Scheduling.Quartz20\Spring.Scheduling.Quartz20.2008.csproj">
-      <Project>{E823D54C-CE82-4868-929F-5F95A999F61E}</Project>
+      <Project>{764C3A6A-8690-49DD-B9AF-99E7C09AE4F0}</Project>
       <Name>Spring.Scheduling.Quartz20.2008</Name>
     </ProjectReference>
     <ProjectReference Include="..\Spring.Core.Tests\Spring.Core.Tests.2008.csproj">
