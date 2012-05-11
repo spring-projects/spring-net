@@ -16,7 +16,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\..\build\VS.NET.2008\Spring.Scheduling.Quartz20.Tests\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NET_2_0</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET_2_0,NET_3_0,NET_3_5,QUARTZ_2_0</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>
@@ -49,52 +49,27 @@
       <HintPath>..\..\..\lib\Net\2.0\Rhino.Mocks.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Spring.Scheduling.Quartz.Tests\QuartzCompilerOptionsTests.cs">
-      <Link>QuartzCompilerOptionsTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Scheduling.Quartz.Tests\Scheduling\Quartz\AdaptableJobFactoryTest.cs">
-      <Link>Scheduling\Quartz\AdaptableJobFactoryTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Scheduling.Quartz.Tests\Scheduling\Quartz\CronTriggerObjectTest.cs">
-      <Link>Scheduling\Quartz\CronTriggerObjectTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Scheduling.Quartz.Tests\Scheduling\Quartz\JobDetailObjectTest.cs">
-      <Link>Scheduling\Quartz\JobDetailObjectTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Scheduling.Quartz.Tests\Scheduling\Quartz\MethodInvokingJobDetailFactoryObjectTest.cs">
-      <Link>Scheduling\Quartz\MethodInvokingJobDetailFactoryObjectTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Scheduling.Quartz.Tests\Scheduling\Quartz\MethodInvokingJobTest.cs">
-      <Link>Scheduling\Quartz\MethodInvokingJobTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Scheduling.Quartz.Tests\Scheduling\Quartz\QuartzSupportTests.cs">
-      <Link>Scheduling\Quartz\QuartzSupportTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Scheduling.Quartz.Tests\Scheduling\Quartz\QuartzTestObject.cs">
-      <Link>Scheduling\Quartz\QuartzTestObject.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Scheduling.Quartz.Tests\Scheduling\Quartz\SchedulerFactoryObjectTest.cs">
-      <Link>Scheduling\Quartz\SchedulerFactoryObjectTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Scheduling.Quartz.Tests\Scheduling\Quartz\SimpleTriggerObjectTest.cs">
-      <Link>Scheduling\Quartz\SimpleTriggerObjectTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Scheduling.Quartz.Tests\Scheduling\Quartz\SpringObjectJobFactoryTest.cs">
-      <Link>Scheduling\Quartz\SpringObjectJobFactoryTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Scheduling.Quartz.Tests\Scheduling\Quartz\TestMethodInvokingTask.cs">
-      <Link>Scheduling\Quartz\TestMethodInvokingTask.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Scheduling.Quartz.Tests\Scheduling\Quartz\TestUtil.cs">
-      <Link>Scheduling\Quartz\TestUtil.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Scheduling.Quartz.Tests\Scheduling\Quartz\TriggerObjectTest.cs">
-      <Link>Scheduling\Quartz\TriggerObjectTest.cs</Link>
-    </Compile>
+    <Compile Include="QuartzCompilerOptionsTests.cs" />
+    <Compile Include="Scheduling\Quartz\AdaptableJobFactoryTest.cs" />
+    <Compile Include="Scheduling\Quartz\CronTriggerObjectTest.cs" />
+    <Compile Include="Scheduling\Quartz\JobDetailObjectTest.cs" />
+    <Compile Include="Scheduling\Quartz\MethodInvokingJobDetailFactoryObjectTest.cs" />
+    <Compile Include="Scheduling\Quartz\MethodInvokingJobTest.cs" />
+    <Compile Include="Scheduling\Quartz\QuartzSupportTests.cs" />
+    <Compile Include="Scheduling\Quartz\QuartzTestObject.cs" />
+    <Compile Include="Scheduling\Quartz\SchedulerFactoryObjectTest.cs" />
+    <Compile Include="Scheduling\Quartz\SimpleTriggerObjectTest.cs" />
+    <Compile Include="Scheduling\Quartz\SpringObjectJobFactoryTest.cs" />
+    <Compile Include="Scheduling\Quartz\TestMethodInvokingTask.cs" />
+    <Compile Include="Scheduling\Quartz\TestUtil.cs" />
+    <Compile Include="Scheduling\Quartz\TriggerObjectTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="job-scheduling-data.xml">
