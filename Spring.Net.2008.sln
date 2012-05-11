@@ -38,10 +38,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Testing.NUnit.2008",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Testing.NUnit.Tests.2008", "test\Spring\Spring.Testing.NUnit.Tests\Spring.Testing.NUnit.Tests.2008.csproj", "{4D6D616B-7643-4D6B-8E5E-14ECFDB9AF82}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Scheduling.Quartz.2008", "src\Spring\Spring.Scheduling.Quartz\Spring.Scheduling.Quartz.2008.csproj", "{E823D54C-CE82-4868-929F-5F95A999F61E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Scheduling.Quartz.Tests.2008", "test\Spring\Spring.Scheduling.Quartz.Tests\Spring.Scheduling.Quartz.Tests.2008.csproj", "{9FE720ED-2BD9-4FB9-89C8-FFFA4A491CB5}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Messaging.Nms.2008", "src\Spring\Spring.Messaging.Nms\Spring.Messaging.Nms.2008.csproj", "{AEB1578C-9018-4D49-B440-789F38DD2F29}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Messaging.Nms.Tests.2008", "test\Spring\Spring.Messaging.Nms.Tests\Spring.Messaging.Nms.Tests.2008.csproj", "{FA7A6931-7DBE-4A32-A312-51FAD2E80332}"

@@ -46,6 +46,22 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\lib\Net\2.0\Common.Logging.dll</HintPath>
     </Reference>
+   <Reference Include="Spring.Aop, Version=1.2.0.20336, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\bin\net\3.5\debug\Spring.Aop.dll</HintPath>
+    </Reference>
+    <Reference Include="Spring.Core, Version=1.2.0.20336, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\bin\net\3.5\debug\Spring.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Spring.Data, Version=1.2.0.20336, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\bin\net\3.5\debug\Spring.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Spring.Messaging.Nms, Version=1.2.0.20336, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\..\bin\net\3.5\debug\Spring.Messaging.Nms.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -71,22 +87,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\..\..\..\src\Spring\Spring.Aop\Spring.Aop.2008.csproj">
-      <Project>{3A3A4E65-45A6-4B20-B460-0BEDC302C02C}</Project>
-      <Name>Spring.Aop.2008</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\..\src\Spring\Spring.Core\Spring.Core.2008.csproj">
-      <Project>{710961A3-0DF4-49E4-A26E-F5B9C044AC84}</Project>
-      <Name>Spring.Core.2008</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\..\src\Spring\Spring.Data\Spring.Data.2008.csproj">
-      <Project>{AE00E5AB-C39A-436F-86D2-33BFE33E2E40}</Project>
-      <Name>Spring.Data.2008</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\..\..\..\src\Spring\Spring.Messaging.Nms\Spring.Messaging.Nms.2008.csproj">
-      <Project>{AEB1578C-9018-4D49-B440-789F38DD2F29}</Project>
-      <Name>Spring.Messaging.Nms.2008</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Spring.NmsQuickStart.Common\Spring.NmsQuickStart.Common.2008.csproj">
       <Project>{AC5A3035-75DD-48E5-ABCA-38FBC8193F22}</Project>
       <Name>Spring.NmsQuickStart.Common.2008</Name>
