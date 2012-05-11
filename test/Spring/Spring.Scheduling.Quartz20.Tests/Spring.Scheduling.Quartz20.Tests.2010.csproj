@@ -72,50 +72,6 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Spring.Scheduling.Quartz.Tests\QuartzCompilerOptionsTests.cs">
-      <Link>QuartzCompilerOptionsTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Scheduling.Quartz.Tests\Scheduling\Quartz\AdaptableJobFactoryTest.cs">
-      <Link>Scheduling\Quartz\AdaptableJobFactoryTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Scheduling.Quartz.Tests\Scheduling\Quartz\CronTriggerObjectTest.cs">
-      <Link>Scheduling\Quartz\CronTriggerObjectTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Scheduling.Quartz.Tests\Scheduling\Quartz\JobDetailObjectTest.cs">
-      <Link>Scheduling\Quartz\JobDetailObjectTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Scheduling.Quartz.Tests\Scheduling\Quartz\MethodInvokingJobDetailFactoryObjectTest.cs">
-      <Link>Scheduling\Quartz\MethodInvokingJobDetailFactoryObjectTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Scheduling.Quartz.Tests\Scheduling\Quartz\MethodInvokingJobTest.cs">
-      <Link>Scheduling\Quartz\MethodInvokingJobTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Scheduling.Quartz.Tests\Scheduling\Quartz\QuartzSupportTests.cs">
-      <Link>Scheduling\Quartz\QuartzSupportTests.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Scheduling.Quartz.Tests\Scheduling\Quartz\QuartzTestObject.cs">
-      <Link>Scheduling\Quartz\QuartzTestObject.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Scheduling.Quartz.Tests\Scheduling\Quartz\SchedulerFactoryObjectTest.cs">
-      <Link>Scheduling\Quartz\SchedulerFactoryObjectTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Scheduling.Quartz.Tests\Scheduling\Quartz\SimpleTriggerObjectTest.cs">
-      <Link>Scheduling\Quartz\SimpleTriggerObjectTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Scheduling.Quartz.Tests\Scheduling\Quartz\SpringObjectJobFactoryTest.cs">
-      <Link>Scheduling\Quartz\SpringObjectJobFactoryTest.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Scheduling.Quartz.Tests\Scheduling\Quartz\TestMethodInvokingTask.cs">
-      <Link>Scheduling\Quartz\TestMethodInvokingTask.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Scheduling.Quartz.Tests\Scheduling\Quartz\TestUtil.cs">
-      <Link>Scheduling\Quartz\TestUtil.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Scheduling.Quartz.Tests\Scheduling\Quartz\TriggerObjectTest.cs">
-      <Link>Scheduling\Quartz\TriggerObjectTest.cs</Link>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <Content Include="job-scheduling-data.xml">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
@@ -136,6 +92,23 @@
     <None Include="Spring.Scheduling.Quartz20.Tests.dll.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Compile Include="QuartzCompilerOptionsTests.cs" />
+    <Compile Include="Scheduling\Quartz\AdaptableJobFactoryTest.cs" />
+    <Compile Include="Scheduling\Quartz\CronTriggerObjectTest.cs" />
+    <Compile Include="Scheduling\Quartz\JobDetailObjectTest.cs" />
+    <Compile Include="Scheduling\Quartz\MethodInvokingJobDetailFactoryObjectTest.cs" />
+    <Compile Include="Scheduling\Quartz\MethodInvokingJobTest.cs" />
+    <Compile Include="Scheduling\Quartz\QuartzSupportTests.cs" />
+    <Compile Include="Scheduling\Quartz\QuartzTestObject.cs" />
+    <Compile Include="Scheduling\Quartz\SchedulerFactoryObjectTest.cs" />
+    <Compile Include="Scheduling\Quartz\SimpleTriggerObjectTest.cs" />
+    <Compile Include="Scheduling\Quartz\SpringObjectJobFactoryTest.cs" />
+    <Compile Include="Scheduling\Quartz\TestMethodInvokingTask.cs" />
+    <Compile Include="Scheduling\Quartz\TestUtil.cs" />
+    <Compile Include="Scheduling\Quartz\TriggerObjectTest.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
