@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<project name="Spring.Scheduling.Quartz.Tests" default="build" xmlns="http://nant.sf.net/schemas/nant.xsd">
+<project name="Spring.Scheduling.Quartz20.Tests" default="build" xmlns="http://nant.sf.net/schemas/nant.xsd">
 
     <include buildfile="${spring.basedir}/common-project.include" />
 
@@ -18,7 +18,7 @@
 			</fileset>
 		</copy>		
 
-		<csc target="library" define="${current.build.defines.csc}"
+		<csc target="library" define="${current.build.defines.csc},QUARTZ_2_0"
 		     warnaserror="true"
 		     optimize="${build.optimize}"
 		     debug="${current.build.debug}"
@@ -38,13 +38,13 @@
 		</csc>
 
 		<copy todir="${current.bin.dir}">
-			<fileset basedir="${project::get-name()}/Data">
+			<fileset basedir="${project::get-base-directory()}">
 				<include name="**/*.xml" />
-			        <include name="**/*.test" />
+				<include name="**/*.test" />
 			</fileset>
 		</copy>
 		<copy todir="${current.bin.dir}">
-			<fileset basedir="${project::get-name()}">
+			<fileset basedir="${project::get-base-directory()}">
 				<include name="**/*.config" />
 			</fileset>
 		</copy>

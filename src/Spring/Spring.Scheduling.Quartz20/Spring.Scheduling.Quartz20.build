@@ -29,14 +29,6 @@
             </nowarn>
             <sources failonempty="true">
                 <include name="**/*.cs" />
-				<include name="../Spring.Scheduling.Quartz/**/*.cs" />
-				<exclude name="../Spring.Scheduling.Quartz/**/CronTriggerObject.cs" />
-				<exclude name="../Spring.Scheduling.Quartz/**/JobDetailObject.cs" />
-				<exclude name="../Spring.Scheduling.Quartz/**/MethodInvokingJobDetailFactoryObject.cs" />
-				<exclude name="../Spring.Scheduling.Quartz/**/SchedulerAccessor.cs" />
-				<exclude name="../Spring.Scheduling.Quartz/**/SimpleTriggerObject.cs" />
-				<exclude name="../Spring.Scheduling.Quartz/**/StatefulMethodInvokingJob.cs" />
-				<exclude name="../Spring.Scheduling.Quartz/**/ResourceJobSchedulingDataProcessor.cs" />
                 <include name="../GenCommonAssemblyInfo.cs" />
             </sources>
 	    <references basedir="${current.bin.dir}">
