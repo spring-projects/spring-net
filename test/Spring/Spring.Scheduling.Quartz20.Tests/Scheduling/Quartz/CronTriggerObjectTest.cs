@@ -17,14 +17,13 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+
 using NUnit.Framework;
 
 using Quartz;
+using Quartz.Impl;
 using Quartz.Job;
 
-#if QUARTZ_2_0
-using JobDetail = Quartz.Impl.JobDetailImpl;
-#endif
 
 namespace Spring.Scheduling.Quartz
 {
@@ -70,7 +69,7 @@ namespace Spring.Scheduling.Quartz
         {
             const string jobName = "jobName";
             const string jobGroup = "jobGroup";
-            JobDetail jd = new JobDetail(jobName, jobGroup, typeof (NoOpJob));
+            IJobDetail jd = new JobDetailImpl(jobName, jobGroup, typeof(NoOpJob));
             cronTrigger.JobDetail = jd;
             cronTrigger.AfterPropertiesSet();
             base.TestAfterPropertiesSet_JobDetailGiven();
@@ -83,11 +82,7 @@ namespace Spring.Scheduling.Quartz
         [Test]
         public void TestJobDataAsMap()
         {
-#if QUARTZ_2_0
             IDictionary data = new Dictionary<string, object>();
-#else
-            Hashtable data = new Hashtable();
-#endif
             data["foo"] = "bar";
             data["number"] = 123;
             cronTrigger.JobDataAsMap = data;

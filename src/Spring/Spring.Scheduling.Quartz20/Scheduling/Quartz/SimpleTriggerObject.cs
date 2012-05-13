@@ -15,8 +15,10 @@
 */
 using System;
 using System.Collections;
+
 using Quartz;
 using Quartz.Impl.Triggers;
+
 using Spring.Objects.Factory;
 using Spring.Util;
 
@@ -115,7 +117,7 @@ namespace Spring.Scheduling.Quartz
 		{
             set
             {
-                AssertUtils.State(value > TimeSpan.Zero, "Start delay cannot be negative.");
+                AssertUtils.State(value >= TimeSpan.Zero, "Start delay cannot be negative.");
                 startDelay = value;
             }
             get { return startDelay; }
@@ -181,17 +183,10 @@ namespace Spring.Scheduling.Quartz
         /// </exception>
 		public virtual void AfterPropertiesSet()
 		{
-#if QUARTZ_2_0
             if (StartTimeUtc == DateTimeOffset.MinValue)
             {
                 StartTimeUtc = DateTimeOffset.UtcNow;
             }
-#else
-            if (StartTimeUtc == DateTime.MinValue)
-            {
-                StartTimeUtc = DateTime.UtcNow;
-            }
-#endif
             if (StartDelay > TimeSpan.Zero)
             {
                 StartTimeUtc = DateTime.UtcNow.Add(startDelay);

@@ -16,18 +16,13 @@
 
 using System.Collections;
 using System.Collections.Generic;
+
 using NUnit.Framework;
 
 using Quartz;
+using Quartz.Impl.Triggers;
 using Quartz.Job;
 using Quartz.Spi;
-
-#if QUARTZ_2_0
-using Trigger = Quartz.Spi.IOperableTrigger;
-using JobExecutionContext = Quartz.IJobExecutionContext;
-using JobDetail = Quartz.IJobDetail;
-using SimpleTrigger = Quartz.Impl.Triggers.SimpleTriggerImpl;
-#endif
 
 namespace Spring.Scheduling.Quartz
 {
@@ -55,14 +50,10 @@ namespace Spring.Scheduling.Quartz
         [Test]
         public void TestCreateJobInstance_SimpleDefaults()
         {
-            Trigger trigger = new SimpleTrigger();
+            IOperableTrigger trigger = new SimpleTriggerImpl();
             TriggerFiredBundle bundle = TestUtil.CreateMinimalFiredBundleWithTypedJobDetail(typeof (NoOpJob), trigger);
 
-#if QUARTZ_2_0
             IJob job = factory.NewJob(bundle, null);
-#else
-            IJob job = factory.NewJob(bundle);
-#endif
             Assert.IsNotNull(job, "Created job was null");
         }
 
@@ -72,22 +63,14 @@ namespace Spring.Scheduling.Quartz
         [Test]
         public void TestCreateJobInstance_SchedulerContextGiven()
         {
-            Trigger trigger = new SimpleTrigger();
+            IOperableTrigger trigger = new SimpleTriggerImpl();
             TriggerFiredBundle bundle = TestUtil.CreateMinimalFiredBundleWithTypedJobDetail(typeof(InjectableJob), trigger);
 
-#if QUARTZ_2_0
             IDictionary<string, object> items = new Dictionary<string, object>();
             items["foo"] = "bar";
             items["number"] = 123;
             factory.SchedulerContext = new SchedulerContext(items);
             InjectableJob job = (InjectableJob)factory.NewJob(bundle, null);
-#else
-            IDictionary items = new Hashtable();
-            items["foo"] = "bar";
-            items["number"] = 123;
-            factory.SchedulerContext = new SchedulerContext(items);
-            InjectableJob job = (InjectableJob) factory.NewJob(bundle);
-#endif
 
             Assert.IsNotNull(job, "Created job was null");
             Assert.AreEqual("bar", job.Foo, "string injection failed");
@@ -101,16 +84,12 @@ namespace Spring.Scheduling.Quartz
         public void TestCreateJobInstance_IgnoredProperties()
         {
             factory.IgnoredUnknownProperties = new string[] {"foo", "baz"};
-            Trigger trigger = new SimpleTrigger();
+            IOperableTrigger trigger = new SimpleTriggerImpl();
             trigger.JobDataMap["foo"] = "should not be injected";
             trigger.JobDataMap["number"] = 123;
             TriggerFiredBundle bundle = TestUtil.CreateMinimalFiredBundleWithTypedJobDetail(typeof(InjectableJob), trigger);
 
-#if QUARTZ_2_0
             InjectableJob job = (InjectableJob)factory.NewJob(bundle, null);
-#else
-            InjectableJob job = (InjectableJob)factory.NewJob(bundle);
-#endif
             Assert.IsNotNull(job, "Created job was null");
             Assert.AreEqual(123, job.Number, "integer injection failed");
             Assert.IsNull(job.Foo, "foo was injected when it was not supposed to    ");

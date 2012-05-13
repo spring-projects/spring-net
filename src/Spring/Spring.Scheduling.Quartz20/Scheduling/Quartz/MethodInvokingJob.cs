@@ -23,12 +23,6 @@ using Quartz;
 
 using Spring.Objects.Support;
 
-#if QUARTZ_2_0
-using JobExecutionContext = Quartz.IJobExecutionContext;
-#else
-using JobExecutionContext = Quartz.JobExecutionContext;
-#endif
-
 namespace Spring.Scheduling.Quartz
 {
     /// <summary> 
@@ -64,7 +58,7 @@ namespace Spring.Scheduling.Quartz
         /// Invoke the method via the MethodInvoker.
         /// </summary>
         /// <param name="context"></param>
-        protected override void ExecuteInternal(JobExecutionContext context)
+        protected override void ExecuteInternal(IJobExecutionContext context)
         {
             if (methodInvoker == null)
             {

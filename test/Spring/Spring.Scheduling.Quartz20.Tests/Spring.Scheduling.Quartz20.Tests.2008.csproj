@@ -16,7 +16,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\..\build\VS.NET.2008\Spring.Scheduling.Quartz20.Tests\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NET_2_0,NET_3_0,NET_3_5,QUARTZ_2_0</DefineConstants>
+    <DefineConstants>TRACE;DEBUG</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>
@@ -27,7 +27,7 @@
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>..\..\..\build\VS.NET.2008\Spring.Scheduling.Quartz20.Tests\Release\</OutputPath>
-    <DefineConstants>TRACE;NET_2_0,QUARTZ_2_0</DefineConstants>
+    <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>

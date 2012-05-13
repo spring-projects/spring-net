@@ -18,7 +18,6 @@ using System;
 using System.Data;
 using System.Reflection;
 
-using Quartz.Impl.AdoJobStore;
 using Quartz.Impl.AdoJobStore.Common;
 
 using IDbMetadata=Spring.Data.Common.IDbMetadata;

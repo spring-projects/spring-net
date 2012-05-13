@@ -17,12 +17,6 @@ using Quartz;
 
 using Spring.Objects;
 
-#if QUARTZ_2_0
-using JobExecutionContext = Quartz.IJobExecutionContext;
-#else
-using JobExecutionContext = Quartz.JobExecutionContext;
-#endif
-
 namespace Spring.Scheduling.Quartz
 {
 	/// <summary> 
@@ -48,7 +42,7 @@ namespace Spring.Scheduling.Quartz
 	/// </p>
     /// </remarks>
 	/// <author>Juergen Hoeller</author>
-	/// <seealso cref="JobExecutionContext.MergedJobDataMap" />
+	/// <seealso cref="IJobExecutionContext.MergedJobDataMap" />
 	/// <seealso cref="IScheduler.Context" />
 	/// <seealso cref="JobDetailObject.JobDataAsMap" />
 	/// <seealso cref="CronTriggerObject.JobDataAsMap" />
@@ -62,7 +56,7 @@ namespace Spring.Scheduling.Quartz
 		/// values, and delegates to <code>ExecuteInternal</code> afterwards.
 		/// </summary>
 		/// <seealso cref="ExecuteInternal" />
-		public void Execute(JobExecutionContext context)
+        public void Execute(IJobExecutionContext context)
 		{
 			try
 			{
@@ -85,6 +79,6 @@ namespace Spring.Scheduling.Quartz
 		/// exactly the same as for the standard Quartz execute method.
 		/// </summary>
 		/// <seealso cref="Execute" />
-		protected abstract void ExecuteInternal(JobExecutionContext context);
+        protected abstract void ExecuteInternal(IJobExecutionContext context);
 	}
 }

@@ -22,6 +22,7 @@ using NUnit.Framework;
 
 using Quartz;
 using Quartz.Impl;
+using Quartz.Impl.Triggers;
 using Quartz.Spi;
 
 using Rhino.Mocks;
@@ -29,14 +30,6 @@ using Rhino.Mocks;
 using Spring.Context.Support;
 using Spring.Objects;
 using Spring.Objects.Factory.Support;
-
-#if QUARTZ_2_0
-using CronTrigger = Quartz.Impl.Triggers.CronTriggerImpl;
-using JobExecutionContext = Quartz.IJobExecutionContext;
-using JobDetail = Quartz.Impl.JobDetailImpl;
-using SimpleTrigger = Quartz.Impl.Triggers.SimpleTriggerImpl;
-using Trigger = Quartz.ITrigger;
-#endif
 
 namespace Spring.Scheduling.Quartz
 {
@@ -111,7 +104,7 @@ namespace Spring.Scheduling.Quartz
             }
             mijdfb.TargetMethod = ("doSomething");
             mijdfb.AfterPropertiesSet();
-            JobDetail jobDetail1 = (JobDetail) mijdfb.GetObject();
+            IJobDetail jobDetail1 = (IJobDetail) mijdfb.GetObject();
 
             SimpleTriggerObject trigger1 = new SimpleTriggerObject();
             trigger1.ObjectName = ("myTrigger1");
@@ -131,9 +124,9 @@ namespace Spring.Scheduling.Quartz
             schedulerFactoryObject.SchedulerContextAsMap = (schedulerContext);
             if (explicitJobDetail)
             {
-                schedulerFactoryObject.JobDetails = (new JobDetail[] {jobDetail0});
+                schedulerFactoryObject.JobDetails = (new IJobDetail[] {jobDetail0});
             }
-            schedulerFactoryObject.Triggers = (new Trigger[] {trigger0, trigger1});
+            schedulerFactoryObject.Triggers = (new ITrigger[] {trigger0, trigger1});
             try
             {
                 schedulerFactoryObject.AfterPropertiesSet();
@@ -196,7 +189,7 @@ namespace Spring.Scheduling.Quartz
             mijdfb.TargetObject = (task1);
             mijdfb.TargetMethod = ("doSomething");
             mijdfb.AfterPropertiesSet();
-            JobDetail jobDetail1 = (JobDetail) mijdfb.GetObject();
+            IJobDetail jobDetail1 = (IJobDetail) mijdfb.GetObject();
 
             SimpleTriggerObject trigger1 = new SimpleTriggerObject();
             trigger1.ObjectName = ("myTrigger1");
@@ -207,18 +200,11 @@ namespace Spring.Scheduling.Quartz
 
             IScheduler scheduler = MockRepository.GenerateMock<IScheduler>();
             scheduler.Stub(x => x.Context).Return(new SchedulerContext());
-#if QUARTZ_2_0
-            scheduler.Stub(x => x.GetTrigger(new TriggerKey("myTrigger1", SchedulerConstants.DefaultGroup))).Return(new SimpleTrigger());
-#else
-            scheduler.Stub(x => x.GetTrigger("myTrigger1", SchedulerConstants.DefaultGroup)).Return(new SimpleTrigger());
-#endif
+            scheduler.Stub(x => x.GetTrigger(new TriggerKey("myTrigger1", SchedulerConstants.DefaultGroup))).Return(new SimpleTriggerImpl());
+
             if (overwrite)
             {
-#if QUARTZ_2_0
                 scheduler.Stub(x => x.RescheduleJob(new TriggerKey("myTrigger1", SchedulerConstants.DefaultGroup), trigger1)).Return(DateTime.UtcNow);
-#else
-                scheduler.Stub(x => x.RescheduleJob("myTrigger1", SchedulerConstants.DefaultGroup, trigger1)).Return(DateTime.UtcNow);
-#endif
             }
 
             SchedulerFactoryObject schedulerFactoryObject = new TestSchedulerFactoryObject(scheduler);
@@ -226,7 +212,7 @@ namespace Spring.Scheduling.Quartz
             IDictionary schedulerContext = new Hashtable();
             schedulerContext.Add("otherTestObject", tb);
             schedulerFactoryObject.SchedulerContextAsMap = (schedulerContext);
-            schedulerFactoryObject.Triggers = (new Trigger[] {trigger0, trigger1});
+            schedulerFactoryObject.Triggers = (new ITrigger[] {trigger0, trigger1});
             if (overwrite)
             {
                 schedulerFactoryObject.OverwriteExistingJobs = (true);
@@ -289,7 +275,7 @@ namespace Spring.Scheduling.Quartz
             mijdfb.TargetObject = (task1);
             mijdfb.TargetMethod = ("doSomething");
             mijdfb.AfterPropertiesSet();
-            JobDetail jobDetail1 = (JobDetail) mijdfb.GetObject();
+            IJobDetail jobDetail1 = (IJobDetail) mijdfb.GetObject();
 
             SimpleTriggerObject trigger1 = new SimpleTriggerObject();
             trigger1.ObjectName = ("myTrigger1");
@@ -300,30 +286,18 @@ namespace Spring.Scheduling.Quartz
 
             IScheduler scheduler = MockRepository.GenerateMock<IScheduler>();
             scheduler.Stub(x => x.Context).Return(new SchedulerContext());
-#if QUARTZ_2_0
-            scheduler.Stub(x => x.GetTrigger(new TriggerKey("myTrigger1", SchedulerConstants.DefaultGroup))).Return(new SimpleTrigger());
-#else
-            scheduler.Stub(x => x.GetTrigger("myTrigger1", SchedulerConstants.DefaultGroup)).Return(new SimpleTrigger());
-#endif
+            scheduler.Stub(x => x.GetTrigger(new TriggerKey("myTrigger1", SchedulerConstants.DefaultGroup))).Return(new SimpleTriggerImpl());
             if (overwrite)
             {
                 scheduler.AddJob(jobDetail1, true);
-#if QUARTZ_2_0
                 scheduler.Stub(x => x.RescheduleJob(new TriggerKey("myTrigger1", SchedulerConstants.DefaultGroup), trigger1)).Return(DateTime.UtcNow);
-#else
-                scheduler.Stub(x => x.RescheduleJob("myTrigger1", SchedulerConstants.DefaultGroup, trigger1)).Return(DateTime.UtcNow);
-#endif
             }
             
             scheduler.Stub(x => x.ScheduleJob(trigger0)).Throw(new ObjectAlreadyExistsException(""));
 
             if (overwrite)
             {
-#if QUARTZ_2_0
                 scheduler.Stub(x => x.RescheduleJob(new TriggerKey("myTrigger0", SchedulerConstants.DefaultGroup), trigger0)).Return(DateTime.UtcNow);
-#else
-                scheduler.Stub(x => x.RescheduleJob("myTrigger0", SchedulerConstants.DefaultGroup, trigger0)).Return(DateTime.UtcNow);
-#endif
             }
 
             scheduler.Start();
@@ -335,7 +309,7 @@ namespace Spring.Scheduling.Quartz
             IDictionary schedulerContext = new Hashtable();
             schedulerContext.Add("otherTestObject", tb);
             schedulerFactoryObject.SchedulerContextAsMap = (schedulerContext);
-            schedulerFactoryObject.Triggers = (new Trigger[] {trigger0, trigger1});
+            schedulerFactoryObject.Triggers = (new ITrigger[] {trigger0, trigger1});
             if (overwrite)
             {
                 schedulerFactoryObject.OverwriteExistingJobs = (true);
@@ -354,62 +328,7 @@ namespace Spring.Scheduling.Quartz
 
         }
 
-#if !QUARTZ_2_0
-        /// <summary>
-        /// </summary>
-        [Test]
-        public void TestSchedulerFactoryObjectWithListeners()
-        {
-            IJobFactory jobFactory = new AdaptableJobFactory();
-
-            IScheduler scheduler = MockRepository.GenerateMock<IScheduler>();
-
-            ISchedulerListener schedulerListener = new TestSchedulerListener();
-            IJobListener globalJobListener = new TestJobListener();
-            IJobListener jobListener = new TestJobListener();
-            ITriggerListener globalTriggerListener = new TestTriggerListener();
-            ITriggerListener triggerListener = new TestTriggerListener();
-
-            Expect.Call(scheduler.JobFactory = (jobFactory));
-            scheduler.AddSchedulerListener(schedulerListener); 
-            scheduler.AddGlobalJobListener(globalJobListener);
-            scheduler.AddJobListener(jobListener); 
-            scheduler.AddGlobalTriggerListener(globalTriggerListener);
-            scheduler.AddTriggerListener(triggerListener); 
-            scheduler.Start();
-            scheduler.Shutdown(false);
-
-            SchedulerFactoryObject schedulerFactoryObject = new TestSchedulerFactoryObject(scheduler);
-
-            schedulerFactoryObject.JobFactory = (jobFactory);
-            schedulerFactoryObject.SchedulerListeners = (new ISchedulerListener[] {schedulerListener});
-            schedulerFactoryObject.GlobalJobListeners = (new IJobListener[] {globalJobListener});
-            schedulerFactoryObject.JobListeners = (new IJobListener[] {jobListener});
-            schedulerFactoryObject.GlobalTriggerListeners = (new ITriggerListener[] {globalTriggerListener});
-            schedulerFactoryObject.TriggerListeners = (new ITriggerListener[] {triggerListener});
-            try
-            {
-                schedulerFactoryObject.AfterPropertiesSet();
-                schedulerFactoryObject.Start();
-            }
-            finally
-            {
-                schedulerFactoryObject.Dispose();
-            }
-        }
-
-#endif
-        /*public void TestMethodInvocationWithConcurrency()  {
-		methodInvokingConcurrency(true);
-	}*/
-
-        // We can't test both since Quartz somehow seems to keep things in memory
-        // enable both and one of them will fail (order doesn't matter).
-        /*public void TestMethodInvocationWithoutConcurrency()  {
-		methodInvokingConcurrency(false);
-	}*/
-
-        private void methodInvokingConcurrency(bool concurrent)
+        private void MethodInvokingConcurrency(bool concurrent)
         {
             // Test the concurrency flag.
             // Method invoking job with two triggers.
@@ -424,7 +343,7 @@ namespace Spring.Scheduling.Quartz
             mijdfb.TargetObject = (task1);
             mijdfb.TargetMethod = ("doWait");
             mijdfb.AfterPropertiesSet();
-            JobDetail jobDetail1 = (JobDetail) mijdfb.GetObject();
+            IJobDetail jobDetail1 = (IJobDetail) mijdfb.GetObject();
 
             SimpleTriggerObject trigger0 = new SimpleTriggerObject();
             trigger0.ObjectName = ("myTrigger1");
@@ -443,8 +362,8 @@ namespace Spring.Scheduling.Quartz
             trigger1.AfterPropertiesSet();
 
             SchedulerFactoryObject schedulerFactoryObject = new SchedulerFactoryObject();
-            schedulerFactoryObject.JobDetails = (new JobDetail[] {jobDetail1});
-            schedulerFactoryObject.Triggers = (new Trigger[] {trigger1, trigger0});
+            schedulerFactoryObject.JobDetails = (new IJobDetail[] {jobDetail1});
+            schedulerFactoryObject.Triggers = (new ITrigger[] {trigger1, trigger0});
             schedulerFactoryObject.AfterPropertiesSet();
 
             // ok scheduler is set up... let's wait for like 4 seconds
@@ -497,14 +416,14 @@ namespace Spring.Scheduling.Quartz
             IJobFactory jobFactory = new AdaptableJobFactory();
 
             TestObject tb = new TestObject("tb", 99);
-            JobDetail jobDetail0 = new JobDetail();
+            JobDetailImpl jobDetail0 = new JobDetailImpl();
             jobDetail0.JobType = typeof (IJob);
             jobDetail0.Name = ("myJob0");
             jobDetail0.Group = (SchedulerConstants.DefaultGroup);
             jobDetail0.JobDataMap.Add("testObject", tb);
             Assert.AreEqual(tb, jobDetail0.JobDataMap.Get("testObject"));
 
-            CronTrigger trigger0 = new CronTrigger();
+            CronTriggerImpl trigger0 = new CronTriggerImpl();
             trigger0.Name = ("myTrigger0");
             trigger0.Group = SchedulerConstants.DefaultGroup;
             trigger0.JobName = "myJob0";
@@ -519,15 +438,15 @@ namespace Spring.Scheduling.Quartz
             mijdfb.TargetObject = (task1);
             mijdfb.TargetMethod = ("doSomething");
             mijdfb.AfterPropertiesSet();
-            JobDetail jobDetail1 = (JobDetail) mijdfb.GetObject();
+            IJobDetail jobDetail1 = (IJobDetail) mijdfb.GetObject();
 
-            SimpleTrigger trigger1 = new SimpleTrigger();
+            SimpleTriggerImpl trigger1 = new SimpleTriggerImpl();
             trigger1.Name = "myTrigger1";
             trigger1.Group = SchedulerConstants.DefaultGroup;
             trigger1.JobName = "myJob1";
             trigger1.JobGroup = SchedulerConstants.DefaultGroup;
             trigger1.StartTimeUtc = (DateTime.UtcNow);
-            trigger1.RepeatCount = (SimpleTrigger.RepeatIndefinitely);
+            trigger1.RepeatCount = (SimpleTriggerImpl.RepeatIndefinitely);
             trigger1.RepeatInterval = TimeSpan.FromMilliseconds(20);
 
             IScheduler scheduler = MockRepository.GenerateMock<IScheduler>();
@@ -535,8 +454,8 @@ namespace Spring.Scheduling.Quartz
             SchedulerFactoryObject schedulerFactoryObject = new TestSchedulerFactoryObject(scheduler);
 
             schedulerFactoryObject.JobFactory = (jobFactory);
-            schedulerFactoryObject.JobDetails = (new JobDetail[] {jobDetail0, jobDetail1});
-            schedulerFactoryObject.Triggers = (new Trigger[] {trigger0, trigger1});
+            schedulerFactoryObject.JobDetails = (new IJobDetail[] {jobDetail0, jobDetail1});
+            schedulerFactoryObject.Triggers = (new ITrigger[] {trigger0, trigger1});
             try
             {
                 schedulerFactoryObject.AfterPropertiesSet();
@@ -550,17 +469,10 @@ namespace Spring.Scheduling.Quartz
             scheduler.AssertWasCalled(x => x.JobFactory = jobFactory);
             scheduler.AssertWasCalled(x => x.AddJob(jobDetail0, true));
             scheduler.AssertWasCalled(x => x.AddJob(jobDetail1, true));
-#if QUARTZ_2_0
             scheduler.AssertWasCalled(x => x.GetJobDetail(new JobKey("myJob0", SchedulerConstants.DefaultGroup)));
             scheduler.AssertWasCalled(x => x.GetJobDetail(new JobKey("myJob1", SchedulerConstants.DefaultGroup)));
             scheduler.AssertWasCalled(x => x.GetTrigger(new TriggerKey("myTrigger0", SchedulerConstants.DefaultGroup)));
             scheduler.AssertWasCalled(x => x.GetTrigger(new TriggerKey("myTrigger1", SchedulerConstants.DefaultGroup)));
-#else
-            scheduler.AssertWasCalled(x => x.GetJobDetail("myJob0", SchedulerConstants.DefaultGroup));
-            scheduler.AssertWasCalled(x => x.GetJobDetail("myJob1", SchedulerConstants.DefaultGroup));
-            scheduler.AssertWasCalled(x => x.GetTrigger("myTrigger0", SchedulerConstants.DefaultGroup));
-            scheduler.AssertWasCalled(x => x.GetTrigger("myTrigger1", SchedulerConstants.DefaultGroup));
-#endif
         }
 
         /// <summary>
@@ -618,62 +530,6 @@ namespace Spring.Scheduling.Quartz
             Assert.AreEqual(ac, jobDetail.JobDataMap.Get("appCtx"));
         }
 
-#if !QUARTZ_2_0
-        /// <summary>
-        /// </summary>
-        [Test]
-        public void TestMethodInvokingJobDetailFactoryObjectWithListenerNames()
-        {
-            TestMethodInvokingTask task = new TestMethodInvokingTask();
-            MethodInvokingJobDetailFactoryObject mijdfb = new MethodInvokingJobDetailFactoryObject();
-            String[] names = new String[] {"test1", "test2"};
-            mijdfb.Name = ("myJob1");
-            mijdfb.Group = (SchedulerConstants.DefaultGroup);
-            mijdfb.TargetObject = (task);
-            mijdfb.TargetMethod = ("doSomething");
-            mijdfb.JobListenerNames = (names);
-            mijdfb.AfterPropertiesSet();
-            JobDetail jobDetail = (JobDetail) mijdfb.GetObject();
-            ArrayList result = new ArrayList(jobDetail.JobListenerNames);
-            Assert.AreEqual(names, result);
-        }
-
-        /// <summary>
-        /// </summary>
-        [Test]
-        public void TestJobDetailObjectWithListenerNames()
-        {
-            JobDetailObject jobDetail = new JobDetailObject();
-            String[] names = new String[] {"test1", "test2"};
-            jobDetail.JobListenerNames = (names);
-            ArrayList result = new ArrayList(jobDetail.JobListenerNames);
-            Assert.AreEqual(names, result);
-        }
-
-        /// <summary>
-        /// </summary>
-        [Test]
-        public void TestCronTriggerObjectWithListenerNames()
-        {
-            CronTriggerObject trigger = new CronTriggerObject();
-            String[] names = new String[] {"test1", "test2"};
-            trigger.TriggerListenerNames = (names);
-            ArrayList result = new ArrayList(trigger.TriggerListenerNames);
-            Assert.AreEqual(names, result);
-        }
-
-        /// <summary>
-        /// </summary>
-        [Test]
-        public void TestSimpleTriggerObjectWithListenerNames()
-        {
-            SimpleTriggerObject trigger = new SimpleTriggerObject();
-            String[] names = new String[] {"test1", "test2"};
-            trigger.TriggerListenerNames = (names);
-            ArrayList result = new ArrayList(trigger.TriggerListenerNames);
-            Assert.AreEqual(names, result);
-        }
-#endif
         /// <summary>
         /// </summary>
         [Test]
@@ -682,9 +538,8 @@ namespace Spring.Scheduling.Quartz
             CountingTaskExecutor taskExecutor = new CountingTaskExecutor();
             DummyJob.count = 0;
 
-            JobDetail jobDetail = new JobDetail();
+            JobDetailImpl jobDetail = new JobDetailImpl();
             jobDetail.JobType = typeof (DummyJob);
-            ;
             jobDetail.Name = ("myJob");
 
             SimpleTriggerObject trigger = new SimpleTriggerObject();
@@ -697,8 +552,8 @@ namespace Spring.Scheduling.Quartz
 
             SchedulerFactoryObject factoryObject = new SchedulerFactoryObject();
             factoryObject.TaskExecutor = (taskExecutor);
-            factoryObject.Triggers = (new Trigger[] {trigger});
-            factoryObject.JobDetails = (new JobDetail[] {jobDetail});
+            factoryObject.Triggers = (new ITrigger[] {trigger});
+            factoryObject.JobDetails = (new IJobDetail[] {jobDetail});
             factoryObject.AfterPropertiesSet();
             factoryObject.Start();
 
@@ -716,7 +571,7 @@ namespace Spring.Scheduling.Quartz
         {
             DummyRunnable.count = 0;
 
-            JobDetail jobDetail = new JobDetailObject();
+            JobDetailImpl jobDetail = new JobDetailObject();
             jobDetail.JobType = typeof (DummyRunnable);
             jobDetail.Name = "myJob";
 
@@ -729,8 +584,8 @@ namespace Spring.Scheduling.Quartz
             trigger.AfterPropertiesSet();
 
             SchedulerFactoryObject factoryObject = new SchedulerFactoryObject();
-            factoryObject.Triggers = new Trigger[] {trigger};
-            factoryObject.JobDetails = new JobDetail[] {jobDetail};
+            factoryObject.Triggers = new ITrigger[] {trigger};
+            factoryObject.JobDetails = new IJobDetail[] {jobDetail};
             factoryObject.AfterPropertiesSet();
             factoryObject.Start();
 
@@ -748,7 +603,7 @@ namespace Spring.Scheduling.Quartz
             DummyJob.param = 0;
             DummyJob.count = 0;
 
-            JobDetail jobDetail = new JobDetail();
+            JobDetailImpl jobDetail = new JobDetailImpl();
             jobDetail.JobType = (typeof (DummyJobObject));
             jobDetail.Name = ("myJob");
             jobDetail.JobDataMap.Put("param", "10");
@@ -762,8 +617,8 @@ namespace Spring.Scheduling.Quartz
             trigger.AfterPropertiesSet();
 
             SchedulerFactoryObject factoryObject = new SchedulerFactoryObject();
-            factoryObject.Triggers = (new Trigger[] {trigger});
-            factoryObject.JobDetails = (new JobDetail[] {jobDetail});
+            factoryObject.Triggers = (new ITrigger[] {trigger});
+            factoryObject.JobDetails = (new IJobDetail[] {jobDetail});
             factoryObject.AfterPropertiesSet();
             factoryObject.Start();
 
@@ -782,7 +637,7 @@ namespace Spring.Scheduling.Quartz
             DummyJob.param = 0;
             DummyJob.count = 0;
 
-            JobDetail jobDetail = new JobDetail();
+            JobDetailImpl jobDetail = new JobDetailImpl();
             jobDetail.JobType = typeof(DummyJob);
             jobDetail.Name = ("myJob");
             jobDetail.JobDataMap.Add("param", "10");
@@ -798,8 +653,8 @@ namespace Spring.Scheduling.Quartz
 
             SchedulerFactoryObject factoryObject = new SchedulerFactoryObject();
             factoryObject.JobFactory = (new SpringObjectJobFactory());
-            factoryObject.Triggers = (new Trigger[] {trigger});
-            factoryObject.JobDetails = (new JobDetail[] {jobDetail});
+            factoryObject.Triggers = (new ITrigger[] {trigger});
+            factoryObject.JobDetails = (new IJobDetail[] {jobDetail});
             factoryObject.AfterPropertiesSet();
             factoryObject.Start();
 
@@ -818,7 +673,7 @@ namespace Spring.Scheduling.Quartz
             DummyJob.param = 0;
             DummyJob.count = 0;
 
-            JobDetail jobDetail = new JobDetail();
+            JobDetailImpl jobDetail = new JobDetailImpl();
             jobDetail.JobType = typeof(DummyJob);
             jobDetail.Name = ("myJob");
             jobDetail.JobDataMap.Add("para", "10");
@@ -836,8 +691,8 @@ namespace Spring.Scheduling.Quartz
             SpringObjectJobFactory jobFactory = new SpringObjectJobFactory();
             jobFactory.IgnoredUnknownProperties = (new String[] {"ignoredParam"});
             bean.JobFactory = (jobFactory);
-            bean.Triggers = (new Trigger[] {trigger});
-            bean.JobDetails = (new JobDetail[] {jobDetail});
+            bean.Triggers = (new ITrigger[] {trigger});
+            bean.JobDetails = (new IJobDetail[] {jobDetail});
             bean.AfterPropertiesSet();
 
             Thread.Sleep(500);
@@ -855,7 +710,7 @@ namespace Spring.Scheduling.Quartz
             DummyRunnable.param = 0;
             DummyRunnable.count = 0;
 
-            JobDetail jobDetail = new JobDetailObject();
+            JobDetailObject jobDetail = new JobDetailObject();
             jobDetail.JobType = typeof (DummyRunnable);
             jobDetail.Name = ("myJob");
             jobDetail.JobDataMap.Add("param", "10");
@@ -870,8 +725,8 @@ namespace Spring.Scheduling.Quartz
 
             SchedulerFactoryObject factoryObject = new SchedulerFactoryObject();
             factoryObject.JobFactory = (new SpringObjectJobFactory());
-            factoryObject.Triggers = (new Trigger[] {trigger});
-            factoryObject.JobDetails = (new JobDetail[] {jobDetail});
+            factoryObject.Triggers = (new ITrigger[] {trigger});
+            factoryObject.JobDetails = (new IJobDetail[] {jobDetail});
             factoryObject.AfterPropertiesSet();
             factoryObject.Start();
 
@@ -890,7 +745,7 @@ namespace Spring.Scheduling.Quartz
             DummyJobObject.param = 0;
             DummyJobObject.count = 0;
 
-            JobDetail jobDetail = new JobDetail();
+            JobDetailImpl jobDetail = new JobDetailImpl();
             jobDetail.JobType = typeof (DummyJobObject);
             jobDetail.Name = ("myJob");
             jobDetail.JobDataMap.Add("param", "10");
@@ -905,8 +760,8 @@ namespace Spring.Scheduling.Quartz
 
             SchedulerFactoryObject factoryObject = new SchedulerFactoryObject();
             factoryObject.JobFactory = (new SpringObjectJobFactory());
-            factoryObject.Triggers = (new Trigger[] {trigger});
-            factoryObject.JobDetails = (new JobDetail[] {jobDetail});
+            factoryObject.Triggers = (new ITrigger[] {trigger});
+            factoryObject.JobDetails = (new IJobDetail[] {jobDetail});
             factoryObject.AfterPropertiesSet();
             factoryObject.Start();
 
@@ -1064,8 +919,6 @@ namespace Spring.Scheduling.Quartz
             ctx.Dispose();
         }
 
-
-#if QUARTZ_2_0
         private class TestSchedulerListener : ISchedulerListener
         {
             public void JobScheduled(ITrigger trigger)
@@ -1145,47 +998,6 @@ namespace Spring.Scheduling.Quartz
             }
         }
 
-#else
-        private class TestSchedulerListener : ISchedulerListener
-        {
-            public void JobScheduled(Trigger trigger)
-            {
-            }
-
-            public void JobUnscheduled(String triggerName, String triggerGroup)
-            {
-            }
-
-            public void TriggerFinalized(Trigger trigger)
-            {
-            }
-
-            public void TriggersPaused(String triggerName, String triggerGroup)
-            {
-            }
-
-            public void TriggersResumed(String triggerName, String triggerGroup)
-            {
-            }
-
-            public void JobsPaused(String jobName, String jobGroup)
-            {
-            }
-
-            public void JobsResumed(String jobName, String jobGroup)
-            {
-            }
-
-            public void SchedulerError(String msg, SchedulerException cause)
-            {
-            }
-
-            public void SchedulerShutdown()
-            {
-            }
-        }
-#endif
-
         private class TestJobListener : IJobListener
         {
             public string Name
@@ -1193,15 +1005,15 @@ namespace Spring.Scheduling.Quartz
                 get { return null; }
             }
 
-            public void JobToBeExecuted(JobExecutionContext context)
+            public void JobToBeExecuted(IJobExecutionContext context)
             {
             }
 
-            public void JobExecutionVetoed(JobExecutionContext context)
+            public void JobExecutionVetoed(IJobExecutionContext context)
             {
             }
 
-            public void JobWasExecuted(JobExecutionContext context, JobExecutionException jobException)
+            public void JobWasExecuted(IJobExecutionContext context, JobExecutionException jobException)
             {
             }
         }
@@ -1214,20 +1026,20 @@ namespace Spring.Scheduling.Quartz
                 get { return null; }
             }
 
-            public void TriggerFired(Trigger trigger, JobExecutionContext context)
+            public void TriggerFired(ITrigger trigger, IJobExecutionContext context)
             {
             }
 
-            public bool VetoJobExecution(Trigger trigger, JobExecutionContext context)
+            public bool VetoJobExecution(ITrigger trigger, IJobExecutionContext context)
             {
                 return false;
             }
 
-            public void TriggerMisfired(Trigger trigger)
+            public void TriggerMisfired(ITrigger trigger)
             {
             }
 
-            public void TriggerComplete(Trigger trigger, JobExecutionContext context,
+            public void TriggerComplete(ITrigger trigger, IJobExecutionContext context,
                                         SchedulerInstruction triggerInstructionCode)
             {
             }
@@ -1278,7 +1090,7 @@ namespace Spring.Scheduling.Quartz
             /// applied as object property values by execute. The contract is
             /// exactly the same as for the standard Quartz execute method.
             /// </summary>
-            protected override void ExecuteInternal(JobExecutionContext jobExecutionContext)
+            protected override void ExecuteInternal(IJobExecutionContext jobExecutionContext)
             {
                 count++;
             }
@@ -1329,7 +1141,7 @@ namespace Spring.Scheduling.Quartz
         /// Executes this job instance.
         ///</summary>
         ///<param name="jobExecutionContext"></param>
-        public void Execute(JobExecutionContext jobExecutionContext)
+        public void Execute(IJobExecutionContext jobExecutionContext)
         {
             count++;
         }

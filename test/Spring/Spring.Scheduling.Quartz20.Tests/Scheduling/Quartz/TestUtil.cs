@@ -17,12 +17,8 @@
 using System;
 
 using Quartz;
+using Quartz.Impl;
 using Quartz.Spi;
-
-#if QUARTZ_2_0
-using JobDetail = Quartz.Impl.JobDetailImpl;
-using Trigger = Quartz.Spi.IOperableTrigger;
-#endif
 
 namespace Spring.Scheduling.Quartz
 {
@@ -50,9 +46,9 @@ namespace Spring.Scheduling.Quartz
         /// <param name="jobType">Type of the job.</param>
         /// <param name="trigger">The trigger.</param>
         /// <returns>Minimal TriggerFiredBundle</returns>
-        public static TriggerFiredBundle CreateMinimalFiredBundleWithTypedJobDetail(Type jobType, Trigger trigger)
+        public static TriggerFiredBundle CreateMinimalFiredBundleWithTypedJobDetail(Type jobType, IOperableTrigger trigger)
         {
-            JobDetail jd = new JobDetail("jobName", "jobGroup", jobType);
+            IJobDetail jd = new JobDetailImpl("jobName", "jobGroup", jobType);
             TriggerFiredBundle bundle = new TriggerFiredBundle(jd, trigger, null, false, null, null, null, null);
             return bundle;
         }

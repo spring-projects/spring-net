@@ -18,9 +18,7 @@ using System;
 using System.Collections;
 using System.Collections.Specialized;
 using System.IO;
-#if QUARTZ_2_0
 using System.Linq;
-#endif
 
 using Quartz;
 using Quartz.Impl;
@@ -569,11 +567,7 @@ namespace Spring.Scheduling.Quartz
         public virtual void AfterPropertiesSet()
         {
             // Create SchedulerFactory instance.
-#if QUARTZ_2_0
             ISchedulerFactory schedulerFactory = ObjectUtils.InstantiateType<ISchedulerFactory>(schedulerFactoryType);
-#else
-            ISchedulerFactory schedulerFactory = (ISchedulerFactory) ObjectUtils.InstantiateType(schedulerFactoryType);
-#endif
 
             InitSchedulerFactory(schedulerFactory);
             
@@ -762,12 +756,8 @@ namespace Spring.Scheduling.Quartz
             // Put specified objects into Scheduler context.
             if (schedulerContextMap != null)
             {
-#if QUARTZ_2_0
                 var dictionary = schedulerContextMap.Cast<DictionaryEntry>().ToDictionary(entry => entry.Key.ToString(), entry => entry.Value);
                 scheduler.Context.PutAll(dictionary);
-#else
-                scheduler.Context.PutAll(schedulerContextMap);
-#endif
             }
 
             // Register IApplicationContext in Scheduler context.

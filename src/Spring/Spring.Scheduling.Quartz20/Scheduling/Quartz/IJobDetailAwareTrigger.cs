@@ -14,11 +14,7 @@
 * limitations under the License.
 */
 
-#if QUARTZ_2_0
-using JobDetail = Quartz.IJobDetail;
-#else
-using JobDetail = Quartz.JobDetail;
-#endif
+using Quartz;
 
 namespace Spring.Scheduling.Quartz
 {
@@ -47,6 +43,6 @@ namespace Spring.Scheduling.Quartz
 		/// Return the JobDetail that this Trigger is associated with.
 		/// </summary>
 		/// <returns>The associated JobDetail, or <code>null</code> if none</returns>
-		JobDetail JobDetail { get; }
+		IJobDetail JobDetail { get; }
 	}
 }

@@ -18,9 +18,6 @@ using NUnit.Framework;
 
 using Quartz;
 
-#if QUARTZ_2_0
-using JobDetail = Quartz.Impl.JobDetailImpl;
-#endif
 
 namespace Spring.Scheduling.Quartz
 {
@@ -53,14 +50,11 @@ namespace Spring.Scheduling.Quartz
         public void TestGetObject_MinimalDefaults()
         {
             factory.AfterPropertiesSet();
-            JobDetail jd = (JobDetail) factory.GetObject();
+            IJobDetail jd = (IJobDetail) factory.GetObject();
             Assert.IsNotNull(jd, "job detail was null");
-            Assert.AreEqual(FACTORY_NAME, jd.Name, "job name did not default to factory name");
+            Assert.AreEqual(FACTORY_NAME, jd.Key.Name, "job name did not default to factory name");
             Assert.AreEqual(jd.JobType, typeof(MethodInvokingJob), "factory did not create method invoking job");
             Assert.IsTrue(jd.Durable, "job was not durable");
-#if !QUARTZ_2_0
-            Assert.IsTrue(jd.Volatile, "job was not volatile");
-#endif
         }
 
         /// <summary>
@@ -71,25 +65,9 @@ namespace Spring.Scheduling.Quartz
         {
             factory.Concurrent = false;
             factory.AfterPropertiesSet();
-            JobDetail jd = (JobDetail)factory.GetObject();
+            IJobDetail jd = (IJobDetail)factory.GetObject();
             Assert.IsNotNull(jd, "job detail was null");
             Assert.AreEqual(jd.JobType, typeof(StatefulMethodInvokingJob), "factory did not create stateful method invoking job");
         }
-
-#if !QUARTZ_2_0
-        /// <summary>
-        /// Tests JobDetail retrieval and it's set properties.
-        /// </summary>
-        [Test]
-        public void TestGetObject_TriggerListenersSet()
-        {
-            string[] LISTENER_NAMES = new string[] {"Foo", "Bar"};
-            factory.JobListenerNames = LISTENER_NAMES;
-            factory.AfterPropertiesSet();
-            JobDetail jd = (JobDetail)factory.GetObject();
-            CollectionAssert.AreEquivalent(LISTENER_NAMES, jd.JobListenerNames);
-        }
-#endif
-
     }
 }

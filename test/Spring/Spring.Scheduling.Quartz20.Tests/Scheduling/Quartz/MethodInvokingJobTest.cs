@@ -20,18 +20,14 @@ using System.Threading;
 using NUnit.Framework;
 
 using Quartz;
+using Quartz.Impl;
+using Quartz.Impl.Triggers;
 using Quartz.Job;
 using Quartz.Spi;
 
 using Rhino.Mocks;
 
 using Spring.Objects.Support;
-
-#if QUARTZ_2_0
-using JobExecutionContext = Quartz.Impl.JobExecutionContextImpl;
-using JobDetail = Quartz.Impl.JobDetailImpl;
-using SimpleTrigger = Quartz.Impl.Triggers.SimpleTriggerImpl;
-#endif
 
 namespace Spring.Scheduling.Quartz
 {
@@ -101,7 +97,7 @@ namespace Spring.Scheduling.Quartz
             mi.TargetMethod = "InvokeWithReturnValue";
             mi.Prepare();
             methodInvokingJob.MethodInvoker = mi;
-            JobExecutionContext context = CreateMinimalJobExecutionContext();
+            IJobExecutionContext context = CreateMinimalJobExecutionContext();
             methodInvokingJob.Execute(context);
 
             Assert.AreEqual(InvocationCountingJob.DefaultReturnValue, context.Result, "result value was not set to context");
@@ -146,18 +142,18 @@ namespace Spring.Scheduling.Quartz
             methodInvokingJob.Execute(CreateMinimalJobExecutionContext());
         }
         
-        private static JobExecutionContext CreateMinimalJobExecutionContext()
+        private static IJobExecutionContext CreateMinimalJobExecutionContext()
         {
             MockRepository repo = new MockRepository();
-            IScheduler sched = (IScheduler) repo.DynamicMock(typeof (IScheduler));
-            JobExecutionContext ctx = new JobExecutionContext(sched, ConstructMinimalTriggerFiredBundle(), null);
+            IScheduler sched = (IScheduler)repo.DynamicMock(typeof(IScheduler));
+            IJobExecutionContext ctx = new JobExecutionContextImpl(sched, ConstructMinimalTriggerFiredBundle(), null);
             return ctx;
         }
 
         private static TriggerFiredBundle ConstructMinimalTriggerFiredBundle()
         {
-            JobDetail jd = new JobDetail("jobName", "jobGroup", typeof(NoOpJob));
-            SimpleTrigger trigger = new SimpleTrigger("triggerName", "triggerGroup");
+            IJobDetail jd = new JobDetailImpl("jobName", "jobGroup", typeof(NoOpJob));
+            IOperableTrigger trigger = new SimpleTriggerImpl("triggerName", "triggerGroup");
             TriggerFiredBundle retValue = new TriggerFiredBundle(jd, trigger, null, false, null, null, null, null);
 
             return retValue;

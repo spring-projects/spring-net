@@ -25,17 +25,11 @@ using NUnit.Framework;
 
 using Quartz;
 using Quartz.Impl;
+using Quartz.Impl.Triggers;
 using Quartz.Spi;
 using Rhino.Mocks;
 
 using Spring.Core.IO;
-
-#if QUARTZ_2_0
-using Trigger = Quartz.ITrigger;
-using JobExecutionContext = Quartz.IJobExecutionContext;
-using JobDetail = Quartz.IJobDetail;
-using SimpleTrigger = Quartz.Impl.Triggers.SimpleTriggerImpl;
-#endif
 
 namespace Spring.Scheduling.Quartz
 {
@@ -97,34 +91,6 @@ namespace Spring.Scheduling.Quartz
             TestSchedulerFactory.MockScheduler.AssertWasCalled(x => x.JobFactory = null);
         }
 
-#if !QUARTZ_2_0
-        /// <summary>
-        /// Tests AfterPropertiesSet behavior.
-        /// </summary>
-        [Test]
-        public void TestAfterPropertiesSet_AddListeners()
-        {
-            InitForAfterPropertiesSetTest();
-            
-            factory.SchedulerListeners = new ISchedulerListener[] { MockRepository.GenerateMock<ISchedulerListener>() };
-
-            factory.GlobalJobListeners = new IJobListener[] { MockRepository.GenerateMock<IJobListener>() };
-
-            factory.JobListeners = new IJobListener[] { MockRepository.GenerateMock<IJobListener>() };
-
-            factory.GlobalTriggerListeners = new ITriggerListener[] { MockRepository.GenerateMock<ITriggerListener>() };
-
-            factory.TriggerListeners = new ITriggerListener[] { MockRepository.GenerateMock<ITriggerListener>() };
-
-            factory.AfterPropertiesSet();
-
-            TestSchedulerFactory.MockScheduler.AssertWasCalled(x => x.AddSchedulerListener(Arg<ISchedulerListener>.Is.NotNull));
-            TestSchedulerFactory.MockScheduler.AssertWasCalled(x => x.AddGlobalJobListener(Arg<IJobListener>.Is.NotNull));
-            TestSchedulerFactory.MockScheduler.AssertWasCalled(x => x.AddJobListener(Arg<IJobListener>.Is.NotNull));
-            TestSchedulerFactory.MockScheduler.AssertWasCalled(x => x.AddGlobalTriggerListener(Arg<ITriggerListener>.Is.NotNull));
-            TestSchedulerFactory.MockScheduler.AssertWasCalled(x => x.AddTriggerListener(Arg<ITriggerListener>.Is.NotNull));
-        }
-#endif
         /// <summary>
         /// Tests AfterPropertiesSet behavior.
         /// </summary>
@@ -154,14 +120,10 @@ namespace Spring.Scheduling.Quartz
 
             const string TRIGGER_NAME = "trigName";
             const string TRIGGER_GROUP = "trigGroup";
-            SimpleTrigger trigger = new SimpleTrigger(TRIGGER_NAME, TRIGGER_GROUP);
-            factory.Triggers = new Trigger[] { trigger };
+            SimpleTriggerImpl trigger = new SimpleTriggerImpl(TRIGGER_NAME, TRIGGER_GROUP);
+            factory.Triggers = new ITrigger[] { trigger };
 
-#if QUARTZ_2_0
             TestSchedulerFactory.MockScheduler.Stub(x => x.GetTrigger(new TriggerKey(TRIGGER_NAME, TRIGGER_GROUP))).Return(trigger);
-#else
-            TestSchedulerFactory.MockScheduler.Stub(x => x.GetTrigger(TRIGGER_NAME, TRIGGER_GROUP)).Return(trigger);
-#endif
 
             factory.AfterPropertiesSet();
         }
@@ -176,8 +138,8 @@ namespace Spring.Scheduling.Quartz
 
             const string TRIGGER_NAME = "trigName";
             const string TRIGGER_GROUP = "trigGroup";
-            SimpleTrigger trigger = new SimpleTrigger(TRIGGER_NAME, TRIGGER_GROUP);
-            factory.Triggers = new Trigger[] { trigger };
+            SimpleTriggerImpl trigger = new SimpleTriggerImpl(TRIGGER_NAME, TRIGGER_GROUP);
+            factory.Triggers = new ITrigger[] { trigger };
 
             factory.AfterPropertiesSet();
 
@@ -337,21 +299,12 @@ ConnectionStringKey+ " = " + ConnectionStringValue + Environment.NewLine +
             return mockScheduler;
         }
 
-#if QUARTZ_2_0
         ///<summary>
         ///</summary>
         public ICollection<IScheduler> AllSchedulers
         {
             get { return new List<IScheduler>(); }
         }
-#else
-        ///<summary>
-        ///</summary>
-        public ICollection AllSchedulers
-        {
-            get { return new ArrayList(); }
-        }
-#endif
 
         public static void Initialize()
         {

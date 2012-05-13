@@ -19,12 +19,6 @@ using Quartz;
 
 using Spring.Util;
 
-#if QUARTZ_2_0
-using JobExecutionContext = Quartz.IJobExecutionContext;
-#else
-using JobExecutionContext = Quartz.JobExecutionContext;
-#endif
-
 namespace Spring.Scheduling.Quartz
 {
 	/// <summary> 
@@ -39,7 +33,7 @@ namespace Spring.Scheduling.Quartz
 	/// <author>Juergen Hoeller</author>
 	/// <author>Marko Lahma (.NET)</author>
 	/// <seealso cref="SpringObjectJobFactory" />
-	/// <seealso cref="IJob.Execute(JobExecutionContext)" />
+	/// <seealso cref="IJob.Execute(IJobExecutionContext)" />
 	public class DelegatingJob : IJob
 	{
         private readonly ThreadStart delegateInstance;
@@ -69,7 +63,7 @@ namespace Spring.Scheduling.Quartz
 		/// <summary> 
         /// Delegates execution to the underlying ThreadStart.
 		/// </summary>
-		public virtual void Execute(JobExecutionContext context)
+		public virtual void Execute(IJobExecutionContext context)
 		{
             delegateInstance.Invoke();
 		}
