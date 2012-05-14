@@ -116,10 +116,6 @@ Rebuilding Solutions using Nant and "solutions.build":
           <exclude name="Spring.NET.2010.sln"/>
           <exclude name="examples/Spring/Spring.EmsQuickStart/**/*.sln" unless="${build-ems}"/>
           <exclude name="examples/**/Spring.Examples.Pool.2010.sln"/>
-		  
-		  <!-- TODO: rework this to use Spring.Scheduling.Quartz20 before we can include it again -->
-		  <exclude name="examples/**/Spring.Scheduling.Quartz.Example.2010.sln"/>
-		  
         </items>
       </in>
       <do>

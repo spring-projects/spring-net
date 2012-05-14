@@ -2,8 +2,6 @@ using System;
 
 using Quartz;
 
-using Spring.Scheduling.Quartz;
-
 namespace Spring.Scheduling.Quartz.Example
 {
 	/// <summary>
@@ -26,7 +24,7 @@ namespace Spring.Scheduling.Quartz.Example
 		/// Execute.
 		/// </summary>
 		/// <param name="context"></param>
-        protected override void ExecuteInternal(JobExecutionContext context)
+        protected override void ExecuteInternal(IJobExecutionContext context)
         {
             Console.WriteLine("{0}: ExecuteInternal called, user name: {1}, next fire time {2}", 
                 DateTime.Now, userName, context.NextFireTimeUtc.Value.ToLocalTime());
