@@ -285,11 +285,40 @@ namespace Spring.Expressions
             object value = ExpressionEvaluator.GetValue(null, "'123' + 1");
             Assert.AreEqual("1231", value);
         }
-        
-        [Test(Description="SPRNET-944")]
+#if NET_4_0
+        [Test(Description = "SPRNET-1507 - Test 1")]
+        public void TestExpandoObject()
+        {
+            dynamic dynamicObject = new System.Dynamic.ExpandoObject();
+            //add property at run-time
+            dynamicObject.IssueId = "1507";
+
+            object value = ExpressionEvaluator.GetValue(dynamicObject, "IssueId");
+            Assert.AreEqual("1507", value);
+        }
+
+        [Test(Description = "SPRNET-1507 - Test 2")]
+        public void TestExpandoObjectWithNotExistedProperty()
+        {
+            try
+            {
+                dynamic dynamicObject = new System.Dynamic.ExpandoObject();
+
+                ExpressionEvaluator.GetValue(dynamicObject, "PropertyName");
+                Assert.Fail();
+            }
+            catch (InvalidPropertyException ex)
+            {
+                Assert.AreEqual(
+                    "'PropertyName' node cannot be resolved for the specified context [System.Dynamic.ExpandoObject].",
+                    ex.Message);
+            }
+        }
+#endif
+        [Test(Description = "SPRNET-944")]
         public void DateTests()
         {
-            string dateLiteral = (string)ExpressionEvaluator.GetValue(null, "'date'"); 
+            string dateLiteral = (string)ExpressionEvaluator.GetValue(null, "'date'");
             Assert.AreEqual("date", dateLiteral);
         }
 
@@ -321,7 +350,7 @@ namespace Spring.Expressions
             }
             catch (RecognitionException ex)
             {
-                Assert.AreEqual("Syntax Error on line 1, column 6: expecting ''', found '<EOF>' in expression"+Environment.NewLine+"''date'", ex.Message);
+                Assert.AreEqual("Syntax Error on line 1, column 6: expecting ''', found '<EOF>' in expression" + Environment.NewLine + "''date'", ex.Message);
             }
         }
 
@@ -756,8 +785,8 @@ namespace Spring.Expressions
         [Test]
         public void TestTypeNodeWithGenericAssemblyQualifiedName()
         {
-//            Assert.AreEqual(typeof(int?), ExpressionEvaluator.GetValue(null, "T(System.Nullable`1[System.Int32], mscorlib)"));
-//            Assert.AreEqual(typeof(int?), ExpressionEvaluator.GetValue(null, "T(System.Nullable`1[[System.Int32, mscorlib]], mscorlib)"));
+            //            Assert.AreEqual(typeof(int?), ExpressionEvaluator.GetValue(null, "T(System.Nullable`1[System.Int32], mscorlib)"));
+            //            Assert.AreEqual(typeof(int?), ExpressionEvaluator.GetValue(null, "T(System.Nullable`1[[System.Int32, mscorlib]], mscorlib)"));
             Assert.AreEqual(typeof(int?), ExpressionEvaluator.GetValue(null, "T(System.Nullable`1[[int]], mscorlib)"));
             Assert.AreEqual(typeof(System.Collections.Generic.Dictionary<string, bool>), ExpressionEvaluator.GetValue(null, "T(System.Collections.Generic.Dictionary`2[System.String,System.Boolean],mscorlib)"));
         }
@@ -973,8 +1002,8 @@ namespace Spring.Expressions
         [Test]
         public void TestBitwiseOrOperator()
         {
-            Assert.AreEqual( 1 | 2, ExpressionEvaluator.GetValue(null, "1 or 2"));
-            Assert.AreEqual( 1 | -2, ExpressionEvaluator.GetValue(null, "1 or -2"));
+            Assert.AreEqual(1 | 2, ExpressionEvaluator.GetValue(null, "1 or 2"));
+            Assert.AreEqual(1 | -2, ExpressionEvaluator.GetValue(null, "1 or -2"));
             Assert.AreEqual(RegexOptions.IgnoreCase | RegexOptions.Compiled, ExpressionEvaluator.GetValue(null, "T(System.Text.RegularExpressions.RegexOptions).IgnoreCase or T(System.Text.RegularExpressions.RegexOptions).Compiled"));
         }
 
@@ -1001,7 +1030,7 @@ namespace Spring.Expressions
             Assert.AreEqual(1 & 3, ExpressionEvaluator.GetValue(null, "1 and 3"));
             Assert.AreEqual(1 & -1, ExpressionEvaluator.GetValue(null, "1 and -1"));
             Hashtable vars = new Hashtable();
-            vars["ALL"] = (RegexOptions) 0xFFFF;
+            vars["ALL"] = (RegexOptions)0xFFFF;
             Assert.AreEqual(RegexOptions.IgnoreCase, ExpressionEvaluator.GetValue(null, "T(System.Text.RegularExpressions.RegexOptions).IgnoreCase and #ALL", vars));
         }
 
@@ -1015,7 +1044,7 @@ namespace Spring.Expressions
             Assert.IsTrue((bool)ExpressionEvaluator.GetValue(null, "!false"));
             string expression = @"IsMember('Nikola Tesla') and !IsMember('Mihajlo Pupin')";
             Assert.IsFalse((bool)ExpressionEvaluator.GetValue(ieee, expression));
-            Assert.AreEqual( ~RegexOptions.Compiled, ExpressionEvaluator.GetValue(null, "!T(System.Text.RegularExpressions.RegexOptions).Compiled"));
+            Assert.AreEqual(~RegexOptions.Compiled, ExpressionEvaluator.GetValue(null, "!T(System.Text.RegularExpressions.RegexOptions).Compiled"));
         }
 
         /// <summary>
@@ -1679,8 +1708,8 @@ namespace Spring.Expressions
 
             Assert.AreEqual(typeof(TestObject),
                             ExpressionEvaluator.GetValue(null, @"@(my.Context/bla\:goran)").GetType());
-//            Assert.AreEqual(typeof(TestObject),
-//                            ExpressionEvaluator.GetValue(null, "@(my\\.Context:goran)").GetType());
+            //            Assert.AreEqual(typeof(TestObject),
+            //                            ExpressionEvaluator.GetValue(null, "@(my\\.Context:goran)").GetType());
         }
 
         /// <summary>
@@ -1721,14 +1750,14 @@ namespace Spring.Expressions
 
             vars = new Hashtable();
             vars["max"] = new DoubleFunctionTwoArgs(Max);
-            result = (double) ExpressionEvaluator.GetValue(null, "#max(5,25)", vars);
+            result = (double)ExpressionEvaluator.GetValue(null, "#max(5,25)", vars);
             Assert.AreEqual(25, result);
 
-            
+
         }
 
         private delegate double DoubleFunction(double arg);
-        
+
         private double Sqrt(double arg)
         {
             return Math.Sqrt(arg);
@@ -1826,7 +1855,7 @@ namespace Spring.Expressions
                             if ((int)item % 2 == 0)
                             {
                                 total = NumberUtils.Add(total, item);
-                            }                            
+                            }
                         }
                         else
                         {
@@ -1967,7 +1996,7 @@ namespace Spring.Expressions
             Assert.AreEqual(new int[] { 6, 8, 14, 24 }, ExpressionEvaluator.GetValue(set, "sort()"));
         }
 
-        [Test(Description="sort supports any ICollection containing elements of uniform type")]
+        [Test(Description = "sort supports any ICollection containing elements of uniform type")]
         public void TestSortProcessorWithSimpleICollectionType()
         {
             Stack stack = new Stack(new int[] { 24, 8, 14, 6 });
@@ -2019,8 +2048,8 @@ namespace Spring.Expressions
         public void TestConversionProcessor()
         {
             object[] arr = new object[] { "0", 1, 1.1m, "1.1", 1.1f };
-            decimal[] result = (decimal[]) ExpressionEvaluator.GetValue(arr, "convert(decimal)");
-            Assert.AreEqual( 0.0m, result[0] );
+            decimal[] result = (decimal[])ExpressionEvaluator.GetValue(arr, "convert(decimal)");
+            Assert.AreEqual(0.0m, result[0]);
             Assert.AreEqual(1.0m, result[1]);
             Assert.AreEqual(1.1m, result[2]);
             Assert.AreEqual(1.1m, result[3]);
@@ -2031,7 +2060,7 @@ namespace Spring.Expressions
         public void TestReverseProcessor()
         {
             object[] arr = new object[] { "0", 1, 2.1m, "3", 4.1f };
-            object[] result = new ArrayList( (ICollection) ExpressionEvaluator.GetValue(arr, "reverse()") ).ToArray();
+            object[] result = new ArrayList((ICollection)ExpressionEvaluator.GetValue(arr, "reverse()")).ToArray();
             Assert.AreEqual(new object[] { 4.1f, "3", 2.1m, 1, "0" }, result);
         }
 
@@ -2976,7 +3005,8 @@ namespace Spring.Expressions
         private Nullable<DateTime> nullableDate;
         private Nullable<Int32> nullableInt;
 
-        public Foo() : this(FooType.One)
+        public Foo()
+            : this(FooType.One)
         {
         }
 
