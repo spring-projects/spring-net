@@ -54,8 +54,6 @@ using Foo = Spring.Expressions.Foo;
 
 namespace Spring.Expressions
 {
-    using System.Dynamic;
-
     /// <summary>
     /// This class contains tests for ExpressionEvaluator.
     /// </summary>
@@ -287,11 +285,11 @@ namespace Spring.Expressions
             object value = ExpressionEvaluator.GetValue(null, "'123' + 1");
             Assert.AreEqual("1231", value);
         }
-
+#if NET_4_0
         [Test(Description = "SPRNET-1507 - Test 1")]
         public void TestExpandoObject()
         {
-            dynamic dynamicObject = new ExpandoObject();
+            dynamic dynamicObject = new System.Dynamic.ExpandoObject();
             //add property at run-time
             dynamicObject.IssueId = "1507";
 
@@ -304,7 +302,7 @@ namespace Spring.Expressions
         {
             try
             {
-                dynamic dynamicObject = new ExpandoObject();
+                dynamic dynamicObject = new System.Dynamic.ExpandoObject();
 
                 ExpressionEvaluator.GetValue(dynamicObject, "PropertyName");
                 Assert.Fail();
@@ -316,7 +314,7 @@ namespace Spring.Expressions
                     ex.Message);
             }
         }
-
+#endif
         [Test(Description = "SPRNET-944")]
         public void DateTests()
         {

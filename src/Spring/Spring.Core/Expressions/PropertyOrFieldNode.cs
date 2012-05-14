@@ -90,7 +90,11 @@ namespace Spring.Expressions
                 if (contextType != null && accessor == null)
                 {
                     // try to initialize node as ExpandoObject value
+#if NET_4_0
                     if (contextType == typeof(System.Dynamic.ExpandoObject))
+#else
+                    if(context.ToString() == "System.Dynamic.ExpandoObject")
+#endif
                     {
                         accessor = new ExpandoObjectValueAccessor(memberName);
                     }
@@ -108,6 +112,7 @@ namespace Spring.Expressions
                             // because the specified member could be a property of a Type class (i.e. EnumType.FullName)
                         }
                     }
+
 
                     // then try to initialize node as property or field value
                     if (accessor == null)
@@ -720,10 +725,14 @@ namespace Spring.Expressions
                 object value;
                 if (dictionary.TryGetValue(memberName, out value))
                     return value;
+#if NET_4_0
                 throw new InvalidPropertyException(typeof(System.Dynamic.ExpandoObject), memberName,
-                                                   "'" + memberName +
-                                                   "' node cannot be resolved for the specified context [" +
-                                                   context + "].");
+                                                  "'" + memberName +
+                                                  "' node cannot be resolved for the specified context [" +
+                                                  context + "].");
+#else
+                throw new InvalidPropertyException("'" + memberName + "' node cannot be resolved for the specified context [" + context + "].");
+#endif
             }
 
             public override void Set(object context, object value)
