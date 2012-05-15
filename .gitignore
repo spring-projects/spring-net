@@ -60,6 +60,7 @@ PrecompiledWeb
 /src/Spring/Spring.Data.NHibernate31/Spring.Data.NHibernate31.xml
 /src/Spring/Spring.Data.NHibernate32/Spring.Data.NHibernate32.xml
 /src/Spring/Spring.Data.NHibernate33/Spring.Data.NHibernate33.xml
+/src/Spring/Spring.Messaging.Ems/Spring.Messaging.Ems.xml
 /src/Spring/Spring.Messaging.Nms/Spring.Messaging.Nms.xml
 /src/Spring/Spring.Messaging/Spring.Messaging.xml
 /src/Spring/Spring.Data/Spring.Data.xml
