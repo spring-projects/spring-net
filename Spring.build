@@ -435,9 +435,7 @@ Commandline Examples:
     <nant buildfile="test/Spring/Spring.Messaging.Ems.Integration.Tests/Spring.Messaging.Ems.Integration.Tests.build" target="test" if="${build-ems}"/>
     <nant buildfile="test/Spring/Spring.Messaging.Nms.Tests/Spring.Messaging.Nms.Tests.build" target="test" if="${build-nms}"/>
     <nant buildfile="test/Spring/Spring.Messaging.Nms.Integration.Tests/Spring.Messaging.Nms.Integration.Tests.build" target="test" if="${build-nms}"/>
-	<!-- disabled until passing
 	<nant buildfile="test/Spring/Spring.Scheduling.Quartz20.Tests/Spring.Scheduling.Quartz20.Tests.build" target="test" if="${build-quartz}"/>
-	-->
     <nant buildfile="test/Spring/Spring.Messaging.Tests/Spring.Messaging.Tests.build" target="test" if="${build-msmq}"/>
     <nant buildfile="test/Spring/Spring.Template.Velocity.Tests/Spring.Template.Velocity.Tests.build" target="test" if="${build-velocity}"/>
 
