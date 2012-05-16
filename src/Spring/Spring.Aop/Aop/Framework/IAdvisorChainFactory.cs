@@ -21,7 +21,7 @@
 #region Imports
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 
 #endregion
@@ -35,25 +35,24 @@ namespace Spring.Aop.Framework
 	/// <author>Aleksandar Seovic (.NET)</author>
 	public interface IAdvisorChainFactory : IAdvisedSupportListener
 	{
-		/// <summary>
-		/// Gets the list of <see cref="AopAlliance.Intercept.IInterceptor"/> and
-		/// <see cref="Spring.Aop.Framework.InterceptorAndDynamicMethodMatcher"/>
-		/// instances for the supplied <paramref name="proxy"/>.
-		/// </summary>
-		/// <param name="advised">The proxy configuration object.</param>
-		/// <param name="proxy">The object proxy.</param>
-		/// <param name="method">
-		/// The method for which the interceptors are to be evaluated.
-		/// </param>
-		/// <param name="targetType">
-		/// The <see cref="System.Type"/> of the target object.
-		/// </param>
-		/// <returns> 
-		/// The list of <see cref="AopAlliance.Intercept.IInterceptor"/> and
-		/// <see cref="Spring.Aop.Framework.InterceptorAndDynamicMethodMatcher"/>
-		/// instances for the supplied <paramref name="proxy"/>.
-		/// </returns>
-		IList GetInterceptors(
-			IAdvised advised, object proxy, MethodInfo method, Type targetType);
+	    /// <summary>
+	    /// Gets the list of <see cref="AopAlliance.Intercept.IInterceptor"/> and
+	    /// <see cref="Spring.Aop.Framework.InterceptorAndDynamicMethodMatcher"/>
+	    /// instances for the supplied <paramref name="proxy"/>.
+	    /// </summary>
+	    /// <param name="advised">The proxy configuration object.</param>
+	    /// <param name="proxy">The object proxy.</param>
+	    /// <param name="method">
+	    /// The method for which the interceptors are to be evaluated.
+	    /// </param>
+	    /// <param name="targetType">
+	    /// The <see cref="System.Type"/> of the target object.
+	    /// </param>
+	    /// <returns> 
+	    /// The list of <see cref="AopAlliance.Intercept.IInterceptor"/> and
+	    /// <see cref="Spring.Aop.Framework.InterceptorAndDynamicMethodMatcher"/>
+	    /// instances for the supplied <paramref name="proxy"/>.
+	    /// </returns>
+	    IList<object> GetInterceptors(IAdvised advised, object proxy, MethodInfo method, Type targetType);
 	}
 }

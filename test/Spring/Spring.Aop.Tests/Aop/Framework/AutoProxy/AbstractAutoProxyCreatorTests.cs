@@ -19,6 +19,7 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Messaging;
 using System.Runtime.Remoting.Proxies;
@@ -120,13 +121,13 @@ namespace Spring.Aop.Framework.AutoProxy
                 this.ObjectFactory = objectFactory;
             }
 
-            protected override object[] GetAdvicesAndAdvisorsForObject(Type targetType, string targetName, ITargetSource customTargetSource)
+            protected override IList<object> GetAdvicesAndAdvisorsForObject(Type targetType, string targetName, ITargetSource customTargetSource)
             {
                 if (typeof(IFactoryObject).IsAssignableFrom(targetType))
                 {
                     return DO_NOT_PROXY;
                 }
-                return new object[] { NopInterceptor };
+                return new List<object> { NopInterceptor };
             }
         }
 

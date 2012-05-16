@@ -1,5 +1,6 @@
 using System;
-using System.Collections;
+using System.Collections.Generic;
+
 using Spring.Aop.Support;
 using Spring.Aop.Target;
 
@@ -30,7 +31,7 @@ namespace Spring.Aop.Framework.DynamicProxy
             {
                 throw new AopConfigException("Cannot create IAopProxy with null ProxyConfig");
             }
-            if (advisedSupport.Advisors.Length == 0 && advisedSupport.TargetSource == EmptyTargetSource.Empty)
+            if (advisedSupport.Advisors.Count == 0 && advisedSupport.TargetSource == EmptyTargetSource.Empty)
             {
                 throw new AopConfigException("Cannot create IAopProxy with no advisors and no target source");
             }
@@ -57,14 +58,14 @@ namespace Spring.Aop.Framework.DynamicProxy
             {
                 IAdvised innerProxy = (IAdvised)advisedSupport.TargetSource.GetTarget();
                 // eliminate duplicate advisors
-                ArrayList thisAdvisors = new ArrayList(advisedSupport.Advisors);
+                List<IAdvisor> thisAdvisors = new List<IAdvisor>(advisedSupport.Advisors);
                 foreach (IAdvisor innerAdvisor in innerProxy.Advisors)
                 {
                     foreach (IAdvisor thisAdvisor in thisAdvisors)
                     {
                         if (ReferenceEquals(thisAdvisor, innerAdvisor)
                             || (thisAdvisor.GetType() == typeof(DefaultPointcutAdvisor)
-                                && ((DefaultPointcutAdvisor)thisAdvisor).Equals(innerAdvisor)
+                                && thisAdvisor.Equals(innerAdvisor)
                                )
                             )
                         {

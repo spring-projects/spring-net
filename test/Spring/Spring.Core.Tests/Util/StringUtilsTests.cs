@@ -21,7 +21,8 @@
 #region Imports
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
+
 using NUnit.Framework;
 
 #endregion
@@ -119,7 +120,7 @@ namespace Spring.Util
 			Assert.AreEqual(
 				":Foo,:Bar", StringUtils.CollectionToCommaDelimitedString(arr));
 
-			Assert.AreEqual("null", StringUtils.CollectionToCommaDelimitedString(null));
+			Assert.AreEqual("null", StringUtils.CollectionToCommaDelimitedString<object>(null));
 		}
 
 		[Test]
@@ -127,8 +128,8 @@ namespace Spring.Util
 		{
 			Foo[] arr = new Foo[] {new Foo("Foo"), new Foo("Bar")};
 			Assert.AreEqual(
-				":Foo,:Bar", StringUtils.ArrayToCommaDelimitedString(arr));
-			Assert.AreEqual("null", StringUtils.ArrayToCommaDelimitedString(null));
+				":Foo,:Bar", StringUtils.CollectionToCommaDelimitedString(arr));
+			Assert.AreEqual("null", StringUtils.CollectionToCommaDelimitedString<object>(null));
 		}
 
 		[Test]
@@ -214,71 +215,71 @@ namespace Spring.Util
 		[Test]
 		public void GetAntExpressionsWithNull()
 		{
-			IList actual = StringUtils.GetAntExpressions(null);
+			IList<string> actual = StringUtils.GetAntExpressions(null);
 			Assert.IsNotNull(actual);
 			string[] expected = new string[] {};
-			Assert.IsTrue(ArrayUtils.AreEqual(expected, (string[]) ArrayList.Adapter(actual).ToArray(typeof (string))));
+			Assert.IsTrue(ArrayUtils.AreEqual(expected, new List<string>(actual).ToArray()));
 		}
 
 		[Test]
 		public void GetAntExpressionsWithEmptyString()
 		{
-			IList actual = StringUtils.GetAntExpressions(String.Empty);
+			IList<string> actual = StringUtils.GetAntExpressions(String.Empty);
 			Assert.IsNotNull(actual);
 			string[] expected = new string[] {};
-			Assert.IsTrue(ArrayUtils.AreEqual(expected, (string[]) ArrayList.Adapter(actual).ToArray(typeof (string))));
+			Assert.IsTrue(ArrayUtils.AreEqual(expected, new List<string>(actual).ToArray()));
 		}
 
 		[Test]
 		public void GetAntExpressionsWithAStringThatDoesntHaveAnyExpressions()
 		{
-			IList actual = StringUtils.GetAntExpressions("I could really go a cup of tea right now... in fact I think I'll go get one.");
+			IList<string> actual = StringUtils.GetAntExpressions("I could really go a cup of tea right now... in fact I think I'll go get one.");
 			Assert.IsNotNull(actual);
 			string[] expected = new string[] {};
-			Assert.IsTrue(ArrayUtils.AreEqual(expected, (string[]) ArrayList.Adapter(actual).ToArray(typeof (string))));
+			Assert.IsTrue(ArrayUtils.AreEqual(expected, new List<string>(actual).ToArray()));
 		}
 
 		[Test]
 		public void GetAntExpressionsWithAValidExpression()
 		{
-			IList actual = StringUtils.GetAntExpressions("${slurp}. Ah! That is one good cup of tea. That agent Cooper and his coffee... he sure was missing out on a good thing.");
+			IList<string> actual = StringUtils.GetAntExpressions("${slurp}. Ah! That is one good cup of tea. That agent Cooper and his coffee... he sure was missing out on a good thing.");
 			CheckGetAntExpressions(actual, "slurp");
 		}
 
 		[Test]
 		public void GetAntExpressionsWithANestedExpression()
 		{
-			IList actual = StringUtils.GetAntExpressions("And yeah, I've never been a fan of the doughnut... ${blechh${shudder}}");
+			IList<string> actual = StringUtils.GetAntExpressions("And yeah, I've never been a fan of the doughnut... ${blechh${shudder}}");
 			CheckGetAntExpressions(actual, "blechh${shudder");
 		}
 
 		[Test]
 		public void GetAntExpressionsWithACoupleOfDuplicatedValidExpressions()
 		{
-			IList actual = StringUtils.GetAntExpressions("${sigh}. Laura Palmer though... man, that sure was a tragedy. ${sigh}");
+			IList<string> actual = StringUtils.GetAntExpressions("${sigh}. Laura Palmer though... man, that sure was a tragedy. ${sigh}");
 			CheckGetAntExpressions(actual, "sigh");
 		}
 
 		[Test]
 		public void GetAntExpressionsWithACoupleOfUniqueValidExpressions()
 		{
-			IList actual = StringUtils.GetAntExpressions("${Mmm}. Has there been any good telly since then... ${thinks}");
+			IList<string> actual = StringUtils.GetAntExpressions("${Mmm}. Has there been any good telly since then... ${thinks}");
 			CheckGetAntExpressions(actual, "Mmm", "thinks");
 		}
 
 		[Test]
 		public void GetAntExpressionsWithMalformedExpression()
 		{
-			IList actual = StringUtils.GetAntExpressions("Mmm... just what counts as ${a malformed{ expression?");
+			IList<string> actual = StringUtils.GetAntExpressions("Mmm... just what counts as ${a malformed{ expression?");
 			CheckGetAntExpressions(actual, new string[] {});
 		}
 
-		private static void CheckGetAntExpressions(IList actual, params string[] expected)
+		private static void CheckGetAntExpressions(IList<string> actual, params string[] expected)
 		{
 			Assert.IsNotNull(actual);
 			Assert.IsTrue(ArrayUtils.AreEqual(
 				expected,
-				(string[]) ArrayList.Adapter(actual).ToArray(typeof (string))));
+				new List<string>(actual).ToArray()));
 		}
 
 		[Test]

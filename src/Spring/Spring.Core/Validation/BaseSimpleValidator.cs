@@ -19,6 +19,7 @@
 #endregion
 
 using System.Collections;
+using System.Collections.Generic;
 using Spring.Expressions;
 
 namespace Spring.Validation
@@ -85,7 +86,7 @@ namespace Spring.Validation
         /// <param name="contextParams">Additional context parameters.</param>
         /// <param name="errors"><see cref="ValidationErrors"/> instance to add error messages to.</param>
         /// <returns><c>True</c> if validation was successful, <c>False</c> otherwise.</returns>
-        public override bool Validate(object validationContext, IDictionary contextParams, IValidationErrors errors)
+        public override bool Validate(object validationContext, IDictionary<string, object> contextParams, IValidationErrors errors)
         {
             bool valid = true;
 
@@ -111,7 +112,7 @@ namespace Spring.Validation
         /// <param name="rootContext">Root context to use for expression evaluation.</param>
         /// <param name="contextParams">Additional context parameters.</param>
         /// <returns>Result of the test expression evaluation, or validation context if test is <c>null</c>.</returns>
-        protected object EvaluateTest(object rootContext, IDictionary contextParams)
+        protected object EvaluateTest(object rootContext, IDictionary<string, object> contextParams)
         {
             if (Test == null)
             {

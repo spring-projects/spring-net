@@ -22,10 +22,13 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 using AopAlliance.Aop;
 using AopAlliance.Intercept;
+
 using Common.Logging;
+
 using Spring.Aop.Framework.Adapter;
 using Spring.Aop.Support;
 using Spring.Aop.Target;
@@ -394,7 +397,7 @@ namespace Spring.Aop.Framework
                     {
                         return this.singletonInstance.GetType();
                     }
-                    else if (Interfaces.Length == 1)
+                    else if (Interfaces.Count == 1)
                     {
                         return Interfaces[0];
                     }
@@ -453,8 +456,8 @@ namespace Spring.Aop.Framework
 
             // The copy needs a fresh advisor chain, and a fresh TargetSource.
             ITargetSource targetSource = FreshTargetSource();
-            IList advisorChain = FreshAdvisorChain();
-            IList introductionChain = FreshIntroductionChain();
+            IList<IAdvisor> advisorChain = FreshAdvisorChain();
+            IList<IIntroductionAdvisor> introductionChain = FreshIntroductionChain();
             AdvisedSupport copy = new AdvisedSupport();
             copy.CopyConfigurationFrom(this, targetSource, advisorChain, introductionChain);
 
@@ -622,16 +625,16 @@ namespace Spring.Aop.Framework
         /// <summary> Add all global interceptors and pointcuts.</summary>
         private void AddGlobalAdvisor(IListableObjectFactory objectFactory, string prefix)
         {
-            string[] globalAspectNames =
+            IList<string> globalAspectNames =
                 ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(objectFactory, typeof(IAdvisors));
-            string[] globalAdvisorNames =
+            IList<string> globalAdvisorNames =
                 ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(objectFactory, typeof(IAdvisor));
-            string[] globalInterceptorNames =
+            IList<string> globalInterceptorNames =
                 ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(objectFactory, typeof(IInterceptor));
-            ArrayList objects = new ArrayList();
-            Hashtable names = new Hashtable();
+            List<object> objects = new List<object>();
+            Dictionary<object, string> names = new Dictionary<object, string>();
 
-            for (int i = 0; i < globalAspectNames.Length; i++)
+            for (int i = 0; i < globalAspectNames.Count; i++)
             {
                 string name = globalAspectNames[i];
                 if (name.StartsWith(prefix))
@@ -648,7 +651,7 @@ namespace Spring.Aop.Framework
                     }
                 }
             }
-            for (int i = 0; i < globalAdvisorNames.Length; i++)
+            for (int i = 0; i < globalAdvisorNames.Count; i++)
             {
                 string name = globalAdvisorNames[i];
                 if (name.StartsWith(prefix))
@@ -662,7 +665,7 @@ namespace Spring.Aop.Framework
                     }
                 }
             }
-            for (int i = 0; i < globalInterceptorNames.Length; i++)
+            for (int i = 0; i < globalInterceptorNames.Count; i++)
             {
                 string name = globalInterceptorNames[i];
                 if (name.StartsWith(prefix))
@@ -672,10 +675,10 @@ namespace Spring.Aop.Framework
                     names[obj] = name;
                 }
             }
-            ((ArrayList)objects).Sort(new OrderComparator());
+            objects.Sort(new OrderComparator());
             foreach (object obj in objects)
             {
-                string name = (string)names[obj];
+                string name = names[obj];
                 AddAdvisorOnChainCreation(obj, name);
             }
         }
@@ -734,16 +737,16 @@ namespace Spring.Aop.Framework
         /// <summary> Add all global introductions.</summary>
         private void AddGlobalIntroduction(IListableObjectFactory objectFactory, string prefix)
         {
-            string[] globalAspectNames =
+            IList<string> globalAspectNames =
                 ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(objectFactory, typeof(IAdvisors));
-            string[] globalAdvisorNames =
+            IList<string> globalAdvisorNames =
                 ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(objectFactory, typeof(IAdvisor));
-            string[] globalIntroductionNames =
+            IList<string> globalIntroductionNames =
                 ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(objectFactory, typeof(IAdvice));
             ArrayList objects = new ArrayList();
-            Hashtable names = new Hashtable();
+            Dictionary<object, string> names = new Dictionary<object, string>();
 
-            for (int i = 0; i < globalAspectNames.Length; i++)
+            for (int i = 0; i < globalAspectNames.Count; i++)
             {
                 string name = globalAspectNames[i];
                 if (name.StartsWith(prefix))
@@ -760,7 +763,7 @@ namespace Spring.Aop.Framework
                     }
                 }
             }
-            for (int i = 0; i < globalAdvisorNames.Length; i++)
+            for (int i = 0; i < globalAdvisorNames.Count; i++)
             {
                 string name = globalAdvisorNames[i];
                 if (name.StartsWith(prefix))
@@ -774,7 +777,7 @@ namespace Spring.Aop.Framework
                     }
                 }
             }
-            for (int i = 0; i < globalIntroductionNames.Length; i++)
+            for (int i = 0; i < globalIntroductionNames.Count; i++)
             {
                 string name = globalIntroductionNames[i];
                 if (name.StartsWith(prefix))
@@ -791,7 +794,7 @@ namespace Spring.Aop.Framework
             objects.Sort(new OrderComparator());
             foreach (object obj in objects)
             {
-                string name = (string)names[obj];
+                string name = names[obj];
                 AddIntroductionOnChainCreation(obj, name);
             }
         }
@@ -845,10 +848,10 @@ namespace Spring.Aop.Framework
         /// We need to do this every time a new prototype instance is returned,
         /// to return distinct instances of prototype interfaces and pointcuts.
         /// </summary>
-        private IList FreshAdvisorChain()
+        private IList<IAdvisor> FreshAdvisorChain()
         {
-            IAdvisor[] advisors = Advisors;
-            ArrayList freshAdvisors = new ArrayList();
+            IList<IAdvisor> advisors = Advisors;
+            List<IAdvisor> freshAdvisors = new List<IAdvisor>();
             foreach (IAdvisor advisor in advisors)
             {
                 if (advisor is PrototypePlaceholder)
@@ -878,10 +881,10 @@ namespace Spring.Aop.Framework
         /// We need to do this every time a new prototype instance is returned,
         /// to return distinct instances of prototype interfaces and pointcuts.
         /// </summary>
-        private IList FreshIntroductionChain()
+        private IList<IIntroductionAdvisor> FreshIntroductionChain()
         {
-            IIntroductionAdvisor[] introductions = Introductions;
-            ArrayList freshIntroductions = new ArrayList();
+            IList<IIntroductionAdvisor> introductions = Introductions;
+            List<IIntroductionAdvisor> freshIntroductions = new List<IIntroductionAdvisor>();
             foreach (IIntroductionAdvisor introduction in introductions)
             {
                 if (introduction is PrototypePlaceholder)
@@ -896,7 +899,7 @@ namespace Spring.Aop.Framework
                     AssertUtils.ArgumentNotNull(this.objectFactory, "ObjectFactory");
 
                     object introductionObject = this.objectFactory.GetObject(pa.ObjectName);
-                    IAdvisor freshIntroduction = NamedObjectToIntroduction(introductionObject);
+                    IIntroductionAdvisor freshIntroduction = NamedObjectToIntroduction(introductionObject);
                     freshIntroductions.Add(freshIntroduction);
                 }
                 else

@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using System.Runtime.Remoting;
 using Spring.Objects.Factory.Config;
 

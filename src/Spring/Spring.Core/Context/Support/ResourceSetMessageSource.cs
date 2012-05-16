@@ -21,7 +21,7 @@
 #region Imports
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Resources;
@@ -49,8 +49,8 @@ namespace Spring.Context.Support
 	{
 		#region Fields
 
-		private Hashtable _cachedResources;
-		private IList _resourceManagers;
+		private Dictionary<string, object> _cachedResources;
+		private IList<object> _resourceManagers;
 
 		#endregion
 
@@ -60,15 +60,15 @@ namespace Spring.Context.Support
 		/// </summary>
 		public ResourceSetMessageSource()
 		{
-			_cachedResources = new Hashtable();
-			_resourceManagers = new ArrayList();
+			_cachedResources = new Dictionary<string, object>();
+			_resourceManagers = new List<object>();
 		}
 
 		/// <summary>
 		/// The collection of <see cref="System.Resources.ResourceManager"/>s
 		/// in this <see cref="Spring.Context.Support.ResourceSetMessageSource"/>.
 		/// </summary>
-		public IList ResourceManagers
+		public IList<object> ResourceManagers
 		{
 			get { return _resourceManagers; }
 			set { _resourceManagers = value; }
@@ -160,9 +160,9 @@ namespace Spring.Context.Support
 	    protected object ResolveObject(ResourceManager resourceManager, string code, CultureInfo cultureInfo)
 	    {
             string cacheKey = code + "." + cultureInfo.Name;
-            object resource = _cachedResources[cacheKey];
+            object resource;
 
-            if (resource == null)
+            if (!_cachedResources.TryGetValue(cacheKey, out resource))
             {
                 resource = resourceManager.GetObject(code, cultureInfo);
                 if (resource != null)

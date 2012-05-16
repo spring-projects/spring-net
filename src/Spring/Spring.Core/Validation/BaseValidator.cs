@@ -19,7 +19,7 @@
 #endregion
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using Spring.Expressions;
 
 namespace Spring.Validation
@@ -40,7 +40,7 @@ namespace Spring.Validation
     {
         #region Fields
 
-        private IList actions = new ArrayList();
+        private IList<IValidationAction> actions = new List<IValidationAction>();
 
         private IExpression when;
 
@@ -89,7 +89,7 @@ namespace Spring.Validation
         /// Gets or sets the validation actions.
         /// </summary>
         /// <value>The actions that should be executed after validation.</value>
-        public IList Actions
+        public IList<IValidationAction> Actions
         {
             get { return actions; }
             set { actions = value; }
@@ -115,7 +115,7 @@ namespace Spring.Validation
         /// <param name="contextParams">Additional context parameters.</param>
         /// <param name="errors"><see cref="ValidationErrors"/> instance to add error messages to.</param>
         /// <returns><c>True</c> if validation was successful, <c>False</c> otherwise.</returns>
-        public abstract bool Validate(object validationContext, IDictionary contextParams, IValidationErrors errors);
+        public abstract bool Validate(object validationContext, IDictionary<string, object> contextParams, IValidationErrors errors);
 
         #region Helper Methods
 
@@ -125,7 +125,7 @@ namespace Spring.Validation
         /// <param name="rootContext">Root context to use for expression evaluation.</param>
         /// <param name="contextParams">Additional context parameters.</param>
         /// <returns><c>True</c> if the condition is true, <c>False</c> otherwise.</returns>
-        protected bool EvaluateWhen(object rootContext, IDictionary contextParams)
+        protected bool EvaluateWhen(object rootContext, IDictionary<string, object> contextParams)
         {
             if (When == null)
             {
@@ -142,7 +142,7 @@ namespace Spring.Validation
         /// <param name="validationContext">Validation context.</param>
         /// <param name="contextParams">Additional context parameters.</param>
         /// <param name="errors">Validation errors container.</param>
-        protected void ProcessActions(bool isValid, object validationContext, IDictionary contextParams, IValidationErrors errors)
+        protected void ProcessActions(bool isValid, object validationContext, IDictionary<string, object> contextParams, IValidationErrors errors)
         {
             if (actions != null && actions.Count > 0)
             {

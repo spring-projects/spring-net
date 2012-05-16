@@ -166,7 +166,7 @@ namespace Spring.Testing.NUnit
             }
 		    if (contextKey is string[]) 
             {
-			    return StringUtils.ArrayToCommaDelimitedString((string[]) contextKey);
+                return StringUtils.CollectionToCommaDelimitedString((string[])contextKey);
 		    }
 		    else 
             {
@@ -228,7 +228,7 @@ namespace Spring.Testing.NUnit
         {
 		    if (logger.IsInfoEnabled) 
             {
-			    logger.Info("Loading config for: " + StringUtils.ArrayToCommaDelimitedString(locations));
+                logger.Info("Loading config for: " + StringUtils.CollectionToCommaDelimitedString(locations));
 		    }
 		    return new XmlApplicationContext(locations);
 	    }

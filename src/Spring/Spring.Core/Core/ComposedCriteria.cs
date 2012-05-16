@@ -21,6 +21,7 @@
 #region Imports
 
 using System.Collections;
+using System.Collections.Generic;
 using Spring.Core;
 
 #endregion
@@ -52,7 +53,7 @@ namespace Spring.Core
         /// </param>
         public ComposedCriteria(ICriteria criteria)
         {
-            _criteria = new ArrayList();
+            _criteria = new List<ICriteria>();
             Add(criteria);
         }
 
@@ -102,14 +103,14 @@ namespace Spring.Core
         /// The list of <see cref="Spring.Core.ICriteria"/> composing this
         /// instance.
         /// </summary>
-        protected IList Criteria
+        protected IList<ICriteria> Criteria
         {
             get { return _criteria; }
         }
 
         #region Fields
 
-        private IList _criteria;
+        private IList<ICriteria> _criteria;
 
         #endregion
     }

@@ -19,6 +19,7 @@
 #endregion
 
 using System.Collections;
+using System.Collections.Generic;
 using System.Web;
 using System.Web.Caching;
 
@@ -35,9 +36,9 @@ namespace Spring.Globalization
         /// </summary>
         /// <param name="cacheKey">Cache key to use for lookup.</param>
         /// <returns>A list of cached resources for the specified target object and culture.</returns>
-        protected override IList GetResources(string cacheKey)
+        protected override IList<Resource> GetResources(string cacheKey)
         {
-            return (IList)HttpRuntime.Cache[cacheKey];
+            return (IList<Resource>)HttpRuntime.Cache[cacheKey];
         }
 
         /// <summary>
@@ -45,7 +46,7 @@ namespace Spring.Globalization
         /// </summary>
         /// <param name="cacheKey">Cache key to use for the specified resources.</param>
         /// <param name="resources">A list of resources to cache.</param>
-        protected override void PutResources(string cacheKey, IList resources)
+        protected override void PutResources(string cacheKey, IList<Resource> resources)
         {
             HttpRuntime.Cache[cacheKey] = resources;
         }

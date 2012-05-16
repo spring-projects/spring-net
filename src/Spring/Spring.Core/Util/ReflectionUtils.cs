@@ -386,7 +386,7 @@ namespace Spring.Util
         /// <exception cref="AmbiguousMatchException">
         /// If more than 1 matching methods are found in the <paramref name="methods"/> list.
         /// </exception>
-        public static MethodInfo GetMethodByArgumentValues(MethodInfo[] methods, object[] argValues)
+        public static MethodInfo GetMethodByArgumentValues<T>(IEnumerable<T> methods, object[] argValues) where T : MethodBase
         {
             return (MethodInfo)GetMethodBaseByArgumentValues("method", methods, argValues);
         }
@@ -401,8 +401,7 @@ namespace Spring.Util
         /// <exception cref="AmbiguousMatchException">
         /// If more than 1 matching methods are found in the <paramref name="methods"/> list.
         /// </exception>
-        private static MethodBase GetMethodBaseByArgumentValues(string methodTypeName, MethodBase[] methods,
-                                                                object[] argValues)
+        private static MethodBase GetMethodBaseByArgumentValues<T>(string methodTypeName, IEnumerable<T> methods, object[] argValues) where T : MethodBase
         {
             MethodBase match = null;
             int matchCount = 0;
@@ -490,7 +489,7 @@ namespace Spring.Util
         /// <exception cref="AmbiguousMatchException">
         /// If more than 1 matching methods are found in the <paramref name="methods"/> list.
         /// </exception>
-        public static ConstructorInfo GetConstructorByArgumentValues(ConstructorInfo[] methods, object[] argValues)
+        public static ConstructorInfo GetConstructorByArgumentValues<T>(IList<T> methods, object[] argValues) where T : MethodBase
         {
             return (ConstructorInfo)GetMethodBaseByArgumentValues("constructor", methods, argValues);
         }
@@ -540,7 +539,7 @@ namespace Spring.Util
         /// <exception cref="System.ArgumentNullException">
         /// If <paramref name="intf"/> is <see langword="null"/>.
         /// </exception>
-        public static Type[] ToInterfaceArray(Type intf)
+        public static IList<Type> ToInterfaceArray(Type intf)
         {
             AssertUtils.ArgumentNotNull(intf, "intf");
 
@@ -552,10 +551,10 @@ namespace Spring.Util
                                   intf.FullName));
             }
 
-            ArrayList interfaces = new ArrayList(intf.GetInterfaces());
+            List<Type> interfaces = new List<Type>(intf.GetInterfaces());
             interfaces.Add(intf);
 
-            return (Type[])interfaces.ToArray(typeof(Type));
+            return interfaces;
         }
 
         /// <summary>
@@ -942,9 +941,9 @@ namespace Spring.Util
                 {
                 }
 
-                IList getSetProps = new ArrayList();
+                IList<PropertyInfo> getSetProps = new List<PropertyInfo>();
                 IList getSetValues = new ArrayList();
-                IList readOnlyProps = new ArrayList();
+                IList<PropertyInfo> readOnlyProps = new List<PropertyInfo>();
                 IList readOnlyValues = new ArrayList();
                 foreach (PropertyInfo pi in type.GetProperties(BindingFlags.Instance | BindingFlags.Public))
                 {
@@ -976,7 +975,7 @@ namespace Spring.Util
 
                 if (readOnlyProps.Count == 1)
                 {
-                    PropertyInfo pi = readOnlyProps[0] as PropertyInfo;
+                    PropertyInfo pi = readOnlyProps[0];
                     ConstructorInfo ciTemp = type.GetConstructor(new Type[1] { pi.PropertyType });
                     if (ciTemp != null)
                     {
@@ -1234,8 +1233,7 @@ namespace Spring.Util
             object[] attrs = member.GetCustomAttributes(false);
             try
             {
-                System.Collections.Generic.IList<CustomAttributeData> attrsData =
-                    CustomAttributeData.GetCustomAttributes(member);
+                IList<CustomAttributeData> attrsData = CustomAttributeData.GetCustomAttributes(member);
 
                 if (attrs.Length != attrsData.Count)
                 {
@@ -1461,10 +1459,10 @@ namespace Spring.Util
 
             if (type.IsInterface)
             {
-                ArrayList interfaces = new ArrayList();
+                List<Type> interfaces = new List<Type>();
                 interfaces.Add(type);
                 interfaces.AddRange(type.GetInterfaces());
-                return (Type[])interfaces.ToArray(typeof(Type));
+                return interfaces.ToArray();
             }
             else
             {
@@ -1596,19 +1594,22 @@ namespace Spring.Util
 
         private delegate void MemberwiseCopyHandler(object a, object b);
 
-        private static readonly Hashtable s_handlerCache = new Hashtable();
+        private static readonly Dictionary<Type, MemberwiseCopyHandler> s_handlerCache = new Dictionary<Type, MemberwiseCopyHandler>();
 
         private static MemberwiseCopyHandler GetImpl(Type type)
         {
-            MemberwiseCopyHandler handler = s_handlerCache[type] as MemberwiseCopyHandler;
-            if (handler != null)
+            MemberwiseCopyHandler handler;
+            if (s_handlerCache.TryGetValue(type, out handler))
+            {
                 return handler;
+            }
 
             lock (s_handlerCache)
             {
-                handler = s_handlerCache[type] as MemberwiseCopyHandler;
-                if (handler != null)
+                if (s_handlerCache.TryGetValue(type, out handler))
+                {
                     return handler;
+                }
 
                 FieldInfo[] fields = GetFields(type);
                 SecurityCritical.ExecutePrivileged(new PermissionSet(PermissionState.Unrestricted), delegate
@@ -1646,25 +1647,25 @@ namespace Spring.Util
         private const BindingFlags FIELDBINDINGS =
             BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.NonPublic;
 
-        private static readonly Hashtable s_fieldCache = new Hashtable();
+        private static readonly Dictionary<Type, FieldInfo[]> s_fieldCache = new Dictionary<Type, FieldInfo[]>();
 
         private static FieldInfo[] GetFields(Type type)
         {
             lock (s_fieldCache)
             {
-                FieldInfo[] fields = (FieldInfo[])s_fieldCache[type];
-                if (fields == null)
+                FieldInfo[] fields;
+                if (!s_fieldCache.TryGetValue(type, out fields))
                 {
-                    ArrayList fieldList = new ArrayList();
+                    List<FieldInfo> fieldList = new List<FieldInfo>();
                     CollectFieldsRecursive(type, fieldList);
-                    fields = (FieldInfo[])fieldList.ToArray(typeof(FieldInfo));
+                    fields = fieldList.ToArray();
                     s_fieldCache[type] = fields;
                 }
                 return fields;
             }
         }
 
-        private static void CollectFieldsRecursive(Type type, ArrayList fieldList)
+        private static void CollectFieldsRecursive(Type type, List<FieldInfo> fieldList)
         {
             if (type == typeof(object))
                 return;
@@ -1689,8 +1690,8 @@ namespace Spring.Util
 
             private Type type;
             private ArrayList constructorArgs;
-            private ArrayList namedProperties;
-            private ArrayList propertyValues;
+            private List<PropertyInfo> namedProperties;
+            private List<object> propertyValues;
 
             #endregion
 
@@ -1724,8 +1725,8 @@ namespace Spring.Util
                 }
                 this.type = attributeType;
                 this.constructorArgs = new ArrayList(constructorArgs);
-                this.namedProperties = new ArrayList();
-                this.propertyValues = new ArrayList();
+                this.namedProperties = new List<PropertyInfo>();
+                this.propertyValues = new List<object>();
             }
 
             #endregion
@@ -1776,8 +1777,8 @@ namespace Spring.Util
 
                 if (namedProperties.Count > 0)
                 {
-                    PropertyInfo[] npArray = (PropertyInfo[])this.namedProperties.ToArray(typeof(PropertyInfo));
-                    object[] pvArray = (object[])this.propertyValues.ToArray(typeof(object));
+                    PropertyInfo[] npArray = this.namedProperties.ToArray();
+                    object[] pvArray = this.propertyValues.ToArray();
                     return new CustomAttributeBuilder(ci, caArray, npArray, pvArray);
                 }
                 else

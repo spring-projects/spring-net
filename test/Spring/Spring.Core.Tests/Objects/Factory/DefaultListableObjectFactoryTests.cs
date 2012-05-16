@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -145,7 +146,7 @@ namespace Spring.Objects.Factory
             def.FactoryMethodName = "CreateTestObject";
             DefaultListableObjectFactory lof = new DefaultListableObjectFactory();
             lof.RegisterObjectDefinition("factoryObject", def);
-            IDictionary objs = lof.GetObjectsOfType(typeof(TestObject));
+            IDictionary<string, TestObject> objs = lof.GetObjects<TestObject>();
             Assert.AreEqual(1, objs.Count);
         }
 
@@ -159,7 +160,7 @@ namespace Spring.Objects.Factory
             DefaultListableObjectFactory lof = new DefaultListableObjectFactory();
             lof.RegisterObjectDefinition("factoryObject", def);
             lof.RegisterObjectDefinition("target", new RootObjectDefinition(typeof(TestObjectCreator)));
-            IDictionary objs = lof.GetObjectsOfType(typeof(TestObject));
+            IDictionary<string, TestObject> objs = lof.GetObjects<TestObject>();
             Assert.AreEqual(1, objs.Count);
         }
 
@@ -171,7 +172,7 @@ namespace Spring.Objects.Factory
                 = new RootObjectDefinition(typeof(TestGenericObject<int, string>));
             def.FactoryMethodName = "CreateList<int>";
             lof.RegisterObjectDefinition("foo", def);
-            IDictionary objs = lof.GetObjectsOfType(typeof(System.Collections.Generic.List<int>));
+            IDictionary<string, object> objs = lof.GetObjectsOfType(typeof(List<int>));
             Assert.AreEqual(1, objs.Count);
         }
 
@@ -185,7 +186,7 @@ namespace Spring.Objects.Factory
             DefaultListableObjectFactory lof = new DefaultListableObjectFactory();
             lof.RegisterObjectDefinition("factoryObject", def);
             lof.RegisterObjectDefinition("target", new RootObjectDefinition(typeof(TestGenericObject<int, string>)));
-            IDictionary objs = lof.GetObjectsOfType(typeof(TestGenericObject<string, int>));
+            IDictionary<string, object> objs = lof.GetObjectsOfType(typeof(TestGenericObject<string, int>));
             Assert.AreEqual(1, objs.Count);
         }
 
@@ -223,7 +224,7 @@ namespace Spring.Objects.Factory
                     typeof(StaticFactoryMethodObject));
             def.FactoryMethodName = "CreateObject";
             lof.RegisterObjectDefinition("foo", def);
-            IDictionary objs = lof.GetObjectsOfType(typeof(DBNull));
+            IDictionary<string, object> objs = lof.GetObjectsOfType(typeof(DBNull));
             Assert.AreEqual(1, objs.Count,
                             "Must be looking at the RETURN TYPE of the factory method, " +
                                 "and hence get one DBNull object back.");
@@ -403,8 +404,7 @@ namespace Spring.Objects.Factory
 
             #region IInstantiationAwareObjectPostProcessor Members
 
-            public IPropertyValues PostProcessPropertyValues(IPropertyValues pvs, PropertyInfo[] pis, object objectInstance,
-                                                             string objectName)
+            public IPropertyValues PostProcessPropertyValues(IPropertyValues pvs, IList<PropertyInfo> pis, object objectInstance, string objectName)
             {
                 return pvs;
             }
@@ -454,8 +454,7 @@ namespace Spring.Objects.Factory
 
             #region IInstantiationAwareObjectPostProcessor Members
 
-            public IPropertyValues PostProcessPropertyValues(IPropertyValues pvs, PropertyInfo[] pis, object objectInstance,
-                                                             string objectName)
+            public IPropertyValues PostProcessPropertyValues(IPropertyValues pvs, IList<PropertyInfo> pis, object objectInstance, string objectName)
             {
                 return pvs;
             }
@@ -531,7 +530,7 @@ namespace Spring.Objects.Factory
         {
             IListableObjectFactory lof = new DefaultListableObjectFactory();
             Assert.IsTrue(lof.GetObjectDefinitionNames() != null, "No objects defined --> array != null");
-            Assert.IsTrue(lof.GetObjectDefinitionNames().Length == 0, "No objects defined after no arg constructor");
+            Assert.IsTrue(lof.GetObjectDefinitionNames().Count == 0, "No objects defined after no arg constructor");
             Assert.IsTrue(lof.ObjectDefinitionCount == 0, "No objects defined after no arg constructor");
         }
 
@@ -592,10 +591,10 @@ namespace Spring.Objects.Factory
             TestObject test = (TestObject)lof.GetObject("test");
             Assert.AreEqual(singletonObject, lof.GetObject("singletonObject"));
             Assert.AreEqual(singletonObject, test.Spouse);
-            Hashtable objectsOfType = (Hashtable)lof.GetObjectsOfType(typeof(TestObject), false, true);
+            IDictionary<string, object> objectsOfType = lof.GetObjectsOfType(typeof(TestObject), false, true);
             Assert.AreEqual(2, objectsOfType.Count);
-            Assert.IsTrue(objectsOfType.ContainsValue(test));
-            Assert.IsTrue(objectsOfType.ContainsValue(singletonObject));
+            Assert.IsTrue(objectsOfType.Values.Contains(test));
+            Assert.IsTrue(objectsOfType.Values.Contains(singletonObject));
         }
 
         [Test]
@@ -639,7 +638,7 @@ namespace Spring.Objects.Factory
             lof.RegisterSingleton("singletonObject", singletonObject);
             Assert.IsTrue(lof.ContainsObject("singletonObject"));
             Assert.IsTrue(lof.IsSingleton("singletonObject"));
-            Assert.AreEqual(0, lof.GetAliases("singletonObject").Length);
+            Assert.AreEqual(0, lof.GetAliases("singletonObject").Count);
             DependenciesObject test = (DependenciesObject)lof.GetObject("test");
             Assert.AreEqual(singletonObject, lof.GetObject("singletonObject"));
             Assert.AreEqual(singletonObject, test.Spouse);
@@ -1750,8 +1749,8 @@ namespace Spring.Objects.Factory
             DefaultListableObjectFactory of = new DefaultListableObjectFactory();
             of.RegisterObjectDefinition("mod", new RootObjectDefinition(typeof(A)));
 
-            string[] names = of.GetObjectNamesForType(typeof (ISerializable), false, false);
-            Assert.IsNotEmpty(names);
+            IList<string> names = of.GetObjectNamesForType(typeof (ISerializable), false, false);
+            Assert.IsNotEmpty((ICollection) names);
             Assert.AreEqual("&mod", names[0]);
         }
 

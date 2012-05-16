@@ -487,7 +487,7 @@ namespace Spring.Web.Services
             /// <returns>The generated proxy class.</returns>
             public override Type BuildProxyType()
             {
-                if (Interfaces == null || Interfaces.Length == 0)
+                if (Interfaces == null || Interfaces.Count == 0)
                 {
                     throw new ArgumentException(
                         "Web service client proxy must implement at least one interface.");

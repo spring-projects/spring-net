@@ -20,7 +20,7 @@
 
 using System;
 using System.Collections;
-
+using System.Collections.Generic;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 using Spring.Validation.Actions;
@@ -36,7 +36,7 @@ namespace Spring.Validation
             get { return _wasCalled; }
         }
 
-        public override bool Validate(object validationContext, IDictionary contextParams, IValidationErrors errors)
+        public override bool Validate(object validationContext, IDictionary<string, object> contextParams, IValidationErrors errors)
         {
             _wasCalled = true;
             return base.Validate (validationContext, contextParams, errors);
@@ -85,31 +85,33 @@ namespace Spring.Validation
 
     public sealed class MockObjectDefinitionRegistry : IObjectDefinitionRegistry
     {
-        private IDictionary objects = new Hashtable();
+        private IDictionary<string, IObjectDefinition> objects = new Dictionary<string, IObjectDefinition>();
 
         public int ObjectDefinitionCount
         {
             get { return this.objects.Count; }
         }
 
-        public string[] GetObjectDefinitionNames()
+        public IList<string> GetObjectDefinitionNames()
         {
-            return (string[]) new ArrayList(this.objects.Keys).ToArray(typeof(string));
+            return new List<string>(this.objects.Keys);
         }
 
-        public IObjectDefinition[] GetObjectDefinitions()
+        public IList<IObjectDefinition> GetObjectDefinitions()
         {
-            return (IObjectDefinition[]) new ArrayList(this.objects.Values).ToArray(typeof(IObjectDefinition));
+            return new List<IObjectDefinition>(this.objects.Values);
         }
 
         public bool ContainsObjectDefinition(string name)
         {
-            return objects.Contains(name);
+            return objects.ContainsKey(name);
         }
 
         public IObjectDefinition GetObjectDefinition(string name)
         {
-            return (IObjectDefinition) objects[name];
+            IObjectDefinition definition;
+            objects.TryGetValue(name, out definition);
+            return definition;
         }
 
         public void RegisterObjectDefinition(string name, IObjectDefinition definition)
@@ -117,7 +119,7 @@ namespace Spring.Validation
             this.objects[name] = definition;
         }
 
-        public string[] GetAliases(string name)
+        public IList<string> GetAliases(string name)
         {
             throw new NotImplementedException();
         }

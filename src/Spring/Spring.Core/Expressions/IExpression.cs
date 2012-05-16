@@ -19,6 +19,7 @@
 #endregion
 
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 
 namespace Spring.Expressions
@@ -49,7 +50,7 @@ namespace Spring.Expressions
         /// <param name="context">Object to evaluate expression against.</param>
         /// <param name="variables">Expression variables map.</param>
         /// <returns>Value of the expression.</returns>
-        object GetValue(object context, IDictionary variables);
+        object GetValue(object context, IDictionary<string, object> variables);
 
         /// <summary>
         /// Sets expression value.
@@ -64,6 +65,6 @@ namespace Spring.Expressions
         /// <param name="context">Object to evaluate expression against.</param>
         /// <param name="variables">Expression variables map.</param>
         /// <param name="newValue">New value for the last node of the expression.</param>
-        void SetValue(object context, IDictionary variables, object newValue);
+        void SetValue(object context, IDictionary<string, object> variables, object newValue);
     }
 }

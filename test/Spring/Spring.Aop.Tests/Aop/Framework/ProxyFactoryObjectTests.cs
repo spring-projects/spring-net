@@ -154,11 +154,11 @@ namespace Spring.Aop.Framework
             IAdvised pc1 = (IAdvised)test1;
             IAdvised pc2 = (IAdvised)test1_1;
             Assert.AreEqual(pc1.Advisors, pc2.Advisors);
-            int oldLength = pc1.Advisors.Length;
+            int oldLength = pc1.Advisors.Count;
             NopInterceptor di = new NopInterceptor();
             pc1.AddAdvice(1, di);
             Assert.AreEqual(pc1.Advisors, pc2.Advisors);
-            Assert.AreEqual(oldLength + 1, pc2.Advisors.Length, "Now have one more advisor");
+            Assert.AreEqual(oldLength + 1, pc2.Advisors.Count, "Now have one more advisor");
             Assert.AreEqual(di.Count, 0);
             test1.Age = (5);
             Assert.AreEqual(test1_1.Age, test1.Age);
@@ -224,12 +224,12 @@ namespace Spring.Aop.Framework
             string dummy = to.Name;
 
             IAdvised config = (IAdvised)to;
-            Assert.AreEqual(1, config.Advisors.Length, "Object should have only one advisors");
+            Assert.AreEqual(1, config.Advisors.Count, "Object should have only one advisors");
 
             Exception ex = new NotSupportedException("Invoke");
             // Add evil interceptor to head of list
             config.AddAdvice(0, new EvilMethodInterceptor(ex));
-            Assert.AreEqual(2, config.Advisors.Length, "The advisor count is wrong after adding an advisor programmatically.");
+            Assert.AreEqual(2, config.Advisors.Count, "The advisor count is wrong after adding an advisor programmatically.");
 
             try
             {
@@ -266,16 +266,16 @@ namespace Spring.Aop.Framework
             IIntroductionAdvisor advisor = new DefaultIntroductionAdvisor(ti, typeof(ITimeStamped));
 
             // add to front of introduction chain
-            int oldCount = config.Introductions.Length;
+            int oldCount = config.Introductions.Count;
             config.AddIntroduction(0, advisor);
-            Assert.IsTrue(config.Introductions.Length == oldCount + 1);
+            Assert.IsTrue(config.Introductions.Count == oldCount + 1);
 
             ITimeStamped ts2 = (ITimeStamped)factory.GetObject("test1");
             Assert.IsTrue(ts2.TimeStamp == new DateTime(time));
 
             // Can remove
             config.RemoveIntroduction(advisor);
-            Assert.IsTrue(config.Introductions.Length == oldCount);
+            Assert.IsTrue(config.Introductions.Count == oldCount);
 
             // Existing reference will still work
             object o = ts2.TimeStamp;
@@ -292,9 +292,9 @@ namespace Spring.Aop.Framework
             }
 
             // Now check non-effect of removing interceptor that isn't there
-            oldCount = config.Advisors.Length;
+            oldCount = config.Advisors.Count;
             config.RemoveAdvice(new DebugAdvice());
-            Assert.IsTrue(config.Advisors.Length == oldCount);
+            Assert.IsTrue(config.Advisors.Count == oldCount);
 
             ITestObject it = (ITestObject)ts2;
             DebugAdvice debugInterceptor = new DebugAdvice();
@@ -330,16 +330,16 @@ namespace Spring.Aop.Framework
             IIntroductionAdvisor advisor = new DefaultIntroductionAdvisor(ti, typeof(ITimeStamped));
 
             // add to front of introduction chain
-            int oldCount = config.Introductions.Length;
+            int oldCount = config.Introductions.Count;
             config.AddIntroduction(0, advisor);
-            Assert.IsTrue(config.Introductions.Length == oldCount + 1);
+            Assert.IsTrue(config.Introductions.Count == oldCount + 1);
 
             ITimeStamped ts2 = (ITimeStamped)factory.GetObject("test2");
             Assert.IsTrue(ts2.TimeStamp == new DateTime(time));
 
             // Can remove
             config.RemoveIntroduction(advisor);
-            Assert.IsTrue(config.Introductions.Length == oldCount);
+            Assert.IsTrue(config.Introductions.Count == oldCount);
 
             // Existing reference will still work
             object o = ts2.TimeStamp;
@@ -358,9 +358,9 @@ namespace Spring.Aop.Framework
             ITestObject it = (ITestObject)factory.GetObject("test2");
             config = (IAdvised)it;
 
-            oldCount = config.Advisors.Length;
+            oldCount = config.Advisors.Count;
             config.RemoveAdvice(new DebugAdvice());
-            Assert.IsTrue(config.Advisors.Length == oldCount);
+            Assert.IsTrue(config.Advisors.Count == oldCount);
 
             DebugAdvice debugInterceptor = new DebugAdvice();
             config.AddAdvice(0, debugInterceptor);
@@ -462,10 +462,10 @@ namespace Spring.Aop.Framework
 
             ProxyFactoryObject pfb = (ProxyFactoryObject)factory.GetObject("&validGlobals");
             pfb.GetObject(); // for creation
-            Assert.AreEqual(2, pfb.Advisors.Length, "Proxy should have 1 global and 1 explicit advisor");
-            Assert.AreEqual(1, pfb.Introductions.Length, "Proxy should have 1 global introduction");
+            Assert.AreEqual(2, pfb.Advisors.Count, "Proxy should have 1 global and 1 explicit advisor");
+            Assert.AreEqual(1, pfb.Introductions.Count, "Proxy should have 1 global introduction");
 
-            agi.GlobalsAdded = ((IAdvised)agi).Introductions.Length;
+            agi.GlobalsAdded = ((IAdvised)agi).Introductions.Count;
             Assert.IsTrue(agi.GlobalsAdded == 1);
 
             IApplicationEventListener l = (IApplicationEventListener)factory.GetObject("validGlobals");

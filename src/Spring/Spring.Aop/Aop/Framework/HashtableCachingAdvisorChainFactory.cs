@@ -21,10 +21,8 @@
 #region Imports
 
 using System;
-using System.Collections;
-using System.Collections.Specialized;
+using System.Collections.Generic;
 using System.Reflection;
-using Spring.Collections;
 
 #endregion
 
@@ -39,8 +37,8 @@ namespace Spring.Aop.Framework
     [Serializable]
     public sealed class HashtableCachingAdvisorChainFactory : IAdvisorChainFactory
     {
-        private readonly IDictionary methodCache = new ListDictionary();
-    
+        private readonly IDictionary<MethodInfo, IList<object>> methodCache = new Dictionary<MethodInfo, IList<object>>();
+
         /// <summary>
         /// Gets the list of <see cref="AopAlliance.Intercept.IInterceptor"/> and
         /// <see cref="Spring.Aop.Framework.InterceptorAndDynamicMethodMatcher"/>
@@ -59,10 +57,10 @@ namespace Spring.Aop.Framework
         /// <see cref="Spring.Aop.Framework.InterceptorAndDynamicMethodMatcher"/>
         /// instances for the supplied <paramref name="proxy"/>.
         /// </returns>
-        public IList GetInterceptors(IAdvised advised, object proxy, MethodInfo method, Type targetType)
+        public IList<object> GetInterceptors(IAdvised advised, object proxy, MethodInfo method, Type targetType)
         {
-            IList cached = (IList)this.methodCache[method];
-            if (cached == null)
+            IList<object> cached;
+            if (!this.methodCache.TryGetValue(method, out cached))
             {
                 // recalculate...
                 cached = AdvisorChainFactoryUtils.CalculateInterceptors(advised, proxy, method, targetType);

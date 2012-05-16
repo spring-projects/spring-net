@@ -19,7 +19,8 @@
 #endregion
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
+
 using Common.Logging;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
@@ -36,7 +37,7 @@ namespace Spring.Aop.Framework.AutoProxy
     {
         private readonly ILog _log;
         private readonly IConfigurableListableObjectFactory _objectFactory;
-        private string[] _cachedObjectNames;
+        private List<string> _cachedObjectNames;
 
         /// <summary>
         /// The object factory to lookup advisors from
@@ -62,18 +63,18 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <param name="targetType">the type of the object to be advised</param>
         /// <param name="targetName">the name of the object to be advised</param>
         /// <returns>A list of eligible <see cref="IAdvisor"/> instances</returns>
-        public virtual IList FindAdvisorObjects(Type targetType, string targetName)
+        public virtual IList<IAdvisor> FindAdvisorObjects(Type targetType, string targetName)
         {
-            string[] advisorNames = GetAdvisorCandidateNames(targetType, targetName);
+            IList<string> advisorNames = GetAdvisorCandidateNames(targetType, targetName);
 
-            ArrayList advisors = new ArrayList();
+            List<IAdvisor> advisors = new List<IAdvisor>();
 
-            if (advisorNames.Length == 0)
+            if (advisorNames.Count == 0)
             {
                 return advisors;
             }
                 
-            for (int i = 0; i < advisorNames.Length; i++)
+            for (int i = 0; i < advisorNames.Count; i++)
             {
                 string name = advisorNames[i];
                 if (IsEligibleObject(name, targetType, targetName) && !_objectFactory.IsCurrentlyInCreation(name))
@@ -111,12 +112,12 @@ namespace Spring.Aop.Framework.AutoProxy
         /// </summary>
         /// <param name="advisors">the advisor list</param>
         /// <param name="advisorName">the object name of the advisor to add</param>
-        private void AddAdvisorCandidate(ArrayList advisors, string advisorName)
+        private void AddAdvisorCandidate(List<IAdvisor> advisors, string advisorName)
         {
             object advisorCandidate = _objectFactory.GetObject(advisorName);
             if (advisorCandidate is IAdvisor)
             {
-                advisors.Add(advisorCandidate);
+                advisors.Add((IAdvisor) advisorCandidate);
             } 
             else if (advisorCandidate is IAdvisors)
             {
@@ -135,7 +136,7 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <param name="targetType">the type of the object to be advised</param>
         /// <param name="targetName">the name of the object to be advised</param>
         /// <returns>a non-null string array of advisor candidate names</returns>
-        protected virtual string[] GetAdvisorCandidateNames(Type targetType, string targetName)
+        protected virtual IList<string> GetAdvisorCandidateNames(Type targetType, string targetName)
         {
             if (_cachedObjectNames == null)
             {
@@ -143,12 +144,12 @@ namespace Spring.Aop.Framework.AutoProxy
                 {
                     if (_cachedObjectNames == null)
                     {
-                        ArrayList candidateNameList = new ArrayList();
-                        string[] advisorCandidateNames = ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors( _objectFactory, typeof(IAdvisor), true, false);
+                        List<string> candidateNameList = new List<string>();
+                        IList<string> advisorCandidateNames = ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors( _objectFactory, typeof(IAdvisor), true, false);
                         candidateNameList.AddRange(advisorCandidateNames);
-                        string[] advisorsCandidateNames = ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(_objectFactory, typeof(IAdvisors), true, false);
+                        IList<string> advisorsCandidateNames = ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(_objectFactory, typeof(IAdvisors), true, false);
                         candidateNameList.AddRange(advisorsCandidateNames);
-                        _cachedObjectNames = (string[]) candidateNameList.ToArray(typeof(string));
+                        _cachedObjectNames = candidateNameList;
                     }
                 }
             }

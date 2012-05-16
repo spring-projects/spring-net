@@ -22,8 +22,7 @@
 
 using System;
 using System.IO;
-using System.Threading;
-using Common.Logging;
+
 using Spring.Objects;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;

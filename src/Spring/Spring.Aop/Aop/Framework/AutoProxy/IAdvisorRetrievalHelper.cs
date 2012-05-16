@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Spring.Aop.Framework.AutoProxy
 {
@@ -13,6 +14,6 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <summary>
         /// Get the list of advisor objects to apply on the target.
         /// </summary>
-        IList FindAdvisorObjects(Type targetType, string targetName);
+        IList<IAdvisor> FindAdvisorObjects(Type targetType, string targetName);
     }
 }

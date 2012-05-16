@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 #endregion
 
@@ -60,7 +61,7 @@ namespace Spring.Proxy
         /// <summary>
         /// Gets or sets the list of interfaces proxy should implement.
         /// </summary>
-        Type[] Interfaces { get; set; }
+        IList<Type> Interfaces { get; set; }
 
         /// <summary>
         /// Should we proxy target attributes?

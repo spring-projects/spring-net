@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using Spring.Core.IO;
 
 namespace Spring.Context.Support

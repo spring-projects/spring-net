@@ -19,9 +19,9 @@
 #endregion
 
 using System;
-using System.Collections;
-using System.Collections.Specialized;
+using System.Collections.Generic;
 using System.Configuration;
+
 using Spring.Util;
 
 namespace Spring.Objects.Factory.Config
@@ -53,7 +53,7 @@ namespace Spring.Objects.Factory.Config
     [Serializable]
     public class ConnectionStringsVariableSource : IVariableSource
     {
-        private Hashtable variables;
+        private Dictionary<string, string> variables;
 
 
         /// <summary>
@@ -68,7 +68,7 @@ namespace Spring.Objects.Factory.Config
             {
                 InitVariables();
             }
-            return variables.Contains(name);
+            return variables.ContainsKey(name);
         }
 
         /// <summary>
@@ -86,7 +86,9 @@ namespace Spring.Objects.Factory.Config
             {
                 InitVariables();
             }
-            return (string) variables[name];
+            string retValue;
+            variables.TryGetValue(name, out retValue);
+            return retValue;
         }
 
         /// <summary>
@@ -95,7 +97,7 @@ namespace Spring.Objects.Factory.Config
         /// </summary>
         private void InitVariables()
         {
-            variables = CollectionsUtil.CreateCaseInsensitiveHashtable();
+            variables = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             ConnectionStringSettingsCollection settings = ConfigurationManager.ConnectionStrings;
             foreach (ConnectionStringSettings setting in settings)
             {

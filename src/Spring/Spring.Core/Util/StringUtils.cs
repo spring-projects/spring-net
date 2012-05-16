@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 
@@ -148,7 +149,7 @@ namespace Spring.Util
             {
                 return new string[0];
             }
-            if (delimiters==null || delimiters.Length==0)
+            if (string.IsNullOrEmpty(delimiters))
             {
                 return new string[] { s };
             }
@@ -164,7 +165,7 @@ namespace Spring.Util
             int[] delimiterPositions = new int[s.Length];
             int count = MakeDelimiterPositionList(s, delimiterChars, quoteChars, delimiterPositions);
 
-            ArrayList tokens = new ArrayList(count+1);
+            List<string> tokens = new List<string>(count+1);
             int startIndex = 0;
             for (int ixSep = 0; ixSep < count; ixSep++)
             {
@@ -200,7 +201,7 @@ namespace Spring.Util
                 }
             }
 
-            return (string[])tokens.ToArray(typeof(string));
+            return tokens.ToArray();
         }
 
         private static int MakeDelimiterPositionList(string s, char[] delimiters, string quoteChars, int[] delimiterPositions)
@@ -324,8 +325,8 @@ namespace Spring.Util
         /// The delimiter to use (probably a ',').
         /// </param>
         /// <returns>The delimited string representation.</returns>
-        public static string CollectionToDelimitedString(
-            ICollection c, string delimiter)
+        public static string CollectionToDelimitedString<T>(
+            IEnumerable<T> c, string delimiter)
         {
             if (c == null)
             {
@@ -353,8 +354,7 @@ namespace Spring.Util
         /// The <see cref="System.Collections.ICollection"/> to display.
         /// </param>
         /// <returns>The delimited string representation.</returns>
-        public static string CollectionToCommaDelimitedString(
-            ICollection collection)
+        public static string CollectionToCommaDelimitedString<T>(IEnumerable<T> collection)
         {
             return CollectionToDelimitedString(collection, ",");
         }
@@ -368,7 +368,7 @@ namespace Spring.Util
         /// <see cref="System.Object.ToString"/> will be called on each
         /// element).
         /// </param>
-        public static string ArrayToCommaDelimitedString(object[] source)
+        public static string ArrayToCommaDelimitedString<T>(IEnumerable<T> source)
         {
             return ArrayToDelimitedString(source, ",");
         }
@@ -385,8 +385,7 @@ namespace Spring.Util
         /// <param name="delimiter">
         /// The delimiter to use (probably a ',').
         /// </param>
-        public static string ArrayToDelimitedString(
-            object[] source, string delimiter)
+        public static string ArrayToDelimitedString<T>(IEnumerable<T> source, string delimiter)
         {
             if (source == null)
             {
@@ -534,9 +533,9 @@ namespace Spring.Util
         /// If any of the expressions in the supplied <paramref name="text"/>
         /// is empty (<c>${}</c>).
         /// </exception>
-        public static IList GetAntExpressions(string text)
+        public static IList<string> GetAntExpressions(string text)
         {
-            IList expressions = new ArrayList();
+            List<string> expressions = new List<string>();
             if (StringUtils.HasText(text))
             {
                 int start = text.IndexOf(AntExpressionPrefix);

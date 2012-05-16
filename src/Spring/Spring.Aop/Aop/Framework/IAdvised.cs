@@ -22,9 +22,10 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 using AopAlliance.Aop;
-using Spring.Aop;
+
 using Spring.Proxy;
 
 #endregion
@@ -109,7 +110,7 @@ namespace Spring.Aop.Framework
         /// The collection of <see cref="Spring.Aop.IAdvisor"/>
         /// instances that have been applied to this proxy.
         /// </value>
-        IAdvisor[] Advisors { get; }
+        IList<IAdvisor> Advisors { get; }
 
         /// <summary>
         /// Returns the collection of <see cref="Spring.Aop.IIntroductionAdvisor"/>
@@ -127,7 +128,7 @@ namespace Spring.Aop.Framework
         /// The collection of <see cref="Spring.Aop.IIntroductionAdvisor"/>
         /// instances that have been applied to this proxy.
         /// </value>
-        IIntroductionAdvisor[] Introductions { get; }
+        IList<IIntroductionAdvisor> Introductions { get; }
 
         /// <summary>
         /// Returns the collection of interface <see cref="System.Type"/>s
@@ -137,7 +138,7 @@ namespace Spring.Aop.Framework
         /// The collection of interface <see cref="System.Type"/>s
         /// to be (or that are being) proxied by this proxy.
         /// </value>
-        Type[] Interfaces { get; }
+        IList<Type> Interfaces { get; }
 
         /// <summary>
         /// Returns the mapping of the proxied interface

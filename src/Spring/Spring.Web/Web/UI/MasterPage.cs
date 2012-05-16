@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Web.UI;
 using Spring.Collections;
@@ -521,7 +522,7 @@ namespace Spring.Web.UI
         /// </returns>
         public virtual bool Validate(object validationContext, params IValidator[] validators)
         {
-            IDictionary contextParams = CreateValidatorParameters();
+            IDictionary<string, object> contextParams = CreateValidatorParameters();
             bool result = true;
             foreach (IValidator validator in validators)
             {
@@ -559,9 +560,9 @@ namespace Spring.Web.UI
         /// Dictionary containing parameters that should be passed to
         /// the data validation framework.
         /// </returns>
-        protected virtual IDictionary CreateValidatorParameters()
+        protected virtual IDictionary<string, object> CreateValidatorParameters()
         {
-            IDictionary parameters = new ListDictionary();
+            IDictionary<string, object> parameters = new Dictionary<string, object>(8);
             parameters["page"] = this.Page;
             parameters["usercontrol"] = this;
             parameters["session"] = this.Session;

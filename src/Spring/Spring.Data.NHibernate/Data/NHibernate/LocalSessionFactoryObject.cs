@@ -89,7 +89,7 @@ namespace Spring.Data.NHibernate
 
 	    private string[] configFilenames;
 
-        private IDictionary hibernateProperties;
+        private IDictionary<string, string> hibernateProperties;
 
         private IDbProvider dbProvider;
 
@@ -223,13 +223,13 @@ namespace Spring.Data.NHibernate
         /// provider settings and use a Spring-set IDbProvider instead.
         /// </p>
         /// </remarks>
-	    public IDictionary HibernateProperties
+	    public IDictionary<string, string> HibernateProperties
 	    {
 	        get
 	        {
 	            if (hibernateProperties == null)
 	            {
-	                hibernateProperties = new Hashtable();
+	                hibernateProperties = new Dictionary<string, string>();
 	            }
                 return hibernateProperties;
 	        }
@@ -506,7 +506,7 @@ namespace Spring.Data.NHibernate
             {
                 // Register specified Hibernate type definitions.
                 IDictionary<string, string> typedProperties = new  Dictionary<string, string>();
-                foreach (DictionaryEntry entry in hibernateProperties)
+                foreach (KeyValuePair<string, string> entry in hibernateProperties)
                 {
                     typedProperties.Add((string) entry.Key, (string) entry.Value);
                 }
@@ -537,7 +537,7 @@ namespace Spring.Data.NHibernate
             if (this.hibernateProperties != null)
             {
                 if (config.GetProperty(Environment.ConnectionProvider) != null &&
-                    hibernateProperties.Contains(Environment.ConnectionProvider))
+                    hibernateProperties.ContainsKey(Environment.ConnectionProvider))
                 {
                     #region Logging
                     if (log.IsInfoEnabled)
@@ -550,9 +550,9 @@ namespace Spring.Data.NHibernate
                 }
 
                 Dictionary<string, string> genericHibernateProperties = new Dictionary<string, string>();
-                foreach (DictionaryEntry entry in hibernateProperties)
+                foreach (KeyValuePair<string, string> entry in hibernateProperties)
                 {
-                    genericHibernateProperties.Add((string) entry.Key, (string) entry.Value);
+                    genericHibernateProperties.Add(entry.Key, entry.Value);
                 }
                 config.AddProperties(genericHibernateProperties);
             }
@@ -595,7 +595,7 @@ namespace Spring.Data.NHibernate
                 // Register cache strategies for mapped entities.
                 foreach (string className in this.entityCacheStrategies.Keys)
                 {
-                    String[] strategyAndRegion = StringUtils.CommaDelimitedListToStringArray(this.entityCacheStrategies.GetProperty(className));
+                    string[] strategyAndRegion = StringUtils.CommaDelimitedListToStringArray(this.entityCacheStrategies.GetProperty(className));
                     if (strategyAndRegion.Length > 1)
                     {
                         config.SetCacheConcurrencyStrategy(className, strategyAndRegion[0], strategyAndRegion[1]);

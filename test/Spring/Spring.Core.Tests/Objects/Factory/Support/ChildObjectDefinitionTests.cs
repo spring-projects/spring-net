@@ -65,7 +65,7 @@ namespace Spring.Objects.Factory.Support
                 "ParentName property not initialized correctly by ctor.");
             Assert.IsNotNull(def.PropertyValues,
                 "PropertyValues must be init'd to a non-null collection if not explicitly supplied.");
-            Assert.AreEqual(0, def.PropertyValues.PropertyValues.Length, 
+            Assert.AreEqual(0, def.PropertyValues.PropertyValues.Count, 
                 "PropertyValues must be init'd to an empty collection if not explicitly supplied.");
 	    }
 	}

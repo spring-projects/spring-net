@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using NUnit.Framework;
 
 #endregion
@@ -52,7 +53,7 @@ namespace Spring.Expressions.Processors
 
             Assert.AreEqual(new object[] { 1, 2.0, "a", 'b' }, exp.GetValue(input));
 
-            Hashtable vars = new Hashtable();
+            Dictionary<string, object> vars = new Dictionary<string, object>();
             Expression.RegisterFunction( "compare", "{|a,b| $a.ToString().CompareTo($b.ToString())}", vars);
             exp = Expression.Parse("orderBy(#compare)");
             Assert.AreEqual(new object[] { 1, 2.0, "a", 'b' }, exp.GetValue(input, vars));
@@ -61,7 +62,7 @@ namespace Spring.Expressions.Processors
         [Test]
         public void OrderByDelegate()
         {
-            Hashtable vars = new Hashtable();
+            Dictionary<string, object> vars = new Dictionary<string, object>();
             vars["compare"] = new CompareCallback(CompareObjects);
 
             IExpression exp = Expression.Parse("orderBy(#compare)");

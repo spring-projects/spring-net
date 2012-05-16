@@ -20,8 +20,7 @@
 
 #region Imports
 
-using System.Collections;
-using System.Web.UI;
+using System.Collections.Generic;
 using System.Web.UI.WebControls;
 
 #endregion
@@ -44,12 +43,12 @@ namespace Spring.Web.UI.Controls
 		{
 			get
 			{
-				ArrayList vals = new ArrayList();
+				List<string> vals = new List<string>();
 				foreach( ListItem item in this.Items )
 				{
 					if (item.Selected) vals.Add(item.Value);
 				}
-				return (string[]) vals.ToArray(typeof (string));
+				return vals.ToArray();
 			}
 			set
 			{
@@ -59,8 +58,8 @@ namespace Spring.Web.UI.Controls
 				}
 				else
 				{
-					ArrayList vals = new ArrayList(value);
-					foreach(ListItem item in this.Items)
+                    List<string> vals = new List<string>();
+                    foreach (ListItem item in this.Items)
 					{
 						item.Selected = (vals.Contains(item.Value));
 					}

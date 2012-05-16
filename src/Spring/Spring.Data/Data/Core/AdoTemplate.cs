@@ -167,8 +167,7 @@ namespace Spring.Data.Core
                     {
                         throw new ArgumentException("DataReaderWrapper type must implement IDataReaderWrapper. Implemented interfaces on "
                                                     + value.GetType().Name + "are [" +
-                                                    StringUtils.ArrayToCommaDelimitedString(
-                                                        ReflectionUtils.ToInterfaceArray(value)) + "]");
+                                                    StringUtils.CollectionToCommaDelimitedString(ReflectionUtils.ToInterfaceArray(value)) + "]");
                         
                     }
                 }

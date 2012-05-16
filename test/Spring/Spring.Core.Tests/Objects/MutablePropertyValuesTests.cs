@@ -20,8 +20,7 @@
 
 #region Imports
 
-using System;
-using System.Collections;
+using System.Collections.Generic;
 
 using NUnit.Framework;
 
@@ -70,16 +69,16 @@ namespace Spring.Objects
             root.Add (new PropertyValue ("Name", "Fiona Apple"));
             root.Add (new PropertyValue ("Age", 24));
             MutablePropertyValues props = new MutablePropertyValues (root);
-            Assert.AreEqual (2, props.PropertyValues.Length);
+            Assert.AreEqual (2, props.PropertyValues.Count);
         }
 
         [Test]
         public void InstantiationWithNulls () 
         {
-            MutablePropertyValues props = new MutablePropertyValues ((IDictionary) null);
-            Assert.AreEqual (0, props.PropertyValues.Length);
+            MutablePropertyValues props = new MutablePropertyValues ((IDictionary<string, object>) null);
+            Assert.AreEqual (0, props.PropertyValues.Count);
             MutablePropertyValues props2 = new MutablePropertyValues ((IPropertyValues) null);
-            Assert.AreEqual (0, props2.PropertyValues.Length);
+            Assert.AreEqual (0, props2.PropertyValues.Count);
         }
 
         [Test]
@@ -89,7 +88,7 @@ namespace Spring.Objects
             props.AddAll (new PropertyValue [] {
                 new PropertyValue ("Name", "Fiona Apple"),
                 new PropertyValue ("Age", 24)});
-            Assert.AreEqual (2, props.PropertyValues.Length);
+            Assert.AreEqual (2, props.PropertyValues.Count);
         }
 
         [Test]
@@ -98,8 +97,8 @@ namespace Spring.Objects
             MutablePropertyValues props = new MutablePropertyValues ();
             props.Add (new PropertyValue ("Name", "Fiona Apple"));
             props.Add (new PropertyValue ("Age", 24));
-            props.AddAll ((IList) null);
-            Assert.AreEqual (2, props.PropertyValues.Length);
+            props.AddAll ((IList<PropertyValue>) null);
+            Assert.AreEqual (2, props.PropertyValues.Count);
         }
 
         [Test]
@@ -108,9 +107,9 @@ namespace Spring.Objects
             MutablePropertyValues props = new MutablePropertyValues ();
             props.Add (new PropertyValue ("Name", "Fiona Apple"));
             props.Add (new PropertyValue ("Age", 24));
-            Assert.AreEqual (2, props.PropertyValues.Length);
+            Assert.AreEqual (2, props.PropertyValues.Count);
             props.Remove ("name");
-            Assert.AreEqual (1, props.PropertyValues.Length);
+            Assert.AreEqual (1, props.PropertyValues.Count);
         }
 
         [Test]
@@ -120,9 +119,9 @@ namespace Spring.Objects
             PropertyValue propName = new PropertyValue ("Name", "Fiona Apple");
             props.Add (propName);
             props.Add (new PropertyValue ("Age", 24));
-            Assert.AreEqual (2, props.PropertyValues.Length);
+            Assert.AreEqual (2, props.PropertyValues.Count);
             props.Remove (propName);
-            Assert.AreEqual (1, props.PropertyValues.Length);
+            Assert.AreEqual (1, props.PropertyValues.Count);
         }
 
         [Test]
@@ -139,11 +138,11 @@ namespace Spring.Objects
         public void AddAllInMap () 
         {
             MutablePropertyValues props = new MutablePropertyValues ();
-            IDictionary map = new Hashtable ();
-            map.Add ("Name", "Fiona Apple");
+            IDictionary<string, object> map = new Dictionary<string, object>();
+            map.Add("Name", "Fiona Apple");
             map.Add ("Age", 24);
             props.AddAll (map);
-            Assert.AreEqual (2, props.PropertyValues.Length);
+            Assert.AreEqual (2, props.PropertyValues.Count);
         }
 
         [Test]
@@ -151,15 +150,15 @@ namespace Spring.Objects
         {
             MutablePropertyValues props = new MutablePropertyValues ();
             props.Add (new PropertyValue ("Name", "Fiona Apple"));
-            props.AddAll ((IDictionary) null);
-            Assert.AreEqual (1, props.PropertyValues.Length);
+            props.AddAll ((IDictionary<string, object>) null);
+            Assert.AreEqual (1, props.PropertyValues.Count);
         }
 
         [Test]
         public void ChangesSince () 
         {
-            IDictionary map = new Hashtable ();
-            PropertyValue propName = new PropertyValue ("Name", "Fiona Apple");
+            IDictionary<string, object> map = new Dictionary<string, object>();
+            PropertyValue propName = new PropertyValue("Name", "Fiona Apple");
             map.Add (propName.Name, propName.Value);
             map.Add ("Age", 24);
             MutablePropertyValues props = new MutablePropertyValues (map);
@@ -168,13 +167,13 @@ namespace Spring.Objects
             // change the name... this is the change we'll be looking for
             newProps.SetPropertyValueAt (new PropertyValue (propName.Name, "Naomi Woolf"), 0);
             IPropertyValues changes = newProps.ChangesSince (props);
-            Assert.AreEqual (1, changes.PropertyValues.Length);
+            Assert.AreEqual (1, changes.PropertyValues.Count);
             // the name was changed, so its the name property that should be in the changed list
             Assert.IsTrue (changes.Contains ("name"));
 
             newProps.Add (new PropertyValue ("Commentator", "Naomi Woolf"));
             changes = newProps.ChangesSince (props);
-            Assert.AreEqual (2, changes.PropertyValues.Length);
+            Assert.AreEqual (2, changes.PropertyValues.Count);
             // the Commentator was added, so its the Commentator property that should be in the changed list
             Assert.IsTrue (changes.Contains ("commentator"));
             // the name was changed, so its the name property that should be in the changed list
@@ -184,14 +183,14 @@ namespace Spring.Objects
         [Test]
         public void ChangesSinceWithSelf () 
         {
-            IDictionary map = new Hashtable ();
-            map.Add ("Name", "Fiona Apple");
+            IDictionary<string, object> map = new Dictionary<string, object>();
+            map.Add("Name", "Fiona Apple");
             map.Add ("Age", 24);
             MutablePropertyValues props = new MutablePropertyValues (map);
             props.Remove ("name");
             // get all of the changes between self and self again (there should be none);
             IPropertyValues changes = props.ChangesSince (props);
-            Assert.AreEqual (0, changes.PropertyValues.Length);
+            Assert.AreEqual (0, changes.PropertyValues.Count);
         }
 	}
 }

@@ -350,7 +350,7 @@ namespace Spring.Objects.Factory.Xml
             Assert.AreEqual(AutoWiringMode.No, od2.AutowireMode);
             Assert.AreEqual("init", od2.InitMethodName);
             Assert.AreEqual("destroy", od2.DestroyMethodName);
-            Assert.AreEqual(1, od2.DependsOn.Length);
+            Assert.AreEqual(1, od2.DependsOn.Count);
             Assert.AreEqual("test1", od2.DependsOn[0]);
             Assert.AreEqual(DependencyCheckingMode.Simple, od2.DependencyCheck);
         }

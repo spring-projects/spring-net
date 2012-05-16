@@ -76,7 +76,7 @@ namespace Spring.Template.Velocity {
 
         private IDictionary<string, object> velocityProperties = new Dictionary<string, object>();
 
-        private IList resourceLoaderPaths = new ArrayList();
+        private IList<string> resourceLoaderPaths = new List<string>();
 
         private IResourceLoader resourceLoader = new ConfigurableResourceLoader();
 
@@ -141,7 +141,8 @@ namespace Spring.Template.Velocity {
         ///  <see cref="PreferFileSystemAccess"/>
         ///  <see cref="SpringResourceLoader"/>
         ///  <see cref="FileResourceLoader"/>
-        public IList ResourceLoaderPaths {
+        public IList<string> ResourceLoaderPaths 
+        {
             set { resourceLoaderPaths = value; }
         }
 
@@ -287,12 +288,12 @@ namespace Spring.Template.Velocity {
         /// <see cref="SpringResourceLoader"/>
         /// <see cref="InitSpringResourceLoader"/>
         /// <see cref="CreateVelocityEngine"/>
-        protected void InitVelocityResourceLoader(VelocityEngine velocityEngine, ExtendedProperties extendedProperties, IList paths) {
+        protected void InitVelocityResourceLoader(VelocityEngine velocityEngine, ExtendedProperties extendedProperties, IList<string> paths) {
 
             if (PreferFileSystemAccess) {
                 // Try to load via the file system, fall back to SpringResourceLoader
                 // (for hot detection of template changes, if possible).
-                IList resolvedPaths = new ArrayList();
+                IList<string> resolvedPaths = new List<string>();
                 try {
                     foreach (string path in paths) {
                         IResource resource = ResourceLoader.GetResource(path);

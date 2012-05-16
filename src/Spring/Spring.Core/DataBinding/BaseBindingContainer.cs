@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using Spring.Globalization;
 using Spring.Validation;
 
@@ -12,7 +13,7 @@ namespace Spring.DataBinding
     {
         #region Fields
 
-        private IList bindings = new ArrayList();
+        private IList<IBinding> bindings = new List<IBinding>();
 
         #endregion
 
@@ -34,7 +35,7 @@ namespace Spring.DataBinding
         /// <value>
         /// A list of bindings for this container.
         /// </value>
-        protected IList Bindings
+        protected IList<IBinding> Bindings
         {
             get { return bindings; }
         }
@@ -182,19 +183,18 @@ namespace Spring.DataBinding
         /// Binds source object to target object.
         /// </summary>
         /// <param name="source">
-        /// The source object.
+        ///   The source object.
         /// </param>
         /// <param name="target">
-        /// The target object.
+        ///   The target object.
         /// </param>
         /// <param name="validationErrors">
-        /// Validation errors collection that type conversion errors should be added to.
+        ///   Validation errors collection that type conversion errors should be added to.
         /// </param>
         /// <param name="variables">
-        /// Variables that should be used during expression evaluation.
+        ///   Variables that should be used during expression evaluation.
         /// </param>
-        public virtual void BindSourceToTarget(object source, object target, IValidationErrors validationErrors,
-                                       IDictionary variables)
+        public virtual void BindSourceToTarget(object source, object target, IValidationErrors validationErrors, IDictionary<string, object> variables)
         {
             foreach (IBinding binding in bindings)
             {
@@ -223,19 +223,18 @@ namespace Spring.DataBinding
         /// Binds target object to source object.
         /// </summary>
         /// <param name="source">
-        /// The source object.
+        ///   The source object.
         /// </param>
         /// <param name="target">
-        /// The target object.
+        ///   The target object.
         /// </param>
         /// <param name="validationErrors">
-        /// Validation errors collection that type conversion errors should be added to.
+        ///   Validation errors collection that type conversion errors should be added to.
         /// </param>
         /// <param name="variables">
-        /// Variables that should be used during expression evaluation.
+        ///   Variables that should be used during expression evaluation.
         /// </param>
-        public virtual void BindTargetToSource(object source, object target, IValidationErrors validationErrors,
-                                       IDictionary variables)
+        public virtual void BindTargetToSource(object source, object target, IValidationErrors validationErrors, IDictionary<string, object> variables)
         {
             foreach (IBinding binding in bindings)
             {

@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using Common.Logging;
 using Spring.Collections;
@@ -245,8 +246,8 @@ namespace Spring.Objects.Factory.Config
             TextProcessor tp = new TextProcessor(this, compositeVariableSource);
             ObjectDefinitionVisitor visitor = new ObjectDefinitionVisitor(new ObjectDefinitionVisitor.ResolveHandler(tp.ParseAndResolveVariables));
 
-            string[] objectDefinitionNames = factory.GetObjectDefinitionNames();
-            for (int i = 0; i < objectDefinitionNames.Length; ++i)
+            IList<string> objectDefinitionNames = factory.GetObjectDefinitionNames();
+            for (int i = 0; i < objectDefinitionNames.Count; ++i)
             {
                 string name = objectDefinitionNames[i];
                 IObjectDefinition definition = factory.GetObjectDefinition( name );

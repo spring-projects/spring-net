@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Common.Logging;
 using Spring.Context;
 using Spring.Messaging.Support;
@@ -39,12 +40,12 @@ namespace Spring.Messaging.Core
 
         public void Initialize()
         {
-            IDictionary messageQueueDictionary = configurableApplicationContext.GetObjectsOfType(typeof(MessageQueueFactoryObject));
+            IDictionary<string, MessageQueueFactoryObject> messageQueueDictionary = configurableApplicationContext.GetObjects<MessageQueueFactoryObject>();
             lock (itemStore.SyncRoot)
             {
-                foreach (DictionaryEntry entry in messageQueueDictionary)
+                foreach (KeyValuePair<string, MessageQueueFactoryObject> entry in messageQueueDictionary)
                 {
-                    MessageQueueFactoryObject mqfo = entry.Value as MessageQueueFactoryObject;
+                    MessageQueueFactoryObject mqfo = entry.Value;
                     if (mqfo != null)
                     {
                         if (mqfo.Path != null)

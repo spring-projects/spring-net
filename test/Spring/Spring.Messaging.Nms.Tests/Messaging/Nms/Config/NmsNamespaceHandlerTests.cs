@@ -20,7 +20,7 @@
 
 #region Imports
 
-using System.Collections;
+using System.Collections.Generic;
 using Apache.NMS;
 using NUnit.Framework;
 using Rhino.Mocks;
@@ -73,23 +73,23 @@ namespace Spring.Messaging.Nms.Config
         [Test]
         public void ObjectsCreated()
         {
-            IDictionary containers = ctx.GetObjectsOfType(typeof(SimpleMessageListenerContainer));
+            IDictionary<string, SimpleMessageListenerContainer> containers = ctx.GetObjects<SimpleMessageListenerContainer>();
             Assert.AreEqual(3, containers.Count);
         }
 
         [Test]
         public void ContainerConfiguration()
         {
-            IDictionary containers = ctx.GetObjectsOfType(typeof (SimpleMessageListenerContainer));
+            IDictionary<string, SimpleMessageListenerContainer> containers = ctx.GetObjects<SimpleMessageListenerContainer>();
             IConnectionFactory defaultConnectionFactory = (IConnectionFactory) ctx.GetObject(DEFAULT_CONNECTION_FACTORY);
             IConnectionFactory explicitConnectionFactory = (IConnectionFactory) ctx.GetObject(EXPLICIT_CONNECTION_FACTORY);
             
 
             int defaultConnectionFactoryCount = 0;
 		    int explicitConnectionFactoryCount = 0;
-            foreach (DictionaryEntry dictionaryEntry in containers)
+            foreach (KeyValuePair<string, SimpleMessageListenerContainer> dictionaryEntry in containers)
             {
-                SimpleMessageListenerContainer container = (SimpleMessageListenerContainer) dictionaryEntry.Value;
+                SimpleMessageListenerContainer container = dictionaryEntry.Value;
                 if (container.ConnectionFactory.Equals(defaultConnectionFactory))
                 {
                     defaultConnectionFactoryCount++;

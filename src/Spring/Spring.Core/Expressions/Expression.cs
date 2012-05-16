@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -324,7 +325,7 @@ namespace Spring.Expressions
         /// <param name="context">Context to evaluate expression against.</param>
         /// <param name="variables">Expression variables map.</param>
         /// <returns>Value of the last node.</returns>
-        internal PropertyInfo GetPropertyInfo( object context, IDictionary variables )
+        internal PropertyInfo GetPropertyInfo( object context, IDictionary<string, object> variables )
         {
             if (this.getNumberOfChildren() > 0)
             {

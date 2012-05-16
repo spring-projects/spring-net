@@ -1,7 +1,8 @@
 
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
+
 using Spring.Expressions;
 
 namespace Spring.Aspects.Exceptions
@@ -31,7 +32,7 @@ namespace Spring.Aspects.Exceptions
         /// Handles the exception.
         /// </summary>
         /// <returns>The return value from handling the exception, if not rethrown or a new exception is thrown.</returns>
-        public override object HandleException(IDictionary callContextDictionary)
+        public override object HandleException(IDictionary<string, object> callContextDictionary)
         {
             try
             {

@@ -19,7 +19,7 @@
 #endregion
 
 using System.Collections;
-
+using System.Collections.Generic;
 using Spring.Expressions;
 using Spring.Objects.Factory;
 using System;
@@ -136,7 +136,7 @@ namespace Spring.Validation
         /// <param name="contextParams">Additional context parameters.</param>
         /// <param name="errors"><see cref="ValidationErrors"/> instance to add error messages to.</param>
         /// <returns><c>True</c> if validation was successful, <c>False</c> otherwise.</returns>
-        public bool Validate(object validationContext, IDictionary contextParams, IValidationErrors errors)
+        public bool Validate(object validationContext, IDictionary<string, object> contextParams, IValidationErrors errors)
         {
             bool valid = true;
 

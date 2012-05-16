@@ -21,6 +21,7 @@
 #region Imports
 
 using System;
+using System.Collections.Generic;
 
 using NUnit.Framework;
 
@@ -62,10 +63,10 @@ namespace Spring.Objects.Factory {
 		
         protected internal void AssertCount (int count)
         {
-            string [] defnames = ListableObjectFactory.GetObjectDefinitionNames ();
+            IList<string> defnames = ListableObjectFactory.GetObjectDefinitionNames ();
             Assert.IsTrue (
-                defnames.Length == count,
-                string.Format ("We should have {0} objects, not {1}.", count, defnames.Length));
+                defnames.Count == count,
+                string.Format ("We should have {0} objects, not {1}.", count, defnames.Count));
         }
 		
         [Test]
@@ -76,19 +77,19 @@ namespace Spring.Objects.Factory {
 		
         public virtual void AssertTestObjectCount (int count)
         {
-            string [] defnames =
+            IList<string> defnames =
                 ListableObjectFactory.GetObjectNamesForType (typeof (TestObject));
             Assert.IsTrue (
-                defnames.Length == count,
-                string.Format ("We should have {0} objects for class {1}, not {2}.", count, typeof (TestObject).FullName, defnames.Length));
+                defnames.Count == count,
+                string.Format ("We should have {0} objects for class {1}, not {2}.", count, typeof (TestObject).FullName, defnames.Count));
         }
 		
         [Test]
         public virtual void GetDefinitionsForNoSuchClass ()
         {
-            string[] defnames =
+            IList<string> defnames =
                 ListableObjectFactory.GetObjectNamesForType (typeof (string));
-            Assert.IsTrue (defnames.Length == 0, "No string definitions");
+            Assert.IsTrue (defnames.Count == 0, "No string definitions");
         }
 		
         /// <summary>
@@ -101,7 +102,7 @@ namespace Spring.Objects.Factory {
         {
             int count =
                 ListableObjectFactory.GetObjectNamesForType (
-                    typeof (IFactoryObject)).Length;
+                    typeof (IFactoryObject)).Count;
             Assert.IsTrue (
                 count == 2,
                 string.Format ("Should have 2 factories, not {0}.", count));

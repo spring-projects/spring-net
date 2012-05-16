@@ -19,6 +19,7 @@
 #endregion
 
 using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Threading;
 
@@ -72,7 +73,7 @@ namespace Spring.Globalization
             AssertUtils.ArgumentNotNull(target, "target");
             AssertUtils.ArgumentNotNull(culture, "culture");
 
-            IList resources = GetResources(target, messageSource, culture);
+            IList<Resource> resources = GetResources(target, messageSource, culture);
             foreach (Resource resource in resources)
             {
                 resource.Target.SetValue(target, null, resource.Value);
@@ -97,9 +98,9 @@ namespace Spring.Globalization
         /// <param name="messageSource"><see cref="IMessageSource"/> instance to retrieve resources from.</param>
         /// <param name="culture">Resource locale.</param>
         /// <returns>A list of resources to apply.</returns>
-        private IList GetResources(object target, IMessageSource messageSource, CultureInfo culture)
+        private IList<Resource> GetResources(object target, IMessageSource messageSource, CultureInfo culture)
         {
-            IList resources = resourceCache.GetResources(target, culture);
+            IList<Resource> resources = resourceCache.GetResources(target, culture);
 
             if (resources == null)
             {
@@ -117,7 +118,7 @@ namespace Spring.Globalization
         /// <param name="messageSource"><see cref="IMessageSource"/> instance to retrieve resources from.</param>
         /// <param name="culture">Resource locale.</param>
         /// <returns>A list of resources to apply.</returns>
-        protected abstract IList LoadResources(object target, IMessageSource messageSource, CultureInfo culture);
+        protected abstract IList<Resource> LoadResources(object target, IMessageSource messageSource, CultureInfo culture);
 
     }
 }

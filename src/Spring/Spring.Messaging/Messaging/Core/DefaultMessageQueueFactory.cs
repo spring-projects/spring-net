@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Messaging;
 using Common.Logging;
 using Spring.Context;
@@ -66,10 +67,10 @@ namespace Spring.Messaging.Core
             MessageQueueFactoryObject mqfo = new MessageQueueFactoryObject();
             mqfo.MessageCreatorDelegate = messageQueueCreatorDelegate;
             applicationContext.ObjectFactory.RegisterSingleton(messageQueueObjectName, mqfo);
-            IDictionary caches = applicationContext.GetObjectsOfType(typeof(MessageQueueMetadataCache));
-            foreach (DictionaryEntry entry in caches)
+            IDictionary<string, MessageQueueMetadataCache> caches = applicationContext.GetObjects<MessageQueueMetadataCache>();
+            foreach (KeyValuePair<string, MessageQueueMetadataCache> entry in caches)
             {
-                ((MessageQueueMetadataCache) entry.Value).Insert(mqfo.Path, new MessageQueueMetadata(mqfo.RemoteQueue, mqfo.RemoteQueueIsTransactional));
+                entry.Value.Insert(mqfo.Path, new MessageQueueMetadata(mqfo.RemoteQueue, mqfo.RemoteQueueIsTransactional));
             }             
         }
 

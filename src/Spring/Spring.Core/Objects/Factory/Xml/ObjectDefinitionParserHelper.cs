@@ -19,12 +19,12 @@
 #endregion
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
-using System.Reflection;
 using System.Xml;
+
 using Common.Logging;
-using Spring.Collections;
+
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 using Spring.Util;
@@ -55,7 +55,7 @@ namespace Spring.Objects.Factory.Xml
 
         private readonly ObjectsNamespaceParser objectsNamespaceParser;
 
-        private readonly ISet usedNames = new HashedSet();
+        private readonly HashSet<string> usedNames = new HashSet<string>();
 
         #endregion
 
@@ -258,7 +258,7 @@ namespace Spring.Objects.Factory.Xml
         {
             string id = GetAttributeValue(element, ObjectDefinitionConstants.IdAttribute);
             string nameAttr = GetAttributeValue(element, ObjectDefinitionConstants.NameAttribute);
-            ArrayList aliases = new ArrayList();
+            List<string> aliases = new List<string>();
             if (StringUtils.HasText(nameAttr))
             {
                 aliases.AddRange(GetObjectNames(nameAttr));
@@ -274,7 +274,7 @@ namespace Spring.Objects.Factory.Xml
                     aliases.RemoveAt(0);
                     if (log.IsDebugEnabled)
                     {
-                        log.Debug(string.Format("No XML 'id' specified using '{0}' as object name and '{1}' as aliases", objectName, string.Join(",", (string[]) aliases.ToArray(typeof(string)))));
+                        log.Debug(string.Format("No XML 'id' specified using '{0}' as object name and '{1}' as aliases", objectName, string.Join(",", aliases.ToArray())));
                     }
                 }
             }
@@ -322,8 +322,8 @@ namespace Spring.Objects.Factory.Xml
 
                     #endregion
                 }
-                string[] aliasesArray = (string[])aliases.ToArray(typeof(string));
-                return CreateObjectDefinitionHolder(element, definition, objectName, aliasesArray);
+
+                return CreateObjectDefinitionHolder(element, definition, objectName, aliases);
             }
             return null;
         }
@@ -334,9 +334,9 @@ namespace Spring.Objects.Factory.Xml
         /// <remarks>
         /// This method may be used as a last resort to post-process an object definition before it gets added to the registry.
         /// </remarks>
-        protected virtual ObjectDefinitionHolder CreateObjectDefinitionHolder(XmlElement element, IConfigurableObjectDefinition definition, string objectName, string[] aliasesArray)
+        protected virtual ObjectDefinitionHolder CreateObjectDefinitionHolder(XmlElement element, IConfigurableObjectDefinition definition, string objectName, IList<string> aliases)
         {
-            return new ObjectDefinitionHolder(definition, objectName, aliasesArray);
+            return new ObjectDefinitionHolder(definition, objectName, aliases);
         }
 
         /// <summary>
@@ -351,7 +351,7 @@ namespace Spring.Objects.Factory.Xml
         /// <param name="element">the currently processed element.</param>
         /// <param name="containingDefinition">the containing object definition, may be <c>null</c></param>
         /// <returns>the new object name to be used.</returns>
-        protected virtual string PostProcessObjectNameAndAliases(string objectName, ArrayList aliases, XmlElement element, IObjectDefinition containingDefinition)
+        protected virtual string PostProcessObjectNameAndAliases(string objectName, List<string> aliases, XmlElement element, IObjectDefinition containingDefinition)
         {
             if (!StringUtils.HasText(objectName) && aliases.Count == 0)
             {
@@ -367,7 +367,7 @@ namespace Spring.Objects.Factory.Xml
         /// <summary>
         /// Validate that the specified object name and aliases have not been used already.
         /// </summary>
-        protected virtual void CheckNameUniqueness(string objectName, ArrayList aliases, XmlElement element)
+        protected virtual void CheckNameUniqueness(string objectName, List<string> aliases, XmlElement element)
         {
             string foundName = null;
 
@@ -385,7 +385,10 @@ namespace Spring.Objects.Factory.Xml
             }
 
             this.usedNames.Add(objectName);
-            this.usedNames.AddAll(aliases);
+            foreach (string alias in aliases)
+            {
+                this.usedNames.Add(alias);
+            }
         }
 
         /// <summary>

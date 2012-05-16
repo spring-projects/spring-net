@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Web.UI;
 
 namespace Spring.DataBinding
@@ -45,7 +46,7 @@ namespace Spring.DataBinding
         /// <param name="target">The target object</param>
         /// <param name="variables">Variables to be used during binding</param>
         /// <param name="direction">The current binding's direction</param>
-        public void SetBindingContext(object source, object target, IDictionary variables, BindingDirection direction)
+        public void SetBindingContext(object source, object target, IDictionary<string, object> variables, BindingDirection direction)
         {
             // Extract dataSource from source object
             IEnumerable dataSource = DataBinder.GetPropertyValue(source, this._dataSourceFieldName) as IEnumerable;

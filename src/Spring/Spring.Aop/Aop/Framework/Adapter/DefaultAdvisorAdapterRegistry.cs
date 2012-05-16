@@ -21,12 +21,10 @@
 #region Imports
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 
 using AopAlliance.Aop;
 using AopAlliance.Intercept;
-
-using Spring.Aop;
 using Spring.Aop.Support;
 
 #endregion
@@ -43,7 +41,7 @@ namespace Spring.Aop.Framework.Adapter
 	[Serializable]
 	public class DefaultAdvisorAdapterRegistry : IAdvisorAdapterRegistry
 	{
-	    private readonly IList adapters = new ArrayList();
+        private readonly IList<IAdvisorAdapter> adapters = new List<IAdvisorAdapter>();
 		
         /// <summary>
         /// Creates a new instance of the

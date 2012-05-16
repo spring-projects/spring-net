@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.ServiceModel;
@@ -491,12 +492,12 @@ namespace Spring.ServiceModel
                 return attrs;
             }
 
-            protected override Type[] GetProxiableInterfaces(Type[] interfaces)
+            protected override IList<Type> GetProxiableInterfaces(IList<Type> interfaces)
             {
                 if (contractInterface == null)
                 {
-                    Type[] proxiableInterfaces = base.GetProxiableInterfaces(interfaces);
-                    if (proxiableInterfaces.Length > 1)
+                    IList<Type> proxiableInterfaces = base.GetProxiableInterfaces(interfaces);
+                    if (proxiableInterfaces.Count > 1)
                     {
                         throw new ArgumentException(String.Format(
                             "ServiceExporter cannot export service type '{0}' as a WCF service because it implements multiple interfaces. Specify the contract interface to expose via the ContractInterface property.",
@@ -558,7 +559,7 @@ namespace Spring.ServiceModel
                                                                                                               objectDefinition,
                                                                                                               null, null);
 
-                        if (objectDefinition.PropertyValues.PropertyValues.Length == 0)
+                        if (objectDefinition.PropertyValues.PropertyValues.Count == 0)
                         {
                             CustomAttributeBuilder cab = new CustomAttributeBuilder(ci.ConstructorInfo,
                                                                                     ci.ArgInstances);

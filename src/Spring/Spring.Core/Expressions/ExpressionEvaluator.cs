@@ -18,7 +18,7 @@
 
 #endregion
 
-using System.Collections;
+using System.Collections.Generic;
 
 namespace Spring.Expressions
 {
@@ -34,7 +34,7 @@ namespace Spring.Expressions
     /// Methods in this class parse expression on every invocation.
     /// If you plan to reuse the same expression many times, you should prepare
     /// the expression once using the static <see cref="Expression.Parse(string)"/> method,
-    /// and then call <see cref="IExpression.GetValue(object, IDictionary)"/> to evaluate it.
+    /// and then call <see cref="IExpression.GetValue()"/> to evaluate it.
     /// </p>
     /// <p>
     /// This can result in significant performance improvements as it avoids expression
@@ -65,7 +65,7 @@ namespace Spring.Expressions
         /// <param name="expression">Expression to evaluate.</param>
         /// <param name="variables">Expression variables map.</param>
         /// <returns>Value of the last node in the expression.</returns>
-        public static object GetValue(object root, string expression, IDictionary variables)
+        public static object GetValue(object root, string expression, IDictionary<string, object> variables)
         {
             IExpression exp = Expression.Parse(expression);
             return exp.GetValue(root, variables);
@@ -92,7 +92,7 @@ namespace Spring.Expressions
         /// <param name="expression">Expression to evaluate.</param>
         /// <param name="variables">Expression variables map.</param>
         /// <param name="newValue">Value to set last node to.</param>
-        public static void SetValue(object root, string expression, IDictionary variables, object newValue)
+        public static void SetValue(object root, string expression, IDictionary<string, object> variables, object newValue)
         {
             IExpression exp = Expression.Parse(expression);
             exp.SetValue(root, variables, newValue);

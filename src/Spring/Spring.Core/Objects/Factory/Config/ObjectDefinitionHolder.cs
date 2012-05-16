@@ -21,7 +21,8 @@
 #region Imports
 
 using System;
-using Spring.Objects.Factory.Config;
+using System.Collections.Generic;
+
 using Spring.Objects.Factory.Xml;
 using Spring.Util;
 
@@ -56,7 +57,7 @@ namespace Spring.Objects.Factory.Config
     {
         private IObjectDefinition objectDefinition;
         private string objectName;
-        private string[] aliases;
+        private IList<string> aliases;
 
         #region Constructor () / Destructor
 
@@ -87,11 +88,11 @@ namespace Spring.Objects.Factory.Config
         /// Any aliases for the supplied <paramref name="definition"/>
         /// </param>
         public ObjectDefinitionHolder(
-            IObjectDefinition definition, string name, string[] aliases)
+            IObjectDefinition definition, string name, IList<string> aliases)
         {
             this.objectDefinition = definition;
             this.objectName = name;
-            this.aliases = aliases == null ? StringUtils.EmptyStrings : aliases;
+            this.aliases = aliases ?? new List<string>(0);
         }
 
         #endregion
@@ -126,7 +127,7 @@ namespace Spring.Objects.Factory.Config
         /// <see cref="System.String"/> array will be returned.
         /// </p>
         /// </remarks>
-        public string[] Aliases
+        public IList<string> Aliases
         {
             get { return aliases; }
         }

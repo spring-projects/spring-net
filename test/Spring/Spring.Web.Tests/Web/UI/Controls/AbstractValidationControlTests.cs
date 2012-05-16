@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Web.UI;
 using NUnit.Framework;
@@ -280,7 +281,7 @@ namespace Spring.Web.UI.Controls
         {
             public class CapturingRenderer : IValidationErrorsRenderer
             {
-                public IList LastErrorsRendered;
+                public IList<string> LastErrorsRendered;
                 private readonly IValidationErrorsRenderer _inner;
 
                 public CapturingRenderer(IValidationErrorsRenderer inner)
@@ -288,7 +289,7 @@ namespace Spring.Web.UI.Controls
                     _inner = inner;
                 }
 
-                public void RenderErrors(Page page, HtmlTextWriter writer, IList errors)
+                public void RenderErrors(Page page, HtmlTextWriter writer, IList<string> errors)
                 {
                     LastErrorsRendered = errors;
                     if (_inner != null)
@@ -319,7 +320,7 @@ namespace Spring.Web.UI.Controls
                 return _ver;
             }
 
-            public IList LastErrorsRendered
+            public IList<string> LastErrorsRendered
             {
                 get { return ((CapturingRenderer)_ver).LastErrorsRendered; }
             }

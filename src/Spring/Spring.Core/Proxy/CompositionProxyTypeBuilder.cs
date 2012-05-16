@@ -102,7 +102,7 @@ namespace Spring.Proxy
         /// </exception>
         public override Type BuildProxyType()
         {
-            if (Interfaces == null || Interfaces.Length == 0)
+            if (Interfaces == null || Interfaces.Count == 0)
             {
                 throw new ArgumentException(
                     "Composition proxy target must implement at least one interface.");

@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Spring.Util;
 
 namespace Spring.Expressions.Processors
@@ -57,7 +58,7 @@ namespace Spring.Expressions.Processors
 
         private class LambdaComparer : IComparer
         {
-            private readonly Hashtable _variables;
+            private readonly Dictionary<string, object> _variables;
             private readonly IExpression _fn;
 
             public LambdaComparer(LambdaExpressionNode lambdaExpression)
@@ -73,7 +74,7 @@ namespace Spring.Expressions.Processors
                 functionNode.addChild(y);
 
                 _fn = functionNode;
-                _variables = new Hashtable();
+                _variables = new Dictionary<string, object>();
                 _variables.Add( "compare", lambdaExpression );
             }
 

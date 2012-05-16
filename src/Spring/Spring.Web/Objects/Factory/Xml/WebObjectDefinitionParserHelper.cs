@@ -19,6 +19,7 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.Xml;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
@@ -47,7 +48,7 @@ namespace Spring.Objects.Factory.Xml
             this.webObjectNameGenerator = webObjectNameGenerator;
         }
 
-        protected override string PostProcessObjectNameAndAliases(string objectName, System.Collections.ArrayList aliases, XmlElement element, IObjectDefinition containingDefinition)
+        protected override string PostProcessObjectNameAndAliases(string objectName, List<string> aliases, XmlElement element, IObjectDefinition containingDefinition)
         {
             string url = element.GetAttribute(ObjectDefinitionConstants.TypeAttribute);
             string strTypeName = url.ToLower();
@@ -84,7 +85,7 @@ namespace Spring.Objects.Factory.Xml
             return objectName;
         }
 
-        protected override ObjectDefinitionHolder CreateObjectDefinitionHolder(XmlElement element, IConfigurableObjectDefinition definition, string objectName, string[] aliasesArray)
+        protected override ObjectDefinitionHolder CreateObjectDefinitionHolder(XmlElement element, IConfigurableObjectDefinition definition, string objectName, IList<string> aliasesArray)
         {
             IWebObjectDefinition webDefinition = definition as IWebObjectDefinition;
 

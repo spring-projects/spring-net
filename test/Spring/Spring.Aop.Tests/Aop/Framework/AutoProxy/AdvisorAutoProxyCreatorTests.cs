@@ -21,7 +21,7 @@
 #region Imports
 
 using NUnit.Framework;
-using Spring.Aop.Framework.DynamicProxy;
+
 using Spring.Context.Support;
 using Spring.Objects;
 using Spring.Objects.Factory;

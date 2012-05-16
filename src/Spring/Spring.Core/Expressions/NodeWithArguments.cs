@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Spring.Expressions.Parser.antlr.collections;
 
@@ -76,7 +77,7 @@ namespace Spring.Expressions
             {
                 if (args == null)
                 {
-                    ArrayList argList = new ArrayList();
+                    List<BaseNode> argList = new List<BaseNode>();
                     namedArgs = new Hashtable();
 
                     AST node = this.getFirstChild();
@@ -85,7 +86,7 @@ namespace Spring.Expressions
                     {
                         if (node.getFirstChild() is LambdaExpressionNode)
                         {
-                            argList.Add(node.getFirstChild());
+                            argList.Add((BaseNode) node.getFirstChild());
                         }
                         else if (node is NamedArgumentNode)
                         {
@@ -93,12 +94,12 @@ namespace Spring.Expressions
                         }
                         else
                         {
-                            argList.Add(node);
+                            argList.Add((BaseNode) node);
                         }
                         node = node.getNextSibling();
                     }
 
-                    args = (BaseNode[]) argList.ToArray(typeof (BaseNode));
+                    args = argList.ToArray();
                 }
             }
         }

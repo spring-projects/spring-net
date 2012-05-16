@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.Runtime.Remoting;
@@ -166,7 +167,7 @@ namespace Spring.Objects.Factory.Support
             {
                 ExpressionHolder expHolder = (ExpressionHolder)argumentValue;
                 object context = null;
-                IDictionary variables = null;
+                IDictionary<string, object> variables = null;
 
                 if (expHolder.Properties != null)
                 {
@@ -180,9 +181,18 @@ namespace Spring.Objects.Factory.Support
                                        ? null
                                        : ResolveValueIfNecessary(name, definition, "Variables",
                                                                  variablesProperty.Value));
+                    if (vars is IDictionary<string, object>)
+                    {
+                        variables = (IDictionary<string, object>)vars;
+                    }
                     if (vars is IDictionary)
                     {
-                        variables = (IDictionary)vars;
+                        IDictionary temp = (IDictionary) vars;
+                        variables = new Dictionary<string, object>(temp.Count);
+                        foreach (DictionaryEntry entry in temp)
+                        {
+                            variables.Add((string) entry.Key, entry.Value);
+                        }
                     }
                     else
                     {
@@ -190,7 +200,7 @@ namespace Spring.Objects.Factory.Support
                     }
                 }
 
-                if (variables == null) variables = CollectionsUtil.CreateCaseInsensitiveHashtable();
+                if (variables == null) variables = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
                 // add 'this' objectfactory reference to variables
                 variables.Add(Expression.ReservedVariableNames.CurrentObjectFactory, objectFactory);
 
@@ -199,8 +209,7 @@ namespace Spring.Objects.Factory.Support
             else if (argumentValue is IManagedCollection)
             {
                 resolvedValue =
-                    ((IManagedCollection)argumentValue).Resolve(name, definition, argumentName,
-                                                                new ManagedCollectionElementResolver(ResolveValueIfNecessary));
+                    ((IManagedCollection)argumentValue).Resolve(name, definition, argumentName, ResolveValueIfNecessary);
             }
             else if (argumentValue is TypedStringValue)
             {

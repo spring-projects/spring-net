@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Web;
 using System.Web.Caching;
 using Common.Logging;
@@ -166,7 +167,7 @@ namespace Spring.Caching
         {
             get
             {
-                ArrayList keys = new ArrayList();
+                List<object> keys = new List<object>();
                 
                 foreach (DictionaryEntry entry in _cache)
                 {

@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using System.Reflection.Emit;
 
 using Spring.Proxy;

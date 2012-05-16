@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.Serialization;
@@ -61,7 +62,7 @@ namespace Spring.Proxy
         private string _name;
 		private Type _targetType;
 		private Type _baseType = typeof (object);
-        private Type[] _interfaces;
+        private IList<Type> _interfaces;
         private bool _proxyTargetAttributes = true;
 		private IList _typeAttributes = new ArrayList();
 		private IDictionary _memberAttributes = new Hashtable();
@@ -125,7 +126,7 @@ namespace Spring.Proxy
         /// The default value of this property is all the interfaces 
         /// implemented or inherited by the target type.
         /// </remarks>
-        public Type[] Interfaces
+        public IList<Type> Interfaces
         {
             get
             {
@@ -348,8 +349,7 @@ namespace Spring.Proxy
         {
             ArrayList attributes = new ArrayList();
 
-            if (this.ProxyTargetAttributes && 
-                !type.Equals(typeof(object)))
+            if (this.ProxyTargetAttributes && !type.Equals(typeof(object)))
             {
                 // add attributes that apply to the target type
                 attributes.AddRange(ReflectionUtils.GetCustomAttributes(type));
@@ -470,8 +470,7 @@ namespace Spring.Proxy
                 object[] attrs = paramInfo.GetCustomAttributes(false);
                 try
                 {
-                    System.Collections.Generic.IList<CustomAttributeData> attrsData =
-                        CustomAttributeData.GetCustomAttributes(paramInfo);
+                    IList<CustomAttributeData> attrsData = CustomAttributeData.GetCustomAttributes(paramInfo);
                     
                     if (attrs.Length != attrsData.Count)
                     {
@@ -643,7 +642,7 @@ namespace Spring.Proxy
             IProxyMethodBuilder proxyMethodBuilder, Type intf, 
             Type targetType, bool proxyVirtualMethods)
 		{
-            IDictionary methodMap = new Hashtable();
+            Dictionary<string, MethodBuilder> methodMap = new Dictionary<string, MethodBuilder>();
 
             InterfaceMapping mapping = GetInterfaceMapping(targetType, intf);
 
@@ -773,8 +772,7 @@ namespace Spring.Proxy
         protected virtual void InheritType(TypeBuilder typeBuilder,
             IProxyMethodBuilder proxyMethodBuilder, Type type, bool declaredMembersOnly)
         {
-            IDictionary methodMap = new Hashtable();
-            IList finalMethods = new ArrayList();
+            IDictionary<string, MethodBuilder> methodMap = new Dictionary<string, MethodBuilder>();
 
             BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic;
             if (declaredMembersOnly)
@@ -816,10 +814,12 @@ namespace Spring.Proxy
 		/// <param name="property">The property to proxy.</param>
 		/// <param name="methodMap">The implemented methods map.</param>
 		protected virtual void ImplementProperty(
-			TypeBuilder typeBuilder, Type type, PropertyInfo property, IDictionary methodMap)
+			TypeBuilder typeBuilder, Type type, PropertyInfo property, IDictionary<string, MethodBuilder> methodMap)
 		{
-            MethodBuilder getMethod = methodMap["get_" + property.Name] as MethodBuilder;
-            MethodBuilder setMethod = methodMap["set_" + property.Name] as MethodBuilder;
+            MethodBuilder getMethod;
+            methodMap.TryGetValue("get_" + property.Name, out getMethod);
+		    MethodBuilder setMethod;
+            methodMap.TryGetValue("set_" + property.Name, out setMethod);
 
             if (getMethod != null || setMethod != null)
             {
@@ -842,18 +842,19 @@ namespace Spring.Proxy
             }
 		}
 
-		/// <summary>
-		/// Implements the specified event.
-		/// </summary>
-		/// <param name="typeBuilder">The type builder to use.</param>
-        /// <param name="type">The type the event is defined on.</param>
-		/// <param name="evt">The event to proxy.</param>
-		/// <param name="methodMap">The implemented methods map.</param>
-		protected virtual void ImplementEvent(
-            TypeBuilder typeBuilder, Type type, EventInfo evt, IDictionary methodMap)
+	    /// <summary>
+	    /// Implements the specified event.
+	    /// </summary>
+	    /// <param name="typeBuilder">The type builder to use.</param>
+	    /// <param name="type">The type the event is defined on.</param>
+	    /// <param name="evt">The event to proxy.</param>
+	    /// <param name="methodMap">The implemented methods map.</param>
+	    protected virtual void ImplementEvent(TypeBuilder typeBuilder, Type type, EventInfo evt, IDictionary<string, MethodBuilder> methodMap)
 		{
-            MethodBuilder addOnMethod = methodMap["add_" + evt.Name] as MethodBuilder;
-            MethodBuilder removeOnMethod = methodMap["remove_" + evt.Name] as MethodBuilder;
+            MethodBuilder addOnMethod;
+            methodMap.TryGetValue("add_" + evt.Name, out addOnMethod);
+            MethodBuilder removeOnMethod;
+	        methodMap.TryGetValue("remove_" + evt.Name, out removeOnMethod);
 
             if (addOnMethod != null && removeOnMethod != null)
             {
@@ -872,24 +873,24 @@ namespace Spring.Proxy
 
         #endregion
 
-        /// <summary>
-        /// Returns an array of <see cref="System.Type"/>s that represent 
-        /// the proxiable interfaces.
-        /// </summary>
-        /// <remarks>
-        /// An interface is proxiable if it's not marked with the 
-        /// <see cref="ProxyIgnoreAttribute"/>.
-        /// </remarks>
-        /// <param name="interfaces">
-        /// The array of interfaces from which 
-        /// we want to get the proxiable interfaces.
-        /// </param>
-        /// <returns>
-        /// An array containing the interface <see cref="System.Type"/>s.
-        /// </returns>
-        protected virtual Type[] GetProxiableInterfaces(Type[] interfaces)
+	    /// <summary>
+	    /// Returns an array of <see cref="System.Type"/>s that represent 
+	    /// the proxiable interfaces.
+	    /// </summary>
+	    /// <remarks>
+	    /// An interface is proxiable if it's not marked with the 
+	    /// <see cref="ProxyIgnoreAttribute"/>.
+	    /// </remarks>
+	    /// <param name="interfaces">
+	    /// The array of interfaces from which 
+	    /// we want to get the proxiable interfaces.
+	    /// </param>
+	    /// <returns>
+	    /// An array containing the interface <see cref="System.Type"/>s.
+	    /// </returns>
+	    protected virtual IList<Type> GetProxiableInterfaces(IList<Type> interfaces)
         {
-            ArrayList  proxiableInterfaces = new ArrayList();
+            List<Type>  proxiableInterfaces = new List<Type>();
 
             foreach(Type intf in interfaces)
             {
@@ -913,7 +914,7 @@ namespace Spring.Proxy
                 }
             }
 
-            return (Type[]) proxiableInterfaces.ToArray(typeof(Type));
+            return proxiableInterfaces;
         }
 
         /// <summary>

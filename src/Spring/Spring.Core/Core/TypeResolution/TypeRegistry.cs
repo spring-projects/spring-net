@@ -21,9 +21,8 @@
 #region Imports
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 
-using Spring.Core;
 using Spring.Util;
 
 #endregion
@@ -430,7 +429,8 @@ namespace Spring.Core.TypeResolution
 
         #region Fields
 
-        private static IDictionary types = new Hashtable();
+        private static readonly object syncRoot = new object();
+        private static IDictionary<string, Type> types = new Dictionary<string, Type>();
 
         #endregion
 
@@ -441,7 +441,7 @@ namespace Spring.Core.TypeResolution
         /// </summary>
         static TypeRegistry()
         {
-            lock (types.SyncRoot)
+            lock (syncRoot)
             {
                 types["Int32"] = typeof(Int32);
                 types[Int32Alias] = typeof(Int32);
@@ -608,8 +608,8 @@ namespace Spring.Core.TypeResolution
         public static void RegisterType(Type type)
         {
             AssertUtils.ArgumentNotNull(type, "type");
-            
-            lock (types.SyncRoot)
+
+            lock (syncRoot)
             {
                 types[type.Name] = type;
             }
@@ -634,7 +634,7 @@ namespace Spring.Core.TypeResolution
             AssertUtils.ArgumentHasText(alias, "alias");
             AssertUtils.ArgumentNotNull(type, "type");
 
-            lock (types.SyncRoot)
+            lock (syncRoot)
             {
                 types[alias] = type;
             }
@@ -658,7 +658,9 @@ namespace Spring.Core.TypeResolution
         public static Type ResolveType(string alias)
         {
             AssertUtils.ArgumentHasText(alias, "alias");
-            return (Type) types[alias];
+            Type type;
+            types.TryGetValue(alias, out type);
+            return type;
         }
 
         /// <summary>
@@ -674,7 +676,7 @@ namespace Spring.Core.TypeResolution
         /// </returns>
         public static bool ContainsAlias(string alias)
         {
-            return types.Contains(alias);
+            return types.ContainsKey(alias);
         }
     }
 }

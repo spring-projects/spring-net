@@ -19,6 +19,7 @@
 #endregion
 
 using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 
 namespace Spring.Globalization
@@ -35,7 +36,7 @@ namespace Spring.Globalization
         /// <param name="target">Target to get a list of resources for.</param>
         /// <param name="culture">Resource culture.</param>
         /// <returns>A list of cached resources for the specified target object and culture.</returns>
-        public IList GetResources(object target, CultureInfo culture)
+        public IList<Resource> GetResources(object target, CultureInfo culture)
         {
             return GetResources(CreateCacheKey(target, culture));
         }
@@ -47,7 +48,7 @@ namespace Spring.Globalization
         /// <param name="culture">Resource culture.</param>
         /// <param name="resources">A list of resources to cache.</param>
         /// <returns>A list of cached resources for the specified target object and culture.</returns>
-        public void PutResources(object target, CultureInfo culture, IList resources)
+        public void PutResources(object target, CultureInfo culture, IList<Resource> resources)
         {
             PutResources(CreateCacheKey(target, culture), resources);
         }
@@ -67,7 +68,7 @@ namespace Spring.Globalization
         /// </summary>
         /// <param name="cacheKey">Cache key to use for lookup.</param>
         /// <returns>A list of cached resources for the specified target object and culture.</returns>
-        protected abstract IList GetResources(string cacheKey);
+        protected abstract IList<Resource> GetResources(string cacheKey);
 
         /// <summary>
         /// Puts the list of resources in the cache.
@@ -75,7 +76,7 @@ namespace Spring.Globalization
         /// <param name="cacheKey">Cache key to use for the specified resources.</param>
         /// <param name="resources">A list of resources to cache.</param>
         /// <returns>A list of cached resources for the specified target object and culture.</returns>
-        protected abstract void PutResources(string cacheKey, IList resources);
+        protected abstract void PutResources(string cacheKey, IList<Resource> resources);
 
     }
 }

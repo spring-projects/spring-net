@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Resources;
 using Common.Logging;
@@ -60,10 +61,9 @@ namespace Spring.Globalization.Localizers
         /// <param name="messageSource"><see cref="IMessageSource"/> instance to retrieve resources from.</param>
         /// <param name="culture">Resource locale.</param>
         /// <returns>A list of resources to apply.</returns>
-        protected override IList LoadResources(object target, IMessageSource messageSource, CultureInfo culture)
+        protected override IList<Resource> LoadResources(object target, IMessageSource messageSource, CultureInfo culture)
         {
-            IList resources;
-            resources = new ArrayList();
+            IList<Resource> resources = new List<Resource>();
 
             if (messageSource is ResourceSetMessageSource)
             {

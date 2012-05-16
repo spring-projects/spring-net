@@ -19,6 +19,7 @@
 #endregion
 
 using System.Collections;
+using System.Collections.Generic;
 using System.Web.UI;
 
 using Spring.Web.UI.Controls;
@@ -46,7 +47,7 @@ namespace Spring.Web.UI.Validation
         /// <param name="page">Web form instance.</param>
         /// <param name="writer">An HTML writer to use.</param>
         /// <param name="errors">The list of validation errors.</param>
-        public override void RenderErrors(Page page, HtmlTextWriter writer, IList errors)
+        public override void RenderErrors(Page page, HtmlTextWriter writer, IList<string> errors)
         {
             if (errors != null && errors.Count > 0)
             {

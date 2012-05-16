@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.InteropServices;
@@ -457,8 +458,8 @@ namespace Spring.Util
         public void ToInterfaceArrayFromType()
         {
             Type[] expected = new Type[] { typeof(IFoo), typeof(IBar) };
-            Type[] actual = ReflectionUtils.ToInterfaceArray(typeof(IBar));
-            Assert.AreEqual(expected.Length, actual.Length);
+            IList<Type> actual = ReflectionUtils.ToInterfaceArray(typeof(IBar));
+            Assert.AreEqual(expected.Length, actual.Count);
             Assert.AreEqual(expected[0], actual[0]);
             Assert.AreEqual(expected[1], actual[1]);
         }

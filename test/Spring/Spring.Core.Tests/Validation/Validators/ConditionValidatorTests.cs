@@ -21,7 +21,7 @@
 #region Imports
 
 using System.Collections;
-
+using System.Collections.Generic;
 using NUnit.Framework;
 
 using Spring.Context.Support;
@@ -75,7 +75,7 @@ namespace Spring.Validation.Validators
             IValidationErrors errors = new ValidationErrors();
             Assert.IsFalse(validator.Validate(tesla, errors));
             Assert.IsFalse(errors.IsEmpty);
-            IList namedErrors = errors.GetResolvedErrors("InventorValidator", new NullMessageSource());
+            IList<string> namedErrors = errors.GetResolvedErrors("InventorValidator", new NullMessageSource());
             Assert.AreEqual(1, namedErrors.Count);
             string error = (string) namedErrors[0];
             Assert.AreEqual("Wrong name", error);

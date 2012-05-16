@@ -19,8 +19,8 @@
 #endregion
 
 using System;
+
 using AopAlliance.Intercept;
-using Spring.Aop;
 
 namespace Spring.Aop.Framework
 {

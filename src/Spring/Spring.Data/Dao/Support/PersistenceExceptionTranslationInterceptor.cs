@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using AopAlliance.Intercept;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
@@ -152,7 +153,7 @@ namespace Spring.Dao.Support
         protected IPersistenceExceptionTranslator DetectPersistenceExceptionTranslators(IListableObjectFactory objectFactory)
         {
             // Find all translators, being careful not to activate FactoryObjects.
-            IDictionary pets =
+            IDictionary<string, object> pets =
                 ObjectFactoryUtils.ObjectsOfTypeIncludingAncestors(objectFactory,
                                                                    typeof (IPersistenceExceptionTranslator), false,
                                                                    false);
@@ -162,7 +163,7 @@ namespace Spring.Dao.Support
             }
 
             ChainedPersistenceExceptionTranslator cpet = new ChainedPersistenceExceptionTranslator();
-            foreach (DictionaryEntry pet in pets)
+            foreach (KeyValuePair<string, object> pet in pets)
             {
                 cpet.AddTranslator((IPersistenceExceptionTranslator)pet.Value);
             }

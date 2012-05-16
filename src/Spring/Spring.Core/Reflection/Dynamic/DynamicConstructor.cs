@@ -20,7 +20,7 @@
 
 #region Imports
 
-using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using Spring.Util;
 
@@ -65,15 +65,15 @@ namespace Spring.Reflection.Dynamic
 
         #region Generated Function Cache
 
-        private static readonly IDictionary constructorCache = new Hashtable();
+        private static readonly IDictionary<ConstructorInfo, ConstructorDelegate> constructorCache = new Dictionary<ConstructorInfo, ConstructorDelegate>();
 
         /// <summary>
         /// Obtains cached constructor info or creates a new entry, if none is found.
         /// </summary>
         private static ConstructorDelegate GetOrCreateDynamicConstructor(ConstructorInfo constructorInfo)
         {
-            ConstructorDelegate method = (ConstructorDelegate)constructorCache[constructorInfo];
-            if (method == null)
+            ConstructorDelegate method;
+            if (!constructorCache.TryGetValue(constructorInfo, out method))
             {
                 method = DynamicReflectionManager.CreateConstructor(constructorInfo);
                 lock (constructorCache)

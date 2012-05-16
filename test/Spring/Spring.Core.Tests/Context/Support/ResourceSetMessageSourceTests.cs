@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Globalization;
@@ -51,7 +52,7 @@ namespace Spring.Context.Support
         private const string ResourceFileName = "Spring.Context.Tests";
         // The namespace is added during the build...
         private const string ResourceBaseName = ResourceNamespace + "." + ResourceFileName;
-        private IList resourceManagerList;
+        private IList<object> resourceManagerList;
 
         [TestFixtureSetUp]
         public void TestFixtureSetUp()
@@ -72,7 +73,7 @@ namespace Spring.Context.Support
         public void Init()
         {
             messageSource = new ResourceSetMessageSource();
-            resourceManagerList = new ArrayList();
+            resourceManagerList = new List<object>();
             Assembly ass = this.GetType().Assembly;
             resourceManagerList.Add(new ResourceManager(ResourceBaseName, ass));
         }

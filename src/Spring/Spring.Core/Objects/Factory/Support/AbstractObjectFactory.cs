@@ -22,9 +22,10 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
-using System.Runtime.Serialization;
+
 using Common.Logging;
 
 using Spring.Collections;
@@ -34,6 +35,7 @@ using Spring.Objects.Factory.Config;
 using Spring.Threading;
 using Spring.Util;
 using System.Threading;
+using System.Linq;
 
 #endregion
 
@@ -140,7 +142,7 @@ namespace Spring.Objects.Factory.Support
         /// <summary>
         /// Cache of singleton objects created by <see cref="IFactoryObject"/>s: FactoryObject name -> product
         /// </summary>
-        private readonly Hashtable factoryObjectProductCache = new Hashtable();
+        private readonly Dictionary<string, object> factoryObjectProductCache = new Dictionary<string, object>();
 
         #region Constructor (s) / Destructor
 
@@ -904,7 +906,7 @@ namespace Spring.Objects.Factory.Support
 
             if (rod == null)
             {
-                resultInstance = factoryObjectProductCache[canonicalName];
+                factoryObjectProductCache.TryGetValue(canonicalName, out resultInstance);
             }
 
             if (resultInstance == null)
@@ -926,10 +928,9 @@ namespace Spring.Objects.Factory.Support
 
                 if (factory.IsSingleton && ContainsSingleton(canonicalName))
                 {
-                    lock (factoryObjectProductCache.SyncRoot)
+                    lock (factoryObjectProductCache)
                     {
-                        resultInstance = factoryObjectProductCache[canonicalName];
-                        if (resultInstance == null)
+                        if (!factoryObjectProductCache.TryGetValue(canonicalName, out resultInstance))
                         {
                             resultInstance = GetObjectFromFactoryObject(factory, canonicalName, rod);
                             if (resultInstance != null)
@@ -1209,11 +1210,11 @@ namespace Spring.Objects.Factory.Support
         /// The names of objects in the singleton cache that match the given
         /// object type (including subclasses), or an empty array if none.
         /// </returns>
-        public virtual string[] GetSingletonNames(Type type)
+        public virtual IList<string> GetSingletonNames(Type type)
         {
             lock (singletonCache)
             {
-                ArrayList matches = new ArrayList();
+                List<string> matches = new List<string>();
                 foreach (string name in singletonCache.Keys)
                 {
                     object singletonObject = singletonCache[name];
@@ -1223,7 +1224,7 @@ namespace Spring.Objects.Factory.Support
                         matches.Add(name);
                     }
                 }
-                return (string[])matches.ToArray(typeof(string));
+                return matches;
             }
         }
 
@@ -1446,12 +1447,12 @@ namespace Spring.Objects.Factory.Support
         /// </p>
         /// </remarks>
         /// <returns>The names of the objects in the singleton cache.</returns>
-        public virtual string[] GetSingletonNames()
+        public virtual IList<string> GetSingletonNames()
         {
             lock (singletonCache)
             {
-                ICollection keys = singletonCache.Keys;
-                return (string[])new ArrayList(keys).ToArray(typeof(string));
+                IEnumerable<string> keys = singletonCache.Keys.Cast<string>();
+                return new List<string>(keys);
             }
         }
 
@@ -1613,14 +1614,14 @@ namespace Spring.Objects.Factory.Support
         private bool hasDestructionAwareBeanPostProcessors;
 
         private bool caseSensitive;
-        private IDictionary aliasMap;
-        private IDictionary singletonCache;
-        private IDictionary singletonLocks;
+        private OrderedDictionary aliasMap;
+        private OrderedDictionary singletonCache;
+        private OrderedDictionary singletonLocks;
 
         /// <summary>
         /// Set of registered singletons, containing the bean names in registration order 
         /// </summary>
-        private ISet registeredSingletons = new HashedSet();
+        private HashSet<string> registeredSingletons = new HashSet<string>();
 
         private readonly IDictionary singletonsInCreation;
 
@@ -1813,7 +1814,7 @@ namespace Spring.Objects.Factory.Support
         /// Return the aliases for the given object name, if defined.
         /// </summary>
         /// <see cref="Spring.Objects.Factory.IObjectFactory.GetAliases"/>.
-        public string[] GetAliases(string name)
+        public IList<string> GetAliases(string name)
         {
             string objectName = TransformedObjectName(name);
             // check if object actually exists in this object factory...
@@ -1821,18 +1822,18 @@ namespace Spring.Objects.Factory.Support
             if (isInSingletonCache || ContainsObjectDefinition(objectName))
             {
                 // if found, gather aliases...
-                ArrayList matches = new ArrayList();
+                List<string> matches = new List<string>();
                 lock (aliasMap)
                 {
                     foreach (DictionaryEntry aliasEntry in aliasMap)
                     {
                         if (0 == string.Compare((string)aliasEntry.Value, objectName, !this.IsCaseSensitive))
                         {
-                            matches.Add(aliasEntry.Key);
+                            matches.Add((string) aliasEntry.Key);
                         }
                     }
                 }
-                return (string[])matches.ToArray(typeof(string));
+                return matches;
             }
 
             // not found, so check parent...
@@ -2532,7 +2533,7 @@ namespace Spring.Objects.Factory.Support
         /// <see cref="RegisterSingleton"/>
         /// <see cref="Spring.Objects.Factory.Support.IObjectDefinitionRegistry.GetObjectDefinitionNames"/>
         /// <see cref="Spring.Objects.Factory.IListableObjectFactory.GetObjectDefinitionNames"/>
-        public string[] SingletonNames
+        public IList<string> SingletonNames
         {
             get
             {

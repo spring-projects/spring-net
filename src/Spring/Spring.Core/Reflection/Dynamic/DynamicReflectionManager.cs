@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -126,27 +127,32 @@ namespace Spring.Reflection.Dynamic
         /// <summary>
         /// Cache for dynamic property types.
         /// </summary>
-        private readonly static IDictionary propertyCache = new Hashtable();
+        private readonly static IDictionary<PropertyInfo, IDynamicProperty> propertyCache = new Dictionary<PropertyInfo, IDynamicProperty>();
+        private readonly static object propertyCacheLock = new object();
 
         /// <summary>
         /// Cache for dynamic field types.
         /// </summary>
-        private readonly static IDictionary fieldCache = new Hashtable();
+        private readonly static IDictionary<FieldInfo, IDynamicField> fieldCache = new Dictionary<FieldInfo, IDynamicField>();
+        private readonly static object fieldCacheLock = new object();
 
         /// <summary>
         /// Cache for dynamic indexer types.
         /// </summary>
-        private readonly static IDictionary indexerCache = new Hashtable();
+        private readonly static IDictionary<PropertyInfo, IDynamicIndexer> indexerCache = new Dictionary<PropertyInfo, IDynamicIndexer>();
+        private readonly static object indexerCacheLock = new object();
 
         /// <summary>
         /// Cache for dynamic method types.
         /// </summary>
-        private readonly static IDictionary methodCache = new Hashtable();
+        private readonly static IDictionary<MethodInfo, IDynamicMethod> methodCache = new Dictionary<MethodInfo, IDynamicMethod>();
+        private readonly static object methodCacheLock = new object();
 
         /// <summary>
         /// Cache for dynamic constructor types.
         /// </summary>
-        private readonly static IDictionary constructorCache = new Hashtable();
+        private readonly static IDictionary<ConstructorInfo, IDynamicConstructor> constructorCache = new Dictionary<ConstructorInfo, IDynamicConstructor>();
+        private readonly static object constructorCacheLock = new object();
 
         #endregion
 
@@ -175,10 +181,10 @@ namespace Spring.Reflection.Dynamic
         /// <returns>An <see cref="IDynamicProperty"/> for the given property info.</returns>
         internal static IDynamicProperty GetDynamicProperty(PropertyInfo property, CreatePropertyCallback createCallback)
         {
-            lock (propertyCache.SyncRoot)
+            lock (propertyCacheLock)
             {
-                IDynamicProperty dynamicProperty = (IDynamicProperty)propertyCache[property];
-                if (dynamicProperty == null)
+                IDynamicProperty dynamicProperty;
+                if (!propertyCache.TryGetValue(property, out dynamicProperty))
                 {
                     dynamicProperty = createCallback(property);
                     propertyCache[property] = dynamicProperty;
@@ -195,10 +201,10 @@ namespace Spring.Reflection.Dynamic
         /// <returns>An <see cref="IDynamicField"/> for the given field info.</returns>
         internal static IDynamicField GetDynamicField(FieldInfo field, CreateFieldCallback createCallback)
         {
-            lock (fieldCache.SyncRoot)
+            lock (fieldCacheLock)
             {
-                IDynamicField dynamicField = (IDynamicField)fieldCache[field];
-                if (dynamicField == null)
+                IDynamicField dynamicField;
+                if (!fieldCache.TryGetValue(field, out dynamicField))
                 {
                     dynamicField = createCallback(field);
                     fieldCache[field] = dynamicField;
@@ -215,10 +221,10 @@ namespace Spring.Reflection.Dynamic
         /// <returns>An <see cref="IDynamicIndexer"/> for the given indexer.</returns>
         internal static IDynamicIndexer GetDynamicIndexer(PropertyInfo indexer, CreateIndexerCallback createCallback)
         {
-            lock (indexerCache.SyncRoot)
+            lock (indexerCacheLock)
             {
-                IDynamicIndexer dynamicIndexer = (IDynamicIndexer)indexerCache[indexer];
-                if (dynamicIndexer == null)
+                IDynamicIndexer dynamicIndexer;
+                if (!indexerCache.TryGetValue(indexer, out dynamicIndexer))
                 {
                     dynamicIndexer = createCallback(indexer);
                     indexerCache[indexer] = dynamicIndexer;
@@ -235,10 +241,10 @@ namespace Spring.Reflection.Dynamic
         /// <returns>An <see cref="IDynamicMethod"/> for the given method.</returns>
         internal static IDynamicMethod GetDynamicMethod(MethodInfo method, CreateMethodCallback createCallback)
         {
-            lock (methodCache.SyncRoot)
+            lock (methodCacheLock)
             {
-                IDynamicMethod dynamicMethod = (IDynamicMethod)methodCache[method];
-                if (dynamicMethod == null)
+                IDynamicMethod dynamicMethod;
+                if (!methodCache.TryGetValue(method, out dynamicMethod))
                 {
                     dynamicMethod = createCallback(method);
                     methodCache[method] = dynamicMethod;
@@ -255,10 +261,10 @@ namespace Spring.Reflection.Dynamic
         /// <returns>An <see cref="IDynamicConstructor"/> for the given constructor.</returns>
         internal static IDynamicConstructor GetDynamicConstructor(ConstructorInfo constructor, CreateConstructorCallback createCallback)
         {
-            lock (constructorCache.SyncRoot)
+            lock (constructorCacheLock)
             {
-                IDynamicConstructor dynamicConstructor = (IDynamicConstructor)constructorCache[constructor];
-                if (dynamicConstructor == null)
+                IDynamicConstructor dynamicConstructor;
+                if (!constructorCache.TryGetValue(constructor, out dynamicConstructor))
                 {
                     dynamicConstructor = createCallback(constructor);
                     constructorCache[constructor] = dynamicConstructor;

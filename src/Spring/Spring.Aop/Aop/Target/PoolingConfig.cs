@@ -18,12 +18,6 @@
 
 #endregion
 
-#region Imports
-
-using System;
-
-#endregion
-
 namespace Spring.Aop.Target
 {
 	/// <summary>

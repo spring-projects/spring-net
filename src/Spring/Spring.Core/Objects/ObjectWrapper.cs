@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Reflection;
 using System.Text;
@@ -331,7 +332,7 @@ namespace Spring.Objects
         /// <seealso cref="Spring.Objects.IObjectWrapper.SetPropertyValues(IPropertyValues, bool)"/>
         public virtual void SetPropertyValues(IPropertyValues propertyValues, bool ignoreUnknown)
         {
-            ArrayList propertyAccessExceptions = new ArrayList();
+            List<PropertyAccessException> propertyAccessExceptions = new List<PropertyAccessException>();
             foreach (PropertyValue pv in propertyValues)
             {
                 try
@@ -374,8 +375,7 @@ namespace Spring.Objects
             // if we encountered individual exceptions, throw the composite exception...
             if (propertyAccessExceptions.Count > 0)
             {
-                throw new PropertyAccessExceptionsException(this,
-                                                            (PropertyAccessException[]) propertyAccessExceptions.ToArray(typeof(PropertyAccessException)));
+                throw new PropertyAccessExceptionsException(this, propertyAccessExceptions.ToArray());
             }
         }
 

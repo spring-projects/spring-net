@@ -74,7 +74,7 @@ namespace Spring.Web.Mvc
                 var services = ApplicationContext.GetObjectsOfType(serviceType);
                 if (services.Count > 0)
                 {
-                    service = services.Cast<DictionaryEntry>().First().Value;
+                    service = services.First().Value;
                 }
             }
 
@@ -89,7 +89,7 @@ namespace Spring.Web.Mvc
         public IEnumerable<object> GetServices(Type serviceType)
         {
             var services = ApplicationContext.GetObjectsOfType(serviceType);
-            return services.Values.Cast<object>();
+            return services.Values;
         }
     }
 }

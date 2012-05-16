@@ -21,6 +21,8 @@
 #region Imports
 
 using System;
+using System.Collections.Generic;
+
 using Spring.Objects.Factory.Config;
 
 #endregion
@@ -159,7 +161,7 @@ namespace Spring.Objects.Factory.Support
         /// preparation on startup.
         /// </p>
         /// </remarks>
-        new string[] DependsOn { get; set; }
+        new IList<string> DependsOn { get; set; }
 
         /// <summary>
         /// The name of the initializer method.

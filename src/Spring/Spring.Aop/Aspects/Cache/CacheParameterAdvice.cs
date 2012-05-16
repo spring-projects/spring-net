@@ -20,10 +20,10 @@
 
 #region Imports
 
-using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
-using Common.Logging;
+
 using Spring.Aop;
 using Spring.Caching;
 using Spring.Util;
@@ -123,7 +123,7 @@ namespace Spring.Aspects.Cache
 
             if (cacheParameterAttributes.Length > 0)
             {
-                IDictionary vars = PrepareVariables(method, arguments);
+                IDictionary<string, object> vars = PrepareVariables(method, arguments);
                 for (int i = 0; i < cacheParameterAttributes.Length; i++)
                 {
                     foreach (CacheParameterAttribute paramInfo in cacheParameterAttributes[i])

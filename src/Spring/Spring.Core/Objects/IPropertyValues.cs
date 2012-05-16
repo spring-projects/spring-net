@@ -21,6 +21,7 @@
 #region Imports
 
 using System.Collections;
+using System.Collections.Generic;
 
 #endregion
 
@@ -41,7 +42,7 @@ namespace Spring.Objects
         /// An array of the <see cref="Spring.Objects.PropertyValue"/> objects held
         /// in this object.
         /// </returns>
-        PropertyValue [] PropertyValues
+        IList<PropertyValue> PropertyValues
         {
             get;
         }

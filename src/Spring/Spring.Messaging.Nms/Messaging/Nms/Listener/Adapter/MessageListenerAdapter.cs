@@ -21,6 +21,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using Common.Logging;
 using Spring.Expressions;
@@ -295,7 +296,7 @@ namespace Spring.Messaging.Nms.Listener.Adapter
             object convertedMessage = ExtractMessage(message);
 
            
-            IDictionary vars = new Hashtable();
+            IDictionary<string, object> vars = new Dictionary<string, object>();
             vars["convertedObject"] = convertedMessage;
 
             //Need to parse each time since have overloaded methods and

@@ -19,6 +19,8 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
+
 using Common.Logging;
 using Spring.Context;
 using Spring.Context.Support;
@@ -143,10 +145,10 @@ namespace Spring.Data.Common
 								ctx = new XmlApplicationContext(DBPROVIDER_CONTEXTNAME, true, new string[] { DBPROVIDER_DEFAULT_RESOURCE_NAME });
 							}
 
-							string[] dbProviderNames = ctx.GetObjectNamesForType(typeof(IDbProvider));
+							IList<string> dbProviderNames = ctx.GetObjectNames<IDbProvider>();
 							if (log.IsInfoEnabled)
 							{
-								log.Info(String.Format("{0} DbProviders Available. [{1}]", dbProviderNames.Length, StringUtils.ArrayToCommaDelimitedString(dbProviderNames)));
+								log.Info(String.Format("{0} DbProviders Available. [{1}]", dbProviderNames.Count, StringUtils.CollectionToCommaDelimitedString(dbProviderNames)));
 							}
 						}
 						catch (Exception e)

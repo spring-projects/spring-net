@@ -19,6 +19,7 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 using System.Threading;
@@ -217,8 +218,8 @@ namespace Spring.Data.Common
             //Initialize internal application context. factory
             DbProviderFactory.GetDbProvider("SqlServer-2.0");
             IApplicationContext ctx = DbProviderFactory.ApplicationContext;
-            string[] dbProviderNames = ctx.GetObjectNamesForType(typeof(IDbProvider));
-            Assert.IsTrue(dbProviderNames.Length > 0);           
+            IList<string> dbProviderNames = ctx.GetObjectNamesForType(typeof(IDbProvider));
+            Assert.IsTrue(dbProviderNames.Count > 0);           
 
         }
 

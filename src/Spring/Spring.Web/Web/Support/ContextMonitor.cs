@@ -19,6 +19,7 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Web;
 
@@ -67,7 +68,7 @@ namespace Spring.Web.Support
                     "Implementations of IApplicationContext must also implement IConfigurableApplicationContext");
             }
 
-            string[] names = appContext.GetObjectDefinitionNames();
+            IList<string> names = appContext.GetObjectDefinitionNames();
             foreach (string name in names)
             {
                 RenderObjectDefinition(res.Output, name, appContext.ObjectFactory.GetObjectDefinition(name));

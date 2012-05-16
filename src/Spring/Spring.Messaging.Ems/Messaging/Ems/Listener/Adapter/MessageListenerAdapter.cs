@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using Common.Logging;
 using Spring.Expressions;
@@ -277,7 +278,7 @@ namespace Spring.Messaging.Ems.Listener.Adapter
             object convertedMessage = ExtractMessage(message);
 
 
-            IDictionary vars = new Hashtable();
+            IDictionary<string, object> vars = new Dictionary<string, object>();
             vars["convertedObject"] = convertedMessage;
 
             //Invoke message handler method and get result.

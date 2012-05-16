@@ -21,7 +21,7 @@
 #region Imports
 
 using System.Collections;
-
+using System.Collections.Generic;
 using Spring.Validation.Actions;
 
 #endregion
@@ -51,6 +51,6 @@ namespace Spring.Validation
         /// <param name="validationContext">Validation context.</param>
         /// <param name="contextParams">Additional context parameters.</param>
         /// <param name="errors">Validation errors container.</param>
-        void Execute(bool isValid, object validationContext, IDictionary contextParams, IValidationErrors errors);
+        void Execute(bool isValid, object validationContext, IDictionary<string, object> contextParams, IValidationErrors errors);
     }
 }

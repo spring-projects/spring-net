@@ -21,10 +21,10 @@
 #region Imports
 
 using System;
-using System.Globalization;
+
 using Common.Logging;
+
 using Spring.Objects.Factory;
-using Spring.Objects.Factory.Support;
 using Spring.Util;
 
 #endregion

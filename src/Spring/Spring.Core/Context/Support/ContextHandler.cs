@@ -21,7 +21,7 @@
 #region Imports
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Reflection;
 using System.Xml;
@@ -29,7 +29,6 @@ using System.Xml;
 using Common.Logging;
 using Spring.Core;
 using Spring.Core.TypeResolution;
-using Spring.Objects;
 using Spring.Reflection.Dynamic;
 using Spring.Util;
 
@@ -283,7 +282,7 @@ namespace Spring.Context.Support
 	        	bool caseSensitive = GetCaseSensitivity(contextElement);
 
 	        	// get resource-list
-	        	string[] resources = GetResources(contextElement);
+	        	IList<string> resources = GetResources(contextElement);
 	        	
 	        	// finally create the context instance
 				context = InstantiateContext(parentContext, configContext, contextName, contextType, caseSensitive, resources);
@@ -294,7 +293,7 @@ namespace Spring.Context.Support
                 }
 
 				// get and create child context definitions
-                XmlNode[] childContexts = GetChildContexts(contextElement);
+                IList<XmlNode> childContexts = GetChildContexts(contextElement);
 				CreateChildContexts(context, configContext, childContexts);
 
 	        	if (Log.IsDebugEnabled) Log.Debug( string.Format("context '{0}' created for name '{1}'", context, contextName) );
@@ -312,13 +311,13 @@ namespace Spring.Context.Support
 	        return context;
 	    }
 
-		/// <summary>
-		/// Create all child-contexts in the given <see cref="XmlNodeList"/> for the given context.
-		/// </summary>
-		/// <param name="parentContext">The parent context to use</param>
-		/// <param name="configContext">The current configContext <see cref="IConfigurationSectionHandler.Create"/></param>
-		/// <param name="childContexts">The list of child context elements</param>
-		protected virtual void CreateChildContexts(IApplicationContext parentContext, object configContext, XmlNode[] childContexts)
+	    /// <summary>
+	    /// Create all child-contexts in the given <see cref="XmlNodeList"/> for the given context.
+	    /// </summary>
+	    /// <param name="parentContext">The parent context to use</param>
+	    /// <param name="configContext">The current configContext <see cref="IConfigurationSectionHandler.Create"/></param>
+	    /// <param name="childContexts">The list of child context elements</param>
+	    protected virtual void CreateChildContexts(IApplicationContext parentContext, object configContext, IList<XmlNode> childContexts)
 		{	
 			// create child contexts for 'the most recently created context'...
 			foreach (XmlNode childContext in childContexts)
@@ -330,18 +329,18 @@ namespace Spring.Context.Support
 		/// <summary>
 		/// Instantiates a new context.
 		/// </summary>
-		protected virtual IApplicationContext InstantiateContext(IApplicationContext parentContext, object configContext, string contextName, Type contextType, bool caseSensitive, string[] resources)
+		protected virtual IApplicationContext InstantiateContext(IApplicationContext parentContext, object configContext, string contextName, Type contextType, bool caseSensitive, IList<string> resources)
 		{
 			IApplicationContext context;
 			ContextInstantiator instantiator;
 			
 			if (parentContext == null)
 			{
-				instantiator = new RootContextInstantiator(contextType, contextName, caseSensitive, resources);
+				instantiator = new RootContextInstantiator(contextType, contextName, caseSensitive, new List<string>(resources).ToArray());
 			} 
 			else
 			{
-				instantiator = new DescendantContextInstantiator(parentContext, contextType, contextName, caseSensitive, resources);
+                instantiator = new DescendantContextInstantiator(parentContext, contextType, contextName, caseSensitive, new List<string>(resources).ToArray());
 			}
 			
 			if (IsLazy)
@@ -447,9 +446,9 @@ namespace Spring.Context.Support
 	    /// Returns the array of resources containing object definitions for
 	    /// this context.
 	    /// </summary>
-	    private string[] GetResources( XmlElement contextElement )
+	    private IList<string> GetResources( XmlElement contextElement )
 	    {
-	        ArrayList resourceNodes = new ArrayList(contextElement.ChildNodes.Count);
+            List<string> resourceNodes = new List<string>(contextElement.ChildNodes.Count);
 	        foreach (XmlNode possibleResourceNode in contextElement.ChildNodes)
 	        {
 	            XmlElement possibleResourceElement = possibleResourceNode as XmlElement;
@@ -463,15 +462,15 @@ namespace Spring.Context.Support
 	                }
 	            }
 	        }
-	        return (string[]) resourceNodes.ToArray(typeof(string));
+	        return resourceNodes;
 	    }
 
         /// <summary>
         /// Returns the array of child contexts for this context.
         /// </summary>
-        private XmlNode[] GetChildContexts(XmlElement contextElement)
+        private IList<XmlNode> GetChildContexts(XmlElement contextElement)
         {
-            ArrayList contextNodes = new ArrayList(contextElement.ChildNodes.Count);
+            List<XmlNode> contextNodes = new List<XmlNode>(contextElement.ChildNodes.Count);
             foreach (XmlNode possibleContextNode in contextElement.ChildNodes)
             {
                 XmlElement possibleContextElement = possibleContextNode as XmlElement;
@@ -481,7 +480,7 @@ namespace Spring.Context.Support
                     contextNodes.Add(possibleContextElement);
                 }
             }
-            return (XmlNode[])contextNodes.ToArray(typeof(XmlNode));
+            return contextNodes;
         }
 
 	    #region Inner Class : ContextInstantiator
@@ -529,7 +528,7 @@ namespace Spring.Context.Support
 	            get { return _caseSensitive; }
 	        }
 
-	        protected string[] Resources
+	        protected IList<string> Resources
 	        {
 	            get { return _resources; }
 	        }
@@ -537,7 +536,7 @@ namespace Spring.Context.Support
 	        private Type _contextType;
 	        private string _contextName;
             private bool _caseSensitive;
-	        private string[] _resources;
+	        private IList<string> _resources;
 	    }
 
 	    #endregion

@@ -21,6 +21,7 @@
 #region Imports
 
 using System.Collections;
+using System.Collections.Generic;
 using Spring.Globalization;
 using Spring.Objects;
 using Spring.Util;
@@ -52,9 +53,9 @@ namespace Spring.Web.Support
         /// </summary>
         /// <param name="cacheKey">Cache key to use for lookup.</param>
         /// <returns>A list of cached resources for the specified target object and culture.</returns>
-        protected override IList GetResources(string cacheKey)
+        protected override IList<Resource> GetResources(string cacheKey)
         {
-            return (IList) this.sharedStateHolder.SharedState[cacheKey];
+            return (IList<Resource>)this.sharedStateHolder.SharedState[cacheKey];
         }
 
         /// <summary>
@@ -62,7 +63,7 @@ namespace Spring.Web.Support
         /// </summary>
         /// <param name="cacheKey">Cache key to use for the specified resources.</param>
         /// <param name="resources">A list of resources to cache.</param>
-        protected override void PutResources(string cacheKey, IList resources)
+        protected override void PutResources(string cacheKey, IList<Resource> resources)
         {
             this.sharedStateHolder.SharedState[cacheKey] = resources;
         }

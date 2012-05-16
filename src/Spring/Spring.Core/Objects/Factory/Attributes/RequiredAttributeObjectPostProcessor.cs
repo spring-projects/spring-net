@@ -20,13 +20,11 @@
 
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
+
 using Spring.Collections;
-using Spring.Objects;
-using Spring.Objects.Factory;
-using Spring.Objects.Factory.Attributes;
 using Spring.Objects.Factory.Config;
 using Spring.Util;
 
@@ -109,12 +107,11 @@ namespace Spring.Objects.Factory.Attributes
         /// </returns>
         /// <exception cref="ObjectInitializationException">If a required property value has not been specified
         /// in the configuration metadata.</exception>
-        public override IPropertyValues PostProcessPropertyValues(IPropertyValues pvs, PropertyInfo[] pis, object objectInstance,
-                                                         string objectName)
+        public override IPropertyValues PostProcessPropertyValues(IPropertyValues pvs, IList<PropertyInfo> pis, object objectInstance, string objectName)
         {
             if (!validatedObjectNames.Contains(objectName))
             {
-                ArrayList invalidProperties = new ArrayList();
+                List<string> invalidProperties = new List<string>();
 
                 foreach (PropertyInfo pi in pis)
                 {
@@ -126,7 +123,7 @@ namespace Spring.Objects.Factory.Attributes
                 if (invalidProperties.Count != 0)
                 {
                     throw new ObjectInitializationException(
-                        BuildExceptionMessage((string[]) invalidProperties.ToArray(typeof (string)), objectName));
+                        BuildExceptionMessage(invalidProperties, objectName));
                 }
                 validatedObjectNames.Add(objectName);
             }
@@ -156,9 +153,9 @@ namespace Spring.Objects.Factory.Attributes
         /// <param name="invalidProperties">The list of names of invalid properties.</param>
         /// <param name="objectName">Name of the object.</param>
         /// <returns>The exception message</returns>
-        private string BuildExceptionMessage(string[] invalidProperties, ICloneable objectName)
+        private string BuildExceptionMessage(IList<string> invalidProperties, ICloneable objectName)
         {
-            int size = invalidProperties.Length;
+            int size = invalidProperties.Count;
             StringBuilder sb = new StringBuilder();
             sb.Append(size == 1 ? "Property" : "Properties");
             for (int i=0; i < size; i++)

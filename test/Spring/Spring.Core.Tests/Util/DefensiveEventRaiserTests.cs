@@ -62,7 +62,7 @@ namespace Spring.Util
 
             IEventExceptionsCollector exceptions = bru.OnPop( "Iron Brew", eventRaiser );
 
-            Assert.AreEqual(1, exceptions.Exceptions.Length);
+            Assert.AreEqual(1, exceptions.Exceptions.Count);
             Assert.IsTrue(firstCall);
             Assert.IsTrue(secondCall);
             Assert.IsTrue(thirdCall);

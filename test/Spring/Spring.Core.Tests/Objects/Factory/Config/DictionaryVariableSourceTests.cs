@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using NUnit.Framework;
 
 namespace Spring.Objects.Factory.Config
@@ -15,7 +16,7 @@ namespace Spring.Objects.Factory.Config
             dvs.Add("key1", "theValue");
             dvs.Add("key2", "theValue");
 
-            foreach (DictionaryEntry dv in dvs)
+            foreach (KeyValuePair<string, string> dv in dvs)
             {
                 Assert.AreEqual("theValue", dv.Value);
             }

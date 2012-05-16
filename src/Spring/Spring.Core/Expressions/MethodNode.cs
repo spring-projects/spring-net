@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Spring.Expressions.Processors;
@@ -110,7 +111,9 @@ namespace Spring.Expressions
                     // user-defined collection processor?
                     if (localCollectionProcessor == null && evalContext.Variables != null)
                     {
-                        localCollectionProcessor = evalContext.Variables[methodName] as ICollectionProcessor;
+                        object temp;
+                        evalContext.Variables.TryGetValue(methodName, out temp);
+                        localCollectionProcessor = temp as ICollectionProcessor;
                     }
                 }
 
@@ -120,7 +123,9 @@ namespace Spring.Expressions
                     // user-defined extension method processor?
                     if (methodCallProcessor == null && evalContext.Variables != null)
                     {
-                        methodCallProcessor = evalContext.Variables[methodName] as IMethodCallProcessor;
+                        object temp;
+                        evalContext.Variables.TryGetValue(methodName, out temp);
+                        methodCallProcessor = temp as IMethodCallProcessor;
                     }
                 }
 
@@ -229,8 +234,8 @@ namespace Spring.Expressions
             catch (AmbiguousMatchException)
             {
 
-                MethodInfo[] overloads = GetCandidateMethods(type, methodName, bindingFlags, argValues.Length);
-                if (overloads.Length > 0)
+                IList<MethodInfo> overloads = GetCandidateMethods(type, methodName, bindingFlags, argValues.Length);
+                if (overloads.Count > 0)
                 {
                     mi = ReflectionUtils.GetMethodByArgumentValues(overloads, argValues);
                 }
@@ -240,10 +245,10 @@ namespace Spring.Expressions
 
 
 
-        private static MethodInfo[] GetCandidateMethods(Type type, string methodName, BindingFlags bindingFlags, int argCount)
+        private static IList<MethodInfo> GetCandidateMethods(Type type, string methodName, BindingFlags bindingFlags, int argCount)
         {
             MethodInfo[] methods = type.GetMethods(bindingFlags | BindingFlags.FlattenHierarchy);
-            ArrayList matches = new ArrayList();
+            List<MethodInfo> matches = new List<MethodInfo>();
 
             foreach (MethodInfo method in methods)
             {
@@ -265,7 +270,7 @@ namespace Spring.Expressions
                 }
             }
 
-            return (MethodInfo[])matches.ToArray(typeof(MethodInfo));
+            return matches;
         }
 
         // used to calculate signature hash while caring for arg positions

@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Threading;
 using System.Web;
 using System.Web.Caching;
@@ -122,7 +123,7 @@ namespace Spring.Caching
             mocks.ReplayAll();
             // verify
             ICollection keys = mockedCache.Keys;
-            Assert.AreEqual( new string[] { "keyA", "keyB" }, new ArrayList(keys).ToArray(typeof(string)) );
+            CollectionAssert.AreEqual(new string[] { "keyA", "keyB" }, keys);
             mocks.VerifyAll();
         }
 

@@ -102,10 +102,7 @@ namespace Spring.Objects
 			: base(string.Empty)
 		{
 			_objectWrapper = objectWrapper;
-			_propertyAccessExceptions
-				= propertyAccessExceptions == null ?
-					EmptyPropertyAccessExceptions :
-					propertyAccessExceptions;
+			_propertyAccessExceptions = propertyAccessExceptions ?? EmptyPropertyAccessExceptions;
 		}
 
 		/// <summary>

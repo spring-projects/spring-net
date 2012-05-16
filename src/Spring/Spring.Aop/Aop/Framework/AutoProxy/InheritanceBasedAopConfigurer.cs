@@ -22,14 +22,14 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 using AopAlliance.Aop;
+
 using Spring.Util;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
-using Spring.Aop;
-using Spring.Aop.Framework;
 using Spring.Aop.Framework.Adapter;
 using Spring.Aop.Framework.DynamicProxy;
 using Spring.Core;
@@ -176,8 +176,8 @@ namespace Spring.Aop.Framework.AutoProxy
         /// </remarks>
         public void PostProcessObjectFactory(IConfigurableListableObjectFactory factory)
         {
-            string[] objectDefinitionNames = factory.GetObjectDefinitionNames();
-            for (int i = 0; i < objectDefinitionNames.Length; ++i)
+            IList<string> objectDefinitionNames = factory.GetObjectDefinitionNames();
+            for (int i = 0; i < objectDefinitionNames.Count; ++i)
             {
                 string name = objectDefinitionNames[i];
                 if (IsObjectNameMatch(name))
@@ -260,7 +260,7 @@ namespace Spring.Aop.Framework.AutoProxy
                 proxyFactory.Interfaces = Type.EmptyTypes;
             }
 
-            IAdvisor[] advisors = ResolveInterceptorNames();
+            IList<IAdvisor> advisors = ResolveInterceptorNames();
             foreach (IAdvisor advisor in advisors)
             {
                 if (advisor is IIntroductionAdvisor)
@@ -307,9 +307,9 @@ namespace Spring.Aop.Framework.AutoProxy
 
         #region Private Methods
 
-        private IAdvisor[] ResolveInterceptorNames()
+        private IList<IAdvisor> ResolveInterceptorNames()
         {
-            ArrayList advisors = new ArrayList();
+            List<IAdvisor> advisors = new List<IAdvisor>();
             foreach (string name in interceptorNames)
             {
                 object next = objectFactory.GetObject(name);
@@ -322,7 +322,7 @@ namespace Spring.Aop.Framework.AutoProxy
                     advisors.Add(advisorAdapterRegistry.Wrap(next));
                 }
             }
-            return (IAdvisor[])advisors.ToArray(typeof(IAdvisor));
+            return advisors;
         }
 
         #endregion

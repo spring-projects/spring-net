@@ -19,6 +19,7 @@
 #endregion
 
 using System;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace Spring.Objects.Factory.Config {
@@ -105,26 +106,25 @@ namespace Spring.Objects.Factory.Config {
         /// invoked on this object instance.</returns>
         bool PostProcessAfterInstantiation(object objectInstance, string objectName);
 
-        /// <summary>
-        /// Post-process the given property values before the factory applies them
-        /// to the given object.
-        /// </summary>
-        /// <remarks>Allows for checking whether all dependencies have been
-        /// satisfied, for example based on a "Required" annotation on bean property setters.
-        /// <para>Also allows for replacing the property values to apply, typically through
-        /// creating a new MutablePropertyValues instance based on the original PropertyValues,
-        /// adding or removing specific values.
-        /// </para>
-        /// </remarks>
-        /// <param name="pvs">The property values that the factory is about to apply (never <code>null</code>).</param>
-        /// <param name="pis">he relevant property infos for the target object (with ignored
-        /// dependency types - which the factory handles specifically - already filtered out)</param>
-        /// <param name="objectInstance">The object instance created, but whose properties have not yet 
-        /// been set.</param>
-        /// <param name="objectName">Name of the object.</param>
-        /// <returns>The actual property values to apply to the given object (can be the 
-        /// passed-in PropertyValues instances0 or null to skip property population.</returns>
-	    IPropertyValues PostProcessPropertyValues(IPropertyValues pvs, PropertyInfo[] pis, object objectInstance,
-	                                              string objectName);
+	    /// <summary>
+	    /// Post-process the given property values before the factory applies them
+	    /// to the given object.
+	    /// </summary>
+	    /// <remarks>Allows for checking whether all dependencies have been
+	    /// satisfied, for example based on a "Required" annotation on bean property setters.
+	    /// <para>Also allows for replacing the property values to apply, typically through
+	    /// creating a new MutablePropertyValues instance based on the original PropertyValues,
+	    /// adding or removing specific values.
+	    /// </para>
+	    /// </remarks>
+	    /// <param name="pvs">The property values that the factory is about to apply (never <code>null</code>).</param>
+	    /// <param name="pis">he relevant property infos for the target object (with ignored
+	    /// dependency types - which the factory handles specifically - already filtered out)</param>
+	    /// <param name="objectInstance">The object instance created, but whose properties have not yet 
+	    /// been set.</param>
+	    /// <param name="objectName">Name of the object.</param>
+	    /// <returns>The actual property values to apply to the given object (can be the 
+	    /// passed-in PropertyValues instances0 or null to skip property population.</returns>
+	    IPropertyValues PostProcessPropertyValues(IPropertyValues pvs, IList<PropertyInfo> pis, object objectInstance, string objectName);
 	}
 }

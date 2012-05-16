@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 
 using Spring.Collections;
@@ -114,7 +115,7 @@ namespace Spring.Objects.Factory.Config
             MutablePropertyValues pvs = objectDefinition.PropertyValues;
             if (pvs != null)
             {
-                for (int j = 0; j < pvs.PropertyValues.Length; j++)
+                for (int j = 0; j < pvs.PropertyValues.Count; j++)
                 {
                     PropertyValue pv = pvs.PropertyValues[j];
                     object newVal = ResolveValue(pv.Value);
@@ -131,7 +132,7 @@ namespace Spring.Objects.Factory.Config
         /// specified IVariableSource.
         /// </summary>
         /// <param name="ias">The indexed argument values.</param>
-        protected virtual void VisitIndexedArgumentValues(IDictionary ias)
+        protected virtual void VisitIndexedArgumentValues(IDictionary<int, ConstructorArgumentValues.ValueHolder> ias)
         {
             foreach (ConstructorArgumentValues.ValueHolder valueHolder in ias.Values)
             {
@@ -144,7 +145,7 @@ namespace Spring.Objects.Factory.Config
         /// specified IVariableSource.
         /// </summary>
         /// <param name="nav">The named argument values.</param>
-        protected virtual void VisitNamedArgumentValues(IDictionary nav)
+        protected virtual void VisitNamedArgumentValues(IDictionary<string, object> nav)
         {
             foreach (ConstructorArgumentValues.ValueHolder valueHolder in nav.Values)
             {
@@ -157,7 +158,7 @@ namespace Spring.Objects.Factory.Config
         /// the specified IVariableSource.
         /// </summary>
         /// <param name="gav">The genreic argument values.</param>
-        protected virtual void VisitGenericArgumentValues(IList gav)
+        protected virtual void VisitGenericArgumentValues(ICollection<ConstructorArgumentValues.ValueHolder> gav)
         {
             foreach (ConstructorArgumentValues.ValueHolder valueHolder in gav)
             {

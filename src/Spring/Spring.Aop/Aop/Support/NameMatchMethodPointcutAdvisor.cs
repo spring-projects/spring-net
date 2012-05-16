@@ -21,8 +21,9 @@
 #region Imports
 
 using System;
+
 using AopAlliance.Aop;
-using Spring.Core;
+
 using Spring.Util;
 
 #endregion

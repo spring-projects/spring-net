@@ -21,6 +21,7 @@
 #region Imports
 
 using System;
+using System.Collections.Generic;
 
 using NHibernate.Bytecode;
 
@@ -53,8 +54,8 @@ namespace Spring.Data.NHibernate.Bytecode
         /// <returns>A reference to the created object.</returns>
         public object CreateInstance(Type type)
 		{
-			string[] namesForType = listableObjectFactory.GetObjectNamesForType(type);
-			return namesForType.Length > 0 ? listableObjectFactory.GetObject(namesForType[0], type) : Activator.CreateInstance(type);
+			IList<string> namesForType = listableObjectFactory.GetObjectNamesForType(type);
+			return namesForType.Count > 0 ? listableObjectFactory.GetObject(namesForType[0], type) : Activator.CreateInstance(type);
 		}
 
         /// <summary>
@@ -64,8 +65,8 @@ namespace Spring.Data.NHibernate.Bytecode
         /// <returns>A reference to the created object </returns>
         public object CreateInstance(Type type, bool nonPublic)
 		{
-			string[] namesForType = listableObjectFactory.GetObjectNamesForType(type);
-			return namesForType.Length > 0 ? listableObjectFactory.GetObject(namesForType[0], type) : Activator.CreateInstance(type);
+			IList<string> namesForType = listableObjectFactory.GetObjectNamesForType(type);
+			return namesForType.Count > 0 ? listableObjectFactory.GetObject(namesForType[0], type) : Activator.CreateInstance(type);
 		}
 
         /// <summary>

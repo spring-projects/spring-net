@@ -49,7 +49,7 @@ namespace Spring.Messaging.Listener.Adapter
                 {
                     throw new ListenerExecutionFailedException("Failed to invoke the target method '" + methodName +
                                                                "' with arguments " +
-                                                               StringUtils.ArrayToCommaDelimitedString(arguments));
+                                                               StringUtils.CollectionToCommaDelimitedString(arguments));
                 }
                 try
                 {
@@ -62,7 +62,7 @@ namespace Spring.Messaging.Listener.Adapter
             {
                 throw new ListenerExecutionFailedException("Failed to invoke the target method '" + methodName +
                                                                "' with arguments " +
-                                                               StringUtils.ArrayToCommaDelimitedString(arguments), e);
+                                                               StringUtils.CollectionToCommaDelimitedString(arguments), e);
             }
         }
     }

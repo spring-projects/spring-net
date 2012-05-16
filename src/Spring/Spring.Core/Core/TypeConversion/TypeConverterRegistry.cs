@@ -21,7 +21,7 @@
 #region Imports
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
@@ -29,9 +29,9 @@ using System.IO;
 using System.Net;
 using System.Resources;
 using System.Text.RegularExpressions;
+
 using Microsoft.Win32;
 
-using Spring.Core;
 using Spring.Core.TypeResolution;
 using Spring.Util;
 
@@ -50,14 +50,15 @@ namespace Spring.Core.TypeConversion
         /// </summary>
         private const string TypeConvertersSectionName = "spring/typeConverters";
 
-        private static IDictionary converters = new Hashtable();
+        private static readonly object syncRoot = new object();
+        private static IDictionary<Type, TypeConverter> converters = new Dictionary<Type, TypeConverter>();
         
         /// <summary>
         /// Registers standard and configured type converters.
         /// </summary>
         static TypeConverterRegistry()
         {
-            lock (converters.SyncRoot)
+            lock (syncRoot)
             {
                 converters[typeof(string[])] = new StringArrayConverter();
                 converters[typeof(Type)] = new RuntimeTypeConverter();
@@ -88,8 +89,8 @@ namespace Spring.Core.TypeConversion
         {
             AssertUtils.ArgumentNotNull(type, "type");
 
-            TypeConverter converter = (TypeConverter) converters[type];
-            if (converter == null)
+            TypeConverter converter;
+            if (!converters.TryGetValue(type, out converter))
             {
                 if (type.IsEnum)
                 {
@@ -115,7 +116,7 @@ namespace Spring.Core.TypeConversion
             AssertUtils.ArgumentNotNull(type, "type");
             AssertUtils.ArgumentNotNull(converter, "converter");
 
-            lock (converters.SyncRoot)
+            lock (syncRoot)
             {
                 converters[type] = converter;
             }

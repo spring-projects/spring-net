@@ -19,9 +19,10 @@
 #endregion
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
+
 using Common.Logging;
 
 namespace Spring.Util
@@ -34,11 +35,11 @@ namespace Spring.Util
     {
         protected class EventExceptionsCollector : IEventExceptionsCollector
         {
-            private readonly Hashtable _eventExceptions;
+            private readonly Dictionary<Delegate, Exception> _eventExceptions;
 
             public EventExceptionsCollector()
             {
-                _eventExceptions = new Hashtable();
+                _eventExceptions = new Dictionary<Delegate, Exception>();
             }
 
             public bool HasExceptions
@@ -46,19 +47,24 @@ namespace Spring.Util
                 get { return _eventExceptions.Count > 0; }
             }
 
-            public Delegate[] Sources
+            public IList<Delegate> Sources
             {
-                get { return (Delegate[]) CollectionUtils.ToArray(_eventExceptions.Keys, typeof(Delegate)); }
+                get { return new List<Delegate>(_eventExceptions.Keys); }
             }
 
-            public Exception[] Exceptions
+            public IList<Exception> Exceptions
             {
-                get { return (Exception[]) CollectionUtils.ToArray(_eventExceptions.Values, typeof (Exception)); }
+                get { return new List<Exception>(_eventExceptions.Values); }
             }
 
             public Exception this[Delegate source]
             {
-                get { return (Exception) _eventExceptions[source]; }
+                get
+                {
+                    Exception exception;
+                    _eventExceptions.TryGetValue(source, out exception);
+                    return exception;
+                }
             }
 
             public void Add(Delegate source, Exception exception)

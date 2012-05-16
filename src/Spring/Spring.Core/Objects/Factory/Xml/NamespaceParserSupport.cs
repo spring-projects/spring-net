@@ -18,7 +18,7 @@
 
 #endregion
 
-using System.Collections;
+using System.Collections.Generic;
 using System.Xml;
 using Spring.Objects.Factory.Config;
 using Spring.Util;
@@ -37,7 +37,7 @@ namespace Spring.Objects.Factory.Xml
     public abstract class NamespaceParserSupport : INamespaceParser
     {
 
-        private readonly IDictionary objectParsers = new Hashtable();
+        private readonly IDictionary<string, IObjectDefinitionParser> objectParsers = new Dictionary<string, IObjectDefinitionParser>();
 
         #region IXmlObjectDefinitionParser Members
 
@@ -94,8 +94,8 @@ namespace Spring.Objects.Factory.Xml
 
         private IObjectDefinitionParser FindParserForElement(XmlElement element, ParserContext parserContext)
         {
-            IObjectDefinitionParser parser = objectParsers[element.LocalName] as IObjectDefinitionParser;
-            if (parser == null)
+            IObjectDefinitionParser parser;
+            if (!objectParsers.TryGetValue(element.LocalName, out parser))
             {
                 parserContext.ReaderContext.ReportException(element, "unknown object name", "Cannot locate IObjectDefinitionParser for element ["
                     + element.LocalName + "]");

@@ -21,9 +21,10 @@
 #region Imports
 
 using System;
-using System.Globalization;
 using System.Threading;
+
 using AopAlliance.Intercept;
+
 using Spring.Aop.Support;
 using Spring.Collections;
 using Spring.Util;

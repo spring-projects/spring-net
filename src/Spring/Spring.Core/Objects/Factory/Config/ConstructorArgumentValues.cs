@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using Spring.Collections;
 using Spring.Util;
@@ -83,9 +84,9 @@ namespace Spring.Objects.Factory.Config
 		#region Fields
 
         private CultureInfo enUSCultureInfo = new CultureInfo("en-US", false);
-		private IDictionary _indexedArgumentValues = new Hashtable();
-		private IList _genericArgumentValues = new LinkedList();
-		private IDictionary _namedArgumentValues = new Hashtable();
+		private IDictionary<int, ValueHolder>  _indexedArgumentValues = new Dictionary<int, ValueHolder>();
+        private List<ValueHolder> _genericArgumentValues = new List<ValueHolder>();
+		private IDictionary<string, object> _namedArgumentValues = new Dictionary<string, object>();
 
 		#endregion
 
@@ -100,7 +101,7 @@ namespace Spring.Objects.Factory.Config
 		/// <see cref="Spring.Objects.Factory.Config.ConstructorArgumentValues.ValueHolder"/>s
 		/// as values.
 		/// </returns>
-		public virtual IDictionary IndexedArgumentValues
+		public virtual IDictionary<int, ValueHolder> IndexedArgumentValues
 		{
 			get { return _indexedArgumentValues; }
 		}
@@ -114,7 +115,7 @@ namespace Spring.Objects.Factory.Config
 		/// <see cref="Spring.Objects.Factory.Config.ConstructorArgumentValues.ValueHolder"/>s
 		/// as values.
 		/// </returns>
-		public virtual IDictionary NamedArgumentValues
+		public virtual IDictionary<string, object> NamedArgumentValues
 		{
 			get { return _namedArgumentValues; }
 		}
@@ -126,7 +127,7 @@ namespace Spring.Objects.Factory.Config
 		/// A <see cref="System.Collections.IList"/> of
 		/// <see cref="Spring.Objects.Factory.Config.ConstructorArgumentValues.ValueHolder"/>s.
 		/// </returns>
-		public virtual IList GenericArgumentValues
+        public virtual IList<ValueHolder> GenericArgumentValues
 		{
 			get { return _genericArgumentValues; }
 
@@ -175,19 +176,19 @@ namespace Spring.Objects.Factory.Config
 		{
 			if (other != null)
 			{
-				foreach (object o in other.GenericArgumentValues)
+				foreach (ValueHolder o in other.GenericArgumentValues)
 				{
 					GenericArgumentValues.Add(o);
 				}
-				foreach (DictionaryEntry entry in other.IndexedArgumentValues)
+				foreach (KeyValuePair<int, ValueHolder> entry in other.IndexedArgumentValues)
 				{
-				    ValueHolder vh = entry.Value as ValueHolder;
+				    ValueHolder vh = entry.Value;
                     if (vh != null)
                     {
-                        AddOrMergeIndexedArgumentValues( (int) entry.Key, vh.Copy());
+                        AddOrMergeIndexedArgumentValues( entry.Key, vh.Copy());
                     }
 				}
-				foreach (DictionaryEntry entry in other.NamedArgumentValues)
+				foreach (KeyValuePair<string, object> entry in other.NamedArgumentValues)
 				{
 				    AddOrMergeNamedArgumentValues(entry.Key, entry.Value);
 					//NamedArgumentValues.Add(entry.Key, entry.Value);
@@ -195,9 +196,9 @@ namespace Spring.Objects.Factory.Config
 			}
 		}
 
-	    private void AddOrMergeNamedArgumentValues(object key, object newValue)
+	    private void AddOrMergeNamedArgumentValues(string key, object newValue)
 	    {
-	        if (_namedArgumentValues.Contains(key) )
+	        if (_namedArgumentValues.ContainsKey(key) )
 	        {
 	            _namedArgumentValues[key] = newValue;
 	        } else
@@ -208,9 +209,9 @@ namespace Spring.Objects.Factory.Config
 
 	    private void AddOrMergeIndexedArgumentValues(int key, ValueHolder newValue)
 	    {
-	        ValueHolder currentValue = _indexedArgumentValues[key] as ValueHolder;
+	        ValueHolder currentValue;
 	        IMergable mergable = newValue.Value as IMergable;
-            if (currentValue != null && mergable != null )
+            if (_indexedArgumentValues.TryGetValue(key, out currentValue) && mergable != null )
             {
                 if (mergable.MergeEnabled)
                 {
@@ -277,8 +278,8 @@ namespace Spring.Objects.Factory.Config
 		/// </returns>
 		public virtual ValueHolder GetIndexedArgumentValue(int index, Type requiredType)
 		{
-			ValueHolder valueHolder = (ValueHolder) IndexedArgumentValues[index];
-			if (valueHolder != null)
+			ValueHolder valueHolder;
+            if (IndexedArgumentValues.TryGetValue(index, out valueHolder))
 			{
 				if (valueHolder.Type == null
 					|| requiredType.FullName.Equals(valueHolder.Type)
@@ -326,7 +327,7 @@ namespace Spring.Objects.Factory.Config
 		/// </returns>
 		public bool ContainsNamedArgument(string argument)
 		{
-			return NamedArgumentValues.Contains(GetCanonicalNamedArgument(argument));
+			return NamedArgumentValues.ContainsKey(GetCanonicalNamedArgument(argument));
 		}
 
 		/// <summary>

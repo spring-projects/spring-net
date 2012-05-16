@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using Common.Logging;
@@ -140,8 +141,8 @@ namespace Spring.Context.Support
         private IEventRegistry _eventRegistry;
 
         private IApplicationContext _parentApplicationContext;
-        private readonly IList _objectFactoryPostProcessors;
-        private readonly IList _defaultObjectPostProcessors;
+        private readonly IList<IObjectFactoryPostProcessor> _objectFactoryPostProcessors;
+        private readonly IList<IObjectPostProcessor> _defaultObjectPostProcessors;
         private string _name;
         private DateTime _startupDate;
         private readonly bool _isCaseSensitive;
@@ -205,8 +206,8 @@ namespace Spring.Context.Support
             _isCaseSensitive = caseSensitive;
             _parentApplicationContext = parentApplicationContext;
             EventRaiser = CreateEventRaiser();
-            _objectFactoryPostProcessors = new ArrayList();
-            _defaultObjectPostProcessors = new ArrayList();
+            _objectFactoryPostProcessors = new List<IObjectFactoryPostProcessor>();
+            _defaultObjectPostProcessors = new List<IObjectPostProcessor>();
             AddDefaultObjectPostProcessor(new ObjectPostProcessorChecker());
             AddDefaultObjectPostProcessor(new ApplicationContextAwareProcessor(this));
             AddDefaultObjectPostProcessor(new SharedStateAwareProcessor(new ISharedStateFactory[] { new ByTypeSharedStateFactory() }, Int32.MaxValue));
@@ -406,7 +407,7 @@ namespace Spring.Context.Support
             if (exceptions.HasExceptions)
             {
                 Delegate target = ContextEvent.GetInvocationList()[0];
-                Exception exception = (Exception)exceptions[target];
+                Exception exception = exceptions[target];
                 throw new ApplicationContextException(string.Format("An unhandled exception occured during processing application event {0} in handler {1}", e.GetType(), target.Method), exception);
             }
         }
@@ -490,20 +491,21 @@ namespace Spring.Context.Support
         private void InvokeObjectFactoryPostProcessors(IConfigurableListableObjectFactory objectFactory)
         {
             // Invoke BeanDefinitionRegistryPostProcessors first, if any.
-            ArrayList processedObjects = new ArrayList();
+            HashSet<string> processedObjects = new HashSet<string>();
 
             if (objectFactory is IObjectDefinitionRegistry)
             {
                 IObjectDefinitionRegistry registry = (IObjectDefinitionRegistry)objectFactory;
-                ArrayList regularPostProcessors = new ArrayList();
-                ArrayList registryPostProcessors = new ArrayList();
+                List<IObjectFactoryPostProcessor> regularPostProcessors = new List<IObjectFactoryPostProcessor>();
+                List<IObjectDefinitionRegistryPostProcessor> registryPostProcessors = new List<IObjectDefinitionRegistryPostProcessor>();
 
                 foreach (IObjectFactoryPostProcessor factoryProcessor in ObjectFactoryPostProcessors)
                 {
-                    if (factoryProcessor is IObjectDefinitionRegistryPostProcessor)
+                    IObjectDefinitionRegistryPostProcessor registryPostProcessor = factoryProcessor as IObjectDefinitionRegistryPostProcessor;
+                    if (registryPostProcessor != null)
                     {
-                        ((IObjectDefinitionRegistryPostProcessor)factoryProcessor).PostProcessObjectDefinitionRegistry(registry);
-                        registryPostProcessors.Add(factoryProcessor);
+                        registryPostProcessor.PostProcessObjectDefinitionRegistry(registry);
+                        registryPostProcessors.Add(registryPostProcessor);
                     }
                     else
                     {
@@ -511,12 +513,12 @@ namespace Spring.Context.Support
                     }
                 }
 
-                IDictionary objectMap = objectFactory.GetObjectsOfType(typeof(IObjectDefinitionRegistryPostProcessor), true, false);
+                IDictionary<string, IObjectDefinitionRegistryPostProcessor> objectMap = objectFactory.GetObjects<IObjectDefinitionRegistryPostProcessor>(true, false);
 
-                ArrayList registryPostProcessorObjects = new ArrayList(objectMap.Values);
-                registryPostProcessorObjects.Sort(new OrderComparator());
+                List<IObjectDefinitionRegistryPostProcessor> registryPostProcessorObjects = new List<IObjectDefinitionRegistryPostProcessor>(objectMap.Values);
+                registryPostProcessorObjects.Sort(new OrderComparator<IObjectDefinitionRegistryPostProcessor>());
 
-                foreach (System.Object processor in registryPostProcessorObjects)
+                foreach (object processor in registryPostProcessorObjects)
                 {
                     ((IObjectDefinitionRegistryPostProcessor)processor).PostProcessObjectDefinitionRegistry(registry);
                 }
@@ -527,7 +529,7 @@ namespace Spring.Context.Support
 
                 // processedObjects.Add(objectMap.Keys);
 
-                foreach (DictionaryEntry entry in objectMap)
+                foreach (KeyValuePair<string, IObjectDefinitionRegistryPostProcessor> entry in objectMap)
                 {
                     processedObjects.Add(entry.Key);
                 }
@@ -544,22 +546,19 @@ namespace Spring.Context.Support
 
             // Do not initialize FactoryBeans here: We need to leave all regular beans
             // uninitialized to let the bean factory post-processors apply to them!
-            ArrayList factoryProcessorNames = new ArrayList();
-            string[] names = GetObjectNamesForType(typeof(IObjectFactoryPostProcessor), true, false);
-            foreach (string name in names)
-            {
-                factoryProcessorNames.Add(name);
-            }
+            List<string> factoryProcessorNames = new List<string>();
+            IList<string> names = GetObjectNamesForType(typeof(IObjectFactoryPostProcessor), true, false);
+            factoryProcessorNames.AddRange(names);
 
             // Separate between ObjectFactoryPostProcessors that implement PriorityOrdered,
             // Ordered, and the rest.
-            ArrayList priorityOrderedFactoryProcessors = new ArrayList();
-            ArrayList orderedFactoryProcessorsNames = new ArrayList();
-            ArrayList nonOrderedFactoryProcessorNames = new ArrayList();
+            List<IObjectFactoryPostProcessor> priorityOrderedFactoryProcessors = new List<IObjectFactoryPostProcessor>();
+            List<string> orderedFactoryProcessorsNames = new List<string>();
+            List<string> nonOrderedFactoryProcessorNames = new List<string>();
 
             for (int i = 0; i < factoryProcessorNames.Count; ++i)
             {
-                string processorName = (string)factoryProcessorNames[i];
+                string processorName = factoryProcessorNames[i];
                 if (processedObjects.Contains(processorName))
                 {
                     //skip  -- already processed in first phase above
@@ -567,7 +566,7 @@ namespace Spring.Context.Support
                 }
                 else if (IsTypeMatch(processorName, typeof(IPriorityOrdered)))
                 {
-                    priorityOrderedFactoryProcessors.Add(ObjectFactory.GetObject(processorName, typeof(IObjectFactoryPostProcessor)));
+                    priorityOrderedFactoryProcessors.Add(ObjectFactory.GetObject<IObjectFactoryPostProcessor>(processorName));
                 }
                 else if (IsTypeMatch(processorName, typeof(IOrdered)))
                 {
@@ -582,21 +581,19 @@ namespace Spring.Context.Support
             InvokePriorityOrderedObjectFactoryPostProcessors(factoryProcessorNames, priorityOrderedFactoryProcessors);
 
             // Second, invoke those IObjectFactoryPostProcessors that implement IOrdered...
-            ArrayList orderedFactoryProcessors = new ArrayList();
+            List<IObjectFactoryPostProcessor> orderedFactoryProcessors = new List<IObjectFactoryPostProcessor>();
             foreach (string orderedFactoryProcessorsName in orderedFactoryProcessorsNames)
             {
-                orderedFactoryProcessors.Add(ObjectFactory.GetObject(orderedFactoryProcessorsName,
-                                                                     typeof(IObjectFactoryPostProcessor)));
+                orderedFactoryProcessors.Add(ObjectFactory.GetObject<IObjectFactoryPostProcessor>(orderedFactoryProcessorsName));
             }
-            orderedFactoryProcessors.Sort(new OrderComparator());
+            orderedFactoryProcessors.Sort(new OrderComparator<IObjectFactoryPostProcessor>());
             InvokeObjectFactoryPostProcessors(orderedFactoryProcessors, ObjectFactory);
 
             // and then the unordered ones...
-            ArrayList nonOrderedPostProcessors = new ArrayList();
+            List<IObjectFactoryPostProcessor> nonOrderedPostProcessors = new List<IObjectFactoryPostProcessor>();
             foreach (string nonOrderedFactoryProcessorName in nonOrderedFactoryProcessorNames)
             {
-                nonOrderedPostProcessors.Add(ObjectFactory.GetObject(nonOrderedFactoryProcessorName,
-                                                                     typeof(IObjectFactoryPostProcessor)));
+                nonOrderedPostProcessors.Add(ObjectFactory.GetObject<IObjectFactoryPostProcessor>(nonOrderedFactoryProcessorName));
             }
             InvokeObjectFactoryPostProcessors(nonOrderedPostProcessors, ObjectFactory);
 
@@ -614,14 +611,14 @@ namespace Spring.Context.Support
             #endregion
         }
 
-        protected virtual void InvokePriorityOrderedObjectFactoryPostProcessors(ArrayList factoryProcessorNames, ArrayList priorityOrderedFactoryProcessors)
+        protected virtual void InvokePriorityOrderedObjectFactoryPostProcessors(List<string> factoryProcessorNames, List<IObjectFactoryPostProcessor> priorityOrderedFactoryProcessors)
         {
-            priorityOrderedFactoryProcessors.Sort(new OrderComparator());
+            priorityOrderedFactoryProcessors.Sort(new OrderComparator<IObjectFactoryPostProcessor>());
             InvokeObjectFactoryPostProcessors(priorityOrderedFactoryProcessors, ObjectFactory);
 
             // Now will find any additional IObjectFactoryPostProcessors that implement IPriorityOrdered that may have been
             // resolved due to using TypeAlias
-            string[] factoryProcessorNamesAfterTypeAlias = GetObjectNamesForType(typeof(IObjectFactoryPostProcessor), true, false);
+            IList<string> factoryProcessorNamesAfterTypeAlias = GetObjectNamesForType(typeof(IObjectFactoryPostProcessor), true, false);
             priorityOrderedFactoryProcessors.Clear();
             foreach (string factoryProcessorName in factoryProcessorNamesAfterTypeAlias)
             {
@@ -629,12 +626,12 @@ namespace Spring.Context.Support
                 {
                     if (IsTypeMatch(factoryProcessorName, typeof(IPriorityOrdered)))
                     {
-                        priorityOrderedFactoryProcessors.Add(ObjectFactory.GetObject(factoryProcessorName, typeof(IObjectFactoryPostProcessor)));
+                        priorityOrderedFactoryProcessors.Add(ObjectFactory.GetObject<IObjectFactoryPostProcessor>(factoryProcessorName));
                     }
                 }
             }
             // Second, invoke newly discovered IObjectFactoryPostProcessors that implement IPriorityOrdered.
-            priorityOrderedFactoryProcessors.Sort(new OrderComparator());
+            priorityOrderedFactoryProcessors.Sort(new OrderComparator<IObjectFactoryPostProcessor>());
             InvokeObjectFactoryPostProcessors(priorityOrderedFactoryProcessors, ObjectFactory);
         }
 
@@ -649,8 +646,8 @@ namespace Spring.Context.Support
         private void RegisterObjectPostProcessors(IConfigurableListableObjectFactory objectFactory)
         {
             RefreshObjectPostProcessorChecker(objectFactory);
-            IDictionary dict = GetObjectsOfType(typeof(IObjectPostProcessor), true, false);
-            ArrayList objectProcessors = new ArrayList(dict.Values);
+            IDictionary<string, IObjectPostProcessor> dict = GetObjects<IObjectPostProcessor>(true, false);
+            List<IObjectPostProcessor> objectProcessors = new List<IObjectPostProcessor>(dict.Values);
             //            objectProcessors.Sort(new OrderComparator());
             foreach (IObjectPostProcessor objectPostProcessor in objectProcessors)
             {
@@ -675,7 +672,7 @@ namespace Spring.Context.Support
         /// </summary>
         private void RefreshObjectPostProcessorChecker(IConfigurableListableObjectFactory objectFactory)
         {
-            int registeredObjectPostProcessorCount = GetObjectNamesForType(typeof(IObjectPostProcessor), true, false).Length;
+            int registeredObjectPostProcessorCount = GetObjectNamesForType(typeof(IObjectPostProcessor), true, false).Count;
             int objectPostProcessorCount = ObjectFactory.ObjectPostProcessorCount + 1
                                            + registeredObjectPostProcessorCount;
             ((ObjectPostProcessorChecker)_defaultObjectPostProcessors[0]).Reset(objectFactory, objectPostProcessorCount);
@@ -733,8 +730,7 @@ namespace Spring.Context.Support
 
                 #endregion
             }
-            ICollection interestedParties
-                = GetObjectsOfType(typeof(IEventRegistryAware), true, false).Values;
+            ICollection<IEventRegistryAware> interestedParties = GetObjects<IEventRegistryAware>(true, false).Values;
             foreach (IEventRegistryAware party in interestedParties)
             {
                 party.EventRegistry = EventRegistry;
@@ -857,9 +853,7 @@ namespace Spring.Context.Support
 
         private void RefreshApplicationEventListeners()
         {
-            ICollection listeners
-                = GetObjectsOfType(
-                    typeof(IApplicationEventListener), true, false).Values;
+            ICollection<IApplicationEventListener> listeners = GetObjects<IApplicationEventListener>(true, false).Values;
             foreach (IApplicationEventListener applicationListener in listeners)
             {
                 EventRegistry.Subscribe(applicationListener);
@@ -883,7 +877,7 @@ namespace Spring.Context.Support
         /// <see cref="Spring.Objects.Factory.Config.IObjectFactoryPostProcessor"/>s
         /// that will be applied to the objects created with this factory.
         /// </value>
-        private IList ObjectFactoryPostProcessors
+        private IList<IObjectFactoryPostProcessor> ObjectFactoryPostProcessors
         {
             get { return _objectFactoryPostProcessors; }
         }
@@ -1056,7 +1050,7 @@ namespace Spring.Context.Support
             // index 0 contains the ObjectPostProcessorChecker that is handled separately!
             for (int i = 1; i < _defaultObjectPostProcessors.Count; i++)
             {
-                objectFactory.AddObjectPostProcessor((IObjectPostProcessor)this._defaultObjectPostProcessors[i]);
+                objectFactory.AddObjectPostProcessor(this._defaultObjectPostProcessors[i]);
             }
         }
 
@@ -1088,11 +1082,11 @@ namespace Spring.Context.Support
         /// </remarks>
         public void Start()
         {
-            IDictionary lifecycleObjects = LifeCycleObjects;
-            foreach (DictionaryEntry dictionaryEntry in lifecycleObjects)
+            IDictionary<string, ILifecycle> lifecycleObjects = LifeCycleObjects;
+            foreach (KeyValuePair<string, ILifecycle> dictionaryEntry in lifecycleObjects)
             {
                 //TODO start dependencies of the lifecycle objects
-                ILifecycle obj = dictionaryEntry.Value as ILifecycle;
+                ILifecycle obj = dictionaryEntry.Value;
                 if (obj != null)
                 {
                     if (!obj.IsRunning)
@@ -1113,11 +1107,11 @@ namespace Spring.Context.Support
         /// </remarks>
         public void Stop()
         {
-            IDictionary lifecycleObjects = LifeCycleObjects;
-            foreach (DictionaryEntry dictionaryEntry in lifecycleObjects)
+            IDictionary<string, ILifecycle> lifecycleObjects = LifeCycleObjects;
+            foreach (KeyValuePair<string, ILifecycle> dictionaryEntry in lifecycleObjects)
             {
                 //TODO stop dependencies of the lifecycle objects
-                ILifecycle obj = dictionaryEntry.Value as ILifecycle;
+                ILifecycle obj = dictionaryEntry.Value;
                 if (obj != null)
                 {
                     if (obj.IsRunning)
@@ -1142,10 +1136,10 @@ namespace Spring.Context.Support
         {
             get
             {
-                IDictionary lifecycleObjects = LifeCycleObjects;
-                foreach (DictionaryEntry dictionaryEntry in lifecycleObjects)
+                IDictionary<string, ILifecycle> lifecycleObjects = LifeCycleObjects;
+                foreach (KeyValuePair<string, ILifecycle> dictionaryEntry in lifecycleObjects)
                 {
-                    ILifecycle obj = dictionaryEntry.Value as ILifecycle;
+                    ILifecycle obj = dictionaryEntry.Value;
                     if (obj != null)
                     {
                         if (!obj.IsRunning)
@@ -1163,19 +1157,19 @@ namespace Spring.Context.Support
         /// ILifecycle interface in this context.
         /// </summary>
         /// <value>A dictionary of ILifecycle objects with object name as key.</value>
-        private IDictionary LifeCycleObjects
+        private IDictionary<string, ILifecycle> LifeCycleObjects
         {
             get
             {
                 IConfigurableListableObjectFactory objectFactory = ObjectFactory;
-                string[] objectNames = objectFactory.SingletonNames;
-                IDictionary lifeCycleObjects = new Hashtable();
+                IList<string> objectNames = objectFactory.SingletonNames;
+                IDictionary<string, ILifecycle> lifeCycleObjects = new Dictionary<string, ILifecycle>();
                 foreach (string objectName in objectNames)
                 {
                     object obj = objectFactory.GetSingleton(objectName);
                     if (obj is ILifecycle)
                     {
-                        lifeCycleObjects[objectName] = obj;
+                        lifeCycleObjects[objectName] = (ILifecycle) obj;
                     }
                 }
                 return lifeCycleObjects;
@@ -1235,7 +1229,7 @@ namespace Spring.Context.Support
         /// are defined.
         /// </returns>
         /// <seealso cref="Spring.Objects.Factory.IListableObjectFactory.GetObjectNamesForType(Type)"/>
-        public string[] GetObjectNamesForType(Type type)
+        public IList<string> GetObjectNamesForType(Type type)
         {
             return ObjectFactory.GetObjectNamesForType(type);
         }
@@ -1263,7 +1257,7 @@ namespace Spring.Context.Support
         /// The names of all objects defined in this factory, or an empty array if none
         /// are defined.
         /// </returns>
-        public string[] GetObjectNamesForType<T>()
+        public IList<string> GetObjectNames<T>()
         {
             return GetObjectNamesForType(typeof(T));
         }
@@ -1289,8 +1283,7 @@ namespace Spring.Context.Support
         /// are defined.
         /// </returns>
         /// <seealso cref="Spring.Objects.Factory.IListableObjectFactory.GetObjectNamesForType(Type, bool, bool)"/>
-        public string[] GetObjectNamesForType(
-            Type type, bool includePrototypes, bool includeFactoryObjects)
+        public IList<string> GetObjectNamesForType(Type type, bool includePrototypes, bool includeFactoryObjects)
         {
             return ObjectFactory.GetObjectNamesForType(type, includePrototypes, includeFactoryObjects);
         }
@@ -1330,7 +1323,7 @@ namespace Spring.Context.Support
         /// The names of all objects defined in this factory, or an empty array if none
         /// are defined.
         /// </returns>
-        public string[] GetObjectNamesForType<T>(bool includePrototypes, bool includeFactoryObjects)
+        public IList<string> GetObjectNames<T>(bool includePrototypes, bool includeFactoryObjects)
         {
             return GetObjectNamesForType(typeof(T), includePrototypes, includeFactoryObjects);
         }
@@ -1343,7 +1336,7 @@ namespace Spring.Context.Support
         /// are defined.
         /// </returns>
         /// <seealso cref="Spring.Objects.Factory.IListableObjectFactory.GetObjectDefinitionNames()"/>
-        public string[] GetObjectDefinitionNames()
+        public IList<string> GetObjectDefinitionNames()
         {
             return ObjectFactory.GetObjectDefinitionNames();
         }
@@ -1413,7 +1406,7 @@ namespace Spring.Context.Support
         /// If the objects could not be created.
         /// </exception>
         /// <seealso cref="Spring.Objects.Factory.IListableObjectFactory.GetObjectsOfType(Type)"/>
-        public IDictionary GetObjectsOfType(Type type)
+        public IDictionary<string, object> GetObjectsOfType(Type type)
         {
             return GetObjectsOfType(type, true, true);
         }
@@ -1445,9 +1438,9 @@ namespace Spring.Context.Support
         /// <exception cref="Spring.Objects.ObjectsException">
         /// If the objects could not be created.
         /// </exception>
-        public IDictionary GetObjectsOfType<T>()
+        public IDictionary<string, T> GetObjects<T>()
         {
-            return GetObjectsOfType(typeof(T));
+            return ObjectFactory.GetObjects<T>(true, true);
         }
 
         /// <summary>
@@ -1477,7 +1470,7 @@ namespace Spring.Context.Support
         /// If the objects could not be created.
         /// </exception>
         /// <seealso cref="Spring.Objects.Factory.IListableObjectFactory.GetObjectsOfType(Type, bool, bool)"/>
-        public IDictionary GetObjectsOfType(
+        public IDictionary<string, object> GetObjectsOfType(
             Type type, bool includePrototypes, bool includeFactoryObjects)
         {
             return ObjectFactory.GetObjectsOfType(type, includePrototypes, includeFactoryObjects);
@@ -1494,12 +1487,12 @@ namespace Spring.Context.Support
         /// The <see cref="System.Type"/> (class or interface) to match.
         /// </typeparam>
         /// <param name="includePrototypes">
-        /// Whether to include prototype objects too or just singletons (also applies to
-        /// <see cref="Spring.Objects.Factory.IFactoryObject"/>s).
+        ///   Whether to include prototype objects too or just singletons (also applies to
+        ///   <see cref="Spring.Objects.Factory.IFactoryObject"/>s).
         /// </param>
         /// <param name="includeFactoryObjects">
-        /// Whether to include <see cref="Spring.Objects.Factory.IFactoryObject"/>s too
-        /// or just normal objects.
+        ///   Whether to include <see cref="Spring.Objects.Factory.IFactoryObject"/>s too
+        ///   or just normal objects.
         /// </param>
         /// <returns>
         /// A <see cref="System.Collections.IDictionary"/> of the matching objects,
@@ -1509,9 +1502,9 @@ namespace Spring.Context.Support
         /// <exception cref="Spring.Objects.ObjectsException">
         /// If the objects could not be created.
         /// </exception>
-        public IDictionary GetObjectsOfType<T>(bool includePrototypes, bool includeFactoryObjects)
+        public IDictionary<string, T> GetObjects<T>(bool includePrototypes, bool includeFactoryObjects)
         {
-            return GetObjectsOfType(typeof(T), includePrototypes, includeFactoryObjects);
+            return ObjectFactory.GetObjects<T>(includePrototypes, includeFactoryObjects);
         }
 
         /// <summary>
@@ -1545,13 +1538,13 @@ namespace Spring.Context.Support
         /// </exception>
         public T GetObject<T>()
         {
-            string[] objectNamesForType = GetObjectNamesForType(typeof(T));
-            if ((objectNamesForType == null) || (objectNamesForType.Length == 0))
+            IList<string> objectNamesForType = GetObjectNamesForType(typeof(T));
+            if ((objectNamesForType == null) || (objectNamesForType.Count == 0))
             {
                 throw new NoSuchObjectDefinitionException(typeof(T).FullName, "Requested Type not Defined in the Context.");
             }
 
-            if (objectNamesForType.Length > 1)
+            if (objectNamesForType.Count > 1)
             {
                 throw new ObjectDefinitionStoreException(string.Format("More than one definition for {0} found in the Context.", typeof(T).FullName));
             }
@@ -1627,7 +1620,7 @@ namespace Spring.Context.Support
         /// If there's no such object definition.
         /// </exception>
         /// <seealso cref="Spring.Objects.Factory.IObjectFactory.GetAliases(string)"/>
-        public string[] GetAliases(string name)
+        public IList<string> GetAliases(string name)
         {
             return ObjectFactory.GetAliases(name);
         }

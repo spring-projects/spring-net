@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Spring.Expressions;
 
 namespace Spring.Validation
@@ -159,7 +160,7 @@ namespace Spring.Validation
         /// <param name="contextParams">Additional context parameters.</param>
         /// <param name="errors"><see cref="ValidationErrors"/> instance to add error messages to.</param>
         /// <returns><c>True</c> if validation was successful, <c>False</c> otherwise.</returns>
-        public override bool Validate(object validationContext, IDictionary contextParams, IValidationErrors errors)
+        public override bool Validate(object validationContext, IDictionary<string, object> contextParams, IValidationErrors errors)
         {
             if (Context != null)
             {
@@ -177,11 +178,11 @@ namespace Spring.Validation
         /// <summary>
         /// Actual implementation how to validate the specified object.
         /// </summary>
-        /// <param name="validationContext">The object to validate.</param>
         /// <param name="contextParams">Additional context parameters.</param>
         /// <param name="errors"><see cref="ValidationErrors"/> instance to add error messages to.</param>
+        /// <param name="validationContext">The object to validate.</param>
         /// <returns><c>True</c> if validation was successful, <c>False</c> otherwise.</returns>
-        protected override bool ValidateGroup(IDictionary contextParams, IValidationErrors errors, object validationContext)
+        protected override bool ValidateGroup(IDictionary<string, object> contextParams, IValidationErrors errors, object validationContext)
         {
             bool valid = true;
             IEnumerable collectionToValidate = (validationContext is IDictionary

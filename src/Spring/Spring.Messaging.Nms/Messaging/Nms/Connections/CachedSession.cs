@@ -20,6 +20,8 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
+
 using Apache.NMS;
 using Common.Logging;
 using Spring.Collections;
@@ -202,7 +204,7 @@ namespace Spring.Messaging.Nms.Connections
             }
 
             // Physically close durable subscribers at time of Session close call.
-            IList ToRemove = new ArrayList();
+            List<ConsumerCacheKey> ToRemove = new List<ConsumerCacheKey>();
             foreach (DictionaryEntry dictionaryEntry in cachedConsumers)
             {
                 ConsumerCacheKey key = (ConsumerCacheKey) dictionaryEntry.Key;

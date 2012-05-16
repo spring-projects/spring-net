@@ -21,9 +21,8 @@
 #region Imports
 
 using System;
-using System.Collections;
-using Spring.Collections;
-using Spring.Core;
+using System.Collections.Generic;
+
 using Spring.Util;
 
 #endregion
@@ -112,7 +111,7 @@ namespace Spring.Objects.Factory
         /// </returns>
         public static int CountObjectsIncludingAncestors(IListableObjectFactory factory)
         {
-            return ObjectNamesIncludingAncestors(factory).Length;
+            return ObjectNamesIncludingAncestors(factory).Count;
         }
 
         /// <summary>
@@ -120,7 +119,7 @@ namespace Spring.Objects.Factory
         /// </summary>
         /// <param name="factory">The object factory.</param>
         /// <returns>The array of object names, or an empty array if none.</returns>
-        public static string[] ObjectNamesIncludingAncestors(IListableObjectFactory factory)
+        public static IList<string> ObjectNamesIncludingAncestors(IListableObjectFactory factory)
         {
             return ObjectNamesForTypeIncludingAncestors(factory, typeof(object));
         }
@@ -160,17 +159,17 @@ namespace Spring.Objects.Factory
         /// <returns>
         /// The array of object names, or an empty array if none.
         /// </returns>
-        public static string[] ObjectNamesForTypeIncludingAncestors(
+        public static IList<string> ObjectNamesForTypeIncludingAncestors(
             IListableObjectFactory factory, Type type,
             bool includePrototypes, bool includeFactoryObjects)
         {
-            ArrayList result = new ArrayList();
+            List<string> result = new List<string>();
             result.AddRange(factory.GetObjectNamesForType(type, includePrototypes, includeFactoryObjects));
             IListableObjectFactory pof = GetParentListableObjectFactoryIfAny(factory);
             if (pof != null)
             {
                 IHierarchicalObjectFactory hof = (IHierarchicalObjectFactory)factory;
-                string[] parentsResult = ObjectNamesForTypeIncludingAncestors(pof, type, includePrototypes, includeFactoryObjects);
+                IList<string> parentsResult = ObjectNamesForTypeIncludingAncestors(pof, type, includePrototypes, includeFactoryObjects);
                 foreach (string objectName in parentsResult)
                 {
                     if (!result.Contains(objectName) && !hof.ContainsLocalObject(objectName))
@@ -179,7 +178,7 @@ namespace Spring.Objects.Factory
                     }
                 }
             }
-            return (string[])result.ToArray(typeof(string));
+            return result;
         }
 
         /// <summary>
@@ -210,16 +209,16 @@ namespace Spring.Objects.Factory
         /// <returns>
         /// The array of object names, or an empty array if none.
         /// </returns>
-        public static string[] ObjectNamesForTypeIncludingAncestors(
+        public static IList<string> ObjectNamesForTypeIncludingAncestors(
             IListableObjectFactory factory, Type type)
         {
-            ArrayList result = new ArrayList();
+            List<string> result = new List<string>();
             result.AddRange(factory.GetObjectNamesForType(type));
             IListableObjectFactory pof = GetParentListableObjectFactoryIfAny(factory);
             if (pof != null)
             {
                 IHierarchicalObjectFactory hof = (IHierarchicalObjectFactory)factory;
-                string[] parentsResult = ObjectNamesForTypeIncludingAncestors(pof, type);
+                IList<string> parentsResult = ObjectNamesForTypeIncludingAncestors(pof, type);
                 foreach (string objectName in parentsResult)
                 {
                     if (!result.Contains(objectName) && !hof.ContainsLocalObject(objectName))
@@ -228,7 +227,7 @@ namespace Spring.Objects.Factory
                     }
                 }
             }
-            return (string[])result.ToArray(typeof(string));
+            return result;
         }
 
         /// <summary>
@@ -259,12 +258,12 @@ namespace Spring.Objects.Factory
         /// The <see cref="System.Collections.IDictionary"/> of object instances, or an
         /// empty <see cref="System.Collections.IDictionary"/> if none.
         /// </returns>
-        public static IDictionary ObjectsOfTypeIncludingAncestors(
+        public static IDictionary<string, object> ObjectsOfTypeIncludingAncestors(
             IListableObjectFactory factory, Type type,
             bool includePrototypes, bool includeFactoryObjects)
         {
-            Hashtable result = new Hashtable();
-            foreach (DictionaryEntry entry in
+            Dictionary<string, object> result = new Dictionary<string, object>();
+            foreach (KeyValuePair<string, object> entry in
                 factory.GetObjectsOfType(type, includePrototypes, includeFactoryObjects))
             {
                 result.Add(entry.Key, entry.Value);
@@ -273,7 +272,7 @@ namespace Spring.Objects.Factory
             if (pof != null)
             {
                 IHierarchicalObjectFactory hof = (IHierarchicalObjectFactory)factory;
-                IDictionary parentResult = ObjectsOfTypeIncludingAncestors(pof, type, includePrototypes, includeFactoryObjects);
+                IDictionary<string, object> parentResult = ObjectsOfTypeIncludingAncestors(pof, type, includePrototypes, includeFactoryObjects);
                 foreach (string objectName in parentResult.Keys)
                 {
                     if (!result.ContainsKey(objectName) && !hof.ContainsLocalObject(objectName))
@@ -319,7 +318,7 @@ namespace Spring.Objects.Factory
             IListableObjectFactory factory, Type type,
             bool includePrototypes, bool includeFactoryObjects)
         {
-            IDictionary objectsOfType = ObjectsOfTypeIncludingAncestors(factory, type, includePrototypes, includeFactoryObjects);
+            IDictionary<string, object> objectsOfType = ObjectsOfTypeIncludingAncestors(factory, type, includePrototypes, includeFactoryObjects);
             return GrabTheOnlyObject(objectsOfType, type);
         }
 
@@ -355,7 +354,7 @@ namespace Spring.Objects.Factory
         public static object ObjectOfType(IListableObjectFactory factory, Type type,
                                           bool includePrototypes, bool includeFactoryObjects)
         {
-            IDictionary objectsOfType = factory.GetObjectsOfType(type, includePrototypes, includeFactoryObjects);
+            IDictionary<string, object> objectsOfType = factory.GetObjectsOfType(type, includePrototypes, includeFactoryObjects);
             return GrabTheOnlyObject(objectsOfType, type);
         }
 
@@ -464,7 +463,7 @@ namespace Spring.Objects.Factory
             return null;
         }
 
-        private static object GrabTheOnlyObject(IDictionary objectsOfType, Type type)
+        private static object GrabTheOnlyObject(IDictionary<string, object> objectsOfType, Type type)
         {
             if (objectsOfType.Count == 1)
             {

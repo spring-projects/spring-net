@@ -20,12 +20,12 @@
 
 #region Imports
 
-using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using Common.Logging;
 using NHibernate;
-using Spring.Collections;
+
 using Spring.Transaction.Support;
 using Spring.Util;
 
@@ -48,7 +48,8 @@ namespace Spring.Data.NHibernate
 	    
         private static readonly object DEFAULT_KEY = new object();
 
-        private readonly Hashtable sessionDictionary = new Hashtable(1);
+        private readonly object sessionDictionaryLock = new object();
+        private readonly Dictionary<object, ISession> sessionDictionary = new Dictionary<object, ISession>(1);
                
         private IDbConnection connection;
 
@@ -118,10 +119,12 @@ namespace Spring.Data.NHibernate
         {
             get
             {
-                lock (sessionDictionary.SyncRoot)
+                lock (sessionDictionaryLock)
                 {
                     EnsureInitialized();
-                    return sessionDictionary[DEFAULT_KEY] as ISession;
+                    ISession session;
+                    sessionDictionary.TryGetValue(DEFAULT_KEY, out session);
+                    return session;
                 }
             }
         }
@@ -135,7 +138,7 @@ namespace Spring.Data.NHibernate
         {
             get
             {
-                lock(sessionDictionary.SyncRoot)
+                lock(sessionDictionaryLock)
                 {
                     EnsureInitialized();                    
                     if (sessionDictionary.Count > 0)
@@ -160,7 +163,7 @@ namespace Spring.Data.NHibernate
         {
             get
             {
-                lock(sessionDictionary.SyncRoot)
+                lock(sessionDictionaryLock)
                 {
                     EnsureInitialized();                    
                     return (sessionDictionary.Count > 0 ? false : true);
@@ -179,12 +182,12 @@ namespace Spring.Data.NHibernate
         {
             get
             {
-                lock (sessionDictionary.SyncRoot)
+                lock (sessionDictionaryLock)
                 {
                     EnsureInitialized();                    
                     return ( 
                         sessionDictionary.Count == 0 ||
-                        (sessionDictionary.Count == 1 && sessionDictionary.Contains(DEFAULT_KEY)) 
+                        (sessionDictionary.Count == 1 && sessionDictionary.ContainsKey(DEFAULT_KEY)) 
                         );
 
                 }
@@ -263,10 +266,12 @@ namespace Spring.Data.NHibernate
         /// <returns>A hibernate session</returns>
         public ISession GetSession(object key)
         {
-            lock (sessionDictionary.SyncRoot)
+            lock (sessionDictionaryLock)
             {
-                EnsureInitialized();                
-                return sessionDictionary[key] as ISession;
+                EnsureInitialized();
+                ISession session;
+                sessionDictionary.TryGetValue(key, out session);
+                return session;
             }
         }
 
@@ -279,15 +284,15 @@ namespace Spring.Data.NHibernate
         /// <returns>A hibernate session</returns>
         public ISession GetValidatedSession(object key)
         {
-            lock (sessionDictionary.SyncRoot)
+            lock (sessionDictionaryLock)
             {
                 EnsureInitialized();                
-                ISession session = sessionDictionary[key] as ISession;
+                ISession session;
                 // Check for dangling Session that's around but already closed.
                 // Effectively an assertion: that should never happen in practice.
                 // We'll seamlessly remove the Session here, to not let it cause
                 // any side effects.
-                if (session != null && !session.IsOpen) 
+                if (sessionDictionary.TryGetValue(key, out session) && !session.IsOpen) 
                 {
                     sessionDictionary.Remove(key);
                     session = null;
@@ -314,7 +319,7 @@ namespace Spring.Data.NHibernate
             AssertUtils.ArgumentNotNull(key, "key", "Key must not be null");
             AssertUtils.ArgumentNotNull(session, "session", "Session must not be null");
 
-            lock (sessionDictionary.SyncRoot)
+            lock (sessionDictionaryLock)
             {
                 if (sessionDictionary.ContainsKey(key))
                 {
@@ -333,9 +338,10 @@ namespace Spring.Data.NHibernate
         /// dictionary storage.</returns>
         public ISession RemoveSession(object key)
         {
-            lock(sessionDictionary.SyncRoot)
+            lock(sessionDictionaryLock)
             {
-                ISession oldSession = sessionDictionary[key] as ISession;
+                ISession oldSession;
+                sessionDictionary.TryGetValue(key, out oldSession);
                 sessionDictionary.Remove(key);
                 return oldSession;
             }
@@ -348,9 +354,9 @@ namespace Spring.Data.NHibernate
         /// <returns>
         /// 	<c>true</c> if the holder contains the specified session; otherwise, <c>false</c>.
         /// </returns>
-        public bool ContainsSession(object session)
+        public bool ContainsSession(ISession session)
         {
-            lock (sessionDictionary.SyncRoot)
+            lock (sessionDictionaryLock)
             {
                 EnsureInitialized();                
                 return sessionDictionary.ContainsValue(session);

@@ -20,7 +20,7 @@
 
 using System;
 using System.Collections;
-
+using System.Collections.Generic;
 using NUnit.Framework;
 
 using Spring.Expressions;
@@ -39,7 +39,7 @@ namespace Spring.Validation.Actions
         public void WhenInvalidThrowDefaultException()
         {
             Inventor context = new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian");
-            IDictionary vars = new Hashtable();
+            Dictionary<string, object> vars = new Dictionary<string, object>();
             ExceptionAction action = new ExceptionAction();
             try
             {
@@ -56,7 +56,7 @@ namespace Spring.Validation.Actions
         public void WhenInvalidThrowCustomException()
         {
             Inventor context = new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian");
-            IDictionary vars = new Hashtable();
+            Dictionary<string, object> vars = new Dictionary<string, object>();
             ExceptionAction action = new ExceptionAction("new System.InvalidOperationException('invalid')");
             try
             {
@@ -73,7 +73,7 @@ namespace Spring.Validation.Actions
         public void WhenInvalidThrowCustomExceptionUsingSetter()
         {
             Inventor context = new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian");
-            IDictionary vars = new Hashtable();
+            Dictionary<string, object> vars = new Dictionary<string, object>();
             ExceptionAction action = new ExceptionAction();
             IExpression expression = Expression.Parse("new System.InvalidOperationException('invalid')");
             action.ThrowsExpression = expression;
@@ -93,7 +93,7 @@ namespace Spring.Validation.Actions
         public void WhenValid()
         {
             Inventor context = new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian");
-            IDictionary vars = new Hashtable();
+            Dictionary<string, object> vars = new Dictionary<string, object>();
             ExceptionAction action = new ExceptionAction();
             try
             {

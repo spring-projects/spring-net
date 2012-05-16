@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Spring.Aspects
 {
@@ -37,7 +38,7 @@ namespace Spring.Aspects
         /// <returns>
         /// 	<c>true</c> if this instance can handle the specified exception; otherwise, <c>false</c>.
         /// </returns>
-        bool CanHandleException(Exception ex, IDictionary callContextDictionary);
+        bool CanHandleException(Exception ex, IDictionary<string, object> callContextDictionary);
 
         /// <summary>
         /// Handles the exception.
@@ -46,7 +47,7 @@ namespace Spring.Aspects
         /// <returns>
         /// The return value from handling the exception, if not rethrown or a new exception is thrown.
         /// </returns>
-        object HandleException(IDictionary callContextDictionary);
+        object HandleException(IDictionary<string, object> callContextDictionary);
 
         /// <summary>
         /// Gets the source exception names.

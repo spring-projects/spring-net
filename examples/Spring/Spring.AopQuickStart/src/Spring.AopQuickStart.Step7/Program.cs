@@ -21,7 +21,7 @@
 #region Imports
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 
 using Spring.Context;
 using Spring.Context.Support;
@@ -47,7 +47,7 @@ namespace Spring.AopQuickStart
             {
                 // Create AOP proxy using Spring.NET IoC container.
                 IApplicationContext ctx = ContextRegistry.GetContext();
-                IDictionary commands = ctx.GetObjectsOfType(typeof(ICommand));
+                IDictionary<string, ICommand> commands = ctx.GetObjects<ICommand>();
 
                 foreach (ICommand command in commands.Values)
                 {

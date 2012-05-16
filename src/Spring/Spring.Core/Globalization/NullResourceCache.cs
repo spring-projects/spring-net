@@ -19,6 +19,7 @@
 #endregion
 
 using System.Collections;
+using System.Collections.Generic;
 
 namespace Spring.Globalization
 {
@@ -33,7 +34,7 @@ namespace Spring.Globalization
         /// </summary>
         /// <param name="cacheKey">Cache key to use for lookup.</param>
         /// <returns>Always returns <c>null</c>.</returns>
-        protected override IList GetResources(string cacheKey)
+        protected override IList<Resource> GetResources(string cacheKey)
         {
             return null;
         }
@@ -43,7 +44,7 @@ namespace Spring.Globalization
         /// </summary>
         /// <param name="cacheKey">Cache key to use for the specified resources.</param>
         /// <param name="resources">A list of resources to cache.</param>
-        protected override void PutResources(string cacheKey, IList resources)
+        protected override void PutResources(string cacheKey, IList<Resource> resources)
         {}
     }
 }

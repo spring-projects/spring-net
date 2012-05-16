@@ -21,6 +21,7 @@
 #region Imports
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Spring.Objects.Factory.Config;
 #endregion
 
@@ -393,10 +394,10 @@ namespace Spring.Objects.Factory.Support
             }
             else
             {
-                ArrayList arrayList = new ArrayList();
+                List<string> arrayList = new List<string>();
                 arrayList.AddRange(objectDefinition.DependsOn);
                 arrayList.AddRange(new string[]{ objectName});
-                objectDefinition.DependsOn = (string[])arrayList.ToArray(typeof(string));
+                objectDefinition.DependsOn = arrayList;
             }
             return this;
         }

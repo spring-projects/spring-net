@@ -21,7 +21,7 @@
 #region Imports
 
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using Common.Logging;
@@ -170,7 +170,7 @@ namespace Spring.Core.IO
 		protected virtual string ResolvePath(string path)
 		{
 			// quite inefficient, but cost is only ever paid once at startup...
-			IList expressions = StringUtils.GetAntExpressions(path);
+			IList<string> expressions = StringUtils.GetAntExpressions(path);
 			foreach (string expression in expressions)
 			{
 				string environmentValue

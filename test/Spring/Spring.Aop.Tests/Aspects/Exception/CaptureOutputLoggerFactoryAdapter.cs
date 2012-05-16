@@ -1,9 +1,9 @@
 
 
 using System;
-using System.Collections;
-using System.Collections.Specialized;
+using System.Collections.Generic;
 using System.Diagnostics;
+
 using Common.Logging;
 using Common.Logging.Simple;
 
@@ -44,9 +44,9 @@ namespace Spring.Aspects.Exceptions
             System.Diagnostics.Trace.Listeners.Remove(listener);
         }
 
-        private IList logMessages = new ArrayList();
+        private IList<string> logMessages = new List<string>();
 
-        public IList LogMessages
+        public IList<string> LogMessages
         {
             get { return logMessages; }
             set { logMessages = value; }

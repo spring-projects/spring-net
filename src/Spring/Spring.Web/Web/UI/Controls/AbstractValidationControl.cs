@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Web.UI;
 using Spring.Context;
 using Spring.Util;
@@ -244,9 +245,9 @@ namespace Spring.Web.UI.Controls
         /// </para>
         /// </remarks>
         /// <returns>a list containing <see cref="string"/> elements. May return <c>null</c></returns>
-        protected virtual IList ResolveErrorMessages()
+        protected virtual IList<string> ResolveErrorMessages()
         {
-            IList errorMessages;
+            IList<string> errorMessages;
 
             // good catch - idea & patch from Roberto Paterlini
             if (DesignMode)
@@ -272,9 +273,7 @@ namespace Spring.Web.UI.Controls
         /// <param name="writer"></param>
         protected override void Render(HtmlTextWriter writer)
         {
-            IList errorMessages;
-
-            errorMessages = ResolveErrorMessages();
+            IList<string> errorMessages = ResolveErrorMessages();
 
             Renderer.RenderErrors(Page as Page, writer, errorMessages);
         }

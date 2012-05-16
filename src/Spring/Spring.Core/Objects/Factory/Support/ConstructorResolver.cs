@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 using Common.Logging;
@@ -29,6 +30,8 @@ using Spring.Core.TypeConversion;
 using Spring.Core.TypeResolution;
 using Spring.Objects.Factory.Config;
 using Spring.Util;
+
+using System.Linq;
 
 namespace Spring.Objects.Factory.Support
 {
@@ -306,12 +309,12 @@ namespace Spring.Objects.Factory.Support
             }
 
             GenericArgumentsHolder genericArgsInfo = new GenericArgumentsHolder(definition.FactoryMethodName);
-            MethodInfo[] factoryMethodCandidates = FindMethods(genericArgsInfo.GenericMethodName, expectedArgCount, isStatic, factoryClass);
+            IList<MethodInfo> factoryMethodCandidates = FindMethods(genericArgsInfo.GenericMethodName, expectedArgCount, isStatic, factoryClass);
 
             bool autowiring = (definition.AutowireMode == AutoWiringMode.Constructor);
 
             // try all matching methods to see if they match the constructor arguments...
-            for (int i = 0; i < factoryMethodCandidates.Length; i++)
+            for (int i = 0; i < factoryMethodCandidates.Count; i++)
             {
                 MethodInfo factoryMethodCandidate = factoryMethodCandidates[i];
                 if (genericArgsInfo.ContainsGenericArguments)
@@ -540,7 +543,7 @@ namespace Spring.Objects.Factory.Support
 //            ObjectDefinitionValueResolver valueResolver = new ObjectDefinitionValueResolver(objectFactory);
             int minNrOfArgs = cargs.ArgumentCount;
 
-            foreach (DictionaryEntry entry in cargs.IndexedArgumentValues)
+            foreach (KeyValuePair<int, ConstructorArgumentValues.ValueHolder> entry in cargs.IndexedArgumentValues)
             {
                 int index = Convert.ToInt32(entry.Key);
                 if (index < 0)
@@ -552,8 +555,7 @@ namespace Spring.Objects.Factory.Support
                 {
                     minNrOfArgs = index + 1;
                 }
-                ConstructorArgumentValues.ValueHolder valueHolder =
-                    (ConstructorArgumentValues.ValueHolder)entry.Value;
+                ConstructorArgumentValues.ValueHolder valueHolder = entry.Value;
                 string argName = "constructor argument with index " + index;
                 object resolvedValue =
                     valueResolver.ResolveValueIfNecessary(objectName, definition, argName, valueHolder.Value);
@@ -575,9 +577,9 @@ namespace Spring.Objects.Factory.Support
                                                                  AssemblyQualifiedName
                                                            : null);
             }
-            foreach (DictionaryEntry namedArgumentEntry in definition.ConstructorArgumentValues.NamedArgumentValues)
+            foreach (KeyValuePair<string, object> namedArgumentEntry in definition.ConstructorArgumentValues.NamedArgumentValues)
             {
-                string argumentName = (string)namedArgumentEntry.Key;
+                string argumentName = namedArgumentEntry.Key;
                 string syntheticArgumentName = "constructor argument with name " + argumentName;
                 ConstructorArgumentValues.ValueHolder valueHolder =
                     (ConstructorArgumentValues.ValueHolder)namedArgumentEntry.Value;
@@ -610,16 +612,14 @@ namespace Spring.Objects.Factory.Support
         /// <see cref="System.Reflection.MethodInfo">methods</see> exposed on the
         /// <paramref name="searchType"/> that match the supplied criteria.
         /// </returns>
-        private static MethodInfo[] FindMethods(string methodName, int expectedArgumentCount, bool isStatic, Type searchType)
+        private static IList<MethodInfo> FindMethods(string methodName, int expectedArgumentCount, bool isStatic, Type searchType)
         {
             ComposedCriteria methodCriteria = new ComposedCriteria();
             methodCriteria.Add(new MethodNameMatchCriteria(methodName));
             methodCriteria.Add(new MethodParametersCountCriteria(expectedArgumentCount));
             BindingFlags methodFlags = BindingFlags.Public | BindingFlags.IgnoreCase | (isStatic ? BindingFlags.Static : BindingFlags.Instance);
-            MemberInfo[] methods =
-                    searchType.FindMembers(MemberTypes.Method, methodFlags, new MemberFilter(new CriteriaMemberFilter().FilterMemberByCriteria),
-                                           methodCriteria);
-            return (MethodInfo[])ArrayList.Adapter(methods).ToArray(typeof(MethodInfo));
+            MemberInfo[] methods = searchType.FindMembers(MemberTypes.Method, methodFlags, new CriteriaMemberFilter().FilterMemberByCriteria, methodCriteria);
+            return methods.Cast<MethodInfo>().ToArray();
         }
         internal class ArgumentsHolder
         {

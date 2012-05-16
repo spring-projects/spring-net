@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.Serialization;
 
@@ -178,18 +179,18 @@ namespace Spring.Expressions
 
         private static ConstructorInfo GetBestConstructor(Type type, object[] argValues)
         {
-            ConstructorInfo[] candidates = GetCandidateConstructors(type, argValues.Length);
-            if (candidates.Length > 0)
+            IList<ConstructorInfo> candidates = GetCandidateConstructors(type, argValues.Length);
+            if (candidates.Count > 0)
             {
                 return ReflectionUtils.GetConstructorByArgumentValues(candidates, argValues);
             }
             return null;
         }
 
-        private static ConstructorInfo[] GetCandidateConstructors(Type type, int argCount)
+        private static IList<ConstructorInfo> GetCandidateConstructors(Type type, int argCount)
         {
             ConstructorInfo[] ctors = type.GetConstructors(BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic);
-            ArrayList matches = new ArrayList();
+            List<ConstructorInfo> matches = new List<ConstructorInfo>();
 
             foreach (ConstructorInfo ctor in ctors)
             {
@@ -208,7 +209,7 @@ namespace Spring.Expressions
                 }
             }
 
-            return (ConstructorInfo[]) matches.ToArray(typeof(ConstructorInfo));
+            return matches;
         }
 
     }

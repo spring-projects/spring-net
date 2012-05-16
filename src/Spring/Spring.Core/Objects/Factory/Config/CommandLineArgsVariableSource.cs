@@ -19,8 +19,7 @@
 #endregion
 
 using System;
-using System.Collections;
-using System.Collections.Specialized;
+using System.Collections.Generic;
 
 namespace Spring.Objects.Factory.Config
 {
@@ -39,7 +38,7 @@ namespace Spring.Objects.Factory.Config
         private string valueSeparator = DEFAULT_VALUE_SEPARATOR;
 
         private string[] commandLineArgs;
-        protected IDictionary arguments;
+        protected IDictionary<string, string> arguments;
 
         private object objectMonitor = new object();
 
@@ -103,7 +102,7 @@ namespace Spring.Objects.Factory.Config
                 {
                     InitArguments();
                 }
-                return arguments.Contains(name);
+                return arguments.ContainsKey(name);
             }
         }
 
@@ -124,7 +123,9 @@ namespace Spring.Objects.Factory.Config
                 {
                     InitArguments();
                 }
-                return (string) this.arguments[name];
+                string retValue;
+                arguments.TryGetValue(name, out retValue);
+                return retValue;
             }
         }
 
@@ -133,7 +134,7 @@ namespace Spring.Objects.Factory.Config
         /// </summary>
         protected virtual void InitArguments()
         {
-            this.arguments = CollectionsUtil.CreateCaseInsensitiveHashtable(commandLineArgs.Length);
+            this.arguments = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
             foreach (string arg in commandLineArgs)
             {

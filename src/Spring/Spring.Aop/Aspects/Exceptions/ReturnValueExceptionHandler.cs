@@ -19,8 +19,8 @@
 #endregion
 
 using System;
-using System.Collections;
-using Common.Logging;
+using System.Collections.Generic;
+
 using Spring.Expressions;
 
 namespace Spring.Aspects.Exceptions
@@ -53,7 +53,7 @@ namespace Spring.Aspects.Exceptions
         /// Returns the result of evaluating the translation expression.
         /// </summary>
         /// <returns>The return value from handling the exception, if not rethrown or a new exception is thrown.</returns>
-        public override object HandleException(IDictionary callContextDictionary)
+        public override object HandleException(IDictionary<string, object> callContextDictionary)
         {
             object returnVal = null;
             try

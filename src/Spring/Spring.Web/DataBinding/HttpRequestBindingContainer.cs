@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Reflection;
 using System.Web;
@@ -85,18 +86,18 @@ namespace Spring.DataBinding
         /// Binds source object to target object.
         /// </summary>
         /// <param name="source">
-        /// The source object.
+        ///   The source object.
         /// </param>
         /// <param name="target">
-        /// The target object.
+        ///   The target object.
         /// </param>
         /// <param name="validationErrors">
-        /// Validation errors collection that type conversion errors should be added to.
+        ///   Validation errors collection that type conversion errors should be added to.
         /// </param>
         /// <param name="variables">
-        /// Variables that should be used during expression evaluation.
+        ///   Variables that should be used during expression evaluation.
         /// </param>
-        public override void BindSourceToTarget(object source, object target, IValidationErrors validationErrors, IDictionary variables)
+        public override void BindSourceToTarget(object source, object target, IValidationErrors validationErrors, IDictionary<string, object> variables)
         {
             NameValueCollection parameters = VirtualEnvironment.RequestParams;
             IList targetList = targetExpression.GetValue(target) as IList;
@@ -110,7 +111,7 @@ namespace Spring.DataBinding
                 int valueCount = parameters.GetValues(requestParams[0]).Length;
                 for (int i = 0; i < valueCount; i++)
                 {
-                    IDictionary vars = new Hashtable();
+                    IDictionary<string, object> vars = new Dictionary<string, object>();
                     foreach (string paramName in requestParams)
                     {
                         vars[paramName] = parameters.GetValues(paramName)[i];
@@ -146,18 +147,18 @@ namespace Spring.DataBinding
         /// Binds target object to source object.
         /// </summary>
         /// <param name="source">
-        /// The source object.
+        ///   The source object.
         /// </param>
         /// <param name="target">
-        /// The target object.
+        ///   The target object.
         /// </param>
         /// <param name="validationErrors">
-        /// Validation errors collection that type conversion errors should be added to.
+        ///   Validation errors collection that type conversion errors should be added to.
         /// </param>
         /// <param name="variables">
-        /// Variables that should be used during expression evaluation.
+        ///   Variables that should be used during expression evaluation.
         /// </param>
-        public override void BindTargetToSource(object source, object target, IValidationErrors validationErrors, IDictionary variables)
+        public override void BindTargetToSource(object source, object target, IValidationErrors validationErrors, IDictionary<string, object> variables)
         {
             // can't bind to a read-only Request object...
         }
