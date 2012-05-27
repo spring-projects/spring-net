@@ -21,6 +21,7 @@
 #region Imports
 
 using System.Collections;
+using System.Collections.Generic;
 using NUnit.Framework;
 using Spring.Context;
 using Spring.Context.Support;
@@ -65,14 +66,14 @@ namespace Spring.Messaging.Ems.Config
         [Test]
         public void ObjectsCreated()
         {
-            IDictionary containers = ctx.GetObjectsOfType(typeof(SimpleMessageListenerContainer));
+            IDictionary<string, object> containers = ctx.GetObjectsOfType(typeof(SimpleMessageListenerContainer));
             Assert.AreEqual(3, containers.Count);
         }
 
         [Test]
         public void ContainerConfiguration()
         {
-            IDictionary containers = ctx.GetObjectsOfType(typeof (SimpleMessageListenerContainer));
+            IDictionary<string, object> containers = ctx.GetObjectsOfType(typeof (SimpleMessageListenerContainer));
             EmsConnectionFactory defaultConnectionFactory = (EmsConnectionFactory)ctx.GetObject(DEFAULT_CONNECTION_FACTORY);
             defaultConnectionFactory = (EmsConnectionFactory)ctx.GetObject(DEFAULT_CONNECTION_FACTORY);
             EmsConnectionFactory explicitConnectionFactory = (EmsConnectionFactory)ctx.GetObject(EXPLICIT_CONNECTION_FACTORY);
@@ -80,7 +81,7 @@ namespace Spring.Messaging.Ems.Config
 
             int defaultConnectionFactoryCount = 0;
 		    int explicitConnectionFactoryCount = 0;
-            foreach (DictionaryEntry dictionaryEntry in containers)
+            foreach (KeyValuePair<string, object> dictionaryEntry in containers)
             {
                 SimpleMessageListenerContainer container = (SimpleMessageListenerContainer) dictionaryEntry.Value;
                 if (container.ConnectionFactory.Equals(defaultConnectionFactory))
