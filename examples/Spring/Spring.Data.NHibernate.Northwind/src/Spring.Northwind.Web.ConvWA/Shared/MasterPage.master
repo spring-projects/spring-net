@@ -1,0 +1,45 @@
+<%@ Master Language="C#" AutoEventWireup="true" Inherits="Shared_MasterPage" Codebehind="MasterPage.master.cs" %>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title>Spring.NET NHibernate Northwind Example</title>
+    <link type="text/css" rel="Stylesheet" href="../CSS/style.css" />
+</head>
+<body>
+    <form id="form1" runat="server">
+        <a name="top" />
+        <div align="center">
+            <div style="position: relative; top: 0px; width: 719px;">
+                <table border="0" cellpadding="0" cellspacing="0">
+                    <tbody>
+                        <tr>
+                            <td id="headerCell">
+                                <div class="logo">
+                                    <a href="~/Default.aspx" runat="server">
+                                        <img src="img/logo.png" border="0" height="84" width="271"></a>
+                                </div>
+                                <div class="headerText">
+                                    Goes Northwind <br /> with NHibernate
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td id="contentCell">
+                                <div style="margin: 20px;">
+                                
+                                <asp:ContentPlaceHolder ID="content" runat="server">
+                                </asp:ContentPlaceHolder>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td id="footerCell">
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </form>
+</body>
+</html>

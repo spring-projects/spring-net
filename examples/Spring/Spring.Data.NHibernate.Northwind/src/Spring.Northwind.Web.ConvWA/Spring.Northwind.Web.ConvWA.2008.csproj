@@ -1,23 +1,16 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{2967CA64-7352-46E3-89C0-6BB3A0A13FC1}</ProjectGuid>
+    <ProjectGuid>{8DCDA20D-DF9F-4723-9649-BC6934B36DC4}</ProjectGuid>
     <ProjectTypeGuids>{349c5851-65df-11da-9384-00065b846f21};{fae04ec0-301f-11d3-bf4b-00c04f79efbc}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Spring.Northwind.Web</RootNamespace>
     <AssemblyName>Spring.Northwind.Web</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <OldToolsVersion>3.5</OldToolsVersion>
-    <UpgradeBackupLocation />
-    <TargetFrameworkProfile />
-    <UseIISExpress>false</UseIISExpress>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -39,7 +32,7 @@
   <ItemGroup>
     <Reference Include="Common.Logging, Version=1.2.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\bin\net\4.0\debug\Common.Logging.dll</HintPath>
+      <HintPath>..\..\..\..\..\bin\net\3.5\debug\Common.Logging.dll</HintPath>
     </Reference>
     <Reference Include="Common.Logging.Log4Net, Version=1.2.0.2, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -47,7 +40,7 @@
     </Reference>
     <Reference Include="Iesi.Collections, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\lib\NHibernate32\net\4.0\Iesi.Collections.dll</HintPath>
+      <HintPath>..\..\..\..\..\lib\NHibernate32\net\3.5\Iesi.Collections.dll</HintPath>
     </Reference>
     <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -55,39 +48,50 @@
     </Reference>
     <Reference Include="NHibernate, Version=3.2.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\lib\NHibernate32\net\4.0\NHibernate.dll</HintPath>
+      <HintPath>..\..\..\..\..\lib\NHibernate32\net\3.5\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Aop, Version=0.0.0.35000, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Aop.dll</HintPath>
+      <HintPath>..\..\..\..\..\bin\net\3.5\debug\Spring.Aop.dll</HintPath>
+    </Reference>
+    <Reference Include="Spring.ConversationWA.NH32, Version=0.0.0.35000, Culture=neutral, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\..\..\bin\net\3.5\debug\Spring.ConversationWA.NH32.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Core, Version=0.0.0.35000, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Core.dll</HintPath>
+      <HintPath>..\..\..\..\..\bin\net\3.5\debug\Spring.Core.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Data, Version=0.0.0.35000, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Data.dll</HintPath>
+      <HintPath>..\..\..\..\..\bin\net\3.5\debug\Spring.Data.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Data.NHibernate32, Version=0.0.0.35000, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Data.NHibernate32.dll</HintPath>
+      <HintPath>..\..\..\..\..\bin\net\3.5\debug\Spring.Data.NHibernate32.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Web, Version=0.0.0.35000, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Web.dll</HintPath>
+      <HintPath>..\..\..\..\..\bin\net\3.5\debug\Spring.Web.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Data.SQLite, Version=1.0.65.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\net\2.0\System.Data.SQLite.DLL</HintPath>
     </Reference>
-    <Reference Include="System.Web.ApplicationServices" />
-    <Reference Include="System.Web.DynamicData" />
-    <Reference Include="System.Web.Entity" />
-    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Extensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
@@ -95,7 +99,6 @@
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Web.Mobile" />
-    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="CSS\style.css" />
@@ -112,10 +115,13 @@
     <Content Include="Img\logo.png" />
     <Content Include="Img\springNet_release.png" />
     <Content Include="Logs\log.txt" />
-    <Content Include="Web.config" />
+    <Content Include="Web.net40.config" />
     <Content Include="Web.xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ConversationPage.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="CustomerEditor.aspx.designer.cs">
       <DependentUpon>CustomerEditor.aspx</DependentUpon>
     </Compile>
@@ -175,25 +181,31 @@
     <Content Include="Shared\MasterPage.master" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Spring.Northwind.Dao.NHibernate\Spring.Northwind.Dao.NHibernate.2010.csproj">
+    <ProjectReference Include="..\Spring.Northwind.Dao.NHibernate\Spring.Northwind.Dao.NHibernate.2008.csproj">
       <Project>{6E4F55A0-C281-4706-A08B-BDEC2D2FBDA4}</Project>
-      <Name>Spring.Northwind.Dao.NHibernate.2010</Name>
+      <Name>Spring.Northwind.Dao.NHibernate.2008</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Spring.Northwind.Dao\Spring.Northwind.Dao.2010.csproj">
+    <ProjectReference Include="..\Spring.Northwind.Dao\Spring.Northwind.Dao.2008.csproj">
       <Project>{7F45EEA2-50AC-44E2-85A6-2FFB02E38C44}</Project>
-      <Name>Spring.Northwind.Dao.2010</Name>
+      <Name>Spring.Northwind.Dao.2008</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Spring.Northwind.Service\Spring.Northwind.Service.2010.csproj">
+    <ProjectReference Include="..\Spring.Northwind.Service\Spring.Northwind.Service.2008.csproj">
       <Project>{9E15876F-E9E0-43B7-9874-B54F163757D6}</Project>
-      <Name>Spring.Northwind.Service.2010</Name>
+      <Name>Spring.Northwind.Service.2008</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Web.net30.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Properties\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\VisualStudio\v9.0\WebApplications\Microsoft.WebApplication.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
@@ -207,7 +219,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>2431</DevelopmentServerPort>
+          <DevelopmentServerPort>60934</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>
@@ -220,4 +232,7 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(ProjectDir)Web.net30.config"  "$(ProjectDir)Web.config" /Y</PostBuildEvent>
+  </PropertyGroup>
 </Project>
