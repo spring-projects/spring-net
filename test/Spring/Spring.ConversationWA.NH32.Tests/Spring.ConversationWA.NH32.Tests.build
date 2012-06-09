@@ -90,7 +90,7 @@
     <!--temporary copies of "System.Data.SQLite.dll" because it is 32bit and causes problems in the compilation of the other test projects. It occurs in 64-bit Windows environment.-->
     <property name="no.preexisting.sqlite" value="${not file::exists('${current.bin.dir}/System.Data.SQLite.dll')}"/>
     <copy todir="${current.bin.dir}">
-      <fileset basedir="${project::get-base-directory()}/${lib.dir.relative}">
+      <fileset basedir="${project::get-base-directory()}/lib/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}">
         <include name="System.Data.SQLite.dll" if="${no.preexisting.sqlite}"/>
       </fileset>
     </copy>
