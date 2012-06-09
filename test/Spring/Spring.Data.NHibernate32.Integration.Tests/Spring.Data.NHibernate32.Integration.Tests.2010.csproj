@@ -241,7 +241,7 @@
   -->
   <PropertyGroup>
     <PostBuildEvent>echo "Copying .xml files for tests"
-xcopy "$(ProjectDir)Data" ..\..\..\..\build\VS.Net.2008\Spring.Data.NHibernate32.Integration.Tests\$(ConfigurationName)\ /y /s /q /d
-xcopy  "$(ProjectDir)$(TargetFileName).config" ..\..\..\..\build\VS.Net.2008\Spring.Data.NHibernate32.Integration.Tests\$(ConfigurationName)\ /y /s /q</PostBuildEvent>
+xcopy "$(ProjectDir)Data" ..\..\..\..\build\VS.Net.2010\Spring.Data.NHibernate32.Integration.Tests\$(ConfigurationName)\ /y /s /q /d
+xcopy  "$(ProjectDir)$(TargetFileName).config" ..\..\..\..\build\VS.Net.2010\Spring.Data.NHibernate32.Integration.Tests\$(ConfigurationName)\ /y /s /q</PostBuildEvent>
   </PropertyGroup>
 </Project>
