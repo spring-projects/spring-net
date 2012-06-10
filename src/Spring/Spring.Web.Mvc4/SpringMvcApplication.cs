@@ -78,10 +78,10 @@ namespace Spring.Web.Mvc
         /// <summary>
         /// Builds the dependency resolver.
         /// </summary>
-        /// <returns>The <see cref="System.Web.Http.Services.IDependencyResolver"/> instance.</returns>
+        /// <returns>The <see cref="System.Web.Http.Dependencies.IDependencyResolver"/> instance.</returns>
         /// You must override this method in a derived class to control the manner in which the
-        /// <see cref="System.Web.Http.Services.IDependencyResolver"/> is created.
-        protected virtual System.Web.Http.Services.IDependencyResolver BuildWebApiDependencyResolver()
+        /// <see cref="System.Web.Http.Dependencies.IDependencyResolver"/> is created.
+        protected virtual System.Web.Http.Dependencies.IDependencyResolver BuildWebApiDependencyResolver()
         {
             return new SpringWebApiDependencyResolver(ContextRegistry.GetContext());
         }
@@ -115,10 +115,10 @@ namespace Spring.Web.Mvc
         /// Registers the DependencyResolver implementation with the MVC runtime.
         /// <remarks>
         /// You must override this method in a derived class to control the manner in which the
-        /// <see cref="System.Web.Http.Services.IDependencyResolver"/> is registered.
+        /// <see cref="System.Web.Http.Dependencies.IDependencyResolver"/> is registered.
         /// </remarks>
         /// </summary>
-        public virtual void RegisterDependencyResolver(System.Web.Http.Services.IDependencyResolver resolver)
+        public virtual void RegisterDependencyResolver(System.Web.Http.Dependencies.IDependencyResolver resolver)
         {
             ThreadSafeDependencyResolverRegistrar.Register(resolver);
         }
@@ -157,10 +157,10 @@ namespace Spring.Web.Mvc
             }
 
             /// <summary>
-            /// Registers the specified <see cref="System.Web.Http.Services.IDependencyResolver"/>.
+            /// Registers the specified <see cref="System.Web.Http.Dependencies.IDependencyResolver"/>.
             /// </summary>
             /// <param name="resolver">The resolver.</param>
-            public static void Register(System.Web.Http.Services.IDependencyResolver resolver)
+            public static void Register(System.Web.Http.Dependencies.IDependencyResolver resolver)
             {
                 if (_isWebApiResolverRegistered)
                 {
@@ -174,7 +174,7 @@ namespace Spring.Web.Mvc
                         return;
                     }
 
-                    System.Web.Http.GlobalConfiguration.Configuration.ServiceResolver.SetResolver(resolver);
+                    System.Web.Http.GlobalConfiguration.Configuration.DependencyResolver = resolver;
 
                     _isWebApiResolverRegistered = true;
                 }

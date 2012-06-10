@@ -14,7 +14,10 @@ namespace Spring.Web.Mvc
     public class SpringMvcDependencyResolver : IDependencyResolver
     {
 
-        private IApplicationContext _context;
+        /// <summary>
+        /// The <see cref="IApplicationContext"/> to be used by the resolver
+        /// </summary>
+        protected IApplicationContext _context;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SpringMvcDependencyResolver"/> class.
