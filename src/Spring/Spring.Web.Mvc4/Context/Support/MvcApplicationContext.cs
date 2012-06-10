@@ -76,7 +76,7 @@ namespace Spring.Context.Support
 
             if (log.IsDebugEnabled)
             {
-                log.Debug("created instance " + this);
+                log.Debug("created instance " + this.ToString());
             }
         }
 
@@ -119,7 +119,7 @@ namespace Spring.Context.Support
         /// <returns>
         /// An array of resource locations, or <see langword="null"/> if none.
         /// </returns>
-        public override string[] ConfigurationLocations
+        protected override string[] ConfigurationLocations
         {
             get { return _configurationLocations; }
         }
@@ -139,7 +139,7 @@ namespace Spring.Context.Support
         /// <returns>
         /// An array of <see cref="Spring.Core.IO.IResource"/>s, or <see langword="null"/> if none.
         /// </returns>
-        public override IResource[] ConfigurationResources
+        protected override IResource[] ConfigurationResources
         {
             get { return _configurationResources; }
         }
