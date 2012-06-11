@@ -378,7 +378,7 @@ namespace Spring.Context.Support
         /// An array of resource locations, or <see langword="null"/> if none.
         /// </returns>
         /// <seealso cref="Spring.Context.Support.AbstractXmlApplicationContext.ConfigurationLocations"/>
-        protected override string[] ConfigurationLocations
+        public override string[] ConfigurationLocations
         {
             get { return _configurationLocations; }
         }
@@ -390,7 +390,7 @@ namespace Spring.Context.Support
         /// An array of <see cref="Spring.Core.IO.IResource"/>s, or <see langword="null"/> if none.
         /// </returns>
         /// <seealso cref="Spring.Context.Support.AbstractXmlApplicationContext.ConfigurationLocations"/>
-        protected override IResource[] ConfigurationResources
+        public override IResource[] ConfigurationResources
         {
             get { return _configurationResources; }
         }

@@ -17,33 +17,10 @@ namespace Spring.Mvc4QuickStart.Controllers
         // GET: /Account/Login
 
         [AllowAnonymous]
-        public ActionResult Login()
+        public ActionResult Login(string returnUrl)
         {
-            return ContextDependentView();
-        }
-
-        //
-        // POST: /Account/JsonLogin
-
-        [AllowAnonymous]
-        [HttpPost]
-        public JsonResult JsonLogin(LoginModel model, string returnUrl)
-        {
-            if (ModelState.IsValid)
-            {
-                if (Membership.ValidateUser(model.UserName, model.Password))
-                {
-                    FormsAuthentication.SetAuthCookie(model.UserName, model.RememberMe);
-                    return Json(new { success = true, redirect = returnUrl });
-                }
-                else
-                {
-                    ModelState.AddModelError("", "The user name or password provided is incorrect.");
-                }
-            }
-
-            // If we got this far, something failed
-            return Json(new { errors = GetErrorsFromModelState() });
+            ViewBag.ReturnUrl = returnUrl;
+            return View();
         }
 
         //
@@ -93,35 +70,7 @@ namespace Spring.Mvc4QuickStart.Controllers
         [AllowAnonymous]
         public ActionResult Register()
         {
-            return ContextDependentView();
-        }
-
-        //
-        // POST: /Account/JsonRegister
-
-        [AllowAnonymous]
-        [HttpPost]
-        public ActionResult JsonRegister(RegisterModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                // Attempt to register the user
-                MembershipCreateStatus createStatus;
-                Membership.CreateUser(model.UserName, model.Password, model.Email, passwordQuestion: null, passwordAnswer: null, isApproved: true, providerUserKey: null, status: out createStatus);
-
-                if (createStatus == MembershipCreateStatus.Success)
-                {
-                    FormsAuthentication.SetAuthCookie(model.UserName, createPersistentCookie: false);
-                    return Json(new { success = true });
-                }
-                else
-                {
-                    ModelState.AddModelError("", ErrorCodeToString(createStatus));
-                }
-            }
-
-            // If we got this far, something failed
-            return Json(new { errors = GetErrorsFromModelState() });
+            return View();
         }
 
         //
@@ -202,21 +151,6 @@ namespace Spring.Mvc4QuickStart.Controllers
         public ActionResult ChangePasswordSuccess()
         {
             return View();
-        }
-
-        private ActionResult ContextDependentView()
-        {
-            string actionName = ControllerContext.RouteData.GetRequiredString("action");
-            if (Request.QueryString["content"] != null)
-            {
-                ViewBag.FormAction = "Json" + actionName;
-                return PartialView();
-            }
-            else
-            {
-                ViewBag.FormAction = actionName;
-                return View();
-            }
         }
 
         private IEnumerable<string> GetErrorsFromModelState()

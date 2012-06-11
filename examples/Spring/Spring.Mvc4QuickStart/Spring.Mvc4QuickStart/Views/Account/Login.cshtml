@@ -1,4 +1,4 @@
-@model Spring.Mvc4QuickStart.Models.LoginModel
+﻿@model Spring.Mvc4QuickStart.Models.LoginModel
 
 @{
     ViewBag.Title = "Log in";
@@ -6,13 +6,10 @@
 
 <hgroup class="title">
     <h1>@ViewBag.Title.</h1>
-    <h2>Enter your user name and password below.</h2>
+    <h2>Use this form to enter your user name and password.</h2>
 </hgroup>
 
-<script src="~/Scripts/jquery.validate.min.js"></script>
-<script src="~/Scripts/jquery.validate.unobtrusive.min.js"></script>
-
-@using (Html.BeginForm((string)ViewBag.FormAction, "Account")) {
+@using (Html.BeginForm(new { ReturnUrl = ViewBag.ReturnUrl })) {
     @Html.ValidationSummary(true, "Log in was unsuccessful. Please correct the errors and try again.")
 
     <fieldset>
@@ -21,12 +18,10 @@
             <li>
                 @Html.LabelFor(m => m.UserName)
                 @Html.TextBoxFor(m => m.UserName)
-                @Html.ValidationMessageFor(m => m.UserName)
             </li>
             <li>
                 @Html.LabelFor(m => m.Password)
                 @Html.PasswordFor(m => m.Password)
-                @Html.ValidationMessageFor(m => m.Password)
             </li>
             <li>
                 @Html.CheckBoxFor(m => m.RememberMe)
@@ -38,4 +33,8 @@
     <p>
         @Html.ActionLink("Register", "Register") if you don't have an account.
     </p>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
 }

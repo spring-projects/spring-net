@@ -97,7 +97,7 @@ namespace Spring.Context.Support
         /// <returns>
         /// An array of resource locations, or <see langword="null"/> if none.
         /// </returns>
-        protected abstract string[] ConfigurationLocations { get; }
+        public abstract string[] ConfigurationLocations { get; }
 
 
         /// <summary>
@@ -114,7 +114,7 @@ namespace Spring.Context.Support
         /// <returns>
         /// An array of <see cref="Spring.Core.IO.IResource"/>s, or <see langword="null"/> if none.
         /// </returns>
-        protected abstract IResource[] ConfigurationResources { get; }
+        public abstract IResource[] ConfigurationResources { get; }
 
 
         /// <summary>
