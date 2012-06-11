@@ -57,12 +57,12 @@ namespace Spring.Transaction.Config
                 objectDefinitionReader.LoadObjectDefinitions(configurationResources);
             }
 
-            protected override string[] ConfigurationLocations
+            public override string[] ConfigurationLocations
             {
                 get { return null; }
             }
 
-            protected override IResource[] ConfigurationResources
+            public override IResource[] ConfigurationResources
             {
                 get { return null; }
             }
