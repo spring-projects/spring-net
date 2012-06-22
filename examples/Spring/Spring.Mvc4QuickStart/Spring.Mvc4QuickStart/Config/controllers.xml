@@ -8,6 +8,9 @@
   <object type="Spring.Mvc4QuickStart.Controllers.SuffixController, Spring.Mvc4QuickStart" singleton="false" >
     <property name="Suffix" value="_Spring.NET_was_Here!" />
   </object>
+
+  <object type="Spring.Mvc4QuickStart.Controllers.OdataController, Spring.Mvc4QuickStart" singleton="false" />
+
   
   <!--intentionally do NOT register the AccountController or the ValuesController with the container; demonstrates that the underlying
   default controller factory will properly (attempt to!) resolve all controllers not registered with Spring.NET

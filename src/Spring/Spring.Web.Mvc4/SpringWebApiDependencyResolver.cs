@@ -28,7 +28,7 @@ namespace Spring.Web.Mvc
         /// </summary>
         public virtual void Dispose()
         {
-            if (ApplicationContext != null) ApplicationContext.Dispose();
+            //no unmanaged resources to dispose
         }
 
         /// <summary>
