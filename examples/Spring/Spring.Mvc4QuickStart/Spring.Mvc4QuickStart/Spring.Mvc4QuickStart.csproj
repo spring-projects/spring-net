@@ -121,12 +121,15 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\CountController.cs" />
+    <Compile Include="Controllers\SuffixNestedController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\OdataController.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Controllers\ValuesController.cs" />
     <Compile Include="Controllers\SuffixController.cs" />
+    <Compile Include="Counter.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -135,6 +138,12 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Config\controllers.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\child_controllers.xml">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Config\objects.xml">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\themes\base\images\ui-bg_flat_0_aaaaaa_40x100.png" />
@@ -227,6 +236,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Views\Count\Index.cshtml" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

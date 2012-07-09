@@ -3,33 +3,36 @@ using System.Web.Http;
 
 namespace Spring.Mvc4QuickStart.Controllers
 {
-    public class SuffixController : ApiController
+    public class SuffixNestedController : ApiController
     {
+       //same public API as SuffixController, only here so that its config can be shown to
+       // be properly read out of a separate 'child' config file
+
         public string Suffix { get; set; }
 
-        // GET /api/suffix
+        // GET /api/suffixnested
         public IEnumerable<string> Get()
         {
             return new string[] { string.Format("value1_{0}", Suffix), string.Format("value2_{0}", Suffix) };
         }
 
-        // GET /api/suffix/5
+        // GET /api/suffixnested/5
         public string Get(int id)
         {
             return string.Format("value{0}_{1}", Suffix, id);
         }
 
-        // POST /api/suffix
+        // POST /api/suffixnested
         public void Post(string value)
         {
         }
 
-        // PUT /api/suffix/5
+        // PUT /api/suffixnested/5
         public void Put(int id, string value)
         {
         }
 
-        // DELETE /api/suffix/5
+        // DELETE /api/suffixnested/5
         public void Delete(int id)
         {
         }

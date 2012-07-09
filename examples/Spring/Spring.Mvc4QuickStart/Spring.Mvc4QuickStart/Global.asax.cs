@@ -23,5 +23,23 @@ namespace Spring.Mvc4QuickStart
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
         }
+
+        protected override System.Web.Http.Dependencies.IDependencyResolver BuildWebApiDependencyResolver()
+        {
+            //get the 'default' resolver, populated from the 'main' config metadata
+            var resolver = base.BuildWebApiDependencyResolver();
+
+            //check if its castable to a SpringWebApiDependencyResolver
+            var springResolver = resolver as SpringWebApiDependencyResolver;
+
+            //if it is, add additional config sources as needed
+            if (springResolver != null)
+            {
+                springResolver.AddChildApplicationContextConfigurationLocation("file://~/Config/child_controllers.xml");
+            }
+
+            //return the fully-configured resolver
+            return resolver;
+        }
     }
 }

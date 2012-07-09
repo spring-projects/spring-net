@@ -60,7 +60,7 @@ namespace Spring.Web.Mvc
         /// Defaults to using the root (default) Application Context.
         /// </remarks>
         /// <value>The name of the application context.</value>
-        public static string ApplicationContextName { get; set; }
+        public string ApplicationContextName { get; set; }
 
 
         /// <summary>

@@ -17,7 +17,7 @@ namespace Spring.Mvc4QuickStart.Controllers
         [Queryable]
         public IQueryable<SampleDataItem> Get()
         {
-            var campaigns = new[]
+            var dataItems = new[]
                 {
                         new SampleDataItem { SomeProperty = 1 },
                         new SampleDataItem { SomeProperty = 2 },
@@ -25,7 +25,7 @@ namespace Spring.Mvc4QuickStart.Controllers
                         new SampleDataItem { SomeProperty = 4 },
                 };
 
-            return campaigns.AsQueryable();
+            return dataItems.AsQueryable();
         }
 
         // POST /api/odata

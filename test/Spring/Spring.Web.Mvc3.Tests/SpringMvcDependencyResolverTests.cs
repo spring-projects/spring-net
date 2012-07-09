@@ -29,10 +29,6 @@ using Spring.Web.Mvc.Tests.Controllers;
 
 namespace Spring.Web.Mvc.Tests
 {
-//    internal class MockContext : HttpContextBase
-//    {
-//    }
-
     [TestFixture]
     public class SpringMvcDependencyResolverTests
     {

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Http.Dependencies;
 using System.Web.Http.Services;
 using Spring.Context;
 using Spring.Context.Support;
+using Spring.Core.IO;
 
 
 namespace Spring.Web.Mvc
@@ -38,22 +40,105 @@ namespace Spring.Web.Mvc
         /// <exception cref="NotImplementedException"></exception>
         public virtual IDependencyScope BeginScope()
         {
-            var abstractXmlApplicationContext = ApplicationContext as AbstractXmlApplicationContext;
-            
-            if (abstractXmlApplicationContext != null)
+            if (HasApplicationContext && (HasChildApplicationContextConfigurationLocations || HasChildApplicationContextConfigurationResources))
             {
-                var locations = abstractXmlApplicationContext.ConfigurationLocations;
-                var resources = abstractXmlApplicationContext.ConfigurationResources;
+                string[] configurationLocations = null;
+                if (HasChildApplicationContextConfigurationLocations)
+                {
+                    configurationLocations = ChildApplicationContextConfigurationLocations.ToArray();
+                }
 
-                var args = new MvcApplicationContextArgs(string.Format("child_of_{0}", ApplicationContext.Name), ApplicationContext, locations, resources, false);
+                IResource[] configurationResources = null;
+                if (HasChildApplicationContextConfigurationResources)
+                {
+                    configurationResources = ChildApplicationContextConfigurationResources.ToArray();
+                }
 
-                var newResolver = new SpringWebApiDependencyResolver(new MvcApplicationContext(args));
+                var childContextName = string.Format("child_of_{0}", ApplicationContext.Name);
+                var args = new MvcApplicationContextArgs(childContextName, ApplicationContext, configurationLocations, configurationResources, false);
+
+                var childContext = new MvcApplicationContext(args);
+                var newResolver = new SpringWebApiDependencyResolver(childContext) { ApplicationContextName = childContextName };
+
+                RegisterContextIfNeeded(childContext);
+
                 return newResolver;
             }
             else
             {
                 return this;
             }
+        }
+
+        private void RegisterContextIfNeeded(IApplicationContext childContext)
+        {
+            if (!ContextRegistry.IsContextRegistered(childContext.Name))
+            {
+                ContextRegistry.RegisterContext(childContext);
+            }
+        }
+
+        private bool HasChildApplicationContextConfigurationResources
+        {
+            get
+            {
+                return ChildApplicationContextConfigurationResources != null &&
+                       ChildApplicationContextConfigurationResources.Count > 0;
+            }
+        }
+
+        private bool HasChildApplicationContextConfigurationLocations
+        {
+            get
+            {
+                return ChildApplicationContextConfigurationLocations != null &&
+                       ChildApplicationContextConfigurationLocations.Count > 0;
+            }
+        }
+
+        private bool HasApplicationContext
+        {
+            get { return ApplicationContext != null; }
+        }
+
+        /// <summary>
+        /// Gets or sets the child configuration locations.
+        /// </summary>
+        /// <value>The child configuration locations.</value>
+        public virtual IList<string> ChildApplicationContextConfigurationLocations { protected get; set; }
+
+        /// <summary>
+        /// Gets or sets the child configuration resources.
+        /// </summary>
+        /// <value>The child configuration resources.</value>
+        public virtual IList<IResource> ChildApplicationContextConfigurationResources { protected get; set; }
+
+        /// <summary>
+        /// Adds the child configuration resource.
+        /// </summary>
+        /// <param name="resource">The resource.</param>
+        public virtual void AddChildApplicationContextConfigurationResource(IResource resource)
+        {
+            if (null == ChildApplicationContextConfigurationResources)
+            {
+                ChildApplicationContextConfigurationResources = new List<IResource>();
+            }
+
+            ChildApplicationContextConfigurationResources.Add(resource);
+        }
+
+        /// <summary>
+        /// Adds the child configuration location.
+        /// </summary>
+        /// <param name="location">The location.</param>
+        public virtual void AddChildApplicationContextConfigurationLocation(string location)
+        {
+            if (null == ChildApplicationContextConfigurationLocations)
+            {
+                ChildApplicationContextConfigurationLocations = new List<string>();
+            }
+
+            ChildApplicationContextConfigurationLocations.Add(location);
         }
     }
 }

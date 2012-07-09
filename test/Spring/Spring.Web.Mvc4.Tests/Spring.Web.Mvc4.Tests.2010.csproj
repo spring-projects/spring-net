@@ -67,9 +67,7 @@
     <Compile Include="..\Spring.Web.Mvc3.Tests\Controllers\SecondContainerRegisteredController.cs">
       <Link>Controllers\SecondContainerRegisteredController.cs</Link>
     </Compile>
-    <Compile Include="..\Spring.Web.Mvc3.Tests\SpringMvcDependencyResolverTests.cs">
-      <Link>SpringMvcDependencyResolverTests.cs</Link>
-    </Compile>
+    <Compile Include="SpringMvcDependencyResolverTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Spring\Spring.Core\Spring.Core.2010.csproj">
@@ -78,7 +76,7 @@
       <Private>True</Private>
     </ProjectReference>
     <ProjectReference Include="..\..\..\src\Spring\Spring.Web.Mvc4\Spring.Web.Mvc4.2010.csproj">
-      <Project>{904C97E0-3667-4D12-A55F-6CC2E6F68A0A}</Project>
+      <Project>{CB351EB2-049D-40BE-BB09-1CE4ED68FE67}</Project>
       <Name>Spring.Web.Mvc4.2010</Name>
     </ProjectReference>
   </ItemGroup>
