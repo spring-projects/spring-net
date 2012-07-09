@@ -212,25 +212,7 @@ namespace Spring.Objects.Factory
         public static IList<string> ObjectNamesForTypeIncludingAncestors(
             IListableObjectFactory factory, Type type)
         {
-
             return factory.GetObjectNamesForType(type);
-
-            List<string> result = new List<string>();
-            result.AddRange(factory.GetObjectNamesForType(type));
-            IListableObjectFactory pof = GetParentListableObjectFactoryIfAny(factory);
-            if (pof != null)
-            {
-                IHierarchicalObjectFactory hof = (IHierarchicalObjectFactory)factory;
-                IList<string> parentsResult = ObjectNamesForTypeIncludingAncestors(pof, type);
-                foreach (string objectName in parentsResult)
-                {
-                    if (!result.Contains(objectName) && !hof.ContainsLocalObject(objectName))
-                    {
-                        result.Add(objectName);
-                    }
-                }
-            }
-            return result;
         }
 
         /// <summary>
