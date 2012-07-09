@@ -97,8 +97,8 @@ namespace Spring.Objects.Factory.Xml
             parent.RegisterObjectDefinition("typedfather", new RootObjectDefinition(typeof(TestObject), false));
 
 			// add unsupported IObjectDefinition implementation...
-			UnsupportedObjectDefinitionImplementation unsupportedDefinition = new UnsupportedObjectDefinitionImplementation();
-			parent.RegisterObjectDefinition("unsupportedDefinition", unsupportedDefinition);
+			//UnsupportedObjectDefinitionImplementation unsupportedDefinition = new UnsupportedObjectDefinitionImplementation();
+			//parent.RegisterObjectDefinition("unsupportedDefinition", unsupportedDefinition);
 
 		    XmlObjectFactory factory;
 			factory = new XmlObjectFactory(new ReadOnlyXmlTestResource("test.xml", GetType()), parent);

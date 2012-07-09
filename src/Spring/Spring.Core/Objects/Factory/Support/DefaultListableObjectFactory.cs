@@ -600,12 +600,27 @@ namespace Spring.Objects.Factory.Support
         /// </summary>
         /// <returns>
         /// The names of all objects defined in this factory, or an empty array if none
-        /// are defined.
+        /// are defined.  Respects any Parent-Child hierarchy the factory is participating in.
         /// </returns>
         /// <seealso cref="Spring.Objects.Factory.IListableObjectFactory.GetObjectDefinitionNames()"/>
         public IList<string> GetObjectDefinitionNames()
         {
-            return objectDefinitionNames;
+            IList<string> results = new List<string>(objectDefinitionNames);
+
+            var listableObjectFactory = ParentObjectFactory as IListableObjectFactory;
+
+            if (listableObjectFactory != null)
+            {
+                foreach (var name in listableObjectFactory.GetObjectDefinitionNames())
+                {
+                    if (!results.Contains(name))
+                    {
+                        results.Add(name);    
+                    }
+                }
+            }
+
+            return results;
         }
 
         /// <summary>
@@ -677,7 +692,7 @@ namespace Spring.Objects.Factory.Support
         /// </returns>
         public IList<string> GetObjectNames<T>()
         {
-            return GetObjectNamesForType(typeof (T));
+            return GetObjectNamesForType(typeof(T));
         }
 
         /// <summary>
@@ -744,7 +759,7 @@ namespace Spring.Objects.Factory.Support
         /// </returns>
         public IList<string> GetObjectNames<T>(bool includePrototypes, bool includeFactoryObjects)
         {
-            return GetObjectNamesForType(typeof (T), includePrototypes, includeFactoryObjects);
+            return GetObjectNamesForType(typeof(T), includePrototypes, includeFactoryObjects);
         }
 
         /// <summary>
@@ -801,7 +816,7 @@ namespace Spring.Objects.Factory.Support
         public IDictionary<string, T> GetObjects<T>()
         {
             Dictionary<string, T> result = new Dictionary<string, T>();
-            DoGetObjectsOfType(typeof (T), true, true, result);
+            DoGetObjectsOfType(typeof(T), true, true, result);
             return result;
         }
 
@@ -848,7 +863,7 @@ namespace Spring.Objects.Factory.Support
                 catch (ObjectCreationException ex)
                 {
                     if (ex.InnerException != null
-                        && ex.GetBaseException().GetType().Equals(typeof (ObjectCurrentlyInCreationException)))
+                        && ex.GetBaseException().GetType().Equals(typeof(ObjectCurrentlyInCreationException)))
                     {
                         // ignoring this is ok... it indicates a circular reference when autowiring
                         // constructors; we want to find matches other than the currently
@@ -898,7 +913,7 @@ namespace Spring.Objects.Factory.Support
         public IDictionary<string, T> GetObjects<T>(bool includePrototypes, bool includeFactoryObjects)
         {
             Dictionary<string, T> result = new Dictionary<string, T>();
-            DoGetObjectsOfType(typeof (T), includePrototypes, includeFactoryObjects, result);
+            DoGetObjectsOfType(typeof(T), includePrototypes, includeFactoryObjects, result);
             return result;
         }
 
@@ -982,14 +997,14 @@ namespace Spring.Objects.Factory.Support
                 {
                     try
                     {
-                        RootObjectDefinition mod = GetMergedObjectDefinition(objectName, false);
+                        RootObjectDefinition mod = GetMergedObjectDefinition(objectName, true);
                         // Only check object definition if it is complete
                         if (!mod.IsAbstract &&
                                 (allowEagerInit || (mod.HasObjectType || !mod.IsLazyInit /*|| this.AllowEagerTypeLoading*/ ) &&
-                                    !RequiresEagerInitForType(mod.FactoryObjectName) ))
+                                    !RequiresEagerInitForType(mod.FactoryObjectName)))
                         {
                             bool isFactoryObject = IsFactoryObject(objectName, mod);
-                            bool matchFound = 
+                            bool matchFound =
                                    (allowEagerInit || !isFactoryObject || ContainsSingleton(objectName)) &&
                                    (includeNonSingletons || IsSingleton(objectName)) && IsTypeMatch(objectName, type);
                             if (!matchFound && isFactoryObject)
@@ -1016,7 +1031,7 @@ namespace Spring.Objects.Factory.Support
                             log.Debug("Ignoring object class loading failure for object '" + objectName + "'", ex);
                         }
                     }
-                    catch(ObjectDefinitionStoreException ex)
+                    catch (ObjectDefinitionStoreException ex)
                     {
                         if (allowEagerInit)
                         {
