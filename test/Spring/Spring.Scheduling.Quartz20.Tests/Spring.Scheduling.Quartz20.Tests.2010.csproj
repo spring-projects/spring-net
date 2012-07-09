@@ -91,6 +91,7 @@
   <ItemGroup>
     <None Include="Spring.Scheduling.Quartz20.Tests.dll.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <SubType>Designer</SubType>
     </None>
   </ItemGroup>
   <ItemGroup />
