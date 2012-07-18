@@ -358,6 +358,7 @@
     <Compile Include="Objects\LazyTestObject.cs" />
     <Compile Include="Objects\Support\AbstractSharedStateFactoryTests.cs" />
     <Compile Include="Objects\Support\ByTypeSharedStateProviderTests.cs" />
+    <Compile Include="Objects\Support\DelegatingFactoryObjectTests.cs" />
     <Compile Include="Objects\Support\MethodInvokerTests.cs">
       <SubType>Code</SubType>
     </Compile>
