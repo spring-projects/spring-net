@@ -69,7 +69,7 @@ namespace Spring.ConversationWA
         /// Must be the same SessionFactory of the managed conversations.
         /// </para>
         /// </summary>
-        ISessionFactory SessionFactory { get; set; }
+        ISessionFactory SessionFactory { get; }
 
         /// <summary>
         /// Ends the "paused conversations" in call to <see cref="ActiveConversation"/>. 

@@ -15,6 +15,8 @@ using Spring.Data.Common;
 using NHibernate;
 using Spring.Data.NHibernate.Support;
 using Spring.Data.NHibernate;
+using Spring.Context;
+using Spring.Context.Support;
 
 namespace Spring.ConversationWA.Imple
 {
@@ -23,7 +25,8 @@ namespace Spring.ConversationWA.Imple
     /// It avoid Circular Dependence. 
     /// </summary>
     /// <author>Hailton de Castro</author>
-    public class WebConversationSpringState : IConversationState, IObjectNameAware
+    [Serializable]
+    public class WebConversationSpringState : IConversationState, IObjectNameAware, IApplicationContextAware
     {
         private static readonly ILog LOG = LogManager.GetLogger(typeof(WebConversationSpringState));
 
@@ -276,24 +279,60 @@ namespace Spring.ConversationWA.Imple
             }
         }
 
+        private String sessionFactoryName;
+        /// <summary>
+        /// "SessionFactory" name in the current context. 
+        /// This approach is required to support serialization.
+        /// </summary>
+        public String SessionFactoryName
+        {
+            get { return sessionFactoryName; }
+            set { sessionFactoryName = value; }
+        }
+
+        [NonSerialized]
         private ISessionFactory sessionFactory;
         /// <summary>
         /// <see cref="IConversationState"/>
         /// </summary>
         public ISessionFactory SessionFactory
         {
-            get { return sessionFactory; }
-            set { sessionFactory = value; }
+            get
+            {
+                if (this.sessionFactory == null && this.sessionFactoryName != null)
+                {
+                    this.sessionFactory = this.ApplicationContext.GetObject<ISessionFactory>(this.sessionFactoryName);
+                }
+                return sessionFactory;
+            }
         }
 
-        IDbProvider dbProvider;
+        private String dbProviderName;
+        /// <summary>
+        /// "DbProvider" name in the current context. 
+        /// This approach is required to support serialization.
+        /// </summary>
+        public String DbProviderName
+        {
+            get { return dbProviderName; }
+            set { dbProviderName = value; }
+        }
+
+        [NonSerialized]
+        private IDbProvider dbProvider;
         /// <summary>
         /// <see cref="IConversationState"/>
         /// </summary>
         public IDbProvider DbProvider
         {
-            get { return dbProvider; }
-            set { dbProvider = value; }
+            get
+            {
+                if (this.dbProvider == null && this.dbProviderName != null)
+                {
+                    this.dbProvider = this.ApplicationContext.GetObject<IDbProvider>(this.dbProviderName);
+                }
+                return dbProvider;
+            }
         }
 
         private bool isNew = true;
@@ -597,5 +636,31 @@ namespace Spring.ConversationWA.Imple
         {
             return base.GetHashCode();
         }
+
+        #region IApplicationContextAware Members
+        private String applicationContextName;
+        [NonSerialized]
+        private IApplicationContext applicationContext = null;
+        /// <summary>
+        /// Returns the current context. Supports serialization and deserialization.
+        /// </summary>
+        public IApplicationContext ApplicationContext
+        {
+            set 
+            {
+                this.applicationContext = value;
+                this.applicationContextName = this.applicationContext.Name;
+            }
+            get 
+            {
+                if (this.applicationContext == null)
+                {
+                    this.applicationContext = ContextRegistry.GetContext(this.applicationContextName);
+                }
+                return this.applicationContext;
+            }
+        }
+
+        #endregion
     }
 }

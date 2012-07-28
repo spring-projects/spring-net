@@ -97,6 +97,9 @@
       <Link>ConversationWA\PatialEndConvEndBasePage.cs</Link>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="..\Spring.ConversationWA.NH32.Tests\ConversationWA\SerializeConversationTestModule.cs">
+      <Link>ConversationWA\SerializeConversationTestModule.cs</Link>
+    </Compile>
     <Compile Include="..\Spring.ConversationWA.NH32.Tests\ConversationWA\WebConversationStateTest.cs">
       <Link>ConversationWA\WebConversationStateTest.cs</Link>
     </Compile>
@@ -138,7 +141,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\Spring\ConversationWA\WebConversationStateTest\services.xml.config" />
-    <None Include="Data\Spring\ConversationWA\WebConversationStateTest\web.config.net-1.1" />
     <None Include="Data\Spring\ConversationWA\WebConversationStateTest\web.config.net-2.0" />
   </ItemGroup>
   <ItemGroup>

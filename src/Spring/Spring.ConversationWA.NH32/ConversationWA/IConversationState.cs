@@ -141,12 +141,12 @@ namespace Spring.ConversationWA
         ISession RootSessionPerConversation { get; set; }
 
         /// <summary>
-        /// <para>If this is non-null run pattern c.
+        /// <para>If this is non-null run pattern 'session-per-conversation'.
         /// It also depends on <see cref="DbProvider"/> and <see cref="ConversationManager"/>.
         /// <see cref="ConversationManager"/> must support ConversationManager.
         /// </para>
         /// </summary>
-        ISessionFactory SessionFactory { get; set; }
+        ISessionFactory SessionFactory { get; }
 
         /// <summary>
         /// <para>If this is non-null run pattern 'session-per-conversation'. 
@@ -154,7 +154,7 @@ namespace Spring.ConversationWA
         /// <see cref="ConversationManager"/> must support ConversationManager.
         /// </para>
         /// </summary>
-        IDbProvider DbProvider { get; set; }
+        IDbProvider DbProvider { get; }
 
         /// <summary>
         /// Indicates that the conversation is paused.

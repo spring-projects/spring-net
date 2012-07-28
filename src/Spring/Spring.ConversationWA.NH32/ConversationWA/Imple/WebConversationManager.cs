@@ -6,6 +6,8 @@ using System.Web;
 using Common.Logging;
 using Spring.Data.NHibernate.Support;
 using NHibernate;
+using Spring.Context;
+using Spring.Context.Support;
 
 namespace Spring.ConversationWA.Imple
 {
@@ -13,7 +15,8 @@ namespace Spring.ConversationWA.Imple
     /// This was made to stay under session scope.
     /// </summary>
     /// <author>Hailton de Castro</author>
-    public class WebConversationManager : SessionPerConversationScope, IConversationManager
+    [Serializable]
+    public class WebConversationManager : SessionPerConversationScope, IConversationManager, IApplicationContextAware
     {
         private static readonly ILog LOG = LogManager.GetLogger(typeof(WebConversationManager));
 
@@ -22,7 +25,18 @@ namespace Spring.ConversationWA.Imple
         /// <summary>
         /// Semaphore to synchronize writes to the dictionary.
         /// </summary>
+        [NonSerialized]
         private Mutex mutexEditDic = new Mutex();
+        private Mutex MutexEditDic
+        {
+            get
+            {
+                if (this.mutexEditDic == null)
+                    this.mutexEditDic = new Mutex();
+                return this.mutexEditDic;
+            }
+        }
+
         private IDictionary<String, IConversationState> conversations = new Dictionary<String, IConversationState>();
         private IConversationState activeConversation = null;
 
@@ -53,7 +67,7 @@ namespace Spring.ConversationWA.Imple
             try
             {
                 if (LOG.IsDebugEnabled) LOG.Debug("EndOnTimeOut");
-                this.mutexEditDic.WaitOne(5000);
+                this.MutexEditDic.WaitOne(5000);
                 foreach (String keyItem in this.conversations.Keys)
                 {
                     IConversationState conversationItem = this.conversations[keyItem];
@@ -69,7 +83,7 @@ namespace Spring.ConversationWA.Imple
             }
             finally
             {
-                this.mutexEditDic.ReleaseMutex();
+                this.MutexEditDic.ReleaseMutex();
             }
         }
 
@@ -93,7 +107,7 @@ namespace Spring.ConversationWA.Imple
             try
             {
                 if (LOG.IsDebugEnabled) LOG.Debug("EndOnTimeOut");
-                this.mutexEditDic.WaitOne(5000);
+                this.MutexEditDic.WaitOne(5000);
                 List<IConversationState> removeList = new List<IConversationState>();
                 foreach (String keyItem in this.conversations.Keys)
                 {
@@ -107,7 +121,7 @@ namespace Spring.ConversationWA.Imple
 
                 if (removeList.Count > 0)
                 {
-                    this.Close(this.sessionFactory, removeList);
+                    this.Close(this.SessionFactory, removeList);
                 }
 
                 foreach (IConversationState conversationItem in removeList)
@@ -119,7 +133,7 @@ namespace Spring.ConversationWA.Imple
             }
             finally
             {
-                this.mutexEditDic.ReleaseMutex();
+                this.MutexEditDic.ReleaseMutex();
             }
         }
 
@@ -131,12 +145,12 @@ namespace Spring.ConversationWA.Imple
         {
             try
             {
-                this.mutexEditDic.WaitOne(5000);
+                this.MutexEditDic.WaitOne(5000);
                 this.conversations.Add(conversation.Id, conversation);
             }
             finally
             {
-                this.mutexEditDic.ReleaseMutex();
+                this.MutexEditDic.ReleaseMutex();
             }
 
             if (conversation.ConversationManager != null && conversation.ConversationManager != this)
@@ -231,14 +245,32 @@ namespace Spring.ConversationWA.Imple
             }
         }
 
+        private String sessionFactoryName;
+        /// <summary>
+        /// "SessionFactory" name in the current context. 
+        /// This approach is required to support serialization.
+        /// </summary>
+        public String SessionFactoryName
+        {
+            get { return sessionFactoryName; }
+            set { sessionFactoryName = value; }
+        }
+
+        [NonSerialized]
         private ISessionFactory sessionFactory;
         /// <summary>
         /// <see cref="IConversationManager"/>
         /// </summary>
         public ISessionFactory SessionFactory
         {
-            get { return sessionFactory; }
-            set { sessionFactory = value; }
+            get
+            {
+                if (this.sessionFactory == null && this.sessionFactoryName != null)
+                {
+                    this.sessionFactory = this.ApplicationContext.GetObject<ISessionFactory>(this.sessionFactoryName);
+                }
+                return sessionFactory;
+            }
         }
 
         private bool endPaused = false;
@@ -280,7 +312,7 @@ namespace Spring.ConversationWA.Imple
         {
             try
             {
-                this.mutexEditDic.WaitOne(5000);
+                this.MutexEditDic.WaitOne(5000);
                 if (!this.conversations.Remove(conversation.Id))
                 {
                     throw new InvalidOperationException(String.Format("Conversation '{0}' not exists on this manager", conversation.Id));
@@ -288,8 +320,35 @@ namespace Spring.ConversationWA.Imple
             }
             finally
             {
-                this.mutexEditDic.ReleaseMutex();
+                this.MutexEditDic.ReleaseMutex();
             }
         }
+
+        #region IApplicationContextAware Members
+        private String applicationContextName;
+        [NonSerialized]
+        private IApplicationContext applicationContext = null;
+        /// <summary>
+        /// Returns the current context. Supports serialization and deserialization.
+        /// </summary>
+        public IApplicationContext ApplicationContext
+        {
+            set
+            {
+                this.applicationContext = value;
+                this.applicationContextName = this.applicationContext.Name;
+            }
+            get
+            {
+                if (this.applicationContext == null)
+                {
+                    this.applicationContext = ContextRegistry.GetContext(this.applicationContextName);
+                }
+                return this.applicationContext;
+            }
+        }
+
+        #endregion
+
     }
 }

@@ -42,6 +42,7 @@ namespace Spring.Data.NHibernate.Support
     /// for dupport to 'session-per-conversation' pattern.
     ///</summary>
     ///<author>Hailton de Castro</author>
+    [Serializable]
     public class SessionPerConversationScope : IDisposable
     {
         #region Fields

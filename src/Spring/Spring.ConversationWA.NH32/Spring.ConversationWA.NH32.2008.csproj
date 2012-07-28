@@ -73,7 +73,6 @@
       <Link>nant.xsd</Link>
     </None>
     <None Include="app.config" />
-    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Spring.Core\Spring.Core.2008.csproj">

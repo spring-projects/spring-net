@@ -10,6 +10,7 @@ namespace Spring.Data.NHibernate.Support
     /// Setting for <see cref="SessionPerConversationScope"/>
     /// </summary>
     /// <author>Hailton de Castro</author>
+    [Serializable]
     public class SessionPerConversationScopeSettings
     {
         /// <summary>

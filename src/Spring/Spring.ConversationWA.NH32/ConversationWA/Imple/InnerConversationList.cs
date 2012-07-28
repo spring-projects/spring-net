@@ -11,6 +11,7 @@ namespace Spring.ConversationWA.Imple
     /// List that make validation for Circular Dependence for <see cref="IConversationState"/>
     /// </summary>
     /// <author>Hailton de Castro</author>
+    [Serializable]
     public class InnerConversationList: IList<IConversationState>, IList
     {
         private static readonly ILog LOG = LogManager.GetLogger(typeof(InnerConversationList));

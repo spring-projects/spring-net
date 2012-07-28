@@ -11,6 +11,7 @@ namespace Spring.Entities
     /// <see cref="WebConversationStateTest.SPCSwitchConversationSameRequestTest()"/>
     /// </summary>
     /// <author>Hailton de Castro</author>
+    [Serializable]
     public class SPCMasterEnt
     {
         private Int32? id;

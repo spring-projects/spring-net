@@ -30,7 +30,7 @@
       <parser type="Spring.Data.Config.DatabaseNamespaceParser, Spring.Data" />
       <parser type="Spring.Transaction.Config.TxNamespaceParser, Spring.Data" />
     </parsers>
-    <context name="SpringPrvConctWbApp" type="Spring.Context.Support.WebApplicationContext, Spring.Web">
+    <context name="SpringConvWbApp" type="Spring.Context.Support.WebApplicationContext, Spring.Web">
       <resource uri="~/services.xml.config"/>
     </context>
   </spring>
@@ -48,6 +48,7 @@
 
     <httpModules>
       <add name="NUnitAspExModule" type="NUnitAspEx.AspTestExecutionModule, NUnitAspEx" />
+      <add name="SerializeConversationTestModule" type="Spring.ConversationWA.SerializeConversationTestModule, Spring.ConversationWA.NH33.Tests"/>
       <add name="Spring" type="Spring.Context.Support.WebSupportModule, Spring.Web"/>
       <add name="ConversationModule" type="Spring.ConversationWA.HttpModule.ConversationModule, Spring.ConversationWA.NH33"/>
     </httpModules>
@@ -62,6 +63,7 @@
     <validation validateIntegratedModeConfiguration="false" />
     <modules>
       <add name="NUnitAspExModule" preCondition="integratedMode" type="NUnitAspEx.AspTestExecutionModule, NUnitAspEx" />
+      <add name="SerializeConversationTestModule" type="Spring.ConversationWA.SerializeConversationTestModule, Spring.ConversationWA.NH33.Tests"/>
       <add name="Spring" preCondition="integratedMode" type="Spring.Context.Support.WebSupportModule, Spring.Web"/>
       <add name="ConversationModule" preCondition="integratedMode" type="Spring.ConversationWA.HttpModule.ConversationModule, Spring.ConversationWA.NH33"/>
     </modules>
