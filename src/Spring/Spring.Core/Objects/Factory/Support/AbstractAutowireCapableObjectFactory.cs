@@ -1441,6 +1441,9 @@ namespace Spring.Objects.Factory.Support
             log.Debug(m => m("Destroying dependant objects for object '{0}", name));
 
             DestroyDependantObjects(name);
+
+            ApplyObjectPostProcessBeforeDestruction(target, name);
+
             if (target is IDisposable)
             {
                 log.Debug(m => m(string.Format(CultureInfo.InvariantCulture, "Calling Dispose() on object with name '{0}'.", name)));
@@ -1454,8 +1457,6 @@ namespace Spring.Objects.Factory.Support
                     log.Error("Destroy() on object with name '" + name + "' threw an exception.", ex);
                 }
             }
-
-            ApplyObjectPostProcessBeforeDestruction(target, name);
 
             RootObjectDefinition rootDefinition = GetMergedObjectDefinition(name, false);
             if (rootDefinition != null && StringUtils.HasText(rootDefinition.DestroyMethodName))
