@@ -327,6 +327,7 @@
     <Compile Include="Objects\Factory\Config\ConnectionStringsVariableSourceTests.cs" />
     <Compile Include="Objects\Factory\Config\ConfigurableVariableSourceTests.cs" />
     <Compile Include="Objects\Factory\Config\DelegateObjectFactoryConfigurerTests.cs" />
+    <Compile Include="Objects\Factory\Config\DestructionAwareObjectPostProcessorTest.cs" />
     <Compile Include="Objects\Factory\Config\DictionaryVariableSourceTests.cs" />
     <Compile Include="Objects\Factory\Config\ObjectDefinitionVisitorTests.cs" />
     <Compile Include="Objects\Factory\Config\ResourceHandlerConfigurerTests.cs" />

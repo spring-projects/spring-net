@@ -327,6 +327,42 @@ namespace Spring.Objects.Factory.Support
         }
 
         /// <summary>
+        /// Apply <see cref="Spring.Objects.Factory.Config.IDestructionAwareObjectPostProcessor"/>s
+        /// to the given existing object instance, invoking their
+        /// <see cref="Spring.Objects.Factory.Config.IDestructionAwareObjectPostProcessor.PostProcessBeforeDestruction"/>
+        /// methods.
+        /// </summary>
+        /// <param name="instance">
+        /// The existing object instance.
+        /// </param>
+        /// <param name="name">
+        /// The name of the object.
+        /// </param>
+        /// <seealso cref="Spring.Objects.Factory.Config.IDestructionAwareObjectPostProcessor.PostProcessBeforeDestruction"/>
+        public virtual void ApplyObjectPostProcessBeforeDestruction(object instance, string name)
+        {
+            log.Debug(m => m("Invoking PostProcessBeforeDestruction after IDisposal of object '" + name + "'"));
+
+            foreach (IObjectPostProcessor objectProcessor in ObjectPostProcessors)
+            {
+                if (objectProcessor is IDestructionAwareObjectPostProcessor)
+                {
+                    try
+                    {
+                        ((IDestructionAwareObjectPostProcessor)objectProcessor).PostProcessBeforeDestruction(instance, name);
+                    }
+                    catch (Exception ex)
+                    {
+                        log.ErrorFormat(
+                            string.Format("Error during execution of {0}.PostProcessBeforeDestruction for object {1}",
+                                          objectProcessor.GetType().Name, name), ex);
+                    }
+                }
+            }
+        }
+
+
+        /// <summary>
         /// Apply the given property values, resolving any runtime references
         /// to other objects in this object factory.
         /// </summary>
@@ -1402,26 +1438,12 @@ namespace Spring.Objects.Factory.Support
         /// </param>
         protected override void DestroyObject(string name, object target)
         {
-            #region Instrumentation
-
-            if (log.IsDebugEnabled)
-            {
-                log.Debug("Destroying dependant objects for object '" + name + "'");
-            }
-
-            #endregion
+            log.Debug(m => m("Destroying dependant objects for object '{0}", name));
 
             DestroyDependantObjects(name);
             if (target is IDisposable)
             {
-                #region Instrumentation
-
-                if (log.IsDebugEnabled)
-                {
-                    log.Debug(string.Format(CultureInfo.InvariantCulture, "Calling Dispose () on object with name '{0}'.", name));
-                }
-
-                #endregion
+                log.Debug(m => m(string.Format(CultureInfo.InvariantCulture, "Calling Dispose() on object with name '{0}'.", name)));
 
                 try
                 {
@@ -1429,24 +1451,16 @@ namespace Spring.Objects.Factory.Support
                 }
                 catch (Exception ex)
                 {
-                    #region Instrumentation
-
                     log.Error("Destroy() on object with name '" + name + "' threw an exception.", ex);
-
-                    #endregion
                 }
             }
+
+            ApplyObjectPostProcessBeforeDestruction(target, name);
+
             RootObjectDefinition rootDefinition = GetMergedObjectDefinition(name, false);
             if (rootDefinition != null && StringUtils.HasText(rootDefinition.DestroyMethodName))
             {
-                #region Instrumentation
-
-                if (log.IsDebugEnabled)
-                {
-                    log.Debug("Calling custom destroy method '" + rootDefinition.DestroyMethodName + "' on object with name '" + name + "'.");
-                }
-
-                #endregion
+                log.Debug(m => m("Calling custom destroy method '{0}' on object with name '{1}'.", rootDefinition.DestroyMethodName, name));
 
                 InvokeCustomDestroyMethod(name, target, rootDefinition.DestroyMethodName);
             }
