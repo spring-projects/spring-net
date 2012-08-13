@@ -713,6 +713,7 @@
     <Compile Include="Objects\Factory\Support\DelegatingFactoryObject.cs" />
     <Compile Include="Objects\Factory\Support\IObjectDefinitionRegistryPostProcessor.cs" />
     <Compile Include="Objects\Factory\Support\ObjectScope.cs" />
+    <Compile Include="Stereotype\ControllerAttribute.cs" />
     <Compile Include="Util\ConstructorInstantiationInfo.cs" />
     <Compile Include="Objects\Factory\Support\GenericObjectDefinition.cs" />
     <Compile Include="Objects\Factory\Support\IAutowireCandidateResolver.cs" />
