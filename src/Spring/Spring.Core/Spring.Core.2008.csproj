@@ -711,7 +711,7 @@
     <Compile Include="Objects\Factory\Parsing\ObjectDefinitionParsingException.cs" />
     <Compile Include="Objects\Factory\Parsing\Problem.cs" />
     <Compile Include="Objects\Factory\Parsing\ReaderContext.cs" />
-    <Compile Include="Objects\Factory\Support\DelegatingFactoryObject.cs" />
+    <Compile Include="Objects\Factory\Support\DelegateInvokingFactoryObject.cs" />
     <Compile Include="Objects\Factory\Support\IObjectDefinitionRegistryPostProcessor.cs" />
     <Compile Include="Objects\Factory\Support\ObjectScope.cs" />
     <Compile Include="Util\ConstructorInstantiationInfo.cs" />

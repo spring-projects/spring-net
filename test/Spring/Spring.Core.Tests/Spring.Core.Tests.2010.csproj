@@ -343,6 +343,7 @@
     <Compile Include="Objects\Factory\DefaultListableObjectFactoryPerfTests.cs" />
     <Compile Include="Objects\Factory\DummyConfigurableFactory.cs" />
     <Compile Include="Objects\Factory\ObjectFactoryUtils_PreserveOrderInHierarchy_Tests.cs" />
+    <Compile Include="Objects\Factory\Support\DelegateInvokingFactoryObjectTests.cs" />
     <Compile Include="Objects\Factory\Support\ManagedNameValueCollectionTests.cs" />
     <Compile Include="Objects\Factory\Support\ManagedListTests.cs" />
     <Compile Include="Objects\Factory\Support\ManagedDictionaryTests.cs" />
@@ -360,7 +361,6 @@
     <Compile Include="Objects\LazyTestObject.cs" />
     <Compile Include="Objects\Support\AbstractSharedStateFactoryTests.cs" />
     <Compile Include="Objects\Support\ByTypeSharedStateProviderTests.cs" />
-    <Compile Include="Objects\Factory\Support\DelegatingFactoryObjectTests.cs" />
     <Compile Include="Objects\Support\MethodInvokerTests.cs">
       <SubType>Code</SubType>
     </Compile>
