@@ -5,7 +5,7 @@ using Spring.Context.Support;
 namespace Spring.Objects.Factory.Support
 {
     [TestFixture]
-    public class DelegatingFactoryObjectTests
+    public class DelegateInvokingFactoryObjectTests
     {
         [SetUp]
         public void _TestSetUp()
@@ -18,7 +18,7 @@ namespace Spring.Objects.Factory.Support
         private void RegisterDelegatingFactoryWithContext(bool buildSingletonObjectsWhenInvoked)
         {
             var targetBuilder = new ThingThatBuildsTargets();
-            var factory = new DelegatingFactoryObject<TargetToBuild>(targetBuilder.BuildTarget, buildSingletonObjectsWhenInvoked);
+            var factory = new DelegateInvokingFactoryObject<TargetToBuild>(targetBuilder.BuildTarget, buildSingletonObjectsWhenInvoked);
 
             Assume.That(ContextRegistry.GetContext(), Is.InstanceOf<IConfigurableApplicationContext>(), "test requires a registered context that implements IConfigurableApplicationContext!");
 

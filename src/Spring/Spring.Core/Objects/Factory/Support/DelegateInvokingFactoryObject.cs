@@ -34,18 +34,18 @@ namespace Spring.Objects.Factory.Support
     /// </para>
     /// </remarks>
     /// <typeparam name="T"></typeparam>
-    public class DelegatingFactoryObject<T> : IFactoryObject
+    public class DelegateInvokingFactoryObject<T> : IFactoryObject
     {
         private readonly bool _isSingleton;
         private readonly Func<T> _builderDelegate;
 
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DelegatingFactoryObject&lt;T&gt;"/> class.
+        /// Initializes a new instance of the <see cref="DelegateInvokingFactoryObject{T}"/> class.
         /// </summary>
         /// <param name="builderDelegate">The builder delegate.</param>
         /// <param name="isSingleton">if set to <c>true</c> [is singleton].</param>
-        public DelegatingFactoryObject(Func<T> builderDelegate, bool isSingleton)
+        public DelegateInvokingFactoryObject(Func<T> builderDelegate, bool isSingleton)
         {
             _builderDelegate = builderDelegate;
             _isSingleton = isSingleton;
