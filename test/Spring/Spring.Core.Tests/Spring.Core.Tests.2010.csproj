@@ -318,7 +318,9 @@
     </Compile>
     <Compile Include="HookableContextHandler.cs" />
     <Compile Include="Objects\ExpressionTestObject.cs" />
+    <Compile Include="Objects\Factory\Attributes\PostConstructAttributeTests.cs" />
     <Compile Include="Objects\Factory\Attributes\MyRequiredAttribute.cs" />
+    <Compile Include="Objects\Factory\Attributes\PreDestroyAttributeTests.cs" />
     <Compile Include="Objects\Factory\Attributes\RequiredAttributeObjectPostProcessorTests.cs" />
     <Compile Include="Objects\Factory\Attributes\RequiredTestObject.cs" />
     <Compile Include="Objects\Factory\ConcurrentObjectFactoryTests.cs" />

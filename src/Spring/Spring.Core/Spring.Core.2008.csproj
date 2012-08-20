@@ -673,6 +673,9 @@
     <Compile Include="Globalization\Resource.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Objects\Factory\Attributes\InitDestroyAttributeObjectPostProcessor.cs" />
+    <Compile Include="Objects\Factory\Attributes\PostConstructAttribute.cs" />
+    <Compile Include="Objects\Factory\Attributes\PreDestroyAttribute.cs" />
     <Compile Include="Objects\Factory\Attributes\RequiredAttribute.cs" />
     <Compile Include="Objects\Factory\Attributes\RequiredAttributeObjectPostProcessor.cs" />
     <Compile Include="Objects\Factory\Config\AbstractConfigurer.cs" />
