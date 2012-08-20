@@ -99,7 +99,7 @@ namespace Spring.Core.TypeConversion
                     if (newValue is ICollection)
                     {
                         ICollection elements = (ICollection)newValue;
-                        return ToTypedCollectionWithTypeConversion(typeof(Spring.Collections.Generic.Set<>), componentType, elements, propertyName);
+                        return ToTypedCollectionWithTypeConversion(typeof(Spring.Collections.Generic.HashedSet<>), componentType, elements, propertyName);
                     }
                 }
 
