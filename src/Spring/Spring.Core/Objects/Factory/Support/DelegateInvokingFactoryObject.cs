@@ -41,7 +41,7 @@ namespace Spring.Objects.Factory.Support
 
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="DelegateInvokingFactoryObjecteInvokingFactoryObject{T}"/> class.
+        /// Initializes a new instance of the <see cref="DelegateInvokingFactoryObject{T}"/> class.
         /// </summary>
         /// <param name="builderDelegate">The builder delegate.</param>
         /// <param name="isSingleton">if set to <c>true</c> [is singleton].</param>
