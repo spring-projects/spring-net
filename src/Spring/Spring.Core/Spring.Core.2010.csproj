@@ -675,6 +675,10 @@
     <Compile Include="Globalization\Resource.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Objects\Factory\Attributes\AutowiredAttribute.cs" />
+    <Compile Include="Objects\Factory\Attributes\AutowiredAttributeObjectPostProcessor.cs" />
+    <Compile Include="Objects\Factory\Attributes\InjectionMetadata.cs" />
+    <Compile Include="Objects\Factory\Attributes\QualifierAttribute.cs" />
     <Compile Include="Objects\Factory\Attributes\RequiredAttribute.cs" />
     <Compile Include="Objects\Factory\Attributes\RequiredAttributeObjectPostProcessor.cs" />
     <Compile Include="Objects\Factory\Config\AbstractConfigurer.cs" />

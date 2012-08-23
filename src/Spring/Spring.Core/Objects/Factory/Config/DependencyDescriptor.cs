@@ -20,6 +20,8 @@
 
 using System;
 using Spring.Core;
+using System.Reflection;
+using Spring.Objects.Factory.Attributes;
 
 namespace Spring.Objects.Factory.Config
 {
@@ -34,6 +36,10 @@ namespace Spring.Objects.Factory.Config
     {
         private MethodParameter methodParameter;
 
+        private PropertyInfo property;
+
+        private FieldInfo field;
+
         private readonly bool required;
 
         private readonly bool eager;
@@ -45,7 +51,8 @@ namespace Spring.Objects.Factory.Config
         /// </summary>
         /// <param name="methodParameter">The MethodParameter to wrap.</param>
         /// <param name="required">if set to <c>true</c> if the dependency is required.</param>
-        public DependencyDescriptor(MethodParameter methodParameter, bool required) : this(methodParameter, required, true)
+        public DependencyDescriptor(MethodParameter methodParameter, bool required)
+            : this(methodParameter, required, true)
         {
         }
 
@@ -63,6 +70,55 @@ namespace Spring.Objects.Factory.Config
             this.eager = eager;
         }
 
+        /// <summary>
+        /// Create a new descriptor for a property.
+        /// Considers the dependency as 'eager'.
+        /// <param name="property">property to wrap</param>
+        /// <param name="required">required whether the dependency is required</param>
+        /// </summary>
+        public DependencyDescriptor(PropertyInfo property, bool required)
+            : this(property, required, true)
+        {
+        }
+
+        /// <summary>
+        /// Create a new descriptor for a property.
+        /// <param name="property">property to wrap</param>
+        /// <param name="required ">whether the dependency is required</param>
+        /// <param name="eager">whether this dependency is 'eager' in the sense of</param>
+        /// eagerly resolving potential target beans for type matching
+        /// </summary>
+        public DependencyDescriptor(PropertyInfo property, bool required, bool eager)
+        {
+            this.property = property;
+            this.required = required;
+            this.eager = eager;
+        }
+
+        /// <summary>
+        /// Create a new descriptor for a field.
+        /// Considers the dependency as 'eager'.
+        /// <param name="field">field to wrap</param>
+        /// <param name="required">whether the dependency is required</param>
+        /// </summary>
+        public DependencyDescriptor(FieldInfo field, bool required)
+            : this(field, required, true)
+        {
+        }
+
+        /// <summary>
+        /// Create a new descriptor for a field.
+        /// <param name="field">field to wrap</param>
+        /// <param name="required ">whether the dependency is required</param>
+        /// <param name="eager">whether this dependency is 'eager' in the sense of</param>
+        /// eagerly resolving potential target beans for type matching
+        /// </summary>
+        public DependencyDescriptor(FieldInfo field, bool required, bool eager)
+        {
+            this.field = field;
+            this.required = required;
+            this.eager = eager;
+        }
 
         /// <summary>
         /// Gets a value indicating whether this dependency is required.
@@ -79,7 +135,17 @@ namespace Spring.Objects.Factory.Config
         /// <value>The type of the dependency (never <code>null</code></value>
         public Type DependencyType
         {
-            get { return methodParameter.ParameterType; }
+            get
+            {
+                if (methodParameter != null)
+                    return methodParameter.ParameterType;
+                if (property != null)
+                    return property.PropertyType;
+                if (field != null)
+                    return field.FieldType;
+
+                return null;
+            }
         }
 
         /// <summary>
@@ -101,5 +167,83 @@ namespace Spring.Objects.Factory.Config
         {
             get { return methodParameter; }
         }
+
+        public string Name
+        {
+            get
+            {
+                if (methodParameter != null)
+                    return methodParameter.ParameterName();
+                if (property != null)
+                    return property.Name;
+                if (field != null)
+                    return field.Name;
+
+                return "";
+            }
+        }
+
+        /// <summary>
+        /// Determine whether the given dependency carries a value annotation.
+        /// </summary>
+        public Object GetSuggestedValue()
+        {
+            Object value = null;
+
+            if (methodParameter != null)
+                value = ConvertFieldName(methodParameter.ParameterName());
+            if (property != null)
+                value = property.Name;
+            if (field != null)
+                value = ConvertFieldName(field.Name);
+
+            return value;
+        }
+
+        /// <summary>
+        /// Get the qualifier name if exists
+        /// </summary>
+        public string GetQualifierName()
+        {
+            string value = null;
+
+            if (methodParameter != null)
+                value = FindValue(methodParameter.GetParameterAttributes());
+            if (property != null)
+                value = FindValue(Attribute.GetCustomAttributes(property));
+            if (field != null)
+                value = FindValue(Attribute.GetCustomAttributes(field));
+
+            return value;
+        }
+
+        /**
+         * Determine a suggested value from any of the given candidate annotations.
+         */
+
+        private string FindValue(Attribute[] attributesToSearch)
+        {
+            foreach (Attribute attribute in attributesToSearch)
+            {
+                if (attribute is QualifierAttribute)
+                {
+                    var qualifierAttribute = attribute as QualifierAttribute;
+                    return qualifierAttribute.Name;
+                }
+            }
+            return null;
+        }
+
+        private string ConvertFieldName(string fieldName)
+        {
+            if (string.IsNullOrEmpty(fieldName))
+                return string.Empty;
+
+            char[] letters = fieldName.TrimStart('_').ToCharArray();
+            letters[0] = char.ToUpper(letters[0]);
+
+            return new string(letters);
+        }
+
     }
 }

@@ -136,5 +136,13 @@ namespace Spring.Core
         {
             get { return constructorInfo; }
         }
+
+        public Attribute[] GetParameterAttributes()
+        {
+            if (methodInfo != null)
+                return Attribute.GetCustomAttributes(methodInfo.GetParameters()[parameterIndex]);
+            else
+                return Attribute.GetCustomAttributes(constructorInfo.GetParameters()[parameterIndex]);
+        }
     }
 }

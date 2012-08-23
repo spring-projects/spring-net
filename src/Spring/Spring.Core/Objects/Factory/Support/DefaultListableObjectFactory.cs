@@ -1111,6 +1111,21 @@ namespace Spring.Objects.Factory.Support
         public override object ResolveDependency(DependencyDescriptor descriptor, string objectName,
                                                  IList autowiredObjectNames)
         {
+            string qualifierName = descriptor.GetQualifierName();
+            if (!string.IsNullOrEmpty(qualifierName))
+            {
+                if (ContainsObject(qualifierName))
+                {
+                    autowiredObjectNames.Add(qualifierName);
+                    return GetObject(qualifierName);
+                }
+                else
+                {
+                    if (descriptor.Required)
+                        throw new NoSuchObjectDefinitionException(qualifierName, "no object found with this name");
+                    return null;
+                }
+            }
             Type type = descriptor.DependencyType;
             if (type.IsArray)
             {
@@ -1133,6 +1148,38 @@ namespace Spring.Objects.Factory.Support
                 }
                 return TypeConversionUtils.ConvertValueIfNecessary(type, matchingObjects.Values, null);
             }
+            else if (type.IsGenericType && 
+                (type.GetGenericTypeDefinition() == typeof(IList<>) || type.GetGenericTypeDefinition() == typeof(Spring.Collections.Generic.ISet<>) || 
+                 type.GetGenericTypeDefinition() == typeof(IDictionary<,>)))
+            {
+                var isDictionary = (type.GetGenericTypeDefinition() == typeof (IDictionary<,>));
+                var elementType = isDictionary ? type.GetGenericArguments()[1] : type.GetGenericArguments()[0];
+
+                if (isDictionary && type.GetGenericArguments()[0] != typeof(string))
+                    throw new NoSuchObjectDefinitionException(type,
+                                    "expected first generic to be a string but is " + type.GetGenericArguments()[0]);
+
+                IDictionary matchingObjects = FindAutowireCandidates(objectName, elementType, descriptor);
+                if (matchingObjects.Count == 0)
+                {
+                    if (descriptor.Required)
+                    {
+                        RaiseNoSuchObjectDefinitionException(elementType, "dictionary/list/set of " + elementType.FullName, descriptor);
+                    }
+                    return null;
+                }
+                if (autowiredObjectNames != null)
+                {
+                    foreach (DictionaryEntry matchingObject in matchingObjects)
+                    {
+                        autowiredObjectNames.Add(matchingObject.Key);
+                    }
+                }
+
+                return isDictionary
+                           ? TypeConversionUtils.ConvertValueIfNecessary(type, matchingObjects, null)
+                           : TypeConversionUtils.ConvertValueIfNecessary(type, matchingObjects.Values, null);
+            }
             else if (typeof(ICollection).IsAssignableFrom(type) && type.IsInterface)
             {
                 //TODO - handle generic types.
@@ -1142,6 +1189,20 @@ namespace Spring.Objects.Factory.Support
             else
             {
                 IDictionary matchingObjects = FindAutowireCandidates(objectName, type, descriptor);
+                if (matchingObjects.Count == 0 || matchingObjects.Count > 1)
+                {
+                    Object value = descriptor.GetSuggestedValue();
+                    if (value is string)
+                    {
+                        string matchingObject = value as string;
+                        if (ContainsObject(matchingObject))
+                        {
+                            matchingObjects.Clear();
+                            matchingObjects.Add(matchingObject, GetObject(matchingObject));
+                        }
+                    }
+                }
+
                 if (matchingObjects.Count == 0)
                 {
                     if (descriptor.Required)
@@ -1155,9 +1216,8 @@ namespace Spring.Objects.Factory.Support
                 }
                 if (matchingObjects.Count > 1)
                 {
-
                     throw new NoSuchObjectDefinitionException(type,
-                             "expected single matching object but found " + matchingObjects.Count + ": " + matchingObjects);
+                                    "expected single matching object but found " + matchingObjects.Count + ": " + matchingObjects);
                 }
                 DictionaryEntry entry = (DictionaryEntry)ObjectUtils.EnumerateFirstElement(matchingObjects);
                 if (autowiredObjectNames != null)
@@ -1201,6 +1261,7 @@ namespace Spring.Objects.Factory.Support
                     }
                 }
             }
+
             for (int i = 0; i < candidateNames.Count; i++)
             {
                 string candidateName = candidateNames[i];
