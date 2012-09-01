@@ -412,6 +412,19 @@ namespace Spring.Util
             return (o1 == o2 || (o1 != null && o1.Equals(o2)));
         }
 
+
+        /// <summary>
+	    /// Return as hash code for the given object; typically the value of
+	    /// <code>{@link Object#hashCode()}</code>. If the object is an array,
+	    /// this method will delegate to any of the <code>nullSafeHashCode</code>
+	    /// methods for arrays in this class. If the object is <code>null</code>,
+	    /// this method returns 0.
+        /// </summary>
+        public static int NullSafeHashCode(object o1)
+        {
+            return (o1 != null ? o1.GetHashCode() : 0);
+        }
+
         /// <summary>
         /// Returns the first element in the supplied <paramref name="enumerator"/>.
         /// </summary>

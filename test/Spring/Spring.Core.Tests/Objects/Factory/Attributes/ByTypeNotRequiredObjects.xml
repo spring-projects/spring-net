@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net">
+  
+  <object type="Spring.Objects.Factory.Attributes.AutowiredAttributeObjectPostProcessor, Spring.Core" />
+
+  <object id="AutowireTestField"
+          type="Spring.Objects.Factory.Attributes.ByType.AutowireTestFieldNotRequired, Spring.Core.Tests"
+          lazy-init="true" />
+
+  <object id="AutowireTestProperty"
+          type="Spring.Objects.Factory.Attributes.ByType.AutowireTestPropertyNotRequired, Spring.Core.Tests"
+          lazy-init="true" />
+
+  <object id="AutowireTestMethod"
+          type="Spring.Objects.Factory.Attributes.ByType.AutowireTestMethodNotRequired, Spring.Core.Tests"
+          lazy-init="true" />
+
+</objects>

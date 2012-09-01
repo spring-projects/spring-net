@@ -278,12 +278,14 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Context\Support\XmlApplicationContextArgs.cs" />
+    <Compile Include="Core\AttributeAccessorSupport.cs" />	
     <Compile Include="Core\CannotLoadObjectTypeException.cs" />
     <Compile Include="Core\ComposedCriteria.cs" />
     <Compile Include="Core\ControlFlowFactory.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Core\Conventions.cs" />
+    <Compile Include="Core\IAttributeAccessor.cs" />
     <Compile Include="Core\IO\EncodedResource.cs" />
     <Compile Include="Core\IPriorityOrdered.cs" />
     <Compile Include="Core\MethodArgumentsCriteria.cs" />
@@ -673,8 +675,14 @@
     <Compile Include="Globalization\Resource.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Objects\Factory\Attributes\AutowiredAttribute.cs" />
+    <Compile Include="Objects\Factory\Attributes\AutowiredAttributeObjectPostProcessor.cs" />
+    <Compile Include="Objects\Factory\Attributes\InjectionMetadata.cs" />
+    <Compile Include="Objects\Factory\Attributes\QualifierAnnotationAutowireCandidateResolver.cs" />
+    <Compile Include="Objects\Factory\Attributes\QualifierAttribute.cs" />	
     <Compile Include="Objects\Factory\Attributes\RequiredAttribute.cs" />
     <Compile Include="Objects\Factory\Attributes\RequiredAttributeObjectPostProcessor.cs" />
+    <Compile Include="Objects\Factory\Attributes\ValueAttribute.cs" />	
     <Compile Include="Objects\Factory\Config\AbstractConfigurer.cs" />
     <Compile Include="Objects\Factory\Config\CommandLineArgsVariableSource.cs" />
     <Compile Include="Objects\Factory\Config\ConfigSectionVariableSource.cs" />
@@ -708,9 +716,13 @@
     <Compile Include="Objects\Factory\Parsing\ObjectDefinitionParsingException.cs" />
     <Compile Include="Objects\Factory\Parsing\Problem.cs" />
     <Compile Include="Objects\Factory\Parsing\ReaderContext.cs" />
+    <Compile Include="Objects\Factory\Support\AutowireCandidateQualifier.cs" />	
     <Compile Include="Objects\Factory\Support\DelegateInvokingFactoryObject.cs" />
     <Compile Include="Objects\Factory\Support\IObjectDefinitionRegistryPostProcessor.cs" />
     <Compile Include="Objects\Factory\Support\ObjectScope.cs" />
+    <Compile Include="Objects\IObjectMetadataElement.cs" />
+    <Compile Include="Objects\ObjectMetadataAttribute.cs" />
+    <Compile Include="Objects\ObjectMetadataAttributeAccessor.cs" />	
     <Compile Include="Util\ConstructorInstantiationInfo.cs" />
     <Compile Include="Objects\Factory\Support\GenericObjectDefinition.cs" />
     <Compile Include="Objects\Factory\Support\IAutowireCandidateResolver.cs" />
@@ -1141,6 +1153,7 @@
     <Compile Include="Util\IErrorHandler.cs" />
     <Compile Include="Util\IEventExceptionsCollector.cs" />
     <Compile Include="Util\IoUtils.cs" />
+    <Compile Include="Util\IStringValueResolver.cs" />	
     <Compile Include="Util\ITextPosition.cs" />
     <Compile Include="Util\ObjectUtils.cs" />
     <Compile Include="Util\ReflectionException.cs" />
@@ -1229,6 +1242,7 @@
       </SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Objects\Factory\Xml\spring-objects-1.3.xsd" />
+    <EmbeddedResource Include="Objects\Factory\Xml\spring-objects-2.0.xsd" />	
     <None Include="Spring.Core.build" />
     <EmbeddedResource Include="Validation\Config\spring-validation-1.3.xsd" />
     <EmbeddedResource Include="Validation\Config\spring-validation-1.1.xsd" />

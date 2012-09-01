@@ -39,6 +39,7 @@ namespace Spring.Core
         private ConstructorInfo constructorInfo;
 
         private readonly int parameterIndex;
+
         private Type parameterType;
 
         /// <summary>
@@ -137,12 +138,33 @@ namespace Spring.Core
             get { return constructorInfo; }
         }
 
-        public Attribute[] GetParameterAttributes()
+        /// <summary>
+        /// Return the annotations associated with the specific method/constructor parameter.
+        /// </summary>
+        public Attribute[] ParameterAttributes
         {
-            if (methodInfo != null)
-                return Attribute.GetCustomAttributes(methodInfo.GetParameters()[parameterIndex]);
-            else
-                return Attribute.GetCustomAttributes(constructorInfo.GetParameters()[parameterIndex]);
+            get
+            {
+                if (methodInfo != null)
+                    return Attribute.GetCustomAttributes(methodInfo.GetParameters()[parameterIndex]);
+                else
+                    return Attribute.GetCustomAttributes(constructorInfo.GetParameters()[parameterIndex]);
+            }
         }
+
+        /// <summary>
+        /// Return the annotations associated with the target method/constructor itself.
+        /// </summary>
+        public Attribute[] MethodAttributes
+        {
+            get
+            {
+                if (methodInfo != null)
+                    return Attribute.GetCustomAttributes(methodInfo);
+                else
+                    return Attribute.GetCustomAttributes(constructorInfo);
+            }
+        }
+
     }
 }

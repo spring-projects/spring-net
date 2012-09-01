@@ -45,5 +45,18 @@ namespace Spring.Objects.Factory.Support
         {
             return odHolder.ObjectDefinition.IsAutowireCandidate;
         }
+
+
+        /// <summary>
+        /// Determine whether a default value is suggested for the given dependency.
+        /// </summary>
+        /// <param name="descriptor">The descriptor for the target method parameter or field</param>
+        /// <returns>The value suggested (typically an expression String),
+        /// or <c>null</c> if none found
+        /// </returns>
+        public object GetSuggestedValue(DependencyDescriptor descriptor)
+        {
+            return null;
+        }
     }
 }

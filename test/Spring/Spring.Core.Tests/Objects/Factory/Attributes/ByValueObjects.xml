@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net">
+
+  <object id="appPropertyConfigurer" type="Spring.Objects.Factory.Config.PropertyPlaceholderConfigurer, Spring.Core">
+    <property name="Location" value="assembly://Spring.Core.Tests/Spring.Objects.Factory.Attributes/ByValueObjects.config" />
+    <property name="ConfigSections" value="NameValues" />
+  </object>  
+  
+  <object type="Spring.Objects.Factory.Attributes.AutowiredAttributeObjectPostProcessor, Spring.Core" />
+
+  <object id="HelloFoo"
+          type="Spring.Objects.Factory.Attributes.ByType.HelloFoo, Spring.Core.Tests" />
+
+  <object id="CiaoFoo"
+          type="Spring.Objects.Factory.Attributes.ByType.CiaoFoo, Spring.Core.Tests" />
+
+  <object id="AutowireTestField"
+          type="Spring.Objects.Factory.Attributes.ByValue.AutowireTestFieldNormal, Spring.Core.Tests"
+          lazy-init="true" />
+
+  <object id="AutowireTestProperty"
+          type="Spring.Objects.Factory.Attributes.ByValue.AutowireTestPropertyNormal, Spring.Core.Tests"
+          lazy-init="true" />
+
+  <object id="AutowireTestMethod"
+          type="Spring.Objects.Factory.Attributes.ByValue.AutowireTestMethodNormal, Spring.Core.Tests"
+          lazy-init="true" />
+
+  <object id="AutowireTestConstructor"
+          type="Spring.Objects.Factory.Attributes.ByValue.AutowireTestConstructorNormal, Spring.Core.Tests"
+          lazy-init="true" />
+
+  <object id="AutowireTestPropertyPlaceHolder"
+          type="Spring.Objects.Factory.Attributes.ByValue.AutowireTestPropertyPlaceHolder, Spring.Core.Tests"
+          lazy-init="true" />
+
+</objects>

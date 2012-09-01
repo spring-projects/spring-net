@@ -28,6 +28,7 @@ using System.Globalization;
 using Common.Logging;
 
 using Spring.Collections;
+using Spring.Util;
 
 #endregion
 
@@ -247,12 +248,9 @@ namespace Spring.Objects.Factory.Config
 						definition.ResourceDescription, name, ex.Message);
 				}
 			}
+
+            factory.AddEmbeddedValueResolver(resolveAdapter);
 		}
-
-
-
-
-
 
 		/// <summary>
 		/// Parse values recursively to be able to resolve cross-references between
@@ -401,7 +399,7 @@ namespace Spring.Objects.Factory.Config
 
         #region Helper class
 
-        private class PlaceholderResolveHandlerAdapter
+        private class PlaceholderResolveHandlerAdapter : IStringValueResolver
         {
             private readonly PropertyPlaceholderConfigurer ppc;
             private readonly NameValueCollection props;

@@ -22,13 +22,15 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Globalization;
+using System.Linq;
 using System.Reflection;
 using System.Text;
-
 using Spring.Core.TypeResolution;
 using Spring.Objects.Factory.Config;
 using Spring.Util;
+using Spring.Collections.Generic;
 
 #endregion
 
@@ -44,7 +46,7 @@ namespace Spring.Objects.Factory.Support
     /// <author>Juergen Hoeller</author>
     /// <author>Rick Evans (.NET)</author>
     [Serializable]
-    public abstract class AbstractObjectDefinition : IConfigurableObjectDefinition
+    public abstract class AbstractObjectDefinition : ObjectMetadataAttributeAccessor, IConfigurableObjectDefinition
     {
         private static readonly string SCOPE_SINGLETON = "singleton";
         private static readonly string SCOPE_PROTOTYPE = "prototype";
@@ -135,6 +137,8 @@ namespace Spring.Objects.Factory.Support
             InitMethodName = other.InitMethodName;
             DestroyMethodName = other.DestroyMethodName;
             IsAutowireCandidate = other.IsAutowireCandidate;
+            IsPrimary = other.IsPrimary;
+            CopyQualifiersFrom(aod);
             DependsOn = new List<string>(other.DependsOn);
             FactoryMethodName = other.FactoryMethodName;
             FactoryObjectName = other.FactoryObjectName;
@@ -541,6 +545,67 @@ namespace Spring.Objects.Factory.Support
             set { autowireCandidate = value;}
         }
 
+
+        /// <summary>
+        /// Set whether this bean is a primary autowire candidate.
+        /// If this value is true for exactly one bean among multiple
+        /// matching candidates, it will serve as a tie-breaker.
+        /// </summary>
+        public bool IsPrimary 
+        { 
+            get { return primary; }
+            set { primary = value; }
+        }
+
+        /// <summary>
+        /// Register a qualifier to be used for autowire candidate resolution,
+        /// keyed by the qualifier's type name.
+        /// <see cref="AutowireCandidateQualifier#TypeName"/>
+        /// </summary>
+        public void AddQualifier(AutowireCandidateQualifier qualifier)
+        {
+            qualifiers.Add(qualifier.TypeName, qualifier);
+        }
+
+        /// <summary>
+        /// Return whether this bean has the specified qualifier.
+        /// </summary>
+        public bool HasQualifier(string typeName)
+        {
+            return qualifiers.ContainsKey(typeName);
+        }
+
+        /// <summary>
+        /// Return the qualifier mapped to the provided type name.
+        /// </summary>
+        public AutowireCandidateQualifier GetQualifier(string typeName)
+        {
+            return qualifiers.ContainsKey(typeName) ? qualifiers[typeName] : null;
+        }
+
+        /// <summary>
+        /// Return all registered qualifiers.
+        /// </summary>
+        /// <returns>the Set of <see cref="AutowireCandidateQualifier"/> objects.</returns>
+        public Set<AutowireCandidateQualifier> GetQualifiers()
+        {
+            return new OrderedSet<AutowireCandidateQualifier>(qualifiers.Values);
+        }
+
+        /// <summary>
+        /// Copy the qualifiers from the supplied AbstractBeanDefinition to this bean definition.
+        /// </summary>
+        /// <param name="source">the AbstractBeanDefinition to copy from</param>
+        public void CopyQualifiersFrom(AbstractObjectDefinition source)
+        {
+            Trace.Assert(source != null, "Source must not be null");
+            foreach (var qualifier in source.qualifiers)
+            {
+                if (!qualifiers.Contains(qualifier))
+                    qualifiers.Add(qualifier);
+            }
+        }
+
         /// <summary>
         /// The name of the initializer method.
         /// </summary>
@@ -748,6 +813,7 @@ namespace Spring.Objects.Factory.Support
             }
             AutowireMode = other.AutowireMode;
             ResourceDescription = other.ResourceDescription;
+            IsPrimary = other.IsPrimary;
 
             AbstractObjectDefinition aod = other as AbstractObjectDefinition;
             if (aod != null)
@@ -759,6 +825,7 @@ namespace Spring.Objects.Factory.Support
 
                 MethodOverrides.AddAll(aod.MethodOverrides);
                 DependencyCheck = aod.DependencyCheck;
+                CopyQualifiersFrom(aod);
             }
         }
 
@@ -779,6 +846,7 @@ namespace Spring.Objects.Factory.Support
             buffer.Append("; Singleton = ").Append(IsSingleton);
             buffer.Append("; LazyInit = ").Append(IsLazyInit);
             buffer.Append("; Autowire = ").Append(AutowireMode);
+            buffer.Append("; Primary = ").Append(IsPrimary);
             buffer.Append("; DependencyCheck = ").Append(DependencyCheck);
             buffer.Append("; InitMethodName = ").Append(InitMethodName);
             buffer.Append("; DestroyMethodName = ").Append(DestroyMethodName);
@@ -811,6 +879,12 @@ namespace Spring.Objects.Factory.Support
         private DependencyCheckingMode dependencyCheck = DependencyCheckingMode.None;
         private IList<string> dependsOn;
         private bool autowireCandidate = true;
+
+        private bool primary;
+
+        private readonly IDictionary<string, AutowireCandidateQualifier> qualifiers =
+            new Dictionary<string, AutowireCandidateQualifier>();
+
         private string initMethodName = null;
         private string destroyMethodName = null;
         private string factoryMethodName = null;

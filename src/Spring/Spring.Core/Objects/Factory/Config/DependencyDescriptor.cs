@@ -168,7 +168,28 @@ namespace Spring.Objects.Factory.Config
             get { return methodParameter; }
         }
 
-        public string Name
+        /// <summary>
+        /// Gets the Attributes assigned to Field, Property or Paramater
+        /// </summary>
+        public Attribute[] Attributes 
+        { 
+            get
+            {
+                if (methodParameter != null)
+                    return methodParameter.ParameterAttributes;
+                if (property != null)
+                    return Attribute.GetCustomAttributes(property);
+                if (field != null)
+                    return Attribute.GetCustomAttributes(field);
+
+                return new Attribute[0];
+            }
+        }
+
+        /// <summary>
+        /// Gets the name of the member info
+        /// </summary>
+        public string DependencyName
         {
             get
             {
@@ -182,68 +203,5 @@ namespace Spring.Objects.Factory.Config
                 return "";
             }
         }
-
-        /// <summary>
-        /// Determine whether the given dependency carries a value annotation.
-        /// </summary>
-        public Object GetSuggestedValue()
-        {
-            Object value = null;
-
-            if (methodParameter != null)
-                value = ConvertFieldName(methodParameter.ParameterName());
-            if (property != null)
-                value = property.Name;
-            if (field != null)
-                value = ConvertFieldName(field.Name);
-
-            return value;
-        }
-
-        /// <summary>
-        /// Get the qualifier name if exists
-        /// </summary>
-        public string GetQualifierName()
-        {
-            string value = null;
-
-            if (methodParameter != null)
-                value = FindValue(methodParameter.GetParameterAttributes());
-            if (property != null)
-                value = FindValue(Attribute.GetCustomAttributes(property));
-            if (field != null)
-                value = FindValue(Attribute.GetCustomAttributes(field));
-
-            return value;
-        }
-
-        /**
-         * Determine a suggested value from any of the given candidate annotations.
-         */
-
-        private string FindValue(Attribute[] attributesToSearch)
-        {
-            foreach (Attribute attribute in attributesToSearch)
-            {
-                if (attribute is QualifierAttribute)
-                {
-                    var qualifierAttribute = attribute as QualifierAttribute;
-                    return qualifierAttribute.Name;
-                }
-            }
-            return null;
-        }
-
-        private string ConvertFieldName(string fieldName)
-        {
-            if (string.IsNullOrEmpty(fieldName))
-                return string.Empty;
-
-            char[] letters = fieldName.TrimStart('_').ToCharArray();
-            letters[0] = char.ToUpper(letters[0]);
-
-            return new string(letters);
-        }
-
     }
 }

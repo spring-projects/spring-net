@@ -79,7 +79,7 @@ namespace Spring.Objects.Factory.Attributes
         private readonly IDictionary<Type, InjectionMetadata> _injectionMetadataCache =
             new Dictionary<Type, InjectionMetadata>();
 
-        private Type _autowiredPropertyType = typeof (AutowiredAttribute);
+        private IList<Type> _autowiredPropertyTypes = new List<Type>();
 
         /// <summary>
         /// Return the order value of this object, where a higher value means greater in
@@ -125,16 +125,25 @@ namespace Spring.Objects.Factory.Attributes
             set { _objectFactory = (IConfigurableListableObjectFactory) value; }
         }
 
-
         /// <summary>
-        /// Sets the used AutowiredAttributeType during the scan
+        /// Add a Autowired Attribute Type
         /// </summary>
-        public Type AutowiredAttributeType
+        public void AddAutowiredType(Type attributeType)
         {
-            get { return _autowiredPropertyType; }
-            set { _autowiredPropertyType = value; }
+            if (!_autowiredPropertyTypes.Contains(attributeType))
+                _autowiredPropertyTypes.Add(attributeType);
         }
 
+        /// <summary>
+        /// Create a new instance of an Autowire Post Processor
+        /// with standard attributes of <see cref="AutowiredAttribute"/> 
+        /// and <see cref="ValueAttribute"/>
+        /// </summary>
+        public AutowiredAttributeObjectPostProcessor()
+        {
+            _autowiredPropertyTypes.Add(typeof(AutowiredAttribute));
+            _autowiredPropertyTypes.Add(typeof(ValueAttribute));
+        }
 
         /// <summary>
         /// Determines the candidate constructors to use for the given object.
@@ -296,46 +305,59 @@ namespace Spring.Objects.Factory.Attributes
 
             do
             {
-                var currElements = new List<InjectionMetadata.InjectedElement>();
-                foreach (
-                    var property in
-                        objectType.GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance))
+                foreach (var autowiredType in _autowiredPropertyTypes)
                 {
-                    var attr = Attribute.GetCustomAttribute(property, _autowiredPropertyType) as AutowiredAttribute;
-                    if (attr != null && property.DeclaringType == objectType)
-                        currElements.Add(new AutowiredPropertyElement(property, attr.Required));
-                }
-                foreach (
-                    var field in
-                        objectType.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance))
-                {
-                    var attr = Attribute.GetCustomAttribute(field, _autowiredPropertyType) as AutowiredAttribute;
-                    if (attr != null && field.DeclaringType == objectType)
-                        currElements.Add(new AutowiredFieldElement(field, attr.Required));
-                }
-                foreach (
-                    var method in
-                        objectType.GetMethods(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance))
-                {
-                    var attr = Attribute.GetCustomAttribute(method, _autowiredPropertyType) as AutowiredAttribute;
-                    if (attr != null && method.DeclaringType == objectType)
+                    var currElements = new List<InjectionMetadata.InjectedElement>();
+                    foreach (
+                        var property in
+                            objectType.GetProperties(BindingFlags.NonPublic | BindingFlags.Public |
+                                                     BindingFlags.Instance))
                     {
-                        if (method.IsStatic)
-                        {
-                            Logger.Warn(
-                                m => m("Autowired annotation is not supported on static methods: " + method.Name));
-                            continue;
-                        }
-                        if (method.IsGenericMethod)
-                        {
-                            Logger.Warn(
-                                m => m("Autowired annotation is not supported on generic methods: " + method.Name));
-                            continue;
-                        }
-                        currElements.Add(new AutowiredMethodElement(method, attr.Required));
+                        var required = true;
+                        var attr = Attribute.GetCustomAttribute(property, autowiredType);
+                        if (attr is AutowiredAttribute)
+                            required = ((AutowiredAttribute)attr).Required;
+                        if (attr != null && property.DeclaringType == objectType)
+                            currElements.Add(new AutowiredPropertyElement(property, required));
                     }
+                    foreach (
+                        var field in
+                            objectType.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance))
+                    {
+                        var required = true;
+                        var attr = Attribute.GetCustomAttribute(field, autowiredType);
+                        if (attr is AutowiredAttribute)
+                            required = ((AutowiredAttribute) attr).Required;
+                        if (attr != null && field.DeclaringType == objectType)
+                            currElements.Add(new AutowiredFieldElement(field, required));
+                    }
+                    foreach (
+                        var method in
+                            objectType.GetMethods(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance))
+                    {
+                        var required = true;
+                        var attr = Attribute.GetCustomAttribute(method, autowiredType);
+                        if (attr is AutowiredAttribute)
+                            required = ((AutowiredAttribute)attr).Required;
+                        if (attr != null && method.DeclaringType == objectType)
+                        {
+                            if (method.IsStatic)
+                            {
+                                Logger.Warn(
+                                    m => m("Autowired annotation is not supported on static methods: " + method.Name));
+                                continue;
+                            }
+                            if (method.IsGenericMethod)
+                            {
+                                Logger.Warn(
+                                    m => m("Autowired annotation is not supported on generic methods: " + method.Name));
+                                continue;
+                            }
+                            currElements.Add(new AutowiredMethodElement(method, required));
+                        }
+                    }
+                    elements.InsertRange(0, currElements);
                 }
-                elements.InsertRange(0, currElements);
                 objectType = objectType.BaseType;
             } while (objectType != null && objectType != typeof (Object));
 

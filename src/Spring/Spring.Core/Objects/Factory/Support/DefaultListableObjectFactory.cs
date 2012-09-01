@@ -25,6 +25,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
+using System.Linq;
 
 using Common.Logging;
 
@@ -32,6 +33,8 @@ using Spring.Core;
 using Spring.Core.TypeConversion;
 using Spring.Objects.Factory.Config;
 using Spring.Util;
+using Spring.Expressions;
+using Spring.Context.Support;
 
 #endregion
 
@@ -324,7 +327,7 @@ namespace Spring.Objects.Factory.Support
         /// <summary>
         /// IDictionary from dependency type to corresponding autowired value 
         /// </summary>
-        private readonly IDictionary resolvableDependencies = new Hashtable();
+        private readonly IDictionary<Type, object> resolvableDependencies = new Dictionary<Type, object>();
 
         #endregion
 
@@ -523,7 +526,7 @@ namespace Spring.Objects.Factory.Support
             {
                 AssertUtils.IsTrue((autowiredValue is IObjectFactory) || dependencyType.IsInstanceOfType(autowiredValue),
                     "Value [" + autowiredValue + "] does not implement specified type [" + dependencyType.Name + "]");
-                if (!resolvableDependencies.Contains(dependencyType))
+                if (!resolvableDependencies.ContainsKey(dependencyType))
                 {
                     this.resolvableDependencies.Add(dependencyType, autowiredValue);
                 }
@@ -1111,22 +1114,20 @@ namespace Spring.Objects.Factory.Support
         public override object ResolveDependency(DependencyDescriptor descriptor, string objectName,
                                                  IList autowiredObjectNames)
         {
-            string qualifierName = descriptor.GetQualifierName();
-            if (!string.IsNullOrEmpty(qualifierName))
-            {
-                if (ContainsObject(qualifierName))
-                {
-                    autowiredObjectNames.Add(qualifierName);
-                    return GetObject(qualifierName);
-                }
-                else
-                {
-                    if (descriptor.Required)
-                        throw new NoSuchObjectDefinitionException(qualifierName, "no object found with this name");
-                    return null;
-                }
-            }
             Type type = descriptor.DependencyType;
+            Object value = AutowireCandidateResolver.GetSuggestedValue(descriptor);
+		    if (value != null)
+            {
+			    if (value is string)
+			    {
+			        object valueBefore = value;
+			        value = ResolveEmbeddedValue((string) value);
+                    if (valueBefore.Equals(value))
+			            value = ExpressionEvaluator.GetValue(null, (string) value);
+			    }
+                return TypeConversionUtils.ConvertValueIfNecessary(type, value, null);
+		    }
+
             if (type.IsArray)
             {
                 Type elementType = type.GetElementType();
@@ -1189,20 +1190,6 @@ namespace Spring.Objects.Factory.Support
             else
             {
                 IDictionary matchingObjects = FindAutowireCandidates(objectName, type, descriptor);
-                if (matchingObjects.Count == 0 || matchingObjects.Count > 1)
-                {
-                    Object value = descriptor.GetSuggestedValue();
-                    if (value is string)
-                    {
-                        string matchingObject = value as string;
-                        if (ContainsObject(matchingObject))
-                        {
-                            matchingObjects.Clear();
-                            matchingObjects.Add(matchingObject, GetObject(matchingObject));
-                        }
-                    }
-                }
-
                 if (matchingObjects.Count == 0)
                 {
                     if (descriptor.Required)
@@ -1216,8 +1203,17 @@ namespace Spring.Objects.Factory.Support
                 }
                 if (matchingObjects.Count > 1)
                 {
-                    throw new NoSuchObjectDefinitionException(type,
-                                    "expected single matching object but found " + matchingObjects.Count + ": " + matchingObjects);
+                    string primaryObjecName = DeterminePrimaryCandidate(matchingObjects, descriptor);
+                    if (primaryObjecName == null)
+                    {
+                        throw new NoSuchObjectDefinitionException(type,
+                                        "expected single matching object but found " + matchingObjects.Count + ": " + matchingObjects);
+                    }
+                    if (autowiredObjectNames != null)
+                    {
+                        autowiredObjectNames.Add(primaryObjecName);
+                    }
+                    return matchingObjects[primaryObjecName];
                 }
                 DictionaryEntry entry = (DictionaryEntry)ObjectUtils.EnumerateFirstElement(matchingObjects);
                 if (autowiredObjectNames != null)
@@ -1228,7 +1224,75 @@ namespace Spring.Objects.Factory.Support
             }
         }
 
+        /// <summary>
+        /// Determine the primary autowire candidate in the given set of beans.
+        /// </summary>
+        /// <param name="candidateObjects">a Map of candidate names and candidate instances
+        /// that match the required type</param>
+        /// <param name="descriptor">the target dependency to match against</param>
+        /// <returns>the name of the primary candidate, or <code>null</code> if none found</returns>
+        private string DeterminePrimaryCandidate(IDictionary candidateObjects, DependencyDescriptor descriptor) {
+		    string primaryObjectName = null;
+		    string fallbackObjectName = null;
+		    foreach(DictionaryEntry entry in candidateObjects)
+		    {
+		        string candidateBeanName = entry.Key as string;
+			    object objectInstance = entry.Value;
+			    if (IsPrimary(candidateBeanName, objectInstance))
+                {
+				    if (primaryObjectName != null) 
+                    {
+					    bool candidateLocal = ContainsObjectDefinition(candidateBeanName);
+					    bool primaryLocal = ContainsObjectDefinition(primaryObjectName);
+					    if (candidateLocal == primaryLocal)
+                        {
+						    throw new NoSuchObjectDefinitionException(descriptor.DependencyType,
+								    "more than one 'primary' bean found among candidates: " + candidateObjects);
+					    }
+					    if (candidateLocal && !primaryLocal)
+                        {
+						    primaryObjectName = candidateBeanName;
+					    }
+				    }
+				    else
+                    {
+					    primaryObjectName = candidateBeanName;
+				    }
+			    }
+			    if (primaryObjectName == null &&
+                        (resolvableDependencies.Values.Contains(objectInstance) ||
+							    MatchesObjectName(candidateBeanName, descriptor.DependencyName)))
+                {
+				    fallbackObjectName = candidateBeanName;
+			    }
+		    }
+		    return (primaryObjectName != null ? primaryObjectName : fallbackObjectName);
+	    }
 
+        /// <summary>
+        /// Return whether the object definition for the given object name has been
+        /// marked as a primary object.
+        /// </summary>
+        /// <param name="objectName">the name of the bean</param>
+        /// <param name="objectInstance">the corresponding bean instance</param>
+        /// <returns>whether the given bean qualifies as primary</returns>
+        private bool IsPrimary(string objectName, object objectInstance) {
+		    if (ContainsObjectDefinition(objectName)) {
+			    return GetMergedObjectDefinition(objectName, true).IsPrimary;
+		    }
+		    return (ParentObjectFactory is DefaultListableObjectFactory &&
+                    ((DefaultListableObjectFactory)ParentObjectFactory).IsPrimary(objectName, objectInstance));
+	    }
+
+        /// <summary>
+        /// Determine whether the given candidate name matches the bean name or the aliases
+        ///stored in this bean definition.
+        /// </summary>
+        protected bool MatchesObjectName(string objectName, string candidateName)
+        {
+            return (candidateName != null &&
+                    (candidateName.Equals(objectName) || GetAliases(objectName).Contains(candidateName)));
+        }
 
         /// <summary>
         /// Raises the no such object definition exception for an unresolvable dependency
@@ -1248,9 +1312,9 @@ namespace Spring.Objects.Factory.Support
                 ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(this, requiredType, true, descriptor.Eager);
             IDictionary result = new OrderedDictionary(candidateNames.Count);
 
-            foreach (DictionaryEntry entry in resolvableDependencies)
+            foreach (var entry in resolvableDependencies)
             {
-                Type autoWiringType = (Type)entry.Key;
+                Type autoWiringType = entry.Key;
                 if (autoWiringType.IsAssignableFrom(requiredType))
                 {
                     object autowiringValue = this.resolvableDependencies[autoWiringType];
