@@ -33,10 +33,9 @@ namespace Spring.Core
     {
         /// <summary>
         /// Set the attribute defined by <code>name</code> to the supplied	<code>value</code>.
-        /// If <code>value</code> is <code>null</code>, the attribute is {@link #removeAttribute removed}.
-        // <p>In general, users should take care to prevent overlaps with other
+        /// In general, users should take care to prevent overlaps with other
         /// metadata attributes by using fully-qualified names, perhaps using
-        /// class or package names as prefix.</p>
+        /// class or package names as prefix.
         /// </summary>
         /// <param name="name">the unique attribute key</param>
         /// <param name="value">the attribute value to be attached</param>

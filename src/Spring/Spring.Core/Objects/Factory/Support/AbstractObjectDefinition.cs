@@ -560,7 +560,7 @@ namespace Spring.Objects.Factory.Support
         /// <summary>
         /// Register a qualifier to be used for autowire candidate resolution,
         /// keyed by the qualifier's type name.
-        /// <see cref="AutowireCandidateQualifier#TypeName"/>
+        /// <see cref="AutowireCandidateQualifier"/>
         /// </summary>
         public void AddQualifier(AutowireCandidateQualifier qualifier)
         {
