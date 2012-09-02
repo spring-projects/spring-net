@@ -10,7 +10,7 @@ namespace Spring.Objects.Factory.Attributes
     /// candidate beans when autowiring. It may also be used to annotate other
     /// custom annotations that can then in turn be used as qualifiers.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter)]
+    [AttributeUsage(AttributeTargets.Class | AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter)]
     public class QualifierAttribute : Attribute
     {
         private readonly string _value;
