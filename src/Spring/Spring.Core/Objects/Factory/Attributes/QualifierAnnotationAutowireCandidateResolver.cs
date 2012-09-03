@@ -20,7 +20,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using Spring.Collections.Generic;
 using Spring.Core;
 using Spring.Core.TypeConversion;
 using Spring.Objects.Factory.Config;
@@ -38,7 +38,7 @@ namespace Spring.Objects.Factory.Attributes
     {
         private IObjectFactory _objectFactory;
 
-        private ISet<Type> _qualifierTypes = new HashSet<Type>();
+        private Collections.Generic.ISet<Type> _qualifierTypes = new HashedSet<Type>();
 
         private Type _valueAttributeType = typeof(ValueAttribute);
 
@@ -68,7 +68,7 @@ namespace Spring.Objects.Factory.Attributes
         /// <param name="qualifierType">the qualifier attribute to look for</param>
         public QualifierAnnotationAutowireCandidateResolver(Type qualifierType)
         {
-		    Trace.Assert(qualifierType != null, "'qualifierType' must not be null");
+            AssertUtils.ArgumentNotNull(qualifierType, "'qualifierType' must not be null");
 		    _qualifierTypes.Add(qualifierType);
 	    }
 
@@ -77,9 +77,13 @@ namespace Spring.Objects.Factory.Attributes
 	    /// for the given qualifier attribute types.
 	    /// </summary>
 	    /// <param name="qualifierTypes">the qualifier annotations to look for</param>
-	    public QualifierAnnotationAutowireCandidateResolver(ISet<Type> qualifierTypes) {
-		    Trace.Assert(qualifierTypes != null, "'qualifierTypes' must not be null");
-		    _qualifierTypes.UnionWith(qualifierTypes);
+	    public QualifierAnnotationAutowireCandidateResolver(Collections.Generic.ISet<Type> qualifierTypes) {
+            AssertUtils.ArgumentNotNull(qualifierTypes, "'qualifierTypes' must not be null");
+            foreach(var type in qualifierTypes)
+            {
+                if (!_qualifierTypes.Contains(type))
+                    _qualifierTypes.Add(type);
+            }
 	    }
 
 	    /// <summary>
