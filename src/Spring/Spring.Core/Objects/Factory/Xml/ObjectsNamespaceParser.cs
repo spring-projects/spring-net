@@ -61,7 +61,7 @@ namespace Spring.Objects.Factory.Xml
         NamespaceParser(
             Namespace = "http://www.springframework.net",
             SchemaLocationAssemblyHint = typeof(ObjectsNamespaceParser),
-            SchemaLocation = "/Spring.Objects.Factory.Xml/spring-objects-1.3.xsd"
+            SchemaLocation = "/Spring.Objects.Factory.Xml/spring-objects-2.0.xsd"
         )
     ]
 //    [Obsolete("ObjectsNamespaceParser will be dropped with 2.x, use ObjectDefinitionParserHelper instead", false)]
@@ -446,6 +446,8 @@ namespace Spring.Objects.Factory.Xml
 
                 ParserContext childParserContext = new ParserContext(parserContext.ParserHelper, od);
 
+                ParseMetaElements(element, od);
+                ParseQualifierElements(id, element, parserContext, od);
                 MutablePropertyValues pvs = ParsePropertyElements(id, element, childParserContext);
                 ConstructorArgumentValues arguments = ParseConstructorArgSubElements(id, element, childParserContext);
                 EventValues events = ParseEventHandlerSubElements(id, element, childParserContext);
@@ -479,6 +481,12 @@ namespace Spring.Objects.Factory.Xml
                     autowire = childParserContext.ParserHelper.Defaults.Autowire;
                 }
                 od.AutowireMode = GetAutowireMode(autowire);
+                string primary = GetAttributeValue(element, ObjectDefinitionConstants.PrimaryAttribute);
+                if (primary == null)
+                {
+                    primary = "false";
+                }
+                od.IsPrimary = IsTrueStringValue(primary);
                 string initMethodName = GetAttributeValue(element, ObjectDefinitionConstants.InitMethodAttribute);
                 if (StringUtils.HasText(initMethodName))
                 {
@@ -645,6 +653,76 @@ namespace Spring.Objects.Factory.Xml
                 ParseEventListenerDefinition(name, events, (XmlElement)node, parserContext);
             }
             return events;
+        }
+
+        /// <summary>
+        /// Parse the meta upplied meta attributes if the given object element
+        /// </summary>
+        protected void ParseMetaElements(XmlElement element, ObjectMetadataAttributeAccessor attributeAccessor)
+        {
+            foreach (XmlNode node in this.SelectNodes(element, ObjectDefinitionConstants.MetaElement))
+            {
+                string key = GetAttributeValue((XmlElement)node, ObjectDefinitionConstants.KeyAttribute);
+                string value = GetAttributeValue((XmlElement)node, ObjectDefinitionConstants.ValueAttribute);
+
+                ObjectMetadataAttribute attribute = new ObjectMetadataAttribute(key, value);
+                attribute.Source = (XmlElement)node;
+                attributeAccessor.AddMetadataAttribute(attribute);                                
+            }
+        }
+
+        /// <summary>
+        /// Parse qualifier sub-elements of the given bean element.
+        /// </summary>
+        public void ParseQualifierElements(string name, XmlElement element, ParserContext parserContext, AbstractObjectDefinition od)
+        {
+            foreach (XmlNode node in this.SelectNodes(element, ObjectDefinitionConstants.QualifierElement))
+            {
+                ParseQualifierElement(name, (XmlElement) node, parserContext, od);
+            }
+        }
+
+        /// <summary>
+        /// Parse a qualifier element.
+        /// </summary>
+        public void ParseQualifierElement(string name, XmlElement element, ParserContext parserContext, AbstractObjectDefinition od)
+        {
+            string typeName = GetAttributeValue(element, ObjectDefinitionConstants.TypeAttribute);
+            string value = GetAttributeValue(element, ObjectDefinitionConstants.ValueAttribute);
+
+            if (string.IsNullOrEmpty(typeName))
+            {
+                throw new ObjectDefinitionStoreException(
+                                    parserContext.ReaderContext.Resource, name,
+                                    "Tag 'qualifier' must have a 'type' attribute");
+            }
+            
+            var qualifier = new AutowireCandidateQualifier(typeName);
+            qualifier.Source = element;
+
+            if (!string.IsNullOrEmpty(value))
+                qualifier.SetAttribute(AutowireCandidateQualifier.VALUE_KEY, value);
+
+            foreach (XmlNode node in this.SelectNodes(element, ObjectDefinitionConstants.AttributeElement))
+            {
+                var attributeEle = node as XmlElement;
+                string attributeKey = GetAttributeValue(attributeEle, ObjectDefinitionConstants.KeyAttribute);
+                string attributeValue = GetAttributeValue(attributeEle, ObjectDefinitionConstants.ValueAttribute);
+
+                if (!string.IsNullOrEmpty(attributeKey) && !string.IsNullOrEmpty(attributeValue))
+                {
+                    var attribute = new ObjectMetadataAttribute(attributeKey, attributeValue);
+                    attribute.Source = attributeEle;
+                    qualifier.AddMetadataAttribute(attribute);
+                }
+                else
+                {
+                    throw new ObjectDefinitionStoreException(
+                                        parserContext.ReaderContext.Resource, name,
+                                        "Qualifier 'attribute' tag must have a 'key' and 'value'");
+                }
+            }
+            od.AddQualifier(qualifier);
         }
 
         /// <summary>

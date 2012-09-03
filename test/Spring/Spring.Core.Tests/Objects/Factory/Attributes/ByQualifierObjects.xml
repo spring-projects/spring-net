@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net">
+  
+  <object type="Spring.Objects.Factory.Attributes.AutowiredAttributeObjectPostProcessor, Spring.Core" />
+
+  <object id="HelloFoo"
+          type="Spring.Objects.Factory.Attributes.ByType.HelloFoo, Spring.Core.Tests">
+    <qualifier value="hello" />
+  </object>
+
+  <object id="CiaoFoo"
+          type="Spring.Objects.Factory.Attributes.ByType.CiaoFoo, Spring.Core.Tests">
+    <qualifier value="ciao" />
+  </object>
+
+  <object id="AutowireTestField"
+          type="Spring.Objects.Factory.Attributes.ByQualifier.AutowireTestFieldNormal, Spring.Core.Tests"
+          lazy-init="true" />
+
+  <object id="AutowireTestProperty"
+          type="Spring.Objects.Factory.Attributes.ByQualifier.AutowireTestPropertyNormal, Spring.Core.Tests"
+          lazy-init="true" />
+
+  <object id="AutowireTestMethod"
+          type="Spring.Objects.Factory.Attributes.ByQualifier.AutowireTestMethodNormal, Spring.Core.Tests"
+          lazy-init="true" />
+
+  <object id="AutowireTestConstructor"
+          type="Spring.Objects.Factory.Attributes.ByQualifier.AutowireTestConstructorNormal, Spring.Core.Tests"
+          lazy-init="true" />
+
+</objects>

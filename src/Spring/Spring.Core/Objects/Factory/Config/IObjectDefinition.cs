@@ -226,5 +226,12 @@ namespace Spring.Objects.Factory.Config
         /// 	<c>true</c> if this instance is autowire candidate; otherwise, <c>false</c>.
         /// </value>
 	    bool IsAutowireCandidate { get; }
+
+        /// <summary>
+        /// Return whether this bean is a primary autowire candidate.
+        /// If this value is true for exactly one bean among multiple
+        /// matching candidates, it will serve as a tie-breaker.
+        /// </summary>
+	    bool IsPrimary { get; }
 	}
 }

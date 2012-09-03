@@ -40,6 +40,7 @@
 				<include name="**/*.vb" />
 				<include name="**/*.properties" />
 				<include name="**/*.xml" />
+				<include name="**/*.config" />
 <!--
 				<include name="**/SimpleAppContext.xml" />
 				<include name="**/Factory/Attributes/*.xml" />

@@ -18,6 +18,7 @@
 
 #endregion
 
+using System;
 using Spring.Objects.Factory.Config;
 
 namespace Spring.Objects.Factory.Support
@@ -41,5 +42,16 @@ namespace Spring.Objects.Factory.Support
         /// 	<c>true</c> if the object definition qualifies as autowire candidate; otherwise, <c>false</c>.
         /// </returns>
         bool IsAutowireCandidate(ObjectDefinitionHolder odHolder, DependencyDescriptor descriptor);
+
+
+        /// <summary>
+        /// Determine whether a default value is suggested for the given dependency.
+        /// </summary>
+        /// <param name="descriptor">The descriptor for the target method parameter or field</param>
+        /// <returns>The value suggested (typically an expression String),
+        /// or <c>null</c> if none found
+        /// </returns>
+        Object GetSuggestedValue(DependencyDescriptor descriptor);
+
     }
 }

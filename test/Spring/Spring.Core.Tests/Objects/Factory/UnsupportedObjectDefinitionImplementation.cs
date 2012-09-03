@@ -73,6 +73,11 @@ namespace Spring.Objects.Factory
             get { return false; }
         }
 
+        public bool IsPrimary
+        {
+            get { return false; }
+        }
+
         public string ParentName
         {
             get { return null; }
