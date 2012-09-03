@@ -18,6 +18,7 @@
 
 #endregion
 
+using System;
 using Spring.Core;
 
 namespace Spring.Objects
@@ -27,6 +28,7 @@ namespace Spring.Objects
     /// holding attributes as <see cref="IObjectMetadataElement"/> objects in order
     /// to keep track of the definition source.
     /// </summary>
+    [Serializable]
     public class ObjectMetadataAttributeAccessor : AttributeAccessorSupport, IObjectMetadataElement
     {
 	    private object _source;

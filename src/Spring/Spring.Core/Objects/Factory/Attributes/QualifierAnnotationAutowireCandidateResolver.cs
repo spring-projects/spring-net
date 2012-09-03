@@ -34,6 +34,7 @@ namespace Spring.Objects.Factory.Attributes
     /// against <see cref="QualifierAttribute"/> on the field or parameter to be autowired.
     /// Also supports suggested expression values through a <see cref="ValueAttribute"/> attribute.
     /// </summary>
+    [Serializable]
     public class QualifierAnnotationAutowireCandidateResolver : IAutowireCandidateResolver, IObjectFactoryAware
     {
         private IObjectFactory _objectFactory;
