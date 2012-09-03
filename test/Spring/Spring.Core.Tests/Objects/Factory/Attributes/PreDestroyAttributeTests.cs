@@ -51,7 +51,6 @@ namespace Spring.Objects.Factory.Attributes
             _applicationContext.ObjectFactory.RegisterObjectDefinition("PreDestroyTestObject3", objDef);
 
             objDef = new RootObjectDefinition(typeof(PreDestroyTestObject4));
-            objDef.Scope = "prototype";
             _applicationContext.ObjectFactory.RegisterObjectDefinition("PreDestroyTestObject4", objDef);
 
             objDef = new RootObjectDefinition(typeof(PreDestroyTestObject5));
