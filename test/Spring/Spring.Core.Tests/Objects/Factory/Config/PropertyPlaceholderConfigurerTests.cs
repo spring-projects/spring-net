@@ -150,6 +150,7 @@ namespace Spring.Objects.Factory.Config
             IConfigurableListableObjectFactory mock = (IConfigurableListableObjectFactory) mocks.CreateMock(typeof(IConfigurableListableObjectFactory));
 			Expect.Call(mock.GetObjectDefinitionNames()).Return(new string [] {defName});
 			Expect.Call(mock.GetObjectDefinition(defName)).Return(def);
+            Expect.Call(delegate { mock.AddEmbeddedValueResolver(null); }).IgnoreArguments();
             mocks.ReplayAll();
 
 			PropertyPlaceholderConfigurer cfg = new PropertyPlaceholderConfigurer();
@@ -422,6 +423,7 @@ namespace Spring.Objects.Factory.Config
 			IConfigurableListableObjectFactory mock = (IConfigurableListableObjectFactory) mocks.CreateMock(typeof (IConfigurableListableObjectFactory));
 			Expect.Call(mock.GetObjectDefinitionNames()).Return(new string[] {"foo"});
 			Expect.Call(mock.GetObjectDefinition(null)).IgnoreArguments().Return(def);
+            Expect.Call(delegate { mock.AddEmbeddedValueResolver(null); }).IgnoreArguments();
 			mocks.ReplayAll();
             
             PropertyPlaceholderConfigurer cfg = new PropertyPlaceholderConfigurer();
@@ -451,6 +453,7 @@ namespace Spring.Objects.Factory.Config
 			IConfigurableListableObjectFactory mock = (IConfigurableListableObjectFactory) mocks.CreateMock(typeof (IConfigurableListableObjectFactory));
 			Expect.Call(mock.GetObjectDefinitionNames()).Return(new string[] {"foo"});
 			Expect.Call(mock.GetObjectDefinition(null)).IgnoreArguments().Return(def);
+            Expect.Call(delegate { mock.AddEmbeddedValueResolver(null); }).IgnoreArguments();
             mocks.ReplayAll();
 
 			PropertyPlaceholderConfigurer cfg = new PropertyPlaceholderConfigurer();
@@ -548,6 +551,7 @@ namespace Spring.Objects.Factory.Config
 			IConfigurableListableObjectFactory mock = (IConfigurableListableObjectFactory) mocks.CreateMock(typeof(IConfigurableListableObjectFactory));
 			Expect.Call(mock.GetObjectDefinitionNames()).Return(new string [] {defName});
 			Expect.Call(mock.GetObjectDefinition(defName)).Return(def);
+            Expect.Call(delegate { mock.AddEmbeddedValueResolver(null); }).IgnoreArguments();
             mocks.ReplayAll();
 
 			PropertyPlaceholderConfigurer cfg = new PropertyPlaceholderConfigurer();

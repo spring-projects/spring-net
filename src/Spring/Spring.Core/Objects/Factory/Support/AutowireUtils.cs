@@ -27,6 +27,7 @@ using System.Reflection;
 
 using Spring.Collections;
 using Spring.Core;
+using Spring.Objects.Factory.Attributes;
 using Spring.Objects.Factory.Config;
 using Spring.Util;
 
@@ -348,7 +349,7 @@ namespace Spring.Objects.Factory.Support
         /// <returns>A SimpleAutowireCandidateResolver</returns>
 	    public static IAutowireCandidateResolver CreateAutowireCandidateResolver()
 	    {
-            return new SimpleAutowireCandidateResolver();
+            return new QualifierAnnotationAutowireCandidateResolver();
 	    }
 
         /// <summary>

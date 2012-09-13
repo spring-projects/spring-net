@@ -298,6 +298,11 @@ namespace Spring.Objects.Factory.Xml
 		/// </p>
 		/// </remarks>
 		public const string PropertyElement = "property";
+        
+        /// <summary>
+        /// A qualifier definition used for fine grained autowiring
+        /// </summary>
+	    public const string QualifierElement = "qualifier";
 
 		/// <summary>
 		/// A reference to another managed object or static
@@ -581,6 +586,16 @@ namespace Spring.Objects.Factory.Xml
 		/// </summary>
 		public const string AutowireAttribute = "autowire";
 
+        /// <summary>
+        /// Attribute element to farther deifne the qualifier of an object
+        /// </summary>
+	    public const string AttributeElement = "attribute";
+
+        /// <summary>
+        /// The primary object for autwired injection
+        /// </summary>
+        public const string PrimaryAttribute = "primary";
+
 		/// <summary>
 		/// Shortcut alternative to specifying a key element in a
 		/// dictionary entry element with <c>&lt;ref object="..."/&gt;</c>.
@@ -597,6 +612,11 @@ namespace Spring.Objects.Factory.Xml
         /// Specify if the collection values should be merged with the parent.
         /// </summary>
 	    public const string MergeAttribute = "merge";
+
+        /// <summary>
+        /// Defined meta attributes to be used for Autowire objects
+        /// </summary>
+	    public const string MetaElement = "meta";
 
 		/// <summary>
 		/// The string of characters that delimit object names.

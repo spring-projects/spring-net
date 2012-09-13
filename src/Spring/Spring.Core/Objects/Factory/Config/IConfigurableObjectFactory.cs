@@ -22,6 +22,7 @@
 
 using System;
 using System.ComponentModel;
+using Spring.Util;
 
 #endregion
 
@@ -163,5 +164,17 @@ namespace Spring.Objects.Factory.Config
 		/// </param>
 		void RegisterCustomConverter(Type requiredType, TypeConverter converter);
 
+        /// <summary>
+        /// Add a String resolver for embedded values such as annotation attributes.
+        /// </summary>
+        /// <param name="valueResolver">the String resolver to apply to embedded values</param>
+        void AddEmbeddedValueResolver(IStringValueResolver valueResolver);
+
+        /// <summary>
+        /// Resolve the given embedded value, e.g. an annotation attribute.
+        /// </summary>
+        /// <param name="value">the value to resolve</param>
+        /// <returns>the resolved value (may be the original value as-is)</returns>
+        string ResolveEmbeddedValue(string value);
 	}
 }

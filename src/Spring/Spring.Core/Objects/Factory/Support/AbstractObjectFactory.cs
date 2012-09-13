@@ -1604,6 +1604,11 @@ namespace Spring.Objects.Factory.Support
         private ISet objectPostProcessors = new SortedSet(new ObjectOrderComparator());
 
         /// <summary>
+        /// String Resolver applied to Autowired value injections
+        /// </summary>
+        private ISet embeddedValueResolvers = new SortedSet(); 
+
+        /// <summary>
         /// Indicates whether any IInstantiationAwareBeanPostProcessors have been registered
         /// </summary>
         private bool hasInstantiationAwareBeanPostProcessors;
@@ -2384,6 +2389,30 @@ namespace Spring.Objects.Factory.Support
         {
             return this.singletonsInCreation.Contains(name);
         }
+
+        /// <summary>
+        /// Add a String resolver for embedded values such as annotation attributes.
+        /// </summary>
+        /// <param name="valueResolver">the String resolver to apply to embedded values</param>
+        public void AddEmbeddedValueResolver(IStringValueResolver valueResolver)
+        {
+            embeddedValueResolvers.Add(valueResolver);
+        }
+
+        /// <summary>
+        /// Resolve the given embedded value, e.g. an annotation attribute.
+        /// </summary>
+        /// <param name="value">the value to resolve</param>
+        /// <returns>the resolved value (may be the original value as-is)</returns>
+        public string ResolveEmbeddedValue(string value)
+        {
+		    string result = value;
+		    foreach(IStringValueResolver resolver in embeddedValueResolvers)
+            {
+			    result = resolver.ParseAndResolveVariables(result);
+		    }
+		    return result;
+	    }
 
         /// <summary>
         /// Add a new <see cref="Spring.Objects.Factory.Config.IObjectPostProcessor"/>

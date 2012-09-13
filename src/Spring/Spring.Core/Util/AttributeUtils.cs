@@ -1,6 +1,7 @@
 
 
 using System;
+using System.Collections.Generic;
 
 namespace Spring.Util
 {
@@ -41,6 +42,47 @@ namespace Spring.Util
                 return null;
             }
             return FindAttribute(type.BaseType, attributeType);
+        }
+
+        /// <summary>
+        /// Get all attribute properties with values for a specific attribute type
+        /// </summary>
+        /// <param name="attribute">attribute to check against</param>
+        /// <returns>collection of all properties with values</returns>
+        public static IDictionary<string, object> GetAttributeProperties(Attribute attribute)
+        {
+            Type attributeType = attribute.GetType();
+            IDictionary<string, object> attributes = new Dictionary<string, object>();
+            foreach(var property in attributeType.GetProperties())
+            {
+                object value = property.GetValue(attribute, null);
+                attributes.Add(property.Name, value);
+            }
+            return attributes;
+        }
+
+        /// <summary>
+        /// Get the default name value of an attribute and a specific property
+        /// </summary>
+        /// <param name="attribute">attribute from where to get the default value</param>
+        /// <param name="propertyName">property to get the default value</param>
+        /// <returns></returns>
+        public static object GetDefaultValue(Attribute attribute, string propertyName)
+        {
+            Type attributeType = attribute.GetType();
+            try
+            {
+                var property = attributeType.GetProperty(propertyName);
+                if (property == null)
+                    return null;
+                var instance = Activator.CreateInstance(attributeType);
+
+                return property.GetValue(instance, null);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
     }
 }

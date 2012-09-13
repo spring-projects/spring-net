@@ -132,6 +132,17 @@ namespace Spring.Objects.Factory.Config
             get { return aliases; }
         }
 
+        /// <summary>
+        /// Checks wether a givin candidate name has a defined object or alias
+        /// </summary>
+        /// <param name="candidateName">name to check if exists</param>
+        /// <returns></returns>
+        public bool MatchesName(string candidateName)
+        {
+            return (!string.IsNullOrEmpty(candidateName) &&
+                    (candidateName.Equals(ObjectName) || Aliases.Contains(candidateName)));
+        }
+
         #endregion
     }
 }
