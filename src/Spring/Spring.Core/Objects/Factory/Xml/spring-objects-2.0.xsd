@@ -500,10 +500,25 @@
             </xsd:simpleType>
         </xsd:attribute>
         <!--
-               Is this object the rpimary object if type resolving during Autowiring
-          -->
+          Indicates whether or not this object should be considered when looking
+          for matching candidates to satisfy another object's autowiring requirements.
+          Note that this does not affect explicit references by name, which will get
+          resolved even if the specified bean is not marked as an autowire candidate.
+        -->
+        <xsd:attribute name="autowire-candidate" use="optional" default="default">
+          <xsd:simpleType>
+            <xsd:restriction base="xsd:string">
+              <xsd:enumeration value="default"/>
+              <xsd:enumeration value="true"/>
+              <xsd:enumeration value="false"/>
+            </xsd:restriction>
+          </xsd:simpleType>
+        </xsd:attribute>
+        <!--
+             Is this object the rpimary object if type resolving during Autowiring
+        -->
         <xsd:attribute name="primary" type="xsd:boolean" use="optional" default="false"/>
-      <!--
+        <!--
              Optional attribute controlling whether to check whether all this
              objects dependencies, expressed in its properties, are satisfied.
              Default is no dependency checking.
@@ -553,42 +568,49 @@
             <xsd:documentation>The document root.  At least one object definition is required.</xsd:documentation>
         </xsd:annotation>
         <xsd:complexType>
-            <xsd:sequence>
-                <xsd:element name="description" type="description" minOccurs="0" maxOccurs="1"/>
-                <xsd:choice minOccurs="0" maxOccurs="unbounded">
-                    <xsd:element name="import" type="importElement"/>
-                    <xsd:element name="alias" type="aliasElement"/>
-                    <xsd:element name="object" type="vanillaObject"/>
-                    <xsd:any namespace="##other" processContents="strict"/>
-                </xsd:choice>
-            </xsd:sequence>
-            <!--
-                 Default values for all object definitions. Can be overridden at
-                 the "object" level. See those attribute definitions for details.
-            -->
-            <xsd:attribute name="default-lazy-init" type="xsd:boolean" use="optional" default="false"/>
-            <xsd:attribute name="default-merge" type="xsd:boolean" use="optional" default="false"/>
-            <xsd:attribute name="default-dependency-check" use="optional" default="none">
-                <xsd:simpleType>
-                    <xsd:restriction base="xsd:string">
-                        <xsd:enumeration value="none"/>
-                        <xsd:enumeration value="objects"/>
-                        <xsd:enumeration value="simple"/>
-                        <xsd:enumeration value="all"/>
-                    </xsd:restriction>
-                </xsd:simpleType>
-            </xsd:attribute>
-            <xsd:attribute name="default-autowire" use="optional" default="no">
-                <xsd:simpleType>
-                    <xsd:restriction base="xsd:string">
-                        <xsd:enumeration value="no"/>
-                        <xsd:enumeration value="byName"/>
-                        <xsd:enumeration value="byType"/>
-                        <xsd:enumeration value="constructor"/>
-                        <xsd:enumeration value="autodetect"/>
-                    </xsd:restriction>
-                </xsd:simpleType>
-            </xsd:attribute>
+        	<xsd:sequence>
+        		<xsd:element name="description" type="description"
+        			minOccurs="0" maxOccurs="1" />
+        		<xsd:choice minOccurs="0" maxOccurs="unbounded">
+        			<xsd:element name="import" type="importElement" />
+        			<xsd:element name="alias" type="aliasElement" />
+        			<xsd:element name="object" type="vanillaObject" />
+        			<xsd:any namespace="##other"
+        				processContents="strict" />
+        		</xsd:choice>
+        	</xsd:sequence>
+        	<!--
+        		Default values for all object definitions. Can be overridden at
+        		the "object" level. See those attribute definitions for details.
+        	-->
+        	<xsd:attribute name="default-lazy-init" type="xsd:boolean"
+        		use="optional" default="false" />
+        	<xsd:attribute name="default-merge" type="xsd:boolean"
+        		use="optional" default="false" />
+        	<xsd:attribute name="default-dependency-check"
+        		use="optional" default="none">
+        		<xsd:simpleType>
+        			<xsd:restriction base="xsd:string">
+        				<xsd:enumeration value="none" />
+        				<xsd:enumeration value="objects" />
+        				<xsd:enumeration value="simple" />
+        				<xsd:enumeration value="all" />
+        			</xsd:restriction>
+        		</xsd:simpleType>
+        	</xsd:attribute>
+        	<xsd:attribute name="default-autowire" use="optional"
+        		default="no">
+        		<xsd:simpleType>
+        			<xsd:restriction base="xsd:string">
+        				<xsd:enumeration value="no" />
+        				<xsd:enumeration value="byName" />
+        				<xsd:enumeration value="byType" />
+        				<xsd:enumeration value="constructor" />
+        				<xsd:enumeration value="autodetect" />
+        			</xsd:restriction>
+        		</xsd:simpleType>
+        	</xsd:attribute>
+        	<xsd:attribute name="default-autowire-candidates" type="xsd:string" use="optional" />
         </xsd:complexType>
     </xsd:element>
 
