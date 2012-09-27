@@ -488,14 +488,28 @@ namespace Spring.Objects.Factory.Xml
                 }
                 od.IsPrimary = IsTrueStringValue(primary);
                 string initMethodName = GetAttributeValue(element, ObjectDefinitionConstants.InitMethodAttribute);
-                if (StringUtils.HasText(initMethodName))
+                if (initMethodName != null)
                 {
-                    od.InitMethodName = initMethodName;
+                    if (StringUtils.HasText(initMethodName))
+                        od.InitMethodName = initMethodName;
+                }
+                else
+                {
+                    if (StringUtils.HasText(childParserContext.ParserHelper.Defaults.InitMethod))
+                        od.InitMethodName = childParserContext.ParserHelper.Defaults.InitMethod;
                 }
                 string destroyMethodName = GetAttributeValue(element, ObjectDefinitionConstants.DestroyMethodAttribute);
-                if (StringUtils.HasText(destroyMethodName))
+                if (destroyMethodName != null)
                 {
-                    od.DestroyMethodName = destroyMethodName;
+                    if (StringUtils.HasText(destroyMethodName))
+                    {
+                        od.DestroyMethodName = destroyMethodName;
+                    }
+                }
+                else
+                {
+                    if (StringUtils.HasText(childParserContext.ParserHelper.Defaults.DestroyMethod))
+                        od.DestroyMethodName = childParserContext.ParserHelper.Defaults.DestroyMethod;
                 }
                 if (element.HasAttribute(ObjectDefinitionConstants.SingletonAttribute))
                 {

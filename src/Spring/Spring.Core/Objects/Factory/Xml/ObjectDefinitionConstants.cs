@@ -95,6 +95,15 @@ namespace Spring.Objects.Factory.Xml
         /// </summary>
 	    public const string DefaultMergeAttribute = "default-merge";
 
+        /// <summary>
+        /// Specifies the default init method.
+        /// </summary>
+        public const string DefaultInitMethodAttribute = "default-init-method";
+
+        /// <summary>
+        /// Specifies the default destroy method.
+        /// </summary>
+        public const string DefaultDestroyMethodAttribute = "default-destroy-method";
 
 		/// <summary>
 		/// Defines a single named object.
