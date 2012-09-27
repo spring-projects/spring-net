@@ -589,6 +589,26 @@
                     </xsd:restriction>
                 </xsd:simpleType>
             </xsd:attribute>
+            <xsd:attribute name="default-init-method" type="xsd:string">
+              <xsd:annotation>
+                <xsd:documentation>
+                  <![CDATA[
+                  The default 'init-method' value; see the documentation for the
+                  'init-method' attribute of the 'object' element.
+      					  ]]>
+                </xsd:documentation>
+              </xsd:annotation>
+            </xsd:attribute>
+            <xsd:attribute name="default-destroy-method" type="xsd:string">
+              <xsd:annotation>
+                <xsd:documentation>
+                  <![CDATA[
+	                The default 'destroy-method' value; see the documentation for the
+	                'destroy-method' attribute of the 'object' element.
+      					  ]]>
+                </xsd:documentation>
+              </xsd:annotation>
+            </xsd:attribute>
         </xsd:complexType>
     </xsd:element>
 

@@ -175,6 +175,34 @@ namespace Spring.Objects.Factory.Xml
 
             #endregion
 
+            ddd.InitMethod = GetAttributeValue(root, ObjectDefinitionConstants.DefaultInitMethodAttribute);
+
+            #region Instrumentation
+
+            if (log.IsDebugEnabled)
+            {
+                log.Debug(
+                    string.Format(
+                        "Default init method '{0}'.",
+                        ddd.InitMethod));
+            }
+
+            #endregion
+
+            ddd.DestroyMethod = GetAttributeValue(root, ObjectDefinitionConstants.DefaultDestroyMethodAttribute);
+
+            #region Instrumentation
+
+            if (log.IsDebugEnabled)
+            {
+                log.Debug(
+                    string.Format(
+                        "Default destroy method '{0}'.",
+                        ddd.DestroyMethod));
+            }
+
+            #endregion
+
             defaults = ddd;
         }
 

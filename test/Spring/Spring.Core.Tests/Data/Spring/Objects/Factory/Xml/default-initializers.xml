@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<objects xmlns="http://www.springframework.net" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd"
+  default-init-method="Init">
+	
+  <object id="init-method1"
+          type="Spring.Objects.Factory.Xml.XmlObjectFactoryTests+DoubleInitializer, Spring.Core.Tests">
+    <property name="num">
+      <value>7</value>
+    </property>
+  </object>
+
+  <object id="init-method2"
+          type="Spring.Objects.Factory.Xml.XmlObjectFactoryTests+DoubleInitializer, Spring.Core.Tests"
+          init-method="">
+    <property name="num">
+      <value>7</value>
+    </property>
+  </object>
+
+</objects>
