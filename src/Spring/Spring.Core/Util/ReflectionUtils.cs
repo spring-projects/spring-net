@@ -418,7 +418,7 @@ namespace Spring.Util
                     if (parameters.Length > 0)
                     {
                         ParameterInfo lastParameter = parameters[parameters.Length - 1];
-                        if (lastParameter.GetCustomAttributes(typeof(ParamArrayAttribute), false).Length > 0)
+                        if (lastParameter.GetCustomAttributes(typeof(ParamArrayAttribute), false).Length > 0 && argValues.Length >= parameters.Length)
                         {
                             paramValues =
                                 PackageParamArray(argValues, parameters.Length,
