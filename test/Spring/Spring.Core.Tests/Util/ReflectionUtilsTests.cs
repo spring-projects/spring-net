@@ -894,6 +894,33 @@ namespace Spring.Util
         }
 
         [Test]
+        public void GetMethodByArgumentValuesCanResolveWhenAmbiguousMatchIsOnlyDifferentiatedByParams()
+        {
+            GetMethodByArgumentValuesTarget.DummyArgumentType[] typedArg = new GetMethodByArgumentValuesTarget.DummyArgumentType[] { };
+            GetMethodByArgumentValuesTarget foo = new GetMethodByArgumentValuesTarget(1, typedArg);
+
+            Type type = typeof(GetMethodByArgumentValuesTarget);
+            MethodInfo[] candidateMethods = new MethodInfo[]
+                {
+                    type.GetMethod("ParamOverloadedMethod", new Type[] {typeof(string), typeof(string), typeof(string)})
+                    ,type.GetMethod("ParamOverloadedMethod", new Type[] {typeof(string), typeof(string), typeof(bool)})
+                    ,type.GetMethod("ParamOverloadedMethod", new Type[] {typeof(string), typeof(string), typeof(string), typeof(string), typeof(object[])})
+                };
+
+            // ensure noone changed our test class
+            Assert.IsNotNull(candidateMethods[0]);
+            Assert.IsNotNull(candidateMethods[1]);
+            Assert.IsNotNull(candidateMethods[2]);
+            Assert.AreEqual("ThreeStringsOverload", foo.ParamOverloadedMethod(string.Empty, string.Empty, string.Empty));
+            Assert.AreEqual("TwoStringsAndABoolOverload", foo.ParamOverloadedMethod(string.Empty, string.Empty, default(bool)));
+            Assert.AreEqual("FourStringsAndAParamsCollectionOverload", foo.ParamOverloadedMethod(string.Empty, string.Empty, string.Empty, string.Empty, typedArg));
+
+            MethodInfo resolvedMethod = ReflectionUtils.GetMethodByArgumentValues(candidateMethods, new object[] { string.Empty, string.Empty, string.Empty, string.Empty, typedArg });
+            Assert.AreSame(candidateMethods[2], resolvedMethod);
+        }
+
+
+        [Test]
         public void GetMethodByArgumentValuesResolvesToExactMatchIfAvailable()
         {
             GetMethodByArgumentValuesTarget.DummyArgumentType[] typedArg = new GetMethodByArgumentValuesTarget.DummyArgumentType[] { };
@@ -1182,14 +1209,14 @@ namespace Spring.Util
         [Test]
         public void IsTypeNullable_WhenTrue()
         {
-            Type type = typeof (int?);
+            Type type = typeof(int?);
             Assert.That(ReflectionUtils.IsNullableType(type), Is.True);
         }
 
         [Test]
         public void IsTypeNullable_WhenFalse()
         {
-            Type type = typeof (int);
+            Type type = typeof(int);
             Assert.That(ReflectionUtils.IsNullableType(type), Is.False);
         }
 
@@ -1509,6 +1536,23 @@ namespace Spring.Util
         {
             return "NullableArgumentMatch";
         }
+
+        public string ParamOverloadedMethod(string s1, string s2, string s3)
+        {
+            return "ThreeStringsOverload";
+        }
+
+        public string ParamOverloadedMethod(string s1, string s2, bool b1)
+        {
+            return "TwoStringsAndABoolOverload";
+        }
+
+        public string ParamOverloadedMethod(string s1, string s2, string s3, string s4, params object[] args)
+        {
+            return "FourStringsAndAParamsCollectionOverload";
+        }
+
+
     }
 
     public sealed class MyCustomAttribute : Attribute
