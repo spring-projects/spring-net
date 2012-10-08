@@ -44,7 +44,15 @@ namespace Spring.Core.TypeConversion
 
         [Test]
         [SetCulture( "en-US" )]
-        public void ConvertValue_ForDecimalMarkWithComma_FailsWithBritishCulture()
+        public void ConvertValueForDecimalMarkWithPointReturnsValue()
+        {
+          object o = TypeConversionUtils.ConvertValueIfNecessary( typeof( Double ), "1.2", "foo" );
+          Assert.That( o, Is.EqualTo( 1.2 ) );
+        }
+
+        [Test]
+        [SetCulture( "en-US" )]
+        public void ConvertValueForDecimalMarkWithCommaFails()
         {
           TestDelegate testDelegate = () => TypeConversionUtils.ConvertValueIfNecessary( typeof( Double ), "1,2", "foo" );
           Assert.Throws<TypeMismatchException>( testDelegate );
@@ -52,7 +60,7 @@ namespace Spring.Core.TypeConversion
 
         [Test]
         [SetCulture( "nl-NL" )]
-        public void ConvertValue_ForDecimalMarkWithPoint_ReturnsValueWithDutchCulture()
+        public void ConvertValueWithDutchCultureForDecimalMarkWithPointReturnsValue()
         {
           object o = TypeConversionUtils.ConvertValueIfNecessary( typeof( Double ), "1.2", "foo" );
           Assert.That( o, Is.EqualTo( 1.2 ) );
@@ -60,7 +68,7 @@ namespace Spring.Core.TypeConversion
 
         [Test]
         [SetCulture( "nl-NL" )]
-        public void ConvertValue_ForDecimalMarkWithComma_ReturnsValueWithDutchCulture()
+        public void ConvertValueWithDutchCultureForDecimalMarkWithCommaReturnsValue()
         {
           object o = TypeConversionUtils.ConvertValueIfNecessary( typeof( Double ), "1,2", "foo" );
           Assert.That( o, Is.EqualTo( 1.2 ) );
