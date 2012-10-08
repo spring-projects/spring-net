@@ -31,18 +31,39 @@ namespace Spring.Core.TypeConversion
     /// This class contains tests for TypeConversionUtils
     /// </summary>
     /// <author>Mark Pollack</author>
+    /// <author>Andreas Kluth</author>
     [TestFixture]
     public class TypeConversionUtilsTests
     {
-
-#if NET_2_0
         [Test]
         public void NullAbleTest()
         {
             object o = TypeConversionUtils.ConvertValueIfNecessary(typeof(DateTime?), "", "bla");
             Assert.IsNull(o);
-        } 
-#endif
-        
+        }
+
+        [Test]
+        [SetCulture( "en-US" )]
+        public void ConvertValue_ForDecimalMarkWithComma_FailsWithBritishCulture()
+        {
+          TestDelegate testDelegate = () => TypeConversionUtils.ConvertValueIfNecessary( typeof( Double ), "1,2", "foo" );
+          Assert.Throws<TypeMismatchException>( testDelegate );
+        }
+
+        [Test]
+        [SetCulture( "nl-NL" )]
+        public void ConvertValue_ForDecimalMarkWithPoint_ReturnsValueWithDutchCulture()
+        {
+          object o = TypeConversionUtils.ConvertValueIfNecessary( typeof( Double ), "1.2", "foo" );
+          Assert.That( o, Is.EqualTo( 1.2 ) );
+        }
+
+        [Test]
+        [SetCulture( "nl-NL" )]
+        public void ConvertValue_ForDecimalMarkWithComma_ReturnsValueWithDutchCulture()
+        {
+          object o = TypeConversionUtils.ConvertValueIfNecessary( typeof( Double ), "1,2", "foo" );
+          Assert.That( o, Is.EqualTo( 1.2 ) );
+        }
     }
 }
