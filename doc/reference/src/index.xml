@@ -67,8 +67,8 @@
   <info>
     <title>The Spring.NET Framework</title>
     <subtitle>Reference Documentation</subtitle>
-    <releaseinfo>Version 1.3.2</releaseinfo>
-    <pubdate>Last Updated August 1, 2011 <ulink url="http://www.springframework.net/doc-latest/reference/html/index.html">(Latest documentation)</ulink></pubdate>
+    <releaseinfo>Version 2.0.0</releaseinfo>
+    <pubdate>Last Updated October 10, 2012 <ulink url="http://www.springframework.net/doc-latest/reference/html/index.html">(Latest documentation)</ulink></pubdate>
     <authorgroup>
       <author>
         <firstname>Mark</firstname>
@@ -117,6 +117,10 @@
       <author>
         <firstname>Stephen</firstname>
         <surname>Bohlen</surname>
+      </author>
+      <author>
+        <firstname>Thomas</firstname>
+        <surname>Trageser</surname>
       </author>
       <author>
         <firstname>The Spring</firstname>

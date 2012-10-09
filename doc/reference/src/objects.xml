@@ -29,8 +29,7 @@
 
     <para>This chapter covers the Spring Framework implementation of the
     Inversion of Control (IoC) <footnote>
-        <para>See the section entitled <xref
-        linkend="background-ioc" /></para>
+        <para>See the section entitled <xref linkend="background-ioc"/></para>
       </footnote> principle</para>
 
     <para>The <literal>Spring.Core</literal> assembly is the basis for
@@ -54,7 +53,7 @@
     in this chapter in descriptions of Spring's IoC container.</para>
 
     <para>If you are new to Spring.NET or IoC containers in general, you may
-    want to consider starting with <xref linkend="quickstarts" />, which
+    want to consider starting with <xref linkend="quickstarts"/>, which
     contains a number of introductory level examples that actually demonstrate
     a lot of what is described in detail below. Don't worry if you don't
     absorb everything at once... those examples serve only to paint a picture
@@ -100,7 +99,7 @@
 
     <mediaobject>
       <imageobject>
-        <imagedata fileref="images/container-in-action.gif" format="GIF"></imagedata>
+        <imagedata fileref="images/container-in-action.gif" format="GIF"/>
       </imageobject>
     </mediaobject>
 
@@ -167,12 +166,12 @@
       <para>Spring.NET comes with an XSD schema to make the validation of the
       XML object definitions a whole lot easier. The XSD document is
       thoroughly documented so feel free to take a peek inside (see <xref
-      linkend="springobjectsxsd" />). The XSD is currently used in the
+      linkend="springobjectsxsd"/>). The XSD is currently used in the
       implementation code to validate the XML document. The XSD schema serves
       a dual purpose in that it also facilitates the editing of XML object
       definitions inside an XSD aware editor (typically Visual Studio) by
       providing validation (and Intellisense support in the case of Visual
-      Studio). You may wish to refer to <xref linkend="vsnet" /> for more
+      Studio). You may wish to refer to <xref linkend="vsnet"/> for more
       information regarding such integration.</para>
     </sect2>
 
@@ -256,7 +255,7 @@
           know more about Spring's <classname><link
           ns6:href="http://www.springframework.net/doc-latest/api/net-2.0/html/Spring.Core~Spring.Core.IO.IResource.html">IResource</link></classname>
           abstraction to load metadata from other locations as desribed below
-          and alsoin the chapter <xref linkend="resources" /></para>
+          and alsoin the chapter <xref linkend="resources"/></para>
         </note>
 
         <para>These resources are most frequently files or URLs but can also
@@ -270,7 +269,7 @@
         referring to a resource that has been embedded inside a .NET assembly,
         <literal>assembly://&lt;AssemblyName&gt;/&lt;NameSpace&gt;/&lt;ResourceName&gt;</literal>.
         The <literal>IResource</literal> abstraction is explained further in
-        <xref linkend="objects-iresource" />.</para>
+        <xref linkend="objects-iresource"/>.</para>
 
         <note>
           <para>To create an embedded resource using Visual Studio you must
@@ -319,7 +318,7 @@
         language="csharp">IApplicationContext ctx = ContextRegistry.GetContext();</programlisting>
         The <literal>ContextRegistry</literal> is used to both instantiate the
         application context and to perform service locator style access to
-        other objects. (See <xref linkend="objects-servicelocator" /> for more
+        other objects. (See <xref linkend="objects-servicelocator"/> for more
         information). The glue that makes this possible is an implementation
         of the Base Class Library (BCL) provided
         <literal>IConfigurationSectionHandler</literal> interface, namely the
@@ -348,12 +347,12 @@
         <para>Spring.NET comes with an XSD schema to make the validation of
         the XML object definitions a whole lot easier. The XSD document is
         thoroughly documented so feel free to take a peek inside (see <xref
-        linkend="springobjectsxsd" />). The XSD is currently used in the
+        linkend="springobjectsxsd"/>). The XSD is currently used in the
         implementation code to validate the XML document. The XSD schema
         serves a dual purpose in that it also facilitates the editing of XML
         object definitions inside an XSD aware editor (typically Visual
         Studio) by providing validation (and Intellisense support in the case
-        of Visual Studio). You may wish to refer to <xref linkend="vsnet" />
+        of Visual Studio). You may wish to refer to <xref linkend="vsnet"/>
         for more information regarding such integration.</para>
 
         <para>Your XML object definitions can also be defined within the
@@ -387,14 +386,14 @@
 &lt;/configuration&gt;</programlisting></para>
 
         <para>Other options available to structure the configuration files are
-        described in <xref linkend="context-functionality-hierarchy" /> and
-        <xref linkend="objects-factory-xml-import" />.</para>
+        described in <xref linkend="context-functionality-hierarchy"/> and
+        <xref linkend="objects-factory-xml-import"/>.</para>
 
         <para>The <literal>IApplicationContext</literal> can be configured to
         register other resource handlers, custom parsers to integrate
         user-contributed XML schema into the object definitions section, type
         converters, and define type aliases. These features are discussed in
-        section <xref linkend="context-configuration" /></para>
+        section <xref linkend="context-configuration"/></para>
       </sect3>
 
       <sect3 xml:id="objects-factory-xml-import">
@@ -524,9 +523,9 @@ IList userList = service.GetUserNames();
           <title>Object definition explanation</title>
 
           <tgroup cols="2">
-            <colspec colname="c1" colwidth="2*" />
+            <colspec colname="c1" colwidth="2*"/>
 
-            <colspec colname="c2" colwidth="4*" />
+            <colspec colname="c2" colwidth="4*"/>
 
             <thead>
               <row>
@@ -540,57 +539,55 @@ IList userList = service.GetUserNames();
               <row>
                 <entry>type</entry>
 
-                <entry><xref linkend="objects-factory-class" /></entry>
+                <entry><xref linkend="objects-factory-class"/></entry>
               </row>
 
               <row>
                 <entry>id and name</entry>
 
-                <entry><xref linkend="objects-objectname" /></entry>
+                <entry><xref linkend="objects-objectname"/></entry>
               </row>
 
               <row>
                 <entry>singleton or prototype</entry>
 
-                <entry><xref linkend="objects-factory-scopes" /></entry>
+                <entry><xref linkend="objects-factory-scopes"/></entry>
               </row>
 
               <row>
                 <entry>object properties</entry>
 
-                <entry><xref
-                linkend="objects-factory-collaborators" /></entry>
+                <entry><xref linkend="objects-factory-collaborators"/></entry>
               </row>
 
               <row>
                 <entry>constructor arguments</entry>
 
-                <entry><xref
-                linkend="objects-factory-collaborators" /></entry>
+                <entry><xref linkend="objects-factory-collaborators"/></entry>
               </row>
 
               <row>
                 <entry>autowiring mode</entry>
 
-                <entry><xref linkend="objects-factory-autowire" /></entry>
+                <entry><xref linkend="objects-factory-autowire"/></entry>
               </row>
 
               <row>
                 <entry>dependency checking mode</entry>
 
-                <entry><xref linkend="objects-factory-dependencies" /></entry>
+                <entry><xref linkend="objects-factory-dependencies"/></entry>
               </row>
 
               <row>
                 <entry>initialization method</entry>
 
-                <entry><xref linkend="objects-factory-lifecycle" /></entry>
+                <entry><xref linkend="objects-factory-lifecycle"/></entry>
               </row>
 
               <row>
                 <entry>destruction method</entry>
 
-                <entry><xref linkend="objects-factory-lifecycle" /></entry>
+                <entry><xref linkend="objects-factory-lifecycle"/></entry>
               </row>
             </tbody>
           </tgroup>
@@ -764,7 +761,7 @@ IList userList = service.GetUserNames();
         <para>For details about the mechanism for supplying arguments to the
         constructor (if required), and setting object instance properties
         after the object is constructed, see <xref
-        linkend="objects-factory-collaborators" />.</para>
+        linkend="objects-factory-collaborators"/>.</para>
 
         <para>This XML fragment describes an object definition that will be
         identified by the <emphasis>exampleObject</emphasis> name, instances
@@ -837,7 +834,7 @@ IList userList = service.GetUserNames();
         <para>For details about the mechanism for supplying (optional)
         arguments to the factory method and setting object instance properties
         after it has been returned from the factory, see <xref
-        linkend="object-factory-properties-detailed" /></para>
+        linkend="object-factory-properties-detailed"/></para>
       </sect3>
 
       <sect3 xml:id="objects-factory-class-instance-factory-method">
@@ -943,7 +940,7 @@ IList userList = service.GetUserNames();
         type="GenericsPlay.ExampleGenericObject&amp;lt;GenericDictionary&amp;lt;int , string&gt;&gt;, GenericsPlay" /&gt;</programlisting>
         or even shorter <programlisting language="myxml">&lt;object id="myOtherOtherGenericObject" 
         type="GenericsPlay.ExampleGenericObject&amp;lt;MyIntStringDictionary&gt;, GenericsPlay" /&gt;
-</programlisting> Refer to <xref linkend="context-configuration" /> for
+</programlisting> Refer to <xref linkend="context-configuration"/> for
         additional information on using type aliases.</para>
       </sect3>
 
@@ -1175,11 +1172,11 @@ namespace SimpleApp
                 <title>Type aliases</title>
 
                 <tgroup cols="3">
-                  <colspec colname="c1" colwidth="1*" />
+                  <colspec colname="c1" colwidth="1*"/>
 
-                  <colspec colname="c2" colwidth="5*" />
+                  <colspec colname="c2" colwidth="5*"/>
 
-                  <colspec colname="c3" colwidth="5*" />
+                  <colspec colname="c3" colwidth="5*"/>
 
                   <thead>
                     <row>
@@ -1395,7 +1392,7 @@ namespace SimpleApp
         programatically), but rather with an XML definition file which will be
         converted internally into instances of these classes, and used to load
         an entire Spring IoC container instance. Refer to <xref
-        linkend="objects-objects-conversion" /> for more information regarding
+        linkend="objects-objects-conversion"/> for more information regarding
         type conversion, and how you can design your classes to be convertible
         by Spring.NET.</para>
 
@@ -1910,7 +1907,7 @@ public class MixedIocObject
 
         <para>The shortcut forms for value and references are useful to reduce
         XML verbosity when setting collection properties. See <xref
-        linkend="objects-shortcutforms" /> for more information.</para>
+        linkend="objects-shortcutforms"/> for more information.</para>
       </sect3>
 
       <sect3 xml:id="objects-generic-collections-values">
@@ -1927,7 +1924,7 @@ public class MixedIocObject
         collection are automaticaly converted from a string to the appropriate
         type. If you are using your own user-defined type as a generic type
         parameter you will likely need to register a custom type converter.
-        Refer to <xref linkend="objects-type-conversion" /> for more
+        Refer to <xref linkend="objects-type-conversion"/> for more
         information. The implementations of <literal>IList&lt;T&gt;</literal>
         and <literal>IDictionary&lt;TKey, TValue&gt;</literal> that is created
         are <literal>System.Collections.Generic.List</literal> and
@@ -2147,7 +2144,7 @@ support=support@example.co.uk            // overriden by child</programlisting>
         familiar bracket <literal>[]</literal> notation. Spring's XML
         configuration supports the setting of indexer properties. Overloaded
         indexers as well as multiparameter indexers are also supported. The
-        property expression parser described in <xref linkend="expressions" />
+        property expression parser described in <xref linkend="expressions"/>
         is used to perform the type conversion of the indexer name argument
         from a string in the XML file to a matching target type. As an example
         consider the following class <programlisting language="csharp">public class Person
@@ -2568,9 +2565,9 @@ source.OnClick(); // First eventListener1.HandleEvent is invoked, then eventList
           <title>Autowiring modes</title>
 
           <tgroup cols="2">
-            <colspec colname="c1" colwidth="1*" />
+            <colspec colname="c1" colwidth="1*"/>
 
-            <colspec colname="c2" colwidth="5*" />
+            <colspec colname="c2" colwidth="5*"/>
 
             <thead>
               <row>
@@ -2734,9 +2731,9 @@ source.OnClick(); // First eventListener1.HandleEvent is invoked, then eventList
           <title>Dependency checking modes</title>
 
           <tgroup cols="2">
-            <colspec colname="c1" colwidth="1*" />
+            <colspec colname="c1" colwidth="1*"/>
 
-            <colspec colname="c2" colwidth="5*" />
+            <colspec colname="c2" colwidth="5*"/>
 
             <thead>
               <row>
@@ -3014,7 +3011,7 @@ public class ReplacementComputeValue : IMethodReplacer
       indicates to Spring.NET that this object is itself a factory and the
       factories product, not the factory itself, is what will be associated
       with the object id. Factory objects are discussed further in <xref
-      linkend="objects-factory-lifecycle-factoryobject" /></para>
+      linkend="objects-factory-lifecycle-factoryobject"/></para>
 
       <sect3>
         <title>Setting a reference to the value of property.</title>
@@ -3040,7 +3037,7 @@ public class ReplacementComputeValue : IMethodReplacer
         Note that nested properties are supported for both instance and class
         property lookups. The <literal>IFactoryObject</literal> is discussed
         more generally in <xref
-        linkend="objects-factory-lifecycle-factoryobject" />.</para>
+        linkend="objects-factory-lifecycle-factoryobject"/>.</para>
 
         <para>Here's an example where a property path is used against another
         object instance. In this case, an inner object definition is used and
@@ -3163,7 +3160,7 @@ public class ReplacementComputeValue : IMethodReplacer
         class. Additionally, it is sometimes necessary to invoke a method just
         to perform some sort of initialization.... while the mechanisms for
         handling object initialization have yet to be introduced (see <xref
-        linkend="objects-factory-lifecycle-initializingobject" />), these
+        linkend="objects-factory-lifecycle-initializingobject"/>), these
         mechanisms do not permit any arguments to be passed to any
         initialization method, and are confined to invoking an initialization
         method on the object that has just been instantiated by the container.
@@ -3392,9 +3389,9 @@ public class MyClassFactory
       <title>Object Scopes</title>
 
       <tgroup cols="2">
-        <colspec colname="c1" colwidth="2*" />
+        <colspec colname="c1" colwidth="2*"/>
 
-        <colspec colname="c2" colwidth="4*" />
+        <colspec colname="c2" colwidth="4*"/>
 
         <thead>
           <row>
@@ -3529,7 +3526,7 @@ public class MyClassFactory
       prototype-scoped object is a replacement for the C# 'new' operator. All
       lifecycle management past that point must be handled by the client. (For
       details on the lifecycle of an object in the Spring container, see <xref
-      linkend="objects-factory-lifecycle" />.</para>
+      linkend="objects-factory-lifecycle"/>.</para>
     </sect2>
 
     <sect2 xml:id="objects-factory-scopes-sing-prot-interaction">
@@ -3550,7 +3547,7 @@ public class MyClassFactory
       container is instantiating the singleton object and resolving and
       injecting its dependencies. If you need a new instance of a prototype
       object at runtime more than once, see <xref
-      linkend="objects-method-injection" />.</para>
+      linkend="objects-method-injection"/>.</para>
     </sect2>
 
     <sect2>
@@ -3627,9 +3624,9 @@ public sealed class Font : MarshalByRefObject, ICloneable, ISerializable, IDispo
           <title>Built-in <literal>TypeConverters</literal></title>
 
           <tgroup cols="2">
-            <colspec colname="c1" colwidth="3*" />
+            <colspec colname="c1" colwidth="3*"/>
 
-            <colspec colname="c2" colwidth="5*" />
+            <colspec colname="c2" colwidth="5*"/>
 
             <thead>
               <row>
@@ -3759,7 +3756,7 @@ public sealed class Font : MarshalByRefObject, ICloneable, ISerializable, IDispo
       <literal>IApplicationContext</literal> is to use the custom
       configuration section handler
       <literal>TypeConverterSectionHandler</literal> This is demonstrated in
-      section <xref linkend="context-configuration" /></para>
+      section <xref linkend="context-configuration"/></para>
 
       <para>An alternate approach, present for legacy reasons in the port of
       Spring.NET from the Java code base, is to use the object factory
@@ -3888,9 +3885,9 @@ public sealed class Font : MarshalByRefObject, ICloneable, ISerializable, IDispo
       custom features or other lifecycle behavior Spring.NET does not offer
       out-of-the-box, you can implement an
       <literal>IObjectPostProcessor</literal> yourself. For more information
-      see<xref linkend="objects-factory-customizing" />.</para>
+      see<xref linkend="objects-factory-customizing"/>.</para>
 
-      <para></para>
+      <para/>
 
       <sect3 xml:id="objects-factory-lifecycle-initializingobject">
         <title>IInitializingObject / <literal>init-method</literal></title>
@@ -3983,6 +3980,153 @@ public class AnotherExampleObject : IDisposable
     }
 }</programlisting></para>
       </sect3>
+
+      <sect3>
+        <title>[PostConstruct] and [Predestroy] attribute driven lifecycle
+        management</title>
+
+        <para>The <literal>InitDestroyAttributeObjectPostProcessor</literal>
+        recognizes lifecycle attributes such as [PostConstruct] and
+        [PreDestroy]. Introduced in Spring.Net 2.0, the support for these
+        attributes offers yet another alternative to those described in
+        initialization callbacks and destruction callbacks. Provided that the
+        <literal>InitDestroyAttributeObjectPostProcessor</literal> is
+        registered within the Spring ApplicationContext, a method carrying one
+        of these annotations is invoked at the same point in the lifecycle as
+        the corresponding Spring lifecycle interface method or explicitly
+        declared callback method. In the example below, the cache will be
+        pre-populated upon initialization and cleared upon destruction.</para>
+
+        <para>The best way to illustrate the usage of this attribute is with
+        an example.</para>
+
+        <para><programlisting language="csharp">public class MovieLister
+{
+  [PostConstruct]
+  public void Init()
+  {
+    // do some initialization here
+  }
+
+  [PreDestroy]
+  public void Destroy()
+  {
+    // do some destruction here
+  }
+
+  ...
+}</programlisting>There is one last little piece of Spring configuration that
+        is required to actually 'switch on' this behavior. Simply annotating
+        the methods of your classes is not enough to get this behavior. You
+        need to enable a component that is aware of the
+        <literal>[PostContrsuct]</literal> and <literal>[PreDestroy]</literal>
+        attribute and that can process it appropriately.</para>
+
+        <para>This component is the
+        <literal>InitDestroyAttributeObjectPostProcessor</literal> class. This
+        is a special <literal>IObjectPostProcessor</literal> implementation
+        that is <literal>[PostConstruct]</literal>- and
+        <literal>[PreDestroy]</literal>-aware and actually provides the
+        lifecycle logic. It is very easy to configure; simply drop the
+        following object definition into your Spring XML configuration.</para>
+
+        <para><programlisting language="myxml">&lt;object type="Spring.Objects.Factory.Attributes.InitDestroyAttributeObjectPostProcessor, Spring.Core"/&gt;</programlisting>Finally,
+        you can configure an instance of the
+        <literal>InitDestroyAttributeObjectPostProcessor</literal> class to
+        look for other Attribute types. Simply plug it into the definition of
+        a <literal>InitDestroyAttributeObjectPostProcessor</literal> and you
+        are good to go, see example below:</para>
+
+        <para><programlisting language="myxml">&lt;object type="Spring.Objects.Factory.Attributes.InitDestroyAttributeObjectPostProcessor, Spring.Core"&gt;
+  &lt;property name="InitAttributeType" value="MyApp.Attributes.InitAttribute, MyApp"/&gt;
+  &lt;property name="DestroyAttributeType" value="MyApp.Attributes.DisposeAttribute, MyApp"/&gt;
+&lt;/object&gt;</programlisting></para>
+      </sect3>
+
+      <sect3>
+        <title>Default initialization and destroy methods</title>
+
+        <para>When you write initialization and destroy method callbacks that
+        do not use the Spring-specific IInitializingObject and IDisposable
+        callback interfaces, you typically write methods with names such as
+        <literal>Init()</literal>, <literal>Initialize()</literal>,
+        <literal>Dispose()</literal>, and so on. Ideally, the names of such
+        lifecycle callback methods are standardized across a project so that
+        all developers use the same method names and ensure
+        consistency.</para>
+
+        <para>You can configure the Spring container to look for named
+        initialization and destroy callback method names on every object. This
+        means that you, as an application developer, can write your
+        application classes and use an initialization callback called
+        <literal>Init()</literal>, without having to configure an
+        <literal>init-method="Init"</literal> attribute with each object
+        definition. The Spring IoC container calls that method when the object
+        is created (and in accordance with the standard lifecycle callback
+        contract described previously). This feature also enforces a
+        consistent naming convention for initialization and destroy method
+        callbacks.</para>
+
+        <para>Suppose that your initialization callback methods are named
+        <literal>Init()</literal> and destroy callback methods are named
+        <literal>Destroy()</literal>. Your class will resemble the class in
+        the following example.</para>
+
+        <para><programlisting language="csharp">public class DefaultBlogService : IBlogService
+{
+  private IBlogDao _blogDao;
+
+  public void Init()
+  {
+      if (_blogDao == null) {
+          throw new InvalidOperationException("The [_blogDao] property must be set.");
+      }
+  }
+
+  public void Destroy()
+  {
+    // do some destruction work
+  }
+}</programlisting><programlisting language="myxml">&lt;objects default-init-method="Init"
+         defauly-destroy-method="Destroy"&gt;
+
+  &lt;object id="BlogService" class="Examples.DefaultBlogService"&gt;
+      &lt;property name="_blogDao" ref="BlogDao" /&gt;
+  &lt;/object&gt;
+
+&lt;/objects&gt;</programlisting>The presence of the
+        <literal>default-init-method</literal> attribute on the top-level
+        <literal>&lt;objects/&gt;</literal> element attribute causes the
+        Spring IoC container to recognize a method called
+        <literal>Init</literal> on objects as the initialization method
+        callback. When an object is created and assembled, if the object class
+        has such a method, it is invoked at the appropriate time. If the
+        object does not have such a method an
+        <literal>ObjectCreationException</literal> is thrown. To prevent this
+        for objects that do not have such a method you need to define an empty
+        <literal>init-method=""</literal> and/or
+        <literal>destroy-method=""</literal> attributes on the object
+        itself.</para>
+
+        <para>Where existing object classes already have callback methods that
+        are named at variance with the convention, you can override the
+        default by specifying (in XML, that is) the method name using the
+        <literal>init-method</literal> and <literal>destroy-method</literal>
+        attributes on the <literal>&lt;object/&gt;</literal> itself.</para>
+
+        <para>The Spring container guarantees that a configured initialization
+        callback is called immediately after an object is supplied with all
+        dependencies. Thus the initialization callback is called on the raw
+        object reference, which means that AOP interceptors and so forth are
+        not yet applied to the object. A target object is fully created first,
+        then an AOP proxy (for example) with its interceptor chain is applied.
+        If the target object and the proxy are defined separately, your code
+        can even interact with the raw target object, bypassing the proxy.
+        Hence, it would be inconsistent to apply the interceptors to the Init
+        method, because doing so would couple the lifecycle of the target
+        object with its proxy/interceptors and leave strange semantics when
+        your code interacts directly to the raw target object.</para>
+      </sect3>
     </sect2>
 
     <sect2 xml:id="objects-factory-aware">
@@ -4011,7 +4155,7 @@ public class AnotherExampleObject : IDisposable
       <classname>IApplicationContext</classname> provide access to file
       resources, publishing application events, and accessing a
       <classname>IMessageSource</classname>. These additional features are
-      described in <xref linkend="context-introduction" /></para>
+      described in <xref linkend="context-introduction"/></para>
 
       <sect3 xml:id="objects-factory-aware-objectnameaware">
         <title>IObjectNameAware</title>
@@ -4435,7 +4579,7 @@ factory.AddObjectPostProcessor(pp);
         for auto-proxying)”.</para>
       </note>
 
-      <para></para>
+      <para/>
 
       <sect3 xml:id="object-factory-extension-opp-examples-hw">
         <title>Example: Hello World, IObjectPostProcessor-style</title>
@@ -4681,7 +4825,7 @@ cfg.setLocation(new FileSystemResource("ado.properties"));
 cfg.PostProcessObjectFactory(factory);</programlisting></para>
 
       <para><anchor
-      xml:id="objects-factory-autodetect-objectfactorypostprocessors" />This
+      xml:id="objects-factory-autodetect-objectfactorypostprocessors"/>This
       explicit registration step is not convenient, and this is one of the
       reasons why the various <literal>IApplicationContext</literal>
       implementations are preferred above plain
@@ -5055,7 +5199,7 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
 
           <para><mediaobject>
               <imageobject>
-                <imagedata fileref="images/applicationsettings.png"></imagedata>
+                <imagedata fileref="images/applicationsettings.png"/>
               </imageobject>
             </mediaobject>Then you can use <literal>${peggy_name}</literal>,
           <literal>${peggy_age}</literal>,
@@ -5327,7 +5471,7 @@ joan_age=35</programlisting>
 
       <para>The IFactoryObject concept and interface is used in a number of
       places within the Spring Framework. Some examples of its use is
-      described in <xref linkend="objects-advancedproperty-setting" /> for the
+      described in <xref linkend="objects-advancedproperty-setting"/> for the
       <literal>PropertyRetrievingFactoryObject</literal> and
       <literal>FieldRetrievingFactoryObject</literal>. An additional use of
       creating an custom IFactoryObject implementation is to retrieve an
@@ -5365,7 +5509,7 @@ joan_age=35</programlisting>
           </itemizedlist></para>
 
         <para><literal>IConfigurableFactoryObject</literal> implementions you
-        already have examples of in <xref linkend="client-side" /> are
+        already have examples of in <xref linkend="client-side"/> are
         <literal>WebServiceProxyFactory</literal>.</para>
       </sect3>
     </sect2>
@@ -5459,13 +5603,13 @@ joan_age=35</programlisting>
       <literal>IObjectFactory</literal> capabilities in a lot more depth than
       the said feature matrix.)</para>
 
-      <anchor xml:id="context-introduction-ctx-vs-objectfactory-feature-matrix" />
+      <anchor xml:id="context-introduction-ctx-vs-objectfactory-feature-matrix"/>
 
       <table pgwide="1">
         <title>Feature Matrix</title>
 
         <tgroup cols="3">
-          <colspec align="left" />
+          <colspec align="left"/>
 
           <thead>
             <row>
@@ -5758,7 +5902,7 @@ IApplicationContext context =
 &lt;/configuration&gt;</programlisting>
 
       <para>For an example showing type aliases for generic types see <xref
-      linkend="objects-creation-generic-types" />.</para>
+      linkend="objects-creation-generic-types"/>.</para>
 
       <para>Another way is to define an object of the type
       <literal>Spring.Objects.Factory.Config.TypeAliasConfigurer</literal>
@@ -5879,7 +6023,7 @@ IApplicationContext context =
       <literal>Spring.Context.Support.XmlApplicationContext</literal>. The
       name of the context can be used in conjunction with the service locator
       class, <literal>ContextRegistry</literal>, discussed in <xref
-      linkend="objects-servicelocator" /></para>
+      linkend="objects-servicelocator"/></para>
     </sect2>
 
     <sect2 xml:id="context-functionality-messagesource">
@@ -5997,7 +6141,7 @@ IApplicationContext context =
       ever used but provides programmatic ways to add messages to the source.
       The <literal>ResourceSetMessageSource</literal> is more interesting and
       an example is provided for in the distribution and discussed more
-      extensively in the <xref linkend="quickstarts" /> section. The
+      extensively in the <xref linkend="quickstarts"/> section. The
       <literal>ResourceSetMessageSource</literal> is configured by providing a
       list of <literal>ResourceManager</literal>s. When a message code is to
       be resolved, the list of ResourceManagers is searched to resolve the
@@ -6090,7 +6234,7 @@ ctx.GetMessage("error.required",
       resources in a protocol independent way. The
       <literal>IApplicationContext</literal> has a method
       (<literal>GetResource(string)</literal>) to take care of this. Refer to
-      <xref linkend="objects-iresource" /> for more information on the string
+      <xref linkend="objects-iresource"/> for more information on the string
       format to use and the <literal>IResource</literal> abstraction in
       general.</para>
     </sect2>
