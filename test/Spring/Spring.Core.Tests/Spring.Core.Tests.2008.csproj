@@ -265,6 +265,7 @@
     <Compile Include="Core\TypeConversion\StreamConverterTests.cs" />
     <Compile Include="Core\TypeConversion\StringArrayConverterTests.cs" />
     <Compile Include="Core\TypeConversion\TimeSpanConverterTests.cs" />
+    <Compile Include="Core\TypeConversion\TypeConversionUtilsTests.cs" />
     <Compile Include="Core\TypeConversion\TypeConverterRegistryTests.cs" />
     <Compile Include="Core\TypeConversion\UriConverterTests.cs" />
     <Compile Include="Core\TypeResolution\CachedTypeResolverTests.cs" />
