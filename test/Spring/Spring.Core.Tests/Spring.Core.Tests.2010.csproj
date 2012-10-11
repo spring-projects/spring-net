@@ -840,6 +840,8 @@
     <Content Include="Data\Spring\Objects\Factory\Xml\collectionMergingGeneric.xml" />
     <Content Include="Data\Spring\Objects\Factory\Xml\collectionMerging.xml" />
     <Content Include="Data\Spring\Objects\Factory\Xml\collectionConversionGeneric.xml" />
+    <Content Include="Data\Spring\Objects\Factory\Xml\default-destroy-methods.xml" />
+    <Content Include="Data\Spring\Objects\Factory\Xml\default-initializers.xml" />
     <Content Include="Data\Spring\Objects\Factory\Xml\ctor-args.xml" />
     <Content Include="Data\Spring\Objects\Factory\Xml\objectNameGeneration.xml" />
     <Content Include="Data\Spring\Objects\Factory\Xml\simple-constructor-arg.xml" />

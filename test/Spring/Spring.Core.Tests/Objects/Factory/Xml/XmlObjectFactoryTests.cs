@@ -884,6 +884,26 @@ namespace Spring.Objects.Factory.Xml
             Assert.AreEqual(14, in_Renamed.Num);
         }
 
+        [Test]
+        public void DefaultInitMethodIsInvoked()
+        {
+            IResource resource = new ReadOnlyXmlTestResource("default-initializers.xml", GetType());
+            XmlObjectFactory xof = new XmlObjectFactory(resource);
+            DoubleInitializer in_Renamed = (DoubleInitializer)xof.GetObject("init-method1");
+            // Initializer should have doubled value
+            Assert.AreEqual(14, in_Renamed.Num);
+        }
+
+        [Test]
+        public void DefaultInitMethodDisabled()
+        {
+            IResource resource = new ReadOnlyXmlTestResource("default-initializers.xml", GetType());
+            XmlObjectFactory xof = new XmlObjectFactory(resource);
+            DoubleInitializer in_Renamed = (DoubleInitializer)xof.GetObject("init-method2");
+            // Initializer should have doubled value
+            Assert.AreEqual(7, in_Renamed.Num);
+        }
+
         /// <summary>
         /// Test that if a custom initializer throws an exception, it's handled correctly.
         /// </summary>
@@ -933,6 +953,30 @@ namespace Spring.Objects.Factory.Xml
             Assert.IsTrue(iib.destroyed && iib.customDestroyed);
             xof.Dispose();
             Assert.IsTrue(iib.destroyed && iib.customDestroyed);
+        }
+
+        [Test]
+        public void DefaultDestroyMethodInvoked()
+        {
+            IResource resource = new ReadOnlyXmlTestResource("default-destroy-methods.xml", GetType());
+            XmlObjectFactory xof = new XmlObjectFactory(resource);
+            xof.PreInstantiateSingletons();
+            DefaultDestroyer dd = (DefaultDestroyer)xof.GetObject("destroy-method1");
+            Assert.IsTrue(!dd.customDestroyed);
+            xof.Dispose();
+            Assert.IsTrue(dd.customDestroyed);
+        }
+
+        [Test]
+        public void DefaultDestroyMethodDisabled()
+        {
+            IResource resource = new ReadOnlyXmlTestResource("default-destroy-methods.xml", GetType());
+            XmlObjectFactory xof = new XmlObjectFactory(resource);
+            xof.PreInstantiateSingletons();
+            DefaultDestroyer dd = (DefaultDestroyer)xof.GetObject("destroy-method2");
+            Assert.IsTrue(!dd.customDestroyed);
+            xof.Dispose();
+            Assert.IsTrue(!dd.customDestroyed);
         }
 
         [Test]
@@ -1939,6 +1983,16 @@ namespace Spring.Objects.Factory.Xml
             public void Init()
             {
                 this.num *= 2;
+            }
+        }
+
+        public class DefaultDestroyer
+        {
+            public bool customDestroyed;
+
+            public void CustomDestroy()
+            {
+                customDestroyed = true;
             }
         }
 
