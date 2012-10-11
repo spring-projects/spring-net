@@ -48,6 +48,12 @@ namespace Spring.Objects.Factory.Xml
 		/// </remarks>
 		public const string TrueValue = "true";
 
+        /// <summary>
+        /// Value of a boolean attribute that represents
+        /// <see langword="false"/>.
+        /// </summary>
+        public const string FalseValue = "false";
+
 		/// <summary>
 		/// Signifies that a default value is to be applied.
 		/// </summary>
@@ -89,6 +95,11 @@ namespace Spring.Objects.Factory.Xml
 		/// Specifies the default autowire mode.
 		/// </summary>
 		public const string DefaultAutowireAttribute = "default-autowire";
+
+        /// <summary>
+        /// Specifies the default autowire candidates.
+        /// </summary>
+        public const string DefaultAutowireCandidatesAttribute = "default-autowire-candidates";
 
         /// <summary>
         /// Specifies the default collection merge mode.
@@ -594,6 +605,11 @@ namespace Spring.Objects.Factory.Xml
 		/// The autowiring mode for an individual object definition.
 		/// </summary>
 		public const string AutowireAttribute = "autowire";
+
+        /// <summary>
+        /// The autowiring mode for an individual object definition.
+        /// </summary>
+        public const string AutowireCandidateAttribute = "autowire-candidate";
 
         /// <summary>
         /// Attribute element to farther deifne the qualifier of an object

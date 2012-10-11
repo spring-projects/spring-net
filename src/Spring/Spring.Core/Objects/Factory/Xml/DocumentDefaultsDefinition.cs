@@ -35,6 +35,7 @@ namespace Spring.Objects.Factory.Xml
         private string merge;
         private string initMethod;
         private string destroyMethod;
+        private string autowireCandidates;
 
         /// <summary>
         /// Gets or sets the autowire setting for the document that's currently parsed.
@@ -90,10 +91,20 @@ namespace Spring.Objects.Factory.Xml
         /// Gets or sets the destroy method for the document that's currently parsed.
         /// </summary>
         /// <value>The destroy methood</value>
-        public string DestroyMethod 
+        public string DestroyMethod
         {
             get { return destroyMethod; }
-            set { destroyMethod = value; } 
+            set { destroyMethod = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets autowire candidates for the document that's currently parsed
+        /// </summary>
+        /// <value>The Autowire Candidates</value>
+        public string AutowireCandidates 
+        { 
+            get { return autowireCandidates; }
+            set { autowireCandidates = value; }
         }
     }
 }
