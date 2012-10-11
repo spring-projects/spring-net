@@ -335,36 +335,5 @@ namespace Spring.Objects.Factory
 	    /// If the objects could not be created.
 	    /// </exception>
 	    IDictionary<string, T> GetObjects<T>(bool includePrototypes, bool includeFactoryObjects);
-
-        /// <summary>
-        /// Return an instance (possibly shared or independent) of the given object name.
-        /// </summary>
-        /// <remarks>
-        /// <para>
-        /// This method allows an object factory to be used as a replacement for the
-        /// Singleton or Prototype design pattern.
-        /// </para>
-        /// <para>
-        /// Note that callers should retain references to returned objects. There is no
-        /// guarantee that this method will be implemented to be efficient. For example,
-        /// it may be synchronized, or may need to run an RDBMS query.
-        /// </para>
-        /// <para>
-        /// Will ask the parent factory if the object cannot be found in this factory
-        /// instance.
-        /// </para>
-        /// </remarks>
-        /// <typeparam name="T">The type of the object to return.</typeparam>
-        /// <returns>The instance of the object.</returns>
-        /// <exception cref="Spring.Objects.Factory.NoSuchObjectDefinitionException">
-        /// If there's no such object definition.
-        /// </exception>
-        /// <exception cref="Spring.Objects.Factory.ObjectDefinitionStoreException">
-        /// If there is more than a single object of the requested type defined in the factory.
-        /// </exception>
-        /// <exception cref="Spring.Objects.ObjectsException">
-        /// If the object could not be created.
-        /// </exception>
-        T GetObject<T>();
 	}
 }
