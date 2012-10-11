@@ -949,20 +949,41 @@ namespace Spring.Objects.Factory.Support
         /// <exception cref="Spring.Objects.ObjectsException">
         /// If the object could not be created.
         /// </exception>
-        public T GetObject<T>()
+        public override T GetObject<T>()
         {
             IList<string> objectNamesForType = GetObjectNamesForType(typeof(T));
+
+            if (objectNamesForType.Count > 1)
+            {
+                IList<string> autowireCandidates = new List<string>();
+                foreach (var objectName in objectNamesForType)
+                {
+                    if (GetObjectDefinition(objectName).IsAutowireCandidate)
+                        autowireCandidates.Add(objectName);
+
+                }
+                if (autowireCandidates.Count > 0)
+                    objectNamesForType = autowireCandidates;
+            }
+
             if ((objectNamesForType == null) || (objectNamesForType.Count == 0))
             {
                 throw new NoSuchObjectDefinitionException(typeof(T).FullName, "Requested Type not Defined in the Context.");
             }
 
-            if (objectNamesForType.Count > 1)
+            if (objectNamesForType.Count == 1)
             {
-                throw new ObjectDefinitionStoreException(string.Format("More than one definition for {0} found in the Context.", typeof(T).FullName));
+                return (T)GetObject(objectNamesForType[0]);
             }
-
-            return (T)GetObject(objectNamesForType[0]);
+            else if (objectNamesForType.Count == 0 && ParentObjectFactory != null)
+            {
+                return ParentObjectFactory.GetObject<T>();
+            }
+            else
+            {
+                throw new NoSuchObjectDefinitionException(typeof(T), "expected single bean but found " +
+                        objectNamesForType.Count + ": " + StringUtils.ArrayToCommaDelimitedString(objectNamesForType));
+            }
         }
 
         /// <summary>

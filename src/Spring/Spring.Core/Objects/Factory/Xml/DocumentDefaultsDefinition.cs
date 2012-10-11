@@ -33,6 +33,7 @@ namespace Spring.Objects.Factory.Xml
         private string dependencyCheck;
         private string lazyInit;
         private string merge;
+        private string autowireCandidates;
 
         /// <summary>
         /// Gets or sets the autowire setting for the document that's currently parsed.
@@ -72,6 +73,16 @@ namespace Spring.Objects.Factory.Xml
         {
             get { return merge; }
             set { merge = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets autowire candidates for the document that's currently parsed
+        /// </summary>
+        /// <value>The Autowire Candidates</value>
+        public string AutowireCandidates 
+        { 
+            get { return autowireCandidates; }
+            set { autowireCandidates = value; }
         }
     }
 }
