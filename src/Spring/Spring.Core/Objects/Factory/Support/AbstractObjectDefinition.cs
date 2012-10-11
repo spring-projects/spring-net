@@ -814,7 +814,8 @@ namespace Spring.Objects.Factory.Support
             AutowireMode = other.AutowireMode;
             ResourceDescription = other.ResourceDescription;
             IsPrimary = other.IsPrimary;
-
+            IsAutowireCandidate = other.IsAutowireCandidate;
+            
             AbstractObjectDefinition aod = other as AbstractObjectDefinition;
             if (aod != null)
             {
@@ -846,6 +847,7 @@ namespace Spring.Objects.Factory.Support
             buffer.Append("; Singleton = ").Append(IsSingleton);
             buffer.Append("; LazyInit = ").Append(IsLazyInit);
             buffer.Append("; Autowire = ").Append(AutowireMode);
+            buffer.Append("; Autowire-Candidate = ").Append(IsAutowireCandidate);
             buffer.Append("; Primary = ").Append(IsPrimary);
             buffer.Append("; DependencyCheck = ").Append(DependencyCheck);
             buffer.Append("; InitMethodName = ").Append(InitMethodName);

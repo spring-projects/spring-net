@@ -337,6 +337,28 @@ namespace Spring.Objects.Factory.Support
         }
 
         /// <summary>
+        /// Sets the autowire candidate value for this definition.
+        /// </summary>
+        /// <param name="autowireCandidate">The autowire candidate value</param>
+        /// <returns></returns>
+        public ObjectDefinitionBuilder SetAutowireCandidate(bool autowireCandidate)
+        {
+            objectDefinition.IsAutowireCandidate = autowireCandidate;
+            return this;
+        }
+
+        /// <summary>
+        /// Sets the primary value for this definition.
+        /// </summary>
+        /// <param name="primary">If object is primary</param>
+        /// <returns></returns>
+        public ObjectDefinitionBuilder SetPrimary(bool primary)
+        {
+            objectDefinition.IsPrimary = primary;
+            return this;
+        }
+
+        /// <summary>
         /// Sets the dependency check mode for this definition.
         /// </summary>
         /// <param name="dependencyCheck">The dependency check.</param>

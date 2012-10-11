@@ -175,6 +175,20 @@ namespace Spring.Objects.Factory.Xml
 
             #endregion
 
+            ddd.AutowireCandidates = GetAttributeValue(root, ObjectDefinitionConstants.DefaultAutowireCandidatesAttribute);
+
+            #region Instrumentation
+
+            if (log.IsDebugEnabled)
+            {
+                log.Debug(
+                    string.Format(
+                        "Default autowire candidates '{0}'.",
+                        ddd.AutowireCandidates));
+            }
+
+            #endregion
+
             defaults = ddd;
         }
 

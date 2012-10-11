@@ -1609,6 +1609,36 @@ namespace Spring.Objects.Factory
         }
 
         [Test]
+        public void GetObjectByTypeWithAmbiguity()
+        {
+		    DefaultListableObjectFactory lbf = new DefaultListableObjectFactory();
+		    RootObjectDefinition bd1 = new RootObjectDefinition(typeof(TestObject));
+            RootObjectDefinition bd2 = new RootObjectDefinition(typeof(TestObject));
+		    lbf.RegisterObjectDefinition("bd1", bd1);
+		    lbf.RegisterObjectDefinition("bd2", bd2);
+
+            Assert.That(delegate { lbf.GetObject<TestObject>(); }, Throws.Exception.TypeOf<NoSuchObjectDefinitionException>());
+        }
+
+        [Test]
+        public void GetObjectByTypeFiltersOutNonAutowireCandidates()
+        {
+		    DefaultListableObjectFactory lbf = new DefaultListableObjectFactory();
+		    RootObjectDefinition bd1 = new RootObjectDefinition(typeof(TestObject));
+		    RootObjectDefinition bd2 = new RootObjectDefinition(typeof(TestObject));
+		    RootObjectDefinition na1 = new RootObjectDefinition(typeof(TestObject));
+		    na1.IsAutowireCandidate = false;
+
+		    lbf.RegisterObjectDefinition("bd1", bd1);
+		    lbf.RegisterObjectDefinition("na1", na1);
+		    TestObject actual = lbf.GetObject<TestObject>(); // na1 was filtered
+            Assert.That(lbf.GetObject("bd1", typeof(TestObject)), Is.SameAs(actual));
+
+		    lbf.RegisterObjectDefinition("bd2", bd2);
+            Assert.That(delegate { lbf.GetObject<TestObject>(); }, Throws.Exception.TypeOf<NoSuchObjectDefinitionException>());
+        }
+
+        [Test]
         public void GetObjectDefinitionResolvesAliases()
         {
             const string TheParentsAlias = "theParentsAlias";

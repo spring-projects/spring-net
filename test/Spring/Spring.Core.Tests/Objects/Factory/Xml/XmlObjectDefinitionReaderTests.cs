@@ -354,5 +354,37 @@ namespace Spring.Objects.Factory.Xml
             Assert.AreEqual("test1", od2.DependsOn[0]);
             Assert.AreEqual(DependencyCheckingMode.Simple, od2.DependencyCheck);
         }
+
+        [Test]
+        public void ParsesAutowireCandidate()
+        {
+            DefaultListableObjectFactory of = new DefaultListableObjectFactory();
+            XmlObjectDefinitionReader reader = new XmlObjectDefinitionReader(of);
+            reader.LoadObjectDefinitions(new StringResource(
+@"<?xml version='1.0' encoding='UTF-8' ?>
+<objects xmlns='http://www.springframework.net' default-autowire-candidates='test1*,test4*'>  
+	<object id='test1' type='Spring.Objects.TestObject, Spring.Core.Tests' />
+	<object id='test2' type='Spring.Objects.TestObject, Spring.Core.Tests' autowire-candidate='false' />
+	<object id='test3' type='Spring.Objects.TestObject, Spring.Core.Tests' autowire-candidate='true' />
+	<object id='test4' type='Spring.Objects.TestObject, Spring.Core.Tests' autowire-candidate='default' />
+	<object id='test5' type='Spring.Objects.TestObject, Spring.Core.Tests' autowire-candidate='default' />
+</objects>
+"));
+            var od = (AbstractObjectDefinition)of.GetObjectDefinition("test1");
+            Assert.That(od.IsAutowireCandidate, Is.True, "No attribute set should default to true");
+
+            od = (AbstractObjectDefinition)of.GetObjectDefinition("test2");
+            Assert.That(od.IsAutowireCandidate, Is.False, "Specifically attribute set to false should set to false");
+
+            od = (AbstractObjectDefinition)of.GetObjectDefinition("test3");
+            Assert.That(od.IsAutowireCandidate, Is.True, "Specifically attribute set to true should set to false");
+
+            od = (AbstractObjectDefinition)of.GetObjectDefinition("test4");
+            Assert.That(od.IsAutowireCandidate, Is.True, "Attribute set to default should check pattern and return true");
+
+            od = (AbstractObjectDefinition)of.GetObjectDefinition("test5");
+            Assert.That(od.IsAutowireCandidate, Is.False, "Attribute set to default should check pattern and return false");
+        }
+
     }
 }
