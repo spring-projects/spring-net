@@ -24,9 +24,9 @@
       <sources failonempty="true">
         <include name="**/*.cs" />
       </sources>
-      <resources basedir="Resources">
-        <include name="**/*" />
-      </resources>
+      <resources prefix="Spring" dynamicprefix="true" failonempty="true">
+		<include name="**/*.xml" />
+	  </resources>
       <references basedir="${current.bin.dir}">
         <include name="*.dll" />
         <include name="System.Data.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
@@ -43,7 +43,6 @@
     </csc>
   </target>
   <target name="test" depends="build">
-    <!-- skipping running of tests for now -->
-    <!-- call target="common.run-tests" if="${test.integration.data}" / -->
+    <call target="common.run-tests" if="${test.integration.data}" />
   </target>
 </project>
