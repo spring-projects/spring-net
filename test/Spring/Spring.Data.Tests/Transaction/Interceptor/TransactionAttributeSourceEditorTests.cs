@@ -59,7 +59,7 @@ namespace Spring.Transaction.Interceptor
 		{
 			ITransactionAttribute ta = tas.ReturnTransactionAttribute( method, null );
 			Assert.IsTrue( ta != null );
-			Assert.IsTrue( ta.TransactionIsolationLevel == IsolationLevel.ReadCommitted );
+			Assert.IsTrue( ta.TransactionIsolationLevel == IsolationLevel.Unspecified );
 			Assert.IsTrue( ta.PropagationBehavior == transactionPropagation);
 		}
 	}

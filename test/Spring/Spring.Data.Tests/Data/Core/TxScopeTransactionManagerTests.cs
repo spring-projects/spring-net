@@ -57,7 +57,7 @@ namespace Spring.Data.Core
             {
                 Expect.Call(txAdapter.IsExistingTransaction).Return(false);
                 TransactionOptions txOptions = new TransactionOptions();
-                txOptions.IsolationLevel = IsolationLevel.ReadCommitted;
+                txOptions.IsolationLevel = IsolationLevel.Unspecified;
                 txAdapter.CreateTransactionScope(TransactionScopeOption.Required, txOptions, EnterpriseServicesInteropOption.None);
 
                 Expect.Call(txAdapter.RollbackOnly).Return(false);
@@ -94,7 +94,7 @@ namespace Spring.Data.Core
             {
                 Expect.Call(txAdapter.IsExistingTransaction).Return(false);
                 TransactionOptions txOptions = new TransactionOptions();
-                txOptions.IsolationLevel = IsolationLevel.ReadCommitted;
+                txOptions.IsolationLevel = IsolationLevel.Unspecified;
                 txAdapter.CreateTransactionScope(TransactionScopeOption.Required, txOptions, EnterpriseServicesInteropOption.None);
                 txAdapter.Dispose();
             }
@@ -141,7 +141,7 @@ namespace Spring.Data.Core
             {
                 Expect.Call(txAdapter.IsExistingTransaction).Return(false);
                 TransactionOptions txOptions = new TransactionOptions();
-                txOptions.IsolationLevel = IsolationLevel.ReadCommitted;
+                txOptions.IsolationLevel = IsolationLevel.Unspecified;
                 txAdapter.CreateTransactionScope(TransactionScopeOption.RequiresNew, txOptions, EnterpriseServicesInteropOption.None);
 
                 //inner tx actions
