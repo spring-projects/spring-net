@@ -3,17 +3,25 @@
          xmlns:db="http://www.springframework.net/database">
 
 
-  
-  <db:provider id="DbProvider" 
-               provider="SqlServer-2.0"              
+
+  <db:provider id="DbProvider"
+               provider="SqlServer-2.0"
                connectionString="Data Source=SPRINGQA;Database=Spring;Trusted_Connection=False;User ID=springqa;Password=springqa"/>
-       
-       <!-- connectionString="Data Source=MARKT60\SQL2005;Initial Catalog=Spring;Persist Security Info=True;User ID=springqa;Password=springqa"/> -->
-  
 
   <object id="adoTemplate" type="Spring.Data.Core.AdoTemplate, Spring.Data">
     <property name="DbProvider" ref="DbProvider"/>
   </object>
 
+  <object id="testObjectDao"
+            type="Spring.Data.TestObjectDao, Spring.Data.Integration.Tests">
+
+    <property name="AdoTemplate" ref="adoTemplate"/>
+  </object>
+
+  <object id="testObjectManager"
+            type="Spring.Data.TestObjectManager, Spring.Data.Integration.Tests">
+
+    <property name="TestObjectDao" ref="testObjectDao"/>
+  </object>
 
 </objects>

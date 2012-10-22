@@ -48,7 +48,7 @@ namespace Spring.Data
         public void TxTemplate()
         {
             IDbProvider dbProvider = DbProviderFactory.GetDbProvider("System.Data.SqlClient");
-            dbProvider.ConnectionString = @"Data Source=MARKT60\SQL2005;Initial Catalog=CreditsAndDebits;User ID=springqa; Password=springqa";
+            dbProvider.ConnectionString = @"Data Source=SPRINGQA;Initial Catalog=CreditsAndDebits;User ID=springqa; Password=springqa";
             //IPlatformTransactionManager tm = new ServiceDomainPlatformTransactionManager();
             //IPlatformTransactionManager tm = new TxScopeTransactionManager();
             IPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
@@ -95,7 +95,7 @@ namespace Spring.Data
                 using (SqlConnection cn2005 = new SqlConnection())
                 {
                     cn2005.ConnectionString =
-                        @"Data Source=MARKT60\SQL2005;Initial Catalog=CreditsAndDebits;User ID=springqa; Password=springqa";
+                        @"Data Source=SPRINGQA;Initial Catalog=CreditsAndDebits;User ID=springqa; Password=springqa";
                     SqlCommand cmd = new SqlCommand(updateSql1, cn2005);
                     cn2005.Open();
                     cmd.ExecuteNonQuery();
@@ -118,7 +118,7 @@ namespace Spring.Data
   System.Transactions.Transaction.Current.TransactionInformation.LocalIdentifier);
                 using (SqlConnection cn2005 = new SqlConnection())
                 {
-                    cn2005.ConnectionString = @"Data Source=MARKT60\SQL2005;Initial Catalog=CreditsAndDebits;User ID=springqa; Password=springqa";
+                    cn2005.ConnectionString = @"Data Source=SPRINGQA;Initial Catalog=CreditsAndDebits;User ID=springqa; Password=springqa";
                     SqlCommand cmd = new SqlCommand(updateSql2, cn2005);
                     cn2005.Open();
                     cmd.ExecuteNonQuery();
@@ -153,7 +153,7 @@ namespace Spring.Data
 
             using (SqlConnection cn2005 = new SqlConnection())
             {
-                cn2005.ConnectionString = @"Data Source=MARKT60\SQL2005;Initial Catalog=CreditsAndDebits;User ID=springqa; Password=springqa";
+                cn2005.ConnectionString = @"Data Source=SPRINGQA;Initial Catalog=CreditsAndDebits;User ID=springqa; Password=springqa";
                 SqlCommand cmd = new SqlCommand(updateSql2, cn2005);
                 cn2005.Open();
                 cmd.ExecuteNonQuery();

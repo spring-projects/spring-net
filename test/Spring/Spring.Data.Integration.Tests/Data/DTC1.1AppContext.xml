@@ -9,13 +9,13 @@
     
     <object id="DbProvider" type="Spring.Data.Support.SqlProvider, Spring.Data">
       <property name="ConnectionString" 
-                value="Data Source=NYCSUMPOLLL;Initial Catalog=Credits;Integrated Security=True"/>          
+                value="Data Source=SPRINGQA;Initial Catalog=Credits;Integrated Security=false;User Id=springqa;Password=springqa"/>          
     </object>
 
     
     <object id="DebitDbProvider" type="Spring.Data.Support.SqlProvider, Spring.Data">
       <property name="ConnectionString" 
-                value="Data Source=NYCSUMPOLLL;Initial Catalog=Debits;Integrated Security=True"/>
+                value="Data Source=SPRINGQA;Initial Catalog=Debits;Integrated Security=false;User Id=springqa;Password=springqa"/>
     </object>
     
     

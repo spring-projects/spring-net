@@ -80,7 +80,7 @@ namespace Spring.Data
                 using (SqlConnection cn2005 = new SqlConnection())
                 {
                     cn2005.ConnectionString =
-                        @"Data Source=MARKT60\SQL2005;Initial Catalog=CreditsAndDebits;User ID=springqa; Password=springqa";
+                        @"Data Source=SPRINGQA;Initial Catalog=CreditsAndDebits;User ID=springqa; Password=springqa";
                     SqlCommand cmd = new SqlCommand(updateSql2, cn2005);
                     cn2005.Open();
                     Console.WriteLine("Isolation level = " + System.Transactions.Transaction.Current.IsolationLevel);

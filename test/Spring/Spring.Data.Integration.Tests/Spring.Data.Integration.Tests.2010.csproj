@@ -177,7 +177,9 @@
     <EmbeddedResource Include="Data\declarativeServices.xml" />
     <EmbeddedResource Include="Data\DTCAppContext.xml" />
     <EmbeddedResource Include="Data\autoDeclarativeServices.xml" />
-    <EmbeddedResource Include="Data\DTCAppContextNoInterfaces.xml" />
+    <EmbeddedResource Include="Data\DTCAppContextNoInterfaces.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Data\Generic\GenericAdoTemplateTests.xml" />
     <EmbeddedResource Include="Data\nativeAdoTests.xml" />
     <EmbeddedResource Include="Data\oracleAdoTemplateTests.xml" />

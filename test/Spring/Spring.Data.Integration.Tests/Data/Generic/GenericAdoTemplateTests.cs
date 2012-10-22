@@ -44,41 +44,63 @@ namespace Spring.Data.Generic
                     "assembly://Spring.Data.Integration.Tests/Spring.Data.Generic/GenericAdoTemplateTests.xml");
 
             adoTemplate = ctx["adoTemplate"] as AdoTemplate;
+            
+            RemoveTestData();
+            PopulateTestData();
         }
+
+        private void PopulateTestData()
+        {
+            adoTemplate.ExecuteScalar(CommandType.Text, "insert into TestObjects values (10, 'Jack')");
+            adoTemplate.ExecuteScalar(CommandType.Text, "insert into TestObjects values (20, 'Jill')");
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            RemoveTestData();
+        }
+
+        private void RemoveTestData()
+        {
+            adoTemplate.ExecuteNonQuery(CommandType.Text, "delete TestObjects");
+        }
+
 
         [Test]
         public void CommandDelegateUsage()
         {
-            string postalCode = "1010";
+            string name = "Jack";
             int count = adoTemplate.Execute<int>(delegate(DbCommand command)
                                                      {
                                                          command.CommandText =
-                                                             "select count(*) from Customers where PostalCode = @PostalCode";
+                                                             "select count(*) from TestObjects where Name = @Name";
 
                                                          DbParameter p = command.CreateParameter();
-                                                         p.ParameterName = "@PostalCode";
-                                                         p.Value = postalCode;
+                                                         p.ParameterName = "@Name";
+                                                         p.Value = name;
                                                          command.Parameters.Add(p);
 
                                                          return (int) command.ExecuteScalar();
                                                      });
-            Assert.AreEqual(3, count);
+            Assert.AreEqual(1, count);
         }
 
+        [Test]
         public void CommandDelegateUsageDownCast()
         {
-            string postalCode = "1010";
+            string name = "Jack";
             int count = adoTemplate.Execute<int>(delegate(DbCommand command)
                                                      {
                                                          SqlCommand sqlCommand = command as SqlCommand;
                                                          command.CommandText =
-                                                             "select count(*) from Customers where PostalCode = @PostalCode";
+                                                             "select count(*) from TestObjects where Name = @Name";
 
-                                                         sqlCommand.Parameters.AddWithValue("@PostalCode", postalCode);
+                                                         sqlCommand.Parameters.AddWithValue("@Name", name);
 
                                                          return (int) command.ExecuteScalar();
                                                      });
-            Assert.AreEqual(3, count);
+            Assert.AreEqual(1, count);
         }
 
         [Test]

@@ -35,7 +35,7 @@ namespace Spring.Data.Northwind
 
         public Shipper Create(string name, string phone)
         {
-            string connectionString = "Data Source=NYCSUMPOLLL;Initial Catalog=Northwind;Persist Security Info=True;User ID=springqa";
+            string connectionString = "Data Source=SPRINGQA;Initial Catalog=Northwind;Persist Security Info=True;User ID=springqa;Password=springqa";
             int id = 0;
             using (SqlConnection connection = new SqlConnection(connectionString))
             {
@@ -66,7 +66,7 @@ namespace Spring.Data.Northwind
         
         public Shipper CreateShorter(string name, string phone)
         {
-            string connectionString = "Data Source=NYCSUMPOLLL;Initial Catalog=Northwind;Persist Security Info=True;User ID=springqa";
+            string connectionString = "Data Source=SPRINGQA;Initial Catalog=Northwind;Persist Security Info=True;User ID=springqa";
             int id = 0;
             using (SqlConnection connection = new SqlConnection(connectionString))
             {

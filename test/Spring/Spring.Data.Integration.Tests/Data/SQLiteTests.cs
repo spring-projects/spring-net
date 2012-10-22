@@ -53,43 +53,45 @@ namespace Spring.Data
         public void SqlServerTest()
         {
             string errorCode = "544";
-            string[] errorCodes = new string[4] {"544", "2627", "8114", "8115"};
+            string[] errorCodes = new string[4] { "544", "2627", "8114", "8115" };
             //Array.IndexOf()
             //Array.Sort(errorCodes);
             foreach (string code in errorCodes)
             {
                 Console.WriteLine(code);
             }
-             //if (Array.BinarySearch(errorCodes, errorCode) >= 0)
+            //if (Array.BinarySearch(errorCodes, errorCode) >= 0)
             if (Array.IndexOf(errorCodes, errorCode) >= 0)
-             {
-                 Console.WriteLine("yes");
-             }
-             else
-             {
-                 Assert.Fail("did not find error code");
-             }
+            {
+                Console.WriteLine("yes");
+            }
+            else
+            {
+                Assert.Fail("did not find error code");
+            }
             IDbProvider dbProvider = DbProviderFactory.GetDbProvider("System.Data.SqlClient");
             dbProvider.ConnectionString =
-                @"Data Source=MARKT60\SQL2005;Initial Catalog=Spring;Persist Security Info=True;User ID=springqa;Password=springqa";
+                @"Data Source=SPRINGQA;Initial Catalog=Spring;Persist Security Info=True;User ID=springqa;Password=springqa";
             AdoTemplate adoTemplate = new AdoTemplate(dbProvider);
             try
             {
-                adoTemplate.ExecuteNonQuery(CommandType.Text, "insert into Vacation (id) values (1)");
-            } catch (Exception e)
+                adoTemplate.ExecuteNonQuery(CommandType.Text, "insert into Vacations (FirstName,LastName) values ('Jack','Doe')");
+            }
+            catch (Exception e)
             {
                 Console.Write(e);
                 throw;
             }
         }
         [Test]
+        [Ignore("ORACLE-dependent tests disabled for integration runs")]
         public void OracleTest()
         {
             //Data Source=XE;User ID=hr;Unicode=True
             IDbProvider dbProvider = DbProviderFactory.GetDbProvider("System.Data.OracleClient");
             dbProvider.ConnectionString = "Data Source=XE;User ID=hr;Password=hr;Unicode=True";
             AdoTemplate adoTemplate = new AdoTemplate(dbProvider);
-            decimal count = (decimal) adoTemplate.ExecuteScalar(CommandType.Text, "select count(*) from emp");
+            decimal count = (decimal)adoTemplate.ExecuteScalar(CommandType.Text, "select count(*) from emp");
             Assert.AreEqual(14, count);
 
             EmpProc empProc = new EmpProc(dbProvider);
@@ -107,6 +109,7 @@ namespace Spring.Data
         }
 
         [Test]
+        [Ignore("ODBC-dependent tests disabled for integration runs")]
         public void Test()
         {
             //IDbProvider dbProvider = DbProviderFactory.GetDbProvider("SybaseAse1.15");
@@ -127,52 +130,53 @@ namespace Spring.Data
             }
             Assert.IsTrue(authorList.Count > 0);
         }
-/*
+        /*
+                [Test]
+                public void StoredProc()
+                {
+                    //IDbProvider dbProvider = DbProviderFactory.GetDbProvider("SybaseAse1.15");
+                    //dbProvider.ConnectionString = "Data Source='MARKT60';Port='5000';UID='sa';PWD='';Database='pubs2';";
+
+
+                    //IDbProvider dbProvider = DbProviderFactory.GetDbProvider("Odbc-2.0");
+                    //dbProvider.ConnectionString =
+                    //    "Driver={Adaptive Server Enterprise};server=MARKT60;port=5000;Database=pubs2;uid=sa;pwd=;";
+
+                    IDbProvider dbProvider = DbProviderFactory.GetDbProvider("SybaseAse-15");
+                    dbProvider.ConnectionString = "Data Source='MARKT60';Port='5000';UID='sa';PWD='';Database='pubs2';";
+                    HelloProc proc = new HelloProc(dbProvider);
+                    IDictionary dict = proc.GetResults();
+
+                    Assert.AreEqual("Go Sybase", dict["@inoutParam"]);
+                    Assert.AreEqual("Hello mango", dict["@outParam"]);
+                    Assert.AreEqual(101, (int) dict["RETURN_VALUE"]);
+                    foreach (DictionaryEntry entry in dict)
+                    {
+                        Console.WriteLine("Key = " + entry.Key + ", Value = " + entry.Value);
+                    }
+                }
+
+                [Test]
+                public void StordProcAdoTemplate()
+                {
+                    IDbProvider dbProvider = DbProviderFactory.GetDbProvider("SybaseAse-15");
+                    dbProvider.ConnectionString = "Data Source='MARKT60';Port='5000';UID='sa';PWD='';Database='pubs2';";
+                    AdoTemplate adoTemplate = new AdoTemplate(dbProvider);
+                    IDbParameters parameters = new DbParameters(dbProvider);
+                    parameters.Add("inParam", AseDbType.VarChar, 32).Value = "mango";
+                    parameters.AddInOut("inoutParam", AseDbType.VarChar, 64).Value = "Sybase";
+                    parameters.AddOut("outParam", AseDbType.VarChar, 64);
+                    parameters.AddReturn("retValue", AseDbType.Integer);
+                    adoTemplate.ExecuteNonQuery(CommandType.StoredProcedure, "sp_hello", parameters);
+
+
+                    Assert.AreEqual("Go Sybase", parameters["@inoutParam"].Value);
+                    Assert.AreEqual("Hello mango", parameters[2].Value);
+                    Assert.AreEqual(101, (int) parameters[3].Value);
+                }
+        */
         [Test]
-        public void StoredProc()
-        {
-            //IDbProvider dbProvider = DbProviderFactory.GetDbProvider("SybaseAse1.15");
-            //dbProvider.ConnectionString = "Data Source='MARKT60';Port='5000';UID='sa';PWD='';Database='pubs2';";
-
-
-            //IDbProvider dbProvider = DbProviderFactory.GetDbProvider("Odbc-2.0");
-            //dbProvider.ConnectionString =
-            //    "Driver={Adaptive Server Enterprise};server=MARKT60;port=5000;Database=pubs2;uid=sa;pwd=;";
-
-            IDbProvider dbProvider = DbProviderFactory.GetDbProvider("SybaseAse-15");
-            dbProvider.ConnectionString = "Data Source='MARKT60';Port='5000';UID='sa';PWD='';Database='pubs2';";
-            HelloProc proc = new HelloProc(dbProvider);
-            IDictionary dict = proc.GetResults();
-
-            Assert.AreEqual("Go Sybase", dict["@inoutParam"]);
-            Assert.AreEqual("Hello mango", dict["@outParam"]);
-            Assert.AreEqual(101, (int) dict["RETURN_VALUE"]);
-            foreach (DictionaryEntry entry in dict)
-            {
-                Console.WriteLine("Key = " + entry.Key + ", Value = " + entry.Value);
-            }
-        }
-
-        [Test]
-        public void StordProcAdoTemplate()
-        {
-            IDbProvider dbProvider = DbProviderFactory.GetDbProvider("SybaseAse-15");
-            dbProvider.ConnectionString = "Data Source='MARKT60';Port='5000';UID='sa';PWD='';Database='pubs2';";
-            AdoTemplate adoTemplate = new AdoTemplate(dbProvider);
-            IDbParameters parameters = new DbParameters(dbProvider);
-            parameters.Add("inParam", AseDbType.VarChar, 32).Value = "mango";
-            parameters.AddInOut("inoutParam", AseDbType.VarChar, 64).Value = "Sybase";
-            parameters.AddOut("outParam", AseDbType.VarChar, 64);
-            parameters.AddReturn("retValue", AseDbType.Integer);
-            adoTemplate.ExecuteNonQuery(CommandType.StoredProcedure, "sp_hello", parameters);
-
-
-            Assert.AreEqual("Go Sybase", parameters["@inoutParam"].Value);
-            Assert.AreEqual("Hello mango", parameters[2].Value);
-            Assert.AreEqual(101, (int) parameters[3].Value);
-        }
-*/
-        [Test]
+        [Ignore("SYBASE-ASE-dependent tests disabled for integration runs")]
         public void DeriveParams()
         {
             IDbProvider dbProvider = DbProviderFactory.GetDbProvider("SybaseAse-15");
@@ -190,25 +194,26 @@ namespace Spring.Data
             }
         }
 
-/*
-        [Test]
-        public void RawDeriveParams()
-        {
-            using (
-                AseConnection conn =
-                    new AseConnection("Data Source='MARKT60';Port='5000';UID='sa';PWD='';Database='pubs2';"))
-            {
-                using (AseCommand cmd = new AseCommand("@sp_hello", conn))
+        /*
+                [Test]
+                public void RawDeriveParams()
                 {
-                    conn.Open();
-                    cmd.CommandType = CommandType.StoredProcedure;
-                    AseCommandBuilder.DeriveParameters(cmd);
-                    Console.WriteLine("Number of parameters = " + cmd.Parameters.Count);
+                    using (
+                        AseConnection conn =
+                            new AseConnection("Data Source='MARKT60';Port='5000';UID='sa';PWD='';Database='pubs2';"))
+                    {
+                        using (AseCommand cmd = new AseCommand("@sp_hello", conn))
+                        {
+                            conn.Open();
+                            cmd.CommandType = CommandType.StoredProcedure;
+                            AseCommandBuilder.DeriveParameters(cmd);
+                            Console.WriteLine("Number of parameters = " + cmd.Parameters.Count);
+                        }
+                    }
                 }
-            }
-        }
-*/
+        */
         [Test]
+        [Ignore("SYBASE-ASE-dependent tests disabled for integration runs")]
         public void QueryWithMapper()
         {
             IDbProvider dbProvider = DbProviderFactory.GetDbProvider("SybaseAse-15");
@@ -219,6 +224,7 @@ namespace Spring.Data
         }
 
         [Test]
+        [Ignore("ODBC-dependent tests disabled for integration runs")]
         public void QueryWithMapperODBC()
         {
             IDbProvider dbProvider = DbProviderFactory.GetDbProvider("Odbc-2.0");
@@ -230,6 +236,7 @@ namespace Spring.Data
         }
 
         [Test]
+        [Ignore("SYBASE-ASE-dependent tests disabled for integration runs")]
         public void QueryRawODBC()
         {
             using (
@@ -267,17 +274,17 @@ namespace Spring.Data
         {
             return AdoTemplate.QueryWithRowMapperDelegate<Sale>(CommandType.StoredProcedure, "history_proc",
                                                                 delegate(IDataReader dataReader, int rowNum)
-                                                                    {
-                                                                        Sale sale = new Sale();
-                                                                        sale.Date = dataReader.GetDateTime(0);
-                                                                        sale.OrderNumber = dataReader.GetString(1);
-                                                                        sale.Quantity = dataReader.GetInt32(2);
-                                                                        sale.Title = dataReader.GetString(3);
-                                                                        sale.Discount = dataReader.GetFloat(4);
-                                                                        sale.Price = dataReader.GetFloat(5);
-                                                                        sale.Total = dataReader.GetFloat(6);
-                                                                        return sale;
-                                                                    }, "stor_id",
+                                                                {
+                                                                    Sale sale = new Sale();
+                                                                    sale.Date = dataReader.GetDateTime(0);
+                                                                    sale.OrderNumber = dataReader.GetString(1);
+                                                                    sale.Quantity = dataReader.GetInt32(2);
+                                                                    sale.Title = dataReader.GetString(3);
+                                                                    sale.Discount = dataReader.GetFloat(4);
+                                                                    sale.Price = dataReader.GetFloat(5);
+                                                                    sale.Total = dataReader.GetFloat(6);
+                                                                    return sale;
+                                                                }, "stor_id",
                                                                 DbType.String, 0, storeId);
         }
     }
@@ -335,27 +342,28 @@ namespace Spring.Data
             set { total = value; }
         }
     }
-/*
-    public class HelloProc : StoredProcedure
-    {
-        public HelloProc(IDbProvider provider) : base(provider, "sp_hello")
+    /*
+        public class HelloProc : StoredProcedure
         {
-            DeclaredParameters.Add("inParam", AseDbType.VarChar, 32).Value = "mango";
-            DeclaredParameters.AddInOut("inoutParam", AseDbType.VarChar, 64).Value = "Sybase";
-            DeclaredParameters.AddOut("outParam", AseDbType.VarChar, 64);
-            DeclaredParameters.AddReturn("retValue", AseDbType.Integer);
-            Compile();
-        }
+            public HelloProc(IDbProvider provider) : base(provider, "sp_hello")
+            {
+                DeclaredParameters.Add("inParam", AseDbType.VarChar, 32).Value = "mango";
+                DeclaredParameters.AddInOut("inoutParam", AseDbType.VarChar, 64).Value = "Sybase";
+                DeclaredParameters.AddOut("outParam", AseDbType.VarChar, 64);
+                DeclaredParameters.AddReturn("retValue", AseDbType.Integer);
+                Compile();
+            }
 
-        public IDictionary GetResults()
-        {
-            return Query("mango", "Sybase");
+            public IDictionary GetResults()
+            {
+                return Query("mango", "Sybase");
+            }
         }
-    }
-*/
+    */
     public class EmpProc : StoredProcedure
     {
-        public EmpProc(IDbProvider provider) : base(provider, "TEST.Get1CurOut")
+        public EmpProc(IDbProvider provider)
+            : base(provider, "TEST.Get1CurOut")
         {
             //DeriveParameters();
             DeclaredParameters.AddOut("P_CURSOR1", OracleType.Cursor);
@@ -365,7 +373,7 @@ namespace Spring.Data
 
         public IDictionary GetEmployees()
         {
-            for (int i=0; i< DeclaredParameters.Count; i++)
+            for (int i = 0; i < DeclaredParameters.Count; i++)
             {
                 Console.WriteLine("decarled parameter name = " + DeclaredParameters[i].ParameterName + ", type = " + DeclaredParameters[i].DbType);
             }

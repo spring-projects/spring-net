@@ -33,58 +33,60 @@ using Spring.Data.Core;
 
 namespace Spring.Data.Support
 {
-	[TestFixture]
-	public class SimpleExceptionTranslationTests 
-	{
-		#region Fields
-	    private IDbProvider dbProvider;
-	    private IAdoOperations adoOperations;
-		#endregion
+    [TestFixture]
+    public class SimpleExceptionTranslationTests
+    {
+        #region Fields
+        private IDbProvider dbProvider;
+        private IAdoOperations adoOperations;
+        #endregion
 
-		#region Constants
+        #region Constants
 
-		/// <summary>
-		/// The shared ILog instance for this class (and derived classes). 
-		/// </summary>
-		protected static readonly ILog log =
-			LogManager.GetLogger(typeof (SimpleExceptionTranslationTests));
+        /// <summary>
+        /// The shared ILog instance for this class (and derived classes). 
+        /// </summary>
+        protected static readonly ILog log =
+            LogManager.GetLogger(typeof(SimpleExceptionTranslationTests));
 
-		#endregion
+        #endregion
 
-		#region Methods
+        #region Methods
 
-		[SetUp]
+        [SetUp]
         public void CreateAdoTemplate()
         {
-			IApplicationContext ctx =
+            IApplicationContext ctx =
                 new XmlApplicationContext("assembly://Spring.Data.Integration.Tests/Spring.Data/adoTemplateTests.xml");
             Assert.IsNotNull(ctx);
             dbProvider = ctx["DbProvider"] as IDbProvider;
             Assert.IsNotNull(dbProvider);
             adoOperations = new AdoTemplate(dbProvider);
         }
-	    
+
         [Test]
         public void ExecuteNonQueryText()
         {
-            
+
             string badSql = "insert into TestObjects(Age, Name) VALS (33, 'foo')";
             try
             {
                 adoOperations.ExecuteNonQuery(CommandType.Text, badSql);
-            } catch (BadSqlGrammarException e)
+            }
+            catch (BadSqlGrammarException e)
             {
-                
+
                 log.Error("caught correct exception", e);
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 log.Error("caught incorrect exception ", e);
 
                 Assert.Fail("did not throw exception of type BadSqlGrammerException");
             }
-            
-        }
-		#endregion
 
-	}
+        }
+        #endregion
+
+    }
 }

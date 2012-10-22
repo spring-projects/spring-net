@@ -42,6 +42,7 @@ namespace Spring.Data
     /// </summary>
     /// <author>Mark Pollack (.NET)</author>
     [TestFixture]
+    [Ignore("ORACLE-dependent tests disabled for integration runs")]
     public class OracleAdoTemplateTests
     {
         #region Setup/Teardown

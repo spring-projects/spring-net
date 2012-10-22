@@ -31,10 +31,10 @@ using Spring.Context.Support;
 
 namespace Spring.Data
 {
-	[TestFixture]
-	public class NativeAdoTests 
-	{
-	    [Test]
+    [TestFixture]
+    public class NativeAdoTests
+    {
+        [Test]
         public void SimpleUsage()
         {
             IApplicationContext ctx =
@@ -45,21 +45,18 @@ namespace Spring.Data
             dao.Create("John", 45);
         }
 
-		[Test]
-		public void Helloworld()
-		{
-			string connString =
-				@"Data Source=MARKT60\SQL2005;Initial Catalog=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False";
+        [Test]
+        public void Helloworld()
+        {
+            string connString =
+                @"Data Source=SPRINGQA;Initial Catalog=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False";
 
-			SqlConnection conn = new SqlConnection(connString);
-			conn.Open();
+            SqlConnection conn = new SqlConnection(connString);
             conn.Open();
-			//conn.BeginTransaction(IsolationLevel.Unspecified);
-			SqlTransaction trans = conn.BeginTransaction();
-			Console.WriteLine(trans.IsolationLevel);
+            //conn.BeginTransaction(IsolationLevel.Unspecified);
+            SqlTransaction trans = conn.BeginTransaction();
 
-
-			
-		}
-	}
+            Assert.That(trans.IsolationLevel, Is.EqualTo(IsolationLevel.ReadCommitted));
+        }
+    }
 }

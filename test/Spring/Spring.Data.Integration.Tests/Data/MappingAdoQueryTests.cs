@@ -27,73 +27,97 @@ using NUnit.Framework;
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.Data.Common;
+using Spring.Objects;
 
 #endregion
 
 namespace Spring.Data
 {
-	/// <summary>
-	/// Test a MappingAdoQuery implementation 
-	/// </summary>
-	/// <author>Mark Pollack (.NET)</author>
-	[TestFixture]
-	public class MappingAdoQueryTests 
-	{
-		#region Fields
-	    IDbProvider dbProvider;
-		#endregion
+    /// <summary>
+    /// Test a MappingAdoQuery implementation 
+    /// </summary>
+    /// <author>Mark Pollack (.NET)</author>
+    [TestFixture]
+    public class MappingAdoQueryTests
+    {
+        #region Fields
+        IDbProvider dbProvider;
+        #endregion
 
-		#region Constants
+        #region Constants
 
-		/// <summary>
-		/// The shared ILog instance for this class (and derived classes). 
-		/// </summary>
-		protected static readonly ILog log =
-			LogManager.GetLogger(typeof (MappingAdoQueryTests));
+        /// <summary>
+        /// The shared ILog instance for this class (and derived classes). 
+        /// </summary>
+        protected static readonly ILog log =
+            LogManager.GetLogger(typeof(MappingAdoQueryTests));
 
-		#endregion
+        private IApplicationContext ctx;
 
-		#region Constructor (s)
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MappingAdoQueryTests"/> class.
-                /// </summary>
-		public 	MappingAdoQueryTests()
-		{
+        #endregion
 
-		}
+        #region Constructor (s)
+        /// <summary>
+        /// Initializes a new instance of the <see cref="MappingAdoQueryTests"/> class.
+        /// </summary>
+        public MappingAdoQueryTests()
+        {
 
-		#endregion
+        }
 
-		#region Properties
+        #endregion
 
-		#endregion
+        #region Properties
 
-		#region Methods
+        #endregion
+
+        #region Methods
         [SetUp]
         public void CreateDbProvider()
         {
-            IApplicationContext ctx =
-                new XmlApplicationContext("assembly://Spring.Data.Integration.Tests/Spring.Data/adoTemplateTests.xml");
+            ctx = new XmlApplicationContext("assembly://Spring.Data.Integration.Tests/Spring.Data/adoTemplateTests.xml");
             Assert.IsNotNull(ctx);
             dbProvider = ctx["DbProvider"] as IDbProvider;
             Assert.IsNotNull(dbProvider);
+
+            DeleteTestData();
+            PopulateTestData();
         }
-	    
-	    [Test]
-	    public void MappingAdoQuery()
-	    {
-	        TestObjectQuery testObjectQuery = new TestObjectQuery(dbProvider);
-	        IDictionary inParams = new Hashtable();
-            inParams.Add("UName", "George");
-	        IList testObjectList = testObjectQuery.QueryByNamedParam(inParams);
-	        Assert.AreEqual(2, testObjectList.Count);
-	    }
+
+        private void PopulateTestData()
+        {
+            ITestObjectManager testObjectManager = ctx["testObjectManager"] as ITestObjectManager;
+            testObjectManager.SaveTwoTestObjects(new TestObject("Jack", 10), new TestObject("Jill", 20));
+        }
+
+        [TearDown]
+        public void _TestTearDown()
+        {
+            DeleteTestData();
+        }
+
+        private void DeleteTestData()
+        {
+            ITestObjectManager testObjectManager = ctx["testObjectManager"] as ITestObjectManager;
+            testObjectManager.DeleteAllTestObjects();
+        }
+
+
+        [Test]
+        public void MappingAdoQuery()
+        {
+            TestObjectQuery testObjectQuery = new TestObjectQuery(dbProvider);
+            IDictionary inParams = new Hashtable();
+            inParams.Add("@Name", "Jack");
+            IList testObjectList = testObjectQuery.QueryByNamedParam(inParams);
+            Assert.AreEqual(1, testObjectList.Count);
+        }
 
 
 
-	    #endregion
+        #endregion
 
-        
 
-	}
+
+    }
 }
