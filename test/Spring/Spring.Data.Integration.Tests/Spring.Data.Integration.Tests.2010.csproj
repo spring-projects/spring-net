@@ -195,10 +195,11 @@
     <EmbeddedResource Include="Data\TestTxIsolationLevel.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Data\CreateTestObject.sql" />
-    <Content Include="Data\CreditsDebitsSchema.sql" />
     <Content Include="Data\DTC1.1AppContext.xml" />
-    <Content Include="Data\testobjects-sqlserver.sql" />
+    <Content Include="Data\Spring.Data.Integration.Tests_CreditsAndDebits_database.sql" />
+    <Content Include="Data\Spring.Data.Integration.Tests_Credits_database.sql" />
+    <Content Include="Data\Spring.Data.Integration.Tests_Debits_database.sql" />
+    <Content Include="Data\Spring.Data.Integration.Tests_Spring_database.sql" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
