@@ -2702,11 +2702,337 @@ source.OnClick(); // First eventListener1.HandleEvent is invoked, then eventList
       arbitrarily resolved. Instead, if no unique object definition is
       available, an Exception will be thrown.</para>
 
+      <para>In the latter scenario, you have several options:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Abandon autowiring in favor of explicit wiring.</para>
+        </listitem>
+
+        <listitem>
+          <para>Avoid autowiring for a bean definition by setting its
+          autowire-candidate attributes to false as described in the next
+          section.</para>
+        </listitem>
+
+        <listitem>
+          <para>Designate a single bean definition as the primary candidate by
+          setting the primary attribute of its &lt;object/&gt; element to
+          true.</para>
+        </listitem>
+
+        <listitem>
+          <para>Implement the more fine-grained control available with
+          annotation-based configuration.</para>
+        </listitem>
+      </itemizedlist>
+
       <para>When deciding whether to use autowiring, there is no wrong or
       right answer in all cases. A degree of consistency across a project is
       best though; for example, if autowiring is not used in general, it might
       be confusing to developers to use it just to wire one or two object
       definitions.</para>
+
+      <sect3>
+        <title>Excluding a bean from autowiring</title>
+
+        <para>On a per-bean basis, you can exclude a bean from autowiring. In
+        Spring's XML format, set the <literal>autowire-candidate</literal>
+        attribute of the <literal>&lt;object/&gt;</literal> element to
+        <literal>false</literal>; the container makes that specific object
+        definition unavailable to the autowiring infrastructure (including
+        annotation style configurations such as
+        <literal>[Autowired]</literal>).</para>
+
+        <para>You can also limit autowire candidates based on pattern-matching
+        against object names. The top-level
+        <literal>&lt;objects/&gt;</literal> element accepts one or more
+        patterns within its <literal>default-autowire-candidates</literal>
+        attribute. For example, to limit autowire candidate status to any
+        object whose name ends with <emphasis>Repository</emphasis>, provide a
+        value of <emphasis>*Repository</emphasis>. To provide multiple
+        patterns, define them in a comma-separated list. An explicit value of
+        <literal>true</literal> or <literal>false</literal> for a object
+        definitions <literal>autowire-candidate</literal> attribute always
+        takes precedence, and for such objects, the pattern matching rules do
+        not apply.</para>
+
+        <para>These techniques are useful for objects that you never want to
+        be injected into other objects by autowiring. It does not mean that an
+        excluded object cannot itself be configured using autowiring. Rather,
+        the object itself is not a candidate for autowiring other
+        objects.</para>
+      </sect3>
+
+      <sect3>
+        <title>Using [Autowire] Attribute for fine-grained control</title>
+
+        <para>The <literal>[Autowire]</literal> attribute in the
+        <literal>Spring.Objects.Factory.Attributes</literal> namespace can be
+        used to mark a variable, property or method for automatically wiring
+        by injection. It works similar to the autowire configuration described
+        in the paragraph above with a <emphasis>byType</emphasis> setting,
+        except that you can define variables, properties or methods
+        specifically that you want to autowire. In a latter paragraph you will
+        see how you can even further define the object or value to
+        inject.</para>
+
+        <para>To get the <literal>[Autowire]</literal> attribute working you
+        need to add the autowire post processer into your spring configuration
+        file.</para>
+
+        <para><programlisting language="xml">&lt;object type="Spring.Objects.Factory.Attributes.RequiredAttributeObjectPostProcessor, Spring.Core"/&gt;</programlisting></para>
+
+        <para>To use the autowire attribute on a variable, it can be private
+        or public. The folowing code shows how to use the attribute. The post
+        processer will try to find a registered object that is from the
+        requested type. If more than one registered objects are found from
+        that type you will get an <literal>ObjectCreationException</literal>.
+        To prevent or control this situation you can use the
+        <literal>primary</literal> attribute in the
+        <literal>&lt;object&gt;</literal> defintion, later you will see an
+        example for this situation.</para>
+
+        <programlisting language="csharp">public class SomeObject 
+{
+    ...
+
+    [Autowired]
+    private IFoo hello;
+
+    [Autowired]
+    public IFoo Hello { get; set; }
+
+    ...
+} </programlisting>
+
+        <para>You can also use the autowire attribute to inject into methods.
+        In this case all parameters are looked up and found objects of the
+        requested type injected into the method parameters. You are not
+        restricted to a single method parameter.</para>
+
+        <programlisting>public class SomeObject
+{
+    public IFoo hello; 
+
+    [Autowired] 
+    private void Prepare(IFoo hello)
+    {
+       this.hello = hello; 
+    }
+} </programlisting>
+
+        <para>If you have several objects defined from the same type you can
+        make the following change to the <literal>&lt;object&gt;</literal>
+        definition and define one of the objects as
+        <literal>primary</literal>. In case the container will find several
+        objects from a requested type but will check if there is a
+        <literal>primary</literal> object and if true will use this object
+        instead. The container will <emphasis>not</emphasis> throw a
+        <literal>ObjectCreationException</literal>. If the container finds
+        more than one objects for the requested type as
+        <literal>primary</literal>, the container will throw a
+        <literal>ObjectCreationException</literal>.</para>
+
+        <para><programlisting language="xml">&lt;object id="HelloFoo" type="Spring.Objects.Factory.Attributes.ByType.HelloFoo, Spring.Core.Tests" 
+        primary="true"/&gt;</programlisting></para>
+
+        <para>You can also use the autowire attribute for injection in to a
+        List&lt;T&gt;, ISet&lt;T&gt; or Dictionary&lt;string, T&gt; type. In
+        this case the container looks up for the requested type defined in the
+        generic part of the definition and will create a List&lt;T&gt;,
+        HashedSet&lt;T&gt; or Dictionary&lt;string, T&gt; with all found
+        objects injected. For the dictionary type the key is the registered
+        name of the object.</para>
+
+        <programlisting language="xml">public class AutowireLists
+{
+    [Autowired]
+    public IList&lt;IFoo&gt; foosList;
+
+    [Autowired]
+    public Spring.Collections.Generic.ISet&lt;IFoo&gt; foosSet;
+
+    [Autowired]
+    public IDictionary&lt;string, IFoo&gt; foosDictionary; 
+} </programlisting>
+
+        <para>By default all found autowired objects are treated as required.
+        This means if the container can't find an registered object of the
+        requested type it will throw on
+        <literal>ObjectCreationException</literal>. For this situation you can
+        use the <literal>Required</literal> property of the
+        <literal>[Autowire]</literal> attribute to mark an object as not
+        required and therefore will not throw an
+        <literal>ObjectCreationException</literal>.</para>
+
+        <programlisting language="xml">public class AutowirePropertyNotRequired
+{
+   [Autowired(Required = false)]
+   public IFoo Hello { get; set; } 
+} </programlisting>
+      </sect3>
+
+      <sect3>
+        <title>Using [Value] attribute for fine grained autowiring
+        injection</title>
+
+        <para>The <literal>[Autowire]</literal> attribute is wiring
+        <emphasis>byType</emphasis> and therefore not fine-grained enough for
+        some situations. You can also not inject values from loaded
+        PropertyPlaceHolder files. For these cases you can use the
+        <literal>[Value]</literal> attribute instead and this allows the
+        following situations:</para>
+
+        <para>Inject an object by their Id:</para>
+
+        <programlisting language="csharp">public class AutowireViaValue
+{
+   [Value("@(CiaoFoo)")]
+   public IFoo ciao;
+}</programlisting>
+
+        <para>This works on private variables and also on properties.</para>
+
+        <para>You can also use this scenario for autowiring with a
+        method:</para>
+
+        <programlisting language="csharp">public class AutowireMethodWithValue
+{
+    public IFoo ciao; 
+
+    [Autowired]
+    private void Prepare([Value("@(CiaoFoo)")] IFoo ciao)
+    {
+       this.ciao = ciao; 
+    }
+}</programlisting>
+
+        <para>You can also use the [Value] attribute to access properties from
+        a PropertyPlaceHolder configuration:</para>
+
+        <programlisting language="csharp">public class AutowirePropertyPlaceHolder
+{ 
+    [Value("${greeting}")]
+    public string greeting;
+}</programlisting>
+
+        <para>Basically you can use the full Spring Expression Language, here
+        we only showed these two examples of how you could use the
+        <literal>[Value]</literal> attribute.</para>
+      </sect3>
+
+      <sect3>
+        <title>Using the plain [Qualifier] attribute to fine-grain the
+        autowiring finding process</title>
+
+        <para>The <literal>[Qualifier]</literal> attribute allows you to
+        define a qualification property on top of giving the object a name.
+        This can be used for defining several objects from the same type and
+        inject different values, later via autowiring you can refer to this
+        definition property. Here an example. First we create our basic
+        object.</para>
+
+        <programlisting>public interface IFoo 
+{ 
+   string Say(); 
+}
+
+public class SayFoo : IFoo 
+{ 
+   private string _message;
+
+   public string Say() 
+   {
+      return "hello"; 
+   }
+}
+</programlisting>
+
+        <para>Now we define our objects within our spring configuration file.
+        We create tow object that use the same base object type but we inject
+        different values. If we you use the <literal>[Autowire]</literal> we
+        would get an <literal>ObjectCreationException</literal> because we two
+        objects of the same type and most likely we would not got the object
+        we wanted.</para>
+
+        <programlisting language="xml">&lt;object id="HelloFoo" type="Spring.Objects.Factory.Attributes.ByType.SayFoo, Spring.Core.Tests"&gt;
+   &lt;qualifier value="hello" /&gt;
+   &lt;property name="_message" value="Hello" /&gt;
+&lt;/object&gt;
+
+&lt;object id="CiaoFoo" type="Spring.Objects.Factory.Attributes.ByType.SayFoo, Spring.Core.Tests"&gt;
+   &lt;qualifier value="ciao" /&gt;
+   &lt;property name="_message" value="Hello" /&gt;
+&lt;/object&gt; </programlisting>
+
+        <para>With the <literal>&lt;qualifier&gt;</literal> element in our
+        object defintion we provided further information that we can use
+        during the autowire process. See the code below and how to use the
+        <literal>[Qualifier]</literal> attribute to inject the object we want
+        without getting a <literal>ObjectCreationException</literal>.</para>
+
+        <programlisting language="csharp">public class AutowireQithQualifier
+{
+   [Autowired] 
+   [Qualifier("ciao")] 
+   public IFoo Ciao { get; set; } 
+} </programlisting>
+      </sect3>
+
+      <sect3>
+        <title>Using a inherited [Qualifier] attribute with meta
+        properties</title>
+
+        <para>The inherited <literal>QualifierAttribute</literal> class allows
+        you to define an object by more properties than a single qualifier
+        value. You can define objects by fine grained, own defined, properties
+        within a attribute. The first thing you need to do is to create a new
+        attribute derived from <literal>QualifierAttribute</literal> and
+        define your properties.</para>
+
+        <programlisting language="csharp">public class DialectAttribute : QualifierAttribute
+{
+   private string _language = "";
+   public string Language { get { return _language; } set { _language = value; } } 
+} </programlisting>
+
+        <para>The next step is to define your objects and the meta information
+        attached to them. The attributes you define within the
+        <literal>&lt;qualifier&gt;</literal> element are the same as your
+        peroperties in your created attribute.</para>
+
+        <programlisting language="xml">&lt;object id="HelloFoo" type="Spring.Objects.Factory.Attributes.ByType.SayFoo, Spring.Core.Tests"&gt;
+   &lt;qualifier type="Spring.Objects.Factory.Attributes.ByQualifierAttribute.DialectAttribute"&gt;
+      &lt;attribute key="Language" value="English" /&gt; 
+   &lt;/qualifier&gt;
+   &lt;property name="_message" value="Hello" /&gt;
+&lt;/object&gt;
+
+&lt;object id="CiaoFoo" type="Spring.Objects.Factory.Attributes.ByType.SayFoo, Spring.Core.Tests"&gt;
+   &lt;qualifier type="Spring.Objects.Factory.Attributrf4res.ByQualifierAttribute.DialectAttribute"&gt;
+      &lt;attribute key="Language" value="Italian" /&gt;
+   &lt;/qualifier&gt;
+   &lt;property name="_message" value="Ciao" /&gt;
+&lt;/object&gt;</programlisting>
+
+        <para>Now you have defined your objects with new meta information. To
+        use this meta information within the autowiring process you need to
+        add your created attribute as additional annotation to the [Autowire]
+        attributes in your code. The properties you use within the added
+        attribute will be matched with all registered objects. If they
+        properties are matching the object is used for injection. If more then
+        one object is found in the matching process and no object is defined
+        as <literal>primary</literal> a
+        <literal>ObjectCreationException</literal> is thrown.</para>
+
+        <programlisting language="csharp">public class AutowireByMetaInformation
+{
+    [Autowired]
+    [Dialect(Language = "Italian")]
+    public IFoo ciao;
+} </programlisting>
+      </sect3>
     </sect2>
 
     <sect2 xml:id="objects-factory-dependencies">
