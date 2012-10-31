@@ -2781,7 +2781,7 @@ source.OnClick(); // First eventListener1.HandleEvent is invoked, then eventList
         need to add the autowire post processer into your spring configuration
         file.</para>
 
-        <para><programlisting language="xml">&lt;object type="Spring.Objects.Factory.Attributes.RequiredAttributeObjectPostProcessor, Spring.Core"/&gt;</programlisting></para>
+        <para><programlisting language="myxml">&lt;object type="Spring.Objects.Factory.Attributes.RequiredAttributeObjectPostProcessor, Spring.Core"/&gt;</programlisting></para>
 
         <para>To use the autowire attribute on a variable, it can be private
         or public. The folowing code shows how to use the attribute. The post
@@ -2834,7 +2834,7 @@ source.OnClick(); // First eventListener1.HandleEvent is invoked, then eventList
         <literal>primary</literal>, the container will throw a
         <literal>ObjectCreationException</literal>.</para>
 
-        <para><programlisting language="xml">&lt;object id="HelloFoo" type="Spring.Objects.Factory.Attributes.ByType.HelloFoo, Spring.Core.Tests" 
+        <para><programlisting language="myxml">&lt;object id="HelloFoo" type="Spring.Objects.Factory.Attributes.ByType.HelloFoo, Spring.Core.Tests" 
         primary="true"/&gt;</programlisting></para>
 
         <para>You can also use the autowire attribute for injection in to a
@@ -2845,7 +2845,7 @@ source.OnClick(); // First eventListener1.HandleEvent is invoked, then eventList
         objects injected. For the dictionary type the key is the registered
         name of the object.</para>
 
-        <programlisting language="xml">public class AutowireLists
+        <programlisting language="myxml">public class AutowireLists
 {
     [Autowired]
     public IList&lt;IFoo&gt; foosList;
@@ -2866,11 +2866,17 @@ source.OnClick(); // First eventListener1.HandleEvent is invoked, then eventList
         required and therefore will not throw an
         <literal>ObjectCreationException</literal>.</para>
 
-        <programlisting language="xml">public class AutowirePropertyNotRequired
+        <programlisting language="myxml">public class AutowirePropertyNotRequired
 {
    [Autowired(Required = false)]
    public IFoo Hello { get; set; } 
 } </programlisting>
+
+        <para>The <literal>[Autowire]</literal> attribute is also processed in
+        the case of an inheritent class that has variables, properties or
+        methods annotated with the <literal>[Autowire]</literal> attribute.
+        The order of the processing is that all inhertent classes are
+        processed before the actual class is processed.</para>
       </sect3>
 
       <sect3>
@@ -2956,7 +2962,7 @@ public class SayFoo : IFoo
         objects of the same type and most likely we would not got the object
         we wanted.</para>
 
-        <programlisting language="xml">&lt;object id="HelloFoo" type="Spring.Objects.Factory.Attributes.ByType.SayFoo, Spring.Core.Tests"&gt;
+        <programlisting language="myxml">&lt;object id="HelloFoo" type="Spring.Objects.Factory.Attributes.ByType.SayFoo, Spring.Core.Tests"&gt;
    &lt;qualifier value="hello" /&gt;
    &lt;property name="_message" value="Hello" /&gt;
 &lt;/object&gt;
@@ -3002,7 +3008,7 @@ public class SayFoo : IFoo
         <literal>&lt;qualifier&gt;</literal> element are the same as your
         peroperties in your created attribute.</para>
 
-        <programlisting language="xml">&lt;object id="HelloFoo" type="Spring.Objects.Factory.Attributes.ByType.SayFoo, Spring.Core.Tests"&gt;
+        <programlisting language="myxml">&lt;object id="HelloFoo" type="Spring.Objects.Factory.Attributes.ByType.SayFoo, Spring.Core.Tests"&gt;
    &lt;qualifier type="Spring.Objects.Factory.Attributes.ByQualifierAttribute.DialectAttribute"&gt;
       &lt;attribute key="Language" value="English" /&gt; 
    &lt;/qualifier&gt;
