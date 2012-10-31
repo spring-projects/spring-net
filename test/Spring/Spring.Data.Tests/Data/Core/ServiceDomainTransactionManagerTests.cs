@@ -159,7 +159,7 @@ namespace Spring.Data.Core
                 // inner tx
                 ConfigureServiceConfig(serviceConfig, false);
                 serviceConfig.TransactionOption = TransactionOption.RequiresNew;
-                serviceConfig.IsolationLevel = TransactionIsolationLevel.ReadCommitted;
+                serviceConfig.IsolationLevel = TransactionIsolationLevel.Any;
                 txAdapter.Enter(serviceConfig);
                 Expect.Call(txAdapter.IsInTransaction).Return(true);
                 txAdapter.SetAbort();
@@ -204,7 +204,7 @@ namespace Spring.Data.Core
             if (standardIsolationAndProp)
             {
                 serviceConfig.TransactionOption = TransactionOption.Required;
-                serviceConfig.IsolationLevel = TransactionIsolationLevel.ReadCommitted;
+                serviceConfig.IsolationLevel = TransactionIsolationLevel.Any;
             }
             return serviceConfig;
 

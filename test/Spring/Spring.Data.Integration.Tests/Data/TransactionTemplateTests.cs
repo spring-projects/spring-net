@@ -35,21 +35,21 @@ using Spring.Transaction.Support;
 
 namespace Spring.Data
 {
-	/// <summary>
-	/// Integration tests for transaction template functionality 
-	/// </summary>
-	/// <author>Mark Pollack</author>
-	[TestFixture]
-	public class TransactionTemplateTests 
-	{
+    /// <summary>
+    /// Integration tests for transaction template functionality 
+    /// </summary>
+    /// <author>Mark Pollack</author>
+    [TestFixture]
+    public class TransactionTemplateTests
+    {
 
         private IDbProvider dbProvider;
 
         private IPlatformTransactionManager transactionManager;
 
         private IApplicationContext ctx;
-	    
-	    private IAdoOperations adoOperations;
+
+        private IAdoOperations adoOperations;
 
         [SetUp]
         public void SetUp()
@@ -57,9 +57,20 @@ namespace Spring.Data
             ctx =
                 new XmlApplicationContext("assembly://Spring.Data.Integration.Tests/Spring.Data/templateTests.xml");
             dbProvider = ctx["DbProvider"] as IDbProvider;
-            transactionManager = ctx["adoTransactionManager"] as IPlatformTransactionManager;
+            transactionManager = ctx["transactionManager"] as IPlatformTransactionManager;
             adoOperations = ctx["adoTemplate"] as IAdoOperations;
-            
+
+            ITestObjectManager testObjectManager = ctx["testObjectManager"] as ITestObjectManager;
+            testObjectManager.DeleteAllTestObjects();
+            testObjectManager.SaveTwoTestObjects(new TestObject("Jack", 10), new TestObject("Jill", 20));
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            ITestObjectManager testObjectManager = ctx["testObjectManager"] as ITestObjectManager;
+            testObjectManager.DeleteTwoTestObjects("Jack", "Jill");
+            testObjectManager.DeleteAllTestObjects();
         }
 
 
@@ -73,7 +84,7 @@ namespace Spring.Data
         [Test]
         public void DeclarativeViaAutoProxyCreator()
         {
-            ITestObjectManager mgr = ctx["testObjectManager"] as ITestObjectManager; 
+            ITestObjectManager mgr = ctx["testObjectManager"] as ITestObjectManager;
             TestObjectDao dao = (TestObjectDao)ctx["testObjectDao"];
             PerformOperations(mgr, dao);
         }
@@ -88,7 +99,7 @@ namespace Spring.Data
         [Test]
         public void DeclarativeViaTransactionProxyFactoryObject()
         {
-            ITestObjectManager mgr = ctx["testObjectManagerTP"] as ITestObjectManager; 
+            ITestObjectManager mgr = ctx["testObjectManagerTP"] as ITestObjectManager;
             ITestObjectDao dao = (ITestObjectDao)ctx["testObjectDao"];
             PerformOperations(mgr, dao);
         }
@@ -102,7 +113,7 @@ namespace Spring.Data
         public void DeclarativeViaProxyFactoryObject()
         {
             ITestObjectManager mgr = ctx["testObjectManagerPF"] as ITestObjectManager;
-	        TestObjectDao dao = (TestObjectDao)ctx["testObjectDao"];
+            TestObjectDao dao = (TestObjectDao)ctx["testObjectDao"];
             PerformOperations(mgr, dao);
 
         }
@@ -121,35 +132,35 @@ namespace Spring.Data
             coordinator.TestObjectManager.DeleteTwoTestObjects("Jack", "Jill");
         }
 
-	    public static void PerformOperations(ITestObjectManager mgr,
+        public static void PerformOperations(ITestObjectManager mgr,
                                        ITestObjectDao dao)
-	    {
-	        Assert.IsNotNull(mgr);
-	        TestObject to1 = new TestObject();
-	        to1.Name = "Jack";
-	        to1.Age = 7;
-	        TestObject to2 = new TestObject();
-	        to2.Name = "Jill";
-	        to2.Age = 8;
-	        mgr.SaveTwoTestObjects(to1, to2);
-    
-	        TestObject to = dao.FindByName("Jack");
-	        Assert.IsNotNull(to);
-    
-	        to = dao.FindByName("Jill");
-	        Assert.IsNotNull(to);
-	        Assert.AreEqual("Jill", to.Name);
-    
-	        mgr.DeleteTwoTestObjects("Jack", "Jill");
-    
-	        to = dao.FindByName("Jack");
-	        Assert.IsNull(to);
-    
-	        to = dao.FindByName("Jill");
-	        Assert.IsNull(to);
-	    }
+        {
+            Assert.IsNotNull(mgr);
+            TestObject to1 = new TestObject();
+            to1.Name = "Jack";
+            to1.Age = 7;
+            TestObject to2 = new TestObject();
+            to2.Name = "Jill";
+            to2.Age = 8;
+            mgr.SaveTwoTestObjects(to1, to2);
 
-	    [Test]
+            TestObject to = dao.FindByName("Jack");
+            Assert.IsNotNull(to);
+
+            to = dao.FindByName("Jill");
+            Assert.IsNotNull(to);
+            Assert.AreEqual("Jill", to.Name);
+
+            mgr.DeleteTwoTestObjects("Jack", "Jill");
+
+            to = dao.FindByName("Jack");
+            Assert.IsNull(to);
+
+            to = dao.FindByName("Jill");
+            Assert.IsNull(to);
+        }
+
+        [Test]
         public void ExecuteTemplate()
         {
             TransactionTemplate tt = new TransactionTemplate(transactionManager);
@@ -164,7 +175,7 @@ namespace Spring.Data
             def.PropagationBehavior = TransactionPropagation.Required;
 
             ITransactionStatus status = transactionManager.GetTransaction(def);
-            
+
             int iCount = 0;
             try
             {
@@ -176,7 +187,8 @@ namespace Spring.Data
                 */
 
                 //other AdoCommands can be executed within same tx.
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 transactionManager.Rollback(status);
                 throw e;
@@ -186,12 +198,12 @@ namespace Spring.Data
 
         }
 
-        
+
         private class SimpleTransactionCallback : ITransactionCallback
         {
             private IDbProvider dbProvider;
 
-        public SimpleTransactionCallback(IDbProvider dbp)
+            public SimpleTransactionCallback(IDbProvider dbp)
             {
                 dbProvider = dbp;
             }
@@ -207,10 +219,10 @@ namespace Spring.Data
                 return adoTemplate.Execute(new TestCommandCallback());
             }
         }
-	    
+
         private class TestCommandCallback : ICommandCallback
         {
-           
+
             public Object DoInCommand(IDbCommand cmd)
             {
                 cmd.CommandText = "SELECT COUNT(*) FROM TestObjects";
@@ -223,5 +235,5 @@ namespace Spring.Data
 
             }
         }
-	}
+    }
 }

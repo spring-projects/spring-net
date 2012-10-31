@@ -4,7 +4,7 @@
 
   <db:provider id="DbProvider"
                provider="SqlServer-2.0"
-               connectionString="Data Source=MARKT60\SQL2005;Database=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False"/>
+               connectionString="Data Source=SPRINGQA;Database=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False"/>
 
     <object id="adoTemplate" type="Spring.Data.Core.AdoTemplate, Spring.Data">
         <property name="DbProvider" ref="DbProvider"/>                

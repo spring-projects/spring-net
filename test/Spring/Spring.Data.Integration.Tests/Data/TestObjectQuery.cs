@@ -36,7 +36,7 @@ namespace Spring.Data
 	/// <author>Mark Pollack (.NET)</author>
     public class TestObjectQuery : MappingAdoQuery
     {
-        private static string sql = "select TestObjectNo, Age, Name from TestObjects where Name = @UName";
+        private static string sql = "select TestObjectNo, Age, Name from TestObjects where Name = @Name";
             
         public TestObjectQuery(IDbProvider dbProvider) 
             : base(dbProvider, sql)
@@ -44,7 +44,7 @@ namespace Spring.Data
             //DeclaredParameters = new DbParameters(dbProvider);
             try
             {
-                DeclaredParameters.Add("UName", SqlDbType.VarChar, 50);
+                DeclaredParameters.Add("Name", SqlDbType.VarChar, 50);
             } catch (Exception e)
             {
                 Console.WriteLine(e);

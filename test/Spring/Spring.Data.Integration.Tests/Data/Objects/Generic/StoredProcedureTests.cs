@@ -24,6 +24,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Data;
 using System.Reflection;
 using NUnit.Framework;
 using Spring.Data.Common;
@@ -41,10 +42,63 @@ namespace Spring.Data.Objects.Generic
     [TestFixture]
     public class StoredProcedureTests
     {
+        private IDbProvider _dbProvider;
+
         [SetUp]
         public void Setup()
         {
+            _dbProvider = DbProviderFactory.GetDbProvider("System.Data.SqlClient");
+            _dbProvider.ConnectionString =
+                @"Data Source=SPRINGQA;Database=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False";
+
+            IDbCommand command = _dbProvider.CreateCommand();
+            command.Connection = _dbProvider.CreateConnection();
+
+            ClearTestData(command);
+            CreateTestData(command);
         }
+
+        [TearDown]
+        public void TearDown()
+        {
+            IDbCommand command = _dbProvider.CreateCommand();
+            command.Connection = _dbProvider.CreateConnection();
+
+            ClearTestData(command);
+        }
+
+        private void CreateTestData(IDbCommand command)
+        {
+            command.Connection.Open();
+
+            command.CommandText = "insert into TestObjects(Name,Age) values ('Jack', 10)";
+            command.ExecuteNonQuery();
+
+            command.CommandText = "insert into TestObjects(Name,Age) values ('Jill', 20)";
+            command.ExecuteNonQuery();
+
+            command.CommandText = "insert into Vacations(FirstName,LastName,EmployeeId,StartDate,EndDate) values ('Jack', 'Doe', 200, '1/1/2010', '1/15/2010')";
+            command.ExecuteNonQuery();
+
+            command.CommandText = "insert into Vacations(FirstName,LastName,EmployeeId,StartDate,EndDate) values ('Jack', 'Doe', 200, '2/1/2010', '2/15/2010')";
+            command.ExecuteNonQuery();
+
+            command.Connection.Close();
+        }
+
+        private void ClearTestData(IDbCommand command)
+        {
+            command.Connection.Open();
+
+            command.CommandText = "truncate table TestObjects";
+            command.ExecuteNonQuery();
+
+            command.CommandText = "truncate table Vacations";
+            command.ExecuteNonQuery();
+
+            command.Connection.Close();
+        }
+
 
         [Test]
         public void TestReflection()
@@ -102,36 +156,38 @@ namespace Spring.Data.Objects.Generic
             MethodInfo methodInfo = rowMapperclosedType.GetMethod("MapRow", BINDING_FLAGS);
 
             //MethodInfo genMethodInfo = methodInfo.MakeGenericMethod(genericArgumentType);
-            object retVal = methodInfo.Invoke(rowmapper, new object[] { null, null});
+            object retVal = methodInfo.Invoke(rowmapper, new object[] { null, null });
             Console.WriteLine("return val = " + retVal);
 
 
         }
 
         [Test]
-        public void Test()
+        public void SingleTableStoredProcedure_ReturnsResult()
         {
-            IDbProvider dbProvider = DbProviderFactory.GetDbProvider("System.Data.SqlClient");
-            dbProvider.ConnectionString =
-                @"Data Source=MARKT60\SQL2005;Database=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False";
+            TestObjectStoredProc sp = new TestObjectStoredProc(_dbProvider);
+            IList<TestObject> testObjectList = sp.GetByName("Jack");
 
-            TestObjectStoredProc sp = new TestObjectStoredProc(dbProvider);
-            IList<TestObject> testObjectList = sp.GetByName("George");
-            
-            Assert.IsNotNull(testObjectList);
-
-            TestObjectandVacationStoredProc vsp = new TestObjectandVacationStoredProc(dbProvider);
-
-            System.Collections.IDictionary outParams = vsp.ExecStoreProc("George");
+            Assert.That(testObjectList, Is.Not.Null);
+            Assert.That(testObjectList, Has.Count.EqualTo(1));
+        }
 
 
-            testObjectList = outParams["testObjectRowMapper"] as IList<TestObject>;
+        [Test]
+        public void MultipleTableStoredProcedure_ReturnsResult()
+        {
+            TestObjectandVacationStoredProc vsp = new TestObjectandVacationStoredProc(_dbProvider);
+
+            IDictionary outParams = vsp.ExecStoreProc("Jack");
+
+            IList<TestObject> testObjectList = testObjectList = outParams["testObjectRowMapper"] as IList<TestObject>;
             Assert.IsNotNull(testObjectList);
             Assert.AreEqual(1, testObjectList.Count);
 
             IList<Vacation> vacationList = outParams["vacationRowMapper"] as IList<Vacation>;
             Assert.IsNotNull(vacationList);
             Assert.AreEqual(2, vacationList.Count);
+
         }
 
     }
@@ -153,14 +209,14 @@ namespace Spring.Data.Objects.Generic
         }
     }
 
-    
+
     public class TestObjectStoredProc : StoredProcedure
     {
         public TestObjectStoredProc(IDbProvider dbProvider)
             : base(dbProvider, "SelectByName")
-        {           
+        {
             DeriveParameters();
-            AddRowMapper("testObjectRowMapper", new TestObjectRowMapper() );
+            AddRowMapper("testObjectRowMapper", new TestObjectRowMapper());
             Compile();
         }
 

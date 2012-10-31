@@ -116,10 +116,10 @@ Commandline Examples:
   <property name="doc.sdk" value="false"/>
 
   <!-- turn on all tests if test.full specified -->
-  <property name="test.full" value="false" />
-  <property name="test.integration.data" value="${test.full}" />
-  <property name="test.integration.ems" value="${test.full}" />
-  <property name="test.integration.nms" value="${test.full}" />
+  <property name="test.full" value="false" overwrite="false" />
+  <property name="test.integration.data" value="${test.full}" overwrite="false" />
+  <property name="test.integration.ems" value="${test.full}" overwrite="false" />
+  <property name="test.integration.nms" value="${test.full}" overwrite="false" />
 
   <!--
       the line below is for the ccnet build box - see target set-user-overrides for how to change this to your machine values if necessary
@@ -1400,9 +1400,9 @@ Commandline Examples:
   </target>
   <target name="set-build-namespaces-all">
     <property name="build.allnamespaces" value="true"/>
-    <property name="test.integration.data" value="false" />
-    <property name="test.integration.ems" value="false" />
-    <property name="test.integration.nms" value="false" />
+    <property name="test.integration.data" value="false" overwrite="false" />
+    <property name="test.integration.ems" value="false" overwrite="false" />
+    <property name="test.integration.nms" value="false" overwrite="false" />
     <property name="build-aop" value="true" />
     <property name="build-data" value="true" />
     <property name="build-services" value="true" />
@@ -1439,9 +1439,9 @@ Commandline Examples:
     </fileset>
   </target>
   <target name="set-build-namespaces-release">
-    <property name="test.integration.data" value="false" />
-    <property name="test.integration.ems" value="false" />
-    <property name="test.integration.nms" value="false" />
+    <property name="test.integration.data" value="false" overwrite="false" />
+    <property name="test.integration.ems" value="false" overwrite="false" />
+    <property name="test.integration.nms" value="false" overwrite="false" />
     <property name="build-aop" value="true"/>
     <property name="build-data" value="true"/>
     <property name="build-services" value="true"/>

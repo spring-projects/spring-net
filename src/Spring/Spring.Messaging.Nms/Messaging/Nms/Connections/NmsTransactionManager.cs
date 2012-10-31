@@ -186,7 +186,7 @@ namespace Spring.Messaging.Nms.Connections
         protected override void DoBegin(object transaction, ITransactionDefinition definition)
         {
             //This is the default value defined in DefaultTransactionDefinition
-            if (definition.TransactionIsolationLevel != IsolationLevel.ReadCommitted)
+            if (definition.TransactionIsolationLevel != IsolationLevel.Unspecified)
             {
                 throw new InvalidIsolationLevelException("NMS does not support an isoliation level concept");
             }

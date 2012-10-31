@@ -481,21 +481,49 @@ namespace Spring.Objects.Factory.Xml
                     autowire = childParserContext.ParserHelper.Defaults.Autowire;
                 }
                 od.AutowireMode = GetAutowireMode(autowire);
-                string primary = GetAttributeValue(element, ObjectDefinitionConstants.PrimaryAttribute);
-                if (primary == null)
+                
+                string autowireCandidates = GetAttributeValue(element, ObjectDefinitionConstants.AutowireCandidateAttribute);
+                if (string.IsNullOrEmpty(autowireCandidates) || ObjectDefinitionConstants.DefaultValue.Equals(autowireCandidates))
                 {
-                    primary = "false";
+                    if (!string.IsNullOrEmpty(childParserContext.ParserHelper.Defaults.AutowireCandidates))
+                    {
+                        string[] patterns = childParserContext.ParserHelper.Defaults.AutowireCandidates.Split(',');
+                        od.IsAutowireCandidate = PatternMatchUtils.SimpleMatch(patterns, id);
+                    }
+                }
+                else
+                {
+                    od.IsAutowireCandidate = ObjectDefinitionConstants.TrueValue.Equals(autowireCandidates);
+                }
+                string primary = GetAttributeValue(element, ObjectDefinitionConstants.PrimaryAttribute);
+                if (string.IsNullOrEmpty(primary))
+                {
+                    primary = ObjectDefinitionConstants.FalseValue;
                 }
                 od.IsPrimary = IsTrueStringValue(primary);
                 string initMethodName = GetAttributeValue(element, ObjectDefinitionConstants.InitMethodAttribute);
-                if (StringUtils.HasText(initMethodName))
+                if (initMethodName != null)
                 {
-                    od.InitMethodName = initMethodName;
+                    if (StringUtils.HasText(initMethodName))
+                        od.InitMethodName = initMethodName;
+                }
+                else
+                {
+                    if (StringUtils.HasText(childParserContext.ParserHelper.Defaults.InitMethod))
+                        od.InitMethodName = childParserContext.ParserHelper.Defaults.InitMethod;
                 }
                 string destroyMethodName = GetAttributeValue(element, ObjectDefinitionConstants.DestroyMethodAttribute);
-                if (StringUtils.HasText(destroyMethodName))
+                if (destroyMethodName != null)
                 {
-                    od.DestroyMethodName = destroyMethodName;
+                    if (StringUtils.HasText(destroyMethodName))
+                    {
+                        od.DestroyMethodName = destroyMethodName;
+                    }
+                }
+                else
+                {
+                    if (StringUtils.HasText(childParserContext.ParserHelper.Defaults.DestroyMethod))
+                        od.DestroyMethodName = childParserContext.ParserHelper.Defaults.DestroyMethod;
                 }
                 if (element.HasAttribute(ObjectDefinitionConstants.SingletonAttribute))
                 {

@@ -30,7 +30,7 @@
 
         <!-- TODO select form system db all errors that have 'incorrect syntax' at the start of the error string-->
         <property name="ErrorCodes.BadSqlGrammarCodes">
-          <value>156,170,207,208</value>
+          <value>102,156,170,207,208</value>
         </property>
         <property name="ErrorCodes.PermissionDeniedCodes">
           <value>229</value>
@@ -71,7 +71,7 @@
         
         <!-- TODO select form system db all errors that have 'incorrect syntax' at the start of the error string-->
         <property name="ErrorCodes.BadSqlGrammarCodes">
-          <value>156,170,207,208</value>
+          <value>102,156,170,207,208</value>
         </property>
         <property name="ErrorCodes.PermissionDeniedCodes">
           <value>229</value>
@@ -112,7 +112,7 @@
 
         <!-- TODO select form system db all errors that have 'incorrect syntax' at the start of the error string-->
         <property name="ErrorCodes.BadSqlGrammarCodes">
-          <value>156,170,207,208</value>
+          <value>102,156,170,207,208</value>
         </property>
         <property name="ErrorCodes.PermissionDeniedCodes">
           <value>229</value>

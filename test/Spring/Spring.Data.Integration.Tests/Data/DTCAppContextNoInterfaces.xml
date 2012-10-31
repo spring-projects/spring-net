@@ -6,11 +6,11 @@
      <!-- Database Providers -->
      <d:provider id="DbProvider" 
                    provider="SqlServer-2.0" 
-                   connectionString="Data Source=NYCSUMPOLLL\SQLEXPRESS;Initial Catalog=Credits;Integrated Security=True;Pooling=False"/>
+                   connectionString="Data Source=SPRINGQA;Initial Catalog=Credits;Integrated Security=false;User Id=springqa;Password=springqa;Pooling=False"/>
 
-     <d:provider id="DbProvider" 
+     <d:provider id="DebitDbProvider" 
                    provider="SqlServer-2.0" 
-                   connectionString="Data Source=NYCSUMPOLLL\SQLEXPRESS;Initial Catalog=Debits;Integrated Security=True;Pooling=False"/>
+                   connectionString="Data Source=SPRINGQA;Initial Catalog=Debits;Integrated Security=false;User Id=springqa;Password=springqa;Pooling=False"/>
 
 
     <!-- Transaction Manager -->

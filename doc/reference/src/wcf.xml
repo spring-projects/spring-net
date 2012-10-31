@@ -243,6 +243,21 @@
     <para>The value 'serverAppCalculatorEndpoint' refers to the name of an
     enpoints in the &lt;client&gt; section of the standard WCF configuration
     inside of App.config.</para>
+    
+    <para>You can also specify the scope of the created channel (default is singleton) 
+    and use classic DI to configure the ChannelFactory&lt;T&gt; instance.</para>
+
+    <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"
+         xmlns:wcf="http://www.springframework.net/wcf"&gt;
+         
+  &lt;wcf:channelFactory id="serverAppCalculator"
+       channelType="Spring.WcfQuickStart.ICalculator, Spring.WcfQuickStart.Contracts"
+       endpointConfigurationName="serverAppCalculatorEndpoint"&gt;
+    &lt;wcf:property name="IsSingleton" value="false" /&gt;
+    &lt;wcf:property name="Credentials.Windows.ClientCredential" value="Domain\Login:Password" /&gt;
+  &lt;/wcf:channelFactory&gt;
+  
+&lt;/objects&gt;</programlisting>
   </section>
 
   <section>

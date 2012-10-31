@@ -21,6 +21,7 @@
 #region Imports
 
 using System;
+using System.Collections;
 using Common.Logging;
 using Spring.Objects;
 using Spring.Transaction.Interceptor;
@@ -82,7 +83,20 @@ namespace Spring.Data
             testObjectDao.Delete(name2);
         }
 
-		#endregion
+	    public void DeleteAllTestObjects()
+	    {
+	        IList objects = testObjectDao.FindAll();
+
+	        foreach (object testObject in objects)
+	        {
+	            if (testObject is ITestObject)
+	            {
+	                testObjectDao.Delete(((ITestObject)testObject).Name);
+	            }
+	        }
+	    }
+
+	    #endregion
 	}
 
 

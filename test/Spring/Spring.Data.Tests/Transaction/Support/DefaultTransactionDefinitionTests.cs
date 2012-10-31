@@ -23,12 +23,18 @@ namespace Spring.Transaction.Support
 			Assert.IsTrue( true == def.ReadOnly );
 		}
 		[Test]
-		public void IsolationLeveNonDefaultl()
+		public void PropogationBehaviorDefault()
 		{
 			DefaultTransactionDefinition def = new DefaultTransactionDefinition();
 			Assert.IsTrue( def.PropagationBehavior == TransactionPropagation.Required );
 		}
-		[Test]
+        [Test]
+        public void IsolationLevelDefault()
+        {
+            DefaultTransactionDefinition def = new DefaultTransactionDefinition();
+            Assert.IsTrue(def.TransactionIsolationLevel == IsolationLevel.Unspecified);
+        }
+        [Test]
 		[ExpectedException(typeof(ArgumentException))]
 		public void InvalidTimeout()
 		{
