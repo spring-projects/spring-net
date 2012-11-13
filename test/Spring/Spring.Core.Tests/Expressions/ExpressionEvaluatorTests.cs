@@ -274,6 +274,13 @@ namespace Spring.Expressions
         #endregion Serialization Tests
 
         [Test]
+        public void TestConstantRead()
+        {
+            object value = ExpressionEvaluator.GetValue(null, "Society.ByteConst == 1");
+            Assert.AreEqual(true, value);
+        }
+
+        [Test]
         public void TestBitwiseXOR()
         {
             object value = ExpressionEvaluator.GetValue(null, "'123' + 1");

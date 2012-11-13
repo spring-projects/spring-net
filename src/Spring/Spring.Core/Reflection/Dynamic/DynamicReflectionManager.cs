@@ -907,7 +907,7 @@ namespace Spring.Reflection.Dynamic
 
             if (value is byte)
             {
-                il.Emit(OpCodes.Ldc_I4, (byte)value);
+                il.Emit(OpCodes.Ldc_I4_S, (byte)value);
                 il.Emit(OpCodes.Conv_I1);
             }
             else if (value is Int16)
