@@ -872,7 +872,9 @@
     <Content Include="Data\Spring\Objects\Factory\Xml\satisfiedobjectdependencycheck.xml" />
     <Content Include="Data\Spring\Objects\Factory\Xml\satisfiedsimpledependencycheck.xml" />
     <Content Include="Data\Spring\Objects\Factory\Xml\schema-validation.xml" />
-    <Content Include="Data\Spring\Objects\Factory\Xml\test.xml" />
+    <Content Include="Data\Spring\Objects\Factory\Xml\test.xml">
+      <SubType>Designer</SubType>
+    </Content>
     <Content Include="Data\Spring\Objects\Factory\Xml\unsatisfiedalldependencycheckmissingobjects.xml" />
     <Content Include="Data\Spring\Objects\Factory\Xml\unsatisfiedAllDependencyCheckMissingSimple.xml" />
     <Content Include="Data\Spring\Objects\Factory\Xml\unsatisfiedobjectdependencycheck.xml" />

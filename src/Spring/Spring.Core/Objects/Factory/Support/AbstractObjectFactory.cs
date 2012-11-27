@@ -1327,7 +1327,7 @@ namespace Spring.Objects.Factory.Support
         /// </exception>
         public bool IsTypeMatch<T>(string name)
         {
-            return IsTypeMatch(name, typeof (T));
+            return IsTypeMatch(name, typeof(T));
         }
 
         /// <summary>
@@ -1606,7 +1606,7 @@ namespace Spring.Objects.Factory.Support
         /// <summary>
         /// String Resolver applied to Autowired value injections
         /// </summary>
-        private ISet embeddedValueResolvers = new SortedSet(); 
+        private ISet embeddedValueResolvers = new SortedSet();
 
         /// <summary>
         /// Indicates whether any IInstantiationAwareBeanPostProcessors have been registered
@@ -1834,7 +1834,7 @@ namespace Spring.Objects.Factory.Support
                     {
                         if (0 == string.Compare((string)aliasEntry.Value, objectName, !this.IsCaseSensitive))
                         {
-                            matches.Add((string) aliasEntry.Key);
+                            matches.Add((string)aliasEntry.Key);
                         }
                     }
                 }
@@ -2438,13 +2438,13 @@ namespace Spring.Objects.Factory.Support
         /// <returns>the resolved value (may be the original value as-is)</returns>
         public string ResolveEmbeddedValue(string value)
         {
-		    string result = value;
-		    foreach(IStringValueResolver resolver in embeddedValueResolvers)
+            string result = value;
+            foreach (IStringValueResolver resolver in embeddedValueResolvers)
             {
-			    result = resolver.ParseAndResolveVariables(result);
-		    }
-		    return result;
-	    }
+                result = resolver.ParseAndResolveVariables(result);
+            }
+            return result;
+        }
 
         /// <summary>
         /// Add a new <see cref="Spring.Objects.Factory.Config.IObjectPostProcessor"/>
@@ -2504,6 +2504,20 @@ namespace Spring.Objects.Factory.Support
 
             #endregion
 
+            if (name == alias)
+            {
+                #region Instrumentation
+                
+                if (log.IsDebugEnabled)
+                {
+                    log.Debug(string.Format("Ignoring attempt to Register alias '{0}' for object with name '{1}' because name and alias would be the same value.", alias, name));
+                }
+                
+                #endregion
+
+                return;
+            }
+            
             #region Instrumentation
 
             if (log.IsDebugEnabled)
