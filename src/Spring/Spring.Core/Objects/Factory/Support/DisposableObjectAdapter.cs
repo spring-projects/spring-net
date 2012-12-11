@@ -26,22 +26,12 @@ namespace Spring.Objects.Factory.Support
         private List<IDestructionAwareObjectPostProcessor> objectPostProcessors;
 
         /// <summary>
-        /// Disposables the bean adapter.
-        /// </summary>
-        /// <param name="instance">The bean.</param>
-        /// <param name="objectName">Name of the bean.</param>
-        /// <param name="objectDefinition">The bean definition.</param>
-        /// <param name="postProcessors">The post processors.</param>
-        /// <param name="acc">The acc.</param>
         /// Create a new DisposableBeanAdapter for the given bean.
-        /// @param bean the bean instance (never 
-        /// <code>null</code>
-        /// )
-        /// @param beanName the name of the bean
-        /// @param beanDefinition the merged bean definition
-        /// @param postProcessors the List of BeanPostProcessors
-        /// (potentially DestructionAwareBeanPostProcessor), if any
-
+        /// </summary>
+        /// <param name="instance">The bean instance (never <code>null</code>).</param>
+        /// <param name="objectName">Name of the bean.</param>
+        /// <param name="objectDefinition">The merged bean definition.</param>
+        /// <param name="postProcessors">the List of BeanPostProcessors (potentially IDestructionAwareBeanPostProcessor), if any.</param>
         public DisposableObjectAdapter(object instance, string objectName, RootObjectDefinition objectDefinition, ISet postProcessors)
         {
             AssertUtils.ArgumentNotNull(instance, "Disposable object must not be null");
@@ -89,17 +79,6 @@ namespace Spring.Objects.Factory.Support
             this.objectPostProcessors = FilterPostProcessors(postProcessors);
         }
 
-        /**
-	 * If the current value of the given beanDefinition's destroyMethodName property is
-	 * {@link AbstractBeanDefinition#INFER_METHOD}, then attempt to infer a destroy method.
-	 * Candidate methods are currently limited to public, no-arg methods named 'close'
-	 * (whether declared locally or inherited). The given beanDefinition's
-	 * destroyMethodName is updated to be null if no such method is found, otherwise set
-	 * to the name of the inferred method. This constant serves as the default for the
-	 * {@code @Bean#customDestroyMethod} attribute and the value of the constant may also be
-	 * used in XML within the {@code <bean destroy-method="">} or {@code
-	 * <beans default-destroy-method="">} attributes.
-	 */
         private void InferDestroyMethodIfNecessary(RootObjectDefinition beanDefinition)
         {
             if ("(Inferred)".Equals(beanDefinition.DestroyMethodName))
@@ -112,7 +91,7 @@ namespace Spring.Objects.Factory.Support
                         beanDefinition.DestroyMethodName = candidate.Name;
                     }
                 }
-                catch (MissingMethodException ex)
+                catch (MissingMethodException)
                 {
                     // no candidate destroy method found
                     beanDefinition.DestroyMethodName = null;
@@ -121,13 +100,10 @@ namespace Spring.Objects.Factory.Support
         }
 
         /// <summary>
-        /// Filters the post processors.
+        /// Search for all <see cref="IDestructionAwareObjectPostProcessor"/>s in the List.
         /// </summary>
-        /// <param name="postProcessors">The post processors.</param>
-        /// <returns></returns>
-        /// Search for all DestructionAwareBeanPostProcessors in the List.
-        /// @param postProcessors the List to search
-        /// @return the filtered List of DestructionAwareBeanPostProcessors
+        /// <param name="postProcessors">The List to search.</param>
+        /// <returns>the filtered List of IDestructionAwareObjectPostProcessors.</returns>
         private List<IDestructionAwareObjectPostProcessor> FilterPostProcessors(ISet postProcessors)
         {
             List<IDestructionAwareObjectPostProcessor> filteredPostProcessors = null;
@@ -141,6 +117,9 @@ namespace Spring.Objects.Factory.Support
 
 
 
+        /// <summary>
+        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
+        /// </summary>
         public void Dispose()
         {
             if (this.objectPostProcessors != null && this.objectPostProcessors.Count != 0)
@@ -273,24 +252,5 @@ namespace Spring.Objects.Factory.Support
                              "' on object with name '" + this.objectName + "'", ex);
             }
         }
-
-
-        /**
-	 * Serializes a copy of the state of this class,
-	 * filtering out non-serializable BeanPostProcessors.
-	 */
-        //protected Object writeReplace() {
-        //    List<DestructionAwareBeanPostProcessor> serializablePostProcessors = null;
-        //    if (this.objectPostProcessors != null) {
-        //        serializablePostProcessors = new ArrayList<DestructionAwareBeanPostProcessor>();
-        //        for (DestructionAwareBeanPostProcessor postProcessor : this.objectPostProcessors) {
-        //            if (postProcessor instanceof Serializable) {
-        //                serializablePostProcessors.add(postProcessor);
-        //            }
-        //        }
-        //    }
-        //    return new DisposableBeanAdapter(this.bean, this.beanName, this.invokeDisposableObject,
-        //                                     this.nonPublicAccessAllowed, this.destroyMethodName, serializablePostProcessors);
-        //}
     }
 }
