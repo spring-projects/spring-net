@@ -257,7 +257,7 @@ namespace Spring.Objects.Factory.Support
                 ApplyPropertyValues(name, definition, new ObjectWrapper(instance), definition.PropertyValues);
             }
         }
-        
+
         /// <summary>
         /// Apply the property values of the object definition with the supplied
         /// <paramref name="name"/> to the supplied <paramref name="instance"/>.
@@ -480,8 +480,8 @@ namespace Spring.Objects.Factory.Support
             //have to clone the collection before iterating it to avoid arbitrary code in the objects' Dispose()
             // that might permit re-entering the DisposableInnerObjects collections during the iteration to destroy them
             // see https://jira.springframework.org/browse/SPRNET-1334
-            
-            ISet clone = (ISet) DisposableInnerObjects.Clone();
+
+            ISet clone = (ISet)DisposableInnerObjects.Clone();
 
             foreach (object o in clone)
             {
@@ -792,44 +792,44 @@ namespace Spring.Objects.Factory.Support
             ignoredDependencyInterfaces.Add(type);
         }
 
-//        /// <summary>
-//        /// Create an object instance for the given object definition.
-//        /// </summary>
-//        /// <param name="name">The name of the object.</param>
-//        /// <param name="definition">
-//        /// The object definition for the object that is to be instantiated.
-//        /// </param>
-//        /// <param name="arguments">
-//        /// The arguments to use if creating a prototype using explicit arguments to
-//        /// a static factory method. It is invalid to use a non-<see langword="null"/> arguments value
-//        /// in any other case.
-//        /// </param>
-//        /// <returns>
-//        /// A new instance of the object.
-//        /// </returns>
-//        /// <exception cref="Spring.Objects.ObjectsException">
-//        /// In case of errors.
-//        /// </exception>
-//        /// <remarks>
-//        /// <p>
-//        /// Delegates to the
-//        /// <see cref="Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory.CreateObject (string,RootObjectDefinition,object[],bool)"/>
-//        /// method version with the <c>allowEagerCaching</c> parameter set to <b>true</b>.
-//        /// </p>
-//        /// <p>
-//        /// The object definition will already have been merged with the parent
-//        /// definition in case of a child definition.
-//        /// </p>
-//        /// <p>
-//        /// All the other methods in this class invoke this method, although objects
-//        /// may be cached after being instantiated by this method. All object
-//        /// instantiation within this class is performed by this method.
-//        /// </p>
-//        /// </remarks>
-//        protected internal override object CreateObject(string name, RootObjectDefinition definition, object[] arguments)
-//        {
-//            return CreateObject(name, definition, arguments, true, false);
-//        }
+        //        /// <summary>
+        //        /// Create an object instance for the given object definition.
+        //        /// </summary>
+        //        /// <param name="name">The name of the object.</param>
+        //        /// <param name="definition">
+        //        /// The object definition for the object that is to be instantiated.
+        //        /// </param>
+        //        /// <param name="arguments">
+        //        /// The arguments to use if creating a prototype using explicit arguments to
+        //        /// a static factory method. It is invalid to use a non-<see langword="null"/> arguments value
+        //        /// in any other case.
+        //        /// </param>
+        //        /// <returns>
+        //        /// A new instance of the object.
+        //        /// </returns>
+        //        /// <exception cref="Spring.Objects.ObjectsException">
+        //        /// In case of errors.
+        //        /// </exception>
+        //        /// <remarks>
+        //        /// <p>
+        //        /// Delegates to the
+        //        /// <see cref="Spring.Objects.Factory.Support.AbstractAutowireCapableObjectFactory.CreateObject (string,RootObjectDefinition,object[],bool)"/>
+        //        /// method version with the <c>allowEagerCaching</c> parameter set to <b>true</b>.
+        //        /// </p>
+        //        /// <p>
+        //        /// The object definition will already have been merged with the parent
+        //        /// definition in case of a child definition.
+        //        /// </p>
+        //        /// <p>
+        //        /// All the other methods in this class invoke this method, although objects
+        //        /// may be cached after being instantiated by this method. All object
+        //        /// instantiation within this class is performed by this method.
+        //        /// </p>
+        //        /// </remarks>
+        //        protected internal override object CreateObject(string name, RootObjectDefinition definition, object[] arguments)
+        //        {
+        //            return CreateObject(name, definition, arguments, true, false);
+        //        }
 
         /// <summary>
         /// Create an object instance for the given object definition.
@@ -1221,7 +1221,7 @@ namespace Spring.Objects.Factory.Support
             if (unsatisfiedDependencies.Count > 0)
             {
                 throw new UnsatisfiedDependencyException(definition.ResourceDescription, name, unsatisfiedDependencies[0].Name,
-                    "Set this property value or disable dependency checking for this object.");                
+                    "Set this property value or disable dependency checking for this object.");
             }
         }
 
@@ -1438,32 +1438,10 @@ namespace Spring.Objects.Factory.Support
         /// </param>
         protected override void DestroyObject(string name, object target)
         {
-            log.Debug(m => m("Destroying dependant objects for object '{0}", name));
-
-            DestroyDependantObjects(name);
-
-            ApplyObjectPostProcessBeforeDestruction(target, name);
-
-            if (target is IDisposable)
+            using (new DisposableObjectAdapter(target, name, GetMergedObjectDefinition(name, true), ObjectPostProcessors))
             {
-                log.Debug(m => m(string.Format(CultureInfo.InvariantCulture, "Calling Dispose() on object with name '{0}'.", name)));
-
-                try
-                {
-                    ((IDisposable)target).Dispose();
-                }
-                catch (Exception ex)
-                {
-                    log.Error("Destroy() on object with name '" + name + "' threw an exception.", ex);
-                }
-            }
-
-            RootObjectDefinition rootDefinition = GetMergedObjectDefinition(name, false);
-            if (rootDefinition != null && StringUtils.HasText(rootDefinition.DestroyMethodName))
-            {
-                log.Debug(m => m("Calling custom destroy method '{0}' on object with name '{1}'.", rootDefinition.DestroyMethodName, name));
-
-                InvokeCustomDestroyMethod(name, target, rootDefinition.DestroyMethodName);
+                log.Debug(m => m("Destroying dependant objects for object '{0}", name));
+                DestroyDependantObjects(name);
             }
         }
 
@@ -1533,123 +1511,123 @@ namespace Spring.Objects.Factory.Support
         ///// <param name="argumentValue">
         ///// The value of the property that is being resolved.
         ///// </param>
-//        protected object ResolveValueIfNecessary(string name, RootObjectDefinition definition, string argumentName, object argumentValue)
-//        {
-//            object resolvedValue = null;
-//
-//            AssertUtils.ArgumentNotNull(resolvedValue, "test");
-//
-//            // we must check the argument value to see whether it requires a runtime
-//            // reference to another object to be resolved.
-//            // if it does, we'll attempt to instantiate the object and set the reference.
-//            if (RemotingServices.IsTransparentProxy(argumentValue))
-//            {
-//                resolvedValue = argumentValue;
-//            }
-//            else if (argumentValue is ObjectDefinitionHolder)
-//            {
-//                // contains an IObjectDefinition with name and aliases...
-//                ObjectDefinitionHolder holder = (ObjectDefinitionHolder)argumentValue;
-//                resolvedValue = ResolveInnerObjectDefinition(name, holder.ObjectName, argumentName, holder.ObjectDefinition, definition.IsSingleton);
-//            }
-//            else if (argumentValue is IObjectDefinition)
-//            {
-//                // resolve plain IObjectDefinition, without contained name: use dummy name... 
-//                IObjectDefinition def = (IObjectDefinition)argumentValue;
-//                resolvedValue = ResolveInnerObjectDefinition(name, "(inner object)", argumentName, def, definition.IsSingleton);
-//
-//            }
-//            else if (argumentValue is RuntimeObjectReference)
-//            {
-//                RuntimeObjectReference roref = (RuntimeObjectReference)argumentValue;
-//                resolvedValue = ResolveReference(definition, name, argumentName, roref);
-//            }
-//            else if (argumentValue is ExpressionHolder)
-//            {
-//                ExpressionHolder expHolder = (ExpressionHolder)argumentValue;
-//                object context = null;
-//                IDictionary variables = null;
-//
-//                if (expHolder.Properties != null)
-//                {
-//                    PropertyValue contextProperty = expHolder.Properties.GetPropertyValue("Context");
-//                    context = contextProperty == null
-//                                         ? null
-//                                         : ResolveValueIfNecessary2(name, definition, "Context",
-//                                                                   contextProperty.Value);
-//                    PropertyValue variablesProperty = expHolder.Properties.GetPropertyValue("Variables");
-//                    object vars = (variablesProperty == null
-//                                                   ? null
-//                                                   : ResolveValueIfNecessary2(name, definition, "Variables",
-//                                                                             variablesProperty.Value));
-//                    if (vars is IDictionary)
-//                    {
-//                        variables = (IDictionary)vars;
-//                    }
-//                    else
-//                    {
-//                        if (vars != null) throw new ArgumentException("'Variables' must resolve to an IDictionary");
-//                    }
-//                }
-//
-//                if (variables == null) variables = CollectionsUtil.CreateCaseInsensitiveHashtable();
-//                // add 'this' objectfactory reference to variables
-//                variables.Add(Expression.ReservedVariableNames.CurrentObjectFactory, this);
-//
-//                resolvedValue = expHolder.Expression.GetValue(context, variables);
-//            }
-//            else if (argumentValue is IManagedCollection)
-//            {
-//                resolvedValue =
-//                        ((IManagedCollection)argumentValue).Resolve(name, definition, argumentName,
-//                                                                     new ManagedCollectionElementResolver(ResolveValueIfNecessary2));
-//            }
-//            else if (argumentValue is TypedStringValue)
-//            {
-//                TypedStringValue tsv = (TypedStringValue)argumentValue;
-//                try
-//                {
-//                    Type resolvedTargetType = ResolveTargetType(tsv);
-//                    if (resolvedTargetType != null)
-//                    {
-//                        resolvedValue = TypeConversionUtils.ConvertValueIfNecessary(tsv.TargetType, tsv.Value, null);
-//                    }
-//                    else
-//                    {
-//                        resolvedValue = tsv.Value;
-//                    }
-//                }
-//                catch (Exception ex)
-//                {
-//                    throw new ObjectCreationException(definition.ResourceDescription, name,
-//                                                      "Error converted typed String value for " + argumentName, ex);
-//                }
-//
-//            }
-//            else
-//            {
-//                // no need to resolve value...
-//                resolvedValue = argumentValue;
-//            }
-//            return resolvedValue;
-//        }
+        //        protected object ResolveValueIfNecessary(string name, RootObjectDefinition definition, string argumentName, object argumentValue)
+        //        {
+        //            object resolvedValue = null;
+        //
+        //            AssertUtils.ArgumentNotNull(resolvedValue, "test");
+        //
+        //            // we must check the argument value to see whether it requires a runtime
+        //            // reference to another object to be resolved.
+        //            // if it does, we'll attempt to instantiate the object and set the reference.
+        //            if (RemotingServices.IsTransparentProxy(argumentValue))
+        //            {
+        //                resolvedValue = argumentValue;
+        //            }
+        //            else if (argumentValue is ObjectDefinitionHolder)
+        //            {
+        //                // contains an IObjectDefinition with name and aliases...
+        //                ObjectDefinitionHolder holder = (ObjectDefinitionHolder)argumentValue;
+        //                resolvedValue = ResolveInnerObjectDefinition(name, holder.ObjectName, argumentName, holder.ObjectDefinition, definition.IsSingleton);
+        //            }
+        //            else if (argumentValue is IObjectDefinition)
+        //            {
+        //                // resolve plain IObjectDefinition, without contained name: use dummy name... 
+        //                IObjectDefinition def = (IObjectDefinition)argumentValue;
+        //                resolvedValue = ResolveInnerObjectDefinition(name, "(inner object)", argumentName, def, definition.IsSingleton);
+        //
+        //            }
+        //            else if (argumentValue is RuntimeObjectReference)
+        //            {
+        //                RuntimeObjectReference roref = (RuntimeObjectReference)argumentValue;
+        //                resolvedValue = ResolveReference(definition, name, argumentName, roref);
+        //            }
+        //            else if (argumentValue is ExpressionHolder)
+        //            {
+        //                ExpressionHolder expHolder = (ExpressionHolder)argumentValue;
+        //                object context = null;
+        //                IDictionary variables = null;
+        //
+        //                if (expHolder.Properties != null)
+        //                {
+        //                    PropertyValue contextProperty = expHolder.Properties.GetPropertyValue("Context");
+        //                    context = contextProperty == null
+        //                                         ? null
+        //                                         : ResolveValueIfNecessary2(name, definition, "Context",
+        //                                                                   contextProperty.Value);
+        //                    PropertyValue variablesProperty = expHolder.Properties.GetPropertyValue("Variables");
+        //                    object vars = (variablesProperty == null
+        //                                                   ? null
+        //                                                   : ResolveValueIfNecessary2(name, definition, "Variables",
+        //                                                                             variablesProperty.Value));
+        //                    if (vars is IDictionary)
+        //                    {
+        //                        variables = (IDictionary)vars;
+        //                    }
+        //                    else
+        //                    {
+        //                        if (vars != null) throw new ArgumentException("'Variables' must resolve to an IDictionary");
+        //                    }
+        //                }
+        //
+        //                if (variables == null) variables = CollectionsUtil.CreateCaseInsensitiveHashtable();
+        //                // add 'this' objectfactory reference to variables
+        //                variables.Add(Expression.ReservedVariableNames.CurrentObjectFactory, this);
+        //
+        //                resolvedValue = expHolder.Expression.GetValue(context, variables);
+        //            }
+        //            else if (argumentValue is IManagedCollection)
+        //            {
+        //                resolvedValue =
+        //                        ((IManagedCollection)argumentValue).Resolve(name, definition, argumentName,
+        //                                                                     new ManagedCollectionElementResolver(ResolveValueIfNecessary2));
+        //            }
+        //            else if (argumentValue is TypedStringValue)
+        //            {
+        //                TypedStringValue tsv = (TypedStringValue)argumentValue;
+        //                try
+        //                {
+        //                    Type resolvedTargetType = ResolveTargetType(tsv);
+        //                    if (resolvedTargetType != null)
+        //                    {
+        //                        resolvedValue = TypeConversionUtils.ConvertValueIfNecessary(tsv.TargetType, tsv.Value, null);
+        //                    }
+        //                    else
+        //                    {
+        //                        resolvedValue = tsv.Value;
+        //                    }
+        //                }
+        //                catch (Exception ex)
+        //                {
+        //                    throw new ObjectCreationException(definition.ResourceDescription, name,
+        //                                                      "Error converted typed String value for " + argumentName, ex);
+        //                }
+        //
+        //            }
+        //            else
+        //            {
+        //                // no need to resolve value...
+        //                resolvedValue = argumentValue;
+        //            }
+        //            return resolvedValue;
+        //        }
 
         ///// <summary>
         ///// Resolve the target type of the passed <see cref="TypedStringValue"/>.
         ///// </summary>
         ///// <param name="value">The <see cref="TypedStringValue"/> who's target type is to be resolved</param>
         ///// <returns>The resolved target type, if any. <see lang="null" /> otherwise.</returns>
-//        protected virtual Type ResolveTargetType(TypedStringValue value)
-//        {
-//            if (value.HasTargetType)
-//            {
-//                return value.TargetType;
-//            }
-//            else
-//            {
-//                return null;
-//            }
-//        }
+        //        protected virtual Type ResolveTargetType(TypedStringValue value)
+        //        {
+        //            if (value.HasTargetType)
+        //            {
+        //                return value.TargetType;
+        //            }
+        //            else
+        //            {
+        //                return null;
+        //            }
+        //        }
 
         ///// <summary>
         ///// Resolves an inner object definition.
@@ -1674,30 +1652,30 @@ namespace Spring.Objects.Factory.Support
         ///// <returns>
         ///// The resolved object as defined by the inner object definition.
         ///// </returns>
-//        protected object ResolveInnerObjectDefinition(string name, string innerObjectName, string argumentName, IObjectDefinition definition,
-//                                                      bool singletonOwner)
-//        {
-//            RootObjectDefinition mod = GetMergedObjectDefinition(innerObjectName, definition);
-//            mod.IsSingleton = singletonOwner;
-//            object instance;
-//            object result;
-//            try
-//            {
-//                instance = InstantiateObject(innerObjectName, mod, ObjectUtils.EmptyObjects, false, false);
-//                result = GetObjectForInstance(innerObjectName, instance);
-//            }
-//            catch (ObjectsException ex)
-//            {
-//                throw ObjectCreationException.GetObjectCreationException(ex, name, argumentName, definition.ResourceDescription, innerObjectName);
-//            }
-//            if (singletonOwner && instance is IDisposable)
-//            {
-//                // keep a reference to the inner object instance, to be able to destroy
-//                // it on factory shutdown...
-//                DisposableInnerObjects.Add(instance);
-//            }
-//            return result;
-//        }
+        //        protected object ResolveInnerObjectDefinition(string name, string innerObjectName, string argumentName, IObjectDefinition definition,
+        //                                                      bool singletonOwner)
+        //        {
+        //            RootObjectDefinition mod = GetMergedObjectDefinition(innerObjectName, definition);
+        //            mod.IsSingleton = singletonOwner;
+        //            object instance;
+        //            object result;
+        //            try
+        //            {
+        //                instance = InstantiateObject(innerObjectName, mod, ObjectUtils.EmptyObjects, false, false);
+        //                result = GetObjectForInstance(innerObjectName, instance);
+        //            }
+        //            catch (ObjectsException ex)
+        //            {
+        //                throw ObjectCreationException.GetObjectCreationException(ex, name, argumentName, definition.ResourceDescription, innerObjectName);
+        //            }
+        //            if (singletonOwner && instance is IDisposable)
+        //            {
+        //                // keep a reference to the inner object instance, to be able to destroy
+        //                // it on factory shutdown...
+        //                DisposableInnerObjects.Add(instance);
+        //            }
+        //            return result;
+        //        }
 
         /// <summary>
         /// Resolve a reference to another object in the factory.
@@ -1896,7 +1874,6 @@ namespace Spring.Objects.Factory.Support
 
             return instance;
         }
-
 
         /// <summary>
         /// Applies the <code>PostProcessAfterInitialization</code> callback of all

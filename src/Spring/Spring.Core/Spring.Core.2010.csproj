@@ -723,6 +723,7 @@
     <Compile Include="Objects\Factory\Parsing\ReaderContext.cs" />
     <Compile Include="Objects\Factory\Support\AutowireCandidateQualifier.cs" />
     <Compile Include="Objects\Factory\Support\DelegateInvokingFactoryObject.cs" />
+    <Compile Include="Objects\Factory\Support\DisposableObjectAdapter.cs" />
     <Compile Include="Objects\Factory\Support\IObjectDefinitionRegistryPostProcessor.cs" />
     <Compile Include="Objects\Factory\Support\ObjectScope.cs" />
     <Compile Include="Objects\IObjectMetadataElement.cs" />

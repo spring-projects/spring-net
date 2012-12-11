@@ -160,9 +160,9 @@ namespace Spring.Util
                     Type[] parameterTypes = Array.ConvertAll<ParameterInfo, Type>(candidate.GetParameters(), delegate(ParameterInfo i) { return i.ParameterType; });
                     bool typesMatch = false;
 
-                    bool zeroTypeArguments = argumentTypes.Length == 0;
+                    bool zeroTypeArguments = null == argumentTypes || argumentTypes.Length == 0;
 
-                    if (parameterTypes.Length == argumentTypes.Length && !zeroTypeArguments)
+                    if (!zeroTypeArguments && parameterTypes.Length == argumentTypes.Length)
                     {
                         for (int i = 0; i < parameterTypes.Length; i++)
                         {
