@@ -111,7 +111,7 @@
     <Content Include="Img\logo.png" />
     <Content Include="Img\springNet_release.png" />
     <Content Include="Logs\log.txt" />
-    <Content Include="Web.config" />
+    <Content Include="Web.net40.config" />
     <Content Include="Web.xml" />
   </ItemGroup>
   <ItemGroup>
@@ -188,6 +188,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Web.net30.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Web.config" />
+  </ItemGroup>
+  <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Properties\" />
   </ItemGroup>
@@ -206,7 +212,7 @@
         <WebProjectProperties>
           <UseIIS>False</UseIIS>
           <AutoAssignPort>True</AutoAssignPort>
-          <DevelopmentServerPort>60934</DevelopmentServerPort>
+          <DevelopmentServerPort>2937</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
           <IISUrl>
           </IISUrl>
@@ -219,4 +225,7 @@
       </FlavorProperties>
     </VisualStudio>
   </ProjectExtensions>
+  <PropertyGroup>
+    <PostBuildEvent>copy "$(ProjectDir)Web.net30.config"  "$(ProjectDir)Web.config" /Y</PostBuildEvent>
+  </PropertyGroup>
 </Project>

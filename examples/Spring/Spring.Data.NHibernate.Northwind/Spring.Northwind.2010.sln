@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+# Visual Web Developer Express 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Northwind.Service.2010", "src\Spring.Northwind.Service\Spring.Northwind.Service.2010.csproj", "{9E15876F-E9E0-43B7-9874-B54F163757D6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Northwind.Dao.2010", "src\Spring.Northwind.Dao\Spring.Northwind.Dao.2010.csproj", "{7F45EEA2-50AC-44E2-85A6-2FFB02E38C44}"
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Northwind.IntegrationTests.2010", "test\Spring.Northwind.IntegrationTests\Spring.Northwind.IntegrationTests.2010.csproj", "{2D0C5DF7-3BDB-44FB-BC1B-58E60B170BAD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Northwind.Web.2010", "src\Spring.Northwind.Web\Spring.Northwind.Web.2010.csproj", "{2967CA64-7352-46E3-89C0-6BB3A0A13FC1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Northwind.Web.ConvWA.2010", "src\Spring.Northwind.Web.ConvWA\Spring.Northwind.Web.ConvWA.2010.csproj", "{8EEAB62E-DBAF-4C5F-9906-77B2A817F945}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -71,6 +73,16 @@ Global
 		{2967CA64-7352-46E3-89C0-6BB3A0A13FC1}.Release|Any CPU.Build.0 = Release|Any CPU
 		{2967CA64-7352-46E3-89C0-6BB3A0A13FC1}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{2967CA64-7352-46E3-89C0-6BB3A0A13FC1}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{8EEAB62E-DBAF-4C5F-9906-77B2A817F945}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{8EEAB62E-DBAF-4C5F-9906-77B2A817F945}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EEAB62E-DBAF-4C5F-9906-77B2A817F945}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EEAB62E-DBAF-4C5F-9906-77B2A817F945}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{8EEAB62E-DBAF-4C5F-9906-77B2A817F945}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{8EEAB62E-DBAF-4C5F-9906-77B2A817F945}.Release|.NET.ActiveCfg = Release|Any CPU
+		{8EEAB62E-DBAF-4C5F-9906-77B2A817F945}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EEAB62E-DBAF-4C5F-9906-77B2A817F945}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EEAB62E-DBAF-4C5F-9906-77B2A817F945}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{8EEAB62E-DBAF-4C5F-9906-77B2A817F945}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

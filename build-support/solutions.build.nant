@@ -21,23 +21,53 @@ Rebuilding Solutions using Nant and "solutions.build":
 
   <property name="root.dir" value="${project::get-base-directory()}\.." overwrite="false" />
 
-  <property name="vs2003.install.dir.key" value="SOFTWARE\Microsoft\VisualStudio\7.1\InstallDir"/>
+  <!--
+    Ensure use of 32 bits version of frameworks and IDE to avoid the error 
+    [MSB6003: The specified task executable "ResGen.exe" could not be run...] 
+    on "Win 7 64".
+  -->
+  <property name="reg.software.prefix" value="SOFTWARE\Microsoft"/>
+  <readregistry property="wow6432node" key="SOFTWARE\Wow6432Node\" hive="LocalMachine" failonerror="false"/>
+  <if test="${property::exists('wow6432node')}">
+    <property name="reg.software.prefix" value="SOFTWARE\Wow6432Node\Microsoft"/>  
+  </if>
+  
+  <property name="vs2003.install.dir.key" value="${reg.software.prefix}\VisualStudio\7.1\InstallDir"/>
   <readregistry property="vs2003.install.dir" key="${vs2003.install.dir.key}" hive="LocalMachine" failonerror="false"/>
   <property name="devenv11.exe" value="${vs2003.install.dir}devenv.exe" if="${property::exists('vs2003.install.dir')}" />
 
-  <readregistry property="net35.install.dir" key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.5\InstallPath" hive="LocalMachine" failonerror="true"/>
-  <readregistry property="net40.install.dir" key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full\InstallPath" hive="LocalMachine" failonerror="true"/>
-  <property name="msbuild.exe" value="${net40.install.dir}\msbuild.exe"/>
+  <readregistry property="net35.install.dir" key="${reg.software.prefix}\NET Framework Setup\NDP\v3.5\InstallPath" hive="LocalMachine" failonerror="true"/>
+  <readregistry property="net40.install.dir" key="${reg.software.prefix}\NET Framework Setup\NDP\v4\Full\InstallPath" hive="LocalMachine" failonerror="true"/>
 
-  <readregistry property="vs2008.install.dir" key="SOFTWARE\Microsoft\VisualStudio\9.0\InstallDir" hive="LocalMachine" failonerror="false"/>
+  <readregistry property="vs2008.install.dir" key="${reg.software.prefix}\VisualStudio\9.0\InstallDir" hive="LocalMachine" failonerror="false"/>
+  <if test="${not property::exists('vs2008.install.dir')}">
+    <readregistry property="vs2010.install.dir" key="${reg.software.prefix}\VWDExpress\9.0\InstallDir" hive="LocalMachine" failonerror="false"/>
+  </if>
   
-  <readregistry property="vs2010.install.dir" key="SOFTWARE\Microsoft\VisualStudio\10.0\InstallDir" hive="LocalMachine" failonerror="false"/>
+  <readregistry property="vs2010.install.dir" key="${reg.software.prefix}\VisualStudio\10.0\InstallDir" hive="LocalMachine" failonerror="false"/>
+  <if test="${not property::exists('vs2010.install.dir')}">
+    <readregistry property="vs2010.install.dir" key="${reg.software.prefix}\VWDExpress\10.0\InstallDir" hive="LocalMachine" failonerror="false"/>
+  </if>
 
+  <property name="msbuild.exe" value="${net40.install.dir}\msbuild.exe"/>
+  
   <property name="buildconfiguration" value="Debug" />
 
+  <echo message="reg.software.prefix: '${reg.software.prefix}'"/>
+  <echo message="vs2008.install.dir:  '${vs2008.install.dir}'"/>
+  <echo message="vs2010.install.dir:  '${vs2010.install.dir}'"/>
+  <echo message="msbuild.exe:         '${msbuild.exe}'"/>
+  
   <target name="RebuildAllSolutions" description="Rebuild all Solutions">
+    <!--
+      Forcing use of specific SDK to avoid the error "TRK0002: Failed to execute 
+      command ResGen ..." on "Win 7 64".
+      See: http://social.msdn.microsoft.com/Forums/en-US/msbuild/thread/e8c1d26a-5e77-4422-bbc8-f0b7f25702d2/
+    -->
+    <property name="msbuild.exe" value="${net35.install.dir}\msbuild.exe"/>
     <call target="RebuildAllSolutions-3.5" if="${property::exists('vs2008.install.dir')}" />
-	<call target="RebuildAllSolutions-4.0" if="${property::exists('vs2010.install.dir')}" />
+    <property name="msbuild.exe" value="${net40.install.dir}\msbuild.exe"/>
+    <call target="RebuildAllSolutions-4.0" if="${property::exists('vs2010.install.dir')}" />
   </target>
 
   <target name="Clean">
@@ -131,16 +161,20 @@ Rebuilding Solutions using Nant and "solutions.build":
       <arg line="/nologo" />
       <arg line="/verbosity:minimal" />
       <arg line="/property:Configuration=${solutionconfiguration}"/>
+      <!--Specifying mandatory property in SDK 7-->
+      <arg line='/property:Platform="Any CPU"'/>
     </exec>
   </target>
   
   <target name="RebuildSolution-4.0" description="rebuilds a given VS2010 solution file">
     <echo message="Rebuilding .NET 4.0 Solution ${solutionfile}" />
-    <exec program="${msbuild.exe}">
+    <exec program="${msbuild.exe}" verbose="true">
       <arg value="${solutionfile}"/>
       <arg line="/nologo" />
       <arg line="/verbosity:minimal" />
       <arg line="/property:Configuration=${solutionconfiguration}"/>
+      <!--Specifying mandatory property in SDK 7-->
+      <arg line='/property:Platform="Any CPU"'/>
     </exec>
   </target>  
 

@@ -111,7 +111,13 @@ Commandline Examples:
   <property name="spring.basedir" value="${project::get-base-directory()}"/>
   <property name="spring.nonredistdir" value="${spring.basedir}\..\..\nonredist"/>
   <property name="tool.dir" value="${project::get-base-directory()}\build-support\tools"/>
-
+  
+  <!--Support for Windows XP in other languages. In Portuguese, for example, is "c:\Arquivos de Programs"-->
+  <property name="programfiles" value="C:\Program Files"/>
+  <property name="programfilesx86" value="C:\Program Files (x86)"/>
+  <property name="programfiles" value="${environment::get-variable('ProgramFiles')}" failonerror="false"/>
+  <property name="programfilesx86" value="${environment::get-variable('ProgramFiles(x86)')}" failonerror="false"/>
+  
   <!-- build SDK docs with NDoc -->
   <property name="doc.sdk" value="false"/>
 
@@ -411,9 +417,12 @@ Commandline Examples:
 	<nant buildfile="src/Spring/Spring.Scheduling.Quartz20/Spring.Scheduling.Quartz20.build" target="build" if="${build-quartz}"/>
     <nant buildfile="src/Spring/Spring.Messaging/Spring.Messaging.build" target="build" if="${build-msmq}"/>
     <nant buildfile="src/Spring/Spring.Template.Velocity/Spring.Template.Velocity.build" target="build" if="${build-velocity}"/>
+    <!--"Spring.ConversationWA.NH*.dll" should be at last to prevent the other assemblies are compiled with reference to this-->
+    <nant buildfile="src/Spring/Spring.ConversationWA.NH32/Spring.ConversationWA.NH32.build" target="build" if="${build-conversation}"/>
+    <nant buildfile="src/Spring/Spring.ConversationWA.NH33/Spring.ConversationWA.NH33.build" target="build" if="${build-conversation}"/>
 
     <!-- test assemblies -->
-
+    
     <nant buildfile="test/Spring/Spring.Core.Tests/Spring.Core.Tests.build" target="test"/>
     <nant buildfile="test/Spring/Spring.Aop.Tests/Spring.Aop.Tests.build" target="test" if="${build-aop}"/>
     <nant buildfile="test/Spring/Spring.Data.Tests/Spring.Data.Tests.build" target="test" if="${build-data}"/>
@@ -438,6 +447,9 @@ Commandline Examples:
 	<nant buildfile="test/Spring/Spring.Scheduling.Quartz20.Tests/Spring.Scheduling.Quartz20.Tests.build" target="test" if="${build-quartz}"/>
     <nant buildfile="test/Spring/Spring.Messaging.Tests/Spring.Messaging.Tests.build" target="test" if="${build-msmq}"/>
     <nant buildfile="test/Spring/Spring.Template.Velocity.Tests/Spring.Template.Velocity.Tests.build" target="test" if="${build-velocity}"/>
+    <!--"Spring.ConversationWA.NH*.Tests.dll" should be at last to prevent the other tests are compiled with reference to this-->
+    <nant buildfile="test/Spring/Spring.ConversationWA.NH32.Tests/Spring.ConversationWA.NH32.Tests.build" target="test" if="${build-conversation}"/>
+    <nant buildfile="test/Spring/Spring.ConversationWA.NH33.Tests/Spring.ConversationWA.NH33.Tests.build" target="test" if="${build-conversation}"/>
 
     <!-- Main solutions and examples are compiled via task build-solutions -->
 
@@ -573,7 +585,7 @@ Commandline Examples:
  
   <!-- Top level targets -->
   <!-- target for developers to do just debug build and test everything in CVS -->
-  <target name="test">
+  <target name="test" description="build an test">
     <echo message="Compiling debug configuration for all runtime configurations."/>
     <property name="nant.target.root.name" value="build"/>
     <call target="build-all-function"/>
@@ -615,7 +627,7 @@ Commandline Examples:
     </if>
   </target>
 
-  <target name="build-mono-2.0">
+  <target name="build-mono-2.0" if="false">
 
     <if test="${property::exists('project.build.package') and project.build.package}">
       <call target="set-release-build-configuration"/>
@@ -646,7 +658,7 @@ Commandline Examples:
             failonerror="false"/>
   </target>
 
-  <target name="clean-obj">
+  <target name="clean-obj" description="Clean all 'obj' and 'bin' folders">
         <delete dir="src/Spring/Spring.Aop/obj" failonerror="false"/>
         <delete dir="src/Spring/Spring.Aop/bin" failonerror="false"/>
         <delete dir="src/Spring/Spring.Core/obj" failonerror="false"/>
@@ -674,9 +686,32 @@ Commandline Examples:
         <delete dir="src/Spring/Spring.Testing.Microsoft/obj" failonerror="false"/>
         <delete dir="src/Spring/Spring.Testing.Microsoft/bin" failonerror="false"/>
         <delete dir="src/Spring/Spring.Web/obj" failonerror="false"/>
+        <delete dir="src/Spring/Spring.ConversationWA.NH32/obj" failonerror="false"/>
+        <delete dir="src/Spring/Spring.ConversationWA.NH32/bin" failonerror="false"/>
         <delete dir="src/Spring/Spring.Web/bin" failonerror="false"/>
         <delete dir="src/Spring/Spring.Web.Extensions/obj" failonerror="false"/>
         <delete dir="src/Spring/Spring.Web.Extensions/bin" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Web.Mvc/obj"  failonerror="false"/>
+        <delete dir="src/Spring/Spring.Web.Mvc/bin"  failonerror="false"/>
+        <delete dir="src/Spring/Spring.Web.Mvc3/obj" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Web.Mvc3/bin" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Web.Mvc4/obj" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Web.Mvc4/bin" failonerror="false"/>        
+        <delete dir="src/Spring/Spring.ConversationWA.NH32/obj" failonerror="false"/>
+        <delete dir="src/Spring/Spring.ConversationWA.NH32/bin" failonerror="false"/>
+        <delete dir="src/Spring/Spring.ConversationWA.NH33/obj" failonerror="false"/>
+        <delete dir="src/Spring/Spring.ConversationWA.NH33/bin" failonerror="false"/>
+        
+        <delete dir="test/Spring/Spring.Messaging.Ems.Integration.Tests/obj" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Messaging.Ems.Integration.Tests/bin" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Scheduling.Quartz20.Integration.Tests/obj" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Scheduling.Quartz20.Integration.Tests/bin" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Web.Mvc.Tests/obj" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Web.Mvc.Tests/bin" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Web.Mvc3.Tests/obj"  failonerror="false"/>
+        <delete dir="test/Spring/Spring.Web.Mvc3.Tests/bin"  failonerror="false"/>
+        <delete dir="test/Spring/Spring.Web.Mvc4.Tests/obj"  failonerror="false"/>
+        <delete dir="test/Spring/Spring.Web.Mvc4.Tests/bin"  failonerror="false"/>
 
         <delete dir="test/Spring/Spring.Aop.Tests/obj" failonerror="false"/>
         <delete dir="test/Spring/Spring.Aop.Tests/bin" failonerror="false"/>
@@ -714,6 +749,43 @@ Commandline Examples:
         <delete dir="test/Spring/Spring.Testing.Microsoft.Tests/bin" failonerror="false"/>
         <delete dir="test/Spring/Spring.Testing.NUnit.Tests/obj" failonerror="false"/>
         <delete dir="test/Spring/Spring.Testing.NUnit.Tests/bin" failonerror="false"/>
+        
+        <delete failonerror="false">
+          <fileset basedir="test/Spring/Spring.ConversationWA.NH32.Tests/Data/Spring/ConversationWA/WebConversationStateTest/Bin">
+            <include name="*.dll"/> 
+            <include name="*.xml"/> 
+            <include name="*.pdb"/> 
+          </fileset>           
+        </delete>   
+        <delete failonerror="false">
+          <fileset basedir="test/Spring/Spring.ConversationWA.NH33.Tests/Data/Spring/ConversationWA/WebConversationStateTest/Bin">
+            <include name="*.dll"/> 
+            <include name="*.xml"/> 
+            <include name="*.pdb"/> 
+          </fileset>           
+        </delete>   
+        <delete dir="test/Spring/Spring.Messaging.Ems.Integration.Tests/bin" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Messaging.Ems.Integration.Tests/obj" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Scheduling.Quartz20.Integration.Tests/bin" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Scheduling.Quartz20.Integration.Tests/obj" failonerror="false"/>
+        <delete               failonerror="false">
+          <fileset basedir="test/Spring/Spring.Services.Tests/Data/Spring/WindowsService/Cassini/wwwroot/bin">
+            <include name="*.dll"/> 
+            <include name="*.xml"/> 
+            <include name="*.pdb"/> 
+          </fileset>           
+        </delete>   
+        <delete dir="test/Spring/Spring.Web.Mvc.Tests/obj" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Web.Mvc.Tests/bin" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Web.Mvc3.Tests/obj"  failonerror="false"/>
+        <delete dir="test/Spring/Spring.Web.Mvc3.Tests/bin"  failonerror="false"/>
+        <delete dir="test/Spring/Spring.Web.Mvc4.Tests/obj"  failonerror="false"/>
+        <delete dir="test/Spring/Spring.Web.Mvc4.Tests/bin"  failonerror="false"/> 
+        
+        <delete dir="test/Spring/Spring.ConversationWA.NH32.Tests/obj" failonerror="false"/>
+        <delete dir="test/Spring/Spring.ConversationWA.NH32.Tests/bin" failonerror="false"/>
+        <delete dir="test/Spring/Spring.ConversationWA.NH33.Tests/obj" failonerror="false"/>
+        <delete dir="test/Spring/Spring.ConversationWA.NH33.Tests/bin" failonerror="false"/>
 
         <delete dir="examples/Spring/Spring.CachingQuickStart/src/Spring.CachingQuickStart.Web/bin" failonerror="false"/>
         <delete dir="examples/Spring/Spring.CachingQuickStart/src/Spring.CachingQuickStart.Web/obj" failonerror="false"/>
@@ -744,6 +816,100 @@ Commandline Examples:
         <delete dir="examples/Spring/SpringAir/test/SpringAir.Core.Tests/bin" failonerror="false"/>
         <delete dir="examples/Spring/SpringAir/test/SpringAir.Data.Ado.Tests/obj" failonerror="false"/>
         <delete dir="examples/Spring/SpringAir/test/SpringAir.Data.Ado.Tests/bin" failonerror="false"/>
+        
+        <delete dir="examples/Spring/Spring.AopQuickStart/src/Spring.AopQuickStart.Common/bin" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.AopQuickStart/src/Spring.AopQuickStart.Common/obj" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.AopQuickStart/src/Spring.AopQuickStart.Step1/bin" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.AopQuickStart/src/Spring.AopQuickStart.Step1/obj" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.AopQuickStart/src/Spring.AopQuickStart.Step2/bin" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.AopQuickStart/src/Spring.AopQuickStart.Step2/obj" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.AopQuickStart/src/Spring.AopQuickStart.Step3/bin" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.AopQuickStart/src/Spring.AopQuickStart.Step3/obj" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.AopQuickStart/src/Spring.AopQuickStart.Step4/bin" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.AopQuickStart/src/Spring.AopQuickStart.Step4/obj" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.AopQuickStart/src/Spring.AopQuickStart.Step5/bin" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.AopQuickStart/src/Spring.AopQuickStart.Step5/obj" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.AopQuickStart/src/Spring.AopQuickStart.Step6/bin" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.AopQuickStart/src/Spring.AopQuickStart.Step6/obj" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.AopQuickStart/src/Spring.AopQuickStart.Step7/bin" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.AopQuickStart/src/Spring.AopQuickStart.Step7/obj" failonerror="false"/>
+        <delete          failonerror="false">
+          <fileset basedir="examples/Spring/Spring.Calculator/src/Spring.Calculator.Web.2005/Bin"> 
+            <include name="*.dll"/> 
+            <include name="*.xml"/> 
+            <include name="*.pdb"/> 
+          </fileset>     
+        </delete>        
+        <delete          failonerror="false">
+          <fileset basedir="examples/Spring/Spring.Calculator/src/Spring.Calculator.Web.2005/Bin"> 
+            <include name="*.dll"/> 
+            <include name="*.xml"/> 
+            <include name="*.pdb"/> 
+          </fileset>     
+        </delete>        
+        <delete dir="examples/Spring/Spring.DataQuickStart/src/Spring/Spring.DataQuickStart/bin" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.DataQuickStart/test/Spring/Spring.DataQuickStart.Tests/bin" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.IoCQuickStart.AppContext/src/bin" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.IoCQuickStart.AppContext/src/obj" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.IoCQuickStart.EventRegistry/src/bin" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.IoCQuickStart.EventRegistry/src/obj" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.IoCQuickStart.MovieFinder/src/bin" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.IoCQuickStart.MovieFinder/src/obj" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.MsmqQuickStart/src/Spring/Spring.MsmqQuickStart.Client/bin" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.MsmqQuickStart/src/Spring/Spring.MsmqQuickStart.Client/obj" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.MsmqQuickStart/src/Spring/Spring.MsmqQuickStart.Common/bin" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.MsmqQuickStart/src/Spring/Spring.MsmqQuickStart.Common/obj" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.MsmqQuickStart/src/Spring/Spring.MsmqQuickStart.Server/bin" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.MsmqQuickStart/src/Spring/Spring.MsmqQuickStart.Server/obj" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.NmsQuickStart/src/Spring/Spring.NmsQuickStart.Client/bin" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.NmsQuickStart/src/Spring/Spring.NmsQuickStart.Client/obj" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.NmsQuickStart/src/Spring/Spring.NmsQuickStart.Common/bin" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.NmsQuickStart/src/Spring/Spring.NmsQuickStart.Common/obj" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.NmsQuickStart/src/Spring/Spring.NmsQuickStart.Server/bin" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.NmsQuickStart/src/Spring/Spring.NmsQuickStart.Server/obj" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.TxQuickStart/src/Spring/Spring.TxQuickStart/bin" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.TxQuickStart/src/Spring/Spring.TxQuickStart/obj" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.TxQuickStart/test/Spring/Spring.TxQuickStart.Tests/bin" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.TxQuickStart/test/Spring/Spring.TxQuickStart.Tests/obj" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.WcfQuickStart/src/Spring.WcfQuickStart.Aspects/bin" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.WcfQuickStart/src/Spring.WcfQuickStart.Aspects/obj" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.WcfQuickStart/src/Spring.WcfQuickStart.ClientApp/bin" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.WcfQuickStart/src/Spring.WcfQuickStart.ClientApp/obj" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.WcfQuickStart/src/Spring.WcfQuickStart.Contracts/bin" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.WcfQuickStart/src/Spring.WcfQuickStart.Contracts/obj" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.WcfQuickStart/src/Spring.WcfQuickStart.ServerApp/bin" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.WcfQuickStart/src/Spring.WcfQuickStart.ServerApp/obj" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.WcfQuickStart/src/Spring.WcfQuickStart.ServerWeb/bin" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.WcfQuickStart/src/Spring.WcfQuickStart.ServerWeb/obj" failonerror="false"/> 
+        <delete failonerror="false">
+          <fileset basedir="examples/Spring/Spring.Web.Extensions.Example/src/Spring.Web.Extensions.Example.2008/Bin">                    
+            <include name="*.dll"/> 
+            <include name="*.xml"/> 
+            <include name="*.pdb"/> 
+          </fileset>   
+        </delete>      
+        <delete failonerror="false">
+          <fileset basedir="examples/Spring/Spring.Web.Extensions.Example/src/Spring.Web.Extensions.Example.2010/Bin">                    
+            <include name="*.dll"/> 
+            <include name="*.xml"/> 
+            <include name="*.pdb"/> 
+          </fileset>   
+        </delete>      
+        <delete dir="examples/Spring/SpringAir/src/SpringAir.Web.2005.References/bin" failonerror="false"/>
+        <delete dir="examples/Spring/SpringAir/src/SpringAir.Web.2005.References/obj" failonerror="false"/>
+        
+        <delete dir="examples/Spring/Spring.Data.NHibernate.Northwind/src/Spring.Northwind.Dao/obj" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.Data.NHibernate.Northwind/src/Spring.Northwind.Dao/bin" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.Data.NHibernate.Northwind/src/Spring.Northwind.Dao.NHibernate/obj" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.Data.NHibernate.Northwind/src/Spring.Northwind.Dao.NHibernate/bin" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.Data.NHibernate.Northwind/src/Spring.Northwind.Service/obj" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.Data.NHibernate.Northwind/src/Spring.Northwind.Service/bin" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.Data.NHibernate.Northwind/src/Spring.Northwind.Web/obj" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.Data.NHibernate.Northwind/src/Spring.Northwind.Web/bin" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.Data.NHibernate.Northwind/src/Spring.Northwind.Web.ConvWA/obj" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.Data.NHibernate.Northwind/src/Spring.Northwind.Web.ConvWA/bin" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.Data.NHibernate.Northwind/test/Spring.Northwind.IntegrationTests/obj" failonerror="false"/>
+        <delete dir="examples/Spring/Spring.Data.NHibernate.Northwind/test/Spring.Northwind.IntegrationTests/bin" failonerror="false"/>
   </target>
 
   <target name="package" depends="set-package-configuration" description="Build and Package distribution">
@@ -1253,6 +1419,14 @@ Commandline Examples:
           <include name="*/*/Spring.Template.Velocity.xml"/>
           <include name="*/*/Spring.Template.Velocity.pdb"/>
 
+          <include name="*/*/Spring.ConversationWA.NH32.dll"/>
+          <include name="*/*/Spring.ConversationWA.NH32.xml"/>
+          <include name="*/*/Spring.ConversationWA.NH32.pdb"/>
+          
+          <include name="*/*/Spring.ConversationWA.NH33.dll"/>
+          <include name="*/*/Spring.ConversationWA.NH33.xml"/>
+          <include name="*/*/Spring.ConversationWA.NH33.pdb"/>
+
         </fileset>
       </copy>
 	  
@@ -1405,6 +1579,7 @@ Commandline Examples:
     <property name="test.integration.nms" value="false" overwrite="false" />
     <property name="build-aop" value="true" />
     <property name="build-data" value="true" />
+    <property name="build-conversation" value="true" />
     <property name="build-services" value="true" />
     <property name="build-testing-nunit" value="true" />
     <property name="build-testing-microsoft" value="false" />
@@ -1444,6 +1619,7 @@ Commandline Examples:
     <property name="test.integration.nms" value="false" overwrite="false" />
     <property name="build-aop" value="true"/>
     <property name="build-data" value="true"/>
+    <property name="build-conversation" value="true" />
     <property name="build-services" value="true"/>
     <property name="build-testing-nunit" value="true"/>
     <property name="build-testing-microsoft" value="false" />
@@ -1479,6 +1655,8 @@ Commandline Examples:
       <include name="src/Spring/Spring.Testing.NUnit/**"/>
       <include name="src/Spring/Spring.Testing.Microsoft/**"/>
       <include name="src/Spring/CommonAssemblyInfo.cs"/>
+      <include name="src/Spring/Spring.ConversationWA.NH32/**"/>
+      <include name="src/Spring/Spring.ConversationWA.NH33/**"/>
 
       <include name="test/Spring/Spring.Core.Tests/**"/>
       <include name="test/Spring/Spring.Aop.Tests/**"/>
@@ -1502,6 +1680,8 @@ Commandline Examples:
       <include name="test/Spring/Spring.Testing.NUnit.Tests/**"/>
       <include name="test/Spring/Spring.Testing.Microsoft.Tests/**"/>
       <include name="test/Spring/CommonAssemblyInfo.cs"/>
+      <include name="test/Spring/Spring.ConversationWA.NH32.Tests/**"/>
+      <include name="test/Spring/Spring.ConversationWA.NH33.Tests/**"/>
 
       <include name="examples/Spring/Spring.Examples.build"/>
       <include name="examples/Spring/Spring.AopQuickStart/**"/>
@@ -1548,7 +1728,7 @@ Commandline Examples:
   </target>
 
   <!-- build all Visual Studio Solutions -->
-  <target name="build-solutions">
+  <target name="build-solutions" description="Build the solutions">
     <!-- some examples are linked against the "bin" dir of the distribution so copy them from 'build' to 'bin' -->
     <delete dir="${spring.basedir}/bin" />
 

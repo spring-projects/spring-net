@@ -1,0 +1,6 @@
+<asp:DataGrid runat="server" CssClass="datagrid">
+        <HeaderStyle CssClass="datagrid-header" />
+        <ItemStyle CssClass="datagrid-item" />
+        <AlternatingItemStyle CssClass="datagrid-alt-item" />
+        <FooterStyle CssClass="datagrid-header" />
+</asp:DataGrid>
