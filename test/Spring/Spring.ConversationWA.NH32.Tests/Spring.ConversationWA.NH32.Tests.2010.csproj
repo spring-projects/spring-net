@@ -96,6 +96,7 @@
     <Compile Include="ConversationWA\PatialEndConvEndBasePage.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="ConversationWA\SerializeConversationTestModule.cs" />
     <Compile Include="ConversationWA\SimpleTest.cs" />
     <Compile Include="ConversationWA\WebConversationStateTest.cs" />
     <Compile Include="Entities\SPCDetailEnt.cs" />
