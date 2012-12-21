@@ -32,10 +32,6 @@ Rebuilding Solutions using Nant and "solutions.build":
     <property name="reg.software.prefix" value="SOFTWARE\Wow6432Node\Microsoft"/>  
   </if>
   
-  <property name="vs2003.install.dir.key" value="${reg.software.prefix}\VisualStudio\7.1\InstallDir"/>
-  <readregistry property="vs2003.install.dir" key="${vs2003.install.dir.key}" hive="LocalMachine" failonerror="false"/>
-  <property name="devenv11.exe" value="${vs2003.install.dir}devenv.exe" if="${property::exists('vs2003.install.dir')}" />
-
   <readregistry property="net35.install.dir" key="${reg.software.prefix}\NET Framework Setup\NDP\v3.5\InstallPath" hive="LocalMachine" failonerror="true"/>
   <readregistry property="net40.install.dir" key="${reg.software.prefix}\NET Framework Setup\NDP\v4\Full\InstallPath" hive="LocalMachine" failonerror="true"/>
 
