@@ -101,7 +101,7 @@
     <Compile Include="ConversationWA\WebConversationStateTest.cs" />
     <Compile Include="Entities\SPCDetailEnt.cs" />
     <Compile Include="Entities\SPCMasterEnt.cs" />
-    <Compile Include="Spring\Data\Common\CountGetConnDbProvider.cs" />
+    <Compile Include="Spring\Data\Common\ConnectionCreationTrackingDbProvider.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Spring\Spring.Aop\Spring.Aop.2010.csproj">

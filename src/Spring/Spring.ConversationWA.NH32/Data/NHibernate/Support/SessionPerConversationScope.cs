@@ -1,14 +1,14 @@
-#region Licence
+#region License
 
 /*
- * Copyright © 2002-2007 the original author or authors.
- * 
+ * Copyright © 2002-2011 the original author or authors.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -39,7 +39,7 @@ namespace Spring.Data.NHibernate.Support
 {
     ///<summary>
     ///Based on <see cref="Spring.Data.NHibernate.Support.SessionScope"/> 
-    /// for dupport to 'session-per-conversation' pattern.
+    /// for support of 'session-per-conversation' pattern.
     ///</summary>
     ///<author>Hailton de Castro</author>
     [Serializable]
@@ -50,7 +50,7 @@ namespace Spring.Data.NHibernate.Support
         /// <summary>
         /// The logging instance.
         /// </summary>        
-        protected readonly ILog log = LogManager.GetLogger(MethodInfo.GetCurrentMethod().DeclaringType);
+        protected readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         private readonly SessionPerConversationScopeSettings settings;
 
@@ -115,7 +115,7 @@ namespace Spring.Data.NHibernate.Support
         }
 
         /// <summary>
-        /// Get or set the configured EntityInterceptor
+        /// Get the configured EntityInterceptor
         /// </summary>
         public IInterceptor EntityInterceptor
         {
@@ -177,7 +177,6 @@ namespace Spring.Data.NHibernate.Support
         public virtual void Dispose()
         {
             //no OP
-            log.Warn("I'm not doing anything");
         }
 
         #endregion
@@ -187,16 +186,16 @@ namespace Spring.Data.NHibernate.Support
         /// <summary>
         /// Open a new session or reconect the
         /// <see cref="IConversationState.RootSessionPerConversation"/> in <paramref name="activeConversation"/>.
-        /// Participates in an existing session registed with spring's <see cref="TransactionSynchronizationManager"/>
+        /// Participating in an existing session registed with <see cref="TransactionSynchronizationManager"/>
         /// is not alowed.
         /// </summary>
         /// <param name="activeConversation"></param>
         /// <param name="allManagedConversation"></param>
         /// <exception cref="InvalidOperationException">
         /// <list type="bullet">
-        /// <item>If there is another conversation with a ISession with opened 
-        /// IDbConnection.</item>
-        /// <item>If trie to participating in existing Hibernate SessionFactory 
+        /// <item>If there is another conversation with a <see cref="ISession"/> with opened 
+        /// <see cref="IDbConnection"/>.</item>
+        /// <item>If attempting to participate in an existing NHibernate <see cref="ISessionFactory"/>
         /// managed by <see cref="TransactionSynchronizationManager"/>.
         /// </item>
         /// </list>
@@ -226,12 +225,12 @@ namespace Spring.Data.NHibernate.Support
                     if (TransactionSynchronizationManager.HasResource(activeConversation.SessionFactory))
                     {
                         // Do not modify the Session: just set the participate flag.
-                        if (isDebugEnabled) log.Debug("Participating in existing Hibernate SessionFactory IS NOT ALOWED.");
-                        throw new InvalidOperationException("Participating in existing Hibernate SessionFactory IS NOT ALOWED.");
+                        if (isDebugEnabled) log.Debug("Participating in existing NHibernate SessionFactory IS NOT ALLOWED.");
+                        throw new InvalidOperationException("Participating in existing NHibernate SessionFactory IS NOT ALLOWED.");
                     }
                     else
                     {
-                        if (isDebugEnabled) log.Debug("Opening single Hibernate Session in SessionPerConversationScope");
+                        if (isDebugEnabled) log.Debug("Opening single NHibernate Session in SessionPerConversationScope");
                         TransactionSynchronizationManager.BindResource(activeConversation.SessionFactory, new LazySessionPerConversationHolder(this, activeConversation, allManagedConversation));
 
                         SetOpen(true);
@@ -247,17 +246,17 @@ namespace Spring.Data.NHibernate.Support
 
         /// <summary>
         /// Close the current view's session and unregisters 
-        /// from spring's <see cref="TransactionSynchronizationManager"/>.
+        /// from <see cref="TransactionSynchronizationManager"/>.
         /// </summary>
-        /// <param name="sessionFactory">The session factory that IConversationState on <paramref name="allManagedConversation"/> use</param>
+        /// <param name="sessionFactory">The session factory that <see cref="IConversationState"/> on <paramref name="allManagedConversation"/> use</param>
         /// <param name="allManagedConversation">A list of conversations which the session can be closed or disconnected</param>
         /// <exception cref="InvalidOperationException">
         /// <list type="bullet">
         /// <item>If start/resume a conversation from a
-        /// IConversationManager when exists a diferent IConversationManager 
-        /// with open ISession registered on TransactionSynchronizationManager
+        /// <see cref="IConversationManager"/> when exists a different <see cref="IConversationManager"/>
+        /// with open <see cref="ISession"/> registered on <see cref="TransactionSynchronizationManager"/>
         /// </item>
-        /// <item>If the holder on TransactionSynchronizationManager, is not a LazySessionPerConversationHolder.</item>
+        /// <item>If the holder on <see cref="TransactionSynchronizationManager"/>, is not a <see cref="LazySessionPerConversationHolder"/>.</item>
         /// </list>
         /// </exception>
         public void Close(ISessionFactory sessionFactory, ICollection<IConversationState> allManagedConversation)
@@ -370,11 +369,11 @@ namespace Spring.Data.NHibernate.Support
 
         /// <summary>
         /// This sessionHolder creates a session for the active conversation only if it is 
-        /// needed (<see cref="Spring.ConversationWA.IConversationState.StartResumeConversation"/>.
+        /// needed (<see cref="Spring.ConversationWA.IConversationState.StartResumeConversation"/>).
         /// </summary>
         /// <remarks>
-        /// Although a NHibernateSession deferes creation of db-connections until they are really
-        /// needed, instantiation a session is imho still more expensive than this LazySessionHolder. (EE)
+        /// Although a NHibernateSession defers creation of db-connections until they are really
+        /// needed, instantiation a session is still more expensive than using LazySessionHolder.
         /// </remarks>
         private class LazySessionPerConversationHolder : SessionHolder
         {

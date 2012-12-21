@@ -1,3 +1,23 @@
+#region License
+
+/*
+ * Copyright © 2002-2011 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#endregion
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -24,21 +44,21 @@ namespace Spring.ConversationWA
         void EndOnTimeOut();
 
         /// <summary>
-        /// Close IDbConnection's for <see cref="IConversationState"/> that 
+        /// Close IDbConnections for <see cref="IConversationState"/> that 
         /// use 'session-per-conversation'. It calls 
         /// <see cref="IConversationState.PauseConversation"/> in all conversations.
         /// </summary>
         void PauseConversations();
 
         /// <summary>
-        /// Release the ended conversatons And remove it. 
-        /// If the conversation support 'session-per-conversation' close the session.
+        /// Release the ended conversations And removes them. 
+        /// If the conversation supports 'session-per-conversation', also close the session.
         /// </summary>
         void FreeEnded();
 
         /// <summary>
         /// Add conversation. If  <see cref="IConversationManager"/> is null 
-        /// it is setted with 'this'.
+        /// it resolves to 'this'.
         /// </summary>
         /// <param name="conversation"></param>
         /// <exception cref="InvalidOperationException">
@@ -74,7 +94,7 @@ namespace Spring.ConversationWA
         /// <summary>
         /// Ends the "paused conversations" in call to <see cref="ActiveConversation"/>. 
         /// Important: Unexpected behavior may occur if there are nested conversations, 
-        /// as in 'StartResumeConversation' only the own conversation and their parents 
+        /// as in <see cref="IConversationState.StartResumeConversation"/> only the current conversation and its parents 
         /// are started, the 'conversations children' remain paused, so these will be ended.
         /// Defaul value: <c>false</c>.
         /// </summary>

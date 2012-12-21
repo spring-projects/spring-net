@@ -96,11 +96,11 @@ public partial class ConnectionReleaseModeIssue : System.Web.UI.Page, IApplicati
         this.setConnectionReleaseModeByReflection(settings, ConnectionReleaseMode.AfterTransaction);
 
         //((SessionFactoryImpl)this.sessionFactory).Settings.ConnectionReleaseMode = ConnectionReleaseMode.AfterTransaction;
-        CountGetConnDbProvider.Count = 0;
+        ConnectionCreationTrackingDbProvider.Count = 0;
         this.Conversation.StartResumeConversation();
         ISession sessionA = this.SessionFactory.GetCurrentSession();
         SPCDetailEnt detailEnt = sessionA.Get<SPCDetailEnt>(1);
-        Assert.AreEqual(1, CountGetConnDbProvider.Count, "CountGetConnDbProvider.Count");
+        Assert.AreEqual(1, ConnectionCreationTrackingDbProvider.Count, "ConnectionCreationTrackingDbProvider.Count");
 
         SessionScopeSettings sessionScopeSettings = new SessionScopeSettings(this.sessionFactory);
         sessionScopeSettings.SingleSession = true;
@@ -110,20 +110,20 @@ public partial class ConnectionReleaseModeIssue : System.Web.UI.Page, IApplicati
             ISession sessionB = this.SessionFactory.GetCurrentSession();
 
             masterEnt = sessionB.Get<SPCMasterEnt>(1);
-            Assert.AreEqual(2, CountGetConnDbProvider.Count, "CountGetConnDbProvider.Count");
+            Assert.AreEqual(2, ConnectionCreationTrackingDbProvider.Count, "ConnectionCreationTrackingDbProvider.Count");
 
             Assert.AreSame(sessionA, sessionB, "sessionA, sessionB");
         }
 
         SPCMasterEnt masterEnt2 = sessionA.Get<SPCMasterEnt>(2);
-        Assert.AreEqual(3, CountGetConnDbProvider.Count, "CountGetConnDbProvider.Count");
+        Assert.AreEqual(3, ConnectionCreationTrackingDbProvider.Count, "ConnectionCreationTrackingDbProvider.Count");
         Assert.AreEqual(1, masterEnt2.SPCDetailEntList.Count, "masterEnt2.SPCDetailEntList.Count");
-        Assert.AreEqual(4, CountGetConnDbProvider.Count, "CountGetConnDbProvider.Count");
+        Assert.AreEqual(4, ConnectionCreationTrackingDbProvider.Count, "ConnectionCreationTrackingDbProvider.Count");
 
         SPCMasterEnt masterEnt3 = sessionA.Get<SPCMasterEnt>(3);
-        Assert.AreEqual(5, CountGetConnDbProvider.Count, "CountGetConnDbProvider.Count");
+        Assert.AreEqual(5, ConnectionCreationTrackingDbProvider.Count, "ConnectionCreationTrackingDbProvider.Count");
         Assert.AreEqual(1, masterEnt3.SPCDetailEntList.Count, "masterEnt3.SPCDetailEntList.Count");
-        Assert.AreEqual(6, CountGetConnDbProvider.Count, "CountGetConnDbProvider.Count");
+        Assert.AreEqual(6, ConnectionCreationTrackingDbProvider.Count, "ConnectionCreationTrackingDbProvider.Count");
 
 
         //Renew the conversation.
@@ -152,7 +152,7 @@ public partial class ConnectionReleaseModeIssue : System.Web.UI.Page, IApplicati
         ConnectionReleaseMode connReleaseModeOriginal = settings.ConnectionReleaseMode;
         this.setConnectionReleaseModeByReflection(settings, ConnectionReleaseMode.AfterTransaction);
 
-        CountGetConnDbProvider.Count = 0;
+        ConnectionCreationTrackingDbProvider.Count = 0;
         this.ConnectionReleaseModeIssueBsn.Test();
 
         this.setConnectionReleaseModeByReflection(settings, connReleaseModeOriginal);
@@ -172,19 +172,19 @@ public partial class ConnectionReleaseModeIssue : System.Web.UI.Page, IApplicati
 
         //with no conversation
         SessionScopeSettings sessionScopeSettings = new SessionScopeSettings(this.sessionFactory);
-        CountGetConnDbProvider.Count = 0;
+        ConnectionCreationTrackingDbProvider.Count = 0;
         using (new SessionScope(sessionScopeSettings, true))
         {
             ISession sessionNoConv = this.SessionFactory.GetCurrentSession();
             SPCMasterEnt masterEnt2 = sessionNoConv.Get<SPCMasterEnt>(2);
-            Assert.AreEqual(1, CountGetConnDbProvider.Count, "CountGetConnDbProvider.Count");
+            Assert.AreEqual(1, ConnectionCreationTrackingDbProvider.Count, "ConnectionCreationTrackingDbProvider.Count");
             Assert.AreEqual(1, masterEnt2.SPCDetailEntList.Count, "masterEnt2.SPCDetailEntList.Count");
-            Assert.AreEqual(2, CountGetConnDbProvider.Count, "CountGetConnDbProvider.Count");
+            Assert.AreEqual(2, ConnectionCreationTrackingDbProvider.Count, "ConnectionCreationTrackingDbProvider.Count");
 
             SPCMasterEnt masterEnt3 = sessionNoConv.Get<SPCMasterEnt>(3);
-            Assert.AreEqual(3, CountGetConnDbProvider.Count, "CountGetConnDbProvider.Count");
+            Assert.AreEqual(3, ConnectionCreationTrackingDbProvider.Count, "ConnectionCreationTrackingDbProvider.Count");
             Assert.AreEqual(1, masterEnt3.SPCDetailEntList.Count, "masterEnt3.SPCDetailEntList.Count");
-            Assert.AreEqual(4, CountGetConnDbProvider.Count, "CountGetConnDbProvider.Count");
+            Assert.AreEqual(4, ConnectionCreationTrackingDbProvider.Count, "ConnectionCreationTrackingDbProvider.Count");
         }
 
         this.setConnectionReleaseModeByReflection(settings, connReleaseModeOriginal);
@@ -206,11 +206,11 @@ public partial class ConnectionReleaseModeIssue : System.Web.UI.Page, IApplicati
         this.setConnectionReleaseModeByReflection(settings, ConnectionReleaseMode.OnClose);
 
         //with conversation and "connection.release_mode" "on_close"(AfterTransaction)
-        CountGetConnDbProvider.Count = 0;
+        ConnectionCreationTrackingDbProvider.Count = 0;
         this.Conversation.StartResumeConversation();
         ISession sessionA = this.SessionFactory.GetCurrentSession();
         SPCDetailEnt detailEnt = sessionA.Get<SPCDetailEnt>(1);
-        Assert.AreEqual(1, CountGetConnDbProvider.Count, "CountGetConnDbProvider.Count");
+        Assert.AreEqual(1, ConnectionCreationTrackingDbProvider.Count, "ConnectionCreationTrackingDbProvider.Count");
 
         SessionScopeSettings sessionScopeSettings = new SessionScopeSettings(this.sessionFactory);
         sessionScopeSettings.SingleSession = true;
@@ -226,7 +226,7 @@ public partial class ConnectionReleaseModeIssue : System.Web.UI.Page, IApplicati
 
         Assert.AreEqual(3, masterEnt.SPCDetailEntList.Count, "masterEnt.SPCDetailEntList.Count");
 
-        Assert.AreEqual(1, CountGetConnDbProvider.Count, "CountGetConnDbProvider.Count");
+        Assert.AreEqual(1, ConnectionCreationTrackingDbProvider.Count, "ConnectionCreationTrackingDbProvider.Count");
 
         //Renew the conversation.
         this.Conversation.EndConversation();

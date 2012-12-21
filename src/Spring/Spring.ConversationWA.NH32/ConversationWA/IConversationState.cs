@@ -1,3 +1,23 @@
+#region License
+
+/*
+ * Copyright © 2002-2011 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#endregion
+
 using System;
 using System.Data;
 using System.Configuration;
@@ -17,7 +37,7 @@ namespace Spring.ConversationWA
     /// <summary>
     /// Port to conversation. If the object is not found in the current 
     /// conversation, will be tried on the parent if the parent is 
-    /// different not null.
+    /// not null.
     /// </summary>
     /// <exception cref="InvalidOperationException">
     /// If <see cref="Id"/> is different from spring name for this instance.
@@ -31,9 +51,9 @@ namespace Spring.ConversationWA
         String Id { get; set; }
 
         /// <summary>
-        /// Starts or resumes the conversation and the <see cref="ParenteConversation"/>.
+        /// Starts or resumes the conversation and the <see cref="ParentConversation"/>.
         /// <para>If <see cref="RootSessionPerConversation"/> is not null, so 
-        /// <see cref="SessionFactory"/>.GetCurrentSession() is called to 
+        /// <see cref="ISessionFactory.GetCurrentSession"/> is called to 
         /// Raise SessionHolder for make the reconnection.
         /// </para>
         /// <para>Make <see cref="IsNew"/> return false.
@@ -47,7 +67,7 @@ namespace Spring.ConversationWA
         /// </item>
         /// <item>If <see cref="RootSessionPerConversation"/> is not null and 
         /// <see cref="RootSessionPerConversation"/> different from 
-        /// <see cref="SessionFactory"/>.GetCurrentSession()
+        /// <see cref="ISessionFactory.GetCurrentSession"/>
         /// </item>
         /// </list>
         /// </exception>
@@ -59,7 +79,7 @@ namespace Spring.ConversationWA
         bool IsNew { get; }
 
         /// <summary>
-        /// Ends the conversation. End each the 'inner conversation' in
+        /// Ends the conversation. End each of the 'inner conversations' in
         /// <see cref="InnerConversations"/>. Returns false if the
         /// conversation and all <see cref="IConversationState"/> of
         /// <see cref="InnerConversations"/> has already been ended.
@@ -84,14 +104,14 @@ namespace Spring.ConversationWA
         bool Ended { get; }
 
         /// <summary>
-        /// Inner conversation. After added if the <see cref="ParenteConversation"/> 
-        /// is null it will be setted with 'this'.
+        /// Inner conversation. After added if the <see cref="ParentConversation"/> 
+        /// is null it will resolve to 'this'.
         /// </summary>
         /// <exception cref="InvalidOperationException">at 
         /// <see cref="T:System.Collections.Generic.ICollection`1.Add(T)"/>,
         /// <see cref="T:System.Collections.Generic.IList`1.this[int]"/>,
         /// <see cref="T:System.Collections.Generic.IList`1.Insert(int, T)"/>
-        /// if Circular Dependence is detected.</exception>
+        /// if Circular Dependency is detected.</exception>
         IList<IConversationState> InnerConversations { get; }
 
         /// <summary>
@@ -103,23 +123,23 @@ namespace Spring.ConversationWA
         /// </item>
         /// <item>If this Conversation is not new.
         /// </item>
-        /// <item>If Circular Dependence is detected.
+        /// <item>If Circular Dependency is detected.
         /// </item>
         /// <item>The Parent conversation is not new.
         /// </item>
         /// </list>
         /// </exception>
-        IConversationState ParenteConversation { get; set;}
+        IConversationState ParentConversation { get; set;}
 
         /// <summary>
         /// TimeOut for the conversation in milliseconds. 
-        /// If <c>0</c> means it will be ignored.
+        /// If <c>0</c> TimeOut will be ignored.
         /// </summary>
         Int32 TimeOut { get; set; }
 
         /// <summary>
         /// Last acces for a value into this Conversation or Inner Conversation.
-        /// It is reseted for DateTime.Now each time <see cref="StartResumeConversation()"/> 
+        /// Reset to DateTime.Now each time <see cref="StartResumeConversation()"/> 
         /// is called.
         /// </summary>
         DateTime LastAccess { get; set; }

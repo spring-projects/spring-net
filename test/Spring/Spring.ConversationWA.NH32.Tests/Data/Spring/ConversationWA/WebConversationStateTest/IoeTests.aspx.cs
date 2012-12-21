@@ -9,7 +9,7 @@ using System.Web.UI.WebControls;
 using System.Web.UI.WebControls.WebParts;
 using System.Web.UI.HtmlControls;
 using Spring.ConversationWA;
-using Spring.ConversationWA.Imple;
+using Spring.ConversationWA.Impl;
 using System.Text.RegularExpressions;
 using NHibernate;
 using Spring.Data.NHibernate.Support;
@@ -176,9 +176,9 @@ public partial class IoeTests : System.Web.UI.Page
         {
             otherConversationState = new WebConversationSpringState();
             otherConversationState.Id = "otherConversationState";
-            //try second by 'ParenteConversation = '
-            this.ConversationAA.ParenteConversation = otherConversationState;
-            throw new Exception("NOT OK: No raise for 'this.ConversationAA.ParenteConversation = otherConversationState'");
+            //try second by 'ParentConversation = '
+            this.ConversationAA.ParentConversation = otherConversationState;
+            throw new Exception("NOT OK: No raise for 'this.ConversationAA.ParentConversation = otherConversationState'");
         }
         catch (InvalidOperationException ioe)
         {
@@ -216,8 +216,8 @@ public partial class IoeTests : System.Web.UI.Page
         {
             otherConversationState = new WebConversationSpringState();
             otherConversationState.Id = "otherConversationState";
-            //try second by 'ParenteConversation = '
-            otherConversationState.ParenteConversation = this.ConversationA;
+            //try second by 'ParentConversation = '
+            otherConversationState.ParentConversation = this.ConversationA;
             this.Session["testResult"] = "OK";
         }
         finally
@@ -264,9 +264,9 @@ public partial class IoeTests : System.Web.UI.Page
             otherConversationState.Id = "otherConversationState";
             // make not new
             otherConversationState.StartResumeConversation();
-            //try second by 'ParenteConversation = '
-            otherConversationState.ParenteConversation = this.ConversationA;
-            throw new Exception("NOT OK: No raise for 'this.ConversationAA.ParenteConversation = otherConversationState'");
+            //try second by 'ParentConversation = '
+            otherConversationState.ParentConversation = this.ConversationA;
+            throw new Exception("NOT OK: No raise for 'this.ConversationAA.ParentConversation = otherConversationState'");
         }
         catch (InvalidOperationException ioe)
         {
@@ -305,8 +305,8 @@ public partial class IoeTests : System.Web.UI.Page
             otherConversationState = new WebConversationSpringState();
             otherConversationState.Id = "otherConversationState";
             // leave new
-            //try second by 'ParenteConversation = '
-            otherConversationState.ParenteConversation = this.ConversationA;
+            //try second by 'ParentConversation = '
+            otherConversationState.ParentConversation = this.ConversationA;
             this.Session["testResult"] = "OK";
         }
         finally
@@ -366,7 +366,7 @@ public partial class IoeTests : System.Web.UI.Page
     
     private void participatingHibernateNotAlowed()
     {
-        Regex msgErrorRx = new Regex(".*Participating.*Hibernate.*NOT.*ALOWED.*");
+        Regex msgErrorRx = new Regex(".*Participating.*Hibernate.*NOT.*ALLOWED.*");
         try
         {
             //No raise
