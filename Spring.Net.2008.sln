@@ -66,13 +66,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Scheduling.Quartz20.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Scheduling.Quartz20.Tests.2008", "test\Spring\Spring.Scheduling.Quartz20.Tests\Spring.Scheduling.Quartz20.Tests.2008.csproj", "{47E7DF97-2515-4F2F-BBFD-0A4C205800DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.ConversationWA.NH32.2008", "src\Spring\Spring.ConversationWA.NH32\Spring.ConversationWA.NH32.2008.csproj", "{64400FF8-2E9F-4809-B5F4-0C7EB8ABFF87}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Web.Conversation.NHibernate32.2008", "src\Spring\Spring.Web.Conversation.NHibernate32\Spring.Web.Conversation.NHibernate32.2008.csproj", "{64400FF8-2E9F-4809-B5F4-0C7EB8ABFF87}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.ConversationWA.NH33.2008", "src\Spring\Spring.ConversationWA.NH33\Spring.ConversationWA.NH33.2008.csproj", "{CF375928-B6D5-485C-B04D-2BC41D9DBF1E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Web.Conversation.NHibernate33.2008", "src\Spring\Spring.Web.Conversation.NHibernate33\Spring.Web.Conversation.NHibernate33.2008.csproj", "{CF375928-B6D5-485C-B04D-2BC41D9DBF1E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.ConversationWA.NH32.Tests.2008", "test\Spring\Spring.ConversationWA.NH32.Tests\Spring.ConversationWA.NH32.Tests.2008.csproj", "{2FB16852-22AD-4A5B-885A-97136265CC46}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Web.Conversation.NHibernate32.Tests.2008", "test\Spring\Spring.Web.Conversation.NHibernate32.Tests\Spring.Web.Conversation.NHibernate32.Tests.2008.csproj", "{2FB16852-22AD-4A5B-885A-97136265CC46}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.ConversationWA.NH33.Tests.2008", "test\Spring\Spring.ConversationWA.NH33.Tests\Spring.ConversationWA.NH33.Tests.2008.csproj", "{C57B05EA-FD1A-40EC-BB60-D2E45AB1A86A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Web.Conversation.NHibernate33.Tests.2008", "test\Spring\Spring.Web.Conversation.NHibernate33.Tests\Spring.Web.Conversation.NHibernate33.Tests.2008.csproj", "{C57B05EA-FD1A-40EC-BB60-D2E45AB1A86A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

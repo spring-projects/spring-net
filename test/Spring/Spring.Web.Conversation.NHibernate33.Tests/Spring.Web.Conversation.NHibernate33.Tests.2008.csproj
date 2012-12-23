@@ -1,5 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+﻿<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -9,34 +8,21 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Spring</RootNamespace>
-    <AssemblyName>Spring.ConversationWA.NH33.Tests</AssemblyName>
+    <AssemblyName>Spring.Web.Conversation.NHibernate33.Tests</AssemblyName>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
-    <OldToolsVersion>3.5</OldToolsVersion>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <OldToolsVersion>2.0</OldToolsVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
-    <PublishUrl>http://localhost/Spring.ConversationWA.NH33.Tests/</PublishUrl>
-    <Install>true</Install>
-    <InstallFrom>Web</InstallFrom>
-    <UpdateEnabled>true</UpdateEnabled>
-    <UpdateMode>Foreground</UpdateMode>
-    <UpdateInterval>7</UpdateInterval>
-    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
-    <UpdatePeriodically>false</UpdatePeriodically>
-    <UpdateRequired>false</UpdateRequired>
-    <MapFileExtensions>true</MapFileExtensions>
-    <ApplicationRevision>0</ApplicationRevision>
-    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>true</IsWebBootstrapper>
-    <UseApplicationTrust>false</UseApplicationTrust>
-    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <TargetFrameworkSubset>
+    </TargetFrameworkSubset>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\build\VS.Net.2010\Spring.ConversationWA.NH33.Tests\Debug\</OutputPath>
+    <OutputPath>..\..\..\build\VS.Net.2008\Spring.Web.Conversation.NHibernate33.Tests\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -59,6 +45,10 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\Net\2.0\Common.Logging.dll</HintPath>
     </Reference>
+    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\lib\Net\2.0\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="NHibernate, Version=3.3.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\NHibernate33\net\3.5\NHibernate.dll</HintPath>
@@ -78,7 +68,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Data.SQLite, Version=1.0.80.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\Spring.ConversationWA.NH32.Tests\lib\net\2.0\System.Data.SQLite.dll</HintPath>
+      <HintPath>..\Spring.Web.Conversation.NHibernate32.Tests\lib\net\2.0\System.Data.SQLite.dll</HintPath>
     </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
@@ -87,68 +77,70 @@
     <Compile Include="..\..\..\src\Spring\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\Spring.ConversationWA.NH32.Tests\Bsn\ConversationEvidenceBsnImpl.cs">
+    <Compile Include="..\Spring.Web.Conversation.NHibernate32.Tests\Bsn\ConversationEvidenceBsnImpl.cs">
       <Link>Bsn\ConversationEvidenceBsnImpl.cs</Link>
     </Compile>
-    <Compile Include="..\Spring.ConversationWA.NH32.Tests\Bsn\IConversationEvidenceBsn.cs">
+    <Compile Include="..\Spring.Web.Conversation.NHibernate32.Tests\Bsn\IConversationEvidenceBsn.cs">
       <Link>Bsn\IConversationEvidenceBsn.cs</Link>
     </Compile>
-    <Compile Include="..\Spring.ConversationWA.NH32.Tests\Bsn\INoDeferedErrorBsn.cs">
+    <Compile Include="..\Spring.Web.Conversation.NHibernate32.Tests\Bsn\INoDeferedErrorBsn.cs">
       <Link>Bsn\INoDeferedErrorBsn.cs</Link>
     </Compile>
-    <Compile Include="..\Spring.ConversationWA.NH32.Tests\Bsn\NoDeferedErrorBsnImpl.cs">
+    <Compile Include="..\Spring.Web.Conversation.NHibernate32.Tests\Bsn\NoDeferedErrorBsnImpl.cs">
       <Link>Bsn\NoDeferedErrorBsnImpl.cs</Link>
     </Compile>
-    <Compile Include="..\Spring.ConversationWA.NH32.Tests\ConversationWA\PatialEndConvBeginBasePage.cs">
+    <Compile Include="..\Spring.Web.Conversation.NHibernate32.Tests\ConversationWA\PatialEndConvBeginBasePage.cs">
       <Link>ConversationWA\PatialEndConvBeginBasePage.cs</Link>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="..\Spring.ConversationWA.NH32.Tests\ConversationWA\PatialEndConvEndBasePage.cs">
+    <Compile Include="..\Spring.Web.Conversation.NHibernate32.Tests\ConversationWA\PatialEndConvEndBasePage.cs">
       <Link>ConversationWA\PatialEndConvEndBasePage.cs</Link>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="..\Spring.ConversationWA.NH32.Tests\ConversationWA\WebConversationStateTest.cs">
+    <Compile Include="..\Spring.Web.Conversation.NHibernate32.Tests\ConversationWA\SerializeConversationTestModule.cs">
+      <Link>ConversationWA\SerializeConversationTestModule.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Web.Conversation.NHibernate32.Tests\ConversationWA\WebConversationStateTest.cs">
       <Link>ConversationWA\WebConversationStateTest.cs</Link>
     </Compile>
-    <Compile Include="..\Spring.ConversationWA.NH32.Tests\Entities\SPCDetailEnt.cs">
+    <Compile Include="..\Spring.Web.Conversation.NHibernate32.Tests\Entities\SPCDetailEnt.cs">
       <Link>Entities\SPCDetailEnt.cs</Link>
     </Compile>
-    <Compile Include="..\Spring.ConversationWA.NH32.Tests\Entities\SPCMasterEnt.cs">
+    <Compile Include="..\Spring.Web.Conversation.NHibernate32.Tests\Entities\SPCMasterEnt.cs">
       <Link>Entities\SPCMasterEnt.cs</Link>
     </Compile>
-    <Compile Include="..\Spring.ConversationWA.NH32.Tests\Spring\Data\Common\ConnectionCreationTrackingDbProvider.cs">
-      <Link>Spring\Data\Common\ConnectionCreationTrackingDbProvider.cs</Link>
+    <Compile Include="..\Spring.Web.Conversation.NHibernate32.Tests\Spring\Data\Common\CountGetConnDbProvider.cs">
+      <Link>Spring\Data\Common\CountGetConnDbProvider.cs</Link>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\Spring\Spring.Aop\Spring.Aop.2010.csproj">
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Aop\Spring.Aop.2008.csproj">
       <Project>{3A3A4E65-45A6-4B20-B460-0BEDC302C02C}</Project>
-      <Name>Spring.Aop.2010</Name>
+      <Name>Spring.Aop.2008</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\src\Spring\Spring.ConversationWA.NH33\Spring.ConversationWA.NH33.2010.csproj">
-      <Project>{CF375928-B6D5-485C-B04D-2BC41D9DBF1E}</Project>
-      <Name>Spring.ConversationWA.NH33.2010</Name>
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Web.Conversation.NHibernate33\Spring.Web.Conversation.NHibernate33.2008.csproj">
+      <Project>{64400FF8-2E9F-4809-B5F4-0C7EB8ABFF87}</Project>
+      <Name>Spring.Web.Conversation.NHibernate33.2008</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\src\Spring\Spring.Core\Spring.Core.2010.csproj">
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Core\Spring.Core.2008.csproj">
       <Project>{710961A3-0DF4-49E4-A26E-F5B9C044AC84}</Project>
-      <Name>Spring.Core.2010</Name>
+      <Name>Spring.Core.2008</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\src\Spring\Spring.Data.NHibernate33\Spring.Data.NHibernate33.2010.csproj">
-      <Project>{D546EFB7-9F6C-4C11-B2F8-B85FAD135399}</Project>
-      <Name>Spring.Data.NHibernate33.2010</Name>
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Data.NHibernate33\Spring.Data.NHibernate33.2008.csproj">
+      <Project>{67EA5988-C54E-4348-BFFB-E4A61F26143C}</Project>
+      <Name>Spring.Data.NHibernate33.2008</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\src\Spring\Spring.Data\Spring.Data.2010.csproj">
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Data\Spring.Data.2008.csproj">
       <Project>{AE00E5AB-C39A-436F-86D2-33BFE33E2E40}</Project>
-      <Name>Spring.Data.2010</Name>
+      <Name>Spring.Data.2008</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\src\Spring\Spring.Web\Spring.Web.2010.csproj">
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Web\Spring.Web.2008.csproj">
       <Project>{BA4789EB-281A-48EA-8763-28B9F0596A18}</Project>
-      <Name>Spring.Web.2010</Name>
+      <Name>Spring.Web.2008</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\Spring\ConversationWA\WebConversationStateTest\services.xml.config" />
-    <None Include="Data\Spring\ConversationWA\WebConversationStateTest\web.config.net-1.1" />
     <None Include="Data\Spring\ConversationWA\WebConversationStateTest\web.config.net-2.0" />
   </ItemGroup>
   <ItemGroup>
@@ -156,7 +148,7 @@
     <EmbeddedResource Include="Entities\SPCMasterEnt.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Spring.ConversationWA.NH32.Tests\Data\Spring\ConversationWA\WebConversationStateTest\log4net.config">
+    <None Include="..\Spring.Web.Conversation.NHibernate32.Tests\Data\Spring\ConversationWA\WebConversationStateTest\log4net.config">
       <Link>Data\Spring\ConversationWA\WebConversationStateTest\log4net.config</Link>
     </None>
     <None Include="app.config" />
@@ -164,28 +156,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
-  </ItemGroup>
-  <ItemGroup>
-    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
-      <Visible>False</Visible>
-      <ProductName>Microsoft .NET Framework 4 %28x86 and x64%29</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
-      <Visible>False</Visible>
-      <ProductName>.NET Framework 3.5 SP1</ProductName>
-      <Install>false</Install>
-    </BootstrapperPackage>
-    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
-      <Visible>False</Visible>
-      <ProductName>Windows Installer 3.1</ProductName>
-      <Install>true</Install>
-    </BootstrapperPackage>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -198,7 +168,7 @@
   <PropertyGroup>
     <PostBuildEvent>echo "Copying TestWebs to output directory"
 rd /S /Q "$(TargetDir)Data"
-xcopy "$(ProjectDir)..\Spring.ConversationWA.NH32.Tests\Data" "$(TargetDir)Data\" /y /s
+xcopy "$(ProjectDir)..\Spring.Web.Conversation.NHibernate32.Tests\Data" "$(TargetDir)Data\" /y /s
 xcopy "$(ProjectDir)Data" "$(TargetDir)Data\" /y /s
 rd /S /Q "$(TargetDir)Data\Spring\ConversationWA\WebConversationStateTest\Bin"
 </PostBuildEvent>

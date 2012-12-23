@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<project name="Spring.ConversationWA.NH33.Tests" default="test" xmlns="http://nant.sf.net/release/0.91-alpha2/nant.xsd">
+<project name="Spring.Web.Conversation.NHibernate33.Tests" default="test" xmlns="http://nant.sf.net/release/0.91-alpha2/nant.xsd">
 
   <include buildfile="${spring.basedir}/common-project.include" />
 
@@ -31,10 +31,10 @@
         <include name="../CommonAssemblyInfo.cs" />
         <exclude name="Data/**/*.*" />
         <exclude name="bin/**/*" />
-        <include name="../Spring.ConversationWA.NH32.Tests/**/*.cs" />
-        <exclude name="../Spring.ConversationWA.NH32/AssemblyInfo.cs"/>
-        <exclude name="../Spring.ConversationWA.NH32.Tests/Data/**/*.*" />
-        <exclude name="../Spring.ConversationWA.NH32.Tests/bin/**/*" />
+        <include name="../Spring.Web.Conversation.NHibernate32.Tests/**/*.cs" />
+        <exclude name="../Spring.Web.Conversation.NHibernate32/AssemblyInfo.cs"/>
+        <exclude name="../Spring.Web.Conversation.NHibernate32.Tests/Data/**/*.*" />
+        <exclude name="../Spring.Web.Conversation.NHibernate32.Tests/bin/**/*" />
       </sources>
       <references basedir="${current.bin.dir}">
         <lib>
@@ -48,7 +48,7 @@
         <exclude name="Spring.Data.NHibernate2*.dll" />
         <exclude name="Spring.Data.NHibernate30*.dll" />
         <exclude name="Spring.Data.NHibernate32*.dll" />
-        <exclude name="Spring.ConversationWA.NH32*.dll" />
+        <exclude name="Spring.Web.Conversation.NHibernate32*.dll" />
         <exclude name="Spring.Data.NHibernate*Tests*.dll" />
         <exclude name="CloverRuntime.dll" />
         <exclude if="${net-4.0}" name="System.Web.Extensions.dll" />
@@ -67,7 +67,7 @@
     <echo message="Copying TestWebs to output directory"/>
     <delete dir="${current.bin.dir}/Data"/>
     <copy todir="${current.bin.dir}/Data">
-      <fileset basedir="${project::get-base-directory()}/../Spring.ConversationWA.NH32.Tests/Data">
+      <fileset basedir="${project::get-base-directory()}/../Spring.Web.Conversation.NHibernate32.Tests/Data">
         <include name="**/*.*" />
         <exclude name="bin/*.*" />
       </fileset>
@@ -86,7 +86,7 @@
     <move todir="${current.bin.dir}/nunitaspex_excluded" failonerror="true">
       <fileset basedir="${current.bin.dir}">
         <include name="Spring.Data.NHibernate32.dll"/>
-        <include name="Spring.ConversationWA.NH32*.dll"/>
+        <include name="Spring.Web.Conversation.NHibernate32*.dll"/>
       </fileset>
     </move>
 
@@ -94,7 +94,7 @@
     <!--temporary copies of "System.Data.SQLite.dll" because it is 32bit and causes problems in the compilation of the other test projects. It occurs in 64-bit Windows environment.-->
     <property name="no.preexisting.sqlite" value="${not file::exists('${current.bin.dir}/System.Data.SQLite.dll')}"/>
     <copy todir="${current.bin.dir}">
-      <fileset basedir="${project::get-base-directory()}/../Spring.ConversationWA.NH32.Tests/lib/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}">
+      <fileset basedir="${project::get-base-directory()}/../Spring.Web.Conversation.NHibernate32.Tests/lib/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}">
         <include name="System.Data.SQLite.dll" if="${no.preexisting.sqlite}"/>
       </fileset>
     </copy>
@@ -113,7 +113,7 @@
     <move todir="${current.bin.dir}">
       <fileset basedir="${current.bin.dir}/nunitaspex_excluded">
         <include name="Spring.Data.NHibernate32.dll"/>
-        <include name="Spring.ConversationWA.NH32*.dll"/>
+        <include name="Spring.Web.Conversation.NHibernate32*.dll"/>
       </fileset>
     </move>
   </target>

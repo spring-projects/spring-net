@@ -418,8 +418,8 @@ Commandline Examples:
     <nant buildfile="src/Spring/Spring.Messaging/Spring.Messaging.build" target="build" if="${build-msmq}"/>
     <nant buildfile="src/Spring/Spring.Template.Velocity/Spring.Template.Velocity.build" target="build" if="${build-velocity}"/>
     <!--"Spring.ConversationWA.NH*.dll" should be at last to prevent the other assemblies are compiled with reference to this-->
-    <nant buildfile="src/Spring/Spring.ConversationWA.NH32/Spring.ConversationWA.NH32.build" target="build" if="${build-conversation}"/>
-    <nant buildfile="src/Spring/Spring.ConversationWA.NH33/Spring.ConversationWA.NH33.build" target="build" if="${build-conversation}"/>
+    <nant buildfile="src/Spring/Spring.Web.Conversation.NHibernate32/Spring.Web.Conversation.NHibernate32.build" target="build" if="${build-conversation}"/>
+    <nant buildfile="src/Spring/Spring.Web.Conversation.NHibernate33/Spring.Web.Conversation.NHibernate33.build" target="build" if="${build-conversation}"/>
 
     <!-- test assemblies -->
     
@@ -448,8 +448,8 @@ Commandline Examples:
     <nant buildfile="test/Spring/Spring.Messaging.Tests/Spring.Messaging.Tests.build" target="test" if="${build-msmq}"/>
     <nant buildfile="test/Spring/Spring.Template.Velocity.Tests/Spring.Template.Velocity.Tests.build" target="test" if="${build-velocity}"/>
     <!--"Spring.ConversationWA.NH*.Tests.dll" should be at last to prevent the other tests are compiled with reference to this-->
-    <nant buildfile="test/Spring/Spring.ConversationWA.NH32.Tests/Spring.ConversationWA.NH32.Tests.build" target="test" if="${build-conversation}"/>
-    <nant buildfile="test/Spring/Spring.ConversationWA.NH33.Tests/Spring.ConversationWA.NH33.Tests.build" target="test" if="${build-conversation}"/>
+    <nant buildfile="test/Spring/Spring.Web.Conversation.NHibernate32.Tests/Spring.Web.Conversation.NHibernate32.Tests.build" target="test" if="${build-conversation}"/>
+    <nant buildfile="test/Spring/Spring.Web.Conversation.NHibernate33.Tests/Spring.Web.Conversation.NHibernate33.Tests.build" target="test" if="${build-conversation}"/>
 
     <!-- Main solutions and examples are compiled via task build-solutions -->
 
@@ -686,8 +686,8 @@ Commandline Examples:
         <delete dir="src/Spring/Spring.Testing.Microsoft/obj" failonerror="false"/>
         <delete dir="src/Spring/Spring.Testing.Microsoft/bin" failonerror="false"/>
         <delete dir="src/Spring/Spring.Web/obj" failonerror="false"/>
-        <delete dir="src/Spring/Spring.ConversationWA.NH32/obj" failonerror="false"/>
-        <delete dir="src/Spring/Spring.ConversationWA.NH32/bin" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Web.Conversation.NHibernate32/obj" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Web.Conversation.NHibernate32/bin" failonerror="false"/>
         <delete dir="src/Spring/Spring.Web/bin" failonerror="false"/>
         <delete dir="src/Spring/Spring.Web.Extensions/obj" failonerror="false"/>
         <delete dir="src/Spring/Spring.Web.Extensions/bin" failonerror="false"/>
@@ -697,10 +697,10 @@ Commandline Examples:
         <delete dir="src/Spring/Spring.Web.Mvc3/bin" failonerror="false"/>
         <delete dir="src/Spring/Spring.Web.Mvc4/obj" failonerror="false"/>
         <delete dir="src/Spring/Spring.Web.Mvc4/bin" failonerror="false"/>        
-        <delete dir="src/Spring/Spring.ConversationWA.NH32/obj" failonerror="false"/>
-        <delete dir="src/Spring/Spring.ConversationWA.NH32/bin" failonerror="false"/>
-        <delete dir="src/Spring/Spring.ConversationWA.NH33/obj" failonerror="false"/>
-        <delete dir="src/Spring/Spring.ConversationWA.NH33/bin" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Web.Conversation.NHibernate32/obj" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Web.Conversation.NHibernate32/bin" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Web.Conversation.NHibernate33/obj" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Web.Conversation.NHibernate33/bin" failonerror="false"/>
         
         <delete dir="test/Spring/Spring.Messaging.Ems.Integration.Tests/obj" failonerror="false"/>
         <delete dir="test/Spring/Spring.Messaging.Ems.Integration.Tests/bin" failonerror="false"/>
@@ -751,14 +751,14 @@ Commandline Examples:
         <delete dir="test/Spring/Spring.Testing.NUnit.Tests/bin" failonerror="false"/>
         
         <delete failonerror="false">
-          <fileset basedir="test/Spring/Spring.ConversationWA.NH32.Tests/Data/Spring/ConversationWA/WebConversationStateTest/Bin">
+          <fileset basedir="test/Spring/Spring.Web.Conversation.NHibernate32.Tests/Data/Spring/ConversationWA/WebConversationStateTest/Bin">
             <include name="*.dll"/> 
             <include name="*.xml"/> 
             <include name="*.pdb"/> 
           </fileset>           
         </delete>   
         <delete failonerror="false">
-          <fileset basedir="test/Spring/Spring.ConversationWA.NH33.Tests/Data/Spring/ConversationWA/WebConversationStateTest/Bin">
+          <fileset basedir="test/Spring/Spring.Web.Conversation.NHibernate33.Tests/Data/Spring/ConversationWA/WebConversationStateTest/Bin">
             <include name="*.dll"/> 
             <include name="*.xml"/> 
             <include name="*.pdb"/> 
@@ -782,10 +782,10 @@ Commandline Examples:
         <delete dir="test/Spring/Spring.Web.Mvc4.Tests/obj"  failonerror="false"/>
         <delete dir="test/Spring/Spring.Web.Mvc4.Tests/bin"  failonerror="false"/> 
         
-        <delete dir="test/Spring/Spring.ConversationWA.NH32.Tests/obj" failonerror="false"/>
-        <delete dir="test/Spring/Spring.ConversationWA.NH32.Tests/bin" failonerror="false"/>
-        <delete dir="test/Spring/Spring.ConversationWA.NH33.Tests/obj" failonerror="false"/>
-        <delete dir="test/Spring/Spring.ConversationWA.NH33.Tests/bin" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Web.Conversation.NHibernate32.Tests/obj" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Web.Conversation.NHibernate32.Tests/bin" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Web.Conversation.NHibernate33.Tests/obj" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Web.Conversation.NHibernate33.Tests/bin" failonerror="false"/>
 
         <delete dir="examples/Spring/Spring.CachingQuickStart/src/Spring.CachingQuickStart.Web/bin" failonerror="false"/>
         <delete dir="examples/Spring/Spring.CachingQuickStart/src/Spring.CachingQuickStart.Web/obj" failonerror="false"/>
@@ -1419,13 +1419,13 @@ Commandline Examples:
           <include name="*/*/Spring.Template.Velocity.xml"/>
           <include name="*/*/Spring.Template.Velocity.pdb"/>
 
-          <include name="*/*/Spring.ConversationWA.NH32.dll"/>
-          <include name="*/*/Spring.ConversationWA.NH32.xml"/>
-          <include name="*/*/Spring.ConversationWA.NH32.pdb"/>
+          <include name="*/*/Spring.Web.Conversation.NHibernate32.dll"/>
+          <include name="*/*/Spring.Web.Conversation.NHibernate32.xml"/>
+          <include name="*/*/Spring.Web.Conversation.NHibernate32.pdb"/>
           
-          <include name="*/*/Spring.ConversationWA.NH33.dll"/>
-          <include name="*/*/Spring.ConversationWA.NH33.xml"/>
-          <include name="*/*/Spring.ConversationWA.NH33.pdb"/>
+          <include name="*/*/Spring.Web.Conversation.NHibernate33.dll"/>
+          <include name="*/*/Spring.Web.Conversation.NHibernate33.xml"/>
+          <include name="*/*/Spring.Web.Conversation.NHibernate33.pdb"/>
 
         </fileset>
       </copy>
@@ -1655,8 +1655,8 @@ Commandline Examples:
       <include name="src/Spring/Spring.Testing.NUnit/**"/>
       <include name="src/Spring/Spring.Testing.Microsoft/**"/>
       <include name="src/Spring/CommonAssemblyInfo.cs"/>
-      <include name="src/Spring/Spring.ConversationWA.NH32/**"/>
-      <include name="src/Spring/Spring.ConversationWA.NH33/**"/>
+      <include name="src/Spring/Spring.Web.Conversation.NHibernate32/**"/>
+      <include name="src/Spring/Spring.Web.Conversation.NHibernate33/**"/>
 
       <include name="test/Spring/Spring.Core.Tests/**"/>
       <include name="test/Spring/Spring.Aop.Tests/**"/>
@@ -1680,8 +1680,8 @@ Commandline Examples:
       <include name="test/Spring/Spring.Testing.NUnit.Tests/**"/>
       <include name="test/Spring/Spring.Testing.Microsoft.Tests/**"/>
       <include name="test/Spring/CommonAssemblyInfo.cs"/>
-      <include name="test/Spring/Spring.ConversationWA.NH32.Tests/**"/>
-      <include name="test/Spring/Spring.ConversationWA.NH33.Tests/**"/>
+      <include name="test/Spring/Spring.Web.Conversation.NHibernate32.Tests/**"/>
+      <include name="test/Spring/Spring.Web.Conversation.NHibernate33.Tests/**"/>
 
       <include name="examples/Spring/Spring.Examples.build"/>
       <include name="examples/Spring/Spring.AopQuickStart/**"/>

@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<project name="Spring.ConversationWA.NH32" default="build" xmlns="http://nant.sf.net/release/0.91-alpha2/nant.xsd">
+<project name="Spring.Web.Conversation.NHibernate33" default="build" xmlns="http://nant.sf.net/release/0.91-alpha2/nant.xsd">
 <!--
     Required properties:
       * current.bin.dir           - (path) root level to build to
@@ -9,9 +9,9 @@
 	<target name="build">
 
         <!-- copy nh libs -->
-        <echo message="NH Libs: ${nh32.lib.dir}" />
+        <echo message="NH Libs: ${nh33.lib.dir}" />
         <copy todir="${current.bin.dir}" overwrite="true">
-          <fileset basedir="${nh32.lib.dir}">
+          <fileset basedir="${nh33.lib.dir}">
             <include name="**/*.dll" />
           </fileset>
         </copy>
@@ -28,8 +28,10 @@
 				<warning number="${nowarn.numbers}" />
 			</nowarn>
 			<sources failonempty="true">
-				<include name="**/*.cs" />
+        <include name="**/*.cs" />
+        <include name="../Spring.Web.Conversation.NHibernate32/**/*.cs" />
 				<include name="../GenCommonAssemblyInfo.cs" />
+        <exclude name="../Spring.Web.Conversation.NHibernate32/AssemblyInfo.cs"/>
 			</sources>
 			<references basedir="${current.bin.dir}">
 				<include name="System.Data.dll" />
@@ -38,7 +40,7 @@
 				<include name="*.dll" />
 				<exclude name="${project::get-name()}.dll" />
         <exclude name="Spring.ConversationWA.NH*.dll" />
-        <exclude name="Spring.Data.NHibernate33.dll" />
+        <exclude name="Spring.Data.NHibernate32.dll" />
 			</references>
 		</csc>
 	</target>

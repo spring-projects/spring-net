@@ -60,8 +60,8 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Aop.dll</HintPath>
     </Reference>
-    <Reference Include="Spring.ConversationWA.NH32">
-      <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.ConversationWA.NH32.dll</HintPath>
+    <Reference Include="Spring.Web.Conversation.NHibernate32">
+      <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Web.Conversation.NHibernate32.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Core, Version=0.0.0.35000, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="3.5" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -9,23 +9,21 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Spring</RootNamespace>
-    <AssemblyName>Spring.ConversationWA.NH33</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <AssemblyName>Spring.Web.Conversation.NHibernate33</AssemblyName>
+    <TargetFrameworkVersion>v3.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <OldToolsVersion>3.5</OldToolsVersion>
-    <UpgradeBackupLocation />
+    <TargetFrameworkSubset>
+    </TargetFrameworkSubset>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\build\VS.Net.2010\Spring.ConversationWA.NH33\Debug\</OutputPath>
+    <OutputPath>..\..\..\build\VS.Net.2008\Spring.Web.Conversation.NHibernate33\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>bin\Debug\Spring.ConversationWA.NH33.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\Spring.Web.Conversation.NHibernate33.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -57,28 +55,28 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\Spring.ConversationWA.NH32\ConversationWA\HttpModule\ConversationModule.cs">
+    <Compile Include="..\Spring.Web.Conversation.NHibernate32\ConversationWA\HttpModule\ConversationModule.cs">
       <Link>Conversation\HttpModule\ConversationModule.cs</Link>
     </Compile>
-    <Compile Include="..\Spring.ConversationWA.NH32\ConversationWA\IConversationManager.cs">
+    <Compile Include="..\Spring.Web.Conversation.NHibernate32\ConversationWA\IConversationManager.cs">
       <Link>Conversation\IConversationManager.cs</Link>
     </Compile>
-    <Compile Include="..\Spring.ConversationWA.NH32\ConversationWA\IConversationState.cs">
+    <Compile Include="..\Spring.Web.Conversation.NHibernate32\ConversationWA\IConversationState.cs">
       <Link>Conversation\IConversationState.cs</Link>
     </Compile>
-    <Compile Include="..\Spring.ConversationWA.NH32\ConversationWA\Impl\InnerConversationList.cs">
-      <Link>Conversation\Impl\InnerConversationList.cs</Link>
+    <Compile Include="..\Spring.Web.Conversation.NHibernate32\ConversationWA\Imple\InnerConversationList.cs">
+      <Link>Conversation\Imple\InnerConversationList.cs</Link>
     </Compile>
-    <Compile Include="..\Spring.ConversationWA.NH32\ConversationWA\Impl\WebConversationManager.cs">
-      <Link>Conversation\Impl\WebConversationManager.cs</Link>
+    <Compile Include="..\Spring.Web.Conversation.NHibernate32\ConversationWA\Imple\WebConversationManager.cs">
+      <Link>Conversation\Imple\WebConversationManager.cs</Link>
     </Compile>
-    <Compile Include="..\Spring.ConversationWA.NH32\ConversationWA\Impl\WebConversationSpringState.cs">
-      <Link>Conversation\Impl\WebConversationSpringState.cs</Link>
+    <Compile Include="..\Spring.Web.Conversation.NHibernate32\ConversationWA\Imple\WebConversationSpringState.cs">
+      <Link>Conversation\Imple\WebConversationSpringState.cs</Link>
     </Compile>
-    <Compile Include="..\Spring.ConversationWA.NH32\Data\NHibernate\Support\SessionPerConversationScope.cs">
+    <Compile Include="..\Spring.Web.Conversation.NHibernate32\Data\NHibernate\Support\SessionPerConversationScope.cs">
       <Link>Data\NHibernate\Support\SessionPerConversationScope.cs</Link>
     </Compile>
-    <Compile Include="..\Spring.ConversationWA.NH32\Data\NHibernate\Support\SessionPerConversationSettings.cs">
+    <Compile Include="..\Spring.Web.Conversation.NHibernate32\Data\NHibernate\Support\SessionPerConversationSettings.cs">
       <Link>Data\NHibernate\Support\SessionPerConversationSettings.cs</Link>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
@@ -87,17 +85,17 @@
     <None Include="app.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Spring.Core\Spring.Core.2010.csproj">
+    <ProjectReference Include="..\Spring.Core\Spring.Core.2008.csproj">
       <Project>{710961A3-0DF4-49E4-A26E-F5B9C044AC84}</Project>
-      <Name>Spring.Core.2010</Name>
+      <Name>Spring.Core.2008</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Spring.Data.NHibernate33\Spring.Data.NHibernate33.2010.csproj">
+    <ProjectReference Include="..\Spring.Data.NHibernate33\Spring.Data.NHibernate33.2008.csproj">
       <Project>{67EA5988-C54E-4348-BFFB-E4A61F26143C}</Project>
-      <Name>Spring.Data.NHibernate33.2010</Name>
+      <Name>Spring.Data.NHibernate33.2008</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Spring.Data\Spring.Data.2010.csproj">
+    <ProjectReference Include="..\Spring.Data\Spring.Data.2008.csproj">
       <Project>{AE00E5AB-C39A-436F-86D2-33BFE33E2E40}</Project>
-      <Name>Spring.Data.2010</Name>
+      <Name>Spring.Data.2008</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

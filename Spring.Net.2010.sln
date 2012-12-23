@@ -93,13 +93,13 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Messaging.Nms.Integr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Scheduling.Quartz20.Integration.Tests.2010", "test\Spring\Spring.Scheduling.Quartz20.Integration.Tests\Spring.Scheduling.Quartz20.Integration.Tests.2010.csproj", "{8CF0F34A-CC93-4D87-AE14-A2DEEF072F26}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.ConversationWA.NH32.2010", "src\Spring\Spring.ConversationWA.NH32\Spring.ConversationWA.NH32.2010.csproj", "{64400FF8-2E9F-4809-B5F4-0C7EB8ABFF87}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Web.Conversation.NHibernate32.2010", "src\Spring\Spring.Web.Conversation.NHibernate32\Spring.Web.Conversation.NHibernate32.2010.csproj", "{64400FF8-2E9F-4809-B5F4-0C7EB8ABFF87}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.ConversationWA.NH33.2010", "src\Spring\Spring.ConversationWA.NH33\Spring.ConversationWA.NH33.2010.csproj", "{CF375928-B6D5-485C-B04D-2BC41D9DBF1E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Web.Conversation.NHibernate33.2010", "src\Spring\Spring.Web.Conversation.NHibernate33\Spring.Web.Conversation.NHibernate33.2010.csproj", "{CF375928-B6D5-485C-B04D-2BC41D9DBF1E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.ConversationWA.NH32.Tests.2010", "test\Spring\Spring.ConversationWA.NH32.Tests\Spring.ConversationWA.NH32.Tests.2010.csproj", "{2FB16852-22AD-4A5B-885A-97136265CC46}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Web.Conversation.NHibernate32.Tests.2010", "test\Spring\Spring.Web.Conversation.NHibernate32.Tests\Spring.Web.Conversation.NHibernate32.Tests.2010.csproj", "{2FB16852-22AD-4A5B-885A-97136265CC46}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.ConversationWA.NH33.Tests.2010", "test\Spring\Spring.ConversationWA.NH33.Tests\Spring.ConversationWA.NH33.Tests.2010.csproj", "{C57B05EA-FD1A-40EC-BB60-D2E45AB1A86A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Web.Conversation.NHibernate33.Tests.2010", "test\Spring\Spring.Web.Conversation.NHibernate33.Tests\Spring.Web.Conversation.NHibernate33.Tests.2010.csproj", "{C57B05EA-FD1A-40EC-BB60-D2E45AB1A86A}"
 EndProject
 Global
 	GlobalSection(TestCaseManagementSettings) = postSolution

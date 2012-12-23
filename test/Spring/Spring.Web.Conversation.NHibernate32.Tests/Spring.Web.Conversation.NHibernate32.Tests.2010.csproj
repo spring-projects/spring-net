@@ -9,14 +9,14 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Spring</RootNamespace>
-    <AssemblyName>Spring.ConversationWA.NH32.Tests</AssemblyName>
+    <AssemblyName>Spring.Web.Conversation.NHibernate32.Tests</AssemblyName>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
-    <PublishUrl>http://localhost/Spring.ConversationWA.NH32.Tests/</PublishUrl>
+    <PublishUrl>http://localhost/Spring.Web.Conversation.NHibernate32.Tests/</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Web</InstallFrom>
     <UpdateEnabled>true</UpdateEnabled>
@@ -36,11 +36,11 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\build\VS.Net.2010\Spring.ConversationWA.NH32.Tests\Debug\</OutputPath>
+    <OutputPath>..\..\..\build\VS.Net.2010\Spring.Web.Conversation.NHibernate32.Tests\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\..\build\VS.Net.2010\Spring.ConversationWA.NH32.Tests\Debug\Spring.ConversationWA.NH32.Tests.XML</DocumentationFile>
+    <DocumentationFile>..\..\..\build\VS.Net.2010\Spring.Web.Conversation.NHibernate32.Tests\Debug\Spring.Web.Conversation.NHibernate32.Tests.XML</DocumentationFile>
     <StartAction>Program</StartAction>
     <StartProgram>$(MSBuildProjectDirectory)\..\..\dependencies\tools\NUnit-2.6.0.12051\bin\nunit-x86.exe</StartProgram>
     <StartArguments>"$(MSBuildProjectDirectory)\$(OutputPath)\$(AssemblyName).dll"</StartArguments>
@@ -196,9 +196,9 @@
       <Project>{3A3A4E65-45A6-4B20-B460-0BEDC302C02C}</Project>
       <Name>Spring.Aop.2010</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\src\Spring\Spring.ConversationWA.NH32\Spring.ConversationWA.NH32.2010.csproj">
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Web.Conversation.NHibernate32\Spring.Web.Conversation.NHibernate32.2010.csproj">
       <Project>{64400FF8-2E9F-4809-B5F4-0C7EB8ABFF87}</Project>
-      <Name>Spring.ConversationWA.NH32.2010</Name>
+      <Name>Spring.Web.Conversation.NHibernate32.2010</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\src\Spring\Spring.Core\Spring.Core.2010.csproj">
       <Project>{710961A3-0DF4-49E4-A26E-F5B9C044AC84}</Project>
