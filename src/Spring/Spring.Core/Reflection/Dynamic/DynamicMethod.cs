@@ -124,9 +124,10 @@ namespace Spring.Reflection.Dynamic
 
                 lock (stateCache.SyncRoot)
                 {
-                    if (stateCache[methodInfo] == null)
+                    state = (SafeMethodState)stateCache[methodInfo];
+                    if (state == null)
                     {
-                        state = newState;
+                        state = newState; 
                         stateCache[methodInfo] = state;
                     }
                 }
@@ -134,7 +135,6 @@ namespace Spring.Reflection.Dynamic
 
             this.methodInfo = methodInfo;
         }
-
 
         /// <summary>
         /// Invokes dynamic method.
