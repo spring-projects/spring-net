@@ -99,16 +99,22 @@
     <Compile Include="..\Spring.Web.Conversation.NHibernate32.Tests\Bsn\NoDeferedErrorBsnImpl.cs">
       <Link>Bsn\NoDeferedErrorBsnImpl.cs</Link>
     </Compile>
-    <Compile Include="..\Spring.Web.Conversation.NHibernate32.Tests\ConversationWA\PatialEndConvBeginBasePage.cs">
-      <Link>ConversationWA\PatialEndConvBeginBasePage.cs</Link>
+    <Compile Include="..\Spring.Web.Conversation.NHibernate32.Tests\Conversation\PatialEndConvBeginBasePage.cs">
+      <Link>Conversation\PatialEndConvBeginBasePage.cs</Link>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="..\Spring.Web.Conversation.NHibernate32.Tests\ConversationWA\PatialEndConvEndBasePage.cs">
-      <Link>ConversationWA\PatialEndConvEndBasePage.cs</Link>
+    <Compile Include="..\Spring.Web.Conversation.NHibernate32.Tests\Conversation\PatialEndConvEndBasePage.cs">
+      <Link>Conversation\PatialEndConvEndBasePage.cs</Link>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="..\Spring.Web.Conversation.NHibernate32.Tests\ConversationWA\WebConversationStateTest.cs">
-      <Link>ConversationWA\WebConversationStateTest.cs</Link>
+    <Compile Include="..\Spring.Web.Conversation.NHibernate32.Tests\Conversation\SerializeConversationTestModule.cs">
+      <Link>Conversation\SerializeConversationTestModule.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Web.Conversation.NHibernate32.Tests\Conversation\SimpleTest.cs">
+      <Link>Conversation\SimpleTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Web.Conversation.NHibernate32.Tests\Conversation\WebConversationStateTest.cs">
+      <Link>Conversation\WebConversationStateTest.cs</Link>
     </Compile>
     <Compile Include="..\Spring.Web.Conversation.NHibernate32.Tests\Entities\SPCDetailEnt.cs">
       <Link>Entities\SPCDetailEnt.cs</Link>
@@ -147,20 +153,20 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Data\Spring\ConversationWA\WebConversationStateTest\services.xml.config" />
-    <None Include="Data\Spring\ConversationWA\WebConversationStateTest\web.config.net-1.1" />
-    <None Include="Data\Spring\ConversationWA\WebConversationStateTest\web.config.net-2.0" />
+    <None Include="Data\Spring\Conversation\WebConversationStateTest\services.xml.config" />
+    <None Include="Data\Spring\Conversation\WebConversationStateTest\web.config.net-1.1" />
+    <None Include="Data\Spring\Conversation\WebConversationStateTest\web.config.net-2.0" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Entities\SPCDetailEnt.hbm.xml" />
     <EmbeddedResource Include="Entities\SPCMasterEnt.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Spring.Web.Conversation.NHibernate32.Tests\Data\Spring\ConversationWA\WebConversationStateTest\log4net.config">
-      <Link>Data\Spring\ConversationWA\WebConversationStateTest\log4net.config</Link>
+    <None Include="..\Spring.Web.Conversation.NHibernate32.Tests\Data\Spring\Conversation\WebConversationStateTest\log4net.config">
+      <Link>Data\Spring\Conversation\WebConversationStateTest\log4net.config</Link>
     </None>
     <None Include="app.config" />
-    <None Include="Data\Spring\ConversationWA\WebConversationStateTest\Web.Config" />
+    <None Include="Data\Spring\Conversation\WebConversationStateTest\Web.Config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
@@ -200,7 +206,7 @@
 rd /S /Q "$(TargetDir)Data"
 xcopy "$(ProjectDir)..\Spring.Web.Conversation.NHibernate32.Tests\Data" "$(TargetDir)Data\" /y /s
 xcopy "$(ProjectDir)Data" "$(TargetDir)Data\" /y /s
-rd /S /Q "$(TargetDir)Data\Spring\ConversationWA\WebConversationStateTest\Bin"
+rd /S /Q "$(TargetDir)Data\Spring\Conversation\WebConversationStateTest\Bin"
 </PostBuildEvent>
   </PropertyGroup>
 </Project>

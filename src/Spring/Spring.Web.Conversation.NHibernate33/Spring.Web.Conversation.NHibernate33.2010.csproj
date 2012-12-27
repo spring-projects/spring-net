@@ -57,29 +57,29 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\Spring.Web.Conversation.NHibernate32\ConversationWA\HttpModule\ConversationModule.cs">
-      <Link>Conversation\HttpModule\ConversationModule.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Web.Conversation.NHibernate32\ConversationWA\IConversationManager.cs">
-      <Link>Conversation\IConversationManager.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Web.Conversation.NHibernate32\ConversationWA\IConversationState.cs">
-      <Link>Conversation\IConversationState.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Web.Conversation.NHibernate32\ConversationWA\Impl\InnerConversationList.cs">
-      <Link>Conversation\Impl\InnerConversationList.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Web.Conversation.NHibernate32\ConversationWA\Impl\WebConversationManager.cs">
-      <Link>Conversation\Impl\WebConversationManager.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Web.Conversation.NHibernate32\ConversationWA\Impl\WebConversationSpringState.cs">
-      <Link>Conversation\Impl\WebConversationSpringState.cs</Link>
-    </Compile>
     <Compile Include="..\Spring.Web.Conversation.NHibernate32\Data\NHibernate\Support\SessionPerConversationScope.cs">
       <Link>Data\NHibernate\Support\SessionPerConversationScope.cs</Link>
     </Compile>
     <Compile Include="..\Spring.Web.Conversation.NHibernate32\Data\NHibernate\Support\SessionPerConversationSettings.cs">
       <Link>Data\NHibernate\Support\SessionPerConversationSettings.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Web.Conversation.NHibernate32\Web\Conversation\HttpModule\ConversationModule.cs">
+      <Link>Web\Conversation\HttpModule\ConversationModule.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Web.Conversation.NHibernate32\Web\Conversation\IConversationManager.cs">
+      <Link>Web\Conversation\IConversationManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Web.Conversation.NHibernate32\Web\Conversation\IConversationState.cs">
+      <Link>Web\Conversation\IConversationState.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Web.Conversation.NHibernate32\Web\Conversation\InnerConversationList.cs">
+      <Link>Web\Conversation\InnerConversationList.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Web.Conversation.NHibernate32\Web\Conversation\WebConversationManager.cs">
+      <Link>Web\Conversation\WebConversationManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Web.Conversation.NHibernate32\Web\Conversation\WebConversationSpringState.cs">
+      <Link>Web\Conversation\WebConversationSpringState.cs</Link>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
   </ItemGroup>

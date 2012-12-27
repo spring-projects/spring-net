@@ -90,100 +90,100 @@
     <Compile Include="Bsn\IConversationEvidenceBsn.cs" />
     <Compile Include="Bsn\INoDeferedErrorBsn.cs" />
     <Compile Include="Bsn\NoDeferedErrorBsnImpl.cs" />
-    <Compile Include="ConversationWA\PatialEndConvBeginBasePage.cs">
+    <Compile Include="Conversation\PatialEndConvBeginBasePage.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="ConversationWA\PatialEndConvEndBasePage.cs">
+    <Compile Include="Conversation\PatialEndConvEndBasePage.cs">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="ConversationWA\SerializeConversationTestModule.cs" />
-    <Compile Include="ConversationWA\SimpleTest.cs" />
-    <Compile Include="ConversationWA\WebConversationStateTest.cs" />
-    <Compile Include="Data\Spring\ConversationWA\WebConversationStateTest\CircularDependenceTest.aspx.cs">
+    <Compile Include="Conversation\SerializeConversationTestModule.cs" />
+    <Compile Include="Conversation\SimpleTest.cs" />
+    <Compile Include="Conversation\WebConversationStateTest.cs" />
+    <Compile Include="Data\Spring\Conversation\WebConversationStateTest\CircularDependenceTest.aspx.cs">
       <DependentUpon>CircularDependenceTest.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Data\Spring\ConversationWA\WebConversationStateTest\ConnectionReleaseModeIssue.aspx.cs">
+    <Compile Include="Data\Spring\Conversation\WebConversationStateTest\ConnectionReleaseModeIssue.aspx.cs">
       <DependentUpon>ConnectionReleaseModeIssue.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Data\Spring\ConversationWA\WebConversationStateTest\EndConversationTestBegin.aspx.cs">
+    <Compile Include="Data\Spring\Conversation\WebConversationStateTest\EndConversationTestBegin.aspx.cs">
       <DependentUpon>EndConversationTestBegin.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Data\Spring\ConversationWA\WebConversationStateTest\EndConversationTestEnd.aspx.cs">
+    <Compile Include="Data\Spring\Conversation\WebConversationStateTest\EndConversationTestEnd.aspx.cs">
       <DependentUpon>EndConversationTestEnd.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Data\Spring\ConversationWA\WebConversationStateTest\EndPausedSessionIsClosedA.aspx.cs">
+    <Compile Include="Data\Spring\Conversation\WebConversationStateTest\EndPausedSessionIsClosedA.aspx.cs">
       <DependentUpon>EndPausedSessionIsClosedA.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Data\Spring\ConversationWA\WebConversationStateTest\EndPausedSessionIsClosedB.aspx.cs">
+    <Compile Include="Data\Spring\Conversation\WebConversationStateTest\EndPausedSessionIsClosedB.aspx.cs">
       <DependentUpon>EndPausedSessionIsClosedB.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Data\Spring\ConversationWA\WebConversationStateTest\EndPausedTest.aspx.cs">
+    <Compile Include="Data\Spring\Conversation\WebConversationStateTest\EndPausedTest.aspx.cs">
       <DependentUpon>EndPausedTest.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Data\Spring\ConversationWA\WebConversationStateTest\GetParentObjetFromChild.aspx.cs">
+    <Compile Include="Data\Spring\Conversation\WebConversationStateTest\GetParentObjetFromChild.aspx.cs">
       <DependentUpon>GetParentObjetFromChild.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Data\Spring\ConversationWA\WebConversationStateTest\IoeTests.aspx.cs">
+    <Compile Include="Data\Spring\Conversation\WebConversationStateTest\IoeTests.aspx.cs">
       <DependentUpon>IoeTests.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Data\Spring\ConversationWA\WebConversationStateTest\PatialEndConv_A_Begin.aspx.cs">
+    <Compile Include="Data\Spring\Conversation\WebConversationStateTest\PatialEndConv_A_Begin.aspx.cs">
       <DependentUpon>PatialEndConv_A_Begin.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Data\Spring\ConversationWA\WebConversationStateTest\PatialEndConv_A_B_Begin.aspx.cs">
+    <Compile Include="Data\Spring\Conversation\WebConversationStateTest\PatialEndConv_A_B_Begin.aspx.cs">
       <DependentUpon>PatialEndConv_A_B_Begin.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Data\Spring\ConversationWA\WebConversationStateTest\PatialEndConv_A_B_End.aspx.cs">
+    <Compile Include="Data\Spring\Conversation\WebConversationStateTest\PatialEndConv_A_B_End.aspx.cs">
       <DependentUpon>PatialEndConv_A_B_End.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Data\Spring\ConversationWA\WebConversationStateTest\PatialEndConv_A_End.aspx.cs">
+    <Compile Include="Data\Spring\Conversation\WebConversationStateTest\PatialEndConv_A_End.aspx.cs">
       <DependentUpon>PatialEndConv_A_End.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Data\Spring\ConversationWA\WebConversationStateTest\RedirectErrorNoPauseConversation.aspx.cs">
+    <Compile Include="Data\Spring\Conversation\WebConversationStateTest\RedirectErrorNoPauseConversation.aspx.cs">
       <DependentUpon>RedirectErrorNoPauseConversation.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Data\Spring\ConversationWA\WebConversationStateTest\SerializeConversationTest.aspx.cs">
+    <Compile Include="Data\Spring\Conversation\WebConversationStateTest\SerializeConversationTest.aspx.cs">
       <DependentUpon>SerializeConversationTest.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Data\Spring\ConversationWA\WebConversationStateTest\SessionIsClosedA.aspx.cs">
+    <Compile Include="Data\Spring\Conversation\WebConversationStateTest\SessionIsClosedA.aspx.cs">
       <DependentUpon>SessionIsClosedA.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Data\Spring\ConversationWA\WebConversationStateTest\SessionIsClosedB.aspx.cs">
+    <Compile Include="Data\Spring\Conversation\WebConversationStateTest\SessionIsClosedB.aspx.cs">
       <DependentUpon>SessionIsClosedB.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Data\Spring\ConversationWA\WebConversationStateTest\SPCLazyLoadTest_A_Begin.aspx.cs">
+    <Compile Include="Data\Spring\Conversation\WebConversationStateTest\SPCLazyLoadTest_A_Begin.aspx.cs">
       <DependentUpon>SPCLazyLoadTest_A_Begin.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Data\Spring\ConversationWA\WebConversationStateTest\SPCLazyLoadTest_A_Status.aspx.cs">
+    <Compile Include="Data\Spring\Conversation\WebConversationStateTest\SPCLazyLoadTest_A_Status.aspx.cs">
       <DependentUpon>SPCLazyLoadTest_A_Status.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Data\Spring\ConversationWA\WebConversationStateTest\SPCSwitchConversationSameRequest.aspx.cs">
+    <Compile Include="Data\Spring\Conversation\WebConversationStateTest\SPCSwitchConversationSameRequest.aspx.cs">
       <DependentUpon>SPCSwitchConversationSameRequest.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Data\Spring\ConversationWA\WebConversationStateTest\TimeOut_NoTimeOut.aspx.cs">
+    <Compile Include="Data\Spring\Conversation\WebConversationStateTest\TimeOut_NoTimeOut.aspx.cs">
       <DependentUpon>TimeOut_NoTimeOut.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="Data\Spring\ConversationWA\WebConversationStateTest\TimeOut_WithTimeOut.aspx.cs">
+    <Compile Include="Data\Spring\Conversation\WebConversationStateTest\TimeOut_WithTimeOut.aspx.cs">
       <DependentUpon>TimeOut_WithTimeOut.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -218,9 +218,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Data\Spring\ConversationWA\WebConversationStateTest\log4net.config" />
-    <None Include="Data\Spring\ConversationWA\WebConversationStateTest\services.xml.config" />
-    <None Include="Data\Spring\ConversationWA\WebConversationStateTest\web.config.net-2.0" />
+    <None Include="Data\Spring\Conversation\WebConversationStateTest\log4net.config" />
+    <None Include="Data\Spring\Conversation\WebConversationStateTest\services.xml.config" />
+    <None Include="Data\Spring\Conversation\WebConversationStateTest\web.config.net-2.0" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Entities\SPCDetailEnt.hbm.xml" />
@@ -228,7 +228,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
-    <None Include="Data\Spring\ConversationWA\WebConversationStateTest\Web.Config" />
+    <None Include="Data\Spring\Conversation\WebConversationStateTest\Web.Config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
@@ -256,30 +256,30 @@
     </BootstrapperPackage>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Data\Spring\ConversationWA\WebConversationStateTest\CircularDependenceTest.aspx" />
-    <Content Include="Data\Spring\ConversationWA\WebConversationStateTest\ConnectionReleaseModeIssue.aspx" />
-    <Content Include="Data\Spring\ConversationWA\WebConversationStateTest\EndConversationTestBegin.aspx" />
-    <Content Include="Data\Spring\ConversationWA\WebConversationStateTest\EndConversationTestEnd.aspx" />
-    <Content Include="Data\Spring\ConversationWA\WebConversationStateTest\EndPausedSessionIsClosedA.aspx" />
-    <Content Include="Data\Spring\ConversationWA\WebConversationStateTest\EndPausedSessionIsClosedB.aspx" />
-    <Content Include="Data\Spring\ConversationWA\WebConversationStateTest\EndPausedTest.aspx" />
-    <Content Include="Data\Spring\ConversationWA\WebConversationStateTest\GetParentObjetFromChild.aspx" />
-    <Content Include="Data\Spring\ConversationWA\WebConversationStateTest\IoeTests.aspx">
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\CircularDependenceTest.aspx" />
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\ConnectionReleaseModeIssue.aspx" />
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\EndConversationTestBegin.aspx" />
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\EndConversationTestEnd.aspx" />
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\EndPausedSessionIsClosedA.aspx" />
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\EndPausedSessionIsClosedB.aspx" />
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\EndPausedTest.aspx" />
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\GetParentObjetFromChild.aspx" />
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\IoeTests.aspx">
       <SubType>Code</SubType>
     </Content>
-    <Content Include="Data\Spring\ConversationWA\WebConversationStateTest\PatialEndConv_A_Begin.aspx" />
-    <Content Include="Data\Spring\ConversationWA\WebConversationStateTest\PatialEndConv_A_B_Begin.aspx" />
-    <Content Include="Data\Spring\ConversationWA\WebConversationStateTest\PatialEndConv_A_B_End.aspx" />
-    <Content Include="Data\Spring\ConversationWA\WebConversationStateTest\PatialEndConv_A_End.aspx" />
-    <Content Include="Data\Spring\ConversationWA\WebConversationStateTest\RedirectErrorNoPauseConversation.aspx" />
-    <Content Include="Data\Spring\ConversationWA\WebConversationStateTest\SerializeConversationTest.aspx" />
-    <Content Include="Data\Spring\ConversationWA\WebConversationStateTest\SessionIsClosedA.aspx" />
-    <Content Include="Data\Spring\ConversationWA\WebConversationStateTest\SessionIsClosedB.aspx" />
-    <Content Include="Data\Spring\ConversationWA\WebConversationStateTest\SPCLazyLoadTest_A_Begin.aspx" />
-    <Content Include="Data\Spring\ConversationWA\WebConversationStateTest\SPCLazyLoadTest_A_Status.aspx" />
-    <Content Include="Data\Spring\ConversationWA\WebConversationStateTest\SPCSwitchConversationSameRequest.aspx" />
-    <Content Include="Data\Spring\ConversationWA\WebConversationStateTest\TimeOut_NoTimeOut.aspx" />
-    <Content Include="Data\Spring\ConversationWA\WebConversationStateTest\TimeOut_WithTimeOut.aspx" />
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\PatialEndConv_A_Begin.aspx" />
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\PatialEndConv_A_B_Begin.aspx" />
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\PatialEndConv_A_B_End.aspx" />
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\PatialEndConv_A_End.aspx" />
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\RedirectErrorNoPauseConversation.aspx" />
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\SerializeConversationTest.aspx" />
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\SessionIsClosedA.aspx" />
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\SessionIsClosedB.aspx" />
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\SPCLazyLoadTest_A_Begin.aspx" />
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\SPCLazyLoadTest_A_Status.aspx" />
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\SPCSwitchConversationSameRequest.aspx" />
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\TimeOut_NoTimeOut.aspx" />
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\TimeOut_WithTimeOut.aspx" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -293,7 +293,7 @@
     <PostBuildEvent>echo "Copying TestWebs to output directory"
 rd /S /Q "$(TargetDir)Data"
 xcopy "$(ProjectDir)Data" "$(TargetDir)Data\" /y /s
-rd /S /Q "$(TargetDir)Data\Spring\ConversationWA\WebConversationStateTest\Bin"
+rd /S /Q "$(TargetDir)Data\Spring\Conversation\WebConversationStateTest\Bin"
 </PostBuildEvent>
   </PropertyGroup>
 </Project>

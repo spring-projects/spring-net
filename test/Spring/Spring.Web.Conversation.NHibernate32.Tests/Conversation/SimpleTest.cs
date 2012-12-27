@@ -1,7 +1,7 @@
-#region License
+﻿#region License
 
 /*
- * Copyright � 2002-2011 the original author or authors.
+ * Copyright © 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,20 @@
 #endregion
 
 using System;
-using System.Reflection;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using NUnit.Framework;
 
-[assembly: AssemblyTitle("Spring.Web.Conversation.NHibernate32. NHibernate 3.2 support.")]
-[assembly: AssemblyDescription("Interfaces and classes that provide 'Long-Running Conversation' support in Spring.Net")]
+namespace Spring.Web.Conversation
+{
+    [TestFixture]
+    public class SimpleTest
+    {
+        [Test]
+        public void Test()
+        {
+            Assert.AreEqual(2, 1 + 1, "2 == 1 + 1");
+        }
+    }
+}

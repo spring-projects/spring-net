@@ -22,36 +22,37 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Spring.Web.Conversation;
+using Spring.Web.UI;
+using Spring.Web.Conversation;
 
-namespace Spring.Entities
+namespace Spring.Web.Conversation
 {
     /// <summary>
-    /// Detail Entity for 'session-per-conversation' tests: 
-    /// <see cref="WebConversationStateTest.SPCLazyLoadTest()"/>, 
-    /// <see cref="WebConversationStateTest.SPCSwitchConversationSameRequestTest()"/>
+    /// Base class for test pages for test 
+    /// <see cref="WebConversationStateTest.PatialEndConvTest()"/>.
     /// </summary>
-    /// <author>Hailton de Castro</author>
-    [Serializable]
-    public class SPCDetailEnt
+    public class PatialEndConvBeginBasePage: Page
     {
-        private Int32? id;
+        private IConversationState conversation;
         /// <summary>
-        /// Entity key
+        /// <see cref="IConversationState"/>
         /// </summary>
-        public virtual Int32? Id
+        public IConversationState Conversation
         {
-            get { return id; }
-            set { id = value; }
+            get { return conversation; }
+            set { conversation = value; }
         }
 
-        private String description;
         /// <summary>
-        /// Description
+        /// Common Begin. 
         /// </summary>
-        public virtual String Description
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        protected virtual void Page_Load(object sender, EventArgs e)
         {
-            get { return description; }
-            set { description = value; }
+            this.Conversation.StartResumeConversation();
+
+            Session["ConversationStr"] = this.Conversation.ToString();
         }
     }
 }

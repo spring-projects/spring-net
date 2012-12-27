@@ -30,8 +30,8 @@ using Spring.Threading;
 using Spring.Transaction.Support;
 using Spring.Util;
 using System.Data;
-using Spring.ConversationWA;
 using System.Collections.Generic;
+using Spring.Web.Conversation;
 
 #endregion
 
@@ -369,7 +369,7 @@ namespace Spring.Data.NHibernate.Support
 
         /// <summary>
         /// This sessionHolder creates a session for the active conversation only if it is 
-        /// needed (<see cref="Spring.ConversationWA.IConversationState.StartResumeConversation"/>).
+        /// needed (<see cref="IConversationState.StartResumeConversation"/>).
         /// </summary>
         /// <remarks>
         /// Although a NHibernateSession defers creation of db-connections until they are really

@@ -58,14 +58,14 @@
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="ConversationWA\HttpModule\ConversationModule.cs" />
-    <Compile Include="ConversationWA\IConversationManager.cs" />
-    <Compile Include="ConversationWA\IConversationState.cs" />
-    <Compile Include="ConversationWA\Impl\InnerConversationList.cs" />
-    <Compile Include="ConversationWA\Impl\WebConversationManager.cs" />
-    <Compile Include="ConversationWA\Impl\WebConversationSpringState.cs" />
     <Compile Include="Data\NHibernate\Support\SessionPerConversationScope.cs" />
     <Compile Include="Data\NHibernate\Support\SessionPerConversationSettings.cs" />
+    <Compile Include="Web\Conversation\HttpModule\ConversationModule.cs" />
+    <Compile Include="Web\Conversation\IConversationManager.cs" />
+    <Compile Include="Web\Conversation\IConversationState.cs" />
+    <Compile Include="Web\Conversation\InnerConversationList.cs" />
+    <Compile Include="Web\Conversation\WebConversationManager.cs" />
+    <Compile Include="Web\Conversation\WebConversationSpringState.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\build-support\tools\nant\schema\nant.xsd">
