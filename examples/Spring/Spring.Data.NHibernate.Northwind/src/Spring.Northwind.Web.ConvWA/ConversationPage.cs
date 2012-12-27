@@ -8,7 +8,7 @@ using System.Web.UI;
 using System.Web.UI.HtmlControls;
 using System.Web.UI.WebControls;
 using System.Web.UI.WebControls.WebParts;
-using Spring.ConversationWA;
+using Spring.Web.Conversation;
 
 /// <summary>
 /// Base classe for page's that suport conversation.

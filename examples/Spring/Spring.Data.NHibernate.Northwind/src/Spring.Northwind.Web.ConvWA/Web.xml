@@ -24,11 +24,11 @@
 
   <!--Conversation for 'Default.aspx'-->
   <!--"convDefault" will have only one functionality: trigger the release of other conversations when started (StartResumeConversation())-->
-  <object name="convDefault" type="Spring.ConversationWA.Imple.WebConversationSpringState, Spring.Web.Conversation.NHibernate32" scope="session">
+  <object name="convDefault" type="Spring.Web.Conversation.WebConversationSpringState, Spring.Web.Conversation.NHibernate32" scope="session">
     <property name="Id" value="convDefault"></property>
     <property name="TimeOut" value="0"></property>
     <property name="ConversationManager" ref="conversationManager"></property>
-    <property name="SessionFactory" ref="NHibernateSessionFactory"/>
+    <property name="SessionFactoryName" value="NHibernateSessionFactory"/>
     <property name="DbProviderName" value="DbProvider"/>
   </object>
   
@@ -97,19 +97,19 @@
   
   <!--Conversation for 'CustomerEditor.aspx', 'CustomerList.aspx', 'CustomerOrders.aspx', 'CustomerView.aspx',  and 'FulfillmentResult.aspx'-->
   <!--Important: If the application had other parties ("management employees" for example), they should use another conversation.-->
-  <object name="convCustomer" type="Spring.ConversationWA.Imple.WebConversationSpringState, Spring.Web.Conversation.NHibernate32" scope="session">
+  <object name="convCustomer" type="Spring.Web.Conversation.WebConversationSpringState, Spring.Web.Conversation.NHibernate32" scope="session">
     <property name="Id" value="convCustomer"></property>
     <property name="TimeOut" value="0"></property>
     <property name="ConversationManager" ref="conversationManager"></property>
-    <property name="SessionFactory" ref="NHibernateSessionFactory"/>
+    <property name="SessionFactoryName" value="NHibernateSessionFactory"/>
     <property name="DbProviderName" value="DbProvider"/>
     <!--Using workaround for 'conversation scope' to reference for 'CustomerEditController'. It is not as volatile as "request scope" not as durable as the "session scope"-->
     <property name="['CustomerEditController']" ref="CustomerEditController"></property>
   </object>
   
   <!--Conversation Manager-->
-  <object name="conversationManager" type="Spring.ConversationWA.Imple.WebConversationManager, Spring.Web.Conversation.NHibernate32" scope="session">
-    <property name="SessionFactory" ref="NHibernateSessionFactory"/>
+  <object name="conversationManager" type="Spring.Web.Conversation.WebConversationManager, Spring.Web.Conversation.NHibernate32" scope="session">
+    <property name="SessionFactoryName" value="NHibernateSessionFactory"/>
     <property name="EndPaused" value="true"/>
   </object>
 

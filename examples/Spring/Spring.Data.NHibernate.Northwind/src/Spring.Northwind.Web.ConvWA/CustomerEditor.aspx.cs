@@ -3,7 +3,7 @@ using Spring.Northwind.Dao;
 using Spring.Northwind.Domain;
 using Spring.Web.UI;
 
-public partial class CustomerEditor : Page
+public partial class CustomerEditor : ConversationPage
 {
     private ICustomerEditController customerEditController;
     private ICustomerDao customerDao;

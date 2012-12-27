@@ -1,6 +1,6 @@
   I prepared the sample application and posted in 
 https://jira.springsource.org/browse/SPRNET-1431 as the file 
-"Spring.ConversationWA.example.zip.".
+"Spring.Web.Conversation.example.zip.".
   Below explanations to clarify (or not) what I did.
 
   This "sample application" is a modification of "Spring.Data.NHibernate.Northwind"
@@ -29,7 +29,7 @@ IMPORTANT: Never use a single conversation for the entire application (with the
   conversation should be limited to a subset of the application pages, and must 
   be discarded at the end of interaction with this subset 
   (IConversationState.EndConversation()). 
-  In "Spring.ConversationWA.Imple.WebConversationManager" keep 
+  In "Spring.Web.Conversation.WebConversationManager" keep 
   [<property name="EndPaused" value="true"/>] is recommended, so when you start 
   a conversation the others are discarded.
   
@@ -46,7 +46,7 @@ List of changes in "Spring.Data.NHibernate.Northwind":
   -web.config
     -module, added:
        <!--Module that controls the conversations at the end of the request. Ends the Conversations in timeout and pause the conversations at the end of the request.-->
-       <add name="ConversationModule" type="Spring.ConversationWA.HttpModule.ConversationModule, Spring.ConversationWA"/>
+       <add name="ConversationModule" type="Spring.Web.Conversation.HttpModule.ConversationModule, Spring.Web.Conversation"/>
     -module, removed:
        <add name="OpenSessionInView" type="Spring.Data.NHibernate.Support.OpenSessionInViewModule, Spring.Data.NHibernate21"/>
  
@@ -73,14 +73,14 @@ List of changes in "Spring.Data.NHibernate.Northwind":
  
     -conversation manager
       <!--Conversation Manager-->
-      <object name="conversationManager" type="Spring.ConversationWA.Imple.WebConversationManager, Spring.ConversationWA" scope="session">
+      <object name="conversationManager" type="Spring.Web.Conversation.WebConversationManager, Spring.Web.Conversation" scope="session">
         <property name="SessionFactory" ref="NHibernateSessionFactory"/>
         <property name="EndPaused" value="true"/>
       </object>
     -Customer Conversation
       <!--Conversation for 'CustomerEditor.aspx', 'CustomerList.aspx', 'CustomerOrders.aspx', 'CustomerView.aspx',  and 'FulfillmentResult.aspx'-->
       <!--Important: If the application had other parties ("management employees" for example), they should use another conversation.-->
-      <object name="convCustomer" type="Spring.ConversationWA.Imple.WebConversationSpringState, Spring.ConversationWA" scope="session">
+      <object name="convCustomer" type="Spring.Web.Conversation.WebConversationSpringState, Spring.Web.Conversation" scope="session">
         <property name="Id" value="convCustomer"></property>
         <property name="TimeOut" value="0"></property>
         <property name="ConversationManager" ref="conversationManager"></property>
@@ -139,7 +139,7 @@ List of changes in "Spring.Data.NHibernate.Northwind":
       ...
       <!--Conversation for 'Default.aspx'-->
       <!--"convDefault" will have the unique functionality: trigger the release of other conversations when started (StartResumeConversation())-->
-      <object name="convDefault" type="Spring.ConversationWA.Imple.WebConversationSpringState, Spring.ConversationWA" scope="session">
+      <object name="convDefault" type="Spring.Web.Conversation.WebConversationSpringState, Spring.Web.Conversation" scope="session">
         <property name="Id" value="convDefault"></property>
         <property name="TimeOut" value="0"></property>
         <property name="ConversationManager" ref="conversationManager"></property>
@@ -191,6 +191,6 @@ List of changes in "Spring.Data.NHibernate.Northwind":
     </logger>
     ...
     <!--detail's about Conversation-->
-    <logger name="Spring.ConversationWA">
+    <logger name="Spring.Web.Conversation">
       <level value="DEBUG" />
     </logger>
