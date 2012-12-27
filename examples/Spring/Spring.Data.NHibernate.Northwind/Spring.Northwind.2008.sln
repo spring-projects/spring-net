@@ -11,7 +11,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Northwind.Integratio
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Northwind.Web.2008", "src\Spring.Northwind.Web\Spring.Northwind.Web.2008.csproj", "{2967CA64-7352-46E3-89C0-6BB3A0A13FC1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Northwind.Web.ConvWA.2008", "src\Spring.Northwind.Web.ConvWA\Spring.Northwind.Web.ConvWA.2008.csproj", "{8DCDA20D-DF9F-4723-9649-BC6934B36DC4}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Northwind.Web.Conversation.2008", "src\Spring.Northwind.Web.Conversation\Spring.Northwind.Web.Conversation.2008.csproj", "{8DCDA20D-DF9F-4723-9649-BC6934B36DC4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

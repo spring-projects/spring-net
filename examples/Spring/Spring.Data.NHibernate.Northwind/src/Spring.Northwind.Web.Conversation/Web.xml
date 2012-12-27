@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net">
+
+  <!-- Referenced by main application context configuration file -->
+
+  <description>
+    The Northwind web layer definitions
+  </description>
+
+  <object name="CustomerEditController" type="NHibernateCustomerEditController" singleton="false">
+    <constructor-arg name="sessionFactory" ref="NHibernateSessionFactory"/>
+  </object>
+
+  <object type="Default.aspx">
+    <property name="Conversation" ref="convDefault"/>
+    <property name="FulfillmentService" ref="FulfillmentService" />
+    <property name="CustomerDao" ref="CustomerDao" />
+    <property name="Results">
+      <dictionary>
+        <entry key="CustomerList" value="redirect:CustomerList.aspx" />
+      </dictionary>
+    </property>
+  </object>
+
+  <!--Conversation for 'Default.aspx'-->
+  <!--"convDefault" will have only one functionality: trigger the release of other conversations when started (StartResumeConversation())-->
+  <object name="convDefault" type="Spring.Web.Conversation.WebConversationSpringState, Spring.Web.Conversation.NHibernate32" scope="session">
+    <property name="Id" value="convDefault"></property>
+    <property name="TimeOut" value="0"></property>
+    <property name="ConversationManager" ref="conversationManager"></property>
+    <property name="SessionFactoryName" value="NHibernateSessionFactory"/>
+    <property name="DbProviderName" value="DbProvider"/>
+  </object>
+  
+  
+  <!--Using workaround for 'conversation scope' to reference for 'CustomerEditController'. It is not as volatile as "request scope" not as durable as the "session scope"-->
+  <object name="CustomerEditPage" abstract="true">
+    <property name="CustomerEditController" expression="@(convCustomer)['CustomerEditController']"/>
+    <property name="Conversation" ref="convCustomer"/>
+  </object>
+
+  <!--Using workaround for 'conversation scope' to reference for 'CustomerEditController'. It is not as volatile as "request scope" not as durable as the "session scope"-->
+  <object type="CustomerList.aspx" parent="CustomerEditPage">
+    <property name="CustomerDao" ref="CustomerDao" />
+    <property name="Results">
+      <dictionary>
+        <entry key="ViewCustomer" value="redirect:CustomerView.aspx" />
+        <entry key="ViewOrders" value="redirect:CustomerOrders.aspx" />
+      </dictionary>
+    </property>
+  </object>
+
+  <object type="CustomerEditor.aspx" parent="CustomerEditPage">
+    <property name="CustomerDao" ref="CustomerDao" />
+    <property name="Results">
+      <dictionary>
+        <entry key="CustomerList" value="redirect:CustomerList.aspx" />
+        <entry key="ViewCustomer" value="redirect:CustomerView.aspx" />
+        <entry key="CancelEdit" value="redirect:CustomerView.aspx" />
+      </dictionary>
+    </property>
+  </object>
+
+  <!--Using workaround for 'conversation scope' to reference for 'CustomerEditController'. It is not as volatile as "request scope" not as durable as the "session scope"-->
+  <object type="CustomerView.aspx">
+    <property name="CustomerDao" ref="CustomerDao" />
+    <property name="CustomerEditController" expression="@(convCustomer)['CustomerEditController']" />
+    <property name="Conversation" ref="convCustomer"/>
+    <property name="Results">
+      <dictionary>
+        <entry key="EditCustomer" value="redirect:CustomerEditor.aspx" />
+        <entry key="CustomerList" value="redirect:CustomerList.aspx" />
+      </dictionary>
+    </property>
+  </object>
+
+  <object type="CustomerOrders.aspx" parent="CustomerEditPage">
+    <property name="Results">
+      <dictionary>
+        <entry key="CustomerList" value="redirect:CustomerList.aspx" />
+        <entry key="ProcessOrders" value="redirect:FulfillmentResult.aspx" />
+      </dictionary>
+    </property>
+  </object>
+
+  <!--Using workaround for 'conversation scope' to reference for 'CustomerEditController'. It is not as volatile as "request scope" not as durable as the "session scope"-->
+  <object type="FulfillmentResult.aspx">
+    <property name="FulfillmentService" ref="FulfillmentService" />
+    <property name="CustomerEditController" expression="@(convCustomer)['CustomerEditController']" />
+    <property name="Conversation" ref="convCustomer"/>
+    <property name="Results">
+      <dictionary>
+        <entry key="Back" value="redirect:CustomerOrders.aspx" />
+      </dictionary>
+    </property>
+  </object>
+  
+  <!--Conversation for 'CustomerEditor.aspx', 'CustomerList.aspx', 'CustomerOrders.aspx', 'CustomerView.aspx',  and 'FulfillmentResult.aspx'-->
+  <!--Important: If the application had other parties ("management employees" for example), they should use another conversation.-->
+  <object name="convCustomer" type="Spring.Web.Conversation.WebConversationSpringState, Spring.Web.Conversation.NHibernate32" scope="session">
+    <property name="Id" value="convCustomer"></property>
+    <property name="TimeOut" value="0"></property>
+    <property name="ConversationManager" ref="conversationManager"></property>
+    <property name="SessionFactoryName" value="NHibernateSessionFactory"/>
+    <property name="DbProviderName" value="DbProvider"/>
+    <!--Using workaround for 'conversation scope' to reference for 'CustomerEditController'. It is not as volatile as "request scope" not as durable as the "session scope"-->
+    <property name="['CustomerEditController']" ref="CustomerEditController"></property>
+  </object>
+  
+  <!--Conversation Manager-->
+  <object name="conversationManager" type="Spring.Web.Conversation.WebConversationManager, Spring.Web.Conversation.NHibernate32" scope="session">
+    <property name="SessionFactoryName" value="NHibernateSessionFactory"/>
+    <property name="EndPaused" value="true"/>
+  </object>
+
+  <!--Configuration for Spring HttpModule interceptor's-->
+  <object name="HttpApplicationConfigurer" type="Spring.Context.Support.HttpApplicationConfigurer, Spring.Web">
+    <property name="ModuleTemplates">
+      <dictionary>
+        <entry key="ConversationModule">
+          <!-- this name must match the module name -->
+          <object>
+            <!-- select "view source" in your browser on any page to see the appended html comment -->
+            <property name="ConversationManagerNameList">
+              <list element-type="string">
+                <value>conversationManager</value>
+              </list>
+            </property>
+          </object>
+        </entry>
+      </dictionary>
+    </property>
+  </object>
+
+</objects>
