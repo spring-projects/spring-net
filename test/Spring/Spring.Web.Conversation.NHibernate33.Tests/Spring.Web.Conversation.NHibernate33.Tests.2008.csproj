@@ -109,8 +109,8 @@
     <Compile Include="..\Spring.Web.Conversation.NHibernate32.Tests\Entities\SPCMasterEnt.cs">
       <Link>Entities\SPCMasterEnt.cs</Link>
     </Compile>
-    <Compile Include="..\Spring.Web.Conversation.NHibernate32.Tests\Spring\Data\Common\CountGetConnDbProvider.cs">
-      <Link>Spring\Data\Common\CountGetConnDbProvider.cs</Link>
+    <Compile Include="..\Spring.Web.Conversation.NHibernate32.Tests\Spring\Data\Common\ConnectionCreationTrackingDbProvider.cs">
+      <Link>Spring\Data\Common\ConnectionCreationTrackingDbProvider.cs</Link>
     </Compile>
   </ItemGroup>
   <ItemGroup>

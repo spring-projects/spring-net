@@ -20,7 +20,7 @@
     <file src="build\net\3.5\release\Spring.Web.Conversation.NHibernate32.dll" target="lib\net35" />
     <file src="build\net\3.5\release\Spring.Web.Conversation.NHibernate32.pdb" target="lib\net35" />
     <file src="build\net\3.5\release\Spring.Web.Conversation.NHibernate32.xml" target="lib\net35" />
-	<file src="build\net\4.0\release\Spring.Web.Conversation.NHibernate32.dll" target="lib\net40" />
+    <file src="build\net\4.0\release\Spring.Web.Conversation.NHibernate32.dll" target="lib\net40" />
     <file src="build\net\4.0\release\Spring.Web.Conversation.NHibernate32.pdb" target="lib\net40" />
     <file src="build\net\4.0\release\Spring.Web.Conversation.NHibernate32.xml" target="lib\net40" />
   </files>

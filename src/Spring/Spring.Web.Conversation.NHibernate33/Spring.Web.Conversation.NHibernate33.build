@@ -39,7 +39,7 @@
 				<include name="System.EnterpriseServices.dll" />
 				<include name="*.dll" />
 				<exclude name="${project::get-name()}.dll" />
-        <exclude name="Spring.ConversationWA.NH*.dll" />
+        <exclude name="Spring.Web.Conversation.NHibernate*.dll" />
         <exclude name="Spring.Data.NHibernate32.dll" />
 			</references>
 		</csc>

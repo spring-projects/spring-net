@@ -62,9 +62,9 @@
     <Compile Include="ConversationWA\HttpModule\ConversationModule.cs" />
     <Compile Include="ConversationWA\IConversationManager.cs" />
     <Compile Include="ConversationWA\IConversationState.cs" />
-    <Compile Include="ConversationWA\Imple\InnerConversationList.cs" />
-    <Compile Include="ConversationWA\Imple\WebConversationManager.cs" />
-    <Compile Include="ConversationWA\Imple\WebConversationSpringState.cs" />
+    <Compile Include="ConversationWA\Impl\InnerConversationList.cs" />
+    <Compile Include="ConversationWA\Impl\WebConversationManager.cs" />
+    <Compile Include="ConversationWA\Impl\WebConversationSpringState.cs" />
     <Compile Include="Data\NHibernate\Support\SessionPerConversationScope.cs" />
     <Compile Include="Data\NHibernate\Support\SessionPerConversationSettings.cs" />
   </ItemGroup>
