@@ -45,8 +45,8 @@
 				<include name="System.Web.Abstractions.dll"/>
 				<include name="System.Web.Routing.dll"/>
 
-				<include name="C:\Program Files\Microsoft ASP.NET\ASP.NET MVC 3\Assemblies\System.Web.Mvc.dll" />
-				<include name="C:\Program Files (x86)\Microsoft ASP.NET\ASP.NET MVC 3\Assemblies\System.Web.Mvc.dll" />
+				<include name="${programfiles}\Microsoft ASP.NET\ASP.NET MVC 3\Assemblies\System.Web.Mvc.dll" />
+				<include name="${programfilesx86}\Microsoft ASP.NET\ASP.NET MVC 3\Assemblies\System.Web.Mvc.dll" />
 
 				
                 <exclude name="${project::get-name()}.dll" />

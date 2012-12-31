@@ -2811,6 +2811,7 @@ namespace Spring.Objects.Factory.Support
         /// naturally implement <see cref="IDisposable"/>).
         public void RegisterDisposableObject(String objectName, IDisposable instance)
         {
+            if (disposableObjects.ContainsKey(objectName)) return;
             disposableObjects.Add(objectName, instance);
         }
 

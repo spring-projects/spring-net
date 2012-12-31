@@ -39,12 +39,12 @@
 				<include name="System.Web.Abstractions.dll"/>
  				<include name="System.Web.Services.dll" />
 			
-				<include name="C:\Program Files\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies\System.Web.Mvc.dll" />
-				<include name="C:\Program Files (x86)\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies\System.Web.Mvc.dll" />
-				<include name="C:\Program Files\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies\System.Web.Http.dll" />
-				<include name="C:\Program Files (x86)\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies\System.Web.Http.dll" />
-				<include name="C:\Program Files\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies\System.Web.Http.WebHost.dll" />
-				<include name="C:\Program Files (x86)\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies\System.Web.Http.WebHost.dll" />
+				<include name="${programfiles}\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies\System.Web.Mvc.dll" />
+				<include name="${programfilesx86}\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies\System.Web.Mvc.dll" />
+				<include name="${programfiles}\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies\System.Web.Http.dll" />
+				<include name="${programfilesx86}\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies\System.Web.Http.dll" />
+				<include name="${programfiles}\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies\System.Web.Http.WebHost.dll" />
+				<include name="${programfilesx86}\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies\System.Web.Http.WebHost.dll" />
 				
 				<include name="System.Web.ApplicationServices.dll" />        
 			</references>
