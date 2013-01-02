@@ -103,7 +103,7 @@ namespace Spring.Messaging.Ems.Support.Converter
             {
                 using (MemoryStream memoryStream = new MemoryStream())
                 {
-                    using (XmlTextWriter xmlTextWriter = new XmlTextWriter(memoryStream, Encoding.UTF8))
+                    using (XmlTextWriter xmlTextWriter = new XmlTextWriter(memoryStream, new UTF8Encoding(EncoderShouldEmitUtf8Identifier)))
                     {
                         XmlSerializer xs = new XmlSerializer(objectToConvert.GetType());
                         xs.Serialize(xmlTextWriter, objectToConvert);
