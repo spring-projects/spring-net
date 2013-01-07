@@ -152,9 +152,25 @@
     <Compile Include="Context\ApplicationEventArgsTests.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Context\Attributes\AbstractConfigurationClassPostProcessorTests.cs" />
+    <Compile Include="Context\Attributes\AssemblyObjectDefinitionScannerTests.cs" />
+    <Compile Include="Context\Attributes\AssemblyTypeScannerTests.cs" />
+    <Compile Include="Context\Attributes\CodeConfigApplicationContextTests.cs" />
+    <Compile Include="Context\Attributes\ConfigurationClassObjectDefinitionReaderTests.cs" />
+    <Compile Include="Context\Attributes\ConfigurationClassParserTests.cs" />
+    <Compile Include="Context\Attributes\ConfigurationClassPostProcessorTests.cs" />
+    <Compile Include="Context\Attributes\ImportResourceAttributeTests.cs" />
+    <Compile Include="Context\Attributes\ObjectDefAttributeTests.cs" />
+    <Compile Include="Context\Attributes\ScanningConfigurationClassPostProcessorTests.cs" />
+    <Compile Include="Context\Attributes\SimpleScanTests.cs" />
     <Compile Include="Context\CommonTypes.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Context\Config\AttributeConfigObjectDefinitionParserTests.cs" />
+    <Compile Include="Context\Config\ComponentScanObjectDefinitionParserAssemblyFilterTests.cs" />
+    <Compile Include="Context\Config\ComponentScanObjectDefinitionParserTests.cs" />
+    <Compile Include="Context\Config\ComponentScanObjectDefinitionParserTypeFilterTests.cs" />
+    <Compile Include="Context\Config\ContextNamespaceParserTests.cs" />
     <Compile Include="Context\ContextExceptionTests.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -183,6 +199,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Context\Support\Assembler.cs" />
+    <Compile Include="Context\Support\CodeConfigApplicationContextTests.cs" />
     <Compile Include="Context\Support\ContextLocatorHandlerTests.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -281,6 +298,10 @@
     <Compile Include="CompilerOptionsTests.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Example\Scannable\FooService.cs" />
+    <Compile Include="Example\Scannable\IFooDao.cs" />
+    <Compile Include="Example\Scannable\IFooService.cs" />
+    <Compile Include="Example\Scannable\StubFooDao.cs" />
     <Compile Include="ExceptionsTest.cs" />
     <Compile Include="Expressions\ConstructorNodeTests.cs" />
     <Compile Include="Expressions\ExpressionEvaluatorTests.cs">
@@ -804,6 +825,32 @@
     <EmbeddedResource Include="Context\Support\innerObjectsWithPostProcessor.xml" />
     <EmbeddedResource Include="Core\IO\ConfigSectionResourceTests_config1.xml" />
     <EmbeddedResource Include="Context\Support\XmlApplicationContextTests-SPRNET1231.xml" />
+    <EmbeddedResource Include="Context\Attributes\ObjectDefinitions.xml" />
+    <EmbeddedResource Include="Context\Attributes\ObjectDefinitionsTwo.xml" />
+    <EmbeddedResource Include="Context\Attributes\SimpleScanTest.xml" />
+    <EmbeddedResource Include="Context\Config\ConfigFiles\AttributeConfigParser.xml" />
+    <EmbeddedResource Include="Context\Config\ConfigFiles\BaseAssemblyTestMultiple.xml" />
+    <EmbeddedResource Include="Context\Config\ConfigFiles\BaseAssemblyTestNegative.xml" />
+    <EmbeddedResource Include="Context\Config\ConfigFiles\BaseAssemblyTestSingle.xml" />
+    <EmbeddedResource Include="Context\Config\ConfigFiles\BaseAssemblyTestWithout.xml" />
+    <EmbeddedResource Include="Context\Config\ConfigFiles\ComponentScan1.xml" />
+    <EmbeddedResource Include="Context\Config\ConfigFiles\ComponentScan2.xml" />
+    <EmbeddedResource Include="Context\Config\ConfigFiles\ComponentScan3.xml" />
+    <EmbeddedResource Include="Context\Config\ConfigFiles\ComponentScan31.xml" />
+    <EmbeddedResource Include="Context\Config\ConfigFiles\ComponentScan4.xml" />
+    <EmbeddedResource Include="Context\Config\ConfigFiles\ComponentScan5.xml" />
+    <EmbeddedResource Include="Context\Config\ConfigFiles\ComponentScan6.xml" />
+    <EmbeddedResource Include="Context\Config\ConfigFiles\ComponentScanAttributeConfigFalse.xml" />
+    <EmbeddedResource Include="Context\Config\ConfigFiles\ComponentScanAttributeConfigTrue.xml" />
+    <EmbeddedResource Include="Context\Config\ConfigFiles\TypeScannerTestAssignableExclude.xml" />
+    <EmbeddedResource Include="Context\Config\ConfigFiles\TypeScannerTestAssignableInclude.xml" />
+    <EmbeddedResource Include="Context\Config\ConfigFiles\TypeScannerTestAttributeExclude.xml" />
+    <EmbeddedResource Include="Context\Config\ConfigFiles\TypeScannerTestAttributeInclude.xml" />
+    <EmbeddedResource Include="Context\Config\ConfigFiles\TypeScannerTestCustomExclude.xml" />
+    <EmbeddedResource Include="Context\Config\ConfigFiles\TypeScannerTestCustomInclude.xml" />
+    <EmbeddedResource Include="Context\Config\ConfigFiles\TypeScannerTestRegExExclude.xml" />
+    <EmbeddedResource Include="Context\Config\ConfigFiles\TypeScannerTestRegExInclude.xml" />
+    <EmbeddedResource Include="Context\Config\ConfigFiles\TypeScannerTestRegExInclude2.xml" />
     <Content Include="Data\PathMatcher\EmptyPattern.test" />
     <Content Include="Data\PathMatcher\Examples.test" />
     <Content Include="Data\PathMatcher\InBetween.test" />

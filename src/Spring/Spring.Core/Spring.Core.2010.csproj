@@ -177,6 +177,39 @@
     <Compile Include="Context\ApplicationEventArgs.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Context\Attributes\AssemblyObjectDefinitionScanner.cs" />
+    <Compile Include="Context\Attributes\AssemblyTypeScanner.cs" />
+    <Compile Include="Context\Attributes\AssemblyTypeSource.cs" />
+    <Compile Include="Context\Attributes\AttributeConfigUtils.cs" />
+    <Compile Include="Context\Attributes\AttributeObjectNameGenerator.cs" />
+    <Compile Include="Context\Attributes\ConfigurationAttribute.cs" />
+    <Compile Include="Context\Attributes\ConfigurationClass.cs" />
+    <Compile Include="Context\Attributes\ConfigurationClassAssemblyResource.cs" />
+    <Compile Include="Context\Attributes\ConfigurationClassEnhancer.cs" />
+    <Compile Include="Context\Attributes\ConfigurationClassMethod.cs" />
+    <Compile Include="Context\Attributes\ConfigurationClassObjectDefinitionReader.cs" />
+    <Compile Include="Context\Attributes\ConfigurationClassParser.cs" />
+    <Compile Include="Context\Attributes\ConfigurationClassPostProcessor.cs" />
+    <Compile Include="Context\Attributes\DependsOnAttribute.cs" />
+    <Compile Include="Context\Attributes\IAssemblyTypeScanner.cs" />
+    <Compile Include="Context\Attributes\ImportAttribute.cs" />
+    <Compile Include="Context\Attributes\ImportResourceAttribute.cs" />
+    <Compile Include="Context\Attributes\LazyAttribute.cs" />
+    <Compile Include="Context\Attributes\LinqExtensionMethods.cs" />
+    <Compile Include="Context\Attributes\ObjectDefAttribute.cs" />
+    <Compile Include="Context\Attributes\ReflectionOnlyUtils.cs" />
+    <Compile Include="Context\Attributes\RequiredConstraintAssemblyTypeScanner.cs" />
+    <Compile Include="Context\Attributes\ScannedGenericObjectDefinition.cs" />
+    <Compile Include="Context\Attributes\ScopeAttribute.cs" />
+    <Compile Include="Context\Attributes\TypeFilters\AbstractLoadTypeFilter.cs" />
+    <Compile Include="Context\Attributes\TypeFilters\AssignableTypeFilter.cs" />
+    <Compile Include="Context\Attributes\TypeFilters\AttributeTypeFilter.cs" />
+    <Compile Include="Context\Attributes\TypeFilters\CustomTypeFactory.cs" />
+    <Compile Include="Context\Attributes\TypeFilters\ITypeFilter.cs" />
+    <Compile Include="Context\Attributes\TypeFilters\RegexPatternTypeFilter.cs" />
+    <Compile Include="Context\Config\AttributeConfigObjectDefinitionParser.cs" />
+    <Compile Include="Context\Config\ComponentScanObjectDefinitionParser.cs" />
+    <Compile Include="Context\Config\ContextNamespaceParser.cs" />
     <Compile Include="Context\EventListenerAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -186,6 +219,7 @@
     <Compile Include="Context\Events\ContextEventArgs.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Context\Extension\GenericApplicationContextExtensions.cs" />
     <Compile Include="Context\IApplicationContext.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -234,6 +268,7 @@
     <Compile Include="Context\Support\ApplicationObjectSupport.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Context\Support\CodeConfigApplicationContext.cs" />
     <Compile Include="Context\Support\ContextHandler.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -1239,6 +1274,12 @@
       <SubType>Code</SubType>
     </Compile>
     <None Include="ContextClassDiagram.cd" />
+    <EmbeddedResource Include="Context\Config\spring-context-1.3.xsd">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Context\Config\spring-context-2.0.xsd">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <None Include="Expressions\Expression.g" />
     <EmbeddedResource Include="Objects\Factory\Xml\spring-tool-1.1.xsd">
       <SubType>

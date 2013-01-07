@@ -128,146 +128,6 @@
             Create a new session on demand
             </summary>
         </member>
-        <member name="T:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings">
-            <summary>
-            Setting for <see cref="T:Spring.Data.NHibernate.Support.SessionPerConversationScope"/>
-            </summary>
-            <author>Hailton de Castro</author>
-        </member>
-        <member name="F:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings.FLUSHMODE_DEFAULT">
-            <summary>
-            Default value for <see cref="P:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings.DefaultFlushMode"/> property.
-            </summary>
-        </member>
-        <member name="M:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings.#ctor">
-            <summary>
-            Initialize a new instance of <see cref="T:Spring.Data.NHibernate.Support.SessionScopeSettings"/> with default values.
-            </summary>
-            <remarks>
-            Calling this constructor from your derived class leaves <see cref="P:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings.EntityInterceptor"/>
-            uninitialized. See <see cref="M:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings.ResolveEntityInterceptor"/> for more.
-            </remarks>
-        </member>
-        <member name="M:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings.#ctor(NHibernate.IInterceptor,NHibernate.FlushMode)">
-            <summary>
-            Initialize a new instance of <see cref="T:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings"/> with the given values and references.
-            </summary>
-            <param name="entityInterceptor">
-            Specify the <see cref="T:NHibernate.IInterceptor"/> to be set on each session provided by the <see cref="T:Spring.Data.NHibernate.Support.SessionPerConversationScope"/> instance.
-            </param>
-            <param name="defaultFlushMode">
-            Specify the flushmode to be applied on each session provided by the <see cref="T:Spring.Data.NHibernate.Support.SessionScope"/> instance.
-            </param>
-            <remarks>
-            Calling this constructor marks all properties initialized.
-            </remarks>
-        </member>
-        <member name="M:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings.ResolveEntityInterceptor">
-            <summary>
-            Override this method to resolve an <see cref="T:NHibernate.IInterceptor"/> instance according to your chosen strategy.
-            </summary>
-        </member>
-        <member name="P:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings.EntityInterceptor">
-            <summary>
-            Gets the configured <see cref="T:NHibernate.IInterceptor"/> instance to be used.
-            </summary>
-            <remarks>
-            </remarks>
-        </member>
-        <member name="P:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings.DefaultFlushMode">
-            <summary>
-            Gets or Sets the flushmode to be applied on each newly created session.
-            </summary>
-            <remarks>
-            This property defaults to <see cref="F:NHibernate.FlushMode.Never"/> to ensure that modifying objects outside the boundaries 
-            of a transaction will not be persisted. It is recommended to not change this value but wrap any modifying operation
-            within a transaction.
-            </remarks>
-        </member>
-        <member name="T:Spring.Web.Conversation.IConversationManager">
-            <summary>
-            manager for Conversations.
-            </summary>
-            <author>Hailton de Castro</author>
-        </member>
-        <member name="M:Spring.Web.Conversation.IConversationManager.GetConversationById(System.String)">
-            <summary>
-            Returns the conversation if it is still alive, otherwise it returns null.
-            </summary>
-            <param name="id"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Spring.Web.Conversation.IConversationManager.EndOnTimeOut">
-            <summary>
-            Ends all conversations with the timeout exceeded.
-            </summary>
-        </member>
-        <member name="M:Spring.Web.Conversation.IConversationManager.PauseConversations">
-            <summary>
-            Close IDbConnections for <see cref="T:Spring.Web.Conversation.IConversationState"/> that 
-            use 'session-per-conversation'. It calls 
-            <see cref="M:Spring.Web.Conversation.IConversationState.PauseConversation"/> in all conversations.
-            </summary>
-        </member>
-        <member name="M:Spring.Web.Conversation.IConversationManager.FreeEnded">
-            <summary>
-            Release the ended conversations And removes them. 
-            If the conversation supports 'session-per-conversation', also close the session.
-            </summary>
-        </member>
-        <member name="M:Spring.Web.Conversation.IConversationManager.AddConversation(Spring.Web.Conversation.IConversationState)">
-            <summary>
-            Add conversation. If  <see cref="T:Spring.Web.Conversation.IConversationManager"/> is null 
-            it resolves to 'this'.
-            </summary>
-            <param name="conversation"></param>
-            <exception cref="T:System.InvalidOperationException">
-            If <paramref name="conversation"/> already has another manager.
-            </exception>
-        </member>
-        <member name="M:Spring.Web.Conversation.IConversationManager.SetActiveConversation(Spring.Web.Conversation.IConversationState)">
-            <summary>
-            Makes the 'root conversation' of <paramref name="conversation"/> 
-            the current active conversation and open/reopen the 
-            <see cref="P:Spring.Web.Conversation.IConversationState.RootSessionPerConversation"/> if 
-            the conversation supports 'session-per-conversation'. Close all 
-            the connection for all session before.
-            If <see cref="P:Spring.Web.Conversation.IConversationManager.EndPaused"/> is <c>true</c> will end all 
-            paused conversations.
-            </summary>
-        </member>
-        <member name="P:Spring.Web.Conversation.IConversationManager.ActiveConversation">
-            <summary>
-            Returns the active conversation if exists, otherwise returns null. 
-            It depends on <see cref="M:Spring.Web.Conversation.IConversationManager.SetActiveConversation(Spring.Web.Conversation.IConversationState)"/>
-            </summary>
-            <returns></returns>
-        </member>
-        <member name="P:Spring.Web.Conversation.IConversationManager.SessionFactory">
-            <summary>
-            <para>If this is non-null run pattern 'session-per-conversation'. 
-            Must be the same SessionFactory of the managed conversations.
-            </para>
-            </summary>
-        </member>
-        <member name="P:Spring.Web.Conversation.IConversationManager.EndPaused">
-            <summary>
-            Ends the "paused conversations" in call to <see cref="P:Spring.Web.Conversation.IConversationManager.ActiveConversation"/>. 
-            Important: Unexpected behavior may occur if there are nested conversations, 
-            as in <see cref="M:Spring.Web.Conversation.IConversationState.StartResumeConversation"/> only the current conversation and its parents 
-            are started, the 'conversations children' remain paused, so these will be ended.
-            Defaul value: <c>false</c>.
-            </summary>
-            <remarks>
-            <para>When it is true, "start/resume a conversation" will cause the other to be 
-            ended and cleaned up.
-            </para>
-            <para>This is useful to avoid memory leak where there are many conversations. 
-            This leak can be very considerable, as the conversation may keep a "NHibernate session" 
-            that can contain many objects in its cache from the database queries.
-            </para>
-            </remarks>
-        </member>
         <member name="T:Spring.Web.Conversation.IConversationState">
             <summary>
             Port to conversation. If the object is not found in the current 
@@ -422,6 +282,151 @@
             <summary>
             Indicates that the conversation is paused.
             </summary>
+        </member>
+        <member name="T:Spring.Web.Conversation.IConversationManager">
+            <summary>
+            manager for Conversations.
+            </summary>
+            <author>Hailton de Castro</author>
+        </member>
+        <member name="M:Spring.Web.Conversation.IConversationManager.GetConversationById(System.String)">
+            <summary>
+            Returns the conversation if it is still alive, otherwise it returns null.
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Spring.Web.Conversation.IConversationManager.EndOnTimeOut">
+            <summary>
+            Ends all conversations with the timeout exceeded.
+            </summary>
+        </member>
+        <member name="M:Spring.Web.Conversation.IConversationManager.PauseConversations">
+            <summary>
+            Close IDbConnections for <see cref="T:Spring.Web.Conversation.IConversationState"/> that 
+            use 'session-per-conversation'. It calls 
+            <see cref="M:Spring.Web.Conversation.IConversationState.PauseConversation"/> in all conversations.
+            </summary>
+        </member>
+        <member name="M:Spring.Web.Conversation.IConversationManager.FreeEnded">
+            <summary>
+            Release the ended conversations And removes them. 
+            If the conversation supports 'session-per-conversation', also close the session.
+            </summary>
+        </member>
+        <member name="M:Spring.Web.Conversation.IConversationManager.AddConversation(Spring.Web.Conversation.IConversationState)">
+            <summary>
+            Add conversation. If  <see cref="T:Spring.Web.Conversation.IConversationManager"/> is null 
+            it resolves to 'this'.
+            </summary>
+            <param name="conversation"></param>
+            <exception cref="T:System.InvalidOperationException">
+            If <paramref name="conversation"/> already has another manager.
+            </exception>
+        </member>
+        <member name="M:Spring.Web.Conversation.IConversationManager.SetActiveConversation(Spring.Web.Conversation.IConversationState)">
+            <summary>
+            Makes the 'root conversation' of <paramref name="conversation"/> 
+            the current active conversation and open/reopen the 
+            <see cref="P:Spring.Web.Conversation.IConversationState.RootSessionPerConversation"/> if 
+            the conversation supports 'session-per-conversation'. Close all 
+            the connection for all session before.
+            If <see cref="P:Spring.Web.Conversation.IConversationManager.EndPaused"/> is <c>true</c> will end all 
+            paused conversations.
+            </summary>
+        </member>
+        <member name="P:Spring.Web.Conversation.IConversationManager.ActiveConversation">
+            <summary>
+            Returns the active conversation if exists, otherwise returns null. 
+            It depends on <see cref="M:Spring.Web.Conversation.IConversationManager.SetActiveConversation(Spring.Web.Conversation.IConversationState)"/>
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:Spring.Web.Conversation.IConversationManager.SessionFactory">
+            <summary>
+            <para>If this is non-null run pattern 'session-per-conversation'. 
+            Must be the same SessionFactory of the managed conversations.
+            </para>
+            </summary>
+        </member>
+        <member name="P:Spring.Web.Conversation.IConversationManager.EndPaused">
+            <summary>
+            Ends the "paused conversations" in call to <see cref="P:Spring.Web.Conversation.IConversationManager.ActiveConversation"/>. 
+            Important: Unexpected behavior may occur if there are nested conversations, 
+            as in <see cref="M:Spring.Web.Conversation.IConversationState.StartResumeConversation"/> only the current conversation and its parents 
+            are started, the 'conversations children' remain paused, so these will be ended.
+            Defaul value: <c>false</c>.
+            </summary>
+            <remarks>
+            <para>When it is true, "start/resume a conversation" will cause the other to be 
+            ended and cleaned up.
+            </para>
+            <para>This is useful to avoid memory leak where there are many conversations. 
+            This leak can be very considerable, as the conversation may keep a "NHibernate session" 
+            that can contain many objects in its cache from the database queries.
+            </para>
+            </remarks>
+        </member>
+        <member name="T:Spring.Web.Conversation.HttpModule.ConversationModule">
+            <summary>
+            HttpModule for ending Conversations with Timeout exceeded.
+            </summary>
+            <author>Hailton de Castro</author>
+        </member>
+        <member name="M:Spring.Web.Conversation.HttpModule.ConversationModule.Init(System.Web.HttpApplication)">
+            <summary>
+            Add PostRequestHandlerExecute event to clear conversations with timeout exceeded.
+            </summary>
+            <param name="context"></param>
+        </member>
+        <member name="M:Spring.Web.Conversation.HttpModule.ConversationModule.Dispose">
+            <summary>
+            Disposes of the resources (other than memory) used by the module that implements <see cref="T:System.Web.IHttpModule"/>.
+            </summary>
+        </member>
+        <member name="M:Spring.Web.Conversation.HttpModule.ConversationModule.page_Unload(System.Object,System.EventArgs)">
+            <summary>
+            Handles the Unload event of the page control.
+            </summary>
+            <param name="sender">The source of the event.</param>
+            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
+            <remarks>
+            Necessary for Redirect or Abort for any reason.
+            </remarks>
+        </member>
+        <member name="P:Spring.Web.Conversation.HttpModule.ConversationModule.ConversationManagerNameList">
+            <summary>
+            The Names of the <see cref="T:Spring.Web.Conversation.IConversationManager"/>s in the <see cref="T:Spring.Context.IApplicationContext"/>
+            </summary>
+        </member>
+        <member name="P:Spring.Web.Conversation.HttpModule.ConversationModule.ApplicationContext">
+            <summary>
+            Sets the <see cref="T:Spring.Context.IApplicationContext"/> that this
+            object runs in.
+            </summary>
+            <value></value>
+            <remarks>
+            	<p>
+            Used to obtain the instances of <see cref="T:Spring.Web.Conversation.IConversationManager"/>
+            </p>
+            	<p>
+            Invoked after population of normal object properties but before an
+            init callback such as
+            <see cref="T:Spring.Objects.Factory.IInitializingObject"/>'s
+            <see cref="M:Spring.Objects.Factory.IInitializingObject.AfterPropertiesSet"/>
+            or a custom init-method. Invoked after the setting of any
+            <see cref="T:Spring.Context.IResourceLoaderAware"/>'s
+            <see cref="P:Spring.Context.IResourceLoaderAware.ResourceLoader"/>
+            property.
+            </p>
+            </remarks>
+            <exception cref="T:Spring.Context.ApplicationContextException">
+            In the case of application context initialization errors.
+            </exception>
+            <exception cref="T:Spring.Objects.ObjectsException">
+            If thrown by any application context methods.
+            </exception>
+            <exception cref="T:Spring.Objects.Factory.ObjectInitializationException"/>
         </member>
         <member name="T:Spring.Web.Conversation.InnerConversationList">
             <summary>
@@ -588,93 +593,6 @@
         <member name="P:Spring.Web.Conversation.InnerConversationList.SyncRoot">
             <summary>
             <see cref="T:System.Collections.ICollection"/>
-            </summary>
-        </member>
-        <member name="T:Spring.Web.Conversation.WebConversationManager">
-            <summary>
-            This was made to stay under session scope.
-            </summary>
-            <author>Hailton de Castro</author>
-        </member>
-        <member name="F:Spring.Web.Conversation.WebConversationManager.mutexEditDic">
-            <summary>
-            Semaphore to synchronize writes to the dictionary.
-            </summary>
-        </member>
-        <member name="M:Spring.Web.Conversation.WebConversationManager.GetConversationById(System.String)">
-            <summary>
-            <see cref="T:Spring.Web.Conversation.IConversationManager"/> 
-            </summary>
-            <param name="id"></param>
-            <returns></returns>
-        </member>
-        <member name="M:Spring.Web.Conversation.WebConversationManager.EndOnTimeOut">
-            <summary>
-            <see cref="T:Spring.Web.Conversation.IConversationManager"/>
-            </summary>
-        </member>
-        <member name="M:Spring.Web.Conversation.WebConversationManager.PauseConversations">
-            <summary>
-            <see cref="T:Spring.Web.Conversation.IConversationManager"/>
-            </summary>
-        </member>
-        <member name="M:Spring.Web.Conversation.WebConversationManager.FreeEnded">
-            <summary>
-            <see cref="T:Spring.Web.Conversation.IConversationManager"/>
-            </summary>
-        </member>
-        <member name="M:Spring.Web.Conversation.WebConversationManager.AddConversation(Spring.Web.Conversation.IConversationState)">
-            <summary>
-            <see cref="T:Spring.Web.Conversation.IConversationManager"/>
-            </summary>
-            <param name="conversation"></param>
-        </member>
-        <member name="M:Spring.Web.Conversation.WebConversationManager.SetActiveConversation(Spring.Web.Conversation.IConversationState)">
-            <summary>
-            <see cref="T:Spring.Web.Conversation.IConversationManager"/>
-            </summary>
-            <param name="conversation"></param>
-        </member>
-        <member name="M:Spring.Web.Conversation.WebConversationManager.LoadActiveConversation">
-            <summary>
-            <see cref="T:Spring.Web.Conversation.IConversationManager"/>
-            </summary>
-        </member>
-        <member name="M:Spring.Web.Conversation.WebConversationManager.Dispose">
-            <summary>
-            Ends all conversations and Closes all their Session.
-            </summary>
-        </member>
-        <member name="M:Spring.Web.Conversation.WebConversationManager.RemoveConversation(Spring.Web.Conversation.IConversationState)">
-            <summary>
-            Remove conversation.
-            </summary>
-            <param name="conversation"></param>
-        </member>
-        <member name="P:Spring.Web.Conversation.WebConversationManager.ActiveConversation">
-            <summary>
-            <see cref="T:Spring.Web.Conversation.IConversationManager"/>
-            </summary>
-        </member>
-        <member name="P:Spring.Web.Conversation.WebConversationManager.SessionFactoryName">
-            <summary>
-            "SessionFactory" name in the current context. 
-            This approach is required to support serialization.
-            </summary>
-        </member>
-        <member name="P:Spring.Web.Conversation.WebConversationManager.SessionFactory">
-            <summary>
-            <see cref="T:Spring.Web.Conversation.IConversationManager"/>
-            </summary>
-        </member>
-        <member name="P:Spring.Web.Conversation.WebConversationManager.EndPaused">
-            <summary>
-            <see cref="T:Spring.Web.Conversation.IConversationManager"/>
-            </summary>
-        </member>
-        <member name="P:Spring.Web.Conversation.WebConversationManager.ApplicationContext">
-            <summary>
-            Returns the current context. Supports serialization and deserialization.
             </summary>
         </member>
         <member name="T:Spring.Web.Conversation.WebConversationSpringState">
@@ -893,66 +811,148 @@
             Returns the current context. Supports serialization and deserialization.
             </summary>
         </member>
-        <member name="T:Spring.Web.Conversation.HttpModule.ConversationModule">
+        <member name="T:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings">
             <summary>
-            HttpModule for ending Conversations with Timeout exceeded.
+            Setting for <see cref="T:Spring.Data.NHibernate.Support.SessionPerConversationScope"/>
             </summary>
             <author>Hailton de Castro</author>
         </member>
-        <member name="M:Spring.Web.Conversation.HttpModule.ConversationModule.Init(System.Web.HttpApplication)">
+        <member name="F:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings.FLUSHMODE_DEFAULT">
             <summary>
-            Add PostRequestHandlerExecute event to clear conversations with timeout exceeded.
-            </summary>
-            <param name="context"></param>
-        </member>
-        <member name="M:Spring.Web.Conversation.HttpModule.ConversationModule.Dispose">
-            <summary>
-            Disposes of the resources (other than memory) used by the module that implements <see cref="T:System.Web.IHttpModule"/>.
+            Default value for <see cref="P:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings.DefaultFlushMode"/> property.
             </summary>
         </member>
-        <member name="M:Spring.Web.Conversation.HttpModule.ConversationModule.page_Unload(System.Object,System.EventArgs)">
+        <member name="M:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings.#ctor">
             <summary>
-            Handles the Unload event of the page control.
+            Initialize a new instance of <see cref="T:Spring.Data.NHibernate.Support.SessionScopeSettings"/> with default values.
             </summary>
-            <param name="sender">The source of the event.</param>
-            <param name="e">The <see cref="T:System.EventArgs"/> instance containing the event data.</param>
             <remarks>
-            Necessary for Redirect or Abort for any reason.
+            Calling this constructor from your derived class leaves <see cref="P:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings.EntityInterceptor"/>
+            uninitialized. See <see cref="M:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings.ResolveEntityInterceptor"/> for more.
             </remarks>
         </member>
-        <member name="P:Spring.Web.Conversation.HttpModule.ConversationModule.ConversationManagerNameList">
+        <member name="M:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings.#ctor(NHibernate.IInterceptor,NHibernate.FlushMode)">
             <summary>
-            The Names of the <see cref="T:Spring.Web.Conversation.IConversationManager"/>s in the <see cref="T:Spring.Context.IApplicationContext"/>
+            Initialize a new instance of <see cref="T:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings"/> with the given values and references.
+            </summary>
+            <param name="entityInterceptor">
+            Specify the <see cref="T:NHibernate.IInterceptor"/> to be set on each session provided by the <see cref="T:Spring.Data.NHibernate.Support.SessionPerConversationScope"/> instance.
+            </param>
+            <param name="defaultFlushMode">
+            Specify the flushmode to be applied on each session provided by the <see cref="T:Spring.Data.NHibernate.Support.SessionScope"/> instance.
+            </param>
+            <remarks>
+            Calling this constructor marks all properties initialized.
+            </remarks>
+        </member>
+        <member name="M:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings.ResolveEntityInterceptor">
+            <summary>
+            Override this method to resolve an <see cref="T:NHibernate.IInterceptor"/> instance according to your chosen strategy.
             </summary>
         </member>
-        <member name="P:Spring.Web.Conversation.HttpModule.ConversationModule.ApplicationContext">
+        <member name="P:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings.EntityInterceptor">
             <summary>
-            Sets the <see cref="T:Spring.Context.IApplicationContext"/> that this
-            object runs in.
+            Gets the configured <see cref="T:NHibernate.IInterceptor"/> instance to be used.
             </summary>
-            <value></value>
             <remarks>
-            	<p>
-            Used to obtain the instances of <see cref="T:Spring.Web.Conversation.IConversationManager"/>
-            </p>
-            	<p>
-            Invoked after population of normal object properties but before an
-            init callback such as
-            <see cref="T:Spring.Objects.Factory.IInitializingObject"/>'s
-            <see cref="M:Spring.Objects.Factory.IInitializingObject.AfterPropertiesSet"/>
-            or a custom init-method. Invoked after the setting of any
-            <see cref="T:Spring.Context.IResourceLoaderAware"/>'s
-            <see cref="P:Spring.Context.IResourceLoaderAware.ResourceLoader"/>
-            property.
-            </p>
             </remarks>
-            <exception cref="T:Spring.Context.ApplicationContextException">
-            In the case of application context initialization errors.
-            </exception>
-            <exception cref="T:Spring.Objects.ObjectsException">
-            If thrown by any application context methods.
-            </exception>
-            <exception cref="T:Spring.Objects.Factory.ObjectInitializationException"/>
+        </member>
+        <member name="P:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings.DefaultFlushMode">
+            <summary>
+            Gets or Sets the flushmode to be applied on each newly created session.
+            </summary>
+            <remarks>
+            This property defaults to <see cref="F:NHibernate.FlushMode.Never"/> to ensure that modifying objects outside the boundaries 
+            of a transaction will not be persisted. It is recommended to not change this value but wrap any modifying operation
+            within a transaction.
+            </remarks>
+        </member>
+        <member name="T:Spring.Web.Conversation.WebConversationManager">
+            <summary>
+            This was made to stay under session scope.
+            </summary>
+            <author>Hailton de Castro</author>
+        </member>
+        <member name="F:Spring.Web.Conversation.WebConversationManager.mutexEditDic">
+            <summary>
+            Semaphore to synchronize writes to the dictionary.
+            </summary>
+        </member>
+        <member name="M:Spring.Web.Conversation.WebConversationManager.GetConversationById(System.String)">
+            <summary>
+            <see cref="T:Spring.Web.Conversation.IConversationManager"/> 
+            </summary>
+            <param name="id"></param>
+            <returns></returns>
+        </member>
+        <member name="M:Spring.Web.Conversation.WebConversationManager.EndOnTimeOut">
+            <summary>
+            <see cref="T:Spring.Web.Conversation.IConversationManager"/>
+            </summary>
+        </member>
+        <member name="M:Spring.Web.Conversation.WebConversationManager.PauseConversations">
+            <summary>
+            <see cref="T:Spring.Web.Conversation.IConversationManager"/>
+            </summary>
+        </member>
+        <member name="M:Spring.Web.Conversation.WebConversationManager.FreeEnded">
+            <summary>
+            <see cref="T:Spring.Web.Conversation.IConversationManager"/>
+            </summary>
+        </member>
+        <member name="M:Spring.Web.Conversation.WebConversationManager.AddConversation(Spring.Web.Conversation.IConversationState)">
+            <summary>
+            <see cref="T:Spring.Web.Conversation.IConversationManager"/>
+            </summary>
+            <param name="conversation"></param>
+        </member>
+        <member name="M:Spring.Web.Conversation.WebConversationManager.SetActiveConversation(Spring.Web.Conversation.IConversationState)">
+            <summary>
+            <see cref="T:Spring.Web.Conversation.IConversationManager"/>
+            </summary>
+            <param name="conversation"></param>
+        </member>
+        <member name="M:Spring.Web.Conversation.WebConversationManager.LoadActiveConversation">
+            <summary>
+            <see cref="T:Spring.Web.Conversation.IConversationManager"/>
+            </summary>
+        </member>
+        <member name="M:Spring.Web.Conversation.WebConversationManager.Dispose">
+            <summary>
+            Ends all conversations and Closes all their Session.
+            </summary>
+        </member>
+        <member name="M:Spring.Web.Conversation.WebConversationManager.RemoveConversation(Spring.Web.Conversation.IConversationState)">
+            <summary>
+            Remove conversation.
+            </summary>
+            <param name="conversation"></param>
+        </member>
+        <member name="P:Spring.Web.Conversation.WebConversationManager.ActiveConversation">
+            <summary>
+            <see cref="T:Spring.Web.Conversation.IConversationManager"/>
+            </summary>
+        </member>
+        <member name="P:Spring.Web.Conversation.WebConversationManager.SessionFactoryName">
+            <summary>
+            "SessionFactory" name in the current context. 
+            This approach is required to support serialization.
+            </summary>
+        </member>
+        <member name="P:Spring.Web.Conversation.WebConversationManager.SessionFactory">
+            <summary>
+            <see cref="T:Spring.Web.Conversation.IConversationManager"/>
+            </summary>
+        </member>
+        <member name="P:Spring.Web.Conversation.WebConversationManager.EndPaused">
+            <summary>
+            <see cref="T:Spring.Web.Conversation.IConversationManager"/>
+            </summary>
+        </member>
+        <member name="P:Spring.Web.Conversation.WebConversationManager.ApplicationContext">
+            <summary>
+            Returns the current context. Supports serialization and deserialization.
+            </summary>
         </member>
     </members>
 </doc>

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema xmlns="http://www.springframework.net/context"
+		xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+		xmlns:objects="http://www.springframework.net"
+		xmlns:tool="http://www.springframework.net/tool"
+		targetNamespace="http://www.springframework.net/context"
+		elementFormDefault="qualified"
+		attributeFormDefault="unqualified">
+
+	<xsd:import namespace="http://www.springframework.net"/>
+	<xsd:import namespace="http://www.springframework.net/tool"/>
+
+	<xsd:annotation>
+		<xsd:documentation><![CDATA[
+	Defines the configuration elements for the Spring Framework's application
+	context support. Effects the activation of various configuration styles
+	for the containing Spring ApplicationContext.
+		]]></xsd:documentation>
+	</xsd:annotation>
+
+
+	<xsd:element name="code-config">
+		<xsd:annotation>
+			<xsd:documentation><![CDATA[
+Scans assemblies for [Configuration] attributes that provide Spring object definitions.
+			]]></xsd:documentation>
+		</xsd:annotation>    
+    <!--
+		<xsd:complexType>
+			<xsd:attribute name="assemblies" type="xsd:string">
+				<xsd:annotation>
+					<xsd:documentation><![CDATA[
+The names of assemblies to be scanned.
+					]]></xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+		</xsd:complexType>
+    -->
+	</xsd:element>
+
+
+</xsd:schema>

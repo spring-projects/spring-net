@@ -128,62 +128,6 @@
             Create a new session on demand
             </summary>
         </member>
-        <member name="T:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings">
-            <summary>
-            Setting for <see cref="T:Spring.Data.NHibernate.Support.SessionPerConversationScope"/>
-            </summary>
-            <author>Hailton de Castro</author>
-        </member>
-        <member name="F:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings.FLUSHMODE_DEFAULT">
-            <summary>
-            Default value for <see cref="P:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings.DefaultFlushMode"/> property.
-            </summary>
-        </member>
-        <member name="M:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings.#ctor">
-            <summary>
-            Initialize a new instance of <see cref="T:Spring.Data.NHibernate.Support.SessionScopeSettings"/> with default values.
-            </summary>
-            <remarks>
-            Calling this constructor from your derived class leaves <see cref="P:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings.EntityInterceptor"/>
-            uninitialized. See <see cref="M:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings.ResolveEntityInterceptor"/> for more.
-            </remarks>
-        </member>
-        <member name="M:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings.#ctor(NHibernate.IInterceptor,NHibernate.FlushMode)">
-            <summary>
-            Initialize a new instance of <see cref="T:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings"/> with the given values and references.
-            </summary>
-            <param name="entityInterceptor">
-            Specify the <see cref="T:NHibernate.IInterceptor"/> to be set on each session provided by the <see cref="T:Spring.Data.NHibernate.Support.SessionPerConversationScope"/> instance.
-            </param>
-            <param name="defaultFlushMode">
-            Specify the flushmode to be applied on each session provided by the <see cref="T:Spring.Data.NHibernate.Support.SessionScope"/> instance.
-            </param>
-            <remarks>
-            Calling this constructor marks all properties initialized.
-            </remarks>
-        </member>
-        <member name="M:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings.ResolveEntityInterceptor">
-            <summary>
-            Override this method to resolve an <see cref="T:NHibernate.IInterceptor"/> instance according to your chosen strategy.
-            </summary>
-        </member>
-        <member name="P:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings.EntityInterceptor">
-            <summary>
-            Gets the configured <see cref="T:NHibernate.IInterceptor"/> instance to be used.
-            </summary>
-            <remarks>
-            </remarks>
-        </member>
-        <member name="P:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings.DefaultFlushMode">
-            <summary>
-            Gets or Sets the flushmode to be applied on each newly created session.
-            </summary>
-            <remarks>
-            This property defaults to <see cref="F:NHibernate.FlushMode.Never"/> to ensure that modifying objects outside the boundaries 
-            of a transaction will not be persisted. It is recommended to not change this value but wrap any modifying operation
-            within a transaction.
-            </remarks>
-        </member>
         <member name="T:Spring.Web.Conversation.IConversationState">
             <summary>
             Port to conversation. If the object is not found in the current 
@@ -866,6 +810,62 @@
             <summary>
             Returns the current context. Supports serialization and deserialization.
             </summary>
+        </member>
+        <member name="T:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings">
+            <summary>
+            Setting for <see cref="T:Spring.Data.NHibernate.Support.SessionPerConversationScope"/>
+            </summary>
+            <author>Hailton de Castro</author>
+        </member>
+        <member name="F:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings.FLUSHMODE_DEFAULT">
+            <summary>
+            Default value for <see cref="P:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings.DefaultFlushMode"/> property.
+            </summary>
+        </member>
+        <member name="M:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings.#ctor">
+            <summary>
+            Initialize a new instance of <see cref="T:Spring.Data.NHibernate.Support.SessionScopeSettings"/> with default values.
+            </summary>
+            <remarks>
+            Calling this constructor from your derived class leaves <see cref="P:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings.EntityInterceptor"/>
+            uninitialized. See <see cref="M:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings.ResolveEntityInterceptor"/> for more.
+            </remarks>
+        </member>
+        <member name="M:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings.#ctor(NHibernate.IInterceptor,NHibernate.FlushMode)">
+            <summary>
+            Initialize a new instance of <see cref="T:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings"/> with the given values and references.
+            </summary>
+            <param name="entityInterceptor">
+            Specify the <see cref="T:NHibernate.IInterceptor"/> to be set on each session provided by the <see cref="T:Spring.Data.NHibernate.Support.SessionPerConversationScope"/> instance.
+            </param>
+            <param name="defaultFlushMode">
+            Specify the flushmode to be applied on each session provided by the <see cref="T:Spring.Data.NHibernate.Support.SessionScope"/> instance.
+            </param>
+            <remarks>
+            Calling this constructor marks all properties initialized.
+            </remarks>
+        </member>
+        <member name="M:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings.ResolveEntityInterceptor">
+            <summary>
+            Override this method to resolve an <see cref="T:NHibernate.IInterceptor"/> instance according to your chosen strategy.
+            </summary>
+        </member>
+        <member name="P:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings.EntityInterceptor">
+            <summary>
+            Gets the configured <see cref="T:NHibernate.IInterceptor"/> instance to be used.
+            </summary>
+            <remarks>
+            </remarks>
+        </member>
+        <member name="P:Spring.Data.NHibernate.Support.SessionPerConversationScopeSettings.DefaultFlushMode">
+            <summary>
+            Gets or Sets the flushmode to be applied on each newly created session.
+            </summary>
+            <remarks>
+            This property defaults to <see cref="F:NHibernate.FlushMode.Never"/> to ensure that modifying objects outside the boundaries 
+            of a transaction will not be persisted. It is recommended to not change this value but wrap any modifying operation
+            within a transaction.
+            </remarks>
         </member>
         <member name="T:Spring.Web.Conversation.WebConversationManager">
             <summary>
