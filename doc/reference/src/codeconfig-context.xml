@@ -1,0 +1,536 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter version="5" xml:id="codeconfig-context"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:ns5="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns42="http://www.w3.org/2000/svg"
+         xmlns:ns4="http://www.w3.org/1999/xlink"
+         xmlns:ns3="http://www.w3.org/1999/xhtml"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>CodeConfigApplicationContext Reference</title>
+
+  <para>The <literal>CodeConfigApplicationContext</literal> is an
+  implementation of <literal>IApplicationContext</literal> designed to gather
+  its configuration from code-based sources as opposed to XML-based sources as
+  is the common case with most other <literal>IApplicationContext</literal>
+  implementations provided by Spring.NET.</para>
+
+  <para>This chapter introduces the CodeConfigApplicationContext and how you
+  can use .NET code to configure the Spring.NET container instead of XML
+  files. For a general overview on the design of the Spring.NET container
+  please see <link
+  ns4:href="http://www.springframework.net/doc-latest/reference/html/objects.html#objects-basics">container
+  overview</link>. The distribution includes three sample applications, two
+  console applications (the familiar MovieFinder and a prime number generator)
+  and a ASP.NET MVC web application. Refer to the <link
+  linkend="sample-apps">examples section</link> for more information.</para>
+
+  <note>
+    <para>The code-based configuration support requires .NET 2.0 or higher and
+    solutions that depend upon CodeConfig must be compiled with Visual Studio
+    2008 or later.</para>
+  </note>
+
+  <sect1>
+    <title>Concepts</title>
+
+    <para>Internally, Spring.NET has a metadata model around the classes it is
+    responsible for managing, the main abstraction in this metadata model is
+    the interface <interfacename>IObjectDefinition</interfacename>. The
+    <interfacename>IObjectDefinition</interfacename> serves as the 'recipie'
+    that Spring.NET uses to perform dependency injection. In the case of
+    XML-based configuration sources, XmlApplicationContext parses XML files to
+    populate the metadata model. In the case of CodeConfig, the
+    <literal>CodeConfigApplicationContext</literal> scans one or more
+    assemblies containing one or more types attributed with the <link
+    linkend="configuration-attribute-reference"><literal>[Configuration]</literal></link>
+    attribute, parses them to construct appropriate
+    <literal>ObjectDefinition</literal> instances, and registers those Object
+    Definitions with the <literal>IApplicationContext</literal> for use. You
+    can also mix-and-match configuration sources, with some object definitions
+    originating in XML and others in code.</para>
+
+    <sect2>
+      <title>Using the CodeConfigApplicationContext</title>
+
+      <para>The <literal>CodeConfigApplicationContext</literal> usage pattern
+      consists of the following high-level steps:</para>
+
+      <orderedlist>
+        <listitem>
+          <para>Instantiate an instance of the
+          <literal>CodeConfigApplicationContext</literal></para>
+        </listitem>
+
+        <listitem>
+          <para><emphasis>[optional]</emphasis> Provide one ore more filtering
+          constraints to control the Assemblies and/or Types to participate in
+          the scanning</para>
+        </listitem>
+
+        <listitem>
+          <para>Perform the actual scanning</para>
+        </listitem>
+
+        <listitem>
+          <para>Initialize (refresh) the
+          <literal>CodeConfigApplicationContext</literal> which creates the
+          object definition and eagerly instantiates singleton objects.</para>
+        </listitem>
+      </orderedlist>
+    </sect2>
+
+    <sect2>
+      <title>Mixing and matching configuration metadata formats</title>
+
+      <para>You can also use a combination of XML and Code base configuration metadata to configure
+        the Spring.NET container. If you are an existing user of Spring.NET, incrementally adopting
+        the code base configuration model will be a common use-case. In this scenario you should use
+        the component-scan XML namespace to reference configuration metadata. Using the
+        component-scan namespace requires you to register a custom namespace parser in App.config.
+        Below is an example showing the use of the code config namespace</para>
+
+      <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"
+         xmlns:context="http://www.springframework.net/context"&gt;
+  
+  &lt;context:component-scan base-assemblies=""/&gt;
+
+  &lt;!-- &lt;object/&gt; definitions here --&gt;
+
+  
+&lt;/objects&gt;
+</programlisting>
+
+      <para>The base-assemblies attribute allows you to express limitations
+	  of Assemblies to scan via a comma seperated list of assembly names.
+	  The filter is a StartsWith filter</para>
+
+      <para>You will also need to configure the context namespace parser in
+      the main .NET application configuraiton file as shown below</para>
+
+      <programlisting language="myxml">&lt;configuration&gt;
+
+  &lt;configSections&gt;
+    &lt;sectionGroup name="spring"&gt;
+      &lt;!-- other Spring config sections handler like context, typeAliases, etc not shown for brevity --&gt;     
+      &lt;section name="parsers" type="Spring.Context.Support.NamespaceParsersSectionHandler, Spring.Core"/&gt;        
+     &lt;/sectionGroup&gt;
+  &lt;/configSections&gt;
+
+  &lt;spring&gt;
+    &lt;parsers&gt; 
+      &lt;parser type="Spring.Context.Config.ContextNamespaceParser, Spring.Core.Configuration" /&gt;
+    &lt;/parsers&gt; 
+  &lt;/spring&gt;
+
+&lt;/configuration&gt;</programlisting>
+
+
+
+      <para>You can also start from a CodeConfig class and import XML based
+      object defintions. The example below shows loading of an embedded XML
+      resource file using the <literal>[ImportResource]</literal>
+      attribute.</para>
+
+      <programlisting language="csharp">[Configuration]
+[ImportResource("assembly://MyApp/MyApp.MyNamespace.MyConfig/ObjectDefinitions.xml"))]
+public class DataModuleConfigurationClass
+{
+    [ObjectDef]
+    public virtual SomeType SomeType()
+    {
+        return new SomeType();
+    }
+}</programlisting>
+    </sect2>
+  </sect1>
+
+  <sect1>
+    <title>Scanning Basics</title>
+
+    <para>The behavior of the <literal>CodeConfigApplicationContext</literal>
+    scanning operation can be controlled by the following constraints:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>Assembly Inclusion Constraint</emphasis></para>
+
+        <para>Only assemblies matching this contraint will be scanned;
+        defaults to 'all assemblies'.</para>
+      </listitem>
+    </itemizedlist>
+
+    <itemizedlist>
+      <listitem>
+        <para><emphasis>Type Inclusion Contraint</emphasis></para>
+
+        <para>Only types matching this contraint in assemblies matching the
+        <emphasis>Assembly Inclusion Constraint</emphasis> will be scanned;
+        defaults to 'all types'.</para>
+      </listitem>
+    </itemizedlist>
+
+    <sect2>
+      <title>Scaning all assemblies</title>
+
+      <para>The simplest way to get started using code-based configuration is
+      to instruct the context to scan all assemblies, as shown below</para>
+
+      <programlisting language="csharp">var ctx = new CodeConfigApplicationContext();
+ctx.ScanAllAssemblies();
+ctx.Refresh();</programlisting>
+
+      <note>
+        <para>Despite the name of the method 'ScanAllAssemblies', not all
+        assemblies need to be scanned for [Configuraiton] attributes. There is
+        an implicit filter that exclude the .NET BCL libraries as well as the
+        Spring.NET assemblies since these will never contain any
+        [Configuration] attributed classes. The name 'ScanAllAssemblies'
+        should be interpreted as scanning all of the other assemblies you
+        reference in your application.</para>
+      </note>
+    </sect2>
+
+    <sect2>
+      <title>Scanning specific assemblies and types</title>
+
+      <para>While the scanning process is very rapid (as compared to the
+      overhead of parsing XML files) you may want to control the scope of the
+      scanning operations to match your deployment or other usage models. To
+      facilitate control of the scope of the scanning operation, the
+      <literal>CodeConfigApplicationContext</literal> provides several
+      <literal>.ScanXXX()</literal> methods that accept constraints to be
+      applied to the assemblies and types during the scanning process. The
+      format of these constraints is that of
+      <literal>Predicate&lt;T&gt;</literal> where <literal>T</literal> is
+      either <literal>System.Reflection.Assembly</literal> or
+      <literal>System.Type</literal>, respectively. Recall that
+      <literal>Predicate&lt;T&gt;</literal> is any method that accepts a
+      single parameter of <literal>Type T</literal> and returns a
+      <literal>bool</literal>.</para>
+
+      <para>The list of scan methods and brief description is shown
+      below</para>
+
+      <table>
+        <title>Description</title>
+
+        <tgroup cols="2">
+          <tbody>
+            <row>
+              <entry><literal>ScanAllAssemblies()</literal></entry>
+
+              <entry>Scans all assemblies, except those in the .NET BCL and
+              Spring distribution</entry>
+            </row>
+
+            <row>
+              <entry><literal>ScanWithTypeFilter(Predicate&lt;Type&gt;
+              typePredicate)</literal></entry>
+
+              <entry>Scans only those types that match the
+              <literal>typePredicate</literal></entry>
+            </row>
+
+            <row>
+              <entry><literal>ScanWithAssemblyFilter(Predicate&lt;Assembly&gt;
+              assemblyPredicate)</literal></entry>
+
+              <entry>Scans only those assemblines that match the
+              <literal>assemblyPredicate</literal></entry>
+            </row>
+
+            <row>
+              <entry><literal>Scan(Predicate&lt;Assembly&gt;
+              assemblyPredicate, Predicate&lt;Type&gt;
+              typePredicate)</literal></entry>
+
+              <entry>Scans the AppDomain root path for assemblies that match
+              the <literal>assemblyPredicate</literal> and types that match
+              the <literal>typePredicate</literal></entry>
+            </row>
+
+            <row>
+              <entry><literal>Scan(AssemblyObjectDefinitionScanner
+              scanner)</literal></entry>
+
+              <entry>Performs the scan using the settings encapsulated in the
+              provided <literal>ObjectDefintionScanner</literal></entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+
+      <para>Other sections below provide a more detailed description and usage
+      examples for the scan methods.</para>
+
+      <para>Note that as with any <literal>Predicate&lt;T&gt;</literal>
+      construct, the <literal>Predicate&lt;Assembly&gt;</literal> and
+      <literal>Predicate&lt;Type&gt;</literal> constraints may be of arbitrary
+      complexity, formulated using any combination of standard C# AND
+      (<literal>&amp;&amp;</literal>), OR (<literal>||</literal>), and NOT
+      (<literal>!</literal>) operators.</para>
+
+      <para>The following example matches assemblies with names containing
+      "Config" but NOT containing "Configuration" OR containing
+      "Services":</para>
+
+      <programlisting language="csharp">var ctx = new CodeConfigApplicationContext();
+ctx.ScanWithAssemblyFilter(assy =&gt; (assy.Name.FullName.Contains("Config") &amp;&amp; !assy.Name.FullName.Contains("Configuration")) || assy.Name.FullName.Contains("Services");</programlisting>
+
+      <para>Because its merely a .NET delegate, note that it is also possible
+      to pass any arbitrary method that satisfies the contract
+      (<literal>Predicate&lt;T&gt;</literal>), so assuming that the method
+      <literal>IsOneOfOurConfigAssemblies</literal> is defined elsewhere as
+      follows...</para>
+
+      <programlisting language="csharp">private bool IsOneOfOurConfigAssemblies(Assembly assy)
+{
+    return (assy.Name.FullName.Contains("Config") &amp;&amp; !assy.Name.FullName.Contains("Configuration")) || assy.Name.FullName.Contains("Services");
+};</programlisting>
+
+      <para>...its possible to express the constraint in the call to
+      .Scan(...) much more succinctly as follows:</para>
+
+      <programlisting language="csharp">var ctx = new CodeConfigApplicationContext();
+ctx.ScanWithAssemblyFilter(IsOneOfOurConfigAssemblies);</programlisting>
+
+      <para>None of this is anything other than simple .NET Delegate handling,
+      but its important to take note that the full flexibility of .NET
+      Delegates and lambda expressions is at your disposal for formulating and
+      passing scanning constraints.</para>
+    </sect2>
+
+    <sect2>
+      <title>Assembly Inclusion Constraints</title>
+
+      <para>To facilitate limiting the scope of scanning at the Assembly
+      level, the <literal>CodeConfigApplicationContext</literal> provides
+      several <literal>.ScanXXX()</literal> method signatures that accept a
+      constraint to be applied to the assemblies at scan time. The format of
+      this constraint matches
+      <literal>Predicate&lt;System.Reflection.Assembly&gt;</literal> (e.g. any
+      delegate method that accepts a single
+      <literal>System.Reflection.Assembly</literal> param and returns a
+      <literal>bool</literal>).</para>
+
+      <para>As an example, the following snippet demonstrates the invocation
+      of the scanning operation such that it will only scan assemblies whose
+      filename begins with the string
+      "<literal>MyCompany.MyApplication.Config.</literal>" and so would match
+      assemblies like
+      <literal>MyCompany.MyApplication.Config.Services.dll</literal> and
+      <literal>MyCompany.MyApplication.Config.Infrastructure.dll</literal> but
+      would not match an assembly named
+      <literal>MyCompany.MyApplication.Core.dll</literal>.<programlisting
+      language="csharp">var ctx = new CodeConfigApplicationContext();
+ctx.ScanWithAssemblyFilter(assy =&gt; assy.Name.FullName.StartsWith("MyCompany.MyApplication.Config."));</programlisting>Because
+      the <literal>Predicate&lt;System.Reflection.Assembly&gt;</literal> has
+      access to the full reflection metadata of each assembly, it is also
+      possible to indicate assemblies to scan based on properties of one or
+      more contained types as in the following example that will scan any
+      assembly that contains at least one <literal>Type</literal> whose name
+      ends in "<literal>Config</literal>". Note that even though this
+      constraint is dependent upon <literal>Type</literal> metadata, it is
+      still a functional <literal>Assembly</literal> contraint, resulting in
+      filtering only at the Assembly level.</para>
+
+      <programlisting language="csharp">var ctx = new CodeConfigApplicationContext();
+ctx.ScanWithAssemblyFilter(a =&gt; a.GetTypes().Any(assy =&gt; assy.GetTypes().Any(type =&gt; type.FullName.EndsWith("Config"))));</programlisting>
+    </sect2>
+
+    <sect2>
+      <title>Type Inclusion Constraints</title>
+
+      <para>To limit the scope of scanning of types within assemblies, the
+      <literal>CodeConfigApplicationContext</literal> provides several
+      <literal>.ScanXXX()</literal> method signatures that accept a constraint
+      to be applied to include types within assemblies at scan time. The
+      format of this contraint matches
+      <literal>Predicate&lt;System.Type&gt;</literal> (e.g. any delegate
+      method that accepts a single <literal>System.Type</literal> param and
+      returns a <literal>bool</literal>).</para>
+
+      <para>As an example, the following snippet demonstrates the invocation
+      of the scanning operation such that it will only scan types whose names
+      contain the string "Config" and so would match types named
+      "<literal>MyConfiguration</literal>",
+      "<literal>ServicesConfiguration</literal>", and
+      "<literal>ConfigurationSettings</literal>" but not
+      "<literal>MyClass</literal>".</para>
+
+      <programlisting language="csharp">var ctx = new CodeConfigApplicationContext();
+ctx.ScanWithTypeFilter(type =&gt; type.FullName.Contains("Config");</programlisting>
+
+      <para>There are two important aspects to take note of in re: the
+      behavior of the <literal>CodeConfigApplicationContext</literal> with
+      regards to <emphasis>Type Inclusion
+      Constraints</emphasis><emphasis></emphasis></para>
+
+      <itemizedlist>
+        <listitem>
+          <para><emphasis>Type Inclusion Constraints</emphasis> are applied
+          only to types defined in assemblies that also satisfy the
+          <emphasis>Assembly Inclusion Constraint</emphasis></para>
+
+          <para>No matter whether any given <literal>Type</literal> satisfies
+          the <emphasis>Type Inclusion Contstraint</emphasis>, if the
+          <literal>Type</literal> is defined in an assembly that fails to
+          satisfy the <emphasis>Assembly Inclusion Constraint</emphasis>, the
+          <literal>Type</literal> will not be scanned for Object
+          Defintions.</para>
+        </listitem>
+
+        <listitem>
+          <para>There is always an implicit additional <emphasis>Type
+          Inclusion Constraint</emphasis> of "...and the
+          <literal>Type</literal> must have the <link
+          linkend="configuration-attribute-reference"><literal>[Configuration]</literal></link>
+          attribute applied to it"</para>
+
+          <para>No Type that does not have the <link
+          linkend="configuration-attribute-reference"><literal>[Configuration]</literal></link>
+          attribute applied to its declaration will ever be scanned regardless
+          of any <emphasis>Type Inclusion Constraint</emphasis>.</para>
+        </listitem>
+      </itemizedlist>
+    </sect2>
+  </sect1>
+
+  <sect1>
+    <title>Advanced Scanning Behavior</title>
+
+    <para>In some cases, you may want more fine-grained control of the
+    scanning behavior the <literal>CodeConfigApplicationContext</literal>. In
+    this section, we explore the various techniques for achieving this level
+    of control.</para>
+
+    <sect2>
+      <title>Combining Root Path, Assembly Constraints, and Type
+      Constraints</title>
+
+      <para>The <literal>CodeConfigApplicationContext</literal> provides
+      several <literal>.ScanXXX(...)</literal> method overloads that accept
+      both an Assembly Constraint and a Type Constraint. These may be combined
+      as in the following example:</para>
+
+      <programlisting language="csharp">var ctx = new CodeConfigApplicationContext();
+ctx.Scan(assy =&gt; assy.FullName.Name.BeginsWith("Config"), type =&gt; type.Name.Contains("Infrastructure"));</programlisting>
+
+      <para>Note that it is not possible to exclude specific types from the
+      scanning process using these overloads of the
+      <literal>.Scan(...)</literal> method. To get type-exclusion control, you
+      must instantiate and pass in your own instance of the
+      <literal>AssemblyObjectDefinitionScanner</literal> as described in the
+      following section(s).</para>
+    </sect2>
+
+    <sect2>
+      <title>Using your own AssemblyObjectDefintionScanner Instance</title>
+
+      <para>If you need more fine-grained control of the scanning behavior of
+      the <literal>CodeConfigApplicationContext</literal>, you can instantiate
+      and configure your own instance of the
+      <literal>AssemblyObjectDefinitionScanner</literal> and pass it to the
+      <literal>.Scan(...)</literal> method directly. The
+      <literal>AssemblyObjectDefinitonScanner</literal> provides many methods
+      for defining the contraints that will control the scanning
+      process.</para>
+
+      <sect3>
+        <title>Scanning Specific Assemblies and Types</title>
+
+        <para>The <literal>AssemblyObjectDefinitionScanner</literal> provides
+        methods that permit specific assemblies or types to be included or
+        excluded.</para>
+
+        <programlisting language="csharp">var scanner = new AssemblyObjectDefinitionScanner();
+
+scanner.AssemblyHavingType&lt;MyConfigurations&gt;(); //add the assembly containing this type to the list of assemblies to be scanned
+scanner.IncludeType&lt;MySpecialConfiguration&gt;(); //add this specific type the list of types to be scanned
+scanner.ExcludeType&lt;MyConfigurationToBeIgnored&gt;(); //exclude this specific type from the list of types to be scanned
+
+var ctx = new CodeConfigApplicationContext();
+ctx.Scan(scanner);</programlisting>
+
+        <para>For those that prefer a more fluent feel to the
+        <literal>AssemblyObjectDefinitionScanner</literal> API, there are
+        methods that permit successive filter criteria to be strung together
+        in a sequence as in the following example:</para>
+
+        <programlisting language="csharp">var scanner = new AssemblyObjectDefinitionScanner();
+
+scanner
+  .WithAssemblyFilter(assy =&gt; assy.FullName.Name.StartsWith("Config"))
+  .WithIncludeFilter(type =&gt; type.Name.Contains("MyApplication"))
+  .WithExcludeFilter(type =&gt; type.Name.EndsWith("Service"))
+  .WithExcludeFilter(type =&gt; type.Name.StartsWith("Microsoft"));
+
+var ctx = new CodeConfigApplicationContext();
+ctx.Scan(scanner);</programlisting>
+      </sect3>
+    </sect2>
+  </sect1>
+  <sect1>
+    <title>Use of XML Namespace and scanning</title>
+    <para> By default, classes attributed with  [Component] ,  [Repository] ,  [Service] ,
+      [Controller] , [Configuration] or a custom attribute that extends [Component]  are the only
+      detected candidate components. However, you can modify and extend this behavior simply by
+      applying custom filters. Add them as  <emphasis role="italic">include-filter</emphasis>  or 
+        <emphasis role="italic">exclude-filter</emphasis>  sub-elements of the  component-scan
+      element. Each filter element requires the  type  and  expression  attributes. The following
+      table describes the filtering options. </para>
+    <para>
+      <table frame="all">
+        <title>Table Filter Types</title>
+        <tgroup cols="3">
+          <colspec colname="c1" colnum="1" colwidth="1*"/>
+          <colspec colname="c2" colnum="2" colwidth="4.24*"/>
+          <colspec colname="c3" colnum="3" colwidth="3.85*"/>
+          <thead>
+            <row>
+              <entry>Filter Type</entry>
+              <entry>Example Expression</entry>
+              <entry>Description</entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>attribute</entry>
+              <entry><literal>Spring.Stereotype.RepositoryAttribute, Spring.Core</literal></entry>
+              <entry> An attribute to be present at the type level in target components. </entry>
+            </row>
+            <row>
+              <entry>assignable</entry>
+              <entry><literal>My.Namespace.IFoo, My.Assembly</literal></entry>
+              <entry> A class (or interface) that the target components are assignable to
+                (extend/implement). </entry>
+            </row>
+            <row>
+              <entry>regex</entry>
+              <entry><literal>My.NameSpace.*.*Dao</literal></entry>
+              <entry> A regex expression to be matched by the target components class names.
+              </entry>
+            </row>
+            <row>
+              <entry>custom</entry>
+              <entry><literal>My.Namespace.MyTypeFilter, My.Assembly</literal></entry>
+              <entry> A custom implementation of the
+                  <literal>Spring.Context.Attributes.TypeFilters.ITypeFilter</literal> interface. </entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </table>
+    </para>
+    <para> The following example shows the XML configuration ignoring all [Repository]  attributed
+      classes and only scanning types with names that end with Dao using "stub" repositories
+      instead. </para>
+    <programlisting>&lt;objects>
+
+   &lt;context:component-scan base-assemblies="My.Namespace">
+      &lt;context:include-filter type="regex" expression=".*Dao"/>
+      &lt;context:exclude-filter type="annotation" expression="Spring.Stereotype.RepositoryAttribute, Spring.Core"/>
+   &lt;/context:component-scan>
+
+&lt;/beans>  </programlisting>
+  </sect1>
+</chapter>

@@ -6392,17 +6392,8 @@ ctx.Refresh();</programlisting>
     RootObjectDefinition, etc. Note a web version of this application class
     has not yet been implemented.</para>
 
-    <para>An example, with a<emphasis> yet to be created</emphasis> DLL
-    scanner, that would get configuration metadata from the .dll named
-    MyAssembly.dll located in the runtime path, would look something like
-    this</para>
-
-    <programlisting language="csharp">GenericApplicationContext ctx = new GenericApplicationContext();
-ObjectDefinitionScanner scanner = new ObjectDefinitionScanner(ctx);
-scanner.scan("MyAssembly.dll");
-ctx.refresh();</programlisting>
-
-    <para>Refer to the Spring API documentation for more information.</para>
+    <para>For a an even richer XML-free configuration experience, refer
+    instead to the Spring CodeConfig approach.</para>
   </sect1>
 
   <sect1 xml:id="objects-servicelocator">
