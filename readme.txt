@@ -196,8 +196,11 @@ xcopy
 
 In this case you need to run Visual Studio with Administrator-permissions. (note that the first part of this path is an example only)
 
+
 NAnt
 ----
+
+Before building you will need to install on your machine ASP.NET MVC2, 3 and 4.  This is due to not being able to redistribute ASP.NET DLLs
 
 Build scripts are delivered with the download package.
 

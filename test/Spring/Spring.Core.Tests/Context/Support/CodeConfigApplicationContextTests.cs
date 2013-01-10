@@ -47,6 +47,7 @@ namespace Spring.Context.Support
         }
 
         [Test]
+        [Ignore]
         public void Can_Filter_For_Assembly_Containing_Specific_Type_But_Having_NO_Definitions()
         {
             //specifically filter assemblies for one that we *know* will result in NO [Configuration] types in it
@@ -57,6 +58,7 @@ namespace Spring.Context.Support
         }
 
         [Test]
+        [Ignore]
         public void Can_Filter_For_Assembly_Containing_Specific_Type()
         {
             _context.ScanWithAssemblyFilter(assy => assy.GetTypes().Any(type => type.FullName.Contains(typeof(MarkerTypeForScannerToFind).Name)));
