@@ -36,6 +36,10 @@
                 <include name="Objects/Factory/Xml/spring-objects-1.3.xsd" />
                 <include name="Objects/Factory/Xml/spring-objects-2.0.xsd" />
             </resources>
+            <resources basedir="." prefix="Spring.Context.Config">
+                <include name="Context/Config/spring-context-1.3.xsd" />
+                <include name="Context/Config/spring-context-2.0.xsd" />
+            </resources>
             <resources basedir="." prefix="Spring.Objects.Factory.Xml">
                 <include name="Objects/Factory/Xml/spring-tool-1.1.xsd" />
             </resources>

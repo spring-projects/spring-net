@@ -23,6 +23,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.InteropServices;
+using Common.Logging;
 using Spring.Util;
 
 namespace Spring.Context.Attributes
@@ -33,6 +34,11 @@ namespace Spring.Context.Attributes
     [Serializable]
     public class AssemblyTypeSource : IEnumerable<Type>
     {
+        /// <summary>
+        /// Logger Instance.
+        /// </summary>
+        protected static readonly ILog Logger = LogManager.GetLogger<AssemblyTypeSource>();
+
         private readonly _Assembly _assembly;
 
         /// <summary>
@@ -42,8 +48,10 @@ namespace Spring.Context.Attributes
         public AssemblyTypeSource(Assembly assembly)
         {
             AssertUtils.ArgumentNotNull(assembly, "assembly");
-            this._assembly = assembly;
+            _assembly = assembly;
         }
+
+        #region IEnumerable<Type> Members
 
         /// <summary>
         /// Gets the enumerator.
@@ -51,7 +59,24 @@ namespace Spring.Context.Attributes
         /// <returns></returns>
         public IEnumerator<Type> GetEnumerator()
         {
-            foreach (var type in _assembly.GetTypes())
+            Type[] types = new Type[]{};
+            try
+            {
+                types = _assembly.GetTypes();
+            }
+            catch (ReflectionTypeLoadException ex)
+            {
+                //log and swallow everything that might go wrong here...
+                Logger.Debug(m => m("Failed to get types " +  ex.LoaderExceptions), ex);
+            }
+            catch (Exception ex)
+            {
+                //log and swallow everything that might go wrong here...
+                Logger.Debug(m => m("Failed to get types "), ex);
+            }
+
+
+            foreach (Type type in types)
                 yield return type;
         }
 
@@ -59,5 +84,7 @@ namespace Spring.Context.Attributes
         {
             return GetEnumerator();
         }
+
+        #endregion
     }
 }
