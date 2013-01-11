@@ -1759,8 +1759,14 @@ Commandline Examples:
   
 <target name="clean-nuget-package-dir" depends="check-nuget-package-dir" description="Cleans the NuGet package directory">
     <echo message="Cleaning the ${nuget.package.dir} NuGet package directory."/>
-    <delete dir="${nuget.package.dir}" if="${directory::exists(nuget.package.dir)}"/>
-    <mkdir dir="${nuget.package.dir}"/>
+    
+	<delete failonerror="false" if="${directory::exists(nuget.package.dir)}">
+	  <fileset basedir="${nuget.package.dir}">
+		<include name="*.nupkg"/> 
+	  </fileset>           
+    </delete>   
+		
+	<mkdir dir="${nuget.package.dir}" if="${directory::exists(nuget.package.dir)}"/>
   </target>
 
 <target name="set-nuget-package-version" >
