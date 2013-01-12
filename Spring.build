@@ -393,7 +393,7 @@ Commandline Examples:
     <property name="lib.dir" value="${spring.basedir}/lib/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
     <property name="nh32.lib.dir" value="${spring.basedir}/lib/NHibernate32/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
     <property name="nh33.lib.dir" value="${spring.basedir}/lib/NHibernate33/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
-    <property name="quartz20.lib.dir" value="${spring.basedir}/lib/Quartz20/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
+    <property name="quartz21.lib.dir" value="${spring.basedir}/lib/Quartz21/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
     <call target="copylibtobin"/>
 
     <!-- build assemblies -->
@@ -414,7 +414,7 @@ Commandline Examples:
     <nant buildfile="src/Spring/Spring.Testing.Microsoft/Spring.Testing.Microsoft.build" target="build" if="${build-testing-microsoft}"/>
     <nant buildfile="src/Spring/Spring.Messaging.Ems/Spring.Messaging.Ems.build" target="build" if="${build-ems and (nant.settings.currentframework == 'net-3.5' or nant.settings.currentframework == 'net-4.0' )}"/>
     <nant buildfile="src/Spring/Spring.Messaging.Nms/Spring.Messaging.Nms.build" target="build" if="${build-nms}"/>
-	<nant buildfile="src/Spring/Spring.Scheduling.Quartz20/Spring.Scheduling.Quartz20.build" target="build" if="${build-quartz}"/>
+	<nant buildfile="src/Spring/Spring.Scheduling.Quartz21/Spring.Scheduling.Quartz21.build" target="build" if="${build-quartz}"/>
     <nant buildfile="src/Spring/Spring.Messaging/Spring.Messaging.build" target="build" if="${build-msmq}"/>
     <nant buildfile="src/Spring/Spring.Template.Velocity/Spring.Template.Velocity.build" target="build" if="${build-velocity}"/>
     <!--"Spring.ConversationWA.NH*.dll" should be at last to prevent the other assemblies are compiled with reference to this-->
@@ -444,7 +444,7 @@ Commandline Examples:
     <nant buildfile="test/Spring/Spring.Messaging.Ems.Integration.Tests/Spring.Messaging.Ems.Integration.Tests.build" target="test" if="${build-ems}"/>
     <nant buildfile="test/Spring/Spring.Messaging.Nms.Tests/Spring.Messaging.Nms.Tests.build" target="test" if="${build-nms}"/>
     <nant buildfile="test/Spring/Spring.Messaging.Nms.Integration.Tests/Spring.Messaging.Nms.Integration.Tests.build" target="test" if="${build-nms}"/>
-	<nant buildfile="test/Spring/Spring.Scheduling.Quartz20.Tests/Spring.Scheduling.Quartz20.Tests.build" target="test" if="${build-quartz}"/>
+	<nant buildfile="test/Spring/Spring.Scheduling.Quartz21.Tests/Spring.Scheduling.Quartz21.Tests.build" target="test" if="${build-quartz}"/>
     <nant buildfile="test/Spring/Spring.Messaging.Tests/Spring.Messaging.Tests.build" target="test" if="${build-msmq}"/>
     <nant buildfile="test/Spring/Spring.Template.Velocity.Tests/Spring.Template.Velocity.Tests.build" target="test" if="${build-velocity}"/>
     <!--"Spring.ConversationWA.NH*.Tests.dll" should be at last to prevent the other tests are compiled with reference to this-->
@@ -677,8 +677,8 @@ Commandline Examples:
         <delete dir="src/Spring/Spring.Messaging.Ems/bin" failonerror="false"/>
         <delete dir="src/Spring/Spring.Messaging/obj" failonerror="false"/>
         <delete dir="src/Spring/Spring.Messaging/bin" failonerror="false"/>
-        <delete dir="src/Spring/Spring.Scheduling.Quartz20/obj" failonerror="false"/>
-        <delete dir="src/Spring/Spring.Scheduling.Quartz20/bin" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Scheduling.Quartz21/obj" failonerror="false"/>
+        <delete dir="src/Spring/Spring.Scheduling.Quartz21/bin" failonerror="false"/>
         <delete dir="src/Spring/Spring.Template.Velocity/obj" failonerror="false"/>
         <delete dir="src/Spring/Spring.Template.Velocity/bin" failonerror="false"/>
         <delete dir="src/Spring/Spring.Testing.NUnit/obj" failonerror="false"/>
@@ -704,8 +704,8 @@ Commandline Examples:
         
         <delete dir="test/Spring/Spring.Messaging.Ems.Integration.Tests/obj" failonerror="false"/>
         <delete dir="test/Spring/Spring.Messaging.Ems.Integration.Tests/bin" failonerror="false"/>
-        <delete dir="test/Spring/Spring.Scheduling.Quartz20.Integration.Tests/obj" failonerror="false"/>
-        <delete dir="test/Spring/Spring.Scheduling.Quartz20.Integration.Tests/bin" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Scheduling.Quartz21.Integration.Tests/obj" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Scheduling.Quartz21.Integration.Tests/bin" failonerror="false"/>
         <delete dir="test/Spring/Spring.Web.Mvc.Tests/obj" failonerror="false"/>
         <delete dir="test/Spring/Spring.Web.Mvc.Tests/bin" failonerror="false"/>
         <delete dir="test/Spring/Spring.Web.Mvc3.Tests/obj"  failonerror="false"/>
@@ -739,8 +739,8 @@ Commandline Examples:
         <delete dir="test/Spring/Spring.Messaging.Ems.Tests/bin" failonerror="false"/>
         <delete dir="test/Spring/Spring.Messaging.Tests/obj" failonerror="false"/>
         <delete dir="test/Spring/Spring.Messaging.Tests/bin" failonerror="false"/>
-        <delete dir="test/Spring/Spring.Scheduling.Quartz20.Tests/obj" failonerror="false"/>
-        <delete dir="test/Spring/Spring.Scheduling.Quartz20.Tests/bin" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Scheduling.Quartz21.Tests/obj" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Scheduling.Quartz21.Tests/bin" failonerror="false"/>
         <delete dir="test/Spring/Spring.Template.Velocity.Tests/obj" failonerror="false"/>
         <delete dir="test/Spring/Spring.Template.Velocity.Tests/bin" failonerror="false"/>
         <delete dir="test/Spring/Spring.Web.Tests/obj" failonerror="false"/>
@@ -766,8 +766,8 @@ Commandline Examples:
         </delete>   
         <delete dir="test/Spring/Spring.Messaging.Ems.Integration.Tests/bin" failonerror="false"/>
         <delete dir="test/Spring/Spring.Messaging.Ems.Integration.Tests/obj" failonerror="false"/>
-        <delete dir="test/Spring/Spring.Scheduling.Quartz20.Integration.Tests/bin" failonerror="false"/>
-        <delete dir="test/Spring/Spring.Scheduling.Quartz20.Integration.Tests/obj" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Scheduling.Quartz21.Integration.Tests/bin" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Scheduling.Quartz21.Integration.Tests/obj" failonerror="false"/>
         <delete               failonerror="false">
           <fileset basedir="test/Spring/Spring.Services.Tests/Data/Spring/WindowsService/Cassini/wwwroot/bin">
             <include name="*.dll"/> 
@@ -1411,9 +1411,9 @@ Commandline Examples:
           <include name="*/*/Spring.Messaging.xml"/>
           <include name="*/*/Spring.Messaging.pdb"/>
 
-          <include name="*/*/Spring.Scheduling.Quartz20.dll"/>
-          <include name="*/*/Spring.Scheduling.Quartz20.xml"/>
-          <include name="*/*/Spring.Scheduling.Quartz20.pdb"/>
+          <include name="*/*/Spring.Scheduling.Quartz21.dll"/>
+          <include name="*/*/Spring.Scheduling.Quartz21.xml"/>
+          <include name="*/*/Spring.Scheduling.Quartz21.pdb"/>
 
           <include name="*/*/Spring.Template.Velocity.dll"/>
           <include name="*/*/Spring.Template.Velocity.xml"/>
@@ -1438,9 +1438,9 @@ Commandline Examples:
             <include name="*/Spring.Services.xml"/>
             <include name="*/Spring.Services.pdb"/>
 			
-			<include name="*/*/Spring.Scheduling.Quartz20.dll"/>
-			<include name="*/*/Spring.Scheduling.Quartz20.xml"/>
-			<include name="*/*/Spring.Scheduling.Quartz20.pdb"/>
+			<include name="*/*/Spring.Scheduling.Quartz21.dll"/>
+			<include name="*/*/Spring.Scheduling.Quartz21.xml"/>
+			<include name="*/*/Spring.Scheduling.Quartz21.pdb"/>
 			
 			<include name="*/Spring.Web.Mvc.dll"/>
             <include name="*/Spring.Web.Mvc.xml"/>
@@ -1650,7 +1650,7 @@ Commandline Examples:
       <include name="src/Spring/Spring.Messaging/**"/>
       <include name="src/Spring/Spring.Messaging.Nms/**"/>
       <include name="src/Spring/Spring.Messaging.Ems/**"/>
-      <include name="src/Spring/Spring.Scheduling.Quartz20/**"/>
+      <include name="src/Spring/Spring.Scheduling.Quartz21/**"/>
       <include name="src/Spring/Spring.Template.Velocity/**"/>
       <include name="src/Spring/Spring.Testing.NUnit/**"/>
       <include name="src/Spring/Spring.Testing.Microsoft/**"/>
@@ -1675,7 +1675,7 @@ Commandline Examples:
       <include name="test/Spring/Spring.Messaging.Nms.Tests/**"/>
       <include name="test/Spring/Spring.Messaging.Nms.Integration.Tests/**"/>
       <include name="test/Spring/Spring.Messaging.Ems.Tests/**"/>
-      <include name="test/Spring/Spring.Scheduling.Quartz20.Tests/**"/>
+      <include name="test/Spring/Spring.Scheduling.Quartz21.Tests/**"/>
       <include name="test/Spring/Spring.Template.Velocity.Tests/**"/>
       <include name="test/Spring/Spring.Testing.NUnit.Tests/**"/>
       <include name="test/Spring/Spring.Testing.Microsoft.Tests/**"/>
