@@ -139,6 +139,8 @@ Commandline Examples:
   <property name="project.build.sign" value="false" overwrite="false" />
   
   <property name="test.withcoverage" value="false" overwrite="true" />
+  <!-- what coverage tool to use: ncover or opencover -->
+  <property name="test.coverage.tool" value="ncover" overwrite="false" />
 
   <!-- import non-redistributables if available -->
   <!-- to build certain libraries (e.g. Spring.Messaging.Ems), 3rd party libraries are required
@@ -454,15 +456,19 @@ Commandline Examples:
     <!-- Main solutions and examples are compiled via task build-solutions -->
 
     <!-- build coverage summary -->
-		<exec program="${tool.dir}/ncoverexplorer/ncoverexplorer.console.exe" workingdir="${current.bin.dir}" failonerror="false">
-			<arg value="/xml:&quot;${current.bin.dir}/TestCoverageSummary.xml&quot;" />
-			<arg value="/report:ModuleClassFunctionSummary" />
-			<arg value="/sort:4" />
-			<arg value="/minCoverage:80" />
-			<arg value="/q" />
-			<arg path="${current.bin.dir}/*-TestCoverage.xml" />
-		</exec>
+	<exec program="${tool.dir}/ncoverexplorer/ncoverexplorer.console.exe" workingdir="${current.bin.dir}" failonerror="false" if="${test.coverage.tool == 'ncover' and test.withcoverage}">
+		<arg value="/xml:&quot;${current.bin.dir}/TestCoverageSummary.xml&quot;" />
+		<arg value="/report:ModuleClassFunctionSummary" />
+		<arg value="/sort:4" />
+		<arg value="/minCoverage:80" />
+		<arg value="/q" />
+		<arg path="${current.bin.dir}/*-TestCoverage.xml" />
+	</exec>
 
+	<exec program="${tool.dir}\ReportGenerator\bin\ReportGenerator.exe" workingdir="${current.bin.dir}" verbose="true" if="${test.coverage.tool == 'opencover' and test.withcoverage}">
+		<arg value="*-TestCoverage.xml" />
+		<arg path="${current.bin.dir}\CoverageReport\Summary" />
+	</exec>
   </target>
 
   <target name="compile-net-3.5" description="Builds .NET Framework 3.5 version"
