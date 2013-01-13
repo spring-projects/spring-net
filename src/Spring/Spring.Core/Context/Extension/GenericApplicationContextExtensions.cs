@@ -51,8 +51,8 @@ namespace Spring.Context.Support
         /// <param name="assemblyScanPath">The assembly scan path.</param>
         /// <param name="assemblyPredicate">The assembly predicate.</param>
         /// <param name="typePredicate">The type predicate.</param>
-        public static void Scan(this GenericApplicationContext context, string assemblyScanPath, Predicate<Assembly> assemblyPredicate,
-                                Predicate<Type> typePredicate)
+        public static void Scan(this GenericApplicationContext context, string assemblyScanPath, Func<Assembly, bool> assemblyPredicate,
+                                Func<Type, bool> typePredicate)
         {
             //create a scanner instance using the scan path
             var scanner = new AssemblyObjectDefinitionScanner();
@@ -70,7 +70,7 @@ namespace Spring.Context.Support
         /// <param name="context">The context.</param>
         /// <param name="assemblyPredicate">The assembly predicate.</param>
         /// <param name="typePredicate">The type predicate.</param>
-        public static void Scan(this GenericApplicationContext context, Predicate<Assembly> assemblyPredicate, Predicate<Type> typePredicate)
+        public static void Scan(this GenericApplicationContext context, Func<Assembly, bool> assemblyPredicate, Func<Type, bool> typePredicate)
         {
             Scan(context, null, assemblyPredicate, typePredicate);
         }
@@ -90,9 +90,9 @@ namespace Spring.Context.Support
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="assemblyPredicate">The assembly predicate.</param>
-        public static void ScanWithAssemblyFilter(this GenericApplicationContext context, Predicate<Assembly> assemblyPredicate)
+        public static void ScanWithAssemblyFilter(this GenericApplicationContext context, Func<Assembly, bool> assemblyPredicate)
         {
-            Scan(context, null, assemblyPredicate, delegate { return true; });
+            Scan(context, null, assemblyPredicate, obj => true);
         }
 
         /// <summary>
@@ -100,9 +100,9 @@ namespace Spring.Context.Support
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="typePredicate">The type predicate.</param>
-        public static void ScanWithTypeFilter(this GenericApplicationContext context, Predicate<Type> typePredicate)
+        public static void ScanWithTypeFilter(this GenericApplicationContext context, Func<Type, bool> typePredicate)
         {
-            Scan(context, null, delegate { return true; }, typePredicate);
+            Scan(context, null, obj => true, typePredicate);
         }
 
         

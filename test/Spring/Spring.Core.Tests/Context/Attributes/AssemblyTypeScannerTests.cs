@@ -108,25 +108,25 @@ namespace Spring.Context.Attributes
 
         private AssemblyObjectDefinitionScanner _scanner;
 
-        private List<Predicate<Type>> ExcludePredicates
+        private List<Func<Type, bool>> ExcludePredicates
         {
             get
             {
                 //get at the collection of excludePredicates from the private field
                 //(yuck!-- test smell, but at least its wrapped up in a neat private property getter!)
                 return
-                    (List<Predicate<Type>>) (ReflectionUtils.GetInstanceFieldValue(_scanner, "TypeExclusionPredicates"));
+                    (List<Func<Type, bool>>) (ReflectionUtils.GetInstanceFieldValue(_scanner, "TypeExclusionPredicates"));
             }
         }
 
-        private List<Predicate<Type>> IncludePredicates
+        private List<Func<Type, bool>> IncludePredicates
         {
             get
             {
                 //get at the collection of includePredicates from the private field
                 //(yuck!-- test smell, but at least its wrapped up in a neat private property getter!)
                 return
-                    (List<Predicate<Type>>) (ReflectionUtils.GetInstanceFieldValue(_scanner, "TypeInclusionPredicates"));
+                    (List<Func<Type, bool>>) (ReflectionUtils.GetInstanceFieldValue(_scanner, "TypeInclusionPredicates"));
             }
         }
 

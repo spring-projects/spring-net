@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using Spring.Objects.Factory.Support;
 using Spring.Stereotype;
@@ -32,7 +33,7 @@ namespace Spring.Context.Attributes
     [Serializable]
     public class AssemblyObjectDefinitionScanner : RequiredConstraintAssemblyTypeScanner
     {
-        private readonly List<Predicate<Assembly>> _assemblyExclusionPredicates = new List<Predicate<Assembly>>();
+        private readonly List<Func<Assembly, bool>> _assemblyExclusionPredicates = new List<Func<Assembly, bool>>();
 
         private readonly IList<string> _springAssemblies = new List<string>()
                                                                {
@@ -92,8 +93,7 @@ namespace Spring.Context.Attributes
         /// <returns></returns>
         protected override IEnumerable<Assembly> ApplyAssemblyFiltersTo(IEnumerable<Assembly> assemblyCandidates)
         {
-            return assemblyCandidates.Where(
-                delegate(Assembly candidate) { return IsIncludedAssembly(candidate) && !IsExcludedAssembly(candidate); });
+            return assemblyCandidates.Where(candidate => IsIncludedAssembly(candidate) && !IsExcludedAssembly(candidate));
         }
 
         /// <summary>
@@ -105,7 +105,7 @@ namespace Spring.Context.Attributes
         /// </returns>
         protected virtual bool IsExcludedAssembly(Assembly candidate)
         {
-            return _assemblyExclusionPredicates.Any(delegate(Predicate<Assembly> exclude) { return exclude(candidate); });
+            return _assemblyExclusionPredicates.Any(exclude => exclude(candidate));
         }
 
         /// <summary>
@@ -135,8 +135,9 @@ namespace Spring.Context.Attributes
 
             foreach (CustomAttributeData customAttributeData in CustomAttributeData.GetCustomAttributes(type))
             {
-                if (customAttributeData.Constructor.DeclaringType.FullName == typeof(ComponentAttribute).FullName &&
-                    !type.IsAbstract)
+                if (customAttributeData.Constructor.DeclaringType != null && 
+                    (customAttributeData.Constructor.DeclaringType.FullName == typeof(ComponentAttribute).FullName &&
+                    !type.IsAbstract))
                 {
                     satisfied = true;
                     break;
@@ -155,12 +156,11 @@ namespace Spring.Context.Attributes
             base.SetDefaultFilters();
 
             //add the desired assembly exclusions to the list
-            _assemblyExclusionPredicates.Add(
-                delegate(Assembly a) { return _springAssemblies.Contains(a.GetName().Name); });
-            _assemblyExclusionPredicates.Add(delegate(Assembly a) { return a.GetName().Name.StartsWith("System."); });
-            _assemblyExclusionPredicates.Add(delegate(Assembly a) { return a.GetName().Name.StartsWith("Microsoft."); });
-            _assemblyExclusionPredicates.Add(delegate(Assembly a) { return a.GetName().Name == "mscorlib"; });
-            _assemblyExclusionPredicates.Add(delegate(Assembly a) { return a.GetName().Name == "System"; });
+            _assemblyExclusionPredicates.Add(a => _springAssemblies.Contains(a.GetName().Name));
+            _assemblyExclusionPredicates.Add(a => a.GetName().Name.StartsWith("System."));
+            _assemblyExclusionPredicates.Add(a => a.GetName().Name.StartsWith("Microsoft."));
+            _assemblyExclusionPredicates.Add(a => a.GetName().Name == "mscorlib");
+            _assemblyExclusionPredicates.Add(a => a.GetName().Name == "System");
         }
 
         /// <summary>
@@ -178,11 +178,11 @@ namespace Spring.Context.Attributes
         /// </summary>
         public AssemblyObjectDefinitionScanner()
         {
-            AssemblyLoadExclusionPredicates.Add(delegate(string name) { return _springAssemblies.Contains(name); });
-            AssemblyLoadExclusionPredicates.Add(delegate(string name) { return name.StartsWith("System."); });
-            AssemblyLoadExclusionPredicates.Add(delegate(string name) { return name.StartsWith("Microsoft."); });
-            AssemblyLoadExclusionPredicates.Add(delegate(string name) { return name == "mscorlib"; });
-            AssemblyLoadExclusionPredicates.Add(delegate(string name) { return name == "System"; });
+            AssemblyLoadExclusionPredicates.Add(name => _springAssemblies.Contains(name));
+            AssemblyLoadExclusionPredicates.Add(name => name.StartsWith("System."));
+            AssemblyLoadExclusionPredicates.Add(name => name.StartsWith("Microsoft."));
+            AssemblyLoadExclusionPredicates.Add(name => name == "mscorlib");
+            AssemblyLoadExclusionPredicates.Add(name => name == "System");
         }
 
     }

@@ -42,21 +42,21 @@ namespace Spring.Context.Attributes
         /// </summary>
         /// <param name="assemblyPredicate">The assembly predicate.</param>
         /// <returns></returns>
-        IAssemblyTypeScanner WithAssemblyFilter(Predicate<Assembly> assemblyPredicate);
+        IAssemblyTypeScanner WithAssemblyFilter(Func<Assembly, bool> assemblyPredicate);
 
         /// <summary>
         /// Adds the predicte to the include filter for <see cref="Type"/>.
         /// </summary>
         /// <param name="predicate">The predicate.</param>
         /// <returns></returns>
-        IAssemblyTypeScanner WithIncludeFilter(Predicate<Type> predicate);
+        IAssemblyTypeScanner WithIncludeFilter(Func<Type, bool> predicate);
 
         /// <summary>
         /// Adds the predicte to the exclude filter for <see cref="Type"/>.
         /// </summary>
         /// <param name="predicate">The predicate.</param>
         /// <returns></returns>
-        IAssemblyTypeScanner WithExcludeFilter(Predicate<Type> predicate);
+        IAssemblyTypeScanner WithExcludeFilter(Func<Type, bool> predicate);
 
         /// <summary>
         /// Includes the specific types.

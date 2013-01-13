@@ -19,6 +19,7 @@
 #endregion
 
 using System;
+using System.Linq;
 
 namespace Spring.Context.Attributes.TypeFilters
 {

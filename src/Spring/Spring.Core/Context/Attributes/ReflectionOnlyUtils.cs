@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Security.Permissions;
 using System.Security.Policy;
@@ -78,30 +79,12 @@ namespace Spring.Context.Attributes
         private static Assembly InternalLoad(params object[] args)
         {
             // Easiest to query because the StackCrawlMark type is internal
-            /*
-             * TODO: cannot do it this way under .NET 2.0 b/c .First(...) relies on LINQ which we don't have (yet)
-             * (plan to eventually uncomment this impl once we move to .NET 3.5 or greater)
-             * 
-            return (Assembly)
-                typeof(Assembly).GetMethods(BindingFlags.NonPublic | BindingFlags.Static)
-                .First(m => m.Name == "InternalLoad" &&
-                            m.GetParameters()[0].ParameterType == typeof (AssemblyName))
-                .Invoke(null, args);
-             */
             IEnumerable<MethodInfo> methods =
                 typeof(Assembly).GetMethods(BindingFlags.NonPublic | BindingFlags.Static).Where(
-                    delegate(MethodInfo m)
-                    {
-                        return m.Name == "InternalLoad" &&
-                               m.GetParameters()[0].ParameterType == typeof(AssemblyName);
-                    });
+                    m => m.Name == "InternalLoad" &&
+                         m.GetParameters()[0].ParameterType == typeof (AssemblyName));
 
-            foreach (MethodInfo methodInfo in methods)
-            {
-                return (Assembly)methodInfo.Invoke(null, args);
-            }
-
-            return null;
+            return methods.Select(methodInfo => (Assembly) methodInfo.Invoke(null, args)).FirstOrDefault();
         }
     }
 }

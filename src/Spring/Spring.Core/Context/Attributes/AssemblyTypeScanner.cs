@@ -21,6 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using Common.Logging;
 using Spring.Context.Attributes.TypeFilters;
@@ -43,17 +44,17 @@ namespace Spring.Context.Attributes
         /// <summary>
         /// Names of Assemblies to exclude from being loaded for scanning.
         /// </summary>
-        protected IList<Predicate<string>> AssemblyLoadExclusionPredicates = new List<Predicate<string>>();
+        protected IList<Func<string, bool>> AssemblyLoadExclusionPredicates = new List<Func<string, bool>>();
 
         /// <summary>
         /// Assembly Inclusion Predicates.
         /// </summary>
-        protected readonly List<Predicate<Assembly>> AssemblyInclusionPredicates = new List<Predicate<Assembly>>();
+        protected readonly List<Func<Assembly, bool>> AssemblyInclusionPredicates = new List<Func<Assembly, bool>>();
 
         /// <summary>
         /// Type Exclusion Predicates.
         /// </summary>
-        protected readonly List<Predicate<Type>> TypeExclusionPredicates = new List<Predicate<Type>>();
+        protected readonly List<Func<Type, bool>> TypeExclusionPredicates = new List<Func<Type, bool>>();
 
         /// <summary>
         /// Type Exclusion Predicates.
@@ -63,7 +64,7 @@ namespace Spring.Context.Attributes
         /// <summary>
         /// Type Inclusion Predicates.
         /// </summary>
-        protected readonly List<Predicate<Type>> TypeInclusionPredicates = new List<Predicate<Type>>();
+        protected readonly List<Func<Type, bool>> TypeInclusionPredicates = new List<Func<Type, bool>>();
 
         /// <summary>
         /// Type Inclusion TypeFilters.
@@ -105,7 +106,7 @@ namespace Spring.Context.Attributes
         /// <returns></returns>
         public IAssemblyTypeScanner ExcludeType<T>()
         {
-            TypeExclusionPredicates.Add(delegate(Type t) { return t.FullName == typeof(T).FullName; });
+            TypeExclusionPredicates.Add(t => t.FullName == typeof (T).FullName);
             return this;
         }
 
@@ -116,7 +117,7 @@ namespace Spring.Context.Attributes
         /// <returns></returns>
         public IAssemblyTypeScanner IncludeType<T>()
         {
-            TypeInclusionPredicates.Add(delegate(Type t) { return t.FullName == typeof(T).FullName; });
+            TypeInclusionPredicates.Add(t => t.FullName == typeof (T).FullName);
             return this;
         }
 
@@ -130,7 +131,7 @@ namespace Spring.Context.Attributes
             AssertUtils.ArgumentNotNull(typeSource, "typeSource");
             TypeSources.Add(typeSource);
             TypeInclusionPredicates.Add(
-                delegate(Type t) { return typeSource.Any(delegate(Type t1) { return t1.FullName == t.FullName; }); });
+                t => typeSource.Any(t1 => t1.FullName == t.FullName));
             return this;
         }
 
@@ -168,7 +169,7 @@ namespace Spring.Context.Attributes
         /// </summary>
         /// <param name="assemblyPredicate">The assembly predicate.</param>
         /// <returns></returns>
-        public IAssemblyTypeScanner WithAssemblyFilter(Predicate<Assembly> assemblyPredicate)
+        public IAssemblyTypeScanner WithAssemblyFilter(Func<Assembly, bool> assemblyPredicate)
         {
             AssemblyInclusionPredicates.Add(assemblyPredicate);
             return this;
@@ -179,7 +180,7 @@ namespace Spring.Context.Attributes
         /// </summary>
         /// <param name="predicate">The predicate.</param>
         /// <returns></returns>
-        public IAssemblyTypeScanner WithExcludeFilter(Predicate<Type> predicate)
+        public IAssemblyTypeScanner WithExcludeFilter(Func<Type, bool> predicate)
         {
             TypeExclusionPredicates.Add(predicate);
             return this;
@@ -203,7 +204,7 @@ namespace Spring.Context.Attributes
         /// </summary>
         /// <param name="predicate">The predicate.</param>
         /// <returns></returns>
-        public IAssemblyTypeScanner WithIncludeFilter(Predicate<Type> predicate)
+        public IAssemblyTypeScanner WithIncludeFilter(Func<Type, bool> predicate)
         {
             TypeInclusionPredicates.Add(predicate);
             return this;
@@ -314,15 +315,10 @@ namespace Spring.Context.Attributes
         /// </returns>
         protected virtual bool IsExcludedType(Type type)
         {
-            if (TypeExclusionPredicates.Count > 0 && TypeExclusionPredicates.Any(delegate(Predicate<Type> exclude) { return exclude(type); }))
+            if (TypeExclusionPredicates.Count > 0 && TypeExclusionPredicates.Any(exclude => exclude(type)))
                 return true;
 
-            foreach(var filter in TypeExclusionTypeFilters)
-            {
-                if (filter.Match(type))
-                    return true;
-            }
-            return false;
+            return Enumerable.Any(TypeExclusionTypeFilters, filter => filter.Match(type));
         }
 
         /// <summary>
@@ -334,7 +330,7 @@ namespace Spring.Context.Attributes
         /// </returns>
         protected virtual bool IsIncludedAssembly(Assembly assembly)
         {
-            return AssemblyInclusionPredicates.Any(delegate(Predicate<Assembly> include) { return include(assembly); });
+            return AssemblyInclusionPredicates.Any(include => include(assembly));
         }
 
         /// <summary>
@@ -346,15 +342,10 @@ namespace Spring.Context.Attributes
         /// </returns>
         protected virtual bool IsIncludedType(Type type)
         {
-            if (TypeInclusionPredicates.Count > 0 && TypeInclusionPredicates.Any(delegate(Predicate<Type> include) { return include(type); }))
+            if (TypeInclusionPredicates.Count > 0 && TypeInclusionPredicates.Any(include => include(type)))
                 return true;
 
-            foreach(var filter in TypeInclusionTypeFilter)
-            {
-                if (filter.Match(type))
-                    return true;
-            }
-            return false;
+            return Enumerable.Any(TypeInclusionTypeFilter, filter => filter.Match(type));
         }
 
         /// <summary>
@@ -363,13 +354,13 @@ namespace Spring.Context.Attributes
         protected virtual void SetDefaultFilters()
         {
             if (TypeInclusionPredicates.Count == 0 && TypeInclusionTypeFilter.Count == 0)
-                TypeInclusionPredicates.Add(delegate { return true; });
+                TypeInclusionPredicates.Add(obj => true);
 
             if (TypeExclusionPredicates.Count == 0 && TypeExclusionTypeFilters.Count == 0)
-                TypeExclusionPredicates.Add(delegate { return false; });
+                TypeExclusionPredicates.Add(obj => false);
 
             if (AssemblyInclusionPredicates.Count == 0)
-                AssemblyInclusionPredicates.Add(delegate { return true; });
+                AssemblyInclusionPredicates.Add(obj => true);
         }
 
         /// <summary>
@@ -387,7 +378,7 @@ namespace Spring.Context.Attributes
             {
                 string name = Path.GetFileNameWithoutExtension(file);
 
-                if (!AssemblyLoadExclusionPredicates.Any(delegate(Predicate<string> exclude) { return exclude(name); }))
+                if (!AssemblyLoadExclusionPredicates.Any(exclude => exclude(name)))
                 {
                     assemblies.Add(file);
                 }

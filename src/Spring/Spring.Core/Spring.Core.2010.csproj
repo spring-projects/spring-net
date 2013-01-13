@@ -195,7 +195,6 @@
     <Compile Include="Context\Attributes\ImportAttribute.cs" />
     <Compile Include="Context\Attributes\ImportResourceAttribute.cs" />
     <Compile Include="Context\Attributes\LazyAttribute.cs" />
-    <Compile Include="Context\Attributes\LinqExtensionMethods.cs" />
     <Compile Include="Context\Attributes\ObjectDefAttribute.cs" />
     <Compile Include="Context\Attributes\ReflectionOnlyUtils.cs" />
     <Compile Include="Context\Attributes\RequiredConstraintAssemblyTypeScanner.cs" />
