@@ -96,7 +96,7 @@
   <ItemGroup>
     <Reference Include="C5">
       <Name>C5</Name>
-      <HintPath>..\..\..\..\lib\Quartz20\net\3.5\C5.dll</HintPath>
+      <HintPath>..\..\..\..\lib\Quartz21\net\3.5\C5.dll</HintPath>
     </Reference>
     <Reference Include="Common.Logging">
       <Name>Common.Logging</Name>
@@ -104,7 +104,7 @@
     </Reference>
     <Reference Include="Quartz">
       <Name>Quartz</Name>
-      <HintPath>..\..\..\..\lib\Quartz20\net\4.0\Quartz.dll</HintPath>
+      <HintPath>..\..\..\..\lib\Quartz21\net\4.0\Quartz.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Core">
       <SpecificVersion>False</SpecificVersion>
@@ -112,7 +112,7 @@
     </Reference>
     <Reference Include="Spring.Scheduling.Quartz">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\bin\net\4.0\debug\Spring.Scheduling.Quartz20.dll</HintPath>
+      <HintPath>..\..\..\..\bin\net\4.0\debug\Spring.Scheduling.Quartz21.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>

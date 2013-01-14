@@ -62,9 +62,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate33.20
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate33.Tests.2008", "test\Spring\Spring.Data.NHibernate33.Tests\Spring.Data.NHibernate33.Tests.2008.csproj", "{B48B00A6-8E4C-4953-9B82-7121A08AC57C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Scheduling.Quartz20.2008", "src\Spring\Spring.Scheduling.Quartz20\Spring.Scheduling.Quartz20.2008.csproj", "{764C3A6A-8690-49DD-B9AF-99E7C09AE4F0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Scheduling.Quartz21.2008", "src\Spring\Spring.Scheduling.Quartz21\Spring.Scheduling.Quartz21.2008.csproj", "{764C3A6A-8690-49DD-B9AF-99E7C09AE4F0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Scheduling.Quartz20.Tests.2008", "test\Spring\Spring.Scheduling.Quartz20.Tests\Spring.Scheduling.Quartz20.Tests.2008.csproj", "{47E7DF97-2515-4F2F-BBFD-0A4C205800DE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Scheduling.Quartz21.Tests.2008", "test\Spring\Spring.Scheduling.Quartz21.Tests\Spring.Scheduling.Quartz21.Tests.2008.csproj", "{47E7DF97-2515-4F2F-BBFD-0A4C205800DE}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Web.Conversation.NHibernate32.2008", "src\Spring\Spring.Web.Conversation.NHibernate32\Spring.Web.Conversation.NHibernate32.2008.csproj", "{64400FF8-2E9F-4809-B5F4-0C7EB8ABFF87}"
 EndProject
