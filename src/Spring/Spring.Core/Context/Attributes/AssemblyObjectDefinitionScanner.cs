@@ -35,28 +35,20 @@ namespace Spring.Context.Attributes
     {
         private readonly List<Func<Assembly, bool>> _assemblyExclusionPredicates = new List<Func<Assembly, bool>>();
 
-        private readonly IList<string> _springAssemblies = new List<string>()
-                                                               {
-                                                                             "Spring.Core",
-                                                                             "Spring.Core.Configuration",
-                                                                             "Spring.Aop",
-                                                                             "Spring.Data",
-                                                                             "Spring.Services",
-                                                                             "Spring.Messaging",
-                                                                             "Spring.Messaging.Ems",
-                                                                             "Spring.Messaging.Nms",
-                                                                             "Spring.Template.Velocity",
-                                                                             "Spring.Messaging.Quartz",
-                                                                             "Spring.Testing.Microsoft",
-                                                                             "Spring.Testing.Nunit",
-                                                                             "Spring.Data.NHibernate12",
-                                                                             "Spring.Data.NHibernate21",
-                                                                             "Spring.Data.NHibernate20",
-                                                                             "Spring.Data.NHibernate30",
-                                                                             "Spring.Web",
-                                                                             "Spring.Web.Extensions",
-                                                                             "Spring.Web.Mvc",
-                                                                };
+        private readonly IList<string> _springAssemblyExcludePrefixes = new List<string>()
+                                                                     {
+                                                                         "Spring.",
+                                                                         "NHibernate.",
+                                                                         "Common.Logging.",
+                                                                         "log4net",
+                                                                         "Quartz"
+                                                                     };
+
+        //TODO: HACK -- required to permit testing since testing assy also starts with excluded name "Spring."
+        private readonly IList<string> _springAssemblyIncludeNames = new List<string>()
+                                                                            {
+                                                                                "Spring.Core.Tests"
+                                                                            };
 
         private IObjectNameGenerator _objectNameGenerator = new AttributeObjectNameGenerator();
 
@@ -122,7 +114,7 @@ namespace Spring.Context.Attributes
                 try
                 {
                     return Attribute.GetCustomAttribute(type, typeof(ComponentAttribute), true) != null &&
-                           !type.IsAbstract;                    
+                           !type.IsAbstract;
                 }
                 catch (AmbiguousMatchException)
                 {
@@ -135,7 +127,7 @@ namespace Spring.Context.Attributes
 
             foreach (CustomAttributeData customAttributeData in CustomAttributeData.GetCustomAttributes(type))
             {
-                if (customAttributeData.Constructor.DeclaringType != null && 
+                if (customAttributeData.Constructor.DeclaringType != null &&
                     (customAttributeData.Constructor.DeclaringType.FullName == typeof(ComponentAttribute).FullName &&
                     !type.IsAbstract))
                 {
@@ -156,7 +148,9 @@ namespace Spring.Context.Attributes
             base.SetDefaultFilters();
 
             //add the desired assembly exclusions to the list
-            _assemblyExclusionPredicates.Add(a => _springAssemblies.Contains(a.GetName().Name));
+            _assemblyExclusionPredicates.Add(a => _springAssemblyExcludePrefixes.Any(n => n.StartsWith(a.GetName().Name)));
+            //_assemblyExclusionPredicates.Add(a => a.GetName().Name.StartsWith(_springAssemblyPrefix));
+            //_assemblyExclusionPredicates.Add(a => _springAssemblies.Contains(a.GetName().Name));
             _assemblyExclusionPredicates.Add(a => a.GetName().Name.StartsWith("System."));
             _assemblyExclusionPredicates.Add(a => a.GetName().Name.StartsWith("Microsoft."));
             _assemblyExclusionPredicates.Add(a => a.GetName().Name == "mscorlib");
@@ -178,7 +172,9 @@ namespace Spring.Context.Attributes
         /// </summary>
         public AssemblyObjectDefinitionScanner()
         {
-            AssemblyLoadExclusionPredicates.Add(name => _springAssemblies.Contains(name));
+            //AssemblyLoadExclusionPredicates.Add(name => _springAssemblyExcludePrefixes.Any(n => name.StartsWith(n) && !name.Contains(".Tests")));
+            AssemblyLoadExclusionPredicates.Add(candidate => _springAssemblyExcludePrefixes.Any(excludeName => candidate.StartsWith(excludeName) && _springAssemblyIncludeNames.All(includeName => includeName != candidate)));
+            //AssemblyLoadExclusionPredicates.Add(name => _springAssemblies.Contains(name));
             AssemblyLoadExclusionPredicates.Add(name => name.StartsWith("System."));
             AssemblyLoadExclusionPredicates.Add(name => name.StartsWith("Microsoft."));
             AssemblyLoadExclusionPredicates.Add(name => name == "mscorlib");

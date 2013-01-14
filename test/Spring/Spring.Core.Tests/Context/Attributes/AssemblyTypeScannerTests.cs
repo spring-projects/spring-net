@@ -45,7 +45,7 @@ namespace Spring.Context.Attributes
         public void AssemblyHavingType_T_Adds_Assembly()
         {
             _scanner.AssemblyHavingType<IOrdered>();
-            Assert.That(TypeSources.Any(t => t.Contains(typeof (IOrdered))));
+            Assert.That(TypeSources.Any(t => t.Contains(typeof(IOrdered))));
         }
 
         [Test]
@@ -54,8 +54,8 @@ namespace Spring.Context.Attributes
             _scanner.IncludeType<IOrdered>();
             _scanner.IncludeType<IPriorityOrdered>();
 
-            IncludePredicates.Any(p => p(typeof (IOrdered)));
-            IncludePredicates.Any(p => p(typeof (IPriorityOrdered)));
+            IncludePredicates.Any(p => p(typeof(IOrdered)));
+            IncludePredicates.Any(p => p(typeof(IPriorityOrdered)));
         }
 
         [Test]
@@ -66,23 +66,14 @@ namespace Spring.Context.Attributes
             _scanner.IncludeType<TheConfigurationClass>();
             _scanner.IncludeType<TheImportedConfigurationClass>();
             _scanner.WithExcludeFilter(t => t.Name.StartsWith("TheImported"));
-            try
-            {
-                IEnumerable<Type> types = _scanner.Scan();
+            
+            IEnumerable<Type> types = _scanner.Scan();
 
-                //Assert.That(types.Any(t => t.Name == "TheConfigurationClass"));
-                //Assert.False(types.Any(t => t.Name == "TheImportedConfigurationClass"));
+            //Assert.That(types.Any(t => t.Name == "TheConfigurationClass"));
+            //Assert.False(types.Any(t => t.Name == "TheImportedConfigurationClass"));
 
-                Assert.That(types, Contains.Item((typeof (TheConfigurationClass))));
-                Assert.False(types.Contains(typeof (TheImportedConfigurationClass)));
-            } catch (ReflectionTypeLoadException e)
-            {
-                //Console.WriteLine(e);
-                foreach (var ee in e.LoaderExceptions)
-                {
-                    //Console.WriteLine(ee);
-                }
-            }
+            Assert.That(types, Contains.Item((typeof(TheConfigurationClass))));
+            Assert.False(types.Contains(typeof(TheImportedConfigurationClass)));
         }
 
         [Test]
@@ -91,10 +82,10 @@ namespace Spring.Context.Attributes
             _scanner.WithIncludeFilter(t => t.Name.Contains("ConfigurationClass"));
 
             IEnumerable<Type> types = _scanner.Scan();
-            
-            Assert.That(types, Contains.Item((typeof (TheConfigurationClass))));
-            Assert.That(types, Contains.Item((typeof (TheImportedConfigurationClass))));
-            Assert.That(types.Count(),Is.EqualTo(2));
+
+            Assert.That(types, Contains.Item((typeof(TheConfigurationClass))));
+            Assert.That(types, Contains.Item((typeof(TheImportedConfigurationClass))));
+            Assert.That(types.Count(), Is.EqualTo(2));
         }
 
         [Serializable]
@@ -115,7 +106,7 @@ namespace Spring.Context.Attributes
                 //get at the collection of excludePredicates from the private field
                 //(yuck!-- test smell, but at least its wrapped up in a neat private property getter!)
                 return
-                    (List<Func<Type, bool>>) (ReflectionUtils.GetInstanceFieldValue(_scanner, "TypeExclusionPredicates"));
+                    (List<Func<Type, bool>>)(ReflectionUtils.GetInstanceFieldValue(_scanner, "TypeExclusionPredicates"));
             }
         }
 
@@ -126,7 +117,7 @@ namespace Spring.Context.Attributes
                 //get at the collection of includePredicates from the private field
                 //(yuck!-- test smell, but at least its wrapped up in a neat private property getter!)
                 return
-                    (List<Func<Type, bool>>) (ReflectionUtils.GetInstanceFieldValue(_scanner, "TypeInclusionPredicates"));
+                    (List<Func<Type, bool>>)(ReflectionUtils.GetInstanceFieldValue(_scanner, "TypeInclusionPredicates"));
             }
         }
 
@@ -136,7 +127,7 @@ namespace Spring.Context.Attributes
             {
                 //get at the collection of typeSources from the private field
                 //(yuck!-- test smell, but at least its wrapped up in a neat private property getter!)
-                return (List<IEnumerable<Type>>) (ReflectionUtils.GetInstanceFieldValue(_scanner, "TypeSources"));
+                return (List<IEnumerable<Type>>)(ReflectionUtils.GetInstanceFieldValue(_scanner, "TypeSources"));
             }
         }
     }
