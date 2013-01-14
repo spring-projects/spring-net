@@ -23,6 +23,7 @@ using System;
 using System.Reflection;
 using Spring.Context.Attributes;
 using Spring.Objects.Factory.Support;
+using Spring.Util;
 
 namespace Spring.Context.Support
 {
@@ -54,9 +55,25 @@ namespace Spring.Context.Support
         public static void Scan(this GenericApplicationContext context, string assemblyScanPath, Func<Assembly, bool> assemblyPredicate,
                                 Func<Type, bool> typePredicate)
         {
-            //create a scanner instance using the scan path
-            var scanner = new AssemblyObjectDefinitionScanner();
+            Scan(context, assemblyScanPath, assemblyPredicate, typePredicate, new string[0]);
+        }
 
+
+        /// <summary>
+        /// Scans the specified context.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="assemblyScanPath">The assembly scan path.</param>
+        /// <param name="assemblyPredicate">The assembly predicate.</param>
+        /// <param name="typePredicate">The type predicate.</param>
+        /// <param name="assembliesToScan">The assemblies to scan.</param>
+        public static void Scan(this GenericApplicationContext context, string assemblyScanPath, Func<Assembly, bool> assemblyPredicate, Func<Type, bool> typePredicate, params string[] assembliesToScan)
+        {
+            AssemblyObjectDefinitionScanner scanner = 
+                ArrayUtils.HasElements(assembliesToScan) ? new AssemblyObjectDefinitionScanner(assembliesToScan) : new AssemblyObjectDefinitionScanner();
+            
+            scanner.ScanStartFolderPath = assemblyScanPath;
+            
             //configure the scanner per the provided constraints
             scanner.WithAssemblyFilter(assemblyPredicate).WithIncludeFilter(typePredicate);
 
@@ -105,6 +122,6 @@ namespace Spring.Context.Support
             Scan(context, null, obj => true, typePredicate);
         }
 
-        
+
     }
 }

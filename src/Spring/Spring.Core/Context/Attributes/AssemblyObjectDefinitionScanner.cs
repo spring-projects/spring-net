@@ -24,6 +24,7 @@ using System.Linq;
 using System.Reflection;
 using Spring.Objects.Factory.Support;
 using Spring.Stereotype;
+using Spring.Util;
 
 namespace Spring.Context.Attributes
 {
@@ -39,16 +40,12 @@ namespace Spring.Context.Attributes
                                                                      {
                                                                          "Spring.",
                                                                          "NHibernate.",
-                                                                         "Common.Logging.",
+                                                                         "Common.Logging",
                                                                          "log4net",
-                                                                         "Quartz"
+                                                                         "Quartz",
+                                                                         "NVelocity",
+                                                                         "Rhino.Mocks"
                                                                      };
-
-        //TODO: HACK -- required to permit testing since testing assy also starts with excluded name "Spring."
-        private readonly IList<string> _springAssemblyIncludeNames = new List<string>()
-                                                                            {
-                                                                                "Spring.Core.Tests"
-                                                                            };
 
         private IObjectNameGenerator _objectNameGenerator = new AttributeObjectNameGenerator();
 
@@ -148,13 +145,12 @@ namespace Spring.Context.Attributes
             base.SetDefaultFilters();
 
             //add the desired assembly exclusions to the list
-            _assemblyExclusionPredicates.Add(a => _springAssemblyExcludePrefixes.Any(n => n.StartsWith(a.GetName().Name)));
-            //_assemblyExclusionPredicates.Add(a => a.GetName().Name.StartsWith(_springAssemblyPrefix));
-            //_assemblyExclusionPredicates.Add(a => _springAssemblies.Contains(a.GetName().Name));
-            _assemblyExclusionPredicates.Add(a => a.GetName().Name.StartsWith("System."));
-            _assemblyExclusionPredicates.Add(a => a.GetName().Name.StartsWith("Microsoft."));
-            _assemblyExclusionPredicates.Add(a => a.GetName().Name == "mscorlib");
-            _assemblyExclusionPredicates.Add(a => a.GetName().Name == "System");
+            _assemblyExclusionPredicates.Add(assembly => _springAssemblyExcludePrefixes.Any(name => name.StartsWith(assembly.GetName().Name))
+                && assembly.GetName().Name != "Spring.Core.Tests");
+            _assemblyExclusionPredicates.Add(assembly => assembly.GetName().Name.StartsWith("System."));
+            _assemblyExclusionPredicates.Add(assembly => assembly.GetName().Name.StartsWith("Microsoft."));
+            _assemblyExclusionPredicates.Add(assembly => assembly.GetName().Name == "mscorlib");
+            _assemblyExclusionPredicates.Add(assembly => assembly.GetName().Name == "System");
         }
 
         /// <summary>
@@ -172,14 +168,39 @@ namespace Spring.Context.Attributes
         /// </summary>
         public AssemblyObjectDefinitionScanner()
         {
-            //AssemblyLoadExclusionPredicates.Add(name => _springAssemblyExcludePrefixes.Any(n => name.StartsWith(n) && !name.Contains(".Tests")));
-            AssemblyLoadExclusionPredicates.Add(candidate => _springAssemblyExcludePrefixes.Any(excludeName => candidate.StartsWith(excludeName) && _springAssemblyIncludeNames.All(includeName => includeName != candidate)));
-            //AssemblyLoadExclusionPredicates.Add(name => _springAssemblies.Contains(name));
+            AssemblyLoadExclusionPredicates.Add(candidate => _springAssemblyExcludePrefixes.Any(candidate.StartsWith)
+                && candidate != "Spring.Core.Tests");
             AssemblyLoadExclusionPredicates.Add(name => name.StartsWith("System."));
             AssemblyLoadExclusionPredicates.Add(name => name.StartsWith("Microsoft."));
             AssemblyLoadExclusionPredicates.Add(name => name == "mscorlib");
             AssemblyLoadExclusionPredicates.Add(name => name == "System");
         }
 
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AssemblyObjectDefinitionScanner"/> class.
+        /// </summary>
+        /// <param name="assembliesToIncludePredicates">The assemblies to include predicates.</param>
+        public AssemblyObjectDefinitionScanner(params Func<string, bool>[] assembliesToIncludePredicates)
+        {
+            //force exclude for ALL assemblies
+            AssemblyLoadExclusionPredicates.Add(name => true);
+
+            //since all assemblies are EXCLUDED above, these will be the ONLY assemblies to be loaded
+            foreach (var predicate in assembliesToIncludePredicates)
+            {
+                AssemblyLoadInclusionPredicates.Add(predicate);
+            }
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AssemblyObjectDefinitionScanner"/> class.
+        /// </summary>
+        /// <param name="assembliesToInclude">The names of assemblies to include.</param>
+        public AssemblyObjectDefinitionScanner(params string[] assembliesToInclude)
+            : this(name => assembliesToInclude.Any(candidate => candidate == name))
+        {
+            AssertUtils.ArgumentNotNull(assembliesToInclude, "assembliesToInclude");
+        }
     }
 }

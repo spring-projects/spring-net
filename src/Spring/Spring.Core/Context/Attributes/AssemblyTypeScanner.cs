@@ -47,6 +47,11 @@ namespace Spring.Context.Attributes
         protected IList<Func<string, bool>> AssemblyLoadExclusionPredicates = new List<Func<string, bool>>();
 
         /// <summary>
+        /// Names of Assemblies to include for scanning.
+        /// </summary>
+        protected IList<Func<string, bool>> AssemblyLoadInclusionPredicates = new List<Func<string, bool>>();
+
+        /// <summary>
         /// Assembly Inclusion Predicates.
         /// </summary>
         protected readonly List<Func<Assembly, bool>> AssemblyInclusionPredicates = new List<Func<Assembly, bool>>();
@@ -81,10 +86,28 @@ namespace Spring.Context.Attributes
         /// </summary>
         protected DocumentDefaultsDefinition _defaults;
 
+
+        protected string _scanStartFolderPath;
+
+
         /// <summary>
         /// Stores the object default definitons defined in the XML configuration documnet
         /// </summary>
         public DocumentDefaultsDefinition Defaults { get { return _defaults; } set { _defaults = value; } }
+
+        public string ScanStartFolderPath
+        {
+            get
+            {
+                //if we have no value, set it to the current bin dir
+                if (string.IsNullOrEmpty(_scanStartFolderPath))
+                {
+                    _scanStartFolderPath = GetCurrentBinDirectoryPath();
+                }
+                return _scanStartFolderPath;
+            }
+            set { _scanStartFolderPath = value; }
+        }
 
         #region IAssemblyTypeScanner Members
 
@@ -106,7 +129,7 @@ namespace Spring.Context.Attributes
         /// <returns></returns>
         public IAssemblyTypeScanner ExcludeType<T>()
         {
-            TypeExclusionPredicates.Add(t => t.FullName == typeof (T).FullName);
+            TypeExclusionPredicates.Add(t => t.FullName == typeof(T).FullName);
             return this;
         }
 
@@ -117,7 +140,7 @@ namespace Spring.Context.Attributes
         /// <returns></returns>
         public IAssemblyTypeScanner IncludeType<T>()
         {
-            TypeInclusionPredicates.Add(t => t.FullName == typeof (T).FullName);
+            TypeInclusionPredicates.Add(t => t.FullName == typeof(T).FullName);
             return this;
         }
 
@@ -145,7 +168,7 @@ namespace Spring.Context.Attributes
 
             IList<Type> types = new List<Type>();
 
-            foreach (Assembly assembly in GetAllMatchingAssemblies())
+            foreach (Assembly assembly in GetAllMatchingAssemblies(ScanStartFolderPath))
             {
                 TypeSources.Add(new AssemblyTypeSource(assembly));
             }
@@ -225,23 +248,21 @@ namespace Spring.Context.Attributes
 
         #endregion
 
-        private List<string> GetAllAssembliesInPath()
+        private List<string> GetAllAssembliesInPath(string folderPath)
         {
-
-            string folderPath = GetCurrentBinDirectoryPath();
 
             var assemblies = new List<string>();
             assemblies.AddRange(DiscoverAssemblies(folderPath, "*.dll"));
             assemblies.AddRange(DiscoverAssemblies(folderPath, "*.exe"));
 
             Logger.Debug(m => m("Assemblies to be scanned: {0}", StringUtils.ArrayToCommaDelimitedString(assemblies.ToArray())));
-            
+
             return assemblies;
         }
 
-        private IEnumerable<Assembly> GetAllMatchingAssemblies()
+        private IEnumerable<Assembly> GetAllMatchingAssemblies(string folderPath)
         {
-            IEnumerable<string> assemblyCandidates = GetAllAssembliesInPath();
+            IEnumerable<string> assemblyCandidates = GetAllAssembliesInPath(folderPath);
 
             IList<Assembly> assemblies = new List<Assembly>();
 
@@ -378,7 +399,10 @@ namespace Spring.Context.Attributes
             {
                 string name = Path.GetFileNameWithoutExtension(file);
 
-                if (!AssemblyLoadExclusionPredicates.Any(exclude => exclude(name)))
+                bool isNotExcluded = !AssemblyLoadExclusionPredicates.Any(exclude => exclude(name));
+                bool isIncluded = AssemblyLoadInclusionPredicates.Any(include => include(name));
+
+                if (isNotExcluded || isIncluded)
                 {
                     assemblies.Add(file);
                 }

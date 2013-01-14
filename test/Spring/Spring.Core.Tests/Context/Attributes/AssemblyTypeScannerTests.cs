@@ -66,7 +66,7 @@ namespace Spring.Context.Attributes
             _scanner.IncludeType<TheConfigurationClass>();
             _scanner.IncludeType<TheImportedConfigurationClass>();
             _scanner.WithExcludeFilter(t => t.Name.StartsWith("TheImported"));
-            
+
             IEnumerable<Type> types = _scanner.Scan();
 
             //Assert.That(types.Any(t => t.Name == "TheConfigurationClass"));
@@ -86,15 +86,6 @@ namespace Spring.Context.Attributes
             Assert.That(types, Contains.Item((typeof(TheConfigurationClass))));
             Assert.That(types, Contains.Item((typeof(TheImportedConfigurationClass))));
             Assert.That(types.Count(), Is.EqualTo(2));
-        }
-
-        [Serializable]
-        private class Scanner : AssemblyTypeScanner
-        {
-            protected override bool IsCompoundPredicateSatisfiedBy(Type type)
-            {
-                return IsIncludedType(type) && !IsExcludedType(type);
-            }
         }
 
         private AssemblyObjectDefinitionScanner _scanner;

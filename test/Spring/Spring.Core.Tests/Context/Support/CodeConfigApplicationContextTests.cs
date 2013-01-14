@@ -30,12 +30,14 @@ namespace Spring.Context.Support
     public class CodeConfigApplicationContextTests
     {
         private CodeConfigApplicationContext _context;
+        private AssemblyObjectDefinitionScanner _scanner;
 
         [SetUp]
         public void _TestSetup()
         {
             _context = new CodeConfigApplicationContext();
-        }
+            _scanner = new AssemblyObjectDefinitionScanner();
+            }
 
         [Test]
         public void Can_Filter_For_Assembly_Based_On_Assembly_Metadata()
@@ -47,18 +49,16 @@ namespace Spring.Context.Support
         }
 
         [Test]
-        [Ignore]
         public void Can_Filter_For_Assembly_Containing_Specific_Type_But_Having_NO_Definitions()
         {
             //specifically filter assemblies for one that we *know* will result in NO [Configuration] types in it
             _context.ScanWithAssemblyFilter(assy => assy.GetTypes().Any(type => type.FullName.Contains(typeof(Spring.Core.IOrdered).Name)));
-            _context.Refresh();
+           _context.Refresh();
 
             Assert.That(_context.DefaultListableObjectFactory.ObjectDefinitionCount, Is.EqualTo(4));
         }
 
         [Test]
-        [Ignore]
         public void Can_Filter_For_Assembly_Containing_Specific_Type()
         {
             _context.ScanWithAssemblyFilter(assy => assy.GetTypes().Any(type => type.FullName.Contains(typeof(MarkerTypeForScannerToFind).Name)));
@@ -88,22 +88,13 @@ namespace Spring.Context.Support
         [Test]
         public void Can_Filter_For_Specific_Types_With_Multiple_Include_Filters()
         {
-            var scanner = new AssemblyObjectDefinitionScanner();
-            scanner.WithIncludeFilter(type => type.FullName.Contains(typeof(TheImportedConfigurationClass).Name));
-            scanner.WithIncludeFilter(type => type.FullName.Contains(typeof(TheConfigurationClass).Name));
+            _scanner.WithIncludeFilter(type => type.FullName.Contains(typeof(TheImportedConfigurationClass).Name));
+            _scanner.WithIncludeFilter(type => type.FullName.Contains(typeof(TheConfigurationClass).Name));
 
-            _context.Scan(scanner);
+            _context.Scan(_scanner);
             _context.Refresh();
 
             AssertExpectedObjectsAreRegisteredWith(_context, 19);
-        }
-
-        [Test]
-        public void Scanner()
-        {
-            AssemblyObjectDefinitionScanner scanner = new AssemblyObjectDefinitionScanner();
-            scanner.AssemblyHavingType<TheConfigurationClass>();
-
         }
 
         [Test]
@@ -137,6 +128,7 @@ namespace Spring.Context.Support
 
     }
 
+    //DO NOT DELETE: this empty class req'd by the scanning tests!
     public class MarkerTypeForScannerToFind
     {
 
