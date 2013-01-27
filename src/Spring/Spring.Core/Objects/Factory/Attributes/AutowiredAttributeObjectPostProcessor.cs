@@ -369,9 +369,13 @@ namespace Spring.Objects.Factory.Attributes
         /// </summary>
         private static void RegisterDependentObjects(string objectName, IList autowiredObjectNames)
         {
-            if (objectName == null) return;
+            if (objectName == null) 
+                return;
 
             var objectDefinition = _objectFactory.GetObjectDefinition(objectName) as RootObjectDefinition;
+            if (objectDefinition == null)
+                return;
+
             IList<string> dependsOn = new List<string>(objectDefinition.DependsOn);
             foreach (var name in autowiredObjectNames)
             {
