@@ -93,6 +93,7 @@ namespace Spring.Objects.Factory.Xml
             wellknownNamespaceParserTypeNames = new CaseInsensitiveHashtable();
             wellknownNamespaceParserTypeNames["http://www.springframework.net/tx"] = "Spring.Transaction.Config.TxNamespaceParser, Spring.Data";
             wellknownNamespaceParserTypeNames["http://www.springframework.net/aop"] = "Spring.Aop.Config.AopNamespaceParser, Spring.Aop";
+            wellknownNamespaceParserTypeNames["http://www.springframework.net/context"] = "Spring.Context.Config.ContextNamespaceParser, Spring.Core";
             wellknownNamespaceParserTypeNames["http://www.springframework.net/db"] = "Spring.Data.Config.DatabaseNamespaceParser, Spring.Data";
             wellknownNamespaceParserTypeNames["http://www.springframework.net/database"] = "Spring.Data.Config.DatabaseNamespaceParser, Spring.Data";
             wellknownNamespaceParserTypeNames["http://www.springframework.net/remoting"] = "Spring.Remoting.Config.RemotingNamespaceParser, Spring.Services";
