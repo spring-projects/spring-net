@@ -1568,7 +1568,7 @@ Public Class ExampleObject
         myObjectTwo = yetAnotherObject
         Me.i = i
     End Sub
-End Class</programlisting>Ghe constructor arguments specified in the object
+End Class</programlisting>The constructor arguments specified in the object
         definition will be used to pass in as arguments to the constructor of
         the <literal>ExampleObject</literal>.</para>
 
