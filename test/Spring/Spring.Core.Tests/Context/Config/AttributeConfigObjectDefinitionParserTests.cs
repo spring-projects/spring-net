@@ -33,7 +33,6 @@ namespace Spring.Context.Config
         [SetUp]
         public void Setup()
         {
-            NamespaceParserRegistry.RegisterParser(typeof(ContextNamespaceParser));
         }
 
         [Test]

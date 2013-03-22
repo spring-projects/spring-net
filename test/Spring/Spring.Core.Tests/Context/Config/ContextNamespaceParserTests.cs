@@ -30,11 +30,10 @@ namespace Spring.Context.Config
         [SetUp]
         public void Setup()
         {
-            NamespaceParserRegistry.RegisterParser(typeof(ContextNamespaceParser));
         }
         
         [Test]
-        public void Registered()
+        public void RegisteredAsWellKnownParser()
         {
             Assert.IsNotNull(NamespaceParserRegistry.GetParser("http://www.springframework.net/context"));
         }
