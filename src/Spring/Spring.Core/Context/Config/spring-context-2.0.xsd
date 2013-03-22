@@ -103,13 +103,6 @@
 	The fully-qualified class name of the BeanNameGenerator to be used for naming detected components.
 					]]>
           </xsd:documentation>
-          <xsd:appinfo>
-            <tool:annotation>
-              <tool:expected-type type="java.lang.Class" />
-              <tool:assignable-to
-								type="org.springframework.beans.factory.support.BeanNameGenerator" />
-            </tool:annotation>
-          </xsd:appinfo>
         </xsd:annotation>
       </xsd:attribute>
     </xsd:complexType>
