@@ -2739,8 +2739,8 @@ namespace Spring.Objects.Factory.Support
         /// </para>
         /// </remarks>
         /// <see cref="RegisterSingleton"/>
-        /// <see cref="Spring.Objects.Factory.Support.IObjectDefinitionRegistry.GetObjectDefinitionNames"/>
-        /// <see cref="Spring.Objects.Factory.IListableObjectFactory.GetObjectDefinitionNames"/>
+        /// <see cref="IObjectDefinitionRegistry.GetObjectDefinitionNames()"/>
+        /// <see cref="IListableObjectFactory.GetObjectDefinitionNames()"/>
         public IList<string> SingletonNames
         {
             get

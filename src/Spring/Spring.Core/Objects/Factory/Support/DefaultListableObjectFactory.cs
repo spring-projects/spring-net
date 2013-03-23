@@ -181,7 +181,7 @@ namespace Spring.Objects.Factory.Support
         /// <remarks>
         /// <p>
         /// Called by autowiring. If a subclass cannot obtain information about object
-        /// names by <see cref="System.Type"/>, a corresponding exception should be thrown.
+        /// -pnames by <see cref="System.Type"/>, a corresponding exception should be thrown.
         /// </p>
         /// </remarks>
         /// <param name="requiredType">
@@ -275,31 +275,16 @@ namespace Spring.Objects.Factory.Support
             return (objectType != null && type.IsAssignableFrom(objectType));
         }
 
-        private bool IsObjectDefinitionTypeMatch(string name, Type checkedType)
+        private bool IsObjectDefinitionTypeMatch(string name, Type checkedType, bool includeAncestor = false)
         {
             if (checkedType == null)
             {
                 return true;
             }
-            RootObjectDefinition rod = GetMergedObjectDefinition(name, false);
+            RootObjectDefinition rod = GetMergedObjectDefinition(name, includeAncestor);
             return (rod.HasObjectType && checkedType.IsAssignableFrom(rod.ObjectType));
         }
-        /*
-                /// <summary>
-                /// Merges the object definitions.
-                /// </summary>
-                /// <param name="name">Object definition name.</param>
-                /// <param name="parentDefinition">The parent definition.</param>
-                /// <param name="childDefinition">The child definition.</param>
-                /// <returns>Merged object definition.</returns>
-                protected override RootObjectDefinition MergeObjectDefinitions(string name, IObjectDefinition parentDefinition,
-                                                                               IObjectDefinition childDefinition)
-                {
-                    RootObjectDefinition rootDefinition = base.MergeObjectDefinitions(name, parentDefinition, childDefinition);
-                    RegisterObjectDefinition(name, rootDefinition);
-                    return rootDefinition;
-                }
-        */
+
         #endregion
 
         #region Fields
@@ -598,6 +583,7 @@ namespace Spring.Objects.Factory.Support
 
         #region IListableObjectFactory Members
 
+
         /// <summary>
         /// Return the names of all objects defined in this factory.
         /// </summary>
@@ -608,13 +594,27 @@ namespace Spring.Objects.Factory.Support
         /// <seealso cref="Spring.Objects.Factory.IListableObjectFactory.GetObjectDefinitionNames()"/>
         public IList<string> GetObjectDefinitionNames()
         {
+            return GetObjectDefinitionNames(false);
+        }
+
+        /// <summary>
+        /// Return the names of all objects defined in this factory, if <code>includeAncestors</code> is <code>true</code>
+        /// includes all parent factories.
+        /// </summary>
+        /// <param name="includeAncestors">to include parent factories in result</param>
+        /// <returns>
+        /// The names of all objects defined in this factory, if <code>includeAncestors</code> is <code>true</code> includes all 
+        /// objects defined in parent factories, or an empty array if none are defined.
+        /// </returns>
+        public IList<string> GetObjectDefinitionNames(bool includeAncestors)
+        {
             IList<string> results = new List<string>(objectDefinitionNames);
 
             var listableObjectFactory = ParentObjectFactory as IListableObjectFactory;
 
-            if (listableObjectFactory != null)
+            if (includeAncestors && listableObjectFactory != null)
             {
-                foreach (var name in listableObjectFactory.GetObjectDefinitionNames())
+                foreach (var name in listableObjectFactory.GetObjectDefinitionNames(includeAncestors))
                 {
                     if (!results.Contains(name))
                     {
@@ -641,15 +641,20 @@ namespace Spring.Objects.Factory.Support
         /// <seealso cref="Spring.Objects.Factory.IListableObjectFactory.GetObjectDefinitionNames()"/>
         public IList<string> GetObjectDefinitionNames(Type type)
         {
+            return GetObjectDefinitionNames(type, false);
+        }
+
+        public IList<string> GetObjectDefinitionNames(Type type, bool includeAncestor)
+        {
             List<string> matches = new List<string>();
-            foreach (string name in objectDefinitionNames)
+            foreach (string name in GetObjectDefinitionNames(includeAncestor))
             {
-                if (IsObjectDefinitionTypeMatch(name, type))
+                if (IsObjectDefinitionTypeMatch(name, type, includeAncestor))
                 {
                     matches.Add(name);
                 }
             }
-            return matches;
+            return matches;            
         }
 
         /// <summary>
@@ -1013,7 +1018,7 @@ namespace Spring.Objects.Factory.Support
         protected List<string> DoGetObjectNamesForType(Type type, bool includeNonSingletons, bool allowEagerInit)
         {
             List<string> result = new List<string>();
-            IList<string> objectNames = GetObjectDefinitionNames();
+            IList<string> objectNames = GetObjectDefinitionNames(true);
             foreach (string s in objectNames)
             {
                 string objectName = s;

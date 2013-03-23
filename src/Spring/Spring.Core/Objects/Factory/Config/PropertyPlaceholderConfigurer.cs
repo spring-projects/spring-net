@@ -161,6 +161,7 @@ namespace Spring.Objects.Factory.Config
 		private string placeholderPrefix = DefaultPlaceholderPrefix;
 		private string placeholderSuffix = DefaultPlaceholderSuffix;
 		private EnvironmentVariableMode environmentVariableMode = EnvironmentVariableMode.Fallback;
+	    private bool includeAncestors;
 
         /// <summary>
         /// Initializes the new instance
@@ -171,6 +172,7 @@ namespace Spring.Objects.Factory.Config
 	    }
 
 	    #region Properties 
+
         /// <summary>
 		/// The placeholder prefix (the default is <c>${</c>).
 		/// </summary>
@@ -214,6 +216,11 @@ namespace Spring.Objects.Factory.Config
 			set { environmentVariableMode = value; }
         }
 
+	    public bool IncludeAncestors
+	    {
+            set { includeAncestors = value; }
+	    }
+
         #endregion
 
         /// <summary>
@@ -233,12 +240,19 @@ namespace Spring.Objects.Factory.Config
             PlaceholderResolveHandlerAdapter resolveAdapter = new PlaceholderResolveHandlerAdapter(this, props);
             ObjectDefinitionVisitor visitor = new ObjectDefinitionVisitor(resolveAdapter.ParseAndResolveVariables);
 
-			IList<string> objectDefinitionNames = factory.GetObjectDefinitionNames();
+			IList<string> objectDefinitionNames = factory.GetObjectDefinitionNames(includeAncestors);
 			for (int i = 0; i < objectDefinitionNames.Count; ++i)
 			{
 				string name = objectDefinitionNames[i];
-				IObjectDefinition definition = factory.GetObjectDefinition(name);
-				try
+				IObjectDefinition definition = factory.GetObjectDefinition(name, includeAncestors);
+
+			    if (definition == null)
+			    {
+                    logger.ErrorFormat("'{0}' can't be found in factorys'  '{1}' object definition (includeAncestor {2})", name, factory, includeAncestors);
+			        continue;
+			    }
+
+			    try
 				{
                     visitor.VisitObjectDefinition(definition);
 				}
