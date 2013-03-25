@@ -19,6 +19,9 @@
 #endregion
 
 using System;
+
+using Common.Logging;
+
 using Spring.Objects;
 using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Xml;
@@ -33,6 +36,8 @@ namespace Spring.Context.Attributes
     /// </summary>
     public class ScannedGenericObjectDefinition : GenericObjectDefinition
     {
+        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+
         /// <summary>
         /// Name provided by the Component Attribute
         /// </summary>
@@ -51,9 +56,11 @@ namespace Spring.Context.Attributes
 
             ParseName();
             ApplyDefaults(defaults);
-            ParseScopeAttribute();
             ParseLazyAttribute();
+            ParseScopeAttribute();
             ParseQualifierAttribute();
+
+            Log.Debug(m => m("ComponentName: {0}; {1}", _componentName, ToString()));
         }
 
         private void ParseName()
@@ -77,7 +84,14 @@ namespace Spring.Context.Attributes
         {
             var attr = Attribute.GetCustomAttribute(ObjectType, typeof(ScopeAttribute), true) as ScopeAttribute;
             if (attr != null)
+            {
                 Scope = attr.ObjectScope.ToString().ToLower();
+
+                if (attr.ObjectScope == ObjectScope.Request || attr.ObjectScope == ObjectScope.Session)
+                {
+                    IsLazyInit = true;
+                }
+            }
         }
 
         private void ParseLazyAttribute()
