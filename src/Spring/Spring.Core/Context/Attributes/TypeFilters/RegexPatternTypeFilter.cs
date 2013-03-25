@@ -49,5 +49,17 @@ namespace Spring.Context.Attributes.TypeFilters
         {
             return Regex.IsMatch(type.FullName, _pattern);
         }
+        
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns>
+        /// A string that represents the current object.
+        /// </returns>
+        /// <filterpriority>2</filterpriority>
+        public override string ToString()
+        {
+            return string.Format("Pattern: {0}", _pattern);
+        }
     }
 }

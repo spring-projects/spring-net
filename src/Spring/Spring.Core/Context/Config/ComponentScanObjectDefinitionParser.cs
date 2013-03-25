@@ -102,6 +102,9 @@ namespace Spring.Context.Config
 
             foreach (var baseAssembly in baseAssemblies.Split(','))
             {
+                if (Logger.IsDebugEnabled)
+                    Logger.Debug("Start With Assembly Filter: " + baseAssembly);
+
                 scanner.WithAssemblyFilter(assy => assy.FullName.StartsWith(baseAssembly));
             }
         }
@@ -111,7 +114,10 @@ namespace Spring.Context.Config
             var nameGeneratorString = element.GetAttribute(NAME_GENERATOR_ATTRIBUTE);
             var nameGenerator = CustomTypeFactory.GetNameGenerator(nameGeneratorString);
             if (nameGenerator != null)
+            {
+                Logger.Debug(m => m("Use NameTable Generator: {0}", nameGeneratorString));
                 scanner.ObjectNameGenerator = nameGenerator;
+            }
         }
 
         private void ParseTypeFilters(AssemblyObjectDefinitionScanner scanner, XmlElement element)
@@ -119,9 +125,17 @@ namespace Spring.Context.Config
             foreach (XmlNode node in element.ChildNodes)
             {
                 if (node.Name.Contains(INCLUDE_FILTER_ELEMENT))
-                    scanner.WithIncludeFilter(CreateTypeFilter(node));
+                {
+                    var filter = CreateTypeFilter(node);
+                    Logger.Debug(m => m("Inlude Filter: {0}", filter));
+                    scanner.WithIncludeFilter(filter);
+                }
                 else if (node.Name.Contains(EXCLUDE_FILTER_ELEMENT))
-                    scanner.WithExcludeFilter(CreateTypeFilter(node));
+                {
+                    var filter = CreateTypeFilter(node);
+                    Logger.Debug(m => m("Exclude Filter: {0}", filter));
+                    scanner.WithExcludeFilter(filter);
+                }
             }
         }
 
@@ -154,6 +168,5 @@ namespace Spring.Context.Config
                     throw new InvalidEnumArgumentException(string.Format("Filter type {0} is not defined", type));
             }
         }
-
     }
 }

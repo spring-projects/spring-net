@@ -70,6 +70,8 @@ namespace Spring.Context.Attributes
             {
                 var definition = new ScannedGenericObjectDefinition(type, Defaults);
                 string objectName = ObjectNameGenerator.GenerateObjectName(definition, registry);
+
+                Logger.Debug(m => m("Register Type: {0} with object name '{1}'", type.FullName, objectName));
                 registry.RegisterObjectDefinition(objectName, definition);
             }
         }
