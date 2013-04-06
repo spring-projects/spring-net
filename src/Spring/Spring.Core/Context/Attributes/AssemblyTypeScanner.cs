@@ -275,7 +275,9 @@ namespace Spring.Context.Attributes
 
                     if (null != loadedAssembly)
                     {
-                        Logger.Debug(m => m("Add Assembly: {0}", loadedAssembly.FullName));
+                        string fullname = loadedAssembly.FullName;
+                        Logger.Debug(m => m("Add Assembly: {0}", fullname));
+
                         assemblies.Add(loadedAssembly);
                     }
                 }
@@ -359,7 +361,10 @@ namespace Spring.Context.Attributes
             bool result = AssemblyInclusionPredicates.Any(include => include(assembly));
 
             if (result)
-                Logger.Debug(m => m("Include Assembly:  {0}", assembly.FullName));
+            {
+                string fullname = assembly.FullName;
+                Logger.Debug(m => m("Include Assembly:  {0}", fullname));
+            }
 
             return result;
         }
