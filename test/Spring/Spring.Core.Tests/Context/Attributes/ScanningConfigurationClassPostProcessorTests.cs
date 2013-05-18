@@ -30,9 +30,7 @@ namespace Spring.Context.Attributes
     {
         protected override void CreateApplicationContext()
         {
-            NamespaceParserRegistry.RegisterParser(typeof(ContextNamespaceParser));
             _ctx = new XmlApplicationContext(ReadOnlyXmlTestResource.GetFilePath("SimpleScanTest.xml", GetType()));
-    
         }
 
         [Test]
