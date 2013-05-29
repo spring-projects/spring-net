@@ -120,6 +120,15 @@ namespace Spring.Context.Config
         }
 
         [Test]
+        public void ComponentsUseDefaultAutoWire()
+        {
+           _applicationContext = new XmlApplicationContext(ReadOnlyXmlTestResource.GetFilePath("ConfigFiles.ComponentScan5.xml", GetType()));
+           var prototypeDef = _applicationContext.ObjectFactory.GetObjectDefinition("Prototype");
+
+           Assert.That(prototypeDef.AutowireMode == AutoWiringMode.ByName);
+        }
+
+        [Test]
         public void ComponentWithQualifier()
         {
             _applicationContext = new XmlApplicationContext(ReadOnlyXmlTestResource.GetFilePath("ConfigFiles.ComponentScan6.xml", GetType()));
