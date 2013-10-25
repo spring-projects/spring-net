@@ -21,7 +21,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Reflection;
 using System.Linq;
 using Spring.Collections;
@@ -282,14 +281,13 @@ namespace Spring.Objects.Factory.Attributes
         {
             // Quick check on the concurrent map first, with minimal locking.
             InjectionMetadata metadata = null;
-            if (_injectionMetadataCache.ContainsKey(objectType))
-                metadata = _injectionMetadataCache[objectType];
+            _injectionMetadataCache.TryGetValue(objectType, out metadata);
 
             if (metadata == null)
             {
                 lock (_injectionMetadataCache)
                 {
-                    if (!_injectionMetadataCache.ContainsKey(objectType))
+                    if (!_injectionMetadataCache.TryGetValue(objectType, out metadata))
                     {
                         metadata = BuildAutowiringMetadata(objectType);
                         _injectionMetadataCache.Add(objectType, metadata);
