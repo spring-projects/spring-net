@@ -31,7 +31,7 @@ Compatibility:
 OpenCover
 PartCover 4.0
 PartCover 2.2, 2.3
-Visual Studio
+Visual Studio (vstest.console.exe, CodeCoverage.exe)
 NCover (tested version 1.5.8, other versions may not work)
 
 Also available as NuGet package:
@@ -51,6 +51,41 @@ For further details take a look at LICENSE.txt.
 
 CHANGELOG
 
+1.9.1.0
+
+    * Fix: Improved naming of HTML report files
+
+1.9.0.0
+
+    * New: Added support for Visual Studio coverage reports
+           (CodeCoverage.exe)
+
+1.8.1.0
+
+    * Fix: Issue #9988: Completely empty classes now show correct
+           coverage
+
+1.8.0.0
+
+    * New: Issue #9891: Aggregation of results by namespace
+    * New: Issue #9875: More details and sorting possiblity in summary
+           report
+    * New: Issue #9913: Mark of complete line according to coverage
+    * New: Issue #9935: In HTMLSummary static text instead of link is
+           rendered
+    * New: Issue #9937: HTMLSummary now is a self containing report
+           without external CSS or JavaScript
+
+1.7.3.0
+
+    * New: Issue #9833: Version command line parameter
+    * Fix: Issue #9886: Compatibility for OpenCover 4.0.1229
+
+1.7.2.0
+
+    * Fix: Issue #9736: NCover 1.5.8 Exclude attribute is not handled
+    * Fix: Issue #9773: Ignored casing in directory search
+
 1.7.1.0
 
     * Fix: Issue #9706: Trailing slashes in command line arguments
@@ -69,6 +104,7 @@ CHANGELOG
 1.6.0.0
 
     * New: Added support for Visual Studio coverage reports
+           (vstest.console.exe)
     * New: Issue #9534: Added support for wildcards in report file
            pattern
     * Fix: OpenCoverParser supports coverage for methods that 'yield'

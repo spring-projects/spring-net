@@ -140,7 +140,7 @@ Commandline Examples:
   
   <property name="test.withcoverage" value="false" overwrite="true" />
   <!-- what coverage tool to use: ncover or opencover -->
-  <property name="test.coverage.tool" value="ncover" overwrite="false" />
+  <property name="test.coverage.tool" value="opencover" overwrite="false" />
 
   <!-- import non-redistributables if available -->
   <!-- to build certain libraries (e.g. Spring.Messaging.Ems), 3rd party libraries are required
@@ -403,7 +403,6 @@ Commandline Examples:
     <nant buildfile="src/Spring/Spring.Aop/Spring.Aop.build" target="build" if="${build-aop}"/>
     <nant buildfile="src/Spring/Spring.Web/Spring.Web.build" target="build" if="${build-web}"/>
     <nant buildfile="src/Spring/Spring.Web.Extensions/Spring.Web.Extensions.build" target="build" if="${build-web and (nant.settings.currentframework == 'net-3.5' or nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'mono-2.0')}"/>
-    <nant buildfile="src/Spring/Spring.Web.Mvc/Spring.Web.Mvc.build" target="build" if="${nant.settings.currentframework == 'net-3.5' or nant.settings.currentframework == 'net-4.0'}"/>
     <nant buildfile="src/Spring/Spring.Web.Mvc3/Spring.Web.Mvc3.build" target="build" if="${nant.settings.currentframework == 'net-4.0'}"/>
 	<nant buildfile="src/Spring/Spring.Web.Mvc4/Spring.Web.Mvc4.build" target="build" if="${nant.settings.currentframework == 'net-4.0'}"/>
     <nant buildfile="src/Spring/Spring.Data/Spring.Data.build" target="build" if="${build-data}"/>
@@ -437,7 +436,6 @@ Commandline Examples:
 	
     <nant buildfile="test/Spring/Spring.Services.Tests/Spring.Services.Tests.build" target="test" if="${build-services}"/>
     <nant buildfile="test/Spring/Spring.Web.Tests/Spring.Web.Tests.build" target="test" if="${build-web}"/>
-	<nant buildfile="test/Spring/Spring.Web.Mvc.Tests/Spring.Web.Mvc.Tests.build" target="test" if="${build-web and (nant.settings.currentframework == 'net-3.5' or nant.settings.currentframework == 'net-4.0')}"/>
 	<nant buildfile="test/Spring/Spring.Web.Mvc3.Tests/Spring.Web.Mvc3.Tests.build" target="test" if="${build-web and nant.settings.currentframework == 'net-4.0'}"/>
 	<nant buildfile="test/Spring/Spring.Web.Mvc4.Tests/Spring.Web.Mvc4.Tests.build" target="test" if="${build-web and nant.settings.currentframework == 'net-4.0'}"/>
     <nant buildfile="test/Spring/Spring.Testing.NUnit.Tests/Spring.Testing.NUnit.Tests.build" target="test" if="${build-testing-nunit}"/>
@@ -697,8 +695,6 @@ Commandline Examples:
         <delete dir="src/Spring/Spring.Web/bin" failonerror="false"/>
         <delete dir="src/Spring/Spring.Web.Extensions/obj" failonerror="false"/>
         <delete dir="src/Spring/Spring.Web.Extensions/bin" failonerror="false"/>
-        <delete dir="src/Spring/Spring.Web.Mvc/obj"  failonerror="false"/>
-        <delete dir="src/Spring/Spring.Web.Mvc/bin"  failonerror="false"/>
         <delete dir="src/Spring/Spring.Web.Mvc3/obj" failonerror="false"/>
         <delete dir="src/Spring/Spring.Web.Mvc3/bin" failonerror="false"/>
         <delete dir="src/Spring/Spring.Web.Mvc4/obj" failonerror="false"/>
@@ -712,8 +708,6 @@ Commandline Examples:
         <delete dir="test/Spring/Spring.Messaging.Ems.Integration.Tests/bin" failonerror="false"/>
         <delete dir="test/Spring/Spring.Scheduling.Quartz21.Integration.Tests/obj" failonerror="false"/>
         <delete dir="test/Spring/Spring.Scheduling.Quartz21.Integration.Tests/bin" failonerror="false"/>
-        <delete dir="test/Spring/Spring.Web.Mvc.Tests/obj" failonerror="false"/>
-        <delete dir="test/Spring/Spring.Web.Mvc.Tests/bin" failonerror="false"/>
         <delete dir="test/Spring/Spring.Web.Mvc3.Tests/obj"  failonerror="false"/>
         <delete dir="test/Spring/Spring.Web.Mvc3.Tests/bin"  failonerror="false"/>
         <delete dir="test/Spring/Spring.Web.Mvc4.Tests/obj"  failonerror="false"/>
@@ -781,8 +775,6 @@ Commandline Examples:
             <include name="*.pdb"/> 
           </fileset>           
         </delete>   
-        <delete dir="test/Spring/Spring.Web.Mvc.Tests/obj" failonerror="false"/>
-        <delete dir="test/Spring/Spring.Web.Mvc.Tests/bin" failonerror="false"/>
         <delete dir="test/Spring/Spring.Web.Mvc3.Tests/obj"  failonerror="false"/>
         <delete dir="test/Spring/Spring.Web.Mvc3.Tests/bin"  failonerror="false"/>
         <delete dir="test/Spring/Spring.Web.Mvc4.Tests/obj"  failonerror="false"/>
@@ -1377,10 +1369,6 @@ Commandline Examples:
           <include name="*/*/Spring.Web.xml"/>
           <include name="*/*/Spring.Web.pdb"/>
 		  
-		  <include name="*/*/Spring.Web.Mvc.dll"/>
-          <include name="*/*/Spring.Web.Mvc.xml"/>
-          <include name="*/*/Spring.Web.Mvc.pdb"/>
-		  
 		  <include name="*/*/Spring.Web.Mvc3.dll"/>
           <include name="*/*/Spring.Web.Mvc3.xml"/>
           <include name="*/*/Spring.Web.Mvc3.pdb"/>
@@ -1447,10 +1435,6 @@ Commandline Examples:
 			<include name="*/*/Spring.Scheduling.Quartz21.dll"/>
 			<include name="*/*/Spring.Scheduling.Quartz21.xml"/>
 			<include name="*/*/Spring.Scheduling.Quartz21.pdb"/>
-			
-			<include name="*/Spring.Web.Mvc.dll"/>
-            <include name="*/Spring.Web.Mvc.xml"/>
-            <include name="*/Spring.Web.Mvc.pdb"/>
 			
 			<include name="*/Spring.Web.Extensions.dll"/>
             <include name="*/Spring.Web.Extensions.xml"/>
@@ -1645,7 +1629,6 @@ Commandline Examples:
       <include name="src/Spring/Spring.Core/**"/>
       <include name="src/Spring/Spring.Aop/**"/>
       <include name="src/Spring/Spring.Web/**"/>
-      <include name="src/Spring/Spring.Web.Mvc/**"/>
       <include name="src/Spring/Spring.Web.Mvc3/**"/>
 	  <include name="src/Spring/Spring.Web.Mvc4/**"/>
       <include name="src/Spring/Spring.Web.Extensions/**"/>
@@ -1667,7 +1650,6 @@ Commandline Examples:
       <include name="test/Spring/Spring.Core.Tests/**"/>
       <include name="test/Spring/Spring.Aop.Tests/**"/>
       <include name="test/Spring/Spring.Web.Tests/**"/>
-	  <include name="test/Spring/Spring.Web.Mvc.Tests/**"/>
 	  <include name="test/Spring/Spring.Web.Mvc3.Tests/**"/>
 	  <include name="test/Spring/Spring.Web.Mvc4.Tests/**"/>
       <include name="test/Spring/Spring.Services.Tests/**"/>
