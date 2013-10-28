@@ -159,7 +159,7 @@ namespace Spring.Context.Attributes
         /// <param name="registry">The registry within which to register the types.</param>
         public virtual void ScanAndRegisterTypes(IObjectDefinitionRegistry registry)
         {
-            IEnumerable<Type> configTypes = base.Scan();
+            IEnumerable<Type> configTypes = Scan();
             RegisterDefinitionsForTypes(registry, configTypes);
         }
 
