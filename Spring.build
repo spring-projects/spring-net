@@ -1684,7 +1684,6 @@ Commandline Examples:
       <include name="examples/Spring/Spring.Calculator/**"/>
       <include name="examples/Spring/Spring.Calculator/src/Spring.Calculator.Web.2005/Bin/*.refresh"/>
       <include name="examples/Spring/Spring.WebQuickStart/**"/>
-      <include name="examples/Spring/Spring.MvcQuickStart/**"/>
 	  <include name="examples/Spring/Spring.Mvc3QuickStart/**"/>
 	  <include name="examples/Spring/Spring.Mvc4QuickStart/**"/>
 	  <include name="examples/Spring/Spring.Web.Extensions.Example/**"/>
