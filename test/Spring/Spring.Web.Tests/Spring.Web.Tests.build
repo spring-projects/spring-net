@@ -12,14 +12,17 @@
     <target name="build">
         <!-- build Spring.Web -->
         <csc target="library" define="${current.build.defines.csc}" 
-	     warnaserror="true" 
+			 warnaserror="true" 
              optimize="${build.optimize}"
-	     debug="${current.build.debug}"
+			 debug="${current.build.debug}"
              output="${current.bin.dir}/${project::get-name()}.dll" 
-	     doc="${current.bin.dir}/${project::get-name()}.xml">
+			 doc="${current.bin.dir}/${project::get-name()}.xml"
+			 nostdlib="true"
+			 noconfig="true"
+			>
             <nowarn>
                 <warning number="${nowarn.numbers.test}" /> <!-- 1701 -->
-                <warning number="${nowarn.numbers.test},1587" if="${nant.settings.currentframework=='mono-2.0'}"/>
+                <warning number="${nowarn.numbers.test},1587"/>
             </nowarn>
             <sources failonempty="true">
                 <include name="**/*.cs" />
@@ -33,18 +36,21 @@
                 <exclude name="Data/**/*" />
                 <exclude name="obj/**/*" />
             </resources>
-            <references basedir="${current.bin.dir}">
-                <include name="*.dll" />
-		<include name="System.Configuration.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
-		<include name="System.Drawing.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
-		<include name="System.Xml.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
-		<include name="System.Web.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
-		<include name="System.Web.Services.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
-		<include name="System.Data.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
-                <exclude name="${project::get-name()}.dll" />
-                <exclude name="CloverRuntime.dll" />
+            <references>
+				<include name="mscorlib.dll"/>
+				<include name="Microsoft.CSharp.dll"/>
+				<include name="System.dll"/>
+				<include name="System.Core.dll"/>
+				<include name="System.Configuration.dll" />
+				<include name="System.Drawing.dll" />
+				<include name="System.Xml.dll" />
+				<include name="System.Web.dll" />
+				<include name="System.Web.Services.dll" />
+				<include name="System.Data.dll" />
+                <include name="${current.bin.dir}/*.dll" />
+                <exclude name="${current.bin.dir}/${project::get-name()}.dll" />
+                <exclude name="${current.bin.dir}/CloverRuntime.dll" />
                 <include name="${lib.dir}/nunit.core.interfaces.dll" />
-				<exclude if="${net-4.0}" name="System.Web.Extensions.dll" />
             </references>
         </csc>
         <copy todir="${current.bin.dir}">

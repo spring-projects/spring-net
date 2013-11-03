@@ -12,14 +12,17 @@
     <target name="build">
         <!-- build Spring.Web.Mvc -->
         <csc target="library" define="${current.build.defines.csc}" 
-	     warnaserror="true" 
+			 warnaserror="true" 
              optimize="${build.optimize}"
-	     debug="${current.build.debug}"
+			 debug="${current.build.debug}"
              output="${current.bin.dir}/${project::get-name()}.dll" 
-	     doc="${current.bin.dir}/${project::get-name()}.xml">
+			 doc="${current.bin.dir}/${project::get-name()}.xml"
+			 nostdlib="true"
+			 noconfig="true"
+			>
             <nowarn>
                 <warning number="${nowarn.numbers.test}" /> <!-- 1701 -->
-                <warning number="${nowarn.numbers.test},1587" if="${nant.settings.currentframework=='mono-2.0'}"/>
+                <warning number="${nowarn.numbers.test},1587"/>
             </nowarn>
             <sources failonempty="true">
                 <include name="**/*.cs" />
@@ -37,14 +40,17 @@
                 <exclude name="../Spring.Web.Mvc3.Tests/obj/**/*" />
                 <exclude name="../Spring.Web.Mvc3.Tests/bin/**/*" />
             </resources>
-            <references basedir="${current.bin.dir}">
-                <include name="*.dll" />
-				<include name="System.Configuration.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
-				<include name="System.Drawing.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
-				<include name="System.Xml.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
-				<include name="System.Web.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
-				<include name="System.Web.Services.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
-				<include name="System.Data.dll" if="${nant.settings.currentframework=='mono-2.0'}" />
+            <references>
+				<include name="mscorlib.dll"/>
+				<include name="Microsoft.CSharp.dll"/>
+				<include name="System.dll"/>
+				<include name="System.Core.dll"/>
+				<include name="System.Configuration.dll" />
+				<include name="System.Drawing.dll" />
+				<include name="System.Xml.dll" />
+				<include name="System.Web.dll" />
+				<include name="System.Web.Services.dll" />
+				<include name="System.Data.dll" />
 				
 				<include name="System.Web.Abstractions.dll"/>
 				<include name="System.Web.Routing.dll"/>
@@ -56,15 +62,15 @@
 				<include name="${programfiles}\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies\System.Web.Http.WebHost.dll" />
 				<include name="${programfilesx86}\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies\System.Web.Http.WebHost.dll" />
 
-				
-                <exclude name="${project::get-name()}.dll" />
+                <include name="${current.bin.dir}/*.dll" />
+                <exclude name="${current.bin.dir}/${project::get-name()}.dll" />
             
                 <include name="${lib.dir}/nunit.core.interfaces.dll" />
-				<exclude name="System.Web.Extensions.dll" />
-				<exclude name="Spring.Web.Mvc.dll" />
-				<exclude name="Spring.Web.Mvc.Tests.dll" />
-				<exclude name="Spring.Web.Mvc3.dll" />
-				<exclude name="Spring.Web.Mvc3.Tests.dll" />
+				<exclude name="${current.bin.dir}/System.Web.Extensions.dll" />
+				<exclude name="${current.bin.dir}/Spring.Web.Mvc.dll" />
+				<exclude name="${current.bin.dir}/Spring.Web.Mvc.Tests.dll" />
+				<exclude name="${current.bin.dir}/Spring.Web.Mvc3.dll" />
+				<exclude name="${current.bin.dir}/Spring.Web.Mvc3.Tests.dll" />
             </references>
         </csc>
         <copy todir="${current.bin.dir}">

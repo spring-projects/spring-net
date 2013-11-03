@@ -21,6 +21,8 @@
             debug="${current.build.debug}"
             output="${current.bin.dir}/${project::get-name()}.dll"
             doc="${current.bin.dir}/${project::get-name()}.xml"
+			nostdlib="true"
+			noconfig="true"
             >
             <arg line="${compiler.args}"/>
             <nowarn>
@@ -32,15 +34,19 @@
                 <include name="**/*.cs" />
                 <include name="../GenCommonAssemblyInfo.cs" />
             </sources>
-	    <references basedir="${current.bin.dir}">
-		<include name="Spring.Core.dll" />
-		<include name="Spring.Data.dll" />
-		<include name="Common.Logging.dll" />
-		<include name="System.Data.dll" />
-		<include name="Quartz.dll" />
-		<include name="C5.dll" />
-		<exclude name="${project::get-name()}.dll" />
-		<exclude if="${net-4.0}" name="System.Web.Extensions.dll" />
+	    <references>
+			<include name="mscorlib.dll"/>
+			<include name="Microsoft.CSharp.dll"/>
+			<include name="System.dll"/>
+			<include name="System.Core.dll"/>
+			<include name="System.Configuration.dll"/>
+			<include name="System.Data.dll" />
+			<include name="${current.bin.dir}/Spring.Core.dll" />
+			<include name="${current.bin.dir}/Spring.Data.dll" />
+			<include name="${current.bin.dir}/Common.Logging.dll" />
+			<include name="${current.bin.dir}/Quartz.dll" />
+			<include name="${current.bin.dir}/C5.dll" />
+			<exclude name="${current.bin.dir}/${project::get-name()}.dll" />
 	    </references>
         </csc>
     </target>

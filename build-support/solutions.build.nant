@@ -35,23 +35,11 @@ Rebuilding Solutions using Nant and "solutions.build":
   <readregistry property="net35.install.dir" key="${reg.software.prefix}\NET Framework Setup\NDP\v3.5\InstallPath" hive="LocalMachine" failonerror="true"/>
   <readregistry property="net40.install.dir" key="${reg.software.prefix}\NET Framework Setup\NDP\v4\Full\InstallPath" hive="LocalMachine" failonerror="true"/>
 
-  <readregistry property="vs2008.install.dir" key="${reg.software.prefix}\VisualStudio\9.0\InstallDir" hive="LocalMachine" failonerror="false"/>
-  <if test="${not property::exists('vs2008.install.dir')}">
-    <readregistry property="vs2010.install.dir" key="${reg.software.prefix}\VWDExpress\9.0\InstallDir" hive="LocalMachine" failonerror="false"/>
-  </if>
-  
-  <readregistry property="vs2010.install.dir" key="${reg.software.prefix}\VisualStudio\10.0\InstallDir" hive="LocalMachine" failonerror="false"/>
-  <if test="${not property::exists('vs2010.install.dir')}">
-    <readregistry property="vs2010.install.dir" key="${reg.software.prefix}\VWDExpress\10.0\InstallDir" hive="LocalMachine" failonerror="false"/>
-  </if>
-
   <property name="msbuild.exe" value="${net40.install.dir}\msbuild.exe"/>
   
   <property name="buildconfiguration" value="Debug" />
 
   <echo message="reg.software.prefix: '${reg.software.prefix}'"/>
-  <echo message="vs2008.install.dir:  '${vs2008.install.dir}'"/>
-  <echo message="vs2010.install.dir:  '${vs2010.install.dir}'"/>
   <echo message="msbuild.exe:         '${msbuild.exe}'"/>
   
   <target name="RebuildAllSolutions" description="Rebuild all Solutions">
@@ -60,10 +48,8 @@ Rebuilding Solutions using Nant and "solutions.build":
       command ResGen ..." on "Win 7 64".
       See: http://social.msdn.microsoft.com/Forums/en-US/msbuild/thread/e8c1d26a-5e77-4422-bbc8-f0b7f25702d2/
     -->
-    <property name="msbuild.exe" value="${net35.install.dir}\msbuild.exe"/>
-    <call target="RebuildAllSolutions-3.5" if="${property::exists('vs2008.install.dir')}" />
     <property name="msbuild.exe" value="${net40.install.dir}\msbuild.exe"/>
-    <call target="RebuildAllSolutions-4.0" if="${property::exists('vs2010.install.dir')}" />
+    <call target="RebuildAllSolutions-4.0" />
   </target>
 
   <target name="Clean">
@@ -92,7 +78,7 @@ Rebuilding Solutions using Nant and "solutions.build":
   <target name="RebuildAllSolutions-3.5" depends="Clean">
     <!-- build "main" solution -->
 
-    <property name="solutionfile" value="${root.dir}/Spring.NET.2008.sln" />
+    <property name="solutionfile" value="${root.dir}/Spring.NET.2010.sln" />
     <property name="solutionconfiguration" value="${buildconfiguration}" />
     <call target="RebuildSolution-3.5" />
 
@@ -100,16 +86,10 @@ Rebuilding Solutions using Nant and "solutions.build":
     <foreach item="File" property="filename">
       <in>
         <items basedir="${root.dir}">
-          <include name="examples/Spring/**/*.2008.sln" />
           <include name="examples/Spring/Spring.Data.NHibernate/Spring.Northwind.sln" />
-          <!-- Does not build on bamboo server SPRNET-1283 -->
-          <exclude name="examples/Spring/Spring.MsmqQuickStart/**/*.2005.sln"/>
-          <exclude name="examples/Spring/Spring.Calculator/**/*.2008.sln"/>
-          <!-- <include name="*.2005.sln" /> -->
-          <include name="*.2008.sln" />
-          <exclude name="Spring.NET.2008.sln"/>
+          <include name="*.2010.sln" />
           <exclude name="examples/Spring/Spring.EmsQuickStart/**/*.sln" unless="${build-ems}"/>
-          <exclude name="examples/**/Spring.Examples.Pool.2008.sln"/>
+          <exclude name="examples/**/Spring.Examples.Pool.2010.sln"/>
 		</items>
       </in>
       <do>
@@ -134,7 +114,6 @@ Rebuilding Solutions using Nant and "solutions.build":
         <items basedir="${root.dir}">
           <!-- <include name="examples/Spring/**/*.2005.sln" /> -->
           <include name="examples/Spring/**/*.2010.sln" />
-          <exclude name="examples/Spring/Spring.Calculator/**/*.2010.sln"/>
           <exclude name="Spring.NET.2010.sln"/>
           <exclude name="examples/Spring/Spring.EmsQuickStart/**/*.sln" unless="${build-ems}"/>
           <exclude name="examples/**/Spring.Examples.Pool.2010.sln"/>

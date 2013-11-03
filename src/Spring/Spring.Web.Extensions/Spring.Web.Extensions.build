@@ -14,6 +14,8 @@
 		     debug="${current.build.debug}" 
 		     output="${current.bin.dir}/${project::get-name()}.dll" 
 		     doc="${current.bin.dir}/${project::get-name()}.xml"
+   			 nostdlib="true"
+			 noconfig="true"
 		     >
 			<arg line="${compiler.args}"/>	
 			<nowarn>
@@ -26,12 +28,17 @@
 			<resources basedir="Resources">
 				<include name="**/*" />
 			</resources>
-			<references basedir="${current.bin.dir}">
-				<include name="Spring.Core.dll" />
-				<include name="Spring.Web.dll" />
-				<include name="System.Web.Extensions.dll" />
-				<include name="System.Web.dll" />
-				<include name="System.Web.Services.dll" />
+			<references>
+				<include name="mscorlib.dll"/>
+				<include name="Microsoft.CSharp.dll"/>
+				<include name="System.dll"/>
+				<include name="System.Configuration.dll" />
+ 				<include name="System.Xml.dll" />
+ 				<include name="System.Web.dll" />
+ 				<include name="System.Web.Extensions.dll" />
+ 				<include name="System.Web.Services.dll" />
+				<include name="${current.bin.dir}/Spring.Core.dll" />
+				<include name="${current.bin.dir}/Spring.Web.dll" />
 			</references>
 		</csc>
 	</target>

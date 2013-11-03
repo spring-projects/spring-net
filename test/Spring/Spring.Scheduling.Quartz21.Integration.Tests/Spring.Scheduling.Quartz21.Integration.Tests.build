@@ -15,8 +15,11 @@
 		     warnaserror="true"
 		     optimize="${build.optimize}"
 		     debug="${current.build.debug}"
-      		     output="${current.bin.dir}/${project::get-name()}.dll"
-		     doc="${current.bin.dir}/${project::get-name()}.xml">
+      		 output="${current.bin.dir}/${project::get-name()}.dll"
+		     doc="${current.bin.dir}/${project::get-name()}.xml"
+			 nostdlib="true"
+			 noconfig="true"
+			>
 			<nowarn>
 				<warning number="${nowarn.numbers.test}" />
 			</nowarn>
@@ -24,9 +27,13 @@
 				<include name="**/*.cs" />
 				<include name="../CommonAssemblyInfo.cs" />
 			</sources>
-			<references basedir="${current.bin.dir}">
-				<include name="*.dll" />
-				<exclude name="${project::get-name()}.dll" />
+			<references>
+				<include name="mscorlib.dll"/>
+				<include name="Microsoft.CSharp.dll"/>
+				<include name="System.dll"/>
+				<include name="System.Core.dll"/>
+				<include name="${current.bin.dir}/*.dll" />
+				<exclude name="${current.bin.dir}/${project::get-name()}.dll" />
 			</references>
 		</csc>
 		<copy todir="${current.bin.dir}">

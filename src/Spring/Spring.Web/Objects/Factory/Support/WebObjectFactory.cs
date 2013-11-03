@@ -446,12 +446,13 @@ namespace Spring.Objects.Factory.Support
         private ObjectScope GetObjectScope(IObjectDefinition objectDefinition)
         {
             if (objectDefinition is IWebObjectDefinition)
+            {
                 return ((IWebObjectDefinition) objectDefinition).Scope;
+            }
 
-            ObjectScope scope;
-            Enum.TryParse<ObjectScope>(objectDefinition.Scope, true, out scope);
+            ObjectScope scope = (ObjectScope) Enum.Parse(typeof (ObjectScope), objectDefinition.Scope, true);
 
-            return scope == null ? ObjectScope.Singleton : scope;            
+            return scope;            
         }
 
         /// <summary>

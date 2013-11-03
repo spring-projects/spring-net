@@ -17,7 +17,10 @@
          optimize="${build.optimize}"
          debug="${current.build.debug}"
          output="${current.bin.dir}/${project::get-name()}.dll"
-         doc="${current.bin.dir}/${project::get-name()}.xml">
+         doc="${current.bin.dir}/${project::get-name()}.xml"
+		 nostdlib="true"
+		 noconfig="true"
+		 >
       <nowarn>
         <warning number="${nowarn.numbers.test}" />
       </nowarn>
@@ -31,12 +34,22 @@
         <include name="**/*.wsdl" />
         <include name="**/*.config" />
       </resources>
-      <references basedir="${current.bin.dir}">
-        <include name="*.dll" />
+      <references>
+		<include name="mscorlib.dll"/>
+		<include name="Microsoft.CSharp.dll"/>
+		<include name="System.dll"/>
+		<include name="System.Configuration.dll"/>
+		<include name="System.Core.dll"/>
+        <include name="System.EnterpriseServices.dll" />
         <include name="System.ServiceModel.dll" />
-        <exclude name="${project::get-name()}.dll" />
-        <exclude name="CloverRuntime.dll" />
-		<exclude if="${net-4.0}" name="System.Web.Extensions.dll" />
+        <include name="System.Runtime.Remoting.dll" />
+        <include name="System.Runtime.Serialization.dll" />
+		<include name="System.Web.dll"/>
+		<include name="System.Web.Services.dll"/>
+		<include name="System.Xml.dll"/>
+        <include name="${current.bin.dir}/*.dll" />
+        <exclude name="${current.bin.dir}/${project::get-name()}.dll" />
+        <exclude name="${current.bin.dir}/CloverRuntime.dll" />
       </references>
     </csc>
     <copy todir="${current.bin.dir}" verbose="${copy-verbose}" >

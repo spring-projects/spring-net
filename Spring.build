@@ -138,7 +138,7 @@ Commandline Examples:
   <property name="project.build.package" value="false"/>
   <property name="project.build.sign" value="false" overwrite="false" />
   
-  <property name="test.withcoverage" value="false" overwrite="true" />
+  <property name="test.withcoverage" value="true" overwrite="false" />
   <!-- what coverage tool to use: ncover or opencover -->
   <property name="test.coverage.tool" value="opencover" overwrite="false" />
 
@@ -448,8 +448,10 @@ Commandline Examples:
     <nant buildfile="test/Spring/Spring.Messaging.Tests/Spring.Messaging.Tests.build" target="test" if="${build-msmq}"/>
     <nant buildfile="test/Spring/Spring.Template.Velocity.Tests/Spring.Template.Velocity.Tests.build" target="test" if="${build-velocity}"/>
     <!--"Spring.ConversationWA.NH*.Tests.dll" should be at last to prevent the other tests are compiled with reference to this-->
-    <nant buildfile="test/Spring/Spring.Web.Conversation.NHibernate32.Tests/Spring.Web.Conversation.NHibernate32.Tests.build" target="test" if="${build-conversation}"/>
-    <nant buildfile="test/Spring/Spring.Web.Conversation.NHibernate33.Tests/Spring.Web.Conversation.NHibernate33.Tests.build" target="test" if="${build-conversation}"/>
+	
+	<!-- conversation tests disabled for now because with .NET 4.5 installed NUnitAsp does not seem to work anymore -->
+    <nant buildfile="test/Spring/Spring.Web.Conversation.NHibernate32.Tests/Spring.Web.Conversation.NHibernate32.Tests.build" target="test" if="${build-conversation and nant.settings.currentframework == 'net-3.5'}"/>
+    <nant buildfile="test/Spring/Spring.Web.Conversation.NHibernate33.Tests/Spring.Web.Conversation.NHibernate33.Tests.build" target="test" if="${build-conversation and nant.settings.currentframework == 'net-3.5'}"/>
 
     <!-- Main solutions and examples are compiled via task build-solutions -->
 
@@ -472,8 +474,6 @@ Commandline Examples:
   <target name="compile-net-3.5" description="Builds .NET Framework 3.5 version"
         depends="set-net-3.5-runtime-configuration, check-spring-basedir, clean-current-bin-dir">
 		
-	<property name="test.withcoverage" value="true" overwrite="true"/>		  
-
 	<if test="${property::exists('mstest.exe')}">
 		<property name="mstest.exe.current" value="${string::replace(property::get-value('mstest.exe'), 'Microsoft Visual Studio 10.0', 'Microsoft Visual Studio 9.0')}" />
 	</if>
@@ -589,7 +589,7 @@ Commandline Examples:
  
   <!-- Top level targets -->
   <!-- target for developers to do just debug build and test everything in CVS -->
-  <target name="test" description="build an test">
+  <target name="test" description="build and test">
     <echo message="Compiling debug configuration for all runtime configurations."/>
     <property name="nant.target.root.name" value="build"/>
     <call target="build-all-function"/>

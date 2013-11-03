@@ -13,6 +13,8 @@
             debug="${current.build.debug}"
             output="${current.bin.dir}/${project::get-name()}.dll"
             doc="${current.bin.dir}/${project::get-name()}.xml"
+           	nostdlib="true"
+			noconfig="true"
             >
             <arg line="${compiler.args}"/>
             <nowarn>
@@ -28,12 +30,17 @@
 	        <include name="**/*.xsd" />
         	<exclude name="**/obj/**" />
 	    </resources>
-	    <references basedir="${current.bin.dir}">
-		<include name="*.dll" />
-		<include name="System.Data.Dll" />
-		<exclude name="${project::get-name()}.dll" />
-		<exclude name="CloverRuntime.dll" />
-		<exclude if="${net-4.0}" name="System.Web.Extensions.dll" />
+	    <references>
+			<include name="mscorlib.dll"/>
+			<include name="Microsoft.CSharp.dll"/>
+			<include name="System.dll"/>
+			<include name="System.Core.dll"/>
+			<include name="System.Configuration.dll"/>
+			<include name="System.Data.dll" />
+			<include name="System.Xml.dll" />
+			<include name="${current.bin.dir}/*.dll" />
+			<exclude name="${current.bin.dir}/${project::get-name()}.dll" />
+			<exclude name="${current.bin.dir}/CloverRuntime.dll" />
 	    </references>
         </csc>
     </target>

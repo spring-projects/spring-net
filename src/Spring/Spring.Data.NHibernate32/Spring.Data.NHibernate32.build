@@ -17,11 +17,14 @@
 
 		<!-- build Spring.Data.NHibernate32 -->
 		<csc target="library" define="${current.build.defines.csc}"
-                     warnaserror="true"
+             warnaserror="true"
 		     optimize="${build.optimize}"
 		     debug="${current.build.debug}"
-                     output="${current.bin.dir}/${project::get-name()}.dll"
-                     doc="${current.bin.dir}/${project::get-name()}.xml">
+             output="${current.bin.dir}/${project::get-name()}.dll"
+             doc="${current.bin.dir}/${project::get-name()}.xml"
+			 nostdlib="true"
+			 noconfig="true"
+			>
 			<arg line="${compiler.args}"/>
 			<nowarn>
 				<warning number="${nowarn.numbers.test},0169,0618" />
@@ -32,15 +35,22 @@
 				<include name="../Spring.Data.NHibernate/Data/**/*.cs" />
 				<include name="../GenCommonAssemblyInfo.cs" />
 			</sources>
-			<references basedir="${current.bin.dir}">
+			<references>
+				<include name="mscorlib.dll"/>
+				<include name="Microsoft.CSharp.dll"/>
+				<include name="System.dll"/>
+				<include name="System.Core.dll"/>
+                <include name="System.Configuration.dll"/>
 				<include name="System.Data.dll" />
+				<include name="System.Transactions.dll" />
 				<include name="System.Web.dll" />
+				<include name="System.Xml.dll" />
 				<include name="System.EnterpriseServices.dll" />
-				<include name="*NHibernate.dll" />
-				<include name="*.dll" />
-				<exclude name="Spring.Data.NHibernate*.dll" />
-				<exclude name="Spring.Data.NHibernate*.*.dll" />
-				<exclude name="CloverRuntime.dll" />
+				<include name="${current.bin.dir}/*NHibernate.dll" />
+				<include name="${current.bin.dir}/*.dll" />
+				<exclude name="${current.bin.dir}/Spring.Data.NHibernate*.dll" />
+				<exclude name="${current.bin.dir}/Spring.Data.NHibernate*.*.dll" />
+				<exclude name="${current.bin.dir}/CloverRuntime.dll" />
 			</references>
 		</csc>
 	</target>

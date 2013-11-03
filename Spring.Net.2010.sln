@@ -1,5 +1,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2010
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F04753EF-7A1B-4837-AB63-8C0821E8155D}"
 	ProjectSection(SolutionItems) = preProject
 		BreakingChanges.txt = BreakingChanges.txt
@@ -53,10 +55,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Template.Velocity.20
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Template.Velocity.Tests.2010", "test\Spring\Spring.Template.Velocity.Tests\Spring.Template.Velocity.Tests.2010.csproj", "{10405837-CB67-40D8-9326-84C9383983E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Web.Mvc.2010", "src\Spring\Spring.Web.Mvc\Spring.Web.Mvc.2010.csproj", "{5166CE3A-14BE-478A-88DA-729A39DE1E29}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Web.Mvc.Tests.2010", "test\Spring\Spring.Web.Mvc.Tests\Spring.Web.Mvc.Tests.2010.csproj", "{D4032434-D9A8-437B-95E8-9D4DE0AD9932}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Web.Mvc3.2010", "src\Spring\Spring.Web.Mvc3\Spring.Web.Mvc3.2010.csproj", "{904C97E0-3667-4D12-A55F-6CC2E6F68A0A}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Web.Mvc3.Tests.2010", "test\Spring\Spring.Web.Mvc3.Tests\Spring.Web.Mvc3.Tests.2010.csproj", "{1E8E7C0A-4474-44F6-AA67-FABB40FA9784}"
@@ -102,9 +100,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Web.Conversation.NHibernate33.Tests.2010", "test\Spring\Spring.Web.Conversation.NHibernate33.Tests\Spring.Web.Conversation.NHibernate33.Tests.2010.csproj", "{C57B05EA-FD1A-40EC-BB60-D2E45AB1A86A}"
 EndProject
 Global
-	GlobalSection(TestCaseManagementSettings) = postSolution
-		CategoryFile = Spring.Net.2010.vsmdi
-	EndGlobalSection
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|.NET = Debug|.NET
 		Debug|Any CPU = Debug|Any CPU
@@ -342,26 +337,6 @@ Global
 		{10405837-CB67-40D8-9326-84C9383983E2}.Release|Any CPU.Build.0 = Release|Any CPU
 		{10405837-CB67-40D8-9326-84C9383983E2}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{10405837-CB67-40D8-9326-84C9383983E2}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{5166CE3A-14BE-478A-88DA-729A39DE1E29}.Debug|.NET.ActiveCfg = Debug|Any CPU
-		{5166CE3A-14BE-478A-88DA-729A39DE1E29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{5166CE3A-14BE-478A-88DA-729A39DE1E29}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{5166CE3A-14BE-478A-88DA-729A39DE1E29}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{5166CE3A-14BE-478A-88DA-729A39DE1E29}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{5166CE3A-14BE-478A-88DA-729A39DE1E29}.Release|.NET.ActiveCfg = Release|Any CPU
-		{5166CE3A-14BE-478A-88DA-729A39DE1E29}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{5166CE3A-14BE-478A-88DA-729A39DE1E29}.Release|Any CPU.Build.0 = Release|Any CPU
-		{5166CE3A-14BE-478A-88DA-729A39DE1E29}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{5166CE3A-14BE-478A-88DA-729A39DE1E29}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{D4032434-D9A8-437B-95E8-9D4DE0AD9932}.Debug|.NET.ActiveCfg = Debug|Any CPU
-		{D4032434-D9A8-437B-95E8-9D4DE0AD9932}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{D4032434-D9A8-437B-95E8-9D4DE0AD9932}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{D4032434-D9A8-437B-95E8-9D4DE0AD9932}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{D4032434-D9A8-437B-95E8-9D4DE0AD9932}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{D4032434-D9A8-437B-95E8-9D4DE0AD9932}.Release|.NET.ActiveCfg = Release|Any CPU
-		{D4032434-D9A8-437B-95E8-9D4DE0AD9932}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{D4032434-D9A8-437B-95E8-9D4DE0AD9932}.Release|Any CPU.Build.0 = Release|Any CPU
-		{D4032434-D9A8-437B-95E8-9D4DE0AD9932}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{D4032434-D9A8-437B-95E8-9D4DE0AD9932}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{904C97E0-3667-4D12-A55F-6CC2E6F68A0A}.Debug|.NET.ActiveCfg = Debug|Any CPU
 		{904C97E0-3667-4D12-A55F-6CC2E6F68A0A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{904C97E0-3667-4D12-A55F-6CC2E6F68A0A}.Debug|Any CPU.Build.0 = Debug|Any CPU
@@ -580,5 +555,8 @@ Global
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		NAntAddinLastFileName = Spring.build
+	EndGlobalSection
+	GlobalSection(TestCaseManagementSettings) = postSolution
+		CategoryFile = Spring.Net.2010.vsmdi
 	EndGlobalSection
 EndGlobal

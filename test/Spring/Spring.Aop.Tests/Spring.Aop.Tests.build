@@ -15,8 +15,11 @@
 		     warnaserror="true"
 		     optimize="${build.optimize}"
 		     debug="${current.build.debug}"
-                     output="${current.bin.dir}/${project::get-name()}.dll"
-		     doc="${current.bin.dir}/${project::get-name()}.xml">
+             output="${current.bin.dir}/${project::get-name()}.dll"
+		     doc="${current.bin.dir}/${project::get-name()}.xml"
+			 nostdlib="true"
+			 noconfig="true"
+			 >
 			<nowarn>
 				<warning number="${nowarn.numbers.test},0219" />
 			</nowarn>
@@ -35,15 +38,17 @@
 					<exclude name="Data/**/*" />
 					<exclude name="obj/**/*" />
 			</resources>
-			<references basedir="${current.bin.dir}">
+			<references>
+				<include name="mscorlib.dll"/>
+				<include name="Microsoft.CSharp.dll"/>
+				<include name="System.dll"/>
+				<include name="System.Core.dll"/>
 				<include name="System.Data.dll" />
 				<include name="System.Web.dll" />
 				<include name="System.Xml.dll" />
-				<include name="*.dll" />
-				<exclude name="${project::get-name()}.dll" />
-				<exclude name="CloverRuntime.dll" />
-				<exclude if="${net-4.0}" name="System.Web.Extensions.dll" />
-				
+				<include name="${current.bin.dir}/*.dll" />
+				<exclude name="${current.bin.dir}/${project::get-name()}.dll" />
+				<exclude name="${current.bin.dir}/CloverRuntime.dll" />
 			</references>
 		</csc>
 

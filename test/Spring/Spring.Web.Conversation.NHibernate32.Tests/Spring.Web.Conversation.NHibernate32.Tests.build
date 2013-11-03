@@ -21,8 +21,11 @@
 		     warnaserror="true"
 		     optimize="${build.optimize}"
 		     debug="${current.build.debug}"
-      		     output="${current.bin.dir}/${project::get-name()}.dll"
-		     doc="${current.bin.dir}/${project::get-name()}.xml">
+      		 output="${current.bin.dir}/${project::get-name()}.dll"
+		     doc="${current.bin.dir}/${project::get-name()}.xml"
+			 nostdlib="true"
+			 noconfig="true"
+			>
       <nowarn>
         <warning number="${nowarn.numbers.test}" />
       </nowarn>
@@ -32,22 +35,24 @@
         <exclude name="Data/**/*.*" />
         <exclude name="bin/**/*" />
       </sources>
-      <references basedir="${current.bin.dir}">
+      <references>
         <lib>
           <include name="${nh32.lib.dir}"/>
         </lib>
+		<include name="mscorlib.dll"/>
+		<include name="Microsoft.CSharp.dll"/>
+		<include name="System.dll"/>
+		<include name="System.Configuration.dll"/>
+		<include name="System.Core.dll"/>
         <include name="System.Data.dll" />
         <include name="System.EnterpriseServices.dll" />
-        <include name="*.dll" />
-        <exclude name="${project::get-name()}.dll" />
-        <exclude name="Spring.Data.NHibernate1*.dll" />
-        <exclude name="Spring.Data.NHibernate2*.dll" />
-        <exclude name="Spring.Data.NHibernate30*.dll" />
-        <exclude name="Spring.Data.NHibernate33*.dll" />
-        <exclude name="Spring.Web.Conversation.NHibernate33*.dll" />
-        <exclude name="Spring.Data.NHibernate*Tests*.dll" />
-        <exclude name="CloverRuntime.dll" />
-        <exclude if="${net-4.0}" name="System.Web.Extensions.dll" />
+        <include name="System.Web.dll" />
+        <include name="${current.bin.dir}/*.dll" />
+        <exclude name="${current.bin.dir}/${project::get-name()}.dll" />
+        <exclude name="${current.bin.dir}/Spring.Data.NHibernate33*.dll" />
+        <exclude name="${current.bin.dir}/Spring.Web.Conversation.NHibernate33*.dll" />
+        <exclude name="${current.bin.dir}/Spring.Data.NHibernate*Tests*.dll" />
+        <exclude name="${current.bin.dir}/CloverRuntime.dll" />
       </references>
       <resources prefix="Spring" dynamicprefix="true" failonempty="true">
         <include name="**/*.xml" />

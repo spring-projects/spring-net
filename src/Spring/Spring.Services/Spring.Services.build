@@ -11,11 +11,13 @@
 	<!-- build Spring.Services -->
     <csc target="library" define="${current.build.defines.csc}"
 		     warnaserror="true"
-                     optimize="${build.optimize}"
+			 optimize="${build.optimize}"
 		     debug="${current.build.debug}"
-                     output="${current.bin.dir}/${project::get-name()}.dll"
-                     doc="${current.bin.dir}/${project::get-name()}.xml"
-		     >
+			 output="${current.bin.dir}/${project::get-name()}.dll"
+			 doc="${current.bin.dir}/${project::get-name()}.xml"
+		     nostdlib="true"
+			 noconfig="true"
+			 >
       <arg line="${compiler.args}"/>
       <nowarn>
         <warning number="${nowarn.numbers}" />
@@ -34,13 +36,24 @@
         <include name="**/*.keys" />
         <exclude name="**/obj/**" />
       </resources>
-      <references basedir="${current.bin.dir}">
-        <include name="Common.Logging.dll"/>
-        <include name="Spring.Core.dll" />
-        <include name="Spring.Aop.dll" />
-        <include name="Spring.Web.dll" />
+      <references>
+		<include name="mscorlib.dll"/>
+		<include name="Microsoft.CSharp.dll"/>
+		<include name="System.dll"/>
+		<include name="System.Core.dll"/>
+		<include name="System.Configuration.dll"/>
+		<include name="System.EnterpriseServices.dll"/>
         <include name="System.Web.Services.dll" />
+		<include name="System.ServiceModel.dll" />        
 		<include name="System.ServiceModel.Activation.dll" />        
+		<include name="System.ServiceModel.Web.dll" />        
+		<include name="System.Web.dll" />
+		<include name="System.Web.Services.dll" />
+		<include name="System.Xml.dll"/>
+        <include name="${current.bin.dir}/Common.Logging.dll"/>
+        <include name="${current.bin.dir}/Spring.Core.dll" />
+        <include name="${current.bin.dir}/Spring.Aop.dll" />
+        <include name="${current.bin.dir}/Spring.Web.dll" />
       </references>
     </csc>
   </target>

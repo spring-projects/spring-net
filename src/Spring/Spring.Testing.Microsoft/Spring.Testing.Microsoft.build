@@ -13,7 +13,9 @@
             debug="${current.build.debug}"
             output="${current.bin.dir}/${project::get-name()}.dll"
             doc="${current.bin.dir}/${project::get-name()}.xml"
-            >
+           	nostdlib="true"
+			noconfig="true"
+			>
             <arg line="${compiler.args}"/>
             <nowarn>
 				<warning number="${nowarn.numbers}" />
@@ -25,12 +27,17 @@
                 <include name="**/*.cs" />
                 <include name="../GenCommonAssemblyInfo.cs" />
             </sources>
-		        <references basedir="${current.bin.dir}">
-			        <include name="System.Data.dll" />
+		    <references>
+				<include name="mscorlib.dll"/>
+				<include name="Microsoft.CSharp.dll"/>
+				<include name="System.dll"/>
+				<include name="System.Core.dll"/>
+				<include name="System.Configuration.dll"/>
+				<include name="System.Data.dll" />
 				<include name="${vs-net.mstest.bin.dir.current}\PublicAssemblies\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll" />
-			        <include name="*.dll" />
-			        <exclude name="${project::get-name()}.dll" />
-		        </references>
+			    <include name="${current.bin.dir}/*.dll" />
+			    <exclude name="${current.bin.dir}/${project::get-name()}.dll" />
+		    </references>
         </csc>
     </target>
 

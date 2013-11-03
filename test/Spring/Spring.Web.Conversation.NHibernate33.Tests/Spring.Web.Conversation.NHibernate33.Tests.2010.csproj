@@ -37,7 +37,7 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>..\..\..\build\VS.Net.2010\Spring.Web.Conversation.NHibernate33.Tests\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NET_40</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>
@@ -49,8 +49,8 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
+    <OutputPath>..\..\..\build\VS.Net.2010\Spring.Web.Conversation.NHibernate33.Tests\Release\</OutputPath>
+    <DefineConstants>TRACE;NET_40</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
@@ -154,7 +154,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Data\Spring\Conversation\WebConversationStateTest\services.xml.config" />
-    <None Include="Data\Spring\Conversation\WebConversationStateTest\web.config.net-1.1" />
     <None Include="Data\Spring\Conversation\WebConversationStateTest\web.config.net-2.0" />
   </ItemGroup>
   <ItemGroup>

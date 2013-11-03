@@ -19,10 +19,13 @@
 		<!-- build Spring.Data.NHibernate -->
 		<csc target="library" define="${current.build.defines.csc}"
 				warnaserror="true"
-		                optimize="${build.optimize}"
+                optimize="${build.optimize}"
 				debug="${current.build.debug}"
 				output="${current.bin.dir}/${project::get-name()}.dll"
-				doc="${current.bin.dir}/${project::get-name()}.xml">
+				doc="${current.bin.dir}/${project::get-name()}.xml"
+				nostdlib="true"
+				noconfig="true"
+			>
 			<arg line="${compiler.args}"/>
 			<nowarn>
 				<warning number="${nowarn.numbers}" />
@@ -31,14 +34,19 @@
 				<include name="**/*.cs" />
 				<include name="../GenCommonAssemblyInfo.cs" />
 			</sources>
-			<references basedir="${current.bin.dir}">
+			<references>
+				<include name="mscorlib.dll"/>
+				<include name="Microsoft.CSharp.dll"/>
+				<include name="System.dll"/>
+				<include name="System.Core.dll"/>
+				<include name="System.Configuration.dll"/>
 				<include name="System.Data.dll" />
 				<include name="System.Web.dll" />
 				<include name="System.EnterpriseServices.dll" />
-				<include name="*.dll" />
+				<include name="${current.bin.dir}/*.dll" />
 				<exclude name="${project::get-name()}.dll" />
-        <exclude name="Spring.Web.Conversation.NHibernate*.dll" />
-        <exclude name="Spring.Data.NHibernate33.dll" />
+				<exclude name="${current.bin.dir}/Spring.Web.Conversation.NHibernate*.dll" />
+				<exclude name="${current.bin.dir}/Spring.Data.NHibernate33.dll" />
 			</references>
 		</csc>
 	</target>

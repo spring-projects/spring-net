@@ -18,10 +18,13 @@
 
 		<csc target="library" define="${current.build.defines.csc}"
 			warnaserror="true"
-		        optimize="${build.optimize}"
+		    optimize="${build.optimize}"
 			debug="${current.build.debug}"
 			output="${current.bin.dir}/${project::get-name()}.dll"
-			doc="${current.bin.dir}/${project::get-name()}.xml">
+			doc="${current.bin.dir}/${project::get-name()}.xml"
+			nostdlib="true"
+			noconfig="true"
+			>
 			<nowarn>
 				<warning number="${nowarn.numbers.test},0219,0169,0612" /> <!-- add 0414 for mono 2.0 -->
 				<warning number="${nowarn.numbers},1574" if="${nant.settings.currentframework=='mono-2.0'}"/>
@@ -49,7 +52,11 @@
 				<include name="**/contextlifecycle.xml" />
 -->
 			</resources>
-			<references basedir="${current.bin.dir}">
+			<references>
+				<include name="mscorlib.dll"/>
+				<include name="Microsoft.CSharp.dll"/>
+				<include name="System.dll"/>
+				<include name="System.Core.dll"/>
 				<include name="System.EnterpriseServices.dll" />
 				<include name="System.Drawing.dll" />
 				<include name="System.Data.dll" />
@@ -58,11 +65,11 @@
 				<include name="System.Web.dll" />
 				<include name="System.Runtime.Serialization.Formatters.Soap.dll" />
 				<include name="System.Windows.Forms.dll" />
-				<include name="Rhino.Mocks.dll" />
-				<include name="*.dll" />
-				<exclude name="${project::get-name()}.dll" />
-				<exclude name="CloverRuntime.dll" />
-				<exclude if="${net-4.0}" name="System.Web.Extensions.dll" />
+                <include name="System.Xml.dll"/>
+				<include name="${current.bin.dir}/Rhino.Mocks.dll" />
+				<include name="${current.bin.dir}/*.dll" />
+				<exclude name="${current.bin.dir}/${project::get-name()}.dll" />
+				<exclude name="${current.bin.dir}/CloverRuntime.dll" />
 			</references>
 		</csc>
 

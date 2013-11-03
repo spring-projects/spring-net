@@ -9,11 +9,14 @@
 	<target name="build">
 		<!-- build Spring.Data -->
 		<csc target="library" define="${current.build.defines.csc}"
-                     warnaserror="true"
+             warnaserror="true"
 		     optimize="${build.optimize}"
 		     debug="${current.build.debug}"
-                     output="${current.bin.dir}/${project::get-name()}.dll"
-                     doc="${current.bin.dir}/${project::get-name()}.xml">
+             output="${current.bin.dir}/${project::get-name()}.dll"
+             doc="${current.bin.dir}/${project::get-name()}.xml"
+			 nostdlib="true"
+			 noconfig="true"
+			>
 			<arg line="${compiler.args}"/>
 			<nowarn>
 				<warning number="${nowarn.numbers}" />
@@ -37,13 +40,19 @@
 			<resources basedir="Resources">
 				<include name="**/*" />
 			</resources>
-			<references basedir="${current.bin.dir}">
+			<references>
+				<include name="mscorlib.dll"/>
+				<include name="Microsoft.CSharp.dll"/>
+				<include name="System.dll"/>
+				<include name="System.Core.dll"/>
+                <include name="System.Configuration.dll"/>			
 				<include name="System.Data.dll" />
 				<include name="System.EnterpriseServices.dll" />
 				<include name="System.Transactions.dll" />
-				<include name="Common.Logging.dll"/>
-				<include name="Spring.Core.dll" />
-				<include name="Spring.Aop.dll" />
+				<include name="System.Xml.dll" />
+				<include name="${current.bin.dir}/Common.Logging.dll"/>
+				<include name="${current.bin.dir}/Spring.Core.dll" />
+				<include name="${current.bin.dir}/Spring.Aop.dll" />
 			</references>
 		</csc>
 	</target>

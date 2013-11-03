@@ -13,8 +13,10 @@
 		     optimize="${build.optimize}"
 		     debug="${current.build.debug}"
 		     output="${current.bin.dir}/${project::get-name()}.dll"
-                     doc="${current.bin.dir}/${project::get-name()}.xml"
-		     >
+             doc="${current.bin.dir}/${project::get-name()}.xml"
+   			 nostdlib="true"
+			 noconfig="true"
+			>
 			<arg line="${compiler.args}"/>
 			<nowarn>
 				<warning number="${nowarn.numbers}" />
@@ -29,11 +31,16 @@
             		<resources basedir="." prefix="Spring.Aop.Config">
                 	  <include name="Aop\Config\spring-aop-1.1.xsd" />
 	                </resources>
-			<references basedir="${current.bin.dir}">
-				<include name="Common.Logging.dll"/>
-				<include name="antlr.runtime.dll"/>
-				<include name="Spring.Core.dll" />
+			<references>
+				<include name="mscorlib.dll"/>
+				<include name="Microsoft.CSharp.dll"/>
+				<include name="System.dll"/>
+				<include name="System.Core.dll"/>
 				<include name="System.Data.dll" />
+                <include name="System.Xml.dll"/>
+				<include name="${current.bin.dir}/Common.Logging.dll"/>
+				<include name="${current.bin.dir}/antlr.runtime.dll"/>
+				<include name="${current.bin.dir}/Spring.Core.dll" />
 			</references>
 		</csc>
 	</target>

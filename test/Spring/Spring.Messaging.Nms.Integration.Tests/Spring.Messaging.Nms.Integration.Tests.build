@@ -17,7 +17,10 @@
         optimize="${build.optimize}"
         debug="${current.build.debug}"
         output="${current.bin.dir}/${project::get-name()}.dll"
-        doc="${current.bin.dir}/${project::get-name()}.xml">
+        doc="${current.bin.dir}/${project::get-name()}.xml"
+		nostdlib="true"
+		noconfig="true"
+	  >
       <nowarn>
         <warning number="${nowarn.numbers.test}" />
       </nowarn>
@@ -26,13 +29,15 @@
         <include name="**/*.cs" />
         <exclude name="AssemblyInfo.cs" />
       </sources>
-      <references basedir="${current.bin.dir}">
+      <references>
+		<include name="mscorlib.dll"/>
+		<include name="Microsoft.CSharp.dll"/>
+		<include name="System.dll"/>
+		<include name="System.Core.dll"/>
         <include name="System.Data.dll" />
         <include name="System.EnterpriseServices.dll" />
-        <include name="*.dll" />
-        <include name="Spring.Messaging.Nms.dll" />
-		<exclude if="${net-4.0}" name="System.Web.Extensions.dll" />
-		<exclude if="${net-4.0}" name="Spring.Messaging.Nms.Integration.Tests.dll" />
+        <include name="${current.bin.dir}/*.dll" />
+		<exclude name="${current.bin.dir}/${project::get-name()}.dll" />
       </references>
       <resources prefix="Spring" dynamicprefix="true" failonempty="true">
         <include name="**/*.xml" />
