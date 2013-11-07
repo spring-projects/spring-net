@@ -52,5 +52,16 @@ namespace Spring.Context.Attributes.TypeFilters
             return (type.GetInterfaces().Any(i => i.Equals(RequiredType)) || RequiredType.Equals(type.BaseType));
         }
 
+        /// <summary>
+        /// Returns a string that represents the current object.
+        /// </summary>
+        /// <returns>
+        /// A string that represents the current object.
+        /// </returns>
+        /// <filterpriority>2</filterpriority>
+        public override string ToString()
+        {
+            return string.Format("Required Type: {0}", RequiredType != null ? RequiredType.FullName : "");
+        }
     }
 }

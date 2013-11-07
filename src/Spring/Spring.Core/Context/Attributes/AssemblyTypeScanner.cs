@@ -179,6 +179,7 @@ namespace Spring.Context.Attributes
                 {
                     if (IsCompoundPredicateSatisfiedBy(type))
                     {
+                        Logger.Debug(m => m("Satisfied Type: {0}", type.FullName));
                         types.Add(type);
                     }
                 }
@@ -274,6 +275,9 @@ namespace Spring.Context.Attributes
 
                     if (null != loadedAssembly)
                     {
+                        string fullname = loadedAssembly.FullName;
+                        Logger.Debug(m => m("Add Assembly: {0}", fullname));
+
                         assemblies.Add(loadedAssembly);
                     }
                 }
@@ -313,9 +317,12 @@ namespace Spring.Context.Attributes
         /// <returns></returns>
         protected virtual IEnumerable<Assembly> ApplyAssemblyFiltersTo(IEnumerable<Assembly> assemblyCandidates)
         {
-            return
-                assemblyCandidates.Where(IsIncludedAssembly).
-                    AsEnumerable();
+            var filteredAssemblies = assemblyCandidates.Where(IsIncludedAssembly).
+                                                        AsEnumerable();
+
+            Logger.Debug(m => m("Filtered Assemblies: {0}", StringUtils.ArrayToCommaDelimitedString(filteredAssemblies.ToArray())));
+
+            return filteredAssemblies;
         }
 
         /// <summary>
@@ -351,7 +358,15 @@ namespace Spring.Context.Attributes
         /// </returns>
         protected virtual bool IsIncludedAssembly(Assembly assembly)
         {
-            return AssemblyInclusionPredicates.Any(include => include(assembly));
+            bool result = AssemblyInclusionPredicates.Any(include => include(assembly));
+
+            if (result)
+            {
+                string fullname = assembly.FullName;
+                Logger.Debug(m => m("Include Assembly:  {0}", fullname));
+            }
+
+            return result;
         }
 
         /// <summary>
