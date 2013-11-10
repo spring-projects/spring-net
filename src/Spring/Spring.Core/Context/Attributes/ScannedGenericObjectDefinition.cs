@@ -23,6 +23,7 @@ using System;
 using Common.Logging;
 
 using Spring.Objects;
+using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Xml;
 using Spring.Stereotype;
@@ -78,7 +79,20 @@ namespace Spring.Context.Attributes
             bool lazyInit = false;
             bool.TryParse(defaults.LazyInit, out lazyInit);
             IsLazyInit = lazyInit;
+            
+            if (!String.IsNullOrEmpty(defaults.Autowire))
+            {
+               AutowireMode = GetAutowireMode(defaults.Autowire);
+            }            
         }
+
+        private AutoWiringMode GetAutowireMode(string value)
+        {
+           AutoWiringMode autoWiringMode;
+           autoWiringMode = (AutoWiringMode)Enum.Parse(typeof(AutoWiringMode), value, true);
+           return autoWiringMode;
+        }
+
 
         private void ParseScopeAttribute()
         {
