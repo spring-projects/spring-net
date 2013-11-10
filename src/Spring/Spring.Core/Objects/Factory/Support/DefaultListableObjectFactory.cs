@@ -181,7 +181,7 @@ namespace Spring.Objects.Factory.Support
         /// <remarks>
         /// <p>
         /// Called by autowiring. If a subclass cannot obtain information about object
-        /// -pnames by <see cref="System.Type"/>, a corresponding exception should be thrown.
+        /// names by <see cref="System.Type"/>, a corresponding exception should be thrown.
         /// </p>
         /// </remarks>
         /// <param name="requiredType">
@@ -239,9 +239,9 @@ namespace Spring.Objects.Factory.Support
                             if (log.IsDebugEnabled)
                             {
                                 log.Debug(string.Format(
-                                              CultureInfo.InvariantCulture,
-                                              "Found depending object '{0}' for object '{1}'.",
-                                              name, objectName));
+                                    CultureInfo.InvariantCulture,
+                                    "Found depending object '{0}' for object '{1}'.",
+                                    name, objectName));
                             }
 
                             #endregion
@@ -275,7 +275,12 @@ namespace Spring.Objects.Factory.Support
             return (objectType != null && type.IsAssignableFrom(objectType));
         }
 
-        private bool IsObjectDefinitionTypeMatch(string name, Type checkedType, bool includeAncestor = false)
+        private bool IsObjectDefinitionTypeMatch(string name, Type checkedType)
+        {
+            return IsObjectDefinitionTypeMatch(name, checkedType, false);
+        }
+
+        private bool IsObjectDefinitionTypeMatch(string name, Type checkedType, bool includeAncestor)
         {
             if (checkedType == null)
             {

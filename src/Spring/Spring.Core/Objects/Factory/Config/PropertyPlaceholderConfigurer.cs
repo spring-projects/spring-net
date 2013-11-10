@@ -223,50 +223,51 @@ namespace Spring.Objects.Factory.Config
 
         #endregion
 
-        /// <summary>
-		/// Apply the given properties to the supplied
-		/// <see cref="Spring.Objects.Factory.Config.IConfigurableListableObjectFactory"/>.
-		/// </summary>
-		/// <param name="factory">
-		/// The <see cref="Spring.Objects.Factory.Config.IConfigurableListableObjectFactory"/>
-		/// used by the application context.
-		/// </param>
-		/// <param name="props">The properties to apply.</param>
-		/// <exception cref="Spring.Objects.ObjectsException">
-		/// If an error occured.
-		/// </exception>
-		protected override void ProcessProperties(IConfigurableListableObjectFactory factory, NameValueCollection props)
-		{
-            PlaceholderResolveHandlerAdapter resolveAdapter = new PlaceholderResolveHandlerAdapter(this, props);
-            ObjectDefinitionVisitor visitor = new ObjectDefinitionVisitor(resolveAdapter.ParseAndResolveVariables);
+	    /// <summary>
+	    /// Apply the given properties to the supplied
+	    /// <see cref="Spring.Objects.Factory.Config.IConfigurableListableObjectFactory"/>.
+	    /// </summary>
+	    /// <param name="factory">
+	    /// The <see cref="Spring.Objects.Factory.Config.IConfigurableListableObjectFactory"/>
+	    /// used by the application context.
+	    /// </param>
+	    /// <param name="props">The properties to apply.</param>
+	    /// <exception cref="Spring.Objects.ObjectsException">
+	    /// If an error occured.
+	    /// </exception>
+	    protected override void ProcessProperties(IConfigurableListableObjectFactory factory, NameValueCollection props)
+	    {
+	        PlaceholderResolveHandlerAdapter resolveAdapter = new PlaceholderResolveHandlerAdapter(this, props);
+	        ObjectDefinitionVisitor visitor = new ObjectDefinitionVisitor(resolveAdapter.ParseAndResolveVariables);
 
-			IList<string> objectDefinitionNames = factory.GetObjectDefinitionNames(includeAncestors);
-			for (int i = 0; i < objectDefinitionNames.Count; ++i)
-			{
-				string name = objectDefinitionNames[i];
-				IObjectDefinition definition = factory.GetObjectDefinition(name, includeAncestors);
+	        IList<string> objectDefinitionNames = factory.GetObjectDefinitionNames(includeAncestors);
+	        for (int i = 0; i < objectDefinitionNames.Count; ++i)
+	        {
+	            string name = objectDefinitionNames[i];
+	            IObjectDefinition definition = factory.GetObjectDefinition(name, includeAncestors);
 
-			    if (definition == null)
-			    {
-                    logger.ErrorFormat("'{0}' can't be found in factorys'  '{1}' object definition (includeAncestor {2})", name, factory, includeAncestors);
-			        continue;
-			    }
+	            if (definition == null)
+	            {
+	                logger.ErrorFormat("'{0}' can't be found in factorys'  '{1}' object definition (includeAncestor {2})",
+	                                   name, factory, includeAncestors);
+	                continue;
+	            }
 
-			    try
-				{
-                    visitor.VisitObjectDefinition(definition);
-				}
-				catch (ObjectDefinitionStoreException ex)
-				{
-					throw new ObjectDefinitionStoreException(
-						definition.ResourceDescription, name, ex.Message);
-				}
-			}
+	            try
+	            {
+	                visitor.VisitObjectDefinition(definition);
+	            }
+	            catch (ObjectDefinitionStoreException ex)
+	            {
+	                throw new ObjectDefinitionStoreException(
+	                    definition.ResourceDescription, name, ex.Message);
+	            }
+	        }
 
-            factory.AddEmbeddedValueResolver(resolveAdapter);
-		}
+	        factory.AddEmbeddedValueResolver(resolveAdapter);
+	    }
 
-		/// <summary>
+	    /// <summary>
 		/// Parse values recursively to be able to resolve cross-references between
 		/// placeholder values.
 		/// </summary>
