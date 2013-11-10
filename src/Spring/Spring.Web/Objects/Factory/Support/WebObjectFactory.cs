@@ -28,6 +28,7 @@ using System.Web.Caching;
 using System.Web.SessionState;
 using Common.Logging;
 using Spring.Collections;
+using Spring.Context.Attributes;
 using Spring.Context.Support;
 using Spring.Objects.Factory.Config;
 using Spring.Util;
@@ -266,10 +267,9 @@ namespace Spring.Objects.Factory.Support
         protected override object CreateAndCacheSingletonInstance(
             string objectName, RootObjectDefinition objectDefinition, object[] arguments)
         {
-            if (IsWebScopedSingleton(objectDefinition)
-                )
+            if (IsWebScopedSingleton(objectDefinition))
             {
-                ObjectScope scope = ((IWebObjectDefinition)objectDefinition).Scope;
+                ObjectScope scope = GetObjectScope(objectDefinition);
 
                 if (scope == ObjectScope.Request)
                 {
@@ -350,6 +350,22 @@ namespace Spring.Objects.Factory.Support
         }
 
         /// <summary>
+        /// We need this override so that Web Scoped Singletons are not registered in general 
+        /// DisposalObjectRegister 
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="instance"></param>
+        /// <param name="objectDefinition"></param>
+        protected override void RegisterDisposableObjectIfNecessary(string name, object instance,
+                                                                    RootObjectDefinition objectDefinition)
+        {
+            if (!IsWebScopedSingleton(objectDefinition))
+            {
+                base.RegisterDisposableObjectIfNecessary(name, instance, objectDefinition);
+            }
+        }
+
+        /// <summary>
         /// Add the created, but yet unpopulated singleton to the singleton cache
         /// to be able to resolve circular references
         /// </summary>
@@ -363,7 +379,7 @@ namespace Spring.Objects.Factory.Support
         {
             if (IsWebScopedSingleton(objectDefinition))
             {
-                ObjectScope scope = ((IWebObjectDefinition) objectDefinition).Scope;
+                ObjectScope scope = GetObjectScope(objectDefinition);
                 if (scope == ObjectScope.Request)
                 {
                     this.Request[objectName] = rawSingletonInstance;
@@ -396,7 +412,7 @@ namespace Spring.Objects.Factory.Support
         {
             if (IsWebScopedSingleton(objectDefinition))
             {
-                ObjectScope scope = ((IWebObjectDefinition) objectDefinition).Scope;
+                ObjectScope scope = GetObjectScope(objectDefinition);
                 if (scope == ObjectScope.Request)
                 {
                     this.Request.Remove(objectName);
@@ -418,13 +434,24 @@ namespace Spring.Objects.Factory.Support
 
         private bool IsWebScopedSingleton(IObjectDefinition objectDefinition)
         {
-            if (objectDefinition.IsSingleton 
-                && objectDefinition is IWebObjectDefinition)
+            if (objectDefinition.IsSingleton && 
+                (objectDefinition is IWebObjectDefinition || objectDefinition is ScannedGenericObjectDefinition))
             {
-                ObjectScope scope = ((IWebObjectDefinition) objectDefinition).Scope;
+                ObjectScope scope = GetObjectScope(objectDefinition);
                 return (scope == ObjectScope.Request) || (scope == ObjectScope.Session);
             }
             return false;
+        }
+
+        private ObjectScope GetObjectScope(IObjectDefinition objectDefinition)
+        {
+            if (objectDefinition is IWebObjectDefinition)
+                return ((IWebObjectDefinition) objectDefinition).Scope;
+
+            ObjectScope scope;
+            Enum.TryParse<ObjectScope>(objectDefinition.Scope, true, out scope);
+
+            return scope == null ? ObjectScope.Singleton : scope;            
         }
 
         /// <summary>

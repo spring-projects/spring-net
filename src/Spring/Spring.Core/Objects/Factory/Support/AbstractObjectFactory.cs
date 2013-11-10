@@ -2342,7 +2342,7 @@ namespace Spring.Objects.Factory.Support
             }
         }
 
-        protected void RegisterDisposableObjectIfNecessary(string name, object instance, RootObjectDefinition od)
+        protected virtual void RegisterDisposableObjectIfNecessary(string name, object instance, RootObjectDefinition od)
         {
             if (od.IsSingleton && RequiresDestruction(instance, od))
             {
