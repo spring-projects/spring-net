@@ -955,6 +955,9 @@
     <Compile Include="Objects\Factory\Support\DependencyCheckingMode.cs">
       <SubType>Code</SubType>
     </Compile>
+	<Compile Include="Objects\Factory\Support\DisposableObjectAdapter.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="Objects\Factory\Support\IInstantiationStrategy.cs">
       <SubType>Code</SubType>
     </Compile>

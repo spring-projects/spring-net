@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<objects xmlns="http://www.springframework.net" 
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+<objects xmlns="http://www.springframework.net"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
-	
+
   <object id="rod" type="Spring.Objects.TestObject, Spring.Core.Tests">
     <property name="name">
       <value>Rod</value>
@@ -15,14 +15,14 @@
       <ref object="father"/>
     </property>
   </object>
-	
+
   <object id="roderick" parent="rod">
     <property name="name">
       <value>Roderick</value>
     </property>
-		<!-- Should inherit age -->
+    <!-- Should inherit age -->
   </object>
-	
+
   <object id="kerry" type="Spring.Objects.TestObject, Spring.Core.Tests">
     <property name="name">
       <value>Kerry</value>
@@ -34,7 +34,7 @@
       <ref local="rod"/>
     </property>
   </object>
-	
+
   <object id="kathy" type="Spring.Objects.TestObject, Spring.Core.Tests" singleton="false">
     <property name="name">
       <value>Kathy</value>
@@ -46,7 +46,7 @@
       <ref object="father"/>
     </property>
   </object>
-	
+
   <object id="typeMismatch" type="Spring.Objects.TestObject, Spring.Core.Tests" singleton="false">
     <property name="name">
       <value>typeMismatch</value>
@@ -59,24 +59,24 @@
     </property>
   </object>
 
-	<!--
+  <!--
 		Tests of lifecycle callbacks
 	-->
   <object id="mustBeInitialized" type="Spring.Objects.Factory.MustBeInitialized, Spring.Core.Tests"></object>
-	
+
   <object id="lifecycle" type="Spring.Objects.Factory.LifecycleObject, Spring.Core.Tests"></object>
 
 
-	<!-- Factory objects are automatically treated differently -->
+  <!-- Factory objects are automatically treated differently -->
   <object id="singletonFactory" type="Spring.Objects.Factory.DummyFactory, Spring.Core.Tests"></object>
-	
+
   <object id="prototypeFactory" type="Spring.Objects.Factory.DummyFactory, Spring.Core.Tests">
     <property name="issingleton">
       <value>false</value>
     </property>
   </object>
 
-	<!-- Check that the circular reference resolution mechanism doesn't break
+  <!-- Check that the circular reference resolution mechanism doesn't break
 	     repeated references to the same FactoryObject -->
   <object id="factoryReferencer" type="Spring.Objects.Factory.Xml.DummyReferencer, Spring.Core.Tests">
     <property name="testObject1">
@@ -87,7 +87,7 @@
     </property>
   </object>
 
-	<!-- Check that the circular reference resolution mechanism doesn't break
+  <!-- Check that the circular reference resolution mechanism doesn't break
 	     prototype instantiation -->
   <object id="prototypeReferencer" type="Spring.Objects.Factory.Xml.DummyReferencer, Spring.Core.Tests" singleton="false">
     <property name="testObject1">
@@ -97,7 +97,7 @@
       <ref object="kathy"/>
     </property>
   </object>
-	
+
   <object id="listenerVeto" type="Spring.Objects.TestObject, Spring.Core.Tests">
     <property name="name">
       <value>listenerVeto</value>
@@ -106,7 +106,11 @@
       <value>66</value>
     </property>
   </object>
-	
+
   <object id="validEmpty" type="Spring.Objects.TestObject, Spring.Core.Tests"/>
+
+  <object id="object1-with-same-id-and-name" name="object1-with-same-id-and-name" type="Spring.Objects.NameIdTestObject, Spring.Core.Tests" />
+  <object id="object2-with-same-id-and-name" name="object2-with-same-id-and-name" type="Spring.Objects.NameIdTestObject, Spring.Core.Tests" />
+  <object id="object-with-different-id-and-name" name="name-id-test-object-name" type="Spring.Objects.NameIdTestObject, Spring.Core.Tests" />
 
 </objects>

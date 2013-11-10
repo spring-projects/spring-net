@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<xsd:schema xmlns="http://www.springframework.net/context"
+		xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+		xmlns:objects="http://www.springframework.net"
+		xmlns:tool="http://www.springframework.net/tool"
+		targetNamespace="http://www.springframework.net/context"
+		elementFormDefault="qualified"
+		attributeFormDefault="unqualified">
+
+	<xsd:import namespace="http://www.springframework.net"/>
+	<xsd:import namespace="http://www.springframework.net/tool"/>
+
+	<xsd:annotation>
+		<xsd:documentation><![CDATA[
+	Defines the configuration elements for the Spring Framework's application
+	context support. Effects the activation of various configuration styles
+	for the containing Spring ApplicationContext.
+		]]></xsd:documentation>
+	</xsd:annotation>
+
+  <xsd:element name="attribute-config">
+    <xsd:annotation>
+      <xsd:documentation>
+        <![CDATA[
+	Activates various attributes to be detected in object classes: Spring's [Required],
+	[Autowired], [Value] as well [PostConstruct], [PreDestroy]. Alternatively, you may
+	choose to activate the individual BeanPostProcessors for those annotations.
+
+	Note: This tag does not activate processing of Spring's [Transactional].
+  Consider the use of the <tx:annotation-driven> tag for that purpose.
+			]]>
+      </xsd:documentation>
+    </xsd:annotation>
+  </xsd:element>
+
+  <xsd:element name="component-scan">
+		<xsd:annotation>
+			<xsd:documentation>
+				<![CDATA[
+	Scans assemblies for attributed components that will be auto-registered as
+	Spring objects. By default, the Spring-provided [Component], [Repository],
+	[Service], and [Controller] stereotypes will be detected.
+
+	Note: This tag implies the effects of the 'attribute-config' tag, activating [Required],
+	[Autowired], [PostConstruct], [PreDestroy]
+	attributes in the component classes, which is usually desired for autodetected components
+	(without external configuration). Turn off the 'annotation-config' attribute to deactivate
+	this default behavior, for example in order to use custom ObjectPostProcessor definitions
+	for handling those annotations.
+
+	Note: You may use placeholders in package paths, but only resolved against system
+	properties (analogous to resource paths). A component scan results in new bean definition
+	being registered; Spring's PropertyPlaceholderConfigurer will apply to those bean
+	definitions just like to regular bean definitions, but it won't apply to the component
+	scan settings themselves.
+			]]>
+			</xsd:documentation>
+		</xsd:annotation>
+		<xsd:complexType>
+			<xsd:sequence>
+				<xsd:element name="include-filter" type="filterType" minOccurs="0" maxOccurs="unbounded">
+					<xsd:annotation>
+						<xsd:documentation>
+							<![CDATA[
+	Controls which eligible types to include for component scanning.
+							]]>
+						</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+				<xsd:element name="exclude-filter" type="filterType" minOccurs="0" maxOccurs="unbounded">
+					<xsd:annotation>
+						<xsd:documentation>
+							<![CDATA[
+	Controls which eligible types to exclude for component scanning.
+						]]>
+						</xsd:documentation>
+					</xsd:annotation>
+				</xsd:element>
+			</xsd:sequence>
+			<xsd:attribute name="base-assemblies" type="xsd:string" use="required">
+				<xsd:annotation>
+					<xsd:documentation>
+						<![CDATA[
+	The comma-separated list of assemblies to scan for attributed components.
+					]]>
+					</xsd:documentation>
+				</xsd:annotation>
+			</xsd:attribute>
+      <xsd:attribute name="attribute-config" type="xsd:boolean" default="true">
+        <xsd:annotation>
+          <xsd:documentation>
+            <![CDATA[
+	Indicates if attribte driven post processors will be registered, default is true.
+					]]>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
+      <xsd:attribute name="name-generator" type="xsd:string">
+        <xsd:annotation>
+          <xsd:documentation>
+            <![CDATA[
+	The fully-qualified class name of the BeanNameGenerator to be used for naming detected components.
+					]]>
+          </xsd:documentation>
+        </xsd:annotation>
+      </xsd:attribute>
+    </xsd:complexType>
+	</xsd:element>
+
+	<xsd:complexType name="filterType">
+		<xsd:attribute name="type" use="required">
+			<xsd:annotation>
+				<xsd:documentation>
+					<![CDATA[
+    Controls the type of filtering to apply to the expression.
+
+    "attribute" indicates an attribute to be present or excluded at the type level in target components;
+    "assignable" indicates a class (or interface) that the target components are assignable to (extend/implement);
+    "regex" indicates a regex expression to be matched by the target components' class names;
+
+    Note: This attribute will not be inherited by child bean definitions.
+    Hence, it needs to be specified per concrete bean definition.
+                ]]>
+				</xsd:documentation>
+			</xsd:annotation>
+			<xsd:simpleType>
+				<xsd:restriction base="xsd:string">
+					<xsd:enumeration value="assignable" />
+					<xsd:enumeration value="attribute" />
+					<xsd:enumeration value="custom" />
+					<xsd:enumeration value="regex" />
+				</xsd:restriction>
+			</xsd:simpleType>
+		</xsd:attribute>
+		<xsd:attribute name="expression" type="xsd:string" use="required">
+			<xsd:annotation>
+				<xsd:documentation>
+					<![CDATA[
+    Indicates the filter expression, the type of which is indicated by "type".
+                ]]>
+				</xsd:documentation>
+			</xsd:annotation>
+		</xsd:attribute>
+	</xsd:complexType>
+
+</xsd:schema>

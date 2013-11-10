@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<chapter version="5" xml:id="codeconfig-sample-apps"
+         xmlns="http://docbook.org/ns/docbook"
+         xmlns:ns52="http://www.w3.org/1999/xhtml"
+         xmlns:ns5="http://www.w3.org/1999/xlink"
+         xmlns:ns4="http://www.w3.org/2000/svg"
+         xmlns:ns3="http://www.w3.org/1998/Math/MathML"
+         xmlns:ns="http://docbook.org/ns/docbook">
+  <title>Sample Applications</title>
+
+  <section>
+    <title>Overview</title>
+
+    <para>The Spring CodeConfig for .NET project includes three sample
+    applications:</para>
+
+    <itemizedlist>
+      <listitem>
+        <para><link
+        linkend="sample-moviefinder-codeconfig">Spring.IoCQuickStart.MovieFinder</link></para>
+      </listitem>
+
+      <listitem>
+        <para><link
+        linkend="sample-mvc-codeconfig">Spring.MvcQuickStart</link></para>
+      </listitem>
+
+      <listitem>
+        <para><link
+        linkend="sample-migration-codeconfig">Spring.CodeConfig.Migration</link></para>
+      </listitem>
+    </itemizedlist>
+  </section>
+
+  <section xml:id="sample-moviefinder-codeconfig">
+    <title>Spring.IoCQuickStart.MovieFinder</title>
+
+    <para>The Spring.IoCQuickStart.MovieFinder sample application is the same
+    fundamental code as provided in the sample app by the same name that is
+    provided with <link
+    ns5:href="http://springframework.net/download.html">the main Spring.NET
+    Framework download package</link>. This section assumes you are already
+    familiar with the sample application as provided in that download package.
+    This version of this sample application has been modified to rely upon
+    CodeConfig for its Object Definitions.</para>
+
+    <section>
+      <title>Modifying App.config</title>
+
+      <para>The first modification to the existing sample application involves
+      changes to the <literal>&lt;spring&gt;</literal> element in the
+      App.config file:</para>
+
+      <programlisting language="xml">   &lt;spring&gt;
+
+    &lt;parsers&gt;
+      &lt;!-- Equivalent to 'NamespaceParserRegistry.RegisterParser(typeof(ContextNamespaceParser));' --&gt;
+      &lt;parser type="Spring.Context.Config.ContextNamespaceParser, Spring.Core.Configuration" /&gt;
+    &lt;/parsers&gt;
+
+    &lt;context&gt;
+      &lt;!-- using embedded assembly configuration file --&gt;
+      &lt;resource uri="assembly://Spring.IocQuickStart.MovieFinder/Spring.IocQuickStart.MovieFinder/CodeConfigBootstrap.xml"/&gt;
+    &lt;/context&gt;
+
+  &lt;/spring&gt;</programlisting>
+
+      <para>The important changes here are the introducton of the<literal>
+      &lt;parsers&gt;</literal> section (to register the
+      <literal>ContextNamespaceParser</literal> required for CodeConfig) and
+      the change of the <literal>&lt;resource&gt;</literal> element to point
+      to the <literal>CodeConfigBootstrap.xml</literal> file instead of the
+      <literal>Appcontext.xml</literal> file as before.</para>
+    </section>
+
+    <section>
+      <title>Replacing Appcontext.xml with CodeConfigBootstrap.xml</title>
+
+      <para>Where before the <literal>Appcontext.xml</literal> contained all
+      of the XML-based object definitions for the application, in this case
+      the <literal>CodeConfigBootstrap.xml</literal> merely contains the
+      single instruction telling the context to use CodeConfig:</para>
+
+      <programlisting language="xml">&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;objects xmlns="http://www.springframework.net" 
+         xmlns:context="http://www.springframework.net/context"&gt;
+
+  &lt;description&gt;An example that demonstrates code based configuration for object definitions.&lt;/description&gt;
+
+  &lt;context:code-config/&gt;
+
+&lt;/objects&gt;
+ </programlisting>
+
+      <para>In this case, the single
+      <literal>&lt;context:code-config/&gt;</literal> element is sufficient to
+      tell the context to perform scanning for its object definition
+      metadata.</para>
+    </section>
+
+    <section>
+      <title>Introducing the MovieFinderConfiguration CodeConfig class</title>
+
+      <para>The final modification needed to migrate the sample application to
+      rely upon CodeConfig is to author the classes that will provide the
+      Object Definitions for the Application Context to discover when
+      performing the scan. In the case of this simple application, this is
+      encapsulated in the single new
+      <literal>MovieFinderConfiguration</literal> class as shown in the
+      following:</para>
+
+      <programlisting language="csharp">    [Configuration]
+    public class MovieFinderConfiguration
+    {
+
+        [ObjectDef]
+        public virtual MovieLister MyMovieLister()
+        {
+            MovieLister movieLister =  new MovieLister();
+            movieLister.MovieFinder = FileBasedMovieFinder();
+            return movieLister;
+
+        }
+
+        [ObjectDef]
+        public virtual IMovieFinder FileBasedMovieFinder()
+        {
+            return new ColonDelimitedMovieFinder(new FileInfo("movies.txt"));
+        }
+    }</programlisting>
+
+      <para>Using a combination of <literal><link
+      linkend="configuration-attribute-reference">[Configuration]</link></literal>
+      and <link
+      linkend="objectdef-attribute-reference"><literal>[ObjectDef]</literal></link>
+      attributes, this class faithfully reproduces the same Object Definition
+      configuration as had been described by the
+      <literal>Appcontext.xml</literal> file in the iniitial sample
+      application as delivered with the main Spring.NET Framework
+      download.</para>
+    </section>
+  </section>
+
+  <section xml:id="sample-mvc-codeconfig">
+    <title>Spring.MvcQuickStart</title>
+
+    <para>The Spring.MvcQuickStart sample application is the same fundamental
+    code as provided in the sample app by the same name that is provided with
+    <link ns5:href="http://springframework.net/download.html">the main
+    Spring.NET Framework download package</link>. This section assumes you are
+    already familiar with the sample application as provided in that download
+    package. This version of this sample application has been modified to rely
+    upon CodeConfig for its Object Definitions.</para>
+
+    <section>
+      <title>Modifying Web.config</title>
+
+      <para>The first modification to the existing sample application involves
+      changes to the <literal>&lt;spring&gt;</literal> element in the
+      Web.config file:</para>
+
+      <programlisting language="xml">&lt;spring&gt;
+    &lt;parsers&gt;
+      &lt;!-- Equivalent to 'NamespaceParserRegistry.RegisterParser(typeof(ContextNamespaceParser));' --&gt;
+      &lt;parser type="Spring.Context.Config.ContextNamespaceParser, Spring.Core.Configuration" /&gt;
+    &lt;/parsers&gt;
+
+    &lt;context&gt;
+      &lt;resource uri="~/Config/CodeConfigBootsrap.xml"/&gt;
+    &lt;/context&gt;
+  &lt;/spring&gt;</programlisting>
+
+      <para>The important changes here are the introducton of
+      the<literal>&lt;parsers&gt;</literal> section (to register the
+      <literal>ContextNamespaceParser</literal> required for CodeConfig) and
+      the change of the <literal>&lt;resource&gt;</literal> element to point
+      to the <literal>CodeConfigBootstrap.xml</literal> file instead of the
+      <literal>controllers.xml</literal> file as before.</para>
+
+      <para>In addition, the section name for the
+      <literal>&lt;parsers&gt;</literal> element must be registered with the
+      <literal>&lt;spring&gt;</literal> sectionGroup as shown here so that the
+      element can be properly interpreted:</para>
+
+      <programlisting language="xml">  &lt;configSections&gt;
+    &lt;sectionGroup name="spring"&gt;
+      &lt;section name="context" type="Spring.Context.Support.MvcContextHandler, Spring.Web.Mvc"/&gt;
+      &lt;section name="parsers" type="Spring.Context.Support.NamespaceParsersSectionHandler, Spring.Core"/&gt;
+    &lt;/sectionGroup&gt;
+
+    &lt;!--
+        remainder of configSections element here...
+    --&gt;
+
+  &lt;/configSections&gt;</programlisting>
+    </section>
+
+    <section>
+      <title>Replacing controllers.xml with CodeConfigBootstrap.xml</title>
+
+      <para>Where before the <literal>controllers.xml</literal> file contained
+      all of the XML-based object definitions for the controllers for our MVC
+      application, in this case the <literal>CodeConfigBootstrap.xml</literal>
+      merely contains the single instruction telling the context to use
+      CodeConfig:</para>
+
+      <programlisting language="xml">&lt;?xml version="1.0" encoding="utf-8" ?&gt;
+&lt;objects xmlns="http://www.springframework.net" 
+         xmlns:context="http://www.springframework.net/context"&gt;
+
+  &lt;context:code-config/&gt;
+
+&lt;/objects&gt; </programlisting>
+
+      <para>In this case, the single
+      <literal>&lt;context:code-config/&gt;</literal> element is sufficient to
+      tell the context to perform scanning for its object definition
+      metadata.</para>
+    </section>
+
+    <section>
+      <title>Introducing the ControllerConfiguration CodeConfig class</title>
+
+      <para>The final modification needed to migrate the sample application to
+      rely upon CodeConfig is to author the classes that will provide the
+      Object Definitions for the Application Context to discover when
+      performing the scan. In the case of this simple application, this is
+      encapsulated in the single new
+      <literal>ControllerConfiguration</literal> class as shown in the
+      following:</para>
+
+      <programlisting language="csharp">    [Configuration]
+    public class ControllerConfiguration
+    {
+        [ObjectDef]
+        [Scope(ObjectScope.Prototype)]
+        public virtual HomeController HomeController()
+        {
+            HomeController controller = new HomeController();
+            controller.Message = "Welcome to ASP.NET MVC powered by Spring.NET (Code-Config)!";
+            return controller;
+        }
+    }</programlisting>
+
+      <para>Using a combination of <literal><link
+      linkend="configuration-attribute-reference">[Configuration]</link></literal>
+      and <link
+      linkend="objectdef-attribute-reference"><literal>[ObjectDef]</literal></link>
+      attributes, this class faithfully reproduces the same Object Definition
+      configuration as had been described by the
+      <literal>controllers.xml</literal> file in the iniitial sample
+      application as delivered with the main Spring.NET Framework
+      download.</para>
+    </section>
+  </section>
+
+  <section xml:id="sample-migration-codeconfig">
+    <title>Spring.CodeConfig.Migration</title>
+
+    <para>This sample demonstates a step-by-step detailed examination of the
+    process of migrating an XML-configuration based solution to use CodeConfig
+    exclusively and is described in detail in <link
+    linkend="migration-example">the Introduction section</link> of the
+    reference documents.</para>
+  </section>
+</chapter>

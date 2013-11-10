@@ -88,7 +88,7 @@ namespace Spring.Reflection.Dynamic
         private class IdentityTable : Hashtable
         {
             public IdentityTable()
-            {}
+            { }
 
             protected override int GetHash(object key)
             {
@@ -118,11 +118,21 @@ namespace Spring.Reflection.Dynamic
             state = (SafeMethodState)stateCache[methodInfo];
             if (state == null)
             {
-                state = new SafeMethodState(DynamicReflectionManager.CreateMethod(methodInfo),
-                                            new object[methodInfo.GetParameters().Length]
+                SafeMethodState newState = new SafeMethodState(DynamicReflectionManager.CreateMethod(methodInfo),
+                new object[methodInfo.GetParameters().Length]
                 );
-                stateCache[methodInfo] = state;
+
+                lock (stateCache.SyncRoot)
+                {
+                    state = (SafeMethodState)stateCache[methodInfo];
+                    if (state == null)
+                    {
+                        state = newState; 
+                        stateCache[methodInfo] = state;
+                    }
+                }
             }
+
             this.methodInfo = methodInfo;
         }
 

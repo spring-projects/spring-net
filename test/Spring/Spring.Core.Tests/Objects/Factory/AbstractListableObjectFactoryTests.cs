@@ -58,7 +58,7 @@ namespace Spring.Objects.Factory {
         [Test]
         public virtual void Count ()
         {
-            AssertCount (16);
+            AssertCount (19);
         }
 		
         protected internal void AssertCount (int count)

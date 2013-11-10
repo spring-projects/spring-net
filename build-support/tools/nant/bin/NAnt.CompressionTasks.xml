@@ -117,6 +117,13 @@
             <see langword="false" />.
             </summary>
         </member>
+        <member name="P:NAnt.Compression.Tasks.TarTask.Flatten">
+            <summary>
+            Ignore directory structure of source directory, compress all files 
+            into a single directory.
+            The default value is <see langword="false" />.
+            </summary>
+        </member>
         <member name="P:NAnt.Compression.Tasks.TarTask.TarFileSets">
             <summary>
             The set of files to be included in the archive.
@@ -269,6 +276,13 @@
             <see langword="false" />.
             </summary>
         </member>
+        <member name="P:NAnt.Compression.Tasks.ZipTask.Flatten">
+            <summary>
+            Ignore directory structure of source directory, compress all files 
+            into a single directory.
+            The default value is <see langword="false" />.
+            </summary>
+        </member>
         <member name="P:NAnt.Compression.Tasks.ZipTask.ZipFileSets">
             <summary>
             The set of files to be included in the archive.
@@ -277,7 +291,7 @@
         <member name="P:NAnt.Compression.Tasks.ZipTask.DuplicateHandling">
             <summary>
             Specifies the behaviour when a duplicate file is found. The default
-            is <see cref="F:NAnt.Compression.Types.DuplicateHandling.Add"/>.
+            is <see cref="T:NAnt.Compression.Types.DuplicateHandling.Add" />.
             </summary>
         </member>
         <member name="P:NAnt.Compression.Tasks.ZipTask.Encoding">

@@ -17,11 +17,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.2008", "..\..\s
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Core.Tests.2008", "..\..\test\Spring\Spring.Core.Tests\Spring.Core.Tests.2008.csproj", "{44B16BAA-6DF8-447C-9D7F-3AD3D854D904}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Scheduling.Quartz20.Integration.Tests.2008", "..\..\test\Spring\Spring.Scheduling.Quartz20.Integration.Tests\Spring.Scheduling.Quartz20.Integration.Tests.2008.csproj", "{8CF0F34A-CC93-4D87-AE14-A2DEEF072F26}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Scheduling.Quartz21.Integration.Tests.2008", "..\..\test\Spring\Spring.Scheduling.Quartz21.Integration.Tests\Spring.Scheduling.Quartz21.Integration.Tests.2008.csproj", "{8CF0F34A-CC93-4D87-AE14-A2DEEF072F26}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Scheduling.Quartz20.Tests.2008", "..\..\test\Spring\Spring.Scheduling.Quartz20.Tests\Spring.Scheduling.Quartz20.Tests.2008.csproj", "{47E7DF97-2515-4F2F-BBFD-0A4C205800DE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Scheduling.Quartz21.Tests.2008", "..\..\test\Spring\Spring.Scheduling.Quartz21.Tests\Spring.Scheduling.Quartz21.Tests.2008.csproj", "{47E7DF97-2515-4F2F-BBFD-0A4C205800DE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Scheduling.Quartz20.2008", "..\..\src\Spring\Spring.Scheduling.Quartz20\Spring.Scheduling.Quartz20.2008.csproj", "{764C3A6A-8690-49DD-B9AF-99E7C09AE4F0}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Scheduling.Quartz21.2008", "..\..\src\Spring\Spring.Scheduling.Quartz21\Spring.Scheduling.Quartz21.2008.csproj", "{764C3A6A-8690-49DD-B9AF-99E7C09AE4F0}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -1,466 +1,625 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE book  [
-  <!ENTITY aop                  SYSTEM "aop.xml">
-  <!ENTITY aop-aspect-library   SYSTEM "aop-aspect-library.xml">
-  <!ENTITY background           SYSTEM "background.xml">
-  <!ENTITY objects              SYSTEM "objects.xml">
-  <!ENTITY resources            SYSTEM "resources.xml">
-  <!ENTITY objects-misc         SYSTEM "objects-misc.xml">
-  <!ENTITY expressions          SYSTEM "expressions.xml">
-  <!ENTITY validation           SYSTEM "validation.xml">
-  <!ENTITY logging              SYSTEM "logging.xml">
-  <!ENTITY testing              SYSTEM "testing.xml">
-
-  <!ENTITY overview             SYSTEM "overview.xml">
-  <!ENTITY psa-intro            SYSTEM "psa-intro.xml">
-  <!ENTITY remoting             SYSTEM "remoting.xml">
-  <!ENTITY messaging            SYSTEM "messaging.xml">
-  <!ENTITY messaging-ems        SYSTEM "messaging-ems.xml">
-  <!ENTITY msmq	                SYSTEM "msmq.xml">
-  <!ENTITY scheduling           SYSTEM "scheduling.xml">
-  <!ENTITY templating           SYSTEM "templating.xml">
-  <!ENTITY web                  SYSTEM "web.xml">
-  <!ENTITY web-mvc              SYSTEM "web-mvc.xml">
-  <!ENTITY web-mvc3             SYSTEM "web-mvc3.xml">  
-  <!ENTITY ajax                 SYSTEM "ajax.xml">
-  <!ENTITY services             SYSTEM "services.xml">
-  <!ENTITY webservices          SYSTEM "webservices.xml">
-  <!ENTITY wcf                  SYSTEM "wcf.xml">
-  <!ENTITY threading            SYSTEM "threading.xml">
-  <!ENTITY pool                 SYSTEM "pool.xml">
-  <!ENTITY preface              SYSTEM "preface.xml">
-
-  <!ENTITY transaction          SYSTEM "transaction.xml">
-  <!ENTITY dbprovider           SYSTEM "dbprovider.xml">
-  <!ENTITY dao                  SYSTEM "dao.xml">
-  <!ENTITY ado                  SYSTEM "ado.xml">
-  <!ENTITY orm                  SYSTEM "orm.xml">
-
-  <!ENTITY vsnet                SYSTEM "vsnet.xml">
-  <!ENTITY migration            SYSTEM "migration.xml">
-  <!ENTITY quickstarts          SYSTEM "quickstarts.xml">
-  <!ENTITY aop-quickstart       SYSTEM "aop-quickstart.xml">
-  <!ENTITY remoting-quickstart  SYSTEM "remoting-quickstart.xml">
-  <!ENTITY springair            SYSTEM "springair.xml">
-  <!ENTITY web-quickstart       SYSTEM "web-quickstart.xml">
-  <!ENTITY data-quickstart      SYSTEM "data-quickstart.xml">
-  <!ENTITY tx-quickstart        SYSTEM "tx-quickstart.xml">
-  <!ENTITY nh-quickstart        SYSTEM "nh-quickstart.xml">
-  <!ENTITY quartz-quickstart    SYSTEM "quartz-quickstart.xml">
-  <!ENTITY nms-quickstart       SYSTEM "nms-quickstart.xml">
-  <!ENTITY ems-quickstart       SYSTEM "ems-quickstart.xml">
-  <!ENTITY msmq-quickstart      SYSTEM "msmq-quickstart.xml">
-  <!ENTITY wcf-quickstart       SYSTEM "wcf-quickstart.xml">
-  <!ENTITY javadevelopers       SYSTEM "javadevelopers.xml">
-  <!ENTITY misc                 SYSTEM "misc.xml">
-  <!ENTITY pooling-example      SYSTEM "pooling-example.xml">
-  <!ENTITY xsd-configuration    SYSTEM "xsd-configuration.xml">
-  <!ENTITY xml-custom           SYSTEM "xml-custom.xml">
-  <!ENTITY xsd	                SYSTEM "xsd.xml">
-  <!ENTITY classic-spring       SYSTEM "classic-spring.xml">
+<!DOCTYPE book [
+<!ENTITY aop SYSTEM "aop.xml">
+<!ENTITY aop-aspect-library SYSTEM "aop-aspect-library.xml">
+<!ENTITY background SYSTEM "background.xml">
+<!ENTITY objects SYSTEM "objects.xml">
+<!ENTITY resources SYSTEM "resources.xml">
+<!ENTITY objects-misc SYSTEM "objects-misc.xml">
+<!ENTITY expressions SYSTEM "expressions.xml">
+<!ENTITY validation SYSTEM "validation.xml">
+<!ENTITY logging SYSTEM "logging.xml">
+<!ENTITY testing SYSTEM "testing.xml">
+<!ENTITY overview SYSTEM "overview.xml">
+<!ENTITY psa-intro SYSTEM "psa-intro.xml">
+<!ENTITY remoting SYSTEM "remoting.xml">
+<!ENTITY messaging SYSTEM "messaging.xml">
+<!ENTITY messaging-ems SYSTEM "messaging-ems.xml">
+<!ENTITY msmq SYSTEM "msmq.xml">
+<!ENTITY scheduling SYSTEM "scheduling.xml">
+<!ENTITY templating SYSTEM "templating.xml">
+<!ENTITY web SYSTEM "web.xml">
+<!ENTITY web-mvc SYSTEM "web-mvc.xml">
+<!ENTITY web-mvc3 SYSTEM "web-mvc3.xml">
+<!ENTITY ajax SYSTEM "ajax.xml">
+<!ENTITY services SYSTEM "services.xml">
+<!ENTITY webservices SYSTEM "webservices.xml">
+<!ENTITY wcf SYSTEM "wcf.xml">
+<!ENTITY threading SYSTEM "threading.xml">
+<!ENTITY pool SYSTEM "pool.xml">
+<!ENTITY preface SYSTEM "preface.xml">
+<!ENTITY transaction SYSTEM "transaction.xml">
+<!ENTITY dbprovider SYSTEM "dbprovider.xml">
+<!ENTITY dao SYSTEM "dao.xml">
+<!ENTITY ado SYSTEM "ado.xml">
+<!ENTITY orm SYSTEM "orm.xml">
+<!ENTITY vsnet SYSTEM "vsnet.xml">
+<!ENTITY migration SYSTEM "migration.xml">
+<!ENTITY quickstarts SYSTEM "quickstarts.xml">
+<!ENTITY aop-quickstart SYSTEM "aop-quickstart.xml">
+<!ENTITY remoting-quickstart SYSTEM "remoting-quickstart.xml">
+<!ENTITY springair SYSTEM "springair.xml">
+<!ENTITY web-quickstart SYSTEM "web-quickstart.xml">
+<!ENTITY data-quickstart SYSTEM "data-quickstart.xml">
+<!ENTITY tx-quickstart SYSTEM "tx-quickstart.xml">
+<!ENTITY nh-quickstart SYSTEM "nh-quickstart.xml">
+<!ENTITY quartz-quickstart SYSTEM "quartz-quickstart.xml">
+<!ENTITY nms-quickstart SYSTEM "nms-quickstart.xml">
+<!ENTITY ems-quickstart SYSTEM "ems-quickstart.xml">
+<!ENTITY msmq-quickstart SYSTEM "msmq-quickstart.xml">
+<!ENTITY wcf-quickstart SYSTEM "wcf-quickstart.xml">
+<!ENTITY javadevelopers SYSTEM "javadevelopers.xml">
+<!ENTITY misc SYSTEM "misc.xml">
+<!ENTITY pooling-example SYSTEM "pooling-example.xml">
+<!ENTITY xsd-configuration SYSTEM "xsd-configuration.xml">
+<!ENTITY xml-custom SYSTEM "xml-custom.xml">
+<!ENTITY xsd SYSTEM "xsd.xml">
+<!ENTITY classic-spring SYSTEM "classic-spring.xml">
+<!ENTITY codeconfig-migration-example SYSTEM "codeconfig-migration-example.xml">
+<!ENTITY codeconfig-context SYSTEM "codeconfig-context.xml">
+<!ENTITY codeconfig-attribute-reference SYSTEM "codeconfig-attribute-reference.xml">
+<!ENTITY codeconfig-sample-apps SYSTEM "codeconfig-sample-apps.xml">
 ]>
-<book xmlns="http://docbook.org/ns/docbook"
+<book version="5.0" xml:lang="en" xmlns="http://docbook.org/ns/docbook"
       xmlns:xlink="http://www.w3.org/1999/xlink"
       xmlns:xi="http://docbook.org/ns/docbook/xi"
-      version="5.0"
-      xml:lang="en">
+      xmlns:ns5="http://www.w3.org/1999/xhtml"
+      xmlns:ns4="http://www.w3.org/1998/Math/MathML"
+      xmlns:ns3="http://www.w3.org/2000/svg"
+      xmlns:ns="http://docbook.org/ns/docbook">
   <info>
     <title>The Spring.NET Framework</title>
+
     <subtitle>Reference Documentation</subtitle>
+
     <releaseinfo>Version 2.0.0</releaseinfo>
-    <pubdate>Last Updated October 10, 2012 <ulink url="http://www.springframework.net/doc-latest/reference/html/index.html">(Latest documentation)</ulink></pubdate>
+
+    <pubdate>Last Updated January 11, 2013 <ulink
+    url="http://www.springframework.net/doc-latest/reference/html/index.html">(Latest
+    documentation)</ulink></pubdate>
+
     <authorgroup>
       <author>
         <firstname>Mark</firstname>
+
         <surname>Pollack</surname>
       </author>
+
       <author>
         <firstname>Rick</firstname>
+
         <surname>Evans</surname>
       </author>
+
       <author>
         <firstname>Aleksandar</firstname>
+
         <surname>Seovic</surname>
       </author>
+
       <author>
         <firstname>Bruno</firstname>
+
         <surname>Baia</surname>
       </author>
+
       <author>
         <firstname>Erich</firstname>
+
         <surname>Eichinger</surname>
       </author>
+
       <author>
         <firstname>Federico</firstname>
+
         <surname>Spinazzi</surname>
       </author>
+
       <author>
         <firstname>Rob</firstname>
+
         <surname>Harrop</surname>
       </author>
+
       <author>
         <firstname>Griffin</firstname>
+
         <surname>Caprio</surname>
       </author>
+
       <author>
         <firstname>Ruben</firstname>
+
         <surname>Bartelink</surname>
       </author>
+
       <author>
         <firstname>Choy</firstname>
+
         <surname>Rim</surname>
       </author>
+
       <author>
         <firstname>Erez</firstname>
+
         <surname>Mazor</surname>
       </author>
+
       <author>
         <firstname>Stephen</firstname>
+
         <surname>Bohlen</surname>
       </author>
-      <author>
-        <firstname>Thomas</firstname>
-        <surname>Trageser</surname>
-      </author>
+
       <author>
         <firstname>The Spring</firstname>
+
         <surname>Java Team</surname>
       </author>
     </authorgroup>
+
     <legalnotice>
-      <para>
-        Copies of this document may be made for your own use and for
-        distribution to others, provided that you do not charge any fee for such
-        copies and further provided that each copy contains this Copyright
-        Notice, whether distributed in print or electronically.
-      </para>
+      <para>Copies of this document may be made for your own use and for
+      distribution to others, provided that you do not charge any fee for such
+      copies and further provided that each copy contains this Copyright
+      Notice, whether distributed in print or electronically.</para>
     </legalnotice>
   </info>
-  <toc/>
+
+  <toc></toc>
+
   &preface;
+
   &overview;
+
   &background;
+
   &migration;
+
   <part xml:id="spring-core">
     <title>Core Technologies</title>
+
     <partintro>
-      <para>
-        This initial part of the reference documentation covers
-        all of those technologies that are absolutely integral
-        to the Spring Framework.
-      </para>
-      <para>
-        Foremost amongst these is the Spring Framework's
-        Inversion of Control (IoC) container. A thorough treatment
-        of the Spring Framework's IoC container is closely followed
-        by comprehensive coverage of Spring's Aspect-Oriented
-        Programming (AOP) technologies. The Spring Framework has
-        its own AOP framework, which is conceptually easy to understand,
-        and which successfully addresses the 80% sweet spot of AOP
-        requirements in enterprise programming.
-      </para>
-      <para>
-        The core functionality also includes an expression language
-        for lightweight scripting and a ui-agnostic validation framework.
-      </para>
-      <para>
-        Finally, the adoption of the test-driven-development (TDD)
-        approach to software development is certainly advocated by
-        the Spring team, and so coverage of Spring's support for
-        integration testing is covered (alongside best practices for
-        unit testing). The Spring team have found that the correct
-        use of IoC certainly does make both unit and integration
-        testing easier (in that the presence of properties and
-        appropriate constructors on classes makes them
-        easier to wire together on a test without having to set up
-        service locator registries and suchlike)... the chapter
-        dedicated solely to testing will hopefully convince you of
-        this as well.
-      </para>
+      <para>This initial part of the reference documentation covers all of
+      those technologies that are absolutely integral to the Spring
+      Framework.</para>
+
+      <para>Foremost amongst these is the Spring Framework's Inversion of
+      Control (IoC) container. A thorough treatment of the Spring Framework's
+      IoC container is closely followed by comprehensive coverage of Spring's
+      Aspect-Oriented Programming (AOP) technologies. The Spring Framework has
+      its own AOP framework, which is conceptually easy to understand, and
+      which successfully addresses the 80% sweet spot of AOP requirements in
+      enterprise programming.</para>
+
+      <para>The core functionality also includes an expression language for
+      lightweight scripting and a ui-agnostic validation framework.</para>
+
+      <para>Finally, the adoption of the test-driven-development (TDD)
+      approach to software development is certainly advocated by the Spring
+      team, and so coverage of Spring's support for integration testing is
+      covered (alongside best practices for unit testing). The Spring team
+      have found that the correct use of IoC certainly does make both unit and
+      integration testing easier (in that the presence of properties and
+      appropriate constructors on classes makes them easier to wire together
+      on a test without having to set up service locator registries and
+      suchlike)... the chapter dedicated solely to testing will hopefully
+      convince you of this as well.</para>
+
       <itemizedlist>
         <listitem>
           <xref linkend="objects" />
         </listitem>
+
         <listitem>
           <xref linkend="objects-misc" />
         </listitem>
+
         <listitem>
           <xref linkend="resources" />
         </listitem>
+
         <listitem>
           <xref linkend="threading" />
         </listitem>
+
         <listitem>
           <xref linkend="pool" />
         </listitem>
+
         <listitem>
           <xref linkend="expressions" />
         </listitem>
+
         <listitem>
           <xref linkend="misc" />
         </listitem>
+
         <listitem>
           <xref linkend="validation" />
         </listitem>
+
         <listitem>
           <xref linkend="aop" />
         </listitem>
+
         <listitem>
           <xref linkend="aop-aspect-library" />
         </listitem>
+
         <listitem>
           <xref linkend="logging" />
         </listitem>
+
         <listitem>
           <xref linkend="testing" />
         </listitem>
       </itemizedlist>
     </partintro>
+
     &objects;
+
     &objects-misc;
+
     &resources;
+
     &threading;
+
     &pool;
+
     &misc;
+
     &expressions;
+
     &validation;
+
     <!-- &util; -->
+
     &aop;
+
     &aop-aspect-library;
+
     &logging;
+
     &testing;
   </part>
+
   <part xml:id="spring-middle-tier">
     <title>Middle Tier Data Access</title>
+
     <partintro>
-      <para>
-        This part of the reference documentation is concerned
-        with othe middle tier, and specifically the data access
-        responsibilities of said tier.
-      </para>
-      <para>
-        Spring's comprehensive transaction management support is
-        covered in some detail, followed by thorough coverage of
-        the various middle tier data access frameworks and
-        technologies that the Spring Framework integrates with.
-      </para>
+      <para>This part of the reference documentation is concerned with othe
+      middle tier, and specifically the data access responsibilities of said
+      tier.</para>
+
+      <para>Spring's comprehensive transaction management support is covered
+      in some detail, followed by thorough coverage of the various middle tier
+      data access frameworks and technologies that the Spring Framework
+      integrates with.</para>
+
       <itemizedlist>
         <listitem>
           <xref linkend="transaction" />
         </listitem>
+
         <listitem>
           <xref linkend="dao" />
         </listitem>
+
         <listitem>
           <xref linkend="dbprovider" />
         </listitem>
+
         <listitem>
           <xref linkend="ado" />
         </listitem>
+
         <listitem>
           <xref linkend="orm" />
         </listitem>
       </itemizedlist>
     </partintro>
+
     &transaction;
+
     &dao;
+
     &dbprovider;
+
     &ado;
+
     &orm;
   </part>
+
   <part xml:id="spring-web">
     <title>The Web</title>
+
     <partintro>
-      <para>
-        This part of the reference documentation covers the
-        Spring Framework's support for the presentation tier,
-        specifically web-based presentation tiers.
-      </para>
+      <para>This part of the reference documentation covers the Spring
+      Framework's support for the presentation tier, specifically web-based
+      presentation tiers.</para>
+
       <itemizedlist>
         <listitem>
           <xref linkend="web" />
         </listitem>
+
         <listitem>
           <xref linkend="ajax" />
         </listitem>
-		<listitem>
+
+        <listitem>
           <xref linkend="web-mvc" />
         </listitem>
-		<listitem>
+
+        <listitem>
           <xref linkend="web-mvc3" />
         </listitem>
       </itemizedlist>
     </partintro>
+
     &web;
+
     &ajax;
-	&web-mvc;
-	&web-mvc3;
+
+    &web-mvc;
+
+    &web-mvc3;
   </part>
+
   <part xml:id="spring-services">
     <title>Services</title>
+
     <partintro>
-      <para>
-        This part of the reference documentation covers
-        the Spring Framework's integration with .NET distributed
-        technologies such as .NET Remoting, Enterprise Services,
-        Web Services.  Integration with WCF Services is forthcoming.
-        Please refer to the introduction chapter for more details.
-      </para>
+      <para>This part of the reference documentation covers the Spring
+      Framework's integration with .NET distributed technologies such as .NET
+      Remoting, Enterprise Services, Web Services. Integration with WCF
+      Services is forthcoming. Please refer to the introduction chapter for
+      more details.</para>
+
       <itemizedlist>
         <listitem>
           <xref linkend="psa-intro" />
         </listitem>
+
         <listitem>
           <xref linkend="remoting" />
         </listitem>
+
         <listitem>
           <xref linkend="services" />
         </listitem>
+
         <listitem>
           <xref linkend="webservices" />
         </listitem>
+
         <listitem>
           <xref linkend="wcf" />
         </listitem>
       </itemizedlist>
     </partintro>
+
     &psa-intro;
+
     &remoting;
+
     &services;
+
     &webservices;
+
     &wcf;
   </part>
+
   <part xml:id="spring-integration">
     <title>Integration</title>
+
     <partintro>
-      <para>
-        This part of the reference documentation covers
-        the Spring Framework's integration with a number of
-        related enterprise .NET technologies.
-      </para>
+      <para>This part of the reference documentation covers the Spring
+      Framework's integration with a number of related enterprise .NET
+      technologies.</para>
+
       <itemizedlist>
         <listitem>
-          <para>
-            <xref linkend="messaging"/>
-          </para>
+          <para><xref linkend="messaging" /></para>
         </listitem>
+
         <listitem>
-          <para>
-            <xref linkend="messaging-ems"/>
-          </para>
+          <para><xref linkend="messaging-ems" /></para>
         </listitem>
+
         <listitem>
-          <para>
-            <xref linkend="msmq"/>
-          </para>
+          <para><xref linkend="msmq" /></para>
         </listitem>
+
         <listitem>
-          <para>
-            <xref linkend="scheduling"/>
-          </para>
+          <para><xref linkend="scheduling" /></para>
         </listitem>
+
         <listitem>
-          <para>
-            <xref linkend="templating"/>
-          </para>
+          <para><xref linkend="templating" /></para>
         </listitem>
       </itemizedlist>
     </partintro>
+
     &messaging;
+
     &messaging-ems;
+
     &msmq;
+
     &scheduling;
+
     &templating;
   </part>
+
+  <part xml:id="spring-codeconfig">
+    <title>Code-Based Configuration</title>
+    <partintro>
+      <para>In this reference document, we’ll explore the newest addition to
+      the configuration story for the Spring.NET Dependency Injection
+      container: code-based configuration, or simply CodeConfig, intended to
+      begin to address many of the shortcomings of the XML-based configuration
+      approach.</para>
+
+      <para>At the core of Spring.NET is a powerful and flexible dependency
+      injection container, offering object assembly and construction services
+      atop which the remainder of the Spring.NET Framework is based.
+      Historically, the primary manner of configuring this dependency
+      injection container has been XML configuration files. Object
+      definitions, essentially recipes to be used by the container when
+      constructing objects of various types, are expressed in XML and then
+      parsed and interpreted by the container as it is initialized at
+      run-time.</para>
+
+      <para>While there are several positive aspects to expressing
+      configuration metadata in XML files, there are also many problems with
+      this approach including the verbosity of XML and its heavy dependence on
+      string-literals which are both prone to typing errors and unusually
+      resistant to most modern refactoring tools in use today. The CodeConfig
+      approach removes these problems by providing a type safe, code-based,
+      approach to dependency injection. It keeps the configuration metadatda
+      external to your class so your class can be a POCO, free of any DI
+      related annotations.</para>
+    
+      <itemizedlist>
+        <listitem>
+          <xref linkend="codeconfig-migration-example" />
+        </listitem>
+		<listitem>
+          <xref linkend="codeconfig-context" />
+        </listitem>
+        <listitem>
+          <xref linkend="codeconfig-attribute-reference" />
+        </listitem>
+        <listitem>
+          <xref linkend="codeconfig-sample-apps" />
+        </listitem>
+      </itemizedlist>
+    </partintro>
+	
+    &codeconfig-migration-example;
+	&codeconfig-context;
+    &codeconfig-attribute-reference;
+    &codeconfig-sample-apps;
+  </part>
+
   <part xml:id="spring-vsnet">
     <title>VS.NET Integration</title>
+
     <partintro>
-      <para>
-        This part of the reference documentation covers
-        the Spring Framework's integration with VS.NET
-      </para>
+      <para>This part of the reference documentation covers the Spring
+      Framework's integration with VS.NET</para>
+
       <itemizedlist>
         <listitem>
           <xref linkend="vsnet" />
         </listitem>
       </itemizedlist>
     </partintro>
+
     &vsnet;
   </part>
+
   <part xml:id="spring-quickstarts">
     <title>Quickstart applications</title>
+
     <partintro>
-      <para>
-        This part of the reference documentation covers
-        the quickstart applications included with
-        Spring that demonstrate features in a code centric
-        manner.
-      </para>
+      <para>This part of the reference documentation covers the quickstart
+      applications included with Spring that demonstrate features in a code
+      centric manner.</para>
+
       <itemizedlist>
         <listitem>
           <xref linkend="quickstarts" />
         </listitem>
+
         <listitem>
           <xref linkend="aop-quickstart" />
         </listitem>
+
         <listitem>
           <xref linkend="remoting-quickstart" />
         </listitem>
+
         <listitem>
           <xref linkend="web-quickstart" />
         </listitem>
+
         <listitem>
           <xref linkend="springair" />
         </listitem>
+
         <listitem>
           <xref linkend="data-quickstart" />
         </listitem>
+
         <listitem>
           <xref linkend="tx-quickstart" />
         </listitem>
+
         <listitem>
           <xref linkend="nh-quickstart" />
         </listitem>
+
         <listitem>
           <xref linkend="quartz-quickstart" />
         </listitem>
+
         <listitem>
           <xref linkend="nms-quickstart" />
         </listitem>
+
         <listitem>
           <xref linkend="ems-quickstart" />
         </listitem>
+
         <listitem>
           <xref linkend="msmq-quickstart" />
         </listitem>
+
         <listitem>
           <xref linkend="wcf-quickstart" />
         </listitem>
       </itemizedlist>
     </partintro>
+
     &quickstarts;
+
     &aop-quickstart;
+
     &remoting-quickstart;
+
     &web-quickstart;
+
     &springair;
+
     &data-quickstart;
+
     &tx-quickstart;
+
     &nh-quickstart;
+
     &quartz-quickstart;
+
     &nms-quickstart;
+
     &ems-quickstart;
+
     &msmq-quickstart;
+
     &wcf-quickstart;
   </part>
+
   <part xml:id="spring-javadevelopers">
     <title>Spring.NET for Java developers</title>
+
     <partintro>
       <para>
-        This part of the reference documentation
-        is for Java developers who would like a quick
-        orientation to what is different between
-        the Java and .NET versions of the framework.
-      </para>
+      <para>This part of the reference documentation is for Java developers
+      who would like a quick orientation to what is different between the Java
+      and .NET versions of the framework.</para>
+
       <itemizedlist>
         <listitem>
           <xref linkend="javadevelopers" />

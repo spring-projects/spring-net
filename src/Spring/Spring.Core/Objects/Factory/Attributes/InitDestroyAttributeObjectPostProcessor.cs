@@ -22,9 +22,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+
 using Common.Logging;
-using Spring.Objects;
-using Spring.Objects.Factory;
+
 using Spring.Objects.Factory.Config;
 using Spring.Core;
 
@@ -43,15 +43,14 @@ namespace Spring.Objects.Factory.Attributes
     /// </summary>
     public class InitDestroyAttributeObjectPostProcessor : IDestructionAwareObjectPostProcessor, IObjectFactoryAware, IOrdered
     {
-        private static readonly ILog Logger = LogManager.GetLogger<InitDestroyAttributeObjectPostProcessor>();
+        private static readonly ILog logger = LogManager.GetLogger<InitDestroyAttributeObjectPostProcessor>();
 
-        private IConfigurableListableObjectFactory _objectFactory;
-        private readonly IDictionary<string, LifecycleLifecycleMetadata> _lifecycleMetadataCache;
+        private IConfigurableListableObjectFactory objectFactory;
+        private readonly IDictionary<string, LifecycleLifecycleMetadata> lifecycleMetadataCache;
 
-        private int _order = int.MaxValue;
-        private Type _initAttributeType;
-        private Type _destroyAttributeType;
-
+        private int order = int.MaxValue;
+        private Type initAttributeType;
+        private Type destroyAttributeType;
 
         /// <summary>
         /// Return the order value of this object, where a higher value means greater in
@@ -68,27 +67,38 @@ namespace Spring.Objects.Factory.Attributes
         /// <returns>
         /// The order value.
         /// </returns>
-        public int Order { get { return _order; } private set { _order = value; } }
+        public int Order
+        {
+            get { return order; }
+            private set { order = value; }
+        }
 
         /// <summary>
         /// Specify the init attribute to check for, indicating initialization
         /// methods to call after configuration of an object.
         /// </summary>
-        public Type InitAttributeType { get { return _initAttributeType; } set { _initAttributeType = value;  } }
+        public Type InitAttributeType
+        {
+            get { return initAttributeType; }
+            set { initAttributeType = value; }
+        }
 
         /// <summary>
         /// Specify the destroy attribute to check for, indicating disposal
         /// methods to call before object is destroyed
         /// </summary>
-        public Type DestroyAttributeType { get { return _destroyAttributeType; } set { _destroyAttributeType = value; } }
-
+        public Type DestroyAttributeType
+        {
+            get { return destroyAttributeType; }
+            set { destroyAttributeType = value; }
+        }
 
         /// <summary>
         /// 
         /// </summary>
         public IObjectFactory ObjectFactory
         {
-            set { _objectFactory = value as IConfigurableListableObjectFactory; }
+            set { objectFactory = value as IConfigurableListableObjectFactory; }
         }
 
         /// <summary>
@@ -97,10 +107,10 @@ namespace Spring.Objects.Factory.Attributes
         /// </summary>
         public InitDestroyAttributeObjectPostProcessor()
         {
-            _initAttributeType = typeof (PostConstructAttribute);
-            _destroyAttributeType = typeof (PreDestroyAttribute);
+            initAttributeType = typeof (PostConstructAttribute);
+            destroyAttributeType = typeof (PreDestroyAttribute);
 
-            _lifecycleMetadataCache = new Dictionary<string, LifecycleLifecycleMetadata>();
+            lifecycleMetadataCache = new Dictionary<string, LifecycleLifecycleMetadata>();
         }
 
         /// <summary>
@@ -137,7 +147,6 @@ namespace Spring.Objects.Factory.Attributes
             return instance;
         }
 
-
         /// <summary>
         /// Executed PreDestroy methods in given order for provided instance
         /// </summary>
@@ -158,15 +167,21 @@ namespace Spring.Objects.Factory.Attributes
 
         private LifecycleLifecycleMetadata FindLifecycleMetadata(Type instanceType, string name)
         {
-            if (_lifecycleMetadataCache.ContainsKey(name))
-                return _lifecycleMetadataCache[name];
-
-            lock (_lifecycleMetadataCache)
+            LifecycleLifecycleMetadata metadata;
+            if (lifecycleMetadataCache.TryGetValue(name, out metadata))
             {
-                var metadata = BuildLifecycleMetadata(instanceType, name);
-                _lifecycleMetadataCache.Add(name, metadata);
                 return metadata;
             }
+
+            lock (lifecycleMetadataCache)
+            {
+                if (!lifecycleMetadataCache.TryGetValue(name, out metadata))
+                {
+                    metadata = BuildLifecycleMetadata(instanceType, name);
+                    lifecycleMetadataCache.Add(name, metadata);
+                }
+            }
+            return metadata;
         }
 
         private LifecycleLifecycleMetadata BuildLifecycleMetadata(Type instanceType, string name)
@@ -178,75 +193,79 @@ namespace Spring.Objects.Factory.Attributes
             {
                 var curInitMethods = new List<LifecycleElement>();
                 var curDestroyMethods = new List<LifecycleElement>();
-                var methods = instanceType.GetMethods(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
+                var methods =
+                    instanceType.GetMethods(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
                 foreach (var methodInfo in methods)
                 {
                     var initAttribute =
-                        Attribute.GetCustomAttribute(methodInfo, _initAttributeType) as PostConstructAttribute;
+                        Attribute.GetCustomAttribute(methodInfo, initAttributeType) as PostConstructAttribute;
                     if (initAttribute != null && methodInfo.DeclaringType == instanceType)
                     {
-                        Logger.Debug(m => m("Found init method on class [{0}]: {1}", instanceType.Name, methodInfo.Name));
+                        logger.Debug(m => m("Found init method on class [{0}]: {1}", instanceType.Name, methodInfo.Name));
                         curInitMethods.Add(new LifecycleElement(methodInfo, initAttribute.Order));
                     }
 
                     var destroyAttribute =
-                        Attribute.GetCustomAttribute(methodInfo, _destroyAttributeType) as PreDestroyAttribute;
+                        Attribute.GetCustomAttribute(methodInfo, destroyAttributeType) as PreDestroyAttribute;
                     if (destroyAttribute != null && methodInfo.DeclaringType == instanceType)
                     {
-                        Logger.Debug(m => m("Found destroy method on class [{0}]: {1}", instanceType.Name, methodInfo.Name));
+                        logger.Debug(
+                            m => m("Found destroy method on class [{0}]: {1}", instanceType.Name, methodInfo.Name));
                         curDestroyMethods.Add(new LifecycleElement(methodInfo, destroyAttribute.Order));
                     }
                 }
-                
+
                 initMethods.InsertRange(0, curInitMethods.OrderBy(e => e.Order));
                 destroyMethods.InsertRange(0, curDestroyMethods.OrderBy(e => e.Order));
                 instanceType = instanceType.BaseType;
-            } 
-            while (instanceType != null && instanceType != typeof(Object));
+            } while (instanceType != null && instanceType != typeof (Object));
 
-            var objectDef = _objectFactory.GetObjectDefinition(name);
+            var objectDef = objectFactory.GetObjectDefinition(name);
             var metadata = new LifecycleLifecycleMetadata(initMethods, destroyMethods);
             metadata.CheckConfigMembers(objectDef);
 
             return metadata;
         }
 
-
         private class LifecycleLifecycleMetadata
         {
-            private readonly IList<LifecycleElement> _initMethods;
-            private readonly IList<LifecycleElement> _destroyMethods;
+            private readonly IList<LifecycleElement> initMethods;
+            private readonly IList<LifecycleElement> destroyMethods;
 
-
-            public LifecycleLifecycleMetadata(IList<LifecycleElement> initMethods, IList<LifecycleElement> destroyMethods)
+            public LifecycleLifecycleMetadata(IList<LifecycleElement> initMethods,
+                IList<LifecycleElement> destroyMethods)
             {
-                _initMethods = initMethods;
-                _destroyMethods = destroyMethods;
+                this.initMethods = initMethods;
+                this.destroyMethods = destroyMethods;
             }
 
             public void CheckConfigMembers(IObjectDefinition objectDef)
             {
-                lock (_initMethods)
+                lock (initMethods)
                 {
-                    for (int i = 0; i < _initMethods.Count; i++)
-                        {
-                            if (!_initMethods[i].CheckConfig(objectDef))
-                                _initMethods.Remove(_initMethods[i]);
-                        }
-                }
-                lock (_destroyMethods)
-                {
-                    for (int i = 0; i < _destroyMethods.Count; i++)
+                    for (int i = 0; i < initMethods.Count; i++)
                     {
-                        if (!_destroyMethods[i].CheckConfig(objectDef))
-                            _destroyMethods.Remove(_destroyMethods[i]);
+                        if (!initMethods[i].CheckConfig(objectDef))
+                        {
+                            initMethods.Remove(initMethods[i]);
+                        }
+                    }
+                }
+                lock (destroyMethods)
+                {
+                    for (int i = 0; i < destroyMethods.Count; i++)
+                    {
+                        if (!destroyMethods[i].CheckConfig(objectDef))
+                        {
+                            destroyMethods.Remove(destroyMethods[i]);
+                        }
                     }
                 }
             }
 
             public void InvokeInitMethods(object instance, string objectName)
             {
-                foreach (var lifecycleElement in _initMethods)
+                foreach (var lifecycleElement in initMethods)
                 {
                     lifecycleElement.Invoke(instance, objectName);
                 }
@@ -254,43 +273,44 @@ namespace Spring.Objects.Factory.Attributes
 
             public void InvokeDestroyMethods(object instance, string objectName)
             {
-                foreach (var lifecycleElement in _destroyMethods)
+                foreach (var lifecycleElement in destroyMethods)
                 {
                     lifecycleElement.Invoke(instance, objectName);
                 }
             }
-
         }
-
 
         private class LifecycleElement
         {
-            private readonly MethodInfo _method;
-            private readonly int _order;
+            private readonly MethodInfo method;
+            private readonly int order;
 
-            public int Order { get { return _order; } }
-
+            public int Order
+            {
+                get { return order; }
+            }
 
             public LifecycleElement(MethodInfo method, int order)
             {
-                _method = method;
-                _order = order;
+                this.method = method;
+                this.order = order;
             }
 
             public bool CheckConfig(IObjectDefinition objectDef)
             {
-                if (_method.Name == objectDef.InitMethodName || _method.Name == objectDef.DestroyMethodName)
+                if (method.Name == objectDef.InitMethodName || method.Name == objectDef.DestroyMethodName)
+                {
                     return false;
+                }
 
                 return true;
             }
 
             public void Invoke(object instance, string objectName)
             {
-                Logger.Debug(m => m("Invoking init method on object '" + objectName + "': " + _method.Name));
-                _method.Invoke(instance, new object[] {});
+                logger.Debug(m => m("Invoking init method on object '" + objectName + "': " + method.Name));
+                method.Invoke(instance, new object[] {});
             }
         }
-
     }
 }

@@ -29,6 +29,7 @@ using System.ComponentModel;
 using Common.Logging;
 
 using Spring.Collections;
+using Spring.Collections.Generic;
 using Spring.Core;
 using Spring.Core.TypeConversion;
 using Spring.Objects.Factory.Config;
@@ -143,6 +144,27 @@ namespace Spring.Objects.Factory.Support
         /// Cache of singleton objects created by <see cref="IFactoryObject"/>s: FactoryObject name -> product
         /// </summary>
         private readonly Dictionary<string, object> factoryObjectProductCache = new Dictionary<string, object>();
+
+        /// <summary>
+        /// Disposable object instances: object name --> disposable instance
+        /// </summary>
+        private readonly Dictionary<string, object> disposableObjects = new Dictionary<string, object>();
+
+        /// <summary>
+        /// root object definitons: object name --> Root Object Definition
+        /// </summary>
+        protected SynchronizedHashtable mergedObjectDefinitions = new Spring.Collections.SynchronizedHashtable();
+
+        /// <summary>
+        /// Whether to cache object metadata or rather reobtain it for every access
+        /// </summary>
+        protected bool cacheObjectMetadata = true;
+
+
+        /// <summary>
+        /// Names of object that have already been created at least once
+        /// </summary>
+        private Spring.Collections.Generic.ISet<string> alreadyCreated = new SynchronizedSet<string>(new HashedSet<string>());
 
         #region Constructor (s) / Destructor
 
@@ -623,11 +645,26 @@ namespace Spring.Objects.Factory.Support
         /// Return a <see cref="Spring.Objects.Factory.Support.RootObjectDefinition"/>,
         /// even by traversing parent if the parameter is a child definition.
         /// </summary>
+        /// <param name="name">The name.</param>
+        /// <param name="od">The od.</param>
         /// <returns>
         /// A merged <see cref="Spring.Objects.Factory.Support.RootObjectDefinition"/>
         /// with overridden properties.
         /// </returns>
         protected internal virtual RootObjectDefinition GetMergedObjectDefinition(string name, IObjectDefinition od)
+        {
+            return GetMergedLocalObjectDefinition(name) ?? GetMergedObjectDefinitionInternal(name, od);
+        }
+
+        /// <summary>
+        /// Return a <see cref="Spring.Objects.Factory.Support.RootObjectDefinition"/>,
+        /// even by traversing parent if the parameter is a child definition.
+        /// </summary>
+        /// <returns>
+        /// A merged <see cref="Spring.Objects.Factory.Support.RootObjectDefinition"/>
+        /// with overridden properties.
+        /// </returns>
+        protected internal virtual RootObjectDefinition GetMergedObjectDefinitionInternal(string name, IObjectDefinition od)
         {
             if (od == null)
             {
@@ -636,40 +673,99 @@ namespace Spring.Objects.Factory.Support
 
             RootObjectDefinition mod;
 
-            if (od.ParentName == null)
+            // Check with full lock now in order to enforce the same merged instance.
+            lock (this.mergedObjectDefinitions.SyncRoot)
             {
-                mod = CreateRootObjectDefinition(od);
-            }
-            else
-            {
-                //                IObjectDefinition childDefinition = definition;
-                IObjectDefinition pod = null;
-                if (!name.Equals(od.ParentName))
+                mod = this.mergedObjectDefinitions[name] as RootObjectDefinition;
+
+                if (null != mod)
                 {
-                    pod = GetMergedObjectDefinition(TransformedObjectName(od.ParentName), true);
+                    return mod;
+                }
+
+
+                if (od.ParentName == null)
+                {
+                    mod = CreateRootObjectDefinition(od);
                 }
                 else
                 {
-                    if (ParentObjectFactory is AbstractObjectFactory)
+                    IObjectDefinition pod = null;
+                    if (!name.Equals(od.ParentName))
                     {
-                        pod = ((AbstractObjectFactory)ParentObjectFactory).GetMergedObjectDefinition(od.ParentName, true);
+                        pod = GetMergedObjectDefinition(TransformedObjectName(od.ParentName), true);
                     }
+                    else
+                    {
+                        if (ParentObjectFactory is AbstractObjectFactory)
+                        {
+                            pod = ((AbstractObjectFactory)ParentObjectFactory).GetMergedObjectDefinition(
+                                od.ParentName, true);
+                        }
+                    }
+
+                    if (pod == null)
+                    {
+                        throw new NoSuchObjectDefinitionException(od.ParentName,
+                                                                  string.Format(
+                                                                      "Parent name '{0}' is equal to object name '{1}' - "
+                                                                      +
+                                                                      "cannot be resolved without an AbstractObjectFactory parent.",
+                                                                      od.ParentName, name));
+                    }
+
+                    mod = CreateRootObjectDefinition(pod);
+                    mod.OverrideFrom(od);
                 }
 
-                if (pod == null)
+                // Only cache the merged bean definition if we're already about to create an
+                // instance of the object, or at least have already created an instance before.
+                if (CacheObjectMetadata && IsObjectEligibleForMetadataCaching(name))
                 {
-                    throw new NoSuchObjectDefinitionException(od.ParentName,
-                                                                string.Format(
-                                                                        "Parent name '{0}' is equal to object name '{1}' - "
-                                                                        +
-                                                                        "cannot be resolved without an AbstractObjectFactory parent.",
-                                                                        od.ParentName, name));
+                    this.mergedObjectDefinitions.Remove(name);
+                    this.mergedObjectDefinitions.Add(name, mod);
                 }
 
-                mod = CreateRootObjectDefinition(pod);
-                mod.OverrideFrom(od);
+                return mod;
+            } //release the lock scope
+        }
+
+        /// <summary>
+        /// Gets the merged local object definition.
+        /// </summary>
+        /// <param name="objectName">Name of the object.</param>
+        /// <returns>
+        /// Merged RootBeanDefinition, traversing the parent bean definition
+        /// if the specified bean corresponds to a child bean definition.
+        /// </returns>
+        protected RootObjectDefinition GetMergedLocalObjectDefinition(string objectName)
+        {
+            // Quick check on the concurrent map first, with minimal locking.
+            RootObjectDefinition mbd = null;
+
+            if (this.mergedObjectDefinitions.ContainsKey(objectName))
+            {
+                mbd = this.mergedObjectDefinitions[objectName] as RootObjectDefinition;
             }
-            return mod;
+
+            return mbd; // ?? GetMergedObjectDefinition(objectName, GetObjectDefinition(objectName));
+        }
+
+        /// <summary>
+        /// Determines whether the metadata for the specified object name is eligible for caching.
+        /// </summary>
+        /// <param name="beanName">Name of the bean.</param>
+        /// <returns>
+        /// 	<c>true</c> if [is object eligible for metadata caching] [the specified bean name]; otherwise, <c>false</c>.
+        /// </returns>
+        protected bool IsObjectEligibleForMetadataCaching(String beanName)
+        {
+            return this.alreadyCreated.Contains(beanName);
+        }
+
+        protected bool CacheObjectMetadata
+        {
+            get { return this.cacheObjectMetadata; }
         }
 
         /// <summary>
@@ -1233,8 +1329,8 @@ namespace Spring.Objects.Factory.Support
         /// </summary>
         /// <remarks>More specifically, check whether a GetObject call for the given name
         /// would return an object that is assignable to the specified target type.
-        /// Translates aliases back to the corresponding canonical bean name.
-        /// Will ask the parent factory if the bean cannot be found in this factory instance.
+        /// Translates aliases back to the corresponding canonical instance name.
+        /// Will ask the parent factory if the instance cannot be found in this factory instance.
         /// </remarks>
         /// <param name="name">The name of the object to query.</param>
         /// <param name="targetType">Type of the target to match against.</param>
@@ -1314,8 +1410,8 @@ namespace Spring.Objects.Factory.Support
         /// </summary>
         /// <remarks>More specifically, check whether a GetObject call for the given name
         /// would return an object that is assignable to the specified target type.
-        /// Translates aliases back to the corresponding canonical bean name.
-        /// Will ask the parent factory if the bean cannot be found in this factory instance.
+        /// Translates aliases back to the corresponding canonical instance name.
+        /// Will ask the parent factory if the instance cannot be found in this factory instance.
         /// </remarks>
         /// <param name="name">The name of the object to query.</param>
         /// <typeparam name="T">Type of the target to match against.</typeparam>
@@ -1327,7 +1423,7 @@ namespace Spring.Objects.Factory.Support
         /// </exception>
         public bool IsTypeMatch<T>(string name)
         {
-            return IsTypeMatch(name, typeof (T));
+            return IsTypeMatch(name, typeof(T));
         }
 
         /// <summary>
@@ -1606,7 +1702,7 @@ namespace Spring.Objects.Factory.Support
         /// <summary>
         /// String Resolver applied to Autowired value injections
         /// </summary>
-        private ISet embeddedValueResolvers = new SortedSet(); 
+        private ISet embeddedValueResolvers = new SortedSet();
 
         /// <summary>
         /// Indicates whether any IInstantiationAwareBeanPostProcessors have been registered
@@ -1624,7 +1720,7 @@ namespace Spring.Objects.Factory.Support
         private OrderedDictionary singletonLocks;
 
         /// <summary>
-        /// Set of registered singletons, containing the bean names in registration order 
+        /// Set of registered singletons, containing the instance names in registration order 
         /// </summary>
         private HashSet<string> registeredSingletons = new HashSet<string>();
 
@@ -1664,7 +1760,7 @@ namespace Spring.Objects.Factory.Support
         }
 
         /// <summary>
-        /// Determines whether the local object factory contains a bean of the given name,
+        /// Determines whether the local object factory contains a instance of the given name,
         /// ignoring object defined in ancestor contexts.
         /// This is an alternative to <code>ContainsObject</code>, ignoring an object
         /// of the given name from an ancestor object factory.
@@ -1834,7 +1930,7 @@ namespace Spring.Objects.Factory.Support
                     {
                         if (0 == string.Compare((string)aliasEntry.Value, objectName, !this.IsCaseSensitive))
                         {
-                            matches.Add((string) aliasEntry.Key);
+                            matches.Add((string)aliasEntry.Key);
                         }
                     }
                 }
@@ -2194,6 +2290,15 @@ namespace Spring.Objects.Factory.Support
                     }
                 }
 
+                try
+                {
+                    RegisterDisposableObjectIfNecessary(name, instance, mergedObjectDefinition);
+                }
+                catch (ObjectDefinitionValidationException ex)
+                {
+                    throw new ObjectCreationException(mergedObjectDefinition.ResourceDescription, name, "Invalid destruction signature", ex);
+                }
+
                 return EnsureObjectIsOfRequiredType(name, instance, requiredType);
             }
             catch
@@ -2235,6 +2340,34 @@ namespace Spring.Objects.Factory.Support
                     #endregion
                 }
             }
+        }
+
+        protected void RegisterDisposableObjectIfNecessary(string name, object instance, RootObjectDefinition od)
+        {
+            if (od.IsSingleton && RequiresDestruction(instance, od))
+            {
+                // Register a DisposableObject implementation that performs all destruction
+                // work for the given object: DestructionAwareObjectPostProcessors,
+                // DisposableObject interface, custom destroy method.
+                RegisterDisposableObject(name,
+                        new DisposableObjectAdapter(instance, name, od, objectPostProcessors));
+
+            }
+        }
+
+        /// <summary>
+        /// Requireses the destruction.
+        /// </summary>
+        /// <param name="instance">The instance to check.</param>
+        /// <param name="od">The corresponding instance definition.</param>
+        /// <returns>
+        /// Boolean indicating whether destruction is required.
+        /// </returns>
+
+        protected bool RequiresDestruction(object instance, RootObjectDefinition od)
+        {
+            return (instance != null &&
+                (instance is IDisposable || od.DestroyMethodName != null || HasDestructionAwareBeanPostProcessors));
         }
 
         private int nestingCount;
@@ -2438,13 +2571,13 @@ namespace Spring.Objects.Factory.Support
         /// <returns>the resolved value (may be the original value as-is)</returns>
         public string ResolveEmbeddedValue(string value)
         {
-		    string result = value;
-		    foreach(IStringValueResolver resolver in embeddedValueResolvers)
+            string result = value;
+            foreach (IStringValueResolver resolver in embeddedValueResolvers)
             {
-			    result = resolver.ParseAndResolveVariables(result);
-		    }
-		    return result;
-	    }
+                result = resolver.ParseAndResolveVariables(result);
+            }
+            return result;
+        }
 
         /// <summary>
         /// Add a new <see cref="Spring.Objects.Factory.Config.IObjectPostProcessor"/>
@@ -2503,6 +2636,20 @@ namespace Spring.Objects.Factory.Support
             AssertUtils.ArgumentHasText(alias, "The alias must not be empty.");
 
             #endregion
+
+            if (name == alias)
+            {
+                #region Instrumentation
+
+                if (log.IsDebugEnabled)
+                {
+                    log.Debug(string.Format("Ignoring attempt to Register alias '{0}' for object with name '{1}' because name and alias would be the same value.", alias, name));
+                }
+
+                #endregion
+
+                return;
+            }
 
             #region Instrumentation
 
@@ -2583,7 +2730,7 @@ namespace Spring.Objects.Factory.Support
         /// <remarks>
         /// 	<para>
         /// Only checks already instantiated singletons; does not return names
-        /// for singleton bean definitions which have not been instantiated yet.
+        /// for singleton instance definitions which have not been instantiated yet.
         /// </para>
         /// 	<para>
         /// The main purpose of this method is to check manually registered singletons
@@ -2650,6 +2797,24 @@ namespace Spring.Objects.Factory.Support
         }
 
         #endregion
+
+
+        /// <summary>
+        /// Registers the disposable object.
+        /// </summary>
+        /// <param name="objectName">Name of the instance.</param>
+        /// <param name="instance">The instance.</param>
+        /// Add the given instance to the list of disposable beans in this registry.
+        /// Disposable beans usually correspond to registered singletons,
+        /// matching the instance name but potentially being a different instance
+        /// (for example, a DisposableBean adapter for a singleton that does not
+        /// naturally implement <see cref="IDisposable"/>).
+        public void RegisterDisposableObject(String objectName, IDisposable instance)
+        {
+            if (disposableObjects.ContainsKey(objectName)) return;
+            disposableObjects.Add(objectName, instance);
+        }
+
 
 
         /// <summary>

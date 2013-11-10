@@ -1287,7 +1287,7 @@ namespace Spring.Objects.Factory.Support
 				    fallbackObjectName = candidateBeanName;
 			    }
 		    }
-		    return (primaryObjectName != null ? primaryObjectName : fallbackObjectName);
+		    return (primaryObjectName ?? fallbackObjectName);
 	    }
 
         /// <summary>

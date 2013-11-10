@@ -29,8 +29,8 @@
 			<sources failonempty="true">
 				<include name="**/*.cs" />
 				<include name="../CommonAssemblyInfo.cs" />
-				<exclude name="Objects\Factory\Config\ConnectionStringsVariableSourceTests.cs"
-                 if="${framework::get-target-framework() != 'net-2.0'}"/>
+				<exclude name="Objects\Factory\Config\ConnectionStringsVariableSourceTests.cs" if="${framework::get-target-framework() != 'net-2.0'}"/>
+				<exclude name="**/Fail*.cs"/>
       </sources>
 			<resources prefix="Spring" dynamicprefix="true" failonempty="true">
 				<include name="**/*.resx" />
@@ -69,6 +69,7 @@
 		<!-- Mono's al tells me Culture name sr-SP-Cyrl is not supported. Not sure if that's a limitation of my installation (James Fitzsimons) -->
  		<if test="${nant.settings.currentframework!='mono-2.0'}">
 			<!-- for some reason, on my new machine the csc task doesn't create the resource assembly for the sr-SP-Cyrl culture so do it by hand (MLP)-->
+			<!--
 			<if test="${framework::get-target-framework() != 'net-2.0'}">
 			  <mkdir dir="${current.bin.dir}/sr-SP-Cyrl"/>
 			  <copy file="Resources/Spring.Context.Tests.sr-SP-Cyrl.resx" todir="${current.bin.dir}/sr-SP-Cyrl"/>
@@ -84,6 +85,7 @@
 			    </sources>
 			  </al>
 			</if>
+			-->
 		</if>
 
 		<copy todir="${current.bin.dir}">
@@ -92,6 +94,13 @@
                           <include name="**/*.test" />
 			</fileset>
 		</copy>
+		<!-- copy nh libs -->
+		<copy todir="${current.bin.dir}" overwrite="true">
+			<fileset basedir="${nh32.lib.dir}">
+				<include name="**/*.dll" />
+			</fileset>
+		</copy>
+
 
         <copy file="${project::get-base-directory()}/${project::get-name()}.dll.config"
                       tofile="${current.bin.dir}/${project::get-name()}.dll.config"/>

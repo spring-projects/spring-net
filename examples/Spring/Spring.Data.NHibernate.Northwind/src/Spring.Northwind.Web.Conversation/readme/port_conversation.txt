@@ -1,0 +1,196 @@
+  I prepared the sample application and posted in 
+https://jira.springsource.org/browse/SPRNET-1431 as the file 
+"Spring.Web.Conversation.example.zip.".
+  Below explanations to clarify (or not) what I did.
+
+  This "sample application" is a modification of "Spring.Data.NHibernate.Northwind"
+contained in the version "1.3.0" of "Spring.NET" to use Conversation.
+  Currently, the "Spring.Net" has no "conversation scope" or implements the 
+concept of "Extended Persistence Context" ("session per conversation strategy").
+
+In this Sample Application the objective is demonstrate:
+1) How to keep instances of objects in a mimicry of "conversation scope". 
+  Shown in [expression="@(convCustomer)['CustomerEditController']"].
+2) How to enjoy the "extended persistence context". "Lazy load errors" do not happen 
+  anymore and repeated calls of "ISession.Get" to a "same record" do not cause 
+  numerous visits to the database, we take advantage of NHibernatecache. 
+  The modifications on "CustomerList.aspx" demonstrate this.
+  To verify the effectiveness of Conversation, comment on 
+  "App_Code\ConversationPage.cs" the line 
+  "this.Conversation.StartResumeConversation ();" then you will see the error 
+  "failed to lazily initialize a collection of role" occurring at the click 
+  of the button "+" on "CustomerList.aspx".
+
+  
+IMPORTANT: Never use a single conversation for the entire application (with the 
+  same duration of the "HTTP Session"). Remember, NHibernate keeps a cache of all
+  loaded objects, if the conversation is held for a long time this cache tends to
+  grow indefinitely (the limit is the amount of database records). That is, each 
+  conversation should be limited to a subset of the application pages, and must 
+  be discarded at the end of interaction with this subset 
+  (IConversationState.EndConversation()). 
+  In "Spring.Web.Conversation.WebConversationManager" keep 
+  [<property name="EndPaused" value="true"/>] is recommended, so when you start 
+  a conversation the others are discarded.
+  
+ADDITIONAL INFORMATION: The unit tests ("Spring.Northwind.IntegrationTests.2008") 
+  are not working. But there is no problem because it is not related to the 
+  changes made to support conversation, in fact they were already resulting in 
+  errors even before that.
+  
+
+List of changes in "Spring.Data.NHibernate.Northwind":
+
+  -Spring.Northwind.Web.References.2008
+    Adding links to schemes to enable auto complete.
+  -web.config
+    -module, added:
+       <!--Module that controls the conversations at the end of the request. Ends the Conversations in timeout and pause the conversations at the end of the request.-->
+       <add name="ConversationModule" type="Spring.Web.Conversation.HttpModule.ConversationModule, Spring.Web.Conversation"/>
+    -module, removed:
+       <add name="OpenSessionInView" type="Spring.Data.NHibernate.Support.OpenSessionInViewModule, Spring.Data.NHibernate21"/>
+ 
+  -web.xml
+    -module configurations
+      <!--Configuration for Spring HttpModule interceptor's-->
+        <object name="HttpApplicationConfigurer" type="Spring.Context.Support.HttpApplicationConfigurer, Spring.Web">
+          <property name="ModuleTemplates">
+            <dictionary>
+              <entry key="ConversationModule">
+                <!-- this name must match the module name -->
+                <object>
+                  <!-- select "view source" in your browser on any page to see the appended html comment -->
+                  <property name="ConversationManagerNameList">
+                    <list element-type="string">
+                      <value>conversationManager</value>
+                    </list>
+                  </property>
+                </object>
+              </entry>
+            </dictionary>
+          </property>
+        </object>
+ 
+    -conversation manager
+      <!--Conversation Manager-->
+      <object name="conversationManager" type="Spring.Web.Conversation.WebConversationManager, Spring.Web.Conversation" scope="session">
+        <property name="SessionFactory" ref="NHibernateSessionFactory"/>
+        <property name="EndPaused" value="true"/>
+      </object>
+    -Customer Conversation
+      <!--Conversation for 'CustomerEditor.aspx', 'CustomerList.aspx', 'CustomerOrders.aspx', 'CustomerView.aspx',  and 'FulfillmentResult.aspx'-->
+      <!--Important: If the application had other parties ("management employees" for example), they should use another conversation.-->
+      <object name="convCustomer" type="Spring.Web.Conversation.WebConversationSpringState, Spring.Web.Conversation" scope="session">
+        <property name="Id" value="convCustomer"></property>
+        <property name="TimeOut" value="0"></property>
+        <property name="ConversationManager" ref="conversationManager"></property>
+        <property name="SessionFactory" ref="NHibernateSessionFactory"/>
+        <property name="DbProvider" ref="DbProvider"/>
+        <!--Using workaround for 'conversation scope' to reference for 'CustomerEditController'. It is not as volatile as "request scope" not as durable as the "session scope"-->
+        <property name="['CustomerEditController']" ref="CustomerEditController"></property>
+      </object>
+ 
+    -Change "CustomerEditController" scope, remove [scope="session"] and put [singleton="false"]:
+      <object name="CustomerEditController" type="NHibernateCustomerEditController" singleton="false">
+        <constructor-arg name="sessionFactory" ref="NHibernateSessionFactory"/>
+      </object>
+      ...
+       
+    -Change reference for 'CustomerEditController' remove [ref="CustomerEditController"] and put [expression="@(convCustomer)['CustomerEditController']"]
+      <!--Using workaround for 'conversation scope' to reference for 'CustomerEditController'. It is not as volatile as "request scope" not as durable as the "session scope"-->
+      <object name="CustomerEditPage" abstract="true">
+        <property name="CustomerEditController" expression="@(convCustomer)['CustomerEditController']"/>
+        <property name="Conversation" ref="convCustomer"/>
+      </object>
+      ...
+      <!--Using workaround for 'conversation scope' to reference for 'CustomerEditController'. It is not as volatile as "request scope" not as durable as the "session scope"-->
+      <object type="CustomerView.aspx">
+        <property name="CustomerDao" ref="CustomerDao" />
+        <property name="CustomerEditController" expression="@(convCustomer)['CustomerEditController']" />
+        <property name="Conversation" ref="convCustomer"/>
+        <property name="Results">
+          <dictionary>
+            <entry key="EditCustomer" value="redirect:CustomerEditor.aspx" />
+            <entry key="CustomerList" value="redirect:CustomerList.aspx" />
+          </dictionary>
+        </property>
+      </object>
+      ...
+      <!--Using workaround for 'conversation scope' to reference for 'CustomerEditController'. It is not as volatile as "request scope" not as durable as the "session scope"-->
+      <object type="FulfillmentResult.aspx">
+        <property name="FulfillmentService" ref="FulfillmentService" />
+        <property name="CustomerEditController" expression="@(convCustomer)['CustomerEditController']" />
+        <property name="Conversation" ref="convCustomer"/>
+        <property name="Results">
+          <dictionary>
+            <entry key="Back" value="redirect:CustomerOrders.aspx" />
+          </dictionary>
+        </property>
+      </object>
+      ...
+      <object type="Default.aspx">
+        <property name="Conversation" ref="convDefault"/>
+        <property name="Results">
+          <dictionary>
+            <entry key="CustomerList" value="redirect:CustomerList.aspx" />
+          </dictionary>
+        </property>
+      </object>
+      ...
+      <!--Conversation for 'Default.aspx'-->
+      <!--"convDefault" will have the unique functionality: trigger the release of other conversations when started (StartResumeConversation())-->
+      <object name="convDefault" type="Spring.Web.Conversation.WebConversationSpringState, Spring.Web.Conversation" scope="session">
+        <property name="Id" value="convDefault"></property>
+        <property name="TimeOut" value="0"></property>
+        <property name="ConversationManager" ref="conversationManager"></property>
+        <property name="SessionFactory" ref="NHibernateSessionFactory"/>
+        <property name="DbProvider" ref="DbProvider"/>
+      </object>
+
+  -Added "ConversationPage.cs"
+    -Base page with support for conversation.
+  -CustomerList.aspx
+    -Allow list the "Order's" on the same page without lazy initialization error 
+    occurs. All objects stay attached to ISession (NHibernate).
+  -CustomerList.aspx.cs:
+    -Added property "IList<Customer> CustomersDetachedList". List not attached. 
+    Searching the database only once per conversation.
+    -Changing the "Page_InitializeControls" for consider "CustomersDetachedList".
+    -Change "Page_InitializeControls" to "Page_Init".
+    -The method "BtnShowOrders_Click" performe a implicitly a "lazy load" on
+    "Customer.Orders".
+  -Change [CustomerEditor : Spring.Web.UI.Page] to [CustomerEditor : Spring.Web.UI.Page] on:
+    -CustomerEditor.aspx.cs
+    -CustomerList.aspx.cs
+    -CustomerOrders.aspx.cs
+    -CustomerView.aspx.cs
+    -FullfillmentResult.aspx.cs
+    -Default.aspx.cs
+  -Dao.xml
+    -  Added [<entry key="connection.release_mode" value="on_close"/>] to avoid 
+     disconnection and reconnection before and after each IDbCommand execution.
+       This is important because we will do more lazyload outside the transaction
+     boundaries.
+    - Added:
+      ...
+      <entry key="show_sql" value="true"/>
+      <entry key="format_sql" value="true"/>
+      ...
+  -Default.aspx.cs
+    -Remove (they are never used):
+      -customerDao;
+      -fulfillmentService;
+      -CustomerDao;
+      -Button1_Click(object sender, EventArgs e);
+      -ProcessCustomer();
+  -Config\Log4Net.xml. 
+    ...
+    <!--detail's about SQL's. For view sql commands on Logs\log.txt-->
+    <logger name="NHibernate.SQL">
+      <level value="DEBUG" />
+    </logger>
+    ...
+    <!--detail's about Conversation-->
+    <logger name="Spring.Web.Conversation">
+      <level value="DEBUG" />
+    </logger>
