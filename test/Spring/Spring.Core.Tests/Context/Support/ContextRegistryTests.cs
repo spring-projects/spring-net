@@ -170,6 +170,14 @@ namespace Spring.Context.Support
         }
 
         [Test]
+        public void CanBuildProxyForClassWithProtectedConstructor()
+        {
+            CompositionProxyTypeBuilder typeBuilder = new CompositionProxyTypeBuilder();
+            typeBuilder.TargetType = typeof(ClassWithProtectedCtor);
+            typeBuilder.BuildProxyType();            
+        }
+
+        [Test]
         public void ClearWithDynamicProxies()
         {
             CompositionProxyTypeBuilder typeBuilder = new CompositionProxyTypeBuilder();

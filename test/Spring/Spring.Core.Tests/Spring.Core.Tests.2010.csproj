@@ -339,6 +339,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="HookableContextHandler.cs" />
+    <Compile Include="Objects\ClassWithProtectedCtor.cs" />
     <Compile Include="Objects\ExpressionTestObject.cs" />
     <Compile Include="Objects\Factory\Attributes\PostConstructAttributeTests.cs" />
     <Compile Include="Objects\Factory\Attributes\AutowireByTypeNormalTests.cs" />

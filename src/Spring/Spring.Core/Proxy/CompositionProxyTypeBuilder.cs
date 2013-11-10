@@ -197,8 +197,8 @@ namespace Spring.Proxy
             {
                 il.Emit(OpCodes.Ldarg_S, i);
             }
-            il.Emit(OpCodes.Newobj, TargetType.GetConstructor(
-                ReflectionUtils.GetParameterTypes(constructor.GetParameters())));
+
+            il.Emit(OpCodes.Newobj, constructor);
             il.Emit(OpCodes.Stfld, targetInstance);
         }
 
