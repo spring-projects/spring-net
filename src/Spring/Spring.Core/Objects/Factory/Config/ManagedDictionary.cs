@@ -203,35 +203,37 @@ namespace Spring.Objects.Factory.Config
 	    /// <exception cref="InvalidOperationException">If merging is not enabled for this instance,
 	    /// (i.e. <code>MergeEnabled</code> equals <code>false</code>.</exception>
 	    public object Merge(object parent)
-	    {
-            if (!this.mergeEnabled)
-            {
-                throw new InvalidOperationException(
-                    "Not allowed to merge when the 'MergeEnabled' property is set to 'false'");
-            }
-            if (parent == null)
-            {
-                return this;
-            }
-            var pDict = parent as ManagedDictionary;
-            if (pDict == null)
-            {
-                throw new InvalidOperationException("Cannot merge with object of type [" + parent.GetType() + "]");
-            }
-            IDictionary merged = new ManagedDictionary();
-            {
-            	KeyTypeName = pDict.keyTypeName,
-                valueTypeName = pDict.valueTypeName
-            }
-	        foreach (DictionaryEntry dictionaryEntry in pDict)
-	        {
+	    {       
+	    	if (!this.mergeEnabled)
+            	{
+            		throw new InvalidOperationException(
+                    		"Not allowed to merge when the 'MergeEnabled' property is set to 'false'");
+            	}
+            	if (parent == null)
+            	{
+                	return this;
+            	}
+            	var pDict = parent as IDictionary;
+            	if (pDict == null)
+            	{
+            		throw new InvalidOperationException("Cannot merge with object of type [" + parent.GetType() + "]");
+            	}
+            	var merged = new ManagedDictionary();
+            	var pManagedDict = pDict as ManagedDictionary;
+            	if (pManagedDict != null)
+            	{
+            		merged.KeyTypeName = pManagedDict.keyTypeName;
+            		merged.valueTypeName = pManagedDict.valueTypeName;
+            	}
+	    	foreach (DictionaryEntry dictionaryEntry in pDict)
+	    	{
 	            merged[dictionaryEntry.Key] = dictionaryEntry.Value;
 	        }
 	        foreach (DictionaryEntry entry in this)
 	        {
 	            merged[entry.Key] = entry.Value;
 	        }
-            return merged;
+            	return merged;
 	    }
 	}
 }
