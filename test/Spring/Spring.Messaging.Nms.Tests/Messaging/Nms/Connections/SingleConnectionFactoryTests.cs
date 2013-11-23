@@ -54,6 +54,8 @@ namespace Spring.Messaging.Nms.Connections
 
             connection.Start();
             LastCall.On(connection).Repeat.Twice();
+            connection.PurgeTempDestinations();
+            LastCall.On( connection ).Repeat.Twice();
             connection.Stop();
             LastCall.On(connection).Repeat.Once();
             connection.Close();
@@ -64,10 +66,12 @@ namespace Spring.Messaging.Nms.Connections
             SingleConnectionFactory scf = new SingleConnectionFactory(connection);
             IConnection con1 = scf.CreateConnection();
             con1.Start();
+            con1.PurgeTempDestinations();
             con1.Stop(); // should be ignored
             con1.Close(); // should be ignored
             IConnection con2 = scf.CreateConnection();
             con2.Start();
+            con1.PurgeTempDestinations();
             con2.Stop(); // should be ignored
             con2.Close(); // should be ignored.
             scf.Dispose();
