@@ -79,6 +79,7 @@ namespace Spring.Objects.Factory.Config
 
         private int order = Int32.MaxValue; // default: same as non-Ordered
 
+        private bool includeAncestors;
         private bool ignoreUnresolvablePlaceholders;
         private string placeholderPrefix = DefaultPlaceholderPrefix;
         private string placeholderSuffix = DefaultPlaceholderSuffix;
@@ -158,6 +159,11 @@ namespace Spring.Objects.Factory.Config
         public bool IgnoreUnresolvablePlaceholders
         {
             set { ignoreUnresolvablePlaceholders = value; }
+        }
+
+        public bool IncludeAncestors
+        {
+            set { includeAncestors = value;  }
         }
 
         #endregion
@@ -246,11 +252,15 @@ namespace Spring.Objects.Factory.Config
             TextProcessor tp = new TextProcessor(this, compositeVariableSource);
             ObjectDefinitionVisitor visitor = new ObjectDefinitionVisitor(new ObjectDefinitionVisitor.ResolveHandler(tp.ParseAndResolveVariables));
 
-            IList<string> objectDefinitionNames = factory.GetObjectDefinitionNames();
+            IList<string> objectDefinitionNames = factory.GetObjectDefinitionNames(includeAncestors);
             for (int i = 0; i < objectDefinitionNames.Count; ++i)
             {
                 string name = objectDefinitionNames[i];
-                IObjectDefinition definition = factory.GetObjectDefinition( name );
+                IObjectDefinition definition = factory.GetObjectDefinition( name, includeAncestors );
+                
+                if (definition == null)
+                    continue;
+
                 try
                 {
                     visitor.VisitObjectDefinition( definition );

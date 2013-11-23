@@ -1338,7 +1338,21 @@ namespace Spring.Context.Support
         /// <seealso cref="Spring.Objects.Factory.IListableObjectFactory.GetObjectDefinitionNames()"/>
         public IList<string> GetObjectDefinitionNames()
         {
-            return ObjectFactory.GetObjectDefinitionNames();
+            return GetObjectDefinitionNames(false);
+        }
+        
+        /// <summary>
+        /// Return the names of all objects defined in this factory, if <code>includeAncestors</code>is <code>true</code>
+        /// includes all parent factories.
+        /// </summary>
+        /// <param name="includeAncestors">to include parent factories into result</param>
+        /// <returns>
+        /// The names of all objects defined in this factory, if <code>includeAncestors</code> is <code>true</code> includes all 
+        /// objects defined in parent factories, or an empty array if none are defined.
+        /// </returns>
+        public IList<string> GetObjectDefinitionNames(bool includeAncestors)
+        {
+            return ObjectFactory.GetObjectDefinitionNames(includeAncestors);
         }
 
         /// <summary>
