@@ -29,8 +29,7 @@
 
     <para>This chapter covers the Spring Framework implementation of the
     Inversion of Control (IoC) <footnote>
-        <para>See the section entitled <xref
-        linkend="background-ioc" /></para>
+        <para>See the section entitled <xref linkend="background-ioc"/></para>
       </footnote> principle</para>
 
     <para>The <literal>Spring.Core</literal> assembly is the basis for
@@ -54,7 +53,7 @@
     in this chapter in descriptions of Spring's IoC container.</para>
 
     <para>If you are new to Spring.NET or IoC containers in general, you may
-    want to consider starting with <xref linkend="quickstarts" />, which
+    want to consider starting with <xref linkend="quickstarts"/>, which
     contains a number of introductory level examples that actually demonstrate
     a lot of what is described in detail below. Don't worry if you don't
     absorb everything at once... those examples serve only to paint a picture
@@ -70,15 +69,15 @@
     the Spring IoC container and is responsible for instantiating,
     configuring, and assembling many of the objects in your application. The
     container gets its instructions on what objects to instantiate, configure,
-    and assemble by reading configuration metadata. The configuration metadata
-    is represented in XML. The configuration metadata allows you to express
+    and assemble by reading configuration meta data. The configuration meta data
+    is represented in XML. The configuration meta data allows you to express
     the objects that compose your application and the rich interdependencies
     between such objects.</para>
 
     <note>
-      <para>Note that other ways to specify the metadata, such as attributes
+      <para>Note that other ways to specify the meta data, such as attributes
       and .NET code, are planned for future releases, the core IoC container
-      does not assume any specific metadata format. The Java version of Spring
+      does not assume any specific meta data format. The Java version of Spring
       already supports such functionality.</para>
     </note>
 
@@ -94,33 +93,33 @@
     Configuration</link> for more details.</para>
 
     <para>The following diagram is a high-level view of how Spring works. Your
-    application classes are combined with configuration metadata so that after
+    application classes are combined with configuration meta data so that after
     the ApplicationContext is created and initialized, you have a fully
     configured and executable system or application.</para>
 
     <mediaobject>
       <imageobject>
-        <imagedata fileref="images/container-in-action.gif" format="GIF"></imagedata>
+        <imagedata fileref="images/container-in-action.gif" format="GIF"/>
       </imageobject>
     </mediaobject>
 
     <sect2 xml:id="objects-configuration-metadata">
-      <title>Configuration metadata</title>
+      <title>Configuration meta data</title>
 
       <para>As the preceding diagram shows, the Spring IoC container consumes
-      a form of <emphasis>configuration metadata</emphasis>; this
-      configuration metadata represents how you as an application developer
+      a form of <emphasis>configuration meta data</emphasis>; this
+      configuration meta data represents how you as an application developer
       tell the Spring container to instantiate, configure, and assemble the
-      objects in your application. Configuration metadata is supplied in a
+      objects in your application. Configuration meta data is supplied in a
       simple and intuitive XML format</para>
 
       <note>
-        <para>XML-based metadata is by far the most commonly used form of
-        configuration metadata. It is not however the only form of
-        configuration metadata that is allowed. The Spring IoC container
+        <para>XML-based meta data is by far the most commonly used form of
+        configuration meta data. It is not however the only form of
+        configuration meta data that is allowed. The Spring IoC container
         itself is totally decoupled from the format in which this
-        configuration metadata is actually written. Attribute based and code
-        based metadata will be part of an upcoming release and it is already
+        configuration meta data is actually written. Attribute based and code
+        based meta data will be part of an upcoming release and it is already
         part of the Spring Java framework.</para>
       </note>
 
@@ -139,7 +138,7 @@
       domain objects.</para>
 
       <para>The following example shows the basic structure of XML-based
-      configuration metadata:</para>
+      configuration meta data:</para>
 
       <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"&gt;
 
@@ -167,12 +166,12 @@
       <para>Spring.NET comes with an XSD schema to make the validation of the
       XML object definitions a whole lot easier. The XSD document is
       thoroughly documented so feel free to take a peek inside (see <xref
-      linkend="springobjectsxsd" />). The XSD is currently used in the
+      linkend="springobjectsxsd"/>). The XSD is currently used in the
       implementation code to validate the XML document. The XSD schema serves
       a dual purpose in that it also facilitates the editing of XML object
       definitions inside an XSD aware editor (typically Visual Studio) by
       providing validation (and Intellisense support in the case of Visual
-      Studio). You may wish to refer to <xref linkend="vsnet" /> for more
+      Studio). You may wish to refer to <xref linkend="vsnet"/> for more
       information regarding such integration.</para>
     </sect2>
 
@@ -182,7 +181,7 @@
       <para>Instantiating a Spring IoC container is straightforward. The
       location path or paths suppied to an IApplicationContext constructor are
       actually resource strings that allow the container to load configuration
-      metadata from a variety of external resources such as the local file
+      meta data from a variety of external resources such as the local file
       system, embedded assembly resources, and so on.</para>
 
       <programlisting language="csharp">IApplicationContext context = new XmlApplicationContext("services.xml", "data-access.xml");
@@ -229,7 +228,7 @@
       linkend="objects-dependencies">Dependencies</link>.</para>
 
       <sect3>
-        <title>Loading configuration metadata from non-default resource
+        <title>Loading configuration meta data from non-default resource
         locations</title>
 
         <para>In the previous example the configuration resources are assumed
@@ -255,8 +254,8 @@
           <para>After you learn about Spring's IoC container, you may want to
           know more about Spring's <classname><link
           ns6:href="http://www.springframework.net/doc-latest/api/net-2.0/html/Spring.Core~Spring.Core.IO.IResource.html">IResource</link></classname>
-          abstraction to load metadata from other locations as desribed below
-          and alsoin the chapter <xref linkend="resources" /></para>
+          abstraction to load meta data from other locations as desribed below
+          and alsoin the chapter <xref linkend="resources"/></para>
         </note>
 
         <para>These resources are most frequently files or URLs but can also
@@ -270,7 +269,7 @@
         referring to a resource that has been embedded inside a .NET assembly,
         <literal>assembly://&lt;AssemblyName&gt;/&lt;NameSpace&gt;/&lt;ResourceName&gt;</literal>.
         The <literal>IResource</literal> abstraction is explained further in
-        <xref linkend="objects-iresource" />.</para>
+        <xref linkend="objects-iresource"/>.</para>
 
         <note>
           <para>To create an embedded resource using Visual Studio you must
@@ -319,7 +318,7 @@
         language="csharp">IApplicationContext ctx = ContextRegistry.GetContext();</programlisting>
         The <literal>ContextRegistry</literal> is used to both instantiate the
         application context and to perform service locator style access to
-        other objects. (See <xref linkend="objects-servicelocator" /> for more
+        other objects. (See <xref linkend="objects-servicelocator"/> for more
         information). The glue that makes this possible is an implementation
         of the Base Class Library (BCL) provided
         <literal>IConfigurationSectionHandler</literal> interface, namely the
@@ -348,12 +347,12 @@
         <para>Spring.NET comes with an XSD schema to make the validation of
         the XML object definitions a whole lot easier. The XSD document is
         thoroughly documented so feel free to take a peek inside (see <xref
-        linkend="springobjectsxsd" />). The XSD is currently used in the
+        linkend="springobjectsxsd"/>). The XSD is currently used in the
         implementation code to validate the XML document. The XSD schema
         serves a dual purpose in that it also facilitates the editing of XML
         object definitions inside an XSD aware editor (typically Visual
         Studio) by providing validation (and Intellisense support in the case
-        of Visual Studio). You may wish to refer to <xref linkend="vsnet" />
+        of Visual Studio). You may wish to refer to <xref linkend="vsnet"/>
         for more information regarding such integration.</para>
 
         <para>Your XML object definitions can also be defined within the
@@ -387,18 +386,18 @@
 &lt;/configuration&gt;</programlisting></para>
 
         <para>Other options available to structure the configuration files are
-        described in <xref linkend="context-functionality-hierarchy" /> and
-        <xref linkend="objects-factory-xml-import" />.</para>
+        described in <xref linkend="context-functionality-hierarchy"/> and
+        <xref linkend="objects-factory-xml-import"/>.</para>
 
         <para>The <literal>IApplicationContext</literal> can be configured to
         register other resource handlers, custom parsers to integrate
         user-contributed XML schema into the object definitions section, type
         converters, and define type aliases. These features are discussed in
-        section <xref linkend="context-configuration" /></para>
+        section <xref linkend="context-configuration"/></para>
       </sect3>
 
       <sect3 xml:id="objects-factory-xml-import">
-        <title>Composing XML-based configuration metadata</title>
+        <title>Composing XML-based configuration meta data</title>
 
         <para>It can be useful to have object definitions span multiple XML
         files. Often each individual XML configuration file represents a
@@ -485,12 +484,12 @@ IList userList = service.GetUserNames();
       <title>Object definition overview</title>
 
       <para>A Spring IoC container manages one or more objects. These objects
-      are created with the configuration metadata that you supply to the
+      are created with the configuration meta data that you supply to the
       container.</para>
 
       <para>Within the container itself, these object definitions are
       represented as <classname>IObjectDefinition</classname> objects, which
-      contain (among other information) the following metadata: <itemizedlist
+      contain (among other information) the following meta data: <itemizedlist
           spacing="compact">
           <listitem>
             <para><emphasis>A type name</emphasis>: typically the actual
@@ -518,15 +517,15 @@ IList userList = service.GetUserNames();
           </listitem>
         </itemizedlist></para>
 
-      <para>This metadata translates to a set of properties that make up each
+      <para>This meta data translates to a set of properties that make up each
       object definition. The following table lists some of these properties,
       with links to documentation <table frame="all">
           <title>Object definition explanation</title>
 
           <tgroup cols="2">
-            <colspec colname="c1" colwidth="2*" />
+            <colspec colname="c1" colwidth="2*"/>
 
-            <colspec colname="c2" colwidth="4*" />
+            <colspec colname="c2" colwidth="4*"/>
 
             <thead>
               <row>
@@ -540,57 +539,55 @@ IList userList = service.GetUserNames();
               <row>
                 <entry>type</entry>
 
-                <entry><xref linkend="objects-factory-class" /></entry>
+                <entry><xref linkend="objects-factory-class"/></entry>
               </row>
 
               <row>
                 <entry>id and name</entry>
 
-                <entry><xref linkend="objects-objectname" /></entry>
+                <entry><xref linkend="objects-objectname"/></entry>
               </row>
 
               <row>
                 <entry>singleton or prototype</entry>
 
-                <entry><xref linkend="objects-factory-scopes" /></entry>
+                <entry><xref linkend="objects-factory-scopes"/></entry>
               </row>
 
               <row>
                 <entry>object properties</entry>
 
-                <entry><xref
-                linkend="objects-factory-collaborators" /></entry>
+                <entry><xref linkend="objects-factory-collaborators"/></entry>
               </row>
 
               <row>
                 <entry>constructor arguments</entry>
 
-                <entry><xref
-                linkend="objects-factory-collaborators" /></entry>
+                <entry><xref linkend="objects-factory-collaborators"/></entry>
               </row>
 
               <row>
                 <entry>autowiring mode</entry>
 
-                <entry><xref linkend="objects-factory-autowire" /></entry>
+                <entry><xref linkend="objects-factory-autowire"/></entry>
               </row>
 
               <row>
                 <entry>dependency checking mode</entry>
 
-                <entry><xref linkend="objects-factory-dependencies" /></entry>
+                <entry><xref linkend="objects-factory-dependencies"/></entry>
               </row>
 
               <row>
                 <entry>initialization method</entry>
 
-                <entry><xref linkend="objects-factory-lifecycle" /></entry>
+                <entry><xref linkend="objects-factory-lifecycle"/></entry>
               </row>
 
               <row>
                 <entry>destruction method</entry>
 
-                <entry><xref linkend="objects-factory-lifecycle" /></entry>
+                <entry><xref linkend="objects-factory-lifecycle"/></entry>
               </row>
             </tbody>
           </tgroup>
@@ -610,7 +607,7 @@ IList userList = service.GetUserNames();
       registration through the methods
       <literal>RegisterSingleton(..)</literal> and
       <literal>RegisterObjectDefinition(..)</literal>. However, typical
-      applications work soley with objects defined through metadata object
+      applications work soley with objects defined through meta data object
       definitions.</para>
 
       <sect3 xml:id="objects-objectname">
@@ -634,7 +631,7 @@ IList userList = service.GetUserNames();
           when applying advice to a set of objects related by name.</para>
         </sidebar>
 
-        <para>When using XML-based configuration metadata, you use the
+        <para>When using XML-based configuration meta data, you use the
         <literal>'id'</literal> and/or <literal>'name'</literal>attributes to
         specify the object identifier(s). The <literal>'id'</literal>
         attribute allows you to specify exactly one id, and because it is a
@@ -676,8 +673,8 @@ IList userList = service.GetUserNames();
           not always adequate, however. It is sometimes desirable to introduce
           an alias for an object that is defined elsewhere. This is commonly
           the case in large systems where configuration is split amongst each
-          subsystem, each subsystem having its own set of object defintions.
-          In XML-based configuration metadata, you can use of the
+          subsystem, each subsystem having its own set of object definitions.
+          In XML-based configuration meta data, you can use of the
           &lt;alias/&gt; element to accomplish this.</para>
 
           <programlisting language="myxml"> &lt;alias name="fromName" alias="toName"/&gt;</programlisting>
@@ -686,14 +683,14 @@ IList userList = service.GetUserNames();
           <literal>fromName</literal>, may also after the use of this alias
           definition, be referred to as <literal>toName</literal>.</para>
 
-          <para>For example, the configuration metadata for subsystem A may
+          <para>For example, the configuration meta data for subsystem A may
           refer to a DbProvider via the name 'SubsystemA-DbProvider. The
-          configuration metadata for subsystem B may refer to a DbProvider via
+          configuration meta data for subsystem B may refer to a DbProvider via
           the name 'SubsystemB-DbProvider'. When composing the main
           application that uses both these subsystems the main application
           refers to the DbProvider via the name 'MyApp-DbProvider'. To have
           all three names refer to the same object you add to the MyApp
-          configuration metadata the following aliases definitions:</para>
+          configuration meta data the following aliases definitions:</para>
 
           <programlisting language="myxml">&lt;alias name="SubsystemA-DbProvider" alias="SubsystemB-DbProvider"/&gt;
 &lt;alias name="SubsystemA-DbProvider" alias="MyApp-DbProvider"/&gt;</programlisting>
@@ -711,10 +708,10 @@ IList userList = service.GetUserNames();
 
       <para>An object definition essentially is a recipe for creating one or
       more objects. The container looks at the recipe for a named object when
-      asked, and uses the configuration metadata encapsulated by that object
+      asked, and uses the configuration meta data encapsulated by that object
       definition to create (or acquire) an actual object.</para>
 
-      <para>If you are using XML-based configuration metadata, you can specify
+      <para>If you are using XML-based configuration meta data, you can specify
       the type of object that is to be instantiated in the
       <literal>'type'</literal> attribute of the
       <literal>&lt;object/&gt;</literal> element. This
@@ -758,13 +755,13 @@ IList userList = service.GetUserNames();
         IoC you are going to use for that specific object, you may need to
         create a default constructor.</para>
 
-        <para>With XML-based configuration metadata you can specify your
+        <para>With XML-based configuration meta data you can specify your
         object class as follows: <programlisting language="myxml">&lt;object id="exampleObject" type="Examples.ExampleObject, ExamplesLibrary"/&gt;</programlisting></para>
 
         <para>For details about the mechanism for supplying arguments to the
         constructor (if required), and setting object instance properties
         after the object is constructed, see <xref
-        linkend="objects-factory-collaborators" />.</para>
+        linkend="objects-factory-collaborators"/>.</para>
 
         <para>This XML fragment describes an object definition that will be
         identified by the <emphasis>exampleObject</emphasis> name, instances
@@ -837,7 +834,7 @@ IList userList = service.GetUserNames();
         <para>For details about the mechanism for supplying (optional)
         arguments to the factory method and setting object instance properties
         after it has been returned from the factory, see <xref
-        linkend="object-factory-properties-detailed" /></para>
+        linkend="object-factory-properties-detailed"/></para>
       </sect3>
 
       <sect3 xml:id="objects-factory-class-instance-factory-method">
@@ -943,7 +940,7 @@ IList userList = service.GetUserNames();
         type="GenericsPlay.ExampleGenericObject&amp;lt;GenericDictionary&amp;lt;int , string&gt;&gt;, GenericsPlay" /&gt;</programlisting>
         or even shorter <programlisting language="myxml">&lt;object id="myOtherOtherGenericObject" 
         type="GenericsPlay.ExampleGenericObject&amp;lt;MyIntStringDictionary&gt;, GenericsPlay" /&gt;
-</programlisting> Refer to <xref linkend="context-configuration" /> for
+</programlisting> Refer to <xref linkend="context-configuration"/> for
         additional information on using type aliases.</para>
       </sect3>
 
@@ -1049,7 +1046,7 @@ public class TestGenericObjectFactory
       look up its dependencies, and does not know the location or class of the
       dependencies. Long sections of initialization code that you used to hide
       in a #region tag simply go away, and are placed by container
-      configuration metadata. One can also consider this clean up an
+      configuration meta data. One can also consider this clean up an
       application of the principal of Separation of Concerns. Before using DI,
       you class was responsible for business logic AND its configuration, it
       was concerns with doing more than one thing. DI removes the
@@ -1175,11 +1172,11 @@ namespace SimpleApp
                 <title>Type aliases</title>
 
                 <tgroup cols="3">
-                  <colspec colname="c1" colwidth="1*" />
+                  <colspec colname="c1" colwidth="1*"/>
 
-                  <colspec colname="c2" colwidth="5*" />
+                  <colspec colname="c2" colwidth="5*"/>
 
-                  <colspec colname="c3" colwidth="5*" />
+                  <colspec colname="c3" colwidth="5*"/>
 
                   <thead>
                     <row>
@@ -1395,7 +1392,7 @@ namespace SimpleApp
         programatically), but rather with an XML definition file which will be
         converted internally into instances of these classes, and used to load
         an entire Spring IoC container instance. Refer to <xref
-        linkend="objects-objects-conversion" /> for more information regarding
+        linkend="objects-objects-conversion"/> for more information regarding
         type conversion, and how you can design your classes to be convertible
         by Spring.NET.</para>
 
@@ -1506,7 +1503,7 @@ namespace SimpleApp
       <sect3 xml:id="objects-di-examples">
         <title>Examples of dependency injection</title>
 
-        <para>First, an example of using XML-based configuration metadata for
+        <para>First, an example of using XML-based configuration meta data for
         setter-based DI. A small part of a Spring XML configuration file
         specifying some object definitions:<programlisting language="myxml">&lt;object id="exampleObject" type="Examples.ExampleObject, ExamplesLibrary"&gt;
 
@@ -1661,7 +1658,7 @@ public class MixedIocObject
       <para>As mentioned in the previous section, you can define object
       properties and constructor arguments as either references to other
       managed objects (collaborators), or as values defined inline. Spring's
-      XML-based configuration metadata supports sub-element types within its
+      XML-based configuration meta data supports sub-element types within its
       <literal>&lt;property/&gt;</literal> and
       &lt;<literal>constructor-arg/&gt;</literal> elements for this
       purpose.</para>
@@ -1724,7 +1721,7 @@ public class MixedIocObject
           referenced, named object actually exists. In the second variation,
           no validation is performed on the value that is passed to the
           <literal>targetName</literal> property of the client object. Typos
-          are only discovered (with ost mikely fatal results) when the
+          are only discovered (with most likely fatal results) when the
           'client' object is actually instantiated. If the 'client' object is
           a prototype object, this typo and the resulting exception may only
           be discovered long after the container is deployed.</para>
@@ -1752,7 +1749,7 @@ public class MixedIocObject
 &lt;/property&gt;</programlisting>
 
           <para>The above configuration will result in the string " \n\r\t".
-          Note, that you don't have to explicitely specifiy the 'xml'
+          Note, that you don't have to explicitly specify the 'xml'
           namespace on top of your configuration.</para>
         </sect4>
       </sect3>
@@ -1766,7 +1763,7 @@ public class MixedIocObject
         of the specified property to be a reference to another object (a
         collaborator) managed by the container. The referenced object is a
         dependency of the object whose property will be set, and it is
-        initialzed on demand as needed before the property is set. (If the
+        initialized on demand as needed before the property is set. (If the
         collaborator is a singleton object it may be initialized already by
         the container.) All references are ultimately just a reference to
         another object. Scoping and validation depend on whether you specify
@@ -1900,7 +1897,7 @@ public class MixedIocObject
         it will configure the collection by using the getter property to
         obtain a reference to the collection class and then proceed to add the
         additional elements to the existing collection. This results in an
-        additive behavior for collection properties that are exposed in this
+        additive behaviour for collection properties that are exposed in this
         manner.</para>
 
         <para><emphasis>The value of a Dictionary entry, or a set value, can
@@ -1910,7 +1907,7 @@ public class MixedIocObject
 
         <para>The shortcut forms for value and references are useful to reduce
         XML verbosity when setting collection properties. See <xref
-        linkend="objects-shortcutforms" /> for more information.</para>
+        linkend="objects-shortcutforms"/> for more information.</para>
       </sect3>
 
       <sect3 xml:id="objects-generic-collections-values">
@@ -1924,10 +1921,10 @@ public class MixedIocObject
         for <literal>IList&lt;T&gt;</literal> and the XML attributes
         <literal>key-type</literal> and <literal>value-type</literal> for
         <literal>IDictionary&lt;TKey, TValue&gt;</literal>. The values of the
-        collection are automaticaly converted from a string to the appropriate
+        collection are automatically converted from a string to the appropriate
         type. If you are using your own user-defined type as a generic type
         parameter you will likely need to register a custom type converter.
-        Refer to <xref linkend="objects-type-conversion" /> for more
+        Refer to <xref linkend="objects-type-conversion"/> for more
         information. The implementations of <literal>IList&lt;T&gt;</literal>
         and <literal>IDictionary&lt;TKey, TValue&gt;</literal> that is created
         are <literal>System.Collections.Generic.List</literal> and
@@ -2089,13 +2086,13 @@ public class MixedIocObject
 
         <programlisting>administrator=administrator@example.com  // from parent
 sales=sales@example.com                  // from child
-support=support@example.co.uk            // overriden by child</programlisting>
+support=support@example.co.uk            // overridden by child</programlisting>
 
         <para>The child Properties collection's value set inherits all
         property elements from the parent
         <literal>&lt;name-values/&gt;</literal>, and the child's value for the
         support value overrides the value in the parent collection. This
-        merging behavior applies similarly to the
+        merging behaviour applies similarly to the
         <literal>&lt;list/&gt;</literal>,
         <literal>&lt;dictionary/&gt;</literal>, and
         <literal>&lt;set/&gt;</literal> collection types. In the specific case
@@ -2115,7 +2112,7 @@ support=support@example.co.uk            // overriden by child</programlisting>
         <title>Null and empty values</title>
 
         <para>Spring treats empty arguments for properties and the like as
-        empty Strings. The following XML-based configuration metadata snippet
+        empty Strings. The following XML-based configuration meta data snippet
         sets the email property to the empty String value ("")</para>
 
         <programlisting>&lt;object type="Examples.ExampleObject, ExamplesLibrary"&gt; 
@@ -2146,8 +2143,8 @@ support=support@example.co.uk            // overriden by child</programlisting>
         <para>An indexer lets you set and get values from a collection using a
         familiar bracket <literal>[]</literal> notation. Spring's XML
         configuration supports the setting of indexer properties. Overloaded
-        indexers as well as multiparameter indexers are also supported. The
-        property expression parser described in <xref linkend="expressions" />
+        indexers as well as multi-parameter indexers are also supported. The
+        property expression parser described in <xref linkend="expressions"/>
         is used to perform the type conversion of the indexer name argument
         from a string in the XML file to a matching target type. As an example
         consider the following class <programlisting language="csharp">public class Person
@@ -2467,7 +2464,7 @@ source.OnClick(); // First eventListener1.HandleEvent is invoked, then eventList
       <para>If an object is a dependency of another that usually means that
       one object is set as a property of another. Typically you accomplish
       this with the <literal>&lt;ref/&gt;</literal> element in XML-based
-      configuration metadata. However, sometimes dependencies between objects
+      configuration meta data. However, sometimes dependencies between objects
       are less direct; for example, a static initializer in a class needs to
       be triggered, such as device driver registration. The
       <literal>depends-on</literal> attribute can explicitly force one or more
@@ -2560,7 +2557,7 @@ source.OnClick(); // First eventListener1.HandleEvent is invoked, then eventList
       autowired. Using autowiring, it is possible to reduce or eliminate the
       need to specify properties or constructor arguments, thus saving a
       significant amount of typing. When using XML-based configuration
-      metadata, the autowire mode for an object definition is specified by
+      meta data, the autowire mode for an object definition is specified by
       using the autowire attribute of the &lt;object/&gt; element. The
       following values are allowed:</para>
 
@@ -2568,9 +2565,9 @@ source.OnClick(); // First eventListener1.HandleEvent is invoked, then eventList
           <title>Autowiring modes</title>
 
           <tgroup cols="2">
-            <colspec colname="c1" colwidth="1*" />
+            <colspec colname="c1" colwidth="1*"/>
 
-            <colspec colname="c2" colwidth="5*" />
+            <colspec colname="c2" colwidth="5*"/>
 
             <thead>
               <row>
@@ -2705,11 +2702,343 @@ source.OnClick(); // First eventListener1.HandleEvent is invoked, then eventList
       arbitrarily resolved. Instead, if no unique object definition is
       available, an Exception will be thrown.</para>
 
-      <para>When deciding whether to use autowiring, there is no wrong or
+      <para>In the latter scenario, you have several options:</para>
+
+      <itemizedlist>
+        <listitem>
+          <para>Abandon auto wiring in favour of explicit wiring.</para>
+        </listitem>
+
+        <listitem>
+          <para>Avoid auto wiring for an object definition by setting its
+          autowire-candidate attributes to false as described in the next
+          section.</para>
+        </listitem>
+
+        <listitem>
+          <para>Designate a single object definition as the primary candidate by
+          setting the primary attribute of its &lt;object/&gt; element to
+          true.</para>
+        </listitem>
+
+        <listitem>
+          <para>Implement the more fine-grained control available with
+          attribute-based configuration.</para>
+        </listitem>
+      </itemizedlist>
+
+      <para>When deciding whether to use auto wiring, there is no wrong or
       right answer in all cases. A degree of consistency across a project is
-      best though; for example, if autowiring is not used in general, it might
-      be confusing to developers to use it just to wire one or two object
+      best though; for example, if auto wiring is not used in general, it might
+      be confusing for developers to use it just to wire one or two object
       definitions.</para>
+
+      <sect3>
+        <title>Excluding an object from auto wiring</title>
+
+        <para>On a per-object basis, you can exclude an object from auto wiring. In
+        Spring's XML format, set the <literal>autowire-candidate</literal>
+        attribute of the <literal>&lt;object/&gt;</literal> element to
+        <literal>false</literal>; the container makes that specific object
+        definition unavailable to the auto wiring infrastructure (including
+        attribute style configurations such as
+        <literal>[Autowired]</literal>).</para>
+
+        <para>You can also limit auto wire candidates based on pattern-matching
+        against object names. The top-level
+        <literal>&lt;objects/&gt;</literal> element accepts one or more
+        patterns within its <literal>default-autowire-candidates</literal>
+        attribute. For example, to limit auto wire candidate status to any
+        object whose name ends with <emphasis>Repository</emphasis>, provide a
+        value of <emphasis>*Repository</emphasis>. To provide multiple
+        patterns, define them in a comma-separated list. An explicit value of
+        <literal>true</literal> or <literal>false</literal> for a object
+        definitions <literal>autowire-candidate</literal> attribute always
+        takes precedence, and for such objects, the pattern matching rules do
+        not apply.</para>
+
+        <para>These techniques are useful for objects that you never want to
+        be injected into other objects by auto wiring. It does not mean that an
+        excluded object cannot itself be configured using auto wiring. Rather,
+        the object itself is not a candidate for auto wiring other
+        objects.</para>
+      </sect3>
+
+      <sect3>
+        <title>Using [Autowire] Attribute for fine-grained control</title>
+
+        <para>The <literal>[Autowire]</literal> attribute in the
+        <literal>Spring.Objects.Factory.Attributes</literal> namespace can be
+        used to mark a variable, property or method for automatically wiring
+        by injection. It works similar to the auto wire configuration described
+        in the paragraph above with a <emphasis>byType</emphasis> setting,
+        except that you can define variables, properties or methods
+        specifically that you want to autowire. In a latter paragraph you will
+        see how you can even further define the object or value to
+        inject.</para>
+
+        <para>To get the <literal>[Autowire]</literal> attribute working you
+        need to add the auto wire post processor into your spring configuration
+        file.</para>
+
+        <para><programlisting language="myxml">&lt;object type="Spring.Objects.Factory.Attributes.RequiredAttributeObjectPostProcessor, Spring.Core"/&gt;</programlisting></para>
+
+        <para>To use the auto wire attribute on a variable, it can be private
+        or public. The following code shows how to use the attribute. The post
+        processor will try to find a registered object that is from the
+        requested type. If more than one registered objects are found from
+        that type you will get an <literal>ObjectCreationException</literal>.
+        To prevent or control this situation you can use the
+        <literal>primary</literal> attribute in the
+        <literal>&lt;object&gt;</literal> definition, later you will see an
+        example for this situation.</para>
+
+        <programlisting language="csharp">public class SomeObject 
+{
+    ...
+
+    [Autowired]
+    private IFoo hello;
+
+    [Autowired]
+    public IFoo Hello { get; set; }
+
+    ...
+} </programlisting>
+
+        <para>You can also use the auto wire attribute to inject into methods.
+        In this case all parameters are looked up and found objects of the
+        requested type injected into the method parameters. You are not
+        restricted to a single method parameter.</para>
+
+        <programlisting>public class SomeObject
+{
+    public IFoo hello; 
+
+    [Autowired] 
+    private void Prepare(IFoo hello)
+    {
+       this.hello = hello; 
+    }
+} </programlisting>
+
+        <para>If you have several objects defined from the same type you can
+        make the following change to the <literal>&lt;object&gt;</literal>
+        definition and define one of the objects as
+        <literal>primary</literal>. In case the container will find several
+        objects from a requested type but will check if there is a
+        <literal>primary</literal> object and if true will use this object
+        instead. The container will <emphasis>not</emphasis> throw a
+        <literal>ObjectCreationException</literal>. If the container finds
+        more than one objects for the requested type as
+        <literal>primary</literal>, the container will throw a
+        <literal>ObjectCreationException</literal>.</para>
+
+        <para><programlisting language="myxml">&lt;object id="HelloFoo" type="Spring.Objects.Factory.Attributes.ByType.HelloFoo, Spring.Core.Tests" 
+        primary="true"/&gt;</programlisting></para>
+
+        <para>You can also use the auto wire attribute for injection in to a
+        List&lt;T&gt;, ISet&lt;T&gt; or Dictionary&lt;string, T&gt; type. In
+        this case the container looks up for the requested type defined in the
+        generic part of the definition and will create a List&lt;T&gt;,
+        HashedSet&lt;T&gt; or Dictionary&lt;string, T&gt; with all found
+        objects injected. For the dictionary type the key is the registered
+        name of the object.</para>
+
+        <programlisting language="myxml">public class AutowireLists
+{
+    [Autowired]
+    public IList&lt;IFoo&gt; foosList;
+
+    [Autowired]
+    public Spring.Collections.Generic.ISet&lt;IFoo&gt; foosSet;
+
+    [Autowired]
+    public IDictionary&lt;string, IFoo&gt; foosDictionary; 
+} </programlisting>
+
+        <para>By default all found autowired objects are treated as required.
+        This means if the container can't find an registered object of the
+        requested type it will throw on
+        <literal>ObjectCreationException</literal>. For this situation you can
+        use the <literal>Required</literal> property of the
+        <literal>[Autowire]</literal> attribute to mark an object as not
+        required and therefore will not throw an
+        <literal>ObjectCreationException</literal>.</para>
+
+        <programlisting language="myxml">public class AutowirePropertyNotRequired
+{
+   [Autowired(Required = false)]
+   public IFoo Hello { get; set; } 
+} </programlisting>
+
+        <para>The <literal>[Autowire]</literal> attribute is also processed in
+        the case of an inheritent class that has variables, properties or
+        methods annotated with the <literal>[Autowire]</literal> attribute.
+        The order of the processing is that all inheritent classes are
+        processed before the actual class is processed.</para>
+      </sect3>
+
+      <sect3>
+        <title>Using [Value] attribute for fine grained auto wiring
+        injection</title>
+
+        <para>The <literal>[Autowire]</literal> attribute is wiring
+        <emphasis>byType</emphasis> and therefore not fine-grained enough for
+        some situations. You can also not inject values from loaded
+        PropertyPlaceHolder files. For these cases you can use the
+        <literal>[Value]</literal> attribute instead and this allows the
+        following situations:</para>
+
+        <para>Inject an object by their Id:</para>
+
+        <programlisting language="csharp">public class AutowireViaValue
+{
+   [Value("@(CiaoFoo)")]
+   public IFoo ciao;
+}</programlisting>
+
+        <para>This works on private variables and also on properties.</para>
+
+        <para>You can also use this scenario for auto wiring with a
+        method:</para>
+
+        <programlisting language="csharp">public class AutowireMethodWithValue
+{
+    public IFoo ciao; 
+
+    [Autowired]
+    private void Prepare([Value("@(CiaoFoo)")] IFoo ciao)
+    {
+       this.ciao = ciao; 
+    }
+}</programlisting>
+
+        <para>You can also use the [Value] attribute to access properties from
+        a PropertyPlaceHolder configuration:</para>
+
+        <programlisting language="csharp">public class AutowirePropertyPlaceHolder
+{ 
+    [Value("${greeting}")]
+    public string greeting;
+}</programlisting>
+
+        <para>Basically you can use the full Spring Expression Language, here
+        we only showed these two examples of how you could use the
+        <literal>[Value]</literal> attribute.</para>
+      </sect3>
+
+      <sect3>
+        <title>Using the plain [Qualifier] attribute to fine-grain the
+        auto wiring finding process</title>
+
+        <para>The <literal>[Qualifier]</literal> attribute allows you to
+        define a qualification property on top of giving the object a name.
+        This can be used for defining several objects from the same type and
+        inject different values, later via auto wiring you can refer to this
+        definition property. Here an example. First we create our basic
+        object.</para>
+
+        <programlisting>public interface IFoo 
+{ 
+   string Say(); 
+}
+
+public class SayFoo : IFoo 
+{ 
+   private string _message;
+
+   public string Say() 
+   {
+      return "hello"; 
+   }
+}
+</programlisting>
+
+        <para>Now we define our objects within our spring configuration file.
+        We create tow object that use the same base object type but we inject
+        different values. If we you use the <literal>[Autowire]</literal> we
+        would get an <literal>ObjectCreationException</literal> because we two
+        objects of the same type and most likely we would not got the object
+        we wanted.</para>
+
+        <programlisting language="myxml">&lt;object id="HelloFoo" type="Spring.Objects.Factory.Attributes.ByType.SayFoo, Spring.Core.Tests"&gt;
+   &lt;qualifier value="hello" /&gt;
+   &lt;property name="_message" value="Hello" /&gt;
+&lt;/object&gt;
+
+&lt;object id="CiaoFoo" type="Spring.Objects.Factory.Attributes.ByType.SayFoo, Spring.Core.Tests"&gt;
+   &lt;qualifier value="ciao" /&gt;
+   &lt;property name="_message" value="Hello" /&gt;
+&lt;/object&gt; </programlisting>
+
+        <para>With the <literal>&lt;qualifier&gt;</literal> element in our
+        object definition we provided further information that we can use
+        during the auto wire process. See the code below and how to use the
+        <literal>[Qualifier]</literal> attribute to inject the object we want
+        without getting a <literal>ObjectCreationException</literal>.</para>
+
+        <programlisting language="csharp">public class AutowireQithQualifier
+{
+   [Autowired] 
+   [Qualifier("ciao")] 
+   public IFoo Ciao { get; set; } 
+} </programlisting>
+      </sect3>
+
+      <sect3>
+        <title>Using a inherited [Qualifier] attribute with meta
+        properties</title>
+
+        <para>The inherited <literal>QualifierAttribute</literal> class allows
+        you to define an object by more properties than a single qualifier
+        value. You can define objects by fine grained, own defined, properties
+        within a attribute. The first thing you need to do is to create a new
+        attribute derived from <literal>QualifierAttribute</literal> and
+        define your properties.</para>
+
+        <programlisting language="csharp">public class DialectAttribute : QualifierAttribute
+{
+   private string _language = "";
+   public string Language { get { return _language; } set { _language = value; } } 
+} </programlisting>
+
+        <para>The next step is to define your objects and the meta information
+        attached to them. The attributes you define within the
+        <literal>&lt;qualifier&gt;</literal> element are the same as your
+        peroperties in your created attribute.</para>
+
+        <programlisting language="myxml">&lt;object id="HelloFoo" type="Spring.Objects.Factory.Attributes.ByType.SayFoo, Spring.Core.Tests"&gt;
+   &lt;qualifier type="Spring.Objects.Factory.Attributes.ByQualifierAttribute.DialectAttribute"&gt;
+      &lt;attribute key="Language" value="English" /&gt; 
+   &lt;/qualifier&gt;
+   &lt;property name="_message" value="Hello" /&gt;
+&lt;/object&gt;
+
+&lt;object id="CiaoFoo" type="Spring.Objects.Factory.Attributes.ByType.SayFoo, Spring.Core.Tests"&gt;
+   &lt;qualifier type="Spring.Objects.Factory.Attributrf4res.ByQualifierAttribute.DialectAttribute"&gt;
+      &lt;attribute key="Language" value="Italian" /&gt;
+   &lt;/qualifier&gt;
+   &lt;property name="_message" value="Ciao" /&gt;
+&lt;/object&gt;</programlisting>
+
+        <para>Now you have defined your objects with new meta information. To
+        use this meta information within the auto wiring process you need to
+        add your created attribute as additional attribute to the [Autowire]
+        attributes in your code. The properties you use within the added
+        attribute will be matched with all registered objects. If they
+        properties are matching the object is used for injection. If more then
+        one object is found in the matching process and no object is defined
+        as <literal>primary</literal> a
+        <literal>ObjectCreationException</literal> is thrown.</para>
+
+        <programlisting language="csharp">public class AutowireByMetaInformation
+{
+    [Autowired]
+    [Dialect(Language = "Italian")]
+    public IFoo ciao;
+} </programlisting>
+      </sect3>
     </sect2>
 
     <sect2 xml:id="objects-factory-dependencies">
@@ -2719,24 +3048,24 @@ source.OnClick(); // First eventListener1.HandleEvent is invoked, then eventList
       an object deployed into the container. When enabling checking for
       unresolved dependencies all properties of the object must have an
       explicit values set for them in the object definition or have their
-      values set via autowiring.</para>
+      values set via auto wiring.</para>
 
       <para>This feature useful when you want to ensure that all properties
       (or all properties of a certain type) are set on an object. An object
       often has default values for many properties, or some properties do not
       apply to all usage scenarios, so this feature is of limited use. You can
-      enable dependency checking per object, just as with the autowiring
+      enable dependency checking per object, just as with the auto wiring
       functionality. The default is not <emphasis>not</emphasis> check
-      dependencies. In XML-based configuration metadata, you specify
+      dependencies. In XML-based configuration meta data, you specify
       dependency checking via the <literal>dependency-check</literal>
       attribute in an object definition, which may have the following values.
       <table frame="all">
           <title>Dependency checking modes</title>
 
           <tgroup cols="2">
-            <colspec colname="c1" colwidth="1*" />
+            <colspec colname="c1" colwidth="1*"/>
 
-            <colspec colname="c2" colwidth="5*" />
+            <colspec colname="c2" colwidth="5*"/>
 
             <thead>
               <row>
@@ -2786,7 +3115,7 @@ source.OnClick(); // First eventListener1.HandleEvent is invoked, then eventList
       singletons. When a singleton object needs to collaborate with another
       singleton object, or a non-singleton object needs to collaborate with
       another non-singleton object, you typically handle the dependency by
-      defining one object as a property of the other. A problem arrises when
+      defining one object as a property of the other. A problem arises when
       the object lifecycles are different. Suppose singleton object A needs to
       use a non-singleton (prototype) object B, perhaps on each method
       invocation on A. The container only creates the singleton object A once,
@@ -2834,7 +3163,7 @@ namespace Fiona.Apple
 }</programlisting>
 
       <para>The preceding is not desirable, because the business code is aware
-      of and coupled to the Sring Framework. Method Injection, a somewhat
+      of and coupled to the Spring Framework. Method Injection, a somewhat
       advanced feature of the Spring IoC container, allows this use case to be
       handled in a clean fashion.</para>
 
@@ -2925,7 +3254,7 @@ namespace Fiona.Apple
         Method Injection is the ability to replace arbitrary methods in a
         managed object with another method implementation.</para>
 
-        <para>With XML-based configuration metadata, you can use the
+        <para>With XML-based configuration meta data, you can use the
         <literal>replaced-method</literal> element to replace an existing
         method implementation with another, for a deployed object. Consider
         the following class, with a method <literal>ComputeValue</literal>,
@@ -3014,7 +3343,7 @@ public class ReplacementComputeValue : IMethodReplacer
       indicates to Spring.NET that this object is itself a factory and the
       factories product, not the factory itself, is what will be associated
       with the object id. Factory objects are discussed further in <xref
-      linkend="objects-factory-lifecycle-factoryobject" /></para>
+      linkend="objects-factory-lifecycle-factoryobject"/></para>
 
       <sect3>
         <title>Setting a reference to the value of property.</title>
@@ -3040,7 +3369,7 @@ public class ReplacementComputeValue : IMethodReplacer
         Note that nested properties are supported for both instance and class
         property lookups. The <literal>IFactoryObject</literal> is discussed
         more generally in <xref
-        linkend="objects-factory-lifecycle-factoryobject" />.</para>
+        linkend="objects-factory-lifecycle-factoryobject"/>.</para>
 
         <para>Here's an example where a property path is used against another
         object instance. In this case, an inner object definition is used and
@@ -3163,7 +3492,7 @@ public class ReplacementComputeValue : IMethodReplacer
         class. Additionally, it is sometimes necessary to invoke a method just
         to perform some sort of initialization.... while the mechanisms for
         handling object initialization have yet to be introduced (see <xref
-        linkend="objects-factory-lifecycle-initializingobject" />), these
+        linkend="objects-factory-lifecycle-initializingobject"/>), these
         mechanisms do not permit any arguments to be passed to any
         initialization method, and are confined to invoking an initialization
         method on the object that has just been instantiated by the container.
@@ -3392,9 +3721,9 @@ public class MyClassFactory
       <title>Object Scopes</title>
 
       <tgroup cols="2">
-        <colspec colname="c1" colwidth="2*" />
+        <colspec colname="c1" colwidth="2*"/>
 
-        <colspec colname="c2" colwidth="4*" />
+        <colspec colname="c2" colwidth="4*"/>
 
         <thead>
           <row>
@@ -3529,7 +3858,7 @@ public class MyClassFactory
       prototype-scoped object is a replacement for the C# 'new' operator. All
       lifecycle management past that point must be handled by the client. (For
       details on the lifecycle of an object in the Spring container, see <xref
-      linkend="objects-factory-lifecycle" />.</para>
+      linkend="objects-factory-lifecycle"/>.</para>
     </sect2>
 
     <sect2 xml:id="objects-factory-scopes-sing-prot-interaction">
@@ -3550,7 +3879,7 @@ public class MyClassFactory
       container is instantiating the singleton object and resolving and
       injecting its dependencies. If you need a new instance of a prototype
       object at runtime more than once, see <xref
-      linkend="objects-method-injection" />.</para>
+      linkend="objects-method-injection"/>.</para>
     </sect2>
 
     <sect2>
@@ -3627,9 +3956,9 @@ public sealed class Font : MarshalByRefObject, ICloneable, ISerializable, IDispo
           <title>Built-in <literal>TypeConverters</literal></title>
 
           <tgroup cols="2">
-            <colspec colname="c1" colwidth="3*" />
+            <colspec colname="c1" colwidth="3*"/>
 
-            <colspec colname="c2" colwidth="5*" />
+            <colspec colname="c2" colwidth="5*"/>
 
             <thead>
               <row>
@@ -3759,7 +4088,7 @@ public sealed class Font : MarshalByRefObject, ICloneable, ISerializable, IDispo
       <literal>IApplicationContext</literal> is to use the custom
       configuration section handler
       <literal>TypeConverterSectionHandler</literal> This is demonstrated in
-      section <xref linkend="context-configuration" /></para>
+      section <xref linkend="context-configuration"/></para>
 
       <para>An alternate approach, present for legacy reasons in the port of
       Spring.NET from the Java code base, is to use the object factory
@@ -3880,7 +4209,7 @@ public sealed class Font : MarshalByRefObject, ICloneable, ISerializable, IDispo
       can also achieve the same integration with the container without
       coupling your objects to Spring interfaces though the use of
       <literal>init-method</literal> and <literal>destroy-method</literal>
-      object definition metadata.</para>
+      object definition meta data.</para>
 
       <para>Internally, Spring.NET uses implementations of the
       <literal>IObjectPostProcessor</literal> interface to process any call
@@ -3888,9 +4217,9 @@ public sealed class Font : MarshalByRefObject, ICloneable, ISerializable, IDispo
       custom features or other lifecycle behavior Spring.NET does not offer
       out-of-the-box, you can implement an
       <literal>IObjectPostProcessor</literal> yourself. For more information
-      see<xref linkend="objects-factory-customizing" />.</para>
+      see<xref linkend="objects-factory-customizing"/>.</para>
 
-      <para></para>
+      <para/>
 
       <sect3 xml:id="objects-factory-lifecycle-initializingobject">
         <title>IInitializingObject / <literal>init-method</literal></title>
@@ -3916,7 +4245,7 @@ public sealed class Font : MarshalByRefObject, ICloneable, ISerializable, IDispo
         <literal>IInitializingObject</literal> interface because it
         unnecessarily coupules the code to Spring. Alternatively, specify an
         POJO initialization method. In the case of XML-based configuration
-        metadata, you use the <literal>init-method</literal> attribute to
+        meta data, you use the <literal>init-method</literal> attribute to
         specify the name of the method that has a void no-argument signature.
         For example, the following definition:</para>
 
@@ -3967,7 +4296,7 @@ public class AnotherExampleObject : IInitializingObject
         in the case with the <classname>IInitializingObject</classname>
         interface. However, you may also specify a destruction method that is
         not tied to the <classname>IDisposable</classname> interface. In the
-        case of XML-based configuration metadata, you use the
+        case of XML-based configuration meta data, you use the
         <literal>destroy-method</literal> attribute to specify the name of the
         method that has a void no-argument signature. For example, the
         following definition:</para>
@@ -3982,6 +4311,153 @@ public class AnotherExampleObject : IDisposable
         // do some destruction work
     }
 }</programlisting></para>
+      </sect3>
+
+      <sect3>
+        <title>[PostConstruct] and [PreDestroy] attribute driven lifecycle
+        management</title>
+
+        <para>The <literal>InitDestroyAttributeObjectPostProcessor</literal>
+        recognizes lifecycle attributes such as [PostConstruct] and
+        [PreDestroy]. Introduced in Spring.Net 2.0, the support for these
+        attributes offers yet another alternative to those described in
+        initialization callbacks and destruction callbacks. Provided that the
+        <literal>InitDestroyAttributeObjectPostProcessor</literal> is
+        registered within the Spring ApplicationContext, a method carrying one
+        of these attributions is invoked at the same point in the lifecycle as
+        the corresponding Spring lifecycle interface method or explicitly
+        declared callback method. In the example below, the cache will be
+        pre-populated upon initialization and cleared upon destruction.</para>
+
+        <para>The best way to illustrate the usage of this attribute is with
+        an example.</para>
+
+        <para><programlisting language="csharp">public class MovieLister
+{
+  [PostConstruct]
+  public void Init()
+  {
+    // do some initialization here
+  }
+
+  [PreDestroy]
+  public void Destroy()
+  {
+    // do some destruction here
+  }
+
+  ...
+}</programlisting>There is one last little piece of Spring configuration that
+        is required to actually 'switch on' this behaviour. Simply annotating
+        the methods of your classes is not enough to get this behaviour. You
+        need to enable a component that is aware of the
+        <literal>[PostContrsuct]</literal> and <literal>[PreDestroy]</literal>
+        attribute and that can process it appropriately.</para>
+
+        <para>This component is the
+        <literal>InitDestroyAttributeObjectPostProcessor</literal> class. This
+        is a special <literal>IObjectPostProcessor</literal> implementation
+        that is <literal>[PostConstruct]</literal>- and
+        <literal>[PreDestroy]</literal>-aware and actually provides the
+        lifecycle logic. It is very easy to configure; simply drop the
+        following object definition into your Spring XML configuration.</para>
+
+        <para><programlisting language="myxml">&lt;object type="Spring.Objects.Factory.Attributes.InitDestroyAttributeObjectPostProcessor, Spring.Core"/&gt;</programlisting>Finally,
+        you can configure an instance of the
+        <literal>InitDestroyAttributeObjectPostProcessor</literal> class to
+        look for other Attribute types. Simply plug it into the definition of
+        a <literal>InitDestroyAttributeObjectPostProcessor</literal> and you
+        are good to go, see example below:</para>
+
+        <para><programlisting language="myxml">&lt;object type="Spring.Objects.Factory.Attributes.InitDestroyAttributeObjectPostProcessor, Spring.Core"&gt;
+  &lt;property name="InitAttributeType" value="MyApp.Attributes.InitAttribute, MyApp"/&gt;
+  &lt;property name="DestroyAttributeType" value="MyApp.Attributes.DisposeAttribute, MyApp"/&gt;
+&lt;/object&gt;</programlisting></para>
+      </sect3>
+
+      <sect3>
+        <title>Default initialization and destroy methods</title>
+
+        <para>When you write initialization and destroy method callbacks that
+        do not use the Spring-specific IInitializingObject and IDisposable
+        callback interfaces, you typically write methods with names such as
+        <literal>Init()</literal>, <literal>Initialize()</literal>,
+        <literal>Dispose()</literal>, and so on. Ideally, the names of such
+        lifecycle callback methods are standardized across a project so that
+        all developers use the same method names and ensure
+        consistency.</para>
+
+        <para>You can configure the Spring container to look for named
+        initialization and destroy callback method names on every object. This
+        means that you, as an application developer, can write your
+        application classes and use an initialization callback called
+        <literal>Init()</literal>, without having to configure an
+        <literal>init-method="Init"</literal> attribute with each object
+        definition. The Spring IoC container calls that method when the object
+        is created (and in accordance with the standard lifecycle callback
+        contract described previously). This feature also enforces a
+        consistent naming convention for initialization and destroy method
+        callbacks.</para>
+
+        <para>Suppose that your initialization callback methods are named
+        <literal>Init()</literal> and destroy callback methods are named
+        <literal>Destroy()</literal>. Your class will resemble the class in
+        the following example.</para>
+
+        <para><programlisting language="csharp">public class DefaultBlogService : IBlogService
+{
+  private IBlogDao _blogDao;
+
+  public void Init()
+  {
+      if (_blogDao == null) {
+          throw new InvalidOperationException("The [_blogDao] property must be set.");
+      }
+  }
+
+  public void Destroy()
+  {
+    // do some destruction work
+  }
+}</programlisting><programlisting language="myxml">&lt;objects default-init-method="Init"
+         defauly-destroy-method="Destroy"&gt;
+
+  &lt;object id="BlogService" class="Examples.DefaultBlogService"&gt;
+      &lt;property name="_blogDao" ref="BlogDao" /&gt;
+  &lt;/object&gt;
+
+&lt;/objects&gt;</programlisting>The presence of the
+        <literal>default-init-method</literal> attribute on the top-level
+        <literal>&lt;objects/&gt;</literal> element attribute causes the
+        Spring IoC container to recognize a method called
+        <literal>Init</literal> on objects as the initialization method
+        callback. When an object is created and assembled, if the object class
+        has such a method, it is invoked at the appropriate time. If the
+        object does not have such a method an
+        <literal>ObjectCreationException</literal> is thrown. To prevent this
+        for objects that do not have such a method you need to define an empty
+        <literal>init-method=""</literal> and/or
+        <literal>destroy-method=""</literal> attributes on the object
+        itself.</para>
+
+        <para>Where existing object classes already have callback methods that
+        are named at variance with the convention, you can override the
+        default by specifying (in XML, that is) the method name using the
+        <literal>init-method</literal> and <literal>destroy-method</literal>
+        attributes on the <literal>&lt;object/&gt;</literal> itself.</para>
+
+        <para>The Spring container guarantees that a configured initialization
+        callback is called immediately after an object is supplied with all
+        dependencies. Thus the initialization callback is called on the raw
+        object reference, which means that AOP interceptors and so forth are
+        not yet applied to the object. A target object is fully created first,
+        then an AOP proxy (for example) with its interceptor chain is applied.
+        If the target object and the proxy are defined separately, your code
+        can even interact with the raw target object, bypassing the proxy.
+        Hence, it would be inconsistent to apply the interceptors to the Init
+        method, because doing so would couple the lifecycle of the target
+        object with its proxy/interceptors and leave strange semantics when
+        your code interacts directly to the raw target object.</para>
       </sect3>
     </sect2>
 
@@ -4011,7 +4487,7 @@ public class AnotherExampleObject : IDisposable
       <classname>IApplicationContext</classname> provide access to file
       resources, publishing application events, and accessing a
       <classname>IMessageSource</classname>. These additional features are
-      described in <xref linkend="context-introduction" /></para>
+      described in <xref linkend="context-introduction"/></para>
 
       <sect3 xml:id="objects-factory-aware-objectnameaware">
         <title>IObjectNameAware</title>
@@ -4030,7 +4506,7 @@ public class AnotherExampleObject : IDisposable
         <para>The callback is invoked after population of normal object
         properties but before an initialization callback such as
         <classname>IInitializingObject</classname> 's AfterPropertiesSet
-        method or a custom initalization method is invoked.</para>
+        method or a custom initialization method is invoked.</para>
       </sect3>
     </sect2>
   </sect1>
@@ -4052,7 +4528,7 @@ public class AnotherExampleObject : IDisposable
     with them on this level, instead configuring object definitions
     declaratively in something like the
     <literal>XmlApplicationContext.</literal> When you use XML-based
-    configuration metadata, you indicate a child object using the parent
+    configuration meta data, you indicate a child object using the parent
     attribute, specifying the parent object definition as the value of this
     attribute.</para>
 
@@ -4313,7 +4789,7 @@ Console.WriteLine (three == four);        // prints 'false'
         <literal>IObjectFactoryPostProcessor</literal> (described below in the
         section entitled <link
         linkend="objects-factory-customizing-factory-postprocessors">Customizing
-        configuration metadata with
+        configuration meta data with
         IObjectFactoryPostProcessors.</link></para>
 
         <para>Also, <literal>IObjectPostProcessors</literal> are scoped
@@ -4435,7 +4911,7 @@ factory.AddObjectPostProcessor(pp);
         for auto-proxying)”.</para>
       </note>
 
-      <para></para>
+      <para/>
 
       <sect3 xml:id="object-factory-extension-opp-examples-hw">
         <title>Example: Hello World, IObjectPostProcessor-style</title>
@@ -4523,7 +4999,7 @@ DEBUG - MovieApp Done.</programlisting>
       <sect3 xml:id="object-factory-extension-opp-examplesrapp">
         <title>Example: the RequiredAttributeObjectPostProcessor</title>
 
-        <para>Using callback interfaces or annotations in conjunction with a
+        <para>Using callback interfaces or attributes in conjunction with a
         custom IObjectPostProcessor implementation is a common means of
         extending the Spring IoC container. The <literal>[Required]</literal>
         attribute in the <literal>Spring.Objects.Factory.Attributes</literal>
@@ -4606,7 +5082,7 @@ DEBUG - MovieApp Done.</programlisting>
     </sect2>
 
     <sect2 xml:id="objects-factory-customizing-factory-postprocessors">
-      <title>Customizing configuration metadata with
+      <title>Customizing configuration meta data with
       <literal>IObjectFactoryPostProcessors</literal></title>
 
       <para>The next extension point that we will look at is the
@@ -4616,7 +5092,7 @@ DEBUG - MovieApp Done.</programlisting>
       <literal>IObjectFactoryPostProcessors</literal> operate on; that is to
       say, the Spring IoC container will allow
       <literal>IObjectFactoryPostProcessors</literal> to read the
-      configuration metadata and potentially change it before the container
+      configuration meta data and potentially change it before the container
       has actually instantiated any other objects. By implementing this
       interface, you will receive a callback after the all the object
       definitions have been loaded into the IoC container but before they have
@@ -4641,7 +5117,7 @@ DEBUG - MovieApp Done.</programlisting>
 
       <note>
         <para>If you want to change the actual object instances (the objects
-        that are created from the configuration metadata), then you rather
+        that are created from the configuration meta data), then you rather
         need to use a <literal>IObjectObjectPostProcessor</literal> (described
         above in the section entitled <link
         linkend="objects-factory-customizing">Customizing objects with
@@ -4660,7 +5136,7 @@ DEBUG - MovieApp Done.</programlisting>
       <para>An object factory post-processor is executed manually (in the case
       of a <literal>IObjectFactory</literal>) or automatically (in the case of
       an <literal>IApplicationContext</literal>) to apply changes of some sort
-      to the configuration metadata that defines a container. Spring.NET
+      to the configuration meta data that defines a container. Spring.NET
       includes a number of pre-existing object factory post-processors, such
       as <literal>PropertyResourceConfigurer</literal> and
       <literal>PropertyPlaceHolderConfigurer</literal>, both described below
@@ -4681,7 +5157,7 @@ cfg.setLocation(new FileSystemResource("ado.properties"));
 cfg.PostProcessObjectFactory(factory);</programlisting></para>
 
       <para><anchor
-      xml:id="objects-factory-autodetect-objectfactorypostprocessors" />This
+      xml:id="objects-factory-autodetect-objectfactorypostprocessors"/>This
       explicit registration step is not convenient, and this is one of the
       reasons why the various <literal>IApplicationContext</literal>
       implementations are preferred above plain
@@ -4851,7 +5327,7 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
           <literal>ApplicationContext</literal> for a non-lazy-init
           object.)</para>
 
-          <para>Similarly you can replace 'ref' and 'expression' metadata, as
+          <para>Similarly you can replace 'ref' and 'expression' meta data, as
           shown below</para>
 
           <programlisting language="myxml">&lt;object id="TestObject" type="Simple.TestObject, MyAssembly"&gt;
@@ -5055,7 +5531,7 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
 
           <para><mediaobject>
               <imageobject>
-                <imagedata fileref="images/applicationsettings.png"></imagedata>
+                <imagedata fileref="images/applicationsettings.png"/>
               </imageobject>
             </mediaobject>Then you can use <literal>${peggy_name}</literal>,
           <literal>${peggy_age}</literal>,
@@ -5327,7 +5803,7 @@ joan_age=35</programlisting>
 
       <para>The IFactoryObject concept and interface is used in a number of
       places within the Spring Framework. Some examples of its use is
-      described in <xref linkend="objects-advancedproperty-setting" /> for the
+      described in <xref linkend="objects-advancedproperty-setting"/> for the
       <literal>PropertyRetrievingFactoryObject</literal> and
       <literal>FieldRetrievingFactoryObject</literal>. An additional use of
       creating an custom IFactoryObject implementation is to retrieve an
@@ -5365,7 +5841,7 @@ joan_age=35</programlisting>
           </itemizedlist></para>
 
         <para><literal>IConfigurableFactoryObject</literal> implementions you
-        already have examples of in <xref linkend="client-side" /> are
+        already have examples of in <xref linkend="client-side"/> are
         <literal>WebServiceProxyFactory</literal>.</para>
       </sect3>
     </sect2>
@@ -5459,13 +5935,13 @@ joan_age=35</programlisting>
       <literal>IObjectFactory</literal> capabilities in a lot more depth than
       the said feature matrix.)</para>
 
-      <anchor xml:id="context-introduction-ctx-vs-objectfactory-feature-matrix" />
+      <anchor xml:id="context-introduction-ctx-vs-objectfactory-feature-matrix"/>
 
       <table pgwide="1">
         <title>Feature Matrix</title>
 
         <tgroup cols="3">
-          <colspec align="left" />
+          <colspec align="left"/>
 
           <thead>
             <row>
@@ -5758,7 +6234,7 @@ IApplicationContext context =
 &lt;/configuration&gt;</programlisting>
 
       <para>For an example showing type aliases for generic types see <xref
-      linkend="objects-creation-generic-types" />.</para>
+      linkend="objects-creation-generic-types"/>.</para>
 
       <para>Another way is to define an object of the type
       <literal>Spring.Objects.Factory.Config.TypeAliasConfigurer</literal>
@@ -5879,7 +6355,7 @@ IApplicationContext context =
       <literal>Spring.Context.Support.XmlApplicationContext</literal>. The
       name of the context can be used in conjunction with the service locator
       class, <literal>ContextRegistry</literal>, discussed in <xref
-      linkend="objects-servicelocator" /></para>
+      linkend="objects-servicelocator"/></para>
     </sect2>
 
     <sect2 xml:id="context-functionality-messagesource">
@@ -5997,7 +6473,7 @@ IApplicationContext context =
       ever used but provides programmatic ways to add messages to the source.
       The <literal>ResourceSetMessageSource</literal> is more interesting and
       an example is provided for in the distribution and discussed more
-      extensively in the <xref linkend="quickstarts" /> section. The
+      extensively in the <xref linkend="quickstarts"/> section. The
       <literal>ResourceSetMessageSource</literal> is configured by providing a
       list of <literal>ResourceManager</literal>s. When a message code is to
       be resolved, the list of ResourceManagers is searched to resolve the
@@ -6090,7 +6566,7 @@ ctx.GetMessage("error.required",
       resources in a protocol independent way. The
       <literal>IApplicationContext</literal> has a method
       (<literal>GetResource(string)</literal>) to take care of this. Refer to
-      <xref linkend="objects-iresource" /> for more information on the string
+      <xref linkend="objects-iresource"/> for more information on the string
       format to use and the <literal>IResource</literal> abstraction in
       general.</para>
     </sect2>
@@ -6371,7 +6847,7 @@ public class BlackListNotifier : IApplicationEventListener
 
     <para>The class GenericApplicationContext can be used as a basis for
     creating an IApplicationContext implementation that read the container
-    metadata from sources other than XML. This could be by scanning objects in
+    meta data from sources other than XML. This could be by scanning objects in
     a .DLL for known attributes or a scripting language that leverages a DSL
     to create terse IObjectDefinitions. There is a class,
     Spring.Objects.Factory.Support.ObjectDefinitionBuilder offers some
@@ -6388,7 +6864,7 @@ reader.LoadObjectDefinitions("assembly://Spring.Core.Tests/Spring.Context.Suppor
 ctx.Refresh();</programlisting>
 
     <para>The implementation of IObjectDefinitionReader is responsible for
-    creating the configuration metadata, i.e., implementations of
+    creating the configuration meta data, i.e., implementations of
     RootObjectDefinition, etc. Note a web version of this application class
     has not yet been implemented.</para>
 
@@ -6458,13 +6934,13 @@ ctx.Refresh();</programlisting>
     <title>Stereotype attributes</title>
 
     <para>Beginning with Spring 1.2, the [Repository] attribute was introduced
-    as a marker for any class that fulfills the role or stereotype of a
+    as a marker for any class that fulfils the role or stereotype of a
     repository (a.k.a. Data Access Object or DAO). Among the possibilities for
     leveraging such a marker is the automatic translation of exceptions as
     described in <link linkend="orm-hibernate-straight-ex">Exception
     Translation.</link></para>
 
-    <para>Spring 1.2 introduces further stereotype annotations: [Component]
+    <para>Spring 1.2 introduces further stereotype attributes: [Component]
     and [Service]. [Component] serves as a generic stereotype for any
     Spring-managed component; whereas, [Repository] and [Service] serve as
     specializations of [Component] for more specific use cases (e.g., in the
@@ -6473,7 +6949,7 @@ ctx.Refresh();</programlisting>
     What this means is that you can annotate your component classes with
     [Component], but by annotating them with [Repository] or [Service] your
     classes are more properly suited for processing by tools or associating
-    with aspects. For example, these stereotype annotations make ideal targets
+    with aspects. For example, these stereotype attributes make ideal targets
     for pointcuts. Of course, it is also possible that [Repository] and
     [Service] may carry additional semantics in future releases of the Spring
     Framework. Thus, if you are making a decision between using [Component] or
