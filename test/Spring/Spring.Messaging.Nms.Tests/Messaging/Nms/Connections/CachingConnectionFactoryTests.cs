@@ -47,10 +47,7 @@ namespace Spring.Messaging.Nms.Connections
         [Test]
         public void CachedSession()
         {
-            IConnectionFactory connectionFactory = (IConnectionFactory)mocks.CreateMock(typeof(IConnectionFactory));
-            IConnection connection = new TestConnection();
-
-            Expect.Call(connectionFactory.CreateConnection()).Return(connection).Repeat.Once();
+            IConnectionFactory connectionFactory = CreateConnectionFactory();
 
             mocks.ReplayAll();
 
@@ -96,10 +93,7 @@ namespace Spring.Messaging.Nms.Connections
         [Test]
         public void CachedSessionTwoRequests()
         {
-            IConnectionFactory connectionFactory = (IConnectionFactory)mocks.CreateMock(typeof(IConnectionFactory));
-            IConnection connection = new TestConnection();
-
-            Expect.Call(connectionFactory.CreateConnection()).Return(connection).Repeat.Once();
+            IConnectionFactory connectionFactory = CreateConnectionFactory();
 
             mocks.ReplayAll();
 
@@ -145,10 +139,7 @@ namespace Spring.Messaging.Nms.Connections
         [Test]
         public void CachedMessageProducer()
         {
-            IConnectionFactory connectionFactory = (IConnectionFactory)mocks.CreateMock(typeof(IConnectionFactory));
-            IConnection connection = new TestConnection();
-
-            Expect.Call(connectionFactory.CreateConnection()).Return(connection).Repeat.Once();
+            IConnectionFactory connectionFactory = CreateConnectionFactory();
             
             mocks.ReplayAll();
 
@@ -175,10 +166,7 @@ namespace Spring.Messaging.Nms.Connections
         [Test]
         public void CachedMessageProducerTwoRequests()
         {
-            IConnectionFactory connectionFactory = (IConnectionFactory)mocks.CreateMock(typeof(IConnectionFactory));
-            IConnection connection = new TestConnection();
-
-            Expect.Call(connectionFactory.CreateConnection()).Return(connection).Repeat.Once();
+            IConnectionFactory connectionFactory = CreateConnectionFactory();
 
             mocks.ReplayAll();
 
@@ -218,11 +206,7 @@ namespace Spring.Messaging.Nms.Connections
         [Test]
         public void CachedMessageConsumer()
         {
-            IConnectionFactory connectionFactory = (IConnectionFactory)mocks.CreateMock(typeof(IConnectionFactory));
-            IConnection connection = new TestConnection();
-            
-
-            Expect.Call(connectionFactory.CreateConnection()).Return(connection).Repeat.Once();
+            IConnectionFactory connectionFactory = CreateConnectionFactory();
 
             mocks.ReplayAll();
 
@@ -244,6 +228,15 @@ namespace Spring.Messaging.Nms.Connections
 
             Assert.AreSame(tmpA, tmpB);            
             mocks.VerifyAll();
+        }
+
+        private IConnectionFactory CreateConnectionFactory()
+        {
+            IConnectionFactory connectionFactory = (IConnectionFactory)mocks.CreateMock(typeof(IConnectionFactory));
+            IConnection connection = new TestConnection();
+
+            Expect.Call(connectionFactory.CreateConnection()).Return(connection).Repeat.Once();
+            return connectionFactory;
         }
 
         private static TestMessageConsumer GetTestMessageConsumer(IMessageConsumer consumer)

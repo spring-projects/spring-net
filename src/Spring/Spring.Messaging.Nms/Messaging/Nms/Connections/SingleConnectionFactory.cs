@@ -556,7 +556,11 @@ namespace Spring.Messaging.Nms.Connections
 
 
         #region Pass through implementations to the target connection
-
+        
+        public void PurgeTempDestinations()
+        {
+            target.PurgeTempDestinations();
+        }
 
         public event ExceptionListener ExceptionListener
         {

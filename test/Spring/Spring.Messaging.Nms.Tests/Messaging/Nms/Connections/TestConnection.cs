@@ -50,6 +50,11 @@ namespace Spring.Messaging.Nms.Connections
             closeCount++;
         }
 
+        public void PurgeTempDestinations()
+        {
+
+        }
+
         public ConsumerTransformerDelegate ConsumerTransformer
         {
             get { throw new NotImplementedException(); }

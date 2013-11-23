@@ -67,7 +67,7 @@ namespace Spring.Messaging.Nms.Connections
         {
             target = targetSession;
             this.sessionList = sessionList;
-            this.sessionCacheSize = ccf.SessionCacheSize;
+            sessionCacheSize = ccf.SessionCacheSize;
             shouldCacheProducers = ccf.CacheProducers;
             shouldCacheConsumers = ccf.CacheConsumers;
             this.ccf = ccf;
@@ -204,17 +204,17 @@ namespace Spring.Messaging.Nms.Connections
             }
 
             // Physically close durable subscribers at time of Session close call.
-            List<ConsumerCacheKey> ToRemove = new List<ConsumerCacheKey>();
+            List<ConsumerCacheKey> toRemove = new List<ConsumerCacheKey>();
             foreach (DictionaryEntry dictionaryEntry in cachedConsumers)
             {
                 ConsumerCacheKey key = (ConsumerCacheKey) dictionaryEntry.Key;
                 if (key.Subscription != null)
                 {
                     ((IMessageConsumer) dictionaryEntry.Value).Close();
-                    ToRemove.Add(key);
+                    toRemove.Add(key);
                 }                
             }
-            foreach (ConsumerCacheKey key in ToRemove)
+            foreach (ConsumerCacheKey key in toRemove)
             {
                 cachedConsumers.Remove(key);
             }
@@ -530,6 +530,18 @@ namespace Spring.Messaging.Nms.Connections
         }
 
         /// <summary>
+        /// Stops all Message delivery in this session and restarts it again with the oldest unacknowledged message. Messages that were delivered
+        /// but not acknowledged should have their redelivered property set. This is an optional method that may not by implemented by all NMS
+        /// providers, if not implemented an Exception will be thrown. Message redelivery is not requried to be performed in the original
+        /// order. It is not valid to call this method on a Transacted Session.
+        /// </summary>
+        public void Recover()
+        {
+            this.transactionOpen = true;
+            target.Recover();
+        }
+
+        /// <summary>
         /// Rollbacks this instance.
         /// </summary>
         public void Rollback()
@@ -595,6 +607,33 @@ namespace Spring.Messaging.Nms.Connections
                 this.transactionOpen = true;
                 return target.AcknowledgementMode;
             }
+        }
+
+        /// <summary>
+        /// Occurs, when a transaction is started.
+        /// </summary>
+        public event SessionTxEventDelegate TransactionStartedListener
+        {
+            add { target.TransactionStartedListener += value; }
+            remove { target.TransactionStartedListener -= value; }
+        }
+
+        /// <summary>
+        /// Occurs, when a transaction is commited.
+        /// </summary>
+        public event SessionTxEventDelegate TransactionCommittedListener
+        {
+            add { target.TransactionCommittedListener += value; }
+            remove { target.TransactionCommittedListener -= value; }
+        }
+
+        /// <summary>
+        /// Occurs, when a transaction is rolled back.
+        /// </summary>
+        public event SessionTxEventDelegate TransactionRolledBackListener
+        {
+            add { target.TransactionRolledBackListener += value; }
+            remove { target.TransactionRolledBackListener -= value; }
         }
 
         /// <summary>

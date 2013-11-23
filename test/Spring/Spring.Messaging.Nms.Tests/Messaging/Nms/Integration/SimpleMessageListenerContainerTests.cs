@@ -51,7 +51,7 @@ namespace Spring.Messaging.Nms.Integration
             Assert.IsNotNull(listener);
             
 
-            NmsTemplate nmsTemplate = (NmsTemplate) applicationContext["MessageTemplate"] as NmsTemplate;
+            NmsTemplate nmsTemplate = (NmsTemplate) applicationContext["NmsTemplate"] as NmsTemplate;
             Assert.IsNotNull(nmsTemplate);
 
             Assert.AreEqual(0, listener.MessageCount);

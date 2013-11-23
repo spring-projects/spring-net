@@ -90,6 +90,7 @@
     <Compile Include="NmsExceptionTests.cs" />
     <Compile Include="NmsCompilerOptionsTests.cs" />
     <Compile Include="Messaging\Nms\Config\NmsNamespaceHandlerTests.cs" />
+    <Compile Include="Messaging\Nms\Connections\CachedSessionTests.cs" />
     <Compile Include="Messaging\Nms\Connections\CachingConnectionFactoryTests.cs" />
     <Compile Include="Messaging\Nms\Connections\MessageTransactionManagerTests.cs" />
     <Compile Include="Messaging\Nms\Connections\SingleConnectionFactoryTests.cs" />
