@@ -9,7 +9,7 @@ namespace Spring.Messaging.Nms.Connections
     /// </summary>
     /// <author>Andreas Kluth</author>
     [TestFixture]
-    public class CachedSessionTest
+    public class CachedSessionTests
     {
         /// <summary>
         /// Validates that events raised by the session cached are propagated to a registered consumer.
