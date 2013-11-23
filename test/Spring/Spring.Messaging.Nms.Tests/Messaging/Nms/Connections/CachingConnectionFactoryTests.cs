@@ -232,10 +232,10 @@ namespace Spring.Messaging.Nms.Connections
 
         private IConnectionFactory CreateConnectionFactory()
         {
-            IConnectionFactory connectionFactory = (IConnectionFactory) mocks.CreateMock( typeof( IConnectionFactory ) );
+            IConnectionFactory connectionFactory = (IConnectionFactory)mocks.CreateMock(typeof(IConnectionFactory));
             IConnection connection = new TestConnection();
 
-            Expect.Call( connectionFactory.CreateConnection() ).Return( connection ).Repeat.Once();
+            Expect.Call(connectionFactory.CreateConnection()).Return(connection).Repeat.Once();
             return connectionFactory;
         }
 
