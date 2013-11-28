@@ -97,6 +97,11 @@ namespace Spring.Validation
             return new List<string>(this.objects.Keys);
         }
 
+        public IList<string> GetObjectDefinitionNames(bool includeAncestor)
+        {
+            return new List<string>(this.objects.Keys);
+        }
+
         public IList<IObjectDefinition> GetObjectDefinitions()
         {
             return new List<IObjectDefinition>(this.objects.Values);

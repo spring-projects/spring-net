@@ -71,8 +71,20 @@ namespace Spring.Objects.Factory.Support
         /// The names of all objects defined in this registry, or an empty array
         /// if none defined
         /// </returns>
-        IList<string> GetObjectDefinitionNames ();
-		
+        IList<string> GetObjectDefinitionNames();
+
+        /// <summary>
+        /// Return the names of all objects defined in this registry.
+        /// If <code>includeAncestors</code> is <code>true</code> it includes all objects in the defined parent factories.
+        /// </summary>
+        /// <param name="includeAncestors">to include parent factories in result</param>
+        /// <returns>
+        /// The names of all objects defined in this registry, if <code>includeAncestors</code> is <code>true</code> it includes
+        /// all objects in the defined parent factories, or an empty array if none defined
+        /// </returns>
+        IList<string> GetObjectDefinitionNames(bool includeAncestors);
+
+
         /// <summary>
         /// Check if this registry contains a object definition with the given name.
         /// </summary>

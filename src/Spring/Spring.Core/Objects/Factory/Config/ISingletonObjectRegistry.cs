@@ -20,6 +20,8 @@
 
 using System.Collections.Generic;
 
+using Spring.Objects.Factory.Support;
+
 namespace Spring.Objects.Factory.Config
 {
     /// <summary>
@@ -138,8 +140,8 @@ namespace Spring.Objects.Factory.Config
         /// </remarks>
         /// <value>The list of names as String array (never <code>null</code>).</value>
         /// <see cref="RegisterSingleton"/>
-        /// <see cref="Spring.Objects.Factory.Support.IObjectDefinitionRegistry.GetObjectDefinitionNames"/>
-        /// <see cref="Spring.Objects.Factory.IListableObjectFactory.GetObjectDefinitionNames"/>
+        /// <see cref="IObjectDefinitionRegistry.GetObjectDefinitionNames()"/>
+        /// <see cref="IListableObjectFactory.GetObjectDefinitionNames()"/>
         IList<string> SingletonNames
         { 
             get;

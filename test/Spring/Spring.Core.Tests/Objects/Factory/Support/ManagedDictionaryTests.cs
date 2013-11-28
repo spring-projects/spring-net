@@ -146,5 +146,30 @@ namespace Spring.Objects.Factory.Support
             Assert.AreEqual(1, resolved.Count);
             Assert.AreEqual(typeof(List<string>), resolved["key"].GetType());
         }
+        
+        [Test]
+        public void ResolvesMergedGenericType()
+        {
+            ManagedDictionary parent = new ManagedDictionary();
+            parent.Add("one", 1);
+            parent.Add("two", 2);
+            parent.KeyTypeName = "string";
+            parent.ValueTypeName = "int";
+            
+            ManagedDictionary child = new ManagedDictionary();
+            child.MergeEnabled = true;
+            child.Add("one", -1);
+            child.Add("three", 3);
+             
+            ManagedDictionary merged = (ManagedDictionary) child.Merge(parent);
+
+            IDictionary resolved = (IDictionary) merged.Resolve("somename", new RootObjectDefinition(typeof(object)), "prop",
+                (name, definition, argumentName, element) => element);
+            
+            Assert.IsInstanceOf<IDictionary<string,int>>(resolved);
+            Assert.AreEqual(3, resolved.Count);
+            Assert.AreEqual(typeof(int), resolved["two"].GetType());
+            Assert.AreEqual(-1, resolved["one"]);
+        }
     }
 }

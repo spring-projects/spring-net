@@ -104,7 +104,7 @@ namespace Spring.Objects.Factory.Config
 			cfg.Location = mockResource;
 			cfg.ConfigSections = new string[] { "" };
             IConfigurableListableObjectFactory mockFactory = (IConfigurableListableObjectFactory)mocks.DynamicMock(typeof(IConfigurableListableObjectFactory));
-			Expect.Call(mockFactory.GetObjectDefinitionNames()).Return(new string[] {});
+			Expect.Call(mockFactory.GetObjectDefinitionNames(false)).Return(new string[] {});
             mocks.ReplayAll();
 
 			cfg.PostProcessObjectFactory(mockFactory);
@@ -148,8 +148,8 @@ namespace Spring.Objects.Factory.Config
 			RootObjectDefinition def = new RootObjectDefinition(typeof(TestObject), pvs);
 
             IConfigurableListableObjectFactory mock = (IConfigurableListableObjectFactory) mocks.CreateMock(typeof(IConfigurableListableObjectFactory));
-			Expect.Call(mock.GetObjectDefinitionNames()).Return(new string [] {defName});
-			Expect.Call(mock.GetObjectDefinition(defName)).Return(def);
+			Expect.Call(mock.GetObjectDefinitionNames(false)).Return(new string [] {defName});
+			Expect.Call(mock.GetObjectDefinition(defName, false)).Return(def);
             Expect.Call(delegate { mock.AddEmbeddedValueResolver(null); }).IgnoreArguments();
             mocks.ReplayAll();
 
@@ -164,6 +164,38 @@ namespace Spring.Objects.Factory.Config
 
 			mocks.VerifyAll();
 		}
+
+        [Test]
+        public void IncludingAncestors()
+        {
+            const string defName = "foo";
+            const string placeholder = "${name}";
+            MutablePropertyValues pvs = new MutablePropertyValues();
+            
+
+            const string theProperty = "name";
+            pvs.Add(theProperty, placeholder);
+            RootObjectDefinition def = new RootObjectDefinition(typeof(TestObject), pvs);
+
+            IConfigurableListableObjectFactory mock = (IConfigurableListableObjectFactory)mocks.CreateMock(typeof(IConfigurableListableObjectFactory));
+            Expect.Call(mock.GetObjectDefinitionNames(true)).Return(new string[] { defName });
+            Expect.Call(mock.GetObjectDefinition(defName, true)).Return(def);
+            Expect.Call(delegate { mock.AddEmbeddedValueResolver(null); }).IgnoreArguments();
+            mocks.ReplayAll();
+
+            PropertyPlaceholderConfigurer cfg = new PropertyPlaceholderConfigurer();
+            cfg.IncludeAncestors = true;
+
+            NameValueCollection defaultProperties = new NameValueCollection();
+            const string expectedName = "Rick Evans";
+            defaultProperties.Add(theProperty, expectedName);
+            cfg.Properties = defaultProperties;
+            cfg.PostProcessObjectFactory(mock);
+            Assert.AreEqual(expectedName, def.PropertyValues.GetPropertyValue(theProperty).Value,
+                "Property placeholder value was not replaced with the resolved value.");
+
+            mocks.VerifyAll();
+        }
 
 		/// <summary>
 		/// Fallback is the default mode. Check if the PROCESSOR_ARCHITECTURE
@@ -390,8 +422,8 @@ namespace Spring.Objects.Factory.Config
 			properties.Add("foo", expectedName);
 			
 			IConfigurableListableObjectFactory mock = (IConfigurableListableObjectFactory) mocks.CreateMock(typeof (IConfigurableListableObjectFactory));
-			Expect.Call(mock.GetObjectDefinitionNames()).Return(new string[] {"foo"});
-			Expect.Call(mock.GetObjectDefinition(null)).IgnoreArguments().Return(def);
+			Expect.Call(mock.GetObjectDefinitionNames(false)).Return(new string[] {"foo"});
+			Expect.Call(mock.GetObjectDefinition(null, false)).IgnoreArguments().Return(def);
             mocks.ReplayAll();
 
 			PropertyPlaceholderConfigurer cfg = new PropertyPlaceholderConfigurer();
@@ -421,8 +453,8 @@ namespace Spring.Objects.Factory.Config
 			properties.Add("hope.floats", expectedName);
 
 			IConfigurableListableObjectFactory mock = (IConfigurableListableObjectFactory) mocks.CreateMock(typeof (IConfigurableListableObjectFactory));
-			Expect.Call(mock.GetObjectDefinitionNames()).Return(new string[] {"foo"});
-			Expect.Call(mock.GetObjectDefinition(null)).IgnoreArguments().Return(def);
+			Expect.Call(mock.GetObjectDefinitionNames(false)).Return(new string[] {"foo"});
+			Expect.Call(mock.GetObjectDefinition(null, false)).IgnoreArguments().Return(def);
             Expect.Call(delegate { mock.AddEmbeddedValueResolver(null); }).IgnoreArguments();
 			mocks.ReplayAll();
             
@@ -451,8 +483,8 @@ namespace Spring.Objects.Factory.Config
 			properties.Add("hope.floats", expectedName);
 
 			IConfigurableListableObjectFactory mock = (IConfigurableListableObjectFactory) mocks.CreateMock(typeof (IConfigurableListableObjectFactory));
-			Expect.Call(mock.GetObjectDefinitionNames()).Return(new string[] {"foo"});
-			Expect.Call(mock.GetObjectDefinition(null)).IgnoreArguments().Return(def);
+			Expect.Call(mock.GetObjectDefinitionNames(false)).Return(new string[] {"foo"});
+			Expect.Call(mock.GetObjectDefinition(null, false)).IgnoreArguments().Return(def);
             Expect.Call(delegate { mock.AddEmbeddedValueResolver(null); }).IgnoreArguments();
             mocks.ReplayAll();
 
@@ -549,8 +581,8 @@ namespace Spring.Objects.Factory.Config
 			RootObjectDefinition def = new RootObjectDefinition(typeof(TestObject), pvs);
 
 			IConfigurableListableObjectFactory mock = (IConfigurableListableObjectFactory) mocks.CreateMock(typeof(IConfigurableListableObjectFactory));
-			Expect.Call(mock.GetObjectDefinitionNames()).Return(new string [] {defName});
-			Expect.Call(mock.GetObjectDefinition(defName)).Return(def);
+			Expect.Call(mock.GetObjectDefinitionNames(false)).Return(new string [] {defName});
+			Expect.Call(mock.GetObjectDefinition(defName, false)).Return(def);
             Expect.Call(delegate { mock.AddEmbeddedValueResolver(null); }).IgnoreArguments();
             mocks.ReplayAll();
 
