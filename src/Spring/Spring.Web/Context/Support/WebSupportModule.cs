@@ -187,31 +187,27 @@ namespace Spring.Context.Support
         ///</summary>
         private void OnConfigureHandler(object sender, EventArgs e)
         {
+            HttpApplication app = (HttpApplication)sender;
             HandlerConfigurationMetaData hCfg = (HandlerConfigurationMetaData)LogicalThreadContext.GetData(CURRENTHANDLER_OBJECTDEFINITION);
             if (hCfg != null)
             {
-                HttpApplication app = (HttpApplication)sender;
                 // app.Context.Handler = // TODO: check, if this makes sense (EE)
                 ConfigureHandlerNow(app.Context.Handler, hCfg.ApplicationContext, hCfg.ObjectDefinitionName, hCfg.IsContainerManaged);
             }
 #if NET_4_0
             else
             {
-                // TODO: Validate if this could create a regression e.g. in case of context hierachies.
-                HttpApplication app = (HttpApplication)sender;
-                Page page = app.Context.CurrentHandler as Page;
-                if (!isPageWithPageRouteHandler(page))
+                // TODO: Validate if this could create a regression e.g. in case of context hierachies, user controls, nested pages.
+                Page page = app.Context.Handler as Page;
+                if (!isPageWithRouteHandler(page))
                 {
                     return;
                 }
-
-                IApplicationContext applicationContext = WebApplicationContext.Current;
-
                 // In case of Routing pages are not handled by the PageHandlerFactory therefore no HandlerConfigurationMetaData
                 // is set.
-                PageRouteHandler pageRouteHandler = (PageRouteHandler)page.RouteData.RouteHandler;
-                string virtualPath = WebUtils.GetNormalizedVirtualPath(pageRouteHandler.VirtualPath);
-                ConfigureHandlerNow(page, (IConfigurableApplicationContext)applicationContext, virtualPath, true);
+                IConfigurableApplicationContext applicationContext = (IConfigurableApplicationContext)WebApplicationContext.Current;
+                string normalizedVirtualPath = WebUtils.GetNormalizedVirtualPath(page.AppRelativeVirtualPath);
+                ConfigureHandlerNow(page, applicationContext, normalizedVirtualPath, false);
             }
 #endif
         }
@@ -222,9 +218,9 @@ namespace Spring.Context.Support
         ///</summary>
         ///<param name="page">the page.</param>
         ///<returns>whether the page has a page route assigned</returns>
-        private static bool isPageWithPageRouteHandler(Page page)
+        private static bool isPageWithRouteHandler(Page page)
         {
-            return page != null && page.RouteData != null && page.RouteData.RouteHandler as PageRouteHandler != null;
+            return page != null && page.RouteData != null && page.RouteData.RouteHandler != null;
         }
 #endif
 
