@@ -63,7 +63,7 @@ namespace Spring.Objects.Factory {
 		
         protected internal void AssertCount (int count)
         {
-            IList<string> defnames = ListableObjectFactory.GetObjectDefinitionNames();
+            IList<string> defnames = ListableObjectFactory.GetObjectDefinitionNames(true);
             Assert.IsTrue (
                 defnames.Count == count,
                 string.Format ("We should have {0} objects, not {1}.", count, defnames.Count));
@@ -78,7 +78,7 @@ namespace Spring.Objects.Factory {
         public virtual void AssertTestObjectCount (int count)
         {
             IList<string> defnames =
-                ListableObjectFactory.GetObjectNamesForType (typeof (TestObject));
+                ListableObjectFactory.GetObjectNamesForType(typeof (TestObject));
             Assert.IsTrue (
                 defnames.Count == count,
                 string.Format ("We should have {0} objects for class {1}, not {2}.", count, typeof (TestObject).FullName, defnames.Count));

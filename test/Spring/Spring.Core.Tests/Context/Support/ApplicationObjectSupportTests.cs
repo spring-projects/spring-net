@@ -114,6 +114,11 @@ namespace Spring.Context.Support
                 return null;
             }
 
+            public IList<string> GetObjectDefinitionNames(bool includeAncestors)
+            {
+                return null;
+            }
+
             public string[] GetObjectDefinitionNames(Type type)
 			{
 				return null;

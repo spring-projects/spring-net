@@ -615,6 +615,7 @@
     <title>Spring.NET for Java developers</title>
 
     <partintro>
+      <para>
       <para>This part of the reference documentation is for Java developers
       who would like a quick orientation to what is different between the Java
       and .NET versions of the framework.</para>
@@ -625,21 +626,16 @@
         </listitem>
       </itemizedlist>
     </partintro>
-
     &javadevelopers;
   </part>
 
   <!-- back matter -->
-
   <part id="spring-appendices">
-    <title>Appendices</title>
-
+  <title>Appendices</title>
     &classic-spring;
-
     &xsd-configuration;
-
     &xml-custom;
-
     &xsd;
   </part>
+
 </book>

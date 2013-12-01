@@ -558,6 +558,20 @@ namespace Spring.Objects.Factory.Support
         }
 
         /// <summary>
+        /// Return the names of all objects defined in this factory, if <code>includeAncestors</code> is <code>true</code>
+        /// includes all parent factories.
+        /// </summary>
+        /// <param name="includeAncestors">to include parent factories in result</param>
+        /// <returns>
+        /// The names of all objects defined in this factory, if <code>includeAncestors</code> is <code>true</code> includes all 
+        /// objects defined in parent factories, or an empty array if none are defined.
+        /// </returns>
+        public IList<string> GetObjectDefinitionNames(bool includeAncestors)
+        {
+            throw new NotSupportedException("StaticListableObjectFactory does not contain object definitions.");            
+        }
+
+        /// <summary>
         /// Return the names of objects matching the given <see cref="System.Type"/>
         /// (including subclasses), judging from the object definitions.
         /// </summary>

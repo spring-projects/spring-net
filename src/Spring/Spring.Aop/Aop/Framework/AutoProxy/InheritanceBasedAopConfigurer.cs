@@ -182,8 +182,7 @@ namespace Spring.Aop.Framework.AutoProxy
                 string name = objectDefinitionNames[i];
                 if (IsObjectNameMatch(name))
                 {
-                    IConfigurableObjectDefinition definition = 
-                        factory.GetObjectDefinition(name) as IConfigurableObjectDefinition;
+                    var definition = factory.GetObjectDefinition(name) as IConfigurableObjectDefinition;
 
                     if (definition == null || IsInfrastructureType(definition.ObjectType, name))
                     {
