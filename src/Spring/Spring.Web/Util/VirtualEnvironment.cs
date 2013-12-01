@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright © 2002-2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -369,7 +369,7 @@ namespace Spring.Util
             {
                 string rootedVPath = WebUtils.CombineVirtualPaths(CurrentExecutionFilePath, virtualPath);
                 object result = BuildManager.CreateInstanceFromVirtualPath(rootedVPath, requiredBaseType);
-                if (!requiredBaseType.IsAssignableFrom(result.GetType()))
+                if (!requiredBaseType.IsInstanceOfType(result))
                 {
                     throw new HttpException(string.Format("Type '{0}' from virtual path '{1}' does not inherit from '{2}'", result.GetType(), rootedVPath, requiredBaseType));
                 }

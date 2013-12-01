@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright 2002-2010 the original author or authors.
+ * Copyright 2002-2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -99,13 +99,13 @@ namespace Spring.Web.Support
                 if (context.Handler != null)
                 {
                     // all deps can/must be resolved now
-                    handler = (IHttpHandler)appContext.GetObject(namedPageDefinition.Name, typeof(IHttpHandler), null);
+                    handler = appContext.GetObject<IHttpHandler>(namedPageDefinition.Name, null);
                 }
                 else
                 {
                     // execution pipeline "entry-point" - create page instance only 
                     // and defer configuration to PreRequestHandlerExecute step
-                    handler = (IHttpHandler)appContext.CreateObject(namedPageDefinition.Name, typeof(IHttpHandler), null);
+                    handler = appContext.CreateObject<IHttpHandler>(namedPageDefinition.Name, null);
                     WebSupportModule.ConfigureHandler(context, handler, appContext, namedPageDefinition.Name, true);
                 }
             }

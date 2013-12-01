@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright © 2002-2013 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,9 +24,11 @@ using System;
 using System.Globalization;
 using System.Reflection;
 using System.Security;
-using System.Security.Permissions;
 using System.Web;
 using System.Web.Caching;
+#if NET_4_0
+using System.Web.Routing;
+#endif
 using System.Web.SessionState;
 using System.Web.UI;
 using Common.Logging;
@@ -34,12 +36,9 @@ using Spring.Core.IO;
 using Spring.Core.TypeConversion;
 using Spring.Core.TypeResolution;
 using Spring.Expressions;
-using Spring.Objects.Factory.Config;
-using Spring.Objects.Factory.Support;
 using Spring.Reflection.Dynamic;
 using Spring.Threading;
 using Spring.Util;
-using Spring.Web.Support;
 
 #endregion
 
@@ -148,8 +147,8 @@ namespace Spring.Context.Support
                 VirtualEnvironment.SetInitialized();
             }
 
-            app.PreRequestHandlerExecute += new EventHandler(OnConfigureHandler);
-            app.EndRequest += new EventHandler(VirtualEnvironment.RaiseEndRequest);
+            app.PreRequestHandlerExecute += OnConfigureHandler;
+            app.EndRequest += VirtualEnvironment.RaiseEndRequest;
 
             // TODO: this is only a workaround to get us up & running in IIS7/integrated mode
             // We must review all code for relative virtual paths - they must be resolved to application-relative paths
@@ -182,18 +181,48 @@ namespace Spring.Context.Support
         #region IHttpHandler configuration
 
         ///<summary>
-        /// Configures the current IHttpHandler as specified by <see cref="Spring.Web.Support.PageHandlerFactory"/>.
+        /// Configures the current IHttpHandler as specified by <see cref="Spring.Web.Support.PageHandlerFactory" />. If the
+        ///<see cref="Spring.Web.Support.PageHandlerFactory" /> is not executed for the current request and an instance of
+        ///<see cref="Page" /> is served revalidate if the instance should be configured.
         ///</summary>
         private void OnConfigureHandler(object sender, EventArgs e)
         {
+            HttpApplication app = (HttpApplication)sender;
             HandlerConfigurationMetaData hCfg = (HandlerConfigurationMetaData)LogicalThreadContext.GetData(CURRENTHANDLER_OBJECTDEFINITION);
             if (hCfg != null)
             {
-                HttpApplication app = (HttpApplication)sender;
                 // app.Context.Handler = // TODO: check, if this makes sense (EE)
                 ConfigureHandlerNow(app.Context.Handler, hCfg.ApplicationContext, hCfg.ObjectDefinitionName, hCfg.IsContainerManaged);
             }
+#if NET_4_0
+            else
+            {
+                // TODO: Validate if this could create a regression e.g. in case of context hierachies, user controls, nested pages.
+                Page page = app.Context.Handler as Page;
+                if (!isPageWithRouteHandler(page))
+                {
+                    return;
+                }
+                // In case of Routing pages are not handled by the PageHandlerFactory therefore no HandlerConfigurationMetaData
+                // is set.
+                IConfigurableApplicationContext applicationContext = (IConfigurableApplicationContext)WebApplicationContext.Current;
+                string normalizedVirtualPath = WebUtils.GetNormalizedVirtualPath(page.AppRelativeVirtualPath);
+                ConfigureHandlerNow(page, applicationContext, normalizedVirtualPath, false);
+            }
+#endif
         }
+
+#if NET_4_0
+        ///<summary>
+        /// Determines whether the specified page is processed by a <see cref="PageRouteHandler" />.
+        ///</summary>
+        ///<param name="page">the page.</param>
+        ///<returns>whether the page has a page route assigned</returns>
+        private static bool isPageWithRouteHandler(Page page)
+        {
+            return page != null && page.RouteData != null && page.RouteData.RouteHandler != null;
+        }
+#endif
 
         /// <summary>
         /// Configures the specified handler instance using the object definition <paramref name="name"/>.
@@ -292,7 +321,7 @@ namespace Spring.Context.Support
                 }
                 else
                 {
-                    // this is an async session timout - log as fatal since this is the thread's exit point!
+                    // this is an async session timeout - log as fatal since this is the thread's exit point!
                     s_log.Fatal(msg, ex);
                 }
             }
