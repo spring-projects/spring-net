@@ -24,9 +24,9 @@ using System;
 using System.Globalization;
 using System.Reflection;
 using System.Security;
-using System.Security.Permissions;
 using System.Web;
 using System.Web.Caching;
+using System.Web.Routing;
 using System.Web.SessionState;
 using System.Web.UI;
 using Common.Logging;
@@ -34,12 +34,9 @@ using Spring.Core.IO;
 using Spring.Core.TypeConversion;
 using Spring.Core.TypeResolution;
 using Spring.Expressions;
-using Spring.Objects.Factory.Config;
-using Spring.Objects.Factory.Support;
 using Spring.Reflection.Dynamic;
 using Spring.Threading;
 using Spring.Util;
-using Spring.Web.Support;
 
 #endregion
 
@@ -148,8 +145,8 @@ namespace Spring.Context.Support
                 VirtualEnvironment.SetInitialized();
             }
 
-            app.PreRequestHandlerExecute += new EventHandler(OnConfigureHandler);
-            app.EndRequest += new EventHandler(VirtualEnvironment.RaiseEndRequest);
+            app.PreRequestHandlerExecute += OnConfigureHandler;
+            app.EndRequest += VirtualEnvironment.RaiseEndRequest;
 
             // TODO: this is only a workaround to get us up & running in IIS7/integrated mode
             // We must review all code for relative virtual paths - they must be resolved to application-relative paths
@@ -182,7 +179,9 @@ namespace Spring.Context.Support
         #region IHttpHandler configuration
 
         ///<summary>
-        /// Configures the current IHttpHandler as specified by <see cref="Spring.Web.Support.PageHandlerFactory"/>.
+        /// Configures the current IHttpHandler as specified by <see cref="Spring.Web.Support.PageHandlerFactory" />. If the
+        ///<see cref="Spring.Web.Support.PageHandlerFactory" /> is not executed for the current request and an instance of
+        ///<see cref="Page" /> is served revalidate if the instance should be configured.
         ///</summary>
         private void OnConfigureHandler(object sender, EventArgs e)
         {
@@ -193,6 +192,35 @@ namespace Spring.Context.Support
                 // app.Context.Handler = // TODO: check, if this makes sense (EE)
                 ConfigureHandlerNow(app.Context.Handler, hCfg.ApplicationContext, hCfg.ObjectDefinitionName, hCfg.IsContainerManaged);
             }
+            else
+            {
+                // TODO: Validate if this could create a regression e.g. in case of context hierachies, .aspx
+                // pages that are not configured.
+                HttpApplication app = (HttpApplication)sender;
+                Page page = app.Context.CurrentHandler as Page;
+                if (!isPageWithPageRouteHandler(page))
+                {
+                    return;
+                }
+
+                IApplicationContext applicationContext = WebApplicationContext.Current;
+
+                // In case of Routing pages are not handled by the PageHandlerFactory therefore no HandlerConfigurationMetaData
+                // is set.
+                PageRouteHandler pageRouteHandler = (PageRouteHandler)page.RouteData.RouteHandler;
+                string virtualPath = WebUtils.GetNormalizedVirtualPath(pageRouteHandler.VirtualPath);
+                ConfigureHandlerNow(page, (IConfigurableApplicationContext)applicationContext, virtualPath, true);
+            }
+        }
+
+        /// <summary>
+        ///     Determines whether the specified page is processed by a <see cref="PageRouteHandler" />.
+        /// </summary>
+        /// <param name="page">the page.</param>
+        /// <returns></returns>
+        private static bool isPageWithPageRouteHandler(Page page)
+        {
+            return page != null && page.RouteData != null && page.RouteData.RouteHandler as PageRouteHandler != null;
         }
 
         /// <summary>
