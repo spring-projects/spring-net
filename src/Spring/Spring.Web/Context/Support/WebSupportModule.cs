@@ -26,7 +26,9 @@ using System.Reflection;
 using System.Security;
 using System.Web;
 using System.Web.Caching;
+#if NET_4_0
 using System.Web.Routing;
+#endif
 using System.Web.SessionState;
 using System.Web.UI;
 using Common.Logging;
@@ -192,10 +194,10 @@ namespace Spring.Context.Support
                 // app.Context.Handler = // TODO: check, if this makes sense (EE)
                 ConfigureHandlerNow(app.Context.Handler, hCfg.ApplicationContext, hCfg.ObjectDefinitionName, hCfg.IsContainerManaged);
             }
+#if NET_4_0
             else
             {
-                // TODO: Validate if this could create a regression e.g. in case of context hierachies, .aspx
-                // pages that are not configured.
+                // TODO: Validate if this could create a regression e.g. in case of context hierachies.
                 HttpApplication app = (HttpApplication)sender;
                 Page page = app.Context.CurrentHandler as Page;
                 if (!isPageWithPageRouteHandler(page))
@@ -211,17 +213,20 @@ namespace Spring.Context.Support
                 string virtualPath = WebUtils.GetNormalizedVirtualPath(pageRouteHandler.VirtualPath);
                 ConfigureHandlerNow(page, (IConfigurableApplicationContext)applicationContext, virtualPath, true);
             }
+#endif
         }
 
-        /// <summary>
-        ///     Determines whether the specified page is processed by a <see cref="PageRouteHandler" />.
-        /// </summary>
-        /// <param name="page">the page.</param>
-        /// <returns></returns>
+#if NET_4_0
+        ///<summary>
+        /// Determines whether the specified page is processed by a <see cref="PageRouteHandler" />.
+        ///</summary>
+        ///<param name="page">the page.</param>
+        ///<returns>whether the page has a page route assigned</returns>
         private static bool isPageWithPageRouteHandler(Page page)
         {
             return page != null && page.RouteData != null && page.RouteData.RouteHandler as PageRouteHandler != null;
         }
+#endif
 
         /// <summary>
         /// Configures the specified handler instance using the object definition <paramref name="name"/>.
