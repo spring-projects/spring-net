@@ -236,13 +236,16 @@ ${tool.dir}       : dir for tools
     <property name="test.assemblyname" value="${project::get-name()}" overwrite="false" />
     <property name="test.assemblyfile" value="${test.assemblyname}.dll" overwrite="false" />
 
+	<property name="nunit.framework.version" value="${nant.settings.currentframework}" />
+	<property name="nunit.framework.version" value="net-4.0" if="${nunit.framework.version == 'net-4.5'}" />
+	
     <property name="test.bin.dir" value="${current.bin.dir}" if="${not property::exists('test.bin.dir')}" />
     <echo message="Unit Testing ${project.name}, ${test.assemblyname} in ${test.bin.dir}" />
 
     <exec program="${tool.dir}\nunit\net-2.0\nunit-console-x86.exe" workingdir="${test.bin.dir}" verbose="true">
       <arg line="${test.assemblyfile}" />
       <arg value="/xml:${test.assemblyname}.dll-TestResults.xml" />
-      <arg value="/framework:${nant.settings.currentframework}" />
+      <arg value="/framework:${nunit.framework.version}" />
       <arg value="/nologo" />
     </exec>
 
@@ -265,7 +268,10 @@ ${tool.dir}       : dir for tools
 
         <property name="test.bin.dir" value="${current.bin.dir}" if="${not property::exists('test.bin.dir')}" />
 
-        <echo message="Coverage Testing ${test.assemblyname} in ${test.bin.dir}" />
+		<property name="nunit.framework.version" value="${nant.settings.currentframework}" />
+		<property name="nunit.framework.version" value="net-4.0" if="${nunit.framework.version == 'net-4.5'}" />
+        
+		<echo message="Coverage Testing ${test.assemblyname} in ${test.bin.dir}" />
 
 		<exec program="${tool.dir}/ncover/ncover.console.exe" workingdir="${test.bin.dir}" verbose="true">
 			<arg value="//q" />
@@ -283,7 +289,7 @@ ${tool.dir}       : dir for tools
 			<arg line="${test.assemblyfile}" />
 			<arg value="/xml:${test.assemblyname}.dll-TestResults.xml" />
 			<arg value="/nologo" />
-            <arg value="/framework:${nant.settings.currentframework}" />
+            <arg value="/framework:${nunit.framework.version}" />
 		</exec>
 
 <!--
@@ -310,12 +316,15 @@ ${tool.dir}       : dir for tools
 
         <property name="test.bin.dir" value="${current.bin.dir}" if="${not property::exists('test.bin.dir')}" />
 
+		<property name="nunit.framework.version" value="${nant.settings.currentframework}" />
+		<property name="nunit.framework.version" value="net-4.0" if="${nunit.framework.version == 'net-4.5'}" />
+
         <echo message="Coverage Testing ${test.assemblyname} in ${test.bin.dir}" />
 
 		<exec program="${tool.dir}/opencover/OpenCover.Console.exe" workingdir="${test.bin.dir}" verbose="true">
 			<arg value="-register:user" />
 			<arg value="-target:${tool.dir}/nunit/net-2.0/nunit-console-x86.exe" />
-			<arg value="-targetargs:${test.assemblyfile} /xml:${test.assemblyname}.dll-TestResults.xml /noshadow /nologo /framework:${nant.settings.currentframework}" />
+			<arg value="-targetargs:${test.assemblyfile} /xml:${test.assemblyname}.dll-TestResults.xml /noshadow /nologo /framework:${nunit.framework.version}" />
 			<arg value="-filter:&quot;+[Spring*]* -[*Test*]* -[*nunit*]*&quot;" />
 			<arg value="-output:${test.bin.dir}/${test.assemblyname}.dll-TestCoverage.xml" />
 		</exec>
@@ -325,31 +334,8 @@ ${tool.dir}       : dir for tools
 			<arg path="${test.bin.dir}\CoverageReport\${test.assemblyname}" />
 		</exec>
 </target>
-	
-	
-	
-    <target name="common.run-tests.partcover" description="Run NUnit tests">
 
-        <exec program="${tool.dir}\partcover\partcover.exe"
-              workingdir="${current.bin.dir}"
-              verbose="true"
-              append="true"
-				>
-            <arg value="--target" /><arg path="${tool.dir}\nunit\nunit-console-x86.exe" />
-            <arg value="--target-work-dir" /><arg path="${current.bin.dir}" />
-            <arg value="--exclude" /><arg value="[nunit*]*" />
-            <arg value="--exclude" /><arg value="[NAnt*]*" />
-            <arg value="--include" /><arg value="[NDoc3*]*" />
-            <arg value="--exclude" /><arg value="[${project::get-name()}*]*" /><!-- exclude the test-assembly itself -->
-            <arg value="--log" /><arg value="251" />
-            <arg value="--output" /><arg path="${current.bin.dir}/${project::get-name()}.dll-coverage.xml" />
-            <arg value="--target-args" /><arg value="${project::get-name()}.dll /process=Single /domain=None /xml=${project::get-name()}.dll-testresults.xml" />
-
-        </exec>
-
-    </target>
-
-	<readregistry property="net35.install.dir" key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.5\InstallPath" hive="LocalMachine" failonerror="true"/>
+  <readregistry property="net35.install.dir" key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.5\InstallPath" hive="LocalMachine" failonerror="true"/>
   <property name="msbuild.exe" value="${net35.install.dir}\msbuild.exe"/>
 	
 	

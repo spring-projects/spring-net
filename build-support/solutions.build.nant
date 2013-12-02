@@ -101,7 +101,7 @@ Rebuilding Solutions using Nant and "solutions.build":
 
   </target>
 
-    <target name="RebuildAllSolutions-4.0" depends="Clean">
+  <target name="RebuildAllSolutions-4.0" depends="Clean">
     <!-- build "main" solution -->
 
     <property name="solutionfile" value="${root.dir}/Spring.NET.2010.sln" />
@@ -117,6 +117,7 @@ Rebuilding Solutions using Nant and "solutions.build":
           <exclude name="Spring.NET.2010.sln"/>
           <exclude name="examples/Spring/Spring.EmsQuickStart/**/*.sln" unless="${build-ems}"/>
           <exclude name="examples/**/Spring.Examples.Pool.2010.sln"/>
+          <exclude name="examples/**/Spring.Examples.Pool.2010.sln"/>
         </items>
       </in>
       <do>
@@ -128,6 +129,23 @@ Rebuilding Solutions using Nant and "solutions.build":
 
   </target>
   
+  <target name="RebuildAllSolutions-4.5" depends="Clean">
+
+    <foreach item="File" property="filename">
+      <in>
+        <items basedir="${root.dir}">
+          <!-- <include name="examples/Spring/**/*.2005.sln" /> -->
+          <include name="examples/Spring/**/Spring.Mvc5QuickStart.sln" />
+        </items>
+      </in>
+      <do>
+        <property name="solutionfile" value="${filename}" />
+        <property name="solutionconfiguration" value="${buildconfiguration}" />
+        <call target="RebuildSolution-4.5" />
+      </do>
+    </foreach>
+
+  </target>
  
   <target name="RebuildSolution-3.5" description="rebuilds a given VS2008 solution file">
     <echo message="Rebuilding .NET 3.5 Solution ${solutionfile}" />
@@ -152,5 +170,17 @@ Rebuilding Solutions using Nant and "solutions.build":
       <arg line='/property:Platform="Any CPU"'/>
     </exec>
   </target>  
-
+  
+  <target name="RebuildSolution-4.5" description="rebuilds a given VS2010 solution file">
+    <echo message="Rebuilding .NET 4.5 Solution ${solutionfile}" />
+    <exec program="${msbuild.exe}" verbose="true">
+      <arg value="${solutionfile}"/>
+      <arg line="/nologo" />
+      <arg line="/verbosity:minimal" />
+      <arg line="/property:Configuration=${solutionconfiguration}"/>
+      <!--Specifying mandatory property in SDK 7-->
+      <arg line='/property:Platform="Any CPU"'/>
+    </exec>
+  </target> 
+  
 </project>

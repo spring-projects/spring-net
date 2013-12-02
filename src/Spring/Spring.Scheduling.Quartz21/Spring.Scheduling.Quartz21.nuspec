@@ -26,5 +26,8 @@
     <file src="build\net\4.0\release\Spring.Scheduling.Quartz21.dll" target="lib\net40" />
     <file src="build\net\4.0\release\Spring.Scheduling.Quartz21.pdb" target="lib\net40" />
     <file src="build\net\4.0\release\Spring.Scheduling.Quartz21.xml" target="lib\net40" />
+    <file src="build\net\4.5\release\Spring.Scheduling.Quartz21.dll" target="lib\net45" />
+    <file src="build\net\4.5\release\Spring.Scheduling.Quartz21.pdb" target="lib\net45" />
+    <file src="build\net\4.5\release\Spring.Scheduling.Quartz21.xml" target="lib\net45" />
   </files>
 </package>

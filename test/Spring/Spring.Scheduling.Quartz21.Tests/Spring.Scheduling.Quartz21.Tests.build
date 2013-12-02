@@ -41,6 +41,7 @@
 				<include name="System.Core.dll"/>
 				<include name="${current.bin.dir}/*.dll" />
 				<exclude name="${current.bin.dir}/${project::get-name()}.dll" />
+				<exclude name="${current.bin.dir}/System.Net.Http*.dll" />
 			</references>
 		</csc>
 

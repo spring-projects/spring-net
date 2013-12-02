@@ -39,7 +39,16 @@
 
   <property name="net-4.0.installed" value="${registry.net-4.0.installed == '1'}" />
 
+  <!-- detect if .net 4.5 is installed -->
+  <property name="net-4.5" value="false"/>
+  <property name="registry.net-4.5.installed" value="0" overwrite="false"/>
 
+  <readregistry property="registry.net-4.5.installed"
+		      key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full\Version"
+		      hive="LocalMachine"
+		      failonerror="false" />
+
+  <property name="net-4.5.installed" value="${string::starts-with(registry.net-4.5.installed, '4.5.') == true}" />
 
   <readregistry property="vs-net90.dir" key="SOFTWARE\Microsoft\VisualStudio\9.0\InstallDir" hive="LocalMachine" failonerror="false"/>
 
@@ -365,6 +374,28 @@
       <property name="current.sdkdoc.debug" value="${sdkdoc.debug}" dynamic="true"/>
       <property name="nowarn.numbers.test" value="${nowarn.numbers.test.default},1701"/>
     </target>
+	
+    <target name="set-net-4.5-runtime-configuration"
+            depends="check-bin-dir, check-sdkdoc-dir, check-sdkdoc-debug, check-current-build-config, check-build-debug, check-build-defines">
+      <property name="nant.settings.currentframework" value="net-4.5"/>
+      <property name="nant.settings.currentframework.number" value="4.5"/>
+      <!-- revision number used when generating assembly info -->
+      <property name="nant.settings.currentframework.revisionnumber" value="45"/>
+      <property name="net-2.0" value="true"/>
+      <property name="net-3.0" value="true"/>
+      <property name="net-3.5" value="true"/>
+      <property name="net-4.0" value="true"/>
+      <property name="net-4.5" value="true"/>
+      <property name="current.build.debug" value="${build.debug}" dynamic="true"/>
+      <property name="current.build.defines.csc" value="${build.defines.csc},NET,NET_2_0,NET_3_0,NET_3_5,NET_4_0,NET_4_0" dynamic="true"/>
+      <property name="current.build.defines.cl" value="${build.defines.cl} /D NET /D NET_2_0 /D NET_3_0 /D NET_3_5 /D NET_4_0 /D NET_4_5" dynamic="true"/>
+      <property name="current.bin.dir"
+                value="${bin.dir}/${framework::get-family(framework::get-target-framework())}/4.5/${current.build.config}"/>
+      <property name="current.sdkdoc.dir"
+                value="${sdkdoc.dir}/${framework::get-family(framework::get-target-framework())}/4.5"/>
+      <property name="current.sdkdoc.debug" value="${sdkdoc.debug}" dynamic="true"/>
+      <property name="nowarn.numbers.test" value="${nowarn.numbers.test.default},1701"/>
+    </target>	
 
     <target name="set-netcf-1.0-runtime-configuration"
             depends="check-bin-dir, check-sdkdoc-dir, check-sdkdoc-debug, check-current-build-config, check-build-debug, check-build-defines">

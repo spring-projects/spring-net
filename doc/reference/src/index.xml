@@ -615,7 +615,6 @@
     <title>Spring.NET for Java developers</title>
 
     <partintro>
-      <para>
       <para>This part of the reference documentation is for Java developers
       who would like a quick orientation to what is different between the Java
       and .NET versions of the framework.</para>

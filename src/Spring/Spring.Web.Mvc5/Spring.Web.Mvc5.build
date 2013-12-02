@@ -1,0 +1,59 @@
+<?xml version="1.0" ?>
+<project name="Spring.Web.Mvc5" default="build" xmlns="http://nant.sf.net/schemas/nant.xsd">
+<!--
+    Required properties:
+      * current.bin.dir           - (path) root level to build to
+      * current.build.debug       - (true|false) debug build?
+      * current.build.defines.csc - framework-specific build defines for C# compiler
+-->
+	<target name="build">
+		<!-- build Spring.Web.Mvc -->
+		<csc target="library" define="${current.build.defines.csc}" 
+		     warnaserror="true"
+		     optimize="${build.optimize}"
+		     debug="${current.build.debug}" 
+		     output="${current.bin.dir}/${project::get-name()}.dll" 
+		     doc="${current.bin.dir}/${project::get-name()}.xml"
+			 nostdlib="true"
+			 noconfig="true"
+		     >
+			<arg line="${compiler.args}"/>	
+			<nowarn>
+				<warning number="${nowarn.numbers},0108,0114,0612,0109" />
+				<warning number="${nowarn.numbers},1591" if="${nant.settings.currentframework=='mono-2.0'}"/>
+			</nowarn>
+			<sources failonempty="true">
+				<include name="../Spring.Web.Mvc4/**/*.cs" />
+				<include name="**/*.cs" />
+				<include name="../GenCommonAssemblyInfo.cs" />
+			</sources>
+			<resources basedir="Resources">
+				<include name="**/*" />
+			</resources>
+			<references>
+			    <include name="mscorlib.dll"/>
+				<include name="Microsoft.CSharp.dll"/>
+				<include name="System.dll"/>
+				<include name="System.Configuration.dll" />
+				<include name="System.Core.dll"/>
+ 				<include name="System.Xml.dll" />
+ 				<include name="System.Web.dll" />
+				<include name="System.Web.Abstractions.dll"/>
+				<include name="System.Web.ApplicationServices.dll" />        
+				<include name="System.Web.Routing.dll"/>
+ 				<include name="System.Web.Services.dll" />
+
+				<include name="${current.bin.dir}/Common.Logging.dll"/>
+				<include name="${current.bin.dir}/antlr.runtime.dll" />
+				<include name="${current.bin.dir}/Spring.Core.dll" />
+				<include name="${current.bin.dir}/Spring.Aop.dll" />
+				<include name="${current.bin.dir}/Spring.Web.dll" />
+			
+				<include name="${spring.basedir}/packages/Microsoft.AspNet.Mvc.5.0.0/lib/net45/System.Web.Mvc.dll" />
+				<include name="${spring.basedir}/packages/Microsoft.AspNet.WebApi.Core.5.0.0/lib/net45/System.Web.Http.dll" />
+				<include name="${spring.basedir}/packages/Microsoft.AspNet.WebApi.WebHost.5.0.0/lib/net45/System.Web.Http.WebHost.dll" />
+				
+			</references>
+		</csc>
+	</target>
+</project>

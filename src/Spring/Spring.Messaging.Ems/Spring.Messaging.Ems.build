@@ -36,7 +36,8 @@
 			<include name="System.dll"/>
 			<include name="System.Core.dll"/>
 			<include name="System.Configuration.dll"/>
-			<include name="System.Data.d ll" />
+			<include name="System.Data.dll" />
+			<include name="System.Xml.dll" />
 			<include name="${current.bin.dir}/*.dll" />
 			<exclude name="${current.bin.dir}/${project::get-name()}.dll" />
 			<exclude name="${current.bin.dir}/CloverRuntime.dll" />

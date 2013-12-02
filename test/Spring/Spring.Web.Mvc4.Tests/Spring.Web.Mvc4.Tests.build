@@ -67,10 +67,10 @@
             
                 <include name="${lib.dir}/nunit.core.interfaces.dll" />
 				<exclude name="${current.bin.dir}/System.Web.Extensions.dll" />
-				<exclude name="${current.bin.dir}/Spring.Web.Mvc.dll" />
-				<exclude name="${current.bin.dir}/Spring.Web.Mvc.Tests.dll" />
 				<exclude name="${current.bin.dir}/Spring.Web.Mvc3.dll" />
 				<exclude name="${current.bin.dir}/Spring.Web.Mvc3.Tests.dll" />
+				<exclude name="${current.bin.dir}/Spring.Web.Mvc5.dll" />
+				<exclude name="${current.bin.dir}/Spring.Web.Mvc5.Tests.dll" />
             </references>
         </csc>
         <copy todir="${current.bin.dir}">

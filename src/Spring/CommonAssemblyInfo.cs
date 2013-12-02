@@ -31,9 +31,11 @@ using System.Reflection;
 // (e.g., add any new ones at the TOP of this construct!)
 
 #if NET_4_0
-[assembly: AssemblyVersion("1.3.2.40001")]
+[assembly: AssemblyVersion("2.0.0.45001")]
+#elif NET_4_0
+[assembly: AssemblyVersion("2.0.0.40001")]
 #elif NET_3_5
-[assembly: AssemblyVersion("1.3.2.35001")]
+[assembly: AssemblyVersion("2.0.0.35001")]
 #endif
 
 

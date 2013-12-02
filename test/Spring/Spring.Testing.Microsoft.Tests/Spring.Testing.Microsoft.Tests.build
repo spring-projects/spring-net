@@ -36,7 +36,7 @@
 				<include name="System.dll"/>
 				<include name="System.Core.dll"/>
 				<include name="${vs-net.mstest.bin.dir.current}\PublicAssemblies\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll" />
-				<include name="*.dll" />
+				<include name="${current.bin.dir}/*.dll" />
 				<exclude name="${current.bin.dir}/${project::get-name()}.dll" />
 				<exclude name="${current.bin.dir}/CloverRuntime.dll" />
 			</references>

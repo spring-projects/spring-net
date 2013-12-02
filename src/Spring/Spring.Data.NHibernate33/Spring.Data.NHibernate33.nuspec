@@ -27,5 +27,8 @@
     <file src="build\net\4.0\release\Spring.Data.NHibernate33.dll" target="lib\net40" />
     <file src="build\net\4.0\release\Spring.Data.NHibernate33.pdb" target="lib\net40" />
     <file src="build\net\4.0\release\Spring.Data.NHibernate33.xml" target="lib\net40" />
+    <file src="build\net\4.5\release\Spring.Data.NHibernate33.dll" target="lib\net45" />
+    <file src="build\net\4.5\release\Spring.Data.NHibernate33.pdb" target="lib\net45" />
+    <file src="build\net\4.5\release\Spring.Data.NHibernate33.xml" target="lib\net45" />
   </files>
 </package>

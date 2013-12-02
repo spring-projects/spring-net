@@ -1,0 +1,106 @@
+<?xml version="1.0" ?>
+<project name="Spring.Web.Mvc5.Tests" default="test" xmlns="http://nant.sf.net/schemas/nant.xsd">
+
+    <include buildfile="${spring.basedir}/common-project.include" />
+    <!--
+        Required properties:
+            * current.bin.dir           - (path) root level to build to
+            * build.debug               - (true|false) debug build?
+            * current.build.defines.csc - framework-specific build defines
+            * lib.dir                   - framework-specific assembly references
+    -->
+    <target name="build">
+        <!-- build Spring.Web.Mvc -->
+        <csc target="library" define="${current.build.defines.csc}" 
+			 warnaserror="true" 
+             optimize="${build.optimize}"
+			 debug="${current.build.debug}"
+             output="${current.bin.dir}/${project::get-name()}.dll" 
+			 doc="${current.bin.dir}/${project::get-name()}.xml"
+			 nostdlib="true"
+			 noconfig="true"
+			>
+            <nowarn>
+                <warning number="${nowarn.numbers.test}" /> <!-- 1701 -->
+                <warning number="${nowarn.numbers.test},1587"/>
+            </nowarn>
+            <sources failonempty="true">
+                <include name="**/*.cs" />
+                <include name="../CommonAssemblyInfo.cs" />
+				<include name="../Spring.Web.Mvc3.Tests/**/*.cs" />
+				<include name="../Spring.Web.Mvc4.Tests/**/*.cs" />
+				<include name="../Spring.Web.Mvc5.Tests/**/*.cs" />
+				<exclude name="../Spring.Web.Mvc3.Tests/**/SpringMvcDependencyResolverTests.cs" />
+            </sources>
+            <resources prefix="Spring" dynamicprefix="true" failonempty="true">
+                <include name="../Spring.Web.Mvc3.Tests/**/*.resx" />
+                <include name="../Spring.Web.Mvc3.Tests/**/*.xsd" />
+                <include name="../Spring.Web.Mvc3.Tests/**/*.txt" />
+                <include name="../Spring.Web.Mvc3.Tests/**/*.xml" />
+                <exclude name="../Spring.Web.Mvc3.Tests/Data/**/*" />
+                <exclude name="../Spring.Web.Mvc3.Tests/obj/**/*" />
+                <exclude name="../Spring.Web.Mvc3.Tests/bin/**/*" />
+            </resources>
+            <references>
+				<include name="mscorlib.dll"/>
+				<include name="Microsoft.CSharp.dll"/>
+				<include name="System.dll"/>
+				<include name="System.Core.dll"/>
+				<include name="System.Configuration.dll" />
+				<include name="System.Data.dll" />
+				<include name="System.Drawing.dll" />
+				<include name="System.Xml.dll" />
+				
+				<include name="System.Web.dll" />
+				<include name="System.Web.Abstractions.dll"/>
+				<include name="System.Web.ApplicationServices.dll" />        
+				<include name="System.Web.Routing.dll"/>
+				<include name="System.Web.Services.dll" />
+				
+				<include name="${spring.basedir}/packages/Microsoft.AspNet.Mvc.5.0.0/lib/net45/System.Web.Mvc.dll" />
+				<include name="${spring.basedir}/packages/Microsoft.AspNet.WebApi.Core.5.0.0/lib/net45/System.Web.Http.dll" />
+				<include name="${spring.basedir}/packages/Microsoft.AspNet.WebApi.WebHost.5.0.0/lib/net45/System.Web.Http.WebHost.dll" />
+
+                <include name="${current.bin.dir}/*.dll" />
+                <include name="${current.bin.dir}/Spring.Web.Mvc5.dll" />
+                <exclude name="${current.bin.dir}/${project::get-name()}.dll" />
+            
+                <include name="${lib.dir}/nunit.core.interfaces.dll" />
+				<exclude name="${current.bin.dir}/System.Web.Extensions.dll" />
+				<exclude name="${current.bin.dir}/Spring.Web.Mvc3.dll" />
+				<exclude name="${current.bin.dir}/Spring.Web.Mvc3.Tests.dll" />
+				<exclude name="${current.bin.dir}/Spring.Web.Mvc4.dll" />
+				<exclude name="${current.bin.dir}/Spring.Web.Mvc4.Tests.dll" />
+            </references>
+        </csc>
+        <copy todir="${current.bin.dir}">
+            <fileset basedir="${project::get-base-directory()}/Data">
+                <include name="**/*.*" />
+            </fileset>
+		</copy>
+		<copy todir="${current.bin.dir}">
+            <fileset basedir="${project::get-base-directory()}">
+                <include name="**/*.xml" />
+            </fileset>
+		</copy>
+		<copy todir="${current.bin.dir}" flatten="true">
+            <fileset basedir="${spring.basedir}/packages/">
+                <include name="Microsoft.AspNet.*.5.0.0/**/*.dll" />
+            </fileset>
+		</copy>		
+    </target>
+
+    <target name="test" depends="build">
+        <!-- property name="test.assemblyname" value="${project::get-name()}" / -->
+        <call target="common.run-tests" />
+    </target>
+<!--
+    <target name="test" depends="build">
+        <nunit2outproc>
+            <formatter type="Plain" />
+            <formatter type="Xml" usefile="true" extension=".xml" outputdir="${current.bin.dir}/results" />
+            <test assemblyname="${current.bin.dir}/${project::get-name()}.dll" />
+        </nunit2outproc>
+    </target>
+-->
+</project>

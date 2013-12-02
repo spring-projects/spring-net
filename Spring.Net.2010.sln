@@ -99,6 +99,17 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Web.Conversation.NHi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Web.Conversation.NHibernate33.Tests.2010", "test\Spring\Spring.Web.Conversation.NHibernate33.Tests\Spring.Web.Conversation.NHibernate33.Tests.2010.csproj", "{C57B05EA-FD1A-40EC-BB60-D2E45AB1A86A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Web.Mvc5.2010", "src\Spring\Spring.Web.Mvc5\Spring.Web.Mvc5.2010.csproj", "{39AAD7EA-2ED0-4E50-8D4D-C666EA9CBFE4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Web.Mvc5.Tests.2010", "test\Spring\Spring.Web.Mvc5.Tests\Spring.Web.Mvc5.Tests.2010.csproj", "{B9590252-6D58-4587-950C-475AB61FDBCF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{79F495DF-83D6-435E-A20E-47800F6F8FE7}"
+	ProjectSection(SolutionItems) = preProject
+		.nuget\NuGet.Config = .nuget\NuGet.Config
+		.nuget\NuGet.exe = .nuget\NuGet.exe
+		.nuget\NuGet.targets = .nuget\NuGet.targets
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|.NET = Debug|.NET
@@ -549,6 +560,26 @@ Global
 		{C57B05EA-FD1A-40EC-BB60-D2E45AB1A86A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{C57B05EA-FD1A-40EC-BB60-D2E45AB1A86A}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{C57B05EA-FD1A-40EC-BB60-D2E45AB1A86A}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{39AAD7EA-2ED0-4E50-8D4D-C666EA9CBFE4}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{39AAD7EA-2ED0-4E50-8D4D-C666EA9CBFE4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{39AAD7EA-2ED0-4E50-8D4D-C666EA9CBFE4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{39AAD7EA-2ED0-4E50-8D4D-C666EA9CBFE4}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{39AAD7EA-2ED0-4E50-8D4D-C666EA9CBFE4}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{39AAD7EA-2ED0-4E50-8D4D-C666EA9CBFE4}.Release|.NET.ActiveCfg = Release|Any CPU
+		{39AAD7EA-2ED0-4E50-8D4D-C666EA9CBFE4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{39AAD7EA-2ED0-4E50-8D4D-C666EA9CBFE4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{39AAD7EA-2ED0-4E50-8D4D-C666EA9CBFE4}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{39AAD7EA-2ED0-4E50-8D4D-C666EA9CBFE4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{B9590252-6D58-4587-950C-475AB61FDBCF}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{B9590252-6D58-4587-950C-475AB61FDBCF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B9590252-6D58-4587-950C-475AB61FDBCF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B9590252-6D58-4587-950C-475AB61FDBCF}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{B9590252-6D58-4587-950C-475AB61FDBCF}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{B9590252-6D58-4587-950C-475AB61FDBCF}.Release|.NET.ActiveCfg = Release|Any CPU
+		{B9590252-6D58-4587-950C-475AB61FDBCF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B9590252-6D58-4587-950C-475AB61FDBCF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B9590252-6D58-4587-950C-475AB61FDBCF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{B9590252-6D58-4587-950C-475AB61FDBCF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

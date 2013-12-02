@@ -26,5 +26,8 @@
     <file src="build\net\4.0\release\Spring.Messaging.Nms.dll" target="lib\net40" />
     <file src="build\net\4.0\release\Spring.Messaging.Nms.pdb" target="lib\net40" />
     <file src="build\net\4.0\release\Spring.Messaging.Nms.xml" target="lib\net40" />
+    <file src="build\net\4.5\release\Spring.Messaging.Nms.dll" target="lib\net45" />
+    <file src="build\net\4.5\release\Spring.Messaging.Nms.pdb" target="lib\net45" />
+    <file src="build\net\4.5\release\Spring.Messaging.Nms.xml" target="lib\net45" />
   </files>
 </package>
