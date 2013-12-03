@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
-[assembly: CLSCompliant(false)]
+
+[assembly: CLSCompliant(true)]
 
 //
 // General Information about an assembly is controlled through the following 

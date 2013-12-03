@@ -1,25 +1,18 @@
 using System;
-using System.Data;
-using System.Configuration;
-using System.Collections;
-using System.Web;
-using System.Web.Security;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using System.Web.UI.WebControls.WebParts;
-using System.Web.UI.HtmlControls;
-using Spring.Web.Conversation;
+using System.Reflection;
+
 using Spring.Data.NHibernate.Support;
-using NHibernate;
+using Spring.Bsn;
 using Spring.Entities;
 using Spring.Spring.Data.Common;
-using NUnit.Framework;
-using Spring.Bsn;
-using NHibernate.Impl;
-using System.Reflection;
-using NHibernate.Cfg;
 using Spring.Context;
 using Spring.Web.Conversation;
+
+using NHibernate;
+using NHibernate.Cfg;
+using NHibernate.Impl;
+
+using NUnit.Framework;
 
 /// <summary>
 /// Page for <see cref="Spring.Web.Conversation.WebConversationStateTest.ConnectionReleaseModeIssue()"/>.
@@ -27,6 +20,7 @@ using Spring.Web.Conversation;
 public partial class ConnectionReleaseModeIssue : System.Web.UI.Page, IApplicationContextAware
 {
     private IConversationState conversation;
+
     /// <summary>
     /// <see cref="IConversationState"/>
     /// </summary>
@@ -37,14 +31,15 @@ public partial class ConnectionReleaseModeIssue : System.Web.UI.Page, IApplicati
     }
 
     private ISessionFactory sessionFactory;
+
     public ISessionFactory SessionFactory
     {
         get { return sessionFactory; }
         set { sessionFactory = value; }
     }
 
-
     private IConnectionReleaseModeIssueBsn connectionReleaseModeIssueBsn;
+
     public IConnectionReleaseModeIssueBsn ConnectionReleaseModeIssueBsn
     {
         get { return connectionReleaseModeIssueBsn; }
@@ -92,7 +87,7 @@ public partial class ConnectionReleaseModeIssue : System.Web.UI.Page, IApplicati
     {
         //with conversation and "connection.release_mode" "auto"(AfterTransaction)
         //forcing "auto" by reflection.
-        Settings settings = ((SessionFactoryImpl)this.SessionFactory).Settings;
+        Settings settings = ((SessionFactoryImpl) this.SessionFactory).Settings;
         ConnectionReleaseMode connReleaseModeOriginal = settings.ConnectionReleaseMode;
         this.setConnectionReleaseModeByReflection(settings, ConnectionReleaseMode.AfterTransaction);
 
@@ -126,11 +121,10 @@ public partial class ConnectionReleaseModeIssue : System.Web.UI.Page, IApplicati
         Assert.AreEqual(1, masterEnt3.SPCDetailEntList.Count, "masterEnt3.SPCDetailEntList.Count");
         Assert.AreEqual(6, ConnectionCreationTrackingDbProvider.Count, "ConnectionCreationTrackingDbProvider.Count");
 
-
         //Renew the conversation.
         this.Conversation.EndConversation();
         this.Conversation.ConversationManager.FreeEnded();
-        this.Conversation = (IConversationState)this.applicationContext.GetObject("convConnectionReleaseModeIssue");
+        this.Conversation = (IConversationState) this.applicationContext.GetObject("convConnectionReleaseModeIssue");
 
         this.setConnectionReleaseModeByReflection(settings, connReleaseModeOriginal);
     }
@@ -149,7 +143,7 @@ public partial class ConnectionReleaseModeIssue : System.Web.UI.Page, IApplicati
     {
         //with conversation and "connection.release_mode" "auto"(AfterTransaction)
         //forcing "auto" by reflection.
-        Settings settings = ((SessionFactoryImpl)this.SessionFactory).Settings;
+        Settings settings = ((SessionFactoryImpl) this.SessionFactory).Settings;
         ConnectionReleaseMode connReleaseModeOriginal = settings.ConnectionReleaseMode;
         this.setConnectionReleaseModeByReflection(settings, ConnectionReleaseMode.AfterTransaction);
 
@@ -167,7 +161,7 @@ public partial class ConnectionReleaseModeIssue : System.Web.UI.Page, IApplicati
     {
         //with NO conversation and "connection.release_mode" "auto"(AfterTransaction)
         //forcing "auto" by reflection.
-        Settings settings = ((SessionFactoryImpl)this.SessionFactory).Settings;
+        Settings settings = ((SessionFactoryImpl) this.SessionFactory).Settings;
         ConnectionReleaseMode connReleaseModeOriginal = settings.ConnectionReleaseMode;
         this.setConnectionReleaseModeByReflection(settings, ConnectionReleaseMode.AfterTransaction);
 
@@ -202,7 +196,7 @@ public partial class ConnectionReleaseModeIssue : System.Web.UI.Page, IApplicati
     private void connection_release_mode_on_close()
     {
         //forcing "on_close" by reflection.
-        Settings settings = ((SessionFactoryImpl)this.SessionFactory).Settings;
+        Settings settings = ((SessionFactoryImpl) this.SessionFactory).Settings;
         ConnectionReleaseMode connReleaseModeOriginal = settings.ConnectionReleaseMode;
         this.setConnectionReleaseModeByReflection(settings, ConnectionReleaseMode.OnClose);
 
@@ -232,7 +226,7 @@ public partial class ConnectionReleaseModeIssue : System.Web.UI.Page, IApplicati
         //Renew the conversation.
         this.Conversation.EndConversation();
         this.Conversation.ConversationManager.FreeEnded();
-        this.Conversation = (IConversationState)this.applicationContext.GetObject("convConnectionReleaseModeIssue");
+        this.Conversation = (IConversationState) this.applicationContext.GetObject("convConnectionReleaseModeIssue");
 
         this.setConnectionReleaseModeByReflection(settings, connReleaseModeOriginal);
     }
@@ -248,15 +242,17 @@ public partial class ConnectionReleaseModeIssue : System.Web.UI.Page, IApplicati
             settings.GetType().GetProperty(
                 "ConnectionReleaseMode",
                 BindingFlags.Public |
-                    BindingFlags.NonPublic |
-                    BindingFlags.SetProperty |
-                    BindingFlags.Instance);
+                BindingFlags.NonPublic |
+                BindingFlags.SetProperty |
+                BindingFlags.Instance);
 
         pInfoConnectionReleaseMode.SetValue(settings, mode, null);
     }
 
     #region IApplicationContextAware Members
+
     private IApplicationContext applicationContext;
+
     public IApplicationContext ApplicationContext
     {
         set { this.applicationContext = value; }

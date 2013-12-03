@@ -44,7 +44,7 @@ namespace Spring.Aop.Framework
         /// <summary>
         /// The method invocation that is to be invoked on the proxy.
         /// </summary>
-        protected MethodInfo proxyMethod;
+        private MethodInfo proxyMethod;
 
         /// <summary>
         /// Creates a new instance of the
@@ -74,6 +74,15 @@ namespace Spring.Aop.Framework
         }
 
         /// <summary>
+        /// The method invocation that is to be invoked on the proxy.
+        /// </summary>
+        protected MethodInfo ProxyMethod
+        {
+            get { return proxyMethod; }
+            set { proxyMethod = value; }
+        }
+
+        /// <summary>
         /// Invokes the joinpoint using dynamic reflection.
         /// </summary>
         /// <remarks>
@@ -90,14 +99,14 @@ namespace Spring.Aop.Framework
         /// <see cref="Spring.Aop.Framework.AbstractMethodInvocation.InvokeJoinpoint"/>
         protected override object InvokeJoinpoint()
 		{
-		    MethodInfo targetMethodInfo = ((this.proxyMethod == null)) ? method : this.proxyMethod;
+		    MethodInfo targetMethodInfo = this.proxyMethod ?? Method;
 
             IDynamicMethod targetMethod = new SafeMethod(targetMethodInfo);
 
 	        try
             {
-                AssertUtils.Understands(target, "target", targetMethodInfo);
-                return targetMethod.Invoke(target, arguments);
+                AssertUtils.Understands(Target, "target", targetMethodInfo);
+                return targetMethod.Invoke(Target, Arguments);
             }
             // Only happens if fallback to standard reflection.
             catch (TargetInvocationException ex)
@@ -119,9 +128,8 @@ namespace Spring.Aop.Framework
         /// </returns>
         protected override IMethodInvocation PrepareMethodInvocationForProceed(IMethodInvocation invocation)
         {
-            DynamicMethodInvocation rmi = new DynamicMethodInvocation(
-                this.proxy, this.target, this.method, this.proxyMethod, this.arguments, this.targetType, this.interceptors);
-            rmi.currentInterceptorIndex = this.currentInterceptorIndex + 1;
+            var rmi = new DynamicMethodInvocation(Proxy, Target, Method, ProxyMethod, Arguments, TargetType, Interceptors);
+            rmi.CurrentInterceptorIndex = CurrentInterceptorIndex + 1;
 
             return rmi;
         }

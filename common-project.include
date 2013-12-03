@@ -53,7 +53,7 @@ ${current.bin.dir}: the binary directory to output the assembly + app.config to
     -->
     <target name="common.init" description="Initializes build properties">
 
-        <property name="assembly.is-cls-compliant" value="false" />
+        <property name="assembly.is-cls-compliant" value="true" />
         <property name="assembly.version" value="1.0.0.0" />
         <property name="assembly.version.informational" value="1.0" />
 

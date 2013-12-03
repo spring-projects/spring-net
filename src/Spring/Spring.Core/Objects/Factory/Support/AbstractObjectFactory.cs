@@ -158,7 +158,7 @@ namespace Spring.Objects.Factory.Support
         /// <summary>
         /// Whether to cache object metadata or rather reobtain it for every access
         /// </summary>
-        protected bool cacheObjectMetadata = true;
+        private bool cacheObjectMetadata = true;
 
 
         /// <summary>
@@ -766,6 +766,7 @@ namespace Spring.Objects.Factory.Support
         protected bool CacheObjectMetadata
         {
             get { return this.cacheObjectMetadata; }
+            set { this.cacheObjectMetadata = value; }
         }
 
         /// <summary>

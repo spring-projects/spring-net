@@ -43,7 +43,7 @@ namespace Spring.Testing.Microsoft
         /// <summary>
         /// Holds the <see cref="AdoTemplate"/> that this base class manages
         /// </summary>
-        protected AdoTemplate adoTemplate;
+        private AdoTemplate adoTemplate;
 
         /// <summary>
         /// Did this test delete any tables? If so, we forbid transaction completion,
@@ -74,6 +74,7 @@ namespace Spring.Testing.Microsoft
         public AdoTemplate AdoTemplate
         {
             get { return adoTemplate; }
+            protected set { adoTemplate = value; }
         }
 
         /// <summary>

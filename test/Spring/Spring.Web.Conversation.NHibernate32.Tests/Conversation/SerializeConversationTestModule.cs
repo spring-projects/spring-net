@@ -20,15 +20,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Web;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
-using System.Runtime.Remoting.Messaging;
 using System.Runtime.Serialization;
 using System.Reflection;
-using Spring.Entities;
 
 namespace Spring.Web.Conversation
 {
@@ -211,9 +207,6 @@ namespace Spring.Web.Conversation
         private static readonly Common.Logging.ILog LOG = Common.Logging.LogManager.GetLogger(typeof(SerializeConversationTestModule));
 
         #endregion
-        public MySerializationSurrogate()
-        {
-        }
 
         #region ISerializationSurrogate Members
 

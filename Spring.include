@@ -237,7 +237,7 @@
     </target>
 
     <target name="common.set-assembly-attribute-values" depends="generate-build-number">
-        <property name="assembly.is-cls-compliant" value="false" />
+        <property name="assembly.is-cls-compliant" value="true" />
 	<property name="assembly.configuration" value="${nant.settings.currentframework}.win32; ${current.build.config}"/>
 	<if test="${nant.settings.currentframework!='mono-2.0'}">
 	  <property name="assembly.product" value="${project.name.full} ${package.version} for .NET ${nant.settings.currentframework.number}" />-->
@@ -273,7 +273,7 @@
 	        <import namespace="System.Reflection" />
 	    </imports>
 	    <attributes>
-	        <attribute type="CLSCompliantAttribute" value="${assembly.is-cls-compliant}" />
+		<attribute type="CLSCompliantAttribute" value="${assembly.is-cls-compliant}" />
 		<attribute type="AssemblyConfigurationAttribute" value="${assembly.configuration}" />
 		<attribute type="AssemblyProductAttribute" value="${assembly.product}" />
 		<attribute type="AssemblyCompanyAttribute" value="${assembly.company}" />

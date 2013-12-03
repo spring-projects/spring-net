@@ -23,7 +23,7 @@ namespace Spring.Testing.NUnit
         /// <summary>
         /// Holds the <see cref="AdoTemplate"/> that this base class manages
         /// </summary>
-        protected AdoTemplate adoTemplate;
+        private AdoTemplate adoTemplate;
 
         /// <summary>
         /// Did this test delete any tables? If so, we forbid transaction completion,
@@ -54,6 +54,7 @@ namespace Spring.Testing.NUnit
         public AdoTemplate AdoTemplate
         {
             get { return adoTemplate; }
+            protected set { adoTemplate = value; }
         }
 
         /// <summary>

@@ -496,6 +496,11 @@ namespace Spring.Messaging.Listener
             return message;
         }
 
+        /// <summary>
+        /// Handles the result of a listener method.
+        /// </summary>
+        /// <param name="result">The result that was returned from listener.</param>
+        /// <param name="request">The original request.</param>
         protected virtual void HandleResult(object result, Message request)
         {
             if (logger.IsDebugEnabled)

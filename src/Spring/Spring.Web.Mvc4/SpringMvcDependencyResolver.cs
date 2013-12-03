@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
@@ -17,7 +16,7 @@ namespace Spring.Web.Mvc
         /// <summary>
         /// The <see cref="IApplicationContext"/> to be used by the resolver
         /// </summary>
-        protected IApplicationContext _context;
+        private IApplicationContext _context;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SpringMvcDependencyResolver"/> class.
@@ -51,6 +50,7 @@ namespace Spring.Web.Mvc
 
                 return _context;
             }
+            protected set { _context = value; }
         }
 
         /// <summary>

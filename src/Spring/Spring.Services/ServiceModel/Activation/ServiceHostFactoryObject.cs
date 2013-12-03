@@ -51,7 +51,7 @@ namespace Spring.ServiceModel.Activation
         /// <summary>
         /// The owning factory.
         /// </summary>
-        protected IObjectFactory objectFactory;
+        private IObjectFactory objectFactory;
 
         /// <summary>
         /// The <see cref="Spring.ServiceModel.SpringServiceHost" /> instance managed by this factory.
@@ -133,6 +133,7 @@ namespace Spring.ServiceModel.Activation
         /// </exception>
         public virtual IObjectFactory ObjectFactory
         {
+            protected get { return this.objectFactory; }
             set { this.objectFactory = value; }
         }
 

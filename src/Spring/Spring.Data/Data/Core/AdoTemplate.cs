@@ -57,7 +57,7 @@ namespace Spring.Data.Core
         private IAdoExceptionTranslator exceptionTranslator;
 
         private bool lazyInit = true;
-        protected Type dataReaderWrapperType;
+        private Type dataReaderWrapperType;
         protected IDynamicConstructor newDataReaderWrapper;
 
         #endregion

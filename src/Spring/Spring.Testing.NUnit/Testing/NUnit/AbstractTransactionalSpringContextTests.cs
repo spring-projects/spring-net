@@ -60,7 +60,7 @@ namespace Spring.Testing.NUnit
         /// <summary>
         /// The transaction manager to use
         /// </summary>
-        protected IPlatformTransactionManager transactionManager;
+        private IPlatformTransactionManager transactionManager;
 
         /// <summary>
         /// Should we roll back by default?
@@ -86,21 +86,14 @@ namespace Spring.Testing.NUnit
         /// <summary>
         /// TransactionStatus for this test. Typical subclasses won't need to use it.
         /// </summary>
-        protected ITransactionStatus transactionStatus;
-
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AbstractTransactionalSpringContextTests"/> class.
-        /// </summary>
-        public AbstractTransactionalSpringContextTests()
-        {
-        }
+        private ITransactionStatus transactionStatus;
 
         /// <summary>
         /// Sets the transaction manager to use.
         /// </summary>
         public IPlatformTransactionManager TransactionManager
         {
+            protected get { return transactionManager; }
             set { transactionManager = value; }
         }
 
@@ -121,6 +114,15 @@ namespace Spring.Testing.NUnit
         protected ITransactionDefinition TransactionDefinition
         {
             set { transactionDefinition = value; }
+        }
+
+        /// <summary>
+        /// TransactionStatus for this test. Typical subclasses won't need to use it.
+        /// </summary>
+        protected ITransactionStatus TransactionStatus
+        {
+            get { return transactionStatus; }
+            set { transactionStatus = value; }
         }
 
         /// <summary>

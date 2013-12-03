@@ -44,7 +44,7 @@ namespace Spring.Aop.Framework
         /// <summary>
         /// The method invocation that is to be invoked on the proxy.
         /// </summary>
-        protected MethodInfo proxyMethod;
+        private MethodInfo proxyMethod;
 
 		/// <summary>
 		/// Creates a new instance of the
@@ -73,7 +73,16 @@ namespace Spring.Aop.Framework
             this.proxyMethod = proxyMethod;
         }
 
-		/// <summary>
+        /// <summary>
+        /// The method invocation that is to be invoked on the proxy.
+        /// </summary>
+	    protected MethodInfo ProxyMethod
+	    {
+	        get { return proxyMethod; }
+	        set { proxyMethod = value; }
+	    }
+
+	    /// <summary>
         /// Invokes the joinpoint using standard reflection.
         /// </summary>
         /// <remarks>
@@ -92,10 +101,10 @@ namespace Spring.Aop.Framework
         {
             try
             {
-                MethodInfo targetMethodInfo = ((this.proxyMethod == null)) ? method : this.proxyMethod;
+                MethodInfo targetMethodInfo = ProxyMethod ?? Method;
                 
-                AssertUtils.Understands(target, "target", targetMethodInfo);
-                return targetMethodInfo.Invoke(target, arguments);
+                AssertUtils.Understands(Target, "target", targetMethodInfo);
+                return targetMethodInfo.Invoke(Target, Arguments);
             }
             catch (TargetInvocationException ex)
             {
@@ -116,9 +125,8 @@ namespace Spring.Aop.Framework
         /// </returns>
         protected override IMethodInvocation PrepareMethodInvocationForProceed(IMethodInvocation invocation)
         {
-            ReflectiveMethodInvocation rmi = new ReflectiveMethodInvocation(
-                this.proxy, this.target, this.method, this.proxyMethod, this.arguments, this.targetType, this.interceptors);
-            rmi.currentInterceptorIndex = this.currentInterceptorIndex + 1;
+            var rmi = new ReflectiveMethodInvocation(Proxy, Target, Method, ProxyMethod, Arguments, TargetType, Interceptors);
+            rmi.CurrentInterceptorIndex = CurrentInterceptorIndex + 1;
 
             return rmi;
         }

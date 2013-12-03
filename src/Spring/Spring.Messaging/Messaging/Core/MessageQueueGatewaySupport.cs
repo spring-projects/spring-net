@@ -19,7 +19,7 @@
 #endregion
 
 using System;
-using Spring.Context;
+
 using Spring.Objects.Factory;
 
 namespace Spring.Messaging.Core
@@ -56,7 +56,11 @@ namespace Spring.Messaging.Core
         }
 
 
-        public void AfterPropertiesSet()
+		/// <summary>
+		/// Invoked by an <see cref="Spring.Objects.Factory.IObjectFactory"/>
+		/// after it has injected all of an object's dependencies.
+		/// </summary>
+		public void AfterPropertiesSet()
         {
             if (this.MessageQueueTemplate == null)
             {

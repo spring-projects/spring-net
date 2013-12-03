@@ -34,7 +34,8 @@ namespace Spring.Template.Velocity
     /// </summary>
     /// <see cref="VelocityEngineFactory"/>
     /// <author>Erez Mazor</author>
-    public class VelocityEngineFactoryObject : VelocityEngineFactory, IFactoryObject, IInitializingObject, IResourceLoaderAware {
+    public class VelocityEngineFactoryObject : VelocityEngineFactory, IFactoryObject, IInitializingObject, IResourceLoaderAware
+    {
         private VelocityEngine velocityEngine;
         /// <summary>
         /// Get the velocity engine underlying object

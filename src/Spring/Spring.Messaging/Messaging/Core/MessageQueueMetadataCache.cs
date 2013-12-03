@@ -8,6 +8,9 @@ using Spring.Objects.Factory;
 
 namespace Spring.Messaging.Core
 {
+    /// <summary>
+    /// Hold cached data for queue's metadata.
+    /// </summary>
     public class MessageQueueMetadataCache : IApplicationContextAware, IInitializingObject
     {
         #region Logging Definition
@@ -24,20 +27,33 @@ namespace Spring.Messaging.Core
 
         private bool isInitialized;
        
+        /// <summary>
+        /// Constructs a new instance of <see cref="MessageQueueMetadataCache"/>.
+        /// </summary>
         public MessageQueueMetadataCache()
         {
         }
 
+        /// <summary>
+        /// Constructs a new instance of <see cref="MessageQueueMetadataCache"/>.
+        /// </summary>
         public MessageQueueMetadataCache(IConfigurableApplicationContext configurableApplicationContext)
         {
             this.configurableApplicationContext = configurableApplicationContext;
         }
 
+        /// <summary>
+        /// Sets the <see cref="Spring.Context.IApplicationContext"/> that this
+        /// object runs in.
+        /// </summary>
         public IApplicationContext ApplicationContext
         {
             set { applicationContext = value; }
         }
 
+        /// <summary>
+        /// Initializes the cache.
+        /// </summary>
         public void Initialize()
         {
             IDictionary<string, MessageQueueFactoryObject> messageQueueDictionary = configurableApplicationContext.GetObjects<MessageQueueFactoryObject>();
@@ -72,7 +88,11 @@ namespace Spring.Messaging.Core
                 isInitialized = true;
             }
         }
-
+	
+		/// <summary>
+		/// Invoked by an <see cref="Spring.Objects.Factory.IObjectFactory"/>
+		/// after it has injected all of an object's dependencies.
+		/// </summary>
         public void AfterPropertiesSet()
         {
             IConfigurableApplicationContext ctx = applicationContext as IConfigurableApplicationContext;
@@ -98,6 +118,9 @@ namespace Spring.Messaging.Core
             }
         }
 
+        /// <summary>
+        /// Returns whether this cache has been initialized yet.
+        /// </summary>
         public bool Initalized
         {
             get
@@ -184,6 +207,9 @@ namespace Spring.Messaging.Core
             }
         }
 
+        /// <summary>
+        /// Inserts metadata to the cache.
+        /// </summary>
         public void Insert(string path, MessageQueueMetadata messageQueueMetadata)
         {
             lock (itemStore.SyncRoot)

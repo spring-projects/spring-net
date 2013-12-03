@@ -47,7 +47,7 @@ namespace Spring.Scheduling.Quartz
         /// <summary>
         /// Logger instance.
         /// </summary>
-        protected readonly ILog logger;
+        private readonly ILog logger;
         private bool overwriteExistingJobs;
 
         private string[] jobSchedulingDataLocations;
@@ -66,7 +66,7 @@ namespace Spring.Scheduling.Quartz
         /// <summary>
         /// Resource loader instance for sub-classes
         /// </summary>
-        protected IResourceLoader resourceLoader;
+        private IResourceLoader resourceLoader;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SchedulerAccessor"/> class.
@@ -244,6 +244,15 @@ namespace Spring.Scheduling.Quartz
         public virtual IResourceLoader ResourceLoader
         {
             set { resourceLoader = value; }
+            protected get { return resourceLoader; }
+        }
+
+        /// <summary>
+        /// Logger instance.
+        /// </summary>
+        protected ILog Logger
+        {
+            get { return logger; }
         }
 
         /// <summary>

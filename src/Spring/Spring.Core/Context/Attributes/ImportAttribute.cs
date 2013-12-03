@@ -37,6 +37,13 @@ namespace Spring.Context.Attributes
     public class ImportAttribute : Attribute
     {
         private Type[] _types;
+        
+        /// <summary>
+        /// Initializes a new instance of the Import class.
+        /// </summary>
+        public ImportAttribute(Type type) : this(new []{ type })
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the Import class.
