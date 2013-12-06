@@ -33,6 +33,8 @@ using System.Threading;
 using System.Web;
 using System.Web.Configuration;
 
+#pragma warning disable 618
+
 namespace Spring
 {
     /// <summary>
@@ -517,3 +519,4 @@ namespace Spring
 //        }
     }
 }
+#pragma warning restore 618

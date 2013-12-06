@@ -56,7 +56,7 @@ namespace Spring.Context.Support
         public void SetUp()
         {
             mocks = new MockRepository();
-            _messageSource = (IMessageSource)mocks.CreateMock(typeof(IMessageSource));
+            _messageSource = mocks.StrictMock<IMessageSource>();
         }
 
         [Test]
@@ -181,8 +181,7 @@ namespace Spring.Context.Support
 		{
 			const string expectedName = "Rick Evans";
 
-		    IMessageSourceResolvable resolvable =
-		        (IMessageSourceResolvable) mocks.CreateMock(typeof (IMessageSourceResolvable));
+		    IMessageSourceResolvable resolvable = mocks.StrictMock<IMessageSourceResolvable>();
 		    Expect.Call(resolvable.DefaultMessage).Return(expectedName);
 		    Expect.Call(resolvable.DefaultMessage).Return(expectedName);          
 

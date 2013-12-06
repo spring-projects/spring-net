@@ -92,10 +92,12 @@ namespace Spring.Objects.Events.Support.Tests
 
 		internal class SimpleEventPublisher
 		{
+#pragma warning disable 67
 			public event Delegate1 MyFirstEvent;
 			public event Delegate2 MySecondEvent;
 			public event Delegate3 MyThirdEvent;
-		}
+#pragma warning restore 67
+        }
 
 		internal class SimpleEventSubscriber
 		{

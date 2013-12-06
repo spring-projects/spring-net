@@ -232,7 +232,7 @@ namespace Spring.Messaging.Nms.Connections
 
         private IConnectionFactory CreateConnectionFactory()
         {
-            IConnectionFactory connectionFactory = (IConnectionFactory)mocks.CreateMock(typeof(IConnectionFactory));
+            IConnectionFactory connectionFactory = mocks.StrictMock<IConnectionFactory>();
             IConnection connection = new TestConnection();
 
             Expect.Call(connectionFactory.CreateConnection()).Return(connection).Repeat.Once();

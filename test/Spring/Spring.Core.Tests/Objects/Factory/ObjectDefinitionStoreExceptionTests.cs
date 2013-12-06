@@ -48,7 +48,7 @@ namespace Spring.Objects.Factory
 		{
 			string expectedName = "bing";
 			string expectedResourceDescription = "mock.resource";			
-		    IResource resource = (IResource) mocks.CreateMock(typeof (IResource));
+		    IResource resource = mocks.StrictMock<IResource>();
 		    Expect.Call(resource.Description).Return(expectedResourceDescription);
             mocks.ReplayAll();		    
 			ObjectDefinitionStoreException inex

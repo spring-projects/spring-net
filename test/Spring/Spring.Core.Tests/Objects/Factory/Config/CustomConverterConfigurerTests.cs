@@ -45,8 +45,7 @@ namespace Spring.Objects.Factory.Config
         public void SetUp()
         {
             mocks = new MockRepository();
-            factory = (IConfigurableListableObjectFactory) 
-                mocks.CreateMock(typeof(IConfigurableListableObjectFactory));
+            factory = mocks.StrictMock<IConfigurableListableObjectFactory>();
 
         }
 

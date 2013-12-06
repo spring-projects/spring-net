@@ -29,6 +29,8 @@ using Spring.Context.Support;
 
 #endregion
 
+#pragma warning disable 618
+
 namespace Spring.Reflection.Dynamic
 {
 	/// <summary>
@@ -152,3 +154,4 @@ namespace Spring.Reflection.Dynamic
 	    
     }
 }
+#pragma warning restore 618

@@ -293,8 +293,8 @@ namespace Spring.Objects.Factory
         [Test]
         public void GetObjectPostProcessorCount()
         {
-            IObjectPostProcessor proc1 = (IObjectPostProcessor) mocks.CreateMock(typeof (IObjectPostProcessor));
-            IObjectPostProcessor proc2 = (IObjectPostProcessor)mocks.CreateMock(typeof(IObjectPostProcessor));
+            IObjectPostProcessor proc1 = mocks.StrictMock<IObjectPostProcessor>();
+            IObjectPostProcessor proc2 = mocks.StrictMock<IObjectPostProcessor>();
 
             DefaultListableObjectFactory lof = new DefaultListableObjectFactory();
 
@@ -316,8 +316,8 @@ namespace Spring.Objects.Factory
         public void GetObjectPostProcessorCountDoesntRespectHierarchy()
         {
 
-            IObjectPostProcessor proc1 = (IObjectPostProcessor)mocks.CreateMock(typeof(IObjectPostProcessor));
-            IObjectPostProcessor proc2 = (IObjectPostProcessor)mocks.CreateMock(typeof(IObjectPostProcessor));
+            IObjectPostProcessor proc1 = mocks.StrictMock<IObjectPostProcessor>();
+            IObjectPostProcessor proc2 = mocks.StrictMock<IObjectPostProcessor>();
 
             DefaultListableObjectFactory child = new DefaultListableObjectFactory();
             DefaultListableObjectFactory parent = new DefaultListableObjectFactory(child);
@@ -1664,7 +1664,7 @@ namespace Spring.Objects.Factory
         [Test]
         public void IgnoreObjectPostProcessorDuplicates()
         {
-            IObjectPostProcessor proc1 = (IObjectPostProcessor)mocks.CreateMock(typeof(IObjectPostProcessor));
+            IObjectPostProcessor proc1 = mocks.StrictMock<IObjectPostProcessor>();
 
             DefaultListableObjectFactory lof = new DefaultListableObjectFactory();
 

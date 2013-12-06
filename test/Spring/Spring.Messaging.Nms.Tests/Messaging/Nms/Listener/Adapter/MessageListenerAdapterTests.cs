@@ -52,7 +52,7 @@ namespace Spring.Messaging.Nms.Listener.Adapter
         public void MessageContentsHandlerForTextMessage()
         {
             int numIterations = 10;
-            ITextMessage message = (ITextMessage)mocks.CreateMock(typeof(ITextMessage));
+            ITextMessage message = mocks.StrictMock<ITextMessage>();
             Expect.Call(message.Text).Return(TEXT).Repeat.Times(numIterations);
             MessageContentsHandler handler = new MessageContentsHandler();
             mocks.ReplayAll();
@@ -71,7 +71,7 @@ namespace Spring.Messaging.Nms.Listener.Adapter
         public void MessageContentsHandlerForBytesMessage()
         {
             int numIterations = 10;
-            IBytesMessage message = (IBytesMessage)mocks.CreateMock(typeof(IBytesMessage));
+            IBytesMessage message = mocks.StrictMock<IBytesMessage>();
             ASCIIEncoding encoding = new ASCIIEncoding();
             byte[] content = encoding.GetBytes("test");
             Expect.Call(message.Content).Return(content).Repeat.Times(numIterations);
@@ -92,12 +92,12 @@ namespace Spring.Messaging.Nms.Listener.Adapter
         public void MessageContentsHandlerOverloadCalls()
         {
             int numIterations = 10;
-            IBytesMessage bytesMessage = (IBytesMessage)mocks.CreateMock(typeof(IBytesMessage));
+            IBytesMessage bytesMessage = mocks.StrictMock<IBytesMessage>();
             ASCIIEncoding encoding = new ASCIIEncoding();
             byte[] content = encoding.GetBytes("test");
             Expect.Call(bytesMessage.Content).Return(content).Repeat.Times(numIterations / 2);
 
-            ITextMessage textMessage = (ITextMessage)mocks.CreateMock(typeof(ITextMessage));
+            ITextMessage textMessage = mocks.StrictMock<ITextMessage>();
             Expect.Call(textMessage.Text).Return(TEXT).Repeat.Times(numIterations/2);
 
             MessageContentsHandler handler = new MessageContentsHandler();

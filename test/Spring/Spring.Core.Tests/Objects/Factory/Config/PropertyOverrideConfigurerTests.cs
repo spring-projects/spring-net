@@ -144,9 +144,8 @@ namespace Spring.Objects.Factory.Config
 		[Test]
 		public void MalformedOverrideKey()
 		{
-			IConfigurableListableObjectFactory objectFactory =
-		        (IConfigurableListableObjectFactory) mocks.CreateMock(typeof (IConfigurableListableObjectFactory));
-		    IConfigurableListableObjectFactory fac = (IConfigurableListableObjectFactory) objectFactory;
+			IConfigurableListableObjectFactory objectFactory = mocks.StrictMock<IConfigurableListableObjectFactory>();
+		    IConfigurableListableObjectFactory fac = objectFactory;
 
 			PropertyOverrideConfigurer cfg = new PropertyOverrideConfigurer();
 			NameValueCollection defaultProperties = new NameValueCollection();
@@ -169,10 +168,9 @@ namespace Spring.Objects.Factory.Config
 		{
 			const string valueTo_NOT_BeOveridden = "Jenny Lewis";
 			TestObject foo = new TestObject(valueTo_NOT_BeOveridden, 30);
-            IConfigurableListableObjectFactory objectFactory =
-                (IConfigurableListableObjectFactory)mocks.CreateMock(typeof(IConfigurableListableObjectFactory));
+            IConfigurableListableObjectFactory objectFactory = mocks.StrictMock<IConfigurableListableObjectFactory>();
 		    Expect.Call(objectFactory.GetObjectDefinition("rubbish")).Return(null);
-		    IConfigurableListableObjectFactory fac = (IConfigurableListableObjectFactory) objectFactory;
+		    IConfigurableListableObjectFactory fac = objectFactory;
 
 			PropertyOverrideConfigurer cfg = new PropertyOverrideConfigurer();
 			NameValueCollection defaultProperties = new NameValueCollection();

@@ -32,7 +32,9 @@ namespace Spring.Util
     {
         internal delegate void PrivilegedCallback();
 
+#pragma warning disable 618
         [SecurityCritical, SecurityTreatAsSafe]
+#pragma warning restore 618
         [MethodImpl(MethodImplOptions.NoInlining)]
         internal static void ExecutePrivileged(IStackWalk permission, PrivilegedCallback callback)
         {

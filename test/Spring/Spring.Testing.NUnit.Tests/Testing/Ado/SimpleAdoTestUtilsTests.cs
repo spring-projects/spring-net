@@ -42,7 +42,7 @@ namespace Spring.Testing.Ado
         public void SetUp()
         {
             mocks = new MockRepository();
-            adoTemplate = (IAdoOperations) mocks.CreateMock(typeof (IAdoOperations));
+            adoTemplate = mocks.StrictMock<IAdoOperations>();
         }
 
         [Test]
@@ -111,9 +111,9 @@ namespace Spring.Testing.Ado
         public void ExecuteScriptTransactedSuccess()
         {
             IDbProvider dbProvider = (IDbProvider) mocks.DynamicMock(typeof(IDbProvider));
-            IDbConnection dbConnection = (IDbConnection) mocks.CreateMock(typeof (IDbConnection));
-            IDbTransaction dbTx = (IDbTransaction) mocks.CreateMock(typeof (IDbTransaction));
-            IDbCommand dbCommand = (IDbCommand) mocks.CreateMock(typeof (IDbCommand));
+            IDbConnection dbConnection = mocks.StrictMock<IDbConnection>();
+            IDbTransaction dbTx = mocks.StrictMock<IDbTransaction>();
+            IDbCommand dbCommand = mocks.StrictMock<IDbCommand>();
             DefaultTransactionDefinition txDefinition = new DefaultTransactionDefinition();
 
             Expect.Call(dbProvider.CreateConnection()).Return(dbConnection);
@@ -142,9 +142,9 @@ namespace Spring.Testing.Ado
         [Test]
         public void ExecuteScriptTransactedRollsbackIfNoCommit()
         {
-            IDbProvider dbProvider = (IDbProvider) mocks.CreateMock(typeof(IDbProvider));
-            IDbConnection dbConnection = (IDbConnection) mocks.CreateMock(typeof (IDbConnection));
-            IDbTransaction dbTx = (IDbTransaction) mocks.CreateMock(typeof (IDbTransaction));
+            IDbProvider dbProvider = mocks.StrictMock<IDbProvider>();
+            IDbConnection dbConnection = mocks.StrictMock<IDbConnection>();
+            IDbTransaction dbTx = mocks.StrictMock<IDbTransaction>();
             DefaultTransactionDefinition txDefinition = new DefaultTransactionDefinition();
 
             Expect.Call(dbProvider.CreateConnection()).Return(dbConnection);

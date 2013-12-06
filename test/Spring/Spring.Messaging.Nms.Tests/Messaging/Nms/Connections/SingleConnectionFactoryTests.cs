@@ -50,7 +50,7 @@ namespace Spring.Messaging.Nms.Connections
         [Test]
         public void UsingConnection()
         {
-            IConnection connection = (IConnection)mocks.CreateMock(typeof(IConnection));
+            IConnection connection = mocks.StrictMock<IConnection>();
 
             connection.Start();
             LastCall.On(connection).Repeat.Twice();
@@ -82,8 +82,8 @@ namespace Spring.Messaging.Nms.Connections
         [Test]
         public void UsingConnectionFactory()
         {
-            IConnectionFactory connectionFactory = (IConnectionFactory)mocks.CreateMock(typeof(IConnectionFactory));
-            IConnection connection = (IConnection)mocks.CreateMock(typeof(IConnection));
+            IConnectionFactory connectionFactory = (IConnectionFactory)mocks.StrictMock<IConnectionFactory>();
+            IConnection connection = mocks.StrictMock<IConnection>();
 
             Expect.Call(connectionFactory.CreateConnection()).Return(connection).Repeat.Once();
             connection.Start();
@@ -112,8 +112,8 @@ namespace Spring.Messaging.Nms.Connections
         [Test]
         public void UsingConnectionFactoryAndClientId()
         {
-            IConnectionFactory connectionFactory = (IConnectionFactory)mocks.CreateMock(typeof(IConnectionFactory));
-            IConnection connection = (IConnection)mocks.CreateMock(typeof(IConnection));
+            IConnectionFactory connectionFactory = mocks.StrictMock<IConnectionFactory>();
+            IConnection connection = mocks.StrictMock<IConnection>();
 
             Expect.Call(connectionFactory.CreateConnection()).Return(connection).Repeat.Once();
             connection.ClientId = "MyId";
@@ -146,8 +146,8 @@ namespace Spring.Messaging.Nms.Connections
         [Test]
         public void UsingConnectionFactoryAndExceptionListener()
         {
-            IConnectionFactory connectionFactory = (IConnectionFactory)mocks.CreateMock(typeof(IConnectionFactory));
-            IConnection connection = (IConnection)mocks.CreateMock(typeof(IConnection));
+            IConnectionFactory connectionFactory = mocks.StrictMock<IConnectionFactory>();
+            IConnection connection = mocks.StrictMock<IConnection>();
 
 
             IExceptionListener listener = new ChainedExceptionListener();
@@ -185,7 +185,7 @@ namespace Spring.Messaging.Nms.Connections
         [Test]
         public void UsingConnectionFactoryAndReconnectOnException()
         {
-            IConnectionFactory connectionFactory = (IConnectionFactory)mocks.CreateMock(typeof(IConnectionFactory));
+            IConnectionFactory connectionFactory = mocks.StrictMock<IConnectionFactory>();
             TestConnection con = new TestConnection();
 
             Expect.Call(connectionFactory.CreateConnection()).Return(con).Repeat.Twice();
@@ -211,7 +211,7 @@ namespace Spring.Messaging.Nms.Connections
         [Test]
         public void UsingConnectionFactoryAndExceptionListenerAndReconnectOnException()
         {
-            IConnectionFactory connectionFactory = (IConnectionFactory)mocks.CreateMock(typeof(IConnectionFactory));
+            IConnectionFactory connectionFactory = mocks.StrictMock<IConnectionFactory>();
             TestConnection con = new TestConnection();
             TestExceptionListener listener = new TestExceptionListener();
 
@@ -240,10 +240,10 @@ namespace Spring.Messaging.Nms.Connections
         [Test]
         public void CachingConnectionFactory()
         {
-            IConnectionFactory connectionFactory = (IConnectionFactory)mocks.CreateMock(typeof(IConnectionFactory));
-            IConnection connection = (IConnection)mocks.CreateMock(typeof(IConnection));
-            ISession txSession = (ISession)mocks.CreateMock(typeof(ISession));
-            ISession nonTxSession = (ISession)mocks.CreateMock(typeof(ISession));
+            IConnectionFactory connectionFactory = mocks.StrictMock<IConnectionFactory>();
+            IConnection connection = mocks.StrictMock<IConnection>();
+            ISession txSession = mocks.StrictMock<ISession>();
+            ISession nonTxSession = mocks.StrictMock<ISession>();
             Expect.Call(connectionFactory.CreateConnection()).Return(connection).Repeat.Once();
 
             Expect.Call(connection.CreateSession(AcknowledgementMode.Transactional)).Return(txSession).Repeat.Once();

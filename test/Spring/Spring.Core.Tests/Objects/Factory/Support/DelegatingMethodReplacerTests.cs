@@ -48,7 +48,7 @@ namespace Spring.Objects.Factory.Support
 		[ExpectedException(typeof (ArgumentNullException))]
 		public void InstantiationWithNullDefinition()
 		{
-		    IObjectFactory factory = (IObjectFactory) mocks.CreateMock(typeof (IObjectFactory));
+		    IObjectFactory factory = mocks.StrictMock<IObjectFactory>();
 		    new DelegatingMethodReplacer(null, factory);
 		}
 
@@ -56,17 +56,16 @@ namespace Spring.Objects.Factory.Support
 		[ExpectedException(typeof (ArgumentNullException))]
 		public void InstantiationWithNullFactory()
 		{
-            IConfigurableObjectDefinition mock = (IConfigurableObjectDefinition) 
-                mocks.CreateMock(typeof(IConfigurableObjectDefinition));
+            IConfigurableObjectDefinition mock = mocks.StrictMock<IConfigurableObjectDefinition>();
             new DelegatingMethodReplacer(mock, null);
 		}
 
 		[Test]
 		public void SunnyDayPath()
 		{
-            IObjectFactory mockFactory = (IObjectFactory) mocks.CreateMock(typeof(IObjectFactory));
-            IConfigurableObjectDefinition mockDefinition = (IConfigurableObjectDefinition) mocks.CreateMock(typeof(IConfigurableObjectDefinition));
-            IMethodReplacer mockReplacer = (IMethodReplacer) mocks.CreateMock(typeof(IMethodReplacer));
+            IObjectFactory mockFactory = mocks.StrictMock<IObjectFactory>();
+            IConfigurableObjectDefinition mockDefinition = mocks.StrictMock<IConfigurableObjectDefinition>();
+            IMethodReplacer mockReplacer = mocks.StrictMock<IMethodReplacer>();
 
             
 			const string ReplacerObjectName = "replacer";

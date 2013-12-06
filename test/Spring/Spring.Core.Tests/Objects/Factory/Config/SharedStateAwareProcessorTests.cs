@@ -114,7 +114,7 @@ namespace Spring.Objects.Factory.Config
             DefaultListableObjectFactory of = new DefaultListableObjectFactory();
 
             MockRepository mocks = new MockRepository();
-            ISharedStateFactory ssf1 = (ISharedStateFactory)mocks.CreateMock( typeof( ISharedStateFactory ) );
+            ISharedStateFactory ssf1 = mocks.StrictMock<ISharedStateFactory>();
             ISharedStateAware ssa = (ISharedStateAware)mocks.DynamicMock( typeof( ISharedStateAware ) );
 
             SharedStateAwareProcessor ssap = new SharedStateAwareProcessor();
@@ -140,10 +140,10 @@ namespace Spring.Objects.Factory.Config
             DefaultListableObjectFactory of = new DefaultListableObjectFactory();
 
             MockRepository mocks = new MockRepository();
-            ISharedStateFactory ssf1 = (ISharedStateFactory)mocks.CreateMock( typeof( ISharedStateFactory ) );
-            ISharedStateFactory ssf2 = (ISharedStateFactory)mocks.CreateMock( typeof( ISharedStateFactory ) );
-            ISharedStateFactory ssf3 = (ISharedStateFactory)mocks.CreateMock( typeof( ISharedStateFactory ) );
-            ISharedStateFactory ssf4 = (ISharedStateFactory)mocks.CreateMock( typeof( ISharedStateFactory ) );
+            ISharedStateFactory ssf1 = mocks.StrictMock<ISharedStateFactory>();
+            ISharedStateFactory ssf2 = mocks.StrictMock<ISharedStateFactory>();
+            ISharedStateFactory ssf3 = mocks.StrictMock<ISharedStateFactory>();
+            ISharedStateFactory ssf4 = mocks.StrictMock<ISharedStateFactory>();
             IDictionary ssf3ProvidedState = new Hashtable();
 
             SharedStateAwareProcessor ssap = new SharedStateAwareProcessor();

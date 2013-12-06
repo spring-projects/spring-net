@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using System.Collections;
 using Apache.NMS;
 using NUnit.Framework;
@@ -75,11 +74,11 @@ namespace Spring.Messaging.Nms.Core
 
         private void CreateMocks()
         {
-            mockConnectionFactory = (IConnectionFactory) mocks.CreateMock(typeof (IConnectionFactory));
-            mockConnection = (IConnection) mocks.CreateMock(typeof (IConnection));
-            mockSession = (ISession) mocks.CreateMock(typeof (ISession));
+            mockConnectionFactory = mocks.StrictMock<IConnectionFactory>();
+            mockConnection = mocks.StrictMock<IConnection>();
+            mockSession = mocks.StrictMock<ISession>();
 
-            IQueue queue = (IQueue) mocks.CreateMock(typeof (IQueue));
+            IQueue queue = mocks.StrictMock<IQueue>();
 
             Expect.Call(mockConnectionFactory.CreateConnection()).Return(mockConnection).Repeat.Once();
             if (UseTransactedTemplate)
@@ -96,7 +95,7 @@ namespace Spring.Messaging.Nms.Core
             Expect.Call(mockSession.Transacted).Return(true);
 
             mockDestinationResolver =
-                (IDestinationResolver) mocks.CreateMock(typeof (IDestinationResolver));
+                mocks.StrictMock<IDestinationResolver>();
             mockDestinationResolver.ResolveDestinationName(mockSession, "testDestination", false);
             LastCall.Return(queue).Repeat.Any();
         }
@@ -107,7 +106,7 @@ namespace Spring.Messaging.Nms.Core
             NmsTemplate template = CreateTemplate();
             template.ConnectionFactory = mockConnectionFactory;
 
-            IMessageProducer mockProducer = (IMessageProducer)mocks.CreateMock(typeof(IMessageProducer));
+            IMessageProducer mockProducer = mocks.StrictMock<IMessageProducer>();
             Expect.Call(mockSession.CreateProducer(null)).Return(mockProducer);
 
             Expect.Call(mockProducer.Priority).Return(MsgPriority.Normal);
@@ -137,7 +136,7 @@ namespace Spring.Messaging.Nms.Core
             template.MessageIdEnabled = false;
             template.MessageTimestampEnabled = false;
 
-            IMessageProducer mockProducer = (IMessageProducer) mocks.CreateMock(typeof (IMessageProducer));
+            IMessageProducer mockProducer = mocks.StrictMock<IMessageProducer>();
             Expect.Call(mockSession.CreateProducer(null)).Return(mockProducer);
 
             mockProducer.DisableMessageID = true;

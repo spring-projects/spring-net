@@ -79,12 +79,12 @@ namespace Spring.Data.NHibernate
         [Test]
         public void TransactionCommit()
         {
-            IDbProvider provider = (IDbProvider)mocks.CreateMock(typeof(IDbProvider));
-            IDbConnection connection = (IDbConnection)mocks.CreateMock(typeof(IDbConnection));
-            ISessionFactory sessionFactory = (ISessionFactory)mocks.CreateMock(typeof(ISessionFactory));
-            ISession session = (ISession)mocks.CreateMock(typeof(ISession));
-            ITransaction transaction = (ITransaction) mocks.CreateMock(typeof (ITransaction));
-            IQuery query = (IQuery) mocks.CreateMock(typeof (IQuery));
+            IDbProvider provider = mocks.StrictMock<IDbProvider>();
+            IDbConnection connection = mocks.StrictMock<IDbConnection>();
+            ISessionFactory sessionFactory = mocks.StrictMock<ISessionFactory>();
+            ISession session = mocks.StrictMock<ISession>();
+            ITransaction transaction = mocks.StrictMock<ITransaction>();
+            IQuery query = mocks.StrictMock<IQuery>();
 
             IList list = new ArrayList();
             list.Add("test");
@@ -143,12 +143,12 @@ namespace Spring.Data.NHibernate
         public void TransactionRollback()
         {
 
-            IDbProvider provider = (IDbProvider)mocks.CreateMock(typeof(IDbProvider));
-            IDbConnection connection = (IDbConnection)mocks.CreateMock(typeof(IDbConnection));
-            ISessionFactory sessionFactory = (ISessionFactory)mocks.CreateMock(typeof(ISessionFactory));
-            ISession session = (ISession)mocks.CreateMock(typeof(ISession));
-            ITransaction transaction = (ITransaction)mocks.CreateMock(typeof(ITransaction));
-            IDbTransaction adoTransaction = (IDbTransaction)mocks.CreateMock(typeof(IDbTransaction));
+            IDbProvider provider = mocks.StrictMock<IDbProvider>();
+            IDbConnection connection = mocks.StrictMock<IDbConnection>();
+            ISessionFactory sessionFactory = mocks.StrictMock<ISessionFactory>();
+            ISession session = mocks.StrictMock<ISession>();
+            ITransaction transaction = mocks.StrictMock<ITransaction>();
+            IDbTransaction adoTransaction = mocks.StrictMock<IDbTransaction>();
 
             using (mocks.Ordered())
             {
@@ -194,11 +194,11 @@ namespace Spring.Data.NHibernate
         [Test]
         public void TransactionRollbackOnly()
         {            
-            IDbConnection connection = (IDbConnection)mocks.CreateMock(typeof(IDbConnection));
-            ISessionFactory sessionFactory = (ISessionFactory)mocks.CreateMock(typeof(ISessionFactory));
-            ISession session = (ISession)mocks.CreateMock(typeof(ISession));
-            ITransaction transaction = (ITransaction)mocks.CreateMock(typeof(ITransaction));
-            IDbTransaction adoTransaction = (IDbTransaction)mocks.CreateMock(typeof(IDbTransaction));
+            IDbConnection connection = mocks.StrictMock<IDbConnection>();
+            ISessionFactory sessionFactory = mocks.StrictMock<ISessionFactory>();
+            ISession session = mocks.StrictMock<ISession>();
+            ITransaction transaction = mocks.StrictMock<ITransaction>();
+            IDbTransaction adoTransaction = mocks.StrictMock<IDbTransaction>();
 
             using (mocks.Ordered())
             {
@@ -239,10 +239,10 @@ namespace Spring.Data.NHibernate
         [Test]
         public void ParticipatingTransactionWithCommit()
         {
-            IDbConnection connection = (IDbConnection) mocks.CreateMock(typeof (IDbConnection));
-            ISessionFactory sessionFactory = (ISessionFactory) mocks.CreateMock(typeof (ISessionFactory));
-            ISession session = (ISession) mocks.CreateMock(typeof (ISession));
-            ITransaction transaction = (ITransaction) mocks.CreateMock(typeof (ITransaction));
+            IDbConnection connection = mocks.StrictMock<IDbConnection>();
+            ISessionFactory sessionFactory = mocks.StrictMock<ISessionFactory>();
+            ISession session = mocks.StrictMock<ISession>();
+            ITransaction transaction = mocks.StrictMock<ITransaction>();
 
             using (mocks.Ordered())
             {
@@ -277,11 +277,11 @@ namespace Spring.Data.NHibernate
         [Test]
         public void ParticipatingTransactionWithRollback()
         {
-            IDbConnection connection = (IDbConnection) mocks.CreateMock(typeof (IDbConnection));
-            ISessionFactory sessionFactory = (ISessionFactory) mocks.CreateMock(typeof (ISessionFactory));
-            ISession session = (ISession) mocks.CreateMock(typeof (ISession));
-            ITransaction transaction = (ITransaction) mocks.CreateMock(typeof (ITransaction));
-            IDbTransaction adoTransaction = (IDbTransaction)mocks.CreateMock(typeof(IDbTransaction));
+            IDbConnection connection = mocks.StrictMock<IDbConnection>();
+            ISessionFactory sessionFactory = mocks.StrictMock<ISessionFactory>();
+            ISession session = mocks.StrictMock<ISession>();
+            ITransaction transaction = mocks.StrictMock<ITransaction>();
+            IDbTransaction adoTransaction = mocks.StrictMock<IDbTransaction>();
 
             using (mocks.Ordered())
             {
@@ -322,11 +322,11 @@ namespace Spring.Data.NHibernate
         [Test]
         public void ParticipatingTransactionWithRollbackOnly()
         {
-            IDbConnection connection = (IDbConnection)mocks.CreateMock(typeof(IDbConnection));
-            ISessionFactory sessionFactory = (ISessionFactory)mocks.CreateMock(typeof(ISessionFactory));
-            ISession session = (ISession)mocks.CreateMock(typeof(ISession));
-            ITransaction transaction = (ITransaction)mocks.CreateMock(typeof(ITransaction));
-            IDbTransaction adoTransaction = (IDbTransaction)mocks.CreateMock(typeof(IDbTransaction));
+            IDbConnection connection = mocks.StrictMock<IDbConnection>();
+            ISessionFactory sessionFactory = mocks.StrictMock<ISessionFactory>();
+            ISession session = mocks.StrictMock<ISession>();
+            ITransaction transaction = mocks.StrictMock<ITransaction>();
+            IDbTransaction adoTransaction = mocks.StrictMock<IDbTransaction>();
 
             using (mocks.Ordered())
             {
@@ -368,11 +368,11 @@ namespace Spring.Data.NHibernate
         [Test]
         public void ParticipatingTransactionWithWithRequiresNew()
         {
-            IDbConnection connection = (IDbConnection)mocks.CreateMock(typeof(IDbConnection));
-            ISessionFactory sessionFactory = (ISessionFactory)mocks.CreateMock(typeof(ISessionFactory));
-            ISession session1 = (ISession)mocks.CreateMock(typeof(ISession));
-            ISession session2 = (ISession)mocks.CreateMock(typeof(ISession));
-            ITransaction transaction = (ITransaction)mocks.CreateMock(typeof(ITransaction));
+            IDbConnection connection = mocks.StrictMock<IDbConnection>();
+            ISessionFactory sessionFactory = mocks.StrictMock<ISessionFactory>();
+            ISession session1 = mocks.StrictMock<ISession>();
+            ISession session2 = mocks.StrictMock<ISession>();
+            ITransaction transaction = mocks.StrictMock<ITransaction>();
 
             //using (mocks.Ordered())
             //{
@@ -418,10 +418,10 @@ namespace Spring.Data.NHibernate
         [Test]
         public void ParticipatingTransactionWithWithNotSupported()
         {
-            IDbConnection connection = (IDbConnection)mocks.CreateMock(typeof(IDbConnection));
-            ISessionFactory sessionFactory = (ISessionFactory)mocks.CreateMock(typeof(ISessionFactory));
-            ISession session = (ISession)mocks.CreateMock(typeof(ISession));
-            ITransaction transaction = (ITransaction)mocks.CreateMock(typeof(ITransaction));
+            IDbConnection connection = mocks.StrictMock<IDbConnection>();
+            ISessionFactory sessionFactory = mocks.StrictMock<ISessionFactory>();
+            ISession session = mocks.StrictMock<ISession>();
+            ITransaction transaction = mocks.StrictMock<ITransaction>();
 
             //using (mocks.Ordered())
             //{
@@ -461,8 +461,8 @@ namespace Spring.Data.NHibernate
         [Test]
         public void TransactionWithPropagationSupports()
         {
-            ISessionFactory sessionFactory = (ISessionFactory)mocks.CreateMock(typeof(ISessionFactory));
-            ISession session = (ISession)mocks.CreateMock(typeof(ISession));
+            ISessionFactory sessionFactory = mocks.StrictMock<ISessionFactory>();
+            ISession session = mocks.StrictMock<ISession>();
 
             Expect.Call(sessionFactory.OpenSession()).Return(session);
             Expect.Call(session.FlushMode).Return(FlushMode.Never);
@@ -500,11 +500,11 @@ namespace Spring.Data.NHibernate
         [Test]
         public void TransactionWithPropagationSupportsAndInnerTransaction()
         {
-            IDbConnection connection = (IDbConnection)mocks.CreateMock(typeof(IDbConnection));
-            ISessionFactory sessionFactory = (ISessionFactory)mocks.CreateMock(typeof(ISessionFactory));
-            ISession session1 = (ISession)mocks.CreateMock(typeof(ISession));
-            ISession session2 = (ISession)mocks.CreateMock(typeof(ISession));
-            ITransaction transaction = (ITransaction)mocks.CreateMock(typeof(ITransaction));
+            IDbConnection connection = mocks.StrictMock<IDbConnection>();
+            ISessionFactory sessionFactory = mocks.StrictMock<ISessionFactory>();
+            ISession session1 = mocks.StrictMock<ISession>();
+            ISession session2 = mocks.StrictMock<ISession>();
+            ITransaction transaction = mocks.StrictMock<ITransaction>();
 
             Expect.Call(sessionFactory.OpenSession()).Return(session1);
             Expect.Call(session1.Connection).Return(connection);
@@ -586,11 +586,11 @@ namespace Spring.Data.NHibernate
             #region Mock Setup
 
             IDbProvider provider = new TestDbProvider();
-            IDbConnection connection = (IDbConnection)mocks.CreateMock(typeof(IDbConnection));
-            ISessionFactory sessionFactory = (ISessionFactory)mocks.CreateMock(typeof(ISessionFactory));
-            ISession session = (ISession)mocks.CreateMock(typeof(ISession));
-            ITransaction transaction = (ITransaction)mocks.CreateMock(typeof(ITransaction));
-            IDbTransaction adoTransaction = (IDbTransaction)mocks.CreateMock(typeof(IDbTransaction));
+            IDbConnection connection = mocks.StrictMock<IDbConnection>();
+            ISessionFactory sessionFactory = mocks.StrictMock<ISessionFactory>();
+            ISession session = mocks.StrictMock<ISession>();
+            ITransaction transaction = mocks.StrictMock<ITransaction>();
+            IDbTransaction adoTransaction = mocks.StrictMock<IDbTransaction>();
             
             Exception rootCause = null;
             using (mocks.Ordered())

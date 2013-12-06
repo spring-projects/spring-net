@@ -1,28 +1,13 @@
 using System;
-using System.Data;
-using System.Configuration;
-using System.Collections;
-using System.Web;
-using System.Web.Security;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-using System.Web.UI.WebControls.WebParts;
-using System.Web.UI.HtmlControls;
-using Spring.Web.Conversation;
-using Spring.Data.NHibernate.Support;
-using NHibernate;
-using Spring.Entities;
-using Spring.Spring.Data.Common;
-using NUnit.Framework;
-using Spring.Bsn;
-using NHibernate.Impl;
-using System.Reflection;
-using NHibernate.Cfg;
-using Spring.Context;
 using System.Collections.Generic;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.IO;
+
 using Spring.Web.Conversation;
+
+using NHibernate;
+using Spring.Entities;
+
 
 /// <summary>
 /// Page for <see cref="Spring.Web.Conversation.WebConversationStateTest.SerializeConversationTest()"/>.

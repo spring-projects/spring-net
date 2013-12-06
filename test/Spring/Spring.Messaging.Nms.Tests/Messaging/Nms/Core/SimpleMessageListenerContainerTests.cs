@@ -63,26 +63,26 @@ namespace Spring.Messaging.Nms.Core
         {
             SimpleMessageConsumer messageConsumer = new SimpleMessageConsumer();
 
-            ISession session = (ISession) mocks.CreateMock(typeof (ISession));
+            ISession session = mocks.StrictMock<ISession>();
             Expect.Call(session.GetQueue(DESTINATION_NAME)).Return(QUEUE_DESTINATION);
             Expect.Call(session.CreateConsumer(QUEUE_DESTINATION, null)).Return(messageConsumer);
             // an exception is thrown, so the rollback logic is being applied here...
             Expect.Call(session.Transacted).Return(false);
 
-            IConnection connection = (IConnection)mocks.CreateMock(typeof(IConnection));
+            IConnection connection = mocks.StrictMock<IConnection>();
             connection.ExceptionListener += container.OnException;
             Expect.Call(connection.CreateSession(container.SessionAcknowledgeMode)).Return(session);
             connection.Start();
             
-            IConnectionFactory connectionFactory = (IConnectionFactory) mocks.CreateMock(typeof (IConnectionFactory));
+            IConnectionFactory connectionFactory = mocks.StrictMock<IConnectionFactory>();
             Expect.Call(connectionFactory.CreateConnection()).Return(connection);
 
             NMSException theException = new NMSException(EXCEPTION_MESSAGE);
 
-            IExceptionListener exceptionListener = (IExceptionListener) mocks.CreateMock(typeof (IExceptionListener));
+            IExceptionListener exceptionListener = mocks.StrictMock<IExceptionListener>();
             exceptionListener.OnException(theException);
 
-            IMessage message = (IMessage) mocks.CreateMock(typeof (IMessage));
+            IMessage message = mocks.StrictMock<IMessage>();
 
             mocks.ReplayAll();
 
@@ -103,26 +103,26 @@ namespace Spring.Messaging.Nms.Core
         {
             SimpleMessageConsumer messageConsumer = new SimpleMessageConsumer();
 
-            ISession session = (ISession)mocks.CreateMock(typeof(ISession));
+            ISession session = mocks.StrictMock<ISession>();
             Expect.Call(session.GetQueue(DESTINATION_NAME)).Return(QUEUE_DESTINATION);
             Expect.Call(session.CreateConsumer(QUEUE_DESTINATION, null)).Return(messageConsumer);
             // an exception is thrown, so the rollback logic is being applied here...
             Expect.Call(session.Transacted).Return(false);
 
-            IConnection connection = (IConnection)mocks.CreateMock(typeof(IConnection));
+            IConnection connection = mocks.StrictMock<IConnection>();
             connection.ExceptionListener += container.OnException;
             Expect.Call(connection.CreateSession(container.SessionAcknowledgeMode)).Return(session);
             connection.Start();
 
-            IConnectionFactory connectionFactory = (IConnectionFactory)mocks.CreateMock(typeof(IConnectionFactory));
+            IConnectionFactory connectionFactory = mocks.StrictMock<IConnectionFactory>();
             Expect.Call(connectionFactory.CreateConnection()).Return(connection);
 
             IllegalStateException theException = new IllegalStateException(EXCEPTION_MESSAGE);
 
-            IErrorHandler errorHandler = (IErrorHandler)mocks.CreateMock(typeof(IErrorHandler));
+            IErrorHandler errorHandler = mocks.StrictMock<IErrorHandler>();
             errorHandler.HandleError(theException);
 
-            IMessage message = (IMessage)mocks.CreateMock(typeof(IMessage));
+            IMessage message = mocks.StrictMock<IMessage>();
 
             mocks.ReplayAll();
 

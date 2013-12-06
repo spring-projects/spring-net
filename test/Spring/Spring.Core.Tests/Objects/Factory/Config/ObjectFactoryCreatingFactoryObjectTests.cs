@@ -48,11 +48,11 @@ namespace Spring.Objects.Factory.Config
 		public void SunnyDay()
 		{
 			TestObject dude = new TestObject("Rick Evans", 30);
-		    IObjectFactory objectFactory = (IObjectFactory) mocks.CreateMock(typeof (IObjectFactory));
+		    IObjectFactory objectFactory = mocks.StrictMock<IObjectFactory>();
 			const string lookupObjectName = "rick";
 		    Expect.Call(objectFactory.GetObject(lookupObjectName)).Return(dude).Repeat.Twice();
 			ObjectFactoryCreatingFactoryObject factory = new ObjectFactoryCreatingFactoryObject();
-		    factory.ObjectFactory = (IObjectFactory) objectFactory;
+		    factory.ObjectFactory = objectFactory;
 			factory.TargetObjectName = lookupObjectName;
 			factory.AfterPropertiesSet();
 
@@ -75,11 +75,11 @@ namespace Spring.Objects.Factory.Config
 		public void PrototypeModeWithSingletonTarget()
 		{
 			TestObject dude = new TestObject("Rick Evans", 30);			
-            IObjectFactory objectFactory = (IObjectFactory)mocks.CreateMock(typeof(IObjectFactory));
+            IObjectFactory objectFactory = mocks.StrictMock<IObjectFactory>();
 			const string lookupObjectName = "rick";
             Expect.Call(objectFactory.GetObject(lookupObjectName)).Return(dude).Repeat.Twice();
 			ObjectFactoryCreatingFactoryObject factory = new ObjectFactoryCreatingFactoryObject();
-		    factory.ObjectFactory = (IObjectFactory) objectFactory;
+		    factory.ObjectFactory = objectFactory;
 			factory.TargetObjectName = lookupObjectName;
 			factory.IsSingleton = false;
 			factory.AfterPropertiesSet();

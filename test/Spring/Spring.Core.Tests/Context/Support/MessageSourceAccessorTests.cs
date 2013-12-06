@@ -55,8 +55,8 @@ namespace Spring.Context.Support
         public void SetUp()
         {
             mocks = new MockRepository();
-            mockMsgSource = (IMessageSource) mocks.CreateMock(typeof(IMessageSource));
-            mockMsgSourceResolvable = (IMessageSourceResolvable) mocks.CreateMock(typeof(IMessageSourceResolvable));
+            mockMsgSource = mocks.StrictMock<IMessageSource>();
+            mockMsgSourceResolvable = mocks.StrictMock<IMessageSourceResolvable>();
         }
 
         [TearDown]

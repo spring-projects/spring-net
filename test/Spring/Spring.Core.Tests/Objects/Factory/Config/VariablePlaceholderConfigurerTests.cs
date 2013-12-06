@@ -301,7 +301,7 @@ namespace Spring.Objects.Factory.Config
             pvs.Add(theProperty, placeholder);
             RootObjectDefinition def = new RootObjectDefinition(typeof(TestObject), pvs);
 
-            IConfigurableListableObjectFactory mock = (IConfigurableListableObjectFactory)mocks.CreateMock(typeof(IConfigurableListableObjectFactory));
+            IConfigurableListableObjectFactory mock = mocks.StrictMock<IConfigurableListableObjectFactory>();
             Expect.Call(mock.GetObjectDefinitionNames(true)).Return(new string[] { defName });
             Expect.Call(mock.GetObjectDefinition(defName, true)).Return(def);
             mocks.ReplayAll();

@@ -46,8 +46,8 @@ namespace Spring.Data.Common
         [Test]
         public void StaticCredentials()
         {
-            IDbProvider dbProvider = (IDbProvider)mocks.CreateMock(typeof(IDbProvider));
-            IDbConnection connection = (IDbConnection)mocks.CreateMock(typeof(IDbConnection));
+            IDbProvider dbProvider = mocks.StrictMock<IDbProvider>();
+            IDbConnection connection = mocks.StrictMock<IDbConnection>();
             using (mocks.Ordered())
             {
                 Expect.Call(dbProvider.CreateConnection()).Return(connection);
@@ -70,8 +70,8 @@ namespace Spring.Data.Common
         [Test]
         public void NoCredentials()
         {
-            IDbProvider dbProvider = (IDbProvider)mocks.CreateMock(typeof(IDbProvider));
-            IDbConnection connection = (IDbConnection)mocks.CreateMock(typeof(IDbConnection));
+            IDbProvider dbProvider = mocks.StrictMock<IDbProvider>();
+            IDbConnection connection = mocks.StrictMock<IDbConnection>();
             using (mocks.Ordered())
             {
                 Expect.Call(dbProvider.CreateConnection()).Return(connection);
@@ -89,8 +89,8 @@ namespace Spring.Data.Common
         [Test]
         public void ThreadBoundCredentials()
         {
-            IDbProvider dbProvider = (IDbProvider)mocks.CreateMock(typeof(IDbProvider));
-            IDbConnection connection = (IDbConnection)mocks.CreateMock(typeof(IDbConnection));
+            IDbProvider dbProvider = mocks.StrictMock<IDbProvider>();
+            IDbConnection connection = mocks.StrictMock<IDbConnection>();
             using (mocks.Ordered())
             {
                 Expect.Call(dbProvider.CreateConnection()).Return(connection);

@@ -45,6 +45,7 @@
     <StartAction>Program</StartAction>
     <StartProgram>$(MSBuildProjectDirectory)\..\..\dependencies\tools\NUnit-2.6.0.12051\bin\nunit-x86.exe</StartProgram>
     <StartArguments>"$(MSBuildProjectDirectory)\$(OutputPath)\$(AssemblyName).dll"</StartArguments>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -53,6 +54,7 @@
     <DefineConstants>TRACE;NET_40</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Common.Logging, Version=2.0.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">

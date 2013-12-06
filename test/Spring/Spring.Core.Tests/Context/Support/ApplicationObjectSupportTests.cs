@@ -85,9 +85,11 @@ namespace Spring.Context.Support
 				get { return new DateTime(); }
 			}
 
+#pragma warning disable 67
 			public event ApplicationEventHandler ContextEvent;
+#pragma warning restore 67
 
-			public long StartupDateMilliseconds
+            public long StartupDateMilliseconds
 			{
 				get { return 0; }
 			}

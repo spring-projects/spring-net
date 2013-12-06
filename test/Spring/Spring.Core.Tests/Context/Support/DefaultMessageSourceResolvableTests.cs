@@ -87,7 +87,7 @@ namespace Spring.Context.Support
 		[Test]
 		public void DefaultResolvableFromExistingResolvable()
 		{
-            IMessageSourceResolvable res = (IMessageSourceResolvable)mocks.CreateMock(typeof(IMessageSourceResolvable));
+            IMessageSourceResolvable res = mocks.StrictMock<IMessageSourceResolvable>();
             Expect.Call(res.DefaultMessage).Return("defaultMessageFromMock").Repeat.AtLeastOnce();
             Expect.Call(res.GetCodes()).Return(new string[] { "code1FromMock" });
             Expect.Call(res.GetArguments()).Return(new object[] { "ArgumentFromMock" }).Repeat.AtLeastOnce();

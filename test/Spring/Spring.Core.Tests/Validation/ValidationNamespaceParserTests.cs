@@ -55,7 +55,9 @@ namespace Spring.Validation
             XmlReaderContext readerContext = new XmlReaderContext(null, new XmlObjectDefinitionReader(registry));
             ObjectDefinitionParserHelper helper = new ObjectDefinitionParserHelper(readerContext);
             helper.InitDefaults(doc.DocumentElement);
+#pragma warning disable 618
             ParserContext parserContext = new ParserContext(helper.ReaderContext, helper);
+#pragma warning restore 618
 
             ValidationNamespaceParser parser = new ValidationNamespaceParser();
             foreach (XmlElement element in doc.DocumentElement.ChildNodes)
@@ -162,7 +164,9 @@ namespace Spring.Validation
             XmlReaderContext readerContext = new XmlReaderContext(null, new XmlObjectDefinitionReader(registry));
             ObjectDefinitionParserHelper helper = new ObjectDefinitionParserHelper(readerContext);
             helper.InitDefaults(doc.DocumentElement);
+#pragma warning disable 618
             ParserContext parserContext = new ParserContext(helper.ReaderContext, helper);
+#pragma warning restore 618
 
             ValidationNamespaceParser parser = new ValidationNamespaceParser();
             foreach (XmlElement element in doc.DocumentElement.ChildNodes)

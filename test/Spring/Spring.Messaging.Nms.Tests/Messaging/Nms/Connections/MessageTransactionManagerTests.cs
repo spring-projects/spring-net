@@ -50,9 +50,9 @@ namespace Spring.Messaging.Nms.Connections
         [Test]
         public void TransactionCommit()
         {
-            IConnectionFactory connectionFactory = (IConnectionFactory) mocks.CreateMock(typeof (IConnectionFactory));
-            IConnection connection = (IConnection) mocks.CreateMock(typeof (IConnection));
-            ISession session = (ISession) mocks.CreateMock(typeof (ISession));
+            IConnectionFactory connectionFactory = mocks.StrictMock<IConnectionFactory>();
+            IConnection connection = mocks.StrictMock<IConnection>();
+            ISession session = mocks.StrictMock<ISession>();
 
             using (mocks.Ordered())
             {
@@ -74,9 +74,9 @@ namespace Spring.Messaging.Nms.Connections
         [Test]
         public void TransactionRollback()
         {
-            IConnectionFactory connectionFactory = (IConnectionFactory) mocks.CreateMock(typeof (IConnectionFactory));
-            IConnection connection = (IConnection) mocks.CreateMock(typeof (IConnection));
-            ISession session = (ISession) mocks.CreateMock(typeof (ISession));
+            IConnectionFactory connectionFactory = mocks.StrictMock<IConnectionFactory>();
+            IConnection connection = mocks.StrictMock<IConnection>();
+            ISession session = mocks.StrictMock<ISession>();
 
             SetupRollbackExpectations(connection, connectionFactory, session);
 
@@ -91,15 +91,12 @@ namespace Spring.Messaging.Nms.Connections
             mocks.VerifyAll();
         }
 
-        /**
-         * TODO because using anonymous delegates - refactor to support .net 1.1 later.
-         */
         [Test]
         public void ParticipatingTransactionWithCommit()
         {
-            IConnectionFactory connectionFactory = (IConnectionFactory)mocks.CreateMock(typeof(IConnectionFactory));
-            IConnection connection = (IConnection)mocks.CreateMock(typeof(IConnection));
-            ISession session = (ISession)mocks.CreateMock(typeof(ISession));
+            IConnectionFactory connectionFactory = mocks.StrictMock<IConnectionFactory>();
+            IConnection connection = mocks.StrictMock<IConnection>();
+            ISession session = mocks.StrictMock<ISession>();
 
             using (mocks.Ordered())
             {
@@ -130,9 +127,9 @@ namespace Spring.Messaging.Nms.Connections
         [Test]
         public void ParticipatingTransactionWithRollback()
         {
-            IConnectionFactory connectionFactory = (IConnectionFactory) mocks.CreateMock(typeof (IConnectionFactory));
-            IConnection connection = (IConnection) mocks.CreateMock(typeof (IConnection));
-            ISession session = (ISession) mocks.CreateMock(typeof (ISession));
+            IConnectionFactory connectionFactory = mocks.StrictMock<IConnectionFactory>();
+            IConnection connection = mocks.StrictMock<IConnection>();
+            ISession session = mocks.StrictMock<ISession>();
 
             using (mocks.Ordered())
             {
@@ -168,10 +165,10 @@ namespace Spring.Messaging.Nms.Connections
         [Test]
         public void SuspendedTransaction()
         {
-            IConnectionFactory connectionFactory = (IConnectionFactory) mocks.CreateMock(typeof (IConnectionFactory));
-            IConnection connection = (IConnection) mocks.CreateMock(typeof (IConnection));
-            ISession session = (ISession) mocks.CreateMock(typeof (ISession));
-            ISession session2 = (ISession)mocks.CreateMock(typeof(ISession));
+            IConnectionFactory connectionFactory = mocks.StrictMock<IConnectionFactory>();
+            IConnection connection = mocks.StrictMock<IConnection>();
+            ISession session = mocks.StrictMock<ISession>();
+            ISession session2 = mocks.StrictMock<ISession>();
 
             Expect.Call(connectionFactory.CreateConnection()).Return(connection).Repeat.Twice();
             Expect.Call(connection.CreateSession(AcknowledgementMode.Transactional)).Return(session).Repeat.Once();
@@ -214,10 +211,10 @@ namespace Spring.Messaging.Nms.Connections
         [Test]
         public void TransactionSuspension()
         {
-            IConnectionFactory connectionFactory = (IConnectionFactory)mocks.CreateMock(typeof(IConnectionFactory));
-            IConnection connection = (IConnection)mocks.CreateMock(typeof(IConnection));
-            ISession session = (ISession)mocks.CreateMock(typeof(ISession));
-            ISession session2 = (ISession)mocks.CreateMock(typeof(ISession));
+            IConnectionFactory connectionFactory = mocks.StrictMock<IConnectionFactory>();
+            IConnection connection = mocks.StrictMock<IConnection>();
+            ISession session = mocks.StrictMock<ISession>();
+            ISession session2 = mocks.StrictMock<ISession>();
 
 
             Expect.Call(connectionFactory.CreateConnection()).Return(connection).Repeat.Twice();

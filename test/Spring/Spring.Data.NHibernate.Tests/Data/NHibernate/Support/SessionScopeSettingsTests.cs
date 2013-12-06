@@ -81,8 +81,8 @@ namespace Spring.Data.NHibernate.Support
         public void WorksAsExpected()
         {
             MockRepository mocks = new MockRepository();
-            ISessionFactory sessionFactory =  (ISessionFactory) mocks.CreateMock(typeof(ISessionFactory));
-            IInterceptor entityInterceptor = (IInterceptor) mocks.CreateMock(typeof(IInterceptor));
+            ISessionFactory sessionFactory =  mocks.StrictMock<ISessionFactory>();
+            IInterceptor entityInterceptor = mocks.StrictMock<IInterceptor>();
             Assert.AreNotEqual( FlushMode.Auto, SessionScopeSettings.FLUSHMODE_DEFAULT ); // ensure noone changed our assumptions
             SessionScopeSettings sss = new SessionScopeSettings(sessionFactory, entityInterceptor, !SessionScopeSettings.SINGLESESSION_DEFAULT, FlushMode.Auto );   
 
@@ -115,8 +115,8 @@ namespace Spring.Data.NHibernate.Support
         public void CallingDefaultConstructorCausesLazyResolvingReferences()
         {
             MockRepository mocks = new MockRepository();
-            ISessionFactory expectedSessionFactory = (ISessionFactory)mocks.CreateMock(typeof(ISessionFactory));
-            IInterceptor expectedEntityInterceptor = (IInterceptor)mocks.CreateMock(typeof(IInterceptor));
+            ISessionFactory expectedSessionFactory = mocks.StrictMock<ISessionFactory>();
+            IInterceptor expectedEntityInterceptor = mocks.StrictMock<IInterceptor>();
 
             SessionScopeSettings sss = new LazyResolvingSessionScopeSettings(expectedSessionFactory, expectedEntityInterceptor);
 
@@ -145,7 +145,7 @@ namespace Spring.Data.NHibernate.Support
         public void MissingEntityInterceptorIsOkDuringLazyResolving()
         {
             MockRepository mocks = new MockRepository();
-            ISessionFactory expectedSessionFactory = (ISessionFactory)mocks.CreateMock(typeof(ISessionFactory));
+            ISessionFactory expectedSessionFactory = mocks.StrictMock<ISessionFactory>();
 
             SessionScopeSettings sss = new LazyResolvingSessionScopeSettings(expectedSessionFactory, null);
 
