@@ -1,6 +1,8 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Web Developer Express 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Northwind.Service.2010", "src\Spring.Northwind.Service\Spring.Northwind.Service.2010.csproj", "{9E15876F-E9E0-43B7-9874-B54F163757D6}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Northwind.Dao.2010", "src\Spring.Northwind.Dao\Spring.Northwind.Dao.2010.csproj", "{7F45EEA2-50AC-44E2-85A6-2FFB02E38C44}"

@@ -94,10 +94,6 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="C5">
-      <Name>C5</Name>
-      <HintPath>..\..\..\..\lib\Quartz21\net\3.5\C5.dll</HintPath>
-    </Reference>
     <Reference Include="Common.Logging">
       <Name>Common.Logging</Name>
       <HintPath>..\..\..\..\lib\net\2.0\Common.Logging.dll</HintPath>
