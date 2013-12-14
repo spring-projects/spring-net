@@ -708,7 +708,6 @@
     <EmbeddedResource Include="Reflection\Dynamic\SafePropertyTests_TestObject.vb" />
     <Compile Include="Reflection\Dynamic\DynamicConstructorTests.cs" />
     <Compile Include="Reflection\Dynamic\DynamicFieldTests.cs" />
-    <Compile Include="Reflection\Dynamic\DynamicIndexerTests.cs" />
     <Compile Include="Reflection\Dynamic\DynamicMethodTests.cs" />
     <Compile Include="Reflection\Dynamic\DynamicPropertyTests.cs" />
     <Compile Include="Reflection\Dynamic\SafeFieldTests.cs" />

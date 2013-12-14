@@ -21,7 +21,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using System.Web;
+
 using Common.Logging;
 using NHibernate;
 using Spring.Context;
@@ -39,13 +39,12 @@ namespace Spring.Web.Conversation
     {
         private static readonly ILog LOG = LogManager.GetLogger(typeof(WebConversationManager));
 
-        private static readonly String CONVERSATION_COOKIE_ID = "WebConversationManager.activeConversationId";
-
         /// <summary>
         /// Semaphore to synchronize writes to the dictionary.
         /// </summary>
         [NonSerialized]
         private Mutex mutexEditDic = new Mutex();
+
         private Mutex MutexEditDic
         {
             get
@@ -209,46 +208,6 @@ namespace Spring.Web.Conversation
                     {
                         convItem.EndConversation();
                     }
-                }
-            }
-        }
-
-        /// <summary>
-        /// <see cref="IConversationManager"/>
-        /// </summary>
-        [Obsolete("Not used, the active conversation is defined by call 'IConversationManager.SetActiveConversation' on 'IConversationState.StartResumeConversation'")]
-        public void LoadActiveConversation()
-        {
-            //reset this.activeConversation
-            this.activeConversation = null;
-
-            if (LOG.IsDebugEnabled) LOG.Debug("LoadActiveConversation");
-
-            HttpCookie activeConveCookie = HttpContext.Current.Request.Cookies[CONVERSATION_COOKIE_ID];
-            if (activeConveCookie != null && !String.IsNullOrEmpty(activeConveCookie.Value))
-            {
-                if (LOG.IsDebugEnabled) LOG.Debug(String.Format("LoadActiveConversation: cooking found for current active conversation: [{0}]", activeConveCookie.ToString()));
-                if (this.conversations.ContainsKey(activeConveCookie.Value))
-                {
-                    if (LOG.IsDebugEnabled) LOG.Debug(String.Format("LoadActiveConversation: active conversation found for id: '{0}'", activeConveCookie.Value));
-                    IConversationState conversation = this.conversations[activeConveCookie.Value];
-                    if (conversation != null)
-                    {
-                        if (LOG.IsDebugEnabled) LOG.Debug(String.Format("LoadActiveConversation: conversation found: '{0}'", conversation.Id));
-                        //find root conversation.
-                        IConversationState rootConversation = conversation;
-                        while (rootConversation.ParentConversation != null)
-                        {
-                            rootConversation = rootConversation.ParentConversation;
-                        }
-                        rootConversation.StartResumeConversation();
-                        this.SetActiveConversation(rootConversation);
-                    }
-                }
-                else
-                {
-                    if (LOG.IsDebugEnabled) LOG.Debug(String.Format("LoadActiveConversation: conversation NOT found for id on the cookie: '{0}'", activeConveCookie.Value));
-                    HttpContext.Current.Response.Cookies.Remove(CONVERSATION_COOKIE_ID);
                 }
             }
         }

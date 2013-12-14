@@ -63,34 +63,6 @@ namespace Spring.Objects.Factory.Xml
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="ParserContext"/> class.
-        /// </summary>
-        /// <param name="readerContext">The reader context.</param>
-        /// <param name="parserHelper">The parser helper.</param>
-        [Obsolete("consider using ParserContext(ObjectDefinitionParserHelper) instead", false)]
-        public ParserContext(XmlReaderContext readerContext, ObjectDefinitionParserHelper parserHelper)
-        {
-            this.readerContext = readerContext;
-            this.parserHelper = parserHelper;
-        }
-
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ParserContext"/> class.
-        /// </summary>
-        /// <param name="readerContext">The reader context.</param>
-        /// <param name="parserHelper">The parser helper.</param>
-        /// <param name="containingObjectDefinition">The containing object definition.</param>
-        [Obsolete("consider using ParserContext(ObjectDefinitionParserHelper, IObjectDefinition) instead", false)]
-        public ParserContext(XmlReaderContext readerContext, ObjectDefinitionParserHelper parserHelper, IObjectDefinition containingObjectDefinition)
-        {
-            this.readerContext = readerContext;
-            this.parserHelper = parserHelper;
-            this.containingObjectDefinition = containingObjectDefinition;
-        }
-
-
-        /// <summary>
         /// Gets the reader context.
         /// </summary>
         /// <value>The reader context.</value>

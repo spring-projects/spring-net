@@ -764,6 +764,7 @@
     <Compile Include="Objects\IObjectMetadataElement.cs" />
     <Compile Include="Objects\ObjectMetadataAttribute.cs" />
     <Compile Include="Objects\ObjectMetadataAttributeAccessor.cs" />
+    <Compile Include="Reflection\Dynamic\DynamicIndexer.cs" />
     <Compile Include="Stereotype\ControllerAttribute.cs" />
     <Compile Include="Util\ConstructorInstantiationInfo.cs" />
     <Compile Include="Objects\Factory\Support\GenericObjectDefinition.cs" />
@@ -1156,7 +1157,6 @@
     <Compile Include="Reflection\Dynamic\BaseDynamicMember.cs" />
     <Compile Include="Reflection\Dynamic\DynamicConstructor.cs" />
     <Compile Include="Reflection\Dynamic\DynamicField.cs" />
-    <Compile Include="Reflection\Dynamic\DynamicIndexer.cs" />
     <Compile Include="Reflection\Dynamic\DynamicMethod.cs" />
     <Compile Include="Reflection\Dynamic\DynamicProperty.cs" />
     <Compile Include="Reflection\Dynamic\DynamicReflectionManager.cs" />

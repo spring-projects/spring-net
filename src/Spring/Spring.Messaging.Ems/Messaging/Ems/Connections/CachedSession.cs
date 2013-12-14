@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Collections;
 using Spring.Messaging.Ems.Common;
 using TIBCO.EMS;
@@ -45,15 +44,15 @@ namespace Spring.Messaging.Ems.Connections
 
         #endregion
 
-        private ISession target;
-        private LinkedList sessionList;
-        private int sessionCacheSize;
-        private IDictionary cachedProducers = new Hashtable();
-        private IDictionary cachedConsumers = new Hashtable();
-        private bool shouldCacheProducers;
-        private bool shouldCacheConsumers;
+        private readonly ISession target;
+        private readonly LinkedList sessionList;
+        private readonly int sessionCacheSize;
+        private readonly IDictionary cachedProducers = new Hashtable();
+        private readonly IDictionary cachedConsumers = new Hashtable();
+        private readonly bool shouldCacheProducers;
+        private readonly bool shouldCacheConsumers;
         private bool transactionOpen = false;
-        private CachingConnectionFactory ccf;
+        private readonly CachingConnectionFactory ccf;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CachedSession"/> class.
@@ -592,19 +591,6 @@ namespace Spring.Messaging.Ems.Connections
             }
         }
 
-        public IMessageListener MessageListener
-        {
-            get { 
-                this.transactionOpen = true;
-                return target.MessageListener;
-            }
-            set
-            {
-                this.transactionOpen = true;
-                target.MessageListener = value;
-            }
-        }
-
         #endregion
 
         /// <summary>
@@ -621,10 +607,10 @@ namespace Spring.Messaging.Ems.Connections
 
     internal class ConsumerCacheKey
     {
-        private Destination destination;
-        private string selector;
-        private bool noLocal;
-        private string subscription;
+        private readonly Destination destination;
+        private readonly string selector;
+        private readonly bool noLocal;
+        private readonly string subscription;
 
         public ConsumerCacheKey(Destination destination, string selector, bool noLocal, string subscription)
         {

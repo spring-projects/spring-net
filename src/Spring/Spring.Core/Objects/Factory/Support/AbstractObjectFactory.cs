@@ -915,24 +915,6 @@ namespace Spring.Objects.Factory.Support
         /// instance itself or its created object in case of an
         /// <see cref="Spring.Objects.Factory.IFactoryObject"/>.
         /// </summary>
-        /// <param name="name">
-        /// The name that may include the factory dereference prefix.
-        /// </param>
-        /// <param name="instance">The object instance.</param>
-        /// <returns>
-        /// The singleton instance of the object.
-        /// </returns>
-        [Obsolete("")]
-        protected internal virtual object GetObjectForInstance(string name, object instance)
-        {
-            return GetObjectForInstance(instance, name, TransformedObjectName(name), null);
-        }
-
-        /// <summary>
-        /// Get the object for the given object instance, either the object
-        /// instance itself or its created object in case of an
-        /// <see cref="Spring.Objects.Factory.IFactoryObject"/>.
-        /// </summary>
         /// <param name="instance">The object instance.</param>
         /// <param name="name">
         /// The name that may include the factory dereference prefix (=the requested name).

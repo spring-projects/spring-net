@@ -20,9 +20,13 @@
 
 using System;
 using System.Collections;
+
 using Spring.Messaging.Ems.Common;
+
 using TIBCO.EMS;
+
 using Common.Logging;
+
 using Spring.Collections;
 using Spring.Util;
 
@@ -61,7 +65,7 @@ namespace Spring.Messaging.Ems.Connections
     {
         #region Logging Definition
 
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(CachingConnectionFactory));
+        private static readonly ILog LOG = LogManager.GetLogger(typeof (CachingConnectionFactory));
 
         #endregion
 
@@ -74,7 +78,6 @@ namespace Spring.Messaging.Ems.Connections
         private volatile bool active = true;
 
         private IDictionary cachedSessions = new Hashtable();
-
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CachingConnectionFactory"/> class.
@@ -94,7 +97,6 @@ namespace Spring.Messaging.Ems.Connections
         {
             ReconnectOnException = true;
         }
-
 
         /// <summary>
         /// Gets or sets the size of the session cache.
@@ -122,7 +124,6 @@ namespace Spring.Messaging.Ems.Connections
             }
         }
 
-
         /// <summary>
         /// Gets or sets a value indicating whether to cache MessageProducers per 
         /// Session instance. (more specifically: one MessageProducer per Destination 
@@ -139,7 +140,6 @@ namespace Spring.Messaging.Ems.Connections
             get { return cacheProducers; }
             set { cacheProducers = value; }
         }
-
 
         /// <summary>
         /// Gets or sets a value indicating whether o cache JMS MessageConsumers per 
@@ -197,7 +197,7 @@ namespace Spring.Messaging.Ems.Connections
                         }
                     }
                 }
-                cachedSessions.Clear();                
+                cachedSessions.Clear();
             }
             this.active = true;
             // Now proceed with actual closing of the shared Connection...
@@ -240,9 +240,10 @@ namespace Spring.Messaging.Ems.Connections
                     LOG.Debug("Found cached Session for mode " + mode + ": "
                               + (session is IDecoratorSession ? ((IDecoratorSession) session).TargetSession : session));
                 }
-            } else
+            }
+            else
             {
-                ISession targetSession = CreateSession(con, mode);              
+                ISession targetSession = CreateSession(con, mode);
                 if (LOG.IsDebugEnabled)
                 {
                     LOG.Debug("Creating cached Session for mode " + mode + ": " + targetSession);
@@ -259,11 +260,10 @@ namespace Spring.Messaging.Ems.Connections
             return con.CreateSession(transacted, ackMode);
         }
 
-
         /// <summary>
         /// Wraps the given Session so that it delegates every method call to the target session but
         /// adapts close calls. This is useful for allowing application code to
-	    /// handle a special framework Session just like an ordinary Session.
+        /// handle a special framework Session just like an ordinary Session.
         /// </summary>
         /// <param name="targetSession">The original Session to wrap.</param>
         /// <param name="sessionList">The List of cached Sessions that the given Session belongs to.</param>
@@ -273,6 +273,4 @@ namespace Spring.Messaging.Ems.Connections
             return new CachedSession(targetSession, sessionList, this);
         }
     }
-
-
 }

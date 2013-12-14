@@ -190,12 +190,6 @@ namespace Spring.Messaging.Ems.Common
             get { return nativeSession.IsTransacted; }
         }
 
-        public IMessageListener MessageListener
-        {
-            get { return nativeSession.MessageListener; }
-            set { nativeSession.MessageListener = value; }
-        }
-
         public long SessID
         {
             get { return nativeSession.SessID; }

@@ -20,6 +20,7 @@
 
 using System;
 using System.ComponentModel;
+
 using TIBCO.EMS;
 
 namespace Spring.Messaging.Ems.Common
@@ -27,48 +28,64 @@ namespace Spring.Messaging.Ems.Common
     public interface ISession
     {
         Session NativeSession { get; }
+
         void Close();
+
         void Commit();
+
         QueueBrowser CreateBrowser(Queue queue);
+
         QueueBrowser CreateBrowser(Queue queue, string messageSelector);
 
         IMessageConsumer CreateConsumer(Destination dest);
+
         IMessageConsumer CreateConsumer(Destination dest, string messageSelector);
+
         IMessageConsumer CreateConsumer(Destination dest, string messageSelector, bool noLocal);
+
         ITopicSubscriber CreateDurableSubscriber(Topic topic, string name);
+
         ITopicSubscriber CreateDurableSubscriber(Topic topic, string name, string messageSelector, bool noLocal);
+
         IMessageProducer CreateProducer(Destination dest);
 
-
         Queue CreateQueue(string queueName);
+
         Topic CreateTopic(string topicName);
+
         TemporaryQueue CreateTemporaryQueue();
+
         TemporaryTopic CreateTemporaryTopic();
 
         Message CreateMessage();
+
         TextMessage CreateTextMessage();
+
         TextMessage CreateTextMessage(string text);
+
         MapMessage CreateMapMessage();
+
         BytesMessage CreateBytesMessage();
+
         ObjectMessage CreateObjectMessage();
+
         ObjectMessage CreateObjectMessage(object obj);
+
         StreamMessage CreateStreamMessage();
 
-
         void Recover();
+
         void Rollback();
 
         [EditorBrowsable(EditorBrowsableState.Never), Obsolete("Ordinary JMS clients should not use this method.")]
         void Run();
 
         void Unsubscribe(string name);
+
         int AcknowledgeMode { get; }
         TIBCO.EMS.Connection Connection { get; }
         bool IsClosed { get; }
         bool IsTransacted { get; }
-
-        [Obsolete("Use MessageConsumer.MessageListener instead.")]
-        IMessageListener MessageListener { get; set; }
 
         long SessID { get; }
         SessionMode SessionAcknowledgeMode { get; }
