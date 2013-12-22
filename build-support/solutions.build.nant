@@ -36,6 +36,10 @@ Rebuilding Solutions using Nant and "solutions.build":
   <readregistry property="net40.install.dir" key="${reg.software.prefix}\NET Framework Setup\NDP\v4\Full\InstallPath" hive="LocalMachine" failonerror="true"/>
 
   <property name="msbuild.exe" value="${net40.install.dir}\msbuild.exe"/>
+  <if test="${file::exists('C:\Program Files (x86)\MSBuild\12.0\Bin\MsBuild.exe')}">
+	<property name="msbuild.exe" value="C:\Program Files (x86)\MSBuild\12.0\Bin\MsBuild.exe" />
+	<echo message="Swithing to installed MSBuild at location ${msbuild.exe}" />
+  </if>
   
   <property name="buildconfiguration" value="Debug" />
 
@@ -48,7 +52,6 @@ Rebuilding Solutions using Nant and "solutions.build":
       command ResGen ..." on "Win 7 64".
       See: http://social.msdn.microsoft.com/Forums/en-US/msbuild/thread/e8c1d26a-5e77-4422-bbc8-f0b7f25702d2/
     -->
-    <property name="msbuild.exe" value="${net40.install.dir}\msbuild.exe"/>
     <call target="RebuildAllSolutions-4.0" />
   </target>
 

@@ -28,6 +28,7 @@
 			<references>
 				<lib>
 					<include name="${nh33.lib.dir}"/>
+					<include name="${iesi33.lib.dir}"/>
 				</lib>
 				<include name="mscorlib.dll"/>
 				<include name="Microsoft.CSharp.dll"/>

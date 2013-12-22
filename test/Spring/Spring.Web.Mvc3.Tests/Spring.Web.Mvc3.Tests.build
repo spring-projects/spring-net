@@ -10,7 +10,14 @@
             * lib.dir                   - framework-specific assembly references
     -->
     <target name="build">
-        <!-- build Spring.Web.Mvc -->
+
+		<copy todir="${current.bin.dir}" flatten="true" overwrite="true">
+            <fileset basedir="${spring.basedir}/packages/">
+                <include name="Microsoft.AspNet.Mvc.3.0.*/**/*.dll" />
+            </fileset>
+		</copy>				
+
+		<!-- build Spring.Web.Mvc -->
         <csc target="library" define="${current.build.defines.csc}" 
 			 warnaserror="true" 
              optimize="${build.optimize}"
@@ -50,10 +57,6 @@
 				
 				<include name="System.Web.Abstractions.dll"/>
 				<include name="System.Web.Routing.dll"/>
-
-				<include name="${programfiles}\Microsoft ASP.NET\ASP.NET MVC 3\Assemblies\System.Web.Mvc.dll" />
-				<include name="${programfilesx86}\Microsoft ASP.NET\ASP.NET MVC 3\Assemblies\System.Web.Mvc.dll" />
-
 				
                 <include name="${current.bin.dir}/*.dll" />
                 <exclude name="${current.bin.dir}/${project::get-name()}.dll" />

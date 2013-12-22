@@ -28,6 +28,7 @@
 			</sources>
 			<references>
 				<lib>
+					<include name="${iesi32.lib.dir}"/>
 					<include name="${nh32.lib.dir}"/>
 				</lib>
 				<include name="mscorlib.dll"/>
@@ -55,6 +56,12 @@
 				<include name="**/*.dll" />
 			</fileset>
 		</copy>
+		<copy todir="${current.bin.dir}" overwrite="true">
+			<fileset basedir="${iesi32.lib.dir}">
+				<include name="**/*.dll" />
+			</fileset>
+		</copy>		
+		
 
 	</target>
 

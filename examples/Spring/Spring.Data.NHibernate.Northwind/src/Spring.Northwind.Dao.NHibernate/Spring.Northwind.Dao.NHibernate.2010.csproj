@@ -57,12 +57,10 @@
       <HintPath>..\..\..\..\..\lib\Net\2.0\Common.Logging.dll</HintPath>
     </Reference>
     <Reference Include="Iesi.Collections">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\lib\NHibernate32\net\4.0\Iesi.Collections.dll</HintPath>
+      <HintPath>..\..\packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\lib\NHibernate32\net\4.0\NHibernate.dll</HintPath>
+      <HintPath>..\..\packages\NHibernate.3.2.0.4000\lib\Net35\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Core">
       <SpecificVersion>False</SpecificVersion>
@@ -129,6 +127,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Dao\DaoConversation.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.

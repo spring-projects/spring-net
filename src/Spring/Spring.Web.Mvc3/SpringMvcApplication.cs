@@ -20,15 +20,9 @@
 
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Web;
 using System.Web.Mvc;
-using Spring.Objects.Factory;
-using Spring.Core.IO;
-using Spring.Objects.Factory.Xml;
-using System.Web.Routing;
+
 using Spring.Context.Support;
 
 namespace Spring.Web.Mvc

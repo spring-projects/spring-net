@@ -27,6 +27,7 @@
 			</sources>
 			<references>
 				<lib>
+					<include name="${iesi32.lib.dir}"/>
 					<include name="${nh32.lib.dir}"/>
 				</lib>
 				<include name="mscorlib.dll"/>

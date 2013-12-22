@@ -50,16 +50,14 @@
     <Reference Include="Common.Logging.Log4Net1211">
       <HintPath>..\..\..\..\..\lib\Net\2.0\Common.Logging.Log4Net1211.dll</HintPath>
     </Reference>
-    <Reference Include="Iesi.Collections, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\lib\NHibernate32\net\4.0\Iesi.Collections.dll</HintPath>
+    <Reference Include="Iesi.Collections">
+      <HintPath>..\..\packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
       <HintPath>..\..\..\..\..\lib\Net\2.0\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate, Version=3.2.0.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\lib\NHibernate32\net\4.0\NHibernate.dll</HintPath>
+    <Reference Include="NHibernate">
+      <HintPath>..\..\packages\NHibernate.3.2.0.4000\lib\Net35\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Aop, Version=0.0.0.35000, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -142,27 +140,21 @@
     <Compile Include="Controller\NHibernateCustomerEditController.cs" />
     <Compile Include="CustomerEditor.aspx.cs">
       <DependentUpon>CustomerEditor.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="CustomerList.aspx.cs">
       <DependentUpon>CustomerList.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="CustomerOrders.aspx.cs">
       <DependentUpon>CustomerOrders.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="CustomerView.aspx.cs">
       <DependentUpon>CustomerView.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="FulfillmentResult.aspx.cs">
       <DependentUpon>FulfillmentResult.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Shared\MasterPage.master.cs">
       <DependentUpon>MasterPage.master</DependentUpon>
@@ -195,6 +187,9 @@
   <ItemGroup>
     <Folder Include="App_Data\" />
     <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="packages.config" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

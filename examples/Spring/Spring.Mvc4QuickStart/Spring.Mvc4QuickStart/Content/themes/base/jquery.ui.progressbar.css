@@ -1,16 +1,28 @@
-/*
- * Note: While Microsoft is not the author of this file, Microsoft is
- * offering you a license subject to the terms of the Microsoft Software
- * License Terms for Microsoft ASP.NET Model View Controller 4 Developer Preview.
- * Microsoft reserves all other rights. The notices below are provided
- * for informational purposes only and are not the license terms under
- * which Microsoft distributed this file.
+/*!
+ * jQuery UI Progressbar 1.10.3
+ * http://jqueryui.com
  *
- * jQuery UI Progressbar 1.8.11
- *
- * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
+ * Copyright 2013 jQuery Foundation and other contributors
+ * Released under the MIT license.
+ * http://jquery.org/license
  *
  * http://docs.jquery.com/UI/Progressbar#theming
  */
-.ui-progressbar { height:2em; text-align: left; }
-.ui-progressbar .ui-progressbar-value {margin: -1px; height:100%; }
+.ui-progressbar {
+	height: 2em;
+	text-align: left;
+	overflow: hidden;
+}
+.ui-progressbar .ui-progressbar-value {
+	margin: -1px;
+	height: 100%;
+}
+.ui-progressbar .ui-progressbar-overlay {
+	background: url("images/animated-overlay.gif");
+	height: 100%;
+	filter: alpha(opacity=25);
+	opacity: 0.25;
+}
+.ui-progressbar-indeterminate .ui-progressbar-value {
+	background-image: none;
+}

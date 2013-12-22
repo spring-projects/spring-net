@@ -48,12 +48,9 @@
 				<include name="${current.bin.dir}/Spring.Aop.dll" />
 				<include name="${current.bin.dir}/Spring.Web.dll" />
 			
-				<include name="${programfiles}\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies\System.Web.Mvc.dll" />
-				<include name="${programfilesx86}\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies\System.Web.Mvc.dll" />
-				<include name="${programfiles}\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies\System.Web.Http.dll" />
-				<include name="${programfilesx86}\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies\System.Web.Http.dll" />
-				<include name="${programfiles}\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies\System.Web.Http.WebHost.dll" />
-				<include name="${programfilesx86}\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies\System.Web.Http.WebHost.dll" />
+				<include name="${spring.basedir}/packages/Microsoft.AspNet.Mvc.4.0.30506.0/lib/net40/System.Web.Mvc.dll" />
+				<include name="${spring.basedir}/packages/Microsoft.AspNet.WebApi.Core.4.0.30506.0/lib/net40/System.Web.Http.dll" />
+				<include name="${spring.basedir}/packages/Microsoft.AspNet.WebApi.WebHost.4.0.30506.0/lib/net40/System.Web.Http.WebHost.dll" />
 				
 			</references>
 		</csc>

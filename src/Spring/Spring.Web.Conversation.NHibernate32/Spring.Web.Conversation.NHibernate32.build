@@ -15,6 +15,12 @@
             <include name="**/*.dll" />
           </fileset>
         </copy>
+		<echo message="${iesi32.lib.dir}" />
+		<copy todir="${current.bin.dir}" overwrite="true">
+			<fileset basedir="${iesi32.lib.dir}">
+				<include name="**/*.dll" />
+			</fileset>
+		</copy>		
 
 		<!-- build Spring.Data.NHibernate -->
 		<csc target="library" define="${current.build.defines.csc}"
