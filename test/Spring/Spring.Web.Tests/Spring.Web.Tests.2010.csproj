@@ -44,6 +44,8 @@
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
     <TargetFrameworkProfile />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>..\..\..\build\VS.Net.2010\Spring.Web.Tests\Debug\</OutputPath>
@@ -160,6 +162,7 @@
     <None Include="Data\Spring\Web\Support\LocalResourceManagerTests\Web.Config" />
     <None Include="Data\Spring\Web\Support\PageHandlerFactoryTests\Web.Config.net-1.1" />
     <None Include="Data\Spring\Web\Support\PageHandlerFactoryTests\Web.Config.net-2.0" />
+    <None Include="packages.config" />
     <None Include="Spring.Web.Tests.build" />
   </ItemGroup>
   <ItemGroup>
@@ -194,9 +197,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\lib\Net\2.0\Common.Logging.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.framework, Version=2.4.1.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77">
+    <Reference Include="nunit.framework, Version=2.6.3.13283, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Net\2.0\nunit.framework.dll</HintPath>
+      <HintPath>..\..\..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="NUnitAsp, Version=1.5.1.27647, Culture=neutral, PublicKeyToken=f9bdb8e9d00f2b23">
       <SpecificVersion>False</SpecificVersion>
@@ -257,4 +260,5 @@
 %25SystemRoot%25\system32\xcopy "$(ProjectDir)Data" ..\..\..\..\build\VS.Net.2010\Spring.Web.Tests\$(ConfigurationName)\ /y /s /q /d
 </PostBuildEvent>
   </PropertyGroup>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
 </Project>

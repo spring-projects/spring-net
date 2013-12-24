@@ -429,6 +429,7 @@ Commandline Examples:
     <property name="nh33.lib.dir" value="${spring.basedir}/packages/NHibernate.3.3.3.4001/lib/Net35"/>
     <property name="iesi33.lib.dir" value="${spring.basedir}/packages/Iesi.Collections.3.3.3.4001/lib/Net35"/>
     <property name="quartz2.lib.dir" value="${spring.basedir}/packages/Quartz.2.2.1/lib/net35"/>
+	<property name="nunit.lib.dir" value="${spring.basedir}/packages/NUnit.2.6.3/lib"/>
 
 	<!-- we use same libs for both 4.0 and 4.5 builds -->
 	<if test="${nant.settings.currentframework == 'net-4.5' or nant.settings.currentframework == 'net-4.5'}">
@@ -644,6 +645,13 @@ Commandline Examples:
         <include name="*.dll"/>
         <include name="*.xml"/>
         <exclude name="nunit.core.*" />
+      </fileset>
+    </copy>
+    <!-- copy nuget libs -->
+    <copy todir="${current.bin.dir}" verbose="${copy-verbose}">
+      <fileset basedir="${nunit.lib.dir}">
+        <include name="*.dll"/>
+        <include name="*.xml"/>
       </fileset>
     </copy>
   </target>
