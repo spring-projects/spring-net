@@ -3835,8 +3835,7 @@ public class MyClassFactory
         singleton and prototype. The element singleton=true refers to
         singleton scope and singleton=false refers to prototype scope. In
         Spring 1.1 the additional web scopes were introduced along with the
-        new elment 'scope'. The scope element is the preferred element to
-        use.</para>
+        new elment 'scope'.</para>
       </note>
 
       <para>In contrast to the other scopes, Spring does not manage the
