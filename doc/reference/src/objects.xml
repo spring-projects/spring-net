@@ -3827,7 +3827,7 @@ public class MyClassFactory
       <para>The following examples defines an object as a prototype in
       XML:</para>
 
-      <programlisting language="myxml">&lt;object id="exampleObject" type="Examples.ExampleObject, ExamplesLibrary" scope="prototype"/&gt;</programlisting>
+      <programlisting language="myxml">&lt;object id="exampleObject" type="Examples.ExampleObject, ExamplesLibrary" singleton="false"/&gt;</programlisting>
 
       <note>
         <para>The <literal>&lt;singleton/&gt;</literal> attribute was
