@@ -50,7 +50,7 @@
       <HintPath>..\..\..\..\..\lib\Net\2.0\Common.Logging.Log4Net1211.dll</HintPath>
     </Reference>
     <Reference Include="log4net">
-      <HintPath>..\..\lib\net\2.0\log4net.dll</HintPath>
+      <HintPath>..\..\..\..\..\lib\Net\4.0\log4net.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Aop">
       <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Aop.dll</HintPath>
@@ -95,6 +95,9 @@
       <Project>{D9FB04E5-D636-4EC2-A3AB-FAB1C4F37827}</Project>
       <Name>Spring.Calculator.Services.2010</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
