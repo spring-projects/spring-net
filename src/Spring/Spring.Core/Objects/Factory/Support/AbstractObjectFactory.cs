@@ -2466,7 +2466,9 @@ namespace Spring.Objects.Factory.Support
             {
                 // copy the keys into a new set, 'cos we are going to modifying the
                 // original collection (_singletonCache) as we destroy each singleton.
-                ISet keys = new HashedSet(singletonCache.Keys);
+                // we also want to traverse the keys in reverse order to destroy correctly
+                ArrayList keys = new ArrayList(singletonCache.Keys);
+                keys.Reverse();
                 foreach (string name in keys)
                 {
                     DestroySingleton(name);
