@@ -27,12 +27,10 @@
         <exclude name="AssemblyInfo.cs" />
       </sources>
       <references basedir="${current.bin.dir}">
-        <include name="System.Data.dll" />
-        <include name="System.EnterpriseServices.dll" />
         <include name="*.dll" />
         <include name="Spring.Messaging.Ems.dll" />
 		<exclude if="${net-4.0}" name="System.Web.Extensions.dll" />
-      </references>
+	  </references>
       <resources prefix="Spring" dynamicprefix="true" failonempty="true">
         <include name="**/*.xml" />
         <include name="**/*.sql" />
