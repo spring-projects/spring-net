@@ -70,6 +70,7 @@
             
                 <include name="${lib.dir}/nunit.core.interfaces.dll" />
 				<exclude name="${current.bin.dir}/System.Web.Extensions.dll" />
+				<exclude name="${current.bin.dir}/System.Net.Http.Formatting.dll" />
 				<exclude name="${current.bin.dir}/Spring.Web.Mvc3.dll" />
 				<exclude name="${current.bin.dir}/Spring.Web.Mvc3.Tests.dll" />
 				<exclude name="${current.bin.dir}/Spring.Web.Mvc4.dll" />
