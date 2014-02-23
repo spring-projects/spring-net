@@ -24,6 +24,8 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -121,7 +123,9 @@
     <Content Include="Web.xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConversationPage.cs" />
+    <Compile Include="ConversationPage.cs">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="CustomerEditor.aspx.designer.cs">
       <DependentUpon>CustomerEditor.aspx</DependentUpon>
     </Compile>
@@ -144,21 +148,27 @@
     <Compile Include="Controller\NHibernateCustomerEditController.cs" />
     <Compile Include="CustomerEditor.aspx.cs">
       <DependentUpon>CustomerEditor.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="CustomerList.aspx.cs">
       <DependentUpon>CustomerList.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="CustomerOrders.aspx.cs">
       <DependentUpon>CustomerOrders.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="CustomerView.aspx.cs">
       <DependentUpon>CustomerView.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Default.aspx.cs">
       <DependentUpon>Default.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="FulfillmentResult.aspx.cs">
       <DependentUpon>FulfillmentResult.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Shared\MasterPage.master.cs">
       <DependentUpon>MasterPage.master</DependentUpon>
@@ -235,4 +245,5 @@
   <PropertyGroup>
     <PostBuildEvent>copy "$(ProjectDir)Web.net40.config"  "$(ProjectDir)Web.config" /Y</PostBuildEvent>
   </PropertyGroup>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
 </Project>
