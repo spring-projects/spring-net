@@ -1,4 +1,5 @@
 @echo off
+call build-support\set-nant-config-per-processor-architecture.cmd
 @echo .
 @echo ..
 @echo ...
