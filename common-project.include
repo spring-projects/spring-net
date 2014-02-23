@@ -340,6 +340,6 @@ ${tool.dir}       : dir for tools
 
   <readregistry property="net35.install.dir" key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.5\InstallPath" hive="LocalMachine" failonerror="true"/>
   <property name="msbuild.exe" value="${net35.install.dir}\msbuild.exe"/>
-  <property name="nunit.console.exe" value="${spring.basedir}/packages/NUnit.Runners.2.6.1/tools/nunit-console.exe" />
+  <property name="nunit.console.exe" value="${spring.basedir}/packages/NUnit.Runners.2.6.1/tools/nunit-console-x86.exe" />
 	
 </project>
