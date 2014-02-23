@@ -100,7 +100,7 @@
       <HintPath>..\packages\Common.Logging.2.1.2\lib\net40\Common.Logging.dll</HintPath>
     </Reference>
     <Reference Include="Quartz">
-      <HintPath>..\packages\Quartz.2.2.1\lib\net40\Quartz.dll</HintPath>
+      <HintPath>..\packages\Quartz.2.2.2\lib\net40\Quartz.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Core">
       <SpecificVersion>False</SpecificVersion>

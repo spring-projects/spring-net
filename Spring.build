@@ -478,13 +478,13 @@ Commandline Examples:
     <property name="iesi32.lib.dir" value="${spring.basedir}/packages/Iesi.Collections.3.2.0.4000/lib/Net35"/>
     <property name="nh33.lib.dir" value="${spring.basedir}/packages/NHibernate.3.3.3.4001/lib/Net35"/>
     <property name="iesi33.lib.dir" value="${spring.basedir}/packages/Iesi.Collections.3.3.3.4001/lib/Net35"/>
-    <property name="quartz2.lib.dir" value="${spring.basedir}/packages/Quartz.2.2.1/lib/net35"/>
+    <property name="quartz2.lib.dir" value="${spring.basedir}/packages/Quartz.2.2.2/lib/net35"/>
 	<property name="nunit.lib.dir" value="${spring.basedir}/packages/NUnit.2.6.3/lib"/>
 
 	<!-- we use same libs for both 4.0 and 4.5 builds -->
 	<if test="${nant.settings.currentframework == 'net-4.5' or nant.settings.currentframework == 'net-4.5'}">
 		<property name="lib.dir" value="${spring.basedir}/lib/net/4.0"/>
-		<property name="quartz2.lib.dir" value="${spring.basedir}/packages/Quartz.2.2.1/lib/net40"/>
+		<property name="quartz2.lib.dir" value="${spring.basedir}/packages/Quartz.2.2.2/lib/net40"/>
 	</if>
 	
 	
