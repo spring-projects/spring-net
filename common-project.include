@@ -248,6 +248,7 @@ ${tool.dir}       : dir for tools
       <arg value="/xml:${test.assemblyname}.dll-TestResults.xml" />
       <arg value="/framework:${nunit.framework.version}" />
       <arg value="/nologo" />
+      <arg value="/noshadow" />
     </exec>
 
   </target>
@@ -289,8 +290,9 @@ ${tool.dir}       : dir for tools
 			<arg path="${nunit.console.exe}" />
 			<arg line="${test.assemblyfile}" />
 			<arg value="/xml:${test.assemblyname}.dll-TestResults.xml" />
+			<arg value="/noshadow" />
 			<arg value="/nologo" />
-            <arg value="/framework:${nunit.framework.version}" />
+			<arg value="/framework:${nunit.framework.version}" />
 		</exec>
 
 <!--
