@@ -328,6 +328,56 @@ Commandline Examples:
 	  commandline="restore ${spring.basedir}\src\Spring\Spring.Web.Mvc5\packages.config -SolutionDirectory ${spring.basedir}" 
 	  workingdir="."
 	  failonerror="true" />
+	<exec 
+	  program=".nuget\nuget.exe"
+	  commandline="restore ${spring.basedir}\test\Spring\Spring.Web.Mvc5.Tests\packages.config -SolutionDirectory ${spring.basedir}" 
+	  workingdir="."
+	  failonerror="true" />
+	<exec 
+	  program=".nuget\nuget.exe"
+	  commandline="restore ${spring.basedir}\examples\Spring\Spring.CodeConfig.Migration\Spring.CodeConfig.Migration.2010.sln" 
+	  workingdir="."
+	  failonerror="true" />
+	<exec 
+	  program=".nuget\nuget.exe"
+	  commandline="restore ${spring.basedir}\examples\Spring\Spring.Data.NHibernate.Northwind\Spring.Northwind.2010.sln" 
+	  workingdir="."
+	  failonerror="true" />
+	<exec 
+	  program=".nuget\nuget.exe"
+	  commandline="restore ${spring.basedir}\examples\Spring\Spring.DataQuickStart\Spring.DataQuickStart.2010.sln" 
+	  workingdir="."
+	  failonerror="true" />
+	<exec 
+	  program=".nuget\nuget.exe"
+	  commandline="restore ${spring.basedir}\examples\Spring\Spring.Mvc3QuickStart\Spring.Mvc3QuickStart.sln" 
+	  workingdir="."
+	  failonerror="true" />
+	<exec 
+	  program=".nuget\nuget.exe"
+	  commandline="restore ${spring.basedir}\examples\Spring\Spring.Mvc4QuickStart\Spring.Mvc4QuickStart.sln" 
+	  workingdir="."
+	  failonerror="true" />
+	<exec 
+	  program=".nuget\nuget.exe"
+	  commandline="restore ${spring.basedir}\examples\Spring\Spring.Mvc5QuickStart\Spring.Mvc5QuickStart.sln" 
+	  workingdir="."
+	  failonerror="true" />
+	 <exec 
+	  program=".nuget\nuget.exe"
+	  commandline="restore ${spring.basedir}\examples\Spring\Spring.Scheduling.Quartz.Example\Spring.Scheduling.Quartz.Example.2010.sln" 
+	  workingdir="."
+	  failonerror="true" />
+	 <exec 
+	  program=".nuget\nuget.exe"
+	  commandline="restore ${spring.basedir}\examples\Spring\Spring.TxQuickStart\Spring.TxQuickStart.2010.sln" 
+	  workingdir="."
+	  failonerror="true" />
+	<exec 
+	  program=".nuget\nuget.exe"
+	  commandline="restore ${spring.basedir}\examples\Spring\SpringAir\SpringAir.2010.sln" 
+	  workingdir="."
+	  failonerror="true" />
   </target>
 
   <target name="compile-build-3.5" description="Builds for .NET 3.5 if available">
@@ -444,7 +494,7 @@ Commandline Examples:
     <nant buildfile="src/Spring/Spring.Core/Spring.Core.build" target="build" />
     <nant buildfile="src/Spring/Spring.Aop/Spring.Aop.build" target="build" if="${build-aop}"/>
     <nant buildfile="src/Spring/Spring.Web/Spring.Web.build" target="build" if="${build-web}"/>
-    <nant buildfile="src/Spring/Spring.Web.Extensions/Spring.Web.Extensions.build" target="build" if="${build-web and (nant.settings.currentframework == 'net-3.5' or nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'mono-2.0')}"/>
+    <nant buildfile="src/Spring/Spring.Web.Extensions/Spring.Web.Extensions.build" target="build" if="${build-web and (nant.settings.currentframework == 'net-3.5' or nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'net-4.5' or nant.settings.currentframework == 'mono-2.0')}"/>
     <nant buildfile="src/Spring/Spring.Web.Mvc3/Spring.Web.Mvc3.build" target="build" if="${nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'net-4.5'}"/>
 	<nant buildfile="src/Spring/Spring.Web.Mvc4/Spring.Web.Mvc4.build" target="build" if="${nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'net-4.5'}"/>
 	<nant buildfile="src/Spring/Spring.Web.Mvc5/Spring.Web.Mvc5.build" target="build" if="${nant.settings.currentframework == 'net-4.5'}"/>
@@ -521,10 +571,12 @@ Commandline Examples:
         depends="set-net-3.5-runtime-configuration, check-spring-basedir, clean-current-bin-dir, restore-nuget-packages">
 		
 	<if test="${property::exists('mstest.exe')}">
-		<property name="mstest.exe.current" value="${string::replace(property::get-value('mstest.exe'), 'Microsoft Visual Studio 10.0', 'Microsoft Visual Studio 9.0')}" />
+		<property name="mstest.exe.current" value="${property::get-value('mstest.exe')}" />
+		<!-- <property name="mstest.exe.current" value="${string::replace(property::get-value('mstest.exe'), 'Microsoft Visual Studio 10.0', 'Microsoft Visual Studio 9.0')}" /> -->
 	</if>
 	<if test="${property::exists('mstest.exe')}">
-		<property name="vs-net.mstest.bin.dir.current" value="${string::replace(property::get-value('vs-net.mstest.bin.dir'), 'Microsoft Visual Studio 10.0', 'Microsoft Visual Studio 9.0')}" />
+		<property name="vs-net.mstest.bin.dir.current" value="${property::get-value('vs-net.mstest.bin.dir')}" />
+		<!-- <property name="vs-net.mstest.bin.dir.current" value="${string::replace(property::get-value('vs-net.mstest.bin.dir'), 'Microsoft Visual Studio 10.0', 'Microsoft Visual Studio 9.0')}" /> -->
 	</if>
 
 	<call target="copykeys" if="${project.build.sign}"/>
@@ -549,10 +601,12 @@ Commandline Examples:
 	<property name="test.withcoverage" value="false" overwrite="true"/>
 	
 	<if test="${property::exists('mstest.exe')}">
-		<property name="mstest.exe.current" value="${string::replace(property::get-value('mstest.exe'), 'Microsoft Visual Studio 9.0', 'Microsoft Visual Studio 10.0')}" />
+		<property name="mstest.exe.current" value="${property::get-value('mstest.exe')}" />
+		<!-- <property name="mstest.exe.current" value="${string::replace(property::get-value('mstest.exe'), 'Microsoft Visual Studio 10.0', 'Microsoft Visual Studio 9.0')}" /> -->
 	</if>
 	<if test="${property::exists('mstest.exe')}">
-		<property name="vs-net.mstest.bin.dir.current" value="${string::replace(property::get-value('vs-net.mstest.bin.dir'), 'Microsoft Visual Studio 9.0', 'Microsoft Visual Studio 10.0')}" />
+		<property name="vs-net.mstest.bin.dir.current" value="${property::get-value('vs-net.mstest.bin.dir')}" />
+		<!-- <property name="vs-net.mstest.bin.dir.current" value="${string::replace(property::get-value('vs-net.mstest.bin.dir'), 'Microsoft Visual Studio 10.0', 'Microsoft Visual Studio 9.0')}" /> -->
 	</if>
 	
 	<call target="copykeys" if="${project.build.sign}"/>
@@ -577,10 +631,12 @@ Commandline Examples:
 	<property name="test.withcoverage" value="false" overwrite="true"/>
 	
 	<if test="${property::exists('mstest.exe')}">
-		<property name="mstest.exe.current" value="${string::replace(property::get-value('mstest.exe'), 'Microsoft Visual Studio 9.0', 'Microsoft Visual Studio 10.0')}" />
+		<property name="mstest.exe.current" value="${property::get-value('mstest.exe')}" />
+		<!-- <property name="mstest.exe.current" value="${string::replace(property::get-value('mstest.exe'), 'Microsoft Visual Studio 10.0', 'Microsoft Visual Studio 9.0')}" /> -->
 	</if>
 	<if test="${property::exists('mstest.exe')}">
-		<property name="vs-net.mstest.bin.dir.current" value="${string::replace(property::get-value('vs-net.mstest.bin.dir'), 'Microsoft Visual Studio 9.0', 'Microsoft Visual Studio 10.0')}" />
+		<property name="vs-net.mstest.bin.dir.current" value="${property::get-value('vs-net.mstest.bin.dir')}" />
+		<!-- <property name="vs-net.mstest.bin.dir.current" value="${string::replace(property::get-value('vs-net.mstest.bin.dir'), 'Microsoft Visual Studio 10.0', 'Microsoft Visual Studio 9.0')}" /> -->
 	</if>
 	
 	<call target="copykeys" if="${project.build.sign}"/>
