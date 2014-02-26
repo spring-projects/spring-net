@@ -64,7 +64,7 @@ namespace Spring.Data.Support
 	    /// </returns>
 	    public DataAccessException Translate(string task, string sql, Exception exception)
 	    {
-	        throw new UncategorizedAdoException(task, sql, "<no error code>", exception);
+	        return new UncategorizedAdoException(task, sql, "<no error code>", exception);
 	    }
 	}
 }
