@@ -436,7 +436,7 @@ namespace Spring.Data.NHibernate
                     ConnectionHolder conHolder = new ConnectionHolder(con, adoTx);
                     if (timeout != DefaultTransactionDefinition.TIMEOUT_DEFAULT)
                     {
-                        conHolder.TimeoutInMillis = definition.TransactionTimeout;
+                        conHolder.TimeoutInSeconds = timeout;
                     }
                     if (log.IsDebugEnabled)
                     {
