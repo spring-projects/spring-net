@@ -638,40 +638,45 @@ namespace Spring.Data.NHibernate
         protected override void DoCommit(DefaultTransactionStatus status)
         {
             HibernateTransactionObject txObject = (HibernateTransactionObject)status.Transaction;
+            SessionHolder sessHolder = txObject.SessionHolder;
             if (status.Debug)
             {
                 log.Debug("Committing Hibernate transaction on Session [" +
-                    txObject.SessionHolder.Session + "]");
+                    sessHolder.Session + "]");
             }
             try
             {
-                txObject.SessionHolder.Transaction.Commit();
+                // Since the NHibernate ITransaction API does note support explicit timeout
+                // handling we check it ourselves before attempting to commit the transaction.
+                if (sessHolder.HasTimeout)
+                {
+                    sessHolder.CheckTransactionTimeout();
+                    // If the flush mode indicates that the session will be automatically
+                    // flushed on commit we flush it ourselves and check the transaction
+                    // timeout again - flushing all pending changes could take a long time.
+                    FlushMode flushMode = sessHolder.Session.FlushMode;
+                    if (flushMode == FlushMode.Auto || flushMode == FlushMode.Commit) 
+                    {
+                        sessHolder.Session.Flush();
+                        sessHolder.CheckTransactionTimeout();
+                    }
+                }
+                sessHolder.Transaction.Commit();
             }
-            // Note, unfortunate collision of namespaces/classname for NHibernate.TransactionException
-            // and Spring.Data.NHibernate requires this wierd construct.
-            catch (Exception ex)
+            catch (global::NHibernate.TransactionException ex)
             {
-                Type nhibTxExceptiontype = TypeResolutionUtils.ResolveType("NHibernate.TransactionException, NHibernate");
-                if (ex.GetType().Equals(nhibTxExceptiontype))
-                {
-                    // assumably from commit call to the underlying ADO.NET connection
-                    throw new TransactionSystemException("Could not commit Hibernate transaction", ex);
-                }
-                HibernateException hibEx = ex as HibernateException;
-                if (hibEx != null)
-                {
-                    // assumably failed to flush changes to database
-                    throw ConvertHibernateAccessException(hibEx);
-                }
-                throw;
+                // assumably from commit call to the underlying ADO.NET connection
+                throw new TransactionSystemException("Could not commit Hibernate transaction", ex);
+            }
+            catch (HibernateException ex) 
+            {
+                // assumably failed to flush changes to database
+                throw ConvertHibernateAccessException(ex);
             }
             finally
             {
                 DoTxScopeCommit(status);
             }
-
-
-
         }
 
         /// <summary>

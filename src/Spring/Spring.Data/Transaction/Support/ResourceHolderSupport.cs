@@ -86,13 +86,14 @@ namespace Spring.Transaction.Support
 		/// <exception cref="System.ArgumentException">
 		/// If no deadline has been set.
 		/// </exception>
-		public int TimeToLiveInSeconds
+        /// <exception cref="Spring.Transaction.TransactionTimedOutException">
+        /// If the transaction deadline has passed.
+        /// </exception>
+        public int TimeToLiveInSeconds
 		{
 			get
 			{
-			    int secs = (int)Math.Ceiling( TimeToLiveInMilliseconds / 1000 );
-                checkTransactionTimeout(secs <= 0);
-                return secs;
+			    return (int)Math.Ceiling( TimeToLiveInMilliseconds / 1000 );
 			}
 		}
 
@@ -102,6 +103,9 @@ namespace Spring.Transaction.Support
 		/// <exception cref="System.ArgumentException">
 		/// If no deadline has been set.
 		/// </exception>
+        /// <exception cref="Spring.Transaction.TransactionTimedOutException">
+        /// If the transaction deadline has passed.
+        /// </exception>
 		public double TimeToLiveInMilliseconds
 		{
 			get
@@ -110,16 +114,7 @@ namespace Spring.Transaction.Support
 				{
 					throw new ArgumentException( "No deadline specified for this resource holder.");
 				}
-                TimeSpan duration = deadline - DateTime.Now;
-                checkTransactionTimeout(duration.TotalMilliseconds <= 0);
-			    if (duration.TotalMilliseconds > 0)
-			    {
-                    return duration.TotalMilliseconds;
-			    }
-			    else
-			    {
-                    return 0;
-			    }
+                return CheckTransactionTimeout().TotalMilliseconds;
 			}
 		}
 
@@ -147,13 +142,32 @@ namespace Spring.Transaction.Support
             }
         }
 
-        private void checkTransactionTimeout(bool deadlineReached)
+        /// <summary>
+        /// Checks if the transaction deadline has been passed and raises an 
+        /// exception if it has.
+        /// </summary>
+        /// <returns>
+        /// The duration left until the transaction deadline has been passed.
+        /// </returns>
+        /// <exception cref="System.InvalidOperationException">
+        /// If no deadline has been set.
+        /// </exception>
+        /// <exception cref="Spring.Transaction.TransactionTimedOutException">
+        /// If the transaction deadline has passed.
+        /// </exception>
+        public TimeSpan CheckTransactionTimeout()
         {
-            if (deadlineReached)
+            if (!HasTimeout)
+            {
+                throw new InvalidOperationException("No deadline specified for this resource holder.");
+            }
+            TimeSpan duaration = deadline - DateTime.Now;
+            if (duaration.TotalMilliseconds <= 0)
             {
                 RollbackOnly = true;
                 throw new TransactionTimedOutException("Transaction timed out: deadline was " + Deadline);
             }
+            return duaration;
         }
 
 
