@@ -77,7 +77,9 @@ namespace Spring.Data.NHibernate
         }
 
         [Test]
-        public void TransactionCommit()
+        [TestCase(true)]
+        [TestCase(false)]
+        public void TransactionCommit(bool useTimeout)
         {
             IDbProvider provider = mocks.StrictMock<IDbProvider>();
             IDbConnection connection = mocks.StrictMock<IDbConnection>();
@@ -95,7 +97,17 @@ namespace Spring.Data.NHibernate
                 Expect.Call(session.BeginTransaction(IsolationLevel.Serializable)).Return(transaction);
                 Expect.Call(session.IsOpen).Return(true);
                 Expect.Call(session.CreateQuery("some query string")).Return(query);
+                if (useTimeout)
+                {
+                    Expect.Call(query.SetTimeout(10));
+                }
                 Expect.Call(query.List()).Return(list);
+                if (useTimeout)
+                {
+                    Expect.Call(session.FlushMode).Return(FlushMode.Auto);
+                    session.Flush();
+                    LastCall.On(session).Repeat.Once();
+                }
                 transaction.Commit();
                 LastCall.On(transaction).Repeat.Once();
                 Expect.Call(session.Close()).Return(null);
@@ -118,6 +130,10 @@ namespace Spring.Data.NHibernate
             TransactionTemplate tt = new TransactionTemplate(tm);
 
             tt.TransactionIsolationLevel = IsolationLevel.Serializable;
+            if (useTimeout) 
+            {
+                tt.TransactionTimeout = 10;
+            }
 
             Assert.IsFalse(TransactionSynchronizationManager.HasResource(sfProxy),"Hasn't thread session");
             Assert.IsFalse(TransactionSynchronizationManager.HasResource(provider), "Hasn't thread db provider");
@@ -138,6 +154,55 @@ namespace Spring.Data.NHibernate
 
         }
 
+        [Test, ExpectedException(typeof(TransactionTimedOutException))]
+        public void TransactionTimeout() 
+        {
+            IDbProvider provider = mocks.StrictMock<IDbProvider>();
+            IDbConnection connection = mocks.StrictMock<IDbConnection>();
+            ISessionFactory sessionFactory = mocks.StrictMock<ISessionFactory>();
+            ISession session = mocks.StrictMock<ISession>();
+            ITransaction transaction = mocks.StrictMock<ITransaction>();
+
+            using (mocks.Ordered()) {
+                Expect.Call(sessionFactory.OpenSession()).Return(session);
+                Expect.Call(session.Connection).Return(connection);
+                Expect.Call(session.BeginTransaction(IsolationLevel.Serializable)).Return(transaction);
+                Expect.Call(session.Close()).Return(null);
+            }
+
+            mocks.ReplayAll();
+
+            LocalSessionFactoryObjectStub lsfo = new LocalSessionFactoryObjectStub(sessionFactory);
+            lsfo.AfterPropertiesSet();
+
+            ISessionFactory sfProxy = lsfo.GetObject() as ISessionFactory;
+            Assert.IsNotNull(sfProxy);
+
+            HibernateTransactionManager tm = new HibernateTransactionManager();
+            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
+            tm.AdoExceptionTranslator = new FallbackExceptionTranslator();
+            tm.SessionFactory = sfProxy;
+            tm.DbProvider = provider;
+            TransactionTemplate tt = new TransactionTemplate(tm);
+
+            tt.TransactionIsolationLevel = IsolationLevel.Serializable;
+            tt.TransactionTimeout = 1;
+
+            Assert.IsFalse(TransactionSynchronizationManager.HasResource(sfProxy), "Hasn't thread session");
+            Assert.IsFalse(TransactionSynchronizationManager.HasResource(provider), "Hasn't thread db provider");
+            Assert.IsFalse(TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
+            Assert.IsFalse(TransactionSynchronizationManager.ActualTransactionActive, "Actual transaction not active");
+
+            try 
+            {
+                tt.Execute(new TransactionTimeoutTxCallback());
+            } 
+            catch 
+            {
+                mocks.VerifyAll();
+                throw;
+            }
+        }
 
         [Test]
         public void TransactionRollback()
@@ -696,6 +761,19 @@ namespace Spring.Data.NHibernate
         protected override ISessionFactory NewSessionFactory(Configuration config)
         {
             return sf;
+        }
+    }
+
+    #endregion
+
+    #region Supporting classes for test TransactionTimeout
+
+    public class TransactionTimeoutTxCallback : ITransactionCallback 
+    {
+        public object DoInTransaction(ITransactionStatus status) 
+        {
+            System.Threading.Thread.Sleep(1100);
+            return null;
         }
     }
 
