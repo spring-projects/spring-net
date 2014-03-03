@@ -23,7 +23,7 @@ Build properties that may be set:
   signs all assemblies. Requires the key file $/Spring.Net.snk to be in place
 
 "mstest.exe":
-  value: string, fully-qualiifed location of mstest.exe, for example, C:\Program Files\Microsoft Visual Studio 9.0\Common7\IDE\mstest.exe
+  value: string, fully-qualified location of mstest.exe, for example, C:\Program Files\Microsoft Visual Studio 9.0\Common7\IDE\mstest.exe
 
 "vs-net.mstest.bin.dir":
   value: string: location of mstest.exe, for example C:\Program Files\Microsoft Visual Studio 9.0\Common7\IDE
@@ -325,16 +325,6 @@ Commandline Examples:
 	  failonerror="true" />
 	<exec 
 	  program=".nuget\nuget.exe"
-	  commandline="restore ${spring.basedir}\src\Spring\Spring.Web.Mvc5\packages.config -SolutionDirectory ${spring.basedir}" 
-	  workingdir="."
-	  failonerror="true" />
-	<exec 
-	  program=".nuget\nuget.exe"
-	  commandline="restore ${spring.basedir}\test\Spring\Spring.Web.Mvc5.Tests\packages.config -SolutionDirectory ${spring.basedir}" 
-	  workingdir="."
-	  failonerror="true" />
-	<exec 
-	  program=".nuget\nuget.exe"
 	  commandline="restore ${spring.basedir}\examples\Spring\Spring.CodeConfig.Migration\Spring.CodeConfig.Migration.2010.sln" 
 	  workingdir="."
 	  failonerror="true" />
@@ -373,7 +363,12 @@ Commandline Examples:
 	  commandline="restore ${spring.basedir}\examples\Spring\Spring.TxQuickStart\Spring.TxQuickStart.2010.sln" 
 	  workingdir="."
 	  failonerror="true" />
-	<exec 
+	 <exec 
+	  program=".nuget\nuget.exe"
+	  commandline="restore ${spring.basedir}\examples\Spring\Spring.WebQuickStart\Spring.WebQuickStart.2010.sln" 
+	  workingdir="."
+	  failonerror="true" />
+	  <exec 
 	  program=".nuget\nuget.exe"
 	  commandline="restore ${spring.basedir}\examples\Spring\SpringAir\SpringAir.2010.sln" 
 	  workingdir="."
@@ -533,7 +528,7 @@ Commandline Examples:
 	<nant buildfile="test/Spring/Spring.Web.Mvc4.Tests/Spring.Web.Mvc4.Tests.build" target="test" if="${build-web and nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'net-4.5'}"/>
 	<nant buildfile="test/Spring/Spring.Web.Mvc5.Tests/Spring.Web.Mvc5.Tests.build" target="test" if="${build-web and nant.settings.currentframework == 'net-4.5'}"/>
     <nant buildfile="test/Spring/Spring.Testing.NUnit.Tests/Spring.Testing.NUnit.Tests.build" target="test" if="${build-testing-nunit}"/>
-    <nant buildfile="test/Spring/Spring.Testing.Microsoft.Tests/Spring.Testing.Microsoft.Tests.build" target="test" if="${build-testing-microsoft}"/>
+    <nant buildfile="test/Spring/Spring.Testing.Microsoft.Tests/Spring.Testing.Microsoft.Tests.build" target="test" if="${run-testing-microsoft and build-testing-microsoft}"/>
     <nant buildfile="test/Spring/Spring.Messaging.Ems.Tests/Spring.Messaging.Ems.Tests.build" target="test" if="${build-ems}"/>
     <nant buildfile="test/Spring/Spring.Messaging.Ems.Integration.Tests/Spring.Messaging.Ems.Integration.Tests.build" target="test" if="${build-ems}"/>
     <nant buildfile="test/Spring/Spring.Messaging.Nms.Tests/Spring.Messaging.Nms.Tests.build" target="test" if="${build-nms}"/>
@@ -1756,6 +1751,7 @@ Commandline Examples:
     <property name="build-testing-nunit" value="true" />
     <property name="build-testing-microsoft" value="false" />
     <property name="build-testing-microsoft" value="${property::exists('mstest.exe')}" />
+    <property name="run-testing-microsoft" value="${not property::exists('skipmstestrun')}" />
     <property name="build-web" value="true" />
     <property name="build-nms" value="true" />
     <property name="build-ems" value="${file::exists('lib/net/2.0/tibco.ems.dll')}" />
@@ -1796,6 +1792,7 @@ Commandline Examples:
     <property name="build-testing-nunit" value="true"/>
     <property name="build-testing-microsoft" value="false" />
     <property name="build-testing-microsoft" value="${property::exists('mstest.exe')}" />
+    <property name="run-testing-microsoft" value="${not property::exists('skipmstestrun')}" />
     <property name="build-web" value="true"/>
     <property name="build-examples" value="true"/>
     <property name="build-nms" value="true" />
