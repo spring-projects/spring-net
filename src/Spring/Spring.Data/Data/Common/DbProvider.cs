@@ -20,6 +20,7 @@
 
 using System;
 using System.Data;
+
 using Spring.Expressions;
 using Spring.Reflection.Dynamic;
 using Spring.Util;
@@ -32,12 +33,13 @@ namespace Spring.Data.Common
     public class DbProvider : IDbProvider
     {
         private string connectionString;
-        private IDbMetadata dbMetadata;
-        private IDynamicConstructor newCommand;
-        private IDynamicConstructor newConnection;
-        private IDynamicConstructor newCommandBuilder;
-        private IDynamicConstructor newDataAdapter;
-        private IDynamicConstructor newParameter;
+        private readonly IDbMetadata dbMetadata;
+        private readonly IDynamicConstructor newCommand;
+        private readonly IDynamicProperty commandBindByName;
+        private readonly IDynamicConstructor newConnection;
+        private readonly IDynamicConstructor newCommandBuilder;
+        private readonly IDynamicConstructor newDataAdapter;
+        private readonly IDynamicConstructor newParameter;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DbProvider"/> class.
@@ -47,6 +49,14 @@ namespace Spring.Data.Common
         {
             this.dbMetadata = dbMetadata;
             newCommand = DynamicConstructor.Create(dbMetadata.CommandType.GetConstructor(Type.EmptyTypes));
+            
+            // Oracle needs custom bind by name property set to true as it's false by default
+            var bindByNameProperty = dbMetadata.CommandType.GetProperty("BindByName");
+            if (bindByNameProperty != null && bindByNameProperty.CanWrite)
+            {
+                commandBindByName = DynamicProperty.Create(bindByNameProperty);
+            }
+
             newConnection = DynamicConstructor.Create(dbMetadata.ConnectionType.GetConstructor(Type.EmptyTypes));
             newCommandBuilder = DynamicConstructor.Create(dbMetadata.CommandBuilderType.GetConstructor(Type.EmptyTypes));
             newDataAdapter = DynamicConstructor.Create(dbMetadata.DataAdapterType.GetConstructor(Type.EmptyTypes));
@@ -60,7 +70,12 @@ namespace Spring.Data.Common
         /// <returns>An new <see cref="IDbCommand"/></returns>
         public IDbCommand CreateCommand()
         {
-            return newCommand.Invoke(ObjectUtils.EmptyObjects) as IDbCommand;          
+            var command = newCommand.Invoke(ObjectUtils.EmptyObjects) as IDbCommand;
+            if (command != null && commandBindByName != null)
+            {
+                commandBindByName.SetValue(command, dbMetadata.BindByName);
+            }
+            return command;
         }
 
         /// <summary>
@@ -188,19 +203,15 @@ namespace Spring.Data.Common
         /// <returns>The provider specific error code</returns>
         public string ExtractError(Exception e)
         {
-    
             if (!StringUtils.IsNullOrEmpty(dbMetadata.ErrorCodeExceptionExpression))
             {
                 return ExpressionEvaluator.GetValue(e, dbMetadata.ErrorCodeExceptionExpression).ToString();
-            }  
+            }
             else
             {
-                return "Could not extract error code exception type." + e.GetType(); 
+                return "Could not extract error code exception type." + e.GetType();
             }
-
         }
-
-
 
         /// <summary>
         /// Determines whether the provided exception is in fact related
@@ -215,7 +226,6 @@ namespace Spring.Data.Common
         /// </returns>
         public bool IsDataAccessException(Exception e)
         {
-
             if (e is System.Data.Common.DbException)
             {
                 return true;
@@ -224,22 +234,6 @@ namespace Spring.Data.Common
             {
                 return false;
             }
-        }
-
-        /// <summary>
-        /// Determines whether is data access exception in .NET 1.1 for the specified exception.
-        /// </summary>
-        /// <param name="e">The candidate exception.</param>
-        /// <returns>
-        /// 	<c>true</c> if is data access exception in .NET 1.1 for the specified exception; otherwise, <c>false</c>.
-        /// </returns>
-        private bool IsDataAccessExceptionBCL11(Exception e)
-        {
-            if (e == null)
-            {
-                return false;
-            }
-            return e.GetType().IsAssignableFrom(DbMetadata.ExceptionType);
         }
     }
 }
