@@ -66,7 +66,7 @@ namespace Spring.Globalization.Formatters
 
             fmt = new CurrencyFormatter(CultureInfoUtils.SerbianLatinCultureName);
 
-            if (CultureInfoUtils.OperatingSystemIsLaterThanWindows7)
+            if (CultureInfoUtils.OperatingSystemIsLaterThanWindows7 && CultureInfoUtils.ClrIsVersion4OrLater)
             {
                 Assert.AreEqual("1.234,00 din.", fmt.Format(1234));
                 Assert.AreEqual("1.234,56 din.", fmt.Format(1234.56));
@@ -83,7 +83,7 @@ namespace Spring.Globalization.Formatters
 
             fmt = new CurrencyFormatter(CultureInfoUtils.SerbianCyrillicCultureName);
 
-            if (CultureInfoUtils.OperatingSystemIsLaterThanWindows7)
+            if (CultureInfoUtils.OperatingSystemIsLaterThanWindows7 && CultureInfoUtils.ClrIsVersion4OrLater)
             {
                 Assert.AreEqual("1.234,00 дин.", fmt.Format(1234));
                 Assert.AreEqual("1.234,56 дин.", fmt.Format(1234.56));
@@ -111,7 +111,7 @@ namespace Spring.Globalization.Formatters
 
             fmt = new CurrencyFormatter(CultureInfoUtils.SerbianLatinCultureName);
 
-            if (CultureInfoUtils.OperatingSystemIsLaterThanWindows7)
+            if (CultureInfoUtils.OperatingSystemIsLaterThanWindows7 && CultureInfoUtils.ClrIsVersion4OrLater)
             {
                 Assert.AreEqual(1234, fmt.Parse("1.234,00 din."));
                 Assert.AreEqual(1234.56, fmt.Parse("1.234,56 din."));
@@ -128,7 +128,7 @@ namespace Spring.Globalization.Formatters
 
             fmt = new CurrencyFormatter(CultureInfoUtils.SerbianCyrillicCultureName);
 
-            if (CultureInfoUtils.OperatingSystemIsLaterThanWindows7)
+            if (CultureInfoUtils.OperatingSystemIsLaterThanWindows7 && CultureInfoUtils.ClrIsVersion4OrLater)
             {
                 Assert.AreEqual(1234, fmt.Parse("1.234,00 дин."));
                 Assert.AreEqual(1234.56, fmt.Parse("1.234,56 дин."));
@@ -168,7 +168,7 @@ namespace Spring.Globalization.Formatters
             fmt.GroupSizes = new int[] { 1, 2 };
             fmt.GroupSeparator = "'";
 
-            if (CultureInfoUtils.OperatingSystemIsLaterThanWindows7)
+            if (CultureInfoUtils.OperatingSystemIsLaterThanWindows7 && CultureInfoUtils.ClrIsVersion4OrLater)
             {
                 Assert.AreEqual("1'23'4,00 дин.", fmt.Format(1234));
                 Assert.AreEqual("1'23'4,56 дин.", fmt.Format(1234.56));
@@ -207,7 +207,7 @@ namespace Spring.Globalization.Formatters
             fmt.GroupSizes = new int[] { 1, 2 };
             fmt.GroupSeparator = "'";
 
-            if (CultureInfoUtils.OperatingSystemIsLaterThanWindows7)
+            if (CultureInfoUtils.OperatingSystemIsLaterThanWindows7 && CultureInfoUtils.ClrIsVersion4OrLater)
             {
                 Assert.AreEqual(1234, fmt.Parse("1'23'4,00 дин."));
                 Assert.AreEqual(1234.56, fmt.Parse("1'23'4,56 дин."));

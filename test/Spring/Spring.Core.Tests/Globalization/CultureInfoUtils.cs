@@ -66,5 +66,10 @@ namespace Spring.Globalization
         {
             get { return Environment.OSVersion.Version.Major >= 6 && Environment.OSVersion.Version.Minor >= 2; }
         }
+        
+        public static bool ClrIsVersion4OrLater
+        {
+            get { return Environment.Version.Major >= 4; }
+        }
     }
 }
