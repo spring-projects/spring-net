@@ -53,12 +53,14 @@ namespace Spring.Context.Attributes.TypeFilters
         {
             try
             {
-                RequiredType = TypeResolutionUtils.ResolveType(typeToLoad);
+                RequiredType = !string.IsNullOrEmpty(typeToLoad) ?
+                    TypeResolutionUtils.ResolveType(typeToLoad) : 
+                    null;
             }
             catch (Exception)
             {
                 RequiredType = null;
-                Logger.Error("Can't load type defined in exoression:" + typeToLoad);
+                Logger.Error("Can't load type defined in expression:" + typeToLoad);
             }
         }
 
