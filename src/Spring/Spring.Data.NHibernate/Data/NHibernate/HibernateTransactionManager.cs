@@ -552,25 +552,27 @@ namespace Spring.Data.NHibernate
         {
             HibernateTransactionObject txObject = (HibernateTransactionObject)status.Transaction;
             SessionHolder sessHolder = txObject.SessionHolder;
+            ISession session = sessHolder.Session;
             if (status.Debug)
             {
-                log.Debug("Committing Hibernate transaction on Session [" +
-                    sessHolder.Session + "]");
+                log.Debug("Committing Hibernate transaction on Session [" + session + "]");
             }
             try
             {
                 // Since the NHibernate ITransaction API does note support explicit timeout
-                // handling we check it ourselves before attempting to commit the transaction.
-                if (sessHolder.HasTimeout)
+                // handling we check it ourselves before attempting to commit the transaction
+                // provided there are any changes. For a transaction that will not result in any
+                // updates failing due to a timeout at this stage is pointless.
+                if (sessHolder.HasTimeout && !status.ReadOnly && session.IsDirty())
                 {
                     sessHolder.CheckTransactionTimeout();
                     // If the flush mode indicates that the session will be automatically
                     // flushed on commit we flush it ourselves and check the transaction
                     // timeout again - flushing all pending changes could take a long time.
-                    FlushMode flushMode = sessHolder.Session.FlushMode;
+                    FlushMode flushMode = session.FlushMode;
                     if (flushMode == FlushMode.Auto || flushMode == FlushMode.Commit) 
                     {
-                        sessHolder.Session.Flush();
+                        session.Flush();
                         sessHolder.CheckTransactionTimeout();
                     }
                 }

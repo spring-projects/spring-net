@@ -104,6 +104,7 @@ namespace Spring.Data.NHibernate
                 Expect.Call(query.List()).Return(list);
                 if (useTimeout)
                 {
+                    Expect.Call(session.IsDirty()).Return(true);
                     Expect.Call(session.FlushMode).Return(FlushMode.Auto);
                     session.Flush();
                     LastCall.On(session).Repeat.Once();
@@ -167,6 +168,7 @@ namespace Spring.Data.NHibernate
                 Expect.Call(sessionFactory.OpenSession()).Return(session);
                 Expect.Call(session.Connection).Return(connection);
                 Expect.Call(session.BeginTransaction(IsolationLevel.Serializable)).Return(transaction);
+                Expect.Call(session.IsDirty()).Return(true);
                 Expect.Call(session.Close()).Return(null);
             }
 
