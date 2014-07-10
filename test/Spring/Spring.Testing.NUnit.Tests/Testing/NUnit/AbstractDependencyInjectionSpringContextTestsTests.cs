@@ -149,7 +149,7 @@ namespace Spring.Testing.NUnit
 
             protected override void OnTearDown()
             {
-                throw new Exception("TearDown Expcetion");
+                throw new Exception("TearDown Exception");
             }
         }
 
