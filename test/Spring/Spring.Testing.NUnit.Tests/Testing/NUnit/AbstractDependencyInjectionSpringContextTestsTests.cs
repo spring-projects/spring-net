@@ -18,6 +18,8 @@
 
 #endregion
 
+using System;
+
 using NUnit.Framework;
 using Spring.Context;
 using Spring.Context.Support;
@@ -127,5 +129,42 @@ namespace Spring.Testing.NUnit
             Assert.AreNotSame(fixtureInstance.ApplicationContext, otherFixtureInstance.ApplicationContext);
             otherFixtureInstance.TearDown();
         }
-	}
+
+        private class TestAbstractDependencyInjectionSpringContextTestsExceptions : AbstractDependencyInjectionSpringContextTests
+        {
+            private static readonly string[] CONFIGLOCATIONS = new string[] { "assembly://Spring.Testing.NUnit.Tests/Spring.Testing.NUnit/TestApplicationContext.xml" };
+
+            public TestAbstractDependencyInjectionSpringContextTestsExceptions()
+            { }
+
+            protected override string[] ConfigLocations
+            {
+                get { return CONFIGLOCATIONS; }
+            }
+
+            protected override void OnSetUp()
+            {
+                throw new Exception("SetUp Exception");
+            }
+
+            protected override void OnTearDown()
+            {
+                throw new Exception("TearDown Expcetion");
+            }
+        }
+
+        [Test, ExpectedException]
+        public void ThrowsSetUpException()
+        {
+            var testFixture = new TestAbstractDependencyInjectionSpringContextTestsExceptions();
+            testFixture.SetUp();
+        }
+
+        [Test, ExpectedException]
+        public void ThrowsTearDownException()
+        {
+            var testFixture = new TestAbstractDependencyInjectionSpringContextTestsExceptions();
+            testFixture.TearDown();
+        }
+    }
 }
