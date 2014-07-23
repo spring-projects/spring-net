@@ -66,15 +66,15 @@
     </Reference>
     <Reference Include="Spring.Core">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Core.dll</HintPath>
+      <HintPath>..\..\..\..\..\build\net\4.0\debug\Spring.Core.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Data">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Data.dll</HintPath>
+      <HintPath>..\..\..\..\..\build\net\4.0\debug\Spring.Data.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Data.NHibernate32">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Data.NHibernate32.dll</HintPath>
+      <HintPath>..\..\..\..\..\build\net\4.0\debug\Spring.Data.NHibernate32.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

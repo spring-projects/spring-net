@@ -95,11 +95,11 @@
   <ItemGroup>
     <Reference Include="Spring.Core, Version=1.1.0.2, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Core.dll</HintPath>
+      <HintPath>..\..\..\..\..\build\net\4.0\debug\Spring.Core.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Data, Version=1.1.0.2, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Data.dll</HintPath>
+      <HintPath>..\..\..\..\..\build\net\4.0\debug\Spring.Data.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>

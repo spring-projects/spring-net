@@ -59,19 +59,19 @@
     </Reference>
     <Reference Include="Spring.Aop, Version=1.2.0.20336, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\bin\net\4.0\debug\Spring.Aop.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\build\net\4.0\debug\Spring.Aop.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Core, Version=1.2.0.20336, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\bin\net\4.0\debug\Spring.Core.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\build\net\4.0\debug\Spring.Core.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Data, Version=1.2.0.20336, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\bin\net\4.0\debug\Spring.Data.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\build\net\4.0\debug\Spring.Data.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Messaging, Version=1.2.0.20336, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\bin\net\4.0\debug\Spring.Messaging.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\build\net\4.0\debug\Spring.Messaging.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

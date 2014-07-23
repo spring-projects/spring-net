@@ -99,7 +99,7 @@
       <HintPath>lib\net\2.0\LinqBridge.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Core">
-      <HintPath>..\..\..\bin\net\2.0\debug\Spring.Core.dll</HintPath>
+      <HintPath>..\..\..\build\net\2.0\debug\Spring.Core.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Threading, Version=1.0.0.19912, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
