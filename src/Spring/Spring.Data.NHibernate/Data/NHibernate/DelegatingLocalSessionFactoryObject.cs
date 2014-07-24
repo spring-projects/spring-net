@@ -40,18 +40,18 @@ namespace Spring.Data.NHibernate
         protected override void PostProcessConfiguration(Configuration config)
         {
             // called before NewSessionFactory
-            var settings = ConfigurationManager.ConnectionStrings[NHibernate.Cfg.Environment.ConnectionStringName];
+            var settings = ConfigurationManager.ConnectionStrings[config.Properties[NHibernate.Cfg.Environment.ConnectionStringName]];
 
-			if (settings != null)
-			{
-				config.Properties.Add(new KeyValuePair<string, string>(NHibernate.Cfg.Environment.ConnectionString, settings.ConnectionString));
-			}
+	    if (settings != null)
+	    {
+	        config.Properties.Add(new KeyValuePair<string, string>(NHibernate.Cfg.Environment.ConnectionString, settings.ConnectionString));
+	    }
 
-			// called before NewSessionFactory
-			if (!config.Properties.ContainsKey(NHibernate.Cfg.Environment.ConnectionString))
-			{
-				throw new System.ArgumentException("Must specify connection string. If connection_string_name is set to a value, make sure there exists a connection string with that name.");
-			}
+	    // called before NewSessionFactory
+	    if (!config.Properties.ContainsKey(NHibernate.Cfg.Environment.ConnectionString))
+	    {
+		throw new System.ArgumentException("Must specify connection string. If connection_string_name is set to a value, make sure there exists a connection string with that name.");
+	    }
         }
 
     }
