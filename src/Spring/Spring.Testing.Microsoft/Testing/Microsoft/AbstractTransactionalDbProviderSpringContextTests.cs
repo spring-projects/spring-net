@@ -23,6 +23,7 @@ using System;
 using System.Data;
 using Spring.Data.Common;
 using Spring.Data.Core;
+using Spring.Objects.Factory.Config;
 
 namespace Spring.Testing.Microsoft
 {
@@ -55,7 +56,7 @@ namespace Spring.Testing.Microsoft
         /// Initializes a new instance of the <see cref="AbstractTransactionalDbProviderSpringContextTests"/> class.
         /// </summary>
         public AbstractTransactionalDbProviderSpringContextTests()
-        {
+        {            
         }
 
         /// <summary>
@@ -75,6 +76,23 @@ namespace Spring.Testing.Microsoft
         {
             get { return adoTemplate; }
             protected set { adoTemplate = value; }
+        }
+
+        /// <summary>
+        /// Inject dependencies into 'this' instance (that is, this test instance).
+        /// </summary>
+        /// <remarks>
+        /// <p>The default implementation populates protected variables if the
+        /// <see cref="PopulateProtectedVariables"/> property is set, else
+        /// uses autowiring if autowiring is switched on (which it is by default).</p>
+        /// <p>You can certainly override this method if you want to totally control
+        /// how dependencies are injected into 'this' instance.</p>
+        /// <p>AdoTemplate autowiring is Ignored</p>
+        /// </remarks>
+        protected override void InjectDependencies()
+        {
+            applicationContext.ObjectFactory.IgnoreDependencyType(typeof(AdoTemplate));
+            base.InjectDependencies();
         }
 
         /// <summary>
