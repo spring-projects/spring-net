@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -125,6 +125,29 @@ namespace Spring.Objects.Factory.Config
 
         private bool _isToParent;
 
+        #endregion
+        
+        #region Equality Members
+        protected bool Equals(RuntimeObjectReference other)
+        {
+            return string.Equals(_objectName, other._objectName) && _isToParent.Equals(other._isToParent);
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((RuntimeObjectReference)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return (_objectName.GetHashCode() * 397) ^ _isToParent.GetHashCode();
+            }
+        }
         #endregion
     }
 }
