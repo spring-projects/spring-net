@@ -128,11 +128,20 @@ namespace Spring.Objects.Factory.Config
         #endregion
         
         #region Equality Members
+        
+        /// <summary>
+        /// Determines whether the specified RuntimeObjectReference is equal to the current RuntimeObjectReference.
+        /// </summary>
+        /// <returns>true if the specified RuntimeObjectReference is equal to the current RuntimeObjectReference; otherwise, false.</returns>
         protected bool Equals(RuntimeObjectReference other)
         {
             return string.Equals(_objectName, other._objectName) && _isToParent.Equals(other._isToParent);
         }
 
+        /// <summary>
+        /// Determines whether the specified System.Object is equal to the current RuntimeObjectReference.
+        /// </summary>
+        /// <returns>true if the specified RuntimeObjectReference is equal to the current RuntimeObjectReference; otherwise, false.</returns>
         public override bool Equals(object obj)
         {
             if (ReferenceEquals(null, obj)) return false;
@@ -140,7 +149,11 @@ namespace Spring.Objects.Factory.Config
             if (obj.GetType() != this.GetType()) return false;
             return Equals((RuntimeObjectReference)obj);
         }
-
+        
+        /// <summary>
+        /// Serves as a hash function for RuntimeObjectReference.
+        /// </summary>
+        /// <returns>A hash code for the currentRuntimeObjectReference.</returns>
         public override int GetHashCode()
         {
             unchecked
@@ -148,6 +161,7 @@ namespace Spring.Objects.Factory.Config
                 return (_objectName.GetHashCode() * 397) ^ _isToParent.GetHashCode();
             }
         }
+        
         #endregion
     }
 }
