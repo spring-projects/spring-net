@@ -57,13 +57,13 @@
       <HintPath>..\..\..\..\..\..\lib\Net\2.0\Common.Logging.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Core">
-      <HintPath>..\..\..\..\..\..\bin\net\4.0\debug\Spring.Core.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\build\net\4.0\debug\Spring.Core.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Messaging">
-      <HintPath>..\..\..\..\..\..\bin\net\4.0\debug\Spring.Messaging.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\build\net\4.0\debug\Spring.Messaging.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Messaging.Ems">
-      <HintPath>..\..\..\..\..\..\bin\net\4.0\debug\Spring.Messaging.Ems.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\build\net\4.0\debug\Spring.Messaging.Ems.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

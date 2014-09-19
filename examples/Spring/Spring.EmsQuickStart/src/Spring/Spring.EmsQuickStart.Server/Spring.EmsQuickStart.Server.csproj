@@ -55,23 +55,23 @@
     </Reference>
     <Reference Include="Spring.Aop, Version=1.3.2.20942, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\bin\net\3.5\debug\Spring.Aop.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\build\net\3.5\debug\Spring.Aop.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Core, Version=1.3.2.20942, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\bin\net\3.5\debug\Spring.Core.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\build\net\3.5\debug\Spring.Core.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Data, Version=1.3.2.20942, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\bin\net\3.5\debug\Spring.Data.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\build\net\3.5\debug\Spring.Data.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Messaging, Version=1.3.2.20942, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\bin\net\3.5\debug\Spring.Messaging.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\build\net\3.5\debug\Spring.Messaging.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Messaging.Ems, Version=1.3.2.20942, Culture=neutral, PublicKeyToken=65e474d141e25e07, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\bin\net\3.5\debug\Spring.Messaging.Ems.dll</HintPath>
+      <HintPath>..\..\..\..\..\..\build\net\3.5\debug\Spring.Messaging.Ems.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">

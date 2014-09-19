@@ -98,15 +98,15 @@
   <ItemGroup>
     <Reference Include="Spring.Aop, Version=0.0.0.20883, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Aop.dll</HintPath>
+      <HintPath>..\..\..\..\..\build\net\4.0\debug\Spring.Aop.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Core, Version=0.0.0.20883, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Core.dll</HintPath>
+      <HintPath>..\..\..\..\..\build\net\4.0\debug\Spring.Core.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Services, Version=0.0.0.20883, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Services.dll</HintPath>
+      <HintPath>..\..\..\..\..\build\net\4.0\debug\Spring.Services.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>system</Name>
