@@ -59,14 +59,15 @@
       <HintPath>..\..\..\..\..\lib\Net\2.0\log4net.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate">
-      <HintPath>..\..\packages\NHibernate.3.2.0.4000\lib\Net35\NHibernate.dll</HintPath>
+      <HintPath>..\..\packages\NHibernate.3.3.3.4001\lib\Net35\NHibernate.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Spring.Aop, Version=0.0.0.35000, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Aop.dll</HintPath>
     </Reference>
-    <Reference Include="Spring.Web.Conversation.NHibernate32">
-      <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Web.Conversation.NHibernate32.dll</HintPath>
+    <Reference Include="Spring.Web.Conversation.NHibernate3">
+      <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Web.Conversation.NHibernate3.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Core, Version=0.0.0.35000, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -76,9 +77,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Data.dll</HintPath>
     </Reference>
-    <Reference Include="Spring.Data.NHibernate32, Version=0.0.0.35000, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Spring.Data.NHibernate3, Version=0.0.0.35000, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Data.NHibernate32.dll</HintPath>
+      <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Data.NHibernate3.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Web, Version=0.0.0.35000, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

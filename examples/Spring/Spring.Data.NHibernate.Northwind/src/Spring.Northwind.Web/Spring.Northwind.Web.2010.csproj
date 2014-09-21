@@ -58,8 +58,9 @@
     <Reference Include="log4net">
       <HintPath>..\..\..\..\..\lib\Net\2.0\log4net.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate">
-      <HintPath>..\..\packages\NHibernate.3.2.0.4000\lib\Net35\NHibernate.dll</HintPath>
+    <Reference Include="NHibernate, Version=3.3.1.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\packages\NHibernate.3.3.3.4001\lib\Net35\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Aop, Version=0.0.0.35000, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -73,9 +74,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Data.dll</HintPath>
     </Reference>
-    <Reference Include="Spring.Data.NHibernate32, Version=0.0.0.35000, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Spring.Data.NHibernate3, Version=0.0.0.35000, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Data.NHibernate32.dll</HintPath>
+      <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Data.NHibernate3.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Web, Version=0.0.0.35000, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

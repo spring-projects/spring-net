@@ -1,0 +1,256 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D546EFB7-9F6C-4C11-B2F8-B85FAD135399}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Spring</RootNamespace>
+    <AssemblyName>Spring.Data.NHibernate3</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\..\build\VS.Net.2010\Spring.Data.NHibernate3\Debug\</OutputPath>
+    <DefineConstants>TRACE;DEBUG;NET_4_0</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>Spring.Data.NHibernate3.xml</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>0618</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\..\build\VS.Net.2010\Spring.Data.NHibernate3\Release\</OutputPath>
+    <DefineConstants>TRACE;NET_4_0</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>Spring.Data.NHibernate3.xml</DocumentationFile>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <NoWarn>0618</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Common.Logging">
+      <HintPath>..\..\..\packages\Common.Logging.2.1.2\lib\net40\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Iesi.Collections, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Iesi.Collections.3.3.3.4001\lib\Net35\Iesi.Collections.dll</HintPath>
+    </Reference>
+    <Reference Include="NHibernate, Version=3.3.1.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\NHibernate.3.3.3.4001\lib\Net35\NHibernate.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\CommonAssemblyInfo.cs">
+      <Link>CommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\Bytecode\BytecodeProvider.cs">
+      <Link>Data\NHibernate\Bytecode\BytecodeProvider.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\Bytecode\LazyInitializer.cs">
+      <Link>Data\NHibernate\Bytecode\LazyInitializer.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\Bytecode\ObjectsFactory.cs">
+      <Link>Data\NHibernate\Bytecode\ObjectsFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\Bytecode\ProxyFactory.cs">
+      <Link>Data\NHibernate\Bytecode\ProxyFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\Bytecode\ProxyFactoryFactory.cs">
+      <Link>Data\NHibernate\Bytecode\ProxyFactoryFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\Bytecode\ReflectionOptimizer.cs">
+      <Link>Data\NHibernate\Bytecode\ReflectionOptimizer.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\DelegatingLocalSessionFactoryObject.cs">
+      <Link>Data\NHibernate\DelegatingLocalSessionFactoryObject.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\DelegatingSessionFactory.cs">
+      <Link>Data\NHibernate\DelegatingSessionFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\FilterDefinitionFactoryObject.cs">
+      <Link>Data\NHibernate\FilterDefinitionFactoryObject.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\Generic\FindHibernateDelegate.cs">
+      <Link>Data\NHibernate\Generic\FindHibernateDelegate.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\Generic\HibernateDaoSupport.cs">
+      <Link>Data\NHibernate\Generic\HibernateDaoSupport.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\Generic\HibernateDelegate.cs">
+      <Link>Data\NHibernate\Generic\HibernateDelegate.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\Generic\HibernateTemplate.cs">
+      <Link>Data\NHibernate\Generic\HibernateTemplate.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\Generic\IFindHibernateCallback.cs">
+      <Link>Data\NHibernate\Generic\IFindHibernateCallback.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\Generic\IHibernateCallback.cs">
+      <Link>Data\NHibernate\Generic\IHibernateCallback.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\Generic\IHibernateOperations.cs">
+      <Link>Data\NHibernate\Generic\IHibernateOperations.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\HibernateAccessor.cs">
+      <Link>Data\NHibernate\HibernateAccessor.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\HibernateAdoException.cs">
+      <Link>Data\NHibernate\HibernateAdoException.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\HibernateDelegate.cs">
+      <Link>Data\NHibernate\HibernateDelegate.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\HibernateObjectRetrievalFailureException.cs">
+      <Link>Data\NHibernate\HibernateObjectRetrievalFailureException.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\HibernateOptimisticLockingFailureException.cs">
+      <Link>Data\NHibernate\HibernateOptimisticLockingFailureException.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\HibernateQueryException.cs">
+      <Link>Data\NHibernate\HibernateQueryException.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\HibernateSystemException.cs">
+      <Link>Data\NHibernate\HibernateSystemException.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\HibernateTemplate.cs">
+      <Link>Data\NHibernate\HibernateTemplate.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\HibernateTransactionManager.cs">
+      <Link>Data\NHibernate\HibernateTransactionManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\HibernateTxScopeTransactionManager.cs">
+      <Link>Data\NHibernate\HibernateTxScopeTransactionManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\ICommonHibernateOperations.cs">
+      <Link>Data\NHibernate\ICommonHibernateOperations.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\IHibernateCallback.cs">
+      <Link>Data\NHibernate\IHibernateCallback.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\IHibernateOperations.cs">
+      <Link>Data\NHibernate\IHibernateOperations.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\LocalSessionFactoryObject.cs">
+      <Link>Data\NHibernate\LocalSessionFactoryObject.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\SessionFactoryUtils.cs">
+      <Link>Data\NHibernate\SessionFactoryUtils.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\SessionHolder.cs">
+      <Link>Data\NHibernate\SessionHolder.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\SimpleDelegatingSessionFactory.cs">
+      <Link>Data\NHibernate\SimpleDelegatingSessionFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\SpringSessionContext.cs">
+      <Link>Data\NHibernate\SpringSessionContext.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\SpringSessionSynchronization.cs">
+      <Link>Data\NHibernate\SpringSessionSynchronization.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\Support\ConfigSectionSessionScopeSettings.cs">
+      <Link>Data\NHibernate\Support\ConfigSectionSessionScopeSettings.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\Support\HibernateDaoSupport.cs">
+      <Link>Data\NHibernate\Support\HibernateDaoSupport.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\Support\OpenSessionInViewModule.cs">
+      <Link>Data\NHibernate\Support\OpenSessionInViewModule.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\Support\SessionScope.cs">
+      <Link>Data\NHibernate\Support\SessionScope.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\Support\SessionScopeSettings.cs">
+      <Link>Data\NHibernate\Support\SessionScopeSettings.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate\Data\NHibernate\TemplateFlushMode.cs">
+      <Link>Data\NHibernate\TemplateFlushMode.cs</Link>
+    </Compile>
+    <Compile Include="AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Spring.Aop\Spring.Aop.2010.csproj">
+      <Project>{3A3A4E65-45A6-4B20-B460-0BEDC302C02C}</Project>
+      <Name>Spring.Aop.2010</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Spring.Core\Spring.Core.2010.csproj">
+      <Project>{710961A3-0DF4-49E4-A26E-F5B9C044AC84}</Project>
+      <Name>Spring.Core.2010</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Spring.Data\Spring.Data.2010.csproj">
+      <Project>{AE00E5AB-C39A-436F-86D2-33BFE33E2E40}</Project>
+      <Name>Spring.Data.2010</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include=".NETFramework,Version=v4.0">
+      <Visible>False</Visible>
+      <ProductName>Microsoft .NET Framework 4 %28x86 and x64%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

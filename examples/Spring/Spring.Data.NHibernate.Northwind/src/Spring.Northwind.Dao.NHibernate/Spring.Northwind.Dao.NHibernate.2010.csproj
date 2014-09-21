@@ -62,7 +62,7 @@
       <HintPath>..\..\packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate">
-      <HintPath>..\..\packages\NHibernate.3.2.0.4000\lib\Net35\NHibernate.dll</HintPath>
+      <HintPath>..\..\packages\NHibernate.3.3.3.4001\lib\Net35\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Core">
       <SpecificVersion>False</SpecificVersion>
@@ -72,9 +72,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Data.dll</HintPath>
     </Reference>
-    <Reference Include="Spring.Data.NHibernate32">
+    <Reference Include="Spring.Data.NHibernate3">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Data.NHibernate32.dll</HintPath>
+      <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Data.NHibernate3.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -102,7 +102,9 @@
     <EmbeddedResource Include="Mappings\OrderDetail.hbm.xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Dao\Dao.xml" />
+    <EmbeddedResource Include="Dao\Dao.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -128,9 +130,12 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Dao\DaoConversation.xml" />
+    <EmbeddedResource Include="Dao\DaoConversation.xml">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
+    <None Include="app.config" />
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

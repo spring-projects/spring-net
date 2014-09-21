@@ -222,6 +222,7 @@ namespace Spring.Data.NHibernate
         /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
         void SaveOrUpdate(object entity);
 
+#if !NH_4_0
         /// <summary>
         /// Save or update the contents of given persistent object,
         /// according to its id (matching the configured "unsaved-value"?).
@@ -235,8 +236,8 @@ namespace Spring.Data.NHibernate
         /// (either an already loaded instance with the same id, or the given object)</returns>
         /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
         object SaveOrUpdateCopy(object entity);
+#endif
 
-#if !NH_1_2
         /// <summary>
         /// Copy the state of the given object onto the persistent object with the same identifier. 
         /// If there is no persistent instance currently associated with the session, it will be loaded.
@@ -252,7 +253,6 @@ namespace Spring.Data.NHibernate
         /// <returns>An updated persistent instance</returns>
         /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
         object Merge(object entity);
-#endif
 
         #endregion
     }

@@ -103,7 +103,7 @@
 		</copy>
 		<!-- copy nh libs -->
 		<copy todir="${current.bin.dir}" overwrite="true">
-			<fileset basedir="${nh32.lib.dir}">
+			<fileset basedir="${nh3.lib.dir}">
 				<include name="**/*.dll" />
 			</fileset>
 		</copy>

@@ -1,0 +1,64 @@
+<?xml version="1.0" ?>
+<project name="Spring.Data.NHibernate4.Integration.Tests" default="test" xmlns="http://nant.sf.net/schemas/nant.xsd">
+<!--
+	Required properties:
+	  * current.bin.dir           - (path) root level to build to
+	  * current.build.debug       - (true|false) debug build?
+	  * current.build.defines.csc - framework-specific build defines for C# compiler
+ -->
+	<target name="build">
+
+		<!-- build Spring.Data.NHibernate4.Integration.Tests -->
+		<csc target="library" define="${current.build.defines.csc}"
+				warnaserror="true"
+		        optimize="${build.optimize}"
+				debug="${current.build.debug}"
+				output="${current.bin.dir}/${project::get-name()}.dll"
+				doc="${current.bin.dir}/${project::get-name()}.xml"
+				nostdlib="true"
+				noconfig="true"
+				>
+			<nowarn>
+				<warning number="${nowarn.numbers.test}" />
+			</nowarn>
+			<sources failonempty="true">
+				<include name="**/*.cs" />
+				<include name="../CommonAssemblyInfo.cs" />
+			</sources>
+			<references>
+				<lib>
+					<include name="${nh4.lib.dir}"/>
+					<include name="${iesi4.lib.dir}"/>
+				</lib>
+				<include name="mscorlib.dll"/>
+				<include name="Microsoft.CSharp.dll"/>
+				<include name="System.dll"/>
+				<include name="System.Core.dll"/>
+				<include name="System.Data.dll" />
+				<include name="System.EnterpriseServices.dll" />
+				<include name="${current.bin.dir}/*.dll" />
+				<exclude name="${current.bin.dir}/${project::get-name()}.dll" />
+				<exclude name="${current.bin.dir}/Spring.Data.NHibernate32*.dll" />
+				<exclude name="${current.bin.dir}/Spring.Data.NHibernate*Tests*.dll" />
+				<exclude name="${current.bin.dir}/CloverRuntime.dll" />
+			</references>
+			<resources prefix="Spring" dynamicprefix="true" failonempty="true">
+				<include name="**/*.xml" />
+			</resources>
+		</csc>
+
+        <copy file="${project::get-base-directory()}/${project::get-name()}.dll.config"
+              tofile="${current.bin.dir}/${project::get-name()}.dll.config"/>
+
+	</target>
+	<target name="test" depends="build">
+			<!-- skipping running of tests for now
+		<nunit2outproc>
+			<formatter type="Plain" />
+			<formatter type="Xml" usefile="true" extension=".xml"
+					   outputdir="${current.bin.dir}/results" />
+			<test assemblyname="${current.bin.dir}/${project::get-name()}.dll" />
+		</nunit2outproc>
+		-->
+	</target>
+</project>
