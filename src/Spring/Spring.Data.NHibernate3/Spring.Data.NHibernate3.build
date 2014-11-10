@@ -1,0 +1,63 @@
+<?xml version="1.0" ?>
+<project name="Spring.Data.NHibernate3" default="build" xmlns="http://nant.sf.net/schemas/nant.xsd">
+<!--
+    Required properties:
+      * current.bin.dir           - (path) root level to build to
+      * current.build.debug       - (true|false) debug build?
+      * current.build.defines.csc - framework-specific build defines for C# compiler
+ -->
+	<target name="build">
+
+		<echo message="${nh3.lib.dir}" />
+		<copy todir="${current.bin.dir}" overwrite="true">
+			<fileset basedir="${nh3.lib.dir}">
+				<include name="**/*.dll" />
+			</fileset>
+		</copy>		
+		<echo message="${iesi3.lib.dir}" />
+		<copy todir="${current.bin.dir}" overwrite="true">
+			<fileset basedir="${iesi3.lib.dir}">
+				<include name="**/*.dll" />
+			</fileset>
+		</copy>		
+
+		<!-- build Spring.Data.NHibernate3 -->
+		<csc target="library" define="${current.build.defines.csc}"
+			 warnaserror="true"
+			 optimize="${build.optimize}"
+			 debug="${current.build.debug}"
+			 output="${current.bin.dir}/${project::get-name()}.dll"
+			 doc="${current.bin.dir}/${project::get-name()}.xml"
+			 nostdlib="true"
+			 noconfig="true"
+			>
+			<arg line="${compiler.args}"/>
+			<nowarn>
+				<warning number="${nowarn.numbers},0169,0618" />
+				<warning number="0219" if="${nant.settings.currentframework=='mono-2.0'}"/>
+			</nowarn>
+			<sources failonempty="true">
+				<include name="**/*.cs" />
+				<include name="../Spring.Data.NHibernate/Data/**/*.cs" />
+				<include name="../GenCommonAssemblyInfo.cs" />
+			</sources>
+			<references>
+				<include name="mscorlib.dll"/>
+				<include name="Microsoft.CSharp.dll"/>
+				<include name="System.dll"/>
+				<include name="System.Core.dll"/>
+                <include name="System.Configuration.dll"/>
+				<include name="System.Data.dll" />
+				<include name="System.Transactions.dll" />
+				<include name="System.Web.dll" />
+				<include name="System.Xml.dll" />
+				<include name="System.EnterpriseServices.dll" />
+				<include name="${current.bin.dir}/*NHibernate.dll" />
+				<include name="${current.bin.dir}/*.dll" />
+				<exclude name="${current.bin.dir}/Spring.Data.NHibernate*.dll" />
+				<exclude name="${current.bin.dir}/Spring.Data.NHibernate*.*.dll" />
+				<exclude name="${current.bin.dir}/CloverRuntime.dll" />
+			</references>
+		</csc>
+	</target>
+</project>

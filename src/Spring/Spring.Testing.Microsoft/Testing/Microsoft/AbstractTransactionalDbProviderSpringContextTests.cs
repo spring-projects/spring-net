@@ -83,7 +83,7 @@ namespace Spring.Testing.Microsoft
         /// </summary>
         /// <remarks>
         /// <p>The default implementation populates protected variables if the
-        /// <see cref="AbstractTransactionalDbProviderSpringContextTests.PopulateProtectedVariables"/> property is set, else
+        /// <see cref="AbstractDependencyInjectionSpringContextTests.PopulateProtectedVariables"/> property is set, else
         /// uses autowiring if autowiring is switched on (which it is by default).</p>
         /// <p>You can certainly override this method if you want to totally control
         /// how dependencies are injected into 'this' instance.</p>
