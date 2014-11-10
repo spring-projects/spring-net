@@ -3,6 +3,7 @@
 
   <property name="project.basedir" value="${project::get-base-directory()}" />
   <property name="project.targetdir" value="${project.basedir}\target" />
+  <property name="java.basedir" value="${environment::get-variable('JAVA_HOME')}\bin" />
 
   <target name="help">
     <echo message="Available tasks :" />
@@ -24,7 +25,7 @@
     <echo message="Generating HTML format..." />
     <mkdir dir="${project.targetdir}" />
     <!-- docbook -> html -->
-    <exec workingdir="${project.targetdir}" program="java" commandline='-cp "..\lib\saxon6-5-5\saxon.jar;..\lib\xslthl-2.0.0\xslthl-2.0.0.jar" com.icl.saxon.StyleSheet ../src/index.xml "..\lib\docbook-xsl-snapshot\html\springnet.xsl" highlight.xslthl.config="file:///${project.basedir}/lib/docbook-xsl-snapshot/highlighting/xslthl-config.xml"' />
+    <exec workingdir="${project.targetdir}" program="java" basedir="${java.basedir}" commandline='-cp "..\lib\saxon6-5-5\saxon.jar;..\lib\xslthl-2.0.0\xslthl-2.0.0.jar" com.icl.saxon.StyleSheet ../src/index.xml "..\lib\docbook-xsl-snapshot\html\springnet.xsl" highlight.xslthl.config="file:///${project.basedir}/lib/docbook-xsl-snapshot/highlighting/xslthl-config.xml"' />
     <!-- copy css to html dir -->
     <copy todir="${project.targetdir}\html\styles">
       <fileset basedir="${project.basedir}\src\styles">
@@ -72,7 +73,7 @@
     </copy>
 
     <!-- docbook -> HTML Help Workshop project (.hhp) -->
-    <exec workingdir="${project.targetdir}" program="java" commandline='-cp "..\lib\saxon6-5-5\saxon.jar;..\lib\xslthl-2.0.0\xslthl-2.0.0.jar" com.icl.saxon.StyleSheet ../src/index.xml "..\lib\docbook-xsl-snapshot\htmlhelp\springnet.xsl" highlight.xslthl.config="file:///${project.basedir}/lib/docbook-xsl-snapshot/highlighting/xslthl-config.xml"' />
+    <exec workingdir="${project.targetdir}" program="java" basedir="${java.basedir}" commandline='-cp "..\lib\saxon6-5-5\saxon.jar;..\lib\xslthl-2.0.0\xslthl-2.0.0.jar" com.icl.saxon.StyleSheet ../src/index.xml "..\lib\docbook-xsl-snapshot\htmlhelp\springnet.xsl" highlight.xslthl.config="file:///${project.basedir}/lib/docbook-xsl-snapshot/highlighting/xslthl-config.xml"' />
     <!-- HTML Help Workshop project (.hhp) -> HTML Help file (.chm) -->
     <property name="hhc.path" value="c:\Program Files\HTML Help Workshop" />
 		
@@ -97,7 +98,7 @@
     <echo message="Generating PDF format..." />
     <mkdir dir="${project.targetdir}" />
     <!-- docbook -> fop -->
-    <exec workingdir="${project.targetdir}" program="java" commandline='-cp "..\lib\saxon6-5-5\saxon.jar;..\lib\xslthl-2.0.0\xslthl-2.0.0.jar"  -Xmx1024m  com.icl.saxon.StyleSheet -o pdf/spring-net-reference.fo ../src/index.xml "..\lib\docbook-xsl-snapshot\fo\springnet.xsl" highlight.xslthl.config="file:///${project.basedir}/lib/docbook-xsl-snapshot/highlighting/xslthl-config.xml"'/>
+    <exec workingdir="${project.targetdir}" program="java" basedir="${java.basedir}" commandline='-cp "..\lib\saxon6-5-5\saxon.jar;..\lib\xslthl-2.0.0\xslthl-2.0.0.jar"  -Xmx1024m  com.icl.saxon.StyleSheet -o pdf/spring-net-reference.fo ../src/index.xml "..\lib\docbook-xsl-snapshot\fo\springnet.xsl" highlight.xslthl.config="file:///${project.basedir}/lib/docbook-xsl-snapshot/highlighting/xslthl-config.xml"'/>
     <!-- fop -> pdf -->
     <exec program="${project.basedir}\lib\fop-0.95\fop.bat" commandline='-fo "${project.targetdir}\pdf\spring-net-reference.fo" -pdf "${project.targetdir}\pdf\spring-net-reference.pdf"'/>
     <!-- Delete temporary fop file -->
