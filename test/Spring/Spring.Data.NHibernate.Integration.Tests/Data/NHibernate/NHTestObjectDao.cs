@@ -22,7 +22,9 @@
 
 using System;
 using System.Collections;
+
 using NHibernate.Type;
+
 using Spring.Data.NHibernate.Support;
 using Spring.Transaction.Interceptor;
 
@@ -30,43 +32,42 @@ using Spring.Transaction.Interceptor;
 
 namespace Spring.Data.NHibernate
 {
-	public class NHTestObjectDao : HibernateDaoSupport, ITestObjectDao
-	{
+    public class NHTestObjectDao : HibernateDaoSupport, ITestObjectDao
+    {
+        #region Constructor (s)
 
-		#region Constructor (s)
-		/// <summary>
-		/// Initializes a new instance of the <see cref="NHTestObjectDao"/> class.
-                /// </summary>
-		public 	NHTestObjectDao()
-		{
+        /// <summary>
+        /// Initializes a new instance of the <see cref="NHTestObjectDao"/> class.
+        /// </summary>
+        public NHTestObjectDao()
+        {
+        }
 
-		}
-
-		#endregion
+        #endregion
 
         #region ITestObjectDao Members
 
         [Transaction()]
-	    public void Create(TestObject to)
-	    {
-	        HibernateTemplate.Save(to);
-	    }
-
-        [Transaction()]
-	    public void Update(TestObject to)
-	    {
-	       HibernateTemplate.SaveOrUpdate(to);
-	    }
-
-        [Transaction()]
-	    public void Delete(TestObject to)
-	    {
-	        HibernateTemplate.Delete(to);
-	    }
-
-	    public TestObject FindByName(string name)
+        public void Create(TestObject to)
         {
-	        IList result = HibernateTemplate.Find(
+            HibernateTemplate.Save(to);
+        }
+
+        [Transaction()]
+        public void Update(TestObject to)
+        {
+            HibernateTemplate.Update(to);
+        }
+
+        [Transaction()]
+        public void Delete(TestObject to)
+        {
+            HibernateTemplate.Delete(to);
+        }
+
+        public TestObject FindByName(string name)
+        {
+            IList result = HibernateTemplate.Find(
                 "from TestObject to where to.Name=?",
                 name,
                 TypeFactory.GetStringType(50)
@@ -74,7 +75,7 @@ namespace Spring.Data.NHibernate
 
             if (result.Count > 0)
             {
-                return (TestObject)result[0];
+                return (TestObject) result[0];
             }
             else
             {
@@ -86,10 +87,10 @@ namespace Spring.Data.NHibernate
         {
             HibernateTemplate.Save(to);
             to.Name = "Updated Name";
-            HibernateTemplate.SaveOrUpdate(to);
+            HibernateTemplate.Update(to);
             throw new Exception("My expected exception for test purposes.");
         }
 
         #endregion
-	}
+    }
 }

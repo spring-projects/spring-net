@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30110.0
+VisualStudioVersion = 12.0.30723.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F04753EF-7A1B-4837-AB63-8C0821E8155D}"
 	ProjectSection(SolutionItems) = preProject
@@ -62,13 +62,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Testing.Microsoft.20
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Testing.Microsoft.Tests.2010", "test\Spring\Spring.Testing.Microsoft.Tests\Spring.Testing.Microsoft.Tests.2010.csproj", "{7321149A-47C6-4FBA-9D1A-26FD6815381B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate32.2010", "src\Spring\Spring.Data.NHibernate32\Spring.Data.NHibernate32.2010.csproj", "{9F0F739C-876E-4C4B-AA55-9AC9242C25C8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate3.2010", "src\Spring\Spring.Data.NHibernate3\Spring.Data.NHibernate3.2010.csproj", "{D546EFB7-9F6C-4C11-B2F8-B85FAD135399}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate32.Tests.2010", "test\Spring\Spring.Data.NHibernate32.Tests\Spring.Data.NHibernate32.Tests.2010.csproj", "{C33C6A06-885D-49D2-8029-422D38CBC6D7}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate33.2010", "src\Spring\Spring.Data.NHibernate33\Spring.Data.NHibernate33.2010.csproj", "{D546EFB7-9F6C-4C11-B2F8-B85FAD135399}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate33.Tests.2010", "test\Spring\Spring.Data.NHibernate33.Tests\Spring.Data.NHibernate33.Tests.2010.csproj", "{9C86BC69-DD23-4DCC-B11F-8781BBC887CF}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate3.Tests.2010", "test\Spring\Spring.Data.NHibernate3.Tests\Spring.Data.NHibernate3.Tests.2010.csproj", "{9C86BC69-DD23-4DCC-B11F-8781BBC887CF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Messaging.Ems.2010", "src\Spring\Spring.Messaging.Ems\Spring.Messaging.Ems.2010.csproj", "{900E3839-301E-48B1-BAEB-B6645620ACFF}"
 EndProject
@@ -82,21 +78,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Scheduling.Quartz2.T
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Messaging.Ems.Integration.Tests.2010", "test\Spring\Spring.Messaging.Ems.Integration.Tests\Spring.Messaging.Ems.Integration.Tests.2010.csproj", "{FA934E92-C8C2-428A-BE2A-26818F17A787}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate32.Integration.Tests.2010", "test\Spring\Spring.Data.NHibernate32.Integration.Tests\Spring.Data.NHibernate32.Integration.Tests.2010.csproj", "{CD6A49DE-745C-4360-AADF-3539CFEC6639}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate33.Integration.Tests.2010", "test\Spring\Spring.Data.NHibernate33.Integration.Tests\Spring.Data.NHibernate33.Integration.Tests.2010.csproj", "{6B7DA759-F46D-4860-AF03-E7AC7498E003}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate3.Integration.Tests.2010", "test\Spring\Spring.Data.NHibernate3.Integration.Tests\Spring.Data.NHibernate3.Integration.Tests.2010.csproj", "{6B7DA759-F46D-4860-AF03-E7AC7498E003}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Messaging.Nms.Integration.Tests.2010", "test\Spring\Spring.Messaging.Nms.Integration.Tests\Spring.Messaging.Nms.Integration.Tests.2010.csproj", "{E5323AC8-137E-4EF7-BC62-3BD6FC0576CD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Scheduling.Quartz2.Integration.Tests.2010", "test\Spring\Spring.Scheduling.Quartz2.Integration.Tests\Spring.Scheduling.Quartz2.Integration.Tests.2010.csproj", "{8CF0F34A-CC93-4D87-AE14-A2DEEF072F26}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Web.Conversation.NHibernate32.2010", "src\Spring\Spring.Web.Conversation.NHibernate32\Spring.Web.Conversation.NHibernate32.2010.csproj", "{64400FF8-2E9F-4809-B5F4-0C7EB8ABFF87}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Web.Conversation.NHibernate3.2010", "src\Spring\Spring.Web.Conversation.NHibernate3\Spring.Web.Conversation.NHibernate3.2010.csproj", "{CF375928-B6D5-485C-B04D-2BC41D9DBF1E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Web.Conversation.NHibernate33.2010", "src\Spring\Spring.Web.Conversation.NHibernate33\Spring.Web.Conversation.NHibernate33.2010.csproj", "{CF375928-B6D5-485C-B04D-2BC41D9DBF1E}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Web.Conversation.NHibernate32.Tests.2010", "test\Spring\Spring.Web.Conversation.NHibernate32.Tests\Spring.Web.Conversation.NHibernate32.Tests.2010.csproj", "{2FB16852-22AD-4A5B-885A-97136265CC46}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Web.Conversation.NHibernate33.Tests.2010", "test\Spring\Spring.Web.Conversation.NHibernate33.Tests\Spring.Web.Conversation.NHibernate33.Tests.2010.csproj", "{C57B05EA-FD1A-40EC-BB60-D2E45AB1A86A}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Web.Conversation.NHibernate3.Tests.2010", "test\Spring\Spring.Web.Conversation.NHibernate3.Tests\Spring.Web.Conversation.NHibernate3.Tests.2010.csproj", "{C57B05EA-FD1A-40EC-BB60-D2E45AB1A86A}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{79F495DF-83D6-435E-A20E-47800F6F8FE7}"
 	ProjectSection(SolutionItems) = preProject
@@ -108,6 +98,12 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Web.Mvc5.2010", "src\Spring\Spring.Web.Mvc5\Spring.Web.Mvc5.2010.csproj", "{39AAD7EA-2ED0-4E50-8D4D-C666EA9CBFE4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Web.Mvc5.Tests.2010", "test\Spring\Spring.Web.Mvc5.Tests\Spring.Web.Mvc5.Tests.2010.csproj", "{B9590252-6D58-4587-950C-475AB61FDBCF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate4.2010", "src\Spring\Spring.Data.NHibernate4\Spring.Data.NHibernate4.2010.csproj", "{D9C45177-0D80-4133-AB46-58F142DB92AA}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate4.Tests.2010", "test\Spring\Spring.Data.NHibernate4.Tests\Spring.Data.NHibernate4.Tests.2010.csproj", "{86E9E4E0-792F-43F6-AAA0-599D3B1A0C4E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate4.Integration.Tests.2010", "test\Spring\Spring.Data.NHibernate4.Integration.Tests\Spring.Data.NHibernate4.Integration.Tests.2010.csproj", "{46F8B5E9-ABCF-4306-BC05-FF05B0FAC151}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -579,6 +575,36 @@ Global
 		{B9590252-6D58-4587-950C-475AB61FDBCF}.Release|Any CPU.Build.0 = Release|Any CPU
 		{B9590252-6D58-4587-950C-475AB61FDBCF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{B9590252-6D58-4587-950C-475AB61FDBCF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{D9C45177-0D80-4133-AB46-58F142DB92AA}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{D9C45177-0D80-4133-AB46-58F142DB92AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D9C45177-0D80-4133-AB46-58F142DB92AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D9C45177-0D80-4133-AB46-58F142DB92AA}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{D9C45177-0D80-4133-AB46-58F142DB92AA}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{D9C45177-0D80-4133-AB46-58F142DB92AA}.Release|.NET.ActiveCfg = Release|Any CPU
+		{D9C45177-0D80-4133-AB46-58F142DB92AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D9C45177-0D80-4133-AB46-58F142DB92AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D9C45177-0D80-4133-AB46-58F142DB92AA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{D9C45177-0D80-4133-AB46-58F142DB92AA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{86E9E4E0-792F-43F6-AAA0-599D3B1A0C4E}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{86E9E4E0-792F-43F6-AAA0-599D3B1A0C4E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{86E9E4E0-792F-43F6-AAA0-599D3B1A0C4E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{86E9E4E0-792F-43F6-AAA0-599D3B1A0C4E}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{86E9E4E0-792F-43F6-AAA0-599D3B1A0C4E}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{86E9E4E0-792F-43F6-AAA0-599D3B1A0C4E}.Release|.NET.ActiveCfg = Release|Any CPU
+		{86E9E4E0-792F-43F6-AAA0-599D3B1A0C4E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{86E9E4E0-792F-43F6-AAA0-599D3B1A0C4E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{86E9E4E0-792F-43F6-AAA0-599D3B1A0C4E}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{86E9E4E0-792F-43F6-AAA0-599D3B1A0C4E}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{46F8B5E9-ABCF-4306-BC05-FF05B0FAC151}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{46F8B5E9-ABCF-4306-BC05-FF05B0FAC151}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{46F8B5E9-ABCF-4306-BC05-FF05B0FAC151}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{46F8B5E9-ABCF-4306-BC05-FF05B0FAC151}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{46F8B5E9-ABCF-4306-BC05-FF05B0FAC151}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{46F8B5E9-ABCF-4306-BC05-FF05B0FAC151}.Release|.NET.ActiveCfg = Release|Any CPU
+		{46F8B5E9-ABCF-4306-BC05-FF05B0FAC151}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{46F8B5E9-ABCF-4306-BC05-FF05B0FAC151}.Release|Any CPU.Build.0 = Release|Any CPU
+		{46F8B5E9-ABCF-4306-BC05-FF05B0FAC151}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{46F8B5E9-ABCF-4306-BC05-FF05B0FAC151}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

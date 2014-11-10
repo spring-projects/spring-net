@@ -22,14 +22,18 @@
 
 using System;
 using System.Collections;
+
 using Common.Logging;
+
 using Spring.Aop.Framework;
 using Spring.Data.Common;
 using Spring.Data.Support;
+
 using IInterceptor = NHibernate.IInterceptor;
 
 using NHibernate;
 using NHibernate.Type;
+
 using Spring.Dao;
 using Spring.Objects.Factory;
 
@@ -69,18 +73,17 @@ namespace Spring.Data.NHibernate
     /// to a specific NHibernate ISessionFactory.
     /// </p>
     /// </remarks>
-	/// <author>Mark Pollack (.NET)</author>
-	public class HibernateTemplate : HibernateAccessor, IHibernateOperations
-	{
-		#region Fields
+    /// <author>Mark Pollack (.NET)</author>
+    public class HibernateTemplate : HibernateAccessor, IHibernateOperations
+    {
+        #region Fields
 
         /// <summary>
         /// The <see cref="ILog"/> instance for this class. 
         /// </summary>
-        private readonly ILog log = LogManager.GetLogger(typeof(HibernateTemplate));
+        private readonly ILog log = LogManager.GetLogger(typeof (HibernateTemplate));
 
         private bool checkWriteOperations = true;
-
 
         private bool exposeNativeSession = false;
 
@@ -90,26 +93,26 @@ namespace Spring.Data.NHibernate
         private bool allowCreate = true;
         private ISessionFactory sessionFactory;
         private object entityInterceptor;
-        private IObjectFactory objectFactory; 
+        private IObjectFactory objectFactory;
         private bool cacheQueries = false;
         private string queryCacheRegion;
         private int fetchSize = 0;
 
         private IAdoExceptionTranslator adoExceptionTranslator;
-        
+
         private readonly object syncRoot = new object();
         private ProxyFactory sessionProxyFactory;
 
         #endregion
 
         #region Constructor (s)
-        /// <summary>
-		/// Initializes a new instance of the <see cref="HibernateTemplate"/> class.
-        /// </summary>
-		public 	HibernateTemplate()
-		{
 
-		}
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HibernateTemplate"/> class.
+        /// </summary>
+        public HibernateTemplate()
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HibernateTemplate"/> class.
@@ -118,7 +121,7 @@ namespace Spring.Data.NHibernate
         /// session when no transactional Session can be found for the current thread
         /// is set to true.</remarks>
         /// <param name="sessionFactory">The session factory to create sessions.</param>
-        public HibernateTemplate(ISessionFactory sessionFactory) 
+        public HibernateTemplate(ISessionFactory sessionFactory)
         {
             SessionFactory = sessionFactory;
             AfterPropertiesSet();
@@ -137,9 +140,10 @@ namespace Spring.Data.NHibernate
             AllowCreate = allowCreate;
             AfterPropertiesSet();
         }
-		#endregion
 
-		#region Properties
+        #endregion
+
+        #region Properties
 
         /// <summary>
         /// Gets or sets if a new Session should be created when no transactional Session
@@ -159,11 +163,7 @@ namespace Spring.Data.NHibernate
         /// </remarks>
         public override bool AllowCreate
         {
-            get
-            {
-
-                return allowCreate;
-            }
+            get { return allowCreate; }
             set { allowCreate = value; }
         }
 
@@ -192,7 +192,6 @@ namespace Spring.Data.NHibernate
             get { return alwaysUseNewSession; }
             set { alwaysUseNewSession = value; }
         }
-
 
         /// <summary>
         /// Gets or sets the template flush mode.
@@ -233,16 +232,14 @@ namespace Spring.Data.NHibernate
                     {
                         throw new InvalidOperationException("Cannot get entity interceptor via object name if no object factory set");
                     }
-                    return (IInterceptor)this.objectFactory.GetObject((String)this.entityInterceptor, typeof(IInterceptor));
+                    return (IInterceptor) this.objectFactory.GetObject((String) this.entityInterceptor, typeof (IInterceptor));
                 }
 
-                return (IInterceptor)entityInterceptor;
+                return (IInterceptor) entityInterceptor;
             }
-            set
-            {
-                entityInterceptor = value;
-            }
+            set { entityInterceptor = value; }
         }
+
         /// <summary>
         /// Gets or sets the name of the cache region for queries executed by this template.
         /// </summary>
@@ -259,7 +256,6 @@ namespace Spring.Data.NHibernate
             get { return queryCacheRegion; }
             set { queryCacheRegion = value; }
         }
-
 
         /// <summary>
         /// Gets or sets a value indicating whether to 
@@ -310,6 +306,7 @@ namespace Spring.Data.NHibernate
             get { return exposeNativeSession; }
             set { exposeNativeSession = value; }
         }
+
         /// <summary>
         /// Gets or sets  whether to check that the Hibernate Session is not in read-only mode
         /// in case of write operations (save/update/delete).
@@ -346,10 +343,7 @@ namespace Spring.Data.NHibernate
         /// <value>The name of the entity interceptor in the object factory/application context.</value>
         public override string EntityInterceptorObjectName
         {
-            set
-            {
-                this.entityInterceptor = value;
-            }
+            set { this.entityInterceptor = value; }
         }
 
         /// <summary>
@@ -358,10 +352,7 @@ namespace Spring.Data.NHibernate
         /// <value>The object factory instance</value>
         public override IObjectFactory ObjectFactory
         {
-            set
-            {
-                objectFactory = value;
-            }
+            set { objectFactory = value; }
         }
 
         /// <summary>
@@ -372,10 +363,7 @@ namespace Spring.Data.NHibernate
         public override ISessionFactory SessionFactory
         {
             get { return sessionFactory; }
-            set
-            {
-                sessionFactory = value;
-            }
+            set { sessionFactory = value; }
         }
 
         /// <summary>
@@ -394,7 +382,6 @@ namespace Spring.Data.NHibernate
             set { fetchSize = value; }
         }
 
-
         /// <summary>
         /// Gets or sets the proxy factory.
         /// </summary>
@@ -407,7 +394,7 @@ namespace Spring.Data.NHibernate
         /// <value>The proxy factory.</value>
         public virtual ProxyFactory ProxyFactory
         {
-            get { return sessionProxyFactory;  }
+            get { return sessionProxyFactory; }
             set { sessionProxyFactory = value; }
         }
 
@@ -433,11 +420,10 @@ namespace Spring.Data.NHibernate
                 if (adoExceptionTranslator == null)
                 {
                     adoExceptionTranslator = SessionFactoryUtils.NewAdoExceptionTranslator(SessionFactory);
-                }               
+                }
                 return adoExceptionTranslator;
             }
         }
-
 
         /// <summary>
         /// Delegate function that clears the session.
@@ -496,8 +482,7 @@ namespace Spring.Data.NHibernate
         /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
         public object Get(Type type, object id, LockMode lockMode)
         {
-            return Execute(new GetByTypeHibernateCallback(type, id, lockMode),true);
-        
+            return Execute(new GetByTypeHibernateCallback(type, id, lockMode), true);
         }
 
         /// <summary>
@@ -527,8 +512,7 @@ namespace Spring.Data.NHibernate
         /// <exception cref="DataAccessException">In case of Hibernate errors</exception> 
         public object Load(Type entityType, object id, LockMode lockMode)
         {
-            return Execute(new LoadByTypeHibernateCallback(entityType, id, lockMode),true);
-        
+            return Execute(new LoadByTypeHibernateCallback(entityType, id, lockMode), true);
         }
 
         /// <summary>
@@ -541,7 +525,7 @@ namespace Spring.Data.NHibernate
         /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
         public void Load(object entity, object id)
         {
-            Execute(new LoadByEntityHibernateCallback(entity, id),true);        
+            Execute(new LoadByEntityHibernateCallback(entity, id), true);
         }
 
         /// <summary>
@@ -553,7 +537,7 @@ namespace Spring.Data.NHibernate
         /// <exception cref="DataAccessException">In case of Hibernate errors</exception> 
         public IList LoadAll(Type entityType)
         {
-            return (IList)Execute(new LoadAllByTypeHibernateCallback(this, entityType),true); 
+            return (IList) Execute(new LoadAllByTypeHibernateCallback(this, entityType), true);
         }
 
         /// <summary>
@@ -575,7 +559,7 @@ namespace Spring.Data.NHibernate
         /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
         public void Refresh(object entity, LockMode lockMode)
         {
-            Execute(new RefreshHibernateCallback(entity, lockMode),true); 
+            Execute(new RefreshHibernateCallback(entity, lockMode), true);
         }
 
         /// <summary>
@@ -589,7 +573,7 @@ namespace Spring.Data.NHibernate
         /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
         public void Lock(object entity, LockMode lockMode)
         {
-            Execute(new LockHibernateCallback(entity, lockMode),true); 
+            Execute(new LockHibernateCallback(entity, lockMode), true);
         }
 
         /// <summary>
@@ -600,7 +584,7 @@ namespace Spring.Data.NHibernate
         /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
         public object Save(object entity)
         {
-            return Execute(new SaveObjectHibernateCallback(this, entity),true); 
+            return Execute(new SaveObjectHibernateCallback(this, entity), true);
         }
 
         /// <summary>
@@ -611,7 +595,7 @@ namespace Spring.Data.NHibernate
         /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
         public void Save(object entity, object id)
         {
-             Execute(new SaveObjectWithIdHibernateCallback(this, entity, id),true); 
+            Execute(new SaveObjectWithIdHibernateCallback(this, entity, id), true);
         }
 
         /// <summary>
@@ -635,7 +619,7 @@ namespace Spring.Data.NHibernate
         /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
         public void Update(object entity, LockMode lockMode)
         {
-             Execute(new UpdateObjectHibernateCallback(this, entity, lockMode),true); 
+            Execute(new UpdateObjectHibernateCallback(this, entity, lockMode), true);
         }
 
         /// <summary>
@@ -647,7 +631,7 @@ namespace Spring.Data.NHibernate
         /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
         public void SaveOrUpdate(object entity)
         {
-            Execute(new SaveOrUpdateObjectHibernateCallback(this, entity),true);         
+            Execute(new SaveOrUpdateObjectHibernateCallback(this, entity), true);
         }
 
         /// <summary>
@@ -659,9 +643,10 @@ namespace Spring.Data.NHibernate
         /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
         public void SaveOrUpdateAll(ICollection entities)
         {
-            Execute(new SaveOrUpdateAllHibernateCallback(this, entities), true); 
+            Execute(new SaveOrUpdateAllHibernateCallback(this, entities), true);
         }
 
+#if !NH_4_0
         /// <summary>
         /// Save or update the contents of given persistent object,
         /// according to its id (matching the configured "unsaved-value"?).
@@ -676,10 +661,10 @@ namespace Spring.Data.NHibernate
         /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
         public object SaveOrUpdateCopy(object entity)
         {
-              return Execute(new SaveOrUpdateCopyHibernateCallback(this, entity),true);
+            return Execute(new SaveOrUpdateCopyHibernateCallback(this, entity), true);
         }
+#endif
 
-#if !NH_1_2
         /// <summary>
         /// Copy the state of the given object onto the persistent object with the same identifier. 
         /// If there is no persistent instance currently associated with the session, it will be loaded.
@@ -698,7 +683,6 @@ namespace Spring.Data.NHibernate
         {
             return Execute(new MergeHibernateCallback(this, entity), true);
         }
-#endif
 
         /// <summary>
         /// Remove all objects from the Session cache, and cancel all pending saves,
@@ -708,8 +692,6 @@ namespace Spring.Data.NHibernate
         {
             Execute(new HibernateDelegate(ClearAction), true);
         }
-
-
 
         /// <summary>
         /// Determines whether the given object is in the Session cache.
@@ -721,7 +703,7 @@ namespace Spring.Data.NHibernate
         /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
         public bool Contains(object entity)
         {
-            return (bool)Execute(new ContainsHibernateCallback(entity));
+            return (bool) Execute(new ContainsHibernateCallback(entity));
         }
 
         /// <summary>
@@ -732,10 +714,7 @@ namespace Spring.Data.NHibernate
         public void Evict(object entity)
         {
             Execute(new EvictHibernateCallback(entity), true);
-       
         }
-
-
 
         /// <summary>
         /// Delete the given persistent instance.
@@ -746,7 +725,6 @@ namespace Spring.Data.NHibernate
         {
             Delete(entity, null);
         }
-
 
         /// <summary>
         /// Delete the given persistent instance.
@@ -761,7 +739,7 @@ namespace Spring.Data.NHibernate
         /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
         public void Delete(object entity, LockMode lockMode)
         {
-             Execute(new DeleteLockModeHibernateCallback(this, entity, lockMode), true);
+            Execute(new DeleteLockModeHibernateCallback(this, entity, lockMode), true);
         }
 
         /// <summary>
@@ -799,14 +777,12 @@ namespace Spring.Data.NHibernate
         /// <exception cref="ArgumentOutOfRangeException">If length for argument values and types are not equal.</exception>
         public int Delete(String queryString, Object[] values, IType[] types)
         {
-            if (values != null && types != null && values.Length != types.Length) 
+            if (values != null && types != null && values.Length != types.Length)
             {
                 throw new ArgumentOutOfRangeException("values", "Length of values array must match length of types array");
             }
-            return (int)Execute(new DeletebyQueryHibernateCallback(this, queryString, values, types),true);
-        
+            return (int) Execute(new DeletebyQueryHibernateCallback(this, queryString, values, types), true);
         }
-
 
         /// <summary>
         /// Delete all given persistent instances.
@@ -818,10 +794,9 @@ namespace Spring.Data.NHibernate
         /// </remarks>
         /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
         public void DeleteAll(ICollection entities)
-        {   
-            Execute(new DeleteAllHibernateCallback(this, entities),true);        
+        {
+            Execute(new DeleteAllHibernateCallback(this, entities), true);
         }
-
 
         /// <summary>
         /// Execute the action specified by the given action object within a Session.
@@ -897,12 +872,13 @@ namespace Spring.Data.NHibernate
         /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
         public IList ExecuteFind(IHibernateCallback action)
         {
-		    Object result = Execute(action, ExposeNativeSession);
-		    if (result != null && !(result is IList)) {
-			    throw new InvalidDataAccessApiUsageException(
-					    "Result object returned from HibernateCallback isn't a List: [" + result + "]");
-		    }
-		    return (IList) result;
+            Object result = Execute(action, ExposeNativeSession);
+            if (result != null && !(result is IList))
+            {
+                throw new InvalidDataAccessApiUsageException(
+                    "Result object returned from HibernateCallback isn't a List: [" + result + "]");
+            }
+            return (IList) result;
         }
 
         /// <summary>
@@ -917,15 +893,18 @@ namespace Spring.Data.NHibernate
         public object Execute(IHibernateCallback action, bool exposeNativeSession)
         {
             ISession session = Session;
-            
+
             bool existingTransaction = SessionFactoryUtils.IsSessionTransactional(session, SessionFactory);
-            if (existingTransaction) 
+            if (existingTransaction)
             {
-                if(log.IsDebugEnabled) log.Debug("Found thread-bound Session for HibernateTemplate");
+                if (log.IsDebugEnabled)
+                {
+                    log.Debug("Found thread-bound Session for HibernateTemplate");
+                }
             }
 
             FlushModeHolder previousFlushModeHolder = new FlushModeHolder();
-            try 
+            try
             {
                 previousFlushModeHolder = ApplyFlushMode(session, existingTransaction);
                 ISession sessionToExpose = (exposeNativeSession ? session : CreateSessionProxy(session));
@@ -945,11 +924,11 @@ namespace Spring.Data.NHibernate
                     throw new HibernateSystemException(ex);
                 }
             }
-            catch (HibernateException ex) 
+            catch (HibernateException ex)
             {
                 throw ConvertHibernateAccessException(ex);
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 IDbProvider dbProvider = SessionFactoryUtils.GetDbProvider(SessionFactory);
                 if (dbProvider != null && dbProvider.IsDataAccessException(ex))
@@ -962,27 +941,30 @@ namespace Spring.Data.NHibernate
                     throw;
                 }
             }
-            finally 
+            finally
             {
-                if (existingTransaction) 
+                if (existingTransaction)
                 {
-                    if (log.IsDebugEnabled) log.Debug("Not closing pre-bound Hibernate Session after HibernateTemplate");
-                    if (previousFlushModeHolder.ModeWasSet) 
+                    if (log.IsDebugEnabled)
+                    {
+                        log.Debug("Not closing pre-bound Hibernate Session after HibernateTemplate");
+                    }
+                    if (previousFlushModeHolder.ModeWasSet)
                     {
                         session.FlushMode = previousFlushModeHolder.Mode;
                     }
                 }
-                else 
+                else
                 {
-                   // Never use deferred close for an explicitly new Session.
+                    // Never use deferred close for an explicitly new Session.
                     if (AlwaysUseNewSession)
                     {
                         SessionFactoryUtils.CloseSession(session);
                     }
                     else
                     {
-                        SessionFactoryUtils.CloseSessionOrRegisterDeferredClose(session, SessionFactory);                        
-                    }                                     
+                        SessionFactoryUtils.CloseSessionOrRegisterDeferredClose(session, SessionFactory);
+                    }
                 }
             }
         }
@@ -997,7 +979,7 @@ namespace Spring.Data.NHibernate
         /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
         public IList Find(string queryString)
         {
-            return Find(queryString, (object[])null, (IType[])null );
+            return Find(queryString, (object[]) null, (IType[]) null);
         }
 
         /// <summary>
@@ -1041,7 +1023,7 @@ namespace Spring.Data.NHibernate
         /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
         public IList Find(string queryString, object[] values)
         {
-            return Find(queryString, values, (IType[]) null);        
+            return Find(queryString, values, (IType[]) null);
         }
 
         /// <summary>
@@ -1058,11 +1040,11 @@ namespace Spring.Data.NHibernate
         /// <exception cref="ArgumentException">If values and types are not null and their lengths are not equal</exception>          
         public IList Find(string queryString, object[] values, IType[] types)
         {
-            if (values != null && types != null && values.Length != types.Length) 
+            if (values != null && types != null && values.Length != types.Length)
             {
-                throw new ArgumentException("Length of values array must match length of types array");                
+                throw new ArgumentException("Length of values array must match length of types array");
             }
-            return (IList)Execute(new FindHibernateCallback(this, queryString, values, types),true);
+            return (IList) Execute(new FindHibernateCallback(this, queryString, values, types), true);
         }
 
         /// <summary>
@@ -1091,7 +1073,7 @@ namespace Spring.Data.NHibernate
         /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
         public IList FindByNamedParam(string queryName, string paramName, object value, IType type)
         {
-            return FindByNamedParam(queryName, new string[] {paramName}, new object[] {value}, new IType[] {type});	
+            return FindByNamedParam(queryName, new string[] {paramName}, new object[] {value}, new IType[] {type});
         }
 
         /// <summary>
@@ -1122,17 +1104,16 @@ namespace Spring.Data.NHibernate
         /// if paramNames length is not equal to types length (when types is not null)</exception>
         public IList FindByNamedParam(string queryString, string[] paramNames, object[] values, IType[] types)
         {
-            if (paramNames.Length != values.Length) 
+            if (paramNames.Length != values.Length)
             {
-                throw new ArgumentOutOfRangeException("paramNames","Length of paramNames array must match length of values array");
+                throw new ArgumentOutOfRangeException("paramNames", "Length of paramNames array must match length of values array");
             }
-            if (types != null && paramNames.Length != types.Length) 
+            if (types != null && paramNames.Length != types.Length)
             {
-                throw new ArgumentOutOfRangeException("paramNames","Length of paramNames array must match length of types array");
+                throw new ArgumentOutOfRangeException("paramNames", "Length of paramNames array must match length of types array");
             }
 
-            return (IList)Execute(new FindByNamedParamHibernateCallback(this, queryString, paramNames, values, types),true);
-
+            return (IList) Execute(new FindByNamedParamHibernateCallback(this, queryString, paramNames, values, types), true);
         }
 
         /// <summary>
@@ -1173,7 +1154,7 @@ namespace Spring.Data.NHibernate
         /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
         public IList FindByNamedQuery(string queryName, object value, IType type)
         {
-            return FindByNamedQuery(queryName, new object[] { value }, new IType[] { type });
+            return FindByNamedQuery(queryName, new object[] {value}, new IType[] {type});
         }
 
         /// <summary>
@@ -1203,13 +1184,11 @@ namespace Spring.Data.NHibernate
         /// <exception cref="ArgumentOutOfRangeException">If values and types are not null and their lengths differ.</exception>        
         public IList FindByNamedQuery(string queryName, object[] values, IType[] types)
         {
-            if (values != null && types != null && values.Length != types.Length) 
+            if (values != null && types != null && values.Length != types.Length)
             {
                 throw new ArgumentOutOfRangeException("Length of values array must match length of types array");
             }
-            return (IList)Execute(new FindByNamedQueryHibernateCallback(this, queryName, values, types),true);
-
-
+            return (IList) Execute(new FindByNamedQueryHibernateCallback(this, queryName, values, types), true);
         }
 
         /// <summary>
@@ -1225,7 +1204,6 @@ namespace Spring.Data.NHibernate
         public IList FindByNamedQueryAndNamedParam(string queryName, string paramName, object value)
         {
             return FindByNamedQueryAndNamedParam(queryName, paramName, value, null);
-	
         }
 
         /// <summary>
@@ -1242,7 +1220,6 @@ namespace Spring.Data.NHibernate
         {
             return FindByNamedQueryAndNamedParam(
                 queryName, new string[] {paramName}, new object[] {value}, new IType[] {type});
-	
         }
 
         /// <summary>
@@ -1258,7 +1235,6 @@ namespace Spring.Data.NHibernate
         public IList FindByNamedQueryAndNamedParam(string queryName, string[] paramNames, object[] values)
         {
             return FindByNamedQueryAndNamedParam(queryName, paramNames, values, null);
-	
         }
 
         /// <summary>
@@ -1276,16 +1252,15 @@ namespace Spring.Data.NHibernate
         /// if paramNames length is not equal to types length (when types is not null)</exception>                
         public IList FindByNamedQueryAndNamedParam(string queryName, string[] paramNames, object[] values, IType[] types)
         {
-            if (paramNames != null && values != null && paramNames.Length != values.Length) 
+            if (paramNames != null && values != null && paramNames.Length != values.Length)
             {
-                throw new ArgumentOutOfRangeException("paramNames","Length of paramNames array must match length of values array");
+                throw new ArgumentOutOfRangeException("paramNames", "Length of paramNames array must match length of values array");
             }
-            if (paramNames != null && types != null && paramNames.Length != types.Length) 
+            if (paramNames != null && types != null && paramNames.Length != types.Length)
             {
-                throw new ArgumentOutOfRangeException("paramNams","Length of paramNames array must match length of types array");
+                throw new ArgumentOutOfRangeException("paramNams", "Length of paramNames array must match length of types array");
             }
-            return (IList)Execute(new FindByNamedQueryAndNamedParamHibernateCallback(this, queryName, paramNames, values, types),true);
-
+            return (IList) Execute(new FindByNamedQueryAndNamedParamHibernateCallback(this, queryName, paramNames, values, types), true);
         }
 
         /// <summary>
@@ -1299,8 +1274,7 @@ namespace Spring.Data.NHibernate
         /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
         public IList FindByNamedQueryAndValueObject(string queryName, object valueObject)
         {
-            return (IList)Execute(new FindByNamedQueryAndValueObjectHibernateCallback(this, queryName, valueObject),true);
-
+            return (IList) Execute(new FindByNamedQueryAndValueObjectHibernateCallback(this, queryName, valueObject), true);
         }
 
         /// <summary>
@@ -1313,13 +1287,12 @@ namespace Spring.Data.NHibernate
         /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
         public IList FindByValueObject(string queryString, object valueObject)
         {
-            return (IList)Execute(new FindByValueObjectHibernateCallback(this, queryString, valueObject), true);
+            return (IList) Execute(new FindByValueObjectHibernateCallback(this, queryString, valueObject), true);
         }
 
         #endregion
 
         #region Methods
-
 
         /// <summary>
         /// Create a close-suppressing proxy for the given Hibernate Session.
@@ -1343,10 +1316,10 @@ namespace Spring.Data.NHibernate
 
                 sessionProxyFactory.Target = session;
 
-                return (ISession)sessionProxyFactory.GetProxy();
+                return (ISession) sessionProxyFactory.GetProxy();
             }
         }
-        
+
         /// <summary>
         /// Check whether write operations are allowed on the given Session.
         /// </summary>
@@ -1357,19 +1330,17 @@ namespace Spring.Data.NHibernate
         /// <param name="session">The current Hibernate session.</param>
         /// <exception cref="InvalidDataAccessApiUsageException">If write operation is attempted in read-only mode
         /// </exception>
-        public virtual void CheckWriteOperationAllowed(ISession session) 
+        public virtual void CheckWriteOperationAllowed(ISession session)
         {
-          if (CheckWriteOperations && TemplateFlushMode != TemplateFlushMode.Eager &&
-                AreEqualFlushMode(TemplateFlushMode.Never, session.FlushMode)) 
+            if (CheckWriteOperations && TemplateFlushMode != TemplateFlushMode.Eager &&
+                AreEqualFlushMode(TemplateFlushMode.Never, session.FlushMode))
             {
                 throw new InvalidDataAccessApiUsageException(
-                      "Write operations are not allowed in read-only mode (FlushMode.NEVER) - turn your Session " +
-                      "into FlushMode.AUTO or remove 'readOnly' marker from transaction definition");
+                    "Write operations are not allowed in read-only mode (FlushMode.NEVER) - turn your Session " +
+                    "into FlushMode.AUTO or remove 'readOnly' marker from transaction definition");
             }
         }
 
- 
-        
         /// <summary>
         /// Compares if the flush mode enumerations, Spring's
         /// TemplateFlushMode and NHibernates FlushMode have equal
@@ -1383,9 +1354,9 @@ namespace Spring.Data.NHibernate
         /// </returns>
         protected bool AreEqualFlushMode(TemplateFlushMode tfm, FlushMode fm)
         {
-            if ( (tfm ==TemplateFlushMode.Never && fm == FlushMode.Never) ||
-                 (tfm ==TemplateFlushMode.Auto && fm == FlushMode.Auto) ||
-                 (tfm ==TemplateFlushMode.Commit && fm == FlushMode.Commit) )
+            if ((tfm == TemplateFlushMode.Never && fm == FlushMode.Never) ||
+                (tfm == TemplateFlushMode.Auto && fm == FlushMode.Auto) ||
+                (tfm == TemplateFlushMode.Commit && fm == FlushMode.Commit))
             {
                 return true;
             }
@@ -1398,7 +1369,7 @@ namespace Spring.Data.NHibernate
 
         #endregion
     }
-  
+
     #region Internal Supporting Callback Classes
 
     //TODO see if can create common base class for some callbacks.
@@ -1406,6 +1377,7 @@ namespace Spring.Data.NHibernate
     internal class ContainsHibernateCallback : IHibernateCallback
     {
         private object entity;
+
         public ContainsHibernateCallback(object entity)
         {
             this.entity = entity;
@@ -1417,12 +1389,12 @@ namespace Spring.Data.NHibernate
         }
     }
 
-
     internal class DeleteLockModeHibernateCallback : IHibernateCallback
     {
         private HibernateTemplate outer;
         private object entity;
         private LockMode lockMode;
+
         public DeleteLockModeHibernateCallback(HibernateTemplate template, object entity, LockMode lockMode)
         {
             this.outer = template;
@@ -1433,7 +1405,7 @@ namespace Spring.Data.NHibernate
         public object DoInHibernate(ISession session)
         {
             outer.CheckWriteOperationAllowed(session);
-            if (lockMode != null) 
+            if (lockMode != null)
             {
                 session.Lock(entity, lockMode);
             }
@@ -1441,7 +1413,6 @@ namespace Spring.Data.NHibernate
             return null;
         }
     }
-
 
     internal class DeletebyQueryHibernateCallback : IHibernateCallback
     {
@@ -1473,29 +1444,26 @@ namespace Spring.Data.NHibernate
         public object DoInHibernate(ISession session)
         {
             outer.CheckWriteOperationAllowed(session);
-            if (values != null) 
+            if (values != null)
             {
                 return session.Delete(queryString, values, types);
             }
-            else 
+            else
             {
                 return session.Delete(queryString);
             }
         }
     }
 
-
-
     internal class DeleteAllHibernateCallback : IHibernateCallback
     {
-        HibernateTemplate outer;
+        private HibernateTemplate outer;
         private ICollection entities;
 
         public DeleteAllHibernateCallback(HibernateTemplate template, ICollection entities)
         {
             this.outer = template;
             this.entities = entities;
-
         }
 
         /// <summary>
@@ -1519,11 +1487,7 @@ namespace Spring.Data.NHibernate
             }
             return null;
         }
-
-
-
     }
-
 
     internal class EvictHibernateCallback : IHibernateCallback
     {
@@ -1532,7 +1496,6 @@ namespace Spring.Data.NHibernate
         public EvictHibernateCallback(object entity)
         {
             this.entity = entity;
-
         }
 
         /// <summary>
@@ -1552,11 +1515,7 @@ namespace Spring.Data.NHibernate
             session.Evict(entity);
             return null;
         }
-
-
-
     }
-
 
     internal class FindHibernateCallback : IHibernateCallback
     {
@@ -1589,29 +1548,28 @@ namespace Spring.Data.NHibernate
         {
             IQuery queryObject = session.CreateQuery(queryString);
             outer.PrepareQuery(queryObject);
-            if (values != null) 
+            if (values != null)
             {
-                for (int i = 0; i < values.Length; i++) 
+                for (int i = 0; i < values.Length; i++)
                 {
-                    if (types != null && types[i] != null) 
+                    if (types != null && types[i] != null)
                     {
                         queryObject.SetParameter(i, values[i], types[i]);
                     }
-                    else 
+                    else
                     {
                         queryObject.SetParameter(i, values[i]);
                     }
                 }
             }
-            
+
             return queryObject.List();
         }
     }
 
-
     internal class FindByNamedParamHibernateCallback : IHibernateCallback
     {
-        HibernateTemplate outer;
+        private HibernateTemplate outer;
         private string queryString;
         private string[] paramNames;
         private object[] values;
@@ -1642,22 +1600,20 @@ namespace Spring.Data.NHibernate
         {
             IQuery queryObject = session.CreateQuery(queryString);
             outer.PrepareQuery(queryObject);
-            if (values != null) 
+            if (values != null)
             {
-                for (int i = 0; i < values.Length; i++) 
+                for (int i = 0; i < values.Length; i++)
                 {
                     outer.ApplyNamedParameterToQuery(queryObject, paramNames[i], values[i], (types != null ? types[i] : null));
                 }
             }
             return queryObject.List();
-
         }
     }
 
-    
     internal class FindByNamedQueryHibernateCallback : IHibernateCallback
     {
-        HibernateTemplate outer;
+        private HibernateTemplate outer;
         private string queryName;
         private object[] values;
         private IType[] types;
@@ -1686,29 +1642,27 @@ namespace Spring.Data.NHibernate
         {
             IQuery queryObject = session.GetNamedQuery(queryName);
             outer.PrepareQuery(queryObject);
-            if (values != null) 
+            if (values != null)
             {
-                for (int i = 0; i < values.Length; i++) 
+                for (int i = 0; i < values.Length; i++)
                 {
-                    if (types != null && types[i] != null) 
+                    if (types != null && types[i] != null)
                     {
                         queryObject.SetParameter(i, values[i], types[i]);
                     }
-                    else 
+                    else
                     {
                         queryObject.SetParameter(i, values[i]);
                     }
                 }
             }
             return queryObject.List();
-
         }
     }
 
-    
     internal class FindByNamedQueryAndNamedParamHibernateCallback : IHibernateCallback
     {
-        HibernateTemplate outer;
+        private HibernateTemplate outer;
         private string queryName;
         private string[] paramNames;
         private object[] values;
@@ -1739,22 +1693,20 @@ namespace Spring.Data.NHibernate
         {
             IQuery queryObject = session.GetNamedQuery(queryName);
             outer.PrepareQuery(queryObject);
-            if (values != null) 
+            if (values != null)
             {
-                for (int i = 0; i < values.Length; i++) 
+                for (int i = 0; i < values.Length; i++)
                 {
                     outer.ApplyNamedParameterToQuery(queryObject, paramNames[i], values[i], (types != null ? types[i] : null));
                 }
             }
             return queryObject.List();
-
         }
     }
 
-
     internal class FindByNamedQueryAndValueObjectHibernateCallback : IHibernateCallback
     {
-        HibernateTemplate outer;
+        private HibernateTemplate outer;
         private string queryName;
         private object valueObject;
 
@@ -1763,7 +1715,6 @@ namespace Spring.Data.NHibernate
             this.outer = template;
             this.queryName = queryName;
             this.valueObject = valueObject;
-
         }
 
         /// <summary>
@@ -1784,16 +1735,12 @@ namespace Spring.Data.NHibernate
             outer.PrepareQuery(queryObject);
             queryObject.SetProperties(valueObject);
             return queryObject.List();
-
         }
-
-
-
     }
 
     internal class FindByValueObjectHibernateCallback : IHibernateCallback
     {
-        HibernateTemplate outer;
+        private HibernateTemplate outer;
         private string queryString;
         private object valueObject;
 
@@ -1802,7 +1749,6 @@ namespace Spring.Data.NHibernate
             this.outer = template;
             this.queryString = queryString;
             this.valueObject = valueObject;
-
         }
 
         public object DoInHibernate(ISession session)
@@ -1811,11 +1757,9 @@ namespace Spring.Data.NHibernate
             outer.PrepareQuery(queryObject);
             queryObject.SetProperties(valueObject);
             return queryObject.List();
-
         }
-        
     }
-   
+
     internal class ExecuteHibernateCallbackUsingDelegate : IHibernateCallback
     {
         private HibernateDelegate del;
@@ -1831,7 +1775,6 @@ namespace Spring.Data.NHibernate
         }
     }
 
-    
     internal class GetByTypeHibernateCallback : IHibernateCallback
     {
         private Type entityType;
@@ -1843,7 +1786,6 @@ namespace Spring.Data.NHibernate
             this.entityType = entityType;
             this.id = id;
             this.lockMode = lockMode;
-
         }
 
         /// <summary>
@@ -1860,20 +1802,16 @@ namespace Spring.Data.NHibernate
         /// </remarks>
         public object DoInHibernate(ISession session)
         {
-            if (lockMode != null) 
+            if (lockMode != null)
             {
                 return session.Get(entityType, id, lockMode);
             }
-            else 
+            else
             {
                 return session.Get(entityType, id);
             }
         }
-
-
-
     }
-
 
     internal class LoadByTypeHibernateCallback : IHibernateCallback
     {
@@ -1886,7 +1824,6 @@ namespace Spring.Data.NHibernate
             this.entityType = entityType;
             this.id = id;
             this.lockMode = lockMode;
-
         }
 
         /// <summary>
@@ -1903,20 +1840,16 @@ namespace Spring.Data.NHibernate
         /// </remarks>
         public object DoInHibernate(ISession session)
         {
-            if (lockMode != null) 
+            if (lockMode != null)
             {
                 return session.Load(entityType, id, lockMode);
             }
-            else 
+            else
             {
                 return session.Load(entityType, id);
             }
         }
-
-
-
     }
-
 
     internal class LoadByEntityHibernateCallback : IHibernateCallback
     {
@@ -1946,11 +1879,7 @@ namespace Spring.Data.NHibernate
             session.Load(entity, id);
             return null;
         }
-
-
-
     }
-
 
     internal class LoadAllByTypeHibernateCallback : IHibernateCallback
     {
@@ -1983,7 +1912,6 @@ namespace Spring.Data.NHibernate
         }
     }
 
-
     internal class LockHibernateCallback : IHibernateCallback
     {
         private object entity;
@@ -2010,10 +1938,9 @@ namespace Spring.Data.NHibernate
         public object DoInHibernate(ISession session)
         {
             session.Lock(entity, lockMode);
-			return null;
+            return null;
         }
     }
-
 
     internal class RefreshHibernateCallback : IHibernateCallback
     {
@@ -2040,18 +1967,17 @@ namespace Spring.Data.NHibernate
         /// </remarks>
         public object DoInHibernate(ISession session)
         {
-            if (lockMode != null) 
+            if (lockMode != null)
             {
                 session.Refresh(entity, lockMode);
             }
-            else 
+            else
             {
                 session.Refresh(entity);
             }
             return null;
         }
     }
-
 
     internal class SaveObjectHibernateCallback : IHibernateCallback
     {
@@ -2061,7 +1987,7 @@ namespace Spring.Data.NHibernate
         public SaveObjectHibernateCallback(HibernateTemplate template, object entity)
         {
             this.outer = template;
-            this.entity = entity;            
+            this.entity = entity;
         }
 
         /// <summary>
@@ -2083,7 +2009,6 @@ namespace Spring.Data.NHibernate
         }
     }
 
-
     internal class SaveObjectWithIdHibernateCallback : IHibernateCallback
     {
         private HibernateTemplate outer;
@@ -2093,7 +2018,7 @@ namespace Spring.Data.NHibernate
         public SaveObjectWithIdHibernateCallback(HibernateTemplate template, object entity, object id)
         {
             this.outer = template;
-            this.entity = entity;            
+            this.entity = entity;
             this.id = id;
         }
 
@@ -2117,7 +2042,6 @@ namespace Spring.Data.NHibernate
         }
     }
 
-
     internal class UpdateObjectHibernateCallback : IHibernateCallback
     {
         private HibernateTemplate outer;
@@ -2127,7 +2051,7 @@ namespace Spring.Data.NHibernate
         public UpdateObjectHibernateCallback(HibernateTemplate template, object entity, LockMode lockMode)
         {
             this.outer = template;
-            this.entity = entity;    
+            this.entity = entity;
             this.lockMode = lockMode;
         }
 
@@ -2147,14 +2071,13 @@ namespace Spring.Data.NHibernate
         {
             outer.CheckWriteOperationAllowed(session);
             session.Update(entity);
-            if (lockMode != null) 
+            if (lockMode != null)
             {
                 session.Lock(entity, lockMode);
             }
             return null;
         }
     }
-
 
     internal class SaveOrUpdateObjectHibernateCallback : IHibernateCallback
     {
@@ -2164,7 +2087,7 @@ namespace Spring.Data.NHibernate
         public SaveOrUpdateObjectHibernateCallback(HibernateTemplate template, object entity)
         {
             this.outer = template;
-            this.entity = entity;    
+            this.entity = entity;
         }
 
         /// <summary>
@@ -2220,6 +2143,8 @@ namespace Spring.Data.NHibernate
             return null;
         }
     }
+
+#if !NH_4_0
     internal class SaveOrUpdateCopyHibernateCallback : IHibernateCallback
     {
         private HibernateTemplate outer;
@@ -2228,7 +2153,7 @@ namespace Spring.Data.NHibernate
         public SaveOrUpdateCopyHibernateCallback(HibernateTemplate template, object entity)
         {
             this.outer = template;
-            this.entity = entity;    
+            this.entity = entity;
         }
 
         /// <summary>
@@ -2249,8 +2174,8 @@ namespace Spring.Data.NHibernate
             return session.SaveOrUpdateCopy(entity);
         }
     }
+#endif
 
-#if !NH_1_2
     internal class MergeHibernateCallback : IHibernateCallback
     {
         private HibernateTemplate outer;
@@ -2280,9 +2205,6 @@ namespace Spring.Data.NHibernate
             return session.Merge(entity);
         }
     }
-#endif
 
     #endregion
-    
-
 }

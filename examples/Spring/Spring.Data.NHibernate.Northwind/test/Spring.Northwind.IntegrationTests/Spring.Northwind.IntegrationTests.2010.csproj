@@ -62,7 +62,7 @@
       <HintPath>..\..\packages\Iesi.Collections.3.2.0.4000\lib\Net35\Iesi.Collections.dll</HintPath>
     </Reference>
     <Reference Include="NHibernate">
-      <HintPath>..\..\packages\NHibernate.3.2.0.4000\lib\Net35\NHibernate.dll</HintPath>
+      <HintPath>..\..\packages\NHibernate.3.3.3.4001\lib\Net35\NHibernate.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework">
       <HintPath>..\..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
@@ -75,9 +75,9 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Data.dll</HintPath>
     </Reference>
-    <Reference Include="Spring.Data.NHibernate32, Version=1.1.2.20153, Culture=neutral, processorArchitecture=MSIL">
+    <Reference Include="Spring.Data.NHibernate3, Version=1.1.2.20153, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Data.NHibernate32.dll</HintPath>
+      <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Data.NHibernate3.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Testing.NUnit, Version=1.1.2.20153, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>

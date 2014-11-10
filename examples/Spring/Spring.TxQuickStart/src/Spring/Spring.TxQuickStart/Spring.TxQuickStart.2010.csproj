@@ -54,7 +54,7 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Common.Logging, Version=2.1.2.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+    <Reference Include="Common.Logging">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\lib\Net\2.0\Common.Logging.dll</HintPath>
     </Reference>
