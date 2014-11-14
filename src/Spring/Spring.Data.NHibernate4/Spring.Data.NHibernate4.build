@@ -26,8 +26,8 @@
 			 warnaserror="true"
 			 optimize="${build.optimize}"
 			 debug="${current.build.debug}"
-			 output="${current.bin.dir}/${project::get-name()}.dll"
-			 doc="${current.bin.dir}/${project::get-name()}.xml"
+			 output="${current.bin.dir}/NH4/Spring.Data.NHibernate.dll"
+			 doc="${current.bin.dir}/NH4/Spring.Data.NHibernate.xml"
 			 nostdlib="true"
 			 noconfig="true"
 			>

@@ -1,0 +1,19 @@
+﻿Istruzioni per compilare dai sorgenti Spring.NET con
+	- .NET 4.5 
+	- NHibernate 3.3/4
+	- MVC 5.2.2
+
+- Scarica da GitHub i sorgenti (https://github.com/rpaterlini/spring-net.git)
+- Copia Spring.Net.snk nella root da Mtk
+
+- Aggiornare i progetti e i relativi file di build alla versione di MVC corrente (5.2.2)
+	Spring.Web.Mvc5.2010
+	Spring.Web.Mvc5.Tests.2010
+	 
+- Esegui:
+    build clean compile-build-4.5 -D:"project.build.sign=true" -D:"package.version=2.0.0" -D:"project.build.config=release"
+- L'output è in buildlog.txt
+- Ci possono comunque essere errori nei test, ignorarli
+- Il compilato è in build\net\4.5\release 
+
+Stessa sequenza per .NET 4.0

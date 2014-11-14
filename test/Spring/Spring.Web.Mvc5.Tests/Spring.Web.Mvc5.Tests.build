@@ -13,7 +13,7 @@
 
 		<copy todir="${current.bin.dir}" flatten="true" overwrite="true">
             <fileset basedir="${spring.basedir}/packages/">
-                <include name="Microsoft.AspNet.*.5.0.0/**/*.dll" />
+                <include name="Microsoft.AspNet.*.5.2.2/**/*.dll" />
             </fileset>
 		</copy>		
 
