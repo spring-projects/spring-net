@@ -1617,7 +1617,7 @@ namespace Spring.Objects.Factory
 		    lbf.RegisterObjectDefinition("bd1", bd1);
 		    lbf.RegisterObjectDefinition("bd2", bd2);
 
-            Assert.That(delegate { lbf.GetObject<TestObject>(); }, Throws.Exception.TypeOf<NoSuchObjectDefinitionException>());
+            Assert.That(() => lbf.GetObject<TestObject>(), Throws.Exception.TypeOf<NoSuchObjectDefinitionException>());
         }
 
         [Test]
@@ -1635,7 +1635,7 @@ namespace Spring.Objects.Factory
             Assert.That(lbf.GetObject("bd1", typeof(TestObject)), Is.SameAs(actual));
 
 		    lbf.RegisterObjectDefinition("bd2", bd2);
-            Assert.That(delegate { lbf.GetObject<TestObject>(); }, Throws.Exception.TypeOf<NoSuchObjectDefinitionException>());
+            Assert.That(() => lbf.GetObject<TestObject>(), Throws.Exception.TypeOf<NoSuchObjectDefinitionException>());
         }
 
         [Test]
