@@ -115,7 +115,7 @@ namespace Spring.Messaging.Nms.Core
             mocks.ReplayAll();
 
             MsgPriority priority = MsgPriority.Highest;
-            template.Execute(delegate(ISession session, IMessageProducer producer)
+            template.Execute((session, producer) =>
             {
                 bool b = session.Transacted;
                 priority = producer.Priority;
@@ -149,7 +149,7 @@ namespace Spring.Messaging.Nms.Core
 
             mocks.ReplayAll();
 
-            template.Execute(delegate(ISession session, IMessageProducer producer)
+            template.Execute((session, producer) =>
                                  {
                                      bool b = session.Transacted;
                                      MsgPriority priority = producer.Priority;
@@ -183,7 +183,7 @@ namespace Spring.Messaging.Nms.Core
 
             mocks.ReplayAll();
 
-            template.Execute(delegate(ISession session)
+            template.Execute(session =>
                                  {
                                      bool b = session.Transacted;
                                      return null;
@@ -223,12 +223,12 @@ namespace Spring.Messaging.Nms.Core
 
             try
             {
-                template.Execute(delegate(ISession session)
+                template.Execute(session =>
                                      {
                                          bool b = session.Transacted;
                                          return null;
                                      });
-                template.Execute(delegate(ISession session)
+                template.Execute(session =>
                                      {
                                          bool b = session.Transacted;
                                          return null;
@@ -241,7 +241,7 @@ namespace Spring.Messaging.Nms.Core
                 //In Java this test was doing 'double-duty' and testing TransactionAwareConnectionFactoryProxy, which has
                 //not been implemented in .NET
 
-                template.Execute(delegate(ISession session)
+                template.Execute(session =>
                                      {
                                          bool b = session.Transacted;
                                          return null;

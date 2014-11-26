@@ -17,7 +17,7 @@ namespace Spring.Context.Config
         [Test]
         public void BaseAssembliesAttributeRequired()
         {
-            Assert.That(delegate { _applicationContext = new XmlApplicationContext(ReadOnlyXmlTestResource.GetFilePath("ConfigFiles.BaseAssemblyTestWithout.xml", GetType())); },
+            Assert.That(() => { _applicationContext = new XmlApplicationContext(ReadOnlyXmlTestResource.GetFilePath("ConfigFiles.BaseAssemblyTestWithout.xml", GetType())); },
                         Throws.Exception);
         }
 

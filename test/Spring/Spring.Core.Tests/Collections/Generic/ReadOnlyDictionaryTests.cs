@@ -65,12 +65,12 @@ namespace Spring.Collections.Generic
             //updating to nunit 2.5 would be nice to use Assert.That( SomeMethod, Throws.Exception<ArgumentException>());
             // Execute(delegate {  });
 
-            Execute(delegate { readonlyPersonDictionary["Mark"] = 4; });
-            Execute(delegate { readonlyPersonDictionary.Add("Gabriel", 3); });
-            Execute(delegate { readonlyPersonDictionary.Add(new KeyValuePair<string, int>("Mark", 38)); });
-            Execute(delegate { readonlyPersonDictionary.Clear();});
-            Execute(delegate { readonlyPersonDictionary.Remove("Mark"); });
-            Execute(delegate { readonlyPersonDictionary.Remove(new KeyValuePair<string, int>("Mark", 38)); });
+            Execute(() => { readonlyPersonDictionary["Mark"] = 4; });
+            Execute(() => readonlyPersonDictionary.Add("Gabriel", 3));
+            Execute(() => readonlyPersonDictionary.Add(new KeyValuePair<string, int>("Mark", 38)));
+            Execute(() => readonlyPersonDictionary.Clear());
+            Execute(() => readonlyPersonDictionary.Remove("Mark"));
+            Execute(() => readonlyPersonDictionary.Remove(new KeyValuePair<string, int>("Mark", 38)));
         }
 
         public void Execute(DoInTryCatch exceptionDelegate)

@@ -112,7 +112,7 @@ namespace Spring.Messaging.Nms.Connections
             nt.Execute(new AssertSessionCallback(session));
 
             TransactionTemplate tt = new TransactionTemplate(tm);
-            tt.Execute(delegate(ITransactionStatus status)
+            tt.Execute(status =>
                            {
                                nt.Execute(new AssertSessionCallback(session));
                                return null;
@@ -144,7 +144,7 @@ namespace Spring.Messaging.Nms.Connections
             nt.Execute(new AssertSessionCallback(session));
 
             TransactionTemplate tt = new TransactionTemplate(tm);
-            tt.Execute(delegate(ITransactionStatus status)
+            tt.Execute(status =>
                            {
                                nt.Execute(new AssertSessionCallback(session));
                                status.SetRollbackOnly();
@@ -194,7 +194,7 @@ namespace Spring.Messaging.Nms.Connections
 
             TransactionTemplate tt = new TransactionTemplate(tm);
             tt.PropagationBehavior = TransactionPropagation.NotSupported;
-            tt.Execute(delegate(ITransactionStatus status)
+            tt.Execute(status =>
                            {
                                nt.Execute(new AssertNotSameSessionCallback(session));
                                return null;
@@ -243,7 +243,7 @@ namespace Spring.Messaging.Nms.Connections
 
             TransactionTemplate tt = new TransactionTemplate(tm);
             tt.PropagationBehavior = TransactionPropagation.RequiresNew;
-            tt.Execute(delegate(ITransactionStatus status)
+            tt.Execute(status =>
                            {
                                nt.Execute(new AssertNotSameSessionCallback(session));
                                return null;

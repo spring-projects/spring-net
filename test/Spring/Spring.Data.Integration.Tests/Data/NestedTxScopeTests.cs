@@ -56,7 +56,7 @@ namespace Spring.Data
 
             TransactionTemplate tt = new TransactionTemplate(tm);
             tt.PropagationBehavior = TransactionPropagation.Required;
-            tt.Execute(delegate(ITransactionStatus status)
+            tt.Execute(status =>
                            {
                                if (System.Transactions.Transaction.Current != null) Console.WriteLine("tx 1 id = " + System.Transactions.Transaction.Current.TransactionInformation.LocalIdentifier);
                                Console.WriteLine("tx 1 'IsNewTransaction' = " + status.IsNewTransaction);
@@ -64,7 +64,7 @@ namespace Spring.Data
                                TransactionTemplate tt2 = new TransactionTemplate(tm);
                                tt2.PropagationBehavior = TransactionPropagation.RequiresNew;
                                
-                               tt2.Execute(delegate(ITransactionStatus status2)
+                               tt2.Execute(status2 =>
                                                {
                                                    if (System.Transactions.Transaction.Current != null) Console.WriteLine("tx 2 = " + System.Transactions.Transaction.Current.TransactionInformation.LocalIdentifier);
                                                    Console.WriteLine("tx 2 'IsNewTransaction' = " + status2.IsNewTransaction);
