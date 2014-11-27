@@ -46,10 +46,7 @@ namespace Spring.Objects.Factory.Config
             MockObjectFactoryPostProcessor mofp = new MockObjectFactoryPostProcessor();
 
             IConfigurableApplicationContext ctx = new XmlApplicationContext(false, "name", false, null);
-            ctx.AddObjectFactoryPostProcessor(new DelegateObjectFactoryConfigurer(delegate(IConfigurableListableObjectFactory of)
-                                                                                        {
-                                                                                            of.RegisterSingleton("mofp", mofp);
-                                                                                        }));
+            ctx.AddObjectFactoryPostProcessor(new DelegateObjectFactoryConfigurer(of => of.RegisterSingleton("mofp", mofp)));
 
             ctx.Refresh();
             Assert.IsTrue(mofp.Called);
@@ -61,10 +58,7 @@ namespace Spring.Objects.Factory.Config
             MockObjectFactoryPostProcessor mofp = new MockObjectFactoryPostProcessor();
 
             IConfigurableApplicationContext ctx = new XmlApplicationContext(false, "name", false, null);
-            ctx.AddObjectFactoryPostProcessor(new DelegateObjectFactoryConfigurer(delegate(IConfigurableListableObjectFactory of)
-                {
-                    of.RegisterSingleton("mofp", mofp);
-                }));
+            ctx.AddObjectFactoryPostProcessor(new DelegateObjectFactoryConfigurer(of => of.RegisterSingleton("mofp", mofp)));
 
             ctx.Refresh();
 

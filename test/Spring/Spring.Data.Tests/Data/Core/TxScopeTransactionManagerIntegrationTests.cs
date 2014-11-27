@@ -129,7 +129,7 @@ namespace Spring.Data.Core
             Assert.IsFalse(TransactionSynchronizationManager.SynchronizationActive);
             Assert.IsNull(TransactionSynchronizationManager.CurrentTransactionName);
             Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
-            tt.Execute(delegate (ITransactionStatus status)
+            tt.Execute(status =>
                            {
                                Assert.IsTrue(TransactionSynchronizationManager.SynchronizationActive);
                                TransactionSynchronizationManager.RegisterSynchronization(sync);

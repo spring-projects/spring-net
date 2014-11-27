@@ -68,14 +68,14 @@ namespace Spring.Context.Support
 	    {
 	        MockApplicationContext appCtx = new MockApplicationContext();
             bool secondHandlerExecuted = false;
-            appCtx.ContextEvent += new ApplicationEventHandler(delegate(object sender, ApplicationEventArgs e)
+            appCtx.ContextEvent += (sender, e) =>
             {
                 throw new ApplicationException("dummy");
-            } );
-            appCtx.ContextEvent += new ApplicationEventHandler(delegate(object sender, ApplicationEventArgs e)
+            };
+            appCtx.ContextEvent += (sender,  e) =>
             {
                 secondHandlerExecuted = true;
-            } );
+            };
 
 
 	        ApplicationException resultException = null;
