@@ -773,7 +773,7 @@ namespace Spring.Data.NHibernate
 		    log.Info("Dropping database schema for NHibernate SessionFactory");
 		    HibernateTemplate hibernateTemplate = new HibernateTemplate(sessionFactory);
                 hibernateTemplate.Execute(
-                    new HibernateDelegate(delegate(ISession session)
+                    new HibernateDelegate(session =>
                                               {
                                                   IDbConnection con = session.Connection;
                                                   Dialect dialect = Dialect.GetDialect(Configuration.Properties);
@@ -803,7 +803,7 @@ namespace Spring.Data.NHibernate
 		    log.Info("Creating database schema for Hibernate SessionFactory");
 		    HibernateTemplate hibernateTemplate = new HibernateTemplate(sessionFactory);
 		    hibernateTemplate.Execute(
-			    new HibernateDelegate(delegate (ISession session)
+			    new HibernateDelegate(session =>
                 {
 					    IDbConnection con = session.Connection;
 					    Dialect dialect = Dialect.GetDialect(Configuration.Properties);
@@ -835,7 +835,7 @@ namespace Spring.Data.NHibernate
 		    HibernateTemplate hibernateTemplate = new HibernateTemplate(sessionFactory);
 		    hibernateTemplate.TemplateFlushMode = TemplateFlushMode.Never;
             hibernateTemplate.Execute(
-                new HibernateDelegate(delegate(ISession session)
+                new HibernateDelegate(session =>
                                           {
                                               IDbConnection con = session.Connection;
                                               Dialect dialect = Dialect.GetDialect(Configuration.Properties);

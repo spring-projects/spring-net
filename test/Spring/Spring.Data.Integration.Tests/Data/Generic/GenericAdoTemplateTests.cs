@@ -71,7 +71,7 @@ namespace Spring.Data.Generic
         public void CommandDelegateUsage()
         {
             string name = "Jack";
-            int count = adoTemplate.Execute<int>(delegate(DbCommand command)
+            int count = adoTemplate.Execute<int>(command =>
                                                      {
                                                          command.CommandText =
                                                              "select count(*) from TestObjects where Name = @Name";
@@ -90,7 +90,7 @@ namespace Spring.Data.Generic
         public void CommandDelegateUsageDownCast()
         {
             string name = "Jack";
-            int count = adoTemplate.Execute<int>(delegate(DbCommand command)
+			int count = adoTemplate.Execute<int>((DbCommand command) =>
                                                      {
                                                          SqlCommand sqlCommand = command as SqlCommand;
                                                          command.CommandText =

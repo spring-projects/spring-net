@@ -92,7 +92,7 @@ namespace Spring.Objects.Factory.Attributes
         [Test]
         public void WithArgumentMustThrowException()
         {
-            Assert.That(delegate { _applicationContext.GetObject("PostContructTestObject4"); }, Throws.Exception.TypeOf<ObjectCreationException>());
+            Assert.That(() => { _applicationContext.GetObject("PostContructTestObject4"); }, Throws.Exception.TypeOf<ObjectCreationException>());
         }
 
         [Test]

@@ -197,7 +197,7 @@ namespace Spring.Messaging.Core
         {
             IPlatformTransactionManager txManager = new MessageQueueTransactionManager();
             TransactionTemplate transactionTemplate = new TransactionTemplate(txManager);
-            transactionTemplate.Execute(delegate(ITransactionStatus status)
+            transactionTemplate.Execute(status =>
                                             {
                                                 if (messageQueueObjectName == null)
                                                 {
@@ -218,7 +218,7 @@ namespace Spring.Messaging.Core
         {
             IPlatformTransactionManager txManager = new TxScopeTransactionManager();
             TransactionTemplate transactionTemplate = new TransactionTemplate(txManager);
-            transactionTemplate.Execute(delegate(ITransactionStatus status)
+            transactionTemplate.Execute(status =>
                                             {
                                                 q.ConvertAndSend("Hello World 1");
                                                 q.ConvertAndSend("Hello World 2");

@@ -103,7 +103,7 @@ namespace Spring.Objects.Factory.Attributes
         [Test]
         public void WithArgumentMustThrowException()
         {
-            Assert.That(delegate
+            Assert.That(() =>
             {
                 DestroyTester.ExecutionCount5 = 0;
                 var testObj = (PreDestroyTestObject5)_applicationContext.GetObject("PreDestroyTestObject5");

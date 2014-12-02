@@ -47,7 +47,7 @@ namespace Spring.Context.Config
 
             Assert.That(_applicationContext.GetObjectDefinitionNames().Count, Is.EqualTo(6));
             Assert.That(_applicationContext.GetObject("SomeIncludeType1"), Is.Not.Null);
-            Assert.That(delegate { _applicationContext.GetObject("SomeExcludeType"); }, Throws.Exception.TypeOf<NoSuchObjectDefinitionException>());
+            Assert.That(() => { _applicationContext.GetObject("SomeExcludeType"); }, Throws.Exception.TypeOf<NoSuchObjectDefinitionException>());
         }
 
         [Test]
@@ -58,7 +58,7 @@ namespace Spring.Context.Config
             Assert.That(_applicationContext.GetObjectDefinitionNames().Count, Is.EqualTo(8));
             Assert.That(_applicationContext.GetObject("SomeIncludeType1"), Is.Not.Null);
             Assert.That(_applicationContext.GetObject("SomeIncludeType2"), Is.Not.Null);
-            Assert.That(delegate { _applicationContext.GetObject("SomeExcludeType"); }, Throws.Exception.TypeOf<NoSuchObjectDefinitionException>());
+            Assert.That(() => { _applicationContext.GetObject("SomeExcludeType"); }, Throws.Exception.TypeOf<NoSuchObjectDefinitionException>());
         }
 
         [Test]
@@ -68,7 +68,7 @@ namespace Spring.Context.Config
 
             Assert.That(_applicationContext.GetObjectDefinitionNames().Count, Is.EqualTo(8));
             Assert.That(_applicationContext.GetObject("SomeIncludeType1"), Is.Not.Null);
-            Assert.That(delegate { _applicationContext.GetObject("SomeExcludeType"); }, Throws.Exception.TypeOf<NoSuchObjectDefinitionException>());
+            Assert.That(() => { _applicationContext.GetObject("SomeExcludeType"); }, Throws.Exception.TypeOf<NoSuchObjectDefinitionException>());
         }
 
         [Test]
@@ -78,7 +78,7 @@ namespace Spring.Context.Config
 
             Assert.That(_applicationContext.GetObjectDefinitionNames().Count, Is.EqualTo(6));
             Assert.That(_applicationContext.GetObject("SomeIncludeType2"), Is.Not.Null);
-            Assert.That(delegate { _applicationContext.GetObject("SomeExcludeType"); }, Throws.Exception.TypeOf<NoSuchObjectDefinitionException>());
+            Assert.That(() => { _applicationContext.GetObject("SomeExcludeType"); }, Throws.Exception.TypeOf<NoSuchObjectDefinitionException>());
         }
 
         [Test]
@@ -89,7 +89,7 @@ namespace Spring.Context.Config
             Assert.That(_applicationContext.GetObjectDefinitionNames().Count, Is.EqualTo(8));
             Assert.That(_applicationContext.GetObject("SomeIncludeType2"), Is.Not.Null);
             Assert.That(_applicationContext.GetObject("SomeExcludeType"), Is.Not.Null);
-            Assert.That(delegate { _applicationContext.GetObject("SomeIncludeType1"); }, Throws.Exception.TypeOf<NoSuchObjectDefinitionException>());
+            Assert.That(() => { _applicationContext.GetObject("SomeIncludeType1"); }, Throws.Exception.TypeOf<NoSuchObjectDefinitionException>());
         }
 
         [Test]
@@ -100,7 +100,7 @@ namespace Spring.Context.Config
             Assert.That(_applicationContext.GetObjectDefinitionNames().Count, Is.EqualTo(8));
             Assert.That(_applicationContext.GetObject("SomeIncludeType1"), Is.Not.Null);
             Assert.That(_applicationContext.GetObject("SomeIncludeType2"), Is.Not.Null);
-            Assert.That(delegate { _applicationContext.GetObject("SomeExcludeType"); }, Throws.Exception.TypeOf<NoSuchObjectDefinitionException>());
+            Assert.That(() => { _applicationContext.GetObject("SomeExcludeType"); }, Throws.Exception.TypeOf<NoSuchObjectDefinitionException>());
         }
 
         [Test]
@@ -111,7 +111,7 @@ namespace Spring.Context.Config
             Assert.That(_applicationContext.GetObjectDefinitionNames().Count, Is.EqualTo(8));
             Assert.That(_applicationContext.GetObject("SomeIncludeType1"), Is.Not.Null);
             Assert.That(_applicationContext.GetObject("SomeExcludeType"), Is.Not.Null);
-            Assert.That(delegate { _applicationContext.GetObject("SomeIncludeType2"); }, Throws.Exception.TypeOf<NoSuchObjectDefinitionException>());
+            Assert.That(() => { _applicationContext.GetObject("SomeIncludeType2"); }, Throws.Exception.TypeOf<NoSuchObjectDefinitionException>());
         }
 
         [Test]
@@ -121,7 +121,7 @@ namespace Spring.Context.Config
 
             Assert.That(_applicationContext.GetObjectDefinitionNames().Count, Is.EqualTo(6));
             Assert.That(_applicationContext.GetObject("SomeIncludeType1"), Is.Not.Null);
-            Assert.That(delegate { _applicationContext.GetObject("SomeIncludeType2"); }, Throws.Exception.TypeOf<NoSuchObjectDefinitionException>());
+            Assert.That(() => { _applicationContext.GetObject("SomeIncludeType2"); }, Throws.Exception.TypeOf<NoSuchObjectDefinitionException>());
         }
 
         [Test]
@@ -132,7 +132,7 @@ namespace Spring.Context.Config
             Assert.That(_applicationContext.GetObjectDefinitionNames().Count, Is.EqualTo(8));
             Assert.That(_applicationContext.GetObject("SomeIncludeType2"), Is.Not.Null);
             Assert.That(_applicationContext.GetObject("SomeExcludeType"), Is.Not.Null);
-            Assert.That(delegate { _applicationContext.GetObject("SomeIncludeType1"); }, Throws.Exception.TypeOf<NoSuchObjectDefinitionException>());
+            Assert.That(() => { _applicationContext.GetObject("SomeIncludeType1"); }, Throws.Exception.TypeOf<NoSuchObjectDefinitionException>());
         }
 
     }
