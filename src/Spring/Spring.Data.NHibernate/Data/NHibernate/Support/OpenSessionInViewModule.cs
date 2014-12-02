@@ -57,8 +57,8 @@ namespace Spring.Data.NHibernate.Support
         /// <param name="context">The standard HTTP application context</param>
         public void Init( HttpApplication context )
         {
-            context.BeginRequest += new EventHandler(context_BeginRequest);
-            context.EndRequest += new EventHandler(context_EndRequest);
+            context.BeginRequest += context_BeginRequest;
+            context.EndRequest += context_EndRequest;
         }
          /// <summary>
          /// A do nothing dispose method.

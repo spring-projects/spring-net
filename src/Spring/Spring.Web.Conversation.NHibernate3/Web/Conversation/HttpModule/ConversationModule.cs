@@ -73,7 +73,7 @@ namespace Spring.Web.Conversation.HttpModule
             if (HttpContext.Current.Handler is Page)
             {
                 Page page = (Page)HttpContext.Current.Handler;
-                page.Unload += new EventHandler(page_Unload);
+                page.Unload += page_Unload;
 
                 if (HttpContext.Current.Session != null)
                 {

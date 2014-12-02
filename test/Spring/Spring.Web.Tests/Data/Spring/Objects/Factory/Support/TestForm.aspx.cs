@@ -9,7 +9,7 @@ namespace Spring.Data.Objects.Factory.Support
 
         public TestForm()
         {
-            this.Load += new EventHandler(Page_Load);
+            this.Load += Page_Load;
         }
 
         protected void Page_Load(object sender, EventArgs e)
