@@ -156,7 +156,7 @@ namespace Spring.Context.Support
             ILog s_weblog = LogManager.GetLogger(typeof(WebApplicationContext));
 
             // register for ContextRegistry.Cleared event - we need to discard our cache in this case
-            ContextRegistry.Cleared += new EventHandler(OnContextRegistryCleared);
+            ContextRegistry.Cleared += OnContextRegistryCleared;
 
 #if !MONO_2_0
             if (HttpRuntime.AppDomainAppVirtualPath != null) // check if we're within an ASP.NET AppDomain!

@@ -83,7 +83,7 @@ namespace Spring.EnterpriseServices
         {
             // this is to ensure, that assemblies placed next to the component assembly can be loaded
             // even when they are not strong named.
-            AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
+            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
             FileInfo componentAssemblyFile = new FileInfo(componentType.Assembly.Location);
             FileInfo assemblyFile = new FileInfo(componentAssemblyFile.FullName);
 
