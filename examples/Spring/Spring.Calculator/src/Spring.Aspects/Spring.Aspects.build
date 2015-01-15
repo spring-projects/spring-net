@@ -18,7 +18,8 @@
 			</nowarn>
 			<references basedir="${current.bin.dir}">
 				<include name="log4net.dll" />
-			        <include name="Common.Logging.dll"/>
+                <include name="Common.Logging.dll"/>
+                <include name="Common.Logging.Core.dll"/>
 				<include name="Spring.Aop.dll" />
 			</references>
 		</csc>

@@ -35,6 +35,7 @@
 				<include name="System.Configuration.dll"/>
 				<include name="System.Data.dll" />
 			    <include name="${current.bin.dir}/Common.Logging.dll"/>
+		        <include name="${current.bin.dir}/Common.Logging.Core.dll"/>
 			    <include name="${current.bin.dir}/nunit.framework.dll"/>
 				<include name="${current.bin.dir}/Spring.Core.dll" />
 				<include name="${current.bin.dir}/Spring.Data.dll" />

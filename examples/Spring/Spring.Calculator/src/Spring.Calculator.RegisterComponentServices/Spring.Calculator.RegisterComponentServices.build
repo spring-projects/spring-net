@@ -21,7 +21,8 @@
 			</resources>
 			<references basedir="${current.bin.dir}">
 				<include name="log4net.dll" />
-			        <include name="Common.Logging.dll"/>
+                <include name="Common.Logging.dll"/>
+                <include name="Common.Logging.Core.dll"/>
 				<include name="Spring.Core.dll" />
 				<include name="Spring.Services.dll" />
 				<include name="Spring.Calculator.Contract.dll" />

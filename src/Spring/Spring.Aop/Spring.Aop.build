@@ -39,6 +39,7 @@
 				<include name="System.Data.dll" />
                 <include name="System.Xml.dll"/>
 				<include name="${current.bin.dir}/Common.Logging.dll"/>
+		        <include name="${current.bin.dir}/Common.Logging.Core.dll"/>
 				<include name="${current.bin.dir}/antlr.runtime.dll"/>
 				<include name="${current.bin.dir}/Spring.Core.dll" />
 			</references>

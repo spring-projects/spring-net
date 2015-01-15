@@ -51,6 +51,7 @@
 		<include name="System.Web.Services.dll" />
 		<include name="System.Xml.dll"/>
         <include name="${current.bin.dir}/Common.Logging.dll"/>
+        <include name="${current.bin.dir}/Common.Logging.Core.dll"/>
         <include name="${current.bin.dir}/Spring.Core.dll" />
         <include name="${current.bin.dir}/Spring.Aop.dll" />
         <include name="${current.bin.dir}/Spring.Web.dll" />
