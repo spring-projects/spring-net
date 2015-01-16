@@ -325,10 +325,15 @@ Commandline Examples:
 	  failonerror="true" />
 	<exec 
 	  program=".nuget\nuget.exe"
-	  commandline="restore ${spring.basedir}\examples\Spring\Spring.CodeConfig.Migration\Spring.CodeConfig.Migration.2010.sln" 
+	  commandline="restore ${spring.basedir}\examples\Spring\Spring.Calculator\Spring.Calculator.2010.sln" 
 	  workingdir="."
 	  failonerror="true" />
 	<exec 
+	  program=".nuget\nuget.exe"
+	  commandline="restore ${spring.basedir}\examples\Spring\Spring.CodeConfig.Migration\Spring.CodeConfig.Migration.2010.sln"
+	  workingdir="."
+	  failonerror="true" />
+	  <exec 
 	  program=".nuget\nuget.exe"
 	  commandline="restore ${spring.basedir}\examples\Spring\Spring.Data.NHibernate.Northwind\Spring.Northwind.2010.sln" 
 	  workingdir="."
@@ -338,6 +343,16 @@ Commandline Examples:
 	  commandline="restore ${spring.basedir}\examples\Spring\Spring.DataQuickStart\Spring.DataQuickStart.2010.sln" 
 	  workingdir="."
 	  failonerror="true" />
+	<exec 
+	  program=".nuget\nuget.exe"
+	  commandline="restore ${spring.basedir}\examples\Spring\Spring.IoCQuickStart.MovieFinder\Spring.IocQuickStart.MovieFinder.2010.sln" 
+	  workingdir="."
+	  failonerror="true" />
+	<exec 
+	  program=".nuget\nuget.exe"
+	  commandline="restore ${spring.basedir}\examples\Spring\Spring.MsmqQuickStart\Spring.MsmqQuickStart.2010.sln" 
+	  workingdir="."
+	  failonerror="true" />	  
 	<exec 
 	  program=".nuget\nuget.exe"
 	  commandline="restore ${spring.basedir}\examples\Spring\Spring.Mvc3QuickStart\Spring.Mvc3QuickStart.sln" 
@@ -351,6 +366,11 @@ Commandline Examples:
 	<exec 
 	  program=".nuget\nuget.exe"
 	  commandline="restore ${spring.basedir}\examples\Spring\Spring.Mvc5QuickStart\Spring.Mvc5QuickStart.sln" 
+	  workingdir="."
+	  failonerror="true" />
+	<exec 
+	  program=".nuget\nuget.exe"
+	  commandline="restore ${spring.basedir}\examples\Spring\Spring.NmsQuickStart\Spring.NmsQuickStart.2010.sln" 
 	  workingdir="."
 	  failonerror="true" />
 	 <exec 
