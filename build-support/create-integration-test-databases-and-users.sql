@@ -60,9 +60,6 @@ GO
 CREATE DATABASE CreditsAndDebits
 GO
 
-CREATE DATABASE Spring
-GO
-
 -- create the SpringQA login itself
 CREATE LOGIN [springqa] WITH PASSWORD=N'springqa', DEFAULT_DATABASE=[Spring], DEFAULT_LANGUAGE=[us_english], CHECK_EXPIRATION = OFF, CHECK_POLICY = OFF
 GO
