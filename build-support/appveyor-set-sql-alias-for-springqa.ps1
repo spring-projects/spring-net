@@ -26,7 +26,8 @@ if ((test-path -path $x64) -ne $True)
  
 #Adding the extra "fluff" to tell the machine what type of alias it is
 $TCPAlias = "DBMSSOCN," + $ServerName + "\" + $InstanceName
-$NamedPipesAlias = "DBNMPNTW,\\" + $ServerName + "\PIPE\" + "MSSQL$" + $InstanceName + "\sql\query"
+#$NamedPipesAlias = "DBNMPNTW,\\" + $ServerName + "\PIPE\" + "MSSQL$" + $InstanceName + "\sql\query"
+$NamedPipesAlias = "DBNMPNTW,\\.\PIPE\MSSQL$SQL2012SP1\sql\query"
 
 #Creating our TCP/IP Aliases
 #New-ItemProperty -Path $x86 -Name $AliasName -PropertyType String -Value $TCPAlias -Force
