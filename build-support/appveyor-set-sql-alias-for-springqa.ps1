@@ -26,15 +26,15 @@ if ((test-path -path $x64) -ne $True)
  
 #Adding the extra "fluff" to tell the machine what type of alias it is
 $TCPAlias = "DBMSSOCN," + $ServerName + "\" + $InstanceName
-$NamedPipesAlias = "DBNMPNTW,\\" + $ServerName + "\pipe\" + "MSSQL$" + $InstanceName + "\sql\query"
- 
+$NamedPipesAlias = "DBNMPNTW,\\" + $ServerName + "\PIPE\" + "MSSQL$" + $InstanceName + "\sql\query"
+
 #Creating our TCP/IP Aliases
-New-ItemProperty -Path $x86 -Name $AliasName -PropertyType String -Value $TCPAlias -Force
-New-ItemProperty -Path $x64 -Name $AliasName -PropertyType String -Value $TCPAlias -Force
+#New-ItemProperty -Path $x86 -Name $AliasName -PropertyType String -Value $TCPAlias -Force
+#New-ItemProperty -Path $x64 -Name $AliasName -PropertyType String -Value $TCPAlias -Force
  
 #WARNING: left here in case we ever want to switch to named-piped, but since we can't have two aliases
 #          named the same for two diff. conn. protcols, this is commented out here in favor of the TCPIP alias above
  
 #Creating our Named Pipes Aliases
-#New-ItemProperty -Path $x86 –Name $AliasName -PropertyType String -Value $NamedPipesAlias
-#New-ItemProperty -Path $x64 –Name $AliasName -PropertyType String -Value $NamedPipesAlias
+New-ItemProperty -Path $x86 –Name $AliasName -PropertyType String -Value $NamedPipesAlias
+New-ItemProperty -Path $x64 –Name $AliasName -PropertyType String -Value $NamedPipesAlias
