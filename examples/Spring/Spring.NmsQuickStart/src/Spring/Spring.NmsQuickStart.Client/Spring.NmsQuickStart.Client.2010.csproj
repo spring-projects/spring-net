@@ -60,9 +60,11 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\..\..\..\lib\Net\2.0\Apache.NMS.ActiveMQ.dll</HintPath>
     </Reference>
-    <Reference Include="Common.Logging, Version=1.2.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\..\lib\Net\2.0\Common.Logging.dll</HintPath>
+    <Reference Include="Common.Logging">
+      <HintPath>..\..\..\packages\Common.Logging.3.0.0\lib\net40\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging.Core">
+      <HintPath>..\..\..\packages\Common.Logging.Core.3.0.0\lib\net40\Common.Logging.Core.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Core">
       <HintPath>..\..\..\..\..\..\bin\net\4.0\debug\Spring.Core.dll</HintPath>
@@ -104,6 +106,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <None Include="App.config" />
+    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>

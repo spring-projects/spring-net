@@ -20,7 +20,8 @@
 				<include name="**/*.xml" />
 			</resources>
 			<references basedir="${current.bin.dir}">
-			        <include name="Common.Logging.dll"/>
+		        <include name="Common.Logging.dll"/>
+				<include name="Common.Logging.Core.dll" />
 				<include name="Spring.Core.dll" />
 				<include name="Spring.Aop.dll" />
 				<include name="Spring.Services.dll" />

@@ -27,10 +27,11 @@
         <warning number="${nowarn.numbers}" />
       </nowarn>
       <references basedir="${local.lib.dir}">
-        <include name="${current.bin.dir}/Common.Logging.dll"/>
-				<include name="${current.bin.dir}/Spring.Core.dll" />
-        <include name="log4net.dll" />
-				<include name="Common.Logging.Log4Net.dll"/>
+            <include name="${current.bin.dir}/Common.Logging.dll"/>
+            <include name="${current.bin.dir}/Common.Logging.Core.dll"/>
+			<include name="${current.bin.dir}/Spring.Core.dll" />
+            <include name="log4net.dll" />
+			<include name="Common.Logging.Log4Net.dll"/>
       </references>
     </csc>
     <copy tofile="${current.bin.dir}/${project::get-name()}.exe.config"

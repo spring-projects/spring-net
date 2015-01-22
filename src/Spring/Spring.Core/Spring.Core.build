@@ -59,6 +59,7 @@
                 <include name="System.Xml.dll"/>
                 <include name="Microsoft.VisualBasic.dll"/>
 		        <include name="${current.bin.dir}/Common.Logging.dll"/>
+		        <include name="${current.bin.dir}/Common.Logging.Core.dll"/>
             </references>
         </csc>
     </target>

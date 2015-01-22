@@ -41,11 +41,16 @@
     <DocumentationFile>..\..\..\build\VS.NET.2010\Spring.Scheduling.Quartz2\Release\Spring.Scheduling.Quartz2.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Common.Logging">
-      <HintPath>..\..\..\packages\Common.Logging.2.3.1\lib\net40\Common.Logging.dll</HintPath>
+    <Reference Include="Common.Logging, Version=3.0.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\..\..\packages\Common.Logging.3.0.0\lib\net40\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging.Core">
+      <HintPath>..\..\..\packages\Common.Logging.Core.3.0.0\lib\net40\Common.Logging.Core.dll</HintPath>
     </Reference>
     <Reference Include="Quartz">
-      <HintPath>..\..\..\packages\Quartz.2.3\lib\net40\Quartz.dll</HintPath>
+      <HintPath>..\..\..\packages\Quartz.2.3.1\lib\net40\Quartz.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -92,6 +97,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="job_scheduling_data_2_0.xsd">
+      <SubType>Designer</SubType>
+    </None>
     <None Include="packages.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
