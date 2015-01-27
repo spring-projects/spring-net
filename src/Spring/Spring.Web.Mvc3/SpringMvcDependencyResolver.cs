@@ -13,7 +13,7 @@ namespace Spring.Web.Mvc
     /// </summary>
     public class SpringMvcDependencyResolver : IDependencyResolver
     {
-
+        private static readonly string IgnoreViewNamespace = "ASP.";
         private IApplicationContext _context;
 
         /// <summary>
@@ -67,6 +67,10 @@ namespace Spring.Web.Mvc
         /// <returns>The requested service or object.</returns>
         public object GetService(Type serviceType)
         {
+            if (serviceType.FullName.StartsWith(IgnoreViewNamespace))
+            {
+                return null;
+            }
             object service = null;
 
             if (serviceType != null)

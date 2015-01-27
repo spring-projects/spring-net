@@ -13,8 +13,11 @@ namespace Spring.Web.Mvc
     /// </summary>
     public class SpringMvcDependencyResolver : IDependencyResolver
     {
-
-        private IApplicationContext _context;
+        private static readonly string IgnoreViewNamespace = "ASP.";
+        /// <summary>
+        /// The <see cref="IApplicationContext"/> to be used by the resolver
+        /// </summary>
+        protected IApplicationContext _context;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SpringMvcDependencyResolver"/> class.
@@ -48,6 +51,7 @@ namespace Spring.Web.Mvc
 
                 return _context;
             }
+            protected set { _context = value; }
         }
 
         /// <summary>
@@ -57,7 +61,7 @@ namespace Spring.Web.Mvc
         /// Defaults to using the root (default) Application Context.
         /// </remarks>
         /// <value>The name of the application context.</value>
-        public static string ApplicationContextName { get; set; }
+        public string ApplicationContextName { get; set; }
 
 
         /// <summary>
@@ -67,6 +71,10 @@ namespace Spring.Web.Mvc
         /// <returns>The requested service or object.</returns>
         public object GetService(Type serviceType)
         {
+            if (serviceType.FullName.StartsWith(IgnoreViewNamespace))
+            {
+                return null;
+            }
             object service = null;
 
             if (serviceType != null)
