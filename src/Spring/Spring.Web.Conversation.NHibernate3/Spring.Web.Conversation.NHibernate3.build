@@ -52,6 +52,7 @@
 				<include name="System.Web.dll" />
 				<include name="System.EnterpriseServices.dll" />
 				<include name="${current.bin.dir}/*.dll" />
+				<include name="${current.bin.dir}/NH3/*.dll" />
 				<exclude name="${current.bin.dir}/${project::get-name()}.dll" />
 				<exclude name="${current.bin.dir}/Spring.Web.Conversation.NHibernate*.dll" />
 				<exclude name="${current.bin.dir}/Spring.Data.NHibernate4.dll" />

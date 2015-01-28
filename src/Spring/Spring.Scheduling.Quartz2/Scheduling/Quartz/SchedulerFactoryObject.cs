@@ -684,14 +684,14 @@ namespace Spring.Scheduling.Quartz
 
     		if (dbProvider != null) 
             {
-                mergedProps.Add(StdSchedulerFactory.PropertyJobStoreType, typeof(LocalDataSourceJobStore).AssemblyQualifiedName);
+                mergedProps.Set(StdSchedulerFactory.PropertyJobStoreType, typeof(LocalDataSourceJobStore).AssemblyQualifiedName);
 	        }
 
 
             // Make sure to set the scheduler name as configured in the Spring configuration.
             if (schedulerName != null)
             {
-                mergedProps.Add(StdSchedulerFactory.PropertySchedulerInstanceName, schedulerName);
+                mergedProps.Set(StdSchedulerFactory.PropertySchedulerInstanceName, schedulerName);
             }
 
             ((StdSchedulerFactory) schedulerFactory).Initialize(mergedProps);
