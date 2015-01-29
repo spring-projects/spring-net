@@ -75,14 +75,14 @@ namespace Spring.Scheduling.Quartz
     /// <seealso cref="IScheduler" />
     /// <seealso cref="ISchedulerFactory" />
     /// <seealso cref="StdSchedulerFactory" />
-    public class SchedulerFactoryObject : SchedulerAccessor, IFactoryObject, IObjectNameAware, 
+    public class SchedulerFactoryObject : SchedulerAccessor, IFactoryObject, IObjectNameAware,
         IApplicationContextAware, IApplicationEventListener, IInitializingObject, IDisposable
     {
         /// <summary>
         /// Default thread count to be set to thread pool.
         /// </summary>
         public const int DEFAULT_THREAD_COUNT = 10;
-        
+
         /// <summary>
         /// Property name for thread count in thread pool.
         /// </summary>
@@ -131,7 +131,7 @@ namespace Spring.Scheduling.Quartz
         private IJobFactory jobFactory;
         private bool jobFactorySet;
         private IDictionary quartzProperties;
-        private IScheduler  scheduler;
+        private IScheduler scheduler;
         private IDictionary schedulerContextMap;
         private Type schedulerFactoryType;
         private string schedulerName;
@@ -148,7 +148,6 @@ namespace Spring.Scheduling.Quartz
         {
             schedulerFactoryType = typeof (StdSchedulerFactory);
         }
-
 
         /// <summary>
         /// Set the Quartz SchedulerFactory implementation to use.
@@ -286,8 +285,8 @@ namespace Spring.Scheduling.Quartz
         /// <p>
         /// Default is Spring's <see cref="AdaptableJobFactory" />, which supports
         /// standard Quartz <see cref="IJob" /> instances. Note that this default only applies
- 	 	/// to a <i>local</i> Scheduler, not to a RemoteScheduler (where setting
- 	 	/// a custom JobFactory is not supported by Quartz).
+        /// to a <i>local</i> Scheduler, not to a RemoteScheduler (where setting
+        /// a custom JobFactory is not supported by Quartz).
         /// </p>
         /// <p>
         /// Specify an instance of Spring's <see cref="SpringObjectJobFactory" /> here
@@ -299,8 +298,8 @@ namespace Spring.Scheduling.Quartz
         /// <seealso cref="SpringObjectJobFactory" />
         public virtual IJobFactory JobFactory
         {
-            set 
-            { 
+            set
+            {
                 jobFactory = value;
                 jobFactorySet = true;
             }
@@ -570,18 +569,17 @@ namespace Spring.Scheduling.Quartz
             ISchedulerFactory schedulerFactory = ObjectUtils.InstantiateType<ISchedulerFactory>(schedulerFactoryType);
 
             InitSchedulerFactory(schedulerFactory);
-            
-		    if (taskExecutor != null) 
-            {
-			    // Make given TaskExecutor available for SchedulerFactory configuration.
-			    configTimeTaskExecutor = taskExecutor;
-		    }
-		    if (dbProvider != null) 
-            {
-			    // Make given db provider available for SchedulerFactory configuration.
-			    configTimeDbProvider = dbProvider;
-		    }
 
+            if (taskExecutor != null)
+            {
+                // Make given TaskExecutor available for SchedulerFactory configuration.
+                configTimeTaskExecutor = taskExecutor;
+            }
+            if (dbProvider != null)
+            {
+                // Make given db provider available for SchedulerFactory configuration.
+                configTimeDbProvider = dbProvider;
+            }
 
             try
             {
@@ -589,12 +587,12 @@ namespace Spring.Scheduling.Quartz
                 scheduler = CreateScheduler(schedulerFactory, schedulerName);
                 PopulateSchedulerContext();
 
-                if (!jobFactorySet && !(scheduler is RemoteScheduler)) 
+                if (!jobFactorySet && !(scheduler is RemoteScheduler))
                 {
- 	 	            // Use AdaptableJobFactory as default for a local Scheduler, unless when
- 	 	            // explicitly given a null value through the "jobFactory" object property.
- 	 	            jobFactory = new AdaptableJobFactory();
- 	 	        }
+                    // Use AdaptableJobFactory as default for a local Scheduler, unless when
+                    // explicitly given a null value through the "jobFactory" object property.
+                    jobFactory = new AdaptableJobFactory();
+                }
 
                 if (jobFactory != null)
                 {
@@ -607,14 +605,14 @@ namespace Spring.Scheduling.Quartz
             }
             finally
             {
-			    if (taskExecutor != null) 
+                if (taskExecutor != null)
                 {
-				    configTimeTaskExecutor = null;
-			    }
-			    if (dbProvider != null) 
+                    configTimeTaskExecutor = null;
+                }
+                if (dbProvider != null)
                 {
-				    configTimeDbProvider = null;
-			    }
+                    configTimeDbProvider = null;
+                }
             }
 
             RegisterListeners();
@@ -634,7 +632,6 @@ namespace Spring.Scheduling.Quartz
                 if (configLocation != null || quartzProperties != null || schedulerName != null ||
                     taskExecutor != null || dbProvider != null)
                 {
-
                     throw new ArgumentException("StdSchedulerFactory required for applying Quartz properties: " + schedulerFactory);
                 }
                 // Otherwise assume that no initialization is necessary...
@@ -651,7 +648,7 @@ namespace Spring.Scheduling.Quartz
             }
             else
             {
-                mergedProps.Set(StdSchedulerFactory.PropertyThreadPoolType, typeof(SimpleThreadPool).AssemblyQualifiedName);
+                mergedProps.Set(StdSchedulerFactory.PropertyThreadPoolType, typeof (SimpleThreadPool).AssemblyQualifiedName);
                 mergedProps[PROP_THREAD_COUNT] = Convert.ToString(DEFAULT_THREAD_COUNT);
             }
 
@@ -666,32 +663,30 @@ namespace Spring.Scheduling.Quartz
                     string line;
                     while ((line = sr.ReadLine()) != null)
                     {
-                        string[] lineItems = line.Split(new char[] { '=' }, 2);
+                        string[] lineItems = line.Split(new char[] {'='}, 2);
                         if (lineItems.Length == 2)
                         {
                             mergedProps[lineItems[0].Trim()] = lineItems[1].Trim();
                         }
-                    } 
+                    }
                 }
-                
             }
 
             if (quartzProperties != null)
             {
                 // if given quartz properties, merge to them to configuration
-            	MergePropertiesIntoMap(quartzProperties, mergedProps);
+                MergePropertiesIntoMap(quartzProperties, mergedProps);
             }
 
-    		if (dbProvider != null) 
+            if (dbProvider != null)
             {
-                mergedProps.Add(StdSchedulerFactory.PropertyJobStoreType, typeof(LocalDataSourceJobStore).AssemblyQualifiedName);
-	        }
-
+                mergedProps[StdSchedulerFactory.PropertyJobStoreType] = typeof (LocalDataSourceJobStore).AssemblyQualifiedName;
+            }
 
             // Make sure to set the scheduler name as configured in the Spring configuration.
             if (schedulerName != null)
             {
-                mergedProps.Add(StdSchedulerFactory.PropertySchedulerInstanceName, schedulerName);
+                mergedProps[StdSchedulerFactory.PropertySchedulerInstanceName] = schedulerName;
             }
 
             ((StdSchedulerFactory) schedulerFactory).Initialize(mergedProps);
@@ -711,7 +706,6 @@ namespace Spring.Scheduling.Quartz
             }
         }
 
-
         /// <summary>
         /// Create the Scheduler instance for the given factory and scheduler name.
         /// Called by afterPropertiesSet.
@@ -727,24 +721,26 @@ namespace Spring.Scheduling.Quartz
         /// <seealso cref="ISchedulerFactory.GetScheduler()"/>
         protected virtual IScheduler CreateScheduler(ISchedulerFactory schedulerFactory, string schedName)
         {
-		    SchedulerRepository repository = SchedulerRepository.Instance;
-		    lock (repository) 
+            SchedulerRepository repository = SchedulerRepository.Instance;
+            lock (repository)
             {
-			    IScheduler existingScheduler = (schedulerName != null ? repository.Lookup(schedulerName) : null);
-			    IScheduler newScheduler = schedulerFactory.GetScheduler();
-			    if (newScheduler == existingScheduler) {
-				    throw new InvalidOperationException(
+                IScheduler existingScheduler = (schedulerName != null ? repository.Lookup(schedulerName) : null);
+                IScheduler newScheduler = schedulerFactory.GetScheduler();
+                if (newScheduler == existingScheduler)
+                {
+                    throw new InvalidOperationException(
                         string.Format(
-                        "Active Scheduler of name '{0}' already registered in Quartz SchedulerRepository. Cannot create a new Spring-managed Scheduler of the same name!", 
-                        schedulerName));
-			    }
-			    if (!exposeSchedulerInRepository) {
-				    // Need to explicitly remove it if not intended for exposure,
-				    // since Quartz shares the Scheduler instance by default!
-				    SchedulerRepository.Instance.Remove(newScheduler.SchedulerName);
-			    }
-			    return newScheduler;
-		    }
+                            "Active Scheduler of name '{0}' already registered in Quartz SchedulerRepository. Cannot create a new Spring-managed Scheduler of the same name!",
+                            schedulerName));
+                }
+                if (!exposeSchedulerInRepository)
+                {
+                    // Need to explicitly remove it if not intended for exposure,
+                    // since Quartz shares the Scheduler instance by default!
+                    SchedulerRepository.Instance.Remove(newScheduler.SchedulerName);
+                }
+                return newScheduler;
+            }
         }
 
         /// <summary>
@@ -772,7 +768,6 @@ namespace Spring.Scheduling.Quartz
             }
         }
 
-
         /// <summary>
         /// Start the Quartz Scheduler, respecting the "startDelay" setting.
         /// </summary>
@@ -795,7 +790,6 @@ namespace Spring.Scheduling.Quartz
                 sched.StartDelayed(startDelay);
             }
         }
-
 
         //---------------------------------------------------------------------
         // Implementation of Lifecycle interface
