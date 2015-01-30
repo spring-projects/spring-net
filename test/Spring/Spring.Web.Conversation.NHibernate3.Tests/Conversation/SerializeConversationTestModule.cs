@@ -61,8 +61,8 @@ namespace Spring.Web.Conversation
         /// <param name="context"></param>
         public void Init(HttpApplication context)
         {
-            context.PreRequestHandlerExecute += new EventHandler(context_PreRequestHandlerExecute);
-            context.PostRequestHandlerExecute += new EventHandler(context_PostRequestHandlerExecute);
+            context.PreRequestHandlerExecute += context_PreRequestHandlerExecute;
+            context.PostRequestHandlerExecute += context_PostRequestHandlerExecute;
         }
 
         /// <summary>

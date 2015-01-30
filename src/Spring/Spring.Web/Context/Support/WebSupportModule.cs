@@ -145,8 +145,8 @@ namespace Spring.Context.Support
                 VirtualEnvironment.SetInitialized();
             }
 
-            app.PreRequestHandlerExecute += new EventHandler(OnConfigureHandler);
-            app.EndRequest += new EventHandler(VirtualEnvironment.RaiseEndRequest);
+            app.PreRequestHandlerExecute += OnConfigureHandler;
+            app.EndRequest += VirtualEnvironment.RaiseEndRequest;
 
             // TODO: this is only a workaround to get us up & running in IIS7/integrated mode
             // We must review all code for relative virtual paths - they must be resolved to application-relative paths

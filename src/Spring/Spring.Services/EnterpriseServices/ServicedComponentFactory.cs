@@ -150,7 +150,7 @@ namespace Spring.EnterpriseServices
         {
             ValidateConfiguration();
             componentType = Type.GetTypeFromProgID(Name, Server);
-            AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(CurrentDomain_AssemblyResolve);
+            AppDomain.CurrentDomain.AssemblyResolve += CurrentDomain_AssemblyResolve;
         }
 
         #endregion
