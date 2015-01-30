@@ -254,7 +254,7 @@ namespace Spring.Context.Support
          IApplicationContext parentContext,
          string[] configurationLocations,
          IResource[] configurationResources)
-            : this(new XmlApplicationContextArgs(name, parentContext, configurationLocations, null, caseSensitive, refresh))
+            : this(new XmlApplicationContextArgs(name, parentContext, configurationLocations, configurationResources, caseSensitive, refresh))
         { }
 
 
