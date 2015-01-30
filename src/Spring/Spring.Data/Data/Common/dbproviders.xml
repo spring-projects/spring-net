@@ -1263,6 +1263,9 @@
         <property name="ErrorCodes.BadSqlGrammarCodes">
           <value>-007,-029,-097,-104,-109,-115,-128,-199,-204,-206,-301,-408,-441,-491</value>
         </property>
+        <property name="ErrorCodes.PermissionDeniedCodes">
+          <value>-551,-552</value>
+        </property>
         <property name="ErrorCodes.DuplicateKeyCodes">
           <value>-803</value>
         </property>
@@ -1310,6 +1313,9 @@
 
         <property name="ErrorCodes.BadSqlGrammarCodes">
           <value>-007,-029,-097,-104,-109,-115,-128,-199,-204,-206,-301,-408,-441,-491</value>
+        </property>
+        <property name="ErrorCodes.PermissionDeniedCodes">
+          <value>-551,-552</value>
         </property>
         <property name="ErrorCodes.DuplicateKeyCodes">
           <value>-803</value>
@@ -1363,6 +1369,9 @@
         <property name="ErrorCodes.BadSqlGrammarCodes">
           <value>-007,-029,-097,-104,-109,-115,-128,-199,-204,-206,-301,-408,-441,-491</value>
         </property>
+        <property name="ErrorCodes.PermissionDeniedCodes">
+          <value>-551,-552</value>
+        </property>
         <property name="ErrorCodes.DuplicateKeyCodes">
           <value>-803</value>
         </property>
@@ -1411,6 +1420,9 @@
 
         <property name="ErrorCodes.BadSqlGrammarCodes">
           <value>-007,-029,-097,-104,-109,-115,-128,-199,-204,-206,-301,-408,-441,-491</value>
+        </property>
+        <property name="ErrorCodes.PermissionDeniedCodes">
+          <value>-551,-552</value>
         </property>
         <property name="ErrorCodes.DuplicateKeyCodes">
           <value>-803</value>
@@ -1462,6 +1474,9 @@
 
         <property name="ErrorCodes.BadSqlGrammarCodes">
           <value>-007,-029,-097,-104,-109,-115,-128,-199,-204,-206,-301,-408,-441,-491</value>
+        </property>
+        <property name="ErrorCodes.PermissionDeniedCodes">
+          <value>-551,-552</value>
         </property>
         <property name="ErrorCodes.DuplicateKeyCodes">
           <value>-803</value>
