@@ -769,6 +769,34 @@ namespace Spring.Data
 	    IDataParameter[] DeriveParameters(string procedureName, bool includeReturnParameter);
 
         #endregion
+
+        #region Behavioral Control Properties
+
+        /// <summary>
+        /// An instance of a DbProvider implementation.
+        /// </summary>
+        IDbProvider DbProvider { get; set; }
+
+        /// <summary>
+        /// Gets or set the System.Type to use to create an instance of IDataReaderWrapper 
+        /// for the purpose of having defaults values to use in case of DBNull values read 
+        /// from IDataReader.
+        /// </summary>
+        /// <value>The type of the data reader wrapper.</value>
+        Type DataReaderWrapperType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the command timeout for IDbCommands that this AdoTemplate executes.
+        /// </summary>
+        /// <remarks>Default is 0, indicating to use the database provider's default.
+        /// Any timeout specified here will be overridden by the remaining 
+        /// transaction timeout when executing within a transaction that has a
+        /// timeout specified at the transaction level. 
+        /// </remarks>
+        /// <value>The command timeout.</value>
+        int CommandTimeout { get; set; }
+
+        #endregion
 	}
 
 

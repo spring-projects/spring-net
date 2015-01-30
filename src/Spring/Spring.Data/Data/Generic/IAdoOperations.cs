@@ -104,39 +104,39 @@ namespace Spring.Data.Generic
         /// <returns>A result object returned by the callback or null</returns>
         T Execute<T>(DataAdapterDelegate<T> del);
 
-        #endregion                 
+        #endregion
 
         #region Queries with RowMapper<T>
 
         IList<T> QueryWithRowMapper<T>(CommandType cmdType, string cmdText, IRowMapper<T> rowMapper);
 
-        IList<T> QueryWithRowMapper<T>(CommandType cmdType, string cmdText, IRowMapper<T> rowMapper, 
+        IList<T> QueryWithRowMapper<T>(CommandType cmdType, string cmdText, IRowMapper<T> rowMapper,
                                        ICommandSetter commandSetter);
 
         IList<T> QueryWithRowMapper<T>(CommandType cmdType, string cmdText, IRowMapper<T> rowMapper,
                                        string parameterName, Enum dbType, int size, object parameterValue);
 
-        IList<T> QueryWithRowMapper<T>(CommandType cmdType, string cmdText, IRowMapper<T> rowMapper, 
+        IList<T> QueryWithRowMapper<T>(CommandType cmdType, string cmdText, IRowMapper<T> rowMapper,
                                        IDbParameters parameters);
 
 
         #endregion
-        
+
         #region Queries with RowMapperDelegate<T>
 
         IList<T> QueryWithRowMapperDelegate<T>(CommandType cmdType, string cmdText, RowMapperDelegate<T> rowMapperDelegate);
 
         IList<T> QueryWithRowMapperDelegate<T>(CommandType cmdType, string cmdText, RowMapperDelegate<T> rowMapperDelegate,
                                                ICommandSetter commandSetter);
-        
-        
+
+
         IList<T> QueryWithRowMapperDelegate<T>(CommandType cmdType, string cmdText, RowMapperDelegate<T> rowMapperDelegate,
                                                string parameterName, Enum dbType, int size, object parameterValue);
-        
+
         IList<T> QueryWithRowMapperDelegate<T>(CommandType cmdType, string cmdText, RowMapperDelegate<T> rowMapperDelegate,
                                                IDbParameters parameters);
 
-        
+
         #endregion
 
         #region Queries with ResultSetExtractor<T>
@@ -183,12 +183,12 @@ namespace Spring.Data.Generic
 
 
         T QueryForObject<T>(CommandType cmdType, string sql, IRowMapper<T> rowMapper, IDbParameters parameters);
-        
-        
+
+
         T QueryForObject<T>(CommandType cmdType, string sql, IRowMapper<T> rowMapper,
                             string name, Enum dbType, int size, object parameterValue);
-        
-        
+
+
 
         #endregion
 
@@ -228,6 +228,50 @@ namespace Spring.Data.Generic
 
         #endregion
 
+        #region Parameter Creation Helper Methods
+
+        IDbParameters CreateDbParameters();
+
+        /// <summary>
+        /// Note that output parameters are marked input/output after derivation....
+        /// (TODO - double check....)
+        /// </summary>
+        /// <param name="procedureName"></param>
+        /// <returns></returns>
+        IDataParameter[] DeriveParameters(string procedureName);
+
+        IDataParameter[] DeriveParameters(string procedureName, bool includeReturnParameter);
+
+        #endregion
+
+        #region Behavioral Control Properties
+
+        /// <summary>
+        /// An instance of a DbProvider implementation.
+        /// </summary>
+        IDbProvider DbProvider { get; set; }
+
+        /// <summary>
+        /// Gets or set the System.Type to use to create an instance of IDataReaderWrapper 
+        /// for the purpose of having defaults values to use in case of DBNull values read 
+        /// from IDataReader.
+        /// </summary>
+        /// <value>The type of the data reader wrapper.</value>
+        Type DataReaderWrapperType { get; set; }
+
+        /// <summary>
+        /// Gets or sets the command timeout for IDbCommands that this AdoTemplate executes.
+        /// </summary>
+        /// <remarks>Default is 0, indicating to use the database provider's default.
+        /// Any timeout specified here will be overridden by the remaining 
+        /// transaction timeout when executing within a transaction that has a
+        /// timeout specified at the transaction level. 
+        /// </remarks>
+        /// <value>The command timeout.</value>
+        int CommandTimeout { get; set; }
+        
+
+        #endregion
 
     }
 }
