@@ -299,7 +299,7 @@ namespace Spring.Objects.Factory.Support
             if (StringUtils.HasText(definition.FactoryObjectName))
             {
                 // it's an instance method on the factory object's class...
-                factoryClass = objectFactory.GetObject(definition.FactoryObjectName).GetType();
+                factoryClass = objectFactory.GetObjectDefinition(definition.FactoryObjectName).ObjectType;
                 isStatic = false;
             }
             else
