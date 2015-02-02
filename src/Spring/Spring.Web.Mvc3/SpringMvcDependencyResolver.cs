@@ -8,18 +8,20 @@ using Spring.Context.Support;
 namespace Spring.Web.Mvc
 {
     /// <summary>
-    /// Spring-based implementation of the <see cref="IDependencyResolver"/> interface.
+    /// Spring-based implementation of the <see cref="IDependencyResolver"/> interface for ASP.NET MVC.
     /// </summary>
     public class SpringMvcDependencyResolver : IDependencyResolver
     {
         private static readonly string IgnoreViewNamespace = "ASP.";
-
+        /// <summary>
+        /// The <see cref="IApplicationContext"/> to be used by the resolver
+        /// </summary>
         private IApplicationContext _context;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SpringMvcDependencyResolver"/> class.
         /// </summary>
-        /// <param name="context">The context.</param>
+        /// <param name="context">The <see cref="IApplicationContext"/> to be used by the resolver</param>
         public SpringMvcDependencyResolver(IApplicationContext context)
         {
             _context = context;
@@ -48,6 +50,7 @@ namespace Spring.Web.Mvc
 
                 return _context;
             }
+            protected set { _context = value; }
         }
 
         /// <summary>
@@ -57,7 +60,7 @@ namespace Spring.Web.Mvc
         /// Defaults to using the root (default) Application Context.
         /// </remarks>
         /// <value>The name of the application context.</value>
-        public static string ApplicationContextName { get; set; }
+        public string ApplicationContextName { get; set; }
 
 
         /// <summary>

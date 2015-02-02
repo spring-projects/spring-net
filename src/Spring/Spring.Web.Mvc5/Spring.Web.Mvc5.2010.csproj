@@ -103,20 +103,20 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="..\Spring.Web.Mvc4\Context\Support\MvcApplicationContext.cs">
+    <Compile Include="..\Spring.Web.Mvc3\Context\Support\MvcApplicationContext.cs">
       <Link>Context\Support\MvcApplicationContext.cs</Link>
     </Compile>
-    <Compile Include="..\Spring.Web.Mvc4\Context\Support\MvcApplicationContextArgs.cs">
+    <Compile Include="..\Spring.Web.Mvc3\Context\Support\MvcApplicationContextArgs.cs">
       <Link>Context\Support\MvcApplicationContextArgs.cs</Link>
     </Compile>
-    <Compile Include="..\Spring.Web.Mvc4\Context\Support\MvcContextHandler.cs">
+    <Compile Include="..\Spring.Web.Mvc3\Context\Support\MvcContextHandler.cs">
       <Link>Context\Support\MvcContextHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Web.Mvc3\SpringMvcDependencyResolver.cs">
+      <Link>SpringMvcDependencyResolver.cs</Link>
     </Compile>
     <Compile Include="..\Spring.Web.Mvc4\SpringMvcApplication.cs">
       <Link>SpringMvcApplication.cs</Link>
-    </Compile>
-    <Compile Include="..\Spring.Web.Mvc4\SpringMvcDependencyResolver.cs">
-      <Link>SpringMvcDependencyResolver.cs</Link>
     </Compile>
     <Compile Include="..\Spring.Web.Mvc4\SpringWebApiDependencyResolver.cs">
       <Link>SpringWebApiDependencyResolver.cs</Link>

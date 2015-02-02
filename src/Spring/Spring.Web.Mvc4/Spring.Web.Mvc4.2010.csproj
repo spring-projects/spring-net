@@ -103,10 +103,18 @@
     <Compile Include="..\CommonAssemblyInfo.cs">
       <Link>CommonAssemblyInfo.cs</Link>
     </Compile>
-    <Compile Include="Context\Support\MvcApplicationContext.cs" />
-    <Compile Include="Context\Support\MvcApplicationContextArgs.cs" />
-    <Compile Include="Context\Support\MvcContextHandler.cs" />
-    <Compile Include="SpringMvcDependencyResolver.cs" />
+    <Compile Include="..\Spring.Web.Mvc3\Context\Support\MvcApplicationContext.cs">
+      <Link>Context\Support\MvcApplicationContext.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Web.Mvc3\Context\Support\MvcApplicationContextArgs.cs">
+      <Link>Context\Support\MvcApplicationContextArgs.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Web.Mvc3\Context\Support\MvcContextHandler.cs">
+      <Link>Context\Support\MvcContextHandler.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Web.Mvc3\SpringMvcDependencyResolver.cs">
+      <Link>SpringMvcDependencyResolver.cs</Link>
+    </Compile>
     <Compile Include="SpringMvcApplication.cs" />
     <Compile Include="SpringWebApiDependencyResolver.cs" />
   </ItemGroup>
