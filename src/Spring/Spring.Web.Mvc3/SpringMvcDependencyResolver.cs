@@ -1,7 +1,13 @@
 using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Mvc;
+
+using Common.Logging;
+
+using Microsoft.Win32;
+
 using Spring.Context;
 using Spring.Context.Support;
 
@@ -13,10 +19,14 @@ namespace Spring.Web.Mvc
     public class SpringMvcDependencyResolver : IDependencyResolver
     {
         private static readonly string IgnoreViewNamespace = "ASP.";
+
         /// <summary>
         /// The <see cref="IApplicationContext"/> to be used by the resolver
         /// </summary>
         private IApplicationContext _context;
+
+        private static readonly ILog logger = LogManager.GetLogger(typeof(SpringMvcDependencyResolver));
+        private readonly ConcurrentBag<Type> _nonResolvableTypes = new ConcurrentBag<Type>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SpringMvcDependencyResolver"/> class.
@@ -72,15 +82,45 @@ namespace Spring.Web.Mvc
         {
             object service = null;
 
-            if (serviceType != null && !serviceType.FullName.StartsWith(IgnoreViewNamespace))
+            if (serviceType != null)
             {
-                var services = ApplicationContext.GetObjectsOfType(serviceType);
-                if (services.Count > 0)
+                //if its an MVC auto-generated View Class...
+                if (serviceType.FullName.StartsWith(IgnoreViewNamespace))
                 {
-                    service = services.First().Value;
+                    return null;
+                }
+
+                //if we already know the container has tried and failed to resolve the type prior...
+                if (_nonResolvableTypes.Contains(serviceType))
+                {
+                    return null;
+                }
+
+                // fastest lookup is if we have direct name match
+                if (_context.ContainsObjectDefinition(serviceType.Name))
+                {
+                    service = _context.GetObject(serviceType.Name);
+                }
+                else
+                {
+                    // fall back to more expensive searching with type
+                    var matchingServices = _context.GetObjectNamesForType(serviceType);
+                    if (matchingServices.Count > 0)
+                    {
+                        service = _context.GetObject(matchingServices[0]);
+                    }
+                }
+
+                if (service == null)
+                {
+                    _nonResolvableTypes.Add(serviceType);
+
+                    if (logger.IsDebugEnabled)
+                    {
+                        logger.DebugFormat("could not find service from Spring container with type: {0}", serviceType);
+                    }
                 }
             }
-
             return service;
         }
 
@@ -91,8 +131,7 @@ namespace Spring.Web.Mvc
         /// <returns>The requested services.</returns>
         public IEnumerable<object> GetServices(Type serviceType)
         {
-            var services = ApplicationContext.GetObjectsOfType(serviceType);
-            return services.Values;
+            return ApplicationContext.GetObjectsOfType(serviceType).Values;
         }
     }
 }
