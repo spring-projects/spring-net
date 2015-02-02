@@ -46,7 +46,7 @@ namespace Spring.Web.Mvc.Tests
 
             _resolver = new SpringMvcDependencyResolver(_context);
 
-            SpringMvcDependencyResolver.ApplicationContextName = string.Empty;
+            _resolver.ApplicationContextName = string.Empty;
         }
 
         #endregion
@@ -58,7 +58,7 @@ namespace Spring.Web.Mvc.Tests
         [Test]
         public void CanUseNamedContextToResolveType()
         {
-            SpringMvcDependencyResolver.ApplicationContextName = "named";
+            _resolver.ApplicationContextName = "named";
             var service = _resolver.GetService(typeof (NamedContextController));
 
             Assert.NotNull(service);
@@ -67,7 +67,7 @@ namespace Spring.Web.Mvc.Tests
         [Test]
         public void CanUseUnnamedContextToResolveType()
         {
-            Assume.That(SpringMvcDependencyResolver.ApplicationContextName, Is.Empty, "Resolver should not have a named-context set for this test!");
+            Assume.That(_resolver.ApplicationContextName, Is.Empty, "Resolver should not have a named-context set for this test!");
             
             var service = _resolver.GetService<FirstContainerRegisteredController>();
             Assert.NotNull(service);

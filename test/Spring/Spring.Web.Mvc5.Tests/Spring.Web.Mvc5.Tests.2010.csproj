@@ -104,7 +104,7 @@
     <Compile Include="..\Spring.Web.Mvc3.Tests\Controllers\SecondContainerRegisteredController.cs">
       <Link>Controllers\SecondContainerRegisteredController.cs</Link>
     </Compile>
-    <Compile Include="..\Spring.Web.Mvc4.Tests\SpringMvcDependencyResolverTests.cs">
+    <Compile Include="..\Spring.Web.Mvc3.Tests\SpringMvcDependencyResolverTests.cs">
       <Link>SpringMvcDependencyResolverTests.cs</Link>
     </Compile>
   </ItemGroup>
