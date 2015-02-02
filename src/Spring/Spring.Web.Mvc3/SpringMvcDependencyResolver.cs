@@ -67,13 +67,9 @@ namespace Spring.Web.Mvc
         /// <returns>The requested service or object.</returns>
         public object GetService(Type serviceType)
         {
-            if (serviceType.FullName.StartsWith(IgnoreViewNamespace))
-            {
-                return null;
-            }
             object service = null;
 
-            if (serviceType != null)
+            if (serviceType != null && !serviceType.FullName.StartsWith(IgnoreViewNamespace))
             {
                 var services = ApplicationContext.GetObjectsOfType(serviceType);
                 if (services.Count > 0)
