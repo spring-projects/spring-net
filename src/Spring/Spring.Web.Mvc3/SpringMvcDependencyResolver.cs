@@ -97,17 +97,17 @@ namespace Spring.Web.Mvc
                 }
 
                 // fastest lookup is if we have direct name match
-                if (_context.ContainsObjectDefinition(serviceType.Name))
+                if (ApplicationContext.ContainsObjectDefinition(serviceType.Name))
                 {
-                    service = _context.GetObject(serviceType.Name);
+                    service = ApplicationContext.GetObject(serviceType.Name);
                 }
                 else
                 {
                     // fall back to more expensive searching with type
-                    var matchingServices = _context.GetObjectNamesForType(serviceType);
+                    var matchingServices = ApplicationContext.GetObjectNamesForType(serviceType);
                     if (matchingServices.Count > 0)
                     {
-                        service = _context.GetObject(matchingServices[0]);
+                        service = ApplicationContext.GetObject(matchingServices[0]);
                     }
                 }
 
