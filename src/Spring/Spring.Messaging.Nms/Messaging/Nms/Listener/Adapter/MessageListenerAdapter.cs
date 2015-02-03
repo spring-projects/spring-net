@@ -481,7 +481,7 @@ namespace Spring.Messaging.Nms.Listener.Adapter
 	    /// </para>
         /// </remarks>
         /// <param name="request">The original incoming message.</param>
-        /// <param name="response">Tthe outgoing message about to be sent.</param>
+        /// <param name="response">The outgoing message about to be sent.</param>
         /// <param name="session">The session to operate on.</param>
         /// <returns>the response destination (never <code>null</code>)</returns>
         /// <exception cref="NMSException">if thrown by NMS API methods</exception>

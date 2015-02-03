@@ -109,7 +109,7 @@ namespace Spring.Messaging.Ems.Config
         /// embedded in the supplied <see cref="ParserContext"/>
         /// </summary>
         /// <param name="element">The element to be parsed.</param>
-        /// <param name="parserContext">TThe object encapsulating the current state of the parsing process.
+        /// <param name="parserContext">The object encapsulating the current state of the parsing process.
         /// Provides access to a IObjectDefinitionRegistry</param>
         /// <returns>The primary object definition.</returns>
         /// <remarks>

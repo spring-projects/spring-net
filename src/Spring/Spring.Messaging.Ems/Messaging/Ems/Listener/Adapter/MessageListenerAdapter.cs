@@ -458,7 +458,7 @@ namespace Spring.Messaging.Ems.Listener.Adapter
 	    /// </para>
         /// </remarks>
         /// <param name="request">The original incoming message.</param>
-        /// <param name="response">Tthe outgoing message about to be sent.</param>
+        /// <param name="response">The outgoing message about to be sent.</param>
         /// <param name="session">The session to operate on.</param>
         /// <returns>the response destination (never <code>null</code>)</returns>
         /// <exception cref="EMSException">if thrown by EMS API methods</exception>

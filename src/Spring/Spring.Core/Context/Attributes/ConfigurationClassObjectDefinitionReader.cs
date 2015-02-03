@@ -221,7 +221,7 @@ namespace Spring.Context.Attributes
                 }
             }
 
-            //TODO: container does not presently support the concept of Primary object defintion for type resolution
+            //TODO: container does not presently support the concept of Primary object definition for type resolution
             //if (Attribute.GetCustomAttribute(metadata, typeof(PrimaryAttribute)) != null)
             //{
             //    ObjectDef.isPrimary = true;

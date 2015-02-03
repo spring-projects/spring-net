@@ -2245,7 +2245,7 @@ namespace Spring.Expressions
             args["bars"] = new Bar[] { new Bar() };
             Foo foo = new Foo();
 
-            // ensure noone changed our test class
+            // ensure no one changed our test class
             Assert.AreEqual("ExactMatch", foo.MethodWithSimilarArguments(1, (Bar[])args["bars"]));
             Assert.AreEqual("AssignableMatch", foo.MethodWithSimilarArguments(1, (ICollection)args["bars"]));
 
@@ -2259,7 +2259,7 @@ namespace Spring.Expressions
             args["bars"] = new Bar[] { new Bar() };
             Foo foo = new Foo();
 
-            // ensure noone changed our test class
+            // ensure no one changed our test class
             Assert.AreEqual("ExactMatch", foo[(Bar[])args["bars"]]);
             Assert.AreEqual("AssignableMatch", foo[(ICollection)args["bars"]]);
 
@@ -2274,7 +2274,7 @@ namespace Spring.Expressions
             Dictionary<string, object> args = new Dictionary<string, object>();
             args["bars"] = new Bar[] { new Bar() };
 
-            // ensure noone changed our test class
+            // ensure no one changed our test class
             Foo foo1 = new Foo(1, (Bar[])args["bars"]);
             try
             {

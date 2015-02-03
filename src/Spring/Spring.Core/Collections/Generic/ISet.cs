@@ -27,10 +27,10 @@ namespace Spring.Collections.Generic
     /// <summary>
     /// <p>A collection that contains no duplicate elements.  This interface models the mathematical
     /// <c>Set</c> abstraction.    
-    /// The order of elements in a set is dependant on (a)the data-structure implementation, and 
+    /// The order of elements in a set is dependent on (a)the data-structure implementation, and 
     /// (b)the implementation of the various <c>Set</c> methods, and thus is not guaranteed.</p>
     /// 
-    /// <p>None of the <c>Set</c> implementations in this library are guranteed to be thread-safe
+    /// <p>None of the <c>Set</c> implementations in this library are guaranteed to be thread-safe
     /// in any way unless wrapped in a <c>SynchronizedSet</c>.</p>
     /// 
     /// <p>The following table summarizes the binary operators that are supported by the <c>Set</c> class.</p>

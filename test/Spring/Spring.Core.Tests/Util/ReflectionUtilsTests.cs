@@ -907,7 +907,7 @@ namespace Spring.Util
                     ,type.GetMethod("ParamOverloadedMethod", new Type[] {typeof(string), typeof(string), typeof(string), typeof(string), typeof(object[])})
                 };
 
-            // ensure noone changed our test class
+            // ensure no one changed our test class
             Assert.IsNotNull(candidateMethods[0]);
             Assert.IsNotNull(candidateMethods[1]);
             Assert.IsNotNull(candidateMethods[2]);
@@ -934,7 +934,7 @@ namespace Spring.Util
                     , type.GetMethod("MethodWithSimilarArguments", new Type[] {typeof(int), typeof(object[])})
                 };
 
-            // ensure noone changed our test class
+            // ensure no one changed our test class
             Assert.IsNotNull(candidateMethods[0]);
             Assert.IsNotNull(candidateMethods[1]);
             Assert.IsNotNull(candidateMethods[2]);
@@ -961,7 +961,7 @@ namespace Spring.Util
                     , type.GetMethod("MethodWithNullableArgument", new Type[] {typeof(int?)})
                 };
 
-            // ensure noone changed our test class
+            // ensure no one changed our test class
             Assert.IsNotNull(candidateMethods[0]);
             Assert.IsNotNull(candidateMethods[1]);
             Assert.IsNotNull(candidateMethods[2]);
