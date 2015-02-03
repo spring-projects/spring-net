@@ -27,6 +27,7 @@ namespace Spring.Web.Mvc
 
         private static readonly ILog logger = LogManager.GetLogger(typeof(SpringMvcDependencyResolver));
         private readonly ConcurrentBag<Type> _nonResolvableTypes = new ConcurrentBag<Type>();
+        private readonly ConcurrentDictionary<Type, string> _resolvedNames = new ConcurrentDictionary<Type, string>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SpringMvcDependencyResolver"/> class.
@@ -103,11 +104,20 @@ namespace Spring.Web.Mvc
                 }
                 else
                 {
-                    // fall back to more expensive searching with type
-                    var matchingServices = ApplicationContext.GetObjectNamesForType(serviceType);
-                    if (matchingServices.Count > 0)
+                    string resolvedName;
+                    if (_resolvedNames.TryGetValue(serviceType, out resolvedName))
                     {
-                        service = ApplicationContext.GetObject(matchingServices[0]);
+                        service = ApplicationContext.GetObject(resolvedName);
+                    }
+                    else
+                    {
+                        // fall back to more expensive searching with type
+                        var matchingServices = ApplicationContext.GetObjectNamesForType(serviceType);
+                        if (matchingServices.Count > 0)
+                        {
+                            _resolvedNames.TryAdd(serviceType, matchingServices[0]);
+                            service = ApplicationContext.GetObject(matchingServices[0]);
+                        }
                     }
                 }
 
