@@ -23,6 +23,8 @@
 				<warning number="${nowarn.numbers},1591" if="${nant.settings.currentframework=='mono-2.0'}"/>
 			</nowarn>
 			<sources failonempty="true">
+				<include name="../Spring.Web.Mvc3/**/*.cs" />
+				<exclude name="../Spring.Web.Mvc3/**/SpringMvcApplication.cs" />
 				<include name="../Spring.Web.Mvc4/**/*.cs" />
 				<include name="**/*.cs" />
 				<include name="../GenCommonAssemblyInfo.cs" />

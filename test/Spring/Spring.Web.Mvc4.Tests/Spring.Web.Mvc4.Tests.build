@@ -36,7 +36,6 @@
                 <include name="../CommonAssemblyInfo.cs" />
 				<include name="../Spring.Web.Mvc3.Tests/**/*.cs" />
 				<include name="../Spring.Web.Mvc4.Tests/**/*.cs" />
-				<exclude name="../Spring.Web.Mvc3.Tests/**/SpringMvcDependencyResolverTests.cs" />
             </sources>
             <resources prefix="Spring" dynamicprefix="true" failonempty="true">
                 <include name="../Spring.Web.Mvc3.Tests/**/*.resx" />
