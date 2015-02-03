@@ -729,7 +729,7 @@ namespace Spring.Data.NHibernate
         /// <summary>
         /// Delete the given persistent instance.
         /// </summary>
-        /// <param name="entity">Tthe persistent instance to delete.</param>
+        /// <param name="entity">The persistent instance to delete.</param>
         /// <param name="lockMode">The lock mode to obtain.</param>
         /// <remarks>
         /// Obtains the specified lock mode if the instance exists, implicitly

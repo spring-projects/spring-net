@@ -28,7 +28,7 @@ using System.Reflection;
 //
 // This is to support side-by-side deployment of .NET 1.1 and .NET 2.0 versions of the assembly.
 
-//note that this #if #elif #endif contstruct requires NET_#_# values be checked in DESCENDING order to work properly
+//note that this #if #elif #endif construct requires NET_#_# values be checked in DESCENDING order to work properly
 // (e.g., add any new ones at the TOP of this construct!)
 
 #if NET_4_5

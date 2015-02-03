@@ -1449,7 +1449,7 @@
             Save or update the given persistent instance,
             according to its id (matching the configured "unsaved-value"?).
             </summary>
-            <param name="entity">Tthe persistent instance to save or update
+            <param name="entity">The persistent instance to save or update
             (to be associated with the Hibernate Session).</param>
             <exception cref="T:Spring.Dao.DataAccessException">In case of Hibernate errors</exception>
         </member>
@@ -1953,7 +1953,7 @@
             <summary>
             Delete the given persistent instance.
             </summary>
-            <param name="entity">Tthe persistent instance to delete.</param>
+            <param name="entity">The persistent instance to delete.</param>
             <param name="lockMode">The lock mode to obtain.</param>
             <remarks>
             Obtains the specified lock mode if the instance exists, implicitly
@@ -2094,7 +2094,7 @@
             Save or update the given persistent instance,
             according to its id (matching the configured "unsaved-value"?).
             </summary>
-            <param name="entity">Tthe persistent instance to save or update
+            <param name="entity">The persistent instance to save or update
             (to be associated with the Hibernate Session).</param>
             <exception cref="T:Spring.Dao.DataAccessException">In case of Hibernate errors</exception>
         </member>
@@ -3885,7 +3885,7 @@
             <summary>
             Delete the given persistent instance.
             </summary>
-            <param name="entity">Tthe persistent instance to delete.</param>
+            <param name="entity">The persistent instance to delete.</param>
             <param name="lockMode">The lock mode to obtain.</param>
             <remarks>
             Obtains the specified lock mode if the instance exists, implicitly
@@ -5123,12 +5123,79 @@
             call methods on the factory.
             </value>
         </member>
+        <member name="T:Spring.Data.NHibernate.HibernateTransactionManager.HibernateTransactionObject">
+            <summary>
+            Hibernate-specific Tx-Aware Object
+            </summary>
+        </member>
+        <member name="M:Spring.Data.NHibernate.HibernateTransactionManager.HibernateTransactionObject.SetSessionHolder(Spring.Data.NHibernate.SessionHolder,System.Boolean)">
+            <summary>
+            Sets the session holder.
+            </summary>
+            <param name="sessionHolder">The session holder.</param>
+            <param name="newSessionHolder">if set to <c>true</c> [new session holder].</param>
+        </member>
+        <member name="M:Spring.Data.NHibernate.HibernateTransactionManager.HibernateTransactionObject.HasTransaction">
+            <summary>
+            Determines whether this instance has a transaction.
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:Spring.Data.NHibernate.HibernateTransactionManager.HibernateTransactionObject.SetRollbackOnly">
+            <summary>
+            Sets the transaction as internally marked as rollback-only.
+            </summary>
+        </member>
+        <member name="P:Spring.Data.NHibernate.HibernateTransactionManager.HibernateTransactionObject.SessionHolder">
+            <summary>
+            Gets the session holder.
+            </summary>
+            <value>
+            The session holder.
+            </value>
+        </member>
+        <member name="P:Spring.Data.NHibernate.HibernateTransactionManager.HibernateTransactionObject.NewSessionHolder">
+            <summary>
+            Gets a value indicating whether a new session holder is present.
+            </summary>
+            <value>
+              <c>true</c> if new session holder; otherwise, <c>false</c>.
+            </value>
+        </member>
         <member name="P:Spring.Data.NHibernate.HibernateTransactionManager.HibernateTransactionObject.RollbackOnly">
             <summary>
             Return whether the transaction is internally marked as rollback-only.
             </summary>
             <value></value>
             <returns>True of the transaction is marked as rollback-only.</returns>
+        </member>
+        <member name="T:Spring.Data.NHibernate.HibernateTransactionManager.SuspendedResourcesHolder">
+            <summary>
+            Holds Suspended Resources
+            </summary>
+        </member>
+        <member name="M:Spring.Data.NHibernate.HibernateTransactionManager.SuspendedResourcesHolder.#ctor(Spring.Data.NHibernate.SessionHolder,Spring.Data.Support.ConnectionHolder)">
+            <summary>
+            Initializes a new instance of the <see cref="T:Spring.Data.NHibernate.HibernateTransactionManager.SuspendedResourcesHolder"/> class.
+            </summary>
+            <param name="sessionHolder">The session holder.</param>
+            <param name="conHolder">The connection holder.</param>
+        </member>
+        <member name="P:Spring.Data.NHibernate.HibernateTransactionManager.SuspendedResourcesHolder.SessionHolder">
+            <summary>
+            Gets the session holder.
+            </summary>
+            <value>
+            The session holder.
+            </value>
+        </member>
+        <member name="P:Spring.Data.NHibernate.HibernateTransactionManager.SuspendedResourcesHolder.ConnectionHolder">
+            <summary>
+            Gets the connection holder.
+            </summary>
+            <value>
+            The connection holder.
+            </value>
         </member>
         <member name="T:Spring.Data.NHibernate.HibernateTxScopeTransactionManager">
             <summary>

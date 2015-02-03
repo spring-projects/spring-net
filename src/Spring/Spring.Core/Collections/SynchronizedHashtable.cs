@@ -68,7 +68,7 @@ namespace Spring.Collections
         { }
 
         /// <summary>
-        /// Initializes a new instance of <see cref="SynchronizedHashtable"/>, copying inital entries from <param name="dictionary"/>
+        /// Initializes a new instance of <see cref="SynchronizedHashtable"/>, copying initial entries from <param name="dictionary"/>
         /// handling keys depending on <param name="ignoreCase"/>.
         /// </summary>        
         public SynchronizedHashtable(IDictionary dictionary, bool ignoreCase)
@@ -288,7 +288,7 @@ namespace Spring.Collections
         ///<summary>
         /// Returns, whether this <see cref="IDictionary"/> contains an entry with the specified <paramref name="value"/>.
         ///</summary>
-        ///<param name="value">The valúe to look for</param>
+        ///<param name="value">The value to look for</param>
         ///<returns><see lang="true"/>, if this <see cref="IDictionary"/> contains an entry with this <paramref name="value"/></returns>
         public bool ContainsValue(object value)
         {

@@ -217,7 +217,7 @@ namespace Spring.Data.NHibernate
         /// Save or update the given persistent instance,
         /// according to its id (matching the configured "unsaved-value"?).
         /// </summary>
-        /// <param name="entity">Tthe persistent instance to save or update
+        /// <param name="entity">The persistent instance to save or update
         /// (to be associated with the Hibernate Session).</param>
         /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
         void SaveOrUpdate(object entity);

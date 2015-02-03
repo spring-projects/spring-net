@@ -66,7 +66,7 @@ namespace Spring.Data.Common
         public void SetUp()
         {
             //Other tests in this assembly will have already initialized the internal context that is part of DbProviderFactory
-            //Reset it back to null so that tests for specifiying additional database providers will be able 're-initialize'
+			//Reset it back to null so that tests for specifying additional database providers will be able 're-initialize'
             //the internal Context of DbProviderFactory.
             //Spring.Objects.Factory.Xml.NamespaceParserRegistry.RegisterParser(typeof(Spring.Data.Config.DatabaseNamespaceParser));
             if (DbProviderFactory.ApplicationContext != null)
@@ -266,7 +266,7 @@ namespace Spring.Data.Common
         public void DefaultInstanceWithMySql()
         {
             DbProviderFactory.DBPROVIDER_ADDITIONAL_RESOURCE_NAME =
-                "assembly://Spring.Data.Tests/Spring.Data.Common/AdditonalProviders.xml";
+                "assembly://Spring.Data.Tests/Spring.Data.Common/AdditionalProviders.xml";
             IDbProvider provider = DbProviderFactory.GetDbProvider("MySqlPersonal");
             Assert.AreEqual("MySQL, MySQL provider 1.0.7.30072", provider.DbMetadata.ProductName);
 
