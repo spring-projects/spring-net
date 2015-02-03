@@ -14,7 +14,7 @@
 		<summary>Core functionality for Spring.Net IoC container</summary>
 		<language>en-US</language>
 		<dependencies>
-			<dependency id="Common.Logging" version="1.2.0" />
+			<dependency id="Common.Logging" version="3.0.0" />
 		</dependencies>
 	</metadata>
  <files>
