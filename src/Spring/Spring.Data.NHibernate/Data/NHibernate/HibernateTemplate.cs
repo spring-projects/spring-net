@@ -626,7 +626,7 @@ namespace Spring.Data.NHibernate
         /// Save or update the given persistent instance,
         /// according to its id (matching the configured "unsaved-value"?).
         /// </summary>
-        /// <param name="entity">Tthe persistent instance to save or update
+        /// <param name="entity">The persistent instance to save or update
         /// (to be associated with the Hibernate Session).</param>
         /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
         public void SaveOrUpdate(object entity)
@@ -638,7 +638,7 @@ namespace Spring.Data.NHibernate
         /// Save or update all given persistent instances,
         /// according to its id (matching the configured "unsaved-value"?).
         /// </summary>
-        /// <param name="entities">Tthe persistent instances to save or update
+        /// <param name="entities">The persistent instances to save or update
         /// (to be associated with the Hibernate Session)he entities.</param>
         /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
         public void SaveOrUpdateAll(ICollection entities)
@@ -729,7 +729,7 @@ namespace Spring.Data.NHibernate
         /// <summary>
         /// Delete the given persistent instance.
         /// </summary>
-        /// <param name="entity">Tthe persistent instance to delete.</param>
+        /// <param name="entity">The persistent instance to delete.</param>
         /// <param name="lockMode">The lock mode to obtain.</param>
         /// <remarks>
         /// Obtains the specified lock mode if the instance exists, implicitly
