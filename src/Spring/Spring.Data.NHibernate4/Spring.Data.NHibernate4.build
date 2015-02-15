@@ -33,7 +33,7 @@
 			>
 			<arg line="${compiler.args}"/>
 			<nowarn>
-				<warning number="${nowarn.numbers},0169,0618" />
+				<warning number="${nowarn.numbers},0169,0618,1684,1701" />
 				<warning number="0219" if="${nant.settings.currentframework=='mono-2.0'}"/>
 			</nowarn>
 			<sources failonempty="true">
