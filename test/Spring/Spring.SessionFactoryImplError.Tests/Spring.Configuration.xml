@@ -8,11 +8,6 @@
     <property name="TemplateFlushMode" value="Auto" />
     <property name="CacheQueries" value="true" />
   </object>
-
-  <object id="Spring.Transaction.IPlatformTransactionManager" type="Spring.Data.NHibernate.HibernateTxScopeTransactionManager, Spring.Data.NHibernate4">
-    <property name="DbProvider" ref="ActiveDbProvider"/>
-    <property name="SessionFactory" ref="Spring.Data.NHibernate.LocalSessionFactoryObject"/>
-  </object>
   
   <tx:advice id="transactionAdvice" transaction-manager="Spring.Transaction.IPlatformTransactionManager" />
 

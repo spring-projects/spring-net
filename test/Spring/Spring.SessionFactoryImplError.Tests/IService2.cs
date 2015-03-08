@@ -2,8 +2,8 @@
 {
     public interface IService2
     {
-        void ServiceMethod1();
+        void ServiceMethodWithNotSupported();
 
-        void ServiceMethod2();
+        void ServiceMethodWithRequiresNew();
     }
 }

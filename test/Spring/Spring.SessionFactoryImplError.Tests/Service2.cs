@@ -13,13 +13,13 @@ namespace Spring.SessionFactoryImplError.Tests
         #endregion
 
         [Transaction.Interceptor.Transaction(TransactionPropagation.NotSupported)]
-        public virtual void ServiceMethod1()
+        public virtual void ServiceMethodWithNotSupported()
         {
-            ServiceMethod2();
+            ServiceMethodWithRequiresNew();
         }
 
         [Transaction.Interceptor.Transaction(TransactionPropagation.RequiresNew)]
-        public virtual void ServiceMethod2()
+        public virtual void ServiceMethodWithRequiresNew()
         {
             // do stuff
         }
