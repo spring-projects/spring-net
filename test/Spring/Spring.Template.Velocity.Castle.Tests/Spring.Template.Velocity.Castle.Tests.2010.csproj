@@ -94,6 +94,7 @@
     <None Include="..\Spring.Template.Velocity.Tests\Template\Velocity\SimpleTemplate.vm">
       <Link>Template\Velocity\SimpleTemplate.vm</Link>
     </None>
+    <None Include="App.config" />
     <None Include="packages.config" />
     <None Include="Template\Velocity\config.properties" />
   </ItemGroup>
