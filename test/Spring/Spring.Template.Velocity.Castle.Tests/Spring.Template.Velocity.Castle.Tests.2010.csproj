@@ -88,15 +88,18 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\Spring.Template.Velocity.Tests\Template\Velocity\EmbeddedTemplate.vm">
+    <EmbeddedResource Include="..\Spring.Template.Velocity.Tests\Template\Velocity\EmbeddedTemplate.vm">
       <Link>Template\Velocity\EmbeddedTemplate.vm</Link>
-    </None>
-    <None Include="..\Spring.Template.Velocity.Tests\Template\Velocity\SimpleTemplate.vm">
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Spring.Template.Velocity.Tests\Template\Velocity\SimpleTemplate.vm">
       <Link>Template\Velocity\SimpleTemplate.vm</Link>
-    </None>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </EmbeddedResource>
     <None Include="App.config" />
     <None Include="packages.config" />
-    <None Include="Template\Velocity\config.properties" />
+    <None Include="Template\Velocity\config.properties">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
