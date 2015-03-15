@@ -76,9 +76,6 @@
     <Compile Include="..\Spring.Template.Velocity\Template\Velocity\CommonsLoggingLogSystem.cs">
       <Link>Template\Velocity\CommonsLoggingLogSystem.cs</Link>
     </Compile>
-    <Compile Include="..\Spring.Template.Velocity\Template\Velocity\Config\TemplateNamespaceParser.cs">
-      <Link>Template\Velocity\Config\TemplateNamespaceParser.cs</Link>
-    </Compile>
     <Compile Include="..\Spring.Template.Velocity\Template\Velocity\VelocityConstants.cs">
       <Link>Template\Velocity\VelocityConstants.cs</Link>
     </Compile>
@@ -92,6 +89,7 @@
       <Link>Template\Velocity\VelocityEngineUtils.cs</Link>
     </Compile>
     <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Template\Velocity\Config\TemplateNamespaceParser.cs" />
     <Compile Include="Template\Velocity\SpringResourceLoader.cs" />
   </ItemGroup>
   <ItemGroup>
