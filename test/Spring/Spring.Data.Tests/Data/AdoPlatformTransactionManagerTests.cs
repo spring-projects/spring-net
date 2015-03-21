@@ -45,7 +45,7 @@ namespace Spring.Data
     public class AdoPlatformTransactionManagerTests
     {
         private MockRepository mocks;
-        private IsolationLevel _defaultIsolationLevel = IsolationLevel.Unspecified;
+        private const IsolationLevel DefaultIsolationLevel = IsolationLevel.ReadCommitted;
 
         [SetUp]
         public void Setup()
@@ -75,7 +75,7 @@ namespace Spring.Data
                 Expect.Call(dbProvider.CreateConnection()).Return(connection);
                 connection.Open();
                 LastCall.On(connection).Repeat.Once();
-                Expect.Call(connection.BeginTransaction(_defaultIsolationLevel)).Return(transaction);
+                Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction);
                 //standard tx timeout.
                 transaction.Commit();
                 LastCall.On(transaction).Repeat.Once();
@@ -116,7 +116,7 @@ namespace Spring.Data
                 Expect.Call(dbProvider.CreateConnection()).Return(connection);
                 connection.Open();
                 LastCall.On(connection).Repeat.Once();
-                Expect.Call(connection.BeginTransaction(_defaultIsolationLevel)).Return(transaction);
+                Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction);
                 //standard tx timeout.
                 transaction.Rollback();
                 LastCall.On(transaction).Repeat.Once();
@@ -166,7 +166,7 @@ namespace Spring.Data
                 Expect.Call(dbProvider.CreateConnection()).Return(connection);
                 connection.Open();
                 LastCall.On(connection).Repeat.Once();
-                Expect.Call(connection.BeginTransaction(_defaultIsolationLevel)).Return(transaction);
+                Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction);
                 //standard tx timeout.
                 transaction.Rollback();
                 LastCall.On(transaction).Repeat.Once();
@@ -238,7 +238,7 @@ namespace Spring.Data
             Expect.Call(dbProvider.CreateConnection()).Return(connection).Repeat.Twice();
             connection.Open();
             LastCall.On(connection).Repeat.Twice();
-            Expect.Call(connection.BeginTransaction(_defaultIsolationLevel)).Return(transaction).Repeat.Twice();
+            Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction).Repeat.Twice();
             //standard tx timeout.
             transaction.Rollback();
             LastCall.On(transaction).Repeat.Once();
@@ -280,7 +280,7 @@ namespace Spring.Data
             Expect.Call(dbProvider.CreateConnection()).Return(connection);
             connection.Open();
             LastCall.On(connection).Repeat.Once();
-            Expect.Call(connection.BeginTransaction(_defaultIsolationLevel)).Return(transaction);
+            Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction);
             transaction.Commit();
             LastCall.On(transaction).Repeat.Once();
             connection.Dispose();
@@ -292,7 +292,7 @@ namespace Spring.Data
             Expect.Call(dbProvider2.CreateConnection()).Return(connection2);
             connection2.Open();
             LastCall.On(connection2).Repeat.Once();
-            Expect.Call(connection2.BeginTransaction(_defaultIsolationLevel)).Return(transaction2);
+            Expect.Call(connection2.BeginTransaction(DefaultIsolationLevel)).Return(transaction2);
             transaction2.Rollback();
             LastCall.On(transaction2).Repeat.Once();
             connection2.Dispose();
@@ -335,7 +335,7 @@ namespace Spring.Data
             Expect.Call(dbProvider.CreateConnection()).Return(connection);
             connection.Open();
             LastCall.On(connection).Repeat.Once();
-            Expect.Call(connection.BeginTransaction(_defaultIsolationLevel)).Return(transaction);
+            Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction);
             transaction.Rollback();
             LastCall.On(transaction).Repeat.Once();
             connection.Dispose();
@@ -395,7 +395,7 @@ namespace Spring.Data
                 Expect.Call(dbProvider.CreateConnection()).Return(connection);
                 connection.Open();
                 LastCall.On(connection).Repeat.Once();
-                Expect.Call(connection.BeginTransaction(_defaultIsolationLevel)).Return(transaction);
+                Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction);
                 //standard tx timeout.
                 transaction.Commit();
                 LastCall.On(transaction).Repeat.Once();
@@ -431,7 +431,7 @@ namespace Spring.Data
                 Expect.Call(dbProvider.CreateConnection()).Return(connection);
                 connection.Open();
                 LastCall.On(connection).Repeat.Once();
-                Expect.Call(connection.BeginTransaction(_defaultIsolationLevel)).Return(transaction);
+                Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction);
                 //standard tx timeout.
                 transaction.Rollback();
                 LastCall.On(transaction).Repeat.Once();
@@ -482,7 +482,7 @@ namespace Spring.Data
             Expect.Call(dbProvider.CreateConnection()).Return(connection2);
             connection2.Open();
             LastCall.On(connection2).Repeat.Once();
-            Expect.Call(connection2.BeginTransaction(_defaultIsolationLevel)).Return(transaction2);
+            Expect.Call(connection2.BeginTransaction(DefaultIsolationLevel)).Return(transaction2);
             transaction2.Commit();
             LastCall.On(transaction2).Repeat.Once();
             connection2.Dispose();
@@ -573,7 +573,7 @@ namespace Spring.Data
                 connection.Open();
                
                 LastCall.On(connection).Repeat.Once();
-                Expect.Call(connection.BeginTransaction(_defaultIsolationLevel)).Return(transaction);
+                Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction);
                 Expect.Call(connection.CreateCommand()).Return(command);
                 command.CommandText = "some SQL statement";
                 LastCall.On(command).Repeat.Once();
@@ -674,7 +674,7 @@ namespace Spring.Data
                 Expect.Call(dbProvider.CreateConnection()).Return(connection);
                 connection.Open();
                 LastCall.On(connection).Repeat.Once();
-                Expect.Call(connection.BeginTransaction(_defaultIsolationLevel)).Return(transaction);
+                Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction);
                 //standard tx timeout.
                 transaction.Commit();
                 LastCall.On(transaction).Throw(new TestSqlException("Cannot commit", "314"));
@@ -717,7 +717,7 @@ namespace Spring.Data
                 Expect.Call(dbProvider.CreateConnection()).Return(connection);
                 connection.Open();
                 LastCall.On(connection).Repeat.Once();
-                Expect.Call(connection.BeginTransaction(_defaultIsolationLevel)).Return(transaction);
+                Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction);
                 transaction.Commit();
                 LastCall.On(transaction).Throw(new TestSqlException("Cannot commit", "314"));
 
@@ -763,7 +763,7 @@ namespace Spring.Data
                 Expect.Call(dbProvider.CreateConnection()).Return(connection);
                 connection.Open();
                 LastCall.On(connection).Repeat.Once();
-                Expect.Call(connection.BeginTransaction(_defaultIsolationLevel)).Return(transaction);
+                Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction);
                 //standard tx timeout.
                 transaction.Rollback();
                 LastCall.On(transaction).Throw(new TestSqlException("Cannot commit", "314"));
@@ -877,7 +877,7 @@ namespace Spring.Data
                 Expect.Call(dbProvider.CreateConnection()).Return(connection);
                 connection.Open();
                 LastCall.On(connection).Repeat.Once();
-                Expect.Call(connection.BeginTransaction(_defaultIsolationLevel)).Return(transaction);
+                Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction);
                 
                 transaction.Rollback();
                 LastCall.On(transaction).Repeat.Once();
@@ -923,7 +923,7 @@ namespace Spring.Data
                 Expect.Call(dbProvider.CreateConnection()).Return(connection);
                 connection.Open();
                 LastCall.On(connection).Repeat.Once();
-                Expect.Call(connection.BeginTransaction(_defaultIsolationLevel)).Return(transaction);
+                Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction);
                 //standard tx timeout.
                 transaction.Commit();
                 LastCall.On(transaction).Repeat.Once();
@@ -971,7 +971,7 @@ namespace Spring.Data
                 Expect.Call(dbProvider.CreateConnection()).Return(connection);
                 connection.Open();
                 LastCall.On(connection).Repeat.Once();
-                Expect.Call(connection.BeginTransaction(_defaultIsolationLevel)).Return(transaction);               
+                Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction);               
                 transaction.Rollback();
                 LastCall.On(transaction).Repeat.Once();
                 connection.Dispose();

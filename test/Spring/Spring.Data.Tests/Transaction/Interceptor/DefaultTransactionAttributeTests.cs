@@ -18,7 +18,7 @@ namespace Spring.Transaction.Interceptor
 		public void ToStringTests()
 		{
 			DefaultTransactionAttribute dta = new DefaultTransactionAttribute();
-			Assert.AreEqual( "PROPAGATION_Required,ISOLATION_Unspecified,-System.Exception", dta.ToString());
+			Assert.AreEqual( "PROPAGATION_Required,ISOLATION_ReadCommitted,-System.Exception", dta.ToString());
 		}
 	}
 }

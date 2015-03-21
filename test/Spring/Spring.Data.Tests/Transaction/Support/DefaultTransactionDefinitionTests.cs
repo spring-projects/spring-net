@@ -20,7 +20,7 @@ namespace Spring.Transaction.Support
 			Assert.IsTrue( 1000 == def.TransactionTimeout );
 			Assert.IsTrue( false == def.ReadOnly );
 			def.ReadOnly = true;
-			Assert.IsTrue( true == def.ReadOnly );
+			Assert.IsTrue( def.ReadOnly );
 		}
 		[Test]
 		public void PropogationBehaviorDefault()
@@ -32,7 +32,7 @@ namespace Spring.Transaction.Support
         public void IsolationLevelDefault()
         {
             DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-            Assert.IsTrue(def.TransactionIsolationLevel == IsolationLevel.Unspecified);
+            Assert.IsTrue(def.TransactionIsolationLevel == IsolationLevel.ReadCommitted);
         }
         [Test]
 		[ExpectedException(typeof(ArgumentException))]
