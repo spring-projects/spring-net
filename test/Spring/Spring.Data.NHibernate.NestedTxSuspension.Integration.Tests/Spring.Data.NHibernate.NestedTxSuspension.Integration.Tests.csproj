@@ -59,7 +59,7 @@
     <Compile Include="IContainer.cs" />
     <Compile Include="IService1.cs" />
     <Compile Include="IService2.cs" />
-    <Compile Include="TestUsingHibernateTxScopeTransactionManager.cs" />
+    <Compile Include="HibernateTxScopeTransactionManagerNestedTransactionSuspensionTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Service1.cs" />
     <Compile Include="Service2.cs" />

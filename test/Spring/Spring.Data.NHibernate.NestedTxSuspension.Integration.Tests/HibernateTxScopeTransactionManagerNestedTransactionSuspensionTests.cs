@@ -5,7 +5,7 @@ using Spring.Testing.NUnit;
 namespace Spring.Data.NHibernate.NestedTxSuspension.Integration.Tests
 {
     [TestFixture]
-    public class TestUsingHibernateTxScopeTransactionManager : AbstractTransactionalSpringContextTests
+    public class HibernateTxScopeTransactionManagerNestedTransactionSuspensionTests : AbstractTransactionalSpringContextTests
     {
         #region DI
 
@@ -29,19 +29,19 @@ namespace Spring.Data.NHibernate.NestedTxSuspension.Integration.Tests
         }
 
         [Test]
-        public void TestSuspendTransactionOnNotSupported()
+        public void CanSuspendTransactionOnNotSupported()
         {
             Service1.ServiceMethodWithNotSupported1();
         }
 
         [Test]
-        public void TestSuspendTransactionOnNotSupportedWithNestedRequiresNew()
+        public void CanSuspendTransactionOnNotSupportedWithNestedRequiresNew()
         {
             Service2.ServiceMethodWithNotSupported();
         }
 
         [Test]
-        public void TestSuspendTransactionOnNotSupportedWithNestedRequired()
+        public void CanSuspendTransactionOnNotSupportedWithNestedRequired()
         {
             Service1.ServiceMethodWithNotSupported3();
         }
