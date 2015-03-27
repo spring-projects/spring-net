@@ -27,7 +27,7 @@
 
     <property name="MappingResources">
       <list>
-        <value>assembly://Spring.Data.NHibernate.TxPromotion.Integration.Tests/Spring.Data.NHibernate.TxPromotion.Integration.Tests/Mappings.hbm.xml</value>
+        <value>assembly://Spring.Data.NHibernate.NestedTxSuspension.Integration.Tests/Spring.Data.NHibernate.NestedTxSuspension.Integration.Tests/Mappings.hbm.xml</value>
       </list>
     </property>
 

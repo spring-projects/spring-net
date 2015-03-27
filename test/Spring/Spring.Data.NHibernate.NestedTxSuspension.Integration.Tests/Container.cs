@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Spring.Data.NHibernate.TxPromotion.Integration.Tests
+namespace Spring.Data.NHibernate.NestedTxSuspension.Integration.Tests
 {
     public class Container : IContainer
     {

@@ -1,4 +1,4 @@
-﻿namespace Spring.Data.NHibernate.TxPromotion.Integration.Tests
+﻿namespace Spring.Data.NHibernate.NestedTxSuspension.Integration.Tests
 {
     public interface IService2
     {

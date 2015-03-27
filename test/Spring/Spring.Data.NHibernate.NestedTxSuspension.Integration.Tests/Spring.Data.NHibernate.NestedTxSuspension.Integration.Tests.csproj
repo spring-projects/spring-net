@@ -7,8 +7,8 @@
     <ProjectGuid>{DE276F7C-4564-49EC-AABC-B964EC3D1626}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Spring.Data.NHibernate.TxPromotion.Integration.Tests</RootNamespace>
-    <AssemblyName>Spring.Data.NHibernate.TxPromotion.Integration.Tests</AssemblyName>
+    <RootNamespace>Spring.Data.NHibernate.NestedTxSuspension.Integration.Tests</RootNamespace>
+    <AssemblyName>Spring.Data.NHibernate.NestedTxSuspension.Integration.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
@@ -16,7 +16,7 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\build\VS.Net.2010\Spring.Data.TxPromotion.Integration.Tests\Debug\</OutputPath>
+    <OutputPath>..\..\..\build\VS.Net.2010\Spring.Data.NestedTxSuspension.Integration.Tests\Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG;NET_4_0</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -24,7 +24,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\..\build\VS.Net.2010\Spring.Data.TxPromotion.Integration.Tests\Release\</OutputPath>
+    <OutputPath>..\..\..\build\VS.Net.2010\Spring.Data.NestedTxSuspension.Integration.Tests\Release\</OutputPath>
     <DefineConstants>TRACE;NET_4_0</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>

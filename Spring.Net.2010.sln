@@ -105,7 +105,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate4.Tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate4.Integration.Tests.2010", "test\Spring\Spring.Data.NHibernate4.Integration.Tests\Spring.Data.NHibernate4.Integration.Tests.2010.csproj", "{46F8B5E9-ABCF-4306-BC05-FF05B0FAC151}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate.TxPromotion.Integration.Tests", "test\Spring\Spring.Data.NHibernate.TxPromotion.Integration.Tests\Spring.Data.NHibernate.TxPromotion.Integration.Tests.csproj", "{DE276F7C-4564-49EC-AABC-B964EC3D1626}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate.NestedTxSuspension.Integration.Tests", "test\Spring\Spring.Data.NHibernate.NestedTxSuspension.Integration.Tests\Spring.Data.NHibernate.NestedTxSuspension.Integration.Tests.csproj", "{DE276F7C-4564-49EC-AABC-B964EC3D1626}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

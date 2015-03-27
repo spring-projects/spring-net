@@ -1,7 +1,7 @@
 ﻿using Spring.Data.NHibernate.Generic;
 using Spring.Transaction;
 
-namespace Spring.Data.NHibernate.TxPromotion.Integration.Tests
+namespace Spring.Data.NHibernate.NestedTxSuspension.Integration.Tests
 {
     [Transaction.Interceptor.Transaction(TransactionPropagation.Supports, ReadOnly = true)]
     public class Service2 : IService2

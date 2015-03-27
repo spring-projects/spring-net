@@ -26,11 +26,11 @@
     </property>
   </object>
 
-  <object id="IService1" type="Spring.Data.NHibernate.TxPromotion.Integration.Tests.Service1, Spring.Data.NHibernate.TxPromotion.Integration.Tests">
+  <object id="IService1" type="Spring.Data.NHibernate.NestedTxSuspension.Integration.Tests.Service1, Spring.Data.NHibernate.NestedTxSuspension.Integration.Tests">
     <property name="HibernateTemplate" ref="Spring.Data.NHibernate.Generic.HibernateTemplate" />
   </object>
 
-  <object id="IService2" type="Spring.Data.NHibernate.TxPromotion.Integration.Tests.Service2, Spring.Data.NHibernate.TxPromotion.Integration.Tests">
+  <object id="IService2" type="Spring.Data.NHibernate.NestedTxSuspension.Integration.Tests.Service2, Spring.Data.NHibernate.NestedTxSuspension.Integration.Tests">
     <property name="HibernateTemplate" ref="Spring.Data.NHibernate.Generic.HibernateTemplate" />
   </object>
 </objects>

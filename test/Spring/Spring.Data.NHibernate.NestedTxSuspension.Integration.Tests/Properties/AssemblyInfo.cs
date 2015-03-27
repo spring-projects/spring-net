@@ -5,11 +5,11 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Spring.Data.NHibernate.TxPromotion.Integration.Tests")]
+[assembly: AssemblyTitle("Spring.Data.NHibernate.NestedTxSuspension.Integration.Tests")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Spring.Data.NHibernate.TxPromotion.Integration.Tests")]
+[assembly: AssemblyProduct("Spring.Data.NHibernate.NestedTxSuspension.Integration.Tests")]
 [assembly: AssemblyCopyright("Copyright ©  2015")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
