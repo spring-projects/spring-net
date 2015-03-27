@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<project name="Spring.Data.NHibernate.NestedTxSuspension.Integration.Tests" default="test" xmlns="http://nant.sf.net/schemas/nant.xsd">
+<project name="Spring.Data.NHibernate4.NestedTxSuspension.Integration.Tests" default="test" xmlns="http://nant.sf.net/schemas/nant.xsd">
 <!--
 	Required properties:
 	  * current.bin.dir           - (path) root level to build to
@@ -11,7 +11,7 @@
  
 	<target name="build">
 
-		<!-- build Spring.Data.NHibernate.NestedTxSuspension.Integration.Tests -->
+		<!-- build Spring.Data.NHibernate4.NestedTxSuspension.Integration.Tests -->
 		<csc target="library" define="${current.build.defines.csc}"
 				warnaserror="true"
 		        optimize="${build.optimize}"
@@ -45,7 +45,7 @@
 				<exclude name="${current.bin.dir}/Spring.Data.NHibernate*Tests*.dll" />
 				<exclude name="${current.bin.dir}/CloverRuntime.dll" />
 			</references>
-			<resources prefix="Spring.Data.NHibernate.NestedTxSuspension.Integration.Tests" dynamicprefix="true" failonempty="true">
+			<resources prefix="Spring.Data.NHibernate4.NestedTxSuspension.Integration.Tests" dynamicprefix="true" failonempty="true">
 				<include name="**/*.xml" />
 			</resources>
 		</csc>

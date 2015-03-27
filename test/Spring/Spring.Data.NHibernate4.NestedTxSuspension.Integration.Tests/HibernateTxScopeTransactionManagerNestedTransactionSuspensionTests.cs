@@ -2,7 +2,7 @@
 
 using Spring.Testing.NUnit;
 
-namespace Spring.Data.NHibernate.NestedTxSuspension.Integration.Tests
+namespace Spring.Data.NHibernate4.NestedTxSuspension.Integration.Tests
 {
     [TestFixture]
     public class HibernateTxScopeTransactionManagerNestedTransactionSuspensionTests : AbstractTransactionalSpringContextTests
@@ -21,9 +21,9 @@ namespace Spring.Data.NHibernate.NestedTxSuspension.Integration.Tests
                 return new[]
                 {
                     "config://spring/objects",
-				    "assembly://Spring.Data.NHibernate.NestedTxSuspension.Integration.Tests/Spring.Data.NHibernate.NestedTxSuspension.Integration.Tests/Spring.Configuration.xml",
-                    "assembly://Spring.Data.NHibernate.NestedTxSuspension.Integration.Tests/Spring.Data.NHibernate.NestedTxSuspension.Integration.Tests/Spring.NHibernate.xml",     
-                    "assembly://Spring.Data.NHibernate.NestedTxSuspension.Integration.Tests/Spring.Data.NHibernate.NestedTxSuspension.Integration.Tests/Spring.HibernateTxScopeTransactionManager.xml"                         
+				    "assembly://Spring.Data.NHibernate4.NestedTxSuspension.Integration.Tests/Spring.Data.NHibernate4.NestedTxSuspension.Integration.Tests/Spring.Configuration.xml",
+                    "assembly://Spring.Data.NHibernate4.NestedTxSuspension.Integration.Tests/Spring.Data.NHibernate4.NestedTxSuspension.Integration.Tests/Spring.NHibernate.xml",     
+                    "assembly://Spring.Data.NHibernate4.NestedTxSuspension.Integration.Tests/Spring.Data.NHibernate4.NestedTxSuspension.Integration.Tests/Spring.HibernateTxScopeTransactionManager.xml"                         
                 };
             }
         }

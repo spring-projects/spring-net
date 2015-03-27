@@ -7,8 +7,8 @@
     <ProjectGuid>{DE276F7C-4564-49EC-AABC-B964EC3D1626}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Spring.Data.NHibernate.NestedTxSuspension.Integration.Tests</RootNamespace>
-    <AssemblyName>Spring.Data.NHibernate.NestedTxSuspension.Integration.Tests</AssemblyName>
+    <RootNamespace>Spring.Data.NHibernate4.NestedTxSuspension.Integration.Tests</RootNamespace>
+    <AssemblyName>Spring.Data.NHibernate4.NestedTxSuspension.Integration.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Spring.Data.NHibernate.NestedTxSuspension.Integration.Tests
+namespace Spring.Data.NHibernate4.NestedTxSuspension.Integration.Tests
 {
     public interface IContainer
     {

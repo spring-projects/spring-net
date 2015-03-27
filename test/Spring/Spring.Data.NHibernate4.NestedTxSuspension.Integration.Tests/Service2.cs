@@ -1,14 +1,14 @@
 ﻿using Spring.Data.NHibernate.Generic;
 using Spring.Transaction;
 
-namespace Spring.Data.NHibernate.NestedTxSuspension.Integration.Tests
+namespace Spring.Data.NHibernate4.NestedTxSuspension.Integration.Tests
 {
     [Transaction.Interceptor.Transaction(TransactionPropagation.Supports, ReadOnly = true)]
     public class Service2 : IService2
     {
         #region DI
 
-        public Generic.HibernateTemplate HibernateTemplate { get; set; }
+        public HibernateTemplate HibernateTemplate { get; set; }
 
         #endregion
 

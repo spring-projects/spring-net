@@ -540,7 +540,7 @@ Commandline Examples:
     <nant buildfile="test/Spring/Spring.Data.NHibernate3.Integration.Tests/Spring.Data.NHibernate3.Integration.Tests.build" target="test" if="${build-data}"/>
     <nant buildfile="test/Spring/Spring.Data.NHibernate4.Tests/Spring.Data.NHibernate4.Tests.build" target="test" if="${build-data}"/>
     <nant buildfile="test/Spring/Spring.Data.NHibernate4.Integration.Tests/Spring.Data.NHibernate4.Integration.Tests.build" target="test" if="${build-data}"/>
-    <nant buildfile="test/Spring/Spring.Data.NHibernate.NestedTxSuspension.Integration.Tests/Spring.Data.NHibernate.NestedTxSuspension.Integration.Tests.build" target="test" if="${build-data and (nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'net-4.5' )}"/>
+    <nant buildfile="test/Spring/Spring.Data.NHibernate4.NestedTxSuspension.Integration.Tests/Spring.Data.NHibernate4.NestedTxSuspension.Integration.Tests.build" target="test" if="${build-data and (nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'net-4.5' )}"/>
 	
     <nant buildfile="test/Spring/Spring.Services.Tests/Spring.Services.Tests.build" target="test" if="${build-services}"/>
     <nant buildfile="test/Spring/Spring.Web.Tests/Spring.Web.Tests.build" target="test" if="${build-web}"/>
@@ -905,8 +905,8 @@ Commandline Examples:
         <delete dir="test/Spring/Spring.Data.NHibernate4.Tests/bin" failonerror="false"/>
         <delete dir="test/Spring/Spring.Data.NHibernate4.Integration.Tests/obj" failonerror="false"/>
         <delete dir="test/Spring/Spring.Data.NHibernate4.Integration.Tests/bin" failonerror="false"/>
-        <delete dir="test/Spring/Spring.Data.NHibernate.NestedTxSuspension.Integration.Tests/bin" failonerror="false"/>
-        <delete dir="test/Spring/Spring.Data.NHibernate.NestedTxSuspension.Integration.Tests/bin" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Data.NHibernate4.NestedTxSuspension.Integration.Tests/bin" failonerror="false"/>
+        <delete dir="test/Spring/Spring.Data.NHibernate4.NestedTxSuspension.Integration.Tests/bin" failonerror="false"/>
         <delete dir="test/Spring/Spring.Services.Tests/obj" failonerror="false"/>
         <delete dir="test/Spring/Spring.Services.Tests/bin" failonerror="false"/>
         <delete dir="test/Spring/Spring.Messaging.Nms.Tests/obj" failonerror="false"/>
@@ -1861,7 +1861,7 @@ Commandline Examples:
       <include name="test/Spring/Spring.Data.NHibernate3.Integration.Tests/**"/>	  
 	  <include name="test/Spring/Spring.Data.NHibernate4.Tests/**"/>
       <include name="test/Spring/Spring.Data.NHibernate4.Integration.Tests/**"/>	  
-      <include name="test/Spring/Spring.Data.NHibernate.NestedTxSuspension.Integration.Tests/**"/>	  
+      <include name="test/Spring/Spring.Data.NHibernate4.NestedTxSuspension.Integration.Tests/**"/>	  
       <include name="test/Spring/Spring.Messaging.Tests/**"/>
       <include name="test/Spring/Spring.Messaging.Nms.Tests/**"/>
       <include name="test/Spring/Spring.Messaging.Nms.Integration.Tests/**"/>
