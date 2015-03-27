@@ -3,14 +3,14 @@
 using Spring.Data.NHibernate.Generic;
 using Spring.Testing.NUnit;
 
-namespace Spring.SessionFactoryImplError.Tests
+namespace Spring.Data.NHibernate.TxPromotion.Integration.Tests
 {
     [TestFixture]
     public class TestUsingHibernateTxScopeTransactionManager : AbstractTransactionalSpringContextTests
     {
         #region DI
 
-        public HibernateTemplate HibernateTemplate { get; set; }
+        public Generic.HibernateTemplate HibernateTemplate { get; set; }
         public IService1 Service1 { get; set; }
         public IService2 Service2 { get; set; }
 
@@ -23,9 +23,9 @@ namespace Spring.SessionFactoryImplError.Tests
                 return new[]
                 {
                     "config://spring/objects",
-				    "assembly://Spring.SessionFactoryImplError.Tests/Spring.SessionFactoryImplError.Tests/Spring.Configuration.xml",
-                    "assembly://Spring.SessionFactoryImplError.Tests/Spring.SessionFactoryImplError.Tests/Spring.NHibernate.xml",     
-                    "assembly://Spring.SessionFactoryImplError.Tests/Spring.SessionFactoryImplError.Tests/Spring.HibernateTxScopeTransactionManager.xml"                         
+				    "assembly://Spring.Data.NHibernate.TxPromotion.Integration.Tests/Spring.Data.NHibernate.TxPromotion.Integration.Tests/Spring.Configuration.xml",
+                    "assembly://Spring.Data.NHibernate.TxPromotion.Integration.Tests/Spring.Data.NHibernate.TxPromotion.Integration.Tests/Spring.NHibernate.xml",     
+                    "assembly://Spring.Data.NHibernate.TxPromotion.Integration.Tests/Spring.Data.NHibernate.TxPromotion.Integration.Tests/Spring.HibernateTxScopeTransactionManager.xml"                         
                 };
             }
         }

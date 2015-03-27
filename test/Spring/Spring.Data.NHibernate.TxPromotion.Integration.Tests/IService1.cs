@@ -1,4 +1,4 @@
-﻿namespace Spring.SessionFactoryImplError.Tests
+﻿namespace Spring.Data.NHibernate.TxPromotion.Integration.Tests
 {
     public interface IService1
     {

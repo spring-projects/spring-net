@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Spring.SessionFactoryImplError.Tests
+namespace Spring.Data.NHibernate.TxPromotion.Integration.Tests
 {
     public class Container : IContainer
     {
