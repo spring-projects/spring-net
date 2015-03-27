@@ -1,6 +1,5 @@
 ﻿using NUnit.Framework;
 
-using Spring.Data.NHibernate.Generic;
 using Spring.Testing.NUnit;
 
 namespace Spring.Data.NHibernate.TxPromotion.Integration.Tests
@@ -10,7 +9,6 @@ namespace Spring.Data.NHibernate.TxPromotion.Integration.Tests
     {
         #region DI
 
-        public Generic.HibernateTemplate HibernateTemplate { get; set; }
         public IService1 Service1 { get; set; }
         public IService2 Service2 { get; set; }
 
