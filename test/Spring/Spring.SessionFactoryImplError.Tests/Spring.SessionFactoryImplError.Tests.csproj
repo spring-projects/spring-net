@@ -56,8 +56,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Container.cs" />
-    <Compile Include="TestUsingCustomHibernateTxScopeTransactionManager.cs" />
-    <Compile Include="CustomSpring132HibernateTxScopeTransactionManager.cs" />
     <Compile Include="IContainer.cs" />
     <Compile Include="IService1.cs" />
     <Compile Include="IService2.cs" />
@@ -97,8 +95,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="CreateTable.sql" />
-    <EmbeddedResource Include="Spring.CustomHibernateTxScopeTransactionManager.xml" />
     <EmbeddedResource Include="Spring.HibernateTxScopeTransactionManager.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
