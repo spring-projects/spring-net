@@ -1,68 +1,33 @@
-#region License
-
-/*
- * Copyright © 2002-2011 the original author or authors.
- * 
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0
- * 
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
-
-#endregion
-
-#region Imports
-
-using System;
+ï»¿using System;
 using System.Data;
 using System.Reflection;
 using System.Transactions;
 using NHibernate;
 using NHibernate.Transaction;
-
 using Spring.Core.TypeResolution;
 using Spring.Dao;
 using Spring.Data.Common;
 using Spring.Data.Core;
+using Spring.Data.NHibernate;
 using Spring.Data.Support;
 using Spring.Objects.Factory;
 using Spring.Transaction;
 using Spring.Transaction.Support;
+using HibernateTransactionException = NHibernate.TransactionException;
 
-#endregion
-
-namespace Spring.Data.NHibernate
+namespace Spring.SessionFactoryImplError.Tests
 {
     /// <summary>
-    /// PlatformTransactionManager implementation for a single Hibernate SessionFactory.
-    /// Binds a Hibernate Session from the specified factory to the thread, potentially
-    /// allowing for one thread Session per factory
+    /// A complete copy and selective re-write of the <c>Spring.Data.NHibernate.<see cref="HibernateTxScopeTransactionManager"/></c> from the Spring.Data.NHibernate32 DLL
+    /// to patch bugs with their implementation that could not be rectified by overriding the class (due to so much private scoping).
     /// </summary>
     /// <remarks>
-    /// SessionFactoryUtils and HibernateTemplate are aware of thread-bound Sessions and participate in such
-    /// transactions automatically. Using either of those is required for Hibernate
-    /// access code that needs to support this transaction handling mechanism.
-    /// <para>
-    /// Supports custom isolation levels at the start of the transaction
-    /// , and timeouts that get applied as appropriate
-    /// Hibernate query timeouts. To support the latter, application code must either use
-    /// <code>HibernateTemplate</code> (which by default applies the timeouts) or call
-    /// <code>SessionFactoryUtils.applyTransactionTimeout</code> for each created
-    /// Hibernate Query object.
-    /// </para>
-    /// <para>Note that you can specify a Spring IDbProvider instance which if shared with
-    /// a corresponding instance of AdoTemplate will allow for mixing ADO.NET/NHibernate
-    /// operations within a single transaction.</para>
+    /// This will be committed to source control in its first version the same way as it appeared in the Spring.NET v1.3.2 (.NET v4.0, VS 2010) source code; therefore, changes
+    /// from the base version in v1.3.2 will be discernable from source control. Those changes will need to be ported to the version of the <see cref="HibernateTxScopeTransactionManager"/>
+    /// in the next upgrade of Spring.NET, and so forth. A new copy of that versions <c>HibernateTxScopeTransactionManager</c> will need to be copied into a <c>CustomSpring132HibernateTxScopeTransactionManager</c>
+    /// file, that should be committed, then the changes need to be ported. This should continue until Spring's version is bug-free.
     /// </remarks>
-    /// <author>Mark Pollack (.NET)</author>
-    public class HibernateTxScopeTransactionManager : AbstractPlatformTransactionManager, IResourceTransactionManager, IObjectFactoryAware, IInitializingObject
+    public class CustomSpring132HibernateTxScopeTransactionManager : AbstractPlatformTransactionManager, IResourceTransactionManager, IObjectFactoryAware, IInitializingObject
     {
         #region Fields
 
@@ -85,23 +50,34 @@ namespace Spring.Data.NHibernate
 
         private TxScopeTransactionManager txScopeTranactionManager;
 
+        private static readonly MethodInfo SessionFactoryUtils_CloseSessionOrRegisterDeferredClose_Method;
+
         #endregion
 
         #region Constructor (s)
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="HibernateTxScopeTransactionManager"/> class.
+        /// Static constructor to get a handle to a internal method from a spring assembly that is needed in this assembly.
         /// </summary>
-        public HibernateTxScopeTransactionManager()
+        static CustomSpring132HibernateTxScopeTransactionManager()
+        {
+            Type sfuType = typeof (SessionFactoryUtils);
+            SessionFactoryUtils_CloseSessionOrRegisterDeferredClose_Method = sfuType.GetMethod("CloseSessionOrRegisterDeferredClose", BindingFlags.Static | BindingFlags.NonPublic);
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="CustomSpring132HibernateTxScopeTransactionManager"/> class.
+        /// </summary>
+        public CustomSpring132HibernateTxScopeTransactionManager()
         {
             txScopeTranactionManager = new TxScopeTransactionManager();
         }
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="HibernateTxScopeTransactionManager"/> class.
+        /// Initializes a new instance of the <see cref="CustomSpring132HibernateTxScopeTransactionManager"/> class.
         /// </summary>
         /// <param name="sessionFactory">The session factory.</param>
-        public HibernateTxScopeTransactionManager(ISessionFactory sessionFactory)
+        public CustomSpring132HibernateTxScopeTransactionManager(ISessionFactory sessionFactory)
         {
             this.sessionFactory = sessionFactory;
             AfterPropertiesSet();
@@ -302,10 +278,21 @@ namespace Spring.Data.NHibernate
         /// </exception>
         protected override object DoGetTransaction()
         {
-
+            if (log.IsDebugEnabled)
+            {
+                if (System.Transactions.Transaction.Current == null)
+                {
+                    log.Debug("DoGetTransaction: No transaction currently exists");
+                }
+                else
+                {
+                    log.Debug(string.Format("DoGetTransaction: Getting transaction object for existing System.Transactions.Transaction{0}", WriteTransactionInformation(System.Transactions.Transaction.Current)));
+                }
+            }
 
             HibernateTransactionObject txObject = new HibernateTransactionObject();
             txObject.SavepointAllowed = NestedTransactionsAllowed;
+
             if (TransactionSynchronizationManager.HasResource(SessionFactory))
             {
                 SessionHolder sessionHolder =
@@ -342,12 +329,10 @@ namespace Spring.Data.NHibernate
         /// </exception>
         protected override bool IsExistingTransaction(object transaction)
         {
-            var hibernateTransactionObject = ((HibernateTransactionObject) transaction);
-
-            var hasExistingPromotableTxScopeTransaction = hibernateTransactionObject.PromotableTxScopeTransactionObject.TxScopeAdapter.IsExistingTransaction;
-            var hasExistingTransaction = hibernateTransactionObject.HasTransaction();
-
-            return hasExistingPromotableTxScopeTransaction && hasExistingTransaction; 
+            return
+                ((HibernateTransactionObject)transaction).PromotableTxScopeTransactionObject.TxScopeAdapter.
+                    IsExistingTransaction &&
+                    ((HibernateTransactionObject) transaction).HasTransaction();
         }
 
         /// <summary>
@@ -382,6 +367,11 @@ namespace Spring.Data.NHibernate
                 throw new CannotCreateTransactionException("Transaction Scope failure on begin", e);
             }
 
+            if (log.IsDebugEnabled)
+            {
+                log.Debug(string.Format("DoBegin: Began new System.Transactions.Transaction{0}", WriteTransactionInformation(System.Transactions.Transaction.Current)));
+            }
+
             HibernateTransactionObject txObject = (HibernateTransactionObject)transaction;
 
             if (DbProvider != null && TransactionSynchronizationManager.HasResource(DbProvider)
@@ -393,6 +383,7 @@ namespace Spring.Data.NHibernate
                     "It is recommended to use a single HibernateTransactionManager for all transactions " +
                     "on a single DbProvider, no matter whether Hibernate or ADO.NET access.");
             }
+
             ISession session = null;
             try
             {
@@ -413,9 +404,30 @@ namespace Spring.Data.NHibernate
                 txObject.SessionHolder.SynchronizedWithTransaction = true;
                 session = txObject.SessionHolder.Session;
 
-                IDbConnection con = session.Connection;
-                //TODO isolation level mgmt
-                //IsolationLevel previousIsolationLevel = 
+                IDbConnection con;
+                try
+                {
+                    con = session.Connection;
+                    //TODO isolation level mgmt
+                    //IsolationLevel previousIsolationLevel = 
+                }
+                catch (System.Data.SqlClient.SqlException ex)
+                {
+                    // Retry logic as a workaround for ADO.NET 2.0 vulnerabilty: KB916002 and MS Connect bug 93731 
+                    if (ex.Message.Contains("New request is not allowed to start because it should come with valid transaction descriptor"))
+                    {
+                        if (log.IsWarnEnabled)
+                        {
+                            log.Warn("Forced to clear all SQL connection pools due to corrupted transaction context on a connection from the connection pool (KB916002).");
+                        }
+                        System.Data.SqlClient.SqlConnection.ClearAllPools();
+                        con = session.Connection;
+                    }
+                    else
+                    {
+                        throw;
+                    }
+                } 
 
                 if (definition.ReadOnly && txObject.NewSessionHolder)
                 {
@@ -456,7 +468,7 @@ namespace Spring.Data.NHibernate
                     ConnectionHolder conHolder = new ConnectionHolder(con, adoTx);
                     if (timeout != DefaultTransactionDefinition.TIMEOUT_DEFAULT)
                     {
-                        conHolder.TimeoutInSeconds = timeout;
+                        conHolder.TimeoutInMillis = definition.TransactionTimeout;
                     }
                     if (log.IsDebugEnabled)
                     {
@@ -723,60 +735,60 @@ namespace Spring.Data.NHibernate
                 // Necessary for pre-bound Sessions, to avoid inconsistent state.
                 txObject.SessionHolder.Session.Clear();
             }
-            
+
             DoTxScopeRollback(status);
             return;
 
 
-/*            HibernateTransactionObject txObject = (HibernateTransactionObject)status.Transaction;
+            /*            HibernateTransactionObject txObject = (HibernateTransactionObject)status.Transaction;
 
-            if (status.Debug)
-            {
-                log.Debug("Rolling back Hibernate transaction on Session [" +
-                    txObject.SessionHolder.Session + "]");
-            }
-            try
-            {
-                if (txObject.SessionHolder.Session != null && txObject.SessionHolder.Transaction != null && !txObject.SessionHolder.Transaction.IsActive)
-                {
-                    return;
-                }
+                        if (status.Debug)
+                        {
+                            log.Debug("Rolling back Hibernate transaction on Session [" +
+                                txObject.SessionHolder.Session + "]");
+                        }
+                        try
+                        {
+                            if (txObject.SessionHolder.Session != null && txObject.SessionHolder.Transaction != null && !txObject.SessionHolder.Transaction.IsActive)
+                            {
+                                return;
+                            }
 
-                IDbTransaction adoTx = GetIDbTransaction(txObject.SessionHolder.Transaction);
+                            IDbTransaction adoTx = GetIDbTransaction(txObject.SessionHolder.Transaction);
 
-                if (adoTx != null && adoTx.Connection != null)
-                {
-                    txObject.SessionHolder.Transaction.Rollback();
-                }
-                else
-                {
-                    if (status.Debug)
-                    {
-                        log.Debug("Unable to RollBack Hibernate transaction; connection for Hibernate transaction on Session [" +
-                            txObject.SessionHolder.Session + "] was null");
-                    }
-                }
+                            if (adoTx != null && adoTx.Connection != null)
+                            {
+                                txObject.SessionHolder.Transaction.Rollback();
+                            }
+                            else
+                            {
+                                if (status.Debug)
+                                {
+                                    log.Debug("Unable to RollBack Hibernate transaction; connection for Hibernate transaction on Session [" +
+                                        txObject.SessionHolder.Session + "] was null");
+                                }
+                            }
 
-            }
-            catch (HibernateTransactionException ex)
-            {
-                throw new TransactionSystemException("Could not roll back Hibernate transaction", ex);
-            }
-            catch (HibernateException ex)
-            {
-                // Shouldn't really happen, as a rollback doesn't cause a flush.
-                throw ConvertHibernateAccessException(ex);
-            }
-            finally
-            {
-                if (!txObject.NewSessionHolder)
-                {
-                    // Clear all pending inserts/updates/deletes in the Session.
-                    // Necessary for pre-bound Sessions, to avoid inconsistent state.
-                    txObject.SessionHolder.Session.Clear();
-                }
-                DoTxScopeRollback(status);
-            }*/
+                        }
+                        catch (HibernateTransactionException ex)
+                        {
+                            throw new TransactionSystemException("Could not roll back Hibernate transaction", ex);
+                        }
+                        catch (HibernateException ex)
+                        {
+                            // Shouldn't really happen, as a rollback doesn't cause a flush.
+                            throw ConvertHibernateAccessException(ex);
+                        }
+                        finally
+                        {
+                            if (!txObject.NewSessionHolder)
+                            {
+                                // Clear all pending inserts/updates/deletes in the Session.
+                                // Necessary for pre-bound Sessions, to avoid inconsistent state.
+                                txObject.SessionHolder.Session.Clear();
+                            }
+                            DoTxScopeRollback(status);
+                        }*/
         }
 
         /// <summary>
@@ -953,15 +965,15 @@ namespace Spring.Data.NHibernate
             }
             */
             ISession session = txObject.SessionHolder.Session;
-            
             if (txObject.NewSessionHolder)
             {
                 if (log.IsDebugEnabled)
                 {
                     log.Debug("Closing Hibernate Session [" + session + "] after transaction");
                 }
-
-                SessionFactoryUtils.CloseSessionOrRegisterDeferredClose(session, SessionFactory);
+                // SessionFactoryUtils.CloseSessionOrRegisterDeferredClose(session, SessionFactory);
+                // NOTE: The above line has to be called via reflection since it is an internal method
+                SessionFactoryUtils_CloseSessionOrRegisterDeferredClose_Method.Invoke(null, BindingFlags.InvokeMethod | BindingFlags.Static | BindingFlags.NonPublic, null, new object[] { session, SessionFactory }, null);
             }
             else
             {
@@ -974,8 +986,9 @@ namespace Spring.Data.NHibernate
                     session.FlushMode = txObject.SessionHolder.PreviousFlushMode;
                 }
             }
-
             txObject.SessionHolder.Clear();
+
+
         }
 
         private class HibernateTransactionObject : AdoTransactionObjectSupport
@@ -1138,7 +1151,18 @@ namespace Spring.Data.NHibernate
 
             }
         }
+
+        private static string WriteTransactionInformation(System.Transactions.Transaction tx)
+        {
+            if (tx == null)
+            {
+                return "NULL";
+            }
+
+            string isoLevel = System.Transactions.Transaction.Current.IsolationLevel.ToString();
+            TransactionInformation txInfo = System.Transactions.Transaction.Current.TransactionInformation;
+            return string.Format("{{LocalId = {0}, DistributedId = {1}, Status = {2}, IsolationLevel = {3}, CreationTime = {4}}}", txInfo.LocalIdentifier, txInfo.DistributedIdentifier, txInfo.Status, isoLevel, txInfo.CreationTime.ToString("o"));
+        }
+    
     }
-
-
 }
