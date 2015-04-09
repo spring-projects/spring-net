@@ -34,7 +34,7 @@ namespace Spring.Transaction.Interceptor
 			ITransactionAttribute ta = editor.Value;
 			Assert.IsTrue( ta != null );
 			Assert.IsTrue( ta.PropagationBehavior == TransactionPropagation.Required );
-			Assert.IsTrue( ta.TransactionIsolationLevel == IsolationLevel.Unspecified );
+			Assert.IsTrue( ta.TransactionIsolationLevel == IsolationLevel.ReadCommitted );
 			Assert.IsFalse( ta.ReadOnly );
 		}
 
