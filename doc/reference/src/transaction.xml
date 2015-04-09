@@ -1068,7 +1068,7 @@ mgr.DeleteTwoTestObjects("Jack", "Jill");
 
                 <entry>No</entry>
 
-                <entry>Unspecified</entry>
+                <entry>ReadCommitted</entry>
 
                 <entry>The transaction isolation level</entry>
               </row>
@@ -1162,7 +1162,7 @@ mgr.DeleteTwoTestObjects("Jack", "Jill");
 
         <listitem>
           <para>The isolation level is
-          <literal>IsolationLevel.Unspecified</literal></para>
+          <literal>IsolationLevel.ReadCommitted</literal></para>
         </listitem>
 
         <listitem>

@@ -68,7 +68,7 @@ namespace Spring.Transaction.Support
 	    //TODO Refactoring to sync with Spring 2.0 for nt/enums for various default values.
 	    
 		private TransactionPropagation _transactionPropagation = TransactionPropagation.Required;
-		private IsolationLevel _transactionIsolationLevel = IsolationLevel.Unspecified;
+		private IsolationLevel _transactionIsolationLevel = IsolationLevel.ReadCommitted;
 		private int _timeout = DefaultTransactionDefinition.TIMEOUT_DEFAULT;
 	    private bool _readOnly = false;
         private string _name = null;

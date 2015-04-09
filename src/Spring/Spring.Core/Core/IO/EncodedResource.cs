@@ -50,7 +50,7 @@ namespace Spring.Core.IO
         /// Create an encoded resource, autodetecting the encoding from the resource stream.
         /// </summary>
         /// <param name="resource">the resource to read from. Must not be <c>null</c></param>
-        /// <param name="autoDetectEncoding">whether to autoDetect encoding from byte-order marks (<see cref="StreamReader(Stream, Encoding, bool)"/>)</param>
+        /// <param name="autoDetectEncoding">whether to autoDetect encoding from byte-order marks (<see cref="M:StreamReader(Stream, Encoding, bool)"/>)</param>
         public EncodedResource(IResource resource, bool autoDetectEncoding)
             :this(resource, null, autoDetectEncoding)
         {
@@ -62,7 +62,7 @@ namespace Spring.Core.IO
         /// </summary>
         /// <param name="resource">the resource to read from. Must not be <c>null</c></param>
         /// <param name="encoding">the encoding to use. If <c>null</c>, encoding will be autodetected.</param>
-        /// <param name="autoDetectEncoding">whether to autoDetect encoding from byte-order marks (<see cref="StreamReader(Stream, Encoding, bool)"/>)</param>
+        /// <param name="autoDetectEncoding">whether to autoDetect encoding from byte-order marks (<see cref="M:StreamReader(Stream, Encoding, bool)"/>)</param>
         public EncodedResource(IResource resource, Encoding encoding, bool autoDetectEncoding)
         {
             AssertUtils.ArgumentNotNull(resource, "resource");
@@ -88,7 +88,7 @@ namespace Spring.Core.IO
         }
 
         /// <summary>
-        /// whether to autoDetect encoding from byte-order marks (<see cref="StreamReader(Stream, Encoding, bool)"/>)
+        /// whether to autoDetect encoding from byte-order marks (<see cref="M:StreamReader(Stream, Encoding, bool)"/>)
         /// </summary>
         public bool AutoDetectEncoding
         {
