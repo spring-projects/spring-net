@@ -10,12 +10,19 @@
             * current.build.defines.csc - framework-specific build defines
     -->
   <target name="build">
-    <!-- copy nh libs. It's necessary here to avoid wrong reference to NHibernate 3.3-->
-    <copy todir="${current.bin.dir}" overwrite="true">
-      <fileset basedir="${nh3.lib.dir}">
-        <include name="**/*.dll" />
-      </fileset>
-    </copy>
+
+		<echo message="${nh3.lib.dir}" />
+		<copy todir="${current.bin.dir}" overwrite="true" >
+			<fileset basedir="${nh3.lib.dir}">
+				<include name="**/*.dll" />
+			</fileset>
+		</copy>		
+		<echo message="${iesi3.lib.dir}" />
+		<copy todir="${current.bin.dir}" overwrite="true">
+			<fileset basedir="${iesi3.lib.dir}">
+				<include name="**/*.dll" />
+			</fileset>
+		</copy>		
     
     <csc target="library" define="${current.build.defines.csc}"
 		     warnaserror="true"

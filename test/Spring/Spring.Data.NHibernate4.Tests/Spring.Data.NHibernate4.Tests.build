@@ -10,6 +10,21 @@
             * current.build.defines.csc - framework-specific build defines
     -->
 	<target name="build">
+		
+		<echo message="${nh4.lib.dir}" />
+		<copy todir="${current.bin.dir}" overwrite="true" >
+			<fileset basedir="${nh4.lib.dir}">
+				<include name="**/*.dll" />
+			</fileset>
+		</copy>		
+		<echo message="${iesi4.lib.dir}" />
+		<copy todir="${current.bin.dir}" overwrite="true">
+			<fileset basedir="${iesi4.lib.dir}">
+				<include name="**/*.dll" />
+			</fileset>
+		</copy>		
+		
+		
 		<csc target="library" define="${current.build.defines.csc}"
 		     warnaserror="true"
 		     optimize="${build.optimize}"
@@ -28,8 +43,8 @@
 			</sources>
 			<references>
 				<lib>
-					<include name="${nh3.lib.dir}"/>
-					<include name="${iesi3.lib.dir}"/>
+					<include name="${nh4.lib.dir}"/>
+					<include name="${iesi4.lib.dir}"/>
 				</lib>
 				<include name="mscorlib.dll"/>
 				<include name="Microsoft.CSharp.dll"/>

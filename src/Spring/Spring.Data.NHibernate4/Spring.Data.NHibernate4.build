@@ -9,7 +9,7 @@
 	<target name="build">
 
 		<echo message="${nh4.lib.dir}" />
-		<copy todir="${current.bin.dir}" overwrite="true">
+		<copy todir="${current.bin.dir}" overwrite="true" >
 			<fileset basedir="${nh4.lib.dir}">
 				<include name="**/*.dll" />
 			</fileset>
