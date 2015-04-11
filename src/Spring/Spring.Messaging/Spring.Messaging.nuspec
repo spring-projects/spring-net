@@ -14,8 +14,8 @@
     <language>en-US</language>
     <dependencies>
       <dependency id="Common.Logging" version="3.0.0" />
-      <dependency id="Spring.Core" version="2.0.0" />
-      <dependency id="Spring.Data" version="2.0.0" />
+      <dependency id="Spring.Core" version="2.0.1" />
+      <dependency id="Spring.Data" version="2.0.1" />
     </dependencies>
   </metadata>
   <files>
