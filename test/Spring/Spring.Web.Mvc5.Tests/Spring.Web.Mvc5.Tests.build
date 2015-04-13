@@ -84,6 +84,7 @@
 				<include name="System.Web.ApplicationServices.dll" />        
 				<include name="System.Web.Routing.dll"/>
 				<include name="System.Web.Services.dll" />
+				<include name="System.Net.Http.Formatting.dll" />
 				
 				<include name="Microsoft.Web.Infrastructure.dll" />
 				
