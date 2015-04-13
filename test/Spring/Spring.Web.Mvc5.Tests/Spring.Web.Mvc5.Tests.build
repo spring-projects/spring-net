@@ -11,13 +11,11 @@
     -->
     <target name="build">
 
-		<!--
 		<copy todir="${current.bin.dir}" flatten="true" overwrite="true">
             <fileset basedir="${spring.basedir}/packages/">
                 <include name="Microsoft.AspNet.*.5.0.0/**/*.dll" />
             </fileset>
 		</copy>
-		-->
 
 		<!-- build Spring.Web.Mvc -->
         <csc target="library" define="${current.build.defines.csc}" 
