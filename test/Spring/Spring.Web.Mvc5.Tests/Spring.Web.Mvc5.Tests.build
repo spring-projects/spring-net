@@ -61,13 +61,18 @@
 				<include name="Microsoft.CSharp.dll"/>
 				<include name="System.dll"/>
 				<include name="System.Core.dll"/>
+				<include name="System.ComponentModel.DataAnnotations.dll"/>
 				<include name="System.Configuration.dll" />
 				<include name="System.Data.dll" />
+				<include name="System.Data.Entity.dll" />
+				<include name="System.Data.Linq.dll" />
 				<include name="System.Drawing.dll" />
+				<include name="System.Runtime.Caching.dll" />
 				<include name="System.Xml.dll" />
 				<include name="System.Xml.Linq.dll" />
 				
 				<include name="System.Web.dll" />
+				<include name="System.Web.Extensions.dll" />
 				<include name="System.Web.Abstractions.dll"/>
 				<include name="System.Web.Helpers.dll"/>
 				<include name="System.Web.Mvc.dll"/>
