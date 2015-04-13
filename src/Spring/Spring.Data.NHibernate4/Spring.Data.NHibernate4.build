@@ -8,19 +8,6 @@
  -->
 	<target name="build">
 
-		<echo message="${nh4.lib.dir}" />
-		<copy todir="${current.bin.dir}" overwrite="true" >
-			<fileset basedir="${nh4.lib.dir}">
-				<include name="**/*.dll" />
-			</fileset>
-		</copy>		
-		<echo message="${iesi4.lib.dir}" />
-		<copy todir="${current.bin.dir}" overwrite="true">
-			<fileset basedir="${iesi4.lib.dir}">
-				<include name="**/*.dll" />
-			</fileset>
-		</copy>		
-
 		<!-- build Spring.Data.NHibernate4 -->
 		<csc target="library" define="${current.build.defines.csc},NH_4_0"
 			 warnaserror="true"
@@ -52,10 +39,15 @@
 				<include name="System.Web.dll" />
 				<include name="System.Xml.dll" />
 				<include name="System.EnterpriseServices.dll" />
-				<include name="${current.bin.dir}/*.dll" />
-				<exclude name="${current.bin.dir}/Spring.Data.NHibernate*.dll" />
-				<exclude name="${current.bin.dir}/*NHibernate3*.*.dll" />
-				<exclude name="${current.bin.dir}/CloverRuntime.dll" />
+				<include name="${common.logging.lib.dir}/Common.Logging.dll"/>
+				<include name="${common.logging.core.lib.dir}/Common.Logging.Core.dll"/>
+				<include name="${current.bin.dir}/Spring.Core.dll"/>
+				<include name="${current.bin.dir}/Spring.Aop.dll"/>
+				<include name="${current.bin.dir}/Spring.Data.dll"/>
+				
+					<include name="${nh4.lib.dir}/NHibernate.dll"/>
+					<include name="${iesi4.lib.dir}/Iesi.Collections.dll"/>
+				
 			</references>
 		</csc>
 	</target>

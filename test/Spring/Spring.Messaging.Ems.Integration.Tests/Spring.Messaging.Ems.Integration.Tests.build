@@ -26,10 +26,25 @@
         <include name="**/*.cs" />
         <exclude name="AssemblyInfo.cs" />
       </sources>
-      <references basedir="${current.bin.dir}">
-        <include name="*.dll" />
-        <include name="Spring.Messaging.Ems.dll" />
-		<exclude if="${net-4.0}" name="System.Web.Extensions.dll" />
+      <references>
+		<!--
+		<include name="mscorlib.dll"/>
+		<include name="System.dll"/>
+		<include name="System.Core.dll"/>
+		<include name="System.Data.dll" />
+		<include name="System.Xml.dll" />
+		-->
+		<include name="${common.logging.lib.dir}/Common.Logging.dll"/>
+		<include name="${common.logging.core.lib.dir}/Common.Logging.Core.dll"/>
+        <include name="${current.bin.dir}/Spring.Core.dll" />
+        <include name="${current.bin.dir}/Spring.Aop.dll" />
+        <include name="${current.bin.dir}/Spring.Data.dll" />
+        <include name="${current.bin.dir}/Spring.Core.Tests.dll" />
+        <include name="${current.bin.dir}/Spring.Messaging.EMS.dll" />
+        <include name="${current.bin.dir}/Spring.Testing.NUnit.dll" />
+        <include name="${spring.basedir}/lib/Net/2.0/TIBCO.EMS.dll" />
+        <include name="${spring.basedir}/lib/Net/2.0/TIBCO.EMS.ADMIN.dll" />
+		<include name="${nunit.lib.dir}/nunit.framework.dll"/>
 	  </references>
       <resources prefix="Spring" dynamicprefix="true" failonempty="true">
         <include name="**/*.xml" />

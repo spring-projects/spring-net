@@ -38,8 +38,8 @@
 				<include name="System.Core.dll"/>
 				<include name="System.Data.dll" />
                 <include name="System.Xml.dll"/>
-				<include name="${current.bin.dir}/Common.Logging.dll"/>
-		        <include name="${current.bin.dir}/Common.Logging.Core.dll"/>
+				<include name="${common.logging.lib.dir}/Common.Logging.dll"/>
+		        <include name="${common.logging.core.lib.dir}/Common.Logging.Core.dll"/>
 				<include name="${current.bin.dir}/antlr.runtime.dll"/>
 				<include name="${current.bin.dir}/Spring.Core.dll" />
 			</references>

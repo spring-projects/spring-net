@@ -495,7 +495,16 @@ Commandline Examples:
     <property name="iesi4.lib.dir" value="${spring.basedir}/packages/Iesi.Collections.4.0.1.4000/lib/Net40"/>
     <property name="quartz2.lib.dir" value="${spring.basedir}/packages/Quartz.2.3.1/lib/net35"/>
 	<property name="nunit.lib.dir" value="${spring.basedir}/packages/NUnit.2.6.3/lib"/>
-
+	
+	
+	<property name="common.logging.lib.dir" value="${spring.basedir}/packages/Common.Logging.3.0.0/lib/net35"/>
+	<property name="common.logging.core.lib.dir" value="${spring.basedir}/packages/Common.Logging.Core.3.0.0/lib/net35"/>
+	
+	<if test="${nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'net-4.5'}">
+		<property name="common.logging.lib.dir" value="${spring.basedir}/packages/Common.Logging.3.0.0/lib/net40"/>
+		<property name="common.logging.core.lib.dir" value="${spring.basedir}/packages/Common.Logging.Core.3.0.0/lib/net40"/>
+	</if>
+		
 	<!-- we use same libs for both 4.0 and 4.5 builds -->
 	<if test="${nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'net-4.5'}">
 		<property name="lib.dir" value="${spring.basedir}/lib/net/4.0"/>

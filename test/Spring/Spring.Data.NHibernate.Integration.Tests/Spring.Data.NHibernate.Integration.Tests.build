@@ -23,9 +23,9 @@
 				<include name="../CommonAssemblyInfo.cs" />
 			</sources>
 			<references basedir="${current.bin.dir}">
-				<lib>
+				
 					<include name="${nh12.lib.dir}"/>
-				</lib>
+				
 				<include name="System.Data.dll" />
 				<include name="System.EnterpriseServices.dll" />
 				<include name="log4net.dll" />

@@ -10,19 +10,6 @@
 
 		<!-- build Spring.Data.NHibernate3.Integration.Tests -->
 
-		<echo message="${nh3.lib.dir}" />
-		<copy todir="${current.bin.dir}" overwrite="true">
-			<fileset basedir="${nh3.lib.dir}">
-				<include name="**/*.dll" />
-			</fileset>
-		</copy>		
-		<echo message="${iesi3.lib.dir}" />
-		<copy todir="${current.bin.dir}" overwrite="true">
-			<fileset basedir="${iesi3.lib.dir}">
-				<include name="**/*.dll" />
-			</fileset>
-		</copy>		
-
 		<csc target="library" define="${current.build.defines.csc}"
 				warnaserror="true"
 		        optimize="${build.optimize}"
@@ -40,21 +27,28 @@
 				<include name="../CommonAssemblyInfo.cs" />
 			</sources>
 			<references>
-				<lib>
-					<include name="${nh3.lib.dir}"/>
-					<include name="${iesi3.lib.dir}"/>
-				</lib>
+				
+					<include name="${nh3.lib.dir}/NHibernate.dll"/>
+					<include name="${iesi3.lib.dir}/Iesi.Collections.dll"/>
+				
 				<include name="mscorlib.dll"/>
 				<include name="Microsoft.CSharp.dll"/>
 				<include name="System.dll"/>
 				<include name="System.Core.dll"/>
 				<include name="System.Data.dll" />
 				<include name="System.EnterpriseServices.dll" />
-				<include name="${current.bin.dir}/*.dll" />
-				<exclude name="${current.bin.dir}/${project::get-name()}.dll" />
-				<exclude name="${current.bin.dir}/Spring.Data.NHibernate3*.dll" />
-				<exclude name="${current.bin.dir}/Spring.Data.NHibernate*Tests*.dll" />
-				<exclude name="${current.bin.dir}/CloverRuntime.dll" />
+				<include name="${common.logging.lib.dir}/Common.Logging.dll"/>
+				<include name="${common.logging.core.lib.dir}/Common.Logging.Core.dll"/>
+				<include name="${spring.basedir}/lib/Net/2.0/log4net.dll"/>
+				<include name="${current.bin.dir}/Spring.Core.dll" />
+				<include name="${current.bin.dir}/Spring.Aop.dll" />
+				<include name="${current.bin.dir}/Spring.Data.dll" />
+				<include name="${current.bin.dir}/Spring.Data.NHibernate3.dll" />
+				
+					<include name="${nh3.lib.dir}/NHibernate.dll"/>
+					<include name="${iesi3.lib.dir}/Iesi.Collections.dll"/>
+				
+				<include name="${nunit.lib.dir}/nunit.framework.dll"/>
 			</references>
 			<resources prefix="Spring" dynamicprefix="true" failonempty="true">
 				<include name="**/*.xml" />

@@ -36,9 +36,13 @@
 				<include name="System.dll"/>
 				<include name="System.Core.dll"/>
 				<include name="${vs-net.mstest.bin.dir.current}\PublicAssemblies\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll" />
-				<include name="${current.bin.dir}/*.dll" />
-				<exclude name="${current.bin.dir}/${project::get-name()}.dll" />
-				<exclude name="${current.bin.dir}/CloverRuntime.dll" />
+				<include name="${common.logging.lib.dir}/Common.Logging.dll"/>
+				<include name="${common.logging.core.lib.dir}/Common.Logging.Core.dll"/>
+				<include name="${current.bin.dir}/Spring.Core.dll" />
+				<include name="${current.bin.dir}/Spring.Core.Tests.dll" />
+				<include name="${current.bin.dir}/Spring.Data.dll" />
+				<include name="${current.bin.dir}/Spring.Data.Tests.dll" />
+				<include name="${current.bin.dir}/Spring.Testing.Microsoft.dll" />
 			</references>
 		</csc>
 

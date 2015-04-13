@@ -43,11 +43,10 @@
 			<include name="System.Data.dll" />
 			<include name="${current.bin.dir}/Spring.Core.dll" />
 			<include name="${current.bin.dir}/Spring.Data.dll" />
-			<include name="${current.bin.dir}/Common.Logging.dll" />
-	        <include name="${current.bin.dir}/Common.Logging.Core.dll"/>
-			<include name="${current.bin.dir}/Quartz.dll" />
-			<include name="${current.bin.dir}/C5.dll" />
-			<exclude name="${current.bin.dir}/${project::get-name()}.dll" />
+			<include name="${common.logging.lib.dir}/Common.Logging.dll"/>
+			<include name="${common.logging.core.lib.dir}/Common.Logging.Core.dll"/>
+			<include name="${quartz2.lib.dir}/Quartz.dll" />
+			<include name="${quartz2.lib.dir}/C5.dll" />
 	    </references>
         </csc>
     </target>

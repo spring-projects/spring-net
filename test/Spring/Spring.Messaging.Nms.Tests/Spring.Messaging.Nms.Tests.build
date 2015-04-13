@@ -30,15 +30,25 @@
 		        <resources prefix="Spring" dynamicprefix="true" failonempty="false">
 			        <include name="**/*.xml" />
 			</resources>
-			<references>
+			  <references>
 				<include name="mscorlib.dll"/>
 				<include name="Microsoft.CSharp.dll"/>
 				<include name="System.dll"/>
 				<include name="System.Core.dll"/>
-				<include name="${current.bin.dir}/*.dll" />
-				<exclude name="${current.bin.dir}/${project::get-name()}.dll" />
-				<exclude name="${current.bin.dir}/CloverRuntime.dll" />
-			</references>
+				<include name="System.Data.dll" />
+				<include name="System.EnterpriseServices.dll" />
+				<include name="${common.logging.lib.dir}/Common.Logging.dll"/>
+				<include name="${common.logging.core.lib.dir}/Common.Logging.Core.dll"/>
+				<include name="${current.bin.dir}/Spring.Core.dll" />
+				<include name="${current.bin.dir}/Spring.Core.Tests.dll" />
+				<include name="${current.bin.dir}/Spring.Data.dll" />
+				<include name="${current.bin.dir}/Spring.Messaging.Nms.dll" />
+				<include name="${current.bin.dir}/Spring.Testing.NUnit.dll" />
+				<include name="${spring.basedir}/lib/Net/2.0/Apache.NMS.dll" />
+				<include name="${spring.basedir}/lib/Net/2.0/Apache.NMS.ActiveMQ.dll" />
+				<include name="${nunit.lib.dir}/nunit.framework.dll"/>
+				<include name="${spring.basedir}/lib/Net/2.0/Rhino.Mocks.dll"/>
+			  </references>
 		</csc>
 
                 <copy file="${project::get-base-directory()}/${project::get-name()}.dll.config"
