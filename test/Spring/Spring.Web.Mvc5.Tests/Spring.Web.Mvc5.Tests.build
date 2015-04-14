@@ -50,26 +50,17 @@
                 <exclude name="../Spring.Web.Mvc3.Tests/bin/**/*" />
             </resources>
             <references>
-				<include name="mscorlib.dll"/>
+			    <include name="mscorlib.dll"/>
 				<include name="Microsoft.CSharp.dll"/>
 				<include name="System.dll"/>
-				<include name="System.Core.dll"/>
-				<include name="System.ComponentModel.DataAnnotations.dll"/>
 				<include name="System.Configuration.dll" />
-				<include name="System.Data.dll" />
-				<include name="System.Data.Entity.dll" />
-				<include name="System.Data.Linq.dll" />
-				<include name="System.Drawing.dll" />
-				<include name="System.Runtime.dll" />
-				<include name="System.Runtime.Caching.dll" />
-				<include name="System.Xml.dll" />
-				<include name="System.Xml.Linq.dll" />
-				
-				<include name="System.Web.dll" />
+				<include name="System.Core.dll"/>
+ 				<include name="System.Xml.dll" />
+ 				<include name="System.Web.dll" />
 				<include name="System.Web.Abstractions.dll"/>
 				<include name="System.Web.ApplicationServices.dll" />        
 				<include name="System.Web.Routing.dll"/>
-				<include name="System.Web.Services.dll" />
+ 				<include name="System.Web.Services.dll" />
 
 				<include name="${spring.basedir}/packages/Microsoft.AspNet.Mvc.5.0.0/lib/net45/System.Web.Mvc.dll" />
 				<include name="${spring.basedir}/packages/Microsoft.AspNet.WebApi.Core.5.0.0/lib/net45/System.Web.Http.dll" />
@@ -80,6 +71,7 @@
 				<include name="${common.logging.core.lib.dir}/Common.Logging.Core.dll"/>
 				
                 <include name="${current.bin.dir}/Spring.Core.dll" />
+                <include name="${current.bin.dir}/Spring.Aop.dll" />
                 <include name="${current.bin.dir}/Spring.Web.Mvc5.dll" />
 
  				<include name="${nunit.lib.dir}/nunit.framework.dll"/>           
