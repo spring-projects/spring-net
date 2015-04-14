@@ -11,13 +11,12 @@
     -->
     <target name="build">
 
-		<!--
 		<copy todir="${current.bin.dir}" flatten="true" overwrite="true">
             <fileset basedir="${spring.basedir}/packages/">
                 <include name="Microsoft.AspNet.*.5.0.0/**/*.dll" />
             </fileset>
 		</copy>
-		-->
+
 		
 		<!-- build Spring.Web.Mvc -->
         <csc target="library" define="${current.build.defines.csc}" 
@@ -50,12 +49,6 @@
                 <exclude name="../Spring.Web.Mvc3.Tests/bin/**/*" />
             </resources>
             <references>
-				<lib>
-					<include name="${spring.basedir}/packages/Microsoft.AspNet.Mvc.5.0.0/lib/net45"/>
-					<include name="${spring.basedir}/packages/Microsoft.AspNet.WebApi.Client.5.0.0/lib/portable-wp8+netcore45+net45"/>
-					<include name="${spring.basedir}/packages/AspNet.WebApi.Core.5.0.0/lib/net45"/>
-					<include name="${spring.basedir}/packages/AspNet.WebApi.WebHost.5.0.0/lib/net45"/>
-				</lib>
 			    <include name="mscorlib.dll"/>
 				<include name="Microsoft.CSharp.dll"/>
 				<include name="System.dll"/>
