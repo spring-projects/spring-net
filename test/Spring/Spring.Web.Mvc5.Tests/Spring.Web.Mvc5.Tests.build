@@ -67,6 +67,7 @@
 				<include name="System.Data.Entity.dll" />
 				<include name="System.Data.Linq.dll" />
 				<include name="System.Drawing.dll" />
+				<include name="System.Runtime.dll" />
 				<include name="System.Runtime.Caching.dll" />
 				<include name="System.Xml.dll" />
 				<include name="System.Xml.Linq.dll" />
