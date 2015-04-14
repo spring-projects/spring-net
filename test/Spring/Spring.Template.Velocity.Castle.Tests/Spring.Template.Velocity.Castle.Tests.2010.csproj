@@ -1,18 +1,17 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{4D6D616B-7643-4D6B-8E5E-14ECFDB9AF82}</ProjectGuid>
+    <ProjectGuid>{8D6ED392-8A1F-41C0-A765-22CF384EDEA1}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Spring</RootNamespace>
-    <AssemblyName>Spring.Testing.NUnit.Tests</AssemblyName>
-    <StartupObject>
-    </StartupObject>
+    <AssemblyName>Spring.Template.Velocity.Castle.Tests</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
@@ -25,16 +24,18 @@
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>..\..\..\build\VS.Net.2010\Spring.Testing.NUnit.Tests\Debug\</OutputPath>
+    <OutputPath>..\..\..\build\VS.NET.2010\Spring.Template.Velocity.Castle.Tests\Debug\</OutputPath>
     <DefineConstants>TRACE;DEBUG;NET_4_0</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
-    <OutputPath>..\..\..\build\VS.Net.2010\Spring.Testing.NUnit.Tests\Release\</OutputPath>
+    <OutputPath>..\..\..\build\VS.NET.2010\Spring.Template.Velocity.Castle.Tests\Release\</OutputPath>
     <DefineConstants>TRACE;NET_4_0</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
@@ -51,57 +52,67 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="Rhino.Mocks, Version=3.4.0.0, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Net\2.0\Rhino.Mocks.dll</HintPath>
+    <Reference Include="NVelocity">
+      <HintPath>..\..\..\packages\Castle.NVelocity.1.1.1\lib\net40\NVelocity.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Testing\Ado\SimpleAdoTestUtilsTests.cs" />
-    <Compile Include="Testing\NUnit\AbstractDependencyInjectionSpringContextTestsTests.cs" />
-    <Compile Include="NUnitCompilerOptionsTests.cs" />
+    <Compile Include="..\Spring.Template.Velocity.Tests\Template\Velocity\Config\TemplateNamespaceParserTests.cs">
+      <Link>Template\Velocity\Config\TemplateNamespaceParserTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Template.Velocity.Tests\Template\Velocity\VelocityEngineFactoryObjectTests.cs">
+      <Link>Template\Velocity\VelocityEngineFactoryObjectTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Template.Velocity.Tests\Template\Velocity\VelocityEngineTestBase.cs">
+      <Link>Template\Velocity\VelocityEngineTestBase.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Template.Velocity.Tests\VelocityCompilerOptionsTests.cs">
+      <Link>VelocityCompilerOptionsTests.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Spring\Spring.Core\Spring.Core.2010.csproj">
       <Project>{710961A3-0DF4-49E4-A26E-F5B9C044AC84}</Project>
       <Name>Spring.Core.2010</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\src\Spring\Spring.Data\Spring.Data.2010.csproj">
-      <Project>{AE00E5AB-C39A-436F-86D2-33BFE33E2E40}</Project>
-      <Name>Spring.Data.2010</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\src\Spring\Spring.Testing.NUnit\Spring.Testing.NUnit.2010.csproj">
-      <Project>{ED204A7B-832F-44C7-BFE3-504AEBE1BCC8}</Project>
-      <Name>Spring.Testing.NUnit.2010</Name>
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Template.Velocity.Castle\Spring.Template.Velocity.Castle.2010.csproj">
+      <Project>{250601c0-a4ac-41fe-b484-51a9b0d5473d}</Project>
+      <Name>Spring.Template.Velocity.Castle.2010</Name>
     </ProjectReference>
     <ProjectReference Include="..\Spring.Core.Tests\Spring.Core.Tests.2010.csproj">
       <Project>{44B16BAA-6DF8-447C-9D7F-3AD3D854D904}</Project>
       <Name>Spring.Core.Tests.2010</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Spring.Data.Tests\Spring.Data.Tests.2010.csproj">
-      <Project>{ACD39D47-1811-40FA-9E7E-5DEA5B9CE6C0}</Project>
-      <Name>Spring.Data.Tests.2010</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Spring.Testing.NUnit.Tests.dll.config">
+    <EmbeddedResource Include="..\Spring.Template.Velocity.Tests\Template\Velocity\EmbeddedTemplate.vm">
+      <Link>Template\Velocity\EmbeddedTemplate.vm</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Spring.Template.Velocity.Tests\Template\Velocity\SimpleTemplate.vm">
+      <Link>Template\Velocity\SimpleTemplate.vm</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </Content>
-    <EmbeddedResource Include="Testing\NUnit\TestApplicationContext.xml" />
+    </EmbeddedResource>
+    <None Include="App.config" />
+    <None Include="packages.config" />
+    <None Include="Template\Velocity\config.properties">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
+    <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
     <Service Include="{82A7F48D-3B50-4B1E-B82E-3ADA8210C358}" />
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <EmbeddedResource Include="Template\Velocity\VelocityEngineFactoryObjectTests.xml" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>
