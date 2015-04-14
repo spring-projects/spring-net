@@ -61,9 +61,9 @@
 				<include name="System.Web.Routing.dll"/>
  				<include name="System.Web.Services.dll" />
 
-				<include name="System.Web.Mvc.dll" />
-				<include name="System.Web.Http.dll" />
-				<include name="System.Web.Http.WebHost.dll" />
+				<include name="${spring.basedir}/packages/Microsoft.AspNet.Mvc.5.0.0/lib/net45/System.Web.Mvc.dll" />
+				<include name="${spring.basedir}/packages/Microsoft.AspNet.WebApi.Core.5.0.0/lib/net45/System.Web.Http.dll" />
+				<include name="${spring.basedir}/packages/Microsoft.AspNet.WebApi.WebHost.5.0.0/lib/net45/System.Web.Http.WebHost.dll" />
 				
 
 				<include name="${common.logging.lib.dir}/Common.Logging.dll"/>
