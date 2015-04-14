@@ -50,12 +50,6 @@
                 <exclude name="../Spring.Web.Mvc3.Tests/bin/**/*" />
             </resources>
             <references>
-				<lib>
-					<include name="${spring.basedir}/packages/Microsoft.AspNet.Mvc.5.0.0/lib/net45" />
-					<include name="${spring.basedir}/packages/Microsoft.AspNet.WebApi.Core.5.0.0/lib/net45" />
-					<include name="${spring.basedir}/packages/Microsoft.AspNet.WebApi.WebHost.5.0.0/lib/net45" />
-					<include name="${spring.basedir}/packages/Microsoft.Web.Infrastructure.1.0.0.0/lib/net40" />
-				</lib>
 				<include name="mscorlib.dll"/>
 				<include name="Microsoft.CSharp.dll"/>
 				<include name="System.dll"/>
@@ -72,22 +66,15 @@
 				<include name="System.Xml.Linq.dll" />
 				
 				<include name="System.Web.dll" />
-				<include name="System.Web.Extensions.dll" />
 				<include name="System.Web.Abstractions.dll"/>
-				<include name="System.Web.Helpers.dll"/>
-				<include name="System.Web.Mvc.dll"/>
-				<include name="System.Web.Razor.dll"/>
-				<include name="System.Web.Routing.dll"/>
-				<include name="System.Web.WebPages.dll"/>
-				<include name="System.Web.WebPages.Deployment.dll"/>
-				<include name="System.Web.WebPages.Razor.dll"/>
 				<include name="System.Web.ApplicationServices.dll" />        
 				<include name="System.Web.Routing.dll"/>
 				<include name="System.Web.Services.dll" />
-				<include name="System.Web.Http.dll" />
-				<include name="System.Web.Http.WebHost.dll" />
+
+				<include name="${spring.basedir}/packages/Microsoft.AspNet.Mvc.5.0.0/lib/net45/System.Web.Mvc.dll" />
+				<include name="${spring.basedir}/packages/Microsoft.AspNet.WebApi.Core.5.0.0/lib/net45/System.Web.Http.dll" />
+				<include name="${spring.basedir}/packages/Microsoft.AspNet.WebApi.WebHost.5.0.0/lib/net45/System.Web.Http.WebHost.dll" />
 				
-				<include name="Microsoft.Web.Infrastructure.dll" />
 
 				<include name="${common.logging.lib.dir}/Common.Logging.dll"/>
 				<include name="${common.logging.core.lib.dir}/Common.Logging.Core.dll"/>
