@@ -52,7 +52,6 @@
             <references>
 				<lib>
 					<include name="${spring.basedir}/packages/Microsoft.AspNet.Mvc.5.0.0/lib/net45" />
-					<include name="${spring.basedir}/packages/Microsoft.AspNet.WebApi.Client.5.0.0/lib/portable-wp8+netcore45+net45" />
 					<include name="${spring.basedir}/packages/Microsoft.AspNet.WebApi.Core.5.0.0/lib/net45" />
 					<include name="${spring.basedir}/packages/Microsoft.AspNet.WebApi.WebHost.5.0.0/lib/net45" />
 					<include name="${spring.basedir}/packages/Microsoft.Web.Infrastructure.1.0.0.0/lib/net40" />
@@ -85,10 +84,11 @@
 				<include name="System.Web.ApplicationServices.dll" />        
 				<include name="System.Web.Routing.dll"/>
 				<include name="System.Web.Services.dll" />
-				<include name="System.Net.Http.Formatting.dll" />
+				<include name="System.Web.Http.dll" />
+				<include name="System.Web.Http.WebHost.dll" />
 				
 				<include name="Microsoft.Web.Infrastructure.dll" />
-				
+
 				<include name="${common.logging.lib.dir}/Common.Logging.dll"/>
 				<include name="${common.logging.core.lib.dir}/Common.Logging.Core.dll"/>
 				
