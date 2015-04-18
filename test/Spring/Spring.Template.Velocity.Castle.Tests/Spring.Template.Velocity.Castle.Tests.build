@@ -63,7 +63,7 @@
 				<include name="../Spring.Template.Velocity.Tests/**/*.config" />
 			</resources>
 		</csc>
-		<copy todir="${current.bin.dir}" verbose="true" failonerror="true">
+		<copy todir="${current.bin.dir}" verbose="true" overwrite="true" failonerror="true">
 			<fileset basedir="${spring.basedir}/test/Spring/Spring.Template.Velocity.Tests">
 				<include name="**/*.xml" />
 				<include name="**/*.xsd" />
@@ -74,7 +74,7 @@
 			</fileset>
 		</copy>
 		
-		<copy todir="${current.bin.dir}" verbose="true" failonerror="true">
+		<copy todir="${current.bin.dir}" verbose="true" overwrite="true" failonerror="true">
 			<fileset basedir="${project::get-base-directory()}">
 				<include name="**/*.xml" />
 				<include name="**/*.xsd" />
