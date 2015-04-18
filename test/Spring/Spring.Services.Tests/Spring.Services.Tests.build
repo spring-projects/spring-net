@@ -9,9 +9,13 @@
       * current.build.debug       - (true|false) debug build?
       * current.build.defines.csc - framework-specific build defines for C# compiler
 -->
+<include buildfile="${spring.basedir}/CopyLibToBinHelpers.include"/>
+
   <target name="build">
 
     <!-- build Spring.Services.Tests -->
+	<call target="copycommonlogginglibtobin" />
+	
     <csc target="library" define="${current.build.defines.csc}"
          warnaserror="true"
          optimize="${build.optimize}"
@@ -47,15 +51,15 @@
 		<include name="System.Web.dll"/>
 		<include name="System.Web.Services.dll"/>
 		<include name="System.Xml.dll"/>
-		<include name="${common.logging.lib.dir}/Common.Logging.dll"/>
-		<include name="${common.logging.core.lib.dir}/Common.Logging.Core.dll"/>
+		<include name="${current.bin.dir}/Common.Logging.dll"/>
+		<include name="${current.bin.dir}/Common.Logging.Core.dll"/>
         <include name="${current.bin.dir}/Spring.Core.dll" />
         <include name="${current.bin.dir}/Spring.Core.Tests.dll" />
         <include name="${current.bin.dir}/Spring.Aop.dll" />
         <include name="${current.bin.dir}/Spring.Aop.Tests.dll" />
         <include name="${current.bin.dir}/Spring.Services.dll" />
-		<include name="${nunit.lib.dir}/nunit.framework.dll"/>
-		<include name="${spring.basedir}/lib/Net/2.0/Rhino.Mocks.dll"/>
+		<include name="${current.bin.dir}/nunit.framework.dll"/>
+		<include name="${current.bin.dir}/Rhino.Mocks.dll"/>
       </references>
     </csc>
     <copy todir="${current.bin.dir}" verbose="${copy-verbose}" >

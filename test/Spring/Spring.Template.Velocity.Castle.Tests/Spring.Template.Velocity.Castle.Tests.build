@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<project name="Spring.Template.Velocity.Tests" default="test" xmlns="http://nant.sf.net/schemas/nant.xsd">
+<project name="Spring.Template.Velocity.Castle.Tests" default="test" xmlns="http://nant.sf.net/schemas/nant.xsd">
 
     <include buildfile="${spring.basedir}/common-project.include" />
 
@@ -9,8 +9,19 @@
             * build.debug               - (true|false) debug build?
             * current.build.defines.csc - framework-specific build defines
     -->
-	<target name="build">
+	<include buildfile="${spring.basedir}/CopyLibToBinHelpers.include"/>
+	
+	<property name="nvelocity.lib.dir" value="${spring.basedir}/packages/Castle.NVelocity.1.1.1/lib/net35" overwrite="true"/>
 
+	<if test="${nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'net-4.5'}">
+		<property name="nvelocity.lib.dir" value="${spring.basedir}/packages/Castle.NVelocity.1.1.1/lib/net40" overwrite="true"/>
+	</if>
+
+	<target name="build">
+	
+		<call target="copycommonlogginglibtobin" />
+		<call target="copynvelocitylibtobin" />
+		
 		<csc target="library" define="${current.build.defines.csc}"
 		     warnaserror="true"
 		     optimize="${build.optimize}"
@@ -25,6 +36,7 @@
 			</nowarn>
 			<sources failonempty="true">
 				<include name="**/*.cs" />
+				<include name="../Spring.Template.Velocity.Tests/**/*.cs" />
 				<include name="../CommonAssemblyInfo.cs" />
 			</sources>
 			<references>
@@ -33,25 +45,42 @@
 				<include name="System.dll"/>
 				<include name="System.Configuration.dll"/>
 				<include name="System.Core.dll"/>
-				<include name="${current.bin.dir}/*.dll" />
-				<exclude name="${current.bin.dir}/${project::get-name()}.dll" />
+				<include name="${current.bin.dir}/Common.Logging.dll"/>
+				<include name="${current.bin.dir}/Common.Logging.Core.dll"/>
+				<include name="${current.bin.dir}/Spring.Core.dll" />
+				<include name="${current.bin.dir}/Spring.Core.Tests.dll" />
+				<include name="${current.bin.dir}/Spring.Template.Velocity.Castle.dll" />
+				<include name="${current.bin.dir}/NVelocity.dll" />
+
+				<include name="${current.bin.dir}/nunit.framework.dll"/>
 			</references>
-			<resources prefix="Spring" dynamicprefix="true" failonempty="true">
+			<resources prefix="Spring.Template.Velocity" failonempty="true">
 				<include name="**/*.xml" />
-				<include name="**/*.xsd" />
-			  <include name="**/*.test" />
-			  <include name="**/*.vm" />
+				<include name="../Spring.Template.Velocity.Tests/**/*.xsd" />
+			  <include name="../Spring.Template.Velocity.Tests/**/*.test" />
+			  <include name="../Spring.Template.Velocity.Tests/**/*.vm" />
 			  <include name="**/*.properties" />
-				<include name="**/*.config" />
+				<include name="../Spring.Template.Velocity.Tests/**/*.config" />
 			</resources>
 		</csc>
-		<copy todir="${current.bin.dir}" failonerror="true">
+		<copy todir="${current.bin.dir}" verbose="true" failonerror="true">
+			<fileset basedir="${spring.basedir}/test/Spring/Spring.Template.Velocity.Tests">
+				<include name="**/*.xml" />
+				<include name="**/*.xsd" />
+				<include name="**/*.test" />
+				<include name="**/*.vm" />
+				<include name="**/*.properties" />
+				<include name="**/*.config" />
+			</fileset>
+		</copy>
+		
+		<copy todir="${current.bin.dir}" verbose="true" failonerror="true">
 			<fileset basedir="${project::get-base-directory()}">
 				<include name="**/*.xml" />
 				<include name="**/*.xsd" />
-			        <include name="**/*.test" />
-			        <include name="**/*.vm" />
-			        <include name="**/*.properties" />
+				<include name="**/*.test" />
+				<include name="**/*.vm" />
+				<include name="**/*.properties" />
 				<include name="**/*.config" />
 			</fileset>
 		</copy>

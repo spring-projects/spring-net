@@ -95,8 +95,10 @@
       <Link>Template\Velocity\SimpleTemplate.vm</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <None Include="App.config" />
     <None Include="packages.config" />
+    <None Include="Spring.Template.Velocity.Castle.Tests.dll.config">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="Template\Velocity\config.properties">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>

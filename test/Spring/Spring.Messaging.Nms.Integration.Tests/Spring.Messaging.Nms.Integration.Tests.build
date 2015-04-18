@@ -9,9 +9,14 @@
     * current.build.debug       - (true|false) debug build?
     * current.build.defines.csc - framework-specific build defines for C# compiler
  -->
+<include buildfile="${spring.basedir}/CopyLibToBinHelpers.include"/>
+
   <target name="build">
 
     <!-- build Spring.Messaging.Nms.Integration.Tests -->
+	
+	<call target="copycommonlogginglibtobin" />
+	
     <csc target="library" define="${current.build.defines.csc}"
         warnaserror="true"
         optimize="${build.optimize}"
@@ -36,16 +41,16 @@
 		<include name="System.Core.dll"/>
         <include name="System.Data.dll" />
         <include name="System.EnterpriseServices.dll" />
-		<include name="${common.logging.lib.dir}/Common.Logging.dll"/>
-		<include name="${common.logging.core.lib.dir}/Common.Logging.Core.dll"/>
+		<include name="${current.bin.dir}/Common.Logging.dll"/>
+		<include name="${current.bin.dir}/Common.Logging.Core.dll"/>
         <include name="${current.bin.dir}/Spring.Core.dll" />
         <include name="${current.bin.dir}/Spring.Core.Tests.dll" />
         <include name="${current.bin.dir}/Spring.Messaging.dll" />
         <include name="${current.bin.dir}/Spring.Messaging.Nms.dll" />
         <include name="${current.bin.dir}/Spring.Testing.NUnit.dll" />
-        <include name="${spring.basedir}/lib/Net/2.0/Apache.NMS.dll" />
-        <include name="${spring.basedir}/lib/Net/2.0/Apache.NMS.ActiveMQ.dll" />
-		<include name="${nunit.lib.dir}/nunit.framework.dll"/>
+        <include name="${current.bin.dir}/Apache.NMS.dll" />
+        <include name="${current.bin.dir}/Apache.NMS.ActiveMQ.dll" />
+		<include name="${current.bin.dir}/nunit.framework.dll"/>
       </references>
       <resources prefix="Spring" dynamicprefix="true" failonempty="true">
         <include name="**/*.xml" />

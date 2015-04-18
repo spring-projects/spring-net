@@ -9,14 +9,12 @@
             * build.debug               - (true|false) debug build?
             * current.build.defines.csc - framework-specific build defines
     -->
+	<include buildfile="${spring.basedir}/CopyLibToBinHelpers.include"/>
+
 	<target name="build">
 
-		<echo message="${quartz2.lib.dir}" />
-		<copy todir="${current.bin.dir}" overwrite="true">
-			<fileset basedir="${quartz2.lib.dir}">
-				<include name="**/*.dll" />
-			</fileset>
-		</copy>		
+		<call target="copycommonlogginglibtobin" />
+		<call target="copyquartz2libtobin" />
 
 		<csc target="library" define="${current.build.defines.csc},QUARTZ_2_0"
 		     warnaserror="true"
@@ -39,16 +37,16 @@
 				<include name="Microsoft.CSharp.dll"/>
 				<include name="System.dll"/>
 				<include name="System.Core.dll"/>
-				<include name="${common.logging.lib.dir}/Common.Logging.dll"/>
-				<include name="${common.logging.core.lib.dir}/Common.Logging.Core.dll"/>
+				<include name="${current.bin.dir}/Common.Logging.dll"/>
+				<include name="${current.bin.dir}/Common.Logging.Core.dll"/>
 				<include name="${current.bin.dir}/Spring.Core.dll" />
 				<include name="${current.bin.dir}/Spring.Core.Tests.dll" />
 				<include name="${current.bin.dir}/Spring.Data.dll" />
 				<include name="${current.bin.dir}/Spring.Scheduling.Quartz2.dll" />
-				<include name="${quartz2.lib.dir}/Quartz.dll" />
-				<include name="${quartz2.lib.dir}/C5.dll" />
-				<include name="${nunit.lib.dir}/nunit.framework.dll"/>
-				<include name="${spring.basedir}/lib/Net/2.0/Rhino.Mocks.dll"/>
+				<include name="${current.bin.dir}/Quartz.dll" />
+				<include name="${current.bin.dir}/C5.dll" />
+				<include name="${current.bin.dir}/nunit.framework.dll"/>
+				<include name="${current.bin.dir}/Rhino.Mocks.dll"/>
 			</references>
 		</csc>
 

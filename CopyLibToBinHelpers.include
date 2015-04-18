@@ -1,0 +1,70 @@
+<project name="CopyLibToBinHelpers">
+
+	<target name="copycommonlogginglibtobin">
+		<echo message="${common.logging.lib.dir}" />
+		<copy todir="${current.bin.dir}" overwrite="true">
+			<fileset basedir="${common.logging.lib.dir}">
+				<include name="**/*.dll" />
+			</fileset>
+		</copy>
+		
+		<echo message="${common.logging.core.lib.dir}" />
+		<copy todir="${current.bin.dir}" overwrite="true">
+			<fileset basedir="${common.logging.core.lib.dir}">
+				<include name="**/*.dll" />
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="copynh3libtobin">
+			<echo message="${nh3.lib.dir}" />
+		<copy todir="${current.bin.dir}" overwrite="true">
+			<fileset basedir="${nh3.lib.dir}">
+				<include name="**/*.dll" />
+			</fileset>
+		</copy>
+
+		<echo message="${iesi3.lib.dir}" />
+		<copy todir="${current.bin.dir}" overwrite="true">
+			<fileset basedir="${iesi3.lib.dir}">
+				<include name="**/*.dll" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="copynh4libtobin">
+			<echo message="${nh4.lib.dir}" />
+		<copy todir="${current.bin.dir}" overwrite="true">
+			<fileset basedir="${nh4.lib.dir}">
+				<include name="**/*.dll" />
+			</fileset>
+		</copy>
+
+		<echo message="${iesi4.lib.dir}" />
+		<copy todir="${current.bin.dir}" overwrite="true">
+			<fileset basedir="${iesi4.lib.dir}">
+				<include name="**/*.dll" />
+			</fileset>
+		</copy>
+	</target>
+	
+	<target name="copyquartz2libtobin">
+		<echo message="${quartz2.lib.dir}" />
+		<copy todir="${current.bin.dir}" overwrite="true">
+			<fileset basedir="${quartz2.lib.dir}">
+				<include name="**/*.dll" />
+			</fileset>
+		</copy>		
+	</target>
+	
+	<target name="copynvelocitylibtobin">
+		<echo message="${nvelocity.lib.dir}" />
+		<copy todir="${current.bin.dir}" overwrite="true">
+			<fileset basedir="${nvelocity.lib.dir}">
+				<include name="**/NVelocity.dll" />
+			</fileset>
+		</copy>		
+	
+	</target>
+
+</project>

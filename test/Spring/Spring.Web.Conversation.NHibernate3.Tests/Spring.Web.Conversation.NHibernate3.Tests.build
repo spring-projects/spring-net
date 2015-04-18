@@ -9,8 +9,13 @@
             * build.debug               - (true|false) debug build?
             * current.build.defines.csc - framework-specific build defines
     -->
+	<include buildfile="${spring.basedir}/CopyLibToBinHelpers.include"/>
+
   <target name="build">
 
+	<call target="copycommonlogginglibtobin" />
+	<call target="copynh3libtobin" />
+  
     <csc target="library" define="${current.build.defines.csc}"
 		     warnaserror="true"
 		     optimize="${build.optimize}"
@@ -37,19 +42,19 @@
         <include name="System.Data.dll" />
         <include name="System.EnterpriseServices.dll" />
         <include name="System.Web.dll" />
-		<include name="${common.logging.lib.dir}/Common.Logging.dll"/>
-		<include name="${common.logging.core.lib.dir}/Common.Logging.Core.dll"/>
+		<include name="${current.bin.dir}/Common.Logging.dll"/>
+		<include name="${current.bin.dir}/Common.Logging.Core.dll"/>
 		<include name="${current.bin.dir}/Spring.Core.dll" />
 		<include name="${current.bin.dir}/Spring.Aop.dll" />
 		<include name="${current.bin.dir}/Spring.Data.dll" />
 		<include name="${current.bin.dir}/Spring.Data.NHibernate3.dll" />
 		<include name="${current.bin.dir}/Spring.Web.dll" />
 		<include name="${current.bin.dir}/Spring.Web.Conversation.NHibernate3.dll" />
-		<include name="${spring.basedir}/lib/Net/2.0/NUnitAspEx.dll" />
+		<include name="${current.bin.dir}/NUnitAspEx.dll" />
 		<include name="${spring.basedir}/test/Spring/${project::get-name()}/lib/Net/2.0/System.Data.SQLite.dll" />
-		<include name="${nh3.lib.dir}/NHibernate.dll"/>
-		<include name="${iesi3.lib.dir}/Iesi.Collections.dll"/>
-		<include name="${nunit.lib.dir}/nunit.framework.dll"/>
+		<include name="${current.bin.dir}/NHibernate.dll"/>
+		<include name="${current.bin.dir}/Iesi.Collections.dll"/>
+		<include name="${current.bin.dir}/nunit.framework.dll"/>
       </references>
       <resources prefix="Spring" dynamicprefix="true" failonempty="true">
         <include name="**/*.xml" />

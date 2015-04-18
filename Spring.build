@@ -504,7 +504,7 @@ Commandline Examples:
 		<property name="common.logging.lib.dir" value="${spring.basedir}/packages/Common.Logging.3.0.0/lib/net40"/>
 		<property name="common.logging.core.lib.dir" value="${spring.basedir}/packages/Common.Logging.Core.3.0.0/lib/net40"/>
 	</if>
-		
+	
 	<!-- we use same libs for both 4.0 and 4.5 builds -->
 	<if test="${nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'net-4.5'}">
 		<property name="lib.dir" value="${spring.basedir}/lib/net/4.0"/>
@@ -535,6 +535,7 @@ Commandline Examples:
 	<nant buildfile="src/Spring/Spring.Scheduling.Quartz2/Spring.Scheduling.Quartz2.build" target="build" if="${build-quartz}"/>
     <nant buildfile="src/Spring/Spring.Messaging/Spring.Messaging.build" target="build" if="${build-msmq}"/>
     <nant buildfile="src/Spring/Spring.Template.Velocity/Spring.Template.Velocity.build" target="build" if="${build-velocity}"/>
+    <nant buildfile="src/Spring/Spring.Template.Velocity.Castle/Spring.Template.Velocity.Castle.build" target="build" if="${build-velocity}"/>
     <!--"Spring.ConversationWA.NH*.dll" should be at last to prevent the other assemblies are compiled with reference to this-->
     <nant buildfile="src/Spring/Spring.Web.Conversation.NHibernate3/Spring.Web.Conversation.NHibernate3.build" target="build" if="${build-conversation}"/>
     
@@ -564,7 +565,8 @@ Commandline Examples:
     <nant buildfile="test/Spring/Spring.Messaging.Nms.Integration.Tests/Spring.Messaging.Nms.Integration.Tests.build" target="test" if="${build-nms}"/>
 	<nant buildfile="test/Spring/Spring.Scheduling.Quartz2.Tests/Spring.Scheduling.Quartz2.Tests.build" target="test" if="${build-quartz}"/>
     <nant buildfile="test/Spring/Spring.Messaging.Tests/Spring.Messaging.Tests.build" target="test" if="${build-msmq}"/>
-    <nant buildfile="test/Spring/Spring.Template.Velocity.Tests/Spring.Template.Velocity.Tests.build" target="test" if="${build-velocity}"/>
+    <!-- <nant buildfile="test/Spring/Spring.Template.Velocity.Tests/Spring.Template.Velocity.Tests.build" target="test" if="${build-velocity}"/> -->
+    <nant buildfile="test/Spring/Spring.Template.Velocity.Castle.Tests/Spring.Template.Velocity.Castle.Tests.build" target="test" if="${build-velocity}"/>
     <!--"Spring.ConversationWA.NH*.Tests.dll" should be at last to prevent the other tests are compiled with reference to this-->
 	
 	<!-- conversation tests disabled for now because with .NET 4.5 installed NUnitAsp does not seem to work anymore -->
@@ -2035,5 +2037,6 @@ Commandline Examples:
 		</do>
 	</foreach>
 </target>
+
 
 </project>
