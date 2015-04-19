@@ -60,9 +60,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Spring.Template.Velocity.Tests\Template\Velocity\Config\TemplateNamespaceParserTests.cs">
-      <Link>Template\Velocity\Config\TemplateNamespaceParserTests.cs</Link>
-    </Compile>
     <Compile Include="..\Spring.Template.Velocity.Tests\Template\Velocity\VelocityEngineFactoryObjectTests.cs">
       <Link>Template\Velocity\VelocityEngineFactoryObjectTests.cs</Link>
     </Compile>
@@ -72,6 +69,7 @@
     <Compile Include="..\Spring.Template.Velocity.Tests\VelocityCompilerOptionsTests.cs">
       <Link>VelocityCompilerOptionsTests.cs</Link>
     </Compile>
+    <Compile Include="Template\Velocity\Config\TemplateNamespaceParserTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Spring\Spring.Core\Spring.Core.2010.csproj">

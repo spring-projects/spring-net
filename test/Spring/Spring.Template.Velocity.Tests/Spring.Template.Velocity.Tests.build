@@ -58,7 +58,7 @@
 				<include name="**/*.config" />
 			</resources>
 		</csc>
-		<copy todir="${current.bin.dir}" failonerror="true">
+		<copy todir="${current.bin.dir}" overwrite="true failonerror="true">
 			<fileset basedir="${project::get-base-directory()}">
 				<include name="**/*.xml" />
 				<include name="**/*.xsd" />

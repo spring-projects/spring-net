@@ -38,6 +38,7 @@
 				<include name="**/*.cs" />
 				<include name="../Spring.Template.Velocity.Tests/**/*.cs" />
 				<include name="../CommonAssemblyInfo.cs" />
+				<exclude name="../Spring.Template.Velocity.Tests/Template/Velocity/Config/TemplateNamespaceParserTests.cs" />
 			</sources>
 			<references>
 				<include name="mscorlib.dll"/>

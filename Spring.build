@@ -565,7 +565,7 @@ Commandline Examples:
     <nant buildfile="test/Spring/Spring.Messaging.Nms.Integration.Tests/Spring.Messaging.Nms.Integration.Tests.build" target="test" if="${build-nms}"/>
 	<nant buildfile="test/Spring/Spring.Scheduling.Quartz2.Tests/Spring.Scheduling.Quartz2.Tests.build" target="test" if="${build-quartz}"/>
     <nant buildfile="test/Spring/Spring.Messaging.Tests/Spring.Messaging.Tests.build" target="test" if="${build-msmq}"/>
-    <!-- <nant buildfile="test/Spring/Spring.Template.Velocity.Tests/Spring.Template.Velocity.Tests.build" target="test" if="${build-velocity}"/> -->
+    <nant buildfile="test/Spring/Spring.Template.Velocity.Tests/Spring.Template.Velocity.Tests.build" target="test" if="${build-velocity}"/>
     <nant buildfile="test/Spring/Spring.Template.Velocity.Castle.Tests/Spring.Template.Velocity.Castle.Tests.build" target="test" if="${build-velocity}"/>
     <!--"Spring.ConversationWA.NH*.Tests.dll" should be at last to prevent the other tests are compiled with reference to this-->
 	

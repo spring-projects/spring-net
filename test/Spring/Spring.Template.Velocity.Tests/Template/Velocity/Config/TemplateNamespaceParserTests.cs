@@ -85,7 +85,7 @@ namespace Spring.Template.Velocity.Config {
             Assert.AreEqual(VelocityConstants.Assembly, getSingleProperty(velocityEngine, RuntimeConstants.RESOURCE_LOADER), "incorrect resource loader");
             Assert.AreEqual(TemplateDefinitionConstants.AssemblyResourceLoaderClass, getSingleProperty(velocityEngine,
                 TemplateNamespaceParser.getResourceLoaderProperty(VelocityConstants.Assembly, VelocityConstants.Class)), "incorrect resource loader type");
-            Assert.AreEqual("Spring.Template.Velocity.Castle.Tests", getSingleProperty(velocityEngine,
+            Assert.AreEqual("Spring.Template.Velocity.Tests", getSingleProperty(velocityEngine,
                 TemplateNamespaceParser.getResourceLoaderProperty(VelocityConstants.Assembly,VelocityConstants.Assembly)), "incorrect resource loader path");
             Assert.AreEqual(DEFAULT_CACHE_SIZE, velocityEngine.GetProperty(RuntimeConstants.RESOURCE_MANAGER_DEFAULTCACHE_SIZE), "incorrect default cache size");
             Assert.AreEqual(DEFAULT_CACHE_FLAG, velocityEngine.GetProperty(VelocityConstants.Assembly + VelocityConstants.Separator + PropertyResourceLoaderCachce),
@@ -155,7 +155,7 @@ namespace Spring.Template.Velocity.Config {
 
             Assert.AreEqual(PropertyMyResourceLoader, getSingleProperty(velocityEngine, RuntimeConstants.RESOURCE_LOADER), "incorrect resource loader");
             
-            Assert.AreEqual("Spring.Template.Velocity.Config.TestCustomResourceLoader; Spring.Template.Velocity.Castle.Tests",
+            Assert.AreEqual("Spring.Template.Velocity.Config.TestCustomResourceLoader; Spring.Template.Velocity.Tests",
                 getSingleProperty(velocityEngine, classProp), "incorrect resource loader type");
             Assert.AreEqual(PropertyMyResourceLoader, getSingleProperty(velocityEngine, RuntimeConstants.RESOURCE_LOADER), "incorrect resource loader");
             Assert.AreEqual("A custom resource loader",
