@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -223,36 +223,34 @@ namespace Spring.Objects.Factory.Support
         protected override IList<string> GetDependingObjectNames(string objectName)
         {
             List<string> dependingObjectNames = new List<string>();
-            IList<string> allObjectDefinitionNames = GetObjectDefinitionNames();
-            foreach (string name in allObjectDefinitionNames)
-            {
-                if (ContainsObjectDefinition(name))
-                {
-                    RootObjectDefinition rod = GetMergedObjectDefinition(name, false);
-                    if (rod.DependsOn != null)
-                    {
-                        HashSet<string> dependsOn = new HashSet<string>(rod.DependsOn);
-                        if (dependsOn.Contains(objectName))
-                        {
-                            #region Instrumentation
-
-                            if (log.IsDebugEnabled)
-                            {
-                                log.Debug(string.Format(
-                                    CultureInfo.InvariantCulture,
-                                    "Found depending object '{0}' for object '{1}'.",
-                                    name, objectName));
-                            }
-
-                            #endregion
-
-                            dependingObjectNames.Add(name);
-                        }
-                    }
-                }
-            }
-            return dependingObjectNames;
-        }
+			if (dependingObjectNamesCache == null)
+			{
+				dependingObjectNamesCache = new Dictionary<string, List<string>>();
+				IList<string> allObjectDefinitionNames = GetObjectDefinitionNames();
+				foreach (string name in allObjectDefinitionNames)
+				{
+					if (ContainsObjectDefinition(name))
+					{
+						RootObjectDefinition rod = GetMergedObjectDefinition(name, false);
+						if (rod.DependsOn != null)
+						{
+							foreach (var dependsOnName in rod.DependsOn)
+							{
+								if (!dependingObjectNamesCache.TryGetValue(dependsOnName, out dependingObjectNames))
+								{
+									dependingObjectNames = new List<string>();
+									dependingObjectNamesCache.Add(dependsOnName, dependingObjectNames);
+								}
+								dependingObjectNames.Add(name);
+							}
+						}
+					}
+				}
+			}
+			if (dependingObjectNamesCache.TryGetValue(objectName, out dependingObjectNames))
+				return dependingObjectNames;
+			return new string[]{};
+		}
 
         /// <summary>
         /// Check whether the specified object matches the supplied <paramref name="type"/>.
@@ -293,6 +291,11 @@ namespace Spring.Objects.Factory.Support
         #endregion
 
         #region Fields
+
+        /// <summary>
+        /// The mapping of object depending object names, keyed by object name.
+        /// </summary>
+		private IDictionary<string, List<string>> dependingObjectNamesCache;
 
         /// <summary>
         /// The <see cref="Common.Logging.ILog"/> instance for this class.
