@@ -667,7 +667,7 @@ namespace Spring.Data.NHibernate
             {
                 try
                 {
-                    FieldInfo fi = hibernateAdoTx.GetType().GetField("trans", BindingFlags.Instance | BindingFlags.NonPublic);
+                    FieldInfo fi = typeof(AdoTransaction).GetField("trans", BindingFlags.Instance | BindingFlags.NonPublic);
                     adoTransaction = fi.GetValue(hibernateAdoTx) as IDbTransaction;
                 }
                 catch (Exception e)
