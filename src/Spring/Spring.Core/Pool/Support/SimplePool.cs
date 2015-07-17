@@ -41,6 +41,7 @@ namespace Spring.Pool.Support
 	/// <author>Doug Lea</author>
 	/// <author>Federico Spinazzi</author>
 	/// <author>Mark Pollack</author>
+	/// <author>Zbynek Vyskovsky, kvr@centrum.cz</author>
 	public class SimplePool : IObjectPool
 	{
 		private readonly IPoolableObjectFactory factory;
@@ -60,19 +61,20 @@ namespace Spring.Pool.Support
 		/// <param name="factory">
 		/// The factory used to instantiate and manage the lifecycle of pooled objects.
 		/// </param>
-		/// <param name="size">The initial size of the pool.</param>
+		/// <param name="maxSize">The maximum size of the pool.</param>
+		/// <param name="initialSize">The initial size of the pool.</param>
 		/// <exception cref="System.ArgumentNullException">
 		/// If the supplied <paramref name="factory"/> is <see langword="null"/>.
 		/// </exception>
 		/// <exception cref="System.ArgumentException">
 		/// If the supplied <paramref name="size"/> is less than or equal to zero.
 		/// </exception>
-		public SimplePool(IPoolableObjectFactory factory, int size)
+		public SimplePool(IPoolableObjectFactory factory, int maxSize, int initialSize)
 		{
 			AssertUtils.ArgumentNotNull(factory, "factory");
-			this.available = new Semaphore(size);
+			this.available = new Semaphore(maxSize);
 			this.factory = factory;
-			InitItems(size);
+			InitItems(initialSize);
 		}
 
 		/// <summary>
@@ -145,7 +147,9 @@ namespace Spring.Pool.Support
 				}
 				if (!closed)
 				{
-					throw new PoolException("No more valid objects in pool.");
+					object o = factory.MakeObject();
+					busy.Add(o);
+					return o;
 				}
 				else
 				{
