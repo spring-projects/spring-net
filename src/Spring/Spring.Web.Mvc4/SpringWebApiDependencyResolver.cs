@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Web.Http.Dependencies;
-using System.Web.Http.Services;
+
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.Core.IO;

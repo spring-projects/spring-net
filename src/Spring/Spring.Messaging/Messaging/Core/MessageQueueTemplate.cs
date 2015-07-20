@@ -19,15 +19,14 @@
 #endregion
 
 using System;
-using System.Collections;
 using System.Messaging;
-using Common.Logging;
+
 using Spring.Context;
-using Spring.Messaging.Support;
 using Spring.Messaging.Support.Converters;
 using Spring.Objects.Factory;
-using Spring.Objects.Factory.Config;
 using Spring.Util;
+
+using Common.Logging;
 
 namespace Spring.Messaging.Core
 {
@@ -83,12 +82,15 @@ namespace Spring.Messaging.Core
         private string messageConverterObjectName;
 
         private IMessageQueueFactory messageQueueFactory;
-        protected IConfigurableApplicationContext applicationContext;
+        private IConfigurableApplicationContext applicationContext;
 
         private TimeSpan timeout = MessageQueue.InfiniteTimeout;
 
         private MessageQueueMetadataCache metadataCache;
 
+        /// <summary>
+        /// The name that is used from cache registration inside the application context.
+        /// </summary>
         public const string METADATA_CACHE_NAME = "__MessageQueueMetadataCache__";
 
         #endregion
@@ -246,7 +248,7 @@ namespace Spring.Messaging.Core
             get { return applicationContext; }
             set {
                 AssertUtils.ArgumentNotNull(value, "An ApplicationContext instance is required");
-                IConfigurableApplicationContext ctx = value as IConfigurableApplicationContext;
+                var ctx = value as IConfigurableApplicationContext;
                 if (ctx == null)
                 {
                     throw new InvalidOperationException(
@@ -292,6 +294,9 @@ namespace Spring.Messaging.Core
             CreateDefaultMetadataCache();
         }
 
+        /// <summary>
+        /// Constructs the metadata cache with default options.
+        /// </summary>
         protected virtual void CreateDefaultMetadataCache()
         {
             if (metadataCache == null)

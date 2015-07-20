@@ -271,5 +271,15 @@ namespace Spring.Util
             Assert.AreEqual("/mYpath", WebUtils.GetRelativePath("/Mydir", "/mYdir/mYpath"));
             Assert.AreEqual("/myotherdir/mypath", WebUtils.GetRelativePath("/mydir", "/myotherdir/mypath"));
         }
+
+        [Test]
+        public void GetNormalizedVirtualPath()
+        {
+            Assert.AreEqual(null, WebUtils.GetNormalizedVirtualPath(null));
+            Assert.AreEqual(String.Empty, WebUtils.GetNormalizedVirtualPath(String.Empty));
+            Assert.AreEqual("~test.aspx", WebUtils.GetNormalizedVirtualPath("~test.aspx"));
+            Assert.AreEqual("/test.aspx", WebUtils.GetNormalizedVirtualPath("~/test.aspx"));
+            Assert.AreEqual("/Complex.Path/~/test.aspx", WebUtils.GetNormalizedVirtualPath("~/Complex.Path/~/test.aspx"));
+        }
     }
 }

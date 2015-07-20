@@ -62,8 +62,7 @@ Release contents:
 * "test" contains the C# source files for Spring.NET's test suite
 * "bin" contains various Spring.NET distribution dll files
 * "lib/Net" contains shared third-party libraries needed for building the framework
-* "lib/NHibernate31" contains NHibernate 3.2 dlls
-* "lib/NHibernate32" contains NHibernate 3.3 dlls
+* "lib/NHibernate3" contains NHibernate 3.3 dlls
 * "doc" contains reference documentation, MSDN-style API help, and the Spring.NET xsd.
 * "examples" contains sample applications.
 * "build-support" contains additonal applications need to build using NAnt as some convenience
@@ -95,12 +94,12 @@ The "bin" directory contains the following distinct dll files for use in applica
 - Contents: Transaction and ADO.NET Framework.
 - Dependencies: Spring.Core, Spring.Aop
 
-* "Spring.Data.NHibernate32" (~90 KB)
-- Contents: NHibernate 3.2 integration
+* "Spring.Data.NHibernate3" (~90 KB)
+- Contents: NHibernate 3.x integration
 - Dependencies: Spring.Core, Spring.Aop, Spring.Data, NHibernate
 
-* "Spring.Data.NHibernate33" (~90 KB)
-- Contents: NHibernate 3.3 integration
+* "Spring.Data.NHibernate4" (~90 KB)
+- Contents: NHibernate 4.x integration
 - Dependencies: Spring.Core, Spring.Aop, Spring.Data, NHibernate
 
 * "Spring.Services" (~70 KB)
@@ -115,16 +114,16 @@ The "bin" directory contains the following distinct dll files for use in applica
 - Contents: ASP.NET AJAX Integartion
 - Dependencies: Spring.Core, Spring.Aop, System.Web.Extensions
 
-* "Spring.Web.Mvc" (~8 KB)
-- Contents: ASP.NET MVC2 Integartion
-- Dependencies: Spring.Core, Spring.Web
-
 * "Spring.Web.Mvc3" (~8 KB)
 - Contents: ASP.NET MVC3 Integartion
 - Dependencies: Spring.Core, Spring.Web
 
 * "Spring.Web.Mvc4" (~8 KB)
 - Contents: ASP.NET MVC4 and WebAPI Integartion
+- Dependencies: Spring.Core, Spring.Web
+
+* "Spring.Web.Mvc5" (~8 KB)
+- Contents: ASP.NET MVC5 and WebAPI Integartion
 - Dependencies: Spring.Core, Spring.Web
 
 * "Spring.Testing.NUnit" (~24 KB)
@@ -143,8 +142,8 @@ The "bin" directory contains the following distinct dll files for use in applica
 - Contents: NMS Integration
 - Dependencies: Spring.Core, Spring.Data, Apache NMS
 
-* "Spring.Scheduling.Quartz" (~44 KB)
-- Contents: Quartz 1.0 Integration
+* "Spring.Scheduling.Quartz2" (~44 KB)
+- Contents: Quartz 2.x Integration
 - Dependencies: Spring.Core, Spring.Data, Quartz
 
 * "Spring.Template.Velocity" (~44 KB)

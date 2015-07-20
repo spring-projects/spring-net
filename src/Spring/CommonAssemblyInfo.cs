@@ -1,6 +1,7 @@
 using System;
 using System.Reflection;
-[assembly: CLSCompliant(false)]
+
+[assembly: CLSCompliant(true)]
 
 //
 // General Information about an assembly is controlled through the following 
@@ -27,13 +28,15 @@ using System.Reflection;
 //
 // This is to support side-by-side deployment of .NET 1.1 and .NET 2.0 versions of the assembly.
 
-//note that this #if #elif #endif contstruct requires NET_#_# values be checked in DESCENDING order to work properly
+//note that this #if #elif #endif construct requires NET_#_# values be checked in DESCENDING order to work properly
 // (e.g., add any new ones at the TOP of this construct!)
 
-#if NET_4_0
-[assembly: AssemblyVersion("1.3.2.40001")]
+#if NET_4_5
+[assembly: AssemblyVersion("2.0.0.45001")]
+#elif NET_4_0
+[assembly: AssemblyVersion("2.0.0.40001")]
 #elif NET_3_5
-[assembly: AssemblyVersion("1.3.2.35001")]
+[assembly: AssemblyVersion("2.0.0.35001")]
 #endif
 
 

@@ -19,6 +19,7 @@
 			</nowarn>
 			<references basedir="${current.bin.dir}">
 				<include name="Common.Logging.dll" />
+				<include name="Common.Logging.Core.dll" />
 				<include name="Spring.Calculator.Contract.dll" />
 			</references>
 		</csc>

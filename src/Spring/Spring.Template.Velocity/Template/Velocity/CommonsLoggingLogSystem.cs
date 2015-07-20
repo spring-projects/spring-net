@@ -18,6 +18,8 @@
 
 #endregion
 
+using System;
+
 using Common.Logging;
 using NVelocity.Runtime;
 using NVelocity.Runtime.Log;
@@ -41,7 +43,9 @@ namespace Spring.Template.Velocity
         /// Initializes the specified runtime services.  No-op in current implementatin
         /// </summary>
         /// <param name="runtimeServices">the runtime services.</param>
-        public void Init(IRuntimeServices runtimeServices) {
+        [CLSCompliant(false)]
+        public void Init(IRuntimeServices runtimeServices)
+        {
         }
 
         /// <summary>
@@ -49,7 +53,9 @@ namespace Spring.Template.Velocity
         /// </summary>
         /// <param name="level">LogLevel to match</param>
         /// <param name="message">message to log</param>
-        public void LogVelocityMessage(LogLevel level, string message) {
+        [CLSCompliant(false)]
+        public void LogVelocityMessage(LogLevel level, string message)
+        {
             switch (level) {
                 case LogLevel.Error:
                     log.Error(message);

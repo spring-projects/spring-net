@@ -9,8 +9,14 @@
       * current.build.debug       - (true|false) debug build?
       * current.build.defines.csc - framework-specific build defines for C# compiler
  -->
+<include buildfile="${spring.basedir}/CopyLibToBinHelpers.include"/>
+
+
 	<target name="build">
 		<!-- build Spring.Data.Tests -->
+		
+		<call target="copycommonlogginglibtobin" />
+		
 		<csc target="library" define="${current.build.defines.csc}"
 		     warnaserror="true"
 		     optimize="${build.optimize}"
@@ -30,15 +36,25 @@
 		        <resources prefix="Spring" dynamicprefix="true" failonempty="false">
 			        <include name="**/*.xml" />
 			</resources>
-			<references>
+			  <references>
 				<include name="mscorlib.dll"/>
 				<include name="Microsoft.CSharp.dll"/>
 				<include name="System.dll"/>
 				<include name="System.Core.dll"/>
-				<include name="${current.bin.dir}/*.dll" />
-				<exclude name="${current.bin.dir}/${project::get-name()}.dll" />
-				<exclude name="${current.bin.dir}/CloverRuntime.dll" />
-			</references>
+				<include name="System.Data.dll" />
+				<include name="System.EnterpriseServices.dll" />
+				<include name="${current.bin.dir}/Common.Logging.dll"/>
+				<include name="${current.bin.dir}/Common.Logging.Core.dll"/>
+				<include name="${current.bin.dir}/Spring.Core.dll" />
+				<include name="${current.bin.dir}/Spring.Core.Tests.dll" />
+				<include name="${current.bin.dir}/Spring.Data.dll" />
+				<include name="${current.bin.dir}/Spring.Messaging.Nms.dll" />
+				<include name="${current.bin.dir}/Spring.Testing.NUnit.dll" />
+				<include name="${current.bin.dir}/Apache.NMS.dll" />
+				<include name="${current.bin.dir}/Apache.NMS.ActiveMQ.dll" />
+				<include name="${current.bin.dir}/nunit.framework.dll"/>
+				<include name="${current.bin.dir}/Rhino.Mocks.dll"/>
+			  </references>
 		</csc>
 
                 <copy file="${project::get-base-directory()}/${project::get-name()}.dll.config"

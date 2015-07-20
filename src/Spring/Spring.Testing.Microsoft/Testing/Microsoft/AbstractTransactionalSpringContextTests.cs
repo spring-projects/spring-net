@@ -81,7 +81,7 @@ namespace Spring.Testing.Microsoft
         /// <summary>
         /// The transaction manager to use
         /// </summary>
-        protected IPlatformTransactionManager transactionManager;
+        private IPlatformTransactionManager transactionManager;
 
         /// <summary>
         /// Should we roll back by default?
@@ -107,7 +107,7 @@ namespace Spring.Testing.Microsoft
         /// <summary>
         /// TransactionStatus for this test. Typical subclasses won't need to use it.
         /// </summary>
-        protected ITransactionStatus transactionStatus;
+        private ITransactionStatus transactionStatus;
 
 
         /// <summary>
@@ -122,6 +122,7 @@ namespace Spring.Testing.Microsoft
         /// </summary>
         public IPlatformTransactionManager TransactionManager
         {
+            protected get { return transactionManager; }
             set { transactionManager = value; }
         }
 
@@ -142,6 +143,15 @@ namespace Spring.Testing.Microsoft
         protected ITransactionDefinition TransactionDefinition
         {
             set { transactionDefinition = value; }
+        }
+
+        /// <summary>
+        /// TransactionStatus for this test. Typical subclasses won't need to use it.
+        /// </summary>
+        protected ITransactionStatus TransactionStatus
+        {
+            get { return transactionStatus; }
+            set { transactionStatus = value; }
         }
 
         /// <summary>

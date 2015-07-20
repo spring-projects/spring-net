@@ -293,8 +293,8 @@ namespace Spring.Objects.Factory
         [Test]
         public void GetObjectPostProcessorCount()
         {
-            IObjectPostProcessor proc1 = (IObjectPostProcessor) mocks.CreateMock(typeof (IObjectPostProcessor));
-            IObjectPostProcessor proc2 = (IObjectPostProcessor)mocks.CreateMock(typeof(IObjectPostProcessor));
+            IObjectPostProcessor proc1 = mocks.StrictMock<IObjectPostProcessor>();
+            IObjectPostProcessor proc2 = mocks.StrictMock<IObjectPostProcessor>();
 
             DefaultListableObjectFactory lof = new DefaultListableObjectFactory();
 
@@ -316,8 +316,8 @@ namespace Spring.Objects.Factory
         public void GetObjectPostProcessorCountDoesntRespectHierarchy()
         {
 
-            IObjectPostProcessor proc1 = (IObjectPostProcessor)mocks.CreateMock(typeof(IObjectPostProcessor));
-            IObjectPostProcessor proc2 = (IObjectPostProcessor)mocks.CreateMock(typeof(IObjectPostProcessor));
+            IObjectPostProcessor proc1 = mocks.StrictMock<IObjectPostProcessor>();
+            IObjectPostProcessor proc2 = mocks.StrictMock<IObjectPostProcessor>();
 
             DefaultListableObjectFactory child = new DefaultListableObjectFactory();
             DefaultListableObjectFactory parent = new DefaultListableObjectFactory(child);
@@ -1617,7 +1617,7 @@ namespace Spring.Objects.Factory
 		    lbf.RegisterObjectDefinition("bd1", bd1);
 		    lbf.RegisterObjectDefinition("bd2", bd2);
 
-            Assert.That(delegate { lbf.GetObject<TestObject>(); }, Throws.Exception.TypeOf<NoSuchObjectDefinitionException>());
+            Assert.That(() => lbf.GetObject<TestObject>(), Throws.Exception.TypeOf<NoSuchObjectDefinitionException>());
         }
 
         [Test]
@@ -1635,7 +1635,7 @@ namespace Spring.Objects.Factory
             Assert.That(lbf.GetObject("bd1", typeof(TestObject)), Is.SameAs(actual));
 
 		    lbf.RegisterObjectDefinition("bd2", bd2);
-            Assert.That(delegate { lbf.GetObject<TestObject>(); }, Throws.Exception.TypeOf<NoSuchObjectDefinitionException>());
+            Assert.That(() => lbf.GetObject<TestObject>(), Throws.Exception.TypeOf<NoSuchObjectDefinitionException>());
         }
 
         [Test]
@@ -1664,7 +1664,7 @@ namespace Spring.Objects.Factory
         [Test]
         public void IgnoreObjectPostProcessorDuplicates()
         {
-            IObjectPostProcessor proc1 = (IObjectPostProcessor)mocks.CreateMock(typeof(IObjectPostProcessor));
+            IObjectPostProcessor proc1 = mocks.StrictMock<IObjectPostProcessor>();
 
             DefaultListableObjectFactory lof = new DefaultListableObjectFactory();
 
@@ -1772,6 +1772,66 @@ namespace Spring.Objects.Factory
         }
 
         #endregion
+
+        [Test]
+        public void GetObjectDefinitionNamesOnlyFromChild()
+        {
+            DefaultListableObjectFactory parent = new DefaultListableObjectFactory();
+            parent.RegisterObjectDefinition("testChild", new RootObjectDefinition(typeof(TestObject), null));
+            DefaultListableObjectFactory child = new DefaultListableObjectFactory(parent);
+            child.RegisterObjectDefinition("testParent", new RootObjectDefinition(typeof(NestedTestObject), null));
+
+            var names = child.GetObjectDefinitionNames();
+
+            Assert.That(names, Has.Count.EqualTo(1), "GetObjectDefinitionNames() should only return object definition names from this factory");
+
+            names = child.GetObjectDefinitionNames(false);
+
+            Assert.That(names, Has.Count.EqualTo(1), "GetObjectDefinitionNames(false) should only return object definition names from this factory");
+        }
+
+        [Test]
+        public void GetObjectDefinitionNamesIncludingParent()
+        {
+            DefaultListableObjectFactory parent = new DefaultListableObjectFactory();
+            parent.RegisterObjectDefinition("testChild", new RootObjectDefinition(typeof(TestObject), null));
+            DefaultListableObjectFactory child = new DefaultListableObjectFactory(parent);
+            child.RegisterObjectDefinition("testParent", new RootObjectDefinition(typeof(NestedTestObject), null));
+
+            var names = child.GetObjectDefinitionNames(true);
+
+            Assert.That(names, Has.Count.EqualTo(2), "GetObjectDefinitionNames(true) should return object definition names from this factory and parents");
+        }
+
+        [Test]
+        public void GetObjectDefinitionNamesByTypeExcludingParent()
+        {
+            DefaultListableObjectFactory parent = new DefaultListableObjectFactory();
+            parent.RegisterObjectDefinition("testChild", new RootObjectDefinition(typeof(TestObject), null));
+            DefaultListableObjectFactory child = new DefaultListableObjectFactory(parent);
+            child.RegisterObjectDefinition("testParent", new RootObjectDefinition(typeof(NestedTestObject), null));
+
+            var names1 = child.GetObjectDefinitionNames(typeof(NestedTestObject));
+            var names2 = child.GetObjectDefinitionNames(typeof(TestObject));
+
+            Assert.That(names1, Has.Count.EqualTo(1), "Should return only child object definitions");
+            Assert.That(names2, Has.Count.EqualTo(0), "Should not return the parent object definitions");
+        }
+
+        [Test]
+        public void GetObjectDefinitionNamesByTypeIncludingParent()
+        {
+            DefaultListableObjectFactory parent = new DefaultListableObjectFactory();
+            parent.RegisterObjectDefinition("testChild", new RootObjectDefinition(typeof(TestObject), null));
+            DefaultListableObjectFactory child = new DefaultListableObjectFactory(parent);
+            child.RegisterObjectDefinition("testParent", new RootObjectDefinition(typeof(NestedTestObject), null));
+
+            var names1 = child.GetObjectDefinitionNames(typeof(NestedTestObject), true);
+            var names2 = child.GetObjectDefinitionNames(typeof(TestObject), true);
+
+            Assert.That(names1, Has.Count.EqualTo(1), "Should return child object definitions");
+            Assert.That(names2, Has.Count.EqualTo(1), "Should return the parent object definitions");
+        }
 
         [Test]
         public void GetObjectNamesForTypeFindsFactoryObjects()

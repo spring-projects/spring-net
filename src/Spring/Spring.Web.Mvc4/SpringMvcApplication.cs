@@ -20,15 +20,9 @@
 
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Web;
 using System.Web.Mvc;
-using Spring.Objects.Factory;
-using Spring.Core.IO;
-using Spring.Objects.Factory.Xml;
-using System.Web.Routing;
+
 using Spring.Context.Support;
 
 namespace Spring.Web.Mvc
@@ -128,9 +122,9 @@ namespace Spring.Web.Mvc
         /// </summary>
         protected static class ThreadSafeDependencyResolverRegistrar
         {
-            private static bool _isMvcResolverRegistered = false;
-            private static bool _isWebApiResolverRegistered = false;
-            private static readonly Object Lock = new Object();
+            private static bool isMvcResolverRegistered;
+            private static bool isWebApiResolverRegistered;
+            private static readonly object Lock = new object();
 
             /// <summary>
             /// Registers the specified <see cref="System.Web.Mvc.IDependencyResolver"/>.
@@ -138,21 +132,21 @@ namespace Spring.Web.Mvc
             /// <param name="resolver">The resolver.</param>
             public static void Register(IDependencyResolver resolver)
             {
-                if (_isMvcResolverRegistered)
+                if (isMvcResolverRegistered)
                 {
                     return;
                 }
 
                 lock (Lock)
                 {
-                    if (_isMvcResolverRegistered)
+                    if (isMvcResolverRegistered)
                     {
                         return;
                     }
 
                     DependencyResolver.SetResolver(resolver);
 
-                    _isMvcResolverRegistered = true;
+                    isMvcResolverRegistered = true;
                 }
             }
 
@@ -162,21 +156,21 @@ namespace Spring.Web.Mvc
             /// <param name="resolver">The resolver.</param>
             public static void Register(System.Web.Http.Dependencies.IDependencyResolver resolver)
             {
-                if (_isWebApiResolverRegistered)
+                if (isWebApiResolverRegistered)
                 {
                     return;
                 }
 
                 lock (Lock)
                 {
-                    if (_isWebApiResolverRegistered)
+                    if (isWebApiResolverRegistered)
                     {
                         return;
                     }
 
                     System.Web.Http.GlobalConfiguration.Configuration.DependencyResolver = resolver;
 
-                    _isWebApiResolverRegistered = true;
+                    isWebApiResolverRegistered = true;
                 }
             }
         }

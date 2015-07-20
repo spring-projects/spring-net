@@ -48,7 +48,7 @@ namespace Spring.Objects.Factory.Support
 		[ExpectedException(typeof (ArgumentNullException))]
 		public void InstantiationWithNullDefinition()
 		{
-		    IObjectFactory objectFactory = (IObjectFactory) mocks.CreateMock(typeof (IObjectFactory));
+		    IObjectFactory objectFactory = mocks.StrictMock<IObjectFactory>();
 			new LookupMethodReplacer(null, objectFactory);
 		}
 
@@ -56,17 +56,15 @@ namespace Spring.Objects.Factory.Support
 		[ExpectedException(typeof (ArgumentNullException))]
 		public void InstantiationWithNullFactory()
 		{
-		    IConfigurableObjectDefinition configurableObjectDefinition =
-		        (IConfigurableObjectDefinition) mocks.CreateMock(typeof (IConfigurableObjectDefinition));
+		    var configurableObjectDefinition = mocks.StrictMock<IConfigurableObjectDefinition>();
             new LookupMethodReplacer(configurableObjectDefinition, null);
 		}
 
 		[Test]
 		public void SunnyDayPath()
 		{
-            IObjectFactory objectFactory = (IObjectFactory)mocks.CreateMock(typeof(IObjectFactory));
-            IConfigurableObjectDefinition configurableObjectDefinition =
-                            (IConfigurableObjectDefinition)mocks.CreateMock(typeof(IConfigurableObjectDefinition));
+            var objectFactory = mocks.StrictMock<IObjectFactory>();
+            var configurableObjectDefinition = mocks.StrictMock<IConfigurableObjectDefinition>();
 			
             object expectedLookup = new object();
 			const string LookupObjectName = "foo";

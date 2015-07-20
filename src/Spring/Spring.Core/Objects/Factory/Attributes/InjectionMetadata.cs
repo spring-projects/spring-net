@@ -89,7 +89,7 @@ namespace Spring.Objects.Factory.Attributes
             /// <summary>
             /// The Property, field, method or constructor info
             /// </summary>
-            protected readonly MemberInfo _member;
+            private readonly MemberInfo _member;
 
             /// <summary>
             /// Instantiates a new inject element
@@ -98,6 +98,11 @@ namespace Spring.Objects.Factory.Attributes
             protected InjectedElement(MemberInfo member)
             {
                 _member = member;
+            }
+
+            public MemberInfo Member
+            {
+                get { return _member; }
             }
 
             /// <summary>

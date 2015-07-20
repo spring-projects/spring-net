@@ -441,7 +441,7 @@ namespace Spring.Objects.Factory.Attributes
 
             public override void Inject(Object instance, String objectName, IPropertyValues pvs)
             {
-                var property = (PropertyInfo) _member;
+                var property = (PropertyInfo) Member;
                 try
                 {
                     Object value;
@@ -513,7 +513,7 @@ namespace Spring.Objects.Factory.Attributes
 
             public override void Inject(Object instance, String objectName, IPropertyValues pvs)
             {
-                var field = (FieldInfo) _member;
+                var field = (FieldInfo) Member;
                 try
                 {
                     Object value;
@@ -585,7 +585,7 @@ namespace Spring.Objects.Factory.Attributes
 
             public override void Inject(Object target, string objectName, IPropertyValues pvs)
             {
-                MethodInfo method = _member as MethodInfo;
+                MethodInfo method = Member as MethodInfo;
                 try
                 {
                     Object[] arguments;

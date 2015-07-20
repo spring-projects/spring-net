@@ -21,6 +21,7 @@
 #region Imports
 
 using System;
+
 using Spring.Dao;
 using Spring.Data.Common;
 
@@ -43,16 +44,14 @@ namespace Spring.Data.Objects.Generic
     /// <author>Mark Pollack (.NET)</author>
     public abstract class AdoOperation : AbstractAdoOperation
     {
-        
         #region Fields
 
         private Data.Generic.AdoTemplate adoTemplate = new Data.Generic.AdoTemplate();
-	    
-        
+
         #endregion
 
         #region Constructor (s)
-        
+
         /// <summary>
         /// Initializes a new instance of the <see cref="AdoOperation"/> class.
         /// </summary>
@@ -60,7 +59,8 @@ namespace Spring.Data.Objects.Generic
         /// before invoking the compile method and using this object.       
         /// </remarks>
         public AdoOperation()
-        {}
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AdoOperation"/> class.
@@ -71,7 +71,8 @@ namespace Spring.Data.Objects.Generic
         /// <param name="provider">Database provider to use.</param>
         public AdoOperation(IDbProvider provider)
             : this(provider, null)
-        {}
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AdoOperation"/> class.
@@ -85,7 +86,7 @@ namespace Spring.Data.Objects.Generic
         {
             //intialized AdoTemplate with the DbProvider
             DbProvider = provider;
-            Sql = sql;                         
+            Sql = sql;
         }
 
         #endregion
@@ -106,12 +107,8 @@ namespace Spring.Data.Objects.Generic
                 }
                 adoTemplate = value;
             }
-            get
-            {
-                return adoTemplate;
-            }
+            get { return adoTemplate; }
         }
-
 
         /// <summary>
         /// Gets or sets the db provider.
@@ -127,13 +124,8 @@ namespace Spring.Data.Objects.Generic
                     DeclaredParameters = new DbParameters(value);
                 }
             }
-            get
-            {
-                return adoTemplate.DbProvider;
-            }
+            get { return adoTemplate.DbProvider; }
         }
-
-
 
         /// <summary>
         /// Sets the command timeout for IDbCommands that this AdoTemplate executes.
@@ -152,7 +144,6 @@ namespace Spring.Data.Objects.Generic
         #endregion
 
         #region Methods
-        
 
         /// <summary>
         /// Compiles this operation.  Ignores subsequent attempts to compile.
@@ -170,23 +161,20 @@ namespace Spring.Data.Objects.Generic
                     throw new InvalidDataAccessApiUsageException("Setting of CommandType is required");
                 }
 
-                try 
-                {                    
+                try
+                {
                     adoTemplate.AfterPropertiesSet();
                 }
-                catch (ArgumentException ex) 
+                catch (ArgumentException ex)
                 {
                     throw new InvalidDataAccessApiUsageException(ex.Message);
-                }	
-                
-                
+                }
+
                 CompileInternal();
-                compiled = true;
-                
-		
+                Compiled = true;
             }
         }
-        
+
         #endregion
     }
 }

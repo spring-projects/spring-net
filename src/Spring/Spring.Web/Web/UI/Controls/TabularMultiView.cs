@@ -220,11 +220,11 @@ namespace Spring.Web.UI.Controls
 		{
 			// create menu tabstrip
 			_tabContainer = CreateTabContainer();
-			_tabContainer.Click += new TabCommandEventHandler(OnSelectTabCommand);
+			_tabContainer.Click += OnSelectTabCommand;
 
 			// create multiview container
 			_multiView = new MultiView();
-			_multiView.ActiveViewChanged += new EventHandler(OnActiveViewChanged);
+			_multiView.ActiveViewChanged += OnActiveViewChanged;
 
 			// add views previously parsed
 			for (int i = 0; i < _parsedViews.Count; i++) _multiView.Controls.Add((Control) _parsedViews[i]);

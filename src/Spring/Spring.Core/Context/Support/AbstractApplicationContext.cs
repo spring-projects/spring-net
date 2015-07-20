@@ -147,9 +147,27 @@ namespace Spring.Context.Support
         private DateTime _startupDate;
         private readonly bool _isCaseSensitive;
         private EventRaiser _eventRaiser;
+        private bool _isInDispose;
+        private bool _isInStart;
+        private bool _isInStop;
 
         #endregion
 
+
+        /// <summary>
+        /// Protects access to the internal object factory used by the ApplicationContext if attempted to be accessed when in improper state.
+        /// </summary>
+        /// <returns>The internal ObjectFactory used by the ApplicationContext</returns>
+        /// <exception cref="System.InvalidOperationException">Cannot Access ApplicationContext in this state!</exception>
+        private IConfigurableListableObjectFactory SafeGetObjectFactory()
+        {
+            if (_isInStart || _isInStop || _isInDispose)
+            {
+                throw new InvalidOperationException("Cannot Access ApplicationContext in this state!");
+            }
+
+            return ObjectFactory;
+        }
 
         #region Constructor (s) / Destructor
 
@@ -234,6 +252,8 @@ namespace Spring.Context.Support
         /// </summary>
         public virtual void Dispose()
         {
+            _isInDispose = true;
+
             GC.SuppressFinalize(this);
 
             #region Instrumentation
@@ -253,6 +273,8 @@ namespace Spring.Context.Support
             PublishEvent(this, new ContextClosedEventArgs());
 
             ObjectFactory.Dispose();
+
+            _isInDispose = false;
         }
 
         #endregion
@@ -566,7 +588,7 @@ namespace Spring.Context.Support
                 }
                 else if (IsTypeMatch(processorName, typeof(IPriorityOrdered)))
                 {
-                    priorityOrderedFactoryProcessors.Add(ObjectFactory.GetObject<IObjectFactoryPostProcessor>(processorName));
+                    priorityOrderedFactoryProcessors.Add(SafeGetObjectFactory().GetObject<IObjectFactoryPostProcessor>(processorName));
                 }
                 else if (IsTypeMatch(processorName, typeof(IOrdered)))
                 {
@@ -584,18 +606,18 @@ namespace Spring.Context.Support
             List<IObjectFactoryPostProcessor> orderedFactoryProcessors = new List<IObjectFactoryPostProcessor>();
             foreach (string orderedFactoryProcessorsName in orderedFactoryProcessorsNames)
             {
-                orderedFactoryProcessors.Add(ObjectFactory.GetObject<IObjectFactoryPostProcessor>(orderedFactoryProcessorsName));
+                orderedFactoryProcessors.Add(SafeGetObjectFactory().GetObject<IObjectFactoryPostProcessor>(orderedFactoryProcessorsName));
             }
             orderedFactoryProcessors.Sort(new OrderComparator<IObjectFactoryPostProcessor>());
-            InvokeObjectFactoryPostProcessors(orderedFactoryProcessors, ObjectFactory);
+            InvokeObjectFactoryPostProcessors(orderedFactoryProcessors, SafeGetObjectFactory());
 
             // and then the unordered ones...
             List<IObjectFactoryPostProcessor> nonOrderedPostProcessors = new List<IObjectFactoryPostProcessor>();
             foreach (string nonOrderedFactoryProcessorName in nonOrderedFactoryProcessorNames)
             {
-                nonOrderedPostProcessors.Add(ObjectFactory.GetObject<IObjectFactoryPostProcessor>(nonOrderedFactoryProcessorName));
+                nonOrderedPostProcessors.Add(SafeGetObjectFactory().GetObject<IObjectFactoryPostProcessor>(nonOrderedFactoryProcessorName));
             }
-            InvokeObjectFactoryPostProcessors(nonOrderedPostProcessors, ObjectFactory);
+            InvokeObjectFactoryPostProcessors(nonOrderedPostProcessors, SafeGetObjectFactory());
 
             #region Instrumentation
 
@@ -614,7 +636,7 @@ namespace Spring.Context.Support
         protected virtual void InvokePriorityOrderedObjectFactoryPostProcessors(List<string> factoryProcessorNames, List<IObjectFactoryPostProcessor> priorityOrderedFactoryProcessors)
         {
             priorityOrderedFactoryProcessors.Sort(new OrderComparator<IObjectFactoryPostProcessor>());
-            InvokeObjectFactoryPostProcessors(priorityOrderedFactoryProcessors, ObjectFactory);
+            InvokeObjectFactoryPostProcessors(priorityOrderedFactoryProcessors, SafeGetObjectFactory());
 
             // Now will find any additional IObjectFactoryPostProcessors that implement IPriorityOrdered that may have been
             // resolved due to using TypeAlias
@@ -626,13 +648,13 @@ namespace Spring.Context.Support
                 {
                     if (IsTypeMatch(factoryProcessorName, typeof(IPriorityOrdered)))
                     {
-                        priorityOrderedFactoryProcessors.Add(ObjectFactory.GetObject<IObjectFactoryPostProcessor>(factoryProcessorName));
+                        priorityOrderedFactoryProcessors.Add(SafeGetObjectFactory().GetObject<IObjectFactoryPostProcessor>(factoryProcessorName));
                     }
                 }
             }
             // Second, invoke newly discovered IObjectFactoryPostProcessors that implement IPriorityOrdered.
             priorityOrderedFactoryProcessors.Sort(new OrderComparator<IObjectFactoryPostProcessor>());
-            InvokeObjectFactoryPostProcessors(priorityOrderedFactoryProcessors, ObjectFactory);
+            InvokeObjectFactoryPostProcessors(priorityOrderedFactoryProcessors, SafeGetObjectFactory());
         }
 
         private void InvokeObjectFactoryPostProcessors(IList objectFactoryPostProcessors, IConfigurableListableObjectFactory objectFactory)
@@ -651,7 +673,7 @@ namespace Spring.Context.Support
             //            objectProcessors.Sort(new OrderComparator());
             foreach (IObjectPostProcessor objectPostProcessor in objectProcessors)
             {
-                ObjectFactory.AddObjectPostProcessor(objectPostProcessor);
+                SafeGetObjectFactory().AddObjectPostProcessor(objectPostProcessor);
             }
 
             if (log.IsDebugEnabled)
@@ -673,7 +695,7 @@ namespace Spring.Context.Support
         private void RefreshObjectPostProcessorChecker(IConfigurableListableObjectFactory objectFactory)
         {
             int registeredObjectPostProcessorCount = GetObjectNamesForType(typeof(IObjectPostProcessor), true, false).Count;
-            int objectPostProcessorCount = ObjectFactory.ObjectPostProcessorCount + 1
+            int objectPostProcessorCount = SafeGetObjectFactory().ObjectPostProcessorCount + 1
                                            + registeredObjectPostProcessorCount;
             ((ObjectPostProcessorChecker)_defaultObjectPostProcessors[0]).Reset(objectFactory, objectPostProcessorCount);
         }
@@ -820,7 +842,7 @@ namespace Spring.Context.Support
             {
                 _messageSource = new DelegatingMessageSource(
                     GetInternalParentMessageSource());
-                ObjectFactory.RegisterSingleton(MessageSourceObjectName, _messageSource);
+                SafeGetObjectFactory().RegisterSingleton(MessageSourceObjectName, _messageSource);
 
                 #region Instrumentation
 
@@ -836,7 +858,7 @@ namespace Spring.Context.Support
             else
             {
                 _messageSource = new StaticMessageSource();
-                ObjectFactory.RegisterSingleton(MessageSourceObjectName, _messageSource);
+                SafeGetObjectFactory().RegisterSingleton(MessageSourceObjectName, _messageSource);
 
                 #region Instrumentation
 
@@ -1082,6 +1104,8 @@ namespace Spring.Context.Support
         /// </remarks>
         public void Start()
         {
+            _isInStart = true;
+
             IDictionary<string, ILifecycle> lifecycleObjects = LifeCycleObjects;
             foreach (KeyValuePair<string, ILifecycle> dictionaryEntry in lifecycleObjects)
             {
@@ -1095,6 +1119,8 @@ namespace Spring.Context.Support
                     }
                 }
             }
+
+            _isInStart = false;
         }
 
         /// <summary>
@@ -1107,6 +1133,8 @@ namespace Spring.Context.Support
         /// </remarks>
         public void Stop()
         {
+            _isInStop = true;
+
             IDictionary<string, ILifecycle> lifecycleObjects = LifeCycleObjects;
             foreach (KeyValuePair<string, ILifecycle> dictionaryEntry in lifecycleObjects)
             {
@@ -1120,6 +1148,8 @@ namespace Spring.Context.Support
                     }
                 }
             }
+
+            _isInStop = false;
         }
 
         /// <summary>
@@ -1231,7 +1261,7 @@ namespace Spring.Context.Support
         /// <seealso cref="Spring.Objects.Factory.IListableObjectFactory.GetObjectNamesForType(Type)"/>
         public IList<string> GetObjectNamesForType(Type type)
         {
-            return ObjectFactory.GetObjectNamesForType(type);
+            return SafeGetObjectFactory().GetObjectNamesForType(type);
         }
 
         /// <summary>
@@ -1285,7 +1315,7 @@ namespace Spring.Context.Support
         /// <seealso cref="Spring.Objects.Factory.IListableObjectFactory.GetObjectNamesForType(Type, bool, bool)"/>
         public IList<string> GetObjectNamesForType(Type type, bool includePrototypes, bool includeFactoryObjects)
         {
-            return ObjectFactory.GetObjectNamesForType(type, includePrototypes, includeFactoryObjects);
+            return SafeGetObjectFactory().GetObjectNamesForType(type, includePrototypes, includeFactoryObjects);
         }
 
         /// <summary>
@@ -1338,7 +1368,21 @@ namespace Spring.Context.Support
         /// <seealso cref="Spring.Objects.Factory.IListableObjectFactory.GetObjectDefinitionNames()"/>
         public IList<string> GetObjectDefinitionNames()
         {
-            return ObjectFactory.GetObjectDefinitionNames();
+            return GetObjectDefinitionNames(false);
+        }
+        
+        /// <summary>
+        /// Return the names of all objects defined in this factory, if <code>includeAncestors</code>is <code>true</code>
+        /// includes all parent factories.
+        /// </summary>
+        /// <param name="includeAncestors">to include parent factories into result</param>
+        /// <returns>
+        /// The names of all objects defined in this factory, if <code>includeAncestors</code> is <code>true</code> includes all 
+        /// objects defined in parent factories, or an empty array if none are defined.
+        /// </returns>
+        public IList<string> GetObjectDefinitionNames(bool includeAncestors)
+        {
+            return SafeGetObjectFactory().GetObjectDefinitionNames(includeAncestors);
         }
 
         /// <summary>
@@ -1360,7 +1404,7 @@ namespace Spring.Context.Support
         /// </exception>        
         public virtual IObjectDefinition GetObjectDefinition(string name)
         {
-            return ObjectFactory.GetObjectDefinition(name);
+            return SafeGetObjectFactory().GetObjectDefinition(name);
         }
 
 
@@ -1384,7 +1428,7 @@ namespace Spring.Context.Support
         /// </exception>       
         public IObjectDefinition GetObjectDefinition(string name, bool includeAncestors)
         {
-            return ObjectFactory.GetObjectDefinition(name, includeAncestors);
+            return SafeGetObjectFactory().GetObjectDefinition(name, includeAncestors);
         }
 
         /// <summary>
@@ -1440,7 +1484,7 @@ namespace Spring.Context.Support
         /// </exception>
         public IDictionary<string, T> GetObjects<T>()
         {
-            return ObjectFactory.GetObjects<T>(true, true);
+            return SafeGetObjectFactory().GetObjects<T>(true, true);
         }
 
         /// <summary>
@@ -1473,7 +1517,7 @@ namespace Spring.Context.Support
         public IDictionary<string, object> GetObjectsOfType(
             Type type, bool includePrototypes, bool includeFactoryObjects)
         {
-            return ObjectFactory.GetObjectsOfType(type, includePrototypes, includeFactoryObjects);
+            return SafeGetObjectFactory().GetObjectsOfType(type, includePrototypes, includeFactoryObjects);
         }
 
         /// <summary>
@@ -1504,7 +1548,7 @@ namespace Spring.Context.Support
         /// </exception>
         public IDictionary<string, T> GetObjects<T>(bool includePrototypes, bool includeFactoryObjects)
         {
-            return ObjectFactory.GetObjects<T>(includePrototypes, includeFactoryObjects);
+            return SafeGetObjectFactory().GetObjects<T>(includePrototypes, includeFactoryObjects);
         }
 
         /// <summary>
@@ -1561,7 +1605,7 @@ namespace Spring.Context.Support
         /// <seealso cref="Spring.Objects.Factory.IListableObjectFactory.ObjectDefinitionCount"/>
         public int ObjectDefinitionCount
         {
-            get { return ObjectFactory.ObjectDefinitionCount; }
+            get { return SafeGetObjectFactory().ObjectDefinitionCount; }
         }
 
         /// <summary>
@@ -1574,7 +1618,7 @@ namespace Spring.Context.Support
         /// <seealso cref="Spring.Objects.Factory.IListableObjectFactory.ContainsObjectDefinition(string)"/>
         public bool ContainsObjectDefinition(string name)
         {
-            return ObjectFactory.ContainsObjectDefinition(name);
+            return SafeGetObjectFactory().ContainsObjectDefinition(name);
         }
 
         #endregion
@@ -1595,7 +1639,10 @@ namespace Spring.Context.Support
         /// <seealso cref="Spring.Objects.Factory.IObjectFactory.GetObject(string)"/>
         public object this[string name]
         {
-            get { return ObjectFactory.GetObject(name); }
+            get
+            {
+                return SafeGetObjectFactory().GetObject(name);
+            }
         }
 
         /// <summary>
@@ -1608,7 +1655,7 @@ namespace Spring.Context.Support
         /// <seealso cref="Spring.Objects.Factory.IObjectFactory.ContainsObject(string)"/>
         public bool ContainsObject(string name)
         {
-            return ObjectFactory.ContainsObject(name);
+            return SafeGetObjectFactory().ContainsObject(name);
         }
 
         /// <summary>
@@ -1622,7 +1669,7 @@ namespace Spring.Context.Support
         /// <seealso cref="Spring.Objects.Factory.IObjectFactory.GetAliases(string)"/>
         public IList<string> GetAliases(string name)
         {
-            return ObjectFactory.GetAliases(name);
+            return SafeGetObjectFactory().GetAliases(name);
         }
 
 
@@ -1682,7 +1729,7 @@ namespace Spring.Context.Support
         /// </remarks>
         public object CreateObject(string name, Type requiredType, object[] arguments)
         {
-            return ObjectFactory.CreateObject(name, requiredType, arguments);
+            return SafeGetObjectFactory().CreateObject(name, requiredType, arguments);
         }
 
         /// <summary>
@@ -1746,7 +1793,7 @@ namespace Spring.Context.Support
         /// <seealso cref="Spring.Objects.Factory.IObjectFactory.GetObject(string, Type)"/>
         public object GetObject(string name, Type requiredType)
         {
-            return ObjectFactory.GetObject(name, requiredType);
+            return SafeGetObjectFactory().GetObject(name, requiredType);
         }
 
         /// <summary>
@@ -1763,7 +1810,7 @@ namespace Spring.Context.Support
         /// <seealso cref="Spring.Objects.Factory.IObjectFactory.GetObject(string)"/>
         public object GetObject(string name)
         {
-            return ObjectFactory.GetObject(name);
+            return SafeGetObjectFactory().GetObject(name);
         }
 
         /// <summary>
@@ -1838,7 +1885,7 @@ namespace Spring.Context.Support
         /// </exception>
         public object GetObject(string name, object[] arguments)
         {
-            return ObjectFactory.GetObject(name, arguments);
+            return SafeGetObjectFactory().GetObject(name, arguments);
         }
 
         /// <summary>
@@ -1916,7 +1963,7 @@ namespace Spring.Context.Support
         /// <seealso cref="Spring.Objects.Factory.IObjectFactory.GetObject(string, Type, object[])"/>
         public object GetObject(string name, Type requiredType, object[] arguments)
         {
-            return ObjectFactory.GetObject(name, requiredType, arguments);
+            return SafeGetObjectFactory().GetObject(name, requiredType, arguments);
         }
 
         /// <summary>
@@ -1930,7 +1977,7 @@ namespace Spring.Context.Support
         /// <seealso cref="Spring.Objects.Factory.IObjectFactory.IsSingleton(string)"/>
         public bool IsSingleton(string name)
         {
-            return ObjectFactory.IsSingleton(name);
+            return SafeGetObjectFactory().IsSingleton(name);
         }
 
         /// <summary>
@@ -1952,7 +1999,7 @@ namespace Spring.Context.Support
         /// <exception cref="NoSuchObjectDefinitionException">if there is no object with the given name.</exception>
         public bool IsPrototype(string name)
         {
-            return ObjectFactory.IsPrototype(name);
+            return SafeGetObjectFactory().IsPrototype(name);
         }
 
 
@@ -1974,7 +2021,7 @@ namespace Spring.Context.Support
         /// </exception>
         public bool IsTypeMatch(string name, Type targetType)
         {
-            return ObjectFactory.IsTypeMatch(name, targetType);
+            return SafeGetObjectFactory().IsTypeMatch(name, targetType);
         }
 
         /// <summary>
@@ -1989,7 +2036,7 @@ namespace Spring.Context.Support
         /// <seealso cref="Spring.Objects.Factory.IObjectFactory.GetType(string)"/>
         public Type GetType(string name)
         {
-            return ObjectFactory.GetType(name);
+            return SafeGetObjectFactory().GetType(name);
         }
 
         /// <summary>
@@ -2006,7 +2053,7 @@ namespace Spring.Context.Support
         /// <seealso cref="Spring.Objects.Factory.IObjectFactory.ConfigureObject(object, string)"/>
         public object ConfigureObject(object target, string name)
         {
-            return ObjectFactory.ConfigureObject(target, name);
+            return SafeGetObjectFactory().ConfigureObject(target, name);
         }
 
         /// <summary>
@@ -2026,7 +2073,7 @@ namespace Spring.Context.Support
         /// <seealso cref="Spring.Objects.Factory.IObjectFactory.ConfigureObject(object, string)"/>
         public object ConfigureObject(object target, string name, IObjectDefinition definition)
         {
-            return ObjectFactory.ConfigureObject(target, name, definition);
+            return SafeGetObjectFactory().ConfigureObject(target, name, definition);
         }
 
         #endregion
@@ -2060,7 +2107,7 @@ namespace Spring.Context.Support
         /// </returns>
         public bool ContainsLocalObject(string name)
         {
-            return ObjectFactory.ContainsLocalObject(name);
+            return SafeGetObjectFactory().ContainsLocalObject(name);
         }
 
         #endregion
@@ -2097,7 +2144,7 @@ namespace Spring.Context.Support
         /// </exception>
         public virtual void RegisterObjectDefinition(string name, IObjectDefinition definition)
         {
-            ObjectFactory.RegisterObjectDefinition(name, definition);
+            SafeGetObjectFactory().RegisterObjectDefinition(name, definition);
         }
 
         /// <summary>
@@ -2114,7 +2161,7 @@ namespace Spring.Context.Support
         /// </exception>
         public virtual void RegisterAlias(string name, string theAlias)
         {
-            ObjectFactory.RegisterAlias(name, theAlias);
+            SafeGetObjectFactory().RegisterAlias(name, theAlias);
         }
 
         #endregion

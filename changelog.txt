@@ -3,6 +3,122 @@ SPRING.NET FRAMEWORK CHANGELOG
 http://www.springframework.net
 
 *****************************************************************************************
+Release Version 2.0.1 April 10, 2015
+
+Release Notes - Spring.NET - Version 2.0.1
+
+Bug
+Erroneous linking of Spring.Data.NHibernate4 against NHibernate 3.3 assembly corrected to properly link to NHibernate 4.0.3
+
+*****************************************************************************************
+Release Version 2.0.0 March 27, 2015
+
+Release Notes - Spring.NET - Version 2.0.0
+
+
+New Feature Highlights
+* Spring CodeConfig integrated to core
+* .NET 3.5 and later supported
+* Generic types taken into use
+* ASP.NET MVC 5 / WebAPI 2.2 support
+* NHibernate 4 Support
+
+API and Behavioural Changes
+* Protected fields were changed to private. Access is now allowed via public/protected property member.
+* Most of members marked as Obsolete before 2.0 release were removed.
+* DbProvider automatically sets BindByName to true for Oracle's ODP.NET OracleCommand instances when created
+
+Project Structure and Packaging changes
+* Spring.Data.NHibernate.3x projects were merged to single Spring.Data.NHibernate3 project (you need to uninstall old NuGet packages and install the new Spring.DataNHibernate3 package)
+* Spring.Scheduling.Quartz has been replaced with Spring.Scheduling.Quartz2
+
+Bug
+[SPRNET-21] - Event Wiring Prototype Source to Singleton Sink Does Nothing
+[SPRNET-1386] - WebServiceExporter results in case-sensitive .asmx URLs
+[SPRNET-1409] - Bug in MethodParametersCriteria.IsSatisfied() Method
+[SPRNET-1427] - Prevent ObjectFactory from doing work when in the process of being disposed to prevent object resolution when container is in an inconsistent state
+[SPRNET-1433] - AopUtils.IsAopProxy and IsAopProxyType fails to consider InheritanceAopProxy instances and types
+[SPRNET-1458] - Nuget package Spring.Testing.NUnit can not find nunit.framework
+[SPRNET-1461] - Transaction Timeout value not adhered while using TransactionAttribute
+[SPRNET-1464] - WCF Service Exporter does not support contract interfaces that inherit from other interfaces
+[SPRNET-1468] - Variables not working in BaseBindingContainer
+[SPRNET-1470] - Setting property of type IList using without the @element-type specified fails.
+[SPRNET-1473] - A call to SpringMvcDependencyResolver GetServices fails with a cast exception (DictionaryEntry -> Implementation)
+[SPRNET-1474] - SimpleDelegatingSessionFactory.cs Connection Leak
+[SPRNET-1481] - SpringControllerFactory does not properly delegate to underlying base class if Controller not registered with the ApplicationContext (MVC2)
+[SPRNET-1482] - SpringControllerFactory returns null instance by default
+[SPRNET-1485] - CachedSession CreateProducer destination null
+[SPRNET-1490] - NumberUtils.IsZero: invalid cast for Byte and SByte
+[SPRNET-1499] - WebService Exported produces "Duplicate type name within an assembly" exception
+[SPRNET-1505] - Support using Proxyied Objects as Factory Objects
+[SPRNET-1462] - Spring DB Provider initialization issue with Oracle 11 g 64 bit - Errors attached.
+[SPRNET-1518] - IDestructionAwareObjectPostProcessor defined PostProcessors do not receive PostProcessBeforeDestruction method calls
+[SPRNET-1519] - [Controller] attribute stereotype does not exists
+[SPRNET-1520] - Autowired into Spring.Collections.Generic.ISet does not work, Exceptions shows that abstract class Set can't be intantiated
+[SPRNET-1524] - IndexOutOfRangeException when matching ambiguous method using params parameters
+[SPRNET-1527] - GetObject(string nameValue) does not resolve objects correctly
+[SPRNET-1529] - ExpressionEvaluation cannot process Byte values
+[SPRNET-1516] - Spring.Reflection.Dynamic.SafeMethod ctor not thread safe
+[SPRNET-1535] - XmlMessageConverter always appends UTF8 preamble (BOM)
+[SPRNET-1543] - DefaultListableObjectFactory.GetObjectDefinitionNames is getting them from all ancestors, but VariablePlaceholderConfigurer is trying to get the ObjectDefinition just from the current context and not the parent, potential NPE exception.
+[SPRNET-1544] - CodeConfig ComponentScan does not setup ObjectScope.Session and ObjectScope.Request not automatically with LazyInit
+[SPRNET-1545] - Web scoped objects with IDisposable failing when object created twice
+[SPRNET-1547] - ScannedGenericObjectDefinition doesn't apply default autowire mode
+[SPRNET-1549] - 2.0.0 M2 Release with MVC4 fails on second request for controller object with duplicate key error
+[SPRNET-1558] - Spring.Aop.Framework.HashtableCachingAdvisorChainFactory not thread safe
+[SPRNET-1563] - Make code as ClsCompliant as possible
+[SPRNET-1566] - Spring.Data.Support.FallbackExceptionTranslator.Translate() should return an exception, not throw one
+[SPRNET-1567] - HibernateTransactionManager assign incorrect connection timeout
+[SPRNET-1318] - Dramatically inefficent ObjectFactory disposing
+[SPRNET-1513] - HibernateTransactionManager DoBegin fails with Oracle 8i
+[SPRNET-1435] - Unhandled exception from TypeConversionUtils.cs at line 147.
+[SPRNET-1494] - Class Spring.Aop.Framework.DynamicProxy.CachedAopProxyFactory logs message on INFO level
+[SPRNET-1445] - Can not autowire IDictionary
+[SPRNET-1498] - Prevent SimpleDelegatingSessionFactory second level cache key conflict
+
+Improvement
+[SPRNET-1247] - Update to use Common.Logging 2.0
+[SPRNET-1385] - update README for first time checkout and build
+[SPRNET-1471] - Set IDictionary property using non-generic element.
+[SPRNET-1489] - Support invalidating cache at the entire method level
+[SPRNET-751] - Add generic method "T GetObject(string name)" to interface IObjectFactory
+[SPRNET-881] - Add autowire-candidate and primary as metadata options for defining object definitions.
+[SPRNET-1522] - Eliminate cache key conflicts when using SimpleDelegatingSessionFactory and second-level caching with multiple databases
+[SPRNET-1534] - Object Definitions with identical values for id="..." and name="..." are excluded from GetObjectsByType(...) and GetObjects() calls
+[SPRNET-1509] - Upgrade to NUnit 2.6
+[SPRNET-1525] - OracleODP-11-2.0
+[SPRNET-1540] - Update NHibernate to 3.3.3
+[SPRNET-1542] - Automatically register context namespace parser
+[SPRNET-1559] - Update to use Apache NMS 1.6
+[SPRNET-1571] - DbProvider should set BindByName for OracleCommand to true
+[SPRNET-1415] - Generic IAdoOperations missing CreateDbParameters()
+
+New Feature
+[SPRNET-1478] - Use lazy properties of NHibernate in Spring.NET
+[SPRNET-1497] - Add Support for ASP.NET MVC4 and HTTP WebAPI
+[SPRNET-1501] - Add Support for SQLite 1.0.80
+[SPRNET-1504] - Support NHibernate 3.3.0 GA
+[SPRNET-1514] - Add IFactoryObject implementation to support arbitrary delegate invocation for object creation
+[SPRNET-1521] - Add AutowireAttributePostProcessor
+[SPRNET-1387] - ASP.NET PageHandlerFactory cannot inject dependencies in the presence of the WebForms 4.0 routing infrastructure
+[SPRNET-1507] - Add support for dynamic type ExpandoObject in spring.net expressions
+[SPRNET-1536] - Merge SPRNET-CODECONFIG project into SPRNET
+[SPRNET-1539] - Quartz.NET 2.3 support
+[SPRNET-1561] - ASP.NET MVC 5 support
+[SPRNET-1572] - Support Oracle ODP.NET Managed provider v. 121.1
+
+Task
+[SPRNET-1383] - test ConfigSectionVariableSourceTests.TestVariableResolutionFromApplicationSettingsSchema fails under .NET 3.5
+[SPRNET-1459] - Remove VS2003, VS2005 projects and solutions
+[SPRNET-1460] - Drop Framework 1.x Support
+[SPRNET-1503] - Update Messaging.Nms to Apache.NMS.ActiveMQ 1.5.4
+[SPRNET-1508] - Publish pre-release versions to NuGet
+[SPRNET-1512] - Spring.Context.Support.AbstractApplicationContext.GetObjectNamesForType(..) fails to account for parent ApplicationContext/ObjectFactory object definitions
+[SPRNET-1560] - Remove VS2008 project and solution files
+[SPRNET-1564] - Remove code marked as obsolete
+
+
+*****************************************************************************************
 Release Version 1.3.2 August 1, 2011
 
 Release Notes - Spring.NET - Version 1.3.2

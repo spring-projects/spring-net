@@ -144,7 +144,7 @@ namespace Spring.Messaging.Ems.Common
         /// <summary>
         /// Creates the session.
         /// </summary>
-        /// <param name="transacted">if set to <c>true</c> the session has transaction semantcis.</param>
+        /// <param name="transacted">if set to <c>true</c> the session has transaction semantics.</param>
         /// <param name="acknowledgeMode">Indicates whether and how the consumer is to acknowledge received messages.
         /// This version of CreateSession accepts an integer value associated with the acknowledge mode described by a Session member and should only be used for backward compatibility.
         /// This parameter is ignored if the session is transacted.</param>

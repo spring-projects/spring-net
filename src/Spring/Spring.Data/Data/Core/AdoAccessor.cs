@@ -36,7 +36,7 @@ namespace Spring.Data.Core
     {
         protected object AdoUtils;
 
-        protected int commandTimeout = -1;
+        private int commandTimeout = -1;
 
         #region Properties
 

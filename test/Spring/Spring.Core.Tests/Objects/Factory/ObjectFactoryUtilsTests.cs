@@ -46,12 +46,9 @@ namespace Spring.Objects.Factory
         [SetUp]
         public void SetUp()
         {
-            IObjectFactory grandparent
-                = new XmlObjectFactory(new ReadOnlyXmlTestResource("root.xml", GetType()));
-            IObjectFactory parent
-                = new XmlObjectFactory(new ReadOnlyXmlTestResource("middle.xml", GetType()), grandparent);
-            IConfigurableListableObjectFactory child
-                = new XmlObjectFactory(new ReadOnlyXmlTestResource("leaf.xml", GetType()), parent);
+            IObjectFactory grandparent = new XmlObjectFactory(new ReadOnlyXmlTestResource("root.xml", GetType()));
+            IObjectFactory parent = new XmlObjectFactory(new ReadOnlyXmlTestResource("middle.xml", GetType()), grandparent);
+            IConfigurableListableObjectFactory child = new XmlObjectFactory(new ReadOnlyXmlTestResource("leaf.xml", GetType()), parent);
             _factory = child;
         }
 

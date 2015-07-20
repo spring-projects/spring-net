@@ -20,7 +20,12 @@
 
 using System;
 using System.Collections;
+using System.Collections.Specialized;
+
 using NUnit.Framework;
+
+using Rhino.Mocks;
+
 using Spring.Context.Support;
 using Spring.Objects.Factory.Support;
 
@@ -33,6 +38,13 @@ namespace Spring.Objects.Factory.Config
     [TestFixture]
     public class VariablePlaceholderConfigurerTests
     {
+        private MockRepository mocks;
+
+        [SetUp]
+        public void SetUp()
+        {
+            mocks = new MockRepository();
+        }
 
         [Test]
         public void ThrowsOnMissingVariableSources()
@@ -275,6 +287,33 @@ namespace Spring.Objects.Factory.Config
             TestObject tb1 = (TestObject)ac.GetObject("tb1");
             Assert.AreEqual("Erich", tb1.Name);
             Assert.AreEqual("${nickname}", tb1.Nickname);
+        }
+
+        [Test]
+        public void InlcludeAncestors()
+        {
+            const string defName = "foo";
+            const string placeholder = "${name}";
+            MutablePropertyValues pvs = new MutablePropertyValues();
+
+
+            const string theProperty = "name";
+            pvs.Add(theProperty, placeholder);
+            RootObjectDefinition def = new RootObjectDefinition(typeof(TestObject), pvs);
+
+            IConfigurableListableObjectFactory mock = mocks.StrictMock<IConfigurableListableObjectFactory>();
+            Expect.Call(mock.GetObjectDefinitionNames(true)).Return(new string[] { defName });
+            Expect.Call(mock.GetObjectDefinition(defName, true)).Return(def);
+            mocks.ReplayAll();
+
+            VariablePlaceholderConfigurer vpc = new VariablePlaceholderConfigurer();
+            vpc.IgnoreUnresolvablePlaceholders = true;
+            vpc.VariableSource = new DictionaryVariableSource(new string[] { "name", "Erich" });
+            vpc.IncludeAncestors = true;
+
+            vpc.PostProcessObjectFactory(mock);
+
+            mocks.VerifyAll();            
         }
     }
 }

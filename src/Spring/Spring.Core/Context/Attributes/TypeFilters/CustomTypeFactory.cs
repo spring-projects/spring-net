@@ -27,7 +27,7 @@ using Spring.Objects.Factory.Support;
 namespace Spring.Context.Attributes.TypeFilters
 {
     /// <summary>
-    /// Creates a new instance of a givin type string
+    /// Creates a new instance of a given type string
     /// </summary>
     public static class CustomTypeFactory
     {

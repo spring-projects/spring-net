@@ -226,6 +226,33 @@ namespace Spring.Util
         }
 
         /// <summary>
+        /// Gets a normalized application-relative virtual path of the given virtual path. 
+        /// </summary>
+        /// <example>
+        /// <p>
+        /// Examples of what would be returned from this method given a virtual path would be:
+        /// </p>
+        /// <p>
+        /// <list type="bullet">
+        /// <item><description>'Login.aspx' => 'Login.aspx'</description></item>
+        /// <item><description>'~/Login.aspx' => '/Login.aspx'</description></item>
+        /// <item><description>'~/B2B/SignUp.aspx' => '/B2B/SignUp.aspx'</description></item>
+        /// <item><description>'B2B/Foo/FooServices.aspx' => 'B2B/Foo/FooServices.aspx'</description></item>
+        /// </list>
+        /// </p>
+        /// </example>
+        /// <param name="virtualPath">the virtual path.</param>
+        /// <returns>the normalized virtual path</returns>
+        public static string GetNormalizedVirtualPath(string virtualPath)
+        {
+            if(String.IsNullOrEmpty(virtualPath))
+            {
+                return virtualPath;
+            }
+            return virtualPath.StartsWith("~/") ? virtualPath.Substring(1) : virtualPath;
+        }
+
+        /// <summary>
         /// Gets the virtual path portion of the given absolute URL 
         /// relative to the given base path.
         /// </summary>

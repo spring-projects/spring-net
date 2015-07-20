@@ -9,8 +9,13 @@
       * current.build.debug       - (true|false) debug build?
       * current.build.defines.csc - framework-specific build defines for C# compiler
  -->
+<include buildfile="${spring.basedir}/CopyLibToBinHelpers.include"/>
+
 	<target name="build">
 		<!-- build Spring.Data.Tests -->
+		
+		<call target="copycommonlogginglibtobin" />
+		
 		<csc target="library" define="${current.build.defines.csc}"
 		     warnaserror="true"
 		     optimize="${build.optimize}"
@@ -36,9 +41,13 @@
 				<include name="System.dll"/>
 				<include name="System.Core.dll"/>
 				<include name="${vs-net.mstest.bin.dir.current}\PublicAssemblies\Microsoft.VisualStudio.QualityTools.UnitTestFramework.dll" />
-				<include name="*.dll" />
-				<exclude name="${current.bin.dir}/${project::get-name()}.dll" />
-				<exclude name="${current.bin.dir}/CloverRuntime.dll" />
+				<include name="${current.bin.dir}/Common.Logging.dll"/>
+				<include name="${current.bin.dir}/Common.Logging.Core.dll"/>
+				<include name="${current.bin.dir}/Spring.Core.dll" />
+				<include name="${current.bin.dir}/Spring.Core.Tests.dll" />
+				<include name="${current.bin.dir}/Spring.Data.dll" />
+				<include name="${current.bin.dir}/Spring.Data.Tests.dll" />
+				<include name="${current.bin.dir}/Spring.Testing.Microsoft.dll" />
 			</references>
 		</csc>
 

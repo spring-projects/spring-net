@@ -14,7 +14,7 @@ namespace Spring.Threading
         public void SetUp ()
         {
             mocks = new MockRepository();
-            sync = (ISync) mocks.CreateMock(typeof(ISync));            
+            sync = mocks.StrictMock<ISync>();            
         }
 
         [TearDown]

@@ -9,9 +9,14 @@
     * current.build.debug       - (true|false) debug build?
     * current.build.defines.csc - framework-specific build defines for C# compiler
  -->
+ <include buildfile="${spring.basedir}/CopyLibToBinHelpers.include"/>
+
   <target name="build">
 
     <!-- build Spring.Messaging.Ems.Integration.Tests -->
+	
+	<call target="copycommonlogginglibtobin" />
+	
     <csc target="library" define="${current.build.defines.csc}"
         warnaserror="true"
         optimize="${build.optimize}"
@@ -26,13 +31,26 @@
         <include name="**/*.cs" />
         <exclude name="AssemblyInfo.cs" />
       </sources>
-      <references basedir="${current.bin.dir}">
-        <include name="System.Data.dll" />
-        <include name="System.EnterpriseServices.dll" />
-        <include name="*.dll" />
-        <include name="Spring.Messaging.Ems.dll" />
-		<exclude if="${net-4.0}" name="System.Web.Extensions.dll" />
-      </references>
+      <references>
+		<!--
+		<include name="mscorlib.dll"/>
+		<include name="System.dll"/>
+		<include name="System.Core.dll"/>
+		<include name="System.Data.dll" />
+		<include name="System.Xml.dll" />
+		-->
+		<include name="${current.bin.dir}/Common.Logging.dll"/>
+		<include name="${current.bin.dir}/Common.Logging.Core.dll"/>
+        <include name="${current.bin.dir}/Spring.Core.dll" />
+        <include name="${current.bin.dir}/Spring.Aop.dll" />
+        <include name="${current.bin.dir}/Spring.Data.dll" />
+        <include name="${current.bin.dir}/Spring.Core.Tests.dll" />
+        <include name="${current.bin.dir}/Spring.Messaging.EMS.dll" />
+        <include name="${current.bin.dir}/Spring.Testing.NUnit.dll" />
+        <include name="${current.bin.dir}/TIBCO.EMS.dll" />
+        <include name="${current.bin.dir}/TIBCO.EMS.ADMIN.dll" />
+		<include name="${current.bin.dir}/nunit.framework.dll"/>
+	  </references>
       <resources prefix="Spring" dynamicprefix="true" failonempty="true">
         <include name="**/*.xml" />
         <include name="**/*.sql" />

@@ -84,16 +84,19 @@ namespace Spring.Context.Attributes
         /// <summary>
         /// Stores the object default definitons defined in the XML configuration documnet
         /// </summary>
-        protected DocumentDefaultsDefinition _defaults;
+        private DocumentDefaultsDefinition _defaults;
 
-
-        protected string _scanStartFolderPath;
+        private string _scanStartFolderPath;
 
 
         /// <summary>
         /// Stores the object default definitons defined in the XML configuration documnet
         /// </summary>
-        public DocumentDefaultsDefinition Defaults { get { return _defaults; } set { _defaults = value; } }
+        public DocumentDefaultsDefinition Defaults
+        {
+            get { return _defaults; }
+            set { _defaults = value; }
+        }
 
         public string ScanStartFolderPath
         {

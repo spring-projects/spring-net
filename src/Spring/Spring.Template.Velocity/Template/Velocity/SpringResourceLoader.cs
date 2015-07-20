@@ -50,6 +50,7 @@ namespace Spring.Template.Velocity {
     /// <see cref="ResourceLoader"/>
     /// <see cref="AssemblyResourceLoader"/>
     /// <author>Erez Mazor (.NET) </author>
+    [CLSCompliant(false)]
     public class SpringResourceLoader : ResourceLoader {
         ///<summary>
         /// Prefix used for the NVelocity Configuration

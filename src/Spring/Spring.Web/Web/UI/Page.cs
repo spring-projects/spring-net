@@ -723,18 +723,6 @@ namespace Spring.Web.UI
         /// Registers script block that should be rendered within the <c>head</c> HTML element.
         /// </summary>
         /// <param name="key">Script key.</param>
-        /// <param name="language">Script language.</param>
-        /// <param name="script">Script text.</param>
-        [Obsolete( "The 'language' attribute is deprecated. Please use RegisterHeadScriptBlock(string key, MimeMediaType type, string script) instead", false )]
-        public void RegisterHeadScriptBlock( string key, string language, string script )
-        {
-            headScripts[key] = new ScriptBlock( language, script );
-        }
-
-        /// <summary>
-        /// Registers script block that should be rendered within the <c>head</c> HTML element.
-        /// </summary>
-        /// <param name="key">Script key.</param>
         /// <param name="type">Script language MIME type.</param>
         /// <param name="script">Script text.</param>
         public void RegisterHeadScriptBlock( string key, MimeMediaType type, string script )
@@ -750,18 +738,6 @@ namespace Spring.Web.UI
         public void RegisterHeadScriptFile( string key, string fileName )
         {
             RegisterHeadScriptFile( key, Script.DefaultType, fileName );
-        }
-
-        /// <summary>
-        /// Registers script file that should be referenced within the <c>head</c> HTML element.
-        /// </summary>
-        /// <param name="key">Script key.</param>
-        /// <param name="language">Script language.</param>
-        /// <param name="fileName">Script file name.</param>
-        [Obsolete( "The 'language' attribute is deprecated. Please use RegisterHeadScriptFile(string key, MimeMediaType type, string filename) instead", false )]
-        public void RegisterHeadScriptFile( string key, string language, string fileName )
-        {
-            headScripts[key] = new ScriptFile( language, fileName );
         }
 
         /// <summary>
@@ -785,20 +761,6 @@ namespace Spring.Web.UI
         public void RegisterHeadScriptEvent( string key, string element, string eventName, string script )
         {
             RegisterHeadScriptEvent( key, Script.DefaultType, element, eventName, script );
-        }
-
-        /// <summary>
-        /// Registers script block that should be rendered within the <c>head</c> HTML element.
-        /// </summary>
-        /// <param name="key">Script key.</param>
-        /// <param name="language">Script language.</param>
-        /// <param name="element">Element ID of the event source.</param>
-        /// <param name="eventName">Name of the event to handle.</param>
-        /// <param name="script">Script text.</param>
-        [Obsolete( "The 'language' attribute is deprecated. Please use RegisterHeadScriptEvent(string key, MimeMediaType mimeType, string element, string eventName, string script) instead" )]
-        public void RegisterHeadScriptEvent( string key, string language, string element, string eventName, string script )
-        {
-            headScripts[key] = new ScriptEvent( language, element, eventName, script );
         }
 
         /// <summary>

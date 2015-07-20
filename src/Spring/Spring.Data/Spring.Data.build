@@ -6,8 +6,14 @@
       * current.build.debug       - (true|false) debug build?
       * current.build.defines.csc - framework-specific build defines for C# compiler
  -->
+ 
+	<include buildfile="${spring.basedir}/CopyLibToBinHelpers.include"/>
+
 	<target name="build">
 		<!-- build Spring.Data -->
+
+		<call target="copycommonlogginglibtobin" />
+		
 		<csc target="library" define="${current.build.defines.csc}"
              warnaserror="true"
 		     optimize="${build.optimize}"
@@ -51,6 +57,7 @@
 				<include name="System.Transactions.dll" />
 				<include name="System.Xml.dll" />
 				<include name="${current.bin.dir}/Common.Logging.dll"/>
+				<include name="${current.bin.dir}/Common.Logging.Core.dll"/>
 				<include name="${current.bin.dir}/Spring.Core.dll" />
 				<include name="${current.bin.dir}/Spring.Aop.dll" />
 			</references>

@@ -9,12 +9,15 @@
             * build.debug               - (true|false) debug build?
             * current.build.defines.csc - framework-specific build defines
     -->
+<include buildfile="${spring.basedir}/CopyLibToBinHelpers.include"/>
 
 	<target name="build">
 		<!--
 	        <copy file="../../../src/Spring/Spring.Core/Pool/Support/ISync.cs" todir="../../../CloverBuild/Pool/Support" verbose="true"/>
 		-->
-
+		
+		<call target="copycommonlogginglibtobin" />
+		<!-- <copy file="${iesi3.lib.dir}/Iesi.Collections.dll" todir="${current.bin.dir}" /> -->
 
 		<csc target="library" define="${current.build.defines.csc}"
 			warnaserror="true"
@@ -64,12 +67,19 @@
 				<include name="System.Web.Services.dll" />
 				<include name="System.Web.dll" />
 				<include name="System.Runtime.Serialization.Formatters.Soap.dll" />
+				<include name="System.Transactions.dll" />
 				<include name="System.Windows.Forms.dll" />
                 <include name="System.Xml.dll"/>
-				<include name="${current.bin.dir}/Rhino.Mocks.dll" />
-				<include name="${current.bin.dir}/*.dll" />
-				<exclude name="${current.bin.dir}/${project::get-name()}.dll" />
-				<exclude name="${current.bin.dir}/CloverRuntime.dll" />
+				<include name="${current.bin.dir}/Common.Logging.dll"/>
+				<include name="${current.bin.dir}/Common.Logging.Core.dll"/>
+				<include name="${current.bin.dir}/Spring.Core.dll" />
+				<include name="${current.bin.dir}/Spring.Aop.dll" />
+				<include name="${current.bin.dir}/Spring.Data.dll" />
+				<include name="${current.bin.dir}/Spring.Services.dll" />
+				<include name="${current.bin.dir}/Spring.Messaging.NMS.dll" />
+				<include name="${current.bin.dir}/Spring.Template.Velocity.dll" />
+				<include name="${current.bin.dir}/nunit.framework.dll"/>
+				<include name="${current.bin.dir}/Rhino.Mocks.dll"/>
 			</references>
 		</csc>
 
@@ -103,7 +113,7 @@
 		</copy>
 		<!-- copy nh libs -->
 		<copy todir="${current.bin.dir}" overwrite="true">
-			<fileset basedir="${nh32.lib.dir}">
+			<fileset basedir="${nh3.lib.dir}">
 				<include name="**/*.dll" />
 			</fileset>
 		</copy>

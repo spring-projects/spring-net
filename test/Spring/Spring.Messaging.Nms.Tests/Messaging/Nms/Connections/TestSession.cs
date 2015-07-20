@@ -75,9 +75,6 @@ namespace Spring.Messaging.Nms.Connections
         public IMessageConsumer CreateConsumer(IDestination destination, string selector)
         {
             return new TestMessageConsumer();
-            //IConnectionFactory connectionFactory = (IConnectionFactory)mocks.CreateMock(typeof(IConnectionFactory));
-            //IMessageConsumer msgConsumer = (IMessageConsumer) mocks.CreateMock(typeof (IMessageConsumer));
-            //return msgConsumer;
         }
 
         public IMessageConsumer CreateConsumer(IDestination destination, string selector, TimeSpan requestTimeout)
@@ -147,14 +144,10 @@ namespace Spring.Messaging.Nms.Connections
             throw new NotImplementedException();
         }
 
-        #region ISession Members
-
         public void DeleteDestination(IDestination destination)
         {
             throw new NotImplementedException();
         }
-
-        #endregion
 
         public IMessage CreateMessage()
         {
@@ -201,6 +194,11 @@ namespace Spring.Messaging.Nms.Connections
             closeCount++;
         }
 
+        public void Recover()
+        {
+
+        }
+
         public void Commit()
         {
 
@@ -238,6 +236,40 @@ namespace Spring.Messaging.Nms.Connections
         {
             get { throw new NotImplementedException(); }
         }
+
+        #region Transaction State Events
+
+        public void TransactionStarted()
+        {
+            if(TransactionStartedListener != null)
+            {
+                TransactionStartedListener(this);
+            }
+        }
+
+        public void TransactionCommitted()
+        {
+            if(TransactionCommittedListener != null)
+            {
+                TransactionCommittedListener(this);
+            }
+        }
+
+        public void TransactionRolledBack()
+        {
+            if(TransactionRolledBackListener != null)
+            {
+                TransactionRolledBackListener(this);
+            }
+        }
+
+        public event SessionTxEventDelegate TransactionStartedListener;
+
+        public event SessionTxEventDelegate TransactionCommittedListener;
+
+        public event SessionTxEventDelegate TransactionRolledBackListener;
+
+        #endregion
 
         public void Dispose()
         {

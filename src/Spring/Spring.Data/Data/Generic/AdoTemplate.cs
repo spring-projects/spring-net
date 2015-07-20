@@ -50,8 +50,7 @@ namespace Spring.Data.Generic
         #region Fields
 
         private Core.AdoTemplate classicAdoTemplate;
-        protected Type dataReaderWrapperType;
-
+       
         #endregion
 
         #region Constructors
@@ -172,10 +171,10 @@ namespace Spring.Data.Generic
         /// </remarks>
         public override int CommandTimeout
         {
-            get { return commandTimeout; }
+            get { return base.CommandTimeout; }
             set
             {
-                commandTimeout = value;
+                base.CommandTimeout = value;
                 classicAdoTemplate.CommandTimeout = value;
             }
         }

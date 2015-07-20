@@ -23,13 +23,15 @@
 using System;
 using System.Collections;
 using System.Text;
+
 using Apache.NMS;
-using Apache.NMS.ActiveMQ.OpenWire;
 using Apache.NMS.Util;
+
 using NUnit.Framework;
+
 using Rhino.Mocks;
+
 using Spring.Messaging.Nms.Support.Converter;
-using Spring.Util;
 
 #endregion
 
@@ -51,14 +53,14 @@ namespace Spring.Messaging.Nms.Core
         public void Setup()
         {
             mocks = new MockRepository();
-            session = (ISession) mocks.CreateMock(typeof (ISession));
+            session = mocks.StrictMock<ISession>();
             converter = new SimpleMessageConverter();
         }
 
         [Test]
         public void StringConversion()
         {
-            ITextMessage message = (ITextMessage) mocks.CreateMock(typeof (ITextMessage));
+            ITextMessage message = mocks.StrictMock<ITextMessage>();
             string content = "test";
 
             Expect.Call(session.CreateTextMessage(content)).Return(message).Repeat.Once();
@@ -79,7 +81,7 @@ namespace Spring.Messaging.Nms.Core
         [Test]
         public void ByteArrayConversion()
         {
-            IBytesMessage message = (IBytesMessage) mocks.CreateMock(typeof (IBytesMessage));
+            IBytesMessage message = mocks.StrictMock<IBytesMessage>();
             ASCIIEncoding encoding = new ASCIIEncoding();
             byte[] content =  encoding.GetBytes("test");
 
@@ -100,7 +102,7 @@ namespace Spring.Messaging.Nms.Core
         [Test]
         public void MapConversion()
         {
-            IMapMessage message = (IMapMessage) mocks.CreateMock(typeof (IMapMessage));
+            IMapMessage message = mocks.StrictMock<IMapMessage>();
             IPrimitiveMap primitiveMap = new PrimitiveMap();
             IDictionary content = new Hashtable();
             content["key1"] = "value1";
@@ -123,7 +125,7 @@ namespace Spring.Messaging.Nms.Core
         [Test]
         public void Serializable()
         {
-            IObjectMessage message = (IObjectMessage)mocks.CreateMock(typeof(IObjectMessage));
+            IObjectMessage message = mocks.StrictMock<IObjectMessage>();
 
             SerializableWithAttribute content = new SerializableWithAttribute();
 
@@ -157,7 +159,7 @@ namespace Spring.Messaging.Nms.Core
         [Test]
         public void ToMessageSimplyReturnsMessageAsIsIfSuppliedWithMessage()
         {
-            IObjectMessage message = (IObjectMessage) mocks.CreateMock(typeof (IObjectMessage));
+            IObjectMessage message = mocks.StrictMock<IObjectMessage>();
 
             mocks.ReplayAll();
 
@@ -170,7 +172,7 @@ namespace Spring.Messaging.Nms.Core
         [Test]
         public void FromMessageSimplyReturnsMessageAsIsIfSuppliedWithMessage()
         {
-            IMessage message = (IMessage)mocks.CreateMock(typeof(IMessage));
+            IMessage message = mocks.StrictMock<IMessage>();
 
             mocks.ReplayAll();
 
@@ -183,7 +185,7 @@ namespace Spring.Messaging.Nms.Core
         [Test]
         public void DictionaryConversionWhereMapHasNonStringTypesForKeys()
         {
-            IMapMessage message = (IMapMessage)mocks.CreateMock(typeof(IMapMessage));
+            IMapMessage message = mocks.StrictMock<IMapMessage>();
 
 
             Expect.Call(session.CreateMapMessage()).Return(message);

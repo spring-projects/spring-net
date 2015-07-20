@@ -342,10 +342,12 @@ namespace Spring.Data.NHibernate
         /// </exception>
         protected override bool IsExistingTransaction(object transaction)
         {
-            return
-                ((HibernateTransactionObject)transaction).PromotableTxScopeTransactionObject.TxScopeAdapter.
-                    IsExistingTransaction;
-            //return ((HibernateTransactionObject) transaction).HasTransaction();
+            var hibernateTransactionObject = ((HibernateTransactionObject) transaction);
+
+            var hasExistingPromotableTxScopeTransaction = hibernateTransactionObject.PromotableTxScopeTransactionObject.TxScopeAdapter.IsExistingTransaction;
+            var hasExistingTransaction = hibernateTransactionObject.HasTransaction();
+
+            return hasExistingPromotableTxScopeTransaction && hasExistingTransaction; 
         }
 
         /// <summary>
@@ -454,7 +456,7 @@ namespace Spring.Data.NHibernate
                     ConnectionHolder conHolder = new ConnectionHolder(con, adoTx);
                     if (timeout != DefaultTransactionDefinition.TIMEOUT_DEFAULT)
                     {
-                        conHolder.TimeoutInMillis = definition.TransactionTimeout;
+                        conHolder.TimeoutInSeconds = timeout;
                     }
                     if (log.IsDebugEnabled)
                     {
@@ -951,12 +953,14 @@ namespace Spring.Data.NHibernate
             }
             */
             ISession session = txObject.SessionHolder.Session;
+            
             if (txObject.NewSessionHolder)
             {
                 if (log.IsDebugEnabled)
                 {
                     log.Debug("Closing Hibernate Session [" + session + "] after transaction");
                 }
+
                 SessionFactoryUtils.CloseSessionOrRegisterDeferredClose(session, SessionFactory);
             }
             else
@@ -970,9 +974,8 @@ namespace Spring.Data.NHibernate
                     session.FlushMode = txObject.SessionHolder.PreviousFlushMode;
                 }
             }
+
             txObject.SessionHolder.Clear();
-
-
         }
 
         private class HibernateTransactionObject : AdoTransactionObjectSupport

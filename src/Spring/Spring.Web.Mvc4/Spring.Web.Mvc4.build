@@ -6,8 +6,14 @@
       * current.build.debug       - (true|false) debug build?
       * current.build.defines.csc - framework-specific build defines for C# compiler
 -->
+
+	<include buildfile="${spring.basedir}/CopyLibToBinHelpers.include"/>
+
 	<target name="build">
 		<!-- build Spring.Web.Mvc -->
+		
+		<call target="copycommonlogginglibtobin" />
+		
 		<csc target="library" define="${current.build.defines.csc}" 
 		     warnaserror="true"
 		     optimize="${build.optimize}"
@@ -23,6 +29,8 @@
 				<warning number="${nowarn.numbers},1591" if="${nant.settings.currentframework=='mono-2.0'}"/>
 			</nowarn>
 			<sources failonempty="true">
+				<include name="../Spring.Web.Mvc3/**/*.cs" />
+				<exclude name="../Spring.Web.Mvc3/**/SpringMvcApplication.cs" />
 				<include name="**/*.cs" />
 				<include name="../GenCommonAssemblyInfo.cs" />
 			</sources>
@@ -43,17 +51,15 @@
  				<include name="System.Web.Services.dll" />
 
 				<include name="${current.bin.dir}/Common.Logging.dll"/>
+				<include name="${current.bin.dir}/Common.Logging.Core.dll"/>
 				<include name="${current.bin.dir}/antlr.runtime.dll" />
 				<include name="${current.bin.dir}/Spring.Core.dll" />
 				<include name="${current.bin.dir}/Spring.Aop.dll" />
 				<include name="${current.bin.dir}/Spring.Web.dll" />
 			
-				<include name="${programfiles}\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies\System.Web.Mvc.dll" />
-				<include name="${programfilesx86}\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies\System.Web.Mvc.dll" />
-				<include name="${programfiles}\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies\System.Web.Http.dll" />
-				<include name="${programfilesx86}\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies\System.Web.Http.dll" />
-				<include name="${programfiles}\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies\System.Web.Http.WebHost.dll" />
-				<include name="${programfilesx86}\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies\System.Web.Http.WebHost.dll" />
+				<include name="${spring.basedir}/packages/Microsoft.AspNet.Mvc.4.0.30506.0/lib/net40/System.Web.Mvc.dll" />
+				<include name="${spring.basedir}/packages/Microsoft.AspNet.WebApi.Core.4.0.30506.0/lib/net40/System.Web.Http.dll" />
+				<include name="${spring.basedir}/packages/Microsoft.AspNet.WebApi.WebHost.4.0.30506.0/lib/net40/System.Web.Http.WebHost.dll" />
 				
 			</references>
 		</csc>

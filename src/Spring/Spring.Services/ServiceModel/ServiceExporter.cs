@@ -69,12 +69,12 @@ namespace Spring.ServiceModel
         /// <summary>
         /// The name of the object in the factory.
         /// </summary>
-        protected string objectName;
+        private string objectName;
 
         /// <summary>
         /// The owning factory.
         /// </summary>
-        protected DefaultListableObjectFactory objectFactory;
+        private DefaultListableObjectFactory objectFactory;
 
         /// <summary>
         /// The generated WCF service wrapper type.
@@ -258,6 +258,7 @@ namespace Spring.ServiceModel
         /// </exception>
         public virtual IObjectFactory ObjectFactory
         {
+            protected get { return objectFactory; }
             set
             {
                 if (value is DefaultListableObjectFactory)
@@ -347,6 +348,7 @@ namespace Spring.ServiceModel
         /// </remarks>
         public string ObjectName
         {
+            protected get { return this.objectName; }
             set { this.objectName = value; }
         }
 

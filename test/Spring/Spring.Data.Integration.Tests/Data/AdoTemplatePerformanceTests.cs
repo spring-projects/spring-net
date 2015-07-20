@@ -178,7 +178,7 @@ namespace Spring.Data
 
             TransactionTemplate tt = new TransactionTemplate(tm);
             double timeElapsed = 0;
-            tt.Execute(delegate(ITransactionStatus status)
+            tt.Execute(status =>
                            {
                                start = DateTime.Now;
                                for (int i = 0; i < numIterations; i++)

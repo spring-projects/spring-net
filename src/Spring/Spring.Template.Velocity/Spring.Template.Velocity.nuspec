@@ -12,9 +12,9 @@
     <summary>Spring.NET Intergration with the NVelocity templating Engine</summary>
     <language>en-US</language>
     <dependencies>
-      <dependency id="Common.Logging" version="1.2.0" />
+      <dependency id="Common.Logging" version="3.0.0" />
       <dependency id="NVelocity" version="1.0.3" />
-      <dependency id="Spring.Core" version="2.0.0" />
+      <dependency id="Spring.Core" version="2.0.1" />
     </dependencies>
   </metadata>
   <files>
@@ -24,5 +24,8 @@
     <file src="build\net\4.0\release\Spring.Template.Velocity.dll" target="lib\net40" />
     <file src="build\net\4.0\release\Spring.Template.Velocity.pdb" target="lib\net40" />
     <file src="build\net\4.0\release\Spring.Template.Velocity.xml" target="lib\net40" />
+    <file src="build\net\4.5\release\Spring.Template.Velocity.dll" target="lib\net45" />
+    <file src="build\net\4.5\release\Spring.Template.Velocity.pdb" target="lib\net45" />
+    <file src="build\net\4.5\release\Spring.Template.Velocity.xml" target="lib\net45" />
   </files>
 </package>

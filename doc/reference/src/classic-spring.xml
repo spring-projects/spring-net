@@ -412,7 +412,7 @@
       Spring.Transaction.TransactionPropagation enumeration, namely Required,
       Supports, Mandatory, RequiresNew, NotSupported, Never, Nested. The
       string used for ISOLATION_NAME are those defined on the
-      System.Data.IsolationLevel enumberateion, namely ReadCommitted,
+      System.Data.IsolationLevel enumeration, namely ReadCommitted,
       ReadUncommitted, RepeatableRead, Serializable.</para>
 
       <para>The TransactionProxyFactoryObject allows you to set optional "pre"

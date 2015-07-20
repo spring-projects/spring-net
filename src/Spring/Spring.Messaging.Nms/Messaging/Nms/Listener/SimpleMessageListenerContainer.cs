@@ -180,7 +180,7 @@ namespace Spring.Messaging.Nms.Listener
         protected override void PrepareSharedConnection(IConnection connection)
         {
             base.PrepareSharedConnection(connection);
-            connection.ExceptionListener += new ExceptionListener(OnException);
+            connection.ExceptionListener += OnException;
         }
 
 
@@ -313,7 +313,7 @@ namespace Spring.Messaging.Nms.Listener
 			
 	        SimpleMessageListener listener = new SimpleMessageListener(this, session);
             // put in explicit registration with 'new' for compilation on .NET 1.1
-            consumer.Listener += new Apache.NMS.MessageListener(listener.OnMessage); 
+            consumer.Listener += listener.OnMessage;
             return consumer;
         }
 

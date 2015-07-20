@@ -37,7 +37,7 @@ namespace Spring.Data.NHibernate.Support
     [TestFixture]
     public class SessionScopeTests
     {
-        private MockRepository repository;
+        private MockRepository mocks;
         private ISessionFactory expectedSessionFactory;
         private IInterceptor expectedEntityInterceptor;
         private bool expectedSingleSession;
@@ -46,9 +46,9 @@ namespace Spring.Data.NHibernate.Support
         [SetUp]
         public void SetUp()
         {
-            repository = new MockRepository();
-            expectedSessionFactory = (ISessionFactory)repository.CreateMock(typeof(ISessionFactory));
-            expectedEntityInterceptor = (IInterceptor)repository.CreateMock(typeof(IInterceptor));
+            mocks = new MockRepository();
+            expectedSessionFactory = mocks.StrictMock<ISessionFactory>();
+            expectedEntityInterceptor = mocks.StrictMock<IInterceptor>();
             expectedSingleSession = SessionScopeSettings.SINGLESESSION_DEFAULT;
             expectedDefaultFlushMode = SessionScopeSettings.FLUSHMODE_DEFAULT;
         }
@@ -74,14 +74,14 @@ namespace Spring.Data.NHibernate.Support
         [Test]
         public void CanCreateAndCloseSimpleCtor()
         {
-            using (repository.Ordered())
+            using (mocks.Ordered())
             {
-                ISession session = (ISession) repository.CreateMock(typeof (ISession));
+                ISession session = mocks.StrictMock<ISession>();
                 Expect.Call(expectedSessionFactory.OpenSession()).Return(session);
                 session.FlushMode = FlushMode.Never;
                 Expect.Call(session.Close()).Return(null);
             }
-            repository.ReplayAll();            
+            mocks.ReplayAll();            
             using (SessionScope scope = new SessionScope(expectedSessionFactory, true))
             {
                 // no op - just create & dispose
@@ -99,7 +99,7 @@ namespace Spring.Data.NHibernate.Support
                 Assert.IsNotNull(sessionHolder.Session);
                 scope.Close();
             }
-            repository.VerifyAll();
+            mocks.VerifyAll();
         }
 
         [Test]
@@ -208,12 +208,12 @@ namespace Spring.Data.NHibernate.Support
         [Test]
         public void SingleSessionAppliesDefaultFlushModeOnOpenSessionAndClosesSession()
         {
-            ISession expectedSession = (ISession)repository.CreateMock(typeof(ISession));
+            ISession expectedSession = mocks.StrictMock<ISession>();
 
             Expect.Call(expectedSessionFactory.OpenSession()).Return(expectedSession);
             expectedSession.FlushMode = FlushMode.Auto;
             Expect.Call(expectedSession.Close()).Return(null);
-            repository.ReplayAll();
+            mocks.ReplayAll();
 
             SessionScope scope = null;
             using (scope = new SessionScope(expectedSessionFactory, null, true, FlushMode.Auto, true))
@@ -225,7 +225,7 @@ namespace Spring.Data.NHibernate.Support
             Assert.IsFalse(scope.IsOpen);
             Assert.IsFalse(TransactionSynchronizationManager.HasResource(expectedSessionFactory));
 
-            repository.VerifyAll();
+            mocks.VerifyAll();
         }
 
         [Test]
@@ -286,13 +286,13 @@ namespace Spring.Data.NHibernate.Support
         public void ResolvesEntityInterceptorOnEachOpen()
         {
             TestSessionScopeSettings sss =
-                (TestSessionScopeSettings)repository.PartialMock(typeof(TestSessionScopeSettings), expectedSessionFactory);
-            ISession expectedSession = (ISession)repository.CreateMock(typeof(ISession));
+                (TestSessionScopeSettings)mocks.PartialMock(typeof(TestSessionScopeSettings), expectedSessionFactory);
+            ISession expectedSession = mocks.StrictMock<ISession>();
             sss.DefaultFlushMode = FlushMode.Never;
 
             SessionScope sc = new SessionScope(sss, false);
 
-            using (repository.Ordered())
+            using (mocks.Ordered())
             {
                 Expect.Call(sss.DoResolveEntityInterceptor()).Return(expectedEntityInterceptor);
                 Expect.Call(expectedSessionFactory.OpenSession(expectedEntityInterceptor)).Return(expectedSession);
@@ -304,7 +304,7 @@ namespace Spring.Data.NHibernate.Support
                 expectedSession.FlushMode = FlushMode.Never;
                 Expect.Call(expectedSession.Close()).Return(null);
             }
-            repository.ReplayAll();
+            mocks.ReplayAll();
 
             sc.Open();
             SessionHolder sessionHolder = (SessionHolder)TransactionSynchronizationManager.GetResource(expectedSessionFactory);
@@ -316,7 +316,7 @@ namespace Spring.Data.NHibernate.Support
             sessionHolder.ContainsSession(null); // force opening session
             sc.Close();
 
-            repository.VerifyAll();
+            mocks.VerifyAll();
         }
 
      }

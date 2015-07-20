@@ -349,6 +349,7 @@ namespace Spring.Testing.NUnit
             catch (Exception ex)
             {
                 logger.Error("OnTearDown error", ex);
+                throw;
             }
         }
 

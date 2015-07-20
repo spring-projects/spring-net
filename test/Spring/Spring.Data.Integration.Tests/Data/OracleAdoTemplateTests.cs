@@ -223,8 +223,6 @@ namespace Spring.Data
         [Test]
         public void ExecuteNonQueryText()
         {
-            int counter = 0;
-
             int user_id = 100;
 
             string user_name = "George0";
@@ -240,7 +238,6 @@ namespace Spring.Data
             int user_id1 = 101;
             string user_name1 = "George1";
             parameters.Add("id", OracleType.Int32).Value = user_id1;
-            counter++;
             parameters.Add("name", DbType.String, 12).Value = user_name1;
 
             adoOperations.ExecuteNonQuery(CommandType.Text, sql, parameters);

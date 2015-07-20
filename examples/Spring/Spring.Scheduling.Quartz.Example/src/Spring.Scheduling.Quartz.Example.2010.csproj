@@ -44,6 +44,8 @@
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
+    <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\</SolutionDir>
+    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <OutputPath>..\..\..\..\build\VS.NET.2010\Spring.Scheduling.Quartz.Example\Debug\</OutputPath>
@@ -94,17 +96,14 @@
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="C5">
-      <Name>C5</Name>
-      <HintPath>..\..\..\..\lib\Quartz21\net\3.5\C5.dll</HintPath>
-    </Reference>
     <Reference Include="Common.Logging">
-      <Name>Common.Logging</Name>
-      <HintPath>..\..\..\..\lib\net\2.0\Common.Logging.dll</HintPath>
+      <HintPath>..\packages\Common.Logging.3.0.0\lib\net40\Common.Logging.dll</HintPath>
+    </Reference>
+    <Reference Include="Common.Logging.Core">
+      <HintPath>..\packages\Common.Logging.Core.3.0.0\lib\net40\Common.Logging.Core.dll</HintPath>
     </Reference>
     <Reference Include="Quartz">
-      <Name>Quartz</Name>
-      <HintPath>..\..\..\..\lib\Quartz21\net\4.0\Quartz.dll</HintPath>
+      <HintPath>..\packages\Quartz.2.3.1\lib\net40\Quartz.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Core">
       <SpecificVersion>False</SpecificVersion>
@@ -112,7 +111,7 @@
     </Reference>
     <Reference Include="Spring.Scheduling.Quartz">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\bin\net\4.0\debug\Spring.Scheduling.Quartz21.dll</HintPath>
+      <HintPath>..\..\..\..\bin\net\4.0\debug\Spring.Scheduling.Quartz2.dll</HintPath>
     </Reference>
     <Reference Include="System">
       <Name>System</Name>
@@ -148,6 +147,12 @@
       <Install>true</Install>
     </BootstrapperPackage>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="job_scheduling_data_2_0.xsd">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="packages.config" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>
@@ -155,4 +160,5 @@
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
+  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
 </Project>

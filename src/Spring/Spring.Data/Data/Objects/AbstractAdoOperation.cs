@@ -54,7 +54,7 @@ namespace Spring.Data.Objects
         /// least checking that a IDbProvider and sql have been provided,
         /// but subclasses may also implement their own custom validation.
         /// </summary>
-        protected bool compiled;
+        private bool compiled;
 
         /// <summary>
         /// Object enabling us to create IDbCommands
@@ -132,6 +132,7 @@ namespace Spring.Data.Objects
         public bool Compiled
         {
             get { return compiled; }
+            protected set { compiled = value; }
         }
 
         /// <summary>

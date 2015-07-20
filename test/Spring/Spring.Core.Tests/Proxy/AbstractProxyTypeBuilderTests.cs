@@ -860,7 +860,9 @@ namespace Spring.Proxy
 
     // http://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=94803
     [Marker]
+#pragma warning disable 618
     [WebPermission(SecurityAction.Deny)]
+#pragma warning restore 618
     public class ClassWithSecurityAttribute : IMarkerInterface
     {
     }

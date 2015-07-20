@@ -57,7 +57,7 @@ namespace Spring.Data.Core
             {
                 Expect.Call(txAdapter.IsExistingTransaction).Return(false);
                 TransactionOptions txOptions = new TransactionOptions();
-                txOptions.IsolationLevel = IsolationLevel.Unspecified;
+                txOptions.IsolationLevel = IsolationLevel.ReadCommitted;
                 txAdapter.CreateTransactionScope(TransactionScopeOption.Required, txOptions, EnterpriseServicesInteropOption.None);
 
                 Expect.Call(txAdapter.RollbackOnly).Return(false);
@@ -70,7 +70,7 @@ namespace Spring.Data.Core
             tm.TransactionSynchronization = TransactionSynchronizationState.Always;
 
             TransactionTemplate tt = new TransactionTemplate(tm);
-            tt.Execute(delegate(ITransactionStatus status)
+            tt.Execute(status =>
                            {
                                Assert.IsTrue(TransactionSynchronizationManager.SynchronizationActive);
                                Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
@@ -94,7 +94,7 @@ namespace Spring.Data.Core
             {
                 Expect.Call(txAdapter.IsExistingTransaction).Return(false);
                 TransactionOptions txOptions = new TransactionOptions();
-                txOptions.IsolationLevel = IsolationLevel.Unspecified;
+                txOptions.IsolationLevel = IsolationLevel.ReadCommitted;
                 txAdapter.CreateTransactionScope(TransactionScopeOption.Required, txOptions, EnterpriseServicesInteropOption.None);
                 txAdapter.Dispose();
             }
@@ -110,7 +110,7 @@ namespace Spring.Data.Core
             Exception ex = new ArgumentException("test exception");
             try
             {
-                tt.Execute(delegate(ITransactionStatus status)
+                tt.Execute(status =>
                                {
                                    Assert.IsTrue(TransactionSynchronizationManager.SynchronizationActive);
                                    Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
@@ -141,7 +141,7 @@ namespace Spring.Data.Core
             {
                 Expect.Call(txAdapter.IsExistingTransaction).Return(false);
                 TransactionOptions txOptions = new TransactionOptions();
-                txOptions.IsolationLevel = IsolationLevel.Unspecified;
+                txOptions.IsolationLevel = IsolationLevel.ReadCommitted;
                 txAdapter.CreateTransactionScope(TransactionScopeOption.RequiresNew, txOptions, EnterpriseServicesInteropOption.None);
 
                 //inner tx actions
@@ -162,14 +162,14 @@ namespace Spring.Data.Core
 
             TransactionTemplate tt = new TransactionTemplate(tm);
             tt.PropagationBehavior = TransactionPropagation.RequiresNew;
-            tt.Execute(delegate(ITransactionStatus status)
+            tt.Execute(status =>
                            {
                                Assert.IsTrue(status.IsNewTransaction, "Is new transaction");
                                Assert.IsTrue(TransactionSynchronizationManager.SynchronizationActive, "Synchronization active");
                                Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
                                Assert.IsTrue(TransactionSynchronizationManager.ActualTransactionActive);
 
-                               tt.Execute(delegate(ITransactionStatus status2)
+                               tt.Execute(status2 =>
                                               {
                                                   Assert.IsTrue(TransactionSynchronizationManager.SynchronizationActive, "Synchronization active");
                                                   Assert.IsTrue(status2.IsNewTransaction, "Is new transaction");

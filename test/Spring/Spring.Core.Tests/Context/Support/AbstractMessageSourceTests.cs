@@ -43,7 +43,7 @@ namespace Spring.Context.Support
 		[ExpectedException(typeof (NoSuchMessageException))]
 		public void GetResolvableNullCodes()
 		{            
-		    IMessageSourceResolvable res = (IMessageSourceResolvable) mocks.CreateMock(typeof (IMessageSourceResolvable));
+		    IMessageSourceResolvable res = mocks.StrictMock<IMessageSourceResolvable>();
 		    Expect.Call(res.GetCodes()).Return(null);
 		    Expect.Call(res.DefaultMessage).Return(null);
             mocks.ReplayAll();
@@ -57,11 +57,11 @@ namespace Spring.Context.Support
 		    string MSGCODE = "nullCode";
             object[] MSGARGS = new object[] { "arg1", "arg2" };
 
-            IMessageSourceResolvable res = (IMessageSourceResolvable)mocks.CreateMock(typeof(IMessageSourceResolvable));
+            IMessageSourceResolvable res = mocks.StrictMock<IMessageSourceResolvable>();
             Expect.Call(res.GetArguments()).Return(MSGARGS);
 		    Expect.Call(res.GetCodes()).Return(new string[] {MSGCODE}).Repeat.Once();
 		                           
-            IMessageSource parentSource = (IMessageSource)mocks.CreateMock(typeof(IMessageSource));
+            IMessageSource parentSource = mocks.StrictMock<IMessageSource>();
             Expect.Call(parentSource.GetMessage(MSGCODE, null, CultureInfo.CurrentCulture, MSGARGS)).Return(
 		        "MockMessageSource");
 			ParentMessageSource = parentSource;
@@ -75,7 +75,7 @@ namespace Spring.Context.Support
 		public void GetMessageParentMessageSource()
 		{
 		    object[] args = new object[] {"arguments"};
-            IMessageSource parentSource = (IMessageSource)mocks.CreateMock(typeof(IMessageSource));
+            IMessageSource parentSource = mocks.StrictMock<IMessageSource>();
             Expect.Call(parentSource.GetMessage("null", null, CultureInfo.CurrentCulture, args)).Return(
                 "my parent message");
 			ParentMessageSource = parentSource;
@@ -87,7 +87,7 @@ namespace Spring.Context.Support
 		[Test]
 		public void GetMessageResolvableDefaultMessage()
 		{
-		    IMessageSourceResolvable res = (IMessageSourceResolvable) mocks.CreateMock(typeof (IMessageSourceResolvable));
+            IMessageSourceResolvable res = mocks.StrictMock<IMessageSourceResolvable>();
 		    Expect.Call(res.DefaultMessage).Return("MyDefaultMessage").Repeat.AtLeastOnce();
 		    Expect.Call(res.GetCodes()).Return(null);
 		    Expect.Call(res.GetArguments()).Return(null);
@@ -101,8 +101,8 @@ namespace Spring.Context.Support
 		[Test]
 		public void GetMessageResolvableReturnsFirstCode()
 		{
-			
-            IMessageSourceResolvable res = (IMessageSourceResolvable)mocks.CreateMock(typeof(IMessageSourceResolvable));
+
+            IMessageSourceResolvable res = mocks.StrictMock<IMessageSourceResolvable>();
             Expect.Call(res.DefaultMessage).Return(null).Repeat.AtLeastOnce();
             Expect.Call(res.GetCodes()).Return(new string[] {"null"});
 		    Expect.Call(res.GetArguments()).Return(null).Repeat.AtLeastOnce();
@@ -116,7 +116,7 @@ namespace Spring.Context.Support
 		[ExpectedException(typeof (NoSuchMessageException))]
 		public void GetMessageResolvableNoValidMessage()
 		{
-            IMessageSourceResolvable res = (IMessageSourceResolvable)mocks.CreateMock(typeof(IMessageSourceResolvable));
+            IMessageSourceResolvable res = mocks.StrictMock<IMessageSourceResolvable>();
             Expect.Call(res.DefaultMessage).Return(null).Repeat.AtLeastOnce();
             Expect.Call(res.GetCodes()).Return(null);
             Expect.Call(res.GetArguments()).Return(null).Repeat.AtLeastOnce();
@@ -127,7 +127,7 @@ namespace Spring.Context.Support
 		[Test]
 		public void GetMessageResolvableValidMessageAndCode()
 		{
-            IMessageSourceResolvable res = (IMessageSourceResolvable)mocks.CreateMock(typeof(IMessageSourceResolvable));
+            IMessageSourceResolvable res = mocks.StrictMock<IMessageSourceResolvable>();
             Expect.Call(res.GetCodes()).Return(new string[] {"code1"});
             Expect.Call(res.GetArguments()).Return(new object[] { "my", "arguments" }).Repeat.AtLeastOnce();
             mocks.ReplayAll();
@@ -138,7 +138,7 @@ namespace Spring.Context.Support
 		[Test]
 		public void GetMessageResolvableValidMessageAndCodeNullCulture()
 		{
-            IMessageSourceResolvable res = (IMessageSourceResolvable)mocks.CreateMock(typeof(IMessageSourceResolvable));
+            IMessageSourceResolvable res = mocks.StrictMock<IMessageSourceResolvable>();
             Expect.Call(res.GetCodes()).Return(new string[] { "code1" });
             Expect.Call(res.GetArguments()).Return(new object[] { "my", "arguments" }).Repeat.AtLeastOnce();
             mocks.ReplayAll();
@@ -183,7 +183,7 @@ namespace Spring.Context.Support
 		[Test]
 		public void GetMessageWithResolvableArguments()
 		{
-            IMessageSourceResolvable res = (IMessageSourceResolvable)mocks.CreateMock(typeof(IMessageSourceResolvable));
+            IMessageSourceResolvable res = mocks.StrictMock<IMessageSourceResolvable>();
             Expect.Call(res.GetCodes()).Return(new string[] { "code1" });
             Expect.Call(res.GetArguments()).Return(new object[] { "my", "resolvable" }).Repeat.AtLeastOnce();
             mocks.ReplayAll();
@@ -194,7 +194,7 @@ namespace Spring.Context.Support
 		[Test]
 		public void GetMessageResolvableValidMessageAndCodNullMessageFormat()
 		{
-            IMessageSourceResolvable res = (IMessageSourceResolvable)mocks.CreateMock(typeof(IMessageSourceResolvable));
+            IMessageSourceResolvable res = mocks.StrictMock<IMessageSourceResolvable>();
 		    Expect.Call(res.DefaultMessage).Return("myDefaultMessage").Repeat.AtLeastOnce();
             Expect.Call(res.GetCodes()).Return(new string[] { "nullCode" });
             Expect.Call(res.GetArguments()).Return(null).Repeat.AtLeastOnce();

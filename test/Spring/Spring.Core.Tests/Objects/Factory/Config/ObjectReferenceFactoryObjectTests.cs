@@ -42,7 +42,7 @@ namespace Spring.Objects.Factory.Config
         public void SetUp()
         {
             mocks = new MockRepository();
-            factory = (IObjectFactory) mocks.CreateMock(typeof(IObjectFactory));
+            factory = mocks.StrictMock<IObjectFactory>();
         }
 
         [Test]

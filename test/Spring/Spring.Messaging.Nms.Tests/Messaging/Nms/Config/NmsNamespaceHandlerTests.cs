@@ -117,7 +117,7 @@ namespace Spring.Messaging.Nms.Config
             Assert.IsNull(testObject3.Message);
 
 
-            ITextMessage message1 = (ITextMessage) mocks.CreateMock(typeof (ITextMessage));
+            ITextMessage message1 = mocks.StrictMock<ITextMessage>();
             Expect.Call(message1.Text).Return("Test1");
             mocks.Replay(message1);
 
@@ -127,7 +127,7 @@ namespace Spring.Messaging.Nms.Config
             mocks.Verify(message1);
 
 
-            ITextMessage message2 = (ITextMessage)mocks.CreateMock(typeof(ITextMessage));
+            ITextMessage message2 = mocks.StrictMock<ITextMessage>();
             Expect.Call(message2.Text).Return("Test1");
             mocks.Replay(message2);
 
@@ -136,7 +136,7 @@ namespace Spring.Messaging.Nms.Config
             mocks.Verify(message2);
 
 
-            ITextMessage message3 = (ITextMessage)mocks.CreateMock(typeof(ITextMessage));
+            ITextMessage message3 = mocks.StrictMock<ITextMessage>();
             mocks.Replay(message3);
             
             //Default naming strategy is to use full type name + # + number

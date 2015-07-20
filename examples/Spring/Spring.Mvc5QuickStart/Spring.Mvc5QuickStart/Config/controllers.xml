@@ -1,0 +1,22 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns="http://www.springframework.net" default-autowire="constructor">
+
+  <object type="Spring.Mvc5QuickStart.Controllers.HomeController, Spring.Mvc5QuickStart" singleton="false" >
+    <property name="Message" value="Welcome to ASP.NET MVC4 powered by Spring.NET!" />
+  </object>
+
+  <object type="Spring.Mvc5QuickStart.Controllers.CountController, Spring.Mvc5QuickStart" singleton="false" />
+
+  <object type="Spring.Mvc5QuickStart.Controllers.SuffixController, Spring.Mvc5QuickStart" singleton="false" >
+    <property name="Suffix" value="_Spring.NET_was_Here!" />
+  </object>
+
+  <object type="Spring.Mvc5QuickStart.Controllers.OdataController, Spring.Mvc5QuickStart" singleton="false" />
+
+
+  <!--intentionally do NOT register the AccountController or the ValuesController with the container; demonstrates that the underlying
+  default controller factory will properly (attempt to!) resolve all controllers not registered with Spring.NET
+  using its default controller resolution behavoir-->
+  <!--<object type="Spring.Mvc5QuickStart.Controllers.AccountController, Spring.Mvc5QuickStart" singleton="false" />-->
+  <!--<object type="Spring.Mvc5QuickStart.Controllers.ValuesController, Spring.Mvc5QuickStart" singleton="false" />-->
+</objects>

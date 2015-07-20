@@ -352,11 +352,11 @@ namespace Spring.Messaging.Nms.Connections
             if (reconnectOnException)
             {
                 //add reconnect exception handler first to exception chain.
-                con.ExceptionListener += new ExceptionListener(this.OnException);
+                con.ExceptionListener += this.OnException;
             }
             if (ExceptionListener != null)
             {
-                con.ExceptionListener += new ExceptionListener(ExceptionListener.OnException);                
+                con.ExceptionListener += ExceptionListener.OnException;
             }
         }
 
@@ -556,7 +556,11 @@ namespace Spring.Messaging.Nms.Connections
 
 
         #region Pass through implementations to the target connection
-
+        
+        public void PurgeTempDestinations()
+        {
+            target.PurgeTempDestinations();
+        }
 
         public event ExceptionListener ExceptionListener
         {

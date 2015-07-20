@@ -1,3 +1,12 @@
+Changes (1.3.2 to 2.0)
+========================
+
+1. Protected fields were changed to private. Access is now allowed via public/protected property member.
+
+2. Most of members marked as Obsolete before 2.0 release were removed.
+
+3. DbProvider automatically sets BindByName to true for Oracle's ODP.NET OracleCommand instances when created
+
 Changes (1.3.1 to 1.3.2)
 ========================
 

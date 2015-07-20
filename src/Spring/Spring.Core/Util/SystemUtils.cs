@@ -64,7 +64,7 @@ namespace Spring.Util
             {
                 lock (assemblyResolverLock)
                 {
-                    AppDomain.CurrentDomain.AssemblyResolve += new ResolveEventHandler(LoadedAssemblyResolver);
+                    AppDomain.CurrentDomain.AssemblyResolve += LoadedAssemblyResolver;
                     assemblyResolverRegistered = true;
                 }
             }

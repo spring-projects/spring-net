@@ -6,7 +6,13 @@
       * current.build.debug       - (true|false) debug build?
       * current.build.defines.csc - framework-specific build defines for C# compiler
  -->
+ 
+	<include buildfile="${spring.basedir}/CopyLibToBinHelpers.include"/>
+ 
     <target name="build" depends="compileGrammar">
+	
+		<call target="copycommonlogginglibtobin" />
+	
         <echo message="Compiling '${current.bin.dir}/${project::get-name()}.dll' with args ${compiler.args}" />
         <csc target="library"
              define="${current.build.defines.csc}"
@@ -58,7 +64,8 @@
                 <include name="System.Configuration.dll"/>
                 <include name="System.Xml.dll"/>
                 <include name="Microsoft.VisualBasic.dll"/>
-		        <include name="${current.bin.dir}/Common.Logging.dll"/>
+				<include name="${current.bin.dir}/Common.Logging.dll"/>
+				<include name="${current.bin.dir}/Common.Logging.Core.dll"/>
             </references>
         </csc>
     </target>

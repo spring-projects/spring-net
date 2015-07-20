@@ -47,7 +47,7 @@ namespace Spring.Objects.Factory.Xml
         /// The element to be parsed.
         /// </param>
         /// <param name="parserContext">
-        /// TThe object encapsulating the current state of the parsing process. 
+        /// The object encapsulating the current state of the parsing process. 
         /// Provides access to a IObjectDefinitionRegistry
         /// </param>
         /// <returns>

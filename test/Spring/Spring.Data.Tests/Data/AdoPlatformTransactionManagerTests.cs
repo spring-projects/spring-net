@@ -45,7 +45,7 @@ namespace Spring.Data
     public class AdoPlatformTransactionManagerTests
     {
         private MockRepository mocks;
-        private IsolationLevel _defaultIsolationLevel = IsolationLevel.Unspecified;
+        private const IsolationLevel DefaultIsolationLevel = IsolationLevel.ReadCommitted;
 
         [SetUp]
         public void Setup()
@@ -67,15 +67,15 @@ namespace Spring.Data
         {
             #region Mock setup
             IDbProvider dbProvider = (IDbProvider) mocks.CreateMock(typeof (IDbProvider));
-            IDbConnection connection = (IDbConnection) mocks.CreateMock(typeof (IDbConnection));
-            IDbTransaction transaction = (IDbTransaction) mocks.CreateMock(typeof (IDbTransaction));
+            IDbConnection connection = mocks.StrictMock<IDbConnection>();
+            IDbTransaction transaction = mocks.StrictMock<IDbTransaction>();
 
             using (mocks.Ordered())
             {
                 Expect.Call(dbProvider.CreateConnection()).Return(connection);
                 connection.Open();
                 LastCall.On(connection).Repeat.Once();
-                Expect.Call(connection.BeginTransaction(_defaultIsolationLevel)).Return(transaction);
+                Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction);
                 //standard tx timeout.
                 transaction.Commit();
                 LastCall.On(transaction).Repeat.Once();
@@ -108,15 +108,15 @@ namespace Spring.Data
             #region Mock Setup
 
             IDbProvider dbProvider = (IDbProvider) mocks.CreateMock(typeof (IDbProvider));
-            IDbConnection connection = (IDbConnection) mocks.CreateMock(typeof (IDbConnection));
-            IDbTransaction transaction = (IDbTransaction) mocks.CreateMock(typeof (IDbTransaction));
+            IDbConnection connection = mocks.StrictMock<IDbConnection>();
+            IDbTransaction transaction = mocks.StrictMock<IDbTransaction>();
 
             using (mocks.Ordered())
             {
                 Expect.Call(dbProvider.CreateConnection()).Return(connection);
                 connection.Open();
                 LastCall.On(connection).Repeat.Once();
-                Expect.Call(connection.BeginTransaction(_defaultIsolationLevel)).Return(transaction);
+                Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction);
                 //standard tx timeout.
                 transaction.Rollback();
                 LastCall.On(transaction).Repeat.Once();
@@ -158,15 +158,15 @@ namespace Spring.Data
         public void ParticipatingTransactionWithRollbackOnly()
         {
             IDbProvider dbProvider = (IDbProvider) mocks.CreateMock(typeof (IDbProvider));
-            IDbConnection connection = (IDbConnection) mocks.CreateMock(typeof (IDbConnection));
-            IDbTransaction transaction = (IDbTransaction) mocks.CreateMock(typeof (IDbTransaction));
+            IDbConnection connection = mocks.StrictMock<IDbConnection>();
+            IDbTransaction transaction = mocks.StrictMock<IDbTransaction>();
 
             using (mocks.Ordered())
             {
                 Expect.Call(dbProvider.CreateConnection()).Return(connection);
                 connection.Open();
                 LastCall.On(connection).Repeat.Once();
-                Expect.Call(connection.BeginTransaction(_defaultIsolationLevel)).Return(transaction);
+                Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction);
                 //standard tx timeout.
                 transaction.Rollback();
                 LastCall.On(transaction).Repeat.Once();
@@ -232,13 +232,13 @@ namespace Spring.Data
         {
             #region Mock Setup
             IDbProvider dbProvider = (IDbProvider) mocks.CreateMock(typeof (IDbProvider));
-            IDbConnection connection = (IDbConnection) mocks.CreateMock(typeof (IDbConnection));
-            IDbTransaction transaction = (IDbTransaction) mocks.CreateMock(typeof (IDbTransaction));
+            IDbConnection connection = mocks.StrictMock<IDbConnection>();
+            IDbTransaction transaction = mocks.StrictMock<IDbTransaction>();
 
             Expect.Call(dbProvider.CreateConnection()).Return(connection).Repeat.Twice();
             connection.Open();
             LastCall.On(connection).Repeat.Twice();
-            Expect.Call(connection.BeginTransaction(_defaultIsolationLevel)).Return(transaction).Repeat.Twice();
+            Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction).Repeat.Twice();
             //standard tx timeout.
             transaction.Rollback();
             LastCall.On(transaction).Repeat.Once();
@@ -274,25 +274,25 @@ namespace Spring.Data
         public void PropagationRequiresNewWithExistingTransactionAndUnrelatedDataSource()
         {
             IDbProvider dbProvider = (IDbProvider) mocks.CreateMock(typeof (IDbProvider));
-            IDbConnection connection = (IDbConnection) mocks.CreateMock(typeof (IDbConnection));
-            IDbTransaction transaction = (IDbTransaction) mocks.CreateMock(typeof (IDbTransaction));
+            IDbConnection connection = mocks.StrictMock<IDbConnection>();
+            IDbTransaction transaction = mocks.StrictMock<IDbTransaction>();
 
             Expect.Call(dbProvider.CreateConnection()).Return(connection);
             connection.Open();
             LastCall.On(connection).Repeat.Once();
-            Expect.Call(connection.BeginTransaction(_defaultIsolationLevel)).Return(transaction);
+            Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction);
             transaction.Commit();
             LastCall.On(transaction).Repeat.Once();
             connection.Dispose();
 
             IDbProvider dbProvider2 = (IDbProvider) mocks.CreateMock(typeof (IDbProvider));
-            IDbConnection connection2 = (IDbConnection) mocks.CreateMock(typeof (IDbConnection));
-            IDbTransaction transaction2 = (IDbTransaction) mocks.CreateMock(typeof (IDbTransaction));
+            IDbConnection connection2 = mocks.StrictMock<IDbConnection>();
+            IDbTransaction transaction2 = mocks.StrictMock<IDbTransaction>();
 
             Expect.Call(dbProvider2.CreateConnection()).Return(connection2);
             connection2.Open();
             LastCall.On(connection2).Repeat.Once();
-            Expect.Call(connection2.BeginTransaction(_defaultIsolationLevel)).Return(transaction2);
+            Expect.Call(connection2.BeginTransaction(DefaultIsolationLevel)).Return(transaction2);
             transaction2.Rollback();
             LastCall.On(transaction2).Repeat.Once();
             connection2.Dispose();
@@ -328,20 +328,20 @@ namespace Spring.Data
         public void PropagationRequiresNewWithExistingTransactionAndUnrelatedFailingDataSource()
         {
             #region Mock Setup
-            IDbProvider dbProvider = (IDbProvider)mocks.CreateMock(typeof(IDbProvider));
-            IDbConnection connection = (IDbConnection)mocks.CreateMock(typeof(IDbConnection));            
-            IDbTransaction transaction = (IDbTransaction)mocks.CreateMock(typeof(IDbTransaction));
+            IDbProvider dbProvider = mocks.StrictMock<IDbProvider>();
+            IDbConnection connection = mocks.StrictMock<IDbConnection>();            
+            IDbTransaction transaction = mocks.StrictMock<IDbTransaction>();
 
             Expect.Call(dbProvider.CreateConnection()).Return(connection);
             connection.Open();
             LastCall.On(connection).Repeat.Once();
-            Expect.Call(connection.BeginTransaction(_defaultIsolationLevel)).Return(transaction);
+            Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction);
             transaction.Rollback();
             LastCall.On(transaction).Repeat.Once();
             connection.Dispose();
 
-            IDbProvider dbProvider2 = (IDbProvider)mocks.CreateMock(typeof(IDbProvider));
-            IDbConnection connection2 = (IDbConnection)mocks.CreateMock(typeof(IDbConnection));
+            IDbProvider dbProvider2 = mocks.StrictMock<IDbProvider>();
+            IDbConnection connection2 = mocks.StrictMock<IDbConnection>();
            
             Expect.Call(dbProvider2.CreateConnection()).Return(connection2);
             connection2.Open();
@@ -386,16 +386,16 @@ namespace Spring.Data
         public void PropagationNotSupportedWithExistingTransaction()
         {
             #region Mock Setup
-            IDbProvider dbProvider = (IDbProvider)mocks.CreateMock(typeof(IDbProvider));
-            IDbConnection connection = (IDbConnection)mocks.CreateMock(typeof(IDbConnection));
-            IDbTransaction transaction = (IDbTransaction)mocks.CreateMock(typeof(IDbTransaction));
+            IDbProvider dbProvider = mocks.StrictMock<IDbProvider>();
+            IDbConnection connection = mocks.StrictMock<IDbConnection>();
+            IDbTransaction transaction = mocks.StrictMock<IDbTransaction>();
 
             using (mocks.Ordered())
             {
                 Expect.Call(dbProvider.CreateConnection()).Return(connection);
                 connection.Open();
                 LastCall.On(connection).Repeat.Once();
-                Expect.Call(connection.BeginTransaction(_defaultIsolationLevel)).Return(transaction);
+                Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction);
                 //standard tx timeout.
                 transaction.Commit();
                 LastCall.On(transaction).Repeat.Once();
@@ -422,16 +422,16 @@ namespace Spring.Data
         public void PropagationNeverWithExistingTransaction()
         {
             #region Mock Setup
-            IDbProvider dbProvider = (IDbProvider)mocks.CreateMock(typeof(IDbProvider));
-            IDbConnection connection = (IDbConnection)mocks.CreateMock(typeof(IDbConnection));
-            IDbTransaction transaction = (IDbTransaction)mocks.CreateMock(typeof(IDbTransaction));
+            IDbProvider dbProvider = mocks.StrictMock<IDbProvider>();
+            IDbConnection connection = mocks.StrictMock<IDbConnection>();
+            IDbTransaction transaction = mocks.StrictMock<IDbTransaction>();
 
             using (mocks.Ordered())
             {
                 Expect.Call(dbProvider.CreateConnection()).Return(connection);
                 connection.Open();
                 LastCall.On(connection).Repeat.Once();
-                Expect.Call(connection.BeginTransaction(_defaultIsolationLevel)).Return(transaction);
+                Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction);
                 //standard tx timeout.
                 transaction.Rollback();
                 LastCall.On(transaction).Repeat.Once();
@@ -468,21 +468,21 @@ namespace Spring.Data
         {
             #region Mock Setup
 
-            IDbProvider dbProvider = (IDbProvider)mocks.CreateMock(typeof(IDbProvider));
-            IDbConnection connection = (IDbConnection)mocks.CreateMock(typeof(IDbConnection));
+            IDbProvider dbProvider = mocks.StrictMock<IDbProvider>();
+            IDbConnection connection = mocks.StrictMock<IDbConnection>();
             
             Expect.Call(dbProvider.CreateConnection()).Return(connection);
             connection.Open();
             LastCall.On(connection).Repeat.Once();
             connection.Dispose();
 
-            IDbConnection connection2 = (IDbConnection)mocks.CreateMock(typeof(IDbConnection));
-            IDbTransaction transaction2 = (IDbTransaction)mocks.CreateMock(typeof(IDbTransaction));
+            IDbConnection connection2 = mocks.StrictMock<IDbConnection>();
+            IDbTransaction transaction2 = mocks.StrictMock<IDbTransaction>();
 
             Expect.Call(dbProvider.CreateConnection()).Return(connection2);
             connection2.Open();
             LastCall.On(connection2).Repeat.Once();
-            Expect.Call(connection2.BeginTransaction(_defaultIsolationLevel)).Return(transaction2);
+            Expect.Call(connection2.BeginTransaction(DefaultIsolationLevel)).Return(transaction2);
             transaction2.Commit();
             LastCall.On(transaction2).Repeat.Once();
             connection2.Dispose();
@@ -511,9 +511,9 @@ namespace Spring.Data
         public void TransactionWithIsolation()
         {
             #region Mock setup
-            IDbProvider dbProvider = (IDbProvider)mocks.CreateMock(typeof(IDbProvider));
-            IDbConnection connection = (IDbConnection)mocks.CreateMock(typeof(IDbConnection));
-            IDbTransaction transaction = (IDbTransaction)mocks.CreateMock(typeof(IDbTransaction));
+            IDbProvider dbProvider = mocks.StrictMock<IDbProvider>();
+            IDbConnection connection = mocks.StrictMock<IDbConnection>();
+            IDbTransaction transaction = mocks.StrictMock<IDbTransaction>();
 
             using (mocks.Ordered())
             {
@@ -562,10 +562,10 @@ namespace Spring.Data
         {
             #region Mock setup
 
-            IDbProvider dbProvider = (IDbProvider)mocks.CreateMock(typeof(IDbProvider));
-            IDbConnection connection = (IDbConnection)mocks.CreateMock(typeof(IDbConnection));
-            IDbTransaction transaction = (IDbTransaction)mocks.CreateMock(typeof(IDbTransaction));
-            IDbCommand command = (IDbCommand) mocks.CreateMock(typeof (IDbCommand));
+            IDbProvider dbProvider = mocks.StrictMock<IDbProvider>();
+            IDbConnection connection = mocks.StrictMock<IDbConnection>();
+            IDbTransaction transaction = mocks.StrictMock<IDbTransaction>();
+            IDbCommand command = mocks.StrictMock<IDbCommand>();
 
             using (mocks.Ordered())
             {
@@ -573,7 +573,7 @@ namespace Spring.Data
                 connection.Open();
                
                 LastCall.On(connection).Repeat.Once();
-                Expect.Call(connection.BeginTransaction(_defaultIsolationLevel)).Return(transaction);
+                Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction);
                 Expect.Call(connection.CreateCommand()).Return(command);
                 command.CommandText = "some SQL statement";
                 LastCall.On(command).Repeat.Once();
@@ -628,7 +628,7 @@ namespace Spring.Data
         public void TransactionWithExceptionOnBegin()
         {
             #region Mock setup
-            IDbProvider dbProvider = (IDbProvider)mocks.CreateMock(typeof(IDbProvider));       
+            IDbProvider dbProvider = mocks.StrictMock<IDbProvider>();       
             
             // CreateConnection is called in AdoPlatformTransactionManager.DoBegin
             Expect.Call(dbProvider.CreateConnection()).Throw(new TestSqlException("Cannot begin", "314"));     
@@ -665,16 +665,16 @@ namespace Spring.Data
         public void TransactionWithExceptionOnCommit()
         {
             #region Mock setup
-            IDbProvider dbProvider = (IDbProvider)mocks.CreateMock(typeof(IDbProvider));
-            IDbConnection connection = (IDbConnection)mocks.CreateMock(typeof(IDbConnection));
-            IDbTransaction transaction = (IDbTransaction)mocks.CreateMock(typeof(IDbTransaction));
+            IDbProvider dbProvider = mocks.StrictMock<IDbProvider>();
+            IDbConnection connection = mocks.StrictMock<IDbConnection>();
+            IDbTransaction transaction = mocks.StrictMock<IDbTransaction>();
 
             using (mocks.Ordered())
             {
                 Expect.Call(dbProvider.CreateConnection()).Return(connection);
                 connection.Open();
                 LastCall.On(connection).Repeat.Once();
-                Expect.Call(connection.BeginTransaction(_defaultIsolationLevel)).Return(transaction);
+                Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction);
                 //standard tx timeout.
                 transaction.Commit();
                 LastCall.On(transaction).Throw(new TestSqlException("Cannot commit", "314"));
@@ -708,16 +708,16 @@ namespace Spring.Data
         public void TransactionWithExceptionOnCommitAndRollbackOnCommitFailure()
         {
             #region Mock Setup
-            IDbProvider dbProvider = (IDbProvider)mocks.CreateMock(typeof(IDbProvider));
-            IDbConnection connection = (IDbConnection)mocks.CreateMock(typeof(IDbConnection));
-            IDbTransaction transaction = (IDbTransaction)mocks.CreateMock(typeof(IDbTransaction));
+            IDbProvider dbProvider = mocks.StrictMock<IDbProvider>();
+            IDbConnection connection = mocks.StrictMock<IDbConnection>();
+            IDbTransaction transaction = mocks.StrictMock<IDbTransaction>();
 
             using (mocks.Ordered())
             {
                 Expect.Call(dbProvider.CreateConnection()).Return(connection);
                 connection.Open();
                 LastCall.On(connection).Repeat.Once();
-                Expect.Call(connection.BeginTransaction(_defaultIsolationLevel)).Return(transaction);
+                Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction);
                 transaction.Commit();
                 LastCall.On(transaction).Throw(new TestSqlException("Cannot commit", "314"));
 
@@ -754,16 +754,16 @@ namespace Spring.Data
         {
             #region Mock Setup
 
-            IDbProvider dbProvider = (IDbProvider)mocks.CreateMock(typeof(IDbProvider));
-            IDbConnection connection = (IDbConnection)mocks.CreateMock(typeof(IDbConnection));
-            IDbTransaction transaction = (IDbTransaction)mocks.CreateMock(typeof(IDbTransaction));
+            IDbProvider dbProvider = mocks.StrictMock<IDbProvider>();
+            IDbConnection connection = mocks.StrictMock<IDbConnection>();
+            IDbTransaction transaction = mocks.StrictMock<IDbTransaction>();
 
             using (mocks.Ordered())
             {
                 Expect.Call(dbProvider.CreateConnection()).Return(connection);
                 connection.Open();
                 LastCall.On(connection).Repeat.Once();
-                Expect.Call(connection.BeginTransaction(_defaultIsolationLevel)).Return(transaction);
+                Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction);
                 //standard tx timeout.
                 transaction.Rollback();
                 LastCall.On(transaction).Throw(new TestSqlException("Cannot commit", "314"));
@@ -804,7 +804,7 @@ namespace Spring.Data
         [Test]
         public void TransactionWithPropagationSupports()
         {
-            IDbProvider dbProvider = (IDbProvider)mocks.CreateMock(typeof(IDbProvider));
+            IDbProvider dbProvider = mocks.StrictMock<IDbProvider>();
 
             mocks.ReplayAll();
 
@@ -825,7 +825,7 @@ namespace Spring.Data
         [Test]
         public void TransactionWithPropagationNotSupported()
         {
-            IDbProvider dbProvider = (IDbProvider)mocks.CreateMock(typeof(IDbProvider));
+            IDbProvider dbProvider = mocks.StrictMock<IDbProvider>();
 
             mocks.ReplayAll();
 
@@ -846,7 +846,7 @@ namespace Spring.Data
         [Test]
         public void TransactionWithPropagationNever()
         {
-            IDbProvider dbProvider = (IDbProvider)mocks.CreateMock(typeof(IDbProvider));
+            IDbProvider dbProvider = mocks.StrictMock<IDbProvider>();
 
             mocks.ReplayAll();
 
@@ -868,16 +868,16 @@ namespace Spring.Data
         public void ExistingTransactionWithPropagationNestedNotSupported()
         {
             #region Mock setup
-            IDbProvider dbProvider = (IDbProvider)mocks.CreateMock(typeof(IDbProvider));
-            IDbConnection connection = (IDbConnection)mocks.CreateMock(typeof(IDbConnection));
-            IDbTransaction transaction = (IDbTransaction)mocks.CreateMock(typeof(IDbTransaction));
+            IDbProvider dbProvider = mocks.StrictMock<IDbProvider>();
+            IDbConnection connection = mocks.StrictMock<IDbConnection>();
+            IDbTransaction transaction = mocks.StrictMock<IDbTransaction>();
 
             using (mocks.Ordered())
             {
                 Expect.Call(dbProvider.CreateConnection()).Return(connection);
                 connection.Open();
                 LastCall.On(connection).Repeat.Once();
-                Expect.Call(connection.BeginTransaction(_defaultIsolationLevel)).Return(transaction);
+                Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction);
                 
                 transaction.Rollback();
                 LastCall.On(transaction).Repeat.Once();
@@ -914,16 +914,16 @@ namespace Spring.Data
         public void TransactionWithPropagationNested()
         {
             #region Mock setup
-            IDbProvider dbProvider = (IDbProvider)mocks.CreateMock(typeof(IDbProvider));
-            IDbConnection connection = (IDbConnection)mocks.CreateMock(typeof(IDbConnection));
-            IDbTransaction transaction = (IDbTransaction)mocks.CreateMock(typeof(IDbTransaction));
+            IDbProvider dbProvider = mocks.StrictMock<IDbProvider>();
+            IDbConnection connection = mocks.StrictMock<IDbConnection>();
+            IDbTransaction transaction = mocks.StrictMock<IDbTransaction>();
 
             using (mocks.Ordered())
             {
                 Expect.Call(dbProvider.CreateConnection()).Return(connection);
                 connection.Open();
                 LastCall.On(connection).Repeat.Once();
-                Expect.Call(connection.BeginTransaction(_defaultIsolationLevel)).Return(transaction);
+                Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction);
                 //standard tx timeout.
                 transaction.Commit();
                 LastCall.On(transaction).Repeat.Once();
@@ -962,16 +962,16 @@ namespace Spring.Data
         public void TransactionWithPropagationNestedAndRollback()
         {
             #region Mock setup
-            IDbProvider dbProvider = (IDbProvider)mocks.CreateMock(typeof(IDbProvider));
-            IDbConnection connection = (IDbConnection)mocks.CreateMock(typeof(IDbConnection));
-            IDbTransaction transaction = (IDbTransaction)mocks.CreateMock(typeof(IDbTransaction));
+            IDbProvider dbProvider = mocks.StrictMock<IDbProvider>();
+            IDbConnection connection = mocks.StrictMock<IDbConnection>();
+            IDbTransaction transaction = mocks.StrictMock<IDbTransaction>();
 
             using (mocks.Ordered())
             {
                 Expect.Call(dbProvider.CreateConnection()).Return(connection);
                 connection.Open();
                 LastCall.On(connection).Repeat.Once();
-                Expect.Call(connection.BeginTransaction(_defaultIsolationLevel)).Return(transaction);               
+                Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction);               
                 transaction.Rollback();
                 LastCall.On(transaction).Repeat.Once();
                 connection.Dispose();

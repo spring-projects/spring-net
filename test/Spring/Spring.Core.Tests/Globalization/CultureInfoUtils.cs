@@ -18,17 +18,21 @@
 
 #endregion
 
+using System;
 using System.Globalization;
 
 namespace Spring.Globalization
 {
     /// <summary>
-    /// Helper class to pick the appropriate culture name for serbian due to changes of the CultureInfo classes
-    /// in recent releases of the .NET framework.
+    /// Helper class for Globalization Tests
     /// </summary>
-    /// <remarks>In short, sr-SP-Latn->sr-Latn-CS and sr-SP-Cyrl->sr-Cyrl-CS.  See http://blogs.msdn.com/kierans/archive/2006/08/02/687267.aspx
+    /// <remarks>Ensure the appropriate culture name for serbian due to changes of the CultureInfo classes
+    /// in recent releases of the .NET framework.In short, sr-SP-Latn->sr-Latn-CS and sr-SP-Cyrl->sr-Cyrl-CS.  See http://blogs.msdn.com/kierans/archive/2006/08/02/687267.aspx
     /// and http://blogs.msdn.com/shawnste/archive/2006/11/14/problems-compiling-resources-in-net-2-0-apps-after-updates.aspx for
-    /// additional information.</remarks>
+    /// additional information.
+    /// Also, provide for detection of runtime OS to respond to need for different asserts to reflect changes in Serbian Localization within the OS
+    /// introduced after Windows7.
+    /// </remarks>
     /// <author>Mark Pollack</author>
     public class CultureInfoUtils
     {
@@ -56,6 +60,16 @@ namespace Spring.Globalization
         public static string SerbianLatinCultureName
         {
             get { return srLatn; }
+        }
+
+        public static bool OperatingSystemIsLaterThanWindows7
+        {
+            get { return Environment.OSVersion.Version.Major >= 6 && Environment.OSVersion.Version.Minor >= 2; }
+        }
+        
+        public static bool ClrIsVersion4OrLater
+        {
+            get { return Environment.Version.Major >= 4; }
         }
     }
 }

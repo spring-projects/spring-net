@@ -1508,7 +1508,7 @@ namespace Spring.Messaging.Ems.Core
         public object BrowseSelectedWithDelegate(Queue queue, string messageSelector, BrowserDelegate action)
         {
             AssertUtils.ArgumentNotNull(action, "action");
-            return Execute(delegate(ISession session)
+            return Execute(session =>
                                {
                                    QueueBrowser browser = CreateBrowser(session, queue, messageSelector);
                                    try
@@ -1535,7 +1535,7 @@ namespace Spring.Messaging.Ems.Core
         public object BrowseSelectedWithDelegate(string queueName, string messageSelector, BrowserDelegate action)
         {
             AssertUtils.ArgumentNotNull(action, "action");
-            return Execute(delegate(ISession session)
+            return Execute(session =>
                                {
                                    Queue queue = (Queue)DestinationResolver.ResolveDestinationName(session, queueName, false);
                                    QueueBrowser browser = CreateBrowser(session, queue, messageSelector);

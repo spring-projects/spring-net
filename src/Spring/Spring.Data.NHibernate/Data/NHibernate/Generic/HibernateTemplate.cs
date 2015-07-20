@@ -392,7 +392,7 @@ namespace Spring.Data.NHibernate.Generic
         /// <summary>
         /// Delete the given persistent instance.
         /// </summary>
-        /// <param name="entity">Tthe persistent instance to delete.</param>
+        /// <param name="entity">The persistent instance to delete.</param>
         /// <param name="lockMode">The lock mode to obtain.</param>
         /// <remarks>
         /// Obtains the specified lock mode if the instance exists, implicitly
@@ -578,7 +578,7 @@ namespace Spring.Data.NHibernate.Generic
         /// Save or update the given persistent instance,
         /// according to its id (matching the configured "unsaved-value"?).
         /// </summary>
-        /// <param name="entity">Tthe persistent instance to save or update
+        /// <param name="entity">The persistent instance to save or update
         /// (to be associated with the Hibernate Session).</param>
         /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
         public void SaveOrUpdate(object entity)
@@ -586,6 +586,7 @@ namespace Spring.Data.NHibernate.Generic
             classicHibernateTemplate.SaveOrUpdate(entity);
         }
 
+#if !NH_4_0
         /// <summary>
         /// Save or update the contents of given persistent object,
         /// according to its id (matching the configured "unsaved-value"?).
@@ -602,8 +603,8 @@ namespace Spring.Data.NHibernate.Generic
         {
             return classicHibernateTemplate.SaveOrUpdateCopy(entity);
         }
+#endif
 
-#if !NH_1_2
         /// <summary>
         /// Copy the state of the given object onto the persistent object with the same identifier. 
         /// If there is no persistent instance currently associated with the session, it will be loaded.
@@ -622,7 +623,6 @@ namespace Spring.Data.NHibernate.Generic
         {
             return classicHibernateTemplate.Merge(entity);
         }
-#endif
 
         #endregion
 

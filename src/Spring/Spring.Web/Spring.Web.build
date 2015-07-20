@@ -6,9 +6,14 @@
       * current.build.debug       - (true|false) debug build?
       * current.build.defines.csc - framework-specific build defines for C# compiler
 -->
+	<include buildfile="${spring.basedir}/CopyLibToBinHelpers.include"/>
+
 	<target name="build">
-		<!-- build Spring.Web -->
-		<csc target="library" define="${current.build.defines.csc}" 
+	<!-- build Spring.Web -->
+		
+		<call target="copycommonlogginglibtobin" />
+
+	<csc target="library" define="${current.build.defines.csc}" 
 		     warnaserror="true"
 		     optimize="${build.optimize}"
 		     debug="${current.build.debug}" 
@@ -39,7 +44,8 @@
  				<include name="System.Web.dll" />
  				<include name="System.Web.Services.dll" />
 				<include if="${net-4.0.installed and net-4.0}" name="System.Web.ApplicationServices.dll" />        
-			    <include name="${current.bin.dir}/Common.Logging.dll"/>
+				<include name="${current.bin.dir}/Common.Logging.dll"/>
+				<include name="${current.bin.dir}/Common.Logging.Core.dll"/>
 				<include name="${current.bin.dir}/antlr.runtime.dll" />
 				<include name="${current.bin.dir}/Spring.Core.dll" />
 				<include name="${current.bin.dir}/Spring.Aop.dll" />

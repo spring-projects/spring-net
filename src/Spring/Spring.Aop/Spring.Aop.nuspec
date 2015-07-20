@@ -13,8 +13,8 @@
     <summary>Interfaces and classes that provide AOP support in Spring.Net</summary>
     <language>en-US</language>
     <dependencies>
-      <dependency id="Common.Logging" version="1.2.0" />
-      <dependency id="Spring.Core" version="2.0.0" />
+      <dependency id="Common.Logging" version="3.0.0" />
+      <dependency id="Spring.Core" version="2.0.1" />
     </dependencies>
   </metadata>
   <files>
@@ -24,5 +24,8 @@
     <file src="build\net\4.0\release\Spring.Aop.dll" target="lib\net40" />
     <file src="build\net\4.0\release\Spring.Aop.pdb" target="lib\net40" />
     <file src="build\net\4.0\release\Spring.Aop.xml" target="lib\net40" />
+    <file src="build\net\4.5\release\Spring.Aop.dll" target="lib\net45" />
+    <file src="build\net\4.5\release\Spring.Aop.pdb" target="lib\net45" />
+    <file src="build\net\4.5\release\Spring.Aop.xml" target="lib\net45" />
   </files>
 </package>

@@ -44,7 +44,8 @@ namespace Spring.Context.Attributes
                                                                          "log4net",
                                                                          "Quartz",
                                                                          "NVelocity",
-                                                                         "Rhino.Mocks"
+                                                                         "Rhino.Mocks",
+                                                                         "Apache.NMS"
                                                                      };
 
         private IObjectNameGenerator _objectNameGenerator = new AttributeObjectNameGenerator();

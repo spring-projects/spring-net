@@ -44,11 +44,8 @@ namespace Spring.Objects.Factory.Support
         public void SetUp()
         {
             mocks = new MockRepository();
-            registry = (IObjectDefinitionRegistry) 
-                mocks.CreateMock(typeof(IObjectDefinitionRegistry));
-
-            definition = (IObjectDefinition) 
-                mocks.CreateMock(typeof (IObjectDefinition));
+            registry = mocks.StrictMock<IObjectDefinitionRegistry>();
+            definition = mocks.StrictMock<IObjectDefinition>();
         }
 
         [Test]
@@ -138,9 +135,7 @@ namespace Spring.Objects.Factory.Support
         [ExpectedException(typeof (ArgumentNullException))]
         public void GenerateObjectNameWithNullRegistry()
         {
-            ObjectDefinitionReaderUtils.GenerateObjectName(
-                (IConfigurableObjectDefinition) mocks.CreateMock(typeof(IConfigurableObjectDefinition)),
-                null);
+            ObjectDefinitionReaderUtils.GenerateObjectName(mocks.StrictMock<IConfigurableObjectDefinition>(), null);
         }
     }
 }

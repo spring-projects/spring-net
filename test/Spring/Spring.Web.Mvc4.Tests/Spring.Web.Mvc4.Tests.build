@@ -9,8 +9,22 @@
             * current.build.defines.csc - framework-specific build defines
             * lib.dir                   - framework-specific assembly references
     -->
+	<include buildfile="${spring.basedir}/CopyLibToBinHelpers.include"/>
+
     <target name="build">
-        <!-- build Spring.Web.Mvc -->
+
+		<!--
+		<copy todir="${current.bin.dir}" flatten="true" overwrite="true">
+            <fileset basedir="${spring.basedir}/packages/">
+                <include name="Microsoft.AspNet.*.4.0.*/**/*.dll" />
+            </fileset>
+		</copy>
+		-->
+
+		<!-- build Spring.Web.Mvc -->
+		
+		<call target="copycommonlogginglibtobin" />
+		
         <csc target="library" define="${current.build.defines.csc}" 
 			 warnaserror="true" 
              optimize="${build.optimize}"
@@ -29,7 +43,6 @@
                 <include name="../CommonAssemblyInfo.cs" />
 				<include name="../Spring.Web.Mvc3.Tests/**/*.cs" />
 				<include name="../Spring.Web.Mvc4.Tests/**/*.cs" />
-				<exclude name="../Spring.Web.Mvc3.Tests/**/SpringMvcDependencyResolverTests.cs" />
             </sources>
             <resources prefix="Spring" dynamicprefix="true" failonempty="true">
                 <include name="../Spring.Web.Mvc3.Tests/**/*.resx" />
@@ -41,6 +54,12 @@
                 <exclude name="../Spring.Web.Mvc3.Tests/bin/**/*" />
             </resources>
             <references>
+				<lib>
+					<include name="${spring.basedir}/packages/Microsoft.AspNet.Mvc.4.0.30506.0/lib/net40" />
+					<include name="${spring.basedir}/packages/Microsoft.AspNet.WebApi.Client.4.0.30506.0/lib/net40" />
+					<include name="${spring.basedir}/packages/Microsoft.AspNet.WebApi.Core.4.0.30506.0/lib/net40" />
+					<include name="${spring.basedir}/packages/Microsoft.AspNet.WebApi.WebHost.4.0.30506.0/lib/net40" />
+				</lib>
 				<include name="mscorlib.dll"/>
 				<include name="Microsoft.CSharp.dll"/>
 				<include name="System.dll"/>
@@ -48,29 +67,29 @@
 				<include name="System.Configuration.dll" />
 				<include name="System.Drawing.dll" />
 				<include name="System.Xml.dll" />
+				<include name="System.Xml.Linq.dll" />
 				<include name="System.Web.dll" />
+				<include name="System.Web.Abstractions.dll" />
+				<include name="System.Web.Helpers.dll" />
+				<include name="System.Web.Http.dll" />
+				<include name="System.Web.Http.WebHost.dll" />
+				<include name="System.Web.Mvc.dll" />
+				<include name="System.Web.Razor.dll" />
+				<include name="System.Web.Routing.dll" />
+				<include name="System.Web.WebPages.dll" />
+				<include name="System.Web.WebPages.Deployment.dll" />
+				<include name="System.Web.WebPages.Razor.dll" />
 				<include name="System.Web.Services.dll" />
 				<include name="System.Data.dll" />
 				
-				<include name="System.Web.Abstractions.dll"/>
-				<include name="System.Web.Routing.dll"/>
-				
-				<include name="${programfiles}\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies\System.Web.Mvc.dll" />
-				<include name="${programfilesx86}\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies\System.Web.Mvc.dll" />
-				<include name="${programfiles}\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies\System.Web.Http.dll" />
-				<include name="${programfilesx86}\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies\System.Web.Http.dll" />
-				<include name="${programfiles}\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies\System.Web.Http.WebHost.dll" />
-				<include name="${programfilesx86}\Microsoft ASP.NET\ASP.NET MVC 4\Assemblies\System.Web.Http.WebHost.dll" />
+				<include name="${current.bin.dir}/Common.Logging.dll"/>
+				<include name="${current.bin.dir}/Common.Logging.Core.dll"/>
 
-                <include name="${current.bin.dir}/*.dll" />
-                <exclude name="${current.bin.dir}/${project::get-name()}.dll" />
-            
+                <include name="${current.bin.dir}/Spring.Core.dll" />
+                <include name="${current.bin.dir}/Spring.Web.Mvc4.dll" />
+
+				<include name="${current.bin.dir}/nunit.framework.dll"/>            
                 <include name="${lib.dir}/nunit.core.interfaces.dll" />
-				<exclude name="${current.bin.dir}/System.Web.Extensions.dll" />
-				<exclude name="${current.bin.dir}/Spring.Web.Mvc.dll" />
-				<exclude name="${current.bin.dir}/Spring.Web.Mvc.Tests.dll" />
-				<exclude name="${current.bin.dir}/Spring.Web.Mvc3.dll" />
-				<exclude name="${current.bin.dir}/Spring.Web.Mvc3.Tests.dll" />
             </references>
         </csc>
         <copy todir="${current.bin.dir}">

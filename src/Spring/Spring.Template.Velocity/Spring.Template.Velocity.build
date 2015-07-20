@@ -6,7 +6,16 @@
       * current.build.debug       - (true|false) debug build?
       * current.build.defines.csc - framework-specific build defines for C# compiler
  -->
+ 
+	<include buildfile="${spring.basedir}/CopyLibToBinHelpers.include"/>
+
+	<property name="nvelocity.lib.dir" value="${spring.basedir}/lib/net/2.0" overwrite="true"/>
+
     <target name="build">
+	
+		<call target="copycommonlogginglibtobin" />
+		<call target="copynvelocitylibtobin" />
+		
         <csc target="library" define="${current.build.defines.csc}"
             warnaserror="true"
             optimize="${build.optimize}"
@@ -35,9 +44,10 @@
 			<include name="System.Core.dll"/>
 			<include name="System.Configuration.dll"/>
 			<include name="System.Xml.dll" />
-			<include name="${current.bin.dir}/*.dll" />
-			<exclude name="${current.bin.dir}/${project::get-name()}.dll" />
-			<exclude name="${current.bin.dir}/CloverRuntime.dll" />
+			<include name="${current.bin.dir}/Common.Logging.dll"/>
+			<include name="${current.bin.dir}/Common.Logging.Core.dll"/>
+			<include name="${current.bin.dir}/Spring.Core.dll" />
+			<include name="${current.bin.dir}/NVelocity.dll" />
 	    </references>
         </csc>
     </target>

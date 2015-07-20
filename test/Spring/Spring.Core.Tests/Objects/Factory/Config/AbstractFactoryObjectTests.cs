@@ -46,7 +46,7 @@ namespace Spring.Objects.Factory.Config
         [Test]
         public void DisposeCallbackIsNotInvokedOnDisposeIfInPrototypeMode()
         {
-            IDisposable disposable = (IDisposable) mocks.CreateMock(typeof (IDisposable));            
+            IDisposable disposable = mocks.StrictMock<IDisposable>();           
             DummyFactoryObject factory = new DummyFactoryObject(disposable);
             mocks.ReplayAll();
             factory.IsSingleton = false;
@@ -59,7 +59,7 @@ namespace Spring.Objects.Factory.Config
         [Test]
         public void DisposeCallbackIsInvokedOnDispose()
         {
-            IDisposable disposable = (IDisposable)mocks.CreateMock(typeof(IDisposable));
+            IDisposable disposable = mocks.StrictMock<IDisposable>();
             disposable.Dispose();
             LastCall.On(disposable).Repeat.Once();            
 			DummyFactoryObject factory = new DummyFactoryObject(disposable);

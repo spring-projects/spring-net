@@ -24,9 +24,11 @@ namespace Spring.Messaging.Nms.Connections
             get { throw new NotImplementedException(); }
         }
 
+#pragma warning disable 67
         public event ExceptionListener ExceptionListener;
         public event ConnectionInterruptedListener ConnectionInterruptedListener;
         public event ConnectionResumedListener ConnectionResumedListener;
+#pragma warning restore 67
 
         public ISession CreateSession()
         {
@@ -48,6 +50,11 @@ namespace Spring.Messaging.Nms.Connections
         public void Close()
         {
             closeCount++;
+        }
+
+        public void PurgeTempDestinations()
+        {
+
         }
 
         public ConsumerTransformerDelegate ConsumerTransformer

@@ -54,9 +54,9 @@ namespace Spring.Util
 
             OneThirstyDude dude = new OneThirstyDude();
             Soda bru = new Soda();
-            bru.Pop += new PopHandler(delegate { firstCall = true; });
-            bru.Pop += new PopHandler(delegate { secondCall = true; throw new Exception(); });
-            bru.Pop += new PopHandler(delegate { thirdCall = true; });
+            bru.Pop += (sender, soda) => firstCall = true;
+			bru.Pop += (sender, soda) => { secondCall = true; throw new Exception(); };
+			bru.Pop += (sender, soda) => { thirdCall = true; };
 
             DefensiveEventRaiser eventRaiser = new DefensiveEventRaiser();
 

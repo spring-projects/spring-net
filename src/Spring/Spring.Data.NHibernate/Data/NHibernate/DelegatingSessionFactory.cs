@@ -1,11 +1,7 @@
 using System.Data;
-using System.Collections;
 using System.Collections.Generic;
 
 using NHibernate;
-using NHibernate.Cfg;
-using NHibernate.Connection;
-using NHibernate.Dialect;
 using NHibernate.Engine;
 using NHibernate.Metadata;
 using NHibernate.Stat;

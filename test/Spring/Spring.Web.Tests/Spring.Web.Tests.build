@@ -9,8 +9,15 @@
             * current.build.defines.csc - framework-specific build defines
             * lib.dir                   - framework-specific assembly references
     -->
+	
+	<include buildfile="${spring.basedir}/CopyLibToBinHelpers.include"/>
+
     <target name="build">
         <!-- build Spring.Web -->
+		
+		<call target="copycommonlogginglibtobin" />
+		<call target="copynh3libtobin" />
+		
         <csc target="library" define="${current.build.defines.csc}" 
 			 warnaserror="true" 
              optimize="${build.optimize}"
@@ -47,10 +54,16 @@
 				<include name="System.Web.dll" />
 				<include name="System.Web.Services.dll" />
 				<include name="System.Data.dll" />
-                <include name="${current.bin.dir}/*.dll" />
-                <exclude name="${current.bin.dir}/${project::get-name()}.dll" />
-                <exclude name="${current.bin.dir}/CloverRuntime.dll" />
+				<include name="${current.bin.dir}/Common.Logging.dll"/>
+				<include name="${current.bin.dir}/Common.Logging.Core.dll"/>
+				<include name="${current.bin.dir}/Spring.Core.dll" />
+				<include name="${current.bin.dir}/Spring.Core.Tests.dll" />
+				<include name="${current.bin.dir}/Spring.Web.dll" />
+				<include name="${current.bin.dir}/nunit.framework.dll"/>
+				<include name="${current.bin.dir}/Rhino.Mocks.dll"/>
                 <include name="${lib.dir}/nunit.core.interfaces.dll" />
+                <include name="${current.bin.dir}/NUnitAsp.dll" />
+                <include name="${current.bin.dir}/NUnitAspEx.dll" />
             </references>
         </csc>
         <copy todir="${current.bin.dir}">

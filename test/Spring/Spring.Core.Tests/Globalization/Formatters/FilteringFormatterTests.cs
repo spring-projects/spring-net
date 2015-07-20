@@ -67,7 +67,7 @@ namespace Spring.Globalization.Formatters
         public void FiltersOnParseAndFormat()
         {
             MockRepository mocks = new MockRepository();
-            IFormatter underlyingFormatter = (IFormatter) mocks.CreateMock(typeof (IFormatter));
+            IFormatter underlyingFormatter = mocks.StrictMock<IFormatter>();
             TestFilteringFormatter formatter = (TestFilteringFormatter) mocks.PartialMock(typeof (TestFilteringFormatter), underlyingFormatter);
 
             string inputText = "inputText";

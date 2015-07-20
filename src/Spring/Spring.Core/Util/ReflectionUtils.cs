@@ -1102,11 +1102,8 @@ namespace Spring.Util
             // In case of using List<CustomAttributesData> the above note makes
             // no sense (SD:)
             IList propertiesToSet = new ArrayList();
-            int k = 0;
 
             IList fieldsToSet = new ArrayList();
-            int n = 0;
-
 
             // Fills arrays of the constructor named parameters
             foreach (CustomAttributeNamedArgument namedArgument in attributeData.NamedArguments)

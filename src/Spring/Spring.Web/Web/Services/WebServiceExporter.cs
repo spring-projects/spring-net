@@ -98,12 +98,12 @@ namespace Spring.Web.Services
         /// <summary>
         /// The name of the object in the factory.
         /// </summary>
-        protected string objectName;
+        private string objectName;
         
         /// <summary>
         /// The owning factory.
         /// </summary>
-        protected IObjectFactory objectFactory;
+        private IObjectFactory objectFactory;
         
         /// <summary>
         /// The generated web service wrapper type.
@@ -315,7 +315,8 @@ namespace Spring.Web.Services
         /// </exception>
         public virtual IObjectFactory ObjectFactory
         {
-            set { this.objectFactory = value; }
+            protected get { return objectFactory; }
+            set { objectFactory = value; }
         }
 
         #endregion
@@ -338,7 +339,8 @@ namespace Spring.Web.Services
         /// </remarks>
         public string ObjectName
         {
-            set { this.objectName = value; }
+            protected get { return objectName; }
+            set { objectName = value; }
         }
 
         #endregion

@@ -248,7 +248,7 @@ namespace Spring.Collections
 		/// Performs an unsigned bitwise right shift with the specified number
 		/// </summary>
 		/// <param name="number">Number to operate on</param>
-		/// <param name="bits">Ammount of bits to shift</param>
+		/// <param name="bits">Amount of bits to shift</param>
 		/// <returns>The resulting number from the shift operation</returns>
 		private int urShift(int number, int bits)
 		{
@@ -616,7 +616,7 @@ namespace Spring.Collections
 
 		/// <summary> 
 		/// Returns an <see cref="System.Collections.IEnumerator"/> over the elements in this queue. 
-		/// The enumeratoar does not return the elements in any particular order.
+		/// The enumerator does not return the elements in any particular order.
 		/// </summary>
 		/// <returns> an enumerator over the elements in this queue.</returns>
 		public override IEnumerator GetEnumerator()
@@ -660,10 +660,10 @@ namespace Spring.Collections
 			return result;
 		}
 		/// <summary>
-		/// Queries the queue to see if it contains the specified <pararef name="element"/>
+		/// Queries the queue to see if it contains the specified <paramref name="element"/>
 		/// </summary>
 		/// <param name="element">element to look for.</param>
-		/// <returns><see lang="true"/> if the queue contains the <pararef name="element"/>, 
+		/// <returns><see lang="true"/> if the queue contains the <paramref name="element"/>, 
 		/// <see lang="false"/> otherwise.</returns>
 		public bool Contains( object element )
 		{

@@ -142,7 +142,7 @@ namespace Spring.Objects.Factory
         /// If this isn't also an
         /// <see cref="Spring.Objects.Factory.IHierarchicalObjectFactory"/>,
         /// this method will return the same as it's own
-        /// <see cref="Spring.Objects.Factory.IListableObjectFactory.GetObjectDefinitionNames"/>
+        /// <see cref="IListableObjectFactory.GetObjectDefinitionNames()"/>
         /// method.
         /// </param>
         /// <param name="type">
@@ -197,11 +197,8 @@ namespace Spring.Objects.Factory
         /// </p>
         /// </remarks>
         /// <param name="factory">
-        /// If this isn't also an
-        /// <see cref="Spring.Objects.Factory.IHierarchicalObjectFactory"/>,
-        /// this method will return the same as it's own
-        /// <see cref="Spring.Objects.Factory.IListableObjectFactory.GetObjectDefinitionNames"/>
-        /// method.
+        /// If this isn't also an  <see cref="Spring.Objects.Factory.IHierarchicalObjectFactory"/>,
+        /// this method will return the same as it's own <see cref="IListableObjectFactory.GetObjectDefinitionNames()"/>  method.
         /// </param>
         /// <param name="type">
         /// The <see cref="System.Type"/> that objects must match.
@@ -209,8 +206,7 @@ namespace Spring.Objects.Factory
         /// <returns>
         /// The array of object names, or an empty array if none.
         /// </returns>
-        public static IList<string> ObjectNamesForTypeIncludingAncestors(
-            IListableObjectFactory factory, Type type)
+        public static IList<string> ObjectNamesForTypeIncludingAncestors(IListableObjectFactory factory, Type type)
         {
             return factory.GetObjectNamesForType(type);
         }

@@ -200,8 +200,8 @@ namespace Spring.Data.Common
         [Test]
         public void CreateOperations()
         {
-            IDbProvider dbProvider = (IDbProvider)mocks.CreateMock(typeof(IDbProvider));
-            IDbConnection mockConnection = (IDbConnection)mocks.CreateMock(typeof(IDbConnection));            
+            IDbProvider dbProvider = mocks.StrictMock<IDbProvider>();
+            IDbConnection mockConnection = mocks.StrictMock<IDbConnection>();            
             Expect.Call(dbProvider.CreateConnection()).Return(mockConnection).Repeat.Once();
 
             IDbCommand mockCommand = (IDbCommand)mocks.CreateMock(typeof(IDbCommand));

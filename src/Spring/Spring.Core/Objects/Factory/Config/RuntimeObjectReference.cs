@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -125,6 +125,43 @@ namespace Spring.Objects.Factory.Config
 
         private bool _isToParent;
 
+        #endregion
+        
+        #region Equality Members
+        
+        /// <summary>
+        /// Determines whether the specified RuntimeObjectReference is equal to the current RuntimeObjectReference.
+        /// </summary>
+        /// <returns>true if the specified RuntimeObjectReference is equal to the current RuntimeObjectReference; otherwise, false.</returns>
+        protected bool Equals(RuntimeObjectReference other)
+        {
+            return string.Equals(_objectName, other._objectName) && _isToParent.Equals(other._isToParent);
+        }
+
+        /// <summary>
+        /// Determines whether the specified System.Object is equal to the current RuntimeObjectReference.
+        /// </summary>
+        /// <returns>true if the specified RuntimeObjectReference is equal to the current RuntimeObjectReference; otherwise, false.</returns>
+        public override bool Equals(object obj)
+        {
+            if (ReferenceEquals(null, obj)) return false;
+            if (ReferenceEquals(this, obj)) return true;
+            if (obj.GetType() != this.GetType()) return false;
+            return Equals((RuntimeObjectReference)obj);
+        }
+        
+        /// <summary>
+        /// Serves as a hash function for RuntimeObjectReference.
+        /// </summary>
+        /// <returns>A hash code for the currentRuntimeObjectReference.</returns>
+        public override int GetHashCode()
+        {
+            unchecked
+            {
+                return (_objectName.GetHashCode() * 397) ^ _isToParent.GetHashCode();
+            }
+        }
+        
         #endregion
     }
 }

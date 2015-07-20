@@ -436,7 +436,7 @@ namespace Spring.Data.NHibernate
                     ConnectionHolder conHolder = new ConnectionHolder(con, adoTx);
                     if (timeout != DefaultTransactionDefinition.TIMEOUT_DEFAULT)
                     {
-                        conHolder.TimeoutInMillis = definition.TransactionTimeout;
+                        conHolder.TimeoutInSeconds = timeout;
                     }
                     if (log.IsDebugEnabled)
                     {
@@ -777,7 +777,11 @@ namespace Spring.Data.NHibernate
 
         }
 
-        private class HibernateTransactionObject : AdoTransactionObjectSupport
+
+        /// <summary>
+        /// Hibernate-specific Tx-Aware Object
+        /// </summary>
+        protected class HibernateTransactionObject : AdoTransactionObjectSupport
         {
 
             private SessionHolder sessionHolder;
@@ -785,6 +789,11 @@ namespace Spring.Data.NHibernate
             private bool newSessionHolder;
 
 
+            /// <summary>
+            /// Sets the session holder.
+            /// </summary>
+            /// <param name="sessionHolder">The session holder.</param>
+            /// <param name="newSessionHolder">if set to <c>true</c> [new session holder].</param>
             public void SetSessionHolder(SessionHolder sessionHolder, bool newSessionHolder)
             {
                 this.sessionHolder = sessionHolder;
@@ -792,6 +801,12 @@ namespace Spring.Data.NHibernate
             }
 
 
+            /// <summary>
+            /// Gets the session holder.
+            /// </summary>
+            /// <value>
+            /// The session holder.
+            /// </value>
             public SessionHolder SessionHolder
             {
                 get
@@ -800,6 +815,12 @@ namespace Spring.Data.NHibernate
                 }
             }
 
+            /// <summary>
+            /// Gets a value indicating whether a new session holder is present.
+            /// </summary>
+            /// <value>
+            ///   <c>true</c> if new session holder; otherwise, <c>false</c>.
+            /// </value>
             public bool NewSessionHolder
             {
                 get
@@ -808,11 +829,18 @@ namespace Spring.Data.NHibernate
                 }
             }
 
+            /// <summary>
+            /// Determines whether this instance has a transaction.
+            /// </summary>
+            /// <returns></returns>
             public bool HasTransaction()
             {
                 return (this.sessionHolder != null && this.sessionHolder.Transaction != null);
             }
 
+            /// <summary>
+            /// Sets the transaction as internally marked as rollback-only.
+            /// </summary>
             public void SetRollbackOnly()
             {
                 SessionHolder.RollbackOnly = true;
@@ -837,19 +865,34 @@ namespace Spring.Data.NHibernate
             }
         }
 
-        private class SuspendedResourcesHolder
+
+        /// <summary>
+        /// Holds Suspended Resources
+        /// </summary>
+        protected class SuspendedResourcesHolder
         {
 
             private readonly SessionHolder sessionHolder;
 
             private readonly ConnectionHolder connectionHolder;
 
+            /// <summary>
+            /// Initializes a new instance of the <see cref="SuspendedResourcesHolder"/> class.
+            /// </summary>
+            /// <param name="sessionHolder">The session holder.</param>
+            /// <param name="conHolder">The connection holder.</param>
             public SuspendedResourcesHolder(SessionHolder sessionHolder, ConnectionHolder conHolder)
             {
                 this.sessionHolder = sessionHolder;
                 this.connectionHolder = conHolder;
             }
 
+            /// <summary>
+            /// Gets the session holder.
+            /// </summary>
+            /// <value>
+            /// The session holder.
+            /// </value>
             public SessionHolder SessionHolder
             {
                 get
@@ -859,6 +902,12 @@ namespace Spring.Data.NHibernate
 
             }
 
+            /// <summary>
+            /// Gets the connection holder.
+            /// </summary>
+            /// <value>
+            /// The connection holder.
+            /// </value>
             public ConnectionHolder ConnectionHolder
             {
                 get

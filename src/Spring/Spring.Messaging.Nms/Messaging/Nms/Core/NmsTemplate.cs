@@ -1167,7 +1167,7 @@ namespace Spring.Messaging.Nms.Core
         public object ReceiveSelectedAndConvert(string messageSelector)
         {
             CheckMessageConverter();
-            return DoConvertFromMessage(ReceiveSelected(messageSelector)); ;
+            return DoConvertFromMessage(ReceiveSelected(messageSelector));
         }
 
         /// <summary> Receive a message synchronously from the specified destination, but only

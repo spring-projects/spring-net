@@ -293,7 +293,7 @@ namespace Spring.Context.Support
         public void GetResource()
         {
             //Add another resource manager to the list
-            Assembly ass = Assembly.LoadWithPartialName("Spring.Core.Tests");
+            Assembly ass = Assembly.Load("Spring.Core.Tests");
             string baseName = "Spring" + "." + "Resources.Images";
 
             resourceManagerList.Add(new ResourceManager(baseName, ass));
@@ -408,7 +408,7 @@ namespace Spring.Context.Support
         public void TwoResourceManagers()
         {
             //Add another resource manager to the list
-            Assembly ass = Assembly.LoadWithPartialName("Spring.Core.Tests");
+            Assembly ass = Assembly.Load("Spring.Core.Tests");
             string baseName = "Spring" + "." + "Resources.SampleResources";
             resourceManagerList.Add(new ResourceManager(baseName, ass));
 

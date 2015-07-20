@@ -158,7 +158,7 @@ namespace Spring.Objects.Factory.Support
         /// <summary>
         /// Whether to cache object metadata or rather reobtain it for every access
         /// </summary>
-        protected bool cacheObjectMetadata = true;
+        private bool cacheObjectMetadata = true;
 
 
         /// <summary>
@@ -766,6 +766,7 @@ namespace Spring.Objects.Factory.Support
         protected bool CacheObjectMetadata
         {
             get { return this.cacheObjectMetadata; }
+            set { this.cacheObjectMetadata = value; }
         }
 
         /// <summary>
@@ -907,24 +908,6 @@ namespace Spring.Objects.Factory.Support
                 return null;
             }
             return ResolveObjectType(mod, objectName);
-        }
-
-        /// <summary>
-        /// Get the object for the given object instance, either the object
-        /// instance itself or its created object in case of an
-        /// <see cref="Spring.Objects.Factory.IFactoryObject"/>.
-        /// </summary>
-        /// <param name="name">
-        /// The name that may include the factory dereference prefix.
-        /// </param>
-        /// <param name="instance">The object instance.</param>
-        /// <returns>
-        /// The singleton instance of the object.
-        /// </returns>
-        [Obsolete("")]
-        protected internal virtual object GetObjectForInstance(string name, object instance)
-        {
-            return GetObjectForInstance(instance, name, TransformedObjectName(name), null);
         }
 
         /// <summary>
@@ -2483,7 +2466,9 @@ namespace Spring.Objects.Factory.Support
             {
                 // copy the keys into a new set, 'cos we are going to modifying the
                 // original collection (_singletonCache) as we destroy each singleton.
-                ISet keys = new HashedSet(singletonCache.Keys);
+                // we also want to traverse the keys in reverse order to destroy correctly
+                ArrayList keys = new ArrayList(singletonCache.Keys);
+                keys.Reverse();
                 foreach (string name in keys)
                 {
                     DestroySingleton(name);
@@ -2739,8 +2724,8 @@ namespace Spring.Objects.Factory.Support
         /// </para>
         /// </remarks>
         /// <see cref="RegisterSingleton"/>
-        /// <see cref="Spring.Objects.Factory.Support.IObjectDefinitionRegistry.GetObjectDefinitionNames"/>
-        /// <see cref="Spring.Objects.Factory.IListableObjectFactory.GetObjectDefinitionNames"/>
+        /// <see cref="IObjectDefinitionRegistry.GetObjectDefinitionNames()"/>
+        /// <see cref="IListableObjectFactory.GetObjectDefinitionNames()"/>
         public IList<string> SingletonNames
         {
             get

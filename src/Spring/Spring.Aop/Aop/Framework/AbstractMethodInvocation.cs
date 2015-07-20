@@ -55,39 +55,39 @@ namespace Spring.Aop.Framework
 		/// The arguments (if any = may be <see lang="null"/>) to the method
 		/// that is to be invoked.
 		/// </summary>
-		protected object[] arguments;
+		private object[] arguments;
 
 		/// <summary>
 		/// The target object that the method is to be invoked on.
 		/// </summary>
-        protected object target;
+		private readonly object target;
 
 		/// <summary>
         /// The AOP proxy for the target object.
         /// </summary>
-        protected object proxy;
+		private object proxy;
 
         /// <summary>
         /// The method invocation that is to be invoked.
         /// </summary>
-        protected MethodInfo method;
+        private MethodInfo method;
 
 		/// <summary>
 		/// The list of <see cref="AopAlliance.Intercept.IMethodInterceptor"/> and
 		/// <cref see="Spring.Aop.Framework.InterceptorAndDynamicMethodMatcher"/>
 		/// that need dynamic checks.
 		/// </summary>
-        protected IList interceptors;
+		private IList interceptors;
 
         /// <summary>
         /// The declaring type of the method that is to be invoked.
         /// </summary>
-        protected Type targetType;
+        private Type targetType;
 
         /// <summary>
         /// The index from 0 of the current interceptor we're invoking.
         /// </summary>
-        protected int currentInterceptorIndex;
+        private int currentInterceptorIndex;
 
 		/// <summary>
 		/// Creates a new instance of the
@@ -128,16 +128,11 @@ namespace Spring.Aop.Framework
 		protected AbstractMethodInvocation(object proxy, object target,
             MethodInfo method, object[] arguments, Type targetType, IList interceptors)
 		{
-			#region Sanity Check
-
-            // EE: There is not necessarily always a target - e.g. for DynamicEntities
+		    // EE: There is not necessarily always a target - e.g. for DynamicEntities
             // moved this check to InvokeJoinpoint()
-//			AssertUtils.ArgumentNotNull(target, "target");
             AssertUtils.ArgumentNotNull(method, "method");
 
-			#endregion
-
-			this.proxy = proxy;
+		    this.proxy = proxy;
 			this.target = target;
             this.method = method;
 			this.targetType = targetType;
@@ -157,10 +152,11 @@ namespace Spring.Aop.Framework
 		/// <see cref="AopAlliance.Intercept.IMethodInvocation.Method"/>
 		public virtual MethodInfo Method
 		{
-			get { return method; }
-        }
+		    get { return method; }
+		    protected set { method = value; }
+		}
 
-		/// <summary>
+	    /// <summary>
 		/// Gets the static part of this joinpoint.
 		/// </summary>
 		/// <value>
@@ -181,6 +177,7 @@ namespace Spring.Aop.Framework
 		public virtual object Proxy
 		{
 			get { return this.proxy; }
+            protected set { this.proxy = value; }
 		}
 	    /// <summary>
 	    /// Gets the target object for the invocation.
@@ -200,7 +197,8 @@ namespace Spring.Aop.Framework
 	    /// </value>
 	    public virtual Type TargetType
 	    {
-            get { return this.targetType; }
+	        get { return this.targetType; }
+	        protected set { this.targetType = value; }
 	    }
 
 	    /// <summary>
@@ -240,7 +238,16 @@ namespace Spring.Aop.Framework
 			get { return this.target; }
 		}
 
-		/// <summary>
+        /// <summary>
+        /// The index from 0 of the current interceptor we're invoking.
+        /// </summary>
+	    protected int CurrentInterceptorIndex
+	    {
+	        get { return currentInterceptorIndex; }
+	        set { currentInterceptorIndex = value; }
+	    }
+
+	    /// <summary>
 		/// Proceeds to the next interceptor in the chain.
 		/// </summary>
 		/// <returns>
@@ -357,15 +364,15 @@ namespace Spring.Aop.Framework
 		{
 			StringBuilder buffer = new StringBuilder("Invocation: method '");
 			buffer.Append(Method.Name).Append("', ").Append("arguments ");
-            buffer.Append(this.arguments != null ? StringUtils.CollectionToCommaDelimitedString(this.arguments) : "[none]");
+            buffer.Append(Arguments != null ? StringUtils.CollectionToCommaDelimitedString(Arguments) : "[none]");
 			buffer.Append("; ");
-			if (this.target == null)
+			if (Target == null)
 			{
 				buffer.Append("target is null.");
 			}
 			else
 			{
-				buffer.Append("target is of Type [").Append(this.targetType.FullName).Append(']');
+				buffer.Append("target is of Type [").Append(TargetType.FullName).Append(']');
 			}
 			return buffer.ToString();
 		}

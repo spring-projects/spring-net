@@ -46,7 +46,7 @@ namespace Spring.Data.NHibernate.Support
 
             // setup expected values
             MockRepository mocks = new MockRepository();
-            ISessionFactory expectedSessionFactory = (ISessionFactory)mocks.CreateMock(typeof(ISessionFactory));
+            ISessionFactory expectedSessionFactory = mocks.StrictMock<ISessionFactory>();
             IInterceptor expectedEntityInterceptor = null;
             bool expectedSingleSession = SessionScopeSettings.SINGLESESSION_DEFAULT;
             FlushMode expectedDefaultFlushMode = SessionScopeSettings.FLUSHMODE_DEFAULT;
@@ -73,8 +73,8 @@ namespace Spring.Data.NHibernate.Support
             string ENTITYINTERCEPTOR_OBJECTNAME = "EntityInterceptor";
 
             MockRepository mocks = new MockRepository();
-            ISessionFactory expectedSessionFactory =  (ISessionFactory) mocks.CreateMock(typeof(ISessionFactory));
-            IInterceptor expectedEntityInterceptor = (IInterceptor) mocks.CreateMock(typeof(IInterceptor));
+            ISessionFactory expectedSessionFactory =  mocks.StrictMock<ISessionFactory>();
+            IInterceptor expectedEntityInterceptor = mocks.StrictMock<IInterceptor>();
             bool expectedSingleSession = false;
             FlushMode expectedDefaultFlushMode = FlushMode.Auto;
 

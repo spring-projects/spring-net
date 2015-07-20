@@ -625,21 +625,16 @@
         </listitem>
       </itemizedlist>
     </partintro>
-
     &javadevelopers;
   </part>
 
   <!-- back matter -->
-
   <part id="spring-appendices">
-    <title>Appendices</title>
-
+  <title>Appendices</title>
     &classic-spring;
-
     &xsd-configuration;
-
     &xml-custom;
-
     &xsd;
   </part>
+
 </book>

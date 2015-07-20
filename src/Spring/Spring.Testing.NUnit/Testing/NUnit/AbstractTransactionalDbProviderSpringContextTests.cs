@@ -23,7 +23,7 @@ namespace Spring.Testing.NUnit
         /// <summary>
         /// Holds the <see cref="AdoTemplate"/> that this base class manages
         /// </summary>
-        protected AdoTemplate adoTemplate;
+        private AdoTemplate adoTemplate;
 
         /// <summary>
         /// Did this test delete any tables? If so, we forbid transaction completion,
@@ -54,6 +54,24 @@ namespace Spring.Testing.NUnit
         public AdoTemplate AdoTemplate
         {
             get { return adoTemplate; }
+            protected set { adoTemplate = value; }
+        }
+
+        /// <summary>
+        /// Inject dependencies into 'this' instance (that is, this test instance).
+        /// </summary>
+        /// <remarks>
+        /// <p>The default implementation populates protected variables if the
+        /// <see cref="AbstractDependencyInjectionSpringContextTests.PopulateProtectedVariables"/> property is set, else
+        /// uses autowiring if autowiring is switched on (which it is by default).</p>
+        /// <p>You can certainly override this method if you want to totally control
+        /// how dependencies are injected into 'this' instance.</p>
+        /// <p>AdoTemplate autowiring is Ignored</p>
+        /// </remarks>
+        protected override void InjectDependencies()
+        {
+            applicationContext.ObjectFactory.IgnoreDependencyType(typeof(AdoTemplate));
+            base.InjectDependencies();
         }
 
         /// <summary>
