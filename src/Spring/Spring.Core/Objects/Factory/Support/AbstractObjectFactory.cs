@@ -1685,7 +1685,7 @@ namespace Spring.Objects.Factory.Support
         /// <summary>
         /// String Resolver applied to Autowired value injections
         /// </summary>
-        private ISet embeddedValueResolvers = new SortedSet(new OrderComparator());
+        private ISet embeddedValueResolvers = new SortedSet(new ObjectOrderComparator());
 
         /// <summary>
         /// Indicates whether any IInstantiationAwareBeanPostProcessors have been registered
