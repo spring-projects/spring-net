@@ -18,13 +18,11 @@
 
 #endregion
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using Spring.Collections.Generic
 using NUnit.Framework;
 
-namespace Spring.Collections.Generic.Test
+namespace Spring.Collections.Generic
 {
 	/// <summary>
 	/// This class contains tests for LinkedHashDictionary
