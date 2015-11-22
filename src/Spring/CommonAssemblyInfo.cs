@@ -1,7 +1,9 @@
 using System;
 using System.Reflection;
 
+#if !TIBCO_EMS
 [assembly: CLSCompliant(true)]
+#endif
 
 //
 // General Information about an assembly is controlled through the following 
