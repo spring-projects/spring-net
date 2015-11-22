@@ -61,13 +61,32 @@ namespace Spring.Pool.Support
 		/// <param name="factory">
 		/// The factory used to instantiate and manage the lifecycle of pooled objects.
 		/// </param>
+		/// <param name="initialSize">The initial size of the pool.</param>
+		/// <exception cref="System.ArgumentNullException">
+		/// If the supplied <paramref name="factory"/> is <see langword="null"/>.
+		/// </exception>
+		/// <exception cref="System.ArgumentException">
+		/// If the supplied <paramref name="initialSize"/> is less than or equal to zero.
+		/// </exception>
+		public SimplePool(IPoolableObjectFactory factory, int initialSize)
+            : this(factory, initialSize, initialSize)
+		{
+		}
+        
+        /// <summary>
+		/// Creates a new instance of the <see cref="Spring.Pool.Support.SimplePool"/>
+		/// class.
+		/// </summary>
+		/// <param name="factory">
+		/// The factory used to instantiate and manage the lifecycle of pooled objects.
+		/// </param>
 		/// <param name="maxSize">The maximum size of the pool.</param>
 		/// <param name="initialSize">The initial size of the pool.</param>
 		/// <exception cref="System.ArgumentNullException">
 		/// If the supplied <paramref name="factory"/> is <see langword="null"/>.
 		/// </exception>
 		/// <exception cref="System.ArgumentException">
-		/// If the supplied <paramref name="size"/> is less than or equal to zero.
+		/// If the supplied <paramref name="maxSize"/> is less than or equal to zero.
 		/// </exception>
 		public SimplePool(IPoolableObjectFactory factory, int maxSize, int initialSize)
 		{
