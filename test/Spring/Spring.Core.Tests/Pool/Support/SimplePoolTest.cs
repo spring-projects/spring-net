@@ -183,6 +183,7 @@ namespace Spring.Pool
         }
 
 		[Test, ExpectedException(typeof (PoolException))]
+        [Ignore("No longer expected behavior per SPRNET-1582 being resolved.")]
 		public void NoMoreUsableAfterClose()
 		{
             object o = pool.BorrowObject();
@@ -195,7 +196,8 @@ namespace Spring.Pool
         }
 
 		[Test, ExpectedException(typeof (PoolException))]
-		public void ThrowsExceptionWhenOutOfItemsBecauseFailedValidation()
+        [Ignore("No longer expected behavior per SPRNET-1582 being resolved.")]
+        public void ThrowsExceptionWhenOutOfItemsBecauseFailedValidation()
 		{
 		    object o = new object();
 		    Expect.Call(factory.MakeObject()).Return(o);
