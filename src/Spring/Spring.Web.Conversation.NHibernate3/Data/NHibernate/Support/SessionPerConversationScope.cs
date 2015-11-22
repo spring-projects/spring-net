@@ -437,7 +437,11 @@ namespace Spring.Data.NHibernate.Support
                     else
                     {
                         if (tmpSession.IsConnected)
-                            tmpSession.Disconnect();
+                        {
+                            IDbConnection conn = tmpSession.Disconnect();
+                            if (conn != null && conn.State == ConnectionState.Open)
+                                conn.Close();
+                        }
                     }
                     RemoveSession(tmpSession);
                 }
