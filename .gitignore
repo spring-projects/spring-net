@@ -61,7 +61,7 @@ PrecompiledWeb
 /src/Spring/Spring.Messaging/Spring.Messaging.xml
 /src/Spring/Spring.Data/Spring.Data.xml
 /src/Spring/Spring.Web/Spring.Web.xml
-/src/Spring/Spring.Web.Conversation.NHibernate3/Spring.Web.Conversation.NHibernate3.xml
+/src/Spring/Spring.Web.Conversation.NHibernate3/Spring.Web.Conversation.NHibernate33.xml
 /src/Spring/Spring.Web.Conversation.NHibernate4/Spring.Web.Conversation.NHibernate4.xml
 /src/Spring/Spring.Web.Mvc/Spring.Web.Mvc.xml
 /src/Spring/Spring.Web.Mvc3/Spring.Web.Mvc3.xml
