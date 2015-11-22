@@ -21,7 +21,7 @@ namespace Spring.Web.Mvc
         private static readonly string IgnoreViewNamespace = "ASP.";
 
         /// <summary>
-        /// The <see cref="IApplicationContext"/> to be used by the resolver
+        /// The <see cref="Spring.Context.IApplicationContext"/> to be used by the resolver
         /// </summary>
         private IApplicationContext _context;
 
@@ -32,7 +32,7 @@ namespace Spring.Web.Mvc
         /// <summary>
         /// Initializes a new instance of the <see cref="SpringMvcDependencyResolver"/> class.
         /// </summary>
-        /// <param name="context">The <see cref="IApplicationContext"/> to be used by the resolver</param>
+        /// <param name="context">The <see cref="Spring.Context.IApplicationContext"/> to be used by the resolver</param>
         public SpringMvcDependencyResolver(IApplicationContext context)
         {
             _context = context;
