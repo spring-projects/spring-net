@@ -24,46 +24,80 @@ using NUnit.Framework;
 
 namespace Spring.Collections.Generic
 {
-	/// <summary>
-	/// This class contains tests for LinkedHashDictionary
-	/// </summary>
-	/// <author>Zbynek Vyskovsky, kvr@centrum.cz</author>
-	[TestFixture]
-	public class LinkedHashDictionaryTest
-	{
-		[Test]
-		public void			TestSunnyDay()
-		{
-			IDictionary<int, string> td = new LinkedHashDictionary<int, string>();
-			td.Add(0, "a");
-			td.Add(1, "b");
-			td.Add(2, "c");
-			td.Add(1, "b2");
-			td.Add(3, "d");
-			td.Add(4, "e");
-			Assert.IsTrue(td.ContainsKey(0));
-			Assert.IsTrue(td.ContainsKey(1));
-			Assert.IsTrue(td.ContainsKey(2));
-			Assert.IsTrue(td.ContainsKey(3));
-			Assert.IsTrue(td.ContainsKey(4));
-			Assert.AreEqual("a", td[0]);
-			Assert.AreEqual("b2", td[1]);
-			int[] keys = td.Keys.ToArray();
-			Assert.AreEqual(5, keys.Length);
-			Assert.AreEqual(0, keys[0]);
-			Assert.AreEqual(1, keys[1]);
-			Assert.AreEqual(2, keys[2]);
-			Assert.AreEqual(3, keys[3]);
-			Assert.AreEqual(4, keys[4]);
-			td.Remove(3);
-			td.Remove(2);
-			Assert.AreEqual(3, td.Count);
-			td.Remove(1);
-			Assert.AreEqual(2, td.Count);
-			td.Remove(4);
-			td.Remove(0);
-			Assert.AreEqual(0, td.Count);
-			Assert.AreEqual(0, td.Keys.Count);
-		}
-	}
+    /// <summary>
+    /// This class contains tests for LinkedHashDictionary
+    /// </summary>
+    /// <author>Zbynek Vyskovsky, kvr@centrum.cz</author>
+    [TestFixture]
+    public class LinkedHashDictionaryTest
+    {
+        private IDictionary<int, string> _testDictionary;
+
+        [SetUp]
+        public void Setup()
+        {
+            _testDictionary = new LinkedHashDictionary<int, string>();
+            _testDictionary.Add(0, "a");
+            _testDictionary.Add(1, "b");
+            _testDictionary.Add(2, "c");
+            _testDictionary.Add(3, "d");
+            _testDictionary.Add(4, "e");
+        }
+
+        [Test]
+        public void CanAddEntries()
+        {
+            Assert.IsTrue(_testDictionary.ContainsKey(0));
+            Assert.IsTrue(_testDictionary.ContainsKey(1));
+            Assert.IsTrue(_testDictionary.ContainsKey(2));
+            Assert.IsTrue(_testDictionary.ContainsKey(3));
+            Assert.IsTrue(_testDictionary.ContainsKey(4));
+        }
+
+        [Test]
+        public void AddAtExistingIndexOverwritesEntry()
+        {
+            _testDictionary.Add(1, "b2");
+            Assert.AreEqual("b2", _testDictionary[1]);
+        }
+
+        [Test]
+        public void CanAccessValuesByIndex()
+        {
+            Assert.AreEqual("a", _testDictionary[0]);
+            Assert.AreEqual("b", _testDictionary[1]);
+        }
+
+        /// <summary>
+        /// Determines whether this instance [can retreive keys].
+        /// </summary>
+        [Test]
+        public void CanRetreiveKeys()
+        {
+            int[] keys = _testDictionary.Keys.ToArray();
+            Assert.AreEqual(5, keys.Length);
+            Assert.AreEqual(0, keys[0]);
+            Assert.AreEqual(1, keys[1]);
+            Assert.AreEqual(2, keys[2]);
+            Assert.AreEqual(3, keys[3]);
+            Assert.AreEqual(4, keys[4]);
+        }
+
+        [Test]
+        public void CanRemoveEntriesByIndex()
+        {
+            _testDictionary.Remove(3);
+            _testDictionary.Remove(2);
+            Assert.AreEqual(3, _testDictionary.Count);
+
+            _testDictionary.Remove(1);
+            Assert.AreEqual(2, _testDictionary.Count);
+
+            _testDictionary.Remove(4);
+            _testDictionary.Remove(0);
+            Assert.AreEqual(0, _testDictionary.Count);
+            Assert.AreEqual(0, _testDictionary.Keys.Count);
+        }
+        
+    }
 }
