@@ -635,5 +635,21 @@ namespace Spring.Objects.Factory.Config
             Assert.AreEqual(2, to.Computers.Count);
             Assert.IsTrue(to.PeriodicTable.Contains("C"));
         }
+
+        [Test]
+        public void WithMultipleXml_MultiplePropertyPlaceholderConfigurersAndOrder_CanReplaceValueFromOtherXml()
+        {
+            var context =
+                new XmlApplicationContext(
+                    new[]
+                        {
+                            "file://Spring/Objects/Factory/Config/FirstPropertyPlaceholderConfigurer.xml",
+                            "file://Spring/Objects/Factory/Config/SecondPropertyPlaceholderConfigurer.xml"
+                        });
+
+            var testObject = context.GetObject<TestObject>("testObject");
+
+            Assert.AreEqual("correct_name", testObject.Name);
+        }
     }
 }

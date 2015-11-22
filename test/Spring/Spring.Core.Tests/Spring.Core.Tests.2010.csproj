@@ -872,6 +872,8 @@
     <Content Include="Data\Spring\Context\Support\SPRNET-192.xml" />
     <Content Include="Data\Spring\Objects\Factory\concurrent.xml" />
     <Content Include="Data\Spring\Objects\Factory\Config\AnotherDaoConfig.xml" />
+    <Content Include="Data\Spring\Objects\Factory\Config\SecondPropertyPlaceholderConfigurer.xml" />
+    <Content Include="Data\Spring\Objects\Factory\Config\FirstPropertyPlaceholderConfigurer.xml" />
     <Content Include="Data\Spring\Objects\Factory\Config\PPCWithTypesTests.xml" />
     <Content Include="Data\Spring\Objects\Factory\Config\TypeAliases.xml" />
     <Content Include="Data\Spring\Objects\Factory\Config\DaoConfig.xml" />
