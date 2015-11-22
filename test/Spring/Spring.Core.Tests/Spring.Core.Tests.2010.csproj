@@ -127,7 +127,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Collections\CaseInsensitiveHashtableTests.cs" />
-    <Compile Include="Collections\LinkedHashDictionaryTest.cs" />
+    <Compile Include="Collections\Generic\ReadOnlyDictionaryTests.cs" />
+    <Compile Include="Collections\Generic\LinkedHashDictionaryTest.cs" />
     <Compile Include="Collections\HashedSetTests.cs">
       <SubType>Code</SubType>
     </Compile>

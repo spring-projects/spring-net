@@ -25,113 +25,122 @@ using System.Text;
 
 namespace Spring.Collections.Generic
 {
-	/// <summary>
-	/// IDictionary implementation which preserves the order of inserted items.
-	/// </summary>
-	/// <author>Zbynek Vyskovsky, kvr@centrum.cz</author>
-	public class LinkedHashDictionary<TKey, TValue>: AbstractDictionary<TKey, TValue>
-	{
-		public override void			Add(TKey key, TValue value)
-		{
-			Node node;
-			if (items.TryGetValue(key, out node)) {
-				node.value = value;
-			}
-			else {
-				node = new Node();
-				node.key = key;
-				node.value = value;
-				if ((node.previousLinked = linkedTail) != null)
-					node.previousLinked.nextLinked = node;
-				node.nextLinked = null;
-				linkedTail = node;
-				if (linkedHead == null)
-					linkedHead = node;
-				items.Add(key, node);
-			}
-		}
+    /// <summary>
+    /// IDictionary implementation which preserves the order of inserted items.
+    /// </summary>
+    /// <author>Zbynek Vyskovsky, kvr@centrum.cz</author>
+    public class LinkedHashDictionary<TKey, TValue> : AbstractDictionary<TKey, TValue>
+    {
+        public override void Add(TKey key, TValue value)
+        {
+            Node node;
+            if (items.TryGetValue(key, out node))
+            {
+                node.value = value;
+            }
+            else
+            {
+                node = new Node();
+                node.key = key;
+                node.value = value;
+                if ((node.previousLinked = linkedTail) != null)
+                    node.previousLinked.nextLinked = node;
+                node.nextLinked = null;
+                linkedTail = node;
+                if (linkedHead == null)
+                    linkedHead = node;
+                items.Add(key, node);
+            }
+        }
 
-		public override bool			ContainsKey(TKey key)
-		{
-			return items.ContainsKey(key);
-		}
+        public override bool ContainsKey(TKey key)
+        {
+            return items.ContainsKey(key);
+        }
 
-		public override bool			Remove(TKey key)
-		{
-			Node node;
-			if (!items.TryGetValue(key, out node))
-				return false;
+        public override bool Remove(TKey key)
+        {
+            Node node;
+            if (!items.TryGetValue(key, out node))
+                return false;
 
-			if (node.previousLinked != null) {
-				node.previousLinked.nextLinked = node.nextLinked;
-			}
-			else {
-				linkedHead = node.nextLinked;
-			}
+            if (node.previousLinked != null)
+            {
+                node.previousLinked.nextLinked = node.nextLinked;
+            }
+            else
+            {
+                linkedHead = node.nextLinked;
+            }
 
-			if (node.nextLinked != null) {
-				node.nextLinked.previousLinked = node.previousLinked;
-			}
-			else {
-				linkedTail = node.previousLinked;
-			}
-			
-			return true;
-		}
+            if (node.nextLinked != null)
+            {
+                node.nextLinked.previousLinked = node.previousLinked;
+            }
+            else
+            {
+                linkedTail = node.previousLinked;
+            }
 
-		public override bool			TryGetValue(TKey key, out TValue value)
-		{
-			Node node;
-			if (!items.TryGetValue(key, out node)) {
-				value = default(TValue);
-				return false;
-			}
-			value = node.value;
-			return true;
-		}
+            items.Remove(key);
 
-		public override void			Clear()
-		{
-			items.Clear();
-			linkedHead = null;
-			linkedTail = null;
-		}
+            return true;
+        }
 
-		public override bool			Remove(KeyValuePair<TKey, TValue> item)
-		{
-			Node node;
-			if (!items.TryGetValue(item.Key, out node))
-				return false;
-			if (!node.value.Equals(item.Value))
-				return false;
-			return Remove(item.Key);
-		}
+        public override bool TryGetValue(TKey key, out TValue value)
+        {
+            Node node;
+            if (!items.TryGetValue(key, out node))
+            {
+                value = default(TValue);
+                return false;
+            }
+            value = node.value;
+            return true;
+        }
 
-		public override int		Count
-		{
-			get { return items.Count; }
-		}
+        public override void Clear()
+        {
+            items.Clear();
+            linkedHead = null;
+            linkedTail = null;
+        }
 
-		protected class Node
-		{
-			public TKey			key;
-			public TValue			value;
+        public override bool Remove(KeyValuePair<TKey, TValue> item)
+        {
+            Node node;
+            if (!items.TryGetValue(item.Key, out node))
+                return false;
+            if (!node.value.Equals(item.Value))
+                return false;
+            return Remove(item.Key);
+        }
 
-			public Node			previousLinked;
-			public Node			nextLinked;
-		}
+        public override int Count
+        {
+            get { return items.Count; }
+        }
 
-		protected override IEnumerable<KeyValuePair<TKey, TValue>> EntriesSet()
-		{
-			List<KeyValuePair<TKey, TValue>> entries = new List<KeyValuePair<TKey, TValue>>();
-			for (Node node = linkedHead; node != null; node = node.nextLinked)
-				entries.Add(new KeyValuePair<TKey, TValue>(node.key, node.value));
-			return entries;
-		}
+        protected class Node
+        {
+            public TKey key;
+            public TValue value;
 
-		private Node				linkedHead = null;
-		private Node				linkedTail = null;
+            public Node previousLinked;
+            public Node nextLinked;
+        }
 
-		private Dictionary<TKey, Node>		items = new Dictionary<TKey, Node>();
-	}
+        protected override IEnumerable<KeyValuePair<TKey, TValue>> EntriesSet()
+        {
+            List<KeyValuePair<TKey, TValue>> entries = new List<KeyValuePair<TKey, TValue>>();
+            for (Node node = linkedHead; node != null; node = node.nextLinked)
+                entries.Add(new KeyValuePair<TKey, TValue>(node.key, node.value));
+            return entries;
+        }
+
+        private Node linkedHead = null;
+        private Node linkedTail = null;
+
+        private Dictionary<TKey, Node> items = new Dictionary<TKey, Node>();
+    }
 }
