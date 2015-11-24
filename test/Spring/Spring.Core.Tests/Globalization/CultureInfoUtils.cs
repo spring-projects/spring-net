@@ -20,6 +20,7 @@
 
 using System;
 using System.Globalization;
+using Microsoft.Win32;
 
 namespace Spring.Globalization
 {
@@ -43,10 +44,19 @@ namespace Spring.Globalization
         {
             foreach (CultureInfo ci in CultureInfo.GetCultures(CultureTypes.AllCultures))
             {
+                //address changes in 2006 (see blog posts above)
                 if (ci.Name.Equals("sr-Latn-CS"))
                 {
                     srLatn = "sr-Latn-CS";
                     srCyrl = "sr-Cyrl-CS";
+                    break;
+                }
+
+                //address changes introduced in Windows 10 "November 2015 Update" (build 10586)
+                if (ci.Name.Equals("sr-Latn-RS"))
+                {
+                    srLatn = "sr-Latn-RS";
+                    srCyrl = "sr-Cyrl-RS";
                     break;
                 }
             }
@@ -62,11 +72,48 @@ namespace Spring.Globalization
             get { return srLatn; }
         }
 
-        public static bool OperatingSystemIsLaterThanWindows7
+        public static bool OperatingSystemIsAfterWindows7
         {
             get { return Environment.OSVersion.Version.Major >= 6 && Environment.OSVersion.Version.Minor >= 2; }
         }
-        
+
+        public static bool OperatingSystemIsAfterWindows7AndBeforeWindows10Build10586
+        {
+            get { return OperatingSystemIsAfterWindows7 && !OperatingSystemIsAtLeastWindows10Build10586; }
+        }
+
+        public static bool OperatingSystemIsAtLeastWindows10Build10586
+        {
+            get
+            {
+                try
+                {
+                    var registryBuildNumberString = Registry.GetValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "CurrentBuildNumber", string.Empty) as string;
+
+                    //if null or empty, we coudn't find the value or it couldn't be cast to a string
+                    if (!string.IsNullOrEmpty(registryBuildNumberString))
+                    {
+                        int buildNumber;
+
+                        //if we can convert the value to an int...
+                        if (int.TryParse(registryBuildNumberString, out buildNumber))
+                        {
+                            //do the comparison
+                            return buildNumber >= 10586;
+                        }
+                    }
+                }
+                catch (Exception)
+                {
+                    //if anythign at all goes wrong, presume we're not on Windows 10 Build 10586 or later
+                    return false;
+                }
+
+                //if we get this far, we can't tell WTF is going on, so just return FALSE
+                return false;
+            }
+        }
+
         public static bool ClrIsVersion4OrLater
         {
             get { return Environment.Version.Major >= 4; }
