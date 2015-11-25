@@ -133,9 +133,7 @@
     </Compile>
     <Compile Include="Web\Services\WebServiceExporterTests.cs" />
     <Compile Include="Web\Support\AbstractHandlerFactoryTests.cs" />
-    <Compile Include="Web\Support\ControlInterceptionTests.cs">
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
+    <Compile Include="Web\Support\ControlInterceptionTests.cs" />
     <Compile Include="Web\Support\HandlerMapTests.cs" />
     <Compile Include="Web\Support\LocalResourceManagerTests.cs" />
     <Compile Include="Web\Support\MimeMediaTypeTests.cs" />
