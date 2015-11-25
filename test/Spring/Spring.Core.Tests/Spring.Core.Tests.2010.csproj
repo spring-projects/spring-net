@@ -955,6 +955,9 @@
     <Content Include="Spring.Core.Tests.dll.config" />
     <EmbeddedResource Include="Resources\Spring.Context.Tests.de-AT.resx" />
     <EmbeddedResource Include="Resources\Spring.Context.Tests.de.resx" />
+    <EmbeddedResource Include="Resources\Spring.Context.Tests.sr-Cyrl-RS.resx">
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Resources\Tesla.sr-Cyrl-RS.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>

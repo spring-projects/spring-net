@@ -275,21 +275,10 @@ namespace Spring.Context.Support
                                 msgSource.GetMessage("MyMessage", new CultureInfo(CultureInfoUtils.SerbianLatinCultureName), new object[] { "Spring", ".NET" }), "message not as expected");
 
 
-                if (CultureInfoUtils.OperatingSystemIsAtLeastWindows10Build10586)
-                {
-                    Assert.AreEqual("Ovo je Spring.NET",
+                Assert.AreEqual("Ово је Spring.NET",
                                 msgSource.GetMessage("MyMessage", new CultureInfo(CultureInfoUtils.SerbianCyrillicCultureName),
                                                          new object[] { "Spring", ".NET" }), "message not as expected");
-
-                }
-                else
-                {
-                    Assert.AreEqual("Ово је Spring.NET",
-                                msgSource.GetMessage("MyMessage", new CultureInfo(CultureInfoUtils.SerbianCyrillicCultureName),
-                                                         new object[] { "Spring", ".NET" }), "message not as expected");
-                }
-
-
+                
                 Assert.AreEqual("Visual Studio voli Spring.NET",
                                 msgSource.GetMessage("MyNewMessage", new CultureInfo(CultureInfoUtils.SerbianCyrillicCultureName), new object[] { "Spring", ".NET" }), "message not as expected");
 
