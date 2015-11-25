@@ -128,7 +128,7 @@ namespace Spring.Globalization.Formatters
                 Assert.AreEqual(-1234.56, fmt.Parse("-1.234,56 din."));
             }
 
-            else if (CultureInfoUtils.OperatingSystemIsAtLeastWindows10Build10586)
+            else if (CultureInfoUtils.OperatingSystemIsAtLeastWindows10Build10586 && CultureInfoUtils.ClrIsVersion4OrLater)
             {
                 Assert.AreEqual(1234, fmt.Parse("1.234 RSD"));
                 Assert.AreEqual(-1234, fmt.Parse("-1.234 RSD"));
@@ -176,7 +176,7 @@ namespace Spring.Globalization.Formatters
             fmt.PositivePattern = 1;
             fmt.CurrencySymbol = "din";
 
-            if (CultureInfoUtils.OperatingSystemIsAtLeastWindows10Build10586)
+            if (CultureInfoUtils.OperatingSystemIsAtLeastWindows10Build10586 && CultureInfoUtils.ClrIsVersion4OrLater)
             {
                 Assert.AreEqual("1.234din", fmt.Format(1234));
                 Assert.AreEqual("1.235din", fmt.Format(1234.56));
