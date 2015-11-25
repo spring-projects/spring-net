@@ -274,9 +274,21 @@ namespace Spring.Context.Support
                 Assert.AreEqual("Ovo je Spring.NET",
                                 msgSource.GetMessage("MyMessage", new CultureInfo(CultureInfoUtils.SerbianLatinCultureName), new object[] { "Spring", ".NET" }), "message not as expected");
 
-                Assert.AreEqual("Ово је Spring.NET",
+
+                if (CultureInfoUtils.OperatingSystemIsAtLeastWindows10Build10586)
+                {
+                    Assert.AreEqual("Ovo je Spring.NET",
                                 msgSource.GetMessage("MyMessage", new CultureInfo(CultureInfoUtils.SerbianCyrillicCultureName),
                                                          new object[] { "Spring", ".NET" }), "message not as expected");
+
+                }
+                else
+                {
+                    Assert.AreEqual("Ово је Spring.NET",
+                                msgSource.GetMessage("MyMessage", new CultureInfo(CultureInfoUtils.SerbianCyrillicCultureName),
+                                                         new object[] { "Spring", ".NET" }), "message not as expected");
+                }
+
 
                 Assert.AreEqual("Visual Studio voli Spring.NET",
                                 msgSource.GetMessage("MyNewMessage", new CultureInfo(CultureInfoUtils.SerbianCyrillicCultureName), new object[] { "Spring", ".NET" }), "message not as expected");
@@ -417,7 +429,7 @@ namespace Spring.Context.Support
             //Repeat the test for the first resource manager
 
             Assert.AreEqual("This is Spring.NET",
-                            messageSource.GetMessage("MyMessage",  new CultureInfo("en"), new object[] { "Spring", ".NET" }), "message not as expected");
+                            messageSource.GetMessage("MyMessage", new CultureInfo("en"), new object[] { "Spring", ".NET" }), "message not as expected");
 
             //Now with the newly added one
             Assert.AreEqual("Hello Mr. Anderson",
