@@ -20,6 +20,7 @@
 #Tooling
 _ReSharper*/
 *.resharper
+*.sln.DotSettings
 [Tt]est[Rr]esult*
 
 #Project files
