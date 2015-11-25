@@ -104,6 +104,19 @@
 			</if>
 			-->
 		</if>
+		
+		<!-- Visual Studio (and more importantly, csc.exe) is incapable of compiling RESX files for e.g., Cultures not present on the OS + CLR version;
+		      this means that for us to have resource files availabel for each of the various OS + CLR combinations possible to support the right test
+			  assertions we need to manually compile each of the resource files external to the NANT csc task itself and manually copy the assemblied into
+			  their expected locations -->
+		<property name="resource.designator" value="sr-Cyrl-CS" />
+		<call target="compile-resource-files" />
+		
+		<property name="resource.designator" value="sr-Cyrl-RS" />
+		<call target="compile-resource-files" />
+		
+		<property name="resource.designator" value="sr-SP-Cyrl" />
+		<call target="compile-resource-files" />
 
 		<copy todir="${current.bin.dir}">
 			<fileset basedir="${project::get-base-directory()}/Data">
@@ -124,6 +137,25 @@
 
         </target>
 
+	<target name="compile-resource-files">
+		<if test="${framework::get-target-framework() != 'net-2.0'}">
+		  <mkdir dir="${current.bin.dir}/sr-SP-Cyrl"/>
+		  <copy file="Resources/Spring.Context.Tests.${resource.designator}.resx" todir="${current.bin.dir}/${resource.designator}"/>
+		  <resgen input="${current.bin.dir}/${resource.designator}/Spring.Context.Tests.${resource.designator}.resx" output="${current.bin.dir}/${resource.designator}/Spring.Resources.Spring.Context.Tests.${resource.designator}.resources" />
+		  <copy file="Resources/Tesla.${resource.designator}.resx" todir="${current.bin.dir}/${resource.designator}"/>
+		  <resgen input="${current.bin.dir}/${resource.designator}/Tesla.${resource.designator}.resx" output="${current.bin.dir}/${resource.designator}/Spring.Resources.Tesla.${resource.designator}.resources" />
+		  <al output="${current.bin.dir}/${resource.designator}/Spring.Core.Tests.resources.dll"
+			  target="lib"
+			  culture="${resource.designator}">
+			<sources>
+			  <include name="${current.bin.dir}/${resource.designator}/Spring.Resources.Spring.Context.Tests.${resource.designator}.resources"/>
+			  <include name="${current.bin.dir}/${resource.designator}/Spring.Resources.Tesla.${resource.designator}.resources" />
+			</sources>
+		  </al>
+		</if>
+	</target>
+		
+		
     <target name="test" depends="build">
         <!-- property name="test.assemblyname" value="${project::get-name()}" / -->
         <call target="common.run-tests" />
