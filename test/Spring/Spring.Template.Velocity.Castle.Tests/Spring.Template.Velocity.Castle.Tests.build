@@ -11,10 +11,10 @@
     -->
 	<include buildfile="${spring.basedir}/CopyLibToBinHelpers.include"/>
 	
-	<property name="nvelocity.lib.dir" value="${spring.basedir}/packages/Castle.NVelocity.1.1.1/lib/net35" overwrite="true"/>
+	<property name="nvelocity.lib.dir" value="${nuget.packages.dir}/Castle.NVelocity/1.1.1/lib/net35" overwrite="true"/>
 
 	<if test="${nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'net-4.5'}">
-		<property name="nvelocity.lib.dir" value="${spring.basedir}/packages/Castle.NVelocity.1.1.1/lib/net40" overwrite="true"/>
+		<property name="nvelocity.lib.dir" value="${nuget.packages.dir}/Castle.NVelocity/1.1.1/lib/net40" overwrite="true"/>
 	</if>
 
 	<target name="build">

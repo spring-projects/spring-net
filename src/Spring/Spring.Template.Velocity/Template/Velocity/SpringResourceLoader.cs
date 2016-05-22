@@ -92,8 +92,8 @@ namespace Spring.Template.Velocity {
         /// </summary>
         /// <param name="configuration">The ExtendedProperties representing the Velocity configuration.</param>
         public override void Init(ExtendedProperties configuration) {
-            resourceLoader = (IResourceLoader)rsvc.GetApplicationAttribute(SPRING_RESOURCE_LOADER);
-            string resourceLoaderPath = (string)rsvc.GetApplicationAttribute(SPRING_RESOURCE_LOADER_PATH);
+            resourceLoader = (IResourceLoader)runtimeServices.GetApplicationAttribute(SPRING_RESOURCE_LOADER);
+            string resourceLoaderPath = (string)runtimeServices.GetApplicationAttribute(SPRING_RESOURCE_LOADER_PATH);
             if (resourceLoader == null) {
                 throw new ArgumentException("'resourceLoader' application attribute must be present for SpringResourceLoader");
             }

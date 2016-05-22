@@ -35,10 +35,16 @@ Rebuilding Solutions using Nant and "solutions.build":
   <readregistry property="net35.install.dir" key="${reg.software.prefix}\NET Framework Setup\NDP\v3.5\InstallPath" hive="LocalMachine" failonerror="true"/>
   <readregistry property="net40.install.dir" key="${reg.software.prefix}\NET Framework Setup\NDP\v4\Full\InstallPath" hive="LocalMachine" failonerror="true"/>
 
+  <property name="msbuild.v12.path" value="C:\Program Files (x86)\MSBuild\12.0\Bin\MsBuild.exe" />
+  <property name="msbuild.v14.path" value="C:\Program Files (x86)\MSBuild\14.0\Bin\MsBuild.exe" />
   <property name="msbuild.exe" value="${net40.install.dir}\msbuild.exe"/>
-  <if test="${file::exists('C:\Program Files (x86)\MSBuild\12.0\Bin\MsBuild.exe')}">
-	<property name="msbuild.exe" value="C:\Program Files (x86)\MSBuild\12.0\Bin\MsBuild.exe" />
-	<echo message="Swithing to installed MSBuild at location ${msbuild.exe}" />
+  <if test="${file::exists(msbuild.v14.path)}">
+	<property name="msbuild.exe" value="${msbuild.v14.path}" />
+	<echo message="Switching to installed MSBuild at location ${msbuild.exe}" />
+  </if>
+  <if test="${file::exists(msbuild.v14.path) == false and file::exists(msbuild.v12.path)}">
+	<property name="msbuild.exe" value="${msbuild.v12.path}" />
+	<echo message="Switching to installed MSBuild at location ${msbuild.exe}" />
   </if>
   
   <property name="buildconfiguration" value="Debug" />
