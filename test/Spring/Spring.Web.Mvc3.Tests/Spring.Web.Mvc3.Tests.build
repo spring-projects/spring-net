@@ -15,7 +15,7 @@
 
 		<!--
 		<copy todir="${current.bin.dir}" flatten="true" overwrite="true">
-            <fileset basedir="${spring.basedir}/packages/">
+            <fileset basedir="${nuget.packages.dir}">
                 <include name="Microsoft.AspNet.Mvc.3.0.*/**/*.dll" />
             </fileset>
 		</copy>
@@ -52,7 +52,7 @@
             </resources>
             <references>
 				<lib>
-					<include name="${spring.basedir}/packages/Microsoft.AspNet.Mvc.3.0.20105.1/lib/net40" />
+					<include name="${nuget.packages.dir}/Microsoft.AspNet.Mvc/3.0.20105.1/lib/net40" />
 				</lib>
 				<include name="mscorlib.dll"/>
 				<include name="Microsoft.CSharp.dll"/>

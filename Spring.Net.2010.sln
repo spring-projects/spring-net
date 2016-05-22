@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.31101.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.25123.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{F04753EF-7A1B-4837-AB63-8C0821E8155D}"
 	ProjectSection(SolutionItems) = preProject
@@ -88,13 +88,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Web.Conversation.NHi
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Web.Conversation.NHibernate3.Tests.2010", "test\Spring\Spring.Web.Conversation.NHibernate3.Tests\Spring.Web.Conversation.NHibernate3.Tests.2010.csproj", "{C57B05EA-FD1A-40EC-BB60-D2E45AB1A86A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{79F495DF-83D6-435E-A20E-47800F6F8FE7}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Web.Mvc5.2010", "src\Spring\Spring.Web.Mvc5\Spring.Web.Mvc5.2010.csproj", "{39AAD7EA-2ED0-4E50-8D4D-C666EA9CBFE4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Web.Mvc5.Tests.2010", "test\Spring\Spring.Web.Mvc5.Tests\Spring.Web.Mvc5.Tests.2010.csproj", "{B9590252-6D58-4587-950C-475AB61FDBCF}"
@@ -108,6 +101,7 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Template.Velocity.Castle.2010", "src\Spring\Spring.Template.Velocity.Castle\Spring.Template.Velocity.Castle.2010.csproj", "{250601C0-A4AC-41FE-B484-51A9B0D5473D}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Template.Velocity.Castle.Tests.2010", "test\Spring\Spring.Template.Velocity.Castle.Tests\Spring.Template.Velocity.Castle.Tests.2010.csproj", "{8D6ED392-8A1F-41C0-A765-22CF384EDEA1}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate4.NestedTxSuspension.Integration.Tests", "test\Spring\Spring.Data.NHibernate4.NestedTxSuspension.Integration.Tests\Spring.Data.NHibernate4.NestedTxSuspension.Integration.Tests.csproj", "{DE276F7C-4564-49EC-AABC-B964EC3D1626}"
 EndProject
 Global
