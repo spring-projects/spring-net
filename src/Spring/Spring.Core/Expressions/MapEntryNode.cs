@@ -37,6 +37,7 @@ namespace Spring.Expressions
         public MapEntryNode()
         {}
 
+#if BINARY_SERIALIZATION
         /// <summary>
         /// Create a new instance from SerializationInfo
         /// </summary>
@@ -44,7 +45,8 @@ namespace Spring.Expressions
             : base(info, context)
         {
         }
-        
+#endif
+
         /// <summary>
         /// Creates new instance of the map entry defined by this node.
         /// </summary>

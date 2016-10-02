@@ -18,6 +18,8 @@
 
 #endregion
 
+#if !NETCORE
+
 using System;
 using System.Collections.Specialized;
 using System.Configuration;
@@ -109,7 +111,7 @@ namespace Spring.Objects.Factory.Config
                     InitVariables();
                 }
                 return CollectionUtils.Contains(variables.AllKeys, name);
-            }            
+            }
         }
 
         /// <summary>
@@ -131,15 +133,15 @@ namespace Spring.Objects.Factory.Config
                     InitVariables();
                 }
                 return variables.Get(name);
-            }            
+            }
         }
 
         /// <summary>
-        /// Initializes properties based on the specified 
+        /// Initializes properties based on the specified
         /// property file locations.
         /// </summary>
         protected virtual void InitVariables()
-        {            
+        {
             foreach (string sectionName in sectionNames)
             {
                 object section = ConfigurationUtils.GetSection(sectionName);
@@ -164,3 +166,4 @@ namespace Spring.Objects.Factory.Config
         }
     }
 }
+#endif

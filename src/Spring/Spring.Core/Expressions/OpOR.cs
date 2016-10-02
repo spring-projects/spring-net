@@ -46,14 +46,15 @@ namespace Spring.Expressions
         {
         }
 
-        /// <summary>
+#if BINARY_SERIALIZATION        /// <summary>
         /// Create a new instance from SerializationInfo
         /// </summary>
         protected OpOR(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
         }
-        
+#endif
+
         /// <summary>
         /// Returns a value for the logical OR operator node.
         /// </summary>
@@ -63,7 +64,7 @@ namespace Spring.Expressions
         protected override object Get(object context, EvaluationContext evalContext)
         {
             object l = GetLeftValue(context, evalContext);
-            
+
             if (NumberUtils.IsInteger(l))
             {
                 object r = GetRightValue(context, evalContext);
@@ -86,7 +87,7 @@ namespace Spring.Expressions
                 }
             }
 
-            return Convert.ToBoolean(l) || 
+            return Convert.ToBoolean(l) ||
                 Convert.ToBoolean(GetRightValue(context, evalContext));
         }
     }

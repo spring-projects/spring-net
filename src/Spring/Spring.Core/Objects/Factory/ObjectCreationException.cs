@@ -22,8 +22,10 @@
 
 using System;
 using System.Globalization;
+#if BINARY_SERIALIZATION
 using System.Runtime.Serialization;
 using System.Security.Permissions;
+#endif
 using System.Text;
 using Spring.Core;
 using Spring.Util;
@@ -51,7 +53,7 @@ namespace Spring.Objects.Factory
 		}
 
 		/// <summary>
-		/// Creates a new instance of the 
+		/// Creates a new instance of the
 		/// <see cref="Spring.Objects.Factory.ObjectCreationException"/> class.
 		/// </summary>
 		/// <param name="message">
@@ -63,7 +65,7 @@ namespace Spring.Objects.Factory
 		}
 
 		/// <summary>
-		/// Creates a new instance of the 
+		/// Creates a new instance of the
 		/// <see cref="Spring.Objects.Factory.ObjectCreationException"/> class.
 		/// </summary>
 		/// <param name="message">
@@ -78,7 +80,7 @@ namespace Spring.Objects.Factory
 		}
 
         /// <summary>
-        /// Creates a new instance of the 
+        /// Creates a new instance of the
         /// <see cref="Spring.Objects.Factory.ObjectCreationException"/> class.
         /// </summary>
         /// <param name="message">
@@ -93,7 +95,7 @@ namespace Spring.Objects.Factory
         }
 
 		/// <summary>
-		/// Creates a new instance of the 
+		/// Creates a new instance of the
 		/// <see cref="Spring.Objects.Factory.ObjectCreationException"/> class.
 		/// </summary>
 		/// <param name="message">
@@ -112,7 +114,7 @@ namespace Spring.Objects.Factory
 		}
 
 		/// <summary>
-		/// Creates a new instance of the 
+		/// Creates a new instance of the
 		/// <see cref="Spring.Objects.Factory.ObjectCreationException"/> class.
 		/// </summary>
 		/// <param name="resourceDescription">
@@ -133,7 +135,7 @@ namespace Spring.Objects.Factory
 		}
 
 		/// <summary>
-		/// Creates a new instance of the 
+		/// Creates a new instance of the
 		/// <see cref="Spring.Objects.Factory.ObjectCreationException"/> class.
 		/// </summary>
 		/// <param name="resourceDescription">
@@ -159,18 +161,19 @@ namespace Spring.Objects.Factory
             _objectName = objectName;
 		}
 
-		/// <summary>
-		/// Creates a new instance of the 
-		/// <see cref="Spring.Objects.Factory.ObjectCreationException"/> class.
-		/// </summary>
-		/// <param name="info">
-		/// The <see cref="System.Runtime.Serialization.SerializationInfo"/>
-		/// that holds the serialized object data about the exception being thrown.
-		/// </param>
-		/// <param name="context">
-		/// The <see cref="System.Runtime.Serialization.StreamingContext"/>
-		/// that contains contextual information about the source or destination.
-		/// </param>
+#if BINARY_SERIALIZATION
+        /// <summary>
+        /// Creates a new instance of the
+        /// <see cref="Spring.Objects.Factory.ObjectCreationException"/> class.
+        /// </summary>
+        /// <param name="info">
+        /// The <see cref="System.Runtime.Serialization.SerializationInfo"/>
+        /// that holds the serialized object data about the exception being thrown.
+        /// </param>
+        /// <param name="context">
+        /// The <see cref="System.Runtime.Serialization.StreamingContext"/>
+        /// that contains contextual information about the source or destination.
+        /// </param>
 		protected ObjectCreationException(
 			SerializationInfo info, StreamingContext context)
 			: base(info, context)
@@ -201,11 +204,12 @@ namespace Spring.Objects.Factory
 			info.AddValue("_objectName", ObjectName);
 			info.AddValue("_callStack", _callStack);
 		}
+#endif
 
-		/// <summary>
-		/// The name of the object that triggered the exception (if any).
-		/// </summary>
-		public string ObjectName
+        /// <summary>
+        /// The name of the object that triggered the exception (if any).
+        /// </summary>
+        public string ObjectName
 		{
 			get { return _objectName; }
 		}
@@ -243,12 +247,12 @@ namespace Spring.Objects.Factory
 			if (StringUtils.IsNullOrEmpty(callStack))
 			{
 				return StringUtils.IsNullOrEmpty(resourceDescription) ?
-					string.Format(						
+					string.Format(
 						"Error creating object with name '{0}' : {1}",
                         objectName,
 						message)
 					:
-					string.Format(						
+					string.Format(
 						"Error creating object with name '{0}' defined in '{1}' : {2}",
                         objectName,
 						resourceDescription,

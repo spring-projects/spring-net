@@ -12,7 +12,7 @@ namespace Spring.Expressions
     /// This class is only required to enable serialization of parsed Spring expressions since antlr.CommonAST
     /// unfortunately is not marked as [Serializable].<br/>
     /// <br/>
-    /// <b>Note:</b>Since SpringAST implements <see cref="ISerializable"/>, deriving classes 
+    /// <b>Note:</b>Since SpringAST implements <see cref="ISerializable"/>, deriving classes
     /// have to explicitely override <see cref="GetObjectData"/> if they need to persist additional
     /// data during serialization.
     /// </remarks>
@@ -125,6 +125,7 @@ namespace Spring.Expressions
 
         #region ISerializable Implementation
 
+#if BINARY_SERIALIZATION
         /// <summary>
         /// Create a new instance from SerializationInfo
         /// </summary>
@@ -146,7 +147,8 @@ namespace Spring.Expressions
             info.AddValue("ttype", this.Type, typeof(int));
             info.AddValue("text", this.Text, typeof(string));
         }
-        
+#endif
+
         #endregion
     }
 }

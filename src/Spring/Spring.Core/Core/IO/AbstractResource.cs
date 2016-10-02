@@ -274,8 +274,8 @@ namespace Spring.Core.IO
                     try
                     {
                         Stream inputStream = InputStream;
-                        inputStream.Close();
-                        return true;                        
+                        inputStream.Dispose();
+                        return true;
                     } catch (Exception)
                     {
                         return false;
@@ -397,7 +397,7 @@ namespace Spring.Core.IO
 
         /// <summary>
         /// Serves as a hash function for a particular type, suitable for use
-        /// in hashing algorithms and data structures like a hash table. 
+        /// in hashing algorithms and data structures like a hash table.
         /// </summary>
         /// <remarks>
         /// <p>
@@ -422,7 +422,7 @@ namespace Spring.Core.IO
         {
             return null;
         }
-                
+
         /// <summary>
         /// The ResourceLoader to be used for resolving relative resources
         /// </summary>
@@ -430,7 +430,7 @@ namespace Spring.Core.IO
         {
             return new ConfigurableResourceLoader();
         }
-        
+
         /// <summary>
         /// Does this <see cref="Spring.Core.IO.IResource"/> support relative
         /// resource retrieval?
@@ -537,7 +537,7 @@ namespace Spring.Core.IO
         /// The name of the resource to test.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if resource name is relative; 
+        /// <see langword="true"/> if resource name is relative;
         /// otherwise <see langword="false"/>.
         /// </returns>
         protected virtual bool IsRelativeResource(string resourceName)
@@ -577,7 +577,7 @@ namespace Spring.Core.IO
         ///     </item>
         ///     <item>
         ///     If the <paramref name="resourceName"/> starts with '.' or a
-        ///     letter, a new path is appended to the current 
+        ///     letter, a new path is appended to the current
         ///     <see cref="Spring.Core.IO.AbstractResource.ResourcePath"/> of
         ///     this resource.
         ///     </item>
@@ -604,7 +604,7 @@ namespace Spring.Core.IO
 
             // try to create fully qualified resource...
             IResourceLoader loader = GetResourceLoader();
-            
+
             if (ConfigurableResourceLoader.HasProtocol(resourceName))
             {
                 IResource resource = loader.GetResource(resourceName);
@@ -624,7 +624,7 @@ namespace Spring.Core.IO
             {
                 fullResourceName.Append(Protocol).Append(ConfigurableResourceLoader.ProtocolSeparator);
             }
-            
+
             if (!IsRelativeResource(resourceName))
             {
                 fullResourceName.Append(resourceName);
@@ -654,14 +654,14 @@ namespace Spring.Core.IO
             }
 
             string resultResourceName = fullResourceName.ToString();
-            
+
             if (!ConfigurableResourceLoader.HasProtocol( resultResourceName ))
             {
                 // give derived resource classes a chance to create an instance on their own
                 IResource resultResource = CreateResourceInstance( resultResourceName );
                 if (resultResource != null) return resultResource;
             }
-            
+
             // create resource instance using default loader
             return loader.GetResource(resultResourceName);
         }
@@ -701,7 +701,7 @@ namespace Spring.Core.IO
                 }
                 return path.ToString();
             }
-            else if (relativePath.StartsWith("/")) // relative to root 
+            else if (relativePath.StartsWith("/")) // relative to root
             {
                 if (relativePath.Length > 1)
                 {

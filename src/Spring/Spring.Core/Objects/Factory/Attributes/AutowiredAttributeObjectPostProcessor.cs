@@ -39,25 +39,25 @@ namespace Spring.Objects.Factory.Attributes
     /// that autowires annotated fields, properties and arbitrary config methods.
     /// Such members to be injected are detected through an attribute: by default,
     /// Spring's <see cref="AutowiredAttribute"/>.
-    /// 
+    ///
     /// Only one constructor (at max) of any given bean class may carry this
-    /// annotation with the 'required' parameter set to <code>true</code>, 
-    /// indicating <i>the</i> constructor to autowire when used as a Spring bean. 
-    /// If multiple <i>non-required</i> constructors carry the annotation, they 
-    /// will be considered as candidates for autowiring. The constructor with 
+    /// annotation with the 'required' parameter set to <code>true</code>,
+    /// indicating <i>the</i> constructor to autowire when used as a Spring bean.
+    /// If multiple <i>non-required</i> constructors carry the annotation, they
+    /// will be considered as candidates for autowiring. The constructor with
     /// the greatest number of dependencies that can be satisfied by matching
     /// beans in the Spring container will be chosen. If none of the candidates
     /// can be satisfied, then a default constructor (if present) will be used.
     /// An annotated constructor does not have to be public.
-    /// 
+    ///
     /// Fields are injected right after construction of a bean, before any
     /// config methods are invoked. Such a config field does not have to be public.
-    /// 
+    ///
     /// Config methods may have an arbitrary name and any number of arguments; each of
     /// those arguments will be autowired with a matching bean in the Spring container.
     /// Bean property setter methods are effectively just a special case of such a
     /// general config method. Config methods do not have to be public.
-    /// 
+    ///
     /// Note: A default AutowiredAttributeObjectPostProcessor will be registered
     /// by the "context:annotation-config" and "context:component-scan" XML tags.
     /// Remove or turn off the default annotation configuration there if you intend
@@ -136,7 +136,7 @@ namespace Spring.Objects.Factory.Attributes
 
         /// <summary>
         /// Create a new instance of an Autowire Post Processor
-        /// with standard attributes of <see cref="AutowiredAttribute"/> 
+        /// with standard attributes of <see cref="AutowiredAttribute"/>
         /// and <see cref="ValueAttribute"/>
         /// </summary>
         public AutowiredAttributeObjectPostProcessor()
@@ -173,8 +173,7 @@ namespace Spring.Objects.Factory.Attributes
                         ConstructorInfo defaultConstructor = null;
                         foreach (var candidate in rawCandidates)
                         {
-                            AutowiredAttribute attr =
-                                Attribute.GetCustomAttribute(candidate, typeof (AutowiredAttribute)) as AutowiredAttribute;
+                            AutowiredAttribute attr = candidate.GetCustomAttribute(typeof (AutowiredAttribute)) as AutowiredAttribute;
                             if (attr != null)
                             {
                                 if (requiredConstructor != null)
@@ -262,7 +261,7 @@ namespace Spring.Objects.Factory.Attributes
         /// <param name="pis"></param>
         /// <param name="objectInstance"></param>
         /// <param name="objectName">Name of the object.</param>
-        /// <returns>The actual property values to apply to the given object (can be the 
+        /// <returns>The actual property values to apply to the given object (can be the
         /// passed-in PropertyValues instances0 or null to skip property population.</returns>
         public override IPropertyValues PostProcessPropertyValues(IPropertyValues pvs, IList<PropertyInfo> pis,
             object objectInstance, string objectName)
@@ -286,7 +285,7 @@ namespace Spring.Objects.Factory.Attributes
             {
                 return metadata;
             }
-            
+
             lock (injectionMetadataCache)
             {
                 if (!injectionMetadataCache.TryGetValue(objectType, out metadata))
@@ -313,7 +312,7 @@ namespace Spring.Objects.Factory.Attributes
                                                      BindingFlags.Instance))
                     {
                         var required = true;
-                        var attr = Attribute.GetCustomAttribute(property, autowiredType);
+                        var attr = property.GetCustomAttribute(autowiredType);
                         if (attr is AutowiredAttribute)
                         {
                             required = ((AutowiredAttribute) attr).Required;
@@ -328,7 +327,7 @@ namespace Spring.Objects.Factory.Attributes
                             objectType.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance))
                     {
                         var required = true;
-                        var attr = Attribute.GetCustomAttribute(field, autowiredType);
+                        var attr = field.GetCustomAttribute(autowiredType);
                         if (attr is AutowiredAttribute)
                         {
                             required = ((AutowiredAttribute) attr).Required;
@@ -343,7 +342,7 @@ namespace Spring.Objects.Factory.Attributes
                             objectType.GetMethods(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance))
                     {
                         var required = true;
-                        var attr = Attribute.GetCustomAttribute(method, autowiredType);
+                        var attr = method.GetCustomAttribute(autowiredType);
                         if (attr is AutowiredAttribute)
                         {
                             required = ((AutowiredAttribute) attr).Required;
@@ -367,7 +366,7 @@ namespace Spring.Objects.Factory.Attributes
                     }
                     elements.InsertRange(0, currElements);
                 }
-                objectType = objectType.BaseType;
+                objectType = objectType.GetTypeInfo().BaseType;
             } while (objectType != null && objectType != typeof (Object));
 
             return new InjectionMetadata(objectType, elements);

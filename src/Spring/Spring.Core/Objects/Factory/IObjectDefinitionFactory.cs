@@ -40,7 +40,6 @@ namespace Spring.Objects.Factory.Support
     /// <author>Aleksandar Seovic</author>
     public interface IObjectDefinitionFactory
     {
-
         /// <summary>
         /// Factory style method for getting concrete
         /// <see cref="IConfigurableObjectDefinition"/>
@@ -50,18 +49,22 @@ namespace Spring.Objects.Factory.Support
         /// The FullName of the <see cref="System.Type"/> of the defined object.
         /// </param>
         /// <param name="parent">The name of the parent object definition (if any).</param>
+#if APPDOMAINS
         /// <param name="domain">
         /// The <see cref="System.AppDomain"/> against which any class names
         /// will be resolved into <see cref="System.Type"/> instances.  It can be null to register the
         /// object class just by name.
         /// </param>
+#endif
         /// <returns>
         /// An
         /// <see cref="Spring.Objects.Factory.Support.AbstractObjectDefinition"/>
         /// instance.
         /// </returns>
-        AbstractObjectDefinition CreateObjectDefinition(string typeName, string parent, AppDomain domain);
-
-
+        AbstractObjectDefinition CreateObjectDefinition(string typeName, string parent
+#if APPDOMAINS
+            , AppDomain domain
+#endif
+        );
     }
 }

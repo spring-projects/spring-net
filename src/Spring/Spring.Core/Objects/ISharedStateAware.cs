@@ -21,25 +21,24 @@
 #region Imports
 
 using System.Collections;
-using System.Web;
 
 #endregion
 
 namespace Spring.Objects
 {
     /// <summary>
-    /// This interface should be implemented by classes that want to 
+    /// This interface should be implemented by classes that want to
     /// have access to the shared state.
     /// </summary>
     /// <remarks>
     /// <p>
     /// Shared state is very useful if you have data that needs to be shared by all instances
-    /// of e.g. the same webform (or other <c>IHttpHandler</c>s). 
+    /// of e.g. the same webform (or other <c>IHttpHandler</c>s).
     /// </p>
     /// <p>
-    /// For example, <c>Spring.Web.UI.Page</c> class implements this interface, which allows  
-    /// each page derived from it to cache localizalization resources and parsed data binding 
-    /// expressions only once and then reuse the cached values, regardless of how many instances 
+    /// For example, <c>Spring.Web.UI.Page</c> class implements this interface, which allows
+    /// each page derived from it to cache localizalization resources and parsed data binding
+    /// expressions only once and then reuse the cached values, regardless of how many instances
     /// of the page are created.
     /// </p>
     /// </remarks>

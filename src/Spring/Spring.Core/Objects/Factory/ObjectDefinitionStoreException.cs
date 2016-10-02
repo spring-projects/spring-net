@@ -19,8 +19,10 @@
 #endregion
 
 using System;
+#if BINARY_SERIALIZATION
 using System.Runtime.Serialization;
 using System.Security.Permissions;
+#endif
 using Spring.Core.IO;
 
 namespace Spring.Objects.Factory
@@ -186,6 +188,7 @@ namespace Spring.Objects.Factory
         {
         }
 
+#if BINARY_SERIALIZATION
         /// <summary>
         /// Creates a new instance of the ObjectDefinitionStoreException class.
         /// </summary>
@@ -226,6 +229,7 @@ namespace Spring.Objects.Factory
             info.AddValue("_objectName", ObjectName);
         }
 
+#endif
         /// <summary>
         /// The name of the object that triggered the exception (if any).
         /// </summary>

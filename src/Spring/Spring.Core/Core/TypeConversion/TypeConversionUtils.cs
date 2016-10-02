@@ -92,7 +92,7 @@ namespace Spring.Core.TypeConversion
                     }
                 }
                 // if required type is some ISet<T>, convert all the elements
-                if (requiredType != null && requiredType.IsGenericType && TypeImplementsGenericInterface(requiredType, typeof(Spring.Collections.Generic.ISet<>)))
+                if (requiredType != null && requiredType.GetTypeInfo().IsGenericType && TypeImplementsGenericInterface(requiredType, typeof(Spring.Collections.Generic.ISet<>)))
                 {
                     // convert individual elements to array elements
                     Type componentType = requiredType.GetGenericArguments()[0];
@@ -104,7 +104,7 @@ namespace Spring.Core.TypeConversion
                 }
 
                 // if required type is some IList<T>, convert all the elements
-                if (requiredType != null && requiredType.IsGenericType && TypeImplementsGenericInterface(requiredType, typeof(IList<>)))
+                if (requiredType != null && requiredType.GetTypeInfo().IsGenericType && TypeImplementsGenericInterface(requiredType, typeof(IList<>)))
                 {
                     // convert individual elements to array elements
                     Type componentType = requiredType.GetGenericArguments()[0];
@@ -116,7 +116,7 @@ namespace Spring.Core.TypeConversion
                 }
 
                 // if required type is some IDictionary<K,V>, convert all the elements
-                if (requiredType != null && requiredType.IsGenericType && TypeImplementsGenericInterface(requiredType, typeof(IDictionary<,>)))
+                if (requiredType != null && requiredType.GetTypeInfo().IsGenericType && TypeImplementsGenericInterface(requiredType, typeof(IDictionary<,>)))
                 {
                     Type[] typeParameters = requiredType.GetGenericArguments();
                     Type keyType = typeParameters[0];
@@ -143,7 +143,7 @@ namespace Spring.Core.TypeConversion
                 }
 
                 // if required type is some IEnumerable<T>, convert all the elements
-                if (requiredType != null && requiredType.IsGenericType && TypeImplementsGenericInterface(requiredType, typeof(IEnumerable<>)))
+                if (requiredType != null && requiredType.GetTypeInfo().IsGenericType && TypeImplementsGenericInterface(requiredType, typeof(IEnumerable<>)))
                 {
                     // convert individual elements to array elements
                     Type componentType = requiredType.GetGenericArguments()[0];
@@ -183,7 +183,7 @@ namespace Spring.Core.TypeConversion
                         {
                             // look if it's an enum
                             if (requiredType != null
-                                && requiredType.IsEnum
+                                && requiredType.GetTypeInfo().IsEnum
                                 && (!(newValue is float)
                                     && (!(newValue is double))))
                             {
@@ -272,12 +272,14 @@ namespace Spring.Core.TypeConversion
 
         private static bool IsAssignableFrom(object newValue, Type requiredType)
         {
+#if REMOTING
             if (newValue is MarshalByRefObject)
             {
-                //TODO see what type of type checking can be done.  May need to 
+                //TODO see what type of type checking can be done.  May need to
                 //preserve information when proxy was created by SaoServiceExporter.
                 return true;
             }
+#endif
             if (requiredType == null)
             {
                 return false;
@@ -310,12 +312,12 @@ namespace Spring.Core.TypeConversion
         /// <returns><see lang="true" /> if a match, else <see lang="false"/></returns>
         private static bool TypeImplementsGenericInterface(Type candidateType, Type matchingInterface)
         {
-            if (!matchingInterface.IsInterface)
+            if (!matchingInterface.GetTypeInfo().IsInterface)
             {
                 throw new ArgumentException("matchingInterface Type must be an Interface Type", "matchingInterface");
             }
 
-            if (candidateType.IsInterface && IsMatchingGenericInterface(candidateType, matchingInterface))
+            if (candidateType.GetTypeInfo().IsInterface && IsMatchingGenericInterface(candidateType, matchingInterface))
             {
                 return true;
             }
@@ -336,7 +338,7 @@ namespace Spring.Core.TypeConversion
 
         private static bool IsMatchingGenericInterface(Type candidateInterfaceType, Type matchingGenericInterface)
         {
-            return candidateInterfaceType.IsGenericType && candidateInterfaceType.GetGenericTypeDefinition() == matchingGenericInterface;
+            return candidateInterfaceType.GetTypeInfo().IsGenericType && candidateInterfaceType.GetGenericTypeDefinition() == matchingGenericInterface;
         }
     }
 }

@@ -70,6 +70,7 @@ namespace Spring.Util
         {
         }
 
+#if BINARY_SERIALIZATION
         /// <summary>
         /// Creates a new instance of the FatalObjectException class.
         /// </summary>
@@ -86,5 +87,6 @@ namespace Spring.Util
             : base (info, context)
         {
         }
+#endif
     }
 }

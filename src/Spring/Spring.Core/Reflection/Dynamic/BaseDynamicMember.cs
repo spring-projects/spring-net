@@ -42,7 +42,7 @@ namespace Spring.Reflection.Dynamic
             | MethodAttributes.NewSlot | MethodAttributes.Virtual
             | MethodAttributes.Final;
 
-        private static ConstructorInfo invalidOperationException = 
+        private static ConstructorInfo invalidOperationException =
             typeof(InvalidOperationException).GetConstructor(new Type[] { typeof(string) });
 
         /// <summary>
@@ -53,7 +53,7 @@ namespace Spring.Reflection.Dynamic
         protected static void SetupTargetInstance(ILGenerator il, Type targetType)
         {
             il.Emit(OpCodes.Ldarg_1);
-            if (targetType.IsValueType)
+            if (targetType.GetTypeInfo().IsValueType)
             {
                 LocalBuilder target = il.DeclareLocal(targetType);
             	il.Emit(OpCodes.Unbox, targetType);
@@ -76,7 +76,7 @@ namespace Spring.Reflection.Dynamic
         protected static void SetupArgument(ILGenerator il, Type argumentType, int argumentPosition)
         {
             il.Emit(OpCodes.Ldarg, argumentPosition);
-            if (argumentType.IsValueType)
+            if (argumentType.GetTypeInfo().IsValueType)
             {
 				il.Emit(OpCodes.Unbox, argumentType);
 				il.Emit(OpCodes.Ldobj, argumentType);
@@ -117,7 +117,7 @@ namespace Spring.Reflection.Dynamic
             {
                 il.Emit(OpCodes.Ldnull);
             }
-            else if (returnValueType.IsValueType)
+            else if (returnValueType.GetTypeInfo().IsValueType)
             {
                 il.Emit(OpCodes.Box, returnValueType);
             }

@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 
 using Common.Logging;
@@ -65,7 +66,7 @@ namespace Spring.Context.Attributes
                                                                                                          attributeType);
             foreach (MethodInfo method in methods)
             {
-                if (Attribute.GetCustomAttribute(method, attributeType) != null)
+                if (method.GetCustomAttribute(attributeType) != null)
                 {
                     return true;
                 }
@@ -132,11 +133,11 @@ namespace Spring.Context.Attributes
                 }
                 if (objectType != null)
                 {
-                    if (Attribute.GetCustomAttribute(objectType, typeof(ConfigurationAttribute)) != null)
+                    if (objectType.GetTypeInfo().GetCustomAttribute(typeof(ConfigurationAttribute)) != null)
                     {
                         return true;
                     }
-                    if (Attribute.GetCustomAttribute(objectType, typeof(ComponentAttribute)) != null ||
+                    if (objectType.GetTypeInfo().GetCustomAttribute(typeof(ComponentAttribute)) != null ||
                         HasAttributeOnMethods(objectType, typeof(ObjectDefAttribute)))
                     {
                         return true;
@@ -150,7 +151,7 @@ namespace Spring.Context.Attributes
         {
             if (type != null)
             {
-                return (Attribute.GetCustomAttribute(type, typeof(ConfigurationAttribute)) != null);
+                return type.GetTypeInfo().GetCustomAttribute(typeof(ConfigurationAttribute)) != null;
             }
 
             return false;
@@ -177,15 +178,15 @@ namespace Spring.Context.Attributes
 
             objDef.FactoryObjectName = configClass.ObjectName;
             objDef.FactoryMethodName = metadata.Name;
-            objDef.AutowireMode = Objects.Factory.Config.AutoWiringMode.Constructor;
+            objDef.AutowireMode = AutoWiringMode.Constructor;
 
             // consider name and any aliases
             //Dictionary<String, Object> ObjectAttributes = metadata.getAnnotationAttributes(Object.class.getName());
-            object[] objectAttributes = metadata.GetCustomAttributes(typeof(ObjectDefAttribute), true);
+            ObjectDefAttribute[] objectAttributes = metadata.GetCustomAttributes(typeof(ObjectDefAttribute), true).Cast<ObjectDefAttribute>().ToArray();
             List<string> names = new List<string>();
-            foreach (object t in objectAttributes)
+            foreach (ObjectDefAttribute t in objectAttributes)
             {
-                string[] namesAndAliases = ((ObjectDefAttribute)t).NamesToArray;
+                string[] namesAndAliases = t.NamesToArray;
 
                 if (namesAndAliases != null)
                 {
@@ -228,16 +229,16 @@ namespace Spring.Context.Attributes
             //}
 
             // is this Object to be instantiated lazily?
-            if (Attribute.GetCustomAttribute(metadata, typeof(LazyAttribute)) != null)
+            var lazyAttribute = metadata.GetCustomAttribute(typeof(LazyAttribute));
+            if (lazyAttribute != null)
             {
-                objDef.IsLazyInit =
-                    (Attribute.GetCustomAttribute(metadata, typeof(LazyAttribute)) as LazyAttribute).LazyInitialize;
+                objDef.IsLazyInit = ((LazyAttribute) lazyAttribute).LazyInitialize;
             }
 
-            if (Attribute.GetCustomAttribute(metadata, typeof(DependsOnAttribute)) != null)
+            var dependsOnAttribute = metadata.GetCustomAttribute(typeof(DependsOnAttribute));
+            if (dependsOnAttribute != null)
             {
-                objDef.DependsOn =
-                    (Attribute.GetCustomAttribute(metadata, typeof(DependsOnAttribute)) as DependsOnAttribute).Name;
+                objDef.DependsOn = ((DependsOnAttribute) dependsOnAttribute).Name;
             }
 
             //TODO: container does not presently support autowiring to the degree needed to support this feature as of yet
@@ -246,21 +247,18 @@ namespace Spring.Context.Attributes
             //	ObjectDef.setAutowireMode(autowire.value());
             //}
 
-            if (Attribute.GetCustomAttribute(metadata, typeof(ObjectDefAttribute)) != null)
+            var objectDefAttribute = metadata.GetCustomAttribute(typeof(ObjectDefAttribute));
+            if (objectDefAttribute != null)
             {
-                objDef.InitMethodName =
-                    (Attribute.GetCustomAttribute(metadata, typeof(ObjectDefAttribute)) as ObjectDefAttribute).
-                        InitMethod;
-                objDef.DestroyMethodName =
-                    (Attribute.GetCustomAttribute(metadata, typeof(ObjectDefAttribute)) as ObjectDefAttribute).
-                        DestroyMethod;
+                objDef.InitMethodName = ((ObjectDefAttribute) objectDefAttribute).InitMethod;
+                objDef.DestroyMethodName = ((ObjectDefAttribute) objectDefAttribute).DestroyMethod;
             }
 
             // consider scoping
-            if (Attribute.GetCustomAttribute(metadata, typeof(ScopeAttribute)) != null)
+            var scopeAttribute = metadata.GetCustomAttribute(typeof(ScopeAttribute));
+            if (scopeAttribute != null)
             {
-                objDef.Scope =
-                    (Attribute.GetCustomAttribute(metadata, typeof(ScopeAttribute)) as ScopeAttribute).ObjectScope.ToString();
+                objDef.Scope = ((ScopeAttribute) scopeAttribute).ObjectScope.ToString();
             }
 
             Logger.Debug(m => m("Registering Object definition for [ObjectDef] method {0}.{1}()",

@@ -33,7 +33,7 @@ namespace Spring.Context.Support
 	/// implement the
 	/// <see cref="Spring.Context.IApplicationContextAware"/>,
 	/// <see cref="Spring.Context.IMessageSourceAware"/>, and
-	/// <see cref="Spring.Context.IResourceLoaderAware"/> interfaces. 
+	/// <see cref="Spring.Context.IResourceLoaderAware"/> interfaces.
 	/// </summary>
 	/// <remarks>
 	/// <p>
@@ -64,7 +64,7 @@ namespace Spring.Context.Support
 	/// <author>Griffin Caprio (.NET)</author>
 	public class ApplicationContextAwareProcessor : IObjectPostProcessor
 	{
-		private IApplicationContext _applicationContext;
+		private readonly IApplicationContext _applicationContext;
 
 		/// <summary>
 		/// Creates a new instance of the
@@ -123,22 +123,22 @@ namespace Spring.Context.Support
 		/// <seealso cref="Spring.Objects.Factory.Config.IObjectPostProcessor.PostProcessBeforeInitialization"/>
 		public object PostProcessBeforeInitialization(object obj, string name)
 		{
-			if(!RemotingServices.IsTransparentProxy(obj)) 
+			if(!RemotingServices.IsTransparentProxy(obj))
 			{
-				if (typeof (IResourceLoaderAware).IsInstanceOfType(obj))
+			    var resourceLoaderAware = obj as IResourceLoaderAware;
+			    if (resourceLoaderAware != null)
 				{
-					((IResourceLoaderAware) obj).ResourceLoader
-						= _applicationContext;
+					resourceLoaderAware.ResourceLoader = _applicationContext;
 				}
-				if (typeof (IMessageSourceAware).IsInstanceOfType(obj))
+			    var messageSourceAware = obj as IMessageSourceAware;
+			    if (messageSourceAware != null)
 				{
-					((IMessageSourceAware) obj).MessageSource
-						= _applicationContext;
+					messageSourceAware.MessageSource = _applicationContext;
 				}
-				if (typeof (IApplicationContextAware).IsInstanceOfType(obj))
+			    var applicationContextAware = obj as IApplicationContextAware;
+			    if (applicationContextAware != null)
 				{
-					((IApplicationContextAware) obj).ApplicationContext
-						= _applicationContext;
+					applicationContextAware.ApplicationContext = _applicationContext;
 				}
 			}
 			return obj;

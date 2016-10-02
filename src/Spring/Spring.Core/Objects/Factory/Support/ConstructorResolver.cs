@@ -36,7 +36,7 @@ using System.Linq;
 namespace Spring.Objects.Factory.Support
 {
     /// <summary>
-    /// Helper class for resolving constructors and factory methods.  
+    /// Helper class for resolving constructors and factory methods.
     /// Performs constructor resolution through argument matching.
     /// </summary>
     /// <remarks>
@@ -74,7 +74,7 @@ namespace Spring.Objects.Factory.Support
         }
 
         /// <summary>
-        /// "autowire constructor" (with constructor arguments by type) behavior.  
+        /// "autowire constructor" (with constructor arguments by type) behavior.
         /// Also applied if explicit constructor argument values are specified,
         /// matching all remaining arguments with objects from the object factory.
         /// </summary>
@@ -158,7 +158,7 @@ namespace Spring.Objects.Factory.Support
                 resolvedValues = new ConstructorArgumentValues();
                 minNrOfArgs = ResolveConstructorArguments(objectName, rod, wrapper, cargs, resolvedValues);
             }
-            // Take specified constructors, if any.            
+            // Take specified constructors, if any.
             ConstructorInfo[] candidates = (chosenCtors != null
                                                 ? chosenCtors
                                                 : AutowireUtils.GetConstructors(rod, 0));
@@ -237,7 +237,7 @@ namespace Spring.Objects.Factory.Support
 
             return new ConstructorInstantiationInfo(constructorToUse, argsToUse);
 
-            
+
         }
 
         /// <summary>
@@ -406,7 +406,7 @@ namespace Spring.Objects.Factory.Support
                 string parameterName = argTypes[paramIndex].Name;
                 // If we couldn't find a direct match and are not supposed to autowire,
                 // let's try the next generic, untyped argument value as fallback:
-                // it could match after type conversion (for example, String -> int).               
+                // it could match after type conversion (for example, String -> int).
                 ConstructorArgumentValues.ValueHolder valueHolder = null;
                 if (resolvedValues.GetNamedArgumentValue(parameterName) != null)
                 {

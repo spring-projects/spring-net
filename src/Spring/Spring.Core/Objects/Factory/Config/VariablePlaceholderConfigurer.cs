@@ -22,6 +22,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Reflection;
 using Common.Logging;
 using Spring.Collections;
 using Spring.Core;
@@ -34,11 +35,11 @@ namespace Spring.Objects.Factory.Config
     /// </summary>
     /// <remarks>
     /// The placeholder syntax follows the NAnt style: <c>${...}</c>.
-    /// Placeholders values are resolved against a list of 
+    /// Placeholders values are resolved against a list of
     /// <see cref="IVariableSource"/>s.  In case of multiple definitions
-    /// for the same property placeholder name, the first one in the 
+    /// for the same property placeholder name, the first one in the
     /// list is used.
-    /// <para>Variable substitution is performed on simple property values, 
+    /// <para>Variable substitution is performed on simple property values,
     /// lists, dictionaries, sets, constructor
     /// values, object type name, and object names in
     /// runtime object references (
@@ -200,19 +201,15 @@ namespace Spring.Objects.Factory.Config
 
             try
             {
-                ProcessProperties( factory );
+                ProcessProperties(factory);
             }
             catch (Exception ex)
             {
-                if (typeof( ObjectsException ).IsInstanceOfType( ex ))
+                if (ex is ObjectsException)
                 {
                     throw;
                 }
-                else
-                {
-                    throw new ObjectsException(
-                        "Errored while postprocessing an object factory.", ex );
-                }
+                throw new ObjectsException("Errored while postprocessing an object factory.", ex);
             }
         }
 
@@ -257,7 +254,7 @@ namespace Spring.Objects.Factory.Config
             {
                 string name = objectDefinitionNames[i];
                 IObjectDefinition definition = factory.GetObjectDefinition( name, includeAncestors );
-                
+
                 if (definition == null)
                     continue;
 
@@ -362,7 +359,7 @@ namespace Spring.Objects.Factory.Config
                     }
                 }
                 return strVal;
-            }            
+            }
         }
 
         private class CompositeVariableSource : IVariableSource

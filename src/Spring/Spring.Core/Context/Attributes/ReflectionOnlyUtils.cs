@@ -18,6 +18,8 @@
 
 #endregion
 
+#if !NETCORE
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -88,3 +90,4 @@ namespace Spring.Context.Attributes
         }
     }
 }
+#endif

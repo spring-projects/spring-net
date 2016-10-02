@@ -133,7 +133,7 @@ namespace Spring.Core.TypeResolution
                 AssertUtils.ArgumentNotNull(interfaceName,
                                             string.Format(CultureInfo.InvariantCulture, "interfaceNames[{0}]", i));
                 Type resolvedInterface = ResolveType(interfaceName);
-                if (!resolvedInterface.IsInterface)
+                if (!resolvedInterface.GetTypeInfo().IsInterface)
                 {
                     throw new ArgumentException(
                         string.Format(CultureInfo.InvariantCulture,

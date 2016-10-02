@@ -1,7 +1,5 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
 using Common.Logging;
 using Spring.Globalization;
 using Spring.Validation;
@@ -16,7 +14,7 @@ namespace Spring.DataBinding
     {
         #region Fields
 
-        private readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private readonly ILog log;
         private IFormatter formatter;
 
         #endregion
@@ -28,10 +26,11 @@ namespace Spring.DataBinding
         /// </summary>
         protected AbstractSimpleBinding()
         {
+            log = LogManager.GetLogger(GetType());
         }
 
         /// <summary>
-        /// Initialize a new instance of <see cref="AbstractSimpleBinding"/> with the 
+        /// Initialize a new instance of <see cref="AbstractSimpleBinding"/> with the
         /// specified <see cref="IFormatter"/>.
         /// </summary>
         protected AbstractSimpleBinding(IFormatter formatter)

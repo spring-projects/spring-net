@@ -31,8 +31,8 @@ namespace Spring.Globalization.Formatters
 	/// </summary>
 	/// <remarks>
 	/// <para>
-	/// This formatter allows you to format and parse numbers that conform 
-	/// to <see cref="NumberStyles.Float"/> number style (leading and trailing 
+	/// This formatter allows you to format and parse numbers that conform
+	/// to <see cref="NumberStyles.Float"/> number style (leading and trailing
 	/// white space, leading sign, decimal point, exponent).
 	/// </para>
 	/// </remarks>
@@ -78,7 +78,7 @@ namespace Spring.Globalization.Formatters
         /// </summary>
         /// <param name="format">The format string.</param>
         /// <param name="cultureName">The culture name.</param>
-        public FloatFormatter(string format, string cultureName) : this(format, CultureInfo.CreateSpecificCulture(cultureName))
+        public FloatFormatter(string format, string cultureName) : this(format, new CultureInfo(cultureName))
         {}
 
         /// <summary>

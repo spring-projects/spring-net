@@ -21,6 +21,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Text;
 
@@ -68,12 +69,12 @@ namespace Spring.Objects.Factory.Attributes
         /// </summary>
         /// <remarks>
         /// The default required attribute type is the Spring-provided <see cref="RequiredAttribute"/> attribute.
-        /// This setter property exists so that developers can provide their own 
+        /// This setter property exists so that developers can provide their own
         /// (non-Spring-specific) annotation type to indicate that a property value is required.
         /// </remarks>
         /// <value>The type of the required attribute.</value>
         public Type RequiredAttributeType
-        {            
+        {
             set
             {
                 AssertUtils.ArgumentNotNull(value, "RequiredAttributeType", "RequiredAttributeType property must not be null");
@@ -144,7 +145,7 @@ namespace Spring.Objects.Factory.Attributes
         /// </returns>
         protected virtual bool IsRequiredProperty(PropertyInfo pi)
         {
-            return (pi.GetSetMethod() != null && pi.GetCustomAttributes(RequiredAttributeType, true).Length > 0);
+            return pi.GetSetMethod() != null && pi.GetCustomAttributes(RequiredAttributeType, true).Any();
         }
 
         /// <summary>
@@ -153,7 +154,7 @@ namespace Spring.Objects.Factory.Attributes
         /// <param name="invalidProperties">The list of names of invalid properties.</param>
         /// <param name="objectName">Name of the object.</param>
         /// <returns>The exception message</returns>
-        private string BuildExceptionMessage(IList<string> invalidProperties, ICloneable objectName)
+        private string BuildExceptionMessage(IList<string> invalidProperties, string objectName)
         {
             int size = invalidProperties.Count;
             StringBuilder sb = new StringBuilder();

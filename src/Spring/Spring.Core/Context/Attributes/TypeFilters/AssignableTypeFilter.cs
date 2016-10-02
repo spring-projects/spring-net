@@ -19,7 +19,8 @@
 #endregion
 
 using System;
-using System.Linq;
+using System.Reflection;
+using Spring.Util;
 
 namespace Spring.Context.Attributes.TypeFilters
 {
@@ -47,9 +48,23 @@ namespace Spring.Context.Attributes.TypeFilters
         public override bool Match(Type type)
         {
             if (RequiredType == null)
+            {
                 return false;
+            }
+            if (RequiredType == type.GetTypeInfo().BaseType)
+            {
+                return true;
+            }
+            var interfaces = ReflectionUtils.GetInterfaces(type);
+            foreach (var i in interfaces)
+            {
+                if (RequiredType == i)
+                {
+                    return true;
+                }
+            }
 
-            return (type.GetInterfaces().Any(i => i.Equals(RequiredType)) || RequiredType.Equals(type.BaseType));
+            return false;
         }
 
         /// <summary>

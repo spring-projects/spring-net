@@ -33,9 +33,9 @@ namespace Spring.Objects.Factory.Attributes
     /// <summary>
     /// <see cref="InitDestroyAttributeObjectPostProcessor"/> implementation
     /// that invokes attributed init and destroy methods. Allows for an attributation
-    /// alternative to Spring's <see cref="IInitializingObject"/> and 
+    /// alternative to Spring's <see cref="IInitializingObject"/> and
     /// <see cref="IDisposable"/> callback interfaces.
-    /// 
+    ///
     /// Invoke and destroy annotations may be applied to methods of any visibility:
     /// public, protected, or private. Multiple such methods
     /// may be annotated, but it is recommended to only annotate one single
@@ -94,7 +94,7 @@ namespace Spring.Objects.Factory.Attributes
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         public IObjectFactory ObjectFactory
         {
@@ -198,7 +198,7 @@ namespace Spring.Objects.Factory.Attributes
                 foreach (var methodInfo in methods)
                 {
                     var initAttribute =
-                        Attribute.GetCustomAttribute(methodInfo, initAttributeType) as PostConstructAttribute;
+                        methodInfo.GetCustomAttribute(initAttributeType) as PostConstructAttribute;
                     if (initAttribute != null && methodInfo.DeclaringType == instanceType)
                     {
                         logger.Debug(m => m("Found init method on class [{0}]: {1}", instanceType.Name, methodInfo.Name));
@@ -206,7 +206,7 @@ namespace Spring.Objects.Factory.Attributes
                     }
 
                     var destroyAttribute =
-                        Attribute.GetCustomAttribute(methodInfo, destroyAttributeType) as PreDestroyAttribute;
+                        methodInfo.GetCustomAttribute(destroyAttributeType) as PreDestroyAttribute;
                     if (destroyAttribute != null && methodInfo.DeclaringType == instanceType)
                     {
                         logger.Debug(
@@ -217,7 +217,7 @@ namespace Spring.Objects.Factory.Attributes
 
                 initMethods.InsertRange(0, curInitMethods.OrderBy(e => e.Order));
                 destroyMethods.InsertRange(0, curDestroyMethods.OrderBy(e => e.Order));
-                instanceType = instanceType.BaseType;
+                instanceType = instanceType.GetTypeInfo().BaseType;
             } while (instanceType != null && instanceType != typeof (Object));
 
             var objectDef = objectFactory.GetObjectDefinition(name);

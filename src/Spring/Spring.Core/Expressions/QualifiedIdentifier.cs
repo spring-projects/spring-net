@@ -41,6 +41,7 @@ namespace Spring.Expressions
         {
         }
 
+#if BINARY_SERIALIZATION
         /// <summary>
         /// Create a new instance from SerializationInfo
         /// </summary>
@@ -48,6 +49,7 @@ namespace Spring.Expressions
             : base(info, context)
         {
         }
+#endif
 
         /// <summary>
         /// Returns the value of the named argument defined by this node.
@@ -72,7 +74,7 @@ namespace Spring.Expressions
         }
 
         /// <summary>
-        /// Overrides getText to allow easy way to get fully 
+        /// Overrides getText to allow easy way to get fully
         /// qualified identifier.
         /// </summary>
         /// <returns>

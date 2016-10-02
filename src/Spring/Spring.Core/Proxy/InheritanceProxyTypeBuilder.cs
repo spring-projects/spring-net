@@ -67,7 +67,7 @@ namespace Spring.Proxy
         #region Constructor(s) / Destructor
 
         /// <summary>
-        /// Creates a new instance of the 
+        /// Creates a new instance of the
         /// <see cref="InheritanceProxyTypeBuilder"/> class.
         /// </summary>
         public InheritanceProxyTypeBuilder()
@@ -97,7 +97,7 @@ namespace Spring.Proxy
 		public override Type BuildProxyType()
 		{
 			BaseType = TargetType;
-            if (BaseType.IsSealed)
+            if (BaseType.GetTypeInfo().IsSealed)
             {
                 throw new ArgumentException("Inheritance proxy cannot be created for a sealed class [" + BaseType.FullName + "]");
             }
@@ -123,7 +123,7 @@ namespace Spring.Proxy
                 new BaseProxyMethodBuilder(typeBuilder, this, false),
                 BaseType, declaredMembersOnly);
 
-            return typeBuilder.CreateType();
+            return typeBuilder.CreateTypeInfo().AsType();
         }
 
         #endregion
@@ -131,7 +131,7 @@ namespace Spring.Proxy
         #region IProxyTypeGenerator Members
 
         /// <summary>
-        /// Generates the IL instructions that pushes 
+        /// Generates the IL instructions that pushes
         /// the target instance on which calls should be delegated to.
         /// </summary>
         /// <param name="il">The IL generator to use.</param>

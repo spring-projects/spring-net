@@ -2,13 +2,13 @@
 
 /*
  * Copyright © 2002-2011 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -201,6 +201,7 @@ namespace Spring.Util
             return contains;
         }
 
+#if !NETCORE
         /// <summary>
         /// Removes all the elements from the target collection that are contained in the source collection.
         /// </summary>
@@ -239,6 +240,7 @@ namespace Spring.Util
                 }
             }
         }
+#endif
 
         /// <summary>
         /// Converts an <see cref="System.Collections.ICollection"/>instance to an <see cref="System.Collections.ArrayList"/> instance.
@@ -256,7 +258,7 @@ namespace Spring.Util
         }
 
         /// <summary>
-        /// Copies the elements of the <see cref="ICollection"/> to a 
+        /// Copies the elements of the <see cref="ICollection"/> to a
         /// new array of the specified element type.
         /// </summary>
         /// <param name="inputCollection">The <see cref="System.Collections.ICollection"/> instance to be converted.</param>
@@ -364,14 +366,14 @@ namespace Spring.Util
         }
 
         /// <summary>
-        /// Find a value of one of the given types in the given Collection, 
+        /// Find a value of one of the given types in the given Collection,
         /// searching the Collection for a value of the first type, then
         /// searching for a value of the second type, etc.
         /// </summary>
         /// <param name="collection">The collection to search.</param>
         /// <param name="types">The types to look for, in prioritized order.</param>
         /// <returns>a value of the given types found, or <code>null</code> if none</returns>
-        /// <exception cref="ArgumentException">If more than one value of the given type is found</exception>        
+        /// <exception cref="ArgumentException">If more than one value of the given type is found</exception>
         public static object FindValueOfType(ICollection collection, Type[] types)
         {
             if (IsEmpty(collection) || ObjectUtils.IsEmpty(types))
@@ -533,7 +535,7 @@ namespace Spring.Util
             }
         }
 
-        #region StableSort Utility Classes
+#region StableSort Utility Classes
 
         private class Entry
         {
@@ -574,6 +576,6 @@ namespace Spring.Util
             }
         }
 
-        #endregion
+#endregion
     }
 }

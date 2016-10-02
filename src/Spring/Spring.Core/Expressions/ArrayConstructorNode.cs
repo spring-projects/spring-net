@@ -42,13 +42,14 @@ namespace Spring.Expressions
         {
         }
 
+#if BINARY_SERIALIZATION
         /// <summary>
         /// Create a new instance from SerializationInfo
         /// </summary>
         protected ArrayConstructorNode(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
-
+#endif
         /// <summary>
         /// Creates new instance of the type defined by this node.
         /// </summary>

@@ -117,6 +117,8 @@ namespace Spring.Validation
             this.errors = errors;
         }
 
+        #if BINARY_SERIALIZATION
+
         /// <summary>
         /// Creates a new instance of the ValidationException class.
         /// </summary>
@@ -135,6 +137,7 @@ namespace Spring.Validation
             this.errors = (IValidationErrors) info.GetValue("errors", typeof (IValidationErrors));
         }
 
+
         /// <summary>
         /// Implements object serialization.
         /// </summary>
@@ -151,6 +154,7 @@ namespace Spring.Validation
             base.GetObjectData(info, context);
             info.AddValue("errors", this.errors);
         }
+#endif
 
         /// <summary>
         /// Gets validation errors.

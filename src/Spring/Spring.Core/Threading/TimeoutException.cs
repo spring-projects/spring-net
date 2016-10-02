@@ -2,13 +2,13 @@
 
 /*
 * Copyright © 2002-2011 the original author or authors.
-* 
+*
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
-* 
+*
 *      http://www.apache.org/licenses/LICENSE-2.0
-* 
+*
 * Unless required by applicable law or agreed to in writing, software
 * distributed under the License is distributed on an "AS IS" BASIS,
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -36,14 +36,19 @@ namespace Spring.Threading
 	/// as a form (subclass) of InterruptedException. This both
 	/// simplifies handling, and conceptually reflects the fact that
 	/// timed-out operations are artificially interrupted by timers.
-	/// 
+	///
 	/// </summary>
 	[Serializable]
-	public class TimeoutException : ThreadInterruptedException
+	public class TimeoutException :
+#if NETCORE
+        Exception
+#else
+        ThreadInterruptedException
+#endif
 	{
-		/// <summary> The approximate time that the operation lasted before 
+		/// <summary> The approximate time that the operation lasted before
 		/// this timeout exception was thrown.
-		/// 
+		///
 		/// </summary>
 		private readonly long _duration;
 		/// <summary>
@@ -72,6 +77,8 @@ namespace Spring.Threading
 		/// The root exception that is being wrapped.
 		/// </param>
 		public TimeoutException( string message, Exception innerException ) : base( message, innerException ){}
+
+#if BINARY_SERIALIZATION
 		/// <summary>
 		/// Creates a new instance of the
 		/// <see cref="Spring.Threading.TimeoutException"/> class.
@@ -89,6 +96,7 @@ namespace Spring.Threading
 		{
 			_duration = info.GetInt32( "duration" );
 		}
+
 		/// <summary>
 		/// Override of GetObjectData to allow for private serialization
 		/// </summary>
@@ -99,8 +107,10 @@ namespace Spring.Threading
 			info.AddValue( "duration", _duration );
 			base.GetObjectData( info, context );
 		}
+#endif
+
 		/// <summary> Constructs a TimeoutException with given duration value.
-		/// 
+		///
 		/// </summary>
 		public TimeoutException( long time )
 		{
@@ -113,8 +123,8 @@ namespace Spring.Threading
 		{
 			_duration = time;
 		}
-		/// <summary> 
-		/// Gets the approximate time that the operation lasted before 
+		/// <summary>
+		/// Gets the approximate time that the operation lasted before
 		/// this timeout exception was thrown.
 		/// </summary>
 		public long Duration

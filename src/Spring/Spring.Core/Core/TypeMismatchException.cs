@@ -108,6 +108,7 @@ namespace Spring.Core
         {
         }
 
+#if BINARY_SERIALIZATION
         /// <summary>
         /// Creates a new instance of the TypeMismatchException class.
         /// </summary>
@@ -123,6 +124,7 @@ namespace Spring.Core
             : base(info, context)
         {
         }
+#endif
 
         private static string BuildMessage(PropertyChangeEventArgs propertyChangeEventArgs, Type requiredType)
         {

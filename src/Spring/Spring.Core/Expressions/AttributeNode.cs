@@ -40,6 +40,7 @@ namespace Spring.Expressions
         {
         }
 
+#if BINARY_SERIALIZATION
         /// <summary>
         /// Create a new instance from SerializationInfo
         /// </summary>
@@ -47,7 +48,8 @@ namespace Spring.Expressions
             : base(info, context)
         {
         }
-        
+#endif
+
         /// <summary>
         /// Tries to determine attribute type based on the specified
         /// attribute type name.

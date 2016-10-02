@@ -48,10 +48,11 @@ namespace Spring.Objects.Factory.Support
 		/// </summary>
 		protected readonly ILog log;
 
-		#endregion
+        #endregion
 
-		#region Constructor (s) / Destructor
+        #region Constructor (s) / Destructor
 
+#if APPDOMAINS
 		/// <summary>
 		/// Creates a new instance of the
 		/// <see cref="Spring.Objects.Factory.Support.AbstractObjectDefinitionReader"/>
@@ -70,34 +71,42 @@ namespace Spring.Objects.Factory.Support
 			: this(registry, AppDomain.CurrentDomain)
 		{
 		}
+#endif
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Objects.Factory.Support.AbstractObjectDefinitionReader"/>
-		/// class.
-		/// </summary>
-		/// <param name="registry">
-		/// The <see cref="Spring.Objects.Factory.Support.IObjectDefinitionRegistry"/>
-		/// instance that this reader works on.
-		/// </param>
+        /// <summary>
+        /// Creates a new instance of the
+        /// <see cref="Spring.Objects.Factory.Support.AbstractObjectDefinitionReader"/>
+        /// class.
+        /// </summary>
+        /// <param name="registry">
+        /// The <see cref="Spring.Objects.Factory.Support.IObjectDefinitionRegistry"/>
+        /// instance that this reader works on.
+        /// </param>
+#if APPDOMAINS
 		/// <param name="domain">
 		/// The <see cref="System.AppDomain"/> against which any class names
 		/// will be resolved into <see cref="System.Type"/> instances.
 		/// </param>
-		/// <remarks>
-		/// <p>
-		/// This is an <see langword="abstract"/> class, and as such exposes no public constructors.
-		/// </p>
-		/// </remarks>
-		protected AbstractObjectDefinitionReader(
-			IObjectDefinitionRegistry registry,
-			AppDomain domain)
+#endif
+        /// <remarks>
+        /// <p>
+        /// This is an <see langword="abstract"/> class, and as such exposes no public constructors.
+        /// </p>
+        /// </remarks>
+        protected AbstractObjectDefinitionReader(
+			IObjectDefinitionRegistry registry
+#if APPDOMAINS
+			, AppDomain domain
+#endif
+            )
 		{
 		    log = LogManager.GetLogger(this.GetType());
 
 		    AssertUtils.ArgumentNotNull(registry, "registry", "IObjectDefinitionRegistry must not be null");
 			_registry = registry;
+#if APPDOMAINS
 			_domain = domain;
+#endif
             if (registry is IResourceLoader)
             {
                 _resourceLoader = registry as IResourceLoader;
@@ -108,9 +117,9 @@ namespace Spring.Objects.Factory.Support
             }
 		}
 
-		#endregion
+#endregion
 
-		#region Properties
+#region Properties
 
 		/// <summary>
 		/// Gets the
@@ -144,15 +153,16 @@ namespace Spring.Objects.Factory.Support
 	        }
 	    }
 
-	    /// <summary>
-		/// The <see cref="System.AppDomain"/> against which any class names
-		/// will be resolved into <see cref="System.Type"/> instances.
-		/// </summary>
+#if APPDOMAINS
+        /// <summary>
+        /// The <see cref="System.AppDomain"/> against which any class names
+        /// will be resolved into <see cref="System.Type"/> instances.
+        /// </summary>
 		public AppDomain Domain
 		{
 			get { return _domain; }
 		}
-
+#endif
 
         /// <summary>
         /// Gets or sets the resource loader to use for resource locations.
@@ -164,9 +174,9 @@ namespace Spring.Objects.Factory.Support
 	        set { _resourceLoader = value; }
 	    }
 
-	    #endregion
+#endregion
 
-		#region Methods
+#region Methods
 
 		/// <summary>
 		/// Load object definitions from the supplied <paramref name="resource"/>.
@@ -208,10 +218,10 @@ namespace Spring.Objects.Factory.Support
         /// <summary>
         /// Loads the object definitions from the specified resource location.
         /// </summary>
-        /// <param name="location">The resource location, to be loaded with the 
+        /// <param name="location">The resource location, to be loaded with the
         /// IResourceLoader location .</param>
         /// <returns>
-        /// The number of object definitions found        
+        /// The number of object definitions found
         /// </returns>
         public int LoadObjectDefinitions(string location)
 	    {
@@ -245,7 +255,7 @@ namespace Spring.Objects.Factory.Support
 	    /// <param name="locations">The the resource locations to be loaded with the
 	    /// IResourceLoader of this object definition reader.</param>
 	    /// <returns>
-	    /// The number of object definitions found        
+	    /// The number of object definitions found
 	    /// </returns>
 	    public int LoadObjectDefinitions(string[] locations)
 	    {
@@ -258,15 +268,17 @@ namespace Spring.Objects.Factory.Support
             return counter;
 	    }
 
-	    #endregion
+#endregion
 
-		#region Fields
+#region Fields
 
 		private IObjectDefinitionRegistry _registry;
+#if APPDOMAINS
 		private AppDomain _domain;
+#endif
 	    private IResourceLoader _resourceLoader;
 	    private IObjectNameGenerator _objectNameGenerator = new DefaultObjectNameGenerator();
 
-		#endregion
+#endregion
 	}
 }

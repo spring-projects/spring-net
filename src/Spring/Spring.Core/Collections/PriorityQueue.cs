@@ -26,7 +26,7 @@ using System.Runtime.Serialization;
 
 namespace Spring.Collections
 {
-	/// <summary> 
+	/// <summary>
 	/// An unbounded priority <see cref="Spring.Collections.IQueue"/> based on a priority
 	/// heap.  This queue orders elements according to an order specified
 	/// at construction time, which is specified either according to their
@@ -36,13 +36,13 @@ namespace Spring.Collections
 	/// A priority queue relying on natural ordering also does not
 	/// permit insertion of non-comparable objects (doing so will result
 	/// <see cref="System.InvalidCastException"/>.
-	/// 
+	///
 	/// <p/>
 	/// The <i>head</i> of this queue is the <i>lowest</i> element
 	/// with respect to the specified ordering.  If multiple elements are
 	/// tied for lowest value, the head is one of those elements -- ties are
-	/// broken arbitrarily. 
-	/// 
+	/// broken arbitrarily.
+	///
 	/// <p/>
 	/// A priority queue is unbounded, but has an internal
 	/// <i>capacity</i> governing the size of an array used to store the
@@ -50,16 +50,16 @@ namespace Spring.Collections
 	/// size.  As elements are added to a priority queue, its capacity
 	/// grows automatically.  The details of the growth policy are not
 	/// specified.
-	/// 
+	///
 	/// <p/>
 	/// This class and its enumerator implement all of the
 	/// <i>optional</i> methods of the <see cref="System.Collections.ICollection"/> and
 	/// <see cref="System.Collections.IEnumerator"/> interfaces.
-	/// The enumerator provided in method <see cref="System.Collections.IEnumerable.GetEnumerator"/> 
+	/// The enumerator provided in method <see cref="System.Collections.IEnumerable.GetEnumerator"/>
 	/// is <b>not</b> guaranteed to traverse the elements of the PriorityQueue in any
 	/// particular order.
-	/// 
-	/// <p/> 
+	///
+	/// <p/>
 	/// Note that this implementation is <b>NOT</b> synchronized.
 	/// Multiple threads should not access a <see cref="Spring.Collections.PriorityQueue"/>
 	/// instance concurrently if any of the threads modifies the list
@@ -93,7 +93,7 @@ namespace Spring.Collections
 
 			}
 
-			/// <summary> 
+			/// <summary>
 			/// Index (into queue array) of element to be returned by subsequent call to next.
 			/// </summary>
 			private int _cursorIndex = 0;
@@ -119,31 +119,31 @@ namespace Spring.Collections
 
 		private const int DEFAULT_INITIAL_CAPACITY = 11;
 
-		/// <summary> 
+		/// <summary>
 		/// Priority queue represented as a balanced binary heap: the two children
 		/// of queue[n] are queue[2*n] and queue[2*n + 1].  The priority queue is
 		/// ordered by comparator, or by the elements' natural ordering, if
 		/// comparator is null:  For each node n in the heap and each descendant d
 		/// of n, n &lt;= d.
-		/// 
+		///
 		/// The element with the lowest value is in queue[1], assuming the queue is
 		/// nonempty.  (A one-based array is used in preference to the traditional
 		/// zero-based array to simplify parent and child calculations.)
-		/// 
+		///
 		/// queue.length must be >= 2, even if size == 0.
 		/// </summary>
 		[NonSerialized] private object[] _queue;
 
 		/// <summary> The number of elements in the priority queue.</summary>
 		private int _priorityQueueSize = 0;
-		
-		/// <summary> 
+
+		/// <summary>
 		/// The comparator, or null if priority queue uses elements'
 		/// natural ordering.
 		/// </summary>
 		private IComparer _comparator;
 
-		/// <summary> 
+		/// <summary>
 		/// The number of times this priority queue has been
 		/// <i>structurally modified</i>.
 		/// </summary>
@@ -162,7 +162,7 @@ namespace Spring.Collections
 		{
 		}
 
-		/// <summary> 
+		/// <summary>
 		/// Creates a <see cref="Spring.Collections.PriorityQueue"/> with the specified initial capacity
 		/// that orders its elements according to their natural ordering
 		/// (using <see cref="System.IComparable"/>).
@@ -174,7 +174,7 @@ namespace Spring.Collections
 		{
 		}
 
-		/// <summary> 
+		/// <summary>
 		/// Creates a <see cref="Spring.Collections.PriorityQueue"/> with the specified initial capacity
 		/// that orders its elements according to the specified comparator.
 		/// </summary>
@@ -191,7 +191,7 @@ namespace Spring.Collections
 			_comparator = comparator;
 		}
 
-		/// <summary> 
+		/// <summary>
 		/// Creates a <see cref="Spring.Collections.PriorityQueue"/> containing the elements in the
 		/// specified collection.  The priority queue has an initial
 		/// capacity of 110% of the size of the specified collection or 1
@@ -203,7 +203,7 @@ namespace Spring.Collections
 		/// ordered according to its elements' natural order.
 		/// </summary>
 		/// <param name="collection">the collection whose elements are to be placed into this priority queue.</param>
-		/// <exception cref="System.InvalidCastException">if elements of <paramref name="collection"/> cannot be 
+		/// <exception cref="System.InvalidCastException">if elements of <paramref name="collection"/> cannot be
 		/// compared to one another according to the priority queue's ordering</exception>
 		/// <exception cref="System.ArgumentNullException">if <paramref name="collection"/> or any element with it is
 		/// <see lang="null"/>
@@ -230,7 +230,7 @@ namespace Spring.Collections
 
 		#region Private Helper Methods
 
-		/// <summary> 
+		/// <summary>
 		/// Common code to initialize underlying queue array across
 		/// constructors below.
 		/// </summary>
@@ -258,7 +258,7 @@ namespace Spring.Collections
 				return (number >> bits) + (2 << ~bits);
 		}
 
-		/// <summary> 
+		/// <summary>
 		/// Establishes the heap invariant assuming the heap
 		/// satisfies the invariant except possibly for the leaf-node indexed by k
 		/// (which may have a nextExecutionTime less than its parent's).
@@ -298,7 +298,7 @@ namespace Spring.Collections
 			}
 		}
 
-		/// <summary> 
+		/// <summary>
 		/// Establishes the heap invariant (described above) in the subtree
 		/// rooted at k, which is assumed to satisfy the heap invariant except
 		/// possibly for node k itself (which may be greater than its children).
@@ -342,7 +342,7 @@ namespace Spring.Collections
 			}
 		}
 
-		/// <summary> 
+		/// <summary>
 		/// Establishes the heap invariant in the entire tree,
 		/// assuming nothing about the order of the elements prior to the call.
 		/// </summary>
@@ -354,7 +354,7 @@ namespace Spring.Collections
 
 		/// <summary>
 		/// Returns the <paramref name="percentage"/> of <paramref name="size"/> or <see cref="System.Int32.MaxValue"/> - 1,
-		/// whichever is smaller. 
+		/// whichever is smaller.
 		/// </summary>
 		/// <param name="size">base size</param>
 		/// <param name="percentage">percentage to return</param>
@@ -364,7 +364,7 @@ namespace Spring.Collections
 			return (int) Math.Min((size*percentage)/100, Int32.MaxValue - 1);
 		}
 
-		/// <summary> 
+		/// <summary>
 		/// Initially fill elements of the queue array under the
 		/// knowledge that it is sorted or is another <see cref="Spring.Collections.PriorityQueue"/>, in which
 		/// case we can just place the elements in the order presented.
@@ -388,7 +388,7 @@ namespace Spring.Collections
 			}
 		}
 
-		/// <summary> 
+		/// <summary>
 		/// Initially fill elements of the queue array that is not to our knowledge
 		/// sorted, so we must rearrange the elements to guarantee the heap
 		/// invariant.
@@ -398,7 +398,7 @@ namespace Spring.Collections
 			fillArray(collection, false);
 		}
 
-		/// <summary> 
+		/// <summary>
 		/// Removes and returns element located at <paramref name="index"/> from queue.  (Recall that the queue
 		/// is one-based, so 1 &lt;= i &lt;= size.)
 		/// </summary>
@@ -479,7 +479,7 @@ namespace Spring.Collections
 			get { return _priorityQueueSize; }
 		}
 
-		/// <summary> 
+		/// <summary>
 		/// Inserts the specified element into this queue if it is possible to do
 		/// so immediately without violating capacity restrictions.
 		/// </summary>
@@ -529,11 +529,11 @@ namespace Spring.Collections
 			return true;
 		}
 
-		/// <summary> 
+		/// <summary>
 		/// Retrieves, but does not remove, the head of this queue,
 		/// or returns <see lang="null"/> if this queue is empty.
 		/// </summary>
-		/// <returns> 
+		/// <returns>
 		/// The head of this queue, or <see lang="null"/> if this queue is empty.
 		/// </returns>
 		public override Object Peek()
@@ -544,7 +544,7 @@ namespace Spring.Collections
 		}
 
 		// Collection Methods - the first two override to update docs
-		/// <summary> 
+		/// <summary>
 		/// Inserts the specified element into this queue if it is possible to do so
 		/// immediately without violating capacity restrictions, returning
 		/// <see lang="true"/> upon success and throwing an
@@ -554,7 +554,7 @@ namespace Spring.Collections
 		/// <param name="objectToAdd">
 		/// The element to add.
 		/// </param>
-		/// <returns> 
+		/// <returns>
 		/// <see lang="true"/> if successful.
 		/// </returns>
 		/// <exception cref="System.InvalidOperationException">
@@ -578,7 +578,7 @@ namespace Spring.Collections
 			return Offer(objectToAdd);
 		}
 
-		/// <summary> 
+		/// <summary>
 		/// Removes a single instance of the specified element from this
 		/// queue, if it is present.
 		/// </summary>
@@ -614,8 +614,8 @@ namespace Spring.Collections
 			return false;
 		}
 
-		/// <summary> 
-		/// Returns an <see cref="System.Collections.IEnumerator"/> over the elements in this queue. 
+		/// <summary>
+		/// Returns an <see cref="System.Collections.IEnumerator"/> over the elements in this queue.
 		/// The enumerator does not return the elements in any particular order.
 		/// </summary>
 		/// <returns> an enumerator over the elements in this queue.</returns>
@@ -625,7 +625,7 @@ namespace Spring.Collections
 		}
 
 
-		/// <summary> 
+		/// <summary>
 		/// Removes all elements from the priority queue.
 		/// The queue will be empty after this call returns.
 		/// </summary>
@@ -639,11 +639,11 @@ namespace Spring.Collections
 			_priorityQueueSize = 0;
 		}
 
-		/// <summary> 
+		/// <summary>
 		/// Retrieves and removes the head of this queue,
 		/// or returns <see lang="null"/> if this queue is empty.
 		/// </summary>
-		/// <returns> 
+		/// <returns>
 		/// The head of this queue, or <see lang="null"/> if this queue is empty.
 		/// </returns>
 		public override Object Poll()
@@ -663,7 +663,7 @@ namespace Spring.Collections
 		/// Queries the queue to see if it contains the specified <paramref name="element"/>
 		/// </summary>
 		/// <param name="element">element to look for.</param>
-		/// <returns><see lang="true"/> if the queue contains the <paramref name="element"/>, 
+		/// <returns><see lang="true"/> if the queue contains the <paramref name="element"/>,
 		/// <see lang="false"/> otherwise.</returns>
 		public bool Contains( object element )
 		{
@@ -692,7 +692,7 @@ namespace Spring.Collections
 		/// <summary> Returns the comparator used to order this collection, or <see lang="null"/>
 		/// if this collection is sorted according to its elements natural ordering
 		/// (using <see cref="System.IComparable"/>).
-		/// 
+		///
 		/// </summary>
 		/// <returns> the comparator used to order this collection, or <see lang="null"/>
 		/// if this collection is sorted according to its elements natural ordering.
@@ -701,10 +701,12 @@ namespace Spring.Collections
 		{
 			return _comparator;
 		}
-		#endregion
+        #endregion
 
-		#region ISerializable Implementation
-		/// <summary> 
+#region ISerializable Implementation
+
+#if BINARY_SERIALIZATION
+		/// <summary>
 		/// Save the state of the instance to a stream (that
 		/// is, serialize it).
 		/// </summary>
@@ -733,7 +735,7 @@ namespace Spring.Collections
 			}
 		}
 
-		/// <summary> 
+		/// <summary>
 		/// Reconstitute the <see cref="Spring.Collections.PriorityQueue"/> instance from a stream (that is,
 		/// deserialize it).
 		/// </summary>
@@ -756,9 +758,11 @@ namespace Spring.Collections
 				_queue[i] = serializationInfo.GetValue("Spring.Collections.PriorityQueueData" + i, typeof (Object));
 			}
 		}
-		#endregion
+#endif
 
-		#region ICollection Implementation
+#endregion
+
+#region ICollection Implementation
 
 		///<summary>
 		///Copies the elements of the <see cref="T:System.Collections.ICollection"></see> to an <see cref="T:System.Array"></see>, starting at a particular <see cref="T:System.Array"></see> index.
@@ -828,6 +832,6 @@ namespace Spring.Collections
 			get { return _priorityQueueSize == 0; }
 		}
 
-		#endregion
+#endregion
 	}
 }

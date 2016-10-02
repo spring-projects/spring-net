@@ -56,7 +56,7 @@ namespace Spring.Objects.Factory.Support
 	    /// The name of the dynamic assembly that holds dynamically created code
 	    /// </summary>
         private const string DYNAMIC_ASSEMBLY_NAME = "Spring.MethodInjected";
-	    
+
 		/// <summary>
 		/// A cache of generated <see cref="System.Type"/> instances, keyed on
 		/// the object name for which the <see cref="System.Type"/> was generated.
@@ -84,7 +84,7 @@ namespace Spring.Objects.Factory.Support
 		/// An instance of the object described by the supplied
 		/// <paramref name="definition"/> from the supplied <paramref name="factory"/>.
 		/// </returns>
-		/// <seealso cref="Spring.Objects.Factory.Support.SimpleInstantiationStrategy.InstantiateWithMethodInjection(RootObjectDefinition, string, IObjectFactory)"/> 
+		/// <seealso cref="Spring.Objects.Factory.Support.SimpleInstantiationStrategy.InstantiateWithMethodInjection(RootObjectDefinition, string, IObjectFactory)"/>
 		protected override object InstantiateWithMethodInjection(
 			RootObjectDefinition definition, string objectName, IObjectFactory factory)
 		{
@@ -119,7 +119,7 @@ namespace Spring.Objects.Factory.Support
 		/// An instance of the object described by the supplied
 		/// <paramref name="definition"/> from the supplied <paramref name="factory"/>.
 		/// </returns>
-		/// <seealso cref="Spring.Objects.Factory.Support.SimpleInstantiationStrategy.InstantiateWithMethodInjection(RootObjectDefinition, string, IObjectFactory, ConstructorInfo, object[])"/> 
+		/// <seealso cref="Spring.Objects.Factory.Support.SimpleInstantiationStrategy.InstantiateWithMethodInjection(RootObjectDefinition, string, IObjectFactory, ConstructorInfo, object[])"/>
 		protected override object InstantiateWithMethodInjection(
 			RootObjectDefinition definition, string objectName, IObjectFactory factory, ConstructorInfo constructor, object[] arguments)
 		{
@@ -190,7 +190,7 @@ namespace Spring.Objects.Factory.Support
 		{
 			lock (typeCache.SyncRoot)
 			{
-                Type generatedType = (Type) typeCache[objectName];			    
+                Type generatedType = (Type) typeCache[objectName];
 				if (generatedType == null)
 				{
 					#region Instrumentation
@@ -284,10 +284,10 @@ namespace Spring.Objects.Factory.Support
 			}
 
 			/// <summary>
-			/// Builds a <see cref="System.Type"/> suitable for Method-Injection. 
+			/// Builds a <see cref="System.Type"/> suitable for Method-Injection.
 			/// </summary>
 			/// <returns>
-			/// A <see cref="System.Type"/> suitable for Method-Injection. 
+			/// A <see cref="System.Type"/> suitable for Method-Injection.
 			/// </returns>
 			public Type BuildType()
 			{
@@ -447,7 +447,7 @@ namespace Spring.Objects.Factory.Support
 				il.Emit(OpCodes.Ret);
 			}
 
-            /* 
+            /*
 			/// <summary>
 			/// Defines the parameters to the method that is being overridden.
 			/// </summary>
@@ -563,7 +563,7 @@ namespace Spring.Objects.Factory.Support
 					il.Emit(OpCodes.Ldc_I4, i);
 					il.Emit(OpCodes.Ldarg_S, i + 1);
 					ParameterInfo parameter = methodParameters[i];
-					if (parameter.ParameterType.IsEnum || parameter.ParameterType.IsValueType)
+					if (parameter.ParameterType.GetTypeInfo().IsEnum || parameter.ParameterType.GetTypeInfo().IsValueType)
 					{
 						il.Emit(OpCodes.Box, parameter.ParameterType);
 					}
@@ -574,7 +574,7 @@ namespace Spring.Objects.Factory.Support
 
 			/// <summary>
 			/// Simply generates the IL for a write only property for the
-			/// <see cref="IMethodReplacer"/> <see cref="System.Type"/>. 
+			/// <see cref="IMethodReplacer"/> <see cref="System.Type"/>.
 			/// </summary>
 			/// <param name="typeBuilder">
 			/// The <see cref="System.Type"/> in which the property is defined.

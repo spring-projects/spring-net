@@ -66,6 +66,7 @@ namespace Spring.Util
         {
         }
 
+#if BINARY_SERIALIZATION
         /// <summary>
         /// Creates a new instance of the ObjectsException class.
         /// </summary>
@@ -82,6 +83,8 @@ namespace Spring.Util
             : base (info, context)
         {
         }
+#endif
+
         #endregion
     }
 }

@@ -21,8 +21,7 @@
 #region Imports
 
 using System;
-
-using Spring.Objects;
+using System.Reflection;
 
 #endregion
 
@@ -31,7 +30,7 @@ namespace Spring.Context.Support
 	/// <summary>
 	/// Convenient superclass for application objects that want to be aware of
 	/// the application context, e.g. for custom lookup of collaborating object
-	/// or for context-specific resource access. 
+	/// or for context-specific resource access.
 	/// </summary>
 	/// <remarks>
 	/// <p>
@@ -151,7 +150,7 @@ namespace Spring.Context.Support
 		/// <see cref="Spring.Context.IApplicationContext"/> implementation
 		/// instance that is not compatible with the <see cref="System.Type"/>
 		/// defined by the value of the
-		/// <see cref="Spring.Context.Support.ApplicationObjectSupport.RequiredType"/>. 
+		/// <see cref="Spring.Context.Support.ApplicationObjectSupport.RequiredType"/>.
 		/// property. Also, thrown when trying to re-initialize with a
 		/// different <see cref="Spring.Context.IApplicationContext"/> than was
 		/// originally used.

@@ -21,6 +21,7 @@
 #region Imports
 
 using System;
+using System.Reflection;
 
 using Spring.Objects.Factory.Config;
 
@@ -259,7 +260,7 @@ namespace Spring.Objects.Factory.Support
         /// Is always <c>null</c> for a <see cref="RootObjectDefinition"/>.
         /// </summary>
         /// <remarks>
-        /// It is safe to request this property's value. Setting any other value than <c>null</c> will 
+        /// It is safe to request this property's value. Setting any other value than <c>null</c> will
         /// raise an <see cref="ArgumentException"/>.
         /// </remarks>
         /// <exception cref="ArgumentException">Raised on any attempt to set a non-null value on this property.</exception>
@@ -289,8 +290,7 @@ namespace Spring.Objects.Factory.Support
             base.Validate();
             if (HasObjectType)
             {
-                if (typeof(IFactoryObject).IsAssignableFrom(ObjectType)
-                    && !IsSingleton)
+                if (typeof(IFactoryObject).IsAssignableFrom(ObjectType) && !IsSingleton)
                 {
                     throw new ObjectDefinitionValidationException(
                         "IFactoryObject must be defined as a singleton - " +

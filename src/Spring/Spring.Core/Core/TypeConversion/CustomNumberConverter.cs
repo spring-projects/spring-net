@@ -2,13 +2,13 @@
 
 /*
  * Copyright © 2002-2011 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,7 +23,7 @@
 using System;
 using System.ComponentModel;
 using System.Globalization;
-
+using System.Reflection;
 using Spring.Util;
 
 #endregion
@@ -79,7 +79,7 @@ namespace Spring.Core.TypeConversion
 		public CustomNumberConverter(
 			Type type, NumberFormatInfo format, bool allowEmpty)
 		{
-			if (!type.IsPrimitive)
+			if (!type.GetTypeInfo().IsPrimitive)
 			{
 				throw new ArgumentException(
 					"Property type must be a primitive type.");
@@ -130,7 +130,7 @@ namespace Spring.Core.TypeConversion
 		/// </param>
 		/// <param name="culture">
 		/// The <see cref="System.Globalization.CultureInfo"/> to use
-		/// as the current culture. 
+		/// as the current culture.
 		/// </param>
 		/// <param name="val">
 		/// The value that is to be converted.

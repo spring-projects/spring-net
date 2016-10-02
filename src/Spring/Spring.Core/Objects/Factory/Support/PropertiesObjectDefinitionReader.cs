@@ -187,14 +187,9 @@ namespace Spring.Objects.Factory.Support
             Properties props = new Properties();
             try
             {
-                Stream str = resource.InputStream;
-                try
+                using (Stream str = resource.InputStream)
                 {
                     props.Load(str);
-                }
-                finally
-                {
-                    str.Close();
                 }
                 return RegisterObjectDefinitions(props, prefix, resource.Description);
             }
@@ -204,6 +199,7 @@ namespace Spring.Objects.Factory.Support
             }
         }
 
+#if RESOURCESET
         /// <summary>
         /// Register object definitions contained in a
         /// <see cref="System.Resources.ResourceSet"/>, using all property keys (i.e.
@@ -251,6 +247,7 @@ namespace Spring.Objects.Factory.Support
             }
             return RegisterObjectDefinitions(id, prefix);
         }
+#endif
 
         /// <summary>
         /// Register object definitions contained in an
@@ -270,10 +267,10 @@ namespace Spring.Objects.Factory.Support
         }
 
         /// <summary>
-        /// Registers object definitions contained in an <see cref="System.Collections.Specialized.NameValueCollection"/> 
+        /// Registers object definitions contained in an <see cref="System.Collections.Specialized.NameValueCollection"/>
         /// using all property keys ( i.e. not filtering by prefix )
         /// </summary>
-        /// <param name="nameValueCollection">The <see cref="System.Collections.Specialized.NameValueCollection"/> containing 
+        /// <param name="nameValueCollection">The <see cref="System.Collections.Specialized.NameValueCollection"/> containing
         /// object definitions.
         /// </param>
         /// <exception cref="Spring.Objects.ObjectsException">
@@ -359,14 +356,14 @@ namespace Spring.Objects.Factory.Support
                     {
                         string name = nameAndProperty.Substring(0, sepIndx);
 
-                        #region Instrumentation
+#region Instrumentation
 
                         if (log.IsDebugEnabled)
                         {
                             log.Debug("Found object name '" + name + "'");
                         }
 
-                        #endregion
+#endregion
 
                         if (!Registry.ContainsObjectDefinition(name))
                         {
@@ -379,14 +376,14 @@ namespace Spring.Objects.Factory.Support
                         // Ignore it: it wasn't a valid object name and property,
                         // although it did start with the required prefix
 
-                        #region Instrumentation
+#region Instrumentation
 
                         if (log.IsDebugEnabled)
                         {
                             log.Debug("Invalid object name and property [" + nameAndProperty + "]");
                         }
 
-                        #endregion
+#endregion
                     }
                 } // if the key started with the prefix we're looking for
             } // while there are more keys
@@ -497,7 +494,12 @@ namespace Spring.Objects.Factory.Support
             }
             try
             {
-                IConfigurableObjectDefinition objectDefinition = ObjectDefinitionFactory.CreateObjectDefinition(typeName, parent, Domain);
+                IConfigurableObjectDefinition objectDefinition =
+#if APPDOMAINS
+                    ObjectDefinitionFactory.CreateObjectDefinition(typeName, parent, Domain);
+#else
+                    ObjectDefinitionFactory.CreateObjectDefinition(typeName, parent);
+#endif
                 objectDefinition.PropertyValues = pvs;
                 objectDefinition.IsSingleton = singleton;
                 objectDefinition.IsLazyInit = lazyInit;

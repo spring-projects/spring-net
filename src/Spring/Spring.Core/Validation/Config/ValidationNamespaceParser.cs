@@ -123,9 +123,12 @@ namespace Spring.Validation.Config
             string name = "validator: " + (StringUtils.HasText(id) ? id : this.definitionCount.ToString());
 
             MutablePropertyValues properties = new MutablePropertyValues();
-            IConfigurableObjectDefinition od
-                = parserContext.ReaderContext.ObjectDefinitionFactory.CreateObjectDefinition(
-                    typeName, parent, parserContext.ReaderContext.Reader.Domain);
+            IConfigurableObjectDefinition od =
+#if APPDOMAINS
+                parserContext.ReaderContext.ObjectDefinitionFactory.CreateObjectDefinition(typeName, parent, parserContext.ReaderContext.Reader.Domain);
+#else
+                parserContext.ReaderContext.ObjectDefinitionFactory.CreateObjectDefinition(typeName, parent);
+#endif
 
             od.PropertyValues = properties;
             od.IsSingleton = true;
@@ -206,7 +209,7 @@ namespace Spring.Validation.Config
         /// Parses and potentially registers a validator.
         /// </summary>
         /// <remarks>
-        /// Only validators that have <code>id</code> attribute specified are registered 
+        /// Only validators that have <code>id</code> attribute specified are registered
         /// as separate object definitions within application context.
         /// </remarks>
         /// <param name="element">Validator XML element.</param>
@@ -274,7 +277,11 @@ namespace Spring.Validation.Config
             }
 
             IConfigurableObjectDefinition action =
+#if APPDOMAINS
                 parserContext.ReaderContext.ObjectDefinitionFactory.CreateObjectDefinition(typeName, null, parserContext.ReaderContext.Reader.Domain);
+#else
+                parserContext.ReaderContext.ObjectDefinitionFactory.CreateObjectDefinition(typeName, null);
+#endif
             action.ConstructorArgumentValues = ctorArgs;
             action.PropertyValues = properties;
 
@@ -286,7 +293,7 @@ namespace Spring.Validation.Config
             string typeName = "Spring.Validation.Actions.ExceptionAction, Spring.Core";
             string throwExpression = GetAttributeValue(element, ValidatorDefinitionConstants.ThrowAttribute);
 
-            
+
             ConstructorArgumentValues ctorArgs = new ConstructorArgumentValues();
             ctorArgs.AddGenericArgumentValue(throwExpression);
 
@@ -298,7 +305,11 @@ namespace Spring.Validation.Config
             }
 
             IConfigurableObjectDefinition action =
+#if APPDOMAINS
                 parserContext.ReaderContext.ObjectDefinitionFactory.CreateObjectDefinition(typeName, null, parserContext.ReaderContext.Reader.Domain);
+#else
+                parserContext.ReaderContext.ObjectDefinitionFactory.CreateObjectDefinition(typeName, null);
+#endif
             action.ConstructorArgumentValues = ctorArgs;
             action.PropertyValues = properties;
 
@@ -322,7 +333,11 @@ namespace Spring.Validation.Config
             }
 
             IConfigurableObjectDefinition action =
+#if APPDOMAINS
                 parserContext.ReaderContext.ObjectDefinitionFactory.CreateObjectDefinition(typeName, null, parserContext.ReaderContext.Reader.Domain);
+#else
+                parserContext.ReaderContext.ObjectDefinitionFactory.CreateObjectDefinition(typeName, null);
+#endif
             action.PropertyValues = properties;
 
             return action;
@@ -353,12 +368,16 @@ namespace Spring.Validation.Config
             }
 
             IConfigurableObjectDefinition reference =
+#if APPDOMAINS
                 parserContext.ReaderContext.ObjectDefinitionFactory.CreateObjectDefinition(typeName, null, parserContext.ReaderContext.Reader.Domain);
+#else
+                parserContext.ReaderContext.ObjectDefinitionFactory.CreateObjectDefinition(typeName, null);
+#endif
             reference.PropertyValues = properties;
             return reference;
         }
 
-        #region Element & Attribute Name Constants
+#region Element & Attribute Name Constants
 
         private class ValidatorDefinitionConstants
         {
@@ -397,6 +416,6 @@ namespace Spring.Validation.Config
             public const string ParameterValueAttribute = "value";
         }
 
-        #endregion
+#endregion
     }
 }

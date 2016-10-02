@@ -20,7 +20,7 @@
 
 using System;
 using System.Collections.Generic;
-
+using System.Reflection;
 using Common.Logging;
 
 using Spring.Core;
@@ -132,7 +132,7 @@ namespace Spring.Context.Attributes
 
                 if (((AbstractObjectDefinition)objDef).HasObjectType)
                 {
-                    if (Attribute.GetCustomAttribute(objDef.ObjectType, typeof(ConfigurationAttribute)) != null)
+                    if (objDef.ObjectType.GetTypeInfo().GetCustomAttribute(typeof(ConfigurationAttribute)) != null)
                     {
                         //TODO check type of object isn't infrastructure type.
 

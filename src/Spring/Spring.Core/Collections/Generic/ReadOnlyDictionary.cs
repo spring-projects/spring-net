@@ -96,7 +96,7 @@ namespace Spring.Collections.Generic
         {
             get
             {
-                return new ReadOnlyCollection<TKey>(new List<TKey>(dict.Keys));                
+                return new ReadOnlyCollection<TKey>(new List<TKey>(dict.Keys));
             }
         }
 
@@ -128,13 +128,13 @@ namespace Spring.Collections.Generic
         public ICollection<TValue> Values
         {
             get
-            {                              
+            {
                 return new ReadOnlyCollection<TValue>(new List<TValue>(dict.Values));
             }
         }
 
         /// <summary>
-        /// Gets the value with the specified key. 
+        /// Gets the value with the specified key.
         /// Set will throw an exception
         /// </summary>
         public TValue this[TKey key]
@@ -343,8 +343,8 @@ namespace Spring.Collections.Generic
         /// Gets the <see cref="System.Object"/> with the specified key. Set throws an exception.
         /// </summary>
         /// <value></value>
-        /// <exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"></see> is read-only. 
-        /// if try to set value</exception>        
+        /// <exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Generic.ICollection`1"></see> is read-only.
+        /// if try to set value</exception>
         public object this[object key]
         {
             get
@@ -397,6 +397,7 @@ namespace Spring.Collections.Generic
             }
         }
 
+#if BINARY_SERIALIZATION
         /// <summary>
         /// Runs when the entire object graph has been deserialized.
         /// </summary>
@@ -424,5 +425,6 @@ namespace Spring.Collections.Generic
                 serializable.GetObjectData(info, context);
             }
         }
+#endif
     }
 }

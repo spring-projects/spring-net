@@ -24,6 +24,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Security;
@@ -66,7 +67,7 @@ namespace Spring.Util
         /// </summary>
         public static bool IsNullableType(Type type)
         {
-            return (type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>));
+            return (type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>));
         }
 
         /// <summary>
@@ -102,8 +103,8 @@ namespace Spring.Util
         /// </summary>
         /// <remarks>
         /// <para>Searches with BindingFlags</para>
-        /// <para>When dealing with interface methods, you probable want to 'normalize' method references by calling 
-        /// <see cref="MapInterfaceMethodToImplementationIfNecessary"/>. 
+        /// <para>When dealing with interface methods, you probable want to 'normalize' method references by calling
+        /// <see cref="MapInterfaceMethodToImplementationIfNecessary"/>.
         /// </para>
         /// </remarks>
         /// <param name="targetType">
@@ -129,8 +130,8 @@ namespace Spring.Util
         /// </summary>
         /// <remarks>
         /// <para>Searches with BindingFlags</para>
-        /// <para>When dealing with interface methods, you probable want to 'normalize' method references by calling 
-        /// <see cref="MapInterfaceMethodToImplementationIfNecessary"/>. 
+        /// <para>When dealing with interface methods, you probable want to 'normalize' method references by calling
+        /// <see cref="MapInterfaceMethodToImplementationIfNecessary"/>.
         /// </para>
         /// </remarks>
         /// <param name="targetType">
@@ -148,7 +149,7 @@ namespace Spring.Util
             Type targetType, string method, Type[] argumentTypes, int genericArgumentsCount)
         {
             AssertUtils.ArgumentNotNull(targetType, "Type must not be null");
-            
+
             MethodInfo retMethod = null;
 
             MethodInfo[] methods = targetType.GetMethods(ReflectionUtils.AllMembersCaseInsensitiveFlags);
@@ -222,7 +223,7 @@ namespace Spring.Util
 
             MethodInfo concreteMethodInfo = methodInfo;
 
-            if (methodInfo.DeclaringType.IsInterface)
+            if (methodInfo.DeclaringType.GetTypeInfo().IsInterface)
             {
                 InterfaceMapping interfaceMapping = implementingType.GetInterfaceMap(methodInfo.DeclaringType);
                 int methodIndex = Array.IndexOf(interfaceMapping.InterfaceMethods, methodInfo);
@@ -269,7 +270,7 @@ namespace Spring.Util
         }
 
         /// <summary>
-        /// Returns an array of <see langword="string"/>s that represent 
+        /// Returns an array of <see langword="string"/>s that represent
         /// the names of the generic type parameter.
         /// </summary>
         /// <param name="method">The method.</param>
@@ -284,7 +285,7 @@ namespace Spring.Util
         }
 
         /// <summary>
-        /// Returns an array of <see langword="string"/>s that represent 
+        /// Returns an array of <see langword="string"/>s that represent
         /// the names of the generic type parameter.
         /// </summary>
         /// <param name="args">The parameter info array.</param>
@@ -418,7 +419,7 @@ namespace Spring.Util
                     if (parameters.Length > 0)
                     {
                         ParameterInfo lastParameter = parameters[parameters.Length - 1];
-                        if (lastParameter.GetCustomAttributes(typeof(ParamArrayAttribute), false).Length > 0 && argValues.Length >= parameters.Length)
+                        if (lastParameter.GetCustomAttributes(typeof(ParamArrayAttribute), false).Any() && argValues.Length >= parameters.Length)
                         {
                             paramValues =
                                 PackageParamArray(argValues, parameters.Length,
@@ -437,8 +438,8 @@ namespace Spring.Util
                             Type paramType = parameters[i].ParameterType;
                             object paramValue = paramValues[i];
 
-                            if ((paramValue == null && paramType.IsValueType && !IsNullableType(paramType))
-                                || (paramValue != null && !paramType.IsAssignableFrom(paramValue.GetType())))
+                            if ((paramValue == null && paramType.GetTypeInfo().IsValueType && !IsNullableType(paramType))
+                                || (paramValue != null && !paramType.IsInstanceOfType(paramValue)))
                             {
                                 isMatch = false;
                                 break;
@@ -527,8 +528,8 @@ namespace Spring.Util
         }
 
         /// <summary>
-        /// Convenience method to convert an interface <see cref="System.Type"/> 
-        /// to a <see cref="System.Type"/> array that contains 
+        /// Convenience method to convert an interface <see cref="System.Type"/>
+        /// to a <see cref="System.Type"/> array that contains
         /// all the interfaces inherited and the specified interface.
         /// </summary>
         /// <param name="intf">The interface to convert.</param>
@@ -543,7 +544,7 @@ namespace Spring.Util
         {
             AssertUtils.ArgumentNotNull(intf, "intf");
 
-            if (!intf.IsInterface)
+            if (!intf.GetTypeInfo().IsInterface)
             {
                 throw new ArgumentException(
                     string.Format(CultureInfo.InvariantCulture,
@@ -576,8 +577,7 @@ namespace Spring.Util
         /// </exception>
         public static bool PropertyIsIndexer(string propertyName, Type type)
         {
-            DefaultMemberAttribute[] attribs =
-                (DefaultMemberAttribute[])type.GetCustomAttributes(typeof(DefaultMemberAttribute), true);
+            var attribs = (DefaultMemberAttribute[]) type.GetTypeInfo().GetCustomAttributes(typeof(DefaultMemberAttribute), true);
             if (attribs.Length != 0)
             {
                 foreach (DefaultMemberAttribute attrib in attribs)
@@ -618,7 +618,7 @@ namespace Spring.Util
             {
                 Type interfaceType = interfaces[i];
                 AssertUtils.ArgumentNotNull(interfaceType, StringUtils.Surround("interfaces[", i, "]"));
-                if (!interfaceType.IsInterface)
+                if (!interfaceType.GetTypeInfo().IsInterface)
                 {
                     throw new ArgumentException(interfaces[i].FullName + " is not an interface");
                 }
@@ -664,7 +664,7 @@ namespace Spring.Util
         /// </exception>
         public static object GetDefaultValue(Type type)
         {
-            if (!type.IsValueType)
+            if (!type.GetTypeInfo().IsValueType)
             {
                 return null;
             }
@@ -680,7 +680,7 @@ namespace Spring.Util
             {
                 return Char.MinValue;
             }
-            if (type.IsEnum)
+            if (type.GetTypeInfo().IsEnum)
             {
                 Array values = Enum.GetValues(type);
                 if (values == null || values.Length == 0)
@@ -812,7 +812,7 @@ namespace Spring.Util
         /// <returns>Friendly string representing the Type</returns>
         public static string GetTypeFriendlyName(Type type)
         {
-#if MONO
+#if MONO || NETCORE
             //no csharp services in mono (verify this!) so have to fall back to returning the ToString() for now
             //TODO: investigate whether there is another equivalent manner of providing this functionality under MONO
             return type.ToString();
@@ -852,7 +852,7 @@ namespace Spring.Util
         }
 
         /// <summary>
-        ///  Within <paramref name="type"/>, counts the number of overloads for the method with the given (case-insensitive!) <paramref name="name"/> 
+        ///  Within <paramref name="type"/>, counts the number of overloads for the method with the given (case-insensitive!) <paramref name="name"/>
         /// </summary>
         /// <param name="type">The type to be searched</param>
         /// <param name="name">the name of the method for which overloads shall be counted</param>
@@ -873,7 +873,7 @@ namespace Spring.Util
         {
             MethodInfo method = member as MethodInfo;
             string name = criteria as string;
-            return String.Compare(method.Name, name, true, CultureInfo.InvariantCulture) == 0;
+            return string.Compare(method.Name, name, StringComparison.OrdinalIgnoreCase) == 0;
         }
 
         /// <summary>
@@ -1072,7 +1072,7 @@ namespace Spring.Util
         /// Creates a <see cref="System.Reflection.Emit.CustomAttributeBuilder"/>.
         /// </summary>
         /// <param name="attributeData">
-        /// The <see cref="System.Reflection.CustomAttributeData"/> to create 
+        /// The <see cref="System.Reflection.CustomAttributeData"/> to create
         /// the custom attribute builder from.
         /// </param>
         /// <returns>A custom attribute builder.</returns>
@@ -1097,7 +1097,7 @@ namespace Spring.Util
             FieldInfo[] attributeFields = attributeType.GetFields(
                 BindingFlags.Instance | BindingFlags.Public);
 
-            // Not using generics bellow as probably Spring.NET tries to keep 
+            // Not using generics bellow as probably Spring.NET tries to keep
             // it on .NET1 compatibility level right now I believe (SD)
             // In case of using List<CustomAttributesData> the above note makes
             // no sense (SD:)
@@ -1219,7 +1219,7 @@ namespace Spring.Util
         /// </summary>
         /// <param name="member">The type or method to find attributes for.</param>
         /// <returns>
-        /// A list of custom attributes (CustomAttributeData or Attribute instances) 
+        /// A list of custom attributes (CustomAttributeData or Attribute instances)
         /// that should be applied to type or method.
         /// </returns>
         public static IList GetCustomAttributes(MemberInfo member)
@@ -1227,10 +1227,10 @@ namespace Spring.Util
             ArrayList attributes = new ArrayList();
 
             // add attributes that apply to the target type or method
-            object[] attrs = member.GetCustomAttributes(false);
+            Attribute[] attrs = member.GetCustomAttributes(false).Cast<Attribute>().ToArray();
             try
             {
-                IList<CustomAttributeData> attrsData = CustomAttributeData.GetCustomAttributes(member);
+                IList<CustomAttributeData> attrsData = member.GetCustomAttributesData();
 
                 if (attrs.Length != attrsData.Count)
                 {
@@ -1361,7 +1361,7 @@ namespace Spring.Util
             typeof(Exception).GetMethod("InternalPreserveStackTrace", BindingFlags.Instance | BindingFlags.NonPublic);
 
         /// <summary>
-        /// Unwraps the supplied <see cref="System.Reflection.TargetInvocationException"/> 
+        /// Unwraps the supplied <see cref="System.Reflection.TargetInvocationException"/>
         /// and returns the inner exception preserving the stack trace.
         /// </summary>
         /// <param name="ex">
@@ -1400,22 +1400,22 @@ namespace Spring.Util
         /// </returns>
         public static bool IsTypeNullable(Type type)
         {
-            return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
+            return type.GetTypeInfo().IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
         }
 
         /// <summary>
-        /// Is the supplied <paramref name="type"/> can be accessed 
+        /// Is the supplied <paramref name="type"/> can be accessed
         /// from the supplied friendly assembly ?
         /// </summary>
         /// <param name="type">The type to check.</param>
         /// <param name="friendlyAssemblyName">The friendly assembly name.</param>
         /// <returns>
-        /// <see langword="true"/> if the type can be accessed 
+        /// <see langword="true"/> if the type can be accessed
         /// from the supplied friendly assembly; Otherwise <see langword="false"/>.
         /// </returns>
         public static bool IsTypeVisible(Type type, string friendlyAssemblyName)
         {
-            if (type.IsVisible)
+            if (type.GetTypeInfo().IsVisible)
             {
                 return true;
             }
@@ -1423,10 +1423,10 @@ namespace Spring.Util
             {
                 if (friendlyAssemblyName != null
                     && friendlyAssemblyName.Length > 0
-                    && (!type.IsNested || type.IsNestedPublic ||
-                     (!type.IsNestedPrivate && (type.IsNestedAssembly || type.IsNestedFamORAssem))))
+                    && (!type.IsNested || type.GetTypeInfo().IsNestedPublic ||
+                     (!type.GetTypeInfo().IsNestedPrivate && (type.GetTypeInfo().IsNestedAssembly || type.GetTypeInfo().IsNestedFamORAssem))))
                 {
-                    object[] attrs = type.Assembly.GetCustomAttributes(typeof(InternalsVisibleToAttribute), false);
+                    object[] attrs = type.GetTypeInfo().Assembly.GetCustomAttributes(typeof(InternalsVisibleToAttribute), false);
                     foreach (InternalsVisibleToAttribute ivta in attrs)
                     {
                         if (ivta.AssemblyName.Split(',')[0] == friendlyAssemblyName)
@@ -1440,7 +1440,7 @@ namespace Spring.Util
         }
 
         /// <summary>
-        /// Gets all of the interfaces implemented by 
+        /// Gets all of the interfaces implemented by
         /// the specified <see cref="System.Type"/>.
         /// </summary>
         /// <param name="type">
@@ -1454,7 +1454,7 @@ namespace Spring.Util
         {
             AssertUtils.ArgumentNotNull(type, "type");
 
-            if (type.IsInterface)
+            if (type.GetTypeInfo().IsInterface)
             {
                 List<Type> interfaces = new List<Type>();
                 interfaces.Add(type);
@@ -1471,7 +1471,7 @@ namespace Spring.Util
         /// Returns the explicit <see cref="System.Exception"/> that is the root cause of an exception.
         /// </summary>
         /// <remarks>
-        /// If the InnerException property of the current exception is a null reference 
+        /// If the InnerException property of the current exception is a null reference
         /// or a <see cref="System.NullReferenceException"/>, returns the current exception.
         /// </remarks>
         /// <param name="ex">The last exception thrown.</param>
@@ -1491,7 +1491,7 @@ namespace Spring.Util
         }
 
         /// <summary>
-        /// Copies all fields from one object to another. 
+        /// Copies all fields from one object to another.
         /// </summary>
         /// <remarks>
         /// The types of both objects must be related. This means, that either of the following is true:
@@ -1609,9 +1609,11 @@ namespace Spring.Util
                 }
 
                 FieldInfo[] fields = GetFields(type);
+#if !NETCORE
                 SecurityCritical.ExecutePrivileged(new PermissionSet(PermissionState.Unrestricted), delegate
                 {
-                    DynamicMethod dm = new DynamicMethod(type.FullName + ".ShallowCopy", null, new Type[] { typeof(object), typeof(object) }, type.Module, true);
+#endif
+                    DynamicMethod dm = new DynamicMethod(type.FullName + ".ShallowCopy", null, new Type[] { typeof(object), typeof(object) }, type.GetTypeInfo().Module, true);
                     ILGenerator ilGen = dm.GetILGenerator();
                     ilGen.DeclareLocal(type);
                     ilGen.DeclareLocal(type);
@@ -1632,14 +1634,16 @@ namespace Spring.Util
                     ilGen.Emit(OpCodes.Ret);
 
                     handler = (MemberwiseCopyHandler)dm.CreateDelegate(typeof(MemberwiseCopyHandler));
+#if !NETCORE
                 });
+#endif
 
                 s_handlerCache[type] = handler;
             }
             return handler;
         }
 
-        #region Field Cache Management for "MemberwiseCopy"
+#region Field Cache Management for "MemberwiseCopy"
 
         private const BindingFlags FIELDBINDINGS =
             BindingFlags.Instance | BindingFlags.DeclaredOnly | BindingFlags.Public | BindingFlags.NonPublic;
@@ -1672,10 +1676,10 @@ namespace Spring.Util
             CollectFieldsRecursive(type.BaseType, fieldList);
         }
 
-        #endregion Field Cache Management for "MemberwiseCopy"
+#endregion Field Cache Management for "MemberwiseCopy"
 
 
-        #region CustomAttributeBuilderBuilder inner class definition
+#region CustomAttributeBuilderBuilder inner class definition
 
         /// <summary>
         /// Creates a <see cref=" CustomAttributeBuilder"/>.
@@ -1683,19 +1687,19 @@ namespace Spring.Util
         /// <author>Bruno Baia</author>
         public class CustomAttributeBuilderBuilder
         {
-            #region Fields
+#region Fields
 
             private Type type;
             private ArrayList constructorArgs;
             private List<PropertyInfo> namedProperties;
             private List<object> propertyValues;
 
-            #endregion
+#endregion
 
-            #region Constructor(s) / Destructor
+#region Constructor(s) / Destructor
 
             /// <summary>
-            /// Creates a new instance of the 
+            /// Creates a new instance of the
             /// <see cref="CustomAttributeBuilderBuilder"/> class.
             /// </summary>
             /// <param name="attributeType">The custom attribute type.</param>
@@ -1706,7 +1710,7 @@ namespace Spring.Util
             }
 
             /// <summary>
-            /// Creates a new instance of the 
+            /// Creates a new instance of the
             /// <see cref="CustomAttributeBuilderBuilder"/> class.
             /// </summary>
             /// <param name="attributeType">The custom attribute type.</param>
@@ -1726,12 +1730,12 @@ namespace Spring.Util
                 this.propertyValues = new List<object>();
             }
 
-            #endregion
+#endregion
 
-            #region Public Methods
+#region Public Methods
 
             /// <summary>
-            /// Adds the specified values to the constructor argument list 
+            /// Adds the specified values to the constructor argument list
             /// used to create the custom attribute.
             /// </summary>
             /// <param name="values">An array of argument values.</param>
@@ -1785,9 +1789,9 @@ namespace Spring.Util
 
             }
 
-            #endregion
+#endregion
         }
 
-        #endregion
+#endregion
     }
 }

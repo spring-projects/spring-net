@@ -18,6 +18,7 @@
 
 #endregion
 
+#if !NETCORE
 using System;
 using System.Collections.Generic;
 
@@ -37,13 +38,13 @@ namespace Spring.Objects.Factory.Config
         private string argumentPrefix = DEFAULT_ARG_PREFIX;
         private string valueSeparator = DEFAULT_VALUE_SEPARATOR;
 
-        private string[] commandLineArgs;
+        private readonly string[] commandLineArgs;
         protected IDictionary<string, string> arguments;
 
-        private object objectMonitor = new object();
+        private readonly object objectMonitor = new object();
 
         /// <summary>
-        /// Default constructor. 
+        /// Default constructor.
         /// Initializes command line arguments from the environment.
         /// </summary>
         public CommandLineArgsVariableSource()
@@ -61,11 +62,11 @@ namespace Spring.Objects.Factory.Config
         }
 
         /// <summary>
-        /// Gets or sets a prefix that should be used to 
+        /// Gets or sets a prefix that should be used to
         /// identify arguments to extract values from.
         /// </summary>
         /// <value>
-        /// A prefix that should be used to identify arguments 
+        /// A prefix that should be used to identify arguments
         /// to extract values from. Defaults to slash ("/").
         /// </value>
         public string ArgumentPrefix
@@ -79,7 +80,7 @@ namespace Spring.Objects.Factory.Config
         /// separate argument name from its value.
         /// </summary>
         /// <value>
-        /// A character that should be used to separate argument 
+        /// A character that should be used to separate argument
         /// name from its value. Defaults to colon (":").
         /// </value>
         public string ValueSeparator
@@ -149,3 +150,4 @@ namespace Spring.Objects.Factory.Config
         }
     }
 }
+#endif

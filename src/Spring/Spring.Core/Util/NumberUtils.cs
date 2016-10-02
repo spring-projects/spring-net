@@ -86,7 +86,12 @@ namespace Spring.Util
         /// </returns>
         public static bool CanConvertToInteger(object number)
         {
-            TypeConverter converter = TypeDescriptor.GetConverter(number);
+            if (number == null)
+            {
+                return false;
+            }
+
+            TypeConverter converter = TypeDescriptor.GetConverter(number.GetType());
             return (converter.CanConvertTo(typeof(Int32))
                 || converter.CanConvertTo(typeof(Int16))
                 || converter.CanConvertTo(typeof(Int64))
@@ -106,7 +111,12 @@ namespace Spring.Util
         /// </returns>
         public static bool CanConvertToDecimal(object number)
         {
-            TypeConverter converter = TypeDescriptor.GetConverter(number);
+            if (number == null)
+            {
+                return false;
+            }
+
+            TypeConverter converter = TypeDescriptor.GetConverter(number.GetType());
             return (converter.CanConvertTo(typeof(Single))
                 || converter.CanConvertTo(typeof(Double))
                 || converter.CanConvertTo(typeof(Decimal))
@@ -552,11 +562,11 @@ namespace Spring.Util
 
             if (leftTypeCode > rightTypeCode)
             {
-                n = Convert.ChangeType(n, leftTypeCode);
+                n = Convert.ChangeType(n, leftTypeCode, null);
             }
             else
             {
-                m = Convert.ChangeType(m, rightTypeCode);
+                m = Convert.ChangeType(m, rightTypeCode, null);
             }
         }
 

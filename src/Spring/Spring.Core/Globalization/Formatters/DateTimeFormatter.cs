@@ -32,7 +32,7 @@ namespace Spring.Globalization.Formatters
 	/// <remarks>
 	/// <para>
 	/// <c>DateTimeFormatter</c> uses properties of the
-	/// <see cref="DateTimeFormatInfo"/> to format and parse <see cref="DateTime"/> values. 
+	/// <see cref="DateTimeFormatInfo"/> to format and parse <see cref="DateTime"/> values.
 	/// </para>
 	/// <para>
 	/// If you use one of the constructors that accept culture as a parameter
@@ -66,7 +66,7 @@ namespace Spring.Globalization.Formatters
         /// </summary>
         /// <param name="format">Date/time format string.</param>
         /// <param name="cultureName">The culture name.</param>
-        public DateTimeFormatter(string format, string cultureName) : this(format, CultureInfo.CreateSpecificCulture(cultureName))
+        public DateTimeFormatter(string format, string cultureName) : this(format, new CultureInfo(cultureName))
         {}
 
         /// <summary>

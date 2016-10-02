@@ -2,13 +2,13 @@
 
 /*
  * Copyright © 2002-2011 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -50,7 +50,7 @@ namespace Spring.Core
 
 		private class DefaultControlFlow : IControlFlow
 		{
-			private StackTrace _stackTrace;
+			private readonly StackTrace _stackTrace;
 
 			#region Constructor (s) / Destructor
 
@@ -60,12 +60,16 @@ namespace Spring.Core
 			/// </summary>
 			public DefaultControlFlow()
 			{
-				_stackTrace = new StackTrace();
-			}
+#if NETCORE
+                _stackTrace = new StackTrace(new Exception(), false);
+#else
+                _stackTrace = new StackTrace();
+#endif
+            }
 
-			#endregion
+#endregion
 
-			#region IControlFlow Members
+#region IControlFlow Members
 
 			/// <summary>
 			/// Detects whether the caller is under the supplied <see cref="System.Type"/>,
@@ -111,12 +115,13 @@ namespace Spring.Core
 				return _stackTrace.ToString().IndexOf(token) != -1;
 			}
 
-			private bool IsMatch(ICriteria criteria) 
+			private bool IsMatch(ICriteria criteria)
 			{
-				for (int i = 0; i < _stackTrace.FrameCount; i++)
+			    var frames = _stackTrace.GetFrames();
+				for (int i = 0; i < frames.Length; i++)
 				{
-					MethodBase method = _stackTrace.GetFrame(i).GetMethod();
-					if(criteria.IsSatisfied(method)) 
+					MethodBase method = frames[i].GetMethod();
+					if(criteria.IsSatisfied(method))
 					{
 						return true;
 					}
@@ -124,7 +129,7 @@ namespace Spring.Core
 				return false;
 			}
 
-			private sealed class MethodsDeclaredTypeCriteria : ICriteria  
+			private sealed class MethodsDeclaredTypeCriteria : ICriteria
 			{
 				public MethodsDeclaredTypeCriteria(Type typeToMatch)
 				{
@@ -134,7 +139,7 @@ namespace Spring.Core
 				public bool IsSatisfied(object datum)
 				{
 					MethodBase method = datum as MethodBase;
-					if(method != null && method.DeclaringType != null) 
+					if(method != null && method.DeclaringType != null)
 					{
 						return method.DeclaringType.Equals(_typeToMatch);
 					}
@@ -144,7 +149,7 @@ namespace Spring.Core
 				private Type _typeToMatch;
 			}
 
-			#endregion
+#endregion
 		}
 	}
 }

@@ -45,7 +45,7 @@ namespace Spring.Core
             get
             {
                 return "methodInvocation";
-            }			
+            }
         }
 
         #region Constructor (s) / Destructor
@@ -80,7 +80,7 @@ namespace Spring.Core
             : base (message, rootCause)
         {
         }
-		
+
         /// <summary>
         /// Constructor to use when an exception results from a
         /// <see cref="System.ComponentModel.PropertyChangedEventArgs"/>.
@@ -92,11 +92,12 @@ namespace Spring.Core
         /// The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> that
         /// resulted in an exception.
         /// </param>
-        public MethodInvocationException (Exception ex, PropertyChangeEventArgs argument) : 
+        public MethodInvocationException (Exception ex, PropertyChangeEventArgs argument) :
             base ("Property '" + argument.PropertyName + "' threw exception.", argument, ex)
         {
         }
 
+#if BINARY_SERIALIZATION
         /// <summary>
         /// Creates a new instance of the MethodInvocationException class.
         /// </summary>
@@ -113,6 +114,7 @@ namespace Spring.Core
             : base (info, context)
         {
         }
+#endif
         #endregion
     }
 }

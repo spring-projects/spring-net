@@ -143,6 +143,7 @@ namespace Spring.Expressions
         public BaseNode()
         { }
 
+#if BINARY_SERIALIZATION
         /// <summary>
         /// Create a new instance from SerializationInfo
         /// </summary>
@@ -150,6 +151,7 @@ namespace Spring.Expressions
             : base(info, context)
         {
         }
+#endif
 
         /// <summary>
         /// Returns node's value.
@@ -224,7 +226,7 @@ namespace Spring.Expressions
         /// <remarks>
         /// <p>
         /// This is a default implementation of <c>Set</c> method, which
-        /// simply throws <see cref="NotSupportedException"/>. 
+        /// simply throws <see cref="NotSupportedException"/>.
         /// </p>
         /// <p>
         /// This was done in order to avoid redundant <c>Set</c> method implementations,

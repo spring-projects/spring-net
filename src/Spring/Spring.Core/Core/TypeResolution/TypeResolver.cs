@@ -44,7 +44,7 @@ namespace Spring.Core.TypeResolution
         /// <see cref="System.Type"/> instance.
         /// </summary>
         /// <param name="typeName">
-        /// The unresolved (possibly partially assembly qualified) name 
+        /// The unresolved (possibly partially assembly qualified) name
         /// of a <see cref="System.Type"/>.
         /// </param>
         /// <returns>
@@ -64,7 +64,7 @@ namespace Spring.Core.TypeResolution
             Type type = null;
             try
             {
-                type = (typeInfo.IsAssemblyQualified) ?
+                type = typeInfo.IsAssemblyQualified ?
                      LoadTypeDirectlyFromAssembly(typeInfo) :
                      LoadTypeByIteratingOverAllLoadedAssemblies(typeInfo);
             }
@@ -113,11 +113,7 @@ namespace Spring.Core.TypeResolution
         private static Type LoadTypeDirectlyFromAssembly(TypeAssemblyHolder typeInfo)
         {
             Type type = null;
-#if MONO_2_0
-            Assembly assembly = Assembly.Load(typeInfo.AssemblyName);
-#else
-			Assembly assembly = Assembly.LoadWithPartialName(typeInfo.AssemblyName);
-#endif
+			Assembly assembly = Assembly.Load(new AssemblyName(typeInfo.AssemblyName));
             if (assembly != null)
             {
                 type = assembly.GetType(typeInfo.TypeName, true, true);
@@ -127,7 +123,7 @@ namespace Spring.Core.TypeResolution
 
         /// <summary>
         /// Uses <see cref="M:System.AppDomain.CurrentDomain.GetAssemblies()"/>
-        /// to load the attendant <see cref="System.Type"/> referred to by 
+        /// to load the attendant <see cref="System.Type"/> referred to by
         /// the <paramref name="typeInfo"/> parameter.
         /// </summary>
         /// <param name="typeInfo">
@@ -138,6 +134,9 @@ namespace Spring.Core.TypeResolution
         /// </returns>
         private static Type LoadTypeByIteratingOverAllLoadedAssemblies(TypeAssemblyHolder typeInfo)
         {
+#if NETCORE
+            throw new InvalidOperationException("Under .NET Core you need to always your declare types with assembly qualified named");
+#else
             Type type = null;
             Assembly[] assemblies = AppDomain.CurrentDomain.GetAssemblies();
             foreach (Assembly assembly in assemblies)
@@ -149,10 +148,11 @@ namespace Spring.Core.TypeResolution
                 }
             }
             return type;
+#endif
         }
 
         /// <summary>
-        /// Creates a new <see cref="TypeLoadException"/> instance 
+        /// Creates a new <see cref="TypeLoadException"/> instance
         /// from the given <paramref name="typeName"/>
         /// </summary>
         protected static TypeLoadException BuildTypeLoadException(string typeName)
@@ -162,7 +162,7 @@ namespace Spring.Core.TypeResolution
 
         /// <summary>
         /// Creates a new <see cref="TypeLoadException"/> instance
-        /// from the given <paramref name="typeName"/> with the given inner <see cref="Exception"/> 
+        /// from the given <paramref name="typeName"/> with the given inner <see cref="Exception"/>
         /// </summary>
         protected static TypeLoadException BuildTypeLoadException(string typeName, Exception ex)
         {

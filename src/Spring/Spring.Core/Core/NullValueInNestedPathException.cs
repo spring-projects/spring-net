@@ -18,15 +18,14 @@
 
 #endregion
 
-#region Imports
-
 using System;
 using System.Globalization;
+#if BINARY_SERIALIZATION
 using System.Runtime.Serialization;
 using System.Security.Permissions;
-using Spring.Util;
+#endif
 
-#endregion
+using Spring.Util;
 
 namespace Spring.Core
 {
@@ -55,8 +54,6 @@ namespace Spring.Core
         {
             get { return type; }
         }
-
-        #region Constructor (s) / Destructor
 
         /// <summary>
         /// Creates a new instance of the
@@ -122,6 +119,7 @@ namespace Spring.Core
             this.type = type;
         }
 
+#if BINARY_SERIALIZATION
         /// <summary>
         /// Creates a new instance of the
         /// <see cref="NullValueInNestedPathException"/> class.
@@ -140,10 +138,6 @@ namespace Spring.Core
             type = info.GetValue("ObjectType", typeof (Type)) as Type;
             property = info.GetString("PropertyName");
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Populates a <see cref="System.Runtime.Serialization.SerializationInfo"/> with
@@ -165,7 +159,6 @@ namespace Spring.Core
             info.AddValue("ObjectType", ObjectType);
             info.AddValue("PropertyName", PropertyName);
         }
-
-        #endregion
+#endif
     }
 }

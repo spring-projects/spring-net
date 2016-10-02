@@ -71,7 +71,7 @@ namespace Spring.Objects.Factory.Support
             builder.objectDefinition = new GenericObjectDefinition();
             return builder;
         }
-       
+
         /// <summary>
         /// Creates a new <see cref="ObjectDefinitionBuilder"/> used to construct a <see cref="Spring.Objects.Factory.Support.GenericObjectDefinition"/>.
         /// </summary>
@@ -83,7 +83,7 @@ namespace Spring.Objects.Factory.Support
             builder.objectDefinition.ObjectType = objectType;
             return builder;
         }
-       
+
         /// <summary>
         /// Creates a new <see cref="ObjectDefinitionBuilder"/> used to construct a <see cref="Spring.Objects.Factory.Support.GenericObjectDefinition"/>.
         /// </summary>
@@ -95,7 +95,7 @@ namespace Spring.Objects.Factory.Support
             builder.objectDefinition.ObjectTypeName = objectTypeName;
             return builder;
         }
-       
+
         /// <summary>
         /// Create a new <code>ObjectDefinitionBuilder</code> used to construct a root object definition.
         /// </summary>
@@ -125,13 +125,17 @@ namespace Spring.Objects.Factory.Support
 
             // Pass in null for parent name and also AppDomain to force object definition to be register by name and not type.
             builder.objectDefinition =
+#if APPDOMAINS
                            objectDefinitionFactory.CreateObjectDefinition(objectTypeName, null, null);
+#else
+                           objectDefinitionFactory.CreateObjectDefinition(objectTypeName, null);
+#endif
 
             builder.objectDefinition.FactoryMethodName = factoryMethodName;
 
             return builder;
 
-        }        
+        }
 
         /// <summary>
         /// Create a new <code>ObjectDefinitionBuilder</code> used to construct a root object definition.
@@ -140,7 +144,7 @@ namespace Spring.Objects.Factory.Support
         /// <param name="objectType">Type of the object.</param>
         /// <returns>A new <code>ObjectDefinitionBuilder</code> instance.</returns>
         public static ObjectDefinitionBuilder RootObjectDefinition(IObjectDefinitionFactory objectDefinitionFactory,
-                                                                   Type objectType) 
+                                                                   Type objectType)
         {
             return RootObjectDefinition(objectDefinitionFactory, objectType, null);
         }
@@ -156,11 +160,15 @@ namespace Spring.Objects.Factory.Support
                                                                    Type objectType, string factoryMethodName)
         {
             ObjectDefinitionBuilder builder = new ObjectDefinitionBuilder();
-            
+
             builder.objectDefinitionFactory = objectDefinitionFactory;
 
             builder.objectDefinition =
+#if APPDOMAINS
                 objectDefinitionFactory.CreateObjectDefinition(objectType.FullName, null, AppDomain.CurrentDomain);
+#else
+                objectDefinitionFactory.CreateObjectDefinition(objectType.FullName, null);
+#endif
 
             builder.objectDefinition.ObjectType = objectType;
             builder.objectDefinition.FactoryMethodName = factoryMethodName;
@@ -181,15 +189,19 @@ namespace Spring.Objects.Factory.Support
             builder.objectDefinitionFactory = objectDefinitionFactory;
 
             builder.objectDefinition =
-              objectDefinitionFactory.CreateObjectDefinition(null, parentObjectName, AppDomain.CurrentDomain);
+#if APPDOMAINS
+                objectDefinitionFactory.CreateObjectDefinition(null, parentObjectName, AppDomain.CurrentDomain);
+#else
+                objectDefinitionFactory.CreateObjectDefinition(null, parentObjectName);
+#endif
 
             return builder;
         }
 
-        #endregion 
+#endregion
 
 
-        #region Properties
+#region Properties
 
         /// <summary>
         /// Gets the current object definition in its raw (unvalidated) form.
@@ -215,9 +227,9 @@ namespace Spring.Objects.Factory.Support
         }
 
 
-        #endregion
+#endregion
 
-        #region Methods
+#region Methods
         //TODO add expression support.
 
         /// <summary>
@@ -424,6 +436,6 @@ namespace Spring.Objects.Factory.Support
             return this;
         }
 
-        #endregion
+#endregion
     }
 }

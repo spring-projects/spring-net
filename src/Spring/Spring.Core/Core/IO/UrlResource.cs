@@ -30,7 +30,7 @@ using Spring.Util;
 namespace Spring.Core.IO
 {
 	/// <summary>
-    /// A <see cref="System.Uri"/> backed resource 
+    /// A <see cref="System.Uri"/> backed resource
     /// on top of <see cref="System.Net.WebRequest"/>
 	/// </summary>
 	/// <remarks>
@@ -116,7 +116,7 @@ namespace Spring.Core.IO
 		}
 
         /// <summary>
-        /// Returns the <see cref="System.Net.WebRequest"/> instance 
+        /// Returns the <see cref="System.Net.WebRequest"/> instance
         /// used for the resource resolution.
         /// </summary>
         /// <value>
@@ -141,7 +141,7 @@ namespace Spring.Core.IO
 		/// <seealso cref="Spring.Core.IO.IInputStreamSource"/>
 		public override Stream InputStream
 		{
-			get { return _webRequest.GetResponse().GetResponseStream(); }
+			get { return _webRequest.GetResponseAsync().GetAwaiter().GetResult().GetResponseStream(); }
 		}
 
 		/// <summary>
@@ -262,7 +262,7 @@ namespace Spring.Core.IO
         /// The name of the resource to test.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if resource name is relative; 
+        /// <see langword="true"/> if resource name is relative;
         /// otherwise <see langword="false"/>.
         /// </returns>
         protected override bool IsRelativeResource(string resourceName)

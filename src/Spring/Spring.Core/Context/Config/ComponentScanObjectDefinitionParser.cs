@@ -18,6 +18,7 @@
 
 #endregion
 
+using System;
 using System.ComponentModel;
 using System.Xml;
 using Common.Logging;
@@ -66,7 +67,7 @@ namespace Spring.Context.Config
 		{
 			AssemblyObjectDefinitionScanner scanner = ConfigureScanner(parserContext, element);
 			IObjectDefinitionRegistry registry = parserContext.Registry;
-			
+
 			// Actually scan for objects definitions and register them.
 			scanner.ScanAndRegisterTypes(registry);
             RegisterComponents(element, registry);
@@ -165,7 +166,7 @@ namespace Spring.Context.Config
                 case "custom":
                     return CustomTypeFactory.GetTypeFilter(expression);
                 default:
-                    throw new InvalidEnumArgumentException(string.Format("Filter type {0} is not defined", type));
+                    throw new ArgumentOutOfRangeException(string.Format("Filter type {0} is not defined", type));
             }
         }
     }

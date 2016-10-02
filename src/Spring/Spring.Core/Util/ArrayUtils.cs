@@ -22,6 +22,7 @@
 
 using System;
 using System.Collections;
+using System.Reflection;
 using System.Text;
 
 #endregion
@@ -97,7 +98,7 @@ namespace Spring.Util
                     {
                         object elemA = a.GetValue(i);
                         object elemB = b.GetValue(i);
-                        
+
                         if (elemA is Array && elemB is Array)
                         {
                             if (!AreEqual(elemA as Array, elemB as Array))
@@ -178,10 +179,10 @@ namespace Spring.Util
             {
                 object val = array.GetValue(i);
                 sb.Append(val == null ? "null" : val.ToString());
-                
+
                 if (i < array.Length - 1)
                 {
-                    sb.Append(", ");    
+                    sb.Append(", ");
                 }
             }
 
@@ -194,7 +195,7 @@ namespace Spring.Util
         /// Concatenates 2 arrays of compatible element types
         /// </summary>
         /// <remarks>
-        /// If either of the arguments is null, the other array is returned as the result. 
+        /// If either of the arguments is null, the other array is returned as the result.
         /// The array element types may differ as long as they are assignable. The result array will be of the "smaller" element type.
         /// </remarks>
         public static Array Concat(Array first, Array second)
@@ -205,11 +206,11 @@ namespace Spring.Util
             Type resultElementType;
             Type firstElementType = first.GetType().GetElementType();
             Type secondElementType = second.GetType().GetElementType();
-            if (firstElementType.IsAssignableFrom(secondElementType))
+            if (firstElementType.GetTypeInfo().IsAssignableFrom(secondElementType.GetTypeInfo()))
             {
                 resultElementType = firstElementType;
             }
-            else if (secondElementType.IsAssignableFrom(firstElementType))
+            else if (secondElementType.GetTypeInfo().IsAssignableFrom(firstElementType.GetTypeInfo()))
             {
                 resultElementType = secondElementType;
             }

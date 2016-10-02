@@ -38,14 +38,17 @@ namespace Spring.Expressions
         {
         }
 
-        /// <summary>
-        /// Create a new instance from SerializationInfo
-        /// </summary>
+#if BINARY_SERIALIZATION
+    /// <summary>
+    /// Create a new instance from SerializationInfo
+    /// </summary>
         protected ProjectionNode(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
         }
-        
+
+#endif
+
         /// <summary>
         /// Returns a <see cref="IList"/> containing results of evaluation
         /// of projection expression against each node in the context.

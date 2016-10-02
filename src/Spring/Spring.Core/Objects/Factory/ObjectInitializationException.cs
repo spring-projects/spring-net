@@ -77,6 +77,7 @@ namespace Spring.Objects.Factory
         {
         }
 
+#if BINARY_SERIALIZATION
         /// <summary>
         /// Creates a new instance of the ObjectInitializationException class.
         /// </summary>
@@ -93,6 +94,8 @@ namespace Spring.Objects.Factory
             : base (info, context)
         {
         }
+#endif
+
         #endregion
     }
 }

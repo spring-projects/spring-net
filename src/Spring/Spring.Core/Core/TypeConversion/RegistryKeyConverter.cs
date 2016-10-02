@@ -77,7 +77,7 @@ namespace Spring.Core.TypeConversion
         /// </param>
         /// <returns>
         /// A <see cref="System.String"/> array if successful.
-        /// </returns>        
+        /// </returns>
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {
             AssertUtils.ArgumentNotNull(value, "value");
@@ -114,7 +114,7 @@ namespace Spring.Core.TypeConversion
         /// Index of the last element to use.
         /// </param>
         /// <returns>
-        /// Friendly key name containing key element from 
+        /// Friendly key name containing key element from
         /// 0 to <paramref name="index"/>, inclusive.
         /// </returns>
         private static string GetPartialKeyName(string[] keys, int index)
@@ -153,8 +153,6 @@ namespace Spring.Core.TypeConversion
                     return Registry.PerformanceData;
                 case "HKEY_CURRENT_CONFIG":
                     return Registry.CurrentConfig;
-                case "HKEY_DYN_DATA":
-                    return Registry.DynData;
                 default:
                     throw new ArgumentException("Invalid root hive name [" + name + "].");
             }

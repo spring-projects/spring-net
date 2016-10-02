@@ -18,6 +18,7 @@
 
 #endregion
 
+#if !NETCORE
 using System;
 using System.Collections.Generic;
 using System.Configuration;
@@ -92,7 +93,7 @@ namespace Spring.Objects.Factory.Config
         }
 
         /// <summary>
-        /// Initializes properties based on the specified 
+        /// Initializes properties based on the specified
         /// property file locations.
         /// </summary>
         private void InitVariables()
@@ -110,3 +111,4 @@ namespace Spring.Objects.Factory.Config
         }
     }
 }
+#endif

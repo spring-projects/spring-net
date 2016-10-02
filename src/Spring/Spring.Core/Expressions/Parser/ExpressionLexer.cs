@@ -125,7 +125,7 @@ namespace Spring.Expressions.Parser
 		{
 			caseSensitiveLiterals = true;
 			setCaseSensitive(true);
-			literals = new Hashtable(100, (float) 0.4, null, Comparer.Default);
+			literals = new Hashtable(100, (float) 0.4);
 			literals.Add("true", 7);
 			literals.Add("and", 8);
 			literals.Add("matches", 15);

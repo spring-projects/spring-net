@@ -74,10 +74,10 @@ namespace Spring.Core.TypeConversion
         /// </param>
         /// <returns>True if the conversion is possible.</returns>
         public override bool CanConvertFrom (
-            ITypeDescriptorContext context, 
+            ITypeDescriptorContext context,
             Type sourceType)
         {
-            if (sourceType == typeof(string)) 
+            if (sourceType == typeof(string))
             {
                 return true;
             }
@@ -94,22 +94,22 @@ namespace Spring.Core.TypeConversion
         /// </param>
         /// <param name="culture">
         /// The <see cref="System.Globalization.CultureInfo"/> to use
-        /// as the current culture. 
+        /// as the current culture.
         /// </param>
         /// <param name="value">
         /// The value that is to be converted.
         /// </param>
         /// <returns>
         /// A <see cref="System.Resources.ResourceManager"/>
-        /// if successful. 
+        /// if successful.
         /// </returns>
         /// <exception cref="ArgumentException">If the specified <paramref name="value"/> does not denote a valid resource</exception>
         public override object ConvertFrom (
-            ITypeDescriptorContext context, 
-            CultureInfo culture, object value) 
+            ITypeDescriptorContext context,
+            CultureInfo culture, object value)
         {
-            if (value is string) 
-            {          
+            if (value is string)
+            {
                 // convert incoming string into ResourceManager...
                 string[] resourceManagerDescription = StringUtils.DelimitedListToStringArray((string)value, ",");
                 if (resourceManagerDescription.Length != 2)
@@ -140,7 +140,7 @@ namespace Spring.Core.TypeConversion
                         throw new ArgumentException("Could not load resources '{0}'", resourceName, ex);
                     }
                 }
-                Assembly ass = Assembly.LoadWithPartialName(assemblyName);
+                Assembly ass = Assembly.Load(new AssemblyName(assemblyName));
                 if (ass == null)
                 {
                     throw new ArgumentException("Could not find assembly with name = '" + assemblyName + "'.");

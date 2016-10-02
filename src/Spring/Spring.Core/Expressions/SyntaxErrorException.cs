@@ -77,9 +77,11 @@ namespace Spring.Expressions
             _expression = expression;
         }
 
-		#endregion Public Instance Constructors
+        #endregion Public Instance Constructors
 
-		#region Protected Instance Constructors
+        #region Protected Instance Constructors
+
+#if BINARY_SERIALIZATION
 
         /// <summary>
         /// TODO
@@ -92,7 +94,7 @@ namespace Spring.Expressions
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <param name="info"></param>
         /// <param name="context"></param>
@@ -106,7 +108,8 @@ namespace Spring.Expressions
             info.AddValue("Message", base.Message);
             info.AddValue("Expression", this._expression);
         }
+#endif
 
-		#endregion Protected Instance Constructors
-	}
+        #endregion Protected Instance Constructors
+    }
 }

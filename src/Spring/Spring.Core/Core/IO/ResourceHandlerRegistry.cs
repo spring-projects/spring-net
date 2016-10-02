@@ -21,7 +21,10 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
+
+#if !NETCORE
 using System.Security.Permissions;
+#endif
 
 using Spring.Context.Support;
 using Spring.Core.TypeResolution;
@@ -39,7 +42,7 @@ namespace Spring.Core.IO
     /// that should be used to process resources with the specified protocol.
     /// </para>
     /// <para>
-    /// They are used throughout the framework to access resources from various 
+    /// They are used throughout the framework to access resources from various
     /// sources. For example, application context loads object definitions from the resources
     /// that are processed using one of the registered resource handlers.
     /// </para>
@@ -97,7 +100,7 @@ namespace Spring.Core.IO
     public class ResourceHandlerRegistry
     {
         /// <summary>
-        /// Name of the .Net config section that contains definitions 
+        /// Name of the .Net config section that contains definitions
         /// for custom resource handlers.
         /// </summary>
         private const string ResourcesSectionName = "spring/resourceHandlers";
@@ -146,7 +149,7 @@ namespace Spring.Core.IO
         }
 
         /// <summary>
-        /// Returns <c>true</c> if a handler is registered for the specified protocol, 
+        /// Returns <c>true</c> if a handler is registered for the specified protocol,
         /// <c>false</c> otherwise.
         /// </summary>
         /// <param name="protocolName">Name of the protocol.</param>
@@ -183,7 +186,7 @@ namespace Spring.Core.IO
         /// <see langword="null"/>.
         /// </exception>
         /// <exception cref="System.ArgumentException">
-        /// If the supplied <paramref name="handlerTypeName"/> is not a 
+        /// If the supplied <paramref name="handlerTypeName"/> is not a
         /// <see cref="Type"/> that derives from the
         /// <see cref="Spring.Core.IO.IResource"/> interface; or (having passed
         /// this first check), the supplied <paramref name="handlerTypeName"/>
@@ -223,7 +226,7 @@ namespace Spring.Core.IO
         /// <see langword="null"/>.
         /// </exception>
         /// <exception cref="System.ArgumentException">
-        /// If the supplied <paramref name="handlerType"/> is not a 
+        /// If the supplied <paramref name="handlerType"/> is not a
         /// <see cref="Type"/> that derives from the
         /// <see cref="Spring.Core.IO.IResource"/> interface; or (having passed
         /// this first check), the supplied <paramref name="handlerType"/>
@@ -232,7 +235,7 @@ namespace Spring.Core.IO
         /// </exception>
         public static void RegisterResourceHandler(string protocolName, Type handlerType)
         {
-            #region Sanity Checks
+#region Sanity Checks
 
             AssertUtils.ArgumentHasText(protocolName, "protocolName");
             AssertUtils.ArgumentNotNull(handlerType, "handlerType");
@@ -242,10 +245,11 @@ namespace Spring.Core.IO
                         string.Format("[{0}] does not implement [{1}] interface (it must).", handlerType.FullName, typeof(IResource).FullName));
             }
 
-            #endregion
+#endregion
 
             lock (syncRoot)
             {
+#if !NETCORE
                 SecurityCritical.ExecutePrivileged( new SecurityPermission(SecurityPermissionFlag.Infrastructure), delegate
                 {
                     // register generic uri parser for this scheme
@@ -254,11 +258,13 @@ namespace Spring.Core.IO
                         UriParser.Register(new TolerantUriParser(), protocolName, 0);
                     }
                 });
+#endif
                 IDynamicConstructor ctor = GetResourceConstructor(handlerType);
                 resourceHandlers[protocolName] = ctor;
             }
         }
 
+#if !NETCORE
         /// <summary>
         /// Allows to create any arbitrary Url format
         /// </summary>
@@ -272,6 +278,7 @@ namespace Spring.Core.IO
                 : base(DefaultOptions)
             { }
         }
+#endif
 
         private static IDynamicConstructor GetResourceConstructor(Type handlerType)
         {

@@ -42,7 +42,7 @@ namespace Spring.Objects.Support
 	/// <see cref="Spring.Objects.Factory.Config.MethodInvokingFactoryObject"/>.
 	/// </p>
 	/// <p>
-	/// Usage: specify either the <see cref="MethodInvoker.TargetType"/> and 
+	/// Usage: specify either the <see cref="MethodInvoker.TargetType"/> and
 	/// <see cref="MethodInvoker.TargetMethod"/> or the
 	/// <see cref="MethodInvoker.TargetObject"/> and
 	/// <see cref="MethodInvoker.TargetMethod"/> properties respectively, and
@@ -58,13 +58,13 @@ namespace Spring.Objects.Support
 	/// arguments.
 	/// </p>
 	/// <code language="C#">
-	/// public class Foo 
+	/// public class Foo
 	/// {
 	///     public string ToString(string name, int age, string address)
 	///     {
 	///			return string.Format("{0}, {1} years old, {2}", name, age, address);
 	///     }
-	///     
+	///
 	///     public static void Main()
 	///     {
 	///			Foo foo = new Foo();
@@ -335,12 +335,12 @@ namespace Spring.Objects.Support
 				for (int i = 0; i < parameters.Length; ++i)
 				{
 					ParameterInfo parameter = parameters[i];
-					argumentNamesToIndexes[parameter.Name.ToLower(CultureInfo.InvariantCulture)] = i;
+					argumentNamesToIndexes[parameter.Name.ToLowerInvariant()] = i;
 				}
 				int THE_ARGUMENT_IS_PREPARED = -12;
 				foreach (DictionaryEntry namedArgument in NamedArguments)
 				{
-					string argumentName = ((string) namedArgument.Key).ToLower(CultureInfo.InvariantCulture);
+					string argumentName = ((string) namedArgument.Key).ToLowerInvariant();
 					object argumentValue = namedArgument.Value;
 					if (!argumentNamesToIndexes.ContainsKey(argumentName))
 					{
@@ -420,7 +420,7 @@ namespace Spring.Objects.Support
 			}
             if (theMethod == null)
             {
-                // search for a method with a matching signature... 
+                // search for a method with a matching signature...
                 ComposedCriteria searchCriteria = new ComposedCriteria();
                 searchCriteria.Add(new MethodNameMatchCriteria(genericInfo.GenericMethodName));
                 searchCriteria.Add(new MethodParametersCountCriteria(ArgumentCount));

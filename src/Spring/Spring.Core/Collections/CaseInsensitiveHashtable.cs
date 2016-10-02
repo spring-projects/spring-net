@@ -48,9 +48,10 @@ namespace Spring.Collections
                 {
                     this.Add(enumerator.Key, enumerator.Value);
                 }
-            }            
+            }
         }
 
+#if BINARY_SERIALIZATION
         /// <summary>
         /// Initializes a new, empty instance of the <see cref="T:System.Collections.Hashtable"></see> class that is serializable using the specified <see cref="T:System.Runtime.Serialization.SerializationInfo"></see> and <see cref="T:System.Runtime.Serialization.StreamingContext"></see> objects.
         /// </summary>
@@ -76,6 +77,7 @@ namespace Spring.Collections
             base.GetObjectData(info, context);
             info.AddValue("_cultureName", _culture.Name);
         }
+#endif
 
         /// <summary>
         /// Calculate the hashcode of the given string key, using the configured culture.

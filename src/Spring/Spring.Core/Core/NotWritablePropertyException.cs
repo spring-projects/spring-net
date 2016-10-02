@@ -128,6 +128,7 @@ namespace Spring.Core
         {
         }
 
+#if BINARY_SERIALIZATION
         /// <summary>
         /// Creates a new instance of the NotWritablePropertyException class.
         /// </summary>
@@ -143,5 +144,6 @@ namespace Spring.Core
             : base(info, context)
         {
         }
+#endif
     }
 }

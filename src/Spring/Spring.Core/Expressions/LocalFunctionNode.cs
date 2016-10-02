@@ -38,6 +38,7 @@ namespace Spring.Expressions
         {
         }
 
+#if BINARY_SERIALIZATION
         /// <summary>
         /// Create a new instance from SerializationInfo
         /// </summary>
@@ -45,7 +46,8 @@ namespace Spring.Expressions
             : base(info, context)
         {
         }
-        
+#endif
+
         /// <summary>
         /// Evaluates function represented by this node.
         /// </summary>
@@ -57,7 +59,7 @@ namespace Spring.Expressions
             string name = this.getText();
             IDictionary locals = evalContext.LocalVariables;
             LambdaExpressionNode lambda = locals[name] as LambdaExpressionNode;
-            
+
             if (lambda == null)
             {
                 throw new InvalidOperationException("Function '" + name + "' is not defined.");

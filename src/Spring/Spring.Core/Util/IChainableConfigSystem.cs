@@ -29,7 +29,6 @@ namespace Spring.Util
     public interface IChainableConfigSystem : IInternalConfigSystem
     {
         /// <summary>
-        /// 
         /// </summary>
         /// <param name="innerConfigSystem"></param>
         void SetInnerConfigurationSystem(IInternalConfigSystem innerConfigSystem);

@@ -27,9 +27,12 @@ namespace Spring.Objects.Factory.Parsing
     [Serializable]
     public class ObjectDefinitionParsingException : ObjectDefinitionStoreException
     {
+#if BINARY_SERIALIZATION
         protected ObjectDefinitionParsingException(SerializationInfo info, StreamingContext context)
         {
         }
+#endif
+
         /// <summary>
         /// Initializes a new instance of the ObjectDefinitionParsingException class.
         /// </summary>

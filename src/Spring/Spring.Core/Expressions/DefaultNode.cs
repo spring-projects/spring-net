@@ -29,7 +29,7 @@ namespace Spring.Expressions
     /// <author>Aleksandar Seovic</author>
     [Serializable]
     public class DefaultNode : BinaryOperator
-    {        
+    {
         /// <summary>
         /// Create a new instance
         /// </summary>
@@ -37,6 +37,7 @@ namespace Spring.Expressions
         {
         }
 
+#if BINARY_SERIALIZATION
         /// <summary>
         /// Create a new instance from SerializationInfo
         /// </summary>
@@ -44,6 +45,7 @@ namespace Spring.Expressions
             : base(info, context)
         {
         }
+#endif
 
         /// <summary>
         /// Returns left operand if it is not null, or the right operand if it is.

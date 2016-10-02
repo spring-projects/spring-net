@@ -3,7 +3,7 @@ using Spring.Expressions.Parser.antlr.collections;
 using Spring.Expressions.Parser.antlr.collections.impl;
 using AST = Spring.Expressions.Parser.antlr.collections.AST;
 using BitSet = Spring.Expressions.Parser.antlr.collections.impl.BitSet;
-	
+
 namespace Spring.Expressions.Parser.antlr
 {
 	/*ANTLR Translator Generator
@@ -29,30 +29,30 @@ namespace Spring.Expressions.Parser.antlr
 		*  everywhere.
 		*/
 		public static ASTNULLType ASTNULL = new ASTNULLType();
-		
+
 		/*Where did this rule leave off parsing; avoids a return parameter */
 		protected internal AST retTree_;
-		
+
 		/*guessing nesting level; guessing==0 implies not guessing */
 		// protected int guessing = 0;
-		
+
 		/*Nesting level of registered handlers */
 		// protected int exceptionLevel = 0;
-		
+
 		protected internal TreeParserSharedInputState inputState;
-		
+
 		/*Table of token type to token names */
 		protected internal string[] tokenNames;
-		
+
 		/*AST return value for a rule is squirreled away here */
 		protected internal AST returnAST;
-		
+
 		/*AST support code; parser and treeparser delegate to this object */
 		protected internal ASTFactory astFactory = new ASTFactory();
-		
+
 		/*Used to keep track of indentdepth for traceIn/Out */
 		protected internal int traceDepth = 0;
-		
+
 		public TreeParser()
 		{
 			inputState = new TreeParserSharedInputState();
@@ -116,12 +116,14 @@ namespace Spring.Expressions.Parser.antlr
 		/// <code>static</code>, it cannot be overridden to avoid these problems.
 		/// ANTLR no longer uses this method internally or in generated code.
 		/// </summary>
-		/// 
+		///
 		[Obsolete("De-activated since version 2.7.2.6 as it cannot be overidden.", true)]
 		public static void panic()
 		{
 			Console.Error.WriteLine("TreeWalker: panic");
-			System.Environment.Exit(1);
+#if !NETCORE
+            System.Environment.Exit(1);
+#endif
 		}
 		/*Parser error-reporting function can be overridden in subclass */
 		public virtual void  reportError(RecognitionException ex)
@@ -146,19 +148,19 @@ namespace Spring.Expressions.Parser.antlr
 		{
 			astFactory = f;
 		}
-		
+
 		/*Specify the type of node to create during tree building */
 		public virtual void  setASTNodeType(string nodeType)
 		{
 			setASTNodeClass(nodeType);
 		}
-		
+
 		/*Specify the type of node to create during tree building */
 		public virtual void  setASTNodeClass(string nodeType)
 		{
 			astFactory.setASTNodeType(nodeType);
 		}
-		
+
 		public virtual void  traceIndent()
 		{
 			 for (int i = 0; i < traceDepth; i++)

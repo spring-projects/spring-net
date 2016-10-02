@@ -25,7 +25,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.Remoting;
+
+#if BINARY_SERIALIZATION
 using System.Runtime.Serialization;
+#endif
 
 using Spring.Collections;
 using Spring.Core;
@@ -59,6 +62,7 @@ namespace Spring.Expressions
         {
         }
 
+#if BINARY_SERIALIZATION
         /// <summary>
         /// Create a new instance from SerializationInfo
         /// </summary>
@@ -66,6 +70,7 @@ namespace Spring.Expressions
             : base(info, context)
         {
         }
+#endif
 
         /// <summary>
         /// Initializes the node.
@@ -98,7 +103,7 @@ namespace Spring.Expressions
                         accessor = new ExpandoObjectValueAccessor(memberName);
                     }
                     // try to initialize node as enum value first
-                    else if (contextType.IsEnum)
+                    else if (contextType.GetTypeInfo().IsEnum)
                     {
                         try
                         {
@@ -166,7 +171,7 @@ namespace Spring.Expressions
         /// Binding flags to use.
         /// </param>
         /// <returns>
-        /// Resolved property or field accessor, or <c>null</c> 
+        /// Resolved property or field accessor, or <c>null</c>
         /// if specified <paramref name="memberName"/> cannot be resolved.
         /// </returns>
         private static IValueAccessor GetPropertyOrFieldAccessor(Type contextType, string memberName, BindingFlags bindingFlags)
@@ -207,7 +212,7 @@ namespace Spring.Expressions
                     {
                         return new PropertyValueAccessor(pi);
                     }
-                    contextType = contextType.BaseType;
+                    contextType = contextType.GetTypeInfo().BaseType;
                 }
             }
 
@@ -345,7 +350,7 @@ namespace Spring.Expressions
                             "Can't change the value of the read-only property or field '" + this.memberName + "'.");
                     }
                 }
-                else if (targetType.IsPrimitive && (newValue == null || String.Empty.Equals(newValue)))
+                else if (targetType.GetTypeInfo().IsPrimitive && (newValue == null || String.Empty.Equals(newValue)))
                 {
                     throw new ArgumentException("Invalid value [" + newValue + "] for property or field '" +
                                                 this.memberName + "' of primitive type ["
@@ -496,7 +501,7 @@ namespace Spring.Expressions
             //}
         }
 
-        #region IValueAccessor interface
+#region IValueAccessor interface
 
         private interface IValueAccessor
         {
@@ -511,9 +516,9 @@ namespace Spring.Expressions
             bool RequiresRefresh(Type contextType);
         }
 
-        #endregion
+#endregion
 
-        #region BaseValueAccessor implementation
+#region BaseValueAccessor implementation
 
         private abstract class BaseValueAccessor : IValueAccessor
         {
@@ -552,9 +557,9 @@ namespace Spring.Expressions
             }
         }
 
-        #endregion
+#endregion
 
-        #region PropertyValueAccessor implementation
+#region PropertyValueAccessor implementation
 
         private class PropertyValueAccessor : BaseValueAccessor
         {
@@ -624,9 +629,9 @@ namespace Spring.Expressions
             }
         }
 
-        #endregion
+#endregion
 
-        #region FieldValueAccessor implementation
+#region FieldValueAccessor implementation
 
         private class FieldValueAccessor : BaseValueAccessor
         {
@@ -679,9 +684,9 @@ namespace Spring.Expressions
             }
         }
 
-        #endregion
+#endregion
 
-        #region EnumValueAccessor implementation
+#region EnumValueAccessor implementation
 
         private class EnumValueAccessor : BaseValueAccessor
         {
@@ -703,9 +708,9 @@ namespace Spring.Expressions
             }
         }
 
-        #endregion
+#endregion
 
-        #region ExpandoObjectValueAccessor implementation
+#region ExpandoObjectValueAccessor implementation
 
         private class ExpandoObjectValueAccessor : BaseValueAccessor
         {
@@ -739,9 +744,9 @@ namespace Spring.Expressions
             }
         }
 
-        #endregion
+#endregion
 
-        #region TypeValueAccessor implementation
+#region TypeValueAccessor implementation
 
         private class TypeValueAccessor : BaseValueAccessor
         {
@@ -763,6 +768,6 @@ namespace Spring.Expressions
             }
         }
 
-        #endregion
+#endregion
     }
 }

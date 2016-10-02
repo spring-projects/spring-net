@@ -36,7 +36,7 @@ namespace Spring.Expressions
         /// caches argumentNames of this instance
         /// </summary>
         private string[] argumentNames;
-        
+
         /// <summary>
         /// caches body expression of this lambda function
         /// </summary>
@@ -49,6 +49,7 @@ namespace Spring.Expressions
         {
         }
 
+#if BINARY_SERIALIZATION
         /// <summary>
         /// Create a new instance from SerializationInfo
         /// </summary>
@@ -56,7 +57,8 @@ namespace Spring.Expressions
             : base(info, context)
         {
         }
-        
+#endif
+
         /// <summary>
         /// Gets argument names for this lambda expression.
         /// </summary>

@@ -21,9 +21,10 @@
 #region Imports
 
 using System;
-using System.Globalization;
+#if BINARY_SERIALIZATION
 using System.Runtime.Serialization;
 using System.Security.Permissions;
+#endif
 using Spring.Objects.Factory.Xml;
 
 #endregion
@@ -77,6 +78,7 @@ namespace Spring.Objects.Factory
             _className = name;
         }
 
+#if BINARY_SERIALIZATION
         /// <summary>
         /// Creates a new instance of the ObjectDefinitionException class.
         /// </summary>
@@ -94,7 +96,10 @@ namespace Spring.Objects.Factory
         {
             _className = info.GetString ("MyClassName");
         }
-        #endregion
+
+#endif
+
+#endregion
 
         #region Properties
         /// <summary>
@@ -109,7 +114,10 @@ namespace Spring.Objects.Factory
         }
         #endregion
 
-        #region Methods
+#region Methods
+
+#if BINARY_SERIALIZATION
+
         /// <summary>
         /// Populates a <see cref="System.Runtime.Serialization.SerializationInfo"/> with
         /// the data needed to serialize the target object.
@@ -129,6 +137,8 @@ namespace Spring.Objects.Factory
             base.GetObjectData (info, context);
             info.AddValue ("MyClassName", _className);
         }
-        #endregion
+#endif
+
+#endregion
     }
 }

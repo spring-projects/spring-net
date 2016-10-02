@@ -21,6 +21,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 
@@ -58,6 +59,7 @@ namespace Spring.Expressions
         {
         }
 
+#if BINARY_SERIALIZATION
         /// <summary>
         /// Create a new instance from SerializationInfo
         /// </summary>
@@ -66,6 +68,7 @@ namespace Spring.Expressions
         {
         }
 
+#endif
         /// <summary>
         /// Creates new instance of the type defined by this node.
         /// </summary>
@@ -94,7 +97,7 @@ namespace Spring.Expressions
             {
                 SetNamedArguments(instance, namedArgValues);
             }
-            
+
             return instance;
         }
 
@@ -124,7 +127,7 @@ namespace Spring.Expressions
         {
             SafeConstructor ctor = null;
             Type objectType = GetObjectType(this.getText().Trim());
-                
+
             // cache constructor info
             ConstructorInfo ci = GetBestConstructor(objectType, argValues);
             if (ci == null)
@@ -134,13 +137,13 @@ namespace Spring.Expressions
                                   "number and types of arguments does not exist.",
                                   objectType.FullName));
             }
-            else 
+            else
             {
                 ParameterInfo[] parameters = ci.GetParameters();
                 if (parameters.Length > 0)
                 {
                     ParameterInfo lastParameter = parameters[parameters.Length - 1];
-                    isParamArray = lastParameter.GetCustomAttributes(typeof(ParamArrayAttribute), false).Length > 0;
+                    isParamArray = lastParameter.GetCustomAttributes(typeof(ParamArrayAttribute), false).Any();
                     if (isParamArray)
                     {
                         paramArrayType = lastParameter.ParameterType.GetElementType();
@@ -149,7 +152,7 @@ namespace Spring.Expressions
                 }
                 ctor = new SafeConstructor(ci);
             }
-                
+
             // cache named args info
             if (namedArgValues != null)
             {
@@ -202,7 +205,7 @@ namespace Spring.Expressions
                 else if (parameters.Length > 0)
                 {
                     ParameterInfo lastParameter = parameters[parameters.Length - 1];
-                    if (lastParameter.GetCustomAttributes(typeof(ParamArrayAttribute), false).Length > 0)
+                    if (lastParameter.GetCustomAttributes(typeof(ParamArrayAttribute), false).Any())
                     {
                         matches.Add(ctor);
                     }

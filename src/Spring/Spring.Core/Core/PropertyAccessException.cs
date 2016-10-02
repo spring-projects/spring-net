@@ -21,8 +21,10 @@
 #region Imports
 
 using System;
+#if BINARY_SERIALIZATION
 using System.Runtime.Serialization;
 using System.Security.Permissions;
+#endif
 using Spring.Core;
 using Spring.Util;
 
@@ -56,6 +58,7 @@ namespace Spring.Core
 
         #region Methods
 
+#if BINARY_SERIALIZATION
         /// <summary>
         /// Populates a <see cref="System.Runtime.Serialization.SerializationInfo"/> with
         /// the data needed to serialize the target object.
@@ -75,6 +78,7 @@ namespace Spring.Core
             base.GetObjectData(info, context);
             info.AddValue("PropertyChangeArgs", PropertyChangeArgs);
         }
+#endif
 
         #endregion
 
@@ -137,6 +141,7 @@ namespace Spring.Core
         {
         }
 
+#if BINARY_SERIALIZATION
         /// <summary>
         /// Creates a new instance of the PropertyAccessExceptionsException class.
         /// </summary>
@@ -148,11 +153,11 @@ namespace Spring.Core
         /// The <see cref="System.Runtime.Serialization.StreamingContext"/>
         /// that contains contextual information about the source or destination.
         /// </param>
-        protected PropertyAccessException(
-            SerializationInfo info, StreamingContext context)
+        protected PropertyAccessException(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
             _propertyChangeEventArgs = info.GetValue("PropertyChangeArgs", typeof (object)) as PropertyChangeEventArgs;
         }
+#endif
     }
 }

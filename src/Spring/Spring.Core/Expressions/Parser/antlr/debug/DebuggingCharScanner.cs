@@ -5,7 +5,7 @@ namespace Spring.Expressions.Parser.antlr.debug
 	using antlr;
 
 	using BitSet	= antlr.collections.impl.BitSet;
-	
+
 	public abstract class DebuggingCharScanner : CharScanner, DebuggingParser
 	{
 		private void  InitBlock()
@@ -21,8 +21,8 @@ namespace Spring.Expressions.Parser.antlr.debug
 		private bool _notDebugMode = false;
 		protected internal string[] ruleNames;
 		protected internal string[] semPredNames;
-		
-		
+
+
 		public DebuggingCharScanner(InputBuffer cb) : base(cb)
 		{
 			InitBlock();
@@ -124,10 +124,14 @@ namespace Spring.Expressions.Parser.antlr.debug
 				{
 					Monitor.Wait(this);
 				}
-				catch (System.Threading.ThreadInterruptedException)
-				{
-				}
-			}
+#if NETCORE
+                catch (Exception)
+#else
+                catch (ThreadInterruptedException)
+#endif
+                {
+                }
+            }
 		}
 		public virtual bool isDebugMode()
 		{
@@ -203,7 +207,7 @@ namespace Spring.Expressions.Parser.antlr.debug
 			catch (System.Exception)
 			{
 			}
-			
+
 			try
 			{
 				base.match(s);
@@ -215,7 +219,7 @@ namespace Spring.Expressions.Parser.antlr.debug
 					eventSupport.fireMismatch(la_s.ToString(), s, inputState.guessing);
 				throw e;
 			}
-			
+
 		}
 		public override void  matchNot(int c)
 		{
@@ -231,7 +235,7 @@ namespace Spring.Expressions.Parser.antlr.debug
 					eventSupport.fireMismatchNot(la_1, Convert.ToChar(c), inputState.guessing);
 				throw e;
 			}
-			
+
 		}
 		public override void  matchRange(int c1, int c2)
 		{
@@ -247,7 +251,7 @@ namespace Spring.Expressions.Parser.antlr.debug
 					eventSupport.fireMismatch(la_1, "" + c1 + c2, inputState.guessing);
 				throw e;
 			}
-			
+
 		}
 		public override void  newline()
 		{
@@ -286,21 +290,21 @@ namespace Spring.Expressions.Parser.antlr.debug
 		{
 			eventSupport.removeTraceListener(l);
 		}
-		/// <summary>Report exception errors caught in nextToken() 
+		/// <summary>Report exception errors caught in nextToken()
 		/// </summary>
 		public virtual void  reportError(MismatchedCharException e)
 		{
 			eventSupport.fireReportError(e);
 			base.reportError(e);
 		}
-		/// <summary>Parser error-reporting function can be overridden in subclass 
+		/// <summary>Parser error-reporting function can be overridden in subclass
 		/// </summary>
 		public override void  reportError(string s)
 		{
 			eventSupport.fireReportError(s);
 			base.reportError(s);
 		}
-		/// <summary>Parser warning-reporting function can be overridden in subclass 
+		/// <summary>Parser warning-reporting function can be overridden in subclass
 		/// </summary>
 		public override void  reportWarning(string s)
 		{

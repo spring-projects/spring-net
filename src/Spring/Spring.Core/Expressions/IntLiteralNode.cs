@@ -47,6 +47,7 @@ namespace Spring.Expressions
             this.Text = text;
         }
 
+#if BINARY_SERIALIZATION
         /// <summary>
         /// Create a new instance from SerializationInfo
         /// </summary>
@@ -54,7 +55,8 @@ namespace Spring.Expressions
             : base(info, context)
         {
         }
-        
+#endif
+
         /// <summary>
         /// Returns a value for the integer literal node.
         /// </summary>

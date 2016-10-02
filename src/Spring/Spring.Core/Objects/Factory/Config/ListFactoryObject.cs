@@ -2,13 +2,13 @@
 
 /*
  * Copyright © 2002-2011 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,6 +23,7 @@
 using System;
 using System.Collections;
 using System.Globalization;
+using System.Reflection;
 using Spring.Core;
 using Spring.Util;
 
@@ -78,14 +79,14 @@ namespace Spring.Objects.Factory.Config
 						              "The Type passed to the TargetListType property must implement the '{0}' interface.",
 						              ObjectType.FullName));
 				}
-				if (value.IsInterface)
+				if (value.GetTypeInfo().IsInterface)
 				{
 					throw new ArgumentException(
 						string.Format(CultureInfo.InvariantCulture,
 						              "The Type passed to the TargetListType property cannot be an interface; it must be a concrete class that implements the '{0}' interface.",
 						              ObjectType.FullName));
 				}
-				if (value.IsAbstract)
+				if (value.GetTypeInfo().IsAbstract)
 				{
 					throw new ArgumentException(
 						string.Format(CultureInfo.InvariantCulture,

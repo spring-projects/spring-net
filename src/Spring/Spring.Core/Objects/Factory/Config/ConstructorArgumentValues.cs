@@ -24,6 +24,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Reflection;
+
 using Spring.Collections;
 using Spring.Util;
 
@@ -83,10 +85,9 @@ namespace Spring.Objects.Factory.Config
 
 		#region Fields
 
-        private CultureInfo enUSCultureInfo = new CultureInfo("en-US", false);
-		private IDictionary<int, ValueHolder>  _indexedArgumentValues = new Dictionary<int, ValueHolder>();
-        private List<ValueHolder> _genericArgumentValues = new List<ValueHolder>();
-		private IDictionary<string, object> _namedArgumentValues = new Dictionary<string, object>();
+		private readonly IDictionary<int, ValueHolder>  _indexedArgumentValues = new Dictionary<int, ValueHolder>();
+        private readonly List<ValueHolder> _genericArgumentValues = new List<ValueHolder>();
+		private readonly IDictionary<string, object> _namedArgumentValues = new Dictionary<string, object>();
 
 		#endregion
 
@@ -202,7 +203,7 @@ namespace Spring.Objects.Factory.Config
 	        {
 	            _namedArgumentValues[key] = newValue;
 	        } else
-	        {	            
+	        {
                 _namedArgumentValues.Add(key, newValue);
 	        }
 	    }
@@ -409,8 +410,7 @@ namespace Spring.Objects.Factory.Config
 							}
 						}
 						else if (requiredType.IsInstanceOfType(valueHolder.Value)
-							|| (requiredType.IsArray
-								&& typeof (IList).IsInstanceOfType(valueHolder.Value)))
+							|| (requiredType.IsArray && valueHolder.Value is IList))
 						{
 							return valueHolder;
 						}
@@ -482,7 +482,7 @@ namespace Spring.Objects.Factory.Config
 		/// </summary>
 		/// <param name="name">
 		/// The name of the argument in the constructor argument list. May be
-		/// <see langword="null"/>, in which case generic matching by 
+		/// <see langword="null"/>, in which case generic matching by
 		/// <see cref="System.Type"/> is assumed.
 		/// </param>
 		/// <param name="requiredType">
@@ -505,7 +505,7 @@ namespace Spring.Objects.Factory.Config
 		/// </summary>
 		/// <param name="name">
 		/// The name of the argument in the constructor argument list. May be
-		/// <see langword="null"/>, in which case generic matching by 
+		/// <see langword="null"/>, in which case generic matching by
 		/// <see cref="System.Type"/> is assumed.
 		/// </param>
 		/// <param name="requiredType">
@@ -565,7 +565,7 @@ namespace Spring.Objects.Factory.Config
 			int index, string name, Type requiredType, ISet usedValues)
 		{
 			ValueHolder valueHolder = null;
-			if(index != NoIndex) 
+			if(index != NoIndex)
 			{
 				valueHolder = GetIndexedArgumentValue(index, requiredType);
 			}
@@ -582,7 +582,7 @@ namespace Spring.Objects.Factory.Config
 
 		private string GetCanonicalNamedArgument(string argument)
 		{
-            return argument != null ? argument.ToLower(enUSCultureInfo) : argument;
+            return argument != null ? argument.ToLowerInvariant() : null;
 		}
 
 	    #endregion

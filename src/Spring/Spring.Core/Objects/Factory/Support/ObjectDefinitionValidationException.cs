@@ -25,7 +25,7 @@ using System.Runtime.Serialization;
 
 #endregion
 
-namespace Spring.Objects.Factory.Support 
+namespace Spring.Objects.Factory.Support
 {
     /// <summary>
     /// Thrown when the validation of an object definition failed.
@@ -72,6 +72,7 @@ namespace Spring.Objects.Factory.Support
         {
         }
 
+#if BINARY_SERIALIZATION
         /// <summary>
         /// Creates a new instance of the ObjectDefinitionValidationException class.
         /// </summary>
@@ -88,6 +89,8 @@ namespace Spring.Objects.Factory.Support
             : base (info, context)
         {
         }
+#endif
+
         #endregion
     }
 }

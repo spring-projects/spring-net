@@ -95,7 +95,7 @@ namespace Spring.Core.IO
             {
                 throw new UriFormatException(string.Format("Invalid resource name. Name has to be in 'assembly:<assemblyName>/<namespace>/<resourceName>' format:{0}", resourceName));
             }
-            this._assembly = Assembly.Load(info[0]);
+            this._assembly = Assembly.Load(new AssemblyName(info[0]));
             if (this._assembly == null)
             {
                 throw new FileNotFoundException("Unable to load assembly [" + info[0] + "]");
@@ -124,7 +124,7 @@ namespace Spring.Core.IO
         /// the underlying assembly's manifest.
         /// </exception>
         /// <seealso cref="Spring.Core.IO.IInputStreamSource"/>
-        /// <see cref="System.Reflection.Assembly.GetManifestResourceStream(string)"/> 
+        /// <see cref="System.Reflection.Assembly.GetManifestResourceStream(string)"/>
         public override Stream InputStream
         {
             get
@@ -151,7 +151,7 @@ namespace Spring.Core.IO
         /// </value>
         /// <seealso cref="Spring.Core.IO.IResource.Exists"/>
         /// <seealso cref="Spring.Core.IO.IResource.File"/>
-        /// <see cref="System.Reflection.Assembly.GetManifestResourceNames()"/> 
+        /// <see cref="System.Reflection.Assembly.GetManifestResourceNames()"/>
         public override bool Exists
         {
             get
@@ -264,7 +264,7 @@ namespace Spring.Core.IO
         /// The name of the resource to test.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if resource name is relative; 
+        /// <see langword="true"/> if resource name is relative;
         /// otherwise <see langword="false"/>.
         /// </returns>
         protected override bool IsRelativeResource(string resourceName)

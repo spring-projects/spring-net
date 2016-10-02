@@ -23,8 +23,9 @@ using System.Security;
 
 namespace Spring.Util
 {
+#if !NETCORE
     /// <summary>
-    /// Utility class to be used from within this assembly for executing security critical code 
+    /// Utility class to be used from within this assembly for executing security critical code
     /// NEVER EVER MAKE THIS PUBLIC!
     /// </summary>
     /// <author>Erich Eichinger</author>
@@ -32,7 +33,7 @@ namespace Spring.Util
     {
         internal delegate void PrivilegedCallback();
 
-        [SecurityCritical, SecurityTreatAsSafe]
+        [SecurityCritical, SecuritySafeCritical]
         [MethodImpl(MethodImplOptions.NoInlining)]
         internal static void ExecutePrivileged(IStackWalk permission, PrivilegedCallback callback)
         {
@@ -47,4 +48,5 @@ namespace Spring.Util
             }
         }
     }
+#endif
 }

@@ -47,13 +47,15 @@ namespace Spring.Expressions
             base.addChild(right);
         }
 
+#if BINARY_SERIALIZATION
         /// <summary>
         /// Create a new instance from SerializationInfo
         /// </summary>
         protected BinaryOperator(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {}
-        
+#endif
+
         /// <summary>
         /// Gets the left operand.
         /// </summary>

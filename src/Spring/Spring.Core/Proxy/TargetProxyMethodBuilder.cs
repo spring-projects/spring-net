@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using System.Reflection;
 using System.Reflection.Emit;
 
@@ -83,7 +82,7 @@ namespace Spring.Proxy
             {
                 il.Emit(OpCodes.Stloc, returnValue);
 
-                if (!method.ReturnType.IsValueType)
+                if (!method.ReturnType.GetTypeInfo().IsValueType)
                 {
                     ProcessReturnValue(il, returnValue);
                 }

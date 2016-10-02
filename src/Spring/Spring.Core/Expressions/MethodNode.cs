@@ -21,6 +21,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Spring.Expressions.Processors;
@@ -78,6 +79,7 @@ namespace Spring.Expressions
         {
         }
 
+#if BINARY_SERIALIZATION
         /// <summary>
         /// Create a new instance from SerializationInfo
         /// </summary>
@@ -85,6 +87,7 @@ namespace Spring.Expressions
             : base(info, context)
         {
         }
+#endif
 
         /// <summary>
         /// Returns node's value for the given context.
@@ -187,7 +190,7 @@ namespace Spring.Expressions
             // check the context type first
             MethodInfo mi = GetBestMethod(contextType, methodName, BINDING_FLAGS, argValues);
 
-            // if not found, probe the Type's type          
+            // if not found, probe the Type's type
             if (mi == null)
             {
                 mi = GetBestMethod(typeof(Type), methodName, BINDING_FLAGS, argValues);
@@ -203,7 +206,7 @@ namespace Spring.Expressions
                 if (parameters.Length > 0)
                 {
                     ParameterInfo lastParameter = parameters[parameters.Length - 1];
-                    cachedIsParamArray = lastParameter.GetCustomAttributes(typeof(ParamArrayAttribute), false).Length > 0;
+                    cachedIsParamArray = lastParameter.GetCustomAttributes(typeof(ParamArrayAttribute), false).Any();
                     if (cachedIsParamArray)
                     {
                         paramArrayType = lastParameter.ParameterType.GetElementType();
@@ -262,7 +265,7 @@ namespace Spring.Expressions
                     else if (parameters.Length > 0)
                     {
                         ParameterInfo lastParameter = parameters[parameters.Length - 1];
-                        if (lastParameter.GetCustomAttributes(typeof(ParamArrayAttribute), false).Length > 0)
+                        if (lastParameter.GetCustomAttributes(typeof(ParamArrayAttribute), false).Any())
                         {
                             matches.Add(method);
                         }

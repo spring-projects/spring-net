@@ -42,6 +42,7 @@ namespace Spring.Expressions
         {
         }
 
+#if BINARY_SERIALIZATION
         /// <summary>
         /// Create a new instance from SerializationInfo
         /// </summary>
@@ -49,6 +50,7 @@ namespace Spring.Expressions
             : base(info, context)
         {
         }
+#endif
 
         /// <summary>
         /// Returns node's value for the given context.
@@ -70,7 +72,7 @@ namespace Spring.Expressions
         }
 
         /// <summary>
-        /// Overrides getText to allow easy way to get fully 
+        /// Overrides getText to allow easy way to get fully
         /// qualified typename.
         /// </summary>
         /// <returns>
@@ -85,7 +87,7 @@ namespace Spring.Expressions
 //                if (type != null)
 //                {
 //                    tmp = type.AssemblyQualifiedName;
-//                }                
+//                }
 //            }
             AST node = this.getFirstChild();
             while (node != null)

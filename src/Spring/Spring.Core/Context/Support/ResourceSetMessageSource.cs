@@ -18,6 +18,8 @@
 
 #endregion
 
+#if RESOURCESET
+
 #region Imports
 
 using System;
@@ -38,21 +40,21 @@ namespace Spring.Context.Support
 	/// An <see cref="Spring.Context.IMessageSource"/> implementation that
 	/// accesses resources from .resx / .resource files.
 	/// </summary>
-    /// <remarks>Note that for the method 
-    /// GetResourceObject if the resource name resolves to null, then in 
-    /// .NET 1.1 the return value will be String.Empty whereas 
+    /// <remarks>Note that for the method
+    /// GetResourceObject if the resource name resolves to null, then in
+    /// .NET 1.1 the return value will be String.Empty whereas
     /// in .NET 2.0 it will return null.</remarks>
 	/// <author>Griffin Caprio (.NET)</author>
 	/// <author>Mark Pollack (.NET)</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
 	public class ResourceSetMessageSource : AbstractMessageSource, IInitializingObject
 	{
-		#region Fields
+#region Fields
 
 		private Dictionary<string, object> _cachedResources;
 		private IList<object> _resourceManagers;
 
-		#endregion
+#endregion
 
 		/// <summary>
 		/// Creates a new instance of the
@@ -78,7 +80,7 @@ namespace Spring.Context.Support
 		/// Resolves a given code by searching through each assembly name in
 		/// the base names array.
 		/// </summary>
-		/// <param name="code">The code to resolve.</param>      
+		/// <param name="code">The code to resolve.</param>
 		/// <param name="cultureInfo">
 		/// The <see cref="System.Globalization.CultureInfo"/> to use for lookups.
 		/// </param>
@@ -97,7 +99,7 @@ namespace Spring.Context.Support
 		/// <summary>
 		/// Resolves a given code by searching through each assembly name in the array.
 		/// </summary>
-		/// <param name="code">The code to resolve.</param>      
+		/// <param name="code">The code to resolve.</param>
 		/// <param name="cultureInfo">
 		/// The <see cref="System.Globalization.CultureInfo"/> to use for lookups.
 		/// </param>
@@ -130,7 +132,7 @@ namespace Spring.Context.Support
 		/// </param>
 		/// <param name="objectName">
 		/// The base name of the object to use for the key lookup.
-		/// </param>      
+		/// </param>
 		/// <param name="culture">
 		/// The <see cref="System.Globalization.CultureInfo"/> to use for lookups.
 		/// If <cref lang="null"/>, uses the
@@ -141,7 +143,7 @@ namespace Spring.Context.Support
 		/// </exception>
 		protected override void ApplyResourcesToObject(object value, string objectName, CultureInfo culture)
 		{
-		    if(value != null) 
+		    if(value != null)
 		    {
 		        ComponentResourceManager crm = new ComponentResourceManager(value.GetType());
 		        crm.ApplyResources(value, objectName, culture);
@@ -152,7 +154,7 @@ namespace Spring.Context.Support
 	    /// Resolves a code into an object given a base name.
 	    /// </summary>
 	    /// <param name="resourceManager">The <see cref="System.Resources.ResourceManager"/> to search.</param>
-	    /// <param name="code">The code to resolve.</param>      
+	    /// <param name="code">The code to resolve.</param>
 	    /// <param name="cultureInfo">
 	    /// The <see cref="System.Globalization.CultureInfo"/> to use for lookups.
 	    /// </param>
@@ -231,3 +233,4 @@ namespace Spring.Context.Support
 	    }
 	}
 }
+#endif

@@ -18,6 +18,7 @@
 
 #endregion
 
+#if !NETCORE
 using System;
 
 namespace Spring.Objects.Factory.Config
@@ -68,3 +69,4 @@ namespace Spring.Objects.Factory.Config
         }
     }
 }
+#endif

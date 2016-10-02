@@ -19,6 +19,7 @@
 #endregion
 
 using System;
+using System.Linq;
 using Spring.Core;
 using System.Reflection;
 using Spring.Objects.Factory.Attributes;
@@ -171,16 +172,16 @@ namespace Spring.Objects.Factory.Config
         /// <summary>
         /// Gets the Attributes assigned to Field, Property or Paramater
         /// </summary>
-        public Attribute[] Attributes 
-        { 
+        public Attribute[] Attributes
+        {
             get
             {
                 if (methodParameter != null)
                     return methodParameter.ParameterAttributes;
                 if (property != null)
-                    return Attribute.GetCustomAttributes(property);
+                    return property.GetCustomAttributes().ToArray();
                 if (field != null)
-                    return Attribute.GetCustomAttributes(field);
+                    return field.GetCustomAttributes().ToArray();
 
                 return new Attribute[0];
             }

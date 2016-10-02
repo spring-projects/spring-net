@@ -26,6 +26,7 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.Linq;
+using System.Reflection;
 
 using Common.Logging;
 
@@ -270,7 +271,7 @@ namespace Spring.Objects.Factory.Support
                 return true;
             }
             Type objectType = GetType(objectName);
-            return (objectType != null && type.IsAssignableFrom(objectType));
+            return (objectType != null && type.GetTypeInfo().IsAssignableFrom(objectType.GetTypeInfo()));
         }
 
         private bool IsObjectDefinitionTypeMatch(string name, Type checkedType)
@@ -285,7 +286,7 @@ namespace Spring.Objects.Factory.Support
                 return true;
             }
             RootObjectDefinition rod = GetMergedObjectDefinition(name, includeAncestor);
-            return (rod.HasObjectType && checkedType.IsAssignableFrom(rod.ObjectType));
+            return (rod.HasObjectType && checkedType.GetTypeInfo().IsAssignableFrom(rod.ObjectType.GetTypeInfo()));
         }
 
         #endregion
@@ -318,7 +319,7 @@ namespace Spring.Objects.Factory.Support
         private IAutowireCandidateResolver autowireCandidateResolver = AutowireUtils.CreateAutowireCandidateResolver();
 
         /// <summary>
-        /// IDictionary from dependency type to corresponding autowired value 
+        /// IDictionary from dependency type to corresponding autowired value
         /// </summary>
         private readonly IDictionary<Type, object> resolvableDependencies = new Dictionary<Type, object>();
 
@@ -534,7 +535,7 @@ namespace Spring.Objects.Factory.Support
         /// </summary>
         /// <param name="name">The name of the object.</param>
         /// <returns>
-        /// The registered <see cref="Spring.Objects.Factory.Config.IObjectDefinition"/>, 
+        /// The registered <see cref="Spring.Objects.Factory.Config.IObjectDefinition"/>,
         /// or <c>null</c>, if specified object definitions does not exist.
         /// </returns>
         /// <exception cref="System.ArgumentException">
@@ -555,7 +556,7 @@ namespace Spring.Objects.Factory.Support
         /// <param name="name">The name of the object.</param>
         /// <param name="includeAncestors">Whether to search parent object factories.</param>
         /// <returns>
-        /// The registered <see cref="Spring.Objects.Factory.Config.IObjectDefinition"/>, 
+        /// The registered <see cref="Spring.Objects.Factory.Config.IObjectDefinition"/>,
         /// or <c>null</c>, if specified object definitions does not exist.
         /// </returns>
         /// <exception cref="System.ArgumentException">
@@ -611,7 +612,7 @@ namespace Spring.Objects.Factory.Support
         /// </summary>
         /// <param name="includeAncestors">to include parent factories in result</param>
         /// <returns>
-        /// The names of all objects defined in this factory, if <code>includeAncestors</code> is <code>true</code> includes all 
+        /// The names of all objects defined in this factory, if <code>includeAncestors</code> is <code>true</code> includes all
         /// objects defined in parent factories, or an empty array if none are defined.
         /// </returns>
         public IList<string> GetObjectDefinitionNames(bool includeAncestors)
@@ -626,7 +627,7 @@ namespace Spring.Objects.Factory.Support
                 {
                     if (!results.Contains(name))
                     {
-                        results.Add(name);    
+                        results.Add(name);
                     }
                 }
             }
@@ -662,7 +663,7 @@ namespace Spring.Objects.Factory.Support
                     matches.Add(name);
                 }
             }
-            return matches;            
+            return matches;
         }
 
         /// <summary>
@@ -1122,7 +1123,7 @@ namespace Spring.Objects.Factory.Support
         }
 
         /// <summary>
-        /// Check whether the given bean is defined as a <see cref="IFactoryObject"/>. 
+        /// Check whether the given bean is defined as a <see cref="IFactoryObject"/>.
         /// </summary>
         /// <param name="objectName">the name of the object</param>
         /// <param name="rod">the corresponding object definition</param>
@@ -1183,8 +1184,8 @@ namespace Spring.Objects.Factory.Support
                 }
                 return TypeConversionUtils.ConvertValueIfNecessary(type, matchingObjects.Values, null);
             }
-            else if (type.IsGenericType && 
-                (type.GetGenericTypeDefinition() == typeof(IList<>) || type.GetGenericTypeDefinition() == typeof(Spring.Collections.Generic.ISet<>) || 
+            else if (type.GetTypeInfo().IsGenericType &&
+                (type.GetGenericTypeDefinition() == typeof(IList<>) || type.GetGenericTypeDefinition() == typeof(Spring.Collections.Generic.ISet<>) ||
                  type.GetGenericTypeDefinition() == typeof(IDictionary<,>)))
             {
                 var isDictionary = (type.GetGenericTypeDefinition() == typeof (IDictionary<,>));
@@ -1215,7 +1216,7 @@ namespace Spring.Objects.Factory.Support
                            ? TypeConversionUtils.ConvertValueIfNecessary(type, matchingObjects, null)
                            : TypeConversionUtils.ConvertValueIfNecessary(type, matchingObjects.Values, null);
             }
-            else if (typeof(ICollection).IsAssignableFrom(type) && type.IsInterface)
+            else if (typeof(ICollection).GetType().GetTypeInfo().IsAssignableFrom(type.GetTypeInfo()) && type.GetTypeInfo().IsInterface)
             {
                 //TODO - handle generic types.
                 return null;
@@ -1274,7 +1275,7 @@ namespace Spring.Objects.Factory.Support
 			    object objectInstance = entry.Value;
 			    if (IsPrimary(candidateBeanName, objectInstance))
                 {
-				    if (primaryObjectName != null) 
+				    if (primaryObjectName != null)
                     {
 					    bool candidateLocal = ContainsObjectDefinition(candidateBeanName);
 					    bool primaryLocal = ContainsObjectDefinition(primaryObjectName);
@@ -1349,10 +1350,10 @@ namespace Spring.Objects.Factory.Support
             foreach (var entry in resolvableDependencies)
             {
                 Type autoWiringType = entry.Key;
-                if (autoWiringType.IsAssignableFrom(requiredType))
+                if (autoWiringType.GetTypeInfo().IsAssignableFrom(requiredType.GetTypeInfo()))
                 {
                     object autowiringValue = this.resolvableDependencies[autoWiringType];
-                    if (requiredType.IsInstanceOfType(autowiringValue))
+                    if (requiredType.IsInstanceOfType(autowiringValue.GetType().GetTypeInfo()))
                     {
                         result.Add(ObjectUtils.IdentityToString(autowiringValue), autowiringValue);
                         break;
@@ -1386,7 +1387,7 @@ namespace Spring.Objects.Factory.Support
         {
             //Consider FactoryObjects as autowiring candidates.
             bool isFactoryObject = (descriptor != null && descriptor.DependencyType != null &&
-                                    typeof(IFactoryObject).IsAssignableFrom(descriptor.DependencyType));
+                                    typeof(IFactoryObject).GetTypeInfo().IsAssignableFrom(descriptor.DependencyType.GetTypeInfo()));
             if (isFactoryObject)
             {
                 objectName = ObjectFactoryUtils.TransformedObjectName(objectName);

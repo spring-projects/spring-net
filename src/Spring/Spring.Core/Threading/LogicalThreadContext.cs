@@ -18,6 +18,8 @@
 
 #endregion
 
+#if !NETCORE
+
 #region Imports
 
 using System;
@@ -32,9 +34,9 @@ namespace Spring.Threading
     /// An abstraction to safely store "ThreadStatic" data.
     /// </summary>
     /// <remarks>
-    /// By default, <see cref="CallContext"/> is used to store thread-specific data. 
+    /// By default, <see cref="CallContext"/> is used to store thread-specific data.
     /// You may switch the storage strategy by calling <see cref="SetStorage(IThreadStorage)"/>.<p/>
-    /// <b>NOTE:</b> Access to the underlying storage is not synchronized for performance reasons. 
+    /// <b>NOTE:</b> Access to the underlying storage is not synchronized for performance reasons.
     /// You should call <see cref="SetStorage(IThreadStorage)"/> only once at application startup!
     /// </remarks>
     /// <author>Erich Eichinger</author>
@@ -44,7 +46,7 @@ namespace Spring.Threading
         /// Holds the current <see cref="IThreadStorage"/> strategy.
         /// </summary>
         /// <remarks>
-        /// Access to this variable is not synchronized on purpose for performance reasons. 
+        /// Access to this variable is not synchronized on purpose for performance reasons.
         /// Setting a different <see cref="IThreadStorage"/> strategy should happen only once
         /// at application startup.
         /// </remarks>
@@ -94,3 +96,4 @@ namespace Spring.Threading
         }
     }
 }
+#endif

@@ -24,8 +24,10 @@ using System;
 using System.Collections;
 using System.Globalization;
 using System.Reflection;
+#if REMOTING
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Proxies;
+#endif
 using System.Runtime.Serialization;
 
 #endregion
@@ -45,7 +47,7 @@ namespace Spring.Util
 	public sealed class AssertUtils
 	{
         ///<summary>
-        /// Checks, whether <paramref name="method"/> may be invoked on <paramref name="target"/>. 
+        /// Checks, whether <paramref name="method"/> may be invoked on <paramref name="target"/>.
         /// Supports testing transparent proxies.
         ///</summary>
         ///<param name="target">the target instance or <c>null</c></param>
@@ -60,7 +62,7 @@ namespace Spring.Util
         public static void Understands(object target, string targetName, MethodBase method)
         {
             ArgumentNotNull(method, "method");
-                
+
             if (target==null )
             {
                 if (method.IsStatic)
@@ -84,7 +86,7 @@ namespace Spring.Util
         /// if <paramref name="requiredType"/> is <c>null</c>
         /// </exception>
         /// <exception cref="NotSupportedException">
-        /// if it is not possible to invoke methods of 
+        /// if it is not possible to invoke methods of
         /// type <paramref name="requiredType"/> on <paramref name="target"/>
         /// </exception>
         public static void Understands(object target, string targetName, Type requiredType)
@@ -97,6 +99,7 @@ namespace Spring.Util
             }
 
             Type targetType;
+#if REMOTING
             if (RemotingServices.IsTransparentProxy(target))
             {
                 RealProxy rp = RemotingServices.GetRealProxy(target);
@@ -107,22 +110,23 @@ namespace Spring.Util
                     {
                         return;
                     }
-                    throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, "Target '{0}' is a transparent proxy that does not support methods of '{1}'.", targetName, requiredType.FullName));                                    
+                    throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, "Target '{0}' is a transparent proxy that does not support methods of '{1}'.", targetName, requiredType.FullName));
                 }
                 targetType = rp.GetProxiedType();
             }
             else
+#endif
             {
-                targetType = target.GetType();                
+                targetType = target.GetType();
             }
 
             if (!requiredType.IsAssignableFrom(targetType))
             {
-                throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, "Target '{0}' of type '{1}' does not support methods of '{2}'.", targetName, targetType, requiredType.FullName));                
+                throw new NotSupportedException(string.Format(CultureInfo.InvariantCulture, "Target '{0}' of type '{1}' does not support methods of '{2}'.", targetName, targetType, requiredType.FullName));
             }
         }
 
-        #region checking casts on transparent proxies (From BCL via Reflector)
+#region checking casts on transparent proxies (From BCL via Reflector)
         //        private static bool CheckCast(RealProxy rp, Type castType)
 //        {
 //            bool flag = false;
@@ -157,7 +161,7 @@ namespace Spring.Util
 //            }
 //            return flag;
         //        }
-        #endregion
+#endregion
 
         /// <summary>
 		/// Checks the value of the supplied <paramref name="argument"/> and throws an
@@ -295,7 +299,7 @@ namespace Spring.Util
         /// <param name="argument">The array or collection to check.</param>
         /// <param name="name">The argument name.</param>
         /// <exception cref="System.ArgumentNullException">
-        /// If the supplied <paramref name="argument"/> is <see langword="null"/>, 
+        /// If the supplied <paramref name="argument"/> is <see langword="null"/>,
         /// contains no elements or only null elements.
         /// </exception>
         public static void ArgumentHasElements(ICollection argument, string name)
@@ -307,12 +311,12 @@ namespace Spring.Util
                     string.Format(
                     CultureInfo.InvariantCulture,
                     "Argument '{0}' must not be null or resolve to an empty collection and must contain non-null elements", name));
-            }            
+            }
         }
 
 
 	    /// <summary>
-	    /// Checks whether the specified <paramref name="argument"/> can be cast 
+	    /// Checks whether the specified <paramref name="argument"/> can be cast
 	    /// into the <paramref name="requiredType"/>.
 	    /// </summary>
 	    /// <param name="argument">
@@ -381,8 +385,8 @@ namespace Spring.Util
                 throw new InvalidOperationException(message);
             }
         }
-        
-	    #region Constructor (s) / Destructor
+
+#region Constructor (s) / Destructor
 
 		// CLOVER:OFF
 
@@ -400,7 +404,7 @@ namespace Spring.Util
 
 		// CLOVER:ON
 
-		#endregion
+#endregion
 
 	}
 }

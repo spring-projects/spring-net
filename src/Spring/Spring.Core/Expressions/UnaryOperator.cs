@@ -44,6 +44,7 @@ namespace Spring.Expressions
             this.addChild(operand);
         }
 
+#if BINARY_SERIALIZATION
         /// <summary>
         /// Create a new instance from SerializationInfo
         /// </summary>
@@ -51,7 +52,8 @@ namespace Spring.Expressions
             : base(info, context)
         {
         }
-        
+#endif
+
         /// <summary>
         /// Gets the operand.
         /// </summary>

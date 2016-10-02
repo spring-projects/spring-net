@@ -32,7 +32,7 @@ namespace Spring.Expressions
     public class LocalVariableNode : BaseNode
     {
         //internal const string LOCAL_VARIABLES = "__locals";
-     
+
         /// <summary>
         /// Create a new instance
         /// </summary>
@@ -40,6 +40,7 @@ namespace Spring.Expressions
         {
         }
 
+#if BINARY_SERIALIZATION
         /// <summary>
         /// Create a new instance from SerializationInfo
         /// </summary>
@@ -47,7 +48,8 @@ namespace Spring.Expressions
             : base(info, context)
         {
         }
-        
+#endif
+
         /// <summary>
         /// Returns value of the local variable represented by this node.
         /// </summary>

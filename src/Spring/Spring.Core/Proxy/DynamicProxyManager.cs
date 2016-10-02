@@ -76,10 +76,10 @@ namespace Spring.Proxy
             }
             catch (ArgumentException ex)
             {
-                Type alreadyRegisteredType = module.GetType(typeName, true);
+                Type alreadyRegisteredType = module.GetType(typeName, true, false);
 
                 string msg;
-                
+
                 if (alreadyRegisteredType != null)
                     msg = "Proxy already registered for \"{0}\" as Type \"{1}\".";
                 else

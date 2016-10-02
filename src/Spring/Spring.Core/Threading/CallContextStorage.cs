@@ -1,3 +1,4 @@
+#if REMOTING
 using System.Runtime.Remoting.Messaging;
 
 namespace Spring.Threading
@@ -38,3 +39,4 @@ namespace Spring.Threading
         }
     }
 }
+#endif

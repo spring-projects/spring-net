@@ -40,6 +40,7 @@ namespace Spring.Expressions
         {
         }
 
+#if BINARY_SERIALIZATION
         /// <summary>
         /// Create a new instance from SerializationInfo
         /// </summary>
@@ -47,7 +48,8 @@ namespace Spring.Expressions
             : base(info, context)
         {
         }
-        
+#endif
+
         /// <summary>
         /// Returns a value for the arithmetic addition operator node.
         /// </summary>
@@ -91,7 +93,7 @@ namespace Spring.Expressions
                 ISet leftset = new HybridSet(((IDictionary) left).Keys);
                 ISet rightset = new HybridSet(((IDictionary) right).Keys);
                 ISet unionset = leftset.Union(rightset);
-                
+
                 IDictionary result = new Hashtable(unionset.Count);
                 foreach(object key in unionset)
                 {

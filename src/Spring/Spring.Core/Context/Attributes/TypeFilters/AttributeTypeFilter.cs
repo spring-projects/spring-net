@@ -19,6 +19,7 @@
 #endregion
 
 using System;
+using System.Reflection;
 
 namespace Spring.Context.Attributes.TypeFilters
 {
@@ -49,7 +50,7 @@ namespace Spring.Context.Attributes.TypeFilters
             if (RequiredType == null)
                 return false;
 
-            return (Attribute.GetCustomAttribute(type, RequiredType) != null);
+            return type.GetTypeInfo().GetCustomAttribute(RequiredType) != null;
         }
 
         /// <summary>

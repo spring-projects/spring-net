@@ -2,13 +2,13 @@
 
 /*
 * Copyright © 2002-2011 the original author or authors.
-* 
+*
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
-* 
+*
 *      http://www.apache.org/licenses/LICENSE-2.0
-* 
+*
 * Unless required by applicable law or agreed to in writing, software
 * distributed under the License is distributed on an "AS IS" BASIS,
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -37,11 +37,11 @@ namespace Spring.Threading
 		/// <summary>
 		/// .NET threads have not a method to check if they have been interrupted.
 		/// Moreover, differently from java threads, when entering <c>lock</c>ed
-		/// blocks, Monitor, Sleep, SpinWait and so on, a <see cref="ThreadInterruptedException"/> 
+		/// blocks, Monitor, Sleep, SpinWait and so on, a <see cref="ThreadInterruptedException"/>
 		/// will be raised by the runtime.
 		/// <p/>Spring.Threading classes usually call this method before entering a lock block, to mirror java code
-		/// <p>Usually this is non issue because the same exception will be raised entering the monitor 
-		/// associated with the lock (<seealso href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfsystemthreadingmonitorclassentertopic.asp"/>) 
+		/// <p>Usually this is non issue because the same exception will be raised entering the monitor
+		/// associated with the lock (<seealso href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfsystemthreadingmonitorclassentertopic.asp"/>)
 		/// </p>
 		/// </summary>
 		/// <exception cref="ThreadInterruptedException">if the thread has been interrupted</exception>
@@ -60,7 +60,7 @@ namespace Spring.Threading
 		}
 
 		/// <summary>
-		/// Normalize the given <see cref="System.DateTime"/> so that 
+		/// Normalize the given <see cref="System.DateTime"/> so that
 		/// is is comparable with <see cref="Utils.CurrentTimeMillis"/>.
 		/// </summary>
 		/// <param name="date">Date.</param>
@@ -73,7 +73,7 @@ namespace Spring.Threading
 		}
 
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 		/// <param name="one"></param>
 		/// <param name="another"></param>
@@ -109,13 +109,14 @@ namespace Spring.Threading
 		public static TimeSpan NanoSecondsTimeSpan(long nanoSeconds )
 		{
 			int milliseconds = Convert.ToInt32(nanoSeconds / 1000000);
-			return new TimeSpan(0,0,0,0, milliseconds);	
+			return new TimeSpan(0,0,0,0, milliseconds);
 		}
 
-		/// <summary>
-		/// Has been interrupted this thread
-		/// </summary>
-		public static bool ThreadInterrupted
+#if THREADING
+        /// <summary>
+        /// Has been interrupted this thread
+        /// </summary>
+        public static bool ThreadInterrupted
 		{
 			get
 			{
@@ -132,5 +133,6 @@ namespace Spring.Threading
 				return interrupted;
 			}
 		}
+#endif
 	}
 }

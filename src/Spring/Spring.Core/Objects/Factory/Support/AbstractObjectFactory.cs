@@ -37,6 +37,7 @@ using Spring.Threading;
 using Spring.Util;
 using System.Threading;
 using System.Linq;
+using System.Reflection;
 
 #endregion
 
@@ -64,28 +65,42 @@ namespace Spring.Objects.Factory.Support
         {
             private readonly string name = Guid.NewGuid().ToString();
 
+#if NETCORE
+            readonly AsyncLocal<ISet> asyncLocalStorage = new AsyncLocal<ISet>();
+#endif
+
             public ISet Value
             {
                 get
                 {
+#if NETCORE
+                    ISet set = asyncLocalStorage.Value;
+#else
                     ISet set = LogicalThreadContext.GetData(this.name) as ISet;
+#endif
                     if (set == null)
                     {
                         set = CreateSet();
+#if NETCORE
+                        asyncLocalStorage.Value = set;
+#else
                         LogicalThreadContext.SetData(this.name, set);
+#endif
                     }
                     return set;
                 }
             }
 
-            #region Implementation of IDisposable
+#region Implementation of IDisposable
 
             public void Dispose()
             {
+#if !NETCORE
                 LogicalThreadContext.FreeNamedDataSlot(this.name);
+#endif
             }
 
-            #endregion
+#endregion
 
             private ISet CreateSet()
             {
@@ -94,7 +109,7 @@ namespace Spring.Objects.Factory.Support
         }
 
         /// <summary>
-        /// Makes a distinction between sort order and object identity. 
+        /// Makes a distinction between sort order and object identity.
         /// This is important when used with <see cref="ISet"/>, since most
         /// implementations assume Order == Identity
         /// </summary>
@@ -102,7 +117,7 @@ namespace Spring.Objects.Factory.Support
         private class ObjectOrderComparator : OrderComparator
         {
             /// <summary>
-            /// Handle the case when both objects have equal sort order priority. By default returns 0, 
+            /// Handle the case when both objects have equal sort order priority. By default returns 0,
             /// but may be overriden for handling special cases.
             /// </summary>
             /// <param name="o1">The first object to compare.</param>
@@ -166,7 +181,7 @@ namespace Spring.Objects.Factory.Support
         /// </summary>
         private Spring.Collections.Generic.ISet<string> alreadyCreated = new SynchronizedSet<string>(new HashedSet<string>());
 
-        #region Constructor (s) / Destructor
+#region Constructor (s) / Destructor
 
         /// <summary>
         /// Creates a new instance of the
@@ -234,9 +249,9 @@ namespace Spring.Objects.Factory.Support
             ParentObjectFactory = parentFactory;
         }
 
-        #endregion
+#endregion
 
-        #region Properties
+#region Properties
 
         /// <summary>
         /// Returns, whether this factory treats object names case sensitive or not.
@@ -286,9 +301,9 @@ namespace Spring.Objects.Factory.Support
             get { return hasDestructionAwareBeanPostProcessors; }
         }
 
-        #endregion
+#endregion
 
-        #region Methods
+#region Methods
 
         /// <summary>
         /// Return an instance (possibly shared or independent) of the given object name.
@@ -587,8 +602,8 @@ namespace Spring.Objects.Factory.Support
         }
 
         /// <summary>
-        /// Ensures, that the given name is prefixed with <see cref="ObjectFactoryUtils.FactoryObjectPrefix"/> 
-        /// if it incidentially already starts with this prefix. This avoids troubles when dereferencing 
+        /// Ensures, that the given name is prefixed with <see cref="ObjectFactoryUtils.FactoryObjectPrefix"/>
+        /// if it incidentially already starts with this prefix. This avoids troubles when dereferencing
         /// the object name during <see cref="ObjectFactoryUtils.TransformedObjectName"/>
         /// </summary>
         protected string OriginalObjectName(string name)
@@ -943,14 +958,14 @@ namespace Spring.Objects.Factory.Support
             // it's a normal object ?
             if (!ObjectUtils.IsAssignable(typeof(IFactoryObject), instance))
             {
-                #region Instrumentation
+#region Instrumentation
 
                 if (log.IsDebugEnabled)
                 {
                     log.Debug(string.Format("Calling code asked for normal instance for name '{0}'.", canonicalName));
                 }
 
-                #endregion
+#endregion
 
                 return instance;
             }
@@ -958,7 +973,7 @@ namespace Spring.Objects.Factory.Support
             // the user wants the factory itself ?
             if (!ObjectUtils.IsAssignable(typeof(IFactoryObject), instance) || IsFactoryDereference(name))
             {
-                #region Instrumentation
+#region Instrumentation
 
                 if (log.IsDebugEnabled)
                 {
@@ -967,19 +982,19 @@ namespace Spring.Objects.Factory.Support
                                       TransformedObjectName(name)));
                 }
 
-                #endregion
+#endregion
 
                 return instance;
             }
 
-            #region Instrumentation
+#region Instrumentation
 
             if (log.IsDebugEnabled)
             {
                 log.Debug(string.Format("Object with name '{0}' is a factory object.", canonicalName));
             }
 
-            #endregion
+#endregion
 
             object resultInstance = null;
 
@@ -990,12 +1005,12 @@ namespace Spring.Objects.Factory.Support
 
             if (resultInstance == null)
             {
-                #region Instrumentation
+#region Instrumentation
                 if (log.IsDebugEnabled)
                 {
                     log.Debug(string.Format("Dereferencing Object with name '{0}'", canonicalName));
                 }
-                #endregion
+#endregion
 
                 // return object instance from factory...
                 IFactoryObject factory = (IFactoryObject)instance;
@@ -1034,12 +1049,12 @@ namespace Spring.Objects.Factory.Support
             }
             else
             {
-                #region Instrumentation
+#region Instrumentation
                 if (log.IsDebugEnabled)
                 {
                     log.Debug(string.Format("Returning factory product from cache for Object with name '{0}'", canonicalName));
                 }
-                #endregion
+#endregion
             }
             return resultInstance;
         }
@@ -1083,14 +1098,14 @@ namespace Spring.Objects.Factory.Support
             {
                 IConfigurableFactoryObject configurableFactory = (IConfigurableFactoryObject)factory;
 
-                #region Instrumentation
+#region Instrumentation
 
                 if (log.IsDebugEnabled)
                 {
                     log.Debug(string.Format("Factory object with name '{0}' is configurable.", TransformedObjectName(objectName)));
                 }
 
-                #endregion
+#endregion
 
                 if (configurableFactory.ProductTemplate != null)
                 {
@@ -1368,7 +1383,7 @@ namespace Spring.Objects.Factory.Support
                 }
 
                 // Check object class whether we're dealing with a FactoryObject
-                if (typeof(IFactoryObject).IsAssignableFrom(objectType))
+                if (typeof(IFactoryObject).GetTypeInfo().IsAssignableFrom(objectType.GetTypeInfo()))
                 {
                     if (!IsFactoryDereference(name))
                     {
@@ -1487,7 +1502,7 @@ namespace Spring.Objects.Factory.Support
 
         /// <summary>
         /// Determines the <see cref="System.Type"/> of the object defined
-        /// by the supplied object <paramref name="definition"/>. 
+        /// by the supplied object <paramref name="definition"/>.
         /// </summary>
         /// <remarks>
         /// <p>
@@ -1505,7 +1520,7 @@ namespace Spring.Objects.Factory.Support
         /// </param>
         /// <param name="definition">
         /// The <see cref="Spring.Objects.Factory.Support.RootObjectDefinition"/>
-        /// that the <see cref="System.Type"/> is to be determined for. 
+        /// that the <see cref="System.Type"/> is to be determined for.
         /// </param>
         /// <returns>
         /// The <see cref="System.Type"/> of the object defined by the supplied
@@ -1653,7 +1668,7 @@ namespace Spring.Objects.Factory.Support
         }
 
         /// <summary>
-        /// Gets the temporary object that is placed 
+        /// Gets the temporary object that is placed
         /// into the singleton cache during object resolution.
         /// </summary>
         protected object TemporarySingletonPlaceHolder
@@ -1661,9 +1676,9 @@ namespace Spring.Objects.Factory.Support
             get { return CURRENTLY_IN_CREATION; }
         }
 
-        #endregion
+#endregion
 
-        #region Fields
+#region Fields
 
         /// <summary>
         /// Parent object factory, for object inheritance support
@@ -1693,19 +1708,19 @@ namespace Spring.Objects.Factory.Support
         private bool hasInstantiationAwareBeanPostProcessors;
 
         /// <summary>
-        /// Indicates whether any IDestructionAwareBeanPostProcessors have been registered 
+        /// Indicates whether any IDestructionAwareBeanPostProcessors have been registered
         /// </summary>
         private bool hasDestructionAwareBeanPostProcessors;
 
-        private bool caseSensitive;
+        private readonly bool caseSensitive;
         private OrderedDictionary aliasMap;
-        private OrderedDictionary singletonCache;
-        private OrderedDictionary singletonLocks;
+        private readonly OrderedDictionary singletonCache;
+        private readonly OrderedDictionary singletonLocks;
 
         /// <summary>
-        /// Set of registered singletons, containing the instance names in registration order 
+        /// Set of registered singletons, containing the instance names in registration order
         /// </summary>
-        private HashSet<string> registeredSingletons = new HashSet<string>();
+        private readonly HashSet<string> registeredSingletons = new HashSet<string>();
 
         private readonly IDictionary singletonsInCreation;
 
@@ -1715,9 +1730,9 @@ namespace Spring.Objects.Factory.Support
         /// Set that holds all inner objects created by this factory that implement the IDisposable
         /// interface, to be destroyed on call to Dispose.
         /// </summary>
-        private ISet disposableInnerObjects = new SynchronizedSet(new HybridSet());
+        private readonly ISet disposableInnerObjects = new SynchronizedSet(new HybridSet());
 
-        #endregion
+#endregion
 
         /// <summary>
         /// Set that holds all inner objects created by this factory that implement the IDisposable
@@ -1728,7 +1743,7 @@ namespace Spring.Objects.Factory.Support
             get { return disposableInnerObjects; }
         }
 
-        #region IHierarchicalObjectFactory Members
+#region IHierarchicalObjectFactory Members
 
         /// <summary>
         /// The parent object factory, or <see langword="null"/> if there is none.
@@ -1759,16 +1774,16 @@ namespace Spring.Objects.Factory.Support
                     (!ObjectFactoryUtils.IsFactoryDereference(name) || IsFactoryObject(objectName)));
         }
 
-        #endregion
+#endregion
 
-        #region IObjectFactory Members
+#region IObjectFactory Members
 
-        #region New region
+#region New region
 
         /// <summary>
         /// Is this object a singleton?
         /// </summary>
-        /// <see cref="Spring.Objects.Factory.IObjectFactory.IsSingleton"/> 
+        /// <see cref="Spring.Objects.Factory.IObjectFactory.IsSingleton"/>
         public bool IsSingleton(string name)
         {
             string objectName = TransformedObjectName(name);
@@ -1847,7 +1862,7 @@ namespace Spring.Objects.Factory.Support
             IObjectFactory parentFactory = ParentObjectFactory;
             if (parentFactory != null && !this.ContainsObjectDefinition(objectName))
             {
-                // No object definition found in this factory -> delegate to parent   
+                // No object definition found in this factory -> delegate to parent
                 return parentFactory.IsPrototype(OriginalObjectName(name));
             }
 
@@ -1877,7 +1892,7 @@ namespace Spring.Objects.Factory.Support
         /// Does this object factory or one of its parent factories contain an object with the given name?
         /// </summary>
         /// <remarks>
-        /// This method scans the object factory hierarchy starting with the current factory instance upwards. 
+        /// This method scans the object factory hierarchy starting with the current factory instance upwards.
         /// Use <see cref="ContainsLocalObject"/> if you want to explicitely check just this object factory instance.
         /// </remarks>
         /// <see cref="Spring.Objects.Factory.IObjectFactory.ContainsObject"/>.
@@ -2138,7 +2153,7 @@ namespace Spring.Objects.Factory.Support
         }
 
         /// <summary>
-        /// Return an instance (possibly shared or independent) of the given object name, 
+        /// Return an instance (possibly shared or independent) of the given object name,
         /// optionally injecting dependencies.
         /// </summary>
         /// <param name="name">The name of the object to return.</param>
@@ -2180,23 +2195,23 @@ namespace Spring.Objects.Factory.Support
                 string objectName = TransformedObjectName(name);
                 Interlocked.Increment(ref nestingCount);
 
-                #region Instrumentation
+#region Instrumentation
                 if (log.IsDebugEnabled)
                 {
                     log.Debug(string.Format("{2}GetObjectInternal: obtaining instance for name {0} => canonical name {1}", name, objectName, new String(' ', nestingCount * INDENT)));
                 }
-                #endregion
+#endregion
 
                 object instance = null;
 
                 // those are cases, where singleton cache can be used
                 if (arguments == null && !suppressConfigure)
                 {
-                    // eagerly check singleton cache for manually registered singletons...                       
+                    // eagerly check singleton cache for manually registered singletons...
                     object sharedInstance = GetSingleton(objectName);
                     if (sharedInstance != null)
                     {
-                        #region Instrumentation
+#region Instrumentation
                         if (log.IsDebugEnabled)
                         {
                             if (IsSingletonCurrentlyInCreation(objectName))
@@ -2209,7 +2224,7 @@ namespace Spring.Objects.Factory.Support
                                 log.Debug(string.Format("Returning cached instance of singleton object '{0}'.", objectName));
                             }
                         }
-                        #endregion
+#endregion
 
                         instance = GetObjectForInstance(sharedInstance, name, objectName, null);
                         return EnsureObjectIsOfRequiredType(name, instance, requiredType);
@@ -2296,12 +2311,12 @@ namespace Spring.Objects.Factory.Support
                 }
 
                 hasErrors = true;
-                #region Instrumentation
+#region Instrumentation
                 if (log.IsErrorEnabled)
                 {
                     log.Error(string.Format("{1}GetObjectInternal: error obtaining object {0}", name, new String(' ', nestingCount * INDENT)));
                 }
-                #endregion
+#endregion
                 throw;
             }
             finally
@@ -2315,12 +2330,12 @@ namespace Spring.Objects.Factory.Support
                             nestingCount--;
                         }
                     }
-                    #region Instrumentation
+#region Instrumentation
                     if (log.IsDebugEnabled)
                     {
                         log.Debug(string.Format("{1}GetObjectInternal: returning instance for objectname {0}", name, new String(' ', nestingCount * INDENT)));
                     }
-                    #endregion
+#endregion
                 }
             }
         }
@@ -2399,12 +2414,12 @@ namespace Spring.Objects.Factory.Support
                 object sharedInstance = singletonCache[objectName];
                 if (sharedInstance == null)
                 {
-                    #region Instrumentation
+#region Instrumentation
                     if (log.IsDebugEnabled)
                     {
                         log.Debug(string.Format("Creating shared instance of singleton object '{0}'", objectName));
                     }
-                    #endregion
+#endregion
 
                     BeforeSingletonCreation(objectName);
                     try
@@ -2417,12 +2432,12 @@ namespace Spring.Objects.Factory.Support
                     }
                     AddSingleton(objectName, sharedInstance);
 
-                    #region Instrumentation
+#region Instrumentation
                     if (log.IsDebugEnabled)
                     {
                         log.Debug(string.Format("Cached shared instance of singleton object '{0}'", objectName));
                     }
-                    #endregion
+#endregion
                 }
                 return sharedInstance;
             }
@@ -2442,23 +2457,23 @@ namespace Spring.Objects.Factory.Support
         /// <seealso cref="Spring.Objects.Factory.IObjectFactory.ConfigureObject(object, string)"/>
         public abstract object ConfigureObject(object target, string name, IObjectDefinition definition);
 
-        #endregion
+#endregion
 
-        #endregion
+#endregion
 
         /// <summary>
         /// Destroy all cached singletons in this factory.
         /// </summary>
         public virtual void Dispose()
         {
-            #region Instrumentation
+#region Instrumentation
 
             if (log.IsDebugEnabled)
             {
                 log.Debug(string.Format("Destroying singletons in factory [{0}].", this));
             }
 
-            #endregion
+#endregion
 
             this.prototypesInCreation.Dispose();
 
@@ -2615,35 +2630,35 @@ namespace Spring.Objects.Factory.Support
         /// <seealso cref="Spring.Objects.Factory.Config.IConfigurableObjectFactory.RegisterAlias"/>.
         public void RegisterAlias(string name, string alias)
         {
-            #region Sanity Checks
+#region Sanity Checks
 
             AssertUtils.ArgumentHasText(name, "The object name must not be empty.");
             AssertUtils.ArgumentHasText(alias, "The alias must not be empty.");
 
-            #endregion
+#endregion
 
             if (name == alias)
             {
-                #region Instrumentation
+#region Instrumentation
 
                 if (log.IsDebugEnabled)
                 {
                     log.Debug(string.Format("Ignoring attempt to Register alias '{0}' for object with name '{1}' because name and alias would be the same value.", alias, name));
                 }
 
-                #endregion
+#endregion
 
                 return;
             }
 
-            #region Instrumentation
+#region Instrumentation
 
             if (log.IsDebugEnabled)
             {
                 log.Debug(string.Format("Registering alias '{0}' for object with name '{1}'.", alias, name));
             }
 
-            #endregion
+#endregion
 
             lock (aliasMap)
             {
@@ -2670,7 +2685,7 @@ namespace Spring.Objects.Factory.Support
             TypeConverterRegistry.RegisterConverter(requiredType, converter);
         }
 
-        #region ISingletonObjectRegistry Members
+#region ISingletonObjectRegistry Members
 
         /// <summary>
         /// Register the given existing object as singleton in the object factory,
@@ -2769,7 +2784,7 @@ namespace Spring.Objects.Factory.Support
             }
         }
         /// <summary>
-        /// Tries to find a cached object for the specified name. 
+        /// Tries to find a cached object for the specified name.
         /// </summary>
         /// <param name="objectName">Teh object name to look for.</param>
         /// <returns>The cached object if found, <see langword="null"/> otherwise.</returns>
@@ -2781,7 +2796,7 @@ namespace Spring.Objects.Factory.Support
             }
         }
 
-        #endregion
+#endregion
 
 
         /// <summary>

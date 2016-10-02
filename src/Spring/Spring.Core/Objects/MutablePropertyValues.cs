@@ -57,7 +57,7 @@ namespace Spring.Objects
         private List<PropertyValue> propertyValuesList = new List<PropertyValue>();
 
         #endregion
-		
+
         #region Constructor (s) / Destructor
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace Spring.Objects
         public MutablePropertyValues ()
         {
         }
-        
+
         /// <summary>
         /// Creates a new instance of the <see cref="Spring.Objects.MutablePropertyValues"/>
         /// class.
@@ -126,7 +126,7 @@ namespace Spring.Objects
         }
 
         #endregion
-		
+
         #region Methods
 
         /// <summary>
@@ -196,17 +196,17 @@ namespace Spring.Objects
         /// The map of property values, the keys of which must be
         /// <see cref="System.String"/>s.
         /// </param>
-        public void AddAll (IDictionary<string, object>  map) 
+        public void AddAll (IDictionary<string, object>  map)
         {
-            if (map != null) 
+            if (map != null)
             {
-                foreach (KeyValuePair<string, object> pair in map) 
+                foreach (KeyValuePair<string, object> pair in map)
                 {
                     Add (new PropertyValue (pair.Key, pair.Value));
                 }
             }
         }
-        
+
         /// <summary>
         /// Add all property values from the given
         /// <see cref="System.Collections.IList"/>.
@@ -214,17 +214,17 @@ namespace Spring.Objects
         /// <param name="values">
         /// The list of <see cref="Spring.Objects.PropertyValue"/>s to be added.
         /// </param>
-        public void AddAll(IList<PropertyValue> values) 
+        public void AddAll(IList<PropertyValue> values)
         {
-            if (values != null) 
+            if (values != null)
             {
-                foreach (PropertyValue value in values) 
+                foreach (PropertyValue value in values)
                 {
                     Add (value);
                 }
             }
         }
-		
+
         /// <summary>
         /// Remove the given <see cref="Spring.Objects.PropertyValue"/>, if contained.
         /// </summary>
@@ -235,7 +235,7 @@ namespace Spring.Objects
         {
             propertyValuesList.Remove (pv);
         }
-		
+
         /// <summary>
         /// Removes the named <see cref="Spring.Objects.PropertyValue"/>, if contained.
         /// </summary>
@@ -246,7 +246,7 @@ namespace Spring.Objects
         {
             Remove (GetPropertyValue (propertyName));
         }
-		
+
         /// <summary>
         /// Modify a <see cref="Spring.Objects.PropertyValue"/> object held in this object. Indexed from 0.
         /// </summary>
@@ -254,7 +254,7 @@ namespace Spring.Objects
         {
             propertyValuesList [i] = pv;
         }
-		
+
         /// <summary>
         /// Return the property value given the name.
         /// </summary>
@@ -269,17 +269,16 @@ namespace Spring.Objects
         /// </returns>
         public PropertyValue GetPropertyValue (string propertyName)
         {
-            string propertyNameLowered = propertyName.ToLower (CultureInfo.CurrentCulture);
             foreach (PropertyValue pv in propertyValuesList)
             {
-                if (pv.Name.ToLower(CultureInfo.CurrentCulture).Equals (propertyNameLowered))
+                if (pv.Name.Equals(propertyName, StringComparison.OrdinalIgnoreCase))
                 {
                     return pv;
                 }
             }
             return null;
         }
-		
+
         /// <summary>
         /// Does the container of properties contain one of this name.
         /// </summary>
@@ -291,7 +290,7 @@ namespace Spring.Objects
         {
             return GetPropertyValue (propertyName) != null;
         }
-		
+
         /// <summary>
         /// Return the difference (changes, additions, but not removals) of
         /// property values between the supplied argument and the values
@@ -304,10 +303,10 @@ namespace Spring.Objects
         public IPropertyValues ChangesSince (IPropertyValues old)
         {
             MutablePropertyValues changes = new MutablePropertyValues ();
-            if (old == this) 
+            if (old == this)
             {
                 return changes;
-            }			
+            }
             // for each property value in this (the newer set)
             foreach (PropertyValue newProperty in propertyValuesList)
             {
@@ -342,11 +341,11 @@ namespace Spring.Objects
         /// An <see cref="System.Collections.IEnumerator"/> that can iterate through a
         /// collection.
         /// </returns>
-        public IEnumerator GetEnumerator () 
+        public IEnumerator GetEnumerator ()
         {
             return PropertyValues.GetEnumerator ();
         }
-		
+
         // CLOVER:OFF
 
         /// <summary>

@@ -2,6 +2,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 
 namespace Spring.Util
 {
@@ -11,9 +13,9 @@ namespace Spring.Util
     public class AttributeUtils
     {
         /// <summary>
-        /// Find a single Attribute of the type 'attributeType' from the supplied class, 
-        /// traversing it interfaces and super classes if no attribute can be found on the 
-        /// class iteslf. 
+        /// Find a single Attribute of the type 'attributeType' from the supplied class,
+        /// traversing it interfaces and super classes if no attribute can be found on the
+        /// class iteslf.
         /// </summary>
         /// <remarks>
         /// This method explicitly handles class-level attributes which are not declared as
@@ -24,10 +26,10 @@ namespace Spring.Util
         /// <returns>the attribute of the given type found, or <code>null</code></returns>
         public static Attribute FindAttribute(Type type, Type attributeType)
         {
-            Attribute[] attributes = Attribute.GetCustomAttributes(type, attributeType, false);  // we will traverse hierarchy ourselves.
-            if (attributes.Length > 0)
+            Attribute attribute = type.GetTypeInfo().GetCustomAttributes(attributeType, false).Cast<Attribute>().FirstOrDefault();  // we will traverse hierarchy ourselves.
+            if (attribute != null)
             {
-                return attributes[0];
+                return attribute;
             }
             foreach (Type interfaceType in type.GetInterfaces())
             {
@@ -37,11 +39,12 @@ namespace Spring.Util
                     return attrib;
                 }
             }
-            if (type.BaseType == null)
+            Type baseType = type.GetTypeInfo().BaseType;
+            if (baseType == null)
             {
                 return null;
             }
-            return FindAttribute(type.BaseType, attributeType);
+            return FindAttribute(baseType, attributeType);
         }
 
         /// <summary>

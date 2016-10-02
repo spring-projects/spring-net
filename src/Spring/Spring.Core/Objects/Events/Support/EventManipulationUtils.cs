@@ -36,32 +36,34 @@ namespace Spring.Objects.Events.Support
 	/// <author>Griffin Caprio</author>
 	public sealed class EventManipulationUtils
 	{
-		/// <summary>
-		/// Returns a new instance of the requested <see cref="Delegate"/>.
-		/// </summary>
-		/// <remarks>
-		/// <p>
-		/// Often used to wire subscribers to event publishers.
-		/// </p>
-		/// </remarks>
-		/// <param name="delegateType">
-		/// The <see cref="System.Type"/> of delegate to create.
-		/// </param>
-		/// <param name="targetSubscriber">
-		/// The target subscriber object that contains the delegate implementation.
-		/// </param>
-		/// <param name="targetSubscriberDelegateMethod">
-		/// <see cref="MethodInfo"/> referencing the delegate method on the subscriber.
-		/// </param>
-		/// <returns>
-		/// A delegate handler that can be added to an events list of handlers, or called directly.
-		/// </returns>
-		public static Delegate GetHandlerDelegate(
+#if !NETCORE
+        /// <summary>
+        /// Returns a new instance of the requested <see cref="Delegate"/>.
+        /// </summary>
+        /// <remarks>
+        /// <p>
+        /// Often used to wire subscribers to event publishers.
+        /// </p>
+        /// </remarks>
+        /// <param name="delegateType">
+        /// The <see cref="System.Type"/> of delegate to create.
+        /// </param>
+        /// <param name="targetSubscriber">
+        /// The target subscriber object that contains the delegate implementation.
+        /// </param>
+        /// <param name="targetSubscriberDelegateMethod">
+        /// <see cref="MethodInfo"/> referencing the delegate method on the subscriber.
+        /// </param>
+        /// <returns>
+        /// A delegate handler that can be added to an events list of handlers, or called directly.
+        /// </returns>
+        public static Delegate GetHandlerDelegate(
 			Type delegateType, object targetSubscriber, MethodInfo targetSubscriberDelegateMethod)
 		{
 			return Delegate.CreateDelegate(
 				delegateType, targetSubscriber, targetSubscriberDelegateMethod.Name);
 		}
+#endif
 
 		/// <summary>
 		/// Queries the input type for a <see cref="MethodInfo" /> signature matching the input
@@ -98,7 +100,7 @@ namespace Spring.Objects.Events.Support
 			return null;
 		}
 
-		#region Constructor (s) / Destructor
+#region Constructor (s) / Destructor
 
 		// CLOVER:OFF
 
@@ -116,6 +118,6 @@ namespace Spring.Objects.Events.Support
 
 		// CLOVER:ON
 
-		#endregion
+#endregion
 	}
 }

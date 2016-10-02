@@ -73,7 +73,7 @@ namespace Spring.Proxy
         #region Constructor(s) / Destructor
 
         /// <summary>
-        /// Creates a new instance of the 
+        /// Creates a new instance of the
         /// <see cref="CompositionProxyTypeBuilder"/> class.
         /// </summary>
         public CompositionProxyTypeBuilder()
@@ -129,7 +129,7 @@ namespace Spring.Proxy
 
             ImplementCustom(typeBuilder);
 
-            return typeBuilder.CreateType();
+            return typeBuilder.CreateTypeInfo().AsType();
         }
 
         /// <summary>
@@ -151,7 +151,7 @@ namespace Spring.Proxy
         #region IProxyTypeGenerator Members
 
         /// <summary>
-        /// Generates the IL instructions that pushes 
+        /// Generates the IL instructions that pushes
         /// the target instance on which calls should be delegated to.
         /// </summary>
         /// <param name="il">The IL generator to use.</param>

@@ -18,6 +18,9 @@
 
 #endregion
 
+
+#if !NETCORE
+
 #region Imports
 
 using System;
@@ -131,14 +134,14 @@ namespace Spring.Core.TypeConversion
 		/// </param>
 		/// <param name="culture">
 		/// The <see cref="System.Globalization.CultureInfo"/> to use
-		/// as the current culture. 
+		/// as the current culture.
 		/// </param>
 		/// <param name="value">
 		/// The value that is to be converted.
 		/// </param>
 		/// <returns>
 		/// A <see cref="System.Collections.Specialized.NameValueCollection"/>
-		/// if successful. 
+		/// if successful.
 		/// </returns>
 		public override object ConvertFrom(
 			ITypeDescriptorContext context,
@@ -156,3 +159,4 @@ namespace Spring.Core.TypeConversion
 		}
 	}
 }
+#endif

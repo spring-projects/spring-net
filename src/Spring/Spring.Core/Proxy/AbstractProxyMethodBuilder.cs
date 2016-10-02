@@ -68,7 +68,7 @@ namespace Spring.Proxy
         /// <see langword="true"/> if the interface is to be
         /// implemented explicitly; otherwise <see langword="false"/>.
         /// </param>
-        public AbstractProxyMethodBuilder(TypeBuilder typeBuilder, 
+        public AbstractProxyMethodBuilder(TypeBuilder typeBuilder,
             IProxyTypeGenerator proxyGenerator, bool explicitImplementation)
         {
             this.typeBuilder = typeBuilder;
@@ -92,7 +92,7 @@ namespace Spring.Proxy
         /// </returns>
         public virtual MethodBuilder BuildProxyMethod(MethodInfo method, MethodInfo interfaceMethod)
         {
-            MethodBuilder methodBuilder = 
+            MethodBuilder methodBuilder =
                 DefineMethod(method, interfaceMethod, explicitImplementation);
 
             ILGenerator il = methodBuilder.GetILGenerator();
@@ -101,7 +101,7 @@ namespace Spring.Proxy
 
             il.Emit(OpCodes.Ret);
 
-            if (explicitImplementation || 
+            if (explicitImplementation ||
                 (interfaceMethod != null && interfaceMethod.Name != method.Name))
             {
                 typeBuilder.DefineMethodOverride(methodBuilder, interfaceMethod);
@@ -115,7 +115,7 @@ namespace Spring.Proxy
         #region Protected Methods
 
         /// <summary>
-        /// Generates the IL instructions that pushes 
+        /// Generates the IL instructions that pushes
         /// the proxy instance on stack.
         /// </summary>
         /// <param name="il">The IL generator to use.</param>
@@ -125,7 +125,7 @@ namespace Spring.Proxy
         }
 
         /// <summary>
-        /// Generates the IL instructions that pushes 
+        /// Generates the IL instructions that pushes
         /// the target instance on which calls should be delegated to.
         /// </summary>
         /// <param name="il">The IL generator to use.</param>
@@ -169,7 +169,7 @@ namespace Spring.Proxy
 
                 if (explicitImplementation || method.Name.IndexOf('.') != -1)
                 {
-                    name = String.Format("{0}.{1}", 
+                    name = String.Format("{0}.{1}",
                         intfMethod.DeclaringType.FullName, intfMethod.Name);
                     attributes |= MethodAttributes.Private;
                 }
@@ -240,7 +240,7 @@ namespace Spring.Proxy
                     System.Collections.Generic.List<Type> interfaces = new System.Collections.Generic.List<Type>(constraints.Length);
                     foreach (Type constraint in constraints)
                     {
-                        if (constraint.IsClass)
+                        if (constraint.GetTypeInfo().IsClass)
                             gtpBuilders[i].SetBaseTypeConstraint(constraint);
                         else
                             interfaces.Add(constraint);

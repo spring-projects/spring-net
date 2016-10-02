@@ -133,7 +133,7 @@ namespace Spring.Objects.Factory.Support
         private object ResolvePropertyValue(string name, IObjectDefinition definition, string argumentName, object argumentValue)
         {
             object resolvedValue = null;
-            
+
             // we must check the argument value to see whether it requires a runtime
             // reference to another object to be resolved.
             // if it does, we'll attempt to instantiate the object and set the reference.
@@ -153,7 +153,7 @@ namespace Spring.Objects.Factory.Support
             }
             else if (argumentValue is IObjectDefinition)
             {
-                // resolve plain IObjectDefinition, without contained name: use dummy name... 
+                // resolve plain IObjectDefinition, without contained name: use dummy name...
                 IObjectDefinition def = (IObjectDefinition)argumentValue;
                 resolvedValue = ResolveInnerObjectDefinition(name, "(inner object)", argumentName, def, definition.IsSingleton);
 
@@ -248,7 +248,7 @@ namespace Spring.Objects.Factory.Support
         /// <returns>The resolved target type, if any. <see lang="null" /> otherwise.</returns>
         protected virtual Type ResolveTargetType(TypedStringValue value)
         {
-            if (value.HasTargetType) 
+            if (value.HasTargetType)
             {
 			    return value.TargetType;
             }

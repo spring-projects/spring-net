@@ -30,7 +30,7 @@ namespace Spring.Expressions
     /// <author>Aleksandar Seovic</author>
     [Serializable]
     public class AssignNode : BaseNode
-    {        
+    {
         /// <summary>
         /// Create a new instance
         /// </summary>
@@ -38,6 +38,7 @@ namespace Spring.Expressions
         {
         }
 
+#if BINARY_SERIALIZATION
         /// <summary>
         /// Create a new instance from SerializationInfo
         /// </summary>
@@ -45,6 +46,7 @@ namespace Spring.Expressions
             : base(info, context)
         {
         }
+#endif
 
         /// <summary>
         /// Assigns value of the right operand to the left one.

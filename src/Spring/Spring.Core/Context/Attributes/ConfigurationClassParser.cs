@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using Spring.Objects.Factory.Parsing;
 using Spring.Collections.Generic;
 using System.Reflection;
@@ -97,7 +98,7 @@ namespace Spring.Context.Attributes
         private void DoProcessConfigurationClass(ConfigurationClass configurationClass)
         {
 
-            Attribute[] importAttributes = Attribute.GetCustomAttributes(configurationClass.ConfigurationClassType, typeof(ImportAttribute));
+            Attribute[] importAttributes = configurationClass.ConfigurationClassType.GetTypeInfo().GetCustomAttributes(typeof(ImportAttribute)).ToArray();
 
             if (importAttributes.Length > 0)
             {
@@ -112,7 +113,7 @@ namespace Spring.Context.Attributes
                 }
             }
 
-            Attribute[] importResourceAttributes = Attribute.GetCustomAttributes(configurationClass.ConfigurationClassType, typeof(ImportResourceAttribute));
+            Attribute[] importResourceAttributes = configurationClass.ConfigurationClassType.GetTypeInfo().GetCustomAttributes(typeof(ImportResourceAttribute)).ToArray();
 
             if (importResourceAttributes.Length > 0)
             {
@@ -150,7 +151,7 @@ namespace Spring.Context.Attributes
 
             foreach (MethodInfo method in theClass.GetMethods())
             {
-                if (Attribute.GetCustomAttribute(method, customAttribute) != null)
+                if (method.GetCustomAttribute(customAttribute) != null)
                 {
                     methods.Add(method);
                 }

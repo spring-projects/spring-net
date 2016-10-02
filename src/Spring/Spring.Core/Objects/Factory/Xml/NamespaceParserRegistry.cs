@@ -39,6 +39,7 @@ using Spring.Validation;
 
 namespace Spring.Objects.Factory.Xml
 {
+#if !NETCORE
     /// <summary>
     /// Provides a resolution mechanism for configuration parsers.
     /// </summary>
@@ -72,18 +73,18 @@ namespace Spring.Objects.Factory.Xml
         }
 
         /// <summary>
-        /// Name of the .Net config section that contains definitions 
+        /// Name of the .Net config section that contains definitions
         /// for custom config parsers.
         /// </summary>
         private const string ConfigParsersSectionName = "spring/parsers";
 
-        #region Fields
+#region Fields
 
         private static IDictionary parsers;
         private readonly static IDictionary wellknownNamespaceParserTypeNames;
         private static XmlSchemaSet schemas;
 
-        #endregion
+#endregion
 
         /// <summary>
         /// Creates a new instance of the NamespaceParserRegistry class.
@@ -114,7 +115,7 @@ namespace Spring.Objects.Factory.Xml
         {
             parsers = new HybridDictionary();
             schemas = new XmlSchemaSet();
-            schemas.XmlResolver = new XmlResourceUrlResolver();            
+            schemas.XmlResolver = new XmlResourceUrlResolver();
 
             RegisterParser(new ObjectsNamespaceParser());
             // register custom config parsers
@@ -178,7 +179,7 @@ namespace Spring.Objects.Factory.Xml
                 if (ok)
                 {
                     parser = (INamespaceParser)parsers[namespaceURI];
-                    
+
                     //work-around for SPRNET-1277 where we're inconsistent re: exposing /db or /database as the final namespace element
                     if (parser == null && namespaceURI == "http://www.springframework.net/db")
                     {
@@ -235,8 +236,8 @@ namespace Spring.Objects.Factory.Xml
         /// The namespace with which to associate instance of the parser.
         /// </param>
         /// <param name="schemaLocation">
-        /// The location of the XML schema that should be used for validation 
-        /// of the XML elements that belong to the specified namespace 
+        /// The location of the XML schema that should be used for validation
+        /// of the XML elements that belong to the specified namespace
         /// (can be any valid Spring.NET resource URI).
         /// </param>
         /// <exception cref="System.ArgumentException">
@@ -328,12 +329,12 @@ namespace Spring.Objects.Factory.Xml
         /// The parser instance.
         /// </param>
         /// <param name="schemaLocation">
-        /// The location of the XML schema that should be used for validation 
-        /// of the XML elements that belong to the specified namespace 
+        /// The location of the XML schema that should be used for validation
+        /// of the XML elements that belong to the specified namespace
         /// (can be any valid Spring.NET resource URI).
         /// </param>
         /// <exception cref="System.ArgumentNullException">
-        /// If <paramref name="parser"/> is <see langword="null"/>, or if 
+        /// If <paramref name="parser"/> is <see langword="null"/>, or if
         /// <paramref name="namespaceUri"/> is not specified and parser class
         /// does not have default value defined using <see cref="NamespaceParserAttribute"/>.
         /// </exception>
@@ -400,7 +401,7 @@ namespace Spring.Objects.Factory.Xml
         }
 
         /// <summary>
-        /// Returns default values for the parser namespace and schema location as 
+        /// Returns default values for the parser namespace and schema location as
         /// defined by the <see cref="NamespaceParserAttribute"/>.
         /// </summary>
         /// <param name="parserType">
@@ -420,7 +421,7 @@ namespace Spring.Objects.Factory.Xml
             return null;
         }
 
-        #region ObjectDefinitionParserNamespaceParser Utility class
+#region ObjectDefinitionParserNamespaceParser Utility class
 
         /// <summary>
         /// Adapts the <see cref="IObjectDefinitionParser"/> interface to <see cref="INamespaceParser"/>.
@@ -451,6 +452,7 @@ namespace Spring.Objects.Factory.Xml
             }
         }
 
-        #endregion
+#endregion
     }
+#endif
 }

@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Reflection;
 using Spring.Collections.Generic;
 using Spring.Core;
 using Spring.Core.TypeConversion;
@@ -179,7 +180,7 @@ namespace Spring.Objects.Factory.Attributes
                 if (actual == requested)
                     return true;
 
-                actual = actual.BaseType;
+                actual = actual.GetTypeInfo().BaseType;
             } while (actual != typeof(Object));
 
             return false;
@@ -208,11 +209,11 @@ namespace Spring.Objects.Factory.Attributes
 					    Type objectType = od.ObjectType;
 					    if (objectType != null)
 					    {
-					        targetAttribute = Attribute.GetCustomAttribute(objectType, type);
+					        targetAttribute = objectType.GetTypeInfo().GetCustomAttribute(type);
 					    }
 				    }
 				    if (targetAttribute == null && od.ObjectType != null) {
-                        targetAttribute = Attribute.GetCustomAttribute(od.ObjectType, type);
+                        targetAttribute = od.ObjectType.GetTypeInfo().GetCustomAttribute(type);
 				    }
 			    }
 			    if (targetAttribute != null && targetAttribute.Equals(attribute)) {
@@ -235,7 +236,7 @@ namespace Spring.Objects.Factory.Attributes
                 {
 				    actualValue = qualifier.GetAttribute(propertyName);
 			    }
-			    if (actualValue == null)                
+			    if (actualValue == null)
                 {
 				    // fall back on bean definition attribute
 				    actualValue = od.GetAttribute(propertyName);
@@ -261,7 +262,7 @@ namespace Spring.Objects.Factory.Attributes
 		    }
 		    return true;
 	    }
-        
+
         /// <summary>
         /// Determine whether the given dependency carries a value attribute.
         /// </summary>

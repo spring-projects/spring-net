@@ -2,13 +2,13 @@
 
 /*
  * Copyright © 2002-2011 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,8 +21,10 @@
 #region Imports
 
 using System;
+#if BINARY_SERIALIZATION
 using System.Runtime.Serialization;
 using System.Security.Permissions;
+#endif
 using System.Text;
 using Spring.Core;
 
@@ -105,22 +107,24 @@ namespace Spring.Objects
 			_propertyAccessExceptions = propertyAccessExceptions ?? EmptyPropertyAccessExceptions;
 		}
 
-		/// <summary>
-		/// Creates a new instance of the PropertyAccessExceptionsException class.
-		/// </summary>
-		/// <param name="info">
-		/// The <see cref="System.Runtime.Serialization.SerializationInfo"/>
-		/// that holds the serialized object data about the exception being thrown.
-		/// </param>
-		/// <param name="context">
-		/// The <see cref="System.Runtime.Serialization.StreamingContext"/>
-		/// that contains contextual information about the source or destination.
-		/// </param>
+#if BINARY_SERIALIZATION
+        /// <summary>
+        /// Creates a new instance of the PropertyAccessExceptionsException class.
+        /// </summary>
+        /// <param name="info">
+        /// The <see cref="System.Runtime.Serialization.SerializationInfo"/>
+        /// that holds the serialized object data about the exception being thrown.
+        /// </param>
+        /// <param name="context">
+        /// The <see cref="System.Runtime.Serialization.StreamingContext"/>
+        /// that contains contextual information about the source or destination.
+        /// </param>
 		protected PropertyAccessExceptionsException(SerializationInfo info, StreamingContext context)
 			: base(info, context)
 		{
 		}
 
+#endif
 		#endregion
 
 		/// <summary>
@@ -163,7 +167,7 @@ namespace Spring.Objects
 		}
 
 		/// <summary>
-		/// Describe the group of exceptions. 
+		/// Describe the group of exceptions.
 		/// </summary>
 		public override string Message
 		{
@@ -181,7 +185,7 @@ namespace Spring.Objects
 					sb.Append(pae.GetType().FullName);
 					sb.Append(": ");
 					sb.Append(pae.Message);
-					if (pae.InnerException != null) 
+					if (pae.InnerException != null)
 					{
 						sb.Append(", Inner Exception: ");
 						sb.Append(pae.InnerException.ToString());
@@ -196,18 +200,19 @@ namespace Spring.Objects
 			}
 		}
 
-		/// <summary>
-		/// Populates a <see cref="System.Runtime.Serialization.SerializationInfo"/> with
-		/// the data needed to serialize the target object.
-		/// </summary>
-		/// <param name="info">
-		/// The <see cref="System.Runtime.Serialization.SerializationInfo"/> to populate
-		/// with data.
-		/// </param>
-		/// <param name="context">
-		/// The destination (see <see cref="System.Runtime.Serialization.StreamingContext"/>)
-		/// for this serialization.
-		/// </param>
+#if BINARY_SERIALIZATION
+        /// <summary>
+        /// Populates a <see cref="System.Runtime.Serialization.SerializationInfo"/> with
+        /// the data needed to serialize the target object.
+        /// </summary>
+        /// <param name="info">
+        /// The <see cref="System.Runtime.Serialization.SerializationInfo"/> to populate
+        /// with data.
+        /// </param>
+        /// <param name="context">
+        /// The destination (see <see cref="System.Runtime.Serialization.StreamingContext"/>)
+        /// for this serialization.
+        /// </param>
 		[SecurityPermission(SecurityAction.Demand, SerializationFormatter=true)]
 		public override void GetObjectData(
 			SerializationInfo info, StreamingContext context)
@@ -215,6 +220,7 @@ namespace Spring.Objects
 			// TODO serialize me
 			base.GetObjectData(info, context);
 		}
+#endif
 
 		/// <summary>
 		/// The IObjectWrapper wrapping the target object at the root of the exception.

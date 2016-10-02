@@ -21,6 +21,7 @@
 #region Imports
 
 using System;
+using System.Linq;
 using System.Reflection;
 using Spring.Core;
 
@@ -130,7 +131,7 @@ namespace Spring.Core
                 else if ((parameters.Length > 0) && (ExpectedParameterCount >= parameters.Length-1))
                 {
                     ParameterInfo lastParameter = parameters[parameters.Length - 1];
-                    satisfied = lastParameter.GetCustomAttributes(typeof(ParamArrayAttribute), false).Length > 0;
+                    satisfied = lastParameter.GetCustomAttributes(typeof(ParamArrayAttribute), false).Any();
                 }
             }
             return satisfied;

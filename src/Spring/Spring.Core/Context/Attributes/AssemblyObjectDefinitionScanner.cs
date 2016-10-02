@@ -110,12 +110,15 @@ namespace Spring.Context.Attributes
         /// </returns>
         protected override bool IsRequiredConstraintSatisfiedBy(Type type)
         {
-            if (!type.Assembly.ReflectionOnly)
+            var typeInfo = type.GetTypeInfo();
+#if !NETCORE
+            if (!typeInfo.Assembly.ReflectionOnly)
+#endif
             {
                 try
                 {
-                    return Attribute.GetCustomAttribute(type, typeof(ComponentAttribute), true) != null &&
-                           !type.IsAbstract;
+                    return typeInfo.GetCustomAttribute(typeof(ComponentAttribute), true) != null &&
+                           !typeInfo.IsAbstract;
                 }
                 catch (AmbiguousMatchException)
                 {
@@ -124,13 +127,14 @@ namespace Spring.Context.Attributes
                 }
             }
 
+#if !NETCORE
             bool satisfied = false;
 
-            foreach (CustomAttributeData customAttributeData in CustomAttributeData.GetCustomAttributes(type))
+            foreach (CustomAttributeData customAttributeData in typeInfo.GetCustomAttributesData())
             {
                 if (customAttributeData.Constructor.DeclaringType != null &&
                     (customAttributeData.Constructor.DeclaringType.FullName == typeof(ComponentAttribute).FullName &&
-                    !type.IsAbstract))
+                    !typeInfo.IsAbstract))
                 {
                     satisfied = true;
                     break;
@@ -138,6 +142,7 @@ namespace Spring.Context.Attributes
             }
 
             return satisfied;
+#endif
         }
 
         /// <summary>

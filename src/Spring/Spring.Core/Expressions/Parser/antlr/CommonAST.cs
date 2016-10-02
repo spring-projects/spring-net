@@ -1,7 +1,7 @@
 using System;
 using Spring.Expressions.Parser.antlr.collections;
 using AST = Spring.Expressions.Parser.antlr.collections.AST;
-	
+
 namespace Spring.Expressions.Parser.antlr
 {
 	/*ANTLR Translator Generator
@@ -26,8 +26,8 @@ namespace Spring.Expressions.Parser.antlr
 
 		internal int ttype = Token.INVALID_TYPE;
 		internal string text;
-		
-		
+
+
 		[Obsolete("Deprecated since version 2.7.2. Use ASTFactory.dup() instead.", false)]
 		protected CommonAST(CommonAST another)
 		{
@@ -35,7 +35,7 @@ namespace Spring.Expressions.Parser.antlr
 			//down	= another.down;
 			//right	= another.right;
 			ttype	= another.ttype;
-			text	= (another.text==null) ? null : String.Copy(another.text);
+			text	= another.text;
 		}
 
 		/*Get the token text for this node */
@@ -43,35 +43,35 @@ namespace Spring.Expressions.Parser.antlr
 		{
 			return text;
 		}
-		
+
 		/*Get the token type for this node */
 		override public int Type
 		{
 			get { return ttype;   }
 			set { ttype = value; }
 		}
-		
+
 		override public void  initialize(int t, string txt)
 		{
 			Type = t;
 			setText(txt);
 		}
-		
+
 		override public void  initialize(collections.AST t)
 		{
 			setText(t.getText());
 			Type = t.Type;
 		}
-		
+
 		public CommonAST()
 		{
 		}
-		
+
 		public CommonAST(IToken tok)
 		{
 			initialize(tok);
 		}
-		
+
 		override public void  initialize(IToken tok)
 		{
 			setText(tok.getText());
@@ -106,9 +106,9 @@ namespace Spring.Expressions.Parser.antlr
 			/// </summary>
 			public override string ASTNodeTypeName
 			{
-				get 
-				{ 
-					return typeof(antlr.CommonAST).FullName;; 
+				get
+				{
+					return typeof(antlr.CommonAST).FullName;;
 				}
 			}
 

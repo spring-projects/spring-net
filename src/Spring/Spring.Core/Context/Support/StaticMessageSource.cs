@@ -20,6 +20,7 @@
 
 #region Imports
 
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
@@ -47,8 +48,8 @@ namespace Spring.Context.Support
 	/// <seealso cref="Spring.Context.Support.DelegatingMessageSource"/>
     public class StaticMessageSource : AbstractMessageSource
     {
-        private Dictionary<string, string> _messages;
-        private Dictionary<string, object> _objects;
+        private readonly Dictionary<string, string> _messages;
+        private readonly Dictionary<string, object> _objects;
 
 		/// <summary>
 		/// Creates a new instance of the
@@ -134,11 +135,15 @@ namespace Spring.Context.Support
 		/// <seealso cref="Spring.Context.Support.AbstractMessageSource.ApplyResourcesToObject(object, string, CultureInfo)"/>
 		protected override void ApplyResourcesToObject(object value, string objectName, CultureInfo cultureInfo)
 		{
-		    if(value != null) 
+#if RESOURCESET
+		    if(value != null)
 		    {
 		        new ComponentResourceManager(value.GetType()).ApplyResources(value, objectName, cultureInfo);
 		    }
-		}
+#else
+            throw new NotSupportedException("This feature is not supported under .NET Core");
+#endif
+        }
 
         /// <summary>
         /// Associate the supplied <paramref name="messageFormat"/> with the

@@ -18,6 +18,8 @@
 
 #endregion
 
+#if !NETCORE
+
 #region Imports
 
 using System;
@@ -136,3 +138,4 @@ namespace Spring.Context.Support
 		}
 	}
 }
+#endif

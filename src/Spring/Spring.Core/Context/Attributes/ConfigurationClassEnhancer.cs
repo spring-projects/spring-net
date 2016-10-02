@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections;
+using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 
@@ -31,7 +32,7 @@ using Common.Logging;
 namespace Spring.Context.Attributes
 {
     /// <summary>
-    /// Enhances Configuration classes by generating a dynamic proxy capable of 
+    /// Enhances Configuration classes by generating a dynamic proxy capable of
     /// interacting with the Spring container to respect object semantics.
     /// </summary>
     /// <author>Chris Beams</author>
@@ -48,7 +49,7 @@ namespace Spring.Context.Attributes
         /// <param name="objectFactory">
         /// The supplied ObjectFactory to check for the existence of object definitions.
         /// </param>
-    	public ConfigurationClassEnhancer(IConfigurableListableObjectFactory objectFactory) 
+    	public ConfigurationClassEnhancer(IConfigurableListableObjectFactory objectFactory)
         {
 		    AssertUtils.ArgumentNotNull(objectFactory, "objectFactory");
 
@@ -68,13 +69,13 @@ namespace Spring.Context.Attributes
         }
 
         /// <summary>
-        /// Intercepts the invocation of any <see cref="ObjectDefAttribute"/>-decorated methods in order 
+        /// Intercepts the invocation of any <see cref="ObjectDefAttribute"/>-decorated methods in order
         /// to ensure proper handling of object semantics such as scoping and AOP proxying.
         /// </summary>
         public interface IConfigurationClassInterceptor
         {
             /// <summary>
-            /// Process the <see cref="ObjectDefAttribute"/>-decorated method to check 
+            /// Process the <see cref="ObjectDefAttribute"/>-decorated method to check
             /// for the existence of this object.
             /// </summary>
             /// <param name="method">The method providing the object definition.</param>
@@ -88,7 +89,7 @@ namespace Spring.Context.Attributes
             #region Logging
 
             private static readonly ILog Logger = LogManager.GetLogger<ConfigurationClassInterceptor>();
-            
+
             #endregion
 
             private readonly IConfigurableListableObjectFactory _configurableListableObjectFactory;
@@ -109,8 +110,7 @@ namespace Spring.Context.Attributes
                     return false;
                 }
 
-                object[] attribs = method.GetCustomAttributes(typeof(ObjectDefAttribute), true);
-                if (attribs.Length == 0)
+                if (!method.GetCustomAttributes(typeof(ObjectDefAttribute), true).Any())
                 {
                     return false;
                 }
@@ -122,7 +122,7 @@ namespace Spring.Context.Attributes
                     return false;
                 }
 
-                Logger.Debug(m => m("Object '{0}' not in creation, asked the application context for one", objectName)); 
+                Logger.Debug(m => m("Object '{0}' not in creation, asked the application context for one", objectName));
 
                 instance = this._configurableListableObjectFactory.GetObject(objectName);
                 return true;
@@ -138,7 +138,7 @@ namespace Spring.Context.Attributes
 
             public ConfigurationClassProxyTypeBuilder(Type configurationClassType, IConfigurationClassInterceptor interceptor)
             {
-                if (configurationClassType.IsSealed)
+                if (configurationClassType.GetTypeInfo().IsSealed)
                 {
                     throw new ArgumentException(String.Format(
                         "[Configuration] classes '{0}' cannot be sealed [{0}].", configurationClassType.FullName));
@@ -173,7 +173,7 @@ namespace Spring.Context.Attributes
                     new ConfigurationClassProxyMethodBuilder(typeBuilder, this, false, targetMethods),
                     BaseType, this.DeclaredMembersOnly);
 
-                Type proxyType = typeBuilder.CreateType();
+                Type proxyType = typeBuilder.CreateTypeInfo().AsType();
 
                 // set target method references
                 foreach (DictionaryEntry entry in targetMethods)
@@ -203,7 +203,7 @@ namespace Spring.Context.Attributes
 
             private ConfigurationClassProxyTypeBuilder customProxyGenerator;
 
-            private IDictionary targetMethods;         
+            private IDictionary targetMethods;
 
             public ConfigurationClassProxyMethodBuilder(
                 TypeBuilder typeBuilder, ConfigurationClassProxyTypeBuilder proxyGenerator,
@@ -252,7 +252,7 @@ namespace Spring.Context.Attributes
                 if (returnValue != null)
                 {
                     il.Emit(OpCodes.Ldloc, interceptedReturnValue);
-                    if (method.ReturnType.IsValueType || method.ReturnType.IsGenericParameter)
+                    if (method.ReturnType.GetTypeInfo().IsValueType || method.ReturnType.IsGenericParameter)
                     {
                         il.Emit(OpCodes.Unbox_Any, method.ReturnType);
                     }

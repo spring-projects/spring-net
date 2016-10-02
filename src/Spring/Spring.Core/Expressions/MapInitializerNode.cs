@@ -38,14 +38,16 @@ namespace Spring.Expressions
         public MapInitializerNode()
         {}
 
-         /// <summary>
+#if BINARY_SERIALIZATION
+        /// <summary>
         /// Create a new instance from SerializationInfo
         /// </summary>
         protected MapInitializerNode(SerializationInfo info, StreamingContext context)
             : base(info, context)
         {
         }
-        
+#endif
+
         /// <summary>
         /// Creates new instance of the map defined by this node.
         /// </summary>

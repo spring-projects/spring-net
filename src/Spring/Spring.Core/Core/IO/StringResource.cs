@@ -48,8 +48,8 @@ namespace Spring.Core.IO
         /// Creates a new instance of the <see cref="StringResource"/> class.
         /// </summary>
         public StringResource(string content)
-            : this(content, Encoding.Default, null)
-        {            
+            : this(content, Encoding.UTF8, null)
+        {
         }
 
         /// <summary>
@@ -73,7 +73,7 @@ namespace Spring.Core.IO
         }
 
         /// <summary>
-        /// Get the <see cref="System.IO.Stream"/> to 
+        /// Get the <see cref="System.IO.Stream"/> to
         /// for accessing this resource.
         /// </summary>
         public override Stream InputStream

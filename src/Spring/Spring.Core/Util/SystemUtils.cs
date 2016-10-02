@@ -39,14 +39,21 @@ namespace Spring.Util
 
         private static readonly bool isMono;
         private static readonly bool isClr4;
+        private static readonly bool isNetCore;
+
 
         static SystemUtils()
         {
+#if !NETCORE
             isMono = Type.GetType("Mono.Runtime") == null ? false : true;
             isClr4 = Environment.Version.Major == 4 ? true : false;
+#else
+            isNetCore = true;
+#endif
             assemblyResolverLock = new object();
         }
 
+#if !NETCORE
         /// <summary>
         /// Registers assembly resolver that iterates over the
         /// assemblies loaded into the current <see cref="AppDomain"/>
@@ -82,7 +89,7 @@ namespace Spring.Util
             }
             return null;
         }
-
+#endif
 
         /// <summary>
         /// Returns true if running on Mono
@@ -94,6 +101,12 @@ namespace Spring.Util
         }
 
         /// <summary>
+        /// Returns true if running on Mono
+        /// </summary>
+        /// <remarks>Tests for the presence of the type Mono.Runtime</remarks>
+        public static bool SupportsXmlSchemaValidation => !MonoRuntime;
+
+        /// <summary>
         /// Returns true if running on CLR 4.0 under InProc SxS mode
         /// </summary>
         public static bool Clr4Runtime
@@ -103,7 +116,7 @@ namespace Spring.Util
 
         /// <summary>
         /// Gets the thread id for the current thread. Use thread name is available,
-        /// otherwise use CurrentThread.GetHashCode() for .NET 1.0/1.1 and 
+        /// otherwise use CurrentThread.GetHashCode() for .NET 1.0/1.1 and
         /// CurrentThread.ManagedThreadId otherwise.
         /// </summary>
         /// <value>The thread id.</value>

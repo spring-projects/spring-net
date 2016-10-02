@@ -21,6 +21,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Spring.Core;
@@ -50,6 +51,7 @@ namespace Spring.Expressions
         {
         }
 
+#if BINARY_SERIALIZATION
         /// <summary>
         /// Create a new instance from SerializationInfo
         /// </summary>
@@ -57,7 +59,8 @@ namespace Spring.Expressions
             : base(info, context)
         {
         }
-        
+#endif
+
         /// <summary>
         /// Returns node's value for the given context.
         /// </summary>
@@ -132,7 +135,7 @@ namespace Spring.Expressions
             {
                 throw new NullValueInNestedPathException("Cannot set the value of the indexer because the context for its resolution is null.");
             }
-            
+
             try
             {
                 if (context is Array)
@@ -176,7 +179,7 @@ namespace Spring.Expressions
             {
                 throw new InvalidPropertyException( evalContext.RootContextType,this.ToString(),"Invalid argument.",e );
             }
-            
+
         }
 
         /// <summary>
@@ -277,10 +280,10 @@ namespace Spring.Expressions
                         Type contextType = context.GetType();
                         Type[] argTypes = ReflectionUtils.GetTypes(indices);
                         string defaultMember = "Item";
-                        object[] atts = contextType.GetCustomAttributes(typeof(DefaultMemberAttribute), true);
+                        DefaultMemberAttribute[] atts = contextType.GetTypeInfo().GetCustomAttributes(typeof(DefaultMemberAttribute), true).Cast<DefaultMemberAttribute>().ToArray();
                         if (atts != null && atts.Length > 0)
                         {
-                            defaultMember = ((DefaultMemberAttribute) atts[0]).MemberName;
+                            defaultMember = atts[0].MemberName;
                         }
                         PropertyInfo indexerProperty = contextType.GetProperty(defaultMember, BINDING_FLAGS, null, null, argTypes, null);
                         if (indexerProperty == null)

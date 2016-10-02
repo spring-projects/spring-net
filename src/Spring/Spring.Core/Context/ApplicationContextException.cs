@@ -40,20 +40,22 @@ namespace Spring.Context
 		/// </summary>
 		public ApplicationContextException() {}
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Context.ApplicationContextException"/> class.
-		/// </summary>
-		/// <param name="info">
-		/// The <see cref="System.Runtime.Serialization.SerializationInfo"/>
-		/// that holds the serialized object data about the exception being thrown.
-		/// </param>
-		/// <param name="context">
-		/// The <see cref="System.Runtime.Serialization.StreamingContext"/>
-		/// that contains contextual information about the source or destination.
-		/// </param>
-		protected ApplicationContextException( SerializationInfo info, StreamingContext context )
+#if BINARY_SERIALIZATION
+        /// <summary>
+        /// Creates a new instance of the
+        /// <see cref="Spring.Context.ApplicationContextException"/> class.
+        /// </summary>
+        /// <param name="info">
+        /// The <see cref="System.Runtime.Serialization.SerializationInfo"/>
+        /// that holds the serialized object data about the exception being thrown.
+        /// </param>
+        /// <param name="context">
+        /// The <see cref="System.Runtime.Serialization.StreamingContext"/>
+        /// that contains contextual information about the source or destination.
+        /// </param>
+        protected ApplicationContextException( SerializationInfo info, StreamingContext context )
 			: base( info, context ) {}
+#endif
 
 		/// <summary>
 		/// Creates a new instance of the

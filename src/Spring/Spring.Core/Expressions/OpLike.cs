@@ -20,7 +20,7 @@
 
 using System;
 using System.Runtime.Serialization;
-#if !MONO_2_0
+#if !MONO_2_0 && !NETCORE
 using Microsoft.VisualBasic;
 using Microsoft.VisualBasic.CompilerServices;
 #endif
@@ -41,6 +41,7 @@ namespace Spring.Expressions
         {
         }
 
+#if BINARY_SERIALIZATION
         /// <summary>
         /// Create a new instance from SerializationInfo
         /// </summary>
@@ -48,7 +49,8 @@ namespace Spring.Expressions
             : base(info, context)
         {
         }
-        
+#endif
+
         /// <summary>
         /// Returns a value for the logical LIKE operator node.
         /// </summary>
@@ -59,7 +61,7 @@ namespace Spring.Expressions
         /// </returns>
         protected override object Get(object context, EvaluationContext evalContext)
         {
-#if !MONO_2_0
+#if !MONO_2_0 && !NETCORE
             string text = GetLeftValue( context, evalContext ) as string;
             string pattern = GetRightValue( context, evalContext ) as string;
 

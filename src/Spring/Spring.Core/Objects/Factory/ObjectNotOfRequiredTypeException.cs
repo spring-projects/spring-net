@@ -21,9 +21,10 @@
 #region Imports
 
 using System;
-using System.Globalization;
+#if BINARY_SERIALIZATION
 using System.Runtime.Serialization;
 using System.Security.Permissions;
+#endif
 
 #endregion
 
@@ -92,6 +93,7 @@ namespace Spring.Objects.Factory {
             this.requiredType = requiredType;
         }
 
+#if BINARY_SERIALIZATION
         /// <summary>
         /// Creates a new instance of the ObjectNotOfRequiredTypeException class.
         /// </summary>
@@ -111,6 +113,8 @@ namespace Spring.Objects.Factory {
             actualInstance = info.GetValue ("ActualInstance", typeof (object));
             name = info.GetString ("Name");
         }
+#endif
+
         #endregion
 
         #region Properties
@@ -153,7 +157,10 @@ namespace Spring.Objects.Factory {
         }
         #endregion
 
-        #region Methods
+#region Methods
+
+#if BINARY_SERIALIZATION
+
         /// <summary>
         /// Populates a <see cref="System.Runtime.Serialization.SerializationInfo"/> with
         /// the data needed to serialize the target object.
@@ -174,12 +181,14 @@ namespace Spring.Objects.Factory {
             info.AddValue ("ActualInstance", actualInstance);
             info.AddValue ("Name", name);
         }
-        #endregion
+#endif
 
-        #region Fields
+#endregion
+
+#region Fields
         private Type requiredType;
         private object actualInstance;
         private string name;
-        #endregion
+#endregion
     }
 }

@@ -2,13 +2,13 @@
 
 /*
  * Copyright © 2002-2011 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -17,6 +17,8 @@
  */
 
 #endregion
+
+ #if !NETCORE
 
 #region Imports
 
@@ -41,11 +43,11 @@ using ConfigXmlDocument = Spring.Util.ConfigXmlDocument;
 namespace Spring.Objects.Factory.Config
 {
     /// <summary>
-    /// Various utility methods for .NET style .config files. 
+    /// Various utility methods for .NET style .config files.
     /// </summary>
     /// <remarks>
     /// <p>
-    /// Currently supports reading custom configuration sections and returning them as 
+    /// Currently supports reading custom configuration sections and returning them as
     /// <see cref="System.Collections.Specialized.NameValueCollection"/> objects.
     /// </p>
     /// </remarks>
@@ -362,7 +364,7 @@ namespace Spring.Objects.Factory.Config
                     handlerType = defaultConfigurationSectionHandlerType;
                 }
             }
-            
+
             if (xmlConfig != null)
             {
                 XmlAttribute xmlConfigType = xmlConfig.Attributes[ConfigSectionTypeAttribute];
@@ -464,3 +466,4 @@ namespace Spring.Objects.Factory.Config
         #endregion
     }
 }
+#endif

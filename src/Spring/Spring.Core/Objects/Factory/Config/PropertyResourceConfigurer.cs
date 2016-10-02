@@ -23,7 +23,10 @@
 using System;
 using System.Collections.Specialized;
 using System.Globalization;
+using System.Reflection;
+
 using Common.Logging;
+
 using Spring.Core;
 using Spring.Core.IO;
 
@@ -70,11 +73,10 @@ namespace Spring.Objects.Factory.Config
     /// <seealso cref="Spring.Objects.Factory.Config.PropertyOverrideConfigurer"/>
     /// <seealso cref="Spring.Objects.Factory.Config.PropertyPlaceholderConfigurer"/>
     [Serializable]
-    public abstract class PropertyResourceConfigurer
-        : IObjectFactoryPostProcessor, IOrdered
+    public abstract class PropertyResourceConfigurer : IObjectFactoryPostProcessor, IOrdered
     {
         /// <summary>
-        /// The default configuration section name to use if none is explictly supplied. 
+        /// The default configuration section name to use if none is explictly supplied.
         /// </summary>
         /// <seealso cref="Spring.Objects.Factory.Config.PropertyResourceConfigurer.ConfigSections"/>
         public static readonly string DefaultConfigSectionName = "spring-config";
@@ -259,7 +261,7 @@ namespace Spring.Objects.Factory.Config
         }
 
         /// <summary>
-        /// Loads properties from the configuration sections 
+        /// Loads properties from the configuration sections
         /// specified in <see cref="ConfigSections"/> into <paramref name="properties"/>.
         /// </summary>
         /// <param name="properties">The <see cref="NameValueCollection"/> instance to be filled with properties.</param>

@@ -39,6 +39,7 @@ namespace Spring.Context.Support
         {
         }
 
+#if BINARY_SERIALIZATION
         /// <summary>
         /// Create a new instance from SerializationInfo
         /// </summary>
@@ -46,7 +47,8 @@ namespace Spring.Context.Support
             : base(info, context)
         {
         }
-        
+#endif
+
         /// <summary>
         /// Returns a value for the integer literal node.
         /// </summary>

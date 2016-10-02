@@ -19,6 +19,7 @@
 #endregion
 
 using System;
+using System.Reflection;
 using Spring.Core.IO;
 using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Xml;
@@ -57,7 +58,7 @@ namespace Spring.Context.Attributes
         {
             if (StringUtils.IsNullOrEmpty(resource))
                 throw new ArgumentException("resource cannot be null or empty!");
-            	
+
             _resources = new[] { resource };
         }
 
@@ -74,9 +75,9 @@ namespace Spring.Context.Attributes
             }
             set
             {
-                if (!((typeof(IObjectDefinitionReader).IsAssignableFrom(value))))
+                if (!((typeof(IObjectDefinitionReader).GetTypeInfo().IsAssignableFrom(value.GetTypeInfo()))))
                     throw new ArgumentException(string.Format("DefinitionReader must be of type IObjectDefinitionReader but was of type {0}", value.Name));
-                
+
                 _objectDefinitionReader = value;
             }
         }

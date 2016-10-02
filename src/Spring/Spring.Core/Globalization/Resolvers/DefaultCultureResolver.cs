@@ -54,7 +54,7 @@ namespace Spring.Globalization.Resolvers
         }
 
         /// <summary>
-        /// Returns the default <see cref="System.Globalization.CultureInfo"/>. 
+        /// Returns the default <see cref="System.Globalization.CultureInfo"/>.
         /// </summary>
         /// <remarks>
         /// <p>
@@ -78,7 +78,7 @@ namespace Spring.Globalization.Resolvers
             }
             else
             {
-                return Thread.CurrentThread.CurrentUICulture;
+                return CultureInfo.CurrentUICulture;
             }
         }
 

@@ -171,7 +171,7 @@ namespace Spring.Util
 		}
 
 		/// <summary>
-		/// Gets the return <see cref="System.Type"/> of the 
+		/// Gets the return <see cref="System.Type"/> of the
 		/// method signature associated with this delegate type.
 		/// </summary>
 		/// <returns>The return <see cref="System.Type"/>.</returns>
@@ -210,7 +210,7 @@ namespace Spring.Util
 		{
 			return type == null ?
 				false :
-				type.IsSubclassOf(typeof (Delegate));
+				type.GetTypeInfo().IsSubclassOf(typeof (Delegate));
 		}
 
 		/// <summary>
@@ -227,7 +227,7 @@ namespace Spring.Util
 		/// <paramref name="handlerMethod"/> is compatible with the signature
 		/// expected by the supplied <paramref name="eventMeta"/>;
 		/// <see langword="false"/> if not or either of the supplied
-		/// parameters is <see langword="null"/>. 
+		/// parameters is <see langword="null"/>.
 		/// </returns>
 		/// <seealso cref="Spring.Util.DelegateInfo.IsSignatureCompatible(MethodInfo)"/>
 		public static bool IsSignatureCompatible(

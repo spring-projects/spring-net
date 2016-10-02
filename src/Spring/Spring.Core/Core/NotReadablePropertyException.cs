@@ -95,6 +95,7 @@ namespace Spring.Core
         {
         }
 
+#if BINARY_SERIALIZATION
         /// <summary>
         /// Creates a new instance of the
         /// <see cref="Spring.Core.NotReadablePropertyException"/> class.
@@ -111,5 +112,6 @@ namespace Spring.Core
             : base(info, context)
         {
         }
+#endif
     }
 }

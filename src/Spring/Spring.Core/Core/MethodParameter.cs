@@ -19,6 +19,7 @@
 #endregion
 
 using System;
+using System.Linq;
 using System.Reflection;
 using Spring.Util;
 
@@ -76,8 +77,8 @@ namespace Spring.Core
                 if (this.parameterType == null)
                 {
                     this.parameterType = (this.methodInfo != null
-                                              ? ReflectionUtils.GetParameterTypes(this.methodInfo.GetParameters())[parameterIndex]
-                                              : ReflectionUtils.GetParameterTypes(this.constructorInfo.GetParameters())[parameterIndex]);                                        
+                        ? ReflectionUtils.GetParameterTypes(this.methodInfo.GetParameters())[parameterIndex]
+                        : ReflectionUtils.GetParameterTypes(this.constructorInfo.GetParameters())[parameterIndex]);
                 }
                 return this.parameterType;
             }
@@ -96,12 +97,15 @@ namespace Spring.Core
             if (methodOrConstructorInfo is MethodInfo)
             {
                 return new MethodParameter((MethodInfo) methodOrConstructorInfo, parameterIndex);
-            } else if (methodOrConstructorInfo is ConstructorInfo)
+            }
+            else if (methodOrConstructorInfo is ConstructorInfo)
             {
                 return new MethodParameter((ConstructorInfo) methodOrConstructorInfo, parameterIndex);
-            } else
+            }
+            else
             {
-                throw new ArgumentException("Given object [" + methodOrConstructorInfo + "] is nieth a MethodInfo nor a ConstructorInfo");
+                throw new ArgumentException("Given object [" + methodOrConstructorInfo +
+                                            "] is nieth a MethodInfo nor a ConstructorInfo");
             }
         }
 
@@ -114,7 +118,8 @@ namespace Spring.Core
             if (methodInfo != null)
             {
                 return methodInfo.GetParameters()[parameterIndex].Name;
-            } else
+            }
+            else
             {
                 return constructorInfo.GetParameters()[parameterIndex].Name;
             }
@@ -146,9 +151,9 @@ namespace Spring.Core
             get
             {
                 if (methodInfo != null)
-                    return Attribute.GetCustomAttributes(methodInfo.GetParameters()[parameterIndex]);
+                    return methodInfo.GetParameters()[parameterIndex].GetCustomAttributes().ToArray();
                 else
-                    return Attribute.GetCustomAttributes(constructorInfo.GetParameters()[parameterIndex]);
+                    return constructorInfo.GetParameters()[parameterIndex].GetCustomAttributes().ToArray();
             }
         }
 
@@ -160,11 +165,10 @@ namespace Spring.Core
             get
             {
                 if (methodInfo != null)
-                    return Attribute.GetCustomAttributes(methodInfo);
+                    return methodInfo.GetCustomAttributes().ToArray();
                 else
-                    return Attribute.GetCustomAttributes(constructorInfo);
+                    return constructorInfo.GetCustomAttributes().ToArray();
             }
         }
-
     }
 }

@@ -24,10 +24,13 @@ using System;
 using System.Collections;
 using System.Globalization;
 using System.Reflection;
+
 using System.Runtime.Remoting;
+#if REMOTING
 using System.Runtime.Remoting.Proxies;
+#endif
+
 using Common.Logging;
-using Spring.Objects;
 using Spring.Reflection.Dynamic;
 
 #endregion
@@ -98,7 +101,7 @@ namespace Spring.Util
         /// <param name="assembly">The assembly.</param>
         /// <param name="typeName">Name of the type.</param>
         /// <returns></returns>
-        /// <exception cref="System.ArgumentNullException"> 
+        /// <exception cref="System.ArgumentNullException">
         /// If the <paramref name="assembly"/> or <paramref name="typeName"/> is <see langword="null"/>
         /// </exception>
         /// <exception cref="Spring.Util.FatalReflectionException">
@@ -131,11 +134,11 @@ namespace Spring.Util
         /// The <see cref="System.Type"/> to instantiate*
         /// </param>
         /// <returns>A new instance of the <see cref="System.Type"/>.</returns>
-        /// <exception cref="System.ArgumentNullException"> 
+        /// <exception cref="System.ArgumentNullException">
         /// If the <paramref name="type"/> is <see langword="null"/>
         /// </exception>
         /// <exception cref="Spring.Util.FatalReflectionException">
-        /// If the <paramref name="type"/> is an abstract class, an interface, 
+        /// If the <paramref name="type"/> is an abstract class, an interface,
         /// an open generic type or does not have a public no-argument constructor.
         /// </exception>
         public static object InstantiateType(Type type)
@@ -174,19 +177,19 @@ namespace Spring.Util
         /// <param name="type">The type.</param>
         public static void IsInstantiable(Type type)
         {
-            if (type.IsInterface)
+            if (type.GetTypeInfo().IsInterface)
             {
                 throw new FatalReflectionException(
                     string.Format(
                         CultureInfo.InvariantCulture, "Cannot instantiate an interface [{0}].", type));
             }
-            if (type.IsAbstract)
+            if (type.GetTypeInfo().IsAbstract)
             {
                 throw new FatalReflectionException(
                     string.Format(
                         CultureInfo.InvariantCulture, "Cannot instantiate an abstract class [{0}].", type));
             }
-            if (type.ContainsGenericParameters)
+            if (type.GetTypeInfo().ContainsGenericParameters)
             {
                 throw new FatalReflectionException(
                     string.Format(
@@ -211,11 +214,11 @@ namespace Spring.Util
         /// The arguments to be passed to the constructor.
         /// </param>
         /// <returns>A new instance.</returns>
-        /// <exception cref="System.ArgumentNullException"> 
+        /// <exception cref="System.ArgumentNullException">
         /// If the <paramref name="constructor"/> is <see langword="null"/>
         /// </exception>
         /// <exception cref="Spring.Util.FatalReflectionException">
-        /// If the <paramref name="constructor"/>'s declaring type is an abstract class, 
+        /// If the <paramref name="constructor"/>'s declaring type is an abstract class,
         /// an interface, an open generic type or does not have a public no-argument constructor.
         /// </exception>
         public static object InstantiateType(ConstructorInfo constructor, object[] arguments)
@@ -224,19 +227,19 @@ namespace Spring.Util
 
             if (log.IsTraceEnabled) log.Trace(string.Format("instantiating type [{0}] using constructor [{1}]", constructor.DeclaringType, constructor));
 
-            if (constructor.DeclaringType.IsInterface)
+            if (constructor.DeclaringType.GetTypeInfo().IsInterface)
             {
                 throw new FatalReflectionException(
                     string.Format(
                         CultureInfo.InvariantCulture, "Cannot instantiate an interface [{0}].", constructor.DeclaringType));
             }
-            if (constructor.DeclaringType.IsAbstract)
+            if (constructor.DeclaringType.GetTypeInfo().IsAbstract)
             {
                 throw new FatalReflectionException(
                     string.Format(
                         CultureInfo.InvariantCulture, "Cannot instantiate an abstract class [{0}].", constructor.DeclaringType));
             }
-            if (constructor.DeclaringType.ContainsGenericParameters)
+            if (constructor.DeclaringType.GetTypeInfo().ContainsGenericParameters)
             {
                 throw new FatalReflectionException(
                     string.Format(
@@ -261,7 +264,7 @@ namespace Spring.Util
 
         /// <summary>
         /// Checks whether the supplied <paramref name="instance"/> is not a transparent proxy and is
-        /// assignable to the supplied <paramref name="type"/>. 
+        /// assignable to the supplied <paramref name="type"/>.
         /// </summary>
         /// <remarks>
         /// <p>
@@ -309,11 +312,12 @@ namespace Spring.Util
         public static bool IsAssignable(Type type, object obj)
         {
             AssertUtils.ArgumentNotNull(type, "type");
-            if (!type.IsPrimitive && obj == null)
+            if (!type.GetTypeInfo().IsPrimitive && obj == null)
             {
                 return true;
             }
 
+#if REMOTING
             if (RemotingServices.IsTransparentProxy(obj))
             {
                 RealProxy rp = RemotingServices.GetRealProxy(obj);
@@ -332,6 +336,7 @@ namespace Spring.Util
                     return false;
                 }
             }
+#endif
 
             return (type.IsInstanceOfType(obj) ||
                     (type.Equals(typeof(bool)) && obj is Boolean) ||
@@ -361,7 +366,7 @@ namespace Spring.Util
         /// </param>
         public static bool IsSimpleProperty(Type type)
         {
-            return type.IsPrimitive
+            return type.GetTypeInfo().IsPrimitive
                    || type.Equals(typeof(string))
                    || type.Equals(typeof(string[]))
                    || IsPrimitiveArray(type)
@@ -537,10 +542,10 @@ namespace Spring.Util
             return ObjectUtils.EnumerateElementAtIndex(enumerable.GetEnumerator(), index);
         }
 
-        #endregion
+#endregion
 
         /// <summary>
-        /// Gets the qualified name of the given method, consisting of 
+        /// Gets the qualified name of the given method, consisting of
         /// fully qualified interface/class name + "." method name.
         /// </summary>
         /// <param name="method">The method.</param>

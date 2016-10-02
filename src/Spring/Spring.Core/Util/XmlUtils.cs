@@ -34,6 +34,7 @@ namespace Spring.Util
     /// <author>Aleksandar Seovic</author>
     public class XmlUtils
     {
+#if XML_SCHEMA
         /// <summary>
         /// Gets an appropriate <see cref="System.Xml.XmlReader"/> implementation
         /// for the supplied <see cref="System.IO.Stream"/>.
@@ -81,9 +82,10 @@ namespace Spring.Util
                 return XmlReader.Create(stream, settings);
             }
         }
+#endif
 
         /// <summary>
-        /// Gets an appropriate <see cref="System.Xml.XmlReader"/> implementation 
+        /// Gets an appropriate <see cref="System.Xml.XmlReader"/> implementation
         /// for the supplied <see cref="System.IO.Stream"/>.
         /// </summary>
         /// <param name="stream">The XML <see cref="System.IO.Stream"/> that is going to be read.</param>

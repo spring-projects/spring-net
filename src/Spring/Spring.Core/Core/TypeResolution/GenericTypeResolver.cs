@@ -21,6 +21,7 @@
 #region Imports
 
 using System;
+using System.Reflection;
 using Spring.Util;
 
 #endregion
@@ -72,7 +73,7 @@ namespace Spring.Core.TypeResolution
                     }
                     if (genericInfo.IsArrayDeclaration)
                     {
-                        typeName = string.Format("{0}{1},{2}", type.FullName, genericInfo.GetArrayDeclaration(), type.Assembly.FullName);
+                        typeName = string.Format("{0}{1},{2}", type.FullName, genericInfo.GetArrayDeclaration(), type.GetTypeInfo().Assembly.FullName);
                         type = null;
                     }
                 }

@@ -19,7 +19,7 @@
 #endregion
 
 using System;
-
+using System.Reflection;
 using Common.Logging;
 
 using Spring.Objects;
@@ -37,7 +37,7 @@ namespace Spring.Context.Attributes
     /// </summary>
     public class ScannedGenericObjectDefinition : GenericObjectDefinition
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILog Log = LogManager.GetLogger<ScannedGenericObjectDefinition>();
 
         /// <summary>
         /// Name provided by the Component Attribute
@@ -66,7 +66,7 @@ namespace Spring.Context.Attributes
 
         private void ParseName()
         {
-            var attr = Attribute.GetCustomAttribute(ObjectType, typeof (ComponentAttribute), true) as ComponentAttribute;
+            var attr = ObjectType.GetTypeInfo().GetCustomAttribute(typeof (ComponentAttribute), true) as ComponentAttribute;
             if (attr != null && !string.IsNullOrEmpty(attr.Name))
                 _componentName = attr.Name;
         }
@@ -79,11 +79,11 @@ namespace Spring.Context.Attributes
             bool lazyInit = false;
             bool.TryParse(defaults.LazyInit, out lazyInit);
             IsLazyInit = lazyInit;
-            
+
             if (!String.IsNullOrEmpty(defaults.Autowire))
             {
                AutowireMode = GetAutowireMode(defaults.Autowire);
-            }            
+            }
         }
 
         private AutoWiringMode GetAutowireMode(string value)
@@ -96,7 +96,7 @@ namespace Spring.Context.Attributes
 
         private void ParseScopeAttribute()
         {
-            var attr = Attribute.GetCustomAttribute(ObjectType, typeof(ScopeAttribute), true) as ScopeAttribute;
+            var attr = ObjectType.GetTypeInfo().GetCustomAttribute(typeof(ScopeAttribute), true) as ScopeAttribute;
             if (attr != null)
             {
                 Scope = attr.ObjectScope.ToString().ToLower();
@@ -110,14 +110,14 @@ namespace Spring.Context.Attributes
 
         private void ParseLazyAttribute()
         {
-            var attr = Attribute.GetCustomAttribute(ObjectType, typeof(LazyAttribute), true) as LazyAttribute;
+            var attr = ObjectType.GetTypeInfo().GetCustomAttribute(typeof(LazyAttribute), true) as LazyAttribute;
             if (attr != null)
                 IsLazyInit = attr.LazyInitialize;
         }
 
         private void ParseQualifierAttribute()
         {
-            var attr = Attribute.GetCustomAttribute(ObjectType, typeof(QualifierAttribute), true) as QualifierAttribute;
+            var attr = ObjectType.GetTypeInfo().GetCustomAttribute(typeof(QualifierAttribute), true) as QualifierAttribute;
             if (attr != null)
             {
                 var qualifier = new AutowireCandidateQualifier(attr.GetType());

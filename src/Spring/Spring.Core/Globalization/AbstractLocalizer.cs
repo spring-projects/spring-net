@@ -38,7 +38,7 @@ namespace Spring.Globalization
     /// interface.
     /// </p>
     /// <p>
-    /// All specific localizers need to do is inherit this class and implement 
+    /// All specific localizers need to do is inherit this class and implement
     /// <c>GetResources</c> method that will return a list of <see cref="Resource"/>
     /// objects that should be applied to a specified <c>target</c>.
     /// </p>
@@ -88,7 +88,7 @@ namespace Spring.Globalization
         public void ApplyResources(object target, IMessageSource messageSource)
         {
             AssertUtils.ArgumentNotNull(target, "target");
-            ApplyResources(target, messageSource, Thread.CurrentThread.CurrentUICulture);
+            ApplyResources(target, messageSource, CultureInfo.CurrentUICulture);
         }
 
         /// <summary>

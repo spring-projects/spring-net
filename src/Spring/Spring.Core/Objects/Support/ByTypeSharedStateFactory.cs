@@ -21,6 +21,7 @@
 #region Imports
 
 using System;
+using System.Reflection;
 
 #endregion
 
@@ -37,7 +38,7 @@ namespace Spring.Objects.Support
         /// Limit object types to be served by this state manager.
         /// </summary>
         /// <remarks>
-        /// Only objects assignable to one of the types in this list 
+        /// Only objects assignable to one of the types in this list
         /// will be served state by this manager.
         /// </remarks>
         public Type[] TypeFilter
@@ -66,10 +67,10 @@ namespace Spring.Objects.Support
         /// <param name="instance">the instance to serve state</param>
         /// <param name="name">the name of the instance</param>
         /// <returns>
-        /// a boolean value indicating, whether state shall 
+        /// a boolean value indicating, whether state shall
         /// be resolved for the given instance or not.
         /// </returns>
-        public override bool CanProvideState( object instance, string name )
+        public override bool CanProvideState(object instance, string name)
         {
             if (instance == null)
                 return false;
@@ -80,7 +81,7 @@ namespace Spring.Objects.Support
             Type instanceType = instance.GetType();
             foreach (Type type in typeFilter)
             {
-                if (type.IsAssignableFrom( instanceType ))
+                if (type.GetTypeInfo().IsAssignableFrom(instanceType.GetTypeInfo()))
                     return true;
             }
             return false;

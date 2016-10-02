@@ -46,7 +46,7 @@ namespace Spring.Util
         /// </summary>
         /// <remarks>
         /// <p>
-        /// Primary purpose of this method is to allow us to parse and 
+        /// Primary purpose of this method is to allow us to parse and
         /// load configuration sections using the same API regardless
         /// of the .NET framework version.
         /// </p>
@@ -59,6 +59,9 @@ namespace Spring.Util
         /// <returns>Object created by a corresponding <see cref="IConfigurationSectionHandler"/>.</returns>
         public static object GetSection(string sectionName)
         {
+#if NETCORE
+            throw new NotSupportedException("This feature is not supported under .NET Core");
+#else
             try
             {
                 return ConfigurationManager.GetSection(sectionName.TrimEnd('/'));
@@ -71,6 +74,7 @@ namespace Spring.Util
             {
                 throw CreateConfigurationException(string.Format("Error reading section {0}", sectionName), ex);
             }
+#endif
         }
 
         /// <summary>
@@ -78,7 +82,7 @@ namespace Spring.Util
         /// </summary>
         /// <remarks>
         /// <p>
-        /// Primary purpose of this method is to allow us to parse and 
+        /// Primary purpose of this method is to allow us to parse and
         /// load configuration sections using the same API regardless
         /// of the .NET framework version.
         /// </p>
@@ -90,7 +94,11 @@ namespace Spring.Util
         /// <param name="sectionName">Name of the configuration section.</param>
         public static void RefreshSection(string sectionName)
         {
+#if NETCORE
+            throw new NotSupportedException("This feature is not supported under .NET Core");
+#else
             ConfigurationManager.RefreshSection(sectionName);
+#endif
         }
 
         /// <summary>
@@ -159,7 +167,7 @@ namespace Spring.Util
         /// <returns>Configuration exception.</returns>
         public static Exception CreateConfigurationException(string message)
         {
-            return CreateConfigurationException(message, (Exception)null);
+            return CreateConfigurationException(message, (Exception) null);
         }
 
         /// <summary>
@@ -168,7 +176,7 @@ namespace Spring.Util
         /// <returns>Configuration exception.</returns>
         public static Exception CreateConfigurationException()
         {
-            return CreateConfigurationException(null, (Exception)null);
+            return CreateConfigurationException(null, (Exception) null);
         }
 
         /// <summary>
@@ -194,7 +202,12 @@ namespace Spring.Util
             {
                 return ((ITextPosition)node).LineNumber;
             }
+
+#if NETCORE
+            throw new NotSupportedException("This feature is not supported under .NET Core");
+#else
             return ConfigurationErrorsException.GetLineNumber(node);
+#endif
         }
 
         /// <summary>
@@ -208,7 +221,12 @@ namespace Spring.Util
             {
                 return ((ITextPosition)node).Filename;
             }
+
+#if NETCORE
+            throw new NotSupportedException("This feature is not supported under .NET Core");
+#else
             return ConfigurationErrorsException.GetFilename(node);
+#endif
         }
 
         /// <summary>
@@ -224,6 +242,9 @@ namespace Spring.Util
         /// <returns>the previous config system, if any</returns>
         public static System.Configuration.Internal.IInternalConfigSystem SetConfigurationSystem(System.Configuration.Internal.IInternalConfigSystem configSystem, bool enforce)
         {
+#if NETCORE
+            throw new NotSupportedException("This feature is not supported under .NET Core");
+#else
             FieldInfo s_configSystem = typeof(ConfigurationManager).GetField("s_configSystem", BindingFlags.Static | BindingFlags.NonPublic);
             // for MONO
             if (s_configSystem == null)
@@ -263,6 +284,7 @@ namespace Spring.Util
             }
 
             return innerConfigSystem;
+#endif
         }
 
         /// <summary>
@@ -270,6 +292,9 @@ namespace Spring.Util
         /// </summary>
         public static void ResetConfigurationSystem()
         {
+#if NETCORE
+            return;
+#else
             if (SystemUtils.MonoRuntime)
             {
                 return;
@@ -277,17 +302,7 @@ namespace Spring.Util
             FieldInfo initStateRef = typeof(ConfigurationManager).GetField("s_initState", BindingFlags.NonPublic | BindingFlags.Static);
             object notStarted = Activator.CreateInstance(initStateRef.FieldType);
             initStateRef.SetValue(null, notStarted);
+#endif
         }
-        //        private static T CreateDelegate<T>(MethodInfo method)
-        //        {
-        //            return (T)(object)Delegate.CreateDelegate(typeof(T), method);
-        //        }
-        //
-        //        private delegate void SetConfigurationSystemHandler(System.Configuration.Internal.IInternalConfigSystem configSystem, bool setComplete);
-        //
-        //        private static SetConfigurationSystemHandler setConfigurationSystem =
-        //            CreateDelegate<SetConfigurationSystemHandler>(typeof(ConfigurationManager).GetMethod("SetConfigurationSystem"
-        //                                                         , BindingFlags.Static | BindingFlags.NonPublic));
-
     }
 }

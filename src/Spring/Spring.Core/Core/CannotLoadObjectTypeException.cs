@@ -22,7 +22,6 @@
 
 using System;
 using System.Runtime.Serialization;
-using System.Security.Permissions;
 using Spring.Util;
 
 #endregion
@@ -88,6 +87,7 @@ namespace Spring.Core
             this.objectTypeName = objectTypeName;
         }
 
+#if BINARY_SERIALIZATION
         /// <summary>
         /// Creates a new instance of the
         /// <see cref="InvalidPropertyException"/> class.
@@ -108,11 +108,12 @@ namespace Spring.Core
             objectName = info.GetString("ObjectName");
             objectTypeName = info.GetString("ObjectTypeName");
         }
+#endif
 
 
-        #endregion
+#endregion
 
-        #region Properties
+#region Properties
 
         /// <summary>
         /// Gets he name of the object we are trying to load.
@@ -141,10 +142,11 @@ namespace Spring.Core
             get { return resourceDescription; }
         }
 
-        #endregion
+#endregion
 
-        #region Methods
+#region Methods
 
+#if BINARY_SERIALIZATION
         /// <summary>
         /// Populates a <see cref="System.Runtime.Serialization.SerializationInfo"/> with
         /// the data needed to serialize the target object.
@@ -157,7 +159,7 @@ namespace Spring.Core
         /// The destination (see <see cref="System.Runtime.Serialization.StreamingContext"/>)
         /// for this serialization.
         /// </param>
-        [SecurityPermission(SecurityAction.Demand, SerializationFormatter=true)]
+        [System.Security.Permissions.SecurityPermission(System.Security.Permissions.SecurityAction.Demand, SerializationFormatter=true)]
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             base.GetObjectData(info, context);
@@ -165,15 +167,16 @@ namespace Spring.Core
             info.AddValue("ObjectName", ObjectName);
             info.AddValue("ObjectTypeName", ObjectTypeName);
         }
+#endif
 
-        #endregion
+#endregion
 
-        #region Fields
+#region Fields
 
         private string resourceDescription;
         private string objectName;
         private string objectTypeName;
 
-        #endregion
+#endregion
     }
 }

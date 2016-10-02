@@ -38,14 +38,16 @@ namespace Spring.Expressions
         {
         }
 
-        /// <summary>
-        /// Create a new instance from SerializationInfo
-        /// </summary>
-        protected ListInitializerNode(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
-	    
+#if BINARY_SERIALIZATION
+	    /// <summary>
+	    /// Create a new instance from SerializationInfo
+	    /// </summary>
+	    protected ListInitializerNode(SerializationInfo info, StreamingContext context)
+	        : base(info, context)
+	    {
+	    }
+#endif
+
         /// <summary>
         /// Creates new instance of the list defined by this node.
         /// </summary>

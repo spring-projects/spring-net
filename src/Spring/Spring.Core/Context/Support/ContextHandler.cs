@@ -92,7 +92,7 @@ namespace Spring.Context.Support
 	/// <p>
 	/// This is an example of specifying a context that reads its resources from
 	/// a custom configuration section within the same application / web
-	/// configuration file and uses case insensitive object lookups. 
+	/// configuration file and uses case insensitive object lookups.
 	/// </p>
 	/// <p>
 	/// Please note that you <b>must</b> adhere to the naming
@@ -141,7 +141,7 @@ namespace Spring.Context.Support
     ///             </sectionGroup>
 	/// 		</sectionGroup>
 	/// 	</configSections>
-	/// 	
+	///
 	///     <spring>
 	/// 		<context name='Parent'>
 	/// 			<resource uri='config://spring/objects'/>
@@ -174,7 +174,7 @@ namespace Spring.Context.Support
 	public class ContextHandler : IConfigurationSectionHandler
 	{
 		private readonly ILog Log = LogManager.GetLogger(typeof(ContextHandler));
-		
+
 		/// <summary>
 		/// The <see cref="System.Type"/> of <see cref="Spring.Context.IApplicationContext"/>
 		/// created if no <c>type</c> attribute is specified on a <c>context</c> element.
@@ -200,9 +200,9 @@ namespace Spring.Context.Support
 		{
 			get { return true; }
 		}
-		
+
         /// <summary>
-        /// Specifies, whether the instantiated context will be automatically registered in the 
+        /// Specifies, whether the instantiated context will be automatically registered in the
         /// global <see cref="ContextRegistry"/>.
         /// </summary>
 	    protected virtual bool AutoRegisterWithContextRegistry
@@ -253,28 +253,28 @@ namespace Spring.Context.Support
 	    	// sanity check on parent
 	    	if ( (parent != null) && !(parent is IApplicationContext) )
 	    	{
-	    		throw ConfigurationUtils.CreateConfigurationException( 
+	    		throw ConfigurationUtils.CreateConfigurationException(
 	    			String.Format("Parent context must be of type IApplicationContext, but was '{0}'", parent.GetType().FullName));
 	    	}
 
 	    	#endregion
-	        		    	
+
 			// determine name of context to be created
 			string contextName = GetContextName(configContext, contextElement);
 			if (!StringUtils.HasLength(contextName))
 			{
 				contextName = AbstractApplicationContext.DefaultRootContextName;
 			}
-	    	
+
 			#region Instrumentation
 			if (Log.IsDebugEnabled) Log.Debug(string.Format("creating context '{0}'", contextName ) );
 			#endregion
-	    	
+
 	    	IApplicationContext context = null;
 	        try
 	        {
 	        	IApplicationContext parentContext = parent as IApplicationContext;
-	        	
+
 	            // determine context type
 	        	Type contextType = GetContextType(contextElement, parentContext);
 
@@ -283,13 +283,13 @@ namespace Spring.Context.Support
 
 	        	// get resource-list
 	        	IList<string> resources = GetResources(contextElement);
-	        	
+
 	        	// finally create the context instance
 				context = InstantiateContext(parentContext, configContext, contextName, contextType, caseSensitive, resources);
                 // and register with global context registry
                 if (AutoRegisterWithContextRegistry && !ContextRegistry.IsContextRegistered(context.Name))
                 {
-                    ContextRegistry.RegisterContext(context);                    
+                    ContextRegistry.RegisterContext(context);
                 }
 
 				// get and create child context definitions
@@ -303,7 +303,7 @@ namespace Spring.Context.Support
 	            if (!ConfigurationUtils.IsConfigurationException(ex))
 	            {
                     throw ConfigurationUtils.CreateConfigurationException(
-                        String.Format("Error creating context '{0}': {1}", 
+                        String.Format("Error creating context '{0}': {1}",
                         contextName, ReflectionUtils.GetExplicitBaseException(ex).Message), ex);
 	            }
 	            throw;
@@ -318,7 +318,7 @@ namespace Spring.Context.Support
 	    /// <param name="configContext">The current configContext <see cref="IConfigurationSectionHandler.Create"/></param>
 	    /// <param name="childContexts">The list of child context elements</param>
 	    protected virtual void CreateChildContexts(IApplicationContext parentContext, object configContext, IList<XmlNode> childContexts)
-		{	
+		{
 			// create child contexts for 'the most recently created context'...
 			foreach (XmlNode childContext in childContexts)
 			{
@@ -333,16 +333,16 @@ namespace Spring.Context.Support
 		{
 			IApplicationContext context;
 			ContextInstantiator instantiator;
-			
+
 			if (parentContext == null)
 			{
 				instantiator = new RootContextInstantiator(contextType, contextName, caseSensitive, new List<string>(resources).ToArray());
-			} 
+			}
 			else
 			{
                 instantiator = new DescendantContextInstantiator(parentContext, contextType, contextName, caseSensitive, new List<string>(resources).ToArray());
 			}
-			
+
 			if (IsLazy)
 			{
 				// TODO
@@ -362,9 +362,9 @@ namespace Spring.Context.Support
 			contextName = contextElement.GetAttribute(ContextSchema.NameAttribute);
 			return contextName;
 		}
-		
+
 		/// <summary>
-		/// Extracts the context-type from the context element. 
+		/// Extracts the context-type from the context element.
 		/// If none is specified, returns the parent's type.
 		/// </summary>
 		private Type GetContextType(XmlElement contextElement, IApplicationContext parentContext)
@@ -388,7 +388,7 @@ namespace Spring.Context.Support
 		private  bool GetCaseSensitivity(XmlElement contextElement)
 		{
 			bool caseSensitive = DefaultCaseSensitivity;
-			
+
 			string caseSensitiveAttr = contextElement.GetAttribute(ContextSchema.CaseSensitiveAttribute);
 			if (StringUtils.HasText(caseSensitiveAttr))
 			{
@@ -414,7 +414,7 @@ namespace Spring.Context.Support
 	    private Type GetConfiguredContextType(XmlElement contextElement, Type defaultContextType)
 	    {
             string typeName = contextElement.GetAttribute(ContextSchema.TypeAttribute);
-			
+
             if (StringUtils.IsNullOrEmpty(typeName))
             {
                 return defaultContextType;

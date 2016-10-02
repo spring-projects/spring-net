@@ -58,7 +58,7 @@ namespace Spring.Core.IO
     ///     file://~/../strings.txt  C:\strings.txt
     ///     ../strings.txt           C:\strings.txt
     ///     ~/../strings.txt         C:\strings.txt
-    ///     
+    ///
     ///     // note that only a leading ~ character is resolved to the executing directory...
     ///     stri~ngs.txt              C:\App\stri~ngs.txt
     /// </code>
@@ -83,7 +83,7 @@ namespace Spring.Core.IO
         }
 
         /// <summary>
-        /// Creates a new instance of the 
+        /// Creates a new instance of the
         /// <see cref="Spring.Core.IO.FileSystemResource"/> class.
         /// </summary>
         /// <param name="resourceName">
@@ -99,7 +99,7 @@ namespace Spring.Core.IO
         }
 
         /// <summary>
-        /// Creates a new instance of the 
+        /// Creates a new instance of the
         /// <see cref="Spring.Core.IO.FileSystemResource"/> class.
         /// </summary>
         /// <param name="resourceName">
@@ -120,7 +120,7 @@ namespace Spring.Core.IO
                 Initialize( resourceName );
             }
         }
-        
+
         #endregion
 
         #region Properties
@@ -276,11 +276,11 @@ namespace Spring.Core.IO
         {
             this.fileHandle = ResolveFileHandle(resourceName);
             this.rootLocation = ResolveRootLocation(resourceName);
-            this.resourcePath = ResolveResourcePath(resourceName);            
+            this.resourcePath = ResolveResourcePath(resourceName);
         }
-        
+
         /// <summary>
-        /// Resolves the <see cref="System.IO.FileInfo"/> handle 
+        /// Resolves the <see cref="System.IO.FileInfo"/> handle
         /// for the supplied <paramref name="resourceName"/>.
         /// </summary>
         /// <param name="resourceName">
@@ -363,11 +363,16 @@ namespace Spring.Core.IO
             {
                 resourceName = resourceName.Substring(1);
             }
-            
+
             if (StringUtils.HasText(resourceName)
                 && resourceName.TrimStart().StartsWith(basePathPlaceHolder))
             {
-                return resourceName.Replace(basePathPlaceHolder, AppDomain.CurrentDomain.BaseDirectory).TrimStart();
+#if !APPDOMAINS
+                var baseDirectory = AppContext.BaseDirectory;
+#else
+                var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
+#endif
+                return resourceName.Replace(basePathPlaceHolder, baseDirectory).TrimStart();
             }
             return resourceName;
         }
@@ -379,7 +384,7 @@ namespace Spring.Core.IO
         /// The name of the resource to test.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if resource name is relative; 
+        /// <see langword="true"/> if resource name is relative;
         /// otherwise <see langword="false"/>.
         /// </returns>
         protected override bool IsRelativeResource(string resourceName)

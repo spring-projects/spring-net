@@ -3,7 +3,7 @@ namespace Spring.Expressions.Parser.antlr.debug
 	using System;
 	using System.Threading;
 	using antlr.collections.impl;
-	
+
 	public class LLkDebuggingParser : LLkParser, DebuggingParser
 	{
 		private void  InitBlock()
@@ -15,12 +15,12 @@ namespace Spring.Expressions.Parser.antlr.debug
 			_notDebugMode = !mode;
 		}
 		protected internal ParserEventSupport parserEventSupport;
-		
+
 		private bool _notDebugMode = false;
 		protected internal string[] ruleNames;
 		protected internal string[] semPredNames;
-		
-		
+
+
 		public LLkDebuggingParser(int k_):base(k_)
 		{
 			InitBlock();
@@ -65,7 +65,7 @@ namespace Spring.Expressions.Parser.antlr.debug
 		{
 			parserEventSupport.addTraceListener(l);
 		}
-		/// <summary>Get another token object from the token stream 
+		/// <summary>Get another token object from the token stream
 		/// </summary>
 		public override void  consume()
 		{
@@ -123,10 +123,14 @@ namespace Spring.Expressions.Parser.antlr.debug
 				{
 					Monitor.Wait(this);
 				}
-				catch (System.Threading.ThreadInterruptedException)
-				{
-				}
-			}
+#if NETCORE
+                catch (Exception)
+#else
+                catch (ThreadInterruptedException)
+#endif
+                {
+                }
+            }
 		}
 		public override bool isDebugMode()
 		{
@@ -230,21 +234,21 @@ namespace Spring.Expressions.Parser.antlr.debug
 		{
 			parserEventSupport.removeTraceListener(l);
 		}
-		/// <summary>Parser error-reporting function can be overridden in subclass 
+		/// <summary>Parser error-reporting function can be overridden in subclass
 		/// </summary>
 		public override void  reportError(RecognitionException ex)
 		{
 			parserEventSupport.fireReportError(ex);
 			base.reportError(ex);
 		}
-		/// <summary>Parser error-reporting function can be overridden in subclass 
+		/// <summary>Parser error-reporting function can be overridden in subclass
 		/// </summary>
 		public override void  reportError(string s)
 		{
 			parserEventSupport.fireReportError(s);
 			base.reportError(s);
 		}
-		/// <summary>Parser warning-reporting function can be overridden in subclass 
+		/// <summary>Parser warning-reporting function can be overridden in subclass
 		/// </summary>
 		public override void  reportWarning(string s)
 		{
@@ -259,11 +263,14 @@ namespace Spring.Expressions.Parser.antlr.debug
 		{
 			setupDebugging(lexer, null);
 		}
-		/// <summary>User can override to do their own debugging 
-		/// </summary>
-		protected internal virtual void  setupDebugging(TokenStream lexer, TokenBuffer tokenBuf)
+
+        /// <summary>User can override to do their own debugging
+        /// </summary>
+        protected internal virtual void  setupDebugging(TokenStream lexer, TokenBuffer tokenBuf)
 		{
 			setDebugMode(true);
+#if !NETCORE
+
 			// default parser debug setup is ParseView
 			try
 			{
@@ -286,9 +293,12 @@ namespace Spring.Expressions.Parser.antlr.debug
 				System.Console.Error.WriteLine("Please report this to Scott Stanchfield, thetick@magelang.com");
 				System.Environment.Exit(1);
 			}
-		}
+#else
+            throw new InvalidOperationException("Not supported under .NET Core");
+#endif
+        }
 
-		public virtual void  wakeUp()
+        public virtual void  wakeUp()
 		{
 			lock(this)
 			{

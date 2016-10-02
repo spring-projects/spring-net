@@ -90,11 +90,8 @@ namespace Spring.Context.Attributes
         public void Validate(IProblemReporter problemReporter)
         {
             //TODO: investigate whether this should be "if method has ObjectDef attribute" instead of "if class has Configuration attribute"
-            if (
-                Attribute.GetCustomAttribute(ConfigurationClass.ConfigurationClassType, typeof (ConfigurationAttribute)) !=
-                null)
+            if (ConfigurationClass.ConfigurationClassType.GetTypeInfo().GetCustomAttribute(typeof (ConfigurationAttribute)) != null)
             {
-
                 if (MethodMetadata.IsStatic)
                 {
                     problemReporter.Error(new StaticMethodError(MethodMetadata.Name, ResourceLocation));

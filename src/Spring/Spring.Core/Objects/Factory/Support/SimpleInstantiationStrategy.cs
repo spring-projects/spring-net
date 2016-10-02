@@ -45,7 +45,7 @@ namespace Spring.Objects.Factory.Support
     /// </remarks>
     /// <author>Rod Johnson</author>
     /// <author>Rick Evans (.NET)</author>
-    /// <seealso cref="Spring.Objects.Factory.Support.MethodInjectingInstantiationStrategy"/> 
+    /// <seealso cref="Spring.Objects.Factory.Support.MethodInjectingInstantiationStrategy"/>
     [Serializable]
     public class SimpleInstantiationStrategy : IInstantiationStrategy
     {
@@ -109,7 +109,11 @@ namespace Spring.Objects.Factory.Support
             const BindingFlags flags = BindingFlags.Public | BindingFlags.NonPublic |
                 BindingFlags.Instance | BindingFlags.DeclaredOnly;
 
+#if NETCORE
+            ConstructorInfo constructor = type.GetConstructor(Type.EmptyTypes);
+#else
             ConstructorInfo constructor = type.GetConstructor(flags, null, Type.EmptyTypes, null);
+#endif
             if (constructor == null)
             {
                 throw new FatalReflectionException(string.Format(
@@ -204,14 +208,14 @@ namespace Spring.Objects.Factory.Support
                     CultureInfo.InvariantCulture,
                     "Factory method '{0}' threw an Exception.", factoryMethod);
 
-                #region Instrumentation
+#region Instrumentation
 
                 if (log.IsWarnEnabled)
                 {
                     log.Warn(msg, ex.InnerException);
                 }
 
-                #endregion
+#endregion
 
                 throw new ObjectDefinitionStoreException(msg, ex.InnerException);
             }

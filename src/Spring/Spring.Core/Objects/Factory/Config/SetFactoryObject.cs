@@ -22,6 +22,7 @@
 
 using System;
 using System.Globalization;
+using System.Reflection;
 using Spring.Collections;
 using Spring.Core;
 using Spring.Util;
@@ -69,21 +70,21 @@ namespace Spring.Objects.Factory.Config
 			set
 			{
 				AssertUtils.ArgumentNotNull(value, "value");
-				if (!typeof (ISet).IsAssignableFrom(value))
+				if (value == null || !typeof (ISet).IsAssignableFrom(value))
 				{
 					throw new ArgumentException(
 						string.Format(CultureInfo.InvariantCulture,
 						              "The Type passed to the TargetSetType property must implement the '{0}' interface.",
 						              typeof (ISet).FullName));
 				}
-				if (value.IsInterface)
+				if (value.GetTypeInfo().IsInterface)
 				{
 					throw new ArgumentException(
 						string.Format(CultureInfo.InvariantCulture,
 						"The Type passed to the TargetSetType property cannot be an interface; it must be a concrete class that implements the '{0}' interface.",
 						ObjectType.FullName));
 				}
-				if (value.IsAbstract)
+				if (value.GetTypeInfo().IsAbstract)
 				{
 					throw new ArgumentException(
 						string.Format(CultureInfo.InvariantCulture,

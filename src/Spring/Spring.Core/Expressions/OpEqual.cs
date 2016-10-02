@@ -19,6 +19,7 @@
 #endregion
 
 using System;
+using System.Reflection;
 using System.Runtime.Serialization;
 using Spring.Util;
 
@@ -38,6 +39,7 @@ namespace Spring.Expressions
         {
         }
 
+#if BINARY_SERIALIZATION
         /// <summary>
         /// Create a new instance from SerializationInfo
         /// </summary>
@@ -45,6 +47,7 @@ namespace Spring.Expressions
             : base(info, context)
         {
         }
+#endif
 
         /// <summary>
         /// Returns a value for the logical equality operator node.
@@ -76,11 +79,11 @@ namespace Spring.Expressions
                     return left.Equals(right);
                 }
             }
-            else if (left.GetType().IsEnum && right is string)
+            else if (left.GetType().GetTypeInfo().IsEnum && right is string)
             {
                 return left.Equals(Enum.Parse(left.GetType(), (string)right));
             }
-            else if (right.GetType().IsEnum && left is string)
+            else if (right.GetType().GetTypeInfo().IsEnum && left is string)
             {
                 return right.Equals(Enum.Parse(right.GetType(), (string)left));
             }

@@ -21,6 +21,7 @@
 #region Imports
 
 using System;
+using System.Linq;
 using System.Reflection;
 using Spring.Core;
 using Spring.Util;
@@ -109,7 +110,7 @@ namespace Spring.Core
                 if (parametersBeingChecked.Length > 0)
                 {
                     ParameterInfo lastParameter = parametersBeingChecked[parametersBeingChecked.Length - 1];
-                    isParamArray = lastParameter.GetCustomAttributes(typeof(ParamArrayAttribute), false).Length > 0;
+                    isParamArray = lastParameter.GetCustomAttributes(typeof(ParamArrayAttribute), false).Any();
                     if (isParamArray)
                     {
                         paramArrayType = lastParameter.ParameterType.GetElementType();
