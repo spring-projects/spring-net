@@ -27,10 +27,6 @@ using System.Diagnostics;
 using System.EnterpriseServices;
 using System.IO;
 using System.Reflection;
-using System.Xml;
-using Spring.Context.Support;
-using Spring.Objects;
-using Spring.Util;
 
 #endregion
 

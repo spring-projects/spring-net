@@ -25,30 +25,27 @@ namespace Spring.Transaction.Support
         }
 
         [Test]
-        [ExpectedException(typeof (NestedTransactionNotSupportedException))]
         public void CreateSavepointException()
         {
             ISmartTransactionObject transaction = MockRepository.GenerateMock<ISmartTransactionObject>();
             DefaultTransactionStatus stat = new DefaultTransactionStatus(transaction, true, false, false, true, new object());
-            stat.CreateSavepoint("mySavePoint");
+            Assert.Throws<NestedTransactionNotSupportedException>(() => stat.CreateSavepoint("mySavePoint"));
         }
 
         [Test]
-        [ExpectedException(typeof (NestedTransactionNotSupportedException))]
         public void RollbackSavepointException()
         {
             ISmartTransactionObject transaction = MockRepository.GenerateMock<ISmartTransactionObject>();
             DefaultTransactionStatus stat = new DefaultTransactionStatus(transaction, true, false, false, true, new object());
-            stat.RollbackToSavepoint(null);
+            Assert.Throws<NestedTransactionNotSupportedException>(() => stat.RollbackToSavepoint(null));
         }
 
         [Test]
-        [ExpectedException(typeof (NestedTransactionNotSupportedException))]
         public void ReleaseSavepointException()
         {
             ISmartTransactionObject transaction = MockRepository.GenerateMock<ISmartTransactionObject>();
             DefaultTransactionStatus stat = new DefaultTransactionStatus(transaction, true, false, false, true, new object());
-            stat.ReleaseSavepoint(null);
+            Assert.Throws<NestedTransactionNotSupportedException>(() => stat.ReleaseSavepoint(null));
         }
 
         [Test]
@@ -62,12 +59,11 @@ namespace Spring.Transaction.Support
         }
 
         [Test]
-        [ExpectedException(typeof (TransactionUsageException))]
         public void RollbackHeldSavepointException()
         {
             ISmartTransactionObject transaction = MockRepository.GenerateMock<ISmartTransactionObject>();
             DefaultTransactionStatus stat = new DefaultTransactionStatus(transaction, true, false, false, true, new object());
-            stat.RollbackToHeldSavepoint();
+            Assert.Throws<TransactionUsageException>(() => stat.RollbackToHeldSavepoint());
         }
 
         [Test]
@@ -85,12 +81,11 @@ namespace Spring.Transaction.Support
         }
 
         [Test]
-        [ExpectedException(typeof (TransactionUsageException))]
         public void ReleaseHeldSavepointException()
         {
             ISmartTransactionObject transaction = MockRepository.GenerateMock<ISmartTransactionObject>();
             DefaultTransactionStatus stat = new DefaultTransactionStatus(transaction, true, false, false, true, new object());
-            stat.ReleaseHeldSavepoint();
+            Assert.Throws<TransactionUsageException>(() => stat.ReleaseHeldSavepoint());
         }
 
         [Test]

@@ -1,4 +1,3 @@
-using System;
 using Stream			= System.IO.Stream;
 using TextReader		= System.IO.TextReader;
 

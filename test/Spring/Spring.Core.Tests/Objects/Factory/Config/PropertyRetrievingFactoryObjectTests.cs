@@ -44,11 +44,10 @@ namespace Spring.Objects.Factory.Config
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void BailsWhenStaticPropertyIsSetToNull()
 		{
 			PropertyRetrievingFactoryObject fac = new PropertyRetrievingFactoryObject();
-			fac.StaticProperty = null;
+            Assert.Throws<ArgumentNullException>(() => fac.StaticProperty = null);
 		}
 
 		/// <summary>
@@ -183,37 +182,33 @@ namespace Spring.Objects.Factory.Config
 		}
 
 		[Test]
-		[ExpectedException(typeof (FatalObjectException))]
 		public void BailsWhenReadingIndexedPropertyWithNoArguments()
 		{
 			PropertyObject expected = new PropertyObject();
 			PropertyRetrievingFactoryObject fac = new PropertyRetrievingFactoryObject();
 			fac.TargetObject = expected;
 			fac.TargetProperty = "Item";
-			fac.AfterPropertiesSet();
-			fac.GetObject();
+            Assert.Throws<FatalObjectException>(() => fac.AfterPropertiesSet());
 		}
 
 		[Test]
-		[ExpectedException(typeof (NotWritablePropertyException))]
 		public void BailsOnWriteOnlyProperty()
 		{
 			PropertyObject expected = new PropertyObject();
 			PropertyRetrievingFactoryObject fac = new PropertyRetrievingFactoryObject();
 			fac.TargetObject = expected;
 			fac.TargetProperty = "Greenness";
-			fac.AfterPropertiesSet();
+            Assert.Throws<NotWritablePropertyException>(() => fac.AfterPropertiesSet());
 		}
 
 		[Test]
-		[ExpectedException(typeof (InvalidPropertyException))]
 		public void BailsOnNonExistantProperty()
 		{
 			PropertyObject expected = new PropertyObject();
 			PropertyRetrievingFactoryObject fac = new PropertyRetrievingFactoryObject();
 			fac.TargetObject = expected;
 			fac.TargetProperty = "Blister";
-			fac.AfterPropertiesSet();
+            Assert.Throws<InvalidPropertyException>(() => fac.AfterPropertiesSet());
 		}
 
 		[Test]
@@ -233,46 +228,41 @@ namespace Spring.Objects.Factory.Config
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException), ExpectedMessage="One of the TargetType or TargetObject properties must be set.")]
 		public void BailsWhenNotConfigured()
 		{
 			PropertyRetrievingFactoryObject fac = new PropertyRetrievingFactoryObject();
-			fac.AfterPropertiesSet();
+            Assert.Throws<ArgumentException>(() => fac.AfterPropertiesSet(), "One of the TargetType or TargetObject properties must be set.");
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException))]
 		public void BailsWhenJustTargetPropertyIsSet()
 		{
 			PropertyRetrievingFactoryObject fac = new PropertyRetrievingFactoryObject();
 			fac.TargetProperty = "Funk";
-			fac.AfterPropertiesSet();
+            Assert.Throws<ArgumentException>(() => fac.AfterPropertiesSet());
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException))]
 		public void BailsWhenJustTargetTypeIsSet()
 		{
 			PropertyRetrievingFactoryObject fac = new PropertyRetrievingFactoryObject();
 			fac.TargetType = GetType();
-			fac.AfterPropertiesSet();
+            Assert.Throws<ArgumentException>(() => fac.AfterPropertiesSet());
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException), ExpectedMessage="The TargetProperty property is required.")]
 		public void BailsWhenJustTargetObjectIsSet()
 		{
 			PropertyRetrievingFactoryObject fac = new PropertyRetrievingFactoryObject();
 			fac.TargetObject = this;
-			fac.AfterPropertiesSet();
+            Assert.Throws<ArgumentException>(() => fac.AfterPropertiesSet(), "The TargetProperty property is required.");
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException))]
 		public void BailsWhenStaticPropertyPassedGumpfh()
 		{
 			PropertyRetrievingFactoryObject fac = new PropertyRetrievingFactoryObject();
-			fac.StaticProperty = "Boog"; // no field specified
+            Assert.Throws<ArgumentException>(() => fac.StaticProperty = "Boog"); // no field specified
 		}
 
 		[Test]

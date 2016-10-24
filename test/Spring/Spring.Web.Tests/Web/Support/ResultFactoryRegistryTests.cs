@@ -111,23 +111,22 @@ namespace Spring.Web.Support
         }
 
         [Test]
-        [ExpectedException( typeof( ArgumentNullException ) )]
         public void BailsOnNullReturnedFromFactory()
         {
             MockRepository mocks = new MockRepository();
-            IResultFactory resultFactory = (IResultFactory)mocks.CreateMock( typeof( IResultFactory ) );
+            IResultFactory resultFactory = (IResultFactory) mocks.CreateMock(typeof(IResultFactory));
 
-            ResultFactoryRegistry.RegisterResultMode( "resultMode", resultFactory );
+            ResultFactoryRegistry.RegisterResultMode("resultMode", resultFactory);
 
             // verify factory registry does not allow nulls to be returned
-            using (Record( mocks ))
+            using (Record(mocks))
             {
-                Expect.Call( resultFactory.CreateResult( "resultMode", "resultText" ) ).Return( null );
+                Expect.Call(resultFactory.CreateResult("resultMode", "resultText")).Return(null);
             }
 
-            using (Playback( mocks ))
+            using (Playback(mocks))
             {
-                ResultFactoryRegistry.CreateResult( "resultMode:resultText" );
+                Assert.Throws<ArgumentNullException>(() => ResultFactoryRegistry.CreateResult("resultMode:resultText"));
             }
         }
 

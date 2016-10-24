@@ -30,31 +30,27 @@ namespace Spring.Objects.Factory.Support
     public class WebObjectUtilsTests
     {
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void GetPageTypeWithNullPageName()
         {
-            WebObjectUtils.GetPageType(null);
+            Assert.Throws<ArgumentNullException>(() => WebObjectUtils.GetPageType(null));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void GetPageTypeWithEmptyStringPageName()
         {
-            WebObjectUtils.GetPageType(string.Empty);
+            Assert.Throws<ArgumentNullException>(() => WebObjectUtils.GetPageType(string.Empty));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void GetPageTypeWithWhitespacedPageName()
         {
-            WebObjectUtils.GetPageType("   ");
+            Assert.Throws<ArgumentNullException>(() => WebObjectUtils.GetPageType("   "));
         }
 
         [Test]
-        [ExpectedException(typeof(ObjectCreationException))]
         public void CreatePageInstanceWhenNotRunningInServerContext()
         {
-            WebObjectUtils.CreatePageInstance("foo.aspx");
+            Assert.Throws<ObjectCreationException>(() => WebObjectUtils.CreatePageInstance("foo.aspx"));
         }
     }
 }

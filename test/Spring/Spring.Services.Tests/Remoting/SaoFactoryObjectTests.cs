@@ -21,7 +21,6 @@
 #region Imports
 
 using System;
-using System.Diagnostics;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Lifetime;
 using NUnit.Framework;
@@ -29,7 +28,6 @@ using Spring.Aop.Framework;
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.Objects;
-using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Xml;
 
 #endregion
@@ -45,11 +43,10 @@ namespace Spring.Remoting
 	public class SaoFactoryObjectTests : BaseRemotingTestFixture
 	{
 	    [Test]
-		[ExpectedException(typeof(ArgumentException))]
 		public void BailsWhenNotConfigured ()
 		{
 			SaoFactoryObject sfo = new SaoFactoryObject();
-			sfo.AfterPropertiesSet();
+            Assert.Throws<ArgumentException>(() => sfo.AfterPropertiesSet());
 		}
 
 		/// <summary>

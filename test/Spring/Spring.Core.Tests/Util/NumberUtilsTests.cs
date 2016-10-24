@@ -111,17 +111,15 @@ namespace Spring.Util
         }
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
 		public void NegateNull()
 		{
-			NumberUtils.Negate(null);
+            Assert.Throws<ArgumentException>(() => NumberUtils.Negate(null));
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
 		public void NegateString()
 		{
-			NumberUtils.Negate(string.Empty);
+            Assert.Throws<ArgumentException>(() => NumberUtils.Negate(string.Empty));
 		}
 
 		[Test]

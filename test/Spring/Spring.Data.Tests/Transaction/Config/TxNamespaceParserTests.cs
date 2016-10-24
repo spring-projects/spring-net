@@ -26,7 +26,6 @@ using System.Reflection;
 using NUnit.Framework;
 
 using Spring.Aop.Config;
-using Spring.Aop.Framework.AutoProxy;
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.Core.IO;

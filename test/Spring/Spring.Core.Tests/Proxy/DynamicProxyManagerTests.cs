@@ -24,7 +24,6 @@ using System;
 using System.Reflection.Emit;
 using System.Threading;
 using NUnit.Framework;
-using System.Reflection;
 
 #endregion
 

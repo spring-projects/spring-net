@@ -1,12 +1,10 @@
 using System;
-using Spring.Expressions.Parser.antlr.collections;
-using Spring.Expressions.Parser.antlr.collections.impl;
+
 using Spring.Expressions.Parser.antlr.debug;
 using EventHandlerList			= System.ComponentModel.EventHandlerList;
 
 using BitSet					= Spring.Expressions.Parser.antlr.collections.impl.BitSet;
 using AST						= Spring.Expressions.Parser.antlr.collections.AST;
-using ASTArray					= Spring.Expressions.Parser.antlr.collections.impl.ASTArray;
 using MessageListener				= Spring.Expressions.Parser.antlr.debug.MessageListener;
 using ParserListener				= Spring.Expressions.Parser.antlr.debug.ParserListener;
 using ParserMatchListener			= Spring.Expressions.Parser.antlr.debug.ParserMatchListener;

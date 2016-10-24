@@ -22,9 +22,7 @@
 
 using System;
 using System.Collections;
-using System.Configuration;
-using System.Text;
-using System.Threading;
+
 using Common.Logging;
 using Spring.Core;
 using Spring.Util;

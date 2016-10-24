@@ -19,7 +19,7 @@
 #endregion
 
 using System;
-using System.Collections;
+
 using NUnit.Framework;
 using Spring.Collections;
 using Spring.Objects.Factory.Config;
@@ -52,21 +52,19 @@ namespace Spring.Objects.Factory.Support
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidOperationException), ExpectedMessage = @"Not allowed to merge when the 'MergeEnabled' property is set to 'false'")]
         public void MergeNotAllowedWhenMergeNotEnabled()
         {
             ManagedSet child = new ManagedSet();
-            child.Merge(null);
+            Assert.Throws<InvalidOperationException>(() => child.Merge(null), "Not allowed to merge when the 'MergeEnabled' property is set to 'false'");
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void MergeWithNonCompatibleParentType()
         {
             ManagedSet child = new ManagedSet();
             child.Add("one");
             child.MergeEnabled = true;
-            child.Merge("hello");
+            Assert.Throws<InvalidOperationException>(() => child.Merge("hello"));
         }
 
         [Test]

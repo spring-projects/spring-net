@@ -24,7 +24,7 @@ using System;
 using System.Diagnostics;
 using System.Reflection;
 using System.Security;
-using System.Security.Permissions;
+
 using NUnit.Framework;
 using Spring.Context.Support;
 
@@ -75,7 +75,7 @@ namespace Spring.Reflection.Dynamic
             ieee.Officers["advisors"] = new Inventor[] { tesla, pupin }; // not historically accurate, but I need an array in the map ;-)
         }
 
-        [TestFixtureTearDown]
+        [OneTimeTearDown]
         public void TearDown()
         {
             //DynamicReflectionManager.SaveAssembly();
@@ -104,12 +104,11 @@ namespace Spring.Reflection.Dynamic
         }
 
         [Test]
-        [ExpectedException( typeof( InvalidOperationException ) )]
         public void TestAttemptingToSetFieldOfValueTypeInstance()
         {
             MyStruct myYearHolder = new MyStruct();
             IDynamicField year = Create( typeof( MyStruct ).GetField( "year" ) );
-            year.SetValue( myYearHolder, 2004 );
+            Assert.Throws<InvalidOperationException>(() => year.SetValue( myYearHolder, 2004 ));
         }
 
         [Test]

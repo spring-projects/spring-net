@@ -77,25 +77,22 @@ namespace Spring.Objects.Factory.Support
         }
 
         [Test]
-        [ExpectedException(typeof (ArgumentNullException))]
         public void RegisterObjectDefinitionWithNullDefinition()
         {
-            ObjectDefinitionReaderUtils.RegisterObjectDefinition(null, registry);
+            Assert.Throws<ArgumentNullException>(() => ObjectDefinitionReaderUtils.RegisterObjectDefinition(null, registry));
         }
 
         [Test]
-        [ExpectedException(typeof (ArgumentNullException))]
         public void RegisterObjectDefinitionWithNullRegistry()
         {
             ObjectDefinitionHolder holder = new ObjectDefinitionHolder(definition, "foo");
-            ObjectDefinitionReaderUtils.RegisterObjectDefinition(holder, null);
+            Assert.Throws<ArgumentNullException>(() => ObjectDefinitionReaderUtils.RegisterObjectDefinition(holder, null));
         }
 
         [Test]
-        [ExpectedException(typeof (ArgumentNullException))]
         public void RegisterObjectDefinitionWithAllArgumentsNull()
         {
-            ObjectDefinitionReaderUtils.RegisterObjectDefinition(null, null);
+            Assert.Throws<ArgumentNullException>(() => ObjectDefinitionReaderUtils.RegisterObjectDefinition(null, null));
         }
 
         [Test]
@@ -125,17 +122,15 @@ namespace Spring.Objects.Factory.Support
         }
 
         [Test]
-        [ExpectedException(typeof (ArgumentNullException))]
         public void GenerateObjectNameWithNullDefinition()
         {
-            ObjectDefinitionReaderUtils.GenerateObjectName(null, registry);
+            Assert.Throws<ArgumentNullException>(() => ObjectDefinitionReaderUtils.GenerateObjectName(null, registry));
         }
 
         [Test]
-        [ExpectedException(typeof (ArgumentNullException))]
         public void GenerateObjectNameWithNullRegistry()
         {
-            ObjectDefinitionReaderUtils.GenerateObjectName(mocks.StrictMock<IConfigurableObjectDefinition>(), null);
+            Assert.Throws<ArgumentNullException>(() => ObjectDefinitionReaderUtils.GenerateObjectName(mocks.StrictMock<IConfigurableObjectDefinition>(), null));
         }
     }
 }

@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
 using Spring.Context;
@@ -28,7 +27,6 @@ using Spring.Context.Support;
 using Spring.Messaging.Ems.Common;
 using Spring.Messaging.Ems.Listener;
 using Spring.Objects.Factory.Xml;
-using TIBCO.EMS;
 
 #endregion
 

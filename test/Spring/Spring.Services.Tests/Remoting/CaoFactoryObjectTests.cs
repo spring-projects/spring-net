@@ -21,7 +21,9 @@
 #region Imports
 
 using System;
+
 using NUnit.Framework;
+
 using Spring.Context;
 using Spring.Context.Support;
 
@@ -29,37 +31,36 @@ using Spring.Context.Support;
 
 namespace Spring.Remoting
 {
-	/// <summary>
-	/// Unit tests for the CaoFactoryObject class.
-	/// </summary>
-	/// <author>Bruno Baia</author>
-	[TestFixture]
-	public class CaoFactoryObjectTests : BaseRemotingTestFixture
-	{
+    /// <summary>
+    /// Unit tests for the CaoFactoryObject class.
+    /// </summary>
+    /// <author>Bruno Baia</author>
+    [TestFixture]
+    public class CaoFactoryObjectTests : BaseRemotingTestFixture
+    {
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
-        public void BailsWhenNotConfigured ()
+        public void BailsWhenNotConfigured()
         {
             CaoFactoryObject cfo = new CaoFactoryObject();
-            cfo.AfterPropertiesSet ();
+            Assert.Throws<ArgumentException>(() => cfo.AfterPropertiesSet());
         }
 
-		[Test]
-		public void GetSimpleObject()
-		{
+        [Test]
+        public void GetSimpleObject()
+        {
             IApplicationContext ctx = new XmlApplicationContext("assembly://Spring.Services.Tests/Spring.Data.Spring.Remoting/cao.xml");
             ContextRegistry.RegisterContext(ctx);
 
-			object obj = ctx.GetObject("remoteCaoCounter1");
+            object obj = ctx.GetObject("remoteCaoCounter1");
 
-			Assert.IsNotNull(obj, "Object is null even though a object has been registered.");
-			Assert.IsTrue((obj is ISimpleCounter), "Object should implement 'ISimpleCounter' interface.");
+            Assert.IsNotNull(obj, "Object is null even though a object has been registered.");
+            Assert.IsTrue((obj is ISimpleCounter), "Object should implement 'ISimpleCounter' interface.");
 
-			ISimpleCounter sc = (ISimpleCounter) obj;
-			Assert.AreEqual(7, sc.Counter, "Remote object hasn't been activated by the client.");
+            ISimpleCounter sc = (ISimpleCounter) obj;
+            Assert.AreEqual(7, sc.Counter, "Remote object hasn't been activated by the client.");
             sc.Count();
             Assert.AreEqual(8, sc.Counter);
-		}
+        }
 
         [Test]
         public void DisconnectFromClient()

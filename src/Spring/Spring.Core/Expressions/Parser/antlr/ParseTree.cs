@@ -11,8 +11,7 @@ namespace Spring.Expressions.Parser.antlr
 	//                            Anthony Oguntimehin
 	//
 
-	using System;
-	using StringBuilder 	= System.Text.StringBuilder;
+    using StringBuilder 	= System.Text.StringBuilder;
 	using AST 				= antlr.collections.AST;
 
 	public abstract class ParseTree : BaseAST

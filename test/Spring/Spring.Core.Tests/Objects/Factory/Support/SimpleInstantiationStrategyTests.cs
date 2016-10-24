@@ -58,11 +58,10 @@ namespace Spring.Objects.Factory.Support
 		#endregion
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void InstantiateWithNulls()
 		{
 			SimpleInstantiationStrategy strategy = new SimpleInstantiationStrategy();
-			strategy.Instantiate(null, null, null);
+            Assert.Throws<ArgumentNullException>(() => strategy.Instantiate(null, null, null));
 		}
 
 		[Test]

@@ -1,5 +1,5 @@
 using System;
-using Spring.Expressions.Parser.antlr.collections.impl;
+
 using Spring.Expressions.Parser.antlr.debug;
 using Stream			= System.IO.Stream;
 using TextReader		= System.IO.TextReader;

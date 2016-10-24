@@ -34,7 +34,7 @@ using Spring.Data.Support;
 using Spring.Objects.Factory;
 using Spring.Transaction;
 using Spring.Transaction.Support;
-using Spring.Util;
+
 using HibernateTransactionException = NHibernate.TransactionException;
 
 #endregion

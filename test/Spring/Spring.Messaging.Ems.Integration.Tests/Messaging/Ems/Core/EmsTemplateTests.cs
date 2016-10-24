@@ -21,20 +21,11 @@
 
 #region Imports
 
-using System;
 using System.Collections;
 using NUnit.Framework;
-using Spring.Context;
-using Spring.Context.Support;
-using Spring.Core.TypeResolution;
-using Spring.Expressions;
+
 using Spring.Messaging.Ems.Common;
-using Spring.Messaging.Ems.Jndi;
-using Spring.Messaging.Ems.Listener;
-using Spring.Objects.Factory.Xml;
 using Spring.Testing.NUnit;
-using TIBCO.EMS;
-using TIBCO.EMS.ADMIN;
 
 #endregion
 

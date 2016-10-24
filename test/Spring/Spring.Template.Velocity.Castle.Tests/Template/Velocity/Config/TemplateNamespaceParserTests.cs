@@ -30,7 +30,6 @@ using NVelocity.Runtime;
 using NVelocity.Runtime.Resource;
 using NVelocity.Runtime.Resource.Loader;
 using Spring.Core.IO;
-using Spring.Template.Velocity.Config;
 
 #endregion
 

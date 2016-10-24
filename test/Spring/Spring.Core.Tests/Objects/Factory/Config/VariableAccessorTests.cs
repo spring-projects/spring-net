@@ -21,7 +21,8 @@
 #region Imports
 
 using System;
-using System.Collections.Specialized;
+using System.Globalization;
+
 using NUnit.Framework;
 
 #endregion
@@ -64,7 +65,7 @@ namespace Spring.Objects.Factory.Config
             .Add("InvalidDecimal", "")
             .Add("ValidGuid", TESTGUID.ToString())
             .Add("InvalidGuid", "")
-            .Add("ValidDateTime", TESTDATETIME.ToString())
+            .Add("ValidDateTime", TESTDATETIME.ToString(CultureInfo.InvariantCulture))
             .Add("InvalidDateTime", "blabla")
             .Add("ValidDateTimeUtcRoundtripFormatted", TESTDATETIME.ToUniversalTime().ToString("u"))
             ;
@@ -237,12 +238,7 @@ namespace Spring.Objects.Factory.Config
             Assert.AreEqual(TESTDATETIME, va.GetDateTime("ValidDateTime", null, TESTDATETIME_DEFAULT));
             Assert.AreEqual(TESTDATETIME.ToUniversalTime(), va.GetDateTime("ValidDateTimeUtcRoundtripFormatted", "u", TESTDATETIME_DEFAULT));
             Assert.AreEqual(TESTDATETIME_DEFAULT, va.GetDateTime("InvalidDateTime", null, TESTDATETIME_DEFAULT, false));
-            try
-            {
-                va.GetDateTime("InvalidDateTime", null, TESTDATETIME_DEFAULT, true);
-                Assert.Fail();
-            }
-            catch { }
+            Assert.Throws<FormatException>(() => va.GetDateTime("InvalidDateTime", null, TESTDATETIME_DEFAULT, true));
         }
     }
 }

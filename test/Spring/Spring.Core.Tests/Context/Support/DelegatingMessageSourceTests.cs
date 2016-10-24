@@ -91,11 +91,10 @@ namespace Spring.Context.Support
 		}
 
 		[Test]
-		[ExpectedException(typeof(NoSuchMessageException))]
 		public void GetMessageNoDelegateTarget()
 		{
 			DelegatingMessageSource source = new DelegatingMessageSource();
-			source.GetMessage(LookupKey);
+            Assert.Throws<NoSuchMessageException>(() => source.GetMessage(LookupKey));
 		}
 
 		[Test]
@@ -112,11 +111,10 @@ namespace Spring.Context.Support
 		}
 
 		[Test]
-		[ExpectedException(typeof(NoSuchMessageException))]
 		public void GetMessageWithCultureNoDelegateTarget()
 		{
 			DelegatingMessageSource source = new DelegatingMessageSource();
-			source.GetMessage(LookupKey, CultureInfo.InvariantCulture);
+            Assert.Throws<NoSuchMessageException>(() => source.GetMessage(LookupKey, CultureInfo.InvariantCulture));
 		}
 
 		[Test]
@@ -133,11 +131,10 @@ namespace Spring.Context.Support
 		}
 
 		[Test]
-		[ExpectedException(typeof(NoSuchMessageException))]
 		public void GetMessageWithParamsNoDelegateTarget()
 		{
 			DelegatingMessageSource source = new DelegatingMessageSource();
-			source.GetMessage(LookupKey, "Rick", "Evans");
+            Assert.Throws<NoSuchMessageException>(() => source.GetMessage(LookupKey, "Rick", "Evans"));
 		}
 
 		[Test]
@@ -155,11 +152,10 @@ namespace Spring.Context.Support
 		}
 
 		[Test]
-		[ExpectedException(typeof(NoSuchMessageException))]
 		public void GetMessageWithCultureAndParamsNoDelegateTarget()
 		{
 			DelegatingMessageSource source = new DelegatingMessageSource();
-			source.GetMessage(LookupKey, CultureInfo.InvariantCulture, "Rick", "Evans");
+            Assert.Throws<NoSuchMessageException>(() => source.GetMessage(LookupKey, CultureInfo.InvariantCulture, "Rick", "Evans"));
 		}
 
 		[Test]
@@ -194,23 +190,21 @@ namespace Spring.Context.Support
 		}
 
 		[Test]
-		[ExpectedException(typeof(NoSuchMessageException))]
 		public void GetMessageWithNoParentMessageSourceAndNullDefaultMessageSourceResolvableWithNoCodesAndCulture()
 		{
 			IMessageSourceResolvable resolver = new DefaultMessageSourceResolvable(
 				new string[] {}, new object[] {}, string.Empty);
 			DelegatingMessageSource source = new DelegatingMessageSource();
-			source.GetMessage(resolver, CultureInfo.InvariantCulture);
+            Assert.Throws<NoSuchMessageException>(() => source.GetMessage(resolver, CultureInfo.InvariantCulture));
 		}
 
 		[Test]
-		[ExpectedException(typeof(NoSuchMessageException))]
 		public void GetMessageWithNoParentMessageSourceAndNullDefaultMessageSourceResolvableAndCulture()
 		{
 			IMessageSourceResolvable resolver = new DefaultMessageSourceResolvable(
 				new string[] {"foo"}, new object[] {}, string.Empty);
 			DelegatingMessageSource source = new DelegatingMessageSource();
-			source.GetMessage(resolver, CultureInfo.InvariantCulture);
+            Assert.Throws<NoSuchMessageException>(() => source.GetMessage(resolver, CultureInfo.InvariantCulture));
 		}
 
 		[Test]
@@ -227,11 +221,10 @@ namespace Spring.Context.Support
 		}
 
 		[Test]
-		[ExpectedException(typeof(ApplicationContextException))]
 		public void GetResourceObjectWithNoParentMessageSource()
 		{
 			DelegatingMessageSource source = new DelegatingMessageSource();
-			source.GetResourceObject(LookupKey);
+            Assert.Throws<ApplicationContextException>(() => source.GetResourceObject(LookupKey));
 		}
 
 		[Test]
@@ -248,11 +241,10 @@ namespace Spring.Context.Support
 		}
 
 		[Test]
-		[ExpectedException(typeof(ApplicationContextException))]
 		public void GetResourceObjectWithNoParentMessageSourceWithCulture()
 		{
 			DelegatingMessageSource source = new DelegatingMessageSource();
-			source.GetResourceObject(LookupKey, CultureInfo.InvariantCulture);
+            Assert.Throws<ApplicationContextException>(() => source.GetResourceObject(LookupKey, CultureInfo.InvariantCulture));
 		}
 
 		[Test]
@@ -267,11 +259,10 @@ namespace Spring.Context.Support
 		}
 
 		[Test]
-		[ExpectedException(typeof(ApplicationContextException))]
 		public void ApplyResourcesWithNoParentMessageSource()
 		{
 			DelegatingMessageSource source = new DelegatingMessageSource();
-			source.ApplyResources(12, "rick", CultureInfo.InvariantCulture);
+            Assert.Throws<ApplicationContextException>(() => source.ApplyResources(12, "rick", CultureInfo.InvariantCulture));
 		}
     }
 }

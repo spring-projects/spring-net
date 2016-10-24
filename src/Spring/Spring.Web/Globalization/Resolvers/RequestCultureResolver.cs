@@ -22,7 +22,6 @@ using System;
 using System.Globalization;
 using System.Threading;
 using System.Web;
-using Spring.Util;
 
 namespace Spring.Globalization.Resolvers
 {

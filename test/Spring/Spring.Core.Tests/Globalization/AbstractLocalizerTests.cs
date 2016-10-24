@@ -39,13 +39,13 @@ namespace Spring.Globalization
     {
         private ILocalizer localizer;
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void TestFixtureSetUp()
         {
             CultureTestScope.Set("de-AT", "sr");
         }
 
-        [TestFixtureTearDown]
+        [OneTimeTearDown]
         public void TestFixtureTearDown()
         {
             CultureTestScope.Reset();

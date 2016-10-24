@@ -32,11 +32,10 @@ namespace Spring.Globalization.Formatters
     public class DateTimeFormatterTests
     {
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void FormatNullValue()
         {
             DateTimeFormatter fmt = new DateTimeFormatter("d");
-            fmt.Format(null);
+            Assert.Throws<ArgumentNullException>(() => fmt.Format(null));
         }
 
         [Test]
@@ -48,11 +47,10 @@ namespace Spring.Globalization.Formatters
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void FormatNonDate()
         {
             DateTimeFormatter fmt = new DateTimeFormatter("d");
-            fmt.Format("not a date");
+            Assert.Throws<ArgumentException>(() => fmt.Format("not a date"));
         }
 #if !MONO
         [Test]

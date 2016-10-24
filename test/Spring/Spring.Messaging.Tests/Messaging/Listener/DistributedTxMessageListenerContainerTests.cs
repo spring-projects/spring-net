@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System.Messaging;
 using System.Threading;
 using NUnit.Framework;
 using Spring.Messaging.Core;

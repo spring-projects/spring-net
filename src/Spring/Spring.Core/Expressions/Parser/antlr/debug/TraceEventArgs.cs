@@ -1,7 +1,5 @@
 namespace Spring.Expressions.Parser.antlr.debug
 {
-	using System;
-	
 	public class TraceEventArgs : GuessingEventArgs
 	{
 		public TraceEventArgs()

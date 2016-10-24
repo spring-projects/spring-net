@@ -32,7 +32,6 @@
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\</SolutionDir>
-    <RestorePackages>true</RestorePackages>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -57,17 +56,17 @@
     <Reference Include="Common.Logging.Core">
       <HintPath>..\..\..\packages\Common.Logging.Core.3.0.0\lib\net40\Common.Logging.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Iesi.Collections, Version=1.0.1.0, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+    <Reference Include="Iesi.Collections">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\Iesi.Collections.3.3.3.4001\lib\Net35\Iesi.Collections.dll</HintPath>
     </Reference>
-    <Reference Include="NHibernate, Version=3.3.1.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
+    <Reference Include="NHibernate">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\..\packages\NHibernate.3.3.3.4001\lib\Net35\NHibernate.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.framework, Version=2.6.3.13283, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
+    <Reference Include="nunit.framework">
+      <HintPath>..\..\..\packages\NUnit.3.5.0\lib\net40\nunit.framework.dll</HintPath>
+      <Private>True</Private>
     </Reference>
     <Reference Include="Rhino.Mocks, Version=2.9.6.40380, Culture=neutral, PublicKeyToken=0b3305902db7183f, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -80,6 +79,9 @@
   <ItemGroup>
     <Compile Include="..\Spring.Data.NHibernate.Tests\Data\NHibernate\Config\AopConfiguration.cs">
       <Link>Data\NHibernate\Config\AopConfiguration.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate.Tests\Data\NHibernate\DelegatingLocalSessionFactoryObjectTests.cs">
+      <Link>Data\NHibernate\DelegatingLocalSessionFactoryObjectTests.cs</Link>
     </Compile>
     <Compile Include="..\Spring.Data.NHibernate.Tests\Data\NHibernate\HibernateTransactionManagerTests.cs">
       <Link>Data\NHibernate\HibernateTransactionManagerTests.cs</Link>
@@ -95,6 +97,9 @@
     </Compile>
     <Compile Include="..\Spring.Data.NHibernate.Tests\Data\NHibernate\NHTestObjectDao.cs">
       <Link>Data\NHibernate\NHTestObjectDao.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate.Tests\Data\NHibernate\SessionFactoryUtilsTests.cs">
+      <Link>Data\NHibernate\SessionFactoryUtilsTests.cs</Link>
     </Compile>
     <Compile Include="..\Spring.Data.NHibernate.Tests\Data\NHibernate\SimpleService.cs">
       <Link>Data\NHibernate\SimpleService.cs</Link>
@@ -185,5 +190,4 @@
 xcopy "$(ProjectDir)Data" ..\..\..\..\build\VS.Net.2010\Spring.Data.NHibernate3.Tests\$(ConfigurationName)\ /y /s /q /d
 xcopy  "$(ProjectDir)$(TargetFileName).config" ..\..\..\..\build\VS.Net.2010\Spring.Data.NHibernate3.Tests\$(ConfigurationName)\ /y /s /q</PostBuildEvent>
   </PropertyGroup>
-  <Import Project="$(SolutionDir)\.nuget\NuGet.targets" Condition="Exists('$(SolutionDir)\.nuget\NuGet.targets')" />
 </Project>

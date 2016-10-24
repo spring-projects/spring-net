@@ -1,11 +1,8 @@
 namespace Spring.Expressions.Parser.antlr.debug
 {
-	using System;
-	using System.Reflection;
-	using Hashtable		= System.Collections.Hashtable;
-	using ArrayList		= System.Collections.ArrayList;
+    using Hashtable		= System.Collections.Hashtable;
 
-	using antlr.collections.impl;
+    using antlr.collections.impl;
 	
 	
 	/// <summary>A class to assist in firing parser events

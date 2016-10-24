@@ -61,7 +61,6 @@ namespace Spring.Aop.Framework.DynamicProxy
         }
 
         [Test]
-        [ExpectedException(typeof(AopConfigException))]
         public void CannotProxySealedClass()
         {
             SealedTestObject target = new SealedTestObject();
@@ -69,11 +68,10 @@ namespace Spring.Aop.Framework.DynamicProxy
             AdvisedSupport advised = new AdvisedSupport(new Type[] { });
             advised.TargetSource = mockTargetSource;
 
-            IAopProxy aop = CreateAopProxy(advised);
+            Assert.Throws<AopConfigException>(() => CreateAopProxy(advised));
         }
 
         [Test]
-        [ExpectedException(typeof(AopConfigException))]
         public void CannotProxyNonPublicClass()
         {
             NonPublicTestObject target = new NonPublicTestObject();
@@ -81,7 +79,7 @@ namespace Spring.Aop.Framework.DynamicProxy
             AdvisedSupport advised = new AdvisedSupport(new Type[] { });
             advised.TargetSource = mockTargetSource;
 
-            IAopProxy aop = CreateAopProxy(advised);
+            Assert.Throws<AopConfigException>(() => CreateAopProxy(advised));
         }
 
         [Test]
@@ -224,15 +222,23 @@ namespace Spring.Aop.Framework.DynamicProxy
         }
 
         [Test]
-        [ExpectedException(typeof(AopConfigException), ExpectedMessage="Cannot create decorator-based IAopProxy for a non visible class [Spring.Aop.Framework.DynamicProxy.AbstractAopProxyTests+InternalRefOutTestObject]")]
         public override void ProxyMethodWithRefOutParametersWithStandardReflection()
         {
- 	        base.ProxyMethodWithRefOutParametersWithStandardReflection();
+            Assert.Throws<AopConfigException>(() => ProxyMethodWithRefOutParametersWithStandardReflectionWrapped(), "Cannot create decorator-based IAopProxy for a non visible class [Spring.Aop.Framework.DynamicProxy.AbstractAopProxyTests+InternalRefOutTestObject]");
+        }
+
+        private void ProxyMethodWithRefOutParametersWithStandardReflectionWrapped()
+        {
+            base.ProxyMethodWithRefOutParametersWithStandardReflection();
         }
 
         [Test]
-        [ExpectedException(typeof(AopConfigException), ExpectedMessage="Cannot create decorator-based IAopProxy for a non visible class [Spring.Aop.Framework.DynamicProxy.AbstractAopProxyTests+InternalRefOutGenericTestObject]")]
         public override void ProxyGenericMethodWithRefOutParametersWithStandardReflection()
+        {
+            Assert.Throws<AopConfigException>(() => ProxyGenericMethodWithRefOutParametersWithStandardReflectionWrapped(), "Cannot create decorator-based IAopProxy for a non visible class [Spring.Aop.Framework.DynamicProxy.AbstractAopProxyTests+InternalRefOutGenericTestObject]");
+        }
+
+        private void ProxyGenericMethodWithRefOutParametersWithStandardReflectionWrapped()
         {
             base.ProxyGenericMethodWithRefOutParametersWithStandardReflection();
         }

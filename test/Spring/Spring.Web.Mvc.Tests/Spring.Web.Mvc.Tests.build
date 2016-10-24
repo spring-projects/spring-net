@@ -50,12 +50,8 @@
 				<include name="${programfiles}\Reference Assemblies\Microsoft\Framework\v3.5\System.Web.Routing.dll" if="${nant.settings.currentframework=='net-3.5'}" />
 				<include name="${programfiles}\Reference Assemblies\Microsoft\Framework\v3.5\System.Web.Abstractions.dll"  if="${nant.settings.currentframework=='net-3.5'}" />
 					
-			
-
-				
                 <exclude name="${project::get-name()}.dll" />
             
-                <include name="${lib.dir}/nunit.core.interfaces.dll" />
 				<exclude if="${net-4.0}" name="System.Web.Extensions.dll" />
 				<exclude name="Spring.Web.Mvc3.dll" />
 				<exclude name="Spring.Web.Mvc3.Tests.dll" />

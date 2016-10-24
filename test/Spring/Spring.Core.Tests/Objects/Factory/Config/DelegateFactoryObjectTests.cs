@@ -36,7 +36,6 @@ namespace Spring.Objects.Factory.Config
 	public sealed class DelegateFactoryObjectTests
 	{
 		[Test]
-		[ExpectedException(typeof (ArgumentException))]
 		public void StaticDelegateWithInstanceMethod()
 		{
 			DelegateFactoryObject fob = new DelegateFactoryObject();
@@ -45,7 +44,7 @@ namespace Spring.Objects.Factory.Config
 			fob.MethodName = "HandlePop";
 			fob.IsSingleton = false;
 			fob.AfterPropertiesSet();
-			fob.GetObject();
+            Assert.Throws<ArgumentException>(() => fob.GetObject());
 		}
 
 		[Test]
@@ -106,66 +105,59 @@ namespace Spring.Objects.Factory.Config
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException))]
 		public void MissingDelegateType()
 		{
 			DelegateFactoryObject fob = new DelegateFactoryObject();
-			fob.AfterPropertiesSet();
+            Assert.Throws<ArgumentException>(() => fob.AfterPropertiesSet());
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException))]
 		public void BadDelegateType()
 		{
 			DelegateFactoryObject fob = new DelegateFactoryObject();
 			fob.DelegateType = DBNull.Value.GetType();
-			fob.AfterPropertiesSet();
+            Assert.Throws<ArgumentException>(() => fob.AfterPropertiesSet());
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException))]
 		public void NullMethodName()
 		{
 			DelegateFactoryObject fob = new DelegateFactoryObject();
             fob.DelegateType = typeof (EventHandler);
             fob.TargetType = typeof (OneThirstyDude);
-			fob.AfterPropertiesSet();
+            Assert.Throws<ArgumentException>(() => fob.AfterPropertiesSet());
         }
 
         [Test]
-        [ExpectedException(typeof (ArgumentException))]
         public void EmptyMethodName()
         {
             DelegateFactoryObject fob = new DelegateFactoryObject();
             fob.DelegateType = typeof (EventHandler);
             fob.TargetType = typeof (OneThirstyDude);
             fob.MethodName = string.Empty;
-            fob.AfterPropertiesSet();
+            Assert.Throws<ArgumentException>(() => fob.AfterPropertiesSet());
         }
 
         [Test]
-        [ExpectedException(typeof (ArgumentException))]
         public void WhitespacedMethodName()
         {
             DelegateFactoryObject fob = new DelegateFactoryObject();
             fob.DelegateType = typeof (EventHandler);
             fob.TargetType = typeof (OneThirstyDude);
             fob.MethodName = "\n";
-            fob.AfterPropertiesSet();
+            Assert.Throws<ArgumentException>(() => fob.AfterPropertiesSet());
         }
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException))]
 		public void MissingATarget()
 		{
 			DelegateFactoryObject fob = new DelegateFactoryObject();
 			fob.DelegateType = typeof (EventHandler);
 			fob.MethodName = "I Love You Laura Palmer, I Really Do";
-			fob.AfterPropertiesSet();
+            Assert.Throws<ArgumentException>(() => fob.AfterPropertiesSet());
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException))]
 		public void ChokesIfBothTargetTypeAndTargetObjectSupplied()
 		{
 			DelegateFactoryObject fob = new DelegateFactoryObject();
@@ -173,7 +165,7 @@ namespace Spring.Objects.Factory.Config
 			fob.TargetType = typeof (OneThirstyDude);
 			fob.TargetObject = new OneThirstyDude();
 			fob.MethodName = "I Love You Laura Palmer, I Really Do";
-			fob.AfterPropertiesSet();
+            Assert.Throws<ArgumentException>(() => fob.AfterPropertiesSet());
 		}
 	}
 }

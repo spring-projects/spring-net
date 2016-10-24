@@ -53,7 +53,7 @@
 				<include name="${current.bin.dir}/Spring.Core.Tests.dll" />
 				<include name="${current.bin.dir}/Spring.Data.dll" />
 				<include name="${spring.basedir}/packages/odp.net.managed.121.1.1/lib/net40/Oracle.ManagedDataAccess.dll" />
-				<include name="${current.bin.dir}/nunit.framework.dll"/>
+				<include name="${nunit.lib.dir}/nunit.framework.dll"/>
 				<include name="${current.bin.dir}/Rhino.Mocks.dll"/>
 			</references>
 		</csc>

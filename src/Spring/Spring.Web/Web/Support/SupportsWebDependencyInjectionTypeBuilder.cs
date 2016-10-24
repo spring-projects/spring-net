@@ -24,7 +24,6 @@ using System.Reflection.Emit;
 
 using Spring.Context;
 using Spring.Proxy;
-using Spring.Web.Support;
 using Spring.Util;
 
 #endregion

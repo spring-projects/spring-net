@@ -1,8 +1,6 @@
 namespace Spring.Expressions.Parser.antlr.debug
 {
-	using System;
-	
-	public interface SyntacticPredicateListener : Listener
+    public interface SyntacticPredicateListener : Listener
 	{
 		void  syntacticPredicateFailed		(object source, SyntacticPredicateEventArgs e);
 		void  syntacticPredicateStarted		(object source, SyntacticPredicateEventArgs e);

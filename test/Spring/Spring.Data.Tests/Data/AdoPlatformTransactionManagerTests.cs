@@ -216,13 +216,11 @@ namespace Spring.Data
         }
 
         [Test]
-        [Ignore]
         public void ParticipatingTransactionWithTransactionStartedFromSynch()
         {
         }
 
         [Test]
-        [Ignore]
         public void ParticipatingTransactionWithRollbackOnlyAndInnerSynch()
         {
         }

@@ -24,8 +24,6 @@ using System;
 using System.ComponentModel;
 using System.Globalization;
 
-using Spring.Expressions;
-
 #endregion
 
 namespace Spring.Expressions

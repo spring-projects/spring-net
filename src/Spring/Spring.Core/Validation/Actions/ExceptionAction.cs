@@ -19,11 +19,9 @@
 #endregion
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using Common.Logging;
 using Spring.Expressions;
-using Spring.Util;
 
 namespace Spring.Validation.Actions
 {

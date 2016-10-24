@@ -16,7 +16,7 @@
  */
 #endregion
 #region Imports
-using System;
+
 using System.IO;
 using Spring.Core.IO;
 #endregion

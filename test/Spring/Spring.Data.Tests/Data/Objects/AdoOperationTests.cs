@@ -39,7 +39,6 @@
 
 #region Imports
 
-using System.Data;
 using NUnit.Framework;
 using Spring.Dao;
 using Spring.Data.Common;
@@ -61,15 +60,13 @@ namespace Spring.Data.Objects
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidDataAccessApiUsageException))]
         public void EmptySql()
         {
             TestAdoOperation operation = new TestAdoOperation();
-            operation.Compile();           
+            Assert.Throws<InvalidDataAccessApiUsageException>(() => operation.Compile()); 
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidDataAccessApiUsageException))]
         public void DeclareParameterAfterCompile()
         {
             TestAdoOperation operation = new TestAdoOperation();
@@ -77,11 +74,10 @@ namespace Spring.Data.Objects
             operation.Sql = "select * from table";
             operation.Compile();
             IDbParameters parameters = new DbParameters(operation.DbProvider);
-            operation.DeclaredParameters = parameters;
+            Assert.Throws<InvalidDataAccessApiUsageException>(() => operation.DeclaredParameters = parameters);
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidDataAccessApiUsageException))]
         public void TooFewParameters()
         {
             TestAdoOperation operation = new TestAdoOperation();
@@ -91,7 +87,7 @@ namespace Spring.Data.Objects
             parameters.Add("name");
             operation.DeclaredParameters = parameters;
             operation.Compile();
-            operation.ValidateParams(null);
+            Assert.Throws<InvalidDataAccessApiUsageException>(() => operation.ValidateParams(null));
         }
         
     }

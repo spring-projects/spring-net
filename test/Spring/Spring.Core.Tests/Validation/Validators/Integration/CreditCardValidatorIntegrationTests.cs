@@ -65,7 +65,6 @@ namespace Spring.Validation.Validators
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void WithNullCardType()
         {
             const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
@@ -84,7 +83,7 @@ namespace Spring.Validation.Validators
             Assert.IsTrue(obj is CreditCardValidator);
             CreditCardValidator validator = obj as CreditCardValidator;
             Assert.IsNull(validator.CardType);
-            Assert.IsTrue(validator.Validate("378282246310005", new ValidationErrors()));
+            Assert.Throws<ArgumentException>(() => validator.Validate("378282246310005", new ValidationErrors()));
         }
 
         [Test]

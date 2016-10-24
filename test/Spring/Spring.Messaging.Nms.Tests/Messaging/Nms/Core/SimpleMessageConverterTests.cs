@@ -143,17 +143,15 @@ namespace Spring.Messaging.Nms.Core
         }
 
         [Test]
-        [ExpectedException(typeof(MessageConversionException))]
         public void ToMessageThrowsExceptionIfGivenNullObjectToConvert()
         {
-            converter.ToMessage(null, null);
+            Assert.Throws<MessageConversionException>(() => converter.ToMessage(null, null));
         }
 
         [Test]
-        [ExpectedException(typeof(MessageConversionException))]
         public void ToMessageThrowsExceptionIfGivenIncompatibleObjectToConvert()
         {
-            converter.ToMessage(new Cafe(), null);
+            Assert.Throws<MessageConversionException>(() => converter.ToMessage(new Cafe(), null));
         }
 
         [Test]

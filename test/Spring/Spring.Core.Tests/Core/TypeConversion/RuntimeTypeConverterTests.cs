@@ -51,11 +51,10 @@ namespace Spring.Core.TypeConversion
         }
 
         [Test]
-        [ExpectedException (typeof (NotSupportedException))]
-        public void ConvertFromNonSupportedType () 
+        public void ConvertFromNonSupportedType ()
         {
             RuntimeTypeConverter cnv = new RuntimeTypeConverter ();
-            object foo = cnv.ConvertFrom (12);
+            Assert.Throws<NotSupportedException>(() => cnv.ConvertFrom (12));
         }
 
         [Test]
@@ -64,7 +63,7 @@ namespace Spring.Core.TypeConversion
             RuntimeTypeConverter cnv = new RuntimeTypeConverter ();
             object foo = cnv.ConvertFrom ("System.String");
             Assert.IsNotNull (foo);
-            Assert.AreEqual (this.GetType().GetType().FullName, foo.GetType ().FullName);
+            Assert.AreEqual (GetType().GetType().FullName, foo.GetType ().FullName);
         }
 
         [Test]
@@ -77,11 +76,10 @@ namespace Spring.Core.TypeConversion
         }
 
         [Test]
-        [ExpectedException (typeof (NotSupportedException))]
-        public void ConvertToStringFromNonSupportedType () 
+        public void ConvertToStringFromNonSupportedType ()
         {
             RuntimeTypeConverter cnv = new RuntimeTypeConverter ();
-            object foo = cnv.ConvertTo (typeof (string), GetType ());
+            Assert.Throws<NotSupportedException>(() => cnv.ConvertTo (typeof (string), GetType ()));
         }
 	}
 }

@@ -22,7 +22,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
-using Spring.Context.Config;
+
 using Spring.Context.Support;
 using Spring.Example.Scannable;
 using Spring.Objects.Factory;

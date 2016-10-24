@@ -54,17 +54,15 @@ namespace Spring.Aop.Framework
             object[] arguments, Type targetType, IList interceptors);
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void InstantiationWithNullMethod()
 		{
-            CreateMethodInvocation(null, this, null, null, null, GetType(), null);
+            Assert.Throws<ArgumentNullException>(() => CreateMethodInvocation(null, this, null, null, null, GetType(), null));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void InstantiationWithNullTarget()
 		{
-            CreateMethodInvocation(null, null, null, null, null, GetType(), null);
+            Assert.Throws<ArgumentNullException>(() => CreateMethodInvocation(null, null, null, null, null, GetType(), null));
 		}
 
 		[Test]

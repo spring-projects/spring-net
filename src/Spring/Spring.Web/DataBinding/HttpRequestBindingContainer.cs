@@ -3,11 +3,9 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Reflection;
-using System.Web;
-using Spring.Core;
+
 using Spring.Expressions;
 using Spring.Globalization;
-using Spring.Objects;
 using Spring.Util;
 using Spring.Validation;
 

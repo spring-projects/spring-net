@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using System.Threading;
 using NUnit.Framework;
 
@@ -42,13 +41,13 @@ namespace Spring.Threading
         protected virtual void ThreadCleanup()
         {}
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void FixtureSetUp()
         {
             ThreadSetup();
         }
 
-        [TestFixtureTearDown]
+        [OneTimeTearDown]
         public void FixtureTearDown()
         {
             ThreadCleanup();

@@ -37,7 +37,9 @@ namespace Spring.Data.NHibernate
         protected override void PostProcessConfiguration(Configuration config)
         {
             // called before NewSessionFactory
-            var settings = ConfigurationManager.ConnectionStrings[config.Properties[global::NHibernate.Cfg.Environment.ConnectionStringName]];
+            string connectionStringName;
+            config.Properties.TryGetValue(global::NHibernate.Cfg.Environment.ConnectionStringName, out connectionStringName);
+            var settings = ConfigurationManager.ConnectionStrings[connectionStringName ?? string.Empty];
 
             if (settings != null)
             {

@@ -25,7 +25,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Runtime.InteropServices;
 using System.Threading;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
@@ -279,31 +278,27 @@ namespace Spring.Util
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void GetParameterTypesWithNullMethodInfo()
         {
-            ReflectionUtils.GetParameterTypes((MethodInfo)null);
+            Assert.Throws<ArgumentNullException>(() => ReflectionUtils.GetParameterTypes((MethodInfo) null));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void GetParameterTypesWithNullParametersArgs()
         {
-            ReflectionUtils.GetParameterTypes((ParameterInfo[])null);
+            Assert.Throws<ArgumentNullException>(() => ReflectionUtils.GetParameterTypes((ParameterInfo[]) null));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void GetMatchingMethodsWithNullTypeToFindOn()
         {
-            ReflectionUtils.GetMatchingMethods(null, new MethodInfo[] { }, true);
+            Assert.Throws<ArgumentNullException>(() => ReflectionUtils.GetMatchingMethods(null, new MethodInfo[] { }, true));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void GetMatchingMethodsWithNullMethodsToFind()
         {
-            ReflectionUtils.GetMatchingMethods(GetType(), null, true);
+            Assert.Throws<ArgumentNullException>(() => ReflectionUtils.GetMatchingMethods(GetType(), null, true));
         }
 
         [Test]
@@ -315,12 +310,11 @@ namespace Spring.Util
         }
 
         [Test]
-        [ExpectedException(typeof(Exception))]
         public void GetMatchingMethodsWithBadMatchStrict()
         {
             // lets include a protected method that ain't declared on the ReflectionUtilsObject class...
             MethodInfo[] clonesMethods = typeof(ReflectionUtilsObjectClone).GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.DeclaredOnly | BindingFlags.Instance);
-            ReflectionUtils.GetMatchingMethods(typeof(ReflectionUtilsObject), clonesMethods, true);
+            Assert.Throws<Exception>(() => ReflectionUtils.GetMatchingMethods(typeof(ReflectionUtilsObject), clonesMethods, true));
         }
 
         [Test]
@@ -334,12 +328,11 @@ namespace Spring.Util
         }
 
         [Test]
-        [ExpectedException(typeof(Exception))]
         public void GetMatchingMethodsWithBadReturnTypeMatchStrict()
         {
             // lets include a method that return type is different...
             MethodInfo[] clonesMethods = typeof(ReflectionUtilsObjectBadClone).GetMethods(BindingFlags.Public | BindingFlags.DeclaredOnly | BindingFlags.Instance);
-            ReflectionUtils.GetMatchingMethods(typeof(ReflectionUtilsObject), clonesMethods, true);
+            Assert.Throws<Exception>(() => ReflectionUtils.GetMatchingMethods(typeof(ReflectionUtilsObject), clonesMethods, true));
         }
 
         [Test]
@@ -401,19 +394,17 @@ namespace Spring.Util
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void MethodIsOnOneOfTheseInterfacesWithNonInterfaceType()
         {
             MethodInfo method = typeof(ReflectionUtilsObject).GetMethod("Spanglish");
-            Assert.IsFalse(ReflectionUtils.MethodIsOnOneOfTheseInterfaces(method, new Type[] { GetType() }));
+            Assert.Throws<ArgumentException>(() => ReflectionUtils.MethodIsOnOneOfTheseInterfaces(method, new Type[] { GetType() }));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void MethodIsOnOneOfTheseInterfacesWithNullMethod()
         {
             MethodInfo method = null;
-            Assert.IsFalse(ReflectionUtils.MethodIsOnOneOfTheseInterfaces(method, new Type[] { GetType() }));
+            Assert.Throws<ArgumentNullException>(() => ReflectionUtils.MethodIsOnOneOfTheseInterfaces(method, new Type[] { GetType() }));
         }
 
         [Test]
@@ -433,10 +424,9 @@ namespace Spring.Util
 
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ParameterTypesMatchWithNullArgs()
         {
-            ReflectionUtils.ParameterTypesMatch(null, null);
+            Assert.Throws<ArgumentNullException>(() => ReflectionUtils.ParameterTypesMatch(null, null));
         }
 
         [Test]
@@ -465,12 +455,10 @@ namespace Spring.Util
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void ToInterfaceArrayFromTypeWithNonInterface()
         {
-            ReflectionUtils.ToInterfaceArray(typeof(ExplicitFoo));
+            Assert.Throws<ArgumentException>(() => ReflectionUtils.ToInterfaceArray(typeof(ExplicitFoo)));
         }
-
 
         [Test]
         public void GetMethod()
@@ -503,18 +491,15 @@ namespace Spring.Util
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException),
-            ExpectedMessage = "[Spring.Util.ReflectionUtilsTests] does not derive from the [System.Attribute] class.")]
         public void CreateCustomAttributeForNonAttributeType()
         {
-            ReflectionUtils.CreateCustomAttribute(GetType());
+            Assert.Throws<ArgumentException>(() => ReflectionUtils.CreateCustomAttribute(GetType()), "[Spring.Util.ReflectionUtilsTests] does not derive from the [System.Attribute] class.");
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void CreateCustomAttributeWithNullType()
         {
-            ReflectionUtils.CreateCustomAttribute((Type)null);
+            Assert.Throws<ArgumentNullException>(() => ReflectionUtils.CreateCustomAttribute((Type) null));
         }
 
         [Test]
@@ -826,10 +811,9 @@ namespace Spring.Util
         }
 
         [Test]
-        [ExpectedException(typeof(NullReferenceException))]
         public void GetTypeOfOrTypeWithNull()
         {
-            ReflectionUtils.TypeOfOrType(null);
+            Assert.Throws<NullReferenceException>(() => ReflectionUtils.TypeOfOrType(null));
         }
 
         [Test]
@@ -875,10 +859,9 @@ namespace Spring.Util
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void GetDefaultValueWithZeroValueEnumType()
         {
-            ReflectionUtils.GetDefaultValue(typeof(EnumWithNoValues));
+            Assert.Throws<ArgumentException>(() => ReflectionUtils.GetDefaultValue(typeof(EnumWithNoValues)));
         }
 
         [Test]

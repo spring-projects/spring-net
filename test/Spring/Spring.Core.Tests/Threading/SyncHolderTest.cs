@@ -57,17 +57,20 @@ namespace Spring.Threading
         }
 
         [Test]
-        [ExpectedException(typeof(ThreadStateException))]
 		public void CanBeUsedWithTheUsingCSharpIdiomToAcquireAnIsync()
 		{
             sync.Acquire();
             sync.Release();
             mocks.ReplayAll();
 
-            using (new SyncHolder(sync))
-            {
-                throw new ThreadStateException();
-            }
-        }
+		    Assert.Throws<ThreadStateException>(() =>
+		    {
+		        using (new SyncHolder(sync))
+		        {
+		            throw new ThreadStateException();
+		        }
+
+		    });
+		}
 	}
 }

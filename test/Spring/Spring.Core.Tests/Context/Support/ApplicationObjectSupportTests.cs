@@ -21,7 +21,6 @@
 #region Imports
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using NUnit.Framework;
@@ -431,11 +430,10 @@ namespace Spring.Context.Support
 
 
 		[Test]
-		[ExpectedException(typeof (ApplicationContextException))]
 		public void InvalidContextSubclass()
 		{
 			ApplicationObjectSupport support = new MyApplicationObjectSupport();
-			support.ApplicationContext = new MyContext2();
+			Assert.Throws<ApplicationContextException>(() => support.ApplicationContext = new MyContext2());
 		}
 
 		[Test]
@@ -472,12 +470,11 @@ namespace Spring.Context.Support
 		}
 
 		[Test]
-		[ExpectedException(typeof (ApplicationContextException))]
 		public void ReinitWithDiffContext()
 		{
 			MockApplicationContext ctx = new MockApplicationContext();
 			ApplicationObjectSupport support = new MyApplicationObjectSupport(ctx);
-			support.ApplicationContext = new MockApplicationContext();
+			Assert.Throws<ApplicationContextException>(() => support.ApplicationContext = new MockApplicationContext());
 		}
 	}
 }

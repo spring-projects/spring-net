@@ -1,8 +1,6 @@
 namespace Spring.Expressions.Parser.antlr
 {
-	using System;
-	using Queue = System.Collections.Queue;
-	using AST	= antlr.collections.AST;
+    using AST	= antlr.collections.AST;
 
 	/*ANTLR Translator Generator
 	* Project led by Terence Parr at http://www.jGuru.com

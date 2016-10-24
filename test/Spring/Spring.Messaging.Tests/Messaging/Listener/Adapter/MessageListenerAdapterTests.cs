@@ -20,10 +20,7 @@
 
 #region Imports
 
-using System.Threading;
 using NUnit.Framework;
-using Spring.Messaging.Core;
-using Spring.Testing.NUnit;
 
 #endregion
 

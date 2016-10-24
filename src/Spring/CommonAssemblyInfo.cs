@@ -1,8 +1,7 @@
-using System;
 using System.Reflection;
 
 #if !TIBCO_EMS
-[assembly: CLSCompliant(true)]
+[assembly: System.CLSCompliant(true)]
 #endif
 
 //

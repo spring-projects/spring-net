@@ -1,4 +1,3 @@
-using System;
 using StringBuilder			= System.Text.StringBuilder;
 
 namespace Spring.Expressions.Parser.antlr

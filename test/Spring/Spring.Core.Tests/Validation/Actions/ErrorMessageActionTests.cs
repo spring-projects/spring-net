@@ -35,38 +35,33 @@ namespace Spring.Validation.Actions
     public class ErrorMessageActionTests
     {
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void WithNullMesageId()
         {
-            new ErrorMessageAction(null, "errors");    
+            Assert.Throws<ArgumentNullException>(() => new ErrorMessageAction(null, "errors"));    
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void WithEmptyMesageId()
         {
-            new ErrorMessageAction("", "errors");    
+            Assert.Throws<ArgumentNullException>(() => new ErrorMessageAction("", "errors"));    
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void WithWhitespaceMesageId()
         {
-            new ErrorMessageAction("\t   ", "errors");    
+            Assert.Throws<ArgumentNullException>(() => new ErrorMessageAction("\t   ", "errors"));    
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void WithNullProviders()
         {
-            new ErrorMessageAction("error", null);    
+            Assert.Throws<ArgumentException>(() => new ErrorMessageAction("error", null));    
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void WithEmptyProviders()
         {
-            new ErrorMessageAction("error", new string[0]);    
+            Assert.Throws<ArgumentException>(() => new ErrorMessageAction("error", new string[0]));    
         }
 
         [Test]

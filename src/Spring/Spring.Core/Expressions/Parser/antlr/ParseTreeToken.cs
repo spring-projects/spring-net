@@ -12,11 +12,9 @@ namespace Spring.Expressions.Parser.antlr
 	//                            Anthony Oguntimehin
 	//
 
-	using System;
-	using StringBuilder 	= System.Text.StringBuilder;
-	using AST 				= antlr.collections.AST;
+    using StringBuilder 	= System.Text.StringBuilder;
 
-	public class ParseTreeToken : ParseTree
+    public class ParseTreeToken : ParseTree
 	{
 		protected IToken token;
 

@@ -26,7 +26,6 @@ using NUnit.Framework;
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.TestSupport;
-using Spring.Web.Support;
 
 #endregion
 

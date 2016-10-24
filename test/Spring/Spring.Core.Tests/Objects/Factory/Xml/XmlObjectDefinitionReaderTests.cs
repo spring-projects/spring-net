@@ -49,23 +49,17 @@ namespace Spring.Objects.Factory.Xml
         }
 
         [Test]
-        [ExpectedException(typeof(ObjectDefinitionStoreException))]
         public void LoadObjectDefinitionsWithNullResource()
         {
-            XmlObjectDefinitionReader reader
-                = new XmlObjectDefinitionReader(
-                    new DefaultListableObjectFactory());
-            reader.LoadObjectDefinitions((string)null);
+            XmlObjectDefinitionReader reader = new XmlObjectDefinitionReader(new DefaultListableObjectFactory());
+            Assert.Throws<ObjectDefinitionStoreException>(() => reader.LoadObjectDefinitions((string) null));
         }
 
         [Test]
-        [ExpectedException(typeof(ObjectDefinitionStoreException))]
         public void LoadObjectDefinitionsWithNonExistentResource()
         {
-            XmlObjectDefinitionReader reader
-                = new XmlObjectDefinitionReader(
-                    new DefaultListableObjectFactory());
-            reader.LoadObjectDefinitions(new ReadOnlyXmlTestResource("/dev/null"));
+            XmlObjectDefinitionReader reader = new XmlObjectDefinitionReader(new DefaultListableObjectFactory());
+            Assert.Throws<ObjectDefinitionStoreException>(() => reader.LoadObjectDefinitions(new ReadOnlyXmlTestResource("/dev/null")));
         }
 
         [Test]
@@ -101,7 +95,7 @@ namespace Spring.Objects.Factory.Xml
         }
 
         [Test]
-        [Ignore] //this test cannot co-exist with AutoRegistersAllWellknownNamespaceParsers b/c that test will have already loaded the Spring.Data ass'y
+        [Ignore("this test cannot co-exist with AutoRegistersAllWellknownNamespaceParsers b/c that test will have already loaded the Spring.Data ass'y")]
         public void AutoRegistersWellknownNamespaceParser()
         {
             try
@@ -136,21 +130,19 @@ namespace Spring.Objects.Factory.Xml
         }
 
         [Test]
-        [ExpectedException(typeof(ObjectDefinitionStoreException))]
         public void ThrowsOnUnknownNamespaceUri()
         {
             NamespaceParserRegistry.Reset();
 
             DefaultListableObjectFactory of = new DefaultListableObjectFactory();
             XmlObjectDefinitionReader reader = new XmlObjectDefinitionReader(of);
-            reader.LoadObjectDefinitions(new StringResource(
+            Assert.Throws<ObjectDefinitionStoreException>(() => reader.LoadObjectDefinitions(new StringResource(
                                              @"<?xml version='1.0' encoding='UTF-8' ?>
 <objects xmlns='http://www.springframework.net' 
      xmlns:x='http://www.springframework.net/XXXX'>  
   <x:group id='tripValidator' />
 </objects>
-"));
-            Assert.Fail();
+")));
         }
 
 
@@ -279,17 +271,16 @@ namespace Spring.Objects.Factory.Xml
         #endregion
 
         [Test]
-        [ExpectedException(typeof(ObjectDefinitionStoreException))]
         public void ThrowsObjectDefinitionStoreExceptionOnErrorDuringObjectDefinitionRegistration()
         {
             DefaultListableObjectFactory of = new DefaultListableObjectFactory();
             XmlObjectDefinitionReader reader = new TestXmlObjectDefinitionReader(of);
-            reader.LoadObjectDefinitions(new StringResource(
+            Assert.Throws<ObjectDefinitionStoreException>(() => reader.LoadObjectDefinitions(new StringResource(
                 @"<?xml version='1.0' encoding='UTF-8' ?>
 <objects xmlns='http://www.springframework.net'>  
 	<object id='test2' type='Spring.Objects.TestObject, Spring.Core.Tests' />
 </objects>
-"));
+")));
         }
 
         [Test]

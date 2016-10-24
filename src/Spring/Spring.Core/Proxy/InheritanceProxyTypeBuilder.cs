@@ -21,7 +21,6 @@
 #region Imports
 
 using System;
-using System.Collections;
 using System.Reflection;
 using System.Reflection.Emit;
 

@@ -92,17 +92,15 @@ namespace Spring.Caching
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void KeyCannotBeEmptyString()
         {
-            att = new DerivedCacheAttribute("someName", string.Empty);
+            Assert.Throws<ArgumentOutOfRangeException>(() => att = new DerivedCacheAttribute("someName", string.Empty));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void KeyCannotBeNull()
         {
-            att = new DerivedCacheAttribute("someName", null);
+            Assert.Throws<ArgumentNullException>(() => att = new DerivedCacheAttribute("someName", null));
         }
     }
 }

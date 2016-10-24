@@ -111,6 +111,7 @@ Commandline Examples:
   <property name="spring.basedir" value="${project::get-base-directory()}"/>
   <property name="spring.nonredistdir" value="${spring.basedir}\..\..\nonredist"/>
   <property name="tool.dir" value="${project::get-base-directory()}\build-support\tools"/>
+  <property name="nuget.exe" value="${tool.dir}\NuGet\NuGet.exe"/>
   
   <!--Support for Windows XP in other languages. In Portuguese, for example, is "c:\Arquivos de Programs"-->
   <property name="programfiles" value="C:\Program Files"/>
@@ -319,77 +320,77 @@ Commandline Examples:
 
   <target name="restore-nuget-packages" description="Restores NuGet packages that solution(s) reference">
 	<exec 
-	  program=".nuget\nuget.exe"
+	  program="${nuget.exe}"
 	  commandline="restore Spring.NET.2010.sln" 
 	  workingdir="."
 	  failonerror="true" />
 	<exec 
-	  program=".nuget\nuget.exe"
+	  program="${nuget.exe}"
 	  commandline="restore ${spring.basedir}\examples\Spring\Spring.Calculator\Spring.Calculator.2010.sln" 
 	  workingdir="."
 	  failonerror="true" />
 	<exec 
-	  program=".nuget\nuget.exe"
+	  program="${nuget.exe}"
 	  commandline="restore ${spring.basedir}\examples\Spring\Spring.CodeConfig.Migration\Spring.CodeConfig.Migration.2010.sln"
 	  workingdir="."
 	  failonerror="true" />
 	  <exec 
-	  program=".nuget\nuget.exe"
+	  program="${nuget.exe}"
 	  commandline="restore ${spring.basedir}\examples\Spring\Spring.Data.NHibernate.Northwind\Spring.Northwind.2010.sln" 
 	  workingdir="."
 	  failonerror="true" />
 	<exec 
-	  program=".nuget\nuget.exe"
+	  program="${nuget.exe}"
 	  commandline="restore ${spring.basedir}\examples\Spring\Spring.DataQuickStart\Spring.DataQuickStart.2010.sln" 
 	  workingdir="."
 	  failonerror="true" />
 	<exec 
-	  program=".nuget\nuget.exe"
+	  program="${nuget.exe}"
 	  commandline="restore ${spring.basedir}\examples\Spring\Spring.IoCQuickStart.MovieFinder\Spring.IocQuickStart.MovieFinder.2010.sln" 
 	  workingdir="."
 	  failonerror="true" />
 	<exec 
-	  program=".nuget\nuget.exe"
+	  program="${nuget.exe}"
 	  commandline="restore ${spring.basedir}\examples\Spring\Spring.MsmqQuickStart\Spring.MsmqQuickStart.2010.sln" 
 	  workingdir="."
 	  failonerror="true" />	  
 	<exec 
-	  program=".nuget\nuget.exe"
+	  program="${nuget.exe}"
 	  commandline="restore ${spring.basedir}\examples\Spring\Spring.Mvc3QuickStart\Spring.Mvc3QuickStart.sln" 
 	  workingdir="."
 	  failonerror="true" />
 	<exec 
-	  program=".nuget\nuget.exe"
+	  program="${nuget.exe}"
 	  commandline="restore ${spring.basedir}\examples\Spring\Spring.Mvc4QuickStart\Spring.Mvc4QuickStart.sln" 
 	  workingdir="."
 	  failonerror="true" />
 	<exec 
-	  program=".nuget\nuget.exe"
+	  program="${nuget.exe}"
 	  commandline="restore ${spring.basedir}\examples\Spring\Spring.Mvc5QuickStart\Spring.Mvc5QuickStart.sln" 
 	  workingdir="."
 	  failonerror="true" />
 	<exec 
-	  program=".nuget\nuget.exe"
+	  program="${nuget.exe}"
 	  commandline="restore ${spring.basedir}\examples\Spring\Spring.NmsQuickStart\Spring.NmsQuickStart.2010.sln" 
 	  workingdir="."
 	  failonerror="true" />
 	 <exec 
-	  program=".nuget\nuget.exe"
+	  program="${nuget.exe}"
 	  commandline="restore ${spring.basedir}\examples\Spring\Spring.Scheduling.Quartz.Example\Spring.Scheduling.Quartz.Example.2010.sln" 
 	  workingdir="."
 	  failonerror="true" />
 	 <exec 
-	  program=".nuget\nuget.exe"
+	  program="${nuget.exe}"
 	  commandline="restore ${spring.basedir}\examples\Spring\Spring.TxQuickStart\Spring.TxQuickStart.2010.sln" 
 	  workingdir="."
 	  failonerror="true" />
 	 <exec 
-	  program=".nuget\nuget.exe"
+	  program="${nuget.exe}"
 	  commandline="restore ${spring.basedir}\examples\Spring\Spring.WebQuickStart\Spring.WebQuickStart.2010.sln" 
 	  workingdir="."
 	  failonerror="true" />
 	  <exec 
-	  program=".nuget\nuget.exe"
+	  program="${nuget.exe}"
 	  commandline="restore ${spring.basedir}\examples\Spring\SpringAir\SpringAir.2010.sln" 
 	  workingdir="."
 	  failonerror="true" />
@@ -494,24 +495,21 @@ Commandline Examples:
     <property name="nh4.lib.dir" value="${spring.basedir}/packages/NHibernate.4.0.3.4000/lib/Net40"/>
     <property name="iesi4.lib.dir" value="${spring.basedir}/packages/Iesi.Collections.4.0.1.4000/lib/Net40"/>
     <property name="quartz2.lib.dir" value="${spring.basedir}/packages/Quartz.2.3.1/lib/net35"/>
-	<property name="nunit.lib.dir" value="${spring.basedir}/packages/NUnit.2.6.3/lib"/>
-	
+	<property name="nunit.lib.dir" value="${spring.basedir}/packages/NUnit.3.5.0/lib/net35"/>
 	
 	<property name="common.logging.lib.dir" value="${spring.basedir}/packages/Common.Logging.3.0.0/lib/net35"/>
 	<property name="common.logging.core.lib.dir" value="${spring.basedir}/packages/Common.Logging.Core.3.0.0/lib/net35"/>
 	
+	<!-- we use same libs for both 4.0 and 4.5 builds -->
 	<if test="${nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'net-4.5'}">
 		<property name="common.logging.lib.dir" value="${spring.basedir}/packages/Common.Logging.3.0.0/lib/net40"/>
 		<property name="common.logging.core.lib.dir" value="${spring.basedir}/packages/Common.Logging.Core.3.0.0/lib/net40"/>
-	</if>
-	
-	<!-- we use same libs for both 4.0 and 4.5 builds -->
-	<if test="${nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'net-4.5'}">
 		<property name="lib.dir" value="${spring.basedir}/lib/net/4.0"/>
+        <property name="nunit.lib.dir" value="${spring.basedir}/packages/NUnit.3.5.0/lib/net40"/>
 		<property name="quartz2.lib.dir" value="${spring.basedir}/packages/Quartz.2.3.1/lib/net40"/>
 	</if>
 	
-	
+
 	<call target="copylibtobin"/>
 
     <!-- build assemblies -->
@@ -548,12 +546,13 @@ Commandline Examples:
     
     <nant buildfile="test/Spring/Spring.Data.NHibernate3.Tests/Spring.Data.NHibernate3.Tests.build" target="test" if="${build-data}"/>
     <nant buildfile="test/Spring/Spring.Data.NHibernate3.Integration.Tests/Spring.Data.NHibernate3.Integration.Tests.build" target="test" if="${build-data}"/>
-    <nant buildfile="test/Spring/Spring.Data.NHibernate4.Tests/Spring.Data.NHibernate4.Tests.build" target="test" if="${build-data}"/>
+    <nant buildfile="test/Spring/Spring.Data.NHibernate4.Tests/Spring.Data.NHibernate4.Tests.build" target="test" if="${build-data and (nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'net-4.5')}"/>
     <nant buildfile="test/Spring/Spring.Data.NHibernate4.Integration.Tests/Spring.Data.NHibernate4.Integration.Tests.build" target="test" if="${build-data and (nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'net-4.5' )}"/>
     <nant buildfile="test/Spring/Spring.Data.NHibernate4.NestedTxSuspension.Integration.Tests/Spring.Data.NHibernate4.NestedTxSuspension.Integration.Tests.build" target="test" if="${build-data and (nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'net-4.5' )}"/>
 	
-    <nant buildfile="test/Spring/Spring.Services.Tests/Spring.Services.Tests.build" target="test" if="${build-services}"/>
-    <nant buildfile="test/Spring/Spring.Web.Tests/Spring.Web.Tests.build" target="test" if="${build-web}"/>
+    <!-- newer NUnit runners cannot handle test properly, so running just the build target -->
+    <nant buildfile="test/Spring/Spring.Services.Tests/Spring.Services.Tests.build" target="build" if="${build-services}"/>
+    <nant buildfile="test/Spring/Spring.Web.Tests/Spring.Web.Tests.build" target="test" if="${build-web and nant.settings.currentframework != 'net-3.5'}"/>
 	<nant buildfile="test/Spring/Spring.Web.Mvc3.Tests/Spring.Web.Mvc3.Tests.build" target="test" if="${build-web and nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'net-4.5'}"/>
 	<nant buildfile="test/Spring/Spring.Web.Mvc4.Tests/Spring.Web.Mvc4.Tests.build" target="test" if="${build-web and nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'net-4.5'}"/>
 	<nant buildfile="test/Spring/Spring.Web.Mvc5.Tests/Spring.Web.Mvc5.Tests.build" target="test" if="${build-web and nant.settings.currentframework == 'net-4.5'}"/>

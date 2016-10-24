@@ -1,5 +1,3 @@
-using System;
-using Spring.Expressions.Parser.antlr.collections;
 using AST		= Spring.Expressions.Parser.antlr.collections.AST;
 
 namespace Spring.Expressions.Parser.antlr

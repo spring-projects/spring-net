@@ -1,6 +1,5 @@
-using System;
 using System.Threading;
-using Spring.Threading;
+
 using NUnit.Framework;
 
 #region Licence

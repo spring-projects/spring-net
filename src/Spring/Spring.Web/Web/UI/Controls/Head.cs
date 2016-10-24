@@ -19,7 +19,6 @@
 #endregion
 
 using System.Collections;
-using System.IO;
 using System.Web.UI;
 using Spring.Util;
 using Spring.Web.Support;

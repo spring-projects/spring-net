@@ -1,8 +1,6 @@
 namespace Spring.Expressions.Parser.antlr.debug
 {
-	using System;
-	
-	public interface IParserDebugSubject : IDebugSubject
+    public interface IParserDebugSubject : IDebugSubject
 	{
 		event MatchEventHandler					MatchedToken;
 		event MatchEventHandler					MatchedNotToken;

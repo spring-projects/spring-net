@@ -21,7 +21,7 @@
 using System;
 using System.Collections;
 using System.Globalization;
-using Spring.Core;
+
 using Spring.Util;
 
 namespace Spring.Objects.Factory.Config

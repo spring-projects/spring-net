@@ -21,13 +21,9 @@
 #region Imports
 
 using System;
-using System.CodeDom.Compiler;
-using System.Diagnostics;
-using System.IO;
 using System.Reflection;
-using System.Text;
+
 using NUnit.Framework;
-using Spring.Context.Support;
 
 #endregion
 
@@ -42,61 +38,78 @@ namespace Spring.Reflection.Dynamic
     {
         private const BindingFlags BINDANY = BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance | BindingFlags.Static;
 
-        protected override IDynamicProperty Create( PropertyInfo property )
+        protected override IDynamicProperty Create(PropertyInfo property)
         {
-            return DynamicProperty.Create( property );
+            return DynamicProperty.Create(property);
         }
 
         [Test]
-        [ExpectedException( typeof( InvalidOperationException ) )]
         public void TestNonReadableProperties()
         {
-            IDynamicProperty nonReadableProperty =
-                Create( typeof( ClassWithNonReadableProperty ).GetProperty( "MyProperty" ) );
-            nonReadableProperty.GetValue( null );
+            IDynamicProperty nonReadableProperty = Create(typeof(ClassWithNonReadableProperty).GetProperty("MyProperty"));
+            Assert.Throws<InvalidOperationException>(() => nonReadableProperty.GetValue(null));
         }
 
         [Test]
-        [ExpectedException( typeof( InvalidOperationException ) )]
         public void TestNonWritableInstanceProperty()
         {
-            IDynamicProperty nonWritableProperty =
-                Create( typeof( Inventor ).GetProperty( "PlaceOfBirth" ) );
-            nonWritableProperty.SetValue( null, null );
+            IDynamicProperty nonWritableProperty = Create(typeof(Inventor).GetProperty("PlaceOfBirth"));
+            Assert.Throws<InvalidOperationException>(() => nonWritableProperty.SetValue(null, null));
         }
 
         [Test]
-        [ExpectedException( typeof( InvalidOperationException ) )]
         public void TestAttemptingToSetPropertyOfValueTypeInstance()
         {
             MyStruct myYearHolder = new MyStruct();
-            IDynamicProperty year = Create( typeof( MyStruct ).GetProperty( "Year" ) );
-            year.SetValue( myYearHolder, 2004 );
+            IDynamicProperty year = Create(typeof(MyStruct).GetProperty("Year"));
+            Assert.Throws<InvalidOperationException>(() => year.SetValue(myYearHolder, 2004));
         }
 
         [Test]
-        [ExpectedException( typeof( InvalidOperationException ) )]
         public void TestNonWritableStaticProperty()
         {
-            IDynamicProperty nonWritableProperty =
-                Create( typeof( DateTime ).GetProperty( "Today" ) );
-            nonWritableProperty.SetValue( null, null );
+            IDynamicProperty nonWritableProperty = Create(typeof(DateTime).GetProperty("Today"));
+            Assert.Throws<InvalidOperationException>(() => nonWritableProperty.SetValue(null, null));
         }
 
         [Test]
         public void TestSetIncompatibleType()
         {
-            IDynamicProperty inventorPlace = Create( typeof( Inventor ).GetProperty("POB") );
-            try { inventorPlace.SetValue( new Inventor(), new object() ); Assert.Fail(); }
-            catch (InvalidCastException) { }
-            try { inventorPlace.SetValue( new Inventor(), new DateTime() ); Assert.Fail(); }
-            catch (InvalidCastException) { }
+            IDynamicProperty inventorPlace = Create(typeof(Inventor).GetProperty("POB"));
+            try
+            {
+                inventorPlace.SetValue(new Inventor(), new object());
+                Assert.Fail();
+            }
+            catch (InvalidCastException)
+            {
+            }
+            try
+            {
+                inventorPlace.SetValue(new Inventor(), new DateTime());
+                Assert.Fail();
+            }
+            catch (InvalidCastException)
+            {
+            }
 
-            IDynamicProperty inventorDOB = Create( typeof( Inventor ).GetProperty("DOB") );
-            try { inventorDOB.SetValue( new Inventor(), 2 ); Assert.Fail(); }
-            catch (InvalidCastException) { }
-            try { inventorDOB.SetValue( new Inventor(), new Place() ); Assert.Fail(); }
-            catch (InvalidCastException) { }                       
+            IDynamicProperty inventorDOB = Create(typeof(Inventor).GetProperty("DOB"));
+            try
+            {
+                inventorDOB.SetValue(new Inventor(), 2);
+                Assert.Fail();
+            }
+            catch (InvalidCastException)
+            {
+            }
+            try
+            {
+                inventorDOB.SetValue(new Inventor(), new Place());
+                Assert.Fail();
+            }
+            catch (InvalidCastException)
+            {
+            }
         }
     }
 }

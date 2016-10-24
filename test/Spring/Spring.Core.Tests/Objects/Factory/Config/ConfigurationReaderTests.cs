@@ -221,13 +221,15 @@ namespace Spring.Objects.Factory.Config
         }
 
         [Test]
-        [ExpectedException(typeof(ConfigurationErrorsException), ExpectedMessage = "Cannot read config section 'ELNOMBRE' - section not found.")]
         public void TryReadFromNonExistantConfigSection()
         {
-            using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(SunnyDayXml)))
+            Assert.Throws<ConfigurationErrorsException>(() =>
             {
-                ConfigurationReader.Read(new InputStreamResource(stream, ""), "ELNOMBRE", null);
-            }
+                using (Stream stream = new MemoryStream(Encoding.UTF8.GetBytes(SunnyDayXml)))
+                {
+                    ConfigurationReader.Read(new InputStreamResource(stream, ""), "ELNOMBRE", null);
+                }
+            }, "Cannot read config section 'ELNOMBRE' - section not found.");
         }
     }
 }

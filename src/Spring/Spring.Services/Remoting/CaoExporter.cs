@@ -24,12 +24,9 @@ using System;
 using System.Runtime.Remoting;
 
 using Spring.Context;
-using Spring.Core;
-using Spring.Objects;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Support;
 using Spring.Remoting.Support;
-using Spring.Util;
 
 #endregion
 

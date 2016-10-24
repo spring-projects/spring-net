@@ -39,7 +39,7 @@ namespace Spring.Objects
         /// <summary>
         /// The setup logic executed before the execution of this test fixture.
         /// </summary>
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void FixtureSetUp () {}
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace Spring.Objects
         /// <summary>
         /// The tear down logic executed after the entire test fixture has executed.
         /// </summary>
-        [TestFixtureTearDown]
+        [OneTimeTearDown]
         public void FixtureTearDown () {}
         #endregion
 

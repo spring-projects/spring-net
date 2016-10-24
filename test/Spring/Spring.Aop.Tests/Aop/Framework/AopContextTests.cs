@@ -25,10 +25,8 @@ using System.Threading;
 using AopAlliance.Aop;
 using NUnit.Framework;
 
-using Spring.Objects;
 using AopAlliance.Intercept;
 using Spring.Threading;
-using Spring.Util;
 
 #endregion
 
@@ -58,10 +56,9 @@ namespace Spring.Aop.Framework
         }
 
         [Test]
-        [ExpectedException(typeof(AopConfigException))]
         public void CurrentProxyChokesIfNoAopProxyIsOnTheStack()
         {
-            AopContext.CurrentProxy.ToString();
+            Assert.Throws<AopConfigException>(() => AopContext.CurrentProxy.ToString());
         }
 
         [Test]
@@ -79,10 +76,9 @@ namespace Spring.Aop.Framework
         }
 
         [Test]
-        [ExpectedException(typeof(AopConfigException))]
         public void PopProxyWithNothingOnStack()
         {
-            AopContext.PopProxy();
+            Assert.Throws<AopConfigException>(() => AopContext.PopProxy());
         }
 
         [Test(Description = "SPRNET-1158")]

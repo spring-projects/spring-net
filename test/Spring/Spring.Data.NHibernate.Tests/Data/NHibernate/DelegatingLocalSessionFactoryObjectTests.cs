@@ -1,18 +1,20 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
+
 using NhCfg = NHibernate.Cfg;
-using NHibernate;
-using System.Collections;
+
+using System.Collections.Generic;
+
 using Spring.Data.Common;
+
 using NHibernate.Dialect;
+
 using Spring.Context.Support;
+
 using NHibernate.Connection;
 using NHibernate.Driver;
-using Spring.Data.NHibernate.Bytecode;
 
 namespace Spring.Data.NHibernate
 {
-
     [TestFixture]
     public class DelegatingLocalSessionFactoryObjectTests
     {
@@ -25,7 +27,7 @@ namespace Spring.Data.NHibernate
             lsfo.DbProvider = dbProvider;
             lsfo.ApplicationContext = new StaticApplicationContext();
 
-            IDictionary properties = new Hashtable();
+            IDictionary<string, string> properties = new Dictionary<string, string>();
             properties.Add(NhCfg.Environment.Dialect, typeof(MsSql2000Dialect).AssemblyQualifiedName);
             properties.Add(NhCfg.Environment.ConnectionDriver, typeof(SqlClientDriver).AssemblyQualifiedName);
             properties.Add(NhCfg.Environment.ConnectionProvider, typeof(DriverConnectionProvider).AssemblyQualifiedName);
@@ -39,11 +41,6 @@ namespace Spring.Data.NHibernate
             Assert.AreEqual(lsfo.Configuration.Properties[NhCfg.Environment.ConnectionProvider], typeof(DriverConnectionProvider).AssemblyQualifiedName);
             Assert.AreEqual(lsfo.Configuration.Properties[NhCfg.Environment.ConnectionDriver], typeof(SqlClientDriver).AssemblyQualifiedName);
             Assert.AreEqual(lsfo.Configuration.Properties[NhCfg.Environment.Dialect], typeof(MsSql2000Dialect).AssemblyQualifiedName);
-
-            Assert.AreEqual(lsfo.Configuration.Properties[NhCfg.Environment.ProxyFactoryFactoryClass], typeof(ProxyFactoryFactory).AssemblyQualifiedName);
-
         }
-
     }
-
 }

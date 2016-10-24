@@ -1,5 +1,4 @@
 using Spring.Messaging.Ems.Common;
-using TIBCO.EMS;
 
 namespace Spring.Messaging.Ems.Core
 {

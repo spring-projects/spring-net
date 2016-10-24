@@ -18,11 +18,6 @@
 
 #endregion
 
-using System.Collections;
-
-using Spring.Globalization;
-using Spring.Validation;
-
 namespace Spring.DataBinding
 {
     /// <summary>

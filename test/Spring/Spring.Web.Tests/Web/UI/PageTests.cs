@@ -21,13 +21,12 @@
 #region Imports
 
 using System;
-using System.Collections;
 using System.Globalization;
 using System.Threading;
 using System.Web;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Spring.Globalization;
+
 using Spring.Globalization.Resolvers;
 using Spring.Objects;
 using Spring.TestSupport;
@@ -164,11 +163,10 @@ namespace Spring.Web.UI
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void NoNullModelPersistenceMediumAllowed()
         {
             TestPage tuc = new TestPage();
-            tuc.ModelPersistenceMedium = null;
+            Assert.Throws<ArgumentNullException>(() => tuc.ModelPersistenceMedium = null);
         }
 
         [Test]

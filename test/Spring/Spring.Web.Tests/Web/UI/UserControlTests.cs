@@ -93,11 +93,10 @@ namespace Spring.Web.UI
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void NoNullModelPersistenceMediumAllowed()
         {
             TestUserControl tuc = new TestUserControl();
-            tuc.ModelPersistenceMedium = null;
+            Assert.Throws<ArgumentNullException>(() => tuc.ModelPersistenceMedium = null);
         }
 
         [Test]

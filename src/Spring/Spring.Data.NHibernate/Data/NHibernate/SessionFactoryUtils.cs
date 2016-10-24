@@ -679,12 +679,12 @@ namespace Spring.Data.NHibernate
 	        ISessionFactoryImplementor sfi = sessionFactory as ISessionFactoryImplementor;
 	        if (sfi != null)
 	        {
-	            
-                ConnectionProvider cp = sfi.ConnectionProvider as ConnectionProvider;
+
+                IConnectionProvider cp = sfi.ConnectionProvider;
 	            if (cp != null)
 	            {
                     IConfigurableApplicationContext ctx =
-	                    Spring.Data.Common.DbProviderFactory.ApplicationContext as IConfigurableApplicationContext;
+	                    DbProviderFactory.ApplicationContext as IConfigurableApplicationContext;
                     if (ctx == null)
                     {
                         throw new InvalidOperationException(
@@ -710,7 +710,7 @@ namespace Spring.Data.NHibernate
                             
                             if (hibCommandAQN.Equals(commandType))
                             {
-                                IDbProvider prov = Spring.Data.Common.DbProviderFactory.GetDbProvider(providerName);
+                                IDbProvider prov = DbProviderFactory.GetDbProvider(providerName);
                                 return prov;
                             }
                         }

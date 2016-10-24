@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using System.Text.RegularExpressions;
 using Spring.Expressions;
 using Spring.Util;

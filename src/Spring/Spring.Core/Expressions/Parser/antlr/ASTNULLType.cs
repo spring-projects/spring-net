@@ -1,9 +1,6 @@
-using System;
-using Spring.Expressions.Parser.antlr.collections;
 using IEnumerator		= System.Collections.IEnumerator;
 
 using AST				= Spring.Expressions.Parser.antlr.collections.AST;
-using Token				= Spring.Expressions.Parser.antlr.Token;
 
 namespace Spring.Expressions.Parser.antlr
 {

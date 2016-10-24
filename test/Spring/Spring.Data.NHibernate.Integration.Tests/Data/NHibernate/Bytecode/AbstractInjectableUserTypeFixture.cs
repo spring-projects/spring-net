@@ -35,7 +35,7 @@ namespace Spring.Data.NHibernate.Bytecode
         protected abstract IBytecodeProvider GetBytecodeProvider();
 
         [Ignore("Work in progress")]
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void CreateDb()
         {
             InitializeServiceLocator();
@@ -49,7 +49,7 @@ namespace Spring.Data.NHibernate.Bytecode
         }
 
         [Ignore("Work in progress")]
-        [TestFixtureTearDown]
+        [OneTimeTearDown]
         public void CloseSessionFactory()
         {
             if (sessions != null)

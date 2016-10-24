@@ -1,5 +1,5 @@
 using System;
-using System.Runtime.InteropServices;
+
 using TextReader		= System.IO.TextReader;
 using IOException		= System.IO.IOException;
 

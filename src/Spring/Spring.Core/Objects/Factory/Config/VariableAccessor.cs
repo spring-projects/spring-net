@@ -22,7 +22,7 @@
 
 using System;
 using System.Globalization;
-using Spring.Objects.Factory.Config;
+
 using Spring.Util;
 
 #endregion

@@ -36,7 +36,7 @@ namespace Spring
     //[Ignore("Spring inherits from NMS Exceptions which do not ")]
     public sealed class NmsExceptionTests : ExceptionsTest
     {
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void FixtureSetUp()
         {
             AssemblyToCheck = Assembly.GetAssembly(typeof (SynchedLocalTransactionFailedException));

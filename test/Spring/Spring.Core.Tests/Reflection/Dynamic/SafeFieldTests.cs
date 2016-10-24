@@ -52,10 +52,9 @@ namespace Spring.Reflection.Dynamic
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ThrowsOnNullField()
         {
-            SafeField field = new SafeField(null);
+            Assert.Throws<ArgumentNullException>(() => new SafeField(null));
         }
 
         [Test]

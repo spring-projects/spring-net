@@ -37,19 +37,17 @@ namespace Spring.Core.TypeConversion
     public sealed class RegexConverterTests
     {
         [Test]
-        [ExpectedException(typeof(NotSupportedException))]
         public void ConvertFromNullReference()
         {
             RegexConverter rc = new RegexConverter();
-            rc.ConvertFrom(null);
+            Assert.Throws<NotSupportedException>(() => rc.ConvertFrom(null));
         }
 
         [Test]
-        [ExpectedException(typeof(NotSupportedException))]
         public void ConvertFromNonSupportedOptionBails()
         {
             RegexConverter rc = new RegexConverter();
-            rc.ConvertFrom(12);
+            Assert.Throws<NotSupportedException>(() => rc.ConvertFrom(12));
         }
 
         [Test]

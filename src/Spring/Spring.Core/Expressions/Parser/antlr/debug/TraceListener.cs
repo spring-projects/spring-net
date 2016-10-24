@@ -1,8 +1,6 @@
 namespace Spring.Expressions.Parser.antlr.debug
 {
-	using System;
-	
-	public interface TraceListener : Listener
+    public interface TraceListener : Listener
 	{
 		void  enterRule	(object source, TraceEventArgs e);
 		void  exitRule	(object source, TraceEventArgs e);

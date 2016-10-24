@@ -45,14 +45,11 @@ namespace Spring.Data.Common
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void CreationWhenNoRequiredPropertiesSet()
         {
             MultiDelegatingDbProvider dbProvider = new MultiDelegatingDbProvider();
-            dbProvider.AfterPropertiesSet();
+            Assert.Throws<ArgumentException>(() => dbProvider.AfterPropertiesSet());
         }
-
-
 
         [Test]
         public void CreationWithWrongTypeDictionaryKeys()

@@ -49,7 +49,6 @@ namespace Spring.Context.Support
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException))]
 		public void ParseSectionWithHandlerThatDoesNotImplement_IXmlObjectDefinitionParser()
 		{
 			const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
@@ -58,11 +57,10 @@ namespace Spring.Context.Support
 </parsers>";
 
 			NamespaceParsersSectionHandler handler = new NamespaceParsersSectionHandler();
-			handler.Create(null, null, BuildConfigurationSection(xml));
+            Assert.Throws<ArgumentException>(() => handler.Create(null, null, BuildConfigurationSection(xml)));
 		}
 
 		[Test]
-		[ExpectedException(typeof (TypeLoadException))]
 		public void ParseSectionWithBadTypeForHandler()
 		{
 			const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
@@ -71,7 +69,7 @@ namespace Spring.Context.Support
 </parsers>";
 
 			NamespaceParsersSectionHandler handler = new NamespaceParsersSectionHandler();
-			handler.Create(null, null, BuildConfigurationSection(xml));
+			Assert.Throws<TypeLoadException>(() => handler.Create(null, null, BuildConfigurationSection(xml)));
 		}
 
 		[Test]
@@ -87,7 +85,6 @@ namespace Spring.Context.Support
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void ParseSectionWithEmptyType()
 		{
 			const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
@@ -96,11 +93,10 @@ namespace Spring.Context.Support
 </parsers>";
 
 			NamespaceParsersSectionHandler handler = new NamespaceParsersSectionHandler();
-			handler.Create(null, null, BuildConfigurationSection(xml));
+			Assert.Throws<ArgumentNullException>(() => handler.Create(null, null, BuildConfigurationSection(xml)));
 		}
 
 		[Test]
-        [ExpectedException(typeof(ConfigurationErrorsException))]
 		public void WithParserElementThatIsMissingTheTypeAttribute()
 		{
 			const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
@@ -109,7 +105,7 @@ namespace Spring.Context.Support
 </parsers>";
 
 			NamespaceParsersSectionHandler handler = new NamespaceParsersSectionHandler();
-			handler.Create(null, null, BuildConfigurationSection(xml));
+            Assert.Throws<ConfigurationErrorsException>(() => handler.Create(null, null, BuildConfigurationSection(xml)));
 		}
 
 		private static XmlNode BuildConfigurationSection(string xml)

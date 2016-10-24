@@ -17,7 +17,6 @@
 #endregion
 
 #region Imports
-using System;
 
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Xml;

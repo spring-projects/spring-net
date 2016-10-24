@@ -49,7 +49,7 @@
         <include name="${current.bin.dir}/Spring.Testing.NUnit.dll" />
         <include name="${current.bin.dir}/TIBCO.EMS.dll" />
         <include name="${current.bin.dir}/TIBCO.EMS.ADMIN.dll" />
-		<include name="${current.bin.dir}/nunit.framework.dll"/>
+		<include name="${nunit.lib.dir}/nunit.framework.dll"/>
 	  </references>
       <resources prefix="Spring" dynamicprefix="true" failonempty="true">
         <include name="**/*.xml" />

@@ -21,7 +21,6 @@
 #region Imports
 
 using NUnit.Framework;
-using Spring.Core.IO;
 
 #endregion
 

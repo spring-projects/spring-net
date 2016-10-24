@@ -177,10 +177,9 @@ namespace Spring.Core.IO
 		#endregion
 
 		[Test]
-		[ExpectedException(typeof(UriFormatException))]
 		public void GetResourceForNonMappedProtocol()
 		{
-			new ConfigurableResourceLoader().GetResource("beep://foo.xml");
+            Assert.Throws<UriFormatException>(() => new ConfigurableResourceLoader().GetResource("beep://foo.xml"));
         }
 	}
 }

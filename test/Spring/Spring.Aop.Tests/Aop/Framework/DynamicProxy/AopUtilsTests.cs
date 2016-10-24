@@ -124,10 +124,9 @@ namespace Spring.Aop.Framework.DynamicProxy
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void GetAllInterfacesFromTypeWithNull()
         {
-            AopUtils.GetAllInterfacesFromType(null);
+            Assert.Throws<ArgumentNullException>(() => AopUtils.GetAllInterfacesFromType(null));
         }
 
         [Test]

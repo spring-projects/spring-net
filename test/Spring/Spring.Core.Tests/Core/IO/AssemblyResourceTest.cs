@@ -54,10 +54,9 @@ namespace Spring.Core.IO
         /// comma delimited instead of '/'.
         /// </summary>
         [Test]
-        [ExpectedException(typeof(UriFormatException))]
         public void CreateWithMalformedResourceName()
         {
-            new AssemblyResource("assembly://Spring.Core.Tests,Spring.TestResource.txt");
+            Assert.Throws<UriFormatException>(() => new AssemblyResource("assembly://Spring.Core.Tests,Spring.TestResource.txt"));
         }
 
         /// <summary>
@@ -65,20 +64,18 @@ namespace Spring.Core.IO
         /// that used 'dot' notation to seperate the namespace and resource name.
         /// </summary>
         [Test]
-        [ExpectedException(typeof(UriFormatException))]
         public void CreateWithObsoleteResourceName()
         {
-            new AssemblyResource("assembly://Spring.Core.Tests/Spring.TestResource.txt");
+            Assert.Throws<UriFormatException>(() => new AssemblyResource("assembly://Spring.Core.Tests/Spring.TestResource.txt"));
         }
 
         /// <summary>
         /// Use the correct format but with an invalid assembly name.
         /// </summary>
         [Test]
-        [ExpectedException(typeof(FileNotFoundException))]
         public void CreateFromInvalidAssembly()
         {
-            new AssemblyResource("assembly://Xyz.Invalid.Assembly/Spring/TestResource.txt");
+            Assert.Throws<FileNotFoundException>(() => new AssemblyResource("assembly://Xyz.Invalid.Assembly/Spring/TestResource.txt"));
         }
 
         /// <summary>
@@ -225,12 +222,10 @@ namespace Spring.Core.IO
         /// past the root namespace, off into la-la land.
         /// </summary>
         [Test]
-        [ExpectedException(typeof(UriFormatException))]
         public void TooMuchParentNamespacesAbove()
         {
             IResource res = new AssemblyResource("assembly://Spring.Core.Tests/Spring.Core.IO/TestResource.txt");
-            IResource res2 = res.CreateRelative("../../../../TestResource.txt");
-            AssertResourceContent(res2, "Spring.TestResource.txt");
+            Assert.Throws<UriFormatException>(() => res.CreateRelative("../../../../TestResource.txt"));
         }
 
         /// <summary>

@@ -225,26 +225,23 @@ namespace Spring.Aop.Framework
         }
 
         [Test]
-        [ExpectedException(typeof(AopConfigException))]
         public void InstantiateWithNullTarget()
         {
-            new ProxyFactory((object)null);
+            Assert.Throws<AopConfigException>(() => new ProxyFactory((object) null));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void AddNullInterface()
         {
-            new ProxyFactory().AddInterface(null);
+            Assert.Throws<ArgumentNullException>(() => new ProxyFactory().AddInterface(null));
         }
 
         [Test]
-        [ExpectedException(typeof(AopConfigException))]
         public void AddInterfaceWhenConfigurationIsFrozen()
         {
             ProxyFactory factory = new ProxyFactory();
             factory.IsFrozen = true;
-            factory.AddInterface(typeof(ITestObject));
+            Assert.Throws<AopConfigException>(() => factory.AddInterface(typeof(ITestObject)));
         }
 
         [Test]
@@ -609,12 +606,11 @@ namespace Spring.Aop.Framework
         }
 
         [Test]
-        [ExpectedException(typeof(AopConfigException))]
         public void Frozen_RemoveAdvisor()
         {
             ProxyFactory factory = new ProxyFactory();
             factory.IsFrozen = true;
-            factory.RemoveAdvisor(null);
+            Assert.Throws<AopConfigException>(() => factory.RemoveAdvisor(null));
         }
 
         public interface IMultiProxyingTestInterface

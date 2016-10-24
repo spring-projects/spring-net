@@ -20,11 +20,9 @@
 
 #region Imports
 
-using System;
 using System.Collections;
-using System.Security.Permissions;
 using System.Web;
-using System.Web.UI;
+
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.Objects;

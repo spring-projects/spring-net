@@ -35,11 +35,10 @@ namespace Spring.Transaction.Support
             Assert.IsTrue(def.TransactionIsolationLevel == IsolationLevel.ReadCommitted);
         }
         [Test]
-		[ExpectedException(typeof(ArgumentException))]
 		public void InvalidTimeout()
 		{
 			DefaultTransactionDefinition def = new DefaultTransactionDefinition();
-			def.TransactionTimeout = -1000;
+			Assert.Throws<ArgumentException>(() => def.TransactionTimeout = -1000);
 		}
 		[Test]
 		public void DefinitionString()

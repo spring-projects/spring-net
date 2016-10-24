@@ -26,7 +26,6 @@ using System.Collections.Specialized;
 using NUnit.Framework;
 using Spring.Aop.Framework;
 using Spring.Caching;
-using Spring.Context;
 using Spring.Context.Support;
 using Spring.Objects.Factory;
 
@@ -105,7 +104,6 @@ namespace Spring.Aspects.Cache
         /// http://jira.springframework.org/browse/SPRNET-1226
         /// </summary>
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void NoCacheKeySpecified()
         {
             ICache cache = new NonExpiringCache();
@@ -115,12 +113,10 @@ namespace Spring.Aspects.Cache
             pf.AddAdvisors(cacheAspect);
 
             IInventorStore store = (IInventorStore)pf.GetProxy();
-            IList items = store.GetAllNoCacheKey();
-            Assert.IsNotNull(items);
+            Assert.Throws<ArgumentNullException>(() => store.GetAllNoCacheKey());
         }
 
         [Test]
-        [ExpectedException(typeof(NoSuchObjectDefinitionException))]
         public void CacheDoesNotExist()
         {
             //ICache cache = new NonExpiringCache();
@@ -130,11 +126,10 @@ namespace Spring.Aspects.Cache
             pf.AddAdvisors(cacheAspect);
 
             IInventorStore store = (IInventorStore)pf.GetProxy();
-            IList items = store.GetAll();
+            Assert.Throws<NoSuchObjectDefinitionException>(() => store.GetAll());
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void CacheDoesNotImplementICache()
         {
             context.ObjectFactory.RegisterSingleton("inventors", new Object());
@@ -143,7 +138,7 @@ namespace Spring.Aspects.Cache
             pf.AddAdvisors(cacheAspect);
 
             IInventorStore store = (IInventorStore)pf.GetProxy();
-            IList items = store.GetAll();
+            Assert.Throws<ArgumentException>(() => store.GetAll());
         }
 
         [Test(Description = "http://jira.springframework.org/browse/SPRNET-959")]

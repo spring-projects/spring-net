@@ -64,17 +64,15 @@ namespace Spring.Core.TypeConversion
         }
 
         [Test]
-        [ExpectedException(typeof(TypeLoadException))]
         public void RegisterConverterWithNonResolvableType()
         {
-            TypeConverterRegistry.RegisterConverter("Systemm.DateTime", "System.ComponentModel.DateTimeConverter");
+            Assert.Throws<TypeLoadException>(() => TypeConverterRegistry.RegisterConverter("Systemm.DateTime", "System.ComponentModel.DateTimeConverter"));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void RegisterConverterWithNonTypeConverter()
         {
-            TypeConverterRegistry.RegisterConverter("System.DateTime", "System.DateTime");
+            Assert.Throws<ArgumentException>(() => TypeConverterRegistry.RegisterConverter("System.DateTime", "System.DateTime"));
         }
     }
 }

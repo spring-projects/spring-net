@@ -41,7 +41,7 @@ namespace Spring.Aop.Support
         /// <summary>
         /// The setup logic executed before the execution of this test fixture.
         /// </summary>
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void FixtureSetUp()
         {
             // enable (null appender) logging, to ensure that the logging code is exercised
@@ -105,28 +105,25 @@ namespace Spring.Aop.Support
             Assert.IsTrue(pcut.Matches(type.GetMethod("ForMatchingPurposesOnly"), type));
         }
 
-        [ExpectedException(typeof(ArgumentNullException))]
 	    [Test]
 	    public void SetPatternToNull()
 	    {
         	SdkRegularExpressionMethodPointcut pcut = new SdkRegularExpressionMethodPointcut();
-            pcut.Pattern = null;
+            Assert.Throws<ArgumentNullException>(() => pcut.Pattern = null);
         }
 
-        [ExpectedException(typeof(ArgumentNullException))]
         [Test]
         public void SetPatternsPluralToNull()
         {
         	SdkRegularExpressionMethodPointcut pcut = new SdkRegularExpressionMethodPointcut();
-            pcut.Patterns = null;
+            Assert.Throws<ArgumentNullException>(() => pcut.Patterns = null);
         }
 
-        [ExpectedException(typeof(ArgumentNullException))]
         [Test]
         public void SetPatternsPluralToStringArrayWithNullValue()
         {
         	SdkRegularExpressionMethodPointcut pcut = new SdkRegularExpressionMethodPointcut();
-            pcut.Patterns = new string[] { null };
+            Assert.Throws<ArgumentNullException>(() => pcut.Patterns = new string[] { null });
         }
 
 	    [Test]

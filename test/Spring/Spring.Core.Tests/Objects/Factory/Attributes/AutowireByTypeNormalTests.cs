@@ -18,12 +18,9 @@
 
 #endregion
 
-using System;
 using NUnit.Framework;
 using Spring.Context.Support;
 using Spring.Objects.Factory.Attributes.ByType;
-using Spring.Objects.Factory.Config;
-using Spring.Objects.Factory.Support;
 
 namespace Spring.Objects.Factory.Attributes
 {

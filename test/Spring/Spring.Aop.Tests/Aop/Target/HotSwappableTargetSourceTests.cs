@@ -89,11 +89,10 @@ namespace Spring.Aop.Target
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void RejectsSwapToNull()
 		{
 			HotSwappableTargetSource source = new HotSwappableTargetSource(null);
-			source.Swap(null);
+            Assert.Throws<ArgumentNullException>(() => source.Swap(null));
 		}
 
 		[Test]

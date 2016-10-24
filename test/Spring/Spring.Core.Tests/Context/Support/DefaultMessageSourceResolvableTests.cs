@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using System.Text;
 using NUnit.Framework;
 using Rhino.Mocks;

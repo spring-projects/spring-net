@@ -49,7 +49,7 @@ namespace Spring.Objects.Factory.Xml
         /// <summary>
         /// The setup logic executed before the execution of this test fixture.
         /// </summary>
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void FixtureSetUp()
         {
             // enable (null appender) logging, to ensure that the logging code is exercised...
@@ -530,10 +530,9 @@ namespace Spring.Objects.Factory.Xml
         }
 
         [Test]
-        [ExpectedException(typeof (ObjectDefinitionStoreException))]
         public void GetDictionaryThatDoesntSpecifyAnyKeyForAnEntry()
         {
-            new StreamHelperDecorator(new StreamHelperCallback(_GetDictionaryThatDoesntSpecifyAnyKeyForAnEntry)).Run();
+            Assert.Throws<ObjectDefinitionStoreException>(() => new StreamHelperDecorator(new StreamHelperCallback(_GetDictionaryThatDoesntSpecifyAnyKeyForAnEntry)).Run());
         }
 
         private void _GetDictionaryThatDoesntSpecifyAnyKeyForAnEntry(out Stream stream)

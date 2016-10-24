@@ -54,24 +54,21 @@ namespace Spring.Web.Support
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void InstantiationBailsWithNullResultString()
 		{
-			new Result(null);
+            Assert.Throws<ArgumentNullException>(() => new Result(null));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void InstantiationBailsWithEmptyResultString()
 		{
-			new Result(string.Empty);
+            Assert.Throws<ArgumentNullException>(() => new Result(string.Empty));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void InstantiationBailsWithAllWhitespaceResultString()
 		{
-			new Result("    \n\t   ");
+            Assert.Throws<ArgumentNullException>(() => new Result("    \n\t   "));
 		}
 
 		[Test]
@@ -163,11 +160,10 @@ namespace Spring.Web.Support
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void WithRubbishResultMode()
 		{
-			// note the incorrect spelling of the result mode prefix...
-			new Result("redirct:" + ExpectedTargetPageName);
+            // note the incorrect spelling of the result mode prefix...
+            Assert.Throws<ArgumentOutOfRangeException>(() => new Result("redirct:" + ExpectedTargetPageName));
 		}
 
 		[Test]

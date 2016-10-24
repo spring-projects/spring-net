@@ -50,7 +50,7 @@
         <include name="${current.bin.dir}/Spring.Testing.NUnit.dll" />
         <include name="${current.bin.dir}/Apache.NMS.dll" />
         <include name="${current.bin.dir}/Apache.NMS.ActiveMQ.dll" />
-		<include name="${current.bin.dir}/nunit.framework.dll"/>
+		<include name="${nunit.lib.dir}/nunit.framework.dll"/>
       </references>
       <resources prefix="Spring" dynamicprefix="true" failonempty="true">
         <include name="**/*.xml" />

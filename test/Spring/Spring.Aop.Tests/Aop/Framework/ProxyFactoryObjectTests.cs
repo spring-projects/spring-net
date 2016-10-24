@@ -454,24 +454,23 @@ namespace Spring.Aop.Framework
         /// to be included in proxiedInterface [].
         /// </summary>
         [Test]
-        [ExpectedException(typeof(InvalidCastException))]
         public void GlobalsCanAddAspectInterfaces()
         {
-            IAddedGlobalInterface agi = (IAddedGlobalInterface)factory.GetObject("autoInvoker");
+            IAddedGlobalInterface agi = (IAddedGlobalInterface) factory.GetObject("autoInvoker");
             Assert.IsTrue(agi.GlobalsAdded == -1);
 
-            ProxyFactoryObject pfb = (ProxyFactoryObject)factory.GetObject("&validGlobals");
+            ProxyFactoryObject pfb = (ProxyFactoryObject) factory.GetObject("&validGlobals");
             pfb.GetObject(); // for creation
             Assert.AreEqual(2, pfb.Advisors.Count, "Proxy should have 1 global and 1 explicit advisor");
             Assert.AreEqual(1, pfb.Introductions.Count, "Proxy should have 1 global introduction");
 
-            agi.GlobalsAdded = ((IAdvised)agi).Introductions.Count;
+            agi.GlobalsAdded = ((IAdvised) agi).Introductions.Count;
             Assert.IsTrue(agi.GlobalsAdded == 1);
 
-            IApplicationEventListener l = (IApplicationEventListener)factory.GetObject("validGlobals");
-            agi = (IAddedGlobalInterface)l;
+            IApplicationEventListener l = (IApplicationEventListener) factory.GetObject("validGlobals");
+            agi = (IAddedGlobalInterface) l;
             Assert.IsTrue(agi.GlobalsAdded == -1);
-            agi = (IAddedGlobalInterface)factory.GetObject("test1");
+            Assert.Throws<InvalidCastException>(() => factory.GetObject<IAddedGlobalInterface>("test1"));
         }
 
         [Test]
@@ -542,21 +541,19 @@ namespace Spring.Aop.Framework
         }
 
         [Test]
-        [ExpectedException(typeof(AopConfigException))]
         public void RemoveAdvisorWhenConfigIsFrozen()
         {
             ProxyFactoryObject fac = CreateFrozenProxyFactory();
             fac.IsFrozen = true;
-            fac.RemoveAdvisor(new PointcutForVoid());
+            Assert.Throws<AopConfigException>(() => fac.RemoveAdvisor(new PointcutForVoid()));
         }
 
         [Test]
-        [ExpectedException(typeof(AopConfigException))]
         public void ReplaceAdvisorWhenConfigIsFrozen()
         {
             ProxyFactoryObject fac = CreateFrozenProxyFactory();
             fac.IsFrozen = true;
-            fac.ReplaceAdvisor(new PointcutForVoid(), new PointcutForVoid());
+            Assert.Throws<AopConfigException>(() => fac.ReplaceAdvisor(new PointcutForVoid(), new PointcutForVoid()));
         }
 
         [Test]
@@ -746,35 +743,31 @@ namespace Spring.Aop.Framework
         }
 
         [Test]
-        [ExpectedException(typeof(AopConfigException))]
         public void PassNullToTheProxyInterfacesProperty()
         {
             ProxyFactoryObject fac = new ProxyFactoryObject();
-            fac.ProxyInterfaces = null;
+            Assert.Throws<AopConfigException>(() => fac.ProxyInterfaces = null);
         }
 
         [Test]
-        [ExpectedException(typeof(AopConfigException))]
         public void PassClassNotInterfaceNameToTheProxyInterfacesProperty()
         {
             ProxyFactoryObject fac = new ProxyFactoryObject();
-            fac.ProxyInterfaces = new string[] { typeof(GoodCommand).FullName };
+            Assert.Throws<AopConfigException>(() => fac.ProxyInterfaces = new string[] { typeof(GoodCommand).FullName });
         }
 
         [Test]
-        [ExpectedException(typeof(AopConfigException))]
         public void PassRubbishNameToTheProxyInterfacesProperty()
         {
             ProxyFactoryObject fac = new ProxyFactoryObject();
-            fac.ProxyInterfaces = new string[] { "Hey" };
+            Assert.Throws<AopConfigException>(() => fac.ProxyInterfaces = new string[] { "Hey" });
         }
 
         [Test]
-        [ExpectedException(typeof(AopConfigException))]
         public void PassNullElementListToTheProxyInterfacesProperty()
         {
             ProxyFactoryObject fac = new ProxyFactoryObject();
-            fac.ProxyInterfaces = new string[] { null };
+            Assert.Throws<AopConfigException>(() => fac.ProxyInterfaces = new string[] { null });
         }
 
         [Test]

@@ -42,17 +42,15 @@ namespace Spring.Aop.Framework.Adapter
 	public sealed class ThrowsAdviceInterceptorTests
 	{
 		[Test]
-		[ExpectedException(typeof (ArgumentException))]
 		public void NoHandlerMethods()
 		{
-			new ThrowsAdviceInterceptor(new object());
+            Assert.Throws<ArgumentException>(() => new ThrowsAdviceInterceptor(new object()));
 		}
 
         [Test]
-        [ExpectedException(typeof (ArgumentNullException))]
         public void PassNullAdviceToCtor()
         {
-            new ThrowsAdviceInterceptor(null);
+            Assert.Throws<ArgumentNullException>(() => new ThrowsAdviceInterceptor(null));
         }
 
 		[Test]
@@ -163,11 +161,10 @@ namespace Spring.Aop.Framework.Adapter
         }
 
 	    [Test]
-        [ExpectedException(typeof(ArgumentException))]
 	    public void ChokesOnHandlerWhereMultipleMethodsAreApplicable()
 	    {
             object throwsHandler = new MultipleMethodsAreApplicableThrowsHandler();
-            new ThrowsAdviceInterceptor(throwsHandler);
+            Assert.Throws<ArgumentException>(() => new ThrowsAdviceInterceptor(throwsHandler));
 	    }
 
 		[Test]

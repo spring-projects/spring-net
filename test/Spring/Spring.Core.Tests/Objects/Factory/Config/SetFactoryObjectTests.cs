@@ -36,29 +36,25 @@ namespace Spring.Objects.Factory.Config
 	[TestFixture]
     public sealed class SetFactoryObjectTests
     {
-
 		[Test]
-		[ExpectedException(typeof (ArgumentException), ExpectedMessage = "The Type passed to the TargetSetType property must implement the 'Spring.Collections.ISet' interface.")]
 		public void SetTargetSetTypeToNonSetType()
 		{
 			SetFactoryObject lfo = new SetFactoryObject();
-			lfo.TargetSetType = typeof (ICollection);
+            Assert.Throws<ArgumentException>(() => lfo.TargetSetType = typeof (ICollection), "The Type passed to the TargetSetType property must implement the 'Spring.Collections.ISet' interface.");
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException), ExpectedMessage="The Type passed to the TargetSetType property cannot be an interface; it must be a concrete class that implements the 'Spring.Collections.ISet' interface.")]
 		public void SetTargetSetTypeToDerivedISetInterfaceType()
 		{
 			SetFactoryObject lfo = new SetFactoryObject();
-			lfo.TargetSetType = typeof (IExtendedSet);
+            Assert.Throws<ArgumentException>(() => lfo.TargetSetType = typeof (IExtendedSet), "The Type passed to the TargetSetType property cannot be an interface; it must be a concrete class that implements the 'Spring.Collections.ISet' interface.");
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException), ExpectedMessage="The Type passed to the TargetSetType property cannot be abstract (MustInherit in VisualBasic.NET); it must be a concrete class that implements the 'Spring.Collections.ISet' interface.")]
 		public void SetTargetSetTypeToAbstractISetInterfaceType()
 		{
 			SetFactoryObject lfo = new SetFactoryObject();
-			lfo.TargetSetType = typeof (AbstractSet);
+            Assert.Throws<ArgumentException>(() => lfo.TargetSetType = typeof (AbstractSet), "The Type passed to the TargetSetType property cannot be abstract (MustInherit in VisualBasic.NET); it must be a concrete class that implements the 'Spring.Collections.ISet' interface.");
 		}
 
 		private interface IExtendedSet : ISet
@@ -70,20 +66,18 @@ namespace Spring.Objects.Factory.Config
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void SetTargetSetTypeToNull()
 		{
 			SetFactoryObject lfo = new SetFactoryObject();
-			lfo.TargetSetType = null;
+            Assert.Throws<ArgumentNullException>(() => lfo.TargetSetType = null);
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException), ExpectedMessage="The 'SourceSet' property cannot be null (Nothing in Visual Basic.NET).")]
 		public void GetObjectWithoutSupplyingASourceSet()
 		{
 			SetFactoryObject lfo = new SetFactoryObject();
 			lfo.IsSingleton = false;
-			lfo.GetObject();
+            Assert.Throws<ArgumentException>(() => lfo.GetObject(), "The 'SourceSet' property cannot be null (Nothing in Visual Basic.NET).");
 		}
 
 		[Test]

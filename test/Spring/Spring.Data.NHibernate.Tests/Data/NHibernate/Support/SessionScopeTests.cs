@@ -103,13 +103,15 @@ namespace Spring.Data.NHibernate.Support
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void OpeningTwiceThrowsInvalidOperationException()
         {
-            using (SessionScope scope = new SessionScope(expectedSessionFactory, true))
+            Assert.Throws<InvalidOperationException>(() =>
             {
-                scope.Open();
-            }
+                using (SessionScope scope = new SessionScope(expectedSessionFactory, true))
+                {
+                    scope.Open();
+                }
+            });
         }
 
         [Test]

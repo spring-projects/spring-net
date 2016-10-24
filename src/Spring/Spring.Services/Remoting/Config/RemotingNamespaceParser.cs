@@ -22,7 +22,6 @@
 
 using System.Xml;
 
-using Spring.Context.Support;
 using Spring.Core.TypeResolution;
 using Spring.Objects;
 using Spring.Objects.Factory.Support;

@@ -20,8 +20,6 @@
 
 #region Imports
 
-using System;
-
 using NUnit.Framework;
 
 #endregion
@@ -70,14 +68,13 @@ namespace Spring.Objects.Support
         }
 
         [Test]
-        [ExpectedException (typeof (FatalObjectException))]
         public void BailsIfMethodDoesntExist () 
         {
             PingSource source = new PingSource ();
             InstanceEventHandlerValue wirer
                 = new InstanceEventHandlerValue (source, "Roo");
             wirer.EventName = "Ping";
-            wirer.Wire (source, typeof (StaticPingListener));
+            Assert.Throws<FatalObjectException>(() => wirer.Wire (source, typeof (StaticPingListener)));
         }
 	}
 }

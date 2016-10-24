@@ -25,7 +25,6 @@ using Spring.Context.Attributes.TypeFilters;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Xml;
 using Spring.Context.Support;
-using Spring.Stereotype;
 
 
 namespace Spring.Context.Config

@@ -5,7 +5,6 @@ using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 using Apache.NMS;
-using Spring.Messaging.Nms.Support.Converter;
 
 namespace Spring.Messaging.Nms.Support.Converter
 {

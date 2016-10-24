@@ -1,8 +1,6 @@
 namespace Spring.Expressions.Parser.antlr.debug
 {
-	using System;
-	
-	public class MatchEventArgs : GuessingEventArgs
+    public class MatchEventArgs : GuessingEventArgs
 	{
 		public MatchEventArgs()
 		{

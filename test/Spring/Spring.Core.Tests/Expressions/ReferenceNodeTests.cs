@@ -20,11 +20,9 @@
 
 #region Imports
 
-using System;
 using System.Text;
 using NUnit.Framework;
 using Spring.Core.IO;
-using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Xml;
 
 #endregion

@@ -50,7 +50,6 @@ namespace Spring.Objects.Factory.Config
         }
 
 		[Test]
-		[ExpectedException(typeof(ObjectInitializationException))]
         public void UseInvalidKeyForConverterMapKey()
 		{
         	IDictionary converters = new Hashtable();
@@ -58,13 +57,10 @@ namespace Spring.Objects.Factory.Config
 
             CustomConverterConfigurer config = new CustomConverterConfigurer();
 			config.CustomConverters = converters;
-			config.PostProcessObjectFactory(factory);
-
-            mocks.VerifyAll();
+            Assert.Throws<ObjectInitializationException>(() => config.PostProcessObjectFactory(factory));
 		}
 
 		[Test]
-		[ExpectedException(typeof(ObjectInitializationException))]
 		public void UseNonTypeConverterForConverterMapValue()
 		{
 			IDictionary converters = new Hashtable();
@@ -72,13 +68,10 @@ namespace Spring.Objects.Factory.Config
 
 			CustomConverterConfigurer config = new CustomConverterConfigurer();
 			config.CustomConverters = converters;
-			config.PostProcessObjectFactory(factory);
-        
-            mocks.VerifyAll();
-        }
+            Assert.Throws<ObjectInitializationException>(() => config.PostProcessObjectFactory(factory));
+                }
 
 		[Test]
-		[ExpectedException(typeof(ObjectInitializationException))]
 		public void UseNonResolvableTypeForConverterMapKey()
 		{
 			IDictionary converters = new Hashtable();
@@ -87,9 +80,7 @@ namespace Spring.Objects.Factory.Config
 
 			CustomConverterConfigurer config = new CustomConverterConfigurer();
 			config.CustomConverters = converters;
-			config.PostProcessObjectFactory(factory);
-        
-            mocks.VerifyAll();
+            Assert.Throws<ObjectInitializationException>(() => config.PostProcessObjectFactory(factory));
         }
 
 		/// <summary>

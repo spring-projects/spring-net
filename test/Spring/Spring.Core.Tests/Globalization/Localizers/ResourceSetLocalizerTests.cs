@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using System.Globalization;
 using System.Resources;
 

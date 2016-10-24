@@ -56,24 +56,21 @@ namespace Spring.Core.TypeConversion
 
 		[Test]
         [Explicit] // fails if there is a transparent proxy that redirects to error page for non existing URL
-		[ExpectedException(typeof (WebException))]
 		public void ConvertFromValidButNonExistingStreamResource()
 		{
-			new StreamConverter().ConvertFrom("http://www.aaaabbbbccccddd.com");
+            Assert.Throws<WebException>(() => new StreamConverter().ConvertFrom("http://www.aaaabbbbccccddd.com"));
 		}
 
 		[Test]
-		[ExpectedException(typeof (NotSupportedException))]
 		public void ConvertFromNullReference()
 		{
-			new StreamConverter().ConvertFrom(null);
+            Assert.Throws<NotSupportedException>(() => new StreamConverter().ConvertFrom(null));
 		}
 
 		[Test]
-		[ExpectedException(typeof (NotSupportedException))]
 		public void ConvertFromNonSupportedOptionBails()
 		{
-			new StreamConverter().ConvertFrom(12);
+            Assert.Throws<NotSupportedException>(() => new StreamConverter().ConvertFrom(12));
 		}
 	}
 }

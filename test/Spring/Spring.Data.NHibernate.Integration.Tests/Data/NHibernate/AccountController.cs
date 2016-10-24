@@ -1,5 +1,3 @@
-using System;
-
 namespace Spring.Data.NHibernate
 {
     public class AccountController : IAccountController

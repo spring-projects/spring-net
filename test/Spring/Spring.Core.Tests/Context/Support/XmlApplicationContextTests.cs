@@ -82,10 +82,9 @@ namespace Spring.Context.Support
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void NoConfigLocation()
         {
-            new XmlApplicationContext();
+           Assert.Throws<ArgumentException>(() =>  new XmlApplicationContext());
         }
 
         [Test]
@@ -155,14 +154,13 @@ namespace Spring.Context.Support
         }
         
         [Test]
-        [ExpectedException(typeof(NoSuchObjectDefinitionException))]
         public void GetObjectOnUnknownIdThrowsNoSuchObjectDefinition()
         {
             XmlApplicationContext ctx =
                 new XmlApplicationContext(false, "assembly://Spring.Core.Tests/Spring.Context.Support/objects.xml");
             string DOES_NOT_EXIST = "does_not_exist";
             Assert.IsFalse(ctx.ContainsObject(DOES_NOT_EXIST));
-            Assert.IsNull(ctx.GetObject(DOES_NOT_EXIST));
+            Assert.Throws<NoSuchObjectDefinitionException>(() => ctx.GetObject(DOES_NOT_EXIST));
         }
 
         [Test]

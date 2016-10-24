@@ -75,7 +75,6 @@ namespace Spring.Objects.Support
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ThrowsOnNullInstance()
         {
             TestSharedStateFactory p = new TestSharedStateFactory();
@@ -83,7 +82,7 @@ namespace Spring.Objects.Support
             IDictionary state = p.GetSharedStateFor(new object(), null);
             Assert.IsNotNull(state);
             // throws on null for instance
-            p.GetSharedStateFor(null, "no name");
+            Assert.Throws<ArgumentNullException>(() => p.GetSharedStateFor(null, "no name"));
         }
 
         [Test]

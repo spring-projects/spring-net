@@ -35,45 +35,39 @@ namespace Spring.Objects.Factory.Support
 	public sealed class LookupMethodOverrideTests
 	{
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void InstantiationWithNullMethodName()
 		{
-			new LookupMethodOverride(null, null);
+            Assert.Throws<ArgumentNullException>(() => new LookupMethodOverride(null, null));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void InstantiationWithEmptyMethodName()
 		{
-			new LookupMethodOverride(string.Empty, null);
+            Assert.Throws<ArgumentNullException>(() => new LookupMethodOverride(string.Empty, null));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void InstantiationWithWhitespacedMethodName()
 		{
-			new LookupMethodOverride("  ", null);
+            Assert.Throws<ArgumentNullException>(() => new LookupMethodOverride("  ", null));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void InstantiationWithNullMethodReplacerObjectName()
 		{
-			new LookupMethodOverride("foo", null);
+            Assert.Throws<ArgumentNullException>(() => new LookupMethodOverride("foo", null));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void InstantiationWithEmptyMethodReplacerObjectName()
 		{
-			new LookupMethodOverride("foo", string.Empty);
+            Assert.Throws<ArgumentNullException>(() => new LookupMethodOverride("foo", string.Empty));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void InstantiationWithWhitespacedMethodReplacerObjectName()
 		{
-			new LookupMethodOverride("foo", "  ");
+            Assert.Throws<ArgumentNullException>(() => new LookupMethodOverride("foo", "  "));
 		}
 
 		[Test]
@@ -91,11 +85,10 @@ namespace Spring.Objects.Factory.Support
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void MatchesWithNullMethod()
 		{
 			LookupMethodOverride methodOverride = new LookupMethodOverride("Execute", "foo");
-			methodOverride.Matches(null);
+            Assert.Throws<ArgumentNullException>(() => methodOverride.Matches(null));
 		}
 
 		[Test]

@@ -21,7 +21,7 @@
 #region Imports
 using System;
 using System.Reflection;
-using Spring.Aop.Framework;
+
 #endregion
 
 namespace Spring.Aop.Framework

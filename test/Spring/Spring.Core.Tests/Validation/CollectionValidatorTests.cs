@@ -99,7 +99,6 @@ namespace Spring.Validation
 
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void TestWithWrongArgumentType()
         {
             RequiredValidator req = new RequiredValidator("Name", "true");
@@ -107,9 +106,9 @@ namespace Spring.Validation
             validator.Validators.Add(req);
             
             TestObject tObj = new TestObject("Damjan Tomic", 24);
-            
+
             //This should cause the ArgumentException because tObj is not a Collection
-            Assert.IsTrue(validator.Validate(tObj, new ValidationErrors()));              
+            Assert.Throws<ArgumentException>(() => validator.Validate(tObj, new ValidationErrors()));
         }
 
         [Test]
@@ -137,12 +136,11 @@ namespace Spring.Validation
         }
         
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void TestWithNull()
         {
             CollectionValidator validator = new CollectionValidator();
             //This should cause the ArgumentException because we passed null into Validate method
-            Assert.IsTrue(validator.Validate(null, new ValidationErrors()));
+            Assert.Throws<ArgumentException>(() => validator.Validate(null, new ValidationErrors()));
         }
         
         [Test]

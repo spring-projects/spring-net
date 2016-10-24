@@ -24,7 +24,6 @@ using System;
 using System.Xml;
 using NUnit.Framework;
 using Spring.Objects.Factory.Config;
-using Spring.Objects.Factory.Support;
 
 #endregion
 
@@ -39,32 +38,27 @@ namespace Spring.Objects.Factory.Xml
 	public sealed class XmlParserResolverTests
 	{
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void RegisterParserWithNullType()
 		{
-            NamespaceParserRegistry.RegisterParser((Type) null);
+            Assert.Throws<ArgumentNullException>(() => NamespaceParserRegistry.RegisterParser((Type) null));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException))]
 		public void RegisterParserWithBadParserType()
 		{
-            NamespaceParserRegistry.RegisterParser(GetType());
+            Assert.Throws<ArgumentException>(() => NamespaceParserRegistry.RegisterParser(GetType()));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void RegisterParserWithNullNamespaceWithoutDefaultValues()
 		{
-		    NamespaceParserRegistry.RegisterParser(typeof(NotImplementedXmlObjectDefinitionParser), null, null);
+            Assert.Throws<ArgumentNullException>(() => NamespaceParserRegistry.RegisterParser(typeof(NotImplementedXmlObjectDefinitionParser), null, null));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
         public void RegisterParserWithEmptyNamespaceWithoutDefaultValues()
 		{
-		    NamespaceParserRegistry.RegisterParser(
-                typeof(NotImplementedXmlObjectDefinitionParser), string.Empty, null);
+            Assert.Throws<ArgumentNullException>(() => NamespaceParserRegistry.RegisterParser(typeof(NotImplementedXmlObjectDefinitionParser), string.Empty, null));
 		}
 
 		#region Inner Class : NotImplementedXmlObjectDefinitionParser

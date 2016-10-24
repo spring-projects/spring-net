@@ -21,7 +21,6 @@
 #region Imports
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml.Serialization;
@@ -62,18 +61,16 @@ namespace Spring.Validation
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void AddErrorWithNullMessage()
 		{
-			new ValidationErrors().AddError(GoodErrorKey, null);
+            Assert.Throws<ArgumentNullException>(() => new ValidationErrors().AddError(GoodErrorKey, null));
 		}
 
 		[Test]
-        [ExpectedException(typeof(ArgumentNullException))]
 		public void AddErrorWithNullKey()
 		{
 			IValidationErrors errors = new ValidationErrors();
-			errors.AddError(null, ErrorMessageOne);
+            Assert.Throws<ArgumentNullException>(() => errors.AddError(null, ErrorMessageOne));
 		}
 
 		[Test]

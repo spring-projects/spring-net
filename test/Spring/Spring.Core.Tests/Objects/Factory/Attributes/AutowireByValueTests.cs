@@ -18,13 +18,10 @@
 
 #endregion
 
-using System.Collections.Specialized;
 using NUnit.Framework;
-using Spring.Context;
+
 using Spring.Context.Support;
 using Spring.Objects.Factory.Attributes.ByValue;
-using Spring.Objects.Factory.Config;
-using Spring.Objects.Factory.Support;
 
 namespace Spring.Objects.Factory.Attributes
 {

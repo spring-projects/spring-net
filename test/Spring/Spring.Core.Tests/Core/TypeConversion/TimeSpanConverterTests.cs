@@ -36,27 +36,24 @@ namespace Spring.Core.TypeConversion
     public sealed class TimeSpanConverterTests
     {
         [Test]
-        [ExpectedException(typeof(NotSupportedException))]
         public void ConvertFromNullReference()
         {
             TimeSpanConverter tsc = new TimeSpanConverter();
-            tsc.ConvertFrom(null);
+            Assert.Throws<NotSupportedException>(() => tsc.ConvertFrom(null));
         }
 
         [Test]
-        [ExpectedException(typeof(NotSupportedException))]
         public void ConvertFromNonSupportedOptionBails()
         {
             TimeSpanConverter tsc = new TimeSpanConverter();
-            tsc.ConvertFrom(12);
+            Assert.Throws<NotSupportedException>(() => tsc.ConvertFrom(12));
         }
 
         [Test]
-        [ExpectedException(typeof(FormatException))]
         public void ConvertFromStringMalformed()
         {
             TimeSpanConverter tsc = new TimeSpanConverter();
-            tsc.ConvertFrom("15a");
+            Assert.Throws<FormatException>(() => tsc.ConvertFrom("15a"));
         }
 
         [Test]

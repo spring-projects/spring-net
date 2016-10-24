@@ -24,7 +24,6 @@ using System;
 using System.Data;
 using Spring.Data.Common;
 using Spring.Data.Core;
-using Spring.Data.Support;
 
 #endregion
 

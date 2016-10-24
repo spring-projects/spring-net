@@ -23,7 +23,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using NUnit.Framework;
-using Rhino.Mocks;
+
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Xml;
@@ -147,11 +147,11 @@ namespace Spring.Objects.Factory
         }
 
         [Test]
-        [ExpectedException(typeof(NoSuchObjectDefinitionException),
-            ExpectedMessage = "No unique object of type [Spring.Objects.ITestObject] is defined : Expected single object but found 4")]
         public void ObjectOfTypeIncludingAncestorsWithMoreThanOneObjectOfType()
         {
-            ObjectFactoryUtils.ObjectOfTypeIncludingAncestors(_factory, typeof(ITestObject), true, true);
+            Assert.Throws<NoSuchObjectDefinitionException>(
+                () => ObjectFactoryUtils.ObjectOfTypeIncludingAncestors(_factory, typeof(ITestObject), true, true),
+                "No unique object of type [Spring.Objects.ITestObject] is defined : Expected single object but found 4");
         }
 
         [Test]

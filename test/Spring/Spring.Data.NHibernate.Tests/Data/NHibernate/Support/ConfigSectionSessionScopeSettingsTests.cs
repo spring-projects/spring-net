@@ -20,8 +20,6 @@
 
 #region Imports
 
-using System;
-using System.Collections.Specialized;
 using NHibernate;
 using NUnit.Framework;
 using Rhino.Mocks;

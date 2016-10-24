@@ -20,13 +20,11 @@
 
 #region Imports
 
-using System;
 using System.Configuration;
 using System.IO;
-using System.Security.Policy;
 using System.Xml;
 using NUnit.Framework;
-using Spring.Objects;
+
 using Spring.Objects.Factory;
 using Spring.Util;
 
@@ -117,7 +115,6 @@ namespace Spring.Context.Support
 		/// Expect failure when using a type that does not inherit from IApplicationContext
 		/// </summary>
 		[Test]
-        [ExpectedException(typeof(ConfigurationErrorsException))]
 		public void ContextNotOfCorrectType()
 		{
 			const string xmlData =
@@ -126,15 +123,14 @@ namespace Spring.Context.Support
 </context>";
 			CreateConfigurationElement(xmlData);
 			ContextHandler ctxHandler = new ContextHandler();
-			ctxHandler.Create(null, null, configurationElement);
+            Assert.Throws<ConfigurationErrorsException>(() => ctxHandler.Create(null, null, configurationElement));
 		}
 
 		[Test]
-        [ExpectedException(typeof(ConfigurationErrorsException))]
 		public void CreatedFromNullXmlElement()
 		{
 			ContextHandler ctxHandler = new ContextHandler();
-			ctxHandler.Create(null, null, null);
+            Assert.Throws<ConfigurationErrorsException>(() => ctxHandler.Create(null, null, null));
 		}
 
 		[Test]
@@ -151,7 +147,6 @@ namespace Spring.Context.Support
 			                "Default type is not the XmlApplicationContext type; it must be.");
 		}
 
-        [ExpectedException(typeof(ConfigurationErrorsException))]
         [Test(Description="SPRNET-105")]
 		public void ChokesIfChildContextsUseTheSameName()
 		{
@@ -162,7 +157,7 @@ namespace Spring.Context.Support
 </context>";
 			CreateConfigurationElement(xmlData);
 			ContextHandler ctxHandler = new ContextHandler();
-			ctxHandler.Create(null, null, configurationElement);
+            Assert.Throws<ConfigurationErrorsException>(() => ctxHandler.Create(null, null, configurationElement));
         }
 
         private void CreateConfigurationElement(string xmlData)

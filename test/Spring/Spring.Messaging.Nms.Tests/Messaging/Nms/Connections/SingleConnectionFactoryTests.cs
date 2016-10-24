@@ -20,11 +20,10 @@
 
 #region Imports
 
-using System;
 using Apache.NMS;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Spring.Messaging.Nms.Connections;
+
 using Spring.Messaging.Nms.Core;
 
 #endregion

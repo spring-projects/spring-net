@@ -71,19 +71,17 @@ namespace Spring.Core.TypeConversion
         }
 
         [Test]
-        [ExpectedException (typeof (NotSupportedException))]
-        public void ConvertFromNullReference () 
+        public void ConvertFromNullReference()
         {
-            NameValueConverter vrt = new NameValueConverter ();
-            vrt.ConvertFrom (null);
+            NameValueConverter vrt = new NameValueConverter();
+            Assert.Throws<NotSupportedException>(() => vrt.ConvertFrom(null));
         }
 
         [Test]
-        [ExpectedException (typeof (NotSupportedException))]
-        public void ConvertFromNonSupportedOptionBails () 
+        public void ConvertFromNonSupportedOptionBails()
         {
-            NameValueConverter vrt = new NameValueConverter ();
-            vrt.ConvertFrom (true);
+            NameValueConverter vrt = new NameValueConverter();
+            Assert.Throws<NotSupportedException>(() => vrt.ConvertFrom(true));
         } 
 	}
 }

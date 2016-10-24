@@ -43,18 +43,16 @@ namespace Spring.Aop.Support
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
 		public void InstantiationWithNonAttributeType()
 		{
-			new AttributeMatchMethodPointcut(GetType());
+            Assert.Throws<ArgumentException>(() => new AttributeMatchMethodPointcut(GetType()));
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
 		public void AttributeSetterWithNonAttributeType()
 		{
 			AttributeMatchMethodPointcut cut = new AttributeMatchMethodPointcut();
-			cut.Attribute = GetType();
+            Assert.Throws<ArgumentException>(() => cut.Attribute = GetType());
 		}
 
 		[Test]

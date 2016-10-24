@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Data;
 
 namespace Spring.Data

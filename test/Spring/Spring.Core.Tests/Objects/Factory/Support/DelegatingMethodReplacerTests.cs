@@ -45,19 +45,17 @@ namespace Spring.Objects.Factory.Support
         }
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void InstantiationWithNullDefinition()
 		{
 		    IObjectFactory factory = mocks.StrictMock<IObjectFactory>();
-		    new DelegatingMethodReplacer(null, factory);
+            Assert.Throws<ArgumentNullException>(() => new DelegatingMethodReplacer(null, factory));
 		}
 
 	    [Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void InstantiationWithNullFactory()
 		{
             IConfigurableObjectDefinition mock = mocks.StrictMock<IConfigurableObjectDefinition>();
-            new DelegatingMethodReplacer(mock, null);
+            Assert.Throws<ArgumentNullException>(() => new DelegatingMethodReplacer(mock, null));
 		}
 
 		[Test]

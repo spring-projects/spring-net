@@ -129,7 +129,6 @@ namespace Spring.Data.NHibernate.Support
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void MissingSessionFactoryCausesArgumentExceptionDuringLazyResolving()
         {
             SessionScopeSettings sss = new LazyResolvingSessionScopeSettings(null, null);
@@ -138,7 +137,8 @@ namespace Spring.Data.NHibernate.Support
             Assert.AreEqual(SessionScopeSettings.SINGLESESSION_DEFAULT, sss.SingleSession);
             Assert.AreEqual(SessionScopeSettings.FLUSHMODE_DEFAULT, sss.DefaultFlushMode);
 
-            ISessionFactory sessionFactory = sss.SessionFactory;
+            ISessionFactory temp;
+            Assert.Throws<ArgumentException>(() => temp = sss.SessionFactory);
         }
 
         [Test]

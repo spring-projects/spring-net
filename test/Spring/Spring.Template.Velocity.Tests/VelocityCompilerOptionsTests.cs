@@ -37,7 +37,7 @@ namespace Spring
         /// <summary>
         /// Setup for entiry test fixture.
         /// </summary>
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void FixtureSetUp()
         {
             AssemblyToCheck = Assembly.GetAssembly(typeof (VelocityEngineFactory));

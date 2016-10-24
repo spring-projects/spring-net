@@ -61,17 +61,15 @@ namespace Spring.Core.TypeResolution
         /// when supplied a load of old rubbish as a type name.
         /// </summary>
         [Test]
-        [ExpectedException(typeof (TypeLoadException))]
         public void ResolveWithNonExistentTypeName()
         {
-            GetTypeResolver().Resolve("RaskolnikovsDilemma, System.StPetersburg");
+            Assert.Throws<TypeLoadException>(() => GetTypeResolver().Resolve("RaskolnikovsDilemma, System.StPetersburg"));
         }
 
         [Test]
-        [ExpectedException(typeof(TypeLoadException))]
         public void ResolveBadArgs()
         {
-            GetTypeResolver().Resolve(null);
+            Assert.Throws<TypeLoadException>(() => GetTypeResolver().Resolve(null));
         }
 
         [Test]
@@ -82,12 +80,10 @@ namespace Spring.Core.TypeResolution
         }
 
         [Test]
-        [ExpectedException(typeof(TypeLoadException))]
         public void LoadTypeFromSystemAssemblySpecifyingOnlyTheAssemblyDisplayName()
         {
             string stringType = typeof(string).FullName + ", System";
-            Type t = GetTypeResolver().Resolve(stringType);
-            Assert.AreEqual(typeof(string), t);
+            Assert.Throws<TypeLoadException>(() => GetTypeResolver().Resolve(stringType));
         }
 
         [Test]

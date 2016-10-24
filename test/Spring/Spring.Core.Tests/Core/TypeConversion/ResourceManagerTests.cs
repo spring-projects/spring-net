@@ -21,7 +21,6 @@
 #region Imports
 
 using System;
-using System.Collections.Specialized;
 using System.Resources;
 
 using NUnit.Framework;
@@ -66,71 +65,64 @@ namespace Spring.Core.TypeConversion
         /// Test passing a null instance and see if expected exception is raised
         /// </summary>
         [Test]
-        [ExpectedException (typeof (NotSupportedException))]
-        public void ConvertFromNullReference () 
+        public void ConvertFromNullReference ()
         {
             ResourceManagerConverter cvt = new ResourceManagerConverter();
-            object foo = cvt.ConvertFrom (null);
+            Assert.Throws<NotSupportedException>(() => cvt.ConvertFrom (null));
         }
 
         /// <summary>
         /// Test passing a single string with no ','
         /// </summary>
         [Test]
-        [ExpectedException (typeof (ArgumentException))]
-        public void ConvertFromSingleString () 
+        public void ConvertFromSingleString ()
         {
             ResourceManagerConverter cvt = new ResourceManagerConverter();
-            object foo = cvt.ConvertFrom ("Spring.TestResource.txt");
+            Assert.Throws<ArgumentException>(() => cvt.ConvertFrom ("Spring.TestResource.txt"));
         }
 
         /// <summary>
         /// Test passing a single ','
         /// </summary>
         [Test]
-        [ExpectedException (typeof (ArgumentException))]
-        public void ConvertFromSingleComma () 
+        public void ConvertFromSingleComma ()
         {
             ResourceManagerConverter cvt = new ResourceManagerConverter();
-            object foo = cvt.ConvertFrom (",");
+            Assert.Throws<ArgumentException>(() => cvt.ConvertFrom (","));
         }
 
         /// <summary>
         /// Test passing only assembly name
         /// </summary>
         [Test]
-        [ExpectedException (typeof (ArgumentException))]
-        public void ConvertFromOnlyAssemblyNAme () 
+        public void ConvertFromOnlyAssemblyNAme ()
         {
             ResourceManagerConverter cvt = new ResourceManagerConverter();
-            object foo = cvt.ConvertFrom (",Spring.Core.Tests");
+            Assert.Throws<ArgumentException>(() => cvt.ConvertFrom (",Spring.Core.Tests"));
         }
 
         /// <summary>
         /// Test passing only assembly name
         /// </summary>
         [Test]
-        [ExpectedException (typeof (ArgumentException))]
-        public void ConvertFromOnlyResourceName() 
+        public void ConvertFromOnlyResourceName()
         {
             ResourceManagerConverter cvt = new ResourceManagerConverter();
-            object foo = cvt.ConvertFrom ("Spring.TestResource.txt,");
+            Assert.Throws<ArgumentException>(() => cvt.ConvertFrom ("Spring.TestResource.txt,"));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
-        public void ConvertFromBadAssembly() 
+        public void ConvertFromBadAssembly()
         {
             ResourceManagerConverter cvt = new ResourceManagerConverter();
-            object foo = cvt.ConvertFrom ("Spring.TestResource.txt, FooAssembly");
+            Assert.Throws<ArgumentException>(() => cvt.ConvertFrom ("Spring.TestResource.txt, FooAssembly"));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void ConvertFromBad_App_GlobalResources()
         {
             ResourceManagerConverter cvt = new ResourceManagerConverter();
-            object foo = cvt.ConvertFrom("Spring.TestResource.txt, "+ResourceManagerConverter.APP_GLOBALRESOURCES_ASSEMBLYNAME);
+            Assert.Throws<ArgumentException>(() => cvt.ConvertFrom("Spring.TestResource.txt, "+ResourceManagerConverter.APP_GLOBALRESOURCES_ASSEMBLYNAME));
         }        
 	}
 }

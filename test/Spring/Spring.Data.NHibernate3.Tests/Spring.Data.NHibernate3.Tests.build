@@ -29,7 +29,7 @@
 				<warning number="${nowarn.numbers.test}" />
 			</nowarn>
 			<sources failonempty="true">
-				<include name="**/*.cs" />
+				<include name="../Spring.Data.NHibernate.Tests/**/*.cs" />
 				<include name="../CommonAssemblyInfo.cs" />
 			</sources>
 			<references>
@@ -44,13 +44,14 @@
 				<include name="${current.bin.dir}/Spring.Core.dll" />
 				<include name="${current.bin.dir}/Spring.Aop.dll" />
 				<include name="${current.bin.dir}/Spring.Data.dll" />
-				<include name="${current.bin.dir}/Spring.Data.NHibernate3.dll" />
+                <include name="${current.bin.dir}/Spring.Data.NHibernate3.dll" />
+				<include name="${current.bin.dir}/Spring.Core.Tests.dll" />
 				<include name="${current.bin.dir}/Spring.Data.Tests.dll" />
 				
-				<include name="${current.bin.dir}/NHibernate.dll"/>
-				<include name="${current.bin.dir}/Iesi.Collections.dll"/>
+				<include name="${nh3.lib.dir}/NHibernate.dll"/>
+				<include name="${iesi3.lib.dir}/Iesi.Collections.dll"/>
 				
-				<include name="${current.bin.dir}/nunit.framework.dll"/>
+				<include name="${nunit.lib.dir}/nunit.framework.dll"/>
 				<include name="${current.bin.dir}/Rhino.Mocks.dll"/>
 			</references>
 			<resources prefix="Spring" dynamicprefix="true" failonempty="true">

@@ -58,7 +58,7 @@
         <include name="${current.bin.dir}/Spring.Aop.dll" />
         <include name="${current.bin.dir}/Spring.Aop.Tests.dll" />
         <include name="${current.bin.dir}/Spring.Services.dll" />
-		<include name="${current.bin.dir}/nunit.framework.dll"/>
+		<include name="${nunit.lib.dir}/nunit.framework.dll"/>
 		<include name="${current.bin.dir}/Rhino.Mocks.dll"/>
       </references>
     </csc>

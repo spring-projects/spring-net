@@ -137,26 +137,23 @@ namespace Spring.Objects.Factory.Config
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException), ExpectedMessage="Unable to determine which exact method to call; found '2' matches.")]
 		public void GetSupertypesTooManyArgs()
 		{
 			MethodInvokingFactoryObject mcfo = new MethodInvokingFactoryObject();
 			mcfo.TargetType = typeof (TestClass1);
 			mcfo.TargetMethod = "Supertypes2";
 			mcfo.Arguments = new Object[] {new ArrayList(), new ArrayList(), "hello", "bogus"};
-			mcfo.AfterPropertiesSet();
+            Assert.Throws<ArgumentException>(() => mcfo.AfterPropertiesSet(), "Unable to determine which exact method to call; found '2' matches.");
 		}
 
 		[Test]
-		[ExpectedException(typeof (TypeMismatchException))]
 		public void GetMisMatchedArgumentTypes()
 		{
 			MethodInvokingFactoryObject mcfo = new MethodInvokingFactoryObject();
 			mcfo.TargetType = typeof (TestClass1);
 			mcfo.TargetMethod = "Supertypes";
 			mcfo.Arguments = new Object[] {"1", "2", "3"};
-			mcfo.AfterPropertiesSet();
-			mcfo.Invoke();
+            Assert.Throws<TypeMismatchException>(() => mcfo.AfterPropertiesSet());
 		}
 
 		[Test]
@@ -174,7 +171,7 @@ namespace Spring.Objects.Factory.Config
 			mcfo.TargetMethod = "VoidRetvalMethod";
 			mcfo.AfterPropertiesSet();
 			Type objType = mcfo.ObjectType;
-			Assert.IsTrue(objType.Equals(MethodInvokingFactoryObject.Void.GetType()));
+			Assert.IsTrue(objType.Equals(MethodInvoker.Void.GetType()));
 
 			// verify that we can call a method with args that are subtypes of the
 			// target method arg types
@@ -199,50 +196,45 @@ namespace Spring.Objects.Factory.Config
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException), ExpectedMessage="The 'TargetMethod' property is required.")]
 		public void BailsIfTheTargetMethodPropertyAintSet()
 		{
 			MethodInvokingFactoryObject mcfo = new MethodInvokingFactoryObject();
-			mcfo.AfterPropertiesSet();
+            Assert.Throws<ArgumentException>(() => mcfo.AfterPropertiesSet(), "The 'TargetMethod' property is required.");
 		}
 
 		[Test]
-		[ExpectedException(typeof (MissingMethodException))]
 		public void AfterPropertiesSetBogusMethod()
 		{
 			MethodInvokingFactoryObject mcfo = new MethodInvokingFactoryObject();
 			mcfo.TargetObject = this;
 			mcfo.TargetMethod = "whatever";
-			mcfo.AfterPropertiesSet();
+            Assert.Throws<MissingMethodException>(() => mcfo.AfterPropertiesSet());
 		}
 
 		[Test]
-		[ExpectedException(typeof (MissingMethodException))]
 		public void AfterPropertiesSetBogusStaticMethod()
 		{
 			MethodInvokingFactoryObject mcfo = new MethodInvokingFactoryObject();
 			mcfo.TargetType = typeof (TestClass1);
 			mcfo.TargetMethod = "some.bogus.Method.name";
-			mcfo.AfterPropertiesSet();
+            Assert.Throws<MissingMethodException>(() => mcfo.AfterPropertiesSet());
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException))]
 		public void AfterPropertiesSetStaticMethodMissingArgs()
 		{
 			MethodInvokingFactoryObject mcfo = new MethodInvokingFactoryObject();
 			mcfo.TargetType = typeof (TestClass1);
 			mcfo.TargetMethod = "Method1";
-			mcfo.AfterPropertiesSet();
+            Assert.Throws<ArgumentException>(() => mcfo.AfterPropertiesSet());
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException))]
 		public void AfterPropertiesSetMissingMethod()
 		{
 			MethodInvokingFactoryObject mcfo = new MethodInvokingFactoryObject();
 			mcfo.TargetObject = this;
-			mcfo.AfterPropertiesSet();
+            Assert.Throws<ArgumentException>(() => mcfo.AfterPropertiesSet());
 		}
 
 		[Test]

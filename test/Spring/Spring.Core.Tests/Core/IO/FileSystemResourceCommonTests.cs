@@ -78,12 +78,11 @@ namespace Spring.Core.IO
         }
 
         [Test]
-        [ExpectedException(typeof(FileNotFoundException))]
         public void FileSystemResourceOpenNonExistanceFile()
         {
             FileSystemResource fileSystemResource = CreateResourceInstance(TemporaryFileName);
-            Stream inputStream = fileSystemResource.InputStream;
-            inputStream.Close();
+            Stream inputStream;
+            Assert.Throws<FileNotFoundException>(() => inputStream = fileSystemResource.InputStream);
         }
 
         [Test]
@@ -150,11 +149,10 @@ namespace Spring.Core.IO
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void CreateRelativeWithNullRelativePath()
         {
             IResource resource = CreateResourceInstance(".");
-            resource.CreateRelative(null);
+            Assert.Throws<ArgumentNullException>(() => resource.CreateRelative(null));
         }
 
         [Test]
@@ -240,11 +238,10 @@ namespace Spring.Core.IO
         }
 
         [Test]
-        [ExpectedException(typeof(UriFormatException))]
         public void RelativeResourceTooManyBackLevels()
         {
             FileSystemResource res = CreateResourceInstance("/samples/artfair/dummy.txt");
-            res.CreateRelative("../../../index.html");
+            Assert.Throws<UriFormatException>(() => res.CreateRelative("../../../index.html"));
         }
 
         [Test]

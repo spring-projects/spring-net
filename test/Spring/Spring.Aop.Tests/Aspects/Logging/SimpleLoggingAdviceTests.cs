@@ -22,7 +22,7 @@
 
 using System;
 using System.Reflection;
-using System.Text;
+
 using AopAlliance.Intercept;
 using Common.Logging;
 using NUnit.Framework;

@@ -42,10 +42,9 @@ namespace Spring.Util
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException))]
 		public void InstantiationWithBadType()
 		{
-			new DelegateInfo(typeof (string));
+            Assert.Throws<ArgumentException>(() => new DelegateInfo(typeof (string)));
 		}
 
 		[Test]

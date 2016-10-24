@@ -22,7 +22,7 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Common.Logging;
-using Spring.Objects;
+
 using Spring.Objects.Factory.Support;
 
 namespace Spring.Objects.Factory.Attributes

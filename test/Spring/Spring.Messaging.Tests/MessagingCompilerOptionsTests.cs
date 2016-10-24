@@ -23,7 +23,6 @@
 using System.Reflection;
 using NUnit.Framework;
 using Spring.Messaging;
-using Spring.Transaction;
 
 #endregion
 
@@ -35,7 +34,7 @@ namespace Spring
     [TestFixture]
     public sealed class MessagingCompilerOptionTests : CompilerOptionsTests
     {
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void FixtureSetUp()
         {
             AssemblyToCheck = Assembly.GetAssembly(typeof (MessagingException));

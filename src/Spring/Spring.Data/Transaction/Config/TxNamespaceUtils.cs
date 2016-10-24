@@ -18,9 +18,7 @@
 
 #endregion
 
-using System;
 using Spring.Core;
-using Spring.Transaction.Interceptor;
 
 namespace Spring.Transaction.Config
 {

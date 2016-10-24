@@ -69,18 +69,16 @@ namespace Spring.Aop.Support
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException), ExpectedMessage = "Type [Spring.Aop.Support.DefaultIntroductionAdvisorTests] is not an interface; cannot be used in an introduction.")]
         public void BailsIfInterfaceTypeIsNotAnInterface()
         {
-            DefaultIntroductionAdvisor a = new DefaultIntroductionAdvisor(new TestIntroductionAdvice(), this.GetType());
+            Assert.Throws<ArgumentException>(() => new DefaultIntroductionAdvisor(new TestIntroductionAdvice(), GetType()), "Type [Spring.Aop.Support.DefaultIntroductionAdvisorTests] is not an interface; cannot be used in an introduction.");
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException), ExpectedMessage = "Introduction [Spring.Aop.Support.DefaultIntroductionAdvisorTests+TestIntroductionAdvice] does not implement interface 'System.ICloneable' specified in introduction advice.")]
         public void IntroductionMustImplementIntroducedInterfaces()
         {
             DefaultIntroductionAdvisor advisor = new DefaultIntroductionAdvisor(new TestIntroductionAdvice(), typeof(ICloneable));
-            advisor.ValidateInterfaces();
+            Assert.Throws<ArgumentException>(() => advisor.ValidateInterfaces(), "Introduction [Spring.Aop.Support.DefaultIntroductionAdvisorTests+TestIntroductionAdvice] does not implement interface 'System.ICloneable' specified in introduction advice.");
         }
 
         [Test]

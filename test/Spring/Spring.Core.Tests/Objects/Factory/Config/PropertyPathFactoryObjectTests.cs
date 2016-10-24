@@ -96,7 +96,6 @@ namespace Spring.Objects.Factory.Config
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
 		public void GetObject_ViaObjectNameThatStartsWithAPeriod()
 		{
 			Expect.Call(mockFactory.IsSingleton("foo")).Return(true);
@@ -105,7 +104,7 @@ namespace Spring.Objects.Factory.Config
 
 			PropertyPathFactoryObject fac = new PropertyPathFactoryObject();
 			fac.ObjectName = ".foo.name";
-			fac.ObjectFactory = mockFactory;
+            Assert.Throws<ArgumentException>(() => fac.ObjectFactory = mockFactory);
 		}
 
 		[Test]
@@ -141,7 +140,6 @@ namespace Spring.Objects.Factory.Config
 		}
 
 		[Test]
-		[ExpectedException(typeof(NullValueInNestedPathException))]
 		public void GetObject_ViaObjectNameWithNullInNestedPropertyPath()
 		{
             Expect.Call(mockFactory.IsSingleton("foo")).Return(true);
@@ -150,14 +148,10 @@ namespace Spring.Objects.Factory.Config
 
 			PropertyPathFactoryObject fac = new PropertyPathFactoryObject();
 			fac.ObjectName = "foo.spouse.name";
-			fac.ObjectFactory = mockFactory;
-			string name = (string) fac.GetObject();
-			Assert.AreEqual("Fiona Apple", name);
-			mocks.VerifyAll();
+            Assert.Throws<NullValueInNestedPathException>(() => fac.ObjectFactory = mockFactory);
 		}
 
 		[Test]
-		[ExpectedException(typeof(FatalObjectException))]
 		public void GetObject_PropertyPathEvaluatesToNull()
 		{
             Expect.Call(mockFactory.IsSingleton("foo")).Return(true);
@@ -167,7 +161,7 @@ namespace Spring.Objects.Factory.Config
 			PropertyPathFactoryObject fac = new PropertyPathFactoryObject();
 			fac.ObjectName = "foo.name";
 			fac.ObjectFactory = mockFactory;
-			fac.GetObject();
+            Assert.Throws<FatalObjectException>(() => fac.GetObject());
 		}
 	}
 }

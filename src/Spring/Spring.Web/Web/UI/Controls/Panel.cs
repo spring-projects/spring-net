@@ -21,17 +21,13 @@
 #region Imports
 
 using System;
-using System.Collections;
 using System.ComponentModel;
-using System.Diagnostics;
-using System.Reflection;
 using System.Security.Permissions;
 using System.Web;
 using System.Web.UI;
-using System.Web.UI.HtmlControls;
+
 using Spring.Context;
 using Spring.Context.Support;
-using Spring.Util;
 using Spring.Web.Support;
 
 #endregion

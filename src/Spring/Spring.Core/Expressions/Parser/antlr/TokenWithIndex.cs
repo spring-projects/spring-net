@@ -11,9 +11,7 @@ namespace Spring.Expressions.Parser.antlr
 	//                            Anthony Oguntimehin
 	//
 
-	using System;
-
-	 /// <summary>
+    /// <summary>
 	 /// This token tracks it's own index 0..n-1 relative to the beginning 
 	 /// of the stream. It is designed to work with 
 	 /// <see cref="TokenStreamRewriteEngine"/> in TokenStreamRewriteEngine.cs

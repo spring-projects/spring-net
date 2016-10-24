@@ -160,19 +160,17 @@ namespace Spring.Collections
 		}
 
 		[Test]
-		[ExpectedException(typeof (InvalidOperationException))]
 		public void AddFail()
 		{
 			FailQueue q = new FailQueue();
-			q.Add(Int32.Parse("1"));
+			Assert.Throws<InvalidOperationException>(() => q.Add(Int32.Parse("1")));
 		}
 
 		[Test]
-		[ExpectedException(typeof (NullReferenceException))]
 		public void AddNPE()
 		{
 			SucceedQueue q = new SucceedQueue();
-			q.Add(null);
+			Assert.Throws<NullReferenceException>(() => q.Add(null));
 		}
 
 		[Test]
@@ -183,11 +181,10 @@ namespace Spring.Collections
 		}
 
 		[Test]
-		[ExpectedException(typeof (NoElementsException))]
 		public void RemoveFail()
 		{
 			FailQueue q = new FailQueue();
-			q.Remove();
+			Assert.Throws<NoElementsException>(() => q.Remove());
 		}
 
 		[Test]
@@ -198,27 +195,24 @@ namespace Spring.Collections
 		}
 
 		[Test]
-		[ExpectedException(typeof (NoElementsException))]
 		public void ElementF()
 		{
 			FailQueue q = new FailQueue();
-			q.Element();
+			Assert.Throws<NoElementsException>(() => q.Element());
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void AddAll1()
 		{
 			SucceedQueue q = new SucceedQueue();
-			q.AddAll(null);
+			Assert.Throws<ArgumentNullException>(() => q.AddAll(null));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException))]
 		public void AddAllSelf()
 		{
 			SucceedQueue q = new SucceedQueue();
-			q.AddAll(q);
+			Assert.Throws<ArgumentException>(() => q.AddAll(q));
 		}
 	}
 }

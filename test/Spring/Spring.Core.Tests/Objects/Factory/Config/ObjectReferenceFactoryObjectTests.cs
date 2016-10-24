@@ -46,22 +46,20 @@ namespace Spring.Objects.Factory.Config
         }
 
         [Test]
-		[ExpectedException(typeof(ArgumentException))]
         public void NullTargetObjectName()
 		{
 			ObjectReferenceFactoryObject fac = new ObjectReferenceFactoryObject();
-			// simulate IFactoryObjectAware interface...
-			fac.ObjectFactory = null;
+            // simulate IFactoryObjectAware interface...
+            Assert.Throws<ArgumentException>(() => fac.ObjectFactory = null);
         }
 		
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
 		public void WhitespaceTargetObjectName()
 		{
 			ObjectReferenceFactoryObject fac = new ObjectReferenceFactoryObject();
 			fac.TargetObjectName = string.Empty;
-			// simulate IFactoryObjectAware interface...
-			fac.ObjectFactory = null;
+            // simulate IFactoryObjectAware interface...
+            Assert.Throws<ArgumentException>(() => fac.ObjectFactory = null);
 		}
 		
 		[Test]

@@ -45,11 +45,10 @@ namespace Spring.Core.IO
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void CreateInvalidUrlResource()
         {
             string uri = null;
-            new UrlResource(uri);
+            Assert.Throws<ArgumentNullException>(() => new UrlResource(uri));
         }
 
         [Test]
@@ -67,21 +66,19 @@ namespace Spring.Core.IO
         }
 
         [Test]
-        [ExpectedException(typeof(FileNotFoundException))]
         public void GetInvalidFileInfo()
         {
             UrlResource urlResource = new UrlResource("http://www.springframework.net/");
-            FileInfo file = urlResource.File;
-            file.GetType();
+            FileInfo file;
+            Assert.Throws<FileNotFoundException>(() => file = urlResource.File);
 		}
 
 		[Test]
-		[ExpectedException(typeof(FileNotFoundException))]
 		public void GetInvalidFileInfoWithOddPort()
 		{
 			UrlResource urlResource = new UrlResource("http://www.springframework.net:76/");
-			FileInfo file = urlResource.File;
-			file.GetType();
+		    FileInfo temp;
+            Assert.Throws<FileNotFoundException>(() => temp = urlResource.File);
 		}
 
         [Test]
@@ -156,11 +153,10 @@ namespace Spring.Core.IO
         }
 
         [Test]
-        [ExpectedException(typeof(UriFormatException))]
         public void RelativeResourceTooManyBackLevels()
         {
             UrlResource res = new UrlResource("http://www.springframework.net/samples/artfair/download.html");
-            res.CreateRelative("../../../index.html");
+            Assert.Throws<UriFormatException>(() => res.CreateRelative("../../../index.html"));
         }
     }
 }

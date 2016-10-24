@@ -20,8 +20,6 @@
 
 #region Imports
 
-using System;
-
 using NUnit.Framework;
 
 #endregion
@@ -40,7 +38,7 @@ namespace Spring.Aop.Framework
         /// <summary>
         /// The setup logic executed before the execution of this test fixture.
         /// </summary>
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void FixtureSetUp()
         {
         }
@@ -68,7 +66,7 @@ namespace Spring.Aop.Framework
         /// <summary>
         /// The tear down logic executed after the entire test fixture has executed.
         /// </summary>
-        [TestFixtureTearDown]
+        [OneTimeTearDown]
         public void FixtureTearDown()
         {
         }

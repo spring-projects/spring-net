@@ -1,7 +1,6 @@
 namespace Spring.Expressions.Parser.antlr
 {
-	using System;
-	using ArrayList		= System.Collections.ArrayList;
+    using ArrayList		= System.Collections.ArrayList;
 	using StringBuilder	= System.Text.StringBuilder;
 
 	/*ANTLR Translator Generator

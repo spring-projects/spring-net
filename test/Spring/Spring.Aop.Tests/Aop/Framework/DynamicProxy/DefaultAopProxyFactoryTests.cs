@@ -44,19 +44,17 @@ namespace Spring.Aop.Framework.DynamicProxy
         }
 
         [Test]
-        [ExpectedException(typeof(AopConfigException), ExpectedMessage="Cannot create IAopProxy with null ProxyConfig")]
         public void NullConfig()
         {
             IAopProxyFactory apf = new DefaultAopProxyFactory();
-            apf.CreateAopProxy(null);
+            Assert.Throws<AopConfigException>(() => apf.CreateAopProxy(null),"Cannot create IAopProxy with null ProxyConfig" );
         }
 
         [Test]
-        [ExpectedException(typeof(AopConfigException), ExpectedMessage="Cannot create IAopProxy with no advisors and no target source")]
         public void NoInterceptorsAndNoTarget()
         {
             ProxyFactory advisedSupport = new ProxyFactory(new Type[] { typeof(ITestObject) });
-            CreateAopProxy(advisedSupport);
+            Assert.Throws<AopConfigException>(() => CreateAopProxy(advisedSupport), "Cannot create IAopProxy with no advisors and no target source");
         }
 
         [Test]

@@ -1,8 +1,6 @@
 namespace Spring.Expressions.Parser.antlr.debug
 {
-	using System;
-	
-	public class InputBufferReporter : InputBufferListenerBase, InputBufferListener
+    public class InputBufferReporter : InputBufferListenerBase, InputBufferListener
 	{
 		public virtual void inputBufferChanged(object source, InputBufferEventArgs e)
 		{

@@ -11,8 +11,6 @@
  
 	<target name="build">
 
-		<!-- build Spring.Data.NHibernate4 -->
-		
 		<call target="copycommonlogginglibtobin" />
 		<call target="copynh4libtobin" />
 		
@@ -51,10 +49,8 @@
 				<include name="${current.bin.dir}/Spring.Core.dll"/>
 				<include name="${current.bin.dir}/Spring.Aop.dll"/>
 				<include name="${current.bin.dir}/Spring.Data.dll"/>
-				
-				<include name="${current.bin.dir}/NHibernate.dll"/>
-				<include name="${current.bin.dir}/Iesi.Collections.dll"/>
-				
+				<include name="${nh4.lib.dir}/NHibernate.dll"/>
+				<include name="${iesi4.lib.dir}/Iesi.Collections.dll"/>
 			</references>
 		</csc>
 	</target>

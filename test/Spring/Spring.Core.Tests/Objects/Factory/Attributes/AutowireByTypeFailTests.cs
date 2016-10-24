@@ -22,8 +22,6 @@ using System;
 using NUnit.Framework;
 using Spring.Context.Support;
 using Spring.Objects.Factory.Attributes.ByType;
-using Spring.Objects.Factory.Config;
-using Spring.Objects.Factory.Support;
 
 namespace Spring.Objects.Factory.Attributes
 {
@@ -50,7 +48,7 @@ namespace Spring.Objects.Factory.Attributes
             catch (Exception e) { ex = e; }
 
             Assert.That(ex, Is.Not.Null, "Should throw an exception");
-            Assert.That(ex.Message, Is.StringContaining("Injection of autowired dependencies failed"));
+            Assert.That(ex.Message, Does.Contain("Injection of autowired dependencies failed"));
         }
 
         [Test]
@@ -64,7 +62,7 @@ namespace Spring.Objects.Factory.Attributes
             catch (Exception e) { ex = e; }
 
             Assert.That(ex, Is.Not.Null, "Should throw an exception");
-            Assert.That(ex.Message, Is.StringContaining("Injection of autowired dependencies failed"));
+            Assert.That(ex.Message, Does.Contain("Injection of autowired dependencies failed"));
         }
 
         [Test]
@@ -78,21 +76,14 @@ namespace Spring.Objects.Factory.Attributes
             catch (Exception e) { ex = e; }
 
             Assert.That(ex, Is.Not.Null, "Should throw an exception");
-            Assert.That(ex.Message, Is.StringContaining("Injection of autowired dependencies failed"));
+            Assert.That(ex.Message, Does.Contain("Injection of autowired dependencies failed"));
         }
 
         [Test]
         public void FailConstructorInjectionTooManyObjects()
         {
-            Exception ex = null;
-            try
-            {
-                var testObj = (AutowireTestConstructorNormal)_applicationContext.GetObject("AutowireTestConstructorNormal");
-            }
-            catch (Exception e) { ex = e; }
-
-            Assert.That(ex, Is.Not.Null, "Should throw an exception");
-            Assert.That(ex.Message, Is.StringContaining("Error creating object with name"));
+            var ex = Assert.Throws<UnsatisfiedDependencyException>(() => _applicationContext.GetObject("AutowireTestConstructorNormal"));
+            Assert.That(ex.Message, Does.Contain("Error creating object with name"));
         }
     }
 }

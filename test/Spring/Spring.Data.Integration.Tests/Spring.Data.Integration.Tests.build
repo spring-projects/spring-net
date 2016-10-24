@@ -55,7 +55,7 @@
 		<include name="${current.bin.dir}/Spring.Data.dll" />
 		<include name="${current.bin.dir}/Spring.Core.Tests.dll" />
 		<include name="${current.bin.dir}/Spring.Testing.NUnit.dll" />
-		<include name="${current.bin.dir}/nunit.framework.dll"/>
+		<include name="${nunit.lib.dir}/nunit.framework.dll"/>
       </references>
     </csc>
   </target>

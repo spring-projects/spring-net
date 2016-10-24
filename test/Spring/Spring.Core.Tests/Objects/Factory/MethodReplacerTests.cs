@@ -149,7 +149,6 @@ namespace Spring.Objects.Factory
 		/// We don't specify any type fragments, so the method overload check will never pass.
 		/// </summary>
 		[Test]
-		[ExpectedException(typeof(NotImplementedException))]
 		public void SunnyDayReplaceMethod_WithArgumentAcceptingReplacerWithNoTypeFragmentsSpecified()
 		{
 			RootObjectDefinition replacerDef = new RootObjectDefinition(typeof (NewsFeedFactory));
@@ -161,7 +160,7 @@ namespace Spring.Objects.Factory
 			factory.RegisterObjectDefinition("manager", managerDef);
 			factory.RegisterObjectDefinition("replacer", replacerDef);
 			NewsFeedManagerWith_Replace_MethodThatTakesArguments manager = (NewsFeedManagerWith_Replace_MethodThatTakesArguments) factory["manager"];
-			manager.CreateNewsFeed("So sad... to be all alone in the world");
+            Assert.Throws<NotImplementedException>(() => manager.CreateNewsFeed("So sad... to be all alone in the world"));
 		}
 
 		/// <summary>
@@ -352,7 +351,6 @@ namespace Spring.Objects.Factory
 		#region Rainy Day Scenarios
 
 		[Test]
-		[ExpectedException(typeof (ObjectCreationException))]
 		public void FailWithLookupMethodOnSealedClass()
 		{
 			RootObjectDefinition feedDef = new RootObjectDefinition(typeof (NewsFeed));
@@ -365,11 +363,10 @@ namespace Spring.Objects.Factory
 			DefaultListableObjectFactory factory = new DefaultListableObjectFactory();
 			factory.RegisterObjectDefinition("manager", managerDef);
 			factory.RegisterObjectDefinition("feed", feedDef);
-			factory.GetObject("manager");
+            Assert.Throws<ObjectCreationException>(() => factory.GetObject("manager"));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ObjectCreationException))]
 		public void FailWithReplaceMethodOnSealedClass()
 		{
 			RootObjectDefinition replacerDef = new RootObjectDefinition(typeof (NewsFeedFactory));
@@ -380,7 +377,7 @@ namespace Spring.Objects.Factory
 			DefaultListableObjectFactory factory = new DefaultListableObjectFactory();
 			factory.RegisterObjectDefinition("manager", managerDef);
 			factory.RegisterObjectDefinition("replacer", replacerDef);
-			factory.GetObject("manager");
+            Assert.Throws<ObjectCreationException>(() => factory.GetObject("manager"));
 		}
 
 		/// <summary>
@@ -388,7 +385,6 @@ namespace Spring.Objects.Factory
 		/// not been explicitly declared virtual on the original class declaration.
 		/// </summary>
 		[Test]
-		[ExpectedException(typeof (ObjectCreationException))]
 		public void FailOnNonVirtualProtectedMethod()
 		{
 			RootObjectDefinition feedDef = new RootObjectDefinition(typeof (NewsFeed));
@@ -401,7 +397,7 @@ namespace Spring.Objects.Factory
 			DefaultListableObjectFactory factory = new DefaultListableObjectFactory();
 			factory.RegisterObjectDefinition("manager", managerDef);
 			factory.RegisterObjectDefinition("feed", feedDef);
-			factory.GetObject("manager");
+            Assert.Throws<ObjectCreationException>(() => factory.GetObject("manager"));
 		}
 
 		/// <summary>
@@ -409,7 +405,6 @@ namespace Spring.Objects.Factory
 		/// return type.
 		/// </summary>
 		[Test]
-		[ExpectedException(typeof (ObjectCreationException))]
 		public void FailOnMethodWithVoidReturnType()
 		{
 			RootObjectDefinition feedDef = new RootObjectDefinition(typeof (NewsFeed));
@@ -422,14 +417,13 @@ namespace Spring.Objects.Factory
 			DefaultListableObjectFactory factory = new DefaultListableObjectFactory();
 			factory.RegisterObjectDefinition("manager", managerDef);
 			factory.RegisterObjectDefinition("feed", feedDef);
-			factory.GetObject("manager");
+            Assert.Throws<ObjectCreationException>(() => factory.GetObject("manager"));
 		}
 
 		/// <summary>
 		/// Lookup methods cannot accept any arguments (replace methods can though).
 		/// </summary>
 		[Test]
-		[ExpectedException(typeof (ObjectCreationException))]
 		public void FailOnLookupMethodThatHasArguments()
 		{
 			RootObjectDefinition feedDef = new RootObjectDefinition(typeof (NewsFeed));
@@ -442,7 +436,7 @@ namespace Spring.Objects.Factory
 			DefaultListableObjectFactory factory = new DefaultListableObjectFactory();
 			factory.RegisterObjectDefinition("manager", managerDef);
 			factory.RegisterObjectDefinition("feed", feedDef);
-			factory.GetObject("manager");
+            Assert.Throws<ObjectCreationException>(() => factory.GetObject("manager"));
 		}
 
 		#endregion

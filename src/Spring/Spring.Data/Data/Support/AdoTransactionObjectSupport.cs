@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using System.Data;
 using Common.Logging;
 using Spring.Transaction;

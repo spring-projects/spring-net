@@ -39,19 +39,17 @@ namespace Spring.Validation.Validators
 	public sealed class RegularExpressionValidatorTests
 	{
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
 		public void WithNonString()
 		{
 			RegularExpressionValidator validator = new RegularExpressionValidator();
-			validator.Validate(this, new ValidationErrors());
+			Assert.Throws<ArgumentException>(() => validator.Validate(this, new ValidationErrors()));
 		}
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void WithNull()
         {
         	RegularExpressionValidator validator = new RegularExpressionValidator();
-            validator.Validate(null, new ValidationErrors());
+            Assert.Throws<ArgumentException>(() => validator.Validate(null, new ValidationErrors()));
         }
 
 		[Test]

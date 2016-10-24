@@ -45,20 +45,18 @@ namespace Spring.Core.TypeResolution
         }
 
         [Test]
-        [ExpectedException(typeof(TypeLoadException))]
         public void ResolveWithNullTypeName() {
 
             ITypeResolver mockResolver = (ITypeResolver) mocks.DynamicMock(typeof(ITypeResolver));
 
             CachedTypeResolver resolver = new CachedTypeResolver(mockResolver);
-            resolver.Resolve(null);
+            Assert.Throws<TypeLoadException>(() => resolver.Resolve(null));
         }
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void InstantiateWithNullTypeResolver()
 		{
-			new CachedTypeResolver(null);
+            Assert.Throws<ArgumentNullException>(() => new CachedTypeResolver(null));
 		}
     }
 }

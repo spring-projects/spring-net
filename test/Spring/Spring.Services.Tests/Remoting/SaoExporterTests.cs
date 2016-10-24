@@ -23,9 +23,8 @@
 using System;
 using NUnit.Framework;
 using Rhino.Mocks;
-using Spring.Aop.Framework;
+
 using Spring.Core.IO;
-using Spring.Objects;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Xml;
@@ -43,15 +42,13 @@ namespace Spring.Remoting
     public class SaoExporterTests : BaseRemotingTestFixture
     {
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void BailsWhenNotConfigured()
         {
             SaoExporter exp = new SaoExporter();
-            exp.AfterPropertiesSet();
+            Assert.Throws<ArgumentException>(() => exp.AfterPropertiesSet());
         }
 
         [Test]
-        [ExpectedException(typeof(NoSuchObjectDefinitionException))]
         public void BailsIfTargetNotFound()
         {
             using (DefaultListableObjectFactory of = new DefaultListableObjectFactory())
@@ -60,7 +57,7 @@ namespace Spring.Remoting
                 saoExporter.ObjectFactory = of;
                 saoExporter.TargetName = "DOESNOTEXIST";
                 saoExporter.ServiceName = "RemotedSaoSingletonCounter";
-                saoExporter.AfterPropertiesSet();
+                Assert.Throws<NoSuchObjectDefinitionException>(() => saoExporter.AfterPropertiesSet());
             }
         }
 

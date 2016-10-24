@@ -29,7 +29,7 @@ using System.Runtime.InteropServices;
 using System.Xml;
 
 using Common.Logging;
-using Spring.Core;
+
 using Spring.Core.IO;
 using Spring.Core.TypeResolution;
 using Spring.Util;

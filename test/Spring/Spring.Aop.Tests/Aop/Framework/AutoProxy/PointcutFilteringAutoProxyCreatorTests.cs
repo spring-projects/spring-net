@@ -55,11 +55,10 @@ namespace Spring.Aop.Framework.AutoProxy
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ThrowsArgumentExceptionIfNoCriteriaSpecified()
         {
             PointcutFilteringAutoProxyCreator apc = new PointcutFilteringAutoProxyCreator();
-            apc.PostProcessAfterInitialization( new TestObject(), "testObject" );
+            Assert.Throws<ArgumentNullException>(() => apc.PostProcessAfterInitialization(new TestObject(), "testObject"));
         }
     }
 }

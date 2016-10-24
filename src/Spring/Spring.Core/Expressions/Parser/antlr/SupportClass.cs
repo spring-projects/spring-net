@@ -1,4 +1,3 @@
-using System;
 namespace Spring.Expressions.Parser.antlr
 {
     internal class SupportClass

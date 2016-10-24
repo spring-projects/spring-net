@@ -1,8 +1,6 @@
 namespace Spring.Expressions.Parser.antlr.debug
 {
-	using System;
-	
-	public interface ParserController : ParserListener
+    public interface ParserController : ParserListener
 		{
 			ParserEventSupport ParserEventSupport
 			{

@@ -35,7 +35,7 @@ namespace Spring
     [TestFixture]
     public sealed class CoreExceptionTests : ExceptionsTest
     {
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void FixtureSetUp()
         {
             AssemblyToCheck = Assembly.GetAssembly(typeof (ObjectsException));

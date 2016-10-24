@@ -1,7 +1,6 @@
 using System;
 using System.Data;
 using Spring.Data.Core;
-using Spring.Data.Support;
 
 namespace Spring.Data
 {

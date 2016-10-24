@@ -27,7 +27,7 @@ using System.Reflection;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Proxies;
 using Common.Logging;
-using Spring.Objects;
+
 using Spring.Reflection.Dynamic;
 
 #endregion

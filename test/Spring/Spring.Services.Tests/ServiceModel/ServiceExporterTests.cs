@@ -113,11 +113,10 @@ namespace Spring.ServiceModel
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException), ExpectedMessage = "The TargetName property is required.")]
         public void NullConfig()
         {
             se.ObjectName = "NullConfig";
-            se.AfterPropertiesSet();
+            Assert.Throws<ArgumentException>(() => se.AfterPropertiesSet(), "The TargetName property is required.");
         }
 
         [Test] // SPRNET-1416
@@ -173,13 +172,12 @@ namespace Spring.ServiceModel
         }
 
         [Test(Description = "http://jira.springframework.org/browse/SPRNET-1179")]
-        [ExpectedException(typeof(ArgumentException), ExpectedMessage = "ServiceExporter cannot export service type 'Spring.ServiceModel.ServiceExporterTests+ServiceWithMultipleInterfaces' as a WCF service because it implements multiple interfaces. Specify the contract interface to expose via the ContractInterface property.")]
         public void ProxiesOnlyContractInterfaceFailsIfNoContractInterface()
         {
             se.ObjectName = "ProxiesOnlyContractInterface";
             se.TargetName = "serviceWithMultipleInterfaces";
             // se.ContractInterface = typeof (IContract);
-            se.AfterPropertiesSet();
+            Assert.Throws<ArgumentException>(() => se.AfterPropertiesSet(), "ServiceExporter cannot export service type 'Spring.ServiceModel.ServiceExporterTests+ServiceWithMultipleInterfaces' as a WCF service because it implements multiple interfaces. Specify the contract interface to expose via the ContractInterface property.");
         }
 
         [Test]

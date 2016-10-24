@@ -1,4 +1,3 @@
-using System;
 using Spring.Context.Events;
 
 #region License

@@ -24,7 +24,7 @@ using System;
 using NUnit.Framework;
 using Spring.Objects;
 using Spring.Objects.Factory;
-using Spring.Util;
+
 using IBar=Spring.Objects.Factory.IBar;
 using Spring.Context;
 using Spring.Context.Support;
@@ -61,71 +61,63 @@ namespace Spring.Core.TypeResolution
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void ResolveTypeWithNullAliasArg()
 		{
-			TypeRegistry.ResolveType(null);
+            Assert.Throws<ArgumentNullException>(() => TypeRegistry.ResolveType(null));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void ResolveTypeWithEmptyAliasArg()
 		{
-			TypeRegistry.ResolveType(string.Empty);
+            Assert.Throws<ArgumentNullException>(() => TypeRegistry.ResolveType(string.Empty));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void ResolveTypeWithWhitespacedAliasArg()
 		{
-			TypeRegistry.ResolveType("   ");
+            Assert.Throws<ArgumentNullException>(() => TypeRegistry.ResolveType("   "));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void RegisterTypeWithNullAliasArg()
 		{
-			TypeRegistry.RegisterType(null, typeof (TestObject));
+            Assert.Throws<ArgumentNullException>(() => TypeRegistry.RegisterType(null, typeof (TestObject)));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void RegisterTypeWithEmptyAliasArg()
 		{
-			TypeRegistry.RegisterType(string.Empty, typeof (TestObject));
+            Assert.Throws<ArgumentNullException>(() => TypeRegistry.RegisterType(string.Empty, typeof (TestObject)));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void RegisterTypeWithWhitespacedAliasArg()
 		{
-			TypeRegistry.RegisterType("   ", typeof (TestObject));
+            Assert.Throws<ArgumentNullException>(() => TypeRegistry.RegisterType("   ", typeof (TestObject)));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void RegisterTypeWithNullTypeArg()
 		{
-			TypeRegistry.RegisterType("foo", (Type) null);
+            Assert.Throws<ArgumentNullException>(() => TypeRegistry.RegisterType("foo", (Type) null));
 		}
 
+        [Test]
 		public void RegisterTypeWithNullTypeStringArg()
 		{
-			TypeRegistry.RegisterType("foo", (String) null);
+            Assert.Throws<ArgumentNullException>(() => TypeRegistry.RegisterType("foo", (string) null));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void RegisterTypeWithEmptyTypeStringArg()
 		{
-			TypeRegistry.RegisterType("foo", string.Empty);
+            Assert.Throws<ArgumentNullException>(() => TypeRegistry.RegisterType("foo", string.Empty));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void RegisterTypeWithWhitespacedTypeStringArg()
 		{
-			TypeRegistry.RegisterType("foo", "   ");
+            Assert.Throws<ArgumentNullException>(() => TypeRegistry.RegisterType("foo", "   "));
 		}
 
 		[Test]

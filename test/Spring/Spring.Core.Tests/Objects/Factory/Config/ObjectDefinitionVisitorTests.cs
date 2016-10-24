@@ -52,10 +52,9 @@ namespace Spring.Objects.Factory.Config
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void BadConstructorCall()
         {
-            ObjectDefinitionVisitor visitor = new ObjectDefinitionVisitor(null);
+            Assert.Throws<ArgumentNullException>(() => new ObjectDefinitionVisitor(null));
         }
 
         [Test]

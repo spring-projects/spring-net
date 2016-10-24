@@ -43,10 +43,9 @@ namespace Spring.Aop.Support
 		private static readonly DateTime EXPECTED_TIMESTAMP = new DateTime(2004,8,1);
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void testNullTarget()
 		{
-			DefaultIntroductionAdvisor advisor = new DefaultIntroductionAdvisor(null, typeof(ITimeStamped));
+            Assert.Throws<ArgumentNullException>(() => new DefaultIntroductionAdvisor(null, typeof(ITimeStamped)));
 		}
 
 		public interface ITimeStampedIntroduction: ITimeStamped, IAdvice

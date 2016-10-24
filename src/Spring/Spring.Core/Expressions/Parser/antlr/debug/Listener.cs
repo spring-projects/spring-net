@@ -1,9 +1,6 @@
 namespace Spring.Expressions.Parser.antlr.debug
 {
-	using System;
-	
-
-	public interface Listener
+    public interface Listener
 	{
 		void  doneParsing	(object source, TraceEventArgs e);
 		void  refresh		();

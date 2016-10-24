@@ -1,4 +1,3 @@
-using System;
 using System.Reflection;
 
 [assembly: AssemblyTitle("Spring.Web.Conversation.NHibernate3. NHibernate 3.3 support.")]

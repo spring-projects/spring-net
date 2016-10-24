@@ -63,19 +63,17 @@ namespace Spring.Core.TypeConversion
         }
 
         [Test]
-        [ExpectedException(typeof (NotSupportedException))]
         public void ConvertFromNullReference()
         {
             FileInfoConverter vrt = new FileInfoConverter();
-            vrt.ConvertFrom(null);
+            Assert.Throws<NotSupportedException>(() => vrt.ConvertFrom(null));
         }
 
         [Test]
-        [ExpectedException(typeof (NotSupportedException))]
         public void ConvertFromNonSupportedOptionBails()
         {
             FileInfoConverter vrt = new FileInfoConverter();
-            vrt.ConvertFrom(12);
+            Assert.Throws<NotSupportedException>(() => vrt.ConvertFrom(12));
         }
     }
 }

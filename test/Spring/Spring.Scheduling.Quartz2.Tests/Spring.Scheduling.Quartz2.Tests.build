@@ -45,7 +45,7 @@
 				<include name="${current.bin.dir}/Spring.Scheduling.Quartz2.dll" />
 				<include name="${current.bin.dir}/Quartz.dll" />
 				<include name="${current.bin.dir}/C5.dll" />
-				<include name="${current.bin.dir}/nunit.framework.dll"/>
+				<include name="${nunit.lib.dir}/nunit.framework.dll"/>
 				<include name="${current.bin.dir}/Rhino.Mocks.dll"/>
 			</references>
 		</csc>

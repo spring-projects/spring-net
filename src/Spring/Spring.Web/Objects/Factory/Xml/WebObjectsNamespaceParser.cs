@@ -20,14 +20,7 @@
 
 #region Imports
 
-using System;
-using System.Collections;
-using System.Web;
-using System.Xml;
 
-using Spring.Objects.Factory.Config;
-using Spring.Objects.Factory.Support;
-using Spring.Util;
 
 #endregion
 

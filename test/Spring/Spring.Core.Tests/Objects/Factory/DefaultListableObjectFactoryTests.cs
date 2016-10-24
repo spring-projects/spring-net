@@ -56,7 +56,7 @@ namespace Spring.Objects.Factory
         /// <summary>
         /// The setup logic executed before the execution of this test fixture.
         /// </summary>
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void FixtureSetUp()
         {
             // enable (null appender) logging, just to ensure that the logging code is correct :D
@@ -551,13 +551,12 @@ namespace Spring.Objects.Factory
         }
 
         [Test]
-        [ExpectedException(typeof(ObjectDefinitionStoreException))]
         public void ObjectDefinitionOverridingNotAllowed()
         {
             DefaultListableObjectFactory lof = new DefaultListableObjectFactory();
             lof.AllowObjectDefinitionOverriding = false;
             lof.RegisterObjectDefinition("test", new RootObjectDefinition(typeof(TestObject), null));
-            lof.RegisterObjectDefinition("test", new RootObjectDefinition(typeof(NestedTestObject), null));
+            Assert.Throws<ObjectDefinitionStoreException>(() => lof.RegisterObjectDefinition("test", new RootObjectDefinition(typeof(NestedTestObject), null)));
         }
 
         [Test]
@@ -645,13 +644,12 @@ namespace Spring.Objects.Factory
         }
 
         [Test]
-        [ExpectedException(typeof(ObjectDefinitionStoreException))]
         public void RegisterExistingSingletonWithAlreadyBound()
         {
             DefaultListableObjectFactory lof = new DefaultListableObjectFactory();
             object singletonObject = new TestObject();
             lof.RegisterSingleton("singletonObject", singletonObject);
-            lof.RegisterSingleton("singletonObject", singletonObject);
+            Assert.Throws<ObjectDefinitionStoreException>(() => lof.RegisterSingleton("singletonObject", singletonObject));
         }
 
         [Test]
@@ -700,13 +698,12 @@ namespace Spring.Objects.Factory
         }
 
         [Test]
-        [ExpectedException(typeof(UnsatisfiedDependencyException))]
         public void AutowireObjectByNameWithDependencyCheck()
         {
             DefaultListableObjectFactory lof = new DefaultListableObjectFactory();
             RootObjectDefinition rod = new RootObjectDefinition(typeof(TestObject));
             lof.RegisterObjectDefinition("Spous", rod);
-            lof.Autowire(typeof(DependenciesObject), AutoWiringMode.ByName, true);
+            Assert.Throws<UnsatisfiedDependencyException>(() => lof.Autowire(typeof(DependenciesObject), AutoWiringMode.ByName, true));
         }
 
         [Test]
@@ -731,12 +728,10 @@ namespace Spring.Objects.Factory
         }
 
         [Test]
-        [ExpectedException(typeof(UnsatisfiedDependencyException))]
         public void AutowireObjectByTypeWithDependencyCheck()
         {
             DefaultListableObjectFactory lof = new DefaultListableObjectFactory();
-            lof.Autowire(typeof(DependenciesObject), AutoWiringMode.ByType, true);
-            Assert.Fail("Should have thrown UnsatisfiedDependencyException");
+            Assert.Throws<UnsatisfiedDependencyException>(() => lof.Autowire(typeof(DependenciesObject), AutoWiringMode.ByType, true));
         }
 
         [Test]
@@ -761,15 +756,13 @@ namespace Spring.Objects.Factory
         }
 
         [Test]
-        [ExpectedException(typeof(UnsatisfiedDependencyException))]
         public void AutowireExistingObjectByNameWithDependencyCheck()
         {
             DefaultListableObjectFactory lof = new DefaultListableObjectFactory();
             RootObjectDefinition rod = new RootObjectDefinition(typeof(TestObject));
             lof.RegisterObjectDefinition("Spous", rod);
             DependenciesObject existingObj = new DependenciesObject();
-            lof.AutowireObjectProperties(existingObj, AutoWiringMode.ByName, true);
-            Assert.Fail("Should have thrown UnsatisfiedDependencyException");
+            Assert.Throws<UnsatisfiedDependencyException>(() => lof.AutowireObjectProperties(existingObj, AutoWiringMode.ByName, true));
         }
 
         [Test]
@@ -796,21 +789,19 @@ namespace Spring.Objects.Factory
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void AutowireByTypeWithInvalidAutowireMode()
         {
             DefaultListableObjectFactory lof = new DefaultListableObjectFactory();
             DependenciesObject obj = new DependenciesObject();
-            lof.AutowireObjectProperties(obj, AutoWiringMode.Constructor, true);
+            Assert.Throws<ArgumentException>(() => lof.AutowireObjectProperties(obj, AutoWiringMode.Constructor, true));
         }
 
         [Test]
-        [ExpectedException(typeof(UnsatisfiedDependencyException))]
         public void AutowireExistingObjectByTypeWithDependencyCheck()
         {
             DefaultListableObjectFactory lof = new DefaultListableObjectFactory();
             DependenciesObject existingObj = new DependenciesObject();
-            lof.AutowireObjectProperties(existingObj, AutoWiringMode.ByType, true);
+            Assert.Throws<UnsatisfiedDependencyException>(() => lof.AutowireObjectProperties(existingObj, AutoWiringMode.ByType, true));
         }
 
         [Test]
@@ -868,7 +859,6 @@ namespace Spring.Objects.Factory
         }
 
         [Test]
-        [ExpectedException(typeof(UnsatisfiedDependencyException))]
         public void AutowireWithUnsatisfiedConstructorDependency()
         {
             DefaultListableObjectFactory lof = new DefaultListableObjectFactory();
@@ -877,8 +867,7 @@ namespace Spring.Objects.Factory
             RootObjectDefinition rod = new RootObjectDefinition(typeof(TestObject), pvs);
             lof.RegisterObjectDefinition("rod", rod);
             Assert.AreEqual(1, lof.ObjectDefinitionCount);
-            lof.Autowire(typeof(UnsatisfiedConstructorDependency), AutoWiringMode.AutoDetect, true);
-            Assert.Fail("Should have unsatisfied constructor dependency on SideEffectObject");
+            Assert.Throws<UnsatisfiedDependencyException>(() => lof.Autowire(typeof(UnsatisfiedConstructorDependency), AutoWiringMode.AutoDetect, true));
         }
 
         [Test]
@@ -1465,30 +1454,27 @@ namespace Spring.Objects.Factory
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void ConfigureObjectViaNullName()
         {
             TestObject instance = new TestObject();
             DefaultListableObjectFactory fac = new DefaultListableObjectFactory();
-            fac.ConfigureObject(instance, null);
+            Assert.Throws<ArgumentException>(() => fac.ConfigureObject(instance, null));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void ConfigureObjectViaLoadOfOldWhitespaceName()
         {
             TestObject instance = new TestObject();
             DefaultListableObjectFactory fac = new DefaultListableObjectFactory();
-            fac.ConfigureObject(instance, "        \t");
+            Assert.Throws<ArgumentException>(() => fac.ConfigureObject(instance, "        \t"));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void ConfigureObjectViaEmptyName()
         {
             TestObject instance = new TestObject();
             DefaultListableObjectFactory fac = new DefaultListableObjectFactory();
-            fac.ConfigureObject(instance, string.Empty);
+            Assert.Throws<ArgumentException>(() => fac.ConfigureObject(instance, string.Empty));
         }
 
         [Test]
@@ -1537,9 +1523,6 @@ namespace Spring.Objects.Factory
         /// to the ctor, it should (must) choke.
         /// </summary>
         [Test]
-        [ExpectedException(typeof(UnsatisfiedDependencyException), ExpectedMessage="Error creating object with name 'foo' : Unsatisfied dependency " +
-                "expressed through constructor argument with index 1 of type [System.Boolean] : " +
-                "No unique object of type [System.Boolean] is defined : Unsatisfied dependency of type [System.Boolean]: expected at least 1 matching object to wire the [b2] parameter on the constructor of object [foo]")]
         public void DoubleBooleanAutowire()
         {
             RootObjectDefinition def = new RootObjectDefinition(typeof(DoubleBooleanConstructorObject));
@@ -1552,7 +1535,10 @@ namespace Spring.Objects.Factory
             DefaultListableObjectFactory fac = new DefaultListableObjectFactory();
             fac.RegisterObjectDefinition("foo", def);
 
-            fac.GetObject("foo");
+            Assert.Throws<UnsatisfiedDependencyException>(() => fac.GetObject("foo"), 
+                "Error creating object with name 'foo' : Unsatisfied dependency " +
+                "expressed through constructor argument with index 1 of type [System.Boolean] : " +
+                "No unique object of type [System.Boolean] is defined : Unsatisfied dependency of type [System.Boolean]: expected at least 1 matching object to wire the [b2] parameter on the constructor of object [foo]");
         }
 
         [Test]

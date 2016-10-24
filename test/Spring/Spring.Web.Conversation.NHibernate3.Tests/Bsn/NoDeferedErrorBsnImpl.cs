@@ -18,9 +18,6 @@
 
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using NHibernate;
 using Spring.Entities;
 using NUnit.Framework;

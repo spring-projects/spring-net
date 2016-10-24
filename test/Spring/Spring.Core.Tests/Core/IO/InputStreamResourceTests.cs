@@ -69,13 +69,12 @@ namespace Spring.Core.IO
         }
 
         [Test]
-        [ExpectedException (typeof (ArgumentNullException))]
-        public void InstantiationWithNull () {
-            new InputStreamResource (null, "A null resource.");
+        public void InstantiationWithNull ()
+        {
+            Assert.Throws<ArgumentNullException>(() => new InputStreamResource (null, "A null resource."));
         }
 
         [Test]
-        [ExpectedException (typeof (InvalidOperationException))]
         public void ReadStreamMultipleTimes () 
         {
             FileInfo file = null;
@@ -87,7 +86,8 @@ namespace Spring.Core.IO
                 // attempting to read this stream twice is an error...
                 InputStreamResource res = new InputStreamResource (stream, "A temporary resource.");
                 Stream streamOne = res.InputStream;
-                Stream streamTwo = res.InputStream; // should bail here
+                Stream streamTwo;
+                Assert.Throws<InvalidOperationException>(() => streamTwo = res.InputStream); // should bail here
             } 
             finally 
             {

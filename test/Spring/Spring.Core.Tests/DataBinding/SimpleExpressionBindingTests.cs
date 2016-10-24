@@ -47,38 +47,33 @@ namespace Spring.DataBinding
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void WithNullMessageId()
         {
-            new SimpleExpressionBinding("exp", "exp").SetErrorMessage(null, "errors");
+            Assert.Throws<ArgumentNullException>(() => new SimpleExpressionBinding("exp", "exp").SetErrorMessage(null, "errors"));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void WithEmptyMessageId()
         {
-            new SimpleExpressionBinding("exp", "exp").SetErrorMessage("", "errors");
+            Assert.Throws<ArgumentNullException>(() => new SimpleExpressionBinding("exp", "exp").SetErrorMessage("", "errors"));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void WithWhitespaceMessageId()
         {
-            new SimpleExpressionBinding("exp", "exp").SetErrorMessage("\t   ", "errors");
+            Assert.Throws<ArgumentNullException>(() => new SimpleExpressionBinding("exp", "exp").SetErrorMessage("\t   ", "errors"));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void WithNullProviders()
         {
-            new SimpleExpressionBinding("exp", "exp").SetErrorMessage("error", null);
+            Assert.Throws<ArgumentException>(() => new SimpleExpressionBinding("exp", "exp").SetErrorMessage("error", null));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void WithEmptyProviders()
         {
-            new SimpleExpressionBinding("exp", "exp").SetErrorMessage("error", new string[0]);
+            Assert.Throws<ArgumentException>(() => new SimpleExpressionBinding("exp", "exp").SetErrorMessage("error", new string[0]));
         }
     }
 }

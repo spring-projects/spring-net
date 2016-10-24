@@ -121,27 +121,24 @@ namespace Spring.Objects.Factory.Config
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void AddNamedArgumentWithNullName()
 		{
 			ConstructorArgumentValues values = new ConstructorArgumentValues();
-			values.AddNamedArgumentValue(null, 1);
+            Assert.Throws<ArgumentNullException>(() => values.AddNamedArgumentValue(null, 1));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void AddNamedArgumentWithEmptyStringName()
 		{
 			ConstructorArgumentValues values = new ConstructorArgumentValues();
-			values.AddNamedArgumentValue(string.Empty, 1);
+            Assert.Throws<ArgumentNullException>(() => values.AddNamedArgumentValue(string.Empty, 1));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void AddNamedArgumentWithWhitespaceStringName()
 		{
 			ConstructorArgumentValues values = new ConstructorArgumentValues();
-			values.AddNamedArgumentValue(Environment.NewLine + "  ", 1);
+            Assert.Throws<ArgumentNullException>(() => values.AddNamedArgumentValue(Environment.NewLine + "  ", 1));
 		}
 
 		[Test]

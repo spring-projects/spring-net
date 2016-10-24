@@ -30,7 +30,6 @@ using Spring.Context;
 using Spring.Context.Support;
 using Spring.Data.Core;
 using Spring.Reflection.Dynamic;
-using Spring.Transaction;
 using Spring.Transaction.Support;
 using Spring.Util;
 

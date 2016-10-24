@@ -1,8 +1,6 @@
 namespace Spring.Expressions.Parser.antlr.debug
 {
-	using System;
-	
-	public interface ICharScannerDebugSubject : IDebugSubject
+    public interface ICharScannerDebugSubject : IDebugSubject
 	{
 		event NewLineEventHandler				HitNewLine;
 		event MatchEventHandler					MatchedChar;

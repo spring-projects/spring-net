@@ -23,13 +23,11 @@
 using System;
 using System.Collections.Specialized;
 using NUnit.Framework;
-using Spring.Aop.Config;
+
 using Spring.Context;
 using Spring.Context.Support;
 using Common.Logging;
 using Common.Logging.Simple;
-using Spring.Objects.Factory.Xml;
-using Spring.Transaction.Config;
 
 #endregion
 

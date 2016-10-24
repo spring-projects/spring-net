@@ -22,7 +22,6 @@
 
 using System;
 using System.Runtime.Serialization;
-using Spring.Core;
 
 #endregion
 
