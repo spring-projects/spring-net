@@ -1,5 +1,3 @@
-using System;
-
 namespace Spring.Expressions.Parser.antlr
 {
 	/* ANTLR Translator Generator

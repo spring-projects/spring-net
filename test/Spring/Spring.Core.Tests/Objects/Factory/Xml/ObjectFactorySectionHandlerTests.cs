@@ -50,11 +50,10 @@ namespace Spring.Objects.Factory.Xml
         /// Test calling the section handler with null values.
         /// </summary>
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void CreateFactoryUnSuccessful()
 		{
-            ObjectFactorySectionHandler objHandler = new ObjectFactorySectionHandler();
-			objHandler.Create( null, null, null );
+		    ObjectFactorySectionHandler objHandler = new ObjectFactorySectionHandler();
+		    Assert.Throws<ArgumentNullException>(() => objHandler.Create(null, null, null));
 		}
 
         /// <summary>

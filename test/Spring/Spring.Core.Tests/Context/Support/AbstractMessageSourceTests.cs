@@ -40,14 +40,13 @@ namespace Spring.Context.Support
 		}
 
 		[Test]
-		[ExpectedException(typeof (NoSuchMessageException))]
 		public void GetResolvableNullCodes()
 		{            
 		    IMessageSourceResolvable res = mocks.StrictMock<IMessageSourceResolvable>();
 		    Expect.Call(res.GetCodes()).Return(null);
 		    Expect.Call(res.DefaultMessage).Return(null);
             mocks.ReplayAll();
-		    GetMessage(res, CultureInfo.CurrentCulture);
+            Assert.Throws<NoSuchMessageException>(() => GetMessage(res, CultureInfo.CurrentCulture));
             mocks.VerifyAll();		    
 		}
 
@@ -113,7 +112,6 @@ namespace Spring.Context.Support
 		}
 
 		[Test]
-		[ExpectedException(typeof (NoSuchMessageException))]
 		public void GetMessageResolvableNoValidMessage()
 		{
             IMessageSourceResolvable res = mocks.StrictMock<IMessageSourceResolvable>();
@@ -121,7 +119,7 @@ namespace Spring.Context.Support
             Expect.Call(res.GetCodes()).Return(null);
             Expect.Call(res.GetArguments()).Return(null).Repeat.AtLeastOnce();
             mocks.ReplayAll();
-			GetMessage(res, CultureInfo.CurrentCulture);
+            Assert.Throws<NoSuchMessageException>(() => GetMessage(res, CultureInfo.CurrentCulture));
 		}
 
 		[Test]
@@ -147,10 +145,9 @@ namespace Spring.Context.Support
 		}
 
 		[Test]
-        [ExpectedException(typeof(NoSuchMessageException))]
 		public void GetMessageNullCode()
 		{
-			Assert.IsNull(GetMessage(null));
+            Assert.Throws<NoSuchMessageException>(() => GetMessage(null));
 		}
 
 		[Test]
@@ -174,10 +171,9 @@ namespace Spring.Context.Support
 		}
 
 		[Test]
-		[ExpectedException(typeof (NoSuchMessageException))]
 		public void GetMessageNoValidMessage()
 		{
-			GetMessage("null", new object[] {"arguments"});
+            Assert.Throws<NoSuchMessageException>(() => GetMessage("null", new object[] {"arguments"}));
 		}
 
 		[Test]

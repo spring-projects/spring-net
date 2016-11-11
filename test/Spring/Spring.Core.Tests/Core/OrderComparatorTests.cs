@@ -21,7 +21,6 @@
 #region Imports
 
 using System;
-using System.Collections;
 
 using NUnit.Framework;
 using Spring.Util;

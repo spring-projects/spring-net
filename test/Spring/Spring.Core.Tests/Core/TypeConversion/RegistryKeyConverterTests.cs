@@ -36,19 +36,17 @@ namespace Spring.Core.TypeConversion
     public sealed class RegistryKeyConverterTests
     {
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ConvertFromNullReference()
         {
             RegistryKeyConverter rkc = new RegistryKeyConverter();
-            rkc.ConvertFrom(null);
+            Assert.Throws<ArgumentNullException>(() => rkc.ConvertFrom(null));
         }
 
         [Test]
-        [ExpectedException(typeof(NotSupportedException))]
         public void ConvertFromNonSupportedOptionBails()
         {
             RegistryKeyConverter rkc = new RegistryKeyConverter();
-            rkc.ConvertFrom(12);
+            Assert.Throws<NotSupportedException>(() => rkc.ConvertFrom(12));
         }
 
         [Test]
@@ -63,27 +61,24 @@ namespace Spring.Core.TypeConversion
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ConvertFromEmptyString()
         {
             RegistryKeyConverter rkc = new RegistryKeyConverter();
-            rkc.ConvertFrom(string.Empty);
+            Assert.Throws<ArgumentNullException>(() => rkc.ConvertFrom(string.Empty));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException), ExpectedMessage = @"Registry key [HKEY_CURRENT_USER\sdgsdfgsdfgxadas] does not exist.")]
         public void ConvertFromBadKeyString()
         {
             RegistryKeyConverter rkc = new RegistryKeyConverter();
-            rkc.ConvertFrom(@"HKEY_CURRENT_USER\sdgsdfgsdfgxadas\Xyz\Abc");
+            Assert.Throws<ArgumentException>(() => rkc.ConvertFrom(@"HKEY_CURRENT_USER\sdgsdfgsdfgxadas\Xyz\Abc"), @"Registry key [HKEY_CURRENT_USER\sdgsdfgsdfgxadas] does not exist.");
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException), ExpectedMessage="Invalid root hive name [HKEY_ERROR].")]
         public void ConvertFromBadHiveString()
         {
             RegistryKeyConverter rkc = new RegistryKeyConverter();
-            rkc.ConvertFrom(@"HKEY_ERROR\sdgsdfgsdfgxadas");
+            Assert.Throws<ArgumentException>(() => rkc.ConvertFrom(@"HKEY_ERROR\sdgsdfgsdfgxadas"), "Invalid root hive name [HKEY_ERROR].");
         }
 
     }

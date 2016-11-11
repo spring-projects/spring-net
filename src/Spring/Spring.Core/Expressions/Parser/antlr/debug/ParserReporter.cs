@@ -1,8 +1,6 @@
 namespace Spring.Expressions.Parser.antlr.debug
 {
-	using System;
-	
-	public class ParserReporter : Tracer, ParserListener
+    public class ParserReporter : Tracer, ParserListener
 	{
 		public virtual void  parserConsume(object source, TokenEventArgs e)
 		{

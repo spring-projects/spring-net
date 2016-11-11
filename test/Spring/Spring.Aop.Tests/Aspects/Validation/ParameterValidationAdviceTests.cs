@@ -80,7 +80,6 @@ namespace Spring.Aspects.Validation
         }
 
         [Test]
-        [ExpectedException(typeof(ValidationException))]
         public void TestInvalidArgument()
         {
             MethodInfo method = typeof(ValidationTarget).GetMethod("Save");
@@ -92,7 +91,7 @@ namespace Spring.Aspects.Validation
 
             using (mocks.Playback())
             {
-                advice.Before(method, new object[] { null }, new ValidationTarget());
+                Assert.Throws<ValidationException>(() => advice.Before(method, new object[] { null }, new ValidationTarget()));
             }            
         }
 

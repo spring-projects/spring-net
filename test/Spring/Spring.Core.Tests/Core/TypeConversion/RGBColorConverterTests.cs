@@ -49,51 +49,45 @@ namespace Spring.Core.TypeConversion
         }
 
         [Test]
-        [ExpectedException(typeof (FormatException))]
         public void ConvertFromCommaSeparatedListWithNotEnoughValues()
         {
             RGBColorConverter converter = new RGBColorConverter();
-            converter.ConvertFrom("255, 235");
+            Assert.Throws<FormatException>(() => converter.ConvertFrom("255, 235"));
         }
 
         [Test]
-        [ExpectedException(typeof (FormatException))]
         public void ConvertFromCommaSeparatedListWithOutOfRangeValue()
         {
             RGBColorConverter converter = new RGBColorConverter();
-            converter.ConvertFrom("255, 235, 4567");
+            Assert.Throws<FormatException>(() => converter.ConvertFrom("255, 235, 4567"));
         }
 
         [Test]
-        [ExpectedException(typeof (NotSupportedException))]
         public void ConvertFromNullReference()
         {
             RGBColorConverter vrt = new RGBColorConverter();
-            vrt.ConvertFrom(null);
+            Assert.Throws<NotSupportedException>(() => vrt.ConvertFrom(null));
         }
 
         [Test]
-        [ExpectedException(typeof (NotSupportedException))]
         public void ConvertFromEmptyString()
         {
             RGBColorConverter vrt = new RGBColorConverter();
-            vrt.ConvertFrom(string.Empty);
+            Assert.Throws<NotSupportedException>(() => vrt.ConvertFrom(string.Empty));
         }
 
         [Test]
-        [ExpectedException(typeof (FormatException))]
         public void ConvertFromGarbageBails()
         {
             RGBColorConverter vrt = new RGBColorConverter();
-            vrt.ConvertFrom("*&&%%^£");
+            Assert.Throws<FormatException>(() => vrt.ConvertFrom("*&&%%^£"));
         }
 
         [Test]
-        [ExpectedException(typeof (NotSupportedException))]
         public void ConvertFromNonSupportedOptionBails()
         {
             RGBColorConverter vrt = new RGBColorConverter();
-            vrt.ConvertFrom(12);
+            Assert.Throws<NotSupportedException>(() => vrt.ConvertFrom(12));
         }
 
         [Test]

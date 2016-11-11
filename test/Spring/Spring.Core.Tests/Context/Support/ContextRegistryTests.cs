@@ -135,38 +135,36 @@ namespace Spring.Context.Support
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void GetContextWithNullName()
         {
-            ContextRegistry.GetContext(null);
+            Assert.Throws<ArgumentException>(() => ContextRegistry.GetContext(null));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void GetContextWithEmptyName()
         {
-            ContextRegistry.GetContext("");
+            Assert.Throws<ArgumentException>(() => ContextRegistry.GetContext(""));
         }
 
         [Test]
-        //        [Ignore("How can we test that one ???")]
-        [ExpectedException(typeof(ApplicationContextException),
-            ExpectedMessage = "No context registered. Use the 'RegisterContext' method or the 'spring/context' section from your configuration file.")]
         public void GetRootContextNotRegisteredThrowsException()
         {
-            using (new HookableContextHandler.Guard(new HookableContextHandler.CreateContextFromSectionHandler(GetNullSection)))
+            Assert.Throws<ApplicationContextException>(() =>
             {
-                IApplicationContext context = ContextRegistry.GetContext();
-            }
+                using (new HookableContextHandler.Guard(GetNullSection))
+                {
+                    ContextRegistry.GetContext();
+                }
+            }, "No context registered. Use the 'RegisterContext' method or the 'spring/context' section from your configuration file.");
         }
 
 
         [Test]
-        [ExpectedException(typeof(ApplicationContextException),
-            ExpectedMessage = "No context registered under name 'bingo'. Use the 'RegisterContext' method or the 'spring/context' section from your configuration file.")]
         public void GetContextByNameNotRegisteredThrowsException()
         {
-            IApplicationContext context = ContextRegistry.GetContext("bingo");
+            Assert.Throws<ApplicationContextException>(
+                () => ContextRegistry.GetContext("bingo"),
+                "No context registered under name 'bingo'. Use the 'RegisterContext' method or the 'spring/context' section from your configuration file.");
         }
 
         [Test]
@@ -221,13 +219,12 @@ namespace Spring.Context.Support
         }
 
         [Test(Description = "SPRNET-105")]
-        [ExpectedException(typeof(ApplicationContextException))]
         public void ChokesIfChildContextRegisteredUnderNameOfAnExistingContext()
         {
             MockApplicationContext original = new MockApplicationContext("original");
             ContextRegistry.RegisterContext(original);
             MockApplicationContext duplicate = new MockApplicationContext("original");
-            ContextRegistry.RegisterContext(duplicate);
+            Assert.Throws<ApplicationContextException>(() => ContextRegistry.RegisterContext(duplicate));
         }
 
         
@@ -256,7 +253,7 @@ namespace Spring.Context.Support
             private string _expectedGreatGrandChildName;
 
 
-            [TestFixtureSetUp]
+            [OneTimeSetUp]
             public void InitializeAllTests()
             {
                 _expectedParentName = AbstractApplicationContext.DefaultRootContextName;

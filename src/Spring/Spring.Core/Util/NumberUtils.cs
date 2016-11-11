@@ -22,7 +22,6 @@
 
 using System;
 using System.ComponentModel;
-using Spring.Core.TypeConversion;
 
 #endregion
 

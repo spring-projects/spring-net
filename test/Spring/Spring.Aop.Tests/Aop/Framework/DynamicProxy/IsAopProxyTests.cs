@@ -1,5 +1,4 @@
-﻿using System;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Spring.Aop.Advice;
 using Spring.Context.Support;
 using Spring.Objects;

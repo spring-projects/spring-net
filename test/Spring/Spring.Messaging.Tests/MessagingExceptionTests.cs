@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using System.Reflection;
 
 using NUnit.Framework;
@@ -37,7 +36,7 @@ namespace Spring
     [TestFixture]
     public sealed class MessagingExceptionTests : ExceptionsTest
     {
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void FixtureSetUp ()
         {
             AssemblyToCheck = Assembly.GetAssembly(typeof(MessagingException));

@@ -1,5 +1,5 @@
 using NUnit.Framework;
-using Spring.Aop.Target;
+
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Xml;
 /*

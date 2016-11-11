@@ -38,11 +38,10 @@ namespace Spring.Util
         {}
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void MustNotCallObjectSignatureWithType()
         {
             Type myType = typeof(TestObject);
-            UniqueKey.GetInstanceScopedString( (object)myType, "PartialKey");
+            Assert.Throws<ArgumentException>(() => UniqueKey.GetInstanceScopedString( (object)myType, "PartialKey"));
         }
 
         [Test]

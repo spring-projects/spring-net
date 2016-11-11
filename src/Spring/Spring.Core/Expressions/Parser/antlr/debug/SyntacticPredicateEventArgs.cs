@@ -1,8 +1,6 @@
 namespace Spring.Expressions.Parser.antlr.debug
 {
-	using System;
-	
-	public class SyntacticPredicateEventArgs : GuessingEventArgs
+    public class SyntacticPredicateEventArgs : GuessingEventArgs
 	{
 		
 		

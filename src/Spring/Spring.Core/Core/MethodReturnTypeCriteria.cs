@@ -22,7 +22,6 @@
 
 using System;
 using System.Reflection;
-using Spring.Core;
 
 #endregion
 

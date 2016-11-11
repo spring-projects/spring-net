@@ -283,10 +283,9 @@ namespace Spring.Util
 		}
 
 		[Test]
-		[ExpectedException(typeof (FormatException))]
 		public void GetAntExpressionsIgnoresEmptyExpression()
 		{
-			StringUtils.GetAntExpressions("This is an empty expression ${}...");
+            Assert.Throws<FormatException>(() => StringUtils.GetAntExpressions("This is an empty expression ${}..."));
 		}
 
 		[Test]

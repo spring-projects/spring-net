@@ -55,17 +55,15 @@ namespace Spring.Objects.Factory.Config
         }
 
 		[Test]
-		[ExpectedException(typeof(ObjectInitializationException))]
 		public void MismatchBetweenNumberOfConfigNamesAndNumberOfLocations()
 		{
 			PropertyPlaceholderConfigurer cfg = new PropertyPlaceholderConfigurer();
             cfg.Locations = new IResource[] { mocks.StrictMock<IResource>() }; // will never get to the point where we check the validity
 			cfg.ConfigSections = new string[] { "", "" };
-            cfg.PostProcessObjectFactory((IConfigurableListableObjectFactory) mocks.DynamicMock(typeof(IConfigurableListableObjectFactory)));
+            Assert.Throws<ObjectInitializationException>(() => cfg.PostProcessObjectFactory((IConfigurableListableObjectFactory) mocks.DynamicMock(typeof(IConfigurableListableObjectFactory))));
 		}
 
 		[Test]
-		[ExpectedException(typeof(ObjectsException))]
 		public void OneConfigNameIsOKForLotsOfLocations()
 		{
 			PropertyPlaceholderConfigurer cfg = new PropertyPlaceholderConfigurer();
@@ -76,11 +74,10 @@ namespace Spring.Objects.Factory.Config
 
 			cfg.Locations = new IResource [] {mock};
 			cfg.ConfigSections = new string[] { "" };
-            cfg.PostProcessObjectFactory((IConfigurableListableObjectFactory) mocks.DynamicMock(typeof(IConfigurableListableObjectFactory)));
+            Assert.Throws<ObjectsException>(() => cfg.PostProcessObjectFactory((IConfigurableListableObjectFactory) mocks.DynamicMock(typeof(IConfigurableListableObjectFactory))));
         }
 
 		[Test]
-		[ExpectedException(typeof(ObjectInitializationException))]
 		public void ChokesOnBadResourceLocationIfIgnoreBadResourcesFlagNotSetToTrue()
 		{
 			PropertyPlaceholderConfigurer cfg = new PropertyPlaceholderConfigurer();
@@ -91,7 +88,7 @@ namespace Spring.Objects.Factory.Config
 
 			cfg.Locations = new IResource [] { mock};
 			cfg.ConfigSections = new string[] { "" };
-            cfg.PostProcessObjectFactory((IConfigurableListableObjectFactory) mocks.DynamicMock(typeof(IConfigurableListableObjectFactory)));
+            Assert.Throws<ObjectInitializationException>(() => cfg.PostProcessObjectFactory((IConfigurableListableObjectFactory) mocks.DynamicMock(typeof(IConfigurableListableObjectFactory))));
         }
 
 		[Test]
@@ -113,7 +110,6 @@ namespace Spring.Objects.Factory.Config
 		}
 
 		[Test]
-		[ExpectedException(typeof (ObjectDefinitionStoreException))]
 		public void WithCircularReference()
 		{
 			StaticApplicationContext ac = new StaticApplicationContext();
@@ -133,7 +129,7 @@ namespace Spring.Objects.Factory.Config
 			pvs.Add("Properties", "<spring-config><add key=\"age\" value=\"98\"/></spring-config>");
 			pvs.Add("order", "0");
 			ac.RegisterSingleton("configurer2", typeof (PropertyPlaceholderConfigurer), pvs);
-			ac.Refresh();
+            Assert.Throws<ObjectDefinitionStoreException>(() => ac.Refresh());
 		}
 
 		[Test]
@@ -268,8 +264,6 @@ namespace Spring.Objects.Factory.Config
 		}
 
 		[Test]
-		[ExpectedException(typeof (ObjectDefinitionStoreException),
-             ExpectedMessage = "Error registering object with name 'to' defined in '' : Could not resolve placeholder 'PROCESSOR_ARCHITECTURE'.")]
 		public void WithUnresolvableEnvironmentProperty()
 		{
 			StaticApplicationContext ac = new StaticApplicationContext();
@@ -280,7 +274,7 @@ namespace Spring.Objects.Factory.Config
 			pvs = new MutablePropertyValues();
 			pvs.Add("environmentVariableMode", EnvironmentVariableMode.Never);
 			ac.RegisterSingleton("configurer", typeof (PropertyPlaceholderConfigurer), pvs);
-			ac.Refresh();
+            Assert.Throws<ObjectDefinitionStoreException>(() => ac.Refresh(), "Error registering object with name 'to' defined in '' : Could not resolve placeholder 'PROCESSOR_ARCHITECTURE'.");
 		}
 
 		[Test]

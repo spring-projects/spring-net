@@ -22,7 +22,6 @@
 
 using System;
 using NUnit.Framework;
-using Spring.Objects.Factory.Config;
 
 #endregion
 

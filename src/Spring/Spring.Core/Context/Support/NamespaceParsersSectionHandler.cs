@@ -25,9 +25,7 @@ using System.Configuration;
 using System.Globalization;
 using System.Xml;
 
-using Spring.Core;
 using Spring.Core.TypeResolution;
-using Spring.Objects;
 using Spring.Objects.Factory.Xml;
 using Spring.Util;
 

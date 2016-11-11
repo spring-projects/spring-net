@@ -1,7 +1,6 @@
 namespace Spring.Expressions.Parser.antlr.debug
 {
-	using System;
-	using ArrayList	= System.Collections.ArrayList;
+    using ArrayList	= System.Collections.ArrayList;
 
 	public class InputBufferEventSupport
 	{

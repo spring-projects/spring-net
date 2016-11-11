@@ -51,21 +51,19 @@ namespace Spring.Objects.Factory.Support
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidOperationException), ExpectedMessage = @"Not allowed to merge when the 'MergeEnabled' property is set to 'false'")]
         public void MergeNotAllowedWhenMergeNotEnabled()
         {
             ManagedList child = new ManagedList();
-            child.Merge(null);
+            Assert.Throws<InvalidOperationException>(() => child.Merge(null), "Not allowed to merge when the 'MergeEnabled' property is set to 'false'");
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void MergeWithNonCompatibleParentType()
         {
             ManagedList child = new ManagedList();
             child.Add("one");
             child.MergeEnabled = true;
-            child.Merge("hello");
+            Assert.Throws<InvalidOperationException>(() => child.Merge("hello"));
         }
 
         [Test]

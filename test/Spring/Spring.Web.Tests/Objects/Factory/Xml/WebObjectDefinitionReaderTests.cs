@@ -18,16 +18,13 @@
 
 #endregion
 
-using System;
-using System.Collections;
 using System.Xml;
 using NUnit.Framework;
-using Spring.Collections;
+
 using Spring.Core.IO;
 using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Xml;
 using Spring.TestSupport;
-using Spring.Util;
 
 namespace Spring.Objects.Factory
 {

@@ -37,11 +37,10 @@ namespace Spring.Remoting
     public class RemoteObjectFactoryTests
     {
         [Test]
-        [ExpectedException(typeof(ArgumentException), ExpectedMessage="The Target property is required.")]
         public void BailsWhenNotConfigured()
         {
             RemoteObjectFactory factory = new RemoteObjectFactory();
-            factory.AfterPropertiesSet();
+            Assert.Throws<ArgumentException>(() => factory.AfterPropertiesSet(), "The Target property is required.");
         }
 
         [Test]

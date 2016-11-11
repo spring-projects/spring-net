@@ -20,7 +20,6 @@
 using System;
 using System.Threading;
 using Spring.Pool;
-using Spring.Threading;
 using NUnit.Framework;
 
 
@@ -81,15 +80,13 @@ namespace Spring.Threading
         }
         
         [Test]
-        [ExpectedException(typeof(ArgumentOutOfRangeException))]
         public void ReleaseMultipleBadArgument()
         {
             Semaphore s = new Semaphore(2);
             Assert.AreEqual(2, s.Permits);
             s.Acquire();
             s.Acquire();
-            s.Release(-2);
-            Assert.AreEqual(2, s.Permits); 
+            Assert.Throws<ArgumentOutOfRangeException>(() => s.Release(-2));
         }
         
         [Test]

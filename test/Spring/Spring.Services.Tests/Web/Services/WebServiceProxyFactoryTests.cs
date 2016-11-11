@@ -46,11 +46,10 @@ namespace Spring.Web.Services
     public class WebServiceProxyFactoryTests
     {
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void BailsWhenNotConfigured()
         {
             WebServiceProxyFactory wspf = new WebServiceProxyFactory();
-            wspf.AfterPropertiesSet();
+            Assert.Throws<ArgumentException>(() => wspf.AfterPropertiesSet());
         }
 
         [Test]

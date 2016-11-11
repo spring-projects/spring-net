@@ -25,7 +25,6 @@ using Common.Logging;
 using Spring.Objects.Factory;
 using Spring.Threading;
 using Spring.Util;
-using IsolationLevel=System.Data.IsolationLevel;
 
 namespace Spring.Transaction.Interceptor
 {

@@ -21,8 +21,7 @@
 using System;
 using System.Collections;
 using System.Data;
-using System.Globalization;
-using System.Threading;
+
 using Spring.Core;
 using Spring.Threading;
 using Spring.Util;
@@ -325,9 +324,9 @@ namespace Spring.Transaction.Support
 	    {
 	        get 
 	        {
-	            if ( ! SynchronizationActive ) 
+	            if (!SynchronizationActive)
 	            {
-	                throw new InvalidOperationException( "Transaction synchronization is not active" );
+	                throw new InvalidOperationException("Transaction synchronization is not active");
 	            }
 	            ArrayList syncs = LogicalThreadContext.GetData(syncsDataSlotName) as ArrayList;
 	            if (syncs != null)
@@ -336,9 +335,9 @@ namespace Spring.Transaction.Support
 	                object root = syncs.SyncRoot;
 	                lock (root)
 	                {
-                        // #SPRNET-1160, tx Ben Rowlands 
+	                    // #SPRNET-1160, tx Ben Rowlands 
 	                    CollectionUtils.StableSortInPlace(syncs, syncComparer);
-                    }
+	                }
 
 	                // Return unmodifiable snapshot, to avoid exceptions
 	                // while iterating and invoking synchronization callbacks that in turn

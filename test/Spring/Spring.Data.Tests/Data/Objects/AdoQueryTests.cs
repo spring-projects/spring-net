@@ -93,7 +93,6 @@ namespace Spring.Data.Objects
         }
 
         [Test]
-        [ExpectedException(typeof (InvalidDataAccessApiUsageException))]
         public void QueryWithoutEnoughParams()
         {
             SqlParameter sqlParameter1 = new SqlParameter();
@@ -110,7 +109,7 @@ namespace Spring.Data.Objects
             query.DeclaredParameters.Add(COLUMN_NAMES[0], COLUMN_TYPES[0]);
             query.DeclaredParameters.Add(COLUMN_NAMES[1], COLUMN_TYPES[1]);
             query.Compile();
-            query.Query();
+            Assert.Throws<InvalidDataAccessApiUsageException>(() => query.Query());
         }
 
         public class IntMappingQueryWithContext : MappingAdoQueryWithContext

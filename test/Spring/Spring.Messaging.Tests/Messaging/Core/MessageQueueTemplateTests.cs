@@ -22,15 +22,12 @@
 
 using System;
 using System.Messaging;
-using System.Transactions;
+
 using NUnit.Framework;
 using Spring.Data.Core;
-using Spring.Messaging.Support.Converters;
 using Spring.Testing.NUnit;
-using Spring.Threading;
 using Spring.Transaction;
 using Spring.Transaction.Support;
-using Spring.Util;
 
 #endregion
 
@@ -88,21 +85,18 @@ namespace Spring.Messaging.Core
         }
   
         [Test]
-        [ExpectedException(typeof (ArgumentNullException))]
         public void NoMessageQueueNameSpecified()
         {
             MessageQueueTemplate mqt = new MessageQueueTemplate();
-            mqt.AfterPropertiesSet();
+            Assert.Throws<ArgumentNullException>(() => mqt.AfterPropertiesSet());
         }
 
         [Test, Ignore("obsolete test, defaultMessageQueueName is used to obtain a queue from MessageQueueFactory")]
-        [ExpectedException(typeof (ArgumentException),
-            ExpectedMessage = "No object named noqueuename is defined in the Spring container")]
         public void MessageQueueNameNotInContext()
         {
             MessageQueueTemplate q = new MessageQueueTemplate("noqueuename");
             q.ApplicationContext = applicationContext;
-            q.AfterPropertiesSet();
+            Assert.Throws<ArgumentException>(() => q.AfterPropertiesSet(), "No object named noqueuename is defined in the Spring container");
         }
 
         [Test]

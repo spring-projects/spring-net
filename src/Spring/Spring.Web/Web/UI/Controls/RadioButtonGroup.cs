@@ -19,13 +19,11 @@
 #endregion
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-using Spring.Util;
 
 namespace Spring.Web.UI.Controls
 {

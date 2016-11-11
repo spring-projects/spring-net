@@ -21,7 +21,7 @@
 #region Imports
 
 using System;
-using System.Collections;
+using System.Reflection;
 using NUnit.Framework;
 
 #endregion
@@ -46,13 +46,12 @@ namespace Spring.Util
         }
 
         [Test]
-        [ExpectedException (typeof (System.Reflection.TargetParameterCountException))]
         public void RaiseWithBadNumberOfArguments () 
         {
             OneThirstyDude dude = new OneThirstyDude ();
             Soda bru = new Soda ();
             bru.Pop += new PopHandler (dude.HandlePop);
-            bru.OnPopWithBadNumberOfArguments ("Iron Brew", new EventRaiser ());
+            Assert.Throws<TargetParameterCountException>(() => bru.OnPopWithBadNumberOfArguments ("Iron Brew", new EventRaiser ()));
         }
 
         [Test]
@@ -65,13 +64,12 @@ namespace Spring.Util
             Assert.AreEqual (string.Empty, dude.Soda);
         }
 
-        [Test][ExpectedException (typeof (FormatException), ExpectedMessage="Iron Brew")]
         public void RaiseWithAnEventHandlerThatThrowsAnException () 
         {
             OneThirstyDude dude = new OneThirstyDude ();
             Soda bru = new Soda ();
             bru.Pop += new PopHandler (dude.HandlePopWithException);
-            bru.OnPop ("Iron Brew", new EventRaiser ());
+            Assert.Throws<FormatException>(() => bru.OnPop ("Iron Brew", new EventRaiser ()), "Iron Brew");
         }
 	}
 

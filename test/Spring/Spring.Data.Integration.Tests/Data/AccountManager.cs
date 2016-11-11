@@ -1,6 +1,3 @@
-
-using System;
-using System.Data;
 using Spring.Transaction.Interceptor;
 
 namespace Spring.Data

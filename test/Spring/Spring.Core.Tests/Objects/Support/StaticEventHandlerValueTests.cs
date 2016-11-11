@@ -61,14 +61,13 @@ namespace Spring.Objects.Support
         }
 
         [Test]
-        [ExpectedException (typeof (FatalObjectException))]
         public void WireWithInstanceHandler () 
         {
             StaticEventHandlerValue wirer = new StaticEventHandlerValue ();
             wirer.EventName = "Ping";
             wirer.MethodName = "OnPing";
             PingSource source = new PingSource ();
-            wirer.Wire (source, new PingListener ());
+            Assert.Throws<FatalObjectException>(() => wirer.Wire (source, new PingListener ()));
         }
 	}
 

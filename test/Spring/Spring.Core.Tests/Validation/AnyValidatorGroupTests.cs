@@ -21,7 +21,7 @@
 #region Imports
 
 using NUnit.Framework;
-using Rhino.Mocks;
+
 using Spring.Expressions;
 
 #endregion

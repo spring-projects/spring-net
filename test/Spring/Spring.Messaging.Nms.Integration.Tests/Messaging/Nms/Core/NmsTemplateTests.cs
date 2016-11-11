@@ -19,16 +19,18 @@
 #endregion
 
 using System;
-using System.Threading;
+
 using Apache.NMS;
 using Apache.NMS.ActiveMQ;
+
 using NUnit.Framework;
+
 using Spring.Testing.NUnit;
 
 namespace Spring.Messaging.Nms.Core
 {
     [TestFixture]
-    public class NmsTemplateTests: AbstractDependencyInjectionSpringContextTests
+    public class NmsTemplateTests : AbstractDependencyInjectionSpringContextTests
     {
         protected IConnectionFactory nmsConnectionFactory;
 
@@ -45,12 +47,11 @@ namespace Spring.Messaging.Nms.Core
         }
 
         [Test]
-        [ExpectedException(typeof(Apache.NMS.NMSConnectionException))]
         public void ConnectionThrowException()
         {
             ConnectionFactory cf = new ConnectionFactory();
             cf.BrokerUri = new Uri("tcp://localaaahost:61616");
-            IConnection c = cf.CreateConnection();
+            Assert.Throws<NMSConnectionException>(() => cf.CreateConnection());
         }
 
 
@@ -64,14 +65,13 @@ namespace Spring.Messaging.Nms.Core
 
             //Use with destination set at runtime
             nmsTemplate.ConvertAndSend("APP.TESTING", msgText);
-            
+
             AssertRecievedHelloWorldMessage(msgText, nmsTemplate.ReceiveAndConvert("APP.TESTING"));
 
             //Now using default destination set via property
             nmsTemplate.DefaultDestinationName = "APP.TESTING";
             nmsTemplate.ConvertAndSend(msgText);
             AssertRecievedHelloWorldMessage(msgText, nmsTemplate.ReceiveAndConvert());
-
         }
 
 
@@ -92,7 +92,7 @@ namespace Spring.Messaging.Nms.Core
         /// <value>An array of config locations</value>
         protected override string[] ConfigLocations
         {
-            get { return new string[] { "assembly://Spring.Messaging.Nms.Integration.Tests/Spring.Messaging.Nms.Core/NmsTemplateTests.xml" }; }
+            get { return new string[] {"assembly://Spring.Messaging.Nms.Integration.Tests/Spring.Messaging.Nms.Core/NmsTemplateTests.xml"}; }
         }
 
         #endregion

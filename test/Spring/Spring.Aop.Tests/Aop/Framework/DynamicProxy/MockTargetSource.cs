@@ -22,8 +22,6 @@
 
 using System;
 
-using Spring.Aop.Target;
-
 #endregion
 
 namespace Spring.Aop.Framework.DynamicProxy

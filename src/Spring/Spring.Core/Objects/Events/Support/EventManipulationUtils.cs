@@ -23,7 +23,6 @@
 using System;
 using System.Reflection;
 using Spring.Core;
-using Spring.Objects.Support;
 using Spring.Util;
 
 #endregion

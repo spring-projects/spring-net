@@ -24,6 +24,7 @@ using System;
 using System.Runtime.Remoting.Lifetime;
 
 using NUnit.Framework;
+
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.Remoting.Support;
@@ -32,19 +33,18 @@ using Spring.Remoting.Support;
 
 namespace Spring.Remoting
 {
-	/// <summary>
-	/// Unit tests for the CaoExporter class.
-	/// </summary>
-	/// <author>Bruno Baia</author>
-	[TestFixture]
-	public class CaoExporterTests : BaseRemotingTestFixture
-	{
+    /// <summary>
+    /// Unit tests for the CaoExporter class.
+    /// </summary>
+    /// <author>Bruno Baia</author>
+    [TestFixture]
+    public class CaoExporterTests : BaseRemotingTestFixture
+    {
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
-        public void BailsWhenNotConfigured ()
+        public void BailsWhenNotConfigured()
         {
             CaoExporter exp = new CaoExporter();
-            exp.AfterPropertiesSet ();
+            Assert.Throws<ArgumentException>(() => exp.AfterPropertiesSet());
         }
 
         [Test]
@@ -60,9 +60,9 @@ namespace Spring.Remoting
             Assert.IsNotNull(cao);
         }
 
-		[Test]
-		public void RegistersWithLifetimeService()
-		{
+        [Test]
+        public void RegistersWithLifetimeService()
+        {
             IApplicationContext ctx = new XmlApplicationContext("assembly://Spring.Services.Tests/Spring.Data.Spring.Remoting/caoLifetimeService.xml");
             ContextRegistry.RegisterContext(ctx);
 
@@ -72,10 +72,10 @@ namespace Spring.Remoting
             MarshalByRefObject cao = caoFactory.GetObject() as MarshalByRefObject;
             Assert.IsNotNull(cao);
 
-            ILease lease = (ILease)cao.GetLifetimeService();
-			Assert.AreEqual(TimeSpan.FromMilliseconds(10000), lease.InitialLeaseTime, "InitialLeaseTime");
-			Assert.AreEqual(TimeSpan.FromMilliseconds(1000), lease.RenewOnCallTime, "RenewOnCallTime");
-			Assert.AreEqual(TimeSpan.FromMilliseconds(100), lease.SponsorshipTimeout, "SponsorshipTimeout");
-		}
-	}
+            ILease lease = (ILease) cao.GetLifetimeService();
+            Assert.AreEqual(TimeSpan.FromMilliseconds(10000), lease.InitialLeaseTime, "InitialLeaseTime");
+            Assert.AreEqual(TimeSpan.FromMilliseconds(1000), lease.RenewOnCallTime, "RenewOnCallTime");
+            Assert.AreEqual(TimeSpan.FromMilliseconds(100), lease.SponsorshipTimeout, "SponsorshipTimeout");
+        }
+    }
 }

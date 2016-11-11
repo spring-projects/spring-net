@@ -1,8 +1,6 @@
-using System;
 using NUnit.Framework;
 using Spring.Context;
 using Spring.Context.Support;
-using Spring.Dao;
 using Spring.Objects;
 using Spring.Testing.NUnit;
 

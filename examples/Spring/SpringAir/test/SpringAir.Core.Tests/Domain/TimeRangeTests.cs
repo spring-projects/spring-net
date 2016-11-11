@@ -71,11 +71,10 @@ namespace SpringAir.Domain
         }
 
         [Test]
-        [ExpectedException(typeof(FormatException))]
         public void ConvertFromWithOutOfShortRangeException()
         {
             TimeRange.TimeRangeTypeConverter vrtr = new TimeRange.TimeRangeTypeConverter();
-            vrtr.ConvertFrom("[ 1287876 - 9 ]");
+            Assert.Throws<FormatException>(() => vrtr.ConvertFrom("[ 1287876 - 9 ]"));
         }
 
         [Test]

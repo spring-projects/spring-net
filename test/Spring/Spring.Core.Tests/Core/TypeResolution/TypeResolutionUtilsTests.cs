@@ -47,10 +47,9 @@ namespace Spring.Core.TypeResolution
         }
 
 		[Test]
-		[ExpectedException(typeof(TypeLoadException))]
 		public void ResolveFromBadAssemblyQualifiedName()
 		{
-			TypeResolutionUtils.ResolveType("Spring.Objects.TestObject, Spring.Core.FooTests");
+            Assert.Throws<TypeLoadException>(() => TypeResolutionUtils.ResolveType("Spring.Objects.TestObject, Spring.Core.FooTests"));
 		}
 
         [Test]
@@ -62,14 +61,10 @@ namespace Spring.Core.TypeResolution
         }
 
 		[Test]
-		[ExpectedException(typeof(TypeLoadException))]
 		public void ResolveFromBadShortName()
 		{
-			TypeResolutionUtils.ResolveType("Spring.Objects.FooBarTestObject");
+            Assert.Throws<TypeLoadException>(() => TypeResolutionUtils.ResolveType("Spring.Objects.FooBarTestObject"));
 		}
-
-
-
 
         [Test]
         public void ResolveInterfaceArrayFromStringArray()
@@ -83,11 +78,10 @@ namespace Spring.Core.TypeResolution
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void ResolveInterfaceArrayFromStringArrayWithNonInterfaceTypes()
         {
             string[] input = new string[] { GetType().AssemblyQualifiedName };
-            TypeResolutionUtils.ResolveInterfaceArray(input);
+            Assert.Throws<ArgumentException>(() => TypeResolutionUtils.ResolveInterfaceArray(input));
         }
 
         [Test]

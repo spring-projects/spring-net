@@ -131,34 +131,29 @@ namespace Spring.Objects.Factory.Support
 			return pickedCtor;
 		}
 
-        [ExpectedException(typeof (ArgumentException), ExpectedMessage="Cannot calculate the type difference weight for argument types and arguments with differing lengths.")]
 		[Test]
         [Ignore("Investigate details of new type weight algorithm")]
 		public void GetTypeDifferenceWeightWithMismatchedLengths()
 		{
-		    AutowireUtils.GetTypeDifferenceWeight(new Type[] {}, new object[] {1});
+            Assert.Throws<ArgumentException>(() => AutowireUtils.GetTypeDifferenceWeight(new Type[] {}, new object[] {1}), "Cannot calculate the type difference weight for argument types and arguments with differing lengths.");
 		}
 
 		[Test]
-		[ExpectedException(typeof (NullReferenceException))]
 		public void GetTypeDifferenceWeightWithNullParameterTypes()
 		{
-			AutowireUtils.GetTypeDifferenceWeight(null, new object[] {});
+            Assert.Throws<NullReferenceException>(() => AutowireUtils.GetTypeDifferenceWeight(null, new object[] {}));
 		}
 
 		[Test]
-		[ExpectedException(typeof (NullReferenceException))]
 		public void GetTypeDifferenceWeightWithNullArgumentTypes()
 		{
-			AutowireUtils.GetTypeDifferenceWeight(
-                ReflectionUtils.GetParameterTypes(typeof(Fable).GetConstructor(new Type[] { typeof(FableCharacter) }).GetParameters()), null);
+            Assert.Throws<NullReferenceException>(() => AutowireUtils.GetTypeDifferenceWeight(ReflectionUtils.GetParameterTypes(typeof(Fable).GetConstructor(new Type[] { typeof(FableCharacter) }).GetParameters()), null));
 		}
 
 		[Test]
-		[ExpectedException(typeof (NullReferenceException))]
 		public void GetTypeDifferenceWeightWithAllNulls()
 		{
-			AutowireUtils.GetTypeDifferenceWeight(null, null);
+            Assert.Throws<NullReferenceException>(() => AutowireUtils.GetTypeDifferenceWeight(null, null));
 		}
 
 		[Test]

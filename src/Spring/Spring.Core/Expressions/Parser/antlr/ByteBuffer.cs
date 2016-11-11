@@ -1,8 +1,6 @@
 using System;
-using System.Runtime.InteropServices;
+
 using Stream		= System.IO.Stream;
-using BinaryReader	= System.IO.BinaryReader;
-using IOException	= System.IO.IOException;
 
 namespace Spring.Expressions.Parser.antlr
 {

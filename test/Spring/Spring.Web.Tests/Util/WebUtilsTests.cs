@@ -22,8 +22,7 @@
 
 using System;
 using NUnit.Framework;
-using Spring.Objects.Factory;
-using Spring.Objects.Factory.Support;
+
 using Spring.TestSupport;
 
 #endregion
@@ -40,24 +39,21 @@ namespace Spring.Util
         private const string ExpectedPageName = "foo";
 
         [Test]
-        [ExpectedException(typeof (ArgumentNullException))]
         public void GetPageNameWithNullUrl()
         {
-            WebUtils.GetPageName(null);
+            Assert.Throws<ArgumentNullException>(() => WebUtils.GetPageName(null));
         }
 
         [Test]
-        [ExpectedException(typeof (ArgumentNullException))]
         public void GetPageNameWithEmptyUrl()
         {
-            WebUtils.GetPageName(string.Empty);
+            Assert.Throws<ArgumentNullException>(() => WebUtils.GetPageName(string.Empty));
         }
 
         [Test]
-        [ExpectedException(typeof (ArgumentNullException))]
         public void GetPageNameWithWhitespacedUrl()
         {
-            WebUtils.GetPageName("   ");
+            Assert.Throws<ArgumentNullException>(() => WebUtils.GetPageName("   "));
         }
 
         [Test]
@@ -212,24 +208,21 @@ namespace Spring.Util
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void CombineVirtualPathsDoesntAcceptNullRoot()
         {
-            WebUtils.CombineVirtualPaths(null, string.Empty);
+            Assert.Throws<ArgumentNullException>(() => WebUtils.CombineVirtualPaths(null, string.Empty));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void CombineVirtualPathsDoesntAcceptEmptyRoot()
         {
-            WebUtils.CombineVirtualPaths(string.Empty, string.Empty);
+            Assert.Throws<ArgumentNullException>(() => WebUtils.CombineVirtualPaths(string.Empty, string.Empty));
         }
         
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void CombineVirtualPathsDoesntAcceptNonRootedRoot()
         {
-            WebUtils.CombineVirtualPaths("mypath", string.Empty);
+            Assert.Throws<ArgumentException>(() => WebUtils.CombineVirtualPaths("mypath", string.Empty));
         }
         
         [Test]

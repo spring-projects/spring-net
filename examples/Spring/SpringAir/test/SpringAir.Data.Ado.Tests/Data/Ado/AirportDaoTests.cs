@@ -22,6 +22,7 @@
 
 using System.Collections;
 using NUnit.Framework;
+using Spring.Dao;
 using Spring.Data.Common;
 using SpringAir.Domain;
 
@@ -84,10 +85,9 @@ namespace SpringAir.Data.Ado
         }
 
         [Test]
-        [ExpectedException(typeof(Spring.Dao.EmptyResultDataAccessException))]
         public void GetAirportByCodeNonExistent()
         {
-            Airport airport = dao.GetAirport("FOO");
+            Assert.Throws<EmptyResultDataAccessException>(() => dao.GetAirport("FOO"));
         }
     }
 }

@@ -1,7 +1,6 @@
 namespace Spring.Expressions.Parser.antlr.debug
 {
-	using System;
-	using System.Threading;
+    using System.Threading;
 	using antlr.collections.impl;
 	
 	public class LLkDebuggingParser : LLkParser, DebuggingParser

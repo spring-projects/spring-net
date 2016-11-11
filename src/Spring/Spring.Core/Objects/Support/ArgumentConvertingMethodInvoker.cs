@@ -23,7 +23,6 @@
 using System;
 using System.ComponentModel;
 
-using Spring.Core;
 using Spring.Core.TypeConversion;
 using Spring.Util;
 

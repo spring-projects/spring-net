@@ -22,8 +22,7 @@
 
 using System.Messaging;
 using NUnit.Framework;
-using Spring.Context;
-using Spring.Context.Support;
+
 using Spring.Testing.NUnit;
 
 #endregion

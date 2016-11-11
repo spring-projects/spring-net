@@ -32,11 +32,10 @@ namespace Spring.Globalization.Formatters
     public class IntegerFormatterTests
 	{
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void FormatNullValue()
         {
             IntegerFormatter fmt = new IntegerFormatter();
-            fmt.Format(null);
+            Assert.Throws<ArgumentNullException>(() => fmt.Format(null));
         }
 
         [Test]
@@ -48,11 +47,10 @@ namespace Spring.Globalization.Formatters
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void FormatNonNumber()
         {
             IntegerFormatter fmt = new IntegerFormatter();
-            fmt.Format("not a number");
+            Assert.Throws<ArgumentException>(() => fmt.Format("not a number"));
         }
 
         [Test]

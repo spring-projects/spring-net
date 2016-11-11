@@ -37,19 +37,17 @@ namespace Spring.Core.TypeConversion
     public sealed class CredentialConverterTests
     {
         [Test]
-        [ExpectedException(typeof(NotSupportedException))]
         public void ConvertFromNullReference()
         {
             CredentialConverter cc = new CredentialConverter();
-            cc.ConvertFrom(null);
+            Assert.Throws<NotSupportedException>(() => cc.ConvertFrom(null));
         }
 
         [Test]
-        [ExpectedException(typeof(NotSupportedException))]
         public void ConvertFromNonSupportedOptionBails()
         {
             CredentialConverter cc = new CredentialConverter();
-            cc.ConvertFrom(12);
+            Assert.Throws<NotSupportedException>(() => cc.ConvertFrom(12));
         }
 
         [Test]
@@ -67,19 +65,17 @@ namespace Spring.Core.TypeConversion
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void ConvertFromEmptyString()
         {
             CredentialConverter cc = new CredentialConverter();
-            cc.ConvertFrom(string.Empty);
+            Assert.Throws<ArgumentException>(() => cc.ConvertFrom(string.Empty));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void ConvertFromMalformedString()
         {
             CredentialConverter cc = new CredentialConverter();
-            object credential = cc.ConvertFrom(@"Spring:bbaia\sprnet");
+            Assert.Throws<ArgumentException>(() => cc.ConvertFrom(@"Spring:bbaia\sprnet"));
         }
 
         [Test]
@@ -97,11 +93,10 @@ namespace Spring.Core.TypeConversion
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void ConvertFromStringWithIncorrectDomain()
         {
             CredentialConverter cc = new CredentialConverter();
-            object credential = cc.ConvertFrom(@"\bbaia:sprnet");
+            Assert.Throws<ArgumentException>(() => cc.ConvertFrom(@"\bbaia:sprnet"));
         }
 
         [Test]
@@ -119,11 +114,10 @@ namespace Spring.Core.TypeConversion
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void ConvertFromStringWithIncorrectPassword()
         {
             CredentialConverter cc = new CredentialConverter();
-            object credential = cc.ConvertFrom(@"\bbaia:");
+            Assert.Throws<ArgumentException>(() => cc.ConvertFrom(@"\bbaia:"));
         }
 
         [Test]

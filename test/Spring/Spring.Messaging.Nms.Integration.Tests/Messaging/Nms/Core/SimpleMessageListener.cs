@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using Apache.NMS;
 using Common.Logging;
 

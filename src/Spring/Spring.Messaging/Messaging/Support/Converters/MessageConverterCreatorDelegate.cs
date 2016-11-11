@@ -19,7 +19,6 @@
 #endregion
 
 using Spring.Messaging.Core;
-using Spring.Messaging.Support.Converters;
 
 namespace Spring.Messaging.Support.Converters
 {

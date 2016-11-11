@@ -91,11 +91,10 @@ namespace Spring.Collections
 		}
 
 		[Test]
-		[ExpectedException(typeof(System.ArgumentOutOfRangeException))]
 		public void RemoveAtOnEmptyLinkedList()
 		{
 			LinkedList ll = new LinkedList();
-			ll.RemoveAt(0);
+			Assert.Throws<ArgumentOutOfRangeException>(() => ll.RemoveAt(0));
 		}
 
 		[Test]
@@ -113,7 +112,6 @@ namespace Spring.Collections
 		}
 
 		[Test]
-		[ExpectedException(typeof(System.InvalidOperationException))]
 		public void EnumeratorModification()
 		{
 			LinkedList ll = new LinkedList();
@@ -123,8 +121,7 @@ namespace Spring.Collections
 			IEnumerator ienum = ll.GetEnumerator();
 			Assert.IsTrue(ienum.MoveNext());
 			ll.RemoveAt(0);
-			ienum.MoveNext();
-			Assert.Fail("Expected enumerator to fail with InvalidOperationException");
+            Assert.Throws<InvalidOperationException>(() => ienum.MoveNext());
 		}
 
 		[Test]
@@ -187,43 +184,39 @@ namespace Spring.Collections
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void CopyToWithNullArray()
 		{
 			LinkedList ll = new LinkedList();
 			ll.Add("item1");
-			ll.CopyTo(null, 0);
+            Assert.Throws<ArgumentNullException>(() => ll.CopyTo(null, 0));
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void CopyToWithNegativeIndex()
 		{
 			LinkedList ll = new LinkedList();
 			ll.Add("item1");
 			string[] strings = new string[1];
-			ll.CopyTo(strings, -1);
+            Assert.Throws<ArgumentOutOfRangeException>(() => ll.CopyTo(strings, -1));
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void CopyToWithIndexGreaterThanArrayLength()
 		{
 			LinkedList ll = new LinkedList();
 			ll.Add("item1");
 			string[] strings = new string[1];
-			ll.CopyTo(strings, 2);
+            Assert.Throws<ArgumentOutOfRangeException>(() => ll.CopyTo(strings, 2));
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
 		public void CopyToWithInsufficientSizeArray()
 		{
 			LinkedList ll = new LinkedList();
 			ll.Add("item1");
 			ll.Add("item2");
 			string[] strings = new string[2];
-			ll.CopyTo(strings, 1);
+            Assert.Throws<ArgumentException>(() => ll.CopyTo(strings, 1));
 		}
 
 		[Test]

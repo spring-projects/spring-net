@@ -19,8 +19,6 @@
 #region Imports
 
 using Spring.Context;
-using Spring.Context.Support;
-using Spring.Util;
 
 #endregion
 

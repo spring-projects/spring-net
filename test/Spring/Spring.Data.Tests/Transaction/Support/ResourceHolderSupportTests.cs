@@ -32,11 +32,10 @@ namespace Spring.Transaction.Support
 			Assert.IsTrue( RollbackOnly);
 		}
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
 		public void InvalidDeadline()
 		{
-			int time = TimeToLiveInSeconds;
-            Assert.IsNotNull(time); //just to avoid mono msc CS0219 error
+		    int temp;
+            Assert.Throws<ArgumentException>(() => temp = TimeToLiveInSeconds);
 		}
 
         /*

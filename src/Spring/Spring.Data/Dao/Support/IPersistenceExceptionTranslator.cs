@@ -21,7 +21,7 @@
 #endregion
 
 using System;
-using Spring.Dao;
+
 using Spring.Data.Support;
 
 namespace Spring.Dao.Support

@@ -93,7 +93,7 @@ namespace Spring.Objects.Factory.Xml
                           "The instance handler did not get notified when the static event was raised (and was probably not wired up in the first place).");
         }
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void FixtureSetUp()
         {
             // enable (null appender) logging, to ensure that the logging code is exercised

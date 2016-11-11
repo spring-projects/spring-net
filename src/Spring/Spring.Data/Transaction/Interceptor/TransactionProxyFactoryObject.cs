@@ -27,7 +27,6 @@ using System.Collections.Specialized;
 using Spring.Aop;
 using Spring.Aop.Framework;
 using Spring.Aop.Framework.Adapter;
-using Spring.Aop.Framework.DynamicProxy;
 using Spring.Aop.Support;
 using Spring.Aop.Target;
 using Spring.Core.TypeResolution;

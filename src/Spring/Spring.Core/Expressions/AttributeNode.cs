@@ -22,7 +22,6 @@ using System;
 using System.Runtime.Serialization;
 
 using Spring.Core.TypeResolution;
-using Spring.Util;
 
 namespace Spring.Expressions
 {

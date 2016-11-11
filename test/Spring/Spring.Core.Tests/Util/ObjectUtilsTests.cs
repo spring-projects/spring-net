@@ -101,10 +101,9 @@ namespace Spring.Util
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void InstantiateTypeWithNullType()
         {
-            ObjectUtils.InstantiateType(null);
+            Assert.Throws<ArgumentNullException>(() => ObjectUtils.InstantiateType(null));
         }
 
         [Test]
@@ -131,10 +130,9 @@ namespace Spring.Util
         }
 
         [Test]
-        [ExpectedException(typeof(FatalReflectionException))]
         public void InstantiateTypeWithOpenGenericType()
         {
-            ObjectUtils.InstantiateType(typeof(Dictionary<,>));
+            Assert.Throws<FatalReflectionException>(() => ObjectUtils.InstantiateType(typeof(Dictionary<,>)));
         }
 
         [Test]
@@ -144,24 +142,21 @@ namespace Spring.Util
         }
 
         [Test]
-        [ExpectedException(typeof(FatalReflectionException))]
         public void InstantiateTypeWithAbstractType()
         {
-            ObjectUtils.InstantiateType(typeof (AbstractType));
+            Assert.Throws<FatalReflectionException>(() => ObjectUtils.InstantiateType(typeof (AbstractType)));
         }
 
         [Test]
-        [ExpectedException(typeof(FatalReflectionException))]
         public void InstantiateTypeWithInterfaceType()
         {
-            ObjectUtils.InstantiateType(typeof (IList));
+            Assert.Throws<FatalReflectionException>(() => ObjectUtils.InstantiateType(typeof (IList)));
         }
 
         [Test]
-        [ExpectedException(typeof(FatalReflectionException))]
         public void InstantiateTypeWithTypeExposingNoZeroArgCtor()
         {
-            ObjectUtils.InstantiateType(typeof(NoZeroArgConstructorType));
+            Assert.Throws<FatalReflectionException>(() => ObjectUtils.InstantiateType(typeof(NoZeroArgConstructorType)));
         }
 
         [Test]
@@ -177,10 +172,9 @@ namespace Spring.Util
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void InstantiateTypeWithNullCtor()
         {
-            ObjectUtils.InstantiateType(typeof(IList).GetConstructor(Type.EmptyTypes), new object[] { });
+            Assert.Throws<ArgumentNullException>(() => ObjectUtils.InstantiateType(typeof(IList).GetConstructor(Type.EmptyTypes), new object[] { }));
         }
 
         [Test]
@@ -272,45 +266,37 @@ namespace Spring.Util
         }
 
         [Test]
-        [ExpectedException(typeof (ArgumentOutOfRangeException))]
         public void EnumerateElementAtOutOfRangeIndex()
         {
             string expected = "Mmm...";
             IList list = new string[] {"Aw!", "Man!", expected};
             IEnumerator enumerator = list.GetEnumerator();
-            object actual = ObjectUtils.EnumerateElementAtIndex(enumerator, 12);
-            Assert.AreEqual(expected, actual);
+            Assert.Throws<ArgumentOutOfRangeException>(() => ObjectUtils.EnumerateElementAtIndex(enumerator, 12));
         }
 
         [Test]
-        [ExpectedException(typeof (ArgumentOutOfRangeException))]
         public void EnumerateElementAtOutOfRangeIndexViaIEnumerable()
         {
             string expected = "Mmm...";
             IList list = new string[] {"Aw!", "Man!", expected};
-            object actual = ObjectUtils.EnumerateElementAtIndex(list, 12);
-            Assert.AreEqual(expected, actual);
+            Assert.Throws<ArgumentOutOfRangeException>(() => ObjectUtils.EnumerateElementAtIndex(list, 12));
         }
 
         [Test]
-        [ExpectedException(typeof (ArgumentOutOfRangeException))]
         public void EnumerateElementAtNegativeIndex()
         {
             string expected = "Mmm...";
             IList list = new string[] {"Aw!", "Man!", expected};
             IEnumerator enumerator = list.GetEnumerator();
-            object actual = ObjectUtils.EnumerateElementAtIndex(enumerator, -10);
-            Assert.AreEqual(expected, actual);
+            Assert.Throws<ArgumentOutOfRangeException>(() => ObjectUtils.EnumerateElementAtIndex(enumerator, -10));
         }
 
         [Test]
-        [ExpectedException(typeof (ArgumentOutOfRangeException))]
         public void EnumerateElementAtNegativeIndexViaIEnumerable()
         {
             string expected = "Mmm...";
             IList list = new string[] {"Aw!", "Man!", expected};
-            object actual = ObjectUtils.EnumerateElementAtIndex(list, -10);
-            Assert.AreEqual(expected, actual);
+            Assert.Throws<ArgumentOutOfRangeException>(() => ObjectUtils.EnumerateElementAtIndex(list, -10));
         }
 
         #region Helper Classes

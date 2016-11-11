@@ -24,7 +24,6 @@ using Apache.NMS;
 using Common.Logging;
 using Spring.Collections;
 using Spring.Util;
-using IQueue=Apache.NMS.IQueue;
 
 namespace Spring.Messaging.Nms.Connections
 {

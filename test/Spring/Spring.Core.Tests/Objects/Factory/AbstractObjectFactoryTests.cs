@@ -22,15 +22,13 @@
 
 using System;
 using NUnit.Framework;
-using Spring.Context;
+
 using Spring.Core.IO;
-using Spring.Expressions;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Xml;
 using Spring.Threading;
 using System.Threading;
-using System.Diagnostics;
 using System.Collections;
 
 #endregion
@@ -105,10 +103,9 @@ namespace Spring.Objects.Factory
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public virtual void GetObjectWithNullName()
         {
-            ObjectFactory.GetObject(null);
+            Assert.Throws<ArgumentNullException>(() => ObjectFactory.GetObject(null));
         }
 
         /// <summary>
@@ -236,11 +233,10 @@ namespace Spring.Objects.Factory
         }
 
         [Test]
-        [ExpectedException(typeof(NoSuchObjectDefinitionException))]
         public void NotThere()
         {
             Assert.IsFalse(ObjectFactory.ContainsObject("Mr Squiggle"));
-            ObjectFactory.GetObject("Mr Squiggle");
+            Assert.Throws<NoSuchObjectDefinitionException>(() => ObjectFactory.GetObject("Mr Squiggle"));
         }
 
         [Test]
@@ -260,10 +256,9 @@ namespace Spring.Objects.Factory
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void RegisterNullCustomTypeConverter()
         {
-            ObjectFactory.RegisterCustomConverter(null, null);
+            Assert.Throws<ArgumentNullException>(() => ObjectFactory.RegisterCustomConverter(null, null));
         }
 
         [Test]
@@ -381,14 +376,12 @@ namespace Spring.Objects.Factory
         /// It should be illegal to dereference a normal object as a factory.
         /// </summary>
         [Test]
-        [ExpectedException(typeof(ObjectIsNotAFactoryException))]
         public virtual void RejectsFactoryGetOnNormalObject()
         {
-            ObjectFactory.GetObject("&rod");
+            Assert.Throws<ObjectIsNotAFactoryException>(() => ObjectFactory.GetObject("&rod"));
         }
 
         [Test]
-        [ExpectedException(typeof(ObjectDefinitionStoreException))]
         public virtual void Aliasing()
         {
             string alias = "rods alias";
@@ -407,23 +400,19 @@ namespace Spring.Objects.Factory
             object rod = ObjectFactory.GetObject("rod");
             object aliasRod = ObjectFactory.GetObject(alias);
             Assert.IsTrue(rod == aliasRod);
-            ObjectFactory.RegisterAlias("father", alias);
+            Assert.Throws<ObjectDefinitionStoreException>(() => ObjectFactory.RegisterAlias("father", alias));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void RegisterSingletonWithEmptyName()
         {
-            ((AbstractObjectFactory)ObjectFactory)
-                .RegisterSingleton(Environment.NewLine, DBNull.Value);
+            Assert.Throws<ArgumentNullException>(() => ObjectFactory.RegisterSingleton(Environment.NewLine, DBNull.Value));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void RegisterSingletonWithNullName()
         {
-            ((AbstractObjectFactory)ObjectFactory)
-                .RegisterSingleton(null, DBNull.Value);
+            Assert.Throws<ArgumentNullException>(() => ObjectFactory.RegisterSingleton(null, DBNull.Value));
         }
 
         [Test]
@@ -444,33 +433,27 @@ namespace Spring.Objects.Factory
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ContainsSingletonWithEmptyName()
         {
-            ((AbstractObjectFactory)ObjectFactory)
-                .ContainsSingleton(Environment.NewLine);
+            Assert.Throws<ArgumentNullException>(() => ObjectFactory.ContainsSingleton(Environment.NewLine));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ContainsSingletonWithNullName()
         {
-            ((AbstractObjectFactory)ObjectFactory)
-                .ContainsSingleton(null);
+            Assert.Throws<ArgumentNullException>(() => ObjectFactory.ContainsSingleton(null));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void AliasWithEmptyName()
         {
-            ((AbstractObjectFactory)ObjectFactory).RegisterAlias(Environment.NewLine, "the whipping boy");
+            Assert.Throws<ArgumentNullException>(() => ObjectFactory.RegisterAlias(Environment.NewLine, "the whipping boy"));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void AliasWithEmptyAlias()
         {
-            ((AbstractObjectFactory)ObjectFactory).RegisterAlias("rick", Environment.NewLine);
+            Assert.Throws<ArgumentNullException>(() => ObjectFactory.RegisterAlias("rick", Environment.NewLine));
         }
 
         //		[Test]

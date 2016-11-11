@@ -21,7 +21,7 @@
 #region Imports
 
 using System.IO;
-using Spring.Core.IO;
+
 using Spring.Util;
 
 #endregion

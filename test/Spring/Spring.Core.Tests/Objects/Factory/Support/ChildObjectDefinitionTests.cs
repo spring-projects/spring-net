@@ -36,24 +36,21 @@ namespace Spring.Objects.Factory.Support
     public sealed class ChildObjectDefinitionTests
     {
         [Test]
-        [ExpectedException(typeof(ObjectDefinitionValidationException))]
         public void ChokesIfParentNamePropertyIsNullAtValidationTime()
         {
-            new ChildObjectDefinition(null, null).Validate();
+            Assert.Throws<ObjectDefinitionValidationException>(() => new ChildObjectDefinition(null, null).Validate());
         }
 
         [Test]
-        [ExpectedException(typeof(ObjectDefinitionValidationException))]
         public void ChokesIfParentNamePropertyIsEmptyAtValidationTime()
         {
-            new ChildObjectDefinition(String.Empty, null).Validate();
+            Assert.Throws<ObjectDefinitionValidationException>(() => new ChildObjectDefinition(String.Empty, null).Validate());
         }
 
         [Test]
-        [ExpectedException(typeof(ObjectDefinitionValidationException))]
         public void ChokesIfParentNamePropertyIsJustWhitespaceAtValidationTime()
         {
-            new ChildObjectDefinition("    ", null).Validate();
+            Assert.Throws<ObjectDefinitionValidationException>(() => new ChildObjectDefinition("    ", null).Validate());
         }
 
 	    [Test]

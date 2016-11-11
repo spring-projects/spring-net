@@ -1,8 +1,6 @@
 namespace Spring.Expressions.Parser.antlr.debug
 {
-	using System;
-	
-	public class Tracer : TraceListenerBase, TraceListener
+    public class Tracer : TraceListenerBase, TraceListener
 	{
 		protected string indentString = "";
 		// TBD: should be StringBuffer

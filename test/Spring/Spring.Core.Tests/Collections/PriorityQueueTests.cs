@@ -62,35 +62,31 @@ namespace Spring.Collections
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException))]
 		public void ThrowsArgumentExceptionForZeroCapacity()
 		{
-			new PriorityQueue(0);
+            Assert.Throws<ArgumentException>(() => new PriorityQueue(0));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void ThrowsArgumentNullExceptionForNullCollection()
 		{
-			PriorityQueue q = new PriorityQueue((ICollection) null);
+            Assert.Throws<ArgumentNullException>(() => new PriorityQueue((ICollection) null));
 		}
 
 		[Test]
-			[ExpectedException(typeof(ArgumentNullException))]
 		public void ThrowsArgumentNullExceptionForNullCollectionElements()
 		{
 			object[] ints = new object[SIZE];
-			PriorityQueue q = new PriorityQueue(new ArrayList(ints));
+            Assert.Throws<ArgumentNullException>(() => new PriorityQueue(new ArrayList(ints)));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void ThrowsArgumentNullExceptionForSomeNullCollectionElements()
 		{
 			object[] ints = new object[SIZE];
 			for (int i = 0; i < SIZE - 1; ++i)
 				ints[i] = i;
-			PriorityQueue q = new PriorityQueue(new ArrayList(ints));
+            Assert.Throws<ArgumentNullException>(() => new PriorityQueue(new ArrayList(ints)));
 		}
 
 		[Test]
@@ -150,19 +146,17 @@ namespace Spring.Collections
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void OfferWithNullObject()
 		{
 			PriorityQueue q = new PriorityQueue(1);
-			q.Offer(null);
+            Assert.Throws<ArgumentNullException>(() => q.Offer(null));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void AddWithNullObject()
 		{
 			PriorityQueue q = new PriorityQueue(1);
-			q.Add(null);
+            Assert.Throws<ArgumentNullException>(() => q.Add(null));
 		}
 
 		[Test]
@@ -174,13 +168,11 @@ namespace Spring.Collections
 		}
 
 		[Test]
-		[ExpectedException(typeof (InvalidCastException))]
 		public void OfferNonComparable()
 		{
 			PriorityQueue q = new PriorityQueue(1);
 			q.Offer(new Object());
-			q.Offer(new Object());
-			q.Offer(new Object());
+            Assert.Throws<InvalidCastException>(() => q.Offer(new Object()));
 		}
 
 		[Test]
@@ -195,31 +187,28 @@ namespace Spring.Collections
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void AddAllWithNullElements()
 		{
 			PriorityQueue q = new PriorityQueue(1);
-			q.AddAll(null);
+            Assert.Throws<ArgumentNullException>(() => q.AddAll(null));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void AddAllWithCollectionWithNullElements()
 		{
 			PriorityQueue q = new PriorityQueue(SIZE);
 			object[] ints = new object[SIZE];
-			q.AddAll(new ArrayList(ints));
+            Assert.Throws<ArgumentNullException>(() => q.AddAll(new ArrayList(ints)));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void AddAllWithCollectionWithSomeNullElements()
 		{
 			PriorityQueue q = new PriorityQueue(SIZE);
 			object[] ints = new object[SIZE];
 			for (int i = 0; i < SIZE - 1; ++i)
 				ints[i] = i;
-			q.AddAll(new ArrayList(ints));
+            Assert.Throws<ArgumentNullException>(() => q.AddAll(new ArrayList(ints)));
 		}
 
 		[Test]
@@ -261,7 +250,6 @@ namespace Spring.Collections
 		}
 
 		[Test]
-		[ExpectedException(typeof (NoElementsException))]
 		public void Element()
 		{
 			PriorityQueue q = populatedQueue(SIZE);
@@ -270,11 +258,10 @@ namespace Spring.Collections
 				Assert.AreEqual(i, (q.Element()));
 				q.Poll();
 			}
-			q.Element();
+            Assert.Throws<NoElementsException>(() => q.Element());
 		}
 
 		[Test]
-		[ExpectedException(typeof (NoElementsException))]
 		public void Remove()
 		{
 			PriorityQueue q = populatedQueue(SIZE);
@@ -282,7 +269,7 @@ namespace Spring.Collections
 			{
 				Assert.AreEqual(i, (q.Remove()));
 			}
-			q.Remove();
+            Assert.Throws<NoElementsException>(() => q.Remove());
 		}
 
 		[Test]
@@ -409,44 +396,46 @@ namespace Spring.Collections
 			while (!(q.Count == 0))
 				Assert.AreEqual(q.Remove(), r.Remove());
 		}
-		[Test]
-			[ExpectedException(typeof(ArgumentException))]
-			public void QueueCopyToArrayWithSmallerDestinationArray()
-		{
-			PriorityQueue source = populatedQueue(SIZE);
-			object[] dest = new object[SIZE/2];
-			source.CopyTo(dest);
-		}
-		[Test]
-		[ExpectedException(typeof(ArgumentException))]
-		public void QueueCopyToArrayWithIndexOutOfDestinationArrayRange()
-		{
-			PriorityQueue source = populatedQueue(SIZE);
-			object[] dest = new object[SIZE/2];
-			source.CopyTo(dest, 11);
-		}
-		[Test]
-		[ExpectedException(typeof(IndexOutOfRangeException))]
-			public void QueueCopyToArrayWithValidSizeButInvalidStartingIndex()
-		{
-			PriorityQueue source = populatedQueue(SIZE);
-			object[] dest = new object[SIZE];
-			source.CopyTo(dest, 10);
-		}
-		[Test]
-			public void CompleteQueueCopyToArrayWithValidSize()
-		{
-			PriorityQueue source = populatedQueue(SIZE);
-			object[] dest = new object[SIZE];
-			source.CopyTo(dest);
-			for ( int i = 0; i < SIZE; i++ )
-			{
-				Assert.AreEqual(source.Poll(), dest[i]);
-			}
-		}
-		[Test]
-			public void PartialQueueCopyToArrayWithValidSize()
-		{
+
+	    [Test]
+	    public void QueueCopyToArrayWithSmallerDestinationArray()
+	    {
+	        PriorityQueue source = populatedQueue(SIZE);
+	        object[] dest = new object[SIZE / 2];
+            Assert.Throws<ArgumentException>(() => source.CopyTo(dest));
+	    }
+
+	    [Test]
+	    public void QueueCopyToArrayWithIndexOutOfDestinationArrayRange()
+	    {
+	        PriorityQueue source = populatedQueue(SIZE);
+	        object[] dest = new object[SIZE / 2];
+            Assert.Throws<ArgumentException>(() => source.CopyTo(dest, 11));
+	    }
+
+	    [Test]
+	    public void QueueCopyToArrayWithValidSizeButInvalidStartingIndex()
+	    {
+	        PriorityQueue source = populatedQueue(SIZE);
+	        object[] dest = new object[SIZE];
+            Assert.Throws<IndexOutOfRangeException>(() => source.CopyTo(dest, 10));
+	    }
+
+	    [Test]
+	    public void CompleteQueueCopyToArrayWithValidSize()
+	    {
+	        PriorityQueue source = populatedQueue(SIZE);
+	        object[] dest = new object[SIZE];
+	        source.CopyTo(dest);
+	        for (int i = 0; i < SIZE; i++)
+	        {
+	            Assert.AreEqual(source.Poll(), dest[i]);
+	        }
+	    }
+
+	    [Test]
+	    public void PartialQueueCopyToArrayWithValidSize()
+	    {
 			PriorityQueue source = populatedQueue(SIZE);
 			object[] dest = new object[SIZE*2];
 			source.CopyTo(dest, SIZE / 2);

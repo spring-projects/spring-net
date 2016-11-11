@@ -22,12 +22,10 @@
 
 using System;
 using System.Reflection;
-using System.Reflection.Emit;
 
 using Spring.Proxy;
 using Spring.Objects.Factory;
 using Spring.Remoting.Support;
-using Spring.Util;
 using Spring.Core.TypeResolution;
 
 #endregion

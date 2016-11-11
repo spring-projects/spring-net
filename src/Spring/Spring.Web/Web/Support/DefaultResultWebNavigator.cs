@@ -24,7 +24,6 @@ using System;
 using System.Collections;
 using Spring.Collections;
 using Spring.Core;
-using Spring.Util;
 
 #endregion
 

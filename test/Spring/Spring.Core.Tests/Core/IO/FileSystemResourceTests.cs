@@ -49,11 +49,10 @@ namespace Spring.Core.IO
         }
 
         [Test]
-        [ExpectedException(typeof (UriFormatException))]
         public void RelativeUncResourceTooManyBackLevels()
         {
             FileSystemResource res = new FileSystemResource(@"\\server\share\samples\artfair\dummy.txt");
-            res.CreateRelative(@"..\..\..\index.html");
+            Assert.Throws<UriFormatException>(() => res.CreateRelative(@"..\..\..\index.html"));
         }
 
         [Test(Description="SPRNET-89")]

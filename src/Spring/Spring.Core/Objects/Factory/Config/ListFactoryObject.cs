@@ -23,7 +23,7 @@
 using System;
 using System.Collections;
 using System.Globalization;
-using Spring.Core;
+
 using Spring.Util;
 
 #endregion

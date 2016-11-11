@@ -20,18 +20,8 @@
 
 
 using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using NUnit.Framework;
-using System.Web;
-using System.Web.Routing;
-using Spring.Core.IO;
-using Spring.Objects.Factory;
-using Spring.Objects.Factory.Xml;
 using System.Web.Mvc;
-using Spring.Web.Mvc.Tests.Controllers;
-using Spring.Context.Support;
 using System.Reflection;
 
 namespace Spring.Web.Mvc.Tests

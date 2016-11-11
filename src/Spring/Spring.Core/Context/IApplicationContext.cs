@@ -25,7 +25,6 @@ using System;
 using Spring.Core.IO;
 using Spring.Objects.Events;
 using Spring.Objects.Factory;
-using Spring.Objects.Factory.Config;
 
 #endregion
 

@@ -40,7 +40,7 @@ namespace Spring.Context.Support
     [TestFixture]
     public class HttpApplicationConfigurerTests
     {
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void SetUpFixture()
         {
             LogManager.Adapter = new Common.Logging.Simple.TraceLoggerFactoryAdapter();
@@ -139,7 +139,6 @@ namespace Spring.Context.Support
         }
 
         [Test]
-        [ExpectedException(typeof(ConfigurationErrorsException))]
         public void ThrowsOnUnapplicableModuleTemplate()
         {
             StaticApplicationContext appContext = CreateTestContext();
@@ -153,7 +152,7 @@ namespace Spring.Context.Support
             h.ModuleTemplates.Add("TestModule1", rod);
 
             TestApplication appObject = new TestApplication(null);
-            HttpApplicationConfigurer.Configure(appContext, appObject);
+            Assert.Throws<ConfigurationErrorsException>(() => HttpApplicationConfigurer.Configure(appContext, appObject));
         }
 
         ////////////////////////////////////////////////////

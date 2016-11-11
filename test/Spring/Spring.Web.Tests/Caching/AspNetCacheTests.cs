@@ -22,8 +22,6 @@
 
 using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Threading;
 using System.Web;
 using System.Web.Caching;
 using NUnit.Framework;
@@ -89,10 +87,9 @@ namespace Spring.Caching
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void DoesNotAcceptNullKeysOnInsert()
         {
-            thisCache.Insert(null, "value", TimeSpan.Zero, true);
+            Assert.Throws<ArgumentNullException>(() => thisCache.Insert(null, "value", TimeSpan.Zero, true));
         }
 
         [Test]

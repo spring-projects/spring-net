@@ -48,7 +48,7 @@ namespace Spring.Objects.Factory
         }
 
         [Test]
-        [Ignore]
+        [Ignore("just a test")]
         public void Test()
         {
             int numIterations = 10000;

@@ -56,19 +56,17 @@ namespace Spring.Aop.Framework.AutoProxy
         }
 
         [Test]
-        [ExpectedException( typeof( ArgumentNullException ) )]
         public void ThrowsOnMissingAttributeTypeList()
         {
             AttributeAutoProxyCreator apc = new AttributeAutoProxyCreator();
-            apc.PostProcessAfterInitialization( new ApcTestObject(), "testObject" );
+            Assert.Throws<ArgumentNullException>(() => apc.PostProcessAfterInitialization(new ApcTestObject(), "testObject"));
         }
 
         [Test]
-        [ExpectedException( typeof( ArgumentNullException ) )]
         public void ThrowsOnAssigningNullAttributeList()
         {
             AttributeAutoProxyCreator apc = new AttributeAutoProxyCreator();
-            apc.AttributeTypes = null;
+            Assert.Throws<ArgumentNullException>(() => apc.AttributeTypes = null);
         }
 
         [Test]

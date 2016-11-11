@@ -140,52 +140,47 @@ namespace Spring.Objects.Factory.Config
         }
 
         [Test]
-        [ExpectedException(typeof (ArgumentException))]
         public void NothingSet()
         {
             FieldRetrievingFactoryObject fac = new FieldRetrievingFactoryObject();
             fac.ObjectName = "foo";
-            fac.AfterPropertiesSet();
+            Assert.Throws<ArgumentException>(() => fac.AfterPropertiesSet());
         }
 
         [Test]
-        [ExpectedException(typeof (ArgumentException))]
         public void JustTargetField()
         {
             FieldRetrievingFactoryObject fac = new FieldRetrievingFactoryObject();
             fac.TargetField = "Space";
             fac.ObjectName = "foo";
-            fac.AfterPropertiesSet();
+            Assert.Throws<ArgumentException>(() => fac.AfterPropertiesSet());
         }
 
         [Test]
-        [ExpectedException(typeof (ArgumentException))]
         public void JustTargetType()
         {
             FieldRetrievingFactoryObject fac = new FieldRetrievingFactoryObject();
             fac.TargetType = GetType();
             fac.ObjectName = "foo";
-            fac.AfterPropertiesSet();
+            Assert.Throws<ArgumentException>(() => fac.AfterPropertiesSet());
         }
 
         [Test]
-        [ExpectedException(typeof (ArgumentException))]
         public void JustTargetObject()
         {
             FieldRetrievingFactoryObject fac = new FieldRetrievingFactoryObject();
             fac.TargetObject = this;
             fac.ObjectName = "foo";
-            fac.AfterPropertiesSet();
+            Assert.Throws<ArgumentException>(() => fac.AfterPropertiesSet());
         }
 
         [Test]
-        [ExpectedException(typeof (ArgumentException))]
         public void BailsWhenStaticFieldPassedGumpfh()
         {
             FieldRetrievingFactoryObject fac = new FieldRetrievingFactoryObject();
             fac.StaticField = "Goob"; // no field specified
             fac.ObjectName = "foo";
-            fac.AfterPropertiesSet();
+            Assert.Throws<ArgumentException>(() => fac.AfterPropertiesSet());
         }
 
         [Test]
@@ -202,23 +197,21 @@ namespace Spring.Objects.Factory.Config
         }
 
         [Test]
-        [ExpectedException(typeof (ObjectDefinitionStoreException))]
         public void BailsOnNonExistantField()
         {
             FieldRetrievingFactoryObject fac = new FieldRetrievingFactoryObject();
             fac.StaticField = "Spring.Objects.Factory.Config.FinalFielder.Rubbish, Spring.Core.Tests";
             fac.ObjectName = "foo";
-            fac.AfterPropertiesSet();
+            Assert.Throws<ObjectDefinitionStoreException>(() => fac.AfterPropertiesSet());
         }
 
         [Test]
-        [ExpectedException(typeof (ArgumentException))]
         public void BailsWhenBothTargetTypeAndTargetObjectPropsAreSet()
         {
             FieldRetrievingFactoryObject fac = new FieldRetrievingFactoryObject();
             fac.TargetObject = this;
             fac.TargetType = GetType();
-            fac.AfterPropertiesSet();
+            Assert.Throws<ArgumentException>(() => fac.AfterPropertiesSet());
         }
     }
 

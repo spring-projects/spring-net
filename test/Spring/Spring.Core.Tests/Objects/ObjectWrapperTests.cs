@@ -55,7 +55,7 @@ namespace Spring.Objects
 		/// <summary>
 		/// The setup logic executed before the execution of this test fixture.
 		/// </summary>
-		[TestFixtureSetUp]
+		[OneTimeSetUp]
 		public void FixtureSetUp()
 		{
 			// enable logging (to nowhere), just to exercisee the logging code...
@@ -449,16 +449,15 @@ namespace Spring.Objects
 		#endregion
 
 		[Test]
-		[ExpectedException(typeof (TypeMismatchException))]
 		public void SetPropertyUsingValueThatNeedsConversionWithNoCustomConverterRegistered()
 		{
 			ObjectWrapper wrapper = GetWrapper(new TestObject("Rick", 30));
-			// needs conversion to NestedTestObject...
-			wrapper.SetPropertyValue("doctor", "Pollack, Pinch, & Pounce");
+            // needs conversion to NestedTestObject...
+            Assert.Throws<TypeMismatchException>(() => wrapper.SetPropertyValue("doctor", "Pollack, Pinch, & Pounce"));
 		}
 
 		[Test]
-		[Ignore()]
+		[Ignore("not used")]
 		public void GetValueOfCustomIndexerProperty()
 		{
 			ObjectWrapper wrapper = GetWrapper();
@@ -476,7 +475,7 @@ namespace Spring.Objects
 		}
 
         [Test]
-        [Ignore()]
+        [Ignore("not used")]
         public void GetSetIndexerProperties()
         {
             IList favNames = new ArrayList();
@@ -509,34 +508,30 @@ namespace Spring.Objects
         }
 
 		[Test]
-		[ExpectedException(typeof (InvalidPropertyException))]
 		public void GetValueOfCustomIndexerPropertyWithMalformedIndexer()
 		{
 			ObjectWrapper wrapper = GetWrapper();
 			Honey darwin = new Honey(new string[] {"dickens", "of gaunt"});
 			wrapper.WrappedInstance = darwin;
-			wrapper.GetPropertyValue("AlsoKnownAs[1");
+            Assert.Throws<InvalidPropertyException>(() => wrapper.GetPropertyValue("AlsoKnownAs[1"));
 		}
 
 		[Test]
-		[ExpectedException(typeof (FatalObjectException))]
 		public void GetPropertyTypeWithNullPropertyPath()
 		{
-			GetWrapper().GetPropertyType(null);
+            Assert.Throws<FatalObjectException>(() => GetWrapper().GetPropertyType(null));
 		}
 
 		[Test]
-		[ExpectedException(typeof (FatalObjectException))]
 		public void GetPropertyTypeWithEmptyPropertyPath()
 		{
-			GetWrapper().GetPropertyType(string.Empty);
+            Assert.Throws<FatalObjectException>(() => GetWrapper().GetPropertyType(string.Empty));
 		}
 
 		[Test]
-		[ExpectedException(typeof (FatalObjectException))]
 		public void GetPropertyTypeWithWhitespacedPropertyPath()
 		{
-			GetWrapper().GetPropertyType("      ");
+            Assert.Throws<FatalObjectException>(() => GetWrapper().GetPropertyType("      "));
 		}
 
 		[Test]
@@ -566,37 +561,33 @@ namespace Spring.Objects
 		}
 
 		[Test]
-		[ExpectedException(typeof (NotWritablePropertyException))]
 		public void SetValueOfCustomIndexerPropertyWithNonReadablePropertyInIndexedPath()
 		{
 			ObjectWrapper wrapper = GetWrapper();
 			Honey[] honeys = new NonReadableHoney[] {new NonReadableHoney(new string[] {"hsu", "feng"})};
 			wrapper.WrappedInstance = new Milk(honeys);
-			wrapper.SetPropertyValue("Honeys[0][0]", "mei");
+            Assert.Throws<NotWritablePropertyException>(() => wrapper.SetPropertyValue("Honeys[0][0]", "mei"));
 		}
 
 		[Test]
-		[ExpectedException(typeof (TypeMismatchException))]
 		public void SetPropertyThatRequiresTypeConversionWithNonConvertibleType()
 		{
 			ObjectWrapper wrapper = GetWrapper();
 			TestObject to = new TestObject();
 			wrapper.WrappedInstance = to;
-			wrapper.SetPropertyValue("RealLawyer", "Noob");
-			Console.Out.WriteLine(to.RealLawyer);
+            Assert.Throws<TypeMismatchException>(() => wrapper.SetPropertyValue("RealLawyer", "Noob"));
 		}
 
 		/// <summary>
 		/// This test blows up because index is out of range.
 		/// </summary>
 		[Test]
-        [ExpectedException(typeof(InvalidPropertyException))]
 		public void SetIndexedPropertyOnListThatsOutOfRange()
 		{
 			TestObject to = new TestObject();
 			ObjectWrapper wrapper = GetWrapper(to);
 			to.Friends = new NoNullsList();
-			wrapper.SetPropertyValue("Friends[5]", "Inheritance Tax");
+            Assert.Throws<InvalidPropertyException>(() => wrapper.SetPropertyValue("Friends[5]", "Inheritance Tax"));
 		}
 
 		/// <summary>
@@ -616,24 +607,21 @@ namespace Spring.Objects
 		/// will throw a FatalPropertyException with the correct exception message.
 		/// </summary>
 		[Test]
-		[ExpectedException(typeof (FatalObjectException))]
 		public void NullObject()
 		{
-			new ObjectWrapper((object) null);
+            Assert.Throws<FatalObjectException>(() => new ObjectWrapper((object) null));
 		}
 
 		[Test]
-		[ExpectedException(typeof (FatalObjectException))]
 		public void InstantiateWithInterfaceType()
 		{
-			new ObjectWrapper(typeof (IList));
+            Assert.Throws<FatalObjectException>(() => new ObjectWrapper(typeof (IList)));
 		}
 
 		[Test]
-		[ExpectedException(typeof (FatalObjectException))]
 		public void InstantiateWithAbstractType()
 		{
-			new ObjectWrapper(typeof (AbstractObjectFactoryTests));
+            Assert.Throws<FatalObjectException>(() => new ObjectWrapper(typeof (AbstractObjectFactoryTests)));
 		}
 
 		[Test]
@@ -666,22 +654,20 @@ namespace Spring.Objects
 		}
 
 		[Test]
-		[ExpectedException(typeof (NotReadablePropertyException))]
 		public void TryToReadTheValueOfAWriteOnlyProperty()
 		{
 			NoRead nr = new NoRead();
 			ObjectWrapper wrapper = GetWrapper(nr);
-			wrapper.GetPropertyValue("Age");
+            Assert.Throws<NotReadablePropertyException>(() => wrapper.GetPropertyValue("Age"));
 		}
 
 		[Test]
-        [ExpectedException(typeof(NullValueInNestedPathException))]
 		public void TryToReadAnIndexedValueFromANullProperty()
 		{
 			TestObject o = new TestObject();
 			o.Friends = null;
 			ObjectWrapper wrapper = GetWrapper(o);
-			wrapper.GetPropertyValue("Friends[2]");
+            Assert.Throws<NullValueInNestedPathException>(() => wrapper.GetPropertyValue("Friends[2]"));
 		}
 
 		/// <summary>
@@ -852,21 +838,19 @@ namespace Spring.Objects
 		}
 
 		[Test]
-		[ExpectedException(typeof (TypeMismatchException))]
 		public void TypeMismatch()
 		{
 			TestObject to = new TestObject();
 			IObjectWrapper wrapper = GetWrapper(to);
-			wrapper.SetPropertyValue("Age", "foobar");
+            Assert.Throws<TypeMismatchException>(() => wrapper.SetPropertyValue("Age", "foobar"));
 		}
 
 		[Test]
-		[ExpectedException(typeof (TypeMismatchException))]
 		public void EmptyValueForPrimitiveProperty()
 		{
 			TestObject to = new TestObject();
 			ObjectWrapper wrapper = GetWrapper(to);
-			wrapper.SetPropertyValue("Age", "");
+            Assert.Throws<TypeMismatchException>(() => wrapper.SetPropertyValue("Age", ""));
 		}
 
 		[Test]
@@ -932,12 +916,11 @@ namespace Spring.Objects
 		}
 
 		[Test]
-		[ExpectedException(typeof (NullValueInNestedPathException))]
 		public void GetNestedPropertyValueNullValue()
 		{
 			TestObject rod = new TestObject("rod", 31);
 			rod.Doctor = new NestedTestObject(null);
-			GetWrapper(rod).GetPropertyValue("Doctor.Company.Length");
+            Assert.Throws<NullValueInNestedPathException>(() => GetWrapper(rod).GetPropertyValue("Doctor.Company.Length"));
 		}
 
 		[Test]
@@ -966,30 +949,27 @@ namespace Spring.Objects
 		}
 
 		[Test]
-		[ExpectedException(typeof (NullValueInNestedPathException))]
 		public void SetIndexedPropertyValueOnUninitializedPath()
 		{
 			TestObject obj = new TestObject("Bill", 4500);
 			IObjectWrapper wrapper = GetWrapper(obj);
-			wrapper.SetPropertyValue("hats [0]", "Hicks & Co");
+            Assert.Throws<NullValueInNestedPathException>(() => wrapper.SetPropertyValue("hats [0]", "Hicks & Co"));
 		}
 
 		[Test]
-		[ExpectedException(typeof (InvalidPropertyException))]
 		public void SetIndexedPropertyValueOnNonIndexableType()
 		{
 			TestObject obj = new TestObject("Bill", 4500);
 			IObjectWrapper wrapper = GetWrapper(obj);
-			wrapper.SetPropertyValue("doctor [0]", "Hicks & Co");
+            Assert.Throws<InvalidPropertyException>(() => wrapper.SetPropertyValue("doctor [0]", "Hicks & Co"));
 		}
 
 		[Test]
-		[ExpectedException(typeof (TypeMismatchException))]
 		public void SetPrimitivePropertyToNullReference()
 		{
 			TestObject obj = new TestObject("Bill", 4500);
 			IObjectWrapper wrapper = GetWrapper(obj);
-			wrapper.SetPropertyValue("Age", null);
+            Assert.Throws<TypeMismatchException>(() => wrapper.SetPropertyValue("Age", null));
 		}
 
 		[Test]
@@ -1158,13 +1138,12 @@ namespace Spring.Objects
 		}
 
 		[Test]
-		[ExpectedException(typeof (InvalidPropertyException))]
 		public void GetIndexOutofRangeFromArrayProperty()
 		{
 			PrimitiveArrayObject to = new PrimitiveArrayObject();
 			IObjectWrapper wrapper = GetWrapper(to);
 			to.Array = new int[] {1, 2, 3, 4, 5};
-			wrapper.GetPropertyValue("Array[5]");
+            Assert.Throws<InvalidPropertyException>(() => wrapper.GetPropertyValue("Array[5]"));
 		}
 
 		[Test]
@@ -1178,39 +1157,36 @@ namespace Spring.Objects
 		}
 
 		[Test]
-        [ExpectedException(typeof(InvalidPropertyException))]
 		public void SetIndexOutOfRangeFromArrayProperty()
 		{
 			PrimitiveArrayObject to = new PrimitiveArrayObject();
 			IObjectWrapper wrapper = GetWrapper(to);
 			to.Array = new int[] {1, 2, 3, 4, 5};
-			wrapper.SetPropertyValue("Array[5]", 6);
+            Assert.Throws<InvalidPropertyException>(() => wrapper.SetPropertyValue("Array[5]", 6));
 		}
 
 		/// <summary>
 		/// Test that we bail when attempting to get an indexed property with some guff for the index
 		/// </summary>
 		[Test]
-		[ExpectedException(typeof (InvalidPropertyException))]
 		public void GetIndexedPropertyValueWithGuffIndexFromArrayProperty()
 		{
 			PrimitiveArrayObject to = new PrimitiveArrayObject();
 			IObjectWrapper wrapper = GetWrapper(to);
 			to.Array = new int[] {1, 2, 3, 4, 5};
-			Assert.AreEqual(1, (int) wrapper.GetPropertyValue("Array[HungerHurtsButStarvingWorks]"));
+            Assert.Throws<InvalidPropertyException>(() => wrapper.GetPropertyValue("Array[HungerHurtsButStarvingWorks]"));
 		}
 
 		/// <summary>
 		/// Test that we bail when attempting to get an indexed property with some guff for the index
 		/// </summary>
 		[Test]
-		[ExpectedException(typeof (InvalidPropertyException))]
 		public void GetIndexedPropertyValueWithMissingIndexFromArrayProperty()
 		{
 			PrimitiveArrayObject to = new PrimitiveArrayObject();
 			IObjectWrapper wrapper = GetWrapper(to);
 			to.Array = new int[] {1, 2, 3, 4, 5};
-			Assert.AreEqual(1, (int) wrapper.GetPropertyValue("Array[]"));
+            Assert.Throws<InvalidPropertyException>(() => wrapper.GetPropertyValue("Array[]"));
 		}
 
 		#endregion
@@ -1254,13 +1230,12 @@ namespace Spring.Objects
 		}
 
 		[Test]
-        [ExpectedException(typeof(InvalidPropertyException))]
 		public void GetIndexOutofRangeFromListProperty()
 		{
 			ListTestObject to = new ListTestObject();
 			IObjectWrapper wrapper = GetWrapper(to);
 			to.List = new ArrayList(new int[] {1, 2, 3, 4, 5});
-			wrapper.GetPropertyValue("List[5]");
+            Assert.Throws<InvalidPropertyException>(() => wrapper.GetPropertyValue("List[5]"));
 		}
 
 		[Test]
@@ -1274,34 +1249,30 @@ namespace Spring.Objects
 		}
 
 		[Test]
-		[ExpectedException(typeof (InvalidPropertyException))]
 		public void SetIndexedFromListPropertyUsingMixOfSingleAndDoubleQuotedDelimeters()
 		{
 			ListTestObject to = new ListTestObject();
 			IObjectWrapper wrapper = GetWrapper(to);
 			to.List = new ArrayList(new int[] {1, 2, 3, 4, 5});
-			wrapper.SetPropertyValue("List['0\"]", 6);
-			Assert.AreEqual(6, to.List[0]);
+            Assert.Throws<InvalidPropertyException>(() => wrapper.SetPropertyValue("List['0\"]", 6));
 		}
 
 		[Test]
-		[ExpectedException(typeof (InvalidPropertyException))]
 		public void SetIndexedFromListPropertyUsingNonNumericValueForTheIndex()
 		{
 			ListTestObject to = new ListTestObject();
 			IObjectWrapper wrapper = GetWrapper(to);
 			to.List = new ArrayList(new int[] {1, 2, 3, 4, 5});
-			wrapper.SetPropertyValue("List[bingo]", 6);
+            Assert.Throws<InvalidPropertyException>(() => wrapper.SetPropertyValue("List[bingo]", 6));
 		}
 
 		[Test]
-		[ExpectedException(typeof (InvalidPropertyException))]
 		public void SetIndexedFromListPropertyUsingEmptyValueForTheIndex()
 		{
 			ListTestObject to = new ListTestObject();
 			IObjectWrapper wrapper = GetWrapper(to);
 			to.List = new ArrayList(new int[] {1, 2, 3, 4, 5});
-			wrapper.SetPropertyValue("List[]", 6);
+            Assert.Throws<InvalidPropertyException>(() => wrapper.SetPropertyValue("List[]", 6));
 		}
 
 		[Test]
@@ -1322,23 +1293,21 @@ namespace Spring.Objects
 		/// Test that we bail when attempting to get an indexed property with some guff for the index
 		/// </summary>
 		[Test]
-		[ExpectedException(typeof (InvalidPropertyException))]
 		public void GetIndexedPropertyValueWithGuffIndexFromListProperty()
 		{
 			ListTestObject to = new ListTestObject();
 			IObjectWrapper wrapper = GetWrapper(to);
 			to.List = new ArrayList(new int[] {1, 2, 3, 4, 5});
-			Assert.AreEqual(1, (int) wrapper.GetPropertyValue("List[HungerHurtsButStarvingWorks]"));
+            Assert.Throws<InvalidPropertyException>(() => wrapper.GetPropertyValue("List[HungerHurtsButStarvingWorks]"));
 		}
 
 		[Test]
-		[ExpectedException(typeof (InvalidPropertyException))]
 		public void GetIndexedPropertyValueWithMissingIndexFromListProperty()
 		{
 			ListTestObject to = new ListTestObject();
 			IObjectWrapper wrapper = GetWrapper(to);
 			to.List = new ArrayList(new int[] {1, 2, 3, 4, 5});
-			Assert.AreEqual(1, (int) wrapper.GetPropertyValue("List[]"));
+            Assert.Throws<InvalidPropertyException>(() => wrapper.GetPropertyValue("List[]"));
 		}
 
 		#endregion
@@ -1432,47 +1401,42 @@ namespace Spring.Objects
 		}
 
         [Test]
-        [ExpectedException(typeof(InvalidPropertyException))]
         public void GetIndexFromSetProperty()
         {
             SetTestObject to = new SetTestObject();
             IObjectWrapper wrapper = GetWrapper(to);
             to.Set = new ListSet(new int[] { 1, 2, 3, 4, 5 });
-            Assert.AreEqual(1, (int)wrapper.GetPropertyValue("Set[1]"));
+            Assert.Throws<InvalidPropertyException>(() => wrapper.GetPropertyValue("Set[1]"));
         }
 	    
 		[Test]
-		[ExpectedException(typeof (InvalidPropertyException))]
 		public void GetIndexOutofRangeFromSetProperty()
 		{
 			SetTestObject to = new SetTestObject();
 			IObjectWrapper wrapper = GetWrapper(to);
 			to.Set = new ListSet(new int[] {1, 2, 3, 4, 5});
-			Assert.AreEqual(1, (int) wrapper.GetPropertyValue("Set[23]"));
+            Assert.Throws<InvalidPropertyException>(() => wrapper.GetPropertyValue("Set[23]"));
 		}
 
 		/// <summary>
 		/// Test that we bail when attempting to get an indexed property with some guff for the index
 		/// </summary>
 		[Test]
-		[ExpectedException(typeof (InvalidPropertyException))]
 		public void GetIndexedPropertyValueWithGuffIndexFromSetProperty()
 		{
 			SetTestObject to = new SetTestObject();
 			IObjectWrapper wrapper = GetWrapper(to);
 			to.Set = new ListSet(new int[] {1, 2, 3, 4, 5});
-			Assert.AreEqual(1, (int) wrapper.GetPropertyValue("Set[HungerHurtsButStarvingWorks]"));
+            Assert.Throws<InvalidPropertyException>(() => wrapper.GetPropertyValue("Set[HungerHurtsButStarvingWorks]"));
 		}
 
 		[Test]
-		[ExpectedException(typeof (InvalidPropertyException))]
 		public void GetIndexedPropertyValueWithMissingIndexFromSetProperty()
 		{
 			SetTestObject to = new SetTestObject();
 			IObjectWrapper wrapper = GetWrapper(to);
 			to.Set = new ListSet(new int[] {1, 2, 3, 4, 5});
-            object o = wrapper.GetPropertyValue("Set[]");
-			Assert.AreEqual(1, (int) wrapper.GetPropertyValue("Set[]"));
+            Assert.Throws<InvalidPropertyException>(() => wrapper.GetPropertyValue("Set[]"));
 		}
 
 		#endregion
@@ -1511,26 +1475,23 @@ namespace Spring.Objects
 		}
 
 		[Test]
-		[ExpectedException(typeof (InvalidPropertyException))]
 		public void GetIndexedPropertyValueWithNonIndexedType()
 		{
 			TestObject to = new TestObject();
 			IObjectWrapper wrapper = GetWrapper(to);
-			wrapper.GetPropertyValue("FileMode[0]");
+            Assert.Throws<InvalidPropertyException>(() => wrapper.GetPropertyValue("FileMode[0]"));
 		}
 
 		[Test]
-		[ExpectedException(typeof (NullValueInNestedPathException))]
 		public void SetPropertyValuesWithUnknownProperty()
 		{
 			TestObject to = new TestObject();
 			to.Doctor = null;
 			ObjectWrapper wrapper = GetWrapper(to);
-			wrapper.SetPropertyValue("Doctor.Company", "Bingo");
+            Assert.Throws<NullValueInNestedPathException>(() => wrapper.SetPropertyValue("Doctor.Company", "Bingo"));
 		}
 
         [Test]
-        [ExpectedException(typeof(InvalidPropertyException))]
         public void SetPropertyValuesFailsWhenSettingNonExistantProperty()
         {
             TestObject to = new TestObject();
@@ -1539,7 +1500,7 @@ namespace Spring.Objects
             values.Add("JeepersCreepersWhereDidYaGetThosePeepers", "OhThisWeirdBatGuySoldEmToMe...");
             values.Add("Age", 19);
             // the unknown and ridiculously named property should fail
-            wrapper.SetPropertyValues(values, false);
+            Assert.Throws<InvalidPropertyException>(() => wrapper.SetPropertyValues(values, false));
         }
         
         [Test]
@@ -1556,14 +1517,13 @@ namespace Spring.Objects
 		}
 
         [Test]
-        [ExpectedException(typeof(NotWritablePropertyException))]
         public void SetPropertyValuesFailsWhenSettingReadOnlyProperty()
         {
             TestObject to = new TestObject();
             ObjectWrapper wrapper = GetWrapper(to);
             MutablePropertyValues values = new MutablePropertyValues();
             values.Add("ReadOnlyObjectNumber", 123);
-            wrapper.SetPropertyValues(values, false);
+            Assert.Throws<NotWritablePropertyException>(() => wrapper.SetPropertyValues(values, false));
         }
 
         [Test]
@@ -1606,27 +1566,24 @@ namespace Spring.Objects
 		}
 
 		[Test]
-		[ExpectedException(typeof (FatalObjectException))]
 		public void GetPropertyInfoWithNullArgument()
 		{
 			ObjectWrapper wrapper = GetWrapper(new TestObject());
-			wrapper.GetPropertyInfo(null);
+            Assert.Throws<FatalObjectException>(() => wrapper.GetPropertyInfo(null));
 		}
 
         [Test]
-        [ExpectedException(typeof (FatalReflectionException))]
         public void GetPropertyInfoWithNonPropertyExpression()
         {
             ObjectWrapper wrapper = GetWrapper(new TestObject());
-            wrapper.GetPropertyInfo("2 + 2");
+            Assert.Throws<FatalReflectionException>(() => wrapper.GetPropertyInfo("2 + 2"));
         }
 
         [Test]
-        [ExpectedException(typeof (FatalObjectException))]
         public void GetPropertyInfoWithNonParsableExpression()
         {
             ObjectWrapper wrapper = GetWrapper(new TestObject());
-            wrapper.GetPropertyInfo("[");
+            Assert.Throws<FatalObjectException>(() => wrapper.GetPropertyInfo("["));
         }
 
 		[Test]

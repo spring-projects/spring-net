@@ -48,12 +48,11 @@ namespace Spring.Proxy
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void WithSealedClass()
         {
             InheritanceProxyTypeBuilder builder = (InheritanceProxyTypeBuilder) GetProxyBuilder();
             builder.TargetType = typeof(SealedClass);
-            builder.BuildProxyType();
+            Assert.Throws<ArgumentException>(() => builder.BuildProxyType());
         }
 
         [Test]

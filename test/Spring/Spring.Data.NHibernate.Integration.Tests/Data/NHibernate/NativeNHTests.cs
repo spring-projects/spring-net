@@ -20,14 +20,9 @@
 
 #region Imports
 
-using System;
-using System.Reflection;
-using NHibernate;
 using NUnit.Framework;
 using Spring.Context;
 using Spring.Context.Support;
-using Spring.Objects;
-using Spring.Util;
 
 #endregion
 

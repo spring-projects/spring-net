@@ -36,41 +36,36 @@ namespace Spring.Objects.Factory.Config
 	public sealed class LogFactoryObjectTests
 	{
 		[Test]
-		[ExpectedException(typeof (ArgumentException))]
 		public void CheckThatLogNamePropertyMustBeSet()
 		{
 			LogFactoryObject fac = new LogFactoryObject();
-			fac.GetObject();
+            Assert.Throws<ArgumentException>(() => fac.GetObject());
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void CheckLogNamePropertyWithNullName()
 		{
 			LogFactoryObject fac = new LogFactoryObject();
-			fac.LogName = null;
+            Assert.Throws<ArgumentNullException>(() => fac.LogName = null);
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void CheckLogNamePropertyWithEmptyName()
 		{
 			LogFactoryObject fac = new LogFactoryObject();
-			fac.LogName = string.Empty;
+            Assert.Throws<ArgumentNullException>(() => fac.LogName = string.Empty);
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void CheckInstantiationWithNullName()
 		{
-			new LogFactoryObject(null);
+            Assert.Throws<ArgumentNullException>(() => new LogFactoryObject(null));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void CheckInstantiationWithEmptyName()
 		{
-			new LogFactoryObject(string.Empty);
+            Assert.Throws<ArgumentNullException>(() => new LogFactoryObject(string.Empty));
 		}
 
 		[Test]
@@ -102,11 +97,10 @@ namespace Spring.Objects.Factory.Config
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException), ExpectedMessage="The 'LogName' property has not been set.")]
 		public void CheckAfterPropertiesSetBlowsUpIfNotCorrectlyConfigured()
 		{
 			LogFactoryObject fac = new LogFactoryObject();
-			fac.AfterPropertiesSet();
+            Assert.Throws<ArgumentException>(() => fac.AfterPropertiesSet(), "The 'LogName' property has not been set.");
 		}
 
 		[Test]

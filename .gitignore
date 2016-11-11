@@ -22,6 +22,8 @@ _ReSharper*/
 *.resharper
 *.sln.DotSettings
 [Tt]est[Rr]esult*
+.idea
+.vs
 
 #Project files
 [Bb]uild/
@@ -75,3 +77,4 @@ PrecompiledWeb
 /.project
 /examples/Spring/Spring.Mvc3QuickStart/packages
 /examples/Spring/Spring.Mvc4QuickStart/packages
+/src/Spring/Spring.Testing.NUnit3/Spring.Testing.NUnit3.xml

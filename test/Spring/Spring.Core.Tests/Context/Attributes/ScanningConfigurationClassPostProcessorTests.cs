@@ -19,7 +19,7 @@
 #endregion
 
 using NUnit.Framework;
-using Spring.Context.Config;
+
 using Spring.Context.Support;
 using Spring.Objects.Factory.Xml;
 

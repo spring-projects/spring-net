@@ -36,27 +36,24 @@ namespace Spring.Objects.Factory.Config
 	public sealed class ListFactoryObjectTests
 	{
 		[Test]
-		[ExpectedException(typeof (ArgumentException), ExpectedMessage="The Type passed to the TargetListType property must implement the 'System.Collections.IList' interface.")]
 		public void SetTargetListTypeToNonListType()
 		{
 			ListFactoryObject lfo = new ListFactoryObject();
-			lfo.TargetListType = typeof (ICollection);
+            Assert.Throws<ArgumentException>(() => lfo.TargetListType = typeof (ICollection), "The Type passed to the TargetListType property must implement the 'System.Collections.IList' interface.");
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException), ExpectedMessage="The Type passed to the TargetListType property cannot be an interface; it must be a concrete class that implements the 'System.Collections.IList' interface.")]
 		public void SetTargetListTypeToDerivedIListInterfaceType()
 		{
 			ListFactoryObject lfo = new ListFactoryObject();
-			lfo.TargetListType = typeof (IExtendedList);
+            Assert.Throws<ArgumentException>(() => lfo.TargetListType = typeof (IExtendedList), "The Type passed to the TargetListType property cannot be an interface; it must be a concrete class that implements the 'System.Collections.IList' interface.");
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException), ExpectedMessage="The Type passed to the TargetListType property cannot be abstract (MustInherit in VisualBasic.NET); it must be a concrete class that implements the 'System.Collections.IList' interface.")]
 		public void SetTargetListTypeToAbstractIListInterfaceType()
 		{
 			ListFactoryObject lfo = new ListFactoryObject();
-			lfo.TargetListType = typeof (AbstractList);
+            Assert.Throws<ArgumentException>(() => lfo.TargetListType = typeof (AbstractList), "The Type passed to the TargetListType property cannot be abstract (MustInherit in VisualBasic.NET); it must be a concrete class that implements the 'System.Collections.IList' interface.");
 		}
 
 		private interface IExtendedList : IList
@@ -68,20 +65,18 @@ namespace Spring.Objects.Factory.Config
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void SetTargetListTypeToNull()
 		{
 			ListFactoryObject lfo = new ListFactoryObject();
-			lfo.TargetListType = null;
+            Assert.Throws<ArgumentNullException>(() => lfo.TargetListType = null);
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException), ExpectedMessage="The 'SourceList' property cannot be null (Nothing in Visual Basic.NET).")]
 		public void GetObjectWithoutSupplyingASourceList()
 		{
 			ListFactoryObject lfo = new ListFactoryObject();
 			lfo.IsSingleton = false;
-			lfo.GetObject();
+            Assert.Throws<ArgumentException>(() => lfo.GetObject(), "The 'SourceList' property cannot be null (Nothing in Visual Basic.NET).");
 		}
 
 		[Test]

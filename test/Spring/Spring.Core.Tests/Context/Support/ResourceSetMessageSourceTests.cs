@@ -21,7 +21,6 @@
 #region Imports
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
@@ -54,13 +53,13 @@ namespace Spring.Context.Support
         private const string ResourceBaseName = ResourceNamespace + "." + ResourceFileName;
         private IList<object> resourceManagerList;
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void TestFixtureSetUp()
         {
             CultureTestScope.Set();
         }
 
-        [TestFixtureTearDown]
+        [OneTimeTearDown]
         public void TestFixtureTearDown()
         {
             CultureTestScope.Reset();
@@ -370,11 +369,10 @@ namespace Spring.Context.Support
         /// Get exception when resource doesn't exist.
         /// </summary>
         [Test]
-        [ExpectedException(typeof(NoSuchMessageException))]
         public void ResourceSetMessageSourceGetNonExistantResource()
         {
             messageSource.ResourceManagers = resourceManagerList;
-            messageSource.GetMessage("MyNonExistantMessage", CultureInfo.CurrentCulture, new object[] { "Spring", ".NET" });
+            Assert.Throws<NoSuchMessageException>(() => messageSource.GetMessage("MyNonExistantMessage", CultureInfo.CurrentCulture, new object[] { "Spring", ".NET" }));
         }
 
         /// <summary>

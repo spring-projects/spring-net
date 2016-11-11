@@ -46,18 +46,16 @@ namespace Spring.Core
         }
 
         [Test]
-        [ExpectedException (typeof (ArgumentOutOfRangeException))]
         public void InstantiationBailsWithParameterCountSetToLessThanZero () 
         {
-            MethodParametersCountCriteria criteria = new MethodParametersCountCriteria (-10);
+            Assert.Throws<ArgumentOutOfRangeException>(() => new MethodParametersCountCriteria (-10));
         }
 
         [Test]
-        [ExpectedException (typeof (ArgumentOutOfRangeException))]
         public void BailsWhenExpectedParameterCountSetToLessThanZero () 
         {
             MethodParametersCountCriteria criteria = new MethodParametersCountCriteria ();
-            criteria.ExpectedParameterCount = -12;
+            Assert.Throws<ArgumentOutOfRangeException>(() => criteria.ExpectedParameterCount = -12);
         }
 
         [Test]

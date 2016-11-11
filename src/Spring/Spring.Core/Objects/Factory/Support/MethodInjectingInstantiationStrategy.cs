@@ -25,11 +25,8 @@ using System.Collections;
 using System.Globalization;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Text;
-using Spring.Collections;
-using Spring.Core;
+
 using Spring.Util;
-using Spring.Reflection.Dynamic;
 
 #endregion
 

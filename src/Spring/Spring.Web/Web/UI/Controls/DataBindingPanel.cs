@@ -29,11 +29,10 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 
 using Common.Logging;
-using Spring.Core;
+
 using Spring.Core.TypeResolution;
 using Spring.DataBinding;
 using Spring.Globalization;
-using Spring.Objects;
 using Spring.Util;
 using AttributeCollection=System.Web.UI.AttributeCollection;
 using BindingDirection=Spring.DataBinding.BindingDirection;

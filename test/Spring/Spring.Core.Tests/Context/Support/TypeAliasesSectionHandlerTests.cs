@@ -26,7 +26,6 @@ using System.Xml;
 using NUnit.Framework;
 using Spring.Core.TypeResolution;
 using Spring.Objects;
-using Spring.Util;
 
 #endregion
 
@@ -81,7 +80,6 @@ namespace Spring.Context.Support
         }
 
 		[Test]
-		[ExpectedException(typeof (TypeLoadException))]
 		public void WithNonExistentType()
 		{
 			const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
@@ -90,11 +88,10 @@ namespace Spring.Context.Support
 </typeAliases>";
 
 			TypeAliasesSectionHandler handler = new TypeAliasesSectionHandler();
-			handler.Create(null, null, BuildConfigurationSection(xml));
+            Assert.Throws<TypeLoadException>(() => handler.Create(null, null, BuildConfigurationSection(xml)));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void WithEmptyTypeName()
 		{
 			const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
@@ -103,11 +100,10 @@ namespace Spring.Context.Support
 </typeAliases>";
 
 			TypeAliasesSectionHandler handler = new TypeAliasesSectionHandler();
-			handler.Create(null, null, BuildConfigurationSection(xml));
+            Assert.Throws<ArgumentNullException>(() => handler.Create(null, null, BuildConfigurationSection(xml)));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void WithWhitespacedTypeName()
 		{
 			const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
@@ -118,11 +114,10 @@ namespace Spring.Context.Support
 </typeAliases>";
 
 			TypeAliasesSectionHandler handler = new TypeAliasesSectionHandler();
-			handler.Create(null, null, BuildConfigurationSection(xml));
+            Assert.Throws<ArgumentNullException>(() => handler.Create(null, null, BuildConfigurationSection(xml)));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void WithEmptyAlias()
 		{
 			const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
@@ -131,11 +126,10 @@ namespace Spring.Context.Support
 </typeAliases>";
 
 			TypeAliasesSectionHandler handler = new TypeAliasesSectionHandler();
-			handler.Create(null, null, BuildConfigurationSection(xml));
+            Assert.Throws<ArgumentNullException>(() => handler.Create(null, null, BuildConfigurationSection(xml)));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void WithWhitespacedAlias()
 		{
 			const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
@@ -145,7 +139,7 @@ namespace Spring.Context.Support
 </typeAliases>";
 
 			TypeAliasesSectionHandler handler = new TypeAliasesSectionHandler();
-			handler.Create(null, null, BuildConfigurationSection(xml));
+            Assert.Throws<ArgumentNullException>(() => handler.Create(null, null, BuildConfigurationSection(xml)));
 		}
 
 		[Test]
@@ -177,7 +171,6 @@ namespace Spring.Context.Support
 		}
 
 		[Test]
-        [ExpectedException(typeof(ConfigurationErrorsException))]
 		public void WithAliasElementThatIsMissingTheNameAttribute()
 		{
 			const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
@@ -186,11 +179,10 @@ namespace Spring.Context.Support
 </typeAliases>";
 
 			TypeAliasesSectionHandler handler = new TypeAliasesSectionHandler();
-			handler.Create(null, null, BuildConfigurationSection(xml));
+            Assert.Throws<ConfigurationErrorsException>(() => handler.Create(null, null, BuildConfigurationSection(xml)));
 		}
 
 		[Test]
-        [ExpectedException(typeof(ConfigurationErrorsException))]
 		public void WithAliasElementThatIsMissingTheTypeAttribute()
 		{
 			const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
@@ -199,7 +191,7 @@ namespace Spring.Context.Support
 </typeAliases>";
 
 			TypeAliasesSectionHandler handler = new TypeAliasesSectionHandler();
-			handler.Create(null, null, BuildConfigurationSection(xml));
+            Assert.Throws<ConfigurationErrorsException>(() => handler.Create(null, null, BuildConfigurationSection(xml)));
 		}
 
 		private static XmlNode BuildConfigurationSection(string xml)

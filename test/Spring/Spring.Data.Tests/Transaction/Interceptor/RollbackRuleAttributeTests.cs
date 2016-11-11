@@ -23,7 +23,6 @@ using System;
 using System.Data;
 using System.Text;
 using NUnit.Framework;
-using Spring.Aop.Framework;
 
 namespace Spring.Transaction.Interceptor
 {
@@ -76,26 +75,21 @@ namespace Spring.Transaction.Interceptor
         }
 
         [Test]
-        [ExpectedException(typeof (ArgumentException))]
         public void ConstructorArgMustBeAExceptionClass()
         {
-            new RollbackRuleAttribute(typeof (StringBuilder));
+            Assert.Throws<ArgumentException>(() => new RollbackRuleAttribute(typeof(StringBuilder)));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ConstructorArgMustBeAExceptionClassWithNullThrowableType()
         {
-            new RollbackRuleAttribute((Type)null);
+            Assert.Throws<ArgumentNullException>(() => new RollbackRuleAttribute((Type) null));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ConstructorArgExceptionStringNameVersionWithNull()
         {
-            new RollbackRuleAttribute((String)null);
+            Assert.Throws<ArgumentNullException>(() => new RollbackRuleAttribute((String) null));
         }
-
-
     }
 }

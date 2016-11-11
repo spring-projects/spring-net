@@ -1,10 +1,7 @@
 using System;
-using System.CodeDom.Compiler;
 using System.Diagnostics;
-using System.IO;
 using System.Reflection;
-using System.Runtime.CompilerServices;
-using System.Text;
+
 using NUnit.Framework;
 using Spring.Context.Support;
 
@@ -52,7 +49,7 @@ namespace Spring.Reflection.Dynamic
             ieee.Officers["advisors"] = new Inventor[] { tesla, pupin }; // not historically accurate, but I need an array in the map ;-)
         }
 
-        [TestFixtureTearDown]
+        [OneTimeTearDown]
         public void TearDown()
         {
             //DynamicReflectionManager.SaveAssembly();
@@ -128,7 +125,6 @@ namespace Spring.Reflection.Dynamic
         }
 
         [Test, Ignore("test N/A anymore due to System.Reflection.Emit.DynamicMethod")]
-        [ExpectedException(typeof(MethodAccessException))]
         public void TestForRestrictiveGetter()
         {
             Something something = new Something();
@@ -141,11 +137,10 @@ namespace Spring.Reflection.Dynamic
             IDynamicProperty first = Create(typeof(Something).GetProperty("First"));
             first.SetValue(something, 123);
             //this should cause MethodAccessException, because get is private
-            Assert.AreEqual(123, first.GetValue(something));
+            Assert.Throws<MethodAccessException>(() => first.GetValue(something));
         }
 
         [Test, Ignore("test N/A anymore due to System.Reflection.Emit.DynamicMethod")]
-        [ExpectedException(typeof(MethodAccessException))]
         public void TestForRestrictiveSetter()
         {
             Something something = new Something();
@@ -161,7 +156,7 @@ namespace Spring.Reflection.Dynamic
             second.SetValue(something, 123);
 
             //this should never execute
-            Assert.AreEqual(123, second.GetValue(something));
+            Assert.Throws<MethodAccessException>(() => second.GetValue(something));
         }
 
         #region Performance tests

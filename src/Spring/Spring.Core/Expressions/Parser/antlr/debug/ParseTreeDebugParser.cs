@@ -12,8 +12,7 @@ namespace Spring.Expressions.Parser.antlr.debug
 	//                            Anthony Oguntimehin
 	//
 
-	using System;
-	using Stack = System.Collections.Stack;
+    using Stack = System.Collections.Stack;
 	using antlr;
 	using BitSet = antlr.collections.impl.BitSet;
 

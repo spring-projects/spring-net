@@ -19,11 +19,7 @@
 #endregion
 
 using System;
-using System.Globalization;
-using System.Collections;
 using System.Collections.Specialized;
-
-using Spring.Util;
 
 namespace Spring.Objects.Factory.Config
 {

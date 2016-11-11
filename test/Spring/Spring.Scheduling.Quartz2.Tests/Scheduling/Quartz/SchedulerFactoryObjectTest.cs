@@ -200,10 +200,9 @@ namespace Spring.Scheduling.Quartz
         /// Tests AfterPropertiesSet behavior.
         /// </summary>
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void TestSchedulerFactoryType_InvalidType()
         {
-            factory.SchedulerFactoryType = typeof(SchedulerFactoryObjectTest);
+            Assert.Throws<ArgumentException>(() => factory.SchedulerFactoryType = typeof(SchedulerFactoryObjectTest));
         }
 
         /// <summary>

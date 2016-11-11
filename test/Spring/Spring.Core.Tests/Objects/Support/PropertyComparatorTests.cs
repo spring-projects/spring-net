@@ -45,10 +45,9 @@ namespace Spring.Objects.Support
     public sealed class PropertyComparatorTests
     {
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void InstantiationWithNullArgument()
         {
-            new PropertyComparator(null);
+            Assert.Throws<ArgumentNullException>(() => new PropertyComparator(null));
         }
 
         [Test]
@@ -92,7 +91,6 @@ namespace Spring.Objects.Support
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidPropertyException))]
         public void CompareWithNonExistantProperty()
         {
             ISortDefinition definition = new MutableSortDefinition("Deborahs.Banjo", true, true);
@@ -100,8 +98,7 @@ namespace Spring.Objects.Support
             PropertyComparator cmp = new PropertyComparator(definition);
             TestObject one = new TestObject("Rick", 19);
             TestObject two = new TestObject("Balzac", 205);
-            int actual = cmp.Compare(one, two);
-            Assert.IsTrue(actual == 0);
+            Assert.Throws<InvalidPropertyException>(() => cmp.Compare(one, two));
         }
 
         [Test]
@@ -158,10 +155,9 @@ namespace Spring.Objects.Support
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void SortWithNullDefinition()
         {
-            PropertyComparator.Sort(Type.EmptyTypes, null);
+            Assert.Throws<ArgumentNullException>(() => PropertyComparator.Sort(Type.EmptyTypes, null));
         }
 
         [Test]

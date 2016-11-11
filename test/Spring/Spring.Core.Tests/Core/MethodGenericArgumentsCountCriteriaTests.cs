@@ -46,18 +46,16 @@ namespace Spring.Core
         }
 
         [Test]
-        [ExpectedException (typeof (ArgumentOutOfRangeException))]
         public void InstantiationBailsWithGenericArgumentCountSetToLessThanZero () 
         {
-            MethodGenericArgumentsCountCriteria criteria = new MethodGenericArgumentsCountCriteria(-10);
+            Assert.Throws<ArgumentOutOfRangeException>(() => new MethodGenericArgumentsCountCriteria(-10));
         }
 
         [Test]
-        [ExpectedException (typeof (ArgumentOutOfRangeException))]
         public void BailsWhenExpectedGenericArgumentCountSetToLessThanZero() 
         {
             MethodGenericArgumentsCountCriteria criteria = new MethodGenericArgumentsCountCriteria();
-            criteria.ExpectedGenericArgumentCount = -12;
+            Assert.Throws<ArgumentOutOfRangeException>(() => criteria.ExpectedGenericArgumentCount = -12);
         }
 
         [Test]

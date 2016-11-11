@@ -41,11 +41,10 @@ namespace Spring.Messaging.Nms.Support.Converter
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void ConfigurationNamespaceTests()
         {
             tm.DefaultAssemblyName = "Spring.Objects";
-            tm.AfterPropertiesSet();
+            Assert.Throws<ArgumentException>(() => tm.AfterPropertiesSet());
         }
 
         [Test]
@@ -76,10 +75,9 @@ namespace Spring.Messaging.Nms.Support.Converter
         }
 
         [Test]
-        [ExpectedException(typeof(TypeLoadException))]
         public void ToTypeForUnresolvableType()
         {
-            tm.ToType("TestObject");
+            Assert.Throws<TypeLoadException>(() => tm.ToType("TestObject"));
         }
 
         [Test]

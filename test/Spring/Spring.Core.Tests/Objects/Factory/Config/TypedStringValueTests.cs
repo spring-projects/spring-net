@@ -54,41 +54,36 @@ namespace Spring.Objects.Factory.Config
 
 		}
 
-		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
-		public void InstantiationWithNullType()
-		{
-			new TypedStringValue(string.Empty, (Type)null);
-		}
+	    [Test]
+	    public void InstantiationWithNullType()
+	    {
+	        Assert.Throws<ArgumentNullException>(() => new TypedStringValue(string.Empty, (Type) null));
+	    }
+
+	    [Test]
+	    public void InstantiationWithNullTypeName()
+	    {
+	        Assert.Throws<ArgumentNullException>(() => new TypedStringValue(string.Empty, (string) null));
+	    }
+
+	    [Test]
+	    public void InstantiationWithEmptyTypeName()
+	    {
+	        Assert.Throws<ArgumentNullException>(() => new TypedStringValue(string.Empty, "  "));
+	    }
+
+	    [Test]
+	    public void SetTargetTypePropertyToNullType()
+	    {
+	        TypedStringValue tsv = new TypedStringValue(string.Empty, typeof(DateTime));
+	        Assert.Throws<ArgumentNullException>(() => tsv.TargetType = null);
+	    }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void InstantiationWithNullTypeName()
-        {
-            new TypedStringValue(string.Empty, (string)null);
-        }
-
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
-        public void InstantiationWithEmptyTypeName()
-        {
-            new TypedStringValue(string.Empty, "  ");
-        }
-
-		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
-		public void SetTargetTypePropertyToNullType()
-		{
-			TypedStringValue tsv = new TypedStringValue(string.Empty, typeof (DateTime));
-			tsv.TargetType = null;
-		}
-
-        [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void SetTargetTypeNamePropertyToEmptyString()
         {
             TypedStringValue tsv = new TypedStringValue(string.Empty, typeof(DateTime));
-            tsv.TargetTypeName = "  ";
+            Assert.Throws<ArgumentNullException>(() => tsv.TargetTypeName = "  ");
         }
 
 		[Test]

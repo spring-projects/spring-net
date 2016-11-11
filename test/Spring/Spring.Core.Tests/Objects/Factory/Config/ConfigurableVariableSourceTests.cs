@@ -19,7 +19,6 @@
 #endregion
 
 using NUnit.Framework;
-using Spring.Core.IO;
 
 namespace Spring.Objects.Factory.Config
 {

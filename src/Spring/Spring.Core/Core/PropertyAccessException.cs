@@ -23,7 +23,7 @@
 using System;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
-using Spring.Core;
+
 using Spring.Util;
 
 #endregion

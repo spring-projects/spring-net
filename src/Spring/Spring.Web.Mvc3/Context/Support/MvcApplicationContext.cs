@@ -18,12 +18,6 @@
 
 #endregion
 
-
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Spring.Context.Support;
 using Spring.Core.IO;
 
 namespace Spring.Context.Support

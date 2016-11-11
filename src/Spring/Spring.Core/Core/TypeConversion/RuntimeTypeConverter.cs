@@ -25,7 +25,6 @@ using System.ComponentModel;
 using System.Globalization;
 
 using Spring.Core.TypeResolution;
-using Spring.Util;
 
 #endregion
 

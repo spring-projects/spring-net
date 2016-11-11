@@ -11,8 +11,7 @@ namespace Spring.Expressions.Parser.antlr
 	//                            Anthony Oguntimehin
 	//
 
-	using System;
-	using IList 		= System.Collections.IList;
+    using IList 		= System.Collections.IList;
 	using IDictionary 	= System.Collections.IDictionary;
 	using ArrayList 	= System.Collections.ArrayList;
 	using Hashtable		= System.Collections.Hashtable;

@@ -36,10 +36,9 @@ namespace SpringAir.Data.Ado
 	public sealed class FlightDaoTests
 	{
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void CtorWithNullAircraftDao()
 		{
-			new FlightDao(null);
+            Assert.Throws<ArgumentNullException>(() => new FlightDao(null));
 		}
 	}
 }

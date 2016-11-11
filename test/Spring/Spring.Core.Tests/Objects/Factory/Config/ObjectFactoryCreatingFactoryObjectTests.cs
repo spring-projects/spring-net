@@ -99,20 +99,17 @@ namespace Spring.Objects.Factory.Config
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException),
-            ExpectedMessage = "The 'TargetObjectName' property must have a value.")]
 		public void WithMissingObjectName()
 		{
 			ObjectFactoryCreatingFactoryObject factory
 				= new ObjectFactoryCreatingFactoryObject();
-			factory.AfterPropertiesSet();
+            Assert.Throws<ArgumentException>(() => factory.AfterPropertiesSet(), "The 'TargetObjectName' property must have a value.");
 		}
 
 		[Test]
 		public void ObjectTypeReallyIsIGenericObjectFactory()
 		{
-			Assert.AreEqual(typeof (IGenericObjectFactory),
-			                new ObjectFactoryCreatingFactoryObject().ObjectType);
+			Assert.AreEqual(typeof (IGenericObjectFactory), new ObjectFactoryCreatingFactoryObject().ObjectType);
 		}
 	}
 }

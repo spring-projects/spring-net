@@ -28,7 +28,7 @@ using Common.Logging;
 using Spring.Core;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
-using Spring.Util;
+
 using System.Linq;
 
 #endregion

@@ -23,7 +23,6 @@ using System;
 using System.Data;
 using Spring.Data.Common;
 using Spring.Data.Core;
-using Spring.Objects.Factory.Config;
 
 namespace Spring.Testing.Microsoft
 {

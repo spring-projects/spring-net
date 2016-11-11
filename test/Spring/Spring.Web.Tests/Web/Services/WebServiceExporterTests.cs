@@ -64,11 +64,10 @@ namespace Spring.Web.Services
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException), ExpectedMessage="The TargetName property is required.")]
         public void NullConfig()
         {
             wse.ObjectName = "NullConfig";
-            wse.AfterPropertiesSet();
+            Assert.Throws<ArgumentException>(() => wse.AfterPropertiesSet(), "The TargetName property is required.");
         }
 
         [Test]

@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using NUnit.Framework;
 using Spring.Web.UI.Validation;
 

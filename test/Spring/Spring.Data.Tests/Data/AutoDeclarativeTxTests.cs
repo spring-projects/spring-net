@@ -22,12 +22,8 @@
 
 using NUnit.Framework;
 using Spring.Aop.Framework;
-using Spring.Aop.Framework.DynamicProxy;
-using Spring.Aop.Support;
 using Spring.Context;
 using Spring.Context.Support;
-using Common.Logging;
-using Common.Logging.Simple;
 using Spring.Objects;
 using Spring.Transaction;
 

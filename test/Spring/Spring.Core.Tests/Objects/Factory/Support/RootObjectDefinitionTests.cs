@@ -39,20 +39,17 @@ namespace Spring.Objects.Factory.Support
     public sealed class RootObjectDefinitionTests
     {
         [Test]
-        [ExpectedException( typeof( ApplicationException ) )]
         public void InstantiationWithClassName()
         {
-            RootObjectDefinition def
-                = new RootObjectDefinition( typeof( TestObject ).AssemblyQualifiedName, new ConstructorArgumentValues(), new MutablePropertyValues() );
-            Assert.IsFalse( def.HasObjectType );
-            Assert.IsNull( def.ObjectType ); // must bail...
+            RootObjectDefinition def = new RootObjectDefinition(typeof(TestObject).AssemblyQualifiedName, new ConstructorArgumentValues(), new MutablePropertyValues());
+            Assert.IsFalse(def.HasObjectType);
+            Assert.Throws<ApplicationException>(() => Assert.IsNull(def.ObjectType)); // must bail...
         }
 
         [Test]
         public void InstantiationFromOther()
         {
-            RootObjectDefinition other
-                = new RootObjectDefinition( typeof( TestObject ), AutoWiringMode.Constructor );
+            RootObjectDefinition other = new RootObjectDefinition( typeof( TestObject ), AutoWiringMode.Constructor );
             other.IsSingleton = false;
             other.InitMethodName = "Umberto Eco";
             other.DestroyMethodName = "Pedulismus";
@@ -162,14 +159,13 @@ namespace Spring.Objects.Factory.Support
         }
 
         [Test]
-        [ExpectedException( typeof( ObjectDefinitionValidationException ) )]
         public void ValidateLazyAndPrototypeCausesBail()
         {
             RootObjectDefinition def
                 = new RootObjectDefinition( typeof( TestObject ), AutoWiringMode.No );
             def.IsLazyInit = true;
             def.IsSingleton = false;
-            def.Validate();
+            Assert.Throws<ObjectDefinitionValidationException>(() => def.Validate());
         }
 
         [Test]

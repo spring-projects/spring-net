@@ -36,27 +36,24 @@ namespace Spring.Objects.Factory.Config
 	public sealed class DictionaryFactoryObjectTests
 	{
 		[Test]
-		[ExpectedException(typeof (ArgumentException), ExpectedMessage="The Type passed to the TargetDictionaryType property must implement the 'System.Collections.IDictionary' interface.")]
 		public void SetTargetDictionaryTypeToNonDictionaryType()
 		{
 			DictionaryFactoryObject dfo = new DictionaryFactoryObject();
-			dfo.TargetDictionaryType = typeof (ICollection);
+            Assert.Throws<ArgumentException>(() => dfo.TargetDictionaryType = typeof (ICollection), "The Type passed to the TargetDictionaryType property must implement the 'System.Collections.IDictionary' interface.");
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException), ExpectedMessage="The Type passed to the TargetDictionaryType property cannot be an interface; it must be a concrete class that implements the 'System.Collections.IDictionary' interface.")]
 		public void SetTargetDictionaryTypeToDerivedIDictionaryInterfaceType()
 		{
 			DictionaryFactoryObject dfo = new DictionaryFactoryObject();
-			dfo.TargetDictionaryType = typeof (IExtendedDictionary);
+            Assert.Throws<ArgumentException>(() => dfo.TargetDictionaryType = typeof (IExtendedDictionary), "The Type passed to the TargetDictionaryType property cannot be an interface; it must be a concrete class that implements the 'System.Collections.IDictionary' interface.");
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException), ExpectedMessage="The Type passed to the TargetDictionaryType property cannot be abstract (MustInherit in VisualBasic.NET); it must be a concrete class that implements the 'System.Collections.IDictionary' interface.")]
 		public void SetTargetDictionaryTypeToAbstractIDictionaryInterfaceType()
 		{
 			DictionaryFactoryObject dfo = new DictionaryFactoryObject();
-			dfo.TargetDictionaryType = typeof (AbstractDictionary);
+            Assert.Throws<ArgumentException>(() => dfo.TargetDictionaryType = typeof (AbstractDictionary), "The Type passed to the TargetDictionaryType property cannot be abstract (MustInherit in VisualBasic.NET); it must be a concrete class that implements the 'System.Collections.IDictionary' interface.");
 		}
 
 		private interface IExtendedDictionary : IDictionary
@@ -68,20 +65,18 @@ namespace Spring.Objects.Factory.Config
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void SetTargetDictionaryTypeToNull()
 		{
 			DictionaryFactoryObject dfo = new DictionaryFactoryObject();
-			dfo.TargetDictionaryType = null;
+            Assert.Throws<ArgumentNullException>(() => dfo.TargetDictionaryType = null);
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException), ExpectedMessage="The 'SourceDictionary' property cannot be null (Nothing in Visual Basic.NET).")]
 		public void GetObjectWithoutSupplyingASourceDictionary()
 		{
 			DictionaryFactoryObject dfo = new DictionaryFactoryObject();
 			dfo.IsSingleton = false;
-			dfo.GetObject();
+            Assert.Throws<ArgumentException>(() => dfo.GetObject(), "The 'SourceDictionary' property cannot be null (Nothing in Visual Basic.NET).");
 		}
 
 		[Test]

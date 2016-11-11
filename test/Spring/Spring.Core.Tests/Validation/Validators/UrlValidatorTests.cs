@@ -20,14 +20,7 @@
 
 #region Imports
 
-using System;
-using System.Collections;
-using System.Text.RegularExpressions;
 using NUnit.Framework;
-
-using Spring.Context.Support;
-using Spring.Expressions;
-using Spring.Validation.Actions;
 
 #endregion
 

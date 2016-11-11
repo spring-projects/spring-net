@@ -22,7 +22,6 @@
 
 using System.Xml;
 using Spring.Objects.Factory.Config;
-using Spring.Objects.Factory.Support;
 
 #endregion
 

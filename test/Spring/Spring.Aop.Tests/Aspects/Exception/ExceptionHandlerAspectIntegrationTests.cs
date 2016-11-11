@@ -22,13 +22,11 @@
 
 using System;
 using System.Collections;
-using System.Collections.Specialized;
+
 using Common.Logging;
-using Common.Logging.Simple;
+
 using NUnit.Framework;
 using Spring.Aop.Framework;
-using Spring.Aspects.Exceptions;
-using Spring.Expressions;
 using Spring.Objects;
 using Spring.Util;
 
@@ -170,12 +168,11 @@ namespace Spring.Aspects.Exceptions
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void LoggingTestWithBadString()
         {
             string logHandlerText = "on foobar name ArithmeticException log 'My Message, Method Name ' + #method.Name";
 
-            ExecuteLoggingHandler(logHandlerText, "My Message");
+            Assert.Throws<ArgumentException>(() => ExecuteLoggingHandler(logHandlerText, "My Message"));
         }
 
         [Test]

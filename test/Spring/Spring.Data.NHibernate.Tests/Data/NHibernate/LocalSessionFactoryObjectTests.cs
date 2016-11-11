@@ -18,7 +18,6 @@
 
 #endregion
 
-using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 
@@ -79,17 +78,15 @@ namespace Spring.Data.NHibernate
         }
 
         [Test]
-        [ExpectedException(typeof(FileNotFoundException))]
         public void LocalSessionFactoryObjectWithInvalidMapping()
         {
             LocalSessionFactoryObject sfo = new LocalSessionFactoryObject();
             sfo.MappingResources = new string[] { "mapping.hbm.xml" };
-            sfo.AfterPropertiesSet();
+            Assert.Throws<FileNotFoundException>(() => sfo.AfterPropertiesSet());
 
         }
 
         [Test]
-        [ExpectedException(typeof(HibernateException))]
         public void LocalSessionFactoryObjectWithInvalidProperties()
         {
             LocalSessionFactoryObject sfo = new LocalSessionFactoryObject();
@@ -97,7 +94,7 @@ namespace Spring.Data.NHibernate
             properties.Add(Environment.Dialect, typeof(MsSql2000Dialect).AssemblyQualifiedName);
             properties.Add(Environment.ConnectionProvider, "myClass");
             sfo.HibernateProperties = properties;
-            sfo.AfterPropertiesSet();
+            Assert.Throws<HibernateException>(() => sfo.AfterPropertiesSet());
         }
     }
 }

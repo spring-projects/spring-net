@@ -39,11 +39,10 @@ namespace Spring.Transaction.Interceptor
 		}
 
 		[Test]
-		[ExpectedException( typeof ( ArgumentException ) )]
 		public void InvalidPropagationCodeOnly()
 		{
 			TransactionAttributeEditor editor = new TransactionAttributeEditor( );
-			editor.SetAsText( "INVALIDPROPAGATIONCODE" );
+			Assert.Throws<ArgumentException>(() => editor.SetAsText( "INVALIDPROPAGATIONCODE" ));
 		}
 
 		[Test]
@@ -58,11 +57,10 @@ namespace Spring.Transaction.Interceptor
 		}
 
 		[Test]
-		[ExpectedException( typeof ( ArgumentException ) )]
 		public void ValidPropagationAndIsolationCodeAndInvalidRollbackRule()
 		{
 			TransactionAttributeEditor editor = new TransactionAttributeEditor( );
-			editor.SetAsText( "PROPAGATION_REQUIRED,ISOLATION_READUNCOMMITTED,XXX" );
+            Assert.Throws<ArgumentException>(() => editor.SetAsText( "PROPAGATION_REQUIRED,ISOLATION_READUNCOMMITTED,XXX" ));
 		}
 
 		[Test]

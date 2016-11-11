@@ -43,7 +43,7 @@ namespace Spring.Aop.Target
         /// <summary>
         /// The setup logic executed before the execution of this test fixture.
         /// </summary>
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void FixtureSetUp()
         {
             // enable (null appender) logging, just to ensure that the logging code is correct
@@ -155,11 +155,10 @@ namespace Spring.Aop.Target
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void AfterPropertiesSetWithoutTargetObjectNameBeingSet()
         {
             PrototypeTargetSource source = new PrototypeTargetSource();
-            source.AfterPropertiesSet();
+            Assert.Throws<ArgumentNullException>(() => source.AfterPropertiesSet());
         }
     }
 }

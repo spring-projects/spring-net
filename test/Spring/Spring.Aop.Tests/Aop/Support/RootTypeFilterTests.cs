@@ -36,10 +36,9 @@ namespace Spring.Aop.Support
     public sealed class RootTypeFilterTests
     {
         [Test]
-		[ExpectedException(typeof(ArgumentNullException))]
-        public void InstantiationWithNullRootType()
+		public void InstantiationWithNullRootType()
 		{
-			new RootTypeFilter(null);
+            Assert.Throws<ArgumentNullException>(() => new RootTypeFilter(null));
         }
 	}
 }

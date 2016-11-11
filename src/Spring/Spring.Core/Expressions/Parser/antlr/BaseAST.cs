@@ -1,7 +1,6 @@
 using System;
-using Spring.Expressions.Parser.antlr.collections;
+
 using StringBuilder		= System.Text.StringBuilder;
-using ISerializable		= System.Runtime.Serialization.ISerializable;
 using TextWriter		= System.IO.TextWriter;
 using ArrayList			= System.Collections.ArrayList;
 using IEnumerator		= System.Collections.IEnumerator;

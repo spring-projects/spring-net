@@ -19,10 +19,8 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.Text;
+
 using NHibernate;
-using Spring.Util;
 
 namespace Spring.Data.NHibernate.Support
 {

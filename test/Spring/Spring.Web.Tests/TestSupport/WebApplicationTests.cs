@@ -44,7 +44,7 @@ namespace Spring.TestSupport
             this.relativePhysicalPath = relativePhysicalPath;
         }
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public virtual void TestFixtureSetup()
         {
             host = AspFixtureHost.CreateInstance(virtualPath, relativePhysicalPath, this);

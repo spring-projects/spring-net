@@ -20,9 +20,7 @@
 
 #region Imports
 
-using System;
 using System.Reflection;
-using Spring.Objects.Factory.Config;
 
 #endregion
 

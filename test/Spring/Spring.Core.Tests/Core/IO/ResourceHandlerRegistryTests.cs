@@ -36,38 +36,33 @@ namespace Spring.Core.IO
 	public sealed class ResourceHandlerRegistryTests
 	{
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void WithNullProtocolName()
 		{
-			ResourceHandlerRegistry.RegisterResourceHandler(null, GetType());
+            Assert.Throws<ArgumentNullException>(() => ResourceHandlerRegistry.RegisterResourceHandler(null, GetType()));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void WithNullIResourceHandlerType()
 		{
-            ResourceHandlerRegistry.RegisterResourceHandler("beep", (Type) null);
+            Assert.Throws<ArgumentNullException>(() => ResourceHandlerRegistry.RegisterResourceHandler("beep", (Type) null));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void WithWhitespacedProtocolName()
 		{
-            ResourceHandlerRegistry.RegisterResourceHandler("\t   ", GetType());
+            Assert.Throws<ArgumentNullException>(() => ResourceHandlerRegistry.RegisterResourceHandler("\t   ", GetType()));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException))]
 		public void WithNonIResourceHandlerType()
 		{
-            ResourceHandlerRegistry.RegisterResourceHandler("beep", GetType());
+            Assert.Throws<ArgumentException>(() => ResourceHandlerRegistry.RegisterResourceHandler("beep", GetType()));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException))]
 		public void WithIResourceHandlerTypeWithNoValidCtor()
 		{
-            ResourceHandlerRegistry.RegisterResourceHandler("beep", typeof(IncompatibleResource));
+            Assert.Throws<ArgumentException>(() => ResourceHandlerRegistry.RegisterResourceHandler("beep", typeof(IncompatibleResource)));
 		}
 
         [Test]

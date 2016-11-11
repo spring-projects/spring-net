@@ -39,10 +39,9 @@ namespace Spring.Aop.Framework.Adapter
 	public sealed class AfterReturningAdviceInterceptorTests
 	{
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void PassNullAdviceToCtor()
 		{
-			new AfterReturningAdviceInterceptor(null);
+            Assert.Throws<ArgumentNullException>(() => new AfterReturningAdviceInterceptor(null));
 		}
 
 		[Test]

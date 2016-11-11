@@ -20,8 +20,6 @@
 
 #region Imports
 
-using System;
-
 using NUnit.Framework;
 
 #endregion
@@ -35,7 +33,7 @@ namespace Spring.Collections
 	[TestFixture]
     public class SortedSetTests : SetTests
     {
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void Init () 
         {
             SupportsNull = false;

@@ -45,19 +45,17 @@ namespace Spring.Objects.Factory.Support
         }
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void InstantiationWithNullDefinition()
 		{
 		    IObjectFactory objectFactory = mocks.StrictMock<IObjectFactory>();
-			new LookupMethodReplacer(null, objectFactory);
+            Assert.Throws<ArgumentNullException>(() => new LookupMethodReplacer(null, objectFactory));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void InstantiationWithNullFactory()
 		{
 		    var configurableObjectDefinition = mocks.StrictMock<IConfigurableObjectDefinition>();
-            new LookupMethodReplacer(configurableObjectDefinition, null);
+            Assert.Throws<ArgumentNullException>(() => new LookupMethodReplacer(configurableObjectDefinition, null));
 		}
 
 		[Test]

@@ -21,7 +21,6 @@
 #region Imports
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Web.UI;
@@ -29,7 +28,6 @@ using NUnit.Framework;
 using Rhino.Mocks;
 using Spring.Context;
 using Spring.Context.Support;
-using Spring.Util;
 using Spring.Validation;
 using Spring.Web.UI.Validation;
 

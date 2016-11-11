@@ -19,11 +19,9 @@
 #endregion
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using AopAlliance.Intercept;
 using Spring.Objects.Factory;
-using Spring.Objects.Factory.Config;
 using Spring.Util;
 
 namespace Spring.Dao.Support

@@ -51,9 +51,6 @@
                 <exclude name="obj/**/*" />
             </resources>
             <references>
-				<lib>
-					<include name="${spring.basedir}/packages/Microsoft.AspNet.Mvc.3.0.20105.1/lib/net40" />
-				</lib>
 				<include name="mscorlib.dll"/>
 				<include name="Microsoft.CSharp.dll"/>
 				<include name="System.dll"/>
@@ -79,10 +76,10 @@
 				
 				<include name="${current.bin.dir}/Spring.Core.dll" />
 				<include name="${current.bin.dir}/Spring.Web.Mvc3.dll" />
- 
-				<include name="${current.bin.dir}/nunit.framework.dll"/>
-				<include name="${lib.dir}/nunit.core.interfaces.dll" />
 
+                <include name="${spring.basedir}/packages/Microsoft.AspNet.Mvc.3.0.20105.1/lib/net40/System.Web.Mvc.dll" />
+ 
+				<include name="${nunit.lib.dir}/nunit.framework.dll"/>
             </references>
         </csc>
         <copy todir="${current.bin.dir}">
@@ -99,6 +96,7 @@
 
     <target name="test" depends="build">
         <!-- property name="test.assemblyname" value="${project::get-name()}" / -->
+        <copy file="${spring.basedir}/packages/Microsoft.AspNet.Mvc.3.0.20105.1/lib/net40/System.Web.Mvc.dll" todir="${current.bin.dir}" />
         <call target="common.run-tests" />
     </target>
 <!--

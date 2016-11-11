@@ -57,7 +57,7 @@ namespace Spring.Scheduling.Quartz
             Assert.AreEqual(TRIGGER_NAME, trigger.Key.Name, "trigger name mismatch");
             Assert.AreEqual(SchedulerConstants.DefaultGroup, trigger.Key.Group, "trigger group name mismatch");
             Assert.IsNull(trigger.JobKey, "trigger job name not null");
-            AssertDateTimesEqualityWithAllowedDelta(DateTime.UtcNow, trigger.StartTimeUtc, 1000);
+            AssertDateTimesEqualityWithAllowedDelta(DateTime.UtcNow, trigger.StartTimeUtc, 1500);
         }
 
         /// <summary>
@@ -75,7 +75,7 @@ namespace Spring.Scheduling.Quartz
             trigger.Key = new TriggerKey(NAME, GROUP);
             Assert.AreEqual(NAME, trigger.Key.Name, "trigger name mismatch");
             Assert.AreEqual(GROUP, trigger.Key.Group, "trigger group name mismatch");
-            AssertDateTimesEqualityWithAllowedDelta(START_TIME, trigger.StartTimeUtc, 1000);
+            AssertDateTimesEqualityWithAllowedDelta(START_TIME, trigger.StartTimeUtc, 1500);
         }
 
         /// <summary>

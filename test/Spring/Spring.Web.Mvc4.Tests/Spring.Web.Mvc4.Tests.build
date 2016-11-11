@@ -88,8 +88,7 @@
                 <include name="${current.bin.dir}/Spring.Core.dll" />
                 <include name="${current.bin.dir}/Spring.Web.Mvc4.dll" />
 
-				<include name="${current.bin.dir}/nunit.framework.dll"/>            
-                <include name="${lib.dir}/nunit.core.interfaces.dll" />
+				<include name="${nunit.lib.dir}/nunit.framework.dll"/>            
             </references>
         </csc>
         <copy todir="${current.bin.dir}">
@@ -106,6 +105,11 @@
 
     <target name="test" depends="build">
         <!-- property name="test.assemblyname" value="${project::get-name()}" / -->
+		<copy todir="${current.bin.dir}" flatten="true">
+            <fileset basedir="${spring.basedir}/packages">
+                <include name="Microsoft.AspNet*.4.0.*/**/*.dll" />
+            </fileset>
+		</copy>
         <call target="common.run-tests" />
     </target>
 <!--

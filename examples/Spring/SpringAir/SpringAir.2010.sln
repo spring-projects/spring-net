@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.25807.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "SpringAir.Web.2010", "src\SpringAir.Web.2010\", "{839602F5-8077-497D-9CCB-C9F02741CA55}"
 	ProjectSection(WebsiteProperties) = preProject
@@ -35,13 +35,6 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpringAir.Data.Ado.Tests.2010", "test\SpringAir.Data.Ado.Tests\SpringAir.Data.Ado.Tests.2010.csproj", "{B0A6F98E-5363-4575-BB6B-A84E91895468}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpringAir.Web.2010.References", "src\SpringAir.Web.2005.References\SpringAir.Web.2010.References.csproj", "{0925F8C7-B2AB-4DD7-AF6D-10DD028C5910}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{CBB230BE-316F-4ABE-921B-1B8C13EAA8A1}"
-	ProjectSection(SolutionItems) = preProject
-		.nuget\NuGet.Config = .nuget\NuGet.Config
-		.nuget\NuGet.exe = .nuget\NuGet.exe
-		.nuget\NuGet.targets = .nuget\NuGet.targets
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

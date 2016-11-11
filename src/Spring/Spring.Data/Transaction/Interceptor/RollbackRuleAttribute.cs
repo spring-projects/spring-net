@@ -19,7 +19,7 @@
 #endregion
 
 using System;
-using Spring.Aop.Framework;
+
 using Spring.Util;
 
 namespace Spring.Transaction.Interceptor

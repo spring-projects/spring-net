@@ -1,13 +1,10 @@
 using System;
 using System.Collections;
-using Spring.Expressions.Parser.antlr.collections;
-using Spring.Expressions.Parser.antlr.collections.impl;
+
 using Assembly			= System.Reflection.Assembly;
-using ArrayList			= System.Collections.ArrayList;
 using Debug				= System.Diagnostics.Debug;
 using AST				= Spring.Expressions.Parser.antlr.collections.AST;
 using ASTArray			= Spring.Expressions.Parser.antlr.collections.impl.ASTArray;
-using ANTLRException	= Spring.Expressions.Parser.antlr.ANTLRException;
 
 namespace Spring.Expressions.Parser.antlr
 {

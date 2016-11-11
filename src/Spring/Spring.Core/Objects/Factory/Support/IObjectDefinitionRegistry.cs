@@ -22,7 +22,6 @@
 
 using System.Collections.Generic;
 
-using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
 
 #endregion

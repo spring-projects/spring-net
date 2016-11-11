@@ -8,11 +8,10 @@ namespace Spring.Transaction.Support
     public class TransactionTemplateTests
     {
         [Test]
-        [ExpectedException(typeof (ArgumentException))]
         public void NoTxnMgr()
         {
             TransactionTemplate temp = new TransactionTemplate();
-            temp.AfterPropertiesSet();
+            Assert.Throws<ArgumentException>(() => temp.AfterPropertiesSet());
         }
 
         [Test]

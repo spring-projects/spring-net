@@ -24,7 +24,6 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics;
 using System.Globalization;
 using System.IO;
 using System.Text;
@@ -36,8 +35,6 @@ using NUnit.Framework;
 
 using Rhino.Mocks;
 
-using Spring.Context;
-using Spring.Context.Support;
 using Spring.Core.IO;
 using Spring.Core.TypeResolution;
 using Spring.Expressions;
@@ -67,7 +64,7 @@ namespace Spring.Objects.Factory.Xml
         /// <summary>
         /// The setup logic executed before the execution of this test fixture.
         /// </summary>
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void FixtureSetUp()
         {
             // enable (null appender) logging, to ensure that the logging code is exercised...
@@ -82,10 +79,9 @@ namespace Spring.Objects.Factory.Xml
         }
 
         [Test]
-        [ExpectedException(typeof(ObjectDefinitionStoreException))]
         public void ReplacedMethodWithNoReplacerObjectNameSpecified()
         {
-            new StreamHelperDecorator(new StreamHelperCallback(_ReplacedMethodWithNoReplacerObjectNameSpecified)).Run();
+            Assert.Throws<ObjectDefinitionStoreException>(() => new StreamHelperDecorator(new StreamHelperCallback(_ReplacedMethodWithNoReplacerObjectNameSpecified)).Run());
         }
 
         private void _ReplacedMethodWithNoReplacerObjectNameSpecified(out Stream stream)
@@ -104,10 +100,9 @@ namespace Spring.Objects.Factory.Xml
         }
 
         [Test]
-        [ExpectedException(typeof(ObjectDefinitionStoreException))]
         public void ReplacedMethodWithNoMethodNameSpecified()
         {
-            new StreamHelperDecorator(new StreamHelperCallback(_ReplacedMethodWithNoMethodNameSpecified)).Run();
+            Assert.Throws<ObjectDefinitionStoreException>(() => new StreamHelperDecorator(new StreamHelperCallback(_ReplacedMethodWithNoMethodNameSpecified)).Run());
         }
 
         private void _ReplacedMethodWithNoMethodNameSpecified(out Stream stream)
@@ -126,10 +121,9 @@ namespace Spring.Objects.Factory.Xml
         }
 
         [Test]
-        [ExpectedException(typeof(ObjectDefinitionStoreException))]
         public void ValidatesReplacedMethodCorrectly()
         {
-            new StreamHelperDecorator(new StreamHelperCallback(_ValidatesReplacedMethodCorrectly)).Run();
+            Assert.Throws<ObjectDefinitionStoreException>(() => new StreamHelperDecorator(new StreamHelperCallback(_ValidatesReplacedMethodCorrectly)).Run());
         }
 
         private void _ValidatesReplacedMethodCorrectly(out Stream stream)
@@ -182,10 +176,9 @@ namespace Spring.Objects.Factory.Xml
         }
 
         [Test]
-        [ExpectedException(typeof(ObjectDefinitionStoreException))]
         public void ValidatesLookupMethodCorrectly()
         {
-            new StreamHelperDecorator(new StreamHelperCallback(_ValidatesLookupMethodCorrectly)).Run();
+            Assert.Throws<ObjectDefinitionStoreException>(() => new StreamHelperDecorator(new StreamHelperCallback(_ValidatesLookupMethodCorrectly)).Run());
         }
 
         private void _ValidatesLookupMethodCorrectly(out Stream stream)
@@ -204,10 +197,9 @@ namespace Spring.Objects.Factory.Xml
         }
 
         [Test]
-        [ExpectedException(typeof(ObjectDefinitionStoreException))]
         public void LookupMethodWithNoMethodNameSpecified()
         {
-            new StreamHelperDecorator(new StreamHelperCallback(_LookupMethodWithNoMethodNameSpecified)).Run();
+            Assert.Throws<ObjectDefinitionStoreException>(() => new StreamHelperDecorator(new StreamHelperCallback(_LookupMethodWithNoMethodNameSpecified)).Run());
         }
 
         private void _LookupMethodWithNoMethodNameSpecified(out Stream stream)
@@ -227,10 +219,9 @@ namespace Spring.Objects.Factory.Xml
         }
 
         [Test]
-        [ExpectedException(typeof(ObjectDefinitionStoreException))]
         public void LookupMethodWithNoTargetObjectNameSpecified()
         {
-            new StreamHelperDecorator(new StreamHelperCallback(_LookupMethodWithNoTargetObjectNameSpecified)).Run();
+            Assert.Throws<ObjectDefinitionStoreException>(() => new StreamHelperDecorator(new StreamHelperCallback(_LookupMethodWithNoTargetObjectNameSpecified)).Run());
         }
 
         private void _LookupMethodWithNoTargetObjectNameSpecified(out Stream stream)
@@ -314,10 +305,9 @@ namespace Spring.Objects.Factory.Xml
         }
 
         [Test]
-        [ExpectedException(typeof(ObjectDefinitionStoreException))]
         public void IfTypeAttributeIsPresentItMustNotBeTheEmptyStringValue()
         {
-            new StreamHelperDecorator(new StreamHelperCallback(_IfTypeAttributeIsPresentItMustNotBeTheEmptyStringValue)).Run();
+            Assert.Throws<ObjectDefinitionStoreException>(() => new StreamHelperDecorator(new StreamHelperCallback(_IfTypeAttributeIsPresentItMustNotBeTheEmptyStringValue)).Run());
         }
 
         private void _IfTypeAttributeIsPresentItMustNotBeTheEmptyStringValue(out Stream stream)
@@ -334,10 +324,9 @@ namespace Spring.Objects.Factory.Xml
         }
 
         [Test]
-        [ExpectedException(typeof(ObjectDefinitionStoreException))]
         public void IfTypeAttributeIsPresentItMustNotBeAnOnlyWhitespaceStringValue()
         {
-            new StreamHelperDecorator(new StreamHelperCallback(_IfTypeAttributeIsPresentItMustNotBeAnOnlyWhitespaceStringValue)).Run();
+            Assert.Throws<ObjectDefinitionStoreException>(() => new StreamHelperDecorator(new StreamHelperCallback(_IfTypeAttributeIsPresentItMustNotBeAnOnlyWhitespaceStringValue)).Run());
         }
 
         private void _IfTypeAttributeIsPresentItMustNotBeAnOnlyWhitespaceStringValue(out Stream stream)
@@ -408,13 +397,11 @@ namespace Spring.Objects.Factory.Xml
         }
 
         [Test]
-        [ExpectedException(typeof(ObjectCreationException))]
         public void BadParentReference()
         {
             IResource resource = new ReadOnlyXmlTestResource("wellformed-but-bad.xml", GetType());
             XmlObjectFactory xof = new XmlObjectFactory(resource);
-
-            xof.GetObject("no.parent.factory");
+            Assert.Throws<ObjectCreationException>(() => xof.GetObject("no.parent.factory"));
         }
 
         [Test]
@@ -493,11 +480,10 @@ namespace Spring.Objects.Factory.Xml
         }
 
         [Test]
-        [ExpectedException(typeof(ObjectDefinitionStoreException))]
         public void ImportsExternalResourcesBailsOnNonExistentResource()
         {
             IResource resource = new ReadOnlyXmlTestResource("bad-external-resources.xml", GetType());
-            new XmlObjectFactory(resource);
+            Assert.Throws<ObjectDefinitionStoreException>(() => new XmlObjectFactory(resource));
         }
 
         [Test]
@@ -751,12 +737,11 @@ namespace Spring.Objects.Factory.Xml
         /// If a singleton does this the factory will fail to load.
         /// </summary>
         [Test]
-        [ExpectedException(typeof(NoSuchObjectDefinitionException))]
         public void BogusParentageFromParentFactory()
         {
             XmlObjectFactory parent = new XmlObjectFactory(new ReadOnlyXmlTestResource("parent.xml", GetType()));
             XmlObjectFactory child = new XmlObjectFactory(new ReadOnlyXmlTestResource("child.xml", GetType()), parent);
-            child.GetObject("bogusParent");
+            Assert.Throws<NoSuchObjectDefinitionException>(() => child.GetObject("bogusParent"));
         }
 
         /// <summary>
@@ -924,13 +909,11 @@ namespace Spring.Objects.Factory.Xml
         }
 
         [Test]
-        [ExpectedException(typeof(ObjectCreationException))]
         public void NoSuchInitMethod()
         {
             IResource resource = new ReadOnlyXmlTestResource("initializers.xml", GetType());
             XmlObjectFactory xof = new XmlObjectFactory(resource);
-            xof.GetObject("init-method3");
-            Assert.Fail();
+            Assert.Throws<ObjectCreationException>(() => xof.GetObject("init-method3"));
         }
 
         /// <summary>
@@ -1046,11 +1029,9 @@ namespace Spring.Objects.Factory.Xml
         }
         
         [Test]
-        [ExpectedException(typeof(ObjectDefinitionStoreException))]
         public void NoSuchXmlFile()
         {
-            new XmlObjectFactory(
-                new ReadOnlyXmlTestResource("missing.xml", GetType()));
+            Assert.Throws<ObjectDefinitionStoreException>(() => new XmlObjectFactory(new ReadOnlyXmlTestResource("missing.xml", GetType())));
         }
 
         [Test]
@@ -1086,23 +1067,17 @@ namespace Spring.Objects.Factory.Xml
         }
 
         [Test]
-        [ExpectedException(typeof(UnsatisfiedDependencyException))]
         public void UnsatisfiedObjectDependencyCheck()
         {
-            XmlObjectFactory xof
-                = new XmlObjectFactory(
-                    new ReadOnlyXmlTestResource(
-                        "unsatisfiedObjectDependencyCheck.xml", GetType()));
-            xof.GetObject("a", typeof(DependenciesObject));
+            XmlObjectFactory xof = new XmlObjectFactory(new ReadOnlyXmlTestResource("unsatisfiedObjectDependencyCheck.xml", GetType()));
+            Assert.Throws<UnsatisfiedDependencyException>(() => xof.GetObject("a", typeof(DependenciesObject)));
         }
 
         [Test]
-        [ExpectedException(typeof(UnsatisfiedDependencyException))]
         public void UnsatisfiedSimpleDependencyCheck()
         {
-            XmlObjectFactory xof =
-                new XmlObjectFactory(new ReadOnlyXmlTestResource("unsatisfiedSimpleDependencyCheck.xml", GetType()));
-            xof.GetObject("a", typeof(DependenciesObject));
+            XmlObjectFactory xof = new XmlObjectFactory(new ReadOnlyXmlTestResource("unsatisfiedSimpleDependencyCheck.xml", GetType()));
+            Assert.Throws<UnsatisfiedDependencyException>(() => xof.GetObject("a", typeof(DependenciesObject)));
         }
 
         [Test]
@@ -1127,14 +1102,10 @@ namespace Spring.Objects.Factory.Xml
         }
 
         [Test]
-        [ExpectedException(typeof(UnsatisfiedDependencyException))]
         public void UnsatisfiedAllDependencyCheck()
         {
-            XmlObjectFactory xof
-                = new XmlObjectFactory(
-                    new ReadOnlyXmlTestResource(
-                        "unsatisfiedAllDependencyCheckMissingObjects.xml", GetType()));
-            xof.GetObject("a", typeof(DependenciesObject));
+            XmlObjectFactory xof= new XmlObjectFactory(new ReadOnlyXmlTestResource("unsatisfiedAllDependencyCheckMissingObjects.xml", GetType()));
+            Assert.Throws<UnsatisfiedDependencyException>(() => xof.GetObject("a", typeof(DependenciesObject)));
         }
 
         [Test]
@@ -1338,28 +1309,23 @@ namespace Spring.Objects.Factory.Xml
         }
 
         [Test]
-        [ExpectedException(typeof(ObjectCreationException))]
         public void ThrowsExceptionOnTooManyArguments()
         {
-            XmlObjectFactory xof = new XmlObjectFactory(
-                new ReadOnlyXmlTestResource("constructor-arg.xml", GetType()));
-            xof.GetObject("rod7", typeof(ConstructorDependenciesObject));
+            XmlObjectFactory xof = new XmlObjectFactory(new ReadOnlyXmlTestResource("constructor-arg.xml", GetType()));
+            Assert.Throws<ObjectCreationException>(() => xof.GetObject("rod7", typeof(ConstructorDependenciesObject)));
         }
 
         [Test]
-        [ExpectedException(typeof(UnsatisfiedDependencyException))]
         public void ThrowsExceptionOnAmbiguousResolution()
         {
             XmlObjectFactory xof = new XmlObjectFactory(new ReadOnlyXmlTestResource("constructor-arg.xml", GetType()));
-            xof.GetObject("rod8", typeof(ConstructorDependenciesObject));
+            Assert.Throws<UnsatisfiedDependencyException>(() => xof.GetObject("rod8", typeof(ConstructorDependenciesObject)));
         }
 
         [Test]
-        [ExpectedException(typeof(ObjectDefinitionStoreException))]
         public void FactoryObjectDefinedAsPrototype()
         {
-            new XmlObjectFactory(
-                new ReadOnlyXmlTestResource("invalid-factory.xml", GetType()));
+            Assert.Throws<ObjectDefinitionStoreException>(() => new XmlObjectFactory(new ReadOnlyXmlTestResource("invalid-factory.xml", GetType())));
         }
 
         [Test]
@@ -1605,13 +1571,12 @@ namespace Spring.Objects.Factory.Xml
 
         #endregion
         [Test]
-        [ExpectedException(typeof(ObjectCreationException))]
         public void FactoryMethodNoMatchingStaticMethod()
         {
             DefaultListableObjectFactory factory = new DefaultListableObjectFactory();
             XmlObjectDefinitionReader reader = new XmlObjectDefinitionReader(factory);
             reader.LoadObjectDefinitions(new ReadOnlyXmlTestResource("factory-methods.xml", GetType()));
-            factory.GetObject("noMatchPrototype");
+            Assert.Throws<ObjectCreationException>(() => factory.GetObject("noMatchPrototype"));
         }
 
         [Test]
@@ -1705,23 +1670,21 @@ namespace Spring.Objects.Factory.Xml
         }
 
         [Test]
-        [ExpectedException(typeof(ObjectCreationException))]
         public void BailsOnRubbishFieldRetrievingFactoryMethod()
         {
             DefaultListableObjectFactory factory = new DefaultListableObjectFactory();
             XmlObjectDefinitionReader reader = new XmlObjectDefinitionReader(factory);
             reader.LoadObjectDefinitions(new ReadOnlyXmlTestResource("field-props-factory.xml", GetType()));
-            factory.GetObject("rubbishField", typeof(MyTestObject));
+            Assert.Throws<ObjectCreationException>(() => factory.GetObject("rubbishField", typeof(MyTestObject)));
         }
 
         [Test]
-        [ExpectedException(typeof(ObjectCreationException))]
         public void BailsOnRubbishPropertyRetrievingFactoryMethod()
         {
             DefaultListableObjectFactory factory = new DefaultListableObjectFactory();
             XmlObjectDefinitionReader reader = new XmlObjectDefinitionReader(factory);
             reader.LoadObjectDefinitions(new ReadOnlyXmlTestResource("field-props-factory.xml", GetType()));
-            factory.GetObject("rubbishProperty", typeof(MyTestObject));
+            Assert.Throws<ObjectCreationException>(() => factory.GetObject("rubbishProperty", typeof(MyTestObject)));
         }
 
         /// <summary>
@@ -1796,11 +1759,9 @@ namespace Spring.Objects.Factory.Xml
         }
 
         [Test]
-        [ExpectedException(typeof(ObjectDefinitionStoreException))]
         public void BailsWhenBothNameAndIndexAttributesAreAppliedToASingleCtorArg()
         {
-            new XmlObjectFactory(
-                new ReadOnlyXmlTestResource("bad-named-constructor-arg.xml", GetType()));
+            Assert.Throws<ObjectDefinitionStoreException>(() => new XmlObjectFactory(new ReadOnlyXmlTestResource("bad-named-constructor-arg.xml", GetType())));
         }
 
         [Test]

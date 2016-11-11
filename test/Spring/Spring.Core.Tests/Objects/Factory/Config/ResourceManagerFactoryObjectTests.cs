@@ -17,7 +17,6 @@
 #endregion
 
 using System;
-using System.IO;
 using System.Resources;
 using NUnit.Framework;
 
@@ -50,30 +49,27 @@ namespace Spring.Objects.Factory.Config
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
 		public void MissingBaseName()
 		{
 			ResourceManagerFactoryObject fac = new ResourceManagerFactoryObject();
-			fac.AfterPropertiesSet();
+            Assert.Throws<ArgumentException>(() => fac.AfterPropertiesSet());
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
 		public void MissingAssemblyName()
 		{
 			ResourceManagerFactoryObject fac = new ResourceManagerFactoryObject();
 			fac.BaseName = "Spring.Resources.SampleResources";
-			fac.AfterPropertiesSet();
+            Assert.Throws<ArgumentException>(() => fac.AfterPropertiesSet());
 		}
 
 		[Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void WithRubbishAssemblyName()
 		{
 			ResourceManagerFactoryObject fac = new ResourceManagerFactoryObject();
 			fac.BaseName = "Spring.Resources.SampleResources";
-			fac.AssemblyName = "I'mAJumpedUpPantryBoy"; 
-			fac.AfterPropertiesSet();
+			fac.AssemblyName = "I'mAJumpedUpPantryBoy";
+            Assert.Throws<ArgumentException>(() => fac.AfterPropertiesSet());
 		}
 
 		[Test]

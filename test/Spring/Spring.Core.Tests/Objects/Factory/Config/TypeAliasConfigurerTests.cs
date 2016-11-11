@@ -62,7 +62,6 @@ namespace Spring.Objects.Factory.Config
         }
 
         [Test]
-		[ExpectedException(typeof(ObjectInitializationException))]
         public void UseInvalidTypeForDictionaryValue()
         {
             IDictionary typeAliases = new Hashtable();
@@ -71,11 +70,10 @@ namespace Spring.Objects.Factory.Config
             TypeAliasConfigurer typeAliasConfigurer = new TypeAliasConfigurer();
             typeAliasConfigurer.TypeAliases = typeAliases;
 
-            typeAliasConfigurer.PostProcessObjectFactory(factory);
+            Assert.Throws<ObjectInitializationException>(() => typeAliasConfigurer.PostProcessObjectFactory(factory));
         }
 
         [Test]
-        [ExpectedException(typeof(ObjectInitializationException))]
         public void UseNonResolvableTypeForDictionaryValue()
         {
             IDictionary typeAliases = new Hashtable();
@@ -84,7 +82,7 @@ namespace Spring.Objects.Factory.Config
             TypeAliasConfigurer typeAliasConfigurer = new TypeAliasConfigurer();
             typeAliasConfigurer.TypeAliases = typeAliases;
 
-            typeAliasConfigurer.PostProcessObjectFactory(factory);
+            Assert.Throws<ObjectInitializationException>(() => typeAliasConfigurer.PostProcessObjectFactory(factory));
         }
 
         [Test]

@@ -72,11 +72,10 @@ namespace Spring.Core.IO
         }
 
         [Test]
-        [ExpectedException(typeof(NotSupportedException))]
         public void DoesntSupportRelativeResources()
         {
             StringResource r = new StringResource(string.Empty);
-            r.CreateRelative("foo");
+            Assert.Throws<NotSupportedException>(() => r.CreateRelative("foo"));
         }
 
         [Test]

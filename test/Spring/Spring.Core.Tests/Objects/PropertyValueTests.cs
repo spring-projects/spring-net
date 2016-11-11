@@ -35,10 +35,9 @@ namespace Spring.Objects
     public sealed class PropertyValueTests
     {
         [Test]
-        [ExpectedException(typeof (ArgumentNullException))]
         public void InstantiationWithNulls()
         {
-            new PropertyValue(null, null);
+            Assert.Throws<ArgumentNullException>(() => new PropertyValue(null, null));
         }
 
         [Test]
@@ -50,17 +49,15 @@ namespace Spring.Objects
         }
 
         [Test]
-        [ExpectedException(typeof (ArgumentNullException))]
         public void InstantiationWithEmptyStringPropertyName()
         {
-            new PropertyValue(string.Empty, 12);
+            Assert.Throws<ArgumentNullException>(() => new PropertyValue(string.Empty, 12));
         }
 
         [Test]
-        [ExpectedException(typeof (ArgumentNullException))]
         public void InstantiationWithWhitespacePropertyName()
         {
-            new PropertyValue("  ", 12);
+            Assert.Throws<ArgumentNullException>(() => new PropertyValue("  ", 12));
         }
 
         [Test]

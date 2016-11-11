@@ -18,8 +18,6 @@
 
 #endregion
 
-using TIBCO.EMS;
-
 namespace Spring.Messaging.Ems.Connections
 {
     /// <summary>

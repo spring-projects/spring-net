@@ -23,7 +23,7 @@
 using System;
 using System.Collections;
 using NUnit.Framework;
-using Spring.Core.TypeConversion;
+
 using Spring.Globalization;
 
 #endregion
@@ -37,13 +37,13 @@ namespace Spring.Expressions.Processors
     [TestFixture]
     public class ConversionProcessorTests
     {
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void FixtureSetUp()
         {
             CultureTestScope.Set();
         }
 
-        [TestFixtureTearDown]
+        [OneTimeTearDown]
         public void FixtureTearDown()
         {
             CultureTestScope.Reset();

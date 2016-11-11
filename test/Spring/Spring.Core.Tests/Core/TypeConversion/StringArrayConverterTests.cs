@@ -71,19 +71,17 @@ namespace Spring.Core.TypeConversion
         }
 
         [Test]
-        [ExpectedException(typeof (NotSupportedException))]
         public void ConvertFromNullReference()
         {
             StringArrayConverter vrt = new StringArrayConverter();
-            vrt.ConvertFrom(null);
+            Assert.Throws<NotSupportedException>(() => vrt.ConvertFrom(null));
         }
 
         [Test]
-        [ExpectedException(typeof (NotSupportedException))]
         public void ConvertFromNonSupportedOptionBails()
         {
             StringArrayConverter vrt = new StringArrayConverter();
-            vrt.ConvertFrom(12);
+            Assert.Throws<NotSupportedException>(() => vrt.ConvertFrom(12));
         }
 
         [Test]
@@ -110,19 +108,17 @@ namespace Spring.Core.TypeConversion
         }
 
 	    [Test]
-        [ExpectedException(typeof(ArgumentException))]
-	    public void EmptyListSeparator()
+        public void EmptyListSeparator()
 	    {
 	        StringArrayConverter vrt = new StringArrayConverter();
-            vrt.ListSeparator = string.Empty;
+            Assert.Throws<ArgumentException>(() => vrt.ListSeparator = string.Empty);
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void TooLongListSeparator()
         {
             StringArrayConverter vrt = new StringArrayConverter();
-            vrt.ListSeparator = "  ";
+            Assert.Throws<ArgumentException>(() => vrt.ListSeparator = "  ");
         }
 
         [Test]

@@ -41,7 +41,6 @@ using Spring.Context;
 using Spring.Context.Support;
 using Spring.Core;
 using Spring.Core.TypeResolution;
-using Spring.Expressions;
 using Spring.Expressions.Parser.antlr;
 using Spring.Expressions.Parser.antlr.collections;
 using Spring.Expressions.Processors;
@@ -49,7 +48,6 @@ using Spring.Objects;
 using Spring.Objects.Factory;
 using Spring.Threading;
 using Spring.Util;
-using Foo = Spring.Expressions.Foo;
 
 #endregion
 
@@ -129,7 +127,7 @@ namespace Spring.Expressions
             TypeRegistry.RegisterType("Society", typeof(Society));
         }
 
-        [TestFixtureTearDown]
+        [OneTimeTearDown]
         public void TearDown()
         {
             //DynamicCodeManager.SaveAssembly();
@@ -366,20 +364,18 @@ namespace Spring.Expressions
         /// Should throw exception for null root object
         /// </summary>
         [Test]
-        [ExpectedException(typeof(NullValueInNestedPathException))]
         public void NullRoot()
         {
-            ExpressionEvaluator.GetValue(null, "dummy.expression");
+            Assert.Throws<NullValueInNestedPathException>(() => ExpressionEvaluator.GetValue(null, "dummy.expression"));
         }
 
         /// <summary>
         /// Should throw exception for null root object
         /// </summary>
         [Test]
-        [ExpectedException(typeof(NotSupportedException))]
         public void TryingToSetTheValueOfNonSettableNode()
         {
-            ExpressionEvaluator.SetValue(null, "10", 5);
+            Assert.Throws<NotSupportedException>(() => ExpressionEvaluator.SetValue(null, "10", 5));
         }
 
         /// <summary>
@@ -397,10 +393,9 @@ namespace Spring.Expressions
         /// Should fail when setting value for the empty expression
         /// </summary>
         [Test]
-        [ExpectedException(typeof(NotSupportedException))]
         public void SetNullOrEmptyExpression()
         {
-            ExpressionEvaluator.SetValue("xyz", null, "abc");
+            Assert.Throws<NotSupportedException>(() => ExpressionEvaluator.SetValue("xyz", null, "abc"));
         }
 
         /// <summary>
@@ -652,10 +647,9 @@ namespace Spring.Expressions
         /// Tests indexer access with invalid number of indices
         /// </summary>
         [Test]
-        [ExpectedException(typeof(InvalidPropertyException))]
         public void TestIndexedPropertyAccessWithInvalidNumberOfIndices()
         {
-            ExpressionEvaluator.GetValue(tesla, "Inventions[3, 2]");
+            Assert.Throws<InvalidPropertyException>(() => ExpressionEvaluator.GetValue(tesla, "Inventions[3, 2]"));
         }
 
         /// <summary>
@@ -699,10 +693,9 @@ namespace Spring.Expressions
         /// Tests missing method accessors
         /// </summary>
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void TestMissingMethodAccess()
         {
-            ExpressionEvaluator.GetValue("xyz", "ToStringilyLingily()");
+            Assert.Throws<ArgumentException>(() => ExpressionEvaluator.GetValue("xyz", "ToStringilyLingily()"));
         }
 
         /// <summary>
@@ -863,10 +856,9 @@ namespace Spring.Expressions
         /// Tests missing constructor
         /// </summary>
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void TestMissingConstructor()
         {
-            ExpressionEvaluator.GetValue(null, "new Decimal('xyz')");
+            Assert.Throws<ArgumentException>(() => ExpressionEvaluator.GetValue(null, "new Decimal('xyz')"));
         }
 
         /// <summary>
@@ -949,20 +941,18 @@ namespace Spring.Expressions
         /// Try to set 'this' variable
         /// </summary>
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void TryToSetThis()
         {
-            ExpressionEvaluator.SetValue(null, "#this", "xyz");
+            Assert.Throws<ArgumentException>(() => ExpressionEvaluator.SetValue(null, "#this", "xyz"));
         }
 
         /// <summary>
         /// Try to set 'root' variable
         /// </summary>
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void TryToSetRoot()
         {
-            ExpressionEvaluator.SetValue(null, "#root", "xyz");
+            Assert.Throws<ArgumentException>(() => ExpressionEvaluator.SetValue(null, "#root", "xyz"));
         }
 
         /// <summary>
@@ -1410,23 +1400,21 @@ namespace Spring.Expressions
         /// Type coercion failure.
         /// </summary>
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void TestTypeCoercionForUncoercableTypes()
         {
-            ExpressionEvaluator.GetValue(null, "'xyz' > 123");
+            Assert.Throws<ArgumentException>(() => ExpressionEvaluator.GetValue(null, "'xyz' > 123"));
         }
 
         /// <summary>
         /// Type comparison failure.
         /// </summary>
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void TestComparisonOfInstancesThatDoNotImplementIComparable()
         {
             Dictionary<string, object> vars = new Dictionary<string, object>();
             vars["tesla"] = tesla;
             vars["pupin"] = pupin;
-            ExpressionEvaluator.GetValue(null, "#tesla > #pupin", vars);
+            Assert.Throws<ArgumentException>(() => ExpressionEvaluator.GetValue(null, "#tesla > #pupin", vars));
         }
 
         /// <summary>
@@ -1469,10 +1457,9 @@ namespace Spring.Expressions
         /// Tests addition operator with invalid arguments.
         /// </summary>
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void TestAddOperatorWithInvalidArguments()
         {
-            ExpressionEvaluator.GetValue(null, "DateTime.Today + false");
+            Assert.Throws<ArgumentException>(() => ExpressionEvaluator.GetValue(null, "DateTime.Today + false"));
         }
 
         /// <summary>
@@ -1507,10 +1494,9 @@ namespace Spring.Expressions
         /// Tests subtraction operator with invalid arguments.
         /// </summary>
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void TestSubtractOperatorWithInvalidArguments()
         {
-            ExpressionEvaluator.GetValue(null, "DateTime.Today - false");
+            Assert.Throws<ArgumentException>(() => ExpressionEvaluator.GetValue(null, "DateTime.Today - false"));
         }
 
         /// <summary>
@@ -1531,10 +1517,9 @@ namespace Spring.Expressions
         /// Tests multiplication operator with invalid arguments.
         /// </summary>
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void TestMultiplyOperatorWithInvalidArguments()
         {
-            ExpressionEvaluator.GetValue(null, "DateTime.Today * false");
+            Assert.Throws<ArgumentException>(() => ExpressionEvaluator.GetValue(null, "DateTime.Today * false"));
         }
 
         /// <summary>
@@ -1555,10 +1540,9 @@ namespace Spring.Expressions
         /// Tests division operator with invalid arguments.
         /// </summary>
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void TestDivideOperatorWithInvalidArguments()
         {
-            ExpressionEvaluator.GetValue(null, "DateTime.Today / false");
+            Assert.Throws<ArgumentException>(() => ExpressionEvaluator.GetValue(null, "DateTime.Today / false"));
         }
 
         /// <summary>
@@ -1579,10 +1563,9 @@ namespace Spring.Expressions
         /// Tests modulus operator with invalid arguments.
         /// </summary>
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void TestModulusOperatorWithInvalidArguments()
         {
-            ExpressionEvaluator.GetValue(null, "DateTime.Today % false");
+            Assert.Throws<ArgumentException>(() => ExpressionEvaluator.GetValue(null, "DateTime.Today % false"));
         }
 
         /// <summary>
@@ -1602,30 +1585,27 @@ namespace Spring.Expressions
         /// Tests power operator with invalid arguments.
         /// </summary>
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void TestPowerOperatorWithInvalidArguments()
         {
-            ExpressionEvaluator.GetValue(null, "DateTime.Today ^ false");
+            Assert.Throws<ArgumentException>(() => ExpressionEvaluator.GetValue(null, "DateTime.Today ^ false"));
         }
 
         /// <summary>
         /// Tests unary minus operator with invalid argument.
         /// </summary>
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void TestUnaryMinusOperatorWithInvalidArguments()
         {
-            ExpressionEvaluator.GetValue(null, "-false");
+            Assert.Throws<ArgumentException>(() => ExpressionEvaluator.GetValue(null, "-false"));
         }
 
         /// <summary>
         /// Tests unary plus operator with invalid argument.
         /// </summary>
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void TestUnaryPlusOperatorWithInvalidArguments()
         {
-            ExpressionEvaluator.GetValue(null, "+false");
+            Assert.Throws<ArgumentException>(() => ExpressionEvaluator.GetValue(null, "+false"));
         }
 
         /// <summary>
@@ -1644,12 +1624,10 @@ namespace Spring.Expressions
         /// Tests Spring reference when reference to a non-existant object is specified.
         /// </summary>
         [Test]
-        [ExpectedException(typeof(NoSuchObjectDefinitionException))]
         public void TestReferenceForNonExistantObject()
         {
-            ContextRegistry.RegisterContext(
-                new XmlApplicationContext(false, "assembly://Spring.Core.Tests/Spring.Context.Support/objects.xml"));
-            ExpressionEvaluator.GetValue(null, "@(dummyRef)");
+            ContextRegistry.RegisterContext(new XmlApplicationContext(false, "assembly://Spring.Core.Tests/Spring.Context.Support/objects.xml"));
+            Assert.Throws<NoSuchObjectDefinitionException>(() => ExpressionEvaluator.GetValue(null, "@(dummyRef)"));
         }
 
         /// <summary>
@@ -1890,11 +1868,10 @@ namespace Spring.Expressions
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void TestSumAggregatorWithNonNumber()
         {
             object[] arr = new object[] { 5, "ana", 12.2, 1 };
-            ExpressionEvaluator.GetValue(arr, "sum()");
+            Assert.Throws<ArgumentException>(() => ExpressionEvaluator.GetValue(arr, "sum()"));
         }
 
         [Test]
@@ -1912,11 +1889,10 @@ namespace Spring.Expressions
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void TestAverageAggregatorWithNonNumber()
         {
             object[] arr = new object[] { 5, "ana", 12.2, 1 };
-            ExpressionEvaluator.GetValue(arr, "average()");
+            Assert.Throws<ArgumentException>(() => ExpressionEvaluator.GetValue(arr, "average()"));
         }
 
         [Test]
@@ -1935,19 +1911,17 @@ namespace Spring.Expressions
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void TestMinAggregatorWithNonComparable()
         {
             object[] arr = new object[] { new Object(), new Object() };
-            ExpressionEvaluator.GetValue(arr, "min()");
+            Assert.Throws<ArgumentException>(() => ExpressionEvaluator.GetValue(arr, "min()"));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void TestMinAggregatorWithMixedTypes()
         {
             object[] arr = new object[] { 5, "ana", 12.2, 1 };
-            ExpressionEvaluator.GetValue(arr, "min()");
+            Assert.Throws<ArgumentException>(() => ExpressionEvaluator.GetValue(arr, "min()"));
         }
 
         [Test]
@@ -1966,19 +1940,17 @@ namespace Spring.Expressions
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void TestMaxAggregatorWithNonComparable()
         {
             object[] arr = new object[] { new Object(), new Object() };
-            ExpressionEvaluator.GetValue(arr, "max()");
+            Assert.Throws<ArgumentException>(() => ExpressionEvaluator.GetValue(arr, "max()"));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void TestMaxAggregatorWithMixedTypes()
         {
             object[] arr = new object[] { 5, "ana", 12.2, 1 };
-            ExpressionEvaluator.GetValue(arr, "max()");
+            Assert.Throws<ArgumentException>(() => ExpressionEvaluator.GetValue(arr, "max()"));
         }
 
         [Test]
@@ -2037,19 +2009,17 @@ namespace Spring.Expressions
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void TestDistinctProcessorWithInvalidArgumentType()
         {
             int[] arr = new int[] { 24, 8, 8, 6, 24, 6, 8, 6 };
-            ExpressionEvaluator.GetValue(arr, "distinct(6)");
+            Assert.Throws<ArgumentException>(() => ExpressionEvaluator.GetValue(arr, "distinct(6)"));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void TestDistinctProcessorWithInvalidNumberOfArguments()
         {
             int[] arr = new int[] { 24, 8, 8, 6, 24, 6, 8, 6 };
-            ExpressionEvaluator.GetValue(arr, "distinct(true, 4, 'xyz')");
+            Assert.Throws<ArgumentException>(() => ExpressionEvaluator.GetValue(arr, "distinct(true, 4, 'xyz')"));
         }
 
         [Test]
@@ -2091,30 +2061,27 @@ namespace Spring.Expressions
         /// Tests property access with null in the path.
         /// </summary>
         [Test]
-        [ExpectedException(typeof(NullValueInNestedPathException))]
         public void TestPropertyGetWithNullInThePath()
         {
-            ExpressionEvaluator.GetValue(new Inventor(), "Name.Length");
+            Assert.Throws<NullValueInNestedPathException>(() => ExpressionEvaluator.GetValue(new Inventor(), "Name.Length"));
         }
 
         /// <summary>
         /// Tests property set with null in the path.
         /// </summary>
         [Test]
-        [ExpectedException(typeof(NullValueInNestedPathException))]
         public void TestPropertySetWithNullInThePath()
         {
-            ExpressionEvaluator.SetValue(new Inventor(), "Name.Length", 20);
+            Assert.Throws<NullValueInNestedPathException>(() => ExpressionEvaluator.SetValue(new Inventor(), "Name.Length", 20));
         }
 
         /// <summary>
         /// Tries to set value of the PropertyOrFieldNode that represents type.
         /// </summary>
         [Test]
-        [ExpectedException(typeof(NotSupportedException))]
         public void TestTypeSet()
         {
-            ExpressionEvaluator.SetValue(null, "DateTime", 20);
+            Assert.Throws<NotSupportedException>(() => ExpressionEvaluator.SetValue(null, "DateTime", 20));
         }
 
         /// <summary>
@@ -2702,11 +2669,9 @@ namespace Spring.Expressions
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void TestUnionOperatorBad()
         {
-            object o = ExpressionEvaluator.GetValue(null, "#{1:'one', 2:'two', 3:'three'} + {1, 5}");
-            Assert.IsInstanceOf(typeof(IDictionary), o);
+            Assert.Throws<ArgumentException>(() => ExpressionEvaluator.GetValue(null, "#{1:'one', 2:'two', 3:'three'} + {1, 5}"));
         }
 
         [Test]
@@ -2748,11 +2713,9 @@ namespace Spring.Expressions
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void TestIntersectionOperatorBad()
         {
-            object o = ExpressionEvaluator.GetValue(null, "#{1:'one', 2:'two', 3:'three'} * 'something'");
-            Assert.IsInstanceOf(typeof(IDictionary), o);
+            Assert.Throws<ArgumentException>(() => ExpressionEvaluator.GetValue(null, "#{1:'one', 2:'two', 3:'three'} * 'something'"));
         }
 
         [Test]
@@ -2791,11 +2754,9 @@ namespace Spring.Expressions
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void TestDifferenceOperatorBad()
         {
-            object o = ExpressionEvaluator.GetValue(null, "#{1:'one', 2:'two', 3:'three'} - 'something'");
-            Assert.IsInstanceOf(typeof(IDictionary), o);
+            Assert.Throws<ArgumentException>(() => ExpressionEvaluator.GetValue(null, "#{1:'one', 2:'two', 3:'three'} - 'something'"));
         }
 
         #endregion

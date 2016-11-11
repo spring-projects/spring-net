@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using System.Reflection;
 
 using NUnit.Framework;
@@ -36,7 +35,7 @@ namespace Spring.Context
     [TestFixture]
     public sealed class ContextExceptionTests : ExceptionsTest
     {
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void FixtureSetUp ()
         {
             AssemblyToCheck = Assembly.GetAssembly (typeof (Spring.Context.ApplicationContextException));

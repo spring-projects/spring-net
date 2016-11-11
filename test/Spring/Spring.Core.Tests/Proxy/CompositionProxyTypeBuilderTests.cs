@@ -38,20 +38,18 @@ namespace Spring.Proxy
 	public class CompositionProxyTypeBuilderTests : AbstractProxyTypeBuilderTests
 	{
 		[Test]
-		[ExpectedException(typeof (ArgumentException), ExpectedMessage="Composition proxy target must implement at least one interface.")]
 		public void OnClassThatDoesntImplementAnyInterfaces()
 		{
 			IProxyTypeBuilder builder = GetProxyBuilder();
 			builder.TargetType = typeof (DoesntImplementAnyInterfaces);
-            builder.BuildProxyType();
+            Assert.Throws<ArgumentException>(() => builder.BuildProxyType(), "Composition proxy target must implement at least one interface.");
 		}
 
 		[Test]
-		[ExpectedException(typeof (NullReferenceException))]
 		public void BuildProxyWithNothingSet()
 		{
             IProxyTypeBuilder builder = GetProxyBuilder();
-            builder.BuildProxyType();
+            Assert.Throws<NullReferenceException>(() => builder.BuildProxyType());
 		}
 
 		[Test]

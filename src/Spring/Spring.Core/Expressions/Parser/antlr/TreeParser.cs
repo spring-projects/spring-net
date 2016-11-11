@@ -1,6 +1,5 @@
 using System;
-using Spring.Expressions.Parser.antlr.collections;
-using Spring.Expressions.Parser.antlr.collections.impl;
+
 using AST = Spring.Expressions.Parser.antlr.collections.AST;
 using BitSet = Spring.Expressions.Parser.antlr.collections.impl.BitSet;
 	

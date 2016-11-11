@@ -22,7 +22,7 @@
 
 using System.Reflection;
 using System.Text.RegularExpressions;
-using Spring.Objects.Support;
+
 using Spring.Util;
 
 #endregion

@@ -22,7 +22,6 @@
 
 using System;
 using System.Collections;
-using System.Collections.Specialized;
 using System.Web;
 using System.Web.Caching;
 using System.Web.SessionState;

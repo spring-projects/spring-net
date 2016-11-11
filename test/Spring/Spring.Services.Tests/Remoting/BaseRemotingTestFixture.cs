@@ -1,4 +1,3 @@
-using System;
 using System.Runtime.Remoting.Channels;
 using System.Runtime.Remoting.Channels.Tcp;
 using NUnit.Framework;
@@ -11,7 +10,7 @@ namespace Spring.Remoting
         protected static TcpChannel channel;
         private static object lockObject = new object();
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public virtual void FixtureSetUp()
         {
             lock (lockObject)

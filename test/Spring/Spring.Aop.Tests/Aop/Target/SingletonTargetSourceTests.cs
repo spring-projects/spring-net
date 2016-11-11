@@ -35,10 +35,9 @@ namespace Spring.Aop.Target
 	public sealed class SingletonTargetSourceTests
 	{
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
 		public void InstantiationWithNullTargetSource()
 		{
-			new SingletonTargetSource(null);
+            Assert.Throws<ArgumentNullException>(() => new SingletonTargetSource(null));
 		}
 
 		[Test]

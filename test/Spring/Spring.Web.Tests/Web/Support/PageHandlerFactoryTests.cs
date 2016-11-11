@@ -22,8 +22,7 @@
 
 using System;
 using System.Web;
-using System.IO;
-using NUnit.Extensions.Asp.AspTester;
+
 using NUnit.Framework;
 using NUnitAspEx;
 using NUnitAspEx.Client;
@@ -132,8 +131,8 @@ namespace Spring.Web.Support
         [Test]
         public void TransferAfterSetResult()
         {
-            TextBoxTester name = new TextBoxTester("name", CurrentWebForm);
-            ButtonTester save = new ButtonTester("save", CurrentWebForm);
+            NUnit.Extensions.Asp.AspTester.TextBoxTester name = new NUnit.Extensions.Asp.AspTester.TextBoxTester("name", CurrentWebForm);
+            NUnit.Extensions.Asp.AspTester.ButtonTester save = new NUnit.Extensions.Asp.AspTester.ButtonTester("save", CurrentWebForm);
 
             Browser.GetPage("asptest://localhost/TransferAfterSetResult.aspx");
             // Note, that page TransferAfterSetResultSave.aspx has 'EnableViewStateMac="false"'

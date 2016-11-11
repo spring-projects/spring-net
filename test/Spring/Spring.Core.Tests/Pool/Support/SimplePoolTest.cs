@@ -132,24 +132,21 @@ namespace Spring.Pool
 
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void InstantiateWithNullPoolableObjectFactory()
 		{
-			new SimplePool(null, 10);
+            Assert.Throws<ArgumentNullException>(() => new SimplePool(null, 10));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException))]
 		public void InstantiateSpecifyingZeroPooledItems()
 		{
-			new SimplePool(factory, 0);
+            Assert.Throws<ArgumentException>(() => new SimplePool(factory, 0));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException))]
 		public void InstantiateSpecifyingNegativePooledItems()
 		{
-			new SimplePool(factory, -10000);
+            Assert.Throws<ArgumentException>(() => new SimplePool(factory, -10000));
 		}
 
 		[Test]
@@ -182,7 +179,7 @@ namespace Spring.Pool
             mocks.VerifyAll();
         }
 
-		[Test, ExpectedException(typeof (PoolException))]
+		[Test]
         [Ignore("No longer expected behavior per SPRNET-1582 being resolved.")]
 		public void NoMoreUsableAfterClose()
 		{
@@ -191,11 +188,11 @@ namespace Spring.Pool
             mocks.ReplayAll();
 
             pool.Close();
-            pool.BorrowObject();
+            Assert.Throws<PoolException>(() => pool.BorrowObject());
             mocks.VerifyAll();
         }
 
-		[Test, ExpectedException(typeof (PoolException))]
+		[Test]
         [Ignore("No longer expected behavior per SPRNET-1582 being resolved.")]
         public void ThrowsExceptionWhenOutOfItemsBecauseFailedValidation()
 		{
@@ -205,7 +202,7 @@ namespace Spring.Pool
 		    mocks.ReplayAll();
 
 			pool = new SimplePool(factory, 1);
-			pool.BorrowObject();
+            Assert.Throws<PoolException>(() => pool.BorrowObject());
             mocks.VerifyAll();
         }
 

@@ -21,14 +21,14 @@
 #region Imports
 
 using System.Collections.Generic;
-using System.IO;
 using System.Xml;
+
 using NUnit.Framework;
+
 using Spring.Core.IO;
 using Spring.Objects;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
-using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Xml;
 using Spring.Validation.Actions;
 using Spring.Validation.Config;
@@ -142,7 +142,6 @@ namespace Spring.Validation
         }
 
         [Test]
-        [ExpectedException(typeof(ObjectDefinitionStoreException))]
         public void WhenConfigFileIsNotValid()
         {
 //            const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
@@ -163,13 +162,16 @@ namespace Spring.Validation
             ParserContext parserContext = new ParserContext(helper);
 
             ValidationNamespaceParser parser = new ValidationNamespaceParser();
-            foreach (XmlElement element in doc.DocumentElement.ChildNodes)
+            Assert.Throws<ObjectDefinitionStoreException>(() =>
             {
-                if (element.NamespaceURI == "http://www.springframework.net/validation")
+                foreach (XmlElement element in doc.DocumentElement.ChildNodes)
                 {
-                    parser.ParseElement(element, parserContext);
+                    if (element.NamespaceURI == "http://www.springframework.net/validation")
+                    {
+                        parser.ParseElement(element, parserContext);
+                    }
                 }
-            }
+            });
         }
     }
 }

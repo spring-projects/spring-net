@@ -40,10 +40,9 @@ namespace Spring.Util
     public sealed class AssertUtilsTests
     {
         [Test]
-        [ExpectedException(typeof(ArgumentException), ExpectedMessage = "foo")]
         public void IsTrueWithMesssage()
         {
-            AssertUtils.IsTrue(false, "foo");
+            Assert.Throws<ArgumentException>(() => AssertUtils.IsTrue(false, "foo"), "foo");
         }
 
         [Test]
@@ -53,10 +52,9 @@ namespace Spring.Util
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException), ExpectedMessage = "[Assertion failed] - this expression must be true")]
         public void IsTrue()
         {
-            AssertUtils.IsTrue(false);
+            Assert.Throws<ArgumentException>(() => AssertUtils.IsTrue(false), "[Assertion failed] - this expression must be true");
         }
 
         [Test]
@@ -66,24 +64,21 @@ namespace Spring.Util
         }
 
         [Test]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void StateTrue()
         {
-            AssertUtils.State(false, "foo");
+            Assert.Throws<InvalidOperationException>(() => AssertUtils.State(false, "foo"));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ArgumentNotNull()
         {
-            AssertUtils.ArgumentNotNull(null, "foo");
+            Assert.Throws<ArgumentNullException>(() => AssertUtils.ArgumentNotNull(null, "foo"));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ArgumentNotNullWithMessage()
         {
-            AssertUtils.ArgumentNotNull(null, "foo", "Bang!");
+            Assert.Throws<ArgumentNullException>(() => AssertUtils.ArgumentNotNull(null, "foo", "Bang!"));
         }
 
         [Test]
@@ -99,45 +94,39 @@ namespace Spring.Util
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ArgumentHasText()
         {
-            AssertUtils.ArgumentHasText(null, "foo");
+            Assert.Throws<ArgumentNullException>(() => AssertUtils.ArgumentHasText(null, "foo"));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ArgumentHasTextWithMessage()
         {
-            AssertUtils.ArgumentHasText(null, "foo", "Bang!");
+            Assert.Throws<ArgumentNullException>(() => AssertUtils.ArgumentHasText(null, "foo", "Bang!"));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ArgumentHasLengthArgumentIsNull()
         {
-            AssertUtils.ArgumentHasLength(null, "foo");
+            Assert.Throws<ArgumentNullException>(() => AssertUtils.ArgumentHasLength(null, "foo"));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ArgumentHasLengthArgumentIsNullWithMessage()
         {
-            AssertUtils.ArgumentHasLength(null, "foo", "Bang!");
+            Assert.Throws<ArgumentNullException>(() => AssertUtils.ArgumentHasLength(null, "foo", "Bang!"));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ArgumentHasLengthArgumentIsEmpty()
         {
-            AssertUtils.ArgumentHasLength(new byte[0], "foo");
+            Assert.Throws<ArgumentNullException>(() => AssertUtils.ArgumentHasLength(new byte[0], "foo"));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ArgumentHasLengthArgumentIsEmptyWithMessage()
         {
-            AssertUtils.ArgumentHasLength(new byte[0], "foo", "Bang!");
+            Assert.Throws<ArgumentNullException>(() => AssertUtils.ArgumentHasLength(new byte[0], "foo", "Bang!"));
         }
 
         [Test]
@@ -153,24 +142,21 @@ namespace Spring.Util
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void ArgumentHasElementsArgumentIsNull()
         {
-            AssertUtils.ArgumentHasElements(null, "foo");
+            Assert.Throws<ArgumentException>(() => AssertUtils.ArgumentHasElements(null, "foo"));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void ArgumentHasElementsArgumentIsEmpty()
         {
-            AssertUtils.ArgumentHasElements(new object[0], "foo");
+            Assert.Throws<ArgumentException>(() => AssertUtils.ArgumentHasElements(new object[0], "foo"));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void ArgumentHasElementsArgumentContainsNull()
         {
-            AssertUtils.ArgumentHasElements(new object[] { new object(), null, new object() }, "foo");
+            Assert.Throws<ArgumentException>(() => AssertUtils.ArgumentHasElements(new object[] { new object(), null, new object() }, "foo"));
         }
 
         [Test]

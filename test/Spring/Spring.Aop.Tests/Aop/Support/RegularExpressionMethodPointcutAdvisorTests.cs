@@ -17,11 +17,9 @@
 #endregion
 
 #region Imports
-using System;
 
 using Spring.Aop.Framework;
 using Spring.Aop.Interceptor;
-using Spring.Context.Support;
 using Spring.Objects;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Xml;
@@ -40,7 +38,7 @@ namespace Spring.Aop.Support
 	[TestFixture]
 	public class RegularExpressionMethodPointcutAdvisorTests
 	{
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void FixtureSetUp()
         {
             SystemUtils.RegisterLoadedAssemblyResolver();

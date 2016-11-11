@@ -18,8 +18,6 @@
 
 #endregion
 
-using System;
-using System.Collections;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 

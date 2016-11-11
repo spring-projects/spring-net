@@ -23,7 +23,7 @@
 using System;
 using NUnit.Framework;
 using NUnitAspEx;
-using NUnitAspEx.Core;
+
 using Spring.TestSupport;
 
 #endregion
@@ -125,10 +125,9 @@ namespace Spring.Objects.Factory.Support
         }
 
         [Test]
-        [ExpectedException(typeof(ObjectCreationException))]
         public void ThrowsArgumentExceptionOnNonExistingPath()
         {
-            Host.Execute(new TestAction(ThrowsArgumentExceptionOnNonExistingPathImpl));
+            Assert.Throws<ObjectCreationException>(() => Host.Execute(new TestAction(ThrowsArgumentExceptionOnNonExistingPathImpl)));
         }
 
         public static void ThrowsArgumentExceptionOnNonExistingPathImpl()

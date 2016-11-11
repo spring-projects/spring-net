@@ -23,13 +23,7 @@
 using System;
 using System.Collections;
 using System.Collections.Specialized;
-using System.Globalization;
-using System.Reflection;
 using System.Web;
-using System.Web.UI;
-using Common.Logging;
-using Spring.Context;
-using Spring.Objects.Factory;
 
 #endregion
 

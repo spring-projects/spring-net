@@ -21,16 +21,12 @@
 #region Imports
 
 using System;
-using System.Collections;
-using System.Collections.Specialized;
 using System.IO;
-using System.Reflection;
 using System.Threading;
 using System.Web;
 using System.Web.Hosting;
 using Spring.Collections;
 using Spring.Expressions;
-using Spring.Reflection.Dynamic;
 
 #endregion
 

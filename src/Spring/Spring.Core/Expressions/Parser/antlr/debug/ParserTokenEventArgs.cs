@@ -1,8 +1,6 @@
 namespace Spring.Expressions.Parser.antlr.debug
 {
-	using System;
-	
-	public class TokenEventArgs : ANTLREventArgs
+    public class TokenEventArgs : ANTLREventArgs
 	{
 		public TokenEventArgs()
 		{

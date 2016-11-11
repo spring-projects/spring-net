@@ -20,7 +20,6 @@
 
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using Common.Logging;
@@ -29,7 +28,6 @@ using Spring.Messaging.Nms.Core;
 using Spring.Messaging.Nms.Support;
 using Spring.Messaging.Nms.Support.Converter;
 using Spring.Messaging.Nms.Support.Destinations;
-using Spring.Messaging.Nms.Listener;
 using Spring.Util;
 using Apache.NMS;
 

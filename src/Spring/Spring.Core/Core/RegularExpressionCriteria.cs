@@ -21,7 +21,7 @@
 #region Imports
 
 using System.Text.RegularExpressions;
-using Spring.Core;
+
 using Spring.Util;
 
 #endregion

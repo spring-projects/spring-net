@@ -60,7 +60,6 @@ namespace Spring.Objects.Factory.Config
         }
 
         [Test]
-		[ExpectedException(typeof(ObjectInitializationException))]
         public void UseInvalidTypeForDictionaryValue()
         {
             IDictionary resourceHandlers = new Hashtable();
@@ -69,13 +68,10 @@ namespace Spring.Objects.Factory.Config
             ResourceHandlerConfigurer resourceHandlerConfiguer = new ResourceHandlerConfigurer();
             resourceHandlerConfiguer.ResourceHandlers = resourceHandlers;
 
-
-            resourceHandlerConfiguer.PostProcessObjectFactory((IConfigurableListableObjectFactory) mocks.DynamicMock(typeof(IConfigurableListableObjectFactory)));
-    
+            Assert.Throws<ObjectInitializationException>(() => resourceHandlerConfiguer.PostProcessObjectFactory((IConfigurableListableObjectFactory) mocks.DynamicMock(typeof(IConfigurableListableObjectFactory))));
         }
 
         [Test]
-        [ExpectedException(typeof(ObjectInitializationException))]
         public void UseNonResolvableTypeForDictionaryValue()
         {
             IDictionary resourceHandlers = new Hashtable();
@@ -85,8 +81,7 @@ namespace Spring.Objects.Factory.Config
             resourceHandlerConfiguer.ResourceHandlers = resourceHandlers;
 
 
-            resourceHandlerConfiguer.PostProcessObjectFactory((IConfigurableListableObjectFactory) mocks.DynamicMock(typeof(IConfigurableListableObjectFactory)));
-    
+            Assert.Throws<ObjectInitializationException>(() => resourceHandlerConfiguer.PostProcessObjectFactory((IConfigurableListableObjectFactory) mocks.DynamicMock(typeof(IConfigurableListableObjectFactory))));
         }
 
         [Test]

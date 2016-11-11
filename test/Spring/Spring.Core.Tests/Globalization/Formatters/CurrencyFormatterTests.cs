@@ -19,7 +19,7 @@
 #endregion
 
 using System;
-using System.Globalization;
+
 using NUnit.Framework;
 
 namespace Spring.Globalization.Formatters
@@ -32,11 +32,10 @@ namespace Spring.Globalization.Formatters
     public class CurrencyFormatterTests
     {
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void FormatNullValue()
         {
             CurrencyFormatter fmt = new CurrencyFormatter();
-            fmt.Format(null);
+            Assert.Throws<ArgumentNullException>(() => fmt.Format(null));
         }
 
         [Test]
@@ -48,11 +47,10 @@ namespace Spring.Globalization.Formatters
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void FormatNonNumber()
         {
             CurrencyFormatter fmt = new CurrencyFormatter();
-            fmt.Format("not a number");
+            Assert.Throws<ArgumentException>(() => fmt.Format("not a number"));
         }
 #if !MONO
         [Test]

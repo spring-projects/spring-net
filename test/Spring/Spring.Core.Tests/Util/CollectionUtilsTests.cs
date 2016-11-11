@@ -93,6 +93,7 @@ namespace Spring.Util
 
             Assert.IsTrue(CollectionUtils.Contains(list, 3));
         }
+
         [Test]
         public void ContainsDoesNotContainElement()
         {
@@ -104,12 +105,13 @@ namespace Spring.Util
 
             Assert.IsFalse(CollectionUtils.Contains(list, 5));
         }
+
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void AddNullCollection()
         {
-            CollectionUtils.Add(null, null);
+            Assert.Throws<ArgumentNullException>(() => CollectionUtils.Add(null, null));
         }
+
         [Test]
         public void AddNullObject()
         {
@@ -117,13 +119,14 @@ namespace Spring.Util
             CollectionUtils.Add(list, null);
             Assert.IsTrue(list.Count == 1);
         }
+
         [Test]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void AddCollectionDoesNotImplementAdd()
         {
             NoContainsNoAddCollection noAddCollection = new NoContainsNoAddCollection();
-            CollectionUtils.Add(noAddCollection, null);
+            Assert.Throws<InvalidOperationException>(() => CollectionUtils.Add(noAddCollection, null));
         }
+
         [Test]
         public void AddValidElement()
         {
@@ -132,25 +135,25 @@ namespace Spring.Util
             CollectionUtils.Add(list, obj1);
             Assert.IsTrue(list.Count == 1);
         }
+
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ContainsAllNullTargetCollection()
         {
-            CollectionUtils.ContainsAll(null, new ArrayList());
+            Assert.Throws<ArgumentNullException>(() => CollectionUtils.ContainsAll(null, new ArrayList()));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ContainsAllSourceNullCollection()
         {
-            CollectionUtils.ContainsAll(new ArrayList(), null);
+            Assert.Throws<ArgumentNullException>(() => CollectionUtils.ContainsAll(new ArrayList(), null));
         }
+
         [Test]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void ContainsAllDoesNotImplementContains()
         {
-            CollectionUtils.ContainsAll(new NoContainsNoAddCollection(), new ArrayList());
+            Assert.Throws<InvalidOperationException>(() => CollectionUtils.ContainsAll(new NoContainsNoAddCollection(), new ArrayList()));
         }
+
         [Test]
         public void DoesNotContainAllElements()
         {
@@ -164,6 +167,7 @@ namespace Spring.Util
 
             Assert.IsTrue(CollectionUtils.ContainsAll(target, source));
         }
+
         [Test]
         public void ContainsAllElements()
         {
@@ -190,6 +194,7 @@ namespace Spring.Util
             ArrayList source = new ArrayList();
             Assert.IsTrue(CollectionUtils.ContainsAll(target, source));
         }
+
         [Test]
         public void ContainsAllElementsWithNoElementsEitherCollection()
         {
@@ -197,12 +202,13 @@ namespace Spring.Util
             ArrayList source = new ArrayList();
             Assert.IsFalse(CollectionUtils.ContainsAll(target, source));
         }
+
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ToArrayNullTargetCollection()
         {
-            CollectionUtils.ToArrayList(null);
+            Assert.Throws<ArgumentNullException>(() => CollectionUtils.ToArrayList(null));
         }
+
         [Test]
         public void ToArrayAllElements()
         {
@@ -215,6 +221,7 @@ namespace Spring.Util
 
             Assert.AreEqual(target.Count, source.Count);
         }
+
         [Test]
         public void EmptyArrayElements()
         {
@@ -223,29 +230,29 @@ namespace Spring.Util
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void RemoveAllTargetNullCollection()
         {
-            CollectionUtils.RemoveAll(null, new ArrayList());
+            Assert.Throws<ArgumentNullException>(() => CollectionUtils.RemoveAll(null, new ArrayList()));
         }
+
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void RemoveAllSourceNullCollection()
         {
-            CollectionUtils.RemoveAll(new ArrayList(), null);
+            Assert.Throws<ArgumentNullException>(() => CollectionUtils.RemoveAll(new ArrayList(), null));
         }
+
         [Test]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void RemoveAllTargetCollectionDoesNotImplementContains()
         {
-            CollectionUtils.RemoveAll(new NoContainsNoAddCollection(), new ArrayList());
+            Assert.Throws<InvalidOperationException>(() => CollectionUtils.RemoveAll(new NoContainsNoAddCollection(), new ArrayList()));
         }
+
         [Test]
-        [ExpectedException(typeof(InvalidOperationException))]
         public void RemoveAllTargetCollectionDoesNotImplementRemove()
         {
-            CollectionUtils.RemoveAll(new NoContainsNoAddCollection(), new ArrayList());
+            Assert.Throws<InvalidOperationException>(() => CollectionUtils.RemoveAll(new NoContainsNoAddCollection(), new ArrayList()));
         }
+
         [Test]
         public void RemoveAllNoElements()
         {
@@ -262,6 +269,7 @@ namespace Spring.Util
             CollectionUtils.RemoveAll(target, source);
             Assert.IsTrue(3 == target.Count);
         }
+
         [Test]
         public void RemoveAllSomeElements()
         {
@@ -280,6 +288,7 @@ namespace Spring.Util
             CollectionUtils.RemoveAll(target, source);
             Assert.IsTrue(3 == target.Count);
         }
+
         [Test]
         public void RemoveAllAllElements()
         {
@@ -353,7 +362,6 @@ namespace Spring.Util
             {
                 //ok
             }
-
         }
 
         [Test]
@@ -361,7 +369,7 @@ namespace Spring.Util
         {
             ArrayList list = new ArrayList();
             list.Add("mystring");
-            string[] strList = (string[])CollectionUtils.ToArray(list, typeof(string));
+            string[] strList = (string[]) CollectionUtils.ToArray(list, typeof(string));
             Assert.AreEqual(1, strList.Length);
 
             try
@@ -369,21 +377,23 @@ namespace Spring.Util
                 CollectionUtils.ToArray(list, typeof(Type));
                 Assert.Fail("should fail");
             }
-            catch (InvalidCastException) { }
+            catch (InvalidCastException)
+            {
+            }
         }
 
         [Test]
         public void StableSorting()
         {
             DictionaryEntry[] entries = new DictionaryEntry[]
-                                            {
-                                                new DictionaryEntry(5, 4), 
-                                                new DictionaryEntry(5, 5), 
-                                                new DictionaryEntry(3, 2), 
-                                                new DictionaryEntry(3, 3), 
-                                                new DictionaryEntry(1, 0), 
-                                                new DictionaryEntry(1, 1), 
-                                            };
+            {
+                new DictionaryEntry(5, 4),
+                new DictionaryEntry(5, 5),
+                new DictionaryEntry(3, 2),
+                new DictionaryEntry(3, 3),
+                new DictionaryEntry(1, 0),
+                new DictionaryEntry(1, 1),
+            };
 
             ICollection resultList = CollectionUtils.StableSort(entries, new CollectionUtils.CompareCallback(CompareEntries));
             DictionaryEntry[] resultEntries = (DictionaryEntry[]) CollectionUtils.ToArray(resultList, typeof(DictionaryEntry));
@@ -398,19 +408,19 @@ namespace Spring.Util
 
         private int CompareEntries(object x, object y)
         {
-            DictionaryEntry dex = (DictionaryEntry)x;
-            DictionaryEntry dey = (DictionaryEntry)y;
+            DictionaryEntry dex = (DictionaryEntry) x;
+            DictionaryEntry dey = (DictionaryEntry) y;
 
-            return ((int)dex.Key).CompareTo(dey.Key);
+            return ((int) dex.Key).CompareTo(dey.Key);
         }
 
         [Test]
         public void FindFirstMatchReturnsNullIfAnyInputIsEmpty()
         {
-            Assert.IsNull( CollectionUtils.FindFirstMatch(null, null) );
-            Assert.IsNull( CollectionUtils.FindFirstMatch(new string[0], new string[0]));
-            Assert.IsNull( CollectionUtils.FindFirstMatch(null, new string[] { "x" }));
-            Assert.IsNull( CollectionUtils.FindFirstMatch(new string[] { "x" }, null));
+            Assert.IsNull(CollectionUtils.FindFirstMatch(null, null));
+            Assert.IsNull(CollectionUtils.FindFirstMatch(new string[0], new string[0]));
+            Assert.IsNull(CollectionUtils.FindFirstMatch(null, new string[] {"x"}));
+            Assert.IsNull(CollectionUtils.FindFirstMatch(new string[] {"x"}, null));
         }
 
         [Test]

@@ -40,18 +40,17 @@ namespace Spring.Scheduling.Quartz
         /// </summary>
         [SetUp]
         public void SetUp()
-        {               
-             jobDetail = new JobDetailObject();
+        {
+            jobDetail = new JobDetailObject();
         }
 
         /// <summary>
         /// Tests job detail's property behavior.
         /// </summary>
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void TestJobType_Null()
         {
-            jobDetail.JobType = null;            
+            Assert.Throws<ArgumentException>(() => jobDetail.JobType = null);
         }
 
         /// <summary>
@@ -70,7 +69,7 @@ namespace Spring.Scheduling.Quartz
         [Test]
         public void TestJobType_IJob()
         {
-            Type CORRECT_IJOB = typeof (NoOpJob);
+            Type CORRECT_IJOB = typeof(NoOpJob);
             jobDetail.JobType = CORRECT_IJOB;
             Assert.AreEqual(jobDetail.JobType, CORRECT_IJOB, "JobDetail did not register correct job type");
         }
@@ -79,10 +78,9 @@ namespace Spring.Scheduling.Quartz
         /// Tests job detail's property behavior.
         /// </summary>
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void TestJobDataAsMap_Null()
         {
-            jobDetail.JobDataAsMap = null;
+            Assert.Throws<ArgumentException>(() => jobDetail.JobDataAsMap = null);
         }
 
         /// <summary>
@@ -152,14 +150,12 @@ namespace Spring.Scheduling.Quartz
         /// Tests job detail's property behavior.
         /// </summary>
         [Test]
-        [ExpectedException(typeof(ArgumentException))]
         public void TestAfterPropertiesSet_ApplicationContextJobDataKeySetWithoutApplicationContext()
         {
             const string objectName = "springJobDetailObject";
             jobDetail.ObjectName = objectName;
             jobDetail.ApplicationContextJobDataKey = "applicationContextJobDataKey";
-            jobDetail.AfterPropertiesSet();
+            Assert.Throws<ArgumentException>(() => jobDetail.AfterPropertiesSet());
         }
-
     }
 }

@@ -25,7 +25,6 @@ using System.Collections;
 using NHibernate;
 using NHibernate.Type;
 using Spring.Dao;
-using Spring.Data.NHibernate;
 
 #endregion
 

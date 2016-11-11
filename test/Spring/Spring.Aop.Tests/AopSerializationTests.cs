@@ -29,7 +29,6 @@ using AopAlliance.Aop;
 using NUnit.Framework;
 using Spring.Aop;
 using Spring.Aop.Framework;
-using Spring.Aop.Support;
 using Spring.Context;
 using Spring.Objects.Factory;
 

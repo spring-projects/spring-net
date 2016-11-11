@@ -37,7 +37,7 @@ namespace Spring.DataBinding
     {
         private BaseBindingManager mgr;
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void SetUp()
         {
             mgr = new BaseBindingManager();

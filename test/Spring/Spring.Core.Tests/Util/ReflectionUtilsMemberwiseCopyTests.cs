@@ -1,6 +1,4 @@
 using System;
-using System.Security;
-using System.Security.Permissions;
 using System.Threading;
 using System.Web;
 using NUnit.Framework;
@@ -25,10 +23,9 @@ namespace Spring.Util
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException), ExpectedMessage="object types are not related")]
 		public void DifferentTypesForbidden()
 		{
-			ReflectionUtils.MemberwiseCopy("test", 2);
+            Assert.Throws<ArgumentException>(() => ReflectionUtils.MemberwiseCopy("test", 2), "object types are not related");
 		}
 
 		[Test]

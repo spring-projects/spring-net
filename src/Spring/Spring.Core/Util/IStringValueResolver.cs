@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace Spring.Util
+﻿namespace Spring.Util
 {
     /// <summary>
     /// Simple strategy interface for resolving a String value.

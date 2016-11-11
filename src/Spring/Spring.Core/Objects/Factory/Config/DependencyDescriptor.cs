@@ -21,7 +21,6 @@
 using System;
 using Spring.Core;
 using System.Reflection;
-using Spring.Objects.Factory.Attributes;
 
 namespace Spring.Objects.Factory.Config
 {

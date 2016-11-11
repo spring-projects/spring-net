@@ -39,19 +39,17 @@ namespace Spring.Aop.Framework.AutoProxy
         {}
 
         [Test]
-        [ExpectedException( typeof( ArgumentNullException ) )]
         public void ThrowsOnMissingTypeNames()
         {
             TypeNameAutoProxyCreator apc = new TypeNameAutoProxyCreator();
-            apc.PostProcessAfterInitialization( new TestObject(), "testObject" );
+            Assert.Throws<ArgumentNullException>(() => apc.PostProcessAfterInitialization(new TestObject(), "testObject"));
         }
 
         [Test]
-        [ExpectedException( typeof( ArgumentNullException ) )]
         public void ThrowsOnAssigningNullTypeNames()
         {
             TypeNameAutoProxyCreator apc = new TypeNameAutoProxyCreator();
-            apc.TypeNames = null;
+            Assert.Throws<ArgumentNullException>(() => apc.TypeNames = null);
         }
 
         [Test]

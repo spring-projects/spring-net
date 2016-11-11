@@ -18,10 +18,8 @@
 
 #endregion
 
-using System.Collections;
 using System.Collections.Generic;
 using System.Web.UI;
-using Page=Spring.Web.UI.Page;
 
 namespace Spring.Web.UI.Validation
 {

@@ -1,5 +1,5 @@
 using System;
-using Spring.Transaction;
+
 using NUnit.Framework;
 
 namespace Spring.Transaction

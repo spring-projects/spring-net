@@ -1,7 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.Collections.Generic;
+
 using Spring.Objects.Factory.Attributes.ByType;
 
 namespace Spring.Objects.Factory.Attributes.ByType

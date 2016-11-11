@@ -35,66 +35,57 @@ namespace Spring.Objects.Factory.Support
 	public sealed class ReplacedMethodOverrideTests
 	{
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void InstantiationWithNullMethodName()
 		{
-			new ReplacedMethodOverride(null, null);
+            Assert.Throws<ArgumentNullException>(() => new ReplacedMethodOverride(null, null));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void InstantiationWithEmptyMethodName()
 		{
-			new ReplacedMethodOverride(string.Empty, null);
+            Assert.Throws<ArgumentNullException>(() => new ReplacedMethodOverride(string.Empty, null));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void InstantiationWithWhitespacedMethodName()
 		{
-			new ReplacedMethodOverride("  ", null);
+            Assert.Throws<ArgumentNullException>(() => new ReplacedMethodOverride("  ", null));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void InstantiationWithNullMethodReplacerObjectName()
 		{
-			new ReplacedMethodOverride("foo", null);
+            Assert.Throws<ArgumentNullException>(() => new ReplacedMethodOverride("foo", null));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void InstantiationWithEmptyMethodReplacerObjectName()
 		{
-			new ReplacedMethodOverride("foo", string.Empty);
+            Assert.Throws<ArgumentNullException>(() => new ReplacedMethodOverride("foo", string.Empty));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void InstantiationWithWhitespacedMethodReplacerObjectName()
 		{
-			new ReplacedMethodOverride("foo", "  ");
+            Assert.Throws<ArgumentNullException>(() => new ReplacedMethodOverride("foo", "  "));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void AddNullTypeIdentifier()
 		{
-			new ReplacedMethodOverride("foo", "foo").AddTypeIdentifier(null);
+            Assert.Throws<ArgumentNullException>(() => new ReplacedMethodOverride("foo", "foo").AddTypeIdentifier(null));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void AddEmptyTypeIdentifier()
 		{
-			new ReplacedMethodOverride("foo", "foo").AddTypeIdentifier(string.Empty);
+            Assert.Throws<ArgumentNullException>(() => new ReplacedMethodOverride("foo", "foo").AddTypeIdentifier(string.Empty));
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void AddWhitespacedTypeIdentifier()
 		{
-			new ReplacedMethodOverride("foo", "foo").AddTypeIdentifier("\n ");
+            Assert.Throws<ArgumentNullException>(() => new ReplacedMethodOverride("foo", "foo").AddTypeIdentifier("\n "));
 		}
 
 		[Test]
@@ -155,11 +146,10 @@ namespace Spring.Objects.Factory.Support
 		}
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
 		public void MatchesWithNullMethod()
 		{
 			ReplacedMethodOverride methodOverride = new ReplacedMethodOverride("Execute", "replacer");
-			methodOverride.Matches(null);
+            Assert.Throws<ArgumentNullException>(() => methodOverride.Matches(null));
 		}
 
 		[Test]

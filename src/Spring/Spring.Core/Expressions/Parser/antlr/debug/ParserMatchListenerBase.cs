@@ -1,8 +1,6 @@
 namespace Spring.Expressions.Parser.antlr.debug
 {
-	using System;
-	
-	/// <summary>
+    /// <summary>
 	/// Provides an abstract base for implementing <see cref="ParserMatchListener"/> subclasses.
 	/// </summary>
 	/// <remarks>

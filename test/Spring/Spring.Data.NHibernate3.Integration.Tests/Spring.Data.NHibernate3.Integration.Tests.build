@@ -45,10 +45,10 @@
 				<include name="${current.bin.dir}/Spring.Data.dll" />
 				<include name="${current.bin.dir}/Spring.Data.NHibernate3.dll" />
 				
-				<include name="${current.bin.dir}/NHibernate.dll"/>
-				<include name="${current.bin.dir}/Iesi.Collections.dll"/>
+				<include name="${nh3.lib.dir}/NHibernate.dll"/>
+				<include name="${iesi3.lib.dir}/Iesi.Collections.dll"/>
 				
-				<include name="${current.bin.dir}/nunit.framework.dll"/>
+				<include name="${nunit.lib.dir}/nunit.framework.dll"/>
 			</references>
 			<resources prefix="Spring" dynamicprefix="true" failonempty="true">
 				<include name="**/*.xml" />

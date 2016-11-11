@@ -53,10 +53,9 @@ namespace Spring.TxQuickStart.Services
         }
 
         [Test]
-        [ExpectedException(typeof(ArithmeticException))]
         public void TransferAboveMaxAmount()
         {
-            accountManager.DoTransfer(2000000, 200000);
+            Assert.Throws<ArithmeticException>(() => accountManager.DoTransfer(2000000, 200000));
         }       
     }
 }

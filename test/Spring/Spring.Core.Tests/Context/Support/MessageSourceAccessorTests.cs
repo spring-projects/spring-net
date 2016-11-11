@@ -29,13 +29,13 @@ namespace Spring.Context.Support
     [TestFixture]
     public class MessageSourceAccessorTests
     {
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void TestFixtureSetUp()
         {
             CultureTestScope.Set();
         }
 
-        [TestFixtureTearDown]
+        [OneTimeTearDown]
         public void TestFixtureTearDown()
         {
             CultureTestScope.Reset();

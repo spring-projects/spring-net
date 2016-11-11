@@ -90,7 +90,7 @@ namespace Spring.Scheduling.Quartz
             simpleTrigger.StartDelay = TimeSpan.FromMilliseconds(START_DELAY);
             DateTime startTime = DateTime.UtcNow;
             simpleTrigger.AfterPropertiesSet();
-            AssertDateTimesEqualityWithAllowedDelta(startTime.AddMilliseconds(START_DELAY), simpleTrigger.StartTimeUtc, 1000);
+            AssertDateTimesEqualityWithAllowedDelta(startTime.AddMilliseconds(START_DELAY), simpleTrigger.StartTimeUtc, 1500);
         }
 
         /// <summary>

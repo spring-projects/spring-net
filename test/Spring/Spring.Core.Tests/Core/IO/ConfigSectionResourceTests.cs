@@ -1,9 +1,8 @@
 using System;
 using System.IO;
-using System.Net;
 using System.Xml;
 using NUnit.Framework;
-using Spring.Objects.Factory.Xml;
+
 using Spring.Util;
 
 namespace Spring.Core.IO
@@ -58,17 +57,15 @@ namespace Spring.Core.IO
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ThrowsOnNullSectionName()
         {
-            new ConfigSectionResource((string)null);
+            Assert.Throws<ArgumentNullException>(() => new ConfigSectionResource((string) null));
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void ThrowsOnNullConfigElement()
         {
-            new ConfigSectionResource((XmlElement)null);
+            Assert.Throws<ArgumentNullException>(() => new ConfigSectionResource((XmlElement) null));
         }
 
         [Test]

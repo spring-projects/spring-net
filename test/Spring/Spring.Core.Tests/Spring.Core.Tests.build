@@ -78,7 +78,7 @@
 				<include name="${current.bin.dir}/Spring.Services.dll" />
 				<include name="${current.bin.dir}/Spring.Messaging.NMS.dll" />
 				<include name="${current.bin.dir}/Spring.Template.Velocity.dll" />
-				<include name="${current.bin.dir}/nunit.framework.dll"/>
+				<include name="${nunit.lib.dir}/nunit.framework.dll"/>
 				<include name="${current.bin.dir}/Rhino.Mocks.dll"/>
 			</references>
 		</csc>

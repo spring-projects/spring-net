@@ -16,8 +16,6 @@
  */
 #endregion
 
-using System;
-
 namespace Spring.Transaction
 {
 	/// <summary>

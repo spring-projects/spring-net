@@ -1,12 +1,9 @@
 namespace Spring.Expressions.Parser.antlr.debug
 {
-	using System;
-	using System.Reflection;
-	using Hashtable			= System.Collections.Hashtable;
+    using Hashtable			= System.Collections.Hashtable;
 	using DictionaryEntry	= System.Collections.DictionaryEntry;
-	using ArrayList			= System.Collections.ArrayList;
 
-	using antlr.collections.impl;
+    using antlr.collections.impl;
 	
 	
 	public delegate void MessageEventHandler(object sender, MessageEventArgs e); 

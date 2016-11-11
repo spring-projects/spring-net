@@ -64,7 +64,7 @@ namespace Spring.Aop.Framework.DynamicProxy
          * to ensure that it was used appropriately by code.
          */
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void FixtureSetUp()
         {
             //            SystemUtils.RegisterLoadedAssemblyResolver();
@@ -322,8 +322,6 @@ namespace Spring.Aop.Framework.DynamicProxy
         }
 
         [Test]
-        [ExpectedException(typeof(NotSupportedException)
-         , ExpectedMessage = "Target 'target' is null.")]
         public void Does_proxy_interfacemethods_without_implementation_and_by_default_throws_NotSupportedException()
         {
             AdvisedSupport advised = new AdvisedSupport();
@@ -333,7 +331,7 @@ namespace Spring.Aop.Framework.DynamicProxy
             ITestObject proxy = CreateProxy(advised) as ITestObject;
             Assert.IsNotNull(proxy);
 
-            proxy.GetDescription();
+            Assert.Throws<NotSupportedException>(() => proxy.GetDescription(), "Target 'target' is null.");
         }
 
         [Test]
@@ -357,7 +355,6 @@ namespace Spring.Aop.Framework.DynamicProxy
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException), MatchType=MessageMatch.Contains, UserMessage="'target'")]
         public void Does_proxy_interfacemethods_without_implementation_and_throws_ArgumentNullException_On_NullTarget()
         {
             DynamicInvocationTestInterceptor invocationInterceptor = new DynamicInvocationTestInterceptor();
@@ -373,12 +370,11 @@ namespace Spring.Aop.Framework.DynamicProxy
             // target null, call not handled by interceptor
             targetSource.Target = null;
             invocationInterceptor.CallProceed = true;
-            proxy.GetDescription();
+            var ex = Assert.Throws<ArgumentNullException>(() => proxy.GetDescription());
+            Assert.That(ex.Message, Does.Contain("'target'"));
         }
 
         [Test]
-        [ExpectedException(typeof(NotSupportedException)
-            , ExpectedMessage = "Target 'target' of type 'System.Object' does not support methods of 'Spring.Objects.ITestObject'.")]
         public void Does_proxy_interfacemethods_without_implementation_and_throws_NotSupportedException_On_Incompatible_Target()
         {
             DynamicInvocationTestInterceptor invocationInterceptor = new DynamicInvocationTestInterceptor();
@@ -394,19 +390,17 @@ namespace Spring.Aop.Framework.DynamicProxy
             // target incompatible, call not handled by interceptor
             targetSource.Target = new object();
             invocationInterceptor.CallProceed = true;
-            proxy.GetDescription();
+            Assert.Throws<NotSupportedException>(() => proxy.GetDescription(), "Target 'target' of type 'System.Object' does not support methods of 'Spring.Objects.ITestObject'.");
         }
 
         [Test]
-        [ExpectedException(typeof(NotSupportedException)
-            , ExpectedMessage = "Target 'target' of type 'System.Object' does not support methods of 'Spring.Objects.ITestObject'.")]
         public void NoInterceptorWithNoTarget()
         {
             AdvisedSupport advised = new AdvisedSupport();
             advised.Interfaces = new Type[] { typeof(ITestObject) };
 
             ITestObject to = CreateProxy(advised) as ITestObject;
-            to.GetDescription();
+            Assert.Throws<NotSupportedException>(() => to.GetDescription(), "Target 'target' of type 'System.Object' does not support methods of 'Spring.Objects.ITestObject'.");
         }
 
         [Test]
@@ -426,8 +420,6 @@ namespace Spring.Aop.Framework.DynamicProxy
         }
 
         [Test]
-        [ExpectedException(typeof(NotSupportedException)
-            , ExpectedMessage = "Target 'target' of type 'System.Object' does not support methods of 'Spring.Objects.ITestObject'.")]
         public void InterceptorUnhandledCallWithNoTarget()
         {
             AdvisedSupport advised = new AdvisedSupport();
@@ -436,7 +428,7 @@ namespace Spring.Aop.Framework.DynamicProxy
 
             ITestObject to = CreateProxy(advised) as ITestObject;
             Assert.IsNotNull(to);
-            to.GetDescription();
+            Assert.Throws<NotSupportedException>(() => to.GetDescription(), "Target 'target' of type 'System.Object' does not support methods of 'Spring.Objects.ITestObject'.");
         }
 
         [Test]
@@ -1388,14 +1380,13 @@ namespace Spring.Aop.Framework.DynamicProxy
         }
 
         [Test]
-        [ExpectedException(typeof(AopConfigException))]
         public void TargetCantGetProxyByDefault()
         {
             NeedsToSeeProxy et = new NeedsToSeeProxy();
             ProxyFactory pf1 = new ProxyFactory(et);
             Assert.IsFalse(pf1.ExposeProxy);
             INeedsToSeeProxy proxied = (INeedsToSeeProxy)CreateProxy(pf1);
-            proxied.IncrementViaProxy();
+            Assert.Throws<AopConfigException>(() => proxied.IncrementViaProxy());
         }
 
         #region TargetReturnsThis

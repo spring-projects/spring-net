@@ -1,5 +1,3 @@
-using System;
-using Spring.Expressions.Parser.antlr.collections.impl;
 using BitSet = Spring.Expressions.Parser.antlr.collections.impl.BitSet;
 	
 namespace Spring.Expressions.Parser.antlr

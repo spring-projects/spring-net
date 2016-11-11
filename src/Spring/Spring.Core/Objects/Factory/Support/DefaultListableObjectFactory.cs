@@ -25,7 +25,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
-using System.Linq;
 
 using Common.Logging;
 
@@ -34,7 +33,6 @@ using Spring.Core.TypeConversion;
 using Spring.Objects.Factory.Config;
 using Spring.Util;
 using Spring.Expressions;
-using Spring.Context.Support;
 
 #endregion
 

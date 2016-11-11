@@ -56,10 +56,9 @@ namespace Spring.Threading
         }
 
         [Test]
-        [ExpectedException(typeof(ArgumentNullException))]
         public void StorageMustNotBeNull()
         {
-            LogicalThreadContext.SetStorage(null);
+            Assert.Throws<ArgumentNullException>(() => LogicalThreadContext.SetStorage(null));
         }
 
         [Test]

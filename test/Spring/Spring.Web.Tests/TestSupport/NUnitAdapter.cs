@@ -31,7 +31,6 @@
  *******************************************************************************************************************/
 #endregion
 
-using System;
 using NUnit.Extensions.Asp;
 using NUnit.Framework;
 

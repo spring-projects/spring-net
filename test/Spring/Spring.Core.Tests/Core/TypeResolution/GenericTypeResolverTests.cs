@@ -57,10 +57,9 @@ namespace Spring.Core.TypeResolution
         }
 
         [Test]
-        [ExpectedException(typeof(TypeLoadException))]
         public void ResolveLocalAssemblyGenericTypeOpen()
         {
-            GetTypeResolver().Resolve("Spring.Objects.TestGenericObject<int >");
+            Assert.Throws<TypeLoadException>(() => GetTypeResolver().Resolve("Spring.Objects.TestGenericObject<int >"));
         }
 
         [Test]
@@ -91,17 +90,15 @@ namespace Spring.Core.TypeResolution
         }
 
         [Test]
-        [ExpectedException(typeof(TypeLoadException))]
         public void ResolveAmbiguousGenericTypeWithAssemblyName()
         {
-            Type t = GetTypeResolver().Resolve("Spring.Objects.TestGenericObject<System.Collections.Generic.Stack<int>, System, string>");
+            Assert.Throws<TypeLoadException>(() => GetTypeResolver().Resolve("Spring.Objects.TestGenericObject<System.Collections.Generic.Stack<int>, System, string>"));
         }
 
         [Test]
-        [ExpectedException(typeof(TypeLoadException))]
         public void ResolveMalformedGenericType()
         {
-            Type t = GetTypeResolver().Resolve("Spring.Objects.TestGenericObject<int, <string>>");
+            Assert.Throws<TypeLoadException>(() => GetTypeResolver().Resolve("Spring.Objects.TestGenericObject<int, <string>>"));
         }
 
         [Test]

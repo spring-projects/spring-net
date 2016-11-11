@@ -21,10 +21,8 @@
 #region Imports
 
 using System;
-using System.Collections;
 using System.Reflection;
 
-using Spring.Core;
 using Spring.Util;
 
 #endregion

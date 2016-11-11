@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Data;
 using NUnit.Framework;
 using Spring.Context;

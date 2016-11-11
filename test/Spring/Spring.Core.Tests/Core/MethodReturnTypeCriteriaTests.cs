@@ -20,11 +20,9 @@
 
 #region Imports
 
-using System;
 using System.Reflection;
 
 using NUnit.Framework;
-using Spring.Objects;
 
 #endregion
 
