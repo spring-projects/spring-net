@@ -1,141 +1,33 @@
 <VisualStudioProject>
-    <CSHARP
-        ProjectType = "Local"
-        ProductVersion = "7.10.3077"
-        SchemaVersion = "2.0"
-        ProjectGuid = "{9DAA763B-5855-45C5-826F-9710DB2D9073}"
-    >
-        <Build>
-            <Settings
-                ApplicationIcon = ""
-                AssemblyKeyContainerName = ""
-                AssemblyName = "Spring.Services.WindowsService.Samples"
-                AssemblyOriginatorKeyFile = ""
-                DefaultClientScript = "JScript"
-                DefaultHTMLPageLayout = "Grid"
-                DefaultTargetSchema = "IE50"
-                DelaySign = "false"
-                OutputType = "Library"
-                PreBuildEvent = ""
-                PostBuildEvent = 'copy "$(ProjectDir)WindowsService\Samples\service.*" "$(TargetDir).."&#xd;&#xa;copy "$(ProjectDir)WindowsService\Samples\watcher.xml" "$(TargetDir).."'
-                RootNamespace = "Spring.Service.Sample"
-                RunPostBuildEvent = "OnBuildSuccess"
-                StartupObject = ""
-            >
-                <Config
-                    Name = "Debug"
-                    AllowUnsafeBlocks = "false"
-                    BaseAddress = "285212672"
-                    CheckForOverflowUnderflow = "false"
-                    ConfigurationOverrideFile = ""
-                    DefineConstants = "DEBUG;TRACE"
-                    DocumentationFile = ""
-                    DebugSymbols = "true"
-                    FileAlignment = "4096"
-                    IncrementalBuild = "false"
-                    NoStdLib = "false"
-                    NoWarn = ""
-                    Optimize = "false"
-                    OutputPath = "..\..\..\build\deploy\sample\bin\"
-                    RegisterForComInterop = "false"
-                    RemoveIntegerChecks = "false"
-                    TreatWarningsAsErrors = "false"
-                    WarningLevel = "4"
-                />
-                <Config
-                    Name = "Release"
-                    AllowUnsafeBlocks = "false"
-                    BaseAddress = "285212672"
-                    CheckForOverflowUnderflow = "false"
-                    ConfigurationOverrideFile = ""
-                    DefineConstants = "TRACE"
-                    DocumentationFile = ""
-                    DebugSymbols = "false"
-                    FileAlignment = "4096"
-                    IncrementalBuild = "false"
-                    NoStdLib = "false"
-                    NoWarn = ""
-                    Optimize = "true"
-                    OutputPath = "..\..\..\build\deploy\sample\bin\"
-                    RegisterForComInterop = "false"
-                    RemoveIntegerChecks = "false"
-                    TreatWarningsAsErrors = "false"
-                    WarningLevel = "4"
-                />
-            </Settings>
-            <References>
-                <Reference
-                    Name = "System"
-                    AssemblyName = "System"
-                    HintPath = "..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.dll"
-                />
-                <Reference
-                    Name = "System.Data"
-                    AssemblyName = "System.Data"
-                    HintPath = "..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll"
-                />
-                <Reference
-                    Name = "System.XML"
-                    AssemblyName = "System.Xml"
-                    HintPath = "..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll"
-                />
-                <Reference
-                    Name = "System.Web"
-                    AssemblyName = "System.Web"
-                    HintPath = "..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.dll"
-                />
-                <Reference
-                    Name = "System.Drawing"
-                    AssemblyName = "System.Drawing"
-                    HintPath = "..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Drawing.dll"
-                />
-                <Reference
-                    Name = "System.Windows.Forms"
-                    AssemblyName = "System.Windows.Forms"
-                    HintPath = "..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Windows.Forms.dll"
-                />
-                <Reference
-                    Name = "System.Web.Services"
-                    AssemblyName = "System.Web.Services"
-                    HintPath = "..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.Services.dll"
-                />
-                <Reference
-                    Name = "log4net"
-                    AssemblyName = "log4net"
-                    HintPath = "..\..\..\lib\log4net.dll"
-                />
-            </References>
-        </Build>
-        <Files>
-            <Include>
-                <File
-                    RelPath = "WindowsService\Samples\ASMXExecutor.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WindowsService\Samples\echo.asmx"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "WindowsService\Samples\service.config"
-                    BuildAction = "None"
-                />
-                <File
-                    RelPath = "WindowsService\Samples\service.xml"
-                    BuildAction = "Content"
-                />
-                <File
-                    RelPath = "WindowsService\Samples\Simple.cs"
-                    SubType = "Code"
-                    BuildAction = "Compile"
-                />
-                <File
-                    RelPath = "WindowsService\Samples\watcher.xml"
-                    BuildAction = "Content"
-                />
-            </Include>
-        </Files>
-    </CSHARP>
+  <ItemGroup>
+    <None Include="project.json" />
+  </ItemGroup>
+  <CSHARP ProjectType="Local" ProductVersion="7.10.3077" SchemaVersion="2.0" ProjectGuid="{9DAA763B-5855-45C5-826F-9710DB2D9073}">
+    <Build>
+      <Settings ApplicationIcon="" AssemblyKeyContainerName="" AssemblyName="Spring.Services.WindowsService.Samples" AssemblyOriginatorKeyFile="" DefaultClientScript="JScript" DefaultHTMLPageLayout="Grid" DefaultTargetSchema="IE50" DelaySign="false" OutputType="Library" PreBuildEvent="" PostBuildEvent="copy &quot;$(ProjectDir)WindowsService\Samples\service.*&quot; &quot;$(TargetDir)..&quot;&#xD;&#xA;copy &quot;$(ProjectDir)WindowsService\Samples\watcher.xml&quot; &quot;$(TargetDir)..&quot;" RootNamespace="Spring.Service.Sample" RunPostBuildEvent="OnBuildSuccess" StartupObject="">
+        <Config Name="Debug" AllowUnsafeBlocks="false" BaseAddress="285212672" CheckForOverflowUnderflow="false" ConfigurationOverrideFile="" DefineConstants="DEBUG;TRACE" DocumentationFile="" DebugSymbols="true" FileAlignment="4096" IncrementalBuild="false" NoStdLib="false" NoWarn="" Optimize="false" OutputPath="..\..\..\build\deploy\sample\bin\" RegisterForComInterop="false" RemoveIntegerChecks="false" TreatWarningsAsErrors="false" WarningLevel="4" />
+        <Config Name="Release" AllowUnsafeBlocks="false" BaseAddress="285212672" CheckForOverflowUnderflow="false" ConfigurationOverrideFile="" DefineConstants="TRACE" DocumentationFile="" DebugSymbols="false" FileAlignment="4096" IncrementalBuild="false" NoStdLib="false" NoWarn="" Optimize="true" OutputPath="..\..\..\build\deploy\sample\bin\" RegisterForComInterop="false" RemoveIntegerChecks="false" TreatWarningsAsErrors="false" WarningLevel="4" />
+      </Settings>
+      <References>
+        <Reference Name="System" AssemblyName="System" HintPath="..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.dll" />
+        <Reference Name="System.Data" AssemblyName="System.Data" HintPath="..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Data.dll" />
+        <Reference Name="System.XML" AssemblyName="System.Xml" HintPath="..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.XML.dll" />
+        <Reference Name="System.Web" AssemblyName="System.Web" HintPath="..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.dll" />
+        <Reference Name="System.Drawing" AssemblyName="System.Drawing" HintPath="..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Drawing.dll" />
+        <Reference Name="System.Windows.Forms" AssemblyName="System.Windows.Forms" HintPath="..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Windows.Forms.dll" />
+        <Reference Name="System.Web.Services" AssemblyName="System.Web.Services" HintPath="..\..\..\..\WINDOWS\Microsoft.NET\Framework\v1.1.4322\System.Web.Services.dll" />
+        <Reference Name="log4net" AssemblyName="log4net" HintPath="..\..\..\lib\log4net.dll" />
+      </References>
+    </Build>
+    <Files>
+      <Include>
+        <File RelPath="WindowsService\Samples\ASMXExecutor.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="WindowsService\Samples\echo.asmx" BuildAction="Content" />
+        <File RelPath="WindowsService\Samples\service.config" BuildAction="None" />
+        <File RelPath="WindowsService\Samples\service.xml" BuildAction="Content" />
+        <File RelPath="WindowsService\Samples\Simple.cs" SubType="Code" BuildAction="Compile" />
+        <File RelPath="WindowsService\Samples\watcher.xml" BuildAction="Content" />
+      </Include>
+    </Files>
+  </CSHARP>
 </VisualStudioProject>
-

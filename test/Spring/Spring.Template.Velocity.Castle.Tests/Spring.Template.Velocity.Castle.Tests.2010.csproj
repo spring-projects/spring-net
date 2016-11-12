@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -18,6 +18,7 @@
     <UpgradeBackupLocation />
     <TargetFrameworkProfile />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\..\</SolutionDir>
+    <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -41,24 +42,23 @@
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Common.Logging">
-      <HintPath>..\..\..\packages\Common.Logging.3.0.0\lib\net40\Common.Logging.dll</HintPath>
-    </Reference>
-    <Reference Include="Common.Logging.Core">
-      <HintPath>..\..\..\packages\Common.Logging.Core.3.0.0\lib\net40\Common.Logging.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.framework, Version=3.5.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\..\..\packages\NUnit.3.5.0\lib\net40\nunit.framework.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="NVelocity">
-      <HintPath>..\..\..\packages\Castle.NVelocity.1.1.1\lib\net40\NVelocity.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="..\Spring.Core.Tests\CompilerOptionsTests.cs">
+      <Link>CompilerOptionsTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Core.Tests\ExceptionsTest.cs">
+      <Link>ExceptionsTest.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Core.Tests\Objects\Factory\Xml\ReadOnlyXmlTestResource.cs">
+      <Link>Objects\Factory\Xml\ReadOnlyXmlTestResource.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Core.Tests\StandardsComplianceTest.cs">
+      <Link>StandardsComplianceTest.cs</Link>
+    </Compile>
     <Compile Include="..\Spring.Template.Velocity.Tests\Template\Velocity\VelocityEngineFactoryObjectTests.cs">
       <Link>Template\Velocity\VelocityEngineFactoryObjectTests.cs</Link>
     </Compile>
@@ -79,10 +79,6 @@
       <Project>{250601c0-a4ac-41fe-b484-51a9b0d5473d}</Project>
       <Name>Spring.Template.Velocity.Castle.2010</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Spring.Core.Tests\Spring.Core.Tests.2010.csproj">
-      <Project>{44B16BAA-6DF8-447C-9D7F-3AD3D854D904}</Project>
-      <Name>Spring.Core.Tests.2010</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="..\Spring.Template.Velocity.Tests\Template\Velocity\EmbeddedTemplate.vm">
@@ -92,13 +88,13 @@
       <Link>Template\Velocity\SimpleTemplate.vm</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </EmbeddedResource>
-    <None Include="packages.config" />
     <None Include="Spring.Template.Velocity.Castle.Tests.dll.config">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="Template\Velocity\config.properties">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
+    <None Include="project.json" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
@@ -118,4 +114,3 @@
   </Target>
   -->
 </Project>
-

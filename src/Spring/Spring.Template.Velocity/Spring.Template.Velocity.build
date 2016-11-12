@@ -9,7 +9,7 @@
  
 	<include buildfile="${spring.basedir}/CopyLibToBinHelpers.include"/>
 
-	<property name="nvelocity.lib.dir" value="${spring.basedir}/lib/net/2.0" overwrite="true"/>
+	<property name="nvelocity.lib.dir" value="${nuget.packages.dir}/NVelocity/1.0.3/lib" overwrite="true"/>
 
     <target name="build">
 	

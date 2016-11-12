@@ -55,7 +55,7 @@
 				<include name="${current.bin.dir}/Spring.Aop.dll" />
 				<include name="${current.bin.dir}/Spring.Web.dll" />
 			
-				<include name="${spring.basedir}/packages/Microsoft.AspNet.Mvc.3.0.20105.1/lib/net40/System.Web.Mvc.dll" />
+				<include name="${nuget.packages.dir}/Microsoft.AspNet.Mvc/3.0.20105.1/lib/net40/System.Web.Mvc.dll" />
 			</references>
 		</csc>
 	</target>

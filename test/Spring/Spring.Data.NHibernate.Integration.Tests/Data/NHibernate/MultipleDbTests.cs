@@ -71,7 +71,7 @@ namespace Spring.Data.NHibernate
         [SetUp]
         public void SetUp()
         {
-            BasicConfigurator.Configure();
+            //BasicConfigurator.Configure();
             string assemblyName = GetType().Assembly.GetName().Name;
             ctx = new XmlApplicationContext("assembly://" + assemblyName + "/Spring.Data.NHibernate/MultipleDbTests.xml");
         }

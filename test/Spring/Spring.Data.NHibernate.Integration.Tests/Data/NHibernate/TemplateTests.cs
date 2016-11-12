@@ -80,7 +80,7 @@ namespace Spring.Data.NHibernate
         public void SetUp()
         {
             //NamespaceParserRegistry.RegisterParser(typeof(DatabaseNamespaceParser));
-            BasicConfigurator.Configure();
+            //BasicConfigurator.Configure();
             string assemblyName = GetType().Assembly.GetName().Name;
             ctx = new XmlApplicationContext("assembly://" + assemblyName + "/Spring.Data.NHibernate/templateTests.xml");
 

@@ -42,8 +42,8 @@ namespace Spring.Data
         public void SetUp()
         {
             //BasicConfigurator.Configure();
-            Console.WriteLine("Hello");
-            LogManager.Adapter = new ConsoleOutLoggerFactoryAdapter(new NameValueCollection());
+            //Console.WriteLine("Hello");
+            //LogManager.Adapter = new ConsoleOutLoggerFactoryAdapter(new NameValueCollection());
 
             //WELLKNOWN: NamespaceParserRegistry.RegisterParser(typeof(TxNamespaceParser));
             //WELLKNOWN: NamespaceParserRegistry.RegisterParser(typeof(AopNamespaceParser));

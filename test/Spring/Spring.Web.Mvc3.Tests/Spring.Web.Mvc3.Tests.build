@@ -15,7 +15,7 @@
 
 		<!--
 		<copy todir="${current.bin.dir}" flatten="true" overwrite="true">
-            <fileset basedir="${spring.basedir}/packages/">
+            <fileset basedir="${nuget.packages.dir}">
                 <include name="Microsoft.AspNet.Mvc.3.0.*/**/*.dll" />
             </fileset>
 		</copy>
@@ -77,7 +77,7 @@
 				<include name="${current.bin.dir}/Spring.Core.dll" />
 				<include name="${current.bin.dir}/Spring.Web.Mvc3.dll" />
 
-                <include name="${spring.basedir}/packages/Microsoft.AspNet.Mvc.3.0.20105.1/lib/net40/System.Web.Mvc.dll" />
+                <include name="${nuget.packages.dir}/Microsoft.AspNet.Mvc/3.0.20105.1/lib/net40/System.Web.Mvc.dll" />
  
 				<include name="${nunit.lib.dir}/nunit.framework.dll"/>
             </references>
@@ -96,7 +96,7 @@
 
     <target name="test" depends="build">
         <!-- property name="test.assemblyname" value="${project::get-name()}" / -->
-        <copy file="${spring.basedir}/packages/Microsoft.AspNet.Mvc.3.0.20105.1/lib/net40/System.Web.Mvc.dll" todir="${current.bin.dir}" />
+        <copy file="${nuget.packages.dir}/Microsoft.AspNet.Mvc/3.0.20105.1/lib/net40/System.Web.Mvc.dll" todir="${current.bin.dir}" />
         <call target="common.run-tests" />
     </target>
 <!--
