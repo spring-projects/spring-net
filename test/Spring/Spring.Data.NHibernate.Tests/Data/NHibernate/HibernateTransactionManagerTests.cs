@@ -1,7 +1,5 @@
-#region License
-
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,25 +14,23 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using System.Collections;
 using System.Data;
+
+using FakeItEasy;
+
 using NHibernate;
 using NHibernate.Cfg;
+
 using NUnit.Framework;
-using Rhino.Mocks;
+
 using Spring.Dao;
 using Spring.Data.Common;
 using Spring.Data.Support;
 using Spring.Support;
 using Spring.Transaction;
 using Spring.Transaction.Support;
-
-#endregion
 
 namespace Spring.Data.NHibernate
 {
@@ -68,41 +64,24 @@ namespace Spring.Data.NHibernate
             }
         }
 
-        private MockRepository mocks;
-
-        [SetUp]
-        public void Setup()
-        {
-            mocks = new MockRepository();
-        }
-
         [Test]
         public void TransactionCommit()
         {
-            IDbProvider provider = mocks.StrictMock<IDbProvider>();
-            IDbConnection connection = mocks.StrictMock<IDbConnection>();
-            ISessionFactory sessionFactory = mocks.StrictMock<ISessionFactory>();
-            ISession session = mocks.StrictMock<ISession>();
-            ITransaction transaction = mocks.StrictMock<ITransaction>();
-            IQuery query = mocks.StrictMock<IQuery>();
+            IDbProvider provider = A.Fake<IDbProvider>();
+            IDbConnection connection = A.Fake<IDbConnection>();
+            ISessionFactory sessionFactory = A.Fake<ISessionFactory>();
+            ISession session = A.Fake<ISession>();
+            ITransaction transaction = A.Fake<ITransaction>();
+            IQuery query = A.Fake<IQuery>();
 
             IList list = new ArrayList();
             list.Add("test");
-            using (mocks.Ordered())
-            {
-                Expect.Call(sessionFactory.OpenSession()).Return(session);
-                Expect.Call(session.Connection).Return(connection);
-                Expect.Call(session.BeginTransaction(IsolationLevel.Serializable)).Return(transaction);
-                Expect.Call(session.IsOpen).Return(true);
-                Expect.Call(session.CreateQuery("some query string")).Return(query);
-                Expect.Call(query.List()).Return(list);
-                transaction.Commit();
-                LastCall.On(transaction).Repeat.Once();
-                Expect.Call(session.Close()).Return(null);
-            }
-
-            mocks.ReplayAll();
-
+            A.CallTo(() => sessionFactory.OpenSession()).Returns(session);
+            A.CallTo(() => session.Connection).Returns(connection);
+            A.CallTo(() => session.BeginTransaction(IsolationLevel.Serializable)).Returns(transaction);
+            A.CallTo(() => session.IsOpen).Returns(true);
+            A.CallTo(() => session.CreateQuery("some query string")).Returns(query);
+            A.CallTo(() => query.List()).Returns(list);
 
             LocalSessionFactoryObjectStub lsfo = new LocalSessionFactoryObjectStub(sessionFactory);
             lsfo.AfterPropertiesSet();
@@ -119,7 +98,7 @@ namespace Spring.Data.NHibernate
 
             tt.TransactionIsolationLevel = IsolationLevel.Serializable;
 
-            Assert.IsFalse(TransactionSynchronizationManager.HasResource(sfProxy),"Hasn't thread session");
+            Assert.IsFalse(TransactionSynchronizationManager.HasResource(sfProxy), "Hasn't thread session");
             Assert.IsFalse(TransactionSynchronizationManager.HasResource(provider), "Hasn't thread db provider");
             Assert.IsFalse(TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
             Assert.IsFalse(TransactionSynchronizationManager.ActualTransactionActive, "Actual transaction not active");
@@ -133,39 +112,26 @@ namespace Spring.Data.NHibernate
             Assert.IsFalse(TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
             Assert.IsFalse(TransactionSynchronizationManager.ActualTransactionActive, "Actual transaction not active");
 
-
-            mocks.VerifyAll();
-
+            A.CallTo(() => transaction.Commit()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => session.Close()).MustHaveHappenedOnceExactly();
         }
 
 
         [Test]
         public void TransactionRollback()
         {
+            IDbProvider provider = A.Fake<IDbProvider>();
+            IDbConnection connection = A.Fake<IDbConnection>();
+            ISessionFactory sessionFactory = A.Fake<ISessionFactory>();
+            ISession session = A.Fake<ISession>();
+            ITransaction transaction = A.Fake<ITransaction>();
+            IDbTransaction adoTransaction = A.Fake<IDbTransaction>();
 
-            IDbProvider provider = mocks.StrictMock<IDbProvider>();
-            IDbConnection connection = mocks.StrictMock<IDbConnection>();
-            ISessionFactory sessionFactory = mocks.StrictMock<ISessionFactory>();
-            ISession session = mocks.StrictMock<ISession>();
-            ITransaction transaction = mocks.StrictMock<ITransaction>();
-            IDbTransaction adoTransaction = mocks.StrictMock<IDbTransaction>();
-
-            using (mocks.Ordered())
-            {
-                Expect.Call(sessionFactory.OpenSession()).Return(session);
-                Expect.Call(session.Connection).Return(connection);
-                Expect.Call(session.BeginTransaction(IsolationLevel.ReadCommitted)).Return(transaction);
-                Expect.Call(session.IsOpen).Return(true);
-
-                Expect.Call(adoTransaction.Connection).Return(connection);
-                LastCall.On(adoTransaction).Repeat.Once();
-
-                transaction.Rollback();
-                LastCall.On(transaction).Repeat.Once();
-
-                Expect.Call(session.Close()).Return(null);
-            }
-            mocks.ReplayAll();
+            A.CallTo(() => sessionFactory.OpenSession()).Returns(session).Once();
+            A.CallTo(() => session.Connection).Returns(connection).Once();
+            A.CallTo(() => session.BeginTransaction(IsolationLevel.ReadCommitted)).Returns(transaction).Once();
+            A.CallTo(() => session.IsOpen).Returns(true).Once();
+            A.CallTo(() => adoTransaction.Connection).Returns(connection).Once();
 
             TestableHibernateTransactionManager tm = new TestableHibernateTransactionManager(sessionFactory);
             tm.TransactionSynchronization = TransactionSynchronizationState.Always;
@@ -180,45 +146,32 @@ namespace Spring.Data.NHibernate
             {
                 tt.Execute(new TransactionRollbackTxCallback(sessionFactory));
                 Assert.Fail("Should have thrown exception");
-            } catch (ArgumentException)
+            }
+            catch (ArgumentException)
             {
-                
             }
 
             Assert.IsFalse(TransactionSynchronizationManager.HasResource(sessionFactory), "Hasn't thread session");
             Assert.IsFalse(TransactionSynchronizationManager.HasResource(provider), "Hasn't thread db provider");
-            
-            mocks.VerifyAll();
+
+            A.CallTo(() => transaction.Rollback()).MustHaveHappened();
+            A.CallTo(() => session.Close()).MustHaveHappened();
         }
 
         [Test]
         public void TransactionRollbackOnly()
-        {            
-            IDbConnection connection = mocks.StrictMock<IDbConnection>();
-            ISessionFactory sessionFactory = mocks.StrictMock<ISessionFactory>();
-            ISession session = mocks.StrictMock<ISession>();
-            ITransaction transaction = mocks.StrictMock<ITransaction>();
-            IDbTransaction adoTransaction = mocks.StrictMock<IDbTransaction>();
-
-            using (mocks.Ordered())
-            {
-                Expect.Call(sessionFactory.OpenSession()).Return(session);
-                Expect.Call(session.Connection).Return(connection);
-                Expect.Call(session.BeginTransaction(IsolationLevel.ReadCommitted)).Return(transaction);
-                Expect.Call(session.IsOpen).Return(true);
-                Expect.Call(session.FlushMode).Return(FlushMode.Auto);
-                session.Flush();
-                LastCall.On(session).Repeat.Once();
-
-                Expect.Call(adoTransaction.Connection).Return(connection);
-                LastCall.On(adoTransaction).Repeat.Once();
-
-                transaction.Rollback();
-                LastCall.On(transaction).Repeat.Once();
-                Expect.Call(session.Close()).Return(null);
-            }
-            mocks.ReplayAll();
-
+        {
+            IDbConnection connection = A.Fake<IDbConnection>();
+            ISessionFactory sessionFactory = A.Fake<ISessionFactory>();
+            ISession session = A.Fake<ISession>();
+            ITransaction transaction = A.Fake<ITransaction>();
+            IDbTransaction adoTransaction = A.Fake<IDbTransaction>();
+            A.CallTo(() => sessionFactory.OpenSession()).Returns(session);
+            A.CallTo(() => session.Connection).Returns(connection);
+            A.CallTo(() => session.BeginTransaction(IsolationLevel.ReadCommitted)).Returns(transaction);
+            A.CallTo(() => session.IsOpen).Returns(true);
+            A.CallTo(() => session.FlushMode).Returns(FlushMode.Auto);
+            A.CallTo(() => adoTransaction.Connection).Returns(connection).Once();
 
             TestableHibernateTransactionManager tm = new TestableHibernateTransactionManager(sessionFactory);
             tm.TransactionSynchronization = TransactionSynchronizationState.Always;
@@ -231,34 +184,24 @@ namespace Spring.Data.NHibernate
             tt.Execute(new TransactionRollbackOnlyTxCallback(sessionFactory));
 
             Assert.IsFalse(TransactionSynchronizationManager.HasResource(sessionFactory), "Shouldn't have a thread session");
-            
-            mocks.VerifyAll();
-            
+
+            A.CallTo(() => session.Flush()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => transaction.Rollback()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => session.Close()).MustHaveHappenedOnceExactly();
         }
 
         [Test]
         public void ParticipatingTransactionWithCommit()
         {
-            IDbConnection connection = mocks.StrictMock<IDbConnection>();
-            ISessionFactory sessionFactory = mocks.StrictMock<ISessionFactory>();
-            ISession session = mocks.StrictMock<ISession>();
-            ITransaction transaction = mocks.StrictMock<ITransaction>();
-
-            using (mocks.Ordered())
-            {
-                Expect.Call(sessionFactory.OpenSession()).Return(session);
-                Expect.Call(session.Connection).Return(connection);
-                Expect.Call(session.BeginTransaction(IsolationLevel.ReadCommitted)).Return(transaction);
-                Expect.Call(session.IsOpen).Return(true);
-                Expect.Call(session.FlushMode).Return(FlushMode.Auto);
-                session.Flush();
-                LastCall.On(session).Repeat.Once();
-                transaction.Commit();
-                LastCall.On(transaction).Repeat.Once();
-                Expect.Call(session.Close()).Return(null);
-            }
-
-            mocks.ReplayAll();
+            IDbConnection connection = A.Fake<IDbConnection>();
+            ISessionFactory sessionFactory = A.Fake<ISessionFactory>();
+            ISession session = A.Fake<ISession>();
+            ITransaction transaction = A.Fake<ITransaction>();
+            A.CallTo(() => sessionFactory.OpenSession()).Returns(session);
+            A.CallTo(() => session.Connection).Returns(connection);
+            A.CallTo(() => session.BeginTransaction(IsolationLevel.ReadCommitted)).Returns(transaction);
+            A.CallTo(() => session.IsOpen).Returns(true);
+            A.CallTo(() => session.FlushMode).Returns(FlushMode.Auto);
 
             HibernateTransactionManager tm = new HibernateTransactionManager(sessionFactory);
             tm.TransactionSynchronization = TransactionSynchronizationState.Always;
@@ -270,36 +213,25 @@ namespace Spring.Data.NHibernate
             object result = tt.Execute(new ParticipatingTransactionWithCommitTxCallback(sessionFactory, list));
             Assert.IsTrue(result == list);
 
-            mocks.VerifyAll();
-
+            A.CallTo(() => session.Flush()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => transaction.Commit()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => session.Close()).MustHaveHappenedOnceExactly();
         }
 
         [Test]
         public void ParticipatingTransactionWithRollback()
         {
-            IDbConnection connection = mocks.StrictMock<IDbConnection>();
-            ISessionFactory sessionFactory = mocks.StrictMock<ISessionFactory>();
-            ISession session = mocks.StrictMock<ISession>();
-            ITransaction transaction = mocks.StrictMock<ITransaction>();
-            IDbTransaction adoTransaction = mocks.StrictMock<IDbTransaction>();
-
-            using (mocks.Ordered())
-            {
-                Expect.Call(sessionFactory.OpenSession()).Return(session);
-                Expect.Call(session.Connection).Return(connection);
-                Expect.Call(session.BeginTransaction(IsolationLevel.ReadCommitted)).Return(transaction);
-                Expect.Call(session.IsOpen).Return(true);
-                Expect.Call(session.FlushMode).Return(FlushMode.Auto);
-
-                Expect.Call(adoTransaction.Connection).Return(connection);
-                LastCall.On(adoTransaction).Repeat.Once();
-
-                transaction.Rollback();
-                LastCall.On(transaction).Repeat.Once();
-                Expect.Call(session.Close()).Return(null);
-            }
-            mocks.ReplayAll();
-
+            IDbConnection connection = A.Fake<IDbConnection>();
+            ISessionFactory sessionFactory = A.Fake<ISessionFactory>();
+            ISession session = A.Fake<ISession>();
+            ITransaction transaction = A.Fake<ITransaction>();
+            IDbTransaction adoTransaction = A.Fake<IDbTransaction>();
+            A.CallTo(() => sessionFactory.OpenSession()).Returns(session);
+            A.CallTo(() => session.Connection).Returns(connection);
+            A.CallTo(() => session.BeginTransaction(IsolationLevel.ReadCommitted)).Returns(transaction);
+            A.CallTo(() => session.IsOpen).Returns(true);
+            A.CallTo(() => session.FlushMode).Returns(FlushMode.Auto);
+            A.CallTo(() => adoTransaction.Connection).Returns(connection).Once();
 
             TestableHibernateTransactionManager tm = new TestableHibernateTransactionManager(sessionFactory);
             tm.TransactionSynchronization = TransactionSynchronizationState.Always;
@@ -313,37 +245,26 @@ namespace Spring.Data.NHibernate
             }
             catch (ArgumentException)
             {
-
             }
 
-            mocks.VerifyAll();
+            A.CallTo(() => transaction.Rollback()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => session.Close()).MustHaveHappenedOnceExactly();
         }
 
         [Test]
         public void ParticipatingTransactionWithRollbackOnly()
         {
-            IDbConnection connection = mocks.StrictMock<IDbConnection>();
-            ISessionFactory sessionFactory = mocks.StrictMock<ISessionFactory>();
-            ISession session = mocks.StrictMock<ISession>();
-            ITransaction transaction = mocks.StrictMock<ITransaction>();
-            IDbTransaction adoTransaction = mocks.StrictMock<IDbTransaction>();
+            IDbConnection connection = A.Fake<IDbConnection>();
+            ISessionFactory sessionFactory = A.Fake<ISessionFactory>();
+            ISession session = A.Fake<ISession>();
+            ITransaction transaction = A.Fake<ITransaction>();
+            IDbTransaction adoTransaction = A.Fake<IDbTransaction>();
+            A.CallTo(() => sessionFactory.OpenSession()).Returns(session);
+            A.CallTo(() => session.Connection).Returns(connection);
+            A.CallTo(() => session.BeginTransaction(IsolationLevel.ReadCommitted)).Returns(transaction);
+            A.CallTo(() => session.IsOpen).Returns(true);
 
-            using (mocks.Ordered())
-            {
-                Expect.Call(sessionFactory.OpenSession()).Return(session);
-                Expect.Call(session.Connection).Return(connection);
-                Expect.Call(session.BeginTransaction(IsolationLevel.ReadCommitted)).Return(transaction);
-                Expect.Call(session.IsOpen).Return(true);
-
-                Expect.Call(adoTransaction.Connection).Return(connection);
-                LastCall.On(adoTransaction).Repeat.Once();
-
-                transaction.Rollback();
-                LastCall.On(transaction).Repeat.Once();
-                Expect.Call(session.Close()).Return(null);
-            }
-            mocks.ReplayAll();
-
+            A.CallTo(() => adoTransaction.Connection).Returns(connection).Once();
 
             TestableHibernateTransactionManager tm = new TestableHibernateTransactionManager(sessionFactory);
             tm.TransactionSynchronization = TransactionSynchronizationState.Always;
@@ -354,50 +275,38 @@ namespace Spring.Data.NHibernate
             list.Add("test");
             try
             {
-                tt.Execute(new ParticipatingTransactionWithRollbackOnlyTxCallback(tt,sessionFactory,list));
+                tt.Execute(new ParticipatingTransactionWithRollbackOnlyTxCallback(tt, sessionFactory, list));
                 Assert.Fail("Should have thrown UnexpectedRollbackException");
             }
             catch (UnexpectedRollbackException)
             {
-
             }
 
-            mocks.VerifyAll();
+            A.CallTo(() => transaction.Rollback()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => session.Close()).MustHaveHappenedOnceExactly();
         }
 
         [Test]
         public void ParticipatingTransactionWithWithRequiresNew()
         {
-            IDbConnection connection = mocks.StrictMock<IDbConnection>();
-            ISessionFactory sessionFactory = mocks.StrictMock<ISessionFactory>();
-            ISession session1 = mocks.StrictMock<ISession>();
-            ISession session2 = mocks.StrictMock<ISession>();
-            ITransaction transaction = mocks.StrictMock<ITransaction>();
+            IDbConnection connection = A.Fake<IDbConnection>();
+            ISessionFactory sessionFactory = A.Fake<ISessionFactory>();
+            ISession session1 = A.Fake<ISession>();
+            ISession session2 = A.Fake<ISession>();
+            ITransaction transaction = A.Fake<ITransaction>();
 
-            //using (mocks.Ordered())
-            //{
-                Expect.Call(sessionFactory.OpenSession()).Return(session1);
-                Expect.Call(session1.Connection).Return(connection);
-                Expect.Call(session1.BeginTransaction(IsolationLevel.ReadCommitted)).Return(transaction);
-                Expect.Call(session1.IsOpen).Return(true);
+            A.CallTo(() => sessionFactory.OpenSession()).Returns(session1).Once()
+                .Then.Returns(session2).Once();
 
-                Expect.Call(sessionFactory.OpenSession()).Return(session2);
-                Expect.Call(session2.Connection).Return(connection);
-                Expect.Call(session2.BeginTransaction(IsolationLevel.ReadCommitted)).Return(transaction);
-                Expect.Call(session2.IsOpen).Return(true);
+            A.CallTo(() => session1.Connection).Returns(connection);
+            A.CallTo(() => session1.BeginTransaction(IsolationLevel.ReadCommitted)).Returns(transaction);
+            A.CallTo(() => session1.IsOpen).Returns(true);
 
-                Expect.Call(session2.FlushMode).Return(FlushMode.Auto);
-                session2.Flush();
-                LastCall.On(session2).Repeat.Once();
+            A.CallTo(() => session2.Connection).Returns(connection);
+            A.CallTo(() => session2.BeginTransaction(IsolationLevel.ReadCommitted)).Returns(transaction);
+            A.CallTo(() => session2.IsOpen).Returns(true);
 
-                transaction.Commit();
-                LastCall.On(transaction).Repeat.Twice();
-
-                Expect.Call(session1.Close()).Return(null);
-                Expect.Call(session2.Close()).Return(null);
-            //}
-
-            mocks.ReplayAll();
+            A.CallTo(() => session2.FlushMode).Returns(FlushMode.Auto);
 
             HibernateTransactionManager tm = new HibernateTransactionManager(sessionFactory);
             tm.TransactionSynchronization = TransactionSynchronizationState.Always;
@@ -410,36 +319,26 @@ namespace Spring.Data.NHibernate
             tt.Execute(new ParticipatingTransactionWithWithRequiresNewTxCallback(tt, sessionFactory));
 
             Assert.IsTrue(!TransactionSynchronizationManager.HasResource(sessionFactory), "Hasn't thread session");
-            
-            mocks.VerifyAll();
 
+            A.CallTo(() => transaction.Commit()).MustHaveHappenedTwiceExactly();
+            A.CallTo(() => session2.Flush()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => session1.Close()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => session2.Close()).MustHaveHappenedOnceExactly();
         }
 
         [Test]
         public void ParticipatingTransactionWithWithNotSupported()
         {
-            IDbConnection connection = mocks.StrictMock<IDbConnection>();
-            ISessionFactory sessionFactory = mocks.StrictMock<ISessionFactory>();
-            ISession session = mocks.StrictMock<ISession>();
-            ITransaction transaction = mocks.StrictMock<ITransaction>();
+            IDbConnection connection = A.Fake<IDbConnection>();
+            ISessionFactory sessionFactory = A.Fake<ISessionFactory>();
+            ISession session = A.Fake<ISession>();
+            ITransaction transaction = A.Fake<ITransaction>();
 
-            //using (mocks.Ordered())
-            //{
-                Expect.Call(sessionFactory.OpenSession()).Return(session).Repeat.Twice();
-                Expect.Call(session.Connection).Return(connection);
-
-
-                Expect.Call(session.BeginTransaction(IsolationLevel.ReadCommitted)).Return(transaction);
-                Expect.Call(session.IsOpen).Return(true);
-                Expect.Call(session.FlushMode).Return(FlushMode.Auto).Repeat.Twice();
-                session.Flush();
-                LastCall.On(session).Repeat.Twice();
-                transaction.Commit();
-                LastCall.On(transaction).Repeat.Once();
-                Expect.Call(session.Close()).Return(null).Repeat.Once();
-            //}
-            mocks.ReplayAll();
-
+            A.CallTo(() => sessionFactory.OpenSession()).Returns(session).Twice();
+            A.CallTo(() => session.Connection).Returns(connection);
+            A.CallTo(() => session.BeginTransaction(IsolationLevel.ReadCommitted)).Returns(transaction);
+            A.CallTo(() => session.IsOpen).Returns(true);
+            A.CallTo(() => session.FlushMode).Returns(FlushMode.Auto).Twice();
 
             HibernateTransactionManager tm = new HibernateTransactionManager(sessionFactory);
             tm.TransactionSynchronization = TransactionSynchronizationState.Always;
@@ -453,28 +352,19 @@ namespace Spring.Data.NHibernate
 
             Assert.IsTrue(!TransactionSynchronizationManager.HasResource(sessionFactory), "Hasn't thread session");
 
-            mocks.VerifyAll();
-
-
+            A.CallTo(() => session.Flush()).MustHaveHappenedTwiceExactly();
+            A.CallTo(() => transaction.Commit()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => session.Close()).MustHaveHappenedOnceExactly();
         }
 
         [Test]
         public void TransactionWithPropagationSupports()
         {
-            ISessionFactory sessionFactory = mocks.StrictMock<ISessionFactory>();
-            ISession session = mocks.StrictMock<ISession>();
+            ISessionFactory sessionFactory = A.Fake<ISessionFactory>();
+            ISession session = A.Fake<ISession>();
 
-            Expect.Call(sessionFactory.OpenSession()).Return(session);
-            Expect.Call(session.FlushMode).Return(FlushMode.Never);
-            session.FlushMode = FlushMode.Auto;
-            LastCall.IgnoreArguments();
-            session.Flush();
-            LastCall.IgnoreArguments();
-            session.FlushMode = FlushMode.Never;
-            Expect.Call(session.FlushMode).Return(FlushMode.Never);
-
-            mocks.ReplayAll();
-
+            A.CallTo(() => sessionFactory.OpenSession()).Returns(session);
+            A.CallTo(() => session.FlushMode).Returns(FlushMode.Never);
 
             LocalSessionFactoryObjectStub lsfo = new LocalSessionFactoryObjectStub(sessionFactory);
             lsfo.AfterPropertiesSet();
@@ -493,53 +383,38 @@ namespace Spring.Data.NHibernate
 
             Assert.IsTrue(!TransactionSynchronizationManager.HasResource(sessionFactory), "Hasn't thread session");
 
-            mocks.VerifyAll();
-
+            A.CallTo(() => session.Flush()).MustHaveHappenedOnceExactly();
         }
 
         [Test]
         public void TransactionWithPropagationSupportsAndInnerTransaction()
         {
-            IDbConnection connection = mocks.StrictMock<IDbConnection>();
-            ISessionFactory sessionFactory = mocks.StrictMock<ISessionFactory>();
-            ISession session1 = mocks.StrictMock<ISession>();
-            ISession session2 = mocks.StrictMock<ISession>();
-            ITransaction transaction = mocks.StrictMock<ITransaction>();
+            IDbConnection connection = A.Fake<IDbConnection>();
+            ISessionFactory sessionFactory = A.Fake<ISessionFactory>();
+            ISession session1 = A.Fake<ISession>();
+            ISession session2 = A.Fake<ISession>();
+            ITransaction transaction = A.Fake<ITransaction>();
 
-            Expect.Call(sessionFactory.OpenSession()).Return(session1);
-            Expect.Call(session1.Connection).Return(connection);
-            Expect.Call(session1.SessionFactory).Return(sessionFactory);
-            Expect.Call(session1.FlushMode).Return(FlushMode.Auto).Repeat.Twice();
+            A.CallTo(() => sessionFactory.OpenSession()).Returns(session1).Once()
+                .Then.Returns(session2).Once();
 
-            session1.Flush();
-            LastCall.IgnoreArguments().Repeat.Twice();
-            Expect.Call(session1.Close()).Return(null);
+            A.CallTo(() => session1.Connection).Returns(connection);
+            A.CallTo(() => session1.SessionFactory).Returns(sessionFactory);
+            A.CallTo(() => session1.FlushMode).Returns(FlushMode.Auto);
 
-            Expect.Call(sessionFactory.OpenSession()).Return(session2);
-            Expect.Call(session2.Connection).Return(connection).Repeat.Twice();
-            Expect.Call(session2.BeginTransaction(IsolationLevel.ReadCommitted)).Return(transaction);
-            Expect.Call(session2.FlushMode).Return(FlushMode.Auto);
-            session2.Flush();
-            LastCall.IgnoreArguments();
-            Expect.Call(session2.IsOpen).Return(true);
-
-
-            transaction.Commit();
-            LastCall.On(transaction).Repeat.Once();
-
-
-            Expect.Call(session2.Close()).Return(null);
-
-            mocks.ReplayAll();
+            A.CallTo(() => session2.Connection).Returns(connection);
+            A.CallTo(() => session2.BeginTransaction(IsolationLevel.ReadCommitted)).Returns(transaction);
+            A.CallTo(() => session2.FlushMode).Returns(FlushMode.Auto);
+            A.CallTo(() => session2.IsOpen).Returns(true);
 
             LocalSessionFactoryObjectStub lsfo = new LocalSessionFactoryObjectStub(sessionFactory);
             lsfo.AfterPropertiesSet();
-            ISessionFactory sfProxy = (ISessionFactory)lsfo.GetObject();
+            ISessionFactory sfProxy = (ISessionFactory) lsfo.GetObject();
             Assert.IsNotNull(sfProxy);
 
             HibernateTransactionManager tm = new HibernateTransactionManager(sessionFactory);
             tm.TransactionSynchronization = TransactionSynchronizationState.Always;
-            
+
             TransactionTemplate tt = new TransactionTemplate(tm);
             tt.PropagationBehavior = TransactionPropagation.Supports;
             TransactionTemplate tt2 = new TransactionTemplate(tm);
@@ -554,11 +429,12 @@ namespace Spring.Data.NHibernate
             tt.Execute(new TransactionWithPropagationSupportsAndInnerTransactionTxCallback(tt2, sessionFactory, ht, session1, session2));
 
             Assert.IsTrue(!TransactionSynchronizationManager.HasResource(sessionFactory), "Hasn't thread session");
-            
-            mocks.ReplayAll();
-            
-        }
 
+            A.CallTo(() => transaction.Commit()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => session1.Flush()).MustHaveHappenedTwiceExactly();
+            A.CallTo(() => session2.Flush()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => session2.Close()).MustHaveHappenedOnceExactly();
+        }
 
         [Test]
         public void TransactionCommitWithFlushFailure()
@@ -578,54 +454,38 @@ namespace Spring.Data.NHibernate
         /// <param name="fallbackTranslation">if set to <c>true</c> if the exception throw
         /// is of the type NHibernate.ADOException, in which case HibernateTransactionManager
         /// will 'fallback' to using the error codes in the underlying exception thrown by
-        /// the provider, ie. a SqlException, MySqlException.  Otherwise, if it is 
-        /// another subclass of HibernateException, then perform a direct maping as 
+        /// the provider, ie. a SqlException, MySqlException.  Otherwise, if it is
+        /// another subclass of HibernateException, then perform a direct maping as
         /// found in SessionFactoryUtils.ConvertHibernateAccessException.</param>
         private void DoTransactionCommitWithFlushFailure(bool fallbackTranslation)
         {
-            #region Mock Setup
-
             IDbProvider provider = new TestDbProvider();
-            IDbConnection connection = mocks.StrictMock<IDbConnection>();
-            ISessionFactory sessionFactory = mocks.StrictMock<ISessionFactory>();
-            ISession session = mocks.StrictMock<ISession>();
-            ITransaction transaction = mocks.StrictMock<ITransaction>();
-            IDbTransaction adoTransaction = mocks.StrictMock<IDbTransaction>();
-            
-            Exception rootCause = null;
-            using (mocks.Ordered())
+            IDbConnection connection = A.Fake<IDbConnection>();
+            ISessionFactory sessionFactory = A.Fake<ISessionFactory>();
+            ISession session = A.Fake<ISession>();
+            ITransaction transaction = A.Fake<ITransaction>();
+            IDbTransaction adoTransaction = A.Fake<IDbTransaction>();
+
+            Exception rootCause;
+            A.CallTo(() => sessionFactory.OpenSession()).Returns(session);
+            A.CallTo(() => session.Connection).Returns(connection);
+            A.CallTo(() => session.BeginTransaction(IsolationLevel.ReadCommitted)).Returns(transaction);
+            A.CallTo(() => session.IsOpen).Returns(true);
+            Exception sqlException = new TestSqlException("mymsg", "2627");
+            if (fallbackTranslation)
             {
-                Expect.Call(sessionFactory.OpenSession()).Return(session);
-                Expect.Call(session.Connection).Return(connection);
-                Expect.Call(session.BeginTransaction(IsolationLevel.ReadCommitted)).Return(transaction);
-                Expect.Call(session.IsOpen).Return(true);
-                transaction.Commit();
-                Exception sqlException = new TestSqlException("mymsg", "2627");
-                if (fallbackTranslation)
-                {
-                    //error code 2627 will map to a DataAccessIntegrity exception in sqlserver, which is the metadata
-                    //used by TestDbProvider.
-                    rootCause = sqlException;
-                    LastCall.On(transaction).Throw(new ADOException("mymsg", sqlException));
-                }
-                else
-                {
-                    rootCause = new PropertyValueException("mymsg", typeof(string).Name, "Name");
-                    LastCall.On(transaction).Throw(rootCause);
-                }
-
-                Expect.Call(adoTransaction.Connection).Return(connection);
-                LastCall.On(adoTransaction).Repeat.Once();
-
-                transaction.Rollback();
-                LastCall.On(transaction).Repeat.Once();
-                Expect.Call(session.Close()).Return(null);
+                //error code 2627 will map to a DataAccessIntegrity exception in sqlserver, which is the metadata
+                //used by TestDbProvider.
+                rootCause = sqlException;
+                A.CallTo(() => transaction.Commit()).Throws(new ADOException("mymsg", sqlException));
+            }
+            else
+            {
+                rootCause = new PropertyValueException("mymsg", typeof(string).Name, "Name");
+                A.CallTo(() => transaction.Commit()).Throws(rootCause);
             }
 
-            #endregion
-
-            mocks.ReplayAll();
-
+            A.CallTo(() => adoTransaction.Connection).Returns(connection).Once();
 
             TestableHibernateTransactionManager tm = new TestableHibernateTransactionManager(sessionFactory);
             tm.TransactionSynchronization = TransactionSynchronizationState.Always;
@@ -652,31 +512,27 @@ namespace Spring.Data.NHibernate
             Assert.IsTrue(!TransactionSynchronizationManager.HasResource(sessionFactory), "Hasn't thread session");
             Assert.IsTrue(!TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
 
-            mocks.VerifyAll();
-
-
+            A.CallTo(() => transaction.Rollback()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => session.Close()).MustHaveHappenedOnceExactly();
         }
-
     }
 
-
-
-    #region Supporting classes for test TransactionCommit
 
     public class TransactionCommitTxCallback : ITransactionCallback
     {
         private ISessionFactory sfProxy;
         private IDbProvider provider;
+
         public TransactionCommitTxCallback(ISessionFactory sessionFactory, IDbProvider provider)
         {
             sfProxy = sessionFactory;
             this.provider = provider;
         }
-        
+
 
         public object DoInTransaction(ITransactionStatus status)
         {
-            Assert.IsTrue(TransactionSynchronizationManager.HasResource(sfProxy),"Has thread session");
+            Assert.IsTrue(TransactionSynchronizationManager.HasResource(sfProxy), "Has thread session");
             Assert.IsTrue(TransactionSynchronizationManager.HasResource(provider), "Hasn't thread db provider");
             Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
             Assert.IsTrue(TransactionSynchronizationManager.ActualTransactionActive);
@@ -685,9 +541,10 @@ namespace Spring.Data.NHibernate
         }
     }
 
-    public class LocalSessionFactoryObjectStub  : LocalSessionFactoryObject
+    public class LocalSessionFactoryObjectStub : LocalSessionFactoryObject
     {
         private ISessionFactory sf;
+
         public LocalSessionFactoryObjectStub(ISessionFactory sf)
         {
             this.sf = sf;
@@ -699,13 +556,10 @@ namespace Spring.Data.NHibernate
         }
     }
 
-    #endregion
-
-    #region Supporting classes for test TransactionRollback
-
     public class TransactionRollbackTxCallback : ITransactionCallback
     {
         private ISessionFactory sf;
+
         public TransactionRollbackTxCallback(ISessionFactory sf)
         {
             this.sf = sf;
@@ -713,7 +567,7 @@ namespace Spring.Data.NHibernate
 
         public object DoInTransaction(ITransactionStatus status)
         {
-            Assert.IsTrue(TransactionSynchronizationManager.HasResource(sf),"Has thread session");
+            Assert.IsTrue(TransactionSynchronizationManager.HasResource(sf), "Has thread session");
             HibernateTemplate ht = new HibernateTemplate(sf);
             return ht.ExecuteFind(new ThrowExceptionHibernateCallback());
         }
@@ -727,13 +581,10 @@ namespace Spring.Data.NHibernate
         }
     }
 
-    #endregion
-
-    #region Supporting classes for test TransactionRollbackOnly
-
     public class TransactionRollbackOnlyTxCallback : ITransactionCallback
     {
         private ISessionFactory sf;
+
         public TransactionRollbackOnlyTxCallback(ISessionFactory sf)
         {
             this.sf = sf;
@@ -755,14 +606,12 @@ namespace Spring.Data.NHibernate
             return null;
         }
     }
-    #endregion
-
-    #region Supporting classes for test ParticipatingTransactionWithCommit
 
     public class ParticipatingTransactionWithCommitTxCallback : ITransactionCallback
     {
         private ISessionFactory sf;
         private IList list;
+
         public ParticipatingTransactionWithCommitTxCallback(ISessionFactory sf, IList list)
         {
             this.sf = sf;
@@ -784,13 +633,10 @@ namespace Spring.Data.NHibernate
         }
     }
 
-
-    #endregion
-
-    #region Supporting classes for test ParticipatingTransactionWithRollback
     public class ParticipatingTransactionWithRollbackTxCallback : ITransactionCallback
     {
         private ISessionFactory sf;
+
         public ParticipatingTransactionWithRollbackTxCallback(ISessionFactory sf)
         {
             this.sf = sf;
@@ -803,18 +649,14 @@ namespace Spring.Data.NHibernate
             ht.TemplateFlushMode = TemplateFlushMode.Eager;
             return ht.ExecuteFind(new ThrowExceptionHibernateCallback());
         }
-
     }
-
-    #endregion
-
-    #region Supporting classes for test ParticipatingTransactionWithRollbackOnly
 
     public class ParticipatingTransactionWithRollbackOnlyTxCallback : ITransactionCallback
     {
         private TransactionTemplate tt;
         private ISessionFactory sf;
         private IList list;
+
         public ParticipatingTransactionWithRollbackOnlyTxCallback(TransactionTemplate tt, ISessionFactory sf, IList list)
         {
             this.tt = tt;
@@ -840,11 +682,7 @@ namespace Spring.Data.NHibernate
         {
             return list;
         }
-
     }
-    #endregion
-
-    #region Supporting classes for test ParticipatingTransactionWithWithRequiresNew
 
     public class ParticipatingTransactionWithWithRequiresNewTxCallback : ITransactionCallback
     {
@@ -860,19 +698,17 @@ namespace Spring.Data.NHibernate
         public object DoInTransaction(ITransactionStatus status)
         {
             SessionHolder holder = (SessionHolder) TransactionSynchronizationManager.GetResource(sf);
-            Assert.IsNotNull(holder,"Has thread session");
+            Assert.IsNotNull(holder, "Has thread session");
             Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
             Assert.IsTrue(TransactionSynchronizationManager.ActualTransactionActive);
 
             tt.Execute(new RequiresNewTxCallback(sf, holder));
 
-            Assert.IsTrue(holder.Session == SessionFactoryUtils.GetSession(sf, false),"Same thread session as before");
+            Assert.IsTrue(holder.Session == SessionFactoryUtils.GetSession(sf, false), "Same thread session as before");
             Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
             Assert.IsTrue(TransactionSynchronizationManager.ActualTransactionActive);
             return null;
         }
-
-
     }
 
     public class RequiresNewTxCallback : ITransactionCallback
@@ -905,17 +741,13 @@ namespace Spring.Data.NHibernate
 
         public object DoInHibernate(ISession session)
         {
-            Assert.IsTrue(session != holder.Session,"Not enclosing session");
+            Assert.IsTrue(session != holder.Session, "Not enclosing session");
             Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
             Assert.IsTrue(TransactionSynchronizationManager.ActualTransactionActive);
             return null;
         }
     }
 
-    #endregion
-
-
-    #region Supporting classes for test ParticipatingTransactionWithWithNotSupported
 
     public class ParticipatingTransactionWithWithNotSupportedTxCallback : ITransactionCallback
     {
@@ -930,11 +762,11 @@ namespace Spring.Data.NHibernate
 
         public object DoInTransaction(ITransactionStatus status)
         {
-            SessionHolder holder = (SessionHolder)TransactionSynchronizationManager.GetResource(sf);
+            SessionHolder holder = (SessionHolder) TransactionSynchronizationManager.GetResource(sf);
             Assert.IsNotNull(holder, "Has thread session");
             Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
             Assert.IsTrue(TransactionSynchronizationManager.ActualTransactionActive);
-            tt.PropagationBehavior = TransactionPropagation.NotSupported;            
+            tt.PropagationBehavior = TransactionPropagation.NotSupported;
             tt.Execute(new NotSupportedTxCallback(sf));
 
             Assert.IsTrue(holder.Session == SessionFactoryUtils.GetSession(sf, false), "Same thread session as before");
@@ -942,8 +774,6 @@ namespace Spring.Data.NHibernate
             Assert.IsTrue(TransactionSynchronizationManager.ActualTransactionActive);
             return null;
         }
-
-
     }
 
     public class NotSupportedTxCallback : ITransactionCallback
@@ -957,8 +787,6 @@ namespace Spring.Data.NHibernate
 
         public object DoInTransaction(ITransactionStatus status)
         {
-
-
             Assert.IsTrue(!TransactionSynchronizationManager.HasResource(sf), "Hasn't thread session");
             Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
             Assert.IsFalse(TransactionSynchronizationManager.ActualTransactionActive);
@@ -971,25 +799,19 @@ namespace Spring.Data.NHibernate
 
     public class NotSupportedTxCallbackInner : IHibernateCallback
     {
-
         public object DoInHibernate(ISession session)
         {
             return null;
         }
     }
 
-    #endregion
-
-    #region Supporting classes for test TransactionWithPropagationSupports
-
     public class TransactionWithPropagationSupportsTxCallback : ITransactionCallback
     {
         private ISessionFactory sf;
+
         public TransactionWithPropagationSupportsTxCallback(ISessionFactory sf)
         {
-
             this.sf = sf;
-
         }
 
         public object DoInTransaction(ITransactionStatus status)
@@ -1013,10 +835,6 @@ namespace Spring.Data.NHibernate
         }
     }
 
-    #endregion
-
-
-    #region Supporting classes for test ParticipatingTransactionWithWithNotSupported
 
     public class TransactionWithPropagationSupportsAndInnerTransactionTxCallback : ITransactionCallback
     {
@@ -1026,7 +844,7 @@ namespace Spring.Data.NHibernate
         private ISession session1;
         private ISession session2;
 
-        public TransactionWithPropagationSupportsAndInnerTransactionTxCallback(TransactionTemplate tt, 
+        public TransactionWithPropagationSupportsAndInnerTransactionTxCallback(TransactionTemplate tt,
             ISessionFactory sf, HibernateTemplate ht, ISession session1, ISession session2)
         {
             this.tt = tt;
@@ -1051,7 +869,7 @@ namespace Spring.Data.NHibernate
 
             Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
             Assert.IsFalse(TransactionSynchronizationManager.ActualTransactionActive);
-  
+
             return null;
         }
 
@@ -1085,15 +903,7 @@ namespace Spring.Data.NHibernate
                 return null;
             }
         }
-
-
     }
-
-
-
-    #endregion
-
-    #region Supporting classes for DoTransactionCommitWithFlushFailure
 
     public class TransactionCommitWithFlushFailureCallback : ITransactionCallback
     {
@@ -1112,13 +922,12 @@ namespace Spring.Data.NHibernate
             HibernateTemplate ht = new HibernateTemplate(sessionFactory);
             return ht.ExecuteFind(new TransactionCommitWithFlushFailureHibernateCallback(list));
         }
-
-
     }
 
     public class TransactionCommitWithFlushFailureHibernateCallback : IHibernateCallback
     {
         private IList list;
+
         public TransactionCommitWithFlushFailureHibernateCallback(IList list)
         {
             this.list = list;
@@ -1129,7 +938,4 @@ namespace Spring.Data.NHibernate
             return list;
         }
     }
-
-    #endregion
-
 }

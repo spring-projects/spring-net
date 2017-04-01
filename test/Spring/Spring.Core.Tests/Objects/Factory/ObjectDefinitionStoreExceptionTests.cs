@@ -18,14 +18,11 @@
 
 #endregion
 
-#region Imports
+using FakeItEasy;
 
 using NUnit.Framework;
-using Rhino.Mocks;
 using Spring.Core.IO;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Objects.Factory
 {
@@ -36,24 +33,20 @@ namespace Spring.Objects.Factory
 	[TestFixture]
 	public sealed class ObjectDefinitionStoreExceptionTests
 	{
-        private MockRepository mocks;
-
         [SetUp]
         public void Setup()
         {
-            mocks = new MockRepository();
         }
-		[Test]
+
+        [Test]
 		public void FromResource()
 		{
 			string expectedName = "bing";
-			string expectedResourceDescription = "mock.resource";			
-		    IResource resource = mocks.StrictMock<IResource>();
-		    Expect.Call(resource.Description).Return(expectedResourceDescription);
-            mocks.ReplayAll();		    
-			ObjectDefinitionStoreException inex
-				= new ObjectDefinitionStoreException(resource, expectedName, "mmm...");
-		    mocks.VerifyAll();
+			string expectedResourceDescription = "mock.resource";
+		    IResource resource = A.Fake<IResource>();
+		    A.CallTo(() => resource.Description).Returns(expectedResourceDescription);
+
+			ObjectDefinitionStoreException inex = new ObjectDefinitionStoreException(resource, expectedName, "mmm...");
 			CheckSerialization(inex, expectedName, expectedResourceDescription);
 		}
 

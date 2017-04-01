@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ namespace Spring.Expressions
         /// caches argumentNames of this instance
         /// </summary>
         private string[] argumentNames;
-        
+
         /// <summary>
         /// caches body expression of this lambda function
         /// </summary>
@@ -56,7 +56,7 @@ namespace Spring.Expressions
             : base(info, context)
         {
         }
-        
+
         /// <summary>
         /// Gets argument names for this lambda expression.
         /// </summary>
@@ -107,7 +107,7 @@ namespace Spring.Expressions
                 arguments[argNames[i]] = argValues[i];
             }
 
-            EvaluationContext ec = (EvaluationContext)evalContext;
+            EvaluationContext ec = evalContext;
             using (ec.SwitchLocalVariables(arguments))
             {
                 object result = Get(context, ec);

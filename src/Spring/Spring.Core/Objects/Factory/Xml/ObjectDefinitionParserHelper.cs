@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,7 +34,7 @@ namespace Spring.Objects.Factory.Xml
     /// <summary>
     /// Stateful class used to parse XML object definitions.
     /// </summary>
-    /// <remarks>Not all parsing code has been refactored into this class. See 
+    /// <remarks>Not all parsing code has been refactored into this class. See
     /// BeanDefinitionParserDelegate in Java for how this class should evolve.</remarks>
     /// <author>Rob Harrop</author>
     /// <author>Juergen Hoeller</author>
@@ -84,7 +84,7 @@ namespace Spring.Objects.Factory.Xml
         }
 
         /// <summary>
-        /// Gets the defaults definition object, or <code>null</code> if the 
+        /// Gets the defaults definition object, or <code>null</code> if the
         /// default have not yet been initialized.
         /// </summary>
         /// <value>The defaults.</value>
@@ -341,7 +341,7 @@ namespace Spring.Objects.Factory.Xml
             {
                 if (aliases.Count > 0)
                 {
-                    objectName = (string) aliases[0];
+                    objectName = aliases[0];
                     aliases.RemoveAt(0);
                     if (log.IsDebugEnabled)
                     {
@@ -373,9 +373,9 @@ namespace Spring.Objects.Factory.Xml
                         objectName = readerContext.GenerateObjectName(definition);
                         // Register an alias for the plain object type name, if possible.
                         string objectTypeName = definition.ObjectTypeName;
-                        if (objectTypeName != null 
-                            && objectName.StartsWith(objectTypeName) 
-                            && objectName.Length>objectTypeName.Length 
+                        if (objectTypeName != null
+                            && objectName.StartsWith(objectTypeName)
+                            && objectName.Length>objectTypeName.Length
                             && !readerContext.Registry.IsObjectNameInUse(objectTypeName))
                         {
                             aliases.Add(objectTypeName);
@@ -543,7 +543,7 @@ namespace Spring.Objects.Factory.Xml
         /// Returns the value of the element's attribute or <c>null</c>, if the attribute is not specified.
         /// </summary>
         /// <remarks>
-        /// This is a helper for bypassing the behavior of <see cref="XmlElement.GetAttribute(string)"/> 
+        /// This is a helper for bypassing the behavior of <see cref="XmlElement.GetAttribute(string)"/>
         /// to return <see cref="string.Empty"/> if the attribute does not exist.
         /// </remarks>
         public string GetAttributeValue(XmlElement element, string attributeName)
@@ -556,11 +556,11 @@ namespace Spring.Objects.Factory.Xml
         }
 
         /// <summary>
-        /// Returns the value of the element's attribute or <paramref name="defaultValue"/>, 
+        /// Returns the value of the element's attribute or <paramref name="defaultValue"/>,
         /// if the attribute is not specified.
         /// </summary>
         /// <remarks>
-        /// This is a helper for bypassing the behavior of <see cref="XmlElement.GetAttribute(string)"/> 
+        /// This is a helper for bypassing the behavior of <see cref="XmlElement.GetAttribute(string)"/>
         /// to return <see cref="string.Empty"/> if the attribute does not exist.
         /// </remarks>
         public string GetAttributeValue(XmlElement element, string attributeName, string defaultValue)

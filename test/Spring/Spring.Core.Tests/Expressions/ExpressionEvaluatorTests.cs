@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -324,7 +324,7 @@ namespace Spring.Expressions
         [Test(Description = "SPRNET-944")]
         public void DateTests()
         {
-            string dateLiteral = (string)ExpressionEvaluator.GetValue(null, "'date'"); 
+            string dateLiteral = (string)ExpressionEvaluator.GetValue(null, "'date'");
             Assert.AreEqual("date", dateLiteral);
         }
 
@@ -1739,11 +1739,11 @@ namespace Spring.Expressions
             result = (double) ExpressionEvaluator.GetValue(null, "#max(5,25)", vars);
             Assert.AreEqual(25, result);
 
-            
+
         }
 
         private delegate double DoubleFunction(double arg);
-        
+
         private double Sqrt(double arg)
         {
             return Math.Sqrt(arg);
@@ -1820,7 +1820,7 @@ namespace Spring.Expressions
         [Test]
         public void TestCustomCollectionProcessor()
         {
-            // Test for the purposes of creating documentation example.  
+            // Test for the purposes of creating documentation example.
             Dictionary<string, object> vars = new Dictionary<string, object>();
             vars["EvenSum"] = new IntEvenSumCollectionProcessor();
             Assert.AreEqual(6, ExpressionEvaluator.GetValue(null, "{1, 2, 3, 4}.EvenSum()", vars));
@@ -1841,7 +1841,7 @@ namespace Spring.Expressions
                             if ((int)item % 2 == 0)
                             {
                                 total = NumberUtils.Add(total, item);
-                            }                            
+                            }
                         }
                         else
                         {
@@ -2308,26 +2308,26 @@ namespace Spring.Expressions
             expField.SetValue(o, TestEnumTypePropertyClass.ESampleEnumType.Trunk);
             Assert.AreEqual(TestEnumTypePropertyClass.ESampleEnumType.Trunk, o.SampleEnumField);
 
-            expField.SetValue(o, ((Int16)1));
+            expField.SetValue(o, (short) 1);
             Assert.AreEqual(TestEnumTypePropertyClass.ESampleEnumType.Trunk, o.SampleEnumField);
 
-            expField.SetValue(o, ((Int32)1));
+            expField.SetValue(o, 1);
             Assert.AreEqual(TestEnumTypePropertyClass.ESampleEnumType.Trunk, o.SampleEnumField);
 
-            expField.SetValue(o, ((Int64)1));
+            expField.SetValue(o, (long) 1);
             Assert.AreEqual(TestEnumTypePropertyClass.ESampleEnumType.Trunk, o.SampleEnumField);
 
             // test property set operations
             expProperty.SetValue(o, TestEnumTypePropertyClass.ESampleEnumType.Trunk);
             Assert.AreEqual(TestEnumTypePropertyClass.ESampleEnumType.Trunk, o.SampleEnumField);
 
-            expProperty.SetValue(o, ((Int16)1));
+            expProperty.SetValue(o, (short) 1);
             Assert.AreEqual(TestEnumTypePropertyClass.ESampleEnumType.Trunk, o.SampleEnumField);
 
-            expProperty.SetValue(o, ((Int32)1));
+            expProperty.SetValue(o, 1);
             Assert.AreEqual(TestEnumTypePropertyClass.ESampleEnumType.Trunk, o.SampleEnumField);
 
-            expProperty.SetValue(o, ((Int64)1));
+            expProperty.SetValue(o, (long) 1);
             Assert.AreEqual(TestEnumTypePropertyClass.ESampleEnumType.Trunk, o.SampleEnumField);
 
             expProperty.SetValue(o, "Trunk");
@@ -2335,7 +2335,7 @@ namespace Spring.Expressions
 
             try
             {
-                expProperty.SetValue(o, ((double)1.0));
+                expProperty.SetValue(o, 1.0);
                 Assert.Fail("should throw");
             }
             catch (TypeMismatchException e)

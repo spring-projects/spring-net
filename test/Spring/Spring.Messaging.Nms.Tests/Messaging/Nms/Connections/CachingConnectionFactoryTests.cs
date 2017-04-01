@@ -22,8 +22,10 @@
 
 using Apache.NMS;
 using Apache.NMS.ActiveMQ.Commands;
+
+using FakeItEasy;
+
 using NUnit.Framework;
-using Rhino.Mocks;
 
 #endregion
 
@@ -36,20 +38,10 @@ namespace Spring.Messaging.Nms.Connections
     [TestFixture]
     public class CachingConnectionFactoryTests
     {
-        private MockRepository mocks;
-
-        [SetUp]
-        public void Setup()
-        {
-            mocks = new MockRepository();
-        }
-
         [Test]
         public void CachedSession()
         {
             IConnectionFactory connectionFactory = CreateConnectionFactory();
-
-            mocks.ReplayAll();
 
             CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory();
             cachingConnectionFactory.TargetConnectionFactory = connectionFactory;
@@ -75,8 +67,6 @@ namespace Spring.Messaging.Nms.Connections
 
             Assert.AreEqual(1, testSession.CreatedCount);
             Assert.AreEqual(0, testSession.CloseCount);
-           
-            mocks.VerifyAll();
 
             //don't explicitly call close on 
         }
@@ -94,8 +84,6 @@ namespace Spring.Messaging.Nms.Connections
         public void CachedSessionTwoRequests()
         {
             IConnectionFactory connectionFactory = CreateConnectionFactory();
-
-            mocks.ReplayAll();
 
             CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory();
             cachingConnectionFactory.TargetConnectionFactory = connectionFactory;
@@ -125,10 +113,6 @@ namespace Spring.Messaging.Nms.Connections
             Assert.AreSame(session1, session3);
             Assert.AreEqual(1, testSession1.CreatedCount);
             Assert.AreEqual(0, testSession1.CloseCount);
-
-            mocks.VerifyAll();
-
-
         }
 
         /// <summary>
@@ -141,9 +125,6 @@ namespace Spring.Messaging.Nms.Connections
         {
             IConnectionFactory connectionFactory = CreateConnectionFactory();
             
-            mocks.ReplayAll();
-
-
             CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory();
             cachingConnectionFactory.TargetConnectionFactory = connectionFactory;
             IConnection con1 = cachingConnectionFactory.CreateConnection();
@@ -159,17 +140,12 @@ namespace Spring.Messaging.Nms.Connections
             TestMessageProducer tmpB = GetTestMessageProducer(producerB);
             
             Assert.AreSame(tmpA, tmpB);
-
-            mocks.VerifyAll();
         }
 
         [Test]
         public void CachedMessageProducerTwoRequests()
         {
             IConnectionFactory connectionFactory = CreateConnectionFactory();
-
-            mocks.ReplayAll();
-
 
             CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory();
             cachingConnectionFactory.TargetConnectionFactory = connectionFactory;
@@ -193,10 +169,7 @@ namespace Spring.Messaging.Nms.Connections
             TestMessageProducer tmpC = GetTestMessageProducer(producerC);
 
             Assert.AreSame(tmpA, tmpC);
-
-            mocks.VerifyAll();
         }
-
 
         /// <summary>
         /// Tests that the same underlying instance of the message consumer is returned after
@@ -207,9 +180,6 @@ namespace Spring.Messaging.Nms.Connections
         public void CachedMessageConsumer()
         {
             IConnectionFactory connectionFactory = CreateConnectionFactory();
-
-            mocks.ReplayAll();
-
 
             CachingConnectionFactory cachingConnectionFactory = new CachingConnectionFactory();
             cachingConnectionFactory.TargetConnectionFactory = connectionFactory;
@@ -227,15 +197,14 @@ namespace Spring.Messaging.Nms.Connections
             TestMessageConsumer tmpB = GetTestMessageConsumer(consumerB);
 
             Assert.AreSame(tmpA, tmpB);            
-            mocks.VerifyAll();
         }
 
         private IConnectionFactory CreateConnectionFactory()
         {
-            IConnectionFactory connectionFactory = mocks.StrictMock<IConnectionFactory>();
+            IConnectionFactory connectionFactory = A.Fake<IConnectionFactory>();
             IConnection connection = new TestConnection();
 
-            Expect.Call(connectionFactory.CreateConnection()).Return(connection).Repeat.Once();
+            A.CallTo(() => connectionFactory.CreateConnection()).Returns(connection).Once();
             return connectionFactory;
         }
 

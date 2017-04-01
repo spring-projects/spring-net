@@ -922,7 +922,7 @@ namespace Spring.Util
             Assert.IsNotNull(candidateMethods[1]);
             Assert.IsNotNull(candidateMethods[2]);
             Assert.AreEqual("ParamArrayMatch", foo.MethodWithSimilarArguments(1, new object()));
-            Assert.AreEqual("ExactMatch", foo.MethodWithSimilarArguments(1, (GetMethodByArgumentValuesTarget.DummyArgumentType[])typedArg));
+            Assert.AreEqual("ExactMatch", foo.MethodWithSimilarArguments(1, typedArg));
             Assert.AreEqual("AssignableMatch", foo.MethodWithSimilarArguments(1, (ICollection)typedArg));
 
             MethodInfo resolvedMethod = ReflectionUtils.GetMethodByArgumentValues(candidateMethods, new object[] { 1, typedArg });
@@ -950,7 +950,7 @@ namespace Spring.Util
             Assert.IsNotNull(candidateMethods[2]);
             Assert.IsNotNull(candidateMethods[3]);
             Assert.AreEqual("ParamArrayMatch", foo.MethodWithSimilarArguments(1, new object()));
-            Assert.AreEqual("ExactMatch", foo.MethodWithSimilarArguments(1, (GetMethodByArgumentValuesTarget.DummyArgumentType[])typedArg));
+            Assert.AreEqual("ExactMatch", foo.MethodWithSimilarArguments(1, typedArg));
             Assert.AreEqual("AssignableMatch", foo.MethodWithSimilarArguments(1, (ICollection)typedArg));
             Assert.AreEqual("NullableArgumentMatch", foo.MethodWithNullableArgument(null));
 
@@ -975,7 +975,7 @@ namespace Spring.Util
             Assert.IsNotNull(candidateConstructors[1]);
             Assert.IsNotNull(candidateConstructors[2]);
             Assert.AreEqual("ParamArrayMatch", new GetMethodByArgumentValuesTarget(1, new object()).SelectedConstructor);
-            Assert.AreEqual("ExactMatch", new GetMethodByArgumentValuesTarget(1, (GetMethodByArgumentValuesTarget.DummyArgumentType[])typedArg).SelectedConstructor);
+            Assert.AreEqual("ExactMatch", new GetMethodByArgumentValuesTarget(1, typedArg).SelectedConstructor);
             Assert.AreEqual("AssignableMatch", new GetMethodByArgumentValuesTarget(1, (ICollection)typedArg).SelectedConstructor);
 
             ConstructorInfo resolvedConstructor = ReflectionUtils.GetConstructorByArgumentValues(candidateConstructors, new object[] { 1, typedArg });

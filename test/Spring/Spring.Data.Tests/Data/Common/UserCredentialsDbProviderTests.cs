@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +18,11 @@
 
 #endregion
 
-#region Imports
-
 using System.Data;
-using NUnit.Framework;
-using Rhino.Mocks;
 
-#endregion
+using FakeItEasy;
+
+using NUnit.Framework;
 
 namespace Spring.Data.Common
 {
@@ -35,28 +33,13 @@ namespace Spring.Data.Common
     [TestFixture]
     public class UserCredentialsDbProviderTests
     {
-        private MockRepository mocks;
-
-        [SetUp]
-        public void Setup()
-        {
-            mocks = new MockRepository();
-        }
-
         [Test]
         public void StaticCredentials()
         {
-            IDbProvider dbProvider = mocks.StrictMock<IDbProvider>();
-            IDbConnection connection = mocks.StrictMock<IDbConnection>();
-            using (mocks.Ordered())
-            {
-                Expect.Call(dbProvider.CreateConnection()).Return(connection);
-                Expect.Call(dbProvider.ConnectionString).Return(
-                            @"Data Source=MARKT60\SQL2005;Database=Spring;Trusted_Connection=False");
-                Expect.Call(connection.ConnectionString = @"Data Source=MARKT60\SQL2005;Database=Spring;Trusted_Connection=False;User ID=springqa;Password=springqa");
-            }
-
-            mocks.ReplayAll();
+            IDbProvider dbProvider = A.Fake<IDbProvider>();
+            IDbConnection connection = A.Fake<IDbConnection>();
+            A.CallTo(() => dbProvider.CreateConnection()).Returns(connection);
+            A.CallTo(() => dbProvider.ConnectionString).Returns(@"Data Source=MARKT60\SQL2005;Database=Spring;Trusted_Connection=False");
 
             UserCredentialsDbProvider provider = new UserCredentialsDbProvider();
             provider.TargetDbProvider = dbProvider;
@@ -64,50 +47,39 @@ namespace Spring.Data.Common
             provider.Password = "Password=springqa";
             Assert.AreEqual(connection, provider.CreateConnection());
 
-            mocks.VerifyAll();
+            A.CallToSet(() => connection.ConnectionString)
+                .WhenArgumentsMatch(x => (string) x[0] == "Data Source=MARKT60\\SQL2005;Database=Spring;Trusted_Connection=False;User ID=springqa;Password=springqa")
+                .MustHaveHappenedOnceExactly();
         }
 
         [Test]
         public void NoCredentials()
         {
-            IDbProvider dbProvider = mocks.StrictMock<IDbProvider>();
-            IDbConnection connection = mocks.StrictMock<IDbConnection>();
-            using (mocks.Ordered())
-            {
-                Expect.Call(dbProvider.CreateConnection()).Return(connection);
-            }
+            IDbProvider dbProvider = A.Fake<IDbProvider>();
+            IDbConnection connection = A.Fake<IDbConnection>();
+            A.CallTo(() => dbProvider.CreateConnection()).Returns(connection);
 
-            mocks.ReplayAll();
-            
             UserCredentialsDbProvider provider = new UserCredentialsDbProvider();
             provider.TargetDbProvider = dbProvider;
             Assert.AreEqual(connection, provider.CreateConnection());
-
-            mocks.VerifyAll();
         }
 
         [Test]
         public void ThreadBoundCredentials()
         {
-            IDbProvider dbProvider = mocks.StrictMock<IDbProvider>();
-            IDbConnection connection = mocks.StrictMock<IDbConnection>();
-            using (mocks.Ordered())
-            {
-                Expect.Call(dbProvider.CreateConnection()).Return(connection);
-                Expect.Call(dbProvider.ConnectionString).Return(
-                            @"Data Source=MARKT60\SQL2005;Database=Spring;Trusted_Connection=False");
-                Expect.Call(connection.ConnectionString = @"Data Source=MARKT60\SQL2005;Database=Spring;Trusted_Connection=False;User ID=springqa;Password=springqa");
-            }
-
-            mocks.ReplayAll();
+            IDbProvider dbProvider = A.Fake<IDbProvider>();
+            IDbConnection connection = A.Fake<IDbConnection>();
+            A.CallTo(() => dbProvider.CreateConnection()).Returns(connection);
+            A.CallTo(() => dbProvider.ConnectionString).Returns(@"Data Source=MARKT60\SQL2005;Database=Spring;Trusted_Connection=False");
 
             UserCredentialsDbProvider provider = new UserCredentialsDbProvider();
             provider.TargetDbProvider = dbProvider;
             provider.SetCredentialsForCurrentThread("User ID=springqa", "Password=springqa");
             Assert.AreEqual(connection, provider.CreateConnection());
 
-            mocks.VerifyAll();
-
+            A.CallToSet(() => connection.ConnectionString)
+                .WhenArgumentsMatch(x => (string) x[0] == "Data Source=MARKT60\\SQL2005;Database=Spring;Trusted_Connection=False;User ID=springqa;Password=springqa")
+                .MustHaveHappenedOnceExactly();
         }
     }
 }

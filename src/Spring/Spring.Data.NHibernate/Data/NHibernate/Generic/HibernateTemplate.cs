@@ -1,14 +1,14 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
- * 
+ * Copyright ï¿½ 2002-2011 the original author or authors.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -50,18 +50,18 @@ namespace Spring.Data.NHibernate.Generic
     /// or handling Session lifecycle exceptions. For typical single step actions,
     /// there are various convenience methods (Find, Load, SaveOrUpdate, Delete).
     /// </p>
-    /// 
+    ///
     /// <p>Can be used within a service implementation via direct instantiation
     /// with a ISessionFactory reference, or get prepared in an application context
     /// and given to services as an object reference. Note: The ISessionFactory should
     /// always be configured as an object in the application context, in the first case
     /// given to the service directly, in the second case to the prepared template.
     /// </p>
-    /// 
+    ///
     /// <p>This class can be considered as a direct alternative to working with the raw
     /// Hibernate Session API (through SessionFactoryUtils.Session).
     /// </p>
-    /// 
+    ///
     /// <p>LocalSessionFactoryObject is the preferred way of obtaining a reference
     /// to a specific NHibernate ISessionFactory.
     /// </p>
@@ -73,8 +73,8 @@ namespace Spring.Data.NHibernate.Generic
         #region Fields
 
         NHibernate.HibernateTemplate classicHibernateTemplate;
-        
-        #endregion 
+
+        #endregion
 
         #region Constructor (s)
 
@@ -89,25 +89,25 @@ namespace Spring.Data.NHibernate.Generic
         /// <summary>
         /// Initializes a new instance of the <see cref="HibernateTemplate"/> class.
         /// </summary>
-        /// <remarks>Allows creation of a new non-transactional session when no 
+        /// <remarks>Allows creation of a new non-transactional session when no
         /// transactional Session can be found for the current thread</remarks>
         /// <param name="sessionFactory">The session factory to create sessions.</param>
         public HibernateTemplate(ISessionFactory sessionFactory)
         {
-            classicHibernateTemplate = new Spring.Data.NHibernate.HibernateTemplate(sessionFactory);            
+            classicHibernateTemplate = new Spring.Data.NHibernate.HibernateTemplate(sessionFactory);
             AfterPropertiesSet();
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HibernateTemplate"/> class.
         /// </summary>
-        /// <param name="sessionFactory">The session factory to create sessions.</param>        
+        /// <param name="sessionFactory">The session factory to create sessions.</param>
         /// <param name="allowCreate">if set to <c>true</c> allow creation
-        /// of a new non-transactional session when no transactional Session can be found 
+        /// of a new non-transactional session when no transactional Session can be found
         /// for the current thread.</param>
         public HibernateTemplate(ISessionFactory sessionFactory, bool allowCreate)
         {
-            classicHibernateTemplate = new Spring.Data.NHibernate.HibernateTemplate(sessionFactory, allowCreate);            
+            classicHibernateTemplate = new Spring.Data.NHibernate.HibernateTemplate(sessionFactory, allowCreate);
             AfterPropertiesSet();
         }
 
@@ -247,7 +247,7 @@ namespace Spring.Data.NHibernate.Generic
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to 
+        /// Gets or sets a value indicating whether to
         /// cache all queries executed by this template.
         /// </summary>
         /// <remarks>
@@ -344,7 +344,7 @@ namespace Spring.Data.NHibernate.Generic
         /// <summary>
         /// Gets or sets the proxy factory.
         /// </summary>
-        /// <remarks>This may be useful to set if you create many instances of 
+        /// <remarks>This may be useful to set if you create many instances of
         /// HibernateTemplate and/or HibernateDaoSupport.  This allows the same
         /// ProxyFactory implementation to be used thereby limiting the
         /// number of dynamic proxy types created in the temporary assembly, which
@@ -362,8 +362,8 @@ namespace Spring.Data.NHibernate.Generic
         #region Properties
 
 
-        
-        
+
+
         #endregion
 
         #region Methods
@@ -374,7 +374,7 @@ namespace Spring.Data.NHibernate.Generic
         /// </summary>
         public void Clear()
         {
-            classicHibernateTemplate.Clear();           
+            classicHibernateTemplate.Clear();
         }
 
 
@@ -606,13 +606,13 @@ namespace Spring.Data.NHibernate.Generic
 #endif
 
         /// <summary>
-        /// Copy the state of the given object onto the persistent object with the same identifier. 
+        /// Copy the state of the given object onto the persistent object with the same identifier.
         /// If there is no persistent instance currently associated with the session, it will be loaded.
-        /// Return the persistent instance. If the given instance is unsaved, 
+        /// Return the persistent instance. If the given instance is unsaved,
         /// save a copy of and return it as a newly persistent instance.
-        /// The given instance does not become associated with the session. 
+        /// The given instance does not become associated with the session.
         /// This operation cascades to associated instances if the association is mapped with cascade="merge".
-        /// The semantics of this method are defined by JSR-220. 
+        /// The semantics of this method are defined by JSR-220.
         /// </summary>
         /// <param name="entity">The persistent object to merge.
         /// (<i>not</i> necessarily to be associated with the Hibernate Session)
@@ -636,7 +636,7 @@ namespace Spring.Data.NHibernate.Generic
         /// <typeparam name="T">The object type to get.</typeparam>
         /// <param name="id">The id of the object to get.</param>
         /// <returns>the persistent instance, or null if not found</returns>
-        /// <exception cref="DataAccessException">In case of Hibernate errors</exception>        
+        /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
         public T Get<T>(object id)
         {
             return Get<T>(id, null);
@@ -668,7 +668,7 @@ namespace Spring.Data.NHibernate.Generic
         /// <typeparam name="T">The object type to load.</typeparam>
         /// <param name="id">An identifier of the persistent instance.</param>
         /// <returns>The persistent instance</returns>
-        /// <exception cref="ObjectRetrievalFailureException">If not found</exception>     
+        /// <exception cref="ObjectRetrievalFailureException">If not found</exception>
         /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
         public T Load<T>(object id)
         {
@@ -684,8 +684,8 @@ namespace Spring.Data.NHibernate.Generic
         /// <param name="id">An identifier of the persistent instance.</param>
         /// <param name="lockMode">The lock mode.</param>
         /// <returns>The persistent instance</returns>
-        /// <exception cref="ObjectRetrievalFailureException">If not found</exception>     
-        /// <exception cref="DataAccessException">In case of Hibernate errors</exception>  
+        /// <exception cref="ObjectRetrievalFailureException">If not found</exception>
+        /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
         public T Load<T>(object id, LockMode lockMode)
         {
             return Execute(new LoadByTypeHibernateCallback<T>(id, lockMode), true);
@@ -715,7 +715,7 @@ namespace Spring.Data.NHibernate.Generic
         /// <returns>
         /// a generic List containing 0 or more persistent instances
         /// </returns>
-        /// <exception cref="DataAccessException">In case of Hibernate errors</exception>  
+        /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
         public IList<T> Find<T>(string queryString)
         {
             return Find<T>(queryString, (object[]) null, (IType[]) null);
@@ -731,7 +731,7 @@ namespace Spring.Data.NHibernate.Generic
         /// <returns>
         /// a generic List containing 0 or more persistent instances
         /// </returns>
-        /// <exception cref="DataAccessException">In case of Hibernate errors</exception>  
+        /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
         public IList<T> Find<T>(string queryString, object value)
         {
             return Find<T>(queryString, new object[] {value}, (IType[]) null);
@@ -748,7 +748,7 @@ namespace Spring.Data.NHibernate.Generic
         /// <returns>
         /// a generic List containing 0 or more persistent instances
         /// </returns>
-        /// <exception cref="DataAccessException">In case of Hibernate errors</exception>  
+        /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
         public IList<T> Find<T>(string queryString, object value, IType type)
         {
             return Find<T>(queryString, new object[] {value}, new IType[] {type});
@@ -762,7 +762,7 @@ namespace Spring.Data.NHibernate.Generic
         /// <param name="queryString">a query expressed in Hibernate's query language</param>
         /// <param name="values">the values of the parameters</param>
         /// <returns>a generic List containing 0 or more persistent instances</returns>
-        /// <exception cref="DataAccessException">In case of Hibernate errors</exception>  
+        /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
         public IList<T> Find<T>(string queryString, object[] values)
         {
             return Find<T>(queryString, values, (IType[]) null);
@@ -779,8 +779,8 @@ namespace Spring.Data.NHibernate.Generic
         /// <returns>
         /// a generic List containing 0 or more persistent instances
         /// </returns>
-        /// <exception cref="DataAccessException">In case of Hibernate errors</exception>  
-        /// <exception cref="ArgumentException">If values and types are not null and their lengths are not equal</exception>  
+        /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
+        /// <exception cref="ArgumentException">If values and types are not null and their lengths are not equal</exception>
         public IList<T> Find<T>(string queryString, object[] values, IType[] types)
         {
             if (values != null && types != null && values.Length != types.Length)
@@ -1009,7 +1009,7 @@ namespace Spring.Data.NHibernate.Generic
         /// <returns>A generic List containing 0 or more persistent instances</returns>
         /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
         /// <exception cref="ArgumentOutOfRangeException">If paramNames length is not equal to values length or
-        /// if paramNames length is not equal to types length (when types is not null)</exception>        
+        /// if paramNames length is not equal to types length (when types is not null)</exception>
         public IList<T> FindByNamedQueryAndNamedParam<T>(string queryName, string[] paramNames, object[] values,
                                                          IType[] types)
         {
@@ -1050,7 +1050,7 @@ namespace Spring.Data.NHibernate.Generic
         /// of the given object to <i>named</i> parameters in the query string.
         /// </summary>
         /// <typeparam name="T">The object type to find.</typeparam>
-        /// <param name="queryString">A query expressed in Hibernate's query language</param>       
+        /// <param name="queryString">A query expressed in Hibernate's query language</param>
         /// <param name="valueObject">The values of the parameters</param>
         /// <returns>A generic List containing 0 or more persistent instances</returns>
         /// <exception cref="DataAccessException">In case of Hibernate errors</exception>

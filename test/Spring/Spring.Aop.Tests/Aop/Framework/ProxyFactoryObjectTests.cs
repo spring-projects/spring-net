@@ -31,8 +31,10 @@ using System.Web;
 
 using AopAlliance.Aop;
 using AopAlliance.Intercept;
+
+using FakeItEasy;
+
 using NUnit.Framework;
-using Rhino.Mocks;
 using Spring.Aop.Advice;
 using Spring.Aop.Framework.Adapter;
 using Spring.Aop.Interceptor;
@@ -61,16 +63,13 @@ namespace Spring.Aop.Framework
     [TestFixture]
     public sealed class ProxyFactoryObjectTests
     {
-        private MockRepository mocks;
         private IObjectFactory factory;
 
         [SetUp]
         public void SetUp()
         {
-            mocks = new MockRepository();
             factory = new XmlObjectFactory(new ReadOnlyXmlTestResource("proxyFactoryTests.xml", GetType()));
         }
-
 
         [Test]
         public void TargetThrowsInvalidCastException()
@@ -477,9 +476,8 @@ namespace Spring.Aop.Framework
         public void IsSingletonFalseReturnsNew_ProxyInstance_NotNewProxyTargetSource()
         {
             GoodCommand target = new GoodCommand();
-            IObjectFactory mock = (IObjectFactory) mocks.CreateMock(typeof(IObjectFactory));
-            Expect.Call(mock.GetObject("singleton")).Return(target).Repeat.Twice();
-            mocks.ReplayAll();
+            IObjectFactory mock = A.Fake<IObjectFactory>();
+            A.CallTo(() => mock.GetObject("singleton")).Returns(target).Twice();
 
             ProxyFactoryObject fac = new ProxyFactoryObject();
             fac.ProxyInterfaces = new string[] { typeof(ICommand).FullName };
@@ -491,17 +489,14 @@ namespace Spring.Aop.Framework
             ICommand one = (ICommand)fac.GetObject();
             ICommand two = (ICommand)fac.GetObject();
             Assert.IsFalse(ReferenceEquals(one, two));
-
-            mocks.VerifyAll();
         }
 
         [Test]
         public void IsSingletonTrueReturnsNew_ProxyInstance_NotNewProxyTargetSource()
         {
             GoodCommand target = new GoodCommand();
-            IObjectFactory mock = (IObjectFactory)mocks.CreateMock(typeof(IObjectFactory));
-            Expect.Call(mock.GetObject("singleton")).Return(target);
-            mocks.ReplayAll();
+            IObjectFactory mock = A.Fake<IObjectFactory>();
+            A.CallTo(() => mock.GetObject("singleton")).Returns(target);
 
             ProxyFactoryObject fac = new ProxyFactoryObject();
             fac.ProxyInterfaces = new string[] { typeof(ICommand).FullName };
@@ -513,8 +508,6 @@ namespace Spring.Aop.Framework
             ICommand one = (ICommand)fac.GetObject();
             ICommand two = (ICommand)fac.GetObject();
             Assert.IsTrue(ReferenceEquals(one, two));
-
-            mocks.VerifyAll();
         }
 
         private ProxyFactoryObject CreateFrozenProxyFactory()
@@ -562,11 +555,10 @@ namespace Spring.Aop.Framework
             GoodCommand target = new GoodCommand();
             NopInterceptor advice = new NopInterceptor();
 
-            IObjectFactory mock = (IObjectFactory) mocks.CreateMock(typeof(IObjectFactory));
-            Expect.Call(mock.GetObject("advice")).Return(advice);
-            Expect.Call(mock.GetObject("singleton")).Return(target);
-            Expect.Call(mock.GetType("singleton")).Return(typeof(GoodCommand));
-            mocks.ReplayAll();
+            IObjectFactory mock = A.Fake<IObjectFactory>();
+            A.CallTo(() => mock.GetObject("advice")).Returns(advice);
+            A.CallTo(() => mock.GetObject("singleton")).Returns(target);
+            A.CallTo(() => mock.GetType("singleton")).Returns(typeof(GoodCommand));
 
             ProxyFactoryObject fac = new ProxyFactoryObject();
             fac.ProxyInterfaces = new string[] { typeof(ICommand).FullName };
@@ -581,8 +573,6 @@ namespace Spring.Aop.Framework
             Assert.AreEqual(1, advice.Count);
             two.Execute();
             Assert.AreEqual(2, advice.Count);
-
-            mocks.VerifyAll();
         }
 
         [Test]
@@ -591,32 +581,20 @@ namespace Spring.Aop.Framework
             GoodCommand target = new GoodCommand();
             NopInterceptor advice = new NopInterceptor();
 
-            MockRepository mocks = new MockRepository();
-            IObjectFactory factory = (IObjectFactory) mocks.CreateMock(typeof(IObjectFactory));
+            IObjectFactory factory = A.Fake<IObjectFactory>();
 
             ProxyFactoryObject fac = new ProxyFactoryObject();
-            fac.ProxyInterfaces = new string[] { typeof(ICommand).FullName };
+            fac.ProxyInterfaces = new[] {typeof(ICommand).FullName};
             fac.IsSingleton = false;
-            fac.InterceptorNames = new string[] { "advice", "prototype" };
+            fac.InterceptorNames = new[] {"advice", "prototype"};
             fac.ObjectFactory = factory;
 
-//            using (mocks.Record())
-            {
-                using (mocks.Unordered())
-                {
-                    Expect.Call(factory.IsSingleton("advice")).Return(true);
-                    Expect.Call(factory.GetObject("advice")).Return(advice);
-                    Expect.Call(factory.GetType("prototype")).Return(target.GetType());
-                    Expect.Call(factory.GetObject("prototype")).Return(target);
-                }
-            }
-            mocks.ReplayAll();
+            A.CallTo(() => factory.IsSingleton("advice")).Returns(true);
+            A.CallTo(() => factory.GetObject("advice")).Returns(advice);
+            A.CallTo(() => factory.GetType("prototype")).Returns(target.GetType());
+            A.CallTo(() => factory.GetObject("prototype")).Returns(target);
 
-//            using(mocks.Playback())
-            {
-                fac.GetObject();
-            }
-            mocks.VerifyAll();
+            fac.GetObject();
         }
 
         [Test]
@@ -706,26 +684,20 @@ namespace Spring.Aop.Framework
         [Test]
         public void NullNameInInterceptorNamesArrayThrowAopConfigException()
         {
-            IObjectFactory factory = (IObjectFactory) mocks.CreateMock(typeof(IObjectFactory));
+            IObjectFactory factory = A.Fake<IObjectFactory>();
 
             ProxyFactoryObject fac = new ProxyFactoryObject();
             fac.ProxyInterfaces = new string[] { typeof(ICommand).FullName };
             fac.IsSingleton = false;
             fac.InterceptorNames = new string[] { null, null };
             fac.ObjectFactory = factory;
-            try
-            {
-                fac.GetObject();
-                Assert.Fail();
-            }
-            catch (AopConfigException)
-            {}
+            Assert.Throws<AopConfigException>(() => fac.GetObject());
         }
 
         [Test]
         public void PassEmptyInterceptorNamesArray_WithTargetThatImplementsAnInterfaceCanBeCastToSaidInterface()
         {
-            IObjectFactory factory = (IObjectFactory) mocks.CreateMock(typeof(IObjectFactory));
+            IObjectFactory factory = A.Fake<IObjectFactory>();
 
             ProxyFactoryObject fac = new ProxyFactoryObject();
             fac.ProxyInterfaces = new string[] { };

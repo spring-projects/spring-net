@@ -18,17 +18,14 @@
 
 #endregion
 
-#region Imports
-
 using System.Reflection;
-using NUnit.Framework;
 
-using Rhino.Mocks;
+using FakeItEasy;
+
+using NUnit.Framework;
 
 using Spring.Caching;
 using Spring.Context;
-
-#endregion
 
 namespace Spring.Aspects.Cache
 {
@@ -42,13 +39,11 @@ namespace Spring.Aspects.Cache
         private IApplicationContext mockContext;
         private InvalidateCacheAdvice advice;
         private ICache cache;
-        private MockRepository mocks;
 
         [SetUp]
         public void SetUp()
         {
-            mocks = new MockRepository();
-            mockContext = (IApplicationContext) mocks.CreateMock(typeof (IApplicationContext));
+            mockContext = A.Fake<IApplicationContext>();
 
             advice = new InvalidateCacheAdvice();
             advice.ApplicationContext = mockContext;
@@ -66,7 +61,6 @@ namespace Spring.Aspects.Cache
             object[] args = new object[] { 2 };
 
             ExpectCacheInstanceRetrieval("cache", cache);
-            mocks.ReplayAll();
 
             Assert.AreEqual(3, cache.Count);
 
@@ -74,8 +68,6 @@ namespace Spring.Aspects.Cache
             advice.AfterReturning(null, method, args, null);
             Assert.AreEqual(2, cache.Count);
             Assert.IsNull(cache.Get(2));
-
-            mocks.VerifyAll();
         }
 
         [Test]
@@ -85,7 +77,6 @@ namespace Spring.Aspects.Cache
             object[] args = new object[] { 2 };
 
             ExpectCacheInstanceRetrieval("cache", cache);
-            mocks.ReplayAll();
 
             Assert.AreEqual(3, cache.Count);
 
@@ -93,8 +84,6 @@ namespace Spring.Aspects.Cache
             advice.AfterReturning(null, method, args, null);
             Assert.AreEqual(1, cache.Count);
             Assert.AreEqual("two", cache.Get(2));
-
-            mocks.VerifyAll();
         }
 
         [Test]
@@ -103,15 +92,12 @@ namespace Spring.Aspects.Cache
             MethodInfo method = typeof(InvalidateCacheTarget).GetMethod("InvalidateAll");
 
             ExpectCacheInstanceRetrieval("cache", cache);
-            mocks.ReplayAll();
 
             Assert.AreEqual(3, cache.Count);
 
             // all items should be removed from cache
             advice.AfterReturning(null, method, null, null);
             Assert.AreEqual(0, cache.Count);
-
-            mocks.VerifyAll();
         }
 
         [Test]
@@ -122,7 +108,6 @@ namespace Spring.Aspects.Cache
 
             ExpectCacheInstanceRetrieval("cache", cache);
             ExpectCacheInstanceRetrieval("cache", cache);
-            mocks.ReplayAll();
 
             Assert.AreEqual(3, cache.Count);
 
@@ -130,8 +115,6 @@ namespace Spring.Aspects.Cache
             // all items except item "two" should be removed from cache
             advice.AfterReturning(null, method, args, null);
             Assert.AreEqual(0, cache.Count);
-
-            mocks.VerifyAll();
         }
 
         [Test]
@@ -148,14 +131,10 @@ namespace Spring.Aspects.Cache
             Assert.AreEqual("three", cache.Get(3));
         }
 
-        #region Helper methods
-
         private void ExpectCacheInstanceRetrieval(string cacheName, ICache cacheToReturn)
         {
-            Expect.Call(mockContext.GetObject(cacheName)).Return(cacheToReturn);
+            A.CallTo(() => mockContext.GetObject(cacheName)).Returns(cacheToReturn).Once();
         }
-
-        #endregion
     }
 
     #region Inner Class : InvalidateCacheTarget

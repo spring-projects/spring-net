@@ -21,8 +21,10 @@
 #region Imports
 
 using Apache.NMS;
+
+using FakeItEasy;
+
 using NUnit.Framework;
-using Rhino.Mocks;
 using Spring.Messaging.Nms.Core;
 using Spring.Transaction;
 using Spring.Transaction.Support;
@@ -39,27 +41,14 @@ namespace Spring.Messaging.Nms.Connections
     [TestFixture]
     public class NmsTransactionManagerTests
     {           
-        private MockRepository mocks;
-
-        [SetUp]
-        public void Setup()
-        {
-            mocks = new MockRepository();
-        }
-
         [Test]
         public void TransactionCommit()
         {
-            IConnectionFactory connectionFactory = mocks.StrictMock<IConnectionFactory>();
-            IConnection connection = mocks.StrictMock<IConnection>();
-            ISession session = mocks.StrictMock<ISession>();
+            IConnectionFactory connectionFactory = A.Fake<IConnectionFactory>();
+            IConnection connection = A.Fake<IConnection>();
+            ISession session = A.Fake<ISession>();
 
-            using (mocks.Ordered())
-            {
-                SetupCommitExpectations(connection, connectionFactory, session);
-            }
-
-            mocks.ReplayAll();
+            SetupCreateSession(connection, connectionFactory, session);
 
             NmsTransactionManager tm = new NmsTransactionManager(connectionFactory);
             ITransactionStatus ts = tm.GetTransaction(new DefaultTransactionDefinition());
@@ -67,20 +56,17 @@ namespace Spring.Messaging.Nms.Connections
             nt.Execute(new AssertSessionCallback(session));
             tm.Commit(ts);
 
-            mocks.VerifyAll();
-                
+            AssertCommitExpectations(connection, connectionFactory, session);
         }
 
         [Test]
         public void TransactionRollback()
         {
-            IConnectionFactory connectionFactory = mocks.StrictMock<IConnectionFactory>();
-            IConnection connection = mocks.StrictMock<IConnection>();
-            ISession session = mocks.StrictMock<ISession>();
+            IConnectionFactory connectionFactory = A.Fake<IConnectionFactory>();
+            IConnection connection = A.Fake<IConnection>();
+            ISession session = A.Fake<ISession>();
 
-            SetupRollbackExpectations(connection, connectionFactory, session);
-
-            mocks.ReplayAll();
+            SetupCreateSession(connection, connectionFactory, session);
 
             NmsTransactionManager tm = new NmsTransactionManager(connectionFactory);
             ITransactionStatus ts = tm.GetTransaction(new DefaultTransactionDefinition());
@@ -88,23 +74,17 @@ namespace Spring.Messaging.Nms.Connections
             nt.Execute(new AssertSessionCallback(session));
             tm.Rollback(ts);
 
-            mocks.VerifyAll();
+            AssertRollbackExpectations(connection, connectionFactory, session);
         }
 
         [Test]
         public void ParticipatingTransactionWithCommit()
         {
-            IConnectionFactory connectionFactory = mocks.StrictMock<IConnectionFactory>();
-            IConnection connection = mocks.StrictMock<IConnection>();
-            ISession session = mocks.StrictMock<ISession>();
+            IConnectionFactory connectionFactory = A.Fake<IConnectionFactory>();
+            IConnection connection = A.Fake<IConnection>();
+            ISession session = A.Fake<ISession>();
 
-            using (mocks.Ordered())
-            {
-                SetupCommitExpectations(connection, connectionFactory, session);
-            }
-
-            mocks.ReplayAll();
-
+            SetupCreateSession(connection, connectionFactory, session);
 
             NmsTransactionManager tm = new NmsTransactionManager(connectionFactory);
             ITransactionStatus ts = tm.GetTransaction(new DefaultTransactionDefinition());
@@ -120,23 +100,17 @@ namespace Spring.Messaging.Nms.Connections
 
             tm.Commit(ts);
 
-            mocks.VerifyAll();
-
+            AssertCommitExpectations(connection, connectionFactory, session);
         }
 
         [Test]
         public void ParticipatingTransactionWithRollback()
         {
-            IConnectionFactory connectionFactory = mocks.StrictMock<IConnectionFactory>();
-            IConnection connection = mocks.StrictMock<IConnection>();
-            ISession session = mocks.StrictMock<ISession>();
+            IConnectionFactory connectionFactory = A.Fake<IConnectionFactory>();
+            IConnection connection = A.Fake<IConnection>();
+            ISession session = A.Fake<ISession>();
 
-            using (mocks.Ordered())
-            {
-                SetupRollbackExpectations(connection, connectionFactory, session);
-            }
-
-            mocks.ReplayAll();
+            SetupCreateSession(connection, connectionFactory, session);
 
             NmsTransactionManager tm = new NmsTransactionManager(connectionFactory);
             ITransactionStatus ts = tm.GetTransaction(new DefaultTransactionDefinition());
@@ -159,34 +133,21 @@ namespace Spring.Messaging.Nms.Connections
                 
             }
 
-            mocks.VerifyAll();
+            AssertRollbackExpectations(connection, connectionFactory, session);
         }
 
         [Test]
         public void SuspendedTransaction()
         {
-            IConnectionFactory connectionFactory = mocks.StrictMock<IConnectionFactory>();
-            IConnection connection = mocks.StrictMock<IConnection>();
-            ISession session = mocks.StrictMock<ISession>();
-            ISession session2 = mocks.StrictMock<ISession>();
+            IConnectionFactory connectionFactory = A.Fake<IConnectionFactory>();
+            IConnection connection = A.Fake<IConnection>();
+            ISession session = A.Fake<ISession>();
+            ISession session2 = A.Fake<ISession>();
 
-            Expect.Call(connectionFactory.CreateConnection()).Return(connection).Repeat.Twice();
-            Expect.Call(connection.CreateSession(AcknowledgementMode.Transactional)).Return(session).Repeat.Once();
-            Expect.Call(connection.CreateSession(AcknowledgementMode.AutoAcknowledge)).Return(session2).Repeat.Once();           
+            A.CallTo(() => connectionFactory.CreateConnection()).Returns(connection).Twice();
+            A.CallTo(() => connection.CreateSession(AcknowledgementMode.Transactional)).Returns(session).Once();
+            A.CallTo(() => connection.CreateSession(AcknowledgementMode.AutoAcknowledge)).Returns(session2).Once();
             
-            session.Commit();
-            LastCall.On(session).Repeat.Once();
-            session.Close();
-            LastCall.On(session).Repeat.Once();
-
-            session2.Close();
-            LastCall.On(session2).Repeat.Once();
-
-            connection.Close();
-            LastCall.On(connection).Repeat.Twice();
-
-            mocks.ReplayAll();
-
             NmsTransactionManager tm = new NmsTransactionManager(connectionFactory);
             ITransactionStatus ts = tm.GetTransaction(new DefaultTransactionDefinition());
             NmsTemplate nt = new NmsTemplate(connectionFactory);
@@ -204,42 +165,28 @@ namespace Spring.Messaging.Nms.Connections
 
             tm.Commit(ts);
 
-            mocks.VerifyAll();
-            
+            A.CallTo(() => session.Commit()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => session.Close()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => session2.Close()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => connection.Close()).MustHaveHappenedTwiceExactly();
         }
 
         [Test]
         public void TransactionSuspension()
         {
-            IConnectionFactory connectionFactory = mocks.StrictMock<IConnectionFactory>();
-            IConnection connection = mocks.StrictMock<IConnection>();
-            ISession session = mocks.StrictMock<ISession>();
-            ISession session2 = mocks.StrictMock<ISession>();
-
-
-            Expect.Call(connectionFactory.CreateConnection()).Return(connection).Repeat.Twice();
-            Expect.Call(connection.CreateSession(AcknowledgementMode.Transactional)).Return(session).Repeat.Once();
-            Expect.Call(connection.CreateSession(AcknowledgementMode.Transactional)).Return(session2).Repeat.Once();
-
-            session.Commit();
-            LastCall.On(session).Repeat.Once();
-            session2.Commit();
-            LastCall.On(session2).Repeat.Once();
-
-            session.Close();
-            LastCall.On(session).Repeat.Once();
-            session2.Close();
-            LastCall.On(session2).Repeat.Once();
-
-            connection.Close();
-            LastCall.On(connection).Repeat.Twice();
-
-            mocks.ReplayAll();
+            IConnectionFactory connectionFactory = A.Fake<IConnectionFactory>();
+            IConnection connection = A.Fake<IConnection>();
+            ISession session = A.Fake<ISession>();
+            ISession session2 = A.Fake<ISession>();
+                                                                        
+            A.CallTo(() => connectionFactory.CreateConnection()).Returns(connection).Twice();
+            A.CallTo(() => connection.CreateSession(AcknowledgementMode.Transactional))
+                .Returns(session).Once()
+                .Then.Returns(session2).Once();
 
             NmsTransactionManager tm = new NmsTransactionManager(connectionFactory);
             ITransactionStatus ts = tm.GetTransaction(new DefaultTransactionDefinition());
             NmsTemplate nt = new NmsTemplate(connectionFactory);
-
 
             TransactionTemplate tt = new TransactionTemplate(tm);
             tt.PropagationBehavior = TransactionPropagation.RequiresNew;
@@ -253,32 +200,38 @@ namespace Spring.Messaging.Nms.Connections
 
             tm.Commit(ts);
 
-            mocks.VerifyAll();
-
+            A.CallTo(() => session.Commit()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => session2.Commit()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => session.Close()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => session2.Close()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => connection.Close()).MustHaveHappenedTwiceExactly();
         }
 
-        private static void SetupRollbackExpectations(IConnection connection, IConnectionFactory connectionFactory, ISession session)
+        private static void AssertRollbackExpectations(IConnection connection, IConnectionFactory connectionFactory, ISession session)
         {
-            Expect.Call(connectionFactory.CreateConnection()).Return(connection).Repeat.Once();
-            Expect.Call(connection.CreateSession(AcknowledgementMode.Transactional)).Return(session).Repeat.Once();
-            session.Rollback();
-            LastCall.On(session).Repeat.Once();
-            session.Close();
-            LastCall.On(session).Repeat.Once();
-            connection.Close();
-            LastCall.On(connection).Repeat.Once();
+            A.CallTo(() => session.Rollback()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => session.Close()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => connection.Close()).MustHaveHappenedOnceExactly();
         }
 
-        private static void SetupCommitExpectations(IConnection connection, IConnectionFactory connectionFactory, ISession session)
+        private static void SetupCreateSession(
+            IConnection connection,
+            IConnectionFactory connectionFactory,
+            ISession session)
         {
-            Expect.Call(connectionFactory.CreateConnection()).Return(connection).Repeat.Once();
-            Expect.Call(connection.CreateSession(AcknowledgementMode.Transactional)).Return(session).Repeat.Once();
-            session.Commit();
-            LastCall.On(session).Repeat.Once();
-            session.Close();
-            LastCall.On(session).Repeat.Once();
-            connection.Close();
-            LastCall.On(connection).Repeat.Once();
+            A.CallTo(() => connectionFactory.CreateConnection()).Returns(connection).Once();
+            A.CallTo(() => connection.CreateSession(AcknowledgementMode.Transactional)).Returns(session).Once();
+        }
+
+
+        private static void AssertCommitExpectations(
+            IConnection connection,
+            IConnectionFactory connectionFactory,
+            ISession session)
+        {
+            A.CallTo(() => session.Commit()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => session.Close()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => connection.Close()).MustHaveHappenedOnceExactly();
         }
 
         [TearDown]
@@ -288,8 +241,6 @@ namespace Spring.Messaging.Nms.Connections
             Assert.IsFalse(TransactionSynchronizationManager.SynchronizationActive);
             
         }
-
-        
     }
 
     internal class AssertSessionCallback : ISessionCallback

@@ -18,115 +18,98 @@
 
 #endregion
 
-#region Imports
-
 using System;
-using NUnit.Framework;
-using Rhino.Mocks;
 
-#endregion
+using FakeItEasy;
+
+using NUnit.Framework;
 
 namespace Spring.Objects.Factory.Config
 {
-	/// <summary>
-	/// Unit tests for the ObjectReferenceFactoryObject class.
+    /// <summary>
+    /// Unit tests for the ObjectReferenceFactoryObject class.
     /// </summary>
     /// <author>Rick Evans</author>
-	[TestFixture]
+    [TestFixture]
     public sealed class ObjectReferenceFactoryObjectTests
     {
-        private MockRepository mocks;
-	    private IObjectFactory factory;
+        private IObjectFactory factory;
 
         [SetUp]
         public void SetUp()
         {
-            mocks = new MockRepository();
-            factory = mocks.StrictMock<IObjectFactory>();
+            factory = A.Fake<IObjectFactory>();
         }
 
         [Test]
         public void NullTargetObjectName()
-		{
-			ObjectReferenceFactoryObject fac = new ObjectReferenceFactoryObject();
+        {
+            ObjectReferenceFactoryObject fac = new ObjectReferenceFactoryObject();
             // simulate IFactoryObjectAware interface...
             Assert.Throws<ArgumentException>(() => fac.ObjectFactory = null);
         }
-		
-		[Test]
-		public void WhitespaceTargetObjectName()
-		{
-			ObjectReferenceFactoryObject fac = new ObjectReferenceFactoryObject();
-			fac.TargetObjectName = string.Empty;
+
+        [Test]
+        public void WhitespaceTargetObjectName()
+        {
+            ObjectReferenceFactoryObject fac = new ObjectReferenceFactoryObject();
+            fac.TargetObjectName = string.Empty;
             // simulate IFactoryObjectAware interface...
             Assert.Throws<ArgumentException>(() => fac.ObjectFactory = null);
-		}
-		
-		[Test]
-		public void FactoryDoesNotContainTargetObject()
-		{
-		    Expect.Call(factory.ContainsObject("bojangles")).Return(false);
-            mocks.ReplayAll();
+        }
 
-			ObjectReferenceFactoryObject fac = new ObjectReferenceFactoryObject();
-			fac.TargetObjectName = "bojangles";
-			try
-			{
-				// simulate IFactoryObjectAware interface...
-				fac.ObjectFactory = factory;
-				Assert.Fail("Must have bailed with a " +
-					"NoSuchObjectDefinitionException 'cos the object doesn't " +
-					"exist in the associated factory.");
-			}
-			catch (NoSuchObjectDefinitionException)
-			{
-				mocks.VerifyAll();
-			}
-		}
-
-		[Test]
-		public void DelegatesThroughToFactoryFor_IsSingleton()
-		{
-            Expect.Call(factory.ContainsObject("bojangles")).Return(true);
-            Expect.Call(factory.IsSingleton("bojangles")).Return(true);
-            mocks.ReplayAll();
+        [Test]
+        public void FactoryDoesNotContainTargetObject()
+        {
+            A.CallTo(() => factory.ContainsObject("bojangles")).Returns(false);
 
             ObjectReferenceFactoryObject fac = new ObjectReferenceFactoryObject();
-			fac.TargetObjectName = "bojangles";
-			fac.ObjectFactory = factory;
+            fac.TargetObjectName = "bojangles";
 
-			Assert.IsTrue(fac.IsSingleton);
-			mocks.VerifyAll();
-		}
+            // simulate IFactoryObjectAware interface...
+            Assert.Throws<NoSuchObjectDefinitionException>(() => fac.ObjectFactory = factory,
+                "Must have bailed with a " +
+                "NoSuchObjectDefinitionException 'cos the object doesn't " +
+                "exist in the associated factory.");
+        }
 
-		[Test]
-		public void DelegatesThroughToFactoryFor_GetObject()
-		{
-		    Expect.Call(factory.ContainsObject("bojangles")).Return(true);
-            Expect.Call(factory.GetObject("bojangles")).Return("Rick");
-            mocks.ReplayAll();
+        [Test]
+        public void DelegatesThroughToFactoryFor_IsSingleton()
+        {
+            A.CallTo(() => factory.ContainsObject("bojangles")).Returns(true);
+            A.CallTo(() => factory.IsSingleton("bojangles")).Returns(true);
 
-			ObjectReferenceFactoryObject fac = new ObjectReferenceFactoryObject();
-			fac.TargetObjectName = "bojangles";
-			fac.ObjectFactory = factory;
+            ObjectReferenceFactoryObject fac = new ObjectReferenceFactoryObject();
+            fac.TargetObjectName = "bojangles";
+            fac.ObjectFactory = factory;
 
-			Assert.AreEqual("Rick", fac.GetObject());
-			mocks.VerifyAll();
-		}
+            Assert.IsTrue(fac.IsSingleton);
+        }
 
-		[Test]
-		public void DelegatesThroughToFactoryFor_ObjectType()
-		{
-            Expect.Call(factory.ContainsObject("bojangles")).Return(true);
-            Expect.Call(factory.GetType("bojangles")).Return(GetType());
-            mocks.ReplayAll();
+        [Test]
+        public void DelegatesThroughToFactoryFor_GetObject()
+        {
+            A.CallTo(() => factory.ContainsObject("bojangles")).Returns(true);
+            A.CallTo(() => factory.GetObject("bojangles")).Returns("Rick");
 
-			ObjectReferenceFactoryObject fac = new ObjectReferenceFactoryObject();
-			fac.TargetObjectName = "bojangles";
-			fac.ObjectFactory = factory;
+            ObjectReferenceFactoryObject fac = new ObjectReferenceFactoryObject();
+            fac.TargetObjectName = "bojangles";
+            fac.ObjectFactory = factory;
 
-			Assert.AreEqual(GetType(), fac.ObjectType);
-			mocks.VerifyAll();
-		}
+            Assert.AreEqual("Rick", fac.GetObject());
+        }
+
+        [Test]
+        public void DelegatesThroughToFactoryFor_ObjectType()
+        {
+            A.CallTo(() => factory.ContainsObject("bojangles")).Returns(true);
+            A.CallTo(() => factory.GetType("bojangles")).Returns(GetType());
+
+            ObjectReferenceFactoryObject fac = new ObjectReferenceFactoryObject();
+            fac.TargetObjectName = "bojangles";
+            fac.ObjectFactory = factory;
+
+            Assert.AreEqual(GetType(), fac.ObjectType);
+        }
     }
 }

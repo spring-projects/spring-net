@@ -1,12 +1,12 @@
 /*
 * Copyright 2002-2010 the original author or authors.
-* 
+*
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
-* 
+*
 *      http://www.apache.org/licenses/LICENSE-2.0
-* 
+*
 * Unless required by applicable law or agreed to in writing, software
 * distributed under the License is distributed on an "AS IS" BASIS,
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -21,13 +21,15 @@ using System.Collections.Specialized;
 using System.IO;
 using System.Reflection;
 using System.Text;
+
+using FakeItEasy;
+
 using NUnit.Framework;
 
 using Quartz;
 using Quartz.Impl;
 using Quartz.Impl.Triggers;
 using Quartz.Spi;
-using Rhino.Mocks;
 
 using Spring.Core.IO;
 
@@ -53,7 +55,7 @@ namespace Spring.Scheduling.Quartz
             factory = new SchedulerFactoryObject();
 
             TestSchedulerFactory.Initialize();
-            TestSchedulerFactory.MockScheduler.Stub(x => x.SchedulerName).Return("scheduler").Repeat.Any();
+            A.CallTo(() => TestSchedulerFactory.MockScheduler.SchedulerName).Returns("scheduler");
         }
 
         /// <summary>
@@ -71,7 +73,7 @@ namespace Spring.Scheduling.Quartz
         [Test]
         public void TestAfterPropertiesSet_NullJobFactory()
         {
-            factory.JobFactory = null;  
+            factory.JobFactory = null;
             factory.AfterPropertiesSet();
         }
 
@@ -81,14 +83,11 @@ namespace Spring.Scheduling.Quartz
         [Test]
         public void TestAfterPropertiesSet_NoAutoStartup()
         {
-            // set expectations
-            TestSchedulerFactory.MockScheduler.JobFactory = null;
-
             factory.SchedulerFactoryType = typeof(TestSchedulerFactory);
             factory.AutoStartup = false;
             factory.AfterPropertiesSet();
 
-            TestSchedulerFactory.MockScheduler.AssertWasCalled(x => x.JobFactory = null);
+            A.CallTo(() => TestSchedulerFactory.MockScheduler.Start()).MustNotHaveHappened();
         }
 
         /// <summary>
@@ -100,14 +99,14 @@ namespace Spring.Scheduling.Quartz
             InitForAfterPropertiesSetTest();
 
             const string calendarName = "calendar";
-            ICalendar cal = MockRepository.GenerateMock<ICalendar>();
+            ICalendar cal = A.Fake<ICalendar>();
             Hashtable calTable = new Hashtable();
             calTable[calendarName] = cal;
             factory.Calendars = calTable;
 
             factory.AfterPropertiesSet();
 
-            TestSchedulerFactory.MockScheduler.AssertWasCalled(x => x.AddCalendar(calendarName, cal, true, true));
+            A.CallTo(() => TestSchedulerFactory.MockScheduler.AddCalendar(calendarName, cal, true, true)).MustHaveHappened();
         }
 
         /// <summary>
@@ -123,7 +122,7 @@ namespace Spring.Scheduling.Quartz
             SimpleTriggerImpl trigger = new SimpleTriggerImpl(TRIGGER_NAME, TRIGGER_GROUP);
             factory.Triggers = new ITrigger[] { trigger };
 
-            TestSchedulerFactory.MockScheduler.Stub(x => x.GetTrigger(new TriggerKey(TRIGGER_NAME, TRIGGER_GROUP))).Return(trigger);
+            A.CallTo(() => TestSchedulerFactory.MockScheduler.GetTrigger(new TriggerKey(TRIGGER_NAME, TRIGGER_GROUP))).Returns(trigger);
 
             factory.AfterPropertiesSet();
         }
@@ -135,6 +134,7 @@ namespace Spring.Scheduling.Quartz
         public void TestAfterPropertiesSet_Trigger_TriggerDoesntExist()
         {
             InitForAfterPropertiesSetTest();
+            A.CallTo(() => TestSchedulerFactory.MockScheduler.GetTrigger(A<TriggerKey>._)).Returns(null);
 
             const string TRIGGER_NAME = "trigName";
             const string TRIGGER_GROUP = "trigGroup";
@@ -143,7 +143,7 @@ namespace Spring.Scheduling.Quartz
 
             factory.AfterPropertiesSet();
 
-            TestSchedulerFactory.MockScheduler.AssertWasCalled(x => x.ScheduleJob(trigger));
+            A.CallTo(() => TestSchedulerFactory.MockScheduler.ScheduleJob(trigger)).MustHaveHappened();
         }
 
 
@@ -166,8 +166,12 @@ namespace Spring.Scheduling.Quartz
             factory.AfterPropertiesSet();
             factory.Start();
 
-            TestSchedulerFactory.MockScheduler.AssertWasCalled(x => x.JobFactory = Arg<IJobFactory>.Is.NotNull);
-            TestSchedulerFactory.MockScheduler.AssertWasCalled(x => x.Start());
+            A.CallTo(TestSchedulerFactory.MockScheduler)
+                .Where(x => x.Method.Name.Equals("set_JobFactory"))
+                .WhenArgumentsMatch(x => x.Get<IJobFactory>(0) != null)
+                .MustHaveHappened();
+
+            A.CallTo(() => TestSchedulerFactory.MockScheduler.Start()).MustHaveHappened();
         }
 
         /// <summary>
@@ -181,8 +185,12 @@ namespace Spring.Scheduling.Quartz
             factory.AfterPropertiesSet();
             factory.Stop();
 
-            TestSchedulerFactory.MockScheduler.AssertWasCalled(x => x.JobFactory = Arg<IJobFactory>.Is.NotNull);
-            TestSchedulerFactory.MockScheduler.AssertWasCalled(x => x.Standby());
+            A.CallTo(TestSchedulerFactory.MockScheduler)
+                .Where(x => x.Method.Name.Equals("set_JobFactory"))
+                .WhenArgumentsMatch(x => x.Get<IJobFactory>(0) != null)
+                .MustHaveHappened();
+
+            A.CallTo(() => TestSchedulerFactory.MockScheduler.Standby()).MustHaveHappened();
         }
 
         /// <summary>
@@ -251,7 +259,7 @@ ConnectionStringKey+ " = " + ConnectionStringValue + Environment.NewLine +
             InterceptingStdSChedulerFactory factoryToPass = new InterceptingStdSChedulerFactory();
 
             factory.ConfigLocation = new TestConfigLocation(ms, "description");
-            
+
             m_InitSchedulerFactory.Invoke(factory, new object[] { factoryToPass });
 
             Assert.AreEqual(ConnectionStringValue, factoryToPass.Properties[ConnectionStringKey]);
@@ -307,7 +315,7 @@ ConnectionStringKey+ " = " + ConnectionStringValue + Environment.NewLine +
 
         public static void Initialize()
         {
-            mockScheduler = MockRepository.GenerateMock<IScheduler>();
+            mockScheduler = A.Fake<IScheduler>();
         }
     }
 

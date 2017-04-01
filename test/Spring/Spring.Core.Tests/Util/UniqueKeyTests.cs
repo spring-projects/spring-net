@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ namespace Spring.Util
         public void MustNotCallObjectSignatureWithType()
         {
             Type myType = typeof(TestObject);
-            Assert.Throws<ArgumentException>(() => UniqueKey.GetInstanceScopedString( (object)myType, "PartialKey"));
+            Assert.Throws<ArgumentException>(() => UniqueKey.GetInstanceScopedString( myType, "PartialKey"));
         }
 
         [Test]
@@ -60,7 +60,7 @@ namespace Spring.Util
 
             string expectedKeyString = string.Format("{0}.{1}", typeof(TestObject).FullName, "PartialKey");
 
-            // I know testing implementation details is not the best strategy, 
+            // I know testing implementation details is not the best strategy,
             // but I want to receive an error if this fails (oakinger)
             Assert.AreEqual(expectedKeyString, expectedKey.ToString());
             Assert.AreEqual(expectedKeyString.GetHashCode(), expectedKey.GetHashCode());
@@ -78,7 +78,7 @@ namespace Spring.Util
             TestObject testObject = new TestObject();
             string typeScopedKey = UniqueKey.GetInstanceScopedString(testObject, "PartialKey");
             string expectedKey = string.Format("{0}[{1}].{2}", typeof(TestObject).FullName, testObject.GetHashCode(), "PartialKey");
-            Assert.AreEqual(expectedKey, typeScopedKey);      
+            Assert.AreEqual(expectedKey, typeScopedKey);
         }
 
         [Test]
@@ -90,7 +90,7 @@ namespace Spring.Util
 
             string expectedKeyString = string.Format("{0}[{1}].{2}", typeof(TestObject).FullName, testObject.GetHashCode(), "PartialKey");
 
-            // I know testing implementation details is not the best strategy, 
+            // I know testing implementation details is not the best strategy,
             // but I want to receive an error if this fails (oakinger)
             Assert.AreEqual(expectedKeyString, expectedKey.ToString());
             Assert.AreEqual(expectedKeyString.GetHashCode(), expectedKey.GetHashCode());

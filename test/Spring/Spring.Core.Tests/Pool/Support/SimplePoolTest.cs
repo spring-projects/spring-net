@@ -2,13 +2,13 @@
 
 /*
 * Copyright © 2002-2011 the original author or authors.
-* 
+*
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
-* 
+*
 *      http://www.apache.org/licenses/LICENSE-2.0
-* 
+*
 * Unless required by applicable law or agreed to in writing, software
 * distributed under the License is distributed on an "AS IS" BASIS,
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,18 +18,16 @@
 
 #endregion
 
-#region Imports
-
 using System;
 using System.Collections;
 using System.Runtime.InteropServices;
 using System.Threading;
+
+using FakeItEasy;
+
 using NUnit.Framework;
-using Rhino.Mocks;
 using Spring.Pool.Support;
 using Spring.Threading;
-
-#endregion
 
 namespace Spring.Pool
 {
@@ -111,23 +109,18 @@ namespace Spring.Pool
 			}
 		}
 
-		#endregion
+        #endregion
 
-		private MockRepository mocks;
-		private IPoolableObjectFactory factory;
+        private IPoolableObjectFactory factory;
 		private SimplePool pool;
 
 		[SetUp]
 		public void SetUp()
 		{
-			mocks = new MockRepository();
-            factory = (IPoolableObjectFactory) mocks.DynamicMock(typeof(IPoolableObjectFactory));
-		    Expect.Call(factory.MakeObject()).Return(new object()).Repeat.Any();
+            factory = A.Fake<IPoolableObjectFactory>();
+		    A.CallTo(() => factory.MakeObject()).Returns(new object());
 
-            mocks.ReplayAll();
             pool = new SimplePool(factory, 1);
-
-            mocks.BackToRecordAll();
 		}
 
 
@@ -152,85 +145,70 @@ namespace Spring.Pool
 		[Test]
 		public void ActivateOnObjectOnBorrow()
 		{
-		    Expect.Call(factory.ValidateObject(null)).IgnoreArguments().Return(true).Repeat.Any();
-		    factory.ActivateObject(null);
-		    LastCall.IgnoreArguments();
-            mocks.ReplayAll();
+            A.CallTo(() => factory.ValidateObject(null)).WithAnyArguments().Returns(true);
 
 			Assert.AreEqual(0, pool.NumActive, "active wrong");
 			Assert.AreEqual(1, pool.NumIdle, "idle wrong");
 			pool.BorrowObject();
 			Assert.AreEqual(1, pool.NumActive, "active wrong");
 			Assert.AreEqual(0, pool.NumIdle, "idle wrong");
-            mocks.VerifyAll();
-		}
 
-        // TODO fix test!!!
-		[Test]
-        [Ignore("Cannot figure out why this is failing?")]
-		public void PassivateBusyObjectsBeforeClose()
-		{
-            Expect.Call(factory.ValidateObject(null)).IgnoreArguments().Return(true).Repeat.Any();
-            object o = pool.BorrowObject();
-			factory.PassivateObject(o);
-            mocks.ReplayAll();
-
-            pool.Close();
-            mocks.VerifyAll();
+            A.CallTo(() => factory.ActivateObject(null)).WithAnyArguments().MustHaveHappened();
         }
 
-		[Test]
+        [Test]
+		public void PassivateBusyObjectsBeforeClose()
+		{
+            A.CallTo(() => factory.ValidateObject(A<object>._)).WithAnyArguments().Returns(true);
+
+			object o = pool.BorrowObject();
+            pool.Close();
+            A.CallTo(() => factory.PassivateObject(o)).MustHaveHappened();
+        }
+
+        [Test]
         [Ignore("No longer expected behavior per SPRNET-1582 being resolved.")]
 		public void NoMoreUsableAfterClose()
 		{
-            object o = pool.BorrowObject();
-            factory.PassivateObject(o);
-            mocks.ReplayAll();
-
             pool.Close();
             Assert.Throws<PoolException>(() => pool.BorrowObject());
-            mocks.VerifyAll();
+
+            A.CallTo(() => factory.PassivateObject(null)).WithAnyArguments().MustHaveHappened();
         }
 
-		[Test]
+        [Test]
         [Ignore("No longer expected behavior per SPRNET-1582 being resolved.")]
         public void ThrowsExceptionWhenOutOfItemsBecauseFailedValidation()
 		{
 		    object o = new object();
-		    Expect.Call(factory.MakeObject()).Return(o);
-			Expect.Call(factory.ValidateObject(o)).Return(false);
-		    mocks.ReplayAll();
+		    A.CallTo(() => factory.MakeObject()).Returns(o);
+			A.CallTo(() => factory.ValidateObject(o)).Returns(false);
 
 			pool = new SimplePool(factory, 1);
             Assert.Throws<PoolException>(() => pool.BorrowObject());
-            mocks.VerifyAll();
         }
 
 		[Test]
 		public void PassivateObjectOnReturn()
 		{
-            Expect.Call(factory.ValidateObject(null)).IgnoreArguments().Return(true).Repeat.Any();
-            factory.PassivateObject(null);
-		    LastCall.IgnoreArguments();
-            mocks.ReplayAll();
+            A.CallTo(() => factory.ValidateObject(null)).WithAnyArguments().Returns(true);
 
 			pool.ReturnObject(pool.BorrowObject());
-            mocks.VerifyAll();
+            A.CallTo(() => factory.PassivateObject(null)).WithAnyArguments().MustHaveHappened();
         }
 
-		[Test]
+        [Test]
 		public void DestroyObjectOnClose()
 		{
-            Expect.Call(factory.ValidateObject(null)).IgnoreArguments().Return(true).Repeat.Any();
-            factory.DestroyObject(null);
-		    LastCall.IgnoreArguments();
-            mocks.ReplayAll();
+            A.CallTo(() => factory.ValidateObject(null)).WithAnyArguments().Returns(true);
 
 			pool.BorrowObject();
 			pool.Close();
-		}
 
-		[Test]
+            A.CallTo(() => factory.DestroyObject(null)).WithAnyArguments().MustHaveHappened();
+        }
+
+        [Test]
 		public void WaitOnBorrowWhenExausted()
 		{
 			int n = 100;

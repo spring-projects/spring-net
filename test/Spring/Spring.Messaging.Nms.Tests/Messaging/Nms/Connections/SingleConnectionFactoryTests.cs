@@ -21,8 +21,10 @@
 #region Imports
 
 using Apache.NMS;
+
+using FakeItEasy;
+
 using NUnit.Framework;
-using Rhino.Mocks;
 
 using Spring.Messaging.Nms.Core;
 
@@ -37,31 +39,11 @@ namespace Spring.Messaging.Nms.Connections
     [TestFixture]
     public class SingleConnectionFactoryTests
     {
-        private MockRepository mocks;
-
-        [SetUp]
-        public void Setup()
-        {
-            mocks = new MockRepository();
-        }
-
-
         [Test]
         public void UsingConnection()
         {
-            IConnection connection = mocks.StrictMock<IConnection>();
+            IConnection connection = A.Fake<IConnection>();
 
-            connection.Start();
-            LastCall.On(connection).Repeat.Twice();
-            connection.PurgeTempDestinations();
-            LastCall.On( connection ).Repeat.Twice();
-            connection.Stop();
-            LastCall.On(connection).Repeat.Once();
-            connection.Close();
-            LastCall.On(connection).Repeat.Once();
-
-            mocks.ReplayAll();
-            
             SingleConnectionFactory scf = new SingleConnectionFactory(connection);
             IConnection con1 = scf.CreateConnection();
             con1.Start();
@@ -75,25 +57,19 @@ namespace Spring.Messaging.Nms.Connections
             con2.Close(); // should be ignored.
             scf.Dispose();
 
-            mocks.VerifyAll();
+            A.CallTo(() => connection.Start()).MustHaveHappenedTwiceExactly();
+            A.CallTo(() => connection.PurgeTempDestinations()).MustHaveHappenedTwiceExactly();
+            A.CallTo(() => connection.Stop()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => connection.Close()).MustHaveHappenedOnceExactly();
         }
 
         [Test]
         public void UsingConnectionFactory()
         {
-            IConnectionFactory connectionFactory = (IConnectionFactory)mocks.StrictMock<IConnectionFactory>();
-            IConnection connection = mocks.StrictMock<IConnection>();
+            IConnectionFactory connectionFactory = A.Fake<IConnectionFactory>();
+            IConnection connection = A.Fake<IConnection>();
 
-            Expect.Call(connectionFactory.CreateConnection()).Return(connection).Repeat.Once();
-            connection.Start();
-            LastCall.On(connection).Repeat.Twice();
-            connection.Stop();
-            LastCall.On(connection).Repeat.Once();
-            connection.Close();
-            LastCall.On(connection).Repeat.Once();
-
-
-            mocks.ReplayAll();
+            A.CallTo(() => connectionFactory.CreateConnection()).Returns(connection).Once();
 
             SingleConnectionFactory scf = new SingleConnectionFactory(connectionFactory);
             IConnection con1 = scf.CreateConnection();
@@ -101,30 +77,21 @@ namespace Spring.Messaging.Nms.Connections
             con1.Close(); // should be ignored
             IConnection con2 = scf.CreateConnection();
             con2.Start();
-            con2.Close();   //should be ignored
-            scf.Dispose();  //should trigger actual close
+            con2.Close(); //should be ignored
+            scf.Dispose(); //should trigger actual close
 
-            mocks.VerifyAll();
-
+            A.CallTo(() => connection.Start()).MustHaveHappenedTwiceExactly();
+            A.CallTo(() => connection.Stop()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => connection.Close()).MustHaveHappenedOnceExactly();
         }
 
         [Test]
         public void UsingConnectionFactoryAndClientId()
         {
-            IConnectionFactory connectionFactory = mocks.StrictMock<IConnectionFactory>();
-            IConnection connection = mocks.StrictMock<IConnection>();
+            IConnectionFactory connectionFactory = A.Fake<IConnectionFactory>();
+            IConnection connection = A.Fake<IConnection>();
 
-            Expect.Call(connectionFactory.CreateConnection()).Return(connection).Repeat.Once();
-            connection.ClientId = "MyId";
-            LastCall.On(connection).Repeat.Once();
-            connection.Start();
-            LastCall.On(connection).Repeat.Twice();
-            connection.Stop();
-            LastCall.On(connection).Repeat.Once();
-            connection.Close();
-            LastCall.On(connection).Repeat.Once();
-
-            mocks.ReplayAll();
+            A.CallTo(() => connectionFactory.CreateConnection()).Returns(connection).Once();
 
             SingleConnectionFactory scf = new SingleConnectionFactory(connectionFactory);
             scf.ClientId = "MyId";
@@ -133,36 +100,26 @@ namespace Spring.Messaging.Nms.Connections
             con1.Close(); // should be ignored
             IConnection con2 = scf.CreateConnection();
             con2.Start();
-            con2.Close();   // should be ignored
-            scf.Dispose();  // should trigger actual close
+            con2.Close(); // should be ignored
+            scf.Dispose(); // should trigger actual close
 
-            mocks.VerifyAll();
-
-
+            A.CallToSet(() => connection.ClientId).WhenArgumentsMatch(x => x.Get<string>(0) == "MyId").MustHaveHappenedOnceExactly();
+            A.CallTo(() => connection.Start()).MustHaveHappenedTwiceExactly();
+            A.CallTo(() => connection.Stop()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => connection.Close()).MustHaveHappenedOnceExactly();
         }
 
 
         [Test]
         public void UsingConnectionFactoryAndExceptionListener()
         {
-            IConnectionFactory connectionFactory = mocks.StrictMock<IConnectionFactory>();
-            IConnection connection = mocks.StrictMock<IConnection>();
+            IConnectionFactory connectionFactory = A.Fake<IConnectionFactory>();
+            IConnection connection = A.Fake<IConnection>();
 
 
             IExceptionListener listener = new ChainedExceptionListener();
-            Expect.Call(connectionFactory.CreateConnection()).Return(connection).Repeat.Once();
-            connection.ExceptionListener += listener.OnException;
-            LastCall.On(connection).IgnoreArguments();
+            A.CallTo(() => connectionFactory.CreateConnection()).Returns(connection).Once();
 
-            connection.Start();
-            LastCall.On(connection).Repeat.Twice();
-            connection.Stop();
-            LastCall.On(connection).Repeat.Once();
-            connection.Close();
-            LastCall.On(connection).Repeat.Once();
-
-            mocks.ReplayAll();
-            
             SingleConnectionFactory scf = new SingleConnectionFactory(connectionFactory);
             scf.ExceptionListener = listener;
             IConnection con1 = scf.CreateConnection();
@@ -177,19 +134,24 @@ namespace Spring.Messaging.Nms.Connections
             con2.Stop();
             con2.Close();
             scf.Dispose();
-                       
-            mocks.VerifyAll();
+
+            // TODO
+            //connection.ExceptionListener += listener.OnException;
+             // LastCall.On(connection).IgnoreArguments();
+
+
+            A.CallTo(() => connection.Start()).MustHaveHappenedTwiceExactly();
+            A.CallTo(() => connection.Stop()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => connection.Close()).MustHaveHappenedOnceExactly();
         }
 
         [Test]
         public void UsingConnectionFactoryAndReconnectOnException()
         {
-            IConnectionFactory connectionFactory = mocks.StrictMock<IConnectionFactory>();
+            IConnectionFactory connectionFactory = A.Fake<IConnectionFactory>();
             TestConnection con = new TestConnection();
 
-            Expect.Call(connectionFactory.CreateConnection()).Return(con).Repeat.Twice();
-
-            mocks.ReplayAll();
+            A.CallTo(() => connectionFactory.CreateConnection()).Returns(con).Twice();
 
             SingleConnectionFactory scf = new SingleConnectionFactory(connectionFactory);
             scf.ReconnectOnException = true;
@@ -201,8 +163,6 @@ namespace Spring.Messaging.Nms.Connections
             con2.Start();
             scf.Dispose();
 
-            mocks.VerifyAll();
-
             Assert.AreEqual(2, con.StartCount);
             Assert.AreEqual(2, con.CloseCount);
         }
@@ -210,14 +170,12 @@ namespace Spring.Messaging.Nms.Connections
         [Test]
         public void UsingConnectionFactoryAndExceptionListenerAndReconnectOnException()
         {
-            IConnectionFactory connectionFactory = mocks.StrictMock<IConnectionFactory>();
+            IConnectionFactory connectionFactory = A.Fake<IConnectionFactory>();
             TestConnection con = new TestConnection();
             TestExceptionListener listener = new TestExceptionListener();
 
-            Expect.Call(connectionFactory.CreateConnection()).Return(con).Repeat.Twice();
+            A.CallTo(() => connectionFactory.CreateConnection()).Returns(con).Twice();
 
-            mocks.ReplayAll();
-            
             SingleConnectionFactory scf = new SingleConnectionFactory(connectionFactory);
             scf.ExceptionListener = listener;
             scf.ReconnectOnException = true;
@@ -229,8 +187,6 @@ namespace Spring.Messaging.Nms.Connections
             con2.Start();
             scf.Dispose();
 
-            mocks.VerifyAll();
-
             Assert.AreEqual(2, con.StartCount);
             Assert.AreEqual(2, con.CloseCount);
             Assert.AreEqual(1, listener.Count);
@@ -239,32 +195,16 @@ namespace Spring.Messaging.Nms.Connections
         [Test]
         public void CachingConnectionFactory()
         {
-            IConnectionFactory connectionFactory = mocks.StrictMock<IConnectionFactory>();
-            IConnection connection = mocks.StrictMock<IConnection>();
-            ISession txSession = mocks.StrictMock<ISession>();
-            ISession nonTxSession = mocks.StrictMock<ISession>();
-            Expect.Call(connectionFactory.CreateConnection()).Return(connection).Repeat.Once();
+            IConnectionFactory connectionFactory = A.Fake<IConnectionFactory>();
+            IConnection connection = A.Fake<IConnection>();
+            ISession txSession = A.Fake<ISession>();
+            ISession nonTxSession = A.Fake<ISession>();
+            A.CallTo(() => connectionFactory.CreateConnection()).Returns(connection).Once();
 
-            Expect.Call(connection.CreateSession(AcknowledgementMode.Transactional)).Return(txSession).Repeat.Once();
-            Expect.Call(txSession.Transacted).Return(true).Repeat.Twice();
-            txSession.Rollback();
-            LastCall.Repeat.Once();
-            txSession.Commit();
-            LastCall.Repeat.Once();            
-            txSession.Close();
-            LastCall.Repeat.Once();
+            A.CallTo(() => connection.CreateSession(AcknowledgementMode.Transactional)).Returns(txSession).Once();
+            A.CallTo(() => txSession.Transacted).Returns(true).Twice();
 
-            Expect.Call(connection.CreateSession(AcknowledgementMode.ClientAcknowledge)).Return(nonTxSession).Repeat.Once();           
-            nonTxSession.Close();
-            LastCall.Repeat.Once();
-            connection.Start();
-            LastCall.Repeat.Twice();
-            connection.Stop();
-            LastCall.Repeat.Once();
-            connection.Close();
-            LastCall.Repeat.Once();
-
-            mocks.ReplayAll();
+            A.CallTo(() => connection.CreateSession(AcknowledgementMode.ClientAcknowledge)).Returns(nonTxSession).Once();
 
             CachingConnectionFactory scf = new CachingConnectionFactory(connectionFactory);
             scf.ReconnectOnException = false;
@@ -272,9 +212,9 @@ namespace Spring.Messaging.Nms.Connections
             IConnection con1 = scf.CreateConnection();
             ISession session1 = con1.CreateSession(AcknowledgementMode.Transactional);
             bool b = session1.Transacted;
-            session1.Close();  // should be ignored
+            session1.Close(); // should be ignored
             session1 = con1.CreateSession(AcknowledgementMode.ClientAcknowledge);
-            session1.Close();  // should be ignored
+            session1.Close(); // should be ignored
             con1.Start();
             con1.Close(); // should be ignored
             IConnection con2 = scf.CreateConnection();
@@ -287,12 +227,14 @@ namespace Spring.Messaging.Nms.Connections
             con2.Close();
             scf.Dispose();
 
-            mocks.Verify(connectionFactory);
-            mocks.Verify(connection);
-            mocks.Verify(txSession);
-            mocks.Verify(nonTxSession);
+            A.CallTo(() => txSession.Rollback()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => txSession.Commit()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => txSession.Close()).MustHaveHappenedOnceExactly();
 
-
+            A.CallTo(() => nonTxSession.Close()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => connection.Start()).MustHaveHappenedTwiceExactly();
+            A.CallTo(() => connection.Stop()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => connection.Close()).MustHaveHappenedOnceExactly();
         }
     }
 }

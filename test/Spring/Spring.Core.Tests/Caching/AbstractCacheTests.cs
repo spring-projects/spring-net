@@ -18,19 +18,17 @@
 
 #endregion
 
-#region Imports
-
 using System;
 using System.Threading;
-using NUnit.Framework;
-using Rhino.Mocks;
 
-#endregion
+using FakeItEasy;
+
+using NUnit.Framework;
 
 namespace Spring.Caching
 {
     /// <summary>
-    /// Tests <see cref="AbstractCache"/> behaviour to ensure, 
+    /// Tests <see cref="AbstractCache"/> behaviour to ensure,
     /// that derived classes maybe rely on this default behaviour
     /// </summary>
     /// <author>Erich Eichinger</author>
@@ -56,15 +54,13 @@ namespace Spring.Caching
 
         TimeSpan expectedPerItemTTL;
         TimeSpan expectedPerCacheTTL;
-        MockRepository mocks;
         ExposingAbstractCache cache;
-        string[] KEYS = new string[] { "keyA", "keyB" };
+        string[] KEYS = new string[] {"keyA", "keyB"};
 
         [SetUp]
         public void SetUp()
         {
-            mocks = new MockRepository();
-            cache = (ExposingAbstractCache)mocks.PartialMock(typeof(ExposingAbstractCache));
+            cache = A.Fake<ExposingAbstractCache>(options => options.CallsBaseMethods());
 
             expectedPerItemTTL = new TimeSpan(0, 0, 10);
             expectedPerCacheTTL = new TimeSpan(0, 0, 20);
@@ -75,7 +71,7 @@ namespace Spring.Caching
         [Test]
         public void TestDefaults()
         {
-            ExposingAbstractCache localCache = (ExposingAbstractCache)mocks.PartialMock(typeof(ExposingAbstractCache));
+            ExposingAbstractCache localCache = A.Fake<ExposingAbstractCache>();
             Assert.AreEqual(TimeSpan.Zero, localCache.TimeToLive);
             Assert.AreEqual(false, localCache.EnforceTimeToLive);
         }
@@ -85,96 +81,78 @@ namespace Spring.Caching
         {
             // set expectations
             cache.DoInsertExposed("key", "value", expectedPerCacheTTL);
-            mocks.ReplayAll();
-            // verify
             cache.Insert("key", "value", expectedPerCacheTTL);
-            mocks.VerifyAll();
+            A.CallTo(() => cache.DoInsertExposed("key", "value", expectedPerCacheTTL)).MustHaveHappened();
         }
 
         [Test]
         public void AppliesPerCacheDefaultsIfTTLLessThanZero()
         {
-            // set expectations
-            cache.DoInsertExposed("key", "value", expectedPerCacheTTL);
-            cache.DoInsertExposed("key", "value", expectedPerCacheTTL);
-            cache.DoInsertExposed("key", "value", expectedPerCacheTTL);
-            cache.DoInsertExposed("key", "value", expectedPerCacheTTL);
-            mocks.ReplayAll();
-            // verify
             cache.Insert("key", "value", new TimeSpan(Timeout.Infinite));
+            A.CallTo(() => cache.DoInsertExposed("key", "value", expectedPerCacheTTL)).MustHaveHappened();
+
             cache.Insert("key", "value", new TimeSpan(-1));
-            cache.Insert("key", "value", new TimeSpan(Int64.MinValue));
+            A.CallTo(() => cache.DoInsertExposed("key", "value", expectedPerCacheTTL)).MustHaveHappened();
+
+            cache.Insert("key", "value", new TimeSpan(long.MinValue));
+            A.CallTo(() => cache.DoInsertExposed("key", "value", expectedPerCacheTTL)).MustHaveHappened();
+
             cache.Insert("key", "value", TimeSpan.MinValue);
-            mocks.VerifyAll();
+            A.CallTo(() => cache.DoInsertExposed("key", "value", expectedPerCacheTTL)).MustHaveHappened();
         }
 
         [Test]
         public void AppliesPerCacheDefaultsIfEnfored()
         {
-            // set expectations
-            cache.DoInsertExposed("key", "value", expectedPerCacheTTL);
-            mocks.ReplayAll();
-            // verify
             cache.EnforceTimeToLive = true;
             cache.Insert("key", "value", expectedPerItemTTL);
-            mocks.VerifyAll();
+
+            A.CallTo(() => cache.DoInsertExposed("key", "value", expectedPerCacheTTL)).MustHaveHappened();
         }
 
         [Test]
         public void AppliesZeroTTLIfTTLIsZero()
         {
-            // set expectations
-            cache.DoInsertExposed("key", "value", TimeSpan.Zero);                        
-            mocks.ReplayAll();
-            // verify
             cache.Insert("key", "value", TimeSpan.Zero);
-            mocks.VerifyAll();
+
+            A.CallTo(() => cache.DoInsertExposed("key", "value", TimeSpan.Zero)).MustHaveHappened();
         }
 
         [Test]
         public void AppliesPerItemTTLIfTTLGreaterZero()
         {
-            // set expectations
-            cache.DoInsertExposed("key", "value", expectedPerItemTTL);            
-            mocks.ReplayAll();
-            // verify
             cache.Insert("key", "value", expectedPerItemTTL);
-            mocks.VerifyAll();
+
+            A.CallTo(() => cache.DoInsertExposed("key", "value", expectedPerItemTTL)).MustHaveHappened();
         }
 
         [Test]
         public void RemoveAllCausesCallsToRemove()
         {
-            // set expectations
-            cache.Remove(KEYS[0]);
-            cache.Remove(KEYS[1]);
-            mocks.ReplayAll();
-            // verify
             cache.RemoveAll(KEYS);
-            mocks.VerifyAll();
+
+            A.CallTo(() => cache.Remove(KEYS[0])).MustHaveHappened();
+            A.CallTo(() => cache.Remove(KEYS[1])).MustHaveHappened();
         }
 
         [Test]
         public void ClearCausesCallToRemoveAllUsingKeys()
         {
-            // set expectations
-            Expect.Call(cache.Keys).Return(KEYS);
-            cache.RemoveAll(KEYS);
-            mocks.ReplayAll();
-            // verify
+            A.CallTo(() => cache.Keys).Returns(this.KEYS);
+
             cache.Clear();
-            mocks.VerifyAll();
+
+            A.CallTo(() => cache.Keys).MustHaveHappened();
+            A.CallTo(() => cache.RemoveAll(KEYS)).MustHaveHappened();
         }
 
         [Test]
         public void CountUsingKeys()
         {
             // set expectations
-            Expect.Call(cache.Keys).Return(this.KEYS);
-            mocks.ReplayAll();
-            // verify
-            Assert.AreEqual( this.KEYS.Length, cache.Count );
-            mocks.VerifyAll();
+            A.CallTo(() => cache.Keys).Returns(this.KEYS);
+
+            Assert.AreEqual(this.KEYS.Length, cache.Count);
         }
     }
 }

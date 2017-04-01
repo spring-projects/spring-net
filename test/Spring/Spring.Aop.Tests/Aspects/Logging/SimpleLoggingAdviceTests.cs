@@ -18,18 +18,16 @@
 
 #endregion
 
-#region Imports
-
 using System;
 using System.Reflection;
 
 using AopAlliance.Intercept;
 using Common.Logging;
-using NUnit.Framework;
-using Rhino.Mocks;
-using Spring.Aop.Framework;
 
-#endregion
+using FakeItEasy;
+
+using NUnit.Framework;
+using Spring.Aop.Framework;
 
 namespace Spring.Aspects.Logging
 {
@@ -51,12 +49,9 @@ namespace Spring.Aspects.Logging
             { }
         }
 
-        private MockRepository mocks;
-
         [SetUp]
         public void Setup()
         {
-            mocks = new MockRepository();
         }
 
         [Test]
@@ -64,101 +59,76 @@ namespace Spring.Aspects.Logging
         {
             ProxyFactory pf = new ProxyFactory(new TestTarget());
 
-            ILog log = (ILog)mocks.CreateMock(typeof(ILog));
+            ILog log = A.Fake<ILog>();
             SimpleLoggingAdvice loggingAdvice = new SimpleLoggingAdvice(log);
             pf.AddAdvice(loggingAdvice);
 
-            Expect.Call(log.IsTraceEnabled).Return(true).Repeat.Any();
-            log.Trace("Entering DoSomething");
-            log.Trace("Exiting DoSomething");
-
-            mocks.ReplayAll();
+            A.CallTo(() => log.IsTraceEnabled).Returns(true);
 
             object proxy = pf.GetProxy();
             ITestTarget ptt = (ITestTarget)proxy;
             ptt.DoSomething();
 
-            mocks.VerifyAll();
+            A.CallTo(() => log.Trace("Entering DoSomething")).MustHaveHappened();
+            A.CallTo(() => log.Trace("Exiting DoSomething")).MustHaveHappened();
         }
 
         [Test]
         public void SunnyDayLoggingCorrectly()
         {
-            ILog log = (ILog)mocks.CreateMock(typeof(ILog));
-            IMethodInvocation methodInvocation = (IMethodInvocation)mocks.CreateMock(typeof(IMethodInvocation));
+            ILog log = A.Fake<ILog>();
+            IMethodInvocation methodInvocation = A.Fake<IMethodInvocation>();
 
             MethodInfo mi = typeof(string).GetMethod("ToString", Type.EmptyTypes);
             //two additional calls the method are to retrieve the method name on entry/exit...
-            Expect.Call(methodInvocation.Method).Return(mi).Repeat.Any();
-
-            Expect.Call(log.IsTraceEnabled).Return(true).Repeat.Any();
-            log.Trace("Entering ToString");
-
-            Expect.Call(methodInvocation.Proceed()).Return(null);
-
-            log.Trace("Exiting ToString");
-
-            mocks.ReplayAll();
+            A.CallTo(() => methodInvocation.Method).Returns(mi);
+            A.CallTo(() => log.IsTraceEnabled).Returns(true);
+            A.CallTo(() => methodInvocation.Proceed()).Returns(null);
 
             TestableSimpleLoggingAdvice loggingAdvice = new TestableSimpleLoggingAdvice(true);
             loggingAdvice.CallInvokeUnderLog(methodInvocation, log);
 
-            mocks.VerifyAll();
-
+            A.CallTo(() => log.Trace("Entering ToString")).MustHaveHappened();
+            A.CallTo(() => log.Trace("Exiting ToString")).MustHaveHappened();
         }
 
         [Test]
         public void SunnyDayLoggingCorrectlyDebugLevel()
         {
-            ILog log = (ILog)mocks.CreateMock(typeof(ILog));
-            IMethodInvocation methodInvocation = (IMethodInvocation)mocks.CreateMock(typeof(IMethodInvocation));
+            ILog log = A.Fake<ILog>();
+            IMethodInvocation methodInvocation = A.Fake<IMethodInvocation>();
 
             MethodInfo mi = typeof(string).GetMethod("ToString", Type.EmptyTypes);
             //two additional calls the method are to retrieve the method name on entry/exit...
-            Expect.Call(methodInvocation.Method).Return(mi).Repeat.Any();
+            A.CallTo(() => methodInvocation.Method).Returns(mi);
 
-            Expect.Call(log.IsTraceEnabled).Return(false).Repeat.Any();
-            Expect.Call(log.IsDebugEnabled).Return(true).Repeat.Any();
-            log.Debug("Entering ToString");
+            A.CallTo(() => log.IsTraceEnabled).Returns(false);
+            A.CallTo(() => log.IsDebugEnabled).Returns(true);
 
-            Expect.Call(methodInvocation.Proceed()).Return(null);
-
-            log.Debug("Exiting ToString");
-
-            mocks.ReplayAll();
+            A.CallTo(() => methodInvocation.Proceed()).Returns(null);
 
             TestableSimpleLoggingAdvice loggingAdvice = new TestableSimpleLoggingAdvice(true);
             loggingAdvice.LogLevel = LogLevel.Debug;
             Assert.IsTrue(loggingAdvice.CallIsInterceptorEnabled(methodInvocation, log));
             loggingAdvice.CallInvokeUnderLog(methodInvocation, log);
 
-            mocks.VerifyAll();
-
+            A.CallTo(() => log.Debug("Entering ToString")).MustHaveHappened();
+            A.CallTo(() => log.Debug("Exiting ToString")).MustHaveHappened();
         }
-
 
         [Test]
         public void ExceptionPathStillLogsCorrectly()
         {
-            ILog log = (ILog)mocks.CreateMock(typeof(ILog));
-            IMethodInvocation methodInvocation = (IMethodInvocation)mocks.CreateMock(typeof(IMethodInvocation));
+            ILog log = A.Fake<ILog>();
+            IMethodInvocation methodInvocation = A.Fake<IMethodInvocation>();
 
             MethodInfo mi = typeof(string).GetMethod("ToString", Type.EmptyTypes);
             //two additional calls the method are to retrieve the method name on entry/exit...
-            Expect.Call(methodInvocation.Method).Return(mi).Repeat.Any();
-
-            Expect.Call(log.IsTraceEnabled).Return(true).Repeat.Any();
-            log.Trace("Entering...");
-
-            LastCall.On(log).IgnoreArguments();
+            A.CallTo(() => methodInvocation.Method).Returns(mi);
+            A.CallTo(() => log.IsTraceEnabled).Returns(true);
 
             Exception e = new ArgumentException("bad value");
-            Expect.Call(methodInvocation.Proceed()).Throw(e);
-
-            log.Trace("Exception...", e);
-            LastCall.On(log).IgnoreArguments();
-
-            mocks.ReplayAll();
+            A.CallTo(() => methodInvocation.Proceed()).Throws(e);
 
             TestableSimpleLoggingAdvice loggingAdvice = new TestableSimpleLoggingAdvice(true);
             try
@@ -168,39 +138,27 @@ namespace Spring.Aspects.Logging
             }
             catch (ArgumentException)
             {
-
             }
 
-            mocks.VerifyAll();
-
+            A.CallTo(() => log.Trace("Entering ToString")).MustHaveHappened();
+            A.CallTo(() => log.Trace("Exception thrown in ToString, ToString", e)).MustHaveHappened();
         }
-
 
         [Test]
         public void SunnyDayLoggingAllOptionalInformationCorrectly()
         {
-            ILog log = (ILog)mocks.CreateMock(typeof(ILog));
-            IMethodInvocation methodInvocation = (IMethodInvocation)mocks.CreateMock(typeof(IMethodInvocation));
+            ILog log = A.Fake<ILog>();
+            IMethodInvocation methodInvocation = A.Fake<IMethodInvocation>();
 
             MethodInfo mi = typeof(Dog).GetMethod("Bark");
             //two additional calls the method are to retrieve the method name on entry/exit...
-            Expect.Call(methodInvocation.Method).Return(mi).Repeat.Any();
+            A.CallTo(() => methodInvocation.Method).Returns(mi);
             int[] luckyNumbers = new int[] { 1, 2, 3 };
             object[] args = new object[] { "hello", luckyNumbers };
 
-
-            Expect.Call(methodInvocation.Arguments).Return(args);
-
-            Expect.Call(log.IsTraceEnabled).Return(true).Repeat.Any();
-            log.Trace("Entering...");
-            LastCall.IgnoreArguments();
-
-            Expect.Call(methodInvocation.Proceed()).Return(4);
-
-            log.Trace("Exiting...");
-            LastCall.IgnoreArguments();
-
-            mocks.ReplayAll();
+            A.CallTo(() => methodInvocation.Arguments).Returns(args);
+            A.CallTo(() => log.IsTraceEnabled).Returns(true);
+            A.CallTo(() => methodInvocation.Proceed()).Returns(4);
 
             TestableSimpleLoggingAdvice loggingAdvice = new TestableSimpleLoggingAdvice(true);
             loggingAdvice.LogExecutionTime = true;
@@ -209,7 +167,8 @@ namespace Spring.Aspects.Logging
 
             loggingAdvice.CallInvokeUnderLog(methodInvocation, log);
 
-            mocks.VerifyAll();
+            A.CallTo(() => log.Trace(A<string>.That.StartsWith("Entering Bark"))).MustHaveHappened();
+            A.CallTo(() => log.Trace(A<string>.That.StartsWith("Exiting Bark"))).MustHaveHappened();
         }
     }
 

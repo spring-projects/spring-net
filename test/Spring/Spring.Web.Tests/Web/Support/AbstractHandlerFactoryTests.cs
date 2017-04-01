@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,21 +18,20 @@
 
 #endregion
 
-#region Imports
-
 using System;
 using System.Web;
+
+using FakeItEasy;
+
 using NUnit.Framework;
-using Rhino.Mocks;
+
 using Spring.Context;
 using Spring.Objects.Factory.Support;
-
-#endregion
 
 namespace Spring.Web.Support
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <author>Erich Eichinger</author>
     [TestFixture]
@@ -125,17 +124,13 @@ namespace Spring.Web.Support
         [Test]
         public void GetCheckedApplicationContextThrowsExceptionsOnNonConfigurableContexts()
         {
-            MockRepository mocks = new MockRepository();            
-            TestHandlerFactory f = (TestHandlerFactory) mocks.PartialMock(typeof(TestHandlerFactory));
-            IApplicationContext simpleAppContext = (IApplicationContext) mocks.DynamicMock(typeof(IApplicationContext));
-            IConfigurableApplicationContext allowedAppContext = (IConfigurableApplicationContext) mocks.DynamicMock(typeof(IConfigurableApplicationContext));
+            TestHandlerFactory f = A.Fake<TestHandlerFactory>(options => options.CallsBaseMethods());
+            IApplicationContext simpleAppContext = A.Fake<IApplicationContext>();
+            IConfigurableApplicationContext allowedAppContext = A.Fake<IConfigurableApplicationContext>();
 
-            using(Record(mocks))
-            {
-                Expect.Call(f.GetContextStub("/NullContext")).Return(null);
-                Expect.Call(f.GetContextStub("/NonConfigurableContext")).Return(simpleAppContext);
-                Expect.Call(f.GetContextStub("/AllowedContext")).Return(allowedAppContext);
-            }
+            A.CallTo(() => f.GetContextStub("/NullContext")).Returns(null);
+            A.CallTo(() => f.GetContextStub("/NonConfigurableContext")).Returns(simpleAppContext);
+            A.CallTo(() => f.GetContextStub("/AllowedContext")).Returns(allowedAppContext);
 
             // (context == null) -> ArgumentException
             try
@@ -144,7 +139,8 @@ namespace Spring.Web.Support
                 Assert.Fail("should throw ArgumentException");
             }
             catch (ArgumentException)
-            {}
+            {
+            }
 
             // !(context is IConfigurableApplicationContext) -> InvalidOperationException
             try
@@ -153,7 +149,8 @@ namespace Spring.Web.Support
                 Assert.Fail("should throw InvalidOperationException");
             }
             catch (InvalidOperationException)
-            {}
+            {
+            }
 
             // (context is IConfigurableApplicationContext) -> OK
             Assert.AreSame(allowedAppContext, f.GetCheckedApplicationContext("/AllowedContext"));
@@ -162,66 +159,40 @@ namespace Spring.Web.Support
         [Test]
         public void CachesReusableHandlers()
         {
-            MockRepository mocks = new MockRepository();            
-            TestHandlerFactory f = (TestHandlerFactory) mocks.PartialMock(typeof(TestHandlerFactory));
-            IHttpHandler reusableHandler = (IHttpHandler) mocks.DynamicMock(typeof(IHttpHandler));
-            IConfigurableApplicationContext appCtx = (IConfigurableApplicationContext) mocks.DynamicMock(typeof(IConfigurableApplicationContext));
+            TestHandlerFactory f = A.Fake<TestHandlerFactory>(options => options.CallsBaseMethods());
+            IHttpHandler reusableHandler = A.Fake<IHttpHandler>();
+            IConfigurableApplicationContext appCtx = A.Fake<IConfigurableApplicationContext>();
 
-            // if (IHttpHandler.IsReusable == true) => always returns the same handler instance 
+            // if (IHttpHandler.IsReusable == true) => always returns the same handler instance
             // - CreateHandlerInstance() is only called once
-            using(Record(mocks))
-            {
-                Expect.Call(reusableHandler.IsReusable).Return(true);
-                Expect.Call(f.GetContextStub("reusable")).Return(appCtx);
-                Expect.Call(f.CreateHandlerInstanceStub(appCtx, null, null, "reusable", null)).Return(reusableHandler);
-            }
-            using (Playback(mocks))
-            {
-                Assert.AreSame( reusableHandler, f.GetHandler( null, null, "reusable", null ) );
-                Assert.AreSame( reusableHandler, f.GetHandler( null, null, "reusable", null ) );
-            }
+            A.CallTo(() => reusableHandler.IsReusable).Returns(true);
+            A.CallTo(() => f.GetContextStub("reusable")).Returns(appCtx);
+            A.CallTo(() => f.CreateHandlerInstanceStub(appCtx, null, null, "reusable", null)).Returns(reusableHandler);
+
+            Assert.AreSame(reusableHandler, f.GetHandler(null, null, "reusable", null));
+            Assert.AreSame(reusableHandler, f.GetHandler(null, null, "reusable", null));
         }
 
         [Test]
         public void DoesntCacheNonReusableHandlers()
         {
-            MockRepository mocks = new MockRepository();            
-            TestHandlerFactory f = (TestHandlerFactory) mocks.PartialMock(typeof(TestHandlerFactory));
-            IHttpHandler nonReusableHandler = (IHttpHandler) mocks.DynamicMock(typeof(IHttpHandler));
-            Expect.Call(nonReusableHandler.IsReusable).Return(false);
-            IHttpHandler nonReusableHandler2 = (IHttpHandler) mocks.DynamicMock(typeof(IHttpHandler));
-            Expect.Call(nonReusableHandler2.IsReusable).Return(false);
-            IConfigurableApplicationContext appCtx = (IConfigurableApplicationContext) mocks.DynamicMock(typeof(IConfigurableApplicationContext));
+            TestHandlerFactory f = A.Fake<TestHandlerFactory>(options => options.CallsBaseMethods());
+            IHttpHandler nonReusableHandler = A.Fake<IHttpHandler>();
+            A.CallTo(() => nonReusableHandler.IsReusable).Returns(false);
+            IHttpHandler nonReusableHandler2 = A.Fake<IHttpHandler>();
+            A.CallTo(() => nonReusableHandler2.IsReusable).Returns(false);
+            IConfigurableApplicationContext appCtx = A.Fake<IConfigurableApplicationContext>();
 
-            // if (IHttpHandler.IsReusable == false) => always create new handler instance 
+            // if (IHttpHandler.IsReusable == false) => always create new handler instance
             // - CreateHandlerInstance() is called for each request
-            using(Record(mocks))
-            {
-                Expect.Call(f.GetContextStub("notreusable")).Return(appCtx);
-                Expect.Call(f.CreateHandlerInstanceStub(appCtx, null, null, "notreusable", null)).Return(nonReusableHandler);
-                Expect.Call(f.GetContextStub("notreusable")).Return(appCtx);
-                Expect.Call(f.CreateHandlerInstanceStub(appCtx, null, null, "notreusable", null)).Return(nonReusableHandler2);
-            }
-            using (Playback(mocks))
-            {
-                Assert.AreSame( nonReusableHandler, f.GetHandler( null, null, "notreusable", null ) );
-                Assert.AreSame( nonReusableHandler2, f.GetHandler( null, null, "notreusable", null ) );
-            }
+
+            A.CallTo(() => f.GetContextStub("notreusable")).Returns(appCtx);
+            A.CallTo(() => f.CreateHandlerInstanceStub(appCtx, null, null, "notreusable", null))
+                .Returns(nonReusableHandler).Once()
+                .Then.Returns(nonReusableHandler2).Once();
+
+            Assert.AreSame(nonReusableHandler, f.GetHandler(null, null, "notreusable", null));
+            Assert.AreSame(nonReusableHandler2, f.GetHandler(null, null, "notreusable", null));
         }
-
-        #region Rhino.Mocks Compatibility Adapter
-
-        private static IDisposable Record(MockRepository mocks)
-        {
-            return mocks.Record();
-        }
-
-        private static IDisposable Playback(MockRepository mocks)
-        {
-            return mocks.Playback();
-        }
-
-
-        #endregion Rhino.Mocks Compatibility Adapter
     }
 }

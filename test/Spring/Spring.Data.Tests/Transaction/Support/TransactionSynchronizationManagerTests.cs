@@ -1,9 +1,9 @@
 using System;
 using System.Collections;
 
-using NUnit.Framework;
+using FakeItEasy;
 
-using Rhino.Mocks;
+using NUnit.Framework;
 
 using Spring.Core;
 using Spring.Util;
@@ -54,7 +54,7 @@ namespace Spring.Transaction.Support
         [Test]
         public void RegisterSyncsInvalid()
         {
-            Assert.Throws<InvalidOperationException>(() => TransactionSynchronizationManager.RegisterSynchronization(MockRepository.GenerateMock<ITransactionSynchronization>()));
+            Assert.Throws<InvalidOperationException>(() => TransactionSynchronizationManager.RegisterSynchronization(A.Fake<ITransactionSynchronization>()));
         }
 
         [Test]
@@ -63,7 +63,7 @@ namespace Spring.Transaction.Support
             TransactionSynchronizationManager.InitSynchronization();
             IList syncs = TransactionSynchronizationManager.Synchronizations;
             Assert.AreEqual(0, syncs.Count);
-            TransactionSynchronizationManager.RegisterSynchronization(MockRepository.GenerateMock<ITransactionSynchronization>());
+            TransactionSynchronizationManager.RegisterSynchronization(A.Fake<ITransactionSynchronization>());
             syncs = TransactionSynchronizationManager.Synchronizations;
             Assert.AreEqual(1, syncs.Count);
             TransactionSynchronizationManager.ClearSynchronization();

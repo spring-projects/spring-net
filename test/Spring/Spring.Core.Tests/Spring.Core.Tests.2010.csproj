@@ -11,10 +11,11 @@
     <ProjectReference Include="..\..\..\src\Spring\Spring.Template.Velocity\Spring.Template.Velocity.2010.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="FakeItEasy" Version="$(FakeItEasyVersion)" />
+    <PackageReference Include="FakeItEasy.Analyzer" Version="$(FakeItEasyVersion)" PrivateAssets="All" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftTestSDKVersion)" />
     <PackageReference Include="NUnit" Version="$(NUnitVersion)" />
     <PackageReference Include="NUnit3TestAdapter" Version="$(NUnitTestAdapterVersion)" />
-    <PackageReference Include="RhinoMocks" Version="$(RhinoMocksVersion)" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />

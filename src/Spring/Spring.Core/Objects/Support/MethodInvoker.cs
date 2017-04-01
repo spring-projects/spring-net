@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -42,7 +42,7 @@ namespace Spring.Objects.Support
 	/// <see cref="Spring.Objects.Factory.Config.MethodInvokingFactoryObject"/>.
 	/// </p>
 	/// <p>
-	/// Usage: specify either the <see cref="MethodInvoker.TargetType"/> and 
+	/// Usage: specify either the <see cref="MethodInvoker.TargetType"/> and
 	/// <see cref="MethodInvoker.TargetMethod"/> or the
 	/// <see cref="MethodInvoker.TargetObject"/> and
 	/// <see cref="MethodInvoker.TargetMethod"/> properties respectively, and
@@ -58,13 +58,13 @@ namespace Spring.Objects.Support
 	/// arguments.
 	/// </p>
 	/// <code language="C#">
-	/// public class Foo 
+	/// public class Foo
 	/// {
 	///     public string ToString(string name, int age, string address)
 	///     {
 	///			return string.Format("{0}, {1} years old, {2}", name, age, address);
 	///     }
-	///     
+	///
 	///     public static void Main()
 	///     {
 	///			Foo foo = new Foo();
@@ -352,7 +352,7 @@ namespace Spring.Objects.Support
 
 					}
 					// look up the index of where in the prepared args array we're gonna stick the named argument value
-					int namedArgumentsIndex = (int) argumentNamesToIndexes[argumentName];
+					int namedArgumentsIndex = argumentNamesToIndexes[argumentName];
 					PreparedArguments[namedArgumentsIndex] = argumentValue;
 					// we've prepped this index position, so mark it as so...
 					argumentNamesToIndexes[argumentName] = THE_ARGUMENT_IS_PREPARED;
@@ -420,7 +420,7 @@ namespace Spring.Objects.Support
 			}
             if (theMethod == null)
             {
-                // search for a method with a matching signature... 
+                // search for a method with a matching signature...
                 ComposedCriteria searchCriteria = new ComposedCriteria();
                 searchCriteria.Add(new MethodNameMatchCriteria(genericInfo.GenericMethodName));
                 searchCriteria.Add(new MethodParametersCountCriteria(ArgumentCount));

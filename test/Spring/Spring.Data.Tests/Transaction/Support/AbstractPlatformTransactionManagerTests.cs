@@ -1,5 +1,6 @@
+using FakeItEasy;
+
 using NUnit.Framework;
-using Rhino.Mocks;
 
 namespace Spring.Transaction.Support
 {
@@ -144,7 +145,7 @@ namespace Spring.Transaction.Support
             MockTxnDefinition def = new MockTxnDefinition();
             def.PropagationBehavior = TransactionPropagation.Nested;
             def.ReadOnly = false;
-            ISavepointManager saveMgr = MockRepository.GenerateMock<ISavepointManager>();
+            ISavepointManager saveMgr = A.Fake<ISavepointManager>();
             _mockTxnMgr.SetTransaction(saveMgr);
             _mockTxnMgr.Savepoints = true;
             _mockTxnMgr.NestedTransactionsAllowed = true;

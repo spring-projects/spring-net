@@ -22,8 +22,10 @@
 
 using System.Collections.Generic;
 using Apache.NMS;
+
+using FakeItEasy;
+
 using NUnit.Framework;
-using Rhino.Mocks;
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.Messaging.Nms.Core;
@@ -45,15 +47,9 @@ namespace Spring.Messaging.Nms.Config
     [TestFixture]
     public class NmsNamespaceHandlerTests
     {
-
         private static string DEFAULT_CONNECTION_FACTORY = "ConnectionFactory";
-
         private static string EXPLICIT_CONNECTION_FACTORY = "testConnectionFactory";
-
-
         private IApplicationContext ctx;
-
-        private MockRepository mocks;
 
         [SetUp]
         public void Setup()
@@ -61,7 +57,6 @@ namespace Spring.Messaging.Nms.Config
             // WELLKNOWN
             //NamespaceParserRegistry.RegisterParser(typeof(NmsNamespaceParser));
             ctx = new XmlApplicationContext(ReadOnlyXmlTestResource.GetFilePath("NmsNamespaceHandlerTests.xml", GetType()));
-            mocks = new MockRepository();
         }
 
         [Test]
@@ -117,37 +112,29 @@ namespace Spring.Messaging.Nms.Config
             Assert.IsNull(testObject3.Message);
 
 
-            ITextMessage message1 = mocks.StrictMock<ITextMessage>();
-            Expect.Call(message1.Text).Return("Test1");
-            mocks.Replay(message1);
+            ITextMessage message1 = A.Fake<ITextMessage>();
+            A.CallTo(() => message1.Text).Returns("Test1");
 
             IMessageListener listener1 = GetListener("listener1");
             listener1.OnMessage(message1);
             Assert.AreEqual("Test1", testObject1.Name);
-            mocks.Verify(message1);
 
 
-            ITextMessage message2 = mocks.StrictMock<ITextMessage>();
-            Expect.Call(message2.Text).Return("Test1");
-            mocks.Replay(message2);
+            ITextMessage message2 = A.Fake<ITextMessage>();
+            A.CallTo(() => message2.Text).Returns("Test1");
 
             IMessageListener listener2 = GetListener("listener2");
             listener2.OnMessage(message2);
-            mocks.Verify(message2);
+            A.CallTo(() => message2.Text).MustHaveHappened();
 
+            ITextMessage message3 = A.Fake<ITextMessage>();
 
-            ITextMessage message3 = mocks.StrictMock<ITextMessage>();
-            mocks.Replay(message3);
-            
             //Default naming strategy is to use full type name + # + number
             string className = typeof(SimpleMessageListenerContainer).FullName;
             string targetName = className + ObjectDefinitionReaderUtils.GENERATED_OBJECT_NAME_SEPARATOR + "0";
             IMessageListener listener3 = GetListener(targetName);
             listener3.OnMessage(message3);
             Assert.AreSame(message3, testObject3.Message);
-            mocks.Verify(message3);
-
-
         }
 
         private IMessageListener GetListener(string containerObjectName)

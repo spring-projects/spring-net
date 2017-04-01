@@ -18,22 +18,20 @@
 
 #endregion
 
-#region Imports
-
 using System;
 using System.Globalization;
 using System.Threading;
 using System.Web;
+
+using FakeItEasy;
+
 using NUnit.Framework;
-using Rhino.Mocks;
 
 using Spring.Globalization.Resolvers;
 using Spring.Objects;
 using Spring.TestSupport;
 using Spring.Validation;
 using Spring.Web.Support;
-
-#endregion
 
 namespace Spring.Web.UI
 {
@@ -150,16 +148,14 @@ namespace Spring.Web.UI
         [Test]
         public void SetResultSelectsCorrectResult()
         {
-            MockRepository mocks = new MockRepository();
             TestPage page = new TestPage();
 
-            Result theResult = (Result) mocks.CreateMock(typeof (Result));
-            theResult.Navigate(page);
-            mocks.ReplayAll();
+            Result theResult = A.Fake<Result>();
 
             page.Results.Add( "theResult", theResult );
             page.SetResult("theResult");
-            mocks.VerifyAll();
+
+            A.CallTo(() => theResult.Navigate(page)).MustHaveHappened();
         }
 
         [Test]

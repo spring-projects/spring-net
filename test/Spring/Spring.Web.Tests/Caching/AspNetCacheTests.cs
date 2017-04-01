@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,16 +18,14 @@
 
 #endregion
 
-#region Imports
-
 using System;
 using System.Collections;
 using System.Web;
 using System.Web.Caching;
-using NUnit.Framework;
-using Rhino.Mocks;
 
-#endregion
+using FakeItEasy;
+
+using NUnit.Framework;
 
 namespace Spring.Caching
 {
@@ -43,7 +41,6 @@ namespace Spring.Caching
         private readonly Cache aspCache = HttpRuntime.Cache;
         private readonly TimeSpan ttl10Seconds = new TimeSpan(0, 0, 10);
 
-        MockRepository mocks;
         AspNetCache.IRuntimeCache mockedRuntimeCache;
         AspNetCache mockedCache;
 
@@ -59,31 +56,24 @@ namespace Spring.Caching
             thisCache = new AspNetCache();
             otherCache = new AspNetCache();
 
-            mocks = new MockRepository();
-            mockedRuntimeCache = (AspNetCache.IRuntimeCache)mocks.CreateMock(typeof(AspNetCache.IRuntimeCache));
+            mockedRuntimeCache = A.Fake<AspNetCache.IRuntimeCache>();
             mockedCache = new AspNetCache(mockedRuntimeCache);
         }
 
         [Test]
         public void Get()
         {
-            // set expectations
-            Expect.Call(mockedRuntimeCache.Get(mockedCache.GenerateKey("key"))).Return(null);
-            mocks.ReplayAll();
-            // verify
             mockedCache.Get("key");
-            mocks.VerifyAll();
+
+            A.CallTo(() => mockedRuntimeCache.Get(mockedCache.GenerateKey("key"))).MustHaveHappened();
         }
 
         [Test]
         public void Remove()
         {
-            // set expectations
-            Expect.Call(mockedRuntimeCache.Remove(mockedCache.GenerateKey("key"))).Return(null);
-            mocks.ReplayAll();
-            // verify
             mockedCache.Remove("key");
-            mocks.VerifyAll();
+
+            A.CallTo(() => mockedRuntimeCache.Remove(mockedCache.GenerateKey("key"))).MustHaveHappened();
         }
 
         [Test]
@@ -107,7 +97,7 @@ namespace Spring.Caching
         [Test]
         public void ReturnsOnlyKeysOwnedByCache()
         {
-            DictionaryEntry[] mockedRuntimeCacheEntries = 
+            DictionaryEntry[] mockedRuntimeCacheEntries =
                 {
                       new DictionaryEntry(mockedCache.GenerateKey("keyA"), null)
                     , new DictionaryEntry(mockedCache.GenerateKey("keyB"), null)
@@ -115,13 +105,10 @@ namespace Spring.Caching
                     , new DictionaryEntry(otherCache.GenerateKey("keyD"), null)
                 };
 
-            // set expectations
-            Expect.Call(mockedRuntimeCache.GetEnumerator()).Return(mockedRuntimeCacheEntries.GetEnumerator());
-            mocks.ReplayAll();
-            // verify
+            A.CallTo(() => mockedRuntimeCache.GetEnumerator()).Returns(mockedRuntimeCacheEntries.GetEnumerator());
+
             ICollection keys = mockedCache.Keys;
             CollectionAssert.AreEqual(new string[] { "keyA", "keyB" }, keys);
-            mocks.VerifyAll();
         }
 
         [Test]
@@ -170,8 +157,7 @@ namespace Spring.Caching
         [Test]
         public void PassesParametersToRuntimeCache()
         {
-            MockRepository mocks = new MockRepository();
-            AspNetCache.IRuntimeCache runtimeCache = (AspNetCache.IRuntimeCache) mocks.CreateMock(typeof(AspNetCache.IRuntimeCache));            
+            AspNetCache.IRuntimeCache runtimeCache = A.Fake<AspNetCache.IRuntimeCache>();
             AspNetCache cache = new AspNetCache(runtimeCache);
 
             DateTime expectedAbsoluteExpiration = DateTime.Now;
@@ -180,34 +166,26 @@ namespace Spring.Caching
 
 //          TODO: find way to test non-sliding expiration case
 //            runtimeCache.Insert(cache.GenerateKey("key"), "value", null, DateTime.Now.Add(ttl10Seconds), Cache.NoSlidingExpiration, expectedPriority, null);
-            runtimeCache.Insert(cache.GenerateKey("key"), "value", null, Cache.NoAbsoluteExpiration, ttl10Seconds, expectedPriority, null);
-
-            mocks.ReplayAll();
 
 //            cache.Insert( "key", "value", ttl10Seconds, false, expectedPriority );
             cache.Insert("key", "value", ttl10Seconds, true, expectedPriority);
 
-            mocks.VerifyAll();
+            A.CallTo(() => runtimeCache.Insert(cache.GenerateKey("key"), "value", null, Cache.NoAbsoluteExpiration, ttl10Seconds, expectedPriority, null)).MustHaveHappened();
         }
 
         [Test]
         public void ZeroTTLCausesNoExpiration()
         {
-            MockRepository mocks = new MockRepository();
-            AspNetCache.IRuntimeCache runtimeCache = (AspNetCache.IRuntimeCache)mocks.CreateMock(typeof(AspNetCache.IRuntimeCache));
+            AspNetCache.IRuntimeCache runtimeCache = A.Fake<AspNetCache.IRuntimeCache>();
             AspNetCache cache = new AspNetCache(runtimeCache);
 
             CacheItemPriority expectedPriority = CacheItemPriority.Low;
 
-            runtimeCache.Insert(cache.GenerateKey("key"), "value", null, Cache.NoAbsoluteExpiration, Cache.NoSlidingExpiration, expectedPriority, null);
-            runtimeCache.Insert(cache.GenerateKey("key"), "value", null, Cache.NoAbsoluteExpiration, Cache.NoSlidingExpiration, expectedPriority, null);
-
-            mocks.ReplayAll();
-
             cache.Insert("key", "value", TimeSpan.Zero, true, expectedPriority);
-            cache.Insert("key", "value", TimeSpan.Zero, false, expectedPriority);
+            A.CallTo(() => runtimeCache.Insert(cache.GenerateKey("key"), "value", null, Cache.NoAbsoluteExpiration, Cache.NoSlidingExpiration, expectedPriority, null)).MustHaveHappened();
 
-            mocks.VerifyAll();
+            cache.Insert("key", "value", TimeSpan.Zero, false, expectedPriority);
+            A.CallTo(() => runtimeCache.Insert(cache.GenerateKey("key"), "value", null, Cache.NoAbsoluteExpiration, Cache.NoSlidingExpiration, expectedPriority, null)).MustHaveHappened();
         }
     }
 }

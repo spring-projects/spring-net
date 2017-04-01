@@ -18,17 +18,14 @@
 
 #endregion
 
-#region Imports
+using FakeItEasy;
 
 using NUnit.Framework;
-using Rhino.Mocks;
-
-#endregion
 
 namespace Spring.Globalization.Formatters
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <author>Erich Eichinger</author>
     [TestFixture]
@@ -47,7 +44,7 @@ namespace Spring.Globalization.Formatters
 
             public virtual string DoFilterValueToParse(string value)
             {
-                return base.FilterValueToParse(value);                
+                return base.FilterValueToParse(value);
             }
 
             protected override object FilterValueToFormat(object value)
@@ -65,29 +62,24 @@ namespace Spring.Globalization.Formatters
         [Test]
         public void FiltersOnParseAndFormat()
         {
-            MockRepository mocks = new MockRepository();
-            IFormatter underlyingFormatter = mocks.StrictMock<IFormatter>();
-            TestFilteringFormatter formatter = (TestFilteringFormatter) mocks.PartialMock(typeof (TestFilteringFormatter), underlyingFormatter);
+            IFormatter underlyingFormatter = A.Fake<IFormatter>();
+            TestFilteringFormatter formatter = A.Fake<TestFilteringFormatter>(x => x
+                .CallsBaseMethods()
+                .WithArgumentsForConstructor(new[] {underlyingFormatter}));
 
             string inputText = "inputText";
             string filteredInputText = "filteredInputText";
             object outputValue = new object();
             object filteredOutputValue = new object();
 
-            using(mocks.Ordered())
-            {
-                Expect.Call(formatter.DoFilterValueToParse(inputText)).Return(filteredInputText);
-                Expect.Call(underlyingFormatter.Parse(filteredInputText)).Return(outputValue);
+            A.CallTo(() => formatter.DoFilterValueToParse(inputText)).Returns(filteredInputText);
+            A.CallTo(() => underlyingFormatter.Parse(filteredInputText)).Returns(outputValue);
 
-                Expect.Call(formatter.DoFilterValueToFormat(outputValue)).Return(filteredOutputValue);
-                Expect.Call(underlyingFormatter.Format(filteredOutputValue)).Return(inputText);
-            }
-            mocks.ReplayAll();
+            A.CallTo(() => formatter.DoFilterValueToFormat(outputValue)).Returns(filteredOutputValue);
+            A.CallTo(() => underlyingFormatter.Format(filteredOutputValue)).Returns(inputText);
 
             Assert.AreSame(outputValue, formatter.Parse(inputText));
             Assert.AreEqual(inputText, formatter.Format(outputValue));
-
-            mocks.VerifyAll();
         }
     }
 }

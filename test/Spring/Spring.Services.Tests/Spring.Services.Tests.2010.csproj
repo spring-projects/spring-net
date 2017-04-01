@@ -10,11 +10,12 @@
     <ProjectReference Include="..\Spring.Core.Tests\Spring.Core.Tests.2010.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="FakeItEasy" Version="$(FakeItEasyVersion)" />
+    <PackageReference Include="FakeItEasy.Analyzer" Version="$(FakeItEasyVersion)" PrivateAssets="All" />
     <PackageReference Include="log4net" Version="$(Log4NetVersion)" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftTestSDKVersion)" />
     <PackageReference Include="NUnit" Version="$(NUnitVersion)" />
     <PackageReference Include="NUnit3TestAdapter" Version="$(NUnitTestAdapterVersion)" />
-    <PackageReference Include="RhinoMocks" Version="$(RhinoMocksVersion)" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="DotNetMock, Version=0.8.1.0, Culture=neutral, PublicKeyToken=65e474d141e25e07">

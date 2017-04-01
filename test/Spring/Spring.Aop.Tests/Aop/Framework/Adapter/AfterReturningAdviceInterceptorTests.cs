@@ -18,48 +18,41 @@
 
 #endregion
 
-#region Imports
-
 using System;
-using AopAlliance.Intercept;
-using NUnit.Framework;
-using Rhino.Mocks;
-using Spring.Util;
 
-#endregion
+using AopAlliance.Intercept;
+using FakeItEasy;
+using NUnit.Framework;
+
+using Spring.Util;
 
 namespace Spring.Aop.Framework.Adapter
 {
-	/// <summary>
-	/// Unit tests for the AfterReturningAdviceInterceptor class.
-	/// </summary>
-	/// <author>Rod Johnson</author>
-	/// <author>Simon White (.NET)</author>
-	[TestFixture]
-	public sealed class AfterReturningAdviceInterceptorTests
-	{
-		[Test]
-		public void PassNullAdviceToCtor()
-		{
+    /// <summary>
+    /// Unit tests for the AfterReturningAdviceInterceptor class.
+    /// </summary>
+    /// <author>Rod Johnson</author>
+    /// <author>Simon White (.NET)</author>
+    [TestFixture]
+    public sealed class AfterReturningAdviceInterceptorTests
+    {
+        [Test]
+        public void PassNullAdviceToCtor()
+        {
             Assert.Throws<ArgumentNullException>(() => new AfterReturningAdviceInterceptor(null));
-		}
+        }
 
-		[Test]
-		public void IsNotInvokedIfServiceObjectThrowsException()
-		{
-            MockRepository repository = new MockRepository();
-            IMethodInvocation mockInvocation = (IMethodInvocation)repository.CreateMock(typeof(IMethodInvocation));
-            IAfterReturningAdvice mockAdvice = (IAfterReturningAdvice)repository.CreateMock(typeof(IAfterReturningAdvice));
-            mockAdvice.AfterReturning(null, null, null, null);
-            LastCall.IgnoreArguments();
-            LastCall.Throw(new FormatException());
+        [Test]
+        public void IsNotInvokedIfServiceObjectThrowsException()
+        {
+            IMethodInvocation mockInvocation = A.Fake<IMethodInvocation>();
+            IAfterReturningAdvice mockAdvice = A.Fake<IAfterReturningAdvice>();
 
-            Expect.Call(mockInvocation.Method).Return(ReflectionUtils.GetMethod(typeof(object), "HashCode", new Type[] { }));
-            Expect.Call(mockInvocation.Arguments).Return(null);
-            Expect.Call(mockInvocation.This).Return(new object());
-            Expect.Call(mockInvocation.Proceed()).Return(null);
-
-            repository.ReplayAll();
+            A.CallTo(() => mockAdvice.AfterReturning(null, null, null, null)).WithAnyArguments().Throws<FormatException>();
+            A.CallTo(() => mockInvocation.Method).Returns(ReflectionUtils.GetMethod(typeof(object), "HashCode", new Type[] { }));
+            A.CallTo(() => mockInvocation.Arguments).Returns(null);
+            A.CallTo(() => mockInvocation.This).Returns(new object());
+            A.CallTo(() => mockInvocation.Proceed()).Returns(null);
 
             try
             {
@@ -70,29 +63,19 @@ namespace Spring.Aop.Framework.Adapter
             catch (FormatException)
             {
             }
+        }
 
-            repository.VerifyAll();
+        [Test]
+        public void JustPassesAfterReturningAdviceExceptionUpWithoutAnyWrapping()
+        {
+            IMethodInvocation mockInvocation = A.Fake<IMethodInvocation>();
+            IAfterReturningAdvice mockAdvice = A.Fake<IAfterReturningAdvice>();
+            A.CallTo(() => mockAdvice.AfterReturning(null, null, null, null)).WithAnyArguments().Throws<FormatException>();
 
-		}
-
-		[Test]
-		public void JustPassesAfterReturningAdviceExceptionUpWithoutAnyWrapping()
-		{
-
-            MockRepository repository = new MockRepository();
-            IMethodInvocation mockInvocation = (IMethodInvocation)repository.CreateMock(typeof(IMethodInvocation));
-		    IAfterReturningAdvice mockAdvice = (IAfterReturningAdvice) repository.CreateMock(typeof (IAfterReturningAdvice));
-		    mockAdvice.AfterReturning(null,null,null,null);
-		    LastCall.IgnoreArguments();
-		    LastCall.Throw(new FormatException());
-
-            Expect.Call(mockInvocation.Method).Return(ReflectionUtils.GetMethod(typeof(object), "HashCode", new Type[] { }));
-            Expect.Call(mockInvocation.Arguments).Return(null);
-            Expect.Call(mockInvocation.This).Return(new object());           
-		    Expect.Call(mockInvocation.Proceed()).Return(null);
-
-            repository.ReplayAll();
-
+            A.CallTo(() => mockInvocation.Method).Returns(ReflectionUtils.GetMethod(typeof(object), "HashCode", new Type[] { }));
+            A.CallTo(() => mockInvocation.Arguments).Returns(null);
+            A.CallTo(() => mockInvocation.This).Returns(new object());
+            A.CallTo(() => mockInvocation.Proceed()).Returns(null);
             try
             {
                 AfterReturningAdviceInterceptor interceptor = new AfterReturningAdviceInterceptor(mockAdvice);
@@ -102,12 +85,6 @@ namespace Spring.Aop.Framework.Adapter
             catch (FormatException)
             {
             }
-            repository.VerifyAll();
-
-
-
-
-
-		}
-	}
+        }
+    }
 }

@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,18 +18,16 @@
 
 #endregion
 
-#region Imports
-
 using System;
-using NUnit.Framework;
-using Rhino.Mocks;
 
-#endregion
+using FakeItEasy;
+
+using NUnit.Framework;
 
 namespace Spring.Web.Support
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <author>Erich Eichinger</author>
     [TestFixture]
@@ -44,104 +42,56 @@ namespace Spring.Web.Support
         [Test]
         public void SetDefaultFactory()
         {
-            MockRepository mocks = new MockRepository();
-            IResultFactory resultFactory = (IResultFactory)mocks.CreateMock( typeof( IResultFactory ) );
+            IResultFactory resultFactory = A.Fake<IResultFactory>();
 
             IResultFactory prevFactory = ResultFactoryRegistry.DefaultResultFactory;
-            Assert.AreSame( prevFactory, ResultFactoryRegistry.SetDefaultFactory( resultFactory ) );
-            Assert.AreSame( resultFactory, ResultFactoryRegistry.DefaultResultFactory );
+            Assert.AreSame(prevFactory, ResultFactoryRegistry.SetDefaultFactory(resultFactory));
+            Assert.AreSame(resultFactory, ResultFactoryRegistry.DefaultResultFactory);
 
             // verify default factory is used for unknown result mode
-            using (Record( mocks ))
-            {
-                Expect.Call( resultFactory.CreateResult( null, "resultText" ) ).Return( new Result() );
-                Expect.Call( resultFactory.CreateResult( "resultMode", "resultText" ) ).Return( new Result() );
-            }
+            A.CallTo(() => resultFactory.CreateResult(null, "resultText")).Returns(new Result());
+            A.CallTo(() => resultFactory.CreateResult("resultMode", "resultText")).Returns(new Result());
 
-            using (Playback( mocks ))
-            {
-                ResultFactoryRegistry.CreateResult( "resultText" );
-                ResultFactoryRegistry.CreateResult( "resultMode:resultText" );
-            }
+            ResultFactoryRegistry.CreateResult("resultText");
+            ResultFactoryRegistry.CreateResult("resultMode:resultText");
         }
 
         [Test]
         public void ResultModeValuesHavePredefinedFactories()
         {
-            MockRepository mocks = new MockRepository();
-            IResultFactory defaultFactory = (IResultFactory)mocks.CreateMock( typeof( IResultFactory ) );
+            IResultFactory defaultFactory = A.Fake<IResultFactory>();
+            ResultFactoryRegistry.SetDefaultFactory(defaultFactory);
 
-            ResultFactoryRegistry.SetDefaultFactory( defaultFactory );
-
-            // verify factory registry knows all ResultModes
-            using (Record( mocks ))
+            foreach (string resultMode in Enum.GetNames(typeof(ResultMode)))
             {
-                // defaultFactory must never be called!
-            }
-
-            using (Playback( mocks ))
-            {
-                foreach (string resultMode in Enum.GetNames( typeof( ResultMode ) ))
-                {
-                    Assert.IsNotNull( ResultFactoryRegistry.CreateResult( resultMode+":resultText" ) );
-                }
+                Assert.IsNotNull(ResultFactoryRegistry.CreateResult(resultMode + ":resultText"));
             }
         }
 
         [Test]
         public void SelectsFactoryByResultMode()
         {
-            MockRepository mocks = new MockRepository();
-            IResultFactory resultFactory = (IResultFactory)mocks.CreateMock( typeof( IResultFactory ) );
+            IResultFactory resultFactory = A.Fake<IResultFactory>();
 
-            ResultFactoryRegistry.RegisterResultMode( "resultMode", resultFactory );
+            ResultFactoryRegistry.RegisterResultMode("resultMode", resultFactory);
 
             Result result = new Result();
 
             // verify factory registry does not allow nulls to be returned
-            using (Record( mocks ))
-            {
-                Expect.Call( resultFactory.CreateResult( "resultMode", "resultText" ) ).Return( result );
-            }
-
-            using (Playback( mocks ))
-            {
-                Assert.AreSame( result, ResultFactoryRegistry.CreateResult( "resultMode:resultText" ) );
-            }
+            A.CallTo(() => resultFactory.CreateResult("resultMode", "resultText")).Returns(result);
+            Assert.AreSame(result, ResultFactoryRegistry.CreateResult("resultMode:resultText"));
         }
 
         [Test]
         public void BailsOnNullReturnedFromFactory()
         {
-            MockRepository mocks = new MockRepository();
-            IResultFactory resultFactory = (IResultFactory) mocks.CreateMock(typeof(IResultFactory));
+            IResultFactory resultFactory = A.Fake<IResultFactory>();
 
             ResultFactoryRegistry.RegisterResultMode("resultMode", resultFactory);
 
             // verify factory registry does not allow nulls to be returned
-            using (Record(mocks))
-            {
-                Expect.Call(resultFactory.CreateResult("resultMode", "resultText")).Return(null);
-            }
-
-            using (Playback(mocks))
-            {
-                Assert.Throws<ArgumentNullException>(() => ResultFactoryRegistry.CreateResult("resultMode:resultText"));
-            }
+            A.CallTo(() => resultFactory.CreateResult("resultMode", "resultText")).Returns(null);
+            Assert.Throws<ArgumentNullException>(() => ResultFactoryRegistry.CreateResult("resultMode:resultText"));
         }
-
-        #region Rhino.Mocks Compatibility Adapter
-
-        private static IDisposable Record( MockRepository mocks )
-        {
-            return mocks.Record();
-        }
-
-        private static IDisposable Playback( MockRepository mocks )
-        {
-            return mocks.Playback();
-        }
-
-        #endregion Rhino.Mocks Compatibility Adapter
     }
 }

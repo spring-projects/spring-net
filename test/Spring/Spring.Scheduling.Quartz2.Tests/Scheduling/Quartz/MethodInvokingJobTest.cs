@@ -17,6 +17,8 @@
 using System;
 using System.Threading;
 
+using FakeItEasy;
+
 using NUnit.Framework;
 
 using Quartz;
@@ -24,8 +26,6 @@ using Quartz.Impl;
 using Quartz.Impl.Triggers;
 using Quartz.Job;
 using Quartz.Spi;
-
-using Rhino.Mocks;
 
 using Spring.Objects.Support;
 
@@ -142,8 +142,7 @@ namespace Spring.Scheduling.Quartz
         
         private static IJobExecutionContext CreateMinimalJobExecutionContext()
         {
-            MockRepository repo = new MockRepository();
-            IScheduler sched = (IScheduler)repo.DynamicMock(typeof(IScheduler));
+            IScheduler sched = A.Fake<IScheduler>();
             IJobExecutionContext ctx = new JobExecutionContextImpl(sched, ConstructMinimalTriggerFiredBundle(), null);
             return ctx;
         }

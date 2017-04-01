@@ -18,14 +18,12 @@
 
 #endregion
 
-#region Imports
-
 using System;
 using System.Reflection;
-using NUnit.Framework;
-using Rhino.Mocks;
 
-#endregion
+using FakeItEasy;
+
+using NUnit.Framework;
 
 namespace Spring.Objects.Factory.Support
 {
@@ -36,52 +34,46 @@ namespace Spring.Objects.Factory.Support
 	[TestFixture]
 	public sealed class LookupMethodReplacerTests
 	{
-        private MockRepository mocks;
-
         [SetUp]
         public void Setup()
         {
-            mocks = new MockRepository();
         }
 
 		[Test]
 		public void InstantiationWithNullDefinition()
 		{
-		    IObjectFactory objectFactory = mocks.StrictMock<IObjectFactory>();
+		    IObjectFactory objectFactory = A.Fake<IObjectFactory>();
             Assert.Throws<ArgumentNullException>(() => new LookupMethodReplacer(null, objectFactory));
 		}
 
 		[Test]
 		public void InstantiationWithNullFactory()
 		{
-		    var configurableObjectDefinition = mocks.StrictMock<IConfigurableObjectDefinition>();
+		    var configurableObjectDefinition = A.Fake<IConfigurableObjectDefinition>();
             Assert.Throws<ArgumentNullException>(() => new LookupMethodReplacer(configurableObjectDefinition, null));
 		}
 
 		[Test]
 		public void SunnyDayPath()
 		{
-            var objectFactory = mocks.StrictMock<IObjectFactory>();
-            var configurableObjectDefinition = mocks.StrictMock<IConfigurableObjectDefinition>();
-			
+            var objectFactory = A.Fake<IObjectFactory>();
+            var configurableObjectDefinition = A.Fake<IConfigurableObjectDefinition>();
+
             object expectedLookup = new object();
 			const string LookupObjectName = "foo";
-			
-		    Expect.Call(objectFactory.GetObject(LookupObjectName)).Return(expectedLookup);
+
+		    A.CallTo(() => objectFactory.GetObject(LookupObjectName)).Returns(expectedLookup);
 
 			LookupMethodOverride ovr = new LookupMethodOverride("SunnyDayPath", LookupObjectName);
 			MethodOverrides overrides = new MethodOverrides();
 			overrides.Add(ovr);
-		    Expect.Call(configurableObjectDefinition.MethodOverrides).Return(overrides);
+            A.CallTo(() => configurableObjectDefinition.MethodOverrides).Returns(overrides);
 
             LookupMethodReplacer replacer = new LookupMethodReplacer(configurableObjectDefinition, objectFactory);
-            mocks.ReplayAll();		    
 			MethodInfo method = (MethodInfo) MethodBase.GetCurrentMethod();
 
 			object lookup = replacer.Implement(this, method, new object[] {});
 			Assert.AreSame(expectedLookup, lookup);
-
-			mocks.VerifyAll();
 		}
 	}
 }

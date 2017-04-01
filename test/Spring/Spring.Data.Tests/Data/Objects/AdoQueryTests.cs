@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,14 +21,14 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
- * 
+ * Copyright Â© 2002-2011 the original author or authors.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -44,9 +44,9 @@ using System.Collections;
 using System.Data;
 using System.Data.SqlClient;
 
-using NUnit.Framework;
+using FakeItEasy;
 
-using Rhino.Mocks;
+using NUnit.Framework;
 
 using Spring.Dao;
 using Spring.Data.Common;
@@ -75,12 +75,11 @@ namespace Spring.Data.Objects
         [Test]
         public void MappingAdoQueryWithContextWithoutParams()
         {
-            IDataReader reader = MockRepository.GenerateMock<IDataReader>();
-            reader.Stub(x => x.Read()).Return(true).Repeat.Once();
-            reader.Stub(x => x.GetInt32(0)).Return(1).Repeat.Once();
-            reader.Stub(x => x.Read()).Return(false).Repeat.Once();
+            IDataReader reader = A.Fake<IDataReader>();
+            A.CallTo(() => reader.Read()).Returns(true).Once().Then.Returns(false);
+            A.CallTo(() => reader.GetInt32(0)).Returns(1).Once();
 
-            command.Stub(x => x.ExecuteReader()).Return(reader);
+            A.CallTo(() => command.ExecuteReader()).Returns(reader);
 
             IntMappingQueryWithContext queryWithNoContext = new IntMappingQueryWithContext(provider);
             queryWithNoContext.Compile();
@@ -95,13 +94,10 @@ namespace Spring.Data.Objects
         [Test]
         public void QueryWithoutEnoughParams()
         {
-            SqlParameter sqlParameter1 = new SqlParameter();
-            command.Stub(x => x.CreateParameter()).Return(sqlParameter1).Repeat.Once();
-            provider.Stub(x => x.CreateParameterNameForCollection(COLUMN_NAMES[0])).Return("@" + COLUMN_NAMES[0]).Repeat.Once();
+            A.CallTo(() => command.CreateParameter()).ReturnsLazily(() => new SqlParameter());
 
-            SqlParameter sqlParameter2 = new SqlParameter();
-            command.Stub(x => x.CreateParameter()).Return(sqlParameter2);
-            provider.Stub(x => x.CreateParameterNameForCollection(COLUMN_NAMES[1])).Return("@" + COLUMN_NAMES[1]);
+            A.CallTo(() => provider.CreateParameterNameForCollection(COLUMN_NAMES[0])).Returns("@" + COLUMN_NAMES[0]).Once();
+            A.CallTo(() => provider.CreateParameterNameForCollection(COLUMN_NAMES[1])).Returns("@" + COLUMN_NAMES[1]);
 
             IntMappingAdoQuery query = new IntMappingAdoQuery();
             query.DbProvider = provider;

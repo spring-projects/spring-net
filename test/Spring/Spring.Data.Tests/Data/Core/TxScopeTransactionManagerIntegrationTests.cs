@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +18,12 @@
 
 #endregion
 
-#region Imports
+using FakeItEasy;
 
 using NUnit.Framework;
-using Rhino.Mocks;
+
 using Spring.Transaction;
 using Spring.Transaction.Support;
-
-#endregion
 
 namespace Spring.Data.Core
 {
@@ -37,13 +35,6 @@ namespace Spring.Data.Core
     [TestFixture]
     public class TxScopeTransactionManagerIntegrationTests
     {
-        private MockRepository mocks;
-        [SetUp]
-        public void Setup()
-        {
-            mocks = new MockRepository();
-        }
-
         [TearDown]
         public void TearDown()
         {
@@ -53,7 +44,6 @@ namespace Spring.Data.Core
             Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
             Assert.AreEqual(System.Data.IsolationLevel.Unspecified, TransactionSynchronizationManager.CurrentTransactionIsolationLevel);
             Assert.IsFalse(TransactionSynchronizationManager.ActualTransactionActive);
-
         }
 
         [Test]
@@ -80,7 +70,7 @@ namespace Spring.Data.Core
         {
             Assert.IsTrue(TransactionSynchronizationManager.SynchronizationActive);
             Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
-           
+
             return null;
         }
 
@@ -97,12 +87,11 @@ namespace Spring.Data.Core
 
         public object TransactionInformationTxDelegate(ITransactionStatus status)
         {
-
             Assert.AreEqual(System.Transactions.IsolationLevel.ReadUncommitted,
-                            System.Transactions.Transaction.Current.IsolationLevel);
+                System.Transactions.Transaction.Current.IsolationLevel);
 
             Assert.AreEqual(System.Data.IsolationLevel.ReadUncommitted,
-                            TransactionSynchronizationManager.CurrentTransactionIsolationLevel);
+                TransactionSynchronizationManager.CurrentTransactionIsolationLevel);
             return null;
         }
 
@@ -110,14 +99,7 @@ namespace Spring.Data.Core
         [Test]
         public void Rollback()
         {
-            ITransactionSynchronization sync =
-                (ITransactionSynchronization) mocks.DynamicMock(typeof (ITransactionSynchronization));
-            sync.BeforeCompletion();
-            LastCall.On(sync).Repeat.Once();
-            sync.AfterCompletion(TransactionSynchronizationStatus.Rolledback);
-            LastCall.On(sync).Repeat.Once();
-            mocks.ReplayAll();
-
+            ITransactionSynchronization sync = A.Fake<ITransactionSynchronization>();
 
             TxScopeTransactionManager tm = new TxScopeTransactionManager();
             tm.TransactionSynchronization = TransactionSynchronizationState.Always;
@@ -130,20 +112,18 @@ namespace Spring.Data.Core
             Assert.IsNull(TransactionSynchronizationManager.CurrentTransactionName);
             Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
             tt.Execute(status =>
-                           {
-                               Assert.IsTrue(TransactionSynchronizationManager.SynchronizationActive);
-                               TransactionSynchronizationManager.RegisterSynchronization(sync);
-                               Assert.AreEqual("txName", TransactionSynchronizationManager.CurrentTransactionName);
-                               Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
-                               status.SetRollbackOnly();
-                               return null;
-                           }
+                {
+                    Assert.IsTrue(TransactionSynchronizationManager.SynchronizationActive);
+                    TransactionSynchronizationManager.RegisterSynchronization(sync);
+                    Assert.AreEqual("txName", TransactionSynchronizationManager.CurrentTransactionName);
+                    Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
+                    status.SetRollbackOnly();
+                    return null;
+                }
             );
 
-            mocks.VerifyAll();
-
+            A.CallTo(() => sync.BeforeCompletion()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => sync.AfterCompletion(TransactionSynchronizationStatus.Rolledback)).MustHaveHappenedOnceExactly();
         }
-
-
     }
 }

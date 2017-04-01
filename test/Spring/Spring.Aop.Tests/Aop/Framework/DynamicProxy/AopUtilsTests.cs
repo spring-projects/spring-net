@@ -18,19 +18,17 @@
 
 #endregion
 
-#region Imports
-
 using System;
 using System.Collections;
 using System.Reflection;
+
+using FakeItEasy;
+
 using NUnit.Framework;
-using Rhino.Mocks;
 using Spring.Aop.Interceptor;
 using Spring.Aop.Support;
 using Spring.Collections;
 using Spring.Objects;
-
-#endregion
 
 namespace Spring.Aop.Framework.DynamicProxy
 {
@@ -42,12 +40,9 @@ namespace Spring.Aop.Framework.DynamicProxy
     [TestFixture]
     public sealed class AopUtilsTests
     {
-        private MockRepository mocks;
-
         [SetUp]
         public void SetUp()
         {
-            mocks = new MockRepository();
         }
 
         [Test]
@@ -80,17 +75,17 @@ namespace Spring.Aop.Framework.DynamicProxy
         {
             IPointcut pointcut = new OneInterfaceTestPointcut();
 
-            // Will return true if we're proxying interfaces including ITestObject 
+            // Will return true if we're proxying interfaces including ITestObject
             Assert.IsTrue(AopUtils.CanApply(pointcut, typeof (TestObject), new Type[] {typeof (ITestObject), typeof (IComparable)}));
 
-            // Will return true if we're proxying interfaces including ITestObject 
+            // Will return true if we're proxying interfaces including ITestObject
             Assert.IsFalse(AopUtils.CanApply(pointcut, typeof (TestObject), new Type[] {typeof (IComparable)}));
         }
 
         [Test]
         public void CanApplyWithAdvisorYieldsTrueIfAdvisorIsNotKnownAdvisorType()
         {
-            IAdvisor advisor = (IAdvisor) mocks.CreateMock(typeof (IAdvisor));
+            IAdvisor advisor = A.Fake<IAdvisor>();
             Assert.IsTrue(AopUtils.CanApply(advisor, typeof (TestObject), null));
         }
 
@@ -171,12 +166,10 @@ namespace Spring.Aop.Framework.DynamicProxy
         [Test]
         public void CanApplyWithTrueIntroductionAdvisor()
         {
-            IIntroductionAdvisor mockIntroAdvisor = (IIntroductionAdvisor) mocks.CreateMock(typeof(IIntroductionAdvisor));
-            Expect.Call(mockIntroAdvisor.TypeFilter).Return(TrueTypeFilter.True);
-            mocks.ReplayAll();
+            IIntroductionAdvisor mockIntroAdvisor = A.Fake<IIntroductionAdvisor>();
+            A.CallTo(() => mockIntroAdvisor.TypeFilter).Returns(TrueTypeFilter.True);
 
             Assert.IsTrue(AopUtils.CanApply(mockIntroAdvisor, typeof (TestObject), null));
-            mocks.VerifyAll();
         }
 
         #region Helper Classes

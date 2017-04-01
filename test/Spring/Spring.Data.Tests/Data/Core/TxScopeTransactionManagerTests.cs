@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,91 +18,68 @@
 
 #endregion
 
-#region Imports
-
 using System;
 using System.Transactions;
+
+using FakeItEasy;
+
 using NUnit.Framework;
-using Rhino.Mocks;
+
 using Spring.Data.Support;
 using Spring.Transaction;
 using Spring.Transaction.Support;
 
-#endregion
-
 namespace Spring.Data.Core
 {
     /// <summary>
-    /// This calss contains tests for 
+    /// This calss contains tests for
     /// </summary>
     /// <author>Mark Pollack</author>
     [TestFixture]
     public class TxScopeTransactionManagerTests
     {
-        private MockRepository mocks;
-
-        [SetUp]
-        public void Setup()
-        {
-            mocks = new MockRepository();
-        }
 
         [Test]
-
         public void TransactionCommit()
         {
-            ITransactionScopeAdapter txAdapter = (ITransactionScopeAdapter) mocks.CreateMock(typeof(ITransactionScopeAdapter));
+            ITransactionScopeAdapter txAdapter = A.Fake<ITransactionScopeAdapter>();
+            A.CallTo(() => txAdapter.IsExistingTransaction).Returns(false);
 
-            using (mocks.Ordered())
-            {
-                Expect.Call(txAdapter.IsExistingTransaction).Return(false);
-                TransactionOptions txOptions = new TransactionOptions();
-                txOptions.IsolationLevel = IsolationLevel.ReadCommitted;
-                txAdapter.CreateTransactionScope(TransactionScopeOption.Required, txOptions, EnterpriseServicesInteropOption.None);
-
-                Expect.Call(txAdapter.RollbackOnly).Return(false);
-                txAdapter.Complete();
-                txAdapter.Dispose();
-            }
-            mocks.ReplayAll();
+            A.CallTo(() => txAdapter.RollbackOnly).Returns(false);
 
             TxScopeTransactionManager tm = new TxScopeTransactionManager(txAdapter);
             tm.TransactionSynchronization = TransactionSynchronizationState.Always;
 
             TransactionTemplate tt = new TransactionTemplate(tm);
             tt.Execute(status =>
-                           {
-                               Assert.IsTrue(TransactionSynchronizationManager.SynchronizationActive);
-                               Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
-                               return null;
-                           });
+            {
+                Assert.IsTrue(TransactionSynchronizationManager.SynchronizationActive);
+                Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
+                return null;
+            });
 
             Assert.IsFalse(TransactionSynchronizationManager.SynchronizationActive);
-            Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);   
+            Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
 
-            mocks.VerifyAll();
-
-
+            TransactionOptions txOptions = new TransactionOptions();
+            txOptions.IsolationLevel = IsolationLevel.ReadCommitted;
+            txAdapter.CreateTransactionScope(TransactionScopeOption.Required, txOptions, EnterpriseServicesInteropOption.None);
+            txAdapter.Complete();
+            txAdapter.Dispose();
         }
 
         [Test]
         public void TransactionRollback()
         {
-            ITransactionScopeAdapter txAdapter = (ITransactionScopeAdapter)mocks.CreateMock(typeof(ITransactionScopeAdapter));
+            ITransactionScopeAdapter txAdapter = A.Fake<ITransactionScopeAdapter>();
 
-            using (mocks.Ordered())
-            {
-                Expect.Call(txAdapter.IsExistingTransaction).Return(false);
-                TransactionOptions txOptions = new TransactionOptions();
-                txOptions.IsolationLevel = IsolationLevel.ReadCommitted;
-                txAdapter.CreateTransactionScope(TransactionScopeOption.Required, txOptions, EnterpriseServicesInteropOption.None);
-                txAdapter.Dispose();
-            }
-            mocks.ReplayAll();
+            A.CallTo(() => txAdapter.IsExistingTransaction).Returns(false);
+            TransactionOptions txOptions = new TransactionOptions();
+            txOptions.IsolationLevel = IsolationLevel.ReadCommitted;
 
             TxScopeTransactionManager tm = new TxScopeTransactionManager(txAdapter);
             tm.TransactionSynchronization = TransactionSynchronizationState.Always;
-            
+
             TransactionTemplate tt = new TransactionTemplate(tm);
 
             Assert.IsTrue(!TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
@@ -111,13 +88,13 @@ namespace Spring.Data.Core
             try
             {
                 tt.Execute(status =>
-                               {
-                                   Assert.IsTrue(TransactionSynchronizationManager.SynchronizationActive);
-                                   Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
-                                   Assert.IsTrue(status.IsNewTransaction, "Is new transaction");
-                                   if (ex != null) throw ex;
-                                   return null;
-                               });
+                {
+                    Assert.IsTrue(TransactionSynchronizationManager.SynchronizationActive);
+                    Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
+                    Assert.IsTrue(status.IsNewTransaction, "Is new transaction");
+                    if (ex != null) throw ex;
+                    return null;
+                });
                 Assert.Fail("Should have thrown exception");
             }
             catch (ArgumentException e)
@@ -126,36 +103,24 @@ namespace Spring.Data.Core
             }
 
             Assert.IsTrue(!TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
-
-
-            mocks.VerifyAll();
+            A.CallTo(() => txAdapter.CreateTransactionScope(TransactionScopeOption.Required, txOptions, EnterpriseServicesInteropOption.None)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => txAdapter.Dispose()).MustHaveHappenedOnceExactly();
         }
 
         [Test]
         public void PropagationRequiresNewWithExistingTransaction()
         {
+            ITransactionScopeAdapter txAdapter = A.Fake<ITransactionScopeAdapter>();
+            A.CallTo(() => txAdapter.IsExistingTransaction).Returns(false).Once();
 
-            ITransactionScopeAdapter txAdapter = (ITransactionScopeAdapter)mocks.CreateMock(typeof(ITransactionScopeAdapter));
+            TransactionOptions txOptions = new TransactionOptions();
+            txOptions.IsolationLevel = IsolationLevel.ReadCommitted;
 
-            using (mocks.Ordered())
-            {
-                Expect.Call(txAdapter.IsExistingTransaction).Return(false);
-                TransactionOptions txOptions = new TransactionOptions();
-                txOptions.IsolationLevel = IsolationLevel.ReadCommitted;
-                txAdapter.CreateTransactionScope(TransactionScopeOption.RequiresNew, txOptions, EnterpriseServicesInteropOption.None);
+            //inner tx actions
+            A.CallTo(() => txAdapter.IsExistingTransaction).Returns(true).Once();
+            //end inner tx actions
 
-                //inner tx actions
-                Expect.Call(txAdapter.IsExistingTransaction).Return(true);
-                txAdapter.CreateTransactionScope(TransactionScopeOption.RequiresNew, txOptions, EnterpriseServicesInteropOption.None);
-                txAdapter.Dispose();
-                //end inner tx actions
-
-                Expect.Call(txAdapter.RollbackOnly).Return(false);
-                txAdapter.Complete();
-                txAdapter.Dispose();
-                
-            }
-            mocks.ReplayAll();
+            A.CallTo(() => txAdapter.RollbackOnly).Returns(false);
 
             TxScopeTransactionManager tm = new TxScopeTransactionManager(txAdapter);
             tm.TransactionSynchronization = TransactionSynchronizationState.Always;
@@ -163,30 +128,32 @@ namespace Spring.Data.Core
             TransactionTemplate tt = new TransactionTemplate(tm);
             tt.PropagationBehavior = TransactionPropagation.RequiresNew;
             tt.Execute(status =>
-                           {
-                               Assert.IsTrue(status.IsNewTransaction, "Is new transaction");
-                               Assert.IsTrue(TransactionSynchronizationManager.SynchronizationActive, "Synchronization active");
-                               Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
-                               Assert.IsTrue(TransactionSynchronizationManager.ActualTransactionActive);
+            {
+                Assert.IsTrue(status.IsNewTransaction, "Is new transaction");
+                Assert.IsTrue(TransactionSynchronizationManager.SynchronizationActive, "Synchronization active");
+                Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
+                Assert.IsTrue(TransactionSynchronizationManager.ActualTransactionActive);
 
-                               tt.Execute(status2 =>
-                                              {
-                                                  Assert.IsTrue(TransactionSynchronizationManager.SynchronizationActive, "Synchronization active");
-                                                  Assert.IsTrue(status2.IsNewTransaction, "Is new transaction");
-                                                  Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
-                                                  Assert.IsTrue(TransactionSynchronizationManager.ActualTransactionActive);
-                                                  status2.SetRollbackOnly();
-                                                  return null;
-                                              });
+                tt.Execute(status2 =>
+                {
+                    Assert.IsTrue(TransactionSynchronizationManager.SynchronizationActive, "Synchronization active");
+                    Assert.IsTrue(status2.IsNewTransaction, "Is new transaction");
+                    Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
+                    Assert.IsTrue(TransactionSynchronizationManager.ActualTransactionActive);
+                    status2.SetRollbackOnly();
+                    return null;
+                });
 
 
-                               Assert.IsTrue(status.IsNewTransaction, "Is new transaction");
-                               Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
-                               Assert.IsTrue(TransactionSynchronizationManager.ActualTransactionActive);
-                               return null;
-                           });
+                Assert.IsTrue(status.IsNewTransaction, "Is new transaction");
+                Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
+                Assert.IsTrue(TransactionSynchronizationManager.ActualTransactionActive);
+                return null;
+            });
 
-            mocks.VerifyAll();
+            A.CallTo(() => txAdapter.CreateTransactionScope(TransactionScopeOption.RequiresNew, txOptions, EnterpriseServicesInteropOption.None)).MustHaveHappenedTwiceExactly();
+            A.CallTo(() => txAdapter.Dispose()).MustHaveHappenedTwiceExactly();
+            A.CallTo(() => txAdapter.Complete()).MustHaveHappenedOnceExactly();
         }
     }
 }

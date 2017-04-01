@@ -22,7 +22,7 @@
 
     <NUnitVersion>3.10.1</NUnitVersion>
     <NUnitTestAdapterVersion>3.10.0</NUnitTestAdapterVersion>
-    <RhinoMocksVersion>3.6.1</RhinoMocksVersion>
+    <FakeItEasyVersion>4.8.1</FakeItEasyVersion>
     <MicrosoftTestSDKVersion>15.7.2</MicrosoftTestSDKVersion>
 
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
@@ -36,6 +36,7 @@
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+	<DebugType>Full</DebugType>
     <DefineConstants>DEBUG;TRACE;$(DefineConstants)</DefineConstants>
   </PropertyGroup>
 

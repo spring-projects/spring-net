@@ -20,8 +20,9 @@
 
 using System.Globalization;
 
+using FakeItEasy;
+
 using NUnit.Framework;
-using Rhino.Mocks;
 using Spring.Globalization;
 
 namespace Spring.Context.Support
@@ -47,29 +48,25 @@ namespace Spring.Context.Support
         private readonly string MSGRESULT = "my message";
 
 
-        private MockRepository mocks;
         private IMessageSource mockMsgSource;
         private IMessageSourceResolvable mockMsgSourceResolvable;
 
         [SetUp]
         public void SetUp()
         {
-            mocks = new MockRepository();
-            mockMsgSource = mocks.StrictMock<IMessageSource>();
-            mockMsgSourceResolvable = mocks.StrictMock<IMessageSourceResolvable>();
+            mockMsgSource = A.Fake<IMessageSource>();
+            mockMsgSourceResolvable = A.Fake<IMessageSourceResolvable>();
         }
 
         [TearDown]
         public void TearDown()
         {
-            mocks.VerifyAll();
         }
 
         [Test]
         public void GetMessageCodeCultureArgs()
         {
-            Expect.Call(mockMsgSource.GetMessage(MSGCODE, MSGCULTURE, MSGARGS)).Return(MSGRESULT);
-            mocks.ReplayAll();
+            A.CallTo(() => mockMsgSource.GetMessage(MSGCODE, MSGCULTURE, MSGARGS)).Returns(MSGRESULT);
 
             MessageSourceAccessor msgSourceAccessor = new MessageSourceAccessor(mockMsgSource);
             Assert.AreEqual(MSGRESULT, msgSourceAccessor.GetMessage(MSGCODE, MSGCULTURE, MSGARGS));
@@ -78,8 +75,7 @@ namespace Spring.Context.Support
         [Test]
         public void GetMessageCodeArgs()
         {
-            Expect.Call(mockMsgSource.GetMessage(MSGCODE, MSGCULTURE, MSGARGS)).Return(MSGRESULT);
-            mocks.ReplayAll();
+            A.CallTo(() => mockMsgSource.GetMessage(MSGCODE, MSGCULTURE, MSGARGS)).Returns(MSGRESULT);
 
             MessageSourceAccessor msgSourceAccessor = new MessageSourceAccessor(mockMsgSource, MSGCULTURE);
             Assert.AreEqual(MSGRESULT, msgSourceAccessor.GetMessage(MSGCODE, MSGARGS));
@@ -88,8 +84,7 @@ namespace Spring.Context.Support
         [Test]
         public void GetMessageCodeArgsDefaultsToCurrentUICulture()
         {
-            Expect.Call(mockMsgSource.GetMessage(MSGCODE, CultureInfo.CurrentUICulture, MSGARGS)).Return(MSGRESULT);
-            mocks.ReplayAll();
+            A.CallTo(() => mockMsgSource.GetMessage(MSGCODE, CultureInfo.CurrentUICulture, MSGARGS)).Returns(MSGRESULT);
 
             MessageSourceAccessor msgSourceAccessor = new MessageSourceAccessor(mockMsgSource);
             Assert.AreEqual(MSGRESULT, msgSourceAccessor.GetMessage(MSGCODE, MSGARGS));
@@ -98,8 +93,7 @@ namespace Spring.Context.Support
         [Test]
         public void GetMessageCodeCulture()
         {
-            Expect.Call(mockMsgSource.GetMessage(MSGCODE, MSGCULTURE)).Return(MSGRESULT);
-            mocks.ReplayAll();
+            A.CallTo(() => mockMsgSource.GetMessage(MSGCODE, MSGCULTURE)).Returns(MSGRESULT);
 
             MessageSourceAccessor msgSourceAccessor = new MessageSourceAccessor(mockMsgSource);
             Assert.AreEqual(MSGRESULT, msgSourceAccessor.GetMessage(MSGCODE, MSGCULTURE));
@@ -108,8 +102,7 @@ namespace Spring.Context.Support
         [Test]
         public void GetMessageCodeDefaultsToCurrentUICulture()
         {
-            Expect.Call(mockMsgSource.GetMessage(MSGCODE, CultureInfo.CurrentUICulture)).Return(MSGRESULT);
-            mocks.ReplayAll();
+            A.CallTo(() => mockMsgSource.GetMessage(MSGCODE, CultureInfo.CurrentUICulture)).Returns(MSGRESULT);
 
             MessageSourceAccessor msgSourceAccessor = new MessageSourceAccessor(mockMsgSource);
             Assert.AreEqual(MSGRESULT, msgSourceAccessor.GetMessage(MSGCODE));
@@ -118,8 +111,7 @@ namespace Spring.Context.Support
         [Test]
         public void GetMessageResolvableCulture()
         {
-            Expect.Call(mockMsgSource.GetMessage(mockMsgSourceResolvable, MSGCULTURE)).Return(MSGRESULT);            
-            mocks.ReplayAll();
+            A.CallTo(() => mockMsgSource.GetMessage(mockMsgSourceResolvable, MSGCULTURE)).Returns(MSGRESULT);
 
             MessageSourceAccessor msgSourceAccessor = new MessageSourceAccessor(mockMsgSource);
             Assert.AreEqual(MSGRESULT, msgSourceAccessor.GetMessage(mockMsgSourceResolvable, MSGCULTURE));
@@ -128,8 +120,7 @@ namespace Spring.Context.Support
         [Test]
         public void GetMessageResolvableDefaultsToCurrentUICulture()
         {
-            Expect.Call(mockMsgSource.GetMessage(mockMsgSourceResolvable, CultureInfo.CurrentUICulture)).Return(MSGRESULT);
-            mocks.ReplayAll();
+            A.CallTo(() => mockMsgSource.GetMessage(mockMsgSourceResolvable, CultureInfo.CurrentUICulture)).Returns(MSGRESULT);
 
             MessageSourceAccessor msgSourceAccessor = new MessageSourceAccessor(mockMsgSource);
             Assert.AreEqual(MSGRESULT, msgSourceAccessor.GetMessage(mockMsgSourceResolvable));
