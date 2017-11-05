@@ -20,10 +20,8 @@
 
 using System;
 using System.Runtime.Serialization;
-#if !MONO_2_0
-using Microsoft.VisualBasic;
-using Microsoft.VisualBasic.CompilerServices;
-#endif
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace Spring.Expressions
 {
@@ -37,7 +35,7 @@ namespace Spring.Expressions
         /// <summary>
         /// Create a new instance
         /// </summary>
-        public OpLike():base()
+        public OpLike()
         {
         }
 
@@ -48,7 +46,7 @@ namespace Spring.Expressions
             : base(info, context)
         {
         }
-        
+
         /// <summary>
         /// Returns a value for the logical LIKE operator node.
         /// </summary>
@@ -59,14 +57,100 @@ namespace Spring.Expressions
         /// </returns>
         protected override object Get(object context, EvaluationContext evalContext)
         {
-#if !MONO_2_0
-            string text = GetLeftValue( context, evalContext ) as string;
-            string pattern = GetRightValue( context, evalContext ) as string;
+            string text = GetLeftValue(context, evalContext) as string;
+            string pattern = GetRightValue(context, evalContext) as string;
 
-            return LikeOperator.LikeString(text, pattern, CompareMethod.Text);
-#else
-            throw new NotSupportedException("'like' operator is only supported in .NET 2.0 or higher.");
-#endif
+            return LikeString(text, pattern);
+        }
+
+        private static bool LikeString(string Source, string Pattern)
+        {
+            if (string.IsNullOrEmpty(Source) && string.IsNullOrEmpty(Pattern))
+            {
+                return true;
+                // LAMESPEC : MSDN states "if either string or pattern is an empty string, the result is False."
+                // but "" Like "[]" returns True
+            }
+
+            if ((string.IsNullOrEmpty(Source) || string.IsNullOrEmpty(Pattern)) && string.Compare(Pattern, "[]") != 0)
+            {
+                return false;
+            }
+
+            RegexOptions options = RegexOptions.Singleline | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase;
+
+            string regexString = ConvertLikeExpression(Pattern);
+            Regex regexpr = new Regex(regexString, options);
+
+            //Console.WriteLine("{0} --> {1}", Pattern, regexString)
+
+            return regexpr.IsMatch(Source);
+        }
+
+        private static string ConvertLikeExpression(string expression)
+        {
+            StringBuilder sb = new StringBuilder();
+
+            sb.Append("^");
+
+            for (int pos = 0; pos <= expression.Length - 1; pos++)
+            {
+                switch (expression[pos])
+                {
+                    case '?':
+                        sb.Append('.');
+                        break;
+                    case '*':
+                        sb.Append('.').Append('*');
+                        break;
+                    case '#':
+                        sb.Append("\\d{1}");
+                        break;
+                    case '[':
+                        StringBuilder gsb = ConvertGroupSubexpression(expression, ref pos);
+                        // skip groups of form [], i.e. empty strings
+                        if (gsb.Length > 2)
+                        {
+                            sb.Append(gsb);
+                        }
+                        break;
+                    default:
+                        sb.Append(Regex.Escape(expression[pos].ToString()));
+                        break;
+                }
+            }
+
+            sb.Append("$");
+
+            return sb.ToString();
+        }
+
+        private static StringBuilder ConvertGroupSubexpression(string carr, ref int pos)
+        {
+            StringBuilder sb = new StringBuilder();
+            bool negate = false;
+
+            while (carr[pos] != ']')
+            {
+                if (negate)
+                {
+                    sb.Append('^');
+                    negate = false;
+                }
+                if (carr[pos] == '!')
+                {
+                    sb.Remove(1, sb.Length - 1);
+                    negate = true;
+                }
+                else
+                {
+                    sb.Append(carr[pos]);
+                }
+                pos = pos + 1;
+            }
+            sb.Append(']');
+
+            return sb;
         }
     }
 }

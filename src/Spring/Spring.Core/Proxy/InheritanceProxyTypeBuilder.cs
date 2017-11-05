@@ -122,7 +122,7 @@ namespace Spring.Proxy
                 new BaseProxyMethodBuilder(typeBuilder, this, false),
                 BaseType, declaredMembersOnly);
 
-            return typeBuilder.CreateType();
+            return typeBuilder.CreateTypeInfo();
         }
 
         #endregion
