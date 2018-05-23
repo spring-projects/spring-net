@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ?2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -703,20 +703,20 @@ namespace Spring.Collections
 		}
         #endregion
 
-#region ISerializable Implementation
+        #region ISerializable Implementation
 
-#if BINARY_SERIALIZATION
-		/// <summary>
-		/// Save the state of the instance to a stream (that
-		/// is, serialize it).
-		/// </summary>
-		/// <serialData> The length of the array backing the instance is
-		/// emitted (int), followed by all of its elements (each an
-		/// <see cref="System.Object"/>) in the proper order.
-		/// </serialData>
-		/// <param name="serializationInfo">the stream</param>
-		/// <param name="context">the context</param>
-		public virtual void GetObjectData(SerializationInfo serializationInfo, StreamingContext context)
+#if BINARY_SERIALIZATION || NET_STANDARD_2_0
+        /// <summary>
+        /// Save the state of the instance to a stream (that
+        /// is, serialize it).
+        /// </summary>
+        /// <serialData> The length of the array backing the instance is
+        /// emitted (int), followed by all of its elements (each an
+        /// <see cref="System.Object"/>) in the proper order.
+        /// </serialData>
+        /// <param name="serializationInfo">the stream</param>
+        /// <param name="context">the context</param>
+        public virtual void GetObjectData(SerializationInfo serializationInfo, StreamingContext context)
 		{
 			Type thisType = this.GetType();
 			MemberInfo[] mi = FormatterServices.GetSerializableMembers(thisType, context);

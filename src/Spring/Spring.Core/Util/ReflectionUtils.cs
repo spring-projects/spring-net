@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ?2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -812,12 +812,13 @@ namespace Spring.Util
         /// <returns>Friendly string representing the Type</returns>
         public static string GetTypeFriendlyName(Type type)
         {
-#if MONO || NETCORE
+#if MONO || NETCORE 
             //no csharp services in mono (verify this!) so have to fall back to returning the ToString() for now
             //TODO: investigate whether there is another equivalent manner of providing this functionality under MONO
             return type.ToString();
-#endif
+#else
             return (new Microsoft.CSharp.CSharpCodeProvider()).GetTypeOutput(new System.CodeDom.CodeTypeReference(type));
+#endif
         }
 
 
