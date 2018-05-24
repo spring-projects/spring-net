@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ?2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -414,7 +414,9 @@ namespace Spring.Reflection.Dynamic
             methodName = "_dynamic_" + member.DeclaringType.FullName + "." + methodName;
             try
             {
+#if BINARY_SERIALIZATION
                 new PermissionSet(PermissionState.Unrestricted).Demand();
+#endif
                 dmGetter = CreateDynamicMethodInternal(methodName, returnType, argumentTypes, member, skipVisibility);
             }
             catch(SecurityException)
@@ -505,7 +507,7 @@ namespace Spring.Reflection.Dynamic
                 }
         */
 
-        #region Shared Code Generation
+#region Shared Code Generation
 
         private static void EmitFieldGetter(ILGenerator il, FieldInfo fieldInfo, bool isInstanceMethod)
         {
@@ -698,7 +700,7 @@ namespace Spring.Reflection.Dynamic
             EmitMethodReturn(il, constructor.DeclaringType);
         }
 
-        #endregion
+#endregion
 
         private static OpCode[] LdArgOpCodes = { OpCodes.Ldarg_0, OpCodes.Ldarg_1, OpCodes.Ldarg_2 };
 

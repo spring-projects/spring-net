@@ -125,7 +125,7 @@ namespace Spring.Expressions
 
         #region ISerializable Implementation
 
-#if BINARY_SERIALIZATION
+#if BINARY_SERIALIZATION || NET_STANDARD_2_0
         /// <summary>
         /// Create a new instance from SerializationInfo
         /// </summary>

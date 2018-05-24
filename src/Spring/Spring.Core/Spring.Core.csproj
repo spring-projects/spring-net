@@ -1,7 +1,8 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net45;netstandard1.3</TargetFrameworks>
+    <!--<TargetFrameworks>net45;netstandard1.3</TargetFrameworks>-->
+    <TargetFramework>netstandard2.0</TargetFramework>
     <AssemblyName>Spring.Core</AssemblyName>
     <PackageId>Spring.Core</PackageId>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
@@ -19,6 +20,7 @@
   <ItemGroup>
     <PackageReference Include="Common.Logging" Version="3.4.0-Alpha2" />
     <PackageReference Include="Common.Logging.Core" Version="3.4.0-Alpha2" />
+    
   </ItemGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
@@ -34,13 +36,19 @@
   <PropertyGroup Condition=" '$(TargetFramework)' == 'net45' ">
     <DefineConstants>$(DefineConstants);APPDOMAINS;BINARY_SERIALIZATION;DRAWING_COLOR;REMOTING;RESOURCESET;THREADING;XML_SCHEMA</DefineConstants>
   </PropertyGroup>
-
+  
   <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' ">
     <DefineConstants>$(DefineConstants);APPCONTEXT;NETCORE;NETSTANDARD_DBPROVIDERS</DefineConstants>
     <DebugType>portable</DebugType>
   </PropertyGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard1.3' ">
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <DefineConstants>$(DefineConstants);APPCONTEXT;NETCORE;NET_STANDARD_2_0</DefineConstants>
+    <DebugType>portable</DebugType>
+  </PropertyGroup>
+  
+
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
     <PackageReference Include="Microsoft.CSharp" Version="4.0.1" />
     <PackageReference Include="Microsoft.Win32.Registry" Version="4.0.0" />
     <PackageReference Include="System.AppContext" Version="4.1.0" />
@@ -80,6 +88,7 @@
     <PackageReference Include="System.Threading.ThreadPool" Version="4.0.10" />
     <PackageReference Include="System.Xml.XmlDocument" Version="4.0.1" />
     <PackageReference Include="System.Xml.XmlSerializer" Version="4.0.11" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.4.1" />
   </ItemGroup>
 
 </Project>

@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ?2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,7 +36,7 @@ namespace Spring.Objects.Events.Support
 	/// <author>Griffin Caprio</author>
 	public sealed class EventManipulationUtils
 	{
-#if !NETCORE
+
         /// <summary>
         /// Returns a new instance of the requested <see cref="Delegate"/>.
         /// </summary>
@@ -63,7 +63,7 @@ namespace Spring.Objects.Events.Support
 			return Delegate.CreateDelegate(
 				delegateType, targetSubscriber, targetSubscriberDelegateMethod.Name);
 		}
-#endif
+
 
 		/// <summary>
 		/// Queries the input type for a <see cref="MethodInfo" /> signature matching the input

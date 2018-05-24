@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ?2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -102,11 +102,15 @@ namespace Spring.Util
                     module = assembly.DefineDynamicModule(an.Name, an.Name + ".dll", true);
 #else
                     an.SetPublicKey(Assembly.GetExecutingAssembly().GetName().GetPublicKey());
+#if BINARY_SERIALIZATION
                     assembly = AppDomain.CurrentDomain.DefineDynamicAssembly(an, AssemblyBuilderAccess.Run, null, null, null, null,null, true );
-#if DEBUG                    
+#else
+                    assembly = AssemblyBuilder.DefineDynamicAssembly(an, AssemblyBuilderAccess.Run);
+#endif
+#if DEBUG && BINARY_SERIALIZATION
                     module = assembly.DefineDynamicModule(an.Name, true);
 #else
-			        module = assembly.DefineDynamicModule(an.Name, false);
+                    module = assembly.DefineDynamicModule(an.Name);
 #endif
 #endif
                     s_moduleCache[assemblyName] = module;
@@ -139,7 +143,11 @@ namespace Spring.Util
             }
 
             AssemblyBuilder assembly = (AssemblyBuilder) module.Assembly;
+#if BINARY_SERIALIZATION
             assembly.Save(assembly.GetName().Name + ".dll");            
+#else
+            throw new NotSupportedException("Not Support in netcore");
+#endif
         }
 
         /// <summary>
