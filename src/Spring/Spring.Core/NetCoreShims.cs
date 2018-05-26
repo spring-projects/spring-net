@@ -15,7 +15,7 @@ namespace System
 #endif
 
 
-#if !BINARY_SERIALIZATION
+#if !BINARY_SERIALIZATION && !NET_STANDARD_2_0
     internal class SerializableAttribute : Attribute
     {
     }
@@ -56,18 +56,6 @@ namespace System
         }
     }
 
-    public interface ICloneable
-    {
-        object Clone();
-    }
-
-    internal interface ISerializable
-    {
-    }
-
-    internal interface IDeserializationCallback
-    {
-    }
 
     namespace Configuration.Internal
     {
@@ -79,7 +67,7 @@ namespace System
         {
         }
     }
-
+    /*
     namespace Configuration
     {
         /// <summary>Handles the access to certain configuration sections.</summary>
@@ -120,6 +108,22 @@ namespace System
             {
             }
         }
+    }
+    */
+#endif
+
+#if !BINARY_SERIALIZATION && !NET_STANDARD_2_0
+    public interface ICloneable
+    {
+        object Clone();
+    }
+
+    internal interface ISerializable
+    {
+    }
+
+    internal interface IDeserializationCallback
+    {
     }
 #endif
 

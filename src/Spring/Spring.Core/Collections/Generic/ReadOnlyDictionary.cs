@@ -397,7 +397,7 @@ namespace Spring.Collections.Generic
             }
         }
 
-#if BINARY_SERIALIZATION
+#if BINARY_SERIALIZATION || NET_STANDARD_2_0
         /// <summary>
         /// Runs when the entire object graph has been deserialized.
         /// </summary>
