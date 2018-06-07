@@ -98,50 +98,6 @@ namespace Spring.Web.Support
                 }
             }
         }
-
-#if !NET_4_0
-        /// <summary>
-        /// Tests the behavior of our PageHandlerFactory class
-        /// </summary>
-        [Test]
-        public void PageHandlerFactoryBehavesLikeSystemPageHandlerFactory()
-        {
-            Host.Execute(new TestAction(PageHandlerFactoryBehavesLikeSystemPageHandlerFactoryImpl));
-        }
-#endif
-
-        public static void PageHandlerFactoryBehavesLikeSystemPageHandlerFactoryImpl()
-        {
-            using (TestWebContext ctx = new TestWebContext("/Test", "DoesNotExist.aspx"))
-            {
-                try
-                {
-                    IHttpHandlerFactory phf = new PageHandlerFactory();
-                    phf.GetHandler(HttpContext.Current, "GET", ctx.HttpWorkerRequest.GetFilePath(), ctx.HttpWorkerRequest.GetFilePathTranslated());
-                }
-                catch (HttpException e)
-                {
-                    Assert.AreEqual(404, e.GetHttpCode());
-                    Assert.IsTrue(e.Message.IndexOf(ctx.HttpWorkerRequest.GetFilePath()) > 0);
-                }
-            }
-        }
-
-#if !NET_4_0
-        [Test]
-        public void TransferAfterSetResult()
-        {
-            NUnit.Extensions.Asp.AspTester.TextBoxTester name = new NUnit.Extensions.Asp.AspTester.TextBoxTester("name", CurrentWebForm);
-            NUnit.Extensions.Asp.AspTester.ButtonTester save = new NUnit.Extensions.Asp.AspTester.ButtonTester("save", CurrentWebForm);
-
-            Browser.GetPage("asptest://localhost/TransferAfterSetResult.aspx");
-            // Note, that page TransferAfterSetResultSave.aspx has 'EnableViewStateMac="false"'
-            // otherwise ViewState validation will fail on a Server.Transfer during a Postback!
-            save.Click();
-            string result = Browser.CurrentPageText;
-            Assert.AreEqual("OK", result);
-        }
-#endif
     }
 
     [TestFixture]

@@ -18,7 +18,6 @@
 using System.Collections.Specialized;
 using System.IO;
 using NUnit.Framework;
-using Spring.Services.WindowsService.Common;
 
 namespace Spring.Services.WindowsService.Common
 {

@@ -24,8 +24,3 @@ using System.Runtime.InteropServices;
 [assembly: ComVisible(false)]
 [assembly: AssemblyTitle("Spring.Scheduling.Quartz")]
 [assembly: AssemblyDescription("Quartz.NET scheduler integration for Spring.NET")]
-
-#if !NET_4_0
-[assembly: System.Security.AllowPartiallyTrustedCallers]
-[assembly: System.Security.SecurityCritical]
-#endif

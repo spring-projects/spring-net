@@ -23,7 +23,6 @@ using DotNetMock.Dynamic;
 using log4net;
 using NUnit.Framework;
 using Spring.Threading;
-using Spring.Services.WindowsService.Common;
 
 namespace Spring.Services.WindowsService.Common.Deploy.FileSystem
 {

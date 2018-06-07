@@ -36,17 +36,20 @@ namespace Spring.Context.Attributes
     {
         private readonly List<Func<Assembly, bool>> _assemblyExclusionPredicates = new List<Func<Assembly, bool>>();
 
-        private readonly IList<string> _springAssemblyExcludePrefixes = new List<string>()
-                                                                     {
-                                                                         "Spring.",
-                                                                         "NHibernate.",
-                                                                         "Common.Logging",
-                                                                         "log4net",
-                                                                         "Quartz",
-                                                                         "NVelocity",
-                                                                         "Rhino.Mocks",
-                                                                         "Apache.NMS"
-                                                                     };
+        private readonly List<string> _springAssemblyExcludePrefixes = new List<string>
+        {
+            "Antlr3.Runtime",
+            "Spring.",
+            "NHibernate.",
+            "Common.Logging",
+            "log4net",
+            "Mono.Cecil",
+            "NUnit",
+            "Quartz",
+            "NVelocity",
+            "Rhino.Mocks",
+            "Apache.NMS"
+        };
 
         private IObjectNameGenerator _objectNameGenerator = new AttributeObjectNameGenerator();
 
@@ -86,7 +89,13 @@ namespace Spring.Context.Attributes
         /// <returns></returns>
         protected override IEnumerable<Assembly> ApplyAssemblyFiltersTo(IEnumerable<Assembly> assemblyCandidates)
         {
-            return assemblyCandidates.Where(candidate => IsIncludedAssembly(candidate) && !IsExcludedAssembly(candidate));
+            foreach (Assembly candidate in assemblyCandidates)
+            {
+                if (IsIncludedAssembly(candidate) && !IsExcludedAssembly(candidate))
+                {
+                    yield return candidate;
+                }
+            }
         }
 
         /// <summary>
@@ -149,8 +158,25 @@ namespace Spring.Context.Attributes
             base.SetDefaultFilters();
 
             //add the desired assembly exclusions to the list
-            _assemblyExclusionPredicates.Add(assembly => _springAssemblyExcludePrefixes.Any(name => name.StartsWith(assembly.GetName().Name))
-                && assembly.GetName().Name != "Spring.Core.Tests");
+            _assemblyExclusionPredicates.Add(assembly =>
+            {
+                var assemblyName = assembly.GetName().Name;
+                if ("Spring.Core.Tests".Equals(assemblyName, StringComparison.OrdinalIgnoreCase))
+                {
+                    return false;
+                }
+
+                for (var i = 0; i < _springAssemblyExcludePrefixes.Count; i++)
+                {
+                    var name = _springAssemblyExcludePrefixes[i];
+                    if (assemblyName.StartsWith(name, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            });
             _assemblyExclusionPredicates.Add(assembly => assembly.GetName().Name.StartsWith("System."));
             _assemblyExclusionPredicates.Add(assembly => assembly.GetName().Name.StartsWith("Microsoft."));
             _assemblyExclusionPredicates.Add(assembly => assembly.GetName().Name == "mscorlib");
@@ -172,8 +198,22 @@ namespace Spring.Context.Attributes
         /// </summary>
         public AssemblyObjectDefinitionScanner()
         {
-            AssemblyLoadExclusionPredicates.Add(candidate => _springAssemblyExcludePrefixes.Any(candidate.StartsWith)
-                && candidate != "Spring.Core.Tests");
+            AssemblyLoadExclusionPredicates.Add(candidate =>
+            {
+                if ("Spring.Core.Tests".Equals(candidate, StringComparison.OrdinalIgnoreCase))
+                {
+                    return false;
+                }
+                foreach (var prefix in _springAssemblyExcludePrefixes)
+                {
+                    if (candidate.StartsWith(prefix, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            });
             AssemblyLoadExclusionPredicates.Add(name => name.StartsWith("System."));
             AssemblyLoadExclusionPredicates.Add(name => name.StartsWith("Microsoft."));
             AssemblyLoadExclusionPredicates.Add(name => name == "mscorlib");

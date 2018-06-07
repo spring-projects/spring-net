@@ -30,9 +30,7 @@ namespace Spring.Web.Support
     /// </summary>
     /// <author>Erich Eichinger</author>
     [TestFixture]
-#if NET_4_0
     [Ignore("Trouble with running under .NET 4.5")]
-#endif
     public class LocalResourceManagerTests : WebApplicationTests
     {
         public LocalResourceManagerTests()

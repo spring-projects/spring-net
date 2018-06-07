@@ -22,7 +22,7 @@ using System.Reflection;
 using System.Threading;
 using log4net;
 using NUnit.Framework;
-using Spring.Services.WindowsService.Common.Deploy.FileSystem;
+
 using Spring.Threading;
 
 namespace Spring.Services.WindowsService.Common.Deploy

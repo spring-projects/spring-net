@@ -17,41 +17,25 @@
               value="${spring.basedir}/bin/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}/${current.build.config}"
               dynamic="true"/>
 
-  <!-- detect if .net 3.5 is installed -->
-  <property name="net-3.5" value="false"/>
-  <property name="registry.net-3.5.installed" value="0" overwrite="false"/>
-
-  <readregistry property="registry.net-3.5.installed"
-		      key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.5\Install"
-		      hive="LocalMachine"
-		      failonerror="false" />
-
-  <property name="net-3.5.installed" value="${registry.net-3.5.installed == '1'}" />
-
-  <!-- detect if .net 4.0 is installed -->
-  <property name="net-4.0" value="false"/>
-  <property name="registry.net-4.0.installed" value="0" overwrite="false"/>
-
-  <readregistry property="registry.net-4.0.installed"
-		      key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full\Install"
-		      hive="LocalMachine"
-		      failonerror="false" />
-
-  <property name="net-4.0.installed" value="${registry.net-4.0.installed == '1'}" />
-
-  <!-- detect if .net 4.5 is installed -->
-  <property name="net-4.5" value="false"/>
-  <property name="registry.net-4.5.installed" value="0" overwrite="false"/>
-
-  <readregistry property="registry.net-4.5.installed"
-		      key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v4\Full\Version"
-		      hive="LocalMachine"
-		      failonerror="false" />
-
-  <property name="net-4.5.installed" value="${string::starts-with(registry.net-4.5.installed, '4.5.') == true}" />
-
   <readregistry property="vs-net90.dir" key="SOFTWARE\Microsoft\VisualStudio\9.0\InstallDir" hive="LocalMachine" failonerror="false"/>
 
+  <property name="msbuild.exe" value="MsBuild.exe" />
+  <if test="${file::exists('C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\MSBuild\15.0\Bin\MsBuild.exe')}">
+	<property name="msbuild.exe" value="C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\MSBuild\15.0\Bin\MsBuild.exe" />
+	<echo message="Switching to installed MSBuild at location ${msbuild.exe}" />
+  </if>
+  <if test="${file::exists('C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\bin\MsBuild.exe')}">
+	<property name="msbuild.exe" value="C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\bin\MsBuild.exe" />
+	<echo message="Switching to installed MSBuild at location ${msbuild.exe}" />
+  </if>
+  <if test="${file::exists('C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\bin\MsBuild.exe')}">
+	<property name="msbuild.exe" value="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\bin\MsBuild.exe" />
+	<echo message="Switching to installed MSBuild at location ${msbuild.exe}" />
+  </if>
+  
+  <echo message="msbuild.exe:         '${msbuild.exe}'"/>
+
+  
   <!-- default location of mstest executable and reference assemblies -->
   <property name="mstest.exe" value="${vs-net90.dir}/mstest.exe" if="${property::exists('vs-net90-dir')}" />
 

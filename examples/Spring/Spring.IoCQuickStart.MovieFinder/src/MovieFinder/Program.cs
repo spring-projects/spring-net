@@ -21,7 +21,6 @@
 #region Imports
 
 using System;
-using System.Collections.Specialized;
 using Common.Logging;
 using Common.Logging.Log4Net;
 using Spring.Context;
@@ -168,7 +167,7 @@ namespace Spring.IocQuickStart.MovieFinder
 
         private static void InitializeCommonLogging()
         {
-            NameValueCollection properties = new NameValueCollection();
+            var properties = new Common.Logging.Configuration.NameValueCollection();
             properties["configType"] = "INLINE";
             LogManager.Adapter = new Log4NetLoggerFactoryAdapter(properties);
         }

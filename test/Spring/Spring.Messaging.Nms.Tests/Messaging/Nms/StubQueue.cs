@@ -60,5 +60,9 @@ namespace Spring.Messaging.Nms
         {
             get { return false; }
         }
+
+        public void Dispose()
+        {
+        }
     }
 }

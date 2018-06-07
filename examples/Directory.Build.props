@@ -1,0 +1,48 @@
+<Project>
+
+  <PropertyGroup>
+
+	<CleanedProjectName>$(MSBuildProjectName.Replace('.2010', ''))</CleanedProjectName>
+  
+    <AssemblyName>$(CleanedProjectName)</AssemblyName>
+    <PackageId>$(CleanedProjectName)</PackageId>
+    <RootNamespace>Spring</RootNamespace>
+
+    <AssemblyOriginatorKeyFile>..\..\..\Spring.Net.snk</AssemblyOriginatorKeyFile>
+
+    <DelaySign>false</DelaySign>
+    <Deterministic>true</Deterministic>
+
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+
+    <CommonLoggingVersion>3.4.1</CommonLoggingVersion>
+
+    <Authors>SpringSource</Authors>
+    <PackageIconUrl>http://springframework.net/images/SpringSource_Leaves32x32.png</PackageIconUrl>
+    <PackageLicenseUrl>http://www.springframework.net/license.html</PackageLicenseUrl>
+    <PackageProjectUrl>http://www.springframework.net/</PackageProjectUrl>
+    <PackageTags>Library</PackageTags>
+
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <WarningsAsErrors>True</WarningsAsErrors>
+	<NoWarn>1574,1584,1591</NoWarn>
+
+    <RepositoryType>git</RepositoryType>
+    <RepositoryUrl>https://github.com/spring-projects/spring-net</RepositoryUrl>
+
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+
+    <CLSCompliant>True</CLSCompliant>
+    <ComVisible>False</ComVisible>
+
+    <DebugSymbols>True</DebugSymbols>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+
+    <LangVersion>latest</LangVersion>
+
+  </PropertyGroup>
+
+</Project>

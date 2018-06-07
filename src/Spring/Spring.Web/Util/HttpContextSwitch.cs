@@ -51,32 +51,6 @@ namespace Spring.Util
         private readonly IDisposable rewriteContext;
         private static readonly ILog log = LogManager.GetLogger(typeof(HttpContextSwitch));
 
-//        /// <summary>
-//        /// Performs an immediate call to <see cref="HttpContext.RewritePath(string)"/>
-//        /// </summary>
-//        /// <param name="virtualDirectory">a directory path (without trailing filename!)</param>
-//        public HttpContextSwitch( string virtualDirectory )
-//        {
-//            HttpContext currentContext = HttpContext.Current;
-//            if (currentContext == null) return; // no webrequest
-//
-//            virtualDirectory = WebUtils.GetVirtualDirectory(virtualDirectory);
-//            string currentFileDirectory = WebUtils.GetVirtualDirectory(currentContext.Request.FilePath);
-//            // only switch path if necessary
-//            if (string.Compare( virtualDirectory, currentFileDirectory, true ) != 0)
-//            {
-//                savedContext = currentContext;
-//                originalUrl = savedContext.Request.Url.PathAndQuery;
-//                string newPath = virtualDirectory + "currentcontext.dummy";
-//#if NET_2_0
-//                savedContext.RewritePath( newPath, false );
-//#else
-//                savedContext.RewritePath( newPath );
-//#endif
-//                if (log.IsDebugEnabled) log.Debug("rewriting path from " + originalUrl + " to " + newPath + " results in " + savedContext.Request.FilePath);
-//            }
-//        }
-
         /// <summary>
         /// Performs an immediate call to <see cref="HttpContext.RewritePath(string)"/>
         /// </summary>
@@ -84,24 +58,6 @@ namespace Spring.Util
         public HttpContextSwitch(string virtualDirectory)
         {
             rewriteContext = VirtualEnvironment.RewritePath(virtualDirectory, false);
-
-//            string currentFileDirectory = WebUtils.GetVirtualDirectory(VirtualEnvironment.CurrentVirtualFilePath);
-//            // only switch path if necessary
-//            if (string.Compare(virtualDirectory, currentFileDirectory, true) != 0)
-//            {
-//                originalUrl = VirtualEnvironment.CurrentVirtualPathAndQuery;
-//                string newPath = virtualDirectory + "currentcontext.dummy";
-//                VirtualEnvironment.RewritePath(newPath, false);
-//
-//                #region Instrumentation
-//
-//                if (log.IsDebugEnabled)
-//                {
-//                    log.Debug("rewriting path from " + originalUrl + " to " + newPath + " results in " + VirtualEnvironment.CurrentVirtualFilePath);
-//                }
-//
-//                #endregion
-//            }
         }
 
         /// <summary>
@@ -110,44 +66,6 @@ namespace Spring.Util
         public void Dispose()
         {
             rewriteContext.Dispose();
-//            if (rewriteContext != null)
-//            {
-//                VirtualEnvironment.RewritePath(originalUrl, false);
-//
-//                #region Instrumentation
-//
-//                if (log.IsDebugEnabled)
-//                {
-//                    log.Debug("restoring original path from " + VirtualEnvironment.CurrentVirtualFilePath + " back to " + originalUrl);
-//                }
-//
-//                #endregion
-//            }
         }
-
-//        /// <summary>
-//        /// Restores original path if necessary
-//        /// </summary>
-//        public void Dispose()
-//        {
-//            if (originalUrl != null)
-//            {
-//                HttpContext context = HttpContext.Current;
-//#if NET_2_0
-//                context.RewritePath( originalUrl, false );
-//#else
-//                context.RewritePath( originalUrl );
-//#endif
-//
-//                #region Instrumentation
-//
-//                if (log.IsDebugEnabled)
-//                {
-//                    log.Debug("restoring original path from " + context.Request.FilePath + " back to " + originalUrl);
-//                }
-//
-//                #endregion
-//            }
-//        }
     }
 }

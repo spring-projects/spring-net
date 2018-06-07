@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿
 using System.Linq;
 using System.Web.Http;
+using System.Web.Http.OData;
 
 namespace Spring.Mvc5QuickStart.Controllers
 {
@@ -14,7 +15,7 @@ namespace Spring.Mvc5QuickStart.Controllers
 
         // GET /api/odata?$skip=1&$top=2
         // GET /api/odata?$filter=SomeProperty%20eq%203
-        [Queryable]
+        [EnableQuery]
         public IQueryable<SampleDataItem> Get()
         {
             var dataItems = new[]

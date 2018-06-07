@@ -193,12 +193,6 @@ namespace Spring.Objects.Factory.Support
             }
 
             Type pageType = VirtualEnvironment.GetCompiledType(rootedVPath);
-//#if NET_2_0
-//            pageType = BuildManager.GetCompiledType( rootedVPath ); // requires rooted virtual path!
-//#else
-//            pageType = CreatePageInstance(pageUrl).GetType();
-//#endif
-
             if (s_log.IsDebugEnabled)
             {
                 s_log.Debug( string.Format( "got page type '{0}' for vpath '{1}'", pageType.FullName, rootedVPath ) );
@@ -234,11 +228,6 @@ namespace Spring.Objects.Factory.Support
             Type controlType;
             try
             {
-//#if NET_2_0
-//                controlType = BuildManager.GetCompiledType( rootedVPath ); // requires rooted virtual path!
-//#else
-//              controlType = (Type) miGetCompiledUserControlType.Invoke(null, new object[] { rootedVPath, null, ctx });
-//#endif
                 controlType = VirtualEnvironment.GetCompiledType(rootedVPath);
             }
             catch (HttpException httpEx)

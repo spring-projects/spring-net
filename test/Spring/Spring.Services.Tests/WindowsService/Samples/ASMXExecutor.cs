@@ -2,8 +2,6 @@ using System;
 using System.Globalization;
 using System.IO;
 using System.Runtime.Remoting;
-using System.Web;
-using System.Web.Hosting;
 
 namespace Spring.Service.Sample
 {

@@ -1,9 +1,11 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27703.2035
+MinimumVisualStudioVersion = 10.0.40219.1
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Spring.WebQuickStart.2005", "src\Spring.WebQuickStart.2005\", "{B4F56253-6425-4065-8A93-EF88F8730E57}"
 	ProjectSection(WebsiteProperties) = preProject
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5.2"
 		ProjectReferences = "{BA4789EB-281A-48EA-8763-28B9F0596A18}|Spring.Web.dll;{710961A3-0DF4-49E4-A26E-F5B9C044AC84}|Spring.Core.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/Spring.WebQuickStart.2005"
 		Debug.AspNetCompiler.PhysicalPath = "src\Spring.WebQuickStart.2005\"
@@ -20,12 +22,13 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Spring.WebQuickStart.2005",
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
 		VWDPort = "4724"
+		SlnRelativePath = "src\Spring.WebQuickStart.2005\"
 		DefaultWebSiteLanguage = "Visual C#"
 	EndProjectSection
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Spring.WebQuickStart.Providers", "src\Spring.WebQuickStart.Providers\", "{F42A333D-D305-4649-8B5A-6F5862F0F62A}"
 	ProjectSection(WebsiteProperties) = preProject
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.0"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5.2"
 		ProjectReferences = "{710961A3-0DF4-49E4-A26E-F5B9C044AC84}|Spring.Core.dll;{BA4789EB-281A-48EA-8763-28B9F0596A18}|Spring.Web.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/Spring.WebQuickStart.Providers"
 		Debug.AspNetCompiler.PhysicalPath = "src\Spring.WebQuickStart.Providers\"
@@ -42,20 +45,27 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Spring.WebQuickStart.Provid
 		Release.AspNetCompiler.FixedNames = "false"
 		Release.AspNetCompiler.Debug = "False"
 		VWDPort = "1343"
+		SlnRelativePath = "src\Spring.WebQuickStart.Providers\"
 		DefaultWebSiteLanguage = "Visual C#"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Core.2010", "..\..\..\src\Spring\Spring.Core\Spring.Core.2010.csproj", "{710961A3-0DF4-49E4-A26E-F5B9C044AC84}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Core.2010", "..\..\..\src\Spring\Spring.Core\Spring.Core.2010.csproj", "{710961A3-0DF4-49E4-A26E-F5B9C044AC84}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Core.Tests.2010", "..\..\..\test\Spring\Spring.Core.Tests\Spring.Core.Tests.2010.csproj", "{44B16BAA-6DF8-447C-9D7F-3AD3D854D904}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Core.Tests.2010", "..\..\..\test\Spring\Spring.Core.Tests\Spring.Core.Tests.2010.csproj", "{44B16BAA-6DF8-447C-9D7F-3AD3D854D904}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Web.2010", "..\..\..\src\Spring\Spring.Web\Spring.Web.2010.csproj", "{BA4789EB-281A-48EA-8763-28B9F0596A18}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Web.2010", "..\..\..\src\Spring\Spring.Web\Spring.Web.2010.csproj", "{BA4789EB-281A-48EA-8763-28B9F0596A18}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Web.Tests.2010", "..\..\..\test\Spring\Spring.Web.Tests\Spring.Web.Tests.2010.csproj", "{C67E47AA-1ACD-41B4-A465-4D336A2319CA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Web.Tests.2010", "..\..\..\test\Spring\Spring.Web.Tests\Spring.Web.Tests.2010.csproj", "{C67E47AA-1ACD-41B4-A465-4D336A2319CA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Aop.2010", "..\..\..\src\Spring\Spring.Aop\Spring.Aop.2010.csproj", "{3A3A4E65-45A6-4B20-B460-0BEDC302C02C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Aop.2010", "..\..\..\src\Spring\Spring.Aop\Spring.Aop.2010.csproj", "{3A3A4E65-45A6-4B20-B460-0BEDC302C02C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.2010", "..\..\..\src\Spring\Spring.Data\Spring.Data.2010.csproj", "{AE00E5AB-C39A-436F-86D2-33BFE33E2E40}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Data.2010", "..\..\..\src\Spring\Spring.Data\Spring.Data.2010.csproj", "{AE00E5AB-C39A-436F-86D2-33BFE33E2E40}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Template.Velocity.2010", "..\..\..\src\Spring\Spring.Template.Velocity\Spring.Template.Velocity.2010.csproj", "{6630B5A3-5471-40F7-B058-4C1D17B219EF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Services.2010", "..\..\..\src\Spring\Spring.Services\Spring.Services.2010.csproj", "{88601B69-E2E6-44CA-A2B4-82CD635A16AA}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Messaging.Nms.2010", "..\..\..\src\Spring\Spring.Messaging.Nms\Spring.Messaging.Nms.2010.csproj", "{E2B834B9-9476-470B-9D5D-97183124A31F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -147,8 +157,47 @@ Global
 		{AE00E5AB-C39A-436F-86D2-33BFE33E2E40}.Release|Any CPU.Build.0 = Release|Any CPU
 		{AE00E5AB-C39A-436F-86D2-33BFE33E2E40}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{AE00E5AB-C39A-436F-86D2-33BFE33E2E40}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{6630B5A3-5471-40F7-B058-4C1D17B219EF}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{6630B5A3-5471-40F7-B058-4C1D17B219EF}.Debug|.NET.Build.0 = Debug|Any CPU
+		{6630B5A3-5471-40F7-B058-4C1D17B219EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6630B5A3-5471-40F7-B058-4C1D17B219EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6630B5A3-5471-40F7-B058-4C1D17B219EF}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{6630B5A3-5471-40F7-B058-4C1D17B219EF}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{6630B5A3-5471-40F7-B058-4C1D17B219EF}.Release|.NET.ActiveCfg = Release|Any CPU
+		{6630B5A3-5471-40F7-B058-4C1D17B219EF}.Release|.NET.Build.0 = Release|Any CPU
+		{6630B5A3-5471-40F7-B058-4C1D17B219EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6630B5A3-5471-40F7-B058-4C1D17B219EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6630B5A3-5471-40F7-B058-4C1D17B219EF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{6630B5A3-5471-40F7-B058-4C1D17B219EF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{88601B69-E2E6-44CA-A2B4-82CD635A16AA}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{88601B69-E2E6-44CA-A2B4-82CD635A16AA}.Debug|.NET.Build.0 = Debug|Any CPU
+		{88601B69-E2E6-44CA-A2B4-82CD635A16AA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{88601B69-E2E6-44CA-A2B4-82CD635A16AA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{88601B69-E2E6-44CA-A2B4-82CD635A16AA}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{88601B69-E2E6-44CA-A2B4-82CD635A16AA}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{88601B69-E2E6-44CA-A2B4-82CD635A16AA}.Release|.NET.ActiveCfg = Release|Any CPU
+		{88601B69-E2E6-44CA-A2B4-82CD635A16AA}.Release|.NET.Build.0 = Release|Any CPU
+		{88601B69-E2E6-44CA-A2B4-82CD635A16AA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{88601B69-E2E6-44CA-A2B4-82CD635A16AA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{88601B69-E2E6-44CA-A2B4-82CD635A16AA}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{88601B69-E2E6-44CA-A2B4-82CD635A16AA}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E2B834B9-9476-470B-9D5D-97183124A31F}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{E2B834B9-9476-470B-9D5D-97183124A31F}.Debug|.NET.Build.0 = Debug|Any CPU
+		{E2B834B9-9476-470B-9D5D-97183124A31F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E2B834B9-9476-470B-9D5D-97183124A31F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E2B834B9-9476-470B-9D5D-97183124A31F}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E2B834B9-9476-470B-9D5D-97183124A31F}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E2B834B9-9476-470B-9D5D-97183124A31F}.Release|.NET.ActiveCfg = Release|Any CPU
+		{E2B834B9-9476-470B-9D5D-97183124A31F}.Release|.NET.Build.0 = Release|Any CPU
+		{E2B834B9-9476-470B-9D5D-97183124A31F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E2B834B9-9476-470B-9D5D-97183124A31F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E2B834B9-9476-470B-9D5D-97183124A31F}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E2B834B9-9476-470B-9D5D-97183124A31F}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {FCE7DAD6-0825-438B-A579-EB142A7F4628}
 	EndGlobalSection
 EndGlobal

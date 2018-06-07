@@ -74,19 +74,10 @@ namespace Spring.Util
             }
         }
 
-#if NET_4_0
         [Test]
         public void Clr4Runtime()
         {
             Assert.IsTrue(SystemUtils.Clr4Runtime);
         }
-#else
-        [Test]
-        public void Clr4Runtime()
-        {
-            Assert.IsFalse(SystemUtils.Clr4Runtime);
-        }
-#endif
-
     }
 }

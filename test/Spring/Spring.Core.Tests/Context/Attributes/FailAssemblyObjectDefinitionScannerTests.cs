@@ -27,7 +27,7 @@ using Spring.Objects.Factory.Support;
 
 namespace Spring.Context.Attributes
 {
-    [TestFixture]
+    [Explicit("Interferes with other fixtures")]
     public class FailAssemblyObjectDefinitionScannerTests
     {
         #region Setup/Teardown

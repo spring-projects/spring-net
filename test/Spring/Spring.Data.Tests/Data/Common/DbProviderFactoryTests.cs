@@ -153,8 +153,6 @@ namespace Spring.Data.Common
             Assert.AreEqual(":Foo", provider.CreateParameterName("Foo"));
         }
 
-#if NET_4_0
-
         [Test]
         public void DefaultInstanceWithSqlServer40()
         {
@@ -181,7 +179,6 @@ namespace Spring.Data.Common
             Assert.IsNotNull(provider.CreateParameter());
             Assert.AreEqual("?", provider.CreateParameterName("Foo"));
         }
-#endif
 
         [Test]
         public void DefaultInstanceWithOracleClient10_20()

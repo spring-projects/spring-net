@@ -235,8 +235,7 @@ ${tool.dir}       : dir for tools
     <property name="test.assemblyname" value="${project::get-name()}" overwrite="false" />
     <property name="test.assemblyfile" value="${test.assemblyname}.dll" overwrite="false" />
 
-	<property name="nunit.framework.version" value="${nant.settings.currentframework}" />
-	<property name="nunit.framework.version" value="net-4.0" if="${nunit.framework.version == 'net-4.5'}" />
+	<property name="nunit.framework.version" value="net-4.0" />
 	
     <property name="test.bin.dir" value="${current.bin.dir}" if="${not property::exists('test.bin.dir')}" />
     <echo message="Unit Testing ${project.name}, ${test.assemblyname} in ${test.bin.dir}" />
@@ -331,10 +330,8 @@ ${tool.dir}       : dir for tools
 			<arg value="${test.assemblyname}.dll-TestCoverage.xml" />
 			<arg path="${test.bin.dir}\CoverageReport\${test.assemblyname}" />
 		</exec>
-</target>
+  </target>
 
-  <readregistry property="net35.install.dir" key="SOFTWARE\Microsoft\NET Framework Setup\NDP\v3.5\InstallPath" hive="LocalMachine" failonerror="true"/>
-  <property name="msbuild.exe" value="${net35.install.dir}\msbuild.exe"/>
-  <property name="nunit.console.exe" value="${spring.basedir}/packages/NUnit.ConsoleRunner.3.5.0/tools/nunit3-console.exe" />
+  <property name="nunit.console.exe" value="${spring.basedir}/packages/NUnit.ConsoleRunner.3.9.0/tools/nunit3-console.exe" />
   
 </project>

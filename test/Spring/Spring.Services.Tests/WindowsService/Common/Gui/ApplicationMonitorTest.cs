@@ -2,13 +2,11 @@ using System;
 using System.Collections;
 using System.Drawing.Imaging;
 using System.Threading;
-using System.Windows.Forms;
+
 using DotNetMock.Dynamic;
-using NUnit.Extensions.Forms;
+
 using NUnit.Framework;
 using Spring.Objects.Factory.Config;
-using Spring.Services.WindowsService.Common;
-using Spring.Services.WindowsService.Common.Deploy;
 using Spring.Threading;
 
 namespace Spring.Services.WindowsService.Common.Gui

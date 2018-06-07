@@ -12,13 +12,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Spring.CachingQuickStart</RootNamespace>
     <AssemblyName>Spring.CachingQuickStart.Web</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <OldToolsVersion>4.0</OldToolsVersion>
-    <UpgradeBackupLocation>
-    </UpgradeBackupLocation>
-    <TargetFrameworkProfile />
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <UseIISExpress>false</UseIISExpress>
     <PlatformTarget>AnyCPU</PlatformTarget>
   </PropertyGroup>
@@ -40,18 +34,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Spring.Aop, Version=0.0.0.20709, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Aop.dll</HintPath>
+    <Reference Include="Spring.Aop">
+      <HintPath>..\..\..\..\..\build\$(Configuration)\Spring.Aop\net452\Spring.Aop.dll</HintPath>
     </Reference>
-    <Reference Include="Spring.Core, Version=0.0.0.20709, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Core.dll</HintPath>
+    <Reference Include="Spring.Core">
+      <HintPath>..\..\..\..\..\build\$(Configuration)\Spring.Aop\net452\Spring.Core.dll</HintPath>
     </Reference>
-    <Reference Include="Spring.Web, Version=0.0.0.20709, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Web.dll</HintPath>
+    <Reference Include="Spring.Web">
+      <HintPath>..\..\..\..\..\build\$(Configuration)\Spring.Web\net452\Spring.Web.dll</HintPath>
     </Reference>
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Web" />
   </ItemGroup>

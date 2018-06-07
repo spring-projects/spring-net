@@ -1,5 +1,8 @@
 version: 1.0.{build}
-services: mssql2012sp1
+image: Visual Studio 2017
+services:
+- mssql2017
+- msmq
 hosts:
   SpringQA: 127.0.0.1
 build_script:
@@ -10,7 +13,7 @@ build_script:
 - rem we need the MSDTC running for the Tx integration tests to pass so start it if necessary...
 - powershell "%APPVEYOR_BUILD_FOLDER%\build-support\wait-to-restart-service.ps1" "'MSDTC'"
 - rem after applying the alias, we need to restart the SQL Server instance to ensure the alias is picked up properly...
-- powershell "%APPVEYOR_BUILD_FOLDER%\build-support\wait-to-restart-service.ps1" "'MSSQL$SQL2012SP1'"
+- powershell "%APPVEYOR_BUILD_FOLDER%\build-support\wait-to-restart-service.ps1" "'MSSQL$SQL2017'"
 - rem attempt to access the database via its alias to validate alias is functional...
 - sqlcmd -S "SpringQA" -U springqa -P springqa -Q "select * from Vacations"
 - rem actually invoke the build + test run

@@ -74,7 +74,7 @@ namespace Spring.Globalization
 
         public static bool OperatingSystemIsAfterWindows7
         {
-            get { return Environment.OSVersion.Version.Major >= 6 && Environment.OSVersion.Version.Minor >= 2; }
+            get { return Environment.OSVersion.Version.Major >= 6; }
         }
 
         public static bool OperatingSystemIsAfterWindows7AndBeforeWindows10Build10586

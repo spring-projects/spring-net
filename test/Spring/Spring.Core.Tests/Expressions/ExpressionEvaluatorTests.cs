@@ -291,7 +291,7 @@ namespace Spring.Expressions
             object value = ExpressionEvaluator.GetValue(null, "'123' + 1");
             Assert.AreEqual("1231", value);
         }
-#if NET_4_0
+
         [Test(Description = "SPRNET-1507 - Test 1")]
         public void TestExpandoObject()
         {
@@ -320,7 +320,7 @@ namespace Spring.Expressions
                     ex.Message);
             }
         }
-#endif
+
         [Test(Description = "SPRNET-944")]
         public void DateTests()
         {

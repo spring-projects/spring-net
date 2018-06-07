@@ -21,13 +21,10 @@ using System.IO;
 using System.Net;
 using System.Net.Sockets;
 using System.Reflection;
-using System.Threading;
+
 using NUnit.Framework;
-using Spring.Services.WindowsService.Common;
-using Spring.Services.WindowsService.Common.Deploy;
-using Spring.Services.WindowsService.Common.Deploy.FileSystem;
+
 using Spring.Threading;
-using Spring.Util;
 
 namespace Spring.Services.WindowsService
 {

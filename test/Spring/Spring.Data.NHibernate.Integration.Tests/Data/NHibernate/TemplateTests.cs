@@ -23,7 +23,7 @@
 using System;
 using System.Data;
 using log4net;
-using log4net.Config;
+
 using NHibernate;
 using NUnit.Framework;
 using Spring.Context;

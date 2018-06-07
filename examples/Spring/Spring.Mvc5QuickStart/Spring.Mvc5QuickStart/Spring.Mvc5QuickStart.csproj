@@ -13,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Spring.Mvc5QuickStart</RootNamespace>
     <AssemblyName>Spring.Mvc5QuickStart</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>false</UseIISExpress>
     <TargetFrameworkProfile />
@@ -46,15 +46,23 @@
     <Prefer32Bit>false</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Antlr" Version="3.5.0.2" />
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.6" />
+    <PackageReference Include="Microsoft.AspNet.WebApi" Version="5.2.6" />
+    <PackageReference Include="Microsoft.AspNet.Web.Optimization" Version="1.1.3" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.OData" Version="5.7.0" />
+    <PackageReference Include="Microsoft.Web.Infrastructure" Version="1.0.0" />
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Spring.Core">
-      <HintPath>..\..\..\..\build\VS.Net.2010\Spring.Core\Debug\Spring.Core.dll</HintPath>
+      <HintPath>..\..\..\..\build\$(Configuration)\Spring.Core\net452\Spring.Core.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Web">
-      <HintPath>..\..\..\..\build\VS.Net.2010\Spring.Web\Debug\Spring.Web.dll</HintPath>
+      <HintPath>..\..\..\..\build\$(Configuration)\Spring.Web\net452\Spring.Web.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Web.Mvc5">
-      <HintPath>..\..\..\..\build\VS.Net.2010\Spring.Web.Mvc5\Debug\Spring.Web.Mvc5.dll</HintPath>
+      <HintPath>..\..\..\..\build\$(Configuration)\Spring.Web.Mvc5\net452\Spring.Web.Mvc5.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -228,10 +236,6 @@
     <Content Include="Views\Shared\_Layout.cshtml" />
     <Content Include="Views\Web.config" />
     <Content Include="Scripts\jquery-1.10.2.min.map" />
-    <None Include="project.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="App_Data\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Views\Count\Index.cshtml" />
@@ -272,4 +276,3 @@
   <Target Name="AfterBuild">
   </Target> -->
 </Project>
-
