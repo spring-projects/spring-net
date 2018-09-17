@@ -18,6 +18,8 @@
 
 #endregion
 
+#if !NETSTANDARD
+using System;
 using System.Runtime.CompilerServices;
 using System.Security;
 
@@ -30,11 +32,9 @@ namespace Spring.Util
     /// <author>Erich Eichinger</author>
     internal class SecurityCritical
     {
-        internal delegate void PrivilegedCallback();
-
         [SecurityCritical, SecurityTreatAsSafe]
         [MethodImpl(MethodImplOptions.NoInlining)]
-        internal static void ExecutePrivileged(IStackWalk permission, PrivilegedCallback callback)
+        internal static void ExecutePrivileged(IStackWalk permission, Action callback)
         {
             permission.Assert();
             try
@@ -48,3 +48,4 @@ namespace Spring.Util
         }
     }
 }
+#endif

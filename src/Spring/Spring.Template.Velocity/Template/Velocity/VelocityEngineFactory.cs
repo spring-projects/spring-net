@@ -198,7 +198,6 @@ namespace Spring.Template.Velocity {
         /// <see cref="InitVelocityResourceLoader" />
         /// <see cref="PostProcessVelocityEngine" />
         /// <see cref="VelocityEngine.Init()" />
-        [CLSCompliant(false)]
         public VelocityEngine CreateVelocityEngine()
         {
             ExtendedProperties extendedProperties = new ExtendedProperties();
@@ -274,7 +273,6 @@ namespace Spring.Template.Velocity {
         /// </summary>
         /// <returns>VelocityEngine instance (non-configured)</returns>
         /// <see cref="CreateVelocityEngine"/>
-        [CLSCompliant(false)]
         protected static VelocityEngine NewVelocityEngine()
         {
             return new VelocityEngine();
@@ -292,7 +290,6 @@ namespace Spring.Template.Velocity {
         /// <see cref="SpringResourceLoader"/>
         /// <see cref="InitSpringResourceLoader"/>
         /// <see cref="CreateVelocityEngine"/>
-        [CLSCompliant(false)]
         protected void InitVelocityResourceLoader(VelocityEngine velocityEngine, ExtendedProperties extendedProperties, IList<string> paths)
         {
 
@@ -341,7 +338,6 @@ namespace Spring.Template.Velocity {
         /// <param name="resourceLoaderPathString">resourceLoaderPath the path to load Velocity resources from</param>
         /// <see cref="SpringResourceLoader"/>
         /// <see cref="InitVelocityResourceLoader"/>
-        [CLSCompliant(false)]
         protected void InitSpringResourceLoader(VelocityEngine velocityEngine, ExtendedProperties extendedProperties, string resourceLoaderPathString)
         {
             extendedProperties.SetProperty(RuntimeConstants.RESOURCE_LOADER, SpringResourceLoader.NAME);
@@ -363,7 +359,6 @@ namespace Spring.Template.Velocity {
         /// <exception cref="IOException" />
         /// <see cref="CreateVelocityEngine"/>
         /// <see cref="VelocityEngine.Init()"/>
-        [CLSCompliant(false)]
         protected virtual void PostProcessVelocityEngine(VelocityEngine velocityEngine)
         {
         }

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -16,15 +14,12 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
+using System.Runtime.Serialization;
 
 using Common.Logging;
 
@@ -32,8 +27,6 @@ using Spring.Collections;
 using Spring.Core.TypeResolution;
 using Spring.Objects.Factory.Config;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Objects.Factory.Support
 {
@@ -62,23 +55,12 @@ namespace Spring.Objects.Factory.Support
     [Serializable]
     public abstract class AbstractAutowireCapableObjectFactory : AbstractObjectFactory, IAutowireCapableObjectFactory
     {
-        #region Constants
-
         /// <summary>
         /// The <see cref="System.Reflection.BindingFlags"/> used during the invocation and
         /// searching for of methods.
         /// </summary>
         protected const BindingFlags MethodResolutionFlags =
                 BindingFlags.Public | BindingFlags.InvokeMethod | BindingFlags.Static | BindingFlags.Instance | BindingFlags.IgnoreCase;
-
-        #endregion
-
-        /// <summary>
-        /// The <see cref="Common.Logging.ILog"/> instance for this class.
-        /// </summary>
-        private readonly ILog log;
-
-        #region Constructor (s) / Destructor
 
         /// <summary>
         /// Creates a new instance of the
@@ -110,15 +92,9 @@ namespace Spring.Objects.Factory.Support
         protected AbstractAutowireCapableObjectFactory(bool caseSensitive, IObjectFactory parentFactory)
             : base(caseSensitive, parentFactory)
         {
-            log = LogManager.GetLogger(this.GetType());
-
             this.IgnoreDependencyInterface(typeof(IObjectFactoryAware));
             this.IgnoreDependencyInterface(typeof(IObjectNameAware));
         }
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// The <see cref="Spring.Objects.Factory.Support.IInstantiationStrategy"/>
@@ -129,10 +105,6 @@ namespace Spring.Objects.Factory.Support
             get { return instantiationStrategy; }
             set { instantiationStrategy = value; }
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Predict the eventual object type (of the processed object instance) for the
@@ -302,14 +274,10 @@ namespace Spring.Objects.Factory.Support
         /// </exception>
         protected object ApplyObjectPostProcessorsBeforeInstantiation(Type objectType, string objectName)
         {
-            #region Instrumentation
-
             if (log.IsDebugEnabled)
             {
                 log.Debug(string.Format("Invoking IInstantiationAwareObjectPostProcessors before " + "the instantiation of '{0}'.", objectName));
             }
-
-            #endregion
 
             foreach (IObjectPostProcessor processor in ObjectPostProcessors)
             {
@@ -675,8 +643,6 @@ namespace Spring.Objects.Factory.Support
                     object o = GetObject(propertyName);
                     properties.Add(propertyName, o);
 
-                    #region Instrumentation
-
                     if (log.IsDebugEnabled)
                     {
                         log.Debug(
@@ -684,21 +650,15 @@ namespace Spring.Objects.Factory.Support
                                               "Added autowiring by name from object name '{0}' via " + "property '{1}' to object named '{1}'.", name,
                                               propertyName));
                     }
-
-                    #endregion
                 }
                 else
                 {
-                    #region Instrumentation
-
                     if (log.IsDebugEnabled)
                     {
                         log.Debug(
                                 string.Format(CultureInfo.InvariantCulture,
                                               "Not autowiring property '{0}' of object '{1}' by name: " + "no matching object found.", propertyName, name));
                     }
-
-                    #endregion
                 }
             }
         }
@@ -739,8 +699,6 @@ namespace Spring.Objects.Factory.Support
                 {
                     properties.Add(propertyName, ObjectUtils.EnumerateFirstElement(matchingObjects.Values));
 
-                    #region Instrumentation
-
                     if (log.IsDebugEnabled)
                     {
                         log.Debug(
@@ -748,8 +706,6 @@ namespace Spring.Objects.Factory.Support
                                               "Autowiring by type from object name '{0}' via property " + "'{1}' to object named '{2}'.", name,
                                               propertyName, ObjectUtils.EnumerateFirstElement(matchingObjects.Keys)));
                     }
-
-                    #endregion
                 }
                 else if (matchingObjects != null && matchingObjects.Count > 1)
                 {
@@ -762,16 +718,12 @@ namespace Spring.Objects.Factory.Support
                 }
                 else
                 {
-                    #region Instrumentation
-
                     if (log.IsDebugEnabled)
                     {
                         log.Debug(
                                 string.Format(CultureInfo.InvariantCulture, "Not autowiring property '{0}' of object '{1}': no matching object found.",
                                               propertyName, name));
                     }
-
-                    #endregion
                 }
             }
         }
@@ -878,14 +830,10 @@ namespace Spring.Objects.Factory.Support
                 }
             }
 
-            #region Instrumentation
-
             if (log.IsDebugEnabled)
             {
                 log.Debug(string.Format(CultureInfo.InvariantCulture, "Creating instance of Object '{0}' with merged definition [{1}].", name, definition));
             }
-
-            #endregion
 
             // Make sure object type is actually resolved at this point.
             ResolveObjectType(definition, name);
@@ -1307,29 +1255,21 @@ namespace Spring.Objects.Factory.Support
         {
             if (ObjectUtils.IsAssignableAndNotTransparentProxy(typeof(IInitializingObject), target))
             {
-                #region Instrumentation
-
                 if (log.IsDebugEnabled)
                 {
                     log.Debug(string.Format(CultureInfo.InvariantCulture, "Calling AfterPropertiesSet() on object with name '{0}'.", name));
                 }
 
-                #endregion
-
                 ((IInitializingObject)target).AfterPropertiesSet();
             }
             if (StringUtils.HasText(definition.InitMethodName))
             {
-                #region Instrumentation
-
                 if (log.IsDebugEnabled)
                 {
                     log.Debug(
                             string.Format(CultureInfo.InvariantCulture, "Calling custom init method '{0} on object with name '{1}'.",
                                           definition.InitMethodName, name));
                 }
-
-                #endregion
 
                 try
                 {
@@ -1386,11 +1326,7 @@ namespace Spring.Objects.Factory.Support
             }
             if (targetMethod == null)
             {
-                #region Instrumentation
-
                 log.Error("Couldn't find a method named '" + destroyMethodName + "' on object with name '" + name + "'");
-
-                #endregion
             }
             else
             {
@@ -1401,11 +1337,7 @@ namespace Spring.Objects.Factory.Support
                 }
                 catch (TargetInvocationException ex)
                 {
-                    #region Instrumentation
-
                     log.Error("Couldn't invoke destroy method '" + destroyMethodName + "' of object with name '" + name + "'", ex.GetBaseException());
-
-                    #endregion
                 }
                 catch (Exception ex)
                 {
@@ -1695,16 +1627,12 @@ namespace Spring.Objects.Factory.Support
         /// <returns>A reference to another object in the factory.</returns>
         protected object ResolveReference(IConfigurableObjectDefinition definition, string name, string argumentName, RuntimeObjectReference reference)
         {
-            #region Instrumentation
-
             if (log.IsDebugEnabled)
             {
                 log.Debug(
                         string.Format(CultureInfo.InvariantCulture, "Resolving reference from property '{0}' in object '{1}' to object '{2}'.",
                                       argumentName, name, reference.ObjectName));
             }
-
-            #endregion
 
             try
             {
@@ -1826,44 +1754,32 @@ namespace Spring.Objects.Factory.Support
         {
             object instance = wrapper.WrappedInstance;
 
-            #region Instrumentation
-
             if (log.IsDebugEnabled)
             {
                 log.Debug(string.Format("Configuring object using definition '{1}'", instance, name));
             }
-
-            #endregion
 
             PopulateObject(name, definition, wrapper);
             WireEvents(name, definition, wrapper);
 
             if (ObjectUtils.IsAssignableAndNotTransparentProxy(typeof(IObjectNameAware), instance))
             {
-                #region Instrumentation
-
                 if (log.IsDebugEnabled)
                 {
                     log.Debug(string.Format(CultureInfo.InvariantCulture, "Setting the name property on the IObjectNameAware object '{0}'.", name));
                 }
-
-                #endregion
 
                 ((IObjectNameAware)instance).ObjectName = name;
             }
 
             if (ObjectUtils.IsAssignableAndNotTransparentProxy(typeof(IObjectFactoryAware), instance))
             {
-                #region Instrumentation
-
                 if (log.IsDebugEnabled)
                 {
                     log.Debug(
                             string.Format(CultureInfo.InvariantCulture, "Setting the ObjectFactory property on the IObjectFactoryAware object '{0}'.",
                                           name));
                 }
-
-                #endregion
 
                 ((IObjectFactoryAware)instance).ObjectFactory = this;
             }
@@ -1888,10 +1804,6 @@ namespace Spring.Objects.Factory.Support
         {
             return ApplyObjectPostProcessorsAfterInitialization(instance, objectName);
         }
-
-        #endregion
-
-        #region IAutowireCapableObjectFactory Members
 
         /// <summary>
         /// Create a new object instance of the given class with the specified
@@ -1980,14 +1892,10 @@ namespace Spring.Objects.Factory.Support
         /// <seealso cref="Spring.Objects.Factory.Config.IObjectPostProcessor.PostProcessBeforeInitialization"/>
         public virtual object ApplyObjectPostProcessorsBeforeInitialization(object instance, string name)
         {
-            #region Instrumentation
-
             if (log.IsDebugEnabled)
             {
                 log.Debug("Invoking IObjectPostProcessors before initialization of object '" + name + "'");
             }
-
-            #endregion
 
             object result = instance;
             foreach (IObjectPostProcessor objectProcessor in ObjectPostProcessors)
@@ -2025,14 +1933,10 @@ namespace Spring.Objects.Factory.Support
         /// <seealso cref="Spring.Objects.Factory.Config.IObjectPostProcessor.PostProcessAfterInitialization"/>
         public virtual object ApplyObjectPostProcessorsAfterInitialization(object instance, string name)
         {
-            #region Instrumentation
-
             if (log.IsDebugEnabled)
             {
                 log.Debug("Invoking IObjectPostProcessors after initialization of object '" + name + "'");
             }
-
-            #endregion
 
             object result = instance;
             foreach (IObjectPostProcessor objectProcessor in ObjectPostProcessors)
@@ -2063,10 +1967,6 @@ namespace Spring.Objects.Factory.Support
         public abstract object ResolveDependency(DependencyDescriptor descriptor, string objectName,
                                                  IList autowiredObjectNames);
 
-        #endregion
-
-        #region Fields
-
         private IInstantiationStrategy instantiationStrategy = new MethodInjectingInstantiationStrategy();
 
         /// <summary>
@@ -2080,8 +1980,6 @@ namespace Spring.Objects.Factory.Support
         /// interfaces are ignored.
         /// </summary>
         private ISet ignoredDependencyInterfaces = new HybridSet();
-
-        #endregion
     }
 
     internal class UnsatisfiedDependencyExceptionData

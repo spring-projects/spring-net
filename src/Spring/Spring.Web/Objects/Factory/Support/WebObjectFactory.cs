@@ -49,8 +49,6 @@ namespace Spring.Objects.Factory.Support
     /// <author>Aleksandar Seovic</author>
     public class WebObjectFactory : DefaultListableObjectFactory
     {
-        private readonly static ILog log = LogManager.GetLogger(typeof(WebObjectFactory));
-
         private static bool s_eventHandlersRegistered = false;
         private readonly static string OBJECTTABLEKEY = "spring.objects";
 
@@ -77,7 +75,7 @@ namespace Spring.Objects.Factory.Support
         /// Registers events handlers with <see cref="WebSupportModule"/> to ensure
         /// proper disposal of 'request'- and 'session'-scoped objects
         /// </summary>
-        private static void EnsureEventHandlersRegistered()
+        private void EnsureEventHandlersRegistered()
         {
             if (!s_eventHandlersRegistered)
             {
@@ -481,7 +479,7 @@ namespace Spring.Objects.Factory.Support
         /// <summary>
         /// Disposes all 'request'-scoped objects at the end of each Request
         /// </summary>
-        private static void OnEndRequest(HttpContext context)
+        private void OnEndRequest(HttpContext context)
         {
             IDictionary items = context.Items[OBJECTTABLEKEY] as IDictionary;
 
@@ -503,7 +501,7 @@ namespace Spring.Objects.Factory.Support
         /// <summary>
         /// Disposes all 'session'-scoped objects at the end of a session
         /// </summary>
-        private static void OnEndSession(HttpSessionState session, CacheItemRemovedReason reason)
+        private void OnEndSession(HttpSessionState session, CacheItemRemovedReason reason)
         {
             IDictionary items = null;
             try

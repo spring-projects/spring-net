@@ -18,12 +18,10 @@
 
 #endregion
 
-#region Imports
-
 using System;
-using AopAlliance.Intercept;
+using System.Runtime.Serialization;
 
-#endregion
+using AopAlliance.Intercept;
 
 namespace Spring.Aop.Framework
 {
@@ -106,6 +104,18 @@ namespace Spring.Aop.Framework
             TargetSource = targetSource;
         }
 
+		/// <inheritdoc />
+		protected ProxyFactory(SerializationInfo info, StreamingContext context)
+			: base(info, context)
+		{
+		}
+
+		/// <inheritdoc />
+		public override void GetObjectData(SerializationInfo info, StreamingContext context)
+		{
+			base.GetObjectData(info, context);
+		}
+
 	    /// <summary>
 	    /// Creates a new proxy according to the settings in this factory.
 	    /// </summary>
@@ -122,9 +132,7 @@ namespace Spring.Aop.Framework
 	        return proxy.GetProxy();
 	    }
 
-        #region Convenience Methods (Static) For Proxy Creation
-
-	    /// <summary>
+		/// <summary>
 	    /// Creates a new proxy for the supplied <paramref name="proxyInterface"/>
 	    /// and <paramref name="interceptor"/>.
 	    /// </summary>
@@ -151,8 +159,5 @@ namespace Spring.Aop.Framework
 	        proxyFactory.AddAdvice(interceptor);
 	        return proxyFactory.GetProxy();
 	    }
-
-	    #endregion
-
 	}
 }

@@ -90,6 +90,7 @@ namespace Spring.Reflection.Dynamic
 
         public void RespectsPermissionsPublicMethod() { }
 
+#if !NETCOREAPP
         [Test]
         public void CanCreateWithRestrictedPermissions()
         {
@@ -130,6 +131,7 @@ namespace Spring.Reflection.Dynamic
             catch (MethodAccessException)
             { }
         }
+#endif
 
         [Test]
         public void TestInstanceMethods()

@@ -666,7 +666,6 @@ namespace Spring.Objects.Factory.Xml
             IResource resource = new ReadOnlyXmlTestResource("collections.xml", GetType());
             XmlObjectFactory xof = new XmlObjectFactory(resource);
             IDictionary map = (IDictionary) xof.GetObject("mapFactory");
-            Assert.IsTrue(map is Hashtable);
             Assert.IsTrue(map.Count == 2);
             Assert.AreEqual("bar", map["foo"]);
             Assert.AreEqual("jenny", map["jen"]);
@@ -678,7 +677,6 @@ namespace Spring.Objects.Factory.Xml
             IResource resource = new ReadOnlyXmlTestResource("collections.xml", GetType());
             XmlObjectFactory xof = new XmlObjectFactory(resource);
             IDictionary map = (IDictionary) xof.GetObject("pMapFactory");
-            Assert.IsTrue(map is Hashtable);
             Assert.IsTrue(map.Count == 2);
             Assert.AreEqual("bar", map["foo"]);
             Assert.AreEqual("jenny", map["jen"]);

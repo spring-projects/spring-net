@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  * 
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -34,8 +28,6 @@ using Spring.Collections;
 using Spring.Context;
 using Spring.Objects.Factory;
 
-#endregion
-
 namespace Spring.Objects
 {
 	/// <summary>
@@ -45,9 +37,7 @@ namespace Spring.Objects
 	/// <author>Mark Pollack (.NET)</author>
     public class TestObject : MarshalByRefObject, ITestObject, IObjectFactoryAware, IComparable, IOther, IApplicationContextAware, IObjectNameAware, IInitializingObject, ISharedStateAware
 	{
-		#region Event testing members
-
-		public event EventHandler Click;
+	    public event EventHandler Click;
 
 		public static event EventHandler StaticClick;
 
@@ -74,10 +64,6 @@ namespace Spring.Objects
 				TestObject.StaticClick(typeof (TestObject), EventArgs.Empty);
 			}
 		}
-
-		#endregion
-
-		#region Properties
 
 	    public int ObjectNumber
 	    {
@@ -347,11 +333,8 @@ namespace Spring.Objects
             get { return size; }
             set { size = value;}
 	    }
-	    #endregion
 
-		#region Indexers
-
-		public string this[int index]
+	    public string this[int index]
 		{
 			get
 			{
@@ -370,10 +353,6 @@ namespace Spring.Objects
 				favoriteQuotes[index] = value;
 			}
 		}
-
-		#endregion
-
-		#region Fields
 
 	    private int exceptionMethodCallCount;
         private int objectNumber = 0;
@@ -427,11 +406,7 @@ namespace Spring.Objects
 	    private NameValueCollection someNameValueCollection;
 	    private List<string> someGenericStringList;
 
-	    #endregion
-
-		#region Constructor (s) / Destructor
-
-		public TestObject()
+	    public TestObject()
 		{
 		}
 
@@ -481,20 +456,12 @@ namespace Spring.Objects
             this.someNameValueCollection = someProps;
         }
 
-		#endregion
-
-        #region Static Methods
-
-        public static TestObject Create(string name)
+	    public static TestObject Create(string name)
 		{
 			return new TestObject(name, 30);
         }
 
-        #endregion
-
-        #region Methods
-
-        public void AfterPropertiesSet()
+	    public void AfterPropertiesSet()
         {
             initCompleted = true;
         }
@@ -636,18 +603,12 @@ namespace Spring.Objects
 			return this;
 		}
 
-		#endregion
-
-		#region IOther Implementation
-
-		/// <summary>
+	    /// <summary>
 		/// Funny Named method.
 		/// </summary>
 		public virtual void Absquatulate()
 		{
 		}
-
-		#endregion
 
 	    public IDictionary SharedState
 	    {
@@ -656,9 +617,7 @@ namespace Spring.Objects
 	    }
 	}
 
-	#region Inner Class : TestObjectConverter
-
-	public class TestObjectConverter : TypeConverter
+    public class TestObjectConverter : TypeConverter
 	{
 		public override bool CanConvertTo(
 			ITypeDescriptorContext context, Type destinationType)
@@ -702,6 +661,4 @@ namespace Spring.Objects
 			return base.ConvertTo(context, culture, param, destinationType);
 		}
 	}
-
-	#endregion
 }

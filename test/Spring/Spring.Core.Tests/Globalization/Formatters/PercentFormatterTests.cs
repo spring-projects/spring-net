@@ -57,8 +57,8 @@ namespace Spring.Globalization.Formatters
         public void FormatUsingDefaults()
         {
             PercentFormatter fmt = new PercentFormatter("en-US");
-            Assert.AreEqual("25.00 %", fmt.Format(0.25));
-            Assert.AreEqual("25.34 %", fmt.Format(0.2534));
+            Assert.AreEqual("25.00%", fmt.Format(0.25).Replace(" ", ""));
+            Assert.AreEqual("25.34%", fmt.Format(0.2534).Replace(" ", ""));
 
             fmt = new PercentFormatter("sr-SP-Latn");
             Assert.AreEqual("25,00%", fmt.Format(0.25));

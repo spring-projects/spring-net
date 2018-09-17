@@ -66,7 +66,7 @@ namespace Spring.Core.IO
 	/// <seealso cref="System.ComponentModel.TypeConverter"/>
 	public class ResourceConverter : TypeConverter
 	{
-		private ILog _log = LogManager.GetLogger(typeof (ResourceConverter));
+		private static readonly ILog _log = LogManager.GetLogger(typeof (ResourceConverter));
 		private IResourceLoader _resourceLoader;
 		
 		#region Constructor (s) / Destructor

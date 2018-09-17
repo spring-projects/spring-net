@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -16,16 +14,10 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using System.Text;
 using Spring.Objects.Factory.Config;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Objects.Factory.Support
 {
@@ -71,8 +63,6 @@ namespace Spring.Objects.Factory.Support
     [Serializable]
     public class ChildObjectDefinition : AbstractObjectDefinition
     {
-        #region Constructor (s) / Destructor
-
         /// <summary>
         /// Creates a new instance of the
         /// <see cref="Spring.Objects.Factory.Support.ChildObjectDefinition"/>
@@ -178,10 +168,6 @@ namespace Spring.Objects.Factory.Support
             ObjectTypeName = typeName;
         }
 
-        #endregion
-
-        #region Properties
-
         /// <summary>
         /// The name of the parent object definition.
         /// </summary>
@@ -196,10 +182,6 @@ namespace Spring.Objects.Factory.Support
             get { return parentName; }
             set { parentName = value; }
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Validate this object definition.
@@ -243,12 +225,6 @@ namespace Spring.Objects.Factory.Support
             return buffer.ToString();
         }
 
-        #endregion
-
-        #region Fields
-
         private string parentName;
-
-        #endregion
     }
 }

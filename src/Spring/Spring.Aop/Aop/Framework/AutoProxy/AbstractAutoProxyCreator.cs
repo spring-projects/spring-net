@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System;
 using System.Collections;
@@ -73,8 +69,6 @@ namespace Spring.Aop.Framework.AutoProxy
     /// <seealso cref="Spring.Aop.Framework.AutoProxy.ObjectNameAutoProxyCreator"/>
     public abstract class AbstractAutoProxyCreator : ProxyConfig, IInstantiationAwareObjectPostProcessor, IObjectFactoryAware, IOrdered
     {
-        #region Protected Fields
-
         /// <summary>
         /// The logger for this class hierarchy.
         /// </summary>
@@ -90,10 +84,6 @@ namespace Spring.Aop.Framework.AutoProxy
         /// "proxy without additional interceptors, just the common ones".
         /// </summary>
         protected static readonly IList<object> PROXY_WITHOUT_ADDITIONAL_INTERCEPTORS = new List<object>(0);
-
-        #endregion
-
-        #region Private Fields
 
         /// <summary>
         /// Default value is same as non-ordered
@@ -136,10 +126,6 @@ namespace Spring.Aop.Framework.AutoProxy
         private ISet advisedObjects = new SynchronizedSet(new HashedSet());
 
         private ISet nonAdvisedObjects = new SynchronizedSet(new HashedSet());
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Sets the AdvisorAdapterRegistry to use.
@@ -219,10 +205,6 @@ namespace Spring.Aop.Framework.AutoProxy
             set { this.freezeProxy = value; }
         }
 
-        #endregion
-
-        #region Constructor
-
         /// <summary>
         /// Create a new instance of this AutoProxyCreator
         /// </summary>
@@ -230,10 +212,6 @@ namespace Spring.Aop.Framework.AutoProxy
         {
             logger = LogManager.GetLogger(this.GetType());
         }
-
-        #endregion
-
-        #region IObjectPostProcessor Members
 
         /// <summary>
         /// Create a proxy with the configured interceptors if the object is
@@ -246,7 +224,13 @@ namespace Spring.Aop.Framework.AutoProxy
                 return obj;
             }
 
-            Type objectType = RemotingServices.IsTransparentProxy(obj)
+#if NETSTANDARD
+            var isTransparentProxy = false;
+#else
+            var isTransparentProxy = RemotingServices.IsTransparentProxy(obj);
+#endif
+
+            Type objectType = isTransparentProxy
                 ? ObjectFactory.GetType(objectName)
                 : obj.GetType();
 
@@ -258,14 +242,10 @@ namespace Spring.Aop.Framework.AutoProxy
 
             if (IsInfrastructureType(objectType, objectName))
             {
-                #region Instrumentation
-
                 if (logger.IsDebugEnabled)
                 {
                     logger.Debug(string.Format("Did not attempt to autoproxy infrastructure type [{0}]", objectType));
                 }
-
-                #endregion
 
                 nonAdvisedObjects.Add(cacheKey);
                 return obj;
@@ -273,14 +253,10 @@ namespace Spring.Aop.Framework.AutoProxy
 
             if (ShouldSkip(objectType, objectName))
             {
-                #region Instrumentation
-
                 if (logger.IsDebugEnabled)
                 {
                     logger.Debug(string.Format("Skipping  type [{0}]", objectType));
                 }
-
-                #endregion
 
                 nonAdvisedObjects.Add(cacheKey);
                 return obj;
@@ -312,10 +288,6 @@ namespace Spring.Aop.Framework.AutoProxy
             return obj;
         }
 
-        #endregion
-
-        #region IObjectFactoryAware Members
-
         /// <summary>
         /// Callback that supplies the owning factory to an object instance.
         /// </summary>
@@ -341,10 +313,6 @@ namespace Spring.Aop.Framework.AutoProxy
             set { owningObjectFactory = value; }
         }
 
-        #endregion
-
-        #region IOrdered Members
-
         /// <summary>
         /// Propery Order
         /// </summary>
@@ -358,10 +326,6 @@ namespace Spring.Aop.Framework.AutoProxy
             get { return order; }
             set { order = value; }
         }
-
-        #endregion
-
-        #region Protected Methods
 
         /// <summary>
         /// Subclasses should override this method to return true if this
@@ -580,10 +544,6 @@ namespace Spring.Aop.Framework.AutoProxy
         }
 
 
-        #endregion
-
-        #region Private Methods
-
         private IList<IAdvisor> ResolveInterceptorNames()
         {
             List<IAdvisor> advisors = new List<IAdvisor>();
@@ -601,10 +561,6 @@ namespace Spring.Aop.Framework.AutoProxy
             }
             return advisors;
         }
-
-        #endregion
-
-        #region IInstantiationAwareObjectPostProcessor Members
 
         /// <summary>
         /// Create the proxy if have a custom TargetSource
@@ -624,14 +580,10 @@ namespace Spring.Aop.Framework.AutoProxy
 
                 if (IsInfrastructureType(objectType, objectName))
                 {
-                    #region Instrumentation
-
                     if (logger.IsDebugEnabled)
                     {
                         logger.Debug(string.Format("Did not attempt to autoproxy infrastructure type [{0}]", objectType));
                     }
-
-                    #endregion
 
                     nonAdvisedObjects.Add(cacheKey);
                     return null;
@@ -639,14 +591,10 @@ namespace Spring.Aop.Framework.AutoProxy
 
                 if (ShouldSkip(objectType, objectName))
                 {
-                    #region Instrumentation
-
                     if (logger.IsDebugEnabled)
                     {
                         logger.Debug(string.Format("Skipping  type [{0}]", objectType));
                     }
-
-                    #endregion
 
                     nonAdvisedObjects.Add(cacheKey);
                     return null;
@@ -691,7 +639,5 @@ namespace Spring.Aop.Framework.AutoProxy
         {
             return pvs;
         }
-
-        #endregion
     }
 }

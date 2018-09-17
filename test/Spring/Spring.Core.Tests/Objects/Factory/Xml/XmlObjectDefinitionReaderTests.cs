@@ -65,15 +65,19 @@ namespace Spring.Objects.Factory.Xml
         [Test]
         public void AutoRegistersAllWellknownNamespaceParsers_Common()
         {
-            string[] namespaces = {
+            string[] namespaces =
+            {
                 "http://www.springframework.net/tx",
                 "http://www.springframework.net/aop",
                 "http://www.springframework.net/db",
                 "http://www.springframework.net/database",
+#if !NETCOREAPP
                 "http://www.springframework.net/remoting",
                 "http://www.springframework.net/nms",
-                "http://www.springframework.net/validation",
-                "http://www.springframework.net/nvelocity" };
+                "http://www.springframework.net/nvelocity",
+#endif
+                "http://www.springframework.net/validation"
+            };
 
             foreach (string ns in namespaces)
             {
@@ -81,7 +85,8 @@ namespace Spring.Objects.Factory.Xml
                     string.Format("Parser for Namespace {0} could not be auto-registered.", ns));
             }
         }
-    
+
+#if !NETCOREAPP
         [Test]
         public void AutoRegistersAllWellknownNamespaceParsers_3_0()
         {
@@ -93,6 +98,7 @@ namespace Spring.Objects.Factory.Xml
                     string.Format("Parser for Namespace {0} could not be auto-registered.", ns));
             }
         }
+#endif
 
         [Test]
         [Ignore("this test cannot co-exist with AutoRegistersAllWellknownNamespaceParsers b/c that test will have already loaded the Spring.Data ass'y")]

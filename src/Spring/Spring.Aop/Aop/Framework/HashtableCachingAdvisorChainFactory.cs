@@ -18,15 +18,10 @@
 
 #endregion
 
-#region Imports
-
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-
-using System.Collections.Concurrent;
-
-#endregion
+using System.Runtime.Serialization;
 
 namespace Spring.Aop.Framework
 {
@@ -39,7 +34,14 @@ namespace Spring.Aop.Framework
     [Serializable]
     public sealed class HashtableCachingAdvisorChainFactory : IAdvisorChainFactory
     {
-        private readonly ConcurrentDictionary<MethodInfo, IList<object>> methodCache = new ConcurrentDictionary<MethodInfo, IList<object>>();
+        [NonSerialized]
+        private Dictionary<MethodInfo, IList<object>> methodCache = new Dictionary<MethodInfo, IList<object>>();
+
+        [OnDeserializing]
+        private void OnDeserializing(StreamingContext c)
+        {
+            methodCache = new Dictionary<MethodInfo, IList<object>>();
+        }
 
         /// <summary>
         /// Gets the list of <see cref="AopAlliance.Intercept.IInterceptor"/> and
@@ -61,7 +63,18 @@ namespace Spring.Aop.Framework
         /// </returns>
         public IList<object> GetInterceptors(IAdvised advised, object proxy, MethodInfo method, Type targetType)
         {
-            return methodCache.GetOrAdd(method, m => AdvisorChainFactoryUtils.CalculateInterceptors(advised, proxy, m, targetType));
+            if (!methodCache.TryGetValue(method, out var interceptors))
+            {
+                lock (methodCache)
+                {
+                    if (!methodCache.TryGetValue(method, out interceptors))
+                    {
+                        interceptors = AdvisorChainFactoryUtils.CalculateInterceptors(advised, proxy, method, targetType);
+                        methodCache[method] = interceptors;
+                    }
+                }
+            }
+            return interceptors;
         }
 
         /// <summary>

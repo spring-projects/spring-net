@@ -111,12 +111,14 @@ namespace Spring.Core.TypeConversion
             Assert.Throws<ArgumentException>(() => cvt.ConvertFrom ("Spring.TestResource.txt,"));
         }
 
+#if NETFRAMEWORK
         [Test]
         public void ConvertFromBadAssembly()
         {
             ResourceManagerConverter cvt = new ResourceManagerConverter();
             Assert.Throws<ArgumentException>(() => cvt.ConvertFrom ("Spring.TestResource.txt, FooAssembly"));
         }
+#endif
 
         [Test]
         public void ConvertFromBad_App_GlobalResources()

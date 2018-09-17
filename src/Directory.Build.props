@@ -36,7 +36,6 @@
 
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
 
-    <CLSCompliant>True</CLSCompliant>
     <ComVisible>False</ComVisible>
 
     <DebugSymbols>True</DebugSymbols>
@@ -44,6 +43,7 @@
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
 
     <LangVersion>latest</LangVersion>
+    <TargetFullFrameworkVersion>net452</TargetFullFrameworkVersion>
 
   </PropertyGroup>
   

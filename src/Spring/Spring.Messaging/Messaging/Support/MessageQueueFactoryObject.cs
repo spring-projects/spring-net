@@ -19,9 +19,14 @@
 #endregion
 
 using System;
-using System.Messaging;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
+
+#if NETSTANDARD
+using Experimental.System.Messaging;
+#else
+using System.Messaging;
+#endif
 
 namespace Spring.Messaging.Support
 {

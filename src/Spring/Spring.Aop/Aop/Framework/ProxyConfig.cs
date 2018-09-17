@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -16,17 +14,12 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
+using System.Runtime.Serialization;
 using System.Text;
 
 using Spring.Util;
 using Spring.Reflection.Dynamic;
-
-#endregion
 
 namespace Spring.Aop.Framework
 {
@@ -48,11 +41,9 @@ namespace Spring.Aop.Framework
 	/// <author>Rod Johnson</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
 	[Serializable]
-    public class ProxyConfig
+    public class ProxyConfig : ISerializable
     {
-        #region Fields
-
-        private static readonly IDynamicConstructor cachedAopProxyFactoryDynCtor =
+	    private static readonly IDynamicConstructor cachedAopProxyFactoryDynCtor =
             new SafeConstructor(typeof(ProxyConfig).Assembly.GetType("Spring.Aop.Framework.DynamicProxy.CachedAopProxyFactory", false, false).GetConstructor(Type.EmptyTypes));
 
         private bool proxyTargetType;
@@ -65,11 +56,34 @@ namespace Spring.Aop.Framework
 		private bool exposeProxy;
         private readonly object syncRoot = new object();
 
-        #endregion
+	    /// <inheritdoc />
+	    public ProxyConfig()
+	    {
+	    }
 
-        #region Properites
+	    /// <inheritdoc />
+	    protected ProxyConfig(SerializationInfo info, StreamingContext context)
+	    {
+		    proxyTargetType = info.GetBoolean("proxyTargetType");
+		    proxyTargetAttributes = info.GetBoolean("proxyTargetAttributes");
+		    optimize = info.GetBoolean("optimize");
+		    frozen = info.GetBoolean("frozen");
+		    exposeProxy = info.GetBoolean("exposeProxy");
+		    syncRoot = info.GetValue("syncRoot", typeof(object));
+	    }
 
-        /// <summary>
+	    /// <inheritdoc />
+	    public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
+	    {
+		    info.AddValue("proxyTargetType", proxyTargetType);
+		    info.AddValue("proxyTargetAttributes", proxyTargetAttributes);
+		    info.AddValue("optimize", optimize);
+		    info.AddValue("frozen", frozen);
+		    info.AddValue("exposeProxy", exposeProxy);
+		    info.AddValue("syncRoot", syncRoot);
+	    }
+
+	    /// <summary>
         /// Use to synchronize access to this ProxyConfig instance
         /// </summary>
 	    public object SyncRoot
@@ -178,9 +192,7 @@ namespace Spring.Aop.Framework
 			set { this.frozen = value; }
         }
 
-        #endregion
-
-        /// <summary>
+	    /// <summary>
 		/// Copies the configuration from the supplied
 		/// <paramref name="otherConfiguration"/> into this instance.
 		/// </summary>

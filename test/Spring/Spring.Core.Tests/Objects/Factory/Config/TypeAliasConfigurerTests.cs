@@ -51,7 +51,7 @@ namespace Spring.Objects.Factory.Config
         public void Serialization()
         {
             IDictionary typeAliases = new Hashtable();
-            typeAliases.Add("LinkedList", typeof(LinkedList));
+            typeAliases.Add("LinkedList", typeof(LinkedList).AssemblyQualifiedName);
 
             TypeAliasConfigurer typeAliasConfigurer = new TypeAliasConfigurer();
             typeAliasConfigurer.TypeAliases = typeAliases;

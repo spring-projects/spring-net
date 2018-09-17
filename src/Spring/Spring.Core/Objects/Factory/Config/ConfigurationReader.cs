@@ -353,13 +353,27 @@ namespace Spring.Objects.Factory.Config
             if (xmlConfig == null)
             {
                 // none specified, use machine inherited
-                XmlDocument machineConfig = new XmlDocument();
-                machineConfig.Load(RuntimeEnvironment.SystemConfigurationFile);
-                xmlConfig = machineConfig.SelectSingleNode(sectionHandlerPath);
-                if (xmlConfig == null)
+                try
                 {
-                    // TOOD: better throw a sensible exception in case of a missing handler configuration?
-                    handlerType = defaultConfigurationSectionHandlerType;
+                    XmlDocument machineConfig = new XmlDocument();
+                    machineConfig.Load(RuntimeEnvironment.SystemConfigurationFile);
+                    xmlConfig = machineConfig.SelectSingleNode(sectionHandlerPath);
+                    if (xmlConfig == null)
+                    {
+                        // TOOD: better throw a sensible exception in case of a missing handler configuration?
+                        handlerType = defaultConfigurationSectionHandlerType;
+                    }
+                }
+                catch (PlatformNotSupportedException)
+                {
+                    if (configSectionName == "connectionStrings")
+                    {
+                        handlerType = typeof(ConnectionStringsSectionHandler);
+                    }
+                    else
+                    {
+                        handlerType = typeof(NameValueSectionHandler);
+                    }
                 }
             }
 
@@ -374,6 +388,23 @@ namespace Spring.Objects.Factory.Config
                 throw new ConfigurationException(string.Format("missing handler-'type' attribute on configuration section definition for section '{0}'", configSectionName));
             }
             return handlerType;
+        }
+
+        private class ConnectionStringsSectionHandler : IConfigurationSectionHandler
+        {
+            public object Create(object parent, object configContext, XmlNode section)
+            {
+                var data = new ConnectionStringsSection();
+                foreach (XmlNode node in section.ChildNodes)
+                {
+                    var settings = new ConnectionStringSettings(
+                        node.Attributes["name"].Value, 
+                        node.Attributes["connectionString"]?.Value,
+                        node.Attributes["providerName"]?.Value);
+                    data.ConnectionStrings.Add(settings);
+                }
+                return data;
+            }
         }
 
 

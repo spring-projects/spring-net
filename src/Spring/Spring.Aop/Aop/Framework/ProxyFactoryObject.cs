@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -16,13 +14,10 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 using AopAlliance.Aop;
 using AopAlliance.Intercept;
@@ -36,8 +31,6 @@ using Spring.Core;
 using Spring.Core.TypeResolution;
 using Spring.Objects.Factory;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Aop.Framework
 {
@@ -98,12 +91,10 @@ namespace Spring.Aop.Framework
     public class ProxyFactoryObject
         : AdvisedSupport, IFactoryObject, IObjectFactoryAware
     {
-        #region Fields
-
         /// <summary>
         /// The <see cref="Common.Logging.ILog"/> instance for this class.
         /// </summary>
-        private readonly ILog logger;
+        private static readonly ILog logger = LogManager.GetLogger<ProxyFactoryObject>();
 
         /// <summary>
         /// Is the object managed by this factory a singleton or a prototype?
@@ -167,9 +158,35 @@ namespace Spring.Aop.Framework
         /// </summary>
         private bool freezeProxy;
 
-        #endregion
+        /// <inheritdoc />
+        protected ProxyFactoryObject(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+            singleton = info.GetBoolean("singleton");
+            singletonInstance = info.GetValue("singletonInstance", typeof(object));
+            objectFactory = (IObjectFactory) info.GetValue("objectFactory", typeof(IObjectFactory));
+            advisorAdapterRegistry = (IAdvisorAdapterRegistry) info.GetValue("advisorAdapterRegistry", typeof(IAdvisorAdapterRegistry));
+            interceptorNames = (string[]) info.GetValue("interceptorNames", typeof(string[]));
+            introductionNames = (string[]) info.GetValue("introductionNames", typeof(string[]));
+            targetName = info.GetString("targetName");
+            initialized = info.GetBoolean("initialized");
+            freezeProxy = info.GetBoolean("freezeProxy");
+        }
 
-        #region Properties
+        /// <inheritdoc />
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+            info.AddValue("singleton", singleton);
+            info.AddValue("singletonInstance", singletonInstance);
+            info.AddValue("objectFactory", objectFactory);
+            info.AddValue("advisorAdapterRegistry", advisorAdapterRegistry);
+            info.AddValue("interceptorNames", interceptorNames);
+            info.AddValue("introductionNames", introductionNames);
+            info.AddValue("targetName", targetName);
+            info.AddValue("initialized", initialized);
+            info.AddValue("freezeProxy", freezeProxy);
+        }
 
         /// <summary>
         /// Indicate whether this config shall be frozen upon creation 
@@ -292,23 +309,14 @@ namespace Spring.Aop.Framework
             set { this.introductionNames = value; }
         }
 
-        #endregion
-
-        #region Construction and Initialization
-
         /// <summary>
         /// Creates a new instance of ProxyFactoryObject
         /// </summary>
         public ProxyFactoryObject()
         {
-            this.logger = LogManager.GetLogger(this.GetType());
             this.advisorAdapterRegistry = GlobalAdvisorAdapterRegistry.Instance;
             this.singleton = true;
         }
-
-        #endregion
-
-        #region IObjectFactoryAware implementation
 
         /// <summary>
         /// Callback that supplies the owning factory to an object instance.
@@ -331,10 +339,6 @@ namespace Spring.Aop.Framework
             }
         }
 
-        #endregion
-
-
-        #region IFactoryObject implementation
 
         /// <summary> 
         /// Creates an instance of the AOP proxy to be returned by this factory
@@ -422,10 +426,6 @@ namespace Spring.Aop.Framework
             set { this.singleton = value; }
         }
 
-        #endregion
-
-        #region Private Methods
-
         private object SingletonInstance
         {
             get
@@ -445,14 +445,10 @@ namespace Spring.Aop.Framework
             // in the case of a prototype, we need to give the proxy
             // an independent instance of the configuration...
 
-            #region Instrumentation
-
             if (logger.IsDebugEnabled)
             {
                 logger.Debug("Creating copy of prototype ProxyFactoryObject config: " + this);
             }
-
-            #endregion
 
             // The copy needs a fresh advisor chain, and a fresh TargetSource.
             ITargetSource targetSource = FreshTargetSource();
@@ -461,12 +457,10 @@ namespace Spring.Aop.Framework
             AdvisedSupport copy = new AdvisedSupport();
             copy.CopyConfigurationFrom(this, targetSource, advisorChain, introductionChain);
 
-            #region Instrumentation
             if (logger.IsDebugEnabled)
             {
                 logger.Debug("Using ProxyConfig: " + copy);
             }
-            #endregion
 
             object generatedProxy = copy.CreateAopProxy().GetProxy();
             base.IsFrozen = this.freezeProxy; // freeze after creating proxy to allow for interface autodetection
@@ -478,22 +472,18 @@ namespace Spring.Aop.Framework
         /// </summary>
         private void Initialize()
         {
-            #region Instrumentation
             if (logger.IsDebugEnabled)
             {
                 logger.Debug(string.Format("Initialize: begin configure target, interceptors and introductions for {0}[{1}]", this.GetType().Name, this.GetHashCode()));
             }
-            #endregion
 
             InitializeAdvisorChain();
             InitializeIntroductionChain();
 
-            #region Instrumentation
             if (logger.IsDebugEnabled)
             {
                 logger.Debug(string.Format("Initialize: completed configuration for {0}[{1}]: {2}", this.GetType().Name, this.GetHashCode(), this.ToProxyConfigString()));
             }
-            #endregion
         }
 
         /// <summary>Create the advisor (interceptor) chain.</summary>
@@ -536,23 +526,19 @@ namespace Spring.Aop.Framework
                         throw new AopConfigException("Can only use global advisors or interceptors in conjunction with an IListableObjectFactory.");
                     }
 
-                    #region Instrumentation
                     if (logger.IsDebugEnabled)
                     {
                         logger.Debug("Adding global advisor '" + name + "'");
                     }
-                    #endregion
 
                     AddGlobalAdvisor(lof, name.Substring(0, (name.Length - GlobalInterceptorSuffix.Length)));
                 }
                 else
                 {
-                    #region Instrumentation
                     if (logger.IsDebugEnabled)
                     {
                         logger.Debug("resolving advisor name " + "'" + name + "'");
                     }
-                    #endregion
 
                     // If we get here, we need to add a named interceptor.
                     // We must check if it's a singleton or prototype.
@@ -575,34 +561,29 @@ namespace Spring.Aop.Framework
         {
             if (advice is IAdvisors)
             {
-                #region Instrumentation
                 if (logger.IsDebugEnabled)
                 {
                     logger.Debug(string.Format("Adding advisor list '{0}'", name));
                 }
-                #endregion
 
                 IAdvisors advisors = (IAdvisors)advice;
                 foreach (object element in advisors.Advisors)
                 {
-                    #region Instrumentation
                     if (logger.IsDebugEnabled)
                     {
                         logger.Debug(string.Format("Adding advisor '{0}' of type {1}", name, element.GetType().FullName));
                     }
-                    #endregion
+
                     IAdvisor advisor = NamedObjectToAdvisor(element);
                     AddAdvisor(advisor);
                 }
             }
             else
             {
-                #region Instrumentation
                 if (logger.IsDebugEnabled)
                 {
                     logger.Debug(string.Format("Adding advisor '{0}' of type {1}", name, advice.GetType().FullName));
                 }
-                #endregion
 
                 IAdvisor advisor = NamedObjectToAdvisor(advice);
                 AddAdvisor(advisor);
@@ -701,12 +682,10 @@ namespace Spring.Aop.Framework
                     throw new AopConfigException("Found null interceptor name value in the InterceptorNames list; check your configuration.");
                 }
 
-                #region Instrumentation
                 if (logger.IsDebugEnabled)
                 {
                     logger.Debug("Adding introduction '" + name + "'");
                 }
-                #endregion
 
                 if (name.EndsWith(GlobalInterceptorSuffix))
                 {
@@ -820,24 +799,20 @@ namespace Spring.Aop.Framework
         {
             if (StringUtils.IsNullOrEmpty(this.targetName))
             {
-                #region Instrumentation
                 if (logger.IsDebugEnabled)
                 {
                     logger.Debug("Not Refreshing TargetSource: No target name specified");
                 }
-                #endregion
+
                 return this.TargetSource;
             }
 
             AssertUtils.ArgumentNotNull(this.objectFactory, "ObjectFactory");
-            #region Instrumentation
 
             if (logger.IsDebugEnabled)
             {
                 logger.Debug("Refreshing TargetSource with name '" + this.targetName + "'");
             }
-
-            #endregion
 
             object target = this.objectFactory.GetObject(this.targetName);
             ITargetSource targetSource = NamedObjectToTargetSource(target);
@@ -857,12 +832,11 @@ namespace Spring.Aop.Framework
                 if (advisor is PrototypePlaceholder)
                 {
                     PrototypePlaceholder pa = (PrototypePlaceholder)advisor;
-                    #region Instrumentation
                     if (logger.IsDebugEnabled)
                     {
                         logger.Debug(string.Format("Refreshing advisor '{0}'", pa.ObjectName));
                     }
-                    #endregion
+
                     AssertUtils.ArgumentNotNull(this.objectFactory, "ObjectFactory");
 
                     object advisorObject = this.objectFactory.GetObject(pa.ObjectName);
@@ -890,12 +864,11 @@ namespace Spring.Aop.Framework
                 if (introduction is PrototypePlaceholder)
                 {
                     PrototypePlaceholder pa = (PrototypePlaceholder)introduction;
-                    #region Instrumentation
                     if (logger.IsDebugEnabled)
                     {
                         logger.Debug(string.Format("Refreshing introduction '{0}'", pa.ObjectName));
                     }
-                    #endregion
+
                     AssertUtils.ArgumentNotNull(this.objectFactory, "ObjectFactory");
 
                     object introductionObject = this.objectFactory.GetObject(pa.ObjectName);
@@ -949,8 +922,6 @@ namespace Spring.Aop.Framework
             }
             return new DefaultIntroductionAdvisor((IAdvice)introduction);
         }
-
-        #endregion
 
         /// <summary>
         /// Callback method that is invoked when the list of proxied interfaces
@@ -1027,8 +998,6 @@ namespace Spring.Aop.Framework
                 this.message = "Placeholder for prototype Advisor/Advice/Introduction with bean name '" + objectName + "'";
             }
 
-            #region Implementation of IAdvisor
-
             public bool IsPerInstance
             {
                 get { throw new NotSupportedException("Cannot invoke methods: " + this.message); }
@@ -1038,10 +1007,6 @@ namespace Spring.Aop.Framework
             {
                 get { throw new NotSupportedException("Cannot invoke methods: " + this.message); }
             }
-
-            #endregion
-
-            #region Implementation of IIntroductionAdvisor
 
             public ITypeFilter TypeFilter
             {
@@ -1057,8 +1022,6 @@ namespace Spring.Aop.Framework
             {
                 throw new NotSupportedException("Cannot invoke methods: " + this.message);
             }
-
-            #endregion
         }
     }
 }

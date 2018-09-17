@@ -24,7 +24,7 @@ namespace Spring.Objects.Factory.Parsing
 {
     public class FailFastProblemReporter : IProblemReporter
     {
-        private ILog _logger = LogManager.GetLogger(typeof(FailFastProblemReporter));
+        private static readonly ILog _logger = LogManager.GetLogger(typeof(FailFastProblemReporter));
 
         public ILog Logger
         {

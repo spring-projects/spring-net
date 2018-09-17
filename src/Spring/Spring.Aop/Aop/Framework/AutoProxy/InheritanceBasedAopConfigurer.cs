@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -16,13 +14,10 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 using AopAlliance.Aop;
 
@@ -34,8 +29,6 @@ using Spring.Aop.Framework.Adapter;
 using Spring.Aop.Framework.DynamicProxy;
 using Spring.Core;
 
-#endregion
-
 namespace Spring.Aop.Framework.AutoProxy
 {
     /// <summary>
@@ -46,8 +39,6 @@ namespace Spring.Aop.Framework.AutoProxy
     /// <author>Bruno Baia</author>
     public class InheritanceBasedAopConfigurer : IObjectFactoryPostProcessor, IObjectFactoryAware, IOrdered
     {
-        #region Fields
-
         private IList objectNames;
         private string[] interceptorNames = new string[0];
         private bool proxyTargetAttributes = true;
@@ -57,10 +48,6 @@ namespace Spring.Aop.Framework.AutoProxy
         private IObjectFactory objectFactory;
         private int order = int.MaxValue;
         private IAdvisorAdapterRegistry advisorAdapterRegistry = GlobalAdvisorAdapterRegistry.Instance;
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Set the names of the objects in IList fashioned way 
@@ -134,10 +121,6 @@ namespace Spring.Aop.Framework.AutoProxy
             set { proxyInterfaces = value; }
         }
 
-        #endregion
-
-        #region IObjectFactoryAware Members
-
         /// <summary>
         /// Callback that supplies the owning factory to an object instance.
         /// </summary>
@@ -161,10 +144,6 @@ namespace Spring.Aop.Framework.AutoProxy
         {
             set { objectFactory = value; }
         }
-
-        #endregion
-
-        #region IObjectFactoryPostProcessor Members
 
         /// <summary>
         /// Allows for custom modification of an application context's object definitions.
@@ -201,10 +180,6 @@ namespace Spring.Aop.Framework.AutoProxy
             }
         }
 
-        #endregion
-
-        #region IOrdered Members
-
         /// <summary>
         /// Return the order value of this object, where a higher value means greater in
         /// terms of sorting.
@@ -220,10 +195,6 @@ namespace Spring.Aop.Framework.AutoProxy
             get { return order; }
             set { order = value; }
         }
-
-        #endregion
-
-        #region Protected methods
 
         /// <summary>
         /// Determines whether the object is an infrastructure type,
@@ -302,10 +273,6 @@ namespace Spring.Aop.Framework.AutoProxy
             return false;
         }
 
-        #endregion
-
-        #region Private Methods
-
         private IList<IAdvisor> ResolveInterceptorNames()
         {
             List<IAdvisor> advisors = new List<IAdvisor>();
@@ -324,12 +291,8 @@ namespace Spring.Aop.Framework.AutoProxy
             return advisors;
         }
 
-        #endregion
-
-        #region InheritanceBasedAopTargetSource inner class definition
-
         [Serializable]
-        private class InheritanceBasedAopTargetSource : ITargetSource
+        private class InheritanceBasedAopTargetSource : ITargetSource, ISerializable
         {
             private readonly Type _targetType;
 
@@ -338,7 +301,19 @@ namespace Spring.Aop.Framework.AutoProxy
                 _targetType = targetType;
             }
 
-            #region ITargetSource Members
+            
+            /// <inheritdoc />
+            private InheritanceBasedAopTargetSource(SerializationInfo info, StreamingContext context)
+            {
+                var type = info.GetString("TargetType");
+                _targetType = type != null ? Type.GetType(type) : null;
+            }
+        
+            /// <inheritdoc />
+            public void GetObjectData(SerializationInfo info, StreamingContext context)
+            {
+                info.AddValue("TargetType", _targetType?.AssemblyQualifiedName);
+            }
 
             public object GetTarget()
             {
@@ -358,10 +333,6 @@ namespace Spring.Aop.Framework.AutoProxy
             {
                 get { return _targetType; }
             }
-
-            #endregion
         }
-
-        #endregion
     }
 }

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -16,12 +14,11 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Runtime.Serialization;
 using System.Text;
 
 using AopAlliance.Aop;
@@ -56,8 +53,6 @@ namespace Spring.Aop.Framework
     [Serializable]
     public class AdvisedSupport : ProxyConfig, IAdvised
     {
-        #region Fields
-
         /// <summary>The list of advice.</summary>
         /// <remarks>
         /// <p>
@@ -108,7 +103,7 @@ namespace Spring.Aop.Framework
         /// <summary>
         /// The list of <see cref="Spring.Aop.Framework.AdvisedSupport"/> event listeners.
         /// </summary>
-        private readonly IList<IAdvisedSupportListener> listeners = new List<IAdvisedSupportListener>();
+        private readonly List<IAdvisedSupportListener> listeners = new List<IAdvisedSupportListener>();
 
         /// <summary>
         /// The advisor chain factory.
@@ -120,10 +115,6 @@ namespace Spring.Aop.Framework
         /// from the target type
         /// </summary>
         private bool autoDetectInterfaces;
-
-        #endregion
-
-        #region Constructor(s)
 
         /// <summary>
         /// Creates a new instance of the
@@ -187,9 +178,46 @@ namespace Spring.Aop.Framework
             TargetSource = targetSource;
         }
 
-        #endregion
+        /// <inheritdoc />
+        protected AdvisedSupport(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+            _advisors = (List<IAdvisor>) info.GetValue("advisors", typeof(List<IAdvisor>));
+            _advisorsArray = (IAdvisor[]) info.GetValue("advisorsArray", typeof(IAdvisor[]));
+            _introductions = (List<IIntroductionAdvisor>) info.GetValue("introductions", typeof(List<IIntroductionAdvisor>));
 
-        #region IAdvised implementation
+            var map = (Dictionary<string, IIntroductionAdvisor>) info.GetValue("interfaceMap", typeof(Dictionary<string, IIntroductionAdvisor>));
+            interfaceMap = new Dictionary<Type, IIntroductionAdvisor>();
+            foreach (var pair in map)
+            {
+                interfaceMap[Type.GetType(pair.Key)] = pair.Value;
+            }
+            m_targetSource = (ITargetSource) info.GetValue("targetSource", typeof(ITargetSource));
+            isActive = info.GetBoolean("isActive");
+            listeners = (List<IAdvisedSupportListener>) info.GetValue("listeners", typeof(List<IAdvisedSupportListener>));
+            advisorChainFactory = (IAdvisorChainFactory) info.GetValue("advisorChainFactory", typeof(IAdvisorChainFactory));
+            autoDetectInterfaces = info.GetBoolean("autoDetectInterfaces");
+        }
+
+        /// <inheritdoc />
+        public override void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            base.GetObjectData(info, context);
+            info.AddValue("advisors", _advisors);
+            info.AddValue("advisorsArray", _advisorsArray);
+            info.AddValue("introductions", _introductions);
+            var map = new Dictionary<string, IIntroductionAdvisor>();
+            foreach (var pair in interfaceMap)
+            {
+                map.Add(pair.Key.AssemblyQualifiedName, pair.Value);
+            }
+            info.AddValue("interfaceMap", map);
+            info.AddValue("targetSource", m_targetSource);
+            info.AddValue("isActive", isActive);
+            info.AddValue("listeners", listeners);
+            info.AddValue("advisorChainFactory", advisorChainFactory);
+            info.AddValue("autoDetectInterfaces", autoDetectInterfaces);
+        }
 
         /// <summary>
         /// Gets and sets the
@@ -943,10 +971,6 @@ namespace Spring.Aop.Framework
             return buffer.ToString();            
         }
 
-        #endregion
-
-        #region Properties
-
         /// <summary>
         /// Gets the target type behind the implementing object.
         /// Ttypically a proxy configuration or an actual proxy.
@@ -991,8 +1015,6 @@ namespace Spring.Aop.Framework
         {
             get { return isActive; }
         }
-
-        #endregion
 
         /// <summary>
         /// Specifies the <see cref="System.Type"/> of proxies that are to be
@@ -1342,8 +1364,6 @@ namespace Spring.Aop.Framework
             this._advisorsArray = advisorsArray;
         }
 
-        #region IAdvisedSupportListener support
-
         /// <summary>
         /// Callback method that is invoked when the list of proxied interfaces
         /// has changed.
@@ -1398,8 +1418,6 @@ namespace Spring.Aop.Framework
                 }
             }
         }
-
-        #endregion
 
         /// <summary> 
         /// Creates an AOP proxy using this instance's configuration data.

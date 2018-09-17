@@ -90,36 +90,14 @@ namespace Spring.Transaction
 		public InvalidTimeoutException(string message, Exception rootCause)
 			: base(message, rootCause) {}
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Transaction.InvalidTimeoutException"/> class.
-		/// </summary>
-		/// <param name="info">
-		/// The <see cref="System.Runtime.Serialization.SerializationInfo"/>
-		/// that holds the serialized object data about the exception being thrown.
-		/// </param>
-		/// <param name="context">
-		/// The <see cref="System.Runtime.Serialization.StreamingContext"/>
-		/// that contains contextual information about the source or destination.
-		/// </param>
+		/// <inheritdoc />
 		protected InvalidTimeoutException(
 			SerializationInfo info, StreamingContext context ) : base( info, context ) 
 		{
 			_timeout = info.GetInt32( "timeout" );
 		}
 
-		/// <summary>
-		/// Override of <see cref="System.Exception.GetObjectData(SerializationInfo, StreamingContext)"/>
-		/// to allow for private serialization.
-		/// </summary>
-		/// <param name="info">
-		/// The <see cref="System.Runtime.Serialization.SerializationInfo"/>
-		/// that holds the serialized object data about the exception.
-		/// </param>
-		/// <param name="context">
-		/// The <see cref="System.Runtime.Serialization.StreamingContext"/>
-		/// that contains contextual information about the source or destination.
-		/// </param>
+		/// <inheritdoc />
 		public override void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
 			info.AddValue( "timeout", _timeout );

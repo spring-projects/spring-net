@@ -1,6 +1,4 @@
-﻿#region License
-
-/*
+﻿/*
 /// Copyright 2002-2010 the original author or authors.
  *
 /// Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,8 +13,6 @@
 /// See the License for the specific language governing permissions and
 /// limitations under the License.
  */
-
-#endregion
 
 using System;
 using System.Diagnostics;

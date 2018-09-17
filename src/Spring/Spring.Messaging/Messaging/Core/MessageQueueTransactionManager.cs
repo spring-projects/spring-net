@@ -19,12 +19,17 @@
 #endregion
 
 
-using System.Messaging;
 using Common.Logging;
 using Spring.Data.Core;
 using Spring.Transaction;
 using Spring.Transaction.Support;
 using Spring.Util;
+
+#if NETSTANDARD
+using Experimental.System.Messaging;
+#else
+using System.Messaging;
+#endif
 
 namespace Spring.Messaging.Core
 {

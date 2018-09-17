@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -16,14 +14,10 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
-using Spring.Util;
+using System.Runtime.Serialization;
 
-#endregion
+using Spring.Util;
 
 namespace Spring.Aop.Target
 {
@@ -42,7 +36,7 @@ namespace Spring.Aop.Target
 	/// <author>Rod Johnson</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
     [Serializable]
-    public sealed class SingletonTargetSource : ITargetSource
+    public sealed class SingletonTargetSource : ITargetSource, ISerializable
 	{
 		private readonly object target;
 	    private readonly Type targetType;
@@ -80,7 +74,13 @@ namespace Spring.Aop.Target
 		    this.targetType = targetType;
 		}
 
-	    #region ITarget Source impl
+	    /// <inheritdoc />
+	    private SingletonTargetSource(SerializationInfo info, StreamingContext context)
+	    {
+	        target = info.GetValue("Target", typeof(object));
+	        var type = info.GetString("TargetTypeName");
+	        targetType = type != null ? Type.GetType(type) : null;
+	    }
 
 	    /// <summary>
 		/// The <see cref="System.Type"/> of the target object.
@@ -127,7 +127,12 @@ namespace Spring.Aop.Target
           
 		}
 
-	    #endregion
+	    /// <inheritdoc />
+	    public void GetObjectData(SerializationInfo info, StreamingContext context)
+	    {
+	        info.AddValue("TargetTypeName", targetType?.AssemblyQualifiedName);
+	        info.AddValue("Target", target);
+	    }
 
 	    /// <summary>
 		/// Returns a stringified representation of this target source.

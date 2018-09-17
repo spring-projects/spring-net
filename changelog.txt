@@ -3,6 +3,20 @@ SPRING.NET FRAMEWORK CHANGELOG
 http://www.springframework.net
 
 *****************************************************************************************
+Release Version 3.0.0 XXXX XX, 2018
+
+Release Notes - Spring.NET - Version 3.0.0
+
+Breaking Changes
+
+* .NET 4.5.2 is the lowest full framework supported
+
+New Feature Highlights
+
+* .NET Core support Spring.Aop, Spring.Core, Spring.Data, Spring.Messaging, Spring.Testing.NUnit
+
+
+*****************************************************************************************
 Release Version 2.0.1 April 10, 2015
 
 Release Notes - Spring.NET - Version 2.0.1

@@ -173,7 +173,7 @@ namespace Spring.Context.Attributes
                     new ConfigurationClassProxyMethodBuilder(typeBuilder, this, false, targetMethods),
                     BaseType, this.DeclaredMembersOnly);
 
-                Type proxyType = typeBuilder.CreateType();
+                Type proxyType = typeBuilder.CreateTypeInfo();
 
                 // set target method references
                 foreach (DictionaryEntry entry in targetMethods)

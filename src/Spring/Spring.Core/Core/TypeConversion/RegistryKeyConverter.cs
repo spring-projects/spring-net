@@ -153,8 +153,6 @@ namespace Spring.Core.TypeConversion
                     return Registry.PerformanceData;
                 case "HKEY_CURRENT_CONFIG":
                     return Registry.CurrentConfig;
-                case "HKEY_DYN_DATA":
-                    return Registry.DynData;
                 default:
                     throw new ArgumentException("Invalid root hive name [" + name + "].");
             }

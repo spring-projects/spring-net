@@ -76,18 +76,12 @@ namespace Spring.Core.TypeConversion
             Assert.Throws<NotSupportedException>(() => vrt.ConvertFrom(string.Empty));
         }
 
+#if NETFRAMEWORK
         [Test]
         public void ConvertFromGarbageBails()
         {
             RGBColorConverter vrt = new RGBColorConverter();
             Assert.Throws<FormatException>(() => vrt.ConvertFrom("*&&%%^£"));
-        }
-
-        [Test]
-        public void ConvertFromNonSupportedOptionBails()
-        {
-            RGBColorConverter vrt = new RGBColorConverter();
-            Assert.Throws<NotSupportedException>(() => vrt.ConvertFrom(12));
         }
 
         [Test]
@@ -97,6 +91,14 @@ namespace Spring.Core.TypeConversion
             RGBColorConverter vrt = new RGBColorConverter();
             Color actual = (Color) vrt.ConvertFrom(expected.Name);
             Assert.AreEqual(expected, actual);
+        }
+#endif
+
+        [Test]
+        public void ConvertFromNonSupportedOptionBails()
+        {
+            RGBColorConverter vrt = new RGBColorConverter();
+            Assert.Throws<NotSupportedException>(() => vrt.ConvertFrom(12));
         }
 
         [Test]

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -33,8 +27,6 @@ using Spring.Core.TypeConversion;
 using Spring.Objects.Factory.Config;
 using Spring.Util;
 using Spring.Expressions;
-
-#endregion
 
 namespace Spring.Objects.Factory.Support
 {
@@ -73,8 +65,6 @@ namespace Spring.Objects.Factory.Support
         IConfigurableListableObjectFactory,
         IObjectDefinitionRegistry
     {
-        #region Constructor (s) / Destructor
-
         /// <summary>
         /// Creates a new instance of the
         /// <see cref="Spring.Objects.Factory.Support.DefaultListableObjectFactory"/> class.
@@ -124,10 +114,6 @@ namespace Spring.Objects.Factory.Support
             }
         }
 
-        #endregion
-
-        #region Properties
-
         /// <summary>
         /// Should object definitions registered under the same name as an
         /// existing object definition be allowed?
@@ -168,10 +154,6 @@ namespace Spring.Objects.Factory.Support
                 autowireCandidateResolver = value;
             }
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Find object instances that match the <paramref name="requiredType"/>.
@@ -286,24 +268,15 @@ namespace Spring.Objects.Factory.Support
             return (rod.HasObjectType && checkedType.IsAssignableFrom(rod.ObjectType));
         }
 
-        #endregion
-
-        #region Fields
-
         /// <summary>
         /// The mapping of object depending object names, keyed by object name.
         /// </summary>
-		private IDictionary<string, List<string>> dependingObjectNamesCache;
-
-        /// <summary>
-        /// The <see cref="Common.Logging.ILog"/> instance for this class.
-        /// </summary>
-        private readonly ILog log = LogManager.GetLogger(typeof(DefaultListableObjectFactory));
+		private Dictionary<string, List<string>> dependingObjectNamesCache;
 
         /// <summary>
         /// The mapping of object definition objects, keyed by object name.
         /// </summary>
-        private readonly IDictionary<string, IObjectDefinition> objectDefinitionMap;
+        private readonly Dictionary<string, IObjectDefinition> objectDefinitionMap;
 
         /// <summary>
         /// List of object definition names, in registration order.
@@ -319,10 +292,6 @@ namespace Spring.Objects.Factory.Support
         /// IDictionary from dependency type to corresponding autowired value 
         /// </summary>
         private readonly IDictionary<Type, object> resolvableDependencies = new Dictionary<Type, object>();
-
-        #endregion
-
-        #region IObjectDefinitionRegistry Members
 
         /// <summary>
         /// Return the number of objects defined in this registry.
@@ -396,8 +365,6 @@ namespace Spring.Objects.Factory.Support
                 }
                 else
                 {
-                    #region Instrumentation
-
                     if (log.IsDebugEnabled)
                     {
                         log.Debug(
@@ -405,8 +372,6 @@ namespace Spring.Objects.Factory.Support
                                 "Overriding object definition for object '{0}': replacing [{1}] with [{2}].",
                                 name, oldObjectDefinition, objectDefinition));
                     }
-
-                    #endregion
                 }
             }
             else
@@ -415,10 +380,6 @@ namespace Spring.Objects.Factory.Support
             }
             objectDefinitionMap[name] = objectDefinition;
         }
-
-        #endregion
-
-        #region IConfigurableListableObjectFactory Members
 
         /// <summary>
         /// Ensure that all non-lazy-init singletons are instantiated, also
@@ -430,14 +391,10 @@ namespace Spring.Objects.Factory.Support
         /// <seealso cref="Spring.Objects.Factory.Config.IConfigurableListableObjectFactory.PreInstantiateSingletons"/>
         public void PreInstantiateSingletons()
         {
-            #region Instrumentation
-
             if (log.IsDebugEnabled)
             {
                 log.Debug("Pre-instantiating singletons in factory [" + this + "]");
             }
-
-            #endregion
 
             try
             {
@@ -584,10 +541,6 @@ namespace Spring.Objects.Factory.Support
             }
             return definition;
         }
-
-        #endregion
-
-        #region IListableObjectFactory Members
 
 
         /// <summary>
@@ -1129,8 +1082,6 @@ namespace Spring.Objects.Factory.Support
             Type objectType = PredictObjectType(objectName, rod);
             return (objectType != null && typeof(IFactoryObject).IsAssignableFrom(objectType));
         }
-
-        #endregion
 
         /// <summary>
         /// Resolve the specified dependency against the objects defined in this factory.

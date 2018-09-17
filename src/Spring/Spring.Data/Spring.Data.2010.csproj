@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net452</TargetFrameworks>
+    <TargetFrameworks>netstandard2.0;$(TargetFullFrameworkVersion)</TargetFrameworks>
     <Description>Interfaces and classes that provide Data access support in Spring.Net</Description>
     <NoWarn>1591</NoWarn>
   </PropertyGroup>
@@ -8,8 +8,8 @@
     <ProjectReference Include="..\Spring.Aop\Spring.Aop.2010.csproj" />
     <ProjectReference Include="..\Spring.Core\Spring.Core.2010.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System.configuration" />
+  <ItemGroup Condition=" '$(TargetFramework)' == '$(TargetFullFrameworkVersion)' ">
+    <Reference Include="System.Configuration" />
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
@@ -25,5 +25,11 @@
     <EmbeddedResource Include="Data\Config\spring-database-1.1.xsd" />
     <EmbeddedResource Include="Transaction\Config\spring-tx-1.1.xsd" />
     <EmbeddedResource Include="Data\Config\spring-database-1.3.xsd" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <Compile Remove="Data\Core\ServiceDomainPlatformTransactionManager.cs"  />
+    <Compile Remove="Data\Support\DefaultServiceDomainAdapter.cs"  />
+    <Compile Remove="Data\Support\IServiceDomainAdapter.cs"  />
+    <Compile Remove="Data\Support\SimpleServiceConfig.cs"  />
   </ItemGroup>
 </Project>

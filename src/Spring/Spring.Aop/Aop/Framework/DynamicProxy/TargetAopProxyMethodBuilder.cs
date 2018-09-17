@@ -82,7 +82,7 @@ namespace Spring.Aop.Framework.DynamicProxy
             base.DeclareLocals(il, method);
             target = il.DeclareLocal(typeof(object));
 
-#if DEBUG
+#if DEBUG && !NETSTANDARD
             target.SetLocalSymInfo("target");
 #endif
         }

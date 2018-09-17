@@ -25,7 +25,9 @@ using System.Collections;
 using System.Globalization;
 using System.Reflection;
 using System.Runtime.Remoting;
+#if !NETSTANDARD
 using System.Runtime.Remoting.Proxies;
+#endif
 using Common.Logging;
 
 using Spring.Reflection.Dynamic;
@@ -314,6 +316,7 @@ namespace Spring.Util
                 return true;
             }
 
+#if !NETSTANDARD
             if (RemotingServices.IsTransparentProxy(obj))
             {
                 RealProxy rp = RemotingServices.GetRealProxy(obj);
@@ -332,6 +335,7 @@ namespace Spring.Util
                     return false;
                 }
             }
+    #endif
 
             return (type.IsInstanceOfType(obj) ||
                     (type.Equals(typeof(bool)) && obj is Boolean) ||

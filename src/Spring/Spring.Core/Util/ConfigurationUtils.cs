@@ -61,7 +61,9 @@ namespace Spring.Util
         {
             try
             {
-                return ConfigurationManager.GetSection(sectionName.TrimEnd('/'));
+                var name = sectionName.TrimEnd('/');
+                var section = ConfigurationManager.GetSection(name);
+                return section;
             }
             catch (ConfigurationException)
             {

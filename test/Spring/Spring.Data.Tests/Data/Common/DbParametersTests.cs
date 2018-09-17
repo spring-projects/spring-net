@@ -21,6 +21,7 @@
 #region Imports
 
 using System.Data;
+
 using NUnit.Framework;
 
 #endregion
@@ -39,6 +40,8 @@ namespace Spring.Data.Common
         {
         }
 
+        // TODO separate providers for OracleClient
+#if !NETCOREAPP
         [Test]
         public void OracleClient()
         {
@@ -52,6 +55,7 @@ namespace Spring.Data.Common
             Assert.IsNotNull(springParameter);
             Assert.AreEqual("foo", springParameter);
         }
+#endif
 
         [Test]
         public void SqlClient()
@@ -66,7 +70,5 @@ namespace Spring.Data.Common
             Assert.IsNotNull(springParameter);
             Assert.AreEqual("foo", springParameter);
         }
-
-
     }
 }

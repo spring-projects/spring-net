@@ -45,11 +45,16 @@ namespace Spring.Reflection.Dynamic
             return new SafeProperty(property);
         }
 
+#if NETCOREAPP
+        private bool CanGenerateVisualBasic => false;
+#else
+        private bool CanGenerateVisualBasic => SystemUtils.MonoRuntime;
+#endif
 
         [Test]
         public void CanGetSetSimpleProperty()
         {
-            if (SystemUtils.MonoRuntime)
+            if (!CanGenerateVisualBasic)
             {
                 // TODO (EE): find solution for Mono
                 return;
@@ -64,7 +69,7 @@ namespace Spring.Reflection.Dynamic
         [Test]
         public void CanGetSetSimpleIndexer()
         {
-            if (SystemUtils.MonoRuntime)
+            if (!CanGenerateVisualBasic)
             {
                 // TODO (EE): find solution for Mono
                 return;
@@ -87,7 +92,7 @@ namespace Spring.Reflection.Dynamic
         [Test]
         public void CanGetSetComplexIndexer()
         {
-            if (SystemUtils.MonoRuntime)
+            if (!CanGenerateVisualBasic)
             {
                 // TODO (EE): find solution for Mono
                 return;

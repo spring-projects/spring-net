@@ -54,6 +54,7 @@ namespace Spring.Expressions
             Assert.AreEqual(new DateTime(2008,1,1), ((IExpression) pofNode).GetValue(new DerivedClass()));
         }
 
+#if !NETCOREAPP
         [Test]
         public void CanSetTransparentProxy()
         {
@@ -69,5 +70,6 @@ namespace Spring.Expressions
             pofNode.SetValue( ouc, null, itpo);
             Assert.AreSame( tpo, ouc.ObjectProp );
         }
+#endif
     }
 }

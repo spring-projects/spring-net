@@ -43,8 +43,10 @@ namespace Spring.Objects.Factory.Config
 	[TestFixture]
     public sealed class PropertyPlaceholderConfigurerTests
 	{
+#if !NETCOREAPP
 	    private static string testConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0; Data Source=c:\Northwind.mdb;User ID=Admin;Password=;";
         private static string testConnectionStringTwo = @"Provider=Microsoft.Jet.OLEDB.4.0; Data Source=c:\Northwind.mdb;User ID=Admin;Password=Ernie;";
+#endif
 		
         [SetUp]
         public void SetUp()
@@ -476,6 +478,7 @@ namespace Spring.Objects.Factory.Config
 				"Named argument placeholder value was not replaced.");
 		}
 
+#if !NETCOREAPP
 		/// <summary>
 		/// Test that properties can be replaced from NameValueConfiguration sections
 		/// from the main .NET application configuration file.
@@ -544,6 +547,7 @@ namespace Spring.Objects.Factory.Config
             Assert.AreEqual(testConnectionStringTwo, to.DbConnection.ConnectionString);
 			Assert.AreEqual(1000, to.MaxResults);
 		}
+#endif
 
 		[Test]
 		public void WithIgnoreUnresolvablePlaceholder()

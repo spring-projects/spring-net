@@ -1,25 +1,28 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net452</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.1;$(TargetFullFrameworkVersion)</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Spring\Spring.Aop\Spring.Aop.2010.csproj" />
     <ProjectReference Include="..\..\..\src\Spring\Spring.Core\Spring.Core.2010.csproj" />
     <ProjectReference Include="..\..\..\src\Spring\Spring.Data\Spring.Data.2010.csproj" />
-    <ProjectReference Include="..\..\..\src\Spring\Spring.Messaging.Nms\Spring.Messaging.Nms.2010.csproj" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == '$(TargetFullFrameworkVersion)' ">
     <ProjectReference Include="..\..\..\src\Spring\Spring.Services\Spring.Services.2010.csproj" />
     <ProjectReference Include="..\..\..\src\Spring\Spring.Template.Velocity\Spring.Template.Velocity.2010.csproj" />
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Messaging.Nms\Spring.Messaging.Nms.2010.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FakeItEasy" Version="$(FakeItEasyVersion)" />
     <PackageReference Include="FakeItEasy.Analyzer" Version="$(FakeItEasyVersion)" PrivateAssets="All" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftTestSDKVersion)" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
     <PackageReference Include="NUnit" Version="$(NUnitVersion)" />
     <PackageReference Include="NUnit3TestAdapter" Version="$(NUnitTestAdapterVersion)" />
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == '$(TargetFullFrameworkVersion)' ">
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.configuration" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
     <Reference Include="System.Transactions" />
@@ -27,11 +30,22 @@
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.1' ">
+    <Compile Remove="Context\Attributes\FailAssemblyObjectDefinitionScannerTests.cs" />
+    <Compile Remove="Context\Support\ApplicationContextAwareProcessorTests.cs" />
+    <Compile Remove="Expressions\ExpressionEvaluatorTests.cs" />
+    <Compile Remove="Globalization\AbstractLocalizerTests.cs" />
+    <Compile Remove="Globalization\Localizers\ResourceSetLocalizerTests.cs" />
+    <Compile Remove="Objects\TestTransparentProxyFactory.cs" />
+    <Compile Remove="SecurityTemplate.cs" />
+    <Compile Remove="Threading\CallContextStorageTests.cs" />
+    <Compile Remove="Util\ObjectUtilsTests.cs" />
+  </ItemGroup>
   <ItemGroup>
-    <Content Include="Data\**">
+    <Content Include="App.config">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="App.config">
+    <Content Include="Data\**">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Compile Remove="Context\Attributes\FailAssemblyObjectDefinitionScannerTests.cs" />
@@ -56,5 +70,6 @@
   </ItemGroup>
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="xcopy &quot;$(ProjectDir)Data&quot; &quot;$(OutDir)&quot; /y /s /q /d" />
+    <Exec Command="copy &quot;$(ProjectDir)App.config&quot; &quot;$(OutDir)testhost.dll.config&quot;" />
   </Target>
 </Project>

@@ -27,7 +27,6 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Threading;
 using System.Runtime.CompilerServices;
-using System.Windows.Forms;
 using NUnit.Framework;
 
 using Spring.Objects;
@@ -528,10 +527,11 @@ namespace Spring.Util
             // TODO : actually emit the attribute and check it...
         }
 
+#if !NETCOREAPP
         [Test]
         public void CreatCustomAttriubtesFromCustomAttributeData()
         {
-            Type control = typeof(Control);
+            Type control = typeof(System.Windows.Forms.Control);
             MethodInfo mi = control.GetMethod("get_Font");
             System.Collections.Generic.IList<CustomAttributeData> attributes = CustomAttributeData.GetCustomAttributes(mi.ReturnParameter);
             CustomAttributeBuilder builder = null;
@@ -540,8 +540,8 @@ namespace Spring.Util
                 builder = ReflectionUtils.CreateCustomAttribute(customAttributeData);
                 Assert.IsNotNull(builder);
             }
-
         }
+#endif
 
         [Test]
         public void CreatCustomAttriubtesFromCustomAttributeDataWithSingleEnum()
@@ -716,6 +716,7 @@ namespace Spring.Util
 
         }
 
+#if !NETCOREAPP
         [Test]
         public void CreateCustomAttributeUsingDefaultValuesForTheConstructor()
         {
@@ -783,6 +784,7 @@ namespace Spring.Util
             Assert.AreEqual(expectedAge, att.Age);
             Assert.IsFalse(att.HasSwallowedExplosives);
         }
+#endif
 
         [Test]
         public void HasAtLeastOneMethodWithName()
@@ -1208,7 +1210,11 @@ namespace Spring.Util
         {
             IList attrs = ReflectionUtils.GetCustomAttributes(typeof(ClassWithAttributes));
 
+#if NETCOREAPP
+            Assert.AreEqual(1, attrs.Count);
+#else
             Assert.AreEqual(2, attrs.Count);
+#endif
         }
 
         [Test]
@@ -1216,7 +1222,11 @@ namespace Spring.Util
         {
             IList attrs = ReflectionUtils.GetCustomAttributes(typeof(ClassWithAttributes).GetMethod("MethodWithAttributes"));
 
+#if NETCOREAPP
+            Assert.AreEqual(1, attrs.Count);
+#else
             Assert.AreEqual(2, attrs.Count);
+#endif
         }
 
         #endregion
@@ -1280,6 +1290,7 @@ namespace Spring.Util
             return one + two;
         }
 
+#if !NETCOREAPP
         private Attribute CheckForPresenceOfCustomAttribute(
             CustomAttributeBuilder attBuilder, Type attType)
         {
@@ -1310,7 +1321,7 @@ namespace Spring.Util
             classBuilder.SetCustomAttribute(attBuilder);
             return classBuilder.CreateType();
         }
-
+#endif
         #endregion
     }
 

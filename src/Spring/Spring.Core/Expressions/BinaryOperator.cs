@@ -74,7 +74,6 @@ namespace Spring.Expressions
         /// Gets the right operand.
         /// </summary>
         /// <value>The right operand.</value>
-        [CLSCompliant(false)]
         public BaseNode Right
         {
             get { return (BaseNode) this.getFirstChild().getNextSibling(); }

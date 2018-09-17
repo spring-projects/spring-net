@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System;
 using System.Collections;
@@ -37,10 +33,8 @@ namespace Spring.Aop.Framework.DynamicProxy
     /// </summary>
     /// <author>Bruno Baia</author>
     [Serializable]
-    public class AdvisedProxy : IAdvised //, ISerializable
+    public class AdvisedProxy : IAdvised, ISerializable
     {
-        #region Fields
-
         /// <summary>
         /// Should we use dynamic reflection for method invocation ?
         /// </summary>
@@ -70,10 +64,6 @@ namespace Spring.Aop.Framework.DynamicProxy
         /// Type of target object.
         /// </summary>
         public Type m_targetType;
-
-        #endregion
-
-        #region Constructor (s) / Destructor
 
         /// <summary>
         /// Creates a new instance of the <see cref="AdvisedProxy"/> class.
@@ -130,7 +120,9 @@ namespace Spring.Aop.Framework.DynamicProxy
             m_advised = (IAdvised)info.GetValue("advised", typeof(IAdvised));
             m_introductions = (IAdvice[])info.GetValue("introductions", typeof(IAdvice[]));
             m_targetSource = (ITargetSource)info.GetValue("targetSource", typeof(ITargetSource));
-            m_targetType = (Type)info.GetValue("targetType", typeof(Type));
+
+            var type = info.GetString("targetType");
+            m_targetType = type != null ? Type.GetType(type) : null;
         }
 
         /// <summary>
@@ -139,17 +131,13 @@ namespace Spring.Aop.Framework.DynamicProxy
         /// <param name="info">Serialization data.</param>
         /// <param name="context">Serialization context.</param>
         [SecurityPermissionAttribute(SecurityAction.Demand, SerializationFormatter = true)]
-        protected virtual void GetObjectData(SerializationInfo info, StreamingContext context)
+        public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue("advised", m_advised);
             info.AddValue("introductions", m_introductions);
             info.AddValue("targetSource", m_targetSource);
-            info.AddValue("targetType", m_targetType);
+            info.AddValue("targetType", m_targetType?.AssemblyQualifiedName);
         }
-
-        #endregion
-
-        #region Protected Methods
 
         /// <summary>
         /// Initialization method.
@@ -177,10 +165,6 @@ namespace Spring.Aop.Framework.DynamicProxy
                 }
             }
         }
-
-        #endregion
-
-        #region Public Methods
 
         /// <summary>
         /// Invokes intercepted methods using reflection
@@ -227,10 +211,6 @@ namespace Spring.Aop.Framework.DynamicProxy
                 return m_advised.AdvisorChainFactory.GetInterceptors(m_advised, this, method, targetType);
             }
         }
-
-        #endregion
-
-        #region IAdvised Members
 
         bool IAdvised.ExposeProxy
         {
@@ -400,10 +380,6 @@ namespace Spring.Aop.Framework.DynamicProxy
             return m_advised.ToProxyConfigString();
         }
 
-        #endregion
-
-        #region ITargetTypeAware implementation
-
         /// <summary>
         /// Gets the target type behind the implementing object.
         /// Ttypically a proxy configuration or an actual proxy.
@@ -413,7 +389,5 @@ namespace Spring.Aop.Framework.DynamicProxy
         {
             get { return m_targetType; }
         }
-
-        #endregion
     }
 }

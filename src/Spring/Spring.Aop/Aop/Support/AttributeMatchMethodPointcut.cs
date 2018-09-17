@@ -22,6 +22,8 @@
 
 using System;
 using System.Reflection;
+using System.Runtime.Serialization;
+
 using Spring.Util;
 
 #endregion
@@ -35,7 +37,7 @@ namespace Spring.Aop.Support
 	/// <author>Aleksandar Seovic</author>
     /// <author>Ronald Wildenberg</author>
 	[Serializable]
-    public class AttributeMatchMethodPointcut : StaticMethodMatcherPointcut
+    public class AttributeMatchMethodPointcut : StaticMethodMatcherPointcut, ISerializable
 	{
 		private Type _attribute;
 		private bool _inherit = true;
@@ -100,6 +102,23 @@ namespace Spring.Aop.Support
             Inherit = inherit;
             CheckInterfaces = checkInterfaces;
         }
+
+	    /// <inheritdoc />
+	    protected AttributeMatchMethodPointcut(SerializationInfo info, StreamingContext context)
+	    {
+	        Inherit = info.GetBoolean("Inherit");
+	        CheckInterfaces = info.GetBoolean("CheckInterfaces");
+	        var type = info.GetString("Attribute");
+	        Attribute = type != null ? Type.GetType(type) : null;
+	    }
+        
+	    /// <inheritdoc />
+	    public virtual void GetObjectData(SerializationInfo info, StreamingContext context)
+	    {
+	        info.AddValue("Attribute", Attribute?.AssemblyQualifiedName);
+	        info.AddValue("Inherit", Inherit);
+	        info.AddValue("CheckInterfaces", CheckInterfaces);
+	    }
 
 		/// <summary>
 		/// The <see cref="System.Attribute"/> to match.

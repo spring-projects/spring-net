@@ -19,11 +19,16 @@
 #endregion
 
 using System;
-using System.Messaging;
 using Spring.Context;
 using Spring.Messaging.Support.Converters;
 using Spring.Objects.Factory.Support;
 using Spring.Transaction.Support;
+
+#if NETSTANDARD
+using Experimental.System.Messaging;
+#else
+using System.Messaging;
+#endif
 
 namespace Spring.Messaging.Core
 {

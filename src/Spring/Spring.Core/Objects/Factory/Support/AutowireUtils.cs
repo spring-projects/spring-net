@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -31,8 +25,6 @@ using Spring.Objects.Factory.Attributes;
 using Spring.Objects.Factory.Config;
 using Spring.Util;
 
-#endregion
-
 namespace Spring.Objects.Factory.Support
 {
 	/// <summary>
@@ -43,9 +35,7 @@ namespace Spring.Objects.Factory.Support
 	/// <author>Rick Evans (.NET)</author>
 	public sealed class AutowireUtils
 	{
-		#region Constructor (s) / Destructor
-
-		// CLOVER:OFF
+	    // CLOVER:OFF
 
 		/// <summary>
 		/// Creates a new instance of the AutowireUtils class.
@@ -62,9 +52,7 @@ namespace Spring.Objects.Factory.Support
 
 		// CLOVER:ON
 
-		#endregion
-
-		/// <summary>
+	    /// <summary>
 		/// Gets those <see cref="System.Reflection.ConstructorInfo"/>s
 		/// that are applicable for autowiring the supplied <paramref name="definition"/>.
 		/// </summary>
@@ -264,9 +252,7 @@ namespace Spring.Objects.Factory.Support
 			}
 		}
 
-		#region Inner Class : ConstructorComparer
-
-		private sealed class ConstructorComparer : IComparer
+	    private sealed class ConstructorComparer : IComparer
 		{
 			public int Compare(object lhs, object rhs)
 			{
@@ -294,11 +280,7 @@ namespace Spring.Objects.Factory.Support
 			}
 		}
 
-		#endregion
-
-		#region Inner Class : MinimumArgumentCountCriteria
-
-		private sealed class MinimumArgumentCountCriteria : ICriteria
+	    private sealed class MinimumArgumentCountCriteria : ICriteria
 		{
 			public MinimumArgumentCountCriteria(int minimumArgumentCount)
 			{
@@ -315,9 +297,7 @@ namespace Spring.Objects.Factory.Support
 			private int _minimumArgumentCount;
 		}
 
-		#endregion
-
-        /// <summary>
+	    /// <summary>
         /// Determines whether the setter property is defined in any of the given interfaces.
         /// </summary>
         /// <param name="propertyInfo">The PropertyInfo of the object property</param>
