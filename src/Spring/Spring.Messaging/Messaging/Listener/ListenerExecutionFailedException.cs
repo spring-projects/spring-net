@@ -19,6 +19,7 @@
 #endregion
 
 using System;
+using System.Runtime.Serialization;
 
 namespace Spring.Messaging.Listener
 {
@@ -27,8 +28,15 @@ namespace Spring.Messaging.Listener
     /// </summary>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
+    [Serializable]
     public class ListenerExecutionFailedException : MessagingException
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="ListenerExecutionFailedException"/> class.
+        /// </summary>
+        public ListenerExecutionFailedException()
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ListenerExecutionFailedException"/> class, with the specified message
@@ -46,6 +54,11 @@ namespace Spring.Messaging.Listener
         /// <param name="innerException">The inner exception.</param>
         public ListenerExecutionFailedException(string message, Exception innerException)
             : base(message, innerException)
+        {
+        }
+
+        /// <inheritdoc />
+        protected ListenerExecutionFailedException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
     }

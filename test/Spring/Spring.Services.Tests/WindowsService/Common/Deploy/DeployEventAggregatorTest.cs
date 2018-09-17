@@ -16,7 +16,6 @@
 */
 #endregion
 using NUnit.Framework;
-using Spring.Services.WindowsService.Common.Deploy;
 
 namespace Spring.Services.WindowsService.Common.Deploy
 {

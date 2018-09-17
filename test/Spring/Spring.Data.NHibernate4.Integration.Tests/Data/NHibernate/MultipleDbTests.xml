@@ -10,12 +10,12 @@
                  provider="SqlServer-1.1" 
                  connectionString="Data Source=(local);Database=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False"/>
 
-  <object id="SessionFactory1" type="Spring.Data.NHibernate.LocalSessionFactoryObject, Spring.Data.NHibernate3">
+  <object id="SessionFactory1" type="Spring.Data.NHibernate.LocalSessionFactoryObject, Spring.Data.NHibernate4">
 
     <property name="DbProvider" ref="DbProvider1"/>
     <property name="MappingAssemblies">
       <list>
-        <value>Spring.Data.NHibernate3.Integration.Tests</value>
+        <value>Spring.Data.NHibernate4.Integration.Tests</value>
       </list>
     </property>
     <property name="HibernateProperties">
@@ -35,12 +35,12 @@
 
   </object>
 
-  <object id="SessionFactory2" type="Spring.Data.NHibernate.LocalSessionFactoryObject, Spring.Data.NHibernate3">
+  <object id="SessionFactory2" type="Spring.Data.NHibernate.LocalSessionFactoryObject, Spring.Data.NHibernate4">
 
     <property name="DbProvider" ref="DbProvider2"/>
     <property name="MappingAssemblies">
       <list>
-        <value>Spring.Data.NHibernate3.Integration.Tests</value>
+        <value>Spring.Data.NHibernate4.Integration.Tests</value>
       </list>
     </property>
     <property name="HibernateProperties">
@@ -65,17 +65,17 @@
           type="Spring.Data.Core.TxScopeTransactionManager, Spring.Data">
   </object>
 
-  <object id="AccountCreditDao" type="Spring.Data.NHibernate.AccountCreditDao, Spring.Data.NHibernate3.Integration.Tests">
+  <object id="AccountCreditDao" type="Spring.Data.NHibernate.AccountCreditDao, Spring.Data.NHibernate4.Integration.Tests">
     <property name="SessionFactory" ref="SessionFactory1"/>
   </object>
-  <object id="AccountDebitDao" type="Spring.Data.NHibernate.AccountDebitDao, Spring.Data.NHibernate3.Integration.Tests">
+  <object id="AccountDebitDao" type="Spring.Data.NHibernate.AccountDebitDao, Spring.Data.NHibernate4.Integration.Tests">
     <property name="SessionFactory" ref="SessionFactory2"/>
   </object>
 
   
   <!-- The DAO object that performs multiple data access operations -->
   <object id="accountManagerTarget" 
-          type="Spring.Data.NHibernate.AccountManager, Spring.Data.NHibernate3.Integration.Tests">
+          type="Spring.Data.NHibernate.AccountManager, Spring.Data.NHibernate4.Integration.Tests">
     <property name="AccountCreditDao" ref="AccountCreditDao"/>
     <property name="AccountDebitDao" ref="AccountDebitDao"/>
 

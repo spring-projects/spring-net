@@ -57,7 +57,6 @@ namespace Spring
         }
         #endregion
 
-        #region Methods
         private bool IsCheckedType (Type type) {
             if (CheckedType.IsInterface) {
                 Type iface = type.GetInterface (CheckedType.Name, false);
@@ -87,9 +86,7 @@ namespace Spring
             }
         }
 
-        protected abstract void CheckStandardsCompliance (
-            Assembly assembly, Type t);
-        #endregion
+        protected abstract void CheckStandardsCompliance (Assembly assembly, Type t);
 
         #region Fields
         private Type checkedType;

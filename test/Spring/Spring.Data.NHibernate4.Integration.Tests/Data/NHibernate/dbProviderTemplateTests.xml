@@ -25,11 +25,11 @@
 
 
 
-  <object id="SessionFactory" type="Spring.Data.NHibernate.LocalSessionFactoryObject, Spring.Data.NHibernate3">
+  <object id="SessionFactory" type="Spring.Data.NHibernate.LocalSessionFactoryObject, Spring.Data.NHibernate4">
         <property name="DbProvider" ref="DbProvider"/>
         <property name="MappingResources">
           <list>
-            <value>assembly://Spring.Data.NHibernate3.Integration.Tests/Spring.Data.NHibernate/TestObject.hbm.xml</value>
+            <value>assembly://Spring.Data.NHibernate4.Integration.Tests/Spring.Data.NHibernate/TestObject.hbm.xml</value>
           </list>
         </property>
         <!--
@@ -76,7 +76,7 @@
     -->
     
     <object id="hibernateTransactionManager" 
-            type="Spring.Data.NHibernate.HibernateTransactionManager, Spring.Data.NHibernate3">
+            type="Spring.Data.NHibernate.HibernateTransactionManager, Spring.Data.NHibernate4">
             
         <property name="DbProvider" ref="DbProvider"/>
         <property name="sessionFactory" ref="SessionFactory"/>
@@ -90,7 +90,7 @@
             type="Spring.Transaction.Interceptor.TransactionProxyFactoryObject, Spring.Data">
         <property name="PlatformTransactionManager" ref="hibernateTransactionManager"/>
         <property name="Target">
-            <object type="Spring.Data.NHibernate.NHTestObjectDao, Spring.Data.NHibernate3.Integration.Tests">
+            <object type="Spring.Data.NHibernate.NHTestObjectDao, Spring.Data.NHibernate4.Integration.Tests">
                 <property name="SessionFactory" ref="SessionFactory"/>
             </object>            
         </property>

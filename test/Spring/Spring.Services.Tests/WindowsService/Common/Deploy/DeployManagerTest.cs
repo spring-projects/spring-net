@@ -22,9 +22,6 @@ using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using DotNetMock.Dynamic;
 using NUnit.Framework;
-using Spring.Services.WindowsService.Common;
-using Spring.Services.WindowsService.Common.Deploy;
-using Spring.Threading;
 
 namespace Spring.Services.WindowsService.Common.Deploy
 {

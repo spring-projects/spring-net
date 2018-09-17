@@ -361,15 +361,18 @@ namespace Spring.Context.Attributes
         /// </returns>
         protected virtual bool IsIncludedAssembly(Assembly assembly)
         {
-            bool result = AssemblyInclusionPredicates.Any(include => include(assembly));
-
-            if (result)
+            foreach (var include in AssemblyInclusionPredicates)
             {
-                string fullname = assembly.FullName;
-                Logger.Debug(m => m("Include Assembly:  {0}", fullname));
+                if (include(assembly))
+                {
+                    if (Logger.IsDebugEnabled)
+                    {
+                        Logger.Debug(m => m("Include Assembly: {0}", assembly.FullName));
+                    }
+                    return true;
+                }
             }
-
-            return result;
+            return false;
         }
 
         /// <summary>
@@ -381,10 +384,25 @@ namespace Spring.Context.Attributes
         /// </returns>
         protected virtual bool IsIncludedType(Type type)
         {
-            if (TypeInclusionPredicates.Count > 0 && TypeInclusionPredicates.Any(include => include(type)))
-                return true;
+            for (var i = 0; i < TypeInclusionPredicates.Count; i++)
+            {
+                var include = TypeInclusionPredicates[i];
+                if (include(type))
+                {
+                    return true;
+                }
+            }
 
-            return Enumerable.Any(TypeInclusionTypeFilter, filter => filter.Match(type));
+            for (var i = 0; i < TypeInclusionTypeFilter.Count; i++)
+            {
+                var filter = TypeInclusionTypeFilter[i];
+                if (filter.Match(type))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         /// <summary>

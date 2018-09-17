@@ -15,10 +15,9 @@
 * limitations under the License.
 */
 #endregion
-using System;
+
 using DotNetMock.Dynamic;
 using NUnit.Framework;
-using Spring.Services.WindowsService.Common.Deploy;
 
 namespace Spring.Services.WindowsService.Common.Deploy
 {

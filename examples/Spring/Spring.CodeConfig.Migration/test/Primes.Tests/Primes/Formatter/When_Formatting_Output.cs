@@ -10,7 +10,7 @@ namespace Tests.Formatter
         private string _generatedPrimes;
 
 
-        [TestFixtureSetUp]
+        [OneTimeSetUp]
         public void _TestFixtureSetUp()
         {
             _generatedPrimes = new PrimeGenerator(new PrimeEvaluationEngine()).GeneratePrimesUpTo(20);

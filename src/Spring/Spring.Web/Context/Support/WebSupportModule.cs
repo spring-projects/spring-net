@@ -24,9 +24,7 @@ using System.Reflection;
 using System.Security;
 using System.Web;
 using System.Web.Caching;
-#if NET_4_0
 using System.Web.Routing;
-#endif
 using System.Web.SessionState;
 using System.Web.UI;
 
@@ -192,7 +190,6 @@ namespace Spring.Context.Support
                 // app.Context.Handler = // TODO: check, if this makes sense (EE)
                 ConfigureHandlerNow(app.Context.Handler, hCfg.ApplicationContext, hCfg.ObjectDefinitionName, hCfg.IsContainerManaged);
             }
-#if NET_4_0
             else
             {
                 Page page = app.Context.Handler as Page;
@@ -209,10 +206,8 @@ namespace Spring.Context.Support
                 ControlInterceptor.EnsureControlIntercepted(applicationContext, page);
                 ConfigureHandlerNow(page, applicationContext, normalizedVirtualPath, true);
             }
-#endif
         }
 
-#if NET_4_0
         /// <summary>
         /// Determines whether the specified page is processed by a <see cref="PageRouteHandler" />.
         /// </summary>
@@ -222,7 +217,6 @@ namespace Spring.Context.Support
         {
             return page != null && page.RouteData != null && page.RouteData.RouteHandler != null;
         }
-#endif
 
         /// <summary>
         /// Configures the specified handler instance using the object definition <paramref name="name"/>.

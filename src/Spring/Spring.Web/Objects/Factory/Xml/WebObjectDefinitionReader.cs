@@ -90,17 +90,6 @@ namespace Spring.Objects.Factory.Xml
                 objectName = objectName.Substring(appPath.Length-1);
             }
 
-//            System.Web.UI.Page page = (System.Web.UI.Page)WebObjectUtils.CreatePageInstance(url);
-//#if NET_2_0
-//            objectName = page.AppRelativeVirtualPath.Substring(1);
-//#else
-//            string appPath = HttpContext.Current.Request.ApplicationPath.TrimEnd('\\', '/');
-//            objectName = page.TemplateSourceDirectory.TrimEnd('\\','/') + "/" + WebUtils.GetPageName(url) + ".aspx";
-//            if (objectName.ToLower().StartsWith(appPath.ToLower()))
-//            {
-//                objectName = objectName.Substring(appPath.Length);
-//            }
-//#endif
             return objectName;
         }
     }

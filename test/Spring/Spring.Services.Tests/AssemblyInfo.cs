@@ -19,7 +19,6 @@
 #endregion
 
 using System.Reflection;
-using System.Runtime.CompilerServices;
 
 [assembly: AssemblyTitle("Spring.Services Tests")]
 [assembly: AssemblyDescription("Unit tests for Spring.Services assembly")]

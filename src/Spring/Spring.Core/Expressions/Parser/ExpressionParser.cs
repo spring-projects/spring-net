@@ -6,24 +6,16 @@ namespace Spring.Expressions.Parser
 	using System;
 	
 	using TokenBuffer              = antlr.TokenBuffer;
-	using TokenStreamException     = antlr.TokenStreamException;
-	using TokenStreamIOException   = antlr.TokenStreamIOException;
-	using ANTLRException           = antlr.ANTLRException;
-	using LLkParser = antlr.LLkParser;
 	using Token                    = antlr.Token;
-	using IToken                   = antlr.IToken;
 	using TokenStream              = antlr.TokenStream;
 	using RecognitionException     = antlr.RecognitionException;
 	using NoViableAltException     = antlr.NoViableAltException;
-	using MismatchedTokenException = antlr.MismatchedTokenException;
-	using SemanticException        = antlr.SemanticException;
 	using ParserSharedInputState   = antlr.ParserSharedInputState;
 	using BitSet                   = antlr.collections.impl.BitSet;
 	using AST                      = antlr.collections.AST;
 	using ASTPair                  = antlr.ASTPair;
 	using ASTFactory               = antlr.ASTFactory;
-	using ASTArray                 = antlr.collections.impl.ASTArray;
-	
+
 	internal 	class ExpressionParser : antlr.LLkParser
 	{
 		public const int EOF = 1;

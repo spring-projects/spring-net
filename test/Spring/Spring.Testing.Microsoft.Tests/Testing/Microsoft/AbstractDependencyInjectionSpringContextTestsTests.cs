@@ -19,7 +19,9 @@
 #endregion
 
 using System;
+
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.Objects;

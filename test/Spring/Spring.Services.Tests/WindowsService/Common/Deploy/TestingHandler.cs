@@ -18,7 +18,7 @@
 using System;
 using System.Reflection;
 using log4net;
-using Spring.Services.WindowsService.Common.Deploy;
+
 using Spring.Threading;
 
 namespace Spring.Services.WindowsService.Common.Deploy

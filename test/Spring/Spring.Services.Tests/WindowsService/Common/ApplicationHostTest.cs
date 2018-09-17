@@ -20,7 +20,6 @@ using System.Reflection;
 using DotNetMock.Dynamic;
 using NUnit.Framework;
 using Spring.Objects.Factory.Config;
-using Spring.Services.WindowsService.Common;
 
 namespace Spring.Services.WindowsService.Common
 {

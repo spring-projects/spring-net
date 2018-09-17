@@ -158,6 +158,7 @@ Commandline Examples:
 
   <!-- Include spring helpers -->
   <include buildfile="${spring.basedir}/Spring.include"/>
+  <include buildfile="${spring.basedir}/common-project.include"/>
 
   <property name="package.version" value="0.0.0" overwrite="false"/>
   <!-- change this to sync the sdk doc version generated -->
@@ -170,10 +171,10 @@ Commandline Examples:
   <sysinfo failonerror="false" />
 
   <property name="project.company" value="SpringSource"/>
-  <property name="project.copyright" value="Copyright 2002-2012 Spring.NET Framework Team."/>
+  <property name="project.copyright" value="Copyright 2002-2018 Spring.NET Framework Team."/>
 
   <property name="key.file" value="Spring.Net.snk"/>
-  <property name="project.year" value="2010"/>
+  <property name="project.year" value="2018"/>
 
   <!-- Targets that are always executed -->
   <call target="set-build-configuration"/>
@@ -194,7 +195,6 @@ Commandline Examples:
 		<property name="package.buildincrement" value="${string::substring(package.passedbuildincrement, string::get-length(package.passedbuildincrement) -3, 3)}" overwrite="true" />
 	  </if>
   </target>
-  
   
   <!-- call target="set-framework-configuration"/ -->
   <call target="set-user-overrides"/>
@@ -320,263 +320,70 @@ Commandline Examples:
 -->
 
   <target name="restore-nuget-packages" description="Restores NuGet packages that solution(s) reference">
-	<exec 
-	  program="${nuget.exe}"
-	  commandline="restore Spring.NET.2010.sln" 
-	  workingdir="."
-	  failonerror="true" />
-	<exec 
-	  program="${nuget.exe}"
-	  commandline="restore ${spring.basedir}\examples\Spring\Spring.Calculator\Spring.Calculator.2010.sln" 
-	  workingdir="."
-	  failonerror="true" />
-	<exec 
-	  program="${nuget.exe}"
-	  commandline="restore ${spring.basedir}\examples\Spring\Spring.CodeConfig.Migration\Spring.CodeConfig.Migration.2010.sln"
-	  workingdir="."
-	  failonerror="true" />
-	  <exec 
-	  program="${nuget.exe}"
-	  commandline="restore ${spring.basedir}\examples\Spring\Spring.Data.NHibernate.Northwind\Spring.Northwind.2010.sln" 
-	  workingdir="."
-	  failonerror="true" />
-	<exec 
-	  program="${nuget.exe}"
-	  commandline="restore ${spring.basedir}\examples\Spring\Spring.DataQuickStart\Spring.DataQuickStart.2010.sln" 
-	  workingdir="."
-	  failonerror="true" />
-	<exec 
-	  program="${nuget.exe}"
-	  commandline="restore ${spring.basedir}\examples\Spring\Spring.IoCQuickStart.MovieFinder\Spring.IocQuickStart.MovieFinder.2010.sln" 
-	  workingdir="."
-	  failonerror="true" />
-	<exec 
-	  program="${nuget.exe}"
-	  commandline="restore ${spring.basedir}\examples\Spring\Spring.MsmqQuickStart\Spring.MsmqQuickStart.2010.sln" 
-	  workingdir="."
-	  failonerror="true" />	  
-	<exec 
-	  program="${nuget.exe}"
-	  commandline="restore ${spring.basedir}\examples\Spring\Spring.Mvc3QuickStart\Spring.Mvc3QuickStart.sln" 
-	  workingdir="."
-	  failonerror="true" />
-	<exec 
-	  program="${nuget.exe}"
-	  commandline="restore ${spring.basedir}\examples\Spring\Spring.Mvc4QuickStart\Spring.Mvc4QuickStart.sln" 
-	  workingdir="."
-	  failonerror="true" />
-	<exec 
-	  program="${nuget.exe}"
-	  commandline="restore ${spring.basedir}\examples\Spring\Spring.Mvc5QuickStart\Spring.Mvc5QuickStart.sln" 
-	  workingdir="."
-	  failonerror="true" />
-	<exec 
-	  program="${nuget.exe}"
-	  commandline="restore ${spring.basedir}\examples\Spring\Spring.NmsQuickStart\Spring.NmsQuickStart.2010.sln" 
-	  workingdir="."
-	  failonerror="true" />
-	 <exec 
-	  program="${nuget.exe}"
-	  commandline="restore ${spring.basedir}\examples\Spring\Spring.Scheduling.Quartz.Example\Spring.Scheduling.Quartz.Example.2010.sln" 
-	  workingdir="."
-	  failonerror="true" />
-	 <exec 
-	  program="${nuget.exe}"
-	  commandline="restore ${spring.basedir}\examples\Spring\Spring.TxQuickStart\Spring.TxQuickStart.2010.sln" 
-	  workingdir="."
-	  failonerror="true" />
-	 <exec 
-	  program="${nuget.exe}"
-	  commandline="restore ${spring.basedir}\examples\Spring\Spring.WebQuickStart\Spring.WebQuickStart.2010.sln" 
-	  workingdir="."
-	  failonerror="true" />
-	  <exec 
-	  program="${nuget.exe}"
-	  commandline="restore ${spring.basedir}\examples\Spring\SpringAir\SpringAir.2010.sln" 
-	  workingdir="."
-	  failonerror="true" />
-  </target>
 
-  <target name="compile-build-3.5" description="Builds for .NET 3.5 if available">
+  	  <exec 
+		  program="${nuget.exe}"
+		  commandline="restore .nuget/packages.config -SolutionDirectory ${spring.basedir}" 
+		  workingdir="${spring.basedir}"
+		  failonerror="true" />
+	  
+      <foreach item="File" property="filename">
+      <in>
+        <items basedir="${spring.basedir}">
+          <include name="*.sln" />
+          <include name="examples/**/*.sln" />
+          <exclude name="examples/**/Spring.EmsQuickStart/*" />
+          <exclude name="examples/**/Spring.Examples.Pool/*" />
+          <exclude name="examples/**/SpringAir/*" />
+        </items>
+      </in>
+      <do>
+        <property name="solutionfile" value="${filename}" />
+		<exec program="${msbuild.exe}" verbose="true">
+		  <arg value="${solutionfile}"/>
+		  <arg line="/v:m" />
+		  <arg line="/m" />
+		  <arg line="/nr:false" />
+		  <arg line="/t:Restore"/>
+		</exec>
+	</do>
+    </foreach>
 
-    <if test="${net-3.5.installed}">
-      <call target="compile-net-3.5"/>
-    </if>
-
-    <if test="${not net-3.5.installed}">
-      <if test="${property::exists('project.build.package') and project.build.package}">
-        .NET 3.5 Build Skipped for Package
-        <fail message="The .NET Framework 3.5 is not available."/>
-        <echo message="The .NET Framework 3.5 is not available. Build skipped during package."/>
-      </if>
-      <if test="${not(property::exists('project.build.package') and project.build.package)}">
-        <echo message="The .NET Framework 3.5 is not available. Build skipped."/>
-      </if>
-    </if>
-  </target>
-
-
-  <target name="compile-build-4.0" description="Builds for .NET 4.0 if available">
-
-    <if test="${net-4.0.installed}">
-      <call target="compile-net-4.0"/>
-    </if>
-
-    <if test="${not net-4.0.installed}">
-      <if test="${property::exists('project.build.package') and project.build.package}">
-        .NET 4.0 Build Skipped for Package
-        <fail message="The .NET Framework 4.0 is not available."/>
-        <echo message="The .NET Framework 4.0 is not available. Build skipped during package."/>
-      </if>
-      <if test="${not(property::exists('project.build.package') and project.build.package)}">
-        <echo message="The .NET Framework 4.0 is not available. Build skipped."/>
-      </if>
-    </if>
   </target>
 
   <target name="compile-build-4.5" description="Builds for .NET 4.5 if available">
-
-    <if test="${net-4.5.installed}">
-      <call target="compile-net-4.5"/>
-    </if>
-
-    <if test="${not net-4.5.installed}">
-      <if test="${property::exists('project.build.package') and project.build.package}">
-        .NET 4.5 Build Skipped for Package
-        <fail message="The .NET Framework 4.5 is not available."/>
-        <echo message="The .NET Framework 4.5 is not available. Build skipped during package."/>
-      </if>
-      <if test="${not(property::exists('project.build.package') and project.build.package)}">
-        <echo message="The .NET Framework 4.5 is not available. Build skipped."/>
-      </if>
-    </if>
-  </target>
-
-
-  <!-- Targets for other .NET frameworks -->
-
-  <target name="compile-build-netcf-1.0" description="Builds for .NET 1.0 Compact Framework if available">
-    <if test="${framework::exists('netcf-1.0')}">
-      <call target="compile-netcf-1.0" />
-    </if>
-
-    <if test="${not framework::exists('netcf-1.0')}">
-      <if test="${property::exists('project.build.package') and project.build.package}">
-        <fail message="The .NET Compact Framework 1.0 is not available." />
-      </if>
-      <if test="${not(property::exists('project.build.package') and project.build.package)}">
-        <echo message="The .NET Compact Framework 1.0 is not available. Build skipped." />
-      </if>
-    </if>
-  </target>
-
-  <target name="compile-build-mono-2.0" description="Builds for mono 2.0 if available">
-     <if test="${framework::exists('mono-2.0')}">
-       <call target="compile-mono-2.0"/>
-     </if>
-     <if test="${not framework::exists('mono-2.0')}">
-         <if test="${property::exists('project.build.package') and project.build.package}">
-             <fail message="Mono 2.0 is not available."/>
-         </if>
-         <if test="${not(property::exists('project.build.package') and project.build.package)}">
-             <echo message="Mono 2.0 is not available. Build skipped."/>
-         </if>
-     </if>
+    <call target="compile-net-4.5"/>
   </target>
 
   <target name="compile" description="Builds the current build configuration for the current target framework."
           depends="check-current-build-config">
-    <call target="compile-${framework::get-target-framework()}"/>
+    <call target="compile-net-4.5"/>
   </target>
 
   <target name="compile-test"> <!-- used as configurable template by all compile-{net|mono|netcf}-x.x targets -->
     <property name="lib.dir" value="${spring.basedir}/lib/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
-    <property name="nh3.lib.dir" value="${nuget.packages.dir}/NHibernate/3.3.3.4001/lib/Net35"/>
-    <property name="iesi3.lib.dir" value="${nuget.packages.dir}/Iesi.Collections/3.3.3.4001/lib/Net35"/>
-    <property name="nh4.lib.dir" value="${nuget.packages.dir}/NHibernate/4.0.3.4000/lib/Net40"/>
-    <property name="iesi4.lib.dir" value="${nuget.packages.dir}/Iesi.Collections/4.0.1.4000/lib/Net40"/>
-    <property name="quartz2.lib.dir" value="${nuget.packages.dir}/Quartz/2.3.1/lib/net35"/>
-	<property name="nunit.lib.dir" value="${nuget.packages.dir}/NUnit/3.5.0/lib/net35"/>
+
+    <foreach item="Folder" property="path">
+	  <in>
+	    <items>
+		   <include name="${spring.basedir}/build/${current.build.config}/*Tests" />
+		   <exclude name="${spring.basedir}/build/${current.build.config}/Spring.Messaging.Ems.Integration.Tests" unless="${test.integration.ems}" />
+		   <exclude name="${spring.basedir}/build/${current.build.config}/Spring.Messaging.Nms.Integration.Tests" unless="${test.integration.nms}" />
+		   <exclude name="${spring.basedir}/build/${current.build.config}/Spring.Services.Tests" /> <!-- TODO should fix -->
+		   <exclude name="${spring.basedir}/build/${current.build.config}/Spring.Testing.Microsoft.Tests" /> <!-- TODO use dotnet test -->
+		   <exclude name="${spring.basedir}/build/${current.build.config}/Spring.Web.Conversation.NHibernate3.Tests" /> <!-- TODO check SQLite -->
+		</items>
+	  </in>
+      <do>
+		<echo message="Running tests for ${path}" />
+        <property name="test.bin.dir" value="${path}/net452" />
+        <property name="test.assemblyname" value="${string::substring(path, string::last-index-of(path, '\') + 1, string::get-length(path) - string::last-index-of(path, '\') - 1)}" />
+        <property name="test.assemblyfile" value="${test.assemblyname}.dll" />
+        <property name="test.assemblyname.tocover" value="${string::substring(test.assemblyname,0,string::last-index-of(test.assemblyname, '.Tests') )}" />
+        <call target="common.run-tests" />
+      </do>
+    </foreach>	
 	
-	<property name="common.logging.lib.dir" value="${nuget.packages.dir}/Common.Logging/3.0.0/lib/net35"/>
-	<property name="common.logging.core.lib.dir" value="${nuget.packages.dir}/Common.Logging.Core/3.0.0/lib/net35"/>
-	
-	<!-- we use same libs for both 4.0 and 4.5 builds -->
-	<if test="${nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'net-4.5'}">
-		<property name="common.logging.lib.dir" value="${nuget.packages.dir}/Common.Logging/3.0.0/lib/net40"/>
-		<property name="common.logging.core.lib.dir" value="${nuget.packages.dir}/Common.Logging.Core/3.0.0/lib/net40"/>
-		<property name="lib.dir" value="${spring.basedir}/lib/net/4.0"/>
-		<property name="quartz2.lib.dir" value="${nuget.packages.dir}/Quartz/2.3.1/lib/net40"/>
-        <property name="nunit.lib.dir" value="${nuget.packages.dir}/NUnit/3.5.0/lib/net40"/>
-
-	</if>
-	
-
-	<call target="copylibtobin"/>
-
-    <!-- build assemblies -->
-    <nant buildfile="src/Spring/Spring.Core/Spring.Core.build" target="build" />
-    <nant buildfile="src/Spring/Spring.Aop/Spring.Aop.build" target="build" if="${build-aop}"/>
-    <nant buildfile="src/Spring/Spring.Web/Spring.Web.build" target="build" if="${build-web}"/>
-    <nant buildfile="src/Spring/Spring.Web.Extensions/Spring.Web.Extensions.build" target="build" if="${build-web and (nant.settings.currentframework == 'net-3.5' or nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'net-4.5' or nant.settings.currentframework == 'mono-2.0')}"/>
-    <nant buildfile="src/Spring/Spring.Web.Mvc3/Spring.Web.Mvc3.build" target="build" if="${nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'net-4.5'}"/>
-    <nant buildfile="src/Spring/Spring.Web.Mvc4/Spring.Web.Mvc4.build" target="build" if="${nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'net-4.5'}"/>
-    <nant buildfile="src/Spring/Spring.Web.Mvc5/Spring.Web.Mvc5.build" target="build" if="${nant.settings.currentframework == 'net-4.5'}"/>
-    <nant buildfile="src/Spring/Spring.Data/Spring.Data.build" target="build" if="${build-data}"/>
-
-    <nant buildfile="src/Spring/Spring.Data.NHibernate3/Spring.Data.NHibernate3.build" target="build" if="${build-data}"/>
-    <nant buildfile="src/Spring/Spring.Data.NHibernate4/Spring.Data.NHibernate4.build" target="build" if="${build-data and (nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'net-4.5')}"/>
-
-    <nant buildfile="src/Spring/Spring.Services/Spring.Services.build" target="build" if="${build-services}"/>
-    <nant buildfile="src/Spring/Spring.Testing.NUnit/Spring.Testing.NUnit.build" target="build" if="${build-testing-nunit}"/>
-    <nant buildfile="src/Spring/Spring.Testing.Microsoft/Spring.Testing.Microsoft.build" target="build" if="${build-testing-microsoft}"/>
-    <nant buildfile="src/Spring/Spring.Messaging.Ems/Spring.Messaging.Ems.build" target="build" if="${build-ems and (nant.settings.currentframework == 'net-3.5' or nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'net-4.5' )}"/>
-    <nant buildfile="src/Spring/Spring.Messaging.Nms/Spring.Messaging.Nms.build" target="build" if="${build-nms}"/>
-    <nant buildfile="src/Spring/Spring.Scheduling.Quartz2/Spring.Scheduling.Quartz2.build" target="build" if="${build-quartz}"/>
-    <nant buildfile="src/Spring/Spring.Messaging/Spring.Messaging.build" target="build" if="${build-msmq}"/>
-    <nant buildfile="src/Spring/Spring.Template.Velocity/Spring.Template.Velocity.build" target="build" if="${build-velocity}"/>
-    <nant buildfile="src/Spring/Spring.Template.Velocity.Castle/Spring.Template.Velocity.Castle.build" target="build" if="${build-velocity}"/>
-    <!--"Spring.ConversationWA.NH*.dll" should be at last to prevent the other assemblies are compiled with reference to this-->
-    <nant buildfile="src/Spring/Spring.Web.Conversation.NHibernate3/Spring.Web.Conversation.NHibernate3.build" target="build" if="${build-conversation}"/>
-    
-    <!-- test assemblies -->
-    
-    <nant buildfile="test/Spring/Spring.Core.Tests/Spring.Core.Tests.build" target="test"/>
-    <nant buildfile="test/Spring/Spring.Aop.Tests/Spring.Aop.Tests.build" target="test" if="${build-aop}"/>
-    <nant buildfile="test/Spring/Spring.Data.Tests/Spring.Data.Tests.build" target="test" if="${build-data}"/>
-    <nant buildfile="test/Spring/Spring.Data.Integration.Tests/Spring.Data.Integration.Tests.build" target="test" if="${build-data}"/>
-    
-    <nant buildfile="test/Spring/Spring.Data.NHibernate3.Tests/Spring.Data.NHibernate3.Tests.build" target="test" if="${build-data}"/>
-    <nant buildfile="test/Spring/Spring.Data.NHibernate3.Integration.Tests/Spring.Data.NHibernate3.Integration.Tests.build" target="test" if="${build-data}"/>
-    <nant buildfile="test/Spring/Spring.Data.NHibernate4.Tests/Spring.Data.NHibernate4.Tests.build" target="test" if="${build-data and (nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'net-4.5')}"/>
-    <nant buildfile="test/Spring/Spring.Data.NHibernate4.Integration.Tests/Spring.Data.NHibernate4.Integration.Tests.build" target="test" if="${build-data and (nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'net-4.5' )}"/>
-    <nant buildfile="test/Spring/Spring.Data.NHibernate4.NestedTxSuspension.Integration.Tests/Spring.Data.NHibernate4.NestedTxSuspension.Integration.Tests.build" target="test" if="${build-data and (nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'net-4.5' )}"/>
-	
-    <!-- newer NUnit runners cannot handle test properly, so running just the build target -->
-    <nant buildfile="test/Spring/Spring.Services.Tests/Spring.Services.Tests.build" target="build" if="${build-services}"/>
-    <nant buildfile="test/Spring/Spring.Web.Tests/Spring.Web.Tests.build" target="test" if="${build-web and nant.settings.currentframework != 'net-3.5'}"/>
-    <nant buildfile="test/Spring/Spring.Web.Mvc3.Tests/Spring.Web.Mvc3.Tests.build" target="test" if="${build-web and nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'net-4.5'}"/>
-    <nant buildfile="test/Spring/Spring.Web.Mvc4.Tests/Spring.Web.Mvc4.Tests.build" target="test" if="${build-web and nant.settings.currentframework == 'net-4.0' or nant.settings.currentframework == 'net-4.5'}"/>
-    <nant buildfile="test/Spring/Spring.Web.Mvc5.Tests/Spring.Web.Mvc5.Tests.build" target="test" if="${build-web and nant.settings.currentframework == 'net-4.5'}"/>
-    <nant buildfile="test/Spring/Spring.Testing.NUnit.Tests/Spring.Testing.NUnit.Tests.build" target="test" if="${build-testing-nunit}"/>
-    <nant buildfile="test/Spring/Spring.Testing.Microsoft.Tests/Spring.Testing.Microsoft.Tests.build" target="test" if="${run-testing-microsoft and build-testing-microsoft}"/>
-    <nant buildfile="test/Spring/Spring.Messaging.Ems.Tests/Spring.Messaging.Ems.Tests.build" target="test" if="${build-ems}"/>
-    <nant buildfile="test/Spring/Spring.Messaging.Ems.Integration.Tests/Spring.Messaging.Ems.Integration.Tests.build" target="test" if="${build-ems}"/>
-    <nant buildfile="test/Spring/Spring.Messaging.Nms.Tests/Spring.Messaging.Nms.Tests.build" target="test" if="${build-nms}"/>
-    <nant buildfile="test/Spring/Spring.Messaging.Nms.Integration.Tests/Spring.Messaging.Nms.Integration.Tests.build" target="test" if="${build-nms}"/>
-    <nant buildfile="test/Spring/Spring.Scheduling.Quartz2.Tests/Spring.Scheduling.Quartz2.Tests.build" target="test" if="${build-quartz}"/>
-    <nant buildfile="test/Spring/Spring.Messaging.Tests/Spring.Messaging.Tests.build" target="test" if="${build-msmq}"/>
-    <nant buildfile="test/Spring/Spring.Template.Velocity.Tests/Spring.Template.Velocity.Tests.build" target="test" if="${build-velocity}"/>
-    <nant buildfile="test/Spring/Spring.Template.Velocity.Castle.Tests/Spring.Template.Velocity.Castle.Tests.build" target="test" if="${build-velocity}"/>
-    <!--"Spring.ConversationWA.NH*.Tests.dll" should be at last to prevent the other tests are compiled with reference to this-->
-	
-    <!-- conversation tests disabled for now because with .NET 4.5 installed NUnitAsp does not seem to work anymore -->
-    <if test="${nant.settings.currentframework == 'net-3.5'}">
-      <nant buildfile="test/Spring/Spring.Web.Conversation.NHibernate3.Tests/Spring.Web.Conversation.NHibernate3.Tests.build" target="test" if="${build-conversation}"/>
-    </if>
-
-    <!-- Main solutions and examples are compiled via task build-solutions -->
-
     <!-- build coverage summary -->
 	<exec program="${tool.dir}/ncoverexplorer/ncoverexplorer.console.exe" workingdir="${current.bin.dir}" failonerror="false" if="${test.coverage.tool == 'ncover' and test.withcoverage}">
 		<arg value="/xml:&quot;${current.bin.dir}/TestCoverageSummary.xml&quot;" />
@@ -592,64 +399,6 @@ Commandline Examples:
 		<arg path="${current.bin.dir}\CoverageReport\Summary" />
 	</exec>
   </target>
-
-  <target name="compile-net-3.5" description="Builds .NET Framework 3.5 version"
-        depends="set-net-3.5-runtime-configuration, check-spring-basedir, clean-current-bin-dir, restore-nuget-packages">
-		
-	<if test="${property::exists('mstest.exe')}">
-		<property name="mstest.exe.current" value="${property::get-value('mstest.exe')}" />
-		<!-- <property name="mstest.exe.current" value="${string::replace(property::get-value('mstest.exe'), 'Microsoft Visual Studio 10.0', 'Microsoft Visual Studio 9.0')}" /> -->
-	</if>
-	<if test="${property::exists('mstest.exe')}">
-		<property name="vs-net.mstest.bin.dir.current" value="${property::get-value('vs-net.mstest.bin.dir')}" />
-		<!-- <property name="vs-net.mstest.bin.dir.current" value="${string::replace(property::get-value('vs-net.mstest.bin.dir'), 'Microsoft Visual Studio 10.0', 'Microsoft Visual Studio 9.0')}" /> -->
-	</if>
-
-	<call target="copykeys" if="${project.build.sign}"/>
-    <call target="common.generate-assemblyinfo"/>
-	
-    <property name="build-ems" value="false" overwrite="true" />
-    <property name="build-nms" value="true" overwrite="true" />
-    <property name="build-quartz" value="true" overwrite="true" />
-    <property name="build-msmq" value="true" overwrite="true" />
-    <property name="build-msmq-tests" value="true" overwrite="true" />
-    <property name="build-velocity" value="true" overwrite="true" />
-	
-    <property name="lib.dir" value="${spring.basedir}/lib/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
-	<call target="copylibs" />
-    <call target="compile-test" />
-
-	</target>
-
-  <target name="compile-net-4.0" description="Builds .NET Framework 4.0 version"
-        depends="set-net-4.0-runtime-configuration, check-spring-basedir, clean-current-bin-dir, restore-nuget-packages">
-	
-	<property name="test.withcoverage" value="false" overwrite="true"/>
-	
-	<if test="${property::exists('mstest.exe')}">
-		<property name="mstest.exe.current" value="${property::get-value('mstest.exe')}" />
-		<!-- <property name="mstest.exe.current" value="${string::replace(property::get-value('mstest.exe'), 'Microsoft Visual Studio 10.0', 'Microsoft Visual Studio 9.0')}" /> -->
-	</if>
-	<if test="${property::exists('mstest.exe')}">
-		<property name="vs-net.mstest.bin.dir.current" value="${property::get-value('vs-net.mstest.bin.dir')}" />
-		<!-- <property name="vs-net.mstest.bin.dir.current" value="${string::replace(property::get-value('vs-net.mstest.bin.dir'), 'Microsoft Visual Studio 10.0', 'Microsoft Visual Studio 9.0')}" /> -->
-	</if>
-	
-	<call target="copykeys" if="${project.build.sign}"/>
-    <call target="common.generate-assemblyinfo"/>
-
-    <property name="build-ems" value="false" overwrite="true" />
-    <property name="build-nms" value="true" overwrite="true" />
-    <property name="build-quartz" value="true" overwrite="true" />
-    <property name="build-msmq" value="true" overwrite="true" />
-    <property name="build-msmq-tests" value="true" overwrite="true" />
-    <property name="build-velocity" value="true" overwrite="true" />
-	
-    <property name="lib.dir" value="${spring.basedir}/lib/${framework::get-family(framework::get-target-framework())}/${framework::get-version(framework::get-target-framework())}"/>
-	<call target="copylibs" />
-    <call target="compile-test" />
-  </target>
-  
 
   <target name="compile-net-4.5" description="Builds .NET Framework 4.5 version"
         depends="set-net-4.5-runtime-configuration, check-spring-basedir, clean-current-bin-dir, restore-nuget-packages">
@@ -679,6 +428,17 @@ Commandline Examples:
 	<if test="${nant.settings.currentframework == 'net-4.5'}">
 		<property name="lib.dir" value="${spring.basedir}/lib/net/4.0"/>
 	</if>
+
+    <exec program="${msbuild.exe}" verbose="true">
+      <arg value="Spring.NET.2010.sln"/>
+      <arg line="/nologo" />
+      <arg line="/v:m" />
+      <arg line="/m" />
+      <arg line="/nr:false" />
+      <arg line="/property:Configuration=${current.build.config}"/>
+      <!--Specifying mandatory property in SDK 7-->
+      <arg line='/property:Platform="Any CPU"'/>
+    </exec>
 	
 	<call target="copylibs" />
     <call target="compile-test" />
@@ -761,42 +521,6 @@ Commandline Examples:
     <echo message="Compiling debug configuration for all runtime configurations."/>
     <property name="nant.target.root.name" value="build"/>
     <call target="build-all-function"/>
-  </target>
-
-  <target name="build-3.5">
-    <call target="set-build-namespaces-release"/>
-    <echo message="------------------------"/>
-    <echo message="Building .NET 3.5 DEBUG "/>
-    <echo message="------------------------"/>
-    <call target="set-debug-build-configuration"/>
-    <call target="compile-build-3.5"/>
-
-
-    <if test="${property::exists('project.build.package') and project.build.package}">
-      <echo message="--------------------------"/>
-      <echo message="Building .NET 3.5 RELEASE "/>
-      <echo message="--------------------------"/>
-      <call target="set-release-build-configuration"/>
-      <call target="compile-build-3.5"/>
-    </if>
-  </target>
-
-  <target name="build-4.0">
-    <call target="set-build-namespaces-release"/>
-    <echo message="------------------------"/>
-    <echo message="Building .NET 4.0 DEBUG "/>
-    <echo message="------------------------"/>
-    <call target="set-debug-build-configuration"/>
-    <call target="compile-build-4.0"/>
-
-
-    <if test="${property::exists('project.build.package') and project.build.package}">
-      <echo message="--------------------------"/>
-      <echo message="Building .NET 4.0 RELEASE "/>
-      <echo message="--------------------------"/>
-      <call target="set-release-build-configuration"/>
-      <call target="compile-build-4.0"/>
-    </if>
   </target>
   
   <target name="build-4.5">
@@ -1199,37 +923,9 @@ Commandline Examples:
 
   <target name="build-all-function" description="Build what is in cvs taking into account approrpiate clr versions and root target name">
 
-    <call target="${nant.target.root.name}-3.5" />
-
-	<call target="${nant.target.root.name}-4.0" />
-	
 	<call target="${nant.target.root.name}-4.5" />
-
-    <!-- ignore Mono 2.0 -->
-    <!-- <call target="${nant.target.root.name}-mono-2.0" /> -->
-
-    <!-- build all Spring.NET solutions and example applications -->
-
     <call target="build-solutions" />
 
-  </target>
-
-  <target name="daily-build-3.5">
-    <call target="set-build-namespaces-all"/>
-    <call target="set-package-configuration"/>
-    <call target="set-debug-build-configuration"/>
-    <call target="compile-build-3.5"/>
-    <call target="set-release-build-configuration"/>
-    <call target="compile-build-3.5"/>
-  </target>
- 
-  <target name="daily-build-4.0">
-    <call target="set-build-namespaces-all"/>
-    <call target="set-package-configuration"/>
-    <call target="set-debug-build-configuration"/>
-    <call target="compile-build-4.0"/>
-    <call target="set-release-build-configuration"/>
-    <call target="compile-build-4.0"/>
   </target>
   
   <target name="daily-build-4.5">
@@ -1240,7 +936,6 @@ Commandline Examples:
     <call target="set-release-build-configuration"/>
     <call target="compile-build-4.5"/>
   </target>
-  
 
   <!-- Target to use when packaging everything in CVS -->
   <target name="package-cvs" description="Build and Package distribution">
@@ -1916,6 +1611,7 @@ Commandline Examples:
       <exclude name="**/bin/**"/>
       <exclude name="**/obj/**"/>
       <exclude name="**/_ReSharper*/**"/>
+      <exclude name="**/.idea/**"/>
       <exclude name="**/build/**"/>
       <exclude name="**/*.resharper"/>
     </fileset>

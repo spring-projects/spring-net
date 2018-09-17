@@ -42,7 +42,7 @@ namespace Spring.Core.IO
             testVirtualEnvironment = new VirtualEnvironmentMock("/some.request", "somepathinfo", null, "/", true);
         }
 
-        [TestFixtureTearDown]
+        [OneTimeTearDown]
         public void ShutDownFixture()
         {
             testVirtualEnvironment.Dispose();

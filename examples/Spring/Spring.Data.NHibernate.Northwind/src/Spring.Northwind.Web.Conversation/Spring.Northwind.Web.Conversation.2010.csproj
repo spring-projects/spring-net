@@ -12,13 +12,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Spring.Northwind.Web</RootNamespace>
     <AssemblyName>Spring.Northwind.Web</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <FileUpgradeFlags>
-    </FileUpgradeFlags>
-    <OldToolsVersion>4.0</OldToolsVersion>
-    <UpgradeBackupLocation>
-    </UpgradeBackupLocation>
-    <TargetFrameworkProfile />
+    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
     <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -45,29 +39,29 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Spring.Aop, Version=0.0.0.35000, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Aop.dll</HintPath>
+    <PackageReference Include="Common.Logging" Version="$(CommonLoggingVersion)" />
+    <PackageReference Include="Iesi.Collections" Version="3.4.1.4000" />
+    <PackageReference Include="log4net" Version="2.0.8" />
+    <PackageReference Include="NHibernate" Version="3.4.1.4000" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Spring.Core">
+      <HintPath>..\..\..\..\..\build\$(Configuration)\Spring.Core\net452\Spring.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Spring.Data">
+      <HintPath>..\..\..\..\..\build\$(Configuration)\Spring.Data\net452\Spring.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Spring.Data.NHibernate3">
+      <HintPath>..\..\..\..\..\build\$(Configuration)\Spring.Data.NHibernate3\net452\Spring.Data.NHibernate3.dll</HintPath>
+    </Reference>
+    <Reference Include="Spring.Web">
+      <HintPath>..\..\..\..\..\build\$(Configuration)\Spring.Web\net452\Spring.Web.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Web.Conversation.NHibernate3">
-      <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Web.Conversation.NHibernate3.dll</HintPath>
+      <HintPath>..\..\..\..\..\build\$(Configuration)\Spring.Web.Conversation.NHibernate3\net452\Spring.Web.Conversation.NHibernate3.dll</HintPath>
     </Reference>
-    <Reference Include="Spring.Core, Version=0.0.0.35000, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Spring.Data, Version=0.0.0.35000, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Spring.Data.NHibernate3, Version=0.0.0.35000, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Data.NHibernate3.dll</HintPath>
-    </Reference>
-    <Reference Include="Spring.Web, Version=0.0.0.35000, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\bin\net\4.0\debug\Spring.Web.dll</HintPath>
-    </Reference>
+  </ItemGroup>
+  <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -102,7 +96,6 @@
     <Content Include="Img\header-spring.png" />
     <Content Include="Img\logo.png" />
     <Content Include="Img\springNet_release.png" />
-    <Content Include="Logs\log.txt" />
     <Content Include="Web.config" />
     <Content Include="Web.xml" />
   </ItemGroup>
@@ -184,17 +177,10 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
-    <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Web.net30.config" />
     <Content Include="Web.net40.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Content Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="project.json" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -233,4 +219,3 @@
     <PostBuildEvent>copy "$(ProjectDir)Web.net40.config"  "$(ProjectDir)Web.config" /Y</PostBuildEvent>
   </PropertyGroup>
 </Project>
-

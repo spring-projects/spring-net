@@ -1,0 +1,47 @@
+<Project>
+
+  <PropertyGroup>
+
+    <NoWarn>618, 1591</NoWarn>
+
+    <CleanedProjectName>$(MSBuildProjectName.Replace('.2010', ''))</CleanedProjectName>
+  
+    <OutputPath>..\..\..\build\$(Configuration)\$(CleanedProjectName)</OutputPath>
+
+    <AssemblyName>$(CleanedProjectName)</AssemblyName>
+    <RootNamespace>Spring</RootNamespace>
+    <Deterministic>true</Deterministic>
+
+    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
+    <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
+    <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
+
+    <ApacheNmsVersion>1.7.1</ApacheNmsVersion>
+    <CommonLoggingVersion>3.4.1</CommonLoggingVersion>
+    <Log4NetVersion>2.0.8</Log4NetVersion>
+
+    <NUnitVersion>3.10.1</NUnitVersion>
+    <NUnitTestAdapterVersion>3.10.0</NUnitTestAdapterVersion>
+    <RhinoMocksVersion>3.6.1</RhinoMocksVersion>
+    <MicrosoftTestSDKVersion>15.7.2</MicrosoftTestSDKVersion>
+
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <ComVisible>False</ComVisible>
+    <DebugSymbols>True</DebugSymbols>
+    <PlatformTarget>AnyCPU</PlatformTarget>
+    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
+
+    <LangVersion>latest</LangVersion>
+
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <DefineConstants>DEBUG;TRACE;$(DefineConstants)</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <Optimize>true</Optimize>
+    <DefineConstants>TRACE;$(DefineConstants)</DefineConstants>
+  </PropertyGroup>
+
+</Project>

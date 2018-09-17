@@ -98,12 +98,7 @@ namespace Spring.Objects.Factory.Config
             VariableAccessor va = new VariableAccessor(_testVariableSource);
             Assert.AreEqual('c', va.GetChar("ValidChar", 'a'));
             Assert.AreEqual('a', va.GetChar("InvalidChar", 'a', false));
-            try
-            {
-                va.GetChar("InvalidChar", 'a', true);
-                Assert.Fail();
-            }
-            catch { }
+            Assert.Throws<ArgumentException>(() => va.GetChar("InvalidChar", 'a', true));
         }
 
         [Test]
@@ -112,81 +107,48 @@ namespace Spring.Objects.Factory.Config
             VariableAccessor va = new VariableAccessor(_testVariableSource);
             Assert.AreEqual(true, va.GetBoolean("ValidBoolean", false));
             Assert.AreEqual(true, va.GetBoolean("InvalidBoolean", true, false));
-            try
-            {
-                va.GetBoolean("InvalidBoolean", true, true);
-                Assert.Fail();
-            }catch {}
         }
 
         [Test]
         public void GetByte()
         {
             VariableAccessor va = new VariableAccessor(_testVariableSource);
-            Assert.AreEqual((byte)1, va.GetByte("ValidByte", 2));
-            Assert.AreEqual((byte)2, va.GetByte("InvalidByte", 2, false));
-            try
-            {
-                va.GetByte("InvalidByte", 2, true);
-                Assert.Fail();
-            }
-            catch { }
+            Assert.AreEqual((byte) 1, va.GetByte("ValidByte", 2));
+            Assert.AreEqual((byte) 2, va.GetByte("InvalidByte", 2, false));
         }
 
         [Test]
         public void GetInt16()
         {
             VariableAccessor va = new VariableAccessor(_testVariableSource);
-            Assert.AreEqual((short)1, va.GetInt16("ValidInt16", 2));
-            Assert.AreEqual((short)2, va.GetInt16("InvalidInt16", 2, false));
-            try
-            {
-                va.GetInt16("InvalidInt16", 2, true);
-                Assert.Fail();
-            }
-            catch { }
+            Assert.AreEqual((short) 1, va.GetInt16("ValidInt16", 2));
+            Assert.AreEqual((short) 2, va.GetInt16("InvalidInt16", 2, false));
+            va.GetInt16("InvalidInt16", 2, true);
         }
 
         [Test]
         public void GetInt32()
         {
             VariableAccessor va = new VariableAccessor(_testVariableSource);
-            Assert.AreEqual((int)1, va.GetInt32("ValidInt32", 2));
-            Assert.AreEqual((int)2, va.GetInt32("InvalidInt32", 2, false));
-            try
-            {
-                va.GetInt32("InvalidInt32", 2, true);
-                Assert.Fail();
-            }
-            catch { }
+            Assert.AreEqual((int) 1, va.GetInt32("ValidInt32", 2));
+            Assert.AreEqual((int) 2, va.GetInt32("InvalidInt32", 2, false));
         }
 
         [Test]
         public void GetInt64()
         {
             VariableAccessor va = new VariableAccessor(_testVariableSource);
-            Assert.AreEqual((long)1, va.GetInt64("ValidInt64", 2));
-            Assert.AreEqual((long)2, va.GetInt64("InvalidInt64", 2, false));
-            try
-            {
-                va.GetInt64("InvalidInt64", 2, true);
-                Assert.Fail();
-            }
-            catch { }
+            Assert.AreEqual((long) 1, va.GetInt64("ValidInt64", 2));
+            Assert.AreEqual((long) 2, va.GetInt64("InvalidInt64", 2, false));
         }
 
         [Test]
         public void GetFloat()
         {
             VariableAccessor va = new VariableAccessor(_testVariableSource);
-            Assert.AreEqual((float)1, va.GetFloat("ValidFloat", 2.0f));
-            Assert.AreEqual((float)2, va.GetFloat("InvalidFloat", 2.0f, false));
-            try
-            {
-                va.GetFloat("InvalidFloat", 2, true);
-                Assert.Fail();
-            }
-            catch { }
+            Assert.AreEqual((float) 1, va.GetFloat("ValidFloat", 2.0f));
+            Assert.AreEqual((float) 2, va.GetFloat("InvalidFloat", 2.0f, false));
+            va.GetFloat("InvalidFloat", 2, true);
         }
 
         [Test]
@@ -195,12 +157,7 @@ namespace Spring.Objects.Factory.Config
             VariableAccessor va = new VariableAccessor(_testVariableSource);
             Assert.AreEqual((double)1, va.GetDouble("ValidDouble", 2.0));
             Assert.AreEqual((double)2, va.GetDouble("InvalidDouble", 2.0, false));
-            try
-            {
-                va.GetDouble("InvalidDouble", 2, true);
-                Assert.Fail();
-            }
-            catch { }
+            va.GetDouble("InvalidDouble", 2, true);
         }
 
         [Test]
@@ -209,12 +166,7 @@ namespace Spring.Objects.Factory.Config
             VariableAccessor va = new VariableAccessor(_testVariableSource);
             Assert.AreEqual((decimal)1, va.GetDecimal("ValidDecimal", 2.0m));
             Assert.AreEqual((decimal)2, va.GetDecimal("InvalidDecimal", 2.0m, false));
-            try
-            {
-                va.GetDecimal("InvalidDecimal", 2, true);
-                Assert.Fail();
-            }
-            catch { }
+            va.GetDecimal("InvalidDecimal", 2, true);
         }
 
         [Test]
@@ -223,12 +175,6 @@ namespace Spring.Objects.Factory.Config
             VariableAccessor va = new VariableAccessor(_testVariableSource);
             Assert.AreEqual(TESTGUID, va.GetGuid("ValidGuid", TESTGUID_DEFAULT));
             Assert.AreEqual(TESTGUID_DEFAULT, va.GetGuid("InvalidGuid", TESTGUID_DEFAULT, false));
-            try
-            {
-                va.GetGuid("InvalidGuid", TESTGUID_DEFAULT, true);
-                Assert.Fail();
-            }
-            catch { }
         }
 
         [Test]

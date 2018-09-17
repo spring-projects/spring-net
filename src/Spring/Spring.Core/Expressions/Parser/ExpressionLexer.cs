@@ -3,7 +3,6 @@
 namespace Spring.Expressions.Parser
 {
 	// Generate header specific to lexer CSharp file
-	using System;
 	using Stream                          = System.IO.Stream;
 	using TextReader                      = System.IO.TextReader;
 	using Hashtable                       = System.Collections.Hashtable;
@@ -14,18 +13,13 @@ namespace Spring.Expressions.Parser
 	using TokenStreamRecognitionException = antlr.TokenStreamRecognitionException;
 	using CharStreamException             = antlr.CharStreamException;
 	using CharStreamIOException           = antlr.CharStreamIOException;
-	using ANTLRException                  = antlr.ANTLRException;
-	using CharScanner                     = antlr.CharScanner;
 	using InputBuffer                     = antlr.InputBuffer;
 	using ByteBuffer                      = antlr.ByteBuffer;
 	using CharBuffer                      = antlr.CharBuffer;
 	using Token                           = antlr.Token;
 	using IToken                          = antlr.IToken;
-	using CommonToken                     = antlr.CommonToken;
-	using SemanticException               = antlr.SemanticException;
 	using RecognitionException            = antlr.RecognitionException;
 	using NoViableAltForCharException     = antlr.NoViableAltForCharException;
-	using MismatchedCharException         = antlr.MismatchedCharException;
 	using TokenStream                     = antlr.TokenStream;
 	using LexerSharedInputState           = antlr.LexerSharedInputState;
 	using BitSet                          = antlr.collections.impl.BitSet;

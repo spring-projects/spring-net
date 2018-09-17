@@ -9,9 +9,7 @@ using System.Xml.Serialization;
 /// Test class used to generate the wsdl.
 /// </summary>
 [WebService(Namespace = "http://www.springframwework.net")]
-#if NET_2_0 
 [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
-#endif
 //[SoapRpcService(Use=SoapBindingUse.Literal)]
 public class HelloWorldService : System.Web.Services.WebService
 {

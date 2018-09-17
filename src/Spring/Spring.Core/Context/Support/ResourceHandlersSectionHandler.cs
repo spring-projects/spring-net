@@ -20,8 +20,6 @@
 
 #region Imports
 
-#if ! NET_COMPACT_FRAMEWORK
-#endif
 using System.Configuration;
 using System.Globalization;
 using System.Xml;
