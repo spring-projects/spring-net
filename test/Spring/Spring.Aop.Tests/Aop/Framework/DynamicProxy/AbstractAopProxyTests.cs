@@ -18,8 +18,6 @@
 
 #endregion
 
-#region Imports
-
 using System;
 using System.IO;
 using System.Runtime.Serialization;
@@ -32,7 +30,9 @@ using System.Runtime.Remoting;
 
 using AopAlliance.Aop;
 using AopAlliance.Intercept;
-using Rhino.Mocks;
+
+using FakeItEasy;
+
 using Spring.Aop.Framework.Adapter;
 using Spring.Aop.Interceptor;
 using Spring.Aop.Support;
@@ -43,8 +43,6 @@ using Spring.Threading;
 using Spring.Util;
 
 using NUnit.Framework;
-
-#endregion
 
 namespace Spring.Aop.Framework.DynamicProxy
 {
@@ -288,19 +286,19 @@ namespace Spring.Aop.Framework.DynamicProxy
         [Test(Description = "http://jira.springframework.org/browse/SPRNET-1174")]
         public void ImplementsInterfaceHierarchy()
         {
-            IMethodInterceptor mi = MockRepository.GenerateMock<IMethodInterceptor>();
+            IMethodInterceptor mi = A.Fake<IMethodInterceptor>();
 
-            mi.Stub(x => x.Invoke(Arg<IMethodInvocation>.Is.NotNull)).Return((long)5).Repeat.Once();
-            mi.Stub(x => x.Invoke(Arg<IMethodInvocation>.Is.NotNull)).Return("Customer Name").Repeat.Once();
-            mi.Stub(x => x.Invoke(Arg<IMethodInvocation>.Is.NotNull)).Return("Customer Company").Repeat.Once();
+            A.CallTo(() => mi.Invoke(A<IMethodInvocation>.That.Matches(x => x.Method.Name == "get_Id"))).Returns((long) 5).Once();
+            A.CallTo(() => mi.Invoke(A<IMethodInvocation>.That.Matches(x => x.Method.Name == "get_Name"))).Returns("Customer Name").Once();
+            A.CallTo(() => mi.Invoke(A<IMethodInvocation>.That.Matches(x => x.Method.Name == "get_Company"))).Returns("Customer Company").Once();
 
             AdvisedSupport advised = new AdvisedSupport();
             advised.AddAdvice(mi);
-            advised.Interfaces = new Type[] { typeof(ITestCustomer) };
+            advised.Interfaces = new[] { typeof(ITestCustomer) };
 
             ITestCustomer to = CreateProxy(advised) as ITestCustomer;
             Assert.IsNotNull(to);
-            Assert.AreEqual((long)5, to.Id, "Incorrect Id");
+            Assert.AreEqual((long) 5, to.Id, "Incorrect Id");
             Assert.AreEqual("Customer Name", to.Name, "Incorrect Name");
             Assert.AreEqual("Customer Company", to.Company, "Incorrect Company");
         }
@@ -407,8 +405,8 @@ namespace Spring.Aop.Framework.DynamicProxy
         public void InterceptorHandledCallWithNoTarget()
         {
             int age = 26;
-            IMethodInterceptor mock = MockRepository.GenerateMock<IMethodInterceptor>();
-            mock.Stub(x => x.Invoke(Arg<IMethodInvocation>.Is.NotNull)).Return(age);
+            IMethodInterceptor mock = A.Fake<IMethodInterceptor>();
+            A.CallTo(() => mock.Invoke(A<IMethodInvocation>.That.Not.IsNull())).Returns(age);
 
             AdvisedSupport advised = new AdvisedSupport();
             advised.AddAdvice(mock);

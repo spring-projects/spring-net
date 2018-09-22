@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,11 @@
 
 #region Imports
 
+using FakeItEasy;
+
 using NHibernate;
 using NUnit.Framework;
-using Rhino.Mocks;
+
 using Spring.Context.Support;
 using Spring.Objects.Factory.Config;
 
@@ -43,8 +45,7 @@ namespace Spring.Data.NHibernate.Support
             string SESSIONFACTORY_OBJECTNAME = ConfigSectionSessionScopeSettings.DEFAULT_SESSION_FACTORY_OBJECT_NAME;
 
             // setup expected values
-            MockRepository mocks = new MockRepository();
-            ISessionFactory expectedSessionFactory = mocks.StrictMock<ISessionFactory>();
+            ISessionFactory expectedSessionFactory = A.Fake<ISessionFactory>();
             IInterceptor expectedEntityInterceptor = null;
             bool expectedSingleSession = SessionScopeSettings.SINGLESESSION_DEFAULT;
             FlushMode expectedDefaultFlushMode = SessionScopeSettings.FLUSHMODE_DEFAULT;
@@ -70,9 +71,8 @@ namespace Spring.Data.NHibernate.Support
             string SESSIONFACTORY_OBJECTNAME = "SessionFactory";
             string ENTITYINTERCEPTOR_OBJECTNAME = "EntityInterceptor";
 
-            MockRepository mocks = new MockRepository();
-            ISessionFactory expectedSessionFactory =  mocks.StrictMock<ISessionFactory>();
-            IInterceptor expectedEntityInterceptor = mocks.StrictMock<IInterceptor>();
+            ISessionFactory expectedSessionFactory =  A.Fake<ISessionFactory>();
+            IInterceptor expectedEntityInterceptor = A.Fake<IInterceptor>();
             bool expectedSingleSession = false;
             FlushMode expectedDefaultFlushMode = FlushMode.Auto;
 
@@ -93,7 +93,7 @@ namespace Spring.Data.NHibernate.Support
                 .Add(thisTypeName + ".DefaultFlushMode", expectedDefaultFlushMode.ToString().ToLower() ) // case insensitive!
                 ;
 
-            
+
             ConfigSectionSessionScopeSettings settings = new ConfigSectionSessionScopeSettings(this.GetType(), variableSource);
 
             Assert.AreEqual( expectedSessionFactory, settings.SessionFactory );

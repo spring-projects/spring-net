@@ -20,8 +20,10 @@
 
 using System;
 using System.Collections;
+
+using FakeItEasy;
+
 using NUnit.Framework;
-using Rhino.Mocks;
 using Spring.Collections;
 using Spring.Context.Support;
 using Spring.Core.TypeResolution;
@@ -37,14 +39,12 @@ namespace Spring.Objects.Factory.Config
     [TestFixture]
     public class TypeAliasConfigurerTests
     {
-        private MockRepository mocks;
         private IConfigurableListableObjectFactory factory;
 
         [SetUp]
         public void SetUp()
         {
-            mocks = new MockRepository();
-            factory = mocks.StrictMock<IConfigurableListableObjectFactory>();
+            factory = A.Fake<IConfigurableListableObjectFactory>();
         }
 
         [Test]

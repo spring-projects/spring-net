@@ -18,13 +18,11 @@
 
 #endregion
 
-#region Imports
-
 using System.Text;
-using NUnit.Framework;
-using Rhino.Mocks;
 
-#endregion
+using FakeItEasy;
+
+using NUnit.Framework;
 
 namespace Spring.Context.Support
 {
@@ -34,13 +32,10 @@ namespace Spring.Context.Support
 	[TestFixture]
 	public sealed class DefaultMessageSourceResolvableTests
 	{
-        private MockRepository mocks;
         [SetUp]
         public void Init()
         {
-            mocks = new MockRepository();
         }
-
 
 		[Test]
 		public void InstantiationWithASingleCodeDefaultsToEmptyDefaultMessage()
@@ -49,7 +44,7 @@ namespace Spring.Context.Support
 			Assert.AreEqual(string.Empty, dmr.DefaultMessage,
 							"Not defaulting to non null empty string value (it must).");
 		}
-		
+
 		[Test]
 		public void NullLastCode()
 		{
@@ -86,16 +81,15 @@ namespace Spring.Context.Support
 		[Test]
 		public void DefaultResolvableFromExistingResolvable()
 		{
-            IMessageSourceResolvable res = mocks.StrictMock<IMessageSourceResolvable>();
-            Expect.Call(res.DefaultMessage).Return("defaultMessageFromMock").Repeat.AtLeastOnce();
-            Expect.Call(res.GetCodes()).Return(new string[] { "code1FromMock" });
-            Expect.Call(res.GetArguments()).Return(new object[] { "ArgumentFromMock" }).Repeat.AtLeastOnce();
-            mocks.ReplayAll();
-			DefaultMessageSourceResolvable dmr = new DefaultMessageSourceResolvable(res);
+            IMessageSourceResolvable res = A.Fake<IMessageSourceResolvable>();
+            A.CallTo(() => res.DefaultMessage).Returns("defaultMessageFromMock");
+            A.CallTo(() => res.GetCodes()).Returns(new string[] { "code1FromMock" });
+            A.CallTo(() => res.GetArguments()).Returns(new object[] { "ArgumentFromMock" });
+
+            DefaultMessageSourceResolvable dmr = new DefaultMessageSourceResolvable(res);
 			Assert.AreEqual("defaultMessageFromMock", dmr.DefaultMessage, "default");
 			Assert.AreEqual("code1FromMock", dmr.LastCode, "codes");
 			Assert.AreEqual("ArgumentFromMock", (dmr.GetArguments())[0], "arguments");
-			mocks.VerifyAll();
 		}
 
 		private string getResolvableString()

@@ -70,7 +70,7 @@ namespace Spring.Collections
 		[Test]
 		public void ThrowsArgumentNullExceptionForNullCollection()
 		{
-            Assert.Throws<ArgumentNullException>(() => new PriorityQueue((ICollection) null));
+            Assert.Throws<ArgumentNullException>(() => new PriorityQueue(null));
 		}
 
 		[Test]

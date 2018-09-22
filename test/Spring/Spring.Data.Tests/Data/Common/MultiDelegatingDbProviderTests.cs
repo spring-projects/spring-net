@@ -22,8 +22,11 @@ using System;
 using System.Collections;
 using System.Data;
 using System.Data.Common;
+
+using FakeItEasy;
+
 using NUnit.Framework;
-using Rhino.Mocks;
+
 using Spring.Dao;
 using Spring.Threading;
 
@@ -36,14 +39,6 @@ namespace Spring.Data.Common
     [TestFixture]
     public class MultiDelegatingDbProviderTests
     {
-        private MockRepository mocks;
-
-        [SetUp]
-        public void Setup()
-        {
-            mocks = new MockRepository();
-        }
-
         [Test]
         public void CreationWhenNoRequiredPropertiesSet()
         {
@@ -197,42 +192,39 @@ namespace Spring.Data.Common
         [Test]
         public void CreateOperations()
         {
-            IDbProvider dbProvider = mocks.StrictMock<IDbProvider>();
-            IDbConnection mockConnection = mocks.StrictMock<IDbConnection>();            
-            Expect.Call(dbProvider.CreateConnection()).Return(mockConnection).Repeat.Once();
+            IDbProvider dbProvider = A.Fake<IDbProvider>();
+            IDbConnection mockConnection = A.Fake<IDbConnection>();
+            A.CallTo(() => dbProvider.CreateConnection()).Returns(mockConnection).Once();
 
-            IDbCommand mockCommand = (IDbCommand)mocks.CreateMock(typeof(IDbCommand));
-            Expect.Call(dbProvider.CreateCommand()).Return(mockCommand).Repeat.Once();
+            IDbCommand mockCommand = A.Fake<IDbCommand>();
+            A.CallTo(() => dbProvider.CreateCommand()).Returns(mockCommand).Once();
 
-            IDbDataParameter mockParameter = (IDbDataParameter) mocks.CreateMock(typeof (IDbDataParameter));
-            Expect.Call(dbProvider.CreateParameter()).Return(mockParameter).Repeat.Once();
+            IDbDataParameter mockParameter = A.Fake<IDbDataParameter>();
+            A.CallTo(() => dbProvider.CreateParameter()).Returns(mockParameter).Once();
 
-            IDbDataAdapter mockDataAdapter = (IDbDataAdapter) mocks.CreateMock(typeof (IDbDataAdapter));
-            Expect.Call(dbProvider.CreateDataAdapter()).Return(mockDataAdapter).Repeat.Once();
+            IDbDataAdapter mockDataAdapter = A.Fake<IDbDataAdapter>();
+            A.CallTo(() => dbProvider.CreateDataAdapter()).Returns(mockDataAdapter).Once();
 
-            DbCommandBuilder mockDbCommandBuilder = (DbCommandBuilder) mocks.CreateMock(typeof (DbCommandBuilder));
-            Expect.Call(dbProvider.CreateCommandBuilder()).Return(mockDbCommandBuilder).Repeat.Once();
+            DbCommandBuilder mockDbCommandBuilder = A.Fake<DbCommandBuilder>();
+            A.CallTo(() => dbProvider.CreateCommandBuilder()).Returns(mockDbCommandBuilder).Once();
 
-            Expect.Call(dbProvider.CreateParameterName("p1")).Return("@p1").Repeat.Once();
-            Expect.Call(dbProvider.CreateParameterNameForCollection("c1")).Return("cc1");
+            A.CallTo(() => dbProvider.CreateParameterName("p1")).Returns("@p1").Once();
+            A.CallTo(() => dbProvider.CreateParameterNameForCollection("c1")).Returns("cc1");
 
-            IDbMetadata mockDbMetaData = (IDbMetadata) mocks.CreateMock(typeof (IDbMetadata));
-            Expect.Call(dbProvider.DbMetadata).Return(mockDbMetaData);
+            IDbMetadata mockDbMetaData = A.Fake<IDbMetadata>();
+            A.CallTo(() => dbProvider.DbMetadata).Returns(mockDbMetaData);
 
             Exception e = new Exception("foo");
-            Expect.Call(dbProvider.ExtractError(e)).Return("badsql").Repeat.Once();
-            DbException dbException = (DbException) mocks.CreateMock(typeof (DbException));
+            A.CallTo(() => dbProvider.ExtractError(e)).Returns("badsql").Once();
+            DbException dbException = A.Fake<DbException>();
 
-            
+
             MultiDelegatingDbProvider multiDbProvider = new MultiDelegatingDbProvider();
             IDictionary targetDbProviders = new Hashtable();
             targetDbProviders.Add("db1", dbProvider);
             multiDbProvider.DefaultDbProvider = dbProvider;
             multiDbProvider.TargetDbProviders = targetDbProviders;
             multiDbProvider.AfterPropertiesSet();
-
-
-            mocks.ReplayAll();
 
             Assert.IsNotNull(multiDbProvider.CreateConnection());
             Assert.IsNotNull(multiDbProvider.CreateCommand());
@@ -245,7 +237,6 @@ namespace Spring.Data.Common
             Assert.AreEqual("badsql", multiDbProvider.ExtractError(e));
             Assert.IsTrue(multiDbProvider.IsDataAccessException(dbException));
             Assert.IsFalse(multiDbProvider.IsDataAccessException(e));
-            mocks.VerifyAll();
         }
     }
 }

@@ -18,8 +18,6 @@
 
 #endregion
 
-#region Imports
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -31,9 +29,10 @@ using System.Threading;
 using System.Web.Services;
 using Common.Logging;
 using Common.Logging.Simple;
-using NUnit.Framework;
 
-using Rhino.Mocks;
+using FakeItEasy;
+
+using NUnit.Framework;
 
 using Spring.Core.IO;
 using Spring.Core.TypeResolution;
@@ -42,10 +41,8 @@ using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 using Spring.Util;
 
-#endregion
-
 namespace Spring.Objects.Factory.Xml
-{   
+{
     /// <summary>
     /// Unit tests for the XmlObjectFactory class.
     /// </summary>
@@ -59,8 +56,6 @@ namespace Spring.Objects.Factory.Xml
     [TestFixture]
     public sealed class XmlObjectFactoryTests
     {
-        private MockRepository mocks;
-
         /// <summary>
         /// The setup logic executed before the execution of this test fixture.
         /// </summary>
@@ -75,7 +70,6 @@ namespace Spring.Objects.Factory.Xml
         [SetUp]
         public void SetUp()
         {
-            mocks = new MockRepository();
         }
 
         [Test]
@@ -573,25 +567,25 @@ namespace Spring.Objects.Factory.Xml
             xof.GetObject("innerObject");
 
             TestObject hasInnerObjects = (TestObject) xof.GetObject("hasInnerObjects");
-            Assert.AreEqual(5, hasInnerObjects.Age);           
+            Assert.AreEqual(5, hasInnerObjects.Age);
             TestObject inner1 = (TestObject) hasInnerObjects.Spouse;
-            Assert.IsNotNull(inner1);            
-            Assert.AreEqual("Spring.Objects.TestObject#", inner1.ObjectName.Substring(0, inner1.ObjectName.IndexOf("#")+1));            
+            Assert.IsNotNull(inner1);
+            Assert.AreEqual("Spring.Objects.TestObject#", inner1.ObjectName.Substring(0, inner1.ObjectName.IndexOf("#")+1));
             Assert.AreEqual("inner1", inner1.Name);
             Assert.AreEqual(6, inner1.Age);
-            
-            
+
+
             Assert.IsNotNull(hasInnerObjects.Friends);
             IList friends = (IList) hasInnerObjects.Friends;
             Assert.AreEqual(2, friends.Count);
             DerivedTestObject inner2 = (DerivedTestObject) friends[0];
             Assert.AreEqual("inner2", inner2.Name);
             Assert.AreEqual(7, inner2.Age);
-            Assert.AreEqual("Spring.Objects.DerivedTestObject#", inner2.ObjectName.Substring(0, inner2.ObjectName.IndexOf("#") + 1));      
+            Assert.AreEqual("Spring.Objects.DerivedTestObject#", inner2.ObjectName.Substring(0, inner2.ObjectName.IndexOf("#") + 1));
             TestObject innerFactory = (TestObject) friends[1];
             Assert.AreEqual(DummyFactory.SINGLETON_NAME, innerFactory.Name);
 
-            
+
             Assert.IsNotNull(hasInnerObjects.SomeMap);
             Assert.IsFalse((hasInnerObjects.SomeMap.Count == 0));
             TestObject inner3 = (TestObject) hasInnerObjects.SomeMap["someKey"];
@@ -636,11 +630,11 @@ namespace Spring.Objects.Factory.Xml
             Assert.AreEqual("inner3", inner3.Name);
             Assert.AreEqual(8, inner3.Age);
             xof.Dispose();
-            
+
             Assert.IsFalse(inner2.WasDestroyed());
             Assert.IsFalse(innerFactory.Name == null);
             Assert.IsFalse(innerFriendOfAFriend.WasDestroyed());
-            
+
         }
 
         [Test]
@@ -661,7 +655,7 @@ namespace Spring.Objects.Factory.Xml
         public void SingletonInheritanceFromParentFactorySingletonUsingCtor()
         {
             XmlObjectFactory parent = new XmlObjectFactory(new ReadOnlyXmlTestResource("parent.xml", GetType()));
-            XmlObjectFactory child = new XmlObjectFactory(new ReadOnlyXmlTestResource("child.xml", GetType()), parent);                                                                           
+            XmlObjectFactory child = new XmlObjectFactory(new ReadOnlyXmlTestResource("child.xml", GetType()), parent);
             TestObject inherits = (TestObject)child.GetObject("inheritsFromParentFactoryUsingCtor");
             // Name property value is overriden
             Assert.IsTrue(inherits.Name.Equals("child-name"));
@@ -967,17 +961,17 @@ namespace Spring.Objects.Factory.Xml
         {
             IResource resource = new ReadOnlyXmlTestResource("lazy-init-multithreaded.xml", GetType());
             XmlObjectFactory xof = new XmlObjectFactory(resource);
-            
+
             LazyWorker lw1 = new LazyWorker(xof);
             LazyWorker lw2 = new LazyWorker(xof);
             Thread thread1 = new Thread(new ThreadStart(lw1.DoWork));
             Thread thread2 = new Thread(new ThreadStart(lw2.DoWork));
-                
+
             thread1.Start();
             Thread.Sleep(1000);
             thread2.Start();
             thread1.Join();
-            thread2.Join();            
+            thread2.Join();
             Assert.AreEqual(typeof(LazyTestObject), lw1.ObjectFromContext.GetType());
             Assert.AreEqual(typeof(LazyTestObject), lw2.ObjectFromContext.GetType());
             Assert.AreEqual(1, LazyTestObject.Count);
@@ -1027,7 +1021,7 @@ namespace Spring.Objects.Factory.Xml
                 Assert.IsTrue(ex.InnerException is FormatException);
             }
         }
-        
+
         [Test]
         public void NoSuchXmlFile()
         {
@@ -1057,7 +1051,7 @@ namespace Spring.Objects.Factory.Xml
             XmlObjectDefinitionReader reader = new XmlObjectDefinitionReader(xof, null);
             try
             {
-                reader.LoadObjectDefinitions(new ReadOnlyXmlTestResource("invalid.xml", GetType()));  
+                reader.LoadObjectDefinitions(new ReadOnlyXmlTestResource("invalid.xml", GetType()));
                 Assert.Fail("Should have thrown XmlObjectDefinitionStoreException");
             }
             catch (ObjectDefinitionStoreException e)
@@ -1528,15 +1522,11 @@ namespace Spring.Objects.Factory.Xml
             //FactoryMethods fm = (FactoryMethods) factory.GetObject("instanceFactoryMethodOverloads", new object[] {row});
             // Assert.AreEqual("DataRowCtor", fm.Name);
 
-            IDataRecord dataRecord = (IDataRecord) mocks.DynamicMock(typeof(IDataRecord));
+            IDataRecord dataRecord = A.Fake<IDataRecord>();
             FactoryMethods fm = (FactoryMethods)factory.GetObject("instanceFactoryMethodOverloads", new object[] { dataRecord });
             Assert.AreEqual("DataRecordCtor", fm.Name);
-
-
         }
 
-
-        #region Private Helper Methods for InstanceFactoryMethodWithOverloadedargs
         private DataTable MakeNamesTable()
         {
             // Create a new DataTable titled 'Names.'
@@ -1569,7 +1559,6 @@ namespace Spring.Objects.Factory.Xml
             return namesTable;
         }
 
-        #endregion
         [Test]
         public void FactoryMethodNoMatchingStaticMethod()
         {
@@ -1689,7 +1678,7 @@ namespace Spring.Objects.Factory.Xml
 
         /// <summary>
         /// Test creating an object using its 1 arg boolean constructor (amongst
-        /// others) by specifying the constructor arguments type and 
+        /// others) by specifying the constructor arguments type and
         /// not its index number.
         /// </summary>
         [Test]
@@ -1840,7 +1829,7 @@ namespace Spring.Objects.Factory.Xml
         public void TestExpressionAttribute()
         {
             TypeRegistry.RegisterType("WebMethod", typeof(WebMethodAttribute));
-            
+
             IResource resource = new ReadOnlyXmlTestResource("expressions.xml", GetType());
             XmlObjectFactory xof = new XmlObjectFactory(resource);
 
@@ -1886,7 +1875,7 @@ namespace Spring.Objects.Factory.Xml
             private Object objectFromContext;
             public LazyWorker(XmlObjectFactory xof)
             {
-               this.xof = xof;        
+               this.xof = xof;
             }
             public void DoWork()
             {
@@ -2069,5 +2058,5 @@ namespace Spring.Objects.Factory.Xml
         #endregion
     }
 
-  
+
 }

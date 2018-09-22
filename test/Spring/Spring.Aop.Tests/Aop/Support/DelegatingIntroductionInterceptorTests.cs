@@ -1,13 +1,13 @@
 #region License
 /*
  * Copyright 2002-2010 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,14 +16,14 @@
  */
 #endregion
 
-#region Imports
 using System;
 using NUnit.Framework;
 using AopAlliance.Aop;
-using Rhino.Mocks;
+
+using FakeItEasy;
+
 using Spring.Aop.Framework;
 using Spring.Objects;
-#endregion
 
 namespace Spring.Aop.Support
 {
@@ -58,9 +58,9 @@ namespace Spring.Aop.Support
 			TestObject raw = new TestObject();
 			Assert.IsTrue(! (raw is ITimeStamped));
 			ProxyFactory factory = new ProxyFactory(raw);
-	
-			ITimeStampedIntroduction ts = MockRepository.GenerateMock<ITimeStampedIntroduction>();
-			ts.Stub(x => x.TimeStamp).Return(EXPECTED_TIMESTAMP);
+
+			ITimeStampedIntroduction ts = A.Fake<ITimeStampedIntroduction>();
+			A.CallTo(() => ts.TimeStamp).Returns(EXPECTED_TIMESTAMP);
 
 			DefaultIntroductionAdvisor advisor = new DefaultIntroductionAdvisor(ts);
 			factory.AddIntroduction(advisor);
@@ -74,17 +74,18 @@ namespace Spring.Aop.Support
 		public interface ISubTimeStampedIntroduction: ISubTimeStamped, IAdvice
 		{
 		}
-	
-		public void TestIntroductionInterceptorWithInterfaceHierarchy() 
+
+		[Test]
+		public void TestIntroductionInterceptorWithInterfaceHierarchy()
 		{
 			TestObject raw = new TestObject();
 			Assert.IsTrue(! (raw is ISubTimeStamped));
 			ProxyFactory factory = new ProxyFactory(raw);
 
-            ISubTimeStampedIntroduction ts = MockRepository.GenerateMock<ISubTimeStampedIntroduction>();
-			ts.Stub(x => x.TimeStamp).Return(EXPECTED_TIMESTAMP);
+            ISubTimeStampedIntroduction ts = A.Fake<ISubTimeStampedIntroduction>();
+            A.CallTo(() => ts.TimeStamp).Returns(EXPECTED_TIMESTAMP);
 
-			DefaultIntroductionAdvisor advisor = new DefaultIntroductionAdvisor(ts);
+            DefaultIntroductionAdvisor advisor = new DefaultIntroductionAdvisor(ts);
 			// we must add introduction, not an advisor
 			factory.AddIntroduction(advisor);
 
@@ -93,17 +94,18 @@ namespace Spring.Aop.Support
 			Assert.IsTrue(tsp.TimeStamp == EXPECTED_TIMESTAMP);
 		}
 
-		public void TestIntroductionInterceptorWithSuperInterface()  
+		[Test]
+		public void TestIntroductionInterceptorWithSuperInterface()
 		{
 			TestObject raw = new TestObject();
 			Assert.IsTrue(! (raw is ITimeStamped));
 			ProxyFactory factory = new ProxyFactory(raw);
 
-            ISubTimeStamped ts = MockRepository.GenerateMock<ISubTimeStampedIntroduction>();
-			ts.Stub(x => x.TimeStamp).Return(EXPECTED_TIMESTAMP);
+            ISubTimeStampedIntroduction ts = A.Fake<ISubTimeStampedIntroduction>();
+            A.CallTo(() => ts.TimeStamp).Returns(EXPECTED_TIMESTAMP);
 
-			factory.AddIntroduction(0, new DefaultIntroductionAdvisor(
-				(ISubTimeStampedIntroduction)ts,
+            factory.AddIntroduction(0, new DefaultIntroductionAdvisor(
+				ts,
 				typeof(ITimeStamped))
 				);
 
@@ -121,42 +123,42 @@ namespace Spring.Aop.Support
 		{
 			private DateTime _timestamp;
 
-			public Test(DateTime timestamp) 
+			public Test(DateTime timestamp)
 			{
 				_timestamp = timestamp;
 			}
-			public void Foo() 
+			public void Foo()
 			{
 			}
-			public DateTime TimeStamp 
+			public DateTime TimeStamp
 			{
-				get 
+				get
 				{
 					return _timestamp;
 				}
 			}
 		}
 
-		public void TestAutomaticInterfaceRecognitionInDelegate() 
+		public void TestAutomaticInterfaceRecognitionInDelegate()
 		{
 			IIntroductionAdvisor ia = new DefaultIntroductionAdvisor(new Test(EXPECTED_TIMESTAMP));
-		
+
 			TestObject target = new TestObject();
 			ProxyFactory pf = new ProxyFactory(target);
 			pf.AddIntroduction(0, ia);
 
 			ITimeStamped ts = (ITimeStamped) pf.GetProxy();
-		
+
 			Assert.IsTrue(ts.TimeStamp == EXPECTED_TIMESTAMP);
 			((ITest) ts).Foo();
-		
+
 			int age = ((ITestObject) ts).Age;
 		}
 
 		/*
 		 * The rest of the tests in the original tested subclassing the
 		 * DelegatingIntroductionInterceptor.
-		 * 
+		 *
 		 * Since we don't need to subclass anything to make a delegating
 		 * introduction, the rest of the tests are not necessary.
 		 */
@@ -164,12 +166,12 @@ namespace Spring.Aop.Support
 		// must be public to be used for AOP
 		// AOP creates a new assembly which must have access to the
 		// interfaces that it intends to expose.
-		public interface ITest 
+		public interface ITest
 		{
 			void Foo();
 		}
 
-		public interface ISubTimeStamped : ITimeStamped 
+		public interface ISubTimeStamped : ITimeStamped
 		{
 		}
 

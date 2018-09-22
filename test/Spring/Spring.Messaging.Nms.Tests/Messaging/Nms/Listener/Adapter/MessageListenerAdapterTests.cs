@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,11 +20,13 @@
 
 #region Imports
 
-using System;
 using System.Text;
+
 using Apache.NMS;
+
+using FakeItEasy;
+
 using NUnit.Framework;
-using Rhino.Mocks;
 
 #endregion
 
@@ -38,87 +40,67 @@ namespace Spring.Messaging.Nms.Listener.Adapter
     [TestFixture]
     public class MessageListenerAdapterTests
     {
-        private MockRepository mocks;
-
         private static string TEXT = "I fancy a good cuppa right now";
-
-        [SetUp]
-        public void Setup()
-        {
-            mocks = new MockRepository();
-        }
 
         [Test]
         public void MessageContentsHandlerForTextMessage()
         {
             int numIterations = 10;
-            ITextMessage message = mocks.StrictMock<ITextMessage>();
-            Expect.Call(message.Text).Return(TEXT).Repeat.Times(numIterations);
+            ITextMessage message = A.Fake<ITextMessage>();
+            A.CallTo(() => message.Text).Returns(TEXT).NumberOfTimes(numIterations);
             MessageContentsHandler handler = new MessageContentsHandler();
-            mocks.ReplayAll();
 
             MessageListenerAdapter adapter = new MessageListenerAdapter(handler);
             for (int i = 0; i < numIterations; i++)
             {
                 adapter.OnMessage(message);
             }
-            Assert.AreEqual(numIterations, handler.HandledStringCount);
 
-            mocks.VerifyAll();            
+            Assert.AreEqual(numIterations, handler.HandledStringCount);
         }
 
         [Test]
         public void MessageContentsHandlerForBytesMessage()
         {
             int numIterations = 10;
-            IBytesMessage message = mocks.StrictMock<IBytesMessage>();
+            IBytesMessage message = A.Fake<IBytesMessage>();
             ASCIIEncoding encoding = new ASCIIEncoding();
             byte[] content = encoding.GetBytes("test");
-            Expect.Call(message.Content).Return(content).Repeat.Times(numIterations);
-            MessageContentsHandler handler = new MessageContentsHandler();            
-            mocks.ReplayAll();
+            A.CallTo(() => message.Content).Returns(content).NumberOfTimes(numIterations);
+            MessageContentsHandler handler = new MessageContentsHandler();
 
             MessageListenerAdapter adapter = new MessageListenerAdapter(handler);
             for (int i = 0; i < numIterations; i++)
             {
                 adapter.OnMessage(message);
             }
-            Assert.AreEqual(numIterations, handler.HandledByteArrayCount);
 
-            mocks.VerifyAll();
+            Assert.AreEqual(numIterations, handler.HandledByteArrayCount);
         }
 
         [Test]
         public void MessageContentsHandlerOverloadCalls()
         {
             int numIterations = 10;
-            IBytesMessage bytesMessage = mocks.StrictMock<IBytesMessage>();
+            IBytesMessage bytesMessage = A.Fake<IBytesMessage>();
             ASCIIEncoding encoding = new ASCIIEncoding();
             byte[] content = encoding.GetBytes("test");
-            Expect.Call(bytesMessage.Content).Return(content).Repeat.Times(numIterations / 2);
+            A.CallTo(() => bytesMessage.Content).Returns(content).NumberOfTimes(numIterations / 2);
 
-            ITextMessage textMessage = mocks.StrictMock<ITextMessage>();
-            Expect.Call(textMessage.Text).Return(TEXT).Repeat.Times(numIterations/2);
+            ITextMessage textMessage = A.Fake<ITextMessage>();
+            A.CallTo(() => textMessage.Text).Returns(TEXT).NumberOfTimes(numIterations / 2);
 
             MessageContentsHandler handler = new MessageContentsHandler();
-            mocks.ReplayAll();
 
             MessageListenerAdapter adapter = new MessageListenerAdapter(handler);
-            for (int i = 0; i < numIterations/2; i++)
+            for (int i = 0; i < numIterations / 2; i++)
             {
                 adapter.OnMessage(textMessage);
                 adapter.OnMessage(bytesMessage);
             }
+
             Assert.AreEqual(numIterations / 2, handler.HandledByteArrayCount);
             Assert.AreEqual(numIterations / 2, handler.HandledStringCount);
-
-            mocks.VerifyAll();
         }
-    }
-
-    [Serializable]
-    public class SerializableObject
-    {
-        
     }
 }

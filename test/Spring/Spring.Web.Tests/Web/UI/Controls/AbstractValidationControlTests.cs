@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,25 +18,24 @@
 
 #endregion
 
-#region Imports
-
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Web.UI;
+
+using FakeItEasy;
+
 using NUnit.Framework;
-using Rhino.Mocks;
+
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.Validation;
 using Spring.Web.UI.Validation;
 
-#endregion
-
 namespace Spring.Web.UI.Controls
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <author>Erich Eichinger</author>
     [TestFixture]
@@ -187,8 +186,7 @@ namespace Spring.Web.UI.Controls
         [Test]
         public void DefaultsToValidationContainerMessageSource()
         {
-            MockRepository mocks = new MockRepository();
-            IMessageSource messageSource = (IMessageSource)mocks.DynamicMock(typeof(IMessageSource));
+            IMessageSource messageSource = A.Fake<IMessageSource>();
             //            IValidationContainer container = (IValidationContainer)mocks.DynamicMock(typeof(IValidationContainer));
 
             Page page = new Page();
@@ -220,7 +218,7 @@ namespace Spring.Web.UI.Controls
             //   - outerVC
             //   - inBetweenControl1 : IValidationContainer
             //         - innerVC
- 
+
             Spring.Web.UI.Page page = new Spring.Web.UI.Page();
             Spring.Web.UI.UserControl inBetweenControl1 = new Spring.Web.UI.UserControl();
             inBetweenControl1.ID = "InBetweenControl1";
@@ -247,7 +245,7 @@ namespace Spring.Web.UI.Controls
             //   - outerVC
             //   - inBetweenControl1 : IValidationContainer
             //         - innerVC
- 
+
             Spring.Web.UI.Page page = new Spring.Web.UI.Page();
             Spring.Web.UI.UserControl userControl = new Spring.Web.UI.UserControl();
             userControl.ID = "userControl";

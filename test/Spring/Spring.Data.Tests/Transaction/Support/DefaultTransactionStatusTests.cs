@@ -1,5 +1,6 @@
+using FakeItEasy;
+
 using NUnit.Framework;
-using Rhino.Mocks;
 
 namespace Spring.Transaction.Support
 {
@@ -9,7 +10,7 @@ namespace Spring.Transaction.Support
         [Test]
         public void DefaultConstructorTests()
         {
-            ISmartTransactionObject txn = MockRepository.GenerateMock<ISmartTransactionObject>();
+            ISmartTransactionObject txn = A.Fake<ISmartTransactionObject>();
 
             DefaultTransactionStatus stat = new DefaultTransactionStatus(txn, true, false, false, true, new object());
             Assert.IsNotNull(stat.Transaction);
@@ -20,14 +21,12 @@ namespace Spring.Transaction.Support
             Assert.IsTrue(! stat.RollbackOnly);
             stat.SetRollbackOnly();
             Assert.IsTrue(stat.RollbackOnly);
-
-            txn.AssertWasCalled(x => x.RollbackOnly, constraints => constraints.Repeat.Once());
         }
 
         [Test]
         public void CreateSavepointException()
         {
-            ISmartTransactionObject transaction = MockRepository.GenerateMock<ISmartTransactionObject>();
+            ISmartTransactionObject transaction = A.Fake<ISmartTransactionObject>();
             DefaultTransactionStatus stat = new DefaultTransactionStatus(transaction, true, false, false, true, new object());
             Assert.Throws<NestedTransactionNotSupportedException>(() => stat.CreateSavepoint("mySavePoint"));
         }
@@ -35,7 +34,7 @@ namespace Spring.Transaction.Support
         [Test]
         public void RollbackSavepointException()
         {
-            ISmartTransactionObject transaction = MockRepository.GenerateMock<ISmartTransactionObject>();
+            ISmartTransactionObject transaction = A.Fake<ISmartTransactionObject>();
             DefaultTransactionStatus stat = new DefaultTransactionStatus(transaction, true, false, false, true, new object());
             Assert.Throws<NestedTransactionNotSupportedException>(() => stat.RollbackToSavepoint(null));
         }
@@ -43,7 +42,7 @@ namespace Spring.Transaction.Support
         [Test]
         public void ReleaseSavepointException()
         {
-            ISmartTransactionObject transaction = MockRepository.GenerateMock<ISmartTransactionObject>();
+            ISmartTransactionObject transaction = A.Fake<ISmartTransactionObject>();
             DefaultTransactionStatus stat = new DefaultTransactionStatus(transaction, true, false, false, true, new object());
             Assert.Throws<NestedTransactionNotSupportedException>(() => stat.ReleaseSavepoint(null));
         }
@@ -51,7 +50,7 @@ namespace Spring.Transaction.Support
         [Test]
         public void CreateSaveAndHoldValidSavepoint()
         {
-            ISavepointManager saveMgr = MockRepository.GenerateMock<ISavepointManager>();
+            ISavepointManager saveMgr = A.Fake<ISavepointManager>();
             DefaultTransactionStatus status = new DefaultTransactionStatus(saveMgr, true, false, false, true, new object());
             status.CreateAndHoldSavepoint("savepoint");
             Assert.IsTrue(status.HasSavepoint);
@@ -61,7 +60,7 @@ namespace Spring.Transaction.Support
         [Test]
         public void RollbackHeldSavepointException()
         {
-            ISmartTransactionObject transaction = MockRepository.GenerateMock<ISmartTransactionObject>();
+            ISmartTransactionObject transaction = A.Fake<ISmartTransactionObject>();
             DefaultTransactionStatus stat = new DefaultTransactionStatus(transaction, true, false, false, true, new object());
             Assert.Throws<TransactionUsageException>(() => stat.RollbackToHeldSavepoint());
         }
@@ -69,7 +68,7 @@ namespace Spring.Transaction.Support
         [Test]
         public void RollbackHeldSavepointSuccess()
         {
-            ISavepointManager saveMgr = MockRepository.GenerateMock<ISavepointManager>();
+            ISavepointManager saveMgr = A.Fake<ISavepointManager>();
             string savepoint = "savepoint";
             DefaultTransactionStatus status = new DefaultTransactionStatus(saveMgr, true, false, false, true, new object());
             status.CreateAndHoldSavepoint(savepoint);
@@ -77,13 +76,13 @@ namespace Spring.Transaction.Support
             Assert.AreEqual(savepoint, status.Savepoint);
 
             status.RollbackToHeldSavepoint();
-            saveMgr.AssertWasCalled(x => x.RollbackToSavepoint(savepoint));
+            A.CallTo(() => saveMgr.RollbackToSavepoint(savepoint)).MustHaveHappened();
         }
 
         [Test]
         public void ReleaseHeldSavepointException()
         {
-            ISmartTransactionObject transaction = MockRepository.GenerateMock<ISmartTransactionObject>();
+            ISmartTransactionObject transaction = A.Fake<ISmartTransactionObject>();
             DefaultTransactionStatus stat = new DefaultTransactionStatus(transaction, true, false, false, true, new object());
             Assert.Throws<TransactionUsageException>(() => stat.ReleaseHeldSavepoint());
         }
@@ -91,7 +90,7 @@ namespace Spring.Transaction.Support
         [Test]
         public void ReleaseHeldSavepointSuccess()
         {
-            ISavepointManager saveMgr = MockRepository.GenerateMock<ISavepointManager>();
+            ISavepointManager saveMgr = A.Fake<ISavepointManager>();
             string savepoint = "savepoint";
             DefaultTransactionStatus status = new DefaultTransactionStatus(saveMgr, true, false, false, true, new object());
             status.CreateAndHoldSavepoint(savepoint);
@@ -99,8 +98,8 @@ namespace Spring.Transaction.Support
             Assert.AreEqual(savepoint, status.Savepoint);
 
             status.ReleaseHeldSavepoint();
-            saveMgr.AssertWasCalled(x => x.CreateSavepoint(savepoint));
-            saveMgr.AssertWasCalled(x => x.ReleaseSavepoint(savepoint));
+            A.CallTo(() => saveMgr.CreateSavepoint(savepoint)).MustHaveHappened();
+            A.CallTo(() => saveMgr.ReleaseSavepoint(savepoint)).MustHaveHappened();
         }
     }
 }

@@ -31,8 +31,8 @@
     <NeutralLanguage>en-US</NeutralLanguage>
     <WarningsAsErrors>True</WarningsAsErrors>
 
-    <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/spring-projects/spring-net</RepositoryUrl>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
 
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
 
@@ -46,8 +46,13 @@
     <LangVersion>latest</LangVersion>
 
   </PropertyGroup>
+  
+  <ItemGroup Condition="'$(SourceLinkEnabled)' != 'false'">
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-63127-02" PrivateAssets="All"/>
+  </ItemGroup>  
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+	<DebugType>Full</DebugType>
     <DefineConstants>DEBUG;TRACE;DEBUG_DYNAMIC;$(DefineConstants)</DefineConstants>
   </PropertyGroup>
 

@@ -18,18 +18,16 @@
 
 #endregion
 
-#region Imports
-
 using System.Collections.Specialized;
 using Common.Logging;
 using Common.Logging.Simple;
+
+using FakeItEasy;
+
 using NUnit.Framework;
-using Rhino.Mocks;
 using Spring.Context.Support;
 using Spring.Core.IO;
 using Spring.Objects.Factory.Xml;
-
-#endregion
 
 namespace Spring.Objects.Factory.Config
 {
@@ -40,13 +38,9 @@ namespace Spring.Objects.Factory.Config
 	[TestFixture]
 	public sealed class PropertyOverrideConfigurerTests
 	{
-
-        private MockRepository mocks;
-
         [SetUp]
         public void Setup()
         {
-            mocks = new MockRepository();
         }
 
 		/// <summary>
@@ -56,7 +50,7 @@ namespace Spring.Objects.Factory.Config
 		public void FixtureSetUp()
 		{
 			// enable (null appender) logging, just to ensure that the logging code is correct
-            LogManager.Adapter = new NoOpLoggerFactoryAdapter(); 
+            LogManager.Adapter = new NoOpLoggerFactoryAdapter();
 		}
 
         [Test]
@@ -90,7 +84,7 @@ namespace Spring.Objects.Factory.Config
             pvs.Add("Age", 27);
             pvs.Add("Name", "Bruno");
             ac.RegisterSingleton("tb1", typeof(TestObject), pvs);
-			
+
             pvs = new MutablePropertyValues();
 			pvs.Add("Properties", "<spring-config><add key=\"tb1.Age\" value=\"99\"/><add key=\"tb1.Name\" value=\"test\"/></spring-config>");
 			ac.RegisterSingleton("configurer", typeof (PropertyOverrideConfigurer), pvs);
@@ -105,11 +99,11 @@ namespace Spring.Objects.Factory.Config
         public void OverridePropertyReference()
         {
             StaticApplicationContext ac = new StaticApplicationContext();
-            
+
             MutablePropertyValues pvs = new MutablePropertyValues();
             pvs.Add("Spouse", new RuntimeObjectReference("spouse1"));
             ac.RegisterSingleton("tb1", typeof(TestObject), pvs);
-            
+
             ac.RegisterSingleton("spouse1", typeof(TestObject), new MutablePropertyValues());
             ac.RegisterSingleton("spouse2", typeof(TestObject), new MutablePropertyValues());
 
@@ -144,23 +138,15 @@ namespace Spring.Objects.Factory.Config
 		[Test]
 		public void MalformedOverrideKey()
 		{
-			IConfigurableListableObjectFactory objectFactory = mocks.StrictMock<IConfigurableListableObjectFactory>();
+			IConfigurableListableObjectFactory objectFactory = A.Fake<IConfigurableListableObjectFactory>();
 		    IConfigurableListableObjectFactory fac = objectFactory;
 
 			PropertyOverrideConfigurer cfg = new PropertyOverrideConfigurer();
 			NameValueCollection defaultProperties = new NameValueCollection();
 			defaultProperties.Add("malformedKey", "Rick Evans");
 			cfg.Properties = defaultProperties;
-            mocks.ReplayAll();
-			try
-			{
-				cfg.PostProcessObjectFactory(fac);
-				Assert.Fail("Should have had a FatalObjectException at this point because of a malformed key.");
-			}
-			catch (FatalObjectException)
-			{
-			}
-			mocks.VerifyAll();
+
+            Assert.Throws<FatalObjectException>(() => cfg.PostProcessObjectFactory(fac));
 		}
 
 		[Test]
@@ -168,20 +154,17 @@ namespace Spring.Objects.Factory.Config
 		{
 			const string valueTo_NOT_BeOveridden = "Jenny Lewis";
 			TestObject foo = new TestObject(valueTo_NOT_BeOveridden, 30);
-            IConfigurableListableObjectFactory objectFactory = mocks.StrictMock<IConfigurableListableObjectFactory>();
-		    Expect.Call(objectFactory.GetObjectDefinition("rubbish")).Return(null);
+            IConfigurableListableObjectFactory objectFactory = A.Fake<IConfigurableListableObjectFactory>();
+		    A.CallTo(() => objectFactory.GetObjectDefinition("rubbish")).Returns(null);
 		    IConfigurableListableObjectFactory fac = objectFactory;
 
 			PropertyOverrideConfigurer cfg = new PropertyOverrideConfigurer();
 			NameValueCollection defaultProperties = new NameValueCollection();
 			defaultProperties.Add("rubbish.Name", "Rick Evans");
 			cfg.Properties = defaultProperties;
-            mocks.ReplayAll();
-			cfg.PostProcessObjectFactory(fac);
-			Assert.AreEqual(valueTo_NOT_BeOveridden, foo.Name,
-			                "Property value was overridden, but a rubbish objectName root was supplied.");
 
-		    mocks.VerifyAll();
+			cfg.PostProcessObjectFactory(fac);
+			Assert.AreEqual(valueTo_NOT_BeOveridden, foo.Name, "Property value was overridden, but a rubbish objectName root was supplied.");
 		}
 
 		[Test]

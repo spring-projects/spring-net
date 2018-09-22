@@ -21,9 +21,9 @@
 using System;
 using System.Collections;
 
-using NUnit.Framework;
+using FakeItEasy;
 
-using Rhino.Mocks;
+using NUnit.Framework;
 
 using Spring.Context.Support;
 using Spring.Objects.Factory.Support;
@@ -31,18 +31,15 @@ using Spring.Objects.Factory.Support;
 namespace Spring.Objects.Factory.Config
 {
     /// <summary>
-    /// This class contains tests for 
+    /// This class contains tests for
     /// </summary>
     /// <author>Mark Pollack</author>
     [TestFixture]
     public class VariablePlaceholderConfigurerTests
     {
-        private MockRepository mocks;
-
         [SetUp]
         public void SetUp()
         {
-            mocks = new MockRepository();
         }
 
         [Test]
@@ -68,7 +65,7 @@ namespace Spring.Objects.Factory.Config
             StaticApplicationContext ac = new StaticApplicationContext();
             VariablePlaceholderConfigurer vphc = new VariablePlaceholderConfigurer();
             vphc.VariableSources = new ArrayList(new object[] { new object() });
-            
+
             try
             {
                 vphc.PostProcessObjectFactory(ac.ObjectFactory);
@@ -300,10 +297,9 @@ namespace Spring.Objects.Factory.Config
             pvs.Add(theProperty, placeholder);
             RootObjectDefinition def = new RootObjectDefinition(typeof(TestObject), pvs);
 
-            IConfigurableListableObjectFactory mock = mocks.StrictMock<IConfigurableListableObjectFactory>();
-            Expect.Call(mock.GetObjectDefinitionNames(true)).Return(new string[] { defName });
-            Expect.Call(mock.GetObjectDefinition(defName, true)).Return(def);
-            mocks.ReplayAll();
+            IConfigurableListableObjectFactory mock = A.Fake<IConfigurableListableObjectFactory>();
+            A.CallTo(() => mock.GetObjectDefinitionNames(true)).Returns(new string[] { defName });
+            A.CallTo(() => mock.GetObjectDefinition(defName, true)).Returns(def);
 
             VariablePlaceholderConfigurer vpc = new VariablePlaceholderConfigurer();
             vpc.IgnoreUnresolvablePlaceholders = true;
@@ -311,8 +307,6 @@ namespace Spring.Objects.Factory.Config
             vpc.IncludeAncestors = true;
 
             vpc.PostProcessObjectFactory(mock);
-
-            mocks.VerifyAll();            
         }
     }
 }

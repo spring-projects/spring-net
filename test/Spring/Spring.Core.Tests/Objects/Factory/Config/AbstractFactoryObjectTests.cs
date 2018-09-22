@@ -18,13 +18,11 @@
 
 #endregion
 
-#region Imports
-
 using System;
-using NUnit.Framework;
-using Rhino.Mocks;
 
-#endregion
+using FakeItEasy;
+
+using NUnit.Framework;
 
 namespace Spring.Objects.Factory.Config
 {
@@ -35,41 +33,38 @@ namespace Spring.Objects.Factory.Config
 	[TestFixture]
     public sealed class AbstractFactoryObjectTests
     {
-        private MockRepository mocks;
-
         [SetUp]
         public void Setup()
         {
-            mocks = new MockRepository();
         }
 
         [Test]
         public void DisposeCallbackIsNotInvokedOnDisposeIfInPrototypeMode()
         {
-            IDisposable disposable = mocks.StrictMock<IDisposable>();           
+            IDisposable disposable = A.Fake<IDisposable>();
             DummyFactoryObject factory = new DummyFactoryObject(disposable);
-            mocks.ReplayAll();
+
             factory.IsSingleton = false;
             factory.GetObject();
             factory.Dispose();
+
 			// in prototype mode, so the Dispose() method of the object must not be called...
-            mocks.VerifyAll();
+            A.CallTo(() => disposable.Dispose()).MustNotHaveHappened();
         }
 
         [Test]
         public void DisposeCallbackIsInvokedOnDispose()
         {
-            IDisposable disposable = mocks.StrictMock<IDisposable>();
-            disposable.Dispose();
-            LastCall.On(disposable).Repeat.Once();            
-			DummyFactoryObject factory = new DummyFactoryObject(disposable);
-            mocks.ReplayAll();
+            IDisposable disposable = A.Fake<IDisposable>();
+
+            DummyFactoryObject factory = new DummyFactoryObject(disposable);
             factory.AfterPropertiesSet();
             factory.Dispose();
-            mocks.VerifyAll();
+
+            A.CallTo(() => disposable.Dispose()).MustHaveHappenedOnceExactly();
         }
 
-        private sealed class DummyFactoryObject : AbstractFactoryObject 
+        private sealed class DummyFactoryObject : AbstractFactoryObject
         {
             public object theObject;
 

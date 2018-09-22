@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -70,7 +70,7 @@ namespace Spring.Data.NHibernate
     /// as autodetected by Spring's <see cref="PersistenceExceptionTranslationPostProcessor"/>
     /// for AOP-based translation of PersistenceExceptionTranslationPostProcessor.
     /// Hence, the presence of e.g. LocalSessionFactoryBean automatically enables
-    /// a PersistenceExceptionTranslationPostProcessor to translate Hibernate exceptions. 
+    /// a PersistenceExceptionTranslationPostProcessor to translate Hibernate exceptions.
 	/// </para>
 	/// </remarks>
 	/// <author>Mark Pollack (.NET)</author>
@@ -117,7 +117,7 @@ namespace Spring.Data.NHibernate
 
         private IApplicationContext applicationContext;
 
-        // Configuration time DB provider. 
+        // Configuration time DB provider.
         // This will not be available after configuration has been done.
         private static IDbProvider configTimeDbProvider;
 
@@ -508,7 +508,7 @@ namespace Spring.Data.NHibernate
                 IDictionary<string, string> typedProperties = new  Dictionary<string, string>();
                 foreach (KeyValuePair<string, string> entry in hibernateProperties)
                 {
-                    typedProperties.Add((string) entry.Key, (string) entry.Value);
+                    typedProperties.Add(entry.Key, entry.Value);
                 }
 
                 Dialect dialect = Dialect.GetDialect(typedProperties);
@@ -545,7 +545,7 @@ namespace Spring.Data.NHibernate
                         log.Info("Overriding use of Spring's Hibernate Connection Provider with [" +
                                  hibernateProperties[Environment.ConnectionProvider] + "]");
                     }
-                    #endregion 
+                    #endregion
                     config.Properties.Remove(Environment.ConnectionProvider);
                 }
 
@@ -625,7 +625,7 @@ namespace Spring.Data.NHibernate
                 }
             }
 
-            if (this.eventListeners != null) 
+            if (this.eventListeners != null)
             {
 				// Register specified NHibernate event listeners.
                 foreach (DictionaryEntry entry in eventListeners)
@@ -641,7 +641,7 @@ namespace Spring.Data.NHibernate
                     }
 
                     object listenerObject = entry.Value;
-					if (listenerObject is ICollection) 
+					if (listenerObject is ICollection)
                     {
 						ICollection listeners = (ICollection) listenerObject;
 						EventListeners listenerRegistry = config.EventListeners;
@@ -651,7 +651,7 @@ namespace Spring.Data.NHibernate
                         object[] listenerArray = (object[])items.ToArray(listenerRegistry.GetListenerClassFor(listenerType));
 						config.SetListeners(listenerType, listenerArray);
 					}
-					else 
+					else
                     {
 						config.SetListener(listenerType, listenerObject);
 					}
@@ -694,8 +694,8 @@ namespace Spring.Data.NHibernate
                 if (log.IsInfoEnabled)
                 {
                     log.Info("Closing Hibernate SessionFactory");
-                }  
-                #endregion                  
+                }
+                #endregion
                 sessionFactory.Close();
             }
 
@@ -753,7 +753,7 @@ namespace Spring.Data.NHibernate
                 UpdateDatabaseSchema();
             }
         }
-	
+
         /// <summary>
         /// Execute schema drop script, determined by the Configuration object
         /// used for creating the SessionFactory. A replacement for NHibernate's
@@ -781,7 +781,7 @@ namespace Spring.Data.NHibernate
                                                   ExecuteSchemaScript(con, sql);
                                                   return null;
                                               }));
-                
+
 	    }
 
         /// <summary>
@@ -810,8 +810,8 @@ namespace Spring.Data.NHibernate
 					    string[] sql = Configuration.GenerateSchemaCreationScript(dialect);
 					    ExecuteSchemaScript(con, sql);
 					    return null;
-    			
-			    }));		
+
+			    }));
 	    }
 
         /// <summary>
@@ -829,7 +829,7 @@ namespace Spring.Data.NHibernate
         /// connection to perform the script.
         /// </p>
         /// </remarks>
-	    public virtual void UpdateDatabaseSchema() 
+	    public virtual void UpdateDatabaseSchema()
         {
 		    log.Info("Updating database schema for Hibernate SessionFactory");
 		    HibernateTemplate hibernateTemplate = new HibernateTemplate(sessionFactory);
@@ -859,17 +859,17 @@ namespace Spring.Data.NHibernate
         /// <param name="sql">The SQL statement to execute.</param>
         protected virtual void ExecuteSchemaScript(IDbConnection con, string[] sql)
         {
-		    if (sql != null && sql.Length > 0) 
+		    if (sql != null && sql.Length > 0)
             {
 			    IDbCommand cmd = con.CreateCommand();
-			    try 
+			    try
                 {
-				    for (int i = 0; i < sql.Length; i++) 
+				    for (int i = 0; i < sql.Length; i++)
                     {
 					    ExecuteSchemaStatement(cmd, sql[i]);
 				    }
 			    }
-			    finally 
+			    finally
                 {
                     AdoUtils.DisposeCommand(cmd);
 			    }
@@ -887,18 +887,18 @@ namespace Spring.Data.NHibernate
 	    /// <param name="sql"></param>
         protected virtual void ExecuteSchemaStatement(IDbCommand cmd, string sql)
         {
-		    if (log.IsDebugEnabled) 
+		    if (log.IsDebugEnabled)
             {
 			    log.Debug("Executing schema statement: " + sql);
 		    }
-		    try 
+		    try
             {
                 cmd.CommandText = sql;
                 cmd.ExecuteNonQuery();
 		    }
-		    catch (ADOException ex) 
+		    catch (ADOException ex)
             {
-			    if (log.IsWarnEnabled) 
+			    if (log.IsWarnEnabled)
                 {
 				    log.Warn("Unsuccessful schema statement: " + sql, ex);
 			    }
@@ -921,7 +921,7 @@ namespace Spring.Data.NHibernate
         {
             ISessionFactory sf = config.BuildSessionFactory();
             ISessionFactoryImplementor sfImplementor = sf as ISessionFactoryImplementor;
-            
+
             if (sfImplementor != null)
             {
                 DbProviderWrapper dbProviderWrapper = sfImplementor.ConnectionProvider as DbProviderWrapper;
@@ -997,7 +997,7 @@ namespace Spring.Data.NHibernate
         /// </returns>
         /// <seealso cref="PersistenceExceptionTranslationPostProcessor"/>
 	    public DataAccessException TranslateExceptionIfPossible(Exception ex)
-	    {            
+	    {
             if (ex is HibernateException)
             {
                 return ConvertHibernateException((HibernateException) ex);
@@ -1032,7 +1032,7 @@ namespace Spring.Data.NHibernate
         /// </returns>
         protected virtual DataAccessException ConvertAdoAccessException(ADOException ex)
         {
-            return SessionFactoryUtils.ConvertAdoAccessException(AdoExceptionTranslator, ex);            
+            return SessionFactoryUtils.ConvertAdoAccessException(AdoExceptionTranslator, ex);
         }
 
 	    #endregion

@@ -1,7 +1,5 @@
-#region License
-
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,19 +14,16 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using System.EnterpriseServices;
+
+using FakeItEasy;
+
 using NUnit.Framework;
-using Rhino.Mocks;
+
 using Spring.Data.Support;
 using Spring.Transaction;
 using Spring.Transaction.Support;
-
-#endregion
 
 namespace Spring.Data.Core
 {
@@ -39,53 +34,33 @@ namespace Spring.Data.Core
     [TestFixture]
     public class ServiceDomainTransactionManagerTests
     {
-        private MockRepository mocks;
-
-        [SetUp]
-        public void Setup()
-        {
-            mocks = new MockRepository();
-        }
-
         [Test]
         public void TransactionCommit()
         {
-            #region Mock Setup
-            IServiceDomainAdapter txAdapter = (IServiceDomainAdapter) mocks.CreateMock(typeof (IServiceDomainAdapter));
-            using (mocks.Ordered())
-            {
-                Expect.Call(txAdapter.IsInTransaction).Return(false);
-                SimpleServiceConfig serviceConfig = new SimpleServiceConfig();
-                ConfigureServiceConfig(serviceConfig, true);
-                txAdapter.Enter(serviceConfig);
+            IServiceDomainAdapter txAdapter = A.Fake<IServiceDomainAdapter>();
 
-                //ProcessCommit - status.GlobalRollbackOnly check
-                Expect.Call(txAdapter.MyTransactionVote).Return(TransactionVote.Commit);
-                //DoCommit      - status.GlobalRollbackOnly check
-                Expect.Call(txAdapter.MyTransactionVote).Return(TransactionVote.Commit);
+            A.CallTo(() => txAdapter.IsInTransaction).Returns(false).Once().Then.Returns(true).Once();
 
-                Expect.Call(txAdapter.IsInTransaction).Return(true);
-                //DoCommit      - check to call SetComplete or SetAbort
-                Expect.Call(txAdapter.MyTransactionVote).Return(TransactionVote.Commit);
-                txAdapter.SetComplete();
-                Expect.Call(txAdapter.Leave()).Return(TransactionStatus.Commited);
+            //ProcessCommit - status.GlobalRollbackOnly check
+            //DoCommit      - status.GlobalRollbackOnly check
+            //DoCommit      - check to call SetComplete or SetAbort
+            A.CallTo(() => txAdapter.MyTransactionVote).Returns(TransactionVote.Commit).NumberOfTimes(3);
 
-            }
-            #endregion
-
-            mocks.ReplayAll();
+            A.CallTo(() => txAdapter.Leave()).Returns(TransactionStatus.Commited).Once();
 
             ServiceDomainPlatformTransactionManager tm = new ServiceDomainPlatformTransactionManager(txAdapter);
             TransactionTemplate tt = new TransactionTemplate(tm);
             tm.TransactionSynchronization = TransactionSynchronizationState.Always;
 
-            tt.Execute(new TransactionDelegate(TransactionCommitMethod));
+            tt.Execute(TransactionCommitMethod);
 
             Assert.IsFalse(TransactionSynchronizationManager.SynchronizationActive);
             Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
 
-            mocks.VerifyAll();
-
+            SimpleServiceConfig serviceConfig = new SimpleServiceConfig();
+            ConfigureServiceConfig(serviceConfig, true);
+            A.CallTo(() => txAdapter.Enter(serviceConfig)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => txAdapter.SetComplete()).MustHaveHappenedOnceExactly();
         }
 
         private object TransactionCommitMethod(ITransactionStatus status)
@@ -98,23 +73,13 @@ namespace Spring.Data.Core
         [Test]
         public void TransactionRollback()
         {
-            #region Mock Setup
-            IServiceDomainAdapter txAdapter = (IServiceDomainAdapter)mocks.CreateMock(typeof(IServiceDomainAdapter));
-            using (mocks.Ordered())
-            {
 
-                Expect.Call(txAdapter.IsInTransaction).Return(false);
-                SimpleServiceConfig serviceConfig = new SimpleServiceConfig();
-                ConfigureServiceConfig(serviceConfig, true);
-                txAdapter.Enter(serviceConfig);
-                Expect.Call(txAdapter.IsInTransaction).Return(true);
-                txAdapter.SetAbort();
-                Expect.Call(txAdapter.Leave()).Return(TransactionStatus.Commited);
+            SimpleServiceConfig serviceConfig = new SimpleServiceConfig();
+            ConfigureServiceConfig(serviceConfig, standardIsolationAndProp: true);
 
-            }
-            #endregion
-
-            mocks.ReplayAll();
+            IServiceDomainAdapter txAdapter = A.Fake<IServiceDomainAdapter>();
+            A.CallTo(() => txAdapter.IsInTransaction).Returns(false).Once().Then.Returns(true);
+            A.CallTo(() => txAdapter.Leave()).Returns(TransactionStatus.Commited);
 
             ServiceDomainPlatformTransactionManager tm = new ServiceDomainPlatformTransactionManager(txAdapter);
             tm.TransactionSynchronization = TransactionSynchronizationState.Always;
@@ -136,53 +101,25 @@ namespace Spring.Data.Core
 
             Assert.IsTrue(!TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
 
-
-            mocks.VerifyAll();
+            A.CallTo(() => txAdapter.SetAbort()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => txAdapter.Enter(serviceConfig)).MustHaveHappenedOnceExactly();
         }
 
 
         [Test]
         public void PropagationRequiresNewWithExistingTransaction()
         {
-            #region Mock Setup
-            IServiceDomainAdapter txAdapter = (IServiceDomainAdapter)mocks.CreateMock(typeof(IServiceDomainAdapter));
-            using (mocks.Ordered())
-            {
+            IServiceDomainAdapter txAdapter = A.Fake<IServiceDomainAdapter>();
 
-                Expect.Call(txAdapter.IsInTransaction).Return(false);
-                SimpleServiceConfig serviceConfig = new SimpleServiceConfig();
-                ConfigureServiceConfig(serviceConfig, true);
-                txAdapter.Enter(serviceConfig);
+            A.CallTo(() => txAdapter.IsInTransaction)
+                .Returns(false).Once()
+                .Then.Returns(true).NumberOfTimes(3);
 
+            A.CallTo(() => txAdapter.Leave())
+                .Returns(TransactionStatus.Aborted).Once()
+                .Then.Returns(TransactionStatus.Commited).Once();
 
-                Expect.Call(txAdapter.IsInTransaction).Return(true);
-                // inner tx
-                ConfigureServiceConfig(serviceConfig, false);
-                serviceConfig.TransactionOption = TransactionOption.RequiresNew;
-                serviceConfig.IsolationLevel = TransactionIsolationLevel.ReadCommitted;
-                txAdapter.Enter(serviceConfig);
-                Expect.Call(txAdapter.IsInTransaction).Return(true);
-                txAdapter.SetAbort();
-                Expect.Call(txAdapter.Leave()).Return(TransactionStatus.Aborted);
-                // innter tx aborted
-
-
-                //ProcessCommit - status.GlobalRollbackOnly check
-                Expect.Call(txAdapter.MyTransactionVote).Return(TransactionVote.Commit);
-                //DoCommit      - status.GlobalRollbackOnly check
-                Expect.Call(txAdapter.MyTransactionVote).Return(TransactionVote.Commit);
-
-                Expect.Call(txAdapter.IsInTransaction).Return(true);
-                //DoCommit      - check to call SetComplete or SetAbort
-                Expect.Call(txAdapter.MyTransactionVote).Return(TransactionVote.Commit);
-                txAdapter.SetComplete();
-
-                Expect.Call(txAdapter.Leave()).Return(TransactionStatus.Commited);
-
-            }
-            #endregion 
-
-            mocks.ReplayAll();
+            A.CallTo(() => txAdapter.MyTransactionVote).Returns(TransactionVote.Commit).NumberOfTimes(3);
 
             ServiceDomainPlatformTransactionManager tm = new ServiceDomainPlatformTransactionManager(txAdapter);
             tm.TransactionSynchronization = TransactionSynchronizationState.Always;
@@ -190,10 +127,22 @@ namespace Spring.Data.Core
             TransactionTemplate tt = new TransactionTemplate(tm);
             tt.PropagationBehavior = TransactionPropagation.RequiresNew;
             tt.Execute(new PropagationRequiresNewWithExistingTransactionCallbackSD(tt));
-            mocks.VerifyAll();
+
+            SimpleServiceConfig serviceConfig = new SimpleServiceConfig();
+            ConfigureServiceConfig(serviceConfig, false);
+            serviceConfig.TransactionOption = TransactionOption.RequiresNew;
+            serviceConfig.IsolationLevel = TransactionIsolationLevel.ReadCommitted;
+            A.CallTo(() => txAdapter.Enter(serviceConfig)).MustHaveHappened();
+
+            ConfigureServiceConfig(serviceConfig, false);
+            serviceConfig.TransactionOption = TransactionOption.RequiresNew;
+            serviceConfig.IsolationLevel = TransactionIsolationLevel.ReadCommitted;
+            A.CallTo(() => txAdapter.Enter(serviceConfig)).MustHaveHappened();
+
+            A.CallTo(() => txAdapter.SetAbort()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => txAdapter.SetComplete()).MustHaveHappenedOnceExactly();
         }
 
-        #region Helper Methods
         private SimpleServiceConfig ConfigureServiceConfig(SimpleServiceConfig serviceConfig, bool standardIsolationAndProp)
         {
             serviceConfig.TransactionDescription = null;
@@ -206,13 +155,10 @@ namespace Spring.Data.Core
                 serviceConfig.TransactionOption = TransactionOption.Required;
                 serviceConfig.IsolationLevel = TransactionIsolationLevel.ReadCommitted;
             }
+
             return serviceConfig;
-
         }
-        #endregion
 
-
-        #region Supporting class for TransactionRollback test
 
         internal class TransactionRollbackTxCallback : ITransactionCallback
         {
@@ -232,9 +178,6 @@ namespace Spring.Data.Core
             }
         }
 
-        #endregion
-
-        #region Supporting class for PropagationRequiresNewWithExistingTransactionCallback test
         internal class PropagationRequiresNewWithExistingTransactionCallbackSD : ITransactionCallback
         {
             private TransactionTemplate tt;
@@ -264,12 +207,8 @@ namespace Spring.Data.Core
                 Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
                 Assert.IsTrue(TransactionSynchronizationManager.ActualTransactionActive);
                 status.SetRollbackOnly();
-                return null; 
+                return null;
             }
         }
-
-        #endregion
     }
-
-
 }

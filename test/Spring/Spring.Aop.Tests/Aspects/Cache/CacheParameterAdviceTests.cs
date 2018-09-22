@@ -18,16 +18,14 @@
 
 #endregion
 
-#region Imports
-
 using System;
 using System.Reflection;
+
+using FakeItEasy;
+
 using NUnit.Framework;
-using Rhino.Mocks;
 using Spring.Caching;
 using Spring.Context;
-
-#endregion
 
 namespace Spring.Aspects.Cache
 {
@@ -38,7 +36,6 @@ namespace Spring.Aspects.Cache
     [TestFixture]
     public sealed class CacheParameterAdviceTests
     {
-        private MockRepository mocks;
         private IApplicationContext mockContext;
         private CacheParameterAdvice advice;
         private ICache cache;
@@ -46,8 +43,7 @@ namespace Spring.Aspects.Cache
         [SetUp]
         public void SetUp()
         {
-            mocks = new MockRepository();
-            mockContext = (IApplicationContext) mocks.CreateMock(typeof (IApplicationContext));
+            mockContext = A.Fake<IApplicationContext>();
 
             advice = new CacheParameterAdvice();
             advice.ApplicationContext = mockContext;
@@ -62,14 +58,11 @@ namespace Spring.Aspects.Cache
             object[] args = new object[] {new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian")};
 
             ExpectCacheInstanceRetrieval("cache", cache);
-            mocks.ReplayAll();
 
             // parameter value should be added to cache
             advice.AfterReturning(null, method, args, null);
             Assert.AreEqual(1, cache.Count);
             Assert.AreEqual(args[0], cache.Get("Nikola Tesla"));
-
-            mocks.VerifyAll();
         }
 
         [Test]
@@ -79,14 +72,11 @@ namespace Spring.Aspects.Cache
             object[] args = new object[] { new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian") };
 
             ExpectCacheInstanceRetrieval("cache", cache);
-            mocks.ReplayAll();
 
             // parameter value should be added to cache
             advice.AfterReturning(null, method, args, null);
             Assert.AreEqual(1, cache.Count);
             Assert.AreEqual(args[0], cache.Get("Save-Nikola Tesla"));
-
-            mocks.VerifyAll();
         }
 
         [Test]
@@ -96,16 +86,13 @@ namespace Spring.Aspects.Cache
             object[] args = new object[] { new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian") };
 
             ExpectCacheInstanceRetrieval("cache", cache);
-            ExpectCacheInstanceRetrieval("cache", cache);  
-            mocks.ReplayAll();
+            ExpectCacheInstanceRetrieval("cache", cache);
 
             // parameter value should be added to both cache
             advice.AfterReturning(null, method, args, null);
             Assert.AreEqual(2, cache.Count);
             Assert.AreEqual(args[0], cache.Get("Nikola Tesla"));
             Assert.AreEqual(args[0], cache.Get("Serbian"));
-
-            mocks.VerifyAll();
         }
 
         [Test]
@@ -119,17 +106,11 @@ namespace Spring.Aspects.Cache
             Assert.AreEqual(0, cache.Count);
         }
 
-        #region Helper methods
-
         private void ExpectCacheInstanceRetrieval(string cacheName, ICache cacheToReturn)
         {
-            Expect.Call(mockContext.GetObject(cacheName)).Return(cacheToReturn);
+            A.CallTo(() => mockContext.GetObject(cacheName)).Returns(cacheToReturn).Once();
         }
-
-        #endregion
     }
-
-    #region Inner Class : CacheParameterTarget
 
     public interface ICacheParameterTarget
     {
@@ -163,6 +144,4 @@ namespace Spring.Aspects.Cache
         {
         }
     }
-
-    #endregion
 }

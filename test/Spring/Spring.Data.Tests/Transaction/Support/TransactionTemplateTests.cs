@@ -1,6 +1,8 @@
 using System;
+
+using FakeItEasy;
+
 using NUnit.Framework;
-using Rhino.Mocks;
 
 namespace Spring.Transaction.Support
 {
@@ -18,59 +20,60 @@ namespace Spring.Transaction.Support
         public void TxnMgr()
         {
             TransactionTemplate temp = new TransactionTemplate();
-            temp.PlatformTransactionManager = MockRepository.GenerateMock<IPlatformTransactionManager>();
+            temp.PlatformTransactionManager = A.Fake<IPlatformTransactionManager>();
             temp.AfterPropertiesSet();
         }
 
         [Test]
         public void ExecuteException()
         {
-            IPlatformTransactionManager mock = MockRepository.GenerateMock<IPlatformTransactionManager>();
+            IPlatformTransactionManager mock = A.Fake<IPlatformTransactionManager>();
 
             TransactionTemplate temp = new TransactionTemplate(mock);
             try
             {
-                temp.Execute(new TransactionDelegate(DummyExceptionMethod));
+                temp.Execute(DummyExceptionMethod);
             }
             catch
             {
             }
 
-            mock.AssertWasCalled(x => x.GetTransaction(Arg<ITransactionDefinition>.Is.Anything), constraints => constraints.Repeat.Once());
-            mock.AssertWasCalled(x => x.Rollback(Arg<ITransactionStatus>.Is.Anything), constraints => constraints.Repeat.Once());
+            A.CallTo(() => mock.GetTransaction(A<ITransactionDefinition>._)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => mock.Rollback(A<ITransactionStatus>._)).MustHaveHappenedOnceExactly();
         }
 
         [Test]
         public void ExecuteExceptionRollbackException()
         {
-            IPlatformTransactionManager mock = MockRepository.GenerateMock<IPlatformTransactionManager>();
-            mock.Stub(x => x.Rollback(Arg<ITransactionStatus>.Is.Anything)).Throw(new Exception("Rollback"));
+            IPlatformTransactionManager mock = A.Fake<IPlatformTransactionManager>();
+            A.CallTo(() => mock.Rollback(A<ITransactionStatus>._)).Throws(new Exception("Rollback"));
 
             TransactionTemplate temp = new TransactionTemplate(mock);
             try
             {
-                temp.Execute(new TransactionDelegate(DummyExceptionMethod));
+                temp.Execute(DummyExceptionMethod);
             }
             catch
             {
             }
 
-            mock.AssertWasCalled(x => x.GetTransaction(Arg<ITransactionDefinition>.Is.Anything), constraints => constraints.Repeat.Once());
-            mock.AssertWasCalled(x => x.Rollback(Arg<ITransactionStatus>.Is.Anything), constraints => constraints.Repeat.Once());
+            A.CallTo(() => mock.GetTransaction(A<ITransactionDefinition>._)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => mock.Rollback(A<ITransactionStatus>._)).MustHaveHappenedOnceExactly();
         }
 
         [Test]
         public void NullResult()
         {
-            IPlatformTransactionManager mock = MockRepository.GenerateMock<IPlatformTransactionManager>();
+            IPlatformTransactionManager mock = A.Fake<IPlatformTransactionManager>();
+            A.CallTo(() => mock.GetTransaction(A<ITransactionDefinition>._)).Returns(null);
 
             TransactionTemplate temp = new TransactionTemplate(mock);
             temp.AfterPropertiesSet();
             Assert.AreEqual(mock, temp.PlatformTransactionManager);
-            Assert.IsNull(temp.Execute(new TransactionDelegate(DummyTransactionMethod)));
+            Assert.IsNull(temp.Execute(DummyTransactionMethod));
 
-            mock.AssertWasCalled(x => x.GetTransaction(Arg<ITransactionDefinition>.Is.Anything), constraints => constraints.Repeat.Once());
-            mock.AssertWasCalled(x => x.Commit(Arg<ITransactionStatus>.Is.Anything), constraints => constraints.Repeat.Once());
+            A.CallTo(() => mock.GetTransaction(A<ITransactionDefinition>._)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => mock.Commit(A<ITransactionStatus>._)).MustHaveHappenedOnceExactly();
         }
 
         public object DummyTransactionMethod(ITransactionStatus status)

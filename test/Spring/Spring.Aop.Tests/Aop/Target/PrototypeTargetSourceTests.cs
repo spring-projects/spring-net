@@ -18,17 +18,17 @@
 
 #endregion
 
-#region Imports
-
 using System;
+
 using Common.Logging;
 using Common.Logging.Simple;
+
+using FakeItEasy;
+
 using NUnit.Framework;
+
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Xml;
-using Rhino.Mocks;
-
-#endregion
 
 namespace Spring.Aop.Target
 {
@@ -79,24 +79,16 @@ namespace Spring.Aop.Target
         [Test]
         public void TargetType()
         {
-            MockRepository mocks = new MockRepository();
             SideEffectObject target = new SideEffectObject();
 
-            IObjectFactory factory = mocks.CreateMock<IObjectFactory>();
+            IObjectFactory factory = A.Fake<IObjectFactory>();
 
-            using (mocks.Record())
-            {
-                Expect.Call(factory.IsPrototype(null)).Return(true);
-                Expect.Call(factory.GetType(null)).Return(typeof(SideEffectObject));
-            }
+            A.CallTo(() => factory.IsPrototype(null)).Returns(true);
+            A.CallTo(() => factory.GetType(null)).Returns(typeof(SideEffectObject));
 
-            using (mocks.Playback())
-            {
-                PrototypeTargetSource source = new PrototypeTargetSource();
-                source.ObjectFactory = factory;
-                Assert.AreEqual(target.GetType(), source.TargetType, "Wrong TargetType being returned.");
-            }
-
+            PrototypeTargetSource source = new PrototypeTargetSource();
+            source.ObjectFactory = factory;
+            Assert.AreEqual(target.GetType(), source.TargetType, "Wrong TargetType being returned.");
         }
 
         [Test]
@@ -109,49 +101,30 @@ namespace Spring.Aop.Target
         [Test]
         public void WithNonSingletonTargetObject()
         {
-            MockRepository mocks = new MockRepository();
-
-            IObjectFactory factory = mocks.CreateMock<IObjectFactory>();
+            IObjectFactory factory = A.Fake<IObjectFactory>();
             const string objectName = "Foo";
 
-            using (mocks.Record())
-            {
-                Expect.Call(factory.IsPrototype(objectName)).Return(false);
-            }
+            A.CallTo(() => factory.IsPrototype(objectName)).Returns(false);
+            PrototypeTargetSource source = new PrototypeTargetSource();
+            source.TargetObjectName = objectName;
 
-            using (mocks.Playback())
-            {
-                PrototypeTargetSource source = new PrototypeTargetSource();
-                source.TargetObjectName = objectName;
-
-                Assert.Throws<ObjectDefinitionStoreException>(delegate { source.ObjectFactory = factory; });
-            }
+            Assert.Throws<ObjectDefinitionStoreException>(delegate { source.ObjectFactory = factory; });
         }
 
         [Test]
         public void GetTarget()
         {
-            MockRepository mocks = new MockRepository();
-
-            IObjectFactory factory = mocks.CreateMock<IObjectFactory>();
+            IObjectFactory factory = A.Fake<IObjectFactory>();
             SideEffectObject target = new SideEffectObject();
+            A.CallTo(() => factory.IsPrototype("foo")).Returns(true);
+            A.CallTo(() => factory.GetObject("foo")).Returns(target);
+            A.CallTo(() => factory.GetType("foo")).Returns(typeof(string));
 
-            using (mocks.Record())
-            {
-                Expect.Call(factory.IsPrototype("foo")).Return(true);
-                Expect.Call(factory.GetObject("foo")).Return(target);
-                Expect.Call(factory.GetType("foo")).Return(typeof(string));
-            }
-
-            using (mocks.Playback())
-            {
-                PrototypeTargetSource source = new PrototypeTargetSource();
-                source.TargetObjectName = "foo";
-                source.ObjectFactory = factory;
-                Assert.IsTrue(object.ReferenceEquals(source.GetTarget(), target),
-                              "Initial target source reference not being returned by GetTarget().");
-            }
-
+            PrototypeTargetSource source = new PrototypeTargetSource();
+            source.TargetObjectName = "foo";
+            source.ObjectFactory = factory;
+            Assert.IsTrue(object.ReferenceEquals(source.GetTarget(), target),
+                "Initial target source reference not being returned by GetTarget().");
         }
 
         [Test]

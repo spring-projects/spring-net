@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,8 +22,10 @@
 
 using System;
 using System.Collections;
+
+using FakeItEasy;
 using NUnit.Framework;
-using Rhino.Mocks;
+
 using Spring.Objects.Factory.Support;
 using Spring.Objects.Support;
 
@@ -113,25 +115,19 @@ namespace Spring.Objects.Factory.Config
         {
             DefaultListableObjectFactory of = new DefaultListableObjectFactory();
 
-            MockRepository mocks = new MockRepository();
-            ISharedStateFactory ssf1 = mocks.StrictMock<ISharedStateFactory>();
-            ISharedStateAware ssa = (ISharedStateAware)mocks.DynamicMock( typeof( ISharedStateAware ) );
+            ISharedStateFactory ssf1 = A.Fake<ISharedStateFactory>();
+            ISharedStateAware ssa = A.Fake<ISharedStateAware>();
 
             SharedStateAwareProcessor ssap = new SharedStateAwareProcessor();
-            ssap.SharedStateFactories = new ISharedStateFactory[] { ssf1 };
-            of.RegisterSingleton( "ssap", ssap );
+            ssap.SharedStateFactories = new ISharedStateFactory[] {ssf1};
+            of.RegisterSingleton("ssap", ssap);
 
-            using (Record( mocks ))
-            {
-                // preset SharedState - ssap must ignore it
-                Expect.Call( ssa.SharedState ).Return( new Hashtable() );
-                // expect nothing else!
-            }
+            // preset SharedState - ssap must ignore it
+            A.CallTo(() => ssa.SharedState).Returns(new Hashtable());
 
-            using (Playback( mocks ))
-            {
-                ssap.PostProcessBeforeInitialization( ssa, "myPage" );
-            }
+            ssap.PostProcessBeforeInitialization(ssa, "myPage");
+
+            A.CallTo(ssa).Where(x => x.Method.Name == "set_SharedState").MustNotHaveHappened();
         }
 
         [Test]
@@ -139,53 +135,33 @@ namespace Spring.Objects.Factory.Config
         {
             DefaultListableObjectFactory of = new DefaultListableObjectFactory();
 
-            MockRepository mocks = new MockRepository();
-            ISharedStateFactory ssf1 = mocks.StrictMock<ISharedStateFactory>();
-            ISharedStateFactory ssf2 = mocks.StrictMock<ISharedStateFactory>();
-            ISharedStateFactory ssf3 = mocks.StrictMock<ISharedStateFactory>();
-            ISharedStateFactory ssf4 = mocks.StrictMock<ISharedStateFactory>();
+            ISharedStateFactory ssf1 = A.Fake<ISharedStateFactory>();
+            ISharedStateFactory ssf2 = A.Fake<ISharedStateFactory>();
+            ISharedStateFactory ssf3 = A.Fake<ISharedStateFactory>();
+            ISharedStateFactory ssf4 = A.Fake<ISharedStateFactory>();
             IDictionary ssf3ProvidedState = new Hashtable();
 
             SharedStateAwareProcessor ssap = new SharedStateAwareProcessor();
-            ssap.SharedStateFactories = new ISharedStateFactory[] { ssf1, ssf2, ssf3, ssf4 };
-            of.RegisterSingleton( "ssap", ssap );
+            ssap.SharedStateFactories = new ISharedStateFactory[] {ssf1, ssf2, ssf3, ssf4};
+            of.RegisterSingleton("ssap", ssap);
 
-            ISharedStateAware ssa = (ISharedStateAware)mocks.DynamicMock( typeof( ISharedStateAware ) );
+            ISharedStateAware ssa = A.Fake<ISharedStateAware>();
 
             // Ensure we iterate over configured SharedStateFactories until 
             // the first provider is found that
             // a) true == provider.CanProvideState( instance, name )
             // b) null != provider.GetSharedState( instance, name )
 
-            using (Record( mocks ))
-            {
-                Expect.Call( ssa.SharedState ).Return( null );
-                Expect.Call( ssf1.CanProvideState( ssa, "pageName" ) ).Return( false );
-                Expect.Call( ssf2.CanProvideState( ssa, "pageName" ) ).Return( true );
-                Expect.Call( ssf2.GetSharedStateFor( ssa, "pageName" ) ).Return( null );
-                Expect.Call( ssf3.CanProvideState( ssa, "pageName" ) ).Return( true );
-                Expect.Call( ssf3.GetSharedStateFor( ssa, "pageName" ) ).Return( ssf3ProvidedState );
-                Expect.Call( ssa.SharedState = ssf3ProvidedState );
-            }
+            A.CallTo(() => ssa.SharedState).Returns(null).Once();
+            A.CallTo(() => ssf1.CanProvideState(ssa, "pageName")).Returns(false).Once();
+            A.CallTo(() => ssf2.CanProvideState(ssa, "pageName")).Returns(true).Once();
+            A.CallTo(() => ssf2.GetSharedStateFor(ssa, "pageName")).Returns(null);
+            A.CallTo(() => ssf3.CanProvideState(ssa, "pageName")).Returns(true).Once();
+            A.CallTo(() => ssf3.GetSharedStateFor(ssa, "pageName")).Returns(ssf3ProvidedState).Once();
 
-            using (Playback( mocks ))
-            {
-                ssap.PostProcessBeforeInitialization( ssa, "pageName" );
-            }
+            ssap.PostProcessBeforeInitialization(ssa, "pageName");
+
+            Assert.That(Equals(ssa.SharedState, ssf3ProvidedState));
         }
-
-        #region Rhino.Mocks Compatibility Adapter
-
-        private static IDisposable Record( MockRepository mocks )
-        {
-            return mocks.Record();
-        }
-
-        private static IDisposable Playback( MockRepository mocks )
-        {
-            return mocks.Playback();
-        }
-
-        #endregion Rhino.Mocks Compatibility Adapter
     }
 }

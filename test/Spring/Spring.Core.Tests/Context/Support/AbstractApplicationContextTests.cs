@@ -18,11 +18,11 @@
 
 #endregion
 
-#region Imports
-
 using System;
+
+using FakeItEasy;
+
 using NUnit.Framework;
-using Rhino.Mocks;
 using Spring.Core;
 using Spring.Core.IO;
 using Spring.Objects;
@@ -31,8 +31,6 @@ using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Xml;
-
-#endregion
 
 namespace Spring.Context.Support
 {
@@ -60,7 +58,7 @@ namespace Spring.Context.Support
 
         public void ContextAwareDisplayName()
         {
-            
+
         }
 
 	    [Test]
@@ -96,8 +94,7 @@ namespace Spring.Context.Support
         [Test]
         public void DoesNotSearchParentContextForMessageSource()
         {
-            MockRepository mocks = new MockRepository();
-            IMessageSource msgSource = (IMessageSource) mocks.DynamicMock(typeof (IMessageSource));
+            IMessageSource msgSource = A.Fake<IMessageSource>();
             MockApplicationContext parentCtx = new MockApplicationContext("parentContext");
             parentCtx.ObjectFactory.RegisterSingleton(AbstractApplicationContext.MessageSourceObjectName, msgSource);
             MockApplicationContext childContext = new MockApplicationContext("childContext", parentCtx);
@@ -112,8 +109,7 @@ namespace Spring.Context.Support
         [Test]
         public void DoesNotSearchParentContextForEventRegistry()
         {
-            MockRepository mocks = new MockRepository();
-            IEventRegistry eventRegistry = (IEventRegistry)mocks.DynamicMock(typeof(IEventRegistry));
+            IEventRegistry eventRegistry = A.Fake<IEventRegistry>();
             MockApplicationContext parentCtx = new MockApplicationContext("parentContext");
             parentCtx.ObjectFactory.RegisterSingleton(AbstractApplicationContext.EventRegistryObjectName, eventRegistry);
             MockApplicationContext childContext = new MockApplicationContext("childContext", parentCtx);
@@ -398,7 +394,7 @@ namespace Spring.Context.Support
 <objects xmlns='http://www.springframework.net'>  
 	<object id='test2' type='DOESNOTEXIST' />
 </objects>
-"));      
+"));
             myContext.Refresh();
           }
           catch (Exception e)

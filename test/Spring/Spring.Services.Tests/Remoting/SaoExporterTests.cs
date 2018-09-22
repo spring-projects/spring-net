@@ -21,8 +21,10 @@
 #region Imports
 
 using System;
+
+using FakeItEasy;
+
 using NUnit.Framework;
-using Rhino.Mocks;
 
 using Spring.Core.IO;
 using Spring.Objects.Factory;
@@ -96,20 +98,18 @@ namespace Spring.Remoting
         }
 
         /// <summary>
-        /// Checks that we can also export if IFactoryObject.ObjectType returns an interface type, 
+        /// Checks that we can also export if IFactoryObject.ObjectType returns an interface type,
         /// </summary>
         [Test(Description = "http://jira.springframework.org/browse/SPRNET-1251")]
         public void CanExportFromFactoryObjectIfObjectTypeIsInterface()
         {
             using (DefaultListableObjectFactory of = new DefaultListableObjectFactory())
             {
-                MockRepository mocks = new MockRepository();
-                IFactoryObject simpleCounterFactory = (IFactoryObject) mocks.DynamicMock(typeof (IFactoryObject));
-                Expect.Call(simpleCounterFactory.ObjectType).Return(typeof (ISimpleCounter));
-                Expect.Call(simpleCounterFactory.IsSingleton).Return(true);
-                Expect.Call(simpleCounterFactory.GetObject()).Return(new SimpleCounter());
+                IFactoryObject simpleCounterFactory = A.Fake<IFactoryObject>();
+                A.CallTo(() => simpleCounterFactory.ObjectType).Returns(typeof (ISimpleCounter));
+                A.CallTo(() => simpleCounterFactory.IsSingleton).Returns(true);
+                A.CallTo(() => simpleCounterFactory.GetObject()).Returns(new SimpleCounter());
 
-                mocks.ReplayAll();
 
                 of.RegisterSingleton("simpleCounter", simpleCounterFactory);
                 SaoExporter saoExporter = new SaoExporter();
@@ -120,13 +120,11 @@ namespace Spring.Remoting
                 of.RegisterSingleton("simpleCounterExporter", saoExporter); // also tests SaoExporter.Dispose()!
 
                 AssertExportedService(saoExporter.ServiceName, 2);
-
-                mocks.VerifyAll();
             }
         }
 
         /// <summary>
-        /// Checks that exp an IFactoryObject.ObjectType returns an interface type, 
+        /// Checks that exp an IFactoryObject.ObjectType returns an interface type,
         /// </summary>
         [Test(Description = "http://jira.springframework.org/browse/SPRNET-1251")]
         public void ThrowsTypeLoadExceptionIfProxyInterfacesValueIsSpecifiedInsteadOfListElement()
@@ -136,10 +134,10 @@ namespace Spring.Remoting
                 XmlObjectDefinitionReader reader = new XmlObjectDefinitionReader(of);
                 reader.LoadObjectDefinitions(new StringResource(
                                                  @"<?xml version='1.0' encoding='UTF-8' ?>
-<objects xmlns='http://www.springframework.net' xmlns:r='http://www.springframework.net/remoting'>  
-    
+<objects xmlns='http://www.springframework.net' xmlns:r='http://www.springframework.net/remoting'>
+
     <r:saoExporter id='ISimpleCounterExporter' targetName='ISimpleCounterProxy' serviceName='RemotedSaoCounterProxy' />
-    
+
     <object id='ISimpleCounter' type='Spring.Remoting.SimpleCounter, Spring.Services.Tests' />
 
     <object id='ISimpleCounterProxy' type='Spring.Aop.Framework.ProxyFactoryObject, Spring.Aop'>

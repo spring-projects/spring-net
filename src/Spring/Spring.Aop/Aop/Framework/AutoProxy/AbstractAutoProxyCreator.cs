@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -109,13 +109,13 @@ namespace Spring.Aop.Framework.AutoProxy
         /// Indicates whether to mark the create proxy as immutable.
         /// </summary>
         /// <remarks>
-        /// Setting this to true effectively disables  modifying the generated 
+        /// Setting this to true effectively disables  modifying the generated
         /// proxy's advisor configuration
         /// </remarks>
         private bool freezeProxy = false;
 
         /// <summary>
-        /// Names of common interceptors. 
+        /// Names of common interceptors.
         /// We must use object name rather than object references
         /// to handle prototype advisors/interceptors.
         /// Default is the empty array: no common interceptors.
@@ -142,7 +142,7 @@ namespace Spring.Aop.Framework.AutoProxy
         #region Properties
 
         /// <summary>
-        /// Sets the AdvisorAdapterRegistry to use. 
+        /// Sets the AdvisorAdapterRegistry to use.
         /// </summary>
         /// <remarks>
         /// Default is the global AdvisorAdapterRegistry.
@@ -170,19 +170,19 @@ namespace Spring.Aop.Framework.AutoProxy
             set { customTargetSourceCreators = value; }
         }
 
-        /// <summary> 
-        /// Sets the common interceptors, a list of <see cref="AopAlliance.Aop.IAdvice"/>, 
+        /// <summary>
+        /// Sets the common interceptors, a list of <see cref="AopAlliance.Aop.IAdvice"/>,
         /// <see cref="Spring.Aop.IAdvisor"/> and introduction object names.
         /// </summary>
         /// <remarks>
         /// <para>
-        /// If this property isn't set, there will be zero common interceptors. 
+        /// If this property isn't set, there will be zero common interceptors.
         /// This is perfectly valid, if "specific" interceptors such as
         /// matching Advisors are all we want.
         /// </para>
         /// </remarks>
         /// <value>
-        /// The list of <see cref="AopAlliance.Aop.IAdvice"/>, 
+        /// The list of <see cref="AopAlliance.Aop.IAdvice"/>,
         /// <see cref="Spring.Aop.IAdvisor"/> and introduction object names.
         /// </value>
         /// <seealso cref="AopAlliance.Aop.IAdvice"/>
@@ -194,7 +194,7 @@ namespace Spring.Aop.Framework.AutoProxy
 
         /// <summary>
         /// Sets whether the common interceptors should be applied before
-        /// object-specific ones. 
+        /// object-specific ones.
         /// </summary>
         /// <remarks>
         /// Default is true; else, object-specific interceptors will get applied first.
@@ -683,7 +683,7 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <param name="pvs">The property values that the factory is about to apply (never <code>null</code>).</param>
         /// <param name="pis">he relevant property infos for the target object (with ignored
         /// dependency types - which the factory handles specifically - already filtered out)</param>
-        /// <param name="objectInstance">The object instance created, but whose properties have not yet 
+        /// <param name="objectInstance">The object instance created, but whose properties have not yet
         /// been set.</param>
         /// <param name="objectName">Name of the object.</param>
         /// <returns>The passed in PropertyValues</returns>

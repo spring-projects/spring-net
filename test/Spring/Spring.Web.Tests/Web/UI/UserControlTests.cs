@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,23 +18,22 @@
 
 #endregion
 
-#region Imports
-
 using System;
 using System.Web;
 using System.Web.UI;
+
+using FakeItEasy;
+
 using NUnit.Framework;
-using Rhino.Mocks;
+
 using Spring.TestSupport;
 using Spring.Validation;
 using Spring.Web.Support;
 
-#endregion
-
 namespace Spring.Web.UI
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     /// <author>Erich Eichinger</author>
     [TestFixture]
@@ -43,40 +42,28 @@ namespace Spring.Web.UI
         [Test]
         public void SetResultSelectsCorrectResult()
         {
-            MockRepository mocks = new MockRepository();
             TestUserControl uc = new TestUserControl();
-            Result theResult = (Result)mocks.CreateMock(typeof(Result));
-
-            using (mocks.Ordered())
-            {
-                theResult.Navigate(uc);
-            }
-            mocks.ReplayAll();
+            Result theResult = A.Fake<Result>();
 
             uc.Results.Add("theResult", theResult);
             uc.SetResult("theResult");
-            mocks.VerifyAll();
+
         }
 
         [Test]
         public void SetResultBubblesUpHierarchyUntilFirstMatch()
         {
-            MockRepository mocks = new MockRepository();
             TestUserControl c1 = new TestUserControl();
-            Control c11 = new Control(); c1.Controls.Add(c11);
+            Control c11 = new Control();
+            c1.Controls.Add(c11);
             TestUserControl c111 = new TestUserControl(c11);
-            Result theResult = (Result)mocks.CreateMock(typeof(Result));
-
-            using (mocks.Ordered())
-            {
-                // context is the control, that contains matching Result
-                theResult.Navigate(c1);
-            }
-            mocks.ReplayAll();
+            Result theResult = A.Fake<Result>();
 
             c1.Results.Add("theResult", theResult);
             c111.SetResult("theResult");
-            mocks.VerifyAll();
+
+            // context is the control, that contains matching Result
+            A.CallTo(() => theResult.Navigate(c1)).MustHaveHappened();
         }
 
         [Test]
@@ -104,7 +91,7 @@ namespace Spring.Web.UI
         {
             TestUserControl tuc = new TestUserControl();
             tuc.ModelPersistenceMedium = new DictionaryModelPersistenceMedium();
-            tuc.SaveModelToPersistenceMedium( this );
+            tuc.SaveModelToPersistenceMedium(this);
             Assert.AreEqual(this, tuc.LoadModelFromPersistenceMedium());
         }
     }

@@ -18,8 +18,6 @@
 
 #endregion
 
-#region Imports
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -27,14 +25,11 @@ using System.Globalization;
 using System.Reflection;
 using System.Runtime.Serialization;
 using NUnit.Framework;
-using Rhino.Mocks;
 using Spring.Core.TypeConversion;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Xml;
 using Spring.Objects.Support;
-
-#endregion
 
 namespace Spring.Objects.Factory
 {
@@ -46,13 +41,11 @@ namespace Spring.Objects.Factory
     [TestFixture]
     public sealed class DefaultListableObjectFactoryTests
     {
-        private MockRepository mocks;
-
         [SetUp]
         public void Setup()
         {
-            mocks = new MockRepository();
         }
+
         /// <summary>
         /// The setup logic executed before the execution of this test fixture.
         /// </summary>
@@ -79,7 +72,7 @@ namespace Spring.Objects.Factory
                 TheStrategy = strategy;
             }
         }
-        
+
         class Class2
         {
             private IStrategy _strategy;
@@ -293,8 +286,8 @@ namespace Spring.Objects.Factory
         [Test]
         public void GetObjectPostProcessorCount()
         {
-            IObjectPostProcessor proc1 = mocks.StrictMock<IObjectPostProcessor>();
-            IObjectPostProcessor proc2 = mocks.StrictMock<IObjectPostProcessor>();
+            IObjectPostProcessor proc1 = FakeItEasy.A.Fake<IObjectPostProcessor>();
+            IObjectPostProcessor proc2 = FakeItEasy.A.Fake<IObjectPostProcessor>();
 
             DefaultListableObjectFactory lof = new DefaultListableObjectFactory();
 
@@ -315,9 +308,8 @@ namespace Spring.Objects.Factory
         [Test]
         public void GetObjectPostProcessorCountDoesntRespectHierarchy()
         {
-
-            IObjectPostProcessor proc1 = mocks.StrictMock<IObjectPostProcessor>();
-            IObjectPostProcessor proc2 = mocks.StrictMock<IObjectPostProcessor>();
+            IObjectPostProcessor proc1 = FakeItEasy.A.Fake<IObjectPostProcessor>();
+            IObjectPostProcessor proc2 = FakeItEasy.A.Fake<IObjectPostProcessor>();
 
             DefaultListableObjectFactory child = new DefaultListableObjectFactory();
             DefaultListableObjectFactory parent = new DefaultListableObjectFactory(child);
@@ -1535,7 +1527,7 @@ namespace Spring.Objects.Factory
             DefaultListableObjectFactory fac = new DefaultListableObjectFactory();
             fac.RegisterObjectDefinition("foo", def);
 
-            Assert.Throws<UnsatisfiedDependencyException>(() => fac.GetObject("foo"), 
+            Assert.Throws<UnsatisfiedDependencyException>(() => fac.GetObject("foo"),
                 "Error creating object with name 'foo' : Unsatisfied dependency " +
                 "expressed through constructor argument with index 1 of type [System.Boolean] : " +
                 "No unique object of type [System.Boolean] is defined : Unsatisfied dependency of type [System.Boolean]: expected at least 1 matching object to wire the [b2] parameter on the constructor of object [foo]");
@@ -1650,7 +1642,7 @@ namespace Spring.Objects.Factory
         [Test]
         public void IgnoreObjectPostProcessorDuplicates()
         {
-            IObjectPostProcessor proc1 = mocks.StrictMock<IObjectPostProcessor>();
+            IObjectPostProcessor proc1 = FakeItEasy.A.Fake<IObjectPostProcessor>();
 
             DefaultListableObjectFactory lof = new DefaultListableObjectFactory();
 
@@ -1706,7 +1698,7 @@ namespace Spring.Objects.Factory
 
             object testObject = "TestObject";
             object resultObject = of.ConfigureObject(testObject, "myObjectDefinition");
-            Assert.AreSame(wrapperObject, resultObject);            
+            Assert.AreSame(wrapperObject, resultObject);
         }
 
         [Test]
@@ -1715,10 +1707,10 @@ namespace Spring.Objects.Factory
             DefaultListableObjectFactory of = new DefaultListableObjectFactory();
             object wrapperObject = "WrapperObject";
             of.AddObjectPostProcessor( new TestObjectPostProcessor(wrapperObject));
- 
+
             object testObject = "TestObject";
             object resultObject = of.ConfigureObject(testObject, "non-existant definition");
-            Assert.AreSame(testObject, resultObject);            
+            Assert.AreSame(testObject, resultObject);
         }
 
         [Test]

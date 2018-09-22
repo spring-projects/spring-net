@@ -36,11 +36,11 @@ namespace Spring.Web.UI.Controls
     /// within the page.
     /// </para>
     /// <para>
-    /// In contrast to <see cref="Content"/> control, ContentReplacer can replace the content of 
+    /// In contrast to <see cref="Content"/> control, ContentReplacer can replace the content of
     /// any control within the current page - it is not limited to replacing ContentPlaceholders on master pages.
     /// </para>
     /// <para>
-    /// This technique is useful if you want to group e.g. rendering navigation elements on 1 ascx control, but your 
+    /// This technique is useful if you want to group e.g. rendering navigation elements on 1 ascx control, but your
     /// design requires navigation elements to be distributed across different places within the HTML code.
     /// </para>
     /// </remarks>
@@ -71,7 +71,7 @@ namespace Spring.Web.UI.Controls
 			if (!Visible) return;
 
             //log.Debug(string.Format("OnPreRender Content['{0}']", this.contentPlaceHolderID));
-            Control ctlRoot = (this.Page.Master != null) ? (Control)this.Page.Master : (Control)this.Page;
+            Control ctlRoot = Page.Master != null ? Page.Master : (Control) Page;
 
             Control ctl = ctlRoot.FindControl(this.contentPlaceHolderID);
             if (ctl != null)
@@ -120,7 +120,7 @@ namespace Spring.Web.UI.Controls
 
         private static readonly PropertyInfo piRareFieldsEnsured =
             typeof(Control).GetProperty("RareFieldsEnsured", BindingFlags.NonPublic | BindingFlags.Instance);
-        private static readonly FieldInfo fiRenderMethod = 
+        private static readonly FieldInfo fiRenderMethod =
             typeof(Control).GetNestedType("ControlRareFields",BindingFlags.NonPublic).GetField("RenderMethod");
 
         private RenderMethod GetRenderMethod()

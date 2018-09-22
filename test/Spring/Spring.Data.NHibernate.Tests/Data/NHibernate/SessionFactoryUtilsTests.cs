@@ -18,9 +18,9 @@
 
 #endregion
 
-#region Imports
-
 using System.Data.SqlClient;
+
+using FakeItEasy;
 
 using NHibernate.Connection;
 using NHibernate.Driver;
@@ -28,11 +28,7 @@ using NHibernate.Engine;
 
 using NUnit.Framework;
 
-using Rhino.Mocks;
-
 using Spring.Data.Common;
-
-#endregion
 
 namespace Spring.Data.NHibernate
 {
@@ -46,23 +42,19 @@ namespace Spring.Data.NHibernate
         [Test]
         public void SessionFactoryUtilsWithGetDbProvider()
         {
-            MockRepository mockery = new MockRepository();
-            ISessionFactoryImplementor sessionFactory = mockery.DynamicMock<ISessionFactoryImplementor>();
+            ISessionFactoryImplementor sessionFactory = A.Fake<ISessionFactoryImplementor>();
 
-            DriverBase driver = mockery.DynamicMock<DriverBase>();
-            Expect.Call(driver.CreateCommand()).Repeat.AtLeastOnce().Return(new SqlCommand());
+            DriverBase driver = A.Fake<DriverBase>();
+            A.CallTo(() => driver.CreateCommand()).Returns(new SqlCommand());
 
-            IConnectionProvider cp = mockery.DynamicMock<IConnectionProvider>();
-            Expect.Call(cp.Driver).Repeat.AtLeastOnce().Return(driver);
+            IConnectionProvider cp = A.Fake<IConnectionProvider>();
+            A.CallTo(() => cp.Driver).Returns(driver);
 
-            Expect.Call(sessionFactory.ConnectionProvider).Repeat.AtLeastOnce().Return(cp);
+            A.CallTo(() => sessionFactory.ConnectionProvider).Returns(cp);
 
-            mockery.ReplayAll();
             IDbProvider provider = SessionFactoryUtils.GetDbProvider(sessionFactory);
 
             Assert.AreEqual(typeof(SqlCommand), provider.DbMetadata.CommandType);
-
-            mockery.VerifyAll();
         }
     }
 }

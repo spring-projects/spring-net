@@ -10,10 +10,11 @@
     <ProjectReference Include="..\Spring.Data.Tests\Spring.Data.Tests.2010.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="FakeItEasy" Version="$(FakeItEasyVersion)" />
+    <PackageReference Include="FakeItEasy.Analyzer" Version="$(FakeItEasyVersion)" PrivateAssets="All" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftTestSDKVersion)" />
     <PackageReference Include="NUnit" Version="$(NUnitVersion)" />
     <PackageReference Include="NUnit3TestAdapter" Version="$(NUnitTestAdapterVersion)" />
-    <PackageReference Include="RhinoMocks" Version="$(RhinoMocksVersion)" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Spring.Data.NHibernate.Tests\Data\NHibernate\Config\AopConfiguration.cs">

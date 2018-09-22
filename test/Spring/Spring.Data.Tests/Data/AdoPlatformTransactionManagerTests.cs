@@ -1,7 +1,5 @@
-#region License
-
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +14,14 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using System.Data;
 using System.Threading;
+
+using FakeItEasy;
+
 using NUnit.Framework;
-using Rhino.Mocks;
+
 using Spring.Dao;
 using Spring.Data.Common;
 using Spring.Data.Core;
@@ -32,8 +29,6 @@ using Spring.Data.Support;
 using Spring.Support;
 using Spring.Transaction;
 using Spring.Transaction.Support;
-
-#endregion
 
 namespace Spring.Data
 {
@@ -44,14 +39,7 @@ namespace Spring.Data
     [TestFixture]
     public class AdoPlatformTransactionManagerTests
     {
-        private MockRepository mocks;
         private const IsolationLevel DefaultIsolationLevel = IsolationLevel.ReadCommitted;
-
-        [SetUp]
-        public void Setup()
-        {
-            mocks = new MockRepository();
-        }
 
         [TearDown]
         public void TearDown()
@@ -65,26 +53,12 @@ namespace Spring.Data
         [Test]
         public void TransactionCommit()
         {
-            #region Mock setup
-            IDbProvider dbProvider = (IDbProvider) mocks.CreateMock(typeof (IDbProvider));
-            IDbConnection connection = mocks.StrictMock<IDbConnection>();
-            IDbTransaction transaction = mocks.StrictMock<IDbTransaction>();
+            IDbProvider dbProvider = A.Fake<IDbProvider>();
+            IDbConnection connection = A.Fake<IDbConnection>();
+            IDbTransaction transaction = A.Fake<IDbTransaction>();
 
-            using (mocks.Ordered())
-            {
-                Expect.Call(dbProvider.CreateConnection()).Return(connection);
-                connection.Open();
-                LastCall.On(connection).Repeat.Once();
-                Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction);
-                //standard tx timeout.
-                transaction.Commit();
-                LastCall.On(transaction).Repeat.Once();
-                connection.Dispose();
-            }
-
-            #endregion
-
-            mocks.ReplayAll();
+            A.CallTo(() => dbProvider.CreateConnection()).Returns(connection);
+            A.CallTo(() => connection.BeginTransaction(DefaultIsolationLevel)).Returns(transaction);
 
             AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
             tm.TransactionSynchronization = TransactionSynchronizationState.Always;
@@ -99,34 +73,21 @@ namespace Spring.Data
             Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
             Assert.IsTrue(!TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
 
-            mocks.VerifyAll();
+            A.CallTo(() => connection.Open()).MustHaveHappenedOnceExactly();
+            //standard tx timeout.
+            A.CallTo(() => transaction.Commit()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => connection.Dispose()).MustHaveHappenedOnceExactly();
         }
 
         [Test]
         public void TransactionRollback()
         {
-            #region Mock Setup
+            IDbProvider dbProvider = A.Fake<IDbProvider>();
+            IDbConnection connection = A.Fake<IDbConnection>();
+            IDbTransaction transaction = A.Fake<IDbTransaction>();
 
-            IDbProvider dbProvider = (IDbProvider) mocks.CreateMock(typeof (IDbProvider));
-            IDbConnection connection = mocks.StrictMock<IDbConnection>();
-            IDbTransaction transaction = mocks.StrictMock<IDbTransaction>();
-
-            using (mocks.Ordered())
-            {
-                Expect.Call(dbProvider.CreateConnection()).Return(connection);
-                connection.Open();
-                LastCall.On(connection).Repeat.Once();
-                Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction);
-                //standard tx timeout.
-                transaction.Rollback();
-                LastCall.On(transaction).Repeat.Once();
-
-                connection.Dispose();
-            }
-
-            #endregion
-
-            mocks.ReplayAll();
+            A.CallTo(() => dbProvider.CreateConnection()).Returns(connection);
+            A.CallTo(() => connection.BeginTransaction(DefaultIsolationLevel)).Returns(transaction);
 
             AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
             tm.TransactionSynchronization = TransactionSynchronizationState.Always;
@@ -150,29 +111,21 @@ namespace Spring.Data
             Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
             Assert.IsTrue(!TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
 
-
-            mocks.VerifyAll();
+            //standard tx timeout.
+            A.CallTo(() => connection.Open()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => transaction.Rollback()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => connection.Dispose()).MustHaveHappenedOnceExactly();
         }
 
         [Test]
         public void ParticipatingTransactionWithRollbackOnly()
         {
-            IDbProvider dbProvider = (IDbProvider) mocks.CreateMock(typeof (IDbProvider));
-            IDbConnection connection = mocks.StrictMock<IDbConnection>();
-            IDbTransaction transaction = mocks.StrictMock<IDbTransaction>();
+            IDbProvider dbProvider = A.Fake<IDbProvider>();
+            IDbConnection connection = A.Fake<IDbConnection>();
+            IDbTransaction transaction = A.Fake<IDbTransaction>();
 
-            using (mocks.Ordered())
-            {
-                Expect.Call(dbProvider.CreateConnection()).Return(connection);
-                connection.Open();
-                LastCall.On(connection).Repeat.Once();
-                Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction);
-                //standard tx timeout.
-                transaction.Rollback();
-                LastCall.On(transaction).Repeat.Once();
-                connection.Dispose();
-            }
-            mocks.ReplayAll();
+            A.CallTo(() => dbProvider.CreateConnection()).Returns(connection);
+            A.CallTo(() => connection.BeginTransaction(DefaultIsolationLevel)).Returns(transaction);
 
             AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
             tm.TransactionSynchronization = TransactionSynchronizationState.Always;
@@ -203,6 +156,7 @@ namespace Spring.Data
                 {
                     tm.Rollback(ts);
                 }
+
                 Assert.IsTrue(outerTransactionBoundaryReached);
             }
 
@@ -212,7 +166,10 @@ namespace Spring.Data
             Assert.IsFalse(synch.afterCommitCalled);
             Assert.IsTrue(synch.afterCompletionCalled);
 
-            mocks.VerifyAll();
+            //standard tx timeout.
+            A.CallTo(() => connection.Open()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => transaction.Rollback()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => connection.Dispose()).MustHaveHappenedOnceExactly();
         }
 
         [Test]
@@ -228,28 +185,12 @@ namespace Spring.Data
         [Test]
         public void PropagationRequiresNewWithExistingTransaction()
         {
-            #region Mock Setup
-            IDbProvider dbProvider = (IDbProvider) mocks.CreateMock(typeof (IDbProvider));
-            IDbConnection connection = mocks.StrictMock<IDbConnection>();
-            IDbTransaction transaction = mocks.StrictMock<IDbTransaction>();
+            IDbProvider dbProvider = A.Fake<IDbProvider>();
+            IDbConnection connection = A.Fake<IDbConnection>();
+            IDbTransaction transaction = A.Fake<IDbTransaction>();
 
-            Expect.Call(dbProvider.CreateConnection()).Return(connection).Repeat.Twice();
-            connection.Open();
-            LastCall.On(connection).Repeat.Twice();
-            Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction).Repeat.Twice();
-            //standard tx timeout.
-            transaction.Rollback();
-            LastCall.On(transaction).Repeat.Once();
-
-            transaction.Commit();
-            LastCall.On(transaction).Repeat.Once();
-
-            connection.Dispose();
-            LastCall.On(connection).Repeat.Twice();
-
-            #endregion
-
-            mocks.ReplayAll();
+            A.CallTo(() => dbProvider.CreateConnection()).Returns(connection);
+            A.CallTo(() => connection.BeginTransaction(DefaultIsolationLevel)).Returns(transaction);
 
             AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
             tm.TransactionSynchronization = TransactionSynchronizationState.Always;
@@ -265,37 +206,28 @@ namespace Spring.Data
 
             Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
 
-            mocks.VerifyAll();
+            A.CallTo(() => connection.Open()).MustHaveHappenedTwiceExactly();
+            A.CallTo(() => transaction.Rollback()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => connection.Dispose()).MustHaveHappenedTwiceExactly();
         }
 
         [Test]
         public void PropagationRequiresNewWithExistingTransactionAndUnrelatedDataSource()
         {
-            IDbProvider dbProvider = (IDbProvider) mocks.CreateMock(typeof (IDbProvider));
-            IDbConnection connection = mocks.StrictMock<IDbConnection>();
-            IDbTransaction transaction = mocks.StrictMock<IDbTransaction>();
+            IDbProvider dbProvider = A.Fake<IDbProvider>();
+            IDbConnection connection = A.Fake<IDbConnection>();
+            IDbTransaction transaction = A.Fake<IDbTransaction>();
 
-            Expect.Call(dbProvider.CreateConnection()).Return(connection);
-            connection.Open();
-            LastCall.On(connection).Repeat.Once();
-            Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction);
-            transaction.Commit();
-            LastCall.On(transaction).Repeat.Once();
-            connection.Dispose();
+            A.CallTo(() => dbProvider.CreateConnection()).Returns(connection);
+            A.CallTo(() => connection.BeginTransaction(DefaultIsolationLevel)).Returns(transaction);
 
-            IDbProvider dbProvider2 = (IDbProvider) mocks.CreateMock(typeof (IDbProvider));
-            IDbConnection connection2 = mocks.StrictMock<IDbConnection>();
-            IDbTransaction transaction2 = mocks.StrictMock<IDbTransaction>();
 
-            Expect.Call(dbProvider2.CreateConnection()).Return(connection2);
-            connection2.Open();
-            LastCall.On(connection2).Repeat.Once();
-            Expect.Call(connection2.BeginTransaction(DefaultIsolationLevel)).Return(transaction2);
-            transaction2.Rollback();
-            LastCall.On(transaction2).Repeat.Once();
-            connection2.Dispose();
+            IDbProvider dbProvider2 = A.Fake<IDbProvider>();
+            IDbConnection connection2 = A.Fake<IDbConnection>();
+            IDbTransaction transaction2 = A.Fake<IDbTransaction>();
 
-            mocks.ReplayAll();
+            A.CallTo(() => dbProvider2.CreateConnection()).Returns(connection2);
+            A.CallTo(() => connection2.BeginTransaction(DefaultIsolationLevel)).Returns(transaction2);
 
             AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
             tm.TransactionSynchronization = TransactionSynchronizationState.Always;
@@ -319,36 +251,31 @@ namespace Spring.Data
             Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
             Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider2), "Hasn't thread db provider");
 
-            mocks.VerifyAll();
+            A.CallTo(() => connection.Open()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => transaction.Commit()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => connection.Dispose()).MustHaveHappenedOnceExactly();
+
+            A.CallTo(() => connection2.Open()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => transaction2.Rollback()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => connection2.Dispose()).MustHaveHappenedOnceExactly();
         }
 
         [Test]
         public void PropagationRequiresNewWithExistingTransactionAndUnrelatedFailingDataSource()
         {
-            #region Mock Setup
-            IDbProvider dbProvider = mocks.StrictMock<IDbProvider>();
-            IDbConnection connection = mocks.StrictMock<IDbConnection>();            
-            IDbTransaction transaction = mocks.StrictMock<IDbTransaction>();
+            IDbProvider dbProvider = A.Fake<IDbProvider>();
+            IDbConnection connection = A.Fake<IDbConnection>();
+            IDbTransaction transaction = A.Fake<IDbTransaction>();
 
-            Expect.Call(dbProvider.CreateConnection()).Return(connection);
-            connection.Open();
-            LastCall.On(connection).Repeat.Once();
-            Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction);
-            transaction.Rollback();
-            LastCall.On(transaction).Repeat.Once();
-            connection.Dispose();
+            A.CallTo(() => dbProvider.CreateConnection()).Returns(connection);
+            A.CallTo(() => connection.BeginTransaction(DefaultIsolationLevel)).Returns(transaction);
 
-            IDbProvider dbProvider2 = mocks.StrictMock<IDbProvider>();
-            IDbConnection connection2 = mocks.StrictMock<IDbConnection>();
-           
-            Expect.Call(dbProvider2.CreateConnection()).Return(connection2);
-            connection2.Open();
+            IDbProvider dbProvider2 = A.Fake<IDbProvider>();
+            IDbConnection connection2 = A.Fake<IDbConnection>();
+
+            A.CallTo(() => dbProvider2.CreateConnection()).Returns(connection2);
             Exception failure = new Exception("can't open connection");
-            LastCall.On(connection2).Throw(failure);
-
-            #endregion
-
-            mocks.ReplayAll();
+            A.CallTo(() => connection2.Open()).Throws(failure);
 
             AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
             tm.TransactionSynchronization = TransactionSynchronizationState.Always;
@@ -370,38 +297,29 @@ namespace Spring.Data
                 tt.Execute(
                     new PropagationRequiresNewWithExistingTransactionAndUnrelatedFailingDataSourceCallback(tt2));
                 Assert.Fail("Should have thrown CannotCreateTransactionException");
-            } catch(CannotCreateTransactionException ex)
+            }
+            catch (CannotCreateTransactionException ex)
             {
                 Assert.AreSame(failure, ex.InnerException);
             }
 
             Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
             Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider2), "Hasn't thread db provider");
-            mocks.VerifyAll();
+
+            A.CallTo(() => connection.Open()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => transaction.Rollback()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => connection.Dispose()).MustHaveHappenedOnceExactly();
         }
 
         [Test]
         public void PropagationNotSupportedWithExistingTransaction()
         {
-            #region Mock Setup
-            IDbProvider dbProvider = mocks.StrictMock<IDbProvider>();
-            IDbConnection connection = mocks.StrictMock<IDbConnection>();
-            IDbTransaction transaction = mocks.StrictMock<IDbTransaction>();
+            IDbProvider dbProvider = A.Fake<IDbProvider>();
+            IDbConnection connection = A.Fake<IDbConnection>();
+            IDbTransaction transaction = A.Fake<IDbTransaction>();
 
-            using (mocks.Ordered())
-            {
-                Expect.Call(dbProvider.CreateConnection()).Return(connection);
-                connection.Open();
-                LastCall.On(connection).Repeat.Once();
-                Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction);
-                //standard tx timeout.
-                transaction.Commit();
-                LastCall.On(transaction).Repeat.Once();
-                connection.Dispose();
-            }
-            #endregion
-
-            mocks.ReplayAll();
+            A.CallTo(() => dbProvider.CreateConnection()).Returns(connection);
+            A.CallTo(() => connection.BeginTransaction(DefaultIsolationLevel)).Returns(transaction);
 
             AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
             tm.TransactionSynchronization = TransactionSynchronizationState.Always;
@@ -413,32 +331,20 @@ namespace Spring.Data
 
             tt.Execute(new PropagationNotSupportedWithExistingTransactionCallback(tt, dbProvider));
 
-            mocks.VerifyAll();
+            A.CallTo(() => connection.Open()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => transaction.Commit()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => connection.Dispose()).MustHaveHappenedOnceExactly();
         }
 
         [Test]
         public void PropagationNeverWithExistingTransaction()
         {
-            #region Mock Setup
-            IDbProvider dbProvider = mocks.StrictMock<IDbProvider>();
-            IDbConnection connection = mocks.StrictMock<IDbConnection>();
-            IDbTransaction transaction = mocks.StrictMock<IDbTransaction>();
+            IDbProvider dbProvider = A.Fake<IDbProvider>();
+            IDbConnection connection = A.Fake<IDbConnection>();
+            IDbTransaction transaction = A.Fake<IDbTransaction>();
 
-            using (mocks.Ordered())
-            {
-                Expect.Call(dbProvider.CreateConnection()).Return(connection);
-                connection.Open();
-                LastCall.On(connection).Repeat.Once();
-                Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction);
-                //standard tx timeout.
-                transaction.Rollback();
-                LastCall.On(transaction).Repeat.Once();
-
-                connection.Dispose();
-            }
-            #endregion
-
-            mocks.ReplayAll();
+            A.CallTo(() => dbProvider.CreateConnection()).Returns(connection);
+            A.CallTo(() => connection.BeginTransaction(DefaultIsolationLevel)).Returns(transaction);
 
             AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
             tm.TransactionSynchronization = TransactionSynchronizationState.Always;
@@ -452,42 +358,31 @@ namespace Spring.Data
             {
                 tt.Execute(new PropagationNeverWithExistingTransactionCallback(tt));
                 Assert.Fail("Should have thrown IllegalTransactionStateException");
-            } catch (IllegalTransactionStateException)
+            }
+            catch (IllegalTransactionStateException)
             {
                 //expected.
             }
+
             Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
 
-            mocks.VerifyAll();
+            A.CallTo(() => connection.Open()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => transaction.Rollback()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => connection.Dispose()).MustHaveHappenedOnceExactly();
         }
 
         [Test]
         public void PropagationRequiresNewWithExistingConnection()
         {
-            #region Mock Setup
+            IDbProvider dbProvider = A.Fake<IDbProvider>();
+            IDbConnection connection = A.Fake<IDbConnection>();
+            IDbConnection connection2 = A.Fake<IDbConnection>();
+            IDbTransaction transaction2 = A.Fake<IDbTransaction>();
 
-            IDbProvider dbProvider = mocks.StrictMock<IDbProvider>();
-            IDbConnection connection = mocks.StrictMock<IDbConnection>();
-            
-            Expect.Call(dbProvider.CreateConnection()).Return(connection);
-            connection.Open();
-            LastCall.On(connection).Repeat.Once();
-            connection.Dispose();
+            A.CallTo(() => dbProvider.CreateConnection()).Returns(connection).Once()
+                .Then.Returns(connection2).Once();
 
-            IDbConnection connection2 = mocks.StrictMock<IDbConnection>();
-            IDbTransaction transaction2 = mocks.StrictMock<IDbTransaction>();
-
-            Expect.Call(dbProvider.CreateConnection()).Return(connection2);
-            connection2.Open();
-            LastCall.On(connection2).Repeat.Once();
-            Expect.Call(connection2.BeginTransaction(DefaultIsolationLevel)).Return(transaction2);
-            transaction2.Commit();
-            LastCall.On(transaction2).Repeat.Once();
-            connection2.Dispose();
-
-            #endregion
-
-            mocks.ReplayAll();
+            A.CallTo(() => connection2.BeginTransaction(DefaultIsolationLevel)).Returns(transaction2);
 
             AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
             tm.TransactionSynchronization = TransactionSynchronizationState.Always;
@@ -499,35 +394,22 @@ namespace Spring.Data
 
             tt.Execute(new PropagationRequiresNewWithExistingConnectionCallback(tt, connection, connection2, dbProvider));
 
-
             Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
 
-            mocks.VerifyAll();
+            A.CallTo(() => connection.Open()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => connection.Dispose()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => connection2.Open()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => connection2.Dispose()).MustHaveHappenedOnceExactly();
         }
 
         [Test]
         public void TransactionWithIsolation()
         {
-            #region Mock setup
-            IDbProvider dbProvider = mocks.StrictMock<IDbProvider>();
-            IDbConnection connection = mocks.StrictMock<IDbConnection>();
-            IDbTransaction transaction = mocks.StrictMock<IDbTransaction>();
-
-            using (mocks.Ordered())
-            {
-                Expect.Call(dbProvider.CreateConnection()).Return(connection);
-                connection.Open();
-                LastCall.On(connection).Repeat.Once();
-                Expect.Call(connection.BeginTransaction(IsolationLevel.Serializable)).Return(transaction);
-                //standard tx timeout.
-                transaction.Commit();
-                LastCall.On(transaction).Repeat.Once();
-                connection.Dispose();
-            }
-
-            #endregion
-
-            mocks.ReplayAll();
+            IDbProvider dbProvider = A.Fake<IDbProvider>();
+            IDbConnection connection = A.Fake<IDbConnection>();
+            IDbTransaction transaction = A.Fake<IDbTransaction>();
+            A.CallTo(() => dbProvider.CreateConnection()).Returns(connection);
+            A.CallTo(() => connection.BeginTransaction(IsolationLevel.Serializable)).Returns(transaction);
 
             AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
             tm.TransactionSynchronization = TransactionSynchronizationState.Always;
@@ -541,13 +423,15 @@ namespace Spring.Data
 
             Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
 
-            mocks.VerifyAll();
+            A.CallTo(() => connection.Open()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => transaction.Commit()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => connection.Dispose()).MustHaveHappenedOnceExactly();
         }
 
         [Test]
         public void TransactionWithLongTimeout()
         {
-            DoTransactionWithTimeout(10);            
+            DoTransactionWithTimeout(10);
         }
 
         [Test]
@@ -558,38 +442,13 @@ namespace Spring.Data
 
         private void DoTransactionWithTimeout(int timeout)
         {
-            #region Mock setup
-
-            IDbProvider dbProvider = mocks.StrictMock<IDbProvider>();
-            IDbConnection connection = mocks.StrictMock<IDbConnection>();
-            IDbTransaction transaction = mocks.StrictMock<IDbTransaction>();
-            IDbCommand command = mocks.StrictMock<IDbCommand>();
-
-            using (mocks.Ordered())
-            {
-                Expect.Call(dbProvider.CreateConnection()).Return(connection);
-                connection.Open();
-               
-                LastCall.On(connection).Repeat.Once();
-                Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction);
-                Expect.Call(connection.CreateCommand()).Return(command);
-                command.CommandText = "some SQL statement";
-                LastCall.On(command).Repeat.Once();
-                if (timeout > 1)
-                {
-                    command.CommandTimeout = (timeout - 1);
-                    transaction.Commit();
-                } else
-                {
-                    transaction.Rollback();
-                }                
-                LastCall.On(transaction).Repeat.Once();
-                connection.Dispose();
-            }
-
-            #endregion
-
-            mocks.ReplayAll();
+            IDbProvider dbProvider = A.Fake<IDbProvider>();
+            IDbConnection connection = A.Fake<IDbConnection>();
+            IDbTransaction transaction = A.Fake<IDbTransaction>();
+            IDbCommand command = A.Fake<IDbCommand>();
+            A.CallTo(() => dbProvider.CreateConnection()).Returns(connection);
+            A.CallTo(() => connection.BeginTransaction(DefaultIsolationLevel)).Returns(transaction);
+            A.CallTo(() => connection.CreateCommand()).Returns(command);
 
             AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
             tm.TransactionSynchronization = TransactionSynchronizationState.Always;
@@ -606,12 +465,14 @@ namespace Spring.Data
                 {
                     Assert.Fail("Should have thrown TransactionTimedOutException");
                 }
-            } catch (TransactionTimedOutException)
+            }
+            catch (TransactionTimedOutException)
             {
-                if (timeout <=1 )
+                if (timeout <= 1)
                 {
                     //expected
-                } else
+                }
+                else
                 {
                     throw;
                 }
@@ -619,22 +480,28 @@ namespace Spring.Data
 
             Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
 
-            mocks.VerifyAll();
+            A.CallTo(() => connection.Open()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => connection.Dispose()).MustHaveHappenedOnceExactly();
+            A.CallToSet(() => command.CommandText).WhenArgumentsMatch(x => x.Get<string>(0) == "some SQL statement").MustHaveHappenedOnceExactly();
+
+            if (timeout > 1)
+            {
+                A.CallToSet(() => command.CommandTimeout).WhenArgumentsMatch(x => (int) x[0] == (timeout - 1)).MustHaveHappenedOnceExactly();
+                A.CallTo(() => transaction.Commit()).MustHaveHappenedOnceExactly();
+            }
+            else
+            {
+                A.CallTo(() => transaction.Rollback()).MustHaveHappenedOnceExactly();
+            }
         }
 
         [Test]
         public void TransactionWithExceptionOnBegin()
         {
-            #region Mock setup
-            IDbProvider dbProvider = mocks.StrictMock<IDbProvider>();       
-            
+            IDbProvider dbProvider = A.Fake<IDbProvider>();
+
             // CreateConnection is called in AdoPlatformTransactionManager.DoBegin
-            Expect.Call(dbProvider.CreateConnection()).Throw(new TestSqlException("Cannot begin", "314"));     
-            
-
-            #endregion
-
-            mocks.ReplayAll();
+            A.CallTo(() => dbProvider.CreateConnection()).Throws(new TestSqlException("Cannot begin", "314"));
 
             AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
             tm.TransactionSynchronization = TransactionSynchronizationState.Always;
@@ -642,16 +509,14 @@ namespace Spring.Data
             TransactionTemplate tt = new TransactionTemplate(tm);
             try
             {
-                tt.Execute(new TransactionDelegate(TransactionWithExceptionNoOp));                
-            } catch (CannotCreateTransactionException)
+                tt.Execute(TransactionWithExceptionNoOp);
+            }
+            catch (CannotCreateTransactionException)
             {
                 // expected
             }
 
-
             Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
-
-            mocks.VerifyAll();
         }
 
         private object TransactionWithExceptionNoOp(ITransactionStatus status)
@@ -662,70 +527,44 @@ namespace Spring.Data
         [Test]
         public void TransactionWithExceptionOnCommit()
         {
-            #region Mock setup
-            IDbProvider dbProvider = mocks.StrictMock<IDbProvider>();
-            IDbConnection connection = mocks.StrictMock<IDbConnection>();
-            IDbTransaction transaction = mocks.StrictMock<IDbTransaction>();
-
-            using (mocks.Ordered())
-            {
-                Expect.Call(dbProvider.CreateConnection()).Return(connection);
-                connection.Open();
-                LastCall.On(connection).Repeat.Once();
-                Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction);
-                //standard tx timeout.
-                transaction.Commit();
-                LastCall.On(transaction).Throw(new TestSqlException("Cannot commit", "314"));
-                connection.Dispose();
-            }
-
-            #endregion
-
-            mocks.ReplayAll();
+            IDbProvider dbProvider = A.Fake<IDbProvider>();
+            IDbConnection connection = A.Fake<IDbConnection>();
+            IDbTransaction transaction = A.Fake<IDbTransaction>();
+            A.CallTo(() => dbProvider.CreateConnection()).Returns(connection);
+            A.CallTo(() => connection.BeginTransaction(DefaultIsolationLevel)).Returns(transaction);
+            A.CallTo(() => transaction.Commit()).Throws(new TestSqlException("Cannot commit", "314"));
 
             AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
             tm.TransactionSynchronization = TransactionSynchronizationState.Always;
 
             TransactionTemplate tt = new TransactionTemplate(tm);
-            
+
             try
             {
-                tt.Execute(new TransactionDelegate(TransactionWithExceptionNoOp));
-            } catch (TransactionSystemException)
+                tt.Execute(TransactionWithExceptionNoOp);
+            }
+            catch (TransactionSystemException)
             {
                 //expected
             }
 
+
             Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
-            mocks.VerifyAll();
-            
+            A.CallTo(() => connection.Open()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => transaction.Commit()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => connection.Dispose()).MustHaveHappenedOnceExactly();
         }
 
 
         [Test]
         public void TransactionWithExceptionOnCommitAndRollbackOnCommitFailure()
         {
-            #region Mock Setup
-            IDbProvider dbProvider = mocks.StrictMock<IDbProvider>();
-            IDbConnection connection = mocks.StrictMock<IDbConnection>();
-            IDbTransaction transaction = mocks.StrictMock<IDbTransaction>();
-
-            using (mocks.Ordered())
-            {
-                Expect.Call(dbProvider.CreateConnection()).Return(connection);
-                connection.Open();
-                LastCall.On(connection).Repeat.Once();
-                Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction);
-                transaction.Commit();
-                LastCall.On(transaction).Throw(new TestSqlException("Cannot commit", "314"));
-
-                transaction.Rollback();
-                LastCall.On(transaction).Repeat.Once();
-
-                connection.Dispose();
-            }
-            #endregion
-            mocks.ReplayAll();
+            IDbProvider dbProvider = A.Fake<IDbProvider>();
+            IDbConnection connection = A.Fake<IDbConnection>();
+            IDbTransaction transaction = A.Fake<IDbTransaction>();
+            A.CallTo(() => dbProvider.CreateConnection()).Returns(connection);
+            A.CallTo(() => connection.BeginTransaction(DefaultIsolationLevel)).Returns(transaction);
+            A.CallTo(() => transaction.Commit()).Throws(new TestSqlException("Cannot commit", "314"));
 
             AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
             tm.TransactionSynchronization = TransactionSynchronizationState.Always;
@@ -735,7 +574,7 @@ namespace Spring.Data
 
             try
             {
-                tt.Execute(new TransactionDelegate(TransactionWithExceptionNoOp));
+                tt.Execute(TransactionWithExceptionNoOp);
             }
             catch (TransactionSystemException)
             {
@@ -744,34 +583,20 @@ namespace Spring.Data
 
             Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
 
-            mocks.VerifyAll();
+            A.CallTo(() => connection.Open()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => transaction.Rollback()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => connection.Dispose()).MustHaveHappenedOnceExactly();
         }
 
         [Test]
         public void TransactionWithExceptionOnRollback()
         {
-            #region Mock Setup
-
-            IDbProvider dbProvider = mocks.StrictMock<IDbProvider>();
-            IDbConnection connection = mocks.StrictMock<IDbConnection>();
-            IDbTransaction transaction = mocks.StrictMock<IDbTransaction>();
-
-            using (mocks.Ordered())
-            {
-                Expect.Call(dbProvider.CreateConnection()).Return(connection);
-                connection.Open();
-                LastCall.On(connection).Repeat.Once();
-                Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction);
-                //standard tx timeout.
-                transaction.Rollback();
-                LastCall.On(transaction).Throw(new TestSqlException("Cannot commit", "314"));
-
-                connection.Dispose();
-            }
-
-            #endregion
-
-            mocks.ReplayAll();
+            IDbProvider dbProvider = A.Fake<IDbProvider>();
+            IDbConnection connection = A.Fake<IDbConnection>();
+            IDbTransaction transaction = A.Fake<IDbTransaction>();
+            A.CallTo(() => dbProvider.CreateConnection()).Returns(connection);
+            A.CallTo(() => connection.BeginTransaction(DefaultIsolationLevel)).Returns(transaction);
+            A.CallTo(() => transaction.Rollback()).Throws(new TestSqlException("Cannot commit", "314"));
 
             AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
             tm.TransactionSynchronization = TransactionSynchronizationState.Always;
@@ -780,7 +605,7 @@ namespace Spring.Data
 
             try
             {
-                tt.Execute(new TransactionDelegate(TransactionWithExceptionOnRollbackMethod));
+                tt.Execute(TransactionWithExceptionOnRollbackMethod);
             }
             catch (TransactionSystemException)
             {
@@ -789,8 +614,9 @@ namespace Spring.Data
 
             Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
 
-            mocks.VerifyAll();
-
+            A.CallTo(() => connection.Open()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => transaction.Rollback()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => connection.Dispose()).MustHaveHappenedOnceExactly();
         }
 
         private object TransactionWithExceptionOnRollbackMethod(ITransactionStatus status)
@@ -802,9 +628,7 @@ namespace Spring.Data
         [Test]
         public void TransactionWithPropagationSupports()
         {
-            IDbProvider dbProvider = mocks.StrictMock<IDbProvider>();
-
-            mocks.ReplayAll();
+            IDbProvider dbProvider = A.Fake<IDbProvider>();
 
             AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
             tm.TransactionSynchronization = TransactionSynchronizationState.Always;
@@ -817,15 +641,12 @@ namespace Spring.Data
             tt.Execute(new TransactionWithPropagationSupportsCallback(dbProvider));
 
             Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
-            mocks.VerifyAll();
         }
 
         [Test]
         public void TransactionWithPropagationNotSupported()
         {
-            IDbProvider dbProvider = mocks.StrictMock<IDbProvider>();
-
-            mocks.ReplayAll();
+            IDbProvider dbProvider = A.Fake<IDbProvider>();
 
             AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
             tm.TransactionSynchronization = TransactionSynchronizationState.Always;
@@ -838,15 +659,12 @@ namespace Spring.Data
             tt.Execute(new TransactionWithPropagationNotSupportedCallback(dbProvider));
 
             Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
-            mocks.VerifyAll();
         }
 
         [Test]
         public void TransactionWithPropagationNever()
         {
-            IDbProvider dbProvider = mocks.StrictMock<IDbProvider>();
-
-            mocks.ReplayAll();
+            IDbProvider dbProvider = A.Fake<IDbProvider>();
 
             AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
             tm.TransactionSynchronization = TransactionSynchronizationState.Always;
@@ -859,39 +677,23 @@ namespace Spring.Data
             tt.Execute(new TransactionWithPropagationNotSupportedCallback(dbProvider));
 
             Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
-            mocks.VerifyAll();
         }
 
         [Test]
         public void ExistingTransactionWithPropagationNestedNotSupported()
         {
-            #region Mock setup
-            IDbProvider dbProvider = mocks.StrictMock<IDbProvider>();
-            IDbConnection connection = mocks.StrictMock<IDbConnection>();
-            IDbTransaction transaction = mocks.StrictMock<IDbTransaction>();
-
-            using (mocks.Ordered())
-            {
-                Expect.Call(dbProvider.CreateConnection()).Return(connection);
-                connection.Open();
-                LastCall.On(connection).Repeat.Once();
-                Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction);
-                
-                transaction.Rollback();
-                LastCall.On(transaction).Repeat.Once();
-                connection.Dispose();
-            }
-
-            #endregion
-
-            mocks.ReplayAll();
+            IDbProvider dbProvider = A.Fake<IDbProvider>();
+            IDbConnection connection = A.Fake<IDbConnection>();
+            IDbTransaction transaction = A.Fake<IDbTransaction>();
+            A.CallTo(() => dbProvider.CreateConnection()).Returns(connection);
+            A.CallTo(() => connection.BeginTransaction(DefaultIsolationLevel)).Returns(transaction);
 
             AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
             tm.TransactionSynchronization = TransactionSynchronizationState.Always;
 
             TransactionTemplate tt = new TransactionTemplate(tm);
             tt.PropagationBehavior = TransactionPropagation.Nested;
-            
+
             Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
             Assert.IsTrue(!TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
 
@@ -899,38 +701,26 @@ namespace Spring.Data
             {
                 tt.Execute(new ExistingTransactionWithPropagationNestedCallback(dbProvider, tt));
                 Assert.Fail("Should have thrown NestedTransactionNotSupportedException");
-            } catch (NestedTransactionNotSupportedException)
+            }
+            catch (NestedTransactionNotSupportedException)
             {
-                // expected 
+                // expected
             }
 
             Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
-            mocks.VerifyAll();
+            A.CallTo(() => connection.Open()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => transaction.Rollback()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => connection.Dispose()).MustHaveHappenedOnceExactly();
         }
 
         [Test]
         public void TransactionWithPropagationNested()
         {
-            #region Mock setup
-            IDbProvider dbProvider = mocks.StrictMock<IDbProvider>();
-            IDbConnection connection = mocks.StrictMock<IDbConnection>();
-            IDbTransaction transaction = mocks.StrictMock<IDbTransaction>();
-
-            using (mocks.Ordered())
-            {
-                Expect.Call(dbProvider.CreateConnection()).Return(connection);
-                connection.Open();
-                LastCall.On(connection).Repeat.Once();
-                Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction);
-                //standard tx timeout.
-                transaction.Commit();
-                LastCall.On(transaction).Repeat.Once();
-                connection.Dispose();
-            }
-
-            #endregion
-
-            mocks.ReplayAll();
+            IDbProvider dbProvider = A.Fake<IDbProvider>();
+            IDbConnection connection = A.Fake<IDbConnection>();
+            IDbTransaction transaction = A.Fake<IDbTransaction>();
+            A.CallTo(() => dbProvider.CreateConnection()).Returns(connection);
+            A.CallTo(() => connection.BeginTransaction(DefaultIsolationLevel)).Returns(transaction);
 
             AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
             tm.TransactionSynchronization = TransactionSynchronizationState.Always;
@@ -942,12 +732,13 @@ namespace Spring.Data
             Assert.IsTrue(!TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
 
 
-            tt.Execute(new TransactionDelegate(TransactionWithPropagationNestedMethod));
+            tt.Execute(TransactionWithPropagationNestedMethod);
 
             Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
-            mocks.VerifyAll();
 
-
+            A.CallTo(() => connection.Open()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => transaction.Commit()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => connection.Dispose()).MustHaveHappenedOnceExactly();
         }
 
         private object TransactionWithPropagationNestedMethod(ITransactionStatus status)
@@ -959,25 +750,11 @@ namespace Spring.Data
         [Test]
         public void TransactionWithPropagationNestedAndRollback()
         {
-            #region Mock setup
-            IDbProvider dbProvider = mocks.StrictMock<IDbProvider>();
-            IDbConnection connection = mocks.StrictMock<IDbConnection>();
-            IDbTransaction transaction = mocks.StrictMock<IDbTransaction>();
-
-            using (mocks.Ordered())
-            {
-                Expect.Call(dbProvider.CreateConnection()).Return(connection);
-                connection.Open();
-                LastCall.On(connection).Repeat.Once();
-                Expect.Call(connection.BeginTransaction(DefaultIsolationLevel)).Return(transaction);               
-                transaction.Rollback();
-                LastCall.On(transaction).Repeat.Once();
-                connection.Dispose();
-            }
-
-            #endregion
-
-            mocks.ReplayAll();
+            IDbProvider dbProvider = A.Fake<IDbProvider>();
+            IDbConnection connection = A.Fake<IDbConnection>();
+            IDbTransaction transaction = A.Fake<IDbTransaction>();
+            A.CallTo(() => dbProvider.CreateConnection()).Returns(connection);
+            A.CallTo(() => connection.BeginTransaction(DefaultIsolationLevel)).Returns(transaction);
 
             AdoPlatformTransactionManager tm = new AdoPlatformTransactionManager(dbProvider);
             tm.TransactionSynchronization = TransactionSynchronizationState.Always;
@@ -989,12 +766,13 @@ namespace Spring.Data
             Assert.IsTrue(!TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
 
 
-            tt.Execute(new TransactionDelegate(TransactionWithPropagationNestedAndRollbackMethod));
+            tt.Execute(TransactionWithPropagationNestedAndRollbackMethod);
 
             Assert.IsTrue(!TransactionSynchronizationManager.HasResource(dbProvider), "Hasn't thread db provider");
-            mocks.VerifyAll();
 
-
+            A.CallTo(() => connection.Open()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => transaction.Rollback()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => connection.Dispose()).MustHaveHappenedOnceExactly();
         }
 
         private object TransactionWithPropagationNestedAndRollbackMethod(ITransactionStatus status)
@@ -1020,7 +798,7 @@ namespace Spring.Data
         {
             Assert.IsTrue(status.IsNewTransaction, "Is new transaction");
             //TODO: Note no support for savepoints at this time (1.1), so can't check that a savepoint isn't present.
-            
+
             tt.Execute(new ExistingTransactionWithPropagationNestedCallback2(dbProvider));
 
             Assert.IsTrue(status.IsNewTransaction, "Is new transaction");
@@ -1048,7 +826,6 @@ namespace Spring.Data
         }
     }
 
-    #region Supporting class for TransactionWithPropagationNotSupported
     internal class TransactionWithPropagationNotSupportedCallback : ITransactionCallback
     {
         private IDbProvider provider;
@@ -1065,9 +842,7 @@ namespace Spring.Data
             return null;
         }
     }
-    #endregion
 
-    #region Supporting class for TransactionWithPropagationSupports
     internal class TransactionWithPropagationSupportsCallback : ITransactionCallback
     {
         private IDbProvider provider;
@@ -1080,20 +855,18 @@ namespace Spring.Data
         public object DoInTransaction(ITransactionStatus status)
         {
             Assert.IsTrue(!TransactionSynchronizationManager.HasResource(provider), "Hasn't thread db provider");
-            Assert.IsTrue(!status.IsNewTransaction,"Is not new transaction");
+            Assert.IsTrue(!status.IsNewTransaction, "Is not new transaction");
             Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
             Assert.IsFalse(TransactionSynchronizationManager.ActualTransactionActive);
             return null;
         }
     }
-    #endregion
 
-
-    #region Supporting class for TransactionWithTimeout
 
     internal class TransactionWithTimeoutCallback : ITransactionCallback
     {
         private IDbProvider provider;
+
         public TransactionWithTimeoutCallback(IDbProvider provider)
         {
             this.provider = provider;
@@ -1104,31 +877,31 @@ namespace Spring.Data
             try
             {
                 Thread.Sleep(1500);
-            } catch (Exception)
-            {
-                
             }
+            catch (Exception)
+            {
+            }
+
             try
             {
                 IDbConnection con = ConnectionUtils.GetConnection(provider);
                 IDbCommand cmd = con.CreateCommand();
                 cmd.CommandText = "some SQL statement";
                 ConnectionUtils.ApplyTransactionTimeout(cmd, provider);
-
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 if (e.GetType() != typeof(TransactionTimedOutException))
                 {
                     throw new DataAccessResourceFailureException("", e);
                 }
+
                 throw;
             }
+
             return null;
         }
     }
-    #endregion
-
-    #region Supporting class for PropagationRequiresNewWithExistingConnection
 
     internal class PropagationRequiresNewWithExistingConnectionCallback : ITransactionCallback
     {
@@ -1182,10 +955,6 @@ namespace Spring.Data
         }
     }
 
-    #endregion
-
-    #region Supporting classes for PropagationNeverWithExistingTransaction
-
     internal class PropagationNeverWithExistingTransactionCallback : ITransactionCallback
     {
         private TransactionTemplate innerTxTemplate;
@@ -1203,22 +972,17 @@ namespace Spring.Data
             innerTxTemplate.Execute(new PropagationNeverWithExistingTransactionCallback2());
             Assert.Fail("Should have thrown IllegalTransactionStateException");
             return null;
-        }        
+        }
     }
 
     internal class PropagationNeverWithExistingTransactionCallback2 : ITransactionCallback
     {
-
         public object DoInTransaction(ITransactionStatus status)
         {
             Assert.Fail("Should have thrown IllegalTransactionStateException");
             return null;
         }
     }
-
-    #endregion
-
-    #region Supporting classes for PropagationNotSupportedWithExistingTransaction
 
     internal class PropagationNotSupportedWithExistingTransactionCallback : ITransactionCallback
     {
@@ -1266,10 +1030,6 @@ namespace Spring.Data
         }
     }
 
-    #endregion
-
-    #region Supporting class for PropagationRequiresNewWithExistingTransactionAndUnrelatedFailingDataSource
-
     internal class PropagationRequiresNewWithExistingTransactionAndUnrelatedFailingDataSourceCallback : ITransactionCallback
     {
         private TransactionTemplate innerTxTemplate;
@@ -1300,17 +1060,13 @@ namespace Spring.Data
         }
     }
 
-    #endregion
-
-    #region Supporting class for PropagationRequiresNewWithExistingTransaction
-
     internal class PropagationRequiresNewWithExistingTransactionCallback : ITransactionCallback
     {
         private TransactionTemplate innerTxTemplate;
         private IDbProvider dbProvider;
 
         public PropagationRequiresNewWithExistingTransactionCallback(TransactionTemplate transactionTemplate,
-                                                                     IDbProvider provider)
+            IDbProvider provider)
         {
             innerTxTemplate = transactionTemplate;
             dbProvider = provider;
@@ -1352,10 +1108,6 @@ namespace Spring.Data
         }
     }
 
-    #endregion
-
-    #region Supporting class for TransactionCommit test
-
     internal class TransactionCommitTxCallback : ITransactionCallback
     {
         private IDbProvider provider;
@@ -1376,10 +1128,6 @@ namespace Spring.Data
         }
     }
 
-    #endregion
-
-    #region Supporting class for TransactionRollback test
-
     internal class TransactionRollbackTxCallback : ITransactionCallback
     {
         private IDbProvider provider;
@@ -1399,10 +1147,6 @@ namespace Spring.Data
             throw exception;
         }
     }
-
-    #endregion
-
-    #region Supporting class for ParticipatingTxWithRollbackOnly test
 
     internal class ParticipatingTxWithRollbackOnlyTxCallback : ITransactionCallback
     {
@@ -1446,11 +1190,6 @@ namespace Spring.Data
         }
     }
 
-    #endregion
-
-
-
-    #region Helper class
 
     internal class TestTransactionSynchronization : ITransactionSynchronization
     {
@@ -1463,7 +1202,7 @@ namespace Spring.Data
         public bool afterCompletionCalled;
 
         public TestTransactionSynchronization(IDbProvider provider,
-                                              TransactionSynchronizationStatus synchronizationStatus)
+            TransactionSynchronizationStatus synchronizationStatus)
         {
             this.provider = provider;
             status = synchronizationStatus;
@@ -1484,6 +1223,7 @@ namespace Spring.Data
             {
                 Assert.Fail("Should never be called");
             }
+
             Assert.IsFalse(beforeCommitCalled);
             beforeCommitCalled = true;
         }
@@ -1494,6 +1234,7 @@ namespace Spring.Data
             {
                 Assert.Fail("Should never be called");
             }
+
             Assert.IsFalse(afterCommitCalled);
             afterCommitCalled = true;
         }
@@ -1512,6 +1253,4 @@ namespace Spring.Data
             Assert.IsTrue(TransactionSynchronizationManager.HasResource(provider));
         }
     }
-
-    #endregion
 }

@@ -21,9 +21,13 @@
 #region Imports
 
 using System;
+
 using Apache.NMS;
+
+using FakeItEasy;
+
 using NUnit.Framework;
-using Rhino.Mocks;
+
 using Spring.Messaging.Nms.Listener;
 using Spring.Util;
 
@@ -39,53 +43,41 @@ namespace Spring.Messaging.Nms.Core
     public class SimpleMessageListenerContainerTests
     {
         private static string DESTINATION_NAME = "foo";
-
         private static StubQueue QUEUE_DESTINATION = new StubQueue();
-
         private static string EXCEPTION_MESSAGE = "This.Is.It";
-
         private SimpleMessageListenerContainer container;
-
-        private MockRepository mocks;
-
 
         [SetUp]
         public void Setup()
         {
-           mocks = new MockRepository();
-           container = new SimpleMessageListenerContainer();
+            container = new SimpleMessageListenerContainer();
         }
-
- 
 
         [Test]
         public void RegisteredExceptionListenerIsInvokedOnException()
         {
             SimpleMessageConsumer messageConsumer = new SimpleMessageConsumer();
 
-            ISession session = mocks.StrictMock<ISession>();
-            Expect.Call(session.GetQueue(DESTINATION_NAME)).Return(QUEUE_DESTINATION);
-            Expect.Call(session.CreateConsumer(QUEUE_DESTINATION, null)).Return(messageConsumer);
+            ISession session = A.Fake<ISession>();
+            A.CallTo(() => session.GetQueue(DESTINATION_NAME)).Returns(QUEUE_DESTINATION);
+            A.CallTo(() => session.CreateConsumer(QUEUE_DESTINATION, null)).Returns(messageConsumer);
             // an exception is thrown, so the rollback logic is being applied here...
-            Expect.Call(session.Transacted).Return(false);
+            A.CallTo(() => session.Transacted).Returns(false);
 
-            IConnection connection = mocks.StrictMock<IConnection>();
+            IConnection connection = A.Fake<IConnection>();
             connection.ExceptionListener += container.OnException;
-            Expect.Call(connection.CreateSession(container.SessionAcknowledgeMode)).Return(session);
+            A.CallTo(() => connection.CreateSession(container.SessionAcknowledgeMode)).Returns(session);
             connection.Start();
-            
-            IConnectionFactory connectionFactory = mocks.StrictMock<IConnectionFactory>();
-            Expect.Call(connectionFactory.CreateConnection()).Return(connection);
+
+            IConnectionFactory connectionFactory = A.Fake<IConnectionFactory>();
+            A.CallTo(() => connectionFactory.CreateConnection()).Returns(connection);
 
             NMSException theException = new NMSException(EXCEPTION_MESSAGE);
 
-            IExceptionListener exceptionListener = mocks.StrictMock<IExceptionListener>();
+            IExceptionListener exceptionListener = A.Fake<IExceptionListener>();
             exceptionListener.OnException(theException);
 
-            IMessage message = mocks.StrictMock<IMessage>();
-
-            mocks.ReplayAll();
-
+            IMessage message = A.Fake<IMessage>();
 
             container.ConnectionFactory = connectionFactory;
             container.DestinationName = DESTINATION_NAME;
@@ -95,7 +87,6 @@ namespace Spring.Messaging.Nms.Core
 
             // manually trigger an Exception with the above bad MessageListener...
             messageConsumer.SendMessage(message);
-            mocks.VerifyAll();
         }
 
         [Test]
@@ -103,29 +94,26 @@ namespace Spring.Messaging.Nms.Core
         {
             SimpleMessageConsumer messageConsumer = new SimpleMessageConsumer();
 
-            ISession session = mocks.StrictMock<ISession>();
-            Expect.Call(session.GetQueue(DESTINATION_NAME)).Return(QUEUE_DESTINATION);
-            Expect.Call(session.CreateConsumer(QUEUE_DESTINATION, null)).Return(messageConsumer);
+            ISession session = A.Fake<ISession>();
+            A.CallTo((() => session.GetQueue(DESTINATION_NAME))).Returns(QUEUE_DESTINATION);
+            A.CallTo((() => session.CreateConsumer(QUEUE_DESTINATION, null))).Returns(messageConsumer);
             // an exception is thrown, so the rollback logic is being applied here...
-            Expect.Call(session.Transacted).Return(false);
+            A.CallTo((() => session.Transacted)).Returns(false);
 
-            IConnection connection = mocks.StrictMock<IConnection>();
+            IConnection connection = A.Fake<IConnection>();
             connection.ExceptionListener += container.OnException;
-            Expect.Call(connection.CreateSession(container.SessionAcknowledgeMode)).Return(session);
+            A.CallTo((() => connection.CreateSession(container.SessionAcknowledgeMode))).Returns(session);
             connection.Start();
 
-            IConnectionFactory connectionFactory = mocks.StrictMock<IConnectionFactory>();
-            Expect.Call(connectionFactory.CreateConnection()).Return(connection);
+            IConnectionFactory connectionFactory = A.Fake<IConnectionFactory>();
+            A.CallTo((() => connectionFactory.CreateConnection())).Returns(connection);
 
             IllegalStateException theException = new IllegalStateException(EXCEPTION_MESSAGE);
 
-            IErrorHandler errorHandler = mocks.StrictMock<IErrorHandler>();
+            IErrorHandler errorHandler = A.Fake<IErrorHandler>();
             errorHandler.HandleError(theException);
 
-            IMessage message = mocks.StrictMock<IMessage>();
-
-            mocks.ReplayAll();
-
+            IMessage message = A.Fake<IMessage>();
 
             container.ConnectionFactory = connectionFactory;
             container.DestinationName = DESTINATION_NAME;
@@ -135,64 +123,62 @@ namespace Spring.Messaging.Nms.Core
 
             // manually trigger an Exception with the above bad MessageListener...
             messageConsumer.SendMessage(message);
-
-            mocks.VerifyAll();
         }
-    }
 
-    internal class BadSessionAwareMessageListener : ISessionAwareMessageListener
-    {
-        private NMSException exception;
-        public BadSessionAwareMessageListener(NMSException exception)
+        internal class BadSessionAwareMessageListener : ISessionAwareMessageListener
         {
-            this.exception = exception;
+            private NMSException exception;
+
+            public BadSessionAwareMessageListener(NMSException exception)
+            {
+                this.exception = exception;
+            }
+
+            public void OnMessage(IMessage message, ISession session)
+            {
+                throw exception;
+            }
         }
 
-        public void OnMessage(IMessage message, ISession session)
+        internal class SimpleMessageConsumer : IMessageConsumer
         {
-            throw exception;
+            public event MessageListener Listener;
+
+            public void SendMessage(IMessage message)
+            {
+                Listener(message);
+            }
+
+            public IMessage Receive()
+            {
+                throw new NotImplementedException();
+            }
+
+            public IMessage Receive(TimeSpan timeout)
+            {
+                throw new NotImplementedException();
+            }
+
+            public IMessage ReceiveNoWait()
+            {
+                throw new NotImplementedException();
+            }
+
+            public void Close()
+            {
+                throw new NotImplementedException();
+            }
+
+            public ConsumerTransformerDelegate ConsumerTransformer
+            {
+                get { throw new NotImplementedException(); }
+                set { throw new NotImplementedException(); }
+            }
+
+            public void Dispose()
+            {
+                throw new NotImplementedException();
+            }
         }
-    }
-
-    internal class SimpleMessageConsumer : IMessageConsumer
-    {
-        public event MessageListener Listener;
-
-        public void SendMessage(IMessage message)
-        {
-            Listener(message);
-        }
-        public IMessage Receive()
-        {
-            throw new NotImplementedException();
-        }
-
-        public IMessage Receive(TimeSpan timeout)
-        {
-            throw new NotImplementedException();
-        }
-
-        public IMessage ReceiveNoWait()
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Close()
-        {
-            throw new NotImplementedException();
-        }
-
-        public ConsumerTransformerDelegate ConsumerTransformer
-        {
-            get { throw new NotImplementedException(); }
-            set { throw new NotImplementedException(); }
-        }
-
-        public void Dispose()
-        {
-            throw new NotImplementedException();
-        }
-
-
     }
 }

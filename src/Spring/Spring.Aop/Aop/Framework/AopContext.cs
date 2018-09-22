@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ namespace Spring.Aop.Framework
 	/// advice configuration.
 	/// </p>
     /// <p>
-    /// To expose the current proxy, set the <see cref="Spring.Aop.Framework.ProxyConfig.ExposeProxy"/> 
+    /// To expose the current proxy, set the <see cref="Spring.Aop.Framework.ProxyConfig.ExposeProxy"/>
     /// property on the controlling proxy to <see langword="true"/>.
     /// The default value for the <see cref="Spring.Aop.Framework.ProxyConfig.ExposeProxy"/> property
     /// is <see langword="false"/>, for performance reasons.
@@ -70,7 +70,7 @@ namespace Spring.Aop.Framework
 		/// </summary>
 		private static Stack ProxyStack
         {
-            get 
+            get
             {
                 if (tls_ProxyStack == null)
                 {
@@ -90,7 +90,7 @@ namespace Spring.Aop.Framework
         /// on the controlling proxy has been set to <see langword="true"/>.
         /// </p>
         /// <p>
-        /// The default value for the 
+        /// The default value for the
         /// <see cref="Spring.Aop.Framework.ProxyConfig.ExposeProxy"/> property
         /// is <see langword="false"/>, for performance reasons.
         /// </p>
@@ -99,7 +99,7 @@ namespace Spring.Aop.Framework
 	    {
 	        get
 	        {
-	            return (tls_ProxyStack != null && tls_ProxyStack.Count > 0);	            
+	            return (tls_ProxyStack != null && tls_ProxyStack.Count > 0);
 	        }
 	    }
 
@@ -125,7 +125,7 @@ namespace Spring.Aop.Framework
 		}
 
 		/// <summary>
-		/// Sets the current proxy by pushing it to the proxy stack. 
+		/// Sets the current proxy by pushing it to the proxy stack.
 		/// </summary>
 		/// <remarks>
 		/// <p>

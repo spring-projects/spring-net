@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -236,7 +236,7 @@ namespace Spring.Context.Support
         /// processors being added to the underlying <see cref="IConfigurableObjectFactory"/>
         /// </summary>
         /// <remarks>
-        /// Each time <see cref="Refresh()"/> is called on this context, the context ensures, that 
+        /// Each time <see cref="Refresh()"/> is called on this context, the context ensures, that
         /// all default <see cref="IObjectPostProcessor"/>s are registered with the underlying <see cref="IConfigurableObjectFactory"/>.
         /// </remarks>
         /// <param name="defaultObjectPostProcessor">The <see cref="IObjectPostProcessor"/> instance.</param>
@@ -268,7 +268,7 @@ namespace Spring.Context.Support
 
             #endregion
 
-            // Closed event is raised before destroying objectfactory to enable registered IApplicationEventListeners 
+            // Closed event is raised before destroying objectfactory to enable registered IApplicationEventListeners
             // to handle the event before they get disposed.
             PublishEvent(this, new ContextClosedEventArgs());
 
@@ -1046,7 +1046,7 @@ namespace Spring.Context.Support
         }
 
         /// <summary>
-        /// Registers well-known <see cref="IObjectPostProcessor"/>s and 
+        /// Registers well-known <see cref="IObjectPostProcessor"/>s and
         /// preregisters well-known dependencies using <see cref="IConfigurableListableObjectFactory.RegisterResolvableDependency"/>
         /// </summary>
         /// <param name="objectFactory">the raw object factory as returned from <see cref="RefreshObjectFactory"/></param>
@@ -1370,14 +1370,14 @@ namespace Spring.Context.Support
         {
             return GetObjectDefinitionNames(false);
         }
-        
+
         /// <summary>
         /// Return the names of all objects defined in this factory, if <code>includeAncestors</code>is <code>true</code>
         /// includes all parent factories.
         /// </summary>
         /// <param name="includeAncestors">to include parent factories into result</param>
         /// <returns>
-        /// The names of all objects defined in this factory, if <code>includeAncestors</code> is <code>true</code> includes all 
+        /// The names of all objects defined in this factory, if <code>includeAncestors</code> is <code>true</code> includes all
         /// objects defined in parent factories, or an empty array if none are defined.
         /// </returns>
         public IList<string> GetObjectDefinitionNames(bool includeAncestors)
@@ -1401,7 +1401,7 @@ namespace Spring.Context.Support
         /// </exception>
         /// <exception cref="Spring.Objects.ObjectsException">
         /// In the case of errors.
-        /// </exception>        
+        /// </exception>
         public virtual IObjectDefinition GetObjectDefinition(string name)
         {
             return SafeGetObjectFactory().GetObjectDefinition(name);
@@ -1425,7 +1425,7 @@ namespace Spring.Context.Support
         /// </exception>
         /// <exception cref="Spring.Objects.ObjectsException">
         /// In the case of errors.
-        /// </exception>       
+        /// </exception>
         public IObjectDefinition GetObjectDefinition(string name, bool includeAncestors)
         {
             return SafeGetObjectFactory().GetObjectDefinition(name, includeAncestors);
@@ -2099,7 +2099,7 @@ namespace Spring.Context.Support
         /// of the given name from an ancestor object factory.
         /// </summary>
         /// <remarks>
-        /// 
+        ///
         /// </remarks>
         /// <param name="name">The name of the object to query.</param>
         /// <returns>
@@ -2115,8 +2115,8 @@ namespace Spring.Context.Support
         #region IObjectDefinitionRegistry Members
 
         /// <summary>
-        /// Determine whether the given object name is already in use within this context, 
-        /// i.e. whether there is a local object. May be override by subclasses, the default 
+        /// Determine whether the given object name is already in use within this context,
+        /// i.e. whether there is a local object. May be override by subclasses, the default
         /// implementation simply returns <see cref="ContainsLocalObject"/>
         /// </summary>
         public virtual bool IsObjectNameInUse(string objectName)
@@ -2496,7 +2496,7 @@ namespace Spring.Context.Support
         /// </summary>
         /// <remarks>
         /// <p>
-        /// 
+        ///
         /// </p>
         /// </remarks>
         /// <param name="sender">

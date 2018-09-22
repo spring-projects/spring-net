@@ -108,17 +108,17 @@ namespace Spring.Context.Support
 
             // MessageSourceAccessor functionality
             MessageSourceAccessor accessor = new MessageSourceAccessor(ac);
-            Assert.AreEqual("message3", accessor.GetMessage("code3", CultureInfo.CurrentUICulture, (object[])null));
+            Assert.AreEqual("message3", accessor.GetMessage("code3", CultureInfo.CurrentUICulture, null));
 
             // IMessageSourceResolveable
-            Assert.AreEqual("message3", ac.GetMessage("code3", CultureInfo.CurrentUICulture, (object[])null));
+            Assert.AreEqual("message3", ac.GetMessage("code3", CultureInfo.CurrentUICulture, null));
             IMessageSourceResolvable resolvable = new DefaultMessageSourceResolvable("code3");
 
             Assert.AreEqual("message3", ac.GetMessage(resolvable, CultureInfo.CurrentUICulture));
             resolvable = new DefaultMessageSourceResolvable(new string[] { "code4", "code3" });
             Assert.AreEqual("message3", ac.GetMessage(resolvable, CultureInfo.CurrentUICulture));
 
-            Assert.AreEqual("message3", ac.GetMessage("code3", CultureInfo.CurrentUICulture, (object[])null));
+            Assert.AreEqual("message3", ac.GetMessage("code3", CultureInfo.CurrentUICulture, null));
             resolvable = new DefaultMessageSourceResolvable(new string[] { "code4", "code3" });
             Assert.AreEqual("message3", ac.GetMessage(resolvable, CultureInfo.CurrentUICulture));
 
@@ -130,7 +130,7 @@ namespace Spring.Context.Support
             Assert.AreEqual("default", ac.GetMessage(null, "default", CultureInfo.CurrentUICulture, null));
             Assert.AreEqual("default", ac.GetMessage(null, "default", CultureInfo.CurrentUICulture, arguments));
 
-            /* not supported 
+            /* not supported
             Assert.AreEqual("{0}, default", ac.GetMessage(null, "{0}, default", CultureInfo.CurrentUICulture, null));
              */
 
@@ -142,7 +142,7 @@ namespace Spring.Context.Support
             resolvable = new DefaultMessageSourceResolvable(null, arguments, "default");
             Assert.AreEqual("default", ac.GetMessage(resolvable, CultureInfo.CurrentUICulture));
 
-            /* not supported 
+            /* not supported
                 resolvable = new DefaultMessageSourceResolvable(null, null, "{0}, default");
                 Assert.AreEqual("{0}, default", ac.GetMessage(resolvable, CultureInfo.CurrentUICulture));
             */
@@ -154,12 +154,12 @@ namespace Spring.Context.Support
             // test message args
             Assert.AreEqual("Arg1, Arg2", ac.GetMessage("hello", CultureInfo.CurrentUICulture, new object[] { "Arg1", "Arg2" }));
 
-            /* not supported 
+            /* not supported
                 Assert.AreEqual("{0}, {1}", ac.GetMessage("hello", CultureInfo.CurrentUICulture, null));
             */
 
 
-            /* not supported 
+            /* not supported
                 Assert.AreEqual("Hello\nWorld", ac.GetMessage("escaped"));
             }
             else
@@ -277,7 +277,7 @@ namespace Spring.Context.Support
                 Assert.AreEqual("Ово је Spring.NET",
                                 msgSource.GetMessage("MyMessage", new CultureInfo(CultureInfoUtils.SerbianCyrillicCultureName),
                                                          new object[] { "Spring", ".NET" }), "message not as expected");
-                
+
                 Assert.AreEqual("Visual Studio voli Spring.NET",
                                 msgSource.GetMessage("MyNewMessage", new CultureInfo(CultureInfoUtils.SerbianCyrillicCultureName), new object[] { "Spring", ".NET" }), "message not as expected");
 

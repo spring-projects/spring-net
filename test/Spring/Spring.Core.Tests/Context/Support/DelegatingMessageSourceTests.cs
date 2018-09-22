@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +18,12 @@
 
 #endregion
 
-#region Imports
-
 using System;
 using System.Globalization;
-using NUnit.Framework;
-using Rhino.Mocks;
 
-#endregion
+using FakeItEasy;
+
+using NUnit.Framework;
 
 namespace Spring.Context.Support
 {
@@ -36,16 +34,14 @@ namespace Spring.Context.Support
 	[TestFixture]
     public sealed class DelegatingMessageSourceTests
 	{
-	    private MockRepository mocks;
-
-		private const string LookupKey = "rick";
+	    private const string LookupKey = "rick";
 		private IMessageSource _messageSource;
 
 		private IMessageSource MockMessageSource
 		{
 			get
 			{
-			    return _messageSource;                
+			    return _messageSource;
 			}
 		}
 
@@ -55,16 +51,14 @@ namespace Spring.Context.Support
         [SetUp]
         public void SetUp()
         {
-            mocks = new MockRepository();
-            _messageSource = mocks.StrictMock<IMessageSource>();
+            _messageSource = A.Fake<IMessageSource>();
         }
 
         [Test]
         public void Instantiation()
 		{
 			DelegatingMessageSource source = new DelegatingMessageSource();
-			Assert.IsNotNull(source.ParentMessageSource,
-				"ParentMessageSource property must *never* be null.");
+			Assert.IsNotNull(source.ParentMessageSource, "ParentMessageSource property must *never* be null.");
 		}
 
 		[Test]
@@ -80,14 +74,11 @@ namespace Spring.Context.Support
 		[Test]
 		public void GetMessage()
 		{
-			const string expectedName = "Rick Evans";	   
-		    Expect.Call(MockMessageSource.GetMessage(LookupKey)).Return(expectedName);
-			DelegatingMessageSource source
-				= new DelegatingMessageSource(MockMessageSource);
-            mocks.ReplayAll();
+			const string expectedName = "Rick Evans";
+		    A.CallTo(() => MockMessageSource.GetMessage(LookupKey)).Returns(expectedName);
+			DelegatingMessageSource source = new DelegatingMessageSource(MockMessageSource);
 			string name = source.GetMessage(LookupKey);
 			Assert.AreEqual(expectedName, name);
-            mocks.VerifyAll();
 		}
 
 		[Test]
@@ -101,13 +92,10 @@ namespace Spring.Context.Support
 		public void GetMessageWithCulture()
 		{
 			const string expectedName = "Rick Evans";
-		    Expect.Call(MockMessageSource.GetMessage(LookupKey, CultureInfo.InvariantCulture)).Return(expectedName);
-			DelegatingMessageSource source
-				= new DelegatingMessageSource(MockMessageSource);
-            mocks.ReplayAll();		   
+            A.CallTo(() => MockMessageSource.GetMessage(LookupKey, CultureInfo.InvariantCulture)).Returns(expectedName);
+			DelegatingMessageSource source = new DelegatingMessageSource(MockMessageSource);
 			string name = source.GetMessage(LookupKey, CultureInfo.InvariantCulture);
 			Assert.AreEqual(expectedName, name);
-            mocks.VerifyAll();
 		}
 
 		[Test]
@@ -121,13 +109,10 @@ namespace Spring.Context.Support
 		public void GetMessageWithParams()
 		{
 			const string expectedName = "Rick Evans";
-		    Expect.Call(MockMessageSource.GetMessage(LookupKey, new string[] {"Rick", "Evans"})).Return(expectedName);
-			DelegatingMessageSource source
-				= new DelegatingMessageSource(MockMessageSource);
-            mocks.ReplayAll();
-			string name = source.GetMessage(LookupKey, "Rick", "Evans");
+            A.CallTo(() => MockMessageSource.GetMessage(LookupKey, new string[] {"Rick", "Evans"})).Returns(expectedName);
+			DelegatingMessageSource source = new DelegatingMessageSource(MockMessageSource);
+            string name = source.GetMessage(LookupKey, "Rick", "Evans");
 			Assert.AreEqual(expectedName, name);
-            mocks.VerifyAll();
 		}
 
 		[Test]
@@ -141,14 +126,10 @@ namespace Spring.Context.Support
 		public void GetMessageWithCultureAndParams()
 		{
 			const string expectedName = "Rick Evans";
-		    Expect.Call(MockMessageSource.GetMessage(LookupKey, CultureInfo.InvariantCulture, new string[] {"Rick", "Evans"}))
-		        .Return(expectedName);
-			DelegatingMessageSource source
-				= new DelegatingMessageSource(MockMessageSource);
-            mocks.ReplayAll();
+            A.CallTo(() => MockMessageSource.GetMessage(LookupKey, CultureInfo.InvariantCulture, new string[] {"Rick", "Evans"})).Returns(expectedName);
+			DelegatingMessageSource source = new DelegatingMessageSource(MockMessageSource);
 			string name = source.GetMessage(LookupKey, CultureInfo.InvariantCulture, "Rick", "Evans");
 			Assert.AreEqual(expectedName, name);
-			mocks.VerifyAll();
 		}
 
 		[Test]
@@ -162,14 +143,11 @@ namespace Spring.Context.Support
 		public void GetMessageWithMessageSourceResolvableAndCulture()
 		{
 			const string expectedName = "Rick Evans";
-			DelegatingMessageSource source
-				= new DelegatingMessageSource(MockMessageSource);
-		    Expect.Call(MockMessageSource.GetMessage((IMessageSourceResolvable)null, CultureInfo.InvariantCulture)).Return(expectedName);
-            mocks.ReplayAll();
-			string name = source.GetMessage(
-				(IMessageSourceResolvable) null, CultureInfo.InvariantCulture);
+			DelegatingMessageSource source = new DelegatingMessageSource(MockMessageSource);
+            A.CallTo(() => MockMessageSource.GetMessage((IMessageSourceResolvable)null, CultureInfo.InvariantCulture)).Returns(expectedName);
+
+			string name = source.GetMessage((IMessageSourceResolvable) null, CultureInfo.InvariantCulture);
 			Assert.AreEqual(expectedName, name);
-			mocks.VerifyAll();
 		}
 
 		[Test]
@@ -177,16 +155,12 @@ namespace Spring.Context.Support
 		{
 			const string expectedName = "Rick Evans";
 
-		    IMessageSourceResolvable resolvable = mocks.StrictMock<IMessageSourceResolvable>();
-		    Expect.Call(resolvable.DefaultMessage).Return(expectedName);
-		    Expect.Call(resolvable.DefaultMessage).Return(expectedName);          
+		    IMessageSourceResolvable resolvable = A.Fake<IMessageSourceResolvable>();
+            A.CallTo(() => resolvable.DefaultMessage).Returns(expectedName);
 
 			DelegatingMessageSource source = new DelegatingMessageSource();
-            mocks.ReplayAll();
 			string name = source.GetMessage(resolvable, CultureInfo.InvariantCulture);
 			Assert.AreEqual(expectedName, name);
-			//mock.Verify();
-            mocks.VerifyAll();
 		}
 
 		[Test]
@@ -211,13 +185,10 @@ namespace Spring.Context.Support
 		public void GetResourceObject()
 		{
 			const string expectedName = "Rick Evans";
-		    Expect.Call(MockMessageSource.GetResourceObject(LookupKey)).Return(expectedName);
-		    DelegatingMessageSource source
-				= new DelegatingMessageSource(MockMessageSource);
-            mocks.ReplayAll();
+            A.CallTo(() => MockMessageSource.GetResourceObject(LookupKey)).Returns(expectedName);
+		    DelegatingMessageSource source = new DelegatingMessageSource(MockMessageSource);
 			string name = (string) source.GetResourceObject(LookupKey);
 			Assert.AreEqual(expectedName, name);
-			mocks.VerifyAll();
 		}
 
 		[Test]
@@ -231,13 +202,10 @@ namespace Spring.Context.Support
 		public void GetResourceObjectWithCulture()
 		{
 			const string expectedName = "Rick Evans";
-		    Expect.Call(MockMessageSource.GetResourceObject(LookupKey, CultureInfo.InvariantCulture)).Return(expectedName);
-			DelegatingMessageSource source
-				= new DelegatingMessageSource(MockMessageSource);
-            mocks.ReplayAll();
+            A.CallTo(() => MockMessageSource.GetResourceObject(LookupKey, CultureInfo.InvariantCulture)).Returns(expectedName);
+			DelegatingMessageSource source = new DelegatingMessageSource(MockMessageSource);
 			string name = (string) source.GetResourceObject(LookupKey, CultureInfo.InvariantCulture);
 			Assert.AreEqual(expectedName, name);
-			mocks.VerifyAll();
 		}
 
 		[Test]
@@ -250,12 +218,9 @@ namespace Spring.Context.Support
 		[Test]
 		public void ApplyResources()
 		{
-		    MockMessageSource.ApplyResources((object) 12, "rick", CultureInfo.InvariantCulture);
-			DelegatingMessageSource source
-				= new DelegatingMessageSource(MockMessageSource);
-            mocks.ReplayAll();
+		    MockMessageSource.ApplyResources(12, "rick", CultureInfo.InvariantCulture);
+			DelegatingMessageSource source = new DelegatingMessageSource(MockMessageSource);
 			source.ApplyResources(12, "rick", CultureInfo.InvariantCulture);
-			mocks.VerifyAll();
 		}
 
 		[Test]

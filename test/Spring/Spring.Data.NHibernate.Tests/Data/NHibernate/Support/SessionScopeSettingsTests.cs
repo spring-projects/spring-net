@@ -18,14 +18,13 @@
 
 #endregion
 
-#region Imports
-
 using System;
-using NHibernate;
-using NUnit.Framework;
-using Rhino.Mocks;
 
-#endregion
+using FakeItEasy;
+
+using NHibernate;
+
+using NUnit.Framework;
 
 namespace Spring.Data.NHibernate.Support
 {
@@ -39,7 +38,7 @@ namespace Spring.Data.NHibernate.Support
         private class DerivedSessionScopeSettings : SessionScopeSettings
         {
             public DerivedSessionScopeSettings()
-                :base() // note, that we're calling default ctor here
+                : base() // note, that we're calling default ctor here
             {
             }
         }
@@ -73,23 +72,22 @@ namespace Spring.Data.NHibernate.Support
         [Test]
         public void CheckDefaults()
         {
-            Assert.IsTrue( SessionScopeSettings.SINGLESESSION_DEFAULT );
-            Assert.AreEqual( FlushMode.Never, SessionScopeSettings.FLUSHMODE_DEFAULT );
+            Assert.IsTrue(SessionScopeSettings.SINGLESESSION_DEFAULT);
+            Assert.AreEqual(FlushMode.Never, SessionScopeSettings.FLUSHMODE_DEFAULT);
         }
 
         [Test]
         public void WorksAsExpected()
         {
-            MockRepository mocks = new MockRepository();
-            ISessionFactory sessionFactory =  mocks.StrictMock<ISessionFactory>();
-            IInterceptor entityInterceptor = mocks.StrictMock<IInterceptor>();
-            Assert.AreNotEqual( FlushMode.Auto, SessionScopeSettings.FLUSHMODE_DEFAULT ); // ensure noone changed our assumptions
-            SessionScopeSettings sss = new SessionScopeSettings(sessionFactory, entityInterceptor, !SessionScopeSettings.SINGLESESSION_DEFAULT, FlushMode.Auto );   
+            ISessionFactory sessionFactory = A.Fake<ISessionFactory>();
+            IInterceptor entityInterceptor = A.Fake<IInterceptor>();
+            Assert.AreNotEqual(FlushMode.Auto, SessionScopeSettings.FLUSHMODE_DEFAULT); // ensure noone changed our assumptions
+            SessionScopeSettings sss = new SessionScopeSettings(sessionFactory, entityInterceptor, !SessionScopeSettings.SINGLESESSION_DEFAULT, FlushMode.Auto);
 
-            Assert.AreEqual( sessionFactory, sss.SessionFactory );
-            Assert.AreEqual( entityInterceptor, sss.EntityInterceptor);
-            Assert.AreEqual( !SessionScopeSettings.SINGLESESSION_DEFAULT, sss.SingleSession );
-            Assert.AreEqual( FlushMode.Auto, sss.DefaultFlushMode );
+            Assert.AreEqual(sessionFactory, sss.SessionFactory);
+            Assert.AreEqual(entityInterceptor, sss.EntityInterceptor);
+            Assert.AreEqual(!SessionScopeSettings.SINGLESESSION_DEFAULT, sss.SingleSession);
+            Assert.AreEqual(FlushMode.Auto, sss.DefaultFlushMode);
         }
 
         [Test]
@@ -108,15 +106,16 @@ namespace Spring.Data.NHibernate.Support
                 ISessionFactory sessionFactory = sss.SessionFactory;
                 Assert.Fail("should fail, because derived classes must override ResolveSessionFactory()");
             }
-            catch (NotSupportedException) { }
+            catch (NotSupportedException)
+            {
+            }
         }
 
         [Test]
         public void CallingDefaultConstructorCausesLazyResolvingReferences()
         {
-            MockRepository mocks = new MockRepository();
-            ISessionFactory expectedSessionFactory = mocks.StrictMock<ISessionFactory>();
-            IInterceptor expectedEntityInterceptor = mocks.StrictMock<IInterceptor>();
+            ISessionFactory expectedSessionFactory = A.Fake<ISessionFactory>();
+            IInterceptor expectedEntityInterceptor = A.Fake<IInterceptor>();
 
             SessionScopeSettings sss = new LazyResolvingSessionScopeSettings(expectedSessionFactory, expectedEntityInterceptor);
 
@@ -144,8 +143,7 @@ namespace Spring.Data.NHibernate.Support
         [Test]
         public void MissingEntityInterceptorIsOkDuringLazyResolving()
         {
-            MockRepository mocks = new MockRepository();
-            ISessionFactory expectedSessionFactory = mocks.StrictMock<ISessionFactory>();
+            ISessionFactory expectedSessionFactory = A.Fake<ISessionFactory>();
 
             SessionScopeSettings sss = new LazyResolvingSessionScopeSettings(expectedSessionFactory, null);
 
@@ -156,6 +154,5 @@ namespace Spring.Data.NHibernate.Support
             Assert.AreSame(expectedSessionFactory, sss.SessionFactory);
             Assert.AreSame(null, sss.EntityInterceptor);
         }
-
     }
 }

@@ -19,8 +19,11 @@
 #endregion
 
 using System.Data;
+
+using FakeItEasy;
+
 using NUnit.Framework;
-using Rhino.Mocks;
+
 using Spring.Core.IO;
 using Spring.Data;
 using Spring.Data.Common;
@@ -35,14 +38,12 @@ namespace Spring.Testing.Ado
     [TestFixture]
     public class SimpleAdoTestUtilsTests
     {
-        private MockRepository mocks;
         private IAdoOperations adoTemplate;
 
         [SetUp]
         public void SetUp()
         {
-            mocks = new MockRepository();
-            adoTemplate = mocks.StrictMock<IAdoOperations>();
+            adoTemplate = A.Fake<IAdoOperations>();
         }
 
         [Test]
@@ -50,10 +51,7 @@ namespace Spring.Testing.Ado
         {
             IResource scriptResource = new StringResource("");
 
-            mocks.ReplayAll();
-
             SimpleAdoTestUtils.ExecuteSqlScript(adoTemplate, scriptResource, false, SimpleAdoTestUtils.BLOCKDELIM_GO_EXP);
-            mocks.VerifyAll();
         }
 
         [Test]
@@ -61,11 +59,8 @@ namespace Spring.Testing.Ado
         {
             IResource scriptResource = new StringResource("statement 1");
 
-            Expect.Call(adoTemplate.ExecuteNonQuery(CommandType.Text, "statement 1")).Return(0);
-            mocks.ReplayAll();
-
             SimpleAdoTestUtils.ExecuteSqlScript(adoTemplate, scriptResource, false, SimpleAdoTestUtils.BLOCKDELIM_GO_EXP);
-            mocks.VerifyAll();
+            A.CallTo(() => adoTemplate.ExecuteNonQuery(CommandType.Text, "statement 1")).MustHaveHappened();
         }
 
         [Test]
@@ -73,12 +68,11 @@ namespace Spring.Testing.Ado
         {
             IResource scriptResource = new StringResource("\tstatement 1 \n\n\t GO\t \n   statement 2");
 
-            Expect.Call(adoTemplate.ExecuteNonQuery(CommandType.Text, "\tstatement 1 \n")).Return(0);
-            Expect.Call(adoTemplate.ExecuteNonQuery(CommandType.Text, "\n   statement 2")).Return(0);
-            mocks.ReplayAll();
-
             SimpleAdoTestUtils.ExecuteSqlScript(adoTemplate, scriptResource, false, SimpleAdoTestUtils.BLOCKDELIM_GO_EXP);
-            mocks.VerifyAll();
+
+            A.CallTo(() => adoTemplate.ExecuteNonQuery(CommandType.Text, "\tstatement 1 \n")).MustHaveHappened();
+            A.CallTo(() => adoTemplate.ExecuteNonQuery(CommandType.Text, "\n   statement 2")). MustHaveHappened();
+
         }
 
         [Test]
@@ -86,12 +80,10 @@ namespace Spring.Testing.Ado
         {
             IResource scriptResource = new StringResource("\tstatement 1 \n\n\t GO\t \n   statement 2\nGO");
 
-            Expect.Call(adoTemplate.ExecuteNonQuery(CommandType.Text, "\tstatement 1 \n")).Return(0);
-            Expect.Call(adoTemplate.ExecuteNonQuery(CommandType.Text, "\n   statement 2\n")).Return(0);
-            mocks.ReplayAll();
+            A.CallTo(() => adoTemplate.ExecuteNonQuery(CommandType.Text, "\tstatement 1 \n")).Returns(0);
+            A.CallTo(() => adoTemplate.ExecuteNonQuery(CommandType.Text, "\n   statement 2\n")).Returns(0);
 
             SimpleAdoTestUtils.ExecuteSqlScript(adoTemplate, scriptResource, false, SimpleAdoTestUtils.BLOCKDELIM_GO_EXP);
-            mocks.VerifyAll();
         }
 
         [Test]
@@ -99,65 +91,62 @@ namespace Spring.Testing.Ado
         {
             IResource scriptResource = new StringResource("\tstatement 1  ;\nGO\n   statement 2;");
 
-            Expect.Call(adoTemplate.ExecuteNonQuery(CommandType.Text, "\tstatement 1  ")).Return(0);
-            Expect.Call(adoTemplate.ExecuteNonQuery(CommandType.Text, "\nGO\n   statement 2")).Return(0);
-            mocks.ReplayAll();
+            A.CallTo(() => adoTemplate.ExecuteNonQuery(CommandType.Text, "\tstatement 1  ")).Returns(0);
+            A.CallTo(() => adoTemplate.ExecuteNonQuery(CommandType.Text, "\nGO\n   statement 2")).Returns(0);
 
             SimpleAdoTestUtils.ExecuteSqlScript(adoTemplate, scriptResource, false, SimpleAdoTestUtils.BLOCKDELIM_SEMICOLON_EXP);
-            mocks.VerifyAll();
         }
 
         [Test]
         public void ExecuteScriptTransactedSuccess()
         {
-            IDbProvider dbProvider = (IDbProvider) mocks.DynamicMock(typeof(IDbProvider));
-            IDbConnection dbConnection = mocks.StrictMock<IDbConnection>();
-            IDbTransaction dbTx = mocks.StrictMock<IDbTransaction>();
-            IDbCommand dbCommand = mocks.StrictMock<IDbCommand>();
+            IDbProvider dbProvider = A.Fake<IDbProvider>();
+            IDbConnection dbConnection = A.Fake<IDbConnection>();
+            IDbTransaction dbTx = A.Fake<IDbTransaction>();
+            IDbCommand dbCommand = A.Fake<IDbCommand>();
             DefaultTransactionDefinition txDefinition = new DefaultTransactionDefinition();
 
-            Expect.Call(dbProvider.CreateConnection()).Return(dbConnection);
-            dbConnection.Open();
-            Expect.Call(dbConnection.BeginTransaction(txDefinition.TransactionIsolationLevel)).Return(dbTx);
-            Expect.Call(dbProvider.CreateCommand()).Return(dbCommand);
-            dbCommand.Connection = dbConnection;
-            dbCommand.Transaction = dbTx;
-            dbCommand.CommandText = "simple sql cmd";
-            dbCommand.CommandType = CommandType.Text;
-            Expect.Call(dbCommand.ExecuteNonQuery()).Return(0);
-            dbTx.Commit();
-            dbCommand.Dispose();
-            dbConnection.Dispose();
-            mocks.ReplayAll();
+            A.CallTo(() => dbProvider.CreateConnection()).Returns(dbConnection);
+            A.CallTo(() => dbConnection.BeginTransaction(txDefinition.TransactionIsolationLevel)).Returns(dbTx);
+            A.CallTo(() => dbProvider.CreateCommand()).Returns(dbCommand);
+            A.CallTo(() => dbCommand.ExecuteNonQuery()).Returns(0);
 
             AdoTemplate adoOps = new AdoTemplate(dbProvider);
             IPlatformTransaction tx = SimpleAdoTestUtils.CreateTransaction(dbProvider, txDefinition);
 
             SimpleAdoTestUtils.ExecuteSqlScript(adoOps, "simple sql cmd");
             tx.Commit();
-            tx.Dispose();            
-            mocks.VerifyAll();
+            tx.Dispose();
+
+            A.CallTo(() => dbConnection.Open()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => dbTx.Commit()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => dbCommand.Dispose()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => dbConnection.Dispose()).MustHaveHappenedOnceExactly();
+
+            A.CallToSet(() => dbCommand.Connection).WhenArgumentsMatch(x => x[0] == dbConnection).MustHaveHappenedOnceExactly();
+            A.CallToSet(() => dbCommand.Transaction).WhenArgumentsMatch(x => x[0] == dbTx).MustHaveHappenedOnceExactly();
+            A.CallToSet(() => dbCommand.CommandText).WhenArgumentsMatch(x => (string) x[0] == "simple sql cmd").MustHaveHappenedOnceExactly();
+            A.CallToSet(() => dbCommand.CommandType).WhenArgumentsMatch(x => (CommandType) x[0] == CommandType.Text).MustHaveHappenedOnceExactly();
         }
 
         [Test]
         public void ExecuteScriptTransactedRollsbackIfNoCommit()
         {
-            IDbProvider dbProvider = mocks.StrictMock<IDbProvider>();
-            IDbConnection dbConnection = mocks.StrictMock<IDbConnection>();
-            IDbTransaction dbTx = mocks.StrictMock<IDbTransaction>();
+            IDbProvider dbProvider = A.Fake<IDbProvider>();
+            IDbConnection dbConnection = A.Fake<IDbConnection>();
+            IDbTransaction dbTx = A.Fake<IDbTransaction>();
             DefaultTransactionDefinition txDefinition = new DefaultTransactionDefinition();
 
-            Expect.Call(dbProvider.CreateConnection()).Return(dbConnection);
-            dbConnection.Open();
-            Expect.Call(dbConnection.BeginTransaction(txDefinition.TransactionIsolationLevel)).Return(dbTx);
-            dbTx.Rollback();
-            dbConnection.Dispose();
-            mocks.ReplayAll();
+            A.CallTo(() => dbProvider.CreateConnection()).Returns(dbConnection);
+            A.CallTo(() => dbConnection.BeginTransaction(txDefinition.TransactionIsolationLevel)).Returns(dbTx);
 
             AdoTemplate adoOps = new AdoTemplate(dbProvider);
             IPlatformTransaction tx = SimpleAdoTestUtils.CreateTransaction(dbProvider, txDefinition);
             tx.Dispose();
-            mocks.VerifyAll();
+
+            A.CallTo(() => dbConnection.Open()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => dbTx.Rollback()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => dbConnection.Dispose()).MustHaveHappenedOnceExactly();
         }
     }
 }

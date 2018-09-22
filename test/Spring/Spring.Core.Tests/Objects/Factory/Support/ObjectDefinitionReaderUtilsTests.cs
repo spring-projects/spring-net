@@ -18,14 +18,12 @@
 
 #endregion
 
-#region Imports
-
 using System;
-using NUnit.Framework;
-using Rhino.Mocks;
-using Spring.Objects.Factory.Config;
 
-#endregion
+using FakeItEasy;
+
+using NUnit.Framework;
+using Spring.Objects.Factory.Config;
 
 namespace Spring.Objects.Factory.Support
 {
@@ -36,44 +34,36 @@ namespace Spring.Objects.Factory.Support
     [TestFixture]
     public sealed class ObjectDefinitionReaderUtilsTests
     {
-        private MockRepository mocks;
         private IObjectDefinitionRegistry registry;
         private IObjectDefinition definition;
 
         [SetUp]
         public void SetUp()
         {
-            mocks = new MockRepository();
-            registry = mocks.StrictMock<IObjectDefinitionRegistry>();
-            definition = mocks.StrictMock<IObjectDefinition>();
+            registry = A.Fake<IObjectDefinitionRegistry>();
+            definition = A.Fake<IObjectDefinition>();
         }
 
         [Test]
         public void RegisterObjectDefinitionSunnyDay()
         {
-            registry.RegisterObjectDefinition(null, null);
-            LastCall.IgnoreArguments();
-            mocks.ReplayAll();
-
             ObjectDefinitionHolder holder = new ObjectDefinitionHolder(definition, "foo");
 
             ObjectDefinitionReaderUtils.RegisterObjectDefinition(holder, registry);
-            mocks.VerifyAll();
+
+            A.CallTo(() => registry.RegisterObjectDefinition(null, null)).WithAnyArguments().MustHaveHappened();
         }
 
         [Test]
         public void RegisterObjectDefinitionSunnyDayWithAliases()
         {
-            registry.RegisterObjectDefinition("foo", definition);
-            registry.RegisterAlias("foo", "bar");
-            registry.RegisterAlias("foo", "baz");
-            mocks.ReplayAll();
-
             ObjectDefinitionHolder holder = new ObjectDefinitionHolder(definition, "foo", new string[] {"bar", "baz"});
 
             ObjectDefinitionReaderUtils.RegisterObjectDefinition(holder, registry);
-            
-            mocks.VerifyAll();
+
+            A.CallTo(() => registry.RegisterObjectDefinition("foo", definition)).MustHaveHappened();
+            A.CallTo(() => registry.RegisterAlias("foo", "bar")).MustHaveHappened();
+            A.CallTo(() => registry.RegisterAlias("foo", "baz")).MustHaveHappened();
         }
 
         [Test]
@@ -101,24 +91,12 @@ namespace Spring.Objects.Factory.Support
             registry.RegisterObjectDefinition("foo", definition);
 
             // we assume that some other object defition has already been associated with this alias...
-            registry.RegisterAlias(null, null);
-            LastCall.IgnoreArguments().Throw(new ObjectDefinitionStoreException());
-            mocks.ReplayAll();
+            A.CallTo(() => registry.RegisterAlias(null, null)).WithAnyArguments().Throws<ObjectDefinitionStoreException>();
 
             ObjectDefinitionHolder holder
-                = new ObjectDefinitionHolder(definition, "foo", new string[] { "bing" });
+                = new ObjectDefinitionHolder(definition, "foo", new string[] {"bing"});
 
-            try
-            {
-                ObjectDefinitionReaderUtils.RegisterObjectDefinition(holder, registry);
-                Assert.Fail("Must have thrown an ObjectDefinitionStoreException store by this point.");
-            }
-            catch (ObjectDefinitionStoreException)
-            {
-                // expected...
-            }
-
-            mocks.VerifyAll();
+            Assert.Throws<ObjectDefinitionStoreException>(() => ObjectDefinitionReaderUtils.RegisterObjectDefinition(holder, registry));
         }
 
         [Test]
@@ -130,7 +108,7 @@ namespace Spring.Objects.Factory.Support
         [Test]
         public void GenerateObjectNameWithNullRegistry()
         {
-            Assert.Throws<ArgumentNullException>(() => ObjectDefinitionReaderUtils.GenerateObjectName(mocks.StrictMock<IConfigurableObjectDefinition>(), null));
+            Assert.Throws<ArgumentNullException>(() => ObjectDefinitionReaderUtils.GenerateObjectName(A.Fake<IConfigurableObjectDefinition>(), null));
         }
     }
 }

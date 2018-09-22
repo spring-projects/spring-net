@@ -18,45 +18,39 @@
 
 #endregion
 
-#region Imports
-
 using System;
+
+using FakeItEasy;
+
 using NUnit.Framework;
-
-using Rhino.Mocks;
-
-#endregion
 
 namespace Spring.Core.TypeResolution
 {
-	/// <summary>
-	/// Unit tests for the CachedTypeResolver class.
+    /// <summary>
+    /// Unit tests for the CachedTypeResolver class.
     /// </summary>
     /// <author>Rick Evans</author>
-	[TestFixture]
+    [TestFixture]
     public sealed class CachedTypeResolverTests
     {
-	    private MockRepository mocks;
-
         [SetUp]
         public void SetUp()
         {
-            mocks = new MockRepository();
         }
 
         [Test]
-        public void ResolveWithNullTypeName() {
-
-            ITypeResolver mockResolver = (ITypeResolver) mocks.DynamicMock(typeof(ITypeResolver));
+        public void ResolveWithNullTypeName()
+        {
+            ITypeResolver mockResolver = A.Fake<ITypeResolver>();
 
             CachedTypeResolver resolver = new CachedTypeResolver(mockResolver);
             Assert.Throws<TypeLoadException>(() => resolver.Resolve(null));
         }
 
-		[Test]
-		public void InstantiateWithNullTypeResolver()
-		{
+        [Test]
+        public void InstantiateWithNullTypeResolver()
+        {
             Assert.Throws<ArgumentNullException>(() => new CachedTypeResolver(null));
-		}
+        }
     }
 }
