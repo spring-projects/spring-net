@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8" ?> 
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2">
+    <class name="Spring.Data.NHibernate.TestObject, Spring.Data.NHibernate5.Integration.Tests" table="TestObjects">
+        <id name="ObjectNumber" column="TestObjectNo" type="Int32"> 
+          <generator class="identity" /> 
+          
+          <!--
+          <generator class="sequence">
+            <param name="sequence">ID_SEQ</param>
+          </generator>
+          -->
+
+        </id> 
+        <property name="Age" column="Age" type="Int32"/> 
+        <property name="Name" type="String" length="50"/> 
+    </class>
+</hibernate-mapping>

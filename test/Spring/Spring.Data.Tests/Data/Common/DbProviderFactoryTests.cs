@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -80,10 +80,16 @@ namespace Spring.Data.Common
         [Test]
         public void ThreadSafety()
         {
-            AsyncTestTask t1 = new AsyncTestDbProviderFactory(1000, "SqlServer-2.0").Start();
-            AsyncTestTask t2 = new AsyncTestDbProviderFactory(1000, "SqlServer-2.0").Start();
-            AsyncTestTask t3 = new AsyncTestDbProviderFactory(1000, "SqlServer-2.0").Start();
-            AsyncTestTask t4 = new AsyncTestDbProviderFactory(1000, "SqlServer-2.0").Start();
+#if NETCOREAPP
+            const string providerName = "SqlServer";
+#else
+            const string providerName = "SqlServer-2.0";
+#endif
+            
+            AsyncTestTask t1 = new AsyncTestDbProviderFactory(1000, providerName).Start();
+            AsyncTestTask t2 = new AsyncTestDbProviderFactory(1000, providerName).Start();
+            AsyncTestTask t3 = new AsyncTestDbProviderFactory(1000, providerName).Start();
+            AsyncTestTask t4 = new AsyncTestDbProviderFactory(1000, providerName).Start();
 
             t1.AssertNoException();
             t2.AssertNoException();
@@ -166,7 +172,6 @@ namespace Spring.Data.Common
             Assert.IsNotNull(provider.CreateParameter());
             Assert.AreEqual("?", provider.CreateParameterName("Foo"));
         }
-#endif
 
         [Test]
         public void DefaultInstanceWithSqlServer40()
@@ -181,6 +186,17 @@ namespace Spring.Data.Common
             Assert.IsNotNull(provider.CreateParameter());
             Assert.AreEqual("@Foo", provider.CreateParameterName("Foo"));
         }
+
+        [Test]
+        public void TestSqlServer20Names()
+        {
+            //Initialize internal application context. factory
+            DbProviderFactory.GetDbProvider("SqlServer-2.0");
+            IApplicationContext ctx = DbProviderFactory.ApplicationContext;
+            IList<string> dbProviderNames = ctx.GetObjectNamesForType(typeof (IDbProvider));
+            Assert.IsTrue(dbProviderNames.Count > 0);
+        }
+#endif
 
         [Test]
         public void DefaultInstanceWithOracleClient10_20()
@@ -272,16 +288,6 @@ namespace Spring.Data.Common
         }
          
         */
-
-        [Test]
-        public void TestSqlServer20Names()
-        {
-            //Initialize internal application context. factory
-            DbProviderFactory.GetDbProvider("SqlServer-2.0");
-            IApplicationContext ctx = DbProviderFactory.ApplicationContext;
-            IList<string> dbProviderNames = ctx.GetObjectNamesForType(typeof (IDbProvider));
-            Assert.IsTrue(dbProviderNames.Count > 0);
-        }
 
         private void AssertIsSqlServer2005(IDbProvider provider)
         {

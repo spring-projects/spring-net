@@ -1,6 +1,7 @@
 using System.Data;
-
+using System.Data.Common;
 using NHibernate;
+using NHibernate.Engine;
 using NHibernate.SqlTypes;
 using NHibernate.UserTypes;
 
@@ -15,9 +16,31 @@ namespace Spring.Data.NHibernate.Bytecode
             this.delimiter = delimiter;
         }
 
+#if NH_5
+        public object NullSafeGet(DbDataReader rs, string[] names, ISessionImplementor session, object owner)
+        {
+            string resultString = (string) NHibernateUtil.String.NullSafeGet(rs, names[0], session);
+            if (resultString != null)
+                return delimiter.Delimit(resultString);
+            return null;
+        }
+
+        public void NullSafeSet(DbCommand cmd, object value, int index, ISessionImplementor session)
+        {
+            if (value == null)
+            {
+                NHibernateUtil.String.NullSafeSet(cmd, null, index, session);
+                return;
+            }
+
+            value = delimiter.Delimit((string) value);
+
+            NHibernateUtil.String.NullSafeSet(cmd, value, index, session);
+        }
+#else
         public object NullSafeGet(IDataReader rs, string[] names, object owner)
         {
-            string resultString = (string)NHibernateUtil.String.NullSafeGet(rs, names[0]);
+            string resultString = (string) NHibernateUtil.String.NullSafeGet(rs, names[0]);
             if (resultString != null)
                 return delimiter.Delimit(resultString);
             return null;
@@ -31,15 +54,16 @@ namespace Spring.Data.NHibernate.Bytecode
                 return;
             }
 
-            value = delimiter.Delimit((string)value);
+            value = delimiter.Delimit((string) value);
 
             NHibernateUtil.String.NullSafeSet(cmd, value, index);
         }
+#endif
 
         public object DeepCopy(object value)
         {
             if (value == null) return null;
-            return string.Copy((string)value);
+            return string.Copy((string) value);
         }
 
         public object Replace(object original, object target, object owner)
@@ -57,23 +81,11 @@ namespace Spring.Data.NHibernate.Bytecode
             return DeepCopy(value);
         }
 
-        public SqlType[] SqlTypes
-        {
-            get
-            {
-                return new SqlType[] { new SqlType(DbType.String) };
-            }
-        }
+        public SqlType[] SqlTypes => new[] {new SqlType(DbType.String)};
 
-        public System.Type ReturnedType
-        {
-            get { return typeof(string); }
-        }
+        public System.Type ReturnedType => typeof(string);
 
-        public bool IsMutable
-        {
-            get { return false; }
-        }
+        public bool IsMutable => false;
 
         public new bool Equals(object x, object y)
         {

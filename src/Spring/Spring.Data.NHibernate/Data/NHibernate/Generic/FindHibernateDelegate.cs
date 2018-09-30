@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  * 
@@ -16,14 +14,8 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using NHibernate;
 using System.Collections.Generic;
-
-#endregion
 
 namespace Spring.Data.NHibernate.Generic
 {

@@ -1,5 +1,3 @@
-#region Licence
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -42,8 +38,6 @@ namespace Spring.Data.Common
     /// <author>Mark Pollack (.NET)</author>
     public class DbProviderFactory
     {
-    	#region Constants
-
         /// <summary>
         /// The shared log instance for this class (and derived classes).
         /// </summary>
@@ -57,24 +51,14 @@ namespace Spring.Data.Common
 
 		private static readonly string DBPROVIDER_CONTEXTNAME = "DBPROVIDERFACTORY_CONTEXT";
 
-        #endregion
-
-	    #region Fields
-
         private volatile static XmlApplicationContext ctx;
 
-        #endregion
-
-        #region Constructor (s)
         /// <summary>
         /// Initializes a new instance of the <see cref="DbProviderFactory"/> class.
         /// </summary>
         static DbProviderFactory()
         {
         }
-
-        #endregion
-
 
         /// <summary>
         /// Gets the DbProvider given an identifying name.
@@ -131,13 +115,12 @@ namespace Spring.Data.Common
 
 							if (loader.GetResource(DBPROVIDER_ADDITIONAL_RESOURCE_NAME).Exists)
 							{
-								#region Instrumentation
-								if (log.IsDebugEnabled)
+							    if (log.IsDebugEnabled)
 								{
 									log.Debug("Loading additional DbProviders from " + DBPROVIDER_ADDITIONAL_RESOURCE_NAME);
 								}
-								#endregion
-								ctx = new XmlApplicationContext(DBPROVIDER_CONTEXTNAME, true, new string[] { DBPROVIDER_DEFAULT_RESOURCE_NAME,
+
+							    ctx = new XmlApplicationContext(DBPROVIDER_CONTEXTNAME, true, new string[] { DBPROVIDER_DEFAULT_RESOURCE_NAME,
 								                                               DBPROVIDER_ADDITIONAL_RESOURCE_NAME});
 							}
 							else
@@ -148,7 +131,7 @@ namespace Spring.Data.Common
 							IList<string> dbProviderNames = ctx.GetObjectNames<IDbProvider>();
 							if (log.IsInfoEnabled)
 							{
-								log.Info(String.Format("{0} DbProviders Available. [{1}]", dbProviderNames.Count, StringUtils.CollectionToCommaDelimitedString(dbProviderNames)));
+								log.Info(string.Format("{0} DbProviders Available. [{1}]", dbProviderNames.Count, StringUtils.CollectionToCommaDelimitedString(dbProviderNames)));
 							}
 						}
 						catch (Exception e)

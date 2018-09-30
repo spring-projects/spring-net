@@ -1,0 +1,128 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>netcoreapp2.1;net461</TargetFrameworks>
+    <DefineConstants>$(DefineConstants);NH_5</DefineConstants>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Aop\Spring.Aop.2010.csproj" />
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Core\Spring.Core.2010.csproj" />
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Data.NHibernate5\Spring.Data.NHibernate5.2010.csproj" />
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Data\Spring.Data.2010.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="log4net" Version="$(Log4NetVersion)" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftTestSDKVersion)" />
+    <PackageReference Include="NUnit" Version="$(NUnitVersion)" />
+    <PackageReference Include="NUnit3TestAdapter" Version="$(NUnitTestAdapterVersion)" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.5.1" Condition=" '$(TargetFramework)' == 'netcoreapp2.1' " />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == '$(TargetFullFrameworkVersion)' ">
+    <Reference Include="System.Transactions" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\AccountController.cs">
+      <Link>Data\NHibernate\AccountController.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\AccountCreditDao.cs">
+      <Link>Data\NHibernate\AccountCreditDao.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\AccountDebitDao.cs">
+      <Link>Data\NHibernate\AccountDebitDao.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\AccountManager.cs">
+      <Link>Data\NHibernate\AccountManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\AuditDao.cs">
+      <Link>Data\NHibernate\AuditDao.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\Bytecode\AbstractInjectableUserTypeFixture.cs">
+      <Link>Data\Bytecode\AbstractInjectableUserTypeFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\Bytecode\Foo.cs">
+      <Link>Data\Bytecode\Foo.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\Bytecode\IDelimiter.cs">
+      <Link>Data\Bytecode\IDelimiter.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\Bytecode\InjectableStringUserType.cs">
+      <Link>Data\Bytecode\InjectableStringUserType.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\Bytecode\InjectableUserTypeFixture.cs">
+      <Link>Data\Bytecode\InjectableUserTypeFixture.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\Bytecode\Product.cs">
+      <Link>Data\Bytecode\Product.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\Credit.cs">
+      <Link>Data\NHibernate\Credit.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\DbProviderTemplateTests.cs">
+      <Link>Data\NHibernate\DbProviderTemplateTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\Debit.cs">
+      <Link>Data\NHibernate\Debit.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\HibernateTxScopeTransactionManagerTests.cs">
+      <Link>Data\NHibernate\HibernateTxScopeTransactionManagerTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\IAccountController.cs">
+      <Link>Data\NHibernate\IAccountController.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\IAccountCreditDao.cs">
+      <Link>Data\NHibernate\IAccountCreditDao.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\IAccountDebitDao.cs">
+      <Link>Data\NHibernate\IAccountDebitDao.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\IAccountManager.cs">
+      <Link>Data\NHibernate\IAccountManager.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\IAuditDao.cs">
+      <Link>Data\NHibernate\IAuditDao.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\ITestObjectDao.cs">
+      <Link>Data\NHibernate\ITestObjectDao.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\MultipleDbTests.cs">
+      <Link>Data\NHibernate\MultipleDbTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\NativeNHTestObjectDao.cs">
+      <Link>Data\NHibernate\NativeNHTestObjectDao.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\NativeNHTests.cs">
+      <Link>Data\NHibernate\NativeNHTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\NHDAOTests.cs">
+      <Link>Data\NHibernate\NHDAOTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\NHTestObjectDao.cs">
+      <Link>Data\NHibernate\NHTestObjectDao.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\SimpleTestDao.cs">
+      <Link>Data\NHibernate\SimpleTestDao.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\TemplateTests.cs">
+      <Link>Data\NHibernate\TemplateTests.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\TestObject.cs">
+      <Link>Data\NHibernate\TestObject.cs</Link>
+    </Compile>
+    <None Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\creditdebit.sql">
+      <Link>Data\NHibernate\creditdebit.sql</Link>
+    </None>
+    <Content Include="Data\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\HibernateTxScopeTransactionManagerTests.xml">
+      <Link>Data\NHibernate\HibernateTxScopeTransactionManagerTests.xml</Link>
+    </Content>
+    <Content Include="Data\NHibernate\Bytecode\Foo.Spechbm.xml" />
+    <EmbeddedResource Include="Data\NHibernate\*.xml" />
+    <EmbeddedResource Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\Controllers.xml">
+      <Link>Data\NHibernate\Controllers.xml</Link>
+    </EmbeddedResource>
+    <EmbeddedResource Include="..\Spring.Data.NHibernate.Integration.Tests\Data\NHibernate\Services.xml">
+      <Link>Data\NHibernate\Services.xml</Link>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>

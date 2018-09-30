@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  * 
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections;
 using System.Collections.Generic;
 using System.Data;
@@ -28,8 +22,6 @@ using NHibernate;
 
 using Spring.Transaction.Support;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Data.NHibernate
 {
@@ -44,9 +36,7 @@ namespace Spring.Data.NHibernate
 	/// <author>Mark Pollack (.NET)</author>
 	public class SessionHolder : ResourceHolderSupport
 	{
-		#region Fields
-	    
-        private static readonly object DEFAULT_KEY = new object();
+	    private static readonly object DEFAULT_KEY = new object();
 
         private readonly object sessionDictionaryLock = new object();
         private readonly Dictionary<object, ISession> sessionDictionary = new Dictionary<object, ISession>(1);
@@ -60,15 +50,7 @@ namespace Spring.Data.NHibernate
 	    //needed to see if we actually assigned the enum value...
         private bool assignedPreviousFlushMode = false;
 
-		#endregion
-
-	    #region Logging Definition
-
 	    private static readonly ILog log = LogManager.GetLogger(typeof (SessionHolder));
-
-	    #endregion
-
-	    #region Constructor (s)
 
 	    /// <summary>
 	    /// May be used by derived classes to create an empty SessionHolder.
@@ -106,12 +88,8 @@ namespace Spring.Data.NHibernate
 	    {	        
 	        // noop here - but may be overridden to lazily create a session
 	    }
-	    
-		#endregion
 
-		#region Properties
-
-        /// <summary>
+	    /// <summary>
         /// Gets the session using the default key
         /// </summary>
         /// <value>The hibernate session.</value>
@@ -255,11 +233,7 @@ namespace Spring.Data.NHibernate
             }
         }
 
-	    #endregion
-
-		#region Methods
-
-        /// <summary>
+	    /// <summary>
         /// Gets the session given key identifier
         /// </summary>
         /// <param name="key">The key.</param>
@@ -373,8 +347,5 @@ namespace Spring.Data.NHibernate
             assignedPreviousFlushMode = false;
             Connection = null;
         }
-
-		#endregion
-
 	}
 }

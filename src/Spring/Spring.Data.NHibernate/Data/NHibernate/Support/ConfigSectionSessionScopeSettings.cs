@@ -1,5 +1,3 @@
-#region Licence
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  * 
@@ -16,18 +14,12 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using NHibernate;
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.Objects.Factory.Config;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Data.NHibernate.Support
 {

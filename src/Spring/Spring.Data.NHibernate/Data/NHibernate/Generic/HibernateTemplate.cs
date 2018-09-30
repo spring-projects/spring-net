@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using System.Collections.Generic;
 using NHibernate;
@@ -29,8 +23,6 @@ using Spring.Dao;
 using Spring.Data.Common;
 using Spring.Data.Support;
 using Spring.Objects.Factory;
-
-#endregion
 
 namespace Spring.Data.NHibernate.Generic
 {
@@ -70,13 +62,7 @@ namespace Spring.Data.NHibernate.Generic
     /// <author>Mark Pollack (.NET)</author>
     public class HibernateTemplate : HibernateAccessor, IHibernateOperations
     {
-        #region Fields
-
         NHibernate.HibernateTemplate classicHibernateTemplate;
-
-        #endregion
-
-        #region Constructor (s)
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HibernateTemplate"/> class.
@@ -357,17 +343,6 @@ namespace Spring.Data.NHibernate.Generic
             set { classicHibernateTemplate.ProxyFactory = value; }
         }
 
-        #endregion
-
-        #region Properties
-
-
-
-
-        #endregion
-
-        #region Methods
-
         /// <summary>
         /// Remove all objects from the Session cache, and cancel all pending saves,
         /// updates and deletes.
@@ -586,7 +561,7 @@ namespace Spring.Data.NHibernate.Generic
             classicHibernateTemplate.SaveOrUpdate(entity);
         }
 
-#if !NH_4_0
+#if !NH_4_0 && !NH_5
         /// <summary>
         /// Save or update the contents of given persistent object,
         /// according to its id (matching the configured "unsaved-value"?).
@@ -624,10 +599,6 @@ namespace Spring.Data.NHibernate.Generic
             return classicHibernateTemplate.Merge(entity);
         }
 
-        #endregion
-
-        #region IHibernateOperations Gets
-
         /// <summary>
         /// Return the persistent instance of the given entity type
         /// with the given identifier, or null if not found.
@@ -656,10 +627,6 @@ namespace Spring.Data.NHibernate.Generic
         {
             return Execute(new GetByTypeHibernateCallback<T>(id, lockMode), true);
         }
-
-        #endregion
-
-        #region IHibernateOperations Loads
 
         /// <summary>
         /// Return the persistent instance of the given entity class
@@ -702,10 +669,6 @@ namespace Spring.Data.NHibernate.Generic
         {
             return ExecuteFind(new LoadAllByTypeHibernateCallback<T>(this), true);
         }
-
-        #endregion
-
-        #region IHibernateOperations Finds
 
         /// <summary>
         /// Execute a query for persistent instances.
@@ -1059,10 +1022,6 @@ namespace Spring.Data.NHibernate.Generic
             return ExecuteFind(new FindByValueObjectHibernateCallback<T>(this, queryString, valueObject), true);
         }
 
-        #endregion
-
-        #region Execute methods
-
         /// <summary>
         /// Execute the action specified by the given action object within a Session.
         /// </summary>
@@ -1335,12 +1294,7 @@ namespace Spring.Data.NHibernate.Generic
         {
             return ExecuteFind<T>(action, ExposeNativeSession);
         }
-
-        #endregion
-
     }
-
-    #region Internal Supporting Callback Classes
 
     internal class ExecuteHibernateCallbackUsingDelegate<T> : IHibernateCallback<T>
     {
@@ -1722,5 +1676,4 @@ namespace Spring.Data.NHibernate.Generic
             return del(session);
         }
     }
-    #endregion
 }

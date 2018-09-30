@@ -16,7 +16,7 @@ namespace Spring.Data.NHibernate.Bytecode
 
         static AbstractInjectableUserTypeFixture()
         {
-            XmlConfigurator.Configure();
+            //XmlConfigurator.Configure();
         }
 
         /// <summary>

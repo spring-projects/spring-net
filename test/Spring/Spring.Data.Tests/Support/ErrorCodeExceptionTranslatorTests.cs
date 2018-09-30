@@ -1,7 +1,5 @@
-#region Licence
-
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +14,12 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using NUnit.Framework;
 using Spring.Dao;
 using Spring.Data;
 using Spring.Data.Common;
 using Spring.Data.Support;
-
-#endregion
 
 namespace Spring.Support
 {
@@ -38,16 +30,11 @@ namespace Spring.Support
 	[TestFixture]
 	public class ErrorCodeExceptionTranslatorTests 
 	{
-		#region Fields
-        private static ErrorCodes ERROR_CODES = new ErrorCodes();
+		private static ErrorCodes ERROR_CODES = new ErrorCodes();
 	    
 	    private IDbProvider dbProvider = new TestDbProvider();
-		#endregion
 
-
-		#region Constructor (s)
-
-	    /// <summary>
+		/// <summary>
 		/// Initializes a new instance of the <see cref="ErrorCodeExceptionTranslatorTests"/> class.
         /// </summary>
 		public 	ErrorCodeExceptionTranslatorTests()
@@ -55,15 +42,7 @@ namespace Spring.Support
 
 		}
 
-		#endregion
-
-		#region Properties
-
-		#endregion
-
-
-	    
-	    [SetUp]
+		[SetUp]
         public void SetUp()
         {
             ERROR_CODES.BadSqlGrammarCodes = (new String[] { "1", "2" });

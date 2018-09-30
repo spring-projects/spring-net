@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  * 
@@ -16,16 +14,10 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using NHibernate;
 using Spring.Dao;
 using Spring.Dao.Support;
-
-#endregion
 
 namespace Spring.Data.NHibernate.Support
 {
@@ -49,14 +41,9 @@ namespace Spring.Data.NHibernate.Support
 	/// <author>Mark Pollack (.NET)</author>
 	public abstract class HibernateDaoSupport : DaoSupport
 	{
-	    #region Fields
-	    
-        private HibernateTemplate hibernateTemplate;
-		
-        #endregion
+	    private HibernateTemplate hibernateTemplate;
 
-		#region Constructor (s)
-		/// <summary>
+	    /// <summary>
 		/// Initializes a new instance of the <see cref="HibernateDaoSupport"/> class.
                 /// </summary>
 		public 	HibernateDaoSupport()
@@ -64,11 +51,7 @@ namespace Spring.Data.NHibernate.Support
 
 		}
 
-		#endregion
-
-		#region Properties
-
-        /// <summary>
+	    /// <summary>
         /// Gets or sets the hibernate template.
         /// </summary>
         /// <remarks>Set the HibernateTemplate for this DAO explicitly,
@@ -129,13 +112,7 @@ namespace Spring.Data.NHibernate.Support
 	        }
 	    }
 
-
-
-	    #endregion
-
-		#region Methods
-        
-        /// <summary>
+	    /// <summary>
         /// Create a HibernateTemplate for the given ISessionFactory.
         /// </summary>
         /// <remarks>
@@ -227,10 +204,5 @@ namespace Spring.Data.NHibernate.Support
     	protected void ReleaseSession(ISession session) {
 		    SessionFactoryUtils.ReleaseSession(session, SessionFactory);
 	    }
-		#endregion
-
-
-
-
 	}
 }

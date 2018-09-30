@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  * 
@@ -16,40 +14,31 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using System.Runtime.Serialization;
 using NHibernate;
 using Spring.Dao;
 
-#endregion
-
 namespace Spring.Data.NHibernate
 {
-	/// <summary>
-	/// Hibernate-specific subclass of ObjectRetrievalFailureException.
-	/// </summary>	 
-	/// <remarks>
-	/// Converts Hibernate's UnresolvableObjectException, ObjectNotFoundException,
-	/// ObjectDeletedException, and WrongClassException.
-	/// </remarks>
-	/// <author>Mark Pollack (.NET)</author>
-	/// <version>$Id: HibernateObjectRetrievalFailureException.cs,v 1.1 2008/04/07 20:12:53 lahma Exp $</version>
-	[Serializable]
-	public class HibernateObjectRetrievalFailureException : ObjectRetrievalFailureException
-	{
-
-		#region Constructor (s)
-		
+    /// <summary>
+    /// Hibernate-specific subclass of ObjectRetrievalFailureException.
+    /// </summary>	 
+    /// <remarks>
+    /// Converts Hibernate's UnresolvableObjectException, ObjectNotFoundException,
+    /// ObjectDeletedException, and WrongClassException.
+    /// </remarks>
+    /// <author>Mark Pollack (.NET)</author>
+    /// <version>$Id: HibernateObjectRetrievalFailureException.cs,v 1.1 2008/04/07 20:12:53 lahma Exp $</version>
+    [Serializable]
+    public class HibernateObjectRetrievalFailureException : ObjectRetrievalFailureException
+    {
         /// <summary>
-		/// Initializes a new instance of the <see cref="HibernateObjectRetrievalFailureException"/> class.
+        /// Initializes a new instance of the <see cref="HibernateObjectRetrievalFailureException"/> class.
         /// </summary>
-		public HibernateObjectRetrievalFailureException()
-		{
-		}
+        public HibernateObjectRetrievalFailureException()
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HibernateObjectRetrievalFailureException"/> class.
@@ -60,12 +49,12 @@ namespace Spring.Data.NHibernate
         {
         }
 
-
         /// <summary>
         /// Initializes a new instance of the <see cref="HibernateObjectRetrievalFailureException"/> class.
         /// </summary>
         /// <param name="ex">The ex.</param>
-        public HibernateObjectRetrievalFailureException(UnresolvableObjectException ex) : base(ex.PersistentClass, ex.Identifier, ex.Message, ex)        
+        public HibernateObjectRetrievalFailureException(UnresolvableObjectException ex) : base(ex.PersistentClass,
+            ex.Identifier, ex.Message, ex)
         {
         }
 
@@ -73,8 +62,9 @@ namespace Spring.Data.NHibernate
         /// Initializes a new instance of the <see cref="HibernateObjectRetrievalFailureException"/> class.
         /// </summary>
         /// <param name="ex">The ex.</param>
-        public HibernateObjectRetrievalFailureException(ObjectNotFoundException ex) : base(ex.PersistentClass, ex.Identifier, ex.Message, ex)
-        
+        public HibernateObjectRetrievalFailureException(ObjectNotFoundException ex) : base(ex.PersistentClass,
+            ex.Identifier, ex.Message, ex)
+
         {
         }
 
@@ -82,9 +72,9 @@ namespace Spring.Data.NHibernate
         /// Initializes a new instance of the <see cref="HibernateObjectRetrievalFailureException"/> class.
         /// </summary>
         /// <param name="ex">The ex.</param>
-        public HibernateObjectRetrievalFailureException(ObjectDeletedException ex) : base(ex.PersistentClass, ex.Identifier, ex.Message, ex) 
+        public HibernateObjectRetrievalFailureException(ObjectDeletedException ex) : base(ex.PersistentClass,
+            ex.Identifier, ex.Message, ex)
         {
-
         }
 
         //TODO investigate WrongClassException.Type as equivalent to ex.PersistentClass
@@ -92,8 +82,9 @@ namespace Spring.Data.NHibernate
         /// Initializes a new instance of the <see cref="HibernateObjectRetrievalFailureException"/> class.
         /// </summary>
         /// <param name="ex">The ex.</param>
-        public HibernateObjectRetrievalFailureException(WrongClassException ex) : base(ex.EntityName, ex.Identifier, ex.Message, ex)
-        {          
+        public HibernateObjectRetrievalFailureException(WrongClassException ex) : base(ex.EntityName, ex.Identifier,
+            ex.Message, ex)
+        {
         }
 
         /// <summary>
@@ -111,24 +102,10 @@ namespace Spring.Data.NHibernate
         {
         }
 
-
-        /// <summary>
-        /// Creates a new instance of the
-        /// <see cref="HibernateObjectRetrievalFailureException"/> class.
-        /// </summary>
-        /// <param name="info">
-        /// The <see cref="System.Runtime.Serialization.SerializationInfo"/>
-        /// that holds the serialized object data about the exception being thrown.
-        /// </param>
-        /// <param name="context">
-        /// The <see cref="System.Runtime.Serialization.StreamingContext"/>
-        /// that contains contextual information about the source or destination.
-        /// </param>
+        /// <inheritdoc />
         protected HibernateObjectRetrievalFailureException(
-            SerializationInfo info, StreamingContext context ) : base( info, context ) {}
-
-
-		#endregion
-
-	}
+            SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+        }
+    }
 }

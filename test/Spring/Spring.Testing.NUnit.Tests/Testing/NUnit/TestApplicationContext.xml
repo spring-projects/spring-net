@@ -3,7 +3,7 @@
          xmlns:db="http://www.springframework.net/database">
 
   <db:provider id="DbProvider"
-               provider="SqlServer-2.0"
+               provider="System.Data.SqlClient"
                connectionString="Data Source=.\SQL2005;Database=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False"/>
 
 

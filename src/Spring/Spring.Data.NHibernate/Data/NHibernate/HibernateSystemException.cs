@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  * 
@@ -16,42 +14,34 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using System.Runtime.Serialization;
 using NHibernate;
 using Spring.Dao;
 
-#endregion
-
 namespace Spring.Data.NHibernate
 {
-	/// <summary>
+    /// <summary>
     /// Hibernate-specific subclass of UncategorizedDataAccessException,
     /// for Hibernate system errors that do not match any concrete
     /// <code>Spring.Dao</code> exceptions.
-	/// </summary>
-	/// <author>Mark Pollack (.NET)</author>
-	[Serializable]
-	public class HibernateSystemException : UncategorizedDataAccessException
-	{
-
-		#region Constructor (s)
-		/// <summary>
-		/// Initializes a new instance of the <see cref="HibernateSystemException"/> class.
+    /// </summary>
+    /// <author>Mark Pollack (.NET)</author>
+    [Serializable]
+    public class HibernateSystemException : UncategorizedDataAccessException
+    {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="HibernateSystemException"/> class.
         /// </summary>
-		public HibernateSystemException()
-		{
-		}
+        public HibernateSystemException()
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HibernateSystemException"/> class.
         /// </summary>
         /// <param name="message">The message.</param>
-        public HibernateSystemException(string message): base(message)
+        public HibernateSystemException(string message) : base(message)
         {
         }
 
@@ -75,26 +65,11 @@ namespace Spring.Data.NHibernate
         /// <param name="cause">The cause.</param>
         public HibernateSystemException(HibernateException cause) : base(cause != null ? cause.Message : null, cause)
         {
-            
         }
 
-        /// <summary>
-        /// Creates a new instance of the
-        /// <see cref="HibernateSystemException"/> class.
-        /// </summary>
-        /// <param name="info">
-        /// The <see cref="System.Runtime.Serialization.SerializationInfo"/>
-        /// that holds the serialized object data about the exception being thrown.
-        /// </param>
-        /// <param name="context">
-        /// The <see cref="System.Runtime.Serialization.StreamingContext"/>
-        /// that contains contextual information about the source or destination.
-        /// </param>
-        protected HibernateSystemException( SerializationInfo info, StreamingContext context ) : base( info, context ) {}
-
-
-
-		#endregion
-
-	}
+        /// <inheritdoc />
+        protected HibernateSystemException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+        }
+    }
 }
