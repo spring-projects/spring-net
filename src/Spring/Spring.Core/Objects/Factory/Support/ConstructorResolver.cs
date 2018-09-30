@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System;
 using System.Collections;
@@ -101,14 +97,10 @@ namespace Spring.Objects.Factory.Support
             wrapper.WrappedInstance = instantiationStrategy.Instantiate(rod, objectName, this.objectFactory,
                     constructorInstantiationInfo.ConstructorInfo, constructorInstantiationInfo.ArgInstances);
 
-            #region Instrumentation
-
             if (log.IsDebugEnabled)
             {
                 log.Debug(string.Format(CultureInfo.InvariantCulture, "Object '{0}' instantiated via constructor [{1}].", objectName, constructorInstantiationInfo.ConstructorInfo));
             }
-
-            #endregion
 
             return wrapper;
         }
@@ -360,14 +352,10 @@ namespace Spring.Objects.Factory.Support
                 object objectInstance = instantiationStrategy.Instantiate(definition, name, objectFactory, factoryMethodCandidate, arguments);
                 wrapper.WrappedInstance = objectInstance;
 
-                #region Instrumentation
-
                 if (log.IsDebugEnabled)
                 {
                     log.Debug(string.Format(CultureInfo.InvariantCulture, "Object '{0}' instantiated via factory method [{1}].", name, factoryMethodCandidate));
                 }
-
-                #endregion
 
                 return wrapper;
             }

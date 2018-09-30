@@ -33,6 +33,7 @@ namespace Spring.Objects.Factory.Attributes
         [SetUp]
         public void Setup()
         {
+            ContextRegistry.Clear();
             _applicationContext = new XmlApplicationContext(false, "assembly://Spring.Core.Tests/Spring.Objects.Factory.Attributes/ByValueObjects.xml");
             ContextRegistry.RegisterContext(_applicationContext);
         }

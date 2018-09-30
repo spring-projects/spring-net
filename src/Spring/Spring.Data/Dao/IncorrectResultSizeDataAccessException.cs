@@ -130,43 +130,19 @@ namespace Spring.Dao
             this._actualSize = -1;
         }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Dao.CleanupFailureDataAccessException"/> class.
-		/// </summary>
-		/// <param name="info">
-		/// The <see cref="System.Runtime.Serialization.SerializationInfo"/>
-		/// that holds the serialized object data about the exception being thrown.
-		/// </param>
-		/// <param name="context">
-		/// The <see cref="System.Runtime.Serialization.StreamingContext"/>
-		/// that contains contextual information about the source or destination.
-		/// </param>
+		/// <inheritdoc />
 		protected IncorrectResultSizeDataAccessException( SerializationInfo info, StreamingContext context ) : base( info, context )
 		{
 			_expectedSize = info.GetInt32( "expectedSize" );
 			_actualSize = info.GetInt32( "actualSize" );
 		}
 
-		#region ISerializable Members
-		/// <summary>
-		/// Override of <see cref="System.Exception.GetObjectData(SerializationInfo, StreamingContext)"/>
-		/// to allow for private serialization.
-		/// </summary>
-		/// <param name="info">
-		/// The <see cref="System.Runtime.Serialization.SerializationInfo"/>
-		/// that holds the serialized object data about the exception.
-		/// </param>
-		/// <param name="context">
-		/// The <see cref="System.Runtime.Serialization.StreamingContext"/>
-		/// that contains contextual information about the source or destination.
-		/// </param>
+		/// <inheritdoc />
 		public override void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
 			info.AddValue( "expectedSize", _expectedSize );
 			info.AddValue( "actualSize", _actualSize );
 			base.GetObjectData( info, context );
 		}
-		#endregion
 	}
 }

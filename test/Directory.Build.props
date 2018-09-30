@@ -23,7 +23,7 @@
     <NUnitVersion>3.10.1</NUnitVersion>
     <NUnitTestAdapterVersion>3.10.0</NUnitTestAdapterVersion>
     <FakeItEasyVersion>4.8.1</FakeItEasyVersion>
-    <MicrosoftTestSDKVersion>15.7.2</MicrosoftTestSDKVersion>
+    <MicrosoftTestSDKVersion>15.8.0</MicrosoftTestSDKVersion>
 
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <ComVisible>False</ComVisible>
@@ -32,6 +32,7 @@
     <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
 
     <LangVersion>latest</LangVersion>
+    <TargetFullFrameworkVersion>net452</TargetFullFrameworkVersion>
 
   </PropertyGroup>
 

@@ -293,7 +293,7 @@ namespace Spring.Objects.Factory.Support
 				DefineConstructors(typeBuilder);
 				DefineProperties(typeBuilder);
 				DefineMethods(typeBuilder);
-				return typeBuilder.CreateType();
+				return typeBuilder.CreateTypeInfo();
 			}
 
 			private Type BaseType

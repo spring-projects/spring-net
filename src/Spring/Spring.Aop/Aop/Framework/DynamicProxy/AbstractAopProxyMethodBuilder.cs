@@ -376,7 +376,7 @@ namespace Spring.Aop.Framework.DynamicProxy
                 returnValue = il.DeclareLocal(method.ReturnType);
             }
 
-#if DEBUG
+#if DEBUG && !NETSTANDARD
             interceptors.SetLocalSymInfo("interceptors");
             targetType.SetLocalSymInfo("targetType");
             arguments.SetLocalSymInfo("arguments");

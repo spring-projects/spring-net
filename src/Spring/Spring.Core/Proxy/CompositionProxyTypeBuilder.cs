@@ -127,7 +127,7 @@ namespace Spring.Proxy
 
             ImplementCustom(typeBuilder);
 
-            return typeBuilder.CreateType();
+            return typeBuilder.CreateTypeInfo();
         }
 
         /// <summary>

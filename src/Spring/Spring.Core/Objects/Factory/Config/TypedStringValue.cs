@@ -21,6 +21,8 @@
 #region Imports
 
 using System;
+using System.Runtime.Serialization;
+
 using Spring.Util;
 using Spring.Core.TypeResolution;
 
@@ -48,12 +50,10 @@ namespace Spring.Objects.Factory.Config
     /// <author>Rick Evans (.NET)</author>
     /// <author>Bruno Baia (.NET)</author>
     [Serializable]
-    public class TypedStringValue
+    public class TypedStringValue : ISerializable
     {
         private string theValue;
         private object targetType;
-
-        #region Constructor (s) / Destructor
 
         /// <summary>
         /// Creates a new instance of the
@@ -115,7 +115,12 @@ namespace Spring.Objects.Factory.Config
             TargetTypeName = targetTypeName;
         }
 
-        #endregion
+        protected TypedStringValue(SerializationInfo info, StreamingContext context)
+        {
+            var type = info.GetString("TargetTypeName");
+            targetType = type != null ? Type.GetType(type) : null;
+            theValue = info.GetString("Value");
+        }
 
         /// <summary>
         /// The value that is to be converted. 
@@ -208,6 +213,21 @@ namespace Spring.Objects.Factory.Config
             Type resolvedType = TypeResolutionUtils.ResolveType(this.TargetTypeName);
             this.targetType = resolvedType;
             return resolvedType;
+        }
+
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            string targetTypeName = null;
+            if (targetType is string x)
+            {
+                targetTypeName = x;
+            }
+            else if (targetType is Type t)
+            {
+                targetTypeName = t.AssemblyQualifiedNameWithoutVersion();
+            }
+            info.AddValue("TargetTypeName", targetTypeName);
+            info.AddValue("Value", theValue);
         }
     }
 }

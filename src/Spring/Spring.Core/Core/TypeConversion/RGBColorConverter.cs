@@ -92,14 +92,14 @@ namespace Spring.Core.TypeConversion
         /// </param>
         /// <param name="value">
         /// The value that is to be converted, in "R,G,B", "A,R,G,B", or 
-        /// symbolic color name (<see cref="System.Drawing.KnownColor"/>).
+        /// symbolic color name (System.Drawing.KnownColor if on .NET Full Framework).
         /// </param>
         /// <returns>
         /// A <see cref="System.Drawing.Color"/> representation of the string value.
         /// </returns>
         /// <exception cref="System.FormatException">
         /// If the input string is not in a supported format, or is not one of the
-        /// predefined system colors (<see cref="System.Drawing.KnownColor"/>).
+        /// predefined system colors (System.Drawing.KnownColor if on .NET Full Framework).
         /// </exception>
         public override object ConvertFrom(
             ITypeDescriptorContext context, CultureInfo culture, object value)
@@ -141,6 +141,9 @@ namespace Spring.Core.TypeConversion
 
         private static Color FromName(string name)
         {
+#if NETSTANDARD
+            throw new NotSupportedException("FromName is not supported under .NET Core");
+#else
             try
             {
                 KnownColor color = (KnownColor) Enum.Parse(typeof (KnownColor), name);
@@ -151,6 +154,7 @@ namespace Spring.Core.TypeConversion
                 throw new FormatException(
                     "Input string is not a known system color : '" + name + "'.", ex);
             }
+#endif
         }
 
         private static Color GetColorFrom(string alpha, string red, string green, string blue)

@@ -80,7 +80,7 @@ namespace Spring.Context.Support
         [Test]
         public void ThrowsInvalidOperationExceptionOnRecursiveCallsToGetContext()
         {
-            using (new HookableContextHandler.Guard(new HookableContextHandler.CreateContextFromSectionHandler(GetContextRecursive)))
+            using (new HookableContextHandler.Guard(GetContextRecursive))
             {
                 try
                 {

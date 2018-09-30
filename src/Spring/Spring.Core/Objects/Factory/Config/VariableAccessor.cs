@@ -243,7 +243,6 @@ namespace Spring.Objects.Factory.Config
         /// A <see cref="ulong"/> that contains the value of the specified variable 
         /// or <paramref name="defaultValue"/>, if <see cref="IVariableSource.ResolveVariable"/> returns <c>null</c>.
         /// </returns>
-        [CLSCompliant(false)]
         public ulong GetUInt64(string name, ulong defaultValue)
         {
             return GetUInt64(name, defaultValue, true);
@@ -262,7 +261,6 @@ namespace Spring.Objects.Factory.Config
         /// A <see cref="ulong"/> that contains the value of the specified variable 
         /// or <paramref name="defaultValue"/>, if <see cref="IVariableSource.ResolveVariable"/> cannot be parsed.
         /// </returns>
-        [CLSCompliant(false)]
         public ulong GetUInt64(string name, ulong defaultValue, bool throwOnInvalidValue)
         {
             try
@@ -339,7 +337,6 @@ namespace Spring.Objects.Factory.Config
         /// A <see cref="uint"/> that contains the value of the specified variable 
         /// or <paramref name="defaultValue"/>, if <see cref="IVariableSource.ResolveVariable"/> returns <c>null</c>.
         /// </returns>
-        [CLSCompliant(false)]
         public uint GetUInt32(string name, uint defaultValue)
         {
             return GetUInt32(name, defaultValue, true);
@@ -358,7 +355,6 @@ namespace Spring.Objects.Factory.Config
         /// A <see cref="uint"/> that contains the value of the specified variable 
         /// or <paramref name="defaultValue"/>, if <see cref="IVariableSource.ResolveVariable"/> cannot be parsed.
         /// </returns>
-        [CLSCompliant(false)]
         public uint GetUInt32(string name, uint defaultValue, bool throwOnInvalidValue)
         {
             try
@@ -435,7 +431,6 @@ namespace Spring.Objects.Factory.Config
         /// A <see cref="short"/> that contains the value of the specified variable 
         /// or <paramref name="defaultValue"/>, if <see cref="IVariableSource.ResolveVariable"/> returns <c>null</c>.
         /// </returns>
-        [CLSCompliant(false)]
         public ushort GetUInt16(string name, ushort defaultValue)
         {
             return GetUInt16(name, defaultValue, true);
@@ -454,7 +449,6 @@ namespace Spring.Objects.Factory.Config
         /// A <see cref="short"/> that contains the value of the specified variable 
         /// or <paramref name="defaultValue"/>, if <see cref="IVariableSource.ResolveVariable"/> cannot be parsed.
         /// </returns>
-        [CLSCompliant(false)]
         public ushort GetUInt16(string name, ushort defaultValue, bool throwOnInvalidValue)
         {
             try

@@ -24,6 +24,7 @@ using System;
 using System.Collections;
 
 using Common.Logging;
+using Common.Logging.Simple;
 
 using NUnit.Framework;
 using Spring.Aop.Framework;
@@ -42,7 +43,7 @@ namespace Spring.Aspects.Exceptions
     public class ExceptionHandlerAspectIntegrationTests
     {
         private ExceptionHandlerAdvice exceptionHandlerAdvice;
-        private CaptureOutputLoggerFactoryAdapter loggerFactoryAdapter;
+        private CapturingLoggerFactoryAdapter loggerFactoryAdapter;
         private ILoggerFactoryAdapter originalAdapter;
         private static bool spelActionExecuted = false;
 
@@ -50,7 +51,7 @@ namespace Spring.Aspects.Exceptions
         public void Setup()
         {
             originalAdapter = LogManager.Adapter;
-            loggerFactoryAdapter = new CaptureOutputLoggerFactoryAdapter();
+            loggerFactoryAdapter = new CapturingLoggerFactoryAdapter();
             LogManager.Adapter = loggerFactoryAdapter;
             exceptionHandlerAdvice = new ExceptionHandlerAdvice();
         }
@@ -61,7 +62,7 @@ namespace Spring.Aspects.Exceptions
             //            loggerFactoryAdapter.LogMessages.Clear();
 
             //reset so other tests can produce some output if needed.
-            loggerFactoryAdapter.Dispose();
+            loggerFactoryAdapter.Clear();
             LogManager.Adapter = originalAdapter;
         }
 
@@ -113,9 +114,9 @@ namespace Spring.Aspects.Exceptions
             catch (ArithmeticException)
             {
                 bool found = false;
-                foreach (string message in loggerFactoryAdapter.LogMessages)
+                foreach (CapturingLoggerEvent loggerEvent in loggerFactoryAdapter.LoggerEvents)
                 {
-                    if (message.IndexOf("Hello World") >= 0)
+                    if (loggerEvent.RenderedMessage.IndexOf("Hello World") >= 0)
                     {
                         found = true;
                     }
@@ -180,7 +181,7 @@ namespace Spring.Aspects.Exceptions
         {
             string logHandlerText = "on exception (#e is System.FooBar) log 'My Message, Method Name ' + #method.Name";
 
-            ExecuteLoggingHandler(logHandlerText, "[WARN]  Was not able to evaluate constraint expression [#e is System.FooBar]");
+            ExecuteLoggingHandler(logHandlerText, "Was not able to evaluate constraint expression [#e is System.FooBar]");
 
         }
 
@@ -189,7 +190,7 @@ namespace Spring.Aspects.Exceptions
         {
             string logHandlerText = "on exception (1+1) log 'My Message, Method Name ' + #method.Name";
 
-            ExecuteLoggingHandler(logHandlerText, "[WARN]  Was not able to unbox constraint expression to boolean [1+1]");
+            ExecuteLoggingHandler(logHandlerText, "Was not able to unbox constraint expression to boolean [1+1]");
 
         }
 
@@ -483,15 +484,15 @@ namespace Spring.Aspects.Exceptions
         private void AssertSearchString(string searchString)
         {
             bool found = false;
-            foreach (string message in loggerFactoryAdapter.LogMessages)
+            foreach (CapturingLoggerEvent loggerEvent in loggerFactoryAdapter.LoggerEvents)
             {
-                if (message.IndexOf(searchString) >= 0)
+                if (loggerEvent.RenderedMessage.IndexOf(searchString) >= 0)
                 {
                     found = true;
                 }
             }
             Assert.IsTrue(found, "did not find logging output [" + searchString + "]  Logging values = "
-                                 + StringUtils.CollectionToCommaDelimitedString(loggerFactoryAdapter.LogMessages));
+                                 + StringUtils.CollectionToCommaDelimitedString(loggerFactoryAdapter.LoggerEvents));
         }
     }
 }

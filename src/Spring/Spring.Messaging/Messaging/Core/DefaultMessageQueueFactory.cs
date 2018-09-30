@@ -21,13 +21,18 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Messaging;
 using Common.Logging;
 using Spring.Context;
 using Spring.Messaging.Support;
 using Spring.Messaging.Support.Converters;
 using Spring.Threading;
 using Spring.Util;
+
+#if NETSTANDARD
+using Experimental.System.Messaging;
+#else
+using System.Messaging;
+#endif
 
 namespace Spring.Messaging.Core
 {

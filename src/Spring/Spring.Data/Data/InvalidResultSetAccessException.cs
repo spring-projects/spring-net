@@ -80,22 +80,10 @@ namespace Spring.Data
         {
              this.sql = sql;
         }
-        /// <summary>
-        /// Creates a new instance of the
-        /// <see cref="InvalidResultSetAccessException"/> class.
-        /// </summary>
-        /// <param name="info">
-        /// The <see cref="System.Runtime.Serialization.SerializationInfo"/>
-        /// that holds the serialized object data about the exception being thrown.
-        /// </param>
-        /// <param name="context">
-        /// The <see cref="System.Runtime.Serialization.StreamingContext"/>
-        /// that contains contextual information about the source or destination.
-        /// </param>
+
+		/// <inheritdoc />
         protected InvalidResultSetAccessException( SerializationInfo info, StreamingContext context ) : base( info, context ) {}
-
-
-
+		
 		#endregion
 
 		#region Properties

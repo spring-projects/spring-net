@@ -286,6 +286,7 @@ namespace Spring.Context.Support
             }
         }
 
+#if !NETCOREAPP
         /// <summary>
         /// Test the happy day scenario of returning an object
         /// </summary>
@@ -351,6 +352,7 @@ namespace Spring.Context.Support
             Assert.AreEqual("Mark", to.Name);
             Assert.AreEqual(35, to.Age);
         }
+#endif
 
         /// <summary>
         /// Test when the code being resolves itself implements IMessageResolvable.

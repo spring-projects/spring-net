@@ -18,12 +18,6 @@
     <PackageReference Include="NUnit3TestAdapter" Version="$(NUnitTestAdapterVersion)" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="DotNetMock, Version=0.8.1.0, Culture=neutral, PublicKeyToken=65e474d141e25e07">
-      <HintPath>..\..\..\lib\Mono\2.0\DotNetMock.dll</HintPath>
-    </Reference>
-    <Reference Include="DotNetMock.Framework, Version=0.8.1.0, Culture=neutral, PublicKeyToken=65e474d141e25e07">
-      <HintPath>..\..\..\lib\Mono\2.0\DotNetMock.Framework.dll</HintPath>
-    </Reference>
     <Reference Include="System.Configuration" />
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Runtime.Remoting" />

@@ -148,7 +148,8 @@ namespace Spring.Objects.Factory
 			: base(info, context)
 		{
 			_objectName = info.GetString("ObjectName");
-			_objectType = info.GetValue("ObjectType", typeof (Type)) as Type;
+			var typeName = info.GetString("ObjectTypeName");
+			_objectType = typeName != null ? Type.GetType(typeName) : null;
 		}
 
 		#endregion
@@ -173,7 +174,7 @@ namespace Spring.Objects.Factory
 		{
 			base.GetObjectData(info, context);
 			info.AddValue("ObjectName", ObjectName);
-			info.AddValue("ObjectType", ObjectType);
+			info.AddValue("ObjectTypeName", ObjectType?.AssemblyQualifiedNameWithoutVersion());
 		}
 
 		#endregion

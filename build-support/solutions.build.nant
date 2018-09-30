@@ -31,6 +31,7 @@ Rebuilding Solutions using Nant and "solutions.build":
           <exclude name="examples/**/Spring.EmsQuickStart/*" />
           <exclude name="examples/**/Spring.Examples.Pool/*" />
           <exclude name="examples/**/SpringAir/*" />
+          <exclude name="examples/**/Spring.WebQuickStart/*" />
         </items>
       </in>
       <do>

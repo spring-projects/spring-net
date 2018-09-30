@@ -151,12 +151,6 @@
         </if>
     </target>
     <!-- Targets for cleaning up -->
-    <target name="clean-current-bin-dir" depends="check-current-bin-dir"
-            description="Cleans the current binaries directory">
-        <echo message="Cleaning the ${current.bin.dir} binaries directory."/>
-        <delete dir="${current.bin.dir}" if="${directory::exists(current.bin.dir)}"/>
-        <mkdir dir="${current.bin.dir}"/>
-    </target>
     <target name="clean-current-sdkdoc-dir" depends="check-current-sdkdoc-dir"
             description="Cleans the current SDK documentation directory">
         <echo message="Cleaning the ${current.sdkdoc.dir} SDK documentation directory."/>
@@ -257,7 +251,6 @@
 	        <import namespace="System.Reflection" />
 	    </imports>
 	    <attributes>
-		<attribute type="CLSCompliantAttribute" value="${assembly.is-cls-compliant}" />
 		<attribute type="AssemblyConfigurationAttribute" value="${assembly.configuration}" />
 		<attribute type="AssemblyProductAttribute" value="${assembly.product}" />
 		<attribute type="AssemblyCompanyAttribute" value="${assembly.company}" />

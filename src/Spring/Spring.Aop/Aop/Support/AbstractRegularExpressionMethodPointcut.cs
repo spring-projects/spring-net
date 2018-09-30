@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -28,8 +22,6 @@ using System.Security.Permissions;
 using AopAlliance.Aop;
 
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Aop.Support
 {
@@ -44,7 +36,7 @@ namespace Spring.Aop.Support
     /// </p>
     /// <p>
     /// This base class is serializable. Subclasses should decorate all
-    /// fields with the <see cref="System.NonSerializedAttribute"/> - the
+    /// fields with the NonSerializedAttribute - the
     /// <see cref="AbstractRegularExpressionMethodPointcut.InitPatternRepresentation"/>
     /// method in this class will be invoked again on the client side on deserialization.
     /// </p>
@@ -58,8 +50,6 @@ namespace Spring.Aop.Support
     {
         [NonSerialized]
         private object[] _patterns = ObjectUtils.EmptyObjects;
-
-        #region Constructors
 
         /// <summary>
         /// Creates a new instance of the
@@ -76,21 +66,7 @@ namespace Spring.Aop.Support
         {
         }
 
-        /// <summary>
-        /// Creates a new instance of the <see cref="AbstractRegularExpressionMethodPointcut"/>
-        /// class.
-        /// </summary>
-        /// <param name="info">
-        /// The <see cref="System.Runtime.Serialization.SerializationInfo"/>
-        /// that holds the serialized object data about the exception being thrown.
-        /// </param>
-        /// <param name="context">
-        /// The <see cref="System.Runtime.Serialization.StreamingContext"/>
-        /// that contains contextual information about the source or destination.
-        /// </param>
-        /// <exception cref="AopAlliance.Aop.AspectException">
-        /// If an error was encountered during the deserialization process.
-        /// </exception>
+        /// <inheritdoc />
         protected AbstractRegularExpressionMethodPointcut(
             SerializationInfo info, StreamingContext context)
         {
@@ -117,10 +93,6 @@ namespace Spring.Aop.Support
                     "Failed to deserialize AOP regular expression pointcut: " + ex.Message);
             }
         }
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// The <see cref="Spring.Aop.ITypeFilter"/> for this pointcut.
@@ -167,22 +139,7 @@ namespace Spring.Aop.Support
             }
         }
 
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// Populates a <see cref="System.Runtime.Serialization.SerializationInfo"/> with
-        /// the data needed to serialize the target object.
-        /// </summary>
-        /// <param name="info">
-        /// The <see cref="System.Runtime.Serialization.SerializationInfo"/> to populate
-        /// with data.
-        /// </param>
-        /// <param name="context">
-        /// The destination (see <see cref="System.Runtime.Serialization.StreamingContext"/>)
-        /// for this serialization.
-        /// </param>
+        /// <inheritdoc />
         [SecurityPermission(SecurityAction.Demand, SerializationFormatter = true)]
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
@@ -292,7 +249,5 @@ namespace Spring.Aop.Support
         {
             return true;
         }
-
-        #endregion
     }
 }

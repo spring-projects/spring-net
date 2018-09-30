@@ -107,6 +107,7 @@ namespace Spring.Data.Common
             Assert.AreEqual("156", errorCode);
         }
 
+#if !NETCOREAPP
         [Test]
         public void DefaultInstanceWithSqlServer20()
         {
@@ -141,7 +142,7 @@ namespace Spring.Data.Common
         }
 
         [Test]
-        public void DefaultInstanceWithMicrsoftOracleClient20()
+        public void DefaultInstanceWithMicrosoftOracleClient20()
         {
             IDbProvider provider = DbProviderFactory.GetDbProvider("OracleClient-2.0");
             Assert.AreEqual("Oracle, Microsoft provider V2.0.0.0", provider.DbMetadata.ProductName);
@@ -151,20 +152,6 @@ namespace Spring.Data.Common
             Assert.IsNotNull(provider.CreateDataAdapter());
             Assert.IsNotNull(provider.CreateParameter());
             Assert.AreEqual(":Foo", provider.CreateParameterName("Foo"));
-        }
-
-        [Test]
-        public void DefaultInstanceWithSqlServer40()
-        {
-            IDbProvider provider = DbProviderFactory.GetDbProvider("SqlServer-4.0");
-            AssertIsSqlServer40(provider);
-            Assert.IsNull(provider.ConnectionString);
-            Assert.IsNotNull(provider.CreateCommand());
-            Assert.IsNotNull(provider.CreateCommandBuilder());
-            Assert.IsNotNull(provider.CreateConnection());
-            Assert.IsNotNull(provider.CreateDataAdapter());
-            Assert.IsNotNull(provider.CreateParameter());
-            Assert.AreEqual("@Foo", provider.CreateParameterName("Foo"));
         }
 
         [Test]
@@ -178,6 +165,21 @@ namespace Spring.Data.Common
             Assert.IsNotNull(provider.CreateDataAdapter());
             Assert.IsNotNull(provider.CreateParameter());
             Assert.AreEqual("?", provider.CreateParameterName("Foo"));
+        }
+#endif
+
+        [Test]
+        public void DefaultInstanceWithSqlServer40()
+        {
+            IDbProvider provider = DbProviderFactory.GetDbProvider("SqlServer-4.0");
+            AssertIsSqlServer40(provider);
+            Assert.IsNull(provider.ConnectionString);
+            Assert.IsNotNull(provider.CreateCommand());
+            Assert.IsNotNull(provider.CreateCommandBuilder());
+            Assert.IsNotNull(provider.CreateConnection());
+            Assert.IsNotNull(provider.CreateDataAdapter());
+            Assert.IsNotNull(provider.CreateParameter());
+            Assert.AreEqual("@Foo", provider.CreateParameterName("Foo"));
         }
 
         [Test]

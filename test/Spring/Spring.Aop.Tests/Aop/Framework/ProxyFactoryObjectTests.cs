@@ -406,6 +406,7 @@ namespace Spring.Aop.Framework
             Assert.AreEqual("set_Name", PointcutForVoid.methodNames[1]);
         }
 
+#if !NETCOREAPP
         [Test]
         public void CanAddThrowsAdviceWithoutAdvisor()
         {
@@ -446,7 +447,8 @@ namespace Spring.Aop.Framework
             // One match
             Assert.AreEqual(1, th.GetCalls("HttpException"));
         }
-
+#endif
+        
         /// <summary> Checks that globals get invoked,
         /// and that they can add aspect interfaces unavailable
         /// to other objects. These interfaces don't need
@@ -778,6 +780,7 @@ namespace Spring.Aop.Framework
             Assert.AreEqual(typeof(SingletonTargetSource), pfb.TargetSource.GetType(), "Incorrect target source, expected singleton");
         }
 
+#if !NETCOREAPP
         [Test(Description = "http://opensource.atlassian.com/projects/spring/browse/SPRNET-293")]
         public void SupportsTransparentProxyAsTarget()
         {
@@ -807,6 +810,7 @@ namespace Spring.Aop.Framework
                 AppDomain.Unload(domain);
             }
         }
+#endif
 
         [Test(Description = "http://opensource.atlassian.com/projects/spring/browse/SPRNET-500")]
         public void NotAccessibleInterfaceProxying()

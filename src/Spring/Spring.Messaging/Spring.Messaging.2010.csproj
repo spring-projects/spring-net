@@ -1,15 +1,18 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFrameworks>netstandard2.0;$(TargetFullFrameworkVersion)</TargetFrameworks>
     <Description>Interfaces and classes that provide MSMQ 3.0 support in Spring.Net</Description>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Spring.Core\Spring.Core.2010.csproj" />
     <ProjectReference Include="..\Spring.Data\Spring.Data.2010.csproj" />
   </ItemGroup>
-  <ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == '$(TargetFullFrameworkVersion)' ">
     <Reference Include="System.Messaging" />
     <Reference Include="System.Transactions" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <PackageReference Include="Experimental.System.Messaging" Version="1.0.0" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\GenCommonAssemblyInfo.cs">

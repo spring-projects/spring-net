@@ -18,8 +18,14 @@
 
 #endregion
 
-using System.Messaging;
 using Spring.Transaction.Support;
+
+
+#if NETSTANDARD
+using Experimental.System.Messaging;
+#else
+using System.Messaging;
+#endif
 
 namespace Spring.Messaging.Core
 {

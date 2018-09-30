@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -16,22 +14,17 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
 using System.Reflection;
+using System.Runtime.Serialization;
 using System.Text;
 using Spring.Core.TypeResolution;
 using Spring.Objects.Factory.Config;
 using Spring.Util;
 using Spring.Collections.Generic;
-
-#endregion
 
 namespace Spring.Objects.Factory.Support
 {
@@ -45,12 +38,10 @@ namespace Spring.Objects.Factory.Support
     /// <author>Juergen Hoeller</author>
     /// <author>Rick Evans (.NET)</author>
     [Serializable]
-    public abstract class AbstractObjectDefinition : ObjectMetadataAttributeAccessor, IConfigurableObjectDefinition
+    public abstract class AbstractObjectDefinition : ObjectMetadataAttributeAccessor, IConfigurableObjectDefinition, ISerializable
     {
         private static readonly string SCOPE_SINGLETON = "singleton";
         private static readonly string SCOPE_PROTOTYPE = "prototype";
-
-        #region Constructor (s) / Destructor
 
         /// <summary>
         /// Creates a new instance of the
@@ -144,10 +135,6 @@ namespace Spring.Objects.Factory.Support
             AutowireMode = other.AutowireMode;
             ResourceDescription = other.ResourceDescription;
         }
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// The name of the parent definition of this object definition, if any.
@@ -679,10 +666,6 @@ namespace Spring.Objects.Factory.Support
             }
         }
 
-        #endregion
-
-        #region Methods
-
         /// <summary>
         /// Resolves the type of the object, resolving it from a specified
         /// object type name if necessary. 
@@ -860,10 +843,6 @@ namespace Spring.Objects.Factory.Support
             return buffer.ToString();
         }
 
-        #endregion
-
-        #region Fields
-
         private ConstructorArgumentValues constructorArgumentValues = new ConstructorArgumentValues();
         private MutablePropertyValues propertyValues = new MutablePropertyValues();
         private EventValues eventHandlerValues = new EventValues();
@@ -880,17 +859,76 @@ namespace Spring.Objects.Factory.Support
         private DependencyCheckingMode dependencyCheck = DependencyCheckingMode.None;
         private IList<string> dependsOn;
         private bool autowireCandidate = true;
-
         private bool primary;
-
-        private readonly IDictionary<string, AutowireCandidateQualifier> qualifiers =
-            new Dictionary<string, AutowireCandidateQualifier>();
-
+        private readonly IDictionary<string, AutowireCandidateQualifier> qualifiers = new Dictionary<string, AutowireCandidateQualifier>();
         private string initMethodName = null;
         private string destroyMethodName = null;
         private string factoryMethodName = null;
         private string factoryObjectName = null;
 
-        #endregion
+        
+        protected AbstractObjectDefinition(SerializationInfo info, StreamingContext context)
+        {
+            constructorArgumentValues = (ConstructorArgumentValues) info.GetValue("constructorArgumentValues", typeof(ConstructorArgumentValues));
+            propertyValues = (MutablePropertyValues) info.GetValue("propertyValues", typeof(MutablePropertyValues));
+            eventHandlerValues= (EventValues) info.GetValue("eventHandlerValues", typeof(EventValues));
+            methodOverrides= (MethodOverrides) info.GetValue("methodOverrides", typeof(MethodOverrides));
+            resourceDescription = info.GetString("resourceDescription");
+            isSingleton = info.GetBoolean("isSingleton");
+            isPrototype = info.GetBoolean("isPrototype");
+            isLazyInit = info.GetBoolean("isLazyInit");
+            isAbstract = info.GetBoolean("isAbstract");
+            scope= info.GetString("scope");
+            role = (ObjectRole) info.GetValue("role", typeof(ObjectRole));
+            
+            var objectTypeName = info.GetString("objectTypeName");
+            objectType = objectTypeName != null ? Type.GetType(objectTypeName) : null;
+            
+            autowireMode = (AutoWiringMode) info.GetValue("autowireMode", typeof(AutoWiringMode));
+            dependencyCheck= (DependencyCheckingMode) info.GetValue("dependencyCheck", typeof(DependencyCheckingMode));
+            dependsOn = (IList<string>) info.GetValue("dependsOn", typeof(IList<string>));
+            autowireCandidate = info.GetBoolean("autowireCandidate");
+            primary = info.GetBoolean("primary");
+            qualifiers = (IDictionary<string, AutowireCandidateQualifier>) info.GetValue("qualifiers", typeof(IDictionary<string, AutowireCandidateQualifier>));
+            initMethodName = info.GetString("initMethodName");
+            destroyMethodName = info.GetString("destroyMethodName");
+            factoryMethodName = info.GetString("factoryMethodName" );
+            factoryObjectName= info.GetString("factoryObjectName");
+        }
+        
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("constructorArgumentValues", constructorArgumentValues);
+            info.AddValue("propertyValues", propertyValues);
+            info.AddValue("eventHandlerValues", eventHandlerValues);
+            info.AddValue("methodOverrides", methodOverrides);
+            info.AddValue("resourceDescription", resourceDescription);
+            info.AddValue("isSingleton", isSingleton);
+            info.AddValue("isPrototype", isPrototype);
+            info.AddValue("isLazyInit", isLazyInit);
+            info.AddValue("isAbstract", isAbstract);
+            info.AddValue("scope", scope);
+            info.AddValue("role", role);
+            string objectTypeName = null;
+            if (objectType is string s)
+            {
+                objectTypeName = s;
+            }
+            else if (objectType is Type t)
+            {
+                objectTypeName = t.AssemblyQualifiedName;
+            }
+            info.AddValue("objectTypeName", objectTypeName);
+            info.AddValue("autowireMode", autowireMode);
+            info.AddValue("dependencyCheck", dependencyCheck);
+            info.AddValue("dependsOn", dependsOn);
+            info.AddValue("autowireCandidate", autowireCandidate);
+            info.AddValue("primary", primary);
+            info.AddValue("qualifiers", qualifiers);
+            info.AddValue("initMethodName", initMethodName);
+            info.AddValue("destroyMethodName", destroyMethodName);
+            info.AddValue("factoryMethodName", factoryMethodName);
+            info.AddValue("factoryObjectName", factoryObjectName);
+        }
     }
 }

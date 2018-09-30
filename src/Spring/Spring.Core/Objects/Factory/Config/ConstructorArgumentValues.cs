@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -16,18 +14,12 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
 using Spring.Collections;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Objects.Factory.Config
 {
@@ -54,9 +46,7 @@ namespace Spring.Objects.Factory.Config
 		/// </summary>
 		public const int NoIndex = -1289; // yes, the number really is wholly arbitrary...
 
-		#region Constructor (s) / Destructor
-
-		/// <summary>
+	    /// <summary>
 		/// Creates a new instance of the
 		/// <see cref="Spring.Objects.Factory.Config.ConstructorArgumentValues"/>
 		/// class.
@@ -79,20 +69,12 @@ namespace Spring.Objects.Factory.Config
 			AddAll(other);
 		}
 
-		#endregion
-
-		#region Fields
-
-        private CultureInfo enUSCultureInfo = new CultureInfo("en-US", false);
+	    private static readonly CultureInfo enUSCultureInfo = new CultureInfo("en-US", false);
 		private IDictionary<int, ValueHolder>  _indexedArgumentValues = new Dictionary<int, ValueHolder>();
         private List<ValueHolder> _genericArgumentValues = new List<ValueHolder>();
 		private IDictionary<string, object> _namedArgumentValues = new Dictionary<string, object>();
 
-		#endregion
-
-		#region Properties
-
-		/// <summary>
+	    /// <summary>
 		/// Return the map of indexed argument values.
 		/// </summary>
 		/// <returns>
@@ -161,11 +143,7 @@ namespace Spring.Objects.Factory.Config
 			}
 		}
 
-		#endregion
-
-		#region Methods
-
-		/// <summary>
+	    /// <summary>
 		/// Copy all given argument values into this object.
 		/// </summary>
 		/// <param name="other">
@@ -585,11 +563,7 @@ namespace Spring.Objects.Factory.Config
             return argument != null ? argument.ToLower(enUSCultureInfo) : argument;
 		}
 
-	    #endregion
-
-		#region Inner Class : ValueHolder
-
-		/// <summary>
+	    /// <summary>
 		/// Holder for a constructor argument value, with an optional
 		/// <see cref="System.Type"/> attribute indicating the target
 		/// <see cref="System.Type"/> of the actual constructor argument.
@@ -597,9 +571,7 @@ namespace Spring.Objects.Factory.Config
 		[Serializable]
 		public class ValueHolder
 		{
-			#region Constructor (s) / Destructor
-
-			/// <summary>
+		    /// <summary>
 			/// Creates a new instance of the ValueHolder class.
 			/// </summary>
 			/// <param name="value">
@@ -628,11 +600,7 @@ namespace Spring.Objects.Factory.Config
 				this.typeName = typeName;
 			}
 
-			#endregion
-
-			#region Methods
-
-            public ValueHolder Copy()
+		    public ValueHolder Copy()
             {
                 ValueHolder copy = new ValueHolder(this._ctorValue, this.typeName);
                 return copy;
@@ -652,11 +620,7 @@ namespace Spring.Objects.Factory.Config
 				                     "'{0}' [{1}]", Value, Type);
 			}
 
-			#endregion
-
-			#region Properties
-
-			/// <summary>
+		    /// <summary>
 			/// Gets and sets the value for the constructor argument.
 			/// </summary>
 			/// <remarks>
@@ -680,16 +644,8 @@ namespace Spring.Objects.Factory.Config
 				get { return typeName; }
 			}
 
-			#endregion
-
-			#region Fields
-
-			private object _ctorValue;
+		    private object _ctorValue;
 			private string typeName;
-
-			#endregion
 		}
-
-		#endregion
 	}
 }

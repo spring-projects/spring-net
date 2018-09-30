@@ -56,7 +56,10 @@ namespace Spring.Objects.Factory.Xml
                 ConfigurableResourceLoader loader = new ConfigurableResourceLoader();
                 underlyingResource = loader.GetResource(fileName);
             }
-            underlyingResource = new FileSystemResource(fileName);
+            else
+            {
+                underlyingResource = new FileSystemResource(fileName);
+            }
         }
 
         /// <summary>

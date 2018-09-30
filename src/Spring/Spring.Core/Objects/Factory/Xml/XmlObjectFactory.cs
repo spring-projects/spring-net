@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -16,15 +14,9 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using Spring.Core.IO;
 using Spring.Objects.Factory.Support;
-
-#endregion
 
 namespace Spring.Objects.Factory.Xml
 {
@@ -61,9 +53,7 @@ namespace Spring.Objects.Factory.Xml
     [Serializable]
     public class XmlObjectFactory : DefaultListableObjectFactory
 	{
-		#region Constructor (s) / Destructor
-
-        /// <summary>
+	    /// <summary>
         /// Creates a new instance of the <see cref="XmlObjectFactory"/> class,
         /// with the given resource, which must be parsable using DOM.
         /// </summary>
@@ -129,11 +119,7 @@ namespace Spring.Objects.Factory.Xml
 			ObjectDefinitionReader.LoadObjectDefinitions(resource);
 		}
 
-		#endregion
-
-		#region Properties
-
-        /// <summary>
+	    /// <summary>
         /// Gets object definition reader to use.
         /// </summary>
 	    protected virtual IObjectDefinitionReader ObjectDefinitionReader
@@ -143,7 +129,5 @@ namespace Spring.Objects.Factory.Xml
                 return new XmlObjectDefinitionReader(this);
 	        }
 	    }
-
-		#endregion
 	}
 }

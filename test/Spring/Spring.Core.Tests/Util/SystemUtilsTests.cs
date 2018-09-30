@@ -73,11 +73,5 @@ namespace Spring.Util
                 Assert.Fail("ThreadId should be an integer");
             }
         }
-
-        [Test]
-        public void Clr4Runtime()
-        {
-            Assert.IsTrue(SystemUtils.Clr4Runtime);
-        }
     }
 }

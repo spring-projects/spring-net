@@ -31,7 +31,6 @@ namespace Spring.Template.Velocity{
     /// Generalized Utility class for merging velocity templates into a text writer or return the result as a string
     /// </summary>
     /// <author>Erez Mazor</author>
-    [CLSCompliant(false)]
     public class VelocityEngineUtils
     {
 

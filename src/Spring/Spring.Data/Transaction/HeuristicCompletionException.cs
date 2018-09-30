@@ -107,36 +107,14 @@ namespace Spring.Transaction
 			_outcomeState = outcomeState;
 		}
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Transaction.CannotCreateTransactionException"/> class.
-		/// </summary>
-		/// <param name="info">
-		/// The <see cref="System.Runtime.Serialization.SerializationInfo"/>
-		/// that holds the serialized object data about the exception being thrown.
-		/// </param>
-		/// <param name="context">
-		/// The <see cref="System.Runtime.Serialization.StreamingContext"/>
-		/// that contains contextual information about the source or destination.
-		/// </param>
+		/// <inheritdoc />
 		protected HeuristicCompletionException( SerializationInfo info, StreamingContext context )
 			: base( info, context ) 
 		{
 			_outcomeState = ( TransactionOutcomeState ) info.GetInt32( "outcomeState" );
 		}
 
-		/// <summary>
-		/// Override of <see cref="System.Exception.GetObjectData(SerializationInfo, StreamingContext)"/>
-		/// to allow for private serialization.
-		/// </summary>
-		/// <param name="info">
-		/// The <see cref="System.Runtime.Serialization.SerializationInfo"/>
-		/// that holds the serialized object data about the exception.
-		/// </param>
-		/// <param name="context">
-		/// The <see cref="System.Runtime.Serialization.StreamingContext"/>
-		/// that contains contextual information about the source or destination.
-		/// </param>
+		/// <inheritdoc />
 		public override void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
 			info.AddValue( "outcomeState", _outcomeState );

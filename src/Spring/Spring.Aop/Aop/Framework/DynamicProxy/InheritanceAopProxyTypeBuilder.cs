@@ -168,7 +168,7 @@ namespace Spring.Aop.Framework.DynamicProxy
             ImplementIAopProxy(typeBuilder);
 
             Type proxyType;
-            proxyType = typeBuilder.CreateType();
+            proxyType = typeBuilder.CreateTypeInfo();
 
             // set target method references
             foreach (DictionaryEntry entry in targetMethods)

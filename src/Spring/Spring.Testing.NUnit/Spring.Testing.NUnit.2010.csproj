@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFrameworks>netstandard2.0;$(TargetFullFrameworkVersion)</TargetFrameworks>
     <Description>Interfaces and classes that provide NUnit integration in Spring.Net</Description>
     <NoWarn>1587, 1591, 219, 162, 618</NoWarn>
   </PropertyGroup>
@@ -9,7 +9,7 @@
     <ProjectReference Include="..\Spring.Data\Spring.Data.2010.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="NUnit" Version="3.5.0" />
+    <PackageReference Include="NUnit" Version="3.10.1" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\GenCommonAssemblyInfo.cs">

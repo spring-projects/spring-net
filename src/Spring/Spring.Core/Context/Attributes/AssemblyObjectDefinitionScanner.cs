@@ -47,7 +47,7 @@ namespace Spring.Context.Attributes
             "NUnit",
             "Quartz",
             "NVelocity",
-            "Rhino.Mocks",
+            "FakeItEasy",
             "Apache.NMS"
         };
 

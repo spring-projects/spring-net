@@ -39,7 +39,7 @@ namespace Spring.Aop.Framework.Adapter
 	/// <author>Rod Johnson</author>
 	/// <author>Simon White (.NET)</author>
 	[TestFixture]
-	public sealed class ThrowsAdviceInterceptorTests
+	public sealed partial class ThrowsAdviceInterceptorTests
 	{
 		[Test]
 		public void NoHandlerMethods()
@@ -201,83 +201,79 @@ namespace Spring.Aop.Framework.Adapter
 			Assert.AreEqual(1, handler.GetCalls("RemotingException"));
 		}
 
-        #region Helper Classes
+		private sealed class MultipleMethodsAreApplicableThrowsHandler
+		{
+			public void AfterThrowing(MethodInfo method, object[] args, object target, RemotingException ex)
+			{
+			}
 
-        private sealed class MultipleMethodsAreApplicableThrowsHandler
-        {
-            public void AfterThrowing(
-                MethodInfo method, object[] args, object target, RemotingException ex)
-            {
-            }
+			public void AfterThrowing(RemotingException ex)
+			{
+			}
+		}
 
-            public void AfterThrowing(RemotingException ex)
-            {
-            }
-        }
+		private class ThrowingMyHandler : MyThrowsHandler
+		{
+			private Exception exception;
 
-	    private class ThrowingMyHandler : MyThrowsHandler
-	    {
-	        private Exception exception;
+			public ThrowingMyHandler(Exception ex)
+			{
+				this.exception = ex;
+			}
 
-	        public ThrowingMyHandler(Exception ex)
-	        {
-	            this.exception = ex;
-	        }
+			public override void AfterThrowing(RemotingException ex)
+			{
+				base.AfterThrowing(ex);
+				throw exception;
+			}
+		}
 
-	        public override void AfterThrowing(RemotingException ex)
-	        {
-	            base.AfterThrowing(ex);
-	            throw exception;
-	        }
-	    }
+		public class MyThrowsHandler : MethodCounter, IThrowsAdvice
+		{
+			public void AfterThrowing(
+				MethodInfo m, object[] args, object target, HttpException ex)
+			{
+				Count("HttpException");
+			}
 
-	    public class MyThrowsHandler : MethodCounter, IThrowsAdvice
-	    {
-	        public void AfterThrowing(
-	            MethodInfo m, object[] args, object target, HttpException ex)
-	        {
-	            Count("HttpException");
-	        }
+			public virtual void AfterThrowing(RemotingException ex)
+			{
+				Count("RemotingException");
+			}
 
-	        public virtual void AfterThrowing(RemotingException ex)
-	        {
-	            Count("RemotingException");
-	        }
+			// not valid, wrong number of arguments...
+			public void AfterThrowing(MethodInfo m, Exception ex)
+			{
+				throw new NotSupportedException("Shouldn't be called");
+			}
+		}
+		
+		public interface IEcho
+		{
+			int A { get; set; }
 
-	        // not valid, wrong number of arguments...
-	        public void AfterThrowing(MethodInfo m, Exception ex)
-	        {
-	            throw new NotSupportedException("Shouldn't be called");
-	        }
-	    }
+			int EchoException(int i, Exception t);
+		}
 
-	    public interface IEcho
-	    {
-	        int A { get; set; }
+		public class Echo : IEcho
+		{
+			private int a;
 
-	        int EchoException(int i, Exception t);
-	    }
+			public int A
+			{
+				get { return a; }
+				set { a = value; }
+			}
 
-	    public class Echo : IEcho
-	    {
-	        private int a;
+			public virtual int EchoException(int i, Exception ex)
+			{
+				if (ex != null)
+				{
+					throw ex;
+				}
+				return i;
+			}
+		}
 
-	        public int A
-	        {
-	            get { return a; }
-	            set { a = value; }
-	        }
-
-	        public virtual int EchoException(int i, Exception ex)
-	        {
-	            if (ex != null)
-	            {
-	                throw ex;
-	            }
-	            return i;
-	        }
-	    }
-
-	    #endregion
 	}
 }

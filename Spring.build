@@ -375,7 +375,7 @@ Commandline Examples:
 		</items>
 	  </in>
       <do>
-		<echo message="Running tests for ${path}" />
+		<echo message="Running .NET Framework tests for ${path}" />
         <property name="test.bin.dir" value="${path}/net452" />
         <property name="test.assemblyname" value="${string::substring(path, string::last-index-of(path, '\') + 1, string::get-length(path) - string::last-index-of(path, '\') - 1)}" />
         <property name="test.assemblyfile" value="${test.assemblyname}.dll" />
@@ -383,6 +383,9 @@ Commandline Examples:
         <call target="common.run-tests" />
       </do>
     </foreach>	
+	
+	<!-- run .NET Core separately for now -->
+    <call target="compile-test-netcore" />
 	
     <!-- build coverage summary -->
 	<exec program="${tool.dir}/ncoverexplorer/ncoverexplorer.console.exe" workingdir="${current.bin.dir}" failonerror="false" if="${test.coverage.tool == 'ncover' and test.withcoverage}">
@@ -400,8 +403,32 @@ Commandline Examples:
 	</exec>
   </target>
 
+  <target name="compile-test-netcore">
+    <foreach item="File" property="file">
+	  <in>
+	    <items>
+		   <include name="${spring.basedir}/test/Spring/Spring.Core.Tests/Spring.Core.Tests.2010.csproj" />
+		   <include name="${spring.basedir}/test/Spring/Spring.Aop.Tests/Spring.Aop.Tests.2010.csproj" />
+		   <include name="${spring.basedir}/test/Spring/Spring.Data.Tests/Spring.Data.Tests.2010.csproj" />
+		   <include name="${spring.basedir}/test/Spring/Spring.Testing.NUnit.Tests/Spring.Testing.NUnit.Tests.2010.csproj" />
+		</items>
+	  </in>
+      <do>
+        <echo message="Running .NET Core tests for ${file}" />
+
+        <exec program="dotnet" verbose="true">
+          <arg line="test" />
+          <arg line="/nodeReuse:false" />
+          <arg line="-c ${current.build.config}" />
+          <arg line="-f netcoreapp2.1" />
+          <arg line="${file}" />
+		</exec>
+      </do>
+    </foreach>	
+  </target>
+  
   <target name="compile-net-4.5" description="Builds .NET Framework 4.5 version"
-        depends="set-net-4.5-runtime-configuration, check-spring-basedir, clean-current-bin-dir, restore-nuget-packages">
+        depends="set-net-4.5-runtime-configuration, check-spring-basedir, restore-nuget-packages">
 	
 	<property name="test.withcoverage" value="false" overwrite="true"/>
 	
@@ -445,7 +472,7 @@ Commandline Examples:
   </target>  
   
   <target name="compile-mono-2.0" description="Builds MONO Framework 2.0 version"
-          depends="set-mono-2.0-runtime-configuration, check-spring-basedir, clean-current-bin-dir">
+          depends="set-mono-2.0-runtime-configuration, check-spring-basedir">
     <call target="copykeys" if="${project.build.sign}"/>
     <call target="common.generate-assemblyinfo"/>
     <property name="build-ems" value="false" overwrite="true" />
@@ -853,7 +880,6 @@ Commandline Examples:
           <include name="**/nunit.*.xml"/>
           <include name="**/NUnitAsp.dll"/>
           <include name="**/NUnitAspEx.dll"/>
-          <include name="**/Rhino.Mocks.dll"/>
           <include if="${not net-4.0}" name="**/System.Web.Extensions.dll"/>
           <include name="**/Apache.NMS.dll"/>
           <include name="**/Apache.NMS.pdb"/>
@@ -1089,29 +1115,6 @@ Commandline Examples:
 
         </fileset>
       </copy>
-	  
-        <mkdir dir="${current.package.dir}/bin/net/3.5"/>
-        <copy todir="${current.package.dir}/bin/net/3.5" verbose="${copy-verbose}">
-          <fileset basedir="./build/net/3.5">
-            
-			<include name="*/Spring.Services.dll"/>
-            <include name="*/Spring.Services.xml"/>
-            <include name="*/Spring.Services.pdb"/>
-			
-			<include name="*/*/Spring.Scheduling.Quartz2.dll"/>
-			<include name="*/*/Spring.Scheduling.Quartz2.xml"/>
-			<include name="*/*/Spring.Scheduling.Quartz2.pdb"/>
-			
-			<include name="*/Spring.Web.Extensions.dll"/>
-            <include name="*/Spring.Web.Extensions.xml"/>
-            <include name="*/Spring.Web.Extensions.pdb"/>
-			
-			<include name="*/Spring.Data.NHibernate*.dll"/>
-			<include name="*/Spring.Data.NHibernate*.xml"/>
-			<include name="*/Spring.Data.NHibernate*.pdb"/>
-			
-          </fileset>
-        </copy>
       
    </if>
 
@@ -1447,52 +1450,27 @@ Commandline Examples:
 	
 	<foreach item="File" property="filename">
 		<in>
-			<items basedir="${spring.basedir}/src/spring">
-				<include name="**/*.nuspec" />
+			<items basedir="${spring.basedir}/src/Spring">
+				<include name="**/*.csproj" />
+				<exclude name="**/Spring.Messaging.Ems.csproj*" unless="${build-ems}" />
 			</items>
 		</in>
 		<do>
 			<echo message="Generating NuGet Package from nuspec file: ${filename}" />  
-
-    <exec program="${tool.dir}\NuGet\NuGet.exe" workingdir="${spring.basedir}" verbose="true">
-      <arg value="pack" />
-      <arg value="${filename}" />
-	  <arg value="-Version" />
-	  <arg value="${nuget.package.version}" />
-	  <arg value="-basepath" />
-	  <arg value="${spring.basedir}" />
-	  <arg value="-OutputDirectory" />
-	  <arg value="${nuget.package.dir}" />
-    </exec>
+			<exec program="dotnet" verbose="true">
+			  <arg value="pack" />
+			  <arg value="-c" />
+			  <arg value="Release" />
+			  <arg value="-p:PackageVersion=${nuget.package.version}" />
+			  <arg value="-o" />
+			  <arg value="${nuget.package.dir}" />
+			  <arg value="${filename}" />
+			</exec>
 		</do>
 	</foreach>
 </target>
 
 <target name="update-nuspec-metadata" depends="set-nuget-package-version">  
-<!--
-	INFO: this task assumes that all SPRNET components are versioned coincident with each other and
-			updates all version dependencies betw. SPRNET components at once
--->
-	<foreach item="File" property="filename">
-		<in>
-			<items basedir="${spring.basedir}/src/spring">
-				<include name="**/*.nuspec" />
-				<!--
-				NOTE: must exclude Spring.Core.nuspec b/c it has no Spring.* deps and so the XPATH expr. won't find a match in that case
-				       and so would fail the XMLPOKE operation otherwise
-				-->
-				<exclude name="**/Spring.Core.nuspec" />
-			</items>
-		</in>
-		<do>
-			<echo message="Processing nuspec file: ${filename}" />
-			<xmlpoke file="${filename}" xpath="/n:package/n:metadata/n:dependencies/n:dependency[starts-with(@id, 'Spring.')]/@version" value="${nuget.package.version}">
-				<namespaces>
-					<namespace prefix="n" uri="http://schemas.microsoft.com/packaging/2010/07/nuspec.xsd" />
-				</namespaces>
-			</xmlpoke>
-		</do>
-	</foreach>
 </target>
 
 

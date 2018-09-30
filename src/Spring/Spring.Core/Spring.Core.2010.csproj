@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFrameworks>netstandard2.0;$(TargetFullFrameworkVersion)</TargetFrameworks>
     <Description>Core functionality for Spring.Net IoC container</Description>
     <NoWarn>219, 162, 618, 1591</NoWarn>
   </PropertyGroup>
@@ -8,9 +8,22 @@
     <PreBuildEvent>rem $(ProjectDir)..\..\..\build-support\tools\antlr-2.7.6\antlr-2.7.6.exe -o $(ProjectDir)Expressions\Parser $(ProjectDir)Expressions\Expression.g
     </PreBuildEvent>
   </PropertyGroup>
-  <ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == '$(TargetFullFrameworkVersion)' ">
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System.Configuration" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <PackageReference Include="Microsoft.CSharp" Version="4.5.0" />
+    <PackageReference Include="Microsoft.Win32.Registry" Version="4.5.0" />
+    <PackageReference Include="System.CodeDom" Version="4.5.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.5.0" />
+    <PackageReference Include="System.Reflection" Version="4.3.0" />
+    <PackageReference Include="System.Reflection.Emit" Version="4.3.0" />
+    <PackageReference Include="System.Reflection.Emit.Lightweight" Version="4.3.0" />
+    <PackageReference Include="System.Reflection.Primitives" Version="4.3.0" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <Compile Remove="Threading\CallContextStorage.cs" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Common.Logging" Version="$(CommonLoggingVersion)" />

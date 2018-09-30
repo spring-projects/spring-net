@@ -50,6 +50,7 @@ namespace Spring.Util
 			Assert.AreEqual(i1, i2);
 		}
 
+#if !NETCOREAPP
 		[Test]
 		public void MediumTrustAllowsCopyingBetweenTypesFromSameModule()
 		{
@@ -71,6 +72,7 @@ namespace Spring.Util
             SecurityTemplate.MediumTrustInvoke(new ThreadStart(new CopyCommand(e2, e1).Execute));
 			Assert.AreEqual(e1.Message, e2.Message);
 		}
+#endif
 
         class CopyCommand
         {

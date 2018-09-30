@@ -19,8 +19,14 @@
 #endregion
 
 using System;
-using System.Messaging;
+
 using Common.Logging;
+
+#if NETSTANDARD
+using Experimental.System.Messaging;
+#else
+using System.Messaging;
+#endif
 
 namespace Spring.Messaging.Listener
 {

@@ -22,9 +22,11 @@
 
 using System;
 using System.Reflection;
+#if !NETCOREAPP
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Messaging;
 using System.Runtime.Remoting.Proxies;
+#endif
 using NUnit.Framework;
 using Spring.Objects;
 
@@ -177,6 +179,28 @@ namespace Spring.Util
             AssertNotUnderstandsType(new object(), "target", null, typeof(ArgumentNullException), "Argument 'requiredType' cannot be null.");
         }
 
+        private void AssertNotUnderstandsType(object target, string targetName, Type requiredType, Type exceptionType, string partialMessage)
+        {
+            try
+            {
+                AssertUtils.Understands(target, targetName, requiredType);
+                Assert.Fail();
+            }
+            catch(Exception ex)
+            {
+                if (ex.GetType() != exceptionType)
+                {
+                    Assert.Fail("Expected Exception of type {0}, but was {1}", exceptionType, ex.GetType());
+                }
+
+                if (-1 == ex.Message.IndexOf(partialMessage))
+                {
+                    Assert.Fail("Expected Message '{0}', but got '{1}'", partialMessage, ex.Message);
+                }
+            }
+        }
+
+#if !NETCOREAPP
         [Test]
         public void UnderstandsMethod()
         {
@@ -197,27 +221,6 @@ namespace Spring.Util
             // incompatible transparent proxy, instance method
             object incompatibleProxy = new TestProxy(new object()).GetTransparentProxy();
             AssertNotUnderstandsMethod(incompatibleProxy, "incompatibleProxy", getDescriptionMethod, typeof(NotSupportedException), "Target 'incompatibleProxy' is a transparent proxy that does not support methods of 'Spring.Objects.ITestObject'.");
-        }
-
-        private void AssertNotUnderstandsType(object target, string targetName, Type requiredType, Type exceptionType, string partialMessage)
-        {
-            try
-            {
-                AssertUtils.Understands(target, targetName, requiredType);
-                Assert.Fail();
-            }
-            catch(Exception ex)
-            {
-                if (ex.GetType() != exceptionType)
-                {
-                    Assert.Fail("Expected Exception of type {0}, but was {1}", exceptionType, ex.GetType());
-                }
-
-                if (-1 == ex.Message.IndexOf(partialMessage))
-                {
-                    Assert.Fail("Expected Message '{0}', but got '{1}'", partialMessage, ex.Message);
-                }
-            }
         }
 
         private void AssertNotUnderstandsMethod(object target, string targetName, MethodBase method, Type exceptionType, string partialMessage)
@@ -269,5 +272,6 @@ namespace Spring.Util
                 set { throw new System.NotSupportedException(); }
             }
         }
+#endif
     }
 }

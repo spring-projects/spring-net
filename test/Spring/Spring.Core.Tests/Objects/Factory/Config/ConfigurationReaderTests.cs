@@ -87,8 +87,6 @@ namespace Spring.Objects.Factory.Config
                                 props["jenny"],
                                 "Wrong value for second property");
             }
-
-            string machineConfig = RuntimeEnvironment.SystemConfigurationFile;
         }
 
         [Test]

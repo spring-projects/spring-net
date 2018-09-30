@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System;
 using AopAlliance.Aop;
@@ -36,13 +32,7 @@ namespace Spring.Aop.Support
     [Serializable]
     public abstract class AbstractPointcutAdvisor : IPointcutAdvisor, IOrdered
     {
-        #region Fields
-
         private int _order = Int32.MaxValue;
-
-        #endregion
-
-        #region IOrdered Members
 
         /// <summary>
         /// Returns this <see cref="Spring.Aop.IAdvisor"/>s order in the
@@ -57,10 +47,6 @@ namespace Spring.Aop.Support
             get { return this._order; }
             set { this._order = value; }
         }
-
-        #endregion
-
-        #region IAdvisor Members
 
         /// <summary>
         /// Return the advice part of this aspect.
@@ -100,18 +86,11 @@ namespace Spring.Aop.Support
             }
         }
 
-        #endregion
-
-        #region IPointcutAdvisor Members
-
         /// <summary>
         /// The <see cref="Spring.Aop.IPointcut"/> that drives this advisor.
         /// </summary>
         public abstract IPointcut Pointcut { get; set; }
 
-        #endregion
-
-        #region Methods
         /// <summary>
         /// Determines whether the specified <see cref="System.Object"/>
         /// is equal to the current <see cref="System.Object"/>.  
@@ -170,7 +149,5 @@ namespace Spring.Aop.Support
                 + 27 * (Advice == null ? 0 : Advice.GetHashCode())
                 + 31 * Order.GetHashCode();
         }
-
-        #endregion
     }
 }

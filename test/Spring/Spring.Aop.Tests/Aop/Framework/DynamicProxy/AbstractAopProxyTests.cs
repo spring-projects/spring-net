@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System;
 using System.IO;
@@ -92,8 +88,6 @@ namespace Spring.Aop.Framework.DynamicProxy
             ExpressionEvaluator.GetValue(advisedSupport, "Activate()");
             return (IAopProxy)proxyCtorInfo.Invoke(new object[] { advisedSupport });
         }
-
-        #region Serialization Tests
 
         private object SerializeAndDeserialize(object s)
         {
@@ -219,8 +213,6 @@ namespace Spring.Aop.Framework.DynamicProxy
             Assert.AreEqual(target.TestData, to.TestData);
         }
 
-        #endregion
-
         [Test(Description = "Simple test that if we set values we can get them out again.")]
         public void ValuesStick()
         {
@@ -242,8 +234,6 @@ namespace Spring.Aop.Framework.DynamicProxy
             to.Name = name;
             Assert.AreEqual(name, to.Name);
         }
-
-        #region ImplementsInterfaceHierarchy Types
 
         public interface ITestPerson
         {
@@ -280,8 +270,6 @@ namespace Spring.Aop.Framework.DynamicProxy
                 set { _company = value; }
             }
         }
-
-        #endregion
 
         [Test(Description = "http://jira.springframework.org/browse/SPRNET-1174")]
         public void ImplementsInterfaceHierarchy()
@@ -448,8 +436,6 @@ namespace Spring.Aop.Framework.DynamicProxy
             Assert.AreEqual(target.Age, proxy2.Age, "Incorrect age");
         }
 
-        #region ProxyAProxyWhereClassExplicitlyImplementsInterfacesWithSameMethodNamesAndSignatures
-
         // SPRNET-655
         [Test]
         public void ProxyAProxyWhereClassExplicitlyImplementsInterfacesWithSameMethodNamesAndSignatures()
@@ -494,8 +480,6 @@ namespace Spring.Aop.Framework.DynamicProxy
 
         public class TheCommand : IServiceCommand, IBusinessCommand
         {
-            #region IServiceCommand Members
-
             private int _serviceCount = 0;
             int IServiceCommand.ServiceCount
             {
@@ -507,10 +491,6 @@ namespace Spring.Aop.Framework.DynamicProxy
                 _serviceCount++;
             }
 
-            #endregion
-
-            #region IBusinessCommand Members
-
             private int _businessCount = 0;
             int IBusinessCommand.BusinessCount
             {
@@ -521,11 +501,7 @@ namespace Spring.Aop.Framework.DynamicProxy
             {
                 _businessCount++;
             }
-
-            #endregion
         }
-
-        #endregion
 
         [Test]
         public void EqualsMethod()
@@ -554,8 +530,6 @@ namespace Spring.Aop.Framework.DynamicProxy
             Assert.IsNotNull(proxy);
             Assert.AreEqual(target.GetHashCode(), proxy.GetHashCode(), "GetHashCode() not equal");
         }
-
-        #region ProxyMethodWithRefOutParameters
 
         [Test]
         public void ProxyMethodWithRefOutParametersWithDirectCall()
@@ -685,10 +659,6 @@ namespace Spring.Aop.Framework.DynamicProxy
         {
         }
 
-        #endregion
-
-        #region ProxyGenericMethodWithRefOutParameters
-
         [Test]
         public void ProxyGenericMethodWithRefOutParametersWithDirectCall()
         {
@@ -789,8 +759,6 @@ namespace Spring.Aop.Framework.DynamicProxy
         {
         }
 
-        #endregion
-
         [Test]
         public void ToStringMethod()
         {
@@ -875,8 +843,6 @@ namespace Spring.Aop.Framework.DynamicProxy
             Assert.AreEqual(2, ni.Count);
         }
 
-        #region MultiThreadedProxyCreation
-
         [Test(Description = "http://opensource.atlassian.com/projects/spring/browse/SPRNET-340")]
         public void MultiThreadedProxyCreation()
         {
@@ -906,10 +872,6 @@ namespace Spring.Aop.Framework.DynamicProxy
             Assert.IsNotNull(proxy);
             Assert.AreEqual(target.Age, proxy.Age, "Incorrect age");
         }
-
-        #endregion
-
-        #region Attributes
 
         [Test]
         public void ProxyTargetTypeAttributes()
@@ -1122,8 +1084,6 @@ namespace Spring.Aop.Framework.DynamicProxy
             }
         }
 
-        #endregion
-
         [Test]
         public void AddAdviceAtRuntime()
         {
@@ -1239,10 +1199,8 @@ namespace Spring.Aop.Framework.DynamicProxy
             Assert.AreEqual(2, cta.GetCalls());
         }
 
-        #region OneAdvisedObjectCallsAnother
-
         /// <summary>
-        /// Check that the two MethodInvocations necessary are independent 
+        /// Check that the two MethodInvocations necessary are independent
         /// and don't conflict.
         /// </summary>
         [Test]
@@ -1304,8 +1262,6 @@ namespace Spring.Aop.Framework.DynamicProxy
             }
         }
 
-        #endregion
-
         [Test]
         public void Reentrance()
         {
@@ -1357,8 +1313,8 @@ namespace Spring.Aop.Framework.DynamicProxy
         }
 
         /// <summary>
-        /// Check that although a method is eligible for advice chain optimization and 
-        /// direct reflective invocation, it doesn't happen if we've asked to see the proxy, 
+        /// Check that although a method is eligible for advice chain optimization and
+        /// direct reflective invocation, it doesn't happen if we've asked to see the proxy,
         /// so as to guarantee a consistent programming model.
         /// </summary>
         [Test]
@@ -1387,8 +1343,6 @@ namespace Spring.Aop.Framework.DynamicProxy
             Assert.Throws<AopConfigException>(() => proxied.IncrementViaProxy());
         }
 
-        #region TargetReturnsThis
-
         [Test(Description = "Test that the proxy returns itself when the target returns 'this'.")]
         public void TargetReturnsThis()
         {
@@ -1409,8 +1363,6 @@ namespace Spring.Aop.Framework.DynamicProxy
                 get { return this; }
             }
         }
-
-        #endregion
 
         [Test]
         public void TargetThrowsException()
@@ -1433,8 +1385,6 @@ namespace Spring.Aop.Framework.DynamicProxy
                 Assert.AreEqual(expectedException, ex, "exception matches");
             }
         }
-
-        #region InterceptorThrowsException
 
         [Test]
         public void InterceptorThrowsException()
@@ -1475,8 +1425,6 @@ namespace Spring.Aop.Framework.DynamicProxy
             }
         }
 
-        #endregion
-
         // TODO : Introduction tests
         /*
                 [Test(Description = "Test stateful interceptor")]
@@ -1501,7 +1449,7 @@ namespace Spring.Aop.Framework.DynamicProxy
                     CheckTestObjectIntroduction(advised);
                 }
 
-                private void CheckTestObjectIntroduction(AdvisedSupport advised) 
+                private void CheckTestObjectIntroduction(AdvisedSupport advised)
                 {
                     int newAge = 65;
 
@@ -1514,12 +1462,12 @@ namespace Spring.Aop.Framework.DynamicProxy
                     lockable.DoLock();
 
                     Assert.IsTrue(ito.Age == newAge);
-                    try 
+                    try
                     {
                         ito.Age = 1;
                         Assert.Fail("Setters should fail when locked");
                     }
-                    catch (LockedException) 
+                    catch (LockedException)
                     {
                         // ok
                     }
@@ -1532,8 +1480,6 @@ namespace Spring.Aop.Framework.DynamicProxy
                     Assert.IsTrue(ito.Age == 1);
                 }
         */
-
-        #region MultipleProceedCalls
 
         [Test]
         public void MultipleProceedCalls()
@@ -1559,10 +1505,6 @@ namespace Spring.Aop.Framework.DynamicProxy
                 return invocation.Proceed();
             }
         }
-
-        #endregion
-
-        #region ReplaceArgument
 
         [Test]
         public void ReplaceArgument()
@@ -1674,8 +1616,6 @@ namespace Spring.Aop.Framework.DynamicProxy
                 return returnValue;
             }
         }
-
-        #endregion
 
         /// <summary>
         /// http://forum.springframework.net/showthread.php?t=504
@@ -1822,7 +1762,7 @@ namespace Spring.Aop.Framework.DynamicProxy
 
         // TODO : Opaque can be implemented if really usefull (To increase performance)
         /*
-                public void testCanPreventCastToAdvisedUsingOpaque() 
+                public void testCanPreventCastToAdvisedUsingOpaque()
                 {
                     TestObject target = new TestObject();
                     ProxyFactory pf = new ProxyFactory(target);
@@ -1846,7 +1786,6 @@ namespace Spring.Aop.Framework.DynamicProxy
          */
 
         // TODO AdviceSupportListeners test
-        #region AdviceSupportListeners
         /*
         [Test]
         public void AdviceSupportListeners()
@@ -1888,13 +1827,13 @@ namespace Spring.Aop.Framework.DynamicProxy
             Assert.AreEqual(2, l.adviceChanges);
         }
 
-        public class CountingAdvisorListener : IAdvisedSupportListener 
+        public class CountingAdvisorListener : IAdvisedSupportListener
         {
             public int adviceChanges;
             public int activates;
             private AdvisedSupport expectedSource;
 
-            public CountingAdvisorListener(AdvisedSupport expectedSource) 
+            public CountingAdvisorListener(AdvisedSupport expectedSource)
             {
                 this.expectedSource = expectedSource;
             }
@@ -1905,18 +1844,18 @@ namespace Spring.Aop.Framework.DynamicProxy
                 ++adviceChanges;
             }
 
-            public void Activated(AdvisedSupport source) 
+            public void Activated(AdvisedSupport source)
             {
                 Assert.AreEqual(expectedSource,source);
                 ++activates;
             }
         }
 
-        public class RefreshCountingAdvisorChainFactory : IAdvisorChainFactory 
+        public class RefreshCountingAdvisorChainFactory : IAdvisorChainFactory
         {
             public int refreshes;
 
-            public void  AdviceChanged(AdvisedSupport source) 
+            public void  AdviceChanged(AdvisedSupport source)
             {
                 ++refreshes;
             }
@@ -1924,17 +1863,14 @@ namespace Spring.Aop.Framework.DynamicProxy
             public IList GetInterceptors(IAdvised advised, object proxy, string methodId, MethodInfo method, Type targetType)
             {
                 return AdvisorChainFactoryUtils.CalculateInterceptors(advised, proxy, method, targetType);
-            }   
+            }
 
-            public void  Activated(AdvisedSupport source) 
+            public void  Activated(AdvisedSupport source)
             {
                 ++refreshes;
             }
         }
 */
-        #endregion
-
-        #region DynamicMethodPointcut
 
         [Test]
         public void DynamicMethodPointcutThatAlwaysAppliesStatically()
@@ -2012,10 +1948,6 @@ namespace Spring.Aop.Framework.DynamicProxy
             }
         }
 
-        #endregion
-
-        #region StaticMethodPointcut
-
         [Test]
         public void StaticMethodPointcut()
         {
@@ -2055,14 +1987,10 @@ namespace Spring.Aop.Framework.DynamicProxy
             }
         }
 
-        #endregion
-
-        #region CloneInvocationToProceedThreeTimes
-
         // TODO ? ReflectiveMethodInvocation is not Cloneable
         /*
                 [Test(Description="There are times when we want to call proceed() twice.")]
-                public void CloneInvocationToProceedThreeTimes() 
+                public void CloneInvocationToProceedThreeTimes()
                 {
                     //We can do this if we clone the invocation.
 
@@ -2113,7 +2041,7 @@ namespace Spring.Aop.Framework.DynamicProxy
                 }
 
         //    // We want to change the arguments on a clone: it shouldn't affect the original.
-        //    public void testCanChangeArgumentsIndependentlyOnClonedInvocation() throws Throwable 
+        //    public void testCanChangeArgumentsIndependentlyOnClonedInvocation() throws Throwable
         //    {
         //        TestObject to = new TestObject();
         //        ProxyFactory pc = new ProxyFactory(to);
@@ -2160,9 +2088,6 @@ namespace Spring.Aop.Framework.DynamicProxy
         //        Assert.AreEqual(name1, saver.names.get(1));
         //    }
         */
-        #endregion
-
-        #region OverloadedMethodsWithDifferentAdvice
 
         [Test]
         public void OverloadedMethodsWithDifferentAdvice()
@@ -2245,8 +2170,6 @@ namespace Spring.Aop.Framework.DynamicProxy
             }
         }
 
-        #endregion
-
         // TODO : IAdvised.TargetSource is read only (no setter)
         /*
                 [Test]
@@ -2294,7 +2217,7 @@ namespace Spring.Aop.Framework.DynamicProxy
                 }
 
                 [Test]
-                public void ProxyIsBoundBeforeTargetSourceInvoked() 
+                public void ProxyIsBoundBeforeTargetSourceInvoked()
                 {
                     TestObject target = new TestObject();
                     ProxyFactory pf = new ProxyFactory(target);
@@ -2317,16 +2240,14 @@ namespace Spring.Aop.Framework.DynamicProxy
                             return target;
                         }
 
-                        public void releaseTarget(Object target) throws Exception {				
-                        }			
+                        public void releaseTarget(Object target) throws Exception {
+                        }
                     });
-	
+
                     // Just test anything: it will fail if context wasn't found
                     Assert.AreEqual(0, proxy.Age);
                 }
         */
-
-        #region BeforeAdvisorIsInvoked
 
         [Test]
         public void BeforeAdvisorIsInvoked()
@@ -2365,10 +2286,7 @@ namespace Spring.Aop.Framework.DynamicProxy
             }
         }
 
-        #endregion
-
         // TODO : Multi advice not supported ?
-        #region MultiAdvice
 
         [Test]
         [Ignore("Multi advice not supported for now.")]
@@ -2419,10 +2337,6 @@ namespace Spring.Aop.Framework.DynamicProxy
                 return method.GetParameters().Length == 0 || method.Name == "Exceptional";
             }
         }
-
-        #endregion
-
-        #region BeforeAdviceThrowsException
 
         [Test]
         public void BeforeAdviceThrowsException()
@@ -2481,10 +2395,6 @@ namespace Spring.Aop.Framework.DynamicProxy
             }
         }
 
-        #endregion
-
-        #region AfterReturningAdvisorIsInvoked
-
         [Test]
         public void AfterReturningAdvisorIsInvoked()
         {
@@ -2533,8 +2443,6 @@ namespace Spring.Aop.Framework.DynamicProxy
             }
         }
 
-        #endregion
-
         [Test]
         public void AfterReturningAdvisorIsNotInvokedOnException()
         {
@@ -2564,8 +2472,7 @@ namespace Spring.Aop.Framework.DynamicProxy
             Assert.AreEqual(2, car.GetCalls());
         }
 
-        #region ThrowsAdvisorIsInvoked
-
+#if !NETCOREAPP
         [Test]
         public void ThrowsAdvisorIsInvoked()
         {
@@ -2606,6 +2513,7 @@ namespace Spring.Aop.Framework.DynamicProxy
             }
             Assert.AreEqual(1, th.GetCalls("HttpException"));
         }
+#endif
 
         private class EchoPointcutAdvisor : StaticMethodMatcherPointcutAdvisor
         {
@@ -2620,8 +2528,7 @@ namespace Spring.Aop.Framework.DynamicProxy
             }
         }
 
-        #endregion
-
+#if !NETCOREAPP
         [Test]
         public void AddThrowsAdviceWithoutAdvisor()
         {
@@ -2662,8 +2569,7 @@ namespace Spring.Aop.Framework.DynamicProxy
             }
             Assert.AreEqual(1, th.GetCalls("RemotingException"));
         }
-
-        #region Arguments
+#endif
 
         [Test]
         public void ArgumentsModification()
@@ -2690,36 +2596,24 @@ namespace Spring.Aop.Framework.DynamicProxy
 
         public class Interceptor1 : IMethodInterceptor
         {
-            #region IMethodInterceptor Members
-
             public object Invoke(IMethodInvocation invocation)
             {
                 invocation.Proceed();
 
                 return invocation.Arguments[0];
             }
-
-            #endregion
         }
 
         public class Interceptor2 : IMethodInterceptor
         {
-            #region IMethodInterceptor Members
-
             public object Invoke(IMethodInvocation invocation)
             {
                 invocation.Arguments[0] = null;
 
                 return invocation.Proceed();
             }
-
-            #endregion
         }
 
-        #endregion
-
-
-        #region Helper classes definitions
 
         public interface INeedsToSeeProxy
         {
@@ -2824,7 +2718,5 @@ namespace Spring.Aop.Framework.DynamicProxy
                 return null;
             }
         }
-
-        #endregion
     }
 }

@@ -20,6 +20,8 @@
 
 using System;
 using System.Reflection;
+using System.Runtime.Serialization;
+
 using Spring.Util;
 
 namespace Spring.Aop.Support
@@ -33,7 +35,7 @@ namespace Spring.Aop.Support
     /// <author>Mark Pollack</author>
     /// <seealso cref="AttributeMatchingPointcut"/>
     [Serializable]
-    public class AttributeMethodMatcher : StaticMethodMatcher
+    public class AttributeMethodMatcher : StaticMethodMatcher, ISerializable
     {
         private readonly Type attributeType;
 
@@ -47,6 +49,19 @@ namespace Spring.Aop.Support
         {
             ValidateAttributeTypeArgument(attributeType);
             this.attributeType = attributeType;
+        }
+
+        /// <inheritdoc />
+        private AttributeMethodMatcher(SerializationInfo info, StreamingContext context)
+        {
+            var type = info.GetString("AttributeType");
+            attributeType = type != null ? Type.GetType(type) : null;
+        }
+        
+        /// <inheritdoc />
+        public void GetObjectData(SerializationInfo info, StreamingContext context)
+        {
+            info.AddValue("AttributeType", attributeType?.AssemblyQualifiedName);
         }
 
         /// <summary>

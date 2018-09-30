@@ -44,7 +44,7 @@ namespace Spring.Aop
 	/// examples would include the ubiquitous logging of any such exceptions,
 	/// monitoring the number and type of exceptions and sending emails to
 	/// a support desk once certain criteria have been met, wrapping generic
-	/// exceptions such as <see cref="System.Data.SqlClient.SqlException"/> in
+	/// exceptions such as System.Data.SqlClient.SqlException in
 	/// exceptions that are more meaningful to your business logic, etc.
 	/// </p>
 	/// </remarks>

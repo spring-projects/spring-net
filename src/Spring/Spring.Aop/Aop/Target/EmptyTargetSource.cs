@@ -128,25 +128,12 @@ namespace Spring.Aop.Target
 			return "EmptyTargetSource: no target";
 		}
 
-		/// <summary>
-		/// Populates a <see cref="System.Runtime.Serialization.SerializationInfo"/> with
-		/// the data needed to serialize the target object.
-		/// </summary>
-		/// <param name="info">
-		/// The <see cref="System.Runtime.Serialization.SerializationInfo"/> to populate
-		/// with data.
-		/// </param>
-		/// <param name="context">
-		/// The destination (see <see cref="System.Runtime.Serialization.StreamingContext"/>)
-		/// for this serialization.
-		/// </param>
+		/// <inheritdoc />
 		[SecurityPermission(SecurityAction.Demand, SerializationFormatter=true)]
 		public void GetObjectData(SerializationInfo info, StreamingContext context)
 		{
 			info.SetType(typeof (EmptyTargetSourceObjectReference));
 		}
-
-
 
 		[Serializable]
 		private sealed class EmptyTargetSourceObjectReference : IObjectReference

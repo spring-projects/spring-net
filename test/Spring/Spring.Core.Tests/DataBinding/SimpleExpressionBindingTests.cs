@@ -36,6 +36,7 @@ namespace Spring.DataBinding
             public Nullable<short> SortOrder { get { return sortOrder; } set { sortOrder = value; } }
         }
 
+#if !NETCOREAPP
         [Test(Description="http://jira.springframework.org/browse/SPRNET-996")]
         public void BindToNullable()
         {
@@ -45,6 +46,7 @@ namespace Spring.DataBinding
             new SimpleExpressionBinding("Text", "SortOrder").BindSourceToTarget(textBox, entity, null);
             Assert.IsNull(entity.SortOrder);
         }
+#endif
 
         [Test]
         public void WithNullMessageId()

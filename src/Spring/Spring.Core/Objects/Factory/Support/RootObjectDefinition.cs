@@ -21,6 +21,7 @@
 #region Imports
 
 using System;
+using System.Runtime.Serialization;
 
 using Spring.Objects.Factory.Config;
 
@@ -61,8 +62,6 @@ namespace Spring.Objects.Factory.Support
     [Serializable]
     public class RootObjectDefinition : AbstractObjectDefinition
     {
-        #region Constructor (s) / Destructor
-
         /// <summary>
         /// Creates a new instance of the
         /// <see cref="Spring.Objects.Factory.Support.RootObjectDefinition"/> class.
@@ -251,9 +250,13 @@ namespace Spring.Objects.Factory.Support
         /// The definition that is to be copied.
         /// </param>
         public RootObjectDefinition(IObjectDefinition other) : base(other)
-        {}
+        {
+        }
 
-        #endregion
+        protected RootObjectDefinition(SerializationInfo info, StreamingContext context)
+            : base(info, context)
+        {
+        }
 
         /// <summary>
         /// Is always <c>null</c> for a <see cref="RootObjectDefinition"/>.

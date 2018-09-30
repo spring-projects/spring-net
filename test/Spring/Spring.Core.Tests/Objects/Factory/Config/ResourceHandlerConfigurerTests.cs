@@ -45,7 +45,7 @@ namespace Spring.Objects.Factory.Config
         public void Serialization()
         {
             IDictionary resourceHandlers = new Hashtable();
-            resourceHandlers.Add("httpsss", typeof(UrlResource));
+            resourceHandlers.Add("httpsss", typeof(UrlResource).AssemblyQualifiedName);
 
             ResourceHandlerConfigurer resourceHandlerConfiguer = new ResourceHandlerConfigurer();
             resourceHandlerConfiguer.ResourceHandlers = resourceHandlers;

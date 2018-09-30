@@ -102,18 +102,7 @@ namespace Spring.Dao
             this.identifier = identifier;
         }
 
-        /// <summary>
-        /// Creates a new instance of the
-        /// <see cref="ObjectOptimisticLockingFailureException"/> class.
-        /// </summary>
-        /// <param name="info">
-        /// The <see cref="System.Runtime.Serialization.SerializationInfo"/>
-        /// that holds the serialized object data about the exception being thrown.
-        /// </param>
-        /// <param name="context">
-        /// The <see cref="System.Runtime.Serialization.StreamingContext"/>
-        /// that contains contextual information about the source or destination.
-        /// </param>
+        /// <inheritdoc />
         protected ObjectOptimisticLockingFailureException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }

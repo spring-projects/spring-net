@@ -80,6 +80,7 @@ namespace Spring.Context.Support
                             msgSource.ToString());
         }
 
+#if !NETCOREAPP
         [Test]
         public void ApplyResources()
         {
@@ -89,6 +90,7 @@ namespace Spring.Context.Support
             Assert.AreEqual("Mark", value.Name, "Name property value not applied.");
             Assert.AreEqual(35, value.Age, "Age property value not applied.");
         }
+#endif
 
         [Test]
         public void ApplyResourcesWithNullObject()

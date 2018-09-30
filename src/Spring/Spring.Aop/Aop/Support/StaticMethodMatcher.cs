@@ -101,8 +101,6 @@ namespace Spring.Aop.Support
 		public abstract bool Matches(MethodInfo method, Type targetType);
 
 
-	    #region Serialization Support
-
 	    void IDeserializationCallback.OnDeserialization(object sender)
 	    {
 	        OnDeserialization(sender);
@@ -114,7 +112,5 @@ namespace Spring.Aop.Support
 	    protected virtual void OnDeserialization(object sender)
 	    {
 	    }
-
-	    #endregion
 	}
 }

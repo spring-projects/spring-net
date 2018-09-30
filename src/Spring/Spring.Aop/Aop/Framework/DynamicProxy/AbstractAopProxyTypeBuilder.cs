@@ -69,17 +69,7 @@ namespace Spring.Aop.Framework.DynamicProxy
 
         #region Protected Methods
 
-        /// <summary>
-        /// Calculates and returns the list of attributes that apply to the
-        /// specified type.
-        /// </summary>
-        /// <remarks>
-        /// Removes <see cref="System.SerializableAttribute"/> from the list.
-        /// </remarks>
-        /// <param name="type">The type to find attributes for.</param>
-        /// <returns>
-        /// A list of custom attributes that should be applied to type.
-        /// </returns>
+        /// <inheritdoc />
         protected override IList GetTypeAttributes(Type type)
         {
             IList attrs = base.GetTypeAttributes(type);

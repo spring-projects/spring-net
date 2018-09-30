@@ -41,9 +41,6 @@ namespace Spring
     [TestFixture]
     public class AopSerializationTests
     {
-        public AopSerializationTests()
-        { }
-
         [Test]
         public void AllAopInfrastructureTypesAreSerializable()
         {
