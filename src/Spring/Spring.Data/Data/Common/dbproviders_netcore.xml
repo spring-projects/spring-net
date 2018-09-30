@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+	- Database Provider definitions for .NET Core.
+-->
+<objects
+  xmlns="http://www.springframework.net"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+  xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
+
+  <!-- SQL SERVER -->
+  <alias name="SqlServer" alias="System.Data.SqlClient"/>
+
+  <object id="SqlServer" type="Spring.Data.Common.DbProvider, Spring.Data" singleton="false">
+    <constructor-arg name="dbMetaData">
+      <object type="Spring.Data.Common.DbMetadata">
+        <constructor-arg name="productName" value="Microsoft SQL Server" />
+        <constructor-arg name="assemblyName" value="System.Data.SqlClient"/>
+        <constructor-arg name="connectionType" value="System.Data.SqlClient.SqlConnection, System.Data.SqlClient"/>
+        <constructor-arg name="commandType" value="System.Data.SqlClient.SqlCommand, System.Data.SqlClient"/>
+        <constructor-arg name="parameterType" value="System.Data.SqlClient.SqlParameter, System.Data.SqlClient"/>
+        <constructor-arg name="dataAdapterType" value="System.Data.SqlClient.SqlDataAdapter, System.Data.SqlClient"/>
+        <constructor-arg name="commandBuilderType" value="System.Data.SqlClient.SqlCommandBuilder, System.Data.SqlClient"/>
+        <constructor-arg name="commandBuilderDeriveParametersMethod" value="DeriveParameters"/>
+        <constructor-arg name="parameterDbType" value="System.Data.SqlDbType, System.Data.SqlClient"/>
+        <constructor-arg name="parameterDbTypeProperty" value="SqlDbType"/>
+        <constructor-arg name="parameterIsNullableProperty" value="IsNullable"/>
+        <constructor-arg name="parameterNamePrefix" value="@"/>
+        <constructor-arg name="exceptionType" value="System.Data.SqlClient.SqlException, System.Data.SqlClient"/>
+        <constructor-arg name="useParameterNamePrefixInParameterCollection" value="true"/>
+        <constructor-arg name="useParameterPrefixInSql" value="true"/>
+        <constructor-arg name="bindByName" value="true"/>
+        <!-- this is only true for .net 1.1 kept it here just in case we want to revert back to this strategy for
+             obtaining error codes-->
+        <constructor-arg name="errorCodeExceptionExpression" value="Errors[0].Number.ToString()"/>
+
+        <!-- TODO select form system db all errors that have 'incorrect syntax' at the start of the error string-->
+        <property name="ErrorCodes.BadSqlGrammarCodes">
+          <value>102,156,170,207,208</value>
+        </property>
+        <property name="ErrorCodes.PermissionDeniedCodes">
+          <value>229</value>
+        </property>
+        <property name="ErrorCodes.DataIntegrityViolationCodes">
+          <value>544,2627,8114,8115</value>
+        </property>
+        <property name="ErrorCodes.DeadlockLoserCodes">
+          <value>1205</value>
+        </property>
+      </object>
+    </constructor-arg>
+
+  </object>
+
+  <!-- ORACLE -->
+
+  <alias name="Oracle" alias="System.Data.OracleClient"/>
+
+  <object id="Oracle" type="Spring.Data.Common.DbProvider, Spring.Data" singleton="false">
+    <constructor-arg name="dbMetaData">
+      <object type="Spring.Data.Common.DbMetadata">
+        <constructor-arg name="productName" value="Oracle, Oracle Managed provider V4.121.1.0"  />
+        <constructor-arg name="assemblyName" value="Oracle.ManagedDataAccess, Version=4.121.1.0, Culture=neutral, PublicKeyToken=89b483f429c47342"/>
+        <constructor-arg name="connectionType" value="Oracle.ManagedDataAccess.Client.OracleConnection, Oracle.ManagedDataAccess, Version=4.121.1.0, Culture=neutral, PublicKeyToken=89b483f429c47342"/>
+        <constructor-arg name="commandType" value="Oracle.ManagedDataAccess.Client.OracleCommand, Oracle.ManagedDataAccess, Version=4.121.1.0, Culture=neutral, PublicKeyToken=89b483f429c47342"/>
+        <constructor-arg name="parameterType" value="Oracle.ManagedDataAccess.Client.OracleParameter, Oracle.ManagedDataAccess, Version=4.121.1.0, Culture=neutral, PublicKeyToken=89b483f429c47342"/>
+        <constructor-arg name="dataAdapterType" value="Oracle.ManagedDataAccess.Client.OracleDataAdapter, Oracle.ManagedDataAccess, Version=4.121.1.0, Culture=neutral, PublicKeyToken=89b483f429c47342"/>
+        <constructor-arg name="commandBuilderType" value="Oracle.ManagedDataAccess.Client.OracleCommandBuilder, Oracle.ManagedDataAccess, Version=4.121.1.0, Culture=neutral, PublicKeyToken=89b483f429c47342"/>
+        <constructor-arg name="commandBuilderDeriveParametersMethod" value="DeriveParameters"/>
+        <constructor-arg name="parameterDbType" value="Oracle.ManagedDataAccess.Client.OracleDbType, Oracle.ManagedDataAccess, Version=4.121.1.0, Culture=neutral, PublicKeyToken=89b483f429c47342"/>
+        <constructor-arg name="parameterDbTypeProperty" value="OracleDbType"/>
+        <constructor-arg name="parameterIsNullableProperty" value="IsNullable"/>
+        <constructor-arg name="parameterNamePrefix" value=":"/>
+        <constructor-arg name="exceptionType" value="Oracle.ManagedDataAccess.Client.OracleException, Oracle.ManagedDataAccess, Version=4.121.1.0, Culture=neutral, PublicKeyToken=89b483f429c47342"/>
+        <constructor-arg name="useParameterNamePrefixInParameterCollection" value="false"/>
+        <constructor-arg name="useParameterPrefixInSql" value="true"/>
+        <constructor-arg name="bindByName" value="true"/>
+        <!-- this is only true for .net 1.1 kept it here just in case we want to revert back to this strategy for
+             obtaining error codes-->
+        <constructor-arg name="errorCodeExceptionExpression" value="Number.ToString()"/>
+
+        <property name="ErrorCodes.BadSqlGrammarCodes">
+          <value>900,903,904,917,936,942,17006</value>
+        </property>
+        <property name="ErrorCodes.InvalidResultSetAccessCodes">
+          <value>17003</value>
+        </property>
+        <property name="ErrorCodes.DuplicateKeyCodes">
+          <value>1</value>
+        </property>
+        <property name="ErrorCodes.DataAccessResourceFailureCodes">
+          <value>17002,17447</value>
+        </property>
+        <property name="ErrorCodes.DataIntegrityViolationCodes">
+          <value>1,1400,1722,2291,2292</value>
+        </property>
+        <property name="ErrorCodes.CannotAcquireLockCodes">
+          <value>54</value>
+        </property>
+        <property name="ErrorCodes.CannotSerializeTransactionCodes">
+          <value>8177</value>
+        </property>
+        <property name="ErrorCodes.DeadlockLoserCodes">
+          <value>60</value>
+        </property>
+      </object>
+    </constructor-arg>
+  </object>
+
+  <!-- My Sql -->
+
+  <alias name="MySql" alias="MySql.Data.MySqlClient"/>
+
+  <object id="MySql" type="Spring.Data.Common.DbProvider, Spring.Data" singleton="false">
+    <constructor-arg name="dbMetaData">
+      <object type="Spring.Data.Common.DbMetadata">
+        <constructor-arg name="productName" value="MySQL"  />
+        <constructor-arg name="assemblyName" value="MySql.Data"/>
+        <constructor-arg name="connectionType" value="MySql.Data.MySqlClient.MySqlConnection, MySql.Data"/>
+        <constructor-arg name="commandType" value="MySql.Data.MySqlClient.MySqlCommand, MySql.Data"/>
+        <constructor-arg name="parameterType" value="MySql.Data.MySqlClient.MySqlParameter, MySql.Data"/>
+        <constructor-arg name="dataAdapterType" value="MySql.Data.MySqlClient.MySqlDataAdapter, MySql.Data"/>
+        <constructor-arg name="commandBuilderType" value="MySql.Data.MySqlClient.MySqlCommandBuilder, MySql.Data"/>
+        <constructor-arg name="commandBuilderDeriveParametersMethod" value="DeriveParameters"/>
+        <constructor-arg name="parameterDbType" value="MySql.Data.MySqlClient.MySqlDbType, MySql.Data"/>
+        <constructor-arg name="parameterDbTypeProperty" value="MySqlDbType"/>
+        <constructor-arg name="parameterIsNullableProperty" value="IsNullable"/>
+        <constructor-arg name="parameterNamePrefix" value="@"/>
+        <constructor-arg name="exceptionType" value="MySql.Data.MySqlClient.MySqlException, MySql.Data"/>
+        <constructor-arg name="useParameterNamePrefixInParameterCollection" value="true"/>
+        <constructor-arg name="useParameterPrefixInSql" value="true"/>
+        <constructor-arg name="bindByName" value="true"/>
+        <!-- this is only true for .net 1.1 kept it here just in case we want to revert back to this strategy for
+             obtaining error codes-->
+        <constructor-arg name="errorCodeExceptionExpression" value="Number.ToString()"/>
+
+        <property name="ErrorCodes.badSqlGrammarCodes">
+          <value>1054,1064,1146</value>
+        </property>
+        <property name="ErrorCodes.DataAccessResourceFailureCodes">
+          <value>1</value>
+        </property>
+        <property name="ErrorCodes.DataIntegrityViolationCodes">
+          <value>630,839,840,893,1062,1169,1215,1216,1217,1451,1452,1557</value>
+        </property>
+        <property name="ErrorCodes.CannotAcquireLockCodes">
+          <value>1205</value>
+        </property>
+        <property name="ErrorCodes.DeadlockLoserCodes">
+          <value>1213</value>
+        </property>
+      </object>
+    </constructor-arg>
+  </object>
+  
+  <object id="Npgsql" type="Spring.Data.Common.DbProvider, Spring.Data"  singleton="false">
+    <constructor-arg name="dbMetaData">
+      <object type="Spring.Data.Common.DbMetadata, Spring.Data">
+        <constructor-arg name="productName" value="Npgsql"  />
+        <constructor-arg name="assemblyName" value="Npgsql"/>
+        <constructor-arg name="connectionType" value="Npgsql.NpgsqlConnection, Npgsql"/>
+        <constructor-arg name="commandType" value="Npgsql.NpgsqlCommand, Npgsql"/>
+        <constructor-arg name="parameterType" value="Npgsql.NpgsqlParameter, Npgsql"/>
+        <constructor-arg name="dataAdapterType" value="Npgsql.NpgsqlDataAdapter, Npgsql"/>
+        <constructor-arg name="commandBuilderType" value="Npgsql.NpgsqlCommandBuilder, Npgsql"/>
+        <constructor-arg name="commandBuilderDeriveParametersMethod" value="DeriveParameters"/>
+        <constructor-arg name="parameterDbType" value="NpgsqlTypes.NpgsqlDbType, Npgsql"/>
+        <constructor-arg name="parameterDbTypeProperty" value="NpgsqlDbType"/>
+        <constructor-arg name="parameterIsNullableProperty" value="IsNullable"/>
+        <constructor-arg name="parameterNamePrefix" value=":"/>
+        <constructor-arg name="exceptionType" value="Npgsql.NpgsqlException, Npgsql"/>
+        <constructor-arg name="useParameterNamePrefixInParameterCollection" value="true"/>
+        <constructor-arg name="useParameterPrefixInSql" value="true"/>
+        <constructor-arg name="bindByName" value="true"/>
+        <!-- this is only true for .net 1.1 kept it here just in case we want to revert back to this strategy for
+             obtaining error codes-->
+        <constructor-arg name="errorCodeExceptionExpression" value="Errors[0].Code"/>
+        <!-- error codes taken from http://www.postgresql.org/docs/8.1/static/errcodes-appendix.html -->
+        <property name="ErrorCodes.badSqlGrammarCodes">
+          <value>03000,42000,42601,42602,42622,42804,42P01</value>
+        </property>
+        <property name="ErrorCodes.DataAccessResourceFailureCodes">
+          <value>53000,53100,53200,53300</value>
+        </property>
+        <property name="ErrorCodes.DataIntegrityViolationCodes">
+          <value>23000,23502,23503,23505,23514</value>
+        </property>
+        <property name="ErrorCodes.CannotAcquireLockCodes">
+          <value>55P03</value>
+        </property>
+        <property name="ErrorCodes.CannotSerializeTransactionCodes">
+          <value>40001</value>
+        </property>
+        <property name="ErrorCodes.DeadlockLoserCodes">
+          <value>40P01</value>
+        </property>
+      </object>
+    </constructor-arg>
+  </object>
+
+  <alias name="SQLite" alias="System.Data.SQLite"/>
+
+  <!-- 
+  from http://system.data.sqlite.org
+   * NuGet distributions: http://system.data.sqlite.org/index.html/doc/trunk/www/faq.wiki#q5
+   * NuGet page: http://www.nuget.org/packages/System.Data.SQLite
+   * Error code docs: http://www.sqlite.org/capi3ref.html#SQLITE_ABORT
+  -->
+  <object id="SQLite" type="Spring.Data.Common.DbProvider, Spring.Data" singleton="false">
+    <constructor-arg name="dbMetaData">
+      <object type="Spring.Data.Common.DbMetadata">
+        <constructor-arg name="productName" value="SQLite"/>
+        <constructor-arg name="assemblyName" value="System.Data.SQLite"/>
+        <constructor-arg name="connectionType" value="System.Data.SQLite.SQLiteConnection, System.Data.SQLite"/>
+        <constructor-arg name="commandType" value="System.Data.SQLite.SQLiteCommand, System.Data.SQLite"/>
+        <constructor-arg name="parameterType" value="System.Data.SQLite.SQLiteParameter, System.Data.SQLite"/>
+        <constructor-arg name="dataAdapterType" value="System.Data.SQLite.SQLiteDataAdapter , System.Data.SQLite"/>
+        <constructor-arg name="commandBuilderType" value="System.Data.SQLite.SQLiteCommandBuilder, System.Data.SQLite"/>
+        <constructor-arg name="commandBuilderDeriveParametersMethod" value="not supported"/>
+        <constructor-arg name="parameterDbType" value="System.Data.SQLite.TypeAffinity, System.Data.SQLite"/>
+        <constructor-arg name="parameterDbTypeProperty" value="DbType"/>
+        <constructor-arg name="parameterIsNullableProperty" value="IsNullable"/>
+        <constructor-arg name="parameterNamePrefix" value=":"/>
+        <constructor-arg name="exceptionType" value="System.Data.SQLite.SQLiteException, System.Data.SQLite"/>
+        <constructor-arg name="useParameterNamePrefixInParameterCollection" value="true"/>
+        <constructor-arg name="useParameterPrefixInSql" value="true"/>
+        <constructor-arg name="bindByName" value="true"/>
+        <!-- this is only true for .net 1.1 kept it here just in case we want to revert back to this strategy for
+             obtaining error codes-->
+        <constructor-arg name="errorCodeExceptionExpression" value="ErrorCode.ToString('D')"/>
+
+        <property name="ErrorCodes.badSqlGrammarCodes">
+          <value></value>
+        </property>
+        <property name="ErrorCodes.DataAccessResourceFailureCodes">
+          <value>1</value>
+        </property>
+        <property name="ErrorCodes.DataIntegrityViolationCodes">
+          <value></value>
+        </property>
+        <property name="ErrorCodes.CannotAcquireLockCodes">
+          <value>15</value>
+        </property>
+        <property name="ErrorCodes.DeadlockLoserCodes">
+          <value>5,6</value>
+        </property>
+      </object>
+    </constructor-arg>
+
+  </object>
+
+  <!-- Firebird -->
+
+  <alias name="Firebird" alias="FirebirdSql.Data.FirebirdClient"/>
+
+  <object id="Firebird" type="Spring.Data.Common.DbProvider, Spring.Data" singleton="false"> 
+    <constructor-arg name="dbMetaData"> 
+      <object type="Spring.Data.Common.DbMetadata"> 
+        <constructor-arg name="productName" value="Firebird Server" /> 
+        <constructor-arg name="assemblyName" value="FirebirdSql.Data.FirebirdClient"/> 
+        <constructor-arg name="connectionType" value="FirebirdSql.Data.FirebirdClient.FbConnection, FirebirdSql.Data.FirebirdClient"/> 
+        <constructor-arg name="commandType" value="FirebirdSql.Data.FirebirdClient.FbCommand, FirebirdSql.Data.FirebirdClient"/> 
+        <constructor-arg name="parameterType" value="FirebirdSql.Data.FirebirdClient.FbParameter, FirebirdSql.Data.FirebirdClient"/> 
+        <constructor-arg name="dataAdapterType" value="FirebirdSql.Data.FirebirdClient.FbDataAdapter, FirebirdSql.Data.FirebirdClient"/> 
+        <constructor-arg name="commandBuilderType" value="FirebirdSql.Data.FirebirdClient.FbCommandBuilder, FirebirdSql.Data.FirebirdClient"/> 
+        <constructor-arg name="commandBuilderDeriveParametersMethod" value="DeriveParameters"/> 
+        <constructor-arg name="parameterDbType" value="FirebirdSql.Data.FirebirdClient.FbDbType, FirebirdSql.Data.FirebirdClient"/> 
+        <constructor-arg name="parameterDbTypeProperty" value="FbDbType"/> 
+        <constructor-arg name="parameterIsNullableProperty" value="IsNullable"/> 
+        <constructor-arg name="parameterNamePrefix" value="@"/> 
+        <constructor-arg name="exceptionType" value="FirebirdSql.Data.FirebirdClient.FbException, FirebirdSql.Data.FirebirdClient"/> 
+        <constructor-arg name="useParameterNamePrefixInParameterCollection" value="true"/> 
+        <constructor-arg name="useParameterPrefixInSql" value="true"/> 
+        <constructor-arg name="bindByName" value="true"/> 
+        <!-- this is only true for .net 1.1 kept it here just in case we want to revert back to this strategy for 
+             obtaining error codes--> 
+        <constructor-arg name="errorCodeExceptionExpression" value="Errors[0].Number.ToString()"/> 
+
+        <!-- TODO select form system db all errors that have 'incorrect syntax' at the start of the error string--> 
+        <property name="ErrorCodes.BadSqlGrammarCodes"> 
+          <value>-104</value> 
+        </property> 
+        <property name="ErrorCodes.PermissionDeniedCodes"> 
+          <value>-901</value> 
+        </property> 
+        <property name="ErrorCodes.DataIntegrityViolationCodes"> 
+          <value>-530</value> 
+        </property> 
+        <property name="ErrorCodes.DeadlockLoserCodes"> 
+          <value>-913</value> 
+        </property> 
+      </object> 
+    </constructor-arg> 
+  </object> 
+
+
+</objects>
+

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  * 
@@ -16,16 +14,9 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
-using System;
 using NHibernate;
 using NHibernate.Type;
 using Spring.Dao;
-
-#endregion
 
 namespace Spring.Data.NHibernate
 {
@@ -102,7 +93,7 @@ namespace Spring.Data.NHibernate
         /// <param name="types"> Hibernate types of the parameters (or <code>null</code>)</param>
         /// <returns>The number of entity instances deleted.</returns>
         /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
-        int Delete(String queryString, Object[] values, IType[] types);
+        int Delete(string queryString, object[] values, IType[] types);
 
 
         /// <summary>
@@ -115,8 +106,6 @@ namespace Spring.Data.NHibernate
         /// </remarks>
         /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
         void Flush();
-
-        #region Convenience methods for loading individual objects
 
         /// <summary>
         /// Load the persistent instance with the given identifier
@@ -161,11 +150,6 @@ namespace Spring.Data.NHibernate
         /// <param name="entity">The persistent instance to evict.</param>
         /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
         void Evict(object entity);
-
-        #endregion
-
-        #region Convenience methods for storing individual objects
-
 
         /// <summary>
         /// Obtain the specified lock level upon the given object, implicitly
@@ -222,7 +206,7 @@ namespace Spring.Data.NHibernate
         /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
         void SaveOrUpdate(object entity);
 
-#if !NH_4_0
+#if !NH_4_0 && !NH_5
         /// <summary>
         /// Save or update the contents of given persistent object,
         /// according to its id (matching the configured "unsaved-value"?).
@@ -253,7 +237,5 @@ namespace Spring.Data.NHibernate
         /// <returns>An updated persistent instance</returns>
         /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
         object Merge(object entity);
-
-        #endregion
     }
 }

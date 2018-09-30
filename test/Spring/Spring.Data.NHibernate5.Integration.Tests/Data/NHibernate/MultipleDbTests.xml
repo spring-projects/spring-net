@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns='http://www.springframework.net'
+         xmlns:db="http://www.springframework.net/database">
+
+  <db:provider id="DbProvider1" 
+                 provider="System.Data.SqlClient" 
+                 connectionString="Data Source=(local);Database=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False"/>
+
+  <db:provider id="DbProvider2" 
+                 provider="System.Data.SqlClient" 
+                 connectionString="Data Source=(local);Database=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False"/>
+
+  <object id="SessionFactory1" type="Spring.Data.NHibernate.LocalSessionFactoryObject, Spring.Data.NHibernate5">
+
+    <property name="DbProvider" ref="DbProvider1"/>
+    <property name="MappingAssemblies">
+      <list>
+        <value>Spring.Data.NHibernate5.Integration.Tests</value>
+      </list>
+    </property>
+    <property name="HibernateProperties">
+      <dictionary>
+
+        <entry key="connection.provider"
+               value="NHibernate.Connection.DriverConnectionProvider"/>
+
+        <entry key="dialect"
+               value="NHibernate.Dialect.MsSql2000Dialect"/>
+
+        <entry key="connection.driver_class"
+               value="NHibernate.Driver.SqlClientDriver"/>
+
+      </dictionary>
+    </property>
+
+  </object>
+
+  <object id="SessionFactory2" type="Spring.Data.NHibernate.LocalSessionFactoryObject, Spring.Data.NHibernate5">
+
+    <property name="DbProvider" ref="DbProvider2"/>
+    <property name="MappingAssemblies">
+      <list>
+        <value>Spring.Data.NHibernate5.Integration.Tests</value>
+      </list>
+    </property>
+    <property name="HibernateProperties">
+      <dictionary>
+
+        <entry key="connection.provider"
+               value="NHibernate.Connection.DriverConnectionProvider"/>
+
+        <entry key="dialect"
+               value="NHibernate.Dialect.MsSql2000Dialect"/>
+
+        <entry key="connection.driver_class"
+               value="NHibernate.Driver.SqlClientDriver"/>
+
+      </dictionary>
+    </property>
+
+  </object>
+
+
+  <object id="transactionManager"
+          type="Spring.Data.Core.TxScopeTransactionManager, Spring.Data">
+  </object>
+
+  <object id="AccountCreditDao" type="Spring.Data.NHibernate.AccountCreditDao, Spring.Data.NHibernate5.Integration.Tests">
+    <property name="SessionFactory" ref="SessionFactory1"/>
+  </object>
+  <object id="AccountDebitDao" type="Spring.Data.NHibernate.AccountDebitDao, Spring.Data.NHibernate5.Integration.Tests">
+    <property name="SessionFactory" ref="SessionFactory2"/>
+  </object>
+
+  
+  <!-- The DAO object that performs multiple data access operations -->
+  <object id="accountManagerTarget" 
+          type="Spring.Data.NHibernate.AccountManager, Spring.Data.NHibernate5.Integration.Tests">
+    <property name="AccountCreditDao" ref="AccountCreditDao"/>
+    <property name="AccountDebitDao" ref="AccountDebitDao"/>
+
+    <!--
+      <property name="AuditDao" ref="AuditDao"/>
+      -->
+
+
+    <!--
+      <property name="ThrowException" value="true"/>
+      -->
+
+    <!--
+      <property name="ThrowExceptionAtEnd" value="true"/>
+      -->
+
+  </object>
+
+
+  <!-- construct the transaction proxy based on [Transaction()] in DAO class -->
+  <!-- todo condense this xml for attribute usage for ease of use -->
+  <!--
+    <aop:transaction name=testObjectDao"
+                     target="NHTestObjectDao"
+                     interfaces="Spring.NHibernate.ITestObjectDao"
+                     transactionManager="hibernateTransactionManager"/>
+    -->
+
+  <!-- Transactional Proxy for TestObjectManager using the ProxyFactoryObject -->
+  <object id="accountManager" 
+          type="Spring.Aop.Framework.ProxyFactoryObject, Spring.Aop">
+
+    <property name="Target" ref="accountManagerTarget"/>
+
+    <property name="InterceptorNames">
+      <value>transactionInterceptor</value>
+    </property>
+
+  </object>
+
+  <!-- Transaction Interceptor based on attribute [Transaction()] -->
+  <object id="transactionInterceptor" 
+          type="Spring.Transaction.Interceptor.TransactionInterceptor, Spring.Data">
+    <property name="TransactionManager" ref="transactionManager"/>
+    <!-- note do not have converter from string to this property type registered -->
+    <property name="TransactionAttributeSource">
+      <object type="Spring.Transaction.Interceptor.AttributesTransactionAttributeSource, Spring.Data"/>
+    </property>
+  </object>
+
+</objects>

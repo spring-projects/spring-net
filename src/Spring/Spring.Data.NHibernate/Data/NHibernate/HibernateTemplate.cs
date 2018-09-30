@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  * 
@@ -15,10 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
-
-#region Imports
 
 using System;
 using System.Collections;
@@ -36,8 +30,6 @@ using NHibernate.Type;
 
 using Spring.Dao;
 using Spring.Objects.Factory;
-
-#endregion
 
 namespace Spring.Data.NHibernate
 {
@@ -76,8 +68,6 @@ namespace Spring.Data.NHibernate
     /// <author>Mark Pollack (.NET)</author>
     public class HibernateTemplate : HibernateAccessor, IHibernateOperations
     {
-        #region Fields
-
         /// <summary>
         /// The <see cref="ILog"/> instance for this class. 
         /// </summary>
@@ -102,10 +92,6 @@ namespace Spring.Data.NHibernate
 
         private readonly object syncRoot = new object();
         private ProxyFactory sessionProxyFactory;
-
-        #endregion
-
-        #region Constructor (s)
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HibernateTemplate"/> class.
@@ -140,10 +126,6 @@ namespace Spring.Data.NHibernate
             AllowCreate = allowCreate;
             AfterPropertiesSet();
         }
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Gets or sets if a new Session should be created when no transactional Session
@@ -398,10 +380,6 @@ namespace Spring.Data.NHibernate
             set { sessionProxyFactory = value; }
         }
 
-        #endregion
-
-        #region IHibernateOperations Members
-
         /// <summary>
         /// Set the ADO.NET exception translator for this instance.
         /// Applied to System.Data.Common.DbException (or provider specific exception type
@@ -646,7 +624,7 @@ namespace Spring.Data.NHibernate
             Execute(new SaveOrUpdateAllHibernateCallback(this, entities), true);
         }
 
-#if !NH_4_0
+#if !NH_4_0 && !NH_5
         /// <summary>
         /// Save or update the contents of given persistent object,
         /// according to its id (matching the configured "unsaved-value"?).
@@ -1290,10 +1268,6 @@ namespace Spring.Data.NHibernate
             return (IList) Execute(new FindByValueObjectHibernateCallback(this, queryString, valueObject), true);
         }
 
-        #endregion
-
-        #region Methods
-
         /// <summary>
         /// Create a close-suppressing proxy for the given Hibernate Session.
         /// The proxy also prepares returned Query and Criteria objects.
@@ -1366,11 +1340,7 @@ namespace Spring.Data.NHibernate
             }
             //TODO other combinations.
         }
-
-        #endregion
     }
-
-    #region Internal Supporting Callback Classes
 
     //TODO see if can create common base class for some callbacks.
 
@@ -2144,7 +2114,7 @@ namespace Spring.Data.NHibernate
         }
     }
 
-#if !NH_4_0
+#if !NH_4_0 && !NH_5
     internal class SaveOrUpdateCopyHibernateCallback : IHibernateCallback
     {
         private HibernateTemplate outer;
@@ -2205,6 +2175,4 @@ namespace Spring.Data.NHibernate
             return session.Merge(entity);
         }
     }
-
-    #endregion
 }

@@ -60,6 +60,7 @@ PrecompiledWeb
 /src/Spring/Spring.Core/Spring.Core.xml
 /src/Spring/Spring.Data.NHibernate3/Spring.Data.NHibernate3.xml
 /src/Spring/Spring.Data.NHibernate4/Spring.Data.NHibernate4.xml
+/src/Spring/Spring.Data.NHibernate5/Spring.Data.NHibernate5.xml
 /src/Spring/Spring.Messaging.Ems/Spring.Messaging.Ems.xml
 /src/Spring/Spring.Messaging.Nms/Spring.Messaging.Nms.xml
 /src/Spring/Spring.Messaging/Spring.Messaging.xml

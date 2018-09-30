@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  * 
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using Common.Logging;
 using NHibernate;
 using NHibernate.Engine;
@@ -27,23 +21,19 @@ using Spring.Core;
 using Spring.Data.Support;
 using Spring.Transaction.Support;
 
-#endregion
-
 namespace Spring.Data.NHibernate
 {
-	/// <summary>
-	/// NHibnerations actions taken during the transaction lifecycle.
-	/// </summary>
-	/// <author>Mark Pollack (.NET)</author>
-	public class SpringSessionSynchronization : TransactionSynchronizationAdapter, IOrdered
-	{
-		#region Fields
-
+    /// <summary>
+    /// NHibnerations actions taken during the transaction lifecycle.
+    /// </summary>
+    /// <author>Mark Pollack (.NET)</author>
+    public class SpringSessionSynchronization : TransactionSynchronizationAdapter, IOrdered
+    {
         /// <summary>
         /// The <see cref="ILog"/> instance for this class. 
         /// </summary>
         private readonly ILog log = LogManager.GetLogger(typeof(SpringSessionSynchronization));
-	    
+
         private readonly SessionHolder sessionHolder;
 
         private readonly ISessionFactory sessionFactory;
@@ -53,24 +43,18 @@ namespace Spring.Data.NHibernate
         private readonly bool newSession;
 
         private bool holderActive = true;
-		#endregion
 
-		#region Constructor (s)
-		/// <summary>
-		/// Initializes a new instance of the <see cref="SpringSessionSynchronization"/> class.
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SpringSessionSynchronization"/> class.
         /// </summary>
-        public 	SpringSessionSynchronization(SessionHolder sessionHolder, ISessionFactory sessionFactory,
-               	                             IAdoExceptionTranslator adoExceptionTranslator, bool newSession)
-		{
+        public SpringSessionSynchronization(SessionHolder sessionHolder, ISessionFactory sessionFactory,
+            IAdoExceptionTranslator adoExceptionTranslator, bool newSession)
+        {
             this.sessionHolder = sessionHolder;
             this.sessionFactory = sessionFactory;
             this.adoExceptionTranslator = adoExceptionTranslator;
             this.newSession = newSession;
-		}
-
-		#endregion
-
-		#region Properties
+        }
 
         /// <summary>
         /// Return the order value of this object, where a higher value means greater in
@@ -90,104 +74,96 @@ namespace Spring.Data.NHibernate
         /// <returns>The order value.</returns>
         public int Order
         {
-            get
-            {
-                return SessionFactoryUtils.SESSION_SYNCHRONIZATION_ORDER;
-            }
+            get { return SessionFactoryUtils.SESSION_SYNCHRONIZATION_ORDER; }
         }
 
-		#endregion
-
-		#region Methods
-
-	    /// <summary>
-	    /// Suspend this synchronization. 
-	    /// </summary>
-	    /// <remarks>
-	    /// <p>
-	    /// Unbind Hibernate resources (SessionHolder) from
-	    /// <see cref="Spring.Transaction.Support.TransactionSynchronizationManager"/>
-	    /// if managing any.
-	    /// </p>
-	    /// </remarks>
-	    public override void Suspend()
-	    {
-            if (this.holderActive) 
+        /// <summary>
+        /// Suspend this synchronization. 
+        /// </summary>
+        /// <remarks>
+        /// <p>
+        /// Unbind Hibernate resources (SessionHolder) from
+        /// <see cref="Spring.Transaction.Support.TransactionSynchronizationManager"/>
+        /// if managing any.
+        /// </p>
+        /// </remarks>
+        public override void Suspend()
+        {
+            if (this.holderActive)
             {
                 TransactionSynchronizationManager.UnbindResource(this.sessionFactory);
             }
-	    }
+        }
 
-	    /// <summary>
-	    /// Resume this synchronization.
-	    /// </summary>
-	    /// <remarks>
-	    /// <p>
-	    /// Rebind Hibernate resources from 
-	    /// <see cref="Spring.Transaction.Support.TransactionSynchronizationManager"/>
-	    /// if managing any.
-	    /// </p>
-	    /// </remarks>
-	    public override void Resume()
-	    {
-            if (this.holderActive) 
+        /// <summary>
+        /// Resume this synchronization.
+        /// </summary>
+        /// <remarks>
+        /// <p>
+        /// Rebind Hibernate resources from 
+        /// <see cref="Spring.Transaction.Support.TransactionSynchronizationManager"/>
+        /// if managing any.
+        /// </p>
+        /// </remarks>
+        public override void Resume()
+        {
+            if (this.holderActive)
             {
                 TransactionSynchronizationManager.BindResource(this.sessionFactory, this.sessionHolder);
             }
-	    }
+        }
 
-	    /// <summary>
-	    /// Invoked before transaction commit (before
-	    /// <see cref="Spring.Transaction.Support.ITransactionSynchronization.BeforeCompletion"/>)
-	    /// </summary>
-	    /// <param name="readOnly">
-	    /// If the transaction is defined as a read-only transaction.
-	    /// </param>
-	    /// <remarks>
-	    /// <p>
-	    /// Can flush transactional sessions to the database.
-	    /// </p>
-	    /// <p>
-	    /// Note that exceptions will get propagated to the commit caller and 
-	    /// cause a rollback of the transaction.
-	    /// </p>
-	    /// </remarks>
-	    public override void BeforeCommit(bool readOnly)
-	    {
-		    if (!readOnly)
-		    {
+        /// <summary>
+        /// Invoked before transaction commit (before
+        /// <see cref="Spring.Transaction.Support.ITransactionSynchronization.BeforeCompletion"/>)
+        /// </summary>
+        /// <param name="readOnly">
+        /// If the transaction is defined as a read-only transaction.
+        /// </param>
+        /// <remarks>
+        /// <p>
+        /// Can flush transactional sessions to the database.
+        /// </p>
+        /// <p>
+        /// Note that exceptions will get propagated to the commit caller and 
+        /// cause a rollback of the transaction.
+        /// </p>
+        /// </remarks>
+        public override void BeforeCommit(bool readOnly)
+        {
+            if (!readOnly)
+            {
                 // read-write transaction -> flush the Hibernate Session
-                log.Debug("Flushing Hibernate Session on transaction synchronization");			
+                log.Debug("Flushing Hibernate Session on transaction synchronization");
                 ISession session = this.sessionHolder.Session;
                 //Further check: only flush when not FlushMode.NEVER
                 if (session.FlushMode != FlushMode.Never)
                 {
-                    try 
+                    try
                     {
                         session.Flush();
                         //TODO can throw System.ObjectDisposedException...
                     }
-                    catch (ADOException ex) 
+                    catch (ADOException ex)
                     {
-                        if (this.adoExceptionTranslator != null) 
+                        if (this.adoExceptionTranslator != null)
                         {
                             //TODO investigate how ADOException wraps inner exception.
                             throw this.adoExceptionTranslator.Translate(
                                 "Hibernate transaction synchronization: " + ex.Message, null, ex.InnerException);
                         }
-                        else 
+                        else
                         {
                             throw new HibernateAdoException("ADO.NET Exception", ex);
                         }
                     }
-                    catch (HibernateException ex) 
+                    catch (HibernateException ex)
                     {
                         throw SessionFactoryUtils.ConvertHibernateAccessException(ex);
                     }
                 }
-
-		    }
-	    }
+            }
+        }
 
         /// <summary>
         /// Invoked before transaction commit (before
@@ -209,67 +185,66 @@ namespace Spring.Data.NHibernate
         /// (note: do not throw TransactionException subclasses here!)
         /// </para>
         /// </remarks>
-	    public override void BeforeCompletion()
-	    {
-            if (this.newSession) 
+        public override void BeforeCompletion()
+        {
+            if (this.newSession)
             {
                 // Default behavior: unbind and close the thread-bound Hibernate Session.
                 TransactionSynchronizationManager.UnbindResource(this.sessionFactory);
                 this.holderActive = false;
             }
-            else if (this.sessionHolder.AssignedPreviousFlushMode == true) 
+            else if (this.sessionHolder.AssignedPreviousFlushMode == true)
             {
                 // In case of pre-bound Session, restore previous flush mode.
                 this.sessionHolder.Session.FlushMode = (this.sessionHolder.PreviousFlushMode);
             }
-	    }
+        }
 
-	    /// <summary>
-	    /// Invoked after transaction commit/rollback.
-	    /// </summary>
-	    /// <param name="status">
-	    /// Status according to <see cref="Spring.Transaction.Support.TransactionSynchronizationStatus"/>
-	    /// </param>
-	    /// <remarks>
-	    /// Can e.g. perform resource cleanup, in this case after transaction completion.
-	    /// <p>
-	    /// Note that exceptions will get propagated to the commit or rollback
-	    /// caller, although they will not influence the outcome of the transaction.
-	    /// </p>
-	    /// </remarks>
-	    public override void AfterCompletion(TransactionSynchronizationStatus status)
-	    {
-	        if (!newSession)
-	        {
+        /// <summary>
+        /// Invoked after transaction commit/rollback.
+        /// </summary>
+        /// <param name="status">
+        /// Status according to <see cref="Spring.Transaction.Support.TransactionSynchronizationStatus"/>
+        /// </param>
+        /// <remarks>
+        /// Can e.g. perform resource cleanup, in this case after transaction completion.
+        /// <p>
+        /// Note that exceptions will get propagated to the commit or rollback
+        /// caller, although they will not influence the outcome of the transaction.
+        /// </p>
+        /// </remarks>
+        public override void AfterCompletion(TransactionSynchronizationStatus status)
+        {
+            if (!newSession)
+            {
                 ISession session = sessionHolder.Session;
-                
+
                 // Provide correct transaction status for releasing the Session's cache locks,
                 // if possible. Else, closing will release all cache locks assuming a rollback.
                 ISessionImplementor sessionImplementor = session as ISessionImplementor;
-	            if (sessionImplementor != null)
-	            {
-                    sessionImplementor.AfterTransactionCompletion(status == TransactionSynchronizationStatus.Committed, sessionHolder.Transaction);
-	            }
+                if (sessionImplementor != null)
+                {
+                    sessionImplementor.AfterTransactionCompletion(status == TransactionSynchronizationStatus.Committed,
+                        sessionHolder.Transaction);
+                }
 
                 if (newSession)
                 {
                     SessionFactoryUtils.CloseSessionOrRegisterDeferredClose(session, sessionFactory);
-                }	            	            
-	        }
+                }
+            }
+
             if (!newSession && status != TransactionSynchronizationStatus.Committed)
             {
                 // Clear all pending inserts/updates/deletes in the Session.
                 // Necessary for pre-bound Sessions, to avoid inconsistent state.
                 sessionHolder.Session.Clear();
             }
-      		
-	        if (this.sessionHolder.DoesNotHoldNonDefaultSession) {
-			  sessionHolder.SynchronizedWithTransaction = false;
-		    }
 
+            if (this.sessionHolder.DoesNotHoldNonDefaultSession)
+            {
+                sessionHolder.SynchronizedWithTransaction = false;
+            }
         }
-
-        #endregion
-
     }
 }

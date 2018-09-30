@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  * 
@@ -16,36 +14,28 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using System.Runtime.Serialization;
 using NHibernate;
 using Spring.Dao;
 
-#endregion
-
 namespace Spring.Data.NHibernate
 {
-	/// <summary>
+    /// <summary>
     /// Hibernate-specific subclass of UncategorizedDataAccessException,
     /// for ADO.NET exceptions that Hibernate rethrew and could not be
     /// mapped into the DAO exception heirarchy.
-	/// </summary>
-	/// <author>Mark Pollack (.NET)</author>
-	[Serializable]
-	public class HibernateAdoException : UncategorizedDataAccessException
-	{
-
-		#region Constructor (s)
-
-
+    /// </summary>
+    /// <author>Mark Pollack (.NET)</author>
+    [Serializable]
+    public class HibernateAdoException : UncategorizedDataAccessException
+    {
         /// <summary>
         /// Initializes a new instance of the <see cref="HibernateAdoException"/> class.
         /// </summary>
-        public HibernateAdoException() : base() {}
+        public HibernateAdoException() : base()
+        {
+        }
 
         /// <summary>
         /// Creates a new instance of the
@@ -54,7 +44,9 @@ namespace Spring.Data.NHibernate
         /// <param name="message">
         /// A message about the exception.
         /// </param>
-        public HibernateAdoException( string message ) : base( message ) {}
+        public HibernateAdoException(string message) : base(message)
+        {
+        }
 
         /// <summary>
         /// Creates a new instance of the
@@ -66,8 +58,9 @@ namespace Spring.Data.NHibernate
         /// <param name="rootCause">
         /// The root exception from the underlying data access API - ADO.NET
         /// </param>        
-        public HibernateAdoException( string message, ADOException rootCause ) : base( message, rootCause ) {}
-
+        public HibernateAdoException(string message, ADOException rootCause) : base(message, rootCause)
+        {
+        }
 
         /// <summary>
         /// Creates a new instance of the HibernateSystemException class with the specified message
@@ -83,23 +76,9 @@ namespace Spring.Data.NHibernate
         {
         }
 
-        /// <summary>
-        /// Creates a new instance of the
-        /// <see cref="HibernateAdoException"/> class.
-        /// </summary>
-        /// <param name="info">
-        /// The <see cref="System.Runtime.Serialization.SerializationInfo"/>
-        /// that holds the serialized object data about the exception being thrown.
-        /// </param>
-        /// <param name="context">
-        /// The <see cref="System.Runtime.Serialization.StreamingContext"/>
-        /// that contains contextual information about the source or destination.
-        /// </param>
-        protected HibernateAdoException( SerializationInfo info, StreamingContext context ) : base( info, context ) {}
-
-
-		#endregion
-
-
-	}
+        /// <inheritdoc />
+        protected HibernateAdoException(SerializationInfo info, StreamingContext context) : base(info, context)
+        {
+        }
+    }
 }

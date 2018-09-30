@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  * 
@@ -16,17 +14,11 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using System.Collections;
 using NHibernate;
 using NHibernate.Type;
 using Spring.Dao;
-
-#endregion
 
 namespace Spring.Data.NHibernate
 {
@@ -111,8 +103,7 @@ namespace Spring.Data.NHibernate
         /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
         IList ExecuteFind(IHibernateCallback action);
 
-        #region Finder Methods
-        /// <summary>
+	    /// <summary>
         /// Execute a query for persistent instances.
         /// </summary>
         /// <param name="queryString">a query expressed in Hibernate's query language</param>
@@ -350,11 +341,7 @@ namespace Spring.Data.NHibernate
         /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
         IList FindByValueObject(string queryString, object valueObject);
 
-        #endregion
-			
-        #region Convenience methods for loading individual objects
-
-        /// <summary>
+	    /// <summary>
         /// Return the persistent instance of the given entity type
         /// with the given identifier, or <code>null</code> if not found.
         /// </summary>
@@ -413,14 +400,7 @@ namespace Spring.Data.NHibernate
         IList LoadAll(Type entityType);
 
 
-
-
-
-        #endregion
-
-        #region Convenience methods for storing individual objects
-
-        /// <summary>
+	    /// <summary>
         /// Save or update all given persistent instances,
         /// according to its id (matching the configured "unsaved-value"?).
         /// </summary>
@@ -428,9 +408,5 @@ namespace Spring.Data.NHibernate
         /// (to be associated with the Hibernate Session)he entities.</param>
         /// <exception cref="DataAccessException">In case of Hibernate errors</exception>
         void SaveOrUpdateAll(ICollection entities);
-
-
-        #endregion 
-
 	}
 }

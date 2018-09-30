@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  * 
@@ -15,10 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
-
-#region Imports
 
 using System;
 using System.Collections;
@@ -39,8 +33,6 @@ using Spring.Threading;
 using Spring.Transaction.Support;
 using Spring.Util;
 
-#endregion
-
 namespace Spring.Data.NHibernate
 {
 	/// <summary>
@@ -51,18 +43,12 @@ namespace Spring.Data.NHibernate
 	/// <author>Mark Pollack (.NET)</author>
 	public abstract class SessionFactoryUtils 
 	{
-		#region Fields
-
-        /// <summary>
+	    /// <summary>
         /// The <see cref="ILog"/> instance for this class. 
         /// </summary>
         private static readonly ILog log = LogManager.GetLogger(typeof(SessionFactoryUtils));
 
-		#endregion
-
-		#region Constants
-
-        /// <summary>
+	    /// <summary>
         /// The ordering value for synchronizaiton this session resources.
         /// Set to be lower than ADO.NET synchronization.
         /// </summary>
@@ -71,10 +57,7 @@ namespace Spring.Data.NHibernate
 
         private static readonly string DeferredCloseHolderDataSlotName = "Spring.Data.NHibernate:deferredCloseHolder";
 
-		#endregion
-
-		#region Constructor (s)
-		/// <summary>
+	    /// <summary>
 		/// Initializes a new instance of the <see cref="SessionFactoryUtils"/> class.
         /// </summary>
 		public SessionFactoryUtils()
@@ -82,15 +65,7 @@ namespace Spring.Data.NHibernate
 
 		}
 
-		#endregion
-
-		#region Properties
-
-		#endregion
-
-		#region Methods
-
-        /// <summary>
+	    /// <summary>
         /// Get a new Hibernate Session from the given SessionFactory.
         /// Will return a new Session even if there already is a pre-bound
         /// Session for the given SessionFactory.
@@ -401,9 +376,7 @@ namespace Spring.Data.NHibernate
             return (sessionHolder != null && sessionHolder.ContainsSession(session));
         }
 
-        #endregion
-
-        /// <summary>
+	    /// <summary>
         /// Converts a Hibernate ADOException to a Spring DataAccessExcption, extracting the underlying error code from 
         /// ADO.NET.  Will extract the ADOException Message and SqlString properties and pass them to the translate method
         /// of the provided IAdoExceptionTranslator.
@@ -699,6 +672,7 @@ namespace Spring.Data.NHibernate
 
                         IList<string> providerNames = ctx.GetObjectNamesForType(typeof(DbProvider), true, false);
                         string hibCommandAQN = hibCommandType.AssemblyQualifiedName;
+                        string hibCommandAQNWithoutVersion = hibCommandType.FullName + ", " + hibCommandType.Assembly.GetName().Name;
                         foreach (string providerName in providerNames)
                         {
                             IObjectDefinition objectdef = ctx.ObjectFactory.GetObjectDefinition(providerName);
@@ -708,7 +682,7 @@ namespace Spring.Data.NHibernate
                             ConstructorArgumentValues dbmdCtorArgs = od.ConstructorArgumentValues;
                             string commandType = dbmdCtorArgs.GetArgumentValue("commandType", typeof(string)).Value as string;
                             
-                            if (hibCommandAQN.Equals(commandType))
+                            if (hibCommandAQN.Equals(commandType) || hibCommandAQNWithoutVersion.Equals(commandType))
                             {
                                 IDbProvider prov = DbProviderFactory.GetDbProvider(providerName);
                                 return prov;

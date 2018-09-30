@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  * 
@@ -16,16 +14,10 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using System.Runtime.Serialization;
 using NHibernate;
 using Spring.Dao;
-
-#endregion
 
 namespace Spring.Data.NHibernate
 {
@@ -37,8 +29,6 @@ namespace Spring.Data.NHibernate
     [Serializable]
     public class HibernateQueryException : InvalidDataAccessResourceUsageException
     {
-        #region Constructor (s)
-
         /// <summary>
         /// Initializes a new instance of the <see cref="HibernateQueryException"/> class.
         /// </summary>
@@ -53,7 +43,9 @@ namespace Spring.Data.NHibernate
         /// <param name="message">
         /// A message about the exception.
         /// </param>
-        public HibernateQueryException(string message) : base(message) { }
+        public HibernateQueryException(string message) : base(message)
+        {
+        }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="HibernateQueryException"/> class.
@@ -87,22 +79,9 @@ namespace Spring.Data.NHibernate
             get { return ((QueryException) this.InnerException).QueryString; }
         }
 
-        /// <summary>
-        /// Creates a new instance of the
-        /// <see cref="HibernateQueryException"/> class.
-        /// </summary>
-        /// <param name="info">
-        /// The <see cref="System.Runtime.Serialization.SerializationInfo"/>
-        /// that holds the serialized object data about the exception being thrown.
-        /// </param>
-        /// <param name="context">
-        /// The <see cref="System.Runtime.Serialization.StreamingContext"/>
-        /// that contains contextual information about the source or destination.
-        /// </param>
+        /// <inheritdoc />
         protected HibernateQueryException(SerializationInfo info, StreamingContext context) : base(info, context)
         {
         }
-
-        #endregion
     }
 }

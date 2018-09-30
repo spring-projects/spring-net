@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,12 +62,10 @@ namespace Spring.Data.NHibernate
         [Test]
         public void DbProviderTranslation()
         {
-
             ISessionFactory sf = ctx["SessionFactory"] as ISessionFactory;
             IDbProvider dbProvider = SessionFactoryUtils.GetDbProvider(sf);
 
-            Assert.IsTrue(dbProvider.DbMetadata.ProductName.Contains("Microsoft SQL Server, provider"));
-            Assert.IsTrue(dbProvider.DbMetadata.ProductName.Contains("in framework .NET"));
+            Assert.That(dbProvider.DbMetadata.ProductName, Does.Contain("Microsoft SQL Server"));
         }
 
         [Test]

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System;
 using System.Reflection;
@@ -53,13 +49,22 @@ namespace Spring.Data.NHibernate.Bytecode
         ///<param name="componentIdType"></param>
         ///<param name="session"></param>
         public LazyInitializer(string entityName, Type persistentClass, object id, MethodInfo getIdentifierMethod,
-                               MethodInfo setIdentifierMethod, IAbstractComponentType componentIdType,
-                               ISessionImplementor session)
+            MethodInfo setIdentifierMethod, IAbstractComponentType componentIdType,
+            ISessionImplementor session)
             : base(
-                entityName, persistentClass, id, getIdentifierMethod,
-                setIdentifierMethod, componentIdType, session) { }
-
-        #region Implementation of IInterceptor
+                entityName,
+                persistentClass,
+                id,
+                getIdentifierMethod,
+                setIdentifierMethod,
+                componentIdType,
+                session
+#if NH_5
+                , overridesEquals: false
+#endif
+                )
+        {
+        }
 
         /// <summary>
         /// Implement this method to perform extra treatments before and after
@@ -106,27 +111,12 @@ namespace Spring.Data.NHibernate.Bytecode
             }
         }
 
-        #endregion
-
-        #region Implementation of ITargetSource
-
-        object ITargetSource.GetTarget()
-        {
-            return Target;
-        }
+        object ITargetSource.GetTarget() => Target;
 
         void ITargetSource.ReleaseTarget(object target) { }
 
-        Type ITargetSource.TargetType
-        {
-            get { return PersistentClass; }
-        }
+        Type ITargetSource.TargetType => PersistentClass;
 
-        bool ITargetSource.IsStatic
-        {
-            get { return false; }
-        }
-
-        #endregion
+        bool ITargetSource.IsStatic => false;
     }
 }

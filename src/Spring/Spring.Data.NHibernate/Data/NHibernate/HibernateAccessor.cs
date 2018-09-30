@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  * 
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using System.Collections;
 using System.Reflection;
@@ -34,8 +28,6 @@ using Spring.Data.Support;
 using Spring.Objects.Factory;
 using IInterceptor=NHibernate.IInterceptor;
 using ICriteria=NHibernate.ICriteria;
-
-#endregion
 
 namespace Spring.Data.NHibernate
 {
@@ -52,17 +44,11 @@ namespace Spring.Data.NHibernate
 	{
 
         private Type criteriaType;
-	    
-	    #region Constants
 
-		/// <summary>
+	    /// <summary>
 		/// The <see cref="ILog"/> instance for this class. 
 		/// </summary>
 		private readonly ILog log = LogManager.GetLogger(typeof (HibernateAccessor));
-	    
-	    #endregion
-
-		#region Constructor (s)
 
 	    /// <summary>
 		/// Initializes a new instance of the <see cref="HibernateAccessor"/> class.
@@ -72,12 +58,7 @@ namespace Spring.Data.NHibernate
 	        
 		}
 
-		#endregion
-
-	    
-        #region Properties
-
-        /// <summary>
+	    /// <summary>
         /// Gets or sets if a new Session should be created when no transactional Session
         /// can be found for the current thread.
         /// </summary>
@@ -328,12 +309,8 @@ namespace Spring.Data.NHibernate
             }
 
         }
-	    
-    	#endregion
 
-		#region Methods
-
-        /// <summary>
+	    /// <summary>
         /// Apply the flush mode that's been specified for this accessor
         /// to the given Session.
         /// </summary>
@@ -626,10 +603,8 @@ namespace Spring.Data.NHibernate
                 log.Warn("CriteriaImpl not available. FetchSize can not be set on ICriteria objects", e);
             }
 	    }
-	    
-		#endregion
 
-        /// <summary>
+	    /// <summary>
         /// Ensure SessionFactory is not null
         /// </summary>
         /// <exception cref="ArgumentException">If SessionFactory property is null.</exception>
@@ -641,8 +616,7 @@ namespace Spring.Data.NHibernate
             }
 	    }
 
-        #region Helper Classes
-        /// <summary>
+	    /// <summary>
         /// Helper class to determine if the FlushMode enumeration
         /// was changed from its default value
         /// </summary>
@@ -690,11 +664,6 @@ namespace Spring.Data.NHibernate
             }
 
         }
-	    
-
-        #endregion
-	    
-
 	}
 
     internal class CloseSuppressingMethodInterceptor : IMethodInterceptor

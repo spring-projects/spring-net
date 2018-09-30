@@ -3,7 +3,7 @@
          xmlns:db="http://www.springframework.net/database">
 
   <db:provider id="dbProvider" 
-              provider="SqlServer-1.1" 
+              provider="System.Data.SqlClient" 
               connectionString="Data Source=SPRINGQA;Database=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False"/>
 
   <object id="transactionManager" type="Spring.Data.Core.AdoPlatformTransactionManager, Spring.Data">

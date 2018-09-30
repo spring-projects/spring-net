@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  * 
@@ -15,10 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
-
-#region Imports
 
 using System;
 using System.Data;
@@ -36,8 +30,6 @@ using Spring.Transaction;
 using Spring.Transaction.Support;
 
 using HibernateTransactionException = NHibernate.TransactionException;
-
-#endregion
 
 namespace Spring.Data.NHibernate
 {
@@ -65,8 +57,6 @@ namespace Spring.Data.NHibernate
     /// <author>Mark Pollack (.NET)</author>
     public class HibernateTransactionManager : AbstractPlatformTransactionManager, IResourceTransactionManager, IObjectFactoryAware, IInitializingObject
     {
-        #region Fields
-
         private ISessionFactory sessionFactory;
 
         private IDbProvider dbProvider;
@@ -84,10 +74,6 @@ namespace Spring.Data.NHibernate
         /// </summary>
         private IObjectFactory objectFactory;
 
-        #endregion
-
-        #region Constructor (s)
-
         /// <summary>
         /// Initializes a new instance of the <see cref="HibernateTransactionManager"/> class.
         /// </summary>
@@ -104,10 +90,6 @@ namespace Spring.Data.NHibernate
             this.sessionFactory = sessionFactory;
             AfterPropertiesSet();
         }
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Gets or sets the db provider.
@@ -263,13 +245,6 @@ namespace Spring.Data.NHibernate
         {
             set { autodetectDbProvider = value; }
         }
-
-        #endregion
-
-        #region Methods
-
-        #endregion
-
 
         /// <summary>
         /// The object factory just needs to be known for resolving entity interceptor

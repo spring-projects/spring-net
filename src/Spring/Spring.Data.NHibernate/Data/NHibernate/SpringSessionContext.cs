@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  * 
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System;
 using NHibernate;
@@ -52,8 +48,6 @@ namespace Spring.Data.NHibernate
             this.sessionFactory = sessionFactory;
         }
 
-        #region ICurrentSessionContext Members
-
         /// <summary>
         /// Retrieve the Spring-managed Session for the current thread.
         /// </summary>
@@ -70,7 +64,5 @@ namespace Spring.Data.NHibernate
                 throw new HibernateException(ex.Message);
             }
         }
-
-        #endregion
     }
 }

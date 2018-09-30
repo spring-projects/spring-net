@@ -377,6 +377,10 @@ Commandline Examples:
       <do>
 		<echo message="Running .NET Framework tests for ${path}" />
         <property name="test.bin.dir" value="${path}/net452" />
+		<if test="${directory::exists(test.bin.dir) == false}">
+          <property name="test.bin.dir" value="${path}/net461" />
+		</if>
+		
         <property name="test.assemblyname" value="${string::substring(path, string::last-index-of(path, '\') + 1, string::get-length(path) - string::last-index-of(path, '\') - 1)}" />
         <property name="test.assemblyfile" value="${test.assemblyname}.dll" />
         <property name="test.assemblyname.tocover" value="${string::substring(test.assemblyname,0,string::last-index-of(test.assemblyname, '.Tests') )}" />
@@ -411,6 +415,8 @@ Commandline Examples:
 		   <include name="${spring.basedir}/test/Spring/Spring.Aop.Tests/Spring.Aop.Tests.2010.csproj" />
 		   <include name="${spring.basedir}/test/Spring/Spring.Data.Tests/Spring.Data.Tests.2010.csproj" />
 		   <include name="${spring.basedir}/test/Spring/Spring.Testing.NUnit.Tests/Spring.Testing.NUnit.Tests.2010.csproj" />
+		   <include name="${spring.basedir}/test/Spring/Spring.Data.NHibernate5.Integration.Tests/Spring.Data.NHibernate5.Integration.Tests.2010.csproj" />
+		   <include name="${spring.basedir}/test/Spring/Spring.Data.NHibernate5.Tests/Spring.Data.NHibernate5.Tests.2010.csproj" />
 		</items>
 	  </in>
       <do>
@@ -892,30 +898,6 @@ Commandline Examples:
       </copy>
     </if>
 
-	<mkdir dir="${current.package.dir}/lib/NHibernate3"/>
-    <if test="${property::exists('build.allnamespaces') and not build.allnamespaces}">
-      <copy todir="${current.package.dir}/lib/NHibernate3" verbose="${copy-verbose}">
-        <fileset basedir="lib/NHibernate3">
-          <include name="**/*.dll"/>
-          <include name="**/*.xml"/>
-          <include name="**/*.license.txt"/>
-		  <exclude name="mono/**"/>
-        </fileset>
-      </copy>
-    </if>
-	
-	<mkdir dir="${current.package.dir}/lib/NHibernate4"/>
-    <if test="${property::exists('build.allnamespaces') and not build.allnamespaces}">
-      <copy todir="${current.package.dir}/lib/NHibernate4" verbose="${copy-verbose}">
-        <fileset basedir="lib/NHibernate4">
-          <include name="**/*.dll"/>
-          <include name="**/*.xml"/>
-          <include name="**/*.license.txt"/>
-		  <exclude name="mono/**"/>
-        </fileset>
-      </copy>
-    </if>		
-	
     <if test="${property::exists('build.allnamespaces') and build.allnamespaces}">
       <copy todir="${current.package.dir}/lib" verbose="${copy-verbose}">
         <fileset basedir="lib">
@@ -1113,6 +1095,10 @@ Commandline Examples:
           <include name="*/*/Spring.Web.Conversation.NHibernate4.xml"/>
           <include name="*/*/Spring.Web.Conversation.NHibernate4.pdb"/>
 
+          <include name="*/*/Spring.Web.Conversation.NHibernate5.dll"/>
+          <include name="*/*/Spring.Web.Conversation.NHibernate5.xml"/>
+          <include name="*/*/Spring.Web.Conversation.NHibernate5.pdb"/>
+
         </fileset>
       </copy>
       
@@ -1307,6 +1293,7 @@ Commandline Examples:
       <include name="src/Spring/Spring.Data/**"/>
       <include name="src/Spring/Spring.Data.NHibernate3/**"/>
       <include name="src/Spring/Spring.Data.NHibernate4/**"/>
+      <include name="src/Spring/Spring.Data.NHibernate5/**"/>
       <include name="src/Spring/Spring.Messaging/**"/>
       <include name="src/Spring/Spring.Messaging.Nms/**"/>
       <include name="src/Spring/Spring.Messaging.Ems/**"/>
@@ -1317,6 +1304,7 @@ Commandline Examples:
       <include name="src/Spring/CommonAssemblyInfo.cs"/>
       <include name="src/Spring/Spring.Web.Conversation.NHibernate3/**"/>
       <include name="src/Spring/Spring.Web.Conversation.NHibernate4/**"/>
+      <include name="src/Spring/Spring.Web.Conversation.NHibernate5/**"/>
       
       <include name="test/Spring/Spring.Core.Tests/**"/>
       <include name="test/Spring/Spring.Aop.Tests/**"/>
@@ -1332,6 +1320,8 @@ Commandline Examples:
 	  <include name="test/Spring/Spring.Data.NHibernate4.Tests/**"/>
       <include name="test/Spring/Spring.Data.NHibernate4.Integration.Tests/**"/>	  
       <include name="test/Spring/Spring.Data.NHibernate4.NestedTxSuspension.Integration.Tests/**"/>	  
+	  <include name="test/Spring/Spring.Data.NHibernate5.Tests/**"/>
+      <include name="test/Spring/Spring.Data.NHibernate5.Integration.Tests/**"/>	  
       <include name="test/Spring/Spring.Messaging.Tests/**"/>
       <include name="test/Spring/Spring.Messaging.Nms.Tests/**"/>
       <include name="test/Spring/Spring.Messaging.Nms.Integration.Tests/**"/>
@@ -1343,6 +1333,7 @@ Commandline Examples:
       <include name="test/Spring/CommonAssemblyInfo.cs"/>
       <include name="test/Spring/Spring.Web.Conversation.NHibernate3.Tests/**"/>
       <include name="test/Spring/Spring.Web.Conversation.NHibernate4.Tests/**"/>
+      <include name="test/Spring/Spring.Web.Conversation.NHibernate5.Tests/**"/>
       
       <include name="examples/Spring/Spring.Examples.build"/>
       <include name="examples/Spring/Spring.AopQuickStart/**"/>

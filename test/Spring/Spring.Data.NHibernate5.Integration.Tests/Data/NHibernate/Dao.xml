@@ -1,0 +1,63 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<objects xmlns='http://www.springframework.net'
+         xmlns:db="http://www.springframework.net/database"
+         xmlns:tx="http://www.springframework.net/tx">
+
+  <object id="transactionManager"
+        type="Spring.Data.NHibernate.HibernateTransactionManager, Spring.Data.NHibernate5">
+    <!--  Comment out DbProvider if you want to have the tx mgr infer the DbProvider from
+              the session factory.  -->
+    <!--  Set the DbProvider explicitly if you would like to have ADO.NET and NHibernate
+              operations take place within the same transaction.  -->
+    <!--
+    <property name="DbProvider" ref="DbProvider"/>
+    -->
+    <property name="SessionFactory" ref="SessionFactory"/>
+
+  </object>
+  
+  <db:provider id="DbProvider"
+               provider="System.Data.SqlClient"
+               connectionString="Data Source=SPRINGQA;Database=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False"/>
+
+
+    <object id="SessionFactory" type="Spring.Data.NHibernate.LocalSessionFactoryObject, Spring.Data.NHibernate5">
+        <property name="DbProvider" ref="DbProvider"/>
+
+
+        <property name="MappingAssemblies">
+            <list>
+                <value>Spring.Data.NHibernate5.Integration.Tests</value>
+            </list>
+        </property>
+        <property name="HibernateProperties">
+           <dictionary>
+
+                <entry key="connection.provider"
+                       value="NHibernate.Connection.DriverConnectionProvider"/>
+
+                <entry key="dialect"
+                       value="NHibernate.Dialect.MsSql2000Dialect"/>
+
+                <entry key="connection.driver_class"
+                       value="NHibernate.Driver.SqlClientDriver"/>
+
+           </dictionary>
+        </property>
+        <!-- provides integation with Spring's declarative transaction management features -->
+        <property name="ExposeTransactionAwareSessionFactory" value="true" /> 
+    </object>
+
+    <!-- DAOs -->
+    <object id="AccountCreditDao" type="Spring.Data.NHibernate.AccountCreditDao">
+        <property name="SessionFactory" ref="SessionFactory"/>
+    </object>
+    <object id="AccountDebitDao" type="Spring.Data.NHibernate.AccountDebitDao">
+        <property name="SessionFactory" ref="SessionFactory"/>
+    </object>
+
+    <object id="AuditDao" type="Spring.Data.NHibernate.AuditDao">
+      <property name="DbProvider" ref="DbProvider"/>
+    </object>
+
+</objects>

@@ -32,6 +32,12 @@ using Spring.Support;
 using Spring.Transaction;
 using Spring.Transaction.Support;
 
+#if NH_5
+using IDbConnection = System.Data.Common.DbConnection; 
+#else
+using IDbConnection = System.Data.IDbConnection; 
+#endif
+
 namespace Spring.Data.NHibernate
 {
     /// <summary>

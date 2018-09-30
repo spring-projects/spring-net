@@ -11,7 +11,7 @@
   -->
 
   <db:provider id="DbProvider" 
-                  provider="SqlServer-1.1" 
+                  provider="System.Data.SqlClient" 
                   connectionString="Data Source=SPRINGQA;Database=Spring;User ID=springqa;Password=springqa;Trusted_Connection=False"/>
     <object id="adoTransactionManager" 
             type="Spring.Data.Core.AdoPlatformTransactionManager, Spring.Data">

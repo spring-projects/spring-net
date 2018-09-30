@@ -1,5 +1,3 @@
-#region Licence
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  * 
@@ -16,15 +14,9 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using NHibernate;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Data.NHibernate.Support
 {
@@ -113,8 +105,6 @@ namespace Spring.Data.NHibernate.Support
             this.defaultFlushMode = defaultFlushMode;
         }
 
-        #region Properties
-
         /// <summary>
         /// Gets the configured <see cref="IInterceptor"/> instance to be used.
         /// </summary>
@@ -186,8 +176,6 @@ namespace Spring.Data.NHibernate.Support
             get { return defaultFlushMode; }
             set { defaultFlushMode = value; }
         }
-
-        #endregion
 
         /// <summary>
         /// Override this method to resolve an <see cref="IInterceptor"/> instance according to your chosen strategy.

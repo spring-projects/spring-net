@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  * 
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using System.Data;
 using System.Reflection;
@@ -35,8 +29,6 @@ using Spring.Data.Support;
 using Spring.Objects.Factory;
 using Spring.Transaction;
 using Spring.Transaction.Support;
-
-#endregion
 
 namespace Spring.Data.NHibernate
 {
@@ -64,8 +56,6 @@ namespace Spring.Data.NHibernate
     /// <author>Mark Pollack (.NET)</author>
     public class HibernateTxScopeTransactionManager : AbstractPlatformTransactionManager, IResourceTransactionManager, IObjectFactoryAware, IInitializingObject
     {
-        #region Fields
-
         private ISessionFactory sessionFactory;
 
         private IDbProvider dbProvider;
@@ -85,10 +75,6 @@ namespace Spring.Data.NHibernate
 
         private TxScopeTransactionManager txScopeTranactionManager;
 
-        #endregion
-
-        #region Constructor (s)
-
         /// <summary>
         /// Initializes a new instance of the <see cref="HibernateTxScopeTransactionManager"/> class.
         /// </summary>
@@ -106,10 +92,6 @@ namespace Spring.Data.NHibernate
             this.sessionFactory = sessionFactory;
             AfterPropertiesSet();
         }
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// Gets or sets the db provider.
@@ -265,13 +247,6 @@ namespace Spring.Data.NHibernate
         {
             set { autodetectDbProvider = value; }
         }
-
-        #endregion
-
-        #region Methods
-
-        #endregion
-
 
         /// <summary>
         /// The object factory just needs to be known for resolving entity interceptor

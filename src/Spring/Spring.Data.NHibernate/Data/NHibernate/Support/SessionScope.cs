@@ -1,5 +1,3 @@
-#region Licence
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  * 
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using System.Reflection;
 
@@ -28,8 +22,6 @@ using NHibernate;
 using Spring.Threading;
 using Spring.Transaction.Support;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Data.NHibernate.Support
 {
@@ -64,8 +56,6 @@ namespace Spring.Data.NHibernate.Support
     /// <author>Harald Radi (.NET)</author>
     public class SessionScope : IDisposable
     {
-        #region Fields
-
         /// <summary>
         /// The logging instance.
         /// </summary>        
@@ -76,10 +66,6 @@ namespace Spring.Data.NHibernate.Support
         // Keys into LogicalThreadContext for runtime values.
         private readonly string PARTICIPATE_KEY;
         private readonly string ISOPEN_KEY;
-
-        #endregion
-
-        #region Constructor (s)
 
         /// <summary>
         /// Initializes a new instance of the <see cref="SessionScope"/> class in single session mode, 
@@ -209,10 +195,6 @@ namespace Spring.Data.NHibernate.Support
             }
         }
 
-        #endregion
-
-        #region Properties
-
         /// <summary>
         /// Set whether to use a single session for each request. Default is "true".
         /// If set to false, each data access operation or transaction will use
@@ -313,10 +295,6 @@ namespace Spring.Data.NHibernate.Support
             }
         }
 
-        #endregion
-
-        #region IDisposable Members
-
         /// <summary>
         /// Call <code>Close()</code>, 
         /// </summary>
@@ -324,10 +302,6 @@ namespace Spring.Data.NHibernate.Support
         {
             Close();
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Opens a new session or participates in an existing session and 
@@ -434,10 +408,6 @@ namespace Spring.Data.NHibernate.Support
             return session;
         }
 
-        #endregion
-
-        #region LazySessionHolder utility class
-
         /// <summary>
         /// This sessionHolder creates a default session only if it is needed.
         /// </summary>
@@ -488,7 +458,5 @@ namespace Spring.Data.NHibernate.Support
                 if (log.IsDebugEnabled) log.Debug("Closed LazySessionHolder");
             }
         }
-
-        #endregion
     }
 }
