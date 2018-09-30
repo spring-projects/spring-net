@@ -2,13 +2,8 @@
 
   <PropertyGroup>
 
-    <CleanedProjectName>$(MSBuildProjectName.Replace('.2010', ''))</CleanedProjectName>
-  
-    <OutputPath>..\..\..\build\$(Configuration)\$(CleanedProjectName)</OutputPath>
+    <OutputPath>..\..\..\build\$(Configuration)\$(MSBuildProjectName)</OutputPath>
 
-    <AssemblyName>$(CleanedProjectName)</AssemblyName>
-    <PackageId>$(CleanedProjectName)</PackageId>
-    <DocumentationFile>$(CleanedProjectName).xml</DocumentationFile>
     <RootNamespace>Spring</RootNamespace>
 
     <AssemblyOriginatorKeyFile>..\..\..\Spring.Net.snk</AssemblyOriginatorKeyFile>

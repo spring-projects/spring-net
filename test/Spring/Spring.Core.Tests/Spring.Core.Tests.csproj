@@ -1,0 +1,75 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>netcoreapp2.1;$(TargetFullFrameworkVersion)</TargetFrameworks>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Aop\Spring.Aop.csproj" />
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Core\Spring.Core.csproj" />
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Data\Spring.Data.csproj" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == '$(TargetFullFrameworkVersion)' ">
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Services\Spring.Services.csproj" />
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Template.Velocity\Spring.Template.Velocity.csproj" />
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Messaging.Nms\Spring.Messaging.Nms.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="FakeItEasy" Version="$(FakeItEasyVersion)" />
+    <PackageReference Include="FakeItEasy.Analyzer" Version="$(FakeItEasyVersion)" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftTestSDKVersion)" />
+    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="NUnit" Version="$(NUnitVersion)" />
+    <PackageReference Include="NUnit3TestAdapter" Version="$(NUnitTestAdapterVersion)" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == '$(TargetFullFrameworkVersion)' ">
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Runtime.Serialization.Formatters.Soap" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.1' ">
+    <Compile Remove="Context\Attributes\FailAssemblyObjectDefinitionScannerTests.cs" />
+    <Compile Remove="Context\Support\ApplicationContextAwareProcessorTests.cs" />
+    <Compile Remove="Expressions\ExpressionEvaluatorTests.cs" />
+    <Compile Remove="Globalization\AbstractLocalizerTests.cs" />
+    <Compile Remove="Globalization\Localizers\ResourceSetLocalizerTests.cs" />
+    <Compile Remove="Objects\TestTransparentProxyFactory.cs" />
+    <Compile Remove="SecurityTemplate.cs" />
+    <Compile Remove="Threading\CallContextStorageTests.cs" />
+    <Compile Remove="Util\ObjectUtilsTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="App.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Compile Remove="Context\Attributes\FailAssemblyObjectDefinitionScannerTests.cs" />
+    <EmbeddedResource Include="Context\Attributes\*.xml" />
+    <EmbeddedResource Include="Context\Support\*.xml" />
+    <EmbeddedResource Include="Context\Support\testobject.xsd" />
+    <EmbeddedResource Include="Context\Config\ConfigFiles\*.xml" />
+    <EmbeddedResource Include="Context\*.xml" />
+    <EmbeddedResource Include="Data\Spring\Objects\Factory\Config\*.properties" />
+    <EmbeddedResource Include="Core\TypeResolution\aliasedObjects.xml" />
+    <EmbeddedResource Include="Core\IO\TestResource.txt" />
+    <EmbeddedResource Include="Core\IO\ConfigSectionResourceTests_config1.xml" />
+    <EmbeddedResource Include="Objects\Factory\Attributes\*.xml" />
+    <EmbeddedResource Include="Objects\Factory\Attributes\*.config" />
+    <EmbeddedResource Include="Objects\Factory\Xml\*.xsd" />
+    <EmbeddedResource Include="Validation\*.xml" />
+    <EmbeddedResource Include="Util\ConfigXmlDocumentTests_SampleConfig.xml" />
+    <EmbeddedResource Include="Objects\Factory\TestResource.txt" />
+    <EmbeddedResource Include="Reflection\Dynamic\SafePropertyTests_TestObject.vb" />
+    <EmbeddedResource Include="Resources\SimpleAppContext.xml" />
+    <EmbeddedResource Include="TestResource.txt" />
+  </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy &quot;$(ProjectDir)Data&quot; &quot;$(OutDir)&quot; /y /s /q /d" />
+    <Exec Command="copy &quot;$(ProjectDir)App.config&quot; &quot;$(OutDir)testhost.dll.config&quot;" />
+  </Target>
+</Project>

@@ -411,12 +411,12 @@ Commandline Examples:
     <foreach item="File" property="file">
 	  <in>
 	    <items>
-		   <include name="${spring.basedir}/test/Spring/Spring.Core.Tests/Spring.Core.Tests.2010.csproj" />
-		   <include name="${spring.basedir}/test/Spring/Spring.Aop.Tests/Spring.Aop.Tests.2010.csproj" />
-		   <include name="${spring.basedir}/test/Spring/Spring.Data.Tests/Spring.Data.Tests.2010.csproj" />
-		   <include name="${spring.basedir}/test/Spring/Spring.Testing.NUnit.Tests/Spring.Testing.NUnit.Tests.2010.csproj" />
-		   <include name="${spring.basedir}/test/Spring/Spring.Data.NHibernate5.Integration.Tests/Spring.Data.NHibernate5.Integration.Tests.2010.csproj" />
-		   <include name="${spring.basedir}/test/Spring/Spring.Data.NHibernate5.Tests/Spring.Data.NHibernate5.Tests.2010.csproj" />
+		   <include name="${spring.basedir}/test/Spring/Spring.Core.Tests/Spring.Core.Tests.csproj" />
+		   <include name="${spring.basedir}/test/Spring/Spring.Aop.Tests/Spring.Aop.Tests.csproj" />
+		   <include name="${spring.basedir}/test/Spring/Spring.Data.Tests/Spring.Data.Tests.csproj" />
+		   <include name="${spring.basedir}/test/Spring/Spring.Testing.NUnit.Tests/Spring.Testing.NUnit.Tests.csproj" />
+		   <include name="${spring.basedir}/test/Spring/Spring.Data.NHibernate5.Integration.Tests/Spring.Data.NHibernate5.Integration.Tests.csproj" />
+		   <include name="${spring.basedir}/test/Spring/Spring.Data.NHibernate5.Tests/Spring.Data.NHibernate5.Tests.csproj" />
 		</items>
 	  </in>
       <do>
@@ -463,7 +463,7 @@ Commandline Examples:
 	</if>
 
     <exec program="${msbuild.exe}" verbose="true">
-      <arg value="Spring.NET.2010.sln"/>
+      <arg value="Spring.NET.sln"/>
       <arg line="/nologo" />
       <arg line="/v:m" />
       <arg line="/m" />
@@ -1280,7 +1280,7 @@ Commandline Examples:
     <property name="build-quartz" value="true" />
     <property name="build-msmq" value="true" />
     <property name="build-velocity" value="true" />
-    <property name="solution.file.2010" value="Spring.Net.2010.sln"/>
+    <property name="solution.file.2010" value="Spring.Net.sln"/>
     <fileset id="src.to.copy">
       <include name="src/Spring/Spring.Core/**"/>
       <include name="src/Spring/Spring.Aop/**"/>

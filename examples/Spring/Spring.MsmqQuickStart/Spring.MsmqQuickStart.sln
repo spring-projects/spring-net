@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.MsmqQuickStart.Common.2010", "src\Spring\Spring.MsmqQuickStart.Common\Spring.MsmqQuickStart.Common.csproj", "{AC5A3035-75DD-48E5-ABCA-38FBC8193F22}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.MsmqQuickStart.Server.2010", "src\Spring\Spring.MsmqQuickStart.Server\Spring.MsmqQuickStart.Server.csproj", "{85E7B947-8153-45E4-B572-BEDB191F1FB2}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.MsmqQuickStart.Client.2010", "src\Spring\Spring.MsmqQuickStart.Client\Spring.MsmqQuickStart.Client.csproj", "{87D0B725-A652-4A6B-A95F-197F7155769F}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{AC5A3035-75DD-48E5-ABCA-38FBC8193F22}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC5A3035-75DD-48E5-ABCA-38FBC8193F22}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC5A3035-75DD-48E5-ABCA-38FBC8193F22}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC5A3035-75DD-48E5-ABCA-38FBC8193F22}.Release|Any CPU.Build.0 = Release|Any CPU
+		{85E7B947-8153-45E4-B572-BEDB191F1FB2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{85E7B947-8153-45E4-B572-BEDB191F1FB2}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{85E7B947-8153-45E4-B572-BEDB191F1FB2}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{85E7B947-8153-45E4-B572-BEDB191F1FB2}.Release|Any CPU.Build.0 = Release|Any CPU
+		{87D0B725-A652-4A6B-A95F-197F7155769F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{87D0B725-A652-4A6B-A95F-197F7155769F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{87D0B725-A652-4A6B-A95F-197F7155769F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{87D0B725-A652-4A6B-A95F-197F7155769F}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal

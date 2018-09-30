@@ -1,0 +1,40 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;$(TargetFullFrameworkVersion)</TargetFrameworks>
+    <Description>Interfaces and classes that provide Data access support in Spring.Net</Description>
+    <NoWarn>1591</NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Spring.Aop\Spring.Aop.csproj" />
+    <ProjectReference Include="..\Spring.Core\Spring.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == '$(TargetFullFrameworkVersion)' ">
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Web" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\GenCommonAssemblyInfo.cs">
+      <Link>GenCommonAssemblyInfo.cs</Link>
+    </Compile>
+    <None Include="Data\Config\spring-database-1.3.xsx">
+      <DependentUpon>spring-database-1.3.xsd</DependentUpon>
+    </None>
+    <EmbeddedResource Include="Data\Common\dbproviders_netcore.xml" Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+      <LogicalName>Spring.Data.Common.dbproviders.xml</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Data\Common\dbproviders.xml" Condition=" '$(TargetFramework)' == '$(TargetFullFrameworkVersion)' ">
+      <LogicalName>Spring.Data.Common.dbproviders.xml</LogicalName>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Data\Config\spring-database-1.1.xsd" />
+    <EmbeddedResource Include="Transaction\Config\spring-tx-1.1.xsd" />
+    <EmbeddedResource Include="Data\Config\spring-database-1.3.xsd" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <Compile Remove="Data\Core\ServiceDomainPlatformTransactionManager.cs" />
+    <Compile Remove="Data\Support\DefaultServiceDomainAdapter.cs" />
+    <Compile Remove="Data\Support\IServiceDomainAdapter.cs" />
+    <Compile Remove="Data\Support\SimpleServiceConfig.cs" />
+  </ItemGroup>
+</Project>

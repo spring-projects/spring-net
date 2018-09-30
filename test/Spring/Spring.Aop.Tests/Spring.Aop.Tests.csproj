@@ -1,0 +1,34 @@
+﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
+  <PropertyGroup>
+    <TargetFrameworks>netcoreapp2.1;$(TargetFullFrameworkVersion)</TargetFrameworks>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Aop\Spring.Aop.csproj" />
+    <ProjectReference Include="..\Spring.Core.Tests\Spring.Core.Tests.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="FakeItEasy" Version="$(FakeItEasyVersion)" />
+    <PackageReference Include="FakeItEasy.Analyzer" Version="$(FakeItEasyVersion)" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftTestSDKVersion)" />
+    <PackageReference Include="NUnit" Version="$(NUnitVersion)" />
+    <PackageReference Include="NUnit3TestAdapter" Version="$(NUnitTestAdapterVersion)" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == '$(TargetFullFrameworkVersion)' ">
+    <Reference Include="System.Web" />
+  </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.1' ">
+    <Compile Remove="Aop\Framework\AutoProxy\AbstractAutoProxyCreatorTests.cs" />
+    <Compile Remove="Aop\Framework\Adapter\ThrowsAdviceInterceptorTests.cs" />
+    <Compile Remove="Aop\Framework\AutoProxy\AbstractAutoProxyCreatorTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Spring.Core.Tests\TestAssemblySetup.cs" Link="TestAssemblySetup.cs" />
+    <Content Include="App.config" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Data\**\*.xml" CopyToOutputDirectory="PreserveNewest" />
+    <EmbeddedResource Include="Aop\Config\AopNamespaceParserTests.xml" />
+    <EmbeddedResource Include="Data\Spring\Aop\Framework\adapter\withBPPContext.xml" />
+    <EmbeddedResource Include="Data\Spring\Aop\Framework\adapter\withoutBPPContext.xml" />
+    <EmbeddedResource Include="Aop\Framework\AutoProxy\advisorAutoProxyCreatorCircularReferencesTests.xml" />
+    <EmbeddedResource Include="Aop\Framework\DynamicProxy\IsAopProxyTests.xml" />
+  </ItemGroup>
+</Project>

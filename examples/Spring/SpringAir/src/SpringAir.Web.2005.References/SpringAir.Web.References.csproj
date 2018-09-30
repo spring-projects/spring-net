@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net452</TargetFramework>
+    <RootNamespace>SpringAir</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\src\Spring\Spring.Aop\Spring.Aop.csproj" />
+    <ProjectReference Include="..\..\..\..\..\src\Spring\Spring.Core\Spring.Core.csproj" />
+    <ProjectReference Include="..\..\..\..\..\src\Spring\Spring.Data\Spring.Data.csproj" />
+    <ProjectReference Include="..\..\..\..\..\src\Spring\Spring.Web\Spring.Web.csproj" />
+    <ProjectReference Include="..\SpringAir.Core\SpringAir.Core.csproj" />
+    <ProjectReference Include="..\SpringAir.Data.Ado\SpringAir.Data.Ado.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.Transactions" />
+  </ItemGroup>
+</Project>

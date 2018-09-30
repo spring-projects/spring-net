@@ -4,11 +4,8 @@
 
     <NoWarn>618, 1591</NoWarn>
 
-    <CleanedProjectName>$(MSBuildProjectName.Replace('.2010', ''))</CleanedProjectName>
-  
-    <OutputPath>..\..\..\build\$(Configuration)\$(CleanedProjectName)</OutputPath>
+    <OutputPath>..\..\..\build\$(Configuration)\$(MSBuildProjectName)</OutputPath>
 
-    <AssemblyName>$(CleanedProjectName)</AssemblyName>
     <RootNamespace>Spring</RootNamespace>
     <Deterministic>true</Deterministic>
 

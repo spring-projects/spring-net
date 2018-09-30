@@ -1,0 +1,35 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 2013
+VisualStudioVersion = 12.0.21005.1
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Primes.2010", "src\Primes\Primes.csproj", "{865E1A8E-88F3-48D8-869F-B584C5A36740}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Primes.Tests.2010", "test\Primes.Tests\Primes.Tests.csproj", "{32476935-0852-4A11-B938-4D202D8B4454}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpringApp.2010", "src\SpringApp\SpringApp.csproj", "{08A8AC17-E5E1-48FC-9958-76ECA8C08D71}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{865E1A8E-88F3-48D8-869F-B584C5A36740}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{865E1A8E-88F3-48D8-869F-B584C5A36740}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{865E1A8E-88F3-48D8-869F-B584C5A36740}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{865E1A8E-88F3-48D8-869F-B584C5A36740}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32476935-0852-4A11-B938-4D202D8B4454}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32476935-0852-4A11-B938-4D202D8B4454}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32476935-0852-4A11-B938-4D202D8B4454}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32476935-0852-4A11-B938-4D202D8B4454}.Release|Any CPU.Build.0 = Release|Any CPU
+		{08A8AC17-E5E1-48FC-9958-76ECA8C08D71}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{08A8AC17-E5E1-48FC-9958-76ECA8C08D71}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{08A8AC17-E5E1-48FC-9958-76ECA8C08D71}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{08A8AC17-E5E1-48FC-9958-76ECA8C08D71}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
+

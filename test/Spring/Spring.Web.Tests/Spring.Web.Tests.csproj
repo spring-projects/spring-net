@@ -1,0 +1,50 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net452</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Core\Spring.Core.csproj" />
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Web\Spring.Web.csproj" />
+    <ProjectReference Include="..\Spring.Core.Tests\Spring.Core.Tests.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="FakeItEasy" Version="$(FakeItEasyVersion)" />
+    <PackageReference Include="FakeItEasy.Analyzer" Version="$(FakeItEasyVersion)" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftTestSDKVersion)" />
+    <PackageReference Include="NUnit" Version="$(NUnitVersion)" />
+    <PackageReference Include="NUnit3TestAdapter" Version="$(NUnitTestAdapterVersion)" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="NUnitAsp, Version=1.5.1.27647, Culture=neutral, PublicKeyToken=f9bdb8e9d00f2b23">
+      <HintPath>..\..\..\lib\Net\2.0\NUnitAsp.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="NUnitAspEx, Version=1.0.2892.39670, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\..\lib\Net\2.0\NUnitAspEx.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Services" />
+    <Reference Include="System.XML" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\Spring.Core.Tests\TestAssemblySetup.cs" Link="TestAssemblySetup.cs" />
+    <Content Include="Data\**\*" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Data\Spring\Context\Support\WebApplicationContextTests\Dummy.aspx" />
+    <Content Include="Data\Spring\Objects\Factory\Support\TestForm.aspx" />
+    <Content Include="Data\Spring\Web\Support\LocalResourceManagerTests\WithoutResources.aspx" />
+    <Content Include="Data\Spring\Web\Support\LocalResourceManagerTests\WithResources.aspx" />
+    <Content Include="Data\Spring\Web\Support\PageHandlerFactoryTests\ReadOnlySession.aspx" />
+    <Content Include="Data\Spring\Web\Support\PageHandlerFactoryTests\TransferAfterSetResult.aspx" />
+    <Content Include="Data\Spring\Web\Support\PageHandlerFactoryTests\MaintainsSession1.aspx" />
+    <Content Include="Data\Spring\Web\Support\PageHandlerFactoryTests\MaintainsSession2.aspx" />
+    <Content Include="Data\Spring\Web\Support\PageHandlerFactoryTests\DisablesSession.aspx" />
+    <Content Include="Data\Spring\Web\Support\PageHandlerFactoryTests\TransferAfterSetResultSave.aspx" />
+    <EmbeddedResource Include="Context\Support\*.xml" />
+    <EmbeddedResource Include="Web\Support\ControlInterceptionTests.objects.xml" />
+  </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy &quot;$(ProjectDir)Data&quot; &quot;$(OutDir)&quot; /y /s /q /d" />
+  </Target>
+</Project>

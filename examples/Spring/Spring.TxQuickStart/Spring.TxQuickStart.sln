@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.25807.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.TxQuickStart.2010", "src\Spring\Spring.TxQuickStart\Spring.TxQuickStart.csproj", "{EDDC48D5-4F25-4476-9BA3-12F2E8BB5A8C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.TxQuickStart.Tests.2010", "test\Spring\Spring.TxQuickStart.Tests\Spring.TxQuickStart.Tests.csproj", "{94E4E1B4-D424-4EB9-BF34-2EE8CC3D7048}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{EDDC48D5-4F25-4476-9BA3-12F2E8BB5A8C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDDC48D5-4F25-4476-9BA3-12F2E8BB5A8C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDDC48D5-4F25-4476-9BA3-12F2E8BB5A8C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDDC48D5-4F25-4476-9BA3-12F2E8BB5A8C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{94E4E1B4-D424-4EB9-BF34-2EE8CC3D7048}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{94E4E1B4-D424-4EB9-BF34-2EE8CC3D7048}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{94E4E1B4-D424-4EB9-BF34-2EE8CC3D7048}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{94E4E1B4-D424-4EB9-BF34-2EE8CC3D7048}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
