@@ -1,111 +1,37 @@
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>8.0.50727</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{2D0C5DF7-3BDB-44FB-BC1B-58E60B170BAD}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <TargetFramework>net452</TargetFramework>
     <RootNamespace>Spring.Northwind</RootNamespace>
-    <AssemblyName>Spring.Northwind.IntegrationTests</AssemblyName>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>bin\Debug\</OutputPath>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>bin\Release\</OutputPath>
-    <DefineConstants>TRACE</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="Common.Logging, Version=1.1.0.0, Culture=neutral, PublicKeyToken=af08829b84f0328e">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\lib\Net\2.0\Common.Logging.dll</HintPath>
-    </Reference>
-    <Reference Include="Iesi.Collections, Version=1.0.0.3, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\lib\NHibernate21\net\2.0\Iesi.Collections.dll</HintPath>
-    </Reference>
-    <Reference Include="log4net, Version=1.2.10.0, Culture=neutral, PublicKeyToken=1b44e1d426115821, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\lib\NHibernate21\net\2.0\log4net.dll</HintPath>
-    </Reference>
-    <Reference Include="NHibernate, Version=1.2.1.4000, Culture=neutral, PublicKeyToken=aa95f207798dfdb4, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\lib\NHibernate21\net\2.0\NHibernate.dll</HintPath>
-    </Reference>
-    <Reference Include="nunit.framework, Version=2.2.8.0, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\lib\net\2.0\nunit.framework.dll</HintPath>
-    </Reference>
-    <Reference Include="Spring.Core, Version=1.1.0.2, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\bin\net\3.5\debug\Spring.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Spring.Data, Version=1.1.0.2, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\bin\net\3.5\debug\Spring.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Spring.Data.NHibernate21, Version=1.1.2.20153, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\bin\net\3.5\debug\Spring.Data.NHibernate21.dll</HintPath>
-    </Reference>
-    <Reference Include="Spring.Testing.NUnit, Version=1.1.2.20153, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\bin\net\3.5\debug\Spring.Testing.NUnit.dll</HintPath>
-    </Reference>
-    <Reference Include="Spring.Web, Version=1.1.0.2, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\..\..\bin\net\3.5\debug\Spring.Web.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="IntegrationTests\AbstractDaoIntegrationTests.cs" />
-    <Compile Include="IntegrationTests\FulfillmentServiceTests.cs" />
-    <Compile Include="IntegrationTests\NorthwindIntegrationTests.cs" />
-    <Compile Include="Properties\AssemblyInfo.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="App.config" />
-    <None Include="project.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\src\Spring.Northwind.Dao.NHibernate\Spring.Northwind.Dao.NHibernate.csproj">
-      <Project>{6E4F55A0-C281-4706-A08B-BDEC2D2FBDA4}</Project>
-      <Name>Spring.Northwind.Dao.NHibernate</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\Spring.Northwind.Dao\Spring.Northwind.Dao.csproj">
-      <Project>{7F45EEA2-50AC-44E2-85A6-2FFB02E38C44}</Project>
-      <Name>Spring.Northwind.Dao</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\src\Spring.Northwind.Service\Spring.Northwind.Service.csproj">
-      <Project>{9E15876F-E9E0-43B7-9874-B54F163757D6}</Project>
-      <Name>Spring.Northwind.Service</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
   <PropertyGroup>
     <PostBuildEvent>rem echo "Copying .xml files for tests"
 rem xcopy  "$(ProjectDir)Data" ..\..\..\..\build\VS.Net.2005\Spring.Northwind.IntegrationTests\$(ConfigurationName)\ /y /s /q</PostBuildEvent>
   </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\Spring.Northwind.Dao.NHibernate\Spring.Northwind.Dao.NHibernate.csproj" />
+    <ProjectReference Include="..\..\src\Spring.Northwind.Dao\Spring.Northwind.Dao.csproj" />
+    <ProjectReference Include="..\..\src\Spring.Northwind.Service\Spring.Northwind.Service.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Spring.Core">
+      <HintPath>..\..\..\..\..\build\$(Configuration)\Spring.Core\$(TargetFramework)\Spring.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Spring.Data">
+      <HintPath>..\..\..\..\..\build\$(Configuration)\Spring.Data\$(TargetFramework)\Spring.Data.dll</HintPath>
+    </Reference>
+    <Reference Include="Spring.Data.NHibernate3">
+      <HintPath>..\..\..\..\..\build\$(Configuration)\Spring.Data.NHibernate3\$(TargetFramework)\Spring.Data.NHibernate3.dll</HintPath>
+    </Reference>
+    <Reference Include="Spring.Testing.NUnit">
+      <HintPath>..\..\..\..\..\build\$(Configuration)\Spring.Testing.NUnit\$(TargetFramework)\Spring.Testing.NUnit.dll</HintPath>
+    </Reference>
+    <Reference Include="Spring.Web">
+      <HintPath>..\..\..\..\..\build\$(Configuration)\Spring.Web\$(TargetFramework)\Spring.Web.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.2" />
+    <PackageReference Include="NUnit" Version="3.10.1" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
+  </ItemGroup>
 </Project>

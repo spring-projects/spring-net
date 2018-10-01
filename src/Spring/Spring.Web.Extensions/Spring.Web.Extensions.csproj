@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net452</TargetFramework>
+    <Description>Interfaces and classes that provide ASP.NET AJAX 1.0 support in Spring.Net</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Spring.Core\Spring.Core.csproj" />
+    <ProjectReference Include="..\Spring.Web\Spring.Web.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Web.Services" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\GenCommonAssemblyInfo.cs">
+      <Link>GenCommonAssemblyInfo.cs</Link>
+    </Compile>
+  </ItemGroup>
+</Project>

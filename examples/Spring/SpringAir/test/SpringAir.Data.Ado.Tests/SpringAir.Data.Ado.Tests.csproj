@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net452</TargetFramework>
+    <RootNamespace>SpringAir</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Remove="Data\Ado\ReflectiveDbConnectionFactoryTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.2" />
+    <PackageReference Include="NUnit" Version="3.10.1" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\src\SpringAir.Core\SpringAir.Core.csproj" />
+    <ProjectReference Include="..\..\src\SpringAir.Data.Ado\SpringAir.Data.Ado.csproj" />
+  </ItemGroup>
+</Project>

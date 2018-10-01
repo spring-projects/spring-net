@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net452</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Core\Spring.Core.csproj" />
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Data\Spring.Data.csproj" />
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Testing.Microsoft\Spring.Testing.Microsoft.csproj" />
+    <ProjectReference Include="..\Spring.Core.Tests\Spring.Core.Tests.csproj" />
+    <ProjectReference Include="..\Spring.Data.Tests\Spring.Data.Tests.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftTestSDKVersion)" />
+    <PackageReference Include="MSTest.TestAdapter" Version="1.3.2" />
+    <PackageReference Include="MSTest.TestFramework" Version="1.3.2" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <EmbeddedResource Include="Testing\Microsoft\TestApplicationContext.xml" />
+  </ItemGroup>
+</Project>

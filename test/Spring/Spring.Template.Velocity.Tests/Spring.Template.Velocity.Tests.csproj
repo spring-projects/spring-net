@@ -1,93 +1,26 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{10405837-CB67-40D8-9326-84C9383983E2}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Spring</RootNamespace>
-    <AssemblyName>Spring.Template.Velocity.Tests</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkSubset>
-    </TargetFrameworkSubset>
-    <TargetFrameworkProfile />
-    <PlatformTarget>AnyCPU</PlatformTarget>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\..\..\build\VS.NET.2008\Spring.Template.Velocity.Tests\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NET_2_0</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-    <DocumentationFile>
-    </DocumentationFile>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\..\..\build\VS.NET.2008\Spring.Template.Velocity.Tests\Release\</OutputPath>
-    <DefineConstants>TRACE;NET_2_0</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <TargetFramework>net452</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Core\Spring.Core.csproj" />
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Template.Velocity\Spring.Template.Velocity.csproj" />
+    <ProjectReference Include="..\Spring.Core.Tests\Spring.Core.Tests.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Template\Velocity\Config\TemplateNamespaceParserTests.cs" />
-    <Compile Include="Template\Velocity\VelocityEngineFactoryObjectTests.cs" />
-    <Compile Include="Template\Velocity\VelocityEngineTestBase.cs" />
-    <Compile Include="VelocityCompilerOptionsTests.cs" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftTestSDKVersion)" />
+    <PackageReference Include="NUnit" Version="$(NUnitVersion)" />
+    <PackageReference Include="NUnit3TestAdapter" Version="$(NUnitTestAdapterVersion)" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\src\Spring\Spring.Core\Spring.Core.2008.csproj">
-      <Project>{710961A3-0DF4-49E4-A26E-F5B9C044AC84}</Project>
-      <Name>Spring.Core.2008</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\src\Spring\Spring.Template.Velocity\Spring.Template.Velocity.2008.csproj">
-      <Project>{BF3AB954-8375-407C-9E98-4C51D8072784}</Project>
-      <Name>Spring.Template.Velocity.2008</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Spring.Core.Tests\Spring.Core.Tests.2008.csproj">
-      <Project>{44B16BAA-6DF8-447C-9D7F-3AD3D854D904}</Project>
-      <Name>Spring.Core.Tests.2008</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Template\Velocity\VelocityEngineFactoryObjectTests.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="Template\Velocity\SimpleTemplate.vm">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
+    <Compile Include="..\Spring.Core.Tests\TestAssemblySetup.cs" Link="TestAssemblySetup.cs" />
     <None Include="Template\Velocity\config.properties">
-      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
-    <EmbeddedResource Include="Template\Velocity\EmbeddedTemplate.vm">
+    <EmbeddedResource Include="Template\Velocity\VelocityEngineFactoryObjectTests.xml" />
+    <EmbeddedResource Include="Template\Velocity\SimpleTemplate.vm">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </EmbeddedResource>
-    <None Include="project.json" />
+    <EmbeddedResource Include="Template\Velocity\EmbeddedTemplate.vm" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

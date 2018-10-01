@@ -1,0 +1,23 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>$(TargetFullFrameworkVersion)</TargetFramework>
+    <Description>ActiveMQ support</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Spring.Aop\Spring.Aop.csproj" />
+    <ProjectReference Include="..\Spring.Core\Spring.Core.csproj" />
+    <ProjectReference Include="..\Spring.Data\Spring.Data.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Apache.NMS" Version="1.7.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\GenCommonAssemblyInfo.cs">
+      <Link>GenCommonAssemblyInfo.cs</Link>
+    </Compile>
+    <EmbeddedResource Include="Messaging\Nms\Config\spring-nms-1.2.xsd">
+      <SubType />
+    </EmbeddedResource>
+    <EmbeddedResource Include="Messaging\Nms\Config\spring-nms-1.3.xsd" />
+  </ItemGroup>
+</Project>

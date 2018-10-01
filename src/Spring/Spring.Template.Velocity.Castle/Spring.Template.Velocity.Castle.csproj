@@ -1,0 +1,35 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net452</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Spring.Core\Spring.Core.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Castle.NVelocity" Version="1.1.1" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\GenCommonAssemblyInfo.cs">
+      <Link>GenCommonAssemblyInfo.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Template.Velocity\Template\Velocity\CommonsLoggingLogSystem.cs">
+      <Link>Template\Velocity\CommonsLoggingLogSystem.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Template.Velocity\Template\Velocity\VelocityConstants.cs">
+      <Link>Template\Velocity\VelocityConstants.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Template.Velocity\Template\Velocity\VelocityEngineFactory.cs">
+      <Link>Template\Velocity\VelocityEngineFactory.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Template.Velocity\Template\Velocity\VelocityEngineFactoryObject.cs">
+      <Link>Template\Velocity\VelocityEngineFactoryObject.cs</Link>
+    </Compile>
+    <Compile Include="..\Spring.Template.Velocity\Template\Velocity\VelocityEngineUtils.cs">
+      <Link>Template\Velocity\VelocityEngineUtils.cs</Link>
+    </Compile>
+    <EmbeddedResource Include="..\Spring.Template.Velocity\Template\Velocity\Config\spring-nvelocity-1.3.xsd">
+      <Link>Template\Velocity\Config\spring-nvelocity-1.3.xsd</Link>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>

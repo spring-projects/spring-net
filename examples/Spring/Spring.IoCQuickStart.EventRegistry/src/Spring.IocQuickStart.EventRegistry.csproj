@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net452</TargetFramework>
+    <RootNamespace>Spring.IocQuickStart</RootNamespace>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Spring.Core">
+      <HintPath>..\..\..\..\build\$(Configuration)\Spring.Core\$(TargetFramework)\Spring.Core.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+</Project>

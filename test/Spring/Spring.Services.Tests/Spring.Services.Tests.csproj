@@ -1,0 +1,51 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net452</TargetFramework>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Aop\Spring.Aop.csproj" />
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Core\Spring.Core.csproj" />
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Services\Spring.Services.csproj" />
+    <ProjectReference Include="..\Spring.Aop.Tests\Spring.Aop.Tests.csproj" />
+    <ProjectReference Include="..\Spring.Core.Tests\Spring.Core.Tests.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="FakeItEasy" Version="$(FakeItEasyVersion)" />
+    <PackageReference Include="FakeItEasy.Analyzer" Version="$(FakeItEasyVersion)" PrivateAssets="All" />
+    <PackageReference Include="log4net" Version="$(Log4NetVersion)" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftTestSDKVersion)" />
+    <PackageReference Include="NUnit" Version="$(NUnitVersion)" />
+    <PackageReference Include="NUnit3TestAdapter" Version="$(NUnitTestAdapterVersion)" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Configuration" />
+    <Reference Include="System.EnterpriseServices" />
+    <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.ServiceModel" />
+    <Reference Include="System.Web.Services" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Data\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="ServiceComponentExporterTests.TestServicedComponents.dll.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="ServiceComponentExporterTests.TestServicedComponents.exe.config">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <Content Include="ServiceComponentExporterTests.TestServicedComponents.Services.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <EmbeddedResource Include="Data\Spring\Remoting\*.xml" />
+    <EmbeddedResource Include="Data\Spring\Web\Services\*.wsdl" />
+    <EmbeddedResource Include="Data\Spring\Web\Services\configurableFactory.xml" />
+    <EmbeddedResource Include="EnterpriseServices\ExeConfigurationSystemTests.config" />
+    <EmbeddedResource Include="ServiceModel\Config\*.xml" />
+    <EmbeddedResource Remove="WindowsService\**" />
+    <None Remove="WindowsService\**" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Remove="WindowsService\**" />
+  </ItemGroup>
+</Project>

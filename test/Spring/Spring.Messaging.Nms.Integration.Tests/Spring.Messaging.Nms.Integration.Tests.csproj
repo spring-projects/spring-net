@@ -1,99 +1,23 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProductVersion>9.0.30729</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{E5323AC8-137E-4EF7-BC62-3BD6FC0576CD}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Spring</RootNamespace>
-    <AssemblyName>Spring.Messaging.Nms.Integration.Tests</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <FileAlignment>512</FileAlignment>
-    <TargetFrameworkSubset>
-    </TargetFrameworkSubset>
-    <TargetFrameworkProfile />
-    <PlatformTarget>AnyCPU</PlatformTarget>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DebugSymbols>true</DebugSymbols>
-    <DebugType>full</DebugType>
-    <Optimize>false</Optimize>
-    <OutputPath>..\..\..\build\VS.NET.2008\Spring.Messaging.Nms.Integration.Tests\Debug\</OutputPath>
-    <DefineConstants>TRACE;DEBUG;NET_2_0</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
-  </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-    <DebugType>pdbonly</DebugType>
-    <Optimize>true</Optimize>
-    <OutputPath>..\..\..\build\VS.NET.2008\Spring.Messaging.Nms.Tests\Release\</OutputPath>
-    <DefineConstants>TRACE;NET_2_0</DefineConstants>
-    <ErrorReport>prompt</ErrorReport>
-    <WarningLevel>4</WarningLevel>
+    <TargetFramework>net452</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Apache.NMS, Version=1.1.0.1642, Culture=neutral, PublicKeyToken=82756feee3957618, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Net\2.0\Apache.NMS.dll</HintPath>
-    </Reference>
-    <Reference Include="Apache.NMS.ActiveMQ, Version=1.1.0.1642, Culture=neutral, PublicKeyToken=82756feee3957618, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\lib\Net\2.0\Apache.NMS.ActiveMQ.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Core\Spring.Core.csproj" />
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Messaging.Nms\Spring.Messaging.Nms.csproj" />
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Messaging\Spring.Messaging.csproj" />
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Testing.NUnit\Spring.Testing.NUnit.csproj" />
+    <ProjectReference Include="..\Spring.Core.Tests\Spring.Core.Tests.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Spring.Messaging.Nms.Integration.Tests.dll.config" />
-    <None Include="project.json" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\CommonAssemblyInfo.cs">
-      <Link>CommonAssemblyInfo.cs</Link>
-    </Compile>
-    <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="Messaging\Nms\Core\NmsTemplateTests.cs" />
-    <Compile Include="Messaging\Nms\Core\SimpleGateway.cs" />
-    <Compile Include="Messaging\Nms\Core\SimpleMessageListener.cs" />
-    <Compile Include="Messaging\Nms\Listener\SimpleMessageListenerContainerTests.cs" />
+    <PackageReference Include="Apache.NMS" Version="$(ApacheNmsVersion)" />
+    <PackageReference Include="Apache.NMS.ActiveMQ" Version="$(ApacheNmsVersion)" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftTestSDKVersion)" />
+    <PackageReference Include="NUnit" Version="$(NUnitVersion)" />
+    <PackageReference Include="NUnit3TestAdapter" Version="$(NUnitTestAdapterVersion)" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Messaging\Nms\Core\NmsTemplateTests.xml" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\..\..\src\Spring\Spring.Core\Spring.Core.2008.csproj">
-      <Project>{710961A3-0DF4-49E4-A26E-F5B9C044AC84}</Project>
-      <Name>Spring.Core.2008</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\src\Spring\Spring.Messaging.Nms\Spring.Messaging.Nms.2008.csproj">
-      <Project>{AEB1578C-9018-4D49-B440-789F38DD2F29}</Project>
-      <Name>Spring.Messaging.Nms.2008</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\src\Spring\Spring.Testing.NUnit\Spring.Testing.NUnit.2008.csproj">
-      <Project>{ED204A7B-832F-44C7-BFE3-504AEBE1BCC8}</Project>
-      <Name>Spring.Testing.NUnit.2008</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Spring.Core.Tests\Spring.Core.Tests.2008.csproj">
-      <Project>{44B16BAA-6DF8-447C-9D7F-3AD3D854D904}</Project>
-      <Name>Spring.Core.Tests.2008</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <EmbeddedResource Include="Messaging\Nms\Listener\SimpleMessageListenerContainerTests.xml" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Properties\" />
-  </ItemGroup>
-  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
-       Other similar extension points exist, see Microsoft.Common.targets.
-  <Target Name="BeforeBuild">
-  </Target>
-  <Target Name="AfterBuild">
-  </Target>
-  -->
 </Project>

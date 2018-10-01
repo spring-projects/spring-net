@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net452</TargetFramework>
+    <OutputType>Exe</OutputType>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Spring.Aspects\Spring.Aspects.csproj" />
+    <ProjectReference Include="..\Spring.Calculator.Contract\Spring.Calculator.Contract.csproj" />
+    <ProjectReference Include="..\Spring.Calculator.Services\Spring.Calculator.Services.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Spring.Core">
+      <HintPath>..\..\..\..\..\build\$(Configuration)\Spring.Core\$(TargetFramework)\Spring.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Spring.Services">
+      <HintPath>..\..\..\..\..\build\$(Configuration)\Spring.Services\$(TargetFramework)\Spring.Services.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Config\*.xml" />
+  </ItemGroup>
+</Project>

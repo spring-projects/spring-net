@@ -1,6 +1,0 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>net452</TargetFramework>
-    <RootNamespace>Spring.Northwind</RootNamespace>
-  </PropertyGroup>
-</Project>
