@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFramework>net461</TargetFramework>
     <RootNamespace>Spring.Northwind</RootNamespace>
   </PropertyGroup>
   <PropertyGroup>
@@ -8,26 +8,10 @@
 rem xcopy  "$(ProjectDir)Data" ..\..\..\..\build\VS.Net.2005\Spring.Northwind.IntegrationTests\$(ConfigurationName)\ /y /s /q</PostBuildEvent>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\src\Spring\Spring.Testing.NUnit\Spring.Testing.NUnit.csproj" />
     <ProjectReference Include="..\..\src\Spring.Northwind.Dao.NHibernate\Spring.Northwind.Dao.NHibernate.csproj" />
     <ProjectReference Include="..\..\src\Spring.Northwind.Dao\Spring.Northwind.Dao.csproj" />
     <ProjectReference Include="..\..\src\Spring.Northwind.Service\Spring.Northwind.Service.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Spring.Core">
-      <HintPath>..\..\..\..\..\build\$(Configuration)\Spring.Core\$(TargetFramework)\Spring.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Spring.Data">
-      <HintPath>..\..\..\..\..\build\$(Configuration)\Spring.Data\$(TargetFramework)\Spring.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Spring.Data.NHibernate3">
-      <HintPath>..\..\..\..\..\build\$(Configuration)\Spring.Data.NHibernate3\$(TargetFramework)\Spring.Data.NHibernate3.dll</HintPath>
-    </Reference>
-    <Reference Include="Spring.Testing.NUnit">
-      <HintPath>..\..\..\..\..\build\$(Configuration)\Spring.Testing.NUnit\$(TargetFramework)\Spring.Testing.NUnit.dll</HintPath>
-    </Reference>
-    <Reference Include="Spring.Web">
-      <HintPath>..\..\..\..\..\build\$(Configuration)\Spring.Web\$(TargetFramework)\Spring.Web.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.2" />

@@ -1,19 +1,33 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.21005.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.28010.2041
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Northwind.Service.2010", "src\Spring.Northwind.Service\Spring.Northwind.Service.csproj", "{9E15876F-E9E0-43B7-9874-B54F163757D6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Northwind.Service", "src\Spring.Northwind.Service\Spring.Northwind.Service.csproj", "{9E15876F-E9E0-43B7-9874-B54F163757D6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Northwind.Dao.2010", "src\Spring.Northwind.Dao\Spring.Northwind.Dao.csproj", "{7F45EEA2-50AC-44E2-85A6-2FFB02E38C44}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Northwind.Dao", "src\Spring.Northwind.Dao\Spring.Northwind.Dao.csproj", "{7F45EEA2-50AC-44E2-85A6-2FFB02E38C44}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Northwind.Dao.NHibernate.2010", "src\Spring.Northwind.Dao.NHibernate\Spring.Northwind.Dao.NHibernate.csproj", "{6E4F55A0-C281-4706-A08B-BDEC2D2FBDA4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Northwind.Dao.NHibernate", "src\Spring.Northwind.Dao.NHibernate\Spring.Northwind.Dao.NHibernate.csproj", "{6E4F55A0-C281-4706-A08B-BDEC2D2FBDA4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Northwind.IntegrationTests.2010", "test\Spring.Northwind.IntegrationTests\Spring.Northwind.IntegrationTests.csproj", "{2D0C5DF7-3BDB-44FB-BC1B-58E60B170BAD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Northwind.IntegrationTests", "test\Spring.Northwind.IntegrationTests\Spring.Northwind.IntegrationTests.csproj", "{2D0C5DF7-3BDB-44FB-BC1B-58E60B170BAD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Northwind.Web.2010", "src\Spring.Northwind.Web\Spring.Northwind.Web.csproj", "{2967CA64-7352-46E3-89C0-6BB3A0A13FC1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Northwind.Web", "src\Spring.Northwind.Web\Spring.Northwind.Web.csproj", "{2967CA64-7352-46E3-89C0-6BB3A0A13FC1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Northwind.Web.Conversation.2010", "src\Spring.Northwind.Web.Conversation\Spring.Northwind.Web.Conversation.csproj", "{8EEAB62E-DBAF-4C5F-9906-77B2A817F945}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Northwind.Web.Conversation", "src\Spring.Northwind.Web.Conversation\Spring.Northwind.Web.Conversation.csproj", "{8EEAB62E-DBAF-4C5F-9906-77B2A817F945}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Core", "..\..\..\src\Spring\Spring.Core\Spring.Core.csproj", "{910797CE-2A96-4546-96A0-955B07531DD1}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Data", "..\..\..\src\Spring\Spring.Data\Spring.Data.csproj", "{49BE49C4-2FF4-465F-9836-E2148EE78D09}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Data.NHibernate5", "..\..\..\src\Spring\Spring.Data.NHibernate5\Spring.Data.NHibernate5.csproj", "{9B34F420-C8D4-43B3-926D-DAA1B180DAD4}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Aop", "..\..\..\src\Spring\Spring.Aop\Spring.Aop.csproj", "{8EC7AC70-37BC-4A76-B4BF-9D62426452DB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Testing.NUnit", "..\..\..\src\Spring\Spring.Testing.NUnit\Spring.Testing.NUnit.csproj", "{4DD44D21-DF71-45B3-AA6E-5D70ED4CE85C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Web", "..\..\..\src\Spring\Spring.Web\Spring.Web.csproj", "{F95A6B28-DB4B-4524-A028-6C92A7541822}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Web.Conversation.NHibernate5", "..\..\..\src\Spring\Spring.Web.Conversation.NHibernate5\Spring.Web.Conversation.NHibernate5.csproj", "{74F437DE-2994-4808-BC2E-E11B00A02DCD}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -85,12 +99,96 @@ Global
 		{8EEAB62E-DBAF-4C5F-9906-77B2A817F945}.Release|Any CPU.Build.0 = Release|Any CPU
 		{8EEAB62E-DBAF-4C5F-9906-77B2A817F945}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{8EEAB62E-DBAF-4C5F-9906-77B2A817F945}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{910797CE-2A96-4546-96A0-955B07531DD1}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{910797CE-2A96-4546-96A0-955B07531DD1}.Debug|.NET.Build.0 = Debug|Any CPU
+		{910797CE-2A96-4546-96A0-955B07531DD1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{910797CE-2A96-4546-96A0-955B07531DD1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{910797CE-2A96-4546-96A0-955B07531DD1}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{910797CE-2A96-4546-96A0-955B07531DD1}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{910797CE-2A96-4546-96A0-955B07531DD1}.Release|.NET.ActiveCfg = Release|Any CPU
+		{910797CE-2A96-4546-96A0-955B07531DD1}.Release|.NET.Build.0 = Release|Any CPU
+		{910797CE-2A96-4546-96A0-955B07531DD1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{910797CE-2A96-4546-96A0-955B07531DD1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{910797CE-2A96-4546-96A0-955B07531DD1}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{910797CE-2A96-4546-96A0-955B07531DD1}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{49BE49C4-2FF4-465F-9836-E2148EE78D09}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{49BE49C4-2FF4-465F-9836-E2148EE78D09}.Debug|.NET.Build.0 = Debug|Any CPU
+		{49BE49C4-2FF4-465F-9836-E2148EE78D09}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{49BE49C4-2FF4-465F-9836-E2148EE78D09}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{49BE49C4-2FF4-465F-9836-E2148EE78D09}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{49BE49C4-2FF4-465F-9836-E2148EE78D09}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{49BE49C4-2FF4-465F-9836-E2148EE78D09}.Release|.NET.ActiveCfg = Release|Any CPU
+		{49BE49C4-2FF4-465F-9836-E2148EE78D09}.Release|.NET.Build.0 = Release|Any CPU
+		{49BE49C4-2FF4-465F-9836-E2148EE78D09}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{49BE49C4-2FF4-465F-9836-E2148EE78D09}.Release|Any CPU.Build.0 = Release|Any CPU
+		{49BE49C4-2FF4-465F-9836-E2148EE78D09}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{49BE49C4-2FF4-465F-9836-E2148EE78D09}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{9B34F420-C8D4-43B3-926D-DAA1B180DAD4}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{9B34F420-C8D4-43B3-926D-DAA1B180DAD4}.Debug|.NET.Build.0 = Debug|Any CPU
+		{9B34F420-C8D4-43B3-926D-DAA1B180DAD4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B34F420-C8D4-43B3-926D-DAA1B180DAD4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B34F420-C8D4-43B3-926D-DAA1B180DAD4}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{9B34F420-C8D4-43B3-926D-DAA1B180DAD4}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{9B34F420-C8D4-43B3-926D-DAA1B180DAD4}.Release|.NET.ActiveCfg = Release|Any CPU
+		{9B34F420-C8D4-43B3-926D-DAA1B180DAD4}.Release|.NET.Build.0 = Release|Any CPU
+		{9B34F420-C8D4-43B3-926D-DAA1B180DAD4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B34F420-C8D4-43B3-926D-DAA1B180DAD4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B34F420-C8D4-43B3-926D-DAA1B180DAD4}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{9B34F420-C8D4-43B3-926D-DAA1B180DAD4}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{8EC7AC70-37BC-4A76-B4BF-9D62426452DB}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{8EC7AC70-37BC-4A76-B4BF-9D62426452DB}.Debug|.NET.Build.0 = Debug|Any CPU
+		{8EC7AC70-37BC-4A76-B4BF-9D62426452DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8EC7AC70-37BC-4A76-B4BF-9D62426452DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8EC7AC70-37BC-4A76-B4BF-9D62426452DB}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{8EC7AC70-37BC-4A76-B4BF-9D62426452DB}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{8EC7AC70-37BC-4A76-B4BF-9D62426452DB}.Release|.NET.ActiveCfg = Release|Any CPU
+		{8EC7AC70-37BC-4A76-B4BF-9D62426452DB}.Release|.NET.Build.0 = Release|Any CPU
+		{8EC7AC70-37BC-4A76-B4BF-9D62426452DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8EC7AC70-37BC-4A76-B4BF-9D62426452DB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8EC7AC70-37BC-4A76-B4BF-9D62426452DB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{8EC7AC70-37BC-4A76-B4BF-9D62426452DB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{4DD44D21-DF71-45B3-AA6E-5D70ED4CE85C}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{4DD44D21-DF71-45B3-AA6E-5D70ED4CE85C}.Debug|.NET.Build.0 = Debug|Any CPU
+		{4DD44D21-DF71-45B3-AA6E-5D70ED4CE85C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4DD44D21-DF71-45B3-AA6E-5D70ED4CE85C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4DD44D21-DF71-45B3-AA6E-5D70ED4CE85C}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{4DD44D21-DF71-45B3-AA6E-5D70ED4CE85C}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{4DD44D21-DF71-45B3-AA6E-5D70ED4CE85C}.Release|.NET.ActiveCfg = Release|Any CPU
+		{4DD44D21-DF71-45B3-AA6E-5D70ED4CE85C}.Release|.NET.Build.0 = Release|Any CPU
+		{4DD44D21-DF71-45B3-AA6E-5D70ED4CE85C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4DD44D21-DF71-45B3-AA6E-5D70ED4CE85C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4DD44D21-DF71-45B3-AA6E-5D70ED4CE85C}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{4DD44D21-DF71-45B3-AA6E-5D70ED4CE85C}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{F95A6B28-DB4B-4524-A028-6C92A7541822}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{F95A6B28-DB4B-4524-A028-6C92A7541822}.Debug|.NET.Build.0 = Debug|Any CPU
+		{F95A6B28-DB4B-4524-A028-6C92A7541822}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F95A6B28-DB4B-4524-A028-6C92A7541822}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F95A6B28-DB4B-4524-A028-6C92A7541822}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{F95A6B28-DB4B-4524-A028-6C92A7541822}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{F95A6B28-DB4B-4524-A028-6C92A7541822}.Release|.NET.ActiveCfg = Release|Any CPU
+		{F95A6B28-DB4B-4524-A028-6C92A7541822}.Release|.NET.Build.0 = Release|Any CPU
+		{F95A6B28-DB4B-4524-A028-6C92A7541822}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F95A6B28-DB4B-4524-A028-6C92A7541822}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F95A6B28-DB4B-4524-A028-6C92A7541822}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{F95A6B28-DB4B-4524-A028-6C92A7541822}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{74F437DE-2994-4808-BC2E-E11B00A02DCD}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{74F437DE-2994-4808-BC2E-E11B00A02DCD}.Debug|.NET.Build.0 = Debug|Any CPU
+		{74F437DE-2994-4808-BC2E-E11B00A02DCD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{74F437DE-2994-4808-BC2E-E11B00A02DCD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{74F437DE-2994-4808-BC2E-E11B00A02DCD}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{74F437DE-2994-4808-BC2E-E11B00A02DCD}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{74F437DE-2994-4808-BC2E-E11B00A02DCD}.Release|.NET.ActiveCfg = Release|Any CPU
+		{74F437DE-2994-4808-BC2E-E11B00A02DCD}.Release|.NET.Build.0 = Release|Any CPU
+		{74F437DE-2994-4808-BC2E-E11B00A02DCD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{74F437DE-2994-4808-BC2E-E11B00A02DCD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{74F437DE-2994-4808-BC2E-E11B00A02DCD}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{74F437DE-2994-4808-BC2E-E11B00A02DCD}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		NAntAddinLastFileName = 
+		SolutionGuid = {1EC12D01-B51D-4F5B-AA65-0F8032363E39}
 	EndGlobalSection
 EndGlobal
-

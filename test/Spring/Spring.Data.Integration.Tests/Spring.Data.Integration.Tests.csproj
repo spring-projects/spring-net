@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net452</TargetFrameworks>
+    <TargetFrameworks>netcoreapp2.1;$(TargetFullFrameworkVersion)</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Spring\Spring.Aop\Spring.Aop.csproj" />
@@ -16,17 +16,17 @@
     <PackageReference Include="NUnit" Version="$(NUnitVersion)" />
     <PackageReference Include="NUnit3TestAdapter" Version="$(NUnitTestAdapterVersion)" />
   </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System.configuration" />
+  <ItemGroup Condition=" '$(TargetFramework)' == '$(TargetFullFrameworkVersion)' ">
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Data.OracleClient" />
     <Reference Include="System.Transactions" />
   </ItemGroup>
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.1' ">
+    <PackageReference Include="System.Data.SqlClient" Version="4.5.1" Condition=" '$(TargetFramework)' == 'netcoreapp2.1' " />
+    <Compile Remove="Data\SQLiteTests.cs" />
+    <Compile Remove="Data\OracleAdoTemplateTests.cs" />
+  </ItemGroup>
   <ItemGroup>
-    <Content Include="Data\DTC1.1AppContext.xml" />
-    <Content Include="Data\Spring.Data.Integration.Tests_CreditsAndDebits_database.sql" />
-    <Content Include="Data\Spring.Data.Integration.Tests_Credits_database.sql" />
-    <Content Include="Data\Spring.Data.Integration.Tests_Debits_database.sql" />
-    <Content Include="Data\Spring.Data.Integration.Tests_Spring_database.sql" />
     <EmbeddedResource Include="Data\*.xml" />
     <EmbeddedResource Include="Data\Generic\GenericAdoTemplateTests.xml" />
   </ItemGroup>

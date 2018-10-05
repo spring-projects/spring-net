@@ -41,7 +41,7 @@
 
   <!-- Transaction Management Strategy - local database transactions -->
   <object id="transactionManager"
-        type="Spring.Data.NHibernate.HibernateTransactionManager, Spring.Data.NHibernate3">
+        type="Spring.Data.NHibernate.HibernateTransactionManager, Spring.Data.NHibernate5">
 
     <property name="DbProvider" ref="DbProvider"/>
     <property name="SessionFactory" ref="NHibernateSessionFactory"/>

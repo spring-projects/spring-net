@@ -12,7 +12,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Spring.Northwind.Web</RootNamespace>
     <AssemblyName>Spring.Northwind.Web</AssemblyName>
-    <TargetFrameworkVersion>v4.5.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <UseIISExpress>false</UseIISExpress>
     <IISExpressSSLPort />
     <IISExpressAnonymousAuthentication />
@@ -20,6 +20,9 @@
     <IISExpressUseClassicPipelineMode />
     <SolutionDir Condition="$(SolutionDir) == '' Or $(SolutionDir) == '*Undefined*'">..\..\</SolutionDir>
     <PlatformTarget>AnyCPU</PlatformTarget>
+    <TargetFrameworkProfile />
+    <Use64BitIISExpress />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -39,32 +42,11 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Common.Logging" Version="$(CommonLoggingVersion)" />
-    <PackageReference Include="Iesi.Collections" Version="3.4.1.4000" />
-    <PackageReference Include="log4net" Version="2.0.8" />
-    <PackageReference Include="NHibernate" Version="3.4.1.4000" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Spring.Core">
-      <HintPath>..\..\..\..\..\build\$(Configuration)\Spring.Core\net452\Spring.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Spring.Data">
-      <HintPath>..\..\..\..\..\build\$(Configuration)\Spring.Data\net452\Spring.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Spring.Data.NHibernate3">
-      <HintPath>..\..\..\..\..\build\$(Configuration)\Spring.Data.NHibernate3\net452\Spring.Data.NHibernate3.dll</HintPath>
-    </Reference>
-    <Reference Include="Spring.Web">
-      <HintPath>..\..\..\..\..\build\$(Configuration)\Spring.Web\net452\Spring.Web.dll</HintPath>
-    </Reference>
-    <Reference Include="Spring.Web.Conversation.NHibernate3">
-      <HintPath>..\..\..\..\..\build\$(Configuration)\Spring.Web.Conversation.NHibernate3\net452\Spring.Web.Conversation.NHibernate3.dll</HintPath>
-    </Reference>
+    <PackageReference Include="Common.Logging.Log4Net1213" Version="3.4.1" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Data.SQLite, Version=1.0.65.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>..\..\lib\net\2.0\System.Data.SQLite.DLL</HintPath>
@@ -72,7 +54,6 @@
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
-    <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
@@ -80,7 +61,6 @@
     <Reference Include="System.Web.Services" />
     <Reference Include="System.EnterpriseServices" />
     <Reference Include="System.Web.Mobile" />
-    <Reference Include="System.Xml.Linq" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="CSS\style.css" />
@@ -162,6 +142,14 @@
     <Content Include="Shared\MasterPage.master" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\src\Spring\Spring.Web.Conversation.NHibernate5\Spring.Web.Conversation.NHibernate5.csproj">
+      <Project>{74f437de-2994-4808-bc2e-e11b00a02dcd}</Project>
+      <Name>Spring.Web.Conversation.NHibernate5</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\..\..\src\Spring\Spring.Web\Spring.Web.csproj">
+      <Project>{f95a6b28-db4b-4524-a028-6c92a7541822}</Project>
+      <Name>Spring.Web</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Spring.Northwind.Dao.NHibernate\Spring.Northwind.Dao.NHibernate.csproj">
       <Project>{6E4F55A0-C281-4706-A08B-BDEC2D2FBDA4}</Project>
       <Name>Spring.Northwind.Dao.NHibernate.2010</Name>

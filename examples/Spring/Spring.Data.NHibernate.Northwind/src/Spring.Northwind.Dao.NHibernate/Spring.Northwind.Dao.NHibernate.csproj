@@ -1,26 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFramework>net461</TargetFramework>
     <RootNamespace>Spring.Northwind</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\..\..\..\src\Spring\Spring.Core\Spring.Core.csproj" />
+    <ProjectReference Include="..\..\..\..\..\src\Spring\Spring.Data.NHibernate5\Spring.Data.NHibernate5.csproj" />
+    <ProjectReference Include="..\..\..\..\..\src\Spring\Spring.Data\Spring.Data.csproj" />
     <ProjectReference Include="..\Spring.Northwind.Dao\Spring.Northwind.Dao.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Common.Logging" Version="$(CommonLoggingVersion)" />
-    <PackageReference Include="Iesi.Collections" Version="3.4.1.4000" />
-    <PackageReference Include="NHibernate" Version="3.4.1.4000" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Spring.Core">
-      <HintPath>..\..\..\..\..\build\$(Configuration)\Spring.Core\$(TargetFramework)\Spring.Core.dll</HintPath>
-    </Reference>
-    <Reference Include="Spring.Data">
-      <HintPath>..\..\..\..\..\build\$(Configuration)\Spring.Data\$(TargetFramework)\Spring.Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Spring.Data.NHibernate3">
-      <HintPath>..\..\..\..\..\build\$(Configuration)\Spring.Data.NHibernate3\$(TargetFramework)\Spring.Data.NHibernate3.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Mappings\*.hbm.xml" />
