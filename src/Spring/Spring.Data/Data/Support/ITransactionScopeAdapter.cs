@@ -35,20 +35,21 @@ namespace Spring.Data.Support
         /// </summary>
         /// <param name="txScopeOption">The tx scope option.</param>
         /// <param name="txOptions">The tx options.</param>
-        /// <param name="interopOption">The interop option.</param>
-        void CreateTransactionScope(TransactionScopeOption txScopeOption, TransactionOptions txOptions, EnterpriseServicesInteropOption interopOption);
+        /// <param name="asyncFlowOption">The async flow option.</param>
+        void CreateTransactionScope(
+            TransactionScopeOption txScopeOption,
+            TransactionOptions txOptions,
+            TransactionScopeAsyncFlowOption asyncFlowOption);
 
         /// <summary>
         /// Call Complete() on the TransactionScope object created by this instance.
         /// </summary>
         void Complete();
 
-
         /// <summary>
-        /// Call Disponse() on the TransactionScope object created by this instance.
+        /// Call Dispose() on the TransactionScope object created by this instance.
         /// </summary>
         void Dispose();
-
 
         /// <summary>
         /// Gets a value indicating whether there is a new transaction or an existing transaction.
@@ -58,13 +59,11 @@ namespace Spring.Data.Support
         /// </value>
         bool IsExistingTransaction { get; }
 
-
         /// <summary>
         /// Gets a value indicating whether rollback only has been called (i.e. Rollback() on the
         /// Transaction object) and therefore voting that the transaction will be aborted.
         /// </summary>
         /// <value><c>true</c> if rollback only; otherwise, <c>false</c>.</value>
         bool RollbackOnly { get; }
-       }
-
+    }
 }

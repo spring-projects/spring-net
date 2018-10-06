@@ -63,7 +63,7 @@ namespace Spring.Data.Core
 
             TransactionOptions txOptions = new TransactionOptions();
             txOptions.IsolationLevel = IsolationLevel.ReadCommitted;
-            txAdapter.CreateTransactionScope(TransactionScopeOption.Required, txOptions, EnterpriseServicesInteropOption.None);
+            txAdapter.CreateTransactionScope(TransactionScopeOption.Required, txOptions, TransactionScopeAsyncFlowOption.Enabled);
             txAdapter.Complete();
             txAdapter.Dispose();
         }
@@ -103,7 +103,7 @@ namespace Spring.Data.Core
             }
 
             Assert.IsTrue(!TransactionSynchronizationManager.SynchronizationActive, "Synchronizations not active");
-            A.CallTo(() => txAdapter.CreateTransactionScope(TransactionScopeOption.Required, txOptions, EnterpriseServicesInteropOption.None)).MustHaveHappenedOnceExactly();
+            A.CallTo(() => txAdapter.CreateTransactionScope(TransactionScopeOption.Required, txOptions, TransactionScopeAsyncFlowOption.Enabled)).MustHaveHappenedOnceExactly();
             A.CallTo(() => txAdapter.Dispose()).MustHaveHappenedOnceExactly();
         }
 
@@ -151,7 +151,7 @@ namespace Spring.Data.Core
                 return null;
             });
 
-            A.CallTo(() => txAdapter.CreateTransactionScope(TransactionScopeOption.RequiresNew, txOptions, EnterpriseServicesInteropOption.None)).MustHaveHappenedTwiceExactly();
+            A.CallTo(() => txAdapter.CreateTransactionScope(TransactionScopeOption.RequiresNew, txOptions, TransactionScopeAsyncFlowOption.Enabled)).MustHaveHappenedTwiceExactly();
             A.CallTo(() => txAdapter.Dispose()).MustHaveHappenedTwiceExactly();
             A.CallTo(() => txAdapter.Complete()).MustHaveHappenedOnceExactly();
         }

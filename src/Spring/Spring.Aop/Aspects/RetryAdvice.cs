@@ -115,7 +115,8 @@ namespace Spring.Aspects
         /// <summary>
         /// Creates a new RetryAdvice instance, using <see cref="Thread.Sleep(TimeSpan)"/> for delaying retries
         /// </summary>
-        public RetryAdvice()            :this(new SleepHandler(Thread.Sleep))
+        public RetryAdvice()
+            :this(new SleepHandler(Thread.Sleep))
         {
         }
 

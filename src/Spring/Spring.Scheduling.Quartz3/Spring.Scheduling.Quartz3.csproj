@@ -1,0 +1,18 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFrameworks>netstandard2.0;$(TargetFullFrameworkVersion)</TargetFrameworks>
+    <Description>Spring.NET Integration with the Quartz Scheduling Library 3.x</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Spring.Core\Spring.Core.csproj" />
+    <ProjectReference Include="..\Spring.Data\Spring.Data.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Quartz" Version="3.0.7" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\GenCommonAssemblyInfo.cs">
+      <Link>GenCommonAssemblyInfo.cs</Link>
+    </Compile>
+  </ItemGroup>
+</Project>

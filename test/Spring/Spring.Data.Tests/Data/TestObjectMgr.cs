@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  * 
@@ -16,47 +14,31 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
+using System.Transactions;
 using Common.Logging;
 using Spring.Objects;
 using Spring.Transaction;
 using Spring.Transaction.Interceptor;
 using Spring.Transaction.Support;
-using IsolationLevel=System.Data.IsolationLevel;
-
-#endregion
+using IsolationLevel = System.Data.IsolationLevel;
 
 namespace Spring.Data
 {
-	/// <summary>
-	/// Group together multiple ITestObjectDao operations.
-	/// </summary>
-	/// <author>Mark Pollack (.NET)</author>
-	public class TestObjectMgr : ITestObjectMgr
-	{
-		#region Fields
-
+    /// <summary>
+    /// Group together multiple ITestObjectDao operations.
+    /// </summary>
+    /// <author>Mark Pollack (.NET)</author>
+    public class TestObjectMgr : ITestObjectMgr
+    {
         private static readonly ILog LOG = LogManager.GetLogger(typeof(TestObjectMgr));
-		#endregion
 
-		#region Constructor (s)
-		/// <summary>
-		/// Initializes a new instance of the <see cref="TestObjectMgr"/> class.
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TestObjectMgr"/> class.
         /// </summary>
-		public 	TestObjectMgr()
-		{
-
-		}
-
-		#endregion
-
-
-
-    	#region Methods
+        public TestObjectMgr()
+        {
+        }
 
         [Transaction()]
         public void SaveTwoTestObjects(TestObject to1, TestObject to2)
@@ -65,14 +47,12 @@ namespace Spring.Data
         }
 
         [Transaction(TransactionPropagation.Required, IsolationLevel.Unspecified, Timeout = 50,
-           RollbackFor = new Type[]{typeof(ArgumentNullException)},
-           ReadOnly = false,
-           EnterpriseServicesInteropOption = System.Transactions.EnterpriseServicesInteropOption.Automatic,
-           NoRollbackFor = new Type[] { typeof(ArithmeticException), typeof(NotSupportedException) })]
-	    public void DeleteTwoTestObjects(string name1, string name2)
+            RollbackFor = new Type[] {typeof(ArgumentNullException)},
+            ReadOnly = false,
+            AsyncFlowOption = TransactionScopeAsyncFlowOption.Enabled,
+            NoRollbackFor = new Type[] {typeof(ArithmeticException), typeof(NotSupportedException)})]
+        public void DeleteTwoTestObjects(string name1, string name2)
         {
         }
-
-		#endregion
-	}
+    }
 }

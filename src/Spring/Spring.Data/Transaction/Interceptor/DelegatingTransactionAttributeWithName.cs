@@ -30,8 +30,8 @@ namespace Spring.Transaction.Interceptor
     /// </summary>
     public class DelegatingTransactionAttributeWithName : ITransactionAttribute
     {
-        private ITransactionAttribute targetAttribute;
-        private string joinpointIdentification;
+        private readonly ITransactionAttribute targetAttribute;
+        private readonly string joinpointIdentification;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="DelegatingTransactionAttributeWithName"/> class.
@@ -61,10 +61,7 @@ namespace Spring.Transaction.Interceptor
         /// <see cref="Spring.Transaction.TransactionPropagation"/>.
         /// </summary>
         /// <value></value>
-        public TransactionPropagation PropagationBehavior
-        {
-            get { return targetAttribute.PropagationBehavior; }
-        }
+        public TransactionPropagation PropagationBehavior => targetAttribute.PropagationBehavior;
 
         /// <summary>
         /// Return the isolation level of type <see cref="System.Data.IsolationLevel"/>.
@@ -82,75 +79,19 @@ namespace Spring.Transaction.Interceptor
         /// <see cref="System.Data.IsolationLevel.Unspecified"/>.
         /// </p>
         /// </remarks>
-        public IsolationLevel TransactionIsolationLevel
-        {
-            get { return targetAttribute.TransactionIsolationLevel; }
-        }
+        public IsolationLevel TransactionIsolationLevel => targetAttribute.TransactionIsolationLevel;
 
-        /// <summary>
-        /// Return the transaction timeout.
-        /// </summary>
-        /// <value></value>
-        /// <remarks>
-        /// 	<p>
-        /// Must return a number of seconds, or -1.
-        /// Only makes sense in combination with
-        /// <see cref="Spring.Transaction.TransactionPropagation.Required"/> and
-        /// <see cref="Spring.Transaction.TransactionPropagation.RequiresNew"/>.
-        /// Note that a transaction manager that does not support timeouts will
-        /// throw an exception when given any other timeout than -1.
-        /// </p>
-        /// </remarks>
-        public int TransactionTimeout
-        {
-            get { return targetAttribute.TransactionTimeout; }
-        }
+        /// <inheritdoc />
+        public int TransactionTimeout => targetAttribute.TransactionTimeout;
 
-        /// <summary>
-        /// Get whether to optimize as read-only transaction.
-        /// </summary>
-        /// <value></value>
-        /// <remarks>
-        /// 	<p>
-        /// This just serves as hint for the actual transaction subsystem,
-        /// it will <i>not necessarily</i> cause failure of write accesses.
-        /// </p>
-        /// 	<p>
-        /// Only makes sense in combination with
-        /// <see cref="Spring.Transaction.TransactionPropagation.Required"/> and
-        /// <see cref="Spring.Transaction.TransactionPropagation.RequiresNew"/>.
-        /// </p>
-        /// 	<p>
-        /// A transaction manager that cannot interpret the read-only hint
-        /// will <i>not</i> throw an exception when given <c>ReadOnly=true</c>.
-        /// </p>
-        /// </remarks>
-        public bool ReadOnly
-        {
-            get { return targetAttribute.ReadOnly; }
-        }
+        /// <inheritdoc />
+        public bool ReadOnly => targetAttribute.ReadOnly;
 
-        /// <summary>
-        /// Return the name of this transaction.
-        /// </summary>
-        /// <value></value>
-        /// <remarks>
-        /// The exposed name will be the fully
-        /// qualified type name + "." method name + assembly (by default).
-        /// </remarks>
-        public string Name
-        {
-            get { return joinpointIdentification; }
-        }
+        /// <inheritdoc />
+        public string Name => joinpointIdentification;
 
-        /// <summary>
-        /// Gets the enterprise services interop option.
-        /// </summary>
-        /// <value>The enterprise services interop option.</value>
-        public EnterpriseServicesInteropOption EnterpriseServicesInteropOption
-        {
-            get { return targetAttribute.EnterpriseServicesInteropOption;  }
-        }
+        /// <inheritdoc />
+        public TransactionScopeAsyncFlowOption AsyncFlowOption => targetAttribute.AsyncFlowOption;
 
         /// <summary> 
         /// Return a description of this transaction attribute.

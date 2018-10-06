@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2007 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System;
 using System.Transactions;
@@ -54,8 +50,6 @@ namespace Spring.Data.Core
             this.txAdapter = txAdapter;
         }
 
-        #region IInitializingObject Members
-
         /// <summary>
         /// No-op initialization
         /// </summary>
@@ -63,8 +57,6 @@ namespace Spring.Data.Core
         {
             // placeholder for more advanced configurations.
         }
-
-        #endregion
 
         protected override object DoGetTransaction()
         {
@@ -74,20 +66,21 @@ namespace Spring.Data.Core
             {
                 txObject.TxScopeAdapter = txAdapter;
             }
+
             return txObject;
         }
 
         protected override bool IsExistingTransaction(object transaction)
         {
             PromotableTxScopeTransactionObject txObject =
-                (PromotableTxScopeTransactionObject)transaction;
-            return txObject.TxScopeAdapter.IsExistingTransaction;                       
+                (PromotableTxScopeTransactionObject) transaction;
+            return txObject.TxScopeAdapter.IsExistingTransaction;
         }
 
-        protected override void DoBegin(object transaction, Spring.Transaction.ITransactionDefinition definition)
+        protected override void DoBegin(object transaction, ITransactionDefinition definition)
         {
             PromotableTxScopeTransactionObject txObject =
-                (PromotableTxScopeTransactionObject)transaction;
+                (PromotableTxScopeTransactionObject) transaction;
             try
             {
                 DoTxScopeBegin(txObject, definition);
@@ -106,7 +99,7 @@ namespace Spring.Data.Core
             PromotableTxScopeTransactionObject txMgrStateObject = (PromotableTxScopeTransactionObject) transaction;
             return txMgrStateObject.TxScopeAdapter;
         }
-        
+
         protected override void DoResume(object transaction, object suspendedResources)
         {
         }
@@ -114,7 +107,7 @@ namespace Spring.Data.Core
         protected override void DoCommit(DefaultTransactionStatus status)
         {
             PromotableTxScopeTransactionObject txObject =
-                (PromotableTxScopeTransactionObject)status.Transaction;
+                (PromotableTxScopeTransactionObject) status.Transaction;
             try
             {
                 txObject.TxScopeAdapter.Complete();
@@ -122,7 +115,8 @@ namespace Spring.Data.Core
             }
             catch (TransactionAbortedException ex)
             {
-                throw new UnexpectedRollbackException("Transaction unexpectedly rolled back (maybe due to a timeout)", ex);
+                throw new UnexpectedRollbackException("Transaction unexpectedly rolled back (maybe due to a timeout)",
+                    ex);
             }
             catch (TransactionInDoubtException ex)
             {
@@ -137,19 +131,17 @@ namespace Spring.Data.Core
         protected override void DoRollback(DefaultTransactionStatus status)
         {
             PromotableTxScopeTransactionObject txObject =
-                (PromotableTxScopeTransactionObject)status.Transaction;
+                (PromotableTxScopeTransactionObject) status.Transaction;
 
             try
             {
-                
                 txObject.TxScopeAdapter.Dispose();
             }
             catch (Exception e)
             {
-                throw new Spring.Transaction.TransactionSystemException("Failure on Transaction Scope rollback.", e);
+                throw new TransactionSystemException("Failure on Transaction Scope rollback.", e);
             }
         }
-
 
         protected override void DoSetRollbackOnly(DefaultTransactionStatus status)
         {
@@ -157,34 +149,35 @@ namespace Spring.Data.Core
             {
                 log.Debug("Setting transaction rollback-only");
             }
+
             try
             {
                 System.Transactions.Transaction.Current.Rollback();
-            } catch (Exception ex)
+            }
+            catch (Exception ex)
             {
                 throw new TransactionSystemException("Failure on System.Transactions.Transaction.Current.Rollback", ex);
             }
         }
 
-        protected override bool ShouldCommitOnGlobalRollbackOnly
-        {
-            get { return true; }
-        }
+        protected override bool ShouldCommitOnGlobalRollbackOnly => true;
 
-        private void DoTxScopeBegin(PromotableTxScopeTransactionObject txObject, 
-                                    Spring.Transaction.ITransactionDefinition definition)
+        private void DoTxScopeBegin(
+            PromotableTxScopeTransactionObject txObject,
+            ITransactionDefinition definition)
         {
-
-            TransactionScopeOption txScopeOption = CreateTransactionScopeOptions(definition);     
+            TransactionScopeOption txScopeOption = CreateTransactionScopeOptions(definition);
             TransactionOptions txOptions = CreateTransactionOptions(definition);
-            txObject.TxScopeAdapter.CreateTransactionScope(txScopeOption, txOptions, definition.EnterpriseServicesInteropOption);            
-            
+            txObject.TxScopeAdapter.CreateTransactionScope(
+                txScopeOption, 
+                txOptions,
+                definition.AsyncFlowOption);
         }
 
         private static TransactionOptions CreateTransactionOptions(ITransactionDefinition definition)
         {
             TransactionOptions txOptions = new TransactionOptions();
-            switch (definition.TransactionIsolationLevel )
+            switch (definition.TransactionIsolationLevel)
             {
                 case System.Data.IsolationLevel.Chaos:
                     txOptions.IsolationLevel = IsolationLevel.Chaos;
@@ -210,9 +203,10 @@ namespace Spring.Data.Core
             }
 
             if (definition.TransactionTimeout != DefaultTransactionDefinition.TIMEOUT_DEFAULT)
-            {                
+            {
                 txOptions.Timeout = new TimeSpan(0, 0, definition.TransactionTimeout);
             }
+
             return txOptions;
         }
 
@@ -233,10 +227,11 @@ namespace Spring.Data.Core
             }
             else
             {
-                throw new Spring.Transaction.TransactionSystemException("Transaction Propagation Behavior" +
-                                                                        definition.PropagationBehavior +
-                                                                        " not supported by TransactionScope.  Use Required or RequiredNew");
+                throw new TransactionSystemException("Transaction Propagation Behavior" +
+                                                     definition.PropagationBehavior +
+                                                     " not supported by TransactionScope.  Use Required or RequiredNew");
             }
+
             return txScopeOption;
         }
 
@@ -264,22 +259,16 @@ namespace Spring.Data.Core
             /// <value>The transaction scope adapter.</value>
             public ITransactionScopeAdapter TxScopeAdapter
             {
-                get { return txScopeAdapter; }
-                set { txScopeAdapter = value; }
+                get => txScopeAdapter;
+                set => txScopeAdapter = value;
             }
-
 
             /// <summary>
             /// Return whether the transaction is internally marked as rollback-only.
             /// </summary>
             /// <value></value>
             /// <returns>True of the transaction is marked as rollback-only.</returns>
-            public bool RollbackOnly
-            {
-                get {
-                    return txScopeAdapter.RollbackOnly;
-                } 
-            }
+            public bool RollbackOnly => txScopeAdapter.RollbackOnly;
         }
     }
 }

@@ -5,6 +5,14 @@ VisualStudioVersion = 12.0.21005.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Scheduling.Quartz.Example.2010", "src\Spring.Scheduling.Quartz.Example.csproj", "{0C0D8C65-90DE-4914-9940-4C684C54971B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Scheduling.Quartz3", "..\..\..\src\Spring\Spring.Scheduling.Quartz3\Spring.Scheduling.Quartz3.csproj", "{E397E260-643A-4929-8979-3483BF0C77CB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Core", "..\..\..\src\Spring\Spring.Core\Spring.Core.csproj", "{7BF79668-CD22-461B-BF82-5571E3E1119E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data", "..\..\..\src\Spring\Spring.Data\Spring.Data.csproj", "{7FBD7BF1-B978-4DBC-BDBC-B8B20865E96D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Aop", "..\..\..\src\Spring\Spring.Aop\Spring.Aop.csproj", "{6905DB1E-B4B7-4B5A-9E6F-72881BB6C98D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +23,22 @@ Global
 		{0C0D8C65-90DE-4914-9940-4C684C54971B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0C0D8C65-90DE-4914-9940-4C684C54971B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0C0D8C65-90DE-4914-9940-4C684C54971B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E397E260-643A-4929-8979-3483BF0C77CB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E397E260-643A-4929-8979-3483BF0C77CB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E397E260-643A-4929-8979-3483BF0C77CB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E397E260-643A-4929-8979-3483BF0C77CB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7BF79668-CD22-461B-BF82-5571E3E1119E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7BF79668-CD22-461B-BF82-5571E3E1119E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7BF79668-CD22-461B-BF82-5571E3E1119E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7BF79668-CD22-461B-BF82-5571E3E1119E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7FBD7BF1-B978-4DBC-BDBC-B8B20865E96D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7FBD7BF1-B978-4DBC-BDBC-B8B20865E96D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7FBD7BF1-B978-4DBC-BDBC-B8B20865E96D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7FBD7BF1-B978-4DBC-BDBC-B8B20865E96D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6905DB1E-B4B7-4B5A-9E6F-72881BB6C98D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6905DB1E-B4B7-4B5A-9E6F-72881BB6C98D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6905DB1E-B4B7-4B5A-9E6F-72881BB6C98D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6905DB1E-B4B7-4B5A-9E6F-72881BB6C98D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using System.Collections;
 using System.Collections.Specialized;
@@ -29,8 +23,6 @@ using Spring.Collections;
 using Spring.Core.IO;
 using Spring.Objects.Factory.Config;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Objects.Factory.Xml
 {
@@ -72,13 +64,9 @@ namespace Spring.Objects.Factory.Xml
         /// </summary>
         private const string ConfigParsersSectionName = "spring/parsers";
 
-        #region Fields
-
         private static IDictionary parsers;
         private readonly static IDictionary wellknownNamespaceParserTypeNames;
         private static XmlSchemaSet schemas;
-
-        #endregion
 
         /// <summary>
         /// Creates a new instance of the NamespaceParserRegistry class.
@@ -86,17 +74,28 @@ namespace Spring.Objects.Factory.Xml
         static NamespaceParserRegistry()
         {
             wellknownNamespaceParserTypeNames = new CaseInsensitiveHashtable();
-            wellknownNamespaceParserTypeNames["http://www.springframework.net/tx"] = "Spring.Transaction.Config.TxNamespaceParser, Spring.Data";
-            wellknownNamespaceParserTypeNames["http://www.springframework.net/aop"] = "Spring.Aop.Config.AopNamespaceParser, Spring.Aop";
-            wellknownNamespaceParserTypeNames["http://www.springframework.net/context"] = "Spring.Context.Config.ContextNamespaceParser, Spring.Core";
-            wellknownNamespaceParserTypeNames["http://www.springframework.net/db"] = "Spring.Data.Config.DatabaseNamespaceParser, Spring.Data";
-            wellknownNamespaceParserTypeNames["http://www.springframework.net/database"] = "Spring.Data.Config.DatabaseNamespaceParser, Spring.Data";
-            wellknownNamespaceParserTypeNames["http://www.springframework.net/remoting"] = "Spring.Remoting.Config.RemotingNamespaceParser, Spring.Services";
-            wellknownNamespaceParserTypeNames["http://www.springframework.net/wcf"] = "Spring.ServiceModel.Config.WcfNamespaceParser, Spring.Services";
-            wellknownNamespaceParserTypeNames["http://www.springframework.net/nms"] = "Spring.Messaging.Nms.Config.NmsNamespaceParser, Spring.Messaging.Nms";
-            wellknownNamespaceParserTypeNames["http://www.springframework.net/ems"] = "Spring.Messaging.Ems.Config.EmsNamespaceParser, Spring.Messaging.Ems";
-            wellknownNamespaceParserTypeNames["http://www.springframework.net/validation"] = "Spring.Validation.Config.ValidationNamespaceParser, Spring.Core";
-            wellknownNamespaceParserTypeNames["http://www.springframework.net/nvelocity"] = "Spring.Template.Velocity.Config.TemplateNamespaceParser, Spring.Template.Velocity";
+            wellknownNamespaceParserTypeNames["http://www.springframework.net/tx"] =
+                "Spring.Transaction.Config.TxNamespaceParser, Spring.Data";
+            wellknownNamespaceParserTypeNames["http://www.springframework.net/aop"] =
+                "Spring.Aop.Config.AopNamespaceParser, Spring.Aop";
+            wellknownNamespaceParserTypeNames["http://www.springframework.net/context"] =
+                "Spring.Context.Config.ContextNamespaceParser, Spring.Core";
+            wellknownNamespaceParserTypeNames["http://www.springframework.net/db"] =
+                "Spring.Data.Config.DatabaseNamespaceParser, Spring.Data";
+            wellknownNamespaceParserTypeNames["http://www.springframework.net/database"] =
+                "Spring.Data.Config.DatabaseNamespaceParser, Spring.Data";
+            wellknownNamespaceParserTypeNames["http://www.springframework.net/remoting"] =
+                "Spring.Remoting.Config.RemotingNamespaceParser, Spring.Services";
+            wellknownNamespaceParserTypeNames["http://www.springframework.net/wcf"] =
+                "Spring.ServiceModel.Config.WcfNamespaceParser, Spring.Services";
+            wellknownNamespaceParserTypeNames["http://www.springframework.net/nms"] =
+                "Spring.Messaging.Nms.Config.NmsNamespaceParser, Spring.Messaging.Nms";
+            wellknownNamespaceParserTypeNames["http://www.springframework.net/ems"] =
+                "Spring.Messaging.Ems.Config.EmsNamespaceParser, Spring.Messaging.Ems";
+            wellknownNamespaceParserTypeNames["http://www.springframework.net/validation"] =
+                "Spring.Validation.Config.ValidationNamespaceParser, Spring.Core";
+            wellknownNamespaceParserTypeNames["http://www.springframework.net/nvelocity"] =
+                "Spring.Template.Velocity.Config.TemplateNamespaceParser, Spring.Template.Velocity";
 
             Reset();
         }
@@ -109,7 +108,7 @@ namespace Spring.Objects.Factory.Xml
         {
             parsers = new HybridDictionary();
             schemas = new XmlSchemaSet();
-            schemas.XmlResolver = new XmlResourceUrlResolver();            
+            schemas.XmlResolver = new XmlResourceUrlResolver();
 
             RegisterParser(new ObjectsNamespaceParser());
             // register custom config parsers
@@ -126,7 +125,7 @@ namespace Spring.Objects.Factory.Xml
 
             if (wellknownNamespaceParserTypeNames.Contains(namespaceUri))
             {
-                string parserTypeName = (string)wellknownNamespaceParserTypeNames[namespaceUri];
+                string parserTypeName = (string) wellknownNamespaceParserTypeNames[namespaceUri];
                 // assume, that all Spring.XXX assemblies have same version + public key
                 // get the ", Version=x.x.x.x, Culture=neutral, PublicKeyToken=65e474d141e25e07" part of Spring.Core and append it
                 string name = typeof(NamespaceParserRegistry).Assembly.GetName().Name;
@@ -138,6 +137,7 @@ namespace Spring.Objects.Factory.Xml
                 RegisterParser(parserType);
                 return true;
             }
+
             return false;
         }
 
@@ -151,6 +151,7 @@ namespace Spring.Objects.Factory.Xml
             {
                 return "assembly://" + schemaLocationAssemblyHint.Assembly.FullName + schemaLocation;
             }
+
             return schemaLocation;
         }
 
@@ -166,21 +167,22 @@ namespace Spring.Objects.Factory.Xml
         /// </returns>
         public static INamespaceParser GetParser(string namespaceURI)
         {
-            INamespaceParser parser = (INamespaceParser)parsers[namespaceURI];
+            INamespaceParser parser = (INamespaceParser) parsers[namespaceURI];
             if (parser == null)
             {
                 bool ok = RegisterWellknownNamespaceParserType(namespaceURI);
                 if (ok)
                 {
-                    parser = (INamespaceParser)parsers[namespaceURI];
-                    
+                    parser = (INamespaceParser) parsers[namespaceURI];
+
                     //work-around for SPRNET-1277 where we're inconsistent re: exposing /db or /database as the final namespace element
                     if (parser == null && namespaceURI == "http://www.springframework.net/db")
                     {
-                        parser = (INamespaceParser)parsers["http://www.springframework.net/database"];
+                        parser = (INamespaceParser) parsers["http://www.springframework.net/database"];
                     }
                 }
             }
+
             return parser;
         }
 
@@ -250,7 +252,7 @@ namespace Spring.Objects.Factory.Xml
 
             if ((typeof(INamespaceParser)).IsAssignableFrom(parserType))
             {
-                np = (INamespaceParser)ObjectUtils.InstantiateType(parserType);
+                np = (INamespaceParser) ObjectUtils.InstantiateType(parserType);
             }
             // TODO (EE): workaround to enable smooth transition between 1.x and 2.0 style namespace handling
             else if (typeof(IObjectDefinitionParser).IsAssignableFrom(parserType))
@@ -264,28 +266,31 @@ namespace Spring.Objects.Factory.Xml
                         throw new ArgumentNullException(
                             "Either default or an explicit namespace value must be specified for a configuration parser.");
                     }
+
                     if (StringUtils.IsNullOrEmpty(namespaceUri))
                     {
                         namespaceUri = defaults.Namespace;
                     }
+
                     if (StringUtils.IsNullOrEmpty(schemaLocation))
                     {
                         schemaLocation = defaults.SchemaLocation;
                         if (defaults.SchemaLocationAssemblyHint != null)
                         {
-                            schemaLocation = GetAssemblySchemaLocation(defaults.SchemaLocationAssemblyHint, schemaLocation);
+                            schemaLocation =
+                                GetAssemblySchemaLocation(defaults.SchemaLocationAssemblyHint, schemaLocation);
                         }
                     }
                 }
 
-                IObjectDefinitionParser odParser = (IObjectDefinitionParser)ObjectUtils.InstantiateType(parserType);
+                IObjectDefinitionParser odParser = (IObjectDefinitionParser) ObjectUtils.InstantiateType(parserType);
                 np = new ObjectDefinitionParserNamespaceParser(odParser);
             }
             else
             {
                 throw new ArgumentException(
-                        string.Format("The [{0}] Type must implement the INamespaceParser interface.", parserType.Name)
-                        , "parserType");
+                    string.Format("The [{0}] Type must implement the INamespaceParser interface.", parserType.Name)
+                    , "parserType");
             }
 
             RegisterParser(np, namespaceUri, schemaLocation);
@@ -345,10 +350,12 @@ namespace Spring.Objects.Factory.Xml
                     throw new ArgumentNullException(
                         "Either default or an explicit namespace value must be specified for a configuration parser.");
                 }
+
                 if (StringUtils.IsNullOrEmpty(namespaceUri))
                 {
                     namespaceUri = defaults.Namespace;
                 }
+
                 if (StringUtils.IsNullOrEmpty(schemaLocation))
                 {
                     schemaLocation = defaults.SchemaLocation;
@@ -364,14 +371,14 @@ namespace Spring.Objects.Factory.Xml
 
             // register parser
             lock (parsers.SyncRoot)
-                lock (schemas)
+            lock (schemas)
+            {
+                parsers[namespaceUri] = parser;
+                if (StringUtils.HasText(schemaLocation) && !schemas.Contains(namespaceUri))
                 {
-                    parsers[namespaceUri] = parser;
-                    if (StringUtils.HasText(schemaLocation) && !schemas.Contains(namespaceUri))
-                    {
-                        RegisterSchema(namespaceUri, schemaLocation);
-                    }
+                    RegisterSchema(namespaceUri, schemaLocation);
                 }
+            }
         }
 
         /// <summary>
@@ -410,12 +417,11 @@ namespace Spring.Objects.Factory.Xml
             object[] attrs = parserType.GetCustomAttributes(typeof(NamespaceParserAttribute), true);
             if (attrs.Length > 0)
             {
-                return (NamespaceParserAttribute)attrs[0];
+                return (NamespaceParserAttribute) attrs[0];
             }
+
             return null;
         }
-
-        #region ObjectDefinitionParserNamespaceParser Utility class
 
         /// <summary>
         /// Adapts the <see cref="IObjectDefinitionParser"/> interface to <see cref="INamespaceParser"/>.
@@ -440,12 +446,11 @@ namespace Spring.Objects.Factory.Xml
                 return odParser.ParseElement(element, parserContext);
             }
 
-            public ObjectDefinitionHolder Decorate(XmlNode node, ObjectDefinitionHolder definition, ParserContext parserContext)
+            public ObjectDefinitionHolder Decorate(XmlNode node, ObjectDefinitionHolder definition,
+                ParserContext parserContext)
             {
                 return null;
             }
         }
-
-        #endregion
     }
 }

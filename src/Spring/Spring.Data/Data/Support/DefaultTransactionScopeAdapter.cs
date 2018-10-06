@@ -31,75 +31,45 @@ namespace Spring.Data.Support
     {
         private TransactionScope txScope;
 
-        /// <summary>
-        /// Call Complete() on the TransactionScope object created by this instance.
-        /// </summary>
+        /// <inheritdoc />
         public void Complete()
         {
             txScope.Complete();
         }
 
-        /// <summary>
-        /// Call Disponse() on the TransactionScope object created by this instance.
-        /// </summary>
+        /// <inheritdoc />
         public void Dispose()
         {
             txScope.Dispose();
         }
 
+        /// <inheritdoc />
+        public bool IsExistingTransaction => System.Transactions.Transaction.Current != null;
 
-        /// <summary>
-        /// Gets a value indicating whether there is a new transaction or an existing transaction.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if this instance is existing transaction; otherwise, <c>false</c>.
-        /// </value>
-        public bool IsExistingTransaction
-        {
-            get {
-                if (System.Transactions.Transaction.Current != null)
-                {
-                    return true;
-                }
-                else
-                {
-                    return false;
-                }
-            }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether rollback only has been called (i.e. Rollback() on the
-        /// Transaction object) and therefore voting that the transaction will be aborted.
-        /// </summary>
-        /// <value><c>true</c> if rollback only; otherwise, <c>false</c>.</value>
+        /// <inheritdoc />
         public bool RollbackOnly
         {
             get
             {
-                if (System.Transactions.Transaction.Current != null &&
-                    System.Transactions.Transaction.Current.TransactionInformation != null &&
-                    System.Transactions.Transaction.Current.TransactionInformation.Status == TransactionStatus.Aborted)
+                var transaction = System.Transactions.Transaction.Current;
+                if (transaction != null &&
+                    transaction.TransactionInformation != null &&
+                    transaction.TransactionInformation.Status == TransactionStatus.Aborted)
                 {
                     return true;
                 }
-                else
-                {
-                    return false;
-                }
-            } 
+
+                return false;
+            }
         }
 
-        /// <summary>
-        /// Creates the transaction scope.
-        /// </summary>
-        /// <param name="txScopeOption">The tx scope option.</param>
-        /// <param name="txOptions">The tx options.</param>
-        /// <param name="interopOption">The interop option.</param>
-        public void CreateTransactionScope(TransactionScopeOption txScopeOption, TransactionOptions txOptions,
-                                           EnterpriseServicesInteropOption interopOption)
+        /// <inheritdoc />
+        public void CreateTransactionScope(
+            TransactionScopeOption txScopeOption, 
+            TransactionOptions txOptions,
+            TransactionScopeAsyncFlowOption asyncFlowOption)
         {
-            txScope = new TransactionScope(txScopeOption, txOptions, interopOption);
+            txScope = new TransactionScope(txScopeOption, txOptions, asyncFlowOption);
         }
     }
 }
