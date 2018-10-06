@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net461</TargetFramework>
+    <RootNamespace>Spring.Data.NHibernate5.NestedTxSuspension.Integration.Tests</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Aop\Spring.Aop.csproj" />
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Core\Spring.Core.csproj" />
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Data.NHibernate5\Spring.Data.NHibernate5.csproj" />
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Data\Spring.Data.csproj" />
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Testing.NUnit\Spring.Testing.NUnit.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftTestSDKVersion)" />
+    <PackageReference Include="NUnit" Version="$(NUnitVersion)" />
+    <PackageReference Include="NUnit3TestAdapter" Version="$(NUnitTestAdapterVersion)" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Transactions" />
+    <Reference Include="System.Data.DataSetExtensions" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="App.config" />
+    <EmbeddedResource Include="Mappings.hbm.xml" />
+    <EmbeddedResource Include="Spring.Configuration.xml" />
+    <EmbeddedResource Include="Spring.NHibernate.xml" />
+    <EmbeddedResource Include="Spring.HibernateTxScopeTransactionManager.xml" />
+  </ItemGroup>
+</Project>

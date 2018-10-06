@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net461</TargetFramework>
+    <Description>Conversation-Per-Business-Transaction support for Spring.Net using NHibernate</Description>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Spring.Core\Spring.Core.csproj" />
+    <ProjectReference Include="..\Spring.Data.NHibernate5\Spring.Data.NHibernate5.csproj" />
+    <ProjectReference Include="..\Spring.Data\Spring.Data.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System.Web" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="..\GenCommonAssemblyInfo.cs">
+      <Link>GenCommonAssemblyInfo.cs</Link>
+    </Compile>
+    <None Include="app.config" />
+  </ItemGroup>
+</Project>

@@ -94,12 +94,8 @@ The "bin" directory contains the following distinct dll files for use in applica
 - Contents: Transaction and ADO.NET Framework.
 - Dependencies: Spring.Core, Spring.Aop
 
-* "Spring.Data.NHibernate3" (~90 KB)
-- Contents: NHibernate 3.x integration
-- Dependencies: Spring.Core, Spring.Aop, Spring.Data, NHibernate
-
-* "Spring.Data.NHibernate4" (~90 KB)
-- Contents: NHibernate 4.x integration
+* "Spring.Data.NHibernate5" (~90 KB)
+- Contents: NHibernate 5.x integration
 - Dependencies: Spring.Core, Spring.Aop, Spring.Data, NHibernate
 
 * "Spring.Services" (~70 KB)
@@ -113,14 +109,6 @@ The "bin" directory contains the following distinct dll files for use in applica
 * "Spring.Web.Extensions" (~8 KB)
 - Contents: ASP.NET AJAX Integartion
 - Dependencies: Spring.Core, Spring.Aop, System.Web.Extensions
-
-* "Spring.Web.Mvc3" (~8 KB)
-- Contents: ASP.NET MVC3 Integartion
-- Dependencies: Spring.Core, Spring.Web
-
-* "Spring.Web.Mvc4" (~8 KB)
-- Contents: ASP.NET MVC4 and WebAPI Integartion
-- Dependencies: Spring.Core, Spring.Web
 
 * "Spring.Web.Mvc5" (~8 KB)
 - Contents: ASP.NET MVC5 and WebAPI Integartion

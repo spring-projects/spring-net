@@ -371,7 +371,7 @@ Commandline Examples:
 		   <exclude name="${spring.basedir}/build/${current.build.config}/Spring.Messaging.Nms.Integration.Tests" unless="${test.integration.nms}" />
 		   <exclude name="${spring.basedir}/build/${current.build.config}/Spring.Services.Tests" /> <!-- TODO should fix -->
 		   <exclude name="${spring.basedir}/build/${current.build.config}/Spring.Testing.Microsoft.Tests" /> <!-- TODO use dotnet test -->
-		   <exclude name="${spring.basedir}/build/${current.build.config}/Spring.Web.Conversation.NHibernate3.Tests" /> <!-- TODO check SQLite -->
+		   <exclude name="${spring.basedir}/build/${current.build.config}/Spring.Web.Conversation.NHibernate5.Tests" /> <!-- TODO check SQLite -->
 		</items>
 	  </in>
       <do>
@@ -1039,14 +1039,6 @@ Commandline Examples:
           <include name="*/*/Spring.Web.xml"/>
           <include name="*/*/Spring.Web.pdb"/>
 		  
-		  <include name="*/*/Spring.Web.Mvc3.dll"/>
-          <include name="*/*/Spring.Web.Mvc3.xml"/>
-          <include name="*/*/Spring.Web.Mvc3.pdb"/>
-		  
-		  <include name="*/*/Spring.Web.Mvc4.dll"/>
-          <include name="*/*/Spring.Web.Mvc4.xml"/>
-          <include name="*/*/Spring.Web.Mvc4.pdb"/>
-
 		  <include name="*/*/Spring.Web.Mvc5.dll"/>
           <include name="*/*/Spring.Web.Mvc5.xml"/>
           <include name="*/*/Spring.Web.Mvc5.pdb"/>
@@ -1086,14 +1078,6 @@ Commandline Examples:
           <include name="*/*/Spring.Template.Velocity.dll"/>
           <include name="*/*/Spring.Template.Velocity.xml"/>
           <include name="*/*/Spring.Template.Velocity.pdb"/>
-
-          <include name="*/*/Spring.Web.Conversation.NHibernate3.dll"/>
-          <include name="*/*/Spring.Web.Conversation.NHibernate3.xml"/>
-          <include name="*/*/Spring.Web.Conversation.NHibernate3.pdb"/>
-
-          <include name="*/*/Spring.Web.Conversation.NHibernate4.dll"/>
-          <include name="*/*/Spring.Web.Conversation.NHibernate4.xml"/>
-          <include name="*/*/Spring.Web.Conversation.NHibernate4.pdb"/>
 
           <include name="*/*/Spring.Web.Conversation.NHibernate5.dll"/>
           <include name="*/*/Spring.Web.Conversation.NHibernate5.xml"/>
@@ -1285,14 +1269,10 @@ Commandline Examples:
       <include name="src/Spring/Spring.Core/**"/>
       <include name="src/Spring/Spring.Aop/**"/>
       <include name="src/Spring/Spring.Web/**"/>
-      <include name="src/Spring/Spring.Web.Mvc3/**"/>
-      <include name="src/Spring/Spring.Web.Mvc4/**"/>
       <include name="src/Spring/Spring.Web.Mvc5/**"/>
       <include name="src/Spring/Spring.Web.Extensions/**"/>
       <include name="src/Spring/Spring.Services/**"/>
       <include name="src/Spring/Spring.Data/**"/>
-      <include name="src/Spring/Spring.Data.NHibernate3/**"/>
-      <include name="src/Spring/Spring.Data.NHibernate4/**"/>
       <include name="src/Spring/Spring.Data.NHibernate5/**"/>
       <include name="src/Spring/Spring.Messaging/**"/>
       <include name="src/Spring/Spring.Messaging.Nms/**"/>
@@ -1302,26 +1282,18 @@ Commandline Examples:
       <include name="src/Spring/Spring.Testing.NUnit/**"/>
       <include name="src/Spring/Spring.Testing.Microsoft/**"/>
       <include name="src/Spring/CommonAssemblyInfo.cs"/>
-      <include name="src/Spring/Spring.Web.Conversation.NHibernate3/**"/>
-      <include name="src/Spring/Spring.Web.Conversation.NHibernate4/**"/>
       <include name="src/Spring/Spring.Web.Conversation.NHibernate5/**"/>
       
       <include name="test/Spring/Spring.Core.Tests/**"/>
       <include name="test/Spring/Spring.Aop.Tests/**"/>
       <include name="test/Spring/Spring.Web.Tests/**"/>
-	  <include name="test/Spring/Spring.Web.Mvc3.Tests/**"/>
-	  <include name="test/Spring/Spring.Web.Mvc4.Tests/**"/>
 	  <include name="test/Spring/Spring.Web.Mvc5.Tests/**"/>
       <include name="test/Spring/Spring.Services.Tests/**"/>
       <include name="test/Spring/Spring.Data.Tests/**"/>
       <include name="test/Spring/Spring.Data.Integration.Tests/**"/>
-	  <include name="test/Spring/Spring.Data.NHibernate3.Tests/**"/>
-      <include name="test/Spring/Spring.Data.NHibernate3.Integration.Tests/**"/>	  
-	  <include name="test/Spring/Spring.Data.NHibernate4.Tests/**"/>
-      <include name="test/Spring/Spring.Data.NHibernate4.Integration.Tests/**"/>	  
-      <include name="test/Spring/Spring.Data.NHibernate4.NestedTxSuspension.Integration.Tests/**"/>	  
-	  <include name="test/Spring/Spring.Data.NHibernate5.Tests/**"/>
       <include name="test/Spring/Spring.Data.NHibernate5.Integration.Tests/**"/>	  
+	  <include name="test/Spring/Spring.Data.NHibernate5.NestedTxSuspension.Integration.Tests/**"/>	  
+	  <include name="test/Spring/Spring.Data.NHibernate5.Tests/**"/>
       <include name="test/Spring/Spring.Messaging.Tests/**"/>
       <include name="test/Spring/Spring.Messaging.Nms.Tests/**"/>
       <include name="test/Spring/Spring.Messaging.Nms.Integration.Tests/**"/>
@@ -1331,8 +1303,6 @@ Commandline Examples:
       <include name="test/Spring/Spring.Testing.NUnit.Tests/**"/>
       <include name="test/Spring/Spring.Testing.Microsoft.Tests/**"/>
       <include name="test/Spring/CommonAssemblyInfo.cs"/>
-      <include name="test/Spring/Spring.Web.Conversation.NHibernate3.Tests/**"/>
-      <include name="test/Spring/Spring.Web.Conversation.NHibernate4.Tests/**"/>
       <include name="test/Spring/Spring.Web.Conversation.NHibernate5.Tests/**"/>
       
       <include name="examples/Spring/Spring.Examples.build"/>
@@ -1348,8 +1318,6 @@ Commandline Examples:
       <include name="examples/Spring/Spring.Calculator/**"/>
       <include name="examples/Spring/Spring.Calculator/src/Spring.Calculator.Web.2005/Bin/*.refresh"/>
       <include name="examples/Spring/Spring.WebQuickStart/**"/>
-	  <include name="examples/Spring/Spring.Mvc3QuickStart/**"/>
-	  <include name="examples/Spring/Spring.Mvc4QuickStart/**"/>
 	  <include name="examples/Spring/Spring.Mvc5QuickStart/**"/>
 	  <include name="examples/Spring/Spring.Web.Extensions.Example/**"/>
       <include name="examples/Spring/Spring.Web.Extensions.Example/src/Spring.Web.Extensions.Example.2005/Bin/*.refresh"/>

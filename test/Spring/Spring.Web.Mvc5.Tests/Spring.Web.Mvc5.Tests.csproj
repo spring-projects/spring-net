@@ -19,8 +19,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Spring.Core.Tests\TestAssemblySetup.cs" Link="TestAssemblySetup.cs" />
-    <Compile Include="..\Spring.Web.Mvc3.Tests\*.cs" />
-    <Compile Include="..\Spring.Web.Mvc3.Tests\Controllers\*.cs" LinkBase="Controllers" />
-    <Content Include="..\Spring.Web.Mvc3.Tests\*.xml" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="*.xml" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>

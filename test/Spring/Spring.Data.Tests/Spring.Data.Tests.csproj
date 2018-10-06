@@ -21,9 +21,9 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftTestSDKVersion)" />
     <PackageReference Include="NUnit" Version="$(NUnitVersion)" />
     <PackageReference Include="NUnit3TestAdapter" Version="$(NUnitTestAdapterVersion)" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.5.1" Condition=" '$(TargetFramework)' == 'netcoreapp2.1' " />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.1' ">
+    <PackageReference Include="System.Data.SqlClient" Version="4.5.1" Condition=" '$(TargetFramework)' == 'netcoreapp2.1' " />
     <Compile Remove="Data\Core\ServiceDomainTransactionManagerTests.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,0 +1,64 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net461</TargetFramework>
+    <Configurations>Debug;Release</Configurations>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Aop\Spring.Aop.csproj" />
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Web.Conversation.NHibernate5\Spring.Web.Conversation.NHibernate5.csproj" />
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Core\Spring.Core.csproj" />
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Data.NHibernate5\Spring.Data.NHibernate5.csproj" />
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Data\Spring.Data.csproj" />
+    <ProjectReference Include="..\..\..\src\Spring\Spring.Web\Spring.Web.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftTestSDKVersion)" />
+    <PackageReference Include="NUnit" Version="$(NUnitVersion)" />
+    <PackageReference Include="NUnit3TestAdapter" Version="$(NUnitTestAdapterVersion)" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="NUnitAspEx">
+      <HintPath>..\..\..\lib\Net\2.0\NUnitAspEx.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="System.Data.SQLite, Version=1.0.80.0, Culture=neutral, PublicKeyToken=db937bc2d44ff139, processorArchitecture=x86">
+      <HintPath>..\Spring.Web.Conversation.NHibernate5.Tests\lib\net\2.0\System.Data.SQLite.dll</HintPath>
+      <SpecificVersion>False</SpecificVersion>
+    </Reference>
+    <Reference Include="System.Web" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Data\**\*">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <None Include="Data\Spring\Conversation\WebConversationStateTest\sqlite\conversationTests.db">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\Spring.Web.Conversation.NHibernate5.Tests\Data\Spring\Conversation\WebConversationStateTest\log4net.config">
+      <Link>Data\Spring\Conversation\WebConversationStateTest\log4net.config</Link>
+    </None>
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\CircularDependenceTest.aspx" />
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\ConnectionReleaseModeIssue.aspx" />
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\EndConversationTestBegin.aspx" />
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\EndConversationTestEnd.aspx" />
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\EndPausedSessionIsClosedA.aspx" />
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\EndPausedSessionIsClosedB.aspx" />
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\EndPausedTest.aspx" />
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\GetParentObjetFromChild.aspx" />
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\IoeTests.aspx" />
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\PatialEndConv_A_Begin.aspx" />
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\PatialEndConv_A_B_Begin.aspx" />
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\PatialEndConv_A_B_End.aspx" />
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\PatialEndConv_A_End.aspx" />
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\RedirectErrorNoPauseConversation.aspx" />
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\SerializeConversationTest.aspx" />
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\SessionIsClosedA.aspx" />
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\SessionIsClosedB.aspx" />
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\SPCLazyLoadTest_A_Begin.aspx" />
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\SPCLazyLoadTest_A_Status.aspx" />
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\SPCSwitchConversationSameRequest.aspx" />
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\TimeOut_NoTimeOut.aspx" />
+    <Content Include="Data\Spring\Conversation\WebConversationStateTest\TimeOut_WithTimeOut.aspx" />
+    <EmbeddedResource Include="Entities\*.hbm.xml" />
+  </ItemGroup>
+</Project>
