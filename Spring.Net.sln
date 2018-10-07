@@ -65,15 +65,15 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Testing.Microsoft.Te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Messaging.Ems", "src\Spring\Spring.Messaging.Ems\Spring.Messaging.Ems.csproj", "{900E3839-301E-48B1-BAEB-B6645620ACFF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Scheduling.Quartz2", "src\Spring\Spring.Scheduling.Quartz2\Spring.Scheduling.Quartz2.csproj", "{E823D54C-CE82-4868-929F-5F95A999F123}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Scheduling.Quartz3", "src\Spring\Spring.Scheduling.Quartz3\Spring.Scheduling.Quartz3.csproj", "{E823D54C-CE82-4868-929F-5F95A999F123}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Scheduling.Quartz2.Tests", "test\Spring\Spring.Scheduling.Quartz2.Tests\Spring.Scheduling.Quartz2.Tests.csproj", "{247787CF-ECE1-4675-8B42-7DF4329A4891}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Scheduling.Quartz3.Integration.Tests", "test\Spring\Spring.Scheduling.Quartz3.Integration.Tests\Spring.Scheduling.Quartz3.Integration.Tests.csproj", "{8CF0F34A-CC93-4D87-AE14-A2DEEF072F26}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Scheduling.Quartz3.Tests", "test\Spring\Spring.Scheduling.Quartz3.Tests\Spring.Scheduling.Quartz3.Tests.csproj", "{247787CF-ECE1-4675-8B42-7DF4329A4891}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Messaging.Ems.Integration.Tests", "test\Spring\Spring.Messaging.Ems.Integration.Tests\Spring.Messaging.Ems.Integration.Tests.csproj", "{FA934E92-C8C2-428A-BE2A-26818F17A787}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Messaging.Nms.Integration.Tests", "test\Spring\Spring.Messaging.Nms.Integration.Tests\Spring.Messaging.Nms.Integration.Tests.csproj", "{E5323AC8-137E-4EF7-BC62-3BD6FC0576CD}"
-EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Scheduling.Quartz2.Integration.Tests", "test\Spring\Spring.Scheduling.Quartz2.Integration.Tests\Spring.Scheduling.Quartz2.Integration.Tests.csproj", "{8CF0F34A-CC93-4D87-AE14-A2DEEF072F26}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Web.Conversation.NHibernate5", "src\Spring\Spring.Web.Conversation.NHibernate5\Spring.Web.Conversation.NHibernate5.csproj", "{CF375928-B6D5-485C-B04D-2BC41D9DBF1E}"
 EndProject

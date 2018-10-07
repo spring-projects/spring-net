@@ -417,6 +417,7 @@ Commandline Examples:
 		   <include name="${spring.basedir}/test/Spring/Spring.Testing.NUnit.Tests/Spring.Testing.NUnit.Tests.csproj" />
 		   <include name="${spring.basedir}/test/Spring/Spring.Data.NHibernate5.Integration.Tests/Spring.Data.NHibernate5.Integration.Tests.csproj" />
 		   <include name="${spring.basedir}/test/Spring/Spring.Data.NHibernate5.Tests/Spring.Data.NHibernate5.Tests.csproj" />
+		   <include name="${spring.basedir}/test/Spring/Spring.Scheduling.Quartz3.Tests/Spring.Scheduling.Quartz3.Tests.csproj" />
 		</items>
 	  </in>
       <do>
@@ -1071,9 +1072,9 @@ Commandline Examples:
           <include name="*/*/Spring.Messaging.xml"/>
           <include name="*/*/Spring.Messaging.pdb"/>
 
-          <include name="*/*/Spring.Scheduling.Quartz2.dll"/>
-          <include name="*/*/Spring.Scheduling.Quartz2.xml"/>
-          <include name="*/*/Spring.Scheduling.Quartz2.pdb"/>
+          <include name="*/*/Spring.Scheduling.Quartz3.dll"/>
+          <include name="*/*/Spring.Scheduling.Quartz3.xml"/>
+          <include name="*/*/Spring.Scheduling.Quartz3.pdb"/>
 
           <include name="*/*/Spring.Template.Velocity.dll"/>
           <include name="*/*/Spring.Template.Velocity.xml"/>
@@ -1277,7 +1278,7 @@ Commandline Examples:
       <include name="src/Spring/Spring.Messaging/**"/>
       <include name="src/Spring/Spring.Messaging.Nms/**"/>
       <include name="src/Spring/Spring.Messaging.Ems/**"/>
-      <include name="src/Spring/Spring.Scheduling.Quartz2/**"/>
+      <include name="src/Spring/Spring.Scheduling.Quartz3/**"/>
       <include name="src/Spring/Spring.Template.Velocity/**"/>
       <include name="src/Spring/Spring.Testing.NUnit/**"/>
       <include name="src/Spring/Spring.Testing.Microsoft/**"/>
@@ -1298,7 +1299,7 @@ Commandline Examples:
       <include name="test/Spring/Spring.Messaging.Nms.Tests/**"/>
       <include name="test/Spring/Spring.Messaging.Nms.Integration.Tests/**"/>
       <include name="test/Spring/Spring.Messaging.Ems.Tests/**"/>
-      <include name="test/Spring/Spring.Scheduling.Quartz2.Tests/**"/>
+      <include name="test/Spring/Spring.Scheduling.Quartz3.Tests/**"/>
       <include name="test/Spring/Spring.Template.Velocity.Tests/**"/>
       <include name="test/Spring/Spring.Testing.NUnit.Tests/**"/>
       <include name="test/Spring/Spring.Testing.Microsoft.Tests/**"/>

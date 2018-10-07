@@ -2,6 +2,7 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
     <Description>Interfaces and classes that provide NHibernate 5 support in Spring.Net</Description>
+    <RootNamespace>Spring.Data.NHibernate</RootNamespace>
     <NoWarn>0618</NoWarn>
   </PropertyGroup>
   <ItemGroup>

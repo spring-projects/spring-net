@@ -2,7 +2,7 @@
 <objects xmlns="http://www.springframework.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
 
-  <object name="exampleJob" type="Spring.Scheduling.Quartz.JobDetailObject, Spring.Scheduling.Quartz2">
+  <object name="exampleJob" type="Spring.Scheduling.Quartz.JobDetailObject, Spring.Scheduling.Quartz3">
     <property name="JobType" value="Spring.Scheduling.Quartz.Example.ExampleJob, Spring.Scheduling.Quartz.Example" />
     <!-- We can inject values throgh JobDataMap -->
     <property name="JobDataAsMap">
@@ -17,20 +17,20 @@
     <property name="UserName" value="Gabriel" />
   </object>
   
-  <object id="jobDetail" type="Spring.Scheduling.Quartz.MethodInvokingJobDetailFactoryObject, Spring.Scheduling.Quartz2">
+  <object id="jobDetail" type="Spring.Scheduling.Quartz.MethodInvokingJobDetailFactoryObject, Spring.Scheduling.Quartz3">
     <!-- We don't actually need to implement IJob as we can use delegation -->
     <property name="TargetObject" ref="adminService" />
     <property name="TargetMethod" value="DoAdminWork" />
   </object>
 
-  <object id="jobDetailNonConcurrent" type="Spring.Scheduling.Quartz.MethodInvokingJobDetailFactoryObject, Spring.Scheduling.Quartz2">
+  <object id="jobDetailNonConcurrent" type="Spring.Scheduling.Quartz.MethodInvokingJobDetailFactoryObject, Spring.Scheduling.Quartz3">
     <property name="targetObject" ref="adminService" />
     <property name="targetMethod" value="DoAdminWork" />
     <!-- Automatic IStatefulJob wrapping -->
     <property name="concurrent" value="false" />
   </object>
 
-  <object id="simpleTrigger" type="Spring.Scheduling.Quartz.SimpleTriggerObject, Spring.Scheduling.Quartz2">
+  <object id="simpleTrigger" type="Spring.Scheduling.Quartz.SimpleTriggerObject, Spring.Scheduling.Quartz3">
     <!-- see the example of method invoking job above -->
     <property name="jobDetail" ref="jobDetail" />
     <!-- 5 seconds -->
@@ -40,13 +40,13 @@
   </object>
 
 
-  <object id="cronTrigger" type="Spring.Scheduling.Quartz.CronTriggerObject, Spring.Scheduling.Quartz2">
+  <object id="cronTrigger" type="Spring.Scheduling.Quartz.CronTriggerObject, Spring.Scheduling.Quartz3">
     <property name="jobDetail" ref="exampleJob" />
     <!-- run every 20 second of minute -->
     <property name="cronExpressionString" value="0/20 * * * * ?" />
   </object>
 
-  <object type="Spring.Scheduling.Quartz.SchedulerFactoryObject, Spring.Scheduling.Quartz2">
+  <object type="Spring.Scheduling.Quartz.SchedulerFactoryObject, Spring.Scheduling.Quartz3">
     <property name="triggers">
       <list>
         <ref object="cronTrigger" />

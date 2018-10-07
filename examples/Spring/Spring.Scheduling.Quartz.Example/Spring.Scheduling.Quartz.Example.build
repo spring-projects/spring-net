@@ -1,8 +1,0 @@
-<?xml version="1.0" ?>
-<project name="Spring.Scheduling.Quartz.Example" default="build" xmlns="http://nant.sf.net/schemas/nant.xsd">
-
-  <target name="build">
-
-  </target>
-  
-</project>

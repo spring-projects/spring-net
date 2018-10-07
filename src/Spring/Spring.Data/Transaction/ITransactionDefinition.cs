@@ -111,9 +111,9 @@ namespace Spring.Transaction
         string Name { get; }
 
         /// <summary>
-        /// Gets the enterprise services interop option.
+        /// Gets the async flow option.
         /// </summary>
-        /// <value>The enterprise services interop option.</value>
-        System.Transactions.EnterpriseServicesInteropOption EnterpriseServicesInteropOption { get;}
+        /// <value>The async flow option.</value>
+        System.Transactions.TransactionScopeAsyncFlowOption AsyncFlowOption { get;}
 	}
 }

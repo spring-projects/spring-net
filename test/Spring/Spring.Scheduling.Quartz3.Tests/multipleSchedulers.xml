@@ -1,0 +1,16 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<objects xmlns="http://www.springframework.net"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
+
+
+  <object id="scheduler1" type="Spring.Scheduling.Quartz.SchedulerFactoryObject, Spring.Scheduling.Quartz3">
+		<property name="SchedulerName" value="quartz1"/>
+	</object>
+
+  <object id="scheduler2" type="Spring.Scheduling.Quartz.SchedulerFactoryObject, Spring.Scheduling.Quartz3">
+    <property name="SchedulerName" value="quartz2"/>
+  </object>
+
+</objects>

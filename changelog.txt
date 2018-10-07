@@ -10,6 +10,7 @@ Release Notes - Spring.NET - Version 3.0.0
 Breaking Changes
 
 * .NET 4.5.2 is the lowest full framework supported
+* Tranasaction definitions no longer have EnterpriseServicesInteropOption, it was replaced by TransactionScopeAsyncFlowOption
 
 New Feature Highlights
 

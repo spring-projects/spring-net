@@ -1,0 +1,52 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+
+<objects xmlns="http://www.springframework.net"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
+
+
+  <object id="scheduler" type="Spring.Scheduling.Quartz.SchedulerFactoryObject, Spring.Scheduling.Quartz3">
+    <property name="schedulerName" value="myScheduler"/>
+    <property name="exposeSchedulerInRepository" value="true"/>
+  </object>
+
+  <object type="Spring.Scheduling.Quartz.SchedulerAccessorObject, Spring.Scheduling.Quartz3">
+    <property name="schedulerName" value="myScheduler"/>
+
+    <property name="triggers">
+      <list>
+        <ref local="exportTrigger"/>
+        <ref local="importTrigger"/>
+      </list>
+    </property>
+  </object>
+
+  <object id="exportTrigger" type="Spring.Scheduling.Quartz.SimpleTriggerObject, Spring.Scheduling.Quartz3">
+
+    <property name="JobDetail">
+      <object type="Spring.Scheduling.Quartz.MethodInvokingJobDetailFactoryObject, Spring.Scheduling.Quartz3">
+        <property name="TargetObject" ref="exportService"/>
+        <property name="TargetMethod" value="DoExport"/>
+      </object>
+    </property>
+    <property name="RepeatInterval" value="1s"/>
+    <property name="RepeatCount" value="1"/>
+  </object>
+
+  <object id="importTrigger" type="Spring.Scheduling.Quartz.SimpleTriggerObject, Spring.Scheduling.Quartz3">
+    <property name="jobDetail">
+      <object type="Spring.Scheduling.Quartz.MethodInvokingJobDetailFactoryObject, Spring.Scheduling.Quartz3">
+        <property name="TargetObject" ref="importService"/>
+        <property name="TargetMethod" value="DoImport"/>
+      </object>
+    </property>
+    <property name="RepeatInterval" value="1s"/>
+
+    <property name="RepeatCount" value="1"/>
+  </object>
+
+  <object id="exportService" type="Spring.Scheduling.Quartz.QuartzTestObject, Spring.Scheduling.Quartz3.Tests"/>
+
+  <object id="importService" type="Spring.Scheduling.Quartz.QuartzTestObject, Spring.Scheduling.Quartz3.Tests"/>
+
+</objects>

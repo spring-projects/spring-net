@@ -1,34 +1,31 @@
 using System;
-
+using System.Threading.Tasks;
 using Quartz;
 
 namespace Spring.Scheduling.Quartz.Example
 {
-	/// <summary>
-	/// Example job.
-	/// </summary>
+    /// <summary>
+    /// Example job.
+    /// </summary>
     public class ExampleJob : QuartzJobObject
     {
-
         private string userName;
 
-		/// <summary>
-		/// Simple property that can be injected.
-		/// </summary>
+        /// <summary>
+        /// Simple property that can be injected.
+        /// </summary>
         public string UserName
         {
-            set { userName = value; }
+            set => userName = value;
         }
 
-		/// <summary>
-		/// Execute.
-		/// </summary>
-		/// <param name="context"></param>
-        protected override void ExecuteInternal(IJobExecutionContext context)
+        /// <inheritdoc />
+        protected override Task ExecuteInternal(IJobExecutionContext context)
         {
-            Console.WriteLine("{0}: ExecuteInternal called, user name: {1}, next fire time {2}", 
-                DateTime.Now, userName, context.NextFireTimeUtc.Value.ToLocalTime());
-        }
+            Console.WriteLine(
+                $"{DateTime.Now}: ExecuteInternal called, user name: {userName}, next fire time {context.NextFireTimeUtc?.ToLocalTime()}");
 
+            return Task.FromResult(true);
+        }
     }
 }

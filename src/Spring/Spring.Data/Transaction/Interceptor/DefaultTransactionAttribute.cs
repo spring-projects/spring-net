@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,83 +14,83 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System;
 using Spring.Transaction.Support;
 
 namespace Spring.Transaction.Interceptor
 {
-	/// <summary> 
-	/// Transaction attribute approach to rolling back on all exceptions, no other
-	/// exceptions by default.
-	/// </summary>
-	/// <author>Rod Johnson</author>
-	/// <author>Griffin Caprio (.NET)</author>
-	public class DefaultTransactionAttribute : DefaultTransactionDefinition, ITransactionAttribute	
-	{
-		/// <summary>
-		/// Prefix for rollback-on-exception rules in description strings.
-		/// </summary>
-		public static readonly string ROLLBACK_RULE_PREFIX = "-";
+    /// <summary> 
+    /// Transaction attribute approach to rolling back on all exceptions, no other
+    /// exceptions by default.
+    /// </summary>
+    /// <author>Rod Johnson</author>
+    /// <author>Griffin Caprio (.NET)</author>
+    public class DefaultTransactionAttribute : DefaultTransactionDefinition, ITransactionAttribute
+    {
+        /// <summary>
+        /// Prefix for rollback-on-exception rules in description strings.
+        /// </summary>
+        public static readonly string ROLLBACK_RULE_PREFIX = "-";
 
-		/// <summary>
-		/// Prefix for commit-on-exception rules in description strings.
-		/// </summary>
-		public static readonly string COMMIT_RULE_PREFIX = "+";
+        /// <summary>
+        /// Prefix for commit-on-exception rules in description strings.
+        /// </summary>
+        public static readonly string COMMIT_RULE_PREFIX = "+";
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Transaction.Interceptor.DefaultTransactionAttribute"/>
-		/// class.
-		/// </summary>
-		public DefaultTransactionAttribute() {}
+        /// <summary>
+        /// Creates a new instance of the
+        /// <see cref="Spring.Transaction.Interceptor.DefaultTransactionAttribute"/>
+        /// class.
+        /// </summary>
+        public DefaultTransactionAttribute()
+        {
+        }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Transaction.Interceptor.DefaultTransactionAttribute"/>
-		/// class, setting the propagation behavior to the supplied value.
-		/// </summary>
-		/// <param name="propagationBehavior">
-		/// The desired transaction propagation behaviour.
-		/// </param>
-		public DefaultTransactionAttribute( TransactionPropagation propagationBehavior )
-			: base (propagationBehavior) {}
+        /// <summary>
+        /// Creates a new instance of the
+        /// <see cref="Spring.Transaction.Interceptor.DefaultTransactionAttribute"/>
+        /// class, setting the propagation behavior to the supplied value.
+        /// </summary>
+        /// <param name="propagationBehavior">
+        /// The desired transaction propagation behaviour.
+        /// </param>
+        public DefaultTransactionAttribute(TransactionPropagation propagationBehavior)
+            : base(propagationBehavior)
+        {
+        }
 
-		#region ITransactionAttribute Members
-		/// <summary>
-		/// Decides if rollback is required for the supplied <paramref name="exception"/>.
-		/// </summary>
-		/// <remarks>
-		/// <p>
-		/// The default behavior is to rollback on any exception.
-		/// Consistent with <see cref="Spring.Transaction.Support.TransactionTemplate"/>'s behavior.
-		/// </p>
-		/// </remarks>
-		/// <param name="exception">The <see cref="System.Exception"/> to evaluate.</param>
-		/// <returns>True if the exception causes a rollback, false otherwise.</returns>
-		public virtual bool RollbackOn(Exception exception)
-		{
-			return ( true );
-		}
-		#endregion
+        /// <summary>
+        /// Decides if rollback is required for the supplied <paramref name="exception"/>.
+        /// </summary>
+        /// <remarks>
+        /// <p>
+        /// The default behavior is to rollback on any exception.
+        /// Consistent with <see cref="Spring.Transaction.Support.TransactionTemplate"/>'s behavior.
+        /// </p>
+        /// </remarks>
+        /// <param name="exception">The <see cref="System.Exception"/> to evaluate.</param>
+        /// <returns>True if the exception causes a rollback, false otherwise.</returns>
+        public virtual bool RollbackOn(Exception exception)
+        {
+            return (true);
+        }
 
-		/// <summary> 
-		/// Return a description of this transaction attribute.
-		/// </summary>
-		/// <remarks>
-		/// <p>
-		/// The format matches the one used by the
-		/// <see cref="Spring.Transaction.Interceptor.TransactionAttributeEditor"/>,
-		/// to be able to feed any result into a <see cref="Spring.Transaction.Interceptor.ITransactionAttribute"/>
-		/// instance's properties.
-		/// </p>
-		/// </remarks>
-		public override string ToString()
-		{
-			string result = DefinitionDescription;
-			result += "," + ROLLBACK_RULE_PREFIX + "System.Exception";
-			return result;
-		}
-	}
+        /// <summary> 
+        /// Return a description of this transaction attribute.
+        /// </summary>
+        /// <remarks>
+        /// <p>
+        /// The format matches the one used by the
+        /// <see cref="Spring.Transaction.Interceptor.TransactionAttributeEditor"/>,
+        /// to be able to feed any result into a <see cref="Spring.Transaction.Interceptor.ITransactionAttribute"/>
+        /// instance's properties.
+        /// </p>
+        /// </remarks>
+        public override string ToString()
+        {
+            string result = DefinitionDescription;
+            result += "," + ROLLBACK_RULE_PREFIX + "System.Exception";
+            return result;
+        }
+    }
 }

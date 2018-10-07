@@ -463,7 +463,7 @@ namespace Spring.Data.NHibernate
 
             TransactionScopeOption txScopeOption = CreateTransactionScopeOptions(definition);
             TransactionOptions txOptions = CreateTransactionOptions(definition);
-            txObject.TxScopeAdapter.CreateTransactionScope(txScopeOption, txOptions, definition.EnterpriseServicesInteropOption);
+            txObject.TxScopeAdapter.CreateTransactionScope(txScopeOption, txOptions, definition.AsyncFlowOption);
 
         }
 

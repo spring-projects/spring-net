@@ -5,49 +5,17 @@ namespace Spring.Transaction
 {
     public class MockTxnDefinition : ITransactionDefinition
     {
-        private int _transactionTimeout = DefaultTransactionDefinition.TIMEOUT_DEFAULT;
-        private TransactionPropagation _transactionPropagation = TransactionPropagation.NotSupported;
-        private bool _readOnly = false;
-        private string _name = null;
-        private System.Transactions.EnterpriseServicesInteropOption _esInteropOption;
+        public bool ReadOnly { get; set; }
 
-        #region ITransactionDefinition Members
+        public int TransactionTimeout { get; set; } = DefaultTransactionDefinition.TIMEOUT_DEFAULT;
 
-        public bool ReadOnly
-        {
-            get { return _readOnly; }
-            set { _readOnly = value; }
-        }
+        public IsolationLevel TransactionIsolationLevel => IsolationLevel.Unspecified;
 
-        public int TransactionTimeout
-        {
-            get { return _transactionTimeout; }
-            set { _transactionTimeout = value; }
-        }
+        public TransactionPropagation PropagationBehavior { get; set; } = TransactionPropagation.NotSupported;
 
-        public IsolationLevel TransactionIsolationLevel
-        {
-            get { return IsolationLevel.Unspecified; }
-        }
+        public string Name { get; } = null;
 
-        public TransactionPropagation PropagationBehavior
-        {
-            get { return _transactionPropagation; }
-            set { _transactionPropagation = value; }
-        }
-
-        public string Name
-        {
-            get { return _name; }
-        }
-
-        public System.Transactions.EnterpriseServicesInteropOption EnterpriseServicesInteropOption
-        {
-            get { return _esInteropOption; }
-            set { _esInteropOption = value; }
-        }
-
-        #endregion
+        public System.Transactions.TransactionScopeAsyncFlowOption AsyncFlowOption { get; set; }
     }
 
     public class MockTxnPlatformMgrAbstract : AbstractPlatformTransactionManager
@@ -68,32 +36,18 @@ namespace Spring.Transaction
             _isExistingTransaction = true;
         }
 
-        public object Transaction
-        {
-            get { return _transaction; }
-        }
+        public object Transaction => _transaction;
 
         public bool Savepoints
         {
-            set { _useSavepointForNestedTransaction = value; }
+            set => _useSavepointForNestedTransaction = value;
         }
 
-        public int DoBeginCallCount
-        {
-            get { return _doBeginCalls; }
-        }
+        public int DoBeginCallCount => _doBeginCalls;
 
-        public int DoGetTransactionCallCount
-        {
-            get { return _doGetTxnCalls; }
-        }
+        public int DoGetTransactionCallCount => _doGetTxnCalls;
 
-        public int IsExistingTransactionCallCount
-        {
-            get { return _isExistingTxnCalls; }
-        }
-
-        #region AbstractPlatformTransactionManager Impls
+        public int IsExistingTransactionCallCount => _isExistingTxnCalls;
 
         protected override void DoResume(object transaction, object suspendedResources)
         {
@@ -144,7 +98,5 @@ namespace Spring.Transaction
         {
             return _useSavepointForNestedTransaction;
         }
-
-        #endregion
     }
 }
