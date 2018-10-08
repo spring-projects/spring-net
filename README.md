@@ -1,4 +1,4 @@
-THE SPRING.NET FRAMEWORK, Release 2.0.0  (PRE-RELEASE)
+THE SPRING.NET FRAMEWORK, Release 3.0.0  (PRE-RELEASE)
 ---------------------------------------------------------
 http://www.springframework.net/
 
