@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using System.Xml;
 using Spring.Collections;
@@ -127,7 +128,8 @@ namespace Spring.Transaction.Config
                 {
                     attribute.ReadOnly = Boolean.Parse(GetAttributeValue(methodElement, READ_ONLY));
                 }
-                IList rollbackRules = new LinkedList();
+
+                var rollbackRules = new List<RollbackRuleAttribute>();
                 if (methodElement.HasAttribute(ROLLBACK_FOR))
                 {
                     string rollbackForValue = GetAttributeValue(methodElement, ROLLBACK_FOR);
@@ -151,9 +153,7 @@ namespace Spring.Transaction.Config
 
         }
 
-
-
-        private void AddRollbackRuleAttributesTo(IList rollbackRules, string rollbackForValue)
+        private void AddRollbackRuleAttributesTo(List<RollbackRuleAttribute> rollbackRules, string rollbackForValue)
         {
             string[] exceptionTypeNames = StringUtils.CommaDelimitedListToStringArray(rollbackForValue);
             foreach (string exceptionTypeName in exceptionTypeNames)
@@ -162,7 +162,7 @@ namespace Spring.Transaction.Config
             }
         }
 
-        private void AddNoRollbackRuleAttributesTo(IList rollbackRules, string noRollbackForValue)
+        private void AddNoRollbackRuleAttributesTo(List<RollbackRuleAttribute> rollbackRules, string noRollbackForValue)
         {
             string[] exceptionTypeNames = StringUtils.CommaDelimitedListToStringArray(noRollbackForValue);
             foreach (string exceptionTypeName in exceptionTypeNames)

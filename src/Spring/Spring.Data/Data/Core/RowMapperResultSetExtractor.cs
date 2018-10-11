@@ -1,7 +1,5 @@
-#region License
-
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +14,10 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Spring.Collections;
-
-#endregion
 
 namespace Spring.Data.Core
 {
@@ -50,17 +43,10 @@ namespace Spring.Data.Core
     /// <author>Mark Pollack (.NET)</author>
     public class RowMapperResultSetExtractor : IResultSetExtractor
     {
-        #region Fields
-        
-        private IRowMapper rowMapper;
+        private readonly IRowMapper rowMapper;
+        private readonly RowMapperDelegate rowMapperDelegate;
+        private readonly int rowsExpected;
 
-        private RowMapperDelegate rowMapperDelegate;
-	    
-        private int rowsExpected;
-	    
-        #endregion
-
-        #region Constructor (s)
         /// <summary>
         /// Initializes a new instance of the <see cref="RowMapperResultSetExtractor"/> class.
         /// </summary>
@@ -74,11 +60,7 @@ namespace Spring.Data.Core
         public RowMapperResultSetExtractor(IRowMapper rowMapper, int rowsExpected, IDataReaderWrapper dataReaderWrapper)
         {
             //TODO use datareaderwrapper
-            if (rowMapper == null)
-            {
-                throw new ArgumentNullException("rowMapper");
-            }
-            this.rowMapper = rowMapper;
+            this.rowMapper = rowMapper ?? throw new ArgumentNullException(nameof(rowMapper));
             this.rowsExpected = rowsExpected;
         }
 
@@ -94,23 +76,15 @@ namespace Spring.Data.Core
         public RowMapperResultSetExtractor(RowMapperDelegate rowMapperDelegate, int rowsExpected, IDataReaderWrapper dataReaderWrapper)
         {
             //TODO use datareaderwrapper
-            if (rowMapperDelegate == null)
-            {
-                throw new ArgumentNullException("rowMapperDelegate");
-            }
-            this.rowMapperDelegate = rowMapperDelegate;
+            this.rowMapperDelegate = rowMapperDelegate ?? throw new ArgumentNullException(nameof(rowMapperDelegate));
             this.rowsExpected = rowsExpected;
         }
-
-        #endregion
-
-        #region IResultSetExtractor Members
 
         public object ExtractData(System.Data.IDataReader reader)
         {
             // Use the more efficient collection if we know how many rows to expect:
             // ArrayList in case of a known row count, LinkedList if unknown
-            IList results = (rowsExpected > 0) ? (IList) new ArrayList(rowsExpected) : new LinkedList();
+            var results = new List<object>(rowsExpected);
             int rowNum = 0;
             if (rowMapper != null)
             {
@@ -129,7 +103,5 @@ namespace Spring.Data.Core
 
             return results;
         }
-
-        #endregion
     }
 }

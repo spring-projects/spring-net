@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,63 +28,62 @@ using System.Collections.Generic;
 namespace Spring.Objects
 {
     /// <summary>
-    /// A collection style container for <see cref="Spring.Objects.PropertyValue"/>
-    /// instances.
+    ///     A collection style container for <see cref="Spring.Objects.PropertyValue" />
+    ///     instances.
     /// </summary>
     /// <author>Rod Johnson</author>
     /// <author>Mark Pollack (.NET) </author>
     public interface IPropertyValues : IEnumerable
     {
         /// <summary>
-        /// Return an array of the <see cref="Spring.Objects.PropertyValue"/> objects
-        /// held in this object.</summary>
+        ///     Return an array of the <see cref="Spring.Objects.PropertyValue" /> objects
+        ///     held in this object.
+        /// </summary>
         /// <returns>
-        /// An array of the <see cref="Spring.Objects.PropertyValue"/> objects held
-        /// in this object.
+        ///     An array of the <see cref="Spring.Objects.PropertyValue" /> objects held
+        ///     in this object.
         /// </returns>
-        IList<PropertyValue> PropertyValues
-        {
-            get;
-        }
-		
+        IReadOnlyList<PropertyValue> PropertyValues { get; }
+
         /// <summary>
-        /// Return the <see cref="Spring.Objects.PropertyValue"/> instance with the
-        /// given name.
+        ///     Return the <see cref="Spring.Objects.PropertyValue" /> instance with the
+        ///     given name.
         /// </summary>
         /// <param name="propertyName">The name to search for.</param>
-        /// <returns>the <see cref="Spring.Objects.PropertyValue"/>, or null if a 
-        /// the <see cref="Spring.Objects.PropertyValue"/> with the supplied
-        /// <paramref name="propertyName"/> did not exist in this collection.
+        /// <returns>
+        ///     the <see cref="Spring.Objects.PropertyValue" />, or null if a
+        ///     the <see cref="Spring.Objects.PropertyValue" /> with the supplied
+        ///     <paramref name="propertyName" /> did not exist in this collection.
         /// </returns>
         PropertyValue GetPropertyValue(string propertyName);
-		
+
         /// <summary>
-        /// Is there a <see cref="Spring.Objects.PropertyValue"/> instance for this
-        /// property name?
+        ///     Is there a <see cref="Spring.Objects.PropertyValue" /> instance for this
+        ///     property name?
         /// </summary>
         /// <param name="propertyName">The name to search for.</param>
         /// <returns>
-        /// True if there is a <see cref="Spring.Objects.PropertyValue"/> instance for
-        /// the supplied <paramref name="propertyName"/>.
+        ///     True if there is a <see cref="Spring.Objects.PropertyValue" /> instance for
+        ///     the supplied <paramref name="propertyName" />.
         /// </returns>
         bool Contains(string propertyName);
-		
+
         /// <summary>
-        /// Return the difference (changes, additions, but not removals) of
-        /// property values between the supplied argument and the values
-        /// contained in the collection.
+        ///     Return the difference (changes, additions, but not removals) of
+        ///     property values between the supplied argument and the values
+        ///     contained in the collection.
         /// </summary>
         /// <remarks>
-        /// <p>
-        /// Subclasses should also override <c>Equals</c>.
-        /// </p>
+        ///     <p>
+        ///         Subclasses should also override <c>Equals</c>.
+        ///     </p>
         /// </remarks>
         /// <param name="old">The old property values.</param>
         /// <returns>
-        /// An <see cref="Spring.Objects.IPropertyValues"/> containing any changes, or
-        /// an empty <see cref="Spring.Objects.IPropertyValues"/> instance if there were
-        /// no changes.
+        ///     An <see cref="Spring.Objects.IPropertyValues" /> containing any changes, or
+        ///     an empty <see cref="Spring.Objects.IPropertyValues" /> instance if there were
+        ///     no changes.
         /// </returns>
-        IPropertyValues ChangesSince (IPropertyValues old);
+        IPropertyValues ChangesSince(IPropertyValues old);
     }
 }

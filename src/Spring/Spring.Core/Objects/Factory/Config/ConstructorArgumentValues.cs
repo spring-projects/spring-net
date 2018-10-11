@@ -1,5 +1,5 @@
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -39,6 +39,17 @@ namespace Spring.Objects.Factory.Config
 	[Serializable]
 	public class ConstructorArgumentValues
 	{
+		private static readonly CultureInfo enUSCultureInfo = new CultureInfo("en-US", false);
+		
+		private static readonly IReadOnlyDictionary<int, ValueHolder> _emptyIndexedArgumentValues = new Dictionary<int, ValueHolder>();
+		private Dictionary<int, ValueHolder>  _indexedArgumentValues = null;
+
+		private static readonly IReadOnlyList<ValueHolder> _emptyGenericArgumentValues = new List<ValueHolder>();
+		private List<ValueHolder> _genericArgumentValues = null;
+		
+		private static readonly IReadOnlyDictionary<string, object> _emptyNamedArgumentValues = new Dictionary<string, object>();
+		private Dictionary<string, object> _namedArgumentValues = null;
+		
 		/// <summary>
 		/// Can be used as an argument filler for the
 		/// <see cref="Spring.Objects.Factory.Config.ConstructorArgumentValues.GetArgumentValue(int, string,Type,ISet)"/>
@@ -69,11 +80,6 @@ namespace Spring.Objects.Factory.Config
 			AddAll(other);
 		}
 
-	    private static readonly CultureInfo enUSCultureInfo = new CultureInfo("en-US", false);
-		private IDictionary<int, ValueHolder>  _indexedArgumentValues = new Dictionary<int, ValueHolder>();
-        private List<ValueHolder> _genericArgumentValues = new List<ValueHolder>();
-		private IDictionary<string, object> _namedArgumentValues = new Dictionary<string, object>();
-
 	    /// <summary>
 		/// Return the map of indexed argument values.
 		/// </summary>
@@ -83,10 +89,8 @@ namespace Spring.Objects.Factory.Config
 		/// <see cref="Spring.Objects.Factory.Config.ConstructorArgumentValues.ValueHolder"/>s
 		/// as values.
 		/// </returns>
-		public virtual IDictionary<int, ValueHolder> IndexedArgumentValues
-		{
-			get { return _indexedArgumentValues; }
-		}
+		public IReadOnlyDictionary<int, ValueHolder> IndexedArgumentValues
+		    => _indexedArgumentValues ?? _emptyIndexedArgumentValues;
 
 		/// <summary>
 		/// Return the map of named argument values.
@@ -97,10 +101,7 @@ namespace Spring.Objects.Factory.Config
 		/// <see cref="Spring.Objects.Factory.Config.ConstructorArgumentValues.ValueHolder"/>s
 		/// as values.
 		/// </returns>
-		public virtual IDictionary<string, object> NamedArgumentValues
-		{
-			get { return _namedArgumentValues; }
-		}
+		public IReadOnlyDictionary<string, object> NamedArgumentValues => _namedArgumentValues ?? _emptyNamedArgumentValues;
 
 		/// <summary>
 		/// Return the set of generic argument values.
@@ -109,41 +110,24 @@ namespace Spring.Objects.Factory.Config
 		/// A <see cref="System.Collections.IList"/> of
 		/// <see cref="Spring.Objects.Factory.Config.ConstructorArgumentValues.ValueHolder"/>s.
 		/// </returns>
-        public virtual IList<ValueHolder> GenericArgumentValues
-		{
-			get { return _genericArgumentValues; }
-
-		}
+        public IReadOnlyList<ValueHolder> GenericArgumentValues => _genericArgumentValues ?? _emptyGenericArgumentValues;
 
 		/// <summary>
 		/// Return the number of arguments held in this instance.
 		/// </summary>
-		public virtual int ArgumentCount
-		{
-			get
-			{
-				return IndexedArgumentValues.Count
-					+ GenericArgumentValues.Count
-					+ NamedArgumentValues.Count;
-			}
-
-		}
+		public int ArgumentCount => IndexedArgumentValues.Count
+		                                    + GenericArgumentValues.Count
+		                                    + NamedArgumentValues.Count;
 
 		/// <summary>
 		/// Returns true if this holder does not contain any argument values,
 		/// neither indexed ones nor generic ones.
 		/// </summary>
-		public virtual bool Empty
-		{
-			get
-			{
-				return IndexedArgumentValues.Count == 0
-					&& GenericArgumentValues.Count == 0
-					&& NamedArgumentValues.Count == 0;
-			}
-		}
+		public bool Empty => IndexedArgumentValues.Count == 0
+		                             && GenericArgumentValues.Count == 0
+		                             && NamedArgumentValues.Count == 0;
 
-	    /// <summary>
+		/// <summary>
 		/// Copy all given argument values into this object.
 		/// </summary>
 		/// <param name="other">
@@ -154,52 +138,63 @@ namespace Spring.Objects.Factory.Config
 		{
 			if (other != null)
 			{
-				foreach (ValueHolder o in other.GenericArgumentValues)
+				if (other._genericArgumentValues != null && other._genericArgumentValues.Count > 0)
 				{
-					GenericArgumentValues.Add(o);
+					GetAndInitializeGenericArgumentValuesIfNeeded().AddRange(other._genericArgumentValues);
 				}
-				foreach (KeyValuePair<int, ValueHolder> entry in other.IndexedArgumentValues)
+
+				if (other._indexedArgumentValues != null && other._indexedArgumentValues.Count > 0)
 				{
-				    ValueHolder vh = entry.Value;
-                    if (vh != null)
-                    {
-                        AddOrMergeIndexedArgumentValues( entry.Key, vh.Copy());
-                    }
+					foreach (var entry in other._indexedArgumentValues)
+					{
+						ValueHolder vh = entry.Value;
+						if (vh != null)
+						{
+							AddOrMergeIndexedArgumentValues(entry.Key, vh.Copy());
+						}
+					}
 				}
-				foreach (KeyValuePair<string, object> entry in other.NamedArgumentValues)
+
+				if (other._namedArgumentValues != null && other._namedArgumentValues.Count > 0)
 				{
-				    AddOrMergeNamedArgumentValues(entry.Key, entry.Value);
-					//NamedArgumentValues.Add(entry.Key, entry.Value);
+					foreach (var entry in other._namedArgumentValues)
+					{
+						AddOrMergeNamedArgumentValues(entry.Key, entry.Value);
+						//NamedArgumentValues.Add(entry.Key, entry.Value);
+					}
 				}
 			}
 		}
 
 	    private void AddOrMergeNamedArgumentValues(string key, object newValue)
 	    {
-	        if (_namedArgumentValues.ContainsKey(key) )
-	        {
-	            _namedArgumentValues[key] = newValue;
-	        } else
-	        {	            
-                _namedArgumentValues.Add(key, newValue);
-	        }
+		    var namedArgumentValues = GetAndInitializeNamedArgumentValuesIfNeeded();
+		    if (namedArgumentValues.ContainsKey(key))
+		    {
+			    namedArgumentValues[key] = newValue;
+		    }
+		    else
+		    {
+			    namedArgumentValues.Add(key, newValue);
+		    }
 	    }
 
 	    private void AddOrMergeIndexedArgumentValues(int key, ValueHolder newValue)
 	    {
-	        ValueHolder currentValue;
-	        IMergable mergable = newValue.Value as IMergable;
-            if (_indexedArgumentValues.TryGetValue(key, out currentValue) && mergable != null )
+		    var dictionary = GetAndInitializeIndexedArgumentValuesIfNeeded();
+
+		    if (newValue.Value is IMergable mergable
+		        && dictionary.TryGetValue(key, out var currentValue))
             {
                 if (mergable.MergeEnabled)
                 {
                     newValue.Value = mergable.Merge(currentValue.Value);
                 }
             }
-	        _indexedArgumentValues[key] = newValue;
+		    dictionary[key] = newValue;
 	    }
 
-	    /// <summary>
+		/// <summary>
 		/// Add argument value for the given index in the constructor argument list.
 		/// </summary>
 		/// <param name="index">
@@ -208,9 +203,9 @@ namespace Spring.Objects.Factory.Config
 		/// <param name="value">
 		/// The argument value.
 		/// </param>
-		public virtual void AddIndexedArgumentValue(int index, object value)
+		public void AddIndexedArgumentValue(int index, object value)
 		{
-			IndexedArgumentValues[index] = new ValueHolder(value);
+			GetAndInitializeIndexedArgumentValuesIfNeeded()[index] = new ValueHolder(value);
 		}
 
 		/// <summary>
@@ -222,9 +217,9 @@ namespace Spring.Objects.Factory.Config
 		/// The <see cref="System.Type.FullName"/> of the argument
 		/// <see cref="System.Type"/>.
 		/// </param>
-		public virtual void AddIndexedArgumentValue(int index, object value, string type)
+		public void AddIndexedArgumentValue(int index, object value, string type)
 		{
-			IndexedArgumentValues[index] = new ValueHolder(value, type);
+			GetAndInitializeIndexedArgumentValuesIfNeeded()[index] = new ValueHolder(value, type);
 		}
 
 		/// <summary>
@@ -236,10 +231,10 @@ namespace Spring.Objects.Factory.Config
 		/// If the supplied <paramref name="name"/> is <see langword="null"/>
 		/// or is composed wholly of whitespace.
 		/// </exception>
-		public virtual void AddNamedArgumentValue(string name, object value)
+		public void AddNamedArgumentValue(string name, object value)
 		{
 			AssertUtils.ArgumentHasText(name, "name");
-			NamedArgumentValues[GetCanonicalNamedArgument(name)] = new ValueHolder(value);
+			GetAndInitializeNamedArgumentValuesIfNeeded()[GetCanonicalNamedArgument(name)] = new ValueHolder(value);
 		}
 
 		/// <summary>
@@ -254,7 +249,7 @@ namespace Spring.Objects.Factory.Config
 		/// <see cref="Spring.Objects.Factory.Config.ConstructorArgumentValues.ValueHolder"/>
 		/// for the argument, or <see langword="null"/> if none set.
 		/// </returns>
-		public virtual ValueHolder GetIndexedArgumentValue(int index, Type requiredType)
+		public ValueHolder GetIndexedArgumentValue(int index, Type requiredType)
 		{
 			ValueHolder valueHolder;
             if (IndexedArgumentValues.TryGetValue(index, out valueHolder))
@@ -278,15 +273,16 @@ namespace Spring.Objects.Factory.Config
 		/// <see cref="Spring.Objects.Factory.Config.ConstructorArgumentValues.ValueHolder"/>
 		/// for the argument, or <see langword="null"/> if none set.
 		/// </returns>
-        public virtual ValueHolder GetNamedArgumentValue(string name)
-        {
-            ValueHolder valueHolder = null;
-            if (name != null && ContainsNamedArgument(name))
-            {
-                valueHolder = (ValueHolder)NamedArgumentValues[GetCanonicalNamedArgument(name)];
-            }
-            return valueHolder;
-        }
+		public ValueHolder GetNamedArgumentValue(string name)
+		{
+			ValueHolder valueHolder = null;
+			if (name != null && ContainsNamedArgument(name))
+			{
+				valueHolder = (ValueHolder) GetAndInitializeNamedArgumentValuesIfNeeded()[GetCanonicalNamedArgument(name)];
+			}
+
+			return valueHolder;
+		}
 
 		/// <summary>
 		/// Does this set of constructor arguments contain a named argument matching the
@@ -305,7 +301,7 @@ namespace Spring.Objects.Factory.Config
 		/// </returns>
 		public bool ContainsNamedArgument(string argument)
 		{
-			return NamedArgumentValues.ContainsKey(GetCanonicalNamedArgument(argument));
+			return _namedArgumentValues != null && _namedArgumentValues.ContainsKey(GetCanonicalNamedArgument(argument));
 		}
 
 		/// <summary>
@@ -314,9 +310,9 @@ namespace Spring.Objects.Factory.Config
 		/// <param name="value">
 		/// The argument value.
 		/// </param>
-		public virtual void AddGenericArgumentValue(object value)
+		public void AddGenericArgumentValue(object value)
 		{
-			GenericArgumentValues.Add(new ValueHolder(value));
+			GetAndInitializeGenericArgumentValuesIfNeeded().Add(new ValueHolder(value));
 		}
 
 		/// <summary>
@@ -327,9 +323,9 @@ namespace Spring.Objects.Factory.Config
 		/// The <see cref="System.Type.FullName"/> of the argument
 		/// <see cref="System.Type"/>.
 		/// </param>
-		public virtual void AddGenericArgumentValue(object value, string type)
+		public void AddGenericArgumentValue(object value, string type)
 		{
-			GenericArgumentValues.Add(new ValueHolder(value, type));
+			GetAndInitializeGenericArgumentValuesIfNeeded().Add(new ValueHolder(value, type));
 		}
 
 		/// <summary>
@@ -344,7 +340,7 @@ namespace Spring.Objects.Factory.Config
 		/// <see cref="Spring.Objects.Factory.Config.ConstructorArgumentValues.ValueHolder"/>
 		/// for the argument, or <see langword="null"/> if none set.
 		/// </returns>
-		public virtual ValueHolder GetGenericArgumentValue(Type requiredType)
+		public ValueHolder GetGenericArgumentValue(Type requiredType)
 		{
 			return GetGenericArgumentValue(requiredType, null);
 		}
@@ -369,11 +365,18 @@ namespace Spring.Objects.Factory.Config
 		/// <see cref="Spring.Objects.Factory.Config.ConstructorArgumentValues.ValueHolder"/>
 		/// for the argument, or <see langword="null"/> if none set.
 		/// </returns>
-		public virtual ValueHolder GetGenericArgumentValue(
-			Type requiredType, ISet usedValues)
+		public ValueHolder GetGenericArgumentValue(
+			Type requiredType,
+			ISet usedValues)
 		{
-			foreach (ValueHolder valueHolder in GenericArgumentValues)
+			if (_genericArgumentValues == null)
 			{
+				return null;
+			}
+
+			for (var i = 0; i < _genericArgumentValues.Count; i++)
+			{
+				ValueHolder valueHolder = _genericArgumentValues[i];
 				if (usedValues == null || !usedValues.Contains(valueHolder))
 				{
 					if (requiredType != null)
@@ -381,25 +384,26 @@ namespace Spring.Objects.Factory.Config
 						if (StringUtils.HasText(valueHolder.Type))
 						{
 							if (valueHolder.Type.Equals(requiredType.FullName)
-								|| valueHolder.Type.Equals(requiredType.AssemblyQualifiedName))
+							    || valueHolder.Type.Equals(requiredType.AssemblyQualifiedName))
 							{
 								return valueHolder;
 							}
 						}
 						else if (requiredType.IsInstanceOfType(valueHolder.Value)
-							|| (requiredType.IsArray
-								&& typeof (IList).IsInstanceOfType(valueHolder.Value)))
+						         || (requiredType.IsArray
+						             && valueHolder.Value is IList))
 						{
 							return valueHolder;
 						}
 					}
-						// if the value holder is (pretty much) untyped, that's ok to return...
+					// if the value holder is (pretty much) untyped, that's ok to return...
 					else if (StringUtils.IsNullOrEmpty(valueHolder.Type))
 					{
 						return valueHolder;
 					}
 				}
 			}
+
 			return null;
 		}
 
@@ -419,7 +423,7 @@ namespace Spring.Objects.Factory.Config
 		/// <see cref="Spring.Objects.Factory.Config.ConstructorArgumentValues.ValueHolder"/>
 		/// for the argument, or <see langword="null"/> if none is set.
 		/// </returns>
-		public virtual ValueHolder GetArgumentValue(int index, Type requiredType)
+		public ValueHolder GetArgumentValue(int index, Type requiredType)
 		{
 			return GetArgumentValue(index, string.Empty, requiredType, null);
 		}
@@ -448,7 +452,7 @@ namespace Spring.Objects.Factory.Config
 		/// <see cref="Spring.Objects.Factory.Config.ConstructorArgumentValues.ValueHolder"/>
 		/// for the argument, or <see langword="null"/> if none is set.
 		/// </returns>
-		public virtual ValueHolder GetArgumentValue(int index, Type requiredType, ISet usedValues)
+		public ValueHolder GetArgumentValue(int index, Type requiredType, ISet usedValues)
 		{
 			return GetArgumentValue(index, string.Empty, requiredType, usedValues);
 		}
@@ -471,7 +475,7 @@ namespace Spring.Objects.Factory.Config
 		/// <see cref="Spring.Objects.Factory.Config.ConstructorArgumentValues.ValueHolder"/>
 		/// for the argument, or <see langword="null"/> if none is set.
 		/// </returns>
-		public virtual ValueHolder GetArgumentValue(string name, Type requiredType)
+		public ValueHolder GetArgumentValue(string name, Type requiredType)
 		{
 			return GetArgumentValue(NoIndex, name, requiredType, null);
 		}
@@ -502,7 +506,7 @@ namespace Spring.Objects.Factory.Config
 		/// <see cref="Spring.Objects.Factory.Config.ConstructorArgumentValues.ValueHolder"/>
 		/// for the argument, or <see langword="null"/> if none is set.
 		/// </returns>
-		public virtual ValueHolder GetArgumentValue(
+		public ValueHolder GetArgumentValue(
 			string name, Type requiredType, ISet usedValues)
 		{
 			return GetArgumentValue(NoIndex, name, requiredType, usedValues);
@@ -539,7 +543,7 @@ namespace Spring.Objects.Factory.Config
 		/// <see cref="Spring.Objects.Factory.Config.ConstructorArgumentValues.ValueHolder"/>
 		/// for the argument, or <see langword="null"/> if none is set.
 		/// </returns>
-		public virtual ValueHolder GetArgumentValue(
+		public ValueHolder GetArgumentValue(
 			int index, string name, Type requiredType, ISet usedValues)
 		{
 			ValueHolder valueHolder = null;
@@ -562,6 +566,21 @@ namespace Spring.Objects.Factory.Config
 		{
             return argument != null ? argument.ToLower(enUSCultureInfo) : argument;
 		}
+		
+		private Dictionary<int, ValueHolder> GetAndInitializeIndexedArgumentValuesIfNeeded()
+		{
+			return _indexedArgumentValues = _indexedArgumentValues ?? new Dictionary<int, ValueHolder>();
+		}
+
+		private Dictionary<string, object> GetAndInitializeNamedArgumentValuesIfNeeded()
+		{
+			return _namedArgumentValues = _namedArgumentValues ?? new Dictionary<string, object>();
+		}
+
+		private List<ValueHolder> GetAndInitializeGenericArgumentValuesIfNeeded()
+		{
+			return _genericArgumentValues = _genericArgumentValues ?? new List<ValueHolder>();
+		}
 
 	    /// <summary>
 		/// Holder for a constructor argument value, with an optional
@@ -571,7 +590,10 @@ namespace Spring.Objects.Factory.Config
 		[Serializable]
 		public class ValueHolder
 		{
-		    /// <summary>
+			private object _ctorValue;
+			private readonly string typeName;
+
+			/// <summary>
 			/// Creates a new instance of the ValueHolder class.
 			/// </summary>
 			/// <param name="value">
@@ -631,21 +653,15 @@ namespace Spring.Objects.Factory.Config
 			/// </remarks>
 			public object Value
 			{
-				get { return _ctorValue; }
-				set { _ctorValue = value; }
-			}
+				get => _ctorValue;
+			    set => _ctorValue = value;
+		    }
 
 			/// <summary>
 			/// Return the <see cref="System.Type.FullName"/> of the constructor
 			/// argument.
 			/// </summary>
-			public string Type
-			{
-				get { return typeName; }
-			}
-
-		    private object _ctorValue;
-			private string typeName;
+			public string Type => typeName;
 		}
 	}
 }

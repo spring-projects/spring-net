@@ -37,11 +37,7 @@ namespace Spring.Context.Attributes
     /// </summary>
     public class ConfigurationClassPostProcessor : IObjectDefinitionRegistryPostProcessor, IOrdered
     {
-        #region Logging
-
         private static readonly ILog Logger = LogManager.GetLogger<ConfigurationClassPostProcessor>();
-
-        #endregion
 
         private bool _postProcessObjectDefinitionRegistryCalled;
 
@@ -66,10 +62,7 @@ namespace Spring.Context.Attributes
         /// </p>
         /// </remarks>
         /// <returns>The order value.</returns>
-        public int Order
-        {
-            get { return int.MinValue; }
-        }
+        public int Order => int.MinValue;
 
         /// <summary>
         /// Sets the problem reporter.

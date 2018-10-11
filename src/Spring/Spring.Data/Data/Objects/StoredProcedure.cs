@@ -1,7 +1,5 @@
-#region Licence
-
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,18 +14,12 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
-using Spring.Collections;
 using Spring.Dao;
 using Spring.Data.Common;
 using Spring.Data.Support;
-
-#endregion
 
 namespace Spring.Data.Objects
 {
@@ -37,16 +29,10 @@ namespace Spring.Data.Objects
 	/// <author>Mark Pollack (.NET)</author>
 	public abstract class StoredProcedure : AdoOperation
 	{
-		#region Fields
-        
-	    //A collection of NamedResultSetProcessor
-        private IList resultProcessors = new LinkedList();
+		//A collection of NamedResultSetProcessor
+        private readonly List<NamedResultSetProcessor> resultProcessors = new List<NamedResultSetProcessor>();
 	    private bool usingDerivedParameters = false;
-	    
-	    
-		#endregion
 
-		#region Constructor (s)
 		/// <summary>
 		/// Initializes a new instance of the <see cref="StoredProcedure"/> class.
         /// </summary>
@@ -64,18 +50,8 @@ namespace Spring.Data.Objects
         {
     	    CommandType = CommandType.StoredProcedure;
         }
-	    
-	    
 
-		#endregion
-
-		#region Properties
-
-		#endregion
-
-		#region Methods
-
-	    public void DeriveParameters()
+		public void DeriveParameters()
 	    {
 	        DeriveParameters(false);
 	    }
@@ -177,8 +153,5 @@ namespace Spring.Data.Objects
                 return base.IsInputParameter(parameter);
             }
         }
-	    
-		#endregion
-
 	}
 }

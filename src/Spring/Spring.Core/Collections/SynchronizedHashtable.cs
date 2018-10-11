@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System;
 using System.Collections;
@@ -50,8 +46,6 @@ namespace Spring.Collections
     {
         private readonly bool _ignoreCase;
         private readonly Hashtable _table;
-
-        #region Constructors
 
         /// <summary>
         /// Initializes a new instance of <see cref="SynchronizedHashtable"/>
@@ -98,10 +92,6 @@ namespace Spring.Collections
         {
             return new SynchronizedHashtable(other);
         }
-
-        #endregion
-
-        #region Properties
 
         ///<summary>
         ///Gets a value indicating whether the <see cref="T:System.Collections.IDictionary"></see> object is read-only.
@@ -209,10 +199,6 @@ namespace Spring.Collections
                 }
             }
         }
-
-        #endregion
-
-        #region Methods
 
         ///<summary>
         ///Adds an element with the provided key and value to the <see cref="T:System.Collections.IDictionary"></see> object.
@@ -343,10 +329,6 @@ namespace Spring.Collections
             }
         }
 
-        #endregion
-
-        #region IEnumerable implementation
-
         ///<summary>
         ///Returns an enumerator that iterates through a collection.
         ///</summary>
@@ -360,10 +342,6 @@ namespace Spring.Collections
                 return new SynchronizedEnumerator(SyncRoot, ((IEnumerable)_table).GetEnumerator());
             }
         }
-
-        #endregion
-
-        #region Indexer
 
         ///<summary>
         ///Gets or sets the element with the specified key.
@@ -391,7 +369,5 @@ namespace Spring.Collections
                 }
             }
         }
-
-        #endregion
     }
 }

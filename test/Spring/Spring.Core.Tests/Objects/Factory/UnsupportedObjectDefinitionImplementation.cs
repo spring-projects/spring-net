@@ -116,7 +116,7 @@ namespace Spring.Objects.Factory
             get { throw new NotImplementedException(); }
         }
 
-        public IList<string> DependsOn
+        public IReadOnlyList<string> DependsOn
         {
             get { throw new NotImplementedException(); }
         }

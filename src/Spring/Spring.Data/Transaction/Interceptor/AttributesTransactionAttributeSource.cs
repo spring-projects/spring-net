@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 
 namespace Spring.Transaction.Interceptor
@@ -93,7 +94,7 @@ namespace Spring.Transaction.Interceptor
 
                     Type[] rbf = ta.RollbackFor;
 
-                    IList rollBackRules = new ArrayList();
+                    var rollBackRules = new List<RollbackRuleAttribute>();
 
                     if (rbf != null)
                     {

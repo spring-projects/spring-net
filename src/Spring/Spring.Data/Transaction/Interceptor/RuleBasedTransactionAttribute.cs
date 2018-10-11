@@ -20,6 +20,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Text;
 
 using Spring.Collections;
@@ -44,7 +45,7 @@ namespace Spring.Transaction.Interceptor
 	/// <author>Griffin Caprio (.NET)</author>
 	public class RuleBasedTransactionAttribute : DefaultTransactionAttribute
 	{
-		private IList _rollbackRules;
+		private IList<RollbackRuleAttribute> _rollbackRules;
 
 		/// <summary>
 		/// Creates a new instance of the
@@ -58,7 +59,8 @@ namespace Spring.Transaction.Interceptor
 		/// The rollback rules list for this transaction attribute.
 		/// </param>
 		public RuleBasedTransactionAttribute(
-			TransactionPropagation transactionPropagation, IList ruleList )
+			TransactionPropagation transactionPropagation,
+			IList<RollbackRuleAttribute> ruleList )
 			: base(transactionPropagation)
 		{
 			_rollbackRules = ruleList;
@@ -71,15 +73,15 @@ namespace Spring.Transaction.Interceptor
 		/// </summary>
 		public RuleBasedTransactionAttribute( )
 		{
-			_rollbackRules = new ArrayList();
+			_rollbackRules = new List<RollbackRuleAttribute>();
 		}
 
 		/// <summary>
 		/// Sets the rollback rules list for this transaction attribute.
 		/// </summary>
-		public IList RollbackRules
+		public IList<RollbackRuleAttribute> RollbackRules
 		{
-			set { _rollbackRules = value; }
+			set => _rollbackRules = value;
 		}
 
 		/// <summary>

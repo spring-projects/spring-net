@@ -389,7 +389,7 @@ namespace Spring.Objects.Factory.Attributes
                 return;
             }
 
-            IList<string> dependsOn = new List<string>(objectDefinition.DependsOn);
+            var dependsOn = new List<string>(objectDefinition.DependsOn);
             foreach (var name in autowiredObjectNames)
             {
                 var autowiredObjectName = name as string;
@@ -452,7 +452,7 @@ namespace Spring.Objects.Factory.Attributes
                     else
                     {
                         var descriptor = new DependencyDescriptor(property, _required);
-                        IList autowiredObjectNames = new ArrayList();
+                        var autowiredObjectNames = new List<string>();
                         value = objectFactory.ResolveDependency(descriptor, objectName, autowiredObjectNames);
                         lock (this)
                         {
@@ -464,7 +464,7 @@ namespace Spring.Objects.Factory.Attributes
                                     RegisterDependentObjects(objectName, autowiredObjectNames);
                                     if (autowiredObjectNames.Count == 1)
                                     {
-                                        var autowiredBeanName = autowiredObjectNames[0] as string;
+                                        var autowiredBeanName = autowiredObjectNames[0];
                                         if (objectFactory.ContainsObject(autowiredBeanName))
                                         {
                                             if (objectFactory.IsTypeMatch(autowiredBeanName, property.GetType()))
@@ -524,7 +524,7 @@ namespace Spring.Objects.Factory.Attributes
                     else
                     {
                         var descriptor = new DependencyDescriptor(field, _required);
-                        IList autowiredObjectNames = new ArrayList();
+                        var autowiredObjectNames = new List<string>();
                         value = objectFactory.ResolveDependency(descriptor, objectName, autowiredObjectNames);
                         lock (this)
                         {
@@ -598,13 +598,12 @@ namespace Spring.Objects.Factory.Attributes
                         Type[] paramTypes = method.GetParameters().Select(p => p.ParameterType).ToArray();
                         arguments = new Object[paramTypes.Length];
                         var descriptors = new DependencyDescriptor[paramTypes.Length];
-                        IList autowiredBeanNames = new ArrayList();
+                        var autowiredBeanNames = new List<string>();
                         for (int i = 0; i < arguments.Length; i++)
                         {
                             MethodParameter methodParam = new MethodParameter(method, i);
                             descriptors[i] = new DependencyDescriptor(methodParam, _required);
-                            arguments[i] = objectFactory.ResolveDependency(descriptors[i], objectName,
-                                autowiredBeanNames);
+                            arguments[i] = objectFactory.ResolveDependency(descriptors[i], objectName, autowiredBeanNames);
                             if (arguments[i] == null && !_required)
                             {
                                 arguments = null;

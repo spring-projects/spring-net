@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,7 +22,7 @@
 
 using System;
 using System.Collections.Generic;
-
+using System.Runtime.CompilerServices;
 using Spring.Util;
 
 #endregion
@@ -44,8 +44,6 @@ namespace Spring.Objects.Factory
     /// <author>Rick Evans (.NET)</author>
     public sealed class ObjectFactoryUtils
     {
-        #region Constructor (s) / Destructor
-
         // CLOVER:OFF
 
         /// <summary>
@@ -63,8 +61,6 @@ namespace Spring.Objects.Factory
         }
 
         // CLOVER:ON
-
-        #endregion
 
         /// <summary>
         /// Used to dereference an <see cref="Spring.Objects.Factory.IFactoryObject"/>
@@ -90,7 +86,7 @@ namespace Spring.Objects.Factory
         /// time that the name becomes unique.
         /// </p>
         /// </remarks>
-        public const string GENERATED_OBJECT_NAME_SEPARATOR = "#";
+        public const string GeneratedObjectNameSeparator = "#";
 
         /// <summary>
         /// Count all object definitions in any hierarchy in which this
@@ -375,12 +371,12 @@ namespace Spring.Objects.Factory
         public static string TransformedObjectName(string name)
         {
             AssertUtils.ArgumentNotNull(name, "name", "Object name must not be null.");
-            if (!ObjectFactoryUtils.IsFactoryDereference(name))
+            if (!IsFactoryDereference(name))
             {
                 return name;
             }
 
-            string objectName = name.Substring(ObjectFactoryUtils.FactoryObjectPrefix.Length);
+            string objectName = name.Substring(FactoryObjectPrefix.Length);
             return objectName;
         }
 
@@ -399,7 +395,7 @@ namespace Spring.Objects.Factory
         /// <seealso cref="Spring.Objects.Factory.ObjectFactoryUtils.FactoryObjectPrefix"/>
         public static string BuildFactoryObjectName(string objectName)
         {
-            return ObjectFactoryUtils.FactoryObjectPrefix + objectName;
+            return FactoryObjectPrefix + objectName;
         }
 
         /// <summary>
@@ -422,24 +418,17 @@ namespace Spring.Objects.Factory
         /// value.
         /// </returns>
         /// <seealso cref="Spring.Objects.Factory.ObjectFactoryUtils.FactoryObjectPrefix"/>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool IsFactoryDereference(string name)
         {
-            return name != null
-                && name.Length > ObjectFactoryUtils.FactoryObjectPrefix.Length
-                && name[0] == ObjectFactoryUtils.FactoryObjectPrefix[0]
-                && name.StartsWith(ObjectFactoryUtils.FactoryObjectPrefix)
-            ;
+            return name != null && name.Length > 1 && name[0] == '&';
         }
-
-        #region Private Utility Methods
 
         private static IListableObjectFactory GetParentListableObjectFactoryIfAny(IListableObjectFactory factory)
         {
-            IHierarchicalObjectFactory hierFactory = factory as IHierarchicalObjectFactory;
-            if (hierFactory != null)
+            if (factory is IHierarchicalObjectFactory hierFactory)
             {
-                return
-                    hierFactory.ParentObjectFactory as IListableObjectFactory;
+                return hierFactory.ParentObjectFactory as IListableObjectFactory;
             }
             return null;
         }
@@ -450,12 +439,8 @@ namespace Spring.Objects.Factory
             {
                 return ObjectUtils.EnumerateFirstElement(objectsOfType.Values);
             }
-            else
-            {
-                throw new NoSuchObjectDefinitionException(type, "Expected single object but found " + objectsOfType.Count);
-            }
-        }
 
-        #endregion
+            throw new NoSuchObjectDefinitionException(type, "Expected single object but found " + objectsOfType.Count);
+        }
     }
 }

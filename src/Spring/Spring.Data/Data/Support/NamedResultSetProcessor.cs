@@ -1,7 +1,5 @@
-#region Licence
-
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
-
-
-#endregion
-
 namespace Spring.Data.Support
 {
 	/// <summary>
@@ -33,14 +23,9 @@ namespace Spring.Data.Support
 	/// <author>Mark Pollack (.NET)</author>
 	public class NamedResultSetProcessor 
 	{
-		#region Fields
-        
-	    private object resultSetProcessor;
-	    private string name;
-		
-	    #endregion
+		private readonly object resultSetProcessor;
+	    private readonly string name;
 
-		#region Constructor (s)
 		/// <summary>
 		/// Initializes a new instance of the <see cref="NamedResultSetProcessor"/> class with a
 		/// IRowCallback instance
@@ -78,11 +63,7 @@ namespace Spring.Data.Support
             resultSetProcessor = resultSetExtractor;
         }
 
-
-		#endregion
-
-		#region Properties
-	    public string Name
+		public string Name
 	    {
 	        get
 	        {
@@ -97,9 +78,5 @@ namespace Spring.Data.Support
 	            return resultSetProcessor;
 	        }
 	    }
-	    
-		#endregion
-
-
 	}
 }

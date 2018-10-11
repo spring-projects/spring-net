@@ -1,5 +1,5 @@
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,6 +16,7 @@
 
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
@@ -57,15 +58,14 @@ namespace Spring.Objects.Factory.Support
         {
             private readonly string name = Guid.NewGuid().ToString();
 
-            public ISet Value
+            public HashSet<string> Value
             {
                 get
                 {
-                    ISet set = LogicalThreadContext.GetData(this.name) as ISet;
-                    if (set == null)
+                    if (!(LogicalThreadContext.GetData(name) is HashSet<string> set))
                     {
-                        set = CreateSet();
-                        LogicalThreadContext.SetData(this.name, set);
+                        set = new HashSet<string>();
+                        LogicalThreadContext.SetData(name, set);
                     }
                     return set;
                 }
@@ -73,12 +73,7 @@ namespace Spring.Objects.Factory.Support
 
             public void Dispose()
             {
-                LogicalThreadContext.FreeNamedDataSlot(this.name);
-            }
-
-            private ISet CreateSet()
-            {
-                return new HashedSet();
+                LogicalThreadContext.FreeNamedDataSlot(name);
             }
         }
 
@@ -115,14 +110,14 @@ namespace Spring.Objects.Factory.Support
         /// Marker object to be temporarily registered in the singleton cache,
         /// while instantiating an object (in order to be able to detect circular references).
         /// </summary>
-        private static readonly object CURRENTLY_IN_CREATION = new Object();
+        private static readonly object CurrentlyInCreation = new object();
 
         /// <summary>
         /// Used as value in hashtable that keeps track of singleton names currently in the
         /// process of being created.  Would not be necessary if we created a case insensitive implementation of
         /// ISet.
         /// </summary>
-        private static readonly object EMPTYOBJECT = new object();
+        private static readonly object EmptyObject = new object();
 
         /// <summary>
         /// The <see cref="Common.Logging.ILog"/> instance for this class.
@@ -142,18 +137,17 @@ namespace Spring.Objects.Factory.Support
         /// <summary>
         /// root object definitons: object name --> Root Object Definition
         /// </summary>
-        protected SynchronizedHashtable mergedObjectDefinitions = new Spring.Collections.SynchronizedHashtable();
+        protected ConcurrentDictionary<string, RootObjectDefinition> mergedObjectDefinitions = new ConcurrentDictionary<string, RootObjectDefinition>();
 
         /// <summary>
         /// Whether to cache object metadata or rather reobtain it for every access
         /// </summary>
         private bool cacheObjectMetadata = true;
 
-
         /// <summary>
         /// Names of object that have already been created at least once
         /// </summary>
-        private Spring.Collections.Generic.ISet<string> alreadyCreated = new SynchronizedSet<string>(new HashedSet<string>());
+        private Collections.Generic.ISet<string> alreadyCreated = new SynchronizedSet<string>(new HashedSet<string>());
 
         /// <summary>
         /// Creates a new instance of the
@@ -188,15 +182,15 @@ namespace Spring.Objects.Factory.Support
         /// </param>
         protected AbstractObjectFactory(bool caseSensitive)
         {
-            this.log = LogManager.GetLogger(this.GetType());
+            log = LogManager.GetLogger(GetType());
             this.caseSensitive = caseSensitive;
 
-            IEqualityComparer comparer = (caseSensitive) ? StringComparer.Ordinal : StringComparer.OrdinalIgnoreCase;
-            this.aliasMap = new OrderedDictionary(comparer);
-            this.singletonCache = new OrderedDictionary(comparer);
-            this.singletonLocks = new OrderedDictionary(comparer);
-            this.singletonsInCreation = new OrderedDictionary(comparer);
-            this.prototypesInCreation = new LogicalThreadContextSetVariable();
+            var  comparer = (caseSensitive) ? StringComparer.Ordinal : StringComparer.OrdinalIgnoreCase;
+            aliasMap = new OrderedDictionary(comparer);
+            singletonCache = new OrderedDictionary(comparer);
+            singletonLocks = new ConcurrentDictionary<string, Lazy<object>>(comparer);
+            singletonsInCreation = new OrderedDictionary(comparer);
+            prototypesInCreation = new LogicalThreadContextSetVariable();
         }
         
         [OnDeserializing]
@@ -230,20 +224,14 @@ namespace Spring.Objects.Factory.Support
         /// <summary>
         /// Returns, whether this factory treats object names case sensitive or not.
         /// </summary>
-        public bool IsCaseSensitive
-        {
-            get { return caseSensitive; }
-        }
+        public bool IsCaseSensitive => caseSensitive;
 
         /// <summary>
         /// Gets the <see cref="ISet"/> of
         /// <see cref="Spring.Objects.Factory.Config.IObjectPostProcessor"/>s
         /// that will be applied to objects created by this factory.
         /// </summary>
-        public ISet ObjectPostProcessors
-        {
-            get { return objectPostProcessors; }
-        }
+        public IReadOnlyList<IObjectPostProcessor> ObjectPostProcessors => objectPostProcessors;
 
         /// <summary>
         /// Gets the set of classes that will be ignored for autowiring.
@@ -254,26 +242,17 @@ namespace Spring.Objects.Factory.Support
         /// <see cref="System.Type"/>s.
         /// </p>
         /// </remarks>
-        public ISet IgnoredDependencyTypes
-        {
-            get { return ignoreDependencyTypes; }
-        }
+        public ISet IgnoredDependencyTypes => ignoreDependencyTypes;
 
         /// <summary>
         /// Returns, whether this object factory instance contains <see cref="IInstantiationAwareObjectPostProcessor"/> objects.
         /// </summary>
-        protected bool HasInstantiationAwareBeanPostProcessors
-        {
-            get { return hasInstantiationAwareBeanPostProcessors; }
-        }
+        protected bool HasInstantiationAwareBeanPostProcessors => hasInstantiationAwareBeanPostProcessors;
 
         /// <summary>
         /// Returns, whether this object factory instance contains <see cref="IDestructionAwareObjectPostProcessor"/> objects.
         /// </summary>
-        protected bool HasDestructionAwareBeanPostProcessors
-        {
-            get { return hasDestructionAwareBeanPostProcessors; }
-        }
+        protected bool HasDestructionAwareBeanPostProcessors => hasDestructionAwareBeanPostProcessors;
 
         /// <summary>
         /// Return an instance (possibly shared or independent) of the given object name.
@@ -563,12 +542,15 @@ namespace Spring.Objects.Factory.Support
         protected string TransformedObjectName(string name)
         {
             string objectName = ObjectFactoryUtils.TransformedObjectName(name);
-            // handle aliasing...
-            lock (aliasMap)
+
+            if (aliasMap.Count > 0)
             {
-                string canonicalName = (string)aliasMap[objectName];
-                return canonicalName != null ? canonicalName : objectName;
+                // handle aliasing...
+                string canonicalName = (string) aliasMap[objectName];
+                return canonicalName ?? objectName;   
             }
+
+            return objectName;
         }
 
         /// <summary>
@@ -596,10 +578,7 @@ namespace Spring.Objects.Factory.Support
         /// </returns>
         protected bool IsAlias(string name)
         {
-            lock (aliasMap)
-            {
-                return aliasMap.Contains(name);
-            }
+            return aliasMap.Contains(name);
         }
 
         /// <summary>
@@ -656,19 +635,10 @@ namespace Spring.Objects.Factory.Support
                 return null;
             }
 
-            RootObjectDefinition mod;
-
             // Check with full lock now in order to enforce the same merged instance.
-            lock (this.mergedObjectDefinitions.SyncRoot)
+            RootObjectDefinition ValueFactory(string key)
             {
-                mod = this.mergedObjectDefinitions[name] as RootObjectDefinition;
-
-                if (null != mod)
-                {
-                    return mod;
-                }
-
-
+                RootObjectDefinition mod;
                 if (od.ParentName == null)
                 {
                     mod = CreateRootObjectDefinition(od);
@@ -676,43 +646,38 @@ namespace Spring.Objects.Factory.Support
                 else
                 {
                     IObjectDefinition pod = null;
-                    if (!name.Equals(od.ParentName))
+                    if (!key.Equals(od.ParentName))
                     {
                         pod = GetMergedObjectDefinition(TransformedObjectName(od.ParentName), true);
                     }
                     else
                     {
-                        if (ParentObjectFactory is AbstractObjectFactory)
+                        if (ParentObjectFactory is AbstractObjectFactory factory)
                         {
-                            pod = ((AbstractObjectFactory)ParentObjectFactory).GetMergedObjectDefinition(
-                                od.ParentName, true);
+                            pod = factory.GetMergedObjectDefinition(od.ParentName, true);
                         }
                     }
 
                     if (pod == null)
                     {
-                        throw new NoSuchObjectDefinitionException(od.ParentName,
-                                                                  string.Format(
-                                                                      "Parent name '{0}' is equal to object name '{1}' - "
-                                                                      +
-                                                                      "cannot be resolved without an AbstractObjectFactory parent.",
-                                                                      od.ParentName, name));
+                        throw new NoSuchObjectDefinitionException(od.ParentName, $"Parent name '{od.ParentName}' is equal to object name '{key}' - " + "cannot be resolved without an AbstractObjectFactory parent.");
                     }
 
                     mod = CreateRootObjectDefinition(pod);
                     mod.OverrideFrom(od);
                 }
 
-                // Only cache the merged bean definition if we're already about to create an
-                // instance of the object, or at least have already created an instance before.
-                if (CacheObjectMetadata && IsObjectEligibleForMetadataCaching(name))
-                {
-                    this.mergedObjectDefinitions.Remove(name);
-                    this.mergedObjectDefinitions.Add(name, mod);
-                }
-
                 return mod;
-            } //release the lock scope
+            }
+
+            // Only cache the merged bean definition if we're already about to create an
+            // instance of the object, or at least have already created an instance before.
+            if (CacheObjectMetadata && IsObjectEligibleForMetadataCaching(name))
+            {
+                return mergedObjectDefinitions.GetOrAdd(name, ValueFactory);
+            }
+
+            return ValueFactory(name);
         }
 
         /// <summary>
@@ -728,9 +693,9 @@ namespace Spring.Objects.Factory.Support
             // Quick check on the concurrent map first, with minimal locking.
             RootObjectDefinition mbd = null;
 
-            if (this.mergedObjectDefinitions.ContainsKey(objectName))
+            if (mergedObjectDefinitions.ContainsKey(objectName))
             {
-                mbd = this.mergedObjectDefinitions[objectName] as RootObjectDefinition;
+                mbd = mergedObjectDefinitions[objectName] as RootObjectDefinition;
             }
 
             return mbd; // ?? GetMergedObjectDefinition(objectName, GetObjectDefinition(objectName));
@@ -743,15 +708,15 @@ namespace Spring.Objects.Factory.Support
         /// <returns>
         /// 	<c>true</c> if [is object eligible for metadata caching] [the specified bean name]; otherwise, <c>false</c>.
         /// </returns>
-        protected bool IsObjectEligibleForMetadataCaching(String beanName)
+        protected bool IsObjectEligibleForMetadataCaching(string beanName)
         {
-            return this.alreadyCreated.Contains(beanName);
+            return alreadyCreated.Contains(beanName);
         }
 
         protected bool CacheObjectMetadata
         {
-            get { return this.cacheObjectMetadata; }
-            set { this.cacheObjectMetadata = value; }
+            get => cacheObjectMetadata;
+            set => cacheObjectMetadata = value;
         }
 
         /// <summary>
@@ -1230,7 +1195,7 @@ namespace Spring.Objects.Factory.Support
             AssertUtils.ArgumentHasText(name, "name");
             lock (GetSingletonLockFor(name))
             {
-                this.singletonCache.Remove(name);
+                singletonCache.Remove(name);
             }
         }
 
@@ -1425,10 +1390,10 @@ namespace Spring.Objects.Factory.Support
                 if (parentFactory != null && !ContainsObjectDefinition(objectName))
                 {
                     // No object definition found in this factory -> delegate to parent.
-                    return parentFactory.GetType(this.OriginalObjectName(name));
+                    return parentFactory.GetType(OriginalObjectName(name));
                 }
 
-                RootObjectDefinition mod = this.GetMergedObjectDefinition(objectName, false);
+                RootObjectDefinition mod = GetMergedObjectDefinition(objectName, false);
                 Type objectType = PredictObjectType(objectName, mod);
 
                 if (objectType != null && typeof(IFactoryObject).IsAssignableFrom(objectType))
@@ -1572,7 +1537,7 @@ namespace Spring.Objects.Factory.Support
         /// <exception cref="Spring.Objects.ObjectsException">
         /// In the case of object validation errors.
         /// </exception>
-        protected void CheckMergedObjectDefinition(RootObjectDefinition mergedObjectDefinition, String objectName,
+        protected void CheckMergedObjectDefinition(RootObjectDefinition mergedObjectDefinition, string objectName,
                                                    Type requiredType, params object[] arguments)
         {
             // check if required type can match according to the object definition;
@@ -1621,10 +1586,7 @@ namespace Spring.Objects.Factory.Support
         /// Gets the temporary object that is placed 
         /// into the singleton cache during object resolution.
         /// </summary>
-        protected object TemporarySingletonPlaceHolder
-        {
-            get { return CURRENTLY_IN_CREATION; }
-        }
+        protected object TemporarySingletonPlaceHolder => CurrentlyInCreation;
 
         /// <summary>
         /// Parent object factory, for object inheritance support
@@ -1635,18 +1597,17 @@ namespace Spring.Objects.Factory.Support
         /// Dependency types to ignore on dependency check and autowire, as Set of
         /// Type objects: for example, string.  Default is none.
         /// </summary>
-        private ISet ignoreDependencyTypes = new HybridSet();
-
+        private HybridSet ignoreDependencyTypes = new HybridSet();
 
         /// <summary>
         /// ObjectPostProcessors to apply in CreateObject
         /// </summary>
-        private ISet objectPostProcessors = new SortedSet(new ObjectOrderComparator());
+        private List<IObjectPostProcessor> objectPostProcessors = new List<IObjectPostProcessor>();
 
         /// <summary>
         /// String Resolver applied to Autowired value injections
         /// </summary>
-        private ISet embeddedValueResolvers = new SortedSet(new ObjectOrderComparator());
+        private SortedSet embeddedValueResolvers = new SortedSet(new ObjectOrderComparator());
 
         /// <summary>
         /// Indicates whether any IInstantiationAwareBeanPostProcessors have been registered
@@ -1661,7 +1622,7 @@ namespace Spring.Objects.Factory.Support
         private bool caseSensitive;
         private OrderedDictionary aliasMap;
         private OrderedDictionary singletonCache;
-        private OrderedDictionary singletonLocks;
+        private ConcurrentDictionary<string, Lazy<object>> singletonLocks;
 
         /// <summary>
         /// Set of registered singletons, containing the instance names in registration order 
@@ -1676,16 +1637,13 @@ namespace Spring.Objects.Factory.Support
         /// Set that holds all inner objects created by this factory that implement the IDisposable
         /// interface, to be destroyed on call to Dispose.
         /// </summary>
-        private ISet disposableInnerObjects = new SynchronizedSet(new HybridSet());
+        private SynchronizedSet disposableInnerObjects = new SynchronizedSet(new HybridSet());
 
         /// <summary>
         /// Set that holds all inner objects created by this factory that implement the IDisposable
         /// interface, to be destroyed on call to Dispose.
         /// </summary>
-        protected internal ISet DisposableInnerObjects
-        {
-            get { return disposableInnerObjects; }
-        }
+        protected internal ISet DisposableInnerObjects => disposableInnerObjects;
 
         /// <summary>
         /// The parent object factory, or <see langword="null"/> if there is none.
@@ -1695,8 +1653,8 @@ namespace Spring.Objects.Factory.Support
         /// </value>
         public IObjectFactory ParentObjectFactory
         {
-            get { return parentObjectFactory; }
-            set { parentObjectFactory = value; }
+            get => parentObjectFactory;
+            set => parentObjectFactory = value;
         }
 
         /// <summary>
@@ -1723,7 +1681,7 @@ namespace Spring.Objects.Factory.Support
         public bool IsSingleton(string name)
         {
             string objectName = TransformedObjectName(name);
-            object objectInstance = this.GetSingleton(objectName);
+            object objectInstance = GetSingleton(objectName);
             if (objectInstance != null)
             {
                 IFactoryObject factoryObject = objectInstance as IFactoryObject;
@@ -1796,7 +1754,7 @@ namespace Spring.Objects.Factory.Support
         {
             string objectName = TransformedObjectName(name);
             IObjectFactory parentFactory = ParentObjectFactory;
-            if (parentFactory != null && !this.ContainsObjectDefinition(objectName))
+            if (parentFactory != null && !ContainsObjectDefinition(objectName))
             {
                 // No object definition found in this factory -> delegate to parent   
                 return parentFactory.IsPrototype(OriginalObjectName(name));
@@ -1841,7 +1799,7 @@ namespace Spring.Objects.Factory.Support
                 return (!ObjectFactoryUtils.IsFactoryDereference(name) || IsFactoryObject(name));
             }
 
-            IObjectFactory parent = this.ParentObjectFactory;
+            IObjectFactory parent = ParentObjectFactory;
             return (parent != null) && parent.ContainsObject(OriginalObjectName(name));
         }
 
@@ -1857,17 +1815,15 @@ namespace Spring.Objects.Factory.Support
             if (isInSingletonCache || ContainsObjectDefinition(objectName))
             {
                 // if found, gather aliases...
-                List<string> matches = new List<string>();
-                lock (aliasMap)
+                var matches = new List<string>();
+                foreach (DictionaryEntry aliasEntry in aliasMap)
                 {
-                    foreach (DictionaryEntry aliasEntry in aliasMap)
+                    if (0 == string.Compare((string) aliasEntry.Value, objectName, !IsCaseSensitive))
                     {
-                        if (0 == string.Compare((string)aliasEntry.Value, objectName, !this.IsCaseSensitive))
-                        {
-                            matches.Add((string)aliasEntry.Key);
-                        }
+                        matches.Add((string) aliasEntry.Key);
                     }
                 }
+
                 return matches;
             }
 
@@ -1883,10 +1839,7 @@ namespace Spring.Objects.Factory.Support
         /// Return an instance (possibly shared or independent) of the given object name.
         /// </summary>
         /// <see cref="Spring.Objects.Factory.IObjectFactory.GetObject(string)"/>.
-        public object this[string name]
-        {
-            get { return GetObject(name); }
-        }
+        public object this[string name] => GetObject(name);
 
         /// <summary>
         /// Return an unconfigured(!) instance (possibly shared or independent) of the given object name.
@@ -2133,7 +2086,7 @@ namespace Spring.Objects.Factory.Support
 
                 if (log.IsDebugEnabled)
                 {
-                    log.Debug(string.Format("{2}GetObjectInternal: obtaining instance for name {0} => canonical name {1}", name, objectName, new String(' ', nestingCount * INDENT)));
+                    log.Debug(string.Format("{2}GetObjectInternal: obtaining instance for name {0} => canonical name {1}", name, objectName, new string(' ', nestingCount * INDENT)));
                 }
 
                 object instance = null;
@@ -2154,7 +2107,7 @@ namespace Spring.Objects.Factory.Support
                             }
                             else
                             {
-                                log.Debug(string.Format("Returning cached instance of singleton object '{0}'.", objectName));
+                                log.Debug($"Returning cached instance of singleton object '{objectName}'.");
                             }
                         }
 
@@ -2245,7 +2198,7 @@ namespace Spring.Objects.Factory.Support
                 hasErrors = true;
                 if (log.IsErrorEnabled)
                 {
-                    log.Error(string.Format("{1}GetObjectInternal: error obtaining object {0}", name, new String(' ', nestingCount * INDENT)));
+                    log.Error(string.Format("{1}GetObjectInternal: error obtaining object {0}", name, new string(' ', nestingCount * INDENT)));
                 }
 
                 throw;
@@ -2264,7 +2217,7 @@ namespace Spring.Objects.Factory.Support
 
                     if (log.IsDebugEnabled)
                     {
-                        log.Debug(string.Format("{1}GetObjectInternal: returning instance for objectname {0}", name, new String(' ', nestingCount * INDENT)));
+                        log.Debug(string.Format("{1}GetObjectInternal: returning instance for objectname {0}", name, new string(' ', nestingCount * INDENT)));
                     }
                 }
             }
@@ -2393,7 +2346,7 @@ namespace Spring.Objects.Factory.Support
                 log.Debug(string.Format("Destroying singletons in factory [{0}].", this));
             }
 
-            this.prototypesInCreation.Dispose();
+            prototypesInCreation.Dispose();
 
             lock (singletonCache)
             {
@@ -2432,23 +2385,28 @@ namespace Spring.Objects.Factory.Support
 
         private void BeforePrototypeCreation(string name)
         {
-            this.prototypesInCreation.Value.Add(name);
+            prototypesInCreation.Value.Add(name);
         }
 
         private void AfterPrototypeCreation(string name)
         {
-            if (!IsPrototypeCurrentlyInCreation(name))
+            var values = prototypesInCreation.Value;
+            if (!values.Contains(name))
             {
-                throw new InvalidOperationException("Singleton " + name + " isn't currently in creation.");
+                ThrowNotCurrentlyInCreation(name);
             }
-            this.prototypesInCreation.Value.Remove(name);
+            values.Remove(name);
+        }
+
+        private static void ThrowNotCurrentlyInCreation(string name)
+        {
+            throw new InvalidOperationException("Singleton " + name + " isn't currently in creation.");
         }
 
         private bool IsPrototypeCurrentlyInCreation(string name)
         {
-            return this.prototypesInCreation.Value.Contains(name);
+            return prototypesInCreation.Value.Contains(name);
         }
-
 
         private void AfterSingletonCreation(string name)
         {
@@ -2461,16 +2419,16 @@ namespace Spring.Objects.Factory.Support
 
         private void BeforeSingletonCreation(string name)
         {
-            if (this.singletonsInCreation.Contains(name))
+            if (singletonsInCreation.Contains(name))
             {
                 throw new ObjectCurrentlyInCreationException(name);
             }
-            singletonsInCreation.Add(name, EMPTYOBJECT);
+            singletonsInCreation.Add(name, EmptyObject);
         }
 
         private bool IsSingletonCurrentlyInCreation(string name)
         {
-            return this.singletonsInCreation.Contains(name);
+            return singletonsInCreation.Contains(name);
         }
 
         /// <summary>
@@ -2514,9 +2472,9 @@ namespace Spring.Objects.Factory.Support
             }
 
             // ensure the same instance doesn't get registered twice
-            if (!ObjectPostProcessors.Contains(objectPostProcessor))
+            if (!objectPostProcessors.Contains(objectPostProcessor))
             {
-                ObjectPostProcessors.Add(objectPostProcessor);
+                objectPostProcessors.Add(objectPostProcessor);
             }
             if (typeof(IInstantiationAwareObjectPostProcessor).IsInstanceOfType(objectPostProcessor))
             {
@@ -2537,10 +2495,7 @@ namespace Spring.Objects.Factory.Support
         /// <see cref="Spring.Objects.Factory.Config.IObjectPostProcessor"/>s.
         /// </value>
         /// <seealso cref="Spring.Objects.Factory.Config.IConfigurableObjectFactory.ObjectPostProcessorCount"/>.
-        public int ObjectPostProcessorCount
-        {
-            get { return ObjectPostProcessors.Count; }
-        }
+        public int ObjectPostProcessorCount => objectPostProcessors.Count;
 
         /// <summary>
         /// Given an object name, create an alias.
@@ -2555,7 +2510,8 @@ namespace Spring.Objects.Factory.Support
             {
                 if (log.IsDebugEnabled)
                 {
-                    log.Debug(string.Format("Ignoring attempt to Register alias '{0}' for object with name '{1}' because name and alias would be the same value.", alias, name));
+                    log.Debug(
+                        $"Ignoring attempt to Register alias '{alias}' for object with name '{name}' because name and alias would be the same value.");
                 }
 
                 return;
@@ -2563,21 +2519,17 @@ namespace Spring.Objects.Factory.Support
 
             if (log.IsDebugEnabled)
             {
-                log.Debug(string.Format("Registering alias '{0}' for object with name '{1}'.", alias, name));
+                log.Debug($"Registering alias '{alias}' for object with name '{name}'.");
             }
 
-            lock (aliasMap)
+            object registeredName = aliasMap[alias];
+            if (registeredName != null)
             {
-                object registeredName = aliasMap[alias];
-                if (registeredName != null)
-                {
-                    throw new ObjectDefinitionStoreException(
-                            string.Format(
-                                    "Cannot register alias '{0}' for object with name '{1}': it's already registered for object name '{2}'.",
-                                    alias, name, registeredName));
-                }
-                aliasMap[alias] = name;
+                throw new ObjectDefinitionStoreException(
+                    $"Cannot register alias '{alias}' for object with name '{name}': it's already registered for object name '{registeredName}'.");
             }
+
+            aliasMap[alias] = name;
         }
 
         /// <summary>
@@ -2711,7 +2663,7 @@ namespace Spring.Objects.Factory.Support
         /// matching the instance name but potentially being a different instance
         /// (for example, a DisposableBean adapter for a singleton that does not
         /// naturally implement <see cref="IDisposable"/>).
-        public void RegisterDisposableObject(String objectName, IDisposable instance)
+        public void RegisterDisposableObject(string objectName, IDisposable instance)
         {
             if (disposableObjects.ContainsKey(objectName)) return;
             disposableObjects.Add(objectName, instance);
@@ -2740,14 +2692,7 @@ namespace Spring.Objects.Factory.Support
         /// <returns>lock object</returns>
         private object GetSingletonLockFor(string objectName)
         {
-            lock (singletonLocks)
-            {
-                if (!singletonLocks.Contains(objectName))
-                {
-                    singletonLocks.Add(objectName, new object());
-                }
-                return singletonLocks[objectName];
-            }
+            return singletonLocks.GetOrAdd(objectName, key => new Lazy<object>(() => new object())).Value;
         }
     }
 }
