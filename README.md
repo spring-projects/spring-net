@@ -168,6 +168,8 @@ VS.NET
 
 Visual Studio 2017 is required to open and build the solution. The free community version of Visual Studio should suffice.
 
+If you have not install Visaul Studio 2017 to C disk, you need modify the Spring.include line 23~33.
+
 NAnt
 ----
 
