@@ -2,7 +2,7 @@
 
     <PropertyGroup>
         <OutputType>Exe</OutputType>
-        <TargetFramework>netcoreapp2.1</TargetFramework>
+        <TargetFrameworks>net471;netcoreapp2.1</TargetFrameworks>
         <RootNamespace>Spring.Benchmark</RootNamespace>
     </PropertyGroup>
 
@@ -14,4 +14,10 @@
       <ProjectReference Include="..\..\..\src\Spring\Spring.Core\Spring.Core.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+        <Content Include="ContainerBenchmark.xml">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
+    
 </Project>

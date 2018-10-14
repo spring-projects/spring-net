@@ -25,11 +25,11 @@ using Spring.Context.Support;
 
 namespace Spring.Benchmark
 {
-    [MediumRunJob]
+    [ClrJob, CoreJob]
     [MemoryDiagnoser]
     public class ContainerBenchmark
     {
-        private IApplicationContext container;
+        private XmlApplicationContext container;
 
         [Params(5_000)]
         public int Iterations { get; set; }
@@ -37,7 +37,8 @@ namespace Spring.Benchmark
         [GlobalSetup]
         public void GlobalSetup()
         {
-            container = ContextRegistry.GetContext();
+            container = new XmlApplicationContext("ContainerBenchmark.xml");
+            container.Refresh();
         }
 
         [Benchmark]

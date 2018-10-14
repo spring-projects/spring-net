@@ -23,7 +23,7 @@ using Spring.Objects.Factory.Support;
 
 namespace Spring.Benchmark
 {
-    [MediumRunJob]
+    [ClrJob, CoreJob]
     [MemoryDiagnoser]
     public class HybridSetBenchmark
     {
