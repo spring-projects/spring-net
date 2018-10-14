@@ -9,9 +9,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		changelog.txt = changelog.txt
 		common-project.include = common-project.include
 		Local.testsettings = Local.testsettings
-		readme.txt = readme.txt
 		Spring.build = Spring.build
 		Spring.include = Spring.include
+		README.md = README.md
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{79F495DF-83D6-435E-A20E-47800F6F8FE7}"
@@ -94,6 +94,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Data.NHibernate5.NestedTxSuspension.Integration.Tests", "test\Spring\Spring.Data.NHibernate5.NestedTxSuspension.Integration.Tests\Spring.Data.NHibernate5.NestedTxSuspension.Integration.Tests.csproj", "{DE276F7C-4564-49EC-AABC-B964EC3D1626}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Data.NHibernate5.Tests", "test\Spring\Spring.Data.NHibernate5.Tests\Spring.Data.NHibernate5.Tests.csproj", "{BEEBC49B-4519-4C77-AE93-11E68F4CA7E3}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Benchmark", "test\Spring\Spring.Benchmark\Spring.Benchmark.csproj", "{504F1D7B-C6AC-4128-9411-D680B3086662}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{9537C677-ADE5-4503-AFD7-3E0C3B0960EB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -511,6 +515,18 @@ Global
 		{BEEBC49B-4519-4C77-AE93-11E68F4CA7E3}.Release|Any CPU.Build.0 = Release|Any CPU
 		{BEEBC49B-4519-4C77-AE93-11E68F4CA7E3}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{BEEBC49B-4519-4C77-AE93-11E68F4CA7E3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{504F1D7B-C6AC-4128-9411-D680B3086662}.Debug|.NET.ActiveCfg = Debug|Any CPU
+		{504F1D7B-C6AC-4128-9411-D680B3086662}.Debug|.NET.Build.0 = Debug|Any CPU
+		{504F1D7B-C6AC-4128-9411-D680B3086662}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{504F1D7B-C6AC-4128-9411-D680B3086662}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{504F1D7B-C6AC-4128-9411-D680B3086662}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{504F1D7B-C6AC-4128-9411-D680B3086662}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{504F1D7B-C6AC-4128-9411-D680B3086662}.Release|.NET.ActiveCfg = Release|Any CPU
+		{504F1D7B-C6AC-4128-9411-D680B3086662}.Release|.NET.Build.0 = Release|Any CPU
+		{504F1D7B-C6AC-4128-9411-D680B3086662}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{504F1D7B-C6AC-4128-9411-D680B3086662}.Release|Any CPU.Build.0 = Release|Any CPU
+		{504F1D7B-C6AC-4128-9411-D680B3086662}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{504F1D7B-C6AC-4128-9411-D680B3086662}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -521,5 +537,8 @@ Global
 	EndGlobalSection
 	GlobalSection(TestCaseManagementSettings) = postSolution
 		CategoryFile = Spring.Net.vsmdi
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{504F1D7B-C6AC-4128-9411-D680B3086662} = {9537C677-ADE5-4503-AFD7-3E0C3B0960EB}
 	EndGlobalSection
 EndGlobal

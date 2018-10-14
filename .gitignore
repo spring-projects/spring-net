@@ -86,3 +86,5 @@ PrecompiledWeb
 /examples/Spring/Spring.Mvc4QuickStart/packages
 
 project.lock.json
+
+BenchmarkDotNet.Artifacts
