@@ -1,7 +1,5 @@
-#region License
-
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System;
 using System.Collections.Generic;
@@ -41,8 +37,6 @@ namespace Spring.Objects.Factory.Config
     /// <author>Mark Pollack (.NET)</author>
     public abstract class InstantiationAwareObjectPostProcessorAdapter : SmartInstantiationAwareObjectPostProcessor
     {
-        #region SmartInstantiationAwareObjectPostProcessor Members
-
         /// <summary>
         /// Predicts the type of the object to be eventually returned from this
         /// processors PostProcessBeforeInstantiation callback.
@@ -67,10 +61,6 @@ namespace Spring.Objects.Factory.Config
         {
             return null;
         }
-
-        #endregion
-
-        #region IInstantiationAwareObjectPostProcessor Members
 
         /// <summary>
         /// Apply this
@@ -159,10 +149,6 @@ namespace Spring.Objects.Factory.Config
             return pvs;
         }
 
-        #endregion
-
-        #region IObjectPostProcessor Members
-
         /// <summary>
         /// Apply this <see cref="Spring.Objects.Factory.Config.IObjectPostProcessor"/>
         /// to the given new object instance <i>before</i> any object initialization callbacks.
@@ -216,7 +202,5 @@ namespace Spring.Objects.Factory.Config
         {
             return instance;
         }
-
-        #endregion
     }
 }

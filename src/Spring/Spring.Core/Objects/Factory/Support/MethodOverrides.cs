@@ -1,7 +1,5 @@
-#region License
-
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +14,11 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
-using Spring.Collections;
-
-#endregion
 
 namespace Spring.Objects.Factory.Support
 {
@@ -36,9 +29,11 @@ namespace Spring.Objects.Factory.Support
 	/// <author>Rod Johnson</author>
 	/// <author>Rick Evans</author>
     [Serializable]
-    public class MethodOverrides : IEnumerable
+    public class MethodOverrides : IEnumerable<MethodOverride>
 	{
-		#region Constructor (s) / Destructor
+		private HashSet<MethodOverride> _overrides;
+
+		private HashSet<string> _overloadedMethodNames;
 
 		/// <summary>
 		/// Creates a new instance of the
@@ -65,29 +60,10 @@ namespace Spring.Objects.Factory.Support
 			AddAll(other);
 		}
 
-		#endregion
-
-		#region Properties
-
-		/// <summary>
-		/// The collection of method overrides.
-		/// </summary>
-		public ISet Overrides
-		{
-			get { return _overrides; }
-		}
-
 		/// <summary>
 		/// Returns true if this instance contains no overrides.
 		/// </summary>
-		public bool IsEmpty
-		{
-			get { return Overrides.IsEmpty; }
-		}
-
-		#endregion
-
-		#region Methods
+		public bool IsEmpty => _overrides== null || _overrides.Count == 0;
 
 		/// <summary>
 		/// Copy all given method overrides into this object.
@@ -99,8 +75,23 @@ namespace Spring.Objects.Factory.Support
 		{
 			if (other != null)
 			{
-				Overrides.AddAll(other.Overrides);
-				_overloadedMethodNames.AddAll(other._overloadedMethodNames);
+				if (other._overrides != null && other._overrides.Count > 0)
+				{
+					_overrides = _overrides ?? new HashSet<MethodOverride>();
+					foreach (var @override in other._overrides)
+					{
+						_overrides.Add(@override);
+					}
+				}
+
+				if (other._overloadedMethodNames != null && other._overloadedMethodNames.Count > 0)
+				{
+					_overloadedMethodNames = _overloadedMethodNames ?? new HashSet<string>();
+					foreach (var methodName in other._overloadedMethodNames)
+					{
+						_overloadedMethodNames.Add(methodName);
+					}
+				}
 			}
 		}
 
@@ -114,7 +105,8 @@ namespace Spring.Objects.Factory.Support
 		/// </param>
 		public void Add(MethodOverride theOverride)
 		{
-			Overrides.Add(theOverride);
+			_overrides = _overrides ?? new HashSet<MethodOverride>();
+			_overrides.Add(theOverride);
 		}
 
 		/// <summary>
@@ -126,6 +118,7 @@ namespace Spring.Objects.Factory.Support
 		/// </param>
 		public void AddOverloadedMethodName(string methodName)
 		{
+			_overloadedMethodNames = _overloadedMethodNames ?? new HashSet<string>();
 			_overloadedMethodNames.Add(methodName);
 		}
 
@@ -142,7 +135,7 @@ namespace Spring.Objects.Factory.Support
 		/// </returns>
 		public bool IsOverloadedMethodName(string methodName)
 		{
-			return _overloadedMethodNames.Contains(methodName);
+			return _overloadedMethodNames != null && _overloadedMethodNames.Contains(methodName);
 		}
 
 		/// <summary>
@@ -156,44 +149,31 @@ namespace Spring.Objects.Factory.Support
 		/// </returns>
 		public MethodOverride GetOverride(MethodInfo method)
 		{
-			foreach (MethodOverride ovr in Overrides)
+			if (_overrides == null)
+			{
+				return null;
+			}
+			foreach (MethodOverride ovr in _overrides)
 			{
 				if (ovr.Matches(method))
 				{
 					return ovr;
 				}
 			}
+
 			return null;
 		}
 
-		/// <summary>
-		/// Returns an <see cref="System.Collections.IEnumerator"/> that can iterate
-		/// through a collection.
-		/// </summary>
-		/// <remarks>
-		/// <p>
-		/// The returned <see cref="System.Collections.IEnumerator"/> is the
-		/// <see cref="System.Collections.IEnumerator"/> exposed by the
-		/// <see cref="Spring.Objects.Factory.Support.MethodOverrides.Overrides"/>
-		/// property.
-		/// </p>
-		/// </remarks>
-		/// <returns>
-		/// An <see cref="System.Collections.IEnumerator"/> that can iterate through a
-		/// collection.
-		/// </returns>
-		public IEnumerator GetEnumerator()
+		/// <inheritdoc />
+		public IEnumerator<MethodOverride> GetEnumerator()
 		{
-			return Overrides.GetEnumerator();
+			return _overrides?.GetEnumerator() ?? Enumerable.Empty<MethodOverride>().GetEnumerator();
 		}
 
-		#endregion
-
-		#region Fields
-
-		private ISet _overrides = new HybridSet();
-		private ISet _overloadedMethodNames = new HybridSet();
-
-		#endregion
+		/// <inheritdoc />
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			return GetEnumerator();
+		}
 	}
 }

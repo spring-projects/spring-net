@@ -1,7 +1,5 @@
-#region License
-
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +14,11 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Runtime.CompilerServices;
 using System.Text;
-
-#endregion
 
 namespace Spring.Util
 {
@@ -44,12 +37,14 @@ namespace Spring.Util
     /// <author>Mark Pollack (.NET)</author>
     /// <author>Rick Evans (.NET)</author>
     /// <author>Erich Eichinger (.NET)</author>
-    public sealed class StringUtils
+    public static class StringUtils
     {
         /// <summary>
         /// An empty array of <see cref="System.String"/> instances.
         /// </summary>
-        public static readonly string[] EmptyStrings = new string[] { };
+        public static readonly string[] EmptyStrings = { };
+
+        public static readonly IReadOnlyList<string> EmptyStringsList = new List<string>();
 
         /// <summary>
         /// The string that signals the start of an Ant-style expression.
@@ -60,26 +55,6 @@ namespace Spring.Util
         /// The string that signals the end of an Ant-style expression.
         /// </summary>
         private const string AntExpressionSuffix = "}";
-
-        #region Constructor (s) / Destructor
-
-        // CLOVER:OFF
-
-        /// <summary>
-        /// Creates a new instance of the <see cref="Spring.Util.StringUtils"/> class.
-        /// </summary>
-        /// <remarks>
-        /// <p>
-        /// This is a utility class, and as such exposes no public constructors.
-        /// </p>
-        /// </remarks>
-        private StringUtils()
-        {
-        }
-
-        // CLOVER:ON
-
-        #endregion
 
         /// <summary>
         /// Tokenize the given <see cref="System.String"/> into a
@@ -150,7 +125,7 @@ namespace Spring.Util
             }
             if (string.IsNullOrEmpty(delimiters))
             {
-                return new string[] { s };
+                return new[] { s };
             }
             if (quoteChars == null)
             {
@@ -390,10 +365,8 @@ namespace Spring.Util
             {
                 return "null";
             }
-            else
-            {
-                return StringUtils.CollectionToDelimitedString(source, delimiter);
-            }
+
+            return CollectionToDelimitedString(source, delimiter);
         }
 
         /// <summary>Checks if a string has length.</summary>
@@ -412,9 +385,10 @@ namespace Spring.Util
         /// StringUtils.HasLength("Hello") = true
         /// </code>
         /// </example>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool HasLength(string target)
         {
-            return (target != null && target.Length > 0);
+            return !string.IsNullOrEmpty(target);
         }
 
         /// <summary>
@@ -445,16 +419,10 @@ namespace Spring.Util
         /// StringUtils.HasText(" 12345 ") = true
         /// </code>
         /// </example>
+        [MethodImpl(MethodImplOptions.AggressiveInlining)]
         public static bool HasText(string target)
         {
-            if (target == null)
-            {
-                return false;
-            }
-            else
-            {
-                return HasLength(target.Trim());
-            }
+            return !string.IsNullOrWhiteSpace(target);
         }
 
         /// <summary>

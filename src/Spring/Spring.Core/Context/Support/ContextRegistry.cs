@@ -1,7 +1,7 @@
 #region License
 
 /* 
- * Copyright © 2002-2011 the original author or authors. 
+ * Copyright ï¿½ 2002-2011 the original author or authors. 
  * 
  * Licensed under the Apache License, Version 2.0 (the "License"); 
  * you may not use this file except in compliance with the License. 
@@ -217,7 +217,7 @@ namespace Spring.Context.Support
         /// <remarks>
         /// Has no effect if the context wasn't registered
         /// </remarks>
-        /// <param name="context">´the context to remove from the registry</param>
+        /// <param name="context">The context to remove from the registry</param>
         private static void UnregisterContext(IApplicationContext context)
         {
             AssertUtils.ArgumentNotNull(context, "context");
@@ -327,8 +327,6 @@ namespace Spring.Context.Support
                     ctx.Dispose();
                 }
 
-                #region Instrumentation
-
                 // contexts will be removed from contextMap during OnContextEvent handler 
                 // but someone might choose to override AbstractApplicationContext.Dispose() without 
                 // calling base.Dispose() ...
@@ -342,17 +340,13 @@ namespace Spring.Context.Support
                     }
                 }
 
-                #endregion
-
                 instance.contextMap.Clear();
+                ConfigurationUtils.ClearCache();
                 rootContextName = null;
                 // mark section dirty - force re-read from disk next time
                 ConfigurationUtils.RefreshSection(AbstractApplicationContext.ContextSectionName);
                 DynamicCodeManager.Clear();
-                if (Cleared != null)
-                {
-                    Cleared(typeof(ContextRegistry), EventArgs.Empty);
-                }
+                Cleared?.Invoke(typeof(ContextRegistry), EventArgs.Empty);
             }
         }
 
@@ -375,22 +369,30 @@ namespace Spring.Context.Support
 
         private static void InitializeContextIfNeeded()
         {
-            if (rootContextName == null)
+            if (rootContextName != null)
             {
-                if (rootContextCurrentlyInCreation)
-                {
-                    throw new InvalidOperationException("root context is currently in creation. You must not call ContextRegistry.GetContext() from e.g. constructors of your singleton objects");
-                }
+                return;
+            }
 
-                rootContextCurrentlyInCreation = true;
-                try
-                {
-                    ConfigurationUtils.GetSection(AbstractApplicationContext.ContextSectionName);
-                }
-                finally
-                {
-                    rootContextCurrentlyInCreation = false;
-                }
+            DoInitializeRootContext();
+        }
+
+        private static void DoInitializeRootContext()
+        {
+            if (rootContextCurrentlyInCreation)
+            {
+                throw new InvalidOperationException(
+                    "root context is currently in creation. You must not call ContextRegistry.GetContext() from e.g. constructors of your singleton objects");
+            }
+
+            rootContextCurrentlyInCreation = true;
+            try
+            {
+                ConfigurationUtils.GetSection(AbstractApplicationContext.ContextSectionName);
+            }
+            finally
+            {
+                rootContextCurrentlyInCreation = false;
             }
         }
     }

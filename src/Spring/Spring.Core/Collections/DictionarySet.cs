@@ -1,9 +1,7 @@
-/* Copyright © 2002-2011 by Aidant Systems, Inc., and by Jason Smith. */
-
-#region License
+/* Copyright Â© 2002-2011 by Aidant Systems, Inc., and by Jason Smith. */
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +16,8 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using System.Collections;
-
-#endregion
 
 namespace Spring.Collections
 {
@@ -87,8 +79,8 @@ namespace Spring.Collections
         /// </remarks>
         protected IDictionary InternalDictionary
         {
-            get { return _internalDictionary; }
-            set { _internalDictionary = value; }
+            get => _internalDictionary;
+            set => _internalDictionary = value;
         }
 
         /// <summary>
@@ -99,10 +91,7 @@ namespace Spring.Collections
         /// There is a single instance of this object globally, used for all
         /// <see cref="Spring.Collections.ISet"/>s.
         /// </remarks>
-        protected static object Placeholder
-        {
-            get { return PlaceholderObject; }
-        }
+        protected static object Placeholder => PlaceholderObject;
 
         /// <summary>
         /// Adds the specified element to this set if it is not already present.
@@ -115,14 +104,14 @@ namespace Spring.Collections
         public override bool Add(object element)
         {
             element = MaskNull(element);
-            if (InternalDictionary[element] != null)
+            if (_internalDictionary[element] != null)
             {
                 return false;
             }
 
             //The object we are adding is just a placeholder.  The thing we are
             //really concerned with is 'o', the key.
-            InternalDictionary.Add(element, PlaceholderObject);
+            _internalDictionary.Add(element, PlaceholderObject);
             return true;
         }
 
@@ -140,17 +129,17 @@ namespace Spring.Collections
             bool changed = false;
             foreach (object o in collection)
             {
-                changed |= this.Add(o);
+                changed |= Add(o);
             }
             return changed;
         }
-
+        
         /// <summary>
         /// Removes all objects from this set.
         /// </summary>
         public override void Clear()
         {
-            InternalDictionary.Clear();
+            _internalDictionary.Clear();
         }
 
         /// <summary>
@@ -164,7 +153,7 @@ namespace Spring.Collections
         public override bool Contains(object element)
         {
             element = MaskNull(element);
-            return InternalDictionary[element] != null;
+            return _internalDictionary[element] != null;
         }
 
         /// <summary>
@@ -185,7 +174,7 @@ namespace Spring.Collections
             }
             foreach (object o in collection)
             {
-                if (!this.Contains(MaskNull(o)))
+                if (!Contains(MaskNull(o)))
                 {
                     return false;
                 }
@@ -196,10 +185,7 @@ namespace Spring.Collections
         /// <summary>
         /// Returns <see langword="true"/> if this set contains no elements.
         /// </summary>
-        public override bool IsEmpty
-        {
-            get { return InternalDictionary.Count == 0; }
-        }
+        public override bool IsEmpty => _internalDictionary.Count == 0;
 
         /// <summary>
         /// Removes the specified element from the set.
@@ -211,10 +197,10 @@ namespace Spring.Collections
         public override bool Remove(object element)
         {
             element = MaskNull(element);
-            bool contained = this.Contains(element);
+            bool contained = Contains(element);
             if (contained)
             {
-                InternalDictionary.Remove(element);
+                _internalDictionary.Remove(element);
             }
             return contained;
         }
@@ -233,7 +219,7 @@ namespace Spring.Collections
             bool changed = false;
             foreach (object o in collection)
             {
-                changed |= this.Remove(o);
+                changed |= Remove(o);
             }
             return changed;
         }
@@ -267,7 +253,7 @@ namespace Spring.Collections
                     removeSet.Add(o);
                 }
             }
-            return this.RemoveAll(removeSet);
+            return RemoveAll(removeSet);
         }
 
         /// <summary>
@@ -298,10 +284,7 @@ namespace Spring.Collections
         /// <summary>
         /// The number of elements currently contained in this collection.
         /// </summary>
-        public override int Count
-        {
-            get { return InternalDictionary.Count; }
-        }
+        public override int Count => _internalDictionary.Count;
 
         /// <summary>
         /// Returns <see langword="true"/> if the
@@ -309,10 +292,7 @@ namespace Spring.Collections
         /// threads.
         /// </summary>
         /// <seealso cref="Spring.Collections.Set.IsSynchronized"/>
-        public override bool IsSynchronized
-        {
-            get { return false; }
-        }
+        public override bool IsSynchronized => false;
 
         /// <summary>
         /// An object that can be used to synchronize this collection to make
@@ -323,10 +303,7 @@ namespace Spring.Collections
         /// it thread-safe.
         /// </value>
         /// <seealso cref="Spring.Collections.Set.SyncRoot"/>
-        public override object SyncRoot
-        {
-            get { return InternalDictionary.SyncRoot; }
-        }
+        public override object SyncRoot => _internalDictionary.SyncRoot;
 
         /// <summary>
         /// Gets an enumerator for the elements in the
@@ -338,12 +315,14 @@ namespace Spring.Collections
         /// </returns>
         public override IEnumerator GetEnumerator()
         {
-            return new DictionarySetEnumerator(InternalDictionary.Keys.GetEnumerator());
+            return new DictionarySetEnumerator(_internalDictionary.Keys.GetEnumerator());
         }
+        
+        
 
         private static object MaskNull(object key)
         {
-            return key == null ? NullPlaceHolderKey : key;
+            return key ?? NullPlaceHolderKey;
         }
 
         private static object UnmaskNull(object key)
@@ -351,41 +330,26 @@ namespace Spring.Collections
             return key == NullPlaceHolderKey ? null : key;
         }
 
-        #region Inner Class : DictionarySetEnumerator
-
-        private sealed class DictionarySetEnumerator : IEnumerator
+        private struct DictionarySetEnumerator : IEnumerator
         {
-            #region Constructor (s) / Destructor
-
             public DictionarySetEnumerator(IEnumerator enumerator)
             {
                 _enumerator = enumerator;
             }
-
-            #endregion
-
-            #region IEnumerator Members
 
             public void Reset()
             {
                 _enumerator.Reset();
             }
 
-            public object Current
-            {
-                get { return UnmaskNull(_enumerator.Current); }
-            }
+            public object Current => UnmaskNull(_enumerator.Current);
 
             public bool MoveNext()
             {
                 return _enumerator.MoveNext();
             }
 
-            #endregion
-
-            private IEnumerator _enumerator;
+            private readonly IEnumerator _enumerator;
         }
-
-        #endregion
     }
 }

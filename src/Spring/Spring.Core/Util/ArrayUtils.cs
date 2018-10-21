@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,11 +41,17 @@ namespace Spring.Util
         /// <returns>true if the collection has a length and contains only non-null elements.</returns>
         public static bool HasElements(ICollection collection)
         {
-            if (!HasLength(collection)) return false;
-            IEnumerator it = collection.GetEnumerator();
-            while(it.MoveNext())
+            if (!HasLength(collection))
             {
-                if (it.Current == null ) return false;
+                return false;
+            }
+
+            foreach (var item in collection)
+            {
+                if (item == null)
+                {
+                    return false;
+                }
             }
             return true;
         }
@@ -72,7 +78,7 @@ namespace Spring.Util
         /// <returns></returns>
         public static bool HasLength(ICollection collection)
         {
-            return !( (collection == null) || (collection.Count == 0) );
+            return collection != null && collection.Count > 0;
         }
 
         /// <summary>

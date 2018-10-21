@@ -1,7 +1,5 @@
-#region License
-
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +14,9 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
-
-#endregion
 
 namespace Spring.Objects.Factory.Config
 {
@@ -33,21 +25,24 @@ namespace Spring.Objects.Factory.Config
     /// </summary>
     /// <author>Rick Evans (.NET)</author>
     [Serializable]
-    public class EventValues 
+    public class EventValues
     {
-        #region Constants
         /// <summary>
         /// The empty array of <see cref="Spring.Objects.IEventHandlerValue"/>s.
         /// </summary>
-        private static readonly IEventHandlerValue [] EmptyHandlers = new IEventHandlerValue [] {};
-        #endregion
+        private static readonly IEventHandlerValue[] EmptyHandlers = { };
 
-        #region Constructor (s) / Destructor
+        private static readonly string[] EmptyKeys = { };
+
+        private Dictionary<string, List<IEventHandlerValue>> _eventHandlers;
+
         /// <summary>
         /// Creates a new instance of the
         /// <see cref="Spring.Objects.Factory.Config.EventValues"/> class.
         /// </summary>
-        public EventValues() {}
+        public EventValues()
+        {
+        }
 
         /// <summary>
         /// Creates a new instance of the
@@ -59,56 +54,33 @@ namespace Spring.Objects.Factory.Config
         /// </param>
         public EventValues(EventValues other)
         {
-            AddAll (other);
-        }
-        #endregion
-
-        #region Properties
-        /// <summary>
-        /// The mapping of event names to an
-        /// <see cref="System.Collections.ICollection"/> of
-        /// <see cref="Spring.Objects.IEventHandlerValue"/>s.
-        /// </summary>
-        protected IDictionary<string, IList<IEventHandlerValue>> EventHandlers 
-        {
-            get 
-            {
-                return _eventHandlers;
-            }
+            AddAll(other);
         }
 
         /// <summary>
         /// Gets the <see cref="System.Collections.ICollection"/> of events
         /// that have handlers associated with them.
         /// </summary>
-        public ICollection<string> Events 
-        {
-            get 
-            {
-                return EventHandlers.Keys;
-            }
-        }
+        public ICollection<string> Events => (ICollection<string>) _eventHandlers?.Keys ?? EmptyKeys;
 
         /// <summary>
         /// Gets the <see cref="System.Collections.ICollection"/> of
         /// <see cref="Spring.Objects.IEventHandlerValue"/>s for the supplied
         /// event name.
         /// </summary>
-        public ICollection<IEventHandlerValue> this [string eventName] 
+        public ICollection<IEventHandlerValue> this[string eventName]
         {
             get
             {
-                IList<IEventHandlerValue> handlers;
-                if (!EventHandlers.TryGetValue(eventName, out handlers))
+                if (_eventHandlers == null || !_eventHandlers.TryGetValue(eventName, out var handlers))
                 {
-                    handlers = EventValues.EmptyHandlers;
+                    return EmptyHandlers;
                 }
+
                 return handlers;
             }
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Copy all given argument values into this object.
         /// </summary>
@@ -116,15 +88,16 @@ namespace Spring.Objects.Factory.Config
         /// The <see cref="Spring.Objects.Factory.Config.EventValues"/>
         /// to be used to populate this instance.
         /// </param>
-        public void AddAll (EventValues other) 
+        public void AddAll(EventValues other)
         {
-            if (other != null) 
+            if (other?._eventHandlers != null)
             {
-                foreach (IList handlers in other.EventHandlers.Values) 
+                foreach (var pair in other._eventHandlers)
                 {
-                    foreach (IEventHandlerValue handler in handlers) 
+                    var list = pair.Value;
+                    for (var i = 0; i < list.Count; i++)
                     {
-                        AddHandler (handler);
+                        AddHandler(list[i]);
                     }
                 }
             }
@@ -134,21 +107,17 @@ namespace Spring.Objects.Factory.Config
         /// Adds the supplied handler to the collection of event handlers.
         /// </summary>
         /// <param name="handler">The handler to be added.</param>
-        public void AddHandler (IEventHandlerValue handler)
+        public void AddHandler(IEventHandlerValue handler)
         {
-            IList<IEventHandlerValue> handlers;
+            _eventHandlers = _eventHandlers ?? new Dictionary<string, List<IEventHandlerValue>>();
 
-            if (!EventHandlers.TryGetValue(handler.EventName, out handlers)) 
+            if (!_eventHandlers.TryGetValue(handler.EventName, out var handlers))
             {
                 handlers = new List<IEventHandlerValue>();
-                EventHandlers [handler.EventName] = handlers;
+                _eventHandlers[handler.EventName] = handlers;
             }
-            handlers.Add (handler);
-        }
-        #endregion
 
-        #region Fields
-        private IDictionary<string, IList<IEventHandlerValue>> _eventHandlers = new Dictionary<string, IList<IEventHandlerValue>>();
-        #endregion
-	}
+            handlers.Add(handler);
+        }
+    }
 }

@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -54,7 +54,7 @@ namespace Spring.Objects.Factory.Support
         /// time that the name becomes unique.
         /// </p>
         /// </remarks>
-        public const string GENERATED_OBJECT_NAME_SEPARATOR = ObjectFactoryUtils.GENERATED_OBJECT_NAME_SEPARATOR;
+        public const string GENERATED_OBJECT_NAME_SEPARATOR = ObjectFactoryUtils.GeneratedObjectNameSeparator;
 
         /// <summary>
         /// Registers the supplied <paramref name="objectDefinition"/> with the

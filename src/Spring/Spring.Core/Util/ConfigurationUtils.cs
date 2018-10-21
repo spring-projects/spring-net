@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,16 +14,11 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
+using System.Collections.Concurrent;
 using System.Configuration;
 using System.Reflection;
 using System.Xml;
-
-#endregion
 
 namespace Spring.Util
 {
@@ -33,14 +26,11 @@ namespace Spring.Util
     /// Utility class for .NET configuration files management.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    public class ConfigurationUtils
+    public static class ConfigurationUtils
     {
-        /// <summary>
-        /// Avoid BeforeFieldInit pitfall
-        /// </summary>
-        static ConfigurationUtils()
-        { }
-
+        private static readonly ConcurrentDictionary<string, object> cachedSections =
+            new ConcurrentDictionary<string, object>();
+        
         /// <summary>
         /// Parses the configuration section.
         /// </summary>
@@ -59,6 +49,11 @@ namespace Spring.Util
         /// <returns>Object created by a corresponding <see cref="IConfigurationSectionHandler"/>.</returns>
         public static object GetSection(string sectionName)
         {
+            return cachedSections.GetOrAdd(sectionName, DoGetSection);
+        }
+
+        private static object DoGetSection(string sectionName)
+        {
             try
             {
                 var name = sectionName.TrimEnd('/');
@@ -71,8 +66,13 @@ namespace Spring.Util
             }
             catch (Exception ex)
             {
-                throw CreateConfigurationException(string.Format("Error reading section {0}", sectionName), ex);
+                throw CreateConfigurationException($"Error reading section {sectionName}", ex);
             }
+        }
+
+        internal static void ClearCache()
+        {
+            cachedSections.Clear();
         }
 
         /// <summary>
@@ -217,7 +217,7 @@ namespace Spring.Util
         /// Sets the current <see cref="System.Configuration.Internal.IInternalConfigSystem"/> to be used by <see cref="ConfigurationManager"/>.
         /// </summary>
         /// <remarks>
-        /// íf <paramref name="configSystem"/> implements <see cref="IChainableConfigSystem"/>, this method invokes
+        /// ï¿½f <paramref name="configSystem"/> implements <see cref="IChainableConfigSystem"/>, this method invokes
         /// <see cref="IChainableConfigSystem.SetInnerConfigurationSystem"/> on the new configSystem to chain them.<br/>
         /// <b> Note, that this method requires reflection on internals of <see cref="ConfigurationManager"/></b>
         /// </remarks>
@@ -280,16 +280,5 @@ namespace Spring.Util
             object notStarted = Activator.CreateInstance(initStateRef.FieldType);
             initStateRef.SetValue(null, notStarted);
         }
-        //        private static T CreateDelegate<T>(MethodInfo method)
-        //        {
-        //            return (T)(object)Delegate.CreateDelegate(typeof(T), method);
-        //        }
-        //
-        //        private delegate void SetConfigurationSystemHandler(System.Configuration.Internal.IInternalConfigSystem configSystem, bool setComplete);
-        //
-        //        private static SetConfigurationSystemHandler setConfigurationSystem =
-        //            CreateDelegate<SetConfigurationSystemHandler>(typeof(ConfigurationManager).GetMethod("SetConfigurationSystem"
-        //                                                         , BindingFlags.Static | BindingFlags.NonPublic));
-
     }
 }

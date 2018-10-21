@@ -1,7 +1,5 @@
-#region License
-
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +14,9 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using Common.Logging;
 using Spring.Collections;
 using Spring.Transaction.Support;
@@ -39,28 +36,13 @@ namespace Spring.Messaging.Nms.Connections
     /// <author>Mark Pollack (.NET)</author>
     public class NmsResourceHolder : ResourceHolderSupport
     {
-        #region Logging
-
         private static readonly ILog logger = LogManager.GetLogger(typeof(NmsResourceHolder));
 
-        #endregion
-
-        #region Fields
-
-        private IConnectionFactory connectionFactory;
-
-        private bool frozen = false;
-
-        private IList connections = new LinkedList();
-
-        private IList sessions = new LinkedList();
-
-        private IDictionary sessionsPerIConnection = new Hashtable();
-
-        #endregion
-
-
-        #region Constructor (s)
+        private readonly IConnectionFactory connectionFactory;
+        private readonly bool frozen = false;
+        private readonly List<IConnection> connections = new List<IConnection>();
+        private readonly List<ISession> sessions = new List<ISession>();
+        private readonly Dictionary<IConnection, List<ISession>> sessionsPerIConnection = new Dictionary<IConnection, List<ISession>>();
 
         /// <summary> Create a new MessageResourceHolder that is open for resources to be added.</summary>
         public NmsResourceHolder()
@@ -100,7 +82,7 @@ namespace Spring.Messaging.Nms.Connections
         {
             AddConnection(connection);
             AddSession(session, connection);
-            this.frozen = true;
+            frozen = true;
         }
 
         /// <summary>
@@ -114,11 +96,8 @@ namespace Spring.Messaging.Nms.Connections
             this.connectionFactory = connectionFactory;
             AddConnection(connection);
             AddSession(session, connection);
-            this.frozen = true;
+            frozen = true;
         }
-        #endregion
-        
-        #region Properties
 
         /// <summary>
         /// Gets a value indicating whether this <see cref="NmsResourceHolder"/> is frozen, namely that 
@@ -126,17 +105,7 @@ namespace Spring.Messaging.Nms.Connections
         /// a Session, the holder will be set to the frozen state.
         /// </summary>
         /// <value><c>true</c> if frozen; otherwise, <c>false</c>.</value>
-        virtual public bool Frozen
-        {
-            get
-            {
-                return frozen;
-            }
-
-        }
-        #endregion
-
-        #region Methods
+        public virtual bool Frozen => frozen;
 
         /// <summary>
         /// Adds the connection to the list of resources managed by this holder.
@@ -175,10 +144,9 @@ namespace Spring.Messaging.Nms.Connections
                 sessions.Add(session);
                 if (connection != null)
                 {
-                    IList sessionsList = (IList)sessionsPerIConnection[connection];
-                    if (sessionsList == null)
+                    if (!sessionsPerIConnection.TryGetValue(connection, out var sessionsList))
                     {
-                        sessionsList = new LinkedList();
+                        sessionsList = new List<ISession>();
                         sessionsPerIConnection[connection] = sessionsList;
                     }
                     sessionsList.Add(session);
@@ -192,7 +160,7 @@ namespace Spring.Messaging.Nms.Connections
         /// <returns>A Connection, or null if no managed connection.</returns>
         public virtual IConnection GetConnection()
         {
-            return (!(this.connections.Count == 0) ? (IConnection)this.connections[0] : null);
+            return (connections.Count != 0 ? connections[0] : null);
         }
 
         /// <summary>
@@ -204,7 +172,7 @@ namespace Spring.Messaging.Nms.Connections
         /// <returns>The connection, or null if not found.</returns>
         public virtual IConnection GetConnection(Type connectionType)
         {
-            return (IConnection)CollectionUtils.FindValueOfType(this.connections, connectionType);
+            return (IConnection)CollectionUtils.FindValueOfType(connections, connectionType);
         }
 
         /// <summary>
@@ -213,7 +181,7 @@ namespace Spring.Messaging.Nms.Connections
         /// <returns>The session or null if not available.</returns>
        public virtual ISession GetSession()
         {
-           return (!(this.sessions.Count == 0) ? (ISession)this.sessions[0] : null);
+           return sessions.Count != 0 ? sessions[0] : null;
         }
 
         /// <summary>
@@ -234,12 +202,13 @@ namespace Spring.Messaging.Nms.Connections
         /// <returns>The sessin or null if not available.</returns>
         public virtual ISession GetSession(Type sessionType, IConnection connection)
         {
-            IList sessions = this.sessions;
+            var sessions = this.sessions;
             if (connection != null)
             {
-                sessions = (IList)sessionsPerIConnection[connection];
+                sessionsPerIConnection.TryGetValue(connection, out sessions);
             }
-            return (ISession)CollectionUtils.FindValueOfType(sessions, sessionType);
+
+            return (ISession) CollectionUtils.FindValueOfType(sessions, sessionType);
         }
 
         /// <summary>
@@ -273,9 +242,9 @@ namespace Spring.Messaging.Nms.Connections
             {
                 ConnectionFactoryUtils.ReleaseConnection(connection, connectionFactory, true);
             }
-            this.connections.Clear();
-            this.sessions.Clear();
-            this.sessionsPerIConnection.Clear();            
+            connections.Clear();
+            sessions.Clear();
+            sessionsPerIConnection.Clear();            
         }
 
         /// <summary>
@@ -287,9 +256,7 @@ namespace Spring.Messaging.Nms.Connections
         /// </returns>
         public bool ContainsSession(ISession session)
         {
-            return this.sessions.Contains(session);
+            return sessions.Contains(session);
         }
-
-        #endregion
     }
 }

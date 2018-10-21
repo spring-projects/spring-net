@@ -51,7 +51,7 @@ namespace Spring.Scheduling.Quartz
 
         private string[] jobSchedulingDataLocations;
 
-        private IList jobDetails;
+        private IList<IJobDetail> jobDetails;
         private IDictionary calendars;
         private IList triggers;
 
@@ -277,7 +277,7 @@ namespace Spring.Scheduling.Quartz
                 else
                 {
                     // Create empty list for easier checks when registering triggers.
-                    jobDetails = new LinkedList();
+                    jobDetails = new List<IJobDetail>();
                 }
 
                 // Register Calendars.

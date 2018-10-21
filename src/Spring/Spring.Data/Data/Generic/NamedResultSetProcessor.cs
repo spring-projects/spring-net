@@ -1,7 +1,5 @@
-#region Licence
-
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,8 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
 namespace Spring.Data.Generic
 {
 	/// <summary>
@@ -27,18 +23,12 @@ namespace Spring.Data.Generic
 	/// <author>Mark Pollack (.NET)</author>
 	public class NamedResultSetProcessor<T>
 	{
-		#region Fields
+		private readonly IRowCallback rowCallback;
+	    private readonly IRowMapper<T> rowMapper;
+	    private readonly IResultSetExtractor<T> resultSetExtractor;
+	    private readonly string name;
 
-        private IRowCallback rowCallback;
-	    private IRowMapper<T> rowMapper;
-	    private IResultSetExtractor<T> resultSetExtractor;
-	    private string name;
-		
-	    #endregion
-
-		#region Constructor (s)
-
-        /// <summary>
+		/// <summary>
         /// Initializes a new instance of the class with a
         /// IRowCallback instance
         /// </summary>
@@ -75,11 +65,7 @@ namespace Spring.Data.Generic
             this.resultSetExtractor = resultSetExtractor;
         }
 
-
-		#endregion
-
-		#region Properties
-	    public string Name
+		public string Name
 	    {
 	        get
 	        {
@@ -102,9 +88,5 @@ namespace Spring.Data.Generic
 	    {
 	        get { return resultSetExtractor; }
 	    }
-
-	    #endregion
-
-
 	}
 }

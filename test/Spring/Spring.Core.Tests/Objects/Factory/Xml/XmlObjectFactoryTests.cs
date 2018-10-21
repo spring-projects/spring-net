@@ -1,5 +1,5 @@
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -963,8 +963,8 @@ namespace Spring.Objects.Factory.Xml
 
             LazyWorker lw1 = new LazyWorker(xof);
             LazyWorker lw2 = new LazyWorker(xof);
-            Thread thread1 = new Thread(new ThreadStart(lw1.DoWork));
-            Thread thread2 = new Thread(new ThreadStart(lw2.DoWork));
+            Thread thread1 = new Thread(lw1.DoWork);
+            Thread thread2 = new Thread(lw2.DoWork);
 
             thread1.Start();
             Thread.Sleep(1000);
@@ -1883,10 +1883,7 @@ namespace Spring.Objects.Factory.Xml
                 objectFromContext = xof.GetObject("lazyObject");
             }
 
-            public Object ObjectFromContext
-            {
-                get { return objectFromContext; }
-            }
+            public Object ObjectFromContext => objectFromContext;
         }
         public sealed class MyTestObject
         {
@@ -1894,20 +1891,17 @@ namespace Spring.Objects.Factory.Xml
 
             public Type[] Types
             {
-                get { return _types; }
-                set { _types = value; }
+                get => _types;
+                set => _types = value;
             }
 
             public CultureInfo Culture
             {
-                get { return _culture; }
-                set { _culture = value; }
+                get => _culture;
+                set => _culture = value;
             }
 
-            public CultureInfo MyDefaultCulture
-            {
-                get { return Default; }
-            }
+            public CultureInfo MyDefaultCulture => Default;
 
             private Type[] _types;
             private CultureInfo _culture;
@@ -1925,8 +1919,8 @@ namespace Spring.Objects.Factory.Xml
         {
             public int Num
             {
-                get { return num; }
-                set { num = value; }
+                get => num;
+                set => num = value;
             }
 
             private int num;

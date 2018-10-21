@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System;
 using System.Collections;
@@ -40,22 +36,18 @@ namespace Spring.Messaging.Nms.Connections
     /// <author>Mark Pollack</author>
     public class CachedSession : IDecoratorSession
     {
-        #region Logging Definition
+        private static readonly ILog Log = LogManager.GetLogger(typeof(CachedSession));
 
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(CachedSession));
-
-        #endregion
-
-        private ISession target;
-        private LinkedList sessionList;
-        private int sessionCacheSize;
-        private IDictionary cachedProducers = new Hashtable();
-        private IDictionary cachedConsumers = new Hashtable();
+        private readonly ISession target;
+        private readonly List<ISession> sessionList;
+        private readonly int sessionCacheSize;
+        private readonly Dictionary<IDestination, IMessageProducer> cachedProducers = new Dictionary<IDestination, IMessageProducer>();
+        private readonly Dictionary<ConsumerCacheKey, IMessageConsumer> cachedConsumers = new Dictionary<ConsumerCacheKey, IMessageConsumer>();
         private IMessageProducer cachedUnspecifiedDestinationMessageProducer;
-        private bool shouldCacheProducers;
-        private bool shouldCacheConsumers;
+        private readonly bool shouldCacheProducers;
+        private readonly bool shouldCacheConsumers;
         private bool transactionOpen = false;
-        private CachingConnectionFactory ccf;
+        private readonly CachingConnectionFactory ccf;
 
         /// <summary>
         /// Initializes a new instance of the <see cref="CachedSession"/> class.
@@ -63,7 +55,10 @@ namespace Spring.Messaging.Nms.Connections
         /// <param name="targetSession">The target session.</param>
         /// <param name="sessionList">The session list.</param>
         /// <param name="ccf">The CachingConnectionFactory.</param>
-        public CachedSession(ISession targetSession, LinkedList sessionList, CachingConnectionFactory ccf)
+        public CachedSession(
+            ISession targetSession,
+            List<ISession> sessionList, 
+            CachingConnectionFactory ccf)
         {
             target = targetSession;
             this.sessionList = sessionList;
@@ -78,10 +73,7 @@ namespace Spring.Messaging.Nms.Connections
         /// Gets the target, for testing purposes.
         /// </summary>
         /// <value>The target.</value>
-        public ISession TargetSession
-        {
-            get { return target; }
-        }
+        public ISession TargetSession => target;
 
         /// <summary>
         /// Creates the producer, potentially returning a cached instance.
@@ -93,29 +85,22 @@ namespace Spring.Messaging.Nms.Connections
             {
                 if (cachedUnspecifiedDestinationMessageProducer != null)
                 {
-                    #region Logging
-
-                    if (LOG.IsDebugEnabled)
+                    if (Log.IsDebugEnabled)
                     {
-                        LOG.Debug("Found cached MessageProducer for unspecified destination");
+                        Log.Debug("Found cached MessageProducer for unspecified destination");
                     }
-
-                    #endregion
                 }
                 else
                 {
-                    #region Logging
-
-                    if (LOG.IsDebugEnabled)
+                    if (Log.IsDebugEnabled)
                     {
-                        LOG.Debug("Creating cached MessageProducer for unspecified destination");
+                        Log.Debug("Creating cached MessageProducer for unspecified destination");
                     }
 
-                    #endregion
                     cachedUnspecifiedDestinationMessageProducer = target.CreateProducer();
 
                 }
-                this.transactionOpen = true;
+                transactionOpen = true;
                 return new CachedMessageProducer(cachedUnspecifiedDestinationMessageProducer);
             }
             else
@@ -135,33 +120,26 @@ namespace Spring.Messaging.Nms.Connections
 
             if (shouldCacheProducers)
             {
-                IMessageProducer producer = (IMessageProducer)cachedProducers[destination];
-                if (producer != null)
+                if (cachedProducers.TryGetValue(destination, out var producer))
                 {
-                    #region Logging
-
-                    if (LOG.IsDebugEnabled)
+                    if (Log.IsDebugEnabled)
                     {
-                        LOG.Debug("Found cached MessageProducer for destination [" + destination + "]");
+                        Log.Debug("Found cached MessageProducer for destination [" + destination + "]");
                     }
-
-                    #endregion
                 }
                 else
                 {
                     producer = target.CreateProducer(destination);
-                    #region Logging
 
-                    if (LOG.IsDebugEnabled)
+                    if (Log.IsDebugEnabled)
                     {
-                        LOG.Debug("Creating cached MessageProducer for destination [" + destination + "]");
+                        Log.Debug("Creating cached MessageProducer for destination [" + destination + "]");
                     }
 
-                    #endregion
-                    cachedProducers.Add(destination, producer);
+                    cachedProducers[destination] = producer;
 
                 }
-                this.transactionOpen = true;
+                transactionOpen = true;
                 return new CachedMessageProducer(producer);
             }
             else
@@ -197,20 +175,20 @@ namespace Spring.Messaging.Nms.Connections
         private void LogicalClose()
         {
             // Preserve rollback-on-close semantics.
-            if (this.transactionOpen && this.target.Transacted)
+            if (transactionOpen && target.Transacted)
             {
-                this.transactionOpen = false;
-                this.target.Rollback();
+                transactionOpen = false;
+                target.Rollback();
             }
 
             // Physically close durable subscribers at time of Session close call.
-            List<ConsumerCacheKey> toRemove = new List<ConsumerCacheKey>();
-            foreach (DictionaryEntry dictionaryEntry in cachedConsumers)
+            var toRemove = new List<ConsumerCacheKey>();
+            foreach (var dictionaryEntry in cachedConsumers)
             {
-                ConsumerCacheKey key = (ConsumerCacheKey) dictionaryEntry.Key;
+                ConsumerCacheKey key = dictionaryEntry.Key;
                 if (key.Subscription != null)
                 {
-                    ((IMessageConsumer) dictionaryEntry.Value).Close();
+                    dictionaryEntry.Value.Close();
                     toRemove.Add(key);
                 }                
             }
@@ -222,14 +200,10 @@ namespace Spring.Messaging.Nms.Connections
             // Allow for multiple close calls...
             if (!sessionList.Contains(this))
             {
-                #region Logging
-
-                if (LOG.IsDebugEnabled)
+                if (Log.IsDebugEnabled)
                 {
-                    LOG.Debug("Returning cached Session: " + target);
+                    Log.Debug("Returning cached Session: " + target);
                 }
-
-                #endregion
 
                 sessionList.Add(this); //add to end of linked list.
             }
@@ -237,21 +211,21 @@ namespace Spring.Messaging.Nms.Connections
 
         private void PhysicalClose()
         {
-            if (LOG.IsDebugEnabled)
+            if (Log.IsDebugEnabled)
             {
-                LOG.Debug("Closing cached Session: " + this.target);
+                Log.Debug("Closing cached Session: " + target);
             }
             // Explicitly close all MessageProducers and MessageConsumers that
             // this Session happens to cache...
             try
             {
-                foreach (DictionaryEntry entry in cachedProducers)
+                foreach (var entry in cachedProducers)
                 {
-                    ((IMessageProducer)entry.Value).Close();
+                    entry.Value.Close();
                 }
-                foreach (DictionaryEntry entry in cachedConsumers)
+                foreach (var entry in cachedConsumers)
                 {
-                    ((IMessageConsumer)entry.Value).Close();
+                    entry.Value.Close();
                 }
             }
             finally
@@ -305,7 +279,7 @@ namespace Spring.Messaging.Nms.Connections
         /// <returns>A message consumer</returns>
         public IMessageConsumer CreateDurableConsumer(ITopic destination, string subscription, string selector, bool noLocal)
         {
-            this.transactionOpen = true;
+            transactionOpen = true;
             if (shouldCacheConsumers)
             {
                 return GetCachedConsumer(destination, selector, noLocal, subscription);
@@ -340,7 +314,7 @@ namespace Spring.Messaging.Nms.Connections
         /// <returns></returns>
         protected IMessageConsumer CreateConsumer(IDestination destination, string selector, bool noLocal, string durableSubscriptionName)
         {
-            this.transactionOpen = true;
+            transactionOpen = true;
             if (shouldCacheConsumers)
             {
                 return GetCachedConsumer(destination, selector, noLocal, durableSubscriptionName);
@@ -353,37 +327,34 @@ namespace Spring.Messaging.Nms.Connections
 
         private IMessageConsumer GetCachedConsumer(IDestination destination, string selector, bool noLocal, string durableSubscriptionName)
         {
-            object cacheKey = new ConsumerCacheKey(destination, selector, noLocal, durableSubscriptionName);
-            IMessageConsumer consumer = (IMessageConsumer)cachedConsumers[cacheKey];
-            if (consumer != null)
+            var cacheKey = new ConsumerCacheKey(destination, selector, noLocal, durableSubscriptionName);
+            if (cachedConsumers.TryGetValue(cacheKey, out var consumer))
             {
-                if (LOG.IsDebugEnabled)
+                if (Log.IsDebugEnabled)
                 {
-                    LOG.Debug("Found cached NMS MessageConsumer for destination [" + destination + "]: " + consumer);
+                    Log.Debug("Found cached NMS MessageConsumer for destination [" + destination + "]: " + consumer);
                 }
             }
             else
             {
-                if (destination is ITopic)
+                if (destination is ITopic topic)
                 {
                     consumer = (durableSubscriptionName != null
-                                    ? target.CreateDurableConsumer((ITopic)destination, durableSubscriptionName, selector, noLocal)
-                                    : target.CreateConsumer(destination, selector, noLocal));
+                                    ? target.CreateDurableConsumer(topic, durableSubscriptionName, selector, noLocal)
+                                    : target.CreateConsumer(topic, selector, noLocal));
                 }
                 else
                 {
                     consumer = target.CreateConsumer(destination, selector);
                 }
-                if (LOG.IsDebugEnabled)
+                if (Log.IsDebugEnabled)
                 {
-                    LOG.Debug("Creating cached NMS MessageConsumer for destination [" + destination + "]: " + consumer);
+                    Log.Debug("Creating cached NMS MessageConsumer for destination [" + destination + "]: " + consumer);
                 }
                 cachedConsumers[cacheKey] = consumer;
             }
             return new CachedMessageConsumer(consumer);
         }
-
-        #region Pass through implementations
 
         /// <summary>
         /// Gets the queue.
@@ -392,7 +363,7 @@ namespace Spring.Messaging.Nms.Connections
         /// <returns></returns>
         public IQueue GetQueue(string name)
         {
-            this.transactionOpen = true;
+            transactionOpen = true;
             return target.GetQueue(name);
         }
 
@@ -403,7 +374,7 @@ namespace Spring.Messaging.Nms.Connections
         /// <returns></returns>
         public ITopic GetTopic(string name)
         {
-            this.transactionOpen = true;
+            transactionOpen = true;
             return target.GetTopic(name);
         }
 
@@ -413,7 +384,7 @@ namespace Spring.Messaging.Nms.Connections
         /// <returns></returns>
         public ITemporaryQueue CreateTemporaryQueue()
         {
-            this.transactionOpen = true;
+            transactionOpen = true;
             return target.CreateTemporaryQueue();
         }
 
@@ -423,7 +394,7 @@ namespace Spring.Messaging.Nms.Connections
         /// <returns></returns>
         public ITemporaryTopic CreateTemporaryTopic()
         {
-            this.transactionOpen = true;
+            transactionOpen = true;
             return target.CreateTemporaryTopic();
         }
 
@@ -433,7 +404,7 @@ namespace Spring.Messaging.Nms.Connections
         /// <param name="destination">The destination.</param>
         public void DeleteDestination(IDestination destination)
         {
-            this.transactionOpen = true;
+            transactionOpen = true;
             target.DeleteDestination(destination);
         }
 
@@ -443,7 +414,7 @@ namespace Spring.Messaging.Nms.Connections
         /// <returns></returns>
         public IMessage CreateMessage()
         {
-            this.transactionOpen = true;
+            transactionOpen = true;
             return target.CreateMessage();
         }
 
@@ -453,7 +424,7 @@ namespace Spring.Messaging.Nms.Connections
         /// <returns></returns>
         public ITextMessage CreateTextMessage()
         {
-            this.transactionOpen = true;
+            transactionOpen = true;
             return target.CreateTextMessage();
         }
 
@@ -464,7 +435,7 @@ namespace Spring.Messaging.Nms.Connections
         /// <returns></returns>
         public ITextMessage CreateTextMessage(string text)
         {
-            this.transactionOpen = true;
+            transactionOpen = true;
             return target.CreateTextMessage(text);
         }
 
@@ -474,7 +445,7 @@ namespace Spring.Messaging.Nms.Connections
         /// <returns></returns>
         public IMapMessage CreateMapMessage()
         {
-            this.transactionOpen = true;
+            transactionOpen = true;
             return target.CreateMapMessage();
         }
 
@@ -485,7 +456,7 @@ namespace Spring.Messaging.Nms.Connections
         /// <returns></returns>
         public IObjectMessage CreateObjectMessage(object body)
         {
-            this.transactionOpen = true;
+            transactionOpen = true;
             return target.CreateObjectMessage(body);
         }
 
@@ -495,7 +466,7 @@ namespace Spring.Messaging.Nms.Connections
         /// <returns></returns>
         public IBytesMessage CreateBytesMessage()
         {
-            this.transactionOpen = true;
+            transactionOpen = true;
             return target.CreateBytesMessage();
         }
 
@@ -506,7 +477,7 @@ namespace Spring.Messaging.Nms.Connections
         /// <returns></returns>
         public IBytesMessage CreateBytesMessage(byte[] body)
         {
-            this.transactionOpen = true;
+            transactionOpen = true;
             return target.CreateBytesMessage(body);
         }
 
@@ -516,7 +487,7 @@ namespace Spring.Messaging.Nms.Connections
         /// <returns></returns>
         public IStreamMessage CreateStreamMessage()
         {
-            this.transactionOpen = true;
+            transactionOpen = true;
             return target.CreateStreamMessage();
         }
 
@@ -525,7 +496,7 @@ namespace Spring.Messaging.Nms.Connections
         /// </summary>
         public void Commit()
         {
-            this.transactionOpen = false;
+            transactionOpen = false;
             target.Commit();
         }
 
@@ -537,7 +508,7 @@ namespace Spring.Messaging.Nms.Connections
         /// </summary>
         public void Recover()
         {
-            this.transactionOpen = true;
+            transactionOpen = true;
             target.Recover();
         }
 
@@ -546,7 +517,7 @@ namespace Spring.Messaging.Nms.Connections
         /// </summary>
         public void Rollback()
         {
-            this.transactionOpen = false;
+            transactionOpen = false;
             target.Rollback();
         }
 
@@ -558,8 +529,8 @@ namespace Spring.Messaging.Nms.Connections
         /// <value></value>
         public ConsumerTransformerDelegate ConsumerTransformer
         {
-            get { return target.ConsumerTransformer; }
-            set { target.ConsumerTransformer = value; }
+            get => target.ConsumerTransformer;
+            set => target.ConsumerTransformer = value;
         }
 
         /// <summary>
@@ -570,8 +541,8 @@ namespace Spring.Messaging.Nms.Connections
         /// <value></value>
         public ProducerTransformerDelegate ProducerTransformer
         {
-            get { return target.ProducerTransformer; }
-            set { target.ProducerTransformer = value; }
+            get => target.ProducerTransformer;
+            set => target.ProducerTransformer = value;
         }
         /// <summary>
         /// Gets or sets the request timeout.
@@ -579,8 +550,8 @@ namespace Spring.Messaging.Nms.Connections
         /// <value>The request timeout.</value>
         public TimeSpan RequestTimeout
         {
-            get { return target.RequestTimeout; }
-            set { target.RequestTimeout = value; }
+            get => target.RequestTimeout;
+            set => target.RequestTimeout = value;
         }
 
         /// <summary>
@@ -591,7 +562,7 @@ namespace Spring.Messaging.Nms.Connections
         {
             get
             {
-                this.transactionOpen = true;
+                transactionOpen = true;
                 return target.Transacted;
             }
         }
@@ -604,7 +575,7 @@ namespace Spring.Messaging.Nms.Connections
         {
             get
             {
-                this.transactionOpen = true;
+                transactionOpen = true;
                 return target.AcknowledgementMode;
             }
         }
@@ -614,8 +585,8 @@ namespace Spring.Messaging.Nms.Connections
         /// </summary>
         public event SessionTxEventDelegate TransactionStartedListener
         {
-            add { target.TransactionStartedListener += value; }
-            remove { target.TransactionStartedListener -= value; }
+            add => target.TransactionStartedListener += value;
+            remove => target.TransactionStartedListener -= value;
         }
 
         /// <summary>
@@ -623,8 +594,8 @@ namespace Spring.Messaging.Nms.Connections
         /// </summary>
         public event SessionTxEventDelegate TransactionCommittedListener
         {
-            add { target.TransactionCommittedListener += value; }
-            remove { target.TransactionCommittedListener -= value; }
+            add => target.TransactionCommittedListener += value;
+            remove => target.TransactionCommittedListener -= value;
         }
 
         /// <summary>
@@ -632,8 +603,8 @@ namespace Spring.Messaging.Nms.Connections
         /// </summary>
         public event SessionTxEventDelegate TransactionRolledBackListener
         {
-            add { target.TransactionRolledBackListener += value; }
-            remove { target.TransactionRolledBackListener -= value; }
+            add => target.TransactionRolledBackListener += value;
+            remove => target.TransactionRolledBackListener -= value;
         }
 
         /// <summary>
@@ -641,7 +612,7 @@ namespace Spring.Messaging.Nms.Connections
         /// </summary>
         public void Dispose()
         {
-            this.transactionOpen = true;
+            transactionOpen = true;
             target.Dispose();
         }
 
@@ -653,7 +624,7 @@ namespace Spring.Messaging.Nms.Connections
         /// <returns>The Queue browser</returns>
         public IQueueBrowser CreateBrowser(IQueue queue, string selector)
         {
-            this.transactionOpen = true;
+            transactionOpen = true;
             return target.CreateBrowser(queue, selector);
         }
 
@@ -664,10 +635,9 @@ namespace Spring.Messaging.Nms.Connections
         /// <returns>The Queue browser</returns>
         public IQueueBrowser CreateBrowser(IQueue queue)
         {
-            this.transactionOpen = true;
+            transactionOpen = true;
             return target.CreateBrowser(queue);
         }
-        #endregion
 
         /// <summary>
         /// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
@@ -677,16 +647,16 @@ namespace Spring.Messaging.Nms.Connections
         /// </returns>
         public override string ToString()
         {
-            return "Cached NMS Session: " + this.target;
+            return "Cached NMS Session: " + target;
         }
     }
 
     internal class ConsumerCacheKey
     {
-        private IDestination destination;
-        private string selector;
-        private bool noLocal;
-        private string subscription;
+        private readonly IDestination destination;
+        private readonly string selector;
+        private readonly bool noLocal;
+        private readonly string subscription;
 
         public ConsumerCacheKey(IDestination destination, string selector, bool noLocal, string subscription)
         {
@@ -696,10 +666,7 @@ namespace Spring.Messaging.Nms.Connections
             this.subscription = subscription;
         }
 
-        public string Subscription
-        {
-            get { return subscription; }
-        }
+        public string Subscription => subscription;
 
         protected bool Equals(ConsumerCacheKey consumerCacheKey)
         {

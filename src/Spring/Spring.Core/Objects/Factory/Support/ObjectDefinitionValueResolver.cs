@@ -326,7 +326,7 @@ namespace Spring.Objects.Factory.Support
             while (this.objectFactory.IsObjectNameInUse(actualInnerObjectName))
             {
                 counter++;
-                actualInnerObjectName = innerObjectName + ObjectFactoryUtils.GENERATED_OBJECT_NAME_SEPARATOR + counter;
+                actualInnerObjectName = innerObjectName + ObjectFactoryUtils.GeneratedObjectNameSeparator + counter;
             }
             return actualInnerObjectName;
         }

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,10 +14,9 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 
 using Spring.Collections;
@@ -93,8 +90,6 @@ namespace Spring.Transaction.Interceptor
 		{
 		}
 
-		#region Protected Abstract Methods
-
 		/// <summary>
 		/// Subclasses should implement this to return all attributes for this method.
 		/// May return null.
@@ -118,10 +113,6 @@ namespace Spring.Transaction.Interceptor
 		/// </returns>
 		protected abstract Attribute[] FindAllAttributes(Type targetType);
 
-		#endregion
-
-		#region ITransactionAttributeSource Members
-
 		/// <summary>
 		/// Return the transaction attribute for this method invocation.
 		/// </summary>
@@ -134,7 +125,7 @@ namespace Spring.Transaction.Interceptor
 		/// <returns><see cref="ITransactionAttribute"/> for this method, or null if the method is non-transactional</returns>
 		public ITransactionAttribute ReturnTransactionAttribute(MethodInfo method, Type targetType)
 		{
-			object cacheKey = getCacheKey(method, targetType);
+			object cacheKey = GetCacheKey(method, targetType);
 
 		    lock (_transactionAttibuteCache)
             {
@@ -152,7 +143,7 @@ namespace Spring.Transaction.Interceptor
                 }
                 else
                 {
-                    ITransactionAttribute transactionAttribute = computeTransactionAttribute(method, targetType);
+                    ITransactionAttribute transactionAttribute = ComputeTransactionAttribute(method, targetType);
                     if (null == transactionAttribute)
                     {
                         _transactionAttibuteCache.Add(cacheKey, NULL_TX_ATTIBUTE);
@@ -165,8 +156,6 @@ namespace Spring.Transaction.Interceptor
                 }
             }
 		}
-
-		#endregion
 
 		/// <summary>
 		/// Return the transaction attribute, given this set of attributes
@@ -205,14 +194,12 @@ namespace Spring.Transaction.Interceptor
 				}
 			}
 
-			RuleBasedTransactionAttribute ruleBasedTransactionAttribute = transactionAttribute as RuleBasedTransactionAttribute;
-			if (null != ruleBasedTransactionAttribute)
+			if (transactionAttribute is RuleBasedTransactionAttribute ruleBasedTransactionAttribute)
 			{
-				IList rollbackRules = new LinkedList();
+				var rollbackRules = new List<RollbackRuleAttribute>();
 				foreach (Attribute currentAttribute in attributes)
 				{
-					RollbackRuleAttribute rollbackRuleAttribute = currentAttribute as RollbackRuleAttribute;
-					if (null != rollbackRuleAttribute)
+					if (currentAttribute is RollbackRuleAttribute rollbackRuleAttribute)
 					{
 						rollbackRules.Add(rollbackRuleAttribute);
 					}
@@ -223,14 +210,12 @@ namespace Spring.Transaction.Interceptor
 			return transactionAttribute;
 		}
 
-		#region Private Methods
-
-		private object getCacheKey(MethodBase method, Type targetType)
+		private static object GetCacheKey(MethodBase method, Type targetType)
 		{
 			return string.Intern(targetType.AssemblyQualifiedName + "." + method);
 		}
 
-        private ITransactionAttribute computeTransactionAttribute(MethodInfo method, Type targetType)
+        private ITransactionAttribute ComputeTransactionAttribute(MethodInfo method, Type targetType)
         {
             MethodInfo specificMethod;
             if (targetType == null)
@@ -263,19 +248,19 @@ namespace Spring.Transaction.Interceptor
                 }
             }
 
-            ITransactionAttribute transactionAttribute = getTransactionAttribute(specificMethod);
+            ITransactionAttribute transactionAttribute = GetTransactionAttribute(specificMethod);
             if (null != transactionAttribute)
             {
                 return transactionAttribute;
             }
             else if (specificMethod != method)
             {
-                transactionAttribute = getTransactionAttribute(method);
+                transactionAttribute = GetTransactionAttribute(method);
             }
             return null;
         }
 
-		private ITransactionAttribute getTransactionAttribute(MethodInfo methodInfo)
+		private ITransactionAttribute GetTransactionAttribute(MethodInfo methodInfo)
 		{
 			ITransactionAttribute transactionAttribute = FindTransactionAttribute(FindAllAttributes(methodInfo));
 
@@ -290,7 +275,5 @@ namespace Spring.Transaction.Interceptor
 			}
 			return null;
 		}
-
-		#endregion
 	}
 }

@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,8 @@
 
 #endregion
 
-#region Imports
-
 using System.Runtime.Remoting;
 using Spring.Objects.Factory.Config;
-
-#endregion
 
 namespace Spring.Context.Support
 {
@@ -64,7 +60,7 @@ namespace Spring.Context.Support
 	/// <author>Griffin Caprio (.NET)</author>
 	public class ApplicationContextAwareProcessor : IObjectPostProcessor
 	{
-		private IApplicationContext _applicationContext;
+		private readonly IApplicationContext _applicationContext;
 
 		/// <summary>
 		/// Creates a new instance of the
@@ -125,20 +121,17 @@ namespace Spring.Context.Support
 		{
 			if(!RemotingServices.IsTransparentProxy(obj)) 
 			{
-				if (typeof (IResourceLoaderAware).IsInstanceOfType(obj))
+				if (obj is IResourceLoaderAware resourceLoaderAware)
 				{
-					((IResourceLoaderAware) obj).ResourceLoader
-						= _applicationContext;
+					resourceLoaderAware.ResourceLoader = _applicationContext;
 				}
-				if (typeof (IMessageSourceAware).IsInstanceOfType(obj))
+				if (obj is IMessageSourceAware messageSourceAware)
 				{
-					((IMessageSourceAware) obj).MessageSource
-						= _applicationContext;
+					messageSourceAware.MessageSource = _applicationContext;
 				}
-				if (typeof (IApplicationContextAware).IsInstanceOfType(obj))
+				if (obj is IApplicationContextAware applicationContextAware)
 				{
-					((IApplicationContextAware) obj).ApplicationContext
-						= _applicationContext;
+					applicationContextAware.ApplicationContext = _applicationContext;
 				}
 			}
 			return obj;

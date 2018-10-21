@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -268,10 +268,7 @@ namespace Spring.Objects.Factory.Support
         /// <exception cref="ArgumentException">Raised on any attempt to set a non-null value on this property.</exception>
         public override string ParentName
         {
-            get
-            {
-                return null;
-            }
+            get => null;
             set
             {
                 if (value != null)
@@ -312,7 +309,7 @@ namespace Spring.Objects.Factory.Support
         /// </returns>
         public override string ToString()
         {
-            return String.Format("{0} : {1}", GetType().Name, base.ToString());
+            return $"{GetType().Name} : {base.ToString()}";
         }
     }
 }

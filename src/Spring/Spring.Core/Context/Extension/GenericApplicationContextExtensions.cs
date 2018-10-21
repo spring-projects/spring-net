@@ -69,8 +69,9 @@ namespace Spring.Context.Support
         /// <param name="assembliesToScan">The assemblies to scan.</param>
         public static void Scan(this GenericApplicationContext context, string assemblyScanPath, Func<Assembly, bool> assemblyPredicate, Func<Type, bool> typePredicate, params string[] assembliesToScan)
         {
-            AssemblyObjectDefinitionScanner scanner = 
-                ArrayUtils.HasElements(assembliesToScan) ? new AssemblyObjectDefinitionScanner(assembliesToScan) : new AssemblyObjectDefinitionScanner();
+            AssemblyObjectDefinitionScanner scanner = ArrayUtils.HasElements(assembliesToScan) 
+                ? new AssemblyObjectDefinitionScanner(assembliesToScan) 
+                : new AssemblyObjectDefinitionScanner();
             
             scanner.ScanStartFolderPath = assemblyScanPath;
             

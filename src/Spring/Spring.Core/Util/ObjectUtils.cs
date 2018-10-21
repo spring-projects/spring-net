@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright  2002-2005 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using System.Collections;
 using System.Globalization;
@@ -31,8 +25,6 @@ using System.Runtime.Remoting.Proxies;
 using Common.Logging;
 
 using Spring.Reflection.Dynamic;
-
-#endregion
 
 namespace Spring.Util
 {
@@ -54,23 +46,18 @@ namespace Spring.Util
         /// </summary>
         private static readonly ILog log = LogManager.GetLogger(typeof(ObjectUtils));
 
-        #region Constants
-
         /// <summary>
         /// An empty object array.
         /// </summary>
-        public static readonly object[] EmptyObjects = new object[] { };
+        public static readonly object[] EmptyObjects = { };
 
-        private static MethodInfo GetHashCodeMethodInfo = null;
-
-        #endregion
+        private static readonly MethodInfo GetHashCodeMethodInfo;
 
         static ObjectUtils()
 		{
 			Type type = typeof(object);
 			GetHashCodeMethodInfo = type.GetMethod("GetHashCode");
 		}
-        #region Constructor (s) / Destructor
 
         // CLOVER:OFF
 
@@ -87,10 +74,6 @@ namespace Spring.Util
         }
 
         // CLOVER:ON
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Instantiates the type using the assembly specified to load the type.
@@ -145,7 +128,7 @@ namespace Spring.Util
             AssertUtils.ArgumentNotNull(type, "type");
 
             ConstructorInfo constructor = GetZeroArgConstructorInfo(type);
-            return ObjectUtils.InstantiateType(constructor, ObjectUtils.EmptyObjects);
+            return InstantiateType(constructor, EmptyObjects);
         }
 
         /// <summary>
@@ -336,17 +319,21 @@ namespace Spring.Util
                 }
             }
     #endif
+            if (type.IsInstanceOfType(obj))
+            {
+                return true;
+            }
 
-            return (type.IsInstanceOfType(obj) ||
-                    (type.Equals(typeof(bool)) && obj is Boolean) ||
-                    (type.Equals(typeof(byte)) && obj is Byte) ||
-                    (type.Equals(typeof(char)) && obj is Char) ||
-                    (type.Equals(typeof(sbyte)) && obj is SByte) ||
-                    (type.Equals(typeof(int)) && obj is Int32) ||
-                    (type.Equals(typeof(short)) && obj is Int16) ||
-                    (type.Equals(typeof(long)) && obj is Int64) ||
-                    (type.Equals(typeof(float)) && obj is Single) ||
-                    (type.Equals(typeof(double)) && obj is Double));
+            return type.IsPrimitive &&
+                   type == typeof(bool) && obj is bool ||
+                   type == typeof(byte) && obj is byte ||
+                   type == typeof(char) && obj is char ||
+                   type == typeof(sbyte) && obj is sbyte ||
+                   type == typeof(int) && obj is int ||
+                   type == typeof(short) && obj is short ||
+                   type == typeof(long) && obj is long ||
+                   type == typeof(float) && obj is float ||
+                   type == typeof(double) && obj is double;
         }
 
         /// <summary>
@@ -444,7 +431,7 @@ namespace Spring.Util
         /// </exception>
         public static object EnumerateFirstElement(IEnumerator enumerator)
         {
-            return ObjectUtils.EnumerateElementAtIndex(enumerator, 0);
+            return EnumerateElementAtIndex(enumerator, 0);
         }
 
         /// <summary>
@@ -466,7 +453,7 @@ namespace Spring.Util
         public static object EnumerateFirstElement(IEnumerable enumerable)
         {
             AssertUtils.ArgumentNotNull(enumerable, "enumerable");
-            return ObjectUtils.EnumerateElementAtIndex(enumerable.GetEnumerator(), 0);
+            return EnumerateElementAtIndex(enumerable.GetEnumerator(), 0);
         }
 
         /// <summary>
@@ -538,10 +525,8 @@ namespace Spring.Util
         public static object EnumerateElementAtIndex(IEnumerable enumerable, int index)
         {
             AssertUtils.ArgumentNotNull(enumerable, "enumerable");
-            return ObjectUtils.EnumerateElementAtIndex(enumerable.GetEnumerator(), index);
+            return EnumerateElementAtIndex(enumerable.GetEnumerator(), index);
         }
-
-        #endregion
 
         /// <summary>
         /// Gets the qualified name of the given method, consisting of 
@@ -562,7 +547,7 @@ namespace Spring.Util
         /// <returns>The object's identity as String representation,
         /// or an empty String if the object was <code>null</code>
         /// </returns>
-        public static object IdentityToString(object obj)
+        public static string IdentityToString(object obj)
         {
             if (obj == null)
             {

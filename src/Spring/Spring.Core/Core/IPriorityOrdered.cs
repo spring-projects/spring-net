@@ -45,7 +45,5 @@ namespace Spring.Core
     /// <see cref="ResourceHandlerConfigurer"/>
     public interface IPriorityOrdered : IOrdered
     {
-        
     }
-
 }

@@ -75,7 +75,7 @@ namespace Spring.Objects
         [Test]
         public void InstantiationWithNulls () 
         {
-            MutablePropertyValues props = new MutablePropertyValues ((IDictionary<string, object>) null);
+            MutablePropertyValues props = new MutablePropertyValues((Dictionary<string, object>) null);
             Assert.AreEqual (0, props.PropertyValues.Count);
             MutablePropertyValues props2 = new MutablePropertyValues ((IPropertyValues) null);
             Assert.AreEqual (0, props2.PropertyValues.Count);
@@ -97,7 +97,7 @@ namespace Spring.Objects
             MutablePropertyValues props = new MutablePropertyValues ();
             props.Add (new PropertyValue ("Name", "Fiona Apple"));
             props.Add (new PropertyValue ("Age", 24));
-            props.AddAll ((IList<PropertyValue>) null);
+            props.AddAll((List<PropertyValue>) null);
             Assert.AreEqual (2, props.PropertyValues.Count);
         }
 
@@ -157,7 +157,7 @@ namespace Spring.Objects
         [Test]
         public void ChangesSince () 
         {
-            IDictionary<string, object> map = new Dictionary<string, object>();
+            Dictionary<string, object> map = new Dictionary<string, object>();
             PropertyValue propName = new PropertyValue("Name", "Fiona Apple");
             map.Add (propName.Name, propName.Value);
             map.Add ("Age", 24);
@@ -183,7 +183,7 @@ namespace Spring.Objects
         [Test]
         public void ChangesSinceWithSelf () 
         {
-            IDictionary<string, object> map = new Dictionary<string, object>();
+            Dictionary<string, object> map = new Dictionary<string, object>();
             map.Add("Name", "Fiona Apple");
             map.Add ("Age", 24);
             MutablePropertyValues props = new MutablePropertyValues (map);
