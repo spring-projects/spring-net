@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -72,7 +72,7 @@ namespace Spring.Messaging.Core
             MessageQueueFactoryObject mqfo = new MessageQueueFactoryObject();
             mqfo.MessageCreatorDelegate = messageQueueCreatorDelegate;
             applicationContext.ObjectFactory.RegisterSingleton(messageQueueObjectName, mqfo);
-            IDictionary<string, MessageQueueMetadataCache> caches = applicationContext.GetObjects<MessageQueueMetadataCache>();
+            var caches = applicationContext.GetObjects<MessageQueueMetadataCache>();
             foreach (KeyValuePair<string, MessageQueueMetadataCache> entry in caches)
             {
                 entry.Value.Insert(mqfo.Path, new MessageQueueMetadata(mqfo.RemoteQueue, mqfo.RemoteQueueIsTransactional));

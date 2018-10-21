@@ -1,5 +1,5 @@
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -46,7 +46,7 @@ namespace Spring.Data.NHibernate.Bytecode
         /// <returns>A reference to the created object.</returns>
         public object CreateInstance(Type type)
 		{
-			IList<string> namesForType = listableObjectFactory.GetObjectNamesForType(type);
+			var namesForType = listableObjectFactory.GetObjectNamesForType(type);
 			return namesForType.Count > 0 ? listableObjectFactory.GetObject(namesForType[0], type) : Activator.CreateInstance(type);
 		}
 
@@ -57,7 +57,7 @@ namespace Spring.Data.NHibernate.Bytecode
         /// <returns>A reference to the created object </returns>
         public object CreateInstance(Type type, bool nonPublic)
 		{
-			IList<string> namesForType = listableObjectFactory.GetObjectNamesForType(type);
+			var namesForType = listableObjectFactory.GetObjectNamesForType(type);
 			return namesForType.Count > 0 ? listableObjectFactory.GetObject(namesForType[0], type) : Activator.CreateInstance(type);
 		}
 

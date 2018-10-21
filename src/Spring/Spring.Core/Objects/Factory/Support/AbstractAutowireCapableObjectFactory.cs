@@ -56,6 +56,24 @@ namespace Spring.Objects.Factory.Support
     [Serializable]
     public abstract class AbstractAutowireCapableObjectFactory : AbstractObjectFactory, IAutowireCapableObjectFactory
     {
+        
+        private IInstantiationStrategy instantiationStrategy = new MethodInjectingInstantiationStrategy();
+
+        /// <summary>
+        /// Cache of filtered PropertyInfos: object Type -> PropertyInfo array 
+        /// </summary>
+        private readonly ConcurrentDictionary<Type, List<PropertyInfo>> filteredPropertyDescriptorsCache = new ConcurrentDictionary<Type, List<PropertyInfo>>();
+
+        /// <summary>
+        /// Dependency interfaces to ignore on dependency check and autowire, as Set of
+        /// Class objects. By default, only the IObjectFactoryAware and IObjectNameAware 
+        /// interfaces are ignored.
+        /// </summary>
+        private readonly HybridSet ignoredDependencyInterfaces = new HybridSet();
+
+        [NonSerialized]
+        private ObjectDefinitionValueResolver cachedValueResolver;
+        
         /// <summary>
         /// The <see cref="System.Reflection.BindingFlags"/> used during the invocation and
         /// searching for of methods.
@@ -226,7 +244,7 @@ namespace Spring.Objects.Factory.Support
             RootObjectDefinition definition = GetMergedObjectDefinition(name, true);
             if (definition != null)
             {
-                log.Debug(string.Format("configuring object '{0}' using definition '{1}'", instance, name));
+                log.Debug($"configuring object '{instance}' using definition '{name}'");
                 ApplyPropertyValues(name, definition, new ObjectWrapper(instance), definition.PropertyValues);
             }
         }
@@ -248,6 +266,7 @@ namespace Spring.Objects.Factory.Support
         /// </param>
         public override void ApplyObjectPropertyValues(object instance, string name, IObjectDefinition definition)
         {
+            MarkObjectAsCreated(name);
             ApplyPropertyValues(name, new RootObjectDefinition(definition), new ObjectWrapper(instance), definition.PropertyValues);
         }
 
@@ -389,7 +408,7 @@ namespace Spring.Objects.Factory.Support
         /// </summary>
         protected virtual ObjectDefinitionValueResolver CreateValueResolver()
         {
-            return new ObjectDefinitionValueResolver(this);
+            return cachedValueResolver ?? (cachedValueResolver =new ObjectDefinitionValueResolver(this));
         }
 
         /// <summary>
@@ -481,7 +500,7 @@ namespace Spring.Objects.Factory.Support
             // to support styles of field injection.
             bool continueWithPropertyPopulation = true;
 
-            if (HasInstantiationAwareBeanPostProcessors)
+            if (HasInstantiationAwareObjectPostProcessors)
             {
                 for (var i = 0; i < ObjectPostProcessors.Count; i++)
                 {
@@ -533,7 +552,7 @@ namespace Spring.Objects.Factory.Support
             //DependencyCheck(name, definition, wrapper, properties);
 
 
-            bool hasInstAwareOpps = HasInstantiationAwareBeanPostProcessors;
+            bool hasInstAwareOpps = HasInstantiationAwareObjectPostProcessors;
             bool needsDepCheck = (definition.DependencyCheck != DependencyCheckingMode.None);
 
             if (hasInstAwareOpps || needsDepCheck)
@@ -1020,7 +1039,7 @@ namespace Spring.Objects.Factory.Support
         /// <seealso cref="SmartInstantiationAwareObjectPostProcessor.DetermineCandidateConstructors"/>
         protected virtual ConstructorInfo[] DetermineConstructorsFromObjectPostProcessors(Type objectType, string objectName)
         {
-            if (HasInstantiationAwareBeanPostProcessors)
+            if (HasInstantiationAwareObjectPostProcessors)
             {
                 for (var i = 0; i < ObjectPostProcessors.Count; i++)
                 {
@@ -1142,7 +1161,7 @@ namespace Spring.Objects.Factory.Support
             }
 
             IList<PropertyInfo> filteredPropInfo = FilterPropertyInfoForDependencyCheck(wrapper);
-            if (HasInstantiationAwareBeanPostProcessors)
+            if (HasInstantiationAwareObjectPostProcessors)
             {
                 for (var i = 0; i < ObjectPostProcessors.Count; i++)
                 {
@@ -1699,6 +1718,7 @@ namespace Spring.Objects.Factory.Support
         /// <seealso cref="Spring.Objects.Factory.IObjectFactory.ConfigureObject(object, string)"/>
         public override object ConfigureObject(object target, string name)
         {
+            MarkObjectAsCreated(name);
             RootObjectDefinition definition = GetMergedObjectDefinition(name, true);
             if (definition != null)
             {
@@ -1964,20 +1984,6 @@ namespace Spring.Objects.Factory.Support
             DependencyDescriptor descriptor, 
             string objectName,
             IList<string> autowiredObjectNames);
-
-        private IInstantiationStrategy instantiationStrategy = new MethodInjectingInstantiationStrategy();
-
-        /// <summary>
-        /// Cache of filtered PropertyInfos: object Type -> PropertyInfo array 
-        /// </summary>
-        private readonly ConcurrentDictionary<Type, List<PropertyInfo>> filteredPropertyDescriptorsCache = new ConcurrentDictionary<Type, List<PropertyInfo>>();
-
-        /// <summary>
-        /// Dependency interfaces to ignore on dependency check and autowire, as Set of
-        /// Class objects. By default, only the IObjectFactoryAware and IObjectNameAware 
-        /// interfaces are ignored.
-        /// </summary>
-        private readonly HybridSet ignoredDependencyInterfaces = new HybridSet();
     }
 
     internal class UnsatisfiedDependencyExceptionData

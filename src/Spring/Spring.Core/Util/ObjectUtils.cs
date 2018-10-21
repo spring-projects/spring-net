@@ -303,11 +303,12 @@ namespace Spring.Util
             if (RemotingServices.IsTransparentProxy(obj))
             {
                 RealProxy rp = RemotingServices.GetRealProxy(obj);
-                if (rp is IRemotingTypeInfo)
+                if (rp is IRemotingTypeInfo remotingTypeInfo)
                 {
-                    return ((IRemotingTypeInfo) rp).CanCastTo(type, obj);
+                    return remotingTypeInfo.CanCastTo(type, obj);
                 }
-                else if (rp != null)
+
+                if (rp != null)
                 {
                     type = rp.GetProxiedType();
                 }

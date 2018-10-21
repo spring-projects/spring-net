@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,10 +41,11 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <summary>
         /// Separator between prefix and remainder of object name
         /// </summary>
-        public static readonly string SEPARATOR = ".";
+        public const string Separator = ".";
+
         private bool usePrefix;
         private string advisorObjectNamePrefix;
-        private IList<IAdvisor> cachedAdvisors;
+        private List<IAdvisor> cachedAdvisors;
 
         #region Properties
 
@@ -94,7 +95,7 @@ namespace Spring.Aop.Framework.AutoProxy
                 // If no infrastructure object name prefix has been set, override it.
                 if (advisorObjectNamePrefix == null)
                 {
-                    advisorObjectNamePrefix = value + SEPARATOR;
+                    advisorObjectNamePrefix = value + Separator;
                 }
             }
         }
@@ -107,7 +108,7 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <param name="targetType">the type of the object to be advised</param>
         /// <param name="targetName">the name of the object to be advised</param>
         /// <returns>the list of candidate advisors</returns>
-        protected override IList<IAdvisor> FindCandidateAdvisors(Type targetType, string targetName)
+        protected override List<IAdvisor> FindCandidateAdvisors(Type targetType, string targetName)
         {
             if (cachedAdvisors == null) {
                 cachedAdvisors = base.FindCandidateAdvisors(targetType, targetName);

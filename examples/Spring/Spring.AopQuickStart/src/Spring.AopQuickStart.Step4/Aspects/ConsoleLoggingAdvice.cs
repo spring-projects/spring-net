@@ -18,15 +18,9 @@
 
 #endregion
 
-#region Imports
-
 using System;
 
 using AopAlliance.Intercept;
-
-using Spring.AopQuickStart.Attributes;
-
-#endregion
 
 namespace Spring.AopQuickStart.Aspects
 {

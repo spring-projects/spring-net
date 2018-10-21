@@ -1,7 +1,5 @@
-#region License
-
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -27,8 +21,6 @@ using NUnit.Framework;
 using Spring.Core.IO;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
-
-#endregion
 
 namespace Spring.Context.Support
 {
@@ -47,20 +39,14 @@ namespace Spring.Context.Support
 			{
 			}
 
-			protected override Type RequiredType
-			{
-				get { return typeof (MockApplicationContext); }
-			}
+			protected override Type RequiredType => typeof (MockApplicationContext);
 
 			protected override void InitApplicationContext()
 			{
 				_init = true;
 			}
 
-			public bool Init
-			{
-				get { return _init; }
-			}
+			public bool Init => _init;
 		}
 
 		internal class MyContext2 : IApplicationContext
@@ -69,43 +55,25 @@ namespace Spring.Context.Support
 			{
 			}
 
-			#region IApplicationContext Members
+			public IApplicationContext ParentContext => null;
 
-			public IApplicationContext ParentContext
-			{
-				get { return null; }
-				set
-				{
-				}
-			}
-
-			public DateTime StartupDate
-			{
-				get { return new DateTime(); }
-			}
+			public DateTime StartupDate => new DateTime();
 
 #pragma warning disable 67
 			public event ApplicationEventHandler ContextEvent;
 #pragma warning restore 67
 
-            public long StartupDateMilliseconds
-			{
-				get { return 0; }
-			}
+            public long StartupDateMilliseconds => 0;
 
 			public string Name
 			{
-				get { return AbstractApplicationContext.DefaultRootContextName; }
+				get => AbstractApplicationContext.DefaultRootContextName;
 				set
 				{
 				}
 			}
 
-			#endregion
-
-			#region IListableObjectFactory Members
-
-            public IObjectDefinition GetObjectDefinition(string name)
+			public IObjectDefinition GetObjectDefinition(string name)
             {
                 return null;
             }
@@ -115,7 +83,7 @@ namespace Spring.Context.Support
                 return null;
             }
 
-            public IList<string> GetObjectDefinitionNames(bool includeAncestors)
+            public IReadOnlyList<string> GetObjectDefinitionNames(bool includeAncestors)
             {
                 return null;
             }
@@ -125,47 +93,47 @@ namespace Spring.Context.Support
 				return null;
 			}
 
-			public IList<string> GetObjectNamesForType(Type type)
+			public IReadOnlyList<string> GetObjectNamesForType(Type type)
 			{
 				return null;
 			}
 
-		    public IList<string> GetObjectNames<T>()
+		    public IReadOnlyList<string> GetObjectNames<T>()
 		    {
 		        return null;
 		    }
 
-		    public IList<string> GetObjectNamesForType(Type type, bool includePrototypes, bool includeFactoryObjects)
+		    public IReadOnlyList<string> GetObjectNamesForType(Type type, bool includePrototypes, bool includeFactoryObjects)
 			{
 				return null;
 			}
 
-		    public IList<string> GetObjectNames<T>(bool includePrototypes, bool includeFactoryObjects)
+		    public IReadOnlyList<string> GetObjectNames<T>(bool includePrototypes, bool includeFactoryObjects)
 		    {
 		        return null;
 		    }
 
-		    IList<string> IListableObjectFactory.GetObjectDefinitionNames()
+		    IReadOnlyList<string> IListableObjectFactory.GetObjectDefinitionNames()
 			{
 				return null;
 			}
 
-			public IDictionary<string, object> GetObjectsOfType(Type type)
+			public IReadOnlyDictionary<string, object> GetObjectsOfType(Type type)
 			{
 				return null;
 			}
 
-		    public IDictionary<string, T> GetObjects<T>()
+		    public IReadOnlyDictionary<string, T> GetObjects<T>()
 		    {
 		        return null;
 		    }
 
-		    public IDictionary<string, object> GetObjectsOfType(Type type, bool includePrototypes, bool includeFactoryObjects)
+		    public IReadOnlyDictionary<string, object> GetObjectsOfType(Type type, bool includePrototypes, bool includeFactoryObjects)
 			{
 				return null;
 			}
 
-		    public IDictionary<string, T> GetObjects<T>(bool includePrototypes, bool includeFactoryObjects)
+		    public IReadOnlyDictionary<string, T> GetObjects<T>(bool includePrototypes, bool includeFactoryObjects)
 		    {
 		        return null;
 		    }
@@ -175,36 +143,23 @@ namespace Spring.Context.Support
 		        throw new NotImplementedException();
 		    }
 
-		    public int ObjectDefinitionCount
-			{
-				get { return 0; }
-			}
+		    public int ObjectDefinitionCount => 0;
 
 			public bool ContainsObjectDefinition(string name)
 			{
 				return false;
 			}
 
-			#endregion
+			public bool IsCaseSensitive => true;
 
-			#region IObjectFactory Members
-
-		    public bool IsCaseSensitive
-		    {
-		        get { return true; }
-		    }
-
-		    public object this[string name]
-			{
-				get { return null; }
-			}
+			public object this[string name] => null;
 
 			public bool ContainsObject(string name)
 			{
 				return false;
 			}
 
-			public IList<string> GetAliases(string name)
+			public IReadOnlyList<string> GetAliases(string name)
 			{
 				return null;
 			}
@@ -291,23 +246,12 @@ namespace Spring.Context.Support
                 return null;
             }
 
-			#endregion
+			public IObjectFactory ParentObjectFactory => null;
 
-			#region IHierarchicalObjectFactory Members
-
-			public IObjectFactory ParentObjectFactory
-			{
-				get { return null; }
-			}
-
-		    public bool ContainsLocalObject(string name)
+			public bool ContainsLocalObject(string name)
 		    {
 		        return false;
 		    }
-
-		    #endregion
-
-			#region IMessageSource Members
 
 			public string GetMessage(IMessageSourceResolvable resolvable, CultureInfo culture)
 			{
@@ -353,18 +297,10 @@ namespace Spring.Context.Support
 			{
 			}
 
-			#endregion
-
-			#region IResourceLoader Members
-
 			public IResource GetResource(string location)
 			{
 				return null;
 			}
-
-			#endregion
-
-			#region IEventRepository Members
 
 			public void PublishEvents(object sourceObject)
 			{
@@ -391,8 +327,6 @@ namespace Spring.Context.Support
 		    {
 		        throw new NotImplementedException();
 		    }
-
-		    #endregion
 
 			public void PublishEvent(object sender, ApplicationEventArgs e)
 			{
@@ -422,10 +356,7 @@ namespace Spring.Context.Support
 				_init = true;
 			}
 
-			public bool Init
-			{
-				get { return _init; }
-			}
+			public bool Init => _init;
 		}
 
 

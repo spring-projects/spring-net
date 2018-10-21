@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -68,14 +68,14 @@ namespace Spring.Messaging.Nms.Config
         [Test]
         public void ObjectsCreated()
         {
-            IDictionary<string, SimpleMessageListenerContainer> containers = ctx.GetObjects<SimpleMessageListenerContainer>();
+            var containers = ctx.GetObjects<SimpleMessageListenerContainer>();
             Assert.AreEqual(3, containers.Count);
         }
 
         [Test]
         public void ContainerConfiguration()
         {
-            IDictionary<string, SimpleMessageListenerContainer> containers = ctx.GetObjects<SimpleMessageListenerContainer>();
+            var containers = ctx.GetObjects<SimpleMessageListenerContainer>();
             IConnectionFactory defaultConnectionFactory = (IConnectionFactory) ctx.GetObject(DEFAULT_CONNECTION_FACTORY);
             IConnectionFactory explicitConnectionFactory = (IConnectionFactory) ctx.GetObject(EXPLICIT_CONNECTION_FACTORY);
             

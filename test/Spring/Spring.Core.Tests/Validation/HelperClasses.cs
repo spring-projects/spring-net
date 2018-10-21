@@ -30,17 +30,14 @@ namespace Spring.Validation
     {
         private bool _wasCalled;
 
-        public bool WasCalled
-        {
-            get { return _wasCalled; }
-        }
+        public bool WasCalled => _wasCalled;
 
-        public override bool Validate(object validationContext, IDictionary<string, object> contextParams, IValidationErrors errors)
+        public override bool Validate(object validationContext, IDictionary<string, object> contextParams,
+            IValidationErrors errors)
         {
             _wasCalled = true;
-            return base.Validate (validationContext, contextParams, errors);
+            return base.Validate(validationContext, contextParams, errors);
         }
-    
     }
 
     /// <summary>
@@ -49,9 +46,9 @@ namespace Spring.Validation
     /// <author>Aleksandar Seovic</author>
     public class TrueValidator : BaseTestValidator
     {
-
         public TrueValidator()
-        {}
+        {
+        }
 
         /// <summary>
         /// Validates test object.
@@ -68,7 +65,7 @@ namespace Spring.Validation
     {
         public FalseValidator()
         {
-            this.Actions.Add(new ErrorMessageAction("error", "errors"));
+            Actions.Add(new ErrorMessageAction("error", "errors"));
         }
 
         /// <summary>
@@ -84,26 +81,23 @@ namespace Spring.Validation
 
     public sealed class MockObjectDefinitionRegistry : IObjectDefinitionRegistry
     {
-        private IDictionary<string, IObjectDefinition> objects = new Dictionary<string, IObjectDefinition>();
+        private readonly IDictionary<string, IObjectDefinition> objects = new Dictionary<string, IObjectDefinition>();
 
-        public int ObjectDefinitionCount
+        public int ObjectDefinitionCount => objects.Count;
+
+        public IReadOnlyList<string> GetObjectDefinitionNames()
         {
-            get { return this.objects.Count; }
+            return new List<string>(objects.Keys);
         }
 
-        public IList<string> GetObjectDefinitionNames()
+        public IReadOnlyList<string> GetObjectDefinitionNames(bool includeAncestor)
         {
-            return new List<string>(this.objects.Keys);
-        }
-
-        public IList<string> GetObjectDefinitionNames(bool includeAncestor)
-        {
-            return new List<string>(this.objects.Keys);
+            return new List<string>(objects.Keys);
         }
 
         public IList<IObjectDefinition> GetObjectDefinitions()
         {
-            return new List<IObjectDefinition>(this.objects.Values);
+            return new List<IObjectDefinition>(objects.Values);
         }
 
         public bool ContainsObjectDefinition(string name)
@@ -113,17 +107,16 @@ namespace Spring.Validation
 
         public IObjectDefinition GetObjectDefinition(string name)
         {
-            IObjectDefinition definition;
-            objects.TryGetValue(name, out definition);
+            objects.TryGetValue(name, out var definition);
             return definition;
         }
 
         public void RegisterObjectDefinition(string name, IObjectDefinition definition)
         {
-            this.objects[name] = definition;
+            objects[name] = definition;
         }
 
-        public IList<string> GetAliases(string name)
+        public IReadOnlyList<string> GetAliases(string name)
         {
             throw new NotImplementedException();
         }
@@ -135,8 +128,7 @@ namespace Spring.Validation
 
         public bool IsObjectNameInUse(string objectName)
         {
-            return this.objects[objectName] != null;
+            return objects[objectName] != null;
         }
     }
-
 }

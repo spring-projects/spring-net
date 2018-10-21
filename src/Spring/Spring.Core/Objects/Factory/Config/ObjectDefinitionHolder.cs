@@ -1,7 +1,5 @@
-#region License
-
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,17 +14,11 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using System.Collections.Generic;
 
 using Spring.Objects.Factory.Xml;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Objects.Factory.Config
 {
@@ -55,11 +47,9 @@ namespace Spring.Objects.Factory.Config
     [Serializable]
     public class ObjectDefinitionHolder
     {
-        private IObjectDefinition objectDefinition;
-        private string objectName;
-        private IList<string> aliases;
-
-        #region Constructor () / Destructor
+        private readonly IObjectDefinition objectDefinition;
+        private readonly string objectName;
+        private readonly List<string> aliases;
 
         /// <summary>
         /// Creates a new instance of the
@@ -88,33 +78,27 @@ namespace Spring.Objects.Factory.Config
         /// Any aliases for the supplied <paramref name="definition"/>
         /// </param>
         public ObjectDefinitionHolder(
-            IObjectDefinition definition, string name, IList<string> aliases)
+            IObjectDefinition definition, 
+            string name,
+            IReadOnlyList<string> aliases)
         {
-            this.objectDefinition = definition;
-            this.objectName = name;
-            this.aliases = aliases ?? new List<string>(0);
+            objectDefinition = definition;
+            objectName = name;
+            this.aliases = aliases != null && aliases.Count > 0 
+                ? new List<string>(aliases)
+                : null;
         }
-
-        #endregion
-
-        #region Properties
 
         /// <summary>
         /// The <see cref="Spring.Objects.Factory.Config.IObjectDefinition"/> held by this
         /// instance.
         /// </summary>
-        public IObjectDefinition ObjectDefinition
-        {
-            get { return objectDefinition; }
-        }
+        public IObjectDefinition ObjectDefinition => objectDefinition;
 
         /// <summary>
         /// The name of the object definition.
         /// </summary>
-        public string ObjectName
-        {
-            get { return objectName; }
-        }
+        public string ObjectName => objectName;
 
         /// <summary>
         /// Any aliases for the object definition.
@@ -127,10 +111,7 @@ namespace Spring.Objects.Factory.Config
         /// <see cref="System.String"/> array will be returned.
         /// </p>
         /// </remarks>
-        public IList<string> Aliases
-        {
-            get { return aliases; }
-        }
+        public IReadOnlyList<string> Aliases => aliases ?? StringUtils.EmptyStringsList;
 
         /// <summary>
         /// Checks wether a givin candidate name has a defined object or alias
@@ -139,10 +120,8 @@ namespace Spring.Objects.Factory.Config
         /// <returns></returns>
         public bool MatchesName(string candidateName)
         {
-            return (!string.IsNullOrEmpty(candidateName) &&
-                    (candidateName.Equals(ObjectName) || Aliases.Contains(candidateName)));
+            return !string.IsNullOrEmpty(candidateName) 
+                   && (candidateName == ObjectName || aliases?.Contains(candidateName) == true);
         }
-
-        #endregion
     }
 }

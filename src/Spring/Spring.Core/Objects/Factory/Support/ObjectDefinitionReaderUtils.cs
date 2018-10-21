@@ -96,7 +96,7 @@ namespace Spring.Objects.Factory.Support
             AssertUtils.ArgumentNotNull(registry, "registry");
 
             registry.RegisterObjectDefinition(objectDefinition.ObjectName, objectDefinition.ObjectDefinition);
-            IList<string> aliases = objectDefinition.Aliases;
+            var aliases = objectDefinition.Aliases;
             for (int i = 0; i < aliases.Count; ++i)
             {
                 string alias = aliases[i];

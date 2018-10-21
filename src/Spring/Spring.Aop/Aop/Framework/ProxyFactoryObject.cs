@@ -15,7 +15,6 @@
  */
 
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 
@@ -606,15 +605,15 @@ namespace Spring.Aop.Framework
         /// <summary> Add all global interceptors and pointcuts.</summary>
         private void AddGlobalAdvisor(IListableObjectFactory objectFactory, string prefix)
         {
-            IList<string> globalAspectNames =
+            var globalAspectNames =
                 ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(objectFactory, typeof(IAdvisors));
-            IList<string> globalAdvisorNames =
+            var globalAdvisorNames =
                 ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(objectFactory, typeof(IAdvisor));
-            IList<string> globalInterceptorNames =
+            var globalInterceptorNames =
                 ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(objectFactory, typeof(IInterceptor));
+            
             List<object> objects = new List<object>();
             Dictionary<object, string> names = new Dictionary<object, string>();
-
             for (int i = 0; i < globalAspectNames.Count; i++)
             {
                 string name = globalAspectNames[i];
@@ -656,7 +655,7 @@ namespace Spring.Aop.Framework
                     names[obj] = name;
                 }
             }
-            objects.Sort(new OrderComparator());
+            objects.Sort(OrderComparator.Instance);
             foreach (object obj in objects)
             {
                 string name = names[obj];
@@ -716,11 +715,11 @@ namespace Spring.Aop.Framework
         /// <summary> Add all global introductions.</summary>
         private void AddGlobalIntroduction(IListableObjectFactory objectFactory, string prefix)
         {
-            IList<string> globalAspectNames =
+            var globalAspectNames =
                 ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(objectFactory, typeof(IAdvisors));
-            IList<string> globalAdvisorNames =
+            var globalAdvisorNames =
                 ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(objectFactory, typeof(IAdvisor));
-            IList<string> globalIntroductionNames =
+            var globalIntroductionNames =
                 ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(objectFactory, typeof(IAdvice));
             List<object> objects = new List<object>();
             Dictionary<object, string> names = new Dictionary<object, string>();
@@ -770,7 +769,7 @@ namespace Spring.Aop.Framework
                     }
                 }
             }
-            objects.Sort(new OrderComparator());
+            objects.Sort(OrderComparator.Instance);
             for (var i = 0; i < objects.Count; i++)
             {
                 object obj = objects[i];

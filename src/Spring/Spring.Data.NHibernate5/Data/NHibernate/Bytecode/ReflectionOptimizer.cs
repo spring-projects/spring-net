@@ -1,5 +1,5 @@
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -50,7 +50,7 @@ namespace Spring.Data.NHibernate.Bytecode
         /// <returns>The new instance.</returns>
         public override object CreateInstance()
         {
-            IList<string> namesForType = listableObjectFactory.GetObjectNamesForType(mappedType);
+            var namesForType = listableObjectFactory.GetObjectNamesForType(mappedType);
             if (namesForType.Count > 0)
             {
                 return listableObjectFactory.GetObject(namesForType[0], mappedType);

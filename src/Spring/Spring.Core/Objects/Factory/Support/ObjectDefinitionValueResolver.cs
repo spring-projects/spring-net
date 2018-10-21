@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System;
 using System.Collections;
@@ -52,7 +48,7 @@ namespace Spring.Objects.Factory.Support
         /// <param name="objectFactory">The object factory.</param>
         public ObjectDefinitionValueResolver(AbstractObjectFactory objectFactory)
         {
-            this.log = LogManager.GetLogger(this.GetType());
+            log = LogManager.GetLogger(GetType());
 
             this.objectFactory = objectFactory;
         }
@@ -349,14 +345,12 @@ namespace Spring.Objects.Factory.Support
         /// <returns>A reference to another object in the factory.</returns>
         protected virtual object ResolveReference(IObjectDefinition definition, string name, string argumentName, RuntimeObjectReference reference)
         {
-            #region Instrumentation
             if (log.IsDebugEnabled)
             {
                 log.Debug(
                         string.Format(CultureInfo.InvariantCulture, "Resolving reference from property '{0}' in object '{1}' to object '{2}'.",
                                       argumentName, name, reference.ObjectName));
             }
-            #endregion
 
             try
             {
@@ -365,9 +359,8 @@ namespace Spring.Objects.Factory.Support
                     if (null == objectFactory.ParentObjectFactory)
                     {
                         throw new ObjectCreationException(definition.ResourceDescription, name,
-                                                          string.Format(
-                                                              "Can't resolve reference to '{0}' in parent factory: " + "no parent factory available.",
-                                                              reference.ObjectName));
+                            $"Can't resolve reference to '{reference.ObjectName}' in parent factory: " +
+                            "no parent factory available.");
                     }
                     return objectFactory.ParentObjectFactory.GetObject(reference.ObjectName);
                 }

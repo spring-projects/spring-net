@@ -1,7 +1,5 @@
-#region License
-
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +14,7 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Reflection;
-
-#endregion
 
 namespace Spring.Core
 {
@@ -39,7 +31,6 @@ namespace Spring.Core
     /// <author>Rick Evans</author>
     public class CriteriaMemberFilter 
     {
-        #region Constructor (s) / Destructor
         /// <summary>
         /// Creates a new instance of the
         /// <see cref="CriteriaMemberFilter"/> class.
@@ -47,9 +38,7 @@ namespace Spring.Core
         public CriteriaMemberFilter ()
         {
         }
-        #endregion
 
-        #region Methods
         /// <summary>
         /// Returns true if the supplied <see cref="System.Reflection.MemberInfo"/> instance
         /// satisfies the supplied <paramref name="filterCriteria"/> (which must be an
@@ -75,6 +64,5 @@ namespace Spring.Core
             ICriteria criteria = filterCriteria as ICriteria;
             return criteria.IsSatisfied (member);
         }
-        #endregion
     }
 }
