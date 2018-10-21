@@ -117,7 +117,7 @@ namespace Spring.Context.Attributes
         {
             ConfigurationClassEnhancer enhancer = new ConfigurationClassEnhancer(objectFactory);
 
-            IList<string> objectNames = objectFactory.GetObjectDefinitionNames();
+            var objectNames = objectFactory.GetObjectDefinitionNames();
 
             foreach (string name in objectNames)
             {

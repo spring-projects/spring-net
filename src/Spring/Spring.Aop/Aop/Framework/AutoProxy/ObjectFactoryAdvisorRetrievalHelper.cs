@@ -63,7 +63,7 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <param name="targetType">the type of the object to be advised</param>
         /// <param name="targetName">the name of the object to be advised</param>
         /// <returns>A list of eligible <see cref="IAdvisor"/> instances</returns>
-        public virtual IList<IAdvisor> FindAdvisorObjects(Type targetType, string targetName)
+        public virtual List<IAdvisor> FindAdvisorObjects(Type targetType, string targetName)
         {
             IList<string> advisorNames = GetAdvisorCandidateNames(targetType, targetName);
 

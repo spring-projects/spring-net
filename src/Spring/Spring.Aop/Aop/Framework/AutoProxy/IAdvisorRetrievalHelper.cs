@@ -13,6 +13,6 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <summary>
         /// Get the list of advisor objects to apply on the target.
         /// </summary>
-        IList<IAdvisor> FindAdvisorObjects(Type targetType, string targetName);
+        List<IAdvisor> FindAdvisorObjects(Type targetType, string targetName);
     }
 }

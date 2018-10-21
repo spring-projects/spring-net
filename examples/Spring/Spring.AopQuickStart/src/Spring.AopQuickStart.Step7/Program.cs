@@ -18,17 +18,11 @@
 
 #endregion
 
-#region Imports
-
 using System;
-using System.Collections.Generic;
-
 using Spring.Context;
 using Spring.Context.Support;
 
 using Spring.AopQuickStart.Commands;
-
-#endregion
 
 namespace Spring.AopQuickStart
 {
@@ -47,7 +41,7 @@ namespace Spring.AopQuickStart
             {
                 // Create AOP proxy using Spring.NET IoC container.
                 IApplicationContext ctx = ContextRegistry.GetContext();
-                IDictionary<string, ICommand> commands = ctx.GetObjects<ICommand>();
+                var commands = ctx.GetObjects<ICommand>();
 
                 foreach (ICommand command in commands.Values)
                 {

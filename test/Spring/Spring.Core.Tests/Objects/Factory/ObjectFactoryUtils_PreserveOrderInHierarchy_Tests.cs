@@ -35,7 +35,7 @@ namespace Spring.Objects.Factory
         [Test]
         public void ObjectNamesIncludingAncestorsPreserveOrderOfRegistration()
         {
-            IList<string> names = ObjectFactoryUtils.ObjectNamesIncludingAncestors(_factory);
+            var names = ObjectFactoryUtils.ObjectNamesIncludingAncestors(_factory);
             Assert.AreEqual(5, names.Count);
             Assert.AreEqual(new string[] { "objA", "objB", "objC", "obj2A", "obj2C" }, names);
         }
@@ -43,7 +43,7 @@ namespace Spring.Objects.Factory
         [Test]
         public void ObjectNamesForTypeIncludingAncestorsPreserveOrderOfRegistration()
         {
-            IList<string> names = ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(_factory, _expectedtype);
+            var names = ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(_factory, _expectedtype);
             Assert.AreEqual(5, names.Count);
             Assert.AreEqual(new string[] { "objA", "objB", "objC", "obj2A", "obj2C" }, names);
         }
@@ -51,7 +51,7 @@ namespace Spring.Objects.Factory
         [Test]
         public void ObjectNamesForTypeIncludingAncestorsPrototypesAndFactoryObjectsPreserveOrderOfRegistration()
         {
-            IList<string> names = ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(_factory, _expectedtype, false, false);
+            var names = ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(_factory, _expectedtype, false, false);
             Assert.AreEqual(5, names.Count);
             Assert.AreEqual(new string[] { "objA", "objB", "objC", "obj2A", "obj2C" }, names);
         }

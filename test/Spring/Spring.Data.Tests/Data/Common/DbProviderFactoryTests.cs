@@ -193,7 +193,7 @@ namespace Spring.Data.Common
             //Initialize internal application context. factory
             DbProviderFactory.GetDbProvider("SqlServer-2.0");
             IApplicationContext ctx = DbProviderFactory.ApplicationContext;
-            IList<string> dbProviderNames = ctx.GetObjectNamesForType(typeof (IDbProvider));
+            var dbProviderNames = ctx.GetObjectNamesForType(typeof (IDbProvider));
             Assert.IsTrue(dbProviderNames.Count > 0);
         }
 #endif

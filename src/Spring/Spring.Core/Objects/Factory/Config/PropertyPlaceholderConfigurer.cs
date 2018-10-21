@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -240,7 +240,7 @@ namespace Spring.Objects.Factory.Config
 	        PlaceholderResolveHandlerAdapter resolveAdapter = new PlaceholderResolveHandlerAdapter(this, props);
 	        ObjectDefinitionVisitor visitor = new ObjectDefinitionVisitor(resolveAdapter.ParseAndResolveVariables);
 
-	        IList<string> objectDefinitionNames = factory.GetObjectDefinitionNames(includeAncestors);
+	        var objectDefinitionNames = factory.GetObjectDefinitionNames(includeAncestors);
 	        for (int i = 0; i < objectDefinitionNames.Count; ++i)
 	        {
 	            string name = objectDefinitionNames[i];

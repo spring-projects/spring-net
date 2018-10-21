@@ -55,7 +55,7 @@ namespace Spring.Aop.Framework.AutoProxy
         public void DefaultExclusionPrefix()
         {
             DefaultAdvisorAutoProxyCreator aapc = (DefaultAdvisorAutoProxyCreator)ObjectFactory.GetObject(ADVISOR_APC_OBJECT_NAME);
-            Assert.AreEqual(ADVISOR_APC_OBJECT_NAME + DefaultAdvisorAutoProxyCreator.SEPARATOR, aapc.AdvisorObjectNamePrefix);
+            Assert.AreEqual(ADVISOR_APC_OBJECT_NAME + DefaultAdvisorAutoProxyCreator.Separator, aapc.AdvisorObjectNamePrefix);
             Assert.IsFalse(aapc.UsePrefix);
         }
 

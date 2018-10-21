@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2004 the original author or authors.
  *
@@ -16,12 +14,11 @@
  * limitations under the License.
  */
 
-#endregion
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using NUnit.Framework;
@@ -139,7 +136,7 @@ namespace Spring.Objects.Factory
             def.FactoryMethodName = "CreateTestObject";
             DefaultListableObjectFactory lof = new DefaultListableObjectFactory();
             lof.RegisterObjectDefinition("factoryObject", def);
-            IDictionary<string, TestObject> objs = lof.GetObjects<TestObject>();
+            var objs = lof.GetObjects<TestObject>();
             Assert.AreEqual(1, objs.Count);
         }
 
@@ -153,7 +150,7 @@ namespace Spring.Objects.Factory
             DefaultListableObjectFactory lof = new DefaultListableObjectFactory();
             lof.RegisterObjectDefinition("factoryObject", def);
             lof.RegisterObjectDefinition("target", new RootObjectDefinition(typeof(TestObjectCreator)));
-            IDictionary<string, TestObject> objs = lof.GetObjects<TestObject>();
+            var objs = lof.GetObjects<TestObject>();
             Assert.AreEqual(1, objs.Count);
         }
 
@@ -165,7 +162,7 @@ namespace Spring.Objects.Factory
                 = new RootObjectDefinition(typeof(TestGenericObject<int, string>));
             def.FactoryMethodName = "CreateList<int>";
             lof.RegisterObjectDefinition("foo", def);
-            IDictionary<string, object> objs = lof.GetObjectsOfType(typeof(List<int>));
+            var objs = lof.GetObjectsOfType(typeof(List<int>));
             Assert.AreEqual(1, objs.Count);
         }
 
@@ -179,7 +176,7 @@ namespace Spring.Objects.Factory
             DefaultListableObjectFactory lof = new DefaultListableObjectFactory();
             lof.RegisterObjectDefinition("factoryObject", def);
             lof.RegisterObjectDefinition("target", new RootObjectDefinition(typeof(TestGenericObject<int, string>)));
-            IDictionary<string, object> objs = lof.GetObjectsOfType(typeof(TestGenericObject<string, int>));
+            var objs = lof.GetObjectsOfType(typeof(TestGenericObject<string, int>));
             Assert.AreEqual(1, objs.Count);
         }
 
@@ -217,7 +214,7 @@ namespace Spring.Objects.Factory
                     typeof(StaticFactoryMethodObject));
             def.FactoryMethodName = "CreateObject";
             lof.RegisterObjectDefinition("foo", def);
-            IDictionary<string, object> objs = lof.GetObjectsOfType(typeof(DBNull));
+            var objs = lof.GetObjectsOfType(typeof(DBNull));
             Assert.AreEqual(1, objs.Count,
                             "Must be looking at the RETURN TYPE of the factory method, " +
                                 "and hence get one DBNull object back.");
@@ -394,14 +391,10 @@ namespace Spring.Objects.Factory
                 return true;
             }
 
-            #region IInstantiationAwareObjectPostProcessor Members
-
             public IPropertyValues PostProcessPropertyValues(IPropertyValues pvs, IList<PropertyInfo> pis, object objectInstance, string objectName)
             {
                 return pvs;
             }
-
-            #endregion
 
             public object PostProcessAfterInitialization(object obj, string objectName)
             {
@@ -444,14 +437,10 @@ namespace Spring.Objects.Factory
                 return true;
             }
 
-            #region IInstantiationAwareObjectPostProcessor Members
-
             public IPropertyValues PostProcessPropertyValues(IPropertyValues pvs, IList<PropertyInfo> pis, object objectInstance, string objectName)
             {
                 return pvs;
             }
-
-            #endregion
 
             public object PostProcessAfterInitialization(object obj, string objectName)
             {
@@ -582,7 +571,7 @@ namespace Spring.Objects.Factory
             TestObject test = (TestObject)lof.GetObject("test");
             Assert.AreEqual(singletonObject, lof.GetObject("singletonObject"));
             Assert.AreEqual(singletonObject, test.Spouse);
-            IDictionary<string, object> objectsOfType = lof.GetObjectsOfType(typeof(TestObject), false, true);
+            var objectsOfType = lof.GetObjectsOfType(typeof(TestObject), false, true);
             Assert.AreEqual(2, objectsOfType.Count);
             Assert.IsTrue(objectsOfType.Values.Contains(test));
             Assert.IsTrue(objectsOfType.Values.Contains(singletonObject));
@@ -1450,7 +1439,7 @@ namespace Spring.Objects.Factory
         {
             TestObject instance = new TestObject();
             DefaultListableObjectFactory fac = new DefaultListableObjectFactory();
-            Assert.Throws<ArgumentException>(() => fac.ConfigureObject(instance, null));
+            Assert.Throws<ArgumentNullException>(() => fac.ConfigureObject(instance, null));
         }
 
         [Test]
@@ -1663,8 +1652,6 @@ namespace Spring.Objects.Factory
             Assert.AreSame(testObject, resultObject);
         }
 
-        #region TestObjectPostProcessor
-
         private class TestObjectPostProcessor : IObjectPostProcessor
         {
             private object other;
@@ -1684,9 +1671,6 @@ namespace Spring.Objects.Factory
                 return other;
             }
         }
-
-
-        #endregion
 
         [Test]
         public void ConfigureObjectAppliesObjectPostProcessorsUsingDefinition()
@@ -1724,8 +1708,6 @@ namespace Spring.Objects.Factory
             Assert.IsNotNull(c);
         }
 
-        #region GetObjectNamesForTypeFindsFactoryObjects
-
         private class A : IFactoryObject, ISerializable
         {
             public object GetObject()
@@ -1748,8 +1730,6 @@ namespace Spring.Objects.Factory
                 throw new NotImplementedException();
             }
         }
-
-        #endregion
 
         [Test]
         public void GetObjectDefinitionNamesOnlyFromChild()
@@ -1817,13 +1797,56 @@ namespace Spring.Objects.Factory
             DefaultListableObjectFactory of = new DefaultListableObjectFactory();
             of.RegisterObjectDefinition("mod", new RootObjectDefinition(typeof(A)));
 
-            IList<string> names = of.GetObjectNamesForType(typeof (ISerializable), false, false);
+            var names = of.GetObjectNamesForType(typeof (ISerializable), false, false);
             Assert.IsNotEmpty((ICollection) names);
             Assert.AreEqual("&mod", names[0]);
         }
+        
+        [Test, MaxTime(1000)]
+        public void TestRegistrationOfManyBeanDefinitionsIsFastEnough()
+        {
+            var bf = new DefaultListableObjectFactory();
+            bf.RegisterObjectDefinition("b", new RootObjectDefinition(typeof(B)));
+            
+            for (int i = 0; i < 100_000; i++) {
+                bf.RegisterObjectDefinition("a" + i, new RootObjectDefinition(typeof(A)));
+            }
+        }
 
-        #region Helper Classes
+        [Test, MaxTime(1000)]
+        public void TestRegistrationOfManySingletonsIsFastEnough()
+        {
+            // Assume.group(TestGroup.PERFORMANCE);
+            var bf = new DefaultListableObjectFactory();
+            bf.RegisterObjectDefinition("b", new RootObjectDefinition(typeof(B)));
+            // bf.getBean("b");
 
+            for (int i = 0; i < 100000; i++) {
+                bf.RegisterSingleton("a" + i, new A());
+            }
+        }
+
+        [Test, MaxTime(3000)]
+        public void TestPrototypeCreationIsFastEnough()
+        {
+            var lbf = new DefaultListableObjectFactory();
+            var rbd = new RootObjectDefinition(typeof(TestObject))
+            {
+                Scope = "prototype"
+            };
+            lbf.RegisterObjectDefinition("test", rbd);
+            //lbf.FreezeConfiguration();
+
+            for (int i = 0; i < 100_000; i++)
+            {
+                lbf.GetObject("test");
+            }
+        }
+
+        public class B
+        {
+        }
+        
         public interface IParent
         {
 
@@ -1928,8 +1951,6 @@ namespace Spring.Objects.Factory
                 InitWasCalled = true;
             }
         }
-
-        #endregion
     }
 
     public class Foo

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -82,7 +82,7 @@ namespace Spring.Objects.Factory.Support
 				MemberInfo[] ctors = definition.ObjectType.FindMembers(
 					MemberTypes.Constructor,
 					flags,
-					new MemberFilter(new CriteriaMemberFilter().FilterMemberByCriteria),
+					new CriteriaMemberFilter().FilterMemberByCriteria,
 					new MinimumArgumentCountCriteria(minimumArgumentCount));
 				constructors = (ConstructorInfo[]) ArrayList.Adapter(ctors).ToArray(typeof (ConstructorInfo));
 			}
@@ -90,7 +90,7 @@ namespace Spring.Objects.Factory.Support
 			{
 				constructors = definition.ObjectType.GetConstructors(flags);
 			}
-			AutowireUtils.SortConstructors(constructors);
+			SortConstructors(constructors);
 			return constructors;
 		}
 
@@ -181,11 +181,11 @@ namespace Spring.Objects.Factory.Support
         public static int GetTypeDifferenceWeight(Type[] paramTypes, object[] args)
         {
             int result = 0;
-            for (int i = 0; i < paramTypes.Length; i++)
+            for (int i = 0; i < (uint) paramTypes.Length; i++)
             {
                 if (!ObjectUtils.IsAssignable(paramTypes[i], args[i]))
                 {
-                    return Int32.MaxValue;
+                    return int.MaxValue;
                 }
                 if (args[i] != null)
                 {
@@ -193,7 +193,7 @@ namespace Spring.Objects.Factory.Support
                     Type superType = args[i].GetType().BaseType;
                     while (superType != null)
                     {
-                        if (paramType.Equals(superType))
+                        if (paramType == superType)
                         {
                             result = result + 2;
                             superType = null;
@@ -226,7 +226,7 @@ namespace Spring.Objects.Factory.Support
         /// </returns>
         public static Boolean IsExcludedFromDependencyCheck(PropertyInfo pi)
         {
-            return (pi.GetSetMethod() == null) ? false : true;
+            return pi.GetSetMethod() != null;
         }
 
 		/// <summary>
@@ -245,15 +245,16 @@ namespace Spring.Objects.Factory.Support
 		/// </param>
 		public static void SortConstructors(ConstructorInfo[] constructors)
 		{
-			if (constructors != null
-				&& constructors.Length > 0)
+			if (constructors != null && constructors.Length > 0)
 			{
-				Array.Sort(constructors, new ConstructorComparer());
+				Array.Sort(constructors, ConstructorComparer.Instance);
 			}
 		}
 
 	    private sealed class ConstructorComparer : IComparer
-		{
+	    {
+		    internal static readonly ConstructorComparer Instance = new ConstructorComparer();
+			
 			public int Compare(object lhs, object rhs)
 			{
 				ConstructorInfo lhsCtor = (ConstructorInfo) lhs;
@@ -282,6 +283,8 @@ namespace Spring.Objects.Factory.Support
 
 	    private sealed class MinimumArgumentCountCriteria : ICriteria
 		{
+			private readonly int _minimumArgumentCount;
+
 			public MinimumArgumentCountCriteria(int minimumArgumentCount)
 			{
 				_minimumArgumentCount = minimumArgumentCount;
@@ -289,12 +292,8 @@ namespace Spring.Objects.Factory.Support
 
 			public bool IsSatisfied(object datum)
 			{
-				bool satisfied = false;
-				satisfied = ((MethodBase) datum).GetParameters().Length >= _minimumArgumentCount;
-				return satisfied;
+				return ((MethodBase) datum).GetParameters().Length >= _minimumArgumentCount;
 			}
-
-			private int _minimumArgumentCount;
 		}
 
 	    /// <summary>

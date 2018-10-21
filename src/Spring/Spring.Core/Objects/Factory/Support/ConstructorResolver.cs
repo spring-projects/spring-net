@@ -114,8 +114,11 @@ namespace Spring.Objects.Factory.Support
         /// <param name="explicitArgs">The explicit chose ctor args.</param>
         /// <returns>A ConstructorInstantiationInfo containg the specified constructor in the RootObjectDefinition or
         /// one based on type matching.</returns>
-        public ConstructorInstantiationInfo GetConstructorInstantiationInfo(string objectName, RootObjectDefinition rod,
-                                                  ConstructorInfo[] chosenCtors, object[] explicitArgs)
+        public ConstructorInstantiationInfo GetConstructorInstantiationInfo(
+            string objectName,
+            RootObjectDefinition rod,
+            ConstructorInfo[] chosenCtors,
+            object[] explicitArgs)
         {
 
             ObjectWrapper wrapper = new ObjectWrapper();
@@ -150,11 +153,9 @@ namespace Spring.Objects.Factory.Support
                 minNrOfArgs = ResolveConstructorArguments(objectName, rod, wrapper, cargs, resolvedValues);
             }
             // Take specified constructors, if any.            
-            ConstructorInfo[] candidates = (chosenCtors != null
-                                                ? chosenCtors
-                                                : AutowireUtils.GetConstructors(rod, 0));
+            ConstructorInfo[] candidates = chosenCtors ?? AutowireUtils.GetConstructors(rod, 0);
             AutowireUtils.SortConstructors(candidates);
-            int minTypeDiffWeight = Int32.MaxValue;
+            int minTypeDiffWeight = int.MaxValue;
 
             for (int i = 0; i < candidates.Length; i++)
             {
@@ -174,17 +175,24 @@ namespace Spring.Objects.Factory.Support
                                                 + "in object '{1}' (hint: specify argument indexes, names, or "
                                                 + "types to avoid ambiguities).", minNrOfArgs, objectName));
                 }
-                ArgumentsHolder args = null;
 
+                ArgumentsHolder args;
                 if (resolvedValues != null)
                 {
-                    UnsatisfiedDependencyExceptionData unsatisfiedDependencyExceptionData = null;
                     // Try to resolve arguments for current constructor
 
                     //need to check for null as indicator of no ctor arg match instead of using exceptions for flow
                     //control as in the Java implementation
-                    args = CreateArgumentArray(objectName, rod, resolvedValues, wrapper, paramTypes, candidate,
-                                                autowiring, out unsatisfiedDependencyExceptionData);
+                    args = CreateArgumentArray(
+                        objectName, 
+                        rod, 
+                        resolvedValues, 
+                        wrapper, 
+                        paramTypes, 
+                        candidate,
+                        autowiring,
+                        out var unsatisfiedDependencyExceptionData);
+
                     if (args == null)
                     {
                         if (i == candidates.Length - 1 && constructorToUse == null)

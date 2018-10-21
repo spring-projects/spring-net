@@ -22,6 +22,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using NUnit.Framework;
 
 using Spring.Objects.Factory.Config;
@@ -68,14 +69,14 @@ namespace Spring.Objects.Factory
         [Test]
         public void ObjectNamesIncludingAncestors()
         {
-            IList<string> names = ObjectFactoryUtils.ObjectNamesIncludingAncestors(_factory);
+            var names = ObjectFactoryUtils.ObjectNamesIncludingAncestors(_factory);
             Assert.AreEqual(6, names.Count);
         }
 
         [Test]
         public void ObjectNamesForTypeIncludingAncestors()
         {
-            IList<string> names = ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(_factory, typeof(ITestObject));
+            var names = ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(_factory, typeof(ITestObject));
             // includes 2 TestObjects from IFactoryObjects (DummyFactory definitions)
             Assert.AreEqual(4, names.Count);
             Assert.IsTrue(names.Contains("test"));
@@ -92,7 +93,7 @@ namespace Spring.Objects.Factory
             DefaultListableObjectFactory child = new DefaultListableObjectFactory(root);
             child.RegisterObjectDefinition("excludeLocalObject", new RootObjectDefinition(typeof(Hashtable)));
 
-            IList<string> names = ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(child, typeof(ArrayList));
+            var names = ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(child, typeof(ArrayList));
             // "excludeLocalObject" matches on the parent, but not the local object definition
             Assert.AreEqual(0, names.Count);
 

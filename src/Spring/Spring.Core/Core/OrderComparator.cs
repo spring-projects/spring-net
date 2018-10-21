@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,6 +62,8 @@ namespace Spring.Core
     [Serializable]
     public class OrderComparator<T> : IComparer<T>
     {
+        public static readonly IComparer<T> Instance = new OrderComparator<T>();
+
         /// <summary>
         /// Compares two objects and returns a value indicating whether one is less than,
         /// equal to or greater than the other.
@@ -81,20 +83,19 @@ namespace Spring.Core
         {
             IOrdered o1lhs = o1 as IOrdered;
             IOrdered o2rhs = o2 as IOrdered;
-            int lhs = o1lhs != null ? o1lhs.Order : Int32.MaxValue;
-            int rhs = o2rhs != null ? o2rhs.Order : Int32.MaxValue;
+            int lhs = o1lhs?.Order ?? int.MaxValue;
+            int rhs = o2rhs?.Order ?? int.MaxValue;
             if (lhs < rhs)
             {
                 return - 1;
             }
-            else if (lhs > rhs)
+
+            if (lhs > rhs)
             {
                 return 1;
             }
-            else
-            {
-                return CompareEqualOrder(o1, o2);
-            }
+
+            return CompareEqualOrder(o1, o2);
         }
 
         /// <summary>

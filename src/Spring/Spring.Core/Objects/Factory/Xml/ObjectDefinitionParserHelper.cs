@@ -405,7 +405,11 @@ namespace Spring.Objects.Factory.Xml
         /// <remarks>
         /// This method may be used as a last resort to post-process an object definition before it gets added to the registry.
         /// </remarks>
-        protected virtual ObjectDefinitionHolder CreateObjectDefinitionHolder(XmlElement element, IConfigurableObjectDefinition definition, string objectName, IList<string> aliases)
+        protected virtual ObjectDefinitionHolder CreateObjectDefinitionHolder(
+            XmlElement element,
+            IConfigurableObjectDefinition definition, 
+            string objectName, 
+            IReadOnlyList<string> aliases)
         {
             return new ObjectDefinitionHolder(definition, objectName, aliases);
         }

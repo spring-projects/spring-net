@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -15,12 +15,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
-
-#region Imports
-
-
 
 #endregion
 
@@ -154,12 +148,12 @@ namespace Spring.Objects.Factory.Config
         /// ApplicationContext instance that the object is living in.
         /// <para>
         /// Note there are no such default types registered in a plain IObjectFactory,
-        /// not even for the BeanFactory interface itself. 
+        /// not even for the IObjectFactory interface itself. 
         /// </para>
         /// </remarks>
         /// <param name="dependencyType">Type of the dependency to register.
         /// This will typically be a base interface such as IObjectFactory, with extensions of it resolved
-        /// as well if declared as an autowiring dependency (e.g. IListableBeanFactory),
+        /// as well if declared as an autowiring dependency (e.g. IListableObjectFactory),
         /// as long as the given value actually implements the extended interface.
         /// </param>
         /// <param name="autowiredValue">The autowired value.  This may also be an
@@ -169,7 +163,7 @@ namespace Spring.Objects.Factory.Config
 
         /// <summary>
         /// Determines whether the specified object qualifies as an autowire candidate,
-        /// to be injected into other beans which declare a dependency of matching type.
+        /// to be injected into other objects which declare a dependency of matching type.
         /// This method checks ancestor factories as well.
         /// </summary>
         /// <param name="objectName">Name of the object to check.</param>
@@ -179,5 +173,33 @@ namespace Spring.Objects.Factory.Config
         /// </returns>
         /// <exception cref="NoSuchObjectDefinitionException">if there is no object with the given name.</exception>
 	    bool IsAutowireCandidate(string objectName, DependencyDescriptor descriptor);
+	    
+    
+	    /// <summary>
+	    /// Clear the merged object definition cache, removing entries for objects
+	    /// which are not considered eligible for full metadata caching yet.
+	    /// </summary>
+	    /// <remarks>
+	    /// Typically triggered after changes to the original object definitions,
+	    /// e.g. after applying a <see cref="IObjectFactoryPostProcessor" />. Note that metadata
+	    /// for objects which have already been created at this point will be kept around.
+	    /// </remarks>
+	    /// <seealso cref="GetObjectDefinition(string)"/>
+	    void ClearMetadataCache();
+
+	    /// <summary>
+	    /// Freeze all object definitions, signalling that the registered object definitions
+		/// will not be modified or post-processed any further.
+	    /// </summary>
+	    /// <remarks>
+	    /// This allows the factory to aggressively cache object definition metadata.
+	    /// </remarks>
+	    void FreezeConfiguration();
+
+	    /// <summary>
+	    /// Return whether this factory's object definitions are frozen,
+	    /// i.e. are not supposed to be modified or post-processed any further.
+	    /// </summary>
+	    bool ConfigurationFrozen { get; }
     }
 }

@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  * 
@@ -16,15 +14,9 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using System.Collections;
 using System.Reflection;
-
-#endregion
 
 namespace Spring.Util
 {
@@ -533,8 +525,6 @@ namespace Spring.Util
             }
         }
 
-        #region StableSort Utility Classes
-
         private class Entry
         {
             private class EntryComparer : IComparer
@@ -573,7 +563,5 @@ namespace Spring.Util
                 Value = value;
             }
         }
-
-        #endregion
     }
 }

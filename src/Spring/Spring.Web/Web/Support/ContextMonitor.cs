@@ -59,18 +59,16 @@ namespace Spring.Web.Support
 
             RenderHeader(res.Output, context.Request.ApplicationPath);
 
-
-            IConfigurableApplicationContext appContext =
-                WebApplicationContext.Current as IConfigurableApplicationContext;
-            if (appContext == null)
+            if (!(WebApplicationContext.Current is IConfigurableApplicationContext appContext))
             {
                 throw new InvalidOperationException(
                     "Implementations of IApplicationContext must also implement IConfigurableApplicationContext");
             }
 
-            IList<string> names = appContext.GetObjectDefinitionNames();
-            foreach (string name in names)
+            var names = appContext.GetObjectDefinitionNames();
+            for (var i = 0; i < names.Count; i++)
             {
+                string name = names[i];
                 RenderObjectDefinition(res.Output, name, appContext.ObjectFactory.GetObjectDefinition(name));
             }
 

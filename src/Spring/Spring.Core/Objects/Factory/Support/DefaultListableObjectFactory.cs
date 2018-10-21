@@ -16,14 +16,15 @@
 
 using System;
 using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
-
+using Spring.Collections.Generic;
 using Spring.Core;
 using Spring.Core.TypeConversion;
+using Spring.Expressions;
 using Spring.Objects.Factory.Config;
 using Spring.Util;
-using Spring.Expressions;
 
 namespace Spring.Objects.Factory.Support
 {
@@ -62,6 +63,37 @@ namespace Spring.Objects.Factory.Support
         IConfigurableListableObjectFactory,
         IObjectDefinitionRegistry
     {
+        
+        // The mapping of object depending object names, keyed by object name.
+        private Dictionary<string, List<string>> dependingObjectNamesCache;
+
+        // The mapping of object definition objects, keyed by object name.
+        private readonly Dictionary<string, IObjectDefinition> objectDefinitionMap;
+
+        // List of object definition names, in registration order.
+        private List<string> objectDefinitionNames = new List<string>(256);
+
+        // Resolver to use for checking if an object definition is an autowire candidate
+        private IAutowireCandidateResolver autowireCandidateResolver = AutowireUtils.CreateAutowireCandidateResolver();
+
+        // Dictionary from dependency type to corresponding autowired value 
+        private readonly IDictionary<Type, object> resolvableDependencies = new Dictionary<Type, object>();
+        
+        // map of singleton and non-singleton bean names, keyed by dependency type
+        private readonly ConcurrentDictionary<Type, List<string>> allObjectNamesByType = new ConcurrentDictionary<Type, List<string>>();
+
+        // map of singleton-only bean names, keyed by dependency type
+        private readonly ConcurrentDictionary<Type, List<string>> singletonObjectNamesByType = new ConcurrentDictionary<Type, List<string>>();
+
+        // list of names of manually registered singletons, in registration order
+        private volatile OrderedSet<string> manualSingletonNames = new OrderedSet<string>();
+
+        // cached array of bean definition names in case of frozen configuration
+        private volatile string[] frozenObjectDefinitionNames;
+
+        // whether bean definition metadata may be cached for all beans
+        private volatile bool configurationFrozen;
+        
         /// <summary>
         /// Creates a new instance of the
         /// <see cref="Spring.Objects.Factory.Support.DefaultListableObjectFactory"/> class.
@@ -203,26 +235,28 @@ namespace Spring.Objects.Factory.Support
 			if (dependingObjectNamesCache == null)
 			{
 				dependingObjectNamesCache = new Dictionary<string, List<string>>();
-				IList<string> allObjectDefinitionNames = GetObjectDefinitionNames();
-				foreach (string name in allObjectDefinitionNames)
-				{
-					if (ContainsObjectDefinition(name))
-					{
-						RootObjectDefinition rod = GetMergedObjectDefinition(name, false);
-						if (rod.DependsOn != null)
-						{
-							foreach (var dependsOnName in rod.DependsOn)
-							{
-								if (!dependingObjectNamesCache.TryGetValue(dependsOnName, out dependingObjectNames))
-								{
-									dependingObjectNames = new List<string>();
-									dependingObjectNamesCache.Add(dependsOnName, dependingObjectNames);
-								}
-								dependingObjectNames.Add(name);
-							}
-						}
-					}
-				}
+				var allObjectDefinitionNames = GetObjectDefinitionNames();
+			    for (var i = 0; i < allObjectDefinitionNames.Count; i++)
+			    {
+			        string name = allObjectDefinitionNames[i];
+			        if (ContainsObjectDefinition(name))
+			        {
+			            RootObjectDefinition rod = GetMergedObjectDefinition(name, false);
+			            if (rod.DependsOn != null)
+			            {
+			                foreach (var dependsOnName in rod.DependsOn)
+			                {
+			                    if (!dependingObjectNamesCache.TryGetValue(dependsOnName, out dependingObjectNames))
+			                    {
+			                        dependingObjectNames = new List<string>();
+			                        dependingObjectNamesCache.Add(dependsOnName, dependingObjectNames);
+			                    }
+
+			                    dependingObjectNames.Add(name);
+			                }
+			            }
+			        }
+			    }
 			}
 			if (dependingObjectNamesCache.TryGetValue(objectName, out dependingObjectNames))
 				return dependingObjectNames;
@@ -266,41 +300,13 @@ namespace Spring.Objects.Factory.Support
         }
 
         /// <summary>
-        /// The mapping of object depending object names, keyed by object name.
-        /// </summary>
-		private Dictionary<string, List<string>> dependingObjectNamesCache;
-
-        /// <summary>
-        /// The mapping of object definition objects, keyed by object name.
-        /// </summary>
-        private readonly Dictionary<string, IObjectDefinition> objectDefinitionMap;
-
-        /// <summary>
-        /// List of object definition names, in registration order.
-        /// </summary>
-        private readonly List<string> objectDefinitionNames = new List<string>();
-
-        /// <summary>
-        /// Resolver to use for checking if an object definition is an autowire candidate
-        /// </summary>
-        private IAutowireCandidateResolver autowireCandidateResolver = AutowireUtils.CreateAutowireCandidateResolver();
-
-        /// <summary>
-        /// IDictionary from dependency type to corresponding autowired value 
-        /// </summary>
-        private readonly IDictionary<Type, object> resolvableDependencies = new Dictionary<Type, object>();
-
-        /// <summary>
         /// Return the number of objects defined in this registry.
         /// </summary>
         /// <value>
         /// The number of objects defined in this registry.
         /// </value>
         /// <seealso cref="Spring.Objects.Factory.Support.IObjectDefinitionRegistry.ObjectDefinitionCount"/>
-        public int ObjectDefinitionCount
-        {
-            get { return objectDefinitionMap.Count; }
-        }
+        public int ObjectDefinitionCount => objectDefinitionMap.Count;
 
         /// <summary>
         /// Check if this registry contains a object definition with the given
@@ -332,51 +338,123 @@ namespace Spring.Objects.Factory.Support
         /// If the object definition is invalid.
         /// </exception>
         /// <seealso cref="Spring.Objects.Factory.Support.IObjectDefinitionRegistry.RegisterObjectDefinition(string, IObjectDefinition)"/>
-        public override void RegisterObjectDefinition(
-            string name, IObjectDefinition objectDefinition)
+        public override void RegisterObjectDefinition(string name, IObjectDefinition objectDefinition)
         {
-            if (objectDefinition is AbstractObjectDefinition)
+            if (objectDefinition is AbstractObjectDefinition abstractObjectDefinition)
             {
                 try
                 {
-                    ((AbstractObjectDefinition)objectDefinition).Validate();
+                    abstractObjectDefinition.Validate();
                 }
                 catch (ObjectDefinitionValidationException ex)
                 {
                     throw new ObjectDefinitionStoreException(
-                        objectDefinition.ResourceDescription,
+                        abstractObjectDefinition.ResourceDescription,
                         name,
                         "Validation of object definition failed.",
                         ex);
                 }
             }
-            IObjectDefinition oldObjectDefinition;
-            if (objectDefinitionMap.TryGetValue(name, out oldObjectDefinition))
+
+            if (objectDefinitionMap.TryGetValue(name, out var existingDefinition))
             {
                 if (!AllowObjectDefinitionOverriding)
                 {
                     throw new ObjectDefinitionStoreException(
-                        string.Format(
-                            "Cannot register object definition [{0}] for object '{1}': there's already [{2}] bound.",
-                            objectDefinition, name, oldObjectDefinition));
+                        $"Cannot register object definition [{objectDefinition}] for object '{name}': there's already [{existingDefinition}] bound.");
                 }
-                else
+
+                if (log.IsDebugEnabled)
                 {
-                    if (log.IsDebugEnabled)
-                    {
-                        log.Debug(
-                            string.Format(
-                                "Overriding object definition for object '{0}': replacing [{1}] with [{2}].",
-                                name, oldObjectDefinition, objectDefinition));
-                    }
+                    log.Debug(
+                        $"Overriding object definition for object '{name}': replacing [{existingDefinition}] with [{objectDefinition}].");
                 }
+                objectDefinitionMap[name] = objectDefinition;
             }
             else
             {
-                objectDefinitionNames.Add(name);
+                if (HasObjectCreationStarted)
+                {
+                    // Cannot modify startup-time collection elements anymore (for stable iteration)
+                    lock (objectDefinitionMap) 
+                    {
+                        objectDefinitionMap[name] = objectDefinition;
+                        var updatedDefinitions = new List<string>(objectDefinitionNames.Count + 1);
+                        updatedDefinitions.AddRange(objectDefinitionNames);
+                        updatedDefinitions.Add(name);
+                        objectDefinitionNames = updatedDefinitions;
+                        if (manualSingletonNames.Contains(name))
+                        {
+                            OrderedSet<string> updatedSingletons = new OrderedSet<string>(manualSingletonNames);
+                            updatedSingletons.Remove(name);
+                            manualSingletonNames = updatedSingletons;
+                        }
+                    }
+                }
+                else 
+                {
+                    // Still in startup registration phase
+                    objectDefinitionMap[name] = objectDefinition;
+                    objectDefinitionNames.Add(name);
+                    manualSingletonNames.Remove(name);
+                }
+                
+                frozenObjectDefinitionNames = null;
             }
-            objectDefinitionMap[name] = objectDefinition;
+            
+            
+            if (existingDefinition != null || ContainsSingleton(name))
+            {
+                ResetObjectDefinition(name);
+            }
         }
+        
+        /// <summary>
+        /// Reset all bean definition caches for the given bean,
+        /// including the caches of beans that are derived from it.
+        ///</summary>
+        /// <remarks>
+        /// Called after an existing bean definition has been replaced or removed,
+        /// triggering <see cref="DefaultListableObjectFactory.ClearMergedObjectDefinition" />, <see cref="DestroySingleton" />
+        /// and <see cref="IMergedObjectDefinitionPostProcessor.ResetObjectDefinition" /> on the
+        /// given bean and on all bean definitions that have the given bean as parent.
+        /// </remarks>
+        /// <param name="objectName">The name of the object to reset</param>
+        protected void ResetObjectDefinition(string objectName)
+        {
+            // Remove the merged bean definition for the given bean, if already created.
+            ClearMergedObjectDefinition(objectName);
+
+            // Remove corresponding bean from singleton cache, if any. Shouldn't usually
+            // be necessary, rather just meant for overriding a context's default beans
+            // (e.g. the default StaticMessageSource in a StaticApplicationContext).
+            DestroySingleton(objectName);
+
+            // Notify all post-processors that the specified bean definition has been reset.
+            for (var i = 0; i < ObjectPostProcessors.Count; i++)
+            {
+                IObjectPostProcessor processor = ObjectPostProcessors[i];
+                if (processor is IMergedObjectDefinitionPostProcessor mergedObjectDefinitionPostProcessor)
+                {
+                    mergedObjectDefinitionPostProcessor.ResetObjectDefinition(objectName);
+                }
+            }
+
+            // Reset all bean definitions that have the given bean as parent (recursively).
+            for (var i = 0; i < objectDefinitionNames.Count; i++)
+            {
+                string bdName = objectDefinitionNames[i];
+                if (objectName != bdName)
+                {
+                    var bd = objectDefinitionMap[bdName];
+                    if (objectName == bd.ParentName)
+                    {
+                        ResetObjectDefinition(bdName);
+                    }
+                }
+            }
+        }
+
 
         /// <summary>
         /// Ensure that all non-lazy-init singletons are instantiated, also
@@ -477,6 +555,77 @@ namespace Spring.Objects.Factory.Support
                 }
             }
         }
+        
+        public override void ClearMetadataCache()
+        {
+            base.ClearMetadataCache();
+            ClearByTypeCache();
+        }
+        
+        /// <summary>
+        /// Remove any assumptions about by-type mappings.
+        /// </summary>
+        private void ClearByTypeCache()
+        {
+            allObjectNamesByType.Clear();
+            singletonObjectNamesByType.Clear();
+        }
+
+        public void FreezeConfiguration()
+        {
+            configurationFrozen = true;
+            frozenObjectDefinitionNames = objectDefinitionNames.ToArray();
+        }
+
+        public bool ConfigurationFrozen => configurationFrozen;
+
+        public override void RegisterSingleton(string beanName, object singletonObject)
+        {
+            base.RegisterSingleton(beanName, singletonObject);
+
+            if (HasObjectCreationStarted)
+            {
+                // Cannot modify startup-time collection elements anymore (for stable iteration)
+                lock (objectDefinitionMap)
+                {
+                    if (!objectDefinitionMap.ContainsKey(beanName))
+                    {
+                        var updatedSingletons = new OrderedSet<string>(manualSingletonNames);
+                        updatedSingletons.Add(beanName);
+                        manualSingletonNames = updatedSingletons;
+                    }
+                }
+            }
+            else
+            {
+                // Still in startup registration phase
+                if (!objectDefinitionMap.ContainsKey(beanName))
+                {
+                    manualSingletonNames.Add(beanName);
+                }
+            }
+
+            ClearByTypeCache();
+        }
+        
+        protected override void DestroySingleton(string name)
+        {
+            base.DestroySingleton(name);
+            manualSingletonNames.Remove(name);
+            ClearByTypeCache();
+        }
+
+        /// <summary>
+        /// Determines whether the metadata for the specified object name is eligible for caching.
+        /// </summary>
+        /// <param name="beanName">Name of the bean.</param>
+        /// <returns>
+        /// 	<c>true</c> if [is object eligible for metadata caching] [the specified bean name]; otherwise, <c>false</c>.
+        /// </returns>
+        protected override bool IsObjectEligibleForMetadataCaching(string beanName)
+        {
+            return (ConfigurationFrozen || base.IsObjectEligibleForMetadataCaching(beanName));
+        }
 
         /// <summary>
         /// Return the registered
@@ -523,17 +672,16 @@ namespace Spring.Objects.Factory.Support
             }
 
             name = TransformedObjectName(name);
-            IObjectDefinition definition;
-            if (!objectDefinitionMap.TryGetValue(name, out definition))
+            if (!objectDefinitionMap.TryGetValue(name, out var definition))
             {
                 if (!includeAncestors || ParentObjectFactory == null)
                 {
                     return null;
                 }
-                else if (ParentObjectFactory is AbstractObjectFactory)
+
+                if (ParentObjectFactory is AbstractObjectFactory abstractObjectFactory)
                 {
-                    definition =
-                        ((AbstractObjectFactory)ParentObjectFactory).GetObjectDefinition(name, includeAncestors);
+                    definition = abstractObjectFactory.GetObjectDefinition(name, includeAncestors);
                 }
             }
             return definition;
@@ -548,7 +696,7 @@ namespace Spring.Objects.Factory.Support
         /// are defined.  Respects any Parent-Child hierarchy the factory is participating in.
         /// </returns>
         /// <seealso cref="Spring.Objects.Factory.IListableObjectFactory.GetObjectDefinitionNames()"/>
-        public IList<string> GetObjectDefinitionNames()
+        public IReadOnlyList<string> GetObjectDefinitionNames()
         {
             return GetObjectDefinitionNames(false);
         }
@@ -562,20 +710,19 @@ namespace Spring.Objects.Factory.Support
         /// The names of all objects defined in this factory, if <code>includeAncestors</code> is <code>true</code> includes all 
         /// objects defined in parent factories, or an empty array if none are defined.
         /// </returns>
-        public IList<string> GetObjectDefinitionNames(bool includeAncestors)
+        public IReadOnlyList<string> GetObjectDefinitionNames(bool includeAncestors)
         {
-            IList<string> results = new List<string>(objectDefinitionNames);
-
-            var listableObjectFactory = ParentObjectFactory as IListableObjectFactory;
-
-            if (includeAncestors && listableObjectFactory != null)
+            if (!includeAncestors || !(ParentObjectFactory is IListableObjectFactory listableObjectFactory))
             {
-                foreach (var name in listableObjectFactory.GetObjectDefinitionNames(includeAncestors))
+                return objectDefinitionNames;
+            }
+
+            var results = new List<string>(objectDefinitionNames);
+            foreach (var name in listableObjectFactory.GetObjectDefinitionNames(includeAncestors: true))
+            {
+                if (!results.Contains(name))
                 {
-                    if (!results.Contains(name))
-                    {
-                        results.Add(name);    
-                    }
+                    results.Add(name);
                 }
             }
 
@@ -626,7 +773,7 @@ namespace Spring.Objects.Factory.Support
         /// are defined.
         /// </returns>
         /// <seealso cref="Spring.Objects.Factory.IListableObjectFactory.GetObjectNamesForType(Type)"/>
-        public IList<string> GetObjectNamesForType(Type type)
+        public IReadOnlyList<string> GetObjectNamesForType(Type type)
         {
             return GetObjectNamesForType(type, true, true);
         }
@@ -654,7 +801,7 @@ namespace Spring.Objects.Factory.Support
         /// The names of all objects defined in this factory, or an empty array if none
         /// are defined.
         /// </returns>
-        public IList<string> GetObjectNames<T>()
+        public IReadOnlyList<string> GetObjectNames<T>()
         {
             return GetObjectNamesForType(typeof(T));
         }
@@ -680,9 +827,24 @@ namespace Spring.Objects.Factory.Support
         /// are defined.
         /// </returns>
         /// <seealso cref="Spring.Objects.Factory.IListableObjectFactory.GetObjectNamesForType(Type, bool, bool)"/>
-        public IList<string> GetObjectNamesForType(Type type, bool includePrototypes, bool includeFactoryObjects)
+        public IReadOnlyList<string> GetObjectNamesForType(Type type, bool includePrototypes, bool includeFactoryObjects)
         {
-            List<string> objectNames = DoGetObjectNamesForType(type, includePrototypes, includeFactoryObjects);
+            if (!ConfigurationFrozen || type == null || !includeFactoryObjects)
+            {
+                return DoGetObjectNamesForType(type, includePrototypes, includeFactoryObjects);
+            }
+
+            ConcurrentDictionary<Type, List<string>> cache =
+                (includePrototypes ? allObjectNamesByType : singletonObjectNamesByType);
+
+            if (cache.TryGetValue(type, out var objectNames))
+            {
+                return objectNames;
+            }
+
+            objectNames = DoGetObjectNamesForType(type, includePrototypes, true);
+            cache[type] = objectNames;
+
             return objectNames;
         }
 
@@ -710,18 +872,18 @@ namespace Spring.Objects.Factory.Support
         /// for all object names.
         /// </typeparam>
         /// <param name="includePrototypes">
-        /// Whether to include prototype objects too or just singletons (also applies to
-        /// <see cref="Spring.Objects.Factory.IFactoryObject"/>s).
+        ///     Whether to include prototype objects too or just singletons (also applies to
+        ///     <see cref="Spring.Objects.Factory.IFactoryObject"/>s).
         /// </param>
         /// <param name="includeFactoryObjects">
-        /// Whether to include <see cref="Spring.Objects.Factory.IFactoryObject"/>s too
-        /// or just normal objects.
+        ///     Whether to include <see cref="Spring.Objects.Factory.IFactoryObject"/>s too
+        ///     or just normal objects.
         /// </param>
         /// <returns>
         /// The names of all objects defined in this factory, or an empty array if none
         /// are defined.
         /// </returns>
-        public IList<string> GetObjectNames<T>(bool includePrototypes, bool includeFactoryObjects)
+        public IReadOnlyList<string> GetObjectNames<T>(bool includePrototypes, bool includeFactoryObjects)
         {
             return GetObjectNamesForType(typeof(T), includePrototypes, includeFactoryObjects);
         }
@@ -745,7 +907,7 @@ namespace Spring.Objects.Factory.Support
         /// If the objects could not be created.
         /// </exception>
         /// <seealso cref="Spring.Objects.Factory.IListableObjectFactory.GetObjectsOfType(Type)"/>
-        public IDictionary<string, object> GetObjectsOfType(Type type)
+        public IReadOnlyDictionary<string, object> GetObjectsOfType(Type type)
         {
             return GetObjectsOfType(type, true, true);
         }
@@ -777,7 +939,7 @@ namespace Spring.Objects.Factory.Support
         /// <exception cref="Spring.Objects.ObjectsException">
         /// If the objects could not be created.
         /// </exception>
-        public IDictionary<string, T> GetObjects<T>()
+        public IReadOnlyDictionary<string, T> GetObjects<T>()
         {
             Dictionary<string, T> result = new Dictionary<string, T>();
             DoGetObjectsOfType(typeof(T), true, true, result);
@@ -808,7 +970,7 @@ namespace Spring.Objects.Factory.Support
         /// If any of the objects could not be created.
         /// </exception>
         /// <seealso cref="Spring.Objects.Factory.IListableObjectFactory.GetObjectsOfType(Type, bool, bool)"/>
-        public IDictionary<string, object> GetObjectsOfType(Type type, bool includePrototypes, bool includeFactoryObjects)
+        public IReadOnlyDictionary<string, object> GetObjectsOfType(Type type, bool includePrototypes, bool includeFactoryObjects)
         {
             Dictionary<string, object> result = new Dictionary<string, object>();
             DoGetObjectsOfType(type, includePrototypes, includeFactoryObjects, result);
@@ -874,7 +1036,7 @@ namespace Spring.Objects.Factory.Support
         /// <exception cref="Spring.Objects.ObjectsException">
         /// If the objects could not be created.
         /// </exception>
-        public IDictionary<string, T> GetObjects<T>(bool includePrototypes, bool includeFactoryObjects)
+        public IReadOnlyDictionary<string, T> GetObjects<T>(bool includePrototypes, bool includeFactoryObjects)
         {
             Dictionary<string, T> result = new Dictionary<string, T>();
             DoGetObjectsOfType(typeof(T), includePrototypes, includeFactoryObjects, result);
@@ -912,22 +1074,27 @@ namespace Spring.Objects.Factory.Support
         /// </exception>
         public override T GetObject<T>()
         {
-            IList<string> objectNamesForType = GetObjectNamesForType(typeof(T));
+            var objectNamesForType = GetObjectNamesForType(typeof(T));
 
             if (objectNamesForType.Count > 1)
             {
-                IList<string> autowireCandidates = new List<string>();
+                var autowireCandidates = new List<string>();
                 foreach (var objectName in objectNamesForType)
                 {
                     if (GetObjectDefinition(objectName).IsAutowireCandidate)
+                    {
                         autowireCandidates.Add(objectName);
+                    }
 
                 }
+
                 if (autowireCandidates.Count > 0)
+                {
                     objectNamesForType = autowireCandidates;
+                }
             }
 
-            if ((objectNamesForType == null) || (objectNamesForType.Count == 0))
+            if ((objectNamesForType == null) || objectNamesForType.Count == 0)
             {
                 throw new NoSuchObjectDefinitionException(typeof(T).FullName, "Requested Type not Defined in the Context.");
             }
@@ -936,15 +1103,14 @@ namespace Spring.Objects.Factory.Support
             {
                 return (T)GetObject(objectNamesForType[0]);
             }
-            else if (objectNamesForType.Count == 0 && ParentObjectFactory != null)
+
+            if (objectNamesForType.Count == 0 && ParentObjectFactory != null)
             {
                 return ParentObjectFactory.GetObject<T>();
             }
-            else
-            {
-                throw new NoSuchObjectDefinitionException(typeof(T), "expected single bean but found " +
-                        objectNamesForType.Count + ": " + StringUtils.ArrayToCommaDelimitedString(objectNamesForType));
-            }
+
+            throw new NoSuchObjectDefinitionException(typeof(T), "expected single bean but found " +
+                                                                 objectNamesForType.Count + ": " + StringUtils.ArrayToCommaDelimitedString(objectNamesForType));
         }
 
         /// <summary>
@@ -974,9 +1140,10 @@ namespace Spring.Objects.Factory.Support
         protected List<string> DoGetObjectNamesForType(Type type, bool includeNonSingletons, bool allowEagerInit)
         {
             List<string> result = new List<string>();
-            IList<string> objectNames = GetObjectDefinitionNames(true);
-            foreach (string s in objectNames)
+            var objectNames = GetObjectDefinitionNames(true);
+            for (var i = 0; i < objectNames.Count; i++)
             {
+                string s = objectNames[i];
                 string objectName = s;
                 if (!IsAlias(objectName))
                 {
@@ -985,19 +1152,21 @@ namespace Spring.Objects.Factory.Support
                         RootObjectDefinition mod = GetMergedObjectDefinition(objectName, true);
                         // Only check object definition if it is complete
                         if (!mod.IsAbstract &&
-                                (allowEagerInit || (mod.HasObjectType || !mod.IsLazyInit /*|| this.AllowEagerTypeLoading*/ ) &&
-                                    !RequiresEagerInitForType(mod.FactoryObjectName)))
+                            (allowEagerInit ||
+                             (mod.HasObjectType || !mod.IsLazyInit /*|| this.AllowEagerTypeLoading*/) &&
+                             !RequiresEagerInitForType(mod.FactoryObjectName)))
                         {
                             bool isFactoryObject = IsFactoryObject(objectName, mod);
                             bool matchFound =
-                                   (allowEagerInit || !isFactoryObject || ContainsSingleton(objectName)) &&
-                                   (includeNonSingletons || IsSingleton(objectName)) && IsTypeMatch(objectName, type);
+                                (allowEagerInit || !isFactoryObject || ContainsSingleton(objectName)) &&
+                                (includeNonSingletons || IsSingleton(objectName)) && IsTypeMatch(objectName, type);
                             if (!matchFound && isFactoryObject)
                             {
                                 // in case of a FactoryObject, try to match FactoryObject instance itself next
                                 objectName = ObjectFactoryUtils.BuildFactoryObjectName(objectName);
                                 matchFound = (includeNonSingletons || mod.IsSingleton) && IsTypeMatch(objectName, type);
                             }
+
                             if (matchFound)
                             {
                                 result.Add(objectName);
@@ -1010,6 +1179,7 @@ namespace Spring.Objects.Factory.Support
                         {
                             throw;
                         }
+
                         // Probably contains a placeholder; lets ignore it for type matching purposes.
                         if (log.IsDebugEnabled)
                         {
@@ -1022,6 +1192,7 @@ namespace Spring.Objects.Factory.Support
                         {
                             throw;
                         }
+
                         // Probably contains a placeholder; lets ignore it for type matching purposes.
                         if (log.IsDebugEnabled)
                         {
@@ -1032,29 +1203,27 @@ namespace Spring.Objects.Factory.Support
             }
 
             // check singletons too, to catch manually registered singletons...
-            IList<string> singletonNames = GetSingletonNames();
-            foreach (string s in singletonNames)
+            foreach (string s in manualSingletonNames)
             {
                 string objectName = s;
-                // only check if manually registered...
-                if (!ContainsObjectDefinition(objectName))
+                // in the case of an IFactoryObject, match the object created by the IFactoryObject...
+                if (IsFactoryObject(objectName))
                 {
-                    // in the case of an IFactoryObject, match the object created by the IFactoryObject...
-                    if (IsFactoryObject(objectName))
-                    {
-                        if ((includeNonSingletons || IsSingleton(objectName)) && IsTypeMatch(objectName, type))
-                        {
-                            result.Add(objectName);
-                            continue;
-                        }
-                        objectName = ObjectFactoryUtils.BuildFactoryObjectName(objectName);
-                    }
-                    if (IsTypeMatch(objectName, type))
+                    if ((includeNonSingletons || IsSingleton(objectName)) && IsTypeMatch(objectName, type))
                     {
                         result.Add(objectName);
+                        continue;
                     }
+
+                    objectName = ObjectFactoryUtils.BuildFactoryObjectName(objectName);
+                }
+
+                if (IsTypeMatch(objectName, type))
+                {
+                    result.Add(objectName);
                 }
             }
+
             return result;
         }
 
@@ -1132,7 +1301,7 @@ namespace Spring.Objects.Factory.Support
                 return TypeConversionUtils.ConvertValueIfNecessary(type, matchingObjects.Values, null);
             }
             else if (type.IsGenericType && 
-                (type.GetGenericTypeDefinition() == typeof(IList<>) || type.GetGenericTypeDefinition() == typeof(Spring.Collections.Generic.ISet<>) || 
+                (type.GetGenericTypeDefinition() == typeof(IList<>) || type.GetGenericTypeDefinition() == typeof(Collections.Generic.ISet<>) || 
                  type.GetGenericTypeDefinition() == typeof(IDictionary<,>)))
             {
                 var isDictionary = (type.GetGenericTypeDefinition() == typeof (IDictionary<,>));
@@ -1268,7 +1437,7 @@ namespace Spring.Objects.Factory.Support
         protected bool MatchesObjectName(string objectName, string candidateName)
         {
             return (candidateName != null &&
-                    (candidateName.Equals(objectName) || GetAliases(objectName).Contains(candidateName)));
+                    (candidateName.Equals(objectName) || DoGetAliases(objectName).Contains(candidateName)));
         }
 
         /// <summary>
@@ -1285,8 +1454,7 @@ namespace Spring.Objects.Factory.Support
 
         private Dictionary<string, object> FindAutowireCandidates(string objectName, Type requiredType, DependencyDescriptor descriptor)
         {
-            IList<string> candidateNames =
-                ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(this, requiredType, true, descriptor.Eager);
+            var candidateNames = ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(this, requiredType, true, descriptor.Eager);
             var result = new Dictionary<string, object>(candidateNames.Count);
 
             foreach (var entry in resolvableDependencies)

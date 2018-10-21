@@ -18,14 +18,9 @@
 
 #endregion
 
-#region Imports
-
 using System;
-using System.Reflection;
 
 using Spring.Aop;
-
-#endregion
 
 namespace Spring.AopQuickStart.Aspects
 {
@@ -39,8 +34,7 @@ namespace Spring.AopQuickStart.Aspects
     {
         public void AfterThrowing(Exception ex)
         {
-            Console.Error.WriteLine(
-                String.Format("Advised method threw this exception : {0}", ex.Message));
+            Console.Error.WriteLine($"Advised method threw this exception : {ex.Message}");
         }
     }
 }

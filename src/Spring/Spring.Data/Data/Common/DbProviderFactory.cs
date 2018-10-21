@@ -1,5 +1,5 @@
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -128,10 +128,11 @@ namespace Spring.Data.Common
 								ctx = new XmlApplicationContext(DBPROVIDER_CONTEXTNAME, true, new string[] { DBPROVIDER_DEFAULT_RESOURCE_NAME });
 							}
 
-							IList<string> dbProviderNames = ctx.GetObjectNames<IDbProvider>();
 							if (log.IsInfoEnabled)
 							{
-								log.Info(string.Format("{0} DbProviders Available. [{1}]", dbProviderNames.Count, StringUtils.CollectionToCommaDelimitedString(dbProviderNames)));
+								var dbProviderNames = ctx.GetObjectNames<IDbProvider>();
+								log.Info(
+									$"{dbProviderNames.Count} DbProviders Available. [{StringUtils.CollectionToCommaDelimitedString(dbProviderNames)}]");
 							}
 						}
 						catch (Exception e)

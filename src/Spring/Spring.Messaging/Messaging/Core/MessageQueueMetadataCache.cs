@@ -56,7 +56,7 @@ namespace Spring.Messaging.Core
         /// </summary>
         public void Initialize()
         {
-            IDictionary<string, MessageQueueFactoryObject> messageQueueDictionary = configurableApplicationContext.GetObjects<MessageQueueFactoryObject>();
+            var messageQueueDictionary = configurableApplicationContext.GetObjects<MessageQueueFactoryObject>();
             lock (itemStore.SyncRoot)
             {
                 foreach (KeyValuePair<string, MessageQueueFactoryObject> entry in messageQueueDictionary)

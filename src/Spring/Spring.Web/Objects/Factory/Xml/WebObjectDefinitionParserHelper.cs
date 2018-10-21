@@ -85,11 +85,13 @@ namespace Spring.Objects.Factory.Xml
             return objectName;
         }
 
-        protected override ObjectDefinitionHolder CreateObjectDefinitionHolder(XmlElement element, IConfigurableObjectDefinition definition, string objectName, IList<string> aliasesArray)
+        protected override ObjectDefinitionHolder CreateObjectDefinitionHolder(
+            XmlElement element,
+            IConfigurableObjectDefinition definition, 
+            string objectName, 
+            IReadOnlyList<string> aliasesArray)
         {
-            IWebObjectDefinition webDefinition = definition as IWebObjectDefinition;
-
-            if (webDefinition != null)
+            if (definition is IWebObjectDefinition webDefinition)
             {
                 if (definition.IsSingleton 
                     && element.HasAttribute(ObjectDefinitionConstants.ScopeAttribute))

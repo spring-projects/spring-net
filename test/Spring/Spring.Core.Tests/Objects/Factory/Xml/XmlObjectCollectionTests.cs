@@ -22,6 +22,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Text;
 using Common.Logging;
 using Common.Logging.Simple;
@@ -195,12 +196,12 @@ namespace Spring.Objects.Factory.Xml
         {
             IResource resource = new ReadOnlyXmlTestResource("collections.xml", GetType());
             XmlObjectFactory xof = new XmlObjectFactory(resource);
-            IList<string> objectNames = xof.GetObjectDefinitionNames();
+            var objectNames = xof.GetObjectDefinitionNames();
             TestObject tb1 = (TestObject) xof.GetObject("aliased");
             TestObject alias1 = (TestObject) xof.GetObject("myalias");
             Assert.IsTrue(tb1 == alias1);
 
-            IList<string> tb1Aliases = xof.GetAliases("aliased");
+            var tb1Aliases = xof.GetAliases("aliased");
             Assert.AreEqual(1, tb1Aliases.Count);
             Assert.IsTrue(tb1Aliases.Contains("myalias"));
             Assert.IsTrue(objectNames.Contains("aliased"));
@@ -211,7 +212,7 @@ namespace Spring.Objects.Factory.Xml
             TestObject alias3 = (TestObject) xof.GetObject("alias2");
             Assert.IsTrue(tb2 == alias2);
             Assert.IsTrue(tb2 == alias3);
-            IList<string> tb2Aliases = xof.GetAliases("multiAliased");
+            var tb2Aliases = xof.GetAliases("multiAliased");
             Assert.AreEqual(2, tb2Aliases.Count);
             Assert.IsTrue(tb2Aliases.Contains("alias1"));
             Assert.IsTrue(tb2Aliases.Contains("alias2"));
@@ -225,7 +226,7 @@ namespace Spring.Objects.Factory.Xml
             Assert.IsTrue(tb3 == alias4);
             Assert.IsTrue(tb3 == alias5);
 
-            IList<string> tb3Aliases = xof.GetAliases("aliasWithoutId1");
+            var tb3Aliases = xof.GetAliases("aliasWithoutId1");
             Assert.AreEqual(2, tb2Aliases.Count);
             Assert.IsTrue(tb3Aliases.Contains("aliasWithoutId2"));
             Assert.IsTrue(tb3Aliases.Contains("aliasWithoutId3"));

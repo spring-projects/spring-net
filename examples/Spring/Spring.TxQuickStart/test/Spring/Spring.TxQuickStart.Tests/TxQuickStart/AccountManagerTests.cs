@@ -18,10 +18,7 @@
 
 #endregion
 
-#region Imports
-
 using System;
-using System.Collections.Generic;
 using System.Data;
 using NUnit.Framework;
 using Spring.Aop.Config;
@@ -33,8 +30,6 @@ using Spring.Data.Core;
 using Spring.Objects.Factory.Xml;
 using Spring.Transaction.Config;
 using Spring.TxQuickStart.Services;
-
-#endregion
 
 namespace Spring.TxQuickStart
 {
@@ -54,7 +49,6 @@ namespace Spring.TxQuickStart
             NamespaceParserRegistry.RegisterParser(typeof(TxNamespaceParser));
             NamespaceParserRegistry.RegisterParser(typeof(AopNamespaceParser));
             IApplicationContext context = CreateContextFromXml();
-            IDictionary<string, IAccountManager> dict = context.GetObjects<IAccountManager>();
             accountManager = context["accountManager"] as IAccountManager;  
             CleanDb(context);
         }
