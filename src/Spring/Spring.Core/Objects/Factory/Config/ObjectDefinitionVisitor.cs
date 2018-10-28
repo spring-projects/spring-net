@@ -145,7 +145,7 @@ namespace Spring.Objects.Factory.Config
         /// specified IVariableSource.
         /// </summary>
         /// <param name="nav">The named argument values.</param>
-        protected virtual void VisitNamedArgumentValues(IReadOnlyDictionary<string, object> nav)
+        protected virtual void VisitNamedArgumentValues(IReadOnlyDictionary<string, ConstructorArgumentValues.ValueHolder> nav)
         {
             foreach (ConstructorArgumentValues.ValueHolder valueHolder in nav.Values)
             {

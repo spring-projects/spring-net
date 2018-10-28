@@ -1,7 +1,5 @@
-#region License
-
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +14,9 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using System.Globalization;
 using Spring.Expressions;
-
-#endregion
 
 namespace Spring.Objects.Factory.Config
 {
@@ -37,15 +29,9 @@ namespace Spring.Objects.Factory.Config
     [Serializable]
     public class ExpressionHolder
 	{
-        #region Fields
-
-        private IExpression expression;
+		private IExpression expression;
         private string expressionString;
 	    private MutablePropertyValues properties;
-
-        #endregion
-        
-        #region Constructor (s) / Destructor
 
 		/// <summary>
 		/// Creates a new instance of the
@@ -59,11 +45,7 @@ namespace Spring.Objects.Factory.Config
             this.expression = Spring.Expressions.Expression.Parse(expression);
 		}
 
-		#endregion
-
-		#region Properties
-
-        /// <summary>
+		/// <summary>
         /// Gets or sets the expression string.  Setting the expression string will cause
         /// the expression to be parsed.
         /// </summary>
@@ -90,20 +72,13 @@ namespace Spring.Objects.Factory.Config
 	        set { properties = value; }
 	    }
 
-	    #endregion
-
-		#region Methods
-
 		/// <summary>
 		/// Returns a string representation of this instance.
 		/// </summary>
 		/// <returns>A string representation of this instance.</returns>
 		public override string ToString()
 		{
-			return string.Format(
-			    CultureInfo.InvariantCulture, "<{0}>", expressionString);
+			return $"<{expressionString}>";
 		}
-
-		#endregion
 	}
 }

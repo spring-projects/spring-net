@@ -300,9 +300,9 @@ namespace Spring.Objects.Factory.Support
                           $"the instantiation of '{objectName}'.");
             }
 
-            for (var i = 0; i < ObjectPostProcessors.Count; i++)
+            for (var i = 0; i < objectPostProcessors.Count; i++)
             {
-                IObjectPostProcessor processor = ObjectPostProcessors[i];
+                IObjectPostProcessor processor = objectPostProcessors[i];
                 IInstantiationAwareObjectPostProcessor inProc = processor as IInstantiationAwareObjectPostProcessor;
                 object theObject = inProc?.PostProcessBeforeInstantiation(objectType, objectName);
                 if (theObject != null)
@@ -841,17 +841,19 @@ namespace Spring.Objects.Factory.Support
         protected internal override object InstantiateObject(string name, RootObjectDefinition definition, object[] arguments, bool allowEagerCaching, bool suppressConfigure)
         {
             // guarantee the initialization of objects that the current one depends on..
-            if (definition.DependsOn != null && definition.DependsOn.Count > 0)
+            if (definition.dependsOn != null)
             {
-                foreach (string dependant in definition.DependsOn)
+                for (var i = 0; i < definition.dependsOn.Count; i++)
                 {
+                    string dependant = definition.dependsOn[i];
                     GetObject(dependant);
                 }
             }
 
-            if (log.IsDebugEnabled)
+            var isDebugEnabled = log.IsDebugEnabled;
+            if (isDebugEnabled)
             {
-                log.Debug(string.Format(CultureInfo.InvariantCulture, "Creating instance of Object '{0}' with merged definition [{1}].", name, definition));
+                log.Debug($"Creating instance of Object '{name}' with merged definition [{definition}].");
             }
 
             // Make sure object type is actually resolved at this point.
@@ -873,12 +875,7 @@ namespace Spring.Objects.Factory.Support
                 return definition;
             }
 
-
-
-            object instance = null;
-
-
-            IObjectWrapper instanceWrapper = null;
+            object instance;
             bool eagerlyCached = false;
             try
             {
@@ -892,17 +889,16 @@ namespace Spring.Objects.Factory.Support
                     }
                 }
 
-
-                instanceWrapper = CreateObjectInstance(name, definition, arguments);
+                var instanceWrapper = CreateObjectInstance(name, definition, arguments);
                 instance = instanceWrapper.WrappedInstance;
 
                 // eagerly cache singletons to be able to resolve circular references
                 // even when triggered by lifecycle interfaces like IObjectFactoryAware.
                 if (allowEagerCaching && definition.IsSingleton)
                 {
-                    if (log.IsDebugEnabled)
+                    if (isDebugEnabled)
                     {
-                        log.Debug("Eagerly caching object '" + name + "' to allow for resolving potential circular references");
+                        log.Debug($"Eagerly caching object '{name}' to allow for resolving potential circular references");
                     }
                     AddEagerlyCachedSingleton(name, definition, instance);
                     eagerlyCached = true;
@@ -1041,9 +1037,9 @@ namespace Spring.Objects.Factory.Support
         {
             if (HasInstantiationAwareObjectPostProcessors)
             {
-                for (var i = 0; i < ObjectPostProcessors.Count; i++)
+                for (var i = 0; i < objectPostProcessors.Count; i++)
                 {
-                    IObjectPostProcessor objectPostProcessor = ObjectPostProcessors[i];
+                    IObjectPostProcessor objectPostProcessor = objectPostProcessors[i];
                     if (ObjectUtils.IsAssignable(typeof(SmartInstantiationAwareObjectPostProcessor),
                         objectPostProcessor))
                     {
@@ -1769,7 +1765,7 @@ namespace Spring.Objects.Factory.Support
 
             if (log.IsDebugEnabled)
             {
-                log.Debug(string.Format("Configuring object using definition '{1}'", instance, name));
+                log.Debug($"Configuring object using definition '{name}'");
             }
 
             PopulateObject(name, definition, wrapper);
@@ -1779,7 +1775,7 @@ namespace Spring.Objects.Factory.Support
             {
                 if (log.IsDebugEnabled)
                 {
-                    log.Debug(string.Format(CultureInfo.InvariantCulture, "Setting the name property on the IObjectNameAware object '{0}'.", name));
+                    log.Debug($"Setting the name property on the IObjectNameAware object '{name}'.");
                 }
 
                 ((IObjectNameAware)instance).ObjectName = name;
@@ -1790,8 +1786,7 @@ namespace Spring.Objects.Factory.Support
                 if (log.IsDebugEnabled)
                 {
                     log.Debug(
-                            string.Format(CultureInfo.InvariantCulture, "Setting the ObjectFactory property on the IObjectFactoryAware object '{0}'.",
-                                          name));
+                        $"Setting the ObjectFactory property on the IObjectFactoryAware object '{name}'.");
                 }
 
                 ((IObjectFactoryAware)instance).ObjectFactory = this;
@@ -1907,13 +1902,13 @@ namespace Spring.Objects.Factory.Support
         {
             if (log.IsDebugEnabled)
             {
-                log.Debug("Invoking IObjectPostProcessors before initialization of object '" + name + "'");
+                log.Debug($"Invoking IObjectPostProcessors before initialization of object '{name}'");
             }
 
             object result = instance;
-            for (var i = 0; i < ObjectPostProcessors.Count; i++)
+            for (var i = 0; i < objectPostProcessors.Count; i++)
             {
-                IObjectPostProcessor objectProcessor = ObjectPostProcessors[i];
+                IObjectPostProcessor objectProcessor = objectPostProcessors[i];
                 result = objectProcessor.PostProcessBeforeInitialization(result, name);
                 if (result == null)
                 {
@@ -1949,20 +1944,19 @@ namespace Spring.Objects.Factory.Support
         {
             if (log.IsDebugEnabled)
             {
-                log.Debug("Invoking IObjectPostProcessors after initialization of object '" + name + "'");
+                log.Debug($"Invoking IObjectPostProcessors after initialization of object '{name}'");
             }
 
             object result = instance;
-            for (var i = 0; i < ObjectPostProcessors.Count; i++)
+            for (var i = 0; i < objectPostProcessors.Count; i++)
             {
-                IObjectPostProcessor objectProcessor = ObjectPostProcessors[i];
+                IObjectPostProcessor objectProcessor = objectPostProcessors[i];
                 result = objectProcessor.PostProcessAfterInitialization(result, name);
                 if (result == null)
                 {
                     throw new ObjectCreationException(name,
-                        string.Format(CultureInfo.InvariantCulture,
-                            "PostProcessAfterInitialization method of IObjectPostProcessor [{0}] "
-                            + " returned null for object [{1}] with name [{2}].", objectProcessor, instance, name));
+                        $"PostProcessAfterInitialization method of IObjectPostProcessor [{objectProcessor}] " +
+                        $" returned null for object [{instance}] with name [{name}].");
                 }
             }
 

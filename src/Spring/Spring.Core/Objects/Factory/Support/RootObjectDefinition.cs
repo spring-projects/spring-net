@@ -21,6 +21,7 @@
 #region Imports
 
 using System;
+using System.Reflection;
 using System.Runtime.Serialization;
 
 using Spring.Objects.Factory.Config;
@@ -62,6 +63,8 @@ namespace Spring.Objects.Factory.Support
     [Serializable]
     public class RootObjectDefinition : AbstractObjectDefinition
     {
+        internal ConstructorInfo[] defaultConstructor;
+
         /// <summary>
         /// Creates a new instance of the
         /// <see cref="Spring.Objects.Factory.Support.RootObjectDefinition"/> class.

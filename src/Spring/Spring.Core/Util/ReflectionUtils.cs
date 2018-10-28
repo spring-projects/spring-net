@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -44,6 +44,8 @@ namespace Spring.Util
     /// <author>Bruno Baia (.NET)</author>
     public sealed class ReflectionUtils
     {
+        internal static Type[] EmptyTypes = new Type[0];
+
         /// <summary>
         /// Convenience <see cref="System.Reflection.BindingFlags"/> value that will
         /// match all private and public, static and instance members on a class
@@ -259,8 +261,14 @@ namespace Spring.Util
         public static Type[] GetParameterTypes(ParameterInfo[] args)
         {
             AssertUtils.ArgumentNotNull(args, "args");
-            Type[] types = new Type[args.Length];
-            for (int i = 0; i < args.Length; i++)
+
+            if (args.Length == 0)
+            {
+                return EmptyTypes;
+            }
+            
+            var types = new Type[args.Length];
+            for (int i = 0; i < (uint) args.Length; i++)
             {
                 types[i] = args[i].ParameterType;
             }
