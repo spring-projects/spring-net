@@ -72,11 +72,20 @@ namespace Spring.Objects.Factory.Support
 		/// </returns>
 		public static ConstructorInfo[] GetConstructors(
 			IObjectDefinition definition, int minimumArgumentCount)
-		{
+	    {
+		    var rootObjectDefinition = definition as RootObjectDefinition;
+		    if (minimumArgumentCount == 0 && rootObjectDefinition?.defaultConstructor != null)
+		    {
+			    return rootObjectDefinition.defaultConstructor;
+		    }
+			
 			const BindingFlags flags =
-					  BindingFlags.Public | BindingFlags.NonPublic
-					  | BindingFlags.Instance | BindingFlags.DeclaredOnly;
-			ConstructorInfo[] constructors = null;
+					  BindingFlags.Public
+					  | BindingFlags.NonPublic
+					  | BindingFlags.Instance 
+					  | BindingFlags.DeclaredOnly;
+		    
+			ConstructorInfo[] constructors;
 			if (minimumArgumentCount > 0)
 			{
 				MemberInfo[] ctors = definition.ObjectType.FindMembers(
@@ -89,6 +98,10 @@ namespace Spring.Objects.Factory.Support
 			else
 			{
 				constructors = definition.ObjectType.GetConstructors(flags);
+				if (rootObjectDefinition != null)
+				{
+					rootObjectDefinition.defaultConstructor = constructors;
+				}
 			}
 			SortConstructors(constructors);
 			return constructors;
@@ -135,10 +148,9 @@ namespace Spring.Objects.Factory.Support
 				Type theParameterType = argTypes[i].ParameterType;
 				if (!ObjectUtils.IsAssignable(theParameterType, args[i]))
 				{
-					return Int32.MaxValue;
+					return int.MaxValue;
 				}
-				if (args[i] != null
-					&& !(args[i].GetType().Equals(theParameterType)))
+				if (args[i] != null && args[i].GetType() != theParameterType)
 				{
 					Type superType = args[i].GetType().BaseType;
 					while (superType != null)
@@ -245,7 +257,7 @@ namespace Spring.Objects.Factory.Support
 		/// </param>
 		public static void SortConstructors(ConstructorInfo[] constructors)
 		{
-			if (constructors != null && constructors.Length > 0)
+			if (constructors != null && constructors.Length > 1)
 			{
 				Array.Sort(constructors, ConstructorComparer.Instance);
 			}

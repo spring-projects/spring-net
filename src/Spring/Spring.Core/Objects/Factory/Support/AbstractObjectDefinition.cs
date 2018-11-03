@@ -60,7 +60,7 @@ namespace Spring.Objects.Factory.Support
         
         private AutoWiringMode autowireMode = AutoWiringMode.No;
         private DependencyCheckingMode dependencyCheck = DependencyCheckingMode.None;
-        private List<string> dependsOn;
+        internal List<string> dependsOn;
         private bool autowireCandidate = true;
         private bool primary;
         private Dictionary<string, AutowireCandidateQualifier> qualifiers;
@@ -672,8 +672,8 @@ namespace Spring.Objects.Factory.Support
         /// <see cref="Spring.Objects.Factory.Support.AbstractObjectDefinition.ConstructorArgumentValues"/>
         /// property.
         /// </value>
-        public virtual bool HasConstructorArgumentValues => ConstructorArgumentValues != null
-                                                            && !ConstructorArgumentValues.Empty;
+        public bool HasConstructorArgumentValues => constructorArgumentValues != null
+                                                            && !constructorArgumentValues.Empty;
 
         /// <summary>
         /// Resolves the type of the object, resolving it from a specified

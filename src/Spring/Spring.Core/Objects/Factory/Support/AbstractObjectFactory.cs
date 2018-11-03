@@ -1618,7 +1618,7 @@ namespace Spring.Objects.Factory.Support
         /// <summary>
         /// ObjectPostProcessors to apply in CreateObject
         /// </summary>
-        private List<IObjectPostProcessor> objectPostProcessors = new List<IObjectPostProcessor>();
+        internal List<IObjectPostProcessor> objectPostProcessors = new List<IObjectPostProcessor>();
 
         /// <summary>
         /// String Resolver applied to Autowired value injections
@@ -2101,17 +2101,19 @@ namespace Spring.Objects.Factory.Support
             object monitor = new object();
             const int indent = 3;
             bool hasErrors = false;
+            var isDebugEnabled = log.IsDebugEnabled;
+            
             try
             {
                 string objectName = TransformedObjectName(name);
                 Interlocked.Increment(ref nestingCount);
 
-                if (log.IsDebugEnabled)
+                if (isDebugEnabled)
                 {
                     log.Debug(string.Format("{2}GetObjectInternal: obtaining instance for name {0} => canonical name {1}", name, objectName, new string(' ', nestingCount * indent)));
                 }
 
-                object instance = null;
+                object instance;
 
                 // those are cases, where singleton cache can be used
                 if (arguments == null && !suppressConfigure)
@@ -2120,7 +2122,7 @@ namespace Spring.Objects.Factory.Support
                     object sharedInstance = GetSingleton(objectName);
                     if (sharedInstance != null)
                     {
-                        if (log.IsDebugEnabled)
+                        if (isDebugEnabled)
                         {
                             if (IsSingletonCurrentlyInCreation(objectName))
                             {
@@ -2138,7 +2140,8 @@ namespace Spring.Objects.Factory.Support
                     }
                 }
 
-                if (IsPrototypeCurrentlyInCreation(name))
+                var set = prototypesInCreation.Value;
+                if (set.Contains(name))
                 {
                     throw new ObjectCurrentlyInCreationException(name);
                 }
@@ -2187,14 +2190,17 @@ namespace Spring.Objects.Factory.Support
                 else
                 {
                     // it's a prototype, so create a new instance...
-                    BeforePrototypeCreation(name);
+                    set.Add(name);
                     try
                     {
                         instance = InstantiateObject(name, mergedObjectDefinition, arguments, true, suppressConfigure);
                     }
                     finally
                     {
-                        AfterPrototypeCreation(name);
+                        if (!set.Remove(name))
+                        {
+                            ThrowNotCurrentlyInCreation(name);
+                        }
                     }
                 }
 
@@ -2241,7 +2247,7 @@ namespace Spring.Objects.Factory.Support
                         }
                     }
 
-                    if (log.IsDebugEnabled)
+                    if (isDebugEnabled)
                     {
                         log.Debug(string.Format("{1}GetObjectInternal: returning instance for objectname {0}", name, new string(' ', nestingCount * indent)));
                     }
@@ -2407,19 +2413,6 @@ namespace Spring.Objects.Factory.Support
         public bool IsCurrentlyInCreation(string objectName)
         {
             return IsSingletonCurrentlyInCreation(objectName) || IsPrototypeCurrentlyInCreation(objectName);
-        }
-
-        private void BeforePrototypeCreation(string name)
-        {
-            prototypesInCreation.Value.Add(name);
-        }
-
-        private void AfterPrototypeCreation(string name)
-        {
-            if (!prototypesInCreation.Value.Remove(name))
-            {
-                ThrowNotCurrentlyInCreation(name);
-            }
         }
 
         private static void ThrowNotCurrentlyInCreation(string name)

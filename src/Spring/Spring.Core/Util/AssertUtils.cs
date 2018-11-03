@@ -21,6 +21,7 @@
 using System;
 using System.Collections;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.Remoting;
 
 namespace Spring.Util
@@ -129,6 +130,7 @@ namespace Spring.Util
 		/// <exception cref="System.ArgumentNullException">
 		/// If the supplied <paramref name="argument"/> is <see langword="null"/>.
 		/// </exception>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void ArgumentNotNull(object argument, string name)
 		{
 			if (argument == null)
@@ -150,6 +152,7 @@ namespace Spring.Util
 		/// <exception cref="System.ArgumentNullException">
 		/// If the supplied <paramref name="argument"/> is <see langword="null"/>.
 		/// </exception>
+		[MethodImpl(MethodImplOptions.AggressiveInlining)]
 		public static void ArgumentNotNull(object argument, string name, string message)
 		{
 			if (argument == null)
