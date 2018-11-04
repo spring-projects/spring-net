@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -82,12 +82,12 @@ namespace Spring.Objects.Events.Support
 
 			ComposedCriteria criteria = new ComposedCriteria();
 			criteria.Add(new MethodReturnTypeCriteria(invoke.ReturnType));
-            criteria.Add(new MethodParametersCountCriteria(parameters.Length));
+            criteria.Add(MethodParametersCountCriteria.Create(parameters.Length));
 			criteria.Add(new MethodParametersCriteria(ReflectionUtils.GetParameterTypes(parameters)));
 
 			MemberInfo[] methods = subscriberType.FindMembers(
 				MemberTypes.Method, ReflectionUtils.AllMembersCaseInsensitiveFlags,
-				new MemberFilter(new CriteriaMemberFilter().FilterMemberByCriteria),
+				CriteriaMemberFilter.DefaultFilter, 
 				criteria);
 			if (methods != null
 				&& methods.Length > 0)

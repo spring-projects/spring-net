@@ -1247,21 +1247,21 @@ namespace Spring.Objects.Factory.Support
             object objectInstance = GetSingleton(objectName);
             if (objectInstance != null)
             {
-                if (objectInstance is IFactoryObject)
+                if (objectInstance is IFactoryObject instance)
                 {
                     if (!IsFactoryDereference(name))
                     {
-                        Type type = GetTypeForFactoryObject((IFactoryObject)objectInstance);
+                        Type type = GetTypeForFactoryObject(instance);
                         return (type != null && typeToMatch.IsAssignableFrom(type));
                     }
                     else
                     {
-                        return typeToMatch.IsAssignableFrom(objectInstance.GetType());
+                        return typeToMatch.IsInstanceOfType(instance);
                     }
                 }
                 else
                 {
-                    return !IsFactoryDereference(name) && typeToMatch.IsAssignableFrom(objectInstance.GetType());
+                    return !IsFactoryDereference(name) && typeToMatch.IsInstanceOfType(objectInstance);
                 }
             }
             else
@@ -1358,15 +1358,13 @@ namespace Spring.Objects.Factory.Support
 
             if (objectInstance != null)
             {
-                IFactoryObject factoryObject = objectInstance as IFactoryObject;
-                if (factoryObject != null & !IsFactoryDereference(objectName))
+                if (objectInstance is IFactoryObject factoryObject
+                    && !IsFactoryDereference(objectName))
                 {
                     return GetTypeForFactoryObject(factoryObject);
                 }
-                else
-                {
-                    return objectInstance.GetType();
-                }
+
+                return objectInstance.GetType();
             }
             else
             {
@@ -1388,15 +1386,11 @@ namespace Spring.Objects.Factory.Support
                         // If it's a FactoryObject, we want to look at what it creates, not the factory class.
                         return GetTypeForFactoryObject(objectName, mod);
                     }
-                    else
-                    {
-                        return objectType;
-                    }
+
+                    return objectType;
                 }
-                else
-                {
-                    return (!IsFactoryDereference(name) ? objectType : null);
-                }
+
+                return !IsFactoryDereference(name) ? objectType : null;
             }
         }
 

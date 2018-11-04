@@ -1,7 +1,5 @@
-#region License
-
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,15 +14,10 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
+using System;
 using System.Reflection;
 
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Core
 {
@@ -42,8 +35,6 @@ namespace Spring.Core
     /// <author>Bruno Baia</author>
     public class MethodNameMatchCriteria : ICriteria
     {
-        #region Constructor (s) / Destructor
-
         /// <summary>
         /// Creates a new instance of the
         /// <see cref="MethodNameMatchCriteria"/> class.
@@ -73,10 +64,6 @@ namespace Spring.Core
             Pattern = pattern;
         }
 
-        #endregion
-
-        #region Properties
-
         /// <summary>
         /// The number of parameters that a <see cref="System.Reflection.MethodInfo"/>
         /// must have to satisfy this criteria.
@@ -86,17 +73,13 @@ namespace Spring.Core
         /// </exception>
         public string Pattern
         {
-            get { return pattern; }
+            get => pattern;
             set
             {
                 AssertUtils.ArgumentHasText(value, "value");
                 pattern = value;
             }
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Does the supplied <paramref name="datum"/> satisfy the criteria encapsulated by
@@ -113,17 +96,11 @@ namespace Spring.Core
             MethodBase method = datum as MethodBase;
             if (method != null)
             {
-                satisfied = PatternMatchUtils.SimpleMatch(pattern.ToLower(), method.Name.ToLower());
+                satisfied = PatternMatchUtils.SimpleMatch(pattern, method.Name, StringComparison.OrdinalIgnoreCase);
             }
             return satisfied;
         }
 
-        #endregion
-
-        #region Fields
-
         private string pattern;
-
-        #endregion
     }
 }

@@ -55,12 +55,28 @@ namespace Spring.Context.Attributes
         /// <value>The scope.</value>
         public ObjectScope ObjectScope
         {
-            get { return _scope; }
-            set
-            {
-                _scope = value;
-            }
+            get => _scope;
+            set => _scope = value;
         }
 
+        internal string ObjectScopeString
+        {
+            get
+            {
+                switch (_scope)
+                {
+                    case ObjectScope.Singleton:
+                        return "singleton";
+                    case ObjectScope.Session:
+                        return "session";
+                    case ObjectScope.Request:
+                        return "request";
+                    case ObjectScope.Prototype:
+                        return "prototype";
+                    default:
+                        return null;
+                }
+            }
+        }
     }
 }

@@ -16,7 +16,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Reflection;
 using Common.Logging;
 using Spring.Collections;
@@ -25,8 +24,6 @@ using Spring.Core.TypeConversion;
 using Spring.Core.TypeResolution;
 using Spring.Objects.Factory.Config;
 using Spring.Util;
-
-using System.Linq;
 
 namespace Spring.Objects.Factory.Support
 {
@@ -287,11 +284,10 @@ namespace Spring.Objects.Factory.Support
                 expectedArgCount = arguments.Length;
             }
 
-
             if (StringUtils.HasText(definition.FactoryObjectName))
             {
                 // it's an instance method on the factory object's class...
-                factoryClass = objectFactory.GetObject(definition.FactoryObjectName).GetType();
+                factoryClass = objectFactory.GetType(definition.FactoryObjectName);
                 isStatic = false;
             }
             else
@@ -301,14 +297,14 @@ namespace Spring.Objects.Factory.Support
             }
 
             GenericArgumentsHolder genericArgsInfo = new GenericArgumentsHolder(definition.FactoryMethodName);
-            IList<MethodInfo> factoryMethodCandidates = FindMethods(genericArgsInfo.GenericMethodName, expectedArgCount, isStatic, factoryClass);
+            MemberInfo[] factoryMethodCandidates = FindMethods(genericArgsInfo.GenericMethodName, expectedArgCount, isStatic, factoryClass);
 
             bool autowiring = (definition.AutowireMode == AutoWiringMode.Constructor);
 
             // try all matching methods to see if they match the constructor arguments...
-            for (int i = 0; i < factoryMethodCandidates.Count; i++)
+            foreach (var memberInfo in factoryMethodCandidates)
             {
-                MethodInfo factoryMethodCandidate = factoryMethodCandidates[i];
+                MethodInfo factoryMethodCandidate = (MethodInfo) memberInfo;
                 if (genericArgsInfo.ContainsGenericArguments)
                 {
                     string[] unresolvedGenericArgs = genericArgsInfo.GetGenericArguments();
@@ -328,7 +324,7 @@ namespace Spring.Objects.Factory.Support
                     // try to create the required arguments...
                     UnsatisfiedDependencyExceptionData unsatisfiedDependencyExceptionData = null;
                     ArgumentsHolder args = CreateArgumentArray(name, definition, resolvedValues, wrapper, paramTypes,
-                                                               factoryMethodCandidate, autowiring, out unsatisfiedDependencyExceptionData);
+                        factoryMethodCandidate, autowiring, out unsatisfiedDependencyExceptionData);
                     if (args == null)
                     {
                         arguments = null;
@@ -344,7 +340,7 @@ namespace Spring.Objects.Factory.Support
 
                 // if we get here, we found a usable candidate factory method - check, if arguments match
                 //arguments = (arguments.Length == 0 ? null : arguments);
-                if (ReflectionUtils.GetMethodByArgumentValues(new MethodInfo[] { factoryMethodCandidate }, arguments) == null)
+                if (ReflectionUtils.GetMethodByArgumentValues(new[] { factoryMethodCandidate }, arguments) == null)
                 {
                     continue;
                 }
@@ -390,12 +386,13 @@ namespace Spring.Objects.Factory.Support
             }
 
             unsatisfiedDependencyExceptionData = null;
+            var args = ArgumentsHolder.Create(paramTypes.Length);
+            
             if (paramTypes.Length == 0)
             {
-                return ArgumentsHolder.Empty;
+                return args;
             }
 
-            ArgumentsHolder args = new ArgumentsHolder(paramTypes.Length);
             var usedValueHolders = new HybridSet();
             List<string> autowiredObjectNames = null;
 
@@ -535,9 +532,12 @@ namespace Spring.Objects.Factory.Support
         /// This method is also used for handling invocations of static factory methods.
         /// </p>
         /// </remarks>
-        private int ResolveConstructorArguments(string objectName, RootObjectDefinition definition, ObjectWrapper wrapper,
-                                                ConstructorArgumentValues cargs,
-                                                ConstructorArgumentValues resolvedValues)
+        private int ResolveConstructorArguments(
+            string objectName,
+            RootObjectDefinition definition,
+            ObjectWrapper wrapper,
+            ConstructorArgumentValues cargs,
+            ConstructorArgumentValues resolvedValues)
         {
 //            ObjectDefinitionValueResolver valueResolver = new ObjectDefinitionValueResolver(objectFactory);
             int minNrOfArgs = cargs.ArgumentCount;
@@ -623,14 +623,34 @@ namespace Spring.Objects.Factory.Support
         /// <see cref="System.Reflection.MethodInfo">methods</see> exposed on the
         /// <paramref name="searchType"/> that match the supplied criteria.
         /// </returns>
-        private static IList<MethodInfo> FindMethods(string methodName, int expectedArgumentCount, bool isStatic, Type searchType)
+        private static MemberInfo[] FindMethods(string methodName, int expectedArgumentCount, bool isStatic, Type searchType)
         {
+            var methodFlags = BindingFlags.Public
+                              | BindingFlags.IgnoreCase
+                              | (isStatic ? BindingFlags.Static : BindingFlags.Instance);
+
+            // check for fast path
+            if (expectedArgumentCount == 0)
+            {
+                try
+                {
+                    var method = searchType.GetMethod(methodName, methodFlags, null, ReflectionUtils.EmptyTypes, null);
+                    if (method != null)
+                    {
+                        return new MemberInfo[] { method };
+                    }
+                }
+                catch
+                {
+                    // use default search
+                }
+            }
+
             ComposedCriteria methodCriteria = new ComposedCriteria();
             methodCriteria.Add(new MethodNameMatchCriteria(methodName));
-            methodCriteria.Add(new MethodParametersCountCriteria(expectedArgumentCount));
-            BindingFlags methodFlags = BindingFlags.Public | BindingFlags.IgnoreCase | (isStatic ? BindingFlags.Static : BindingFlags.Instance);
-            MemberInfo[] methods = searchType.FindMembers(MemberTypes.Method, methodFlags, new CriteriaMemberFilter().FilterMemberByCriteria, methodCriteria);
-            return methods.Cast<MethodInfo>().ToArray();
+            methodCriteria.Add(MethodParametersCountCriteria.Create(expectedArgumentCount));
+            MemberInfo[] methods = searchType.FindMembers(MemberTypes.Method, methodFlags, CriteriaMemberFilter.DefaultFilter, methodCriteria);
+            return methods;
         }
 
         private class ArgumentsHolder
@@ -643,9 +663,18 @@ namespace Spring.Objects.Factory.Support
 
             public ArgumentsHolder(int size)
             {
-                rawArguments = size == 0 ? ObjectUtils.EmptyObjects : new object[size];
-                arguments = size == 0 ? ObjectUtils.EmptyObjects : new object[size];
-                preparedArguments = size == 0 ? ObjectUtils.EmptyObjects : new object[size];
+                if (size == 0)
+                {
+                    rawArguments = ObjectUtils.EmptyObjects;
+                    arguments = ObjectUtils.EmptyObjects;
+                    preparedArguments = ObjectUtils.EmptyObjects;
+                }
+                else
+                {
+                    rawArguments = new object[size];
+                    arguments = new object[size];
+                    preparedArguments = new object[size];
+                }
             }
 
             private ArgumentsHolder(object[] args)

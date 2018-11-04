@@ -166,7 +166,7 @@ namespace Spring.Objects.Support
 				MemberInfo[] events = sourceType.FindMembers(
 					MemberTypes.Event,
 					eventFlags,
-					new MemberFilter(new CriteriaMemberFilter().FilterMemberByCriteria),
+					CriteriaMemberFilter.DefaultFilter,
 					criteria);
 				// and for each event that satisfied the criteria...
 				foreach (EventInfo evt in events)
@@ -202,7 +202,7 @@ namespace Spring.Objects.Support
 				MemberInfo[] methods = HandlerType.FindMembers(
 					MemberTypes.Method,
 					methodFlags,
-					new MemberFilter(new CriteriaMemberFilter().FilterMemberByCriteria),
+					CriteriaMemberFilter.DefaultFilter,
 					methodCriteria);
 
 				// and for each method that satisfied the criteria...

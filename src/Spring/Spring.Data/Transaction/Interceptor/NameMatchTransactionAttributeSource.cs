@@ -141,7 +141,7 @@ namespace Spring.Transaction.Interceptor
 		/// <returns><b>True</b> if the names match.</returns>
 		protected virtual bool IsMatch( string methodName, string mappedName )
 		{
-            return PatternMatchUtils.SimpleMatch(mappedName, methodName);
+            return PatternMatchUtils.SimpleMatch(mappedName, methodName, StringComparison.Ordinal);
 		} 
 
 		/// <summary>

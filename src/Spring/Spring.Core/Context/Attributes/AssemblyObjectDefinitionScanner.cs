@@ -20,7 +20,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Spring.Objects.Factory.Support;
 using Spring.Stereotype;
@@ -107,7 +106,15 @@ namespace Spring.Context.Attributes
         /// </returns>
         protected virtual bool IsExcludedAssembly(Assembly candidate)
         {
-            return _assemblyExclusionPredicates.Any(exclude => exclude(candidate));
+            foreach (var exclude in _assemblyExclusionPredicates)
+            {
+                if (exclude(candidate))
+                {
+                    return true;
+                }
+            }
+
+            return false;
         }
 
         /// <summary>
@@ -242,7 +249,18 @@ namespace Spring.Context.Attributes
         /// </summary>
         /// <param name="assembliesToInclude">The names of assemblies to include.</param>
         public AssemblyObjectDefinitionScanner(params string[] assembliesToInclude)
-            : this(name => assembliesToInclude.Any(candidate => candidate == name))
+            : this(name =>
+            {
+                foreach (var candidate in assembliesToInclude)
+                {
+                    if (candidate == name)
+                    {
+                        return true;
+                    }
+                }
+
+                return false;
+            })
         {
             AssertUtils.ArgumentNotNull(assembliesToInclude, "assembliesToInclude");
         }

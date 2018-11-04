@@ -44,7 +44,7 @@ namespace Spring.Util
     /// <author>Bruno Baia (.NET)</author>
     public sealed class ReflectionUtils
     {
-        internal static Type[] EmptyTypes = new Type[0];
+        internal static readonly Type[] EmptyTypes = new Type[0];
 
         /// <summary>
         /// Convenience <see cref="System.Reflection.BindingFlags"/> value that will
@@ -156,9 +156,9 @@ namespace Spring.Util
 
             foreach (MethodInfo candidate in methods)
             {
-                if (candidate.Name.ToLower() == method.ToLower())
+                if (string.Equals(candidate.Name, method, StringComparison.OrdinalIgnoreCase))
                 {
-                    Type[] parameterTypes = Array.ConvertAll<ParameterInfo, Type>(candidate.GetParameters(), delegate(ParameterInfo i) { return i.ParameterType; });
+                    Type[] parameterTypes = Array.ConvertAll(candidate.GetParameters(), i => i.ParameterType);
                     bool typesMatch = false;
 
                     bool zeroTypeArguments = null == argumentTypes || argumentTypes.Length == 0;

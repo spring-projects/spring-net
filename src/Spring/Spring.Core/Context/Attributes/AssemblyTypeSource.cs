@@ -1,6 +1,4 @@
-﻿#region License
-
-/*
+﻿/*
  * Copyright © 2010-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -15,8 +13,6 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
-#endregion
 
 using System;
 using System.Collections;
@@ -50,15 +46,13 @@ namespace Spring.Context.Attributes
             _assembly = assembly;
         }
 
-        #region IEnumerable<Type> Members
-
         /// <summary>
         /// Gets the enumerator.
         /// </summary>
         /// <returns></returns>
         public IEnumerator<Type> GetEnumerator()
         {
-            Type[] types = new Type[]{};
+            Type[] types = null;
             try
             {
                 types = _assembly.GetTypes();
@@ -74,16 +68,18 @@ namespace Spring.Context.Attributes
                 Logger.Debug(m => m("Failed to get types "), ex);
             }
 
-
-            foreach (Type type in types)
-                yield return type;
+            if (types != null)
+            {
+                foreach (var type in types)
+                {
+                    yield return type;
+                }
+            }
         }
 
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
         }
-
-        #endregion
     }
 }

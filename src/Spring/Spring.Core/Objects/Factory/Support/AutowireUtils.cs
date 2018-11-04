@@ -19,7 +19,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 
-using Spring.Collections;
 using Spring.Core;
 using Spring.Objects.Factory.Attributes;
 using Spring.Objects.Factory.Config;
@@ -91,7 +90,7 @@ namespace Spring.Objects.Factory.Support
 				MemberInfo[] ctors = definition.ObjectType.FindMembers(
 					MemberTypes.Constructor,
 					flags,
-					new CriteriaMemberFilter().FilterMemberByCriteria,
+					CriteriaMemberFilter.DefaultFilter,
 					new MinimumArgumentCountCriteria(minimumArgumentCount));
 				constructors = (ConstructorInfo[]) ArrayList.Adapter(ctors).ToArray(typeof (ConstructorInfo));
 			}
@@ -316,20 +315,21 @@ namespace Spring.Objects.Factory.Support
         /// <returns>
         /// 	<c>true</c> if setter property is defined in interface; otherwise, <c>false</c>.
         /// </returns>
-	    public static bool IsSetterDefinedInInterface(PropertyInfo propertyInfo, ISet interfaces)
+	    public static bool IsSetterDefinedInInterface(PropertyInfo propertyInfo, List<Type> interfaces)
 	    {
 	        MethodInfo setter = propertyInfo.GetSetMethod();
             if (setter != null)
             {
-                Type targetType = setter.DeclaringType;
-                foreach (Type interfaceType in interfaces)
-                {
-                    if (interfaceType.IsAssignableFrom(targetType) &&
-                        ReflectionUtils.GetMethod(interfaceType, setter.Name, ReflectionUtils.GetParameterTypes(setter)) != null)                    
-                    {
-                        return true;
-                    }
-                }
+	            Type targetType = setter.DeclaringType;
+	            for (var i = 0; i < interfaces.Count; i++)
+	            {
+		            Type interfaceType = interfaces[i];
+		            if (interfaceType.IsAssignableFrom(targetType) &&
+		                ReflectionUtils.GetMethod(interfaceType, setter.Name, ReflectionUtils.GetParameterTypes(setter)) != null)
+		            {
+			            return true;
+		            }
+	            }
             }
             return false;
 	    }
@@ -347,23 +347,29 @@ namespace Spring.Objects.Factory.Support
         /// Returns the list of <paramref name="propertyInfos"/> that are not satisfied by <paramref name="properties"/>.
         /// </summary>
         /// <returns>the filtered list. Is never <c>null</c></returns>
-        public static IList<PropertyInfo> GetUnsatisfiedDependencies(IList<PropertyInfo> propertyInfos, IPropertyValues properties, DependencyCheckingMode dependencyCheck)
+        public static IList<PropertyInfo> GetUnsatisfiedDependencies(
+	        IList<PropertyInfo> propertyInfos,
+	        IPropertyValues properties,
+	        DependencyCheckingMode dependencyCheck)
         {
             List<PropertyInfo> unsatisfiedDependenciesList = new List<PropertyInfo>();
-            foreach (PropertyInfo property in propertyInfos)
-            {
-                if (property.CanWrite && properties.GetPropertyValue(property.Name) == null)
-                {
-                    bool isSimple = ObjectUtils.IsSimpleProperty(property.PropertyType);
-                    bool unsatisfied = (dependencyCheck == DependencyCheckingMode.All) || (isSimple && dependencyCheck == DependencyCheckingMode.Simple)
-                                       || (!isSimple && dependencyCheck == DependencyCheckingMode.Objects);
-                    if (unsatisfied)
-                    {
-                        unsatisfiedDependenciesList.Add(property);
-                    }
-                }
-            }
-            return unsatisfiedDependenciesList;
+	        for (var i = 0; i < propertyInfos.Count; i++)
+	        {
+		        PropertyInfo property = propertyInfos[i];
+		        if (property.CanWrite && properties.GetPropertyValue(property.Name) == null)
+		        {
+			        bool isSimple = ObjectUtils.IsSimpleProperty(property.PropertyType);
+			        bool unsatisfied = (dependencyCheck == DependencyCheckingMode.All)
+			                           || (isSimple && dependencyCheck == DependencyCheckingMode.Simple)
+			                           || (!isSimple && dependencyCheck == DependencyCheckingMode.Objects);
+			        if (unsatisfied)
+			        {
+				        unsatisfiedDependenciesList.Add(property);
+			        }
+		        }
+	        }
+
+	        return unsatisfiedDependenciesList;
         }
 	}
 }

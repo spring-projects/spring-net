@@ -47,7 +47,7 @@ namespace Spring.Aop.Framework.AutoProxy
 
         private IObjectFactory objectFactory;
         private int order = int.MaxValue;
-        private IAdvisorAdapterRegistry advisorAdapterRegistry = GlobalAdvisorAdapterRegistry.Instance;
+        private readonly IAdvisorAdapterRegistry advisorAdapterRegistry = GlobalAdvisorAdapterRegistry.Instance;
 
         /// <summary>
         /// Set the names of the objects in IList fashioned way 
@@ -59,7 +59,7 @@ namespace Spring.Aop.Framework.AutoProxy
         /// </remarks>
         public virtual IList ObjectNames
         {
-            set { objectNames = value; }
+            set => objectNames = value;
         }
 
         /// <summary> 
@@ -81,7 +81,7 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <seealso cref="Spring.Aop.IAdvisor"/>
         public virtual string[] InterceptorNames
         {
-            set { interceptorNames = value; }
+            set => interceptorNames = value;
         }
 
         /// <summary>
@@ -91,8 +91,8 @@ namespace Spring.Aop.Framework.AutoProxy
         /// </summary>
         public virtual bool ProxyTargetAttributes
         {
-            get { return this.proxyTargetAttributes; }
-            set { this.proxyTargetAttributes = value; }
+            get => proxyTargetAttributes;
+            set => proxyTargetAttributes = value;
         }
 
         /// <summary>
@@ -104,8 +104,8 @@ namespace Spring.Aop.Framework.AutoProxy
         /// </value>
         public bool ProxyDeclaredMembersOnly
         {
-            get { return proxyDeclaredMembersOnly; }
-            set { proxyDeclaredMembersOnly = value; }
+            get => proxyDeclaredMembersOnly;
+            set => proxyDeclaredMembersOnly = value;
         }
 
         /// <summary>
@@ -117,8 +117,8 @@ namespace Spring.Aop.Framework.AutoProxy
         /// </value>
         public bool ProxyInterfaces
         {
-            get { return proxyInterfaces; }
-            set { proxyInterfaces = value; }
+            get => proxyInterfaces;
+            set => proxyInterfaces = value;
         }
 
         /// <summary>
@@ -142,7 +142,7 @@ namespace Spring.Aop.Framework.AutoProxy
         /// </exception>
         public IObjectFactory ObjectFactory
         {
-            set { objectFactory = value; }
+            set => objectFactory = value;
         }
 
         /// <summary>
@@ -161,9 +161,8 @@ namespace Spring.Aop.Framework.AutoProxy
                 string name = objectDefinitionNames[i];
                 if (IsObjectNameMatch(name))
                 {
-                    var definition = factory.GetObjectDefinition(name) as IConfigurableObjectDefinition;
-
-                    if (definition == null || IsInfrastructureType(definition.ObjectType, name))
+                    if (!(factory.GetObjectDefinition(name) is IConfigurableObjectDefinition definition)
+                        || IsInfrastructureType(definition.ObjectType, name))
                     {
                         continue;
                     }
@@ -171,7 +170,7 @@ namespace Spring.Aop.Framework.AutoProxy
                     ProxyFactory pf = CreateProxyFactory(definition.ObjectType, name);
 
                     InheritanceAopProxyTypeBuilder iaptb = new InheritanceAopProxyTypeBuilder(pf);
-                    iaptb.ProxyDeclaredMembersOnly = this.ProxyDeclaredMembersOnly;
+                    iaptb.ProxyDeclaredMembersOnly = ProxyDeclaredMembersOnly;
                     Type type = iaptb.BuildProxyType();
 
                     definition.ObjectType = type;
@@ -192,8 +191,8 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <returns>The order value.</returns>
         public virtual int Order
         {
-            get { return order; }
-            set { order = value; }
+            get => order;
+            set => order = value;
         }
 
         /// <summary>
@@ -223,7 +222,7 @@ namespace Spring.Aop.Framework.AutoProxy
         protected virtual ProxyFactory CreateProxyFactory(Type objectType, string objectName)
         {
             ProxyFactory proxyFactory = new ProxyFactory();
-            proxyFactory.ProxyTargetAttributes = this.ProxyTargetAttributes;
+            proxyFactory.ProxyTargetAttributes = ProxyTargetAttributes;
             proxyFactory.TargetSource = new InheritanceBasedAopTargetSource(objectType);
             if (!ProxyInterfaces)
             {
@@ -263,8 +262,8 @@ namespace Spring.Aop.Framework.AutoProxy
             {
                 for (int i = 0; i < objectNames.Count; i++)
                 {
-                    string mappedName = String.Copy((string)objectNames[i]);
-                    if (PatternMatchUtils.SimpleMatch(mappedName, objectName))
+                    string mappedName = (string)objectNames[i];
+                    if (PatternMatchUtils.SimpleMatch(mappedName, objectName, StringComparison.Ordinal))
                     {
                         return true;
                     }
@@ -279,9 +278,9 @@ namespace Spring.Aop.Framework.AutoProxy
             foreach (string name in interceptorNames)
             {
                 object next = objectFactory.GetObject(name);
-                if (next is IAdvisors)
+                if (next is IAdvisors ia)
                 {
-                    advisors.AddRange(((IAdvisors)next).Advisors);
+                    advisors.AddRange(ia.Advisors);
                 }
                 else
                 {
@@ -320,19 +319,13 @@ namespace Spring.Aop.Framework.AutoProxy
                 return null;
             }
 
-            public bool IsStatic
-            {
-                get { return true; }
-            }
+            public bool IsStatic => true;
 
             public void ReleaseTarget(object target)
             {
             }
 
-            public Type TargetType
-            {
-                get { return _targetType; }
-            }
+            public Type TargetType => _targetType;
         }
     }
 }

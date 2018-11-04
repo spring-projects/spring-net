@@ -28,7 +28,6 @@ using Spring.Objects.Factory;
 using Spring.Objects.Factory.Parsing;
 using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Config;
-using Spring.Collections.Generic;
 
 namespace Spring.Context.Attributes
 {
@@ -119,11 +118,12 @@ namespace Spring.Context.Attributes
 
             var objectNames = objectFactory.GetObjectDefinitionNames();
 
-            foreach (string name in objectNames)
+            for (var i = 0; i < objectNames.Count; i++)
             {
+                string name = objectNames[i];
                 IObjectDefinition objDef = objectFactory.GetObjectDefinition(name);
 
-                if (((AbstractObjectDefinition)objDef).HasObjectType)
+                if (((AbstractObjectDefinition) objDef).HasObjectType)
                 {
                     if (Attribute.GetCustomAttribute(objDef.ObjectType, typeof(ConfigurationAttribute)) != null)
                     {
@@ -134,7 +134,7 @@ namespace Spring.Context.Attributes
 
                         Logger.Debug(m => m("Replacing object definition '{0}' existing class '{1}' with enhanced class", name, configClass.FullName));
 
-                        ((IConfigurableObjectDefinition)objDef).ObjectType = enhancedClass;
+                        ((IConfigurableObjectDefinition) objDef).ObjectType = enhancedClass;
                     }
                 }
             }
@@ -142,9 +142,11 @@ namespace Spring.Context.Attributes
 
         private void ProcessConfigObjectDefinitions(IObjectDefinitionRegistry registry)
         {
-            Collections.Generic.ISet<ObjectDefinitionHolder> configCandidates = new HashedSet<ObjectDefinitionHolder>();
-            foreach (string objectName in registry.GetObjectDefinitionNames())
+            var configCandidates = new HashSet<ObjectDefinitionHolder>();
+            var objectDefinitionNames = registry.GetObjectDefinitionNames();
+            for (var i = 0; i < objectDefinitionNames.Count; i++)
             {
+                string objectName = objectDefinitionNames[i];
                 IObjectDefinition objectDef = registry.GetObjectDefinition(objectName);
                 if (ConfigurationClassObjectDefinitionReader.CheckConfigurationClassCandidate(objectDef))
                 {
@@ -153,7 +155,10 @@ namespace Spring.Context.Attributes
             }
 
             //if nothing to process, bail out
-            if (configCandidates.Count == 0) { return; }
+            if (configCandidates.Count == 0)
+            {
+                return;
+            }
 
             ConfigurationClassParser parser = new ConfigurationClassParser(_problemReporter);
             foreach (ObjectDefinitionHolder holder in configCandidates)
@@ -161,13 +166,9 @@ namespace Spring.Context.Attributes
                 IObjectDefinition bd = holder.ObjectDefinition;
                 try
                 {
-                    if (bd is AbstractObjectDefinition && ((AbstractObjectDefinition)bd).HasObjectType)
+                    if (bd is AbstractObjectDefinition definition && definition.HasObjectType)
                     {
-                        parser.Parse(((AbstractObjectDefinition)bd).ObjectType, holder.ObjectName);
-                    }
-                    else
-                    {
-                        //parser.Parse(bd.ObjectTypeName, holder.ObjectName);
+                        parser.Parse(definition.ObjectType, holder.ObjectName);
                     }
                 }
                 catch (ObjectDefinitionParsingException ex)

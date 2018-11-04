@@ -229,11 +229,12 @@ namespace Spring.Objects.Factory.Attributes
 
         private class LifecycleLifecycleMetadata
         {
-            private readonly IList<LifecycleElement> initMethods;
-            private readonly IList<LifecycleElement> destroyMethods;
+            private readonly List<LifecycleElement> initMethods;
+            private readonly List<LifecycleElement> destroyMethods;
 
-            public LifecycleLifecycleMetadata(IList<LifecycleElement> initMethods,
-                IList<LifecycleElement> destroyMethods)
+            public LifecycleLifecycleMetadata(
+                List<LifecycleElement> initMethods,
+                List<LifecycleElement> destroyMethods)
             {
                 this.initMethods = initMethods;
                 this.destroyMethods = destroyMethods;
@@ -265,16 +266,18 @@ namespace Spring.Objects.Factory.Attributes
 
             public void InvokeInitMethods(object instance, string objectName)
             {
-                foreach (var lifecycleElement in initMethods)
+                for (var i = 0; i < initMethods.Count; i++)
                 {
+                    var lifecycleElement = initMethods[i];
                     lifecycleElement.Invoke(instance, objectName);
                 }
             }
 
             public void InvokeDestroyMethods(object instance, string objectName)
             {
-                foreach (var lifecycleElement in destroyMethods)
+                for (var i = 0; i < destroyMethods.Count; i++)
                 {
+                    var lifecycleElement = destroyMethods[i];
                     lifecycleElement.Invoke(instance, objectName);
                 }
             }

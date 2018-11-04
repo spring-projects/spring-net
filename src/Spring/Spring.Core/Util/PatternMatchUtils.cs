@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,20 +18,17 @@
 
 #endregion
 
-#region Imports
-
-
-
-#endregion
+using System;
 
 namespace Spring.Util
 {
-    /// <summary> Utility methods for simple pattern matching, in particular for
+    /// <summary>
+    /// Utility methods for simple pattern matching, in particular for
     /// Spring's typical "xxx*", "*xxx" and "*xxx*" pattern styles.
     /// </summary>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack</author>
-    public abstract class PatternMatchUtils
+    public static class PatternMatchUtils
     {
         /// <summary> Match a String against the given pattern, supporting the following simple
         /// pattern styles: "xxx*", "*xxx" and "*xxx*" matches, as well as direct equality.
@@ -40,28 +37,39 @@ namespace Spring.Util
         /// </param>
         /// <param name="str">the String to match
         /// </param>
+        /// <param name="stringComparison"></param>
         /// <returns> whether the String matches the given pattern
         /// </returns>
-        public static bool SimpleMatch(System.String pattern, System.String str)
+        public static bool SimpleMatch(string pattern, string str, StringComparison stringComparison)
         {
-            if (ObjectUtils.NullSafeEquals(pattern, str) || "*".Equals(pattern))
+            if (string.Equals(pattern, str, stringComparison) || "*" == pattern)
             {
                 return true;
             }
-            if (pattern == null || str == null)
+
+            if (pattern == null || str == null || pattern.Length == 0)
             {
                 return false;
             }
-            if (pattern.StartsWith("*") && pattern.EndsWith("*") &&
-                str.IndexOf(pattern.Substring(1, (pattern.Length - 1) - (1))) != -1)
+
+            var startsWithWildcard = pattern[0] == '*';
+            var endsWithWildcard = pattern[pattern.Length - 1] == '*';
+
+            if (startsWithWildcard
+                && endsWithWildcard
+                && str.IndexOf(pattern.Substring(1, pattern.Length - 2), 1, stringComparison) != -1)
             {
                 return true;
             }
-            if (pattern.StartsWith("*") && str.EndsWith(pattern.Substring(1, (pattern.Length) - (1))))
+
+            if (startsWithWildcard
+                && str.EndsWith(pattern.Substring(1, pattern.Length - 1), stringComparison))
             {
                 return true;
             }
-            if (pattern.EndsWith("*") && str.StartsWith(pattern.Substring(0, (pattern.Length - 1) - (0))))
+
+            if (endsWithWildcard
+                && str.StartsWith(pattern.Substring(0, pattern.Length - 1), stringComparison))
             {
                 return true;
             }
@@ -77,14 +85,14 @@ namespace Spring.Util
         /// </param>
         /// <returns> whether the String matches any of the given patterns
         /// </returns>
-        public static bool SimpleMatch(System.String[] patterns, System.String str)
+        public static bool SimpleMatch(string[] patterns, string str)
         {
             if (patterns != null)
             {
                 for (int i = 0; i < patterns.Length; i++)
                 {
                     
-                    if (SimpleMatch(patterns[i], str))
+                    if (SimpleMatch(patterns[i], str, StringComparison.Ordinal))
                     {
                         return true;
                     }

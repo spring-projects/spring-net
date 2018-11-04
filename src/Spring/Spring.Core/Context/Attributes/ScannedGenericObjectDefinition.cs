@@ -66,21 +66,24 @@ namespace Spring.Context.Attributes
 
         private void ParseName()
         {
-            var attr = Attribute.GetCustomAttribute(ObjectType, typeof (ComponentAttribute), true) as ComponentAttribute;
-            if (attr != null && !string.IsNullOrEmpty(attr.Name))
+            if (Attribute.GetCustomAttribute(ObjectType, typeof (ComponentAttribute), true) is ComponentAttribute attr
+                && !string.IsNullOrEmpty(attr.Name))
+            {
                 _componentName = attr.Name;
+            }
         }
 
         private void ApplyDefaults(DocumentDefaultsDefinition defaults)
         {
             if (defaults == null)
+            {
                 return;
+            }
 
-            bool lazyInit = false;
-            bool.TryParse(defaults.LazyInit, out lazyInit);
+            bool.TryParse(defaults.LazyInit, out var lazyInit);
             IsLazyInit = lazyInit;
             
-            if (!String.IsNullOrEmpty(defaults.Autowire))
+            if (!string.IsNullOrEmpty(defaults.Autowire))
             {
                AutowireMode = GetAutowireMode(defaults.Autowire);
             }            
@@ -88,18 +91,16 @@ namespace Spring.Context.Attributes
 
         private AutoWiringMode GetAutowireMode(string value)
         {
-           AutoWiringMode autoWiringMode;
-           autoWiringMode = (AutoWiringMode)Enum.Parse(typeof(AutoWiringMode), value, true);
-           return autoWiringMode;
+            var autoWiringMode = (AutoWiringMode)Enum.Parse(typeof(AutoWiringMode), value, true);
+            return autoWiringMode;
         }
 
 
         private void ParseScopeAttribute()
         {
-            var attr = Attribute.GetCustomAttribute(ObjectType, typeof(ScopeAttribute), true) as ScopeAttribute;
-            if (attr != null)
+            if (Attribute.GetCustomAttribute(ObjectType, typeof(ScopeAttribute), true) is ScopeAttribute attr)
             {
-                Scope = attr.ObjectScope.ToString().ToLower();
+                Scope = attr.ObjectScopeString;
 
                 if (attr.ObjectScope == ObjectScope.Request || attr.ObjectScope == ObjectScope.Session)
                 {
@@ -110,15 +111,15 @@ namespace Spring.Context.Attributes
 
         private void ParseLazyAttribute()
         {
-            var attr = Attribute.GetCustomAttribute(ObjectType, typeof(LazyAttribute), true) as LazyAttribute;
-            if (attr != null)
+            if (Attribute.GetCustomAttribute(ObjectType, typeof(LazyAttribute), true) is LazyAttribute attr)
+            {
                 IsLazyInit = attr.LazyInitialize;
+            }
         }
 
         private void ParseQualifierAttribute()
         {
-            var attr = Attribute.GetCustomAttribute(ObjectType, typeof(QualifierAttribute), true) as QualifierAttribute;
-            if (attr != null)
+            if (Attribute.GetCustomAttribute(ObjectType, typeof(QualifierAttribute), true) is QualifierAttribute attr)
             {
                 var qualifier = new AutowireCandidateQualifier(attr.GetType());
 
@@ -151,12 +152,6 @@ namespace Spring.Context.Attributes
         /// Provides the name of the object scanned
         /// </summary>
         /// <returns>return the provided attribute name of the full object type name</returns>
-        public string ComponentName
-        {
-            get
-            {
-                return _componentName;
-            }
-        }
+        public string ComponentName => _componentName;
     }
 }

@@ -20,10 +20,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
-using System.Runtime.Serialization;
-
-using Common.Logging;
-
 using Spring.Collections;
 using Spring.Core.TypeResolution;
 using Spring.Objects.Factory.Config;
@@ -69,7 +65,7 @@ namespace Spring.Objects.Factory.Support
         /// Class objects. By default, only the IObjectFactoryAware and IObjectNameAware 
         /// interfaces are ignored.
         /// </summary>
-        private readonly HybridSet ignoredDependencyInterfaces = new HybridSet();
+        private readonly List<Type> ignoredDependencyInterfaces = new List<Type>();
 
         [NonSerialized]
         private ObjectDefinitionValueResolver cachedValueResolver;
@@ -1177,7 +1173,11 @@ namespace Spring.Objects.Factory.Support
             CheckDependencies(name, definition, filteredPropInfo, properties);
         }
 
-        private void CheckDependencies(string name, IConfigurableObjectDefinition definition, IList<PropertyInfo> filteredPropInfo, IPropertyValues properties)
+        private void CheckDependencies(
+            string name,
+            IConfigurableObjectDefinition definition,
+            IList<PropertyInfo> filteredPropInfo,
+            IPropertyValues properties)
         {
             DependencyCheckingMode dependencyCheck = definition.DependencyCheck;
             IList<PropertyInfo> unsatisfiedDependencies = AutowireUtils.GetUnsatisfiedDependencies(filteredPropInfo, properties, dependencyCheck);
@@ -1199,16 +1199,15 @@ namespace Spring.Objects.Factory.Support
         {
             return filteredPropertyDescriptorsCache.GetOrAdd(wrapper.WrappedType, t =>
             {
-                var list = new List<PropertyInfo>(wrapper.GetPropertyInfos());
-                for (int i = list.Count - 1; i >= 0; i--)
+                var propertyInfos = wrapper.GetPropertyInfos();
+                var list = new List<PropertyInfo>();
+                foreach (var propertyInfo in propertyInfos)
                 {
-                    PropertyInfo pi = list[i];
-                    if (IsExcludedFromDependencyCheck(pi))
+                    if (!IsExcludedFromDependencyCheck(propertyInfo))
                     {
-                        list.RemoveAt(i);
+                        list.Add(propertyInfo);
                     }
                 }
-
                 return list;
             });
         }
@@ -1224,15 +1223,9 @@ namespace Spring.Objects.Factory.Support
         /// <returns>whether the object property is excluded</returns>
         private bool IsExcludedFromDependencyCheck(PropertyInfo property)
         {
-            bool b1 = !property.CanWrite; //AutowireUtils.IsExcludedFromDependencyCheck(pi);
-            bool b2 = IgnoredDependencyTypes.Contains(property.PropertyType);
-            bool b3 = AutowireUtils.IsSetterDefinedInInterface(property, ignoredDependencyInterfaces);
-            return b1 || b2 || b3;
-            /*
-            return AutowireUtils.IsExcludedFromDependencyCheck(pi) ||
-                   IgnoredDependencyTypes.Contains(pi.PropertyType) ||
-                   AutowireUtils.IsSetterDefinedInInterface(pi, ignoredDependencyInterfaces);
-             */
+            return !property.CanWrite
+                   || IgnoredDependencyTypes.Contains(property.PropertyType)
+                   || AutowireUtils.IsSetterDefinedInInterface(property, ignoredDependencyInterfaces);
         }
 
         /// <summary>

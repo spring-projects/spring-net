@@ -1,7 +1,5 @@
-#region License
-
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -27,8 +21,6 @@ using System.Text.RegularExpressions;
 using System.Reflection;
 
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Core.TypeResolution
 {
@@ -43,14 +35,11 @@ namespace Spring.Core.TypeResolution
     /// <author>Bruno Baia</author>
     public sealed class TypeResolutionUtils
     {
-        #region Fields
+        private static readonly CachedTypeResolver internalTypeResolver = new CachedTypeResolver(new GenericTypeResolver());
 
-        private static readonly ITypeResolver internalTypeResolver
-            = new CachedTypeResolver(new GenericTypeResolver());
-
-        #endregion
-
-        #region Constructor (s) / Destructor
+        private static readonly Regex methodMatchRegex = new Regex(
+            @"(?<methodName>([\w]+\.)*[\w\*]+)(?<parameters>(\((?<parameterTypes>[\w\.]+(,[\w\.]+)*)*\))?)",
+            RegexOptions.Compiled | RegexOptions.ExplicitCapture);
 
         // CLOVER:OFF
 
@@ -67,10 +56,6 @@ namespace Spring.Core.TypeResolution
         }
 
         // CLOVER:ON
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Resolves the supplied type name into a <see cref="System.Type"/>
@@ -135,10 +120,7 @@ namespace Spring.Core.TypeResolution
                 Type resolvedInterface = ResolveType(interfaceName);
                 if (!resolvedInterface.IsInterface)
                 {
-                    throw new ArgumentException(
-                        string.Format(CultureInfo.InvariantCulture,
-                                      "[{0}] is a class.",
-                                      resolvedInterface.FullName));
+                    AssertUtils.ThrowArgumentException($"[{resolvedInterface.FullName}] is a class.");
                 }
                 interfaces.Add(resolvedInterface);
                 interfaces.AddRange(resolvedInterface.GetInterfaces());
@@ -146,13 +128,7 @@ namespace Spring.Core.TypeResolution
             return interfaces;
         }
 
-        #region MethodMatch
-
         // TODO : Use the future Pointcut expression language instead
-
-        private readonly static Regex methodMatchRegex = new Regex(
-            @"(?<methodName>([\w]+\.)*[\w\*]+)(?<parameters>(\((?<parameterTypes>[\w\.]+(,[\w\.]+)*)*\))?)",
-            RegexOptions.Compiled | RegexOptions.ExplicitCapture);
 
         /// <summary>
         /// Match a method against the given pattern.
@@ -170,40 +146,43 @@ namespace Spring.Core.TypeResolution
             Match m = methodMatchRegex.Match(pattern);
 
             if (!m.Success)
-                throw new ArgumentException(String.Format("The pattern [{0}] is not well-formed.", pattern));
+            {
+                AssertUtils.ThrowArgumentException($"The pattern [{pattern}] is not well-formed.");
+            }
 
             // Check method name
             string methodNamePattern = m.Groups["methodName"].Value;
-            if (!PatternMatchUtils.SimpleMatch(methodNamePattern, method.Name))
+            if (!PatternMatchUtils.SimpleMatch(methodNamePattern, method.Name, StringComparison.Ordinal))
+            {
                 return false;
+            }
 
             if (m.Groups["parameters"].Value.Length > 0)
             {
                 // Check parameter types
                 string parameters = m.Groups["parameterTypes"].Value;
-                string[] paramTypes =
-                    (parameters.Length == 0)
-                    ? new string[0]
+                string[] paramTypes = parameters.Length == 0
+                    ? StringUtils.EmptyStrings
                     : StringUtils.DelimitedListToStringArray(parameters, ",");
                 ParameterInfo[] paramInfos = method.GetParameters();
 
                 // Verify parameter count
                 if (paramTypes.Length != paramInfos.Length)
+                {
                     return false;
+                }
 
                 // Match parameter types
                 for (int i = 0; i < paramInfos.Length; i++)
                 {
-                    if (paramInfos[i].ParameterType != TypeResolutionUtils.ResolveType(paramTypes[i]))
+                    if (paramInfos[i].ParameterType != ResolveType(paramTypes[i]))
+                    {
                         return false;
+                    }
                 }
             }
 
             return true;
         }
-
-        #endregion
-
-        #endregion
     }
 }

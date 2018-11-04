@@ -39,7 +39,7 @@ namespace Spring.Util
     /// <author>Rod Johnson</author>
     /// <author>Juergen Hoeller</author>
     /// <author>Rick Evans (.NET)</author>
-    public sealed class ObjectUtils
+    public static class ObjectUtils
     {
         /// <summary>
         /// The <see cref="Common.Logging.ILog"/> instance for this class.
@@ -58,22 +58,6 @@ namespace Spring.Util
 			Type type = typeof(object);
 			GetHashCodeMethodInfo = type.GetMethod("GetHashCode");
 		}
-
-        // CLOVER:OFF
-
-        /// <summary>
-        /// Creates a new instance of the <see cref="Spring.Util.ObjectUtils"/> class.
-        /// </summary>
-        /// <remarks>
-        /// <p>
-        /// This is a utility class, and as such exposes no public constructors.
-        /// </p>
-        /// </remarks>
-        private ObjectUtils()
-        {
-        }
-
-        // CLOVER:ON
 
         /// <summary>
         /// Instantiates the type using the assembly specified to load the type.
@@ -97,8 +81,7 @@ namespace Spring.Util
             if (resolvedType == null)
             {
                 throw new FatalReflectionException(
-                    string.Format(
-                        CultureInfo.InvariantCulture, "Cannot load type named [{0}] from assembly [{1}].", typeName, assembly));
+                    $"Cannot load type named [{typeName}] from assembly [{assembly}].");
             }
             return InstantiateType(resolvedType);
         }
@@ -326,7 +309,7 @@ namespace Spring.Util
             }
 
             return type.IsPrimitive &&
-                   type == typeof(bool) && obj is bool ||
+                   (type == typeof(bool) && obj is bool ||
                    type == typeof(byte) && obj is byte ||
                    type == typeof(char) && obj is char ||
                    type == typeof(sbyte) && obj is sbyte ||
@@ -334,7 +317,7 @@ namespace Spring.Util
                    type == typeof(short) && obj is short ||
                    type == typeof(long) && obj is long ||
                    type == typeof(float) && obj is float ||
-                   type == typeof(double) && obj is double;
+                   type == typeof(double) && obj is double);
         }
 
         /// <summary>
@@ -354,11 +337,11 @@ namespace Spring.Util
         public static bool IsSimpleProperty(Type type)
         {
             return type.IsPrimitive
-                   || type.Equals(typeof(string))
-                   || type.Equals(typeof(string[]))
+                   || type == typeof(string)
+                   || type == typeof(string[])
                    || IsPrimitiveArray(type)
-                   || type.Equals(typeof(Type))
-                   || type.Equals(typeof(Type[]));
+                   || type == typeof(Type)
+                   || type == typeof(Type[]);
         }
 
         /// <summary>
@@ -367,14 +350,15 @@ namespace Spring.Util
         /// </summary>
         public static bool IsPrimitiveArray(Type type)
         {
-            return typeof(bool[]).Equals(type)
-                   || typeof(sbyte[]).Equals(type)
-                   || typeof(char[]).Equals(type)
-                   || typeof(short[]).Equals(type)
-                   || typeof(int[]).Equals(type)
-                   || typeof(long[]).Equals(type)
-                   || typeof(float[]).Equals(type)
-                   || typeof(double[]).Equals(type);
+            return type.IsArray &&
+                   (typeof(bool[]) == type
+                   || typeof(sbyte[]) == type
+                   || typeof(char[]) == type
+                   || typeof(short[]) == type
+                   || typeof(int[]) == type
+                   || typeof(long[]) == type
+                   || typeof(float[]) == type
+                   || typeof(double[]) == type);
         }
 
 
@@ -387,7 +371,7 @@ namespace Spring.Util
         /// </returns>
         public static bool IsEmpty(object[] array)
         {
-            return (array == null || array.Length == 0);
+            return array == null || array.Length == 0;
         }
         /// <summary>
         /// Determine if the given objects are equal, returning <see langword="true"/>
@@ -401,7 +385,7 @@ namespace Spring.Util
         /// </returns>
         public static bool NullSafeEquals(object o1, object o2)
         {
-            return (o1 == o2 || (o1 != null && o1.Equals(o2)));
+            return o1 == o2 || (o1 != null && o1.Equals(o2));
         }
 
 
@@ -414,7 +398,7 @@ namespace Spring.Util
         /// </summary>
         public static int NullSafeHashCode(object o1)
         {
-            return (o1 != null ? o1.GetHashCode() : 0);
+            return o1?.GetHashCode() ?? 0;
         }
 
         /// <summary>

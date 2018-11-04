@@ -1,7 +1,5 @@
-#region License
-
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,13 +14,7 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Collections.Generic;
-
-#endregion
 
 namespace Spring.Core
 {
@@ -32,7 +24,7 @@ namespace Spring.Core
     /// </summary>
     public class ComposedCriteria : ICriteria
     {
-        #region Constructor (s) / Destructor
+        private readonly List<ICriteria> _criteria;
 
         /// <summary>
         /// Creates a new instance of the
@@ -55,28 +47,17 @@ namespace Spring.Core
             Add(criteria);
         }
 
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// Does the supplied <paramref name="datum"/> satisfy the criteria encapsulated by
-        /// this instance?
-        /// </summary>
-        /// <param name="datum">The data to be checked by this criteria instance.</param>
-        /// <returns>
-        /// True if the supplied <paramref name="datum"/> satisfies the criteria encapsulated
-        /// by this instance; false if not or the supplied <paramref name="datum"/> is null.
-        /// </returns>
+        /// <inheritdoc />
         public virtual bool IsSatisfied(object datum)
         {
-            foreach (ICriteria criteria in _criteria)
+            for (var i = 0; i < _criteria.Count; i++)
             {
-                if (!criteria.IsSatisfied(datum))
+                if (!_criteria[i].IsSatisfied(datum))
                 {
                     return false;
                 }
             }
+
             return true;
         }
 
@@ -95,21 +76,10 @@ namespace Spring.Core
             }
         }
 
-        #endregion
-
         /// <summary>
         /// The list of <see cref="Spring.Core.ICriteria"/> composing this
         /// instance.
         /// </summary>
-        protected IList<ICriteria> Criteria
-        {
-            get { return _criteria; }
-        }
-
-        #region Fields
-
-        private IList<ICriteria> _criteria;
-
-        #endregion
+        protected IReadOnlyList<ICriteria> Criteria => _criteria;
     }
 }

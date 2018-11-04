@@ -1,7 +1,5 @@
-#region License
-
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +14,8 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using System.Reflection;
-
-#endregion
 
 namespace Spring.Core
 {
@@ -40,7 +32,9 @@ namespace Spring.Core
     /// <author>Bruno Baia</author>
     public class MethodGenericArgumentsCountCriteria : ICriteria
     {
-        #region Constructor (s) / Destructor
+        private static readonly MethodGenericArgumentsCountCriteria Empty = new MethodGenericArgumentsCountCriteria();
+
+        private int _count;
 
         /// <summary>
         /// Creates a new instance of the
@@ -74,9 +68,10 @@ namespace Spring.Core
             ExpectedGenericArgumentCount = expectedGenericArgumentCount;
         }
 
-        #endregion
-
-        #region Properties
+        internal static MethodGenericArgumentsCountCriteria Create(int expectedParameterCount)
+        {
+            return expectedParameterCount == 0 ? Empty : new MethodGenericArgumentsCountCriteria(expectedParameterCount);
+        }
 
         /// <summary>
         /// The number of generic arguments that a <see cref="System.Reflection.MethodInfo"/> 
@@ -87,21 +82,17 @@ namespace Spring.Core
         /// </exception>
         public int ExpectedGenericArgumentCount
         {
-            get { return _count; }
+            get => _count;
             set
             {
                 if (value < 0)
                 {
                     throw new ArgumentOutOfRangeException(
-                        "value", value, "Cannot specify a generic argument count of less than zero.");
+                        nameof(value), value, "Cannot specify a generic argument count of less than zero.");
                 }
                 _count = value;
             }
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Does the supplied <paramref name="datum"/> satisfy the criteria encapsulated by
@@ -122,13 +113,5 @@ namespace Spring.Core
             }
             return satisfied;
         }
-
-        #endregion
-
-        #region Fields
-
-        private int _count;
-
-        #endregion
     }
 }

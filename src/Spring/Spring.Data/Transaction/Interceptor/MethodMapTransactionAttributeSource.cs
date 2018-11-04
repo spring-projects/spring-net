@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright 2002-2010 the original author or authors.
  *
@@ -16,10 +14,6 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using System.Collections;
 using System.Reflection;
@@ -28,8 +22,6 @@ using Common.Logging;
 using Spring.Util;
 using Spring.Core.TypeResolution;
 using Spring.Core;
-
-#endregion
 
 namespace Spring.Transaction.Interceptor
 {
@@ -45,13 +37,9 @@ namespace Spring.Transaction.Interceptor
 		private IDictionary _methodMap;
 		private IDictionary _nameMap;
 
-	    #region Logging Definition
+		private static readonly ILog LOG = LogManager.GetLogger(typeof (MethodMapTransactionAttributeSource));
 
-	    private static readonly ILog LOG = LogManager.GetLogger(typeof (MethodMapTransactionAttributeSource));
-
-	    #endregion
-
-	    /// <summary>
+		/// <summary>
 		/// Creates a new instance of the
 		/// <see cref="Spring.Transaction.Interceptor.MethodMapTransactionAttributeSource"/> class.
 		/// </summary>
@@ -222,10 +210,9 @@ namespace Spring.Transaction.Interceptor
 		/// <returns><b>True</b> if the names match.</returns>
 		protected virtual bool IsMatch( string methodName, string mappedName )
 		{
-            return PatternMatchUtils.SimpleMatch(mappedName, methodName);
+            return PatternMatchUtils.SimpleMatch(mappedName, methodName, StringComparison.Ordinal);
 		}
 
-		#region ITransactionAttributeSource Members
 		/// <summary>
 		/// Return the <see cref="Spring.Transaction.Interceptor.ITransactionAttribute"/> for this
 		/// method.
@@ -285,8 +272,5 @@ namespace Spring.Transaction.Interceptor
             }
             return (ITransactionAttribute)_methodMap[method];
 		}
-		#endregion
-
-	
 	}
 }

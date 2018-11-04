@@ -59,10 +59,14 @@ namespace Spring.Core
         /// supplied <paramref name="filterCriteria"/> is not an
         /// <see cref="Spring.Core.ICriteria"/> implementation or is null.
         /// </returns>
-        public virtual bool FilterMemberByCriteria (MemberInfo member, object filterCriteria) 
+        public virtual bool FilterMemberByCriteria (MemberInfo member, object filterCriteria)
         {
-            ICriteria criteria = filterCriteria as ICriteria;
-            return criteria.IsSatisfied (member);
+            return DefaultFilter(member, filterCriteria);
+        }
+
+        internal static bool DefaultFilter(MemberInfo member, object filterCriteria)
+        {
+            return ((ICriteria) filterCriteria).IsSatisfied(member);
         }
     }
 }

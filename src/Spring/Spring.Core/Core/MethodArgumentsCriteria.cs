@@ -1,7 +1,5 @@
-#region License
-
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,16 +14,10 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using System.Reflection;
 
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Core
 {
@@ -46,7 +38,7 @@ namespace Spring.Core
     /// <author>Bruno Baia</author>
     public class MethodArgumentsCriteria : ICriteria
     {
-        #region Constructor (s) / Destructor
+        private readonly Type[] _parameters;
 
         /// <summary>
         /// Creates a new instance of the
@@ -74,10 +66,6 @@ namespace Spring.Core
         {
             _parameters = ReflectionUtils.GetTypes(arguments);
         }
-
-        #endregion
-
-        #region Methods
 
         /// <summary>
         /// Does the supplied <paramref name="datum"/> satisfy the criteria encapsulated by
@@ -167,13 +155,5 @@ namespace Spring.Core
             }
             return satisfied;
         }
-
-        #endregion
-
-        #region Fields
-
-        private readonly Type[] _parameters;
-
-        #endregion
     }
 }

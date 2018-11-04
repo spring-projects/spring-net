@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  * 
@@ -16,12 +14,7 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 
@@ -29,8 +22,6 @@ using Common.Logging;
 
 using Spring.Collections;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Objects.Factory.Config
 {
@@ -171,9 +162,7 @@ namespace Spring.Objects.Factory.Config
             logger = LogManager.GetLogger(this.GetType());
 	    }
 
-	    #region Properties 
-
-        /// <summary>
+		/// <summary>
 		/// The placeholder prefix (the default is <c>${</c>).
 		/// </summary>
 		/// <seealso cref="DefaultPlaceholderPrefix"/>
@@ -221,9 +210,7 @@ namespace Spring.Objects.Factory.Config
             set { includeAncestors = value; }
 	    }
 
-        #endregion
-
-	    /// <summary>
+		/// <summary>
 	    /// Apply the given properties to the supplied
 	    /// <see cref="Spring.Objects.Factory.Config.IConfigurableListableObjectFactory"/>.
 	    /// </summary>
@@ -309,16 +296,12 @@ namespace Spring.Objects.Factory.Config
 					{
                         resolvedValue = ParseString(properties, resolvedValue, visitedPlaceholders);
 
-						#region Instrumentation
-
 						if (logger.IsDebugEnabled)
 						{
 							logger.Debug(string.Format(
 								CultureInfo.InvariantCulture,
 								"Resolving placeholder '{0}' to '{1}'.", placeholder, resolvedValue));
 						}
-
-						#endregion
 
 						strVal = strVal.Substring(0, startIndex) + resolvedValue + strVal.Substring(endIndex + 1);
 						startIndex = strVal.IndexOf(placeholderPrefix, startIndex + resolvedValue.Length);
@@ -412,9 +395,7 @@ namespace Spring.Objects.Factory.Config
 			return props[placeholder];
 		}
 
-        #region Helper class
-
-        private class PlaceholderResolveHandlerAdapter : IStringValueResolver
+		private class PlaceholderResolveHandlerAdapter : IStringValueResolver
         {
             private readonly PropertyPlaceholderConfigurer ppc;
             private readonly NameValueCollection props;
@@ -430,7 +411,5 @@ namespace Spring.Objects.Factory.Config
                 return ppc.ParseString(props, name, new HashedSet());
             }
         }
-
-        #endregion
-    }
+	}
 }

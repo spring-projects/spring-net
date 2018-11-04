@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright � 2002-2011 the original author or authors.
  *
@@ -16,22 +14,14 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
-using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using Common.Logging;
 
 using Spring.Core;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
-
-using System.Linq;
-
-#endregion
 
 namespace Spring.Aop.Framework.AutoProxy
 {

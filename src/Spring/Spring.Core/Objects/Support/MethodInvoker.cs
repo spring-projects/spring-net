@@ -403,14 +403,14 @@ namespace Spring.Objects.Support
 			{
                 ComposedCriteria searchCriteria = new ComposedCriteria();
                 searchCriteria.Add(new MethodNameMatchCriteria(genericInfo.GenericMethodName));
-                searchCriteria.Add(new MethodParametersCountCriteria(ArgumentCount));
-                searchCriteria.Add(new MethodGenericArgumentsCountCriteria(genericInfo.GetGenericArguments().Length));
+                searchCriteria.Add(MethodParametersCountCriteria.Create(ArgumentCount));
+                searchCriteria.Add(MethodGenericArgumentsCountCriteria.Create(genericInfo.GetGenericArguments().Length));
                 searchCriteria.Add(new MethodArgumentsCriteria(Arguments));
 
                 MemberInfo[] matchingMethods = targetType.FindMembers(
                     MemberTypes.Method,
                     MethodSearchingFlags,
-                    new MemberFilter(new CriteriaMemberFilter().FilterMemberByCriteria),
+                    CriteriaMemberFilter.DefaultFilter,
                     searchCriteria);
 
                 if (matchingMethods != null && matchingMethods.Length == 1)
@@ -423,13 +423,13 @@ namespace Spring.Objects.Support
                 // search for a method with a matching signature...
                 ComposedCriteria searchCriteria = new ComposedCriteria();
                 searchCriteria.Add(new MethodNameMatchCriteria(genericInfo.GenericMethodName));
-                searchCriteria.Add(new MethodParametersCountCriteria(ArgumentCount));
-                searchCriteria.Add(new MethodGenericArgumentsCountCriteria(genericInfo.GetGenericArguments().Length));
+                searchCriteria.Add(MethodParametersCountCriteria.Create(ArgumentCount));
+                searchCriteria.Add(MethodGenericArgumentsCountCriteria.Create(genericInfo.GetGenericArguments().Length));
 
                 MemberInfo[] matchingMethods = targetType.FindMembers(
                     MemberTypes.Method,
                     MethodSearchingFlags,
-                    new MemberFilter(new CriteriaMemberFilter().FilterMemberByCriteria),
+                    CriteriaMemberFilter.DefaultFilter,
                     searchCriteria);
 
                 if (matchingMethods.Length == 0)

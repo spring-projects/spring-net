@@ -1,5 +1,3 @@
-#region License
-
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -16,20 +14,12 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 using Spring.Objects.Factory.Config;
-using Spring.Objects.Factory.Xml;
 using Spring.Objects.Support;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Objects.Factory.Support
 {
@@ -267,8 +257,6 @@ namespace Spring.Objects.Factory.Support
         }
 
 
-        #region Constructor (s) / Destructor
-
         // CLOVER:OFF
 
         /// <summary>
@@ -285,7 +273,5 @@ namespace Spring.Objects.Factory.Support
         }
 
         // CLOVER:ON
-
-        #endregion
     }
 }

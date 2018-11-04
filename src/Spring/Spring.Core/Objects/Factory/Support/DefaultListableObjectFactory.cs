@@ -18,7 +18,6 @@ using System;
 using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Globalization;
 using Spring.Collections.Generic;
 using Spring.Core;
 using Spring.Core.TypeConversion;
@@ -972,34 +971,36 @@ namespace Spring.Objects.Factory.Support
         /// <seealso cref="Spring.Objects.Factory.IListableObjectFactory.GetObjectsOfType(Type, bool, bool)"/>
         public IReadOnlyDictionary<string, object> GetObjectsOfType(Type type, bool includePrototypes, bool includeFactoryObjects)
         {
-            Dictionary<string, object> result = new Dictionary<string, object>();
+            var result = new Dictionary<string, object>();
             DoGetObjectsOfType(type, includePrototypes, includeFactoryObjects, result);
             return result;
         }
 
-        private void DoGetObjectsOfType(Type type, bool includePrototypes, bool includeFactoryObjects, IDictionary resultCollector)
+        private void DoGetObjectsOfType<T>(
+            Type type, 
+            bool includePrototypes,
+            bool includeFactoryObjects,
+            Dictionary<string, T> resultCollector)
         {
-            IList<string> objectNames = DoGetObjectNamesForType(type, includePrototypes, includeFactoryObjects);
-            foreach (string objectName in objectNames)
+            var objectNames = DoGetObjectNamesForType(type, includePrototypes, includeFactoryObjects);
+            for (var i = 0; i < objectNames.Count; i++)
             {
+                string objectName = objectNames[i];
                 try
                 {
-                    resultCollector.Add(objectName, GetObject(objectName));
+                    resultCollector.Add(objectName, (T) GetObject(objectName));
                 }
                 catch (ObjectCreationException ex)
                 {
                     if (ex.InnerException != null
-                        && ex.GetBaseException().GetType().Equals(typeof(ObjectCurrentlyInCreationException)))
+                        && ex.GetBaseException().GetType() == typeof(ObjectCurrentlyInCreationException))
                     {
                         // ignoring this is ok... it indicates a circular reference when autowiring
                         // constructors; we want to find matches other than the currently
                         // created object itself...
                         if (log.IsDebugEnabled)
                         {
-                            log.Debug(string.Format(
-                                CultureInfo.InvariantCulture,
-                                "Ignoring match to currently created object '{0}'.",
-                                objectName), ex);
+                            log.Debug($"Ignoring match to currently created object '{objectName}'.", ex);
                         }
                     }
                     else

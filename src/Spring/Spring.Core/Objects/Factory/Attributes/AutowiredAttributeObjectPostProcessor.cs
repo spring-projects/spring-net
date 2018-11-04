@@ -19,10 +19,9 @@
 #endregion
 
 using System;
-using System.Collections;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Reflection;
-using System.Linq;
 
 using Spring.Collections;
 using Spring.Core;
@@ -82,6 +81,8 @@ namespace Spring.Objects.Factory.Attributes
 
         private readonly List<Type> autowiredPropertyTypes = new List<Type>();
 
+        private static readonly ConcurrentDictionary<AutowireCacheKey, List<InjectionMetadata.InjectedElement>> cachedAutowiringMetadata = new ConcurrentDictionary<AutowireCacheKey, List<InjectionMetadata.InjectedElement>>(); 
+
         /// <summary>
         /// Return the order value of this object, where a higher value means greater in
         ///             terms of sorting.
@@ -129,7 +130,7 @@ namespace Spring.Objects.Factory.Attributes
 
         public void ResetObjectDefinition(string beanName)
         {
-            this.lookupMethodsChecked.Remove(beanName);
+            lookupMethodsChecked.Remove(beanName);
             injectionMetadataCache.Remove(beanName);
         }
 
@@ -212,7 +213,7 @@ namespace Spring.Objects.Factory.Attributes
                     if (candidateConstructors == null)
                     {
                         ConstructorInfo[] rawCandidates = objectType.GetConstructors();
-                        IList<ConstructorInfo> candidates = new List<ConstructorInfo>(rawCandidates.Length);
+                        List<ConstructorInfo> candidates = new List<ConstructorInfo>(rawCandidates.Length);
                         ConstructorInfo requiredConstructor = null;
                         ConstructorInfo defaultConstructor = null;
                         foreach (var candidate in rawCandidates)
@@ -312,7 +313,7 @@ namespace Spring.Objects.Factory.Attributes
             var metadata = FindAutowiringMetadata(objectName, objectInstance.GetType(), pvs);
             try
             {
-                metadata.Inject(objectInstance, objectName, pvs);
+                metadata.Inject(this, objectInstance, objectName, pvs);
             }
             catch (Exception ex)
             {
@@ -325,9 +326,9 @@ namespace Spring.Objects.Factory.Attributes
         {
             // Fall back to class name as cache key, for backwards compatibility with custom callers.
             var cacheKey = StringUtils.HasLength(objectName) ? objectName : objectType.Name;
-            injectionMetadataCache.TryGetValue(cacheKey, out var metadata);
 
-            if (InjectionMetadata.NeedsRefresh(metadata, objectType))
+            if (!injectionMetadataCache.TryGetValue(cacheKey, out var metadata)
+                || InjectionMetadata.NeedsRefresh(metadata, objectType))
             {
                 lock (injectionMetadataCache)
                 {
@@ -352,76 +353,91 @@ namespace Spring.Objects.Factory.Attributes
                 for (var i = 0; i < autowiredPropertyTypes.Count; i++)
                 {
                     var autowiredType = autowiredPropertyTypes[i];
-                    var currElements = new List<InjectionMetadata.InjectedElement>();
-                    var properties =
-                        objectType.GetProperties(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
 
-                    foreach (var property in properties)
+                    /* TODO something breaks testing
+                    var currElements = cachedAutowiringMetadata.GetOrAdd(
+                        new AutowireCacheKey(autowiredType, objectType), 
+                        x => BuildMetadata(x._autowiredType, x._objectType));
+                    */
+                    var currElements = BuildMetadata(autowiredType, objectType);
+                    if (currElements.Count > 0)
                     {
-                        var required = true;
-                        var attr = Attribute.GetCustomAttribute(property, autowiredType);
-                        if (attr is AutowiredAttribute autowiredAttribute)
-                        {
-                            required = autowiredAttribute.Required;
-                        }
-
-                        if (attr != null && property.DeclaringType == objectType)
-                        {
-                            currElements.Add(new AutowiredPropertyElement(this, property, required));
-                        }
+                        elements.InsertRange(0, currElements);
                     }
-
-                    var fields = objectType.GetFields(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
-                    foreach (var field in fields)
-                    {
-                        var required = true;
-                        var attr = Attribute.GetCustomAttribute(field, autowiredType);
-                        if (attr is AutowiredAttribute autowiredAttribute)
-                        {
-                            required = autowiredAttribute.Required;
-                        }
-
-                        if (attr != null && field.DeclaringType == objectType)
-                        {
-                            currElements.Add(new AutowiredFieldElement(this, field, required));
-                        }
-                    }
-
-                    var methods = objectType.GetMethods(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance);
-                    foreach (var method in methods)
-                    {
-                        var required = true;
-                        var attr = Attribute.GetCustomAttribute(method, autowiredType);
-                        if (attr is AutowiredAttribute autowiredAttribute)
-                        {
-                            required = autowiredAttribute.Required;
-                        }
-
-                        if (attr != null && method.DeclaringType == objectType)
-                        {
-                            if (method.IsStatic)
-                            {
-                                logger.Warn(m => m("Autowired annotation is not supported on static methods: " + method.Name));
-                                continue;
-                            }
-
-                            if (method.IsGenericMethod)
-                            {
-                                logger.Warn(m => m("Autowired annotation is not supported on generic methods: " + method.Name));
-                                continue;
-                            }
-
-                            currElements.Add(new AutowiredMethodElement(this, method, required));
-                        }
-                    }
-
-                    elements.InsertRange(0, currElements);
                 }
 
                 objectType = objectType.BaseType;
-            } while (objectType != null && objectType != typeof (object));
+            } while (objectType != null && objectType != typeof(object));
 
             return new InjectionMetadata(objectType, elements);
+        }
+
+        private static List<InjectionMetadata.InjectedElement> BuildMetadata(Type autowiredType, Type objectType)
+        {
+            var currElements = new List<InjectionMetadata.InjectedElement>();
+            var flags = BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance;
+
+            var properties = objectType.GetProperties(flags);
+            foreach (var property in properties)
+            {
+                var required = true;
+                var attr = Attribute.GetCustomAttribute(property, autowiredType);
+                if (attr is AutowiredAttribute autowiredAttribute)
+                {
+                    required = autowiredAttribute.Required;
+                }
+
+                if (attr != null && property.DeclaringType == objectType)
+                {
+                    currElements.Add(new AutowiredPropertyElement(property, required));
+                }
+            }
+
+            var fields = objectType.GetFields(flags);
+            foreach (var field in fields)
+            {
+                var required = true;
+                var attr = Attribute.GetCustomAttribute(field, autowiredType);
+                if (attr is AutowiredAttribute autowiredAttribute)
+                {
+                    required = autowiredAttribute.Required;
+                }
+
+                if (attr != null && field.DeclaringType == objectType)
+                {
+                    currElements.Add(new AutowiredFieldElement(field, required));
+                }
+            }
+
+            var methods = objectType.GetMethods(flags);
+            foreach (var method in methods)
+            {
+                var required = true;
+                var attr = Attribute.GetCustomAttribute(method, autowiredType);
+                if (attr is AutowiredAttribute autowiredAttribute)
+                {
+                    required = autowiredAttribute.Required;
+                }
+
+                if (attr != null && method.DeclaringType == objectType)
+                {
+                    if (method.IsStatic)
+                    {
+                        logger.Warn(m => m("Autowired annotation is not supported on static methods: " + method.Name));
+                        continue;
+                    }
+
+                    if (method.IsGenericMethod)
+                    {
+                        logger.Warn(m => m("Autowired annotation is not supported on generic methods: " + method.Name));
+                        continue;
+                    }
+
+                    currElements.Add(new AutowiredMethodElement(method, required));
+                }
+            }
+
+            return currElements;
         }
 
         /// <summary>
@@ -434,8 +450,7 @@ namespace Spring.Objects.Factory.Attributes
                 return;
             }
 
-            var objectDefinition = objectFactory.GetObjectDefinition(objectName) as RootObjectDefinition;
-            if (objectDefinition == null)
+            if (!(objectFactory.GetObjectDefinition(objectName) is RootObjectDefinition objectDefinition))
             {
                 return;
             }
@@ -473,19 +488,21 @@ namespace Spring.Objects.Factory.Attributes
         /// </summary>
         private class AutowiredPropertyElement : InjectionMetadata.InjectedElement
         {
-            private readonly AutowiredAttributeObjectPostProcessor processor;
             private readonly bool required;
             private bool cached;
             private object cachedFieldValue;
 
-            public AutowiredPropertyElement(AutowiredAttributeObjectPostProcessor processor, PropertyInfo property, bool required)
+            public AutowiredPropertyElement(PropertyInfo property, bool required)
                 : base(property)
             {
-                this.processor = processor;
                 this.required = required;
             }
 
-            public override void Inject(object instance, string objectName, IPropertyValues pvs)
+            public override void Inject(
+                AutowiredAttributeObjectPostProcessor processor, 
+                object instance, 
+                string objectName, 
+                IPropertyValues pvs)
             {
                 var property = (PropertyInfo) Member;
                 try
@@ -497,11 +514,12 @@ namespace Spring.Objects.Factory.Attributes
                     }
                     else
                     {
-                        var descriptor = new DependencyDescriptor(property, required);
-                        var autowiredObjectNames = new List<string>();
-                        value = processor.objectFactory.ResolveDependency(descriptor, objectName, autowiredObjectNames);
                         lock (this)
                         {
+                            var descriptor = new DependencyDescriptor(property, required);
+                            var autowiredObjectNames = new List<string>();
+                            value = processor.objectFactory.ResolveDependency(descriptor, objectName, autowiredObjectNames);
+
                             if (!cached)
                             {
                                 if (value != null || required)
@@ -545,19 +563,21 @@ namespace Spring.Objects.Factory.Attributes
         /// </summary>
         private class AutowiredFieldElement : InjectionMetadata.InjectedElement
         {
-            private readonly AutowiredAttributeObjectPostProcessor processor;
             private readonly bool required;
             private bool cached;
             private object cachedFieldValue;
 
-            public AutowiredFieldElement(AutowiredAttributeObjectPostProcessor processor, FieldInfo field, bool required)
+            public AutowiredFieldElement(FieldInfo field, bool required)
                 : base(field)
             {
-                this.processor = processor;
                 this.required = required;
             }
 
-            public override void Inject(object instance, string objectName, IPropertyValues pvs)
+            public override void Inject(
+                AutowiredAttributeObjectPostProcessor processor,
+                object instance, 
+                string objectName, 
+                IPropertyValues pvs)
             {
                 var field = (FieldInfo) Member;
                 try
@@ -569,11 +589,11 @@ namespace Spring.Objects.Factory.Attributes
                     }
                     else
                     {
-                        var descriptor = new DependencyDescriptor(field, required);
-                        var autowiredObjectNames = new List<string>();
-                        value = processor.objectFactory.ResolveDependency(descriptor, objectName, autowiredObjectNames);
                         lock (this)
                         {
+                            var descriptor = new DependencyDescriptor(field, required);
+                            var autowiredObjectNames = new List<string>();
+                            value = processor.objectFactory.ResolveDependency(descriptor, objectName, autowiredObjectNames);
                             if (!cached)
                             {
                                 if (value != null || required)
@@ -582,7 +602,7 @@ namespace Spring.Objects.Factory.Attributes
                                     processor.RegisterDependentObjects(objectName, autowiredObjectNames);
                                     if (autowiredObjectNames.Count == 1)
                                     {
-                                        var autowiredBeanName = autowiredObjectNames[0] as string;
+                                        var autowiredBeanName = autowiredObjectNames[0];
                                         if (processor.objectFactory.ContainsObject(autowiredBeanName))
                                         {
                                             if (processor.objectFactory.IsTypeMatch(autowiredBeanName, field.GetType()))
@@ -617,19 +637,17 @@ namespace Spring.Objects.Factory.Attributes
         ///
         private class AutowiredMethodElement : InjectionMetadata.InjectedElement
         {
-            private readonly AutowiredAttributeObjectPostProcessor processor;
             private readonly bool required;
             private bool cached;
             private volatile object[] cachedMethodArguments;
 
-            public AutowiredMethodElement(AutowiredAttributeObjectPostProcessor processor, MethodInfo method, bool required)
+            public AutowiredMethodElement(MethodInfo method, bool required)
                 : base(method)
             {
-                this.processor = processor;
                 this.required = required;
             }
 
-            public override void Inject(object target, string objectName, IPropertyValues pvs)
+            public override void Inject(AutowiredAttributeObjectPostProcessor processor, object target, string objectName, IPropertyValues pvs)
             {
                 MethodInfo method = Member as MethodInfo;
                 try
@@ -637,27 +655,28 @@ namespace Spring.Objects.Factory.Attributes
                     object[] arguments;
                     if (cached)
                     {
-                        arguments = ResolveCachedArguments(objectName);
+                        arguments = ResolveCachedArguments(processor, objectName);
                     }
                     else
                     {
-                        Type[] paramTypes = method.GetParameters().Select(p => p.ParameterType).ToArray();
-                        arguments = new object[paramTypes.Length];
-                        var descriptors = new DependencyDescriptor[paramTypes.Length];
-                        var autowiredBeanNames = new List<string>();
-                        for (int i = 0; i < arguments.Length; i++)
-                        {
-                            MethodParameter methodParam = new MethodParameter(method, i);
-                            descriptors[i] = new DependencyDescriptor(methodParam, required);
-                            arguments[i] = processor.objectFactory.ResolveDependency(descriptors[i], objectName, autowiredBeanNames);
-                            if (arguments[i] == null && !required)
-                            {
-                                arguments = null;
-                                break;
-                            }
-                        }
                         lock (this)
                         {
+                            ParameterInfo[] parameters = method.GetParameters();
+                            arguments = new object[parameters.Length];
+                            var descriptors = new DependencyDescriptor[parameters.Length];
+                            var autowiredBeanNames = new List<string>();
+                            for (int i = 0; i < arguments.Length; i++)
+                            {
+                                MethodParameter methodParam = new MethodParameter(method, i);
+                                descriptors[i] = new DependencyDescriptor(methodParam, required);
+                                arguments[i] = processor.objectFactory.ResolveDependency(descriptors[i], objectName, autowiredBeanNames);
+                                if (arguments[i] == null && !required)
+                                {
+                                    arguments = null;
+                                    break;
+                                }
+                            }
+                            
                             if (!cached)
                             {
                                 if (arguments != null)
@@ -668,17 +687,16 @@ namespace Spring.Objects.Factory.Attributes
                                         cachedMethodArguments[i] = descriptors[i];
                                     }
                                     processor.RegisterDependentObjects(objectName, autowiredBeanNames);
-                                    if (autowiredBeanNames.Count == paramTypes.Length)
+                                    if (autowiredBeanNames.Count == parameters.Length)
                                     {
-                                        for (int i = 0; i < paramTypes.Length; i++)
+                                        for (int i = 0; i < parameters.Length; i++)
                                         {
-                                            string autowiredBeanName = autowiredBeanNames[i] as string;
+                                            string autowiredBeanName = autowiredBeanNames[i];
                                             if (processor.objectFactory.ContainsObject(autowiredBeanName))
                                             {
-                                                if (processor.objectFactory.IsTypeMatch(autowiredBeanName, paramTypes[i]))
+                                                if (processor.objectFactory.IsTypeMatch(autowiredBeanName, parameters[i].ParameterType))
                                                 {
-                                                    cachedMethodArguments[i] =
-                                                        new RuntimeObjectReference(autowiredBeanName);
+                                                    cachedMethodArguments[i] = new RuntimeObjectReference(autowiredBeanName);
                                                 }
                                             }
                                         }
@@ -703,7 +721,7 @@ namespace Spring.Objects.Factory.Attributes
                 }
             }
 
-            private object[] ResolveCachedArguments(string objectName)
+            private object[] ResolveCachedArguments(AutowiredAttributeObjectPostProcessor processor, string objectName)
             {
                 if (cachedMethodArguments == null)
                 {
@@ -715,6 +733,41 @@ namespace Spring.Objects.Factory.Attributes
                     arguments[i] = processor.ResolvedCachedArgument(objectName, cachedMethodArguments[i]);
                 }
                 return arguments;
+            }
+        }
+        
+        private class AutowireCacheKey : IEquatable<AutowireCacheKey>
+        {
+            internal readonly Type _autowiredType;
+            internal readonly Type _objectType;
+
+            public AutowireCacheKey(Type autowiredType, Type objectType)
+            {
+                _autowiredType = autowiredType;
+                _objectType = objectType;
+            }
+
+            public bool Equals(AutowireCacheKey other)
+            {
+                if (ReferenceEquals(null, other)) return false;
+                if (ReferenceEquals(this, other)) return true;
+                return _autowiredType == other._autowiredType && _objectType == other._objectType;
+            }
+
+            public override bool Equals(object obj)
+            {
+                if (ReferenceEquals(null, obj)) return false;
+                if (ReferenceEquals(this, obj)) return true;
+                if (obj.GetType() != this.GetType()) return false;
+                return Equals((AutowireCacheKey) obj);
+            }
+
+            public override int GetHashCode()
+            {
+                unchecked
+                {
+                    return (_autowiredType.GetHashCode() * 397) ^ _objectType.GetHashCode();
+                }
             }
         }
     }

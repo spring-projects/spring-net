@@ -30,27 +30,24 @@ namespace Spring.Objects.Factory.Attributes
 	/// Internal class for managing injection metadata.
 	/// Not intended for direct use in applications.
 	/// </summary>
-	public class InjectionMetadata
+	internal class InjectionMetadata
 	{
 		private static readonly ILog Logger = LogManager.GetLogger<InjectionMetadata>();
 
 		private readonly Type targetType;
-		private readonly IList<InjectedElement> _injectedElements;
+		private readonly List<InjectedElement> _injectedElements;
 
-		/// <summary>
-		/// </summary>
-		/// <param name="targetType"></param>
-		/// <param name="elements"></param>
-		public InjectionMetadata(Type targetType, IList<InjectedElement> elements)
+		public InjectionMetadata(Type targetType, List<InjectedElement> elements)
 		{
 			this.targetType = targetType;
-			_injectedElements = new List<InjectedElement>();
-			if (elements.Count > 0)
+			_injectedElements = elements;
+
+			if (Logger.IsDebugEnabled)
 			{
-				foreach (var element in elements)
+				for (var i = 0; i < elements.Count; i++)
 				{
-					Logger.Debug(m => m("Found injected element on class [" + targetType.Name + "]: " + element));
-					_injectedElements.Add(element);
+					var element = elements[i];
+					Logger.Debug($"Found injected element on class [{targetType.Name}]: {element}");
 				}
 			}
 		}
@@ -65,23 +62,28 @@ namespace Spring.Objects.Factory.Attributes
 		/// <summary>
 		/// Inject values for members into object instance
 		/// </summary>
-		/// <param name="instance"></param>
-		/// <param name="objectName"></param>
-		/// <param name="pvs"></param>
-		public void Inject(object instance, string objectName, IPropertyValues pvs)
+		public void Inject(
+			AutowiredAttributeObjectPostProcessor processor, 
+			object instance, 
+			string objectName, 
+			IPropertyValues pvs)
 		{
+			bool debugEnabled = Logger.IsDebugEnabled;
 			for (var i = 0; i < _injectedElements.Count; i++)
 			{
 				var element = _injectedElements[i];
-				Logger.Debug(m => m("Processing injected method of bean '{0}': {1}", objectName, element));
-				element.Inject(instance, objectName, pvs);
+				if (debugEnabled)
+				{
+					Logger.Debug($"Processing injected method of bean '{objectName}': {element}");
+				}
+				element.Inject(processor, instance, objectName, pvs);
 			}
 		}
 
 		/// <summary>
 		/// Represents an element that needs to be injected
 		/// </summary>
-		public abstract class InjectedElement
+		internal abstract class InjectedElement
 		{
 			/// <summary>
 			/// Instantiates a new inject element
@@ -98,17 +100,18 @@ namespace Spring.Objects.Factory.Attributes
 			public MemberInfo Member { get; }
 
 			/// <summary>
-			/// Ececuted to inject value to associated memeber info
+			/// Executed to inject value to associated member info
 			/// </summary>
-			/// <param name="target"></param>
-			/// <param name="requestingObjectName"></param>
-			/// <param name="pvs"></param>
-			public abstract void Inject(object target, string requestingObjectName, IPropertyValues pvs);
+			public abstract void Inject(
+				AutowiredAttributeObjectPostProcessor processor,
+				object target,
+				string requestingObjectName,
+				IPropertyValues pvs);
 		}
 
 		public static bool NeedsRefresh(InjectionMetadata metadata, Type type)
 		{
-			return (metadata == null || metadata.targetType != type);
+			return metadata == null || metadata.targetType != type;
 		}
 	}
 }

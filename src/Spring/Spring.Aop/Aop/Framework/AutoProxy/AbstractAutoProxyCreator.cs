@@ -17,9 +17,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Runtime.Remoting;
 
 using AopAlliance.Aop;
 
@@ -227,7 +225,7 @@ namespace Spring.Aop.Framework.AutoProxy
 #if NETSTANDARD
             var isTransparentProxy = false;
 #else
-            var isTransparentProxy = RemotingServices.IsTransparentProxy(obj);
+            var isTransparentProxy = System.Runtime.Remoting.RemotingServices.IsTransparentProxy(obj);
 #endif
 
             Type objectType = isTransparentProxy
@@ -244,7 +242,7 @@ namespace Spring.Aop.Framework.AutoProxy
             {
                 if (logger.IsDebugEnabled)
                 {
-                    logger.Debug(string.Format("Did not attempt to autoproxy infrastructure type [{0}]", objectType));
+                    logger.Debug($"Did not attempt to autoproxy infrastructure type [{objectType}]");
                 }
 
                 nonAdvisedObjects.Add(cacheKey);
@@ -255,7 +253,7 @@ namespace Spring.Aop.Framework.AutoProxy
             {
                 if (logger.IsDebugEnabled)
                 {
-                    logger.Debug(string.Format("Skipping  type [{0}]", objectType));
+                    logger.Debug($"Skipping  type [{objectType}]");
                 }
 
                 nonAdvisedObjects.Add(cacheKey);
@@ -396,7 +394,8 @@ namespace Spring.Aop.Framework.AutoProxy
                         // found a match
                         if (logger.IsInfoEnabled)
                         {
-                            logger.Info(string.Format("TargetSourceCreator [{0} found custom TargetSource for object with objectName '{1}'", tsc, name));
+                            logger.Info(
+                                $"TargetSourceCreator [{tsc} found custom TargetSource for object with objectName '{name}'");
                         }
                         return ts;
                     }
@@ -508,11 +507,11 @@ namespace Spring.Aop.Framework.AutoProxy
                 {
                     if (applyCommonInterceptorsFirst)
                     {
-                        allInterceptors.InsertRange(0, commonInterceptors.Cast<object>());
+                        allInterceptors.InsertRange(0, commonInterceptors);
                     }
                     else
                     {
-                        allInterceptors.AddRange(commonInterceptors.Cast<object>());
+                        allInterceptors.AddRange(commonInterceptors);
                     }
                 }
             }
@@ -520,7 +519,8 @@ namespace Spring.Aop.Framework.AutoProxy
             {
                 int nrOfCommonInterceptors = commonInterceptors != null ? commonInterceptors.Count : 0;
                 int nrOfSpecificInterceptors = specificInterceptors != null ? specificInterceptors.Count : 0;
-                logger.Info(string.Format("Creating implicit proxy for object '{0}' with {1} common interceptors and {2} specific interceptors", targetName, nrOfCommonInterceptors, nrOfSpecificInterceptors));
+                logger.Info(
+                    $"Creating implicit proxy for object '{targetName}' with {nrOfCommonInterceptors} common interceptors and {nrOfSpecificInterceptors} specific interceptors");
             }
 
 
@@ -582,7 +582,7 @@ namespace Spring.Aop.Framework.AutoProxy
                 {
                     if (logger.IsDebugEnabled)
                     {
-                        logger.Debug(string.Format("Did not attempt to autoproxy infrastructure type [{0}]", objectType));
+                        logger.Debug($"Did not attempt to autoproxy infrastructure type [{objectType}]");
                     }
 
                     nonAdvisedObjects.Add(cacheKey);
@@ -593,7 +593,7 @@ namespace Spring.Aop.Framework.AutoProxy
                 {
                     if (logger.IsDebugEnabled)
                     {
-                        logger.Debug(string.Format("Skipping  type [{0}]", objectType));
+                        logger.Debug($"Skipping  type [{objectType}]");
                     }
 
                     nonAdvisedObjects.Add(cacheKey);

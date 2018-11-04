@@ -1,7 +1,5 @@
-#region License
-
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +14,8 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using System.Reflection;
-
-#endregion
 
 namespace Spring.Core
 {
@@ -43,7 +35,9 @@ namespace Spring.Core
     /// <author>Rick Evans</author>
     public class MethodParametersCountCriteria : ICriteria
     {
-        #region Constructor (s) / Destructor
+        private static readonly MethodParametersCountCriteria Empty = new MethodParametersCountCriteria();
+
+        private int _count;
 
         /// <summary>
         /// Creates a new instance of the
@@ -77,9 +71,10 @@ namespace Spring.Core
             ExpectedParameterCount = expectedParameterCount;
         }
 
-        #endregion
-
-        #region Properties
+        internal static MethodParametersCountCriteria Create(int expectedParameterCount)
+        {
+            return expectedParameterCount == 0 ? Empty : new MethodParametersCountCriteria(expectedParameterCount);
+        }
 
         /// <summary>
         /// The number of parameters that a <see cref="System.Reflection.MethodInfo"/>
@@ -96,25 +91,13 @@ namespace Spring.Core
                 if (value < 0)
                 {
                     throw new ArgumentOutOfRangeException(
-                        "value", value, "Cannot specify a parameter count of less than zero.");
+                        nameof(value), value, "Cannot specify a parameter count of less than zero.");
                 }
                 _count = value;
             }
         }
 
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// Does the supplied <paramref name="datum"/> satisfy the criteria encapsulated by
-        /// this instance?
-        /// </summary>
-        /// <param name="datum">The datum to be checked by this criteria instance.</param>
-        /// <returns>
-        /// True if the supplied <paramref name="datum"/> satisfies the criteria encapsulated
-        /// by this instance; false if not or the supplied <paramref name="datum"/> is null.
-        /// </returns>
+        /// <inheritdoc />
         public bool IsSatisfied(object datum)
         {
             bool satisfied = false;
@@ -134,13 +117,5 @@ namespace Spring.Core
             }
             return satisfied;
         }
-
-        #endregion
-
-        #region Fields
-
-        private int _count;
-
-        #endregion
     }
 }

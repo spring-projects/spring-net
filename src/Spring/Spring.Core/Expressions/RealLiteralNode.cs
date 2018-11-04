@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -62,8 +62,8 @@ namespace Spring.Expressions
                 {
                     if (nodeValue == null)
                     {
-                        string n = this.getText();
-                        char lastChar = n.ToLower()[n.Length - 1];
+                        string n = getText();
+                        char lastChar = char.ToLowerInvariant(n[n.Length - 1]);
                         if (Char.IsDigit(lastChar))
                         {
                             nodeValue = Double.Parse(n, NumberFormatInfo.InvariantInfo);

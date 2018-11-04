@@ -353,8 +353,8 @@ namespace Spring.Util
 		{
 			throw new ArgumentNullException(paramName, message);
 		}
-		
-		private static void ThrowArgumentException(string message)
+
+		internal static void ThrowArgumentException(string message)
 		{
 			throw new ArgumentException(message);
 		}

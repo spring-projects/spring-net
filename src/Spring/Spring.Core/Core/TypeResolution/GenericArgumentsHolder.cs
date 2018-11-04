@@ -1,7 +1,5 @@
-#region License
-
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +14,8 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System.Text.RegularExpressions;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Core.TypeResolution
 {
@@ -31,15 +23,11 @@ namespace Spring.Core.TypeResolution
     /// Holder for the generic arguments when using type parameters.
     /// </summary>
     /// <remarks>
-    /// <p>
-    /// Type parameters can be applied to classes, interfaces, 
+    /// Type parameters can be applied to classes, interfaces,
     /// structures, methods, delegates, etc...
-    /// </p>
     /// </remarks>
     public class GenericArgumentsHolder
     {
-        #region Constants
-
         private static readonly Regex ClrPattern = new Regex(
               "^"
               + @"(?'name'\w[\w\d\.]+)"
@@ -95,18 +83,10 @@ namespace Spring.Core.TypeResolution
         /// </summary>
         public const char GenericArgumentsSeparator = ',';
 
-        #endregion
-
-        #region Fields
-
         private string unresolvedGenericTypeName;
         private string unresolvedGenericMethodName;
         private string[] unresolvedGenericArguments;
         private string arrayDeclaration;
-
-        #endregion
-
-        #region Constructor (s) / Destructor
 
         /// <summary>
         /// Creates a new instance of the GenericArgumentsHolder class.
@@ -120,27 +100,17 @@ namespace Spring.Core.TypeResolution
             ParseGenericTypeDeclaration(value);
         }
 
-        #endregion
-
-        #region Properties
-
         /// <summary>
         /// The (unresolved) generic type name portion 
         /// of the original value when parsing a generic type.
         /// </summary>
-        public string GenericTypeName
-        {
-            get { return unresolvedGenericTypeName; }
-        }
+        public string GenericTypeName => unresolvedGenericTypeName;
 
         /// <summary>
         /// The (unresolved) generic method name portion 
         /// of the original value when parsing a generic method.
         /// </summary>
-        public string GenericMethodName
-        {
-            get { return unresolvedGenericMethodName; }
-        }
+        public string GenericMethodName => unresolvedGenericMethodName;
 
         /// <summary>
         /// Is the string value contains generic arguments ?
@@ -150,14 +120,8 @@ namespace Spring.Core.TypeResolution
         /// A generic argument can be a type parameter or a type argument.
         /// </p>
         /// </remarks>
-        public bool ContainsGenericArguments
-        {
-            get
-            {
-                return (unresolvedGenericArguments != null &&
-                    unresolvedGenericArguments.Length > 0);
-            }
-        }
+        public bool ContainsGenericArguments => unresolvedGenericArguments != null &&
+                                                unresolvedGenericArguments.Length > 0;
 
         /// <summary>
         /// Is generic arguments only contains type parameters ?
@@ -167,12 +131,16 @@ namespace Spring.Core.TypeResolution
             get
             {
                 if (unresolvedGenericArguments == null)
+                {
                     return false;
+                }
 
                 foreach (string arg in unresolvedGenericArguments)
                 {
                     if (arg.Length > 0)
+                    {
                         return false;
+                    }
                 }
                 return true;
             }
@@ -190,23 +158,14 @@ namespace Spring.Core.TypeResolution
         /// <summary>
         /// Is this an array type definition?
         /// </summary>
-        public bool IsArrayDeclaration
-        {
-            get { return arrayDeclaration != null; }
-        }
-
-        #endregion
-
-        #region Methods
+        public bool IsArrayDeclaration => arrayDeclaration != null;
 
         /// <summary>
         /// Returns an array of unresolved generic arguments types.
         /// </summary>
         /// <remarks>
-        /// <p>
-        /// A empty string represents a type parameter that 
+        /// A empty string represents a type parameter that
         /// did not have been substituted by a specific type.
-        /// </p>
         /// </remarks>
         /// <returns>
         /// An array of strings that represents the unresolved generic 
@@ -356,6 +315,5 @@ namespace Spring.Core.TypeResolution
 
 //            return (string[])args.ToArray(typeof(string));
         }
-        #endregion
     }
 }

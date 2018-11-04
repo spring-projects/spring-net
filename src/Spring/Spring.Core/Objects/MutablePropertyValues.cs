@@ -17,7 +17,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Text;
 using Spring.Util;
 
@@ -271,11 +270,10 @@ namespace Spring.Objects
                 return null;
             }
             
-            string propertyNameLowered = propertyName.ToLower(CultureInfo.CurrentCulture);
             for (var i = 0; i < propertyValuesList.Count; i++)
             {
                 PropertyValue pv = propertyValuesList[i];
-                if (pv.Name.ToLower(CultureInfo.CurrentCulture).Equals(propertyNameLowered))
+                if (pv.Name.Equals(propertyName, StringComparison.OrdinalIgnoreCase))
                 {
                     return pv;
                 }

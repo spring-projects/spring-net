@@ -453,7 +453,9 @@ namespace Spring.Objects.Factory.Xml
                 EventValues events = ParseEventHandlerSubElements(id, element, childParserContext);
                 MethodOverrides methodOverrides = ParseMethodOverrideSubElements(id, element, childParserContext);
 
-                bool isPage = StringUtils.HasText(typeName) && typeName != null && typeName.ToLower().EndsWith(".aspx");
+                bool isPage = StringUtils.HasText(typeName)
+                              && typeName != null 
+                              && typeName.EndsWith(".aspx", StringComparison.OrdinalIgnoreCase);
                 if (!isPage)
                 {
                     od.ConstructorArgumentValues = arguments;

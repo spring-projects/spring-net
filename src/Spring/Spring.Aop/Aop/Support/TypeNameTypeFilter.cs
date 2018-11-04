@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,18 +36,15 @@ namespace Spring.Aop.Support
     /// <seealso cref="PatternMatchUtils.SimpleMatch(string[],string)"/>
     public class TypeNameTypeFilter : ITypeFilter
     {
-        private string[] _typeNamePatterns;
+        private readonly string[] _typeNamePatterns;
 
         ///<summary>
         /// Returns the list of type name patterns for this filter.
         ///</summary>
         /// <seealso cref="PatternMatchUtils.SimpleMatch(string[],string)"/>
-        public string[] TypeNamePatterns
-        {
-            get { return _typeNamePatterns; }
-        }
+        public string[] TypeNamePatterns => _typeNamePatterns;
 
-        ///<summary>
+	    ///<summary>
         ///Creates a new instance of <see cref="TypeNameTypeFilter"/> using a list of given <paramref name="patterns"/>.
         ///</summary>
         ///<param name="patterns">the list patterns to match typenames against. Must not be <c>null</c>.</param>

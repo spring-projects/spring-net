@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -95,7 +95,7 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <returns>if the names match</returns>
         protected virtual bool IsMatch( string objectName, string mappedName )
         {
-            return PatternMatchUtils.SimpleMatch( mappedName, objectName );
+            return PatternMatchUtils.SimpleMatch( mappedName, objectName, StringComparison.Ordinal);
         }
 
         /// <summary>

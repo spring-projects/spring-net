@@ -1,7 +1,5 @@
-#region License
-
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -16,14 +14,8 @@
  * limitations under the License.
  */
 
-#endregion
-
-#region Imports
-
 using System;
 using System.Collections.Generic;
-
-#endregion
 
 namespace Spring.Aop.Framework.AutoProxy
 {
@@ -59,7 +51,8 @@ namespace Spring.Aop.Framework.AutoProxy
         /// Always <see cref="AbstractAutoProxyCreator.PROXY_WITHOUT_ADDITIONAL_INTERCEPTORS"/> to indicate, that the object shall be proxied.
         /// </returns>
         /// <seealso cref="AbstractAutoProxyCreator.PROXY_WITHOUT_ADDITIONAL_INTERCEPTORS"/>
-        protected override IList<object> GetAdvicesAndAdvisorsForObject(Type targetType, string targetName, ITargetSource customTargetSource)
+        protected override IList<object> GetAdvicesAndAdvisorsForObject(Type targetType, string targetName,
+            ITargetSource customTargetSource)
         {
             return PROXY_WITHOUT_ADDITIONAL_INTERCEPTORS;
         }
