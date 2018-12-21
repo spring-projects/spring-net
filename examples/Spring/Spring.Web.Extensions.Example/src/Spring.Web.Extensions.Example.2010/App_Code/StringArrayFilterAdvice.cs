@@ -70,7 +70,7 @@ public class StringArrayFilterAdvice : IMethodInterceptor
             List<string> strings = new List<string>();
             foreach (string item in stringArray)
             {
-                if (PatternMatchUtils.SimpleMatch(_pattern, item))
+                if (PatternMatchUtils.SimpleMatch(_pattern, item, StringComparison.Ordinal))
                 {
                     strings.Add(item);
                 }
