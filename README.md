@@ -168,6 +168,8 @@ VS.NET
 
 Visual Studio 2017 is required to open and build the solution. The free community version of Visual Studio should suffice.
 
+For the first time you need to execute `Build.cmd` which will generate `GenCommonAssemblyInfo.cs` file required for builds.
+
 NAnt
 ----
 
