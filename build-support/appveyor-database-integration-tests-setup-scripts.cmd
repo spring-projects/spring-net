@@ -1,5 +1,5 @@
 rem scripts to setup integration test database on CI server
-rem NOTE: sqlcmd params are hard-coded to credentials and instance name for SQL Server 2012 as per http://www.appveyor.com/docs/services-databases
+rem NOTE: sqlcmd params are hard-coded to credentials and instance name for SQL Server 2012 as per https://www.appveyor.com/docs/services-databases
 
 rem first, create the databases and the SpringQA user
 sqlcmd -S ".\SQL2017" -U sa -P Password12! -i "%APPVEYOR_BUILD_FOLDER%\build-support\create-integration-test-databases-and-users.sql"
