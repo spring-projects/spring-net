@@ -63,7 +63,7 @@
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;objects xmlns="http://www.springframework.net"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/schema/objects/spring-objects-1.1.xsd"&gt;
+         xsi:schemaLocation="http://www.springframework.net https://www.springframework.net/schema/objects/spring-objects-1.1.xsd"&gt;
 
 <lineannotation> &lt;!-- <literal>&lt;object/&gt;</literal> definitions here --&gt;</lineannotation>
 
@@ -467,7 +467,7 @@ int result = calculator.Add(1,2);</programlisting>
       <programlisting language="myxml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;objects xmlns="http://www.springframework.net"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/schema/objects/spring-objects-1.1.xsd"&gt;
+       xsi:schemaLocation="http://www.springframework.net https://www.springframework.net/schema/objects/spring-objects-1.1.xsd"&gt;
 
     &lt;object id="foo" class="X.Y.Foo, X"&gt;
         &lt;property name="name" value="Rick"/&gt;

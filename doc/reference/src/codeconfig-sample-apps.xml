@@ -38,7 +38,7 @@
     <para>The Spring.IoCQuickStart.MovieFinder sample application is the same
     fundamental code as provided in the sample app by the same name that is
     provided with <link
-    ns5:href="http://springframework.net/download.html">the main Spring.NET
+    ns5:href="https://springframework.net/download.html">the main Spring.NET
     Framework download package</link>. This section assumes you are already
     familiar with the sample application as provided in that download package.
     This version of this sample application has been modified to rely upon
@@ -146,7 +146,7 @@
 
     <para>The Spring.MvcQuickStart sample application is the same fundamental
     code as provided in the sample app by the same name that is provided with
-    <link ns5:href="http://springframework.net/download.html">the main
+    <link ns5:href="https://springframework.net/download.html">the main
     Spring.NET Framework download package</link>. This section assumes you are
     already familiar with the sample application as provided in that download
     package. This version of this sample application has been modified to rely

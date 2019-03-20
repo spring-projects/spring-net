@@ -37,8 +37,8 @@
     <para>The quick start contains pseudo DAO objects and a collection of
     NUnit tests to exercise them rather than a full blown application. To run
     the tests from within VS.NET install <ulink
-    url="http://www.testdriven.net/">TestDriven.NET</ulink>, <ulink
-    url="http://www.jetbrains.com/resharper/">ReSharper</ulink>, or an
+    url="https://www.testdriven.net/">TestDriven.NET</ulink>, <ulink
+    url="https://www.jetbrains.com/resharper/">ReSharper</ulink>, or an
     equivalent . The listing of DAO classes and the parts of Spring.Data that
     they demonstrate is shown below.</para>
 
@@ -110,7 +110,7 @@
       abstraction for details particular to your database configuration. You
       should also install the Northwind database, which is available for
       SqlServer 2005 from this <ulink
-      url="http://www.microsoft.com/downloads/details.aspx?FamilyID=06616212-0356-46a0-8da2-eebc53a68034&amp;DisplayLang=en">download
+      url="https://www.microsoft.com/downloads/details.aspx?FamilyID=06616212-0356-46a0-8da2-eebc53a68034&amp;DisplayLang=en">download
       location</ulink>. The minimal schema to support other database providers
       may be supported in the future.</para>
 

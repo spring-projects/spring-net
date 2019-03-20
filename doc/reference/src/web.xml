@@ -1908,9 +1908,9 @@ protected override void InitializeDataBindings()
     <tip>
       <para>For introductory information covering ASP.NET globalization and
       localization, see <ulink
-      url="http://msdn.microsoft.com/asp.net/community/authors/mlb/default.aspx?pull=/library/en-us/dnaspp/html/aspnet-globalarchi.asp">Globalization
+      url="https://msdn.microsoft.com/asp.net/community/authors/mlb/default.aspx?pull=/library/en-us/dnaspp/html/aspnet-globalarchi.asp">Globalization
       Architecture for ASP.NET</ulink> and <ulink
-      url="http://www.theserverside.net/articles/showarticle.tss?id=LocalizationPractices">Localization
+      url="https://searchwindevelopment.techtarget.com/?id=LocalizationPractices">Localization
       Practices for ASP.NET 2.0</ulink> by Michele Leroux Bustamante.</para>
     </tip>
 
@@ -2080,7 +2080,7 @@ protected override void InitializeDataBindings()
 
         <para>There is no way to visually edit resources in a RESX file. Lutz
         Roeder has created a tool named <link
-        ns6:href="http://www.lutzroeder.com/dotnet/">Resourcer</link> that you
+        ns6:href="https://www.lutzroeder.com/dotnet/">Resourcer</link> that you
         can use to edit them</para>
       </tip>
 
@@ -2429,7 +2429,7 @@ private void SetLanguage(object sender, CommandEventArgs e)
     application necessitates code changes (with the attendant recompilation,
     testing, redeployment, and so on). A better way, which works in many MVC (
     <ulink
-    url="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dnpatterns/html/DesMVC.asp">Model-View-Controller</ulink>)
+    url="https://msdn.microsoft.com/library/default.asp?url=/library/en-us/dnpatterns/html/DesMVC.asp">Model-View-Controller</ulink>)
     web frameworks, is to enable you to externalize the mapping of action
     results to target pages.</para>
 

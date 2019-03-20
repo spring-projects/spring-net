@@ -9,7 +9,7 @@
   <object id="bookingAgentWebService" name="/BookingAgent.asmx" type="Spring.Web.Services.WebServiceExporter, Spring.Web">
     <property name="TargetName" value="bookingAgent"/>
     <property name="Name" value="BookingAgent"/>
-    <property name="Namespace" value="http://SpringAir/WebServices"/>
+    <property name="Namespace" value="https://SpringAir/WebServices"/>
     <property name="Description" value="SpringAir Booking Agent Web Service"/>
     <property name="MemberAttributes">
       <dictionary>

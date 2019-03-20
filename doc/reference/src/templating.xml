@@ -29,7 +29,7 @@
 
     <para>The Spring Framework features integration classes for templating
     engine support. Spring 1.3 provides support for the <ulink
-    url="http://www.castleproject.org/others/nvelocity/index.html">NVelocity</ulink>
+    url="https://www.castleproject.org/others/nvelocity/index.html">NVelocity</ulink>
     templating engine.</para>
   </section>
 

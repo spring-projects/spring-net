@@ -6,7 +6,7 @@
 
 <objects xmlns="http://www.springframework.net" 
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
+	xsi:schemaLocation="http://www.springframework.net https://www.springframework.net/xsd/spring-objects.xsd">
 
   <!-- Not available in .NET, so I commented it out (I'll add something else later) Rick, 9th July 2004 -->
   <!--

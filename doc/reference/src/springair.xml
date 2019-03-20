@@ -310,7 +310,7 @@
     <programlisting language="myxml">  &lt;object id="bookingAgentWebService" type="Spring.Web.Services.WebServiceExporter, Spring.Web"&gt;
     &lt;property name="TargetName" value="bookingAgent"/&gt;
     &lt;property name="Name" value="BookingAgent"/&gt;
-    &lt;property name="Namespace" value="http://SpringAir/WebServices"/&gt;
+    &lt;property name="Namespace" value="https://SpringAir/WebServices"/&gt;
     &lt;property name="Description" value="SpringAir Booking Agent Web Service"/&gt;
     &lt;property name="MemberAttributes"&gt;
       &lt;dictionary&gt;

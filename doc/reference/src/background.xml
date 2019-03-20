@@ -28,7 +28,7 @@
     term Inversion of Control Martin suggests renaming the pattern, or at
     least giving it a more self-explanatory name, and starts to use the term
     <emphasis>Dependency Injection</emphasis>. His <ulink
-    url="http://martinfowler.com/articles/injection.html">article</ulink>
+    url="https://martinfowler.com/articles/injection.html">article</ulink>
     continues to explain some of the ideas behind this important software
     engineering principle.</para>
 
@@ -37,13 +37,13 @@
     <itemizedlist>
       <listitem>
         <para>Wikipedia Article - <ulink
-        url="http://en.wikipedia.org/wiki/Dependency_injection">Dependency
+        url="https://en.wikipedia.org/wiki/Dependency_injection">Dependency
         Injection</ulink></para>
       </listitem>
 
       <listitem>
         <para>CodeProject article - <ulink
-        url="http://www.codeproject.com/cs/design/DependencyInjection.asp">Dependency
+        url="https://www.codeproject.com/cs/design/DependencyInjection.asp">Dependency
         Injection for Loose Coupling</ulink></para>
       </listitem>
     </itemizedlist>

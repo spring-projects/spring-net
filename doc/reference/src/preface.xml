@@ -42,10 +42,10 @@
   this document is still to be considered very much work-in-progress, if you
   have any requests or comments, please post them on the user mailing list or
   on the support forums at <ulink
-  url="http://forum.springframework.net">forum.springframework.net</ulink>.</para>
+  url="https://forum.springframework.net">forum.springframework.net</ulink>.</para>
 
   <para>Before we go on, a few words of gratitude are due to Christian Bauer
-  (of the <ulink url="http://www.hibernate.org/">Hibernate</ulink> team), who
+  (of the <ulink url="https://hibernate.org/">Hibernate</ulink> team), who
   prepared and adapted the DocBook-XSL software in order to be able to create
   Hibernate's reference guide, thus also allowing us to create this one. Also
   thanks to Russell Healy for doing an extensive and valuable review of some

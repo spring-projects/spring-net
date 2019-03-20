@@ -588,9 +588,9 @@
           when its code is 'small', just a few lines of code (less than 32
           bytes of IL). For some interesting reading on this process read
           David Notario's blog entries (<ulink
-          url="http://blogs.msdn.com/davidnotario/archive/2004/10/28/248953.aspx">JIT
+          url="https://blogs.msdn.com/davidnotario/archive/2004/10/28/248953.aspx">JIT
           Optimizations I</ulink> and <ulink
-          url="http://blogs.msdn.com/davidnotario/archive/2004/11/01/250398.aspx">JIT
+          url="https://blogs.msdn.com/davidnotario/archive/2004/11/01/250398.aspx">JIT
           Optimizations II</ulink>). Additionally, when an assembly is
           compiled with a Release configuration the assembly metadata
           instructs the CLR to enable JIT optimizations. When compiled with a

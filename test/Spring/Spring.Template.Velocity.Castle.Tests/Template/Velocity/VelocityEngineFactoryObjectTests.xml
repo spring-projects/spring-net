@@ -79,7 +79,7 @@
 
     <!-- Use (ConfigurableResourceLoader) spring resource abstraction for templates that are not file or assembly based  -->
     <object id="springResourceLoaderBasedVelocityEngine" type="Spring.Template.Velocity.VelocityEngineFactoryObject, Spring.Template.Velocity.Castle" >
-        <!--<property name="ResourceLoaderPath " value="http://somesite/template.vm" />-->
+        <!--<property name="ResourceLoaderPath " value="https://somesite/template.vm" />-->
         <property name="ResourceLoaderPath " value="Template/Velocity/" />
         <property name="PreferFileSystemAccess " value="false" />
     </object>

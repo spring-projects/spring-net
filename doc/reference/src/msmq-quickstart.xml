@@ -63,7 +63,7 @@
     <note>
       <para>You must create the queues mentioned previously using standard
       Windows Computer Management console to manage MSMQ. This <link
-      ns6:href="http://www.worldofasp.net/tut/MSMQ/Basic_Introduction_about_MSMQ_in_NET_Framework_98.aspx">article</link>
+      ns6:href="https://www.worldofasp.net/tut/MSMQ/Basic_Introduction_about_MSMQ_in_NET_Framework_98.aspx">article</link>
       covers the basics of creating the queus in the management console.
       </para>
     </note>

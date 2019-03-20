@@ -35,7 +35,7 @@
     word 'bean' you will now see the word 'object'. A comparison of a simple
     Spring configuration file highlights these small name changes. Here is the
     application.xml file for the sample MovieFinder application in Spring.Java
-    <programlisting language="myxml">&lt;!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd"&gt;
+    <programlisting language="myxml">&lt;!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "https://www.springframework.org/dtd/spring-beans.dtd"&gt;
 &lt;beans&gt;
    &lt;bean id="MyMovieLister" class="MovieFinder.MovieLister"&gt;
        &lt;property name="finder" ref="MyMovieFinder"/&gt;
@@ -44,7 +44,7 @@
 &lt;/beans&gt;</programlisting> Here is the corresponding file in Spring.NET
     <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net" 
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects-1.1.xsd"&gt;
+	xsi:schemaLocation="http://www.springframework.net https://www.springframework.net/xsd/spring-objects-1.1.xsd"&gt;
   &lt;object name="MyMovieLister" 
           type="Spring.Examples.MovieFinder.MovieLister, Spring.Examples.MovieFinder"&gt;
         &lt;property name="movieFinder" ref="MyMovieFinder"/&gt;

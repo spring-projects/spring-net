@@ -748,9 +748,9 @@ mgr.DeleteTwoTestObjects("Jack", "Jill");
 	        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns:tx="http://www.springframework.net/tx"
          xmlns:db="http://www.springframework.net/database"
-         xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/schema/objects/spring-objects.xsd
-         http://www.springframework.net/schema/tx http://www.springframework.net/schema/tx/spring-tx-1.1.xsd"
-         http://www.springframework.net/schema/db http://www.springframework.net/schema/db/spring-database.xsd"&gt; 
+         xsi:schemaLocation="http://www.springframework.net https://www.springframework.net/schema/objects/spring-objects.xsd
+         http://www.springframework.net/schema/tx https://www.springframework.net/schema/tx/spring-tx-1.1.xsd"
+         http://www.springframework.net/schema/db https://www.springframework.net/schema/db/spring-database.xsd"&gt; 
 
     &lt;db:provider id="DbProvider" 
                   provider="SqlServer-1.1" 

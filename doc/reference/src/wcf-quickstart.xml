@@ -55,7 +55,7 @@
 
     <para>The service contract is shown below</para>
 
-    <programlisting language="csharp">    [ServiceContract(Namespace = "http://Spring.WcfQuickStart")]
+    <programlisting language="csharp">    [ServiceContract(Namespace = "https://Spring.WcfQuickStart")]
     public interface ICalculator
     {
         [OperationContract]

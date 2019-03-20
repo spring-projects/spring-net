@@ -61,7 +61,7 @@
     <programlisting language="myxml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
 &lt;objects xmlns="http://www.springframework.net"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd"&gt;
+	xsi:schemaLocation="http://www.springframework.net https://www.springframework.net/xsd/spring-objects.xsd"&gt;
   &lt;object id="..." type="..."&gt;
   ...
   &lt;/object&gt;
@@ -204,7 +204,7 @@
     Spring.NET Visual Studio 2010 Extension. For more information and to
     download the latest version of this 100% free tool, visit <link
     ns2:arcrole=""
-    ns2:href="http://springframework.net/vsaddin/">http://springframework.net/vsaddin/</link>.</para>
+    ns2:href="https://springframework.net/vsaddin/">https://springframework.net/vsaddin/</link>.</para>
 
     <para>The latest release of the Spring.NET Visual Studio 2010 Extension
     provides Intellisense<superscript>tm</superscript> support in VS.NET 2010
@@ -255,7 +255,7 @@
     running quickly with a Spring.NET based application or library. Four
     templates are provided and there are plans for more. All the templates
     aside from the web template have been created using <link
-    ns2:href="http://solutionfactory.codeplex.com/">SolutionFactory VS.NET
+    ns2:href="https://solutionfactory.codeplex.com/">SolutionFactory VS.NET
     Add-in</link>. The source to creating the templates is not included in the
     distribution now, so please download the source from the <link
     ns2:arcrole=""

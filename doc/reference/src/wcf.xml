@@ -48,14 +48,14 @@
         service was tried but proved to be limited in its range of
         applicability. This approach was first taken (afaik) by Oran Dennison
         on his <link
-        ns6:href="http://orand.blogspot.com/2006/10/wcf-service-dependency-injection.html">blog</link>
+        ns6:href="https://orand.blogspot.com/2006/10/wcf-service-dependency-injection.html">blog</link>
         and several other folks on the web since then. The issue in using this
         approach is that if the service is configured to be a singleton, for
         example using
         <literal>[ServiceBehavior(InstanceContextMode=InstanceContextMode.Single)]
         </literal>then the invocation of the IInstanceProvider is
         short-circuited. See the notes on the MSDN class documentation <link
-        ns6:href="http://msdn.microsoft.com/en-us/library/system.servicemodel.dispatcher.iinstanceprovider.aspx">here</link>.
+        ns6:href="https://msdn.microsoft.com/en-us/library/system.servicemodel.dispatcher.iinstanceprovider.aspx">here</link>.
         While this would be the preferred approach, no acceptable work around
         was found.</para>
       </note></para>
@@ -67,7 +67,7 @@
       normally do. For example here is a sample service type taken from the
       quickstart example.</para>
 
-      <programlisting language="csharp">    [ServiceContract(Namespace = "http://Spring.WcfQuickStart")]
+      <programlisting language="csharp">    [ServiceContract(Namespace = "https://Spring.WcfQuickStart")]
     public interface ICalculator
     {
         [OperationContract]

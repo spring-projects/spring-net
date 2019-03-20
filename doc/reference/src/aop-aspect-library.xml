@@ -660,7 +660,7 @@ Exiting Bark, 5d2bad47-62cd-435b-8de7-91f12b7f433e, 30453.125 ms, return=4</prog
     successful invocation. When applying retry advice it is important to know
     if making two calls to the remote service will cause side effects.
     Generally speaking, the method being invoked should be <ulink
-    url="http://en.wikipedia.org/wiki/Idempotent#Computer_Science">idempotent</ulink>,
+    url="https://en.wikipedia.org/wiki/Idempotent#Computer_Science">idempotent</ulink>,
     that is, it is safe to call multiple times.</para>
 
     <para>The retry advice is specified using a little language, i.e a DSL. A

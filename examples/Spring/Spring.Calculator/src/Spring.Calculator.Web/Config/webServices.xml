@@ -5,7 +5,7 @@
 			
 	<object id="calculatorService" type="Spring.Web.Services.WebServiceExporter, Spring.Web">
 		<property name="TargetName" value="calculator" />
-		<property name="Namespace" value="http://SpringCalculator/WebServices" />
+		<property name="Namespace" value="https://SpringCalculator/WebServices" />
 		<property name="Description" value="Spring Calculator Web Services" />
 	</object>
 	

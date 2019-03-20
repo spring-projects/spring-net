@@ -10321,7 +10321,7 @@
         </member>
         <member name="T:Apache.NMS.ActiveMQ.OpenWire.OpenWireFormat">
             <summary>
-            Implements the <a href="http://activemq.apache.org/openwire.html">OpenWire</a> protocol.
+            Implements the <a href="https://activemq.apache.org/openwire.html">OpenWire</a> protocol.
             </summary>
         </member>
         <member name="T:Apache.NMS.ActiveMQ.Transport.IWireFormat">

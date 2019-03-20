@@ -29,7 +29,7 @@
 
     <para>The Spring Framework features integration classes for scheduling
     support. Currently, Spring supports the Quartz Scheduler (<ulink
-    url="http://quartznet.sourceforge.net/" />). The scheduler is set up using
+    url="https://quartznet.sourceforge.io/" />). The scheduler is set up using
     a <literal>IFactoryObject</literal> with optional references to
     <literal>Trigger</literal> instances, respectively. Furthermore, a
     convenience class for the Quartz Scheduler is available that allows you to
@@ -48,7 +48,7 @@
     <para>Quartz uses <literal>Trigger</literal>, <literal>Job</literal> and
     <literal>JobDetail</literal> objects to realize scheduling of all kinds of
     jobs. For the basic concepts behind Quartz, have a look at <ulink
-    url="http://quartznet.sourceforge.net/" />. For convenience purposes,
+    url="https://quartznet.sourceforge.io/" />. For convenience purposes,
     Spring offers a couple of classes that simplify the usage of Quartz within
     Spring-based applications.</para>
 
@@ -229,7 +229,7 @@ public class ExampleJob : QuartzJobObject {
       <literal>SchedulerFactoryObjecct</literal> for you to set, such as the
       calendars used by the job details, properties to customize Quartz with,
       etc. Have a look at the <ulink
-      url="http://static.springframework.org/spring/docs/2.5.x/api/org/springframework/scheduling/quartz/SchedulerFactoryBean.html">SchedulerFactoryObject
+      url="https://docs.spring.io/spring/docs/2.5.x/api/org/springframework/scheduling/quartz/SchedulerFactoryBean.html">SchedulerFactoryObject
       SDK docs</ulink> for more information.</para>
     </section>
   </section>

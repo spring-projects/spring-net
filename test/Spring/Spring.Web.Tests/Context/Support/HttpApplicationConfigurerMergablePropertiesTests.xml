@@ -3,9 +3,9 @@
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xmlns:db="http://www.springframework.net/database"
          xmlns:tx="http://www.springframework.net/tx"
-         xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/schema/objects/spring-objects-1.3.xsd
-         http://www.springframework.net/database http://www.springframework.net/schema/db/spring-database-1.1.xsd
-         http://www.springframework.net/tx http://www.springframework.net/schema/tx/spring-tx-1.1.xsd">
+         xsi:schemaLocation="http://www.springframework.net https://www.springframework.net/schema/objects/spring-objects-1.3.xsd
+         http://www.springframework.net/database https://www.springframework.net/schema/db/spring-database-1.1.xsd
+         http://www.springframework.net/tx https://www.springframework.net/schema/tx/spring-tx-1.1.xsd">
 
   <object name="GrandParentHttpModule" abstract="true">
     <property name="GrandParentProperty">

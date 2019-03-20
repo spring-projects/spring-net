@@ -36,7 +36,7 @@
     an excellent open source job scheduler that can be used for these
     purposes. It provides a wealth of features, such as persistent jobs and
     clustering. To find out more about Quartz.NET visit their <ulink
-    url="http://quartznet.sourceforge.net/">web site</ulink>. Spring
+    url="https://quartznet.sourceforge.io/">web site</ulink>. Spring
     integration allows you to use Spring to configure Quartz jobs, triggers,
     and schedulers and also provides integration with Spring's transaction
     management features.</para>

@@ -1145,7 +1145,7 @@ parameters.Add("City", DbType.String).Value = city;
       specify the vendor specific parameter prefix in the SQL Text. Portable
       SQL in this regard is possible to implement, it is available as a
       feature in Spring Java. If you would like such a feature, please <link
-      ns2:href="http://jira.springsource.org/secure/CreateIssue!default.jspa?pid=10020">raise
+      ns2:href="https://jira.springsource.org/secure/CreateIssue!default.jspa?pid=10020">raise
       an issue</link>.</para>
     </sect2>
   </sect1>
@@ -1955,7 +1955,7 @@ public delegate T DataAdapterDelegate&lt;T&gt;(IDbDataAdapter dataAdapter);</pro
     context. The reason for this is by default the code generated is
     explicitly managing the connections and transactions. This issue is very
     well described in the article <ulink
-    url="http://www.code-magazine.com/Article.aspx?quickid=0605031">System.Transactions
+    url="https://www.code-magazine.com/Article.aspx?quickid=0605031">System.Transactions
     and ADO.NET 2.0</ulink> by ADO.NET guru Sahil Malik. Spring offers a
     convenience method that will use reflection to internally set the
     transaction on the table adapter's internal command collection to the

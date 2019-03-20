@@ -50,7 +50,7 @@
 </refsynopsisdiv>
 <refsect1><title/>
     
-<para>This template applies an <link xlink:href="http://www.w3.org/TR/xslt20/#character-maps">XSLT character map</link>; that is, it causes certain
+<para>This template applies an <link xlink:href="https://www.w3.org/TR/xslt20/#character-maps">XSLT character map</link>; that is, it causes certain
       individual characters to be substituted with strings of one
       or more characters. It is useful mainly for replacing
       multiple “special” characters or symbols in the same target
@@ -63,8 +63,8 @@
       
 <para>This template is a very slightly modified version of
         Jeni Tennison’s <function>replace_strings</function>
-        template in the <link xlink:href="http://www.dpawson.co.uk/xsl/sect2/StringReplace.html#d9351e13">multiple string replacements</link> section of Dave Pawson’s
-        <link xlink:href="http://www.dpawson.co.uk/xsl/index.html">XSLT FAQ</link>.</para>
+        template in the <link xlink:href="https://www.dpawson.co.uk/xsl/sect2/StringReplace.html#d9351e13">multiple string replacements</link> section of Dave Pawson’s
+        <link xlink:href="https://www.dpawson.co.uk/xsl/index.html">XSLT FAQ</link>.</para>
 
       
 <para>The <function>apply-string-subst-map</function>
@@ -126,7 +126,7 @@
 </refsynopsisdiv>
 <refsect1><title/>
     
-<para>The XSLT 2.0 specification describes <link xlink:href="http://www.w3.org/TR/xslt20/#character-maps">character maps</link> and explains how they may be used
+<para>The XSLT 2.0 specification describes <link xlink:href="https://www.w3.org/TR/xslt20/#character-maps">character maps</link> and explains how they may be used
       to allow a specific character appearing in a text or
       attribute node in a final result tree to be substituted by
       a specified string of characters during serialization. The
