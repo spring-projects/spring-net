@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<project name="SpringAir.Core.Tests" default="build" xmlns="http://nant.sf.net/schemas/nant.xsd">
+<project name="SpringAir.Core.Tests" default="build" xmlns="http://nant.sourceforge.net/schemas/nant.xsd">
 
     <include buildfile="${spring.basedir}/common-project.include" />
 

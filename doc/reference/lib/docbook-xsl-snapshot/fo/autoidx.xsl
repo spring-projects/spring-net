@@ -6,7 +6,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
                 xmlns:rx="http://www.renderx.com/XSL/Extensions"
-                xmlns:axf="http://www.antennahouse.com/names/XSL/Extensions"
+                xmlns:axf="https://www.antennahouse.com/names/XSL/Extensions"
                 xmlns:exslt="http://exslt.org/common"
                 extension-element-prefixes="exslt"
                 exclude-result-prefixes="exslt"
@@ -17,7 +17,7 @@
      ********************************************************************
 
      This file is part of the DocBook XSL Stylesheet distribution.
-     See ../README or http://docbook.sf.net/ for copyright
+     See ../README or http://docbook.sourceforge.net/ for copyright
      copyright and other information.
 
      ******************************************************************** -->
@@ -330,7 +330,7 @@
 
         <xsl:choose>
           <xsl:when test="$passivetex.extensions != '0'">
-            <fotex:sort xmlns:fotex="http://www.tug.org/fotex">
+            <fotex:sort xmlns:fotex="https://www.tug.org/fotex">
               <xsl:copy-of select="$page-number-citations"/>
             </fotex:sort>
           </xsl:when>
@@ -450,7 +450,7 @@
 
         <xsl:choose>
           <xsl:when test="$passivetex.extensions != '0'">
-            <fotex:sort xmlns:fotex="http://www.tug.org/fotex">
+            <fotex:sort xmlns:fotex="https://www.tug.org/fotex">
               <xsl:copy-of select="$page-number-citations"/>
             </fotex:sort>
           </xsl:when>
@@ -573,7 +573,7 @@
 
         <xsl:choose>
           <xsl:when test="$passivetex.extensions != '0'">
-            <fotex:sort xmlns:fotex="http://www.tug.org/fotex">
+            <fotex:sort xmlns:fotex="https://www.tug.org/fotex">
               <xsl:copy-of select="$page-number-citations"/>
             </fotex:sort>
           </xsl:when>

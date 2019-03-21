@@ -1,9 +1,9 @@
 <?xml version='1.0'?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
-                xmlns:sverb="http://nwalsh.com/xslt/ext/com.nwalsh.saxon.Verbatim"
+                xmlns:sverb="https://nwalsh.com/xslt/ext/com.nwalsh.saxon.Verbatim"
                 xmlns:xverb="com.nwalsh.xalan.Verbatim"
-                xmlns:lxslt="http://xml.apache.org/xslt"
+                xmlns:lxslt="https://xml.apache.org/xslt"
                 xmlns:exsl="http://exslt.org/common"
                 exclude-result-prefixes="sverb xverb lxslt exsl"
                 version='1.0'>
@@ -13,7 +13,7 @@
      ********************************************************************
 
      This file is part of the XSL DocBook Stylesheet distribution.
-     See ../README or http://docbook.sf.net/release/xsl/current/ for
+     See ../README or http://docbook.sourceforge.net/release/xsl/current/ for
      copyright and other information.
 
      ******************************************************************** -->

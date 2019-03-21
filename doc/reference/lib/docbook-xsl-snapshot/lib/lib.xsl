@@ -4,7 +4,7 @@
      ********************************************************************
 
      This file is part of the XSL DocBook Stylesheet distribution.
-     See ../README or http://docbook.sf.net/release/xsl/current/ for
+     See ../README or http://docbook.sourceforge.net/release/xsl/current/ for
      copyright and other information.
 
      This module implements DTD-independent functions
@@ -330,7 +330,7 @@
   <xsl:template name="str.tokenize.keep.delimiters-characters">
     <xsl:param name="string"/>
     <xsl:if test="$string">
-      <ssb:token xmlns:ssb="http://sideshowbarker.net/ns"><xsl:value-of select="substring($string, 1, 1)"/></ssb:token>
+      <ssb:token xmlns:ssb="https://sideshowbarker.net/ns"><xsl:value-of select="substring($string, 1, 1)"/></ssb:token>
       <xsl:call-template name="str.tokenize.keep.delimiters-characters">
         <xsl:with-param name="string" select="substring($string, 2)"/>
       </xsl:call-template>
@@ -342,7 +342,7 @@
     <xsl:variable name="delimiter" select="substring($delimiters, 1, 1)"/>
     <xsl:choose>
       <xsl:when test="not($delimiter)">
-        <ssb:token xmlns:ssb="http://sideshowbarker.net/ns"><xsl:value-of select="$string"/></ssb:token>
+        <ssb:token xmlns:ssb="https://sideshowbarker.net/ns"><xsl:value-of select="$string"/></ssb:token>
       </xsl:when>
       <xsl:when test="contains($string, $delimiter)">
         <xsl:if test="not(starts-with($string, $delimiter))">

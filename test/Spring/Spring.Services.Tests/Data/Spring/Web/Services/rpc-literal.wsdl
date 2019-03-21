@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="http://www.springframwework.net" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="http://www.springframwework.net" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:definitions xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:tm="https://microsoft.com/wsdl/mime/textMatching/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:tns="https://www.springframwework.net" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" targetNamespace="https://www.springframwework.net" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
-    <s:schema elementFormDefault="qualified" targetNamespace="http://www.springframwework.net">
+    <s:schema elementFormDefault="qualified" targetNamespace="https://www.springframwework.net">
       <s:complexType name="ArrayOfString">
         <s:sequence>
           <s:element minOccurs="0" maxOccurs="unbounded" name="string" nillable="true" type="s:string" />
@@ -52,92 +52,92 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="HelloWorldServiceSoap" type="tns:HelloWorldServiceSoap">
-    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="rpc" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http/" style="rpc" />
     <wsdl:operation name="SayHelloWorld">
-      <soap:operation soapAction="http://www.springframwework.net/SayHelloWorld" style="rpc" />
+      <soap:operation soapAction="https://www.springframwework.net/SayHelloWorld" style="rpc" />
       <wsdl:input>
-        <soap:body use="literal" namespace="http://www.springframwework.net" />
+        <soap:body use="literal" namespace="https://www.springframwework.net" />
       </wsdl:input>
       <wsdl:output>
-        <soap:body use="literal" namespace="http://www.springframwework.net" />
+        <soap:body use="literal" namespace="https://www.springframwework.net" />
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="SayHello">
-      <soap:operation soapAction="http://www.springframwework.net/SayHello" style="rpc" />
+      <soap:operation soapAction="https://www.springframwework.net/SayHello" style="rpc" />
       <wsdl:input>
-        <soap:body use="literal" namespace="http://www.springframwework.net" />
+        <soap:body use="literal" namespace="https://www.springframwework.net" />
       </wsdl:input>
       <wsdl:output>
-        <soap:body use="literal" namespace="http://www.springframwework.net" />
+        <soap:body use="literal" namespace="https://www.springframwework.net" />
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="SayHelloArray">
-      <soap:operation soapAction="http://www.springframwework.net/SayHelloArray" style="rpc" />
+      <soap:operation soapAction="https://www.springframwework.net/SayHelloArray" style="rpc" />
       <wsdl:input>
-        <soap:body use="literal" namespace="http://www.springframwework.net" />
+        <soap:body use="literal" namespace="https://www.springframwework.net" />
       </wsdl:input>
       <wsdl:output>
-        <soap:body use="literal" namespace="http://www.springframwework.net" />
+        <soap:body use="literal" namespace="https://www.springframwework.net" />
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="LogHelloWorld">
-      <soap:operation soapAction="http://www.springframwework.net/LogHelloWorld" style="rpc" />
+      <soap:operation soapAction="https://www.springframwework.net/LogHelloWorld" style="rpc" />
       <wsdl:input>
-        <soap:body use="literal" namespace="http://www.springframwework.net" />
+        <soap:body use="literal" namespace="https://www.springframwework.net" />
       </wsdl:input>
     </wsdl:operation>
     <wsdl:operation name="LogHello">
-      <soap:operation soapAction="http://www.springframwework.net/MyLogHello" style="rpc" />
+      <soap:operation soapAction="https://www.springframwework.net/MyLogHello" style="rpc" />
       <wsdl:input name="MyLogHello">
-        <soap:body use="literal" namespace="http://www.springframwework.net" />
+        <soap:body use="literal" namespace="https://www.springframwework.net" />
       </wsdl:input>
       <wsdl:output name="MyLogHello">
-        <soap:body use="literal" namespace="http://www.springframwework.net" />
+        <soap:body use="literal" namespace="https://www.springframwework.net" />
       </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="HelloWorldServiceSoap12" type="tns:HelloWorldServiceSoap">
-    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" style="rpc" />
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http/" style="rpc" />
     <wsdl:operation name="SayHelloWorld">
-      <soap12:operation soapAction="http://www.springframwework.net/SayHelloWorld" style="rpc" />
+      <soap12:operation soapAction="https://www.springframwework.net/SayHelloWorld" style="rpc" />
       <wsdl:input>
-        <soap12:body use="literal" namespace="http://www.springframwework.net" />
+        <soap12:body use="literal" namespace="https://www.springframwework.net" />
       </wsdl:input>
       <wsdl:output>
-        <soap12:body use="literal" namespace="http://www.springframwework.net" />
+        <soap12:body use="literal" namespace="https://www.springframwework.net" />
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="SayHello">
-      <soap12:operation soapAction="http://www.springframwework.net/SayHello" style="rpc" />
+      <soap12:operation soapAction="https://www.springframwework.net/SayHello" style="rpc" />
       <wsdl:input>
-        <soap12:body use="literal" namespace="http://www.springframwework.net" />
+        <soap12:body use="literal" namespace="https://www.springframwework.net" />
       </wsdl:input>
       <wsdl:output>
-        <soap12:body use="literal" namespace="http://www.springframwework.net" />
+        <soap12:body use="literal" namespace="https://www.springframwework.net" />
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="SayHelloArray">
-      <soap12:operation soapAction="http://www.springframwework.net/SayHelloArray" style="rpc" />
+      <soap12:operation soapAction="https://www.springframwework.net/SayHelloArray" style="rpc" />
       <wsdl:input>
-        <soap12:body use="literal" namespace="http://www.springframwework.net" />
+        <soap12:body use="literal" namespace="https://www.springframwework.net" />
       </wsdl:input>
       <wsdl:output>
-        <soap12:body use="literal" namespace="http://www.springframwework.net" />
+        <soap12:body use="literal" namespace="https://www.springframwework.net" />
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="LogHelloWorld">
-      <soap12:operation soapAction="http://www.springframwework.net/LogHelloWorld" style="rpc" />
+      <soap12:operation soapAction="https://www.springframwework.net/LogHelloWorld" style="rpc" />
       <wsdl:input>
-        <soap12:body use="literal" namespace="http://www.springframwework.net" />
+        <soap12:body use="literal" namespace="https://www.springframwework.net" />
       </wsdl:input>
     </wsdl:operation>
     <wsdl:operation name="LogHello">
-      <soap12:operation soapAction="http://www.springframwework.net/MyLogHello" style="rpc" />
+      <soap12:operation soapAction="https://www.springframwework.net/MyLogHello" style="rpc" />
       <wsdl:input name="MyLogHello">
-        <soap12:body use="literal" namespace="http://www.springframwework.net" />
+        <soap12:body use="literal" namespace="https://www.springframwework.net" />
       </wsdl:input>
       <wsdl:output name="MyLogHello">
-        <soap12:body use="literal" namespace="http://www.springframwework.net" />
+        <soap12:body use="literal" namespace="https://www.springframwework.net" />
       </wsdl:output>
     </wsdl:operation>
   </wsdl:binding>

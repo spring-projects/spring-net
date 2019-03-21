@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="http://SpringCalculator/WebServices" xmlns:tm="http://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" targetNamespace="http://SpringCalculator/WebServices" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:definitions xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:tns="https://SpringCalculator/WebServices" xmlns:tm="https://microsoft.com/wsdl/mime/textMatching/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" targetNamespace="https://SpringCalculator/WebServices" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
   <wsdl:types>
-    <s:schema elementFormDefault="qualified" targetNamespace="http://SpringCalculator/WebServices">
+    <s:schema elementFormDefault="qualified" targetNamespace="https://SpringCalculator/WebServices">
       <s:element name="MemoryAdd">
         <s:complexType>
           <s:sequence>
@@ -189,9 +189,9 @@
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="calculatorServiceSoap" type="tns:calculatorServiceSoap">
-    <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document" />
+    <soap:binding transport="http://schemas.xmlsoap.org/soap/http/" style="document" />
     <wsdl:operation name="MemoryAdd">
-      <soap:operation soapAction="http://SpringCalculator/WebServices/MemoryAdd" style="document" />
+      <soap:operation soapAction="https://SpringCalculator/WebServices/MemoryAdd" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -200,7 +200,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="MemoryClear">
-      <soap:operation soapAction="http://SpringCalculator/WebServices/MemoryClear" style="document" />
+      <soap:operation soapAction="https://SpringCalculator/WebServices/MemoryClear" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -209,7 +209,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="SetMemory">
-      <soap:operation soapAction="http://SpringCalculator/WebServices/SetMemory" style="document" />
+      <soap:operation soapAction="https://SpringCalculator/WebServices/SetMemory" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -218,7 +218,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="GetMemory">
-      <soap:operation soapAction="http://SpringCalculator/WebServices/GetMemory" style="document" />
+      <soap:operation soapAction="https://SpringCalculator/WebServices/GetMemory" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -227,7 +227,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="Multiply">
-      <soap:operation soapAction="http://SpringCalculator/WebServices/Multiply" style="document" />
+      <soap:operation soapAction="https://SpringCalculator/WebServices/Multiply" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -236,7 +236,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="Divide">
-      <soap:operation soapAction="http://SpringCalculator/WebServices/Divide" style="document" />
+      <soap:operation soapAction="https://SpringCalculator/WebServices/Divide" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -245,7 +245,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="Substract">
-      <soap:operation soapAction="http://SpringCalculator/WebServices/Substract" style="document" />
+      <soap:operation soapAction="https://SpringCalculator/WebServices/Substract" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>
@@ -254,7 +254,7 @@
       </wsdl:output>
     </wsdl:operation>
     <wsdl:operation name="Add">
-      <soap:operation soapAction="http://SpringCalculator/WebServices/Add" style="document" />
+      <soap:operation soapAction="https://SpringCalculator/WebServices/Add" style="document" />
       <wsdl:input>
         <soap:body use="literal" />
       </wsdl:input>

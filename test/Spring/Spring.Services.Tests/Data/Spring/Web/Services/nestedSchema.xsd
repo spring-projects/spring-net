@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
 <xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-	xmlns="http://myns"
-	targetNamespace="http://myns"
+	xmlns="https://myns"
+	targetNamespace="https://myns"
 	elementFormDefault="qualified" attributeFormDefault="unqualified">
   <xsd:simpleType name="GUID">
     <xsd:restriction base="xsd:string">

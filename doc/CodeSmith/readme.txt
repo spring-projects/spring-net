@@ -10,7 +10,7 @@ I hope to receive feedback, bug reports and hopefully some useful templates to i
 
 Enjoy,
 Eric J. Smith
-http://www.ericjsmith.net/codesmith/
+https://ericjsmith.com/codesmith/
 
 --------------------------------------------------
 History

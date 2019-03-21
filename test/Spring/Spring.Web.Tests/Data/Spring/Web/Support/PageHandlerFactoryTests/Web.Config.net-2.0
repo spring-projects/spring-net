@@ -73,7 +73,7 @@
         </context>
         <objects xmlns="http://www.springframework.net">
 
-            <!-- Tests TypeAliasConfigurer http://jira.springframework.org/browse/SPRNET-1029 -->
+            <!-- Tests TypeAliasConfigurer https://jira.springframework.org/browse/SPRNET-1029 -->
             <object id="DomainAliases" type="Spring.Objects.Factory.Config.TypeAliasConfigurer, Spring.Core">
                 <property name="TypeAliases">
                     <dictionary>

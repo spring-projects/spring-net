@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -610,7 +610,7 @@ namespace Spring.Reflection.Dynamic
         /// <para>
         /// This method mimics the behavior of the compiler that
         /// automatically performs casts like int to double in "Math.Sqrt(4)".<br/>
-        /// See about implicit, widening type conversions on <a href="http://social.msdn.microsoft.com/Search/en-US/?query=type conversion tables">MSDN - Type Conversion Tables</a>
+        /// See about implicit, widening type conversions on <a href="https://social.msdn.microsoft.com/Search/en-US/?query=type conversion tables">MSDN - Type Conversion Tables</a>
         /// </para>
         /// <para>
         /// Note: <paramref name="targetType"/> is expected to be a value type! 

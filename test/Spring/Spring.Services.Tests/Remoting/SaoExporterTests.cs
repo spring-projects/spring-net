@@ -100,7 +100,7 @@ namespace Spring.Remoting
         /// <summary>
         /// Checks that we can also export if IFactoryObject.ObjectType returns an interface type,
         /// </summary>
-        [Test(Description = "http://jira.springframework.org/browse/SPRNET-1251")]
+        [Test(Description = "https://jira.springframework.org/browse/SPRNET-1251")]
         public void CanExportFromFactoryObjectIfObjectTypeIsInterface()
         {
             using (DefaultListableObjectFactory of = new DefaultListableObjectFactory())
@@ -126,7 +126,7 @@ namespace Spring.Remoting
         /// <summary>
         /// Checks that exp an IFactoryObject.ObjectType returns an interface type,
         /// </summary>
-        [Test(Description = "http://jira.springframework.org/browse/SPRNET-1251")]
+        [Test(Description = "https://jira.springframework.org/browse/SPRNET-1251")]
         public void ThrowsTypeLoadExceptionIfProxyInterfacesValueIsSpecifiedInsteadOfListElement()
         {
             using (DefaultListableObjectFactory of = new DefaultListableObjectFactory())

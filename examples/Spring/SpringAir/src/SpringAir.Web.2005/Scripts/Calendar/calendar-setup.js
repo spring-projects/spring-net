@@ -7,7 +7,7 @@
  * http://dynarch.com/mishoo/calendar.epl
  *
  * This script is distributed under the GNU Lesser General Public License.
- * Read the entire license text here: http://www.gnu.org/licenses/lgpl.html
+ * Read the entire license text here: https://www.gnu.org/licenses/lgpl.html
  *
  * This file defines helper functions for setting up the calendar.  They are
  * intended to help non-programmers get a working calendar on their site

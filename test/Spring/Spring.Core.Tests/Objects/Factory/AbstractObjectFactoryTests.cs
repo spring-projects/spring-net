@@ -592,7 +592,7 @@ namespace Spring.Objects.Factory
             reader.LoadObjectDefinitions(new StringResource(@"<?xml version='1.0' encoding='UTF-8' ?>
                 <objects xmlns='http://www.springframework.net'
                           xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-                          xsi:schemaLocation='http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd'>
+                          xsi:schemaLocation='http://www.springframework.net https://www.springframework.net/xsd/spring-objects.xsd'>
 
                       <object id='Parent' type='Spring.Objects.Factory.SPRNET_1334+ParentClass, Spring.Core.Tests'>
                         <property name='Name' value='Foo!'/>

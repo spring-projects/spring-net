@@ -192,7 +192,7 @@ InnovaSys Document X! is used to generate the SDK documentation.
 
 ## 8. Support
 
-The user forums at http://forum.springframework.net/ are available for you to submit questions, support requests, and interact with other Spring.NET users.
+The user forums at https://forum.springframework.net/ are available for you to submit questions, support requests, and interact with other Spring.NET users.
 
 Bug and issue tracking can be found at https://jira.springsource.org/browse/SPRNET
 

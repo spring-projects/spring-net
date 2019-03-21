@@ -32,7 +32,7 @@ function splitAndTrim(value) {
 return value.replace(/^\s+|\s+$/g, "").split(/\s*,\s*/g);
 }
 function escapeAttributeValue(value) {
-// As mentioned on http://api.jquery.com/category/selectors/
+// As mentioned on https://api.jquery.com/category/selectors/
 return value.replace(/([!"#$%&'()*+,./:;<=>?@\[\\\]^`{|}~])/g, "\\$1");
 }
 function getModelPrefix(fieldName) {

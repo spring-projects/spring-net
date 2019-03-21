@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -116,7 +116,7 @@ namespace Spring.Data.Generic
 
             //how come LinkedList<T> doesn't implement IList<T> ?!?!?!
             //some web entries claim slow indexer...  need to write our own again?  return ICollection instead?
-            //http://blogs.msdn.com/kcwalina/archive/2005/09/23/Collections.aspx
+            //https://blogs.msdn.com/kcwalina/archive/2005/09/23/Collections.aspx
             //We did not implement IList<T> on LinkedList because the indexer would be 
             //very slow. If you really need the interface, you probably can inherit from 
             //LinkedList<T> and implement the interface on the subtype.

@@ -1,7 +1,7 @@
 <?xml version='1.0'?>
 <xsl:stylesheet
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:doc="http://nwalsh.com/xsl/documentation/1.0"
+  xmlns:doc="https://nwalsh.com/xsl/documentation/1.0"
   xmlns:date="http://exslt.org/dates-and-times"
   xmlns:exsl="http://exslt.org/common"
   xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -14,7 +14,7 @@
      ********************************************************************
 
      This file is part of the XSL DocBook Stylesheet distribution.
-     See ../README or http://docbook.sf.net/release/xsl/current/ for
+     See ../README or http://docbook.sourceforge.net/release/xsl/current/ for
      copyright and other information.
 
      ******************************************************************** -->

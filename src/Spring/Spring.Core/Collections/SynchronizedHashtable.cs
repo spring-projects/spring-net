@@ -30,7 +30,7 @@ namespace Spring.Collections
     /// <p>
     /// In addition to synchronizing reads, this implementation also fixes
     /// IEnumerator/ICollection issue described at 
-    /// http://msdn.microsoft.com/en-us/netframework/aa570326.aspx
+    /// https://msdn.microsoft.com/en-us/netframework/aa570326.aspx
     /// (search for SynchronizedHashtable for issue description), by implementing 
     /// <see cref="IEnumerator"/> interface explicitly, and returns thread safe enumerator
     /// implementations as well.

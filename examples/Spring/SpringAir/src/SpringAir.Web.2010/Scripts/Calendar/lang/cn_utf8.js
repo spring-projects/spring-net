@@ -82,7 +82,7 @@ Calendar._TT["ABOUT"] =
 "   DHTML \u65e5\u8d77/\u65f6\u95f4\u9009\u62e9\u63a7\u4ef6\n" +
 "(c) dynarch.com 2002-2005 / Author: Mihai Bazon\n" + // don't translate this this ;-)
 "For latest version visit: \u6700\u65b0\u7248\u672c\u8bf7\u767b\u9646http://www.dynarch.com/projects/calendar/\u5bdf\u770b\n" +
-"\u9075\u5faaGNU LGPL.  \u7ec6\u8282\u53c2\u9605 http://gnu.org/licenses/lgpl.html" +
+"\u9075\u5faaGNU LGPL.  \u7ec6\u8282\u53c2\u9605 https://gnu.org/licenses/lgpl.html" +
 "\n\n" +
 "\u65e5\u671f\u9009\u62e9:\n" +
 "- \u70b9\u51fb\xab(\xbb)\u6309\u94ae\u9009\u62e9\u4e0a(\u4e0b)\u4e00\u5e74\u5ea6.\n" +

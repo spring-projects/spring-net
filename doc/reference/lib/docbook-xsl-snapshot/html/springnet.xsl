@@ -100,7 +100,7 @@
       <a style="border:none;" href="http://www.springframework.net/" title="The Spring Framework">
         <img style="border:none;" src="images/xdev-spring_logo.jpg" />
       </a>
-      <a style="border:none;" href="http://www.springsource.com/" title="SpringSource">
+      <a style="border:none;" href="https://www.springsource.com/" title="SpringSource">
         <img style="border:none;position:absolute;padding-top:5px;right:42px;" src="images/S2-banner-rhs.png" />
       </a>
     </div>
@@ -210,7 +210,7 @@
                 </td>
                 <td width="20%" align="center">
                   <span style="color:white;font-size:90%;">
-                    <a href="http://www.springsource.com/" title="SpringSource">Sponsored by SpringSource</a>
+                    <a href="https://www.springsource.com/" title="SpringSource">Sponsored by SpringSource</a>
                   </span>
                 </td>
                 <td width="40%" align="right" valign="top">

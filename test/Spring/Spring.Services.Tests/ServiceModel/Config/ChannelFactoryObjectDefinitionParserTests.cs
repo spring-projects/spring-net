@@ -135,7 +135,7 @@ namespace Spring.ServiceModel.Config
 
         #region Test classes
 
-        [ServiceContract(Namespace = "http://Spring.Services.Tests")]
+        [ServiceContract(Namespace = "https://Spring.Services.Tests")]
         public interface IContract
         {
             [OperationContract(Name = "MySomeMethod")]

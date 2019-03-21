@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -422,7 +422,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         }
 
         // "internal virtual" is not supported on net 1.0 CLR
-        // see http://support.microsoft.com/?scid=kb%3Ben-us%3B317129&x=11&y=12
+        // see https://support.microsoft.com/?scid=kb%3Ben-us%3B317129&x=11&y=12
         internal virtual void InternalToDo()
         {
             

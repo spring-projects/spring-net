@@ -328,7 +328,7 @@ namespace Spring.Expressions
             Assert.AreEqual("date", dateLiteral);
         }
 
-        [Test(Description = "http://jira.springframework.org/browse/SPRNET-944")]
+        [Test(Description = "https://jira.springframework.org/browse/SPRNET-944")]
         public void TestDateVariableExpression()
         {
             Dictionary<string, object> vars = new Dictionary<string, object>();
@@ -337,7 +337,7 @@ namespace Spring.Expressions
             Assert.That(value, Is.EqualTo("2008-05-15"));
         }
 
-        [Test(Description = "http://jira.springframework.org/browse/SPRNET-1155")]
+        [Test(Description = "https://jira.springframework.org/browse/SPRNET-1155")]
         public void TestDateVariableExpressionCamelCased()
         {
             Dictionary<string, object> vars = new Dictionary<string, object>();
@@ -2088,8 +2088,8 @@ namespace Spring.Expressions
         /// Reproduce SPRNET-408.
         /// </summary>
         /// <remarks>
-        /// http://opensource.atlassian.com/projects/spring/browse/SPRNET-408
-        /// http://forum.springframework.net/showthread.php?t=933
+        /// https://opensource.atlassian.com/projects/spring/browse/SPRNET-408
+        /// https://forum.springframework.net/showthread.php?t=933
         /// </remarks>
         [Test(Description = "Test to reproduce SPRNET-408")]
         public void TestNullableTypes()
@@ -2127,8 +2127,8 @@ namespace Spring.Expressions
         /// Reproduce SPRNET-462.
         /// </summary>
         /// <remarks>
-        /// http://opensource.atlassian.com/projects/spring/browse/SPRNET-462
-        /// http://forum.springframework.net/showthread.php?t=1515
+        /// https://opensource.atlassian.com/projects/spring/browse/SPRNET-462
+        /// https://forum.springframework.net/showthread.php?t=1515
         /// </remarks>
         [Test(Description = "Test to reproduce SPRNET-462")]
         public void TestMethodResolutionWithNullArguments()
@@ -2182,8 +2182,8 @@ namespace Spring.Expressions
         /// Reproduce SPRNET-464.
         /// </summary>
         /// <remarks>
-        /// http://opensource.atlassian.com/projects/spring/browse/SPRNET-464
-        /// http://forum.springframework.net/showthread.php?t=1515
+        /// https://opensource.atlassian.com/projects/spring/browse/SPRNET-464
+        /// https://forum.springframework.net/showthread.php?t=1515
         /// </remarks>
         [Test(Description = "Test to reproduce SPRNET-464")]
         public void TestMethodResolutionWithParamArray()
@@ -2266,8 +2266,8 @@ namespace Spring.Expressions
         /// Reproduce SPRNET-470.
         /// </summary>
         /// <remarks>
-        /// http://opensource.atlassian.com/projects/spring/browse/SPRNET-470
-        /// http://forum.springframework.net/showthread.php?t=1574
+        /// https://opensource.atlassian.com/projects/spring/browse/SPRNET-470
+        /// https://forum.springframework.net/showthread.php?t=1574
         /// </remarks>
         [Test(Description = "Test to reproduce SPRNET-470")]
         public void TestPropertyAccessForTypes()
@@ -2288,8 +2288,8 @@ namespace Spring.Expressions
         /// Try to set/get numeric value from enum type property/field
         /// </summary>
         /// <remarks>
-        /// http://opensource.atlassian.com/projects/spring/browse/SPRNET-450
-        /// http://forum.springframework.net/showthread.php?t=1353
+        /// https://opensource.atlassian.com/projects/spring/browse/SPRNET-450
+        /// https://forum.springframework.net/showthread.php?t=1353
         /// </remarks>
         [Test]
         public void TestSetEnumTypePropertyOrFieldFromNumeric()
@@ -2399,8 +2399,8 @@ namespace Spring.Expressions
         /// Test to reproduce SPRNET-342, provided on the forum.
         /// </summary>
         /// <remarks>
-        /// http://opensource.atlassian.com/projects/spring/browse/SPRNET-342
-        /// http://forum.springframework.net/showthread.php?t=614
+        /// https://opensource.atlassian.com/projects/spring/browse/SPRNET-342
+        /// https://forum.springframework.net/showthread.php?t=614
         /// </remarks>
         [Test]
         public void ForumTestThread614()
@@ -2427,8 +2427,8 @@ namespace Spring.Expressions
         /// More "to the point" test to reproduce SPRNET-342
         /// </summary>
         /// <remarks>
-        /// http://opensource.atlassian.com/projects/spring/browse/SPRNET-342
-        /// http://forum.springframework.net/showthread.php?t=614
+        /// https://opensource.atlassian.com/projects/spring/browse/SPRNET-342
+        /// https://forum.springframework.net/showthread.php?t=614
         /// </remarks>
         [Test]
         public void RootContextChangeTest()

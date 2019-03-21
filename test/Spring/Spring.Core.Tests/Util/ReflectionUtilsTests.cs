@@ -200,7 +200,7 @@ namespace Spring.Util
             Assert.AreSame(instance.PropGetterInfo, method);
         }
 
-        #region Helper class for http://jira.springframework.org/browse/SPRNET-992 tests
+        #region Helper class for https://jira.springframework.org/browse/SPRNET-992 tests
 
         public class Foo
         {
@@ -231,7 +231,7 @@ namespace Spring.Util
 
         #endregion
 
-        [Test(Description = "http://jira.springframework.org/browse/SPRNET-992")]
+        [Test(Description = "https://jira.springframework.org/browse/SPRNET-992")]
         public void ShouldPickDefaultConstructorWithoutArgs()
         {
             object[] args = new object[] { };
@@ -243,7 +243,7 @@ namespace Spring.Util
             Assert.AreEqual('0', foo.c);
         }
 
-        [Test(Description = "http://jira.springframework.org/browse/SPRNET-992")]
+        [Test(Description = "https://jira.springframework.org/browse/SPRNET-992")]
         public void ShouldPickDefaultConstructor()
         {
             object[] args = new object[] { };
@@ -255,7 +255,7 @@ namespace Spring.Util
             Assert.AreEqual('0', foo.c);
         }
 
-        [Test(Description = "http://jira.springframework.org/browse/SPRNET-992")]
+        [Test(Description = "https://jira.springframework.org/browse/SPRNET-992")]
         public void ShouldPickSingleArgConstructor()
         {
             object[] args = new object[] { "b" };

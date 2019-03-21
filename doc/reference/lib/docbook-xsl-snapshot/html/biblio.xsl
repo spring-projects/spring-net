@@ -7,7 +7,7 @@
      ********************************************************************
 
      This file is part of the XSL DocBook Stylesheet distribution.
-     See ../README or http://docbook.sf.net/release/xsl/current/ for
+     See ../README or http://docbook.sourceforge.net/release/xsl/current/ for
      copyright and other information.
 
      ******************************************************************** -->
@@ -807,12 +807,12 @@
   </span>
 </xsl:template>
 
-<!-- See FR #1934434 and http://doi.org -->
+<!-- See FR #1934434 and https://doi.org -->
 <xsl:template match="biblioid[@class='doi']"
               mode="bibliography.mode">
   <span>
     <xsl:apply-templates select="." mode="class.attribute"/>
-    <a href="{concat('http://dx.doi.org/', .)}">doi:<xsl:value-of select="."/></a>
+    <a href="{concat('https://dx.doi.org/', .)}">doi:<xsl:value-of select="."/></a>
   </span>
 </xsl:template>
 
@@ -1233,12 +1233,12 @@
   </span>
 </xsl:template>
 
-<!-- See FR #1934434 and http://doi.org -->
+<!-- See FR #1934434 and https://doi.org -->
 <xsl:template match="biblioid[@class='doi']"
               mode="bibliomixed.mode">
   <span>
     <xsl:apply-templates select="." mode="class.attribute"/>
-    <a href="{concat('http://dx.doi.org/', .)}">doi:<xsl:value-of select="."/></a>
+    <a href="{concat('https://dx.doi.org/', .)}">doi:<xsl:value-of select="."/></a>
   </span>
 </xsl:template>
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<project name="Spring.Calculator" default="build" xmlns="http://nant.sf.net/schemas/nant.xsd">
+<project name="Spring.Calculator" default="build" xmlns="http://nant.sourceforge.net/schemas/nant.xsd">
 
   <target name="build">
     <nant buildfile="src/Spring.Aspects/Spring.Aspects.build" target="build" />

@@ -1,7 +1,7 @@
 // ** I18N
 
 // Calendar RU language
-// Translation: Sly Golovanov, http://golovanov.net, <sly@golovanov.net>
+// Translation: Sly Golovanov, https://golovanov.net, <sly@golovanov.net>
 // Encoding: any
 // Distributed under the same terms as the calendar itself.
 
@@ -81,7 +81,7 @@ Calendar._TT["ABOUT"] =
 "DHTML Date/Time Selector\n" +
 "(c) dynarch.com 2002-2005 / Author: Mihai Bazon\n" + // don't translate this this ;-)
 "For latest version visit: http://www.dynarch.com/projects/calendar/\n" +
-"Distributed under GNU LGPL.  See http://gnu.org/licenses/lgpl.html for details." +
+"Distributed under GNU LGPL.  See https://gnu.org/licenses/lgpl.html for details." +
 "\n\n" +
 "Как выбрать дату:\n" +
 "- При помощи кнопок \xab, \xbb можно выбрать год\n" +

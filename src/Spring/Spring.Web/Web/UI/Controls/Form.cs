@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -34,8 +34,8 @@ namespace Spring.Web.UI.Controls
     /// </summary>
     /// <remarks>
     /// the 'action' attribute rendered by the default <see cref="HtmlForm"/> control causes troubles 
-    /// in case of URL-rewriting. See e.g. <a href="http://www.thescripts.com/forum/thread408777.html">'thescripts.com' forum</a>
-    /// and also <a href="http://opensource.atlassian.com/projects/spring/browse/SPRNET-560">JIRA SPRNET-560</a> for more info.
+    /// in case of URL-rewriting. See e.g. <a href="https://bytes.com/forum/thread408777.html">'thescripts.com' forum</a>
+    /// and also <a href="https://opensource.atlassian.com/projects/spring/browse/SPRNET-560">JIRA SPRNET-560</a> for more info.
     /// </remarks>
     /// <author>Erich Eichinger</author>
     public class Form : HtmlForm

@@ -16,7 +16,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
                 xmlns:rx="http://www.renderx.com/XSL/Extensions"
-                xmlns:axf="http://www.antennahouse.com/names/XSL/Extensions"
+                xmlns:axf="https://www.antennahouse.com/names/XSL/Extensions"
                 xmlns:i="urn:cz-kosek:functions:index"
                 xmlns:l="http://docbook.sourceforge.net/xmlns/l10n/1.0"
                 xmlns:func="http://exslt.org/functions"
@@ -30,7 +30,7 @@
      ********************************************************************
 
      This file is part of the DocBook XSL Stylesheet distribution.
-     See ../README or http://docbook.sf.net/ for copyright
+     See ../README or http://docbook.sourceforge.net/ for copyright
      copyright and other information.
 
      ******************************************************************** -->

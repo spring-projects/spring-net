@@ -1,7 +1,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:exsl="http://exslt.org/common"
                 xmlns:cf="http://docbook.sourceforge.net/xmlns/chunkfast/1.0"
-                xmlns:ng="http://docbook.org/docbook-ng"
+                xmlns:ng="https://docbook.org/docbook-ng"
                 xmlns:db="http://docbook.org/ns/docbook"
                 version="1.0"
                 exclude-result-prefixes="exsl cf ng db">
@@ -11,7 +11,7 @@
      ********************************************************************
 
      This file is part of the XSL DocBook Stylesheet distribution.
-     See ../README or http://docbook.sf.net/release/xsl/current/ for
+     See ../README or http://docbook.sourceforge.net/release/xsl/current/ for
      copyright and other information.
 
      ******************************************************************** -->
@@ -157,7 +157,7 @@
   <!-- that are not first children and are not the children of first children -->
 
   <!-- Break these variables into pieces to work around
-       http://nagoya.apache.org/bugzilla/show_bug.cgi?id=6063 -->
+       https://nagoya.apache.org/bugzilla/show_bug.cgi?id=6063 -->
 
   <xsl:variable name="prev-v1"
      select="(ancestor::sect1[$chunk.section.depth &gt; 0 

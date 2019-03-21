@@ -1,5 +1,5 @@
-<xsd:schema targetNamespace="http://www.example.com/brief"
-	    xmlns:brief="http://www.example.com/brief"
+<xsd:schema targetNamespace="https://www.example.com/brief"
+	    xmlns:brief="https://www.example.com/brief"
 	    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	    elementFormDefault="qualified"
 	    attributeFormDefault="unqualified">

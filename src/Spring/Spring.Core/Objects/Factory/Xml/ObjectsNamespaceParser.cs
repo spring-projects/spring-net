@@ -51,7 +51,7 @@ namespace Spring.Objects.Factory.Xml
     /// </p>
     /// <p>
     /// This schema is <b>typically</b> located at
-    /// <a href="http://www.springframework.net/xsd/spring-objects.xsd">http://www.springframework.net/xsd/spring-objects.xsd</a>.
+    /// <a href="https://www.springframework.net/xsd/spring-objects.xsd">https://www.springframework.net/xsd/spring-objects.xsd</a>.
     /// </p>
     /// </remarks>
     /// <author>Rod Johnson</author>
@@ -1435,7 +1435,7 @@ namespace Spring.Objects.Factory.Xml
 
             string innerText = element.InnerText;
             // check the xml:space attribute
-            bool preserveWhitespace = 0 == string.Compare("preserve", element.GetAttribute("space", "http://www.w3.org/XML/1998/namespace"), true);
+            bool preserveWhitespace = 0 == string.Compare("preserve", element.GetAttribute("space", "https://www.w3.org/XML/1998/namespace"), true);
             bool isEmpty = preserveWhitespace ? innerText.Length == 0 : StringUtils.IsNullOrEmpty(innerText);
             return isEmpty ? String.Empty : innerText;
         }

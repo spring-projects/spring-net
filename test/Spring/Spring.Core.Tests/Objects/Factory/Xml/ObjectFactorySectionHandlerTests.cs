@@ -41,7 +41,7 @@ namespace Spring.Objects.Factory.Xml
         public void CreateXmlElement()
         {
             XmlDocument xmlDoc = new XmlDocument();
-            string xmlData = "<objects xmlns=\"http://www.springframework.net\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd\"><object name=\"TestVersion\"  type=\"System.Version, Mscorlib\"></object></objects>";
+            string xmlData = "<objects xmlns=\"http://www.springframework.net\" xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" xsi:schemaLocation=\"http://www.springframework.net https://www.springframework.net/xsd/spring-objects.xsd\"><object name=\"TestVersion\"  type=\"System.Version, Mscorlib\"></object></objects>";
             xmlDoc.Load(new StringReader(xmlData));
             _xmlElement = xmlDoc.DocumentElement;
         }

@@ -69,7 +69,7 @@ namespace Spring.Transaction.Support
             TransactionSynchronizationManager.ClearSynchronization();
         }
 
-        [Test(Description = "http://jira.springframework.org/browse/SPRNET-1160")]
+        [Test(Description = "https://jira.springframework.org/browse/SPRNET-1160")]
         public void SynchronizationsExecuteInOrderOfRegistration()
         {
             TransactionSynchronizationManager.InitSynchronization();

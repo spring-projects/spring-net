@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:suwl="http://nwalsh.com/xslt/ext/com.nwalsh.saxon.UnwrapLinks"
+                xmlns:suwl="https://nwalsh.com/xslt/ext/com.nwalsh.saxon.UnwrapLinks"
                 xmlns:exsl="http://exslt.org/common"
                 xmlns:xlink='http://www.w3.org/1999/xlink'
                 exclude-result-prefixes="suwl exsl xlink"
@@ -11,14 +11,14 @@
      ********************************************************************
 
      This file is part of the XSL DocBook Stylesheet distribution.
-     See ../README or http://docbook.sf.net/release/xsl/current/ for
+     See ../README or http://docbook.sourceforge.net/release/xsl/current/ for
      copyright and other information.
 
      ******************************************************************** -->
 
 <!-- Use internal variable for olink xlink role for consistency -->
 <xsl:variable 
-      name="xolink.role">http://docbook.org/xlink/role/olink</xsl:variable>
+      name="xolink.role">https://docbook.org/xlink/role/olink</xsl:variable>
 
 <!-- ==================================================================== -->
 

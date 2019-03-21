@@ -14,7 +14,7 @@
      ********************************************************************
 
      This file is part of the XSL DocBook Stylesheet distribution.
-     See ../README or http://docbook.sf.net/release/xsl/current/ for
+     See ../README or http://docbook.sourceforge.net/release/xsl/current/ for
      copyright and other information.
 
      ******************************************************************** -->
@@ -48,7 +48,7 @@
       <!-- Is it an olink ? -->
       <xsl:variable name="is.olink">
         <xsl:choose>
-	  <!-- If xlink:role="http://docbook.org/xlink/role/olink" -->
+	  <!-- If xlink:role="https://docbook.org/xlink/role/olink" -->
           <!-- and if the href contains # -->
           <xsl:when test="contains($xhref,'#') and
 	       @xlink:role = $xolink.role">1</xsl:when>

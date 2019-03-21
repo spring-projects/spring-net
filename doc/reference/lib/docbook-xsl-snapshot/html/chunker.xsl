@@ -1,9 +1,9 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:saxon="http://icl.com/saxon"
-                xmlns:lxslt="http://xml.apache.org/xslt"
-                xmlns:redirect="http://xml.apache.org/xalan/redirect"
+                xmlns:saxon="https://icl.com/saxon"
+                xmlns:lxslt="https://xml.apache.org/xslt"
+                xmlns:redirect="https://xml.apache.org/xalan/redirect"
                 xmlns:exsl="http://exslt.org/common"
-                xmlns:doc="http://nwalsh.com/xsl/documentation/1.0"
+                xmlns:doc="https://nwalsh.com/xsl/documentation/1.0"
 		version="1.0"
                 exclude-result-prefixes="doc"
                 extension-element-prefixes="saxon redirect lxslt exsl">
@@ -13,7 +13,7 @@
      ********************************************************************
 
      This file is part of the XSL DocBook Stylesheet distribution.
-     See ../README or http://docbook.sf.net/release/xsl/current/ for
+     See ../README or http://docbook.sourceforge.net/release/xsl/current/ for
      copyright and other information.
 
      ******************************************************************** -->

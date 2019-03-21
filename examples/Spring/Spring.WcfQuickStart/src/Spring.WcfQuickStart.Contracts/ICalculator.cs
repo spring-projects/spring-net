@@ -42,7 +42,7 @@ namespace Spring.WcfQuickStart
         }
     }
 
-    [ServiceContract(Namespace = "http://Spring.WcfQuickStart")]
+    [ServiceContract(Namespace = "https://Spring.WcfQuickStart")]
     public interface ICalculator
     {
         [OperationContract]

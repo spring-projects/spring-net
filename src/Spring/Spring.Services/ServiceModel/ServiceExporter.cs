@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -173,7 +173,7 @@ namespace Spring.ServiceModel
         /// Web Services Description Language (WSDL).
         /// </summary>
         /// <value>
-        /// The WSDL namespace of the &lt;portType&gt; element. The default value is "http://tempuri.org".
+        /// The WSDL namespace of the &lt;portType&gt; element. The default value is "https://www.bing.com/".
         /// </value>
         public string Namespace
         {

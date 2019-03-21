@@ -11,14 +11,14 @@
      ********************************************************************
 
      This file is part of the XSL DocBook Stylesheet distribution.
-     See ../README or http://docbook.sf.net/release/xsl/current/ for
+     See ../README or http://docbook.sourceforge.net/release/xsl/current/ for
      copyright and other information.
 
      ******************************************************************** -->
 
 <!-- Use internal variable for olink xlink role for consistency -->
 <xsl:variable 
-      name="xolink.role">http://docbook.org/xlink/role/olink</xsl:variable>
+      name="xolink.role">https://docbook.org/xlink/role/olink</xsl:variable>
 
 <!-- ==================================================================== -->
 

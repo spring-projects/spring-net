@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -781,7 +781,7 @@ namespace Spring.Aop.Framework
         }
 
 #if !NETCOREAPP
-        [Test(Description = "http://opensource.atlassian.com/projects/spring/browse/SPRNET-293")]
+        [Test(Description = "https://opensource.atlassian.com/projects/spring/browse/SPRNET-293")]
         public void SupportsTransparentProxyAsTarget()
         {
             AppDomain domain = null;
@@ -812,7 +812,7 @@ namespace Spring.Aop.Framework
         }
 #endif
 
-        [Test(Description = "http://opensource.atlassian.com/projects/spring/browse/SPRNET-500")]
+        [Test(Description = "https://opensource.atlassian.com/projects/spring/browse/SPRNET-500")]
         public void NotAccessibleInterfaceProxying()
         {
                 const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>

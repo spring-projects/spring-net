@@ -1,6 +1,6 @@
 <?xml version='1.0'?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:doc="http://nwalsh.com/xsl/documentation/1.0"
+                xmlns:doc="https://nwalsh.com/xsl/documentation/1.0"
                 xmlns:date="http://exslt.org/dates-and-times"
                 exclude-result-prefixes="doc date"
                 version='1.0'>
@@ -10,7 +10,7 @@
      ********************************************************************
 
      This file is part of the XSL DocBook Stylesheet distribution.
-     See ../README or http://docbook.sf.net/release/xsl/current/ for
+     See ../README or http://docbook.sourceforge.net/release/xsl/current/ for
      copyright and other information.
 
      ******************************************************************** -->
@@ -270,7 +270,7 @@
             <xsl:with-param name="source" select="$refname"/>
             <xsl:with-param name="context-desc">meta manvol</xsl:with-param>
             <xsl:with-param name="message">
-              <xsl:text>see http://docbook.sf.net/el/manvolnum</xsl:text>
+              <xsl:text>see https://www.docbook.org/tdg5/en/html/manvolnum.html</xsl:text>
             </xsl:with-param>
           </xsl:call-template>
         </xsl:if>
@@ -402,7 +402,7 @@
           <!-- * <xsl:with-param name="source" select="$refname"/> -->
           <!-- * <xsl:with-param name="context-desc">meta date</xsl:with-param> -->
           <!-- * <xsl:with-param name="message"> -->
-            <!-- * <xsl:text>see http://docbook.sf.net/el/date</xsl:text> -->
+            <!-- * <xsl:text>see https://www.docbook.org/tdg5/en/html/date.html</xsl:text> -->
           <!-- * </xsl:with-param> -->
         <!-- * </xsl:call-template> -->
       <!-- * </xsl:if> -->
@@ -795,7 +795,7 @@
     <xsl:with-param name="source" select="$refname"/>
     <xsl:with-param name="context-desc">meta source</xsl:with-param>
     <xsl:with-param name="message">
-      <xsl:text>see http://docbook.sf.net/el/productname</xsl:text>
+      <xsl:text>see https://www.docbook.org/tdg5/en/html/productname.html</xsl:text>
     </xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="log.message">
@@ -811,7 +811,7 @@
     <xsl:with-param name="source" select="$refname"/>
     <xsl:with-param name="context-desc">meta source</xsl:with-param>
     <xsl:with-param name="message">
-      <xsl:text>see http://docbook.sf.net/el/refmiscinfo</xsl:text>
+      <xsl:text>see https://www.docbook.org/tdg5/en/html/refmiscinfo.html</xsl:text>
     </xsl:with-param>
   </xsl:call-template>
 </xsl:template>
@@ -940,7 +940,7 @@
     <xsl:with-param name="source" select="$refname"/>
     <xsl:with-param name="context-desc">meta version</xsl:with-param>
     <xsl:with-param name="message">
-      <xsl:text>see http://docbook.sf.net/el/productnumber</xsl:text>
+      <xsl:text>see https://www.docbook.org/tdg5/en/html/productnumber.html</xsl:text>
     </xsl:with-param>
   </xsl:call-template>
   <xsl:call-template name="log.message">
@@ -956,7 +956,7 @@
     <xsl:with-param name="source" select="$refname"/>
     <xsl:with-param name="context-desc">meta version</xsl:with-param>
     <xsl:with-param name="message">
-      <xsl:text>see http://docbook.sf.net/el/refmiscinfo</xsl:text>
+      <xsl:text>see https://www.docbook.org/tdg5/en/html/refmiscinfo.html</xsl:text>
     </xsl:with-param>
   </xsl:call-template>
 </xsl:template>
@@ -1195,7 +1195,7 @@
     <xsl:with-param name="source" select="$refname"/>
     <xsl:with-param name="context-desc">meta manual</xsl:with-param>
     <xsl:with-param name="message">
-      <xsl:text>see http://docbook.sf.net/el/refmiscinfo</xsl:text>
+      <xsl:text>see https://www.docbook.org/tdg5/en/html/refmiscinfo.html</xsl:text>
     </xsl:with-param>
   </xsl:call-template>
 </xsl:template>

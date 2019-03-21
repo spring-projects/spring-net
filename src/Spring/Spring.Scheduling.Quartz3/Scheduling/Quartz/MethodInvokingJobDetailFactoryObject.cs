@@ -98,7 +98,7 @@ namespace Spring.Scheduling.Quartz
         /// fashion. The behavior when one does not want concurrent jobs to be
         /// executed is realized through adding the <see cref="DisallowConcurrentExecutionAttribute" /> attribute.
         /// More information on stateful versus stateless jobs can be found
-        /// <a href="http://www.opensymphony.com/quartz/tutorial.html#jobsMore">here</a>.
+        /// <a href="https://www.opensymphony.com/quartz/tutorial.html#jobsMore">here</a>.
         /// <p>
         /// The default setting is to run jobs concurrently.
         /// </p>

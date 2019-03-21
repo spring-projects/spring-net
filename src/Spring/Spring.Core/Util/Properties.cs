@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ namespace Spring.Util
 	/// An implementation of the Java Properties class.
 	/// </summary>
 	/// <remarks>
-    /// For the complete syntax see <a href="http://java.sun.com/j2se/1.4.2/docs/api/java/util/Properties.html#load(java.io.InputStream)">java.util.Properties JavaDoc</a>.
+    /// For the complete syntax see <a href="https://java.sun.com/j2se/1.4.2/docs/api/java/util/Properties.html#load(java.io.InputStream)">java.util.Properties JavaDoc</a>.
     /// This class supports an extended syntax. There may also be sole keys on a line, in that case values are treated as <c>null</c>.
     /// <example>
     /// <code>

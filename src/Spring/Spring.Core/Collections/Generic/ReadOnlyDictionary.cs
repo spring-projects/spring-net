@@ -33,7 +33,7 @@ namespace Spring.Collections.Generic
     /// do not throw an exception, but simply make no change to the underlying collection.
     /// </summary>
     /// <remarks>Originally put into the public domain.
-    /// http://www.simple-talk.com/community/forums/thread/2263.aspx
+    /// https://www.simple-talk.com/community/forums/thread/2263.aspx
     /// </remarks>
     /// <typeparam name="TKey"></typeparam>
     /// <typeparam name="TValue"></typeparam>

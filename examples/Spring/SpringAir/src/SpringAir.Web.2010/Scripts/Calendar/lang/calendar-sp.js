@@ -62,29 +62,29 @@ Calendar._SMN = new Array
 
 // tooltips
 Calendar._TT = {};
-Calendar._TT["INFO"] = "Información del Calendario";
+Calendar._TT["INFO"] = "Informaciï¿½n del Calendario";
 
 Calendar._TT["ABOUT"] =
 "DHTML Date/Time Selector\n" +
 "(c) dynarch.com 2002-2005 / Author: Mihai Bazon\n" + // don't translate this this ;-)
 "Nuevas versiones en: http://www.dynarch.com/projects/calendar/\n" +
-"Distribuida bajo licencia GNU LGPL.  Para detalles vea http://gnu.org/licenses/lgpl.html ." +
+"Distribuida bajo licencia GNU LGPL.  Para detalles vea https://gnu.org/licenses/lgpl.html ." +
 "\n\n" +
-"Selección de Fechas:\n" +
-"- Use  \xab, \xbb para seleccionar el año\n" +
+"Selecciï¿½n de Fechas:\n" +
+"- Use  \xab, \xbb para seleccionar el aï¿½o\n" +
 "- Use " + String.fromCharCode(0x2039) + ", " + String.fromCharCode(0x203a) + " para seleccionar el mes\n" +
-"- Mantenga presionado el botón del ratón en cualquiera de las opciones superiores para un acceso rapido .";
+"- Mantenga presionado el botï¿½n del ratï¿½n en cualquiera de las opciones superiores para un acceso rapido .";
 Calendar._TT["ABOUT_TIME"] = "\n\n" +
-"Selección del Reloj:\n" +
+"Selecciï¿½n del Reloj:\n" +
 "- Seleccione la hora para cambiar el reloj\n" +
 "- o presione  Shift-click para disminuirlo\n" +
-"- o presione click y arrastre del ratón para una selección rapida.";
+"- o presione click y arrastre del ratï¿½n para una selecciï¿½n rapida.";
 
-Calendar._TT["PREV_YEAR"] = "Año anterior (Presione para menu)";
+Calendar._TT["PREV_YEAR"] = "Aï¿½o anterior (Presione para menu)";
 Calendar._TT["PREV_MONTH"] = "Mes Anterior (Presione para menu)";
 Calendar._TT["GO_TODAY"] = "Ir a Hoy";
 Calendar._TT["NEXT_MONTH"] = "Mes Siguiente (Presione para menu)";
-Calendar._TT["NEXT_YEAR"] = "Año Siguiente (Presione para menu)";
+Calendar._TT["NEXT_YEAR"] = "Aï¿½o Siguiente (Presione para menu)";
 Calendar._TT["SEL_DATE"] = "Seleccione fecha";
 Calendar._TT["DRAG_TO_MOVE"] = "Arrastre y mueva";
 Calendar._TT["PART_TODAY"] = " (Hoy)";

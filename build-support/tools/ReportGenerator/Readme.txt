@@ -35,7 +35,7 @@ Visual Studio (vstest.console.exe, CodeCoverage.exe)
 NCover (tested version 1.5.8, other versions may not work)
 
 Also available as NuGet package:
-http://nuget.org/List/Packages/ReportGenerator
+https://nuget.org/List/Packages/ReportGenerator
 
 =======================================================================
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<project name="Spring.AopQuickStart.Common" default="build" xmlns="http://nant.sf.net/schemas/nant.xsd">
+<project name="Spring.AopQuickStart.Common" default="build" xmlns="http://nant.sourceforge.net/schemas/nant.xsd">
   <!--
     Required properties:
       * current.bin.dir           - (path) root level to build to

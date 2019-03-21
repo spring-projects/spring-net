@@ -1,5 +1,5 @@
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -220,7 +220,7 @@ namespace Spring.Proxy
             Assert.AreEqual("ScriptName", fgsta.Name);
         }
 
-        // http://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=296032
+        // https://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=296032
         // should not fail
         // Not fixed by .NET 2.0 SP1.
         [Test]
@@ -246,7 +246,7 @@ namespace Spring.Proxy
         }
 
 #if !NETCOREAPP
-        // http://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=161522
+        // https://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=161522
         // should not fail
         // Use CustomAttributeData if patch applied (.NET 2.0 SP1).
         // Use Attribute instance if patch not applied (.NET 2.0 SP1).
@@ -266,12 +266,12 @@ namespace Spring.Proxy
 
             var wsa = attrs[0] as System.Web.Services.WebServiceAttribute;
             Assert.AreEqual("blah", wsa.Name);
-            Assert.AreEqual("http://mynamespace.com", wsa.Namespace);
+            Assert.AreEqual("/MngpZ/", wsa.Namespace);
         }
 #endif
 
 #if !MONO && !NETCOREAPP
-        // http://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=94803
+        // https://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=94803
         [Test]
         public void ProxySecurityAttribute()
         {
@@ -810,8 +810,8 @@ namespace Spring.Proxy
     }
 
 #if !NETCOREAPP
-    // http://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=161522
-    [System.Web.Services.WebService(Namespace = "http://mynamespace.com", Name = "blah")]
+    // https://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=161522
+    [System.Web.Services.WebService(Namespace = "/MngpZ/", Name = "blah")]
     public class ClassWithWebServiceAttribute : IMarkerInterface
     {
     }
@@ -827,7 +827,7 @@ namespace Spring.Proxy
     {
     }
 
-    // http://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=296032
+    // https://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=296032
     public class ClassWithPublicEnumPropertyAttribute : ISomeMarkerInterface
     {
         [PublicEnumProperty(AttributeTargets.All)]
@@ -838,7 +838,7 @@ namespace Spring.Proxy
     }
 
 #if !NETCOREAPP
-    // http://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=94803
+    // https://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=94803
     [Marker]
 #pragma warning disable 618
     [System.Net.WebPermission(System.Security.Permissions.SecurityAction.Deny)]

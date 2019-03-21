@@ -3,7 +3,7 @@
 	<propertySet>
 	<!--
 		<property name="MyPurchaseOrder">
-			<PurchaseOrder xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.ericjsmith.net">
+			<PurchaseOrder xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="https://ericjsmith.com">
 				<ShipTo Name="Eric J. Smith">
 					<Line1>123 Test Dr.</Line1>
 					<City>Dallas</City>

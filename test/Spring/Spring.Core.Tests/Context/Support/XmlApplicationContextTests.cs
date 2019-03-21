@@ -35,7 +35,7 @@ namespace Spring.Context.Support
     [TestFixture]
     public sealed class XmlApplicationContextTests
     {
-        [Test(Description = "http://jira.springframework.org/browse/SPRNET-1231")]
+        [Test(Description = "https://jira.springframework.org/browse/SPRNET-1231")]
         public void SPRNET1231_DoesNotInvokeFactoryMethodDuringObjectFactoryPostProcessing()
         {
             string configLocation = TestResourceLoader.GetAssemblyResourceUri(this.GetType(), "XmlApplicationContextTests-SPRNET1231.xml");

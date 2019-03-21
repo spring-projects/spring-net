@@ -6,7 +6,7 @@ NAnt is a .NET based build tool. In theory it is kind of like make without
 make's wrinkles. In practice it's a lot like Ant. 
   
 If you are not familiar with Jakarta Ant you can get more information at the
-Ant project web site (http://ant.apache.org/).
+Ant project web site (https://ant.apache.org/).
 
 
 Why NAnt?
@@ -50,7 +50,7 @@ Compilation and Installation
 
        * A version of the Microsoft .NET Framework
 
-           Available from http://msdn.microsoft.com/netframework/
+           Available from https://msdn.microsoft.com/netframework/
          
            You will need the .NET Framework SDK as well as the runtime 
            components if you intend to compile programs.
@@ -62,7 +62,7 @@ Compilation and Installation
 
        * Mono for Windows (version 2.0 or higher)
 
-           Available from http://www.mono-project.com/downloads/
+           Available from https://www.mono-project.com/downloads/
    
    Linux/Unix
    ----------
@@ -71,11 +71,11 @@ Compilation and Installation
 
        * pkg-config
 
-           Available from: http://www.freedesktop.org/Software/pkgconfig
+           Available from: https://www.freedesktop.org/Software/pkgconfig
 
        * A working Mono installation and development libraries (version 2.0 or higher)
 
-           Available from: http://www.mono-project.com/downloads/
+           Available from: https://www.mono-project.com/downloads/
 
            
     b. Building the Software
@@ -155,4 +155,4 @@ included with all NAnt distributions.
 
 For more licensing information refer to the GNU General Public License on the 
 GNU Project web site.
-http://www.gnu.org/copyleft/gpl.html
+https://www.gnu.org/copyleft/gpl.html

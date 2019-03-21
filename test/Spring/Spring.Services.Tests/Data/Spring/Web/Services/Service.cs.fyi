@@ -8,7 +8,7 @@ using System.Xml.Serialization;
 /// <summary>
 /// Test class used to generate the wsdl.
 /// </summary>
-[WebService(Namespace = "http://www.springframwework.net")]
+[WebService(Namespace = "https://www.springframwework.net")]
 [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
 //[SoapRpcService(Use=SoapBindingUse.Literal)]
 public class HelloWorldService : System.Web.Services.WebService
