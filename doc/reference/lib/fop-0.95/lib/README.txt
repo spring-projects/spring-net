@@ -5,7 +5,7 @@ Information on Apache FOP dependencies
 $Id$
 
 The Apache Licenses can also be found here:
-http://www.apache.org/licenses/
+https://www.apache.org/licenses/
 
 
 Normal Dependencies
