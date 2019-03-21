@@ -5,7 +5,7 @@
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
 *
-*      http://www.apache.org/licenses/LICENSE-2.0
+*      https://www.apache.org/licenses/LICENSE-2.0
 *
 * Unless required by applicable law or agreed to in writing, software
 * distributed under the License is distributed on an "AS IS" BASIS,
@@ -22,7 +22,7 @@ namespace Spring.Scheduling
     public interface ISchedulingTaskExecutor : ITaskExecutor
     {
         /// <summary>
-        /// Gets a value indicating whether´this instance prefers short lived tasks.
+        /// Gets a value indicating whetherï¿½this instance prefers short lived tasks.
         /// </summary>
         /// <value>
         /// 	<c>true</c> if prefers short lived tasks; otherwise, <c>false</c>.

@@ -1,13 +1,13 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *      http://www.apache.org/licenses/LICENSE-2.0
+ *      https://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -99,7 +99,7 @@ namespace Spring.Expressions
         public override void GetObjectData( SerializationInfo info, StreamingContext context )
         {
             // since RecognitionException does not implement .ctor(SerializationInfo info, StreamingContext context)
-            // we need to do the serialization on our own... #§$%
+            // we need to do the serialization on our own... #ï¿½$%
             //base.GetObjectData( info, context );
             info.AddValue("Line", base.line);
             info.AddValue("Column", base.column);
