@@ -820,25 +820,25 @@ Memory = 2
     <para><itemizedlist>
         <listitem>
           <para><ulink
-          url="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dndotnet/html/introremoting.asp">An
+          url="https://msdn.microsoft.com/library/default.asp?url=/library/en-us/dndotnet/html/introremoting.asp">An
           Introduction to Microsoft .NET Remoting Framework</ulink></para>
         </listitem>
 
         <listitem>
           <para><ulink
-          url="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dndotnet/html/hawkremoting.asp">Microsoft
+          url="https://msdn.microsoft.com/library/default.asp?url=/library/en-us/dndotnet/html/hawkremoting.asp">Microsoft
           .NET Remoting: A Technical Overview</ulink></para>
         </listitem>
 
         <listitem>
           <para><ulink
-          url="http://www.apress.com/book/bookDisplay.html?bID=374">Advanced
+          url="https://www.apress.com/book/bookDisplay.html?bID=374">Advanced
           .NET Remoting</ulink> (authored by Ingo Rammer)</para>
         </listitem>
 
         <listitem>
           <para><ulink
-          url="http://www.thinktecture.com/resources/remotingfaq/default.html">.NET
+          url="https://www.thinktecture.com/resources/remotingfaq/default.html">.NET
           Remoting FAQ</ulink></para>
         </listitem>
       </itemizedlist></para>

@@ -48,9 +48,9 @@
     used. For more background information on the motivation behind these
     choices, say as compared to the attribute [ThreadStatic] refer to
     "Piers7"'s <ulink
-    url="http://piers7.blogspot.com/2005/11/threadstatic-callcontext-and_02.html">blog</ulink>
+    url="https://piers7.blogspot.com/2005/11/threadstatic-callcontext-and_02.html">blog</ulink>
     and this <ulink
-    url="http://forum.springframework.net/showthread.php?t=572&amp;highlight=LogicalThreadContext">forum
+    url="https://forum.springframework.net/showthread.php?t=572&amp;highlight=LogicalThreadContext">forum
     post</ulink>. The interface IThreadStorage serves as the basis for the
     thread local storage abstraction and various implementations can be
     selected from depending on your runtime requirements. Configuring the

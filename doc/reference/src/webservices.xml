@@ -484,7 +484,7 @@ namespace MyCompany.Services
 
       <programlisting language="myxml">
         &lt;object id="calculatorService" type="Spring.Web.Services.WebServiceProxyFactory, Spring.Services"&gt;
-          &lt;property name="ServiceUri" value="http://myServer/Calculator/calculatorService.asmx"/&gt;
+          &lt;property name="ServiceUri" value="https://myServer/Calculator/calculatorService.asmx"/&gt;
           &lt;!--&lt;property name="ServiceUri" value="file://~/calculatorService.wsdl"/&gt;--&gt;
           &lt;property name="ServiceInterface" value="Spring.Calculator.Interfaces.IAdvancedCalculator, Spring.Calculator.Contract"/&gt;
           &lt;!-- Dependency injection on Factory's product : the proxy instance of type SoapHttpClientProtocol --&gt;
@@ -550,7 +550,7 @@ namespace MyCompany.Services
 
       <para>For an example of how using SOAP headers for authentication using
       the WebServiceExporter and WebServiceProxyFactory, refer to this <ulink
-      url="http://opensource.atlassian.com/confluence/spring/download/attachments/708/Spring.Examples.SoapHeader.rar?version=1">solution</ulink>
+      url="https://opensource.atlassian.com/confluence/spring/download/attachments/708/Spring.Examples.SoapHeader.rar?version=1">solution</ulink>
       on our wiki.</para>
     </sect2>
   </sect1>

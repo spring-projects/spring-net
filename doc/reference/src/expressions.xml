@@ -39,7 +39,7 @@
     run-time evaluation of criteria based on an object's state is required.
     For those with a Java background, the Spring.Expressions namespace
     provides functionality similar to the Java based Object Graph Navigation
-    Language, <ulink url="http://www.ognl.org/">OGNL</ulink>.</para>
+    Language, <ulink url="https://www.ognl.org/">OGNL</ulink>.</para>
 
     <para>This chapter covers the features of the expression language using an
     Inventor and Inventor's Society class as the target objects for expression
@@ -114,7 +114,7 @@ string evaluatedName = (string) exp.GetValue(tesla, null);</programlisting></par
     are in error in some other manner.</para>
 
     <para>The expression language is based on a grammar and uses <ulink
-    url="http://www.antlr.org/">ANTLR</ulink> to construct the lexer and
+    url="https://www.antlr.org/">ANTLR</ulink> to construct the lexer and
     parser. Errors relating to bad syntax of the language will be caught at
     this level of the language implementation. For those interested in the
     digging deeper into the implementation, the grammar file is named

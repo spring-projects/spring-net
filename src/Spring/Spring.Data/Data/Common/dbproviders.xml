@@ -6,7 +6,7 @@
 <objects
   xmlns="http://www.springframework.net"
   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-  xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
+  xsi:schemaLocation="http://www.springframework.net https://www.springframework.net/xsd/spring-objects.xsd">
 
   <!-- SQL SERVER -->
   
@@ -1123,7 +1123,7 @@
         <!-- this is only true for .net 1.1 kept it here just in case we want to revert back to this strategy for
              obtaining error codes-->
         <constructor-arg name="errorCodeExceptionExpression" value="Errors[0].Code"/>
-        <!-- error codes taken from http://www.postgresql.org/docs/8.1/static/errcodes-appendix.html -->
+        <!-- error codes taken from https://www.postgresql.org/docs/8.1/static/errcodes-appendix.html -->
         <property name="ErrorCodes.badSqlGrammarCodes">
           <value>03000,42000,42601,42602,42622,42804,42P01</value>
         </property>
@@ -1168,7 +1168,7 @@
         <!-- this is only true for .net 1.1 kept it here just in case we want to revert back to this strategy for
              obtaining error codes-->
         <constructor-arg name="errorCodeExceptionExpression" value="Errors[0].Code"/>
-        <!-- error codes taken from http://www.postgresql.org/docs/8.1/static/errcodes-appendix.html -->
+        <!-- error codes taken from https://www.postgresql.org/docs/8.1/static/errcodes-appendix.html -->
         <property name="ErrorCodes.badSqlGrammarCodes">
           <value>03000,42000,42601,42602,42622,42804,42P01</value>
         </property>
@@ -1213,7 +1213,7 @@
         <!-- this is only true for .net 1.1 kept it here just in case we want to revert back to this strategy for
              obtaining error codes-->
         <constructor-arg name="errorCodeExceptionExpression" value="Errors[0].Code"/>
-        <!-- error codes taken from http://www.postgresql.org/docs/8.1/static/errcodes-appendix.html -->
+        <!-- error codes taken from https://www.postgresql.org/docs/8.1/static/errcodes-appendix.html -->
         <property name="ErrorCodes.badSqlGrammarCodes">
           <value>03000,42000,42601,42602,42622,42804,42P01</value>
         </property>
@@ -1260,7 +1260,7 @@
         <!-- this is only true for .net 1.1 kept it here just in case we want to revert back to this strategy for
              obtaining error codes-->
         <constructor-arg name="errorCodeExceptionExpression" value="Errors[0].NativeError"/>
-        <!-- error codes taken from http://publib.boulder.ibm.com/infocenter/iseries/v5r3/index.jsp?topic=/rzala/rzalaco.htm and 
+        <!-- error codes taken from https://publib.boulder.ibm.com/infocenter/iseries/v5r3/index.jsp?topic=/rzala/rzalaco.htm and 
              from Spring.Java sql-error-codes.xml -->
 
         <property name="ErrorCodes.BadSqlGrammarCodes">
@@ -1311,7 +1311,7 @@
         <!-- this is only true for .net 1.1 kept it here just in case we want to revert back to this strategy for
              obtaining error codes-->
         <constructor-arg name="errorCodeExceptionExpression" value="Errors[0].NativeError"/>
-        <!-- error codes taken from http://publib.boulder.ibm.com/infocenter/iseries/v5r3/index.jsp?topic=/rzala/rzalaco.htm and 
+        <!-- error codes taken from https://publib.boulder.ibm.com/infocenter/iseries/v5r3/index.jsp?topic=/rzala/rzalaco.htm and 
              from Spring.Java sql-error-codes.xml -->
 
         <property name="ErrorCodes.BadSqlGrammarCodes">
@@ -1365,7 +1365,7 @@
         <!-- this is only true for .net 1.1 kept it here just in case we want to revert back to this strategy for
              obtaining error codes-->
         <constructor-arg name="errorCodeExceptionExpression" value="Errors[0].NativeError"/>
-        <!-- error codes taken from http://publib.boulder.ibm.com/infocenter/iseries/v5r3/index.jsp?topic=/rzala/rzalaco.htm and 
+        <!-- error codes taken from https://publib.boulder.ibm.com/infocenter/iseries/v5r3/index.jsp?topic=/rzala/rzalaco.htm and 
              from Spring.Java sql-error-codes.xml -->
 
 
@@ -1417,7 +1417,7 @@
         <!-- this is only true for .net 1.1 kept it here just in case we want to revert back to this strategy for
              obtaining error codes-->
         <constructor-arg name="errorCodeExceptionExpression" value="Errors[0].NativeError"/>
-        <!-- error codes taken from http://publib.boulder.ibm.com/infocenter/iseries/v5r3/index.jsp?topic=/rzala/rzalaco.htm and 
+        <!-- error codes taken from https://publib.boulder.ibm.com/infocenter/iseries/v5r3/index.jsp?topic=/rzala/rzalaco.htm and 
              from Spring.Java sql-error-codes.xml -->
 
 
@@ -1472,7 +1472,7 @@
         <!-- this is only true for .net 1.1 kept it here just in case we want to revert back to this strategy for
              obtaining error codes-->
         <constructor-arg name="errorCodeExceptionExpression" value="MessageCode"/>
-        <!-- error codes taken from http://publib.boulder.ibm.com/infocenter/iseries/v5r3/index.jsp?topic=/rzala/rzalaco.htm and 
+        <!-- error codes taken from https://publib.boulder.ibm.com/infocenter/iseries/v5r3/index.jsp?topic=/rzala/rzalaco.htm and 
              from Spring.Java sql-error-codes.xml -->
 
         <property name="ErrorCodes.BadSqlGrammarCodes">
@@ -1502,8 +1502,8 @@
 
   
   <!-- Sqlite + ADO Net provider for sqlite -->
-  <!-- Driver can be found at : http://sourceforge.net/projects/sqlite-dotnet2 -->
-  <!-- Reference for error codes : http://www.sqlite.org/capi3.html -->
+  <!-- Driver can be found at : https://sourceforge.net/projects/sqlite-dotnet2 -->
+  <!-- Reference for error codes : https://www.sqlite.org/capi3.html -->
   <object id="SQLite-1.0.43" type="Spring.Data.Common.DbProvider, Spring.Data" singleton="false">
     <constructor-arg name="dbMetaData">
       <object type="Spring.Data.Common.DbMetadata">
@@ -1547,8 +1547,8 @@
   </object>
 
   <!-- Sqlite + ADO Net provider for sqlite -->
-  <!-- Driver can be found at : http://sourceforge.net/projects/sqlite-dotnet2 -->
-  <!-- Reference for error codes : http://www.sqlite.org/capi3.html -->
+  <!-- Driver can be found at : https://sourceforge.net/projects/sqlite-dotnet2 -->
+  <!-- Reference for error codes : https://www.sqlite.org/capi3.html -->
   <object id="SQLite-1.0.44" type="Spring.Data.Common.DbProvider, Spring.Data" singleton="false">
     <constructor-arg name="dbMetaData">
       <object type="Spring.Data.Common.DbMetadata">
@@ -1592,8 +1592,8 @@
   </object>
   
   <!-- Sqlite + ADO Net provider for sqlite -->
-  <!-- Driver can be found at : http://sourceforge.net/projects/sqlite-dotnet2 -->
-  <!-- Reference for error codes : http://www.sqlite.org/capi3.html -->
+  <!-- Driver can be found at : https://sourceforge.net/projects/sqlite-dotnet2 -->
+  <!-- Reference for error codes : https://www.sqlite.org/capi3.html -->
   <object id="SQLite-1.0.47" type="Spring.Data.Common.DbProvider, Spring.Data" singleton="false">
     <constructor-arg name="dbMetaData">
       <object type="Spring.Data.Common.DbMetadata">
@@ -1637,8 +1637,8 @@
   </object>
 
   <!-- Sqlite + ADO Net provider for sqlite -->
-  <!-- Driver can be found at : http://sourceforge.net/projects/sqlite-dotnet2 -->
-  <!-- Reference for error codes : http://www.sqlite.org/capi3.html -->
+  <!-- Driver can be found at : https://sourceforge.net/projects/sqlite-dotnet2 -->
+  <!-- Reference for error codes : https://www.sqlite.org/capi3.html -->
   <object id="SQLite-1.0.56" type="Spring.Data.Common.DbProvider, Spring.Data" singleton="false">
     <constructor-arg name="dbMetaData">
       <object type="Spring.Data.Common.DbMetadata">
@@ -1682,8 +1682,8 @@
   </object>
 
   <!-- Sqlite + ADO Net provider for sqlite -->
-  <!-- Driver can be found at : http://sourceforge.net/projects/sqlite-dotnet2 -->
-  <!-- Reference for error codes : http://www.sqlite.org/capi3.html -->
+  <!-- Driver can be found at : https://sourceforge.net/projects/sqlite-dotnet2 -->
+  <!-- Reference for error codes : https://www.sqlite.org/capi3.html -->
   <object id="SQLite-1.0.65" type="Spring.Data.Common.DbProvider, Spring.Data" singleton="false">
     <constructor-arg name="dbMetaData">
       <object type="Spring.Data.Common.DbMetadata">
@@ -1812,10 +1812,10 @@
   </object>
 
   <!-- 
-  from http://system.data.sqlite.org
-   * NuGet distributions: http://system.data.sqlite.org/index.html/doc/trunk/www/faq.wiki#q5
-   * NuGet page: http://www.nuget.org/packages/System.Data.SQLite
-   * Error code docs: http://www.sqlite.org/capi3ref.html#SQLITE_ABORT
+  from https://system.data.sqlite.org
+   * NuGet distributions: https://system.data.sqlite.org/index.html/doc/trunk/www/faq.wiki#q5
+   * NuGet page: https://www.nuget.org/packages/System.Data.SQLite
+   * Error code docs: https://www.sqlite.org/capi3ref.html#SQLITE_ABORT
   -->
   <object id="SQLite-1.0.80" type="Spring.Data.Common.DbProvider, Spring.Data" singleton="false">
     <constructor-arg name="dbMetaData">

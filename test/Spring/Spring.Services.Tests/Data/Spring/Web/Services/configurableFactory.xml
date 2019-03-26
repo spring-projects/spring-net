@@ -6,7 +6,7 @@
     <property name="ServiceInterface" value="Spring.Web.Services.WebServiceProxyFactoryTests+IHelloWorld, Spring.Services.Tests"/>
     <property name="ProductTemplate">
       <object>
-        <property name="Url" value="http://www.springframework.org/" />
+        <property name="Url" value="https://www.springframework.org/" />
         <property name="Timeout" value="10000" />
       </object>
     </property>
@@ -17,7 +17,7 @@
     <property name="ServiceInterface" value="Spring.Web.Services.WebServiceProxyFactoryTests+IHelloWorld, Spring.Services.Tests"/>
     <property name="ProductTemplate">
       <object>
-        <property name="Url" value="http://www.springframework.org/" />
+        <property name="Url" value="https://www.springframework.org/" />
         <property name="Timeout" value="10000" />
       </object>
     </property>

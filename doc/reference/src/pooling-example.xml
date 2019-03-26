@@ -9,7 +9,7 @@
     <literal>grep</literal>-like file scans).  <emphasis>Note: This example
     is not in the 1.0.0 release to its use of classes in the Spring.Threading
     namespace scheduled for release in Spring 1.1. To access ths example 
-    please get the code from CVS <ulink url="http://opensource.atlassian.com/confluence/spring/display/NET/Project+Structure">(instructions)</ulink> or from the download section of the 
+    please get the code from CVS <ulink url="https://opensource.atlassian.com/confluence/spring/display/NET/Project+Structure">(instructions)</ulink> or from the download section of the 
     Spring.NET website that contains an .zip with the full CVS tree.</emphasis>
     </para>
     <para>

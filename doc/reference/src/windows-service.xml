@@ -24,7 +24,7 @@
     <para>
     This is functionality that will be included after the 
     1.0 release.  If you want to use these features please get the 
-    code from CVS <ulink url="http://opensource.atlassian.com/confluence/spring/display/NET/Project+Structure"></ulink>
+    code from CVS <ulink url="https://opensource.atlassian.com/confluence/spring/display/NET/Project+Structure"></ulink>
     (instructions) or from the download section of the Spring.NET website that contains an
     .zip with the full CVS tree.
     In addition to this documentation
@@ -102,7 +102,7 @@
     </emphasis></para>
     <para>
     That said, while <literal>installutil</literal> 
-    <ulink url="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cptools/html/cpconinstallerutilityinstallutilexe.asp">
+    <ulink url="https://msdn.microsoft.com/library/default.asp?url=/library/en-us/cptools/html/cpconinstallerutilityinstallutilexe.asp">
     <citetitle>is documented on its own </citetitle></ulink>, 
     the command line for 
     <literal>Spring.Services.WindowsService.Installer.exe</literal>
@@ -154,7 +154,7 @@ usage:
     &lt;/system.runtime.remoting&gt;
  
   &lt;log4net&gt;
-    &lt;!-- see http://logging.apache.org/log4net/release/manual/introduction.html --&gt;
+    &lt;!-- see https://logging.apache.org/log4net/release/manual/introduction.html --&gt;
     &lt;appender name=&quot;RollingFile&quot; type=&quot;log4net.Appender.RollingFileAppender&quot;&gt;
       &lt;layout type=&quot;log4net.Layout.PatternLayout&quot;&gt;
         &lt;conversionPattern value=&quot;%d [%t] %-5p %c{1} - %m%n&quot; /&gt;

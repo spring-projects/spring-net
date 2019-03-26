@@ -246,8 +246,8 @@
     <note>
       
 <para>This function began as a copy of Nate Austin's
-        <function>prepend-pad</function> function in the <link xlink:href="http://www.dpawson.co.uk/xsl/sect2/padding.html">Padding
-          Content</link> section of Dave Pawson's <link xlink:href="http://www.dpawson.co.uk/xsl/index.html">XSLT
+        <function>prepend-pad</function> function in the <link xlink:href="https://www.dpawson.co.uk/xsl/sect2/padding.html">Padding
+          Content</link> section of Dave Pawson's <link xlink:href="https://www.dpawson.co.uk/xsl/index.html">XSLT
           FAQ</link>.</para>
 
     </note>

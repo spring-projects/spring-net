@@ -42,7 +42,7 @@
     like to use alternative pool implementations. This may be because the
     default implementations, such as System.ThreadPool, do not meet your
     requirements. (For a discussion on advanced ThreadPool usage see <ulink
-    url="http://www.codeproject.com/KB/threads/smartthreadpool.aspx"> Smart Thread
+    url="https://www.codeproject.com/KB/threads/smartthreadpool.aspx"> Smart Thread
     Pool</ulink> by Ami Bar.) Alternatively, you may want to pool classes that
     do not inherit from
     <literal>System.EnterpriseServices.ServicedComponent</literal>. Instead of

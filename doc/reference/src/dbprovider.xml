@@ -293,7 +293,7 @@
       <listitem>
         <para><literal>SQLite-1.0.80</literal> - SQLite provider 1.0.80 for
         .NET Framework 2.0 SP2 and higher; from
-        http://system.data.sqlite.org/. For the
+        https://system.data.sqlite.org/. For the
         <literal>System.Data.SQLite.Linq</literal> assembly, .NET Framework
         3.5 SP1 is required.</para>
       </listitem>
@@ -569,7 +569,7 @@
       <para>These provider implementations do not take into account usage with
       NHibernate. NHibernate scopes a SessionFactory, where second level
       caching is managed, to each connection. This <link
-      ns6:href="http://forum.springframework.net/showthread.php?t=4462">forum
+      ns6:href="https://forum.springframework.net/showthread.php?t=4462">forum
       thread</link>, contains an implementation of the class
       LocalDelegatingSessionFactoryObject that will create multiple
       SessionFactories for each database connection.</para>
@@ -708,7 +708,7 @@ MultiDelegatingDbProvider.CurrentDbProviderName = "database1ProviderName"
         cache will end up with results from two different databases - which of
         course you don't want to have. The helper class contained in this
         <link
-        ns6:href="http://forum.springframework.net/showthread.php?p=11234#post11234">post</link>
+        ns6:href="https://forum.springframework.net/showthread.php?p=11234#post11234">post</link>
         may help you if you when using NHibernate with multiple
         databases.</para>
       </note>

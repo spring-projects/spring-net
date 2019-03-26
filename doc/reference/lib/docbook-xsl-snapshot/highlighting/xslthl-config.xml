@@ -2,7 +2,7 @@
 <!-- 
 
 xslthl - XSLT Syntax Highlighting
-http://sourceforge.net/projects/xslthl/
+https://sourceforge.net/projects/xslthl/
 Copyright (C) 2005-2008 Michal Molhanec, Jirka Kosek, Michiel Hendriks
 
 This software is provided 'as-is', without any express or implied
@@ -42,5 +42,5 @@ Michiel Hendriks <elmuerte at users.sourceforge.net>
 	<highlighter id="ruby" file="ruby-hl.xml" />
 	<highlighter id="perl" file="perl-hl.xml" />	
 	<highlighter id="javascript" file="javascript-hl.xml" />
-	<namespace prefix="xslthl" uri="http://xslthl.sf.net" />
+	<namespace prefix="xslthl" uri="http://xslthl.sourceforge.net/" />
 </xslthl-config>

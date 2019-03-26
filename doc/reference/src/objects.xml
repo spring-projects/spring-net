@@ -3181,7 +3181,7 @@ namespace Fiona.Apple
 
         <note>
           <para>You can read more about the motivation for Method Injection in
-          <link ns6:href="http://blog.springframework.com/rod/?p=1">this blog
+          <link ns6:href="https://blog.springframework.com/rod/?p=1">this blog
           entry</link>.</para>
         </note>
 
@@ -3666,7 +3666,7 @@ public class MyClassFactory
         language="myxml">&lt;objects xmlns="http://www.springframework.net" 
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
          xsi:schemaLocation="http://www.springframework.net
-         http://www.springframework.net/xsd/spring-objects.xsd" &gt;
+         https://www.springframework.net/xsd/spring-objects.xsd" &gt;
 
     &lt;object name="daoLogger" type="Spring.Objects.Factory.Config.LogFactoryObject, Spring.Core"&gt;
       &lt;property name="logName" value="DAOLogger"/&gt;
@@ -5256,7 +5256,7 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
         <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net" 
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
          xsi:schemaLocation="http://www.springframework.net
-         http://www.springframework.net/xsd/spring-objects.xsd" &gt;
+         https://www.springframework.net/xsd/spring-objects.xsd" &gt;
     
   &lt;object name="productDao" type="DaoApp.SimpleProductDao, DaoApp "&gt;
     &lt;property name="maxResults" value="${maxResults}"/&gt;
@@ -5408,7 +5408,7 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
         overlay the value of 2000 set in the Spring.NET configuration file
         shown below <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net" 
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-         xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd" &gt;
+         xsi:schemaLocation="http://www.springframework.net https://www.springframework.net/xsd/spring-objects.xsd" &gt;
 
     &lt;object name="productDao" type="PropPlayApp.SimpleProductDao, PropPlayApp " &gt;
       &lt;property name="maxResults" value="2000"/&gt;
@@ -5658,7 +5658,7 @@ joan_age=35</programlisting>
           <para>You can configure an
           <literal>EnvironmentVariableSource</literal> to retrieve variables
           from environment variables available through <link
-          ns6:href="http://msdn.microsoft.com/en-us/library/system.environment.aspx">.NET's
+          ns6:href="https://msdn.microsoft.com/en-us/library/system.environment.aspx">.NET's
           <literal>System.Environment</literal> class</link>:</para>
 
           <programlisting language="myxml">&lt;object type="Spring.Objects.Factory.Config.EnvironmentVariableSource, Spring.Core" /&gt;
@@ -5730,7 +5730,7 @@ joan_age=35</programlisting>
 &lt;/object&gt;</programlisting>
 
           <para>Any entry in the <link
-          ns6:href="http://msdn.microsoft.com/library/system.environment.specialfolder.aspx">System.Environment.SpecialFolder</link>
+          ns6:href="https://msdn.microsoft.com/library/system.environment.specialfolder.aspx">System.Environment.SpecialFolder</link>
           enumeration can be used as a variable name.</para>
         </sect4>
 
@@ -5808,7 +5808,7 @@ joan_age=35</programlisting>
       creating an custom IFactoryObject implementation is to retrieve an
       object from an embedded resource file and use it to set another objects
       dependency. An example of this is provided <link
-      ns6:href="http://jira.springframework.org/browse/SPRNET-133#action_19743">here</link>.</para>
+      ns6:href="https://jira.springframework.org/browse/SPRNET-133#action_19743">here</link>.</para>
 
       <para>Finally, there is sometimes a need to ask a container for an
       actual <literal>IFactoryObject</literal> instance itself, not the object

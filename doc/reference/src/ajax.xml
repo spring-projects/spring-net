@@ -65,7 +65,7 @@
       installation. : <programlisting language="myxml">
 &lt;object id="ContactWebService" type="Spring.Web.Services.WebServiceExporter, Spring.Web"&gt;
   &lt;property name="TargetName" value="ContactService"/&gt;
-  &lt;property name="Namespace" value="http://Spring.Examples.Atlas/ContactService"/&gt;
+  &lt;property name="Namespace" value="https://Spring.Examples.Atlas/ContactService"/&gt;
   &lt;property name="Description" value="Contact Web Services"/&gt;
   &lt;property name="TypeAttributes"&gt;
     &lt;list&gt;

@@ -1589,7 +1589,7 @@ level sections, but not in fourth level sections.
 <refsection><info><title>Description</title></info>
 
 <para>If non-zero,
-<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.arbortext.com/">Arbortext</link>
+<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://www.arbortext.com/">Arbortext</link>
 extensions will be used.
 </para>
 <para>This parameter can also affect which graphics file formats
@@ -1617,7 +1617,7 @@ are supported</para>
 <refsection><info><title>Description</title></info>
 
 <para>If non-zero,
-<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.antennahouse.com/">XSL Formatter</link>
+<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://www.antennahouse.com/">XSL Formatter</link>
 extensions will be used. XSL Formatter extensions consists of PDF bookmarks,
 document information and better index processing.</para>
 
@@ -1644,7 +1644,7 @@ are supported</para>
 <refsection><info><title>Description</title></info>
 
 <para>If non-zero, extensions intended for
-<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://xml.apache.org/fop/">FOP</link>
+<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://xml.apache.org/fop/">FOP</link>
 version 0.20.5 and earlier will be used.
 At present, this consists of PDF bookmarks.
 </para>
@@ -1676,7 +1676,7 @@ instead.
 <refsection><info><title>Description</title></info>
 
 <para>If non-zero, extensions for 
-<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://xml.apache.org/fop/">FOP</link>
+<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://xml.apache.org/fop/">FOP</link>
 version 0.90 and later will be used.
 </para>
 
@@ -1706,7 +1706,7 @@ should still be used for FOP version 0.20.5 and earlier.
 <refsection><info><title>Description</title></info>
 
 <para>If non-zero,
-<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.tei-c.org.uk/Software/passivetex/">PassiveTeX</link>
+<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://tei-c.org.uk/software">PassiveTeX</link>
 extensions will be used. At present, this consists of PDF bookmarks
 and sorted index terms.
 </para>
@@ -3160,7 +3160,7 @@ table. </para>
 <refsection><info><title>Description</title></info>
 
 <para>If non-zero, specifies the thickness of borders on table
-cells. The units are points. See <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.w3.org/TR/CSS21/box.html#border-width-properties">
+cells. The units are points. See <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://www.w3.org/TR/CSS21/box.html#border-width-properties">
 CSS</link></para>
 
 <note>
@@ -3229,7 +3229,7 @@ CSS</link></para>
 <refsection><info><title>Description</title></info>
 
 <para>Set the color of table cell borders. If non-zero, the value is used
-for the border coloration. See <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.w3.org/TR/CSS21/syndata.html#value-def-color">CSS</link>. A
+for the border coloration. See <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://www.w3.org/TR/CSS21/syndata.html#value-def-color">CSS</link>. A
 <literal>color</literal> is either a keyword or a numerical RGB specification.
 Keywords are aqua, black, blue, fuchsia, gray, green, lime, maroon,
 navy, olive, orange, purple, red, silver, teal, white, and
@@ -4699,7 +4699,7 @@ the TOC.</para>
 <literal>iso690</literal> styles are supported.</para>
 
 <para>In order to use ISO690 style to the full extent you might need
-to use additional markup described on <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://wiki.docbook.org/topic/ISO690Bibliography">the
+to use additional markup described on <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://wiki.docbook.org/topic/ISO690Bibliography">the
 following WiKi page</link>.</para>
 
 </refsection>
@@ -4766,12 +4766,12 @@ like this:</para>
 <informalexample>
 <programlisting>&lt;!DOCTYPE bibliography
   PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
-  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd"&gt;
+  "https://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd"&gt;
 &lt;bibliography&gt;&lt;title&gt;References&lt;/title&gt;
 
 &lt;bibliomixed id="xml-rec"&gt;&lt;abbrev&gt;XML 1.0&lt;/abbrev&gt;Tim Bray,
 Jean Paoli, C. M. Sperberg-McQueen, and Eve Maler, editors.
-&lt;citetitle&gt;&lt;ulink url="http://www.w3.org/TR/REC-xml"&gt;Extensible Markup
+&lt;citetitle&gt;&lt;ulink url="https://www.w3.org/TR/REC-xml"&gt;Extensible Markup
 Language (XML) 1.0 Second Edition&lt;/ulink&gt;&lt;/citetitle&gt;.
 World Wide Web Consortium, 2000.
 &lt;/bibliomixed&gt;
@@ -4779,7 +4779,7 @@ World Wide Web Consortium, 2000.
 &lt;bibliomixed id="xml-names"&gt;&lt;abbrev&gt;Namespaces&lt;/abbrev&gt;Tim Bray,
 Dave Hollander,
 and Andrew Layman, editors.
-&lt;citetitle&gt;&lt;ulink url="http://www.w3.org/TR/REC-xml-names/"&gt;Namespaces in
+&lt;citetitle&gt;&lt;ulink url="https://www.w3.org/TR/REC-xml-names/"&gt;Namespaces in
 XML&lt;/ulink&gt;&lt;/citetitle&gt;.
 World Wide Web Consortium, 1999.
 &lt;/bibliomixed&gt;
@@ -4971,7 +4971,7 @@ entry has an ID.</para>
 &lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;!DOCTYPE glossary
   PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
-  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd"&gt;
+  "https://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd"&gt;
 &lt;glossary&gt;
 &lt;glossaryinfo&gt;
 &lt;editor&gt;&lt;firstname&gt;Eric&lt;/firstname&gt;&lt;surname&gt;Raymond&lt;/surname&gt;&lt;/editor&gt;
@@ -5799,7 +5799,7 @@ CSS instead.</para>
 <para>Properties that specify the style of shaded verbatim listings. The
 parameters specified (the border and background color) are added to
 the styling of the xsl-fo output. A border might be specified as "thin
-black solid" for example. See <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.w3.org/TR/2004/WD-xsl11-20041216/#border">xsl-fo</link></para>
+black solid" for example. See <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://www.w3.org/TR/2004/WD-xsl11-20041216/#border">xsl-fo</link></para>
 
 </refsection>
 </refentry>
@@ -5918,7 +5918,7 @@ to process the output from the stylesheet.</para>
 
 <para>If non-zero, the <tag class="attribute">role</tag> attribute on
 <tag>xref</tag> will be used to select the cross reference style.
-The <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.oasis-open.org/docbook/">DocBook
+The <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://www.oasis-open.org/docbook/">DocBook
 Technical Committee</link> recently added an
 <tag class="attribute">xrefstyle</tag> attribute for this purpose.
 If the <tag class="attribute">xrefstyle</tag> attribute
@@ -5960,7 +5960,7 @@ stylesheets to make use of the cross reference style:</para>
 
 <programlisting>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
-                  "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd"&gt;
+                  "https://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd"&gt;
 &lt;book id="book"&gt;&lt;title&gt;Book&lt;/title&gt;
 
 &lt;preface&gt;
@@ -6507,7 +6507,7 @@ XSLTHL extension module. This is an external Java library which is not part of t
 
 <para>In order to use this extension, you must add
 <filename>xslthl-2.0.0.jar</filename> to your Java classpath. You can
-download this software from <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://sourceforge.net/projects/xslthl">the XSLT syntax highlighting project</link> at SourceForge.</para>
+download this software from <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://sourceforge.net/projects/xslthl">the XSLT syntax highlighting project</link> at SourceForge.</para>
 
 <para>The configuration of syntax highlighting is stored in 
 <filename>highlighting/xslthl-config.xml</filename>. The Java
@@ -6707,7 +6707,7 @@ and the <tag class="attribute">format</tag> attribute is
 <para>If specified, this value will be used for the
 <tag class="attribute">width</tag> attribute on
 images that do not specify any
-<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://docbook.org/tdg/en/html/imagedata.html#viewport.area">viewport
+<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://docbook.org/tdg/en/html/imagedata.html#viewport.area">viewport
 dimensions</link>.</para>
 
 </refsection>
@@ -11244,7 +11244,7 @@ resulting text will be something like this:</para>
 <refsection><info><title>Description</title></info>
 
 <para>If non-zero, ensure that the values for all <tag class="attribute">lang</tag> attributes in HTML output are RFC
-compliant<footnote><para>Section 8.1.1, <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.w3.org/TR/REC-html40/struct/dirlang.html#h-8.1.1">Language Codes</link>, in the HTML 4.0 Recommendation states that:
+compliant<footnote><para>Section 8.1.1, <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://www.w3.org/TR/REC-html40/struct/dirlang.html#h-8.1.1">Language Codes</link>, in the HTML 4.0 Recommendation states that:
 
 <blockquote><para>[RFC1766] defines and explains the language codes
 that must be used in HTML documents.</para>
@@ -11253,7 +11253,7 @@ empty series of subcodes:
 
 <literallayout class="monospaced">language-code = primary-code ( "-" subcode )*</literallayout>
 </para>
-<para>And in RFC 1766, <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.ietf.org/rfc/rfc1766.txt">Tags for the Identification
+<para>And in RFC 1766, <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="https://www.ietf.org/rfc/rfc1766.txt">Tags for the Identification
 of Languages</link>, the EBNF for "language tag" is given as:
 
 <literallayout class="monospaced">Language-Tag = Primary-tag *( "-" Subtag )
@@ -11456,7 +11456,7 @@ around all these parameters.</para>
      ********************************************************************
 
      This file is part of the XSL DocBook Stylesheet distribution.
-     See ../README or http://docbook.sf.net/release/xsl/current/ for
+     See ../README or http://docbook.sourceforge.net/release/xsl/current/ for
      copyright and other information.
 
      ******************************************************************** --&gt;

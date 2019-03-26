@@ -232,7 +232,7 @@
 
       <para>A WCF binding for Apache NMS is being developed as a separate
       project under the <link
-      ns6:href="http://www.springframework.org/extensions/faq">Spring
+      ns6:href="https://www.springframework.org/extensions/faq">Spring
       Extensions</link> umbrella project. Stay tuned for details.</para>
     </section>
   </section>
@@ -1150,7 +1150,7 @@ namespace MyApp
       covering the case where database processing has committed but message
       processing failed to commit. See the discussion on the ActiveMQ web site
       <ulink
-      url="http://activemq.apache.org/should-i-use-xa.html">here</ulink> for
+      url="https://activemq.apache.org/should-i-use-xa.html">here</ulink> for
       more information combining local database and messaging
       transactions.</para>
     </section>

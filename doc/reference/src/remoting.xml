@@ -227,7 +227,7 @@ Console.ReadLine();
 
       <para>If you are deploying a .NET remoting application inside IIS there
       is a <ulink
-      url="http://forum.springframework.net/showthread.php?t=469">sample
+      url="https://forum.springframework.net/showthread.php?t=469">sample
       project </ulink> that demonstrates the necessary configuration using
       Spring.Web.</para>
 
@@ -477,10 +477,10 @@ Console.ReadLine();
 
     <para>Two articles that describe the process of creating a standard SAO
     factory for returning CAO objects are <ulink
-    url="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dnpatterns/html/ImpBrokerClient.asp">Implementing
+    url="https://msdn.microsoft.com/library/default.asp?url=/library/en-us/dnpatterns/html/ImpBrokerClient.asp">Implementing
     Broker with .NET Remoting Using Client-Activated Objects</ulink> on MSDN
     and <ulink
-    url="http://www.glacialcomponents.com/ArticleDetail/CAOGuide.aspx">Step by
+    url="https://www.glacialcomponents.com/ArticleDetail/CAOGuide.aspx">Step by
     Step guide to CAO creation through SAO class factories</ulink> on Glacial
     Components website.</para>
   </section>

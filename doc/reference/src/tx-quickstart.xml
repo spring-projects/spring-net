@@ -42,8 +42,8 @@
 
     <para>This quickstart assumes you have installed a way to run NUnit tests
     within your IDE. Some excellent tools that let you do this are <ulink
-    url="http://www.testdriven.net/">TestDriven.NET</ulink> and <ulink
-    url="http://www.jetbrains.com/resharper/">ReSharper</ulink>.</para>
+    url="https://www.testdriven.net/">TestDriven.NET</ulink> and <ulink
+    url="https://www.jetbrains.com/resharper/">ReSharper</ulink>.</para>
 
     <note>
       <para>To follow this Quarts QuickStart load the solution file found in
@@ -62,7 +62,7 @@
     toy example the business service layer does nothing more than call two DAO
     objects. The business service is to transfer money in a bank account and
     is blatantly taken from the book <ulink
-    url="http://www.apress.com/book/bookDisplay.html?bID=10002">Pro
+    url="https://www.apress.com/book/bookDisplay.html?bID=10002">Pro
     ADO.NET</ulink> by Sahil Malik. The transfer service is defined by the
     interface <literal>IAccountManager</literal> with the implementation
     <literal>AccountManager</literal> located in the namespace

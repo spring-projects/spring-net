@@ -2,7 +2,7 @@
 
 <objects xmlns="http://www.springframework.net" 
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
+	xsi:schemaLocation="http://www.springframework.net https://www.springframework.net/xsd/spring-objects.xsd">
 	
   <object id="init-method1"
       type="Spring.Objects.Factory.Xml.XmlObjectFactoryTests+DoubleInitializer, Spring.Core.Tests"
