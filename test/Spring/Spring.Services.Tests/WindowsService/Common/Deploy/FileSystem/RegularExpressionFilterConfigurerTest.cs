@@ -32,7 +32,7 @@ namespace Spring.Services.WindowsService.Common.Deploy.FileSystem
         string xml = String.Format (@"
 <objects xmlns='http://www.springframework.net' 
 		xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' 
-		xsi:schemaLocation='http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd'>
+		xsi:schemaLocation='http://www.springframework.net https://www.springframework.net/xsd/spring-objects.xsd'>
     <object name='watcher' type='Spring.Services.WindowsService.Common.Deploy.FileSystem.FileSystemApplicationWatcher' singleton='false'>
       <constructor-arg><ref object='{0}'/></constructor-arg>
       <constructor-arg><ref object='configurer'/></constructor-arg>
@@ -95,7 +95,7 @@ namespace Spring.Services.WindowsService.Common.Deploy.FileSystem
             string inject = @"
 <objects xmlns='http://www.springframework.net' 
 		xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance' 
-		xsi:schemaLocation='http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd'>
+		xsi:schemaLocation='http://www.springframework.net https://www.springframework.net/xsd/spring-objects.xsd'>
 
     <object 
         name='inject' 

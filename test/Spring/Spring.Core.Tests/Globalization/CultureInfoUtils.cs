@@ -28,8 +28,8 @@ namespace Spring.Globalization
     /// Helper class for Globalization Tests
     /// </summary>
     /// <remarks>Ensure the appropriate culture name for serbian due to changes of the CultureInfo classes
-    /// in recent releases of the .NET framework.In short, sr-SP-Latn->sr-Latn-CS and sr-SP-Cyrl->sr-Cyrl-CS.  See http://blogs.msdn.com/kierans/archive/2006/08/02/687267.aspx
-    /// and http://blogs.msdn.com/shawnste/archive/2006/11/14/problems-compiling-resources-in-net-2-0-apps-after-updates.aspx for
+    /// in recent releases of the .NET framework.In short, sr-SP-Latn->sr-Latn-CS and sr-SP-Cyrl->sr-Cyrl-CS.  See https://blogs.msdn.com/kierans/archive/2006/08/02/687267.aspx
+    /// and https://blogs.msdn.com/shawnste/archive/2006/11/14/problems-compiling-resources-in-net-2-0-apps-after-updates.aspx for
     /// additional information.
     /// Also, provide for detection of runtime OS to respond to need for different asserts to reflect changes in Serbian Localization within the OS
     /// introduced after Windows7.

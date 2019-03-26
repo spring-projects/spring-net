@@ -1,5 +1,5 @@
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -271,7 +271,7 @@ namespace Spring.Aop.Framework.DynamicProxy
             }
         }
 
-        [Test(Description = "http://jira.springframework.org/browse/SPRNET-1174")]
+        [Test(Description = "https://jira.springframework.org/browse/SPRNET-1174")]
         public void ImplementsInterfaceHierarchy()
         {
             IMethodInterceptor mi = A.Fake<IMethodInterceptor>();
@@ -843,7 +843,7 @@ namespace Spring.Aop.Framework.DynamicProxy
             Assert.AreEqual(2, ni.Count);
         }
 
-        [Test(Description = "http://opensource.atlassian.com/projects/spring/browse/SPRNET-340")]
+        [Test(Description = "https://opensource.atlassian.com/projects/spring/browse/SPRNET-340")]
         public void MultiThreadedProxyCreation()
         {
             MultiThreadedProxyCreation(5);
@@ -1618,7 +1618,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         }
 
         /// <summary>
-        /// http://forum.springframework.net/showthread.php?t=504
+        /// https://forum.springframework.net/showthread.php?t=504
         /// </summary>
         [Test]
         public void CanCastProxyToIAdvised()

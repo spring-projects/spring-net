@@ -3,11 +3,11 @@
 <!ENTITY lf '<xsl:text xmlns:xsl="http://www.w3.org/1999/XSL/Transform">&#xA;</xsl:text>'>
 ]>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-  xmlns:doc="http://nwalsh.com/xsl/documentation/1.0"
+  xmlns:doc="https://nwalsh.com/xsl/documentation/1.0"
   xmlns:exsl="http://exslt.org/common"
   xmlns:set="http://exslt.org/sets"
   xmlns:h="urn:x-hex"
-  xmlns:ng="http://docbook.org/docbook-ng"
+  xmlns:ng="https://docbook.org/docbook-ng"
   xmlns:db="http://docbook.org/ns/docbook"
   version="1.0"
   exclude-result-prefixes="doc exsl set h db ng">
@@ -847,7 +847,7 @@ Enhanced decompilation=</xsl:text>
       <xsl:value-of select="$htmlhelp.hhk"/>
     </xsl:with-param>
     <xsl:with-param name="indent" select="'no'"/>
-    <xsl:with-param name="content"><xsl:text disable-output-escaping="yes"><![CDATA[<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+    <xsl:with-param name="content"><xsl:text disable-output-escaping="yes"><![CDATA[<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "https://www.w3.org/TR/html4/loose.dtd">
 <HTML>
 <HEAD>
 <meta name="GENERATOR" content="Microsoft&reg; HTML Help Workshop 4.1">

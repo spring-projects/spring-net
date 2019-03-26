@@ -72,7 +72,7 @@ namespace Spring.Web.Services
 
             WebServiceBindingAttribute wsba = (WebServiceBindingAttribute)typeAttrs[0];
             Assert.AreEqual("HelloWorldServiceSoap", wsba.Name);
-            Assert.AreEqual("http://www.springframwework.net", wsba.Namespace);
+            Assert.AreEqual("https://www.springframwework.net", wsba.Namespace);
 
             MethodInfo sayHelloWorldMethod = proxyType.GetMethod("SayHelloWorld");
             Assert.IsNotNull(sayHelloWorldMethod);
@@ -81,14 +81,14 @@ namespace Spring.Web.Services
             Assert.IsTrue(sdmaAttrs.Length > 0);
 
             SoapDocumentMethodAttribute sdma = (SoapDocumentMethodAttribute)sdmaAttrs[0];
-            Assert.AreEqual("http://www.springframwework.net/SayHelloWorld", sdma.Action);
+            Assert.AreEqual("https://www.springframwework.net/SayHelloWorld", sdma.Action);
             Assert.AreEqual(SoapParameterStyle.Wrapped, sdma.ParameterStyle);
             Assert.AreEqual(string.Empty, sdma.Binding);
             Assert.AreEqual(false, sdma.OneWay);
             Assert.AreEqual(string.Empty, sdma.RequestElementName);
-            Assert.AreEqual("http://www.springframwework.net", sdma.RequestNamespace);
+            Assert.AreEqual("https://www.springframwework.net", sdma.RequestNamespace);
             Assert.AreEqual(string.Empty, sdma.ResponseElementName);
-            Assert.AreEqual("http://www.springframwework.net", sdma.ResponseNamespace);
+            Assert.AreEqual("https://www.springframwework.net", sdma.ResponseNamespace);
             Assert.AreEqual(SoapBindingUse.Literal, sdma.Use);
 
             // Try to instantiate the proxy type
@@ -117,12 +117,12 @@ namespace Spring.Web.Services
             Assert.IsTrue(methodAttrs.Length > 0);
 
             SoapDocumentMethodAttribute sdma = (SoapDocumentMethodAttribute)methodAttrs[0];
-            Assert.AreEqual("http://www.springframwework.net/LogHelloWorld", sdma.Action);
+            Assert.AreEqual("https://www.springframwework.net/LogHelloWorld", sdma.Action);
             Assert.AreEqual(SoapParameterStyle.Wrapped, sdma.ParameterStyle);
             Assert.AreEqual(string.Empty, sdma.Binding);
             Assert.AreEqual(true, sdma.OneWay);
             Assert.AreEqual(string.Empty, sdma.RequestElementName);
-            Assert.AreEqual("http://www.springframwework.net", sdma.RequestNamespace);
+            Assert.AreEqual("https://www.springframwework.net", sdma.RequestNamespace);
             Assert.AreEqual(string.Empty, sdma.ResponseElementName);
             Assert.AreEqual(null, sdma.ResponseNamespace);
             Assert.AreEqual(SoapBindingUse.Literal, sdma.Use);
@@ -153,14 +153,14 @@ namespace Spring.Web.Services
             Assert.IsTrue(methodAttrs.Length > 0);
 
             SoapDocumentMethodAttribute sdma = (SoapDocumentMethodAttribute)methodAttrs[0];
-            Assert.AreEqual("http://www.springframwework.net/MyLogHello", sdma.Action);
+            Assert.AreEqual("https://www.springframwework.net/MyLogHello", sdma.Action);
             Assert.AreEqual(SoapParameterStyle.Wrapped, sdma.ParameterStyle);
             Assert.AreEqual(string.Empty, sdma.Binding);
             Assert.AreEqual(false, sdma.OneWay);
             Assert.AreEqual("MyLogHello", sdma.RequestElementName);
-            Assert.AreEqual("http://www.springframwework.net", sdma.RequestNamespace);
+            Assert.AreEqual("https://www.springframwework.net", sdma.RequestNamespace);
             Assert.AreEqual("MyLogHelloResponse", sdma.ResponseElementName);
-            Assert.AreEqual("http://www.springframwework.net", sdma.ResponseNamespace);
+            Assert.AreEqual("https://www.springframwework.net", sdma.ResponseNamespace);
             Assert.AreEqual(SoapBindingUse.Literal, sdma.Use);
 
             // Try to instantiate the proxy type
@@ -189,14 +189,14 @@ namespace Spring.Web.Services
             Assert.IsTrue(sdmaAttrs.Length > 0);
 
             SoapDocumentMethodAttribute sdma = (SoapDocumentMethodAttribute)sdmaAttrs[0];
-            Assert.AreEqual("http://www.springframwework.net/SayHello", sdma.Action);
+            Assert.AreEqual("https://www.springframwework.net/SayHello", sdma.Action);
             Assert.AreEqual(SoapParameterStyle.Wrapped, sdma.ParameterStyle);
             Assert.AreEqual(string.Empty, sdma.Binding);
             Assert.AreEqual(false, sdma.OneWay);
             Assert.AreEqual(string.Empty, sdma.RequestElementName);
-            Assert.AreEqual("http://www.springframwework.net", sdma.RequestNamespace);
+            Assert.AreEqual("https://www.springframwework.net", sdma.RequestNamespace);
             Assert.AreEqual(string.Empty, sdma.ResponseElementName);
-            Assert.AreEqual("http://www.springframwework.net", sdma.ResponseNamespace);
+            Assert.AreEqual("https://www.springframwework.net", sdma.ResponseNamespace);
             Assert.AreEqual(SoapBindingUse.Literal, sdma.Use);
 
             object[] xeAttrs = sayHelloMethod.ReturnTypeCustomAttributes.GetCustomAttributes(typeof(XmlElementAttribute), false);
@@ -231,14 +231,14 @@ namespace Spring.Web.Services
             Assert.IsTrue(sdmaAttrs.Length > 0);
 
             SoapDocumentMethodAttribute sdma = (SoapDocumentMethodAttribute)sdmaAttrs[0];
-            Assert.AreEqual("http://www.springframwework.net/SayHelloArray", sdma.Action);
+            Assert.AreEqual("https://www.springframwework.net/SayHelloArray", sdma.Action);
             Assert.AreEqual(SoapParameterStyle.Wrapped, sdma.ParameterStyle);
             Assert.AreEqual(string.Empty, sdma.Binding);
             Assert.AreEqual(false, sdma.OneWay);
             Assert.AreEqual(string.Empty, sdma.RequestElementName);
-            Assert.AreEqual("http://www.springframwework.net", sdma.RequestNamespace);
+            Assert.AreEqual("https://www.springframwework.net", sdma.RequestNamespace);
             Assert.AreEqual(string.Empty, sdma.ResponseElementName);
-            Assert.AreEqual("http://www.springframwework.net", sdma.ResponseNamespace);
+            Assert.AreEqual("https://www.springframwework.net", sdma.ResponseNamespace);
             Assert.AreEqual(SoapBindingUse.Literal, sdma.Use);
 
             object[] xaAttrs = sayHelloArrayMethod.ReturnTypeCustomAttributes.GetCustomAttributes(typeof(XmlArrayAttribute), false);
@@ -273,13 +273,13 @@ namespace Spring.Web.Services
             Assert.IsTrue(srmaAttrs.Length > 0);
 
             SoapRpcMethodAttribute srma = (SoapRpcMethodAttribute)srmaAttrs[0];
-            Assert.AreEqual("http://www.springframwework.net/SayHello", srma.Action);
+            Assert.AreEqual("https://www.springframwework.net/SayHello", srma.Action);
             Assert.AreEqual(string.Empty, srma.Binding);
             Assert.AreEqual(false, srma.OneWay);
             Assert.AreEqual(string.Empty, srma.RequestElementName);
-            Assert.AreEqual("http://www.springframwework.net", srma.RequestNamespace);
+            Assert.AreEqual("https://www.springframwework.net", srma.RequestNamespace);
             Assert.AreEqual(string.Empty, srma.ResponseElementName);
-            Assert.AreEqual("http://www.springframwework.net", srma.ResponseNamespace);
+            Assert.AreEqual("https://www.springframwework.net", srma.ResponseNamespace);
             Assert.AreEqual(SoapBindingUse.Literal, srma.Use);
 
             object[] xeAttrs = sayHelloMethod.ReturnTypeCustomAttributes.GetCustomAttributes(typeof(XmlElementAttribute), false);
@@ -314,13 +314,13 @@ namespace Spring.Web.Services
             Assert.IsTrue(srmaAttrs.Length > 0);
 
             SoapRpcMethodAttribute srma = (SoapRpcMethodAttribute)srmaAttrs[0];
-            Assert.AreEqual("http://www.springframwework.net/SayHelloArray", srma.Action);
+            Assert.AreEqual("https://www.springframwework.net/SayHelloArray", srma.Action);
             Assert.AreEqual(string.Empty, srma.Binding);
             Assert.AreEqual(false, srma.OneWay);
             Assert.AreEqual(string.Empty, srma.RequestElementName);
-            Assert.AreEqual("http://www.springframwework.net", srma.RequestNamespace);
+            Assert.AreEqual("https://www.springframwework.net", srma.RequestNamespace);
             Assert.AreEqual(string.Empty, srma.ResponseElementName);
-            Assert.AreEqual("http://www.springframwework.net", srma.ResponseNamespace);
+            Assert.AreEqual("https://www.springframwework.net", srma.ResponseNamespace);
             Assert.AreEqual(SoapBindingUse.Literal, srma.Use);
 
             object[] xaAttrs = sayHelloArrayMethod.ReturnTypeCustomAttributes.GetCustomAttributes(typeof(XmlArrayAttribute), false);
@@ -353,7 +353,7 @@ namespace Spring.Web.Services
 
             WebServiceBindingAttribute wsba = (WebServiceBindingAttribute)typeAttrs[0];
             Assert.AreEqual("HelloWorldServiceSoap", wsba.Name);
-            Assert.AreEqual("http://www.springframwework.net", wsba.Namespace);
+            Assert.AreEqual("https://www.springframwework.net", wsba.Namespace);
 
             MethodInfo sayHelloWorldMethod = proxyType.GetMethod("SayHelloWorld");
             Assert.IsNotNull(sayHelloWorldMethod);
@@ -362,13 +362,13 @@ namespace Spring.Web.Services
             Assert.IsTrue(srmaAttrs.Length > 0);
 
             SoapRpcMethodAttribute srma = (SoapRpcMethodAttribute)srmaAttrs[0];
-            Assert.AreEqual("http://www.springframwework.net/SayHelloWorld", srma.Action);
+            Assert.AreEqual("https://www.springframwework.net/SayHelloWorld", srma.Action);
             Assert.AreEqual(string.Empty, srma.Binding);
             Assert.AreEqual(false, srma.OneWay);
             Assert.AreEqual(string.Empty, srma.RequestElementName);
-            Assert.AreEqual("http://www.springframwework.net", srma.RequestNamespace);
+            Assert.AreEqual("https://www.springframwework.net", srma.RequestNamespace);
             Assert.AreEqual(string.Empty, srma.ResponseElementName);
-            Assert.AreEqual("http://www.springframwework.net", srma.ResponseNamespace);
+            Assert.AreEqual("https://www.springframwework.net", srma.ResponseNamespace);
             Assert.AreEqual(SoapBindingUse.Literal, srma.Use);
 
             // Try to instantiate the proxy type
@@ -397,11 +397,11 @@ namespace Spring.Web.Services
             Assert.IsTrue(methodAttrs.Length > 0);
 
             SoapRpcMethodAttribute srma = (SoapRpcMethodAttribute)methodAttrs[0];
-            Assert.AreEqual("http://www.springframwework.net/LogHelloWorld", srma.Action);
+            Assert.AreEqual("https://www.springframwework.net/LogHelloWorld", srma.Action);
             Assert.AreEqual(string.Empty, srma.Binding);
             Assert.AreEqual(true, srma.OneWay);
             Assert.AreEqual(string.Empty, srma.RequestElementName);
-            Assert.AreEqual("http://www.springframwework.net", srma.RequestNamespace);
+            Assert.AreEqual("https://www.springframwework.net", srma.RequestNamespace);
             Assert.AreEqual(string.Empty, srma.ResponseElementName);
             Assert.AreEqual(null, srma.ResponseNamespace);
             Assert.AreEqual(SoapBindingUse.Literal, srma.Use);
@@ -432,13 +432,13 @@ namespace Spring.Web.Services
             Assert.IsTrue(methodAttrs.Length > 0);
 
             SoapRpcMethodAttribute srma = (SoapRpcMethodAttribute)methodAttrs[0];
-            Assert.AreEqual("http://www.springframwework.net/MyLogHello", srma.Action);
+            Assert.AreEqual("https://www.springframwework.net/MyLogHello", srma.Action);
             Assert.AreEqual(string.Empty, srma.Binding);
             Assert.AreEqual(false, srma.OneWay);
             Assert.AreEqual(string.Empty, srma.RequestElementName);
-            Assert.AreEqual("http://www.springframwework.net", srma.RequestNamespace);
+            Assert.AreEqual("https://www.springframwework.net", srma.RequestNamespace);
             Assert.AreEqual(string.Empty, srma.ResponseElementName);
-            Assert.AreEqual("http://www.springframwework.net", srma.ResponseNamespace);
+            Assert.AreEqual("https://www.springframwework.net", srma.ResponseNamespace);
             Assert.AreEqual(SoapBindingUse.Literal, srma.Use);
 
             // Try to instantiate the proxy type
@@ -479,7 +479,7 @@ namespace Spring.Web.Services
             Assert.IsTrue(proxy is SoapHttpClientProtocol);
 
             SoapHttpClientProtocol shcp = proxy as SoapHttpClientProtocol;
-            Assert.AreEqual("http://www.springframework.org/", shcp.Url);
+            Assert.AreEqual("https://www.springframework.org/", shcp.Url);
             Assert.AreEqual(10000, shcp.Timeout);
 
             // Try to instantiate the proxy type
@@ -501,7 +501,7 @@ namespace Spring.Web.Services
             Assert.IsTrue(proxy is SoapHttpClientProtocol);
 
             SoapHttpClientProtocol shcp = proxy as SoapHttpClientProtocol;
-            Assert.AreEqual("http://www.springframework.org/", shcp.Url);
+            Assert.AreEqual("https://www.springframework.org/", shcp.Url);
             Assert.AreEqual(10000, shcp.Timeout);
 
             // Try to instantiate the proxy type
@@ -628,7 +628,7 @@ namespace Spring.Web.Services
         {
             public FakeProxyClass()
             {
-                this.Url = "http://www.fcporto.pt/";
+                this.Url = "https://www.fcporto.pt/";
             }
 
             public string SayHelloWorld()

@@ -57,7 +57,7 @@ namespace Spring.Data.Support
     ///    return printGroupMappingDataSet;
     /// }
     /// </code>
-    /// See http://www.code-magazine.com/articleprint.aspx?quickid=0605031 for a 
+    /// See https://www.code-magazine.com/articleprint.aspx?quickid=0605031 for a 
     /// more complete discussion.
     /// 
     /// </remarks>

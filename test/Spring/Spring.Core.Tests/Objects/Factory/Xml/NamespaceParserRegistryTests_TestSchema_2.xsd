@@ -1,4 +1,4 @@
-<xsd:schema targetNamespace="http://www.example.com/common"
+<xsd:schema targetNamespace="https://www.example.com/common"
 	    xmlns:xsd="http://www.w3.org/2001/XMLSchema"
 	    elementFormDefault="qualified"
 	    attributeFormDefault="unqualified">

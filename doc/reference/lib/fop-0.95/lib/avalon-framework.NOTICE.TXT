@@ -4,7 +4,7 @@
    =========================================================================
 
    This product is developed by the Apache Avalon Project.
-   http://avalon.apache.org
+   https://avalon.apache.org
 
    The names "Avalon" and "Merlin" must not be used to endorse or promote 
    products derived from this software without prior written permission. 

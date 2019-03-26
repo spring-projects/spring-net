@@ -92,7 +92,7 @@ namespace Spring.Objects.Factory
         }
 
 
-        [Test(Description = "http://jira.springframework.org/browse/SPRNET-985")]
+        [Test(Description = "https://jira.springframework.org/browse/SPRNET-985")]
         public void AutowireConstructorHonoresOverridesBeforeThrowingUnsatisfiedDependencyException()
         {
             RootObjectDefinition def = new RootObjectDefinition(typeof(Class1));
@@ -110,7 +110,7 @@ namespace Spring.Objects.Factory
             Assert.AreEqual( typeof(Strategy1), c1.TheStrategy.GetType() );
         }
 
-        [Test(Description = "http://jira.springframework.org/browse/SPRNET-985")]
+        [Test(Description = "https://jira.springframework.org/browse/SPRNET-985")]
         public void AutowireByTypeHonoresOverridesBeforeThrowingUnsatisfiedDependencyException()
         {
             RootObjectDefinition def = new RootObjectDefinition(typeof(Class2));
@@ -128,7 +128,7 @@ namespace Spring.Objects.Factory
             Assert.AreEqual( typeof(Strategy1), c2.Strategy.GetType() );
         }
 
-        [Test(Description = "http://jira.springframework.org/browse/SPRNET-112")]
+        [Test(Description = "https://jira.springframework.org/browse/SPRNET-112")]
         public void ObjectCreatedViaStaticFactoryMethodUsesReturnTypeOfFactoryMethodAsTheObjectType()
         {
             RootObjectDefinition def
@@ -140,7 +140,7 @@ namespace Spring.Objects.Factory
             Assert.AreEqual(1, objs.Count);
         }
 
-        [Test(Description = "http://opensource2.atlassian.com/projects/spring/browse/SPRNET-112")]
+        [Test(Description = "https://opensource2.atlassian.com/projects/spring/browse/SPRNET-112")]
         public void ObjectCreatedViaInstanceFactoryMethodUsesReturnTypeOfFactoryMethodAsTheObjectType()
         {
             RootObjectDefinition def
@@ -154,7 +154,7 @@ namespace Spring.Objects.Factory
             Assert.AreEqual(1, objs.Count);
         }
 
-        [Test(Description = "http://opensource2.atlassian.com/projects/spring/browse/SPRNET-112")]
+        [Test(Description = "https://opensource2.atlassian.com/projects/spring/browse/SPRNET-112")]
         public void ObjectCreatedViaStaticGenericFactoryMethodUsesReturnTypeOfGenericFactoryMethodAsTheObjectType()
         {
             DefaultListableObjectFactory lof = new DefaultListableObjectFactory();
@@ -166,7 +166,7 @@ namespace Spring.Objects.Factory
             Assert.AreEqual(1, objs.Count);
         }
 
-        [Test(Description = "http://opensource2.atlassian.com/projects/spring/browse/SPRNET-112")]
+        [Test(Description = "https://opensource2.atlassian.com/projects/spring/browse/SPRNET-112")]
         public void ObjectCreatedViaInstanceGenericFactoryMethodUsesReturnTypeOfGenericFactoryMethodAsTheObjectType()
         {
             RootObjectDefinition def
@@ -183,7 +183,7 @@ namespace Spring.Objects.Factory
         /// <summary>
         /// Object instantiation through factory method should not require type attribute.
         /// </summary>
-        [Test(Description = "http://opensource.atlassian.com/projects/spring/browse/SPRNET-130")]
+        [Test(Description = "https://opensource.atlassian.com/projects/spring/browse/SPRNET-130")]
         public void SPRNET_130()
         {
             const string factoryObjectName = "factoryObject";
@@ -205,7 +205,7 @@ namespace Spring.Objects.Factory
             Assert.IsNotNull(factoryObject);
         }
 
-        [Test(Description = "http://opensource.atlassian.com/projects/spring/browse/SPR-1011")]
+        [Test(Description = "https://opensource.atlassian.com/projects/spring/browse/SPR-1011")]
         public void SPR_1011()
         {
             DefaultListableObjectFactory lof = new DefaultListableObjectFactory();
@@ -232,7 +232,7 @@ namespace Spring.Objects.Factory
             }
         }
 
-        [Test(Description = "http://opensource.atlassian.com/projects/spring/browse/SPR-1077")]
+        [Test(Description = "https://opensource.atlassian.com/projects/spring/browse/SPR-1077")]
         public void SPR_1077()
         {
             DisposableTestObject sing = null;
@@ -928,7 +928,7 @@ namespace Spring.Objects.Factory
             }
         }
 
-        [Test(Description = "http://opensource.atlassian.com/projects/spring/browse/SPRNET-368")]
+        [Test(Description = "https://opensource.atlassian.com/projects/spring/browse/SPRNET-368")]
         public void GetObjectWithCtorArgsAndCtorAutowiring()
         {
             using (DefaultListableObjectFactory lof = new DefaultListableObjectFactory())
@@ -1030,7 +1030,7 @@ namespace Spring.Objects.Factory
             }
         }
 
-        [Test(Description = "http://opensource.atlassian.com/projects/spring/browse/SPRNET-368")]
+        [Test(Description = "https://opensource.atlassian.com/projects/spring/browse/SPRNET-368")]
         public void CreateObjectWithCtorArgsAndCtorAutowiring()
         {
             using (DefaultListableObjectFactory lof = new DefaultListableObjectFactory())

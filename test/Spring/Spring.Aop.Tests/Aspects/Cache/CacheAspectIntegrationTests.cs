@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -101,7 +101,7 @@ namespace Spring.Aspects.Cache
         }
 
         /// <summary>
-        /// http://jira.springframework.org/browse/SPRNET-1226
+        /// https://jira.springframework.org/browse/SPRNET-1226
         /// </summary>
         [Test]
         public void NoCacheKeySpecified()
@@ -141,7 +141,7 @@ namespace Spring.Aspects.Cache
             Assert.Throws<ArgumentException>(() => store.GetAll());
         }
 
-        [Test(Description = "http://jira.springframework.org/browse/SPRNET-959")]
+        [Test(Description = "https://jira.springframework.org/browse/SPRNET-959")]
         public void UseMethodInfoForKeyGeneration()
         {
             ICache cache = new NonExpiringCache();

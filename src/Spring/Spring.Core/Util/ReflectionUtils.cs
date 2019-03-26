@@ -210,7 +210,7 @@ namespace Spring.Util
         /// Resolves a given <paramref name="methodInfo"/> to the <see cref="MethodInfo"/> representing the actual implementation.
         /// </summary>
         /// <remarks>
-        /// see article <a href="http://weblog.ikvm.net/CommentView.aspx?guid=7356a87f-e5d7-4723-ae49-b263ab9e40ae">How To Get an Explicit Interface Implementation Method</a>.
+        /// see article <a href="https://weblog.ikvm.net/CommentView.aspx?guid=7356a87f-e5d7-4723-ae49-b263ab9e40ae">How To Get an Explicit Interface Implementation Method</a>.
         /// </remarks>
         /// <param name="methodInfo">a <see cref="MethodInfo"/></param>
         /// <param name="implementingType">the type to lookup</param>
@@ -1241,7 +1241,7 @@ namespace Spring.Util
 
                 if (attrs.Length != attrsData.Count)
                 {
-                    // http://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=94803
+                    // https://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=94803
                     attributes.AddRange(attrs);
                 }
                 else if (attrsData.Count > 0)
@@ -1271,12 +1271,12 @@ namespace Spring.Util
             }
             catch (ArgumentException)
             {
-                // http://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=296032
+                // https://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=296032
                 attributes.AddRange(attrs);
             }
             catch (CustomAttributeFormatException)
             {
-                // http://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=161522
+                // https://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=161522
                 attributes.AddRange(attrs);
             }
             return attributes;

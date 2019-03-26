@@ -58,7 +58,7 @@ namespace Spring.Core.TypeConversion
         [Explicit] // fails if there is a transparent proxy that redirects to error page for non existing URL
 		public void ConvertFromValidButNonExistingStreamResource()
 		{
-            Assert.Throws<WebException>(() => new StreamConverter().ConvertFrom("http://www.aaaabbbbccccddd.com"));
+            Assert.Throws<WebException>(() => new StreamConverter().ConvertFrom("https://www.aaaabbbbccccddd.com"));
 		}
 
 		[Test]

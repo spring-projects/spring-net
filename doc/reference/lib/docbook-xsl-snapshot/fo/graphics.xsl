@@ -6,9 +6,9 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
                 xmlns:xlink="http://www.w3.org/1999/xlink"
-                xmlns:stext="http://nwalsh.com/xslt/ext/com.nwalsh.saxon.TextFactory"
+                xmlns:stext="https://nwalsh.com/xslt/ext/com.nwalsh.saxon.TextFactory"
                 xmlns:xtext="com.nwalsh.xalan.Text"
-                xmlns:lxslt="http://xml.apache.org/xslt"
+                xmlns:lxslt="https://xml.apache.org/xslt"
                 exclude-result-prefixes="xlink stext xtext lxslt"
                 extension-element-prefixes="stext xtext"
                 version='1.0'>
@@ -18,7 +18,7 @@
      ********************************************************************
 
      This file is part of the XSL DocBook Stylesheet distribution.
-     See ../README or http://docbook.sf.net/release/xsl/current/ for
+     See ../README or http://docbook.sourceforge.net/release/xsl/current/ for
      copyright and other information.
 
      Contributors:

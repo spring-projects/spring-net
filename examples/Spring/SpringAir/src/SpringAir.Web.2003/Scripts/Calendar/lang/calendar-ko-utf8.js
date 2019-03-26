@@ -87,7 +87,7 @@ Calendar._TT["ABOUT"] =
 "최신 버전을 받으시려면 http://www.dynarch.com/projects/calendar/ 에 방문하세요\n" +
 "\n"+
 "GNU LGPL 라이센스로 배포됩니다. \n"+
-"라이센스에 대한 자세한 내용은 http://gnu.org/licenses/lgpl.html 을 읽으세요." +
+"라이센스에 대한 자세한 내용은 https://gnu.org/licenses/lgpl.html 을 읽으세요." +
 "\n\n" +
 "날짜 선택:\n" +
 "- 연도를 선택하려면 \xab, \xbb 버튼을 사용합니다\n" +

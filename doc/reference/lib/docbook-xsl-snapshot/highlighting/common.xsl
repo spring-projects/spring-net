@@ -2,15 +2,15 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 
 		xmlns:d="http://docbook.org/ns/docbook"
-xmlns:s6hl="http://net.sf.xslthl/ConnectorSaxon6"
-		xmlns:sbhl="http://net.sf.xslthl/ConnectorSaxonB"
-		xmlns:xhl="http://net.sf.xslthl/ConnectorXalan"
-		xmlns:saxon6="http://icl.com/saxon"
-		xmlns:saxonb="http://saxon.sf.net/"
-		xmlns:xalan="http://xml.apache.org/xalan"
+xmlns:s6hl="https://net.sf.xslthl/ConnectorSaxon6"
+		xmlns:sbhl="https://net.sf.xslthl/ConnectorSaxonB"
+		xmlns:xhl="https://net.sf.xslthl/ConnectorXalan"
+		xmlns:saxon6="https://icl.com/saxon"
+		xmlns:saxonb="http://saxon.sourceforge.net/"
+		xmlns:xalan="https://xml.apache.org/xalan"
 
 		xmlns:exsl="http://exslt.org/common"
-		xmlns:xslthl="http://xslthl.sf.net"
+		xmlns:xslthl="http://xslthl.sourceforge.net/"
 		exclude-result-prefixes="exsl xslthl s6hl sbhl xhl d"
 		version='1.0'>
 
@@ -19,7 +19,7 @@ xmlns:s6hl="http://net.sf.xslthl/ConnectorSaxon6"
      ********************************************************************
 
      This file is part of the XSL DocBook Stylesheet distribution.
-     See ../README or http://docbook.sf.net/release/xsl/current/ for
+     See ../README or http://docbook.sourceforge.net/release/xsl/current/ for
      and other information.
 
      ******************************************************************** -->

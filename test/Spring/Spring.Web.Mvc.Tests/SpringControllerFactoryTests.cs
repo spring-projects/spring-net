@@ -62,7 +62,7 @@ namespace Spring.Web.Mvc.Tests
                 _factory = new SpringControllerFactory();
 
                 //due to ridiculous internal methods in DefaultControllerFactory, have to set the ControllerTypeCache using this extension method
-                // see http://stackoverflow.com/questions/727181/asp-net-mvc-system-web-compilation-compilationlock for more info
+                // see https://stackoverflow.com/questions/727181/asp-net-mvc-system-web-compilation-compilationlock for more info
                 _factory.InitializeWithControllerTypes(new[]
                                                            {
                                                                typeof (FirstContainerRegisteredController),

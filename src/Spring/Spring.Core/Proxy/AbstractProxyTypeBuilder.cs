@@ -426,7 +426,7 @@ namespace Spring.Proxy
                     
                     if (attrs.Length != attrsData.Count)
                     {
-                        // http://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=94803
+                        // https://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=94803
                         attributes.AddRange(attrs);
                     }
                     else
@@ -439,7 +439,7 @@ namespace Spring.Proxy
                 }
                 catch (ArgumentException)
                 {
-                    // http://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=296032
+                    // https://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=296032
                     attributes.AddRange(attrs);
                 }
             }
@@ -474,7 +474,7 @@ namespace Spring.Proxy
                     
                     if (attrs.Length != attrsData.Count)
                     {
-                        // http://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=94803
+                        // https://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=94803
                         attributes.AddRange(attrs);
                     }
                     else
@@ -487,7 +487,7 @@ namespace Spring.Proxy
                 }
                 catch (ArgumentException)
                 {
-                    // http://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=296032
+                    // https://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=296032
                     attributes.AddRange(attrs);
                 }
             }

@@ -37,7 +37,7 @@ namespace Spring.DataBinding
         }
 
 #if !NETCOREAPP
-        [Test(Description="http://jira.springframework.org/browse/SPRNET-996")]
+        [Test(Description="https://jira.springframework.org/browse/SPRNET-996")]
         public void BindToNullable()
         {
             System.Web.UI.WebControls.TextBox textBox = new System.Web.UI.WebControls.TextBox();

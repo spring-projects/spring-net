@@ -17,7 +17,7 @@
     <Diagrams PageNestingLevels="2" OverviewNestingLevels="3" SupressSingleObjectDiagrams="True" DiagramStyleSource="0" ObjFillColor="0" ObjTextColor="0" ObjBorderColor="0" ColFillColor="0" ColTextColor="0" ColBorderColor="0" UseDropShadow="False" CenterCaptions="False" DiagramBold="False" BorderWidth="0" UseDiagramShapes="False"/>
     <VariableValues>
         <VariableValue Name="CopyrightNotice" Value="&amp;copy; 2004-2008 Spring.NET Authors. All Rights Reserved."/>
-        <VariableValue Name="FeedbackLink" Value="&lt;a href=&quot;http://forum.springframework.net&quot;&gt;Send comments&lt;/a&gt; on this topic."/>
+        <VariableValue Name="FeedbackLink" Value="&lt;a href=&quot;https://forum.springframework.net&quot;&gt;Send comments&lt;/a&gt; on this topic."/>
         <VariableValue Name="DefaultTypeRequirements" Value="&lt;h4 class=dxh4&gt;$$Requirements$$&lt;/h4&gt;&lt;p&gt;&lt;b&gt;Namespace: &lt;/b&gt;%%linkedcurrentnamespace%%&lt;/b&gt;&lt;/p&gt;&lt;p&gt;&lt;b&gt;Platforms:&lt;/b&gt; Windows 98, Windows NT 4.0, Windows Millennium Edition, Windows 2000, Windows XP Home Edition, Windows XP Professional, Windows Server 2003 family&lt;/p&gt;&lt;p&gt;&lt;b&gt;Assembly: &lt;/b&gt;%%assemblyname%% (in %%assemblyfilename%%)&lt;/p&gt;"/>
         <VariableValue Name="DefaultMemberRequirements" Value="&lt;h4 class=dxh4&gt;$$Requirements$$&lt;/h4&gt;&lt;p&gt;&lt;b&gt;Platforms:&lt;/b&gt; Windows 98, Windows NT 4.0, Windows Millennium Edition, Windows 2000, Windows XP Home Edition, Windows XP Professional, Windows Server 2003 family&lt;/p&gt;"/>
     </VariableValues>

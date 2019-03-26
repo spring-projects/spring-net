@@ -81,7 +81,7 @@ Calendar._TT["ABOUT"] =
 "בחרן תאריך/שעה DHTML\n" +
 "(c) dynarch.com 2002-2005 / Author: Mihai Bazon\n" + // don't translate this this ;-)
 "הגירסא האחרונה זמינה ב: http://www.dynarch.com/projects/calendar/\n" +
-"מופץ תחת זיכיון ה GNU LGPL.  עיין ב http://gnu.org/licenses/lgpl.html לפרטים נוספים." +
+"מופץ תחת זיכיון ה GNU LGPL.  עיין ב https://gnu.org/licenses/lgpl.html לפרטים נוספים." +
 "\n\n" +
 בחירת תאריך:\n" +
 "- השתמש בכפתורים \xab, \xbb לבחירת שנה\n" +

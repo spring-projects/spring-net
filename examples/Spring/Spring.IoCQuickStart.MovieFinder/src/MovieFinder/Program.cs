@@ -38,7 +38,7 @@ namespace Spring.IocQuickStart.MovieFinder
 	/// </summary>
 	/// <remarks>
 	/// <p>
-	/// See <a href="http://martinfowler.com/articles/injection.html"/> for the background
+	/// See <a href="https://martinfowler.com/articles/injection.html"/> for the background
 	/// article on which this example application is based.
 	/// </p>
 	/// </remarks>

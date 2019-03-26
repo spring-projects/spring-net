@@ -4,7 +4,7 @@
 	<!-- the @acceptable element on modules is for backwards compatibility with the		-->
 	<!-- 1.3.3 NCoverExplorer version which did not write the element. Keeping these	-->
 	<!-- checks ensures that older CC.Net build log renderings will still work fine.	-->
-	<xsl:output method="html" doctype-system="http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"/>
+	<xsl:output method="html" doctype-system="https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd" doctype-public="-//W3C//DTD XHTML 1.0 Transitional//EN"/>
 
     <xsl:param name="applicationPath"/>
 

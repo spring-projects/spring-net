@@ -37,19 +37,19 @@ namespace Spring.Validation.Validators
         public void Validate()
         {
             UrlValidator validator = new UrlValidator();
-            Assert.IsTrue(validator.Validate("http://puzzle.com", new ValidationErrors()));
+            Assert.IsTrue(validator.Validate("https://www.braingymmer.com/en/", new ValidationErrors()));
             Assert.IsTrue(validator.Validate("http://www.com", new ValidationErrors()));
             Assert.IsTrue(validator.Validate("www.1.org", new ValidationErrors()));
             Assert.IsTrue(validator.Validate("ww.1.com", new ValidationErrors()));
-            Assert.IsTrue(validator.Validate("http://www.google-com.123.com", new ValidationErrors()));
+            Assert.IsTrue(validator.Validate("https://www.google-com.123.com", new ValidationErrors()));
             Assert.IsTrue(validator.Validate("https://www.google-com.com", new ValidationErrors()));
             Assert.IsTrue(validator.Validate("http://google-com.com", new ValidationErrors()));
             // just to make sure that we are ready for the Japanese market :)
             Assert.IsTrue(validator.Validate("www.amazon.co.jp/C-によるプログラミングWindows-上-Charles-Petzold/dp/4891002921", new ValidationErrors()));
 
-            Assert.IsFalse(validator.Validate("http://.com", new ValidationErrors()));
-            Assert.IsFalse(validator.Validate("http://www.google-com.123", new ValidationErrors()));
-            Assert.IsFalse(validator.Validate("http://1.1", new ValidationErrors()));
+            Assert.IsFalse(validator.Validate("https://.com", new ValidationErrors()));
+            Assert.IsFalse(validator.Validate("https://www.google-com.123", new ValidationErrors()));
+            Assert.IsFalse(validator.Validate("https://1.1", new ValidationErrors()));
             Assert.IsFalse(validator.Validate("ht:1.1", new ValidationErrors()));
             Assert.IsFalse(validator.Validate("/:www.1.com", new ValidationErrors()));
             Assert.IsTrue(validator.Validate("", new ValidationErrors()));

@@ -1,8 +1,8 @@
 <?xml version='1.0'?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:doc="http://nwalsh.com/xsl/documentation/1.0"
+                xmlns:doc="https://nwalsh.com/xsl/documentation/1.0"
                 xmlns:dyn="http://exslt.org/dynamic"
-                xmlns:saxon="http://icl.com/saxon"
+                xmlns:saxon="https://icl.com/saxon"
                 xmlns:xlink="http://www.w3.org/1999/xlink"
                 exclude-result-prefixes="doc dyn saxon"
                 version='1.0'>
@@ -12,7 +12,7 @@
      ********************************************************************
 
      This file is part of the XSL DocBook Stylesheet distribution.
-     See ../README or http://docbook.sf.net/release/xsl/current/ for
+     See ../README or http://docbook.sourceforge.net/release/xsl/current/ for
      copyright and other information.
 
      ******************************************************************** -->
@@ -242,9 +242,9 @@
     <note>
       <para>This function began as a copy of Nate Austin's
         <function>prepend-pad</function> function in the <link
-          xlink:href="http://www.dpawson.co.uk/xsl/sect2/padding.html" >Padding
+          xlink:href="https://www.dpawson.co.uk/xsl/sect2/padding.html" >Padding
           Content</link> section of Dave Pawson's <link
-          xlink:href="http://www.dpawson.co.uk/xsl/index.html" >XSLT
+          xlink:href="https://www.dpawson.co.uk/xsl/index.html" >XSLT
           FAQ</link>.</para>
     </note>
   </refdescription>

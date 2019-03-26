@@ -8,7 +8,7 @@
         <dtscrollpos>0</dtscrollpos>
     </InPlaceEditor>
 </UserData>
-<c eid="Spring.Template.Velocity" tid="##SUMMARY" q="" cd="40162.2624421296"><![CDATA[Support classes for the integration of <A href="http://www.castleproject.org/others/nvelocity/index.html">NVelocity</A>&nbsp;as Spring templating&nbsp;technology.]]></c>
+<c eid="Spring.Template.Velocity" tid="##SUMMARY" q="" cd="40162.2624421296"><![CDATA[Support classes for the integration of <A href="https://www.castleproject.org/others/nvelocity/index.html">NVelocity</A>&nbsp;as Spring templating&nbsp;technology.]]></c>
 <c eid="Spring.Template.Velocity" tid="##PROJECT_GETTINGSTARTED" q="" cd="40162.2609259259"><![CDATA[Please refer to the reference documentation describing<A href="http://www.springframework.net/doc-latest/reference/html/templating.html">Spring's Template Engine Integration</A>.]]></c>
 <c eid="Spring.Template.Velocity" tid="##PROJECT_INTRODUCTION" q="" cd="40162.2629513889"><![CDATA[Spring's support classes allow you to easily configure a NVelocity&nbsp;Template Engine using a high level XML namespace.]]></c>
 <c eid="Spring.Template.Velocity~Spring.Template.Velocity_namespace" tid="##SUMMARY" q="" cd="40162.1833333333">Contains VelocityEngineFactoryObject</c>

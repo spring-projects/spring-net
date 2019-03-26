@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<project name="SpringAir" default="build" xmlns="http://nant.sf.net/schemas/nant.xsd">
+<project name="SpringAir" default="build" xmlns="http://nant.sourceforge.net/schemas/nant.xsd">
 
   <target name="test">
     <nant buildfile="src/SpringAir.Core/SpringAir.Core.build" target="build" />

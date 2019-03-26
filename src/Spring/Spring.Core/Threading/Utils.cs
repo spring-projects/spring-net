@@ -1,7 +1,7 @@
 #region License
 
 /*
-* Copyright © 2002-2011 the original author or authors.
+* Copyright ï¿½ 2002-2011 the original author or authors.
 * 
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ namespace Spring.Threading
 		/// will be raised by the runtime.
 		/// <p/>Spring.Threading classes usually call this method before entering a lock block, to mirror java code
 		/// <p>Usually this is non issue because the same exception will be raised entering the monitor 
-		/// associated with the lock (<seealso href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfsystemthreadingmonitorclassentertopic.asp"/>) 
+		/// associated with the lock (<seealso href="https://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfsystemthreadingmonitorclassentertopic.asp"/>) 
 		/// </p>
 		/// </summary>
 		/// <exception cref="ThreadInterruptedException">if the thread has been interrupted</exception>
@@ -68,7 +68,7 @@ namespace Spring.Threading
 		public static long ToTimeMillis(DateTime date)
 		{
 			// may be also new TimeSpan(DateTime.UtcNow.Ticks).TotalMilliseconds;
-			// see http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dv_jlca/html/vberrjavalangsystemcurrenttimemillis.asp
+			// see https://msdn.microsoft.com/library/default.asp?url=/library/en-us/dv_jlca/html/vberrjavalangsystemcurrenttimemillis.asp
 			return (date.Ticks - 621355968000000000)/10000;
 		}
 

@@ -82,7 +82,7 @@ namespace Spring.Objects.Factory.Xml
             const string xml =
                 @"<?xml version='1.0' encoding='UTF-8' ?>
 <objects xmlns='http://www.springframework.net' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-	xsi:schemaLocation='http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd'>
+	xsi:schemaLocation='http://www.springframework.net https://www.springframework.net/xsd/spring-objects.xsd'>
 	<object id='foo' type='Spring.Objects.TestObject, Spring.Core.Tests'>
 		<!-- the 'name' attribute is required to be a non-null string -->
 		<replaced-method name='bing' replacer=' '/>
@@ -103,7 +103,7 @@ namespace Spring.Objects.Factory.Xml
             const string xml =
                 @"<?xml version='1.0' encoding='UTF-8' ?>
 <objects xmlns='http://www.springframework.net' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-	xsi:schemaLocation='http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd'>
+	xsi:schemaLocation='http://www.springframework.net https://www.springframework.net/xsd/spring-objects.xsd'>
 	<object id='foo' type='Spring.Objects.TestObject, Spring.Core.Tests'>
 		<!-- the 'name' attribute is required to be a non-null string -->
 		<replaced-method name=' ' replacer='target'/>
@@ -124,7 +124,7 @@ namespace Spring.Objects.Factory.Xml
             const string xml =
                 @"<?xml version='1.0' encoding='UTF-8' ?>
 <objects xmlns='http://www.springframework.net' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-	xsi:schemaLocation='http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd'>
+	xsi:schemaLocation='http://www.springframework.net https://www.springframework.net/xsd/spring-objects.xsd'>
 	<object id='foo' type='Spring.Objects.TestObject, Spring.Core.Tests'>
 		<!-- there is no such method 'hello' on the TestObject class -->
 		<replaced-method name='hello' replacer='target'/>
@@ -145,7 +145,7 @@ namespace Spring.Objects.Factory.Xml
             const string xml =
                 @"<?xml version='1.0' encoding='UTF-8' ?>
 <objects xmlns='http://www.springframework.net' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-	xsi:schemaLocation='http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd'>
+	xsi:schemaLocation='http://www.springframework.net https://www.springframework.net/xsd/spring-objects.xsd'>
 	<object id='factory' type='Spring.Objects.Factory.Support.TestObjectFactory, Spring.Core.Tests'>
 		<lookup-method name='GetObject' object='target'/>
 	</object>
@@ -179,7 +179,7 @@ namespace Spring.Objects.Factory.Xml
             const string xml =
                 @"<?xml version='1.0' encoding='UTF-8' ?>
 <objects xmlns='http://www.springframework.net' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-	xsi:schemaLocation='http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd'>
+	xsi:schemaLocation='http://www.springframework.net https://www.springframework.net/xsd/spring-objects.xsd'>
 	<object id='foo' type='Spring.Objects.TestObject, Spring.Core.Tests'>
 		<!-- there is no such method 'hello' on the TestObject class -->
 		<lookup-method name='hello' object='target'/>
@@ -200,7 +200,7 @@ namespace Spring.Objects.Factory.Xml
             const string xml =
                 @"<?xml version='1.0' encoding='UTF-8' ?>
 <objects xmlns='http://www.springframework.net' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-	xsi:schemaLocation='http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd'>
+	xsi:schemaLocation='http://www.springframework.net https://www.springframework.net/xsd/spring-objects.xsd'>
 	<object id='foo' type='Spring.Objects.TestObject, Spring.Core.Tests'>
 		<!-- the 'name' attribute is required to be a non-null string -->
 		<lookup-method name=' ' object='target'/>
@@ -222,7 +222,7 @@ namespace Spring.Objects.Factory.Xml
             const string xml =
                 @"<?xml version='1.0' encoding='UTF-8' ?>
 <objects xmlns='http://www.springframework.net' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-	xsi:schemaLocation='http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd'>
+	xsi:schemaLocation='http://www.springframework.net https://www.springframework.net/xsd/spring-objects.xsd'>
 	<object id='foo' type='Spring.Objects.TestObject, Spring.Core.Tests'>
 		<!-- the 'name' attribute is required to be a non-null string -->
 		<lookup-method name='bing' object=' '/>
@@ -244,7 +244,7 @@ namespace Spring.Objects.Factory.Xml
             const string xml =
                 @"<?xml version='1.0' encoding='UTF-8' ?>
 <objects xmlns='http://www.springframework.net' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-	xsi:schemaLocation='http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd'>
+	xsi:schemaLocation='http://www.springframework.net https://www.springframework.net/xsd/spring-objects.xsd'>
 	<object id='Applicationimpl'/>
 </objects>";
             stream = new MemoryStream(Encoding.UTF8.GetBytes(xml));
@@ -264,7 +264,7 @@ namespace Spring.Objects.Factory.Xml
             const string xml =
                 @"<?xml version='1.0' encoding='UTF-8' ?>
 <objects xmlns='http://www.springframework.net' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-	xsi:schemaLocation='http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd'>
+	xsi:schemaLocation='http://www.springframework.net https://www.springframework.net/xsd/spring-objects.xsd'>
     <alias name='foo' alias='fooAlias'/>
 	<object id='foo' type='Spring.Objects.TestObject,Spring.Core.Tests'/>
 </objects>";
@@ -286,7 +286,7 @@ namespace Spring.Objects.Factory.Xml
             const string xml =
                 @"<?xml version='1.0' encoding='UTF-8' ?>
 <objects xmlns='http://www.springframework.net' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-	xsi:schemaLocation='http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd'>
+	xsi:schemaLocation='http://www.springframework.net https://www.springframework.net/xsd/spring-objects.xsd'>
 	<object id='foo' type='Spring.Objects.TestObject,Spring.Core.Tests'/>
     <alias name='foo' alias='fooAlias'/>
 </objects>";
@@ -308,7 +308,7 @@ namespace Spring.Objects.Factory.Xml
             const string xml =
                 @"<?xml version='1.0' encoding='UTF-8' ?>
 <objects xmlns='http://www.springframework.net' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-	xsi:schemaLocation='http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd'>
+	xsi:schemaLocation='http://www.springframework.net https://www.springframework.net/xsd/spring-objects.xsd'>
 	<object id='foo' type=''/>
 </objects>";
             stream = new MemoryStream(Encoding.UTF8.GetBytes(xml));
@@ -327,7 +327,7 @@ namespace Spring.Objects.Factory.Xml
             const string xml =
                 @"<?xml version='1.0' encoding='UTF-8' ?>
 <objects xmlns='http://www.springframework.net' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-	xsi:schemaLocation='http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd'>
+	xsi:schemaLocation='http://www.springframework.net https://www.springframework.net/xsd/spring-objects.xsd'>
 	<object id='foo' type=' 
 '/>
 </objects>";
@@ -347,7 +347,7 @@ namespace Spring.Objects.Factory.Xml
             const string xml =
                 @"<?xml version='1.0' encoding='UTF-8' ?>
 <objects xmlns='http://www.springframework.net' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-	xsi:schemaLocation='http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd'>
+	xsi:schemaLocation='http://www.springframework.net https://www.springframework.net/xsd/spring-objects.xsd'>
 	<object id='myString' type='System.String'>
 		<constructor-arg index='0' value='foo'/>
 	</object>
@@ -369,7 +369,7 @@ namespace Spring.Objects.Factory.Xml
             const string xml =
                 @"<?xml version='1.0' encoding='UTF-8' ?>
 <objects xmlns='http://www.springframework.net' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-	xsi:schemaLocation='http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd'>
+	xsi:schemaLocation='http://www.springframework.net https://www.springframework.net/xsd/spring-objects.xsd'>
 	<object id='myString' type='System.String'>
 		<constructor-arg type='char[]' value='Bingo'/>
 	</object>
@@ -408,7 +408,7 @@ namespace Spring.Objects.Factory.Xml
             const string xml =
                 @"<?xml version='1.0' encoding='UTF-8' ?>
 <objects xmlns='http://www.springframework.net' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-	xsi:schemaLocation='http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd'>
+	xsi:schemaLocation='http://www.springframework.net https://www.springframework.net/xsd/spring-objects.xsd'>
 	<object id='golyadkin' type='Spring.Objects.TestObject, Spring.Core.Tests'>
 		<property name='Hats'><value type='string[]'>trilby,fedora</value></property>
 	</object>
@@ -433,7 +433,7 @@ namespace Spring.Objects.Factory.Xml
             const string xml =
                 @"<?xml version='1.0' encoding='UTF-8' ?>
 <objects xmlns='http://www.springframework.net' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-	xsi:schemaLocation='http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd'>
+	xsi:schemaLocation='http://www.springframework.net https://www.springframework.net/xsd/spring-objects.xsd'>
 	<object id='mother' abstract='true' type='Spring.Objects.TestObject, Spring.Core.Tests'/>
 	<object parent='mother'/>
 </objects>";
@@ -1512,7 +1512,7 @@ namespace Spring.Objects.Factory.Xml
             Assert.AreEqual("instanceFactory", fm.Object.Name);
         }
 
-        [Test(Description = "http://opensource.atlassian.com/projects/spring/browse/SPRNET-492")]
+        [Test(Description = "https://opensource.atlassian.com/projects/spring/browse/SPRNET-492")]
         public void InstanceFactoryMethodWithOverloadedArgs()
         {
             DefaultListableObjectFactory factory = new DefaultListableObjectFactory();
@@ -1786,7 +1786,7 @@ namespace Spring.Objects.Factory.Xml
             const string xml =
                 @"<?xml version='1.0' encoding='UTF-8' ?>
 <objects xmlns='http://www.springframework.net' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-	xsi:schemaLocation='http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd'>
+	xsi:schemaLocation='http://www.springframework.net https://www.springframework.net/xsd/spring-objects.xsd'>
 	<object id='foo' type='Spring.Objects.TestObject, Spring.Core.Tests'>
         <property name='spouse'>
             <object
@@ -1812,7 +1812,7 @@ namespace Spring.Objects.Factory.Xml
             const string xml =
                 @"<?xml version='1.0' encoding='UTF-8' ?>
 <objects xmlns='http://www.springframework.net' xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
-	xsi:schemaLocation='http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd'>
+	xsi:schemaLocation='http://www.springframework.net https://www.springframework.net/xsd/spring-objects.xsd'>
 	<object id='foo' type='Spring.Objects.TestObject, Spring.Core.Tests'>
         <property name='spouse'>
             <object

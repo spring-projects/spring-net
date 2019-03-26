@@ -1,5 +1,5 @@
 <?xml version="1.0" ?>
-<project name="Spring.AopQuickStart" default="build" xmlns="http://nant.sf.net/schemas/nant.xsd">
+<project name="Spring.AopQuickStart" default="build" xmlns="http://nant.sourceforge.net/schemas/nant.xsd">
 
   <target name="build">
     <nant buildfile="src/Spring.AopQuickStart.Common/Spring.AopQuickStart.Common.build" target="build" />

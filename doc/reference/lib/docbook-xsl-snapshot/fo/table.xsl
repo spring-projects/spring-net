@@ -1,12 +1,12 @@
 <?xml version='1.0'?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:doc="http://nwalsh.com/xsl/documentation/1.0"
+                xmlns:doc="https://nwalsh.com/xsl/documentation/1.0"
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
                 xmlns:rx="http://www.renderx.com/XSL/Extensions"
-                xmlns:stbl="http://nwalsh.com/xslt/ext/com.nwalsh.saxon.Table"
+                xmlns:stbl="https://nwalsh.com/xslt/ext/com.nwalsh.saxon.Table"
                 xmlns:xtbl="com.nwalsh.xalan.Table"
-                xmlns:lxslt="http://xml.apache.org/xslt"
-                xmlns:ptbl="http://nwalsh.com/xslt/ext/xsltproc/python/Table"
+                xmlns:lxslt="https://xml.apache.org/xslt"
+                xmlns:ptbl="https://nwalsh.com/xslt/ext/xsltproc/python/Table"
                 exclude-result-prefixes="doc stbl xtbl lxslt ptbl"
                 version='1.0'>
 
@@ -17,7 +17,7 @@
      ********************************************************************
 
      This file is part of the XSL DocBook Stylesheet distribution.
-     See ../README or http://docbook.sf.net/release/xsl/current/ for
+     See ../README or http://docbook.sourceforge.net/release/xsl/current/ for
      copyright and other information.
 
      ******************************************************************** -->

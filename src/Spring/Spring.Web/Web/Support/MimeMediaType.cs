@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -30,7 +30,7 @@ using Spring.Util;
 namespace Spring.Web.Support
 {
     /// <summary>
-    /// Represents a MIME media type as defined by http://www.iana.org/assignments/media-types/
+    /// Represents a MIME media type as defined by https://www.iana.org/assignments/media-types/
     /// </summary>
     /// <author>Erich Eichinger</author>
     public class MimeMediaType

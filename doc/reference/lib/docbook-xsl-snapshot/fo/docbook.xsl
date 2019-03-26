@@ -2,7 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 xmlns:exsl="http://exslt.org/common"
                 xmlns:fo="http://www.w3.org/1999/XSL/Format"
-                xmlns:ng="http://docbook.org/docbook-ng"
+                xmlns:ng="https://docbook.org/docbook-ng"
                 xmlns:db="http://docbook.org/ns/docbook"
                 exclude-result-prefixes="db ng exsl"
                 version='1.0'>
@@ -17,7 +17,7 @@
      ********************************************************************
 
      This file is part of the XSL DocBook Stylesheet distribution.
-     See ../README or http://docbook.sf.net/release/xsl/current/ for
+     See ../README or http://docbook.sourceforge.net/release/xsl/current/ for
      copyright and other information.
 
      ******************************************************************** -->

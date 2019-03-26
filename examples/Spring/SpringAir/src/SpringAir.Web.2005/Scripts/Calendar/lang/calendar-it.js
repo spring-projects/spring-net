@@ -82,7 +82,7 @@ Calendar._TT["ABOUT"] =
 "DHTML Date/Time Selector\n" +
 "(c) dynarch.com 2002-2005 / Author: Mihai Bazon\n" + // don't translate this this ;-)
 "Per gli aggiornamenti: http://www.dynarch.com/projects/calendar/\n" +
-"Distribuito sotto licenza GNU LGPL.  Vedi http://gnu.org/licenses/lgpl.html per i dettagli." +
+"Distribuito sotto licenza GNU LGPL.  Vedi https://gnu.org/licenses/lgpl.html per i dettagli." +
 "\n\n" +
 "Selezione data:\n" +
 "- Usa \xab, \xbb per selezionare l'anno\n" +

@@ -1,8 +1,8 @@
 <?xml version='1.0'?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                xmlns:doc="http://nwalsh.com/xsl/documentation/1.0"
+                xmlns:doc="https://nwalsh.com/xsl/documentation/1.0"
                 xmlns:dyn="http://exslt.org/dynamic"
-                xmlns:saxon="http://icl.com/saxon"
+                xmlns:saxon="https://icl.com/saxon"
                 xmlns:xlink="http://www.w3.org/1999/xlink"
                 exclude-result-prefixes="doc dyn saxon"
                 version='1.0'>
@@ -12,7 +12,7 @@
      ********************************************************************
 
      This file is part of the XSL DocBook Stylesheet distribution.
-     See ../README or http://docbook.sf.net/release/xsl/current/ for
+     See ../README or http://docbook.sourceforge.net/release/xsl/current/ for
      copyright and other information.
 
      ******************************************************************** -->
@@ -50,7 +50,7 @@
   <refpurpose>Applies an XSLT character map</refpurpose>
   <refdescription id="apply-character-map-desc">
     <para>This template applies an <link
-      xlink:href="http://www.w3.org/TR/xslt20/#character-maps"
+      xlink:href="https://www.w3.org/TR/xslt20/#character-maps"
       >XSLT character map</link>; that is, it causes certain
       individual characters to be substituted with strings of one
       or more characters. It is useful mainly for replacing
@@ -63,9 +63,9 @@
       <para>This template is a very slightly modified version of
         Jeni Tennison’s <function>replace_strings</function>
         template in the <link
-          xlink:href="http://www.dpawson.co.uk/xsl/sect2/StringReplace.html#d9351e13"
+          xlink:href="https://www.dpawson.co.uk/xsl/sect2/StringReplace.html#d9351e13"
           >multiple string replacements</link> section of Dave Pawson’s
-        <link xlink:href="http://www.dpawson.co.uk/xsl/index.html"
+        <link xlink:href="https://www.dpawson.co.uk/xsl/index.html"
           >XSLT FAQ</link>.</para>
       <para>The <function>apply-string-subst-map</function>
         template is essentially the same template as the
@@ -138,7 +138,7 @@
   <refpurpose>Reads in all or part of an XSLT character map</refpurpose>
   <refdescription id="read-character-map-desc">
     <para>The XSLT 2.0 specification describes <link
-        xlink:href="http://www.w3.org/TR/xslt20/#character-maps"
+        xlink:href="https://www.w3.org/TR/xslt20/#character-maps"
         >character maps</link> and explains how they may be used
       to allow a specific character appearing in a text or
       attribute node in a final result tree to be substituted by

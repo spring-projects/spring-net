@@ -1,11 +1,11 @@
 xml-commons/java/external/LICENSE.dom-software.txt $Id: LICENSE.dom-software.txt 226215 2005-06-03 22:49:13Z mrglavas $
 
 
-This license came from: http://www.w3.org/Consortium/Legal/copyright-software-20021231
+This license came from: https://www.w3.org/Consortium/Legal/copyright-software-20021231
 
 
-W3C® SOFTWARE NOTICE AND LICENSE
-http://www.w3.org/Consortium/Legal/2002/copyright-software-20021231
+W3Cï¿½ SOFTWARE NOTICE AND LICENSE
+https://www.w3.org/Consortium/Legal/2002/copyright-software-20021231
 
 This work (and included software, documentation such as READMEs, or other
 related items) is being provided by the copyright holders under the following

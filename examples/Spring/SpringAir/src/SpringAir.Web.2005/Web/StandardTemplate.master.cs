@@ -1,7 +1,7 @@
 #region Licence
 
 /*
- * Copyright © 2002-2005 the original author or authors.
+ * Copyright ï¿½ 2002-2005 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -45,8 +45,8 @@ public partial class StandardTemplate : MasterPage
   /// </summary>
   /// <remarks>If 'sr-Latn-CS' is a valid culture, then translate the following;
   /// sr-SP-Latn->sr-Latn-CS and sr-SP-Cyrl->sr-Cyrl-CS.  See 
-  /// http://blogs.msdn.com/kierans/archive/2006/08/02/687267.aspx
-  /// and http://blogs.msdn.com/shawnste/archive/2006/11/14/problems-compiling-resources-in-net-2-0-apps-after-updates.aspx 
+  /// https://blogs.msdn.com/kierans/archive/2006/08/02/687267.aspx
+  /// and https://blogs.msdn.com/shawnste/archive/2006/11/14/problems-compiling-resources-in-net-2-0-apps-after-updates.aspx 
   /// for additional information.</remarks>
   /// <param name="cultureString">The culture string.</param>
   /// <returns>Translated culture string if necessary.</returns>

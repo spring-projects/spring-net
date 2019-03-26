@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -145,7 +145,7 @@ namespace Spring.ServiceModel
             Assert.IsTrue(typeof(IContract).IsAssignableFrom(proxyType));
         }
 
-        [Test(Description = "http://jira.springframework.org/browse/SPRNET-1179")]
+        [Test(Description = "https://jira.springframework.org/browse/SPRNET-1179")]
         public void ProxiesOnlyContractInterface()
         {
             se.ObjectName = "ProxiesOnlyContractInterface";
@@ -171,7 +171,7 @@ namespace Spring.ServiceModel
             Assert.IsTrue(typeof(IInheritedContract).IsAssignableFrom(proxyType));
         }
 
-        [Test(Description = "http://jira.springframework.org/browse/SPRNET-1179")]
+        [Test(Description = "https://jira.springframework.org/browse/SPRNET-1179")]
         public void ProxiesOnlyContractInterfaceFailsIfNoContractInterface()
         {
             se.ObjectName = "ProxiesOnlyContractInterface";
@@ -222,7 +222,7 @@ namespace Spring.ServiceModel
             se.CallbackContract = typeof(IDisposable);
             se.ConfigurationName = "CustomConfigName";
             se.Name = "serviceName";
-            se.Namespace = "http://Spring.Services.Tests";
+            se.Namespace = "https://Spring.Services.Tests";
             se.ProtectionLevel = ProtectionLevel.Sign;
             se.SessionMode = SessionMode.Required;
 
@@ -343,7 +343,7 @@ namespace Spring.ServiceModel
         {
         }
 
-        [ServiceContract(Namespace = "http://Spring.Services.Tests")]
+        [ServiceContract(Namespace = "https://Spring.Services.Tests")]
         public class DecoratedService : IContract
         {
             [OperationContract(Name = "MySomeMethod")]
@@ -371,7 +371,7 @@ namespace Spring.ServiceModel
             }
         }
 
-        //[ServiceContract(Namespace = "http://Spring.Services.Tests")]
+        //[ServiceContract(Namespace = "https://Spring.Services.Tests")]
         //public interface IDecoratedContract
         //{
         //    [OperationContract]

@@ -51,7 +51,7 @@ namespace Spring.Objects.Factory.Xml
     /// </p>
     /// <p>
     /// This schema is <b>typically</b> located at
-    /// <a href="http://www.springframework.net/xsd/spring-objects.xsd">http://www.springframework.net/xsd/spring-objects.xsd</a>.
+    /// <a href="https://www.springframework.net/xsd/spring-objects.xsd">https://www.springframework.net/xsd/spring-objects.xsd</a>.
     /// </p>
     /// </remarks>
     /// <author>Rod Johnson</author>

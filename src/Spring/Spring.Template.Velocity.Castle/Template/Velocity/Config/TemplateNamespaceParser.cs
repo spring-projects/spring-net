@@ -328,7 +328,7 @@ namespace Spring.Template.Velocity.Config {
         /// This method is overriden from ObjectsNamespaceParser since when invoked on
         /// sub-elements from the objets namespace (e.g., objects:objectMap for nvelocity
         /// property map) the <code>element.SelectNodes</code> fails because it is in
-        /// the nvelocity custom namespace and not the object's namespace (http://www.springframwork.net)
+        /// the nvelocity custom namespace and not the object's namespace (https://www.springframwork.net)
         /// to amend this the object's namespace is added to the provided XmlNamespaceManager
         /// </summary>
         ///<param name="element"> The element to be searched in. </param>

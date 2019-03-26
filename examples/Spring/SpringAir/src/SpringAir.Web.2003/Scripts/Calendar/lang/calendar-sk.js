@@ -66,7 +66,7 @@ Calendar._TT["ABOUT"] =
 "DHTML Date/Time Selector\n" +
 "(c) dynarch.com 2002-2005 / Author: Mihai Bazon\n" +
 "PoslednĂş verziu nĂˇjdete na: http://www.dynarch.com/projects/calendar/\n" +
-"DistribuovanĂ© pod GNU LGPL.  ViÄŹ http://gnu.org/licenses/lgpl.html pre detaily." +
+"DistribuovanĂ© pod GNU LGPL.  ViÄŹ https://gnu.org/licenses/lgpl.html pre detaily." +
 "\n\n" +
 "VĂ˝ber dĂˇtumu:\n" +
 "- PouĹľite tlaÄŤidlĂˇ \xab, \xbb pre vĂ˝ber roku\n" +

@@ -110,7 +110,7 @@ namespace Spring.Service.Sample
 
 //To compile the program, open a Visual Studio .NET command prompt (or any other command prompt session with the C# compiler in the path) and run this command:
 //csc /t:exe /r:System.Web.dll WsHostTest.cs
-//Put the exe file in a directory with an ASMX file. Here’s the simple file I’ve used in my tests:
+//Put the exe file in a directory with an ASMX file. Hereï¿½s the simple file Iï¿½ve used in my tests:
 //<%@ WebService Language="C#" Debug="true" Class="foo" %>
 //using System.Web.Services;
 //
@@ -133,7 +133,7 @@ namespace Spring.Service.Sample
 //xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 //xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 //<soap:Body>
-//<echo xmlns="http://tempuri.org/">
+//<echo xmlns="https://www.bing.com/">
 //<input>Howdy</input>
 //</echo>
 //</soap:Body>

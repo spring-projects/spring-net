@@ -14,7 +14,7 @@ Normal Dependencies
 - Apache Jakarta Commons IO
 
     commons-io-*.jar
-    http://jakarta.apache.org/commons/io/
+    https://jakarta.apache.org/commons/io/
     (I/O routines)
     
     Apache License v2.0
@@ -22,7 +22,7 @@ Normal Dependencies
 - Apache Jakarta Commons Logging
 
     commons-logging-*.jar
-    http://jakarta.apache.org/commons/logging/
+    https://jakarta.apache.org/commons/logging/
     (Logging adapter for various logging backends like JDK 1.4 logging or Log4J)
     
     Apache License v2.0
@@ -30,7 +30,7 @@ Normal Dependencies
 - Apache Avalon Framework
 
     avalon-framework-*.jar
-    http://excalibur.apache.org/framework/
+    https://excalibur.apache.org/framework/
     (Avalon Framework, maintained by the Apache Excalibur project)
     
     Apache License v2.0
@@ -38,7 +38,7 @@ Normal Dependencies
 - Apache XML Graphics Commons
 
     xmlgraphics-commons-*.jar
-    http://xmlgraphics.apache.org/
+    https://xmlgraphics.apache.org/
     (Common Library for Apache Batik and Apache FOP)
     
     Apache License v2.0
@@ -46,7 +46,7 @@ Normal Dependencies
 - Apache Batik
 
     batik-*.jar
-    http://xmlgraphics.apache.org/batik/
+    https://xmlgraphics.apache.org/batik/
     (SVG Implementation)
     
     Apache License v2.0
@@ -54,7 +54,7 @@ Normal Dependencies
 - Apache XML Commons Externals (JAXP API)
 
     xml-apis.jar
-    http://xml.apache.org/commons/components/external/
+    https://xml.apache.org/commons/components/external/
     (the JAXP API, plus SAX and various W3C DOM Java bindings,
     maintained in XML Commons Externals)
     
@@ -63,31 +63,31 @@ Normal Dependencies
         http://www.saxproject.org/copying.html
     W3C Software Notice and License (applies to the various DOM Java bindings)
     W3C Document License (applies to the DOM documentation)
-        http://www.w3.org/Consortium/Legal/copyright-software
-        http://www.w3.org/Consortium/Legal/copyright-documents
-        http://www.w3.org/Consortium/Legal/
+        https://www.w3.org/Consortium/Legal/copyright-software
+        https://www.w3.org/Consortium/Legal/copyright-documents
+        https://www.w3.org/Consortium/Legal/
 
     xml-apis-ext-*.jar
-    http://xml.apache.org/commons/components/external/
+    https://xml.apache.org/commons/components/external/
     (additional DOM APIs from W3C, like SVG, SMIL and Simple API for CSS)
     
     Apache License v2.0 (applies to the distribution)
     W3C Software Notice and License (applies to the various DOM Java bindings)
     W3C Document License (applies to the DOM documentation)
-        http://www.w3.org/Consortium/Legal/copyright-software
-        http://www.w3.org/Consortium/Legal/copyright-documents
-        http://www.w3.org/Consortium/Legal/
+        https://www.w3.org/Consortium/Legal/copyright-software
+        https://www.w3.org/Consortium/Legal/copyright-documents
+        https://www.w3.org/Consortium/Legal/
 
 - Apache Xalan-J
 
     xalan-*.jar and serializer-*.jar
-    http://xalan.apache.org
+    https://xalan.apache.org
     (JAXP-compliant XSLT and XPath implementation)
     
     Apache License v2.0 (applies to Xalan-J)
     Apache License v1.1 (applies to Apache BCEL and Apache REGEXP bundled in the JAR)
     Historical Permission Notice and Disclaimer (applies to CUP Parser Generator)
-        http://www.opensource.org/licenses/historical.php
+        https://www.opensource.org/licenses/historical.php
         (see xalan.runtime.LICENSE.txt)
 
 
@@ -97,7 +97,7 @@ Special Dependencies
 - Apache Xerces-J
 
     xercesImpl-*.jar
-    http://xerces.apache.org
+    https://xerces.apache.org
     (JAXP-compliant XML parser and DOM Level 3 implementation)
     
     Apache License v2.0
@@ -120,10 +120,10 @@ loaded (due to Java's class loader hierarchy).
 Replacing the default implementations involves understanding the 
 "Endorsed Standards Override Mechanism".
 More information can be found here:
-http://java.sun.com/j2se/1.4.2/docs/guide/standards/index.html
+https://java.sun.com/j2se/1.4.2/docs/guide/standards/index.html
 
 See also:
-http://xml.apache.org/xalan-j/faq.html#faq-N100EF
+https://xml.apache.org/xalan-j/faq.html#faq-N100EF
 
 Essentially, you have two different possibilities:
 - add the replacement JARs in the jre/lib/endorsed directory of your JRE.
@@ -147,7 +147,7 @@ Please make sure you've read the license of each package.
 
  - JAI (Java Advanced Imaging API) 
 
-    http://java.sun.com/products/java-media/jai 	 
+    https://java.sun.com/products/java-media/jai 	 
     Java Research License and Java Distribution License (Check which one applies to you!)
     
     Currently used for:
@@ -156,7 +156,7 @@ Please make sure you've read the license of each package.
 - JEuclid (MathML implementation, for the MathML extension)
 
     http://jeuclid.sourceforge.net/
-    http://sourceforge.net/projects/jeuclid
+    https://sourceforge.net/projects/jeuclid
     Apache License v1.1
 
 
@@ -167,7 +167,7 @@ Additional development-time dependencies
 - Servlet API
 
     servlet-*.jar
-    http://jakarta.apache.org/tomcat/
+    https://jakarta.apache.org/tomcat/
     (Servlet API, javax.servlet)
     
     Apache License v1.1
@@ -175,7 +175,7 @@ Additional development-time dependencies
 - Apache Ant
 
     (not bundled, requires pre-installation)
-    http://ant.apache.org
+    https://ant.apache.org
     (XML-based build system
     
     Apache License V2.0
@@ -183,7 +183,7 @@ Additional development-time dependencies
 - JUnit
 
     (not bundled, provided by Apache Ant or your IDE)
-    http://www.junit.org
+    https://www.junit.org
     Common Public License V1.0
 
 - XMLUnit (optional)

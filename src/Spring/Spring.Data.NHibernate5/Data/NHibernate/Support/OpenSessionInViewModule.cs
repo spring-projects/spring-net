@@ -27,7 +27,7 @@ namespace Spring.Data.NHibernate.Support
     /// Provide support for the open session in view pattern for lazily loaded hibernate objects
     /// used in ASP.NET pages.
     /// </summary>
-    /// <author>jjx: http://forum.springframework.net/member.php?u=29</author>
+    /// <author>jjx: https://forum.springframework.net/member.php?u=29</author>
     /// <author>Mark Pollack (.NET)</author>
     /// <author>Erich Eichinger</author>
     /// <author>Harald Radi</author>

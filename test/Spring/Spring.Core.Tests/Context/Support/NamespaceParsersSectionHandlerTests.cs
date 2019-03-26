@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,7 +41,7 @@ namespace Spring.Context.Support
 		{
 			const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
 <parsers>
-	<parser namespace='http://schemas.springframework.net/testobject' type='Spring.Context.Support.TestObjectConfigParser, Spring.Core.Tests' schemaLocation='assembly://Spring.Core.Tests/Spring.Context.Support/testobject.xsd'/>
+	<parser namespace='https://schemas.springframework.net/testobject' type='Spring.Context.Support.TestObjectConfigParser, Spring.Core.Tests' schemaLocation='assembly://Spring.Core.Tests/Spring.Context.Support/testobject.xsd'/>
 </parsers>";
 
 			NamespaceParsersSectionHandler handler = new NamespaceParsersSectionHandler();
@@ -53,7 +53,7 @@ namespace Spring.Context.Support
 		{
 			const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
 <parsers>
-	<parser namespace='http://schemas.springframework.net/2' type='Spring.Context.Support.NamespaceParsersSectionHandlerTests, Spring.Core.Tests' schemaLocation='assembly://Spring.Core.Tests/Spring.Context.Support/testobject.xsd'/>
+	<parser namespace='https://schemas.springframework.net/2' type='Spring.Context.Support.NamespaceParsersSectionHandlerTests, Spring.Core.Tests' schemaLocation='assembly://Spring.Core.Tests/Spring.Context.Support/testobject.xsd'/>
 </parsers>";
 
 			NamespaceParsersSectionHandler handler = new NamespaceParsersSectionHandler();
@@ -65,7 +65,7 @@ namespace Spring.Context.Support
 		{
 			const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
 <parsers>
-	<parser namespace='http://schemas.springframework.net/2' type='Rubbish' schemaLocation='assembly://Spring.Core.Tests/Spring.Context.Support/testobject.xsd'/>
+	<parser namespace='https://schemas.springframework.net/2' type='Rubbish' schemaLocation='assembly://Spring.Core.Tests/Spring.Context.Support/testobject.xsd'/>
 </parsers>";
 
 			NamespaceParsersSectionHandler handler = new NamespaceParsersSectionHandler();
@@ -89,7 +89,7 @@ namespace Spring.Context.Support
 		{
 			const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
 <parsers>
-	<parser namespace='http://schemas.springframework.net/3' type='' schemaLocation='assembly://Spring.Core.Tests/Spring.Context.Support/testobject.xsd'/>
+	<parser namespace='https://schemas.springframework.net/3' type='' schemaLocation='assembly://Spring.Core.Tests/Spring.Context.Support/testobject.xsd'/>
 </parsers>";
 
 			NamespaceParsersSectionHandler handler = new NamespaceParsersSectionHandler();
@@ -101,7 +101,7 @@ namespace Spring.Context.Support
 		{
 			const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
 <parsers>
-	<parser namespace='http://schemas.springframework.net/3'/>
+	<parser namespace='https://schemas.springframework.net/3'/>
 </parsers>";
 
 			NamespaceParsersSectionHandler handler = new NamespaceParsersSectionHandler();
