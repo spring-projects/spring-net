@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 -->
-<chapter xml:id="services" xmlns="http://docbook.org/ns/docbook" version="5">
+<chapter xml:id="services" xmlns="https://docbook.org/ns/docbook" version="5">
   <title>.NET Enterprise Services</title>
 
   <sect1 xml:id="services-introduction">

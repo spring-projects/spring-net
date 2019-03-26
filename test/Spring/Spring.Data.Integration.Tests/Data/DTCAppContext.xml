@@ -1,8 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<objects xmlns='http://www.springframework.net'
-         xmlns:d="http://www.springframework.net/database"
-         xmlns:tx="http://www.springframework.net/tx"
-         xmlns:aop="http://www.springframework.net/aop">
+<objects xmlns='https://www.springframework.net'
+         xmlns:d="https://www.springframework.net/database"
+         xmlns:tx="https://www.springframework.net/tx"
+         xmlns:aop="https://www.springframework.net/aop">
 
 
   <!-- Available Catalogs: CreditsAndDebits, Credits, Debits -->

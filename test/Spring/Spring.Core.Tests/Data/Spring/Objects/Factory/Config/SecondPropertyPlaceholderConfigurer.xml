@@ -14,7 +14,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<objects xmlns="http://www.springframework.net">
+<objects xmlns="https://www.springframework.net">
   <object name="propertyplaceholder_90"
           type="Spring.Objects.Factory.Config.PropertyPlaceholderConfigurer, Spring.Core">
     <property name="Order" value="90"/>

@@ -16,12 +16,12 @@
  * limitations under the License.
  */
 -->
-<appendix id="xsd-config" version="5" xmlns="http://docbook.org/ns/docbook"
-          xmlns:ns6="http://www.w3.org/1999/xlink"
-          xmlns:ns5="http://www.w3.org/1998/Math/MathML"
-          xmlns:ns4="http://www.w3.org/1999/xhtml"
-          xmlns:ns3="http://www.w3.org/2000/svg"
-          xmlns:ns="http://docbook.org/ns/docbook">
+<appendix id="xsd-config" version="5" xmlns="https://docbook.org/ns/docbook"
+          xmlns:ns6="https://www.w3.org/1999/xlink"
+          xmlns:ns5="https://www.w3.org/1998/Math/MathML"
+          xmlns:ns4="https://www.w3.org/1999/xhtml"
+          xmlns:ns3="https://www.w3.org/2000/svg"
+          xmlns:ns="https://docbook.org/ns/docbook">
   <title>XML Schema-based configuration</title>
 
   <section xml:id="xsd-config-introduction">
@@ -61,9 +61,9 @@
 
       <programlisting language="myxml">
 &lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;objects xmlns="http://www.springframework.net"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/schema/objects/spring-objects-1.1.xsd"&gt;
+&lt;objects xmlns="https://www.springframework.net"
+         xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="https://www.springframework.net https://www.springframework.net/schema/objects/spring-objects-1.1.xsd"&gt;
 
 <lineannotation> &lt;!-- <literal>&lt;object/&gt;</literal> definitions here --&gt;</lineannotation>
 
@@ -118,9 +118,9 @@
       the <literal>tx</literal> namespace are available to you.</para>
 
       <programlisting language="myxml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;object xmlns="http://www.springframework.net"
-      xmlns:aop="http://www.springframework.net/aop"
-      xmlns:tx="http://www.springframework.net/tx"&gt;
+&lt;object xmlns="https://www.springframework.net"
+      xmlns:aop="https://www.springframework.net/aop"
+      xmlns:tx="https://www.springframework.net/tx"&gt;
   
 <lineannotation>  &lt;!-- <literal>&lt;object/&gt;</literal> definitions here --&gt;</lineannotation>
 
@@ -184,8 +184,8 @@
       the <literal>aop</literal> namespace are available to you.</para>
 
       <programlisting language="myxml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;objects xmlns="http://www.springframework.net"
-         xmlns:aop="http://www.springframework.net/aop"&gt;
+&lt;objects xmlns="https://www.springframework.net"
+         xmlns:aop="https://www.springframework.net/aop"&gt;
 
 <lineannotation>  &lt;!-- <literal>&lt;object/&gt;</literal> definitions here --&gt;</lineannotation>
 
@@ -232,8 +232,8 @@
       linkend="dbprovider" />.</para>
 
       <programlisting language="myxml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;objects xmlns="http://www.springframework.net"
-         xmlns:db="http://www.springframework.net/db"&gt;
+&lt;objects xmlns="https://www.springframework.net"
+         xmlns:db="https://www.springframework.net/db"&gt;
 
 <lineannotation>  &lt;!-- <literal>&lt;object/&gt;</literal> definitions here --&gt;</lineannotation>
 
@@ -326,8 +326,8 @@ int result = calculator.Add(1,2);</programlisting>
       the chapter <xref linkend="remoting" /></para>
 
       <programlisting language="myxml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;objects xmlns="http://www.springframework.net"
-         xmlns:r="http://www.springframework.net/remoting"&gt;
+&lt;objects xmlns="https://www.springframework.net"
+         xmlns:r="https://www.springframework.net/remoting"&gt;
 
 <lineannotation>  &lt;!-- <literal>&lt;object/&gt;</literal> definitions here --&gt;</lineannotation>
 
@@ -371,8 +371,8 @@ int result = calculator.Add(1,2);</programlisting>
       covered in the chapter <xref linkend="messaging" /></para>
 
       <programlisting language="myxml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;objects xmlns="http://www.springframework.net"
-         xmlns:r="http://www.springframework.net/nms"&gt;
+&lt;objects xmlns="https://www.springframework.net"
+         xmlns:r="https://www.springframework.net/nms"&gt;
 
 <lineannotation>  &lt;!-- <literal>&lt;object/&gt;</literal> definitions here --&gt;</lineannotation>
 
@@ -417,8 +417,8 @@ int result = calculator.Add(1,2);</programlisting>
       linkend="validation" /></para>
 
       <programlisting language="myxml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;objects xmlns="http://www.springframework.net" 
-        xmlns:v="http://www.springframework.net/validation"&gt;
+&lt;objects xmlns="https://www.springframework.net" 
+        xmlns:v="https://www.springframework.net/validation"&gt;
 
 <lineannotation>  &lt;!-- <literal>&lt;object/&gt;</literal> definitions here --&gt;</lineannotation>
 
@@ -465,9 +465,9 @@ int result = calculator.Add(1,2);</programlisting>
       entire <link linkend="objects">chapter</link>).</para>
 
       <programlisting language="myxml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;objects xmlns="http://www.springframework.net"
-       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/schema/objects/spring-objects-1.1.xsd"&gt;
+&lt;objects xmlns="https://www.springframework.net"
+       xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="https://www.springframework.net https://www.springframework.net/schema/objects/spring-objects-1.1.xsd"&gt;
 
     &lt;object id="foo" class="X.Y.Foo, X"&gt;
         &lt;property name="name" value="Rick"/&gt;

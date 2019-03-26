@@ -2776,7 +2776,7 @@
              </example>
              <example>
                <para>
-               Define a custom function and call it using <see href="http://boo.codehaus.org/">Boo</see>.
+               Define a custom function and call it using <see href="https://boo.codehaus.org/">Boo</see>.
                </para>
                <code>
                      &lt;script language="Boo.CodeDom.BooCodeProvider, Boo.CodeDom, Version=1.0.0.0, Culture=neutral, PublicKeyToken=32c39770e9a21a67"

@@ -26,7 +26,7 @@
 
   </partintro>
 
-<refentry xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="dbfo_background-color">
+<refentry xmlns:xlink="https://www.w3.org/1999/xlink" xml:id="dbfo_background-color">
 <refnamediv>
 <refname>dbfo_background-color</refname>
 <refpurpose>Sets background color for an image</refpurpose>
@@ -62,7 +62,7 @@
 
   </refsect1></refentry>
 
-<refentry xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="dbfo_bgcolor">
+<refentry xmlns:xlink="https://www.w3.org/1999/xlink" xml:id="dbfo_bgcolor">
 <refnamediv>
 <refname>dbfo_bgcolor</refname>
 <refpurpose>Sets background color on a table row or table cell</refpurpose>
@@ -98,7 +98,7 @@
 
   </refsect1></refentry>
 
-<refentry xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="dbfo_float-type">
+<refentry xmlns:xlink="https://www.w3.org/1999/xlink" xml:id="dbfo_float-type">
 <refnamediv>
 <refname>dbfo_float-type</refname>
 <refpurpose>Specifies float behavior for a sidebar</refpurpose>
@@ -142,7 +142,7 @@
 
   </refsect1></refentry>
 
-<refentry xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="dbfo_glossary-presentation">
+<refentry xmlns:xlink="https://www.w3.org/1999/xlink" xml:id="dbfo_glossary-presentation">
 <refnamediv>
 <refname>dbfo_glossary-presentation</refname>
 <refpurpose>Specifies presentation style for a glossary</refpurpose>
@@ -187,7 +187,7 @@
 
   </refsect1></refentry>
 
-<refentry xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="dbfo_glosslist-presentation">
+<refentry xmlns:xlink="https://www.w3.org/1999/xlink" xml:id="dbfo_glosslist-presentation">
 <refnamediv>
 <refname>dbfo_glosslist-presentation</refname>
 <refpurpose>Specifies presentation style for a glosslist</refpurpose>
@@ -232,7 +232,7 @@
 
   </refsect1></refentry>
 
-<refentry xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="dbfo_glossterm-width">
+<refentry xmlns:xlink="https://www.w3.org/1999/xlink" xml:id="dbfo_glossterm-width">
 <refnamediv>
 <refname>dbfo_glossterm-width</refname>
 <refpurpose>Specifies the glossterm width for a glossary or
@@ -275,7 +275,7 @@
 
   </refsect1></refentry>
 
-<refentry xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="dbfo_keep-together">
+<refentry xmlns:xlink="https://www.w3.org/1999/xlink" xml:id="dbfo_keep-together">
 <refnamediv>
 <refname>dbfo_keep-together</refname>
 <refpurpose>Specifies “keep” behavior for a table, example,
@@ -330,7 +330,7 @@
 
   </refsect1></refentry>
 
-<refentry xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="dbfo_label-width">
+<refentry xmlns:xlink="https://www.w3.org/1999/xlink" xml:id="dbfo_label-width">
 <refnamediv>
 <refname>dbfo_label-width</refname>
 <refpurpose>Specifies the label width for a qandaset, itemizedlist, orderedlist
@@ -365,7 +365,7 @@
 
   </refsect1></refentry>
 
-<refentry xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="dbfo_linenumbering.everyNth">
+<refentry xmlns:xlink="https://www.w3.org/1999/xlink" xml:id="dbfo_linenumbering.everyNth">
 <refnamediv>
 <refname>dbfo_linenumbering.everyNth</refname>
 <refpurpose>Specifies interval for line numbers in verbatims</refpurpose>
@@ -405,7 +405,7 @@
 
   </refsect1></refentry>
 
-<refentry xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="dbfo_linenumbering.separator">
+<refentry xmlns:xlink="https://www.w3.org/1999/xlink" xml:id="dbfo_linenumbering.separator">
 <refnamediv>
 <refname>dbfo_linenumbering.separator</refname>
 <refpurpose>Specifies separator text for line numbers in verbatims</refpurpose>
@@ -444,7 +444,7 @@
 
   </refsect1></refentry>
 
-<refentry xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="dbfo_linenumbering.width">
+<refentry xmlns:xlink="https://www.w3.org/1999/xlink" xml:id="dbfo_linenumbering.width">
 <refnamediv>
 <refname>dbfo_linenumbering.width</refname>
 <refpurpose>Specifies width for line numbers in verbatims</refpurpose>
@@ -483,7 +483,7 @@
 
   </refsect1></refentry>
 
-<refentry xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="dbfo_list-presentation">
+<refentry xmlns:xlink="https://www.w3.org/1999/xlink" xml:id="dbfo_list-presentation">
 <refnamediv>
 <refname>dbfo_list-presentation</refname>
 <refpurpose>Specifies presentation style for a variablelist or
@@ -548,7 +548,7 @@
 
   </refsect1></refentry>
 
-<refentry xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="dbfo_list-width">
+<refentry xmlns:xlink="https://www.w3.org/1999/xlink" xml:id="dbfo_list-width">
 <refnamediv>
 <refname>dbfo_list-width</refname>
 <refpurpose>Specifies the width of a horizontal simplelist</refpurpose>
@@ -579,7 +579,7 @@
 
   </refsect1></refentry>
 
-<refentry xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="dbfo_orientation">
+<refentry xmlns:xlink="https://www.w3.org/1999/xlink" xml:id="dbfo_orientation">
 <refnamediv>
 <refname>dbfo_orientation</refname>
 <refpurpose>Specifies the orientation for a CALS table row or cell</refpurpose>
@@ -610,7 +610,7 @@
 
   </refsect1></refentry>
 
-<refentry xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="dbfo_pgwide">
+<refentry xmlns:xlink="https://www.w3.org/1999/xlink" xml:id="dbfo_pgwide">
 <refnamediv>
 <refname>dbfo_pgwide</refname>
 <refpurpose>Specifies if an <tag>equation</tag> or <tag>example</tag> goes across full page width</refpurpose>
@@ -653,7 +653,7 @@
 
   </refsect1></refentry>
 
-<refentry xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="dbfo_rotated-width">
+<refentry xmlns:xlink="https://www.w3.org/1999/xlink" xml:id="dbfo_rotated-width">
 <refnamediv>
 <refname>dbfo_rotated-width</refname>
 <refpurpose>Specifies the width for a CALS table <tag>entry</tag> or
@@ -686,7 +686,7 @@
 
   </refsect1></refentry>
 
-<refentry xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="dbfo_sidebar-width">
+<refentry xmlns:xlink="https://www.w3.org/1999/xlink" xml:id="dbfo_sidebar-width">
 <refnamediv>
 <refname>dbfo_sidebar-width</refname>
 <refpurpose>Specifies the width of a sidebar</refpurpose>
@@ -728,7 +728,7 @@
 
   </refsect1></refentry>
 
-<refentry xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="dbfo_start">
+<refentry xmlns:xlink="https://www.w3.org/1999/xlink" xml:id="dbfo_start">
 <refnamediv>
 <refname>dbfo_start</refname>
 <refpurpose>(obsolete) Sets the starting number on an ordered list</refpurpose>
@@ -767,7 +767,7 @@
 
   </refsect1></refentry>
 
-<refentry xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="dbfo_table-width">
+<refentry xmlns:xlink="https://www.w3.org/1999/xlink" xml:id="dbfo_table-width">
 <refnamediv>
 <refname>dbfo_table-width</refname>
 <refpurpose>Specifies the width for a CALS table or for revhistory
@@ -804,7 +804,7 @@
 
   </refsect1></refentry>
 
-<refentry xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="dbfo_term-width">
+<refentry xmlns:xlink="https://www.w3.org/1999/xlink" xml:id="dbfo_term-width">
 <refnamediv>
 <refname>dbfo_term-width</refname>
 <refpurpose>Specifies the term width for a variablelist</refpurpose>
@@ -838,7 +838,7 @@
 
   </refsect1></refentry>
 
-<refentry xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="dbfo_toc">
+<refentry xmlns:xlink="https://www.w3.org/1999/xlink" xml:id="dbfo_toc">
 <refnamediv>
 <refname>dbfo_toc</refname>
 <refpurpose>Specifies whether a TOC should be generated for a qandaset</refpurpose>
@@ -881,7 +881,7 @@
 
   </refsect1></refentry>
 
-<refentry xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="dbfo-need">
+<refentry xmlns:xlink="https://www.w3.org/1999/xlink" xml:id="dbfo-need">
 <refnamediv>
 <refname>dbfo-need</refname>
 <refpurpose>Specify a need for space (a kind of soft page break)</refpurpose>

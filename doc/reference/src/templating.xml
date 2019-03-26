@@ -16,12 +16,12 @@
  * limitations under the License.
  */
 -->
-<chapter version="5" xml:id="templating" xmlns="http://docbook.org/ns/docbook"
-         xmlns:ns5="http://www.w3.org/1999/xhtml"
-         xmlns:ns42="http://www.w3.org/2000/svg"
-         xmlns:ns4="http://www.w3.org/1999/xlink"
-         xmlns:ns3="http://www.w3.org/1998/Math/MathML"
-         xmlns:ns="http://docbook.org/ns/docbook">
+<chapter version="5" xml:id="templating" xmlns="https://docbook.org/ns/docbook"
+         xmlns:ns5="https://www.w3.org/1999/xhtml"
+         xmlns:ns42="https://www.w3.org/2000/svg"
+         xmlns:ns4="https://www.w3.org/1999/xlink"
+         xmlns:ns3="https://www.w3.org/1998/Math/MathML"
+         xmlns:ns="https://docbook.org/ns/docbook">
   <title>Template Engine Support</title>
 
   <section xml:id="templating-introduction">
@@ -29,7 +29,7 @@
 
     <para>The Spring Framework features integration classes for templating
     engine support. Spring 1.3 provides support for the <ulink
-    url="http://www.castleproject.org/others/nvelocity/index.html">NVelocity</ulink>
+    url="https://www.castleproject.org/others/nvelocity/index.html">NVelocity</ulink>
     templating engine.</para>
   </section>
 
@@ -59,7 +59,7 @@
       <para>You create a simple definition of the template engine that uses
       the default resource loader as follows:</para>
 
-      <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net" xmlns:nv="http://www.springframework.net/nvelocity"&gt;
+      <programlisting language="myxml">&lt;objects xmlns="https://www.springframework.net" xmlns:nv="https://www.springframework.net/nvelocity"&gt;
 
   &lt;!-- Simple no arg file based configuration use's NVeclocity default file resource loader  --&gt;
   &lt;nv:engine id="velocityEngine" /&gt;
@@ -387,7 +387,7 @@ string mergedTemplate = VelocityEngineUtils.MergeTemplateIntoString(velocityEngi
     done this way:</para>
 
     <programlisting language="myxml">
-&lt;objects xmlns="http://www.springframework.net" xmlns:nv="http://www.springframework.net/nvelocity"&gt;
+&lt;objects xmlns="https://www.springframework.net" xmlns:nv="https://www.springframework.net/nvelocity"&gt;
 
 &lt;nv:nvelocity id="velocityEngine" &gt;
     &lt;nv:resource-loader&gt;

@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 -->
-<chapter xml:id="logging" xmlns="http://docbook.org/ns/docbook" version="5">
+<chapter xml:id="logging" xmlns="https://docbook.org/ns/docbook" version="5">
   <title>Common Logging</title>
 
   <section xml:id="logging-abstract">

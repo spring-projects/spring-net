@@ -6812,7 +6812,7 @@
               </para>
               <code>
                 <![CDATA[
-            <get src="http://nant.sourceforge.org/" dest="help/index.html" />
+            <get src="https://nant.sourceforge.org/" dest="help/index.html" />
                 ]]>
               </code>
             </example>
@@ -6823,7 +6823,7 @@
               </para>
               <code>
                 <![CDATA[
-            <get src="http://password.protected.site/index.html" dest="secure/index.html">
+            <get src="https://password.protected.site/index.html" dest="secure/index.html">
                 <credentials username="user" password="guess" domain="mydomain" />
                 <proxy host="proxy.company.com" port="8080">
                     <credentials username="proxyuser" password="dunno" />
@@ -8263,7 +8263,7 @@
             <remarks>
             <para>
             The <see cref="P:NAnt.Core.Tasks.RegexTask.Pattern"/> attribute must contain one or more 
-            <see href="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpgenref/html/cpcongroupingconstructs.asp">
+            <see href="https://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpgenref/html/cpcongroupingconstructs.asp">
             named grouping constructs</see>, which represents the names of the 
             properties to be set. These named grouping constructs can be enclosed 
             by angle brackets (?&lt;name&gt;) or single quotes (?'name').
@@ -9032,7 +9032,7 @@
               The date and time string displayed by the <see cref="T:NAnt.Core.Tasks.TStampTask"/> 
               uses the computer's default long date and time string format.  You 
               might consider setting these to the 
-              <see href="http://www.cl.cam.ac.uk/~mgk25/iso-time.html">ISO 8601 standard 
+              <see href="https://www.cl.cam.ac.uk/~mgk25/iso-time.html">ISO 8601 standard 
               for date and time notation</see>.
               </para>
             </remarks>
@@ -9192,7 +9192,7 @@
               <code>
                 <![CDATA[
             <?xml version="1.0" encoding="utf-8" ?>
-            <configuration xmlns="http://www.gordic.cz/shared/project-config/v_1.0.0.0">
+            <configuration xmlns="https://www.gordic.cz/shared/project-config/v_1.0.0.0">
                 <appSettings>
                     <add key="server" value="testhost.somecompany.com" />
                 </appSettings>
@@ -9212,7 +9212,7 @@
                 xpath="/x:configuration/x:appSettings/x:add[@key = 'server']/@value"
                 property="configuration.server">
                 <namespaces>
-                    <namespace prefix="x" uri="http://www.gordic.cz/shared/project-config/v_1.0.0.0" />
+                    <namespace prefix="x" uri="https://www.gordic.cz/shared/project-config/v_1.0.0.0" />
                 </namespaces>
             </xmlpeek>
                 ]]>
@@ -9320,7 +9320,7 @@
               <code>
                 <![CDATA[
             <?xml version="1.0" encoding="utf-8" ?>
-            <Commands xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Path Value">
+            <Commands xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="Path Value">
             </Commands>
                 ]]>
               </code>
@@ -9329,7 +9329,7 @@
                 <![CDATA[
             <xmlpoke file="test.xml" xpath="/Commands/@xsi:noNamespaceSchemaLocation" value="d:\Commands.xsd">
                 <namespaces>
-                    <namespace prefix="xsi" uri="http://www.w3.org/2001/XMLSchema-instance" />
+                    <namespace prefix="xsi" uri="https://www.w3.org/2001/XMLSchema-instance" />
                 </namespaces>
             </xmlpoke>
                 ]]>
@@ -14438,7 +14438,7 @@
         </member>
         <member name="F:NAnt.Core.FrameworkTypes.Mono">
             <summary>
-            Frameworks released as part of the open-source <see href="http://www.mono-project.com">Mono</see>
+            Frameworks released as part of the open-source <see href="https://www.mono-project.com">Mono</see>
             project.
             </summary>
         </member>

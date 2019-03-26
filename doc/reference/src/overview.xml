@@ -17,12 +17,12 @@
  */
 -->
 <chapter version="5" xml:id="introduction"
-         xmlns="http://docbook.org/ns/docbook"
-         xmlns:ns6="http://www.w3.org/1999/xlink"
-         xmlns:ns5="http://www.w3.org/1999/xhtml"
-         xmlns:ns4="http://www.w3.org/1998/Math/MathML"
-         xmlns:ns3="http://www.w3.org/2000/svg"
-         xmlns:ns="http://docbook.org/ns/docbook">
+         xmlns="https://docbook.org/ns/docbook"
+         xmlns:ns6="https://www.w3.org/1999/xlink"
+         xmlns:ns5="https://www.w3.org/1999/xhtml"
+         xmlns:ns4="https://www.w3.org/1998/Math/MathML"
+         xmlns:ns3="https://www.w3.org/2000/svg"
+         xmlns:ns="https://docbook.org/ns/docbook">
   <title>Introduction</title>
 
   <sect1 xml:id="introduction-overview">
@@ -33,7 +33,7 @@
     allows you to remove incidental complexity when using the base class
     libraries makes best practices, such as test driven development, easy
     practices. Spring.NET is created, supported and sustained by <ulink
-    url="http://www.springsource.com">SpringSource</ulink>.</para>
+    url="https://www.springsource.com">SpringSource</ulink>.</para>
 
     <para>The design of Spring.NET is based on the Java version of the Spring
     Framework, which has shown real-world benefits and is used in thousands of
@@ -103,8 +103,8 @@
     to explain the ideas underpinning the Inversion of Control (IoC) and
     Dependency Injection (DI) principle. If you need a decent insight into IoC
     and DI, please do refer to the article : <ulink
-    url="http://martinfowler.com/articles/injection.html">
-    http://martinfowler.com/articles/injection.html</ulink>.</para>
+    url="https://martinfowler.com/articles/injection.html">
+    https://martinfowler.com/articles/injection.html</ulink>.</para>
   </sect1>
 
   <sect1 xml:id="intro-modules">
@@ -394,7 +394,7 @@
 
       <listitem>
         <para>See <uri
-        ns6:href="http://springframework.net/codeconfig/">http://springframework.net/codeconfig/</uri>
+        ns6:href="https://springframework.net/codeconfig/">https://springframework.net/codeconfig/</uri>
         for resources, downloads, and more information</para>
       </listitem>
     </itemizedlist>
@@ -411,7 +411,7 @@
 
       <listitem>
         <para>See <uri
-        ns6:href="http://springframework.net/rest/">http://springframework.net/rest/</uri>
+        ns6:href="https://springframework.net/rest/">https://springframework.net/rest/</uri>
         for resources, downloads, and more information</para>
       </listitem>
     </itemizedlist>
@@ -427,7 +427,7 @@
 
       <listitem>
         <para>See <uri
-        ns6:href="http://springframework.net/amqp/">http://springframework.net/amqp/</uri>
+        ns6:href="https://springframework.net/amqp/">https://springframework.net/amqp/</uri>
         for resources, downloads, and more information</para>
       </listitem>
     </itemizedlist>
@@ -443,7 +443,7 @@
 
       <listitem>
         <para>See <uri
-        ns6:href="http://springframework.net/vsaddin/">http://springframework.net/vsaddin/</uri>
+        ns6:href="https://springframework.net/vsaddin/">https://springframework.net/vsaddin/</uri>
         for resources, downloads, and more information</para>
       </listitem>
     </itemizedlist>
@@ -468,8 +468,8 @@
     <title>Support</title>
 
     <para>Training and support are available through <ulink
-    url="http://www.springsource.com">SpringSource</ulink> in addition to the
+    url="https://www.springsource.com">SpringSource</ulink> in addition to the
     mailing lists and forums you can find on the main <ulink
-    url="http://www.springframework.net">Spring.NET</ulink> website.</para>
+    url="https://www.springframework.net">Spring.NET</ulink> website.</para>
   </sect1>
 </chapter>

@@ -16,12 +16,12 @@
  * limitations under the License.
  */
 -->
-<chapter version="5" xml:id="migration" xmlns="http://docbook.org/ns/docbook"
-         xmlns:ns6="http://www.w3.org/1999/xlink"
-         xmlns:ns5="http://www.w3.org/1999/xhtml"
-         xmlns:ns4="http://www.w3.org/2000/svg"
-         xmlns:ns3="http://www.w3.org/1998/Math/MathML"
-         xmlns:ns="http://docbook.org/ns/docbook">
+<chapter version="5" xml:id="migration" xmlns="https://docbook.org/ns/docbook"
+         xmlns:ns6="https://www.w3.org/1999/xlink"
+         xmlns:ns5="https://www.w3.org/1999/xhtml"
+         xmlns:ns4="https://www.w3.org/2000/svg"
+         xmlns:ns3="https://www.w3.org/1998/Math/MathML"
+         xmlns:ns="https://docbook.org/ns/docbook">
   <title>Migrating from 1.1 M2</title>
 
   <sect1 xml:id="M2RC1-introduction">
@@ -61,16 +61,16 @@
 
       <para>The target namespaces have changed, the 'directory' named /schema/
       has been removed. For example, the target schema changed from
-      http://www.springframework.net/schema/tx to
-      <literal>http://www.springframework.net/tx.</literal></para>
+      https://www.springframework.net/schema/tx to
+      <literal>https://www.springframework.net/tx.</literal></para>
 
       <para>A typical declaration to use custom schemas within your
       configuration file looks like this</para>
 
-      <programlisting language="myxml">&lt;objects xmlns='http://www.springframework.net'
-         xmlns:db="http://www.springframework.net/database"
-         xmlns:tx="http://www.springframework.net/tx"
-         xmlns:aop="http://www.springframework.net/aop"&gt;</programlisting>
+      <programlisting language="myxml">&lt;objects xmlns='https://www.springframework.net'
+         xmlns:db="https://www.springframework.net/database"
+         xmlns:tx="https://www.springframework.net/tx"
+         xmlns:aop="https://www.springframework.net/aop"&gt;</programlisting>
 
       <para>The class <literal>XmlParserRegistry</literal> was renamed to
       <literal>NamespaceParserRegistry</literal>.</para>
@@ -163,7 +163,7 @@ NamespaceParserRegistry.RegisterParser(typeof(TxNamespaceParser));
       <para>For more information on the In-Process Side-by-Side support
       introduced into the .NET 4 Framework, see the MSDN Magazine article
       located here: <uri
-      ns6:href="http://msdn.microsoft.com/en-us/magazine/ee819091.aspx">http://msdn.microsoft.com/en-us/magazine/ee819091.aspx</uri></para>
+      ns6:href="https://msdn.microsoft.com/en-us/magazine/ee819091.aspx">https://msdn.microsoft.com/en-us/magazine/ee819091.aspx</uri></para>
     </note>
 
     <para>Beginning with Spring.NET 1.3.2, this approach is no longer

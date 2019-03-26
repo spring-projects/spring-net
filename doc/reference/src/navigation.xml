@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 -->
-<chapter xml:id="navigation" xmlns="http://docbook.org/ns/docbook" version="5">
+<chapter xml:id="navigation" xmlns="https://docbook.org/ns/docbook" version="5">
   <title>Object Navigation</title>
   <sect1 xml:id="navigation-introduction">
     <title>Introduction</title>
@@ -87,7 +87,7 @@ ObjectNavigator.SetValue(inventor, "DOB", new DateTime(1854, 10, 9));
   </sect1>
   <sect1 xml:id="navigation-collections">
     <title>Navigating Collections</title>
-    <para>TODO.  TestCase shows some example usage.  Please check the Spring.NET <ulink url="http://www.springframework.net/doc/reference/navigation.html">website</ulink> for the latest updates to this document.
+    <para>TODO.  TestCase shows some example usage.  Please check the Spring.NET <ulink url="https://www.springframework.net/doc/reference/navigation.html">website</ulink> for the latest updates to this document.
     </para>
   </sect1>
 </chapter>

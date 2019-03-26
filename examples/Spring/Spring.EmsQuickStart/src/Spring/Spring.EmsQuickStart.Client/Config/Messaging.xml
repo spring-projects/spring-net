@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<objects xmlns="http://www.springframework.net"
-         xmlns:ems="http://www.springframework.net/ems">
+<objects xmlns="https://www.springframework.net"
+         xmlns:ems="https://www.springframework.net/ems">
 
 
 

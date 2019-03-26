@@ -12,17 +12,17 @@
 <!ENTITY hsize4space "15.552pt"> <!-- 0.75 * hsize4 -->
 <!ENTITY hsize5space "18.6624pt"> <!-- 0.75 * hsize5 -->
 ]>
-<t:templates xmlns:t="http://nwalsh.com/docbook/xsl/template/1.0"
-	     xmlns:param="http://nwalsh.com/docbook/xsl/template/1.0/param"
-             xmlns:fo="http://www.w3.org/1999/XSL/Format"
-             xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+<t:templates xmlns:t="https://nwalsh.com/docbook/xsl/template/1.0"
+	     xmlns:param="https://nwalsh.com/docbook/xsl/template/1.0/param"
+             xmlns:fo="https://www.w3.org/1999/XSL/Format"
+             xmlns:xsl="https://www.w3.org/1999/XSL/Transform">
 
 <!-- ********************************************************************
      $Id: titlepage.templates.xml 6910 2007-06-28 23:23:30Z xmldoc $
      ********************************************************************
 
      This file is part of the DocBook XSL Stylesheet distribution.
-     See ../README or http://docbook.sf.net/ for copyright
+     See ../README or http://docbook.sourceforge.net/ for copyright
      copyright and other information.
 
      ******************************************************************** -->

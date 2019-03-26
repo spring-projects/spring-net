@@ -5,9 +5,9 @@
 	autowire without ambiguity from target and proxy.
 -->
 
-<objects xmlns="http://www.springframework.net" 
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
+<objects xmlns="https://www.springframework.net" 
+	xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="https://www.springframework.net https://www.springframework.net/xsd/spring-objects.xsd">
 
 	<object id="nopInterceptor" type="Spring.Aop.Interceptor.NopInterceptor">
 	</object>

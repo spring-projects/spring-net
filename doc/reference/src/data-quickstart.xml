@@ -17,12 +17,12 @@
  */
 -->
 <chapter version="5" xml:id="data-quickstart"
-         xmlns="http://docbook.org/ns/docbook"
-         xmlns:ns6="http://www.w3.org/1999/xlink"
-         xmlns:ns5="http://www.w3.org/1999/xhtml"
-         xmlns:ns4="http://www.w3.org/2000/svg"
-         xmlns:ns3="http://www.w3.org/1998/Math/MathML"
-         xmlns:ns="http://docbook.org/ns/docbook">
+         xmlns="https://docbook.org/ns/docbook"
+         xmlns:ns6="https://www.w3.org/1999/xlink"
+         xmlns:ns5="https://www.w3.org/1999/xhtml"
+         xmlns:ns4="https://www.w3.org/2000/svg"
+         xmlns:ns3="https://www.w3.org/1998/Math/MathML"
+         xmlns:ns="https://docbook.org/ns/docbook">
   <title>ADO.NET Data Access QuickStart</title>
 
   <section>
@@ -37,8 +37,8 @@
     <para>The quick start contains pseudo DAO objects and a collection of
     NUnit tests to exercise them rather than a full blown application. To run
     the tests from within VS.NET install <ulink
-    url="http://www.testdriven.net/">TestDriven.NET</ulink>, <ulink
-    url="http://www.jetbrains.com/resharper/">ReSharper</ulink>, or an
+    url="https://www.testdriven.net/">TestDriven.NET</ulink>, <ulink
+    url="https://www.jetbrains.com/resharper/">ReSharper</ulink>, or an
     equivalent . The listing of DAO classes and the parts of Spring.Data that
     they demonstrate is shown below.</para>
 
@@ -91,8 +91,8 @@
       database connection string. The listing in
       DataQuickStart.GenericTemplate.ExampleTests.xml is shown below</para>
 
-      <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"
-         xmlns:db="http://www.springframework.net/database"&gt;
+      <programlisting language="myxml">&lt;objects xmlns="https://www.springframework.net"
+         xmlns:db="https://www.springframework.net/database"&gt;
 
   &lt;db:provider id="dbProvider" 
                 provider="SqlServer-1.1" 
@@ -110,7 +110,7 @@
       abstraction for details particular to your database configuration. You
       should also install the Northwind database, which is available for
       SqlServer 2005 from this <ulink
-      url="http://www.microsoft.com/downloads/details.aspx?FamilyID=06616212-0356-46a0-8da2-eebc53a68034&amp;DisplayLang=en">download
+      url="https://www.microsoft.com/downloads/details.aspx?FamilyID=06616212-0356-46a0-8da2-eebc53a68034&amp;DisplayLang=en">download
       location</ulink>. The minimal schema to support other database providers
       may be supported in the future.</para>
 

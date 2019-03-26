@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 -->
-<chapter xml:id="resources" xmlns="http://docbook.org/ns/docbook" version="5">
+<chapter xml:id="resources" xmlns="https://docbook.org/ns/docbook" version="5">
   <title>Resources</title>
 
   <section xml:id="objects-iresource">
@@ -237,7 +237,7 @@
         </listitem>
       </itemizedlist> Refer to the MSDN documentation for more information on
     <ulink
-    url="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfsystemurimemberstopic.asp">supported
+    url="https://msdn.microsoft.com/library/default.asp?url=/library/en-us/cpref/html/frlrfsystemurimemberstopic.asp">supported
     Uri scheme types</ulink>.</para>
 
     <section>
@@ -300,7 +300,7 @@
     <literal>ConfigurableResourceLoader</literal> which supports the Uri
     protocols/schemes listed previously. If you do not specify a protocol then
     the file protocol is used. The following shows some sample
-    usage.<programlisting language="csharp">IResource resource = appContext.GetResource("http://www.springframework.net/license.html");
+    usage.<programlisting language="csharp">IResource resource = appContext.GetResource("https://www.springframework.net/license.html");
 resource = appContext.GetResource("assembly://Spring.Core.Tests/Spring/TestResource.txt");
 resource = appContext.GetResource("https://sourceforge.net/");
 resource = appContext.GetResource("file:///C:/WINDOWS/ODBC.INI");

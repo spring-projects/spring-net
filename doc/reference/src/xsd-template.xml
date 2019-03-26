@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 -->
-<appendix id="springobjectsxsd" xmlns="http://docbook.org/ns/docbook" version="5">
+<appendix id="springobjectsxsd" xmlns="https://docbook.org/ns/docbook" version="5">
   <title>Spring.NET's <literal>spring-objects.xsd</literal></title>
   <programlisting language="myxml"><![CDATA[@xsd-include@]]></programlisting>
 </appendix>

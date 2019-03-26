@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <chapter version="5" xml:id="codeconfig-attribute-reference"
-         xmlns="http://docbook.org/ns/docbook"
-         xmlns:ns5="http://www.w3.org/1998/Math/MathML"
-         xmlns:ns42="http://www.w3.org/2000/svg"
-         xmlns:ns4="http://www.w3.org/1999/xlink"
-         xmlns:ns3="http://www.w3.org/1999/xhtml"
-         xmlns:ns="http://docbook.org/ns/docbook">
+         xmlns="https://docbook.org/ns/docbook"
+         xmlns:ns5="https://www.w3.org/1998/Math/MathML"
+         xmlns:ns42="https://www.w3.org/2000/svg"
+         xmlns:ns4="https://www.w3.org/1999/xlink"
+         xmlns:ns3="https://www.w3.org/1999/xhtml"
+         xmlns:ns="https://docbook.org/ns/docbook">
   <title>Attribute Reference</title>
 
   <para>In this chapter, we will explore the attributes that are the essential

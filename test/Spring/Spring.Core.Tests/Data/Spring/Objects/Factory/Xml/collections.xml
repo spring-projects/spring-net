@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<objects xmlns="http://www.springframework.net">
+<objects xmlns="https://www.springframework.net">
 	<description>
 		Tests for list and map handling in an XML object definition file.
 	</description>

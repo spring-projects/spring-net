@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<objects xmlns="http://www.springframework.net" xmlns:nv="http://www.springframework.net/nvelocity">
+<objects xmlns="https://www.springframework.net" xmlns:nv="https://www.springframework.net/nvelocity">
 
     <nv:engine id="cnFileVelocityEngine" >
         <nv:resource-loader default-cache-size="200" modification-check-interval="30" template-caching="true">
@@ -79,7 +79,7 @@
 
     <!-- Use (ConfigurableResourceLoader) spring resource abstraction for templates that are not file or assembly based  -->
     <object id="springResourceLoaderBasedVelocityEngine" type="Spring.Template.Velocity.VelocityEngineFactoryObject, Spring.Template.Velocity" >
-        <!--<property name="ResourceLoaderPath " value="http://somesite/template.vm" />-->
+        <!--<property name="ResourceLoaderPath " value="https://somesite/template.vm" />-->
         <property name="ResourceLoaderPath " value="Template/Velocity/" />
         <property name="PreferFileSystemAccess " value="false" />
     </object>

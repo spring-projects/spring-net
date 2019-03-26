@@ -17,12 +17,12 @@
  */
 -->
 <chapter version="5" xml:id="aop-aspect-library"
-         xmlns="http://docbook.org/ns/docbook"
-         xmlns:ns6="http://www.w3.org/1999/xlink"
-         xmlns:ns5="http://www.w3.org/1998/Math/MathML"
-         xmlns:ns4="http://www.w3.org/1999/xhtml"
-         xmlns:ns3="http://www.w3.org/2000/svg"
-         xmlns:ns="http://docbook.org/ns/docbook">
+         xmlns="https://docbook.org/ns/docbook"
+         xmlns:ns6="https://www.w3.org/1999/xlink"
+         xmlns:ns5="https://www.w3.org/1998/Math/MathML"
+         xmlns:ns4="https://www.w3.org/1999/xhtml"
+         xmlns:ns3="https://www.w3.org/2000/svg"
+         xmlns:ns="https://docbook.org/ns/docbook">
   <title>Aspect Library</title>
 
   <sect1 xml:id="aop-library-introduction">
@@ -660,7 +660,7 @@ Exiting Bark, 5d2bad47-62cd-435b-8de7-91f12b7f433e, 30453.125 ms, return=4</prog
     successful invocation. When applying retry advice it is important to know
     if making two calls to the remote service will cause side effects.
     Generally speaking, the method being invoked should be <ulink
-    url="http://en.wikipedia.org/wiki/Idempotent#Computer_Science">idempotent</ulink>,
+    url="https://en.wikipedia.org/wiki/Idempotent#Computer_Science">idempotent</ulink>,
     that is, it is safe to call multiple times.</para>
 
     <para>The retry advice is specified using a little language, i.e a DSL. A

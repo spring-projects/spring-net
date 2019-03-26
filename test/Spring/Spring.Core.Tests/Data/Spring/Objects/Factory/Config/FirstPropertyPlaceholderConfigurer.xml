@@ -14,7 +14,7 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<objects xmlns="http://www.springframework.net">
+<objects xmlns="https://www.springframework.net">
 
   <object id="testObject" type="Spring.Objects.TestObject, Spring.Core.Tests">
     <property name="Name" value="${SomeName}" />

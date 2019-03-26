@@ -17,12 +17,12 @@
  */
 -->
 <chapter version="5" xml:id="webservices"
-         xmlns="http://docbook.org/ns/docbook"
-         xmlns:ns6="http://www.w3.org/1999/xlink"
-         xmlns:ns5="http://www.w3.org/1998/Math/MathML"
-         xmlns:ns4="http://www.w3.org/1999/xhtml"
-         xmlns:ns3="http://www.w3.org/2000/svg"
-         xmlns:ns="http://docbook.org/ns/docbook">
+         xmlns="https://docbook.org/ns/docbook"
+         xmlns:ns6="https://www.w3.org/1999/xlink"
+         xmlns:ns5="https://www.w3.org/1998/Math/MathML"
+         xmlns:ns4="https://www.w3.org/1999/xhtml"
+         xmlns:ns3="https://www.w3.org/2000/svg"
+         xmlns:ns="https://docbook.org/ns/docbook">
   <title>Web Services</title>
 
   <sect1 xml:id="web-services-introduction">
@@ -91,7 +91,7 @@
       <programlisting language="csharp">
 namespace MyComany.MyApp.Services
 {
-    [WebService(Namespace="http://myCompany/services")]
+    [WebService(Namespace="https://myCompany/services")]
     public class HelloWorldService
     {
         [WebMethod]
@@ -159,7 +159,7 @@ namespace MyComany.MyApp.Services
       value specified for the <literal>name</literal> attribute of the object
       definition as the service name:</para>
 
-      <programlisting>http://localhost/MyWebApp/HelloWorld.asmx</programlisting>
+      <programlisting>https://localhost/MyWebApp/HelloWorld.asmx</programlisting>
     </sect2>
 
     <sect2 xml:id="web-services-di">
@@ -188,7 +188,7 @@ namespace MyApp.Services
         string HelloWorld();
     }
 
-    [WebService(Namespace="http://myCompany/services")]
+    [WebService(Namespace="https://myCompany/services")]
     public class HelloWorldService : IHelloWorld
     {
         private string message;
@@ -288,7 +288,7 @@ namespace MyApp.Services
       <programlisting language="myxml">
 &lt;object id="HelloWorldExporter" type="Spring.Web.Services.WebServiceExporter, Spring.Web"&gt;
     &lt;property name="TargetName" value="HelloWorld"/&gt;
-    &lt;property name="Namespace" value="http://myCompany/services"/&gt;
+    &lt;property name="Namespace" value="https://myCompany/services"/&gt;
     &lt;property name="Description" value="My exported HelloWorld web service"/&gt;
     &lt;property name="MemberAttributes"&gt;
         &lt;dictionary&gt;
@@ -303,7 +303,7 @@ namespace MyApp.Services
 &lt;/object&gt;
 
 // or, once configuration improvements are implemented...
-&lt;web:service targetName="HelloWorld" namespace="http://myCompany/services"&gt;
+&lt;web:service targetName="HelloWorld" namespace="https://myCompany/services"&gt;
     &lt;description&gt;My exported HelloWorld web service.&lt;/description&gt;
     &lt;methods&gt;
         &lt;method name="HelloWorld" messageName="ZdravoSvete"&gt;
@@ -391,7 +391,7 @@ namespace MyApp.Services
 &lt;object id="MyServiceExporter" type="Spring.Web.Services.WebServiceExporter, Spring.Web"&gt;
     &lt;property name="TargetName" value="MyServiceProxy"/&gt;
     &lt;property name="Name" value="MyService"/&gt;
-    &lt;property name="Namespace" value="http://myApp/webservices"/&gt;
+    &lt;property name="Namespace" value="https://myApp/webservices"/&gt;
     &lt;property name="Description" value="My web service"/&gt;
 &lt;/object&gt; 
       </programlisting>
@@ -484,7 +484,7 @@ namespace MyCompany.Services
 
       <programlisting language="myxml">
         &lt;object id="calculatorService" type="Spring.Web.Services.WebServiceProxyFactory, Spring.Services"&gt;
-          &lt;property name="ServiceUri" value="http://myServer/Calculator/calculatorService.asmx"/&gt;
+          &lt;property name="ServiceUri" value="https://myServer/Calculator/calculatorService.asmx"/&gt;
           &lt;!--&lt;property name="ServiceUri" value="file://~/calculatorService.wsdl"/&gt;--&gt;
           &lt;property name="ServiceInterface" value="Spring.Calculator.Interfaces.IAdvancedCalculator, Spring.Calculator.Contract"/&gt;
           &lt;!-- Dependency injection on Factory's product : the proxy instance of type SoapHttpClientProtocol --&gt;
@@ -550,7 +550,7 @@ namespace MyCompany.Services
 
       <para>For an example of how using SOAP headers for authentication using
       the WebServiceExporter and WebServiceProxyFactory, refer to this <ulink
-      url="http://opensource.atlassian.com/confluence/spring/download/attachments/708/Spring.Examples.SoapHeader.rar?version=1">solution</ulink>
+      url="https://opensource.atlassian.com/confluence/spring/download/attachments/708/Spring.Examples.SoapHeader.rar?version=1">solution</ulink>
       on our wiki.</para>
     </sect2>
   </sect1>

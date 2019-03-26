@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
-<objects xmlns="http://www.springframework.net"
-         xmlns:context="http://www.springframework.net/context">
+<objects xmlns="https://www.springframework.net"
+         xmlns:context="https://www.springframework.net/context">
 
 	<context:component-scan base-assemblies="Spring.Core.Tests">
 		<context:include-filter type="regex" expression="ComponentScan.ScanComponentsAndAddToContext.*"/>

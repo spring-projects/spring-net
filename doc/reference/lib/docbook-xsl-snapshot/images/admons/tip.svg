@@ -8,7 +8,7 @@
 	<!ENTITY st4 "fill-rule:nonzero;clip-rule:nonzero;stroke:#000000;stroke-miterlimit:4;">
 	<!ENTITY st5 "stroke:none;">
 ]>
-<svg  width="48pt" height="48pt" viewBox="0 0 48 48" xml:space="preserve" xmlns="http://www.w3.org/2000/svg">
+<svg  width="48pt" height="48pt" viewBox="0 0 48 48" xml:space="preserve" xmlns="https://www.w3.org/2000/svg">
 	<g id="Layer_x0020_3" style="&st2;">
 		<g>
 			<path d="M9.5,18.6c0,8,6.5,14.4,14.4,14.4c8,0,14.4-6.5,14.4-14.4c0-8-6.5-14.4-14.4-14.4c-8,0-14.4,6.5-14.4,14.4z M12.8,18.6c0-6.2,5-11.2,11.2-11.2c6.2,0,11.2,5,11.2,11.2c0,6.2-5,11.2-11.2,11.2c-6.2,0-11.2-5-11.2-11.2z"/>

@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 -->
-<chapter xml:id="dao" xmlns="http://docbook.org/ns/docbook" version="5">
+<chapter xml:id="dao" xmlns="https://docbook.org/ns/docbook" version="5">
   <title>DAO support</title>
 
   <section xml:id="dao-introduction">
@@ -148,7 +148,7 @@
     codes that map to a
     <literal>DataIntegrityViolationException</literal>.</para>
 
-    <para><programlisting language="myxml">&lt;objects xmlns='http://www.springframework.net'&gt;
+    <para><programlisting language="myxml">&lt;objects xmlns='https://www.springframework.net'&gt;
  
   &lt;alias name='SqlServer-2.0' alias='SqlServer2005'/&gt;
  

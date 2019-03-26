@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 -->
-<chapter xml:id="ajax" xmlns="http://docbook.org/ns/docbook" version="5">
+<chapter xml:id="ajax" xmlns="https://docbook.org/ns/docbook" version="5">
   <title>ASP.NET AJAX</title>
 
   <sect1 xml:id="introduction-ajax">
@@ -33,7 +33,7 @@
     <title>Web Services</title>
 
     <para>Spring.NET, and particularly Spring.Web, improved <ulink
-    url="http://www.springframework.net/doc-latest/reference/html/webservices.html">support
+    url="https://www.springframework.net/doc-latest/reference/html/webservices.html">support
     for web services</ulink> in .NET with the
     <literal>WebServiceExporter</literal>. Exporting of an ordinary plain
     .NET object as a web service is achieved by registering a custom
@@ -41,7 +41,7 @@
     class as the HTTP handler for <literal>*.asmx</literal> requests.</para>
 
     <para><ulink
-    url="http://www.springframework.net/doc-latest/reference/html/webservices.html">Microsoft
+    url="https://www.springframework.net/doc-latest/reference/html/webservices.html">Microsoft
     ASP.NET AJAX</ulink> introduced a new HTTP handler
     <literal>System.Web.Script.Services.ScriptHandlerFactory</literal> to
     allow a Web Service to be invoked from the browser by using
@@ -65,7 +65,7 @@
       installation. : <programlisting language="myxml">
 &lt;object id="ContactWebService" type="Spring.Web.Services.WebServiceExporter, Spring.Web"&gt;
   &lt;property name="TargetName" value="ContactService"/&gt;
-  &lt;property name="Namespace" value="http://Spring.Examples.Atlas/ContactService"/&gt;
+  &lt;property name="Namespace" value="https://Spring.Examples.Atlas/ContactService"/&gt;
   &lt;property name="Description" value="Contact Web Services"/&gt;
   &lt;property name="TypeAttributes"&gt;
     &lt;list&gt;

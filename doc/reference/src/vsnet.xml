@@ -16,12 +16,12 @@
  * limitations under the License.
  */
 -->
-<chapter version="5" xml:id="vsnet" xmlns="http://docbook.org/ns/docbook"
-         xmlns:ns5="http://www.w3.org/1999/xhtml"
-         xmlns:ns4="http://www.w3.org/2000/svg"
-         xmlns:ns3="http://www.w3.org/1998/Math/MathML"
-         xmlns:ns2="http://www.w3.org/1999/xlink"
-         xmlns:ns="http://docbook.org/ns/docbook">
+<chapter version="5" xml:id="vsnet" xmlns="https://docbook.org/ns/docbook"
+         xmlns:ns5="https://www.w3.org/1999/xhtml"
+         xmlns:ns4="https://www.w3.org/2000/svg"
+         xmlns:ns3="https://www.w3.org/1998/Math/MathML"
+         xmlns:ns2="https://www.w3.org/1999/xlink"
+         xmlns:ns="https://docbook.org/ns/docbook">
   <title>Visual Studio.NET Integration</title>
 
   <sect1 xml:id="vsnet-config-section">
@@ -59,9 +59,9 @@
     project.</para>
 
     <programlisting language="myxml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;objects xmlns="http://www.springframework.net"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd"&gt;
+&lt;objects xmlns="https://www.springframework.net"
+	xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="https://www.springframework.net https://www.springframework.net/xsd/spring-objects.xsd"&gt;
   &lt;object id="..." type="..."&gt;
   ...
   &lt;/object&gt;
@@ -131,7 +131,7 @@
     the namespace declaration to the objects element,</para>
 
     <para><programlisting language="myxml">&lt;?xml version="1.0" encoding="UTF-8"?&gt;
-&lt;objects xmlns="http://www.springframework.net"&gt;
+&lt;objects xmlns="https://www.springframework.net"&gt;
   &lt;object id="..." type="..."&gt;
   ...
   &lt;/object&gt;
@@ -167,7 +167,7 @@
       &lt;resource uri="config://spring/objects"/&gt;
     &lt;/context&gt;
 
-    &lt;objects xmlns="http://www.springframework.net"&gt;
+    &lt;objects xmlns="https://www.springframework.net"&gt;
         ...
     &lt;/objects&gt;
 
@@ -204,7 +204,7 @@
     Spring.NET Visual Studio 2010 Extension. For more information and to
     download the latest version of this 100% free tool, visit <link
     ns2:arcrole=""
-    ns2:href="http://springframework.net/vsaddin/">http://springframework.net/vsaddin/</link>.</para>
+    ns2:href="https://springframework.net/vsaddin/">https://springframework.net/vsaddin/</link>.</para>
 
     <para>The latest release of the Spring.NET Visual Studio 2010 Extension
     provides Intellisense<superscript>tm</superscript> support in VS.NET 2010
@@ -255,7 +255,7 @@
     running quickly with a Spring.NET based application or library. Four
     templates are provided and there are plans for more. All the templates
     aside from the web template have been created using <link
-    ns2:href="http://solutionfactory.codeplex.com/">SolutionFactory VS.NET
+    ns2:href="https://solutionfactory.codeplex.com/">SolutionFactory VS.NET
     Add-in</link>. The source to creating the templates is not included in the
     distribution now, so please download the source from the <link
     ns2:arcrole=""
@@ -469,7 +469,7 @@
     <title>Versions of XML Schema</title>
 
     <para>The latest version of the schema will always be located under
-    <literal>http://www.springframework.net/xsd/ </literal>The filename of the
+    <literal>https://www.springframework.net/xsd/ </literal>The filename of the
     .xsd files contains the first Spring.NET version to which they
     apply.</para>
   </sect1>

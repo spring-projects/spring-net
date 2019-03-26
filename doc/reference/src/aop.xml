@@ -16,12 +16,12 @@
  * limitations under the License.
  */
 -->
-<chapter version="5" xml:id="aop" xmlns="http://docbook.org/ns/docbook"
-         xmlns:ns5="http://www.w3.org/1998/Math/MathML"
-         xmlns:ns4="http://www.w3.org/2000/svg"
-         xmlns:ns3="http://www.w3.org/1999/xhtml"
-         xmlns:ns2="http://www.w3.org/1999/xlink"
-         xmlns:ns="http://docbook.org/ns/docbook">
+<chapter version="5" xml:id="aop" xmlns="https://docbook.org/ns/docbook"
+         xmlns:ns5="https://www.w3.org/1998/Math/MathML"
+         xmlns:ns4="https://www.w3.org/2000/svg"
+         xmlns:ns3="https://www.w3.org/1999/xhtml"
+         xmlns:ns2="https://www.w3.org/1999/xlink"
+         xmlns:ns="https://docbook.org/ns/docbook">
   <title>Aspect Oriented Programming with Spring.NET</title>
 
   <sect1 xml:id="aop-introduction-concepts">
@@ -588,9 +588,9 @@
           when its code is 'small', just a few lines of code (less than 32
           bytes of IL). For some interesting reading on this process read
           David Notario's blog entries (<ulink
-          url="http://blogs.msdn.com/davidnotario/archive/2004/10/28/248953.aspx">JIT
+          url="https://blogs.msdn.com/davidnotario/archive/2004/10/28/248953.aspx">JIT
           Optimizations I</ulink> and <ulink
-          url="http://blogs.msdn.com/davidnotario/archive/2004/11/01/250398.aspx">JIT
+          url="https://blogs.msdn.com/davidnotario/archive/2004/11/01/250398.aspx">JIT
           Optimizations II</ulink>). Additionally, when an assembly is
           compiled with a Release configuration the assembly metadata
           instructs the CLR to enable JIT optimizations. When compiled with a
@@ -2267,9 +2267,9 @@ Saving speaker...
     piece of advice, in a more declarative manner. Under the covers the
     DefaultAdvisorAutoProxyCreator is being used. Here is an example,</para>
 
-    <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"
-		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xmlns:aop="http://www.springframework.net/aop"&gt;
+    <programlisting language="myxml">&lt;objects xmlns="https://www.springframework.net"
+		xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+		xmlns:aop="https://www.springframework.net/aop"&gt;
 
 	&lt;aop:config&gt;
 
@@ -2330,7 +2330,7 @@ Saving speaker...
       &lt;resource uri="config://spring/objects"/&gt;       
     &lt;/context&gt;     
 
-    &lt;objects xmlns="http://www.springframework.net"&gt;
+    &lt;objects xmlns="https://www.springframework.net"&gt;
         ...
     &lt;/objects&gt;
 

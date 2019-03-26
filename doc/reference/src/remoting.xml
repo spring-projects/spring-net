@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 -->
-<chapter xml:id="remoting" xmlns="http://docbook.org/ns/docbook" version="5">
+<chapter xml:id="remoting" xmlns="https://docbook.org/ns/docbook" version="5">
   <title>.NET Remoting</title>
 
   <section xml:id="remoting-introduction">
@@ -112,8 +112,8 @@ RemotingServices.Marshal(calc, "MyRemotedCalculator");</programlisting></para>
 
     <para>A custom schema is provided to make the object declaration even
     easier and with intellisense support for the attributes. This is shown
-    below<programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net" 
-         xmlns:r="http://www.springframework.net/remoting"&gt;
+    below<programlisting language="myxml">&lt;objects xmlns="https://www.springframework.net" 
+         xmlns:r="https://www.springframework.net/remoting"&gt;
 
   &lt;r:saoExporter targetName="singletonCalculator" 
                  serviceName="RemotedSaoSingletonCalculator" /&gt;
@@ -209,8 +209,8 @@ Console.ReadLine();
       the custom Spring remoting schema can be used to define an instance of
       this class as shown below, taken from the <link
       linkend="remoting-quickstart">Remoting QuickStart</link>
-      <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"
-         xmlns:r="http://www.springframework.net/remoting"&gt;
+      <programlisting language="myxml">&lt;objects xmlns="https://www.springframework.net"
+         xmlns:r="https://www.springframework.net/remoting"&gt;
 
   &lt;r:configurer filename="Spring.Calculator.RemoteApp.exe.config" /&gt;
 
@@ -227,7 +227,7 @@ Console.ReadLine();
 
       <para>If you are deploying a .NET remoting application inside IIS there
       is a <ulink
-      url="http://forum.springframework.net/showthread.php?t=469">sample
+      url="https://forum.springframework.net/showthread.php?t=469">sample
       project </ulink> that demonstrates the necessary configuration using
       Spring.Web.</para>
 
@@ -477,10 +477,10 @@ Console.ReadLine();
 
     <para>Two articles that describe the process of creating a standard SAO
     factory for returning CAO objects are <ulink
-    url="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dnpatterns/html/ImpBrokerClient.asp">Implementing
+    url="https://msdn.microsoft.com/library/default.asp?url=/library/en-us/dnpatterns/html/ImpBrokerClient.asp">Implementing
     Broker with .NET Remoting Using Client-Activated Objects</ulink> on MSDN
     and <ulink
-    url="http://www.glacialcomponents.com/ArticleDetail/CAOGuide.aspx">Step by
+    url="https://www.glacialcomponents.com/ArticleDetail/CAOGuide.aspx">Step by
     Step guide to CAO creation through SAO class factories</ulink> on Glacial
     Components website.</para>
   </section>

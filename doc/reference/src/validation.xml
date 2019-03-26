@@ -16,12 +16,12 @@
  * limitations under the License.
  */
 -->
-<chapter version="5" xml:id="validation" xmlns="http://docbook.org/ns/docbook"
-         xmlns:ns5="http://www.w3.org/1999/xhtml"
-         xmlns:ns4="http://www.w3.org/2000/svg"
-         xmlns:ns3="http://www.w3.org/1998/Math/MathML"
-         xmlns:ns2="http://www.w3.org/1999/xlink"
-         xmlns:ns="http://docbook.org/ns/docbook">
+<chapter version="5" xml:id="validation" xmlns="https://docbook.org/ns/docbook"
+         xmlns:ns5="https://www.w3.org/1999/xhtml"
+         xmlns:ns4="https://www.w3.org/2000/svg"
+         xmlns:ns3="https://www.w3.org/1998/Math/MathML"
+         xmlns:ns2="https://www.w3.org/1999/xlink"
+         xmlns:ns="https://docbook.org/ns/docbook">
   <title>Validation Framework</title>
 
   <section>
@@ -32,7 +32,7 @@
     scope and starts falling apart as soon as you need to perform more complex
     validations. Problems with the out of the box ASP.NET validation framework
     are well <ulink
-    url="http://www.peterblum.com/VAM/ValMain.aspx">documented</ulink> by
+    url="/DES/CompareFrameworks.aspx">documented</ulink> by
     Peter Blum on his web site, so we are not going to repeat them here. Peter
     has also built a nice replacement for the standard ASP.NET validation
     framework, which is worth looking into if you prefer the standard ASP.NET
@@ -44,7 +44,7 @@
     <para>On the Windows Forms side the situation is even worse. Out of the
     box data validation features are completely inadequate as pointed out by
     Ian Griffiths in this <ulink
-    url="http://pluralsight.com/wiki/default.aspx/Craig/WinFormsValidationBroken.html">article</ulink>.
+    url="https://pluralsight.com/wiki/default.aspx/Craig/WinFormsValidationBroken.html">article</ulink>.
     One of the major problems we saw in most validation frameworks available
     today, both open source and commercial, is that they are tied to a
     specific presentation technology. The ASP.NET validation framework uses
@@ -106,7 +106,7 @@
     validation rules defined for the Trip object in the SpringAir sample
     application:</para>
 
-    <para><programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net" xmlns:v="http://www.springframework.net/validation"&gt;
+    <para><programlisting language="myxml">&lt;objects xmlns="https://www.springframework.net" xmlns:v="https://www.springframework.net/validation"&gt;
 
   &lt;object type="TripForm.aspx" parent="standardPage"&gt;
      &lt;property name="TripValidator" ref="tripValidator" /&gt;
@@ -151,7 +151,7 @@
     above:<itemizedlist>
         <listitem>
           <para>You need to reference the validation schema by adding a
-          <literal>xmlns:v="http://www.springframework.net/validation"</literal>
+          <literal>xmlns:v="https://www.springframework.net/validation"</literal>
           namespace declaration to the root element.</para>
         </listitem>
 
@@ -707,7 +707,7 @@ bool userInfoIsValid = userInfoValidator.Validate(userInfo, errors);
     <para>The first thing you need to do is inject validators you want to use
     into your ASP.NET page, as shown in the example below:</para>
 
-    <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net" xmlns:v="http://www.springframework.net/validation"&gt;
+    <programlisting language="myxml">&lt;objects xmlns="https://www.springframework.net" xmlns:v="https://www.springframework.net/validation"&gt;
 
   &lt;object type="TripForm.aspx" parent="standardPage"&gt;
      &lt;property name="TripValidator" ref="tripValidator" /&gt;

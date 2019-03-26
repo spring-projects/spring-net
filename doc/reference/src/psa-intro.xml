@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 -->
-<chapter xml:id="psa-intro" xmlns="http://docbook.org/ns/docbook" version="5">
+<chapter xml:id="psa-intro" xmlns="https://docbook.org/ns/docbook" version="5">
   <title>Introduction to Spring Services</title>
 
   <sect1>

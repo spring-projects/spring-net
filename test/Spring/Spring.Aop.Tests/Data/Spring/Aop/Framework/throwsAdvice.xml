@@ -2,7 +2,7 @@
 <!--
 	Tests for throws advice.
 -->
-<objects xmlns="http://www.springframework.net">
+<objects xmlns="https://www.springframework.net">
     <!-- Simple target -->
     <object id="target" type="Spring.Aop.Framework.Adapter.ThrowsAdviceInterceptorTests+Echo"/>
     <object id="nopInterceptor" type="Spring.Aop.Interceptor.NopInterceptor"/>

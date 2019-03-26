@@ -17,12 +17,12 @@
  */
 -->
 <chapter version="5" xml:id="nh-quickstart"
-         xmlns="http://docbook.org/ns/docbook"
-         xmlns:ns5="http://www.w3.org/2000/svg"
-         xmlns:ns4="http://www.w3.org/1999/xhtml"
-         xmlns:ns3="http://www.w3.org/1998/Math/MathML"
-         xmlns:ns2="http://www.w3.org/1999/xlink"
-         xmlns:ns="http://docbook.org/ns/docbook">
+         xmlns="https://docbook.org/ns/docbook"
+         xmlns:ns5="https://www.w3.org/2000/svg"
+         xmlns:ns4="https://www.w3.org/1999/xhtml"
+         xmlns:ns3="https://www.w3.org/1998/Math/MathML"
+         xmlns:ns2="https://www.w3.org/1999/xlink"
+         xmlns:ns="https://docbook.org/ns/docbook">
   <title>NHibernate QuickStart</title>
 
   <section>
@@ -331,8 +331,8 @@
       referring to a SessionFactory that is created via Spring's
       LocalSessionFactoryObject. See the file Dao.xml for more details.</para>
 
-      <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"
-         xmlns:db="http://www.springframework.net/database"&gt;
+      <programlisting language="myxml">&lt;objects xmlns="https://www.springframework.net"
+         xmlns:db="https://www.springframework.net/database"&gt;
 
   &lt;!-- Referenced by main application context configuration file --&gt;
   &lt;description&gt;

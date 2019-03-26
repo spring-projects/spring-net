@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 -->
-<chapter xml:id="objects-misc" xmlns="http://docbook.org/ns/docbook" version="5">
+<chapter xml:id="objects-misc" xmlns="https://docbook.org/ns/docbook" version="5">
   <title>The IObjectWrapper and Type conversion</title>
 
   <sect1 xml:id="objects-misc-introduction">
@@ -290,7 +290,7 @@ public class Foo
     below demonstrates this automatic conversion of the
     <literal>Example.Xml.SAXParser</literal> (a string) into the corresponding
     <literal>Type</literal> instance for use in this factory-style class.
-    <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"&gt;
+    <programlisting language="myxml">&lt;objects xmlns="https://www.springframework.net"&gt;
 &lt;object id="parserFactory" type="Example.XmlParserFactory, ExamplesLibrary"
 destroy-method="Close"&gt;
   &lt;property name="ParserClass" value="Example.Xml.SAXParser, ExamplesLibrary"/&gt;

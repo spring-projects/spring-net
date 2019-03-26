@@ -4,9 +4,9 @@
 	- Database Provider definitions for .NET Core.
 -->
 <objects
-  xmlns="http://www.springframework.net"
-  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-  xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
+  xmlns="https://www.springframework.net"
+  xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance" 
+  xsi:schemaLocation="https://www.springframework.net https://www.springframework.net/xsd/spring-objects.xsd">
 
   <!-- SQL SERVER -->
   <alias name="SqlServer" alias="System.Data.SqlClient"/>
@@ -175,7 +175,7 @@
         <!-- this is only true for .net 1.1 kept it here just in case we want to revert back to this strategy for
              obtaining error codes-->
         <constructor-arg name="errorCodeExceptionExpression" value="Errors[0].Code"/>
-        <!-- error codes taken from http://www.postgresql.org/docs/8.1/static/errcodes-appendix.html -->
+        <!-- error codes taken from https://www.postgresql.org/docs/8.1/static/errcodes-appendix.html -->
         <property name="ErrorCodes.badSqlGrammarCodes">
           <value>03000,42000,42601,42602,42622,42804,42P01</value>
         </property>
@@ -201,10 +201,10 @@
   <alias name="SQLite" alias="System.Data.SQLite"/>
 
   <!-- 
-  from http://system.data.sqlite.org
-   * NuGet distributions: http://system.data.sqlite.org/index.html/doc/trunk/www/faq.wiki#q5
-   * NuGet page: http://www.nuget.org/packages/System.Data.SQLite
-   * Error code docs: http://www.sqlite.org/capi3ref.html#SQLITE_ABORT
+  from https://system.data.sqlite.org
+   * NuGet distributions: https://system.data.sqlite.org/index.html/doc/trunk/www/faq.wiki#q5
+   * NuGet page: https://www.nuget.org/packages/System.Data.SQLite
+   * Error code docs: https://www.sqlite.org/capi3ref.html#SQLITE_ABORT
   -->
   <object id="SQLite" type="Spring.Data.Common.DbProvider, Spring.Data" singleton="false">
     <constructor-arg name="dbMetaData">

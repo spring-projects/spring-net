@@ -16,12 +16,12 @@
  * limitations under the License.
  */
 -->
-<chapter version="5" xml:id="web" xmlns="http://docbook.org/ns/docbook"
-         xmlns:ns6="http://www.w3.org/1999/xlink"
-         xmlns:ns5="http://www.w3.org/1998/Math/MathML"
-         xmlns:ns4="http://www.w3.org/1999/xhtml"
-         xmlns:ns3="http://www.w3.org/2000/svg"
-         xmlns:ns="http://docbook.org/ns/docbook">
+<chapter version="5" xml:id="web" xmlns="https://docbook.org/ns/docbook"
+         xmlns:ns6="https://www.w3.org/1999/xlink"
+         xmlns:ns5="https://www.w3.org/1998/Math/MathML"
+         xmlns:ns4="https://www.w3.org/1999/xhtml"
+         xmlns:ns3="https://www.w3.org/2000/svg"
+         xmlns:ns="https://docbook.org/ns/docbook">
   <title>Spring.NET Web Framework</title>
 
   <sect1 xml:id="web-introduction">
@@ -465,7 +465,7 @@
         &lt;resource uri="config://spring/objects"/&gt;
     &lt;/context&gt;
 
-    &lt;objects xmlns="http://www.springframework.net"&gt;
+    &lt;objects xmlns="https://www.springframework.net"&gt;
         &lt;object type="MyPage.aspx" parent="basePage"&gt;
               &lt;property name="MyRootService" ref="myServiceDefinedInRootContext"/&gt;
               &lt;property name="MyLocalService" ref="myServiceDefinedLocally"/&gt;
@@ -523,7 +523,7 @@
     application context, the developer can easily create object definitions
     for the pages that compose that web application.</para>
 
-    <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"&gt;
+    <programlisting language="myxml">&lt;objects xmlns="https://www.springframework.net"&gt;
 
   &lt;object name="basePage" abstract="true"&gt;
     &lt;property name="MasterPageFile" value="~/Web/StandardTemplate.master"/&gt;
@@ -712,7 +712,7 @@
       <para>The configuration of
       <classname>MappingHandlerFactoryConfigurer</classname> is shown:</para>
 
-      <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"&gt;
+      <programlisting language="myxml">&lt;objects xmlns="https://www.springframework.net"&gt;
 
     &lt;!-- configures the global GenericHandlerFactory instance --&gt;
     &lt;object name="mappingHandlerFactoryConfigurer" type="Spring.Web.Support.MappingHandlerFactoryConfigurer, Spring.Web"&gt;
@@ -1038,7 +1038,7 @@ class MyControl : Control, ISupportsWebDependencyInjection
       container and creating definitions similar to the following:</para>
 
       <programlisting language="myxml">&lt;?xml version="1.0" encoding="utf-8" ?&gt;
-&lt;objects xmlns="http://www.springframework.net"&gt;
+&lt;objects xmlns="https://www.springframework.net"&gt;
 
   &lt;object name="basePage" abstract="true"&gt;
       &lt;property name="MasterPageFile" value="~/MasterLayout.ascx"/&gt;
@@ -1908,9 +1908,9 @@ protected override void InitializeDataBindings()
     <tip>
       <para>For introductory information covering ASP.NET globalization and
       localization, see <ulink
-      url="http://msdn.microsoft.com/asp.net/community/authors/mlb/default.aspx?pull=/library/en-us/dnaspp/html/aspnet-globalarchi.asp">Globalization
+      url="https://msdn.microsoft.com/asp.net/community/authors/mlb/default.aspx?pull=/library/en-us/dnaspp/html/aspnet-globalarchi.asp">Globalization
       Architecture for ASP.NET</ulink> and <ulink
-      url="http://www.theserverside.net/articles/showarticle.tss?id=LocalizationPractices">Localization
+      url="https://searchwindevelopment.techtarget.com/?id=LocalizationPractices">Localization
       Practices for ASP.NET 2.0</ulink> by Michele Leroux Bustamante.</para>
     </tip>
 
@@ -2080,7 +2080,7 @@ protected override void InitializeDataBindings()
 
         <para>There is no way to visually edit resources in a RESX file. Lutz
         Roeder has created a tool named <link
-        ns6:href="http://www.lutzroeder.com/dotnet/">Resourcer</link> that you
+        ns6:href="https://www.lutzroeder.com/dotnet/">Resourcer</link> that you
         can use to edit them</para>
       </tip>
 
@@ -2429,7 +2429,7 @@ private void SetLanguage(object sender, CommandEventArgs e)
     application necessitates code changes (with the attendant recompilation,
     testing, redeployment, and so on). A better way, which works in many MVC (
     <ulink
-    url="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dnpatterns/html/DesMVC.asp">Model-View-Controller</ulink>)
+    url="https://msdn.microsoft.com/library/default.asp?url=/library/en-us/dnpatterns/html/DesMVC.asp">Model-View-Controller</ulink>)
     web frameworks, is to enable you to externalize the mapping of action
     results to target pages.</para>
 
@@ -2443,7 +2443,7 @@ private void SetLanguage(object sender, CommandEventArgs e)
     other object:</para>
 
     <programlisting language="myxml">
-&lt;objects xmlns="http://www.springframework.net"&gt;
+&lt;objects xmlns="https://www.springframework.net"&gt;
 
     &lt;object id="homePageResult" type="Spring.Web.Support.Result, Spring.Web"&gt;
         &lt;property name="TargetPage" value="~/Default.aspx"/&gt;

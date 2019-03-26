@@ -17,12 +17,12 @@
  */
 -->
 <chapter version="5" xml:id="transaction"
-         xmlns="http://docbook.org/ns/docbook"
-         xmlns:ns6="http://www.w3.org/1999/xlink"
-         xmlns:ns5="http://www.w3.org/2000/svg"
-         xmlns:ns4="http://www.w3.org/1999/xhtml"
-         xmlns:ns3="http://www.w3.org/1998/Math/MathML"
-         xmlns:ns="http://docbook.org/ns/docbook">
+         xmlns="https://docbook.org/ns/docbook"
+         xmlns:ns6="https://www.w3.org/1999/xlink"
+         xmlns:ns5="https://www.w3.org/2000/svg"
+         xmlns:ns4="https://www.w3.org/1999/xhtml"
+         xmlns:ns3="https://www.w3.org/1998/Math/MathML"
+         xmlns:ns="https://docbook.org/ns/docbook">
   <title>Transaction management</title>
 
   <sect1 xml:id="tx-introduction">
@@ -333,8 +333,8 @@
     the <literal>IDbProvider</literal> abstraction refer to the next
     chapter.</para>
 
-    <programlisting language="myxml">&lt;objects xmlns='http://www.springframework.net'
-         xmlns:db="http://www.springframework.net/database"&gt;
+    <programlisting language="myxml">&lt;objects xmlns='https://www.springframework.net'
+         xmlns:db="https://www.springframework.net/database"&gt;
 
     &lt;db:provider id="DbProvider" 
                 provider="SqlServer-1.1" 
@@ -666,8 +666,8 @@ mgr.DeleteTwoTestObjects("Jack", "Jill");
       <para>The configuration of the object definitions of the DAO and manager
       classes is shown below.</para>
 
-      <programlisting language="myxml">&lt;objects xmlns='http://www.springframework.net'
-         xmlns:db="http://www.springframework.net/database"&gt;
+      <programlisting language="myxml">&lt;objects xmlns='https://www.springframework.net'
+         xmlns:db="https://www.springframework.net/database"&gt;
 
     &lt;db:provider id="DbProvider" 
                   provider="SqlServer-1.1" 
@@ -744,13 +744,13 @@ mgr.DeleteTwoTestObjects("Jack", "Jill");
       you have not installed Spring's schema into the proper VS.NET 2005
       location. See the chapter on VS.NET integration for more details.</para>
 
-      <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"
-	        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns:tx="http://www.springframework.net/tx"
-         xmlns:db="http://www.springframework.net/database"
-         xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/schema/objects/spring-objects.xsd
-         http://www.springframework.net/schema/tx http://www.springframework.net/schema/tx/spring-tx-1.1.xsd"
-         http://www.springframework.net/schema/db http://www.springframework.net/schema/db/spring-database.xsd"&gt; 
+      <programlisting language="myxml">&lt;objects xmlns="https://www.springframework.net"
+	        xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+         xmlns:tx="https://www.springframework.net/tx"
+         xmlns:db="https://www.springframework.net/database"
+         xsi:schemaLocation="https://www.springframework.net https://www.springframework.net/schema/objects/spring-objects.xsd
+         https://www.springframework.net/schema/tx https://www.springframework.net/schema/tx/spring-tx-1.1.xsd"
+         https://www.springframework.net/schema/db https://www.springframework.net/schema/db/spring-database.xsd"&gt; 
 
     &lt;db:provider id="DbProvider" 
                   provider="SqlServer-1.1" 

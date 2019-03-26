@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 -->
-<chapter xml:id="quickstarts" xmlns="http://docbook.org/ns/docbook" version="5">
+<chapter xml:id="quickstarts" xmlns="https://docbook.org/ns/docbook" version="5">
   <title>IoC Quickstarts</title>
 
   <sect1>
@@ -32,13 +32,13 @@
     <para>The source material for this simple demonstration of Spring.NET's
     IoC features is lifted straight from Martin Fowler's article that
     discussed the ideas underpinning the IoC pattern. See <ulink
-    url="http://martinfowler.com/articles/injection.html">Inversion of Control
+    url="https://martinfowler.com/articles/injection.html">Inversion of Control
     Containers and the Dependency Injection pattern</ulink> for more
     information. The motivation for basing this quickstart example on said
     article is because the article is pretty widely known, and most people who
     are looking at IoC for the first time typically will have read the article
     (at the time of writing a <ulink
-    url="http://www.google.co.uk/search?q=ioc">simple Google search for
+    url="https://www.google.co.uk/search?q=ioc">simple Google search for
     'IoC'</ulink> yields the article in the first five results).</para>
 
     <para>Fowler's article used the example of a search facility for movies to
@@ -103,7 +103,7 @@ namespace Spring.Examples.MovieFinder
         &lt;context&gt;
             &lt;resource uri="config://spring/objects"/&gt;
         &lt;/context&gt;
-        &lt;objects xmlns="http://www.springframework.net"&gt;
+        &lt;objects xmlns="https://www.springframework.net"&gt;
             &lt;description&gt;An  example that demonstrates simple IoC features.&lt;/description&gt;
         &lt;/objects&gt;
     &lt;/spring&gt;
@@ -144,7 +144,7 @@ using Spring.Context;
       <literal>MovieLister</literal> instance that we are going to use in the
       application can be seen in the following XML snippet...</para>
 
-      <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"&gt;
+      <programlisting language="myxml">&lt;objects xmlns="https://www.springframework.net"&gt;
     &lt;object name="MyMovieLister"
       type="Spring.Examples.MovieFinder.MovieLister, Spring.Examples.MovieFinder"&gt;
     &lt;/object&gt;
@@ -177,7 +177,7 @@ using Spring.Context;
       injected into the <literal>lister</literal> instance looks like
       this...</para>
 
-      <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"&gt;
+      <programlisting language="myxml">&lt;objects xmlns="https://www.springframework.net"&gt;
     &lt;object name="MyMovieFinder"
         type="Spring.Examples.MovieFinder.SimpleMovieFinder, Spring.Examples.MovieFinder"/&gt;
     &lt;/object&gt;
@@ -191,7 +191,7 @@ using Spring.Context;
       instance identified by the <literal>MyMovieFinder</literal> id into the
       <literal>MovieLister</literal> instance identified by the
       <literal>MyMovieLister</literal> id, which can be accomplished using
-      Setter Injection and the following XML... <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"&gt;
+      Setter Injection and the following XML... <programlisting language="myxml">&lt;objects xmlns="https://www.springframework.net"&gt;
     &lt;object name="MyMovieLister"
       type="Spring.Examples.MovieFinder.MovieLister, Spring.Examples.MovieFinder"&gt;
         &lt;!-- using setter injection... --&gt;
@@ -326,11 +326,11 @@ using Spring.Context;
       introduction to log4net. To kick start your understanding of log4net
       this section gives a quick overview. The authoritative place for
       information on log4net is the <ulink
-      url="http://logging.apache.org/log4net/">log4net website</ulink>. Other
+      url="https://logging.apache.org/log4net/">log4net website</ulink>. Other
       good online tutorials are <ulink
-      url="http://www.ondotnet.com/pub/a/dotnet/2003/06/16/log4net.html?page=1">Using
+      url="https://www.oreilly.com?page=1">Using
       log4net (OnDotNet article)</ulink> and <ulink
-      url="http://haacked.com/archive/2005/03/07/2317.aspx">Quick and Dirty
+      url="https://haacked.com/archive/2005/03/07/2317.aspx">Quick and Dirty
       Guide to Configuring Log4Net For Web Applications</ulink>. Spring.NET is
       using version 1.2.9 whereas most of the documentation out there is for
       version 1.2.0. There have been some changes between the two so always
@@ -368,12 +368,12 @@ using Spring.Context;
       </programlisting> The appender is the output sink - in this case the
       console. There are a large variety of output sinks such as files,
       databases, etc. Refer to the log4net <ulink
-      url="http://logging.apache.org/log4net/release/config-examples.html">Config
+      url="https://logging.apache.org/log4net/release/config-examples.html">Config
       Examples</ulink> for more information. Of interest as well is the
       PatternLayout which defines exactly the information and format of what
       gets logged. Usually this is the date, thread, logging level, logger
       name, and then finally the log message. Refer to <ulink
-      url="http://logging.apache.org/log4net/release/sdk/log4net.Layout.PatternLayout.html">PatternLayout
+      url="https://logging.apache.org/log4net/release/sdk/log4net.Layout.PatternLayout.html">PatternLayout
       Documentation</ulink> for information on how to customize.</para>
 
       <para>The logging name is up to you to decide when you declare the

@@ -16,12 +16,12 @@
  * limitations under the License.
  */
 -->
-<chapter version="5" xml:id="objects" xmlns="http://docbook.org/ns/docbook"
-         xmlns:ns6="http://www.w3.org/1999/xlink"
-         xmlns:ns5="http://www.w3.org/1998/Math/MathML"
-         xmlns:ns4="http://www.w3.org/1999/xhtml"
-         xmlns:ns3="http://www.w3.org/2000/svg"
-         xmlns:ns="http://docbook.org/ns/docbook">
+<chapter version="5" xml:id="objects" xmlns="https://docbook.org/ns/docbook"
+         xmlns:ns6="https://www.w3.org/1999/xlink"
+         xmlns:ns5="https://www.w3.org/1998/Math/MathML"
+         xmlns:ns4="https://www.w3.org/1999/xhtml"
+         xmlns:ns3="https://www.w3.org/2000/svg"
+         xmlns:ns="https://docbook.org/ns/docbook">
   <title>The IoC container</title>
 
   <sect1 xml:id="objects-introduction">
@@ -34,10 +34,10 @@
 
     <para>The <literal>Spring.Core</literal> assembly is the basis for
     Spring.NET's IoC container. The <literal><link
-    ns6:href="http://www.springframework.net/doc-latest/api/net-2.0/html/Spring.Core~Spring.Objects.Factory.IObjectFactory.html">IObjectFactory</link></literal>
+    ns6:href="https://www.springframework.net/doc-latest/api/net-2.0/html/Spring.Core~Spring.Objects.Factory.IObjectFactory.html">IObjectFactory</link></literal>
     interface provides an advanced configuration mechanism capable of managing
     any type of object. <literal><link
-    ns6:href="http://www.springframework.net/doc-latest/api/net-2.0/html/Spring.Core~Spring.Context.IApplicationContext.html">IApplicationContext</link></literal>
+    ns6:href="https://www.springframework.net/doc-latest/api/net-2.0/html/Spring.Core~Spring.Context.IApplicationContext.html">IApplicationContext</link></literal>
     is a sub-interface of <literal>IObjectFactory</literal>. It adds easier
     integration with Spring.NET's Aspect Oriented Programming (AOP) features,
     message resource handling (for use in internationalization), event
@@ -140,7 +140,7 @@
       <para>The following example shows the basic structure of XML-based
       configuration meta data:</para>
 
-      <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"&gt;
+      <programlisting language="myxml">&lt;objects xmlns="https://www.springframework.net"&gt;
 
   &lt;object id="..." type="..."&gt;
     &lt;!-- collaborators and configuration for this object go here --&gt;
@@ -190,7 +190,7 @@
       <para>The following example shows the service layer objects
       <literal>(services.xml)</literal> configuration file.</para>
 
-      <para><programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"&gt; 
+      <para><programlisting language="myxml">&lt;objects xmlns="https://www.springframework.net"&gt; 
 
   &lt;object id="PetStore" type="PetStore.Services.PetStoreService, PetStore"&gt;
     &lt;property name="AccountDao" ref="AccountDao"/&gt;
@@ -203,7 +203,7 @@
 &lt;/objects&gt;</programlisting>The following example shows the data access
       objects <literal>(daos.xml)</literal> configuration file:</para>
 
-      <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"&gt; 
+      <programlisting language="myxml">&lt;objects xmlns="https://www.springframework.net"&gt; 
 
   &lt;object id="AccountDao" type="Petstore.Dao.HibernateAccountDao, PetStore"&gt;
     &lt;!-- additional collaborators and configuration for this object go here --&gt;
@@ -234,7 +234,7 @@
         <para>In the previous example the configuration resources are assumed
         to be located in the bin\Debug directory. You can use Spring's
         <classname><link
-        ns6:href="http://www.springframework.net/doc-latest/api/net-2.0/html/Spring.Core~Spring.Core.IO.IResource.html">IResource</link></classname>
+        ns6:href="https://www.springframework.net/doc-latest/api/net-2.0/html/Spring.Core~Spring.Core.IO.IResource.html">IResource</link></classname>
         abstraction to load resources from other locations.</para>
 
         <para>The following example shows how to create an IoC container
@@ -245,7 +245,7 @@
                  "file:///services.xml",
                  "assembly://MyAssembly/MyDataAccess/data-access.xml");
 </programlisting>The above example uses Spring.NET's <classname><link
-        ns6:href="http://www.springframework.net/doc-latest/api/net-2.0/html/Spring.Core~Spring.Core.IO.IResource.html">IResource</link></classname>
+        ns6:href="https://www.springframework.net/doc-latest/api/net-2.0/html/Spring.Core~Spring.Core.IO.IResource.html">IResource</link></classname>
         abstraction. The <literal>IResource</literal> interface provides a
         simple and uniform interface to a wide array of IO resources that can
         represent themselves as <literal>System.IO.Stream</literal>.</para>
@@ -253,7 +253,7 @@
         <note>
           <para>After you learn about Spring's IoC container, you may want to
           know more about Spring's <classname><link
-          ns6:href="http://www.springframework.net/doc-latest/api/net-2.0/html/Spring.Core~Spring.Core.IO.IResource.html">IResource</link></classname>
+          ns6:href="https://www.springframework.net/doc-latest/api/net-2.0/html/Spring.Core~Spring.Core.IO.IResource.html">IResource</link></classname>
           abstraction to load meta data from other locations as desribed below
           and alsoin the chapter <xref linkend="resources"/></para>
         </note>
@@ -377,7 +377,7 @@
       &lt;resource uri="config://spring/objects"/&gt;
     &lt;/context&gt;
        
-    &lt;objects xmlns="http://www.springframework.net"&gt;
+    &lt;objects xmlns="https://www.springframework.net"&gt;
         ...
     &lt;/objects&gt;
 
@@ -411,7 +411,7 @@
         element to load object definitions from another file (or files). For
         example:</para>
 
-        <para><programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"&gt;
+        <para><programlisting language="myxml">&lt;objects xmlns="https://www.springframework.net"&gt;
 
   &lt;import resource="services.xml"/&gt;
   &lt;import resource="resources/messageSource.xml"/&gt;
@@ -1682,7 +1682,7 @@ public class MixedIocObject
         offers a convenient public property for configuration of its
         <literal>ConnectionString</literal> property.</para>
 
-        <para><programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"&gt;
+        <para><programlisting language="myxml">&lt;objects xmlns="https://www.springframework.net"&gt;
   &lt;object id="myConnection" type="System.Data.SqlClient.SqlConnection"&gt;
       &lt;!-- results in a call to the setter of the ConnectionString property --&gt;
       &lt;property
@@ -1851,7 +1851,7 @@ public class MixedIocObject
         <literal>IList</literal>, <literal>ISet</literal>,
         <literal>NameValueCollection</literal> and
         <literal>IDictionary</literal>, respectively, to be defined and set.
-        <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"&gt;
+        <programlisting language="myxml">&lt;objects xmlns="https://www.springframework.net"&gt;
   &lt;object id="moreComplexObject" type="Example.ComplexObject"&gt;
       &lt;!--
       results in a call to the setter of the SomeList (System.Collections.IList) property
@@ -3181,7 +3181,7 @@ namespace Fiona.Apple
 
         <note>
           <para>You can read more about the motivation for Method Injection in
-          <link ns6:href="http://blog.springframework.com/rod/?p=1">this blog
+          <link ns6:href="https://blog.springframework.com/rod/?p=1">this blog
           entry</link>.</para>
         </note>
 
@@ -3663,10 +3663,10 @@ public class MyClassFactory
         example shown below the same logging instance, with a logging category
         name of "DAOLogger", is used in both the SimpleAccountDao and
         SimpleProductDao data access objects. <programlisting
-        language="myxml">&lt;objects xmlns="http://www.springframework.net" 
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-         xsi:schemaLocation="http://www.springframework.net
-         http://www.springframework.net/xsd/spring-objects.xsd" &gt;
+        language="myxml">&lt;objects xmlns="https://www.springframework.net" 
+         xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="https://www.springframework.net
+         https://www.springframework.net/xsd/spring-objects.xsd" &gt;
 
     &lt;object name="daoLogger" type="Spring.Objects.Factory.Config.LogFactoryObject, Spring.Core"&gt;
       &lt;property name="logName" value="DAOLogger"/&gt;
@@ -4949,7 +4949,7 @@ namespace Spring.IocQuickStart.MovieFinder
 }</programlisting>And the following configuration</para>
 
         <programlisting language="myxml">&lt;?xml version="1.0" encoding="utf-8" ?&gt;
-&lt;objects xmlns="http://www.springframework.net" &gt;
+&lt;objects xmlns="https://www.springframework.net" &gt;
   &lt;description&gt;An example that demonstrates simple IoC features.&lt;/description&gt;
 
   &lt;object id="MyMovieLister" 
@@ -5253,10 +5253,10 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
         in deployment. This Spring.NET configuration file is shown
         below.</para>
 
-        <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net" 
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-         xsi:schemaLocation="http://www.springframework.net
-         http://www.springframework.net/xsd/spring-objects.xsd" &gt;
+        <programlisting language="myxml">&lt;objects xmlns="https://www.springframework.net" 
+         xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="https://www.springframework.net
+         https://www.springframework.net/xsd/spring-objects.xsd" &gt;
     
   &lt;object name="productDao" type="DaoApp.SimpleProductDao, DaoApp "&gt;
     &lt;property name="maxResults" value="${maxResults}"/&gt;
@@ -5406,9 +5406,9 @@ cfg.PostProcessObjectFactory(factory);</programlisting></para>
 
 &lt;/configuration&gt;</programlisting> Then the value of 1000 will be used to
         overlay the value of 2000 set in the Spring.NET configuration file
-        shown below <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net" 
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-         xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd" &gt;
+        shown below <programlisting language="myxml">&lt;objects xmlns="https://www.springframework.net" 
+         xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance" 
+         xsi:schemaLocation="https://www.springframework.net https://www.springframework.net/xsd/spring-objects.xsd" &gt;
 
     &lt;object name="productDao" type="PropPlayApp.SimpleProductDao, PropPlayApp " &gt;
       &lt;property name="maxResults" value="2000"/&gt;
@@ -5658,7 +5658,7 @@ joan_age=35</programlisting>
           <para>You can configure an
           <literal>EnvironmentVariableSource</literal> to retrieve variables
           from environment variables available through <link
-          ns6:href="http://msdn.microsoft.com/en-us/library/system.environment.aspx">.NET's
+          ns6:href="https://msdn.microsoft.com/en-us/library/system.environment.aspx">.NET's
           <literal>System.Environment</literal> class</link>:</para>
 
           <programlisting language="myxml">&lt;object type="Spring.Objects.Factory.Config.EnvironmentVariableSource, Spring.Core" /&gt;
@@ -5730,7 +5730,7 @@ joan_age=35</programlisting>
 &lt;/object&gt;</programlisting>
 
           <para>Any entry in the <link
-          ns6:href="http://msdn.microsoft.com/library/system.environment.specialfolder.aspx">System.Environment.SpecialFolder</link>
+          ns6:href="https://msdn.microsoft.com/library/system.environment.specialfolder.aspx">System.Environment.SpecialFolder</link>
           enumeration can be used as a variable name.</para>
         </sect4>
 
@@ -5808,7 +5808,7 @@ joan_age=35</programlisting>
       creating an custom IFactoryObject implementation is to retrieve an
       object from an embedded resource file and use it to set another objects
       dependency. An example of this is provided <link
-      ns6:href="http://jira.springframework.org/browse/SPRNET-133#action_19743">here</link>.</para>
+      ns6:href="https://jira.springframework.org/browse/SPRNET-133#action_19743">here</link>.</para>
 
       <para>Finally, there is sometimes a need to ask a container for an
       actual <literal>IFactoryObject</literal> instance itself, not the object
@@ -6075,7 +6075,7 @@ joan_age=35</programlisting>
       &lt;converter for="MyTypeAlias" type="MyCompany.MyProject.Converters.MyTypeConverter, MyAssembly"/&gt;
     &lt;/typeConverters&gt;       
 
-    &lt;objects xmlns="http://www.springframework.net"&gt;
+    &lt;objects xmlns="https://www.springframework.net"&gt;
         ...
     &lt;/objects&gt;
 
@@ -6333,14 +6333,14 @@ IApplicationContext context =
     &lt;/context&gt;
   &lt;/context&gt;
 
-  &lt;objects xmlns="http://www.springframework.net"&gt;
+  &lt;objects xmlns="https://www.springframework.net"&gt;
 
     ...
 
   &lt;/objects&gt;
 
   &lt;child&gt;
-    &lt;objects xmlns="http://www.springframework.net"&gt;
+    &lt;objects xmlns="https://www.springframework.net"&gt;
 
       ...
 

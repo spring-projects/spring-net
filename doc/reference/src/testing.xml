@@ -16,12 +16,12 @@
  * limitations under the License.
  */
 -->
-<chapter version="5" xml:id="testing" xmlns="http://docbook.org/ns/docbook"
-         xmlns:ns5="http://www.w3.org/1998/Math/MathML"
-         xmlns:ns4="http://www.w3.org/1999/xhtml"
-         xmlns:ns3="http://www.w3.org/2000/svg"
-         xmlns:ns2="http://www.w3.org/1999/xlink"
-         xmlns:ns="http://docbook.org/ns/docbook">
+<chapter version="5" xml:id="testing" xmlns="https://docbook.org/ns/docbook"
+         xmlns:ns5="https://www.w3.org/1998/Math/MathML"
+         xmlns:ns4="https://www.w3.org/1999/xhtml"
+         xmlns:ns3="https://www.w3.org/2000/svg"
+         xmlns:ns2="https://www.w3.org/1999/xlink"
+         xmlns:ns="https://docbook.org/ns/docbook">
   <title>Testing</title>
 
   <section xml:id="testing-introduction">
@@ -234,7 +234,7 @@ public class HibernateTitleDaoTests : AbstractDependencyInjectionSpringContextTe
       this:</para>
 
       <programlisting language="myxml">&lt;?xml version="1.0" encoding="utf-8" ?&gt;
-&lt;objects  xmlns="http://www.springframework.net"&gt;
+&lt;objects  xmlns="https://www.springframework.net"&gt;
 
     <lineannotation>&lt;!-- this object will be injected into the <literal>HibernateTitleDaoTests</literal> class --&gt;</lineannotation>
     &lt;object id="titleDao" type="Spring.Samples.HibernateTitleDao, Spring.Samples"&gt;

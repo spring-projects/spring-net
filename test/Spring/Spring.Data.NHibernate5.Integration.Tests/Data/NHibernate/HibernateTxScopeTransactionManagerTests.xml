@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<objects xmlns='http://www.springframework.net'
-		 xmlns:db="http://www.springframework.net/database"
-		 xmlns:tx="http://www.springframework.net/tx">
+<objects xmlns='https://www.springframework.net'
+		 xmlns:db="https://www.springframework.net/database"
+		 xmlns:tx="https://www.springframework.net/tx">
 
 <!-- NOTE: Critical that the Max Pool Size parameter is present in the connection string to limit conn pool size for these tests-->
   <db:provider   id="DbProvider"

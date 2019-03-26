@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <chapter version="5" xml:id="codeconfig-migration-example"
-         xmlns="http://docbook.org/ns/docbook"
-         xmlns:ns5="http://www.w3.org/1998/Math/MathML"
-         xmlns:ns42="http://www.w3.org/2000/svg"
-         xmlns:ns4="http://www.w3.org/1999/xlink"
-         xmlns:ns3="http://www.w3.org/1999/xhtml"
-         xmlns:ns="http://docbook.org/ns/docbook">
+         xmlns="https://docbook.org/ns/docbook"
+         xmlns:ns5="https://www.w3.org/1998/Math/MathML"
+         xmlns:ns42="https://www.w3.org/2000/svg"
+         xmlns:ns4="https://www.w3.org/1999/xlink"
+         xmlns:ns3="https://www.w3.org/1999/xhtml"
+         xmlns:ns="https://docbook.org/ns/docbook">
   <title>Introducing CodeConfig</title>
 
   <sect1>
@@ -82,7 +82,7 @@ static void Main(string[] args)
 
     <programlisting language="xml">&lt;!-- Listing 2 (Spring.NET XML Configuration file, application-context.xml) --&gt;
 &lt;?xml version="1.0" encoding="utf-8" ?&gt;
-&lt;objects xmlns="http://www.springframework.net"&gt;
+&lt;objects xmlns="https://www.springframework.net"&gt;
  
   &lt;object name="ConsoleReport" type="Primes.ConsoleReport, Primes"&gt;
     &lt;constructor-arg ref="PrimeGenerator"/&gt;

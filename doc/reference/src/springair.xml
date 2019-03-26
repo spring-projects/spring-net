@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 -->
-<chapter xml:id="springair" xmlns="http://docbook.org/ns/docbook" version="5">
+<chapter xml:id="springair" xmlns="https://docbook.org/ns/docbook" version="5">
   <title>SpringAir - Reference Application</title>
 
   <sect1>
@@ -310,7 +310,7 @@
     <programlisting language="myxml">  &lt;object id="bookingAgentWebService" type="Spring.Web.Services.WebServiceExporter, Spring.Web"&gt;
     &lt;property name="TargetName" value="bookingAgent"/&gt;
     &lt;property name="Name" value="BookingAgent"/&gt;
-    &lt;property name="Namespace" value="http://SpringAir/WebServices"/&gt;
+    &lt;property name="Namespace" value="https://SpringAir/WebServices"/&gt;
     &lt;property name="Description" value="SpringAir Booking Agent Web Service"/&gt;
     &lt;property name="MemberAttributes"&gt;
       &lt;dictionary&gt;

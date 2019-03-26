@@ -17,12 +17,12 @@
  */
 -->
 <chapter version="5" xml:id="quartz-quickstart"
-         xmlns="http://docbook.org/ns/docbook"
-         xmlns:ns6="http://www.w3.org/1999/xlink"
-         xmlns:ns5="http://www.w3.org/1999/xhtml"
-         xmlns:ns4="http://www.w3.org/2000/svg"
-         xmlns:ns3="http://www.w3.org/1998/Math/MathML"
-         xmlns:ns="http://docbook.org/ns/docbook">
+         xmlns="https://docbook.org/ns/docbook"
+         xmlns:ns6="https://www.w3.org/1999/xlink"
+         xmlns:ns5="https://www.w3.org/1999/xhtml"
+         xmlns:ns4="https://www.w3.org/2000/svg"
+         xmlns:ns3="https://www.w3.org/1998/Math/MathML"
+         xmlns:ns="https://docbook.org/ns/docbook">
   <title>Quartz QuickStart</title>
 
   <section>
@@ -36,7 +36,7 @@
     an excellent open source job scheduler that can be used for these
     purposes. It provides a wealth of features, such as persistent jobs and
     clustering. To find out more about Quartz.NET visit their <ulink
-    url="http://quartznet.sourceforge.net/">web site</ulink>. Spring
+    url="https://quartznet.sourceforge.io/">web site</ulink>. Spring
     integration allows you to use Spring to configure Quartz jobs, triggers,
     and schedulers and also provides integration with Spring's transaction
     management features.</para>

@@ -17,12 +17,12 @@
  */
 -->
 <chapter version="5" xml:id="nms-quickstart"
-         xmlns="http://docbook.org/ns/docbook"
-         xmlns:ns6="http://www.w3.org/1999/xlink"
-         xmlns:ns5="http://www.w3.org/1999/xhtml"
-         xmlns:ns4="http://www.w3.org/2000/svg"
-         xmlns:ns3="http://www.w3.org/1998/Math/MathML"
-         xmlns:ns="http://docbook.org/ns/docbook">
+         xmlns="https://docbook.org/ns/docbook"
+         xmlns:ns6="https://www.w3.org/1999/xlink"
+         xmlns:ns5="https://www.w3.org/1999/xhtml"
+         xmlns:ns4="https://www.w3.org/2000/svg"
+         xmlns:ns3="https://www.w3.org/1998/Math/MathML"
+         xmlns:ns="https://docbook.org/ns/docbook">
   <title>NMS QuickStart</title>
 
   <section>
@@ -128,8 +128,8 @@
     using Microsoft's Schema Definition Tool (xsd.exe). The schema for trade
     request is shown below</para>
 
-    <programlisting language="myxml">&lt;xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" 
-           targetNamespace="http://www.springframework.net/nms/common/2008-08-05"&gt;
+    <programlisting language="myxml">&lt;xs:schema xmlns:xs="https://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" 
+           targetNamespace="https://www.springframework.net/nms/common/2008-08-05"&gt;
 
   &lt;xs:element name="TradeRequest"&gt;
     &lt;xs:complexType&gt;
@@ -187,8 +187,8 @@
     <literal>TradeResponse</literal> will be used. The schema for the
     <literal>TradeResponse</literal> is shown below</para>
 
-    <programlisting language="myxml">&lt;xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" 
-           targetNamespace="http://www.springframework.net/nms/common/2008-08-05"&gt;
+    <programlisting language="myxml">&lt;xs:schema xmlns:xs="https://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" 
+           targetNamespace="https://www.springframework.net/nms/common/2008-08-05"&gt;
 
   &lt;xs:element name="TradeResponse"&gt;
     &lt;xs:complexType&gt;

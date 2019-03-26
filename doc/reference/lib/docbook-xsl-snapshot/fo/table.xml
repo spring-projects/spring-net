@@ -21,7 +21,7 @@
 
   </partintro>
 
-<refentry xmlns:xlink="http://www.w3.org/1999/xlink" xml:id="template.calc.column.width">
+<refentry xmlns:xlink="https://www.w3.org/1999/xlink" xml:id="template.calc.column.width">
 <refnamediv>
 <refname>calc.column.width</refname>
 <refpurpose>Calculate an XSL FO table column width specification from a

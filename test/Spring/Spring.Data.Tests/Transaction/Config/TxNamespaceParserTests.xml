@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<objects xmlns="http://www.springframework.net"
-	       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns:tx="http://www.springframework.net/tx"
-         xmlns:aop="http://www.springframework.net/aop"
-         xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/schema/objects/spring-objects.xsd
-         http://www.springframework.net/tx http://www.springframework.net/schema/tx/spring-tx-1.1.xsd">
+<objects xmlns="https://www.springframework.net"
+	       xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+         xmlns:tx="https://www.springframework.net/tx"
+         xmlns:aop="https://www.springframework.net/aop"
+         xsi:schemaLocation="https://www.springframework.net https://www.springframework.net/schema/objects/spring-objects.xsd
+         https://www.springframework.net/tx https://www.springframework.net/schema/tx/spring-tx-1.1.xsd">
 
   <object id="testObjectOperation" type="Spring.Aop.Support.SdkRegularExpressionMethodPointcut, Spring.Aop">
     <property name="pattern" value="Spring.Objects.TestObject.*"/>

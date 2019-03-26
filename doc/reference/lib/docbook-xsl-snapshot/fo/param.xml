@@ -937,12 +937,12 @@ want mixed Latin-alphabet words sorted.</para>
 <itemizedlist>
 <listitem>
 <para>For a whitepaper describing the extensions, see:
-<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.innodata-isogen.com/knowledge_center/white_papers/back_of_book_for_xsl_fo.pdf">http://www.innodata-isogen.com/knowledge_center/white_papers/back_of_book_for_xsl_fo.pdf</link>.
+<link xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="http://www.innodata-isogen.com/knowledge_center/white_papers/back_of_book_for_xsl_fo.pdf">http://www.innodata-isogen.com/knowledge_center/white_papers/back_of_book_for_xsl_fo.pdf</link>.
 </para>
 </listitem>
 <listitem>
 <para>To download the extension library, see
-<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.innodata-isogen.com/knowledge_center/tools_downloads/i18nsupport">http://www.innodata-isogen.com/knowledge_center/tools_downloads/i18nsupport</link>.
+<link xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="http://www.innodata-isogen.com/knowledge_center/tools_downloads/i18nsupport">http://www.innodata-isogen.com/knowledge_center/tools_downloads/i18nsupport</link>.
 </para>
 </listitem>
 </itemizedlist>
@@ -1340,7 +1340,7 @@ element to provide space of a specific length, or a dot leader.
 <para>Properties associated with XEP index-items, which generate
 page numbers in an index processed by XEP. For more info see
 the XEP documentation section "Indexes" in
-<uri xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.renderx.com/reference.html#Indexes">http://www.renderx.com/reference.html#Indexes</uri>.</para>
+<uri xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="http://www.renderx.com/reference.html#Indexes">http://www.renderx.com/reference.html#Indexes</uri>.</para>
 
 <para>This attribute-set also adds by default any properties from the
 <tag class="attribute">index.page.number.properties</tag>
@@ -1589,7 +1589,7 @@ level sections, but not in fourth level sections.
 <refsection><info><title>Description</title></info>
 
 <para>If non-zero,
-<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.arbortext.com/">Arbortext</link>
+<link xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="https://www.arbortext.com/">Arbortext</link>
 extensions will be used.
 </para>
 <para>This parameter can also affect which graphics file formats
@@ -1617,7 +1617,7 @@ are supported</para>
 <refsection><info><title>Description</title></info>
 
 <para>If non-zero,
-<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.antennahouse.com/">XSL Formatter</link>
+<link xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="https://www.antennahouse.com/">XSL Formatter</link>
 extensions will be used. XSL Formatter extensions consists of PDF bookmarks,
 document information and better index processing.</para>
 
@@ -1644,7 +1644,7 @@ are supported</para>
 <refsection><info><title>Description</title></info>
 
 <para>If non-zero, extensions intended for
-<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://xml.apache.org/fop/">FOP</link>
+<link xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="https://xml.apache.org/fop/">FOP</link>
 version 0.20.5 and earlier will be used.
 At present, this consists of PDF bookmarks.
 </para>
@@ -1676,7 +1676,7 @@ instead.
 <refsection><info><title>Description</title></info>
 
 <para>If non-zero, extensions for 
-<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://xml.apache.org/fop/">FOP</link>
+<link xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="https://xml.apache.org/fop/">FOP</link>
 version 0.90 and later will be used.
 </para>
 
@@ -1706,7 +1706,7 @@ should still be used for FOP version 0.20.5 and earlier.
 <refsection><info><title>Description</title></info>
 
 <para>If non-zero,
-<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.tei-c.org.uk/Software/passivetex/">PassiveTeX</link>
+<link xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="http://tei-c.org.uk/software">PassiveTeX</link>
 extensions will be used. At present, this consists of PDF bookmarks
 and sorted index terms.
 </para>
@@ -1794,7 +1794,7 @@ equations in your document.</para>
 <refsection><info><title>More information</title></info>
   <para>For how-to documentation on embedding TeX equations and
     generating output from them, see
-    <link xmlns:xlink="http://www.w3.org/1999/xlink" role="tcg" xlink:href="TexMath.html">DBTeXMath</link>.</para>
+    <link xmlns:xlink="https://www.w3.org/1999/xlink" role="tcg" xlink:href="TexMath.html">DBTeXMath</link>.</para>
 </refsection>
 </refentry>
 
@@ -1833,7 +1833,7 @@ you should set this parameter to 0.</para>
 <refsection><info><title>More information</title></info>
   <para>For how-to documentation on embedding TeX equations and
     generating output from them, see
-    <link xmlns:xlink="http://www.w3.org/1999/xlink" role="tcg" xlink:href="TexMath.html">DBTeXMath</link>.</para>
+    <link xmlns:xlink="https://www.w3.org/1999/xlink" role="tcg" xlink:href="TexMath.html">DBTeXMath</link>.</para>
 </refsection>
 </refentry>
 
@@ -1854,7 +1854,7 @@ you should set this parameter to 0.</para>
 <refsection><info><title>Description</title></info>
 
 <para>If non-zero,
-<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.renderx.com/">XEP</link>
+<link xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="http://www.renderx.com/">XEP</link>
 extensions will be used. XEP extensions consists of PDF bookmarks,
 document information and better index processing.
 </para>
@@ -2016,14 +2016,14 @@ in the CALS table.
         either Saxon or Xalan as your XSLT processor (it doesn&#8217;t
         work with xsltproc), along with either the DocBook Saxon
         extensions or DocBook Xalan extensions (for more
-        information about those extensions, see <link xmlns:xlink="http://www.w3.org/1999/xlink" role="tcg" xlink:href="InstallingAProcessor.html#SaxonExtensions">DocBook Saxon Extensions</link> and <link xmlns:xlink="http://www.w3.org/1999/xlink" role="tcg" xlink:href="InstallingAProcessor.html#XalanExtensions">DocBook Xalan Extensions</link>), and you must set both
+        information about those extensions, see <link xmlns:xlink="https://www.w3.org/1999/xlink" role="tcg" xlink:href="InstallingAProcessor.html#SaxonExtensions">DocBook Saxon Extensions</link> and <link xmlns:xlink="https://www.w3.org/1999/xlink" role="tcg" xlink:href="InstallingAProcessor.html#XalanExtensions">DocBook Xalan Extensions</link>), and you must set both
         the <parameter>use.extensions</parameter> and
         <parameter>textinsert.extension</parameter> parameters to
         <literal>1</literal>.</para>
       <para>As an alternative to using the textinsert element,
         consider using an Xinclude element with the
         <literal>parse="text"</literal> attribute and value
-        specified, as detailed in <link xmlns:xlink="http://www.w3.org/1999/xlink" role="tcg" xlink:href="ExternalCode.html#XIncludeCode">Using XInclude for text inclusions</link>.</para>
+        specified, as detailed in <link xmlns:xlink="https://www.w3.org/1999/xlink" role="tcg" xlink:href="ExternalCode.html#XIncludeCode">Using XInclude for text inclusions</link>.</para>
     </note>
   </refsection>
   <refsection><info><title>See Also</title></info>
@@ -2035,9 +2035,9 @@ in the CALS table.
   <refsection><info><title>More information</title></info>
     <para>For how-to documentation on inserting contents of
       external code files and other text files into output, see
-      <link xmlns:xlink="http://www.w3.org/1999/xlink" role="tcg" xlink:href="ExternalCode.html">External code files</link>.</para>
+      <link xmlns:xlink="https://www.w3.org/1999/xlink" role="tcg" xlink:href="ExternalCode.html">External code files</link>.</para>
     <para>For guidelines on inserting contents of
-      HTML files into output, see <link xmlns:xlink="http://www.w3.org/1999/xlink" role="tcg" xlink:href="InsertExtHtml.html">Inserting external HTML code</link>.</para>
+      HTML files into output, see <link xmlns:xlink="https://www.w3.org/1999/xlink" role="tcg" xlink:href="InsertExtHtml.html">Inserting external HTML code</link>.</para>
   </refsection>
 </refentry>
 
@@ -3160,7 +3160,7 @@ table. </para>
 <refsection><info><title>Description</title></info>
 
 <para>If non-zero, specifies the thickness of borders on table
-cells. The units are points. See <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.w3.org/TR/CSS21/box.html#border-width-properties">
+cells. The units are points. See <link xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="https://www.w3.org/TR/CSS21/box.html#border-width-properties">
 CSS</link></para>
 
 <note>
@@ -3229,7 +3229,7 @@ CSS</link></para>
 <refsection><info><title>Description</title></info>
 
 <para>Set the color of table cell borders. If non-zero, the value is used
-for the border coloration. See <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.w3.org/TR/CSS21/syndata.html#value-def-color">CSS</link>. A
+for the border coloration. See <link xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="https://www.w3.org/TR/CSS21/syndata.html#value-def-color">CSS</link>. A
 <literal>color</literal> is either a keyword or a numerical RGB specification.
 Keywords are aqua, black, blue, fuchsia, gray, green, lime, maroon,
 navy, olive, orange, purple, red, silver, teal, white, and
@@ -4699,7 +4699,7 @@ the TOC.</para>
 <literal>iso690</literal> styles are supported.</para>
 
 <para>In order to use ISO690 style to the full extent you might need
-to use additional markup described on <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://wiki.docbook.org/topic/ISO690Bibliography">the
+to use additional markup described on <link xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="https://wiki.docbook.org/topic/ISO690Bibliography">the
 following WiKi page</link>.</para>
 
 </refsection>
@@ -4766,12 +4766,12 @@ like this:</para>
 <informalexample>
 <programlisting>&lt;!DOCTYPE bibliography
   PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
-  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd"&gt;
+  "https://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd"&gt;
 &lt;bibliography&gt;&lt;title&gt;References&lt;/title&gt;
 
 &lt;bibliomixed id="xml-rec"&gt;&lt;abbrev&gt;XML 1.0&lt;/abbrev&gt;Tim Bray,
 Jean Paoli, C. M. Sperberg-McQueen, and Eve Maler, editors.
-&lt;citetitle&gt;&lt;ulink url="http://www.w3.org/TR/REC-xml"&gt;Extensible Markup
+&lt;citetitle&gt;&lt;ulink url="https://www.w3.org/TR/REC-xml"&gt;Extensible Markup
 Language (XML) 1.0 Second Edition&lt;/ulink&gt;&lt;/citetitle&gt;.
 World Wide Web Consortium, 2000.
 &lt;/bibliomixed&gt;
@@ -4779,7 +4779,7 @@ World Wide Web Consortium, 2000.
 &lt;bibliomixed id="xml-names"&gt;&lt;abbrev&gt;Namespaces&lt;/abbrev&gt;Tim Bray,
 Dave Hollander,
 and Andrew Layman, editors.
-&lt;citetitle&gt;&lt;ulink url="http://www.w3.org/TR/REC-xml-names/"&gt;Namespaces in
+&lt;citetitle&gt;&lt;ulink url="https://www.w3.org/TR/REC-xml-names/"&gt;Namespaces in
 XML&lt;/ulink&gt;&lt;/citetitle&gt;.
 World Wide Web Consortium, 1999.
 &lt;/bibliomixed&gt;
@@ -4971,7 +4971,7 @@ entry has an ID.</para>
 &lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;!DOCTYPE glossary
   PUBLIC "-//OASIS//DTD DocBook XML V4.1.2//EN"
-  "http://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd"&gt;
+  "https://www.oasis-open.org/docbook/xml/4.1.2/docbookx.dtd"&gt;
 &lt;glossary&gt;
 &lt;glossaryinfo&gt;
 &lt;editor&gt;&lt;firstname&gt;Eric&lt;/firstname&gt;&lt;surname&gt;Raymond&lt;/surname&gt;&lt;/editor&gt;
@@ -5799,7 +5799,7 @@ CSS instead.</para>
 <para>Properties that specify the style of shaded verbatim listings. The
 parameters specified (the border and background color) are added to
 the styling of the xsl-fo output. A border might be specified as "thin
-black solid" for example. See <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.w3.org/TR/2004/WD-xsl11-20041216/#border">xsl-fo</link></para>
+black solid" for example. See <link xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="https://www.w3.org/TR/2004/WD-xsl11-20041216/#border">xsl-fo</link></para>
 
 </refsection>
 </refentry>
@@ -5838,7 +5838,7 @@ attribute set:</para>
   &lt;xsl:attribute name="hyphenation-character"&gt;&amp;#x25BA;&lt;/xsl:attribute&gt;
 &lt;/xsl:attribute-set&gt;</programlisting>
 
-<para>For a list of arrows available in Unicode see <uri xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.unicode.org/charts/PDF/U2190.pdf">http://www.unicode.org/charts/PDF/U2190.pdf</uri> and <uri xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.unicode.org/charts/PDF/U2900.pdf">http://www.unicode.org/charts/PDF/U2900.pdf</uri> and make sure that
+<para>For a list of arrows available in Unicode see <uri xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="http://www.unicode.org/charts/PDF/U2190.pdf">http://www.unicode.org/charts/PDF/U2190.pdf</uri> and <uri xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="http://www.unicode.org/charts/PDF/U2900.pdf">http://www.unicode.org/charts/PDF/U2900.pdf</uri> and make sure that
 selected character is available in the font you are using for verbatim
 environments.</para>
 
@@ -5918,7 +5918,7 @@ to process the output from the stylesheet.</para>
 
 <para>If non-zero, the <tag class="attribute">role</tag> attribute on
 <tag>xref</tag> will be used to select the cross reference style.
-The <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.oasis-open.org/docbook/">DocBook
+The <link xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="https://www.oasis-open.org/docbook/">DocBook
 Technical Committee</link> recently added an
 <tag class="attribute">xrefstyle</tag> attribute for this purpose.
 If the <tag class="attribute">xrefstyle</tag> attribute
@@ -5937,7 +5937,7 @@ to serve that purpose.</para>
 stylesheets to make use of the cross reference style:</para>
 
 <programlisting>&lt;?xml version="1.0"?&gt;
-&lt;xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+&lt;xsl:stylesheet xmlns:xsl="https://www.w3.org/1999/XSL/Transform"
                 version="1.0"&gt;
 
 &lt;xsl:import href="../xsl/html/docbook.xsl"/&gt;
@@ -5960,7 +5960,7 @@ stylesheets to make use of the cross reference style:</para>
 
 <programlisting>&lt;?xml version="1.0" encoding="utf-8"?&gt;
 &lt;!DOCTYPE book PUBLIC "-//OASIS//DTD DocBook XML V4.2//EN"
-                  "http://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd"&gt;
+                  "https://www.oasis-open.org/docbook/xml/4.2/docbookx.dtd"&gt;
 &lt;book id="book"&gt;&lt;title&gt;Book&lt;/title&gt;
 
 &lt;preface&gt;
@@ -6507,7 +6507,7 @@ XSLTHL extension module. This is an external Java library which is not part of t
 
 <para>In order to use this extension, you must add
 <filename>xslthl-2.0.0.jar</filename> to your Java classpath. You can
-download this software from <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://sourceforge.net/projects/xslthl">the XSLT syntax highlighting project</link> at SourceForge.</para>
+download this software from <link xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="https://sourceforge.net/projects/xslthl">the XSLT syntax highlighting project</link> at SourceForge.</para>
 
 <para>The configuration of syntax highlighting is stored in 
 <filename>highlighting/xslthl-config.xml</filename>. The Java
@@ -6707,7 +6707,7 @@ and the <tag class="attribute">format</tag> attribute is
 <para>If specified, this value will be used for the
 <tag class="attribute">width</tag> attribute on
 images that do not specify any
-<link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://docbook.org/tdg/en/html/imagedata.html#viewport.area">viewport
+<link xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="https://docbook.org/tdg/en/html/imagedata.html#viewport.area">viewport
 dimensions</link>.</para>
 
 </refsection>
@@ -10535,7 +10535,7 @@ one possibility.
 <partintro xml:id="profiling_partintro">
 <para>The following parameters can be used for attribute-based
 profiling of your document. For more information about profiling, see 
-<link xmlns:xlink="http://www.w3.org/1999/xlink" role="tcg" xlink:href="Profiling.html">Profiling (conditional text)</link>.</para>
+<link xmlns:xlink="https://www.w3.org/1999/xlink" role="tcg" xlink:href="Profiling.html">Profiling (conditional text)</link>.</para>
 </partintro>
 <refentry version="5.0" xml:id="profile.arch">
 <refmeta>
@@ -11244,7 +11244,7 @@ resulting text will be something like this:</para>
 <refsection><info><title>Description</title></info>
 
 <para>If non-zero, ensure that the values for all <tag class="attribute">lang</tag> attributes in HTML output are RFC
-compliant<footnote><para>Section 8.1.1, <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.w3.org/TR/REC-html40/struct/dirlang.html#h-8.1.1">Language Codes</link>, in the HTML 4.0 Recommendation states that:
+compliant<footnote><para>Section 8.1.1, <link xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="https://www.w3.org/TR/REC-html40/struct/dirlang.html#h-8.1.1">Language Codes</link>, in the HTML 4.0 Recommendation states that:
 
 <blockquote><para>[RFC1766] defines and explains the language codes
 that must be used in HTML documents.</para>
@@ -11253,7 +11253,7 @@ empty series of subcodes:
 
 <literallayout class="monospaced">language-code = primary-code ( "-" subcode )*</literallayout>
 </para>
-<para>And in RFC 1766, <link xmlns:xlink="http://www.w3.org/1999/xlink" xlink:href="http://www.ietf.org/rfc/rfc1766.txt">Tags for the Identification
+<para>And in RFC 1766, <link xmlns:xlink="https://www.w3.org/1999/xlink" xlink:href="https://www.ietf.org/rfc/rfc1766.txt">Tags for the Identification
 of Languages</link>, the EBNF for "language tag" is given as:
 
 <literallayout class="monospaced">Language-Tag = Primary-tag *( "-" Subtag )
@@ -11456,7 +11456,7 @@ around all these parameters.</para>
      ********************************************************************
 
      This file is part of the XSL DocBook Stylesheet distribution.
-     See ../README or http://docbook.sf.net/release/xsl/current/ for
+     See ../README or http://docbook.sourceforge.net/release/xsl/current/ for
      copyright and other information.
 
      ******************************************************************** --&gt;

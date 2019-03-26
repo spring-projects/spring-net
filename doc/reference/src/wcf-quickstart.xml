@@ -17,12 +17,12 @@
  */
 -->
 <chapter version="5" xml:id="wcf-quickstart"
-         xmlns="http://docbook.org/ns/docbook"
-         xmlns:ns6="http://www.w3.org/1999/xlink"
-         xmlns:ns5="http://www.w3.org/2000/svg"
-         xmlns:ns4="http://www.w3.org/1999/xhtml"
-         xmlns:ns3="http://www.w3.org/1998/Math/MathML"
-         xmlns:ns="http://docbook.org/ns/docbook">
+         xmlns="https://docbook.org/ns/docbook"
+         xmlns:ns6="https://www.w3.org/1999/xlink"
+         xmlns:ns5="https://www.w3.org/2000/svg"
+         xmlns:ns4="https://www.w3.org/1999/xhtml"
+         xmlns:ns3="https://www.w3.org/1998/Math/MathML"
+         xmlns:ns="https://docbook.org/ns/docbook">
   <title>WCF QuickStart</title>
 
   <section>
@@ -55,7 +55,7 @@
 
     <para>The service contract is shown below</para>
 
-    <programlisting language="csharp">    [ServiceContract(Namespace = "http://Spring.WcfQuickStart")]
+    <programlisting language="csharp">    [ServiceContract(Namespace = "https://Spring.WcfQuickStart")]
     public interface ICalculator
     {
         [OperationContract]
@@ -109,8 +109,8 @@
       <literal>ServiceHostFactoryObject</literal> exporter. The configuration
       for the server console application is shown below.</para>
 
-      <programlisting language="myxml">    &lt;objects xmlns="http://www.springframework.net"
-             xmlns:aop="http://www.springframework.net/aop"&gt;
+      <programlisting language="myxml">    &lt;objects xmlns="https://www.springframework.net"
+             xmlns:aop="https://www.springframework.net/aop"&gt;
      
       &lt;!-- Service definition --&gt;
       &lt;object id="calculator" singleton="false"

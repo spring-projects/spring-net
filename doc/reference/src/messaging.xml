@@ -16,12 +16,12 @@
  * limitations under the License.
  */
 -->
-<chapter version="5" xml:id="messaging" xmlns="http://docbook.org/ns/docbook"
-         xmlns:ns6="http://www.w3.org/1999/xlink"
-         xmlns:ns5="http://www.w3.org/1998/Math/MathML"
-         xmlns:ns4="http://www.w3.org/1999/xhtml"
-         xmlns:ns3="http://www.w3.org/2000/svg"
-         xmlns:ns="http://docbook.org/ns/docbook">
+<chapter version="5" xml:id="messaging" xmlns="https://docbook.org/ns/docbook"
+         xmlns:ns6="https://www.w3.org/1999/xlink"
+         xmlns:ns5="https://www.w3.org/1998/Math/MathML"
+         xmlns:ns4="https://www.w3.org/1999/xhtml"
+         xmlns:ns3="https://www.w3.org/2000/svg"
+         xmlns:ns="https://docbook.org/ns/docbook">
   <title>Message Oriented Middleware - Apache ActiveMQ and TIBCO EMS</title>
 
   <section>
@@ -232,7 +232,7 @@
 
       <para>A WCF binding for Apache NMS is being developed as a separate
       project under the <link
-      ns6:href="http://www.springframework.org/extensions/faq">Spring
+      ns6:href="https://www.springframework.org/extensions/faq">Spring
       Extensions</link> umbrella project. Stay tuned for details.</para>
     </section>
   </section>
@@ -930,8 +930,8 @@ namespace MyApp
       the custom schema provided in Spring.NET to more reasily configure
       MessageListenerContainers.</para>
 
-      <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"
-         xmlns:nms="http://www.springframework.net/nms"&gt;
+      <programlisting language="myxml">&lt;objects xmlns="https://www.springframework.net"
+         xmlns:nms="https://www.springframework.net/nms"&gt;
 
   &lt;object id="ActiveMqConnectionFactory" type="Apache.NMS.ActiveMQ.ConnectionFactory, Apache.NMS.ActiveMQ"&gt;
     &lt;constructor-arg index="0" value="tcp://localhost:61616"/&gt;
@@ -1150,7 +1150,7 @@ namespace MyApp
       covering the case where database processing has committed but message
       processing failed to commit. See the discussion on the ActiveMQ web site
       <ulink
-      url="http://activemq.apache.org/should-i-use-xa.html">here</ulink> for
+      url="https://activemq.apache.org/should-i-use-xa.html">here</ulink> for
       more information combining local database and messaging
       transactions.</para>
     </section>

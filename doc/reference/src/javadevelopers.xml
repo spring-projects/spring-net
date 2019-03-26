@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 -->
-<chapter xml:id="javadevelopers" xmlns="http://docbook.org/ns/docbook" version="5">
+<chapter xml:id="javadevelopers" xmlns="https://docbook.org/ns/docbook" version="5">
   <title>Spring.NET for Java Developers</title>
 
   <sect1 xml:id="jd-introduction">
@@ -35,16 +35,16 @@
     word 'bean' you will now see the word 'object'. A comparison of a simple
     Spring configuration file highlights these small name changes. Here is the
     application.xml file for the sample MovieFinder application in Spring.Java
-    <programlisting language="myxml">&lt;!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "http://www.springframework.org/dtd/spring-beans.dtd"&gt;
+    <programlisting language="myxml">&lt;!DOCTYPE beans PUBLIC "-//SPRING//DTD BEAN//EN" "https://www.springframework.org/dtd/spring-beans.dtd"&gt;
 &lt;beans&gt;
    &lt;bean id="MyMovieLister" class="MovieFinder.MovieLister"&gt;
        &lt;property name="finder" ref="MyMovieFinder"/&gt;
    &lt;/bean&gt;
    &lt;bean id="MyMovieFinder" class="MovieFinder.SimpleMovieFinder"/&gt;
 &lt;/beans&gt;</programlisting> Here is the corresponding file in Spring.NET
-    <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net" 
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
-	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects-1.1.xsd"&gt;
+    <programlisting language="myxml">&lt;objects xmlns="https://www.springframework.net" 
+	xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="https://www.springframework.net https://www.springframework.net/xsd/spring-objects-1.1.xsd"&gt;
   &lt;object name="MyMovieLister" 
           type="Spring.Examples.MovieFinder.MovieLister, Spring.Examples.MovieFinder"&gt;
         &lt;property name="movieFinder" ref="MyMovieFinder"/&gt;
@@ -221,7 +221,7 @@
       role="bold">not</emphasis> valid in Spring.NET (so don't do it).</para>
 
       <programlisting language="myxml">&lt;?xml version="1.0" encoding="utf-8" ?&gt;
-    &lt;objects xmlns="http://www.springframework.net"&gt;
+    &lt;objects xmlns="https://www.springframework.net"&gt;
         &lt;object id="target" type="Spring.Objects.TestObject"&gt;
             &lt;property name="name" value="Bingo"/&gt;
         &lt;/object&gt;

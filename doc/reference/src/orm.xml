@@ -16,12 +16,12 @@
  * limitations under the License.
  */
 -->
-<chapter version="5" xml:id="orm" xmlns="http://docbook.org/ns/docbook"
-         xmlns:ns6="http://www.w3.org/1999/xlink"
-         xmlns:ns5="http://www.w3.org/1998/Math/MathML"
-         xmlns:ns4="http://www.w3.org/1999/xhtml"
-         xmlns:ns3="http://www.w3.org/2000/svg"
-         xmlns:ns="http://docbook.org/ns/docbook">
+<chapter version="5" xml:id="orm" xmlns="https://docbook.org/ns/docbook"
+         xmlns:ns6="https://www.w3.org/1999/xlink"
+         xmlns:ns5="https://www.w3.org/1998/Math/MathML"
+         xmlns:ns4="https://www.w3.org/1999/xhtml"
+         xmlns:ns3="https://www.w3.org/2000/svg"
+         xmlns:ns="https://docbook.org/ns/docbook">
   <title>Object Relational Mapping (ORM) data access</title>
 
   <section xml:id="orm-introduction">
@@ -135,7 +135,7 @@
     <title>NHibernate</title>
 
     <para>We will start with a coverage of <ulink
-    url="http://www.hibernate.org/">NHibernate</ulink> in a Spring
+    url="https://hibernate.org/">NHibernate</ulink> in a Spring
     environment, using it to demonstrate the approach that Spring takes
     towards integrating O/R mappers. This section will cover many issues in
     detail and show different variations of DAO implementations and
@@ -288,8 +288,8 @@
       ADO.NET DbProvider and a Hibernate <literal>SessionFactory</literal> on
       top of it:</para>
 
-      <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"
-         xmlns:db="http://www.springframework.net/database"&gt;
+      <programlisting language="myxml">&lt;objects xmlns="https://www.springframework.net"
+         xmlns:db="https://www.springframework.net/database"&gt;
 
 
   &lt;!-- Property placeholder configurer for database settings --&gt;
@@ -428,14 +428,14 @@
         then, to see how you can extend LocalSessionFactoryObject to suppport
         using FluentNHibernate follow the instructions on Benny Michielson's
         blog post <link
-        ns6:href="http://www.bennymichielsen.be/post/2009/01/04/Using-Fluent-NHibernate-in-SpringNet.aspx">here</link>.</para>
+        ns6:href="https://www.bennymichielsen.be/post/2009/01/04/Using-Fluent-NHibernate-in-SpringNet.aspx">here</link>.</para>
       </section>
 
       <section xml:id="orm-hibernate-bytecodeprovider">
         <title>Spring's IByteCodeProvider implementation</title>
 
         <para>Introduced in Hibernate 2.1 is support for <link
-        ns6:href="http://fabiomaulo.blogspot.com/2009/05/nhibernate-ioc-integration.html">dependency
+        ns6:href="https://fabiomaulo.blogspot.com/2009/05/nhibernate-ioc-integration.html">dependency
         injection of hibernate managed objects</link> via the
         <classname>IBytecodeProvider</classname> extension point. As of Spring
         1.3 provides
@@ -670,8 +670,8 @@ public class HibernateCustomerDao : ICustomerDao {
       expresses the intent as compared to the contents of
       DeclarativeServicesAttributeDriven.xml.</para>
 
-      <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"
-	        xmlns:tx="http://www.springframework.net/schema/tx"&gt;
+      <programlisting language="myxml">&lt;objects xmlns="https://www.springframework.net"
+	        xmlns:tx="https://www.springframework.net/schema/tx"&gt;
 
 
   &lt;object id="transactionManager"

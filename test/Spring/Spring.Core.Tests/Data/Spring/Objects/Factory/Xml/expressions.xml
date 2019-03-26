@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<objects xmlns="http://www.springframework.net">
+<objects xmlns="https://www.springframework.net">
   
   <object id="to1" type="Spring.Objects.ExpressionTestObject, Spring.Core.Tests">
     <constructor-arg name="someString" expression="date('1974-08-24').ToString('m')"/>

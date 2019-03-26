@@ -16,7 +16,7 @@
  * limitations under the License.
  */
 -->
-<chapter id="xml-config-reference" xmlns="http://docbook.org/ns/docbook" version="5">
+<chapter id="xml-config-reference" xmlns="https://docbook.org/ns/docbook" version="5">
   <title>XML Configuration Reference</title>
 
   <sect1>
@@ -581,7 +581,7 @@ namespace Example
           <literal>GuageCallback</literal> delegate would look like
           so...</para>
 
-          <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"&gt;
+          <programlisting language="myxml">&lt;objects xmlns="https://www.springframework.net"&gt;
     &lt;object id="gauge" type="Example.Gauge, FooAssembly"&gt;
 		&lt;property name="callback"&gt;
 			&lt;object type="Spring.Objects.Factory.Config.DelegateFactoryObject"&gt;

@@ -12,7 +12,7 @@
 	<!ENTITY st8 "stroke:none;">
 	<!ENTITY st9 "fill:none;stroke-width:4.9715;stroke-linejoin:round;">
 ]>
-<svg  xmlns="http://www.w3.org/2000/svg" width="48pt" height="48pt" viewBox="0 0 48 48" xml:space="preserve">
+<svg  xmlns="https://www.w3.org/2000/svg" width="48pt" height="48pt" viewBox="0 0 48 48" xml:space="preserve">
 	<g id="Layer_x0020_1" style="&st6;">
 		<path style="&st0;" d="M35.7,19.8v18.9H11V8.8h13.9l10.8,11z"/>
 		<path style="&st3;" d="M38.7,30.4L25,16.7l-7.7-3l2.7,8.7l13.3,13.4l5.4-5.4z"/>

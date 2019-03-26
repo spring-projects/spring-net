@@ -14,8 +14,8 @@ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 See the License for the specific language governing permissions and
 limitations under the License.
 -->
-<objects xmlns="http://www.springframework.net" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.springframework.net http://www.springframework.net/xsd/spring-objects.xsd">
+<objects xmlns="https://www.springframework.net" xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="https://www.springframework.net https://www.springframework.net/xsd/spring-objects.xsd">
 	<object name="myConnection" type="System.Data.OleDb.OleDbConnection, System.Data"> 
 		<property name="connectionstring">
 			<value>${connection.string}</value>

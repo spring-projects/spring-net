@@ -17,12 +17,12 @@
  */
 -->
 <chapter version="5" xml:id="messaging-ems" xml:lang=""
-         xmlns="http://docbook.org/ns/docbook"
-         xmlns:ns6="http://www.w3.org/1999/xlink"
-         xmlns:ns5="http://www.w3.org/1998/Math/MathML"
-         xmlns:ns4="http://www.w3.org/1999/xhtml"
-         xmlns:ns3="http://www.w3.org/2000/svg"
-         xmlns:ns="http://docbook.org/ns/docbook">
+         xmlns="https://docbook.org/ns/docbook"
+         xmlns:ns6="https://www.w3.org/1999/xlink"
+         xmlns:ns5="https://www.w3.org/1998/Math/MathML"
+         xmlns:ns4="https://www.w3.org/1999/xhtml"
+         xmlns:ns3="https://www.w3.org/2000/svg"
+         xmlns:ns="https://docbook.org/ns/docbook">
   <title>Message Oriented Middleware - TIBCO EMS</title>
 
   <section>
@@ -529,9 +529,9 @@ namespace Spring.Messaging.Ems.Core
       message off the queue named "APP.STOCK.REQUEST". See this section for
       more details about the message listener container.</para>
 
-      <para><programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns:ems="http://www.springframework.net/ems"&gt;
+      <para><programlisting language="myxml">&lt;objects xmlns="https://www.springframework.net"
+         xmlns:xsi="https://www.w3.org/2001/XMLSchema-instance"
+         xmlns:ems="https://www.springframework.net/ems"&gt;
 
   &lt;object id="connectionFactory" type="Spring.Messaging.Ems.Connections.CachingConnectionFactory, Spring.Messaging.Ems"&gt;
     &lt;property name="SessionCacheSize" value="10" /&gt;

@@ -17,12 +17,12 @@
  */
 -->
 <chapter version="5" xml:id="remoting-quickstart"
-         xmlns="http://docbook.org/ns/docbook"
-         xmlns:ns6="http://www.w3.org/1999/xlink"
-         xmlns:ns5="http://www.w3.org/1998/Math/MathML"
-         xmlns:ns4="http://www.w3.org/2000/svg"
-         xmlns:ns3="http://www.w3.org/1999/xhtml"
-         xmlns:ns="http://docbook.org/ns/docbook">
+         xmlns="https://docbook.org/ns/docbook"
+         xmlns:ns6="https://www.w3.org/1999/xlink"
+         xmlns:ns5="https://www.w3.org/1998/Math/MathML"
+         xmlns:ns4="https://www.w3.org/2000/svg"
+         xmlns:ns3="https://www.w3.org/1999/xhtml"
+         xmlns:ns="https://docbook.org/ns/docbook">
   <title>Portable Service Abstraction Quick Start</title>
 
   <sect1 xml:id="qs-remoting-introduction">
@@ -290,7 +290,7 @@ public class AdvancedCalculator : Calculator, IAdvancedCalculator
 		&lt;resource uri="assembly://RemoteServer/RemoteServer.Config/saoSingleton.xml" /&gt;
 		&lt;resource uri="assembly://RemoteServer/RemoteServer.Config/saoSingleton-aop.xml" /&gt;
 	&lt;/context&gt;
-	&lt;objects xmlns="http://www.springframework.net"&gt;
+	&lt;objects xmlns="https://www.springframework.net"&gt;
 		&lt;description&gt;Definitions of objects to be exported.&lt;/description&gt;
 
     &lt;object type="Spring.Remoting.RemotingConfigurer, Spring.Services"&gt;
@@ -353,8 +353,8 @@ public class AdvancedCalculator : Calculator, IAdvancedCalculator
 
     <para>The configuration for the exporting a SAO-Singleton is shown
     below.<programlisting language="myxml">&lt;objects	
-	xmlns="http://www.springframework.net" 
-	xmlns:r="http://www.springframework.net/remoting"&gt;
+	xmlns="https://www.springframework.net" 
+	xmlns:r="https://www.springframework.net/remoting"&gt;
 	
 	&lt;description&gt;Registers the calculator service as a SAO in 'Singleton' mode.&lt;/description&gt;
 	
@@ -479,7 +479,7 @@ public class AdvancedCalculator : Calculator, IAdvancedCalculator
 
     <para>The inProcess.xml configuration file creates an instance of
     AdvancedCalculator directly <programlisting language="myxml">
-&lt;objects xmlns="http://www.springframework.net"&gt;
+&lt;objects xmlns="https://www.springframework.net"&gt;
 	
   &lt;description&gt;inProcess&lt;/description&gt;
 	
@@ -493,7 +493,7 @@ public class AdvancedCalculator : Calculator, IAdvancedCalculator
     <literal>SaoFactoryObject</literal> class and for CAO objects use the
     <literal>CaoFactoryObject</literal> class. The configuration for obtaining
     a reference to the previously exported SAO singleton implementation is
-    shown below <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"&gt;
+    shown below <programlisting language="myxml">&lt;objects xmlns="https://www.springframework.net"&gt;
 	
 	&lt;description&gt;saoSingleton&lt;/description&gt;
 	
@@ -525,7 +525,7 @@ public class AdvancedCalculator : Calculator, IAdvancedCalculator
 
     <para>The configuration for obtaining a reference to the previously
     exported CAO implementation is shown below <programlisting
-    language="myxml">&lt;objects xmlns="http://www.springframework.net"&gt;
+    language="myxml">&lt;objects xmlns="https://www.springframework.net"&gt;
 	
 	&lt;description&gt;cao&lt;/description&gt;
 	
@@ -636,7 +636,7 @@ Memory = 2
 			&lt;resource uri="assembly://Spring.Calculator.RegisterComponentServices/Spring.Calculator.RegisterComponentServices.Config/enterpriseServices.xml" /&gt;
 		&lt;/context&gt;
 		
-		&lt;objects xmlns="http://www.springframework.net"&gt;
+		&lt;objects xmlns="https://www.springframework.net"&gt;
 			&lt;description&gt;Definitions of objects to be registered.&lt;/description&gt;
 			
 			&lt;object id="calculatorService" type="Spring.Calculator.Services.AdvancedCalculator, Spring.Calculator.Services" /&gt;
@@ -654,7 +654,7 @@ Memory = 2
     AccessControl and Roles properties. The configuration file for
     enterpriseServices.xml is shown below</para>
 
-    <para><programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"&gt;
+    <para><programlisting language="myxml">&lt;objects xmlns="https://www.springframework.net"&gt;
 
 	&lt;description&gt;enterpriseService&lt;/description&gt;
 	
@@ -727,7 +727,7 @@ Memory = 2
     <para>The config section 'spring/objects' in Web.config contains the
     definition for the 'plain' Advanced calculator, as well as the definitions
     to create an AOP proxy of an AdvancedCalculator that adds logging advice.
-    These definitions are shown below<programlisting language="myxml">		&lt;objects xmlns="http://www.springframework.net"&gt;
+    These definitions are shown below<programlisting language="myxml">		&lt;objects xmlns="https://www.springframework.net"&gt;
 			
       &lt;!-- Aspect --&gt;
       
@@ -755,7 +755,7 @@ Memory = 2
 
     <programlisting language="myxml">	&lt;object id="calculatorService" type="Spring.Web.Services.WebServiceExporter, Spring.Web"&gt;
 		&lt;property name="TargetName" value="calculator" /&gt;
-		&lt;property name="Namespace" value="http://SpringCalculator/WebServices" /&gt;
+		&lt;property name="Namespace" value="https://SpringCalculator/WebServices" /&gt;
 		&lt;property name="Description" value="Spring Calculator Web Services" /&gt;
 	&lt;/object&gt;</programlisting>
 
@@ -764,7 +764,7 @@ Memory = 2
 
     <programlisting language="myxml">	&lt;object id="calculatorServiceWeaved" type="Spring.Web.Services.WebServiceExporter, Spring.Web"&gt;
 		&lt;property name="TargetName" value="calculatorWeaved" /&gt;
-		&lt;property name="Namespace" value="http://SpringCalculator/WebServices" /&gt;
+		&lt;property name="Namespace" value="https://SpringCalculator/WebServices" /&gt;
 		&lt;property name="Description" value="Spring Calculator Web Services" /&gt;
 	&lt;/object&gt;
 	</programlisting>
@@ -820,25 +820,25 @@ Memory = 2
     <para><itemizedlist>
         <listitem>
           <para><ulink
-          url="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dndotnet/html/introremoting.asp">An
+          url="https://msdn.microsoft.com/library/default.asp?url=/library/en-us/dndotnet/html/introremoting.asp">An
           Introduction to Microsoft .NET Remoting Framework</ulink></para>
         </listitem>
 
         <listitem>
           <para><ulink
-          url="http://msdn.microsoft.com/library/default.asp?url=/library/en-us/dndotnet/html/hawkremoting.asp">Microsoft
+          url="https://msdn.microsoft.com/library/default.asp?url=/library/en-us/dndotnet/html/hawkremoting.asp">Microsoft
           .NET Remoting: A Technical Overview</ulink></para>
         </listitem>
 
         <listitem>
           <para><ulink
-          url="http://www.apress.com/book/bookDisplay.html?bID=374">Advanced
+          url="https://www.apress.com/book/bookDisplay.html?bID=374">Advanced
           .NET Remoting</ulink> (authored by Ingo Rammer)</para>
         </listitem>
 
         <listitem>
           <para><ulink
-          url="http://www.thinktecture.com/resources/remotingfaq/default.html">.NET
+          url="https://www.thinktecture.com/resources/remotingfaq/default.html">.NET
           Remoting FAQ</ulink></para>
         </listitem>
       </itemizedlist></para>

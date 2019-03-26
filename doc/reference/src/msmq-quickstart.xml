@@ -17,12 +17,12 @@
  */
 -->
 <chapter version="5" xml:id="msmq-quickstart"
-         xmlns="http://docbook.org/ns/docbook"
-         xmlns:ns6="http://www.w3.org/1999/xlink"
-         xmlns:ns5="http://www.w3.org/1999/xhtml"
-         xmlns:ns4="http://www.w3.org/2000/svg"
-         xmlns:ns3="http://www.w3.org/1998/Math/MathML"
-         xmlns:ns="http://docbook.org/ns/docbook">
+         xmlns="https://docbook.org/ns/docbook"
+         xmlns:ns6="https://www.w3.org/1999/xlink"
+         xmlns:ns5="https://www.w3.org/1999/xhtml"
+         xmlns:ns4="https://www.w3.org/2000/svg"
+         xmlns:ns3="https://www.w3.org/1998/Math/MathML"
+         xmlns:ns="https://docbook.org/ns/docbook">
   <title>MSMQ QuickStart</title>
 
   <section>
@@ -63,7 +63,7 @@
     <note>
       <para>You must create the queues mentioned previously using standard
       Windows Computer Management console to manage MSMQ. This <link
-      ns6:href="http://www.worldofasp.net/tut/MSMQ/Basic_Introduction_about_MSMQ_in_NET_Framework_98.aspx">article</link>
+      ns6:href="https://www.worldofasp.net/tut/MSMQ/Basic_Introduction_about_MSMQ_in_NET_Framework_98.aspx">article</link>
       covers the basics of creating the queus in the management console.
       </para>
     </note>

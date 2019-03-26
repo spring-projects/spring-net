@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <chapter version="5" xml:id="codeconfig-context"
-         xmlns="http://docbook.org/ns/docbook"
-         xmlns:ns5="http://www.w3.org/1998/Math/MathML"
-         xmlns:ns42="http://www.w3.org/2000/svg"
-         xmlns:ns4="http://www.w3.org/1999/xlink"
-         xmlns:ns3="http://www.w3.org/1999/xhtml"
-         xmlns:ns="http://docbook.org/ns/docbook">
+         xmlns="https://docbook.org/ns/docbook"
+         xmlns:ns5="https://www.w3.org/1998/Math/MathML"
+         xmlns:ns42="https://www.w3.org/2000/svg"
+         xmlns:ns4="https://www.w3.org/1999/xlink"
+         xmlns:ns3="https://www.w3.org/1999/xhtml"
+         xmlns:ns="https://docbook.org/ns/docbook">
   <title>CodeConfigApplicationContext Reference</title>
 
   <para>The <literal>CodeConfigApplicationContext</literal> is an
@@ -18,7 +18,7 @@
   can use .NET code to configure the Spring.NET container instead of XML
   files. For a general overview on the design of the Spring.NET container
   please see <link
-  ns4:href="http://www.springframework.net/doc-latest/reference/html/objects.html#objects-basics">container
+  ns4:href="https://www.springframework.net/doc-latest/reference/html/objects.html#objects-basics">container
   overview</link>. The distribution includes three sample applications, two
   console applications (the familiar MovieFinder and a prime number generator)
   and a ASP.NET MVC web application. Refer to the <link
@@ -89,8 +89,8 @@
         component-scan namespace requires you to register a custom namespace parser in App.config.
         Below is an example showing the use of the code config namespace</para>
 
-      <programlisting language="myxml">&lt;objects xmlns="http://www.springframework.net"
-         xmlns:context="http://www.springframework.net/context"&gt;
+      <programlisting language="myxml">&lt;objects xmlns="https://www.springframework.net"
+         xmlns:context="https://www.springframework.net/context"&gt;
   
   &lt;context:component-scan base-assemblies=""/&gt;
 

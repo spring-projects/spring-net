@@ -60,13 +60,13 @@
 <!ENTITY codeconfig-attribute-reference SYSTEM "codeconfig-attribute-reference.xml">
 <!ENTITY codeconfig-sample-apps SYSTEM "codeconfig-sample-apps.xml">
 ]>
-<book version="5.0" xml:lang="en" xmlns="http://docbook.org/ns/docbook"
-      xmlns:xlink="http://www.w3.org/1999/xlink"
-      xmlns:xi="http://docbook.org/ns/docbook/xi"
-      xmlns:ns5="http://www.w3.org/1999/xhtml"
-      xmlns:ns4="http://www.w3.org/1998/Math/MathML"
-      xmlns:ns3="http://www.w3.org/2000/svg"
-      xmlns:ns="http://docbook.org/ns/docbook">
+<book version="5.0" xml:lang="en" xmlns="https://docbook.org/ns/docbook"
+      xmlns:xlink="https://www.w3.org/1999/xlink"
+      xmlns:xi="https://docbook.org/ns/docbook/xi"
+      xmlns:ns5="https://www.w3.org/1999/xhtml"
+      xmlns:ns4="https://www.w3.org/1998/Math/MathML"
+      xmlns:ns3="https://www.w3.org/2000/svg"
+      xmlns:ns="https://docbook.org/ns/docbook">
   <info>
     <title>The Spring.NET Framework</title>
 
@@ -75,7 +75,7 @@
     <releaseinfo>Version 2.0.0</releaseinfo>
 
     <pubdate>Last Updated January 11, 2013 <ulink
-    url="http://www.springframework.net/doc-latest/reference/html/index.html">(Latest
+    url="https://www.springframework.net/doc-latest/reference/html/index.html">(Latest
     documentation)</ulink></pubdate>
 
     <authorgroup>

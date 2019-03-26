@@ -4,7 +4,7 @@
 	Tests for independent prototype behaviour.
 -->
 
-<objects xmlns="http://www.springframework.net">
+<objects xmlns="https://www.springframework.net">
 
 	
 	<object id="test" type="Spring.Objects.Factory.SideEffectObject">	

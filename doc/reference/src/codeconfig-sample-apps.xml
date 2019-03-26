@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <chapter version="5" xml:id="codeconfig-sample-apps"
-         xmlns="http://docbook.org/ns/docbook"
-         xmlns:ns52="http://www.w3.org/1999/xhtml"
-         xmlns:ns5="http://www.w3.org/1999/xlink"
-         xmlns:ns4="http://www.w3.org/2000/svg"
-         xmlns:ns3="http://www.w3.org/1998/Math/MathML"
-         xmlns:ns="http://docbook.org/ns/docbook">
+         xmlns="https://docbook.org/ns/docbook"
+         xmlns:ns52="https://www.w3.org/1999/xhtml"
+         xmlns:ns5="https://www.w3.org/1999/xlink"
+         xmlns:ns4="https://www.w3.org/2000/svg"
+         xmlns:ns3="https://www.w3.org/1998/Math/MathML"
+         xmlns:ns="https://docbook.org/ns/docbook">
   <title>Sample Applications</title>
 
   <section>
@@ -38,7 +38,7 @@
     <para>The Spring.IoCQuickStart.MovieFinder sample application is the same
     fundamental code as provided in the sample app by the same name that is
     provided with <link
-    ns5:href="http://springframework.net/download.html">the main Spring.NET
+    ns5:href="https://springframework.net/download.html">the main Spring.NET
     Framework download package</link>. This section assumes you are already
     familiar with the sample application as provided in that download package.
     This version of this sample application has been modified to rely upon
@@ -82,8 +82,8 @@
       single instruction telling the context to use CodeConfig:</para>
 
       <programlisting language="xml">&lt;?xml version="1.0" encoding="utf-8" ?&gt;
-&lt;objects xmlns="http://www.springframework.net" 
-         xmlns:context="http://www.springframework.net/context"&gt;
+&lt;objects xmlns="https://www.springframework.net" 
+         xmlns:context="https://www.springframework.net/context"&gt;
 
   &lt;description&gt;An example that demonstrates code based configuration for object definitions.&lt;/description&gt;
 
@@ -146,7 +146,7 @@
 
     <para>The Spring.MvcQuickStart sample application is the same fundamental
     code as provided in the sample app by the same name that is provided with
-    <link ns5:href="http://springframework.net/download.html">the main
+    <link ns5:href="https://springframework.net/download.html">the main
     Spring.NET Framework download package</link>. This section assumes you are
     already familiar with the sample application as provided in that download
     package. This version of this sample application has been modified to rely
@@ -205,8 +205,8 @@
       CodeConfig:</para>
 
       <programlisting language="xml">&lt;?xml version="1.0" encoding="utf-8" ?&gt;
-&lt;objects xmlns="http://www.springframework.net" 
-         xmlns:context="http://www.springframework.net/context"&gt;
+&lt;objects xmlns="https://www.springframework.net" 
+         xmlns:context="https://www.springframework.net/context"&gt;
 
   &lt;context:code-config/&gt;
 
