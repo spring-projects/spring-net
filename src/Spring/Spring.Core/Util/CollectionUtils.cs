@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ?2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -201,7 +201,7 @@ namespace Spring.Util
             return contains;
         }
 
-#if !NETCORE
+
         /// <summary>
         /// Removes all the elements from the target collection that are contained in the source collection.
         /// </summary>
@@ -240,7 +240,6 @@ namespace Spring.Util
                 }
             }
         }
-#endif
 
         /// <summary>
         /// Converts an <see cref="System.Collections.ICollection"/>instance to an <see cref="System.Collections.ArrayList"/> instance.

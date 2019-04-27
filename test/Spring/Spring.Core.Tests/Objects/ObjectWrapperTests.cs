@@ -55,7 +55,7 @@ namespace Spring.Objects
 		/// <summary>
 		/// The setup logic executed before the execution of this test fixture.
 		/// </summary>
-		[TestFixtureSetUp]
+		[ OneTimeSetUp]
 		public void FixtureSetUp()
 		{
 			// enable logging (to nowhere), just to exercisee the logging code...

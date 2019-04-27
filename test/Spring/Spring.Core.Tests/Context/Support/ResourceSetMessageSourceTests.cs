@@ -54,14 +54,14 @@ namespace Spring.Context.Support
         private const string ResourceBaseName = ResourceNamespace + "." + ResourceFileName;
         private IList<object> resourceManagerList;
 
-        [TestFixtureSetUp]
-        public void TestFixtureSetUp()
+        [ OneTimeSetUp]
+        public void  OneTimeSetUp()
         {
             CultureTestScope.Set();
         }
 
-        [TestFixtureTearDown]
-        public void TestFixtureTearDown()
+        [OneTimeTearDown]
+        public void OneTimeTearDown()
         {
             CultureTestScope.Reset();
         }

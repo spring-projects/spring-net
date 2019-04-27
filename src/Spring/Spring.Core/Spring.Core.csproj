@@ -1,8 +1,8 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <!--<TargetFrameworks>net45;netstandard1.3</TargetFrameworks>-->
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <!--<TargetFrameworks>net461;netstandard1.3</TargetFrameworks>-->
+    <TargetFrameworks>netstandard2.0;net461</TargetFrameworks>
     <AssemblyName>Spring.Core</AssemblyName>
     <PackageId>Spring.Core</PackageId>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
@@ -18,12 +18,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Common.Logging" Version="3.4.0-Alpha2" />
-    <PackageReference Include="Common.Logging.Core" Version="3.4.0-Alpha2" />
+    <PackageReference Include="Common.Logging" Version="3.4.1" />
+    <PackageReference Include="Common.Logging.Core" Version="3.4.1" />
     
   </ItemGroup>
 
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net45' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net461' ">
     <Reference Include="System.Configuration" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Security" />
@@ -33,7 +33,7 @@
     <Reference Include="Microsoft.CSharp" />
   </ItemGroup>
 
-  <PropertyGroup Condition=" '$(TargetFramework)' == 'net45' ">
+  <PropertyGroup Condition=" '$(TargetFramework)' == 'net461' ">
     <DefineConstants>$(DefineConstants);APPDOMAINS;BINARY_SERIALIZATION;DRAWING_COLOR;REMOTING;RESOURCESET;THREADING;XML_SCHEMA</DefineConstants>
   </PropertyGroup>
   

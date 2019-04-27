@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.27703.2000
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.28803.202
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Core", "src\Spring\Spring.Core\Spring.Core.csproj", "{EF9A640E-4AB3-4902-A908-7F01D8817F06}"
 EndProject
@@ -10,6 +10,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		src\Spring\CommonAssemblyInfo.cs = src\Spring\CommonAssemblyInfo.cs
 		src\Spring\NetCorePolyfills.cs = src\Spring\NetCorePolyfills.cs
 	EndProjectSection
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Spring.Core.Tests", "test\Spring\Spring.Core.Tests\Spring.Core.Tests.csproj", "{3CC7C53B-94FE-4E8A-8F50-73FF7D8EB32A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{EF9A640E-4AB3-4902-A908-7F01D8817F06}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF9A640E-4AB3-4902-A908-7F01D8817F06}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF9A640E-4AB3-4902-A908-7F01D8817F06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3CC7C53B-94FE-4E8A-8F50-73FF7D8EB32A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3CC7C53B-94FE-4E8A-8F50-73FF7D8EB32A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3CC7C53B-94FE-4E8A-8F50-73FF7D8EB32A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3CC7C53B-94FE-4E8A-8F50-73FF7D8EB32A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

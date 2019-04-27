@@ -52,46 +52,58 @@ namespace Spring.Collections
         }
 
         [Test]
-        [ExpectedException (typeof (NotSupportedException))]
+        //[ExpectedException (typeof (NotSupportedException))]
         public void Add()
         {
-            Set.Add (1);
+            //Set.Add (1);
+
+            Assert.Throws<NotSupportedException>(() => Set.Add(1));
         }
 
         [Test]
-        [ExpectedException (typeof (NotSupportedException))]
+        //[ExpectedException (typeof (NotSupportedException))]
         public void AddAll()
         {
-            Set.AddAll (new int [] {4, 5, 6});
+            //Set.AddAll (new int [] {4, 5, 6});
+
+            Assert.Throws<NotSupportedException>(() => Set.AddAll(new int[] { 4, 5, 6 }));
         }
 
         [Test]
-        [ExpectedException (typeof (NotSupportedException))]
+        //[ExpectedException (typeof (NotSupportedException))]
         public void Remove()
         {
-            Set.Remove (1);
+            //Set.Remove (1);
+
+            Assert.Throws<NotSupportedException>(() => Set.Remove(1));
         }
 
         [Test]
-        [ExpectedException (typeof (NotSupportedException))]
+        //[ExpectedException (typeof (NotSupportedException))]
         public void RemoveAll()
         {
             object [] removed = new object [] {1, 3};
-            Set.RemoveAll (removed);
+            //Set.RemoveAll (removed);
+
+            Assert.Throws<NotSupportedException>(() => Set.RemoveAll (removed));
         }
 
         [Test]
-        [ExpectedException (typeof (NotSupportedException))]
+        //[ExpectedException (typeof (NotSupportedException))]
         public void RetainAll()
         {
-            Set.RetainAll (new object [] {1, 9});
+            //Set.RetainAll (new object [] {1, 9});
+
+            Assert.Throws<NotSupportedException>(() => Set.RetainAll(new object[] { 1, 9 }));
         }
 
         [Test]
-        [ExpectedException (typeof (NotSupportedException))]
+        //[ExpectedException (typeof (NotSupportedException))]
         public void Clear()
         {
             Set.Clear ();
+
+            Assert.Throws<NotSupportedException>(() => Set.Clear());
         }        
 
         [Test]
@@ -134,55 +146,65 @@ namespace Spring.Collections
         }
 
         [Test]
-        [ExpectedException (typeof (NotSupportedException))]
+        //[ExpectedException (typeof (NotSupportedException))]
         public void ClonedInstanceMustStillBeImmutable () 
         {
             ISet clone = (ISet) Set.Clone ();
-            clone.Add ("bad chair, bad chair");
+            //clone.Add ("bad chair, bad chair");
+
+            Assert.Throws<NotSupportedException>(() => clone.Add("bad chair, bad chair"));
         }
 
         [Test]
-        [ExpectedException (typeof (NotSupportedException))]
+        //[ExpectedException (typeof (NotSupportedException))]
         public void MinusYieldsImmutableCone () 
         {
             ISet mySet = new ListSet (new int [] {1, 2});
             ISet clone = Set.Minus (mySet);
             Assert.IsNotNull (clone);
             Assert.AreEqual (1, clone.Count);
-            clone.Add ("bad chair, bad chair");
+            //clone.Add ("bad chair, bad chair");
+
+            Assert.Throws<NotSupportedException>(() => clone.Add("bad chair, bad chair"));
         }
 
         [Test]
-        [ExpectedException (typeof (NotSupportedException))]
+        //[ExpectedException (typeof (NotSupportedException))]
         public void UnionYieldsImmutableCone () 
         {
             ISet mySet = new ListSet (new int [] {1, 4});
             ISet clone = Set.Union (mySet);
             Assert.IsNotNull (clone);
             Assert.AreEqual (4, clone.Count);
-            clone.Add ("bad chair, bad chair");
+            //clone.Add ("bad chair, bad chair");
+
+            Assert.Throws<NotSupportedException>(() => clone.Add("bad chair, bad chair"));
         }
 
         [Test]
-        [ExpectedException (typeof (NotSupportedException))]
+        //[ExpectedException (typeof (NotSupportedException))]
         public void IntersectionYieldsImmutableCone () 
         {
             ISet mySet = new ListSet (new int [] {1, 4});
             ISet clone = Set.Intersect (mySet);
             Assert.IsNotNull (clone);
             Assert.AreEqual (1, clone.Count);
-            clone.Add ("bad chair, bad chair");
+            //clone.Add ("bad chair, bad chair");
+
+            Assert.Throws<NotSupportedException>(() => clone.Add("bad chair, bad chair"));
         }
 
         [Test]
-        [ExpectedException (typeof (NotSupportedException))]
+        //[ExpectedException (typeof (NotSupportedException))]
         public void ExclusiveOrYieldsImmutableCone () 
         {
             ISet mySet = new ListSet (new int [] {1, 4});
             ISet clone = Set.ExclusiveOr (mySet);
             Assert.IsNotNull (clone);
             Assert.AreEqual (3, clone.Count);
-            clone.Add ("bad chair, bad chair");
+            //clone.Add ("bad chair, bad chair");
+
+            Assert.Throws<NotSupportedException>(() => clone.Add("bad chair, bad chair"));
         }
 
         /// <summary>

@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ?2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -160,20 +160,24 @@ namespace Spring.Collections
 		}
 
 		[Test]
-		[ExpectedException(typeof (InvalidOperationException))]
+		//[ExpectedException(typeof (InvalidOperationException))]
 		public void AddFail()
 		{
 			FailQueue q = new FailQueue();
-			q.Add(Int32.Parse("1"));
+
+            Assert.Throws<InvalidOperationException>(() => q.Add(Int32.Parse("1")));
+            
 		}
 
 		[Test]
-		[ExpectedException(typeof (NullReferenceException))]
+		//[ExpectedException(typeof (NullReferenceException))]
 		public void AddNPE()
 		{
 			SucceedQueue q = new SucceedQueue();
-			q.Add(null);
-		}
+			//q.Add(null);
+
+            Assert.Throws<NullReferenceException>(() => q.Add(null));
+        }
 
 		[Test]
 		public void RemoveSucceed()
@@ -183,12 +187,14 @@ namespace Spring.Collections
 		}
 
 		[Test]
-		[ExpectedException(typeof (NoElementsException))]
+		//[ExpectedException(typeof (NoElementsException))]
 		public void RemoveFail()
 		{
 			FailQueue q = new FailQueue();
-			q.Remove();
-		}
+            //q.Remove();
+
+            Assert.Throws<NoElementsException>(() => q.Remove());
+        }
 
 		[Test]
 		public void ElementSucceed()
@@ -198,27 +204,33 @@ namespace Spring.Collections
 		}
 
 		[Test]
-		[ExpectedException(typeof (NoElementsException))]
+		//[ExpectedException(typeof (NoElementsException))]
 		public void ElementF()
 		{
 			FailQueue q = new FailQueue();
-			q.Element();
-		}
+			//q.Element();
+
+            Assert.Throws<NoElementsException>(() => q.Element());
+        }
 
 		[Test]
-		[ExpectedException(typeof (ArgumentNullException))]
+		//[ExpectedException(typeof (ArgumentNullException))]
 		public void AddAll1()
 		{
 			SucceedQueue q = new SucceedQueue();
-			q.AddAll(null);
-		}
+			//q.AddAll(null);
+
+            Assert.Throws<ArgumentNullException>(() => q.AddAll(null));
+        }
 
 		[Test]
-		[ExpectedException(typeof (ArgumentException))]
+		//[ExpectedException(typeof (ArgumentException))]
 		public void AddAllSelf()
 		{
 			SucceedQueue q = new SucceedQueue();
 			q.AddAll(q);
-		}
+
+            Assert.Throws<ArgumentException>(() => q.AddAll(q));
+        }
 	}
 }

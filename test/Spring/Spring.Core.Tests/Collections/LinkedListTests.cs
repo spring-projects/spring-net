@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ?2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -91,12 +91,14 @@ namespace Spring.Collections
 		}
 
 		[Test]
-		[ExpectedException(typeof(System.ArgumentOutOfRangeException))]
+		//[ExpectedException(typeof(System.ArgumentOutOfRangeException))]
 		public void RemoveAtOnEmptyLinkedList()
 		{
 			LinkedList ll = new LinkedList();
-			ll.RemoveAt(0);
-		}
+			//ll.RemoveAt(0);
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => ll.RemoveAt(0));
+        }
 
 		[Test]
 		public void Enumerator()
@@ -113,7 +115,7 @@ namespace Spring.Collections
 		}
 
 		[Test]
-		[ExpectedException(typeof(System.InvalidOperationException))]
+		//[ExpectedException(typeof(System.InvalidOperationException))]
 		public void EnumeratorModification()
 		{
 			LinkedList ll = new LinkedList();
@@ -187,36 +189,42 @@ namespace Spring.Collections
 		}
 
 		[Test]
-		[ExpectedException(typeof(ArgumentNullException))]
+		//[ExpectedException(typeof(ArgumentNullException))]
 		public void CopyToWithNullArray()
 		{
 			LinkedList ll = new LinkedList();
 			ll.Add("item1");
-			ll.CopyTo(null, 0);
-		}
+			//ll.CopyTo(null, 0);
+
+            Assert.Throws<ArgumentNullException>(() => ll.CopyTo(null, 0));
+        }
 
 		[Test]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
+		//[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void CopyToWithNegativeIndex()
 		{
 			LinkedList ll = new LinkedList();
 			ll.Add("item1");
 			string[] strings = new string[1];
-			ll.CopyTo(strings, -1);
-		}
+			//ll.CopyTo(strings, -1);
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => ll.CopyTo(strings, -1));
+        }
 
 		[Test]
-		[ExpectedException(typeof(ArgumentOutOfRangeException))]
+		//[ExpectedException(typeof(ArgumentOutOfRangeException))]
 		public void CopyToWithIndexGreaterThanArrayLength()
 		{
 			LinkedList ll = new LinkedList();
 			ll.Add("item1");
 			string[] strings = new string[1];
-			ll.CopyTo(strings, 2);
-		}
+			//ll.CopyTo(strings, 2);
+
+            Assert.Throws<ArgumentOutOfRangeException>(() => ll.CopyTo(strings, 2));
+        }
 
 		[Test]
-		[ExpectedException(typeof(ArgumentException))]
+		//[ExpectedException(typeof(ArgumentException))]
 		public void CopyToWithInsufficientSizeArray()
 		{
 			LinkedList ll = new LinkedList();
@@ -224,7 +232,9 @@ namespace Spring.Collections
 			ll.Add("item2");
 			string[] strings = new string[2];
 			ll.CopyTo(strings, 1);
-		}
+
+            Assert.Throws<ArgumentException>(() => ll.CopyTo(strings, 1));
+        }
 
 		[Test]
 		public void Contains()

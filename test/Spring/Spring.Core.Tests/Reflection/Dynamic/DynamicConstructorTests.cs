@@ -72,7 +72,7 @@ namespace Spring.Reflection.Dynamic
             ieee.Officers["advisors"] = new Inventor[] { tesla, pupin }; // not historically accurate, but I need an array in the map ;-)
         }
 	    
-        [TestFixtureTearDown]
+        [OneTimeTearDown]
         public void TearDown()
         {
             //DynamicReflectionManager.SaveAssembly();

@@ -56,7 +56,7 @@ namespace Spring.Objects.Factory
         /// <summary>
         /// The setup logic executed before the execution of this test fixture.
         /// </summary>
-        [TestFixtureSetUp]
+        [ OneTimeSetUp]
         public void FixtureSetUp()
         {
             // enable (null appender) logging, just to ensure that the logging code is correct :D
