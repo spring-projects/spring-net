@@ -504,6 +504,10 @@ namespace Spring.Messaging.Nms.Listener
                 // Transacted session created by this container -> rollback
                 NmsUtils.RollbackIfNecessary(session);
             }
+            else if (IsClientAcknowledge(session))
+            {
+                session.Recover();
+            }
         }
         /// <summary>
         /// Perform a rollback, handling rollback excepitons properly.
@@ -524,7 +528,12 @@ namespace Spring.Messaging.Nms.Listener
                     }
                     NmsUtils.RollbackIfNecessary(session);
                 }
-            } catch (NMSException)
+                else if (IsClientAcknowledge(session))
+                {
+                    session.Recover();
+                }
+            }
+            catch (NMSException)
             {
                 logger.Error("Application exception overriden by rollback exception", ex);
                 throw;

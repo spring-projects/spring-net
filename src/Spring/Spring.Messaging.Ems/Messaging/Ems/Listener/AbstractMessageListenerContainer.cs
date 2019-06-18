@@ -506,6 +506,10 @@ namespace Spring.Messaging.Ems.Listener
                 // Transacted session created by this container -> rollback
                 EmsUtils.RollbackIfNecessary(session);
             }
+            else if (IsClientAcknowledge(session))
+            {
+                session.Recover();
+            }
         }
         /// <summary>
         /// Perform a rollback, handling rollback excepitons properly.
@@ -526,7 +530,12 @@ namespace Spring.Messaging.Ems.Listener
                     }
                     EmsUtils.RollbackIfNecessary(session);
                 }
-            } catch (EMSException)
+                else if (IsClientAcknowledge(session))
+                {
+                    session.Recover();
+                }
+            }
+            catch (EMSException)
             {
                 logger.Error("Application exception overriden by rollback exception", ex);
                 throw;
