@@ -9,7 +9,7 @@
     <ProjectReference Include="..\Spring.Data\Spring.Data.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Apache.NMS" Version="1.7.1" />
+    <PackageReference Include="Apache.NMS" Version="1.8.0" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\GenCommonAssemblyInfo.cs">
