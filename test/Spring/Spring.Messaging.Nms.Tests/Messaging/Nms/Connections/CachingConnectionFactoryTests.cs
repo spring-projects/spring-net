@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,16 +18,9 @@
 
 #endregion
 
-#region Imports
-
 using Apache.NMS;
-using Apache.NMS.ActiveMQ.Commands;
-
 using FakeItEasy;
-
 using NUnit.Framework;
-
-#endregion
 
 namespace Spring.Messaging.Nms.Connections
 {
@@ -171,6 +164,7 @@ namespace Spring.Messaging.Nms.Connections
             Assert.AreSame(tmpA, tmpC);
         }
 
+#if NETFRAMEWORK
         /// <summary>
         /// Tests that the same underlying instance of the message consumer is returned after
         /// creating a session, creating the consumer (A), closing the session, and creating another
@@ -186,7 +180,7 @@ namespace Spring.Messaging.Nms.Connections
             IConnection con1 = cachingConnectionFactory.CreateConnection();
 
             ISession sessionA = con1.CreateSession(AcknowledgementMode.Transactional);
-            IDestination destination = new ActiveMQQueue("test.dest");
+            IDestination destination = new Apache.NMS.ActiveMQ.Commands.ActiveMQQueue("test.dest");
             IMessageConsumer consumerA = sessionA.CreateConsumer(destination);
             TestMessageConsumer tmpA = GetTestMessageConsumer(consumerA);
 
@@ -198,6 +192,7 @@ namespace Spring.Messaging.Nms.Connections
 
             Assert.AreSame(tmpA, tmpB);            
         }
+#endif
 
         private IConnectionFactory CreateConnectionFactory()
         {

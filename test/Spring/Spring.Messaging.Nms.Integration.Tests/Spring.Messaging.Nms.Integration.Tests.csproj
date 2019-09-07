@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFrameworks>netcoreapp2.1;net452</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Spring\Spring.Core\Spring.Core.csproj" />
@@ -11,7 +11,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Apache.NMS" Version="$(ApacheNmsVersion)" />
-    <PackageReference Include="Apache.NMS.ActiveMQ" Version="$(ApacheNmsVersion)" />
+    <PackageReference Include="Apache.NMS.ActiveMQ" Version="1.7.2" Condition=" '$(TargetFramework)' == '$(TargetFullFrameworkVersion)' " />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftTestSDKVersion)" />
     <PackageReference Include="NUnit" Version="$(NUnitVersion)" />
     <PackageReference Include="NUnit3TestAdapter" Version="$(NUnitTestAdapterVersion)" />

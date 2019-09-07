@@ -20,7 +20,7 @@
 
 using System;
 using Apache.NMS;
-using Apache.NMS.ActiveMQ.Commands;
+using FakeItEasy;
 
 namespace Spring.Messaging.Nms.Connections
 {
@@ -126,7 +126,7 @@ namespace Spring.Messaging.Nms.Connections
 
         public IQueue GetQueue(string name)
         {
-            return new ActiveMQQueue(name);
+            return A.Fake<IQueue>();
         }
 
         public ITopic GetTopic(string name)

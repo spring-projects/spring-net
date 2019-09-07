@@ -2,6 +2,8 @@
 
   <PropertyGroup>
 
+    <VersionPrefix>3.0.0-fbs-1</VersionPrefix>
+
     <OutputPath>..\..\..\build\$(Configuration)\$(MSBuildProjectName)</OutputPath>
 
     <RootNamespace>Spring</RootNamespace>
@@ -47,7 +49,7 @@
   </ItemGroup>
   
   <ItemGroup>
-    <PackageReference Include="ConfigureAwaitChecker.Analyzer" Version="2.0.0" PrivateAssets="All" />
+    <PackageReference Include="ConfigureAwaitChecker.Analyzer" Version="4.0.0" PrivateAssets="All" />
   </ItemGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">

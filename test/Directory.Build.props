@@ -13,7 +13,7 @@
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
 
-    <ApacheNmsVersion>1.7.1</ApacheNmsVersion>
+    <ApacheNmsVersion>1.8.0</ApacheNmsVersion>
     <CommonLoggingVersion>3.4.1</CommonLoggingVersion>
     <Log4NetVersion>2.0.8</Log4NetVersion>
 

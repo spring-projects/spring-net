@@ -21,8 +21,6 @@
 using System;
 
 using Apache.NMS;
-using Apache.NMS.ActiveMQ;
-
 using NUnit.Framework;
 
 using Spring.Testing.NUnit;
@@ -46,14 +44,15 @@ namespace Spring.Messaging.Nms.Core
             this.PopulateProtectedVariables = true;
         }
 
+#if NETFRAMEWORK
         [Test]
         public void ConnectionThrowException()
         {
-            ConnectionFactory cf = new ConnectionFactory();
+            var cf = new Apache.NMS.ActiveMQ.ConnectionFactory();
             cf.BrokerUri = new Uri("tcp://localaaahost:61616");
             Assert.Throws<NMSConnectionException>(() => cf.CreateConnection());
         }
-
+#endif
 
         [Test]
         public void ConvertAndSend()

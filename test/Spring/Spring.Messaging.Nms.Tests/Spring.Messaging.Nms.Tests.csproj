@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFrameworks>netcoreapp2.1;net452</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Spring\Spring.Core\Spring.Core.csproj" />
@@ -13,13 +13,10 @@
     <PackageReference Include="FakeItEasy" Version="$(FakeItEasyVersion)" />
     <PackageReference Include="FakeItEasy.Analyzer" Version="$(FakeItEasyVersion)" PrivateAssets="All" />
     <PackageReference Include="Apache.NMS" Version="$(ApacheNmsVersion)" />
-    <PackageReference Include="Apache.NMS.ActiveMQ" Version="$(ApacheNmsVersion)" />
+    <PackageReference Include="Apache.NMS.ActiveMQ" Version="1.7.2" Condition=" '$(TargetFramework)' == '$(TargetFullFrameworkVersion)' " />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftTestSDKVersion)" />
     <PackageReference Include="NUnit" Version="$(NUnitVersion)" />
     <PackageReference Include="NUnit3TestAdapter" Version="$(NUnitTestAdapterVersion)" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Accessibility" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config">
@@ -28,4 +25,7 @@
     <EmbeddedResource Include="Messaging\Nms\Integration\SimpleMessageListenerContainerTests.xml" />
     <EmbeddedResource Include="Messaging\Nms\Config\NmsNamespaceHandlerTests.xml" />
   </ItemGroup>
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="copy &quot;$(ProjectDir)App.config&quot; &quot;$(OutDir)testhost.dll.config&quot;" />
+  </Target>
 </Project>
