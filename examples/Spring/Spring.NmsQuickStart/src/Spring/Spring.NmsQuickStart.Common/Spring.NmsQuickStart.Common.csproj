@@ -3,6 +3,7 @@
     <TargetFramework>net452</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Apache.NMS" Version="1.8.0" />
     <PackageReference Include="Apache.NMS.ActiveMQ" Version="1.7.2" />
   </ItemGroup>
   <ItemGroup>
