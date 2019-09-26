@@ -104,8 +104,8 @@ namespace Spring.Aop.Framework.DynamicProxy
             var interfaceMap = advised.InterfaceMap;
             foreach (Type intf in Interfaces)
             {
-                object target = interfaceMap[intf];
-                if (target == null)
+                interfaceMap.TryGetValue(intf, out var target);
+                if (target is null)
                 {
                     // implement interface (proxy only final methods)
                     ImplementInterface(typeBuilder,

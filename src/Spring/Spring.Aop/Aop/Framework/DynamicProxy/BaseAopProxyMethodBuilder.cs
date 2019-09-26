@@ -91,7 +91,7 @@ namespace Spring.Aop.Framework.DynamicProxy
                 onProxyTargetMethods.Add(methodId, method);
 
                 onProxyTargetMethodCacheField = typeBuilder.DefineField(
-                    methodId, typeof(MethodInfo), FieldAttributes.Private | FieldAttributes.Static | FieldAttributes.InitOnly);
+                    methodId, typeof(MethodInfo), FieldAttributes.Private | FieldAttributes.Static);
 
                 MakeGenericMethod(il, method, onProxyTargetMethodCacheField, genericOnProxyTargetMethod);
             }

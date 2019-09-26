@@ -82,7 +82,8 @@ namespace Spring.Aop.Framework.DynamicProxy
             IDictionary<Type, object> interfaceMap = advised.InterfaceMap;
 			foreach (Type intf in Interfaces)
 			{
-				if (!interfaceMap.TryGetValue(intf, out var target))
+				interfaceMap.TryGetValue(intf, out var target);
+				if (target is null)
 				{
                     // implement interface
 					ImplementInterface(typeBuilder, 
