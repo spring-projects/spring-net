@@ -1,3 +1,5 @@
+#region License
+
 /*
  * Copyright © 2002-2011 the original author or authors.
  *
@@ -14,8 +16,9 @@
  * limitations under the License.
  */
 
+#endregion
+
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.Serialization;
@@ -368,13 +371,18 @@ namespace Spring.Aop.Framework
         /// <see cref="System.Type"/>s to their delegates.
         /// </value>
         /// <seealso cref="Spring.Aop.Framework.IAdvised.InterfaceMap"/>
-        public virtual IDictionary InterfaceMap
+        public virtual IDictionary<Type, object> InterfaceMap
         {
             get
             {
-                lock (this.SyncRoot)
+                lock (SyncRoot)
                 {
-                    return new Hashtable(this.interfaceMap);
+                    var dictionary = new Dictionary<Type, object>(interfaceMap.Count);
+                    foreach (var entry in interfaceMap)
+                    {
+                        dictionary[entry.Key] = entry.Value;
+                    }
+                    return dictionary;
                 }
             }
         }

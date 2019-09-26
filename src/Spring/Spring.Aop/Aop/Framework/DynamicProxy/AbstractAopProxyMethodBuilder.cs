@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,17 +18,13 @@
 
 #endregion
 
-#region Imports
-
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.Serialization;
 
 using Spring.Proxy;
-
-#endregion
 
 namespace Spring.Aop.Framework.DynamicProxy
 {
@@ -39,8 +35,6 @@ namespace Spring.Aop.Framework.DynamicProxy
     /// <author>Bruno Baia</author>
     public abstract class AbstractAopProxyMethodBuilder : AbstractProxyMethodBuilder
     {
-        #region Fields
-
         /// <summary>
         /// The <see cref="IAopProxyTypeGenerator"/> implementation to use.
         /// </summary>
@@ -50,13 +44,13 @@ namespace Spring.Aop.Framework.DynamicProxy
         /// The dictionary to cache the list of target  
         /// <see cref="System.Reflection.MethodInfo"/>s.
         /// </summary>
-        protected IDictionary targetMethods;
+        protected IDictionary<string, MethodInfo> targetMethods;
 
         /// <summary>
         /// The dictionary to cache the list of target  
         /// <see cref="System.Reflection.MethodInfo"/>s defined on the proxy.
         /// </summary>
-        protected IDictionary onProxyTargetMethods;
+        protected IDictionary<string, MethodInfo> onProxyTargetMethods;
 
         // variables
 
@@ -112,15 +106,11 @@ namespace Spring.Aop.Framework.DynamicProxy
 
         // private fields
 
-        private static IDictionary ldindOpCodes;
-
-        #endregion
-
-        #region Constructor(s) / Destructor
+        private static Dictionary<Type, OpCode> ldindOpCodes;
 
         static AbstractAopProxyMethodBuilder()
         {
-			ldindOpCodes = new Hashtable();
+			ldindOpCodes = new Dictionary<Type, OpCode>();
             ldindOpCodes[typeof(sbyte)] = OpCodes.Ldind_I1;
             ldindOpCodes[typeof(short)] = OpCodes.Ldind_I2;
             ldindOpCodes[typeof(int)] = OpCodes.Ldind_I4;
@@ -152,8 +142,8 @@ namespace Spring.Aop.Framework.DynamicProxy
         /// </param>
         protected AbstractAopProxyMethodBuilder(
             TypeBuilder typeBuilder, IAopProxyTypeGenerator aopProxyGenerator,
-            bool explicitImplementation, IDictionary targetMethods)
-            : this(typeBuilder, aopProxyGenerator, explicitImplementation, targetMethods, new Hashtable())
+            bool explicitImplementation, IDictionary<string, MethodInfo> targetMethods)
+            : this(typeBuilder, aopProxyGenerator, explicitImplementation, targetMethods, new Dictionary<string, MethodInfo>())
         {
         }
 
@@ -178,17 +168,13 @@ namespace Spring.Aop.Framework.DynamicProxy
         /// </param>
         protected AbstractAopProxyMethodBuilder(
             TypeBuilder typeBuilder, IAopProxyTypeGenerator aopProxyGenerator,
-            bool explicitImplementation, IDictionary targetMethods, IDictionary onProxyTargetMethods)
+            bool explicitImplementation, IDictionary<string, MethodInfo> targetMethods, IDictionary<string, MethodInfo> onProxyTargetMethods)
             : base(typeBuilder, aopProxyGenerator, explicitImplementation)
         {
             this.aopProxyGenerator = aopProxyGenerator;
             this.targetMethods = targetMethods;
             this.onProxyTargetMethods = onProxyTargetMethods;
         }
-
-        #endregion
-
-        #region Protected Members
 
         /// <summary>
         /// Generates the proxy method.
@@ -235,7 +221,7 @@ namespace Spring.Aop.Framework.DynamicProxy
             targetMethods.Add(methodId, method);
 
             targetMethodCacheField = typeBuilder.DefineField(methodId, typeof(MethodInfo), 
-                FieldAttributes.Private | FieldAttributes.Static | FieldAttributes.InitOnly);
+                FieldAttributes.Private | FieldAttributes.Static);
 
             MakeGenericMethod(il, method, targetMethodCacheField, genericTargetMethod);
         }
@@ -362,7 +348,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         /// <param name="method">The method to proxy.</param>
         protected virtual void DeclareLocals(ILGenerator il, MethodInfo method)
         {
-            interceptors = il.DeclareLocal(typeof(IList));
+            interceptors = il.DeclareLocal(typeof(System.Collections.IList));
             targetType = il.DeclareLocal(typeof(Type));
             arguments = il.DeclareLocal(typeof(Object[]));
             
@@ -604,10 +590,6 @@ namespace Spring.Aop.Framework.DynamicProxy
                 il.Emit(OpCodes.Ldloc, returnValue);
             }
         }
-        
-        #endregion
-
-        #region Reflection.Emit utility methods
 
         /// <summary>
         /// Emits MSIL instructions to load a value of the specified <paramref name="type"/> 
@@ -675,11 +657,7 @@ namespace Spring.Aop.Framework.DynamicProxy
                 il.Emit(OpCodes.Unbox_Any, type);
             }
         }
-
-        #endregion
     }
-
-    #region References helper class definition
 
     internal struct References
     {
@@ -723,7 +701,7 @@ namespace Spring.Aop.Framework.DynamicProxy
             typeof(AopContext).GetMethod("PopProxy", BindingFlags.Static | BindingFlags.Public, null, Type.EmptyTypes, null);
 
         public static readonly MethodInfo InvokeMethod =
-            typeof(AdvisedProxy).GetMethod("Invoke", BindingFlags.Instance | BindingFlags.Public, null, new Type[] { typeof(Object), typeof(Object), typeof(Type), typeof(MethodInfo), typeof(MethodInfo), typeof(Object[]), typeof(IList) }, null);
+            typeof(AdvisedProxy).GetMethod("Invoke", BindingFlags.Instance | BindingFlags.Public, null, new Type[] { typeof(Object), typeof(Object), typeof(Type), typeof(MethodInfo), typeof(MethodInfo), typeof(Object[]), typeof(System.Collections.IList) }, null);
 
         public static readonly MethodInfo GetInterceptorsMethod =
             typeof(AdvisedProxy).GetMethod("GetInterceptors", BindingFlags.Instance | BindingFlags.Public, null, new Type[] { typeof(Type), typeof(MethodInfo) }, null);
@@ -757,8 +735,6 @@ namespace Spring.Aop.Framework.DynamicProxy
             typeof(IAdvised).GetProperty("ExposeProxy", typeof(Boolean)).GetGetMethod();
 
         public static readonly MethodInfo CountProperty =
-            typeof(ICollection).GetProperty("Count", typeof(Int32)).GetGetMethod();
+            typeof(System.Collections.ICollection).GetProperty("Count", typeof(Int32)).GetGetMethod();
     }
-
-    #endregion
 }

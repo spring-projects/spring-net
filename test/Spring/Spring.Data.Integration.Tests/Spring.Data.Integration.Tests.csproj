@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.1;$(TargetFullFrameworkVersion)</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.0;$(TargetFullFrameworkVersion)</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Spring\Spring.Aop\Spring.Aop.csproj" />
@@ -21,8 +21,8 @@
     <Reference Include="System.Data.OracleClient" />
     <Reference Include="System.Transactions" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.1' ">
-    <PackageReference Include="System.Data.SqlClient" Version="4.5.1" Condition=" '$(TargetFramework)' == 'netcoreapp2.1' " />
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.0' ">
+    <PackageReference Include="System.Data.SqlClient" Version="4.5.1" Condition=" '$(TargetFramework)' == 'netcoreapp3.0' " />
     <Compile Remove="Data\SQLiteTests.cs" />
     <Compile Remove="Data\OracleAdoTemplateTests.cs" />
   </ItemGroup>

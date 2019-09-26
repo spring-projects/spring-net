@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp2.1;$(TargetFullFrameworkVersion)</TargetFrameworks>
+    <TargetFrameworks>netcoreapp3.0;$(TargetFullFrameworkVersion)</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Spring\Spring.Aop\Spring.Aop.csproj" />
@@ -16,7 +16,7 @@
   <ItemGroup Condition=" '$(TargetFramework)' == '$(TargetFullFrameworkVersion)' ">
     <Reference Include="System.Web" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp2.1' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.0' ">
     <Compile Remove="Aop\Framework\AutoProxy\AbstractAutoProxyCreatorTests.cs" />
     <Compile Remove="Aop\Framework\Adapter\ThrowsAdviceInterceptorTests.cs" />
     <Compile Remove="Aop\Framework\AutoProxy\AbstractAutoProxyCreatorTests.cs" />

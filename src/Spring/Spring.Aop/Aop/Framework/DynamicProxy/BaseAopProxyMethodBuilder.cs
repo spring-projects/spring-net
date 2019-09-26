@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,15 +18,11 @@
 
 #endregion
 
-#region Imports
-
-using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Aop.Framework.DynamicProxy
 {
@@ -37,8 +33,6 @@ namespace Spring.Aop.Framework.DynamicProxy
     /// <author>Bruno Baia</author>
     public class BaseAopProxyMethodBuilder : AbstractAopProxyMethodBuilder
     {
-        #region Constructor(s) / Destructor
-
         /// <summary>
         /// Creates a new instance of the method builder.
         /// </summary>
@@ -56,14 +50,10 @@ namespace Spring.Aop.Framework.DynamicProxy
         /// </param>
         public BaseAopProxyMethodBuilder(
             TypeBuilder typeBuilder, IAopProxyTypeGenerator aopProxyGenerator, 
-            IDictionary targetMethods, IDictionary onProxyTargetMethods)
+            IDictionary<string, MethodInfo> targetMethods, IDictionary<string, MethodInfo> onProxyTargetMethods)
             : base(typeBuilder, aopProxyGenerator, false, targetMethods, onProxyTargetMethods)
         {
         }
-
-        #endregion
-
-        #region Protected Methods
 
         /// <summary>
         /// Create static field that will cache target method when defined on the proxy.
@@ -101,7 +91,7 @@ namespace Spring.Aop.Framework.DynamicProxy
                 onProxyTargetMethods.Add(methodId, method);
 
                 onProxyTargetMethodCacheField = typeBuilder.DefineField(
-                    methodId, typeof(MethodInfo), FieldAttributes.Private | FieldAttributes.Static | FieldAttributes.InitOnly);
+                    methodId, typeof(MethodInfo), FieldAttributes.Private | FieldAttributes.Static);
 
                 MakeGenericMethod(il, method, onProxyTargetMethodCacheField, genericOnProxyTargetMethod);
             }
@@ -120,7 +110,5 @@ namespace Spring.Aop.Framework.DynamicProxy
         {
             CallDirectBaseMethod(il, method);
         }
-
-        #endregion
     }
 }

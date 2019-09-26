@@ -7,7 +7,6 @@
     <ProjectReference Include="..\Spring.NmsQuickStart.Common\Spring.NmsQuickStart.Common.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Apache.NMS.ActiveMQ" Version="1.7.2" />
     <PackageReference Include="Common.Logging" Version="$(CommonLoggingVersion)" />
   </ItemGroup>
   <ItemGroup>

@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +18,9 @@
 
 #endregion
 
-#region Imports
-
-using System.Collections;
+using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
-
-#endregion
 
 namespace Spring.Aop.Framework.DynamicProxy
 {
@@ -36,16 +32,10 @@ namespace Spring.Aop.Framework.DynamicProxy
     /// <author>Bruno Baia</author>
     public class TargetAopProxyMethodBuilder : AbstractAopProxyMethodBuilder
     {
-        #region Fields
-
         /// <summary>
         /// The local variable to store the target instance.
         /// </summary>
         protected LocalBuilder target;
-
-        #endregion
-
-        #region Constructor(s) / Destructor
 
         /// <summary>
         /// Creates a new instance of the method builder.
@@ -63,14 +53,10 @@ namespace Spring.Aop.Framework.DynamicProxy
         /// <see cref="System.Reflection.MethodInfo"/>s.
         /// </param>
         public TargetAopProxyMethodBuilder(TypeBuilder typeBuilder, 
-            IAopProxyTypeGenerator aopProxyGenerator, bool explicitImplementation, IDictionary targetMethods)
+            IAopProxyTypeGenerator aopProxyGenerator, bool explicitImplementation, IDictionary<string, MethodInfo> targetMethods)
             : base(typeBuilder, aopProxyGenerator, explicitImplementation, targetMethods)
         {
         }
-
-        #endregion
-
-        #region Protected Methods
 
         /// <summary>
         /// Creates local variable declarations.
@@ -137,7 +123,5 @@ namespace Spring.Aop.Framework.DynamicProxy
             else
                 CallDirectTargetMethod(il, method);
         }
-
-        #endregion
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -247,7 +247,7 @@ namespace Spring.Aop.Framework.DynamicProxy
             get { return m_advised.Interfaces; }
         }
 
-        IDictionary IAdvised.InterfaceMap
+        IDictionary<Type, object> IAdvised.InterfaceMap
         {
             get { return m_advised.InterfaceMap; }
         }

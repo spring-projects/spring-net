@@ -163,7 +163,7 @@ namespace Spring.Context.Attributes
 
                 // declare interceptor field
                 interceptorField = typeBuilder.DefineField("__Interceptor", typeof(IConfigurationClassInterceptor),
-                    FieldAttributes.Private | FieldAttributes.Static | FieldAttributes.InitOnly);
+                    FieldAttributes.Private | FieldAttributes.Static);
 
                 // create constructors
                 ImplementConstructors(typeBuilder);
@@ -235,7 +235,7 @@ namespace Spring.Context.Attributes
                 string methodId = "_m" + Guid.NewGuid().ToString("N");
                 targetMethods.Add(methodId, method);
                 FieldBuilder targetMethodCacheField = typeBuilder.DefineField(methodId, typeof(MethodInfo),
-                    FieldAttributes.Private | FieldAttributes.Static | FieldAttributes.InitOnly);
+                    FieldAttributes.Private | FieldAttributes.Static);
 
                 // Call IConfigurationClassInterceptor.TryGetObject method
                 il.Emit(OpCodes.Ldnull);
