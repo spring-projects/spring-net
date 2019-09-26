@@ -18,10 +18,7 @@
 
 #endregion
 
-#region Imports
-
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using Common.Logging;
 
@@ -30,8 +27,6 @@ using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
 
 using System.Linq;
-
-#endregion
 
 namespace Spring.Aop.Framework.AutoProxy
 {

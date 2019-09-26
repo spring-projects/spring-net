@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,18 +18,14 @@
 
 #endregion
 
-#region Imports
-
 using System;
-using System.Collections;
+using System.Collections.Generic;
 using System.Runtime.Serialization;
 using System.Reflection;
 using System.Reflection.Emit;
 
 using Spring.Proxy;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Aop.Framework.DynamicProxy
 {
@@ -39,8 +35,6 @@ namespace Spring.Aop.Framework.DynamicProxy
     /// <author>Bruno Baia</author>
     public class InheritanceAopProxyTypeBuilder : AbstractAopProxyTypeBuilder
     {
-        #region Fields
-
         private const string PROXY_TYPE_NAME = "InheritanceAopProxy";
 
         private IAdvised advised;
@@ -49,11 +43,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         /// <summary>
         /// AdvisedProxy instance calls should be delegated to.
         /// </summary>
-        protected FieldBuilder advisedProxyField;       
-
-        #endregion
-
-        #region Properties
+        protected FieldBuilder advisedProxyField;
 
         /// <summary>
         /// Gets or sets a value indicating whether inherited members should be proxied.
@@ -67,10 +57,6 @@ namespace Spring.Aop.Framework.DynamicProxy
             get { return proxyDeclaredMembersOnly; }
             set { proxyDeclaredMembersOnly = value; }
         }
-
-        #endregion
-
-        #region Constructor (s) / Destructor
 
         /// <summary>
         /// Creates a new instance of the 
@@ -100,18 +86,14 @@ namespace Spring.Aop.Framework.DynamicProxy
             ProxyTargetAttributes = advised.ProxyTargetAttributes;
         }
 
-        #endregion
-
-        #region IProxyTypeBuilder Members
-
         /// <summary>
         /// Creates the proxy type.
         /// </summary>
         /// <returns>The generated proxy class.</returns>
         public override Type BuildProxyType()
         {
-            IDictionary targetMethods = new Hashtable();
-            IDictionary proxyMethods = new Hashtable();
+            var targetMethods = new Dictionary<string, MethodInfo>();
+            var proxyMethods = new Dictionary<string, MethodInfo>();
 
             TypeBuilder typeBuilder = CreateTypeBuilder(Name, BaseType);
 
@@ -134,7 +116,7 @@ namespace Spring.Aop.Framework.DynamicProxy
             ImplementConstructors(typeBuilder);
 
             // implement interfaces
-            IDictionary interfaceMap = advised.InterfaceMap;
+            var interfaceMap = advised.InterfaceMap;
             foreach (Type intf in Interfaces)
             {
                 object target = interfaceMap[intf];
@@ -171,26 +153,22 @@ namespace Spring.Aop.Framework.DynamicProxy
             proxyType = typeBuilder.CreateTypeInfo();
 
             // set target method references
-            foreach (DictionaryEntry entry in targetMethods)
+            foreach (var entry in targetMethods)
             {
-                FieldInfo field = proxyType.GetField((string)entry.Key, BindingFlags.NonPublic | BindingFlags.Static);
+                FieldInfo field = proxyType.GetField(entry.Key, BindingFlags.NonPublic | BindingFlags.Static);
                 field.SetValue(proxyType, entry.Value);
             }
 
             // set proxy method references
-            foreach (DictionaryEntry entry in proxyMethods)
+            foreach (var entry in proxyMethods)
             {
-                FieldInfo field = proxyType.GetField((string)entry.Key, BindingFlags.NonPublic | BindingFlags.Static);
-                MethodInfo proxyMethod = proxyType.GetMethod("proxy_" + (string)entry.Key, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+                FieldInfo field = proxyType.GetField(entry.Key, BindingFlags.NonPublic | BindingFlags.Static);
+                MethodInfo proxyMethod = proxyType.GetMethod("proxy_" + entry.Key, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
                 field.SetValue(proxyType, proxyMethod);
             }
 
             return proxyType;
         }
-
-        #endregion
-
-        #region IAopProxyTypeGenerator Members
 
         /// <summary>
         /// Generates the IL instructions that pushes 
@@ -213,10 +191,6 @@ namespace Spring.Aop.Framework.DynamicProxy
             il.Emit(OpCodes.Ldarg_0);
             il.Emit(OpCodes.Ldfld, advisedProxyField);
         }
-
-        #endregion
-
-        #region Protected Methods
 
         /// <summary>
         /// Declares field that holds the <see cref="Spring.Aop.Framework.DynamicProxy.AdvisedProxy"/>
@@ -346,10 +320,6 @@ namespace Spring.Aop.Framework.DynamicProxy
             typeBuilder.DefineMethodOverride(mb, getProxyMethod);
         }
 
-        #endregion
-
-        #region Public Methods
-
         /// <summary>
         /// Determines if the specified <paramref name="type"/> 
         /// is one of those generated by this builder.
@@ -363,7 +333,5 @@ namespace Spring.Aop.Framework.DynamicProxy
         {
             return type.FullName.StartsWith(PROXY_TYPE_NAME);
         }
-
-        #endregion
     }
 }
