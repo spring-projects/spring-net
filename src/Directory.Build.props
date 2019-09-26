@@ -2,8 +2,6 @@
 
   <PropertyGroup>
 
-    <VersionPrefix>3.0.0-fbs-1</VersionPrefix>
-
     <OutputPath>..\..\..\build\$(Configuration)\$(MSBuildProjectName)</OutputPath>
 
     <RootNamespace>Spring</RootNamespace>
