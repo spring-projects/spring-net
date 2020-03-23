@@ -52,6 +52,47 @@
 
   </object>
 
+  <object id="MicrosoftSqlServer" type="Spring.Data.Common.DbProvider, Spring.Data" singleton="false">
+    <constructor-arg name="dbMetaData">
+      <object type="Spring.Data.Common.DbMetadata">
+        <constructor-arg name="productName" value="Microsoft SQL Server" />
+        <constructor-arg name="assemblyName" value="Microsoft.Data.SqlClient"/>
+        <constructor-arg name="connectionType" value="Microsoft.Data.SqlClient.SqlConnection, Microsoft.Data.SqlClient"/>
+        <constructor-arg name="commandType" value="Microsoft.Data.SqlClient.SqlCommand, Microsoft.Data.SqlClient"/>
+        <constructor-arg name="parameterType" value="Microsoft.Data.SqlClient.SqlParameter, Microsoft.Data.SqlClient"/>
+        <constructor-arg name="dataAdapterType" value="Microsoft.Data.SqlClient.SqlDataAdapter, Microsoft.Data.SqlClient"/>
+        <constructor-arg name="commandBuilderType" value="Microsoft.Data.SqlClient.SqlCommandBuilder, Microsoft.Data.SqlClient"/>
+        <constructor-arg name="commandBuilderDeriveParametersMethod" value="DeriveParameters"/>
+        <constructor-arg name="parameterDbType" value="System.Data.SqlDbType, System.Data"/>
+        <constructor-arg name="parameterDbTypeProperty" value="SqlDbType"/>
+        <constructor-arg name="parameterIsNullableProperty" value="IsNullable"/>
+        <constructor-arg name="parameterNamePrefix" value="@"/>
+        <constructor-arg name="exceptionType" value="Microsoft.Data.SqlClient.SqlException, Microsoft.Data.SqlClient"/>
+        <constructor-arg name="useParameterNamePrefixInParameterCollection" value="true"/>
+        <constructor-arg name="useParameterPrefixInSql" value="true"/>
+        <constructor-arg name="bindByName" value="true"/>
+        <!-- this is only true for .net 1.1 kept it here just in case we want to revert back to this strategy for
+             obtaining error codes-->
+        <constructor-arg name="errorCodeExceptionExpression" value="Errors[0].Number.ToString()"/>
+
+        <!-- TODO select form system db all errors that have 'incorrect syntax' at the start of the error string-->
+        <property name="ErrorCodes.BadSqlGrammarCodes">
+          <value>102,156,170,207,208</value>
+        </property>
+        <property name="ErrorCodes.PermissionDeniedCodes">
+          <value>229</value>
+        </property>
+        <property name="ErrorCodes.DataIntegrityViolationCodes">
+          <value>544,2627,8114,8115</value>
+        </property>
+        <property name="ErrorCodes.DeadlockLoserCodes">
+          <value>1205</value>
+        </property>
+      </object>
+    </constructor-arg>
+
+  </object>
+
   <!-- ORACLE -->
 
   <alias name="Oracle" alias="System.Data.OracleClient"/>
