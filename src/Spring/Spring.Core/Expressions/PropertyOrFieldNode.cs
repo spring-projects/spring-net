@@ -24,6 +24,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Runtime.CompilerServices;
 using System.Runtime.Remoting;
 using System.Runtime.Serialization;
 
@@ -92,6 +93,11 @@ namespace Spring.Expressions
                     if (contextType == typeof(System.Dynamic.ExpandoObject))
                     {
                         accessor = new ExpandoObjectValueAccessor(memberName);
+                    }
+                    // try to initialize node as DynamicObject value
+                    else if (contextType.IsSubclassOf(typeof(System.Dynamic.DynamicObject)))
+                    {
+                        accessor = new DynamicObjectValueAccessor(memberName);
                     }
                     // try to initialize node as enum value first
                     else if (contextType.IsEnum)
@@ -728,6 +734,56 @@ namespace Spring.Expressions
             public override void Set(object context, object value)
             {
                 throw new NotSupportedException("Cannot set the value of an expando object.");
+            }
+        }
+
+        #endregion
+
+        #region DynamicObjectValueAccessor implementation
+
+        private class DynamicObjectValueAccessor : BaseValueAccessor
+        {
+            private string memberName;
+
+            public DynamicObjectValueAccessor(string memberName)
+            {
+                this.memberName = memberName;
+            }
+
+            public override object Get(object context)
+            {
+                var dynamicObject = context as System.Dynamic.DynamicObject;
+
+                try
+                {
+                    var binder = Microsoft.CSharp.RuntimeBinder.Binder.GetMember(
+                        Microsoft.CSharp.RuntimeBinder.CSharpBinderFlags.None,
+                        memberName,
+                        dynamicObject.GetType(),
+                        new List<Microsoft.CSharp.RuntimeBinder.CSharpArgumentInfo>
+                        {
+                            Microsoft.CSharp.RuntimeBinder.CSharpArgumentInfo.Create(Microsoft.CSharp.RuntimeBinder.CSharpArgumentInfoFlags.None, null)
+                        }
+                    );
+
+                    var callsite = CallSite<Func<CallSite, object, object>>.Create(binder);
+
+                    return callsite.Target(callsite, dynamicObject);
+                }
+                catch (Microsoft.CSharp.RuntimeBinder.RuntimeBinderException runtimeBinderException)
+                {
+                    throw new InvalidPropertyException(
+                        typeof(System.Dynamic.DynamicObject),
+                        memberName,
+                        "'" + memberName + "' node cannot be resolved for the specified context [" + context + "].",
+                        runtimeBinderException
+                    );
+                }
+            }
+
+            public override void Set(object context, object value)
+            {
+                throw new NotSupportedException("Cannot set the value of an dynamic object.");
             }
         }
 
