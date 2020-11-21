@@ -8,7 +8,7 @@
     <ProjectReference Include="..\Spring.Data\Spring.Data.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Quartz" Version="3.0.7" />
+    <PackageReference Include="Quartz" Version="3.2.3" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\GenCommonAssemblyInfo.cs">

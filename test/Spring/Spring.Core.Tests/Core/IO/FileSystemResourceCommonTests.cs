@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -47,7 +47,7 @@ namespace Spring.Core.IO
         /// </remarks>
         protected static FileInfo GetAssemblyLocation(Assembly assembly)
         {
-            return new FileInfo(new Uri(assembly.CodeBase).LocalPath);
+            return new FileInfo(new Uri(assembly.Location).LocalPath);
         }
 
         protected static FileInfo CreateFileForTheCurrentDirectory()

@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFramework>net461</TargetFramework>
     <Description>Interfaces and classes that provide ASP.NET MVC5 application support in Spring.Net</Description>
   </PropertyGroup>
   <ItemGroup>
@@ -8,8 +8,8 @@
     <ProjectReference Include="..\Spring.Web\Spring.Web.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.6" />
-    <PackageReference Include="Microsoft.AspNet.WebApi.WebHost" Version="5.2.6" />
+    <PackageReference Include="Microsoft.AspNet.Mvc" Version="5.2.7" />
+    <PackageReference Include="Microsoft.AspNet.WebApi.WebHost" Version="5.2.7" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System.Net.Http" />

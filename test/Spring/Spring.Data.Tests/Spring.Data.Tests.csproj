@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.0;$(TargetFullFrameworkVersion)</TargetFrameworks>
+    <TargetFrameworks>net5.0;$(TargetFullFrameworkVersion)</TargetFrameworks>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
   </PropertyGroup>
   <ItemGroup>
@@ -17,13 +17,13 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FakeItEasy" Version="$(FakeItEasyVersion)" />
-    <PackageReference Include="FakeItEasy.Analyzer" Version="$(FakeItEasyVersion)" PrivateAssets="All" />
+    <PackageReference Include="FakeItEasy.Analyzer.CSharp" Version="$(FakeItEasyAnalyzerVersion)" PrivateAssets="All" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftTestSDKVersion)" />
     <PackageReference Include="NUnit" Version="$(NUnitVersion)" />
     <PackageReference Include="NUnit3TestAdapter" Version="$(NUnitTestAdapterVersion)" />
+    <PackageReference Include="System.Data.SqlClient" Version="4.8.2" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.0' ">
-    <PackageReference Include="System.Data.SqlClient" Version="4.5.1" Condition=" '$(TargetFramework)' == 'netcoreapp3.0' " />
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net5.0' ">
     <Compile Remove="Data\Core\ServiceDomainTransactionManagerTests.cs" />
   </ItemGroup>
   <ItemGroup>

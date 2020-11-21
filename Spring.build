@@ -376,7 +376,7 @@ Commandline Examples:
 	  </in>
       <do>
 		<echo message="Running .NET Framework tests for ${path}" />
-        <property name="test.bin.dir" value="${path}/net452" />
+        <property name="test.bin.dir" value="${path}/net461" />
 		<if test="${directory::exists(test.bin.dir) == false}">
           <property name="test.bin.dir" value="${path}/net461" />
 		</if>
@@ -418,7 +418,6 @@ Commandline Examples:
 		   <include name="${spring.basedir}/test/Spring/Spring.Data.NHibernate5.Integration.Tests/Spring.Data.NHibernate5.Integration.Tests.csproj" />
 		   <include name="${spring.basedir}/test/Spring/Spring.Data.NHibernate5.Tests/Spring.Data.NHibernate5.Tests.csproj" />
 		   <include name="${spring.basedir}/test/Spring/Spring.Messaging.Nms.Tests/Spring.Messaging.Nms.Tests.csproj" />
-		   <include name="${spring.basedir}/test/Spring/Spring.Messaging.Nms.Integration.Tests/Spring.Messaging.Nms.Integration.Tests.csproj" />
 		   <include name="${spring.basedir}/test/Spring/Spring.Scheduling.Quartz3.Tests/Spring.Scheduling.Quartz3.Tests.csproj" />
 		</items>
 	  </in>
@@ -429,7 +428,7 @@ Commandline Examples:
           <arg line="test" />
           <arg line="/nodeReuse:false" />
           <arg line="-c ${current.build.config}" />
-          <arg line="-f netcoreapp2.1" />
+          <arg line="-f net5.0" />
           <arg line="${file}" />
 		</exec>
       </do>
@@ -1424,6 +1423,7 @@ Commandline Examples:
 			  <arg value="-c" />
 			  <arg value="Release" />
 			  <arg value="-p:PackageVersion=${nuget.package.version}" />
+			  <arg value="-p:ContinuousIntegrationBuild=true" />
 			  <arg value="-o" />
 			  <arg value="${nuget.package.dir}" />
 			  <arg value="${filename}" />

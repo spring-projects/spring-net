@@ -1,6 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.0;$(TargetFullFrameworkVersion)</TargetFrameworks>
+    <TargetFrameworks>net5.0;$(TargetFullFrameworkVersion)</TargetFrameworks>
+    <NoWarn>$(NoWarn);SYSLIB0001;SYSLIB0003;SYSLIB0011</NoWarn>
+    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Spring\Spring.Aop\Spring.Aop.csproj" />
@@ -14,11 +16,12 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FakeItEasy" Version="$(FakeItEasyVersion)" />
-    <PackageReference Include="FakeItEasy.Analyzer" Version="$(FakeItEasyVersion)" PrivateAssets="All" />
+    <PackageReference Include="FakeItEasy.Analyzer.CSharp" Version="$(FakeItEasyAnalyzerVersion)" PrivateAssets="All" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftTestSDKVersion)" />
-    <PackageReference Include="Newtonsoft.Json" Version="11.0.2" />
+    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
     <PackageReference Include="NUnit" Version="$(NUnitVersion)" />
     <PackageReference Include="NUnit3TestAdapter" Version="$(NUnitTestAdapterVersion)" />
+    <PackageReference Include="System.Resources.Extensions" Version="4.7.1" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == '$(TargetFullFrameworkVersion)' ">
     <Reference Include="Microsoft.CSharp" />
@@ -30,7 +33,7 @@
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.0' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net5.0' ">
     <Compile Remove="Context\Attributes\FailAssemblyObjectDefinitionScannerTests.cs" />
     <Compile Remove="Context\Support\ApplicationContextAwareProcessorTests.cs" />
     <Compile Remove="Expressions\ExpressionEvaluatorTests.cs" />
@@ -40,7 +43,6 @@
     <Compile Remove="SecurityTemplate.cs" />
     <Compile Remove="Threading\CallContextStorageTests.cs" />
     <Compile Remove="Util\ObjectUtilsTests.cs" />
-    <PackageReference Include="System.Resources.Extensions" Version="4.6.0" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="App.config">

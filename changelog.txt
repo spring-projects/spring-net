@@ -3,18 +3,18 @@ SPRING.NET FRAMEWORK CHANGELOG
 http://www.springframework.net
 
 *****************************************************************************************
-Release Version 3.0.0 XXXX XX, 2018
+Release Version 3.0.0 XXXX XX, 2020
 
 Release Notes - Spring.NET - Version 3.0.0
 
 Breaking Changes
 
-* .NET 4.5.2 is the lowest full framework supported
+* .NET 4.6.1 is the lowest full framework supported
 * Tranasaction definitions no longer have EnterpriseServicesInteropOption, it was replaced by TransactionScopeAsyncFlowOption
 
 New Feature Highlights
 
-* .NET Core support Spring.Aop, Spring.Core, Spring.Data, Spring.Messaging, Spring.Testing.NUnit
+* .NET Core support for all core projects and integration projects which offer .NET standard compatible libraries
 
 
 *****************************************************************************************

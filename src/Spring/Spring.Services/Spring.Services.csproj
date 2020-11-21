@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFramework>net461</TargetFramework>
     <Description>Interfaces and classes that provide portable service abstractions in Spring.Net</Description>
   </PropertyGroup>
   <ItemGroup>

@@ -1,10 +1,13 @@
 version: 1.0.{build}
 image: Visual Studio 2019
+
 services:
 - mssql2017
 - msmq
+
 hosts:
   SpringQA: 127.0.0.1
+
 build_script:
 - rem set the alias for SpringQA so that integration test conn strings resolve properly...
 - 'powershell "%APPVEYOR_BUILD_FOLDER%\build-support\appveyor-set-sql-alias-for-springqa.ps1" '
@@ -17,8 +20,14 @@ build_script:
 - rem attempt to access the database via its alias to validate alias is functional...
 - sqlcmd -S "SpringQA" -U springqa -P springqa -Q "select * from Vacations"
 - rem actually invoke the build + test run
-- call build-ci.cmd
+- call build-ci.cmd test package-nuget
+
 test: off
+
+artifacts:
+- path: nuget-packages/*.*nupkg
+  name: NuGet
+
 on_finish:
 - ps: >-
     $wc = New-Object 'System.Net.WebClient'

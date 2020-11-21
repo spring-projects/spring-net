@@ -1,6 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
-    <TargetFrameworks>netcoreapp3.0;$(TargetFullFrameworkVersion)</TargetFrameworks>
+    <TargetFrameworks>net5.0;$(TargetFullFrameworkVersion)</TargetFrameworks>
+    <NoWarn>$(NoWarn);SYSLIB0011</NoWarn>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Spring\Spring.Aop\Spring.Aop.csproj" />
@@ -8,7 +9,7 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="FakeItEasy" Version="$(FakeItEasyVersion)" />
-    <PackageReference Include="FakeItEasy.Analyzer" Version="$(FakeItEasyVersion)" PrivateAssets="All" />
+    <PackageReference Include="FakeItEasy.Analyzer.CSharp" Version="$(FakeItEasyAnalyzerVersion)" PrivateAssets="All" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftTestSDKVersion)" />
     <PackageReference Include="NUnit" Version="$(NUnitVersion)" />
     <PackageReference Include="NUnit3TestAdapter" Version="$(NUnitTestAdapterVersion)" />
@@ -16,7 +17,7 @@
   <ItemGroup Condition=" '$(TargetFramework)' == '$(TargetFullFrameworkVersion)' ">
     <Reference Include="System.Web" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'netcoreapp3.0' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net5.0' ">
     <Compile Remove="Aop\Framework\AutoProxy\AbstractAutoProxyCreatorTests.cs" />
     <Compile Remove="Aop\Framework\Adapter\ThrowsAdviceInterceptorTests.cs" />
     <Compile Remove="Aop\Framework\AutoProxy\AbstractAutoProxyCreatorTests.cs" />

@@ -18,8 +18,9 @@
     <CommonLoggingVersion>3.4.1</CommonLoggingVersion>
 
     <Authors>SpringSource</Authors>
+	<PackageIcon>SpringSource_Leaves32x32.png</PackageIcon>
     <PackageIconUrl>http://springframework.net/images/SpringSource_Leaves32x32.png</PackageIconUrl>
-    <PackageLicenseUrl>http://www.springframework.net/license.html</PackageLicenseUrl>
+	<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>http://www.springframework.net/</PackageProjectUrl>
     <PackageTags>Library</PackageTags>
 
@@ -28,6 +29,8 @@
 
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
 
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
 
@@ -35,15 +38,14 @@
 
     <DebugSymbols>True</DebugSymbols>
     <PlatformTarget>AnyCPU</PlatformTarget>
-    <AllowedOutputExtensionsInPackageBuildOutputFolder>$(AllowedOutputExtensionsInPackageBuildOutputFolder);.pdb</AllowedOutputExtensionsInPackageBuildOutputFolder>
 
-    <LangVersion>latest</LangVersion>
-    <TargetFullFrameworkVersion>net452</TargetFullFrameworkVersion>
+    <LangVersion>9.0</LangVersion>
+    <TargetFullFrameworkVersion>net461</TargetFullFrameworkVersion>
 
   </PropertyGroup>
   
   <ItemGroup Condition="'$(SourceLinkEnabled)' != 'false'">
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0-beta-63127-02" PrivateAssets="All"/>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
   </ItemGroup>
   
   <ItemGroup>
@@ -52,12 +54,15 @@
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
 	<DebugType>Full</DebugType>
-    <DefineConstants>DEBUG;TRACE;DEBUG_DYNAMIC;$(DefineConstants)</DefineConstants>
+    <DefineConstants>$(DefineConstants);DEBUG_DYNAMIC;</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-    <Optimize>true</Optimize>
     <DefineConstants>TRACE;$(DefineConstants)</DefineConstants>
   </PropertyGroup>
+  
+  <ItemGroup>
+    <None Include="..\..\SpringSource_Leaves32x32.png" Pack="true" Visible="false" PackagePath=""/>
+  </ItemGroup>  
 
 </Project>

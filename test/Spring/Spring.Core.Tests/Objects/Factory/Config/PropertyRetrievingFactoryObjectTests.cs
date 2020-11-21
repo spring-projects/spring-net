@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,6 +22,7 @@
 
 using System;
 using System.Globalization;
+using System.Threading;
 using NUnit.Framework;
 using Spring.Core;
 
@@ -287,9 +288,10 @@ namespace Spring.Objects.Factory.Config
 			fac.AfterPropertiesSet();
 			DateTime then = (DateTime) fac.GetObject();
 			Assert.IsNotNull(then);
+			Thread.Sleep(TimeSpan.FromMilliseconds(10));
 			DateTime now = (DateTime) fac.GetObject();
 			Assert.IsNotNull(now);
-			Assert.IsFalse(ReferenceEquals(then, now));
+			Assert.AreNotEqual(then, now);
 		}
 	}
 
