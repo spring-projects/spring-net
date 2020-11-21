@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.27703.2035
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Spring.WebQuickStart.2005", "src\Spring.WebQuickStart.2005\", "{B4F56253-6425-4065-8A93-EF88F8730E57}"
 	ProjectSection(WebsiteProperties) = preProject
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5.2"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.6.1"
 		ProjectReferences = "{BA4789EB-281A-48EA-8763-28B9F0596A18}|Spring.Web.dll;{710961A3-0DF4-49E4-A26E-F5B9C044AC84}|Spring.Core.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/Spring.WebQuickStart.2005"
 		Debug.AspNetCompiler.PhysicalPath = "src\Spring.WebQuickStart.2005\"
@@ -28,7 +28,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Spring.WebQuickStart.2005",
 EndProject
 Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Spring.WebQuickStart.Providers", "src\Spring.WebQuickStart.Providers\", "{F42A333D-D305-4649-8B5A-6F5862F0F62A}"
 	ProjectSection(WebsiteProperties) = preProject
-		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.5.2"
+		TargetFrameworkMoniker = ".NETFramework,Version%3Dv4.6.1"
 		ProjectReferences = "{710961A3-0DF4-49E4-A26E-F5B9C044AC84}|Spring.Core.dll;{BA4789EB-281A-48EA-8763-28B9F0596A18}|Spring.Web.dll;"
 		Debug.AspNetCompiler.VirtualPath = "/Spring.WebQuickStart.Providers"
 		Debug.AspNetCompiler.PhysicalPath = "src\Spring.WebQuickStart.Providers\"
