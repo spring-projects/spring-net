@@ -20,16 +20,16 @@
   <readregistry property="vs-net90.dir" key="SOFTWARE\Microsoft\VisualStudio\9.0\InstallDir" hive="LocalMachine" failonerror="false"/>
 
   <property name="msbuild.exe" value="MsBuild.exe" />
-  <if test="${file::exists('C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\MSBuild\15.0\Bin\MsBuild.exe')}">
-	<property name="msbuild.exe" value="C:\Program Files (x86)\Microsoft Visual Studio\2017\BuildTools\MSBuild\15.0\Bin\MsBuild.exe" />
+  <if test="${file::exists('C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin\MsBuild.exe')}">
+	<property name="msbuild.exe" value="C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin\MsBuild.exe" />
 	<echo message="Switching to installed MSBuild at location ${msbuild.exe}" />
   </if>
-  <if test="${file::exists('C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\bin\MsBuild.exe')}">
-	<property name="msbuild.exe" value="C:\Program Files (x86)\Microsoft Visual Studio\2017\Enterprise\MSBuild\15.0\bin\MsBuild.exe" />
+  <if test="${file::exists('C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\bin\MsBuild.exe')}">
+	<property name="msbuild.exe" value="C:\Program Files (x86)\Microsoft Visual Studio\2019\Enterprise\MSBuild\Current\bin\MsBuild.exe" />
 	<echo message="Switching to installed MSBuild at location ${msbuild.exe}" />
   </if>
-  <if test="${file::exists('C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\bin\MsBuild.exe')}">
-	<property name="msbuild.exe" value="C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\MSBuild\15.0\bin\MsBuild.exe" />
+  <if test="${file::exists('C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\bin\MsBuild.exe')}">
+	<property name="msbuild.exe" value="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\MSBuild\Current\bin\MsBuild.exe" />
 	<echo message="Switching to installed MSBuild at location ${msbuild.exe}" />
   </if>
   

@@ -14,8 +14,8 @@ rem xcopy  "$(ProjectDir)Data" ..\..\..\..\build\VS.Net.2005\Spring.Northwind.In
     <ProjectReference Include="..\..\src\Spring.Northwind.Service\Spring.Northwind.Service.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.7.2" />
-    <PackageReference Include="NUnit" Version="3.10.1" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.8.0" />
+    <PackageReference Include="NUnit" Version="3.12.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.17.0" />
   </ItemGroup>
 </Project>
