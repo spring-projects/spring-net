@@ -376,7 +376,7 @@ Commandline Examples:
 	  </in>
       <do>
 		<echo message="Running .NET Framework tests for ${path}" />
-        <property name="test.bin.dir" value="${path}/net452" />
+        <property name="test.bin.dir" value="${path}/net461" />
 		<if test="${directory::exists(test.bin.dir) == false}">
           <property name="test.bin.dir" value="${path}/net461" />
 		</if>
@@ -429,7 +429,7 @@ Commandline Examples:
           <arg line="test" />
           <arg line="/nodeReuse:false" />
           <arg line="-c ${current.build.config}" />
-          <arg line="-f netcoreapp2.1" />
+          <arg line="-f net5.0" />
           <arg line="${file}" />
 		</exec>
       </do>

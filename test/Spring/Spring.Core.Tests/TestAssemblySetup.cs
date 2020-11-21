@@ -15,7 +15,7 @@ namespace Spring
         public void SetUp()
         {
             // while R# is broken (https://youtrack.jetbrains.com/issue/RSRP-451142)
-            string codeBase = Assembly.GetExecutingAssembly().CodeBase;
+            string codeBase = Assembly.GetExecutingAssembly().Location;
             UriBuilder uri = new UriBuilder(codeBase);
             string path = Uri.UnescapeDataString(uri.Path);
             var pathToUse = Path.GetDirectoryName(path);

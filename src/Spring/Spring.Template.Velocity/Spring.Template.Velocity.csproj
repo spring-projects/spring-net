@@ -1,16 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFrameworks>net461;netstandard2.0</TargetFrameworks>
     <Description>Spring.NET Intergration with the NVelocity templating Engine</Description>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Spring.Core\Spring.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="NVelocity" Version="1.0.3" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System.XML" />
+    <PackageReference Include="NVelocity" Version="1.2.0" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\GenCommonAssemblyInfo.cs">

@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net452</TargetFramework>
+    <TargetFramework>net461</TargetFramework>
     <Description>TIBCO EMS support</Description>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -15,7 +15,6 @@
     <ProjectReference Include="..\Spring.Data\Spring.Data.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="System.XML" />
     <Reference Include="TIBCO.EMS">
       <HintPath>..\..\..\lib\Net\2.0\TIBCO.EMS.dll</HintPath>
       <SpecificVersion>False</SpecificVersion>
