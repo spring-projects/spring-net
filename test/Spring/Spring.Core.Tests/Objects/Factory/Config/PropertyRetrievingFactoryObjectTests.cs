@@ -22,6 +22,7 @@
 
 using System;
 using System.Globalization;
+using System.Threading;
 using NUnit.Framework;
 using Spring.Core;
 
@@ -287,6 +288,7 @@ namespace Spring.Objects.Factory.Config
 			fac.AfterPropertiesSet();
 			DateTime then = (DateTime) fac.GetObject();
 			Assert.IsNotNull(then);
+			Thread.Sleep(TimeSpan.FromMilliseconds(10));
 			DateTime now = (DateTime) fac.GetObject();
 			Assert.IsNotNull(now);
 			Assert.AreNotEqual(then, now);

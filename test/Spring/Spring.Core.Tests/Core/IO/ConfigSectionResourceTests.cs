@@ -45,6 +45,7 @@ namespace Spring.Core.IO
             return csr;
         }
 
+#if NETFRAMEWORK
         [Test]
         public void CanCreate()
         {
@@ -55,6 +56,7 @@ namespace Spring.Core.IO
             Assert.IsTrue(csr.Description.StartsWith("config [") );
             Assert.IsTrue(csr.Description.EndsWith("#objects]") );
         }
+#endif
 
         [Test]
         public void ThrowsOnNullSectionName()

@@ -2,6 +2,7 @@
   <PropertyGroup>
     <TargetFrameworks>net5.0;$(TargetFullFrameworkVersion)</TargetFrameworks>
     <NoWarn>$(NoWarn);SYSLIB0001;SYSLIB0003;SYSLIB0011</NoWarn>
+    <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Spring\Spring.Aop\Spring.Aop.csproj" />
