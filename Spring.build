@@ -1423,6 +1423,7 @@ Commandline Examples:
 			  <arg value="-c" />
 			  <arg value="Release" />
 			  <arg value="-p:PackageVersion=${nuget.package.version}" />
+			  <arg value="-p:ContinuousIntegrationBuild=true" />
 			  <arg value="-o" />
 			  <arg value="${nuget.package.dir}" />
 			  <arg value="${filename}" />
