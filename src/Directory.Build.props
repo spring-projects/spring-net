@@ -18,8 +18,9 @@
     <CommonLoggingVersion>3.4.1</CommonLoggingVersion>
 
     <Authors>SpringSource</Authors>
+	<PackageIcon>SpringSource_Leaves32x32.png</PackageIcon>
     <PackageIconUrl>http://springframework.net/images/SpringSource_Leaves32x32.png</PackageIconUrl>
-    <PackageLicenseUrl>http://www.springframework.net/license.html</PackageLicenseUrl>
+	<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>http://www.springframework.net/</PackageProjectUrl>
     <PackageTags>Library</PackageTags>
 
@@ -28,6 +29,8 @@
 
     <PublishRepositoryUrl>true</PublishRepositoryUrl>
     <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
 
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
 
@@ -57,5 +60,9 @@
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DefineConstants>TRACE;$(DefineConstants)</DefineConstants>
   </PropertyGroup>
+  
+  <ItemGroup>
+    <None Include="..\..\SpringSource_Leaves32x32.png" Pack="true" Visible="false" PackagePath=""/>
+  </ItemGroup>  
 
 </Project>

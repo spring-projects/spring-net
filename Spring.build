@@ -418,7 +418,6 @@ Commandline Examples:
 		   <include name="${spring.basedir}/test/Spring/Spring.Data.NHibernate5.Integration.Tests/Spring.Data.NHibernate5.Integration.Tests.csproj" />
 		   <include name="${spring.basedir}/test/Spring/Spring.Data.NHibernate5.Tests/Spring.Data.NHibernate5.Tests.csproj" />
 		   <include name="${spring.basedir}/test/Spring/Spring.Messaging.Nms.Tests/Spring.Messaging.Nms.Tests.csproj" />
-		   <include name="${spring.basedir}/test/Spring/Spring.Messaging.Nms.Integration.Tests/Spring.Messaging.Nms.Integration.Tests.csproj" />
 		   <include name="${spring.basedir}/test/Spring/Spring.Scheduling.Quartz3.Tests/Spring.Scheduling.Quartz3.Tests.csproj" />
 		</items>
 	  </in>
