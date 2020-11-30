@@ -27,7 +27,6 @@ _ReSharper*/
 
 #Project files
 [Bb]uild/
-Spring.Net.snk
 s3-credentials.ps1
 TIBCO.EMS.*
 
