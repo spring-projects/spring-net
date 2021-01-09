@@ -29,6 +29,7 @@ using AopAlliance.Intercept;
 using Spring.Caching;
 using Spring.Util;
 using System;
+using System.Collections.Concurrent;
 
 #endregion
 
@@ -66,20 +67,18 @@ namespace Spring.Aspects.Cache
             }
         }
 
-        private readonly Hashtable _cacheResultAttributeCache = new Hashtable();
+        private readonly ConcurrentDictionary<MethodInfo, CacheResultInfo> _cacheResultAttributeCache = new();
 
         private CacheResultInfo GetCacheResultInfo(MethodInfo method)
         {
-            CacheResultInfo cacheResultInfo = (CacheResultInfo)_cacheResultAttributeCache[method];
-            // no need for locking here - last one wins
-            if (cacheResultInfo == null)
+            var cacheResultInfo = _cacheResultAttributeCache.GetOrAdd(method, _ =>
             {
-                CacheResultAttribute resultInfo = (CacheResultAttribute)GetCustomAttribute(method, typeof(CacheResultAttribute));
-                CacheResultItemsAttribute[] itemInfoArray = (CacheResultItemsAttribute[])GetCustomAttributes(method, typeof(CacheResultItemsAttribute));
+                var resultInfo = (CacheResultAttribute) GetCustomAttribute(method, typeof(CacheResultAttribute));
+                var itemInfoArray = (CacheResultItemsAttribute[]) GetCustomAttributes(method, typeof(CacheResultItemsAttribute));
 
-                cacheResultInfo = new CacheResultInfo(resultInfo, itemInfoArray);
-                _cacheResultAttributeCache[method] = cacheResultInfo;
-            }
+                return new CacheResultInfo(resultInfo, itemInfoArray);
+            });
+
             return cacheResultInfo;
         }
 
