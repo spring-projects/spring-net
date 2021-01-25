@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -36,41 +36,39 @@ namespace Spring.Threading
         protected abstract IThreadStorage CreateStorage();
 
         protected virtual void ThreadSetup()
-        {}
+        {
+        }
 
         protected virtual void ThreadCleanup()
-        {}
+        {
+        }
 
-        [OneTimeSetUp]
-        public void FixtureSetUp()
+        [SetUp]
+        public void SetUp()
         {
             ThreadSetup();
         }
 
-        [OneTimeTearDown]
-        public void FixtureTearDown()
+        [TearDown]
+        public void TearDown()
         {
+            // cleanup storage
+            var storage = CreateStorage();
+            storage.FreeNamedDataSlot("key");
+            storage.FreeNamedDataSlot("KEY");
+            storage.FreeNamedDataSlot("KeY");
+
             ThreadCleanup();
         }
-
-				[TearDown]
-				public void TearDown()
-				{
-					// cleanup storage
-          IThreadStorage storage = CreateStorage();
-					storage.FreeNamedDataSlot("key");
-					storage.FreeNamedDataSlot("KEY");
-					storage.FreeNamedDataSlot("KeY");
-				}
 
         [Test]
         public void IsCaseSensitive()
         {
-            IThreadStorage storage = CreateStorage();
+            var storage = CreateStorage();
 
-            object value1 = new object();
-            object value2 = new object();
-            object value3 = new object();
+            var value1 = new object();
+            var value2 = new object();
+            var value3 = new object();
 
             storage.SetData("key", value1);
             storage.SetData("KEY", value2);
@@ -84,10 +82,10 @@ namespace Spring.Threading
         [Test]
         public void AllowReplaceData()
         {
-            IThreadStorage storage = CreateStorage();
+            var storage = CreateStorage();
 
-            object value1 = new object();
-            object value2 = new object();
+            var value1 = new object();
+            var value2 = new object();
 
             storage.SetData("key", value1);
             Assert.AreSame(value1, storage.GetData("key"));
@@ -100,7 +98,7 @@ namespace Spring.Threading
         [Test]
         public void UnknownKeyReturnsNull()
         {
-            IThreadStorage storage = CreateStorage();
+            var storage = CreateStorage();
 
             Assert.AreSame(null, storage.GetData("key"));
         }
@@ -108,9 +106,9 @@ namespace Spring.Threading
         [Test]
         public void FreeNamedDataSlotRemovesData()
         {
-            IThreadStorage storage = CreateStorage();
+            var storage = CreateStorage();
 
-            object value1 = new object();
+            var value1 = new object();
             storage.SetData("key", value1);
             Assert.AreSame(value1, storage.GetData("key"));
             storage.FreeNamedDataSlot("key");
@@ -120,15 +118,15 @@ namespace Spring.Threading
         [Test]
         public void UsesDistinguishedStorageOnDifferentThreads()
         {
-            IThreadStorage storage = CreateStorage();
+            var storage = CreateStorage();
 
-            object value1 = new object();
+            var value1 = new object();
             storage.SetData("key", value1);
 
-            ThreadTestHelper helper = new ThreadTestHelper(this,storage);
+            var helper = new ThreadTestHelper(this, storage);
             helper.Execute();
 
-            Assert.AreNotSame( value1, helper.value );
+            Assert.AreNotSame(value1, helper.value);
             Assert.IsNull(helper.value);
         }
 
@@ -149,7 +147,7 @@ namespace Spring.Threading
 
             public void Execute()
             {
-                Thread t = new Thread(new ThreadStart(this.Run));
+                var t = new Thread(new ThreadStart(Run));
                 t.Start();
                 t.Join();
             }
@@ -157,7 +155,7 @@ namespace Spring.Threading
             private void Run()
             {
                 outer.ThreadSetup();
-                value = this.storage.GetData("key");
+                value = storage.GetData("key");
             }
         }
 

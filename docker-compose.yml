@@ -1,0 +1,12 @@
+version: '2'
+
+services:
+
+  sqlserver:
+    image: mcr.microsoft.com/mssql/server:2019-CU8-ubuntu-16.04
+    environment:
+      - MSSQL_PID=Express
+      - ACCEPT_EULA=Y
+      - SA_PASSWORD=MyPassword!
+    ports:
+      - 1433:1433

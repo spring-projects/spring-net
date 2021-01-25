@@ -12,9 +12,4 @@
     <Reference Include="System.Web.Extensions" />
     <Reference Include="System.Web.Services" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\GenCommonAssemblyInfo.cs">
-      <Link>GenCommonAssemblyInfo.cs</Link>
-    </Compile>
-  </ItemGroup>
 </Project>

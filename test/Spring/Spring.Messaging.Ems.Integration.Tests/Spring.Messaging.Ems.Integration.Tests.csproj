@@ -26,9 +26,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\GenCommonAssemblyInfo.cs">
-      <Link>GenCommonAssemblyInfo.cs</Link>
-    </Compile>
     <EmbeddedResource Include="Messaging\Ems\Core\EmsTemplateTests.xml" />
     <EmbeddedResource Include="Messaging\Ems\Config\EmsNamespaceHandlerTests.xml" />
     <EmbeddedResource Include="Messaging\Ems\Listener\SimpleMessageListenerContainerTests.xml" />
