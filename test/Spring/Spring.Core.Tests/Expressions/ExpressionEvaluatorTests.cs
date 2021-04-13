@@ -27,6 +27,7 @@ using System.Diagnostics;
 using System.EnterpriseServices;
 using System.Globalization;
 using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -2218,6 +2219,26 @@ namespace Spring.Expressions
 
             Assert.AreEqual("ExactMatch", ExpressionEvaluator.GetValue(foo, "MethodWithSimilarArguments(1, #bars)", args));
         }
+        
+        /// <summary>
+        /// Test to show that a large number of parameters can be passed to methods
+        /// </summary>
+        [Test]
+        public void TestMethodResolutionWithLargeNumberOfParametersDoesNotThrow()
+        {
+            int expectedResult = 150;
+            int result = 0;
+            
+            Foo foo = new Foo();
+            string expression = $"MethodWithParamArray({String.Join(", ", Enumerable.Range(0, expectedResult))})";
+            
+            Assert.DoesNotThrow(() =>
+            {
+                result = (int)ExpressionEvaluator.GetValue(foo, expression);
+            });
+
+            Assert.AreEqual(expectedResult, result);
+        }
 
         [Test]
         public void TestIndexerResolutionResolvesToExactMatchOfArgumentTypes()
@@ -3056,6 +3077,11 @@ namespace Spring.Expressions
         {
             string ret = string.Join("|", values);
             return (uppercase ? ret.ToUpper() : ret);
+        }
+
+        public int MethodWithParamArray(params int[] values)
+        {
+            return values.Length;
         }
     }
 
