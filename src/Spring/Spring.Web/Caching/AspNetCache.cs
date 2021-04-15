@@ -287,7 +287,7 @@ namespace Spring.Caching
                 }
                 else
                 {
-                    DateTime absoluteExpiration = DateTime.Now.Add(timeToLive);
+                    DateTime absoluteExpiration = DateTime.UtcNow.Add(timeToLive);
                     _cache.Insert(GenerateKey(key), value, null, absoluteExpiration, Cache.NoSlidingExpiration, itemPriority, null);
                 }
             }
