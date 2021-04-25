@@ -25,6 +25,7 @@ public partial class Build
             var packTargets = GetActiveProjects()
                 .Where(x => x.Name.Contains(".Test"))
                 .Where(x => !x.Name.Contains(".Integration") || TestFull)
+                .Where(x => !x.Name.Contains("Spring.Web.Conversation.NHibernate5.Tests") || TestFull)
                 .Where(x => !x.Name.Contains("Spring.Data.Integration.Tests") || TestIntegrationData)
                 .Where(x => !x.Name.Contains("Spring.Messaging.Tests") || TestIntegrationMsMq || TestFull)
                 .Where(x => !x.Name.Contains("Spring.Nms.Integration.Tests") || TestIntegrationNms || TestFull)
