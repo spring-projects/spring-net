@@ -569,7 +569,7 @@ namespace Spring.Scheduling.Quartz
             factoryObject.AfterPropertiesSet();
             await factoryObject.Start();
 
-            Thread.Sleep(500);
+            await Task.Delay(TimeSpan.FromSeconds(1));
             Assert.IsTrue(DummyJob.count > 0);
             Assert.AreEqual(DummyJob.count, taskExecutor.count);
 
@@ -601,7 +601,7 @@ namespace Spring.Scheduling.Quartz
             factoryObject.AfterPropertiesSet();
             await factoryObject.Start();
 
-            DummyRunnable.runEvent.WaitOne(500);
+            DummyRunnable.runEvent.WaitOne(1000);
             Assert.IsTrue(DummyRunnable.count > 0);
 
             factoryObject.Dispose();
@@ -742,7 +742,7 @@ namespace Spring.Scheduling.Quartz
             factoryObject.AfterPropertiesSet();
             await factoryObject.Start();
 
-            Thread.Sleep(500);
+            await Task.Delay(TimeSpan.FromSeconds(1));
             Assert.AreEqual(10, DummyRunnable.param);
             Assert.IsTrue(DummyRunnable.count > 0);
 
@@ -777,7 +777,7 @@ namespace Spring.Scheduling.Quartz
             factoryObject.AfterPropertiesSet();
             await factoryObject.Start();
 
-            Thread.Sleep(500);
+            await Task.Delay(TimeSpan.FromSeconds(1));
             Assert.AreEqual(10, DummyJobObject.param);
             Assert.IsTrue(DummyJobObject.count > 0);
 
@@ -800,7 +800,7 @@ namespace Spring.Scheduling.Quartz
             factoryObject.AfterPropertiesSet();
             await factoryObject.Start();
 
-            Thread.Sleep(500);
+            await Task.Delay(TimeSpan.FromSeconds(1));
             Assert.AreEqual(10, DummyJob.param);
             Assert.IsTrue(DummyJob.count > 0);
 
