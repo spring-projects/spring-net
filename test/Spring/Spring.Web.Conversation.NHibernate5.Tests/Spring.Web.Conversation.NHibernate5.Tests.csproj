@@ -1,6 +1,8 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>net461</TargetFramework>
+    <ContentSQLiteInteropFiles>true</ContentSQLiteInteropFiles>
+    <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Spring\Spring.Aop\Spring.Aop.csproj" />
@@ -14,7 +16,7 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftTestSDKVersion)" />
     <PackageReference Include="NUnit" Version="$(NUnitVersion)" />
     <PackageReference Include="NUnit3TestAdapter" Version="$(NUnitTestAdapterVersion)" />
-    <PackageReference Include="System.Data.SQLite" Version="1.0.113.7" />
+    <PackageReference Include="System.Data.SQLite.Core" Version="1.0.113.7" PrivateAssets="None" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="NUnitAspEx">
@@ -57,4 +59,5 @@
     <Content Include="Data\Spring\Conversation\WebConversationStateTest\TimeOut_WithTimeOut.aspx" />
     <EmbeddedResource Include="Entities\*.hbm.xml" />
   </ItemGroup>
+
 </Project>
