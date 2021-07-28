@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using Nuke.Common;
 using Nuke.Common.CI;
@@ -11,7 +12,9 @@ using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Utilities.Collections;
+
 using static Nuke.Common.IO.FileSystemTasks;
+using static Nuke.Common.Tooling.ProcessTasks;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
 [CheckBuildProjectConfigurations]
@@ -37,7 +40,7 @@ partial class Build : NukeBuild
 
     [Solution] readonly Solution Solution;
     [GitRepository] readonly GitRepository GitRepository;
-    
+
     [CI] readonly AppVeyor AppVeyor;
     [CI] readonly GitHubActions GitHubActions;
 
@@ -73,6 +76,19 @@ partial class Build : NukeBuild
             );
         });
 
+    Target Antlr => _ => _
+        .Executes(() =>
+        {
+            var projectDir = Solution.GetProject("Spring.Core");
+            var expressionsDir = Path.Combine(projectDir.Directory, "Expressions");
+            var antlrExecutable = Path.Combine(Solution.Directory, "build-support/tools/antlr-2.7.6/antlr-2.7.6.exe");
+            var process = StartProcess(
+                toolPath: antlrExecutable,
+                arguments: $"-o {expressionsDir}/Parser {expressionsDir}/Expression.g"
+            );
+            process.WaitForExit();
+        });
+
     Target Pack => _ => _
         .After(Test)
         .DependsOn(Restore)
@@ -80,14 +96,20 @@ partial class Build : NukeBuild
         {
             var packTargets = GetActiveProjects()
                 .Where(x => !x.Name.Contains(".Test"));
-            
-            var suffix = "develop-" + DateTime.UtcNow.ToString("yyyyMMddHHmm");
-            
+
+            var version = GitRepository.Tags.SingleOrDefault(x => x.StartsWith("v"))?[1..];
+            var suffix = "";
+            if (string.IsNullOrWhiteSpace(version))
+            {
+                version = ProjectVersion;
+                suffix = "develop-" + DateTime.UtcNow.ToString("yyyyMMddHHmm");
+            }
+
             foreach (var project in packTargets)
             {
                 DotNetPack(s => s
                     .SetProject(project.Path)
-                    .SetVersion(ProjectVersion)
+                    .SetVersion(version)
                     .SetVersionSuffix(suffix)
                     .SetConfiguration(Configuration.Release)
                     .EnableNoRestore()
@@ -95,7 +117,7 @@ partial class Build : NukeBuild
                 );
             }
         });
-    
+
     IEnumerable<Project> GetActiveProjects()
     {
         var packTargets = Solution.GetProjects("*")

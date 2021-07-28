@@ -54,6 +54,7 @@ namespace Spring.Globalization.Formatters
         }
 
         [Test]
+        [Platform("Win")]
         public void FormatUsingDefaults()
         {
             FloatFormatter fmt = new FloatFormatter(FloatFormatter.DefaultFormat, "en-US");

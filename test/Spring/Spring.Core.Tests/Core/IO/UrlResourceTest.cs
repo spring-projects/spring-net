@@ -52,6 +52,7 @@ namespace Spring.Core.IO
         }
 
         [Test]
+        [Platform("Win")]
         public void GetValidFileInfo()
         {
             UrlResource urlResource = new UrlResource(FILE_PROTOCOL_PREFIX + "C:/temp");

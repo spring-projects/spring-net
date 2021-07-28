@@ -28,7 +28,6 @@ namespace Spring.Globalization.Formatters
     /// Unit tests for CurrencyFormatter class.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    [TestFixture]
     public class CurrencyFormatterTests
     {
         [Test]
@@ -54,6 +53,7 @@ namespace Spring.Globalization.Formatters
         }
 #if !MONO
         [Test]
+        [Platform("Win")]
         public void FormatUsingDefaults()
         {
             CurrencyFormatter fmt = new CurrencyFormatter("en-US");
@@ -108,6 +108,7 @@ namespace Spring.Globalization.Formatters
         }
 
         [Test]
+        [Platform("Win")]
         public void ParseUsingDefaults()
         {
             CurrencyFormatter fmt = new CurrencyFormatter("en-US");
@@ -160,6 +161,7 @@ namespace Spring.Globalization.Formatters
         }
 
         [Test]
+        [Platform("Win")]
         public void FormatUsingCustomSettings()
         {
             CurrencyFormatter fmt = new CurrencyFormatter("en-US");
@@ -189,8 +191,6 @@ namespace Spring.Globalization.Formatters
                 Assert.AreEqual("-1.234,56 din", fmt.Format(-1234.56));
             }
 
-            
-
             fmt = new CurrencyFormatter(CultureInfoUtils.SerbianCyrillicCultureName);
             fmt.GroupSizes = new int[] { 1, 2 };
             fmt.GroupSeparator = "'";
@@ -213,6 +213,7 @@ namespace Spring.Globalization.Formatters
         }
 
         [Test]
+        [Platform("Win")]
         public void ParseUsingCustomSettings()
         {
             CurrencyFormatter fmt = new CurrencyFormatter("en-US");

@@ -1,25 +1,43 @@
+using System.Collections.Generic;
 using Nuke.Common;
-using Nuke.Common.CI;
 using Nuke.Common.Git;
+using Nuke.Common.IO;
+using Nuke.Common.Tooling;
+using Nuke.Common.Tools.DotNet;
+
+using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
 public partial class Build
 {
-    string PublicNuGetSource => "https://api.nuget.org/v3/index.json";
+    [Parameter] string NuGetSource => "https://api.nuget.org/v3/index.json";
+    [Parameter] [Secret] string NuGetApiKey;
 
-    string GitHubRegistrySource => GitHubActions != null
-        ? $"https://nuget.pkg.github.com/{GitHubActions.GitHubRepositoryOwner}/index.json"
-        : null;
+    Target Publish => _ => _
+        .OnlyWhenStatic(() => GitRepository.IsOnMainBranch() || GitRepository.Branch == "github-build")
+        .DependsOn(Pack)
+        .Requires(() => NuGetApiKey)
+        .Executes(() =>
+        {
+            DotNetNuGetPush(_ => _
+                    .Apply(PushSettingsBase)
+                    .Apply(PushSettings)
+                    .CombineWith(PushPackageFiles, (_, v) => _
+                        .SetTargetPath(v))
+                    .Apply(PackagePushSettings),
+                PushDegreeOfParallelism,
+                PushCompleteOnFailure);
+        });
 
-    [Parameter] [Secret] readonly string PublicNuGetApiKey;
-    [Parameter] [Secret] readonly string GitHubRegistryApiKey;
-    
-    /*
-    Target IPublish.Publish => _ => _
-        .Inherit<IPublish>()
-        .Consumes(From<IPack>().Pack)
-        .Requires(() => IsOriginalRepository && AppVeyor != null && (GitRepository.IsOnMasterBranch() || GitRepository.IsOnReleaseBranch()) ||
-                        !IsOriginalRepository)
-        .WhenSkipped(DependencyBehavior.Execute);
-        
-        */
+    Configure<DotNetNuGetPushSettings> PushSettingsBase => _ => _
+        .SetSource(NuGetSource)
+        .SetApiKey(NuGetApiKey);
+
+    Configure<DotNetNuGetPushSettings> PushSettings => _ => _;
+    Configure<DotNetNuGetPushSettings> PackagePushSettings => _ => _;
+
+    IEnumerable<AbsolutePath> PushPackageFiles => ArtifactsDirectory.GlobFiles("*.nupkg");
+
+    bool PushCompleteOnFailure => true;
+    int PushDegreeOfParallelism => 5;
+
 }

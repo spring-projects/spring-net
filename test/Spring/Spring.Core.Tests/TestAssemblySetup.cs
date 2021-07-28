@@ -14,16 +14,19 @@ namespace Spring
         [OneTimeSetUp]
         public void SetUp()
         {
-            // while R# is broken (https://youtrack.jetbrains.com/issue/RSRP-451142)
-            string codeBase = Assembly.GetExecutingAssembly().Location;
-            UriBuilder uri = new UriBuilder(codeBase);
-            string path = Uri.UnescapeDataString(uri.Path);
-            var pathToUse = Path.GetDirectoryName(path);
-            Directory.SetCurrentDirectory(pathToUse);
-
-            CultureInfo enUs = new CultureInfo("en-US");
-            Thread.CurrentThread.CurrentCulture = enUs;
-            Thread.CurrentThread.CurrentUICulture = enUs;
+            try
+            {
+                // while R# is broken (https://youtrack.jetbrains.com/issue/RSRP-451142)
+                string codeBase = Assembly.GetExecutingAssembly().Location;
+                UriBuilder uri = new UriBuilder(codeBase);
+                string path = Uri.UnescapeDataString(uri.Path);
+                var pathToUse = Path.GetDirectoryName(path);
+                Directory.SetCurrentDirectory(pathToUse);
+            }
+            catch
+            {
+                // ignored
+            }
         }
     }
 }

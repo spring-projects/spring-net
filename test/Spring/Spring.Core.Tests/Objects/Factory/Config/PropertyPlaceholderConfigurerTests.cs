@@ -47,7 +47,7 @@ namespace Spring.Objects.Factory.Config
 	    private static string testConnectionString = @"Provider=Microsoft.Jet.OLEDB.4.0; Data Source=c:\Northwind.mdb;User ID=Admin;Password=;";
         private static string testConnectionStringTwo = @"Provider=Microsoft.Jet.OLEDB.4.0; Data Source=c:\Northwind.mdb;User ID=Admin;Password=Ernie;";
 #endif
-		
+
         [SetUp]
         public void SetUp()
         {
@@ -140,7 +140,7 @@ namespace Spring.Objects.Factory.Config
             IConfigurableListableObjectFactory mock = A.Fake<IConfigurableListableObjectFactory>();
 			A.CallTo(() => mock.GetObjectDefinitionNames(false)).Returns(new string [] {defName});
 			A.CallTo(() => mock.GetObjectDefinition(defName, false)).Returns(def);
-            
+
 			PropertyPlaceholderConfigurer cfg = new PropertyPlaceholderConfigurer();
 			NameValueCollection defaultProperties = new NameValueCollection();
 			const string expectedName = "Rick Evans";
@@ -159,7 +159,7 @@ namespace Spring.Objects.Factory.Config
             const string defName = "foo";
             const string placeholder = "${name}";
             MutablePropertyValues pvs = new MutablePropertyValues();
-            
+
 
             const string theProperty = "name";
             pvs.Add(theProperty, placeholder);
@@ -188,6 +188,7 @@ namespace Spring.Objects.Factory.Config
         /// variable is replaced.
         /// </summary>
         [Test]
+        [Platform("Win")]
 		public void WithEnvironmentVariableFallback()
 		{
 			StaticApplicationContext ac = new StaticApplicationContext();
@@ -233,6 +234,7 @@ namespace Spring.Objects.Factory.Config
 		/// variable setting to override the explicitly defined name value collection.
 		/// </summary>
 		[Test]
+		[Platform("Win")]
 		public void WithOverridingEnvironmentProperty()
 		{
 			StaticApplicationContext ac = new StaticApplicationContext();
@@ -312,14 +314,14 @@ namespace Spring.Objects.Factory.Config
 		public void SunnyDay()
 		{
 			StaticApplicationContext ac = new StaticApplicationContext();
-            
+
 
             MutablePropertyValues pvs = new MutablePropertyValues();
             pvs.Add("age", "${age}");
             RootObjectDefinition def
                 = new RootObjectDefinition("${fqn}", new ConstructorArgumentValues(), pvs);
             ac.RegisterObjectDefinition("tb3", def);
-            
+
 
 
 			pvs = new MutablePropertyValues();
@@ -387,7 +389,7 @@ namespace Spring.Objects.Factory.Config
 			Assert.AreEqual(98, inner2.Age);
 			Assert.AreEqual("namemyvar${", inner2.Name);
 		}
-		
+
 		/// <summary>
 		/// Makes sure that an appropriate exception is raised when trying
 		/// to resolve this placeholder... ${foo} with this value... foo=ba${foo}r
@@ -404,7 +406,7 @@ namespace Spring.Objects.Factory.Config
 			NameValueCollection properties = new NameValueCollection();
 			const string expectedName = "ba${foo}r";
 			properties.Add("foo", expectedName);
-			
+
 			IConfigurableListableObjectFactory mock = A.Fake<IConfigurableListableObjectFactory>();
 			A.CallTo(() => mock.GetObjectDefinitionNames(false)).Returns(new string[] {"foo"});
 			A.CallTo(() => mock.GetObjectDefinition(null, false)).WithAnyArguments().Returns(def);
@@ -437,7 +439,7 @@ namespace Spring.Objects.Factory.Config
 			IConfigurableListableObjectFactory mock = A.Fake<IConfigurableListableObjectFactory>();
 			A.CallTo(() => mock.GetObjectDefinitionNames(false)).Returns(new string[] {"foo"});
 			A.CallTo(() => mock.GetObjectDefinition(null, false)).WithAnyArguments().Returns(def);
-            
+
             PropertyPlaceholderConfigurer cfg = new PropertyPlaceholderConfigurer();
 			cfg.Properties = properties;
 			cfg.PostProcessObjectFactory(mock);
@@ -602,7 +604,7 @@ namespace Spring.Objects.Factory.Config
         {
             IApplicationContext ctx = new XmlApplicationContext(
                 "file://Spring/Objects/Factory/Config/PPCWithTypesTests.xml");
-            
+
             object obj = ctx["testObject"];
             Assert.IsTrue(obj is TestObject);
 

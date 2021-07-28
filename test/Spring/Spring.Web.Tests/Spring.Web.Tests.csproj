@@ -28,7 +28,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="..\Spring.Core.Tests\TestAssemblySetup.cs" Link="TestAssemblySetup.cs" />
-    <Content Include="Data\**\*" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="Data\**\*">
+      <Link>Data\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\**\*">
+      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <Content Include="Data\Spring\Context\Support\WebApplicationContextTests\Dummy.aspx" />
     <Content Include="Data\Spring\Objects\Factory\Support\TestForm.aspx" />
     <Content Include="Data\Spring\Web\Support\LocalResourceManagerTests\WithoutResources.aspx" />
@@ -42,7 +49,4 @@
     <EmbeddedResource Include="Context\Support\*.xml" />
     <EmbeddedResource Include="Web\Support\ControlInterceptionTests.objects.xml" />
   </ItemGroup>
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy &quot;$(ProjectDir)Data&quot; &quot;$(OutDir)&quot; /y /s /q /d" />
-  </Target>
 </Project>

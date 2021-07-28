@@ -22,10 +22,6 @@
           "type": "boolean",
           "description": "Indicates to continue a previously failed build attempt"
         },
-        "GitHubRegistryApiKey": {
-          "type": "string",
-          "default": "Secrets must be entered via 'nuke :secret [profile]'"
-        },
         "Help": {
           "type": "boolean",
           "description": "Shows the help text for this build assembly"
@@ -41,15 +37,29 @@
             "GitHubActions",
             "GitLab",
             "Jenkins",
+            "Rider",
             "SpaceAutomation",
             "TeamCity",
             "Terminal",
-            "TravisCI"
+            "TravisCI",
+            "VisualStudio",
+            "VSCode"
           ]
         },
         "NoLogo": {
           "type": "boolean",
           "description": "Disables displaying the NUKE logo"
+        },
+        "NuGetApiKey": {
+          "type": "string",
+          "default": "Secrets must be entered via 'nuke :secret [profile]'"
+        },
+        "NuGetSource": {
+          "type": "string"
+        },
+        "Partition": {
+          "type": "string",
+          "description": "Partition to use on CI"
         },
         "Plan": {
           "type": "boolean",
@@ -80,10 +90,12 @@
           "items": {
             "type": "string",
             "enum": [
+              "Antlr",
               "Ci",
               "Clean",
               "Compile",
               "Pack",
+              "Publish",
               "Restore",
               "Test"
             ]
@@ -99,10 +111,12 @@
           "items": {
             "type": "string",
             "enum": [
+              "Antlr",
               "Ci",
               "Clean",
               "Compile",
               "Pack",
+              "Publish",
               "Restore",
               "Test"
             ]

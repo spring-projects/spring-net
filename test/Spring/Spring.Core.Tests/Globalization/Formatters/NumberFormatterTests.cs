@@ -28,7 +28,6 @@ namespace Spring.Globalization.Formatters
 	/// Unit tests for NumberFormatter class.
 	/// </summary>
     /// <author>Aleksandar Seovic</author>
-    [TestFixture]
     public class NumberFormatterTests
 	{
         [Test]
@@ -54,6 +53,7 @@ namespace Spring.Globalization.Formatters
         }
 
         [Test]
+        [Platform("Win")]
         public void FormatUsingDefaults()
         {
             NumberFormatter fmt = new NumberFormatter("en-US");
@@ -70,6 +70,7 @@ namespace Spring.Globalization.Formatters
         }
 
         [Test]
+        [Platform("Win")]
         public void ParseUsingDefaults()
         {
             NumberFormatter fmt = new NumberFormatter("en-US");
@@ -86,6 +87,7 @@ namespace Spring.Globalization.Formatters
         }
 
         [Test]
+        [Platform("Win")]
         public void FormatUsingCustomSettings()
         {
             NumberFormatter fmt = new NumberFormatter("en-US");

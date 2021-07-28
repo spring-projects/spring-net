@@ -46,12 +46,16 @@
     <Compile Remove="Util\ObjectUtilsTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App.config">
+    <None Include="App.config" Link="testhost.dll.config" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="App.config" Link="ReSharperTestRunner64.dll.config" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="Data\**\*">
+      <Link>Data\%(RecursiveDir)%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Data\**">
+    </None>
+    <None Include="Data\**\*">
+      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </None>
     <Compile Remove="Context\Attributes\FailAssemblyObjectDefinitionScannerTests.cs" />
     <EmbeddedResource Include="Context\Attributes\*.xml" />
     <EmbeddedResource Include="Context\Support\*.xml" />
@@ -72,9 +76,4 @@
     <EmbeddedResource Include="Resources\SimpleAppContext.xml" />
     <EmbeddedResource Include="TestResource.txt" />
   </ItemGroup>
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="xcopy &quot;$(ProjectDir)Data&quot; &quot;$(OutDir)&quot; /y /s /q /d" />
-    <Exec Command="copy &quot;$(ProjectDir)App.config&quot; &quot;$(OutDir)testhost.dll.config&quot;" />
-    <Exec Command="copy &quot;$(ProjectDir)App.config&quot; &quot;$(OutDir)ReSharperTestRunner64.dll.config&quot;" />
-  </Target>
 </Project>

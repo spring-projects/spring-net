@@ -1,5 +1,5 @@
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -125,7 +125,7 @@ namespace Spring.Proxy
         {
             ConstructorInfo ci = typeof(FakeServiceKnownTypeAttribute).GetConstructor(new Type[] { typeof(Type) });
             CustomAttributeBuilder cab = new CustomAttributeBuilder(ci, new object[] { typeof(TestObject) });
-            
+
             IProxyTypeBuilder builder = GetProxyBuilder();
             builder.TargetType = typeof(ClassWithFakeServiceKnownTypeAttribute);
             builder.TypeAttributes.Add(cab);
@@ -273,6 +273,7 @@ namespace Spring.Proxy
 #if !MONO && !NETCOREAPP
         // http://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=94803
         [Test]
+        [Platform("Win")]
         public void ProxySecurityAttribute()
         {
             IProxyTypeBuilder builder = GetProxyBuilder();

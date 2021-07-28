@@ -2,7 +2,7 @@ name: Publish
 
 on:
   push:
-    tags: 
+    tags:
       - 'v*.*.*'
 
 jobs:
@@ -33,15 +33,7 @@ jobs:
         dotnet-version: 5.0.*
 
     - name: Test
-      run: dotnet test --configuration Release
-
-    - name: Pack with dotnet
-      run: |
-        arrTag=(${GITHUB_REF//\// })
-        VERSION="${arrTag[2]}"
-        VERSION="${VERSION//v}"
-        echo "$VERSION"
-        dotnet pack --output artifacts --configuration Release -p:Version=$VERSION
+      run: ./build.cmd ci test pack
 
     - name: Push with dotnet
       run: dotnet nuget push artifacts/*.*nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json

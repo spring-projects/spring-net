@@ -28,7 +28,6 @@ namespace Spring.Globalization.Formatters
 	/// Unit tests for PercentFormatter class.
 	/// </summary>
     /// <author>Aleksandar Seovic</author>
-    [TestFixture]
     public class PercentFormatterTests
 	{
         [Test]
@@ -54,6 +53,7 @@ namespace Spring.Globalization.Formatters
         }
 
         [Test]
+        [Platform("Win")]
         public void FormatUsingDefaults()
         {
             PercentFormatter fmt = new PercentFormatter("en-US");
