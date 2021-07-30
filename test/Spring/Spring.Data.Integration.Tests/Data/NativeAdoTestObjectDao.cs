@@ -201,5 +201,10 @@ namespace Spring.Data
         {
             throw new NotImplementedException();
         }
+
+        public void Cleanup()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

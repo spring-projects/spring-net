@@ -145,5 +145,10 @@ namespace Spring.Data
             #endregion
 
         }
-	}
+
+        public void Cleanup()
+        {
+            AdoTemplate.ExecuteNonQuery(CommandType.Text, "delete from TestObjects ");
+        }
+    }
 }

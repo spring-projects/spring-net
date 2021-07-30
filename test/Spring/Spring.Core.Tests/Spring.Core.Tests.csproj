@@ -74,5 +74,6 @@
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="xcopy &quot;$(ProjectDir)Data&quot; &quot;$(OutDir)&quot; /y /s /q /d" />
     <Exec Command="copy &quot;$(ProjectDir)App.config&quot; &quot;$(OutDir)testhost.dll.config&quot;" />
+    <Exec Command="copy &quot;$(ProjectDir)App.config&quot; &quot;$(OutDir)ReSharperTestRunner64.dll.config&quot;" />
   </Target>
 </Project>

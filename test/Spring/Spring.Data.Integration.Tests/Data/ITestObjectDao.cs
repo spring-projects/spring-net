@@ -19,5 +19,6 @@ namespace Spring.Data
         //
         int GetCountByAltMethod(int lowerAgeLimit);
         int GetCountByCommandSetter(int lowerAgeLimit);
+        void Cleanup();
     }
 }
