@@ -4,9 +4,16 @@
          xmlns:tx="http://www.springframework.net/tx"
          xmlns:aop="http://www.springframework.net/aop">
 
+  <object type="Spring.Objects.Factory.Config.VariablePlaceholderConfigurer, Spring.Core">
+    <property name="VariableSources">
+      <list>
+        <object type="Spring.ProviderNameSource, Spring.Data.Integration.Tests" />
+      </list>
+    </property>
+  </object>
 
   <db:provider  id="DbProvider"
-              provider="SqlServer-2.0"
+              provider="${providerName}"
               connectionString="Data Source=SPRINGQA;Initial Catalog=Spring;Persist Security Info=True;User ID=springqa;Password=springqa"/>
 
 

@@ -50,6 +50,9 @@ namespace Spring.Data
         }
 
         [Test]
+#if NETCOREAPP
+        [Ignore("Not supported on .NET Core")]
+#endif
         public void DeclarativeWithAttributes()
         {
             IAccountManager mgr = ctx["accountManager"] as IAccountManager;

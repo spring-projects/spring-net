@@ -141,6 +141,12 @@ namespace Spring.Data
             }
 	    }
 
-	    #endregion
+        protected override void OnSetUp()
+        {
+            TestObjectDao.Cleanup();
+            base.OnSetUp();
+        }
+
+        #endregion
 	}
 }

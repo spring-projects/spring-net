@@ -3,9 +3,16 @@
          xmlns:db="http://www.springframework.net/database">
 
 
+  <object type="Spring.Objects.Factory.Config.VariablePlaceholderConfigurer, Spring.Core">
+    <property name="VariableSources">
+      <list>
+        <object type="Spring.ProviderNameSource, Spring.Data.Integration.Tests" />
+      </list>
+    </property>
+  </object>
 
   <db:provider id="DbProvider"
-               provider="SqlServer-2.0"
+               provider="${providerName}"
                connectionString="Data Source=SPRINGQA;Database=Spring;Trusted_Connection=False;User ID=springqa;Password=springqa"/>
 
   <object id="adoTemplate" type="Spring.Data.Core.AdoTemplate, Spring.Data">
