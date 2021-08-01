@@ -1354,6 +1354,7 @@ namespace Spring.Objects.Factory.Xml
             }
         }
 
+#if !NETCOREAPP
         [Test]
         [Platform("Win")]
         public void AnObjectCanBeIstantiatedWithANotFullySpecifiedAssemblyName()
@@ -1363,6 +1364,7 @@ namespace Spring.Objects.Factory.Xml
             IDbConnection connection = (IDbConnection) xof.GetObject("connectionNotFullySpecified");
             Assert.IsNotNull(connection);
         }
+#endif
 
         [Test]
         public void ResourceAndInputStream()

@@ -1,13 +1,13 @@
 #region License
 /*
  * Copyright 2002-2010 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -55,7 +55,7 @@ namespace Spring.Aop.Support
 			// Interceptor behind regexp advisor
 			NopInterceptor nop = (NopInterceptor) iof.GetObject("NopInterceptor");
 			Assert.AreEqual(0, nop.Count);
-			
+
 			int newAge = 12;
 			// Not advised
 			advised.Exceptional(null);
@@ -74,20 +74,20 @@ namespace Spring.Aop.Support
 		{
 			IObjectFactory iof = new XmlObjectFactory(new ReadOnlyXmlTestResource("RegularExpressionSetterTests.xml", GetType()));
 			IPerson advised = (IPerson) iof.GetObject("SettersAndReturnsThisAdvised");
-			
+
 		    // Interceptor behind regexp advisor
 			NopInterceptor nop = (NopInterceptor) iof.GetObject("NopInterceptor");
 			Assert.AreEqual(0, nop.Count);
-		
+
 			int newAge = 12;
 			// Not advised
 			advised.Exceptional(null);
 			Assert.AreEqual(0, nop.Count);
-			
+
 			// This is proxied
 			advised.ReturnsThis();
 			Assert.AreEqual(1, nop.Count);
-			
+
 			// Only setter is advised
 		    advised.SetAge(newAge);
 			Assert.AreEqual(2, nop.Count);
@@ -97,6 +97,7 @@ namespace Spring.Aop.Support
 		}
 
 		[Test]
+		[Platform("Win")]
 		public void Serialization()
 		{
             IObjectFactory iof = new XmlObjectFactory(new ReadOnlyXmlTestResource("RegularExpressionSetterTests.xml", GetType()));
@@ -104,12 +105,12 @@ namespace Spring.Aop.Support
 			// Interceptor behind regexp advisor
 			NopInterceptor nop = (NopInterceptor) iof.GetObject("NopInterceptor");
 			Assert.AreEqual(0, nop.Count);
-		
+
 			int newAge = 12;
 			// Not advised
 			Assert.AreEqual(0, p.GetAge());
 			Assert.AreEqual(0, nop.Count);
-			
+
 			// This is proxied
 			p.SetAge(newAge);
 			Assert.AreEqual(1, nop.Count);
@@ -117,7 +118,7 @@ namespace Spring.Aop.Support
 			Assert.AreEqual(newAge, p.GetAge());
 			// Only setter fired
 			Assert.AreEqual(2, nop.Count);
-			
+
 			// Serialize and continue...
 
 #if !NETCOREAPP // deep chains for Type serialization problems, not worth the effort at the moment

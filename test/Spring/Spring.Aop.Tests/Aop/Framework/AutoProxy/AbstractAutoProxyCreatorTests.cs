@@ -51,7 +51,7 @@ namespace Spring.Aop.Framework.AutoProxy
         public class ObjectWithoutInterface
         {
             public virtual void Foo()
-            { }            
+            { }
         }
 
         public class TransparentProxyFactory : IFactoryObject
@@ -162,12 +162,13 @@ namespace Spring.Aop.Framework.AutoProxy
         }
 
         [Test]
+        [Platform("Win")]
         public void ProxyTransparentProxy()
         {
             DefaultListableObjectFactory of = new DefaultListableObjectFactory();
 
             ConstructorArgumentValues ctorArgs = new ConstructorArgumentValues();
-            ctorArgs.AddNamedArgumentValue("objectType", typeof(ITestObject));            
+            ctorArgs.AddNamedArgumentValue("objectType", typeof(ITestObject));
             of.RegisterObjectDefinition("bar", new RootObjectDefinition(typeof(TransparentProxyFactory), ctorArgs, null));
 
             TestAutoProxyCreator apc = new TestAutoProxyCreator(of);

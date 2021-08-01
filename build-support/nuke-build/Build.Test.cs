@@ -6,7 +6,6 @@ using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
 public partial class Build
 {
-
     [Parameter]
     readonly bool TestFull = false;
     [Parameter]
@@ -20,9 +19,10 @@ public partial class Build
 
     Target Test => _ => _
         .DependsOn(Restore)
+        .After(Compile)
         .Executes(() =>
         {
-            var packTargets = GetActiveProjects()
+            var testTargets = GetActiveProjects()
                 .Where(x => x.Name.Contains(".Test"))
                 .Where(x => !x.Name.Contains(".Integration") || TestFull)
                 .Where(x => !x.Name.Contains("Spring.Web.Conversation.NHibernate5.Tests") || TestFull)
@@ -30,9 +30,14 @@ public partial class Build
                 .Where(x => !x.Name.Contains("Spring.Messaging.Tests") || TestIntegrationMsMq || TestFull)
                 .Where(x => !x.Name.Contains("Spring.Nms.Integration.Tests") || TestIntegrationNms || TestFull)
                 .Where(x => !x.Name.Contains("Spring.Messaging.Ems.Integration.Tests") || TestIntegrationEms || TestFull)
-                .Where(x => !x.Name.Contains("Spring.Services.Tests"));
+                .Where(x => !x.Name.Contains("Spring.Services.Tests"))
+                .Where(x => !x.Name.Contains("Spring.Template.Velocity.Castle.Tests") || EnvironmentInfo.IsWin)
+                .Where(x => !x.Name.Contains("Spring.Template.Velocity.Tests") || EnvironmentInfo.IsWin)
+                .Where(x => !x.Name.Contains("Spring.Testing.Microsoft.Test") || EnvironmentInfo.IsWin)
+                .Where(x => !x.Name.Contains("Spring.Web.Tests") || EnvironmentInfo.IsWin)
+                .Where(x => !x.Name.Contains("Spring.Web.Mvc5.Tests") || EnvironmentInfo.IsWin);
 
-            foreach (var project in packTargets)
+            foreach (var project in testTargets)
             {
                 DotNetTest(s =>
                 {
