@@ -11,7 +11,4 @@
   <ItemGroup>
     <PackageReference Include="NUnit" Version="3.12.0" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Spring.Testing.NUnit.build" />
-  </ItemGroup>
 </Project>

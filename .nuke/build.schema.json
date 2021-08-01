@@ -76,10 +76,6 @@
           "type": "string",
           "description": "Version"
         },
-        "PublicNuGetApiKey": {
-          "type": "string",
-          "default": "Secrets must be entered via 'nuke :secret [profile]'"
-        },
         "Root": {
           "type": "string",
           "description": "Root directory during build execution"
@@ -94,7 +90,10 @@
               "Ci",
               "Clean",
               "Compile",
+              "CompileExamples",
+              "CompileSolution",
               "Pack",
+              "PackBinaries",
               "Publish",
               "Restore",
               "Test"
@@ -115,7 +114,10 @@
               "Ci",
               "Clean",
               "Compile",
+              "CompileExamples",
+              "CompileSolution",
               "Pack",
+              "PackBinaries",
               "Publish",
               "Restore",
               "Test"

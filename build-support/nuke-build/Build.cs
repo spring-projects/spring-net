@@ -11,11 +11,13 @@ using Nuke.Common.Git;
 using Nuke.Common.IO;
 using Nuke.Common.ProjectModel;
 using Nuke.Common.Tools.DotNet;
+using Nuke.Common.Tools.MSBuild;
 using Nuke.Common.Utilities.Collections;
 
 using static Nuke.Common.IO.FileSystemTasks;
 using static Nuke.Common.Tooling.ProcessTasks;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
+using static Nuke.Common.Tools.MSBuild.MSBuildTasks;
 
 [CheckBuildProjectConfigurations]
 [ShutdownDotNetAfterServerBuild]
@@ -46,16 +48,19 @@ partial class Build : NukeBuild
 
     AbsolutePath SourceDirectory => RootDirectory / "src";
     AbsolutePath TestsDirectory => RootDirectory / "test";
+    AbsolutePath BuildDirectory => RootDirectory / "build";
+    AbsolutePath ExamplesDirectory => RootDirectory / "examples";
     AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
 
     Target Clean => _ => _
         .Before(Restore)
         .Executes(() =>
         {
+            ExamplesDirectory.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
             SourceDirectory.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
             TestsDirectory.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
             EnsureCleanDirectory(ArtifactsDirectory);
-            EnsureCleanDirectory(RootDirectory / "build");
+            EnsureCleanDirectory(BuildDirectory);
         });
 
     Target Restore => _ => _
@@ -66,6 +71,9 @@ partial class Build : NukeBuild
         });
 
     Target Compile => _ => _
+        .DependsOn(CompileSolution, CompileExamples);
+
+    Target CompileSolution => _ => _
         .DependsOn(Restore)
         .Executes(() =>
         {
@@ -74,6 +82,32 @@ partial class Build : NukeBuild
                 .SetConfiguration(Configuration)
                 .EnableNoRestore()
             );
+        });
+
+    Target CompileExamples => _ => _
+        .OnlyWhenStatic(() => EnvironmentInfo.IsWin)
+        .DependsOn(CompileSolution, PackBinaries)
+        .Executes(() =>
+        {
+            foreach (var solutionFile in ExamplesDirectory.GlobFiles("**/*.sln"))
+            {
+                if (solutionFile.ToString().Contains("Spring.EmsQuickStart") && !BuildEms
+                    || solutionFile.ToString().Contains("Spring.Examples.Pool")
+                    || solutionFile.ToString().Contains("SpringAir")
+                    || solutionFile.ToString().Contains("Spring.Web.Extensions.Example")
+                    || solutionFile.ToString().Contains("Spring.WebQuickStart"))
+                {
+                    continue;
+                }
+
+                MSBuild(s => s
+                    .SetTargets("Restore", "Rebuild")
+                    .SetConfiguration(Configuration)
+                    .SetTargetPath(solutionFile)
+                    .SetNodeReuse(false)
+                    .SetVerbosity(MSBuildVerbosity.Minimal)
+                );
+            }
         });
 
     Target Antlr => _ => _
@@ -115,6 +149,89 @@ partial class Build : NukeBuild
                     .EnableNoRestore()
                     .SetOutputDirectory(ArtifactsDirectory)
                 );
+            }
+        });
+
+    Target PackBinaries => _ => _
+        .DependsOn(CompileSolution)
+        .Executes(() =>
+        {
+            var binDirectory = RootDirectory / "bin";
+            EnsureCleanDirectory(binDirectory);
+
+            var patterns = new[]
+            {
+                "**/Common.Logging.dll",
+                "**/Common.Logging.Core.dll",
+
+                "**/Spring.Core.dll",
+                "**/Spring.Core.xml",
+                "**/Spring.Core.pdb",
+
+                "**/Spring.Aop.dll",
+                "**/Spring.Aop.xml",
+                "**/Spring.Aop.pdb",
+
+                "**/Spring.Data.dll",
+                "**/Spring.Data.xml",
+                "**/Spring.Data.pdb",
+
+                "**/Spring.Data.NHibernate*.dll",
+                "**/Spring.Data.NHibernate*.xml",
+                "**/Spring.Data.NHibernate*.pdb",
+
+                "**/Spring.Web.dll",
+                "**/Spring.Web.xml",
+                "**/Spring.Web.pdb",
+
+                "**/Spring.Web.Mvc5.dll",
+                "**/Spring.Web.Mvc5.xml",
+                "**/Spring.Web.Mvc5.pdb",
+
+                "**/Spring.Web.Extensions.dll",
+                "**/Spring.Web.Extensions.xml",
+                "**/Spring.Web.Extensions.pdb",
+
+                "**/Spring.Services.dll",
+                "**/Spring.Services.xml",
+                "**/Spring.Services.pdb",
+
+                "**/Spring.Testing.NUnit.dll",
+                "**/Spring.Testing.NUnit.xml",
+                "**/Spring.Testing.NUnit.pdb",
+
+                "**/Spring.Testing.Microsoft.dll",
+                "**/Spring.Testing.Microsoft.xml",
+                "**/Spring.Testing.Microsoft.pdb",
+
+                "**/Spring.Messaging.Ems.dll",
+                "**/Spring.Messaging.Ems.xml",
+                "**/Spring.Messaging.Ems.pdb",
+
+                "**/Spring.Messaging.Nms.dll",
+                "**/Spring.Messaging.Nms.xml",
+                "**/Spring.Messaging.Nms.pdb",
+
+                "**/Spring.Messaging.dll",
+                "**/Spring.Messaging.xml",
+                "**/Spring.Messaging.pdb",
+
+                "**/Spring.Scheduling.Quartz3.dll",
+                "**/Spring.Scheduling.Quartz3.xml",
+                "**/Spring.Scheduling.Quartz3.pdb",
+
+                "**/Spring.Template.Velocity.dll",
+                "**/Spring.Template.Velocity.xml",
+                "**/Spring.Template.Velocity.pdb",
+
+                "**/Spring.Web.Conversation.NHibernate5.dll",
+                "**/Spring.Web.Conversation.NHibernate5.xml",
+                "**/Spring.Web.Conversation.NHibernate5.pdb",
+            };
+
+            foreach (var file in BuildDirectory.GlobFiles(patterns))
+            {
+                CopyFileToDirectory(file, binDirectory / "net", FileExistsPolicy.OverwriteIfNewer);
             }
         });
 
