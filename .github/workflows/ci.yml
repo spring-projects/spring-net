@@ -37,3 +37,5 @@ jobs:
       - uses: actions/checkout@v2
       - name: Publish
         run: ./build.sh publish
+        env:
+          NuGetApiKey: ${{ secrets.NUGET_API_KEY }}
