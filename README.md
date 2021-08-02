@@ -1,11 +1,11 @@
-THE SPRING.NET FRAMEWORK, Release 3.0.0  (PRE-RELEASE)
+THE SPRING.NET FRAMEWORK
 ---------------------------------------------------------
 http://www.springframework.net/
 
 
 ## 1. INTRODUCTION
 
-The 3.0.0 release of Spring.NET contains
+Spring.NET contains:
 
 * A full featured Inversion of Control container
 * An Aspect Oriented Programming framework
