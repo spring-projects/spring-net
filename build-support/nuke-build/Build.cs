@@ -157,75 +157,36 @@ partial class Build : NukeBuild
             var binDirectory = RootDirectory / "bin";
             EnsureCleanDirectory(binDirectory);
 
-            var patterns = new[]
+            var moduleNames = new[]
             {
-                "**/Common.Logging.dll",
-                "**/Common.Logging.Core.dll",
-
-                "**/Spring.Core.dll",
-                "**/Spring.Core.xml",
-                "**/Spring.Core.pdb",
-
-                "**/Spring.Aop.dll",
-                "**/Spring.Aop.xml",
-                "**/Spring.Aop.pdb",
-
-                "**/Spring.Data.dll",
-                "**/Spring.Data.xml",
-                "**/Spring.Data.pdb",
-
-                "**/Spring.Data.NHibernate*.dll",
-                "**/Spring.Data.NHibernate*.xml",
-                "**/Spring.Data.NHibernate*.pdb",
-
-                "**/Spring.Web.dll",
-                "**/Spring.Web.xml",
-                "**/Spring.Web.pdb",
-
-                "**/Spring.Web.Mvc5.dll",
-                "**/Spring.Web.Mvc5.xml",
-                "**/Spring.Web.Mvc5.pdb",
-
-                "**/Spring.Web.Extensions.dll",
-                "**/Spring.Web.Extensions.xml",
-                "**/Spring.Web.Extensions.pdb",
-
-                "**/Spring.Services.dll",
-                "**/Spring.Services.xml",
-                "**/Spring.Services.pdb",
-
-                "**/Spring.Testing.NUnit.dll",
-                "**/Spring.Testing.NUnit.xml",
-                "**/Spring.Testing.NUnit.pdb",
-
-                "**/Spring.Testing.Microsoft.dll",
-                "**/Spring.Testing.Microsoft.xml",
-                "**/Spring.Testing.Microsoft.pdb",
-
-                "**/Spring.Messaging.Ems.dll",
-                "**/Spring.Messaging.Ems.xml",
-                "**/Spring.Messaging.Ems.pdb",
-
-                "**/Spring.Messaging.Nms.dll",
-                "**/Spring.Messaging.Nms.xml",
-                "**/Spring.Messaging.Nms.pdb",
-
-                "**/Spring.Messaging.dll",
-                "**/Spring.Messaging.xml",
-                "**/Spring.Messaging.pdb",
-
-                "**/Spring.Scheduling.Quartz3.dll",
-                "**/Spring.Scheduling.Quartz3.xml",
-                "**/Spring.Scheduling.Quartz3.pdb",
-
-                "**/Spring.Template.Velocity.dll",
-                "**/Spring.Template.Velocity.xml",
-                "**/Spring.Template.Velocity.pdb",
-
-                "**/Spring.Web.Conversation.NHibernate5.dll",
-                "**/Spring.Web.Conversation.NHibernate5.xml",
-                "**/Spring.Web.Conversation.NHibernate5.pdb",
+                "Common.Logging",
+                "Common.Logging.Core",
+                "Spring.Core",
+                "Spring.Aop",
+                "Spring.Data",
+                "Spring.Data.NHibernate*",
+                "Spring.Web",
+                "Spring.Web.Mvc5",
+                "Spring.Web.Extensions",
+                "Spring.Services",
+                "Spring.Testing.NUnit",
+                "Spring.Testing.Microsoft",
+                "Spring.Messaging.Ems",
+                "Spring.Messaging.Nms",
+                "Spring.Messaging",
+                "Spring.Scheduling.Quartz3",
+                "Spring.Template.Velocity",
+                "Spring.Web.Conversation.NHibernate5",
             };
+
+            var patterns = moduleNames
+                .SelectMany(x => new []
+                {
+                    "**/" + Configuration + "/**/" + x + ".dll",
+                    "**/" + Configuration + "/**/" + x + ".xml",
+                    "**/" + Configuration + "/**/" + x + ".pdb"
+                })
+                .ToArray();
 
             foreach (var file in BuildDirectory.GlobFiles(patterns))
             {
