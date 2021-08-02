@@ -6,34 +6,12 @@ on:
       - 'v*.*.*'
 
 jobs:
-  build:
 
-    runs-on: ubuntu-latest
-    env:
-        DOTNET_NOLOGO: true
-        DOTNET_CLI_TELEMETRY_OPTOUT: 1
-
+  publish:
+    runs-on: windows-latest
     steps:
-    - name: Checkout source code
-      uses: actions/checkout@v2
-
-    - name: Setup dotnet 2.1
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 2.1.*
-
-    - name: Setup dotnet 3.1
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 3.1.*
-
-    - name: Setup dotnet 5.0
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: 5.0.*
-
-    - name: Test
-      run: ./build.cmd ci test pack
-
-    - name: Push with dotnet
-      run: dotnet nuget push artifacts/*.*nupkg --api-key ${{ secrets.NUGET_API_KEY }} --source https://api.nuget.org/v3/index.json
+      - uses: actions/checkout@v2
+      - name: Publish
+        run: ./build.sh test publish
+        env:
+          NuGetApiKey: ${{ secrets.NUGET_API_KEY }}
