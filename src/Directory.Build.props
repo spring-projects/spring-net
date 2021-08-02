@@ -11,17 +11,20 @@
     <DelaySign>false</DelaySign>
     <Deterministic>true</Deterministic>
 
-    <GenerateAssemblyInfo>false</GenerateAssemblyInfo>
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
-
+    <Product>Spring.NET</Product>
+    <Company>SpringSource</Company>
+    <Copyright>Copyright 2002-2021 Spring.NET Framework Team.</Copyright>
+    <Trademark>Apache License, Version 2.0</Trademark>
+    
     <CommonLoggingVersion>3.4.1</CommonLoggingVersion>
 
     <Authors>SpringSource</Authors>
 	<PackageIcon>SpringSource_Leaves32x32.png</PackageIcon>
-    <PackageIconUrl>http://springframework.net/images/SpringSource_Leaves32x32.png</PackageIconUrl>
+    <PackageIconUrl>https://springframework.net/images/SpringSource_Leaves32x32.png</PackageIconUrl>
 	<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
-    <PackageProjectUrl>http://www.springframework.net/</PackageProjectUrl>
+    <PackageProjectUrl>https://www.springframework.net/</PackageProjectUrl>
     <PackageTags>Library</PackageTags>
 
     <NeutralLanguage>en-US</NeutralLanguage>

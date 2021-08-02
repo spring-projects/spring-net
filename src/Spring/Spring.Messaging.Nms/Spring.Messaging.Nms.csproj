@@ -12,9 +12,6 @@
     <PackageReference Include="Apache.NMS" Version="1.8.0" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\GenCommonAssemblyInfo.cs">
-      <Link>GenCommonAssemblyInfo.cs</Link>
-    </Compile>
     <EmbeddedResource Include="Messaging\Nms\Config\spring-nms-1.2.xsd">
       <SubType />
     </EmbeddedResource>

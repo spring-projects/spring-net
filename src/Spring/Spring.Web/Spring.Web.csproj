@@ -14,10 +14,4 @@
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.Services" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\GenCommonAssemblyInfo.cs">
-      <Link>GenCommonAssemblyInfo.cs</Link>
-      <SubType>Code</SubType>
-    </Compile>
-  </ItemGroup>
 </Project>

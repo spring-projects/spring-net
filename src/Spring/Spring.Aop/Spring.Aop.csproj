@@ -10,10 +10,6 @@
     <ProjectReference Include="..\Spring.Core\Spring.Core.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\GenCommonAssemblyInfo.cs">
-      <Link>GenCommonAssemblyInfo.cs</Link>
-      <SubType>Code</SubType>
-    </Compile>
     <None Include="Aop\Config\spring-aop-1.1.xsx">
       <DependentUpon>spring-aop-1.1.xsd</DependentUpon>
     </None>

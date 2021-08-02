@@ -87,3 +87,4 @@ PrecompiledWeb
 project.lock.json
 
 BenchmarkDotNet.Artifacts*
+/artifacts

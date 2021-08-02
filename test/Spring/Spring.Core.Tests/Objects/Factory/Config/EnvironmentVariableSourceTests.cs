@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -41,8 +41,8 @@ namespace Spring.Objects.Factory.Config
             EnvironmentVariableSource vs = new EnvironmentVariableSource();
 
             // existing vars
-            Assert.AreEqual(Environment.GetEnvironmentVariable("path"), vs.ResolveVariable("PATH"));
-            Assert.AreEqual(Environment.GetEnvironmentVariable("PATH"), vs.ResolveVariable("path"));
+            Assert.AreEqual(Environment.GetEnvironmentVariable("path"), vs.ResolveVariable("path"));
+            Assert.AreEqual(Environment.GetEnvironmentVariable("PATH"), vs.ResolveVariable("PATH"));
             Assert.AreEqual(Environment.GetEnvironmentVariable("ComputerName"), vs.ResolveVariable("computerName"));
 
             // non-existant variable

@@ -43,7 +43,7 @@ namespace Spring.Core.IO
 		public void FixtureSetUp()
 		{
 			// enable (null appender) logging, just to ensure that the logging code is correct
-            LogManager.Adapter = new NoOpLoggerFactoryAdapter(); 
+            LogManager.Adapter = new NoOpLoggerFactoryAdapter();
 		}
 
 		[Test]
@@ -80,6 +80,7 @@ namespace Spring.Core.IO
 		}
 
 		[Test]
+		[Platform("Win")]
 		public void ConvertFromWithEnvironmentVariableExpansion()
 		{
             string filename = Guid.NewGuid().ToString();

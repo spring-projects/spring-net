@@ -28,7 +28,6 @@ namespace Spring.Globalization.Formatters
     /// Unit tests for DateTimeFormatter class.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    [TestFixture]
     public class DateTimeFormatterTests
     {
         [Test]
@@ -54,6 +53,7 @@ namespace Spring.Globalization.Formatters
         }
 #if !MONO
         [Test]
+        [Platform("Win")]
         public void FormatUsingDefaults()
         {
             DateTimeFormatter fmt = new DateTimeFormatter("d", "en-US");
@@ -103,6 +103,7 @@ namespace Spring.Globalization.Formatters
         }
 
         [Test]
+        [Platform("Win")]
         public void ParseUsingDefaults()
         {
             DateTimeFormatter fmt = new DateTimeFormatter("d", "en-US");

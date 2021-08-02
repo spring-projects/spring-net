@@ -12,11 +12,6 @@
     <Reference Include="System.Transactions" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\GenCommonAssemblyInfo.cs">
-      <Link>GenCommonAssemblyInfo.cs</Link>
-    </Compile>
-  </ItemGroup>
-  <ItemGroup>
     <PackageReference Include="Experimental.System.Messaging" Version="1.1.0" />
   </ItemGroup>
 </Project>

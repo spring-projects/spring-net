@@ -166,29 +166,7 @@ Documented sample applications can be found in "examples":
 VS.NET
 ------
 
-Visual Studio 2017 is required to open and build the solution. The free community version of Visual Studio should suffice.
-
-For the first time you need to execute `Build.cmd` which will generate `GenCommonAssemblyInfo.cs` file required for builds.
-
-NAnt
-----
-
-Build scripts are delivered with the download package.
-
-To build the source and run the unit tests type
-
-build test
-
-If you want to run the build to create strongly signed assemblies you can generate a key file by executing the following command (assuming that sn.exe is properly on your search path):
-
-sn -k Spring.Net.snk
-
-You need to place the Spring.NET.snk file into the root folder of the source tree. All builds are strongly named using this key file when executing the following nant command:
-
-nant -D:project.build.sign=true
-
-InnovaSys Document X! is used to generate the SDK documentation.
-
+Visual Studio 2019 is required to open and build the solution. The free community version of Visual Studio should suffice.
 
 ## 8. Support
 

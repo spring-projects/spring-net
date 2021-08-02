@@ -15,10 +15,6 @@
     <Reference Include="System.Web.Services" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\GenCommonAssemblyInfo.cs">
-      <Link>GenCommonAssemblyInfo.cs</Link>
-      <SubType>Code</SubType>
-    </Compile>
     <None Include="Spring.Services.build" />
     <EmbeddedResource Include="EnterpriseServices\EnterpriseServices.keys" />
     <EmbeddedResource Include="Remoting\Config\spring-remoting-1.1.xsd" />

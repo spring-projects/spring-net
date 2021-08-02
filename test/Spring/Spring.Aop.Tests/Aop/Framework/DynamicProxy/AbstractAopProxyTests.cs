@@ -1,5 +1,5 @@
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -532,6 +532,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         }
 
         [Test]
+        [Platform("Win")]
         public void ProxyMethodWithRefOutParametersWithDirectCall()
         {
             PublicRefOutTestObject target = new PublicRefOutTestObject();
@@ -547,6 +548,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         }
 
         [Test]
+        [Platform("Win")]
         public void ProxyMethodWithRefOutParametersWithDynamicReflection()
         {
             PublicRefOutTestObject target = new PublicRefOutTestObject();
@@ -566,6 +568,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         }
 
         [Test]
+        [Platform("Win")]
         public virtual void ProxyMethodWithRefOutParametersWithStandardReflection()
         {
             InternalRefOutTestObject target = new InternalRefOutTestObject();
@@ -660,6 +663,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         }
 
         [Test]
+        [Platform("Win")]
         public void ProxyGenericMethodWithRefOutParametersWithDirectCall()
         {
             PublicRefOutGenericTestObject target = new PublicRefOutGenericTestObject();
@@ -675,6 +679,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         }
 
         [Test]
+        [Platform("Win")]
         public void ProxyGenericMethodWithRefOutParametersWithDynamicReflection()
         {
             PublicRefOutGenericTestObject target = new PublicRefOutGenericTestObject();
@@ -694,6 +699,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         }
 
         [Test]
+        [Platform("Win")]
         public virtual void ProxyGenericMethodWithRefOutParametersWithStandardReflection()
         {
             InternalRefOutGenericTestObject target = new InternalRefOutGenericTestObject();
@@ -844,6 +850,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         }
 
         [Test(Description = "http://opensource.atlassian.com/projects/spring/browse/SPRNET-340")]
+        [Platform("Win")]
         public void MultiThreadedProxyCreation()
         {
             MultiThreadedProxyCreation(5);

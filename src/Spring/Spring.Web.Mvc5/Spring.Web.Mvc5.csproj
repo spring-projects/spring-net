@@ -18,9 +18,4 @@
     <Reference Include="System.Web.Routing" />
     <Reference Include="System.Data.DataSetExtensions" />
   </ItemGroup>
-  <ItemGroup>
-    <Compile Include="..\GenCommonAssemblyInfo.cs">
-      <Link>GenCommonAssemblyInfo.cs</Link>
-    </Compile>
-  </ItemGroup>
 </Project>

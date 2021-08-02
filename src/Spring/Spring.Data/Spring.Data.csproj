@@ -15,9 +15,6 @@
     <Reference Include="System.Web" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\GenCommonAssemblyInfo.cs">
-      <Link>GenCommonAssemblyInfo.cs</Link>
-    </Compile>
     <None Include="Data\Config\spring-database-1.3.xsx">
       <DependentUpon>spring-database-1.3.xsd</DependentUpon>
     </None>

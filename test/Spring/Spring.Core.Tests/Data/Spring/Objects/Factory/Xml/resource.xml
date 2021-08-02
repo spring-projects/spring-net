@@ -3,18 +3,18 @@
 <objects xmlns="http://www.springframework.net">
     <object id="resource1" type="Spring.Objects.ResourceTestObject, Spring.Core.Tests">
         <property name="resource">
-            <value>file:///temp/spring-test.properties</value>
+            <value>file://./temp/spring-test.properties</value>
         </property>
         <property name="inputStream">
-            <value>file:///temp/spring-test.properties</value>
+            <value>file://./temp/spring-test.properties</value>
         </property>
     </object>
     <object id="resource2" type="Spring.Objects.ResourceTestObject, Spring.Core.Tests">
         <constructor-arg index="0">
-            <value>file:///temp/spring-test.properties</value>
+            <value>file://./temp/spring-test.properties</value>
         </constructor-arg>
         <constructor-arg index="1">
-            <value>file:///temp/spring-test.properties</value>
+            <value>file://./temp/spring-test.properties</value>
         </constructor-arg>
     </object>
 </objects>

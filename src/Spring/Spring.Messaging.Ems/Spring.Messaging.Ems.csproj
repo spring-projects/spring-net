@@ -21,9 +21,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\GenCommonAssemblyInfo.cs">
-      <Link>GenCommonAssemblyInfo.cs</Link>
-    </Compile>
     <EmbeddedResource Include="Messaging\Ems\Config\spring-ems-1.3.xsd" />
   </ItemGroup>
 </Project>

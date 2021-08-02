@@ -19,13 +19,11 @@
     <PackageReference Include="NUnit3TestAdapter" Version="$(NUnitTestAdapterVersion)" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="App.config">
+    <None Include="App.config">
+      <Link>testhost.dll.config</Link>
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </None>
     <EmbeddedResource Include="Messaging\Nms\Integration\SimpleMessageListenerContainerTests.xml" />
     <EmbeddedResource Include="Messaging\Nms\Config\NmsNamespaceHandlerTests.xml" />
   </ItemGroup>
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="copy &quot;$(ProjectDir)App.config&quot; &quot;$(OutDir)testhost.dll.config&quot;" />
-  </Target>
 </Project>

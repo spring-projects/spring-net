@@ -703,7 +703,7 @@ namespace Spring.Objects.Factory.Xml
         [Test]
         public void DependenciesMaterializeThis()
         {
-            IResource resource = new ReadOnlyXmlTestResource("dependenciesMaterializeThis.xml", GetType());
+            IResource resource = new ReadOnlyXmlTestResource("dependenciesmaterializethis.xml", GetType());
             XmlObjectFactory bf = new XmlObjectFactory(resource);
             DummyBo bos = (DummyBo) bf.GetObject("boSingleton");
             DummyBo bop = (DummyBo) bf.GetObject("boPrototype");
@@ -796,7 +796,7 @@ namespace Spring.Objects.Factory.Xml
         [Test]
         public void FactoryReferenceCircle()
         {
-            IResource resource = new ReadOnlyXmlTestResource("factoryCircle.xml", GetType());
+            IResource resource = new ReadOnlyXmlTestResource("factorycircle.xml", GetType());
             XmlObjectFactory xof = new XmlObjectFactory(resource);
             TestObject tb = (TestObject) xof.GetObject("singletonFactory");
             DummyFactory db = (DummyFactory) xof.GetObject("&singletonFactory");
@@ -1062,14 +1062,14 @@ namespace Spring.Objects.Factory.Xml
         [Test]
         public void UnsatisfiedObjectDependencyCheck()
         {
-            XmlObjectFactory xof = new XmlObjectFactory(new ReadOnlyXmlTestResource("unsatisfiedObjectDependencyCheck.xml", GetType()));
+            XmlObjectFactory xof = new XmlObjectFactory(new ReadOnlyXmlTestResource("unsatisfiedobjectdependencycheck.xml", GetType()));
             Assert.Throws<UnsatisfiedDependencyException>(() => xof.GetObject("a", typeof(DependenciesObject)));
         }
 
         [Test]
         public void UnsatisfiedSimpleDependencyCheck()
         {
-            XmlObjectFactory xof = new XmlObjectFactory(new ReadOnlyXmlTestResource("unsatisfiedSimpleDependencyCheck.xml", GetType()));
+            XmlObjectFactory xof = new XmlObjectFactory(new ReadOnlyXmlTestResource("unsatisfiedsimpledependencycheck.xml", GetType()));
             Assert.Throws<UnsatisfiedDependencyException>(() => xof.GetObject("a", typeof(DependenciesObject)));
         }
 
@@ -1078,7 +1078,7 @@ namespace Spring.Objects.Factory.Xml
         {
             XmlObjectFactory xof
                 = new XmlObjectFactory(
-                    new ReadOnlyXmlTestResource("satisfiedObjectDependencyCheck.xml", GetType()));
+                    new ReadOnlyXmlTestResource("satisfiedobjectdependencycheck.xml", GetType()));
             DependenciesObject a = (DependenciesObject) xof.GetObject("a");
             Assert.IsNotNull(a.Spouse);
         }
@@ -1089,7 +1089,7 @@ namespace Spring.Objects.Factory.Xml
             XmlObjectFactory xof =
                 new XmlObjectFactory(
                     new ReadOnlyXmlTestResource(
-                        "satisfiedSimpleDependencyCheck.xml", GetType()));
+                        "satisfiedsimpledependencycheck.xml", GetType()));
             DependenciesObject a = (DependenciesObject) xof.GetObject("a");
             Assert.AreEqual(a.Age, 33);
         }
@@ -1097,7 +1097,7 @@ namespace Spring.Objects.Factory.Xml
         [Test]
         public void UnsatisfiedAllDependencyCheck()
         {
-            XmlObjectFactory xof= new XmlObjectFactory(new ReadOnlyXmlTestResource("unsatisfiedAllDependencyCheckMissingObjects.xml", GetType()));
+            XmlObjectFactory xof= new XmlObjectFactory(new ReadOnlyXmlTestResource("unsatisfiedalldependencycheckmissingobjects.xml", GetType()));
             Assert.Throws<UnsatisfiedDependencyException>(() => xof.GetObject("a", typeof(DependenciesObject)));
         }
 
@@ -1106,7 +1106,7 @@ namespace Spring.Objects.Factory.Xml
         {
             XmlObjectFactory xof
                 = new XmlObjectFactory(
-                    new ReadOnlyXmlTestResource("satisfiedAllDependencyCheck.xml", GetType()));
+                    new ReadOnlyXmlTestResource("satisfiedalldependencycheck.xml", GetType()));
             DependenciesObject a = (DependenciesObject) xof.GetObject("a");
             Assert.AreEqual(a.Age, 33);
             Assert.IsNotNull(a.Name);
@@ -1346,7 +1346,7 @@ namespace Spring.Objects.Factory.Xml
             try
             {
                 new XmlObjectFactory(
-                    new ReadOnlyXmlTestResource("classNotFound.xml", GetType()));
+                    new ReadOnlyXmlTestResource("classnotfound.xml", GetType()));
             }
             catch (ObjectDefinitionStoreException ex)
             {
@@ -1356,6 +1356,7 @@ namespace Spring.Objects.Factory.Xml
 
 #if !NETCOREAPP
         [Test]
+        [Platform("Win")]
         public void AnObjectCanBeIstantiatedWithANotFullySpecifiedAssemblyName()
         {
             IResource resource = new ReadOnlyXmlTestResource("notfullyspecified.xml", GetType());
@@ -1368,8 +1369,7 @@ namespace Spring.Objects.Factory.Xml
         [Test]
         public void ResourceAndInputStream()
         {
-            //string filename = @"C:\temp\spring-test.properties";
-            string filename = @"/temp/spring-test.properties";
+            string filename = "./temp/spring-test.properties";
             FileInfo file = new FileInfo(filename);
             bool tempDirWasCreated = false;
             try

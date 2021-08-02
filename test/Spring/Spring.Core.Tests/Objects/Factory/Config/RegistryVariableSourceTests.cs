@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,7 +32,7 @@ namespace Spring.Objects.Factory.Config
 	/// Unit tests for the RegistryVariableSource class.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
-    [TestFixture]
+    [Platform("Win")]
     public sealed class RegistryVariableSourceTests
     {
 	    private RegistryKey key;

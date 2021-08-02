@@ -17,11 +17,11 @@
     <CommonLoggingVersion>3.4.1</CommonLoggingVersion>
     <Log4NetVersion>2.0.8</Log4NetVersion>
 
-    <NUnitVersion>3.12.0</NUnitVersion>
+    <NUnitVersion>3.13.1</NUnitVersion>
     <NUnitTestAdapterVersion>3.17.0</NUnitTestAdapterVersion>
     <FakeItEasyVersion>6.2.1</FakeItEasyVersion>
     <FakeItEasyAnalyzerVersion>6.0.0</FakeItEasyAnalyzerVersion>
-    <MicrosoftTestSDKVersion>16.8.0</MicrosoftTestSDKVersion>
+    <MicrosoftTestSDKVersion>16.9.4</MicrosoftTestSDKVersion>
 
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <ComVisible>False</ComVisible>
@@ -30,6 +30,8 @@
 
     <LangVersion>latest</LangVersion>
     <TargetFullFrameworkVersion>net461</TargetFullFrameworkVersion>
+	
+	<IsPackable>false</IsPackable>
 
   </PropertyGroup>
 

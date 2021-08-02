@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -32,19 +32,19 @@ namespace Spring.Core.IO
     /// Unit tests for the FileSystemResourceTest class.
     /// </summary>
     /// <author>Rick Evans</author>
-    [TestFixture]
+    [Platform("Win")]
     public class FileSystemResourceTests : FileSystemResourceCommonTests
     {
         protected override FileSystemResource CreateResourceInstance( string resourceName )
         {
             return new FileSystemResource(resourceName);
         }
-        
+
         [Test]
         public void LeadingProtocolIsNotTreatedRelative()
         {
             FileSystemResource res = new FileSystemResource(@"file://\\server\share\samples\artfair\");
-            FileSystemResource res2 = (FileSystemResource) res.CreateRelative(@"file://./index.html");            
+            FileSystemResource res2 = (FileSystemResource) res.CreateRelative(@"file://./index.html");
             Assert.AreEqual(new Uri(Path.Combine(Environment.CurrentDirectory, "index.html")).AbsolutePath, res2.Uri.AbsolutePath);
         }
 
@@ -94,7 +94,7 @@ namespace Spring.Core.IO
                 }
             }
         }
-        
+
         [Test]
         public void Resolution_WithProtocolAndSpecialHomeCharacter()
         {
@@ -116,7 +116,7 @@ namespace Spring.Core.IO
                 "The file name with file://~/.. must have resolved to a file " +
                 "in the parent directory of the currently executing domain.");
         }
-        
+
         [Test]
         public void CreateRelativeWithParent()
         {
@@ -198,7 +198,7 @@ namespace Spring.Core.IO
                 }
             }
         }
-        
+
         [Test]
         public void RelativeLocalFileSystemResourceWhenNotRelative()
         {
@@ -259,8 +259,8 @@ namespace Spring.Core.IO
             IResource rel5 = res.CreateRelative(@"..\..\index.html");
             Assert.IsTrue(rel5 is FileSystemResource);
             Assert.AreEqual(@"file [c:\index.html]", rel5.Description);
-        }      
-        
+        }
+
         [Test]
         public void RelativeUncResourceWhenNotRelative()
         {
@@ -321,6 +321,6 @@ namespace Spring.Core.IO
             IResource rel5 = res.CreateRelative(@"..\..\index.html");
             Assert.IsTrue(rel5 is FileSystemResource);
             Assert.AreEqual(@"file [\\server\share\index.html]", rel5.Description);
-        }        
+        }
     }
 }

@@ -25,7 +25,14 @@
   <ItemGroup>
     <Compile Include="..\Spring.Core.Tests\TestAssemblySetup.cs" Link="TestAssemblySetup.cs" />
     <Content Include="App.config" CopyToOutputDirectory="PreserveNewest" />
-    <Content Include="Data\**\*.xml" CopyToOutputDirectory="PreserveNewest" />
+    <None Include="Data\**\*">
+      <Link>Data\%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="Data\**\*">
+      <Link>%(RecursiveDir)%(Filename)%(Extension)</Link>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <EmbeddedResource Include="Aop\Config\AopNamespaceParserTests.xml" />
     <EmbeddedResource Include="Data\Spring\Aop\Framework\adapter\withBPPContext.xml" />
     <EmbeddedResource Include="Data\Spring\Aop\Framework\adapter\withoutBPPContext.xml" />
