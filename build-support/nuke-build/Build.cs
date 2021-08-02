@@ -129,7 +129,7 @@ partial class Build : NukeBuild
             var packTargets = GetActiveProjects()
                 .Where(x => !x.Name.Contains(".Test"));
 
-            var version = GitRepository.Tags.SingleOrDefault(x => x.StartsWith("v"))?[1..];
+            var version = TagVersion;
             var suffix = "";
             if (string.IsNullOrWhiteSpace(version))
             {

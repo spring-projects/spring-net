@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using Nuke.Common;
 using Nuke.Common.Git;
 using Nuke.Common.IO;
@@ -12,8 +13,10 @@ public partial class Build
     [Parameter] string NuGetSource => "https://api.nuget.org/v3/index.json";
     [Parameter] [Secret] string NuGetApiKey;
 
+    string TagVersion => GitRepository.Tags.SingleOrDefault(x => x.StartsWith("v"))?[1..];
+
     Target Publish => _ => _
-        .OnlyWhenStatic(() => GitRepository.IsOnMainBranch() || GitRepository.Branch == "github-build")
+        .OnlyWhenDynamic(() => GitRepository.IsOnMainBranch() && !string.IsNullOrWhiteSpace(TagVersion))
         .DependsOn(Pack)
         .Requires(() => NuGetApiKey)
         .Executes(() =>
@@ -30,7 +33,8 @@ public partial class Build
 
     Configure<DotNetNuGetPushSettings> PushSettingsBase => _ => _
         .SetSource(NuGetSource)
-        .SetApiKey(NuGetApiKey);
+        .SetApiKey(NuGetApiKey)
+        .SetSkipDuplicate(true);
 
     Configure<DotNetNuGetPushSettings> PushSettings => _ => _;
     Configure<DotNetNuGetPushSettings> PackagePushSettings => _ => _;
