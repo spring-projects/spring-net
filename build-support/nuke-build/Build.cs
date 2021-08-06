@@ -54,7 +54,6 @@ partial class Build : NukeBuild
         .Before(Restore)
         .Executes(() =>
         {
-            ExamplesDirectory.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
             SourceDirectory.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
             TestsDirectory.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
             EnsureCleanDirectory(ArtifactsDirectory);
@@ -127,7 +126,7 @@ partial class Build : NukeBuild
         .Executes(() =>
         {
             var packTargets = GetActiveProjects()
-                .Where(x => !x.Name.Contains(".Test"));
+                .Where(x => !x.Name.EndsWith(".Tests"));
 
             var version = TagVersion;
             var suffix = "";
