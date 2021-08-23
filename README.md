@@ -1,3 +1,6 @@
+![Build status](https://img.shields.io/github/workflow/status/spring-projects/spring-net/ci?style=plastic)
+
+
 THE SPRING.NET FRAMEWORK
 ---------------------------------------------------------
 http://www.springframework.net/
@@ -80,59 +83,59 @@ The Spring Framework is released under the terms of the Apache Software License 
 
 The "bin" directory contains the following distinct dll files for use in applications. Dependencies are those other than on the .NET BCL.
 
-* __Spring.Core__ (~765 KB)
+* __Spring.Core__ (~765 KB) [![NuGet](http://img.shields.io/nuget/v/Spring.Core.svg)](https://www.nuget.org/packages/Spring.Core/) [![Downloads](https://img.shields.io/nuget/dt/Spring.Core)](#)
     * Contents: Inversion of control container. Collection classes.
     * Dependencies: Common.Logging
 
-* __Spring.Aop__ (~150 KB)
+* __Spring.Aop__ (~150 KB) [![NuGet](http://img.shields.io/nuget/v/Spring.Aop.svg)](https://www.nuget.org/packages/Spring.Aop/) [![Downloads](https://img.shields.io/nuget/dt/Spring.Aop)](#)
     * Contents: Abstract Oriented Programming Framework.
     * Dependencies: Spring.Core, Common.Logging
 
-* __Spring.Data__ (~320 KB)
+* __Spring.Data__ (~320 KB) [![NuGet](http://img.shields.io/nuget/v/Spring.Data.svg)](https://www.nuget.org/packages/Spring.Data/) [![Downloads](https://img.shields.io/nuget/dt/Spring.Data)](#)
     * Contents: Transaction and ADO.NET Framework.
     * Dependencies: Spring.Core, Spring.Aop
 
-* __Spring.Data.NHibernate5__ (~90 KB)
+* __Spring.Data.NHibernate5__ (~90 KB) [![NuGet](http://img.shields.io/nuget/v/Spring.Data.NHibernate5.svg)](https://www.nuget.org/packages/Spring.Data.NHibernate5/) [![Downloads](https://img.shields.io/nuget/dt/Spring.Data.NHibernate5)](#)
     * Contents: NHibernate 5.x integration
     * Dependencies: Spring.Core, Spring.Aop, Spring.Data, NHibernate
 
-* __Spring.Services__ (~70 KB)
+* __Spring.Services__ (~70 KB) [![NuGet](http://img.shields.io/nuget/v/Spring.Services.svg)](https://www.nuget.org/packages/Spring.Services/) [![Downloads](https://img.shields.io/nuget/dt/Spring.Services)](#)
     * Contents: Web Services, Remoting, and Enterprise Component based services.
     * Dependencies: Spring.Core, Spring.Aop
 
-* __Spring.Web__ (~165 KB)
+* __Spring.Web__ (~165 KB) [![NuGet](http://img.shields.io/nuget/v/Spring.Web.svg)](https://www.nuget.org/packages/Spring.Web/) [![Downloads](https://img.shields.io/nuget/dt/Spring.Web)](#)
     * Contents: ASP.NET based Web Application Framework.
     * Dependencies: Spring.Core, Spring.Aop
 
-* __Spring.Web.Extensions__ (~8 KB)
+* __Spring.Web.Extensions__ (~8 KB) [![NuGet](http://img.shields.io/nuget/v/Spring.Web.Extensions.svg)](https://www.nuget.org/packages/Spring.Web.Extensions/) [![Downloads](https://img.shields.io/nuget/dt/Spring.Web.Extensions)](#)
     * Contents: ASP.NET AJAX Integartion
     * Dependencies: Spring.Core, Spring.Aop, System.Web.Extensions
 
-* __Spring.Web.Mvc5__ (~8 KB)
+* __Spring.Web.Mvc5__ (~8 KB) [![NuGet](http://img.shields.io/nuget/v/Spring.Web.Mvc5.svg)](https://www.nuget.org/packages/Spring.Web.Mvc5/) [![Downloads](https://img.shields.io/nuget/dt/Spring.Web.Mvc5)](#)
     * Contents: ASP.NET MVC5 and WebAPI Integartion
     * Dependencies: Spring.Core, Spring.Web
 
-* __Spring.Testing.NUnit__ (~24 KB)
+* __Spring.Testing.NUnit__ (~24 KB) [![NuGet](http://img.shields.io/nuget/v/Spring.Testing.NUnit.svg)](https://www.nuget.org/packages/Spring.Testing.NUnit/) [![Downloads](https://img.shields.io/nuget/dt/Spring.Testing.NUnit)](#)
     * Contents: NUnit Integration
     * Dependencies: Spring.Core, Spring.Data, NUnit
 
-* __Spring.Testing.Microsoft__ (~24 KB)
+* __Spring.Testing.Microsoft__ (~24 KB) [![NuGet](http://img.shields.io/nuget/v/Spring.Testing.Microsoft.svg)](https://www.nuget.org/packages/Spring.Testing.Microsoft/) [![Downloads](https://img.shields.io/nuget/dt/Spring.Testing.Microsoft)](#)
     * Contents: MSTest Integration
     * Dependencies: Spring.Core, Spring.Data, MSTest
 
-* __Spring.Messaging__ (~65 KB)
+* __Spring.Messaging__ (~65 KB) [![NuGet](http://img.shields.io/nuget/v/Spring.Messaging.svg)](https://www.nuget.org/packages/Spring.Messaging/) [![Downloads](https://img.shields.io/nuget/dt/Spring.Messaging)](#)
     * Contents: MSMQ Integration
     * Dependencies: Spring.Core, Spring.Data, System.Messaging
 
-* __Spring.Messaging.Nms__ (~100 KB)
+* __Spring.Messaging.Nms__ (~100 KB) [![NuGet](http://img.shields.io/nuget/v/Spring.Messaging.Nms.svg)](https://www.nuget.org/packages/Spring.Messaging.Nms/) [![Downloads](https://img.shields.io/nuget/dt/Spring.Messaging.Nms)](#)
     * Contents: NMS Integration
     * Dependencies: Spring.Core, Spring.Data, Apache NMS
 
-* __Spring.Scheduling.Quartz3__ (~44 KB)
+* __Spring.Scheduling.Quartz3__ (~44 KB) [![NuGet](http://img.shields.io/nuget/v/Spring.Scheduling.Quartz3.svg)](https://www.nuget.org/packages/Spring.Scheduling.Quartz3/) [![Downloads](https://img.shields.io/nuget/dt/Spring.Scheduling.Quartz3)](#)
     * Contents: Quartz32.x Integration
     * Dependencies: Spring.Core, Spring.Data, Quartz
 
-* __Spring.Template.Velocity__ (~44 KB)
+* __Spring.Template.Velocity__ (~44 KB) [![NuGet](http://img.shields.io/nuget/v/Spring.Template.Velocity.svg)](https://www.nuget.org/packages/Spring.Template.Velocity/) [![Downloads](https://img.shields.io/nuget/dt/Spring.Template.Velocity)](#)
     * Contents: NVelocity Integration
     * Dependencies: Spring.Core, NVelocity
 
