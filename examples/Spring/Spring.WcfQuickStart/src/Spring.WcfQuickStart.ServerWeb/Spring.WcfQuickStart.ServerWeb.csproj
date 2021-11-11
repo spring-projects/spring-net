@@ -12,7 +12,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Spring.WcfQuickStart</RootNamespace>
     <AssemblyName>Spring.WcfQuickStart.ServerWeb</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <UseIISExpress>false</UseIISExpress>
     <TargetFrameworkProfile />
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -38,13 +38,13 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="Spring.Aop">
-      <HintPath>..\..\..\..\..\build\$(Configuration)\Spring.Aop\net461\Spring.Aop.dll</HintPath>
+      <HintPath>..\..\..\..\..\build\$(Configuration)\Spring.Aop\net462\Spring.Aop.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Core">
-      <HintPath>..\..\..\..\..\build\$(Configuration)\Spring.Core\net461\Spring.Core.dll</HintPath>
+      <HintPath>..\..\..\..\..\build\$(Configuration)\Spring.Core\net462\Spring.Core.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Services">
-      <HintPath>..\..\..\..\..\build\$(Configuration)\Spring.Services\net461\Spring.Services.dll</HintPath>
+      <HintPath>..\..\..\..\..\build\$(Configuration)\Spring.Services\net462\Spring.Services.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data.DataSetExtensions" />

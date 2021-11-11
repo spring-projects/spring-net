@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net461</TargetFramework>
+    <TargetFramework>$(TargetFullFrameworkVersion)</TargetFramework>
     <ContentSQLiteInteropFiles>true</ContentSQLiteInteropFiles>
     <PlatformTarget>x86</PlatformTarget>
   </PropertyGroup>

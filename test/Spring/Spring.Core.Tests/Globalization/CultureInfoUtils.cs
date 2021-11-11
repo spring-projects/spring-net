@@ -22,6 +22,8 @@ using System;
 using System.Globalization;
 using Microsoft.Win32;
 
+#pragma warning disable CA1416 // is only supported on windows
+
 namespace Spring.Globalization
 {
     /// <summary>

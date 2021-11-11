@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net461</TargetFramework>
+    <TargetFramework>$(TargetFullFrameworkVersion)</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Apache.NMS" Version="1.8.0" />

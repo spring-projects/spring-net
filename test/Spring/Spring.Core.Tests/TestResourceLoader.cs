@@ -45,6 +45,7 @@ namespace Spring
             }
         }
 
+        #pragma warning disable SYSLIB0014 // WebRequest is obsolete
         public class TestResourceWebRequest : WebRequest
         {
             private Uri requestUri;
@@ -58,8 +59,8 @@ namespace Spring
             {
                 return new TestResourceWebResponse(requestUri);
             }
-
         }
+        #pragma warning restore SYSLIB0014 // WebRequest is obsolete
 
         public class TestResourceWebRequestFactory : IWebRequestCreate
         {

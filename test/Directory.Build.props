@@ -29,7 +29,7 @@
     <PlatformTarget>AnyCPU</PlatformTarget>
 
     <LangVersion>latest</LangVersion>
-    <TargetFullFrameworkVersion>net461</TargetFullFrameworkVersion>
+    <TargetFullFrameworkVersion>net462</TargetFullFrameworkVersion>
 	
 	<IsPackable>false</IsPackable>
 

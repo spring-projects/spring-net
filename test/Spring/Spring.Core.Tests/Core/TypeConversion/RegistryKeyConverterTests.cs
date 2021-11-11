@@ -18,13 +18,11 @@
 
 #endregion
 
-#region Imports
-
 using System;
 using Microsoft.Win32;
 using NUnit.Framework;
 
-#endregion
+#pragma warning disable CA1416 // is only supported on windows
 
 namespace Spring.Core.TypeConversion
 {
