@@ -19,6 +19,7 @@
 #endregion
 
 using System;
+using System.Threading.Tasks;
 using Apache.NMS;
 
 namespace Spring.Messaging.Nms.Connections
@@ -50,7 +51,32 @@ namespace Spring.Messaging.Nms.Connections
             throw new NotImplementedException();
         }
 
+        public Task SendAsync(IMessage message)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SendAsync(IMessage message, MsgDeliveryMode deliveryMode, MsgPriority priority, TimeSpan timeToLive)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SendAsync(IDestination destination, IMessage message)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task SendAsync(IDestination destination, IMessage message, MsgDeliveryMode deliveryMode, MsgPriority priority, TimeSpan timeToLive)
+        {
+            throw new NotImplementedException();
+        }
+
         public void Close()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task CloseAsync()
         {
             throw new NotImplementedException();
         }
@@ -60,7 +86,17 @@ namespace Spring.Messaging.Nms.Connections
             throw new NotImplementedException();
         }
 
+        public Task<IMessage> CreateMessageAsync()
+        {
+            throw new NotImplementedException();
+        }
+
         public ITextMessage CreateTextMessage()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<ITextMessage> CreateTextMessageAsync()
         {
             throw new NotImplementedException();
         }
@@ -70,7 +106,17 @@ namespace Spring.Messaging.Nms.Connections
             throw new NotImplementedException();
         }
 
+        public Task<ITextMessage> CreateTextMessageAsync(string text)
+        {
+            throw new NotImplementedException();
+        }
+
         public IMapMessage CreateMapMessage()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IMapMessage> CreateMapMessageAsync()
         {
             throw new NotImplementedException();
         }
@@ -80,7 +126,17 @@ namespace Spring.Messaging.Nms.Connections
             throw new NotImplementedException();
         }
 
+        public Task<IObjectMessage> CreateObjectMessageAsync(object body)
+        {
+            throw new NotImplementedException();
+        }
+
         public IBytesMessage CreateBytesMessage()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IBytesMessage> CreateBytesMessageAsync()
         {
             throw new NotImplementedException();
         }
@@ -90,7 +146,17 @@ namespace Spring.Messaging.Nms.Connections
             throw new NotImplementedException();
         }
 
+        public Task<IBytesMessage> CreateBytesMessageAsync(byte[] body)
+        {
+            throw new NotImplementedException();
+        }
+
         public IStreamMessage CreateStreamMessage()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IStreamMessage> CreateStreamMessageAsync()
         {
             throw new NotImplementedException();
         }
@@ -136,6 +202,8 @@ namespace Spring.Messaging.Nms.Connections
             get { throw new NotImplementedException(); }
             set { throw new NotImplementedException(); }
         }
+
+        public TimeSpan DeliveryDelay { get; set; }
 
         public void Dispose()
         {

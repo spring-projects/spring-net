@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright � 2002-2011 the original author or authors.
+ * Copyright © 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -174,7 +174,7 @@ namespace Spring.Messaging.Nms.Core
             {
                 ISession sessionToUse =
                     ConnectionFactoryUtils.DoGetTransactionalSession(ConnectionFactory, transactionalResourceFactory,
-                                                                     startConnection);
+                                                                     startConnection, true).GetAsyncResult();
                 if (sessionToUse == null)
                 {
                     conToClose = CreateConnection();
@@ -1254,6 +1254,16 @@ namespace Spring.Messaging.Nms.Core
             public virtual ISession CreateSession(IConnection con)
             {
                 return EnclosingInstance.CreateSession(con);
+            }
+
+            public Task<IConnection> CreateConnectionAsync()
+            {
+                return Task.FromResult(CreateConnection());
+            }
+
+            public Task<ISession> CreateSessionAsync(IConnection con)
+            {
+                return Task.FromResult(CreateSession(con));
             }
 
             public bool SynchedLocalTransactionAllowed

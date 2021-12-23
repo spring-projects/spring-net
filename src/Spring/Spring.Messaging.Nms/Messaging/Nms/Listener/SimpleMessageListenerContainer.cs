@@ -351,27 +351,33 @@ namespace Spring.Messaging.Nms.Listener
         /// <param name="session">The session to create a MessageConsumer for.</param>
         /// <param name="destination">The destination to create a MessageConsumer for.</param>
         /// <returns>The new MessageConsumer</returns>
-        protected IMessageConsumer CreateConsumer(ISession session, IDestination destination)
+        protected virtual IMessageConsumer CreateConsumer(ISession session, IDestination destination)
         {
             // Only pass in the NoLocal flag in case of a Topic:
             // Some NMS providers, such as WebSphere MQ 6.0, throw IllegalStateException
             // in case of the NoLocal flag being specified for a Queue.
-            if (PubSubDomain)
+
+            if (PubSubDomain && destination is ITopic)
             {
-                if (SubscriptionDurable && destination is ITopic)
+                if (SubscriptionShared)
                 {
-                    return session.CreateDurableConsumer(
-                        (ITopic) destination, DurableSubscriptionName, MessageSelector, PubSubNoLocal);
+                    if (SubscriptionDurable)
+                    {
+                        return session.CreateSharedDurableConsumer((ITopic) destination, SubscriptionName, MessageSelector);
+                    }
+
+                    return session.CreateSharedConsumer((ITopic) destination, SubscriptionName, MessageSelector);
                 }
-                else
+
+                if (SubscriptionDurable)
                 {
-                    return session.CreateConsumer(destination, MessageSelector, PubSubNoLocal);
+                    return session.CreateDurableConsumer((ITopic) destination, SubscriptionName, MessageSelector, PubSubNoLocal);
                 }
+
+                return session.CreateConsumer(destination, MessageSelector, PubSubNoLocal);
             }
-            else
-            {
-                return session.CreateConsumer(destination, MessageSelector);
-            }
+
+            return session.CreateConsumer(destination, MessageSelector);
         }
     }
 
