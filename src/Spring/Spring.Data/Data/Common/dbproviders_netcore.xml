@@ -100,19 +100,19 @@
   <object id="Oracle" type="Spring.Data.Common.DbProvider, Spring.Data" singleton="false">
     <constructor-arg name="dbMetaData">
       <object type="Spring.Data.Common.DbMetadata">
-        <constructor-arg name="productName" value="Oracle, Oracle Managed provider V4.121.1.0"  />
-        <constructor-arg name="assemblyName" value="Oracle.ManagedDataAccess, Version=4.121.1.0, Culture=neutral, PublicKeyToken=89b483f429c47342"/>
-        <constructor-arg name="connectionType" value="Oracle.ManagedDataAccess.Client.OracleConnection, Oracle.ManagedDataAccess, Version=4.121.1.0, Culture=neutral, PublicKeyToken=89b483f429c47342"/>
-        <constructor-arg name="commandType" value="Oracle.ManagedDataAccess.Client.OracleCommand, Oracle.ManagedDataAccess, Version=4.121.1.0, Culture=neutral, PublicKeyToken=89b483f429c47342"/>
-        <constructor-arg name="parameterType" value="Oracle.ManagedDataAccess.Client.OracleParameter, Oracle.ManagedDataAccess, Version=4.121.1.0, Culture=neutral, PublicKeyToken=89b483f429c47342"/>
-        <constructor-arg name="dataAdapterType" value="Oracle.ManagedDataAccess.Client.OracleDataAdapter, Oracle.ManagedDataAccess, Version=4.121.1.0, Culture=neutral, PublicKeyToken=89b483f429c47342"/>
-        <constructor-arg name="commandBuilderType" value="Oracle.ManagedDataAccess.Client.OracleCommandBuilder, Oracle.ManagedDataAccess, Version=4.121.1.0, Culture=neutral, PublicKeyToken=89b483f429c47342"/>
+        <constructor-arg name="productName" value="Oracle, Oracle Managed provider"  />
+        <constructor-arg name="assemblyName" value="Oracle.ManagedDataAccess"/>
+        <constructor-arg name="connectionType" value="Oracle.ManagedDataAccess.Client.OracleConnection, Oracle.ManagedDataAccess"/>
+        <constructor-arg name="commandType" value="Oracle.ManagedDataAccess.Client.OracleCommand, Oracle.ManagedDataAccess"/>
+        <constructor-arg name="parameterType" value="Oracle.ManagedDataAccess.Client.OracleParameter, Oracle.ManagedDataAccess"/>
+        <constructor-arg name="dataAdapterType" value="Oracle.ManagedDataAccess.Client.OracleDataAdapter, Oracle.ManagedDataAccess"/>
+        <constructor-arg name="commandBuilderType" value="Oracle.ManagedDataAccess.Client.OracleCommandBuilder, Oracle.ManagedDataAccess"/>
         <constructor-arg name="commandBuilderDeriveParametersMethod" value="DeriveParameters"/>
-        <constructor-arg name="parameterDbType" value="Oracle.ManagedDataAccess.Client.OracleDbType, Oracle.ManagedDataAccess, Version=4.121.1.0, Culture=neutral, PublicKeyToken=89b483f429c47342"/>
+        <constructor-arg name="parameterDbType" value="Oracle.ManagedDataAccess.Client.OracleDbType, Oracle.ManagedDataAccess"/>
         <constructor-arg name="parameterDbTypeProperty" value="OracleDbType"/>
         <constructor-arg name="parameterIsNullableProperty" value="IsNullable"/>
         <constructor-arg name="parameterNamePrefix" value=":"/>
-        <constructor-arg name="exceptionType" value="Oracle.ManagedDataAccess.Client.OracleException, Oracle.ManagedDataAccess, Version=4.121.1.0, Culture=neutral, PublicKeyToken=89b483f429c47342"/>
+        <constructor-arg name="exceptionType" value="Oracle.ManagedDataAccess.Client.OracleException, Oracle.ManagedDataAccess"/>
         <constructor-arg name="useParameterNamePrefixInParameterCollection" value="false"/>
         <constructor-arg name="useParameterPrefixInSql" value="true"/>
         <constructor-arg name="bindByName" value="true"/>
