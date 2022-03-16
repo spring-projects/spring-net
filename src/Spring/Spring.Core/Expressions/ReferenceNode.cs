@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,6 +20,7 @@
 
 using System;
 using System.Runtime.Serialization;
+
 using Spring.Expressions;
 using Spring.Objects.Factory;
 
@@ -35,7 +36,7 @@ namespace Spring.Context.Support
         /// <summary>
         /// Create a new instance
         /// </summary>
-        public ReferenceNode():base()
+        public ReferenceNode()
         {
         }
 
@@ -46,7 +47,8 @@ namespace Spring.Context.Support
             : base(info, context)
         {
         }
-        
+
+        /// <inheritdoc />
         /// <summary>
         /// Returns a value for the integer literal node.
         /// </summary>
@@ -55,41 +57,46 @@ namespace Spring.Context.Support
         /// <returns>Node's value.</returns>
         protected override object Get(object context, EvaluationContext evalContext)
         {
-            IApplicationContext ctx;
-            string objectName;
+            var objectName = ResolveNames(out var contextName);
 
-            if (this.getNumberOfChildren() == 2)
+            var sourceContext = SelectSourceContext(evalContext, contextName);
+
+            return sourceContext.GetObject(objectName);
+        }
+
+        private string ResolveNames(out string contextName)
+        {
+            var hasContextDefined = getNumberOfChildren() == 2;
+
+            if (hasContextDefined)
             {
-                string contextName = this.getFirstChild().getText();
-                objectName = this.getFirstChild().getNextSibling().getText();
-                ctx = ContextRegistry.GetContext(contextName);
-                if (ctx == null)
-                {
-                    throw new ArgumentException(string.Format("Context '{0}' is not registered.", contextName));
-                }
-            }
-            else
-            {
-                objectName = this.getFirstChild().getText();
-                IObjectFactory currentObjectFactory = (evalContext.Variables != null)
-                                                          ? (IObjectFactory)evalContext.Variables[Expression.ReservedVariableNames.CurrentObjectFactory]
-                                                          : null;
-
-                // this is a local reference within an object factory
-                if (currentObjectFactory != null)
-                {
-                    return currentObjectFactory.GetObject(objectName);
-                }
-
-                // else lookup in default context
-                ctx = ContextRegistry.GetContext();
-                if (ctx == null)
-                {
-                    throw new ArgumentException("No context registered.");
-                }
+                contextName = getFirstChild().getText();
+                return getFirstChild().getNextSibling().getText();
             }
 
-            return ctx.GetObject(objectName);
+            contextName = null;
+            return getFirstChild().getText();
+        }
+
+        private static IObjectFactory SelectSourceContext(EvaluationContext evalContext, string contextName)
+        {
+            if (contextName != null)
+                return ContextRegistry.GetContext(contextName) ?? throw new ArgumentException($"Context '{contextName}' is not registered.");
+
+            if (TryGetFromCurrentContext(evalContext, out var currentObjectFactory))
+                return (IObjectFactory) currentObjectFactory;
+
+            return ContextRegistry.GetContext() ?? throw new ArgumentException("No context registered.");
+        }
+
+        private static bool TryGetFromCurrentContext(EvaluationContext evalContext, out object currentObjectFactory)
+        {
+            currentObjectFactory = null;
+
+            if (evalContext.Variables is null)
+                return false;
+
+            return evalContext.Variables.TryGetValue(Expression.ReservedVariableNames.CurrentObjectFactory, out currentObjectFactory);
         }
     }
 }
