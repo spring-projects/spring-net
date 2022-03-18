@@ -13,7 +13,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Spring.Mvc5QuickStart</RootNamespace>
     <AssemblyName>Spring.Mvc5QuickStart</AssemblyName>
-    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <MvcBuildViews>false</MvcBuildViews>
     <UseIISExpress>false</UseIISExpress>
     <TargetFrameworkProfile />
@@ -56,13 +56,13 @@
   <ItemGroup>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Spring.Core">
-      <HintPath>..\..\..\..\build\$(Configuration)\Spring.Core\net461\Spring.Core.dll</HintPath>
+      <HintPath>..\..\..\..\build\$(Configuration)\Spring.Core\net462\Spring.Core.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Web">
-      <HintPath>..\..\..\..\build\$(Configuration)\Spring.Web\net461\Spring.Web.dll</HintPath>
+      <HintPath>..\..\..\..\build\$(Configuration)\Spring.Web\net462\Spring.Web.dll</HintPath>
     </Reference>
     <Reference Include="Spring.Web.Mvc5">
-      <HintPath>..\..\..\..\build\$(Configuration)\Spring.Web.Mvc5\net461\Spring.Web.Mvc5.dll</HintPath>
+      <HintPath>..\..\..\..\build\$(Configuration)\Spring.Web.Mvc5\net462\Spring.Web.Mvc5.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />

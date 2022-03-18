@@ -1,6 +1,6 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFramework>net461</TargetFramework>
+    <TargetFramework>$(TargetFullFrameworkVersion)</TargetFramework>
     <RootNamespace>Primes</RootNamespace>
   </PropertyGroup>
   <ItemGroup>

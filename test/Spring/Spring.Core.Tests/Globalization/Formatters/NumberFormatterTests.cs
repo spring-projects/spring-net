@@ -63,10 +63,17 @@ namespace Spring.Globalization.Formatters
             Assert.AreEqual("-1,234.56", fmt.Format(-1234.56));
 
             fmt = new NumberFormatter("sr-SP-Latn");
+#if NETFRAMEWORK
             Assert.AreEqual("1.234,00", fmt.Format(1234));
             Assert.AreEqual("1.234,56", fmt.Format(1234.56));
             Assert.AreEqual("-1.234,00", fmt.Format(-1234));
             Assert.AreEqual("-1.234,56", fmt.Format(-1234.56));
+#else
+            Assert.AreEqual("1.234,000", fmt.Format(1234));
+            Assert.AreEqual("1.234,560", fmt.Format(1234.56));
+            Assert.AreEqual("-1.234,000", fmt.Format(-1234));
+            Assert.AreEqual("-1.234,560", fmt.Format(-1234.56));
+#endif
         }
 
         [Test]
@@ -101,10 +108,18 @@ namespace Spring.Globalization.Formatters
             fmt = new NumberFormatter("sr-SP-Cyrl");
             fmt.GroupSizes = new int[] {1, 2};
             fmt.GroupSeparator = "'";
+            
+#if NETFRAMEWORK
             Assert.AreEqual("1'23'4,00", fmt.Format(1234));
             Assert.AreEqual("1'23'4,56", fmt.Format(1234.56));
             Assert.AreEqual("-1'23'4,00", fmt.Format(-1234));
             Assert.AreEqual("-1'23'4,56", fmt.Format(-1234.56));
+#else
+            Assert.AreEqual("1'23'4,000", fmt.Format(1234));
+            Assert.AreEqual("1'23'4,560", fmt.Format(1234.56));
+            Assert.AreEqual("-1'23'4,000", fmt.Format(-1234));
+            Assert.AreEqual("-1'23'4,560", fmt.Format(-1234.56));
+#endif
         }
 
         [Test]

@@ -67,7 +67,7 @@ namespace Spring.Globalization
             Assert.AreEqual("Croatia", tesla.PlaceOfBirth.Country);
             Assert.AreEqual("Smiljan", tesla.PlaceOfBirth.City);
         }
-#if !MONO
+
         [Test]
         public void TestSerbianLatin()
         {
@@ -89,7 +89,7 @@ namespace Spring.Globalization
             Assert.AreEqual("Хрватска", tesla.PlaceOfBirth.Country);
             Assert.AreEqual("Смиљан", tesla.PlaceOfBirth.City);
         }
-#endif
+
         [Test]
         public void NullReferenceHandling()
         {

@@ -18,10 +18,6 @@
 
 #endregion
 
-#if !MONO
-
-#region Imports
-
 using System;
 using System.Collections;
 using System.Diagnostics;
@@ -32,8 +28,6 @@ using System.Reflection.Emit;
 
 using Spring.Objects.Factory;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.EnterpriseServices
 {
@@ -613,5 +607,3 @@ namespace Spring.EnterpriseServices
         #endregion
     }
 }
-
-#endif // (!MONO)

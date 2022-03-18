@@ -42,8 +42,8 @@
     <DebugSymbols>True</DebugSymbols>
     <PlatformTarget>AnyCPU</PlatformTarget>
 
-    <LangVersion>9.0</LangVersion>
-    <TargetFullFrameworkVersion>net461</TargetFullFrameworkVersion>
+    <LangVersion>latest</LangVersion>
+    <TargetFullFrameworkVersion>net462</TargetFullFrameworkVersion>
 
   </PropertyGroup>
   

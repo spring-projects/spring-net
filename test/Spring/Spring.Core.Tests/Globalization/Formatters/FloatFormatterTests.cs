@@ -28,7 +28,6 @@ namespace Spring.Globalization.Formatters
 	/// Unit tests for FloatFormatter class.
 	/// </summary>
     /// <author>Aleksandar Seovic</author>
-    [TestFixture]
     public class FloatFormatterTests
 	{
         [Test]
@@ -62,8 +61,13 @@ namespace Spring.Globalization.Formatters
             Assert.AreEqual("-1234.00", fmt.Format(-1234));
 
             fmt = new FloatFormatter(FloatFormatter.DefaultFormat, "sr-SP-Latn");
+#if NETFRAMEWORK 
             Assert.AreEqual("1234,00", fmt.Format(1234));
             Assert.AreEqual("-1234,00", fmt.Format(-1234));
+#else
+            Assert.AreEqual("1234,000", fmt.Format(1234));
+            Assert.AreEqual("-1234,000", fmt.Format(-1234));
+#endif
         }
 
         [Test]

@@ -20,7 +20,6 @@
 
 namespace Spring.EnterpriseServices
 {
-#if !MONO
     using System;
     using System.Configuration;
     using System.Reflection;
@@ -152,5 +151,4 @@ namespace Spring.EnterpriseServices
             return result;
         }
     }
-#endif
 }
