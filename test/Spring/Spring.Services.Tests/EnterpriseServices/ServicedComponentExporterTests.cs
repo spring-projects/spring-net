@@ -18,8 +18,6 @@
 
 #endregion
 
-#if !MONO
-
 #region Imports
 
 using System;
@@ -212,5 +210,3 @@ namespace Spring.EnterpriseServices
         #endregion
     }
 }
-
-#endif // !MONO

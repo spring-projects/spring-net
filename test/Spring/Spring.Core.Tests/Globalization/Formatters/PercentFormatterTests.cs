@@ -61,8 +61,13 @@ namespace Spring.Globalization.Formatters
             Assert.AreEqual("25.34%", fmt.Format(0.2534).Replace(" ", ""));
 
             fmt = new PercentFormatter("sr-SP-Latn");
+#if NETFRAMEWORK
             Assert.AreEqual("25,00%", fmt.Format(0.25));
             Assert.AreEqual("25,34%", fmt.Format(0.2534));
+#else
+            Assert.AreEqual("25,000%", fmt.Format(0.25));
+            Assert.AreEqual("25,340%", fmt.Format(0.2534));
+#endif
         }
 
         [Test]

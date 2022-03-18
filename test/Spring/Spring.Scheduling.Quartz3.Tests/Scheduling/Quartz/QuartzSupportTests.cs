@@ -601,7 +601,7 @@ namespace Spring.Scheduling.Quartz
             factoryObject.AfterPropertiesSet();
             await factoryObject.Start();
 
-            DummyRunnable.runEvent.WaitOne(1000);
+            DummyRunnable.runEvent.WaitOne(TimeSpan.FromSeconds(5));
             Assert.IsTrue(DummyRunnable.count > 0);
 
             factoryObject.Dispose();
@@ -634,7 +634,7 @@ namespace Spring.Scheduling.Quartz
             factoryObject.AfterPropertiesSet();
             await factoryObject.Start();
 
-            Thread.Sleep(500);
+            await Task.Delay(TimeSpan.FromSeconds(1));
             Assert.AreEqual(10, DummyJobObject.param);
             Assert.IsTrue(DummyJobObject.count > 0);
 
@@ -670,7 +670,7 @@ namespace Spring.Scheduling.Quartz
             factoryObject.AfterPropertiesSet();
             await factoryObject.Start();
 
-            Thread.Sleep(500);
+            await Task.Delay(TimeSpan.FromSeconds(1));
             Assert.AreEqual(10, DummyJob.param);
             Assert.IsTrue(DummyJob.count > 0);
 
@@ -680,7 +680,7 @@ namespace Spring.Scheduling.Quartz
         /// <summary>
         /// </summary>
         [Test]
-        public void TestSchedulerWithSpringObjectJobFactoryAndParamMismatchNotIgnored()
+        public async Task TestSchedulerWithSpringObjectJobFactoryAndParamMismatchNotIgnored()
         {
             DummyJob.param = 0;
             DummyJob.count = 0;
@@ -707,7 +707,7 @@ namespace Spring.Scheduling.Quartz
             bean.JobDetails = new IJobDetail[] {jobDetail};
             bean.AfterPropertiesSet();
 
-            Thread.Sleep(500);
+            await Task.Delay(TimeSpan.FromSeconds(1));
             Assert.AreEqual(0, DummyJob.param);
             Assert.IsTrue(DummyJob.count == 0);
 

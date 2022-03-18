@@ -18,11 +18,7 @@
 
 #endregion
 
-using System;
 using System.Globalization;
-using Microsoft.Win32;
-
-#pragma warning disable CA1416 // is only supported on windows
 
 namespace Spring.Globalization
 {
@@ -64,61 +60,8 @@ namespace Spring.Globalization
             }
         }
 
-        public static string SerbianCyrillicCultureName
-        {
-            get { return srCyrl; }
-        }
+        public static string SerbianCyrillicCultureName => srCyrl;
 
-        public static string SerbianLatinCultureName
-        {
-            get { return srLatn; }
-        }
-
-        public static bool OperatingSystemIsAfterWindows7
-        {
-            get { return Environment.OSVersion.Version.Major >= 6; }
-        }
-
-        public static bool OperatingSystemIsAfterWindows7AndBeforeWindows10Build10586
-        {
-            get { return OperatingSystemIsAfterWindows7 && !OperatingSystemIsAtLeastWindows10Build10586; }
-        }
-
-        public static bool OperatingSystemIsAtLeastWindows10Build10586
-        {
-            get
-            {
-                try
-                {
-                    var registryBuildNumberString = Registry.GetValue("HKEY_LOCAL_MACHINE\\SOFTWARE\\Microsoft\\Windows NT\\CurrentVersion", "CurrentBuildNumber", string.Empty) as string;
-
-                    //if null or empty, we coudn't find the value or it couldn't be cast to a string
-                    if (!string.IsNullOrEmpty(registryBuildNumberString))
-                    {
-                        int buildNumber;
-
-                        //if we can convert the value to an int...
-                        if (int.TryParse(registryBuildNumberString, out buildNumber))
-                        {
-                            //do the comparison
-                            return buildNumber >= 10586;
-                        }
-                    }
-                }
-                catch (Exception)
-                {
-                    //if anythign at all goes wrong, presume we're not on Windows 10 Build 10586 or later
-                    return false;
-                }
-
-                //if we get this far, we can't tell WTF is going on, so just return FALSE
-                return false;
-            }
-        }
-
-        public static bool ClrIsVersion4OrLater
-        {
-            get { return Environment.Version.Major >= 4; }
-        }
+        public static string SerbianLatinCultureName => srLatn;
     }
 }
