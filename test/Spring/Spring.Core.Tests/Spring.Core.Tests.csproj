@@ -19,7 +19,7 @@
     <PackageReference Include="FakeItEasy" Version="$(FakeItEasyVersion)" />
     <PackageReference Include="FakeItEasy.Analyzer.CSharp" Version="$(FakeItEasyAnalyzerVersion)" PrivateAssets="All" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftTestSDKVersion)" />
-    <PackageReference Include="Newtonsoft.Json" Version="12.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="NUnit" Version="$(NUnitVersion)" />
     <PackageReference Include="NUnit3TestAdapter" Version="$(NUnitTestAdapterVersion)" />
     <PackageReference Include="System.Resources.Extensions" Version="5.0.0" />
