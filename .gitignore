@@ -88,3 +88,4 @@ project.lock.json
 
 BenchmarkDotNet.Artifacts*
 /artifacts
+/.nuke/temp
