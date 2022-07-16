@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using Spring.Core;
 using System.Reflection;
 
@@ -170,8 +169,8 @@ namespace Spring.Objects.Factory.Config
         /// <summary>
         /// Gets the Attributes assigned to Field, Property or Paramater
         /// </summary>
-        public Attribute[] Attributes 
-        { 
+        public Attribute[] Attributes
+        {
             get
             {
                 if (methodParameter != null)

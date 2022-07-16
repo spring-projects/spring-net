@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Collections;
 using System.Reflection;
 using Spring.Util;
@@ -127,7 +126,7 @@ namespace Spring.Reflection.Dynamic
                     state = (SafeMethodState)stateCache[methodInfo];
                     if (state == null)
                     {
-                        state = newState; 
+                        state = newState;
                         stateCache[methodInfo] = state;
                     }
                 }

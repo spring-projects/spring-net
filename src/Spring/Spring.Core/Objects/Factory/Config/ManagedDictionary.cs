@@ -17,12 +17,27 @@
  */
 
 #endregion
+#region License
 
-#region Imports
+/*
+ * Copyright � 2002-2011 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 
-using System;
+#endregion
+
 using System.Collections;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
 
@@ -30,8 +45,6 @@ using Spring.Core;
 using Spring.Core.TypeConversion;
 using Spring.Core.TypeResolution;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Objects.Factory.Config
 {
@@ -63,7 +76,7 @@ namespace Spring.Objects.Factory.Config
 	    }
 
 	    /// <summary>
-        /// Gets or sets the unresolved name for the <see cref="System.Type"/> 
+        /// Gets or sets the unresolved name for the <see cref="System.Type"/>
         /// of the keys of this managed dictionary.
         /// </summary>
         /// <value>The unresolved name for the type of the keys of this managed dictionary.</value>
@@ -74,7 +87,7 @@ namespace Spring.Objects.Factory.Config
         }
 
         /// <summary>
-        /// Gets or sets the unresolved name for the <see cref="System.Type"/> 
+        /// Gets or sets the unresolved name for the <see cref="System.Type"/>
         /// of the values of this managed dictionary.
         /// </summary>
         /// <value>The unresolved name for the type of the values of this managed dictionary.</value>
@@ -83,7 +96,7 @@ namespace Spring.Objects.Factory.Config
             get { return this.valueTypeName; }
             set { this.valueTypeName = value; }
         }
-	    
+
 		/// <summary>
 		/// Resolves this managed collection at runtime.
 		/// </summary>
@@ -127,7 +140,7 @@ namespace Spring.Objects.Factory.Config
             else
             {
                 Type type = typeof(Dictionary<,>);
-                Type[] genericArgs = new Type[2] { 
+                Type[] genericArgs = new Type[2] {
                     (keyType == null) ? typeof(object) : keyType,
                     (valueType == null) ? typeof(object) : valueType };
                 type = type.MakeGenericType(genericArgs);
@@ -152,7 +165,7 @@ namespace Spring.Objects.Factory.Config
                         throw new TypeMismatchException(
                             String.Format(
                                     "Unable to convert managed dictionary key '{0}' from [{1}] into [{2}] during initialization"
-                                    + " of property '{3}' for object '{4}'. Do you have an appropriate type converter registered?", 
+                                    + " of property '{3}' for object '{4}'. Do you have an appropriate type converter registered?",
                                     resolvedKey, resolvedKey.GetType(), keyType, propertyName, objectName));
                     }
                 }
@@ -168,7 +181,7 @@ namespace Spring.Objects.Factory.Config
                         throw new TypeMismatchException(
                            String.Format(
                                    "Unable to convert managed dictionary value '{0}' from [{1}] into [{2}] during initialization"
-                                   + " of property '{3}' for object '{4}'. Do you have an appropriate type converter registered?", 
+                                   + " of property '{3}' for object '{4}'. Do you have an appropriate type converter registered?",
                                    resolvedValue, resolvedValue.GetType(), valueType, propertyName, objectName));
                     }
                 }
@@ -194,7 +207,7 @@ namespace Spring.Objects.Factory.Config
 	    /// <summary>
 	    /// Merges the current value set with that of the supplied object.
 	    /// </summary>
-	    /// <remarks>The supplied object is considered the parent, and values in the 
+	    /// <remarks>The supplied object is considered the parent, and values in the
 	    /// callee's value set must override those of the supplied object.
 	    /// </remarks>
 	    /// <param name="parent">The parent object to merge with</param>
@@ -203,7 +216,7 @@ namespace Spring.Objects.Factory.Config
 	    /// <exception cref="InvalidOperationException">If merging is not enabled for this instance,
 	    /// (i.e. <code>MergeEnabled</code> equals <code>false</code>.</exception>
 	    public object Merge(object parent)
-	    {       
+	    {
 	    	if (!this.mergeEnabled)
             	{
             		throw new InvalidOperationException(

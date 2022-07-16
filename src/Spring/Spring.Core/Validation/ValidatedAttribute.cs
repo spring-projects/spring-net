@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Spring.Validation
+﻿namespace Spring.Validation
 {
     /// <summary>
     /// Allows developers to specify which validator should be used
@@ -25,7 +23,7 @@ namespace Spring.Validation
         {
             this.validatorName = validatorName;
         }
-        
+
         /// <summary>
         /// Gets the name of the validator to use.
         /// </summary>

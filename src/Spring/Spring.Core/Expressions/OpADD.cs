@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Collections;
 using System.Runtime.Serialization;
 using Spring.Collections;
@@ -47,7 +46,7 @@ namespace Spring.Expressions
             : base(info, context)
         {
         }
-        
+
         /// <summary>
         /// Returns a value for the arithmetic addition operator node.
         /// </summary>
@@ -91,7 +90,7 @@ namespace Spring.Expressions
                 ISet leftset = new HybridSet(((IDictionary) left).Keys);
                 ISet rightset = new HybridSet(((IDictionary) right).Keys);
                 ISet unionset = leftset.Union(rightset);
-                
+
                 IDictionary result = new Hashtable(unionset.Count);
                 foreach(object key in unionset)
                 {

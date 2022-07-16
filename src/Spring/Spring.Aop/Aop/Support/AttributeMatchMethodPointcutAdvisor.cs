@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using System.Runtime.Serialization;
 
 using AopAlliance.Aop;
@@ -30,7 +29,7 @@ using Spring.Core;
 
 namespace Spring.Aop.Support
 {
-	/// <summary> 
+	/// <summary>
 	/// Convenient class for attribute-match method pointcuts that hold an Interceptor,
 	/// making them an Advisor.
 	/// </summary>
@@ -87,7 +86,7 @@ namespace Spring.Aop.Support
 	        Order = info.GetInt32("Order");
 	        Advice = (IAdvice) info.GetValue("Advice", typeof(IAdvice));
 	    }
-        
+
 	    /// <inheritdoc />
 	    public override void GetObjectData(SerializationInfo info, StreamingContext context)
 	    {

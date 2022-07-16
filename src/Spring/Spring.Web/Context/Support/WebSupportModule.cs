@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Globalization;
 using System.Reflection;
 using System.Security;
@@ -138,7 +137,7 @@ namespace Spring.Context.Support
                 }
                 s_isInitialized = true;
 
-                // signal, that VirtualEnvironment is ready to accept 
+                // signal, that VirtualEnvironment is ready to accept
                 // handler registrations for EndRequest and EndSession events
                 VirtualEnvironment.SetInitialized();
             }
@@ -155,7 +154,7 @@ namespace Spring.Context.Support
                 hideRequestResponse = (bool)ContextHideRequestResponse.GetValue(app.Context);
                 ContextHideRequestResponse.SetValue(app.Context, false);
             }
-            
+
             try
             {
                 // ensure context is instantiated

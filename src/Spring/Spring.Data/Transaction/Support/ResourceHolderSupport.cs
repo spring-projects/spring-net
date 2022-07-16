@@ -18,8 +18,6 @@
 
 #endregion
 
-using System;
-
 namespace Spring.Transaction.Support
 {
 	/// <summary>
@@ -39,7 +37,7 @@ namespace Spring.Transaction.Support
 		private bool rollbackOnly = false;
 		private DateTime deadline;
         private int referenceCount = 0;
-		
+
 		/// <summary>
 		/// Mark the resource as synchronized with a transaction.
 		/// </summary>
@@ -72,7 +70,7 @@ namespace Spring.Transaction.Support
 		/// </summary>
 		public bool HasTimeout
 		{
-			get { return ( deadline != DateTime.MinValue ); }	
+			get { return ( deadline != DateTime.MinValue ); }
 		}
 
 		/// <summary>
@@ -193,6 +191,6 @@ namespace Spring.Transaction.Support
                 return (referenceCount > 0);
             }
         }
-       
+
 	}
 }

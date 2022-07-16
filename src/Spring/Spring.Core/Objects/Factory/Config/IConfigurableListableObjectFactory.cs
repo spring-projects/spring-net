@@ -18,8 +18,6 @@
 
 #endregion
 
-using System;
-
 namespace Spring.Objects.Factory.Config
 {
 	/// <summary>
@@ -100,7 +98,7 @@ namespace Spring.Objects.Factory.Config
         /// If the object definition is invalid.
         /// </exception>
         void RegisterObjectDefinition(string name, IObjectDefinition definition);
-		
+
         /// <summary>
         /// Injects dependencies into the supplied <paramref name="target"/> instance
         /// using the supplied <paramref name="definition"/>.
@@ -148,7 +146,7 @@ namespace Spring.Objects.Factory.Config
         /// ApplicationContext instance that the object is living in.
         /// <para>
         /// Note there are no such default types registered in a plain IObjectFactory,
-        /// not even for the IObjectFactory interface itself. 
+        /// not even for the IObjectFactory interface itself.
         /// </para>
         /// </remarks>
         /// <param name="dependencyType">Type of the dependency to register.
@@ -157,7 +155,7 @@ namespace Spring.Objects.Factory.Config
         /// as long as the given value actually implements the extended interface.
         /// </param>
         /// <param name="autowiredValue">The autowired value.  This may also be an
-        /// implementation o the <see cref="IObjectFactory"/> interface, 
+        /// implementation o the <see cref="IObjectFactory"/> interface,
         ///  which allows for lazy resolution of the actual target value.</param>
         void RegisterResolvableDependency(Type dependencyType, object autowiredValue);
 
@@ -173,8 +171,8 @@ namespace Spring.Objects.Factory.Config
         /// </returns>
         /// <exception cref="NoSuchObjectDefinitionException">if there is no object with the given name.</exception>
 	    bool IsAutowireCandidate(string objectName, DependencyDescriptor descriptor);
-	    
-    
+
+
 	    /// <summary>
 	    /// Clear the merged object definition cache, removing entries for objects
 	    /// which are not considered eligible for full metadata caching yet.

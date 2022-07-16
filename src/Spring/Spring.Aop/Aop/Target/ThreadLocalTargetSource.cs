@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,6 @@
 #endregion
 
 #region Imports
-
-using System;
-using System.Threading;
 
 using AopAlliance.Intercept;
 
@@ -49,7 +46,7 @@ namespace Spring.Aop.Target
 	/// AOP proxy.
 	/// </p>
 	/// <p>
-	/// This class act both as an introduction and as an interceptor, so it 
+	/// This class act both as an introduction and as an interceptor, so it
 	/// should be added twice, once as an introduction and once as an
 	/// interceptor.
 	/// </p>

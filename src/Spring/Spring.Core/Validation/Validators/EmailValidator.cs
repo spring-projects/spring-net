@@ -18,13 +18,9 @@
 
 #endregion
 
-#region Imports
-
 using System.Text.RegularExpressions;
 using Spring.Expressions;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Validation.Validators
 {
@@ -33,15 +29,15 @@ namespace Spring.Validation.Validators
     /// </summary>
     /// <remarks>
     /// <p/>
-    /// This implementation is not guaranteed to catch all possible errors in an 
-    /// email address. For example, an address like nobody@noplace.nowhere will 
+    /// This implementation is not guaranteed to catch all possible errors in an
+    /// email address. For example, an address like nobody@noplace.nowhere will
     /// pass validator, even though there is no TLD "nowhere".
     /// </remarks>
-    /// <author>Goran Milosavljevic</author>    
+    /// <author>Goran Milosavljevic</author>
     public class EmailValidator : BaseSimpleValidator
     {
         #region Constructors
-        
+
         /// <summary>
         /// Creates a new instance of the <b>EmailValidator</b> class.
         /// </summary>
@@ -85,7 +81,7 @@ namespace Spring.Validation.Validators
         /// </remarks>
         /// <param name="objectToValidate">The object to validate.</param>
         /// <returns>
-        /// <see lang="true"/> if the supplied <paramref name="objectToValidate"/> is valid 
+        /// <see lang="true"/> if the supplied <paramref name="objectToValidate"/> is valid
         /// e-mail address.
         /// </returns>
         protected override bool Validate(object objectToValidate)
@@ -108,7 +104,7 @@ namespace Spring.Validation.Validators
         /// Regular expression used for validation of object passed to this <see cref="EmailValidator"/>.
         /// </summary>
         private static string emailCheck = @"^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$";
-        
+
         #endregion
     }
 }

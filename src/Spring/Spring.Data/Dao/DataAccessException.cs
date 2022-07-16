@@ -18,15 +18,10 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Runtime.Serialization;
 
-#endregion
-
 namespace Spring.Dao
-{	
+{
 	/// <summary>
 	/// Root of the hierarchy of data access exceptions
 	/// </summary>

@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using System.Reflection;
 using Spring.Util;
 
@@ -28,7 +27,7 @@ using Spring.Util;
 
 namespace Spring.Aop.Support
 {
-	/// <summary> 
+	/// <summary>
 	/// Pointcut object for simple method name matches, useful as an alternative to pure
 	/// regular expression based patterns.
 	/// </summary>

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-using System;
 using NHibernate;
 using Spring.Context;
 using Spring.Context.Support;

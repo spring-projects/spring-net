@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using System.ComponentModel;
 using System.Security.Permissions;
 using System.Web;
@@ -50,7 +49,7 @@ namespace Spring.Web.UI.Controls
     AspNetHostingPermission(SecurityAction.LinkDemand, Level = AspNetHostingPermissionLevel.Minimal)]
     public class Panel : System.Web.UI.WebControls.Panel, ISupportsWebDependencyInjection
     {
-        // this helper class intercepts the first call to the child controls 
+        // this helper class intercepts the first call to the child controls
         // collection from within InitRecursive().
         // InitRecursive() is called right after the control has been added to it's parent's children.
         private class InitRecursiveInterceptingControlsCollection : ControlCollection
@@ -65,7 +64,7 @@ namespace Spring.Web.UI.Controls
             {
                 get
                 {
-                    // the following check relies on the fact, that ControlCollection is set readonly 
+                    // the following check relies on the fact, that ControlCollection is set readonly
                     // right before InitRecursive() is called on each child control
                     if (!_passedInitRecursiveCheck
                         && this.IsReadOnly)
@@ -119,7 +118,7 @@ namespace Spring.Web.UI.Controls
         /// </summary>
         protected override void OnPreRender( EventArgs e )
         {
-            this.Visible = (_visibleConditionExpression != null) 
+            this.Visible = (_visibleConditionExpression != null)
                 ? Spring.Expressions.ExpressionEvaluator.GetValue(this, _visibleConditionExpression).Equals(true)
                 : this.Visible;
 
@@ -156,7 +155,7 @@ namespace Spring.Web.UI.Controls
         /// </summary>
         protected virtual void OnPreInitRecursive(EventArgs e)
         {
-            if (!_suppressDependencyInjection 
+            if (!_suppressDependencyInjection
                 && _defaultApplicationContext == null)
             {
                 // obtain appContext of the closed parent template (.ascx/.aspx) control
@@ -191,21 +190,21 @@ namespace Spring.Web.UI.Controls
         /// </summary>
         protected override void AddedControl(Control control, int index)
         {
-            if (!_suppressDependencyInjection 
+            if (!_suppressDependencyInjection
                 && _defaultApplicationContext != null)
             {
-                control = WebDependencyInjectionUtils.InjectDependenciesRecursive(_defaultApplicationContext, control);                
+                control = WebDependencyInjectionUtils.InjectDependenciesRecursive(_defaultApplicationContext, control);
             }
             base.AddedControl(control, index);
         }
 
         /// <summary>
-        /// Overridden to automatically aquire a reference to 
+        /// Overridden to automatically aquire a reference to
         /// root application context to use for DI.
         /// </summary>
         protected override ControlCollection CreateControlCollection()
         {
-            // set root application context to signal, that we care 
+            // set root application context to signal, that we care
             // for our children ourselves
             if (_suppressDependencyInjection)
             {

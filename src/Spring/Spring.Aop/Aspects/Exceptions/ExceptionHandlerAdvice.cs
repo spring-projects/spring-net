@@ -18,9 +18,7 @@
 
 #endregion
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Reflection;
 
 using AopAlliance.Intercept;
@@ -67,7 +65,7 @@ namespace Spring.Aspects.Exceptions
 	///   </list>
 	/// </property>
 	/// </code>
-	/// 
+	///
     /// </remarks>
     /// <author>Mark Pollack</author>
     [Serializable]
@@ -128,16 +126,16 @@ namespace Spring.Aspects.Exceptions
 
         /// <summary>
         /// Gets the exception handler dictionary.  Allows for registration of a specific handler where the key
-        /// is the action type.  This makes configuration of a custom exception handler easier, for example 
+        /// is the action type.  This makes configuration of a custom exception handler easier, for example
         /// LogExceptionHandler, in that only 'user friendly' properties such as LogName, etc., need to be configured
-        /// and not 'user unfriendly' properties such as ConstraintExpressionText and ActionExpressionText.  
+        /// and not 'user unfriendly' properties such as ConstraintExpressionText and ActionExpressionText.
         /// </summary>
         /// <value>The exception handler dictionary.</value>
         public ExceptionHandlerTable ExceptionHandlerDictionary
         {
             get { return exceptionHandlerTable; }
         }
-       
+
         #endregion
 
         #region IMethodInterceptor implementation
@@ -149,7 +147,7 @@ namespace Spring.Aspects.Exceptions
         /// <remarks>
         /// <p>
         /// Polite implementations would certainly like to invoke
-        /// <see cref="AopAlliance.Intercept.IJoinpoint.Proceed"/>. 
+        /// <see cref="AopAlliance.Intercept.IJoinpoint.Proceed"/>.
         /// </p>
         /// </remarks>
         /// <param name="invocation">
@@ -193,7 +191,7 @@ namespace Spring.Aspects.Exceptions
                 }
 
                 //only here if we only are swallowing, returning alternative value, no matching handler was found.
-                
+
                 // no matching handler.
                 if (returnVal.Equals("nomatch"))
                 {
@@ -207,7 +205,7 @@ namespace Spring.Aspects.Exceptions
                         return returnVal;
                     }
                     else
-                    {                        
+                    {
                         Type returnType = invocation.Method.ReturnType;
                         return returnType.IsValueType && !returnType.Equals(typeof(void))? Activator.CreateInstance(returnType) : null;
                     }
@@ -336,7 +334,7 @@ namespace Spring.Aspects.Exceptions
         /// </summary>
         /// <param name="parsedAdviceExpression">The parsed advice expression.</param>
         /// <returns>The exception handler instance</returns>
-        protected virtual IExceptionHandler CreateExceptionHandler(ParsedAdviceExpression parsedAdviceExpression)           
+        protected virtual IExceptionHandler CreateExceptionHandler(ParsedAdviceExpression parsedAdviceExpression)
         {
             if (parsedAdviceExpression.ActionText.IndexOf("log") >= 0)
             {
@@ -348,7 +346,7 @@ namespace Spring.Aspects.Exceptions
                 } else
                 {
                     handler = CreateLogExceptionHandler(parsedAdviceExpression.ExceptionNames);
-                }                
+                }
                 handler.ConstraintExpressionText = parsedAdviceExpression.ConstraintExpression;
                 handler.ActionExpressionText = parsedAdviceExpression.ActionExpressionText;
                 return handler;
@@ -364,7 +362,7 @@ namespace Spring.Aspects.Exceptions
                 else
                 {
                     handler = CreateTranslationExceptionHandler(parsedAdviceExpression.ExceptionNames);
-                }                
+                }
                 handler.ConstraintExpressionText = parsedAdviceExpression.ConstraintExpression;
                 handler.ActionExpressionText = parsedAdviceExpression.ActionExpressionText;
                 return handler;
@@ -381,10 +379,10 @@ namespace Spring.Aspects.Exceptions
                 else
                 {
                     handler = CreateTranslationExceptionHandler(parsedAdviceExpression.ExceptionNames);
-                }                
+                }
                 handler.ConstraintExpressionText = parsedAdviceExpression.ConstraintExpression;
-                handler.ActionExpressionText = ParseWrappedExceptionExpression("wrap", parsedAdviceExpression.AdviceExpression);                
-                return handler;                
+                handler.ActionExpressionText = ParseWrappedExceptionExpression("wrap", parsedAdviceExpression.AdviceExpression);
+                return handler;
             }
             else if (parsedAdviceExpression.ActionText.IndexOf("replace") >= 0)
             {
@@ -397,7 +395,7 @@ namespace Spring.Aspects.Exceptions
                 } else
                 {
                     handler = CreateTranslationExceptionHandler(parsedAdviceExpression.ExceptionNames);
-                }                 
+                }
                 handler.ConstraintExpressionText = parsedAdviceExpression.ConstraintExpression;
                 handler.ActionExpressionText = ParseWrappedExceptionExpression("replace", parsedAdviceExpression.AdviceExpression);
                 return handler;
@@ -608,7 +606,7 @@ namespace Spring.Aspects.Exceptions
             /// <param name="value">The value of the element to add. The value can be null.</param>
             /// <exception cref="T:System.ArgumentNullException">
             /// 	<paramref name="key"/> is null. </exception>
-            /// <exception cref="T:System.ArgumentException">An element with the same key already exists in the <see cref="T:System.Collections.Hashtable"/>. 
+            /// <exception cref="T:System.ArgumentException">An element with the same key already exists in the <see cref="T:System.Collections.Hashtable"/>.
             /// or key is not a string or value is not an IExceptionHandler.</exception>
             /// <exception cref="T:System.NotSupportedException">The <see cref="T:System.Collections.Hashtable"/> is read-only.-or- The <see cref="T:System.Collections.Hashtable"/> has a fixed size. </exception>
             public override void Add(object key, object value)

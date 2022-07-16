@@ -1,10 +1,9 @@
-using System.Collections.Generic;
 using Spring.Globalization;
 
 namespace Spring.DataBinding
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public interface IBindingAwareFormatter : IFormatter
     {

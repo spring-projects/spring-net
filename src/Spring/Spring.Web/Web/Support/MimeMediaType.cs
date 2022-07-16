@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,6 @@
 #endregion
 
 #region Imports
-
-using System;
-using System.Collections.Generic;
 
 using Spring.Util;
 
@@ -162,7 +159,7 @@ namespace Spring.Web.Support
         }
 
         /// <summary>
-        /// Creates a new media type instance representing a generic content type 
+        /// Creates a new media type instance representing a generic content type
         /// with an unspecified subtype (e.g. "text/*")
         /// </summary>
         public MimeMediaType(string contentType)
@@ -171,7 +168,7 @@ namespace Spring.Web.Support
         }
 
         /// <summary>
-        /// Creates a new media type instance representing a particular media type 
+        /// Creates a new media type instance representing a particular media type
         /// </summary>
         public MimeMediaType(string contentType, string subType)
         {

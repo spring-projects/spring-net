@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Xml;
 using Apache.NMS;
 using Spring.Core.TypeResolution;
@@ -85,8 +84,8 @@ namespace Spring.Messaging.Nms.Config
 
         private readonly string RECOVERY_INTERVAL_ATTRIBUTE = "recovery-interval";
 
-        private readonly string MAX_RECOVERY_TIME_ATTRIBUTE = "max-recovery-time"; 
-        
+        private readonly string MAX_RECOVERY_TIME_ATTRIBUTE = "max-recovery-time";
+
         private readonly string CONNECTION_FACTORY_ATTRIBUTE = "connection-factory";
 
         private readonly string CONTAINER_CUSTOM_TYPE = "container-custom-type";
@@ -98,7 +97,7 @@ namespace Spring.Messaging.Nms.Config
         private readonly string ERROR_HANDLER_ATTRIBUTE = "error-handler";
 
         private readonly string EXCEPTION_LISTENER_ATTRIBUTE = "exception-listener";
-        
+
         #endregion
 
         #region IObjectDefinitionParser Members
@@ -163,7 +162,7 @@ namespace Spring.Messaging.Nms.Config
                                                                     "Listener '" + METHOD_ATTRIBUTE +
                                                                     "' attribute contains empty value.");
                     }
-                }               
+                }
             }
             listenerDefBuilder.AddPropertyValue("DefaultHandlerMethod", handlerMethod);
 
@@ -193,7 +192,7 @@ namespace Spring.Messaging.Nms.Config
             containerDefBuilder.AddPropertyValue("MessageListener", listenerDefBuilder.ObjectDefinition);
 
             string containerObjectName = listenerElement.GetAttribute(ID_ATTRIBUTE);
-            // If no object id is given auto generate one using the ReaderContext's ObjectNameGenerator 
+            // If no object id is given auto generate one using the ReaderContext's ObjectNameGenerator
             if (!StringUtils.HasText(containerObjectName))
             {
                 containerObjectName =
@@ -230,7 +229,7 @@ namespace Spring.Messaging.Nms.Config
                     parserContext.ReaderContext.ReportException(containerElement, CONTAINER_CUSTOM_TYPE,
                             "Invalid container-custom-type value [" + customType + "]", ex);
                 }
-            }            
+            }
 
             ObjectDefinitionBuilder containerDef =
                     parserContext.ParserHelper.CreateRootObjectDefinitionBuilder(containerType);
@@ -299,7 +298,7 @@ namespace Spring.Messaging.Nms.Config
             }
             containerDef.AddPropertyValue("RecoveryInterval", ParseRecoveryInterval(containerElement, parserContext));
 
-            containerDef.AddPropertyValue("MaxRecoveryTime", ParseMaxRecoveryTime(containerElement, parserContext));             
+            containerDef.AddPropertyValue("MaxRecoveryTime", ParseMaxRecoveryTime(containerElement, parserContext));
 
             return containerDef;
         }
@@ -422,7 +421,7 @@ namespace Spring.Messaging.Nms.Config
             } else
             {
                 return concurrency;
-            }            
+            }
         }
 
         private string ParseRecoveryInterval(XmlElement ele, ParserContext parserContext)
@@ -431,7 +430,7 @@ namespace Spring.Messaging.Nms.Config
             if (StringUtils.HasText(recoveryInterval))
             {
                 return recoveryInterval;
-                
+
             } else
             {
                 return SimpleMessageListenerContainer.DEFAULT_RECOVERY_INTERVAL;

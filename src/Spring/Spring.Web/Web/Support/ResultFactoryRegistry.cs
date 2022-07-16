@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using System.Collections;
 using Spring.Collections;
 using Spring.Util;
@@ -35,15 +34,15 @@ namespace Spring.Web.Support
     /// </summary>
     /// <remarks>
     /// <para>
-    /// Factories get registered with the <see cref="ResultFactoryRegistry"/> for a certain <i>resultMode</i> string. 
+    /// Factories get registered with the <see cref="ResultFactoryRegistry"/> for a certain <i>resultMode</i> string.
     /// <see cref="DefaultResultWebNavigator"/> uses <see cref="ResultFactoryRegistry"/> for converting strings into <see cref="IResult"/> instances
     /// implementing the corresponding navigation logic.
     /// </para>
     /// <para>
     /// Result string representations are always of the form:<br/>
     /// <c>&quot;&lt;resultmode&gt;:&lt;textual result representation&gt;&quot;</c><br/>
-    /// Calling <see cref="CreateResult"/> on the registry will cause the registry to first extract the leading <c>resultmode</c> to obtain 
-    /// the corresponding <see cref="IResultFactory"/> instance and handle the actual <see cref="IResult"/> instantiation by delegating to 
+    /// Calling <see cref="CreateResult"/> on the registry will cause the registry to first extract the leading <c>resultmode</c> to obtain
+    /// the corresponding <see cref="IResultFactory"/> instance and handle the actual <see cref="IResult"/> instantiation by delegating to
     /// <see cref="IResultFactory.CreateResult"/>.
     /// </para>
     /// <example>
@@ -53,16 +52,16 @@ namespace Spring.Web.Support
     /// {
     ///   ...
     /// }
-    /// 
+    ///
     /// class MySpecialResultLogicFactory : IResultFactory
     /// {
-    ///    IResult Create( string mode, string expression ) { /* ... convert 'expression' into 
+    ///    IResult Create( string mode, string expression ) { /* ... convert 'expression' into
     /// MySpecialResultLogic */ }
     /// }
-    /// 
+    ///
     /// // register with global factory
     /// ResultFactoryRegistry.RegisterResultFactory( &quot;mySpecialMode&quot;, new MySpecialResultLogicFactory );
-    /// 
+    ///
     /// // configure your Results
     /// &lt;object type=&quot;mypage.aspx&quot;&gt;
     ///    &lt;property name=&quot;Results&quot;&gt;
@@ -70,7 +69,7 @@ namespace Spring.Web.Support
     ///          &lt;entry key=&quot;continue&quot; value=&quot;mySpecialMode:&lt;some MySpecialResultLogic string representation&gt;&quot; /&gt;
     ///       &lt;/dictionary&gt;
     ///    &lt;/property&gt;
-    /// 
+    ///
     /// // on your page call
     /// myPage.SetResult(&quot;continue&quot;);
     /// </code>
@@ -157,7 +156,7 @@ namespace Spring.Web.Support
         }
 
         /// <summary>
-        /// Creates a result from the specified <paramref name="resultText"/> by extracting the result mode from 
+        /// Creates a result from the specified <paramref name="resultText"/> by extracting the result mode from
         /// the text and delegating to a corresponding <see cref="IResultFactory"/>, if any.
         /// </summary>
         /// <param name="resultText">the 'resultmode'-prefixed textual representation of the result instance to create.</param>
@@ -169,9 +168,9 @@ namespace Spring.Web.Support
         /// if either <paramref name="resultText"/> is null or <see cref="IResultFactory.CreateResult"/> returned null.</exception>
         /// <remarks>
         /// This method guarantees that the return value will always be non-null.<br/>
-        /// <paramref name="resultText"/> must always be of the form <c>&quot;&lt;resultmode&gt;:&lt;textual result representation&gt;&quot;</c>. 
-        /// The <c>resultmode</c> will be extracted and the corresponding <see cref="IResultFactory"/> (previously registered 
-        /// using <see cref="RegisterResultMode"/>) is called to actually create the <see cref="IResult"/> instance. If no factory matches 
+        /// <paramref name="resultText"/> must always be of the form <c>&quot;&lt;resultmode&gt;:&lt;textual result representation&gt;&quot;</c>.
+        /// The <c>resultmode</c> will be extracted and the corresponding <see cref="IResultFactory"/> (previously registered
+        /// using <see cref="RegisterResultMode"/>) is called to actually create the <see cref="IResult"/> instance. If no factory matches
         /// <c>resultmode</c>, the call is handled to the <see cref="DefaultResultFactory"/>.
         /// </remarks>
         public static IResult CreateResult( string resultText )
@@ -196,7 +195,7 @@ namespace Spring.Web.Support
 
             IResult result = resultFactory.CreateResult( resultMode, resultText );
             AssertUtils.ArgumentNotNull(result, "ResultFactories must not return null results");
-            return result;            
+            return result;
         }
     }
 }

@@ -1,14 +1,14 @@
 #region License
 
 /*
-* Copyright © 2002-2011 the original author or authors.
-* 
+* Copyright ï¿½ 2002-2011 the original author or authors.
+*
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
-* 
+*
 *      http://www.apache.org/licenses/LICENSE-2.0
-* 
+*
 * Unless required by applicable law or agreed to in writing, software
 * distributed under the License is distributed on an "AS IS" BASIS,
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,13 +18,11 @@
 
 #endregion
 
-using System;
-
 namespace Spring.Pool
 {
 	/// <summary>
 	/// A simple pooling interface for managing and monitoring a pool
-	/// of objects.  
+	/// of objects.
 	/// </summary>
 	/// <remarks>
 	/// <p>
@@ -40,7 +38,7 @@ namespace Spring.Pool
 		/// </summary>
 		/// <remarks>
 		/// <p>
-		/// By contract, clients <b>must</b> return the borrowed 
+		/// By contract, clients <b>must</b> return the borrowed
 		/// instance using <see cref="Spring.Pool.IObjectPool.ReturnObject"/>
 		/// or a related method as defined in an implementation or
 		/// sub-interface.
@@ -58,7 +56,7 @@ namespace Spring.Pool
 		/// </summary>
 		/// <remarks>
 		/// <p>
-		/// By contract, the object <b>must</b> have been obtained using 
+		/// By contract, the object <b>must</b> have been obtained using
 		/// <see cref="Spring.Pool.IObjectPool.BorrowObject"/>
 		/// or a related method as defined in an implementation or sub-interface.
 		/// </p>
@@ -71,11 +69,11 @@ namespace Spring.Pool
         /// Create an object using the factory set by
         /// the <see cref="PoolableObjectFactory"/> property
         /// or other implementation dependent mechanism
-        /// and place it into the pool. 
+        /// and place it into the pool.
         /// </summary>
         /// <remarks>
         /// <p>
-        /// This is an optional operation. AddObject is useful for "pre-loading" a 
+        /// This is an optional operation. AddObject is useful for "pre-loading" a
         /// pool with idle objects.
         /// </p>
         /// </remarks>
@@ -104,7 +102,7 @@ namespace Spring.Pool
         void Clear();
 
 		/// <summary>
-		/// Gets the number of instances currently borrowed from the pool. 
+		/// Gets the number of instances currently borrowed from the pool.
 		/// </summary>
 		/// <remarks>
 		/// <p>
@@ -113,9 +111,9 @@ namespace Spring.Pool
 		/// </remarks>
         /// <exception cref="NotSupportedException">
         /// If the implementation does not support the operation.
-        /// </exception>       
-        int NumActive { get; }        
-        
+        /// </exception>
+        int NumActive { get; }
+
         /// <summary>
 		/// Gets the number of instances currently idle in the pool.
 		/// </summary>

@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2010 the original author or authors.
+ * Copyright ï¿½ 2002-2010 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,9 @@
 
 #endregion
 
-using System;
 using Common.Logging;
 using Spring.Messaging.Ems.Common;
 using Spring.Util;
-using TIBCO.EMS;
 
 namespace Spring.Messaging.Ems.Support
 {
@@ -88,7 +86,7 @@ namespace Spring.Messaging.Ems.Support
                 }
             }
         }
-        
+
         /// <summary> Close the given EMS Session and ignore any thrown exception.
 		/// This is useful for typical <code>finally</code> blocks in manual EMS code.
 		/// </summary>
@@ -113,7 +111,7 @@ namespace Spring.Messaging.Ems.Support
                 }
             }
         }
-        
+
         /// <summary> Close the given EMS MessageProducer and ignore any thrown exception.
 		/// This is useful for typical <code>finally</code> blocks in manual EMS code.
 		/// </summary>
@@ -199,11 +197,11 @@ namespace Spring.Messaging.Ems.Support
         public static void CommitIfNecessary(ISession session)
         {
 		    AssertUtils.ArgumentNotNull(session, "Session must not be null");
-			
+
 			session.Commit();
 
 			// TODO Investigate
-			
+
 //		    try {
 //			    session.Commit();
 //		    }

@@ -18,17 +18,15 @@
 
 #endregion
 
-using System;
-
 namespace Spring.Caching
 {
     /// <summary>
-    /// This attribute should be used to mark methods whose result 
+    /// This attribute should be used to mark methods whose result
     /// needs to be cached.
     /// </summary>
     /// <remarks>
     /// <p>
-    /// This attribute allows application developers to mark that a result 
+    /// This attribute allows application developers to mark that a result
     /// of the method invocation should be cached, but it will not do any
     /// caching by itself.
     /// </p>

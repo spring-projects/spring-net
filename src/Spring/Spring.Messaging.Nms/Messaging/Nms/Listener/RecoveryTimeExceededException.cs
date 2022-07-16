@@ -20,7 +20,6 @@
 
 #region
 
-using System;
 using System.Runtime.Serialization;
 using Apache.NMS;
 

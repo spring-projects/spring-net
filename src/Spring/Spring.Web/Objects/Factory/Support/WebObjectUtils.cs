@@ -18,8 +18,6 @@
 
 #endregion
 
-using System;
-using System.IO;
 using Common.Logging;
 using Spring.Util;
 using IHttpHandler = System.Web.IHttpHandler;
@@ -123,7 +121,7 @@ namespace Spring.Objects.Factory.Support
         /// <p>
         /// As indicated by the exception that can be thrown by this method,
         /// the ASPX page referred to by the supplied <paramref name="pageUrl"/>
-        /// does have to be instantiated in order to determine its 
+        /// does have to be instantiated in order to determine its
         /// see cref="System.Type"/>
         /// </p>
         /// </remarks>
@@ -169,7 +167,7 @@ namespace Spring.Objects.Factory.Support
         }
 
         /// <summary>
-        /// Calls the underlying ASP.NET infrastructure to obtain the compiled page type 
+        /// Calls the underlying ASP.NET infrastructure to obtain the compiled page type
         /// relative to the current <see cref="System.Web.HttpRequest.CurrentExecutionFilePath"/>.
         /// </summary>
         /// <param name="pageUrl">

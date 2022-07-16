@@ -1,8 +1,6 @@
-/* Copyright © 2002-2011 by Aidant Systems, Inc., and by Jason Smith. */
+/* Copyright ï¿½ 2002-2011 by Aidant Systems, Inc., and by Jason Smith. */
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 
 namespace Spring.Collections.Generic
 {

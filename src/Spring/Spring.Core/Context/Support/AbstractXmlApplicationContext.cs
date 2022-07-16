@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,6 @@
 
 #endregion
 
-#region Imports
-
-using System;
-using System.IO;
-
 using Spring.Objects;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
@@ -30,15 +25,13 @@ using Spring.Objects.Factory.Xml;
 using Spring.Util;
 using Spring.Core.IO;
 
-#endregion
-
 namespace Spring.Context.Support
 {
     /// <summary>
     /// Convenient abstract superclass for
     /// <see cref="Spring.Context.IApplicationContext"/> implementations that
     /// draw their configuration from XML documents containing object
-    /// definitions as understood by an 
+    /// definitions as understood by an
     /// <see cref="Spring.Objects.Factory.Xml.XmlObjectDefinitionReader"/>.
     /// </summary>
     /// <author>Rod Johnson</author>
@@ -201,7 +194,7 @@ namespace Spring.Context.Support
         { }
 
         /// <summary>
-        /// Load the object definitions with the given 
+        /// Load the object definitions with the given
         /// <see cref="Spring.Objects.Factory.Xml.XmlObjectDefinitionReader"/>.
         /// </summary>
         /// <remarks>
@@ -294,7 +287,7 @@ namespace Spring.Context.Support
         /// This default implementation creates a
         /// <see cref="Spring.Objects.Factory.Support.DefaultListableObjectFactory"/>
         /// with the internal object factory of this context's parent serving
-        /// as the parent object factory.  Can be overridden in subclasse,s 
+        /// as the parent object factory.  Can be overridden in subclasse,s
         /// for example to customize DefaultListableBeanFactory's settings.
         /// </p>
         /// </remarks>
@@ -317,8 +310,8 @@ namespace Spring.Context.Support
         }
 
         /// <summary>
-        /// Determine whether the given object name is already in use within this context's object factory, 
-        /// i.e. whether there is a local object or alias registered under this name. 
+        /// Determine whether the given object name is already in use within this context's object factory,
+        /// i.e. whether there is a local object or alias registered under this name.
         /// </summary>
         public override bool IsObjectNameInUse(string objectName)
         {

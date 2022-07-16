@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using Spring.Objects.Factory.Config;
 
 namespace Spring.Objects.Factory.Support
@@ -47,7 +46,7 @@ namespace Spring.Objects.Factory.Support
         /// <param name="objectName">The name of the object</param>
         /// <see cref="AbstractAutowireCapableObjectFactory.ApplyMergedObjectDefinitionPostProcessors" />
         void PostProcessMergedObjectDefinition(RootObjectDefinition objectDefinition, Type objectType, string objectName);
-        
+
         /// <summary>
         /// A notification that the object definition for the specified name has been reset,
         /// and that this post-processor should clear any metadata for the affected object.

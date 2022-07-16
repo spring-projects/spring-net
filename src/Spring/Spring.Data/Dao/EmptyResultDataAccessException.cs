@@ -1,14 +1,14 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
- * 
+ * Copyright ï¿½ 2002-2011 the original author or authors.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,12 +18,7 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Runtime.Serialization;
-
-#endregion
 
 namespace Spring.Dao
 {
@@ -41,7 +36,7 @@ namespace Spring.Dao
         /// Initializes a new instance of the <see cref="EmptyResultDataAccessException"/> class.
         /// </summary>
         public EmptyResultDataAccessException() : base ()
-        {           
+        {
         }
 
         /// <summary>
@@ -49,7 +44,7 @@ namespace Spring.Dao
         /// </summary>
         /// <param name="message">The message.</param>
         public EmptyResultDataAccessException(string message) : base (message)
-        {           
+        {
         }
 
         /// <summary>
@@ -58,7 +53,7 @@ namespace Spring.Dao
         /// <param name="message">The message.</param>
         /// <param name="innerException">The inner exception.</param>
         public EmptyResultDataAccessException(string message, Exception innerException) : base (message, innerException)
-        {           
+        {
         }
 
         /// <summary>
@@ -78,7 +73,7 @@ namespace Spring.Dao
         /// <param name="expectedSize">The expected size.</param>
         public EmptyResultDataAccessException( string message, int expectedSize ) : base( message, expectedSize, 0 ) {}
 
-       
+
         /// <summary>
         /// Initializes a new instance of the <see cref="EmptyResultDataAccessException"/> class.
         /// </summary>

@@ -18,8 +18,6 @@
 
 #endregion
 
-#region Imports
-
 using System.Xml;
 
 using Spring.Data.Common;
@@ -29,8 +27,6 @@ using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Xml;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Data.Config
 {
@@ -48,7 +44,7 @@ namespace Spring.Data.Config
     {
 
         private const string DatabaseTypePrefix = "database: ";
-        
+
         static DatabaseNamespaceParser()
         {
             TypeRegistry.RegisterType(
@@ -63,7 +59,7 @@ namespace Spring.Data.Config
         /// Initializes a new instance of the <see cref="DatabaseNamespaceParser"/> class.
         /// </summary>
         public DatabaseNamespaceParser()
-        {            
+        {
         }
 
         /// <summary>
@@ -111,10 +107,10 @@ namespace Spring.Data.Config
         {
             switch (element.LocalName)
             {
-                case DbProviderConfigurerConstants.DbProviderConfigurerElement:            
+                case DbProviderConfigurerConstants.DbProviderConfigurerElement:
                     return ParseDbProviderConfigurer(element, name, parserContext);
                 case DbProviderFactoryObjectConstants.DbProviderFactoryObjectElement:
-                    return ParseDbProviderFactoryObject(element, name, parserContext);                
+                    return ParseDbProviderFactoryObject(element, name, parserContext);
             }
 
             return null;
@@ -151,7 +147,7 @@ namespace Spring.Data.Config
             if (StringUtils.HasText(connectionString))
             {
                 propertyValues.Add("ConnectionString", connectionString);
-            } 
+            }
             IConfigurableObjectDefinition cod = parserContext.ReaderContext.ObjectDefinitionFactory.CreateObjectDefinition(
                 typeName, null, parserContext.ReaderContext.Reader.Domain);
             cod.PropertyValues = propertyValues;
@@ -167,18 +163,18 @@ namespace Spring.Data.Config
             {
                 case DbProviderFactoryObjectConstants.DbProviderFactoryObjectElement:
                     {
-                        ParseDatabaseConfigurer(element, parserContext, builder); 
+                        ParseDatabaseConfigurer(element, parserContext, builder);
                         return;
                     }
             }
         }
         */
-        
+
         /*
         private void ParseDatabaseConfigurer(XmlElement element, ParserContext parserContext, ObjectDefinitionBuilder builder)
         {
             string providerNameAttribute = GetAttributeValue(element, DbProviderFactoryObjectConstants.ProviderNameAttribute);
-            string connectionString = GetAttributeValue(element, DbProviderFactoryObjectConstants.ConnectionStringAttribute);           
+            string connectionString = GetAttributeValue(element, DbProviderFactoryObjectConstants.ConnectionStringAttribute);
 
             if (StringUtils.HasText(providerNameAttribute))
             {
@@ -187,7 +183,7 @@ namespace Spring.Data.Config
             if (StringUtils.HasText(connectionString))
             {
                 builder.AddPropertyValue("ConnectionString", connectionString);
-            }           
+            }
         }
         */
 

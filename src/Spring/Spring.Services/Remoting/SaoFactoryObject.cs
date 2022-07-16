@@ -2,13 +2,13 @@
 
 /*
  * Copyright 2002-2010 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,24 +18,19 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using Spring.Objects.Factory;
-
-#endregion
 
 namespace Spring.Remoting
 {
     /// <summary>
-    /// Factory for creating a reference to a 
+    /// Factory for creating a reference to a
     /// remote server activated object (SAO).
     /// </summary>
     /// <remarks>
     /// This is useful alternative to adminstrative type registration on
-    /// the client when you would like the client to have only 
+    /// the client when you would like the client to have only
     /// a reference to the interface that an SAO implements and not the
-    /// actual SAO implentation. 
+    /// actual SAO implentation.
     /// </remarks>
 	/// <author>Aleksandar Seovic</author>
 	/// <author>Mark Pollack</author>

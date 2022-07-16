@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Reflection;
 using Spring.Util;
 
@@ -77,7 +76,7 @@ namespace Spring.Core
                 {
                     this.parameterType = (this.methodInfo != null
                                               ? ReflectionUtils.GetParameterTypes(this.methodInfo.GetParameters())[parameterIndex]
-                                              : ReflectionUtils.GetParameterTypes(this.constructorInfo.GetParameters())[parameterIndex]);                                        
+                                              : ReflectionUtils.GetParameterTypes(this.constructorInfo.GetParameters())[parameterIndex]);
                 }
                 return this.parameterType;
             }

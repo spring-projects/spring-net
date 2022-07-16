@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 
-using System;
-using System.Collections.Generic;
-
 using Common.Logging;
 using Spring.Context;
 using Spring.Context.Support;
@@ -140,7 +137,7 @@ namespace Spring.Data.Common
 							log.Error("Error processing " + DBPROVIDER_DEFAULT_RESOURCE_NAME, e);
 							throw;
 						}
-					}					
+					}
 				}
             }
         }

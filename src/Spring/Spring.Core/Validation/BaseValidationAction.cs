@@ -18,8 +18,6 @@
 
 #endregion
 
-using System;
-using System.Collections.Generic;
 using Spring.Expressions;
 
 namespace Spring.Validation
@@ -31,7 +29,7 @@ namespace Spring.Validation
     /// <remarks>
     /// <p>
     /// This class implements template <c>Execute</c> method
-    /// and defines <c>OnValid</c> and <c>OnInvalid</c> methods that 
+    /// and defines <c>OnValid</c> and <c>OnInvalid</c> methods that
     /// can be overriden
     /// by specific validation actions.
     /// </p>
@@ -91,7 +89,7 @@ namespace Spring.Validation
             }
         }
 
-        #region Abstract methods 
+        #region Abstract methods
 
         // CLOVER:OFF
 
@@ -115,7 +113,7 @@ namespace Spring.Validation
 
         // CLOVER:ON
 
-        #endregion 
+        #endregion
 
         #region Helper methods
 

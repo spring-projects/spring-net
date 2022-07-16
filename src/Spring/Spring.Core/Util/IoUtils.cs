@@ -1,6 +1,3 @@
-using System;
-using System.IO;
-
 namespace Spring.Util
 {
     /// <summary>
@@ -14,7 +11,7 @@ namespace Spring.Util
         }
 
         /// <summary>
-        /// Copies one stream into another. 
+        /// Copies one stream into another.
         /// (Don't forget to call <see cref="Stream.Flush"/> on the destination stream!)
         /// </summary>
         /// <remarks>
@@ -33,7 +30,7 @@ namespace Spring.Util
         }
 
         /// <summary>
-        /// Reads a stream into a byte array. 
+        /// Reads a stream into a byte array.
         /// </summary>
         /// <remarks>
         /// Does not close the input stream!

@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,6 @@
 
 #region Imports
 
-using System;
-using System.Collections.Generic;
 using System.Text;
 using System.Collections;
 
@@ -33,7 +31,7 @@ using Spring.Proxy;
 namespace Spring.Aop.Framework.DynamicProxy
 {
     /// <summary>
-    /// Implementation of the <see cref="Spring.Aop.Framework.IAopProxyFactory"/> 
+    /// Implementation of the <see cref="Spring.Aop.Framework.IAopProxyFactory"/>
     /// interface that caches the AOP proxy <see cref="System.Type"/> instance.
     /// </summary>
     /// <remarks>

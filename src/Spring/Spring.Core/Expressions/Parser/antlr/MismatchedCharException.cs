@@ -1,5 +1,3 @@
-using System;
-
 using StringBuilder			= System.Text.StringBuilder;
 
 using BitSet				= Spring.Expressions.Parser.antlr.collections.impl.BitSet;
@@ -20,7 +18,7 @@ namespace Spring.Expressions.Parser.antlr
 	//
 	// With many thanks to Eric V. Smith from the ANTLR list.
 	//
-	
+
 	[Serializable]
 	public class MismatchedCharException : RecognitionException
 	{
@@ -29,25 +27,25 @@ namespace Spring.Expressions.Parser.antlr
 		*/
 		override public string Message
 		{
-			get 
+			get
 			{
 				StringBuilder sb = new StringBuilder();
-			
+
 				switch (mismatchType)
 				{
-					case CharTypeEnum.CharType: 
+					case CharTypeEnum.CharType:
 						sb.Append("expecting ");   appendCharName(sb, expecting);
 						sb.Append(", found ");     appendCharName(sb, foundChar);
 						break;
-				
-					case CharTypeEnum.NotCharType: 
+
+					case CharTypeEnum.NotCharType:
 						sb.Append("expecting anything but '");
 						appendCharName(sb, expecting);
 						sb.Append("'; got it anyway");
 						break;
-				
-					case CharTypeEnum.RangeType: 				
-					case CharTypeEnum.NotRangeType: 
+
+					case CharTypeEnum.RangeType:
+					case CharTypeEnum.NotRangeType:
 						sb.Append("expecting token ");
 						if (mismatchType == CharTypeEnum.NotRangeType)
 							sb.Append("NOT ");
@@ -58,23 +56,23 @@ namespace Spring.Expressions.Parser.antlr
 						sb.Append(", found ");
 						appendCharName(sb, foundChar);
 						break;
-				
-					case CharTypeEnum.SetType: 
-					case CharTypeEnum.NotSetType: 
+
+					case CharTypeEnum.SetType:
+					case CharTypeEnum.NotSetType:
 						sb.Append("expecting " + (mismatchType == CharTypeEnum.NotSetType ? "NOT " : "") + "one of (");
 						int[] elems = bset.toArray();
-						for (int i = 0; i < elems.Length; i++) 
+						for (int i = 0; i < elems.Length; i++)
 						{
 							appendCharName(sb, elems[i]);
 						}
 						sb.Append("), found ");
 						appendCharName(sb, foundChar);
 						break;
-				
-					default: 
+
+					default:
 						sb.Append(base.Message);
-						break;				
-				}			
+						break;
+				}
 				return sb.ToString();
 			}
 		}
@@ -90,34 +88,34 @@ namespace Spring.Expressions.Parser.antlr
 			SetType = 5,
 			NotSetType = 6
 		}
-		
+
 		// One of the above
 		public CharTypeEnum mismatchType;
-		
+
 		// what was found on the input stream
 		public int foundChar;
-		
+
 		// For CHAR/NOT_CHAR and RANGE/NOT_RANGE
 		public int expecting;
-		
+
 		// For RANGE/NOT_RANGE (expecting is lower bound of range)
 		public int upper;
-		
+
 		// For SET/NOT_SET
 		public BitSet bset;
-		
+
 		// who knows...they may want to ask scanner questions
 		public CharScanner scanner;
-		
+
 		/*
 		* MismatchedCharException constructor comment.
 		*/
 		public MismatchedCharException() : base("Mismatched char")
 		{
 		}
-		
+
 		// Expected range / not range
-		public MismatchedCharException(char c, char lower, char upper_, bool matchNot, CharScanner scanner_) : 
+		public MismatchedCharException(char c, char lower, char upper_, bool matchNot, CharScanner scanner_) :
 					base("Mismatched char", scanner_.getFilename(), scanner_.getLine(), scanner_.getColumn())
 		{
 			mismatchType = matchNot ? CharTypeEnum.NotRangeType : CharTypeEnum.RangeType;
@@ -126,9 +124,9 @@ namespace Spring.Expressions.Parser.antlr
 			upper = upper_;
 			scanner = scanner_;
 		}
-		
+
 		// Expected token / not token
-		public MismatchedCharException(char c, char expecting_, bool matchNot, CharScanner scanner_) : 
+		public MismatchedCharException(char c, char expecting_, bool matchNot, CharScanner scanner_) :
 					base("Mismatched char", scanner_.getFilename(), scanner_.getLine(), scanner_.getColumn())
 		{
 			mismatchType = matchNot ? CharTypeEnum.NotCharType : CharTypeEnum.CharType;
@@ -136,7 +134,7 @@ namespace Spring.Expressions.Parser.antlr
 			expecting = expecting_;
 			scanner = scanner_;
 		}
-		
+
 		// Expected BitSet / not BitSet
 		public MismatchedCharException(char c, BitSet set_, bool matchNot, CharScanner scanner_) :
 					base("Mismatched char", scanner_.getFilename(), scanner_.getLine(), scanner_.getColumn())
@@ -145,16 +143,16 @@ namespace Spring.Expressions.Parser.antlr
 			foundChar = c;
 			bset = set_;
 			scanner = scanner_;
-		}		
+		}
 
 		/// <summary>
 		/// Append a char to the msg buffer.  If special, then show escaped version
 		/// </summary>
 		/// <param name="sb">Message buffer</param>
 		/// <param name="c">Char to append</param>
-		private void appendCharName(StringBuilder sb, int c) 
+		private void appendCharName(StringBuilder sb, int c)
 		{
-			switch (c) 
+			switch (c)
 			{
 				case 65535 :
 					// 65535 = (char) -1 = EOF

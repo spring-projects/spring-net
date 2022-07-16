@@ -18,8 +18,6 @@
 
 #endregion
 
-using System;
-using System.Collections.Generic;
 using Common.Logging;
 using Spring.Expressions;
 
@@ -40,14 +38,14 @@ namespace Spring.Validation.Actions
                 /// <summary>
         /// Initializes a new instance of the <see cref="ExceptionAction"/> class.
         /// </summary>
-        /// <param name="exceptionExpression">Expression that defines the exception to throw when the validator is not valid.</param>        
+        /// <param name="exceptionExpression">Expression that defines the exception to throw when the validator is not valid.</param>
         public ExceptionAction(string exceptionExpression)
             : this((exceptionExpression != null ? Expression.Parse(exceptionExpression) : null))
         {}
 
         /// <summary>
         /// Initializes a new instance of the <see cref="ExceptionAction"/> class with an expression
-        /// that defines the exception to throw. 
+        /// that defines the exception to throw.
         /// </summary>
         public ExceptionAction(IExpression throwsExpression)
         {
@@ -87,8 +85,8 @@ namespace Spring.Validation.Actions
                 if (exception != null)
                 {
                     throw exception;
-                }                
-            }          
+                }
+            }
             throw new ValidationException(errors);
         }
 

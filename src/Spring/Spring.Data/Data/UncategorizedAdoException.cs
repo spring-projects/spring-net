@@ -1,14 +1,14 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
- * 
+ * Copyright ï¿½ 2002-2011 the original author or authors.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,19 +18,14 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Runtime.Serialization;
 using Spring.Dao;
-
-#endregion
 
 namespace Spring.Data
 {
 	/// <summary>
-    /// Exception thrown when we can't classify a SQLException into 
-    /// one of our generic data access exceptions. 
+    /// Exception thrown when we can't classify a SQLException into
+    /// one of our generic data access exceptions.
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
 	[Serializable]
@@ -63,7 +58,7 @@ namespace Spring.Data
         /// </summary>
         /// <param name="message">A message about the exception.</param>
         public UncategorizedAdoException(string message): base(message)
-        {            
+        {
         }
 
         /// <summary>
@@ -72,7 +67,7 @@ namespace Spring.Data
         /// <param name="message">A message about the exception.</param>
         /// <param name="inner">The inner exception.</param>
         public UncategorizedAdoException(string message, Exception inner): base(message, inner)
-        {            
+        {
         }
 
 
@@ -83,15 +78,15 @@ namespace Spring.Data
         /// <param name="errorCode">the underlying error code that could not be translated</param>
         /// <param name="sql">The offending SQL statment</param>
         /// <param name="ex">The root cause.</param>
-        public UncategorizedAdoException(string task, string sql, string errorCode, Exception ex) : base(task + "; uncategorized DataException for SQL [" + sql + "]; " + "ErrorCode [" + errorCode + "]; " + ex.Message, ex)           
-        {            
+        public UncategorizedAdoException(string task, string sql, string errorCode, Exception ex) : base(task + "; uncategorized DataException for SQL [" + sql + "]; " + "ErrorCode [" + errorCode + "]; " + ex.Message, ex)
+        {
              this.sql = sql;
              this.errorCode = errorCode;
         }
 
 		/// <inheritdoc />
         protected UncategorizedAdoException( SerializationInfo info, StreamingContext context ) : base( info, context ) {}
-		
+
 		#endregion
 
 		#region Properties
@@ -131,7 +126,7 @@ namespace Spring.Data
         {
             info.AddValue( "sql", sql );
             info.AddValue( "errorCode", errorCode);
-            base.GetObjectData( info, context ); 
+            base.GetObjectData( info, context );
         }
 
         #endregion

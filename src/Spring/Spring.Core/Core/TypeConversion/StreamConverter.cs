@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using System.ComponentModel;
 using System.Globalization;
 
@@ -83,10 +82,10 @@ namespace Spring.Core.TypeConversion
         /// </param>
         /// <returns>True if the conversion is possible.</returns>
         public override bool CanConvertFrom (
-            ITypeDescriptorContext context, 
-            Type sourceType) 
+            ITypeDescriptorContext context,
+            Type sourceType)
         {
-            if (sourceType == typeof (string)) 
+            if (sourceType == typeof (string))
             {
                 return true;
             }
@@ -102,19 +101,19 @@ namespace Spring.Core.TypeConversion
         /// </param>
         /// <param name="culture">
         /// The <see cref="System.Globalization.CultureInfo"/> to use
-        /// as the current culture. 
+        /// as the current culture.
         /// </param>
         /// <param name="val">
         /// The value that is to be converted.
         /// </param>
         /// <returns>
-        /// A <see cref="System.IO.Stream"/> if successful. 
+        /// A <see cref="System.IO.Stream"/> if successful.
         /// </returns>
         public override object ConvertFrom (
-            ITypeDescriptorContext context, 
-            CultureInfo culture, object val) 
+            ITypeDescriptorContext context,
+            CultureInfo culture, object val)
         {
-            if (val is string) 
+            if (val is string)
             {
                 IResource resource = (IResource) resourceConverter.ConvertFrom(context, culture, val);
                 return resource.InputStream;

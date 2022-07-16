@@ -19,7 +19,6 @@
 #endregion
 
 using Spring.Messaging.Ems.Common;
-using TIBCO.EMS;
 
 namespace Spring.Messaging.Ems.Listener
 {
@@ -36,7 +35,7 @@ namespace Spring.Messaging.Ems.Listener
     /// </remarks>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
-    public interface ISessionAwareMessageListener 
+    public interface ISessionAwareMessageListener
     {
         /// <summary> Callback for processing a received EMS message.
         /// Implementors are supposed to process the given Message,

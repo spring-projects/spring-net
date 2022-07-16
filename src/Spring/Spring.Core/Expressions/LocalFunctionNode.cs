@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Collections;
 using System.Runtime.Serialization;
 
@@ -45,7 +44,7 @@ namespace Spring.Expressions
             : base(info, context)
         {
         }
-        
+
         /// <summary>
         /// Evaluates function represented by this node.
         /// </summary>
@@ -57,7 +56,7 @@ namespace Spring.Expressions
             string name = this.getText();
             IDictionary locals = evalContext.LocalVariables;
             LambdaExpressionNode lambda = locals[name] as LambdaExpressionNode;
-            
+
             if (lambda == null)
             {
                 throw new InvalidOperationException("Function '" + name + "' is not defined.");

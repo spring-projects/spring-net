@@ -18,10 +18,6 @@
 
 #endregion
 
-#region Imports
-
-using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 
 using Spring.Aop;
@@ -31,8 +27,6 @@ using Spring.Aop.Support;
 using Spring.Aop.Target;
 using Spring.Core.TypeResolution;
 using Spring.Objects.Factory;
-
-#endregion
 
 namespace Spring.Transaction.Interceptor
 {
@@ -50,11 +44,11 @@ namespace Spring.Transaction.Interceptor
 	/// transactional proxy, proxying all the interfaces that the target implements.
 	/// </p>
 	/// <p>
-	/// Internally, a <see cref="Spring.Transaction.Interceptor.TransactionInterceptor"/> 
+	/// Internally, a <see cref="Spring.Transaction.Interceptor.TransactionInterceptor"/>
 	/// instance is used, but the user of this class does not have to care. Optionally, an
 	/// <see cref="Spring.Aop.IPointcut"/> can be specified to cause conditional invocation of
 	/// the underlying <see cref="Spring.Transaction.Interceptor.TransactionInterceptor"/>.
-	/// </p> 
+	/// </p>
 	/// <p>
 	/// The
 	/// <see cref="Spring.Transaction.Interceptor.TransactionProxyFactoryObject.PreInterceptors"/>
@@ -240,12 +234,12 @@ namespace Spring.Transaction.Interceptor
 				if ( _proxy != null )
 				{
 					return _proxy.GetType();
-				} 
+				}
 				else if ( _target != null && _target is ITargetSource )
 				{
 					return _target.GetType();
-				} 
-				else 
+				}
+				else
 				{
 					return null;
 				}
@@ -298,7 +292,7 @@ namespace Spring.Transaction.Interceptor
 			{
 				IAdvisor advice = new DefaultPointcutAdvisor(_pointcut, _transactionInterceptor);
 				proxyFactory.AddAdvisor(advice);
-			} 
+			}
 			else
 			{
 				proxyFactory.AddAdvisor( new TransactionAttributeSourceAdvisor( _transactionInterceptor ) );
@@ -315,7 +309,7 @@ namespace Spring.Transaction.Interceptor
 			if ( _proxyInterfaces != null )
 			{
 				proxyFactory.Interfaces = _proxyInterfaces;
-			} 
+			}
 			else if ( !ProxyTargetType )
 			{
 				if ( _target is ITargetSource )

@@ -18,8 +18,6 @@
 
 #endregion
 
-using System;
-
 using Spring.Util;
 
 namespace Spring.Transaction.Interceptor
@@ -40,7 +38,7 @@ namespace Spring.Transaction.Interceptor
 	{
         /// <summary>
         /// Could hold exception, resolving class name but would always require FQN.
-        /// This way does multiple string comparisons, but how often do we decide 
+        /// This way does multiple string comparisons, but how often do we decide
         /// whether to roll back a transaction following an exception?
         /// </summary>
 		private string _exceptionName;
@@ -90,7 +88,7 @@ namespace Spring.Transaction.Interceptor
 		/// </param>
 		public RollbackRuleAttribute( Type exceptionType )
 		{
-		    AssertUtils.ArgumentNotNull(exceptionType, "exceptionType");            
+		    AssertUtils.ArgumentNotNull(exceptionType, "exceptionType");
 			if ( ! typeof(Exception).IsAssignableFrom( exceptionType ) )
 			{
 				throw new ArgumentException("Cannot construct rollback rule from " + exceptionType + "; " + "It's not an Exception");
@@ -110,7 +108,7 @@ namespace Spring.Transaction.Interceptor
 		/// Return the depth to the matching superclass execption <see cref="System.Type"/>.
 		/// </summary>
 		/// <remarks>
-		/// A return value of 0 means that the <paramref name="exceptionType"/> matches. 
+		/// A return value of 0 means that the <paramref name="exceptionType"/> matches.
 		/// </remarks>
 		/// <param name="exceptionType">
 		/// The <see cref="System.Type"/> of exception to find.
@@ -127,8 +125,8 @@ namespace Spring.Transaction.Interceptor
 		/// Return the depth to the matching superclass execption <see cref="System.Type"/>.
 		/// </summary>
 		/// <remarks>
-		/// A return value of 0 means that the <paramref name="exception"/>s 
-		/// <see cref="System.Type"/> matches. 
+		/// A return value of 0 means that the <paramref name="exception"/>s
+		/// <see cref="System.Type"/> matches.
 		/// </remarks>
 		/// <param name="exception">
 		/// The exception object to find.
@@ -161,7 +159,7 @@ namespace Spring.Transaction.Interceptor
 		    return base.GetHashCode();
 		}
 
-        
+
 		/// <summary>
 		/// Override of <see cref="System.Object.Equals(object)"/>.
 		/// </summary>
@@ -197,7 +195,7 @@ namespace Spring.Transaction.Interceptor
 			if ( ( exceptionType.Name.IndexOf( ExceptionName ) != -1 ) || ( exceptionType.FullName.IndexOf( ExceptionName ) != -1 ) )
 			{
 				return depth;
-			}			
+			}
 			if ( exceptionType == typeof(Exception))
 			{
 				return -1;

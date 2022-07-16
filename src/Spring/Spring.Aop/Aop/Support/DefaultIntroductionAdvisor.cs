@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using AopAlliance.Aop;
 using Spring.Collections;
 
@@ -103,11 +102,11 @@ namespace Spring.Aop.Support
 
 		/// <summary>
 		/// Returns the filter determining which target classes this
-		/// introduction should apply to. 
+		/// introduction should apply to.
 		/// </summary>
 		/// <value>
 		/// The filter determining which target classes this introduction
-		/// should apply to. 
+		/// should apply to.
 		/// </value>
 		public virtual ITypeFilter TypeFilter
 		{
@@ -170,7 +169,7 @@ namespace Spring.Aop.Support
 		/// </exception>
 		public virtual void AddInterface(Type intf)
 		{
-			if(intf != null) 
+			if(intf != null)
 			{
 				BailIfNotAnInterfaceType(intf);
 				_interfaces.Add(intf);

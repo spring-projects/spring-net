@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-using System;
 using System.Collections;
 using System.Globalization;
 using System.Reflection;
@@ -83,7 +82,7 @@ namespace Spring.Util
         /// <param name="assembly">The assembly.</param>
         /// <param name="typeName">Name of the type.</param>
         /// <returns></returns>
-        /// <exception cref="System.ArgumentNullException"> 
+        /// <exception cref="System.ArgumentNullException">
         /// If the <paramref name="assembly"/> or <paramref name="typeName"/> is <see langword="null"/>
         /// </exception>
         /// <exception cref="Spring.Util.FatalReflectionException">
@@ -116,11 +115,11 @@ namespace Spring.Util
         /// The <see cref="System.Type"/> to instantiate*
         /// </param>
         /// <returns>A new instance of the <see cref="System.Type"/>.</returns>
-        /// <exception cref="System.ArgumentNullException"> 
+        /// <exception cref="System.ArgumentNullException">
         /// If the <paramref name="type"/> is <see langword="null"/>
         /// </exception>
         /// <exception cref="Spring.Util.FatalReflectionException">
-        /// If the <paramref name="type"/> is an abstract class, an interface, 
+        /// If the <paramref name="type"/> is an abstract class, an interface,
         /// an open generic type or does not have a public no-argument constructor.
         /// </exception>
         public static object InstantiateType(Type type)
@@ -196,11 +195,11 @@ namespace Spring.Util
         /// The arguments to be passed to the constructor.
         /// </param>
         /// <returns>A new instance.</returns>
-        /// <exception cref="System.ArgumentNullException"> 
+        /// <exception cref="System.ArgumentNullException">
         /// If the <paramref name="constructor"/> is <see langword="null"/>
         /// </exception>
         /// <exception cref="Spring.Util.FatalReflectionException">
-        /// If the <paramref name="constructor"/>'s declaring type is an abstract class, 
+        /// If the <paramref name="constructor"/>'s declaring type is an abstract class,
         /// an interface, an open generic type or does not have a public no-argument constructor.
         /// </exception>
         public static object InstantiateType(ConstructorInfo constructor, object[] arguments)
@@ -246,7 +245,7 @@ namespace Spring.Util
 
         /// <summary>
         /// Checks whether the supplied <paramref name="instance"/> is not a transparent proxy and is
-        /// assignable to the supplied <paramref name="type"/>. 
+        /// assignable to the supplied <paramref name="type"/>.
         /// </summary>
         /// <remarks>
         /// <p>
@@ -530,7 +529,7 @@ namespace Spring.Util
         }
 
         /// <summary>
-        /// Gets the qualified name of the given method, consisting of 
+        /// Gets the qualified name of the given method, consisting of
         /// fully qualified interface/class name + "." method name.
         /// </summary>
         /// <param name="method">The method.</param>

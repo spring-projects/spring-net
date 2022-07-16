@@ -18,7 +18,6 @@
 
 #endregion
 
-using System.Collections.Generic;
 using System.Web.UI;
 
 using Spring.Web.UI.Controls;
@@ -30,13 +29,13 @@ namespace Spring.Web.UI.Validation
     /// </summary>
     /// <remarks>
     /// <para>
-    /// Validation errors renderers are used to decouple rendering behavior from the 
+    /// Validation errors renderers are used to decouple rendering behavior from the
     /// validation errors controls such as <see cref="ValidationError"/> and
     /// <see cref="ValidationSummary"/>.
     /// </para>
     /// <para>
     /// This allows users to change how validation errors are rendered by simply pluggin in
-    /// appropriate renderer implementation into the validation errors controls using 
+    /// appropriate renderer implementation into the validation errors controls using
     /// Spring.NET dependency injection.
     /// </para>
     /// </remarks>

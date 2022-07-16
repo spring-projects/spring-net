@@ -18,9 +18,6 @@
 
 #endregion
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Reflection;
 
 namespace Spring.Transaction.Interceptor
@@ -82,7 +79,7 @@ namespace Spring.Transaction.Interceptor
                 if (attr is TransactionAttribute)
                 {
                     TransactionAttribute ta = (TransactionAttribute)attr;
-                    RuleBasedTransactionAttribute rbta = 
+                    RuleBasedTransactionAttribute rbta =
                         new RuleBasedTransactionAttribute();
 
                     //TODO another reminder to sync property names
@@ -125,6 +122,6 @@ namespace Spring.Transaction.Interceptor
             }
             return null;
         }
-        
+
 	}
 }

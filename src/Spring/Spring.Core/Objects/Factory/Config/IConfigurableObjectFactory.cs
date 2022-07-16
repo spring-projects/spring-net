@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.ComponentModel;
 using Spring.Util;
 
@@ -111,7 +110,7 @@ namespace Spring.Objects.Factory.Config
 		/// The current number of registered
 		/// <see cref="Spring.Objects.Factory.Config.IObjectPostProcessor"/>s.
 		/// </value>
-		int ObjectPostProcessorCount 
+		int ObjectPostProcessorCount
 		{
 			get;
 		}

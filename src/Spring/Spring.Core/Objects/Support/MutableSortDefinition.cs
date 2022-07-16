@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,7 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Objects.Support
 {
@@ -44,7 +39,7 @@ namespace Spring.Objects.Support
 		private bool _toggleAscendingOnProperty = false;
 
 		#region Properties
-		private bool ToggleAscendingOnProperty 
+		private bool ToggleAscendingOnProperty
 		{
 			get
 			{
@@ -69,16 +64,16 @@ namespace Spring.Objects.Support
 			}
 			set
 			{
-				if (!StringUtils.HasText (value)) 
+				if (!StringUtils.HasText (value))
 				{
 					_property = string.Empty;
 				}
-				else 
+				else
 				{
 					// implicit toggling of ascending?
-					if (ToggleAscendingOnProperty) 
+					if (ToggleAscendingOnProperty)
 					{
-						if (value.Equals(_property)) 
+						if (value.Equals(_property))
 						{
 							_ascending = !_ascending;
 						}
@@ -189,9 +184,9 @@ namespace Spring.Objects.Support
 		/// <returns>
 		/// True if the supplied <paramref name="obj"/> is equal to this instance.
 		/// </returns>
-		public override bool Equals(object obj) 
+		public override bool Equals(object obj)
 		{
-			if (!(obj is ISortDefinition)) 
+			if (!(obj is ISortDefinition))
 			{
 				return false;
 			}
@@ -204,7 +199,7 @@ namespace Spring.Objects.Support
 		/// Overrides the default <see cref="System.Object.GetHashCode"/> method.
 		/// </summary>
 		/// <returns>The hashcode for this instance.</returns>
-		public override int GetHashCode() 
+		public override int GetHashCode()
 		{
 			int result = 0;
 			result = this.Property.GetHashCode();

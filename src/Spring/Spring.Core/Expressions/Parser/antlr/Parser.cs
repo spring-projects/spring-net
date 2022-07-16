@@ -1,5 +1,3 @@
-using System;
-
 using Spring.Expressions.Parser.antlr.debug;
 using EventHandlerList			= System.ComponentModel.EventHandlerList;
 
@@ -22,7 +20,7 @@ using TraceListener					= Spring.Expressions.Parser.antlr.debug.TraceListener;
 	private Vector synPredListeners;
 	private Vector traceListeners;
 */
-	
+
 namespace Spring.Expressions.Parser.antlr
 {
 	/*ANTLR Translator Generator
@@ -45,7 +43,7 @@ namespace Spring.Expressions.Parser.antlr
 		// Used to store event delegates
 		private EventHandlerList events_ = new EventHandlerList();
 
-		protected internal EventHandlerList Events 
+		protected internal EventHandlerList Events
 		{
 			get	{ return events_;	}
 		}
@@ -69,36 +67,36 @@ namespace Spring.Expressions.Parser.antlr
 		internal static readonly object SynPredSucceededEventKey	= new object();
 
 		protected internal ParserSharedInputState inputState;
-		
+
 		/*Nesting level of registered handlers */
 		// protected int exceptionLevel = 0;
-		
+
 		/*Table of token type to token names */
 		protected internal string[] tokenNames;
-		
+
 		/*AST return value for a rule is squirreled away here */
 		protected internal AST returnAST;
-		
+
 		/*AST support code; parser and treeparser delegate to this object */
 		protected internal ASTFactory astFactory = new ASTFactory();
-		
+
 		private bool ignoreInvalidDebugCalls = false;
-		
+
 		/*Used to keep track of indentdepth for traceIn/Out */
 		protected internal int traceDepth = 0;
-		
+
 		public Parser()
 		{
 			inputState = new ParserSharedInputState();
 		}
-		
+
 		public Parser(ParserSharedInputState state)
 		{
 			inputState = state;
 		}
-		
+
 		/// <summary>
-		/// 
+		///
 		/// </summary>
 
 		public event TraceEventHandler EnterRule
@@ -191,49 +189,49 @@ namespace Spring.Expressions.Parser.antlr
 			remove	{	Events.RemoveHandler(SynPredSucceededEventKey, value);	}
 		}
 
-		
+
 		public virtual void  addMessageListener(MessageListener l)
 		{
 			if (!ignoreInvalidDebugCalls)
 				throw new System.ArgumentException("addMessageListener() is only valid if parser built for debugging");
 		}
-		
+
 		public virtual void  addParserListener(ParserListener l)
 		{
 			if (!ignoreInvalidDebugCalls)
 				throw new System.ArgumentException("addParserListener() is only valid if parser built for debugging");
 		}
-		
+
 		public virtual void  addParserMatchListener(ParserMatchListener l)
 		{
 			if (!ignoreInvalidDebugCalls)
 				throw new System.ArgumentException("addParserMatchListener() is only valid if parser built for debugging");
 		}
-		
+
 		public virtual void  addParserTokenListener(ParserTokenListener l)
 		{
 			if (!ignoreInvalidDebugCalls)
 				throw new System.ArgumentException("addParserTokenListener() is only valid if parser built for debugging");
 		}
-		
+
 		public virtual void  addSemanticPredicateListener(SemanticPredicateListener l)
 		{
 			if (!ignoreInvalidDebugCalls)
 				throw new System.ArgumentException("addSemanticPredicateListener() is only valid if parser built for debugging");
 		}
-		
+
 		public virtual void  addSyntacticPredicateListener(SyntacticPredicateListener l)
 		{
 			if (!ignoreInvalidDebugCalls)
 				throw new System.ArgumentException("addSyntacticPredicateListener() is only valid if parser built for debugging");
 		}
-		
+
 		public virtual void  addTraceListener(TraceListener l)
 		{
 			if (!ignoreInvalidDebugCalls)
 				throw new System.ArgumentException("addTraceListener() is only valid if parser built for debugging");
 		}
-		
+
 		/*Get another token object from the token stream */
 		public abstract void  consume();
 		/*Consume tokens until one matches the given token */
@@ -269,17 +267,17 @@ namespace Spring.Expressions.Parser.antlr
 		{
 			return inputState.filename;
 		}
-		
+
 		public virtual ParserSharedInputState getInputState()
 		{
 			return inputState;
 		}
-		
+
 		public virtual void  setInputState(ParserSharedInputState state)
 		{
 			inputState = state;
 		}
-		
+
 		public virtual void resetState()
 		{
 			traceDepth = 0;
@@ -347,7 +345,7 @@ namespace Spring.Expressions.Parser.antlr
 		/// <code>static</code>, it cannot be overridden to avoid these problems.
 		/// ANTLR no longer uses this method internally or in generated code.
 		/// </summary>
-		/// 
+		///
 		[Obsolete("De-activated since version 2.7.2.6 as it cannot be overidden.", true)]
 		public static void  panic()
 		{
@@ -390,13 +388,13 @@ namespace Spring.Expressions.Parser.antlr
 			if (!ignoreInvalidDebugCalls)
 				throw new System.SystemException("removeTraceListener() is only valid if parser built for debugging");
 		}
-		
+
 		/*Parser error-reporting function can be overridden in subclass */
 		public virtual void reportError(RecognitionException ex)
 		{
 			Console.Error.WriteLine(ex);
 		}
-		
+
 		/*Parser error-reporting function can be overridden in subclass */
 		public virtual void reportError(string s)
 		{
@@ -409,7 +407,7 @@ namespace Spring.Expressions.Parser.antlr
 				Console.Error.WriteLine(getFilename() + ": error: " + s);
 			}
 		}
-		
+
 		/*Parser warning-reporting function can be overridden in subclass */
 		public virtual void  reportWarning(string s)
 		{
@@ -422,13 +420,13 @@ namespace Spring.Expressions.Parser.antlr
 				Console.Error.WriteLine(getFilename() + ": warning: " + s);
 			}
 		}
-		
+
 		public virtual void recover(RecognitionException ex, BitSet tokenSet)
 		{
 			consume();
 			consumeUntil(tokenSet);
 		}
-		
+
 		public virtual void  rewind(int pos)
 		{
 			inputState.input.rewind(pos);
@@ -436,7 +434,7 @@ namespace Spring.Expressions.Parser.antlr
 
 		/// <summary>
 		/// Specify an object with support code (shared by Parser and TreeParser.
-		/// Normally, the programmer does not play with this, using 
+		/// Normally, the programmer does not play with this, using
 		/// <see cref="setASTNodeClass"/> instead.
 		/// </summary>
 		/// <param name="f"></param>
@@ -446,7 +444,7 @@ namespace Spring.Expressions.Parser.antlr
 		}
 
 		/// <summary>
-		/// Specify the type of node to create during tree building. 
+		/// Specify the type of node to create during tree building.
 		/// </summary>
 		/// <param name="cl">Fully qualified AST Node type name.</param>
 		public virtual void  setASTNodeClass(string cl)
@@ -455,8 +453,8 @@ namespace Spring.Expressions.Parser.antlr
 		}
 
 		/// <summary>
-		/// Specify the type of node to create during tree building. 
-		/// use <see cref="setASTNodeClass"/> now to be consistent with 
+		/// Specify the type of node to create during tree building.
+		/// use <see cref="setASTNodeClass"/> now to be consistent with
 		/// Token Object Type accessor.
 		/// </summary>
 		/// <param name="nodeType">Fully qualified AST Node type name.</param>
@@ -484,7 +482,7 @@ namespace Spring.Expressions.Parser.antlr
 		{
 			inputState.input = t;
 		}
-		
+
 		public virtual void  traceIndent()
 		{
 			 for (int i = 0; i < traceDepth; i++)

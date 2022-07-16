@@ -18,8 +18,6 @@
 
 #endregion
 
-using System;
-using System.Threading;
 using Common.Logging;
 using Spring.Data.Core;
 using Spring.Messaging.Core;
@@ -35,15 +33,15 @@ using System.Messaging;
 namespace Spring.Messaging.Listener
 {
     /// <summary>
-    /// An implementation of a Peeking based MessageListener container that starts a transaction 
+    /// An implementation of a Peeking based MessageListener container that starts a transaction
     /// before recieving a message.  The <see cref="IPlatformTransactionManager"/> implementation determines
     /// the type of transaction that will be started.  An exception while processing the message will
     /// result in a rollback, otherwise a transaction commit will be performed.
     /// </summary>
     /// <remarks>
-    /// The type of transaction that can be started can either be local transaction, 
+    /// The type of transaction that can be started can either be local transaction,
     /// (e.g. <see cref="AdoPlatformTransactionManager"/>, a local messaging transaction
-    /// (e.g. <see cref="MessageQueueTransactionManager"/> or a DTC based transaction, 
+    /// (e.g. <see cref="MessageQueueTransactionManager"/> or a DTC based transaction,
     /// (eg. <see cref="TxScopeTransactionManager"/>.
     /// <para>
     /// Transaction properties can be set using the property <see cref="TransactionDefinition"/>
@@ -116,7 +114,7 @@ namespace Spring.Messaging.Listener
                 Thread.Sleep(RecoveryTimeSpan);
                 throw;
             }
-            //if status has indicated rollback only, will rollback.                    
+            //if status has indicated rollback only, will rollback.
             PlatformTransactionManager.Commit(status);
             return messageReceived;
         }

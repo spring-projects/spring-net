@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2010 the original author or authors.
+ * Copyright ï¿½ 2002-2010 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 
 using Spring.Messaging.Ems.Common;
 using Spring.Util;
-using TIBCO.EMS;
 
 namespace Spring.Messaging.Ems.Support.Destinations
 {
@@ -51,7 +50,7 @@ namespace Spring.Messaging.Ems.Support.Destinations
             {
                 return ResolveTopic(session, destinationName);
             }
-            return ResolveQueue(session, destinationName);            
+            return ResolveQueue(session, destinationName);
         }
 
 

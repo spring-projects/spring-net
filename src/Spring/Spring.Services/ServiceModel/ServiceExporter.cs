@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,7 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.ServiceModel;
@@ -34,8 +30,6 @@ using Spring.Objects.Factory;
 using Spring.Objects.Factory.Support;
 using Spring.Proxy;
 using Spring.ServiceModel.Support;
-
-#endregion
 
 namespace Spring.ServiceModel
 {
@@ -109,7 +103,7 @@ namespace Spring.ServiceModel
         /// Gets or sets the service contract interface type.
         /// </summary>
         /// <remarks>
-        /// If not set, uses the unique interface implemented or inherited by the target type. 
+        /// If not set, uses the unique interface implemented or inherited by the target type.
         /// An error will be thrown if the target type implements more than one interface.
         /// </remarks>
         /// <value>The service contract interface type.</value>
@@ -120,7 +114,7 @@ namespace Spring.ServiceModel
         }
 
         /// <summary>
-        /// Gets or sets a list of custom attributes 
+        /// Gets or sets a list of custom attributes
         /// that should be applied to the WCF service class.
         /// </summary>
         public IList TypeAttributes
@@ -130,12 +124,12 @@ namespace Spring.ServiceModel
         }
 
         /// <summary>
-        /// Gets or sets a dictionary of custom attributes 
+        /// Gets or sets a dictionary of custom attributes
         /// that should be applied to the WCF service members.
         /// </summary>
         /// <remarks>
-        /// Dictionary key is an expression that members can be matched against. 
-        /// Value is a list of attributes that should be applied 
+        /// Dictionary key is an expression that members can be matched against.
+        /// Value is a list of attributes that should be applied
         /// to each member that matches expression.
         /// </remarks>
         public IDictionary MemberAttributes
@@ -155,11 +149,11 @@ namespace Spring.ServiceModel
         }
 
         /// <summary>
-        /// Gets or sets the name for the &lt;portType&gt; element in 
+        /// Gets or sets the name for the &lt;portType&gt; element in
         /// Web Services Description Language (WSDL).
         /// </summary>
         /// <value>
-        /// The default value is the name of the class or interface to which the 
+        /// The default value is the name of the class or interface to which the
         /// System.ServiceModel.ServiceContractAttribute is applied.
         /// </value>
         public string Name
@@ -169,7 +163,7 @@ namespace Spring.ServiceModel
         }
 
         /// <summary>
-        /// Gets or sets the namespace of the &lt;portType&gt; element in 
+        /// Gets or sets the namespace of the &lt;portType&gt; element in
         /// Web Services Description Language (WSDL).
         /// </summary>
         /// <value>
@@ -185,7 +179,7 @@ namespace Spring.ServiceModel
         /// Gets or sets the name used to locate the service in an application configuration file.
         /// </summary>
         /// <value>
-        /// The name used to locate the service element in an application configuration file. 
+        /// The name used to locate the service element in an application configuration file.
         /// The default is the name of the service implementation class.
         /// </value>
         public string ConfigurationName
@@ -211,7 +205,7 @@ namespace Spring.ServiceModel
         /// the ProtectionLevel property.
         /// </summary>
         /// <value>
-        /// One of the <see cref="System.Net.Security.ProtectionLevel"/> values. 
+        /// One of the <see cref="System.Net.Security.ProtectionLevel"/> values.
         /// The default is <see cref="System.Net.Security.ProtectionLevel.None"/>.
         /// </value>
         public ProtectionLevel ProtectionLevel
@@ -224,7 +218,7 @@ namespace Spring.ServiceModel
         /// Gets or sets whether sessions are allowed, not allowed or required.
         /// </summary>
         /// <value>
-        /// A <see cref="System.ServiceModel.SessionMode"/> that indicates whether sessions are allowed, 
+        /// A <see cref="System.ServiceModel.SessionMode"/> that indicates whether sessions are allowed,
         /// not allowed, or required.
         /// </value>
         public SessionMode SessionMode
@@ -277,7 +271,7 @@ namespace Spring.ServiceModel
         #region IInitializingObject Members
 
         /// <summary>
-        /// Publish the object 
+        /// Publish the object
         /// </summary>
         public void AfterPropertiesSet()
         {
@@ -377,7 +371,7 @@ namespace Spring.ServiceModel
         protected virtual void GenerateProxy()
         {
             IProxyTypeBuilder builder = new ConfigurableServiceProxyTypeBuilder(
-                TargetName, this.objectName, this.objectFactory, _useServiceProxyTypeCache, ContractInterface, 
+                TargetName, this.objectName, this.objectFactory, _useServiceProxyTypeCache, ContractInterface,
                 Name, Namespace, ConfigurationName, CallbackContract, ProtectionLevel, SessionMode);
 
             builder.TypeAttributes = TypeAttributes;
@@ -549,14 +543,14 @@ namespace Spring.ServiceModel
                         objectDefinition.IsSingleton = false;
                         string objectName = ObjectDefinitionReaderUtils.GenerateObjectName(objectDefinition, objectFactory);
                         objectFactory.RegisterObjectDefinition(objectName, objectDefinition);
-                        
 
-                        //find constructor and constructor arg values to create this attribute.                       
+
+                        //find constructor and constructor arg values to create this attribute.
                         ConstructorResolver constructorResolver = new ConstructorResolver(objectFactory, objectFactory,
                                                                                new SimpleInstantiationStrategy(),
                                                                                new ObjectDefinitionValueResolver(objectFactory));
 
-                        
+
                         ConstructorInstantiationInfo ci = constructorResolver.GetConstructorInstantiationInfo(objectName,
                                                                                                               objectDefinition,
                                                                                                               null, null);
@@ -578,14 +572,14 @@ namespace Spring.ServiceModel
                                 propertyValues[i] =
                                     wrappedAttributeInstance.GetPropertyValue(namedProperties[i].Name);
                             }
-                            CustomAttributeBuilder cab = new CustomAttributeBuilder(ci.ConstructorInfo, ci.ArgInstances, 
+                            CustomAttributeBuilder cab = new CustomAttributeBuilder(ci.ConstructorInfo, ci.ArgInstances,
                                                                                     namedProperties, propertyValues);
                             typeBuilder.SetCustomAttribute(cab);
                         }
 
 
                     }
-                    
+
                 }
             }
         }

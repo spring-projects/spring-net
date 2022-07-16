@@ -18,14 +18,13 @@
 
 #endregion
 
-using System.Collections.Generic;
 using System.Text;
 using System.Web.UI;
 
 namespace Spring.Web.UI.Validation
 {
     /// <summary>
-    /// Implementation of <see cref="IValidationErrorsRenderer"/> that 
+    /// Implementation of <see cref="IValidationErrorsRenderer"/> that
     /// displays an error image to let user know there is an error, and
     /// tooltip to display actual error messages.
     /// </summary>
@@ -75,7 +74,7 @@ namespace Spring.Web.UI.Validation
                 writer.AddAttribute(HtmlTextWriterAttribute.Src, page.ImagesRoot + "/" + IconSrc);
                 writer.AddAttribute(HtmlTextWriterAttribute.Title, sb.ToString());
 
-                writer.RenderBeginTag(HtmlTextWriterTag.Img);                
+                writer.RenderBeginTag(HtmlTextWriterTag.Img);
                 writer.RenderEndTag();
             }
         }

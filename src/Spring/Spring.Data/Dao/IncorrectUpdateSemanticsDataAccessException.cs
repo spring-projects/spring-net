@@ -18,16 +18,11 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Runtime.Serialization;
-
-#endregion
 
 namespace Spring.Dao
 {
-	/// <summary> 
+	/// <summary>
 	/// Data access exception thrown when something unintended appears to have
 	/// happened with an update, but the transaction hasn't already been rolled back.
 	/// </summary>

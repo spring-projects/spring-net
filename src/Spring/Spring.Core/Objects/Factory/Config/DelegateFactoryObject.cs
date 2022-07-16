@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,7 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Objects.Factory.Config
 {
@@ -48,7 +43,7 @@ namespace Spring.Objects.Factory.Config
 		/// In the event of misconfiguration (such as failure to set an essential
 		/// property) or if initialization fails.
 		/// </exception>
-		/// <seealso cref="Spring.Objects.Factory.IInitializingObject.AfterPropertiesSet"/> 
+		/// <seealso cref="Spring.Objects.Factory.IInitializingObject.AfterPropertiesSet"/>
 		public override void AfterPropertiesSet()
 		{
 			if (DelegateType == null)
@@ -86,7 +81,7 @@ namespace Spring.Objects.Factory.Config
 		/// If an exception occured during object creation.
 		/// </exception>
 		/// <returns>The object returned by this factory.</returns>
-		/// <seealso cref="Spring.Objects.Factory.Config.AbstractFactoryObject.CreateInstance()"/> 
+		/// <seealso cref="Spring.Objects.Factory.Config.AbstractFactoryObject.CreateInstance()"/>
 		protected override object CreateInstance()
 		{
 			Delegate instance = null;

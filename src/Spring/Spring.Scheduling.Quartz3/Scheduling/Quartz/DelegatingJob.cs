@@ -14,14 +14,12 @@
 * limitations under the License.
 */
 
-using System.Threading;
-using System.Threading.Tasks;
 using Quartz;
 using Spring.Util;
 
 namespace Spring.Scheduling.Quartz
 {
-    /// <summary> 
+    /// <summary>
     /// Simple Quartz IJob adapter that delegates to a
     /// given <see cref="ThreadStart" /> instance.
     /// </summary>
@@ -38,7 +36,7 @@ namespace Spring.Scheduling.Quartz
     {
         private readonly ThreadStart delegateInstance;
 
-        /// <summary> 
+        /// <summary>
         /// Create a new DelegatingJob.
         /// </summary>
         /// <param name="delegateInstance">
@@ -50,7 +48,7 @@ namespace Spring.Scheduling.Quartz
             this.delegateInstance = delegateInstance;
         }
 
-        /// <summary> 
+        /// <summary>
         /// Delegates execution to the underlying ThreadStart.
         /// </summary>
         public virtual Task Execute(IJobExecutionContext context)

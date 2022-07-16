@@ -1,8 +1,3 @@
-
-
-using System;
-using System.Collections.Generic;
-
 namespace Spring.Util
 {
     /// <summary>
@@ -11,9 +6,9 @@ namespace Spring.Util
     public class AttributeUtils
     {
         /// <summary>
-        /// Find a single Attribute of the type 'attributeType' from the supplied class, 
-        /// traversing it interfaces and super classes if no attribute can be found on the 
-        /// class iteslf. 
+        /// Find a single Attribute of the type 'attributeType' from the supplied class,
+        /// traversing it interfaces and super classes if no attribute can be found on the
+        /// class iteslf.
         /// </summary>
         /// <remarks>
         /// This method explicitly handles class-level attributes which are not declared as

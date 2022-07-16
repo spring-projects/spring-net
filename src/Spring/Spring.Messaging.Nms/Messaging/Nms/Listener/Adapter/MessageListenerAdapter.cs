@@ -18,9 +18,6 @@
 
 #endregion
 
-
-using System;
-using System.Collections.Generic;
 using System.Reflection;
 using Common.Logging;
 using Spring.Expressions;
@@ -237,7 +234,7 @@ namespace Spring.Messaging.Nms.Listener.Adapter
 	    /// </summary>
 	    /// <remarks>
 	    /// In case of an exception, the <see cref="HandleListenerException"/> method will be invoked.
-	    /// <b>Note</b> 
+	    /// <b>Note</b>
 	    /// Does not support sending response messages based on
 	    /// result objects returned from listener methods. Use the
 	    /// <see cref="ISessionAwareMessageListener"/> entry point (typically through a Spring
@@ -293,7 +290,7 @@ namespace Spring.Messaging.Nms.Listener.Adapter
             // Regular case: find a handler method reflectively.
             object convertedMessage = ExtractMessage(message);
 
-           
+
             IDictionary<string, object> vars = new Dictionary<string, object>();
             vars["convertedObject"] = convertedMessage;
 
@@ -301,7 +298,7 @@ namespace Spring.Messaging.Nms.Listener.Adapter
             //expression processor caches target of first invocation.
             //TODO - check JIRA as I believe this has been fixed, otherwise, use regular reflection. -MLP
             //processingExpression = Expression.Parse(defaultHandlerMethod + "(#convertedObject)");
-            
+
             //Invoke message handler method and get result.
             object result;
             try
@@ -398,7 +395,7 @@ namespace Spring.Messaging.Nms.Listener.Adapter
         }
 
         /// <summary>
-        /// Handles the given result object returned from the listener method, sending a response message back. 
+        /// Handles the given result object returned from the listener method, sending a response message back.
         /// </summary>
         /// <param name="result">The result object to handle (never <code>null</code>).</param>
         /// <param name="request">The original request message.</param>
@@ -518,7 +515,7 @@ namespace Spring.Messaging.Nms.Listener.Adapter
             {
                 return DestinationResolver.ResolveDestinationName(session, destNameHolder.Name, destNameHolder.IsTopic);
             }
-            
+
             return null;
         }
 
@@ -550,7 +547,7 @@ namespace Spring.Messaging.Nms.Listener.Adapter
         /// <param name="response">The outgoing message about to be sent.</param>
         protected virtual void 	PostProcessProducer(IMessageProducer producer, IMessage response)
         {
-            
+
         }
     }
 

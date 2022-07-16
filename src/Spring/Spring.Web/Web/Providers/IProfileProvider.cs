@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Collections.Specialized;
 using System.Configuration;
 using System.Web.Profile;
@@ -30,9 +29,9 @@ namespace Spring.Web.Providers
     /// </summary>
     /// <remarks>
     /// <p>
-    /// Configuration for this provider <b>requires</b> <c>providerId</c> element set in web.config file, 
-    /// as the Id of wrapped provider (defined in the Spring context).  
-    /// </p>    
+    /// Configuration for this provider <b>requires</b> <c>providerId</c> element set in web.config file,
+    /// as the Id of wrapped provider (defined in the Spring context).
+    /// </p>
     /// </remarks>
     /// <author>Damjan Tomic</author>
     public interface IProfileProvider
@@ -41,14 +40,14 @@ namespace Spring.Web.Providers
         ///Initializes the provider.
         ///</summary>
         ///
-        ///<param name="config">A collection of the name/value pairs representing the provider-specific 
+        ///<param name="config">A collection of the name/value pairs representing the provider-specific
         /// attributes specified in the configuration for this provider.
         /// The <c>providerId</c> attribute is mandatory.
         /// </param>
         ///<param name="name">The friendly name of the provider.</param>
         ///<exception cref="T:System.ArgumentNullException">The <paramref name="name"/> or <paramref name="config"/> is null.</exception>
         ///<exception cref="T:System.InvalidOperationException">An attempt is made to call <see cref="M:System.Configuration.Provider.ProviderBase.Initialize(System.String,System.Collections.Specialized.NameValueCollection)"></see> on a provider after the provider has already been initialized.</exception>
-        ///<exception cref="T:System.ArgumentException">The <paramref name="name"/> has a length of zero or providerId attribute is not set.</exception>      
+        ///<exception cref="T:System.ArgumentException">The <paramref name="name"/> has a length of zero or providerId attribute is not set.</exception>
         void Initialize(string name, NameValueCollection config);
 
         ///<summary>

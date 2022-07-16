@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-using System;
 using Spring.Objects.Support;
 
 namespace Spring.Scheduling.Quartz

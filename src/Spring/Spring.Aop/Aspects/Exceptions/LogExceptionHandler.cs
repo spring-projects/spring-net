@@ -18,9 +18,6 @@
 
 #endregion
 
-using System;
-using System.Collections.Generic;
-
 using Common.Logging;
 
 using Spring.Expressions;
@@ -28,7 +25,7 @@ using Spring.Expressions;
 namespace Spring.Aspects.Exceptions
 {
     /// <summary>
-    /// Log the exceptions.  Default log nameis "LogExceptionHandler" and log level is Debug 
+    /// Log the exceptions.  Default log nameis "LogExceptionHandler" and log level is Debug
     /// </summary>
     /// <author>Mark Pollack</author>
     public class LogExceptionHandler : AbstractExceptionHandler
@@ -88,7 +85,7 @@ namespace Spring.Aspects.Exceptions
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to log message only, and not pass in the 
+        /// Gets or sets a value indicating whether to log message only, and not pass in the
         /// exception to the logging API
         /// </summary>
         /// <value><c>true</c> if log message only; otherwise, <c>false</c>.</value>
@@ -103,7 +100,7 @@ namespace Spring.Aspects.Exceptions
         /// Gets the action translation expression text.  Overridden to add approprate settings to
         /// the SpEL expression that does the logging so that it depends on the values of LogLevel and
         /// LogMessageOnly.  Those properties must be set to the desired values before calling this method.
-        /// 
+        ///
         /// </summary>
         /// <value>The action translation expression.</value>
         public override string ActionExpressionText
@@ -123,7 +120,7 @@ namespace Spring.Aspects.Exceptions
                     {
                         actionExpressionText = textPart1 + ", #e)";
                     }
-                } 
+                }
             }
         }
 
@@ -146,9 +143,9 @@ namespace Spring.Aspects.Exceptions
             }
             catch (Exception e)
             {
-                log.Warn("Was not able to evaluate action expression [" + ActionExpressionText + "]", e);                    
+                log.Warn("Was not able to evaluate action expression [" + ActionExpressionText + "]", e);
             }
-            return "logged";            
+            return "logged";
         }
 
     }

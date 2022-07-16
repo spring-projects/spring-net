@@ -18,17 +18,12 @@
 
 #endregion
 
-#region Imports
-
 using System;
 using System.Diagnostics;
 using System.Reflection;
-using System.Security;
 
 using NUnit.Framework;
 using Spring.Context.Support;
-
-#endregion
 
 namespace Spring.Reflection.Dynamic
 {
@@ -157,7 +152,7 @@ namespace Spring.Reflection.Dynamic
                 });
                 Assert.Fail("private field must not be accessible in medium trust: " + fieldInfo);
             }
-            catch (SecurityException sex)
+            catch (System.Security.SecurityException sex)
             {
                 Assert.IsTrue( sex.Message.IndexOf("ReflectionPermission") > -1 );
             }

@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using Common.Logging;
 using Spring.Core;
 using Spring.Core.IO;
@@ -27,7 +26,7 @@ using Spring.Objects.Factory.Config;
 namespace Spring.Data.Common
 {
     /// <summary>
-    ///  
+    ///
     /// </summary>
     /// <author>Mark Pollack</author>
     public class DbProviderConfigurer : IObjectFactoryPostProcessor, IOrdered

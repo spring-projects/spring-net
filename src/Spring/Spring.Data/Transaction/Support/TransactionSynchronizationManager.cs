@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Collections;
 using System.Data;
 
@@ -57,9 +56,9 @@ namespace Spring.Transaction.Support
 	/// If transaction synchronization isn't active, there is either no current
 	/// transaction, or the transaction manager doesn't support synchronizations.
 	/// </p>
-	/// Note that this class uses following naming convention for the 
+	/// Note that this class uses following naming convention for the
 	/// named 'data slots' for storage of thread local data, 'Spring.Transaction:Name'
-	/// where Name is either 
+	/// where Name is either
 	/// </remarks>
 	/// <author>Juergen Hoeller</author>
     /// <author>Griffin Caprio (.NET)</author>
@@ -72,9 +71,9 @@ namespace Spring.Transaction.Support
 
 	    #endregion
 
-        #region Fields 
+        #region Fields
         private static readonly string syncsDataSlotName = "Spring.Transactions:syncList";
-	    
+
         private static readonly string resourcesDataSlotName = "Spring.Transactions:resources";
 
         private static readonly string currentTxReadOnlyDataSlotName = "Spring.Transactions:currentTxReadOnly";
@@ -96,7 +95,7 @@ namespace Spring.Transaction.Support
         /// <remarks>Main for debugging purposes.  Resource manager should always
         /// invoke HasResource for a specific resource key that they are interested in.
         /// </remarks>
-        /// <returns>IDictionary with resource keys and resource objects or empty 
+        /// <returns>IDictionary with resource keys and resource objects or empty
         /// dictionary if none is bound.</returns>
         public static IDictionary ResourceDictionary
         {
@@ -145,7 +144,7 @@ namespace Spring.Transaction.Support
                 return null;
             }
             object val = resources[key];
-            
+
             if (val != null && LOG.IsDebugEnabled)
             {
                 LOG.Debug("Retrieved value [" + Describe(val) + "] for key [" + Describe(key) + "] bound to thread [" +
@@ -226,9 +225,9 @@ namespace Spring.Transaction.Support
 		/// <exception cref="System.InvalidOperationException">
 		/// If synchronization is already active.
 		/// </exception>
-		public static void InitSynchronization() 
+		public static void InitSynchronization()
 		{
-			if ( SynchronizationActive ) 
+			if ( SynchronizationActive )
 			{
 				throw new InvalidOperationException( "Cannot activate transaction synchronization - already active" );
 			}
@@ -249,9 +248,9 @@ namespace Spring.Transaction.Support
 		/// <exception cref="System.InvalidOperationException">
 		/// If synchronization is not active.
 		/// </exception>
-		public static void ClearSynchronization() 
+		public static void ClearSynchronization()
 		{
-			if ( !SynchronizationActive ) 
+			if ( !SynchronizationActive )
 			{
 				throw new InvalidOperationException( "Cannot deactivate transaction synchronization - not active" );
 			}
@@ -284,10 +283,10 @@ namespace Spring.Transaction.Support
 		/// <exception cref="System.InvalidOperationException">
 		/// If synchronization is not active.
 		/// </exception>
-		public static void RegisterSynchronization( ITransactionSynchronization synchronization ) 
+		public static void RegisterSynchronization( ITransactionSynchronization synchronization )
 		{
             AssertUtils.ArgumentNotNull(synchronization, "TransactionSynchronization must not be null");
-			if ( !SynchronizationActive ) 
+			if ( !SynchronizationActive )
 			{
 				throw new InvalidOperationException( "Transaction synchronization is not active" );
 			}
@@ -322,7 +321,7 @@ namespace Spring.Transaction.Support
 	    /// </exception>
 	    public static IList Synchronizations
 	    {
-	        get 
+	        get
 	        {
 	            if (!SynchronizationActive)
 	            {
@@ -335,7 +334,7 @@ namespace Spring.Transaction.Support
 	                object root = syncs.SyncRoot;
 	                lock (root)
 	                {
-	                    // #SPRNET-1160, tx Ben Rowlands 
+	                    // #SPRNET-1160, tx Ben Rowlands
 	                    CollectionUtils.StableSortInPlace(syncs, syncComparer);
 	                }
 
@@ -369,10 +368,10 @@ namespace Spring.Transaction.Support
 		}
 
         /// <summary>
-        /// Gets or sets a value indicating whether the 
+        /// Gets or sets a value indicating whether the
         /// current transaction is read only.
         /// </summary>
-        /// <remarks> 
+        /// <remarks>
         /// Called by transaction manager on transaction begin and on cleanup.
         /// Return whether the current transaction is marked as read-only.
         /// To be called by resource management code when preparing a newly
@@ -397,13 +396,13 @@ namespace Spring.Transaction.Support
             {
                 if (value)
                 {
-                    LogicalThreadContext.SetData(currentTxReadOnlyDataSlotName, true); 
+                    LogicalThreadContext.SetData(currentTxReadOnlyDataSlotName, true);
                 }
                 else
                 {
                     LogicalThreadContext.FreeNamedDataSlot(currentTxReadOnlyDataSlotName);
                 }
-                               
+
             }
         }
 
@@ -435,7 +434,7 @@ namespace Spring.Transaction.Support
         /// <para>Called by the transaction manager on transaction begin and on cleanup.</para>
         /// <para>To be called by resource management code that wants to discriminate between
         /// active transaction synchronization (with or without backing resource transaction;
-        /// also on PROPAGATION_SUPPORTS) and an actual transaction being active; on 
+        /// also on PROPAGATION_SUPPORTS) and an actual transaction being active; on
         /// PROPAGATION_REQUIRES, PROPAGATION_REQUIRES_NEW, etC)</para></remarks>
         /// <value>
         /// 	<c>true</c> if [actual transaction active]; otherwise, <c>false</c>.
@@ -443,7 +442,7 @@ namespace Spring.Transaction.Support
 	    public static bool ActualTransactionActive
 	    {
 	        get
-	        {                
+	        {
 	            return LogicalThreadContext.GetData(actualTxActiveDataSlotName) != null;
 	        }
             set
@@ -464,7 +463,7 @@ namespace Spring.Transaction.Support
         /// Gets or sets the current transaction isolation level, if any.
         /// </summary>
         /// <remarks>Called by the transaction manager on transaction begin and on cleanup.</remarks>
-        /// <value>The current transaction isolation level.  If no current transaction is 
+        /// <value>The current transaction isolation level.  If no current transaction is
         /// active, retrun IsolationLevel.Unspecified</value>
         public static IsolationLevel CurrentTransactionIsolationLevel
         {

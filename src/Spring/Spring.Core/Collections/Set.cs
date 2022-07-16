@@ -1,9 +1,9 @@
-/* Copyright © 2002-2011 by Aidant Systems, Inc., and by Jason Smith. */
+/* Copyright ï¿½ 2002-2011 by Aidant Systems, Inc., and by Jason Smith. */
 
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,12 +20,7 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Collections;
-
-#endregion
 
 namespace Spring.Collections
 {
@@ -38,7 +33,7 @@ namespace Spring.Collections
 	{
 		/// <summary>
 		/// Performs a "union" of the two sets, where all the elements
-		/// in both sets are present. 
+		/// in both sets are present.
 		/// </summary>
 		/// <param name="setOne">A collection of elements.</param>
 		/// <returns>
@@ -50,7 +45,7 @@ namespace Spring.Collections
 		public virtual ISet Union(ISet setOne)
 		{
 			ISet resultSet = (ISet) this.Clone();
-			if (setOne != null) 
+			if (setOne != null)
 			{
 				resultSet.AddAll(setOne);
 			}
@@ -137,7 +132,7 @@ namespace Spring.Collections
 
 		/// <summary>
 		/// Performs an "intersection" of the two sets, where only the elements
-		/// that are present in both sets remain. 
+		/// that are present in both sets remain.
 		/// </summary>
 		/// <remarks>
 		/// <p>
@@ -173,7 +168,7 @@ namespace Spring.Collections
 
 		/// <summary>
 		/// Performs an "intersection" of the two sets, where only the elements
-		/// that are present in both sets remain. 
+		/// that are present in both sets remain.
 		/// </summary>
 		/// <param name="setOne">A set of elements.</param>
 		/// <param name="anotherSet">A set of elements.</param>
@@ -217,7 +212,7 @@ namespace Spring.Collections
 		/// <paramref name="setOne"/>, removing the elements that are also in
 		/// set <paramref name="anotherSet"/>. The original sets are not modified
 		/// during this operation. The result set is a <b>clone</b> of set
-		/// <paramref name="setOne"/> containing the elements from the operation. 
+		/// <paramref name="setOne"/> containing the elements from the operation.
 		/// </p>
 		/// </remarks>
 		/// <param name="setOne">A set of elements.</param>
@@ -521,7 +516,7 @@ namespace Spring.Collections
 		/// If you wish to check for "equivalent"
 		/// <see cref="Spring.Collections.ISet"/> instances, use
 		/// <c>Equals()</c>. If you wish to check to see if two references are
-		/// actually the same object, use "==" and "!=".  
+		/// actually the same object, use "==" and "!=".
 		/// </p>
 		/// </remarks>
 		/// <param name="obj">

@@ -18,23 +18,15 @@
 
 #endregion
 
-#region Imports
-
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
 using System.Globalization;
-using System.IO;
 using System.Reflection;
 using System.Resources;
-using System.Text;
 using NUnit.Framework;
 using Spring.Globalization;
 using Spring.Objects;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Context.Support
 {
@@ -301,7 +293,7 @@ namespace Spring.Context.Support
             messageSource.ResourceManagers = resourceManagerList;
             object obj = messageSource.GetResourceObject("bubblechamber", CultureInfo.CurrentCulture);
             Assert.IsNotNull(obj, "expected to retrieve object form resource set");
-            Bitmap bitMap = null;
+            System.Drawing.Bitmap bitMap = null;
 
             //.NET 1.0 returns this as a base64 string while .NET 1.1 returns it as a Bitmap
             //There are some isues with resx compatability between framework versions.
@@ -312,13 +304,13 @@ namespace Spring.Context.Support
                 string ImageText = obj as string;
                 Byte[] bitmapData = new Byte[ImageText.Length];
                 bitmapData = Convert.FromBase64String(FixBase64ForImage(ImageText));
-                MemoryStream streamBitmap = new MemoryStream(bitmapData);
-                bitMap = new Bitmap((Bitmap)Image.FromStream(streamBitmap));
+                var streamBitmap = new System.IO.MemoryStream(bitmapData);
+                bitMap = new System.Drawing.Bitmap((System.Drawing.Bitmap) System.Drawing.Image.FromStream(streamBitmap));
 
             }
             else
             {
-                bitMap = obj as Bitmap;
+                bitMap = obj as System.Drawing.Bitmap;
             }
             Assert.IsNotNull(bitMap, "expected to retrieve BitMap. Instead Type = " + obj.GetType());
             Assert.AreEqual(146, bitMap.Size.Width, "Width of image wrong");
@@ -330,7 +322,7 @@ namespace Spring.Context.Support
 
         private string FixBase64ForImage(string Image)
         {
-            StringBuilder sbText = new StringBuilder(Image, Image.Length);
+            var sbText = new System.Text.StringBuilder(Image, Image.Length);
             sbText.Replace("\r\n", String.Empty);
             sbText.Replace(" ", String.Empty);
             return sbText.ToString();
@@ -344,7 +336,7 @@ namespace Spring.Context.Support
         {
             //Add another resource manager to the list
             TestObject to = new TestObject();
-            ComponentResourceManager mgr = new ComponentResourceManager(to.GetType());
+            var mgr = new System.ComponentModel.ComponentResourceManager(to.GetType());
             resourceManagerList.Add(mgr);
             messageSource.ResourceManagers = resourceManagerList;
 

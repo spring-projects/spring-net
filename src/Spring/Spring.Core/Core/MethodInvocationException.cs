@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using System.Runtime.Serialization;
 
 #endregion
@@ -44,7 +43,7 @@ namespace Spring.Core
             get
             {
                 return "methodInvocation";
-            }			
+            }
         }
 
         #region Constructor (s) / Destructor
@@ -79,7 +78,7 @@ namespace Spring.Core
             : base (message, rootCause)
         {
         }
-		
+
         /// <summary>
         /// Constructor to use when an exception results from a
         /// <see cref="System.ComponentModel.PropertyChangedEventArgs"/>.
@@ -91,7 +90,7 @@ namespace Spring.Core
         /// The <see cref="System.ComponentModel.PropertyChangedEventArgs"/> that
         /// resulted in an exception.
         /// </param>
-        public MethodInvocationException (Exception ex, PropertyChangeEventArgs argument) : 
+        public MethodInvocationException (Exception ex, PropertyChangeEventArgs argument) :
             base ("Property '" + argument.PropertyName + "' threw exception.", argument, ex)
         {
         }

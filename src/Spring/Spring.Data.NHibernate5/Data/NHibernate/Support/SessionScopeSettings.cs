@@ -1,12 +1,12 @@
 /*
- * Copyright © 2002-2011 the original author or authors.
- * 
+ * Copyright ï¿½ 2002-2011 the original author or authors.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-using System;
 using NHibernate;
 using Spring.Util;
 
@@ -59,7 +58,7 @@ namespace Spring.Data.NHibernate.Support
         }
 
         /// <summary>
-        /// Initialize a new instance of <see cref="SessionScopeSettings"/> with the given sessionFactory 
+        /// Initialize a new instance of <see cref="SessionScopeSettings"/> with the given sessionFactory
         /// and default values for all other settings.
         /// </summary>
         /// <param name="sessionFactory">
@@ -74,7 +73,7 @@ namespace Spring.Data.NHibernate.Support
             // noop
             this.entityInterceptorInitialized = false;
         }
-        
+
         /// <summary>
         /// Initialize a new instance of <see cref="SessionScopeSettings"/> with the given values and references.
         /// </summary>
@@ -109,8 +108,8 @@ namespace Spring.Data.NHibernate.Support
         /// Gets the configured <see cref="IInterceptor"/> instance to be used.
         /// </summary>
         /// <remarks>
-        /// If the entity interceptor is not set by the constructor, this property calls 
-        /// <see cref="ResolveEntityInterceptor"/> to obtain an instance. This allows derived classes to 
+        /// If the entity interceptor is not set by the constructor, this property calls
+        /// <see cref="ResolveEntityInterceptor"/> to obtain an instance. This allows derived classes to
         /// override the behaviour of how to obtain the concrete <see cref="IInterceptor"/> instance.
         /// </remarks>
         public IInterceptor EntityInterceptor
@@ -129,7 +128,7 @@ namespace Spring.Data.NHibernate.Support
         /// Gets the configured <see cref="ISessionFactory"/> instance to be used.
         /// </summary>
         /// <remarks>
-        /// If this property is requested for the first time, <see cref="ResolveSessionFactory"/> is called. 
+        /// If this property is requested for the first time, <see cref="ResolveSessionFactory"/> is called.
         /// This allows derived classes to override the behaviour of how to obtain the concrete <see cref="ISessionFactory"/> instance.
         /// </remarks>
         /// <exception cref="ArgumentException">If the <see cref="ISessionFactory"/> instance cannot be resolved.</exception>
@@ -167,7 +166,7 @@ namespace Spring.Data.NHibernate.Support
         /// Gets or Sets the flushmode to be applied on each newly created session.
         /// </summary>
         /// <remarks>
-        /// This property defaults to <see cref="FlushMode.Never"/> to ensure that modifying objects outside the boundaries 
+        /// This property defaults to <see cref="FlushMode.Never"/> to ensure that modifying objects outside the boundaries
         /// of a transaction will not be persisted. It is recommended to not change this value but wrap any modifying operation
         /// within a transaction.
         /// </remarks>

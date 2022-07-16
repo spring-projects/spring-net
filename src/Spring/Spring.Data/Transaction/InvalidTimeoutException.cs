@@ -18,12 +18,11 @@
 
 #endregion
 
-using System;
 using System.Runtime.Serialization;
 
 namespace Spring.Transaction
 {
-	/// <summary> 
+	/// <summary>
 	/// Exception that gets thrown when an invalid timeout is specified,
 	/// for example when the transaction manager implementation doesn't support timeouts.
 	/// </summary>
@@ -92,7 +91,7 @@ namespace Spring.Transaction
 
 		/// <inheritdoc />
 		protected InvalidTimeoutException(
-			SerializationInfo info, StreamingContext context ) : base( info, context ) 
+			SerializationInfo info, StreamingContext context ) : base( info, context )
 		{
 			_timeout = info.GetInt32( "timeout" );
 		}

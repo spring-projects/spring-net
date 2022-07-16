@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,7 @@
 
 #region Imports
 
-using System;
 using System.Collections.Specialized;
-using System.Threading;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 using Spring.Util;
@@ -36,7 +34,7 @@ namespace Spring.Web.UI.Controls
     /// </summary>
     /// <remarks>
     /// <p>
-    /// Credit: this control uses a slightly modified version of the 
+    /// Credit: this control uses a slightly modified version of the
     /// <a href="http://www.dynarch.com/projects/calendar/">Dynarch.com DHTML Calendar</a>,
     /// written by Mihai Bazon.
     /// </p>

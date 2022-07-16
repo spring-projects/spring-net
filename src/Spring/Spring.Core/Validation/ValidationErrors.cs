@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,17 +18,11 @@
 
 #endregion
 
-#region Imports
-
-using System;
-using System.Collections.Generic;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using Spring.Context;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Validation
 {
@@ -48,7 +42,7 @@ namespace Spring.Validation
     public class ValidationErrors : IValidationErrors, IXmlSerializable
     {
         #region Constructors
-        
+
         /// <summary>
         /// Default constructor.
         /// </summary>
@@ -60,16 +54,16 @@ namespace Spring.Validation
         #region IXmlSerializable implementations
 
         /// <summary>
-        /// This property is reserved, apply the 
+        /// This property is reserved, apply the
         /// <see cref="T:System.Xml.Serialization.XmlSchemaProviderAttribute" />
-        /// to the class instead. 
+        /// to the class instead.
         /// </summary>
         /// <returns>
-        /// An <see cref="T:System.Xml.Schema.XmlSchema" /> that describes the 
-        /// XML representation of the object that is produced by 
-        /// the <see cref="M:System.Xml.Serialization.IXmlSerializable.WriteXml(System.Xml.XmlWriter)" /> 
-        /// method and consumed by the 
-        /// <see cref="M:System.Xml.Serialization.IXmlSerializable.ReadXml(System.Xml.XmlReader)" /> 
+        /// An <see cref="T:System.Xml.Schema.XmlSchema" /> that describes the
+        /// XML representation of the object that is produced by
+        /// the <see cref="M:System.Xml.Serialization.IXmlSerializable.WriteXml(System.Xml.XmlWriter)" />
+        /// method and consumed by the
+        /// <see cref="M:System.Xml.Serialization.IXmlSerializable.ReadXml(System.Xml.XmlReader)" />
         /// method.
         /// </returns>
         public XmlSchema GetSchema()
@@ -81,8 +75,8 @@ namespace Spring.Validation
         /// Generates an object from its XML representation.
         /// </summary>
         /// <param name="reader">
-        /// The <see cref="T:System.Xml.XmlReader"></see> stream 
-        /// from which the object is deserialized. 
+        /// The <see cref="T:System.Xml.XmlReader"></see> stream
+        /// from which the object is deserialized.
         /// </param>
         public void ReadXml(XmlReader reader)
         {
@@ -117,8 +111,8 @@ namespace Spring.Validation
         /// Converts an object into its XML representation.
         /// </summary>
         /// <param name="writer">
-        /// The <see cref="T:System.Xml.XmlWriter"></see> stream 
-        /// to which the object is serialized. 
+        /// The <see cref="T:System.Xml.XmlWriter"></see> stream
+        /// to which the object is serialized.
         /// </param>
         public void WriteXml(XmlWriter writer)
         {
@@ -141,7 +135,7 @@ namespace Spring.Validation
             }
         }
 
-        #endregion 
+        #endregion
 
         #region ValidationErrors methods
 
@@ -159,7 +153,7 @@ namespace Spring.Validation
         {
             get { return this.errorMap.Count == 0; }
         }
-        
+
         /// <summary>
         /// Gets the list of all providers.
         /// </summary>
@@ -291,7 +285,7 @@ namespace Spring.Validation
         }
 
         #endregion
-        
+
         #region Data members
 
         private readonly IDictionary<string, List<ErrorMessage>> errorMap = new Dictionary<string, List<ErrorMessage>>();

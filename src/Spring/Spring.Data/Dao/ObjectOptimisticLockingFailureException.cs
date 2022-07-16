@@ -1,14 +1,14 @@
 #region Licence
 
 /*
- * Copyright © 2002-2011 the original author or authors.
- * 
+ * Copyright ï¿½ 2002-2011 the original author or authors.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,18 +18,13 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Runtime.Serialization;
-
-#endregion
 
 namespace Spring.Dao
 {
     /// <summary>
     /// Exception thrown on an optimistic locking violation for a mapped object.
-    ///  Provides information about the persistent class and the identifier. 
+    ///  Provides information about the persistent class and the identifier.
     /// </summary>
     /// <author>Mark Pollack (.NET)</author>
     [Serializable]
@@ -57,7 +52,7 @@ namespace Spring.Dao
         /// </summary>
         /// <param name="message">A message about the exception..</param>
         public ObjectOptimisticLockingFailureException(string message) : base(message)
-        {            
+        {
         }
 
         /// <summary>
@@ -69,7 +64,7 @@ namespace Spring.Dao
         /// </param>
         /// <param name="rootCause">
         /// The root exception from the underlying data access API
-        /// </param>        
+        /// </param>
         public ObjectOptimisticLockingFailureException(string message, Exception rootCause) : base(message, rootCause)
         {
         }
@@ -78,7 +73,7 @@ namespace Spring.Dao
             "Object of class [" + persistentClass.Name + "] with identifier [" + identifier +
             "]: optimistic locking failed", null)
         {
-            
+
         }
 
         public ObjectOptimisticLockingFailureException(
@@ -92,7 +87,7 @@ namespace Spring.Dao
             "Object of class [" + persistentClassName + "] with identifier [" + identifier +
             "]: optimistic locking failed", null)
         {
-            
+
         }
 
         public ObjectOptimisticLockingFailureException(
@@ -123,17 +118,17 @@ namespace Spring.Dao
         {
             get
             {
-                if (this.persistentClass is Type) 
+                if (this.persistentClass is Type)
                 {
                     return ((Type) this.persistentClass).Name;
                 }
                 return (this.persistentClass != null ? this.persistentClass.ToString() : null);
-        
+
             }
         }
 
 
-      
+
 
         #region Properties
 
@@ -156,7 +151,7 @@ namespace Spring.Dao
         {
             info.AddValue( "persistentClass", persistentClass );
             info.AddValue( "identifier", identifier );
-            base.GetObjectData( info, context );            
+            base.GetObjectData( info, context );
         }
 
         #endregion

@@ -18,15 +18,13 @@
 
 #endregion
 
-using System;
 using Spring.Objects.Factory;
 using Spring.Util;
-using TIBCO.EMS;
 
 namespace Spring.Messaging.Ems.Jndi
 {
     public abstract class JndiLocatorSupport : JndiAccessor
-    {       
+    {
 
 
         protected virtual object Lookup(string jndiName)
@@ -44,7 +42,7 @@ namespace Spring.Messaging.Ems.Jndi
             AssertUtils.ArgumentNotNull(jndiName, "jndiName");
 
             object jndiObject =  JndiLookupContext.Lookup(jndiName);
-            
+
 
             if (requiredType != null && !ObjectUtils.IsAssignable(requiredType, jndiObject))
             {

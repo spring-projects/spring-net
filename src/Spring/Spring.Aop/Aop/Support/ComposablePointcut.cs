@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,6 @@
 #endregion
 
 #region Imports
-
-using System;
 
 #endregion
 
@@ -44,7 +42,7 @@ namespace Spring.Aop.Support
 	/// There is no <c>Union()</c> method on this class. Use the
 	/// <see cref="Spring.Aop.Support.Pointcuts.Union"/> method for such functionality.
 	/// </p>
-	/// </remarks> 
+	/// </remarks>
 	/// <author>Rod Johnson</author>
 	/// <author>Aleksandar Seovic (.NET)</author>
 	[Serializable]
@@ -54,7 +52,7 @@ namespace Spring.Aop.Support
 		private IMethodMatcher _methodMatcher;
 
 		/// <summary>
-		/// Creates a new instance of the 
+		/// Creates a new instance of the
 		/// <see cref="Spring.Aop.Support.ComposablePointcut"/> class
 		/// that matches all the methods on all <see cref="System.Type"/>s.
 		/// </summary>
@@ -65,7 +63,7 @@ namespace Spring.Aop.Support
 		}
 
 		/// <summary>
-		/// Creates a new instance of the 
+		/// Creates a new instance of the
 		/// <see cref="Spring.Aop.Support.ComposablePointcut"/> class
 		/// that uses the supplied <paramref name="typeFilter"/> and
 		/// <paramref name="methodMatcher"/>.

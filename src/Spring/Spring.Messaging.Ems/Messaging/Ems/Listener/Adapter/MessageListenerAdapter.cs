@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Reflection;
 using Common.Logging;
 using Spring.Expressions;
@@ -9,7 +6,6 @@ using Spring.Messaging.Ems.Support;
 using Spring.Messaging.Ems.Support.Converter;
 using Spring.Messaging.Ems.Support.Destinations;
 using Spring.Util;
-using TIBCO.EMS;
 
 namespace Spring.Messaging.Ems.Listener.Adapter
 {
@@ -221,7 +217,7 @@ namespace Spring.Messaging.Ems.Listener.Adapter
 	    /// </summary>
 	    /// <remarks>
 	    /// In case of an exception, the <see cref="HandleListenerException"/> method will be invoked.
-	    /// <b>Note</b> 
+	    /// <b>Note</b>
 	    /// Does not support sending response messages based on
 	    /// result objects returned from listener methods. Use the
 	    /// <see cref="ISessionAwareMessageListener"/> entry point (typically through a Spring
@@ -377,7 +373,7 @@ namespace Spring.Messaging.Ems.Listener.Adapter
         }
 
         /// <summary>
-        /// Handles the given result object returned from the listener method, sending a response message back. 
+        /// Handles the given result object returned from the listener method, sending a response message back.
         /// </summary>
         /// <param name="result">The result object to handle (never <code>null</code>).</param>
         /// <param name="request">The original request message.</param>
@@ -497,7 +493,7 @@ namespace Spring.Messaging.Ems.Listener.Adapter
             {
                 return DestinationResolver.ResolveDestinationName(session, destNameHolder.Name, destNameHolder.IsTopic);
             }
-            
+
             return null;
         }
 
@@ -529,7 +525,7 @@ namespace Spring.Messaging.Ems.Listener.Adapter
         /// <param name="response">The outgoing message about to be sent.</param>
         protected virtual void PostProcessProducer(IMessageProducer producer, Message response)
         {
-            
+
         }
     }
 

@@ -18,8 +18,6 @@
 
 #endregion
 
-using System;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.Serialization;
@@ -41,13 +39,13 @@ namespace Spring.Aop.Framework.DynamicProxy
         protected IAopProxyTypeGenerator aopProxyGenerator;
 
         /// <summary>
-        /// The dictionary to cache the list of target  
+        /// The dictionary to cache the list of target
         /// <see cref="System.Reflection.MethodInfo"/>s.
         /// </summary>
         protected IDictionary<string, MethodInfo> targetMethods;
 
         /// <summary>
-        /// The dictionary to cache the list of target  
+        /// The dictionary to cache the list of target
         /// <see cref="System.Reflection.MethodInfo"/>s defined on the proxy.
         /// </summary>
         protected IDictionary<string, MethodInfo> onProxyTargetMethods;
@@ -75,13 +73,13 @@ namespace Spring.Aop.Framework.DynamicProxy
         protected LocalBuilder returnValue;
 
         /// <summary>
-        /// The local variable to store the closed generic method 
+        /// The local variable to store the closed generic method
         /// when the target method is generic.
         /// </summary>
         protected LocalBuilder genericTargetMethod;
 
         /// <summary>
-        /// The local variable to store the closed generic method 
+        /// The local variable to store the closed generic method
         /// when the target method defined on the proxy is generic.
         /// </summary>
         protected LocalBuilder genericOnProxyTargetMethod;
@@ -92,11 +90,11 @@ namespace Spring.Aop.Framework.DynamicProxy
         protected FieldBuilder targetMethodCacheField;
 
         /// <summary>
-        /// The field to cache the target <see cref="System.Reflection.MethodInfo"/> 
+        /// The field to cache the target <see cref="System.Reflection.MethodInfo"/>
         /// defined on the proxy.
         /// </summary>
         protected FieldBuilder onProxyTargetMethodCacheField;
-       
+
         // convinience fields
 
         /// <summary>
@@ -137,7 +135,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         /// implemented explicitly; otherwise <see langword="false"/>.
         /// </param>
         /// <param name="targetMethods">
-        /// The dictionary to cache the list of target 
+        /// The dictionary to cache the list of target
         /// <see cref="System.Reflection.MethodInfo"/>s.
         /// </param>
         protected AbstractAopProxyMethodBuilder(
@@ -159,11 +157,11 @@ namespace Spring.Aop.Framework.DynamicProxy
         /// implemented explicitly; otherwise <see langword="false"/>.
         /// </param>
         /// <param name="targetMethods">
-        /// The dictionary to cache the list of target 
+        /// The dictionary to cache the list of target
         /// <see cref="System.Reflection.MethodInfo"/>s.
         /// </param>
         /// <param name="onProxyTargetMethods">
-        /// The dictionary to cache the list of target  
+        /// The dictionary to cache the list of target
         /// <see cref="System.Reflection.MethodInfo"/>s defined on the proxy.
         /// </param>
         protected AbstractAopProxyMethodBuilder(
@@ -220,7 +218,7 @@ namespace Spring.Aop.Framework.DynamicProxy
             string methodId = GenerateMethodCacheFieldId(method);
             targetMethods.Add(methodId, method);
 
-            targetMethodCacheField = typeBuilder.DefineField(methodId, typeof(MethodInfo), 
+            targetMethodCacheField = typeBuilder.DefineField(methodId, typeof(MethodInfo),
                 FieldAttributes.Private | FieldAttributes.Static);
 
             MakeGenericMethod(il, method, targetMethodCacheField, genericTargetMethod);
@@ -237,7 +235,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         }
 
         /// <summary>
-        /// Create a closed generic method for the current call 
+        /// Create a closed generic method for the current call
         /// if target method is a generic definition.
         /// </summary>
         /// <param name="il">The IL generator to use.</param>
@@ -283,7 +281,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         }
 
         /// <summary>
-        /// Generates the IL instructions that pushes 
+        /// Generates the IL instructions that pushes
         /// the target type on stack.
         /// </summary>
         /// <param name="il">The IL generator to use.</param>
@@ -294,8 +292,8 @@ namespace Spring.Aop.Framework.DynamicProxy
         }
 
         /// <summary>
-        /// Generates the IL instructions that pushes  
-        /// the current <see cref="Spring.Aop.Framework.DynamicProxy.AdvisedProxy"/> 
+        /// Generates the IL instructions that pushes
+        /// the current <see cref="Spring.Aop.Framework.DynamicProxy.AdvisedProxy"/>
         /// instance on stack.
         /// </summary>
         /// <param name="il">The IL generator to use.</param>
@@ -351,7 +349,7 @@ namespace Spring.Aop.Framework.DynamicProxy
             interceptors = il.DeclareLocal(typeof(System.Collections.IList));
             targetType = il.DeclareLocal(typeof(Type));
             arguments = il.DeclareLocal(typeof(Object[]));
-            
+
             if (method.IsGenericMethodDefinition)
             {
                 genericTargetMethod = il.DeclareLocal(typeof(MethodInfo));
@@ -592,7 +590,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         }
 
         /// <summary>
-        /// Emits MSIL instructions to load a value of the specified <paramref name="type"/> 
+        /// Emits MSIL instructions to load a value of the specified <paramref name="type"/>
         /// onto the evaluation stack indirectly.
         /// </summary>
         /// <param name="il">The IL generator to use.</param>
@@ -619,7 +617,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         }
 
         /// <summary>
-        /// Emit MSIL instructions to store a value of the specified <paramref name="type"/> 
+        /// Emit MSIL instructions to store a value of the specified <paramref name="type"/>
         /// at a supplied address.
         /// </summary>
         /// <param name="il">The IL generator to use.</param>
@@ -645,7 +643,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         }
 
         /// <summary>
-        /// Emits MSIL instructions to convert the boxed representation 
+        /// Emits MSIL instructions to convert the boxed representation
         /// of the supplied <paramref name="type"/> to its unboxed form.
         /// </summary>
         /// <param name="il">The IL generator to use.</param>
@@ -715,7 +713,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         public static readonly MethodInfo GetTypeMethod =
             typeof(Object).GetMethod("GetType", Type.EmptyTypes);
 
-        public static readonly MethodInfo GetTypeFromHandle = 
+        public static readonly MethodInfo GetTypeFromHandle =
             typeof(Type).GetMethod("GetTypeFromHandle", new Type[] { typeof(RuntimeTypeHandle) });
 
         public static readonly MethodInfo MakeGenericMethod =

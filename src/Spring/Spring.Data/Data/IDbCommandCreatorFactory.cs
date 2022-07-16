@@ -1,14 +1,14 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
- * 
+ * Copyright ï¿½ 2002-2011 the original author or authors.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,15 +18,10 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Collections;
 using System.Data;
 using Spring.Dao;
 using Spring.Data.Common;
-
-#endregion
 
 namespace Spring.Data
 {
@@ -36,18 +31,18 @@ namespace Spring.Data
     /// set of parameter declarations.
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	public class IDbCommandCreatorFactory 
+	public class IDbCommandCreatorFactory
 	{
 		#region Fields
 
 	    private String sql;
-	    
+
 	    private IDbParameters declaredParameters;
-	    
+
 	    private IDbProvider dbProvider;
-	    
+
 	    private CommandType commandType;
-	    
+
 		#endregion
 
 
@@ -58,7 +53,7 @@ namespace Spring.Data
 	    public IDbCommandCreatorFactory(IDbProvider dbProvider, CommandType commandType, string sql, IDbParameters declaredParameters)
 	    {
             this.dbProvider = dbProvider;
-            this.sql = sql;	
+            this.sql = sql;
 		    this.commandType = commandType;
 		    this.declaredParameters = declaredParameters;
 	    }
@@ -66,7 +61,7 @@ namespace Spring.Data
 	    #endregion
 
 		#region Properties
-	    
+
 	    public IDbParameters DeclaredParameters
 	    {
 	        get
@@ -74,7 +69,7 @@ namespace Spring.Data
 	            return declaredParameters;
 	        }
 	    }
-	    
+
         public string Sql
         {
             get { return sql; }
@@ -90,32 +85,32 @@ namespace Spring.Data
             get { return commandType; }
         }
 		#endregion
-	    
+
 		#region Methods
 
         public IDbCommandCreator NewDbCommandCreatorWithParamValues(params object[] inParamValues)
         {
-	        
+
             return new CommandCreatorWithParamValues(this, inParamValues != null ? ArrayList.Adapter(inParamValues) : new ArrayList());
         }
 
 
 	    public IDbCommandCreator NewDbCommandCreator(IDictionary inParameters)
 	    {
-	        
+
 	        return new CommandCreatorImpl(this, inParameters != null ? inParameters : new Hashtable());
 	    }
-	   
+
 		#endregion
 
         private class CommandCreatorWithParamValues : IDbCommandCreator
         {
             private IDbCommandCreatorFactory factory;
             private IList inParamValues;
-            
+
             public CommandCreatorWithParamValues(IDbCommandCreatorFactory factory, IList inParamValues)
             {
-                this.factory = factory;                
+                this.factory = factory;
                 this.inParamValues = inParamValues;
             }
 
@@ -162,22 +157,22 @@ namespace Spring.Data
                         }
 
                         command.Parameters.Add(clonedParameter);
-                        
+
                     }
                 }
                 return command;
             }
-            
+
         }
 	    private class CommandCreatorImpl : IDbCommandCreator{
 
             private IDbCommandCreatorFactory factory;
 	        private IDictionary inParams;
-	        
+
 
 	        public CommandCreatorImpl(IDbCommandCreatorFactory factory, IDictionary inParameters)
 	        {
-	            this.factory = factory;    
+	            this.factory = factory;
 	            this.inParams = inParameters;
 	        }
 
@@ -191,7 +186,7 @@ namespace Spring.Data
                     foreach ( IDbDataParameter declaredParameter in factory.declaredParameters.DataParameterCollection)
                     {
                         IDbDataParameter clonedParameter = (IDbDataParameter)((ICloneable)declaredParameter).Clone();
-                        
+
                         if (IsInputParamter(clonedParameter) && !inParams.Contains(clonedParameter.ParameterName))
                         {
                             throw new InvalidDataAccessApiUsageException("Required input parameter '" +
@@ -205,14 +200,14 @@ namespace Spring.Data
                         // to obtain parameter values. The whole parameter handling mechanism should be refactored
                         // not to require parameter prefix to be specified when populating named parameters collection
                         // within AdoOperations. Code below is just a temporary workaround until this issue is resolved.
-                        
+
                         Object inValue = inParams[clonedParameter.ParameterName];
                         if (!(clonedParameter.Direction == ParameterDirection.Output) &&
                             !(clonedParameter.Direction == ParameterDirection.ReturnValue))
                         {
                             clonedParameter.Value = (inValue == null) ? DBNull.Value : inValue;
                         }
-                        
+
                         command.Parameters.Add(clonedParameter);
                     }
                 }

@@ -16,8 +16,6 @@
 //  */
 #endregion
 
-using System.Threading.Tasks;
-
 namespace Spring.Scheduling.Quartz
 {
     /// <summary>

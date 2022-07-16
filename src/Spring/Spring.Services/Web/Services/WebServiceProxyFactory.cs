@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,6 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Collections;
 using System.Xml.Schema;
 using System.Xml.Serialization;
@@ -37,8 +34,6 @@ using Spring.Proxy;
 using Spring.Util;
 using Spring.Core.IO;
 
-#endregion
-
 namespace Spring.Web.Services
 {
     /// <summary>
@@ -47,7 +42,7 @@ namespace Spring.Web.Services
     /// <remarks>
     /// <p>
     /// This factory object should be used to obtain reference to a web service
-    /// that can be safely cast to a service interface, which allows client code to code 
+    /// that can be safely cast to a service interface, which allows client code to code
     /// against interface, and not directly against the web service.
     /// </p>
     /// <p>
@@ -88,7 +83,7 @@ namespace Spring.Web.Services
         #region Constructor(s) / Destructor
 
         /// <summary>
-        /// Creates a new instance of the 
+        /// Creates a new instance of the
         /// <see cref="WebServiceProxyFactory"/> class.
         /// </summary>
         public WebServiceProxyFactory()
@@ -112,7 +107,7 @@ namespace Spring.Web.Services
         }
 
         /// <summary>
-        /// Gets or sets the URI for an <see cref="Spring.Core.IO.IResource"/> 
+        /// Gets or sets the URI for an <see cref="Spring.Core.IO.IResource"/>
         /// that contains the web service description (WSDL).
         /// </summary>
         public IResource ServiceUri
@@ -140,7 +135,7 @@ namespace Spring.Web.Services
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="System.Net.NetworkCredential"/> instance 
+        /// Gets or sets the <see cref="System.Net.NetworkCredential"/> instance
         /// to use when connecting to a server that requires authentication.
         /// </summary>
         public NetworkCredential Credential
@@ -167,7 +162,7 @@ namespace Spring.Web.Services
         }
 
         /// <summary>
-        /// Gets or sets the <see cref="System.Net.NetworkCredential"/> instance 
+        /// Gets or sets the <see cref="System.Net.NetworkCredential"/> instance
         /// to use when connecting to a proxy server that requires authentication.
         /// </summary>
         /// <remarks>
@@ -191,7 +186,7 @@ namespace Spring.Web.Services
         }
 
         /// <summary>
-        /// Gets or sets a list of custom attributes 
+        /// Gets or sets a list of custom attributes
         /// that should be applied to a proxy class.
         /// </summary>
         public IList TypeAttributes
@@ -201,12 +196,12 @@ namespace Spring.Web.Services
         }
 
         /// <summary>
-        /// Gets or sets a dictionary of custom attributes 
+        /// Gets or sets a dictionary of custom attributes
         /// that should be applied to web service members.
         /// </summary>
         /// <remarks>
-        /// Dictionary key is an expression that members can be matched against. 
-        /// Value is a list of attributes that should be applied 
+        /// Dictionary key is an expression that members can be matched against.
+        /// Value is a list of attributes that should be applied
         /// to each member that matches expression.
         /// </remarks>
         public IDictionary MemberAttributes
@@ -250,7 +245,7 @@ namespace Spring.Web.Services
         }
 
         /// <summary>
-        /// Gets or sets the template object definition 
+        /// Gets or sets the template object definition
         /// that should be used to configure proxy instance.
         /// </summary>
         public virtual IObjectDefinition ProductTemplate
@@ -358,7 +353,7 @@ namespace Spring.Web.Services
         {
             try
             {
-                if (ServiceUri is UrlResource || 
+                if (ServiceUri is UrlResource ||
                     ServiceUri is FileSystemResource)
                 {
                     DiscoveryClientProtocol dcProtocol = new DiscoveryClientProtocol();
@@ -428,7 +423,7 @@ namespace Spring.Web.Services
         #region SoapHttpClientProxyTypeBuilder inner class implementation
 
         /// <summary>
-        /// Proxy type builder that can be used to create a proxy for 
+        /// Proxy type builder that can be used to create a proxy for
         /// <see cref="System.Web.Services.Protocols.SoapHttpClientProtocol"/> derived classes.
         /// </summary>
         private sealed class SoapHttpClientProxyTypeBuilder : AbstractProxyTypeBuilder
@@ -460,7 +455,7 @@ namespace Spring.Web.Services
             #region Constructor(s) / Destructor
 
             /// <summary>
-            /// Creates a new instance of the 
+            /// Creates a new instance of the
             /// <see cref="SoapHttpClientProxyTypeBuilder"/> class.
             /// </summary>
             /// <param name="serviceUri">The URI that contains the Web Service meta info (WSDL).</param>
@@ -517,7 +512,7 @@ namespace Spring.Web.Services
             #region IProxyTypeGenerator Members
 
             /// <summary>
-            /// Generates the IL instructions that pushes 
+            /// Generates the IL instructions that pushes
             /// the target instance on which calls should be delegated to.
             /// </summary>
             /// <param name="il">The IL generator to use.</param>
@@ -808,7 +803,7 @@ namespace Spring.Web.Services
             }
 
             /// <summary>
-            /// Search and returns the type mapping between method parameters/return value 
+            /// Search and returns the type mapping between method parameters/return value
             /// and the element parts of a literal-use SOAP message.
             /// </summary>
             private XmlMembersMapping GetMembersMapping(string messageName, MessagePartCollection messageParts, SoapBodyBinding soapBodyBinding, SoapBindingStyle soapBindingStyle)
@@ -938,7 +933,7 @@ namespace Spring.Web.Services
             #region SoapHttpClientProxyMethodBuilder inner class implementation
 
             /// <summary>
-            /// Proxy method builder that can be used to create a proxy method 
+            /// Proxy method builder that can be used to create a proxy method
             /// for web services operation invocation.
             /// </summary>
             private sealed class SoapHttpClientProxyMethodBuilder : AbstractProxyMethodBuilder
@@ -1086,7 +1081,7 @@ namespace Spring.Web.Services
         #region WebServiceProxyProxyTypeBuilder inner class implementation
 
         /// <summary>
-        /// Proxy type builder that can be used to create a proxy for 
+        /// Proxy type builder that can be used to create a proxy for
         /// .Net-generated proxy class that can be safely cast to a service interface.
         /// </summary>
         private sealed class WebServiceProxyProxyTypeBuilder : InheritanceProxyTypeBuilder
@@ -1094,7 +1089,7 @@ namespace Spring.Web.Services
             #region Constructor(s) / Destructor
 
             /// <summary>
-            /// Creates a new instance of the 
+            /// Creates a new instance of the
             /// <see cref="WebServiceProxyProxyTypeBuilder"/> class.
             /// </summary>
             public WebServiceProxyProxyTypeBuilder()
@@ -1108,13 +1103,13 @@ namespace Spring.Web.Services
             #region Protected Methods
 
             /// <summary>
-            /// Gets the mapping of the interface to proxy 
-            /// into the actual methods on the target type 
+            /// Gets the mapping of the interface to proxy
+            /// into the actual methods on the target type
             /// that does not need to implement that interface.
             /// </summary>
             /// <remarks>
             /// <p>
-            /// As the proxy type does not implement the interface, 
+            /// As the proxy type does not implement the interface,
             /// we try to find matching methods.
             /// </p>
             /// </remarks>

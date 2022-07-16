@@ -18,17 +18,12 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Runtime.Serialization;
-
-#endregion
 
 namespace Spring.Dao
 {
-    /// <summary> 
-    /// Root of the hierarchy of data access exception that are considered transient - 
+    /// <summary>
+    /// Root of the hierarchy of data access exception that are considered transient -
     /// where a previously failed operation might be able to succeed when the operation
     /// is retried without any intervention by application-level functionality.
     /// </summary>

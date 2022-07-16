@@ -1,14 +1,14 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
- * 
+ * Copyright ï¿½ 2002-2011 the original author or authors.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,13 +18,8 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Reflection;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Data.Common
 {
@@ -44,11 +39,11 @@ namespace Spring.Data.Common
         private Type commandType;
         private Type parameterType;
         private Type dataAdapterType;
-        
+
 
         private Type parameterDbType;
         private PropertyInfo parameterDbTypeProperty;
-        private PropertyInfo parameterIsNullableProperty;        
+        private PropertyInfo parameterIsNullableProperty;
         private string parameterNamePrefix;
 
         private Type exceptionType;
@@ -125,7 +120,7 @@ namespace Spring.Data.Common
             AssertUtils.ArgumentHasText(parameterIsNullableProperty, "parameterIsNullableProperty", GetErrorMessage());
             AssertUtils.ArgumentHasText(parameterNamePrefix, "parameterNamePrefix", GetErrorMessage());
             AssertUtils.ArgumentNotNull(exceptionType, "exceptionType", GetErrorMessage());
-            
+
             this.assemblyName = assemblyName;
 
             this.connectionType = connectionType;
@@ -158,9 +153,9 @@ namespace Spring.Data.Common
 
             this.parameterDbTypeProperty = this.parameterType.GetProperty(parameterDbTypeProperty,
                                                      BindingFlags.Instance | BindingFlags.Public);
-            AssertUtils.ArgumentNotNull(this.parameterDbTypeProperty, "parameterDbTypeProperty", GetErrorMessage() + 
-                ", could not resolve parameterDbTypeProperty " + 
-                parameterDbTypeProperty + 
+            AssertUtils.ArgumentNotNull(this.parameterDbTypeProperty, "parameterDbTypeProperty", GetErrorMessage() +
+                ", could not resolve parameterDbTypeProperty " +
+                parameterDbTypeProperty +
                 " to PropertyInfo.  Please check dbproviders.xml entry for correct metadata listing.");
 
             this.parameterIsNullableProperty = this.parameterType.GetProperty(parameterIsNullableProperty,
@@ -170,20 +165,20 @@ namespace Spring.Data.Common
                 ", could not resolve parameterIsNullableProperty " +
                 parameterIsNullableProperty +
                 " to PropertyInfo.  Please check dbproviders.xml entry for correct metadata listing.");
-            
+
             this.parameterNamePrefix = parameterNamePrefix;
             this.exceptionType = exceptionType;
-           
+
             this.useParameterNamePrefixInParameterCollection = useParameterNamePrefixInParameterCollection;
             this.useParameterPrefixInSql = useParameterPrefixInSql;
             this.bindByName = bindByName;
 
             this.errorCodeExceptionExpression = errorCodeExceptionExpression;
-            
-            
+
+
             errorCodes = new ErrorCodes();
 
-        
+
         }
 
         private string GetErrorMessage()
@@ -397,7 +392,7 @@ namespace Spring.Data.Common
         /// <value>The error codes.</value>
         public ErrorCodes ErrorCodes
         {
-            get { return errorCodes; } 
+            get { return errorCodes; }
             set { errorCodes = value;}
         }
 
@@ -412,7 +407,7 @@ namespace Spring.Data.Common
         }
 
         #endregion
-        
+
 
     }
 }

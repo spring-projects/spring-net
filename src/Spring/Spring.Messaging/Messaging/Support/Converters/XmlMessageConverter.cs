@@ -18,8 +18,6 @@
 
 #endregion
 
-
-using System;
 using Spring.Util;
 
 #if NETSTANDARD
@@ -32,7 +30,7 @@ namespace Spring.Messaging.Support.Converters
 {
     /// <summary>
     /// An <see cref="IMessageConverter"/> implementation that delegates to an instance of
-    /// <see cref="XmlMessageFormatter"/> to convert messages.  
+    /// <see cref="XmlMessageFormatter"/> to convert messages.
     /// </summary>
     /// <author>Mark Pollack</author>
     public class XmlMessageConverter : IMessageConverter

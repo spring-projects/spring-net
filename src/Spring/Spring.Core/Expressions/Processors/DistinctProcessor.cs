@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Collections;
 using Spring.Collections;
 
@@ -45,7 +44,7 @@ namespace Spring.Expressions.Processors
         /// A collection containing distinct source collection elements.
         /// </returns>
         /// <exception cref="ArgumentException">
-        /// If there is more than one argument, or if the single optional argument 
+        /// If there is more than one argument, or if the single optional argument
         /// is not <b>Boolean</b>.
         /// </exception>
         public object Process(ICollection source, object[] args)
@@ -54,7 +53,7 @@ namespace Spring.Expressions.Processors
             {
                 return null;
             }
-            
+
             bool includeNulls = false;
             if (args.Length == 1)
             {

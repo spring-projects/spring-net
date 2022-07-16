@@ -18,11 +18,7 @@
 
 #endregion
 
-#region Imports
-
 using System.Globalization;
-
-#endregion
 
 namespace Spring.Context.Support
 {
@@ -40,7 +36,7 @@ namespace Spring.Context.Support
     /// There should not (typically) be a need to instantiate instances of this class;
     /// <see cref="Spring.Context.Support.NullMessageSource"/> does not maintan any state
     /// and the <see cref="Spring.Context.Support.NullMessageSource.Null"/> instance is
-    /// thus safe to pass around. 
+    /// thus safe to pass around.
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>

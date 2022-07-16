@@ -14,7 +14,6 @@
 * limitations under the License.
 */
 
-using System;
 using System.Collections;
 using Quartz;
 using Quartz.Impl;
@@ -23,7 +22,7 @@ using Spring.Objects.Factory;
 
 namespace Spring.Scheduling.Quartz
 {
-    /// <summary> 
+    /// <summary>
     /// Convenience subclass of Quartz' JobDetail class that eases properties based
     /// usage.
     /// </summary>
@@ -34,7 +33,7 @@ namespace Spring.Scheduling.Quartz
     /// </remarks>
     /// <author>Juergen Hoeller</author>
     /// <seealso cref="IJobDetail.Key" />
-    /// <seealso cref="SchedulerConstants.DefaultGroup" /> 
+    /// <seealso cref="SchedulerConstants.DefaultGroup" />
     public class JobDetailObject : JobDetailImpl, IObjectNameAware, IApplicationContextAware, IInitializingObject
     {
         private Type actualJobType;
@@ -42,7 +41,7 @@ namespace Spring.Scheduling.Quartz
         private IApplicationContext applicationContext;
         private string applicationContextJobDataKey;
 
-        /// <summary> 
+        /// <summary>
         /// Overridden to support any job class, to allow a custom JobFactory
         /// to adapt the given job class to the Quartz Job interface.
         /// </summary>
@@ -65,7 +64,7 @@ namespace Spring.Scheduling.Quartz
             }
         }
 
-        /// <summary> 
+        /// <summary>
         /// Register objects in the JobDataMap via a given Map.
         /// </summary>
         /// <remarks>
@@ -164,7 +163,7 @@ namespace Spring.Scheduling.Quartz
         /// the JobDataMap but rather into the SchedulerContext.</b>
         /// </p>
         /// </remarks>
-        /// <seealso cref="SchedulerFactoryObject.ApplicationContextSchedulerContextKey" /> 
+        /// <seealso cref="SchedulerFactoryObject.ApplicationContextSchedulerContextKey" />
         /// <seealso cref="IApplicationContext" />
         public virtual string ApplicationContextJobDataKey
         {

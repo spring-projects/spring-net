@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using System.Reflection;
 using Common.Logging;
 using Spring.Globalization;
@@ -30,7 +28,7 @@ namespace Spring.DataBinding
         }
 
         /// <summary>
-        /// Initialize a new instance of <see cref="AbstractSimpleBinding"/> with the 
+        /// Initialize a new instance of <see cref="AbstractSimpleBinding"/> with the
         /// specified <see cref="IFormatter"/>.
         /// </summary>
         protected AbstractSimpleBinding(IFormatter formatter)

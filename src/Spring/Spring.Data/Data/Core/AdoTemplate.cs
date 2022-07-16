@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,6 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Collections;
 using System.Data;
 using System.Data.Common;
@@ -32,8 +29,6 @@ using Spring.Data.Common;
 using Spring.Data.Support;
 using Spring.Reflection.Dynamic;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Data.Core
 {
@@ -112,12 +107,12 @@ namespace Spring.Data.Core
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to lazily initialize the 
-        /// IAdoExceptionTranslator for this accessor, on first encounter of a 
+        /// Gets or sets a value indicating whether to lazily initialize the
+        /// IAdoExceptionTranslator for this accessor, on first encounter of a
         /// exception from the data provider.  Default is "true"; can be switched to
         /// "false" for initialization on startup.
         /// </summary>
-        /// <value><c>true</c> if to lazy initialize the IAdoExceptionTranslator; 
+        /// <value><c>true</c> if to lazy initialize the IAdoExceptionTranslator;
         /// otherwise, <c>false</c>.</value>
         public override bool LazyInit
         {
@@ -144,8 +139,8 @@ namespace Spring.Data.Core
         }
 
         /// <summary>
-        /// Gets or set the System.Type to use to create an instance of IDataReaderWrapper 
-        /// for the purpose of having defaults values to use in case of DBNull values read 
+        /// Gets or set the System.Type to use to create an instance of IDataReaderWrapper
+        /// for the purpose of having defaults values to use in case of DBNull values read
         /// from IDataReader.
         /// </summary>
         /// <value>The type of the data reader wrapper.</value>
@@ -168,7 +163,7 @@ namespace Spring.Data.Core
                         throw new ArgumentException("DataReaderWrapper type must implement IDataReaderWrapper. Implemented interfaces on "
                                                     + value.GetType().Name + "are [" +
                                                     StringUtils.CollectionToCommaDelimitedString(ReflectionUtils.ToInterfaceArray(value)) + "]");
-                        
+
                     }
                 }
                 else
@@ -3015,7 +3010,7 @@ namespace Spring.Data.Core
                     else
                     {
                         returnValue = resultSetExtractorDelegate(reader);
-                    }                    
+                    }
                     return returnValue;
                 }
                 finally

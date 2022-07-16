@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,15 +18,10 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Collections;
 using Spring.Collections;
 using Spring.Core;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Objects.Support
 {
@@ -55,7 +50,7 @@ namespace Spring.Objects.Support
         /// <param name="instance">the instance to obtain shared state for</param>
         /// <param name="name">the name of the instance.</param>
         /// <returns>
-        /// A dictionary containing the <paramref name="instance"/>'s state, 
+        /// A dictionary containing the <paramref name="instance"/>'s state,
         /// or null if no state can be served by this provider.
         /// </returns>
         public IDictionary GetSharedStateFor( object instance, string name )
@@ -74,7 +69,7 @@ namespace Spring.Objects.Support
             }
 
             IDictionary sharedState = (IDictionary) _sharedStateCache[key];
-            if (sharedState == null) 
+            if (sharedState == null)
             {
                 lock(_sharedStateCache)
                 {
@@ -106,7 +101,7 @@ namespace Spring.Objects.Support
         protected virtual IDictionary CreateSharedStateDictionary(object key)
         {
             return _caseSensitiveState ? new Hashtable() : new CaseInsensitiveHashtable();
-        }        
+        }
 
         /// <summary>
         /// Indicate, whether the given instance will be served by this provider
@@ -114,7 +109,7 @@ namespace Spring.Objects.Support
         /// <param name="instance">the instance to serve state</param>
         /// <param name="name">the name of the instance</param>
         /// <returns>
-        /// a boolean value indicating, whether state shall 
+        /// a boolean value indicating, whether state shall
         /// be resolved for the given instance or not.
         /// </returns>
         public virtual bool CanProvideState(object instance, string name)
@@ -133,7 +128,7 @@ namespace Spring.Objects.Support
         /// </returns>
         /// <remarks>
         /// <para>
-        /// Implementations may choose to return null from this method to indicate, 
+        /// Implementations may choose to return null from this method to indicate,
         /// that they won't serve state for the given instance.
         /// </para>
         /// <para>

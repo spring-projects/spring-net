@@ -18,8 +18,6 @@
 
 #endregion
 
-using System;
-
 using Spring.Context;
 using Spring.Messaging.Support.Converters;
 using Spring.Objects.Factory;
@@ -43,7 +41,7 @@ namespace Spring.Messaging.Core
     /// <para>
     /// Using the System.Messaging.MessageQueue class directly in application code has a number of
     /// shortcomings, namely that most operations are not thread safe (in particular Send) and
-    /// IMessageFormatter classes are not thread safe either.  
+    /// IMessageFormatter classes are not thread safe either.
     /// </para>
     /// <para>
     /// The MessageQueueTemplate class overcomes these limitations letting you use a single instance
@@ -57,7 +55,7 @@ namespace Spring.Messaging.Core
     /// via the Property DefaultMessageQueue.
     /// </para>
     /// <para>
-    /// The template's Send methods will select an appropriate transaction delivery settings so 
+    /// The template's Send methods will select an appropriate transaction delivery settings so
     /// calling code does not need to explicitly manage this responsibility themselves and thus
     /// allowing for greater portability of code across different, but common, transactional usage scenarios.
     /// </para>
@@ -162,14 +160,14 @@ namespace Spring.Messaging.Core
         /// <summary>
         /// Gets the default message queue to be used on send/receive operations that do not
 	    /// have a destination parameter.  The MessageQueue instance is resolved using
-        /// the template's <see cref="IMessageQueueFactory"/>, the default implementaion 
+        /// the template's <see cref="IMessageQueueFactory"/>, the default implementaion
         /// <see cref="DefaultMessageQueueFactory"/> will return an unique instance per thread.
         /// </summary>
         /// <value>The default message queue.</value>
         public MessageQueue DefaultMessageQueue
         {
             get
-            {                
+            {
                 return MessageQueueFactory.CreateMessageQueue(DefaultMessageQueueObjectName);
             }
         }
@@ -181,7 +179,7 @@ namespace Spring.Messaging.Core
         /// from ReceiveAndConvert methods.
         /// </summary>
         /// <remarks>
-        /// The default 
+        /// The default
         /// </remarks>
         /// <value>The message converter.</value>
         public IMessageConverter MessageConverter
@@ -193,7 +191,7 @@ namespace Spring.Messaging.Core
                     throw new InvalidOperationException(
                         "No MessageConverter registered. Check configuration of MessageQueueTemplate.");
                 }
-                return messageQueueFactory.CreateMessageConverter(MessageConverterObjectName);                
+                return messageQueueFactory.CreateMessageConverter(MessageConverterObjectName);
             }
         }
 
@@ -275,10 +273,10 @@ namespace Spring.Messaging.Core
         /// after it has injected all of an object's dependencies.
         /// </summary>
         /// <remarks>
-        /// Ensure that the DefaultMessageQueueObjectName property is set, creates 
+        /// Ensure that the DefaultMessageQueueObjectName property is set, creates
         /// a default implementation of the <see cref="IMessageQueueFactory"/> interface
         /// (<see cref="DefaultMessageQueueFactory"/>) that retrieves instances on a per-thread
-        /// basis, and registers in the Spring container a default implementation of 
+        /// basis, and registers in the Spring container a default implementation of
         /// <see cref="IMessageConverter"/> (<see cref="XmlMessageConverter"/>) with a
         /// simple System.String as its TargetType.  <see cref="QueueUtils.RegisterDefaultMessageConverter"/>
         /// </remarks>
@@ -287,7 +285,7 @@ namespace Spring.Messaging.Core
             if (MessageQueueFactory == null)
             {
                 AssertUtils.ArgumentNotNull(applicationContext, "MessageQueueTemplate requires the ApplicationContext property to be set if the MessageQueueFactory property is not set for automatic create of the DefaultMessageQueueFactory");
-          
+
                 DefaultMessageQueueFactory mqf = new DefaultMessageQueueFactory();
                 mqf.ApplicationContext = applicationContext;
                 messageQueueFactory = mqf;
@@ -330,7 +328,7 @@ namespace Spring.Messaging.Core
                         {
                             LOG.Warn(
                                 "The ApplicationContext property has not been set, so the MessageQueueMetadataCache can not be automatically generated.  " +
-                                "Please explictly set the MessageQueueMetadataCache using the property MetadataCache or set the ApplicationContext property.  " + 
+                                "Please explictly set the MessageQueueMetadataCache using the property MetadataCache or set the ApplicationContext property.  " +
                                 "This will only effect the use of MessageQueueTemplate when publishing to remote queues.");
                         }
 
@@ -527,24 +525,24 @@ namespace Spring.Messaging.Core
         /// </summary>
         /// <remarks>
         /// <para>
-        /// If the message queue is transactional and there is an ambient MessageQueueTransaction 
-        /// in thread local storage (put there via the use of Spring's MessageQueueTransactionManager 
-        /// or TransactionalMessageListenerContainer), the message will be sent transactionally using the 
-        /// MessageQueueTransaction object in thread local storage. This lets you group together multiple 
-        /// messaging operations within the same transaction without having to explicitly pass around the 
+        /// If the message queue is transactional and there is an ambient MessageQueueTransaction
+        /// in thread local storage (put there via the use of Spring's MessageQueueTransactionManager
+        /// or TransactionalMessageListenerContainer), the message will be sent transactionally using the
+        /// MessageQueueTransaction object in thread local storage. This lets you group together multiple
+        /// messaging operations within the same transaction without having to explicitly pass around the
         /// MessageQueueTransaction object.
         /// </para>
         /// <para>
-        /// If the message queue is transactional but there is no ambient MessageQueueTransaction, 
-        /// then a single message transaction is created on each messaging operation. 
-        /// (MessageQueueTransactionType = Single). 
+        /// If the message queue is transactional but there is no ambient MessageQueueTransaction,
+        /// then a single message transaction is created on each messaging operation.
+        /// (MessageQueueTransactionType = Single).
         /// </para>
         /// <para>
-        /// If there is an ambient System.Transactions transaction then that transaction will 
-        /// be used (MessageQueueTransactionType = Automatic). 
+        /// If there is an ambient System.Transactions transaction then that transaction will
+        /// be used (MessageQueueTransactionType = Automatic).
         /// </para>
         /// <para>
-        /// If the queue is not transactional, then a non-transactional send 
+        /// If the queue is not transactional, then a non-transactional send
         /// (MessageQueueTransactionType = None) is used.
         /// </para>
         /// </remarks>
@@ -575,7 +573,7 @@ namespace Spring.Messaging.Core
                 if (LOG.IsWarnEnabled)
                 {
                     LOG.Warn("MetadataCache has not been initialized.  Set the MetadataCache explicitly in standalone usage and/or " +
-                             "configure the MessageQueueTemplate in an ApplicationContext.  If deployed in an ApplicationContext by default " + 
+                             "configure the MessageQueueTemplate in an ApplicationContext.  If deployed in an ApplicationContext by default " +
                              "the MetadataCache will automaticaly populated.");
                 }
             }
@@ -612,11 +610,11 @@ namespace Spring.Messaging.Core
             else
             {
                 /* From MSDN documentation
-                         * If a non-transactional message is sent to a transactional queue, 
-                         * this component creates a single-message transaction for it, 
-                         * except in the case of referencing a queue on a remote computer 
-                         * using a direct format name. In this situation, if you do not specify a 
-                         * transaction context when sending a message, one is not created for you 
+                         * If a non-transactional message is sent to a transactional queue,
+                         * this component creates a single-message transaction for it,
+                         * except in the case of referencing a queue on a remote computer
+                         * using a direct format name. In this situation, if you do not specify a
+                         * transaction context when sending a message, one is not created for you
                          * and the message will be sent to the dead-letter queue.*/
                 LOG.Warn("Sending message using implicit single-message transaction to transactional queue queue with path [" + mq.Path + "].");
                 mq.Send(msg, MessageQueueTransactionType.Single);
@@ -639,7 +637,7 @@ namespace Spring.Messaging.Core
             else
             {
                 if (LOG.IsDebugEnabled)
-                {                   
+                {
                     LOG.Debug("Sending messsage without MSMQ transaction to non-transactional queue with path [" + mq.Path + "].");
                 }
                 //Typical case, non TLS transaction, non-tx queue.

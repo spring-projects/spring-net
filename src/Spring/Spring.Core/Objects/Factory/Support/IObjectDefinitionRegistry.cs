@@ -18,14 +18,12 @@
 
 #endregion
 
-using System.Collections.Generic;
-
 using Spring.Objects.Factory.Config;
 
 namespace Spring.Objects.Factory.Support
 {
 	/// <summary>
-	/// Interface for registries that hold object definitions, i.e. 
+	/// Interface for registries that hold object definitions, i.e.
     /// <see cref="Spring.Objects.Factory.Support.RootObjectDefinition"/>
     /// and
     /// <see cref="Spring.Objects.Factory.Support.ChildObjectDefinition"/>
@@ -40,10 +38,10 @@ namespace Spring.Objects.Factory.Support
     /// </remarks>
     /// <author>Juergen Hoeller</author>
     /// <author>Rick Evans (.NET)</author>
-	public interface IObjectDefinitionRegistry 
+	public interface IObjectDefinitionRegistry
     {
         /// <summary>
-        /// Determine whether the given object name is already in use within this registry, 
+        /// Determine whether the given object name is already in use within this registry,
         /// i.e. whether there is a local object or alias registered under this name.
         /// </summary>
 	    bool IsObjectNameInUse(string objectName);
@@ -55,7 +53,7 @@ namespace Spring.Objects.Factory.Support
 	    /// The number of objects defined in the registry.
 	    /// </value>
 	    int ObjectDefinitionCount { get; }
-		
+
         /// <summary>
         /// Return the names of all objects defined in this registry.
         /// </summary>
@@ -87,7 +85,7 @@ namespace Spring.Objects.Factory.Support
         /// given name.
         /// </returns>
         bool ContainsObjectDefinition (string name);
-		
+
         /// <summary>
         /// Returns the
         /// <see cref="Spring.Objects.Factory.Config.IObjectDefinition"/>
@@ -107,7 +105,7 @@ namespace Spring.Objects.Factory.Support
         /// In case of errors.
         /// </exception>
         IObjectDefinition GetObjectDefinition (string name);
-		
+
         /// <summary>
         /// Register a new object definition with this registry.
         /// Must support
@@ -150,7 +148,7 @@ namespace Spring.Objects.Factory.Support
 	    /// If there's no such object definition.
 	    /// </exception>
 	    IReadOnlyList<string> GetAliases (string name);
-		
+
         /// <summary>
         /// Given a object name, create an alias. We typically use this method to
         /// support names that are illegal within XML ids (used for object names).

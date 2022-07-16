@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,6 @@
 
 #endregion
 
-using System;
-using System.Collections.Generic;
 using System.Web.UI;
 using Spring.Context;
 using Spring.Util;
@@ -60,7 +58,7 @@ namespace Spring.Web.UI.Controls
         /// collection to render.
         /// </summary>
         /// <remarks>
-        /// If not set, the control will probe the control hierarchy for 
+        /// If not set, the control will probe the control hierarchy for
         /// containing controls implementing <see cref="IValidationContainer"/>
         /// and use the container's <see cref="IValidationContainer.ValidationErrors"/>
         /// </remarks>
@@ -72,7 +70,7 @@ namespace Spring.Web.UI.Controls
 
         /// <summary>
         /// If set, <see cref="FindValidationContainer"/> will resolve to the named control specified
-        /// by this property. The behavior of name resolution is identical to 
+        /// by this property. The behavior of name resolution is identical to
         /// <see cref="System.Web.UI.WebControls.BaseValidator.ControlToValidate"/>, except that if the name
         /// starts with "::", the resolution will start at the page level instead of relative to this
         /// control
@@ -109,7 +107,7 @@ namespace Spring.Web.UI.Controls
         }
 
         /// <summary>
-        /// Gets or sets the validation errors renderer to use. 
+        /// Gets or sets the validation errors renderer to use.
         /// </summary>
         /// <remarks>
         /// If not explicitly specified, defaults to <see cref="SpanValidationErrorsRenderer"/>.
@@ -134,7 +132,7 @@ namespace Spring.Web.UI.Controls
         }
 
         /// <summary>
-        /// Create the default <see cref="IValidationErrorsRenderer"/> 
+        /// Create the default <see cref="IValidationErrorsRenderer"/>
         /// for this ValidationControl if none is configured.
         /// </summary>
         protected abstract IValidationErrorsRenderer CreateValidationErrorsRenderer();
@@ -152,8 +150,8 @@ namespace Spring.Web.UI.Controls
             if (messageSource == null)
             {
                 IValidationContainer validationContainer = FindValidationContainer();
-                messageSource = (validationContainer == null) 
-                                ? null 
+                messageSource = (validationContainer == null)
+                                ? null
                                 : validationContainer.MessageSource;
             }
             return messageSource;
@@ -179,7 +177,7 @@ namespace Spring.Web.UI.Controls
         }
 
         /// <summary>
-        /// Gets the <see cref="IValidationContainer"/>, who's <see cref="IValidationContainer.ValidationErrors"/> 
+        /// Gets the <see cref="IValidationContainer"/>, who's <see cref="IValidationContainer.ValidationErrors"/>
         /// shall be rendered by this control.
         /// </summary>
         /// <remarks>
@@ -228,7 +226,7 @@ namespace Spring.Web.UI.Controls
 
         /// <summary>
         /// Resolves the list of validation errors either explicitely specified using
-        /// <see cref="ValidationErrors"/> or obtained from the containing <see cref="IValidationContainer"/> 
+        /// <see cref="ValidationErrors"/> or obtained from the containing <see cref="IValidationContainer"/>
         /// resolved by <see cref="FindValidationContainer"/> to a list
         /// of <see cref="string"/> elements containing the error messages to be rendered.
         /// </summary>
@@ -239,7 +237,7 @@ namespace Spring.Web.UI.Controls
         /// <see cref="FindValidationContainer"/>.
         /// </para>
         /// <para>
-        /// Error Messages are resolved using either an explicitely specified <see cref="MessageSource"/> or the 
+        /// Error Messages are resolved using either an explicitely specified <see cref="MessageSource"/> or the
         /// <see cref="IMessageSource"/> obtained from the validation container.
         /// </para>
         /// </remarks>

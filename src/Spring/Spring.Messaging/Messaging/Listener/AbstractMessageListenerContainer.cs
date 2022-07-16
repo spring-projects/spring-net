@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using Common.Logging;
 using Spring.Context;
 using Spring.Messaging.Core;
@@ -36,9 +35,9 @@ namespace Spring.Messaging.Listener
     /// <summary>
     /// Defines a minimal programming model for message listener containers.  They are expected to
     /// invoke a <see cref="IMessageListener"/> upon asynchronous receives of a MSMQ message.  Access to
-    /// obtain MessageQueue and <see cref="IMessageConverter"/> instances is available through the 
-    /// <see cref="IMessageQueueFactory"/> property, the default implementation 
-    /// <see cref="DefaultMessageQueueFactory"/> provides per-thread instances of these classes.   
+    /// obtain MessageQueue and <see cref="IMessageConverter"/> instances is available through the
+    /// <see cref="IMessageQueueFactory"/> property, the default implementation
+    /// <see cref="DefaultMessageQueueFactory"/> provides per-thread instances of these classes.
     /// </summary>
     /// <author>Mark Pollack</author>
     public abstract class AbstractMessageListenerContainer : AbstractListenerContainer, IApplicationContextAware
@@ -58,7 +57,7 @@ namespace Spring.Messaging.Listener
 
         /// <summary>
         /// Most operations within the MessageListener container hierarchy use methods on the
-        /// MessageQueue instance which are thread safe (BeginPeek, BeginReceive, 
+        /// MessageQueue instance which are thread safe (BeginPeek, BeginReceive,
         /// EndPeek, EndReceive, GetAllMessages, Peek, and Receive).  When using another
         /// method on the shared MessageQueue instance, wrap calls with a lock on this object.
         /// </summary>
@@ -83,7 +82,7 @@ namespace Spring.Messaging.Listener
         }
 
         /// <summary>
-        /// Gets or sets the name of the message queue object, as refered to in the 
+        /// Gets or sets the name of the message queue object, as refered to in the
         /// Spring configuration, that will be used to create a DefaultMessageQueue instance
         /// for consuming messages in the container.
         /// </summary>
@@ -185,7 +184,7 @@ namespace Spring.Messaging.Listener
         /// <summary>
         /// Template method that execute listener with the provided message if
         /// <see cref="AbstractListenerContainer.Running"/> is true. Subclasses will call
-        /// this method at the appropriate point in their processing lifecycle, for example 
+        /// this method at the appropriate point in their processing lifecycle, for example
         /// committing or rolling back a transaction if needed.
         /// </summary>
         /// <remarks>Calls the template method <see cref="InvokeListener"/></remarks>
@@ -207,7 +206,7 @@ namespace Spring.Messaging.Listener
         /// <summary>
         /// Invokes the listener if it is not null.  Invokes the method <see cref="DoInvokeListener"/>.
         /// Can be overridden in subclasses.
-        /// </summary>        
+        /// </summary>
         /// <param name="message">The message.</param>
         protected virtual void InvokeListener(Message message)
         {

@@ -14,12 +14,8 @@
  * limitations under the License.
  */
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Apache.NMS;
 using Common.Logging;
-using Spring.Collections;
 using Spring.Util;
 
 namespace Spring.Messaging.Nms.Connections

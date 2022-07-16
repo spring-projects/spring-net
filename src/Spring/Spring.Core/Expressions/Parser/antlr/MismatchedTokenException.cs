@@ -1,5 +1,3 @@
-using System;
-
 using StringBuilder			= System.Text.StringBuilder;
 
 using BitSet				= Spring.Expressions.Parser.antlr.collections.impl.BitSet;
@@ -21,7 +19,7 @@ namespace Spring.Expressions.Parser.antlr
 	//
 	// With many thanks to Eric V. Smith from the ANTLR list.
 	//
-	
+
 	[Serializable]
 	public class MismatchedTokenException : RecognitionException
 	{
@@ -31,9 +29,9 @@ namespace Spring.Expressions.Parser.antlr
 		public IToken token;
 		// The offending AST node if tree walking
 		public AST node;
-		
+
 		internal string tokenText = null; // taken from node or token object
-		
+
 		// Types of tokens
 		public enum TokenTypeEnum
 		{
@@ -46,23 +44,23 @@ namespace Spring.Expressions.Parser.antlr
 		}
 		// One of the above
 		public TokenTypeEnum mismatchType;
-		
+
 		// For TOKEN/NOT_TOKEN and RANGE/NOT_RANGE
 		public int expecting;
-		
+
 		// For RANGE/NOT_RANGE (expecting is lower bound of range)
 		public int upper;
-		
+
 		// For SET/NOT_SET
 		public BitSet bset;
-		
+
 		/*Looking for AST wildcard, didn't find it */
 		public MismatchedTokenException() : base("Mismatched Token: expecting any AST node", "<AST>", - 1, - 1)
 		{
 		}
-		
+
 		// Expected range / not range
-		public MismatchedTokenException(string[] tokenNames_, AST node_, int lower, int upper_, bool matchNot) : 
+		public MismatchedTokenException(string[] tokenNames_, AST node_, int lower, int upper_, bool matchNot) :
 					base("Mismatched Token", "<AST>", - 1, - 1)
 		{
 			tokenNames = tokenNames_;
@@ -79,7 +77,7 @@ namespace Spring.Expressions.Parser.antlr
 			expecting = lower;
 			upper = upper_;
 		}
-		
+
 		// Expected token / not token
 		public MismatchedTokenException(string[] tokenNames_, AST node_, int expecting_, bool matchNot) :
 					base("Mismatched Token", "<AST>", - 1, - 1)
@@ -97,7 +95,7 @@ namespace Spring.Expressions.Parser.antlr
 			mismatchType = matchNot ? TokenTypeEnum.NotTokenType : TokenTypeEnum.TokenType;
 			expecting = expecting_;
 		}
-		
+
 		// Expected BitSet / not BitSet
 		public MismatchedTokenException(string[] tokenNames_, AST node_, BitSet set_, bool matchNot) :
 					base("Mismatched Token", "<AST>", - 1, - 1)
@@ -115,9 +113,9 @@ namespace Spring.Expressions.Parser.antlr
 			mismatchType = matchNot ? TokenTypeEnum.NotSetType : TokenTypeEnum.SetType;
 			bset = set_;
 		}
-		
+
 		// Expected range / not range
-		public MismatchedTokenException(string[] tokenNames_, IToken token_, int lower, int upper_, bool matchNot, string fileName_) : 
+		public MismatchedTokenException(string[] tokenNames_, IToken token_, int lower, int upper_, bool matchNot, string fileName_) :
 					base("Mismatched Token", fileName_, token_.getLine(), token_.getColumn())
 		{
 			tokenNames = tokenNames_;
@@ -127,7 +125,7 @@ namespace Spring.Expressions.Parser.antlr
 			expecting = lower;
 			upper = upper_;
 		}
-		
+
 		// Expected token / not token
 		public MismatchedTokenException(string[] tokenNames_, IToken token_, int expecting_, bool matchNot, string fileName_) :
 					base("Mismatched Token", fileName_, token_.getLine(), token_.getColumn())
@@ -138,7 +136,7 @@ namespace Spring.Expressions.Parser.antlr
 			mismatchType = matchNot ? TokenTypeEnum.NotTokenType : TokenTypeEnum.TokenType;
 			expecting = expecting_;
 		}
-		
+
 		// Expected BitSet / not BitSet
 		public MismatchedTokenException(string[] tokenNames_, IToken token_, BitSet set_, bool matchNot, string fileName_) :
 					base("Mismatched Token", fileName_, token_.getLine(), token_.getColumn())
@@ -149,35 +147,35 @@ namespace Spring.Expressions.Parser.antlr
 			mismatchType = matchNot ? TokenTypeEnum.NotSetType : TokenTypeEnum.SetType;
 			bset = set_;
 		}
-		
+
 		/*
 		* Returns a clean error message (no line number/column information)
 		*/
 		override public string Message
 		{
-			get 
+			get
 			{
 				StringBuilder sb = new StringBuilder();
-			
+
 				switch (mismatchType)
 				{
-					case TokenTypeEnum.TokenType: 
+					case TokenTypeEnum.TokenType:
 						sb.Append("expecting " + tokenName(expecting) + ", found '" + tokenText + "'");
 						break;
-				
-					case TokenTypeEnum.NotTokenType: 
+
+					case TokenTypeEnum.NotTokenType:
 						sb.Append("expecting anything but " + tokenName(expecting) + "; got it anyway");
 						break;
-				
-					case TokenTypeEnum.RangeType: 
+
+					case TokenTypeEnum.RangeType:
 						sb.Append("expecting token in range: " + tokenName(expecting) + ".." + tokenName(upper) + ", found '" + tokenText + "'");
 						break;
-				
-					case TokenTypeEnum.NotRangeType: 
+
+					case TokenTypeEnum.NotRangeType:
 						sb.Append("expecting token NOT in range: " + tokenName(expecting) + ".." + tokenName(upper) + ", found '" + tokenText + "'");
 						break;
-				
-					case TokenTypeEnum.SetType: case TokenTypeEnum.NotSetType: 
+
+					case TokenTypeEnum.SetType: case TokenTypeEnum.NotSetType:
 						sb.Append("expecting " + (mismatchType == TokenTypeEnum.NotSetType ? "NOT " : "") + "one of (");
 						int[] elems = bset.toArray();
 						for (int i = 0; i < elems.Length; i++)
@@ -187,15 +185,15 @@ namespace Spring.Expressions.Parser.antlr
 						}
 						sb.Append("), found '" + tokenText + "'");
 						break;
-				
-					default: 
+
+					default:
 						sb.Append(base.Message);
-						break;				
-				}			
+						break;
+				}
 				return sb.ToString();
 			}
 		}
-		
+
 		private string tokenName(int tokenType)
 		{
 			if (tokenType == Token.INVALID_TYPE)

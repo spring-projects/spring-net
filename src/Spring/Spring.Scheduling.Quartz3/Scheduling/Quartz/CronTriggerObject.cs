@@ -14,7 +14,6 @@
 * limitations under the License.
 */
 
-using System;
 using System.Collections;
 using System.Reflection;
 using Quartz;
@@ -60,7 +59,7 @@ namespace Spring.Scheduling.Quartz
         private string objectName;
         private TimeSpan startDelay;
 
-        /// <summary> 
+        /// <summary>
         /// Register objects in the JobDataMap via a given Map.
         /// </summary>
         /// <remarks>
@@ -79,7 +78,7 @@ namespace Spring.Scheduling.Quartz
             }
         }
 
-        /// <summary> 
+        /// <summary>
         /// Set the misfire instruction via the name of the corresponding
         /// constant in the CronTrigger class.
         /// Default is <see cref="MisfireInstruction.SmartPolicy" />.
@@ -109,7 +108,7 @@ namespace Spring.Scheduling.Quartz
             set => objectName = value;
         }
 
-        /// <summary> 
+        /// <summary>
         /// Set the JobDetail that this trigger should be associated with.
         /// </summary>
         /// <remarks>
@@ -129,7 +128,7 @@ namespace Spring.Scheduling.Quartz
         /// </summary>
         /// <remarks>
         /// <para>
-        /// The start delay is added to the current system UTC time 
+        /// The start delay is added to the current system UTC time
         /// (when the object starts) to control the <see cref="ITrigger.StartTimeUtc" />
         /// of the trigger.
         /// </para>

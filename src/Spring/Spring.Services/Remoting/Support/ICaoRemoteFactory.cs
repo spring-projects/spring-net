@@ -18,11 +18,6 @@
 
 #endregion
 
-#region Imports
-
-
-#endregion
-
 namespace Spring.Remoting.Support
 {
 	/// <summary>
@@ -47,14 +42,14 @@ namespace Spring.Remoting.Support
 
         /// <summary>
         /// Returns the CAO proxy using the
-        /// argument list to call the constructor. 
+        /// argument list to call the constructor.
         /// </summary>
         /// <remarks>
         /// The matching of arguments to call the constructor is done
         /// by type. The alternative ways, by index and by constructor
         /// name are not supported.
         /// </remarks>
-        /// <param name="constructorArguments">Constructor 
+        /// <param name="constructorArguments">Constructor
         /// arguments used to create the object.</param>
         /// <returns>The remote object.</returns>
         object GetObject(object[] constructorArguments);

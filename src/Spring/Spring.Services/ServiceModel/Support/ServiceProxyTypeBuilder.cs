@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,6 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Collections;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -28,8 +25,6 @@ using System.Reflection.Emit;
 using Spring.Objects.Factory;
 using Spring.Proxy;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.ServiceModel.Support
 {
@@ -61,7 +56,7 @@ namespace Spring.ServiceModel.Support
         #region Constructor(s) / Destructor
 
         /// <summary>
-        /// Creates a new instance of the 
+        /// Creates a new instance of the
         /// <see cref="Spring.ServiceModel.Support.ServiceProxyTypeBuilder"/> class.
         /// </summary>
         /// <param name="targetName">The name of the service within Spring's IoC container.</param>
@@ -74,7 +69,7 @@ namespace Spring.ServiceModel.Support
 
 
         /// <summary>
-        /// Creates a new instance of the 
+        /// Creates a new instance of the
         /// <see cref="Spring.ServiceModel.Support.ServiceProxyTypeBuilder"/> class.
         /// </summary>
         /// <param name="targetName">The name of the service within Spring's IoC container.</param>
@@ -96,8 +91,8 @@ namespace Spring.ServiceModel.Support
         #region Protected Methods
 
         /// <summary>
-        /// Creates a proxy that delegates calls to an instance of the target object. 
-        /// This overriden implementation caches the generated proxy type 
+        /// Creates a proxy that delegates calls to an instance of the target object.
+        /// This overriden implementation caches the generated proxy type
         /// and sets the '__objectFactory' field.
         /// </summary>
         /// <exception cref="System.ArgumentException">
@@ -134,8 +129,8 @@ namespace Spring.ServiceModel.Support
         /// Implements constructors for the proxy class.
         /// </summary>
         /// <remarks>
-        /// This implementation generates a constructor 
-        /// that gets instance of the target object using 
+        /// This implementation generates a constructor
+        /// that gets instance of the target object using
         /// <see cref="Spring.Objects.Factory.IObjectFactory.GetObject(string)"/>.
         /// </remarks>
         /// <param name="builder">

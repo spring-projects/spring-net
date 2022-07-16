@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-using System;
-using System.Globalization;
 using Spring.Expressions;
 
 namespace Spring.Objects.Factory.Config

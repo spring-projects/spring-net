@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Globalization;
 
 using Spring.Util;
@@ -31,8 +30,8 @@ namespace Spring.Globalization.Formatters
 	/// </summary>
 	/// <remarks>
 	/// <para>
-	/// This formatter allows you to format and parse numbers that conform 
-	/// to <see cref="NumberStyles.Integer"/> number style (leading and trailing 
+	/// This formatter allows you to format and parse numbers that conform
+	/// to <see cref="NumberStyles.Integer"/> number style (leading and trailing
 	/// white space, leading sign).
 	/// </para>
 	/// </remarks>

@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using System.Reflection;
 
 #endregion
@@ -33,7 +32,7 @@ namespace Spring.Core
     /// </summary>
     /// <remarks>
     /// <p>
-    /// This class supports checking the generic arguments count of both 
+    /// This class supports checking the generic arguments count of both
     /// generic methods and constructors.
     /// </p>
     /// </remarks>
@@ -62,7 +61,7 @@ namespace Spring.Core
         /// <see cref="MethodGenericArgumentsCountCriteria"/> class.
         /// </summary>
         /// <param name="expectedGenericArgumentCount">
-        /// The number of generic arguments that a <see cref="System.Reflection.MethodInfo"/> 
+        /// The number of generic arguments that a <see cref="System.Reflection.MethodInfo"/>
         /// must have to satisfy this criteria.
         /// </param>
         /// <exception cref="System.ArgumentException">
@@ -79,7 +78,7 @@ namespace Spring.Core
         #region Properties
 
         /// <summary>
-        /// The number of generic arguments that a <see cref="System.Reflection.MethodInfo"/> 
+        /// The number of generic arguments that a <see cref="System.Reflection.MethodInfo"/>
         /// must have to satisfy this criteria.
         /// </summary>
         /// <exception cref="System.ArgumentException">

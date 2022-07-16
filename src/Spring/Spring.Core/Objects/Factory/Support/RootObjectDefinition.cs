@@ -18,15 +18,10 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Reflection;
 using System.Runtime.Serialization;
 
 using Spring.Objects.Factory.Config;
-
-#endregion
 
 namespace Spring.Objects.Factory.Support
 {
@@ -265,7 +260,7 @@ namespace Spring.Objects.Factory.Support
         /// Is always <c>null</c> for a <see cref="RootObjectDefinition"/>.
         /// </summary>
         /// <remarks>
-        /// It is safe to request this property's value. Setting any other value than <c>null</c> will 
+        /// It is safe to request this property's value. Setting any other value than <c>null</c> will
         /// raise an <see cref="ArgumentException"/>.
         /// </remarks>
         /// <exception cref="ArgumentException">Raised on any attempt to set a non-null value on this property.</exception>

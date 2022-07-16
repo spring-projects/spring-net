@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-using System;
 using System.Reflection;
 using AopAlliance.Intercept;
 using NHibernate.Engine;

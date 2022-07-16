@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-using System;
 using System.Collections;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Globalization;
 using Spring.Collections.Generic;
 using Spring.Core;

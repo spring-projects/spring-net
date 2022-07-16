@@ -1,14 +1,14 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
- * 
+ * Copyright ï¿½ 2002-2011 the original author or authors.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,20 +18,14 @@
 
 #endregion
 
-#region Imports
-
-using System;
-
 using Spring.Dao;
 using Spring.Data.Common;
 using Spring.Data.Core;
 
-#endregion
-
 namespace Spring.Data.Objects
 {
     /// <summary>
-    /// A "AdoOperation" is a thread-safe, reusable object representing 
+    /// A "AdoOperation" is a thread-safe, reusable object representing
     /// an ADO Query, "NonQuery" (Create, Update, Delete), stored procedure
     /// or DataSet manipualtions.
     /// </summary>
@@ -40,7 +34,7 @@ namespace Spring.Data.Objects
     /// Compile().  The order in which parameters are added is generally
     /// significant when using providers or functionality that do not use
     /// named parameters.
-    /// 
+    ///
     /// </remarks>
     /// <author>Mark Pollack (.NET)</author>
     public abstract class AdoOperation : AbstractAdoOperation
@@ -57,7 +51,7 @@ namespace Spring.Data.Objects
         /// Initializes a new instance of the <see cref="AdoOperation"/> class.
         /// </summary>
         /// <remarks>A DbProvider, SQL and any parameters must be supplied
-        /// before invoking the compile method and using this object.       
+        /// before invoking the compile method and using this object.
         /// </remarks>
         public AdoOperation()
         {
@@ -67,7 +61,7 @@ namespace Spring.Data.Objects
         /// Initializes a new instance of the <see cref="AdoOperation"/> class.
         /// </summary>
         /// <remarks>A DbProvider, SQL and any parameters must be supplied
-        /// before invoking the compile method and using this object.       
+        /// before invoking the compile method and using this object.
         /// </remarks>
         /// <param name="provider">Database provider to use.</param>
         public AdoOperation(IDbProvider provider)
@@ -79,7 +73,7 @@ namespace Spring.Data.Objects
         /// Initializes a new instance of the <see cref="AdoOperation"/> class.
         /// </summary>
         /// <remarks>A DbProvider, SQL and any parameters must be supplied
-        /// before invoking the compile method and using this object.       
+        /// before invoking the compile method and using this object.
         /// </remarks>
         /// <param name="provider">Database provider to use.</param>
         /// <param name="sql">SQL query or stored procedure name.</param>
@@ -132,9 +126,9 @@ namespace Spring.Data.Objects
         /// Sets the command timeout for IDbCommands that this AdoTemplate executes.
         /// </summary>
         /// <remarks>Default is 0, indicating to use the database provider's default.
-        /// Any timeout specified here will be overridden by the remaining 
+        /// Any timeout specified here will be overridden by the remaining
         /// transaction timeout when executing within a transaction that has a
-        /// timeout specified at the transaction level. 
+        /// timeout specified at the transaction level.
         /// </remarks>
         /// <value>The command timeout.</value>
         public override int CommandTimeout

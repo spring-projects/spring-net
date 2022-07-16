@@ -1,5 +1,5 @@
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-using System;
 using System.Runtime.Serialization;
 
 using Spring.Util;
@@ -124,7 +123,7 @@ namespace Spring.Aop.Target
 		/// <param name="target">The target object to release.</param>
 		public void ReleaseTarget(object target)
 		{
-          
+
 		}
 
 	    /// <inheritdoc />
@@ -147,7 +146,7 @@ namespace Spring.Aop.Target
 
 	    /// <summary>
 	    /// Determines whether the specified <see cref="System.Object"/>
-	    /// is equal to the current <see cref="System.Object"/>.  
+	    /// is equal to the current <see cref="System.Object"/>.
 	    /// </summary>
 	    /// <param name="other">The target source to compare with.</param>
 	    /// <returns>

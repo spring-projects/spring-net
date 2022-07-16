@@ -2,13 +2,13 @@
 
 /*
  * Copyright 2002-2010 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,19 +18,13 @@
 
 #endregion
 
-#region Imports
-
-using System;
-
 using Spring.Objects.Factory;
 using Spring.Remoting.Support;
-
-#endregion
 
 namespace Spring.Remoting
 {
     /// <summary>
-    /// Factory for creating a reference to a 
+    /// Factory for creating a reference to a
     /// client activated object (CAO).
     /// </summary>
 	/// <author>Aleksandar Seovic</author>
@@ -145,7 +139,7 @@ namespace Spring.Remoting
                 LOG.Debug("Accessing CAO object of type ICaoRemoteFactory object at url = [" + url + "]");
             }
 			ICaoRemoteFactory remoteFactory = (ICaoRemoteFactory) Activator.GetObject(typeof(ICaoRemoteFactory), url);
-			
+
 			if (constructorArguments != null)
 			{
 				return remoteFactory.GetObject(constructorArguments);

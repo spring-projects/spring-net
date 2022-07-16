@@ -1,9 +1,9 @@
-/* Copyright © 2002-2011 by Aidant Systems, Inc., and by Jason Smith. */  
+/* Copyright ï¿½ 2002-2011 by Aidant Systems, Inc., and by Jason Smith. */
 
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,13 +20,8 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Collections;
 using System.Collections.Specialized;
-
-#endregion
 
 namespace Spring.Collections
 {
@@ -41,7 +36,7 @@ namespace Spring.Collections
 	/// <see cref="Spring.Collections.HybridSet"/> instead if you are not sure your data-set
 	/// will always remain very small. Iteration produces elements in the order they were added.
 	/// However, element order is not guaranteed to be maintained by the various
-	/// <see cref="Spring.Collections.ISet"/> mathematical operators.  
+	/// <see cref="Spring.Collections.ISet"/> mathematical operators.
 	/// </p>
 	/// </remarks>
     [Serializable]

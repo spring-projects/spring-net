@@ -1,5 +1,3 @@
-using System;
-using System.Collections.Generic;
 using Spring.Collections;
 using Spring.Util;
 using Spring.Validation;
@@ -46,7 +44,7 @@ namespace Spring.DataBinding
         }
 
         /// <summary>
-        /// Marks this binding's state as invalid for this validationErrors collection. 
+        /// Marks this binding's state as invalid for this validationErrors collection.
         /// Returns false if <paramref name="validationErrors"/> is null.
         /// </summary>
         /// <param name="validationErrors"></param>
@@ -181,7 +179,7 @@ namespace Spring.DataBinding
         public abstract void BindTargetToSource(object source, object target, IValidationErrors validationErrors, IDictionary<string, object> variables);
 
         /// <summary>
-        /// Sets error message that should be displayed in the case 
+        /// Sets error message that should be displayed in the case
         /// of a non-fatal binding error.
         /// </summary>
         /// <param name="messageId">

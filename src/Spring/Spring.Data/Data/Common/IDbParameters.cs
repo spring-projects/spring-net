@@ -1,9 +1,8 @@
-using System;
 using System.Data;
 
 namespace Spring.Data.Common
 {
-    public interface IDbParameters 
+    public interface IDbParameters
     {
         //TODO implement IDataParameterCollection....?
 

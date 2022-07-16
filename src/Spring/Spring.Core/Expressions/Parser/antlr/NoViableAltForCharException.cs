@@ -1,4 +1,3 @@
-using System;
 using StringBuilder				= System.Text.StringBuilder;
 
 namespace Spring.Expressions.Parser.antlr
@@ -17,24 +16,24 @@ namespace Spring.Expressions.Parser.antlr
 	//
 	// With many thanks to Eric V. Smith from the ANTLR list.
 	//
-	
+
 	[Serializable]
 	public class NoViableAltForCharException : RecognitionException
 	{
 		public char foundChar;
-		
+
 		public NoViableAltForCharException(char c, CharScanner scanner) :
 					base("NoViableAlt", scanner.getFilename(), scanner.getLine(), scanner.getColumn())
 		{
 			foundChar = c;
 		}
-		
-		public NoViableAltForCharException(char c, string fileName, int line, int column) : 
+
+		public NoViableAltForCharException(char c, string fileName, int line, int column) :
 					base("NoViableAlt", fileName, line, column)
 		{
 			foundChar = c;
 		}
-		
+
 		/*
 		* Returns a clean error message (no line number/column information)
 		*/
@@ -43,11 +42,11 @@ namespace Spring.Expressions.Parser.antlr
 			get
 			{
 				StringBuilder mesg = new StringBuilder("unexpected char: ");
-			
+
 				// I'm trying to mirror a change in the C++ stuff.
 				// But java seems to lack something isprint-ish..
 				// so we do it manually. This is probably too restrictive.
-			
+
 				if ((foundChar >= ' ') && (foundChar <= '~'))
 				{
 					mesg.Append('\'');

@@ -18,14 +18,12 @@
 
 #endregion
 
-
-using System;
 using Spring.Objects.Factory.Config;
 
 namespace Spring.Messaging.Support.Converters
 {
     /// <summary>
-    /// Internal class to that users can specify a delegate function to register with the application context that 
+    /// Internal class to that users can specify a delegate function to register with the application context that
     /// will create a IMessageConverter instance easily at runtime.
     /// </summary>
     /// <author>Mark Pollack</author>

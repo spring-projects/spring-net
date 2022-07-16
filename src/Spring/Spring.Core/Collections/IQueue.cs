@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,7 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Collections;
-
-#endregion
 
 namespace Spring.Collections
 {
@@ -61,7 +56,7 @@ namespace Spring.Collections
 	/// </p>
 	/// <p>
 	/// The <see cref="Spring.Collections.IQueue.Offer(object)"/> method inserts an
-	/// element if possible, otherwise returning <see lang="false"/>. This differs from the 
+	/// element if possible, otherwise returning <see lang="false"/>. This differs from the
 	/// <see cref="Spring.Collections.IQueue.Add(object)"/> method, which can fail to
 	/// add an element only by throwing an exception. The
 	/// <see cref="Spring.Collections.IQueue.Offer(object)"/> method is designed for
@@ -102,7 +97,7 @@ namespace Spring.Collections
 	/// </p>
 	/// <p>
 	/// <see cref="IQueue"/> implementations generally do not define
-	/// element-based versions of methods <see cref="System.Object.Equals(object)"/> 
+	/// element-based versions of methods <see cref="System.Object.Equals(object)"/>
 	/// and <see cref="System.Object.GetHashCode()"/>, but instead inherit the
 	/// identity based versions from the class object, because element-based equality
 	/// is not always well-defined for queues with the same elements but different
@@ -116,7 +111,7 @@ namespace Spring.Collections
 	/// <author>Griffin Caprio (.NET)</author>
 	public interface IQueue : ICollection
 	{
-		/// <summary> 
+		/// <summary>
 		/// Inserts the specified element into this queue if it is possible to do so
 		/// immediately without violating capacity restrictions, returning
 		/// <see lang="true"/> upon success and throwing an
@@ -126,7 +121,7 @@ namespace Spring.Collections
 		/// <param name="objectToAdd">
 		/// The element to add.
 		/// </param>
-		/// <returns> 
+		/// <returns>
 		/// <see lang="true"/> if successful.
 		/// </returns>
 		/// <exception cref="System.InvalidOperationException">
@@ -146,7 +141,7 @@ namespace Spring.Collections
 		/// </exception>
 		bool Add(object objectToAdd);
 
-		/// <summary> 
+		/// <summary>
 		/// Inserts the specified element into this queue if it is possible to do
 		/// so immediately without violating capacity restrictions.
 		/// </summary>
@@ -176,7 +171,7 @@ namespace Spring.Collections
 		/// </exception>
 		bool Offer(object objectToAdd);
 
-		/// <summary> 
+		/// <summary>
 		/// Retrieves and removes the head of this queue.
 		/// </summary>
 		/// <remarks>
@@ -185,22 +180,22 @@ namespace Spring.Collections
 		/// only in that it throws an exception if this queue is empty.
 		/// </p>
 		/// </remarks>
-		/// <returns> 
+		/// <returns>
 		/// The head of this queue
 		/// </returns>
 		/// <exception cref="Spring.Collections.NoElementsException">if this queue is empty</exception>
 		object Remove();
 
-		/// <summary> 
+		/// <summary>
 		/// Retrieves and removes the head of this queue,
 		/// or returns <see lang="null"/> if this queue is empty.
 		/// </summary>
-		/// <returns> 
+		/// <returns>
 		/// The head of this queue, or <see lang="null"/> if this queue is empty.
 		/// </returns>
 		object Poll();
 
-		/// <summary> 
+		/// <summary>
 		/// Retrieves, but does not remove, the head of this queue.
 		/// </summary>
 		/// <remarks>
@@ -209,21 +204,21 @@ namespace Spring.Collections
 		/// only in that it throws an exception if this queue is empty.
 		/// </p>
 		/// </remarks>
-		/// <returns> 
+		/// <returns>
 		/// The head of this queue.
 		/// </returns>
 		/// <exception cref="Spring.Collections.NoElementsException">If this queue is empty.</exception>
 		object Element();
 
-		/// <summary> 
+		/// <summary>
 		/// Retrieves, but does not remove, the head of this queue,
 		/// or returns <see lang="null"/> if this queue is empty.
 		/// </summary>
-		/// <returns> 
+		/// <returns>
 		/// The head of this queue, or <see lang="null"/> if this queue is empty.
 		/// </returns>
 		object Peek();
-		
+
 		/// <summary>
 		/// Returns <see lang="true"/> if there are no elements in the <see cref="IQueue"/>, <see lang="false"/> otherwise.
 		/// </summary>

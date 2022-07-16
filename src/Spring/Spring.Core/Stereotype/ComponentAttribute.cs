@@ -1,12 +1,10 @@
 
 
-using System;
-
 namespace Spring.Stereotype {
 
     /// <summary>
     /// Indicates that an annotated class is a "component".
-    /// Such classes are considered as candidates for future features such 
+    /// Such classes are considered as candidates for future features such
     /// as auto-detection  when using attribute-based configuration and assembly scanning.
     /// </summary>
     /// <remarks>Other class-level annotations may be considered as identifying

@@ -18,7 +18,6 @@
 
 #endregion
 
-using System.Collections.Generic;
 using Spring.Expressions;
 
 namespace Spring.Validation.Actions

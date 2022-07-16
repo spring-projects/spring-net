@@ -18,8 +18,6 @@
 
 #endregion
 
-using System;
-using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 using Spring.Core;
@@ -87,7 +85,7 @@ namespace Spring.Objects.Factory.Attributes
                     _qualifierTypes.Add(type);
             }
         }
-        
+
         protected QualifierAnnotationAutowireCandidateResolver(SerializationInfo info, StreamingContext context)
         {
             _objectFactory = (IObjectFactory) info.GetValue("objectFactory", typeof(IObjectFactory));

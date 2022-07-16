@@ -18,13 +18,10 @@
 
 #endregion
 
-#region Imports 
-
 using System.Xml;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 using Spring.Util;
-#endregion
 
 namespace Spring.Objects.Factory.Xml
 {
@@ -59,7 +56,7 @@ namespace Spring.Objects.Factory.Xml
         #region Properties
 
         /// <summary>
-        /// Gets a value indicating whether an ID should be generated instead of read 
+        /// Gets a value indicating whether an ID should be generated instead of read
         /// from the passed in XmlElement.
         /// </summary>
         /// <remarks>Note that this flag is about always generating an ID; the parser
@@ -184,7 +181,7 @@ namespace Spring.Objects.Factory.Xml
         /// to be registered as top level objects.
         /// </para>
         /// </remarks>
-        /// 
+        ///
         /// <param name="definition">The object definition to be registered.</param>
         /// <param name="registry">The registry that the bean is to be registered with.</param>
         protected virtual void RegisterObjectDefinition(ObjectDefinitionHolder definition, IObjectDefinitionRegistry registry)
@@ -196,7 +193,7 @@ namespace Spring.Objects.Factory.Xml
         /// Returns the value of the element's attribute or <c>null</c>, if the attribute is not specified.
         /// </summary>
         /// <remarks>
-        /// This is a helper for bypassing the behavior of <see cref="XmlElement.GetAttribute(string)"/> 
+        /// This is a helper for bypassing the behavior of <see cref="XmlElement.GetAttribute(string)"/>
         /// to return <see cref="string.Empty"/> if the attribute does not exist.
         /// </remarks>
         protected static string GetAttributeValue(XmlElement element, string attributeName)
@@ -209,11 +206,11 @@ namespace Spring.Objects.Factory.Xml
         }
 
         /// <summary>
-        /// Returns the value of the element's attribute or <paramref name="defaultValue"/>, 
+        /// Returns the value of the element's attribute or <paramref name="defaultValue"/>,
         /// if the attribute is not specified.
         /// </summary>
         /// <remarks>
-        /// This is a helper for bypassing the behavior of <see cref="XmlElement.GetAttribute(string)"/> 
+        /// This is a helper for bypassing the behavior of <see cref="XmlElement.GetAttribute(string)"/>
         /// to return <see cref="string.Empty"/> if the attribute does not exist.
         /// </remarks>
         protected static string GetAttributeValue(XmlElement element, string attributeName, string defaultValue)
@@ -231,7 +228,7 @@ namespace Spring.Objects.Factory.Xml
         #region Abstract Methods
 
         /// <summary>
-        /// Central template method to actually parse the supplied XmlElement 
+        /// Central template method to actually parse the supplied XmlElement
         /// into one or more IObjectDefinitions.
         /// </summary>
         /// <param name="element">The element that is to be parsed into one or more <see cref="IObjectDefinition"/>s</param>

@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +18,8 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Runtime.Serialization;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Objects.Factory
 {
@@ -48,7 +43,7 @@ namespace Spring.Objects.Factory
         public const string DEFAULTMESSAGE = "Requested object is currently in creation: Is there an unresolvable circular reference?";
 
         /// <summary>
-        /// Creates a new instance of the 
+        /// Creates a new instance of the
         /// <see cref="Spring.Objects.Factory.ObjectCurrentlyInCreationException"/> class.
         /// </summary>
 		public ObjectCurrentlyInCreationException()
@@ -56,19 +51,19 @@ namespace Spring.Objects.Factory
 		}
 
         /// <summary>
-        /// Creates a new instance of the 
+        /// Creates a new instance of the
         /// <see cref="Spring.Objects.Factory.ObjectCurrentlyInCreationException"/> class.
         /// </summary>
 		/// <param name="objectName">
 		/// The name of the object that triggered the exception.
 		/// </param>
-		public ObjectCurrentlyInCreationException(string objectName) 
+		public ObjectCurrentlyInCreationException(string objectName)
             : this(null, objectName, null, null)
 		{
 		}
 
         /// <summary>
-        /// Creates a new instance of the 
+        /// Creates a new instance of the
         /// <see cref="Spring.Objects.Factory.ObjectCurrentlyInCreationException"/> class.
         /// </summary>
         /// <param name="objectName">
@@ -83,7 +78,7 @@ namespace Spring.Objects.Factory
         }
 
         /// <summary>
-		/// Creates a new instance of the 
+		/// Creates a new instance of the
         /// <see cref="Spring.Objects.Factory.ObjectCurrentlyInCreationException"/> class.
 		/// </summary>
 		/// <param name="message">
@@ -98,7 +93,7 @@ namespace Spring.Objects.Factory
 		}
 
         /// <summary>
-        /// Creates a new instance of the 
+        /// Creates a new instance of the
         /// <see cref="Spring.Objects.Factory.ObjectCurrentlyInCreationException"/> class.
         /// </summary>
 		/// <param name="message">
@@ -116,7 +111,7 @@ namespace Spring.Objects.Factory
 		}
 
         /// <summary>
-		/// Creates a new instance of the 
+		/// Creates a new instance of the
 		/// <see cref="Spring.Objects.Factory.ObjectCurrentlyInCreationException"/> class.
 		/// </summary>
 		/// <param name="resourceDescription">
@@ -137,7 +132,7 @@ namespace Spring.Objects.Factory
 		}
 
         /// <summary>
-		/// Creates a new instance of the 
+		/// Creates a new instance of the
 		/// <see cref="Spring.Objects.Factory.ObjectCurrentlyInCreationException"/> class.
 		/// </summary>
 		/// <param name="resourceDescription">
@@ -158,8 +153,8 @@ namespace Spring.Objects.Factory
 			string message,
 			Exception rootCause)
             : base(resourceDescription,
-                objectName, 
-                StringUtils.HasText(message) ? message : DEFAULTMESSAGE, 
+                objectName,
+                StringUtils.HasText(message) ? message : DEFAULTMESSAGE,
                 rootCause)
 		{
 		}

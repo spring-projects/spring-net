@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
 
 #endregion
 
-using System.Collections.Generic;
 using Spring.Expressions;
 
 namespace Spring.Validation
@@ -28,8 +27,8 @@ namespace Spring.Validation
     /// </summary>
     /// <remarks>
     /// <p>
-    /// Custom single validators should always extend this class instead of 
-    /// simply implementing <see cref="IValidator"/> interface, in 
+    /// Custom single validators should always extend this class instead of
+    /// simply implementing <see cref="IValidator"/> interface, in
     /// order to inherit common validator functionality.
     /// </p>
     /// </remarks>
@@ -50,7 +49,7 @@ namespace Spring.Validation
         }
 
         /// <summary>
-        /// Creates a new instance of the validator without any <see cref="Test"/> 
+        /// Creates a new instance of the validator without any <see cref="Test"/>
         /// and <see cref="BaseValidator.When"/> criteria
         /// </summary>
         public BaseSimpleValidator()

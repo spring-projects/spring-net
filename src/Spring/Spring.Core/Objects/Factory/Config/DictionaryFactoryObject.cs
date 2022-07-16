@@ -1,14 +1,14 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
- * 
+ * Copyright ï¿½ 2002-2011 the original author or authors.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Collections;
 using System.Globalization;
 
@@ -81,14 +80,14 @@ namespace Spring.Objects.Factory.Config
 						              "The Type passed to the TargetDictionaryType property must implement the '{0}' interface.",
 						              ObjectType.FullName));
 				}
-				if (value.IsInterface) 
+				if (value.IsInterface)
 				{
 					throw new ArgumentException(
 						string.Format(CultureInfo.InvariantCulture,
 						"The Type passed to the TargetDictionaryType property cannot be an interface; it must be a concrete class that implements the '{0}' interface.",
 						ObjectType.FullName));
 				}
-				if (value.IsAbstract) 
+				if (value.IsAbstract)
 				{
 					throw new ArgumentException(
 						string.Format(CultureInfo.InvariantCulture,

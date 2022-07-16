@@ -18,8 +18,6 @@
 
 #endregion
 
-using System.Collections.Generic;
-
 using Spring.Objects.Factory.Support;
 
 namespace Spring.Objects.Factory.Config
@@ -143,7 +141,7 @@ namespace Spring.Objects.Factory.Config
         /// <see cref="IObjectDefinitionRegistry.GetObjectDefinitionNames()"/>
         /// <see cref="IListableObjectFactory.GetObjectDefinitionNames()"/>
         IList<string> SingletonNames
-        { 
+        {
             get;
         }
 
@@ -166,7 +164,7 @@ namespace Spring.Objects.Factory.Config
         /// <see cref="Spring.Objects.Factory.Support.IObjectDefinitionRegistry.ObjectDefinitionCount"/>
         /// <see cref="Spring.Objects.Factory.IListableObjectFactory.ObjectDefinitionCount"/>
         int SingletonCount
-        { 
+        {
             get;
         }
     }

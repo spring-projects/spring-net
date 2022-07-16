@@ -18,16 +18,11 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Runtime.Serialization;
-
-#endregion
 
 namespace Spring.Dao
 {
-	/// <summary> 
+	/// <summary>
 	/// Data access exception thrown when a result was not of the expected size,
 	/// for example when expecting a single row but getting 0 or more than 1 rows.
 	/// </summary>

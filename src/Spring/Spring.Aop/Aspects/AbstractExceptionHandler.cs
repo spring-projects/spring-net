@@ -18,9 +18,7 @@
 
 #endregion
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using Common.Logging;
 using Spring.Expressions;
 
@@ -150,7 +148,7 @@ namespace Spring.Aspects
                 }
             }
             if (ConstraintExpressionText != null)
-            {                
+            {
                 bool canProcess;
                 try
                 {

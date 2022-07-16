@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,6 @@
  */
 
 #endregion
-
-using System;
 
 namespace Spring.Objects.Factory.Config
 {
@@ -48,7 +46,7 @@ namespace Spring.Objects.Factory.Config
 	///		<!-- a System.String typed property -->
 	///		<property name="name" value="Chinua Achebe"/>
 	/// </object>
-	/// 
+	///
 	/// <!--
 	///		will result in "Chinua Achebe", which is the value of the 'name' property of the 'foo' object
 	///	-->
@@ -57,13 +55,13 @@ namespace Spring.Objects.Factory.Config
 	///		<property name="targetObject" ref="foo"/>
 	///		<property name="propertyPath" value="name"/>
 	/// </object>
-	/// 
+	///
 	/// <!--
 	///		will result in "Chinua Achebe", which is the value of the 'name' property of the 'foo' object
 	///	-->
 	/// <object id="foo.name"
 	///			type="Spring.Objects.Factory.Config.PropertyPathFactoryObject, Spring.Core"/>
-	/// 
+	///
 	/// <!--
 	///		will result in "Chinua Achebe", which is the value of the 'name' property of the 'foo' object
 	/// -->
@@ -72,11 +70,11 @@ namespace Spring.Objects.Factory.Config
 	///		<property name="targetObjectName" value="foo"/>
 	///		<property name="propertyPath" value="name"/>
 	/// </object>
-	/// 
+	///
 	/// <!--
 	///		will result in (the int value) '13', which is the value of the length property of the 'name'
 	///		property of the 'foo' object.
-	///		
+	///
 	///		in this case, the first 'part' of the id is taken to be the name of the target object ('foo');
 	///		the remainder of the name is taken to be the property lookup path
 	///	-->
@@ -108,7 +106,7 @@ namespace Spring.Objects.Factory.Config
 		/// <value>
 		/// The target object that the property path lookup is to be applied to.
 		/// </value>
-		/// <seealso cref="Spring.Objects.Factory.Config.PropertyPathFactoryObject.TargetObjectName"/> 
+		/// <seealso cref="Spring.Objects.Factory.Config.PropertyPathFactoryObject.TargetObjectName"/>
 		public object TargetObject
 		{
 			set { this.targetObjectWrapper = new ObjectWrapper(value); }
@@ -130,7 +128,7 @@ namespace Spring.Objects.Factory.Config
 		/// The (object) name of the target object that the property path lookup
 		/// is to be applied to.
 		/// </value>
-		/// <seealso cref="Spring.Objects.Factory.Config.PropertyPathFactoryObject.TargetObject"/> 
+		/// <seealso cref="Spring.Objects.Factory.Config.PropertyPathFactoryObject.TargetObject"/>
 		public string TargetObjectName
 		{
 			set

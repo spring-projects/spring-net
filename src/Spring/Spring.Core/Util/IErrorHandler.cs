@@ -18,12 +18,10 @@
 
 #endregion
 
-using System;
-
 namespace Spring.Util
 {
     /// <summary>
-    /// A strategy for handling errors.  This is especially useful for handling 
+    /// A strategy for handling errors.  This is especially useful for handling
     /// errors that occur during asynchronous execution as in such cases it may not be
     /// possible to throw the error to the original caller.
     /// </summary>

@@ -20,12 +20,10 @@
 
 #region Imports
 
-using System;
 using System.Collections;
 using System.Web;
 using System.Web.Caching;
 using System.Web.SessionState;
-using Common.Logging;
 using Spring.Collections;
 using Spring.Context.Attributes;
 using Spring.Context.Support;
@@ -38,7 +36,7 @@ namespace Spring.Objects.Factory.Support
 {
     /// <summary>
     /// Concrete implementation of
-    /// <see cref="Spring.Objects.Factory.IListableObjectFactory"/> that knows 
+    /// <see cref="Spring.Objects.Factory.IListableObjectFactory"/> that knows
     /// how to handle <see cref="IWebObjectDefinition"/>s.
     /// </summary>
     /// <remarks>
@@ -204,7 +202,7 @@ namespace Spring.Objects.Factory.Support
         }
 
         /// <summary>
-        /// Tries to find cached object for the specified name. 
+        /// Tries to find cached object for the specified name.
         /// </summary>
         /// <remarks>
         /// This implementation tries to find object first in the Request scope,
@@ -297,7 +295,7 @@ namespace Spring.Objects.Factory.Support
         }
 
         /// <summary>
-        /// Creates a singleton instance for the specified object name and definition 
+        /// Creates a singleton instance for the specified object name and definition
         /// and caches the instance in the specified dictionary
         /// </summary>
         /// <param name="objectName">
@@ -312,7 +310,7 @@ namespace Spring.Objects.Factory.Support
         /// <param name="scopedSingletonCache">the dictionary to be used for caching singleton instances</param>
         /// <returns>The created object instance.</returns>
         /// <remarks>
-        /// If the object is successfully created, <paramref name="scopedSingletonCache"/> 
+        /// If the object is successfully created, <paramref name="scopedSingletonCache"/>
         /// contains the cached instance with the key <paramref name="objectName"/>.
         /// </remarks>
         protected virtual object CreateAndCacheScopedSingletonInstance(string objectName, RootObjectDefinition objectDefinition, object[] arguments, IDictionary scopedSingletonCache)
@@ -347,8 +345,8 @@ namespace Spring.Objects.Factory.Support
         }
 
         /// <summary>
-        /// We need this override so that Web Scoped Singletons are not registered in general 
-        /// DisposalObjectRegister 
+        /// We need this override so that Web Scoped Singletons are not registered in general
+        /// DisposalObjectRegister
         /// </summary>
         /// <param name="name"></param>
         /// <param name="instance"></param>
@@ -383,11 +381,11 @@ namespace Spring.Objects.Factory.Support
                 }
                 else if (scope == ObjectScope.Session)
                 {
-                    this.Session[objectName] = rawSingletonInstance;                    
+                    this.Session[objectName] = rawSingletonInstance;
                 }
                 else
                 {
-                    throw new ObjectDefinitionException("Web singleton objects must be either request, session or application scoped.");                    
+                    throw new ObjectDefinitionException("Web singleton objects must be either request, session or application scoped.");
                 }
             }
             else
@@ -397,7 +395,7 @@ namespace Spring.Objects.Factory.Support
         }
 
         /// <summary>
-        /// Remove the specified singleton from the singleton cache that has 
+        /// Remove the specified singleton from the singleton cache that has
         /// been added before by a call to <see cref="AddEagerlyCachedSingleton"/>
         /// </summary>
         /// <param name="objectName">the name of the object to remove from the cache.</param>
@@ -420,7 +418,7 @@ namespace Spring.Objects.Factory.Support
                 }
                 else
                 {
-                    throw new ObjectDefinitionException("Web singleton objects must be either 'request' or 'session' scoped.");                    
+                    throw new ObjectDefinitionException("Web singleton objects must be either 'request' or 'session' scoped.");
                 }
             }
             else
@@ -431,7 +429,7 @@ namespace Spring.Objects.Factory.Support
 
         private bool IsWebScopedSingleton(IObjectDefinition objectDefinition)
         {
-            if (objectDefinition.IsSingleton && 
+            if (objectDefinition.IsSingleton &&
                 (objectDefinition is IWebObjectDefinition || objectDefinition is ScannedGenericObjectDefinition))
             {
                 ObjectScope scope = GetObjectScope(objectDefinition);
@@ -449,7 +447,7 @@ namespace Spring.Objects.Factory.Support
 
             ObjectScope scope = (ObjectScope) Enum.Parse(typeof (ObjectScope), objectDefinition.Scope, true);
 
-            return scope;            
+            return scope;
         }
 
         /// <summary>

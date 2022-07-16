@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using AopAlliance.Aop;
 
 #endregion
@@ -93,7 +92,7 @@ namespace Spring.Aop.Support
 
 
         ///<summary>
-        /// 2 <see cref="DefaultPointcutAdvisor"/>s are considered equal, if 
+        /// 2 <see cref="DefaultPointcutAdvisor"/>s are considered equal, if
         /// a) their pointcuts are equal
         /// b) their advices are equal
         ///</summary>

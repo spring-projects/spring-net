@@ -18,16 +18,11 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Runtime.Serialization;
-
-#endregion
 
 namespace Spring.Dao
 {
-    /// <summary> 
+    /// <summary>
     /// RDta access exception thrown when a resource fails temporarily and the operation can be
     /// retried.
     /// </summary>

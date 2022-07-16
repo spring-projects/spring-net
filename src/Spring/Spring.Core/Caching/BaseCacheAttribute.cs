@@ -1,4 +1,3 @@
-using System;
 using Spring.Core.TypeConversion;
 using Spring.Expressions;
 
@@ -83,7 +82,7 @@ namespace Spring.Caching
         }
 
         /// <summary>
-        /// Gets or sets a SpEL expression that should be evaluated in order 
+        /// Gets or sets a SpEL expression that should be evaluated in order
         /// to determine the cache key for the item.
         /// </summary>
         /// <value>
@@ -101,7 +100,7 @@ namespace Spring.Caching
         }
 
         /// <summary>
-        /// Gets an expression instance that should be evaluated in order 
+        /// Gets an expression instance that should be evaluated in order
         /// to determine the cache key for the item.
         /// </summary>
         /// <value>
@@ -114,7 +113,7 @@ namespace Spring.Caching
         }
 
         /// <summary>
-        /// Gets or sets a SpEL expression that should be evaluated in order 
+        /// Gets or sets a SpEL expression that should be evaluated in order
         /// to determine whether the item should be cached.
         /// </summary>
         /// <value>
@@ -132,7 +131,7 @@ namespace Spring.Caching
         }
 
         /// <summary>
-        /// Gets an expression instance that should be evaluated in order 
+        /// Gets an expression instance that should be evaluated in order
         /// to determine whether the item should be cached.
         /// </summary>
         /// <value>
@@ -148,11 +147,11 @@ namespace Spring.Caching
         /// The amount of time an object should remain in the cache.
         /// </summary>
         /// <remarks>
-        /// If no TTL is specified, the default TTL defined by the 
+        /// If no TTL is specified, the default TTL defined by the
         /// cache's policy will be applied.
         /// </remarks>
         /// <value>
-        /// The amount of time object should remain in the cache 
+        /// The amount of time object should remain in the cache
         /// formatted to be recognizable by <see cref="TimeSpan.Parse(string)"/>.
         /// </value>
         public string TimeToLive
@@ -170,7 +169,7 @@ namespace Spring.Caching
         /// The amount of time an object should remain in the cache (in seconds).
         /// </summary>
         /// <remarks>
-        /// If no TTL is specified, the default TTL defined by the 
+        /// If no TTL is specified, the default TTL defined by the
         /// cache's policy will be applied.
         /// </remarks>
         /// <value>

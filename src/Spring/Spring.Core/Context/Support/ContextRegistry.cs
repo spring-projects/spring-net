@@ -1,39 +1,32 @@
 #region License
 
-/* 
- * Copyright � 2002-2011 the original author or authors. 
- * 
- * Licensed under the Apache License, Version 2.0 (the "License"); 
- * you may not use this file except in compliance with the License. 
- * You may obtain a copy of the License at 
- * 
- *      http://www.apache.org/licenses/LICENSE-2.0 
- * 
- * Unless required by applicable law or agreed to in writing, software 
- * distributed under the License is distributed on an "AS IS" BASIS, 
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. 
- * See the License for the specific language governing permissions and 
- * limitations under the License. 
+/*
+ * Copyright � 2002-2011 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
  */
 
 #endregion
-
-#region Imports
-
-using System;
-using System.Collections.Generic;
 
 using Common.Logging;
 
 using Spring.Context.Events;
 using Spring.Util;
 
-#endregion
-
 namespace Spring.Context.Support
 {
-    /// <summary> 
-    /// Provides access to a central registry of 
+    /// <summary>
+    /// Provides access to a central registry of
     /// <see cref="Spring.Context.IApplicationContext"/>s.
     /// </summary>
     /// <remarks>
@@ -147,15 +140,15 @@ namespace Spring.Context.Support
         }
 
 
-        /// <summary> 
+        /// <summary>
         /// Registers an instance of an
-        /// <see cref="Spring.Context.IApplicationContext"/>. 
-        /// </summary> 
+        /// <see cref="Spring.Context.IApplicationContext"/>.
+        /// </summary>
         /// <remarks>
         /// <p>
         /// This is usually called via a
         /// <see cref="Spring.Context.Support.ContextHandler"/> inside a .NET
-        /// application configuration file. 
+        /// application configuration file.
         /// </p>
         /// </remarks>
         /// <param name="context">The application context to be registered.</param>
@@ -212,7 +205,7 @@ namespace Spring.Context.Support
         }
 
         /// <summary>
-        /// Removes the context from the registry 
+        /// Removes the context from the registry
         /// </summary>
         /// <remarks>
         /// Has no effect if the context wasn't registered
@@ -239,8 +232,8 @@ namespace Spring.Context.Support
         /// </summary>
         /// <remarks>
         /// <p>
-        /// The first call to GetContext will create the context 
-        /// as specified in the .NET application configuration file 
+        /// The first call to GetContext will create the context
+        /// as specified in the .NET application configuration file
         /// under the location spring/context.
         /// </p>
         /// </remarks>
@@ -264,8 +257,8 @@ namespace Spring.Context.Support
         /// </summary>
         /// <remarks>
         /// <p>
-        /// The first call to GetContext will create the context 
-        /// as specified in the .NET application configuration file 
+        /// The first call to GetContext will create the context
+        /// as specified in the .NET application configuration file
         /// under the location spring/context.
         /// </p>
         /// </remarks>
@@ -327,8 +320,8 @@ namespace Spring.Context.Support
                     ctx.Dispose();
                 }
 
-                // contexts will be removed from contextMap during OnContextEvent handler 
-                // but someone might choose to override AbstractApplicationContext.Dispose() without 
+                // contexts will be removed from contextMap during OnContextEvent handler
+                // but someone might choose to override AbstractApplicationContext.Dispose() without
                 // calling base.Dispose() ...
                 if (log.IsWarnEnabled)
                 {

@@ -18,8 +18,6 @@
 
 #endregion
 
-using System;
-using System.IO;
 using Common.Logging;
 using Commons.Collections;
 using NVelocity.Runtime.Resource;

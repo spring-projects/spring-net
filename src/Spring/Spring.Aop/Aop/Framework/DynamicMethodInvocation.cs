@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using System.Collections;
 using System.Reflection;
 
@@ -116,8 +115,8 @@ namespace Spring.Aop.Framework
         }
 
         /// <summary>
-        /// Creates a new <see cref="Spring.Aop.Framework.DynamicMethodInvocation"/> instance 
-        /// from the specified <see cref="AopAlliance.Intercept.IMethodInvocation"/> and  
+        /// Creates a new <see cref="Spring.Aop.Framework.DynamicMethodInvocation"/> instance
+        /// from the specified <see cref="AopAlliance.Intercept.IMethodInvocation"/> and
         /// increments the interceptor index.
         /// </summary>
         /// <param name="invocation">

@@ -1,14 +1,14 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
- * 
+ * Copyright ï¿½ 2002-2011 the original author or authors.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,23 +18,18 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Collections;
 using System.Data;
 using Common.Logging;
 using Spring.Data.Common;
 
-#endregion
-
 namespace Spring.Data.Support
 {
 	/// <summary>
-	/// Miscellaneous utility methods for manipulating parameter objects. 
+	/// Miscellaneous utility methods for manipulating parameter objects.
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	public class ParameterUtils 
+	public class ParameterUtils
 	{
 		#region Fields
 
@@ -43,7 +38,7 @@ namespace Spring.Data.Support
 		#region Constants
 
 		/// <summary>
-		/// The shared log instance for this class (and derived classes). 
+		/// The shared log instance for this class (and derived classes).
 		/// </summary>
 		protected static readonly ILog log =
 			LogManager.GetLogger(typeof (ParameterUtils));
@@ -78,7 +73,7 @@ namespace Spring.Data.Support
             if (springParamCollection != null)
             {
                 IDataParameterCollection collection = springParamCollection.DataParameterCollection;
-                
+
                 foreach (IDbDataParameter parameter in collection)
                 {
                     IDbDataParameter pClone = (IDbDataParameter)((ICloneable)parameter).Clone();
@@ -86,7 +81,7 @@ namespace Spring.Data.Support
                 }
             }
         }
-	    
+
 	    public static IDataParameter[] CloneParameters(IDbCommand command)
 	    {
             IDataParameter[] returnParameters = new IDataParameter[command.Parameters.Count];
@@ -104,7 +99,7 @@ namespace Spring.Data.Support
         /// </summary>
         /// <param name="springParamCollection">The spring param collection.</param>
         /// <param name="command">The command.</param>
-        public static void CopyParameters(IDbParameters springParamCollection, 
+        public static void CopyParameters(IDbParameters springParamCollection,
                                           IDbCommand command)
         {
             if (springParamCollection != null)
@@ -119,7 +114,7 @@ namespace Spring.Data.Support
                 }
             }
         }
-	    
+
 		#endregion
 
 	    public static void ExtractOutputParameters(IDictionary returnedParameters, IDbCommand command)

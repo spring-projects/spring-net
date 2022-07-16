@@ -1,11 +1,8 @@
-using System;
-using System.Collections.Generic;
-
 namespace Spring.Aop.Framework.AutoProxy
 {
     /// <summary>
-    /// Interface encapsulating the advisor retrieval strategy used by 
-    /// an <see cref="AbstractAdvisorAutoProxyCreator"/> to retrieve the 
+    /// Interface encapsulating the advisor retrieval strategy used by
+    /// an <see cref="AbstractAdvisorAutoProxyCreator"/> to retrieve the
     /// applicable list of advisor objects.
     /// </summary>
     public interface IAdvisorRetrievalHelper

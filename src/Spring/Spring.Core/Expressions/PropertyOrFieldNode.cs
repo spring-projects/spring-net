@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,7 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Runtime.Remoting;
@@ -34,8 +30,6 @@ using Spring.Core.TypeConversion;
 using Spring.Core.TypeResolution;
 using Spring.Util;
 using Spring.Reflection.Dynamic;
-
-#endregion
 
 namespace Spring.Expressions
 {
@@ -168,7 +162,7 @@ namespace Spring.Expressions
         /// Binding flags to use.
         /// </param>
         /// <returns>
-        /// Resolved property or field accessor, or <c>null</c> 
+        /// Resolved property or field accessor, or <c>null</c>
         /// if specified <paramref name="memberName"/> cannot be resolved.
         /// </returns>
         private static IValueAccessor GetPropertyOrFieldAccessor(Type contextType, string memberName, BindingFlags bindingFlags)

@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using System.Collections;
 using System.Reflection;
 using AopAlliance.Intercept;
@@ -37,7 +36,7 @@ namespace Spring.Aop.Framework.Adapter
     /// Implementations of the <see cref="Spring.Aop.IThrowsAdvice"/> interface
     /// <b>must</b> define methods of the form...
     /// <code lang="C#">
-    /// AfterThrowing([MethodInfo method, Object[] args, Object target], Exception subclass); 
+    /// AfterThrowing([MethodInfo method, Object[] args, Object target], Exception subclass);
     /// </code>
     /// The method name is fixed (i.e. your methods <b>must</b> be named
     /// <c>AfterThrowing</c>. The first three arguments (<i>as a whole</i>) are
@@ -84,7 +83,7 @@ namespace Spring.Aop.Framework.Adapter
     /// </code>
     /// <code language="C#">
     /// using System.Data;
-    /// 
+    ///
     /// public class DataExceptionHandlingAdvice
     /// {
     ///     public void AfterThrowing(ConstraintException ex) {

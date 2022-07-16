@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,21 +18,17 @@
 
 #endregion
 
-#region Imports
-
 using System.Configuration;
 using System.Xml;
 
 using Spring.Core.IO;
-
-#endregion
 
 namespace Spring.Objects.Factory.Xml
 {
     /// <summary>
     /// Creates an <see cref="Spring.Objects.Factory.IObjectFactory"/> instance
     /// populated with the object definitions supplied in the configuration
-    /// section. 
+    /// section.
     /// </summary>
     /// <remarks>
     /// <p>
@@ -47,7 +43,7 @@ namespace Spring.Objects.Factory.Xml
     /// </remarks>
     /// <example>
     /// <p>
-    /// 
+    ///
     /// </p>
     /// </example>
     /// <author>Mark Pollack (.NET)</author>

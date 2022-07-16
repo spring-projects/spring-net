@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using Apache.NMS;
 using Common.Logging;
 using Spring.Messaging.Nms.Support;
@@ -44,7 +43,7 @@ namespace Spring.Messaging.Nms.Connections
         /// Releases the given connection, stopping it (if necessary) and eventually closing it.
         /// </summary>
         /// <remarks>Checks <see cref="ISmartConnectionFactory.ShouldStop"/>, if available.
-        /// This is essentially a more sophisticated version of 
+        /// This is essentially a more sophisticated version of
         /// <see cref="NmsUtils.CloseConnection(IConnection, bool)"/>
         /// </remarks>
         /// <param name="connection">The connection to release. (if this is <code>null</code>, the call will be ignored)</param>
@@ -75,7 +74,7 @@ namespace Spring.Messaging.Nms.Connections
             } catch (Exception ex)
             {
                 LOG.Debug("Could not close NMS Connection", ex);
-            }           
+            }
         }
 
         /// <summary>
@@ -340,7 +339,7 @@ namespace Spring.Messaging.Nms.Connections
             /// committing right after the main transaction.
             /// Returns whether to allow for synchronizing a local NMS transaction
             /// </summary>
-            /// 
+            ///
             bool SynchedLocalTransactionAllowed { get; }
         }
 

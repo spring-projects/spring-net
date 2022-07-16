@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Reflection;
 using System.Text;
 using AopAlliance.Intercept;
@@ -194,13 +193,13 @@ namespace Spring.Aspects.Logging
         {
             object returnValue = null;
             bool exitThroughException = false;
-            
+
             DateTime startTime = DateTime.Now;
             string uniqueIdentifier = null;
 
             if (LogUniqueIdentifier)
             {
-                uniqueIdentifier = CreateUniqueIdentifier(); 
+                uniqueIdentifier = CreateUniqueIdentifier();
             }
             try
             {
@@ -303,7 +302,7 @@ namespace Spring.Aspects.Logging
         /// <param name="idString">The id string.</param>
         /// <returns>The entry log message</returns>
         protected virtual string GetEntryMessage(IMethodInvocation invocation, string idString)
-        {            
+        {
             StringBuilder sb = new StringBuilder(128);
             sb.Append("Entering ");
             AppendCommonInformation(sb, invocation, idString);

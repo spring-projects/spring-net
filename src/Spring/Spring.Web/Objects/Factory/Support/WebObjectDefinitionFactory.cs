@@ -20,8 +20,6 @@
 
 #region Imports
 
-using System;
-
 using Spring.Core.TypeResolution;
 using Spring.Objects.Factory.Config;
 using Spring.Util;

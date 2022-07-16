@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Diagnostics;
 using Spring.Util;
 
@@ -81,7 +80,7 @@ namespace Spring.Objects
 				    ObjectUtils.NullSafeEquals(_source, otherMa._source));
 	    }
 
-	    
+
 	    public override int GetHashCode()
         {
 		    return _name.GetHashCode() * 29 + ObjectUtils.NullSafeHashCode(_value);

@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2010 the original author or authors.
+ * Copyright ï¿½ 2002-2010 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using Common.Logging;
 using Spring.Messaging.Ems.Common;
 using Spring.Messaging.Ems.Connections;
@@ -27,7 +26,6 @@ using Spring.Messaging.Ems.Support.Converter;
 using Spring.Messaging.Ems.Support.Destinations;
 using Spring.Transaction.Support;
 using Spring.Util;
-using TIBCO.EMS;
 using Queue=TIBCO.EMS.Queue;
 
 namespace Spring.Messaging.Ems.Core
@@ -61,7 +59,7 @@ namespace Spring.Messaging.Ems.Core
 
         /// <summary>
         /// Timeout value indicating that a receive operation should
-	    /// check if a message is immediately available without blocking.	 
+	    /// check if a message is immediately available without blocking.
         /// </summary>
         public static readonly long DEFAULT_RECEIVE_TIMEOUT = -1;
 
@@ -87,7 +85,7 @@ namespace Spring.Messaging.Ems.Core
         private int deliveryMode = Message.DEFAULT_DELIVERY_MODE;
 
         private long timeToLive = Message.DEFAULT_TIME_TO_LIVE;
-		       
+
         #endregion
 
         #region Constructor (s)
@@ -191,7 +189,7 @@ namespace Spring.Messaging.Ems.Core
             ISession sessionToClose = null;
             // bool sessionInTLS = true;
 
-            //NOTE: Not closing session or connection unless session is not returned from 
+            //NOTE: Not closing session or connection unless session is not returned from
             //      ConnectionFactoryUtils.DoGetTransactionalSession and CacheEmsResources is set to false
             try
             {
@@ -355,7 +353,7 @@ namespace Spring.Messaging.Ems.Core
         virtual public int DeliveryMode
         {
 			get { return deliveryMode; }
-			
+
             set { deliveryMode = value; }
         }
 
@@ -385,7 +383,7 @@ namespace Spring.Messaging.Ems.Core
             set { timeToLive = value; }
         }
 
-        /*        
+        /*
         /// <summary>
         /// Gets or sets a value indicating whether the EmsTemplate should itself
         /// be responsible for caching EMS Connection/Session/MessageProducer as compared to
@@ -480,7 +478,7 @@ namespace Spring.Messaging.Ems.Core
         /// <summary>
         /// Determines whether the given Session is locally transacted, that is, whether
         /// its transaction is managed by this template class's Session handling
-        /// and not by an external transaction coordinator. 
+        /// and not by an external transaction coordinator.
         /// </summary>
         /// <remarks>
         /// The Session's own transacted flag will already have been checked
@@ -499,7 +497,7 @@ namespace Spring.Messaging.Ems.Core
 
         /// <summary> Create a raw EMS MessageProducer for the given Session and Destination.
         /// </summary>
-        /// <remarks>If CacheJmsResource is true, then the producer 
+        /// <remarks>If CacheJmsResource is true, then the producer
         /// will be created upon the first invocation and will retrun the same
         /// producer (per destination) on all subsequent calls.
         /// </remarks>
@@ -554,7 +552,7 @@ namespace Spring.Messaging.Ems.Core
             else
             {
                 return session.CreateProducer(destination);
-            }*/      
+            }*/
         }
 
         /// <summary> Create a EMS MessageConsumer for the given Session and Destination.
@@ -586,7 +584,7 @@ namespace Spring.Messaging.Ems.Core
         /*
         /// <summary>Create a EMS Connection via this template's ConnectionFactory.
         /// </summary>
-        /// <remarks>If CacheJmsResource is true, then the connection 
+        /// <remarks>If CacheJmsResource is true, then the connection
         /// will be created upon the first invocation and will retrun the same
         /// connection on all subsequent calls.
         /// </remarks>
@@ -612,7 +610,7 @@ namespace Spring.Messaging.Ems.Core
         /*
         /// <summary> Create a EMS Session for the given Connection.
         /// </summary>
-        /// <remarks>If CacheJmsResource is true, then the session 
+        /// <remarks>If CacheJmsResource is true, then the session
         /// will be created upon the first invocation and will retrun the same
         /// session on all subsequent calls.
         /// </remarks>
@@ -676,10 +674,10 @@ namespace Spring.Messaging.Ems.Core
         {
 
 
-            IMessageProducer producer = CreateProducer(session, destination);            
+            IMessageProducer producer = CreateProducer(session, destination);
             try
             {
-                
+
                 Message message;
                 if (messageCreator != null)
                 {
@@ -869,7 +867,7 @@ namespace Spring.Messaging.Ems.Core
         /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         public void Send(Destination destination, IMessageCreator messageCreator)
         {
-            
+
             Execute(new SendDestinationCallback(this, destination, messageCreator), false);
         }
 
@@ -971,7 +969,7 @@ namespace Spring.Messaging.Ems.Core
         {
             CheckMessageConverter();
             Send(destination, new ConvertAndSendMessageCreator(this, message, postProcessor));
-            
+
         }
 
         /// <summary> Send the given object to the specified destination, converting the object
@@ -989,7 +987,7 @@ namespace Spring.Messaging.Ems.Core
         public void ConvertAndSend(string destinationName, object message, IMessagePostProcessor postProcessor)
         {
             CheckMessageConverter();
-            Send(destinationName, new ConvertAndSendMessageCreator(this, message, postProcessor));  
+            Send(destinationName, new ConvertAndSendMessageCreator(this, message, postProcessor));
         }
         /// <summary>
         /// Send the given object to the default destination, converting the object
@@ -1162,7 +1160,7 @@ namespace Spring.Messaging.Ems.Core
         public Message ReceiveSelected(string destinationName, string messageSelector)
         {
             return Execute(new ReceiveSelectedCallback(this, destinationName, messageSelector), true) as Message;
-        
+
         }
 
         /// <summary>
@@ -1342,7 +1340,7 @@ namespace Spring.Messaging.Ems.Core
         /// </summary>
         /// <param name="action">The action callback object that exposes the session/browser pair.</param>
         /// <returns>the result object from working with the session</returns>
-        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>        
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         public object Browse(IBrowserCallback action)
         {
             AssertUtils.ArgumentNotNull(action, "action");
@@ -1356,7 +1354,7 @@ namespace Spring.Messaging.Ems.Core
         /// <param name="queue">The queue to browse.</param>
         /// <param name="action">The action callback object that exposes the session/browser pair.</param>
         /// <returns>the result object from working with the session</returns>
-        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>        
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         public object Browse(Queue queue, IBrowserCallback action)
         {
             AssertUtils.ArgumentNotNull(action, "action");
@@ -1367,7 +1365,7 @@ namespace Spring.Messaging.Ems.Core
         /// Browses messages in a EMS queue. The callback gives access to the EMS Session
         /// and QueueBrowser in order to browse the queue and react to the contents.
         /// </summary>
-        /// <param name="queueName">Name of the queue to browse, 
+        /// <param name="queueName">Name of the queue to browse,
         /// (to be resolved to an actual destination by a DestinationResolver)</param>
         /// <param name="action">The action callback object that exposes the session/browser pair.</param>
         /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
@@ -1402,7 +1400,7 @@ namespace Spring.Messaging.Ems.Core
         public object BrowseSelected(Queue queue, string messageSelector, IBrowserCallback action)
         {
             AssertUtils.ArgumentNotNull(action, "action");
-            return BrowseSelectedWithDelegate(queue, messageSelector, action.DoInEms);        
+            return BrowseSelectedWithDelegate(queue, messageSelector, action.DoInEms);
         }
 
 
@@ -1410,7 +1408,7 @@ namespace Spring.Messaging.Ems.Core
         /// Browses messages in a EMS queue. The callback gives access to the EMS Session
         /// and QueueBrowser in order to browse the queue and react to the contents.
         /// </summary>
-        /// <param name="queueName">Name of the queue to browse, 
+        /// <param name="queueName">Name of the queue to browse,
         /// (to be resolved to an actual destination by a DestinationResolver)</param>
         /// <param name="messageSelector">The EMS message selector expression (or <code>null</code> if none).</param>
         /// <param name="action">The action callback object that exposes the session/browser pair.</param>
@@ -1463,7 +1461,7 @@ namespace Spring.Messaging.Ems.Core
         /// Browses messages in a EMS queue. The callback gives access to the EMS Session
         /// and QueueBrowser in order to browse the queue and react to the contents.
         /// </summary>
-        /// <param name="queueName">Name of the queue to browse, 
+        /// <param name="queueName">Name of the queue to browse,
         /// (to be resolved to an actual destination by a DestinationResolver)</param>
         /// <param name="action">The action callback delegate that exposes the session/browser pair.</param>
         /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
@@ -1519,14 +1517,14 @@ namespace Spring.Messaging.Ems.Core
                                    {
                                        EmsUtils.CloseQueueBrowser(browser);
                                    }
-                               }, true); 
+                               }, true);
         }
 
         /// <summary>
         /// Browses messages in a EMS queue. The callback gives access to the EMS Session
         /// and QueueBrowser in order to browse the queue and react to the contents.
         /// </summary>
-        /// <param name="queueName">Name of the queue to browse, 
+        /// <param name="queueName">Name of the queue to browse,
         /// (to be resolved to an actual destination by a DestinationResolver)</param>
         /// <param name="messageSelector">The EMS message selector expression (or <code>null</code> if none).</param>
         /// <param name="action">The action callback delegate that exposes the session/browser pair.</param>
@@ -1547,7 +1545,7 @@ namespace Spring.Messaging.Ems.Core
                                    {
                                        EmsUtils.CloseQueueBrowser(browser);
                                    }
-                               }, true);  
+                               }, true);
         }
 
         #endregion
@@ -1573,7 +1571,7 @@ namespace Spring.Messaging.Ems.Core
         private class EmsTemplateResourceFactory : ConnectionFactoryUtils.ResourceFactory
         {
             private EmsTemplate enclosingTemplateInstance;
-			
+
             public EmsTemplateResourceFactory(EmsTemplate enclosingInstance)
             {
                 InitBlock(enclosingInstance);
@@ -1687,7 +1685,7 @@ namespace Spring.Messaging.Ems.Core
                                                  jmsTemplate.ResolveDestinationName(session, destinationName),
                                                  null);
                 }
-                
+
             }
         }
 
@@ -1780,7 +1778,7 @@ namespace Spring.Messaging.Ems.Core
                 return del(session);
             }
         }
-        
+
         #endregion
     }
 
@@ -1827,7 +1825,7 @@ namespace Spring.Messaging.Ems.Core
     {
         private EmsTemplate jmsTemplate;
         private object objectToConvert;
-        
+
         public SimpleMessageCreator(EmsTemplate jmsTemplate, object objectToConvert)
         {
             this.jmsTemplate = jmsTemplate;

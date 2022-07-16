@@ -18,9 +18,7 @@
 
 #endregion
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using Common.Logging;
 using Spring.Context;
 using Spring.Messaging.Support;
@@ -38,8 +36,8 @@ namespace Spring.Messaging.Core
 {
     /// <summary>
     /// A <see cref="IMessageQueueFactory"/> implementation that caches MessageQueue and IMessageConverter
-    /// instances.  The MessageQueue objects are created by retrieving them by-name from the 
-    /// ApplicationContext. 
+    /// instances.  The MessageQueue objects are created by retrieving them by-name from the
+    /// ApplicationContext.
     /// </summary>
     /// <author>Mark Pollack</author>
     public class DefaultMessageQueueFactory : IMessageQueueFactory, IApplicationContextAware
@@ -76,7 +74,7 @@ namespace Spring.Messaging.Core
             foreach (KeyValuePair<string, MessageQueueMetadataCache> entry in caches)
             {
                 entry.Value.Insert(mqfo.Path, new MessageQueueMetadata(mqfo.RemoteQueue, mqfo.RemoteQueueIsTransactional));
-            }             
+            }
         }
 
         /// <summary>
@@ -155,7 +153,7 @@ namespace Spring.Messaging.Core
                     converters.Add(messageConverterObjectName, mc.Clone());
                 }
                 else
-                {                              
+                {
                     converters.Add(messageConverterObjectName, mc);
                 }
             }

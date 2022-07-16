@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using AopAlliance.Aop;
 
 namespace Spring.Aop.Support
@@ -47,7 +46,7 @@ namespace Spring.Aop.Support
         }
 
         ///<summary>
-        /// 2 <see cref="AbstractGenericPointcutAdvisor"/>s are considered equals, if 
+        /// 2 <see cref="AbstractGenericPointcutAdvisor"/>s are considered equals, if
         /// a) their pointcuts are equal
         /// b) their advices are equal
         ///</summary>

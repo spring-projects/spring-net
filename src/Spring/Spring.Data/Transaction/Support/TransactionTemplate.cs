@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using Common.Logging;
 using Spring.Objects.Factory;
 
@@ -53,7 +52,7 @@ namespace Spring.Transaction.Support
     /// </p>
     /// </remarks>
     /// <author>Juergen Hoeller</author>
-    /// <author>Mark Pollack (.NET)</author> 
+    /// <author>Mark Pollack (.NET)</author>
     /// <author>Griffin Caprio (.NET)</author>
     public class TransactionTemplate : DefaultTransactionDefinition, ITransactionOperations, IInitializingObject
     {
@@ -96,7 +95,7 @@ namespace Spring.Transaction.Support
         /// <param name="platformTransactionManager">
         /// The transaction management strategy to be used.
         /// </param>
-        public TransactionTemplate( IPlatformTransactionManager platformTransactionManager ) 
+        public TransactionTemplate( IPlatformTransactionManager platformTransactionManager )
         {
             _platformTransactionManager = platformTransactionManager;
         }
@@ -119,7 +118,7 @@ namespace Spring.Transaction.Support
         /// </summary>
         public void AfterPropertiesSet()
         {
-            if ( _platformTransactionManager == null ) 
+            if ( _platformTransactionManager == null )
             {
                 throw new ArgumentException( "IPlatformTransactionManager instance is required." );
             }
@@ -142,14 +141,14 @@ namespace Spring.Transaction.Support
         /// <exception cref="Spring.Transaction.TransactionException">
         /// In case of initialization or system errors.
         /// </exception>
-        public object Execute( TransactionDelegate transactionMethod ) 
+        public object Execute( TransactionDelegate transactionMethod )
         {
             ITransactionStatus status = _platformTransactionManager.GetTransaction( this );
             object result;
             try
             {
                 result = transactionMethod( status );
-            } 
+            }
             catch ( Exception ex )
             {
                 rollbackOnException( status, ex );
@@ -182,7 +181,7 @@ namespace Spring.Transaction.Support
             try
             {
                 result = action.DoInTransaction(status);
-            } 
+            }
             catch ( Exception ex )
             {
                 rollbackOnException( status, ex );

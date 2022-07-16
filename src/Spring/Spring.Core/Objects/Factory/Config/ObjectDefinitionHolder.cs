@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 
-using System;
-using System.Collections.Generic;
-
 using Spring.Objects.Factory.Xml;
 using Spring.Util;
 
@@ -78,13 +75,13 @@ namespace Spring.Objects.Factory.Config
         /// Any aliases for the supplied <paramref name="definition"/>
         /// </param>
         public ObjectDefinitionHolder(
-            IObjectDefinition definition, 
+            IObjectDefinition definition,
             string name,
             IReadOnlyList<string> aliases)
         {
             objectDefinition = definition;
             objectName = name;
-            this.aliases = aliases != null && aliases.Count > 0 
+            this.aliases = aliases != null && aliases.Count > 0
                 ? new List<string>(aliases)
                 : null;
         }
@@ -120,7 +117,7 @@ namespace Spring.Objects.Factory.Config
         /// <returns></returns>
         public bool MatchesName(string candidateName)
         {
-            return !string.IsNullOrEmpty(candidateName) 
+            return !string.IsNullOrEmpty(candidateName)
                    && (candidateName == ObjectName || aliases?.Contains(candidateName) == true);
         }
     }

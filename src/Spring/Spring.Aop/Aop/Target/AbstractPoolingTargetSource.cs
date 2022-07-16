@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using AopAlliance.Aop;
 using Spring.Aop.Support;
 using Spring.Objects;
@@ -36,7 +35,7 @@ namespace Spring.Aop.Target
 	/// <remarks>
 	/// <p>
 	/// Maintains a pool of target instances, acquiring and releasing a target
-	/// object from the pool for each method invocation. 
+	/// object from the pool for each method invocation.
 	/// </p>
 	/// <p>
 	/// This class is independent of pooling technology.
@@ -162,7 +161,7 @@ namespace Spring.Aop.Target
 				}
 			}
 		}
-		
+
 		/// <summary>
 		/// Create the pool.
 		/// </summary>
@@ -193,7 +192,7 @@ namespace Spring.Aop.Target
 		/// </summary>
 		/// <remarks>
 		/// <p>
-		/// Disposes of the pool. 
+		/// Disposes of the pool.
 		/// </p>
 		/// </remarks>
 		public abstract void Dispose();

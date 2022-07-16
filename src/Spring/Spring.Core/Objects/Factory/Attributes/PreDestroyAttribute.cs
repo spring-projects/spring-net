@@ -18,8 +18,6 @@
 
 #endregion
 
-using System;
-
 namespace Spring.Objects.Factory.Attributes
 {
     /// <summary>
@@ -52,10 +50,10 @@ namespace Spring.Objects.Factory.Attributes
         /// <summary>
         /// Defined the order in which the PreDestroy methods are called
         /// </summary>
-        public int Order 
-        { 
+        public int Order
+        {
             get { return _order; }
-            set { _order = value; } 
+            set { _order = value; }
         }
     }
 }

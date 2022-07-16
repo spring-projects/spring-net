@@ -18,12 +18,7 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Runtime.Remoting.Lifetime;
-
-#endregion
 
 namespace Spring.Remoting.Support
 {
@@ -34,7 +29,7 @@ namespace Spring.Remoting.Support
     /// <remarks>
     /// <p>
     /// Remoting exporters uses this class as a base proxy class
-    /// in order to support lifecycle configuration when exporting 
+    /// in order to support lifecycle configuration when exporting
     /// a remote object.
     /// </p>
     /// </remarks>
@@ -66,7 +61,7 @@ namespace Spring.Remoting.Support
         /// Gets or sets a value indicating whether this instance has infinite lifetime.
         /// </summary>
         /// <value>
-        /// <see langword="true"/> if this instance has infinite lifetime; 
+        /// <see langword="true"/> if this instance has infinite lifetime;
         /// otherwise, <see langword="false" /> .
         /// </value>
         public bool IsInfinite
@@ -86,10 +81,10 @@ namespace Spring.Remoting.Support
         }
 
         /// <summary>
-        /// Gets or sets the amount of time lease should be 
+        /// Gets or sets the amount of time lease should be
         /// extended for on each call to this object.
         /// </summary>
-        /// <value>The amount of time lease should be 
+        /// <value>The amount of time lease should be
         /// extended for on each call to this object.</value>
         public TimeSpan RenewOnCallTime
         {

@@ -18,9 +18,6 @@
 
 #endregion
 
-using System;
-using System.Collections.Generic;
-
 using Common.Logging;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
@@ -73,7 +70,7 @@ namespace Spring.Aop.Framework.AutoProxy
             {
                 return advisors;
             }
-                
+
             for (int i = 0; i < advisorNames.Count; i++)
             {
                 string name = advisorNames[i];
@@ -118,7 +115,7 @@ namespace Spring.Aop.Framework.AutoProxy
             if (advisorCandidate is IAdvisor)
             {
                 advisors.Add((IAdvisor) advisorCandidate);
-            } 
+            }
             else if (advisorCandidate is IAdvisors)
             {
                 advisors.AddRange(((IAdvisors)advisorCandidate).Advisors);
@@ -158,7 +155,7 @@ namespace Spring.Aop.Framework.AutoProxy
 
         /// <summary>
         /// Determine, whether the specified aspect object is eligible.
-        /// The default implementation accepts all except for advisors that are 
+        /// The default implementation accepts all except for advisors that are
         /// part of the internal infrastructure.
         /// </summary>
         /// <param name="advisorName">the name of the candidate advisor</param>

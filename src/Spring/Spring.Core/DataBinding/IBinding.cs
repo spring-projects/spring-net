@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Spring.Validation;
 
 namespace Spring.DataBinding
@@ -72,7 +71,7 @@ namespace Spring.DataBinding
         void BindTargetToSource(object source, object target, IValidationErrors validationErrors, IDictionary<string, object> variables);
 
         /// <summary>
-        /// Sets error message that should be displayed in the case 
+        /// Sets error message that should be displayed in the case
         /// of a non-fatal binding error.
         /// </summary>
         /// <param name="messageId">
@@ -82,6 +81,6 @@ namespace Spring.DataBinding
         /// List of error providers message should be added to.
         /// </param>
         void SetErrorMessage(string messageId, params string[] errorProviders);
-        
+
     }
 }

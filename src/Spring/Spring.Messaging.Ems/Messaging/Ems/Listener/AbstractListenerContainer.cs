@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using Common.Logging;
 using Spring.Context;
 using Spring.Messaging.Ems.Common;
@@ -26,7 +25,6 @@ using Spring.Messaging.Ems.Connections;
 using Spring.Messaging.Ems.Support;
 using Spring.Messaging.Ems.Support.Destinations;
 using Spring.Objects.Factory;
-using TIBCO.EMS;
 
 namespace Spring.Messaging.Ems.Listener
 {
@@ -59,9 +57,9 @@ namespace Spring.Messaging.Ems.Listener
         private String clientId;
 
         private bool autoStartup = true;
-        
+
         private string objectName;
-        
+
         private IConnection sharedConnection;
 
         private bool sharedConnectionStarted = false;
@@ -70,9 +68,9 @@ namespace Spring.Messaging.Ems.Listener
         /// The monitor object to lock on when performing operations on the connection.
         /// </summary>
         protected object sharedConnectionMonitor = new object();
-        
+
         private volatile bool active = false;
-        
+
         private bool running = false;
 
         /// <summary>
@@ -181,7 +179,7 @@ namespace Spring.Messaging.Ems.Listener
 
         /// <summary> Return whether a shared EMS Connection should be maintained
         /// by this listener container base class.
-        /// </summary>     
+        /// </summary>
         /// <seealso cref="SharedConnection"/>
         protected abstract bool SharedConnectionEnabled { get; }
 
@@ -212,7 +210,7 @@ namespace Spring.Messaging.Ems.Listener
                 }
             }
         }
-        
+
         /// <summary>
         /// Call base class method, then <see cref="ValidateConfiguration"/> and then <see cref="Initialize"/>
         /// </summary>
@@ -229,7 +227,7 @@ namespace Spring.Messaging.Ems.Listener
         /// </summary>
         protected virtual void ValidateConfiguration()
         {
-            
+
         }
 
         /// <summary>
@@ -262,7 +260,7 @@ namespace Spring.Messaging.Ems.Listener
                     DoStart();
                 }
 
-                DoInitialize();             
+                DoInitialize();
 
             }
             catch (Exception)

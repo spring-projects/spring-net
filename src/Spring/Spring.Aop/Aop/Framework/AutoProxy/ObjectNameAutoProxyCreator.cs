@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Collections;
 using Spring.Objects.Factory;
 using Spring.Util;
@@ -35,7 +34,7 @@ namespace Spring.Aop.Framework.AutoProxy
     /// </para>
     /// <para>In case of a IFactoryObject, only the objects created by the
     /// FactoryBean will get proxied.  If you intend to proxy a IFactoryObject instance itself
-    /// specify the object name of the IFactoryObject including 
+    /// specify the object name of the IFactoryObject including
     /// the factory-object prefix "&amp;"  e.g. "&amp;MyFactoryObject".
     /// </para>
     /// </remarks>
@@ -54,7 +53,7 @@ namespace Spring.Aop.Framework.AutoProxy
         {}
 
         /// <summary>
-        /// Set the names of the objects in IList fashioned way that should automatically 
+        /// Set the names of the objects in IList fashioned way that should automatically
         /// get wrapped with proxies.
         /// A name can specify a prefix to match by ending with "*", e.g. "myObject,tx*"
         /// will match the object named "myObject" and all objects whose name start with "tx".
@@ -76,7 +75,7 @@ namespace Spring.Aop.Framework.AutoProxy
         /// Identify as object to proxy if the object name is in the configured list of names.
         /// </summary>
         protected override bool IsEligibleForProxying( Type targetType, string targetName )
-        {           
+        {
             bool shallProxy = IsObjectNameMatch(targetType, targetName, this.ObjectNames);
             return shallProxy;
         }
@@ -103,10 +102,10 @@ namespace Spring.Aop.Framework.AutoProxy
         /// </summary>
         /// <param name="objType">the object's type. Must not be <c>null</c>.</param>
         /// <param name="objectName">the name of the object Must not be <c>null</c>.</param>
-        /// <param name="objectNamePatterns">the list of patterns, that <paramref name="objectName"/> shall be matched against. Must not be <c>null</c>.</param>        
+        /// <param name="objectNamePatterns">the list of patterns, that <paramref name="objectName"/> shall be matched against. Must not be <c>null</c>.</param>
         /// <returns>
         /// If <paramref name="objectNamePatterns"/> is <c>null</c>, will always return <c>true</c>, otherwise
-        /// if <paramref name="objectName"/> matches any of the patterns specified in <paramref name="objectNamePatterns"/>. 
+        /// if <paramref name="objectName"/> matches any of the patterns specified in <paramref name="objectNamePatterns"/>.
         /// </returns>
         protected bool IsObjectNameMatch(Type objType, string objectName, IList objectNamePatterns)
         {

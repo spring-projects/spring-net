@@ -18,17 +18,12 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Reflection;
 
 using Spring.Proxy;
 using Spring.Objects.Factory;
 using Spring.Remoting.Support;
 using Spring.Core.TypeResolution;
-
-#endregion
 
 namespace Spring.Remoting
 {
@@ -71,7 +66,7 @@ namespace Spring.Remoting
 		}
 
         /// <summary>
-        /// Gets or sets the <see cref="Spring.Remoting.Support.BaseRemoteObject"/> class or subclass 
+        /// Gets or sets the <see cref="Spring.Remoting.Support.BaseRemoteObject"/> class or subclass
         /// that the proxy must inherit from.
         /// </summary>
         public Type BaseType
@@ -84,7 +79,7 @@ namespace Spring.Remoting
         /// Gets or sets the list of interfaces to wrap.
         /// </summary>
         /// <remarks>
-        /// The default value of this property is all the interfaces 
+        /// The default value of this property is all the interfaces
         /// implemented or inherited by the target type.
         /// </remarks>
         /// <value>The interfaces to export.</value>

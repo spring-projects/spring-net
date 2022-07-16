@@ -18,9 +18,7 @@
 
 #endregion
 
-using System;
 using Spring.Messaging.Ems.Listener.Adapter;
-using TIBCO.EMS;
 
 namespace Spring.Messaging.Ems.Listener
 {

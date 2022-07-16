@@ -18,14 +18,9 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Text.RegularExpressions;
 using Spring.Expressions;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Validation.Validators
 {
@@ -34,9 +29,9 @@ namespace Spring.Validation.Validators
     /// </summary>
     /// <author>Goran Milosavljevic</author>
     public class ISBNValidator : BaseSimpleValidator
-    {                                                     
+    {
         #region Constructors
-        
+
         /// <summary>
         /// Creates a new instance of the <b>ISBNValidator</b> class.
         /// </summary>
@@ -91,14 +86,14 @@ namespace Spring.Validation.Validators
             }
 
             return IsValid(isbn);
-        }                
+        }
 
         #endregion
 
         #region ISBNValidator methods
-        
+
         /// <summary>
-        /// Validates <paramref name="isbn"/> against ISBN-10 or ISBN-13 validation 
+        /// Validates <paramref name="isbn"/> against ISBN-10 or ISBN-13 validation
         /// rules.
         /// </summary>
         /// <param name="isbn">
@@ -110,20 +105,20 @@ namespace Spring.Validation.Validators
         private bool IsValid(String isbn)
         {
             String code = (isbn == null ? null : isbn.Trim().Replace("-", "").Replace(" ", ""));
-            
+
             // check the length
             if ((code == null) || (code.Length < 10 || code.Length>13))
             {
                 return false;
             }
-                                    
+
             // validate/reformat using regular expression
             Match match;
             String pattern;
             if (code.Length == 10)
             {
                 pattern = ISBN10_PATTERN;
-            } 
+            }
             else
             {
                 pattern = ISBN13_PATTERN;
@@ -131,7 +126,7 @@ namespace Spring.Validation.Validators
 
             match = Regex.Match(code, pattern);
             return match.Success && match.Index == 0 && match.Length == code.Length;
-        }                
+        }
 
         #endregion
 
@@ -141,27 +136,27 @@ namespace Spring.Validation.Validators
         private static readonly String GROUP = "(\\d{1,5})";
         private static readonly String PUBLISHER = "(\\d{1,7})";
         private static readonly String TITLE = "(\\d{1,6})";
-        
+
         /// <summary>
-        /// ISBN-10 consists of 4 groups of numbers separated by either 
-        /// dashes (-) or spaces.  
+        /// ISBN-10 consists of 4 groups of numbers separated by either
+        /// dashes (-) or spaces.
         /// </summary>
         /// <remarks>
-        /// The first group is 1-5 characters, second 1-7, third 1-6, 
+        /// The first group is 1-5 characters, second 1-7, third 1-6,
         /// and fourth is 1 digit or an X.
         /// </remarks>
         static readonly String ISBN10_PATTERN =  "^(?:(\\d{9}[0-9X])|(?:" + GROUP + SEP + PUBLISHER + SEP + TITLE + SEP + "([0-9X])))$";
 
         /// <summary>
-        /// ISBN-13 consists of 5 groups of numbers separated by either 
-        /// dashes (-) or spaces.  
+        /// ISBN-13 consists of 5 groups of numbers separated by either
+        /// dashes (-) or spaces.
         /// </summary>
         /// <remarks>
-        /// The first group is 978 or 979, the second group is 
+        /// The first group is 978 or 979, the second group is
         /// 1-5 characters, third 1-7, fourth 1-6, and fifth is 1 digit.
         /// </remarks>
         static readonly String ISBN13_PATTERN = "^(978|979)(?:(\\d{10})|(?:" + SEP + GROUP + SEP + PUBLISHER + SEP + TITLE + SEP + "([0-9])))$";
-        
+
         #endregion
     }
 }

@@ -20,7 +20,6 @@
 
 using Spring.Expressions;
 using Spring.Objects.Factory;
-using System;
 using System.Runtime.Serialization;
 
 namespace Spring.Context.Support

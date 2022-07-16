@@ -18,21 +18,19 @@
 
 #endregion
 
-using System;
 using System.Globalization;
-using System.Threading;
 using System.Web;
 
 namespace Spring.Globalization.Resolvers
 {
     /// <summary>
     /// Culture resolver that uses request headers to determine culture. If no languages
-    /// are specified in the request headers, it returns default culture specifed, and 
-    /// if no default culture was specifed it returns current culture for the executing 
+    /// are specified in the request headers, it returns default culture specifed, and
+    /// if no default culture was specifed it returns current culture for the executing
     /// server thread.
     /// </summary>
     /// <remarks>
-    /// <b>Note:</b> This culture resolver cannot be used to change the culture 
+    /// <b>Note:</b> This culture resolver cannot be used to change the culture
     /// because request headers cannot be modified. In order to change the culture
     /// when using this culture resolver user has to change language settings in
     /// the web browser.
@@ -42,8 +40,8 @@ namespace Spring.Globalization.Resolvers
     {
         /// <summary>
         /// Tries to determine culture from the request headers. If no languages
-        /// are specified in the request headers, it returns default culture specifed, and 
-        /// if no default culture was specifed it returns current culture for the executing 
+        /// are specified in the request headers, it returns default culture specifed, and
+        /// if no default culture was specifed it returns current culture for the executing
         /// server thread.
         /// </summary>
         /// <returns>Culture that should be used to render view.</returns>

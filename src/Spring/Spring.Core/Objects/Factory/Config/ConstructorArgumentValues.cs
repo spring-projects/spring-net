@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Globalization;
 using Spring.Collections;
 using Spring.Util;
@@ -40,16 +38,16 @@ namespace Spring.Objects.Factory.Config
 	public class ConstructorArgumentValues
 	{
 		private static readonly CultureInfo enUSCultureInfo = new CultureInfo("en-US", false);
-		
+
 		private static readonly IReadOnlyDictionary<int, ValueHolder> _emptyIndexedArgumentValues = new Dictionary<int, ValueHolder>();
 		internal Dictionary<int, ValueHolder>  _indexedArgumentValues = null;
 
 		private static readonly IReadOnlyList<ValueHolder> _emptyGenericArgumentValues = new List<ValueHolder>();
 		internal List<ValueHolder> _genericArgumentValues = null;
-		
+
 		private static readonly IReadOnlyDictionary<string, ValueHolder> _emptyNamedArgumentValues = new Dictionary<string, ValueHolder>();
 		internal Dictionary<string, ValueHolder> _namedArgumentValues = null;
-		
+
 		/// <summary>
 		/// Can be used as an argument filler for the
 		/// <see cref="Spring.Objects.Factory.Config.ConstructorArgumentValues.GetArgumentValue(int, string,Type,ISet)"/>
@@ -492,7 +490,7 @@ namespace Spring.Objects.Factory.Config
 		/// </summary>
 		/// <param name="name">
 		/// The name of the argument in the constructor argument list. May be
-		/// <see langword="null"/>, in which case generic matching by 
+		/// <see langword="null"/>, in which case generic matching by
 		/// <see cref="System.Type"/> is assumed.
 		/// </param>
 		/// <param name="requiredType">
@@ -515,7 +513,7 @@ namespace Spring.Objects.Factory.Config
 		/// </summary>
 		/// <param name="name">
 		/// The name of the argument in the constructor argument list. May be
-		/// <see langword="null"/>, in which case generic matching by 
+		/// <see langword="null"/>, in which case generic matching by
 		/// <see cref="System.Type"/> is assumed.
 		/// </param>
 		/// <param name="requiredType">
@@ -575,7 +573,7 @@ namespace Spring.Objects.Factory.Config
 			int index, string name, Type requiredType, ISet usedValues)
 		{
 			ValueHolder valueHolder = null;
-			if(index != NoIndex) 
+			if(index != NoIndex)
 			{
 				valueHolder = GetIndexedArgumentValue(index, requiredType);
 			}
@@ -594,7 +592,7 @@ namespace Spring.Objects.Factory.Config
 		{
             return argument != null ? argument.ToLower(enUSCultureInfo) : argument;
 		}
-		
+
 		private Dictionary<int, ValueHolder> GetAndInitializeIndexedArgumentValuesIfNeeded()
 		{
 			return _indexedArgumentValues = _indexedArgumentValues ?? new Dictionary<int, ValueHolder>();

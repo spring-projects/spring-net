@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,6 @@
  */
 
 #endregion
-
-using System;
 
 namespace Spring.Objects
 {
@@ -42,7 +40,7 @@ namespace Spring.Objects
         /// <summary>
         /// Merges the current value set with that of the supplied object.
         /// </summary>
-        /// <remarks>The supplied object is considered the parent, and values in the 
+        /// <remarks>The supplied object is considered the parent, and values in the
         /// callee's value set must override those of the supplied object.
         /// </remarks>
         /// <param name="parent">The parent object to merge with</param>

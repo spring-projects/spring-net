@@ -18,9 +18,7 @@
 
 #endregion
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Resources;
 using Common.Logging;
@@ -35,11 +33,11 @@ namespace Spring.Globalization.Localizers
     /// </summary>
     /// <remarks>
     /// <p>
-    /// This <see cref="ILocalizer"/> implementation will iterate over all resource managers 
+    /// This <see cref="ILocalizer"/> implementation will iterate over all resource managers
     /// within the message source and return a list of all the resources whose name starts with '$this'.
     /// </p>
     /// <p>
-    /// All other resources will be ignored, but you can retrieve them by calling one of 
+    /// All other resources will be ignored, but you can retrieve them by calling one of
     /// <c>GetMessage</c> methods on the message source directly.
     /// </p>
     /// </remarks>

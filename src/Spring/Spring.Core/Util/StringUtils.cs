@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -132,7 +130,7 @@ namespace Spring.Util
                 quoteChars = string.Empty;
             }
             AssertUtils.IsTrue( quoteChars.Length % 2 == 0, "the number of quote characters must be even" );
-            
+
             char[] delimiterChars = delimiters.ToCharArray();
 
             // scan separator positions
@@ -154,7 +152,7 @@ namespace Spring.Util
 				}
                 startIndex = delimiterPositions[ixSep] + 1;
             }
-            // add remainder            
+            // add remainder
             if (startIndex < s.Length)
             {
                 string token = s.Substring(startIndex);
@@ -257,7 +255,7 @@ namespace Spring.Util
         /// If the supplied <paramref name="delimiter"/> is a
         /// <cref lang="null"/> or zero-length string, then a single element
         /// <see cref="System.String"/> array composed of the supplied
-        /// <paramref name="input"/> <see cref="System.String"/> will be 
+        /// <paramref name="input"/> <see cref="System.String"/> will be
         /// eturned. If the supplied <paramref name="input"/>
         /// <see cref="System.String"/> is <cref lang="null"/>, then an empty,
         /// zero-length <see cref="System.String"/> array will be returned.
@@ -541,7 +539,7 @@ namespace Spring.Util
         /// </summary>
         /// <remarks>
         /// <p>
-        /// 
+        ///
         /// </p>
         /// </remarks>
         /// <param name="text">The string to set the value in.</param>

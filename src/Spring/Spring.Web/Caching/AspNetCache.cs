@@ -18,9 +18,7 @@
 
 #endregion
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Web;
 using System.Web.Caching;
 using Common.Logging;
@@ -119,9 +117,9 @@ namespace Spring.Caching
         #endregion
 
         /// <summary>
-        /// Initializes a new instance of <see cref="AspNetCache"/> 
+        /// Initializes a new instance of <see cref="AspNetCache"/>
         /// </summary>
-        public AspNetCache() 
+        public AspNetCache()
             :this(new RuntimeCache())
         {
         }
@@ -135,7 +133,7 @@ namespace Spring.Caching
         {
             _cache = runtimeCache;
             // noop
-            _cacheName = typeof(AspNetCache).FullName + "[" + this.GetHashCode() + "].";            
+            _cacheName = typeof(AspNetCache).FullName + "[" + this.GetHashCode() + "].";
         }
 
         #region Configurable Properties
@@ -168,7 +166,7 @@ namespace Spring.Caching
             get
             {
                 List<object> keys = new List<object>();
-                
+
                 foreach (DictionaryEntry entry in _cache)
                 {
                     string key = (string) entry.Key;
@@ -249,7 +247,7 @@ namespace Spring.Caching
         /// </param>
         public void Insert(object key, object value, TimeSpan timeToLive, bool slidingExpiration)
         {
-            this.Insert(key, value, timeToLive, slidingExpiration, _priority);            
+            this.Insert(key, value, timeToLive, slidingExpiration, _priority);
         }
 
         /// <summary>

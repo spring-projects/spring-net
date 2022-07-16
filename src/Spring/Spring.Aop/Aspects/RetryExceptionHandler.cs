@@ -18,9 +18,6 @@
 
 #endregion
 
-using System;
-using System.Collections.Generic;
-
 namespace Spring.Aspects
 {
     /// <summary>

@@ -18,9 +18,6 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Collections;
 using System.Reflection;
 
@@ -28,8 +25,6 @@ using Common.Logging;
 using Spring.Util;
 using Spring.Core.TypeResolution;
 using Spring.Core;
-
-#endregion
 
 namespace Spring.Transaction.Interceptor
 {
@@ -96,11 +91,11 @@ namespace Spring.Transaction.Interceptor
                         editor.SetAsText(entry.Value.ToString());
                         attribute = editor.Value;
                     }
-                    AddTransactionalMethod( name, attribute );                    
-			        
+                    AddTransactionalMethod( name, attribute );
+
 			    }
 
-			} 
+			}
 		}
 		/// <summary>
 		/// Add an attribute for a transactional method.
@@ -117,7 +112,7 @@ namespace Spring.Transaction.Interceptor
             if (lastCommaIndex == -1)
             {
                 throw new ArgumentException("'" + name + "'" +
-                                            " is not a valid method name, missing AssemblyName.  Format is FQN.MethodName, AssemblyName.");                
+                                            " is not a valid method name, missing AssemblyName.  Format is FQN.MethodName, AssemblyName.");
             }
             string fqnWithMethod = name.Substring(0, lastCommaIndex);
 
@@ -137,7 +132,7 @@ namespace Spring.Transaction.Interceptor
 			} catch ( TypeLoadException exception )
 			{
 				throw new TransactionUsageException( "Type '" + fqnClassName + "' not found.", exception );
-			} 
+			}
 		}
 
 		/// <summary>
@@ -178,7 +173,7 @@ namespace Spring.Transaction.Interceptor
 				{
                     // No already registered method name, or more specific
                     // method name specification now -> (re-)register method.
-                    if (LOG.IsDebugEnabled && regularMethodName != null) 
+                    if (LOG.IsDebugEnabled && regularMethodName != null)
                     {
                         LOG.Debug("Replacing attribute for transactional method [" + currentMethod + "]: current name '" +
                             name + "' is more specific than '" + regularMethodName + "'");
@@ -188,7 +183,7 @@ namespace Spring.Transaction.Interceptor
 				}
                 else
 				{
-                    if (LOG.IsDebugEnabled && regularMethodName != null) 
+                    if (LOG.IsDebugEnabled && regularMethodName != null)
                     {
                         LOG.Debug("Keeping attribute for transactional method [" + currentMethod + "]: current name '" +
                             name + "' is not more specific than '" + regularMethodName + "'");
@@ -214,7 +209,7 @@ namespace Spring.Transaction.Interceptor
 		/// </summary>
 		/// <remarks>
 		/// The default implementation checks for "xxx*", "*xxx" and "*xxx*" matches,
-	    /// as well as direct equality.  This behaviour can (of course) be overridden in 
+	    /// as well as direct equality.  This behaviour can (of course) be overridden in
 	    /// derived classes.
 		/// </remarks>
 		/// <param name="methodName">The method name of the class.</param>
@@ -232,11 +227,11 @@ namespace Spring.Transaction.Interceptor
 		/// </summary>
 		/// <param name="method">The method to check.</param>
 		/// <param name="targetType">
-		/// The target <see cref="System.Type"/>. May be null, in which case the declaring 
+		/// The target <see cref="System.Type"/>. May be null, in which case the declaring
 		/// class of the supplied <paramref name="method"/> must be used.
 		/// </param>
 		/// <returns>
-		/// A <see cref="Spring.Transaction.Interceptor.ITransactionAttribute"/> or 
+		/// A <see cref="Spring.Transaction.Interceptor.ITransactionAttribute"/> or
 		/// null if the method is non-transactional.
 		/// </returns>
 		public ITransactionAttribute ReturnTransactionAttribute(MethodInfo method, Type targetType)
@@ -246,7 +241,7 @@ namespace Spring.Transaction.Interceptor
             foreach (DictionaryEntry dictionaryEntry in _methodMap)
             {
                 MethodInfo currentMethod = (MethodInfo)dictionaryEntry.Key;
-                
+
                 MethodInfo specificMethod;
                 if (targetType == null)
                 {
@@ -287,6 +282,6 @@ namespace Spring.Transaction.Interceptor
 		}
 		#endregion
 
-	
+
 	}
 }

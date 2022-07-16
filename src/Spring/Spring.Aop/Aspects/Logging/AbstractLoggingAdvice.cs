@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Reflection;
 using System.Runtime.Serialization;
 using AopAlliance.Intercept;
@@ -140,13 +139,13 @@ namespace Spring.Aspects.Logging
         #region Methods
 
         /// <summary>
-        /// Adds logging to the method invocation.  
+        /// Adds logging to the method invocation.
         /// </summary>
         /// <remarks>
         /// The method IsInterceptorEnabled is called
-        /// as an optimization to determine if logging should be applied.  If logging should be 
+        /// as an optimization to determine if logging should be applied.  If logging should be
         /// applied, the method invocation is passed to the InvokeUnderLog method for handling.
-        /// If not, the method proceeds as normal. 
+        /// If not, the method proceeds as normal.
         /// </remarks>
         /// <param name="invocation">
         /// The method invocation that is being intercepted.
@@ -284,7 +283,7 @@ namespace Spring.Aspects.Logging
         /// </summary>
         protected virtual void OnDeserialization(object sender)
         {
-            SetDefaultLogger(this.defaultLoggerName); 
+            SetDefaultLogger(this.defaultLoggerName);
         }
     }
 }

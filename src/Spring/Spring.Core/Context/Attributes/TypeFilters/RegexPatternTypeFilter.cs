@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Text.RegularExpressions;
 
 namespace Spring.Context.Attributes.TypeFilters

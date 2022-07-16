@@ -1,4 +1,3 @@
-using System;
 using IEnumerator = System.Collections.IEnumerator;
 
 namespace Spring.Expressions.Parser.antlr.collections

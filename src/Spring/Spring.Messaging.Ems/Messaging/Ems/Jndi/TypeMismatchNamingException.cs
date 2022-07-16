@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2010 the original author or authors.
+ * Copyright ï¿½ 2002-2010 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,24 +18,11 @@
 
 #endregion
 
-#region Imports
-
-using System;
-using System.Globalization;
-using System.Runtime.Serialization;
-using System.Security.Permissions;
-using System.Text;
-using Spring.Core;
-using Spring.Util;
-using TIBCO.EMS;
-
-#endregion
-
 namespace Spring.Objects.Factory
 {
 	/// <summary>
     /// Exception thrown if a type mismatch is encountered for an object
-    /// located in a JNDI environment. 
+    /// located in a JNDI environment.
 	/// </summary>
 	/// <author>Juergen Hoeller</author>
 	/// <author>Mark Pollack (.NET)</author>
@@ -47,7 +34,7 @@ namespace Spring.Objects.Factory
         private Type actualType;
 
 		/// <summary>
-		/// Creates a new instance of the 
+		/// Creates a new instance of the
 		/// <see cref="Spring.Objects.Factory.ObjectCreationException"/> class.
 		/// </summary>
 		/// <param name="message">
@@ -59,16 +46,16 @@ namespace Spring.Objects.Factory
 		}
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TypeMismatchNamingException"/> class 
+        /// Initializes a new instance of the <see cref="TypeMismatchNamingException"/> class
         /// building an explanation text from the given arguments.
         /// </summary>
         /// <param name="jndiName">The Jndi name.</param>
         /// <param name="requiredType">Type required type of the lookup.</param>
         /// <param name="actualType">The actual type that the lookup returned.</param>
-        public TypeMismatchNamingException(String jndiName, Type requiredType, Type actualType) : 
+        public TypeMismatchNamingException(String jndiName, Type requiredType, Type actualType) :
             base("Object of type [" + actualType + "] available at JNDI location [" +
                     jndiName + "] is not assignable to [" + requiredType.Name + "]")
-        {            
+        {
             this.requiredType = requiredType;
             this.actualType = actualType;
         }

@@ -18,9 +18,7 @@
 
 #endregion
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using Spring.Expressions;
 
 namespace Spring.Validation
@@ -39,9 +37,9 @@ namespace Spring.Validation
     /// </p>
     /// <p><b>Note</b>, that <see cref="BaseValidatorGroup.FastValidate"/> defaults to <c>true</c> for this validator type!</p>
     /// <p>
-    /// If you set the <c>IncludeElementErrors</c> property to <c>true</c>, 
-    /// <c>ValidationErrors</c> collection will contain a union of all validation error messages 
-    /// for the contained validators; 
+    /// If you set the <c>IncludeElementErrors</c> property to <c>true</c>,
+    /// <c>ValidationErrors</c> collection will contain a union of all validation error messages
+    /// for the contained validators;
     /// Otherwise it will contain only error messages that were set for this Validator.
     /// </p>
     /// </remarks>
@@ -52,7 +50,7 @@ namespace Spring.Validation
         #region Fields
 
         private bool includeElementErrors = false;
-        private IExpression context;        
+        private IExpression context;
 
         #endregion
 
@@ -61,24 +59,24 @@ namespace Spring.Validation
         /// <summary>
         /// Gets or sets the value that indicates whether to validate all elements of the collection
         /// regardless of the errors.
-        /// </summary>        
+        /// </summary>
         /// <remarks>This is just an alias for <see cref="BaseValidatorGroup.FastValidate"/> property</remarks>
         public bool ValidateAll
         {
             get { return !base.FastValidate; }
             set { base.FastValidate = !value; }
         }
-        
+
         /// <summary>
-        /// Gets or sets the value that indicates whether to capture all the errors of the specific 
+        /// Gets or sets the value that indicates whether to capture all the errors of the specific
         /// elements of the collection
-        /// </summary>        
+        /// </summary>
         public bool IncludeElementErrors
         {
             get { return includeElementErrors; }
             set { includeElementErrors = value; }
         }
-        
+
 
         /// <summary>
         /// Gets or sets the expression that should be used to narrow validation context.
@@ -107,8 +105,8 @@ namespace Spring.Validation
         /// <param name="validateAll">The bool that determines if all elements of the collection should be evaluated.
         /// regardless of the Errors
         /// </param>
-        /// <param name="includeElementErrors">The bool that determines whether Validate method should collect 
-        /// all error messages returned by the item validators</param>        
+        /// <param name="includeElementErrors">The bool that determines whether Validate method should collect
+        /// all error messages returned by the item validators</param>
         public CollectionValidator(bool validateAll, bool includeElementErrors)
         {
             this.FastValidate = validateAll;
@@ -122,7 +120,7 @@ namespace Spring.Validation
         /// <param name="validateAll">The bool that determines if this all elements of the collection should be evaluated.
         /// regardless of the Errors
         /// </param>
-        /// <param name="includeElementErrors">The bool that determines whether Validate method should collect 
+        /// <param name="includeElementErrors">The bool that determines whether Validate method should collect
         /// all error messages returned by the item validators</param>
         public CollectionValidator(string when, bool validateAll, bool includeElementErrors)
             : this((when != null ? Expression.Parse(when) : null), validateAll,includeElementErrors)
@@ -137,7 +135,7 @@ namespace Spring.Validation
         /// <param name="validateAll">The bool that determines if this all elements of the collection should be evaluated.
         /// regardless of the Errors
         /// </param>
-        /// <param name="includeElementErrors">The bool that determines whether Validate method should collect 
+        /// <param name="includeElementErrors">The bool that determines whether Validate method should collect
         /// all error messages returned by the item validators</param>
 
         public CollectionValidator(IExpression when, bool validateAll, bool includeElementErrors)
@@ -151,9 +149,9 @@ namespace Spring.Validation
 
         /// <summary>
         /// Validates the specified collection of objects.
-        /// If the <c>IncludeElementErrors</c> property was set to <c>true</c>, 
-        /// <paramref name="errors"/> collection will contain a union of all validation error messages 
-        /// for the contained validators; 
+        /// If the <c>IncludeElementErrors</c> property was set to <c>true</c>,
+        /// <paramref name="errors"/> collection will contain a union of all validation error messages
+        /// for the contained validators;
         /// Otherwise it will contain only error messages that were set for this Validator.
         /// </summary>
         /// <param name="validationContext">The collection to validate.</param>
@@ -189,16 +187,16 @@ namespace Spring.Validation
                 ? ((IDictionary) validationContext).Values
                 : (IEnumerable) validationContext);
 
-            // decide whether to pass new validation errors collection 
+            // decide whether to pass new validation errors collection
             //(and discard error messages returned by the item validators)
             // OR to pass validation errors collection that was passed to this method
             //(and collect all error messages returned by the item validators)
             IValidationErrors err = (includeElementErrors)? errors : new ValidationErrors();
-                
+
             foreach (object objectToValidate in collectionToValidate)
             {
                 foreach (IValidator validator in this.Validators)
-                {                                                                        
+                {
                     valid = validator.Validate(objectToValidate, contextParams, err) && valid;
                     if (!valid && this.FastValidate)
                     {
@@ -210,7 +208,7 @@ namespace Spring.Validation
                 {
                     break;
                 }
-            }                
+            }
             return valid;
         }
 

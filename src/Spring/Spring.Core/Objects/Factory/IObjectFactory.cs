@@ -20,9 +20,6 @@
 
 #region Imports
 
-using System;
-using System.Collections.Generic;
-
 #endregion
 
 namespace Spring.Objects.Factory
@@ -182,14 +179,14 @@ namespace Spring.Objects.Factory
         /// always return independent instances?
         /// </summary>
         /// <remarks>This method returning false does not clearly indicate a singleton object.
-        /// It indicated non-independent instances, which may correspond to a scoped object as 
-        /// well.  use the IsSingleton property to explicitly check for a shared 
+        /// It indicated non-independent instances, which may correspond to a scoped object as
+        /// well.  use the IsSingleton property to explicitly check for a shared
         /// singleton instance.
         /// <para>Translates aliases back to the corresponding canonical object name.  Will ask the
         /// parent factory if the object can not be found in this factory instance.
         /// </para>
         /// </remarks>
-        /// 
+        ///
         /// <param name="name">The name of the object to query</param>
         /// <returns>
         /// 	<c>true</c> if the specified object name will always deliver independent instances; otherwise, <c>false</c>.
@@ -318,7 +315,7 @@ namespace Spring.Objects.Factory
 		/// If the object could not be created.
 		/// </exception>
 		object GetObject(string name);
-		
+
         /// <summary>
 		/// Return an instance (possibly shared or independent) of the given object name.
 		/// </summary>
@@ -387,7 +384,7 @@ namespace Spring.Objects.Factory
         /// If the supplied <paramref name="name"/> is <see langword="null"/>.
         /// </exception>
         object GetObject(string name, object[] arguments);
-        
+
         /// <summary>
         /// Return an instance (possibly shared or independent) of the given object name.
         /// </summary>
@@ -427,7 +424,7 @@ namespace Spring.Objects.Factory
         /// If the supplied <paramref name="name"/> is <see langword="null"/>.
         /// </exception>
         T GetObject<T>(string name, object[] arguments);
-	    
+
         /// <summary>
         /// Return an instance (possibly shared or independent) of the given object name.
         /// </summary>
@@ -652,9 +649,9 @@ namespace Spring.Objects.Factory
 		///     public class BusinessObject
 		///     {
 		///         private IDao _dao;
-		/// 		
+		///
 		///         public BusinessObject() {}
-		/// 
+		///
 		///         public IDao Dao
 		///         {
 		///			    get { return _dao;	}

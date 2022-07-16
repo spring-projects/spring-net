@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,6 @@
 
 #endregion
 
-using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.Reflection;
 
@@ -91,14 +89,14 @@ namespace Spring.Util
         /// <param name="source">The event to be raised.</param>
         /// <param name="arguments">The arguments to the event.</param>
         /// <returns>a map of sink/exception entries that occurred during event raising</returns>
-        public virtual IEventExceptionsCollector Raise(Delegate source, params object[] arguments)  
+        public virtual IEventExceptionsCollector Raise(Delegate source, params object[] arguments)
         {
             EventExceptionsCollector exceptions = new EventExceptionsCollector();
 
             if (source != null)
             {
                 Delegate [] delegates = source.GetInvocationList ();
-                foreach (Delegate sink in delegates) 
+                foreach (Delegate sink in delegates)
                 {
                     Invoke (sink, arguments, exceptions);
                 }
@@ -113,13 +111,13 @@ namespace Spring.Util
         /// <param name="sink">The sink to be invoked.</param>
         /// <param name="arguments">The arguments to the sink.</param>
         /// <param name="exceptions">the map of sink/exception entries to add any exception to</param>
-        protected virtual void Invoke(Delegate sink, object[] arguments, EventExceptionsCollector exceptions) 
+        protected virtual void Invoke(Delegate sink, object[] arguments, EventExceptionsCollector exceptions)
         {
-            try 
+            try
             {
                 sink.DynamicInvoke (arguments);
-            } 
-            catch (TargetInvocationException ex) 
+            }
+            catch (TargetInvocationException ex)
             {
                 // unwrap the exception that actually caused the TargetInvocationException and throw that...
                 Exception cause = ReflectionUtils.UnwrapTargetInvocationException(ex);
@@ -149,9 +147,9 @@ namespace Spring.Util
         /// <param name="sink">The sink to be invoked.</param>
         /// <param name="arguments">The arguments to the sink.</param>
         /// <param name="exceptions">the map of sink/exception entries to add any exception to</param>
-        protected override void Invoke(Delegate sink, object[] arguments, EventExceptionsCollector exceptions) 
+        protected override void Invoke(Delegate sink, object[] arguments, EventExceptionsCollector exceptions)
         {
-            try 
+            try
             {
                 sink.DynamicInvoke (arguments);
             }

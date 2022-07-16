@@ -18,14 +18,8 @@
 
 #endregion
 
-#region Imports
-
-using System;
-using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Objects.Factory
 {
@@ -129,8 +123,8 @@ namespace Spring.Objects.Factory
         /// Will return unique names in case of overridden object definitions.
         /// </p>
         /// <p>
-        /// Does consider objects created by <see cref="Spring.Objects.Factory.IFactoryObject"/>s 
-        /// if <paramref name="includeFactoryObjects"/> is set to true, 
+        /// Does consider objects created by <see cref="Spring.Objects.Factory.IFactoryObject"/>s
+        /// if <paramref name="includeFactoryObjects"/> is set to true,
         /// which means that <see cref="Spring.Objects.Factory.IFactoryObject"/>s will get initialized.
         /// </p>
         /// </remarks>

@@ -1,5 +1,3 @@
-using System;
-
 using Spring.Expressions.Parser.antlr.debug;
 using Stream			= System.IO.Stream;
 using TextReader		= System.IO.TextReader;
@@ -26,7 +24,7 @@ namespace Spring.Expressions.Parser.antlr
 	//
 	// With many thanks to Eric V. Smith from the ANTLR list.
 	//
-	
+
 	public abstract class CharScanner : TokenStream, ICharScannerDebugSubject
 	{
 		internal const char NO_CHAR = (char) (0);
@@ -35,7 +33,7 @@ namespace Spring.Expressions.Parser.antlr
 		// Used to store event delegates
 		private EventHandlerList events_ = new EventHandlerList();
 
-		protected internal EventHandlerList Events 
+		protected internal EventHandlerList Events
 		{
 			get	{ return events_;	}
 		}
@@ -59,7 +57,7 @@ namespace Spring.Expressions.Parser.antlr
 		internal static readonly object SynPredSucceededEventKey	= new object();
 
 		protected internal StringBuilder text;				// text of current token
-		
+
 		protected bool saveConsumedInput = true;	// does consume() save characters?
 
 		/// <summary>Used for creating Token instances.</summary>
@@ -72,38 +70,38 @@ namespace Spring.Expressions.Parser.antlr
 		protected bool caseSensitive = true;
 		protected bool caseSensitiveLiterals = true;
 		protected Hashtable literals; // set by subclass
-		
+
 		/*Tab chars are handled by tab() according to this value; override
 		*  method to do anything weird with tabs.
 		*/
 		protected internal int tabsize = 8;
-		
+
 		protected internal IToken returnToken_ = null; // used to return tokens w/o using return val.
-		
+
 		protected internal LexerSharedInputState inputState;
-		
+
 		/*Used during filter mode to indicate that path is desired.
 		*  A subsequent scan error will report an error as usual if
 		*  acceptPath=true;
 		*/
 		protected internal bool commitToPath = false;
-		
+
 		/*Used to keep track of indentdepth for traceIn/Out */
 		protected internal int traceDepth = 0;
-		
+
 		public CharScanner()
 		{
 			text = new StringBuilder();
 			setTokenCreator(new CommonToken.CommonTokenCreator());
 		}
-		
+
 		public CharScanner(InputBuffer cb) : this()
 		{
 			inputState = new LexerSharedInputState(cb);
 			cached_LA2 = inputState.input.LA(2);
 			cached_LA1 = inputState.input.LA(1);
 		}
-		
+
 		public CharScanner(LexerSharedInputState sharedState) : this()
 		{
 			inputState = sharedState;
@@ -113,7 +111,7 @@ namespace Spring.Expressions.Parser.antlr
 				cached_LA1 = inputState.input.LA(1);
 		}
 	}
-		
+
 
 		public event TraceEventHandler EnterRule
 		{
@@ -221,7 +219,7 @@ namespace Spring.Expressions.Parser.antlr
 				text.Append(c);
 			}
 		}
-		
+
 		public virtual void  append(string s)
 		{
 			if (saveConsumedInput)
@@ -229,18 +227,18 @@ namespace Spring.Expressions.Parser.antlr
 				text.Append(s);
 			}
 		}
-		
+
 		public virtual void  commit()
 		{
 			inputState.input.commit();
 		}
-		
+
 		public virtual void recover(RecognitionException ex, BitSet tokenSet)
 		{
 			consume();
 			consumeUntil(tokenSet);
 		}
-		
+
 		public virtual void  consume()
 		{
 			if (inputState.guessing == 0)
@@ -275,7 +273,7 @@ namespace Spring.Expressions.Parser.antlr
 				cached_LA2 = toLower(inputState.input.LA(2));
 			}
 		}
-		
+
 		/*Consume chars until one matches the given char */
 		public virtual void  consumeUntil(int c)
 		{
@@ -284,7 +282,7 @@ namespace Spring.Expressions.Parser.antlr
 				consume();
 			}
 		}
-		
+
 		/*Consume chars until one matches the given set */
 		public virtual void  consumeUntil(BitSet bset)
 		{
@@ -293,68 +291,68 @@ namespace Spring.Expressions.Parser.antlr
 				consume();
 			}
 		}
-		
+
 		public virtual bool getCaseSensitive()
 		{
 			return caseSensitive;
 		}
-		
+
 		public bool getCaseSensitiveLiterals()
 		{
 			return caseSensitiveLiterals;
 		}
-		
+
 		public virtual int getColumn()
 		{
 			return inputState.column;
 		}
-		
+
 		public virtual void  setColumn(int c)
 		{
 			inputState.column = c;
 		}
-		
+
 		public virtual bool getCommitToPath()
 		{
 			return commitToPath;
 		}
-		
+
 		public virtual string getFilename()
 		{
 			return inputState.filename;
 		}
-		
+
 		public virtual InputBuffer getInputBuffer()
 		{
 			return inputState.input;
 		}
-		
+
 		public virtual LexerSharedInputState getInputState()
 		{
 			return inputState;
 		}
-		
+
 		public virtual void  setInputState(LexerSharedInputState state)
 		{
 			inputState = state;
 		}
-		
+
 		public virtual int getLine()
 		{
 			return inputState.line;
 		}
-		
+
 		/*return a copy of the current text buffer */
 		public virtual string getText()
 		{
 			return text.ToString();
 		}
-		
+
 		public virtual IToken getTokenObject()
 		{
 			return returnToken_;
 		}
-		
+
 		public virtual char LA(int i)
 		{
 			if (i == 1)
@@ -374,7 +372,7 @@ namespace Spring.Expressions.Parser.antlr
 				return toLower(inputState.input.LA(i));
 			}
 		}
-		
+
 		protected internal virtual IToken makeToken(int t)
 		{
 			IToken	newToken	= null;
@@ -405,12 +403,12 @@ namespace Spring.Expressions.Parser.antlr
 			}
 			return newToken;
 		}
-		
+
 		public virtual int mark()
 		{
 			return inputState.input.mark();
 		}
-		
+
 		public virtual void  match(char c)
 		{
 			match((int) c);
@@ -424,7 +422,7 @@ namespace Spring.Expressions.Parser.antlr
 			}
 			consume();
 		}
-		
+
 		public virtual void  match(BitSet b)
 		{
 			if (!b.member(cached_LA1))
@@ -433,7 +431,7 @@ namespace Spring.Expressions.Parser.antlr
 			}
 			consume();
 		}
-		
+
 		public virtual void  match(string s)
 		{
 			int len = s.Length;
@@ -446,12 +444,12 @@ namespace Spring.Expressions.Parser.antlr
 				consume();
 			}
 		}
-		
+
 		public virtual void  matchNot(char c)
 		{
 			matchNot((int) c);
 		}
-		
+
 		public virtual void  matchNot(int c)
 		{
 			if (cached_LA1 == c)
@@ -460,7 +458,7 @@ namespace Spring.Expressions.Parser.antlr
 			}
 			consume();
 		}
-		
+
 		public virtual void  matchRange(int c1, int c2)
 		{
 			if (cached_LA1 < c1 || cached_LA1 > c2)
@@ -469,18 +467,18 @@ namespace Spring.Expressions.Parser.antlr
 			}
 			consume();
 		}
-		
+
 		public virtual void  matchRange(char c1, char c2)
 		{
 			matchRange((int) c1, (int) c2);
 		}
-		
+
 		public virtual void  newline()
 		{
 			inputState.line++;
 			inputState.column = 1;
 		}
-		
+
 		/*advance the current column number by an appropriate amount
 		*  according to tab size. This method is called from consume().
 		*/
@@ -490,17 +488,17 @@ namespace Spring.Expressions.Parser.antlr
 			int nc = (((c - 1) / tabsize) + 1) * tabsize + 1; // calculate tab stop
 			setColumn(nc);
 		}
-		
+
 		public virtual void  setTabSize(int size)
 		{
 			tabsize = size;
 		}
-		
+
 		public virtual int getTabSize()
 		{
 			return tabsize;
 		}
-		
+
 		public virtual void panic()
 		{
 			//Console.Error.WriteLine("CharScanner: panic");
@@ -508,12 +506,12 @@ namespace Spring.Expressions.Parser.antlr
 			panic("");
 
 		}
-		
+
 		/// <summary>
 		/// This method is executed by ANTLR internally when it detected an illegal
 		/// state that cannot be recovered from.
 		/// The previous implementation of this method called <see cref="Environment.Exit"/>
-		/// and writes directly to <see cref="Console.Error"/>, which is usually not 
+		/// and writes directly to <see cref="Console.Error"/>, which is usually not
 		/// appropriate when a translator is embedded into a larger application.
 		/// </summary>
 		/// <param name="s">Error message.</param>
@@ -523,13 +521,13 @@ namespace Spring.Expressions.Parser.antlr
 			//Environment.Exit(1);
 			throw new ANTLRPanicException("CharScanner::panic: " + s);
 		}
-		
+
 		/*Parser error-reporting function can be overridden in subclass */
 		public virtual void  reportError(RecognitionException ex)
 		{
 			Console.Error.WriteLine(ex);
 		}
-		
+
 		/*Parser error-reporting function can be overridden in subclass */
 		public virtual void  reportError(string s)
 		{
@@ -542,7 +540,7 @@ namespace Spring.Expressions.Parser.antlr
 				Console.Error.WriteLine(getFilename() + ": error: " + s);
 			}
 		}
-		
+
 		/*Parser warning-reporting function can be overridden in subclass */
 		public virtual void  reportWarning(string s)
 		{
@@ -555,7 +553,7 @@ namespace Spring.Expressions.Parser.antlr
 				Console.Error.WriteLine(getFilename() + ": warning: " + s);
 			}
 		}
-		
+
 		public virtual void refresh()
 		{
 			if (caseSensitive)
@@ -594,7 +592,7 @@ namespace Spring.Expressions.Parser.antlr
 			inputState.tokenStartColumn = inputState.column;
 			inputState.tokenStartLine = inputState.line;
 		}
-		
+
 		public virtual void  rewind(int pos)
 		{
 			inputState.input.rewind(pos);
@@ -610,7 +608,7 @@ namespace Spring.Expressions.Parser.antlr
 				cached_LA1 = toLower(inputState.input.LA(1));
 			}
 		}
-		
+
 		public virtual void  setCaseSensitive(bool t)
 		{
 			caseSensitive = t;
@@ -625,38 +623,38 @@ namespace Spring.Expressions.Parser.antlr
 				cached_LA1 = toLower(inputState.input.LA(1));
 			}
 		}
-		
+
 		public virtual void  setCommitToPath(bool commit)
 		{
 			commitToPath = commit;
 		}
-		
+
 		public virtual void  setFilename(string f)
 		{
 			inputState.filename = f;
 		}
-		
+
 		public virtual void  setLine(int line)
 		{
 			inputState.line = line;
 		}
-		
+
 		public virtual void  setText(string s)
 		{
 			resetText();
 			text.Append(s);
 		}
-		
+
 		public virtual void  setTokenObjectClass(string cl)
 		{
 			this.tokenCreator = new ReflectionBasedTokenCreator(this, cl);
 		}
-		
+
 		public virtual void  setTokenCreator(TokenCreator tokenCreator)
 		{
 			this.tokenCreator = tokenCreator;
 		}
-		
+
 		// Test the token text against the literals table
 		// Override this method to perform a different literals test
 		public virtual int testLiteralsTable(int ttype)
@@ -671,7 +669,7 @@ namespace Spring.Expressions.Parser.antlr
 				return (typeAsObject == null) ? ttype : ((int) typeAsObject);
 			}
 		}
-		
+
 		/*Test the text passed in against the literals table
 		* Override this method to perform a different literals test
 		* This is used primarily when you want to test a portion of
@@ -687,33 +685,33 @@ namespace Spring.Expressions.Parser.antlr
 				return (typeAsObject == null) ? ttype : ((int) typeAsObject);
 			}
 		}
-		
+
 		// Override this method to get more specific case handling
 		public virtual char toLower(int c)
 		{
 			return Char.ToLower(Convert.ToChar(c), System.Globalization.CultureInfo.InvariantCulture);
 		}
-		
+
 		public virtual void  traceIndent()
 		{
 			 for (int i = 0; i < traceDepth; i++)
 				Console.Out.Write(" ");
 		}
-		
+
 		public virtual void  traceIn(string rname)
 		{
 			traceDepth += 1;
 			traceIndent();
 			Console.Out.WriteLine("> lexer " + rname + "; c==" + LA(1));
 		}
-		
+
 		public virtual void  traceOut(string rname)
 		{
 			traceIndent();
 			Console.Out.WriteLine("< lexer " + rname + "; c==" + LA(1));
 			traceDepth -= 1;
 		}
-		
+
 		/*This method is called by YourLexer.nextToken() when the lexer has
 		*  hit EOF condition.  EOF is NOT a character.
 		*  This method is not called if EOF is reached during
@@ -788,8 +786,8 @@ namespace Spring.Expressions.Parser.antlr
 			public override string TokenTypeName
 			{
 				get
-				{ 
-					return tokenTypeName; 
+				{
+					return tokenTypeName;
 				}
 			}
 

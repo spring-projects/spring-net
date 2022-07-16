@@ -18,22 +18,17 @@
 
 #endregion
 
-#region Imports
-
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Threading;
 using System.Runtime.CompilerServices;
 using NUnit.Framework;
 
 using Spring.Objects;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Attributes;
-
-#endregion
 
 [assembly: InternalsVisibleTo("ReflectionUtils.IsTypeVisible.AssemblyTestName")]
 
@@ -1314,7 +1309,7 @@ namespace Spring.Util
         {
             AssemblyName assemblyName = new AssemblyName();
             assemblyName.Name = "AnAssembly";
-            AssemblyBuilder asmBuilder = Thread.GetDomain().DefineDynamicAssembly(
+            AssemblyBuilder asmBuilder = System.Threading.Thread.GetDomain().DefineDynamicAssembly(
                 assemblyName, AssemblyBuilderAccess.Run);
             ModuleBuilder modBuilder = asmBuilder.DefineDynamicModule("AModule");
             TypeBuilder classBuilder = modBuilder.DefineType("AClass", TypeAttributes.Public);

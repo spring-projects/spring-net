@@ -18,14 +18,13 @@
 
 #endregion
 
-using System;
 using System.Reflection;
 
 namespace Spring.Transaction.Interceptor
 {
 	/// <summary>
-	/// Very simple implementation of <see cref="Spring.Transaction.Interceptor.ITransactionAttributeSource"/> 
-	/// which will always return the same <see cref="Spring.Transaction.Interceptor.ITransactionAttribute"/> 
+	/// Very simple implementation of <see cref="Spring.Transaction.Interceptor.ITransactionAttributeSource"/>
+	/// which will always return the same <see cref="Spring.Transaction.Interceptor.ITransactionAttribute"/>
 	/// for all methods fed to it.
 	/// </summary>
 	/// <remarks>
@@ -69,11 +68,11 @@ namespace Spring.Transaction.Interceptor
 		/// </summary>
 		/// <param name="method">The method to check.</param>
 		/// <param name="targetType">
-		/// The target <see cref="System.Type"/>. May be null, in which case the declaring 
+		/// The target <see cref="System.Type"/>. May be null, in which case the declaring
 		/// class of the supplied <paramref name="method"/> must be used.
 		/// </param>
 		/// <returns>
-		/// A <see cref="Spring.Transaction.Interceptor.ITransactionAttribute"/> or 
+		/// A <see cref="Spring.Transaction.Interceptor.ITransactionAttribute"/> or
 		/// null if the method is non-transactional.
 		/// </returns>
 		public ITransactionAttribute ReturnTransactionAttribute(MethodInfo method, Type targetType)

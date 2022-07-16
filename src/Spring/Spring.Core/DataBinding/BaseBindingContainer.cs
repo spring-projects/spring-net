@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Spring.Globalization;
 using Spring.Validation;
 
@@ -70,7 +69,7 @@ namespace Spring.DataBinding
         }
 
         /// <summary>
-        /// Adds the <see cref="SimpleExpressionBinding"/> binding with a default 
+        /// Adds the <see cref="SimpleExpressionBinding"/> binding with a default
         /// binding direction of <see cref="BindingDirection.Bidirectional"/>.
         /// </summary>
         /// <param name="sourceExpression">
@@ -108,7 +107,7 @@ namespace Spring.DataBinding
         }
 
         /// <summary>
-        /// Adds the <see cref="SimpleExpressionBinding"/> binding with a default 
+        /// Adds the <see cref="SimpleExpressionBinding"/> binding with a default
         /// binding direction of <see cref="BindingDirection.Bidirectional"/>.
         /// </summary>
         /// <param name="sourceExpression">

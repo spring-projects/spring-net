@@ -18,12 +18,11 @@
 
 #endregion
 
-using System;
 using System.Runtime.Serialization;
 
 namespace Spring.Transaction
 {
-	
+
 	/// <summary>
 	/// Exception that gets thrown when an invalid isolation level is specified,
 	/// i.e. an isolation level that the transaction manager implementation

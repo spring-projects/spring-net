@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.ComponentModel;
 
 namespace Spring.Transaction.Interceptor

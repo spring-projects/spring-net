@@ -18,10 +18,7 @@
 
 #endregion
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.IO;
 using Common.Logging;
 using Commons.Collections;
 using NVelocity.App;
@@ -35,7 +32,7 @@ using Spring.Util;
 namespace Spring.Template.Velocity {
     /// <summary>
     /// Factory that configures a VelocityEngine. Can be used standalone,
-    /// but typically you will use VelocityEngineFactoryObject 
+    /// but typically you will use VelocityEngineFactoryObject
     /// for preparing a VelocityEngine as bean reference.
     ///
     /// <br/>
@@ -55,8 +52,8 @@ namespace Spring.Template.Velocity {
     /// CommonsLoggingLogSystem as log system.
     ///
     /// <br/>
-    /// The simplest way to use this class is to specify a ResourceLoaderPath 
-    /// property. the VelocityEngine typically then does not need any further 
+    /// The simplest way to use this class is to specify a ResourceLoaderPath
+    /// property. the VelocityEngine typically then does not need any further
     /// configuration.
     ///
     /// </summary>
@@ -85,8 +82,8 @@ namespace Spring.Template.Velocity {
         private bool overrideLogging = true;
 
         /// <summary>
-        ///  Set the location of the Velocity config file. Alternatively, you can specify all properties locally. 
-        /// </summary> 
+        ///  Set the location of the Velocity config file. Alternatively, you can specify all properties locally.
+        /// </summary>
         /// <see cref="VelocityProperties"/>
         /// <see cref="ResourceLoaderPath"/>
         public IResource ConfigLocation {
@@ -121,8 +118,8 @@ namespace Spring.Template.Velocity {
         /// "file". If the specified resource cannot be resolved to a File,
         /// a generic SpringResourceLoader will be used under the name "spring", without
         /// modification detection.
-        /// <br/> 
-        /// Take notice that resource caching will be enabled in any case. With the file 
+        /// <br/>
+        /// Take notice that resource caching will be enabled in any case. With the file
         /// resource loader, the last-modified timestamp will be checked on access to
         /// detect changes. With SpringResourceLoader, the resource will be throughout
         /// the life time of the application context (for example for class path resources).
@@ -134,27 +131,27 @@ namespace Spring.Template.Velocity {
         /// <br/>
         /// To enforce the use of SpringResourceLoader, i.e. to not resolve a path
         /// as file system resource in any case, turn off the "preferFileSystemAccess"
-        /// flag. See the latter's documentation for details. 
+        /// flag. See the latter's documentation for details.
         /// </summary>
         ///  <see cref="ResourceLoader"/>
         ///  <see cref="VelocityProperties"/>
         ///  <see cref="PreferFileSystemAccess"/>
         ///  <see cref="SpringResourceLoader"/>
         ///  <see cref="FileResourceLoader"/>
-        public IList<string> ResourceLoaderPaths 
+        public IList<string> ResourceLoaderPaths
         {
             set { resourceLoaderPaths = value; }
         }
 
         /// <summary>
-        /// Set the Spring ResourceLoader to use for loading Velocity template files. 
+        /// Set the Spring ResourceLoader to use for loading Velocity template files.
         /// The default is DefaultResourceLoader. Will get overridden by the
         /// ApplicationContext if running in a context.
-        /// 
+        ///
         /// </summary>
         /// <see cref="ConfigurableResourceLoader"/>
         /// <see cref="ContextRegistry"/>
-        /// 
+        ///
         public IResourceLoader ResourceLoader {
             get { return resourceLoader; }
             set { resourceLoader = value; }
@@ -179,7 +176,7 @@ namespace Spring.Template.Velocity {
         }
 
         /// <summary>
-        /// Set whether Velocity should log via Commons Logging, i.e. whether Velocity's 
+        /// Set whether Velocity should log via Commons Logging, i.e. whether Velocity's
         /// log system should be set to CommonsLoggingLogSystem. Default value is true
         /// </summary>
         /// <see cref="CommonsLoggingLogSystem"/>
@@ -246,14 +243,14 @@ namespace Spring.Template.Velocity {
         }
 
         /// <summary>
-        /// This is to overcome an issue with the current NVelocity library, it seems the 
+        /// This is to overcome an issue with the current NVelocity library, it seems the
         /// default runetime properties/directives (nvelocity.properties and directive.properties
-        /// files) are not being properly located in  the library at load time. A jira should 
-        /// be filed but for now we attempt to do this on our own. Particularly our 
-        /// concern here is with several required properties which I don't want 
+        /// files) are not being properly located in  the library at load time. A jira should
+        /// be filed but for now we attempt to do this on our own. Particularly our
+        /// concern here is with several required properties which I don't want
         /// to require users to re-defined. e.g.,:
         /// <br/>
-        /// 
+        ///
         /// Pre-requisites:<br/>
         /// resource.manager.class=NVelocity.Runtime.Resource.ResourceManagerImpl <br/>
         /// directive.manager=NVelocity.Runtime.Directive.DirectiveManager <br/>
@@ -304,11 +301,11 @@ namespace Spring.Template.Velocity {
                     }
 
                     extendedProperties.SetProperty(RuntimeConstants.RESOURCE_LOADER, VelocityConstants.File);
-                    extendedProperties.SetProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH, 
+                    extendedProperties.SetProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH,
                         StringUtils.CollectionToCommaDelimitedString(resolvedPaths));
                 } catch (IOException ex) {
                     if (log.IsDebugEnabled) {
-                        log.Error(string.Format("Cannot resolve resource loader path [{0}] to [File]: using SpringResourceLoader", 
+                        log.Error(string.Format("Cannot resolve resource loader path [{0}] to [File]: using SpringResourceLoader",
                             StringUtils.CollectionToCommaDelimitedString(resolvedPaths)), ex);
                     }
 
@@ -326,8 +323,8 @@ namespace Spring.Template.Velocity {
         /// <summary>
         ///  Initialize a SpringResourceLoader for the given VelocityEngine.
         /// <br/>Called by <code>InitVelocityResourceLoader</code>.
-        /// 
-        /// <b>Important</b>: the NVeloctity ResourceLoaderFactory.getLoader 
+        ///
+        /// <b>Important</b>: the NVeloctity ResourceLoaderFactory.getLoader
         /// method replaces ';' with ',' when attempting to construct our resource
         /// loader. The name on the SPRING_RESOURCE_LOADER_CLASS property
         /// has to be in the form of "ClassFullName; AssemblyName" in replacement

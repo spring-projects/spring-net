@@ -18,8 +18,6 @@
 
 #endregion
 
-using System;
-
 namespace Spring.Objects.Factory.Attributes
 {
     [AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter)]

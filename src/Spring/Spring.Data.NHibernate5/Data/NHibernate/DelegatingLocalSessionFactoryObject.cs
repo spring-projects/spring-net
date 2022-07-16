@@ -1,6 +1,4 @@
 using System.Configuration;
-using System.Collections.Generic;
-
 using NHibernate;
 
 using Configuration = NHibernate.Cfg.Configuration;

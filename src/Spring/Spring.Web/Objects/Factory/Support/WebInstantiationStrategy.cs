@@ -20,8 +20,6 @@
 
 #region Imports
 
-using System;
-
 #endregion
 
 namespace Spring.Objects.Factory.Support

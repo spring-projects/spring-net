@@ -18,13 +18,9 @@
 
 #endregion
 
-using System;
 using System.Collections;
 
 using Spring.Messaging.Ems.Common;
-
-using TIBCO.EMS;
-
 using Common.Logging;
 
 using Spring.Collections;
@@ -58,7 +54,7 @@ namespace Spring.Messaging.Ems.Connections
     /// Session handle is not supported; close and reobtain a cached Session first.
     /// </para>
     /// </remarks>
-    /// 
+    ///
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
     public class CachingConnectionFactory : SingleConnectionFactory
@@ -125,8 +121,8 @@ namespace Spring.Messaging.Ems.Connections
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to cache MessageProducers per 
-        /// Session instance. (more specifically: one MessageProducer per Destination 
+        /// Gets or sets a value indicating whether to cache MessageProducers per
+        /// Session instance. (more specifically: one MessageProducer per Destination
         /// and Session).
         /// </summary>
         /// <remarks>
@@ -142,8 +138,8 @@ namespace Spring.Messaging.Ems.Connections
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether o cache JMS MessageConsumers per 
-        /// EMS Session instance. 
+        /// Gets or sets a value indicating whether o cache JMS MessageConsumers per
+        /// EMS Session instance.
         /// </summary>
         /// <remarks>
         /// Mmore specifically: one MessageConsumer per Destination, selector String

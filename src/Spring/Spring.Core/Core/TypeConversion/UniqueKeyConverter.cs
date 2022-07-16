@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 
 #region Importsusing System;
 
-using System;
 using System.ComponentModel;
 using System.Globalization;
 using Spring.Util;
@@ -72,7 +71,7 @@ namespace Spring.Core.TypeConversion
         /// </param>
         /// <returns>
         /// A <see cref="UniqueKey"/> if successful, <see langword="null"/> otherwise.
-        /// </returns>        
+        /// </returns>
         ///<exception cref="T:System.NotSupportedException">The conversion cannot be performed. </exception>
         public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
         {

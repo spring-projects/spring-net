@@ -20,9 +20,7 @@
 
 #region Imports
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.Serialization;
@@ -35,7 +33,7 @@ using Spring.Util;
 namespace Spring.Proxy
 {
 	/// <summary>
-	/// Base class for proxy builders that can be used 
+	/// Base class for proxy builders that can be used
     /// to create a proxy for any class.
 	/// </summary>
 	/// <remarks>
@@ -58,7 +56,7 @@ namespace Spring.Proxy
         protected static readonly ILog log = LogManager.GetLogger(typeof(AbstractProxyTypeBuilder));
 
         private const string DEFAULT_PROXY_TYPE_NAME = "Proxy";
-        
+
         private string _name;
 		private Type _targetType;
 		private Type _baseType = typeof (object);
@@ -83,13 +81,13 @@ namespace Spring.Proxy
         /// <value>The name of the proxy <see cref="System.Type"/>.</value>
         public string Name
         {
-            get 
+            get
             {
                 if (StringUtils.IsNullOrEmpty(_name))
                 {
                     _name = DEFAULT_PROXY_TYPE_NAME;
                 }
-                return _name; 
+                return _name;
             }
             set { _name = value; }
         }
@@ -123,7 +121,7 @@ namespace Spring.Proxy
         /// Gets or sets the list of interfaces proxy should implement.
         /// </summary>
         /// <remarks>
-        /// The default value of this property is all the interfaces 
+        /// The default value of this property is all the interfaces
         /// implemented or inherited by the target type.
         /// </remarks>
         public IList<Type> Interfaces
@@ -176,7 +174,7 @@ namespace Spring.Proxy
         #region IProxyTypeGenerator Members
 
         /// <summary>
-        /// Generates the IL instructions that pushes 
+        /// Generates the IL instructions that pushes
         /// the proxy instance on stack.
         /// </summary>
         /// <param name="il">The IL generator to use.</param>
@@ -186,7 +184,7 @@ namespace Spring.Proxy
         }
 
         /// <summary>
-        /// Generates the IL instructions that pushes 
+        /// Generates the IL instructions that pushes
         /// the target instance on which calls should be delegated to.
         /// </summary>
         /// <param name="il">The IL generator to use.</param>
@@ -207,7 +205,7 @@ namespace Spring.Proxy
         protected virtual TypeBuilder CreateTypeBuilder(string name, Type baseType)
         {
             // Generates unique type name
-            string typeName = String.Format("{0}_{1}", 
+            string typeName = String.Format("{0}_{1}",
                 name, Guid.NewGuid().ToString("N"));
 
             return DynamicProxyManager.CreateTypeBuilder(typeName, baseType);
@@ -375,7 +373,7 @@ namespace Spring.Proxy
         {
             ArrayList attributes = new ArrayList();
 
-            if (this.ProxyTargetAttributes && 
+            if (this.ProxyTargetAttributes &&
                 !method.DeclaringType.IsInterface)
             {
                 // add attributes that apply to the target method
@@ -421,9 +419,9 @@ namespace Spring.Proxy
                 object[] attrs = method.ReturnTypeCustomAttributes.GetCustomAttributes(false);
                 try
                 {
-                    System.Collections.Generic.IList<CustomAttributeData> attrsData = 
+                    System.Collections.Generic.IList<CustomAttributeData> attrsData =
                         CustomAttributeData.GetCustomAttributes(method.ReturnParameter);
-                    
+
                     if (attrs.Length != attrsData.Count)
                     {
                         // http://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=94803
@@ -471,7 +469,7 @@ namespace Spring.Proxy
                 try
                 {
                     IList<CustomAttributeData> attrsData = CustomAttributeData.GetCustomAttributes(paramInfo);
-                    
+
                     if (attrs.Length != attrsData.Count)
                     {
                         // http://connect.microsoft.com/VisualStudio/feedback/ViewFeedback.aspx?FeedbackID=94803
@@ -539,7 +537,7 @@ namespace Spring.Proxy
             return false;
         }
 
-        private static readonly FieldInfo CustomAttributeConstructorField = 
+        private static readonly FieldInfo CustomAttributeConstructorField =
             typeof(CustomAttributeBuilder).GetField("m_con", BindingFlags.Instance | BindingFlags.NonPublic);
 
         #endregion
@@ -573,7 +571,7 @@ namespace Spring.Proxy
                 {
                     ConstructorBuilder cb = typeBuilder.DefineConstructor(
                         constructor.Attributes,
-                        constructor.CallingConvention, 
+                        constructor.CallingConvention,
                         DefineConstructorParameters(constructor));
 
                     ILGenerator il = cb.GetILGenerator();
@@ -602,7 +600,7 @@ namespace Spring.Proxy
         /// Implements an interface.
 		/// </summary>
         /// <remarks>
-        /// Generates proxy methods that belongs to the interface 
+        /// Generates proxy methods that belongs to the interface
         /// using the specified <paramref name="proxyMethodBuilder"/>.
         /// </remarks>
         /// <param name="typeBuilder">The type builder to use.</param>
@@ -613,7 +611,7 @@ namespace Spring.Proxy
         /// <param name="targetType">
         /// The <see cref="System.Type"/> of the target object.
         /// </param>
-        protected virtual void ImplementInterface(TypeBuilder typeBuilder, 
+        protected virtual void ImplementInterface(TypeBuilder typeBuilder,
             IProxyMethodBuilder proxyMethodBuilder, Type intf, Type targetType)
         {
             ImplementInterface(typeBuilder, proxyMethodBuilder, intf, targetType, true);
@@ -623,7 +621,7 @@ namespace Spring.Proxy
         /// Implements an interface.
 		/// </summary>
         /// <remarks>
-        /// Generates proxy methods that belongs to the interface 
+        /// Generates proxy methods that belongs to the interface
         /// using the specified <paramref name="proxyMethodBuilder"/>.
         /// </remarks>
         /// <param name="typeBuilder">The type builder to use.</param>
@@ -639,7 +637,7 @@ namespace Spring.Proxy
         /// otherwise <see langword="true"/>.
         /// </param>
 		protected virtual void ImplementInterface(TypeBuilder typeBuilder,
-            IProxyMethodBuilder proxyMethodBuilder, Type intf, 
+            IProxyMethodBuilder proxyMethodBuilder, Type intf,
             Type targetType, bool proxyVirtualMethods)
 		{
             Dictionary<string, MethodBuilder> methodMap = new Dictionary<string, MethodBuilder>();
@@ -650,7 +648,7 @@ namespace Spring.Proxy
 
             for (int i = 0; i < mapping.InterfaceMethods.Length; i++)
 			{
-                if (!proxyVirtualMethods && 
+                if (!proxyVirtualMethods &&
                     !mapping.TargetMethods[i].DeclaringType.IsInterface &&
                     mapping.TargetMethods[i].IsVirtual &&
                     !mapping.TargetMethods[i].IsFinal)
@@ -674,18 +672,18 @@ namespace Spring.Proxy
 		}
 
         /// <summary>
-        /// Gets the mapping of the interface to proxy 
-        /// into the actual methods on the target type 
+        /// Gets the mapping of the interface to proxy
+        /// into the actual methods on the target type
         /// that does not need to implement that interface.
         /// </summary>
         /// <remarks>
         /// <p>
-        /// If the target type does not implement the interface, 
+        /// If the target type does not implement the interface,
         /// we return the interfaces methods as the target methods for many reasons :
         /// <ul>
         /// <li>
         /// The target object can change for an object that implements the interface.
-        /// (See 'Spring.Aop.Framework.DynamicProxy.IAdvisedProxyMethodBuilder' 
+        /// (See 'Spring.Aop.Framework.DynamicProxy.IAdvisedProxyMethodBuilder'
         /// implementation in the Spring AOP framework for an example)
         /// </li>
         /// <li>
@@ -694,7 +692,7 @@ namespace Spring.Proxy
         /// </li>
         /// <li>
         /// Allow null target to be proxied.
-        /// (See Spring AOP framework which avoid calls to the target object 
+        /// (See Spring AOP framework which avoid calls to the target object
         /// by intercepting all methods. Think "dynamic mock")
         /// (See 'Spring.Web.Services.WebServiceProxyFactory' implementation for another example)
         /// </li>
@@ -734,7 +732,7 @@ namespace Spring.Proxy
 		/// Inherit from a type.
 		/// </summary>
         /// <remarks>
-        /// Generates proxy methods for base virtual methods 
+        /// Generates proxy methods for base virtual methods
         /// using the specified <paramref name="proxyMethodBuilder"/>.
         /// </remarks>
         /// <param name="typeBuilder">
@@ -744,7 +742,7 @@ namespace Spring.Proxy
         /// The <see cref="IProxyMethodBuilder"/> implementation to use to override base virtual methods.
         /// </param>
         /// <param name="type">The <see cref="System.Type"/> to inherit from.</param>
-        protected virtual void InheritType(TypeBuilder typeBuilder, 
+        protected virtual void InheritType(TypeBuilder typeBuilder,
             IProxyMethodBuilder proxyMethodBuilder, Type type)
         {
             InheritType(typeBuilder, proxyMethodBuilder, type, false);
@@ -754,7 +752,7 @@ namespace Spring.Proxy
 		/// Inherit from a type.
 		/// </summary>
         /// <remarks>
-        /// Generates proxy methods for base virtual methods 
+        /// Generates proxy methods for base virtual methods
         /// using the specified <paramref name="proxyMethodBuilder"/>.
         /// </remarks>
         /// <param name="typeBuilder">
@@ -765,8 +763,8 @@ namespace Spring.Proxy
         /// </param>
         /// <param name="type">The <see cref="System.Type"/> to inherit from.</param>
         /// <param name="declaredMembersOnly">
-        /// <see langword="true"/> if only members declared at the level 
-        /// of the supplied <paramref name="type"/>'s hierarchy should be proxied; 
+        /// <see langword="true"/> if only members declared at the level
+        /// of the supplied <paramref name="type"/>'s hierarchy should be proxied;
         /// otherwise <see langword="false"/>.
         /// </param>
         protected virtual void InheritType(TypeBuilder typeBuilder,
@@ -823,7 +821,7 @@ namespace Spring.Proxy
 
             if (getMethod != null || setMethod != null)
             {
-                string propertyName = (type.IsInterface && 
+                string propertyName = (type.IsInterface &&
                                       ((getMethod != null && getMethod.IsPrivate) || (setMethod != null && setMethod.IsPrivate)))
                                         ? type.FullName + "." + property.Name
                                         : property.Name;
@@ -858,31 +856,31 @@ namespace Spring.Proxy
 
             if (addOnMethod != null && removeOnMethod != null)
             {
-                string eventName = (addOnMethod.IsPrivate) 
-                    ? addOnMethod.DeclaringType.FullName + "." + evt.Name 
+                string eventName = (addOnMethod.IsPrivate)
+                    ? addOnMethod.DeclaringType.FullName + "." + evt.Name
                     : evt.Name;
 
                 EventBuilder eb = typeBuilder.DefineEvent(
                     eventName, EventAttributes.None, evt.EventHandlerType);
-                
+
                 // set add/remove methods
                 eb.SetAddOnMethod(addOnMethod);
                 eb.SetRemoveOnMethod(removeOnMethod);
-            }		
+            }
 		}
 
         #endregion
 
 	    /// <summary>
-	    /// Returns an array of <see cref="System.Type"/>s that represent 
+	    /// Returns an array of <see cref="System.Type"/>s that represent
 	    /// the proxiable interfaces.
 	    /// </summary>
 	    /// <remarks>
-	    /// An interface is proxiable if it's not marked with the 
+	    /// An interface is proxiable if it's not marked with the
 	    /// <see cref="ProxyIgnoreAttribute"/>.
 	    /// </remarks>
 	    /// <param name="interfaces">
-	    /// The array of interfaces from which 
+	    /// The array of interfaces from which
 	    /// we want to get the proxiable interfaces.
 	    /// </param>
 	    /// <returns>
@@ -918,7 +916,7 @@ namespace Spring.Proxy
         }
 
         /// <summary>
-        /// Checks if specified interface is of a special type 
+        /// Checks if specified interface is of a special type
         /// that should never be proxied (i.e. ISerializable).
         /// </summary>
         /// <param name="intf">Interface type to check.</param>

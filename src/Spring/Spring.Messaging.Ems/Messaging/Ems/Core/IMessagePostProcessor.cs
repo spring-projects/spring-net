@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2010 the original author or authors.
+ * Copyright ï¿½ 2002-2010 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,8 +17,6 @@
  */
 
 #endregion
-
-using TIBCO.EMS;
 
 namespace Spring.Messaging.Ems.Core
 {
@@ -41,6 +39,6 @@ namespace Spring.Messaging.Ems.Core
         /// </returns>
         /// <throws>EMSException if thrown by EMS API methods </throws>
         Message PostProcessMessage(Message message);
-        
+
     }
 }

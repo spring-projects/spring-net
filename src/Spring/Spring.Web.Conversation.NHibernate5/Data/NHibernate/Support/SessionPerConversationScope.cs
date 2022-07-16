@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-using System;
 using System.Reflection;
 
 using Common.Logging;
@@ -23,7 +22,6 @@ using Spring.Threading;
 using Spring.Transaction.Support;
 using Spring.Util;
 using System.Data;
-using System.Collections.Generic;
 using System.Data.Common;
 using Spring.Web.Conversation;
 

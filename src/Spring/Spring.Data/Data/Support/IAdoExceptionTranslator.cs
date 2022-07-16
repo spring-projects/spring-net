@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using Spring.Dao;
 
 namespace Spring.Data.Support
@@ -35,7 +34,7 @@ namespace Spring.Data.Support
 	/// </remarks>
 	/// <author>Rod Johnson</author>
 	/// <author>Griffin Caprio (.NET)</author>
-	/// <author>Mark Pollack</author> 
+	/// <author>Mark Pollack</author>
 	public interface IAdoExceptionTranslator
 	{
 		/// <summary>

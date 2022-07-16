@@ -18,8 +18,6 @@
 
 #endregion
 
-using System;
-
 using Common.Logging;
 using NVelocity.Runtime;
 using NVelocity.Runtime.Log;
@@ -29,11 +27,11 @@ using LogManager=Common.Logging.LogManager;
 namespace Spring.Template.Velocity
 {
     /// <summary>
-    /// NVelocity LogSystem implementation for Commons Logging. 
+    /// NVelocity LogSystem implementation for Commons Logging.
     /// </summary>
     /// <author>Erez Mazor</author>
     public class CommonsLoggingLogSystem : ILogSystem {
-        
+
         /// <summary>
         /// Shared logger instance.
         /// </summary>

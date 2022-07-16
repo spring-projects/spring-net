@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,9 +19,6 @@
 #endregion
 
 #region Imports
-
-using System;
-using System.Collections.Generic;
 
 using AopAlliance.Aop;
 using AopAlliance.Intercept;
@@ -42,7 +39,7 @@ namespace Spring.Aop.Framework.Adapter
 	public class DefaultAdvisorAdapterRegistry : IAdvisorAdapterRegistry
 	{
         private readonly IList<IAdvisorAdapter> adapters = new List<IAdvisorAdapter>();
-		
+
         /// <summary>
         /// Creates a new instance of the
         /// <see cref="Spring.Aop.Framework.Adapter.DefaultAdvisorAdapterRegistry"/> class.
@@ -61,7 +58,7 @@ namespace Spring.Aop.Framework.Adapter
             RegisterAdvisorAdapter(new AfterReturningAdviceAdapter());
             RegisterAdvisorAdapter(new ThrowsAdviceAdapter());
         }
-		
+
         /// <summary>
         /// Returns an <see cref="Spring.Aop.IAdvisor"/> wrapping the supplied
         /// <paramref name="advice"/>.
@@ -71,7 +68,7 @@ namespace Spring.Aop.Framework.Adapter
         /// <see cref="Spring.Aop.IBeforeAdvice"/> or
         /// <see cref="Spring.Aop.IThrowsAdvice"/>.
         /// </param>
-        /// <returns> 
+        /// <returns>
         /// An <see cref="Spring.Aop.IAdvisor"/> wrapping the supplied
         /// <paramref name="advice"/>. Never returns <cref lang="null"/>. If
         /// the <paramref name="advice"/> parameter is an

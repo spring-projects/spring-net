@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2010 the original author or authors.
+ * Copyright ï¿½ 2002-2010 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,9 @@
 
 #endregion
 
-using System;
 using Common.Logging;
 using Spring.Messaging.Ems.Common;
 using Spring.Objects.Factory;
-using TIBCO.EMS;
 
 namespace Spring.Messaging.Ems.Support
 {
@@ -42,9 +40,9 @@ namespace Spring.Messaging.Ems.Support
         private readonly ILog logger = LogManager.GetLogger(typeof(EmsAccessor));
 
         #endregion
-        
+
         #region Fields
-        
+
         private IConnectionFactory connectionFactory;
 
         private bool sessionTransacted = false;
@@ -103,12 +101,12 @@ namespace Spring.Messaging.Ems.Support
         /// <remarks>
         /// <para>Setting this flag to "true" will use a short local EMS transaction
         /// when running outside of a managed transaction, and a synchronized local
-        /// EMS transaction in case of a managed transaction being present. 
+        /// EMS transaction in case of a managed transaction being present.
         /// The latter has the effect of a local EMS
         /// transaction being managed alongside the main transaction (which might
         /// be a native ADO.NET transaction), with the EMS transaction committing
         /// right after the main transaction.
-        /// </para> 
+        /// </para>
         /// </remarks>
         public bool SessionTransacted
         {
@@ -126,8 +124,8 @@ namespace Spring.Messaging.Ems.Support
         }
 
         #endregion
-        
-        
+
+
         /// <summary>
         /// Verify that ConnectionFactory property has been set.
         /// </summary>

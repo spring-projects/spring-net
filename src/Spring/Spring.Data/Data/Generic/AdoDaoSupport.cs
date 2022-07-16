@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,15 +18,10 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Data;
 using Spring.Dao.Support;
 using Spring.Data.Common;
 using Spring.Data.Support;
-
-#endregion
 
 namespace Spring.Data.Generic
 {
@@ -118,9 +113,9 @@ namespace Spring.Data.Generic
         /// </summary>
         /// <remarks>
         /// Can be overriden in subclasses to provide AdoTemplate instances
-        /// with a different configuration, or a cusotm AdoTemplate subclass.       
+        /// with a different configuration, or a cusotm AdoTemplate subclass.
         /// </remarks>
-        /// <param name="dbProvider">The DbProvider to create a AdoTemplate for</param>        
+        /// <param name="dbProvider">The DbProvider to create a AdoTemplate for</param>
         protected virtual AdoTemplate CreateAdoTemplate(IDbProvider dbProvider)
         {
             return new AdoTemplate(dbProvider);
@@ -136,14 +131,14 @@ namespace Spring.Data.Generic
         {
             return new DbParametersBuilder(DbProvider);
         }
-        
+
         protected virtual IDbParameters CreateDbParameters()
         {
             return AdoTemplate.CreateDbParameters();
         }
-        
-        
-        
-        
+
+
+
+
     }
 }

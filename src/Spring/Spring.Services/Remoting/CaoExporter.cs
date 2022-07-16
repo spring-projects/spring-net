@@ -18,17 +18,12 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Runtime.Remoting;
 
 using Spring.Context;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Support;
 using Spring.Remoting.Support;
-
-#endregion
 
 namespace Spring.Remoting
 {
@@ -85,7 +80,7 @@ namespace Spring.Remoting
         /// Gets or sets the list of interfaces whose methods should be exported.
         /// </summary>
         /// <remarks>
-        /// The default value of this property is all the interfaces 
+        /// The default value of this property is all the interfaces
         /// implemented or inherited by the target type.
         /// </remarks>
         /// <value>The interfaces to export.</value>
@@ -148,7 +143,7 @@ namespace Spring.Remoting
 		#region IInitializingObject Members
 
 		/// <summary>
-		/// Publish the object 
+		/// Publish the object
 		/// </summary>
 		public void AfterPropertiesSet()
 		{
@@ -235,7 +230,7 @@ namespace Spring.Remoting
 			/// <summary>
 			/// Create a new instance of the RemoteFactory.
 			/// </summary>
-            public CaoRemoteFactory(ILifetime lifetime, string targetName, 
+            public CaoRemoteFactory(ILifetime lifetime, string targetName,
                 string[] interfaces, AbstractObjectFactory objectFactory)
 			{
 				this.targetName = targetName;
@@ -261,20 +256,20 @@ namespace Spring.Remoting
 			public object GetObject()
 			{
 				remoteObjectFactory.Target = objectFactory.GetObject(targetName);
-                
+
                 return remoteObjectFactory.GetObject();
 			}
 
 			/// <summary>
 			/// Returns the CAO proxy using the
-			/// argument list to call the constructor. 
+			/// argument list to call the constructor.
 			/// </summary>
 			/// <remarks>
 			/// The matching of arguments to call the constructor is done
 			/// by type. The alternative ways, by index and by constructor
 			/// name are not supported.
 			/// </remarks>
-			/// <param name="constructorArguments">Constructor 
+			/// <param name="constructorArguments">Constructor
 			/// arguments used to create the object.</param>
 			/// <returns>The remote object.</returns>
 			public object GetObject(object[] constructorArguments)

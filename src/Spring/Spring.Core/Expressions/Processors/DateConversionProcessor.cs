@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Globalization;
 
 namespace Spring.Expressions.Processors

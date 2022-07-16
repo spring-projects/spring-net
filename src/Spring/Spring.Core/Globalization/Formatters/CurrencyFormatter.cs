@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Globalization;
 
 using Spring.Util;
@@ -32,7 +31,7 @@ namespace Spring.Globalization.Formatters
 	/// <remarks>
 	/// <para>
 	/// <c>CurrencyFormatter</c> uses currency related properties of the
-	/// <see cref="NumberFormatInfo"/> to format and parse currency values. 
+	/// <see cref="NumberFormatInfo"/> to format and parse currency values.
 	/// </para>
 	/// <para>
 	/// If you use one of the constructors that accept culture as a parameter
@@ -81,7 +80,7 @@ namespace Spring.Globalization.Formatters
         /// using specified <see cref="NumberFormatInfo"/>.
         /// </summary>
         /// <param name="formatInfo">
-        /// The <see cref="NumberFormatInfo"/> instance that defines how 
+        /// The <see cref="NumberFormatInfo"/> instance that defines how
         /// currency values are formatted.
         /// </param>
         public CurrencyFormatter(NumberFormatInfo formatInfo)

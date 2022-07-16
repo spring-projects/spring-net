@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,7 @@
 
 #region Imports
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 
 #endregion
 
@@ -68,7 +66,7 @@ namespace Spring.Proxy
         /// </summary>
         /// <remarks>
         /// <see langword="True"/> by default.
-        /// Target type attributes, method attributes, method's return type attributes 
+        /// Target type attributes, method attributes, method's return type attributes
         /// and method's parameter attributes are copied to the proxy.
         /// </remarks>
         bool ProxyTargetAttributes { get; set; }
@@ -93,13 +91,13 @@ namespace Spring.Proxy
 		/// // get a concrete implementation of an IProxyTypeBuilder...
 		/// IProxyTypeBuilder builder = ... ;
 		/// builder.TargetType = typeof( ... );
-		/// 
+		///
 		/// IDictionary typeAtts = new Hashtable();
         /// builder.TypeAttributes = typeAtts;
-		/// 
+		///
 		/// // applies a single Attribute to the proxied class...
 		/// typeAtts = new Attribute[] { new MyCustomAttribute() });
-		/// 
+		///
 		/// // applies a number of Attributes to the proxied class...
 		/// typeAtts = new Attribute[]
 		///     {
@@ -141,31 +139,31 @@ namespace Spring.Proxy
 		/// // get a concrete implementation of an IProxyTypeBuilder...
 		/// IProxyTypeBuilder builder = ... ;
 		/// builder.TargetType = typeof( ... );
-		/// 
+		///
 		/// IDictionary memAtts = new Hashtable();
 		/// builder.MemberAttributes = memAtts;
-		/// 
+		///
 		/// // applies a single Attribute to all members of the proxied class...
 		/// memAtts ["*"] = new Attribute[] { new MyCustomAttribute() });
-		/// 
+		///
 		/// // applies a number of Attributes to all members of the proxied class...
 		/// memAtts ["*"] = new Attribute[]
 		///     {
 		///			new MyCustomAttribute(),
 		///			new AnotherAttribute(),
 		///     });
-		/// 
+		///
 		/// // applies a single Attribute to those members of the proxied class
 		/// //     that have identifiers starting with 'Do' ...
 		/// memAtts ["Do*"] = new Attribute[] { new MyCustomAttribute() });
-		/// 
+		///
 		/// // applies a number of Attributes to those members of the proxied class
 		/// //     that have identifiers starting with 'Do' ...
 		/// memAtts ["Do*"] = new Attribute[]
 		///     {
 		///			new MyCustomAttribute(),
 		///			new AnotherAttribute(),
-		///     }); 
+		///     });
 		/// </code>
 		/// </example>
 		IDictionary MemberAttributes { get; set; }

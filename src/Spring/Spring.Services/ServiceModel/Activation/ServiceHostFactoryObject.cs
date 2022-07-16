@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,19 +18,14 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.ServiceModel;
 
 using Spring.Objects.Factory;
 
-#endregion
-
 namespace Spring.ServiceModel.Activation
 {
     /// <summary>
-    /// Factory that provides instances of <see cref="ServiceHost" /> 
+    /// Factory that provides instances of <see cref="ServiceHost" />
     /// to host objects created with Spring's IoC container.
     /// </summary>
     /// <author>Bruno Baia</author>
@@ -101,7 +96,7 @@ namespace Spring.ServiceModel.Activation
         #region Constructor(s) / Destructor
 
         /// <summary>
-        /// Creates a new instance of the 
+        /// Creates a new instance of the
         /// <see cref="Spring.ServiceModel.Activation.ServiceHostFactoryObject"/> class.
         /// </summary>
         public ServiceHostFactoryObject()
@@ -142,11 +137,11 @@ namespace Spring.ServiceModel.Activation
         #region IFactoryObject Members
 
         /// <summary>
-        /// Return a <see cref="Spring.ServiceModel.SpringServiceHost" /> instance 
+        /// Return a <see cref="Spring.ServiceModel.SpringServiceHost" /> instance
         /// managed by this factory.
         /// </summary>
         /// <returns>
-        /// An instance of <see cref="Spring.ServiceModel.SpringServiceHost" /> 
+        /// An instance of <see cref="Spring.ServiceModel.SpringServiceHost" />
         /// managed by this factory.
         /// </returns>
         public virtual object GetObject()

@@ -1,5 +1,3 @@
-using System;
-
 using AST					= Spring.Expressions.Parser.antlr.collections.AST;
 
 namespace Spring.Expressions.Parser.antlr
@@ -18,37 +16,37 @@ namespace Spring.Expressions.Parser.antlr
 	//
 	// With many thanks to Eric V. Smith from the ANTLR list.
 	//
-	
+
 	[Serializable]
 	public class NoViableAltException : RecognitionException
 	{
 		public IToken token;
 		public AST node; // handles parsing and treeparsing
-		
+
 		public NoViableAltException(AST t) : base("NoViableAlt", "<AST>", - 1, - 1)
 		{
 			node = t;
 		}
-		
-		public NoViableAltException(IToken t, string fileName_) : 
+
+		public NoViableAltException(IToken t, string fileName_) :
 					base("NoViableAlt", fileName_, t.getLine(), t.getColumn())
 		{
 			token = t;
 		}
-		
+
 		/*
 		* Returns a clean error message (no line number/column information)
 		*/
 		override public string Message
 		{
-			get 
+			get
 			{
 				if (token != null)
 				{
 					//return "unexpected token: " + token.getText();
 					return "unexpected token: " + token.ToString();
 				}
-			
+
 				// must a tree parser error if token==null
 				if ( (node==null) || (node==TreeParser.ASTNULL) )
 				{

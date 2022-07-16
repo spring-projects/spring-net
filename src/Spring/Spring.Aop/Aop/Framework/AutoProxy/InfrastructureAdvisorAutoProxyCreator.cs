@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using Spring.Objects.Factory.Config;
 
 namespace Spring.Aop.Framework.AutoProxy
@@ -40,7 +39,7 @@ namespace Spring.Aop.Framework.AutoProxy
         {
             return new InfrastructurAdvisorRetrievalHelper(this, objectFactory);
         }
-        
+
         private class InfrastructurAdvisorRetrievalHelper : ObjectFactoryAdvisorRetrievalHelper
         {
             private readonly InfrastructureAdvisorAutoProxyCreator _owner;

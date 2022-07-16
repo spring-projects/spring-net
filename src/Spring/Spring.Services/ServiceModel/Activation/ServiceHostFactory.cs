@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,35 +18,30 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.ServiceModel;
 
 using Spring.Util;
 using Spring.Context.Support;
 using Spring.Context;
 
-#endregion
-
 namespace Spring.ServiceModel.Activation
 {
     /// <summary>
-    /// Factory that provides instances of <see cref="Spring.ServiceModel.SpringServiceHost" /> 
+    /// Factory that provides instances of <see cref="Spring.ServiceModel.SpringServiceHost" />
     /// to host objects created by Spring's IoC container.
     /// </summary>
     /// <author>Bruno Baia</author>
     public class ServiceHostFactory : System.ServiceModel.Activation.ServiceHostFactory
     {
         /// <summary>
-        /// Creates a <see cref="Spring.ServiceModel.SpringServiceHost"/> for 
+        /// Creates a <see cref="Spring.ServiceModel.SpringServiceHost"/> for
         /// a specified Spring-managed object with a specific base address.
         /// </summary>
         /// <param name="reference">
         /// A reference to a Spring-managed object or to a service type.
         /// </param>
         /// <param name="baseAddresses">
-        /// The <see cref="System.Array"/> of type <see cref="System.Uri"/> that contains 
+        /// The <see cref="System.Array"/> of type <see cref="System.Uri"/> that contains
         /// the base addresses for the service hosted.
         /// </param>
         /// <returns>

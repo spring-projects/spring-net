@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,10 +20,8 @@
 
 #region Imports
 
-using System;
 using System.Collections;
 using System.Collections.Specialized;
-using System.IO;
 using System.Web;
 using System.Web.Caching;
 using System.Web.Compilation;
@@ -400,8 +398,8 @@ namespace Spring.Util
         /// </summary>
         public static string CurrentVirtualPathAndQuery
         {
-            get 
-            { 
+            get
+            {
                 string result = CurrentVirtualPath;
                 if (QueryString.Count > 0)
                 {
@@ -566,7 +564,7 @@ namespace Spring.Util
         }
 
         /// <summary>
-        /// Signals, that VirtualEnvironment is ready to accept 
+        /// Signals, that VirtualEnvironment is ready to accept
         /// handler registrations for EndRequest and EndSession events
         /// </summary>
         public static void SetInitialized()

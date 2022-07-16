@@ -21,7 +21,6 @@
 using System.Collections.Generic;
 using Apache.NMS;
 using NUnit.Framework;
-using Spring.Collections;
 
 namespace Spring.Messaging.Nms.Connections
 {

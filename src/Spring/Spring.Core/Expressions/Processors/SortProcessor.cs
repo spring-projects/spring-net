@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +18,8 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Collections;
 using Spring.Collections;
-
-#endregion
 
 namespace Spring.Expressions.Processors
 {
@@ -55,7 +50,7 @@ namespace Spring.Expressions.Processors
         /// An array containing sorted collection elements.
         /// </returns>
         /// <exception cref="ArgumentException">
-        /// If <paramref name="source"/> collection is not empty and it is 
+        /// If <paramref name="source"/> collection is not empty and it is
         /// neither <see cref="IList"/> nor <see cref="ISet"/>.
         /// </exception>
         public object Process(ICollection source, object[] args)

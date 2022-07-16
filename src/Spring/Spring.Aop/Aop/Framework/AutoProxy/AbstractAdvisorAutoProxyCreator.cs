@@ -18,15 +18,11 @@
 
 #endregion
 
-using System;
-using System.Collections.Generic;
 using Common.Logging;
 
 using Spring.Core;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
-
-using System.Linq;
 
 namespace Spring.Aop.Framework.AutoProxy
 {
@@ -57,7 +53,7 @@ namespace Spring.Aop.Framework.AutoProxy
         private IAdvisorRetrievalHelper _advisorRetrievalHelper;
 
         /// <summary>
-        /// Initialize 
+        /// Initialize
         /// </summary>
         protected AbstractAdvisorAutoProxyCreator()
         {
@@ -143,7 +139,7 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <param name="targetType">the type of the object to be advised</param>
         /// <param name="targetName">the name of the object to be advised</param>
         /// <returns>
-        /// the empty list, not null, if there are no pointcuts or interceptors. 
+        /// the empty list, not null, if there are no pointcuts or interceptors.
         /// The by-order sorted list of advisors otherwise
         /// </returns>
         protected IList<IAdvisor> FindEligibleAdvisors(Type targetType, string targetName)
@@ -169,7 +165,7 @@ namespace Spring.Aop.Framework.AutoProxy
         }
 
         /// <summary>
-        /// From the given list of candidate advisors, select the ones that are applicable 
+        /// From the given list of candidate advisors, select the ones that are applicable
         /// to the given target specified by targetType and name.
         /// </summary>
         /// <param name="candidateAdvisors">the list of candidate advisors to date</param>

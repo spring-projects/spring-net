@@ -21,7 +21,6 @@
 #region Imports
 
 using System.Xml;
-using System.IO;
 using System.Xml.Schema;
 
 #endregion
@@ -83,7 +82,7 @@ namespace Spring.Util
         }
 
         /// <summary>
-        /// Gets an appropriate <see cref="System.Xml.XmlReader"/> implementation 
+        /// Gets an appropriate <see cref="System.Xml.XmlReader"/> implementation
         /// for the supplied <see cref="System.IO.Stream"/>.
         /// </summary>
         /// <param name="stream">The XML <see cref="System.IO.Stream"/> that is going to be read.</param>

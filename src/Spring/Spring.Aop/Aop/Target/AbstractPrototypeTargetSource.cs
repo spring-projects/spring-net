@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,6 @@
 #endregion
 
 #region Imports
-
-using System;
 
 using Common.Logging;
 
@@ -82,7 +80,7 @@ namespace Spring.Aop.Target
 		public virtual string TargetObjectName
 		{
 			get { return _targetObjectName; }
-			set { 
+			set {
 				_targetObjectName = value;
 			}
 		}
@@ -147,7 +145,7 @@ namespace Spring.Aop.Target
 				}
 
 				#endregion
-                
+
                 _targetType = _owningObjectFactory.GetType(TargetObjectName);
 			}
 		}

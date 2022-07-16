@@ -1,14 +1,14 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
- * 
+ * Copyright ï¿½ 2002-2011 the original author or authors.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,13 +18,8 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Runtime.Serialization;
 using Spring.Dao;
-
-#endregion
 
 namespace Spring.Data
 {
@@ -57,7 +52,7 @@ namespace Spring.Data
         /// </summary>
         /// <param name="message">A message about the exception.</param>
         public BadSqlGrammarException(string message): base(message)
-        {            
+        {
         }
 
         /// <summary>
@@ -66,7 +61,7 @@ namespace Spring.Data
         /// <param name="message">A message about the exception.</param>
         /// <param name="inner">The inner exception.</param>
         public BadSqlGrammarException(string message, Exception inner): base(message, inner)
-        {            
+        {
         }
 
 
@@ -76,21 +71,21 @@ namespace Spring.Data
         /// <param name="task">name of the current task.</param>
         /// <param name="sql">The offending SQL statment</param>
         /// <param name="ex">The root cause.</param>
-        public BadSqlGrammarException(string task, String sql, Exception ex) : base(task + "; bad SQL grammar [" + sql + "]; " + ex.Message, ex)           
+        public BadSqlGrammarException(string task, String sql, Exception ex) : base(task + "; bad SQL grammar [" + sql + "]; " + ex.Message, ex)
         {
              this.sql = sql;
         }
 
 		/// <inheritdoc />
         protected BadSqlGrammarException( SerializationInfo info, StreamingContext context ) : base( info, context ) {}
-		
+
 		#endregion
 
 		#region Properties
 
 	    public string Sql
 	    {
-            get 
+            get
             {
                 return sql;
             }
@@ -110,7 +105,7 @@ namespace Spring.Data
         public override void GetObjectData(SerializationInfo info, StreamingContext context)
         {
             info.AddValue( "sql", sql );
-            base.GetObjectData( info, context ); 
+            base.GetObjectData( info, context );
         }
 
         #endregion

@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using Spring.Core.IO;
 using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Xml;

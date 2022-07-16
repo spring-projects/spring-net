@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using Apache.NMS;
 using Common.Logging;
 using Spring.Messaging.Nms.Core;
@@ -31,7 +30,7 @@ namespace Spring.Messaging.Nms.Connections
     /// A ConnectionFactory adapter that returns the same Connection
     /// from all CreateConnection() calls, and ignores calls to
     /// Connection.Close().  According to the JMS Connection
-    /// model, this is perfectly thread-safe. The 
+    /// model, this is perfectly thread-safe. The
     /// shared Connection can be automatically recovered in case of an Exception.
     /// </summary>
     /// <remarks>
@@ -85,7 +84,7 @@ namespace Spring.Messaging.Nms.Connections
 
 
         /// <summary>
-        /// Whether the shared Connection has been started 
+        /// Whether the shared Connection has been started
         /// </summary>
         private bool started = false;
 
@@ -366,7 +365,7 @@ namespace Spring.Messaging.Nms.Connections
         /// <param name="con">The connection to operate on.</param>
         /// <param name="mode">The session ack mode.</param>
         /// <returns>the Session to use, or <code>null</code> to indicate
-	    /// creation of a raw standard Session</returns>  
+	    /// creation of a raw standard Session</returns>
         public virtual ISession GetSession(IConnection con, AcknowledgementMode mode)
         {
             return null;
@@ -398,7 +397,7 @@ namespace Spring.Messaging.Nms.Connections
                     if (this.started)
                     {
                         this.started = false;
-                        con.Stop();                        
+                        con.Stop();
                     }
                 } finally
                 {
@@ -428,7 +427,7 @@ namespace Spring.Messaging.Nms.Connections
 
         /// <summary>
         /// Close the underlying shared connection. The provider of this ConnectionFactory needs to care for proper shutdown.
-        /// As this object implements <see cref="IDisposable"/> an application context will automatically 
+        /// As this object implements <see cref="IDisposable"/> an application context will automatically
         /// invoke this on distruction o
         /// </summary>
         public void Dispose()
@@ -495,9 +494,9 @@ namespace Spring.Messaging.Nms.Connections
                     throw new ArgumentException(
                         "Setting of 'ClientID' property not supported on wrapper for shared Connection since" +
                         "this is a shared connection that may serve any number of clients concurrently." +
-                        "Set the 'ClientId' property on the SingleConnectionFactory instead.");    
+                        "Set the 'ClientId' property on the SingleConnectionFactory instead.");
                 }
-                
+
             }
         }
 
@@ -556,7 +555,7 @@ namespace Spring.Messaging.Nms.Connections
 
 
         #region Pass through implementations to the target connection
-        
+
         public void PurgeTempDestinations()
         {
             target.PurgeTempDestinations();
@@ -570,7 +569,7 @@ namespace Spring.Messaging.Nms.Connections
             }
             remove
             {
-                target.ExceptionListener -= value;                
+                target.ExceptionListener -= value;
             }
         }
 

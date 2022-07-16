@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using Spring.Objects.Factory.Config;
 
 namespace Spring.Objects.Factory.Support
@@ -31,7 +30,7 @@ namespace Spring.Objects.Factory.Support
     /// </summary>
     /// <remarks>In general, use this <see cref="GenericObjectDefinition"/> class for the purpose of
     /// registering user-visible object definitions (which a post-processor might operate on,
-    /// potentially even reconfiguring the parent name). 
+    /// potentially even reconfiguring the parent name).
     /// Use <see cref="RootObjectDefinition"/>/<see cref="ChildObjectDefinition"/>
     /// where parent/child relationships happen to be pre-determined.
     /// </remarks>
@@ -99,7 +98,7 @@ namespace Spring.Objects.Factory.Support
 //        }
 
         /// <summary>
-        /// Returns a <see cref="System.String"/> representation of this 
+        /// Returns a <see cref="System.String"/> representation of this
         /// <see cref="GenericObjectDefinition"/> for debugging purposes.
         /// </summary>
         public override string ToString()

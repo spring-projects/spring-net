@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,22 +18,17 @@
 
 #endregion
 
-#region Imports
-
 using System;
 using System.CodeDom.Compiler;
 using System.IO;
 using System.Reflection;
 using System.Text;
 using NUnit.Framework;
-using Spring.Util;
-
-#endregion
 
 namespace Spring.Reflection.Dynamic
 {
     /// <summary>
-    /// Unit tests for the SafeProperty class. SafeProperty must pass the same tests 
+    /// Unit tests for the SafeProperty class. SafeProperty must pass the same tests
     /// as DynamicField plus tests for accessing private members.
     /// </summary>
     /// <author>Erich Eichinger</author>
@@ -48,7 +43,7 @@ namespace Spring.Reflection.Dynamic
 #if NETCOREAPP
         private bool CanGenerateVisualBasic => false;
 #else
-        private bool CanGenerateVisualBasic => SystemUtils.MonoRuntime;
+        private bool CanGenerateVisualBasic => Spring.Util.SystemUtils.MonoRuntime;
 #endif
 
         [Test]
@@ -127,11 +122,11 @@ namespace Spring.Reflection.Dynamic
             Assert.AreEqual(2, second.GetValue(something));
             //this should not cause MethodAccessException because "second" is created using "CreateSafe"
             second.SetValue(something, 123);
-            
+
             Assert.AreEqual(123, second.GetValue(something));
         }
 
-        [Test]        
+        [Test]
         public void TestForRestrictiveGetterWithSafeWrapper()
         {
             Something something = new Something();
@@ -140,12 +135,12 @@ namespace Spring.Reflection.Dynamic
             //this should be ok, because both get and set of the "Third" property are public
             third.SetValue(something, 456);
             Assert.AreEqual(456, third.GetValue(something));
-            
+
             IDynamicProperty first = Create(typeof(Something).GetProperty("First"));
             first.SetValue(something, 123);
             //this should not cause MethodAccessException, "first" is createtd using "CreateSafe"
             Assert.AreEqual(123, first.GetValue(something));
-        }	
+        }
 
         #region VB TestClass Code
 

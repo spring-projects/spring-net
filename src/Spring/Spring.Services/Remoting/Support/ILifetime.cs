@@ -18,12 +18,6 @@
 
 #endregion
 
-#region Imports
-
-using System;
-
-#endregion
-
 namespace Spring.Remoting.Support
 {
     /// <summary>
@@ -47,15 +41,15 @@ namespace Spring.Remoting.Support
         TimeSpan InitialLeaseTime { get; }
 
         /// <summary>
-        /// Gets the amount of time lease 
+        /// Gets the amount of time lease
         /// should be extended for on each call to this object.
         /// </summary>
-        /// <value>The amount of time lease should be 
+        /// <value>The amount of time lease should be
         /// extended for on each call to this object.</value>
         TimeSpan RenewOnCallTime { get; }
 
         /// <summary>
-        /// Gets the amount of time lease manager 
+        /// Gets the amount of time lease manager
         /// will for this object's sponsors to respond.
         /// </summary>
         /// <value>The amount of time lease manager will for this object's

@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-using System;
-using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 using AopAlliance.Aop;
@@ -152,7 +150,7 @@ namespace Spring.Aop.Framework
         private bool initialized;
 
         /// <summary>
-        /// Indicate whether this config shall be frozen upon creation 
+        /// Indicate whether this config shall be frozen upon creation
         /// of the first proxy instance
         /// </summary>
         private bool freezeProxy;
@@ -188,7 +186,7 @@ namespace Spring.Aop.Framework
         }
 
         /// <summary>
-        /// Indicate whether this config shall be frozen upon creation 
+        /// Indicate whether this config shall be frozen upon creation
         /// of the first proxy instance
         /// </summary>
         public bool FreezeProxy
@@ -264,7 +262,7 @@ namespace Spring.Aop.Framework
             set { targetName = value; }
         }
 
-        /// <summary> 
+        /// <summary>
         /// Sets the list of <see cref="AopAlliance.Intercept.IMethodInterceptor"/> and
         /// <see cref="Spring.Aop.IAdvisor"/> object names.
         /// </summary>
@@ -288,8 +286,8 @@ namespace Spring.Aop.Framework
             set { interceptorNames = value; }
         }
 
-        /// <summary> 
-        /// Sets the list of introduction object names. 
+        /// <summary>
+        /// Sets the list of introduction object names.
         /// </summary>
         /// <remarks>
         /// <p>
@@ -339,7 +337,7 @@ namespace Spring.Aop.Framework
         }
 
 
-        /// <summary> 
+        /// <summary>
         /// Creates an instance of the AOP proxy to be returned by this factory
         /// </summary>
         /// <remarks>
@@ -379,10 +377,10 @@ namespace Spring.Aop.Framework
         }
 
         /// <summary>
-        /// Return the <see cref="System.Type"/> of the proxy. 
+        /// Return the <see cref="System.Type"/> of the proxy.
         /// </summary>
         /// <remarks>
-        /// Will check the singleton instance if already created, 
+        /// Will check the singleton instance if already created,
         /// else fall back to the proxy interface (if a single one),
         /// the target bean type, or the TargetSource's target class.
         /// </remarks>
@@ -488,7 +486,7 @@ namespace Spring.Aop.Framework
         /// <summary>Create the advisor (interceptor) chain.</summary>
         /// <remarks>
         /// The advisors that are sourced from an ObjectFactory will be refreshed each time
-        /// a new prototype instance is added. Interceptors added programmatically through 
+        /// a new prototype instance is added. Interceptors added programmatically through
         /// the factory API are unaffected by such changes.
         /// </remarks>
         private void InitializeAdvisorChain()
@@ -611,7 +609,7 @@ namespace Spring.Aop.Framework
                 ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(objectFactory, typeof(IAdvisor));
             var globalInterceptorNames =
                 ObjectFactoryUtils.ObjectNamesForTypeIncludingAncestors(objectFactory, typeof(IInterceptor));
-            
+
             List<object> objects = new List<object>();
             Dictionary<object, string> names = new Dictionary<object, string>();
             for (int i = 0; i < globalAspectNames.Count; i++)

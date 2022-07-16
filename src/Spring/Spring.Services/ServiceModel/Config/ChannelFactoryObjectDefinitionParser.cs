@@ -18,9 +18,6 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Xml;
 
 using Spring.Util;
@@ -29,8 +26,6 @@ using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 using Spring.Core.TypeResolution;
 using Spring.Objects;
-
-#endregion
 
 namespace Spring.ServiceModel.Config
 {
@@ -79,8 +74,8 @@ namespace Spring.ServiceModel.Config
             {
                 // Try to resolve type later (Can be a type alias)
                 channelFactoryDefinition = new RootObjectDefinition(
-                    String.Format("Spring.ServiceModel.ChannelFactoryObject<{0}>, Spring.Services", unresolvedChannelType), 
-                    new ConstructorArgumentValues(), 
+                    String.Format("Spring.ServiceModel.ChannelFactoryObject<{0}>, Spring.Services", unresolvedChannelType),
+                    new ConstructorArgumentValues(),
                     new MutablePropertyValues());
             }
 

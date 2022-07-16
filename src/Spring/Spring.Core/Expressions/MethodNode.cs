@@ -18,9 +18,7 @@
 
 #endregion
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Spring.Expressions.Processors;
@@ -172,7 +170,7 @@ namespace Spring.Expressions
         {
             HashCode hash = new HashCode();
             hash.Add(contextType.GetHashCode());
-            
+
             for (int i = 0; i < argValues.Length; i++)
             {
                 object arg = argValues[i];
@@ -192,7 +190,7 @@ namespace Spring.Expressions
             // check the context type first
             MethodInfo mi = GetBestMethod(contextType, methodName, BINDING_FLAGS, argValues);
 
-            // if not found, probe the Type's type          
+            // if not found, probe the Type's type
             if (mi == null)
             {
                 mi = GetBestMethod(typeof(Type), methodName, BINDING_FLAGS, argValues);

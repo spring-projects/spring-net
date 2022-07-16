@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using System.ComponentModel;
 using System.Globalization;
 using System.Text.RegularExpressions;
@@ -30,13 +29,13 @@ using System.Text.RegularExpressions;
 namespace Spring.Core.TypeConversion
 {
     #region Specifier parsers
- 
+
     using TimeSpanNullable = Nullable<TimeSpan>;
-    
+
     /// <summary>
     /// Base parser for <see cref="TimeSpanConverter"/> custom specifiers.
     /// </summary>
-    abstract class SpecifierParser 
+    abstract class SpecifierParser
     {
         const RegexOptions ParsingOptions = RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline | RegexOptions.IgnoreCase;
 
@@ -53,11 +52,11 @@ namespace Spring.Core.TypeConversion
         public abstract TimeSpan Parse(int value);
 
         /// <summary>
-        /// Check if the string contains the specifier and 
+        /// Check if the string contains the specifier and
         /// </summary>
         /// <param name="value"></param>
         /// <returns></returns>
-        public TimeSpanNullable Match(string value) 
+        public TimeSpanNullable Match(string value)
         {
             string regex = @"^(\d+)" + Specifier + "$";
             Match match = Regex.Match(value, regex, ParsingOptions);
@@ -65,19 +64,19 @@ namespace Spring.Core.TypeConversion
             if (!match.Success) return new TimeSpanNullable();
 
             return new TimeSpanNullable(Parse(int.Parse(match.Groups[1].Value)));
-        }  
-      
+        }
+
     }
 
     /// <summary>
     /// Recognize 10d as ten days
     /// </summary>
-    class DaySpecifier: SpecifierParser 
+    class DaySpecifier: SpecifierParser
     {
         /// <summary>
         /// Day specifier: d
         /// </summary>
-        public override string Specifier 
+        public override string Specifier
         {
             get { return "d"; }
         }
@@ -87,7 +86,7 @@ namespace Spring.Core.TypeConversion
         /// </summary>
         /// <param name="value">Timespan in days</param>
         /// <returns></returns>
-        public override TimeSpan Parse(int value) 
+        public override TimeSpan Parse(int value)
         {
             return TimeSpan.FromDays(value);
         }
@@ -96,12 +95,12 @@ namespace Spring.Core.TypeConversion
     /// <summary>
     /// Recognize 10h as ten hours
     /// </summary>
-    class HourSpecifier : SpecifierParser 
+    class HourSpecifier : SpecifierParser
     {
         /// <summary>
         /// Hour specifier: h
         /// </summary>
-        public override string Specifier 
+        public override string Specifier
         {
             get { return "h"; }
         }
@@ -120,12 +119,12 @@ namespace Spring.Core.TypeConversion
     /// <summary>
     /// Recognize 10m as ten minutes
     /// </summary>
-    class MinuteSpecifier : SpecifierParser 
+    class MinuteSpecifier : SpecifierParser
     {
         /// <summary>
         /// Minute specifier: m
         /// </summary>
-        public override string Specifier 
+        public override string Specifier
         {
             get { return "m"; }
         }
@@ -135,7 +134,7 @@ namespace Spring.Core.TypeConversion
         /// </summary>
         /// <param name="value">Timespan in minutes</param>
         /// <returns></returns>
-        public override TimeSpan Parse(int value) 
+        public override TimeSpan Parse(int value)
         {
             return TimeSpan.FromMinutes(value);
         }
@@ -144,12 +143,12 @@ namespace Spring.Core.TypeConversion
     /// <summary>
     /// Recognize 10s as ten seconds
     /// </summary>
-    class SecondSpecifier : SpecifierParser 
+    class SecondSpecifier : SpecifierParser
     {
         /// <summary>
         /// Second specifier: s
         /// </summary>
-        public override string Specifier 
+        public override string Specifier
         {
             get { return "s"; }
         }
@@ -159,7 +158,7 @@ namespace Spring.Core.TypeConversion
         /// </summary>
         /// <param name="value">Timespan in seconds</param>
         /// <returns></returns>
-        public override TimeSpan Parse(int value) 
+        public override TimeSpan Parse(int value)
         {
             return TimeSpan.FromSeconds(value);
         }
@@ -168,12 +167,12 @@ namespace Spring.Core.TypeConversion
     /// <summary>
     /// Recognize 10ms as ten milliseconds
     /// </summary>
-    class MillisecondSpecifier : SpecifierParser 
+    class MillisecondSpecifier : SpecifierParser
     {
         /// <summary>
         /// Millisecond specifier: ms
         /// </summary>
-        public override string Specifier 
+        public override string Specifier
         {
             get { return "ms"; }
         }
@@ -183,7 +182,7 @@ namespace Spring.Core.TypeConversion
         /// </summary>
         /// <param name="value">Timespan in milliseconds</param>
         /// <returns></returns>
-        public override TimeSpan Parse(int value) 
+        public override TimeSpan Parse(int value)
         {
             return TimeSpan.FromMilliseconds(value);
         }
@@ -201,9 +200,9 @@ namespace Spring.Core.TypeConversion
         #region Constants
 
         static readonly SpecifierParser[] Specifiers = {
-                                                  new DaySpecifier(), 
-                                                  new HourSpecifier(), 
-                                                  new MinuteSpecifier(), 
+                                                  new DaySpecifier(),
+                                                  new HourSpecifier(),
+                                                  new MinuteSpecifier(),
                                                   new SecondSpecifier(),
                                                   new MillisecondSpecifier()
                                               };
@@ -231,13 +230,13 @@ namespace Spring.Core.TypeConversion
         /// </param>
         /// <param name="culture">
         /// The <see cref="System.Globalization.CultureInfo"/> to use
-        /// as the current culture. 
+        /// as the current culture.
         /// </param>
         /// <param name="value">
         /// The value that is to be converted.
         /// </param>
         /// <returns>
-        /// A <see cref="System.TimeSpan"/> if successful. 
+        /// A <see cref="System.TimeSpan"/> if successful.
         /// </returns>
         public override object ConvertFrom(
             ITypeDescriptorContext context,
@@ -250,7 +249,7 @@ namespace Spring.Core.TypeConversion
                 {
                     stringValue = stringValue.Trim();
 
-                    foreach (SpecifierParser specifierParser in Specifiers) 
+                    foreach (SpecifierParser specifierParser in Specifiers)
                     {
                         TimeSpanNullable res = specifierParser.Match(stringValue);
                         if (res.HasValue) return res.Value;

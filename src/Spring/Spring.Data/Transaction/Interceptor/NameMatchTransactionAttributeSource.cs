@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Collections;
 using System.Collections.Specialized;
 using System.Reflection;
@@ -106,7 +105,7 @@ namespace Spring.Transaction.Interceptor
                         editor.SetAsText(entry.Value.ToString());
                         attribute = editor.Value;
                     }
-                    AddTransactionMethod(name, attribute);    
+                    AddTransactionMethod(name, attribute);
 			    }
 			}
 		}
@@ -116,8 +115,8 @@ namespace Spring.Transaction.Interceptor
 	    /// </summary>
 	    /// <remarks>
 	    /// Expects method names as keys and string attributes definitions as values,
-	    /// parsable into <see cref="Spring.Transaction.Interceptor.ITransactionAttribute"/> 
-	    /// instances via 
+	    /// parsable into <see cref="Spring.Transaction.Interceptor.ITransactionAttribute"/>
+	    /// instances via
 	    /// <see cref="Spring.Transaction.Interceptor.TransactionAttributeEditor"/>.
 	    /// </remarks>
 	    /// <value>The properties of the transaction.</value>
@@ -142,7 +141,7 @@ namespace Spring.Transaction.Interceptor
 		protected virtual bool IsMatch( string methodName, string mappedName )
 		{
             return PatternMatchUtils.SimpleMatch(mappedName, methodName);
-		} 
+		}
 
 		/// <summary>
 		/// Add an attribute for a transactional method.
@@ -165,15 +164,15 @@ namespace Spring.Transaction.Interceptor
             }
             #endregion
             nameMap.Add( methodName, attribute );
-		}	
+		}
 
 		/// <summary>
 		/// Parses the given properties into a name/attribute map.
 		/// </summary>
 		/// <remarks>
 		/// Expects method names as keys and string attributes definitions as values,
-		/// parsable into <see cref="Spring.Transaction.Interceptor.ITransactionAttribute"/> 
-		/// instances via 
+		/// parsable into <see cref="Spring.Transaction.Interceptor.ITransactionAttribute"/>
+		/// instances via
 		/// <see cref="Spring.Transaction.Interceptor.TransactionAttributeEditor"/>.
 		/// </remarks>
 		/// <param name="transactionAttributes">The properties of the transaction.</param>
@@ -195,11 +194,11 @@ namespace Spring.Transaction.Interceptor
 		/// </summary>
 		/// <param name="method">The method to check.</param>
 		/// <param name="targetType">
-		/// The target <see cref="System.Type"/>. May be null, in which case the declaring 
+		/// The target <see cref="System.Type"/>. May be null, in which case the declaring
 		/// class of the supplied <paramref name="method"/> must be used.
 		/// </param>
 		/// <returns>
-		/// A <see cref="Spring.Transaction.Interceptor.ITransactionAttribute"/> or 
+		/// A <see cref="Spring.Transaction.Interceptor.ITransactionAttribute"/> or
 		/// null if the method is non-transactional.
 		/// </returns>
 		public ITransactionAttribute ReturnTransactionAttribute(MethodInfo method, Type targetType)

@@ -14,11 +14,7 @@
  * limitations under the License.
  */
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using Common.Logging;
-using Spring.Collections;
 using Spring.Transaction.Support;
 using Spring.Util;
 using Apache.NMS;
@@ -100,7 +96,7 @@ namespace Spring.Messaging.Nms.Connections
         }
 
         /// <summary>
-        /// Gets a value indicating whether this <see cref="NmsResourceHolder"/> is frozen, namely that 
+        /// Gets a value indicating whether this <see cref="NmsResourceHolder"/> is frozen, namely that
         /// additional resources can be registered with the holder.  If using any of the constructors with
         /// a Session, the holder will be set to the frozen state.
         /// </summary>
@@ -244,7 +240,7 @@ namespace Spring.Messaging.Nms.Connections
             }
             connections.Clear();
             sessions.Clear();
-            sessionsPerIConnection.Clear();            
+            sessionsPerIConnection.Clear();
         }
 
         /// <summary>

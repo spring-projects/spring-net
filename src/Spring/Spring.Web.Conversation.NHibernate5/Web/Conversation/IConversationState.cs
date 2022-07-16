@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,16 +18,14 @@
 
 #endregion
 
-using System;
-using System.Collections.Generic;
 using NHibernate;
 using Spring.Data.Common;
 
 namespace Spring.Web.Conversation
 {
     /// <summary>
-    /// Port to conversation. If the object is not found in the current 
-    /// conversation, will be tried on the parent if the parent is 
+    /// Port to conversation. If the object is not found in the current
+    /// conversation, will be tried on the parent if the parent is
     /// not null.
     /// </summary>
     /// <exception cref="InvalidOperationException">
@@ -43,8 +41,8 @@ namespace Spring.Web.Conversation
 
         /// <summary>
         /// Starts or resumes the conversation and the <see cref="ParentConversation"/>.
-        /// <para>If <see cref="RootSessionPerConversation"/> is not null, so 
-        /// <see cref="ISessionFactory.GetCurrentSession"/> is called to 
+        /// <para>If <see cref="RootSessionPerConversation"/> is not null, so
+        /// <see cref="ISessionFactory.GetCurrentSession"/> is called to
         /// Raise SessionHolder for make the reconnection.
         /// </para>
         /// <para>Make <see cref="IsNew"/> return false.
@@ -56,8 +54,8 @@ namespace Spring.Web.Conversation
         /// <list type="bullet">
         /// <item>If this conversation is ended.
         /// </item>
-        /// <item>If <see cref="RootSessionPerConversation"/> is not null and 
-        /// <see cref="RootSessionPerConversation"/> different from 
+        /// <item>If <see cref="RootSessionPerConversation"/> is not null and
+        /// <see cref="RootSessionPerConversation"/> different from
         /// <see cref="ISessionFactory.GetCurrentSession"/>
         /// </item>
         /// </list>
@@ -79,10 +77,10 @@ namespace Spring.Web.Conversation
         /// <exception cref="InvalidOperationException">
         /// <list type="bullet">
         /// <item>If <see cref="System.Web.HttpContext.Current"/>.
-        /// <see cref="System.Web.SessionState.HttpSessionState">Session</see>["spring.objects"] 
+        /// <see cref="System.Web.SessionState.HttpSessionState">Session</see>["spring.objects"]
         /// is null.
         /// </item>
-        /// <item>The 'spring session scopes' are not located in the key 
+        /// <item>The 'spring session scopes' are not located in the key
         /// 'spring.objects' of HttpSessionState.
         /// </item>
         /// </list>
@@ -95,10 +93,10 @@ namespace Spring.Web.Conversation
         bool Ended { get; }
 
         /// <summary>
-        /// Inner conversation. After added if the <see cref="ParentConversation"/> 
+        /// Inner conversation. After added if the <see cref="ParentConversation"/>
         /// is null it will resolve to 'this'.
         /// </summary>
-        /// <exception cref="InvalidOperationException">at 
+        /// <exception cref="InvalidOperationException">at
         /// <see cref="T:System.Collections.Generic.ICollection`1.Add(T)"/>,
         /// <see cref="T:System.Collections.Generic.IList`1.this[int]"/>,
         /// <see cref="T:System.Collections.Generic.IList`1.Insert(int, T)"/>
@@ -123,21 +121,21 @@ namespace Spring.Web.Conversation
         IConversationState ParentConversation { get; set;}
 
         /// <summary>
-        /// TimeOut for the conversation in milliseconds. 
+        /// TimeOut for the conversation in milliseconds.
         /// If <c>0</c> TimeOut will be ignored.
         /// </summary>
         Int32 TimeOut { get; set; }
 
         /// <summary>
         /// Last acces for a value into this Conversation or Inner Conversation.
-        /// Reset to DateTime.Now each time <see cref="StartResumeConversation()"/> 
+        /// Reset to DateTime.Now each time <see cref="StartResumeConversation()"/>
         /// is called.
         /// </summary>
         DateTime LastAccess { get; set; }
 
         /// <summary>
-        /// Conversation Manager. When this is setted if 
-        /// <see cref="IConversationManager.GetConversationById(String)"/> 
+        /// Conversation Manager. When this is setted if
+        /// <see cref="IConversationManager.GetConversationById(String)"/>
         /// returns null so AddConversation is called.
         /// </summary>
         IConversationManager ConversationManager { get; set; }
@@ -160,7 +158,7 @@ namespace Spring.Web.Conversation
         ISessionFactory SessionFactory { get; }
 
         /// <summary>
-        /// <para>If this is non-null run pattern 'session-per-conversation'. 
+        /// <para>If this is non-null run pattern 'session-per-conversation'.
         /// It also depends on <see cref="SessionFactory"/> and <see cref="ConversationManager"/>.
         /// <see cref="ConversationManager"/> must support ConversationManager.
         /// </para>
@@ -174,8 +172,8 @@ namespace Spring.Web.Conversation
 
         /// <summary>
         /// Starts or resumes the conversation and each 'inner conversation' in
-        /// <see cref="InnerConversations"/>. 
-        /// It is not about 'Session-per-conversation' because it is done by 
+        /// <see cref="InnerConversations"/>.
+        /// It is not about 'Session-per-conversation' because it is done by
         /// <see cref="IConversationManager"/>.
         /// </summary>
         void PauseConversation();

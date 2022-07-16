@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using Spring.Util;
 
 namespace Spring.Core
@@ -58,7 +57,7 @@ namespace Spring.Core
                 {
                     result[currPos++] = Char.ToUpper(c);
                     upperCaseNext = false;
-                }                  
+                }
                 else
                 {
                     result[currPos++] = c;

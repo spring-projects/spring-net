@@ -1,14 +1,14 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
- * 
+ * Copyright ï¿½ 2002-2011 the original author or authors.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,14 +18,9 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Collections;
 using System.Data;
 using Spring.Data.Common;
-
-#endregion
 
 namespace Spring.Data
 {
@@ -36,7 +31,7 @@ namespace Spring.Data
         /// <summary>
         /// Execute the query with the specified command text returning a scalar result
         /// </summary>
-        /// <remarks>No parameters are used.  As with 
+        /// <remarks>No parameters are used.  As with
         /// IDbCommand.ExecuteScalar, it returns the first column of the first row in the resultset
         /// returned by the query.  Extra columns or row are ignored.</remarks>
         /// <param name="cmdType">The command type</param>
@@ -81,7 +76,7 @@ namespace Spring.Data
                              ICommandSetter commandSetter);
 
         /// <summary>
-        /// Execute the query with a command created via IDbCommandCreator and 
+        /// Execute the query with a command created via IDbCommandCreator and
         /// parameters
         /// </summary>
         /// <remarks>Output parameters can be retrieved via the returned
@@ -95,8 +90,8 @@ namespace Spring.Data
         /// <returns>A dictionary containing output parameters, if any</returns>
         IDictionary ExecuteScalar(IDbCommandCreator commandCreator);
 
-        #endregion	
-        
+        #endregion
+
         #region ExecuteNonQuery
 
         /// <summary>
@@ -140,8 +135,8 @@ namespace Spring.Data
         /// <returns>The number of rows affected.</returns>
         int ExecuteNonQuery(CommandType cmdType, string cmdText,
                             ICommandSetter commandSetter);
-        
-        
+
+
         /// <summary>
         /// Executes a non query with a command created via IDbCommandCreator and
         /// parameters.
@@ -159,11 +154,11 @@ namespace Spring.Data
 
 
         #endregion
-        
+
         #region Query with RowCallback
 
         /// <summary>
-        /// Execute a query given IDbCommand's type and text, reading a 
+        /// Execute a query given IDbCommand's type and text, reading a
         /// single result set on a per-row basis with a <see cref="IRowCallback"/>.
         /// </summary>
         /// <param name="cmdType">The type of command.</param>
@@ -172,11 +167,11 @@ namespace Spring.Data
         /// one row at a time.
         /// </param>
         void QueryWithRowCallback(CommandType cmdType, string cmdText, IRowCallback rowCallback);
-        
+
 
         /// <summary>
         /// Execute a query given IDbCommand's type and text and provided parameter
-        /// information, reading a 
+        /// information, reading a
         /// single result set on a per-row basis with a <see cref="IRowCallback"/>.
         /// </summary>
         /// <param name="cmdType">The type of command</param>
@@ -204,9 +199,9 @@ namespace Spring.Data
                                   IDbParameters parameters);
 
         /// <summary>
-        /// Execute a query given IDbCommand's type and text by 
-        /// passing the created IDbCommand to a ICommandSetter implementation 
-        /// that knows how to bind values to the IDbCommand, reading a 
+        /// Execute a query given IDbCommand's type and text by
+        /// passing the created IDbCommand to a ICommandSetter implementation
+        /// that knows how to bind values to the IDbCommand, reading a
         /// single result set on a per-row basis with a <see cref="IRowCallback"/>.
         /// </summary>
         /// <param name="cmdType">The type of command</param>
@@ -242,7 +237,7 @@ namespace Spring.Data
 
         void QueryWithCommandCreator(IDbCommandCreator cc, IRowCallback rowCallback, IDictionary returnedParameters);
 
-        #endregion 
+        #endregion
 
     }
 }

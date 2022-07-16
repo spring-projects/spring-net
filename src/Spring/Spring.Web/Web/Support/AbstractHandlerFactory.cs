@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,9 +20,7 @@
 
 #region Imports
 
-using System;
 using System.Collections;
-using System.IO;
 using System.Security;
 using System.Security.Permissions;
 using System.Web;
@@ -120,7 +118,7 @@ namespace Spring.Web.Support
         /// Get the global instance of System.Web.UI.SimpleHandlerFactory
         /// </summary>
         /// <remarks>
-        /// This factory is a plaform version agnostic way to instantiate 
+        /// This factory is a plaform version agnostic way to instantiate
         /// arbitrary handlers without the need for additional reflection.
         /// </remarks>
         public static IHttpHandlerFactory SimpleHandlerFactory
@@ -240,7 +238,7 @@ namespace Spring.Web.Support
         protected abstract IHttpHandler CreateHandlerInstance(IConfigurableApplicationContext appContext, HttpContext context, string requestType, string rawUrl, string physicalPath);
 
         /// <summary>
-        /// Get the application context instance corresponding to the given absolute url and checks 
+        /// Get the application context instance corresponding to the given absolute url and checks
         /// it for <see cref="IConfigurableApplicationContext"/> contract and being not null.
         /// </summary>
         /// <param name="url">the absolute url</param>
@@ -274,7 +272,7 @@ namespace Spring.Web.Support
         /// <param name="virtualPath">the virtual path to get the context for.</param>
         /// <returns>the context or null.</returns>
         /// <remarks>
-        /// Subclasses may override this method to change the context source. 
+        /// Subclasses may override this method to change the context source.
         /// By default, <see cref="WebApplicationContext.GetContext"/> is used for obtaining context instances.
         /// </remarks>
         protected virtual IApplicationContext GetContext(string virtualPath)
@@ -289,7 +287,7 @@ namespace Spring.Web.Support
         /// <param name="objectFactory"></param>
         /// <returns>
         /// This method requires registrars to follow the convention of registering web object definitions using their
-        /// application relative urls (~/mypath/mypage.aspx). 
+        /// application relative urls (~/mypath/mypage.aspx).
         /// </returns>
         /// <remarks>
         /// Resolve an object definition by url.

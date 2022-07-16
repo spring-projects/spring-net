@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using System.Reflection;
 using System.Threading;
 
@@ -93,7 +92,7 @@ namespace Spring.Util
 
         /// <summary>
         /// Gets the thread id for the current thread. Use thread name is available,
-        /// otherwise use CurrentThread.GetHashCode() for .NET 1.0/1.1 and 
+        /// otherwise use CurrentThread.GetHashCode() for .NET 1.0/1.1 and
         /// CurrentThread.ManagedThreadId otherwise.
         /// </summary>
         /// <value>The thread id.</value>

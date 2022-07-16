@@ -14,10 +14,6 @@
  * limitations under the License.
  */
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
-
 namespace Spring.Objects.Factory.Config
 {
     /// <summary>

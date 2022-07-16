@@ -2,13 +2,13 @@
 
 /*
  * Copyright © 2002-2011 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -19,10 +19,7 @@
 #endregion
 
 using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Reflection;
-using System.Threading;
 
 using NUnit.Framework;
 
@@ -85,7 +82,7 @@ namespace Spring.Data.Common
 #else
             const string providerName = "SqlServer-2.0";
 #endif
-            
+
             AsyncTestTask t1 = new AsyncTestDbProviderFactory(1000, providerName).Start();
             AsyncTestTask t2 = new AsyncTestDbProviderFactory(1000, providerName).Start();
             AsyncTestTask t3 = new AsyncTestDbProviderFactory(1000, providerName).Start();
@@ -117,10 +114,10 @@ namespace Spring.Data.Common
         [Test]
         public void DefaultInstanceWithSqlServer20()
         {
-            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US", false);
-            //IApplicationContext ctx = DbProviderFactory.ApplicationContext;            
+            System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US", false);
+            //IApplicationContext ctx = DbProviderFactory.ApplicationContext;
             //Assert.IsNotNull(ctx);
-            Thread.CurrentThread.CurrentCulture = new CultureInfo("tr-TR", false);
+            System.Threading.Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("tr-TR", false);
             IDbProvider provider = DbProviderFactory.GetDbProvider("SqlServer-2.0");
             AssertIsSqlServer2005(provider);
             provider = DbProviderFactory.GetDbProvider("System.Data.SqlClient");
@@ -257,7 +254,7 @@ namespace Spring.Data.Common
         {
             IDbProvider provider = DbProviderFactory.GetDbProvider(providerName);
             Assert.AreEqual(productName, provider.DbMetadata.ProductName);
-            
+
             var command = provider.CreateCommand();
             Assert.IsNotNull(command);
 
@@ -286,7 +283,7 @@ namespace Spring.Data.Common
             Assert.AreEqual("MySQL, MySQL provider 1.0.7.30072", provider.DbMetadata.ProductName);
 
         }
-         
+
         */
 
         private void AssertIsSqlServer2005(IDbProvider provider)

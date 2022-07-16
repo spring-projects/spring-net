@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Reflection;
 using Spring.Aop.Framework;
 using Spring.Aop.Support;
@@ -33,7 +32,7 @@ namespace Spring.Transaction.Interceptor
 	/// <remarks>
 	/// <p>
 	/// Because the AOP framework caches advice calculations, this is normally
-	/// faster than just letting the <see cref="Spring.Transaction.Interceptor.TransactionInterceptor"/> 
+	/// faster than just letting the <see cref="Spring.Transaction.Interceptor.TransactionInterceptor"/>
 	/// run and find out itself that it has no work to do.
 	/// </p>
 	/// </remarks>
@@ -125,6 +124,6 @@ namespace Spring.Transaction.Interceptor
 	        _transactionAttributeSource = transactionInterceptor.TransactionAttributeSource;
 	    }
 
-	    #endregion        
+	    #endregion
 	}
 }

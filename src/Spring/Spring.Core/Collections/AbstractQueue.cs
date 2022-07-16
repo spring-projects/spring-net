@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,16 +18,11 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Collections;
-
-#endregion
 
 namespace Spring.Collections
 {
-	/// <summary> 
+	/// <summary>
 	/// This class provides skeletal implementations of some
 	/// <see cref="IQueue"/> operations.
 	/// </summary>
@@ -43,11 +38,11 @@ namespace Spring.Collections
 	/// <see cref="Spring.Collections.AbstractQueue.Peek()"/> methods
 	/// respectively but throw exceptions instead of indicating failure via
 	/// <see lang="false"/> or <see lang="null"/> returns.
-	/// <p/> 
+	/// <p/>
 	/// An <see cref="IQueue"/> implementation that extends this class must
 	/// minimally define a method
 	/// <see cref="Spring.Collections.AbstractQueue.Offer(object)"/> which does
-	/// not permit the insertion of <see lang="null"/> elements, along with methods 
+	/// not permit the insertion of <see lang="null"/> elements, along with methods
 	/// <see cref="Spring.Collections.AbstractQueue.Poll()"/>, and
 	/// <see cref="Spring.Collections.AbstractQueue.Peek()"/>. Typically,
 	/// additional methods will be overridden as well. If these requirements
@@ -72,14 +67,14 @@ namespace Spring.Collections
 		protected AbstractQueue()
 		{}
 
-		/// <summary> 
+		/// <summary>
 		/// Inserts the specified element into this queue if it is possible
 		/// to do so immediately without violating capacity restrictions.
 		/// </summary>
 		/// <param name="objectToAdd">
 		/// The element to add.
 		/// </param>
-		/// <returns> 
+		/// <returns>
 		/// <see lang="true"/> if successful.
 		/// </returns>
 		/// <exception cref="System.InvalidOperationException">
@@ -97,7 +92,7 @@ namespace Spring.Collections
 			}
 		}
 
-		/// <summary> 
+		/// <summary>
 		/// Retrieves and removes the head of this queue.
 		/// </summary>
 		/// <remarks>
@@ -107,7 +102,7 @@ namespace Spring.Collections
 		/// it throws an exception if this queue is empty.
 		/// </p>
 		/// </remarks>
-		/// <returns> 
+		/// <returns>
 		/// The head of this queue
 		/// </returns>
 		/// <exception cref="NoElementsException">
@@ -127,7 +122,7 @@ namespace Spring.Collections
 		}
 
 
-		/// <summary> 
+		/// <summary>
 		/// Retrieves, but does not remove, the head of this queue.
 		/// </summary>
 		/// <remarks>
@@ -158,7 +153,7 @@ namespace Spring.Collections
 			}
 		}
 
-		/// <summary> 
+		/// <summary>
 		/// Removes all of the elements from this queue.
 		/// </summary>
 		/// <remarks>
@@ -179,7 +174,7 @@ namespace Spring.Collections
 			}
 		}
 
-		/// <summary> 
+		/// <summary>
 		/// Adds all of the elements in the supplied <paramref name="collection"/>
 		/// to this queue.
 		/// </summary>
@@ -210,7 +205,7 @@ namespace Spring.Collections
 		/// If the supplied <paramref name="collection"/> or any one of its elements are <see lang="null"/>.
 		/// </exception>
 		/// <exception cref="System.ArgumentException">
-		/// If the collection is the current <see cref="Spring.Collections.IQueue"/> or 
+		/// If the collection is the current <see cref="Spring.Collections.IQueue"/> or
 		/// the collection size is greater than the queue capacity.
 		/// </exception>
 		public virtual bool AddAll(ICollection collection)
@@ -242,7 +237,7 @@ namespace Spring.Collections
 			return modified;
 		}
 
-		/// <summary> 
+		/// <summary>
 		/// Inserts the specified element into this queue if it is possible to do
 		/// so immediately without violating capacity restrictions.
 		/// </summary>
@@ -272,20 +267,20 @@ namespace Spring.Collections
 		/// </exception>
 		public abstract bool Offer(object objectToAdd);
 
-		/// <summary> 
+		/// <summary>
 		/// Retrieves, but does not remove, the head of this queue,
 		/// or returns <see lang="null"/> if this queue is empty.
 		/// </summary>
-		/// <returns> 
+		/// <returns>
 		/// The head of this queue, or <see lang="null"/> if this queue is empty.
 		/// </returns>
 		public abstract object Peek();
 
-		/// <summary> 
+		/// <summary>
 		/// Retrieves and removes the head of this queue,
 		/// or returns <see lang="null"/> if this queue is empty.
 		/// </summary>
-		/// <returns> 
+		/// <returns>
 		/// The head of this queue, or <see lang="null"/> if this queue is empty.
 		/// </returns>
 		public abstract object Poll();

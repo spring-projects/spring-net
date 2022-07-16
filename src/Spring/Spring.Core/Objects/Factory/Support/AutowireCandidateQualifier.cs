@@ -14,7 +14,6 @@
 /// limitations under the License.
  */
 
-using System;
 using System.Diagnostics;
 
 namespace Spring.Objects.Factory.Support

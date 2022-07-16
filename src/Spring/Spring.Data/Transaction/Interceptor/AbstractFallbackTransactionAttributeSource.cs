@@ -14,12 +14,8 @@
  * limitations under the License.
  */
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Reflection;
-
-using Spring.Collections;
 using Spring.Util;
 using Spring.Core;
 
@@ -159,7 +155,7 @@ namespace Spring.Transaction.Interceptor
 
 		/// <summary>
 		/// Return the transaction attribute, given this set of attributes
-		/// attached to a method or class. Return null if it's not transactional.  
+		/// attached to a method or class. Return null if it's not transactional.
 		/// </summary>
 		/// <remarks>
 		/// Protected rather than private as subclasses may want to customize

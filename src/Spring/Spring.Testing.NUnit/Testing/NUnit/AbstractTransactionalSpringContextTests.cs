@@ -1,4 +1,3 @@
-using System;
 using Spring.Transaction;
 using Spring.Transaction.Support;
 
@@ -41,16 +40,16 @@ namespace Spring.Testing.NUnit
     /// Dependency Injection mechanism. If using the superclass's Field Injection mechanism,
     /// the implementation should be named "transactionManager". This mechanism allows the
     /// use of this superclass even when there's more than one transaction manager in the context.</p>
-    /// 
+    ///
     /// <p><i>This superclass can also be used without transaction management, if no
     /// IPlatformTransactionManager object is found in the context provided. Be careful about
     /// using this mode, as it allows the potential to permanently modify data.
     /// This mode is available only if dependency checking is turned off in
     /// the AbstractDependencyInjectionSpringContextTests superclass. The non-transactional
     /// capability is provided to enable use of the same subclass in different environments.</i></p>
-    /// 
+    ///
     /// </remarks>
-    ///     
+    ///
     /// <author>Rod Johnson</author>
     /// <author>Juergen Hoeller</author>
     /// <author>Rick Evans</author>

@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Xml;
 using Spring.Core.IO;
 using Spring.Objects.Factory.Config;
@@ -55,7 +54,7 @@ namespace Spring.Objects.Factory.Xml
         /// </summary>
         /// <param name="resource">The resource.</param>
         /// <param name="reader">The reader.</param>
-        public XmlReaderContext(IResource resource, IObjectDefinitionReader reader) 
+        public XmlReaderContext(IResource resource, IObjectDefinitionReader reader)
             : this(resource, reader, new DefaultObjectDefinitionFactory())
         {}
 
@@ -65,7 +64,7 @@ namespace Spring.Objects.Factory.Xml
         /// <param name="resource">The resource.</param>
         /// <param name="reader">The reader.</param>
         /// <param name="objectDefinitionFactory">The factory to use for creating new <see cref="IObjectDefinition"/> instances.</param>
-        internal XmlReaderContext(IResource resource, IObjectDefinitionReader reader, IObjectDefinitionFactory objectDefinitionFactory) 
+        internal XmlReaderContext(IResource resource, IObjectDefinitionReader reader, IObjectDefinitionFactory objectDefinitionFactory)
             : base(resource)
         {
             this.reader = reader;
@@ -248,6 +247,6 @@ namespace Spring.Objects.Factory.Xml
         {
             throw new FatalObjectException(message);
         }
-        
+
     }
 }

@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using Common.Logging;
 using Spring.Data.Core;
 using Spring.Messaging.Core;
@@ -41,47 +40,47 @@ namespace Spring.Messaging.Listener
     /// <para>
     /// This container distinguishes between two types of <see cref="IPlatformTransactionManager"/>
     /// implementations.
-    /// </para>  
+    /// </para>
     /// <para>If you specify a <see cref="MessageQueueTransactionManager"/> then
-    /// a MSMQ <see cref="MessageQueueTransaction"/> will be started 
-    /// before receiving the message and used as part of the container's recieve operation.  The 
-    /// <see cref="MessageQueueTransactionManager"/> binds the <see cref="MessageQueueTransaction"/> 
-    /// to thread local storage and as such will implicitly be used by 
+    /// a MSMQ <see cref="MessageQueueTransaction"/> will be started
+    /// before receiving the message and used as part of the container's recieve operation.  The
+    /// <see cref="MessageQueueTransactionManager"/> binds the <see cref="MessageQueueTransaction"/>
+    /// to thread local storage and as such will implicitly be used by
     /// <see cref="MessageQueueTemplate"/> send and receive operations to a transactional queue.
     /// </para>
     /// <para>
     /// Service layer operations that are called inside the message listener will typically
     /// be transactional based on using standard Spring declarative transaction management
-    /// functionality.  In case of exceptions in the service layer, the database operation 
-    /// will have been rolled back and the <see cref="IMessageTransactionExceptionHandler"/> 
-    /// that is later invoked should decide to either commit the surrounding local 
-    /// MSMQ based transaction (removing the message from the queue) or to rollback 
+    /// functionality.  In case of exceptions in the service layer, the database operation
+    /// will have been rolled back and the <see cref="IMessageTransactionExceptionHandler"/>
+    /// that is later invoked should decide to either commit the surrounding local
+    /// MSMQ based transaction (removing the message from the queue) or to rollback
     /// (placing the message back on the queue for redelivery).
     /// </para>
     /// <para>
-    /// The use of a transactional service layer in combination with 
+    /// The use of a transactional service layer in combination with
     /// a container managed <see cref="MessageQueueTransaction"/> is a powerful combination
-    /// that can be used to achieve "exactly one" transaction message processing with 
-    /// database operations that are commonly associated with using transactional messaging and 
+    /// that can be used to achieve "exactly one" transaction message processing with
+    /// database operations that are commonly associated with using transactional messaging and
     /// distributed transactions (i.e. both the messaging and database operation commit or rollback
-    /// together).  
+    /// together).
     /// </para>
     /// <para>
     /// The additional programming logic needed to achieve this is to keep track of the Message.Id
-    /// that has been processed successfully within the transactional service layer.  
-    /// This is needed as there may be a system failure (e.g. power goes off) 
+    /// that has been processed successfully within the transactional service layer.
+    /// This is needed as there may be a system failure (e.g. power goes off)
     /// between the 'inner' database commit and the 'outer' messaging commit, resulting
     /// in message redelivery.  The transactional service layer needs logic to detect if incoming
     /// message was processed successfully. It can do this by checking the database for an
     /// indication of successfull processing, perhaps by recording the Message.Id itself in a
-    /// status table.  If the transactional service layer determines that the message has 
-    /// already been processed, it can throw a specific exception for thise case.  The 
-    /// container's exception handler will recognize this exception type and vote to commit 
-    /// (remove from the queue) the 'outer' messaging transaction.  
-    /// Spring provides an exception handler with this functionality, 
+    /// status table.  If the transactional service layer determines that the message has
+    /// already been processed, it can throw a specific exception for thise case.  The
+    /// container's exception handler will recognize this exception type and vote to commit
+    /// (remove from the queue) the 'outer' messaging transaction.
+    /// Spring provides an exception handler with this functionality,
     /// see <see cref="SendToQueueExceptionHandler"/> for more information.
     /// </para>
-    /// <para>If you specify an implementation of <see cref="IResourceTransactionManager"/> 
+    /// <para>If you specify an implementation of <see cref="IResourceTransactionManager"/>
     /// (e.g. <see cref="AdoPlatformTransactionManager"/> or HibernateTransactionManager) then
     /// an local database transaction will be started before receiving the message.  By default,
     /// the container will also start a local <see cref="MessageQueueTransaction"/>
@@ -91,24 +90,24 @@ namespace Spring.Messaging.Listener
     /// to false.  Also by default, the <see cref="MessageQueueTransaction"/>
     /// will be bound to thread local storage such that any <see cref="MessageQueueTemplate"/>
     /// send or recieve operations will participate transparently in the same
-    /// <see cref="MessageQueueTransaction"/>.  If you do not want this behavior 
+    /// <see cref="MessageQueueTransaction"/>.  If you do not want this behavior
     /// set the property <see cref="ExposeContainerManagedMessageQueueTransaction"/> to false.
     /// </para>
     /// <para>In case of exceptions during <see cref="IMessageListener"/> processing
-    /// when using an implementation of 
-    /// <see cref="IResourceTransactionManager"/> (e.g. and starting a container managed 
+    /// when using an implementation of
+    /// <see cref="IResourceTransactionManager"/> (e.g. and starting a container managed
     /// <see cref="MessageQueueTransaction"/>) the container's
-    /// <see cref="IMessageTransactionExceptionHandler"/> will determine if the 
+    /// <see cref="IMessageTransactionExceptionHandler"/> will determine if the
     /// <see cref="MessageQueueTransaction"/> should commit (removing it from the queue)
-    /// or rollback (placing it back on the queue for redelivery).  The listener 
+    /// or rollback (placing it back on the queue for redelivery).  The listener
     /// exception will always
-    /// trigger a rollback in the 'outer' (e.g. <see cref="AdoPlatformTransactionManager"/> 
+    /// trigger a rollback in the 'outer' (e.g. <see cref="AdoPlatformTransactionManager"/>
     /// or HibernateTransactionManager) based transaction.
     /// </para>
     /// <para>
     /// PoisonMessage handing, that is endless redelivery of a message due to exceptions
-    /// during processing, can be detected using implementatons of the 
-    /// <see cref="IMessageTransactionExceptionHandler"/> interface.  A specific implementation 
+    /// during processing, can be detected using implementatons of the
+    /// <see cref="IMessageTransactionExceptionHandler"/> interface.  A specific implementation
     /// is provided that will move the poison message to another queue after a maximum number
     /// of redelivery attempts.  See <see cref="SendToQueueExceptionHandler"/> for more information.
     /// </para>
@@ -170,7 +169,7 @@ namespace Spring.Messaging.Listener
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether expose the 
+        /// Gets or sets a value indicating whether expose the
         /// container managed <see cref="MessageQueueTransaction"/> to thread local storage
         /// where it will be automatically used by <see cref="MessageQueueTemplate"/> send
         /// and receive operations.
@@ -178,7 +177,7 @@ namespace Spring.Messaging.Listener
         /// <remarks>
         /// Using an <see cref="MessageQueueTransactionManager"/> will always exposes a
         /// <see cref="MessageQueueTransaction"/> to thread local storage.  This property
-        /// only has effect when using a non-DTC based 
+        /// only has effect when using a non-DTC based
         /// </remarks>
         /// <value>
         /// 	<c>true</c> if [expose container managed message queue transaction]; otherwise, <c>false</c>.
@@ -218,12 +217,12 @@ namespace Spring.Messaging.Listener
 
             if (!isRtm && !isQtm)
             {
-                throw new ArgumentException("Can not use the provied IPlatformTransactionManager of type " 
-                    + PlatformTransactionManager.GetType()                     
+                throw new ArgumentException("Can not use the provied IPlatformTransactionManager of type "
+                    + PlatformTransactionManager.GetType()
                     + ".  It must implement IResourceTransactionManager or be a MessageQueueTransactionManager.");
             }
 
-            //Set useContainerManagedMessageQueueTransaction = true when using 
+            //Set useContainerManagedMessageQueueTransaction = true when using
             // 1. non-DTC based transaction manager
             // 2. not the MessageQueueTransactionManager.
             if (!useMessageQueueTransactionManagerCalled && isRtm && !isQtm)
@@ -664,7 +663,7 @@ namespace Spring.Messaging.Listener
         /// <param name="e">The exception thrown during message processing.</param>
         /// <param name="message">The message.</param>
         /// <param name="messageQueueTransaction">The message queue transaction.</param>
-        /// <returns>TransactionAction.Rollback if no exception handler is defined, otherwise the 
+        /// <returns>TransactionAction.Rollback if no exception handler is defined, otherwise the
         /// TransactionAction returned by the exception handler</returns>
         protected virtual TransactionAction InvokeTransactionalExceptionListener(Exception e, Message message,
                                                                                  MessageQueueTransaction

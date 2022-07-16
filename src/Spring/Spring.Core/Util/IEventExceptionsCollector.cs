@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 namespace Spring.Util
 {
     public interface IEventExceptionsCollector

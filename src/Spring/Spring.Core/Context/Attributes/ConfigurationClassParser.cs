@@ -18,8 +18,6 @@
 
 #endregion
 
-using System;
-using System.Collections.Generic;
 using Spring.Objects.Factory.Parsing;
 using Spring.Collections.Generic;
 using System.Reflection;

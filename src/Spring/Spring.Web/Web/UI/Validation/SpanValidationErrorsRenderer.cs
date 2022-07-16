@@ -18,7 +18,6 @@
 
 #endregion
 
-using System.Collections.Generic;
 using System.Web.UI;
 
 using Spring.Web.UI.Controls;
@@ -52,16 +51,16 @@ namespace Spring.Web.UI.Validation
                 {
                     writer.AddAttribute(HtmlTextWriterAttribute.Class, CssClass);
                 }
-                
+
                 writer.RenderBeginTag(HtmlTextWriterTag.Span);
 
                 foreach (string error in errors)
                 {
                     writer.Write(error);
                     writer.Write(" ");
-                }                
+                }
                 writer.RenderEndTag();
-                
+
             }
         }
     }

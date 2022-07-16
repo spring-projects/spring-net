@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2010 the original author or authors.
+ * Copyright ï¿½ 2002-2010 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +18,12 @@
 
 #endregion
 
-using System;
 using System.Collections;
 using Common.Logging;
 using Spring.Collections;
 using Spring.Messaging.Ems.Common;
 using Spring.Transaction.Support;
 using Spring.Util;
-using TIBCO.EMS;
 
 namespace Spring.Messaging.Ems.Connections
 {
@@ -118,11 +116,11 @@ namespace Spring.Messaging.Ems.Connections
             this.frozen = true;
         }
         #endregion
-        
+
         #region Properties
 
         /// <summary>
-        /// Gets a value indicating whether this <see cref="EmsResourceHolder"/> is frozen, namely that 
+        /// Gets a value indicating whether this <see cref="EmsResourceHolder"/> is frozen, namely that
         /// additional resources can be registered with the holder.  If using any of the constructors with
         /// a Session, the holder will be set to the frozen state.
         /// </summary>
@@ -276,7 +274,7 @@ namespace Spring.Messaging.Ems.Connections
             }
             this.connections.Clear();
             this.sessions.Clear();
-            this.sessionsPerConnection.Clear();      
+            this.sessionsPerConnection.Clear();
         }
 
         /// <summary>

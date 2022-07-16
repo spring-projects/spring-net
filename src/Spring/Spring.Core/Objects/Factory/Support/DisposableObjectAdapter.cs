@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Common.Logging;
 using Spring.Objects.Factory.Config;
@@ -48,7 +45,7 @@ namespace Spring.Objects.Factory.Support
 
             string definedDestroyMethodName = objectDefinition.DestroyMethodName;
 
-            if (definedDestroyMethodName != null && !(this.invokeDisposableObject && "Destroy".Equals(definedDestroyMethodName))) // && !beanDefinition.isExternallyManagedDestroyMethod(destroyMethodName)) 
+            if (definedDestroyMethodName != null && !(this.invokeDisposableObject && "Destroy".Equals(definedDestroyMethodName))) // && !beanDefinition.isExternallyManagedDestroyMethod(destroyMethodName))
             {
                 this.destroyMethodName = definedDestroyMethodName;
                 this.destroyMethod = DetermineDestroyMethod();

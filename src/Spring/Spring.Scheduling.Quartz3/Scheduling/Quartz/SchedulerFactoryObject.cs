@@ -14,12 +14,8 @@
 * limitations under the License.
 */
 
-using System;
 using System.Collections;
 using System.Collections.Specialized;
-using System.IO;
-using System.Linq;
-using System.Threading.Tasks;
 using Quartz;
 using Quartz.Impl;
 using Quartz.Simpl;

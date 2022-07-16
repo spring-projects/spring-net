@@ -1,5 +1,3 @@
-using System;
-
 using Stream		= System.IO.Stream;
 
 namespace Spring.Expressions.Parser.antlr

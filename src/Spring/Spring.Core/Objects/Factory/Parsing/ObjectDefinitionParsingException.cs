@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Runtime.Serialization;
 using Spring.Core.IO;
 

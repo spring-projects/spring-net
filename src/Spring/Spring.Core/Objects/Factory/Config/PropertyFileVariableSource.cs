@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,6 @@
 
 #endregion
 
-using System;
-using System.IO;
 using Spring.Core.IO;
 using Spring.Util;
 
@@ -40,11 +38,11 @@ namespace Spring.Objects.Factory.Config
         private bool ignoreMissingResources;
 
         /// <summary>
-        /// Gets or sets the locations of the property files 
+        /// Gets or sets the locations of the property files
         /// to read properties from.
         /// </summary>
         /// <value>
-        /// The locations of the property files 
+        /// The locations of the property files
         /// to read properties from.
         /// </value>
         public IResource[] Locations
@@ -66,7 +64,7 @@ namespace Spring.Objects.Factory.Config
         }
 
         /// <summary>
-        /// Sets a value indicating whether to ignore resource locations that do not exist.  This will call 
+        /// Sets a value indicating whether to ignore resource locations that do not exist.  This will call
         /// the <see cref="IResource"/> Exists property.
         /// </summary>
         /// <value>
@@ -113,17 +111,17 @@ namespace Spring.Objects.Factory.Config
                 {
                     properties = new Properties();
                     InitProperties();
-                }                
+                }
                 return properties.GetProperty(name);
             }
         }
 
         /// <summary>
-        /// Initializes properties based on the specified 
+        /// Initializes properties based on the specified
         /// property file locations.
         /// </summary>
         protected virtual void InitProperties()
-        {            
+        {
             foreach (IResource location in locations)
             {
                 bool exists = location.Exists;
@@ -134,8 +132,8 @@ namespace Spring.Objects.Factory.Config
                 using (Stream input = location.InputStream)
                 {
                     properties.Load(input);
-                }                
-            }            
+                }
+            }
         }
     }
 }

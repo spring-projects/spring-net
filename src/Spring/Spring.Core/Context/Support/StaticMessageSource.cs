@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +18,9 @@
 
 #endregion
 
-#region Imports
-
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
 using System.Text;
-
-#endregion
 
 namespace Spring.Context.Support
 {
@@ -134,7 +129,7 @@ namespace Spring.Context.Support
 		/// <seealso cref="Spring.Context.Support.AbstractMessageSource.ApplyResourcesToObject(object, string, CultureInfo)"/>
 		protected override void ApplyResourcesToObject(object value, string objectName, CultureInfo cultureInfo)
 		{
-		    if(value != null) 
+		    if(value != null)
 		    {
 		        new ComponentResourceManager(value.GetType()).ApplyResources(value, objectName, cultureInfo);
 		    }

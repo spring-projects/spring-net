@@ -2,13 +2,13 @@
 
 /*
  * Copyright © 2002-2011 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Data;
 
 namespace Spring.Data.Common
@@ -28,7 +27,7 @@ namespace Spring.Data.Common
     /// </summary>
     public interface IDbProvider
     {
-        
+
         /// <summary>
         /// Returns a new command object for executing SQL statments/Stored Procedures
         /// against the database.
@@ -43,8 +42,8 @@ namespace Spring.Data.Common
         /// for command builders, hence the return signature is object to
         /// be portable (but more loosely typed) across .NET 1.1/2.0</remarks>
         /// <returns>A new Command Builder</returns>
-        object CreateCommandBuilder();        
-        
+        object CreateCommandBuilder();
+
         /// <summary>
         /// Returns a new connection object to communicate with the database.
         /// </summary>
@@ -57,11 +56,11 @@ namespace Spring.Data.Common
         /// </summary>
         /// <returns>A new <see cref="IDbDataAdapter"/></returns>
         IDbDataAdapter CreateDataAdapter();
-        
+
         /// <summary>
         /// Returns a new parameter object for binding values to parameter
         /// placeholders in SQL statements or Stored Procedure variables.
-        /// </summary> 
+        /// </summary>
         /// <returns>A new <see cref="IDbDataParameter"/></returns>
         IDbDataParameter CreateParameter();
 
@@ -88,10 +87,10 @@ namespace Spring.Data.Common
         IDbMetadata DbMetadata
         {
             get;
-        }               
-        
-       
-        
+        }
+
+
+
         /// <summary>
         /// Connection string used to create connections.
         /// </summary>
@@ -114,13 +113,13 @@ namespace Spring.Data.Common
         /// to database access.  This can be provider dependent in .NET 1.1 since
         /// there isn't a common base class for ADO.NET exceptions.
         /// </summary>
-        /// <param name="e">The exception thrown when performing data access 
+        /// <param name="e">The exception thrown when performing data access
         /// operations.</param>
         /// <returns>
-        /// 	<c>true</c> if is a valid data access exception for the specified 
+        /// 	<c>true</c> if is a valid data access exception for the specified
         /// exception; otherwise, <c>false</c>.
         /// </returns>
         bool IsDataAccessException(Exception e);
-        
+
     }
 }

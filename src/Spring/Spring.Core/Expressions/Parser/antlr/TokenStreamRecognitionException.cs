@@ -1,5 +1,3 @@
-using System;
-
 namespace Spring.Expressions.Parser.antlr
 {
 	/*ANTLR Translator Generator
@@ -8,7 +6,7 @@ namespace Spring.Expressions.Parser.antlr
 	*
 	* $Id:$
 	*/
-	
+
 	//
 	// ANTLR C# Code Generator by Micheal Jordan
 	//                            Kunle Odutola       : kunle UNDERSCORE odutola AT hotmail DOT com
@@ -26,13 +24,13 @@ namespace Spring.Expressions.Parser.antlr
 	public class TokenStreamRecognitionException : TokenStreamException
 	{
 		public RecognitionException recog;
-		
+
 		public TokenStreamRecognitionException(RecognitionException re) :
 				base(re.Message)
 		{
 			this.recog = re;
 		}
-		
+
 		override public string ToString()
 		{
 			return recog.ToString();

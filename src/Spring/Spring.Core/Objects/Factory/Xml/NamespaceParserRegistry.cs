@@ -1,5 +1,5 @@
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-using System;
 using System.Collections;
 using System.Collections.Specialized;
 using System.Xml;
@@ -59,7 +58,7 @@ namespace Spring.Objects.Factory.Xml
         }
 
         /// <summary>
-        /// Name of the .Net config section that contains definitions 
+        /// Name of the .Net config section that contains definitions
         /// for custom config parsers.
         /// </summary>
         private const string ConfigParsersSectionName = "spring/parsers";
@@ -232,8 +231,8 @@ namespace Spring.Objects.Factory.Xml
         /// The namespace with which to associate instance of the parser.
         /// </param>
         /// <param name="schemaLocation">
-        /// The location of the XML schema that should be used for validation 
-        /// of the XML elements that belong to the specified namespace 
+        /// The location of the XML schema that should be used for validation
+        /// of the XML elements that belong to the specified namespace
         /// (can be any valid Spring.NET resource URI).
         /// </param>
         /// <exception cref="System.ArgumentException">
@@ -328,12 +327,12 @@ namespace Spring.Objects.Factory.Xml
         /// The parser instance.
         /// </param>
         /// <param name="schemaLocation">
-        /// The location of the XML schema that should be used for validation 
-        /// of the XML elements that belong to the specified namespace 
+        /// The location of the XML schema that should be used for validation
+        /// of the XML elements that belong to the specified namespace
         /// (can be any valid Spring.NET resource URI).
         /// </param>
         /// <exception cref="System.ArgumentNullException">
-        /// If <paramref name="parser"/> is <see langword="null"/>, or if 
+        /// If <paramref name="parser"/> is <see langword="null"/>, or if
         /// <paramref name="namespaceUri"/> is not specified and parser class
         /// does not have default value defined using <see cref="NamespaceParserAttribute"/>.
         /// </exception>
@@ -402,7 +401,7 @@ namespace Spring.Objects.Factory.Xml
         }
 
         /// <summary>
-        /// Returns default values for the parser namespace and schema location as 
+        /// Returns default values for the parser namespace and schema location as
         /// defined by the <see cref="NamespaceParserAttribute"/>.
         /// </summary>
         /// <param name="parserType">

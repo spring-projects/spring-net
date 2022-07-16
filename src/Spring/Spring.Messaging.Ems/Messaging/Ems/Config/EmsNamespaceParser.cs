@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using Spring.Objects.Factory.Xml;
 
 namespace Spring.Messaging.Ems.Config

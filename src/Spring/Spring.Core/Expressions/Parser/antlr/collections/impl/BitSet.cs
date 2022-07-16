@@ -1,4 +1,3 @@
-using System;
 using ArrayList					= System.Collections.ArrayList;
 
 //using CharFormatter				= antlr.CharFormatter;
@@ -19,7 +18,7 @@ namespace Spring.Expressions.Parser.antlr.collections.impl
 	//
 	// With many thanks to Eric V. Smith from the ANTLR list.
 	//
-	
+
 	/*A BitSet to replace java.util.BitSet.
 	* Primary differences are that most set operators return new sets
 	* as opposed to oring and anding "in place".  Further, a number of
@@ -41,28 +40,28 @@ namespace Spring.Expressions.Parser.antlr.collections.impl
 		protected internal const int BITS = 64; // number of bits / long
 		protected internal const int NIBBLE = 4;
 		protected internal const int LOG_BITS = 6; // 2^6 == 64
-		
+
 		/*We will often need to do a mod operator (i mod nbits).  Its
 		* turns out that, for powers of two, this mod operation is
 		* same as (i & (nbits-1)).  Since mod is slow, we use a
 		* precomputed mod mask to do the mod instead.
 		*/
 		protected internal static readonly int MOD_MASK = BITS - 1;
-		
+
 		/*The actual data bits */
 		protected internal long[] dataBits;
-		
+
 		/*Construct a bitset of size one word (64 bits) */
 		public BitSet() : this(BITS)
 		{
 		}
-		
+
 		/*Construction from a static array of longs */
 		public BitSet(long[] bits_)
 		{
 			dataBits = bits_;
 		}
-		
+
 		/*Construct a bitset given the size
 		* @param nbits The size of the bitset in bits
 		*/
@@ -70,7 +69,7 @@ namespace Spring.Expressions.Parser.antlr.collections.impl
 		{
 			dataBits = new long[((nbits - 1) >> LOG_BITS) + 1];
 		}
-		
+
 		/*or this element into this set (grow as necessary to accommodate) */
 		public virtual void  add(int el)
 		{
@@ -81,14 +80,14 @@ namespace Spring.Expressions.Parser.antlr.collections.impl
 			}
 			dataBits[n] |= bitMask(el);
 		}
-		
+
 		public virtual BitSet and(BitSet a)
 		{
 			BitSet s = (BitSet) this.Clone();
 			s.andInPlace(a);
 			return s;
 		}
-		
+
 		public virtual void  andInPlace(BitSet a)
 		{
 			int min = (int) (Math.Min(dataBits.Length, a.dataBits.Length));
@@ -102,13 +101,13 @@ namespace Spring.Expressions.Parser.antlr.collections.impl
 				dataBits[i] = 0;
 			}
 		}
-		
+
 		private static long bitMask(int bitNumber)
 		{
 			int bitPosition = bitNumber & MOD_MASK; // bitNumber mod BITS
 			return 1L << bitPosition;
 		}
-		
+
 		public virtual void  clear()
 		{
 			 for (int i = dataBits.Length - 1; i >= 0; i--)
@@ -116,7 +115,7 @@ namespace Spring.Expressions.Parser.antlr.collections.impl
 				dataBits[i] = 0;
 			}
 		}
-		
+
 		public virtual void  clear(int el)
 		{
 			int n = wordNumber(el);
@@ -127,7 +126,7 @@ namespace Spring.Expressions.Parser.antlr.collections.impl
 			}
 			dataBits[n] &= ~ bitMask(el);
 		}
-		
+
 		public virtual object Clone()
 		{
 			BitSet s;
@@ -143,7 +142,7 @@ namespace Spring.Expressions.Parser.antlr.collections.impl
 			}
 			return s;
 		}
-		
+
 		public virtual int degree()
 		{
 			int deg = 0;
@@ -163,7 +162,7 @@ namespace Spring.Expressions.Parser.antlr.collections.impl
 			}
 			return deg;
 		}
-		
+
 		override public int GetHashCode()
 		{
 			return dataBits.GetHashCode();
@@ -175,7 +174,7 @@ namespace Spring.Expressions.Parser.antlr.collections.impl
 			if ((obj != null) && (obj is BitSet))
 			{
 				BitSet bset = (BitSet) obj;
-				
+
 				int n = (int) (System.Math.Min(dataBits.Length, bset.dataBits.Length));
 				 for (int i = n; i-- > 0; )
 				{
@@ -208,7 +207,7 @@ namespace Spring.Expressions.Parser.antlr.collections.impl
 			}
 			return false;
 		}
-		
+
 		/*
 		* Grows the set to a larger number of bits.
 		* @param bit element that must fit in set
@@ -220,7 +219,7 @@ namespace Spring.Expressions.Parser.antlr.collections.impl
 			Array.Copy(dataBits, 0, newbits, 0, dataBits.Length);
 			dataBits = newbits;
 		}
-		
+
 		public virtual bool member(int el)
 		{
 			int n = wordNumber(el);
@@ -228,7 +227,7 @@ namespace Spring.Expressions.Parser.antlr.collections.impl
 				return false;
 			return (dataBits[n] & bitMask(el)) != 0;
 		}
-		
+
 		public virtual bool nil()
 		{
 			 for (int i = dataBits.Length - 1; i >= 0; i--)
@@ -238,14 +237,14 @@ namespace Spring.Expressions.Parser.antlr.collections.impl
 			}
 			return true;
 		}
-		
+
 		public virtual BitSet not()
 		{
 			BitSet s = (BitSet) this.Clone();
 			s.notInPlace();
 			return s;
 		}
-		
+
 		public virtual void  notInPlace()
 		{
 			 for (int i = dataBits.Length - 1; i >= 0; i--)
@@ -253,13 +252,13 @@ namespace Spring.Expressions.Parser.antlr.collections.impl
 				dataBits[i] = ~ dataBits[i];
 			}
 		}
-		
+
 		/*complement bits in the range 0..maxBit. */
 		public virtual void  notInPlace(int maxBit)
 		{
 			notInPlace(0, maxBit);
 		}
-		
+
 		/*complement bits in the range minBit..maxBit.*/
 		public virtual void  notInPlace(int minBit, int maxBit)
 		{
@@ -271,19 +270,19 @@ namespace Spring.Expressions.Parser.antlr.collections.impl
 				dataBits[n] ^= bitMask(i);
 			}
 		}
-		
+
 		private int numWordsToHold(int el)
 		{
 			return (el >> LOG_BITS) + 1;
 		}
-		
+
 		public static BitSet of(int el)
 		{
 			BitSet s = new BitSet(el + 1);
 			s.add(el);
 			return s;
 		}
-		
+
 		/*return this | a in a new set */
 		public virtual BitSet or(BitSet a)
 		{
@@ -291,7 +290,7 @@ namespace Spring.Expressions.Parser.antlr.collections.impl
 			s.orInPlace(a);
 			return s;
 		}
-		
+
 		public virtual void  orInPlace(BitSet a)
 		{
 			// If this is smaller than a, grow this first
@@ -305,7 +304,7 @@ namespace Spring.Expressions.Parser.antlr.collections.impl
 				dataBits[i] |= a.dataBits[i];
 			}
 		}
-		
+
 		// remove this element from this set
 		public virtual void  remove(int el)
 		{
@@ -316,7 +315,7 @@ namespace Spring.Expressions.Parser.antlr.collections.impl
 			}
 			dataBits[n] &= ~ bitMask(el);
 		}
-		
+
 		/*
 		* Sets the size of a set.
 		* @param nwords how many words the new set should be
@@ -328,12 +327,12 @@ namespace Spring.Expressions.Parser.antlr.collections.impl
 			Array.Copy(dataBits, 0, newbits, 0, n);
 			dataBits = newbits;
 		}
-		
+
 		public virtual int size()
 		{
 			return dataBits.Length << LOG_BITS; // num words * bits per word
 		}
-		
+
 		/*return how much space is being used by the dataBits array not
 		*  how many actually have member bits on.
 		*/
@@ -341,7 +340,7 @@ namespace Spring.Expressions.Parser.antlr.collections.impl
 		{
 			return dataBits.Length;
 		}
-		
+
 		/*Is this contained within a? */
 		public virtual bool subset(BitSet a)
 		{
@@ -349,7 +348,7 @@ namespace Spring.Expressions.Parser.antlr.collections.impl
 				return false;
 			return this.and(a).Equals(this);
 		}
-		
+
 		/*Subtract the elements of 'a' from 'this' in-place.
 		* Basically, just turn off all bits of 'this' that are in 'a'.
 		*/
@@ -363,7 +362,7 @@ namespace Spring.Expressions.Parser.antlr.collections.impl
 				dataBits[i] &= ~ a.dataBits[i];
 			}
 		}
-		
+
 		public virtual int[] toArray()
 		{
 			int[] elems = new int[degree()];
@@ -377,17 +376,17 @@ namespace Spring.Expressions.Parser.antlr.collections.impl
 			}
 			return elems;
 		}
-		
+
 		public virtual long[] toPackedArray()
 		{
 			return dataBits;
 		}
-		
+
 		override public string ToString()
 		{
 			return ToString(",");
 		}
-		
+
 		/*Transform a bit set into a string by formatting each element as an integer
 		* @separator The string to put in between elements
 		* @return A commma-separated list of values
@@ -408,7 +407,7 @@ namespace Spring.Expressions.Parser.antlr.collections.impl
 			}
 			return str;
 		}
-		
+
 		/*Create a string representation where instead of integer elements, the
 		* ith element of vocabulary is displayed instead.  Vocabulary is a Vector
 		* of Strings.
@@ -446,7 +445,7 @@ namespace Spring.Expressions.Parser.antlr.collections.impl
 			}
 			return str;
 		}
-		
+
 		/*
 		* Dump a comma-separated list of the words making up the bit set.
 		* Split each 64 bit number into two more manageable 32 bit numbers.
@@ -469,7 +468,7 @@ namespace Spring.Expressions.Parser.antlr.collections.impl
 			}
 			return s;
 		}
-		
+
 		/*
 		* Dump a comma-separated list of the words making up the bit set.
 		* This generates a comma-separated list of Java-like long int constants.
@@ -485,7 +484,7 @@ namespace Spring.Expressions.Parser.antlr.collections.impl
 			}
 			return s;
 		}
-		
+
 		/*Print out the bit set but collapse char ranges. */
 /*		public virtual string toStringWithRanges(string separator, CharFormatter formatter)
 		{
@@ -530,7 +529,7 @@ namespace Spring.Expressions.Parser.antlr.collections.impl
 			}
 			return str;
 		}
-*/		
+*/
 		private static int wordNumber(int bit)
 		{
 			return bit >> LOG_BITS; // bit / BITS

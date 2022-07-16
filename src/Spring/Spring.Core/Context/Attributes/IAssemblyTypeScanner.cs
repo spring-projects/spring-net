@@ -18,8 +18,6 @@
 
 #endregion
 
-using System;
-using System.Collections.Generic;
 using System.Reflection;
 
 namespace Spring.Context.Attributes

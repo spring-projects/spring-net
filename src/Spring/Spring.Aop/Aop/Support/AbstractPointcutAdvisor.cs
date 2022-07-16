@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
-using System;
 using AopAlliance.Aop;
 using Spring.Core;
 
 namespace Spring.Aop.Support
 {
     /// <summary>
-    /// Abstract base class for <see cref="IPointcutAdvisor"/> implementations.  
+    /// Abstract base class for <see cref="IPointcutAdvisor"/> implementations.
     /// </summary>
     /// <remarks>
     /// Can be subclassed for returning a specific pointcut/advice or a freely configurable pointcut/advice.
@@ -93,7 +92,7 @@ namespace Spring.Aop.Support
 
         /// <summary>
         /// Determines whether the specified <see cref="System.Object"/>
-        /// is equal to the current <see cref="System.Object"/>.  
+        /// is equal to the current <see cref="System.Object"/>.
         /// </summary>
         /// <param name="o">The advisor to compare with.</param>
         /// <returns>

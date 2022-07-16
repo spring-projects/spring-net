@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Runtime.Serialization;
 using Spring.Util;
 
@@ -51,7 +50,7 @@ namespace Spring.Expressions
             : base(info, context)
         {
         }
-        
+
         /// <summary>
         /// Returns a value for the logical AND operator node.
         /// </summary>

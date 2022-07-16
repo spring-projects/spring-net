@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 using Spring.Context;
 using Spring.Messaging.Core;
@@ -13,7 +12,7 @@ using System.Messaging;
 namespace Spring.Messaging.Listener
 {
     /// <summary>
-    /// Provides common functionality to exception handlers that will send the exceptional message to 
+    /// Provides common functionality to exception handlers that will send the exceptional message to
     /// another queue.
     /// </summary>
     /// <remarks>Allows for setting of MaxRetry limit and contains an internal dictionary to keep track
@@ -110,7 +109,7 @@ namespace Spring.Messaging.Listener
         #region IInitializingObject Members
 
         /// <summary>
-        /// Ensure that the MessageQueueObject name is set and creates a 
+        /// Ensure that the MessageQueueObject name is set and creates a
         /// <see cref="DefaultMessageQueueFactory"/> if no <see cref="IMessageQueueFactory"/>
         /// is specified.
         /// </summary>
@@ -132,7 +131,7 @@ namespace Spring.Messaging.Listener
                 mqf.ApplicationContext = applicationContext;
                 messageQueueFactory = mqf;
             }
-            //Create an instance so we can 'fail-fast' if there isn't an DefaultMessageQueue unde 
+            //Create an instance so we can 'fail-fast' if there isn't an DefaultMessageQueue unde
             MessageQueue mq = MessageQueueFactory.CreateMessageQueue(messageQueueObjectName);
         }
 

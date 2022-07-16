@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Reflection;
 using Spring.Objects.Factory.Parsing;
 

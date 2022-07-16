@@ -20,7 +20,6 @@
 
 using BenchmarkDotNet.Attributes;
 using Spring.Benchmark.Classes;
-using Spring.Context;
 using Spring.Context.Support;
 
 namespace Spring.Benchmark

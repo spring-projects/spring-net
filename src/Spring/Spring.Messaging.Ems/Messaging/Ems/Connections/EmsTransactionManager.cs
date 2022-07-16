@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Data;
 using Common.Logging;
 using Spring.Messaging.Ems.Common;
@@ -26,13 +25,12 @@ using Spring.Messaging.Ems.Core;
 using Spring.Objects.Factory;
 using Spring.Transaction;
 using Spring.Transaction.Support;
-using TIBCO.EMS;
 
 namespace Spring.Messaging.Ems.Connections
 {
     /// <summary>
     /// A <see cref="AbstractPlatformTransactionManager"/> implementation
-    /// for a single EMS <code>ConnectionFactory</code>. Binds a 
+    /// for a single EMS <code>ConnectionFactory</code>. Binds a
     /// Connection/Session pair from the specified ConnecctionFactory to the thread,
     /// potentially allowing for one thread-bound Session per ConnectionFactory.
     /// </summary>
@@ -40,7 +38,7 @@ namespace Spring.Messaging.Ems.Connections
     /// <para>
     /// Application code is required to retrieve the transactional Session via
     /// <see cref="ConnectionFactoryUtils.GetTransactionalSession"/>.  Spring's
-    /// <see cref="EmsTemplate"/> will autodetect a thread-bound Session and 
+    /// <see cref="EmsTemplate"/> will autodetect a thread-bound Session and
     /// automatically participate in it.
     /// </para>
     /// <para>
@@ -51,7 +49,7 @@ namespace Spring.Messaging.Ems.Connections
     /// </remarks>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
-    public class EmsTransactionManager : AbstractPlatformTransactionManager, 
+    public class EmsTransactionManager : AbstractPlatformTransactionManager,
         IResourceTransactionManager, IInitializingObject
     {
 
@@ -59,7 +57,7 @@ namespace Spring.Messaging.Ems.Connections
 
         private static readonly ILog LOG = LogManager.GetLogger(typeof(EmsTransactionManager));
 
-        #endregion 
+        #endregion
 
         private IConnectionFactory connectionFactory;
 
@@ -67,7 +65,7 @@ namespace Spring.Messaging.Ems.Connections
         /// Initializes a new instance of the <see cref="EmsTransactionManager"/> class.
         /// </summary>
         /// <remarks>
-        /// The ConnectionFactory has to be set before using the instance. 
+        /// The ConnectionFactory has to be set before using the instance.
         /// This constructor can be used to prepare a EmsTemplate via a ApplicationContext,
         /// typically setting the ConnectionFactory via ConnectionFactory property.
         /// <para>
@@ -192,7 +190,7 @@ namespace Spring.Messaging.Ems.Connections
                     txObject.ResourceHolder.TimeoutInSeconds = timeout;
                 }
                 TransactionSynchronizationManager.BindResource(ConnectionFactory, txObject.ResourceHolder);
-                
+
 
 
             } catch (EMSException ex)
@@ -214,7 +212,7 @@ namespace Spring.Messaging.Ems.Connections
                 }
                 throw new CannotCreateTransactionException("Could not create EMS Transaction", ex);
             }
-               
+
         }
 
         /// <summary>
@@ -281,7 +279,7 @@ namespace Spring.Messaging.Ems.Connections
                 throw new UnexpectedRollbackException("EMS transaction rolled back", ex);
             }
             catch (EMSException ex)
-            {                
+            {
                 throw new TransactionSystemException("Could not commit EMS transaction.", ex);
             }
         }
@@ -303,7 +301,7 @@ namespace Spring.Messaging.Ems.Connections
                 {
                     LOG.Debug("Rolling back EMS transaction on Session [" + session + "]");
                 }
-                session.Rollback();              
+                session.Rollback();
             }
             catch (EMSException ex)
             {

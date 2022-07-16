@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-using System;
-using System.Collections.Generic;
 using Spring.Objects.Factory.Config;
 
 namespace Spring.Objects.Factory.Support
@@ -55,7 +53,7 @@ namespace Spring.Objects.Factory.Support
             builder.objectDefinition = new GenericObjectDefinition();
             return builder;
         }
-       
+
         /// <summary>
         /// Creates a new <see cref="ObjectDefinitionBuilder"/> used to construct a <see cref="Spring.Objects.Factory.Support.GenericObjectDefinition"/>.
         /// </summary>
@@ -67,7 +65,7 @@ namespace Spring.Objects.Factory.Support
             builder.objectDefinition.ObjectType = objectType;
             return builder;
         }
-       
+
         /// <summary>
         /// Creates a new <see cref="ObjectDefinitionBuilder"/> used to construct a <see cref="Spring.Objects.Factory.Support.GenericObjectDefinition"/>.
         /// </summary>
@@ -79,7 +77,7 @@ namespace Spring.Objects.Factory.Support
             builder.objectDefinition.ObjectTypeName = objectTypeName;
             return builder;
         }
-       
+
         /// <summary>
         /// Create a new <code>ObjectDefinitionBuilder</code> used to construct a root object definition.
         /// </summary>
@@ -115,7 +113,7 @@ namespace Spring.Objects.Factory.Support
 
             return builder;
 
-        }        
+        }
 
         /// <summary>
         /// Create a new <code>ObjectDefinitionBuilder</code> used to construct a root object definition.
@@ -124,7 +122,7 @@ namespace Spring.Objects.Factory.Support
         /// <param name="objectType">Type of the object.</param>
         /// <returns>A new <code>ObjectDefinitionBuilder</code> instance.</returns>
         public static ObjectDefinitionBuilder RootObjectDefinition(IObjectDefinitionFactory objectDefinitionFactory,
-                                                                   Type objectType) 
+                                                                   Type objectType)
         {
             return RootObjectDefinition(objectDefinitionFactory, objectType, null);
         }
@@ -140,7 +138,7 @@ namespace Spring.Objects.Factory.Support
                                                                    Type objectType, string factoryMethodName)
         {
             ObjectDefinitionBuilder builder = new ObjectDefinitionBuilder();
-            
+
             builder.objectDefinitionFactory = objectDefinitionFactory;
 
             builder.objectDefinition =

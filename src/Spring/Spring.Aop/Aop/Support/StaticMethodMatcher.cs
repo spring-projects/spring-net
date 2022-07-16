@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using System.Reflection;
 using System.Runtime.Serialization;
 
@@ -28,9 +27,9 @@ using System.Runtime.Serialization;
 
 namespace Spring.Aop.Support
 {
-	/// <summary> 
+	/// <summary>
 	/// Convenient abstract superclass for static method matchers that don't care
-	/// about arguments at runtime. 
+	/// about arguments at runtime.
 	/// </summary>
 	/// <author>Rod Johnson</author>
 	/// <author>Aleksandar Seovic (.NET)</author>

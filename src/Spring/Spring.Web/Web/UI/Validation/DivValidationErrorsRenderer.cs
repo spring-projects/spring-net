@@ -18,7 +18,6 @@
 
 #endregion
 
-using System.Collections.Generic;
 using System.Web.UI;
 
 namespace Spring.Web.UI.Validation
@@ -48,9 +47,9 @@ namespace Spring.Web.UI.Validation
             {
                 writer.AddAttribute(HtmlTextWriterAttribute.Class, CssClass);
             }
-            
+
             writer.AddAttribute(HtmlTextWriterAttribute.Id, "ctl00_body_validationSummary");
-            
+
             writer.RenderBeginTag(HtmlTextWriterTag.Div);
             if (errors != null && errors.Count > 0)
             {
@@ -59,7 +58,7 @@ namespace Spring.Web.UI.Validation
                     writer.WriteLine(error);
                     writer.WriteFullBeginTag("br /");
                 }
-            }            
+            }
             writer.RenderEndTag();
         }
     }
