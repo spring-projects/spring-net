@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,6 @@
 
 #endregion
 
-#region Imports
-
 using System.Collections.Generic;
 
 using NUnit.Framework;
@@ -29,8 +27,6 @@ using Spring.Context;
 using Spring.Context.Support;
 using Spring.Objects;
 using Spring.Objects.Factory.Xml;
-
-#endregion
 
 namespace Spring.Aop.Config
 {
@@ -46,7 +42,7 @@ namespace Spring.Aop.Config
 
         [SetUp]
         public void Setup()
-        {            
+        {
             // IS WELLKNOWN NOW
             //NamespaceParserRegistry.RegisterParser(typeof(AopNamespaceParser));
             //ctx = new XmlApplicationContext( "assembly://Spring.Aop.Tests/Spring.Aop.Config/AopNamespaceParserTests.xml");
@@ -71,11 +67,11 @@ namespace Spring.Aop.Config
             Assert.IsTrue(AopUtils.IsAopProxy(testObject), "Object should be an AOP proxy");
 
             IAdvised advised = testObject as IAdvised;
-            Assert.IsNotNull(advised);            
+            Assert.IsNotNull(advised);
             IList<IAdvisor> advisors = advised.Advisors;
             Assert.IsTrue(advisors.Count > 0, "Advisors should not be empty");
-            
-           
+
+
         }
 
         [Test]
@@ -99,6 +95,6 @@ namespace Spring.Aop.Config
             return ctx.GetObject("testObject", typeof (ITestObject)) as ITestObject;
         }
 
-        
+
     }
 }

@@ -18,14 +18,13 @@
 
 #endregion
 
-using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 
 namespace Spring.Aop.Framework.DynamicProxy
 {
     /// <summary>
-    /// <see cref="Spring.Proxy.IProxyMethodBuilder"/> implementation 
+    /// <see cref="Spring.Proxy.IProxyMethodBuilder"/> implementation
     /// that delegates method calls to introduction object.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
@@ -45,7 +44,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         /// The <see cref="IAopProxyTypeGenerator"/> implementation to use.
         /// </param>
         /// <param name="targetMethods">
-        /// 
+        ///
         /// </param>
         /// <param name="index">index of the introduction to delegate call to</param>
         public IntroductionProxyMethodBuilder(
@@ -57,7 +56,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         }
 
         /// <summary>
-        /// Generates the IL instructions that pushes 
+        /// Generates the IL instructions that pushes
         /// the introduction type on stack.
         /// </summary>
         /// <param name="il">The IL generator to use.</param>
@@ -68,7 +67,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         }
 
         /// <summary>
-        /// Generates the IL instructions that pushes 
+        /// Generates the IL instructions that pushes
         /// the introduction instance on stack.
         /// </summary>
         /// <param name="il">The IL generator to use.</param>

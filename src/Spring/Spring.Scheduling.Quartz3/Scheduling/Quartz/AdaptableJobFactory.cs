@@ -14,16 +14,13 @@
 * limitations under the License.
 */
 
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Quartz;
 using Quartz.Spi;
 using Quartz.Util;
 
 namespace Spring.Scheduling.Quartz
 {
-    /// <summary> 
+    /// <summary>
     /// JobFactory implementation that supports <see cref="ThreadStart" />
     /// objects as well as standard Quartz <see cref="IJob" /> instances.
     /// </summary>
@@ -50,7 +47,7 @@ namespace Spring.Scheduling.Quartz
         /// and other info relating to the trigger firing can be obtained.</param>
         /// <param name="scheduler">The scheduler instance.</param>
         /// <returns>the newly instantiated Job</returns>
-        /// <throws>SchedulerException if there is a problem instantiating the Job.</throws>        
+        /// <throws>SchedulerException if there is a problem instantiating the Job.</throws>
         public virtual IJob NewJob(TriggerFiredBundle bundle, IScheduler scheduler)
         {
             try
@@ -71,7 +68,7 @@ namespace Spring.Scheduling.Quartz
         {
         }
 
-        /// <summary> 
+        /// <summary>
         /// Create an instance of the specified job class.
         /// <p>
         /// Can be overridden to post-process the job instance.
@@ -87,7 +84,7 @@ namespace Spring.Scheduling.Quartz
             return ObjectUtils.InstantiateType<object>(bundle.JobDetail.JobType);
         }
 
-        /// <summary> 
+        /// <summary>
         /// Adapt the given job object to the Quartz Job interface.
         /// </summary>
         /// <remarks>

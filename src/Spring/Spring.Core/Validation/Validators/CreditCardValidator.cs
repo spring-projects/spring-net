@@ -18,13 +18,8 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using Spring.Expressions;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Validation.Validators
 {
@@ -45,9 +40,9 @@ namespace Spring.Validation.Validators
         /// Credit card type validator to use.
         /// </summary>
         /// <remarks>
-        /// Can be concrete implementations of <see cref="ICreditCardType"/> 
+        /// Can be concrete implementations of <see cref="ICreditCardType"/>
         /// interface. The following are available implementations:
-        /// <see cref="Visa"/>, <see cref="Mastercard"/>, <see cref="Amex"/>, 
+        /// <see cref="Visa"/>, <see cref="Mastercard"/>, <see cref="Amex"/>,
         /// <see cref="Discover"/>.
         /// </remarks>
         public ICreditCardType CardType
@@ -57,9 +52,9 @@ namespace Spring.Validation.Validators
         }
 
         #endregion
-        
+
         #region Constructors
-               
+
         /// <summary>
         /// Creates a new instance of the <b>UrlValidator</b> class.
         /// </summary>
@@ -107,7 +102,7 @@ namespace Spring.Validation.Validators
         /// </remarks>
         /// <param name="objectToValidate">The object to validate.</param>
         /// <returns>
-        /// <see lang="true"/> if the supplied <paramref name="objectToValidate"/> is valid 
+        /// <see lang="true"/> if the supplied <paramref name="objectToValidate"/> is valid
         /// credit card number.
         /// </returns>
         protected override bool Validate(object objectToValidate)
@@ -117,7 +112,7 @@ namespace Spring.Validation.Validators
             {
                 return true;
             }
-            
+
             return IsValid(text);
         }
 
@@ -152,13 +147,13 @@ namespace Spring.Validation.Validators
             if (CardType != null)
             {
                 return ValidateCard(card);
-            } 
+            }
             else
             {
                 throw new ArgumentException("Property CardType cannot be null.");
             }
         }
-        
+
         /// <summary>
         /// Validates card number with the specified <see cref="CardType"/> validator.
         /// </summary>
@@ -171,12 +166,12 @@ namespace Spring.Validation.Validators
         private bool ValidateCard(string cardNumber)
         {
             String card = cardNumber == null ? null : cardNumber.Trim();
-            
+
             if (card == null)
             {
                 return false;
             }
-            
+
             return CardType.Matches(card);
         }
 
@@ -221,12 +216,12 @@ namespace Spring.Validation.Validators
             return (sum == 0) ? false : (sum % 10 == 0);
         }
 
-        #endregion        
+        #endregion
 
         #region Data members
 
         private ICreditCardType m_cardType;
-        
+
         #endregion
     }
 
@@ -239,7 +234,7 @@ namespace Spring.Validation.Validators
     public interface ICreditCardType
     {
         /// <summary>
-        /// Returns true if the card number matches this type of 
+        /// Returns true if the card number matches this type of
         /// credit card.
         /// </summary>
         /// <param name="card">

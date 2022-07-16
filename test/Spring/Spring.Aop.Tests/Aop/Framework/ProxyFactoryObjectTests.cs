@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,16 +18,12 @@
 
 #endregion
 
-#region Imports
-
 using System;
 using System.IO;
-using System.Security.Policy;
 using System.Collections;
 using System.Reflection;
 using System.Text;
 using System.Threading;
-using System.Web;
 
 using AopAlliance.Aop;
 using AopAlliance.Intercept;
@@ -36,7 +32,6 @@ using FakeItEasy;
 
 using NUnit.Framework;
 using Spring.Aop.Advice;
-using Spring.Aop.Framework.Adapter;
 using Spring.Aop.Interceptor;
 using Spring.Aop.Support;
 using Spring.Aop.Target;
@@ -48,8 +43,6 @@ using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Xml;
 using Spring.Proxy;
 using Spring.Threading;
-
-#endregion
 
 namespace Spring.Aop.Framework
 {
@@ -411,12 +404,11 @@ namespace Spring.Aop.Framework
         public void CanAddThrowsAdviceWithoutAdvisor()
         {
             IObjectFactory f = new XmlObjectFactory(new ReadOnlyXmlTestResource("throwsAdvice.xml", GetType()));
-            ThrowsAdviceInterceptorTests.MyThrowsHandler th =
-                (ThrowsAdviceInterceptorTests.MyThrowsHandler)f.GetObject("throwsAdvice");
+            var th = (Spring.Aop.Framework.Adapter.ThrowsAdviceInterceptorTests.MyThrowsHandler) f.GetObject("throwsAdvice");
             CountingBeforeAdvice cba = (CountingBeforeAdvice)f.GetObject("countingBeforeAdvice");
             Assert.AreEqual(0, cba.GetCalls());
             Assert.AreEqual(0, th.GetCalls());
-            ThrowsAdviceInterceptorTests.IEcho echo = (ThrowsAdviceInterceptorTests.IEcho)f.GetObject("throwsAdvised");
+            var echo = (Spring.Aop.Framework.Adapter.ThrowsAdviceInterceptorTests.IEcho) f.GetObject("throwsAdvised");
             echo.A = 12;
             Assert.AreEqual(1, cba.GetCalls());
             Assert.AreEqual(0, th.GetCalls());
@@ -434,13 +426,13 @@ namespace Spring.Aop.Framework
             Assert.AreEqual(0, th.GetCalls());
 
             // Handler knows how to handle this exception
-            expected = new HttpException();
+            expected = new System.Web.HttpException();
             try
             {
                 echo.EchoException(1, expected);
                 Assert.Fail();
             }
-            catch (HttpException ex)
+            catch (System.Web.HttpException ex)
             {
                 Assert.AreEqual(expected, ex);
             }
@@ -448,7 +440,7 @@ namespace Spring.Aop.Framework
             Assert.AreEqual(1, th.GetCalls("HttpException"));
         }
 #endif
-        
+
         /// <summary> Checks that globals get invoked,
         /// and that they can add aspect interfaces unavailable
         /// to other objects. These interfaces don't need
@@ -789,7 +781,7 @@ namespace Spring.Aop.Framework
             {
                 AppDomainSetup setup = new AppDomainSetup();
                 setup.ApplicationBase = Environment.CurrentDirectory;
-                domain = AppDomain.CreateDomain("Spring", new Evidence(AppDomain.CurrentDomain.Evidence), setup);
+                domain = AppDomain.CreateDomain("Spring", new System.Security.Policy.Evidence(AppDomain.CurrentDomain.Evidence), setup);
                 object command = domain.CreateInstanceAndUnwrap(GetType().Assembly.FullName, typeof(RemotableCommand).FullName);
 
                 ProxyFactoryObject fac = new ProxyFactoryObject();

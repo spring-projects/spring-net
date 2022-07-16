@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2010 the original author or authors.
+ * Copyright ï¿½ 2002-2010 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,13 +19,12 @@
 #endregion
 
 using Spring.Messaging.Ems.Common;
-using TIBCO.EMS;
 
 namespace Spring.Messaging.Ems.Support.Converter
 {
     /// <summary> Strategy interface that specifies a IMessageConverter
     /// between .NET objects and EMS messages.
-    /// 
+    ///
     /// </summary>
     /// <author>Mark Pollack</author>
     /// <author>Juergen Hoeller</author>

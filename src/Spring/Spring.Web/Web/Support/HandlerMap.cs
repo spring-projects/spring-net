@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using System.Collections;
 using System.Text.RegularExpressions;
 using System.Web;
@@ -31,7 +30,7 @@ using Common.Logging;
 namespace Spring.Web.Support
 {
     /// <summary>
-    /// Holds a list of url <see cref="Regex"/> expressions and their corresponding names of responsible <see cref="IHttpHandlerFactory"/> 
+    /// Holds a list of url <see cref="Regex"/> expressions and their corresponding names of responsible <see cref="IHttpHandlerFactory"/>
     /// or <see cref="IHttpHandler"/> objects managed by the container.
     /// </summary>
     /// <author>Erich Eichinger</author>

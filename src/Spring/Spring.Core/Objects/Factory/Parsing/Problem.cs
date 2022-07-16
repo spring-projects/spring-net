@@ -18,8 +18,6 @@
 
 #endregion
 
-
-using System;
 using System.Text;
 using Spring.Util;
 

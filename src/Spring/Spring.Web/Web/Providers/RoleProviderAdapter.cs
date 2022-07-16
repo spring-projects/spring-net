@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using System.Collections.Specialized;
 using System.Security.Permissions;
 using System.Web;
@@ -37,9 +36,9 @@ namespace Spring.Web.Providers
     /// </summary>
     /// <remarks>
     /// <p>
-    /// Configuration for this provider <b>requires</b> <c>providerId</c> element set in web.config file, 
-    /// as the Id of wrapped provider (defined in the Spring context).  
-    /// </p>    
+    /// Configuration for this provider <b>requires</b> <c>providerId</c> element set in web.config file,
+    /// as the Id of wrapped provider (defined in the Spring context).
+    /// </p>
     /// </remarks>
     /// <author>Damjan Tomic</author>
     [AspNetHostingPermission(SecurityAction.LinkDemand, Level = AspNetHostingPermissionLevel.Minimal)]
@@ -61,22 +60,22 @@ namespace Spring.Web.Providers
         ///Initializes the provider.
         ///</summary>
         ///
-        ///<param name="config">A collection of the name/value pairs representing the provider-specific 
+        ///<param name="config">A collection of the name/value pairs representing the provider-specific
         /// attributes specified in the configuration for this provider.
         /// The <c>providerId</c> attribute may be used to override the name being used for looking up an object definition.
         /// </param>
         ///<param name="name">The friendly name of the provider.</param>
         ///<exception cref="T:System.ArgumentNullException">The <paramref name="name"/> or <paramref name="config"/> is null.</exception>
         ///<exception cref="T:System.InvalidOperationException">An attempt is made to call <see cref="M:System.Configuration.Provider.ProviderBase.Initialize(System.String,System.Collections.Specialized.NameValueCollection)"></see> on a provider after the provider has already been initialized.</exception>
-        ///<exception cref="T:System.ArgumentException">The <paramref name="name"/> has a length of zero or providerId attribute is not set.</exception>      
+        ///<exception cref="T:System.ArgumentException">The <paramref name="name"/> has a length of zero or providerId attribute is not set.</exception>
         public override void Initialize(string name, NameValueCollection config)
         {
             lock (this)
             {
-                if (config == null) throw new ArgumentNullException("config");                        
-            
-                string providerId = config["providerId"];            
-                if (String.IsNullOrEmpty(providerId)) 
+                if (config == null) throw new ArgumentNullException("config");
+
+                string providerId = config["providerId"];
+                if (String.IsNullOrEmpty(providerId))
                     providerId = name;
                 config.Remove("providerId");
 
@@ -84,7 +83,7 @@ namespace Spring.Web.Providers
                 this.wrappedProvider.Initialize(name,config);
             }
         }
-        
+
         ///<summary>
         ///Gets the friendly name used to refer to the provider during configuration.
         ///</summary>
@@ -96,7 +95,7 @@ namespace Spring.Web.Providers
         {
             get { return this.wrappedProvider.Name; }
         }
-        
+
         ///<summary>
         ///Gets a brief, friendly description suitable for display in administrative tools or other user interfaces (UIs).
         ///</summary>
@@ -112,7 +111,7 @@ namespace Spring.Web.Providers
         #endregion
 
         #region System.Web.Security.RoleProvider members
-                
+
 
         ///<summary>
         ///Gets a value indicating whether the specified user is in the specified role for the configured applicationName.

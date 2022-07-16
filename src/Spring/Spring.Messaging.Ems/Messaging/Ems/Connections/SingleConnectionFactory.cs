@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2010 the original author or authors.
+ * Copyright ï¿½ 2002-2010 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,8 @@
 
 #endregion
 
-using System;
-using System.IO;
 using System.Runtime.Serialization;
 using Spring.Messaging.Ems.Support;
-using TIBCO.EMS;
 using Common.Logging;
 using Spring.Messaging.Ems.Core;
 using Spring.Messaging.Ems.Common;
@@ -35,7 +32,7 @@ namespace Spring.Messaging.Ems.Connections
     /// A ConnectionFactory adapter that returns the same Connection
     /// from all CreateConnection() calls, and ignores calls to
     /// Connection.Close().  According to the JMS Connection
-    /// model, this is perfectly thread-safe. The 
+    /// model, this is perfectly thread-safe. The
     /// shared Connection can be automatically recovered in case of an Exception.
     /// </summary>
     /// <remarks>
@@ -89,7 +86,7 @@ namespace Spring.Messaging.Ems.Connections
 
 
         /// <summary>
-        /// Whether the shared Connection has been started 
+        /// Whether the shared Connection has been started
         /// </summary>
         private bool started = false;
 
@@ -365,7 +362,7 @@ namespace Spring.Messaging.Ems.Connections
                 sslProxyHostSet = true;
             }
         }
-        
+
         public int SSLProxyPort
         {
             get { return TargetConnectionFactory.SSLProxyPort;}
@@ -510,7 +507,7 @@ namespace Spring.Messaging.Ems.Connections
         /// <param name="con">The connection to operate on.</param>
         /// <param name="mode">The session ack mode.</param>
         /// <returns>the Session to use, or <code>null</code> to indicate
-	    /// creation of a raw standard Session</returns>  
+	    /// creation of a raw standard Session</returns>
         public virtual ISession GetSession(IConnection con, SessionMode mode)
         {
             return null;
@@ -544,7 +541,7 @@ namespace Spring.Messaging.Ems.Connections
                     if (this.started)
                     {
                         this.started = false;
-                        con.Stop();                        
+                        con.Stop();
                     }
                 } finally
                 {
@@ -567,7 +564,7 @@ namespace Spring.Messaging.Ems.Connections
             {
                 throw new ArgumentException("Connection or 'TargetConnectionFactory' is required.");
             }
-            // Note this is repeated in EmsConnectionFactory as this class only refers to IConnectionFactory and 
+            // Note this is repeated in EmsConnectionFactory as this class only refers to IConnectionFactory and
             // IConnectionFactory does not implement the spring specific lifecycle interface IInitializingObject
             if (sslProxyAuthUsernameSet || sslProxyAuthPasswordSet)
             {
@@ -584,7 +581,7 @@ namespace Spring.Messaging.Ems.Connections
 
         /// <summary>
         /// Close the underlying shared connection. The provider of this ConnectionFactory needs to care for proper shutdown.
-        /// As this object implements <see cref="IDisposable"/> an application context will automatically 
+        /// As this object implements <see cref="IDisposable"/> an application context will automatically
         /// invoke this on distruction o
         /// </summary>
         public void Dispose()
@@ -684,9 +681,9 @@ namespace Spring.Messaging.Ems.Connections
                     throw new IllegalStateException(
                         "Setting of 'ClientID' property not supported on wrapper for shared Connection since" +
                         "this is a shared connection that may serve any number of clients concurrently." +
-                        "Set the 'ClientId' property on the SingleConnectionFactory instead.");    
+                        "Set the 'ClientId' property on the SingleConnectionFactory instead.");
                 }
-                
+
             }
         }
 
@@ -745,7 +742,7 @@ namespace Spring.Messaging.Ems.Connections
                 }
             }
             set
-            {                        
+            {
                 IExceptionListener currentExceptionListener = target.ExceptionListener;
                 if (value != null && currentExceptionListener is InternalChainedExceptionListener)
                 {
@@ -757,7 +754,7 @@ namespace Spring.Messaging.Ems.Connections
                         "Set the 'ExceptionListener' property on the SingleConnectionFactory instead. " +
                         "Alternatively, activate SingleConnectionFactory's 'reconnectOnException' feature, " +
                         "which will allow for registering further ExceptionListeners to the recovery chain.");
-                }                
+                }
             }
         }
 
@@ -772,7 +769,7 @@ namespace Spring.Messaging.Ems.Connections
             }
             remove
             {
-                target.EMSExceptionHandler -= value;                
+                target.EMSExceptionHandler -= value;
             }
         }
 

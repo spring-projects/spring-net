@@ -20,7 +20,6 @@
 
 #region Import
 
-using System;
 using System.Reflection;
 using System.Web.UI;
 using System.Web.UI.WebControls;
@@ -30,7 +29,7 @@ using System.Web.UI.WebControls;
 namespace Spring.Web.UI.Controls
 {
 	/// <summary>
-	/// Provides functions required for implementing validators 
+	/// Provides functions required for implementing validators
 	/// but are unfortunately not accessible from <see cref="BaseValidator"/>
 	/// </summary>
 	/// <author>Erich Eichinger</author>

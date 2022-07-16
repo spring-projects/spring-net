@@ -18,8 +18,6 @@
 
 #endregion
 
-using System;
-using System.Collections.Generic;
 using AopAlliance.Intercept;
 using Spring.Objects.Factory;
 using Spring.Util;
@@ -75,7 +73,7 @@ namespace Spring.Dao.Support
 
         /// <summary>
         /// Sets the persistence exception translator.  The default is to autodetect all IPersistenceExceptionTranslators
-        /// in the containing object factory, using them in a chain.       
+        /// in the containing object factory, using them in a chain.
         /// </summary>
         /// <value>The persistence exception translator.</value>
         public IPersistenceExceptionTranslator PersistenceExceptionTranslator
@@ -114,7 +112,7 @@ namespace Spring.Dao.Support
                 if (this.persistenceExceptionTranslator == null)
                 {
                     // No explicit exception translator specified - perform autodetection.
-                    IListableObjectFactory owningFactory = value as IListableObjectFactory; 
+                    IListableObjectFactory owningFactory = value as IListableObjectFactory;
                     if (owningFactory == null)
                     {
                         throw new ArgumentException("Cannot use IPersistenceExceptionTranslator autodetection without IListableObjectFactory");

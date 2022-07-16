@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,7 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using Spring.Core.IO;
-
-#endregion
 
 namespace Spring.Objects.Factory.Support {
 
@@ -32,14 +27,14 @@ namespace Spring.Objects.Factory.Support {
     /// </summary>
     /// <author>Juergen Hoeller</author>
     /// <author>Rick Evans</author>
-	public interface IObjectDefinitionReader 
+	public interface IObjectDefinitionReader
     {
         /// <summary>
         /// Gets the
         /// <see cref="Spring.Objects.Factory.Support.IObjectDefinitionRegistry"/>
         /// instance that this reader works on.
         /// </summary>
-        IObjectDefinitionRegistry Registry 
+        IObjectDefinitionRegistry Registry
         {
             get;
         }
@@ -48,7 +43,7 @@ namespace Spring.Objects.Factory.Support {
         /// The <see cref="System.AppDomain"/> against which any class names
         /// will be resolved into <see cref="System.Type"/> instances.
         /// </summary>
-        AppDomain Domain 
+        AppDomain Domain
         {
             get;
         }
@@ -58,7 +53,7 @@ namespace Spring.Objects.Factory.Support {
         /// objects (wihtout explicit object name specified).
         /// </summary>
         IObjectNameGenerator ObjectNameGenerator
-        { 
+        {
             get;
         }
 
@@ -70,7 +65,7 @@ namespace Spring.Objects.Factory.Support {
 	    /// a convenience to avoid explicit ResourceLoader handling.</remarks>
 	    /// <value>The resource loader.</value>
         IResourceLoader ResourceLoader
-        { 
+        {
             get;
         }
 
@@ -106,10 +101,10 @@ namespace Spring.Objects.Factory.Support {
         /// <summary>
         /// Loads the object definitions from the specified resource location.
         /// </summary>
-        /// <param name="location">The resource location, to be loaded with the 
+        /// <param name="location">The resource location, to be loaded with the
         /// IResourceLoader location .</param>
         /// <returns>
-        /// The number of object definitions found        
+        /// The number of object definitions found
         /// </returns>
         int LoadObjectDefinitions(string location);
 
@@ -119,7 +114,7 @@ namespace Spring.Objects.Factory.Support {
         /// <param name="locations">The the resource locations to be loaded with the
         /// IResourceLoader of this object definition reader.</param>
         /// <returns>
-        /// The number of object definitions found        
+        /// The number of object definitions found
         /// </returns>
         int LoadObjectDefinitions(string[] locations);
 	}

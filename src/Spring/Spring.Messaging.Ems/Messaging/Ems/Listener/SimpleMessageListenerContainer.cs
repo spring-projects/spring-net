@@ -18,15 +18,12 @@
 
 #endregion
 
-using System;
-using System.Threading;
 using Common.Logging;
 using Spring.Collections;
 using Spring.Messaging.Ems.Common;
 using Spring.Messaging.Ems.Support;
 using Spring.Transaction.Support;
 using Spring.Util;
-using TIBCO.EMS;
 
 namespace Spring.Messaging.Ems.Listener
 {
@@ -143,7 +140,7 @@ namespace Spring.Messaging.Ems.Listener
         #endregion
 
         /// <summary>
-        /// Call base class for valdation and then check that if the subscription is durable that the number of 
+        /// Call base class for valdation and then check that if the subscription is durable that the number of
         /// concurrent consumers is equal to one.
         /// </summary>
         protected override void ValidateConfiguration()
@@ -280,7 +277,7 @@ namespace Spring.Messaging.Ems.Listener
         /// <exception cref="EMSException">in case of setup failure.</exception>
         protected virtual void InitializeConsumers()
         {
-            // Register Sessions and MessageConsumers            
+            // Register Sessions and MessageConsumers
             lock (consumersMonitor)
             {
                 if (this.consumers == null)
@@ -314,7 +311,7 @@ namespace Spring.Messaging.Ems.Listener
                 destination = ResolveDestinationName(session, DestinationName);
             }
             IMessageConsumer consumer = CreateConsumer(session, destination);
-            
+
 			consumer.MessageListener = new SimpleMessageListener(this, session);
             return consumer;
         }

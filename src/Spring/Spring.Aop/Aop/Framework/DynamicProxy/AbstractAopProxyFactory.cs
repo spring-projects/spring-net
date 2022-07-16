@@ -1,6 +1,3 @@
-using System;
-using System.Collections.Generic;
-
 using Spring.Aop.Support;
 using Spring.Aop.Target;
 

@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Reflection;
 
 using Spring.Collections;
@@ -78,13 +76,13 @@ namespace Spring.Objects.Factory.Support
 		    {
 			    return rootObjectDefinition.defaultConstructor;
 		    }
-			
+
 			const BindingFlags flags =
 					  BindingFlags.Public
 					  | BindingFlags.NonPublic
-					  | BindingFlags.Instance 
+					  | BindingFlags.Instance
 					  | BindingFlags.DeclaredOnly;
-		    
+
 			ConstructorInfo[] constructors;
 			if (minimumArgumentCount > 0)
 			{
@@ -176,7 +174,7 @@ namespace Spring.Objects.Factory.Support
         /// </summary>
         /// <remarks>
         /// Determines a weight that represents the class hierarchy difference between types and
-        /// arguments.  The following a an example based on the Java class hierarchy for Integer.    
+        /// arguments.  The following a an example based on the Java class hierarchy for Integer.
         /// A direct match, i.e. type Integer -> arg of class Integer, does not increase
         /// the result - all direct matches means weight 0. A match between type Object and arg of
         /// class Integer would increase the weight by 2, due to the superclass 2 steps up in the
@@ -209,7 +207,7 @@ namespace Spring.Objects.Factory.Support
                         {
                             result = result + 2;
                             superType = null;
-                        }                        
+                        }
                         if (paramType.IsAssignableFrom(superType))
                         {
                             result = result + 2;
@@ -266,7 +264,7 @@ namespace Spring.Objects.Factory.Support
 	    private sealed class ConstructorComparer : IComparer
 	    {
 		    internal static readonly ConstructorComparer Instance = new ConstructorComparer();
-			
+
 			public int Compare(object lhs, object rhs)
 			{
 				ConstructorInfo lhsCtor = (ConstructorInfo) lhs;
@@ -325,7 +323,7 @@ namespace Spring.Objects.Factory.Support
                 foreach (Type interfaceType in interfaces)
                 {
                     if (interfaceType.IsAssignableFrom(targetType) &&
-                        ReflectionUtils.GetMethod(interfaceType, setter.Name, ReflectionUtils.GetParameterTypes(setter)) != null)                    
+                        ReflectionUtils.GetMethod(interfaceType, setter.Name, ReflectionUtils.GetParameterTypes(setter)) != null)
                     {
                         return true;
                     }

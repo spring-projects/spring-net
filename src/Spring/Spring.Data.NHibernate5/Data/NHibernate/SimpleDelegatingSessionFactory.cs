@@ -9,7 +9,6 @@ using Spring.Threading;
 using Spring.Data.Common;
 using Spring.Context.Support;
 using NHibernate.Engine;
-using System;
 
 namespace Spring.Data.NHibernate
 {

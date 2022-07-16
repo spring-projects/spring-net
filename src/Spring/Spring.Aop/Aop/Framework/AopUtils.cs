@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using System.Reflection;
 
 using Spring.Collections;
@@ -47,7 +46,7 @@ namespace Spring.Aop.Framework
         private const string COMPOSITION_PROXY_TYPE_NAME = "CompositionAopProxy";
 
         private const string DECORATOR_PROXY_TYPE_NAME = "DecoratorAopProxy";
-        
+
         private const string INHERITANCE_PROXY_TYPE_NAME = "InheritanceAopProxy";
 
         /// <summary>
@@ -67,7 +66,7 @@ namespace Spring.Aop.Framework
         /// Is the supplied <paramref name="instance"/> an AOP proxy?
         /// </summary>
         /// <remarks>
-        /// Return whether the given object is either 
+        /// Return whether the given object is either
         /// a composition-based proxy or a decorator-based proxy.
         /// </remarks>
         /// <param name="instance">The instance to be checked.</param>
@@ -185,7 +184,7 @@ namespace Spring.Aop.Framework
         }
 
         /// <summary>
-        /// Gets all of the interfaces that the 
+        /// Gets all of the interfaces that the
         /// supplied <see cref="System.Type"/> implements.
         /// </summary>
         /// <remarks>
@@ -220,7 +219,7 @@ namespace Spring.Aop.Framework
             return Type.EmptyTypes;
         }
 
-        /// <summary> 
+        /// <summary>
         /// Can the supplied <paramref name="pointcut"/> apply at all on the
         /// supplied <paramref name="targetType"/>?
         /// </summary>
@@ -248,7 +247,7 @@ namespace Spring.Aop.Framework
         {
             return CanApply(pointcut, targetType, proxyInterfaces, false);
         }
-        /// <summary> 
+        /// <summary>
         /// Can the supplied <paramref name="pointcut"/> apply at all on the
         /// supplied <paramref name="targetType"/>?
         /// </summary>
@@ -302,7 +301,7 @@ namespace Spring.Aop.Framework
             return false;
         }
 
-        /// <summary> 
+        /// <summary>
         /// Can the supplied <paramref name="advisor"/> apply at all on the
         /// supplied <paramref name="targetType"/>?
         /// </summary>
@@ -326,7 +325,7 @@ namespace Spring.Aop.Framework
             return CanApply(advisor, targetType, proxyInterfaces, false);
         }
 
-        /// <summary> 
+        /// <summary>
         /// Can the supplied <paramref name="advisor"/> apply at all on the
         /// supplied <paramref name="targetType"/>?
         /// </summary>

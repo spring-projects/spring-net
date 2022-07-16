@@ -1,5 +1,3 @@
-using System;
-
 namespace Spring.Expressions.Parser.antlr
 {
 	/*ANTLR Translator Generator
@@ -16,21 +14,21 @@ namespace Spring.Expressions.Parser.antlr
 	//
 	// With many thanks to Eric V. Smith from the ANTLR list.
 	//
-	
+
 	[Serializable]
 	public class RecognitionException : ANTLRException
 	{
 		public string fileName; // not used by treeparsers
 		public int line; // not used by treeparsers
 		public int column; // not used by treeparsers
-		
+
 		public RecognitionException() : base("parsing error")
 		{
 			fileName = null;
 			line = - 1;
 			column = - 1;
 		}
-		
+
 		/*
 		* RecognitionException constructor comment.
 		* @param s java.lang.String
@@ -41,7 +39,7 @@ namespace Spring.Expressions.Parser.antlr
 			line = - 1;
 			column = - 1;
 		}
-		
+
 		/*
 		* RecognitionException constructor comment.
 		* @param s java.lang.String
@@ -52,28 +50,28 @@ namespace Spring.Expressions.Parser.antlr
 			line = line_;
 			column = column_;
 		}
-		
+
 		public virtual string getFilename()
 		{
 			return fileName;
 		}
-		
+
 		public virtual int getLine()
 		{
 			return line;
 		}
-		
+
 		public virtual int getColumn()
 		{
 			return column;
 		}
-		
+
 		[Obsolete("Replaced by Message property since version 2.7.0", true)]
 		public virtual string getErrorMessage()
 		{
 			return Message;
 		}
-		
+
 		override public string ToString()
 		{
 			return FileLineFormatter.getFormatter().getFormatString(fileName, line, column) + Message;

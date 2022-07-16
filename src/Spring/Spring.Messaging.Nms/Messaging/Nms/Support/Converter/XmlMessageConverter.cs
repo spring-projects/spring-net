@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
@@ -146,7 +144,7 @@ namespace Spring.Messaging.Nms.Support.Converter
                 {
 
                     XmlSerializer xs = new XmlSerializer(GetTargetType(textMessage));
-                    XmlTextWriter xmlTextWriter = new XmlTextWriter(memoryStream, Encoding.UTF8);                        
+                    XmlTextWriter xmlTextWriter = new XmlTextWriter(memoryStream, Encoding.UTF8);
                     return xs.Deserialize(memoryStream);
                 }
             } catch (Exception e)

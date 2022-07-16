@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Reflection;
 using System.Runtime.Serialization;
 
@@ -41,7 +40,7 @@ namespace Spring.Aop.Support
 
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AttributeMethodMatcher"/> class for the 
+        /// Initializes a new instance of the <see cref="AttributeMethodMatcher"/> class for the
         /// given atribute type.
         /// </summary>
         /// <param name="attributeType">Type of the attribute to look for.</param>
@@ -57,7 +56,7 @@ namespace Spring.Aop.Support
             var type = info.GetString("AttributeType");
             attributeType = type != null ? Type.GetType(type) : null;
         }
-        
+
         /// <inheritdoc />
         public void GetObjectData(SerializationInfo info, StreamingContext context)
         {
@@ -90,7 +89,7 @@ namespace Spring.Aop.Support
             }
             else
             {
-                
+
                     Type[] parameterTypes = ReflectionUtils.GetParameterTypes(method);
 
                     // Also check whether the attribute is defined on a method implemented from an interface.
@@ -105,7 +104,7 @@ namespace Spring.Aop.Support
                             return true;
                         }
                     }
-                
+
                 return false;
             }
         }

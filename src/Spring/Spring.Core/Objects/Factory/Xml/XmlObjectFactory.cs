@@ -1,5 +1,5 @@
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-using System;
 using Spring.Core.IO;
 using Spring.Objects.Factory.Support;
 
@@ -66,7 +65,7 @@ namespace Spring.Objects.Factory.Xml
         public XmlObjectFactory(IResource resource) : this(resource, true, null)
         {
         }
-        
+
         /// <summary>
 		/// Creates a new instance of the <see cref="XmlObjectFactory"/> class,
 		/// with the given resource, which must be parsable using DOM.
@@ -98,7 +97,7 @@ namespace Spring.Objects.Factory.Xml
             IResource resource, IObjectFactory parentFactory)
             : this(resource, true, parentFactory)
         {}
-        
+
         /// <summary>
 		/// Creates a new instance of the <see cref="XmlObjectFactory"/> class,
 		/// with the given resource, which must be parsable using DOM, and the

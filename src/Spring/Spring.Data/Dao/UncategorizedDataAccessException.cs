@@ -18,16 +18,11 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Runtime.Serialization;
-
-#endregion
 
 namespace Spring.Dao
 {
-	/// <summary> 
+	/// <summary>
 	/// Normal superclass when we can't distinguish anything more specific
 	/// than "something went wrong with the underlying resource": for example,
 	/// a SQLException from Sql Server that we can't pinpoint more precisely.

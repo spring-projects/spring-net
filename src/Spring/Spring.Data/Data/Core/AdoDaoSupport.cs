@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Data;
 using Spring.Dao.Support;
 using Spring.Data.Common;
@@ -106,7 +105,7 @@ namespace Spring.Data.Core
         {
             ConnectionUtils.DisposeConnection(conn, dbProvider);
         }
-        
+
 
         /// <summary>
         /// Create a AdoTemplate for a given DbProvider
@@ -114,9 +113,9 @@ namespace Spring.Data.Core
         /// </summary>
         /// <remarks>
         /// Can be overriden in subclasses to provide AdoTemplate instances
-        /// with a different configuration, or a cusotm AdoTemplate subclass.       
+        /// with a different configuration, or a cusotm AdoTemplate subclass.
         /// </remarks>
-        /// <param name="dbProvider">The DbProvider to create a AdoTemplate for</param>        
+        /// <param name="dbProvider">The DbProvider to create a AdoTemplate for</param>
         protected virtual AdoTemplate CreateAdoTemplate(IDbProvider dbProvider)
         {
             return new AdoTemplate(dbProvider);
@@ -137,6 +136,6 @@ namespace Spring.Data.Core
         {
             return AdoTemplate.CreateDbParameters();
         }
-        
+
     }
 }

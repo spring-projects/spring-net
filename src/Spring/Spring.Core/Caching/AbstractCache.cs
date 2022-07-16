@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Collections;
 
 namespace Spring.Caching
@@ -41,7 +40,7 @@ namespace Spring.Caching
         #region Properties
 
         /// <summary>
-        /// Gets/Set the Default time-to-live (TTL) for items inserted into this cache. 
+        /// Gets/Set the Default time-to-live (TTL) for items inserted into this cache.
         /// Used by <see cref="Insert(object,object)"/>
         /// </summary>
         public TimeSpan TimeToLive
@@ -51,8 +50,8 @@ namespace Spring.Caching
         }
 
         /// <summary>
-        /// Gets/Sets a value, whether the this cache instance's <see cref="TimeToLive"/> 
-        /// shall be applied to all items, regardless of their individual TTL 
+        /// Gets/Sets a value, whether the this cache instance's <see cref="TimeToLive"/>
+        /// shall be applied to all items, regardless of their individual TTL
         /// when <see cref="Insert(object,object,TimeSpan)"/> is called.
         /// </summary>
         public bool EnforceTimeToLive
@@ -65,7 +64,7 @@ namespace Spring.Caching
 
         #region ICache Implementation
 
-        #region 
+        #region
 
         /// <summary>
         /// Gets the number of items in the cache.
@@ -80,7 +79,7 @@ namespace Spring.Caching
                 return Keys.Count;
             }
         }
-        
+
         /// <summary>
         /// Gets a collection of all cache item keys.
         /// </summary>
@@ -151,8 +150,8 @@ namespace Spring.Caching
         /// Inserts an item into the cache.
         /// </summary>
         /// <remarks>
-        /// If <paramref name="timeToLive"/> equals <see cref="TimeSpan.MinValue"/>, 
-        /// or <see cref="EnforceTimeToLive"/> is <value>true</value>, this cache 
+        /// If <paramref name="timeToLive"/> equals <see cref="TimeSpan.MinValue"/>,
+        /// or <see cref="EnforceTimeToLive"/> is <value>true</value>, this cache
         /// instance's <see cref="TimeToLive"/> value will be applied.
         /// </remarks>
         /// <param name="key">

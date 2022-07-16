@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Reflection;
 using AopAlliance.Aop;
 using Spring.Aop.Framework;
@@ -27,15 +26,15 @@ using Spring.Aop.Support;
 namespace Spring.Transaction.Interceptor
 {
 	/// <summary>
-	/// Advisor driven by a <see cref="Spring.Transaction.Interceptor.ITransactionAttributeSource"/>, 
+	/// Advisor driven by a <see cref="Spring.Transaction.Interceptor.ITransactionAttributeSource"/>,
     /// used to exclude a general advice <see cref="IAdvice"/> from methods that
 	/// are non-transactional.
 	/// </summary>
 	/// <remarks>
 	/// <para>
-	/// To put it another way, use this advisor when you would like to associate other AOP 
-	/// advice based on the pointcut specified by declarative transaction demarcation, 
-	/// attibute based or otherwise. 
+	/// To put it another way, use this advisor when you would like to associate other AOP
+	/// advice based on the pointcut specified by declarative transaction demarcation,
+	/// attibute based or otherwise.
 	/// </para>
 	/// <p>
 	/// Because the AOP framework caches advice calculations, this is normally
@@ -58,7 +57,7 @@ namespace Spring.Transaction.Interceptor
 		{
             if (transactionAttributeSource == null)
 			{
-                throw new AopConfigException("Cannot construct a DefaultTransactionAttributeSourceAdvisor if " + 
+                throw new AopConfigException("Cannot construct a DefaultTransactionAttributeSourceAdvisor if " +
 					"TransactionAttributeSource is null.");
 			}
             _transactionAttributeSource = transactionAttributeSource;

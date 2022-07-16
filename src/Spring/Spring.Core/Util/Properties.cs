@@ -1,14 +1,14 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
- * 
+ * Copyright ï¿½ 2002-2011 the original author or authors.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,13 +18,7 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Collections;
-using System.IO;
-
-#endregion
 
 namespace Spring.Util
 {
@@ -40,13 +34,13 @@ namespace Spring.Util
     /// key2:
     /// key3
     /// </code>
-    /// will result in the name/value pairs: 
+    /// will result in the name/value pairs:
     /// <list>
     /// <item>key1:="value"</item>
     /// <item>key2:=string.Empty</item>
     /// <item>key3:=&lt;null&gt;</item>
     /// </list>
-    /// note, that to specify a <c>null</c> value, the key <b>must not</b> be followed by any character except newline. 
+    /// note, that to specify a <c>null</c> value, the key <b>must not</b> be followed by any character except newline.
     /// </example>
 	/// </remarks>
 	/// <author>Simon White</author>
@@ -226,7 +220,7 @@ namespace Spring.Util
 			{
                 // this is an extension to support key-only lines and specifying null values
 			    value = null;
-			} 
+			}
             else if (index == len)
             {
                 value = string.Empty;
@@ -237,7 +231,7 @@ namespace Spring.Util
                 value = RemoveLeadingWhitespace(value);
             }
 
-		    if (value != null && value.Length > 0 
+		    if (value != null && value.Length > 0
                 && Separators.IndexOf(value[0]) != -1)
 			{
 				value = value.Substring(1);

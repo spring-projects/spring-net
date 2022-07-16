@@ -18,16 +18,11 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Runtime.Serialization;
-
-#endregion
 
 namespace Spring.Dao
 {
-    /// <summary> 
+    /// <summary>
     /// Data access exception thrown when a resource fails completely and the failure is permanent.
     /// </summary>
     /// <author>Thomas Risberg</author>

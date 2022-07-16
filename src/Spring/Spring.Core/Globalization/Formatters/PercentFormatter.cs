@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Globalization;
 
 using Spring.Util;
@@ -32,7 +31,7 @@ namespace Spring.Globalization.Formatters
 	/// <remarks>
 	/// <para>
 	/// <c>PercentFormatter</c> uses percent-related properties of the
-	/// <see cref="NumberFormatInfo"/> to format and parse percentages. 
+	/// <see cref="NumberFormatInfo"/> to format and parse percentages.
 	/// </para>
 	/// <para>
 	/// If you use one of the constructors that accept culture as a parameter
@@ -84,7 +83,7 @@ namespace Spring.Globalization.Formatters
         /// using specified <see cref="NumberFormatInfo"/>.
         /// </summary>
         /// <param name="formatInfo">
-        /// The <see cref="NumberFormatInfo"/> instance that defines how 
+        /// The <see cref="NumberFormatInfo"/> instance that defines how
         /// numbers are formatted and parsed.
         /// </param>
         public PercentFormatter(NumberFormatInfo formatInfo)

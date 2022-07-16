@@ -18,20 +18,15 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Reflection;
 using System.Reflection.Emit;
 
 using Spring.Proxy;
 
-#endregion
-
 namespace Spring.Remoting.Support
 {
     /// <summary>
-    /// Builds a proxy type based on <see cref="BaseRemoteObject"/> to wrap a target object 
+    /// Builds a proxy type based on <see cref="BaseRemoteObject"/> to wrap a target object
     /// that is intended to be remotable.
     /// </summary>
     /// <author>Bruno Baia</author>
@@ -61,7 +56,7 @@ namespace Spring.Remoting.Support
         #region Constructor(s) / Destructor
 
         /// <summary>
-        /// Creates a new instance of the 
+        /// Creates a new instance of the
         /// <see cref="RemoteObjectProxyTypeBuilder"/> class.
         /// </summary>
         /// <param name="lifetime">
@@ -71,7 +66,7 @@ namespace Spring.Remoting.Support
         {
             this.lifetime = lifetime;
 
-            Name = "RemoteObjectProxy";            
+            Name = "RemoteObjectProxy";
         }
 
         #endregion

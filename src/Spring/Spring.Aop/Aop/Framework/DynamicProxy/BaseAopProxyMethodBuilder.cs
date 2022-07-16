@@ -18,7 +18,6 @@
 
 #endregion
 
-using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 
@@ -27,7 +26,7 @@ using Spring.Util;
 namespace Spring.Aop.Framework.DynamicProxy
 {
     /// <summary>
-    /// <see cref="Spring.Proxy.IProxyMethodBuilder"/> implementation 
+    /// <see cref="Spring.Proxy.IProxyMethodBuilder"/> implementation
     /// that delegates method calls to the base method.
     /// </summary>
     /// <author>Bruno Baia</author>
@@ -41,15 +40,15 @@ namespace Spring.Aop.Framework.DynamicProxy
         /// The <see cref="IAopProxyTypeGenerator"/> implementation to use.
         /// </param>
         /// <param name="targetMethods">
-        /// The dictionary to cache the list of target 
+        /// The dictionary to cache the list of target
         /// <see cref="System.Reflection.MethodInfo"/>s.
         /// </param>
         /// <param name="onProxyTargetMethods">
-        /// The dictionary to cache the list of target  
+        /// The dictionary to cache the list of target
         /// <see cref="System.Reflection.MethodInfo"/>s defined on the proxy.
         /// </param>
         public BaseAopProxyMethodBuilder(
-            TypeBuilder typeBuilder, IAopProxyTypeGenerator aopProxyGenerator, 
+            TypeBuilder typeBuilder, IAopProxyTypeGenerator aopProxyGenerator,
             IDictionary<string, MethodInfo> targetMethods, IDictionary<string, MethodInfo> onProxyTargetMethods)
             : base(typeBuilder, aopProxyGenerator, false, targetMethods, onProxyTargetMethods)
         {

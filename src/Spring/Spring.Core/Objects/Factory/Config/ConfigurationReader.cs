@@ -18,12 +18,8 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Collections.Specialized;
 using System.Configuration;
-using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Xml;
@@ -35,8 +31,6 @@ using Spring.Core.TypeResolution;
 using Spring.Util;
 using ConfigurationException=Common.Logging.ConfigurationException;
 using ConfigXmlDocument = Spring.Util.ConfigXmlDocument;
-
-#endregion
 
 namespace Spring.Objects.Factory.Config
 {
@@ -398,7 +392,7 @@ namespace Spring.Objects.Factory.Config
                 foreach (XmlNode node in section.ChildNodes)
                 {
                     var settings = new ConnectionStringSettings(
-                        node.Attributes["name"].Value, 
+                        node.Attributes["name"].Value,
                         node.Attributes["connectionString"]?.Value,
                         node.Attributes["providerName"]?.Value);
                     data.ConnectionStrings.Add(settings);

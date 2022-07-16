@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,6 @@
 
 #endregion
 
-
-using System;
 using System.Collections;
 using Spring.Core.TypeResolution;
 
@@ -36,7 +34,7 @@ namespace Spring.Messaging.Nms.Support.Converter
         //Generics not used to support both 1.1 and 2.0
         private IDictionary idTypeMapping;
         private IDictionary typeIdMapping;
-        
+
         private string defaultHashtableTypeId = "Hashtable";
 
         private Type defaultHashtableClass = typeof(Hashtable);
@@ -132,9 +130,9 @@ namespace Spring.Messaging.Nms.Support.Converter
         }
 
         /// <summary>
-        /// Convert from a string to a type.  Will look into the IdTypeMapping dictionary first to resolve the 
+        /// Convert from a string to a type.  Will look into the IdTypeMapping dictionary first to resolve the
         /// type, then check if it is the well known typeId of 'Hashtable' followed by a strategy to resolve a fully qualfied
-        /// name from a simple type name.  This strategy requires that 
+        /// name from a simple type name.  This strategy requires that
         /// </summary>
         /// <param name="typeId">The type id.</param>
         /// <returns>The type associated with the string.</returns>
@@ -150,16 +148,16 @@ namespace Spring.Messaging.Nms.Support.Converter
                 if (typeId.Equals(defaultHashtableTypeId))
                 {
                     return defaultHashtableClass;
-                }                
+                }
                 if (defaultNamespace != null)
                 {
                     string fullyQualifiedTypeName = defaultNamespace + "." +
                                                     typeId + ", " +
                                                     DefaultAssemblyName;
-                    return TypeResolutionUtils.ResolveType(fullyQualifiedTypeName); 
+                    return TypeResolutionUtils.ResolveType(fullyQualifiedTypeName);
                 }
 
-                return TypeResolutionUtils.ResolveType(typeId); 
+                return TypeResolutionUtils.ResolveType(typeId);
             }
 
         }
@@ -178,7 +176,7 @@ namespace Spring.Messaging.Nms.Support.Converter
             {
                 defaultNamespace = value;
             }
-            
+
         }
 
         /// <summary>
@@ -229,7 +227,7 @@ namespace Spring.Messaging.Nms.Support.Converter
                 }
                 finalIdTypeMapping.Add(id,t);
                 typeIdMapping.Add(t,id);
-                
+
             }
             idTypeMapping = finalIdTypeMapping;
         }

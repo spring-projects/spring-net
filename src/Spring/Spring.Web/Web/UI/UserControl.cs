@@ -20,9 +20,7 @@
 
 #region Imports
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Globalization;
@@ -285,7 +283,7 @@ namespace Spring.Web.UI
         private IModelPersistenceMedium modelPersistenceMedium = new SessionModelPersistenceMedium();
 
         /// <summary>
-        /// Set the <see cref="IModelPersistenceMedium"/> strategy for storing model 
+        /// Set the <see cref="IModelPersistenceMedium"/> strategy for storing model
         /// instances between requests.
         /// </summary>
         /// <remarks>
@@ -534,15 +532,15 @@ namespace Spring.Web.UI
         /// <see cref="Args"/> is an easy way to pass additional parameters into the expression
         /// <example>
         /// // config:
-        /// 
+        ///
         /// &lt;property Name=&quot;Results&quot;&gt;
         ///   &lt;dictionary&gt;
         ///   		&lt;entry key=&quot;ok_clicked&quot; value=&quot;redirect:~/ShowResult.aspx?result=%{Args['result']}&quot; /&gt;
         ///   &lt;/dictionary&gt;
         /// &lt;/property&gt;
-        /// 
+        ///
         /// // code:
-        /// 
+        ///
         /// void OnOkClicked(object sender, EventArgs e)
         /// {
         ///   Args[&quot;result&quot;] = txtUserInput.Text;
@@ -584,9 +582,9 @@ namespace Spring.Web.UI
 
 
         /// <summary>
-        /// Returns a redirect url string that points to the 
+        /// Returns a redirect url string that points to the
         /// <see cref="Spring.Web.Support.Result.TargetPage"/> defined by this
-        /// result evaluated using this Page for expression 
+        /// result evaluated using this Page for expression
         /// </summary>
         /// <param name="resultName">Name of the result.</param>
         /// <returns>A redirect url string.</returns>
@@ -596,9 +594,9 @@ namespace Spring.Web.UI
         }
 
         /// <summary>
-        /// Returns a redirect url string that points to the 
+        /// Returns a redirect url string that points to the
         /// <see cref="Spring.Web.Support.Result.TargetPage"/> defined by this
-        /// result evaluated using this Page for expression 
+        /// result evaluated using this Page for expression
         /// </summary>
         /// <param name="resultName">Name of the result.</param>
         /// <param name="context">The context to use for evaluating the SpEL expression in the Result</param>

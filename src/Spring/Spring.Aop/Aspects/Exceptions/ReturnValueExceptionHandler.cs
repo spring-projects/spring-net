@@ -18,9 +18,6 @@
 
 #endregion
 
-using System;
-using System.Collections.Generic;
-
 using Spring.Expressions;
 
 namespace Spring.Aspects.Exceptions

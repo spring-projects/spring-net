@@ -18,9 +18,6 @@
 
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using Spring.Objects.Factory.Support;
 using Spring.Stereotype;

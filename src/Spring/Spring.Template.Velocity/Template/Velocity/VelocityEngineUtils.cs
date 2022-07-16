@@ -18,9 +18,7 @@
 
 #endregion
 
-using System;
 using System.Collections;
-using System.IO;
 using Common.Logging;
 using NVelocity;
 using NVelocity.App;
@@ -48,7 +46,7 @@ namespace Spring.Template.Velocity{
         /// <param name="encoding">encoding the encoding of the template file</param>
         /// <param name="model">the Hashtable that contains model names as keys and model objects</param>
         /// <param name="writer">writer the TextWriter to write the result to</param>
-        /// <exception cref="VelocityException">thrown if any exception is thrown by the velocity engine</exception>		
+        /// <exception cref="VelocityException">thrown if any exception is thrown by the velocity engine</exception>
         public static void MergeTemplate(
             VelocityEngine velocityEngine, string templateLocation, string encoding, Hashtable model, TextWriter writer) {
 
@@ -68,9 +66,9 @@ namespace Spring.Template.Velocity{
         /// <param name="velocityEngine">VelocityEngine to work with</param>
         /// <param name="templateLocation">the location of template, relative to Velocity's resource loader path</param>
         /// <param name="encoding">the encoding string to use for the merge</param>
-        /// <param name="model">the Hashtable that contains model names as keys and model objects</param>       
+        /// <param name="model">the Hashtable that contains model names as keys and model objects</param>
         /// <returns>the result as string</returns>
-        /// <exception cref="VelocityException">thrown if any exception is thrown by the velocity engine</exception>		
+        /// <exception cref="VelocityException">thrown if any exception is thrown by the velocity engine</exception>
         public static string MergeTemplateIntoString(
             VelocityEngine velocityEngine, string templateLocation, string encoding, Hashtable model) {
 

@@ -18,9 +18,6 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Data;
 using Common.Logging;
 using Spring.Data.Common;
@@ -29,7 +26,6 @@ using Spring.Objects.Factory;
 using Spring.Transaction;
 using Spring.Transaction.Support;
 
-#endregion
 namespace Spring.Data.Core
 {
     /// <summary>
@@ -46,7 +42,7 @@ namespace Spring.Data.Core
 
         private static readonly ILog LOG = LogManager.GetLogger(typeof (AdoPlatformTransactionManager));
 
-        #endregion      
+        #endregion
 
         public AdoPlatformTransactionManager()
         {
@@ -84,7 +80,7 @@ namespace Spring.Data.Core
             DbProviderTransactionObject txMgrStateObject =
                 new DbProviderTransactionObject();
             txMgrStateObject.SavepointAllowed = NestedTransactionsAllowed;
-            ConnectionHolder conHolder = 
+            ConnectionHolder conHolder =
                 (ConnectionHolder) TransactionSynchronizationManager.GetResource(DbProvider);
             txMgrStateObject.SetConnectionHolder(conHolder, false);
             return txMgrStateObject;
@@ -135,12 +131,12 @@ namespace Spring.Data.Core
             DbProviderTransactionObject txMgrStateObject =
                 (DbProviderTransactionObject)transaction;
             IDbConnection con = null;
-	        
+
             if (dbProvider == null)
             {
                 throw new ArgumentException("DbProvider is required to be set on AdoPlatformTransactionManager");
             }
-	        
+
             try
             {
                 if (txMgrStateObject.ConnectionHolder == null || txMgrStateObject.ConnectionHolder.SynchronizedWithTransaction)
@@ -150,14 +146,14 @@ namespace Spring.Data.Core
                     {
                         log.Debug("Acquired Connection [" + newCon + ", " + newCon.ConnectionString + "] for ADO.NET transaction");
                     }
-                    newCon.Open();                    
+                    newCon.Open();
 
                     //TODO isolation level mgmt - will need to abstract out SQL used to specify this in DbMetaData
                     //MSDN docs...
                     //With one exception, you can switch from one isolation level to another at any time during a transaction. The exception occurs when changing from any isolation level to SNAPSHOT isolation
-                    
-                    
-                    //IsolationLevel previousIsolationLevel = 
+
+
+                    //IsolationLevel previousIsolationLevel =
 
                     IDbTransaction newTrans = newCon.BeginTransaction(definition.TransactionIsolationLevel);
 
@@ -175,12 +171,12 @@ namespace Spring.Data.Core
                 {
                     txMgrStateObject.ConnectionHolder.TimeoutInSeconds = timeout;
                 }
-                    
+
 
                 //Bind transactional resources to thread
                 if (txMgrStateObject.NewConnectionHolder)
                 {
-                    TransactionSynchronizationManager.BindResource(DbProvider, 
+                    TransactionSynchronizationManager.BindResource(DbProvider,
                                                                    txMgrStateObject.ConnectionHolder);
                 }
 
@@ -191,7 +187,7 @@ namespace Spring.Data.Core
                 ConnectionUtils.DisposeConnection(con, DbProvider);
                 throw new CannotCreateTransactionException("Could not create ADO.NET connection for transaction", e);
             }
-                
+
         }
 
 
@@ -241,9 +237,9 @@ namespace Spring.Data.Core
         protected override void DoResume(object transaction, object suspendedResources)
         {
             ConnectionHolder conHolder = (ConnectionHolder)suspendedResources;
-            TransactionSynchronizationManager.BindResource(DbProvider, conHolder);            
+            TransactionSynchronizationManager.BindResource(DbProvider, conHolder);
         }
-	   
+
 
         /// <summary>
         /// Perform an actual commit on the given transaction.
@@ -385,7 +381,7 @@ namespace Spring.Data.Core
             {
                 get
                 {
-                    return (ConnectionHolder != null && ConnectionHolder.TransactionActive);                 
+                    return (ConnectionHolder != null && ConnectionHolder.TransactionActive);
                 }
             }
 
@@ -393,7 +389,7 @@ namespace Spring.Data.Core
             /// Sets the rollback only.
             /// </summary>
             public void SetRollbackOnly()
-            {                
+            {
                 ConnectionHolder.RollbackOnly = true;
             }
 

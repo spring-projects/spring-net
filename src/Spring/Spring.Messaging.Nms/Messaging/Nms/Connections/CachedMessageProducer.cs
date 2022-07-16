@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using Apache.NMS;
 
 namespace Spring.Messaging.Nms.Connections

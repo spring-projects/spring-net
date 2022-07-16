@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2010 the original author or authors.
+ * Copyright ï¿½ 2002-2010 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,6 @@
 
 #endregion
 
-using TIBCO.EMS;
-
 namespace Spring.Messaging.Ems.Core
 {
     /// <summary>Specifies a basic set of EMS operations.
@@ -27,7 +25,7 @@ namespace Spring.Messaging.Ems.Core
 	/// <remarks>
 	/// <p>Implemented by EmsTemplate. Not often used but a useful option
 	/// to enhance testability, as it can easily be mocked or stubbed.</p>
-	/// 
+	///
 	/// <p>Provides <code>EmsTemplate's</code> <code>send(..)</code> and
 	/// <code>receive(..)</code> methods that mirror various EMS API methods.
 	/// See the EMS specification and EMS API docs for details on those methods.
@@ -56,7 +54,7 @@ namespace Spring.Messaging.Ems.Core
 		/// </returns>
 		/// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
 		object Execute(ISessionCallback action);
-		
+
 		/// <summary> Send a message to a EMS destination. The callback gives access to
 		/// the EMS session and MessageProducer in order to do more complex
 		/// send operations.
@@ -78,12 +76,12 @@ namespace Spring.Messaging.Ems.Core
         /// </returns>
         /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         object Execute(ProducerDelegate del);
-		
-		
+
+
 		//-------------------------------------------------------------------------
 		// Convenience methods for sending messages
 		//-------------------------------------------------------------------------
-		
+
 		/// <summary> Send a message to the default destination.
 		/// <p>This will only work with a default destination specified!</p>
 		/// </summary>
@@ -91,7 +89,7 @@ namespace Spring.Messaging.Ems.Core
 		/// </param>
 		/// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
 		void Send(IMessageCreator messageCreator);
-		
+
 		/// <summary> Send a message to the specified destination.
 		/// The IMessageCreator callback creates the message given a Session.
 		/// </summary>
@@ -101,7 +99,7 @@ namespace Spring.Messaging.Ems.Core
 		/// </param>
 		/// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
 		void Send(Destination destination, IMessageCreator messageCreator);
-		
+
 		/// <summary> Send a message to the specified destination.
 		/// The IMessageCreator callback creates the message given a Session.
 		/// </summary>
@@ -145,11 +143,11 @@ namespace Spring.Messaging.Ems.Core
         /// </param>
         /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         void SendWithDelegate(string destinationName, MessageCreatorDelegate messageCreatorDelegate);
-		
+
 		//-------------------------------------------------------------------------
 		// Convenience methods for sending auto-converted messages
 		//-------------------------------------------------------------------------
-		
+
 		/// <summary> Send the given object to the default destination, converting the object
 		/// to a EMS message with a configured IMessageConverter.
 		/// <p>This will only work with a default destination specified!</p>
@@ -158,7 +156,7 @@ namespace Spring.Messaging.Ems.Core
 		/// </param>
 		/// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
 		void ConvertAndSend(object message);
-		
+
 		/// <summary> Send the given object to the specified destination, converting the object
 		/// to a EMS message with a configured IMessageConverter.
 		/// </summary>
@@ -168,7 +166,7 @@ namespace Spring.Messaging.Ems.Core
 		/// </param>
 		/// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
 		void ConvertAndSend(Destination destination, object message);
-		
+
 		/// <summary> Send the given object to the specified destination, converting the object
 		/// to a EMS message with a configured IMessageConverter.
 		/// </summary>
@@ -179,7 +177,7 @@ namespace Spring.Messaging.Ems.Core
 		/// </param>
 		/// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
 		void ConvertAndSend(string destinationName, object message);
-		
+
 		/// <summary> Send the given object to the default destination, converting the object
 		/// to a EMS message with a configured IMessageConverter. The IMessagePostProcessor
 		/// callback allows for modification of the message after conversion.
@@ -191,7 +189,7 @@ namespace Spring.Messaging.Ems.Core
 		/// </param>
 		/// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
 		void ConvertAndSend(object message, IMessagePostProcessor postProcessor);
-		
+
 		/// <summary> Send the given object to the specified destination, converting the object
 		/// to a EMS message with a configured IMessageConverter. The IMessagePostProcessor
 		/// callback allows for modification of the message after conversion.
@@ -204,7 +202,7 @@ namespace Spring.Messaging.Ems.Core
 		/// </param>
 		/// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
 		void ConvertAndSend(Destination destination, object message, IMessagePostProcessor postProcessor);
-		
+
 		/// <summary> Send the given object to the specified destination, converting the object
 		/// to a EMS message with a configured IMessageConverter. The IMessagePostProcessor
 		/// callback allows for modification of the message after conversion.
@@ -258,7 +256,7 @@ namespace Spring.Messaging.Ems.Core
 		//-------------------------------------------------------------------------
 		// Convenience methods for receiving messages
 		//-------------------------------------------------------------------------
-		
+
 		/// <summary> Receive a message synchronously from the default destination, but only
 		/// wait up to a specified time for delivery.
 		/// <p>This method should be used carefully, since it will block the thread
@@ -269,7 +267,7 @@ namespace Spring.Messaging.Ems.Core
 		/// </returns>
 		/// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
 		Message Receive();
-		
+
 		/// <summary> Receive a message synchronously from the specified destination, but only
 		/// wait up to a specified time for delivery.
 		/// <p>This method should be used carefully, since it will block the thread
@@ -281,7 +279,7 @@ namespace Spring.Messaging.Ems.Core
 		/// </returns>
 		/// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
 		Message Receive(Destination destination);
-		
+
 		/// <summary> Receive a message synchronously from the specified destination, but only
 		/// wait up to a specified time for delivery.
 		/// <p>This method should be used carefully, since it will block the thread
@@ -294,7 +292,7 @@ namespace Spring.Messaging.Ems.Core
 		/// </returns>
 		/// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
 		Message Receive(string destinationName);
-		
+
 		/// <summary> Receive a message synchronously from the default destination, but only
 		/// wait up to a specified time for delivery.
 		/// <p>This method should be used carefully, since it will block the thread
@@ -308,7 +306,7 @@ namespace Spring.Messaging.Ems.Core
 		/// </returns>
 		/// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
 		Message ReceiveSelected(string messageSelector);
-		
+
 		/// <summary> Receive a message synchronously from the specified destination, but only
 		/// wait up to a specified time for delivery.
 		/// <p>This method should be used carefully, since it will block the thread
@@ -323,7 +321,7 @@ namespace Spring.Messaging.Ems.Core
 		/// </returns>
 		/// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
 		Message ReceiveSelected(Destination destination, string messageSelector);
-		
+
 		/// <summary> Receive a message synchronously from the specified destination, but only
 		/// wait up to a specified time for delivery.
 		/// <p>This method should be used carefully, since it will block the thread
@@ -339,12 +337,12 @@ namespace Spring.Messaging.Ems.Core
 		/// </returns>
 		/// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
 		Message ReceiveSelected(string destinationName, string messageSelector);
-		
-		
+
+
 		//-------------------------------------------------------------------------
 		// Convenience methods for receiving auto-converted messages
 		//-------------------------------------------------------------------------
-		
+
 		/// <summary> Receive a message synchronously from the default destination, but only
 		/// wait up to a specified time for delivery. Convert the message into an
 		/// object with a configured IMessageConverter.
@@ -356,7 +354,7 @@ namespace Spring.Messaging.Ems.Core
 		/// </returns>
 		/// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
 		object ReceiveAndConvert();
-		
+
 		/// <summary> Receive a message synchronously from the specified destination, but only
 		/// wait up to a specified time for delivery. Convert the message into an
 		/// object with a configured IMessageConverter.
@@ -369,7 +367,7 @@ namespace Spring.Messaging.Ems.Core
 		/// </returns>
 		/// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
 		object ReceiveAndConvert(Destination destination);
-		
+
 		/// <summary> Receive a message synchronously from the specified destination, but only
 		/// wait up to a specified time for delivery. Convert the message into an
 		/// object with a configured IMessageConverter.
@@ -383,7 +381,7 @@ namespace Spring.Messaging.Ems.Core
 		/// </returns>
 		/// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
 		object ReceiveAndConvert(string destinationName);
-		
+
 		/// <summary> Receive a message synchronously from the default destination, but only
 		/// wait up to a specified time for delivery. Convert the message into an
 		/// object with a configured IMessageConverter.
@@ -398,7 +396,7 @@ namespace Spring.Messaging.Ems.Core
 		/// </returns>
         /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
 		object ReceiveSelectedAndConvert(string messageSelector);
-		
+
 		/// <summary> Receive a message synchronously from the specified destination, but only
 		/// wait up to a specified time for delivery. Convert the message into an
 		/// object with a configured IMessageConverter.
@@ -414,7 +412,7 @@ namespace Spring.Messaging.Ems.Core
 		/// </returns>
         /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
 		object ReceiveSelectedAndConvert(Destination destination, string messageSelector);
-		
+
 		/// <summary> Receive a message synchronously from the specified destination, but only
 		/// wait up to a specified time for delivery. Convert the message into an
 		/// object with a configured IMessageConverter.
@@ -439,7 +437,7 @@ namespace Spring.Messaging.Ems.Core
         /// </summary>
         /// <param name="action">The action callback object that exposes the session/browser pair.</param>
         /// <returns>the result object from working with the session</returns>
-        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>        
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         object Browse(IBrowserCallback action);
 
 
@@ -450,14 +448,14 @@ namespace Spring.Messaging.Ems.Core
         /// <param name="queue">The queue to browse.</param>
         /// <param name="action">The action callback object that exposes the session/browser pair.</param>
         /// <returns>the result object from working with the session</returns>
-        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>        
+        /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         object Browse(Queue queue, IBrowserCallback action);
 
         /// <summary>
         /// Browses messages in a EMS queue. The callback gives access to the EMS Session
         /// and QueueBrowser in order to browse the queue and react to the contents.
         /// </summary>
-        /// <param name="queueName">Name of the queue to browse, 
+        /// <param name="queueName">Name of the queue to browse,
         /// (to be resolved to an actual destination by a DestinationResolver)</param>
         /// <param name="action">The action callback object that exposes the session/browser pair.</param>
         /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
@@ -489,7 +487,7 @@ namespace Spring.Messaging.Ems.Core
         /// Browses messages in a EMS queue. The callback gives access to the EMS Session
         /// and QueueBrowser in order to browse the queue and react to the contents.
         /// </summary>
-        /// <param name="queueName">Name of the queue to browse, 
+        /// <param name="queueName">Name of the queue to browse,
         /// (to be resolved to an actual destination by a DestinationResolver)</param>
         /// <param name="messageSelector">The EMS message selector expression (or <code>null</code> if none).</param>
         /// <param name="action">The action callback object that exposes the session/browser pair.</param>
@@ -518,7 +516,7 @@ namespace Spring.Messaging.Ems.Core
         /// Browses messages in a EMS queue. The callback gives access to the EMS Session
         /// and QueueBrowser in order to browse the queue and react to the contents.
         /// </summary>
-        /// <param name="queueName">Name of the queue to browse, 
+        /// <param name="queueName">Name of the queue to browse,
         /// (to be resolved to an actual destination by a DestinationResolver)</param>
         /// <param name="action">The action callback delegate that exposes the session/browser pair.</param>
         /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
@@ -550,13 +548,13 @@ namespace Spring.Messaging.Ems.Core
         /// Browses messages in a EMS queue. The callback gives access to the EMS Session
         /// and QueueBrowser in order to browse the queue and react to the contents.
         /// </summary>
-        /// <param name="queueName">Name of the queue to browse, 
+        /// <param name="queueName">Name of the queue to browse,
         /// (to be resolved to an actual destination by a DestinationResolver)</param>
         /// <param name="messageSelector">The EMS message selector expression (or <code>null</code> if none).</param>
         /// <param name="action">The action callback delegate that exposes the session/browser pair.</param>
         /// <returns></returns>
         /// <exception cref="EMSException">If there is any problem accessing the EMS API</exception>
         object BrowseSelectedWithDelegate(string queueName, string messageSelector, BrowserDelegate action);
-            
+
 	}
 }

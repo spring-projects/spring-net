@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using System.Reflection;
 
 #endregion
@@ -171,7 +170,7 @@ namespace Spring.Util
 		}
 
 		/// <summary>
-		/// Gets the return <see cref="System.Type"/> of the 
+		/// Gets the return <see cref="System.Type"/> of the
 		/// method signature associated with this delegate type.
 		/// </summary>
 		/// <returns>The return <see cref="System.Type"/>.</returns>
@@ -227,7 +226,7 @@ namespace Spring.Util
 		/// <paramref name="handlerMethod"/> is compatible with the signature
 		/// expected by the supplied <paramref name="eventMeta"/>;
 		/// <see langword="false"/> if not or either of the supplied
-		/// parameters is <see langword="null"/>. 
+		/// parameters is <see langword="null"/>.
 		/// </returns>
 		/// <seealso cref="Spring.Util.DelegateInfo.IsSignatureCompatible(MethodInfo)"/>
 		public static bool IsSignatureCompatible(

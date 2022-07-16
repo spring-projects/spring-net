@@ -18,16 +18,11 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Runtime.Serialization;
-
-#endregion
 
 namespace Spring.Dao
 {
-	/// <summary> 
+	/// <summary>
 	/// Generic exception thrown when the current process was
 	/// a deadlock loser, and its transaction rolled back.
 	/// </summary>

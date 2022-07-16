@@ -2,16 +2,15 @@
 
 /*
  * All the source code provided by AOP Alliance is Public Domain.
- * 
+ *
  *      http://aopalliance.sourceforge.net/
- * 
+ *
  */
 
 #endregion
 
 #region Imports
 
-using System;
 using System.Reflection;
 
 #endregion

@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@
 #region Imports
 
 using System.Collections;
-using System.Collections.Generic;
 using System.Reflection;
 
 using Spring.Aop;
@@ -36,17 +35,17 @@ namespace Spring.Aspects.Cache
     /// </summary>
     /// <remarks>
     /// <p>
-    /// This advice can be used to evict items from the cache. 
+    /// This advice can be used to evict items from the cache.
     /// </p>
     /// <p>
     /// Information that determines which items should be evicted and from which cache
-    /// are retrieved from the <see cref="InvalidateCacheAttribute"/>s  that are defined 
+    /// are retrieved from the <see cref="InvalidateCacheAttribute"/>s  that are defined
     /// on the pointcut.
     /// </p>
     /// <p>
-    /// Items are evicted *after* target method is invoked. Return value of the method, 
+    /// Items are evicted *after* target method is invoked. Return value of the method,
     /// as well as method arguments, can be used to determine a list of keys for the items
-    /// that should be evicted (return value will be passed as a context for 
+    /// that should be evicted (return value will be passed as a context for
     /// <see cref="InvalidateCacheAttribute.Keys"/> expression evaluation, and method
     /// arguments will be passed as variables, keyed by argument name).
     /// </p>

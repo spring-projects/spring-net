@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +18,9 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Reflection;
 
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Objects.Factory.Support
 {
@@ -93,7 +88,7 @@ namespace Spring.Objects.Factory.Support
 		/// <summary>
 		/// Helper method for subclasses to retrieve the appropriate
 		/// <see cref="Spring.Objects.Factory.Support.MethodOverride"/> for the
-		/// supplied <paramref name="method"/>.  
+		/// supplied <paramref name="method"/>.
 		/// </summary>
 		/// <param name="method">
 		/// The <see cref="System.Reflection.MethodInfo"/> to use to retrieve

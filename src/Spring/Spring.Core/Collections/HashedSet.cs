@@ -1,9 +1,9 @@
-/* Copyright © 2002-2011 by Aidant Systems, Inc., and by Jason Smith. */
+/* Copyright ï¿½ 2002-2011 by Aidant Systems, Inc., and by Jason Smith. */
 
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,12 +20,7 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Collections;
-
-#endregion
 
 namespace Spring.Collections
 {

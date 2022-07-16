@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2010 the original author or authors.
+ * Copyright ï¿½ 2002-2010 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 
 using Spring.Messaging.Ems.Common;
 using Spring.Util;
-using TIBCO.EMS;
 
 namespace Spring.Messaging.Ems.Support.Destinations
 {
@@ -30,14 +29,14 @@ namespace Spring.Messaging.Ems.Support.Destinations
     /// </summary>
     /// <remarks>
     /// <p>Not intended to be used directly. See EmsTemplate.</p>
-    /// 
+    ///
     /// </remarks>
     /// <author>Juergen Hoeller </author>
     /// <author>Mark Pollack (.NET)</author>
     public class EmsDestinationAccessor : EmsAccessor
     {
         #region Fields
-        
+
         private IDestinationResolver destinationResolver = new DynamicDestinationResolver();
 
         private bool pubSubDomain = false;
@@ -74,7 +73,7 @@ namespace Spring.Messaging.Ems.Support.Destinations
         /// Gets or sets a value indicating whether Publish/Subscribe
         /// domain (Topics) is used. Otherwise, the Point-to-Point domain
         /// (Queues) is used.
-        /// 
+        ///
         /// </summary>
         /// <remarks>this
         /// setting tells what type of destination to create if dynamic destinations are enabled.</remarks>
@@ -93,7 +92,7 @@ namespace Spring.Messaging.Ems.Support.Destinations
             }
 
         }
-		
+
         #endregion
 
         /// <summary>

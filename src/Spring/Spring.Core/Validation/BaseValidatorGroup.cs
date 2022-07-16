@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@
 #endregion
 
 using System.Collections;
-using System.Collections.Generic;
 using Spring.Expressions;
 
 namespace Spring.Validation
@@ -44,7 +43,7 @@ namespace Spring.Validation
         /// Initializes a new instance
         /// </summary>
         /// <param name="when">The expression that determines if this validator should be evaluated.</param>
-        public BaseValidatorGroup(string when) 
+        public BaseValidatorGroup(string when)
             : base(when)
         {}
 
@@ -52,7 +51,7 @@ namespace Spring.Validation
         /// Initializes a new instance
         /// </summary>
         /// <param name="when">The expression that determines if this validator should be evaluated.</param>
-        public BaseValidatorGroup(IExpression when) 
+        public BaseValidatorGroup(IExpression when)
             : base(when)
         {}
 

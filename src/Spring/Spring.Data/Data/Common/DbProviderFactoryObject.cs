@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,6 @@
 
 #endregion
 
-using System;
-
 using Spring.Objects.Factory;
 using Spring.Util;
 
@@ -29,7 +27,7 @@ namespace Spring.Data.Common
     /// A <see cref="Spring.Objects.Factory.IFactoryObject"/> implementation that
     /// creates instances of the <see cref="IDbProvider"/> class.
     /// </summary>
-    /// <remarks>Typically used as a convenience for retrieving shared 
+    /// <remarks>Typically used as a convenience for retrieving shared
     /// <see cref="IDbProvider"/> in a Spring XML configuration file as compared to
     /// using explict factory method support.
     /// </remarks>

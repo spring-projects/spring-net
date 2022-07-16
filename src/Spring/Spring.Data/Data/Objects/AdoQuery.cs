@@ -1,14 +1,14 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
- * 
+ * Copyright ï¿½ 2002-2011 the original author or authors.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,13 +18,9 @@
 
 #endregion
 
-#region Imports
-
 using System.Collections;
 using Spring.Dao.Support;
 using Spring.Data.Common;
-
-#endregion
 
 namespace Spring.Data.Objects
 {
@@ -47,7 +43,7 @@ namespace Spring.Data.Objects
 		{
 
 		}
-	    
+
 	    public AdoQuery(IDbProvider provider, string sql)
 	    {
 	        DbProvider = provider;
@@ -61,22 +57,22 @@ namespace Spring.Data.Objects
 		#endregion
 
 		#region Methods
-	    
+
         public IList Query()
         {
             return QueryByNamedParam(null);
         }
-	    	    
+
 	    public IList QueryByNamedParam(IDictionary inParams)
 	    {
 	        return QueryByNamedParam(inParams, null);
 	    }
-	    
+
 	    public IList QueryByNamedParam(IDictionary inParams, IDictionary returnedParameters)
 	    {
             return QueryByNamedParam(inParams, returnedParameters, null);
 	    }
-	    
+
         public IList QueryByNamedParam(IDictionary inParams, IDictionary returnedParameters, IDictionary callingContext)
         {
             ValidateNamedParameters(inParams);
@@ -104,7 +100,7 @@ namespace Spring.Data.Objects
 
 
 	    protected abstract IRowMapper NewRowMapper(IDictionary inParams, IDictionary callingContext);
-	    
+
 		#endregion
 
 	}

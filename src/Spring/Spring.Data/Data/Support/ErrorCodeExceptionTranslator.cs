@@ -1,14 +1,14 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
- * 
+ * Copyright ï¿½ 2002-2011 the original author or authors.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,14 +18,9 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using Common.Logging;
 using Spring.Dao;
 using Spring.Data.Common;
-
-#endregion
 
 namespace Spring.Data.Support
 {
@@ -34,7 +29,7 @@ namespace Spring.Data.Support
 	/// error codes and translates into the DAO exception hierarchy.
 	/// </summary>
 	/// <remarks>This class loads the obtains error codes from
-	/// the IDbProvider metadata property ErrorCodes  
+	/// the IDbProvider metadata property ErrorCodes
 	/// which defines error code mappings for various providers.
 	/// </remarks>
 	/// <author>Mark Pollack (.NET)</author>
@@ -45,15 +40,15 @@ namespace Spring.Data.Support
 	    private ErrorCodes errorCodes;
 
         private IAdoExceptionTranslator fallbackTranslator;
-	    
+
 	    private IDbProvider dbProvider;
-	    
+
 		#endregion
 
 		#region Constants
 
 		/// <summary>
-		/// The shared log instance for this class (and derived classes). 
+		/// The shared log instance for this class (and derived classes).
 		/// </summary>
 		protected static readonly ILog log =
 			LogManager.GetLogger(typeof (ErrorCodeExceptionTranslator));
@@ -83,8 +78,8 @@ namespace Spring.Data.Support
             DbProvider = provider;
             errorCodes = ec;
         }
-        
-	  
+
+
 
 		#endregion
 
@@ -100,10 +95,10 @@ namespace Spring.Data.Support
 	        {
 	            dbProvider = value;
                 errorCodes = dbProvider.DbMetadata.ErrorCodes;
-	            
+
 	        }
 	    }
-	    
+
         /// <summary>
         /// Gets the error codes for the provider
         /// </summary>
@@ -115,7 +110,7 @@ namespace Spring.Data.Support
 	            return errorCodes;
 	        }
 	    }
-	    
+
 		#endregion
 
         /// <summary>
@@ -134,7 +129,7 @@ namespace Spring.Data.Support
 	            fallbackTranslator = value;
 	        }
 	    }
-	    
+
 
 		#region Methods
 
@@ -164,7 +159,7 @@ namespace Spring.Data.Support
                 sql = "";
             }
             string errorCode = ExtractErrorCode(exception);
-            
+
             DataAccessException dex = DoTranslate(task, sql, errorCode, exception);
             if (dex != null)
             {
@@ -183,8 +178,8 @@ namespace Spring.Data.Support
             }
             // We couldn't identify it more precisely.
             return new UncategorizedAdoException(task, sql, errorCode, exception);
-            
-            
+
+
         }
 
         /// <summary>
@@ -224,7 +219,7 @@ namespace Spring.Data.Support
 	                    LogTranslation(task, sql, errorCode, exception, false);
 	                    return new BadSqlGrammarException(task, sql, exception);
 	                }
-                    else if (Array.IndexOf(errorCodes.InvalidResultSetAccessCodes, errorCode) >= 0) 
+                    else if (Array.IndexOf(errorCodes.InvalidResultSetAccessCodes, errorCode) >= 0)
                     {
                         LogTranslation(task, sql, errorCode, exception, false);
                         return new InvalidResultSetAccessException(task, sql, exception);
@@ -234,7 +229,7 @@ namespace Spring.Data.Support
                         LogTranslation(task, sql, errorCode, exception, false);
                         return new DuplicateKeyException(task, sql, exception);
                     }
-                    else if (Array.IndexOf(errorCodes.DataAccessResourceFailureCodes, errorCode) >= 0) 
+                    else if (Array.IndexOf(errorCodes.DataAccessResourceFailureCodes, errorCode) >= 0)
                     {
                         LogTranslation(task, sql, errorCode, exception, false);
                         return new DataAccessResourceFailureException(BuildMessage(task, sql, exception), exception);
@@ -244,27 +239,27 @@ namespace Spring.Data.Support
                         LogTranslation(task, sql, errorCode, exception, false);
                         return new TransientDataAccessResourceException(BuildMessage(task, sql, exception), exception);
                     }
-                    else if (Array.IndexOf(errorCodes.PermissionDeniedCodes, errorCode) >= 0) 
+                    else if (Array.IndexOf(errorCodes.PermissionDeniedCodes, errorCode) >= 0)
                     {
                         LogTranslation(task, sql, errorCode, exception, false);
                         return new PermissionDeniedDataAccessException(BuildMessage(task, sql, exception), exception);
                     }
-                    else if (Array.IndexOf(errorCodes.DataIntegrityViolationCodes, errorCode) >= 0) 
+                    else if (Array.IndexOf(errorCodes.DataIntegrityViolationCodes, errorCode) >= 0)
                     {
                         LogTranslation(task, sql, errorCode, exception, false);
                         return new DataIntegrityViolationException(BuildMessage(task, sql, exception), exception);
                     }
-                    else if (Array.IndexOf(errorCodes.CannotAcquireLockCodes, errorCode) >= 0) 
+                    else if (Array.IndexOf(errorCodes.CannotAcquireLockCodes, errorCode) >= 0)
                     {
                         LogTranslation(task, sql, errorCode, exception, false);
                         return new CannotAcquireLockException(BuildMessage(task, sql, exception), exception);
                     }
-                    else if (Array.IndexOf(errorCodes.DeadlockLoserCodes, errorCode) >= 0) 
+                    else if (Array.IndexOf(errorCodes.DeadlockLoserCodes, errorCode) >= 0)
                     {
                         LogTranslation(task, sql, errorCode, exception, false);
                         return new DeadlockLoserDataAccessException(BuildMessage(task, sql, exception), exception);
                     }
-                    else if (Array.IndexOf(errorCodes.CannotSerializeTransactionCodes, errorCode) >= 0) 
+                    else if (Array.IndexOf(errorCodes.CannotSerializeTransactionCodes, errorCode) >= 0)
                     {
                         LogTranslation(task, sql, errorCode, exception, false);
                         return new CannotSerializeTransactionException(BuildMessage(task, sql, exception), exception);
@@ -329,7 +324,7 @@ namespace Spring.Data.Support
         /// <param name="b">if set to <c>true</c> [b].</param>
 	    private void LogTranslation(string task, string sql, string errorCode, Exception exception, bool b)
 	    {
-            if (log.IsDebugEnabled) 
+            if (log.IsDebugEnabled)
             {
                 String intro = "Translating";
                 log.Debug(intro + " ADO exception with error code '" + errorCode

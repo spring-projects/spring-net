@@ -18,14 +18,9 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Reflection;
 using System.Text;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Objects.Factory.Support
 {

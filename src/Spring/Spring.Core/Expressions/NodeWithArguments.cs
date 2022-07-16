@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,7 @@
 
 #endregion
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Spring.Expressions.Parser.antlr.collections;
 
@@ -69,7 +67,7 @@ namespace Spring.Expressions
         }
 
         /// <summary>
-        /// Initializes the node. 
+        /// Initializes the node.
         /// </summary>
         private void InitializeNode()
         {
@@ -151,7 +149,7 @@ namespace Spring.Expressions
             {
                 InitializeNode();
             }
-            
+
             if (namedArgs.Count == 0)
             {
                 return null;

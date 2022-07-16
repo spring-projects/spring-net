@@ -18,16 +18,11 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using Spring.Util;
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.ServiceModel.Support;
 using Spring.Objects.Factory;
-
-#endregion
 
 namespace Spring.ServiceModel
 {
@@ -108,7 +103,7 @@ namespace Spring.ServiceModel
             }
 
             return new ServiceProxyTypeBuilder(serviceName, objectFactory, useServiceProxyTypeCache)
-                .BuildProxyType();                    
+                .BuildProxyType();
         }
 
         #endregion

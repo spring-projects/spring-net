@@ -18,8 +18,6 @@
 
 #endregion
 
-using System;
-
 namespace Spring.Transaction.Support
 {
 	/// <summary>
@@ -39,7 +37,7 @@ namespace Spring.Transaction.Support
 
 		#region ITransactionSynchronization Members
 		/// <summary>
-		/// Suspend this synchronization. 
+		/// Suspend this synchronization.
 		/// </summary>
 		/// <remarks>
 		/// <p>
@@ -74,7 +72,7 @@ namespace Spring.Transaction.Support
 		/// Can flush transactional sessions to the database.
 		/// </p>
 		/// <p>
-		/// Note that exceptions will get propagated to the commit caller and 
+		/// Note that exceptions will get propagated to the commit caller and
 		/// cause a rollback of the transaction.
 		/// </p>
 		/// </remarks>
@@ -92,7 +90,7 @@ namespace Spring.Transaction.Support
 	    public virtual void AfterCommit()
 	    {
 	    }
-	    
+
 		/// <summary>
 		/// Invoked before transaction commit/rollback (after
 		/// <see cref="Spring.Transaction.Support.ITransactionSynchronization.BeforeCommit"/>,
@@ -132,7 +130,7 @@ namespace Spring.Transaction.Support
 	    ///</summary>
 	    ///
 	    ///<returns>
-	    ///A 32-bit signed integer that indicates the relative order of the objects being compared. The return value has these meanings: Value Meaning Less than zero This instance is less than obj. Zero This instance is equal to obj. Greater than zero This instance is greater than obj. 
+	    ///A 32-bit signed integer that indicates the relative order of the objects being compared. The return value has these meanings: Value Meaning Less than zero This instance is less than obj. Zero This instance is equal to obj. Greater than zero This instance is greater than obj.
 	    ///</returns>
 	    ///
 	    ///<param name="obj">An object to compare with this instance. </param>

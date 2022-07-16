@@ -1,12 +1,10 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Web.UI;
 
 namespace Spring.DataBinding
 {
     /// <summary>
-    /// This formatter acts as an adapter to a datasource. It parses a given datasource into 
+    /// This formatter acts as an adapter to a datasource. It parses a given datasource into
     /// a table to allow converting back and forth between objects and their keys during formatting.
     /// </summary>
     /// <remarks>
@@ -21,7 +19,7 @@ namespace Spring.DataBinding
 
         [ThreadStatic]
         private Hashtable _dataItemsByKey;
-        [ThreadStatic] 
+        [ThreadStatic]
         private string _dataItemKeyField;
 
         /// <summary>
@@ -75,7 +73,7 @@ namespace Spring.DataBinding
         {
             _dataItemKeyField = dataItemKeyField;
 
-            // if we are binding from target to source only, we can save some performance 
+            // if we are binding from target to source only, we can save some performance
             // here because only Format() will be called.
             if (direction != (direction&BindingDirection.TargetToSource))
             {

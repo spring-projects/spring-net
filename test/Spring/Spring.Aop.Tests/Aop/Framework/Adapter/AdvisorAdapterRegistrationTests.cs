@@ -16,16 +16,12 @@
  */
 #endregion
 
-#region Imports
-
 using NUnit.Framework;
 
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.Objects;
 using Spring.Objects.Factory.Xml;
-
-#endregion
 
 namespace Spring.Aop.Framework.Adapter
 {

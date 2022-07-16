@@ -1,14 +1,14 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
- * 
+ * Copyright ï¿½ 2002-2011 the original author or authors.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,13 +18,8 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Collections;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Dao.Support
 {
@@ -33,7 +28,7 @@ namespace Spring.Dao.Support
 	/// Useful with any data access technology.
 	/// </summary>
 	/// <author>Mark Pollack (.NET)</author>
-	public class DataAccessUtils 
+	public class DataAccessUtils
 	{
 
 		#region Constructor (s)
@@ -48,7 +43,7 @@ namespace Spring.Dao.Support
 		#endregion
 
 		#region Methods
-	    
+
 	    public static object RequiredUniqueResultSet(IList results)
 	    {
 	        int size = (results != null ? results.Count : 0);
@@ -67,7 +62,7 @@ namespace Spring.Dao.Support
 
         /// <summary>
         /// Return a translated exception if this is appropriate, or null if the exception could
-        /// not be translated. 
+        /// not be translated.
         /// </summary>
         /// <param name="rawException">The raw exception we may wish to translate.</param>
         /// <param name="pet">The PersistenceExceptionTranslator to use to perform the translation.</param>
@@ -78,8 +73,8 @@ namespace Spring.Dao.Support
             AssertUtils.ArgumentNotNull(pet, "PersistenceExceptionTranslator must not be null");
             return pet.TranslateExceptionIfPossible(rawException);
         }
-    	
-	    #endregion	    
+
+	    #endregion
 	}
 
 }

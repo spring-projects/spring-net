@@ -14,7 +14,6 @@
 * limitations under the License.
 */
 
-using System;
 using Quartz;
 using Quartz.Impl;
 using Spring.Objects.Factory;
@@ -23,7 +22,7 @@ using Spring.Objects.Support;
 
 namespace Spring.Scheduling.Quartz
 {
-    /// <summary> 
+    /// <summary>
     /// IFactoryObject that exposes a JobDetail object that delegates job execution
     /// to a specified (static or non-static) method. Avoids the need to implement
     /// a one-line Quartz Job that just invokes an existing service method.
@@ -72,7 +71,7 @@ namespace Spring.Scheduling.Quartz
             group = SchedulerConstants.DefaultGroup;
         }
 
-        /// <summary> 
+        /// <summary>
         /// Set the name of the job.
         /// Default is the object name of this FactoryObject.
         /// </summary>
@@ -82,7 +81,7 @@ namespace Spring.Scheduling.Quartz
             set => name = value;
         }
 
-        /// <summary> 
+        /// <summary>
         /// Set the group of the job.
         /// Default is the default group of the Scheduler.
         /// </summary>
@@ -93,7 +92,7 @@ namespace Spring.Scheduling.Quartz
             set => group = value;
         }
 
-        /// <summary> 
+        /// <summary>
         /// Specify whether or not multiple jobs should be run in a concurrent
         /// fashion. The behavior when one does not want concurrent jobs to be
         /// executed is realized through adding the <see cref="DisallowConcurrentExecutionAttribute" /> attribute.
@@ -114,7 +113,7 @@ namespace Spring.Scheduling.Quartz
         /// <value>The job detail.</value>
         protected IJobDetail JobDetail => jobDetail;
 
-        /// <summary> 
+        /// <summary>
         /// Set a list of JobListener names for this job, referring to
         /// non-global JobListeners registered with the Scheduler.
         /// </summary>

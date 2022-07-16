@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Collections;
 using System.Data;
 using Common.Logging;
@@ -430,8 +429,8 @@ namespace Spring.Transaction.Support
         /// EnterpriseServices transaction invoked via their APIs.
         /// <para>
         /// The default implementation simply invokes the <code>AfterCompletion</code> methods
-        /// immediately, passing in TransactionSynchronizationStatus.Unknown. 
-        /// This is the best we can do if there's no chance to determine the actual 
+        /// immediately, passing in TransactionSynchronizationStatus.Unknown.
+        /// This is the best we can do if there's no chance to determine the actual
         /// outcome of the outer transaction.
         /// </para>
         /// </remarks>
@@ -692,7 +691,7 @@ namespace Spring.Transaction.Support
                 log.Debug("Participating in existing transaction");
             }
 
-            //TODO: this block related to un-ported java feature permitting setting the ValidateExistingTransaction flag 
+            //TODO: this block related to un-ported java feature permitting setting the ValidateExistingTransaction flag
             //  default is FALSE anyway so skipping this validation block should have no effect on code excecution path
             /*if (isValidateExistingTransaction())
             {
@@ -718,7 +717,7 @@ namespace Spring.Transaction.Support
                                 definition + "] is not marked as read-only but existing transaction is");
                     }
                 }
-            
+
             bool newSynch = (_transactionSyncState != TransactionSynchronizationState.Never);
             return PrepareTransactionStatus(definition, transaction, false, newSynch, debugEnabled, null);
 

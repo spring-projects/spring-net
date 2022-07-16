@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
 using System.Reflection;
@@ -56,7 +54,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         public IAdvice[] m_introductions;
 
         /// <summary>
-        /// Target source 
+        /// Target source
         /// </summary>
         public ITargetSource m_targetSource;
 

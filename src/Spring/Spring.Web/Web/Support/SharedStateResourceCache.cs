@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System.Collections.Generic;
 using Spring.Globalization;
 using Spring.Objects;
 using Spring.Util;

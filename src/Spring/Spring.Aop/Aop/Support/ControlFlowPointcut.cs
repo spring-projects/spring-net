@@ -1,5 +1,5 @@
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-using System;
 using System.Reflection;
 using System.Runtime.Serialization;
 
@@ -84,7 +83,7 @@ namespace Spring.Aop.Support
 	        _methodName = info.GetString("MethodName");
 	        _evaluationCount = info.GetInt32("EvaluationCount");
 	    }
-        
+
 	    /// <inheritdoc />
 	    public void GetObjectData(SerializationInfo info, StreamingContext context)
 	    {

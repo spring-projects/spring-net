@@ -18,15 +18,10 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Collections.Specialized;
 using System.Reflection;
 using System.Text;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Objects.Factory.Support
 {
@@ -57,7 +52,7 @@ namespace Spring.Objects.Factory.Support
 		/// </param>
 		/// <param name="methodReplacerObjectName">
 		/// The object name of the <see cref="Spring.Objects.Factory.Support.IMethodReplacer"/>
-		/// instance in the surrounding IoC container. 
+		/// instance in the surrounding IoC container.
 		/// </param>
 		/// <exception cref="System.ArgumentNullException">
 		/// If either of the supplied arguments is <see langword="null"/> or
@@ -82,7 +77,7 @@ namespace Spring.Objects.Factory.Support
 		/// If the supplied <paramref name="identifier"/> is <see langword="null"/> or
 		/// contains only whitespace character(s).
 		/// </exception>
-		/// <seeaso cref="Spring.Objects.Factory.Support.MethodOverride.Matches(MethodInfo)"/> 
+		/// <seeaso cref="Spring.Objects.Factory.Support.MethodOverride.Matches(MethodInfo)"/>
 		public void AddTypeIdentifier(string identifier)
 		{
 			AssertUtils.ArgumentHasText(identifier, "identifier");
@@ -91,7 +86,7 @@ namespace Spring.Objects.Factory.Support
 
 		/// <summary>
 		/// The object name of the <see cref="Spring.Objects.Factory.Support.IMethodReplacer"/>
-		/// instance in the surrounding IoC container. 
+		/// instance in the surrounding IoC container.
 		/// </summary>
 		public string MethodReplacerObjectName
 		{

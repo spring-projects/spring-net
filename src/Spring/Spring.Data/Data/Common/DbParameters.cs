@@ -1,14 +1,14 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
- * 
+ * Copyright ï¿½ 2002-2011 the original author or authors.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,14 +18,9 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Data;
 using System.Reflection;
 using Spring.Dao;
-
-#endregion
 
 namespace Spring.Data.Common
 {
@@ -41,7 +36,7 @@ namespace Spring.Data.Common
 
         private IDbProvider dbProvider;
 
-        //Just used as a container for the underlying parameter collection.	    
+        //Just used as a container for the underlying parameter collection.
         private IDbCommand dbCommand;
         private IDataParameterCollection dataParameterCollection;
 
@@ -85,7 +80,7 @@ namespace Spring.Data.Common
         {
             get { return dataParameterCollection; }
         }
-        
+
         public int Count
         {
             get
@@ -102,16 +97,16 @@ namespace Spring.Data.Common
         {
             dataParameterCollection.Add(dbParameter);
         }
-        
 
-        public IDbDataParameter AddParameter(string name, 
-                                 Enum parameterType, 
-                                 int size, 
+
+        public IDbDataParameter AddParameter(string name,
+                                 Enum parameterType,
+                                 int size,
                                  ParameterDirection direction,
                                  bool isNullable,
-                                 byte precision, 
-                                 byte scale, 
-                                 string sourceColumn, 
+                                 byte precision,
+                                 byte scale,
+                                 string sourceColumn,
                                  DataRowVersion sourceVersion,
                                  object parameterValue)
         {
@@ -149,18 +144,18 @@ namespace Spring.Data.Common
             parameter.Value = (parameterValue == null) ? DBNull.Value : parameterValue;
 
             dataParameterCollection.Add(parameter);
-            
+
             return parameter;
         }
 
-        public IDbDataParameter AddParameter(string name, 
-                                             Enum parameterType, 
-                                             ParameterDirection direction, 
+        public IDbDataParameter AddParameter(string name,
+                                             Enum parameterType,
+                                             ParameterDirection direction,
                                              bool isNullable,
                                              byte precision,
-                                             byte scale, 
-                                             string sourceColumn, 
-                                             DataRowVersion sourceVersion, 
+                                             byte scale,
+                                             string sourceColumn,
+                                             DataRowVersion sourceVersion,
                                              object parameterValue)
         {
             return AddParameter(name, parameterType, 0, direction, isNullable, precision, scale, sourceColumn, sourceVersion,
@@ -186,31 +181,31 @@ namespace Spring.Data.Common
 
         public IDbDataParameter AddWithValue(string name, object parameterValue)
         {
-            return AddParameter(name, null, -1, ParameterDirection.Input, false, 
+            return AddParameter(name, null, -1, ParameterDirection.Input, false,
                                 0, 0, null, DataRowVersion.Default, parameterValue);
         }
 
         public IDbDataParameter Add(string name, Enum parameterType)
         {
-            return AddParameter(name, parameterType, -1, ParameterDirection.Input, 
+            return AddParameter(name, parameterType, -1, ParameterDirection.Input,
                 false, 0, 0, null, DataRowVersion.Default, null);
         }
-        
+
         public IDbDataParameter Add(string name, Enum parameterType, int size)
         {
-            return AddParameter(name, parameterType, size, ParameterDirection.Input, 
+            return AddParameter(name, parameterType, size, ParameterDirection.Input,
                 false, 0, 0, null, DataRowVersion.Default, null);
         }
-        
+
         public IDbDataParameter Add(string name, Enum parameterType, int size, string sourceColumn)
         {
-            return AddParameter(name, parameterType, size, ParameterDirection.Input, 
+            return AddParameter(name, parameterType, size, ParameterDirection.Input,
                 false, 0, 0, sourceColumn, DataRowVersion.Default, null);
         }
 
         public IDbDataParameter AddOut(string name, Enum parameterType)
         {
-            return AddParameter(name, parameterType, -1, ParameterDirection.Output, 
+            return AddParameter(name, parameterType, -1, ParameterDirection.Output,
                 false, 0, 0, null, DataRowVersion.Default, null);
         }
 
@@ -219,25 +214,25 @@ namespace Spring.Data.Common
             return AddParameter(name, parameterType, size, ParameterDirection.Output,
                 false, 0, 0, null, DataRowVersion.Default, null);
         }
-        
+
         public IDbDataParameter AddInOut(string name, Enum parameterType)
         {
             return AddParameter(name, parameterType, -1, ParameterDirection.InputOutput,
                 false, 0, 0, null, DataRowVersion.Default, null);
         }
-        
+
         public IDbDataParameter AddInOut(string name, Enum parameterType, int size)
         {
             return AddParameter(name, parameterType, size, ParameterDirection.InputOutput,
                 false, 0, 0, null, DataRowVersion.Default, null);
         }
-        
+
         public IDbDataParameter AddReturn(string name, Enum parameterType)
         {
             return AddParameter(name, parameterType, -1, ParameterDirection.ReturnValue,
                 false, 0, 0, null, DataRowVersion.Default, null);
         }
-        
+
         public IDbDataParameter AddReturn(string name, Enum parameterType, int size)
         {
             return AddParameter(name, parameterType, size, ParameterDirection.ReturnValue,
@@ -266,7 +261,7 @@ namespace Spring.Data.Common
             }
         }
 
-        
+
         protected void AssignParameterType(IDbDataParameter parameter, Enum parameterType)
         {
             if (parameterType != null)
@@ -280,15 +275,15 @@ namespace Spring.Data.Common
                     if (parameterType.GetType() != dbProvider.DbMetadata.ParameterDbType)
                     {
                         throw new TypeMismatchDataAccessException("Invalid parameter type specified for parameter name ["
-                                                                  + parameter.ParameterName + "].  [" 
-                                                                  + parameterType.GetType().AssemblyQualifiedName + "] is not of expected type [" 
+                                                                  + parameter.ParameterName + "].  ["
+                                                                  + parameterType.GetType().AssemblyQualifiedName + "] is not of expected type ["
                                                                   + dbProvider.DbMetadata.ParameterDbType.AssemblyQualifiedName + "]");
                     }
                     dbProvider.DbMetadata.ParameterDbTypeProperty.SetValue(parameter, parameterType, null);
                 }
             }
         }
-        
+
         protected void AssignIsNullable(bool isNullable, IDbDataParameter parameter)
         {
             PropertyInfo propertyInfo = dbProvider.DbMetadata.ParameterIsNullableProperty;

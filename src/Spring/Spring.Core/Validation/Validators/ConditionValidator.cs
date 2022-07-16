@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +18,8 @@
 
 #endregion
 
-#region Imports
-
-using System;
-
 using Spring.Expressions;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Validation
 {
@@ -71,7 +65,7 @@ namespace Spring.Validation
 		/// <remarks>
 		/// <p>
 		/// Test can be any logical expression that is supported by the Spring.NET logical
-		/// expression evaluation engine, and can use any variables that can be resolved 
+		/// expression evaluation engine, and can use any variables that can be resolved
 		/// by the variable resolver used by the validation engine.
 		/// </p>
 		/// </remarks>

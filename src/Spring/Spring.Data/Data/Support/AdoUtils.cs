@@ -1,4 +1,3 @@
-using System;
 using System.Data;
 using Common.Logging;
 
@@ -71,7 +70,7 @@ namespace Spring.Data.Support
                 }
 	        }
         }
-	    
+
         private static void DoDisposeCommand(IDbCommand command)
         {
             try

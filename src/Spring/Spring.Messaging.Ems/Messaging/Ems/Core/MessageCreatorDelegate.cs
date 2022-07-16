@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2010 the original author or authors.
+ * Copyright ï¿½ 2002-2010 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@
 #endregion
 
 using Spring.Messaging.Ems.Common;
-using TIBCO.EMS;
 
 namespace Spring.Messaging.Ems.Core
 {
@@ -27,7 +26,7 @@ namespace Spring.Messaging.Ems.Core
     /// Delegate that creates a EMS message given a Session
     /// </summary>
     /// <param name="session">the EMS Session to be used to create the
-    /// <code>Message</code> (never <code>null</code>) 
+    /// <code>Message</code> (never <code>null</code>)
     /// </param>
     /// <returns> the <code>Message</code> to be sent
     /// </returns>

@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2010 the original author or authors.
+ * Copyright ï¿½ 2002-2010 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,8 +18,6 @@
 
 #endregion
 
-
-using System;
 using System.Collections;
 using Spring.Core.TypeResolution;
 
@@ -36,13 +34,13 @@ namespace Spring.Messaging.Ems.Support.Converter
         //Generics not used to support both 1.1 and 2.0
         private IDictionary idTypeMapping;
         private IDictionary typeIdMapping;
-        
+
         private string defaultHashtableTypeId = "Hashtable";
 
         private Type defaultHashtableClass = typeof(Hashtable);
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="TypeMapper"/> 
+        /// Initializes a new instance of the <see cref="TypeMapper"/>
         /// </summary>
         public TypeMapper()
         {
@@ -122,7 +120,7 @@ namespace Spring.Messaging.Ems.Support.Converter
                 string fullyQualifiedTypeName = defaultNamespace + "." +
                                  typeId + ", " +
                                  DefaultAssemblyName;
-                return TypeResolutionUtils.ResolveType(fullyQualifiedTypeName); 
+                return TypeResolutionUtils.ResolveType(fullyQualifiedTypeName);
             }
 
         }
@@ -141,7 +139,7 @@ namespace Spring.Messaging.Ems.Support.Converter
             {
                 defaultNamespace = value;
             }
-            
+
         }
 
         /// <summary>
@@ -192,7 +190,7 @@ namespace Spring.Messaging.Ems.Support.Converter
                 }
                 finalIdTypeMapping.Add(id,t);
                 typeIdMapping.Add(t,id);
-                
+
             }
             idTypeMapping = finalIdTypeMapping;
         }

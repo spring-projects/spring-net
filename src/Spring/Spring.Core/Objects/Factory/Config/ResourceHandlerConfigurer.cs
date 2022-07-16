@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +18,8 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Collections;
 using Spring.Core.IO;
-
-#endregion
 
 namespace Spring.Objects.Factory.Config
 {
@@ -42,12 +37,12 @@ namespace Spring.Objects.Factory.Config
     /// scope of an
     /// <see cref="Spring.Context.IApplicationContext"/> will
     /// <i>automatically</i> be picked up by the application context and made
-    /// available to the IoC container whenever resolution of IResources is required. 
+    /// available to the IoC container whenever resolution of IResources is required.
     /// </p>
     /// </remarks>
     /// <author>Mark Pollack</author>
     /// <seealso cref="Spring.Objects.Factory.Config.IObjectFactoryPostProcessor"/>
-    /// <seealso cref="Spring.Context.IApplicationContext"/>	
+    /// <seealso cref="Spring.Context.IApplicationContext"/>
     [Serializable]
     public class ResourceHandlerConfigurer : AbstractConfigurer
     {
@@ -62,10 +57,10 @@ namespace Spring.Objects.Factory.Config
         /// contains the resource protocol name as the key and type as the value.
         /// The key name can either be a string or an object, in which case
         /// ToString() will be used to obtain the string name.
-        /// The value can be the fully qualified name of the IResource 
+        /// The value can be the fully qualified name of the IResource
         /// implementation, a string, or
         /// an actual <see cref="System.Type"/> of the IResource class
-        /// 
+        ///
         /// </p>
         /// </remarks>
         public IDictionary ResourceHandlers

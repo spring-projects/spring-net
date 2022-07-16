@@ -14,12 +14,10 @@
 * limitations under the License.
 */
 
-using System.Threading;
-
 namespace Spring.Scheduling
 {
     /// <summary>
-    /// 
+    ///
     /// </summary>
     public interface ITaskExecutor
     {

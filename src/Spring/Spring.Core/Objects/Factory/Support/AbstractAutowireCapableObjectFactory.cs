@@ -14,16 +14,10 @@
  * limitations under the License.
  */
 
-using System;
 using System.Collections;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
-using System.Runtime.Serialization;
-
-using Common.Logging;
-
 using Spring.Collections;
 using Spring.Core.TypeResolution;
 using Spring.Objects.Factory.Config;
@@ -56,24 +50,24 @@ namespace Spring.Objects.Factory.Support
     [Serializable]
     public abstract class AbstractAutowireCapableObjectFactory : AbstractObjectFactory, IAutowireCapableObjectFactory
     {
-        
+
         private IInstantiationStrategy instantiationStrategy = new MethodInjectingInstantiationStrategy();
 
         /// <summary>
-        /// Cache of filtered PropertyInfos: object Type -> PropertyInfo array 
+        /// Cache of filtered PropertyInfos: object Type -> PropertyInfo array
         /// </summary>
         private readonly ConcurrentDictionary<Type, List<PropertyInfo>> filteredPropertyDescriptorsCache = new ConcurrentDictionary<Type, List<PropertyInfo>>();
 
         /// <summary>
         /// Dependency interfaces to ignore on dependency check and autowire, as Set of
-        /// Class objects. By default, only the IObjectFactoryAware and IObjectNameAware 
+        /// Class objects. By default, only the IObjectFactoryAware and IObjectNameAware
         /// interfaces are ignored.
         /// </summary>
         private readonly HybridSet ignoredDependencyInterfaces = new HybridSet();
 
         [NonSerialized]
         private ObjectDefinitionValueResolver cachedValueResolver;
-        
+
         /// <summary>
         /// The <see cref="System.Reflection.BindingFlags"/> used during the invocation and
         /// searching for of methods.
@@ -155,14 +149,14 @@ namespace Spring.Objects.Factory.Support
 
         /// <summary>
         /// Determines the <see cref="System.Type"/> of the object defined
-        /// by the supplied object <paramref name="definition"/>. 
+        /// by the supplied object <paramref name="definition"/>.
         /// </summary>
         /// <param name="objectName">
         /// The name associated with the supplied object <paramref name="definition"/>.
         /// </param>
         /// <param name="definition">
         /// The <see cref="Spring.Objects.Factory.Support.RootObjectDefinition"/>
-        /// that the <see cref="System.Type"/> is to be determined for. 
+        /// that the <see cref="System.Type"/> is to be determined for.
         /// </param>
         /// <returns>
         /// The <see cref="System.Type"/> of the object defined by the supplied
@@ -944,7 +938,7 @@ namespace Spring.Objects.Factory.Support
         }
 
         /// <summary>
-        /// Remove the specified singleton from the singleton cache that has 
+        /// Remove the specified singleton from the singleton cache that has
         /// been added before by a call to <see cref="AddEagerlyCachedSingleton"/>
         /// </summary>
         /// <param name="objectName">the name of the object to remove from the cache.</param>
@@ -1009,7 +1003,7 @@ namespace Spring.Objects.Factory.Support
                 InitObjectWrapper(instanceWrapper);
             }
             return instanceWrapper;
-            
+
             */
         }
 
@@ -1386,8 +1380,8 @@ namespace Spring.Objects.Factory.Support
         }
 
         /// <summary>
-        /// Destroys all of the objects registered as dependant on the 
-        /// object (definition) identified by the supplied <paramref name="name"/>. 
+        /// Destroys all of the objects registered as dependant on the
+        /// object (definition) identified by the supplied <paramref name="name"/>.
         /// </summary>
         /// <param name="name">
         /// The name of the root object (definition) that is itself being destroyed.
@@ -1472,7 +1466,7 @@ namespace Spring.Objects.Factory.Support
         //            }
         //            else if (argumentValue is IObjectDefinition)
         //            {
-        //                // resolve plain IObjectDefinition, without contained name: use dummy name... 
+        //                // resolve plain IObjectDefinition, without contained name: use dummy name...
         //                IObjectDefinition def = (IObjectDefinition)argumentValue;
         //                resolvedValue = ResolveInnerObjectDefinition(name, "(inner object)", argumentName, def, definition.IsSingleton);
         //
@@ -1975,7 +1969,7 @@ namespace Spring.Objects.Factory.Support
         /// </returns>
         /// <exception cref="ObjectsException">if dependency resolution failed</exception>
         public abstract object ResolveDependency(
-            DependencyDescriptor descriptor, 
+            DependencyDescriptor descriptor,
             string objectName,
             IList<string> autowiredObjectNames);
     }

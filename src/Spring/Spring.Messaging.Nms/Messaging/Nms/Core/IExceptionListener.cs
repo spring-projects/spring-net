@@ -18,8 +18,6 @@
 
 #endregion
 
-using System;
-
 namespace Spring.Messaging.Nms.Core
 {
     /// <summary>

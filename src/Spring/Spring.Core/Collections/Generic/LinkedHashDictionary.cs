@@ -18,8 +18,6 @@
 
 #endregion
 
-using System.Collections.Generic;
-
 namespace Spring.Collections.Generic
 {
     /// <summary>

@@ -14,9 +14,7 @@
 * limitations under the License.
 */
 
-using System;
 using System.Reflection;
-using System.Threading.Tasks;
 using Common.Logging;
 using Quartz;
 using Spring.Objects.Support;

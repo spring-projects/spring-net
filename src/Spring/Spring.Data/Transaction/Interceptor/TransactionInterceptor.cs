@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Reflection;
 using AopAlliance.Intercept;
 
@@ -34,7 +33,7 @@ namespace Spring.Transaction.Interceptor
 	/// transaction API: subclasses such as this are responsible for calling
 	/// superclass methods such as
     /// <see cref="Spring.Transaction.Interceptor.TransactionAspectSupport.CreateTransactionIfNecessary(MethodInfo, Type) "/>
-	/// in the correct order, in the event of normal invocation return or an exception. 
+	/// in the correct order, in the event of normal invocation return or an exception.
 	/// </p>
 	/// <p>
 	/// <see cref="Spring.Transaction.Interceptor.TransactionInterceptor"/>s are thread-safe.
@@ -48,7 +47,7 @@ namespace Spring.Transaction.Interceptor
 	public class TransactionInterceptor : TransactionAspectSupport, IMethodInterceptor
 	{
 		/// <summary>
-		/// AOP Alliance invoke call that handles all transaction plumbing. 
+		/// AOP Alliance invoke call that handles all transaction plumbing.
 		/// </summary>
 		/// <param name="invocation">
 		/// The method that is to execute in the context of a transaction.
@@ -71,13 +70,13 @@ namespace Spring.Transaction.Interceptor
                 // Invoke the next interceptor in the chain.
                 // This will normally result in a target object being invoked.
 				returnValue = invocation.Proceed();
-			} 
+			}
 			catch ( Exception ex )
 			{
                 // target invocation exception
 				CompleteTransactionAfterThrowing( txnInfo, ex );
                 throw;
-			} 
+			}
 			finally
 			{
 				CleanupTransactionInfo( txnInfo );

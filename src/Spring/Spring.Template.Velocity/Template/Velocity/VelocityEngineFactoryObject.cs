@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using NVelocity.App;
 using Spring.Context;
 using Spring.Objects.Factory;
@@ -26,9 +25,9 @@ using Spring.Objects.Factory;
 namespace Spring.Template.Velocity
 {
     /// <summary>
-    /// FactoryObject implementation that configures a VelocityEngine and provides it 
+    /// FactoryObject implementation that configures a VelocityEngine and provides it
     /// as an object reference. This object is intended for any kind of usage of Velocity in
-    /// application code, e.g. for generating email content. 
+    /// application code, e.g. for generating email content.
     ///
     /// See the base class VelocityEngineFactory for configuration details.
     /// </summary>
@@ -61,7 +60,7 @@ namespace Spring.Template.Velocity
         }
 
         /// <summary>
-        /// Facilitate the creation of the velocity engine object 
+        /// Facilitate the creation of the velocity engine object
         /// </summary>
         public void AfterPropertiesSet() {
             velocityEngine = CreateVelocityEngine();

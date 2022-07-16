@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,8 +19,6 @@
 #endregion
 
 #region Imports
-
-using System.IO;
 
 using Spring.Util;
 
@@ -69,7 +67,7 @@ namespace Spring.Core.IO
         }
 
         /// <summary>
-        /// Resolves the <see cref="System.IO.FileInfo"/> handle 
+        /// Resolves the <see cref="System.IO.FileInfo"/> handle
         /// for the supplied <paramref name="resourceName"/>.
         /// </summary>
         /// <param name="resourceName">
@@ -167,7 +165,7 @@ namespace Spring.Core.IO
         /// The name of the resource to test.
         /// </param>
         /// <returns>
-        /// <see langword="true"/> if resource name is relative; 
+        /// <see langword="true"/> if resource name is relative;
         /// otherwise <see langword="false"/>.
         /// </returns>
         protected override bool IsRelativeResource(string resourceName)

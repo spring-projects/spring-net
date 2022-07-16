@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +18,8 @@
 
 #endregion
 
-#region Imports
-
-using System;
-
 using Spring.Expressions;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Validation
 {
@@ -64,7 +58,7 @@ namespace Spring.Validation
     /// </p>
     /// <p>
     /// You cannot use this validator to validate any value types other than the ones
-    /// specified in the table above. 
+    /// specified in the table above.
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>

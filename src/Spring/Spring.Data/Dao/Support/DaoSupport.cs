@@ -1,14 +1,14 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
- * 
+ * Copyright ï¿½ 2002-2011 the original author or authors.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,18 +18,13 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using Common.Logging;
 using Spring.Objects.Factory;
-
-#endregion
 
 namespace Spring.Dao.Support
 {
 	/// <summary>
-	/// Generic base class for DAOs, defining template methods for DAO initialization. 
+	/// Generic base class for DAOs, defining template methods for DAO initialization.
 	/// </summary>
 	/// <remarks>
     /// Extended by Spring's specific DAO support classes, such as:
@@ -45,7 +40,7 @@ namespace Spring.Dao.Support
 		#region Constants
 
 		/// <summary>
-		/// The shared <see cref="Common.Logging.ILog"/> instance for this class (and derived classes). 
+		/// The shared <see cref="Common.Logging.ILog"/> instance for this class (and derived classes).
 		/// </summary>
 		protected static readonly ILog log =
 			LogManager.GetLogger(typeof (DaoSupport));
@@ -79,7 +74,7 @@ namespace Spring.Dao.Support
         /// </remarks>
         protected abstract void CheckDaoConfig();
 
-        /// <summary>        
+        /// <summary>
         /// Concrete subclasses can override this for custom initialization behavior.
         /// </summary>
         /// <remarks>
@@ -89,7 +84,7 @@ namespace Spring.Dao.Support
         /// </remarks>
         protected virtual void InitDao()
         {
-            
+
         }
 
 
@@ -101,11 +96,11 @@ namespace Spring.Dao.Support
             CheckDaoConfig();
 
             // Let concrete implementations initialize themselves.
-            try 
+            try
             {
                 InitDao();
             }
-            catch (Exception ex) 
+            catch (Exception ex)
             {
                 throw new ObjectInitializationException("Initialization of DAO failed: " + ex.Message, ex);
             }

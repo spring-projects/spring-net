@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -32,7 +31,7 @@ namespace Spring.Web.UI.Controls
 	/// This control is responsible for rendering tabs.
 	/// </summary>
 	/// <remarks>
-	/// By default, this TabContainer implementation uses <see cref="LinkButton"/> controls to 
+	/// By default, this TabContainer implementation uses <see cref="LinkButton"/> controls to
 	/// render tabs. Override <see cref="CreateTab"/> to change this behaviour.
 	/// </remarks>
 	/// <author>Erich Eichinger</author>
@@ -58,7 +57,7 @@ namespace Spring.Web.UI.Controls
 		}
 
 		/// <summary>
-		/// Catches <see cref="CommandEventArgs"/> with name '<see cref="SelectTabCommandName"/>' and 
+		/// Catches <see cref="CommandEventArgs"/> with name '<see cref="SelectTabCommandName"/>' and
 		/// raises the <see cref="Click"/> event.
 		/// </summary>
 		/// <param name="source">The source of the event.</param>

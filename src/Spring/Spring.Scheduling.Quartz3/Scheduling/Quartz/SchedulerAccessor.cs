@@ -14,15 +14,11 @@
  * limitations under the License.
  */
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using Common.Logging;
 using Quartz;
 using Quartz.Simpl;
 using Quartz.Xml;
-using Spring.Collections;
 using Spring.Context;
 using Spring.Core.IO;
 using Spring.Transaction;

@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,14 +21,12 @@
 #region Imports
 
 using System.Collections;
-using System.Collections.Generic;
 using System.Reflection;
 
 using AopAlliance.Intercept;
 
 using Spring.Caching;
 using Spring.Util;
-using System;
 using System.Collections.Concurrent;
 
 #endregion
@@ -40,11 +38,11 @@ namespace Spring.Aspects.Cache
     /// </summary>
     /// <remarks>
     /// <p>
-    /// This advice can be used to cache the return value of the method. 
+    /// This advice can be used to cache the return value of the method.
     /// </p>
     /// <p>
-    /// Parameters that determine where, how and for how long the return value 
-    /// will be cached are retrieved from the <see cref="CacheResultAttribute"/> and/or 
+    /// Parameters that determine where, how and for how long the return value
+    /// will be cached are retrieved from the <see cref="CacheResultAttribute"/> and/or
     /// <see cref="CacheResultItemsAttribute"/> that are defined on the pointcut.
     /// </p>
     /// </remarks>
@@ -159,7 +157,7 @@ namespace Spring.Aspects.Cache
         /// </param>
         /// <param name="resultInfo">
         /// Attribute specifying where and how to cache return value. Can be <c>null</c>,
-        /// in which case no caching of the result as a whole will be performed 
+        /// in which case no caching of the result as a whole will be performed
         /// (if the result is collection, individual items could still be cached separately).
         /// </param>
         /// <param name="vars">
@@ -178,13 +176,13 @@ namespace Spring.Aspects.Cache
                 #region Instrumentation
                 bool isLogDebugEnabled = logger.IsDebugEnabled;
                 #endregion
-                
-                AssertUtils.ArgumentNotNull(resultInfo.KeyExpression, "Key", 
+
+                AssertUtils.ArgumentNotNull(resultInfo.KeyExpression, "Key",
                     "The cache attribute is missing the key definition.");
 
                 object returnValue = null;
                 object resultKey = resultInfo.KeyExpression.GetValue(null, vars);
-                
+
                 ICache cache = GetCache(resultInfo.CacheName);
                 returnValue = cache.Get(resultKey);
                 cacheHit = (returnValue != null);
@@ -207,7 +205,7 @@ namespace Spring.Aspects.Cache
                     cacheHit = false;
                     returnValue = null;
                 }
-                
+
                 if (!cacheHit)
                 {
                     #region Instrumentation
@@ -262,7 +260,7 @@ namespace Spring.Aspects.Cache
         {
             foreach (CacheResultItemsAttribute itemInfo in itemInfoArray)
             {
-                AssertUtils.ArgumentNotNull(itemInfo.KeyExpression, "Key", 
+                AssertUtils.ArgumentNotNull(itemInfo.KeyExpression, "Key",
                     "The cache attribute is missing the key definition.");
 
                 ICache cache = GetCache(itemInfo.CacheName);

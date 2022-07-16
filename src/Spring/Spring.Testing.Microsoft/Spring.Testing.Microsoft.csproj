@@ -1,13 +1,21 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <TargetFramework>$(TargetFullFrameworkVersion)</TargetFramework>
     <Description>Interfaces and classes that provide Microsoft Unit Testing integration in Spring.Net</Description>
   </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Spring.Core\Spring.Core.csproj" />
     <ProjectReference Include="..\Spring.Data\Spring.Data.csproj" />
   </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="MSTest.TestFramework" Version="2.1.2" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Using Remove="System.Net.Http" />
+  </ItemGroup>
+
 </Project>

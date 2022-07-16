@@ -18,10 +18,6 @@
 
 #endregion
 
-#region Imports
-
-using System;
-using System.Collections.Generic;
 using System.Xml;
 
 using Spring.Core.TypeResolution;
@@ -32,8 +28,6 @@ using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Xml;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Validation.Config
 {
@@ -206,7 +200,7 @@ namespace Spring.Validation.Config
         /// Parses and potentially registers a validator.
         /// </summary>
         /// <remarks>
-        /// Only validators that have <code>id</code> attribute specified are registered 
+        /// Only validators that have <code>id</code> attribute specified are registered
         /// as separate object definitions within application context.
         /// </remarks>
         /// <param name="element">Validator XML element.</param>
@@ -286,7 +280,7 @@ namespace Spring.Validation.Config
             string typeName = "Spring.Validation.Actions.ExceptionAction, Spring.Core";
             string throwExpression = GetAttributeValue(element, ValidatorDefinitionConstants.ThrowAttribute);
 
-            
+
             ConstructorArgumentValues ctorArgs = new ConstructorArgumentValues();
             ctorArgs.AddGenericArgumentValue(throwExpression);
 

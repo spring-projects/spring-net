@@ -18,13 +18,9 @@
 
 #endregion
 
-#region Imports
-
 using System;
 using System.Collections;
 using NUnit.Framework;
-
-#endregion
 
 namespace Spring.Objects.Factory.Config
 {

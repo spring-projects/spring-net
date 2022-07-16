@@ -1,9 +1,9 @@
-/* Copyright © 2002-2011 by Aidant Systems, Inc., and by Jason Smith. */
+/* Copyright ï¿½ 2002-2011 by Aidant Systems, Inc., and by Jason Smith. */
 
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,12 +20,7 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Collections;
-
-#endregion
 
 namespace Spring.Collections
 {
@@ -275,7 +270,7 @@ namespace Spring.Collections
 
 		/// <summary>
 		/// Performs a "union" of the two sets, where all the elements
-		/// in both sets are present. 
+		/// in both sets are present.
 		/// </summary>
 		/// <param name="setOne">A collection of elements.</param>
 		/// <returns>
@@ -287,7 +282,7 @@ namespace Spring.Collections
 		public override sealed ISet Union(ISet setOne)
 		{
 			ISet m = this;
-			while (m is ImmutableSet) 
+			while (m is ImmutableSet)
 			{
 				m = ((ImmutableSet) m).BasisSet;
 			}
@@ -306,7 +301,7 @@ namespace Spring.Collections
 		public override sealed ISet Intersect(ISet setOne)
 		{
 			ISet m = this;
-			while (m is ImmutableSet) 
+			while (m is ImmutableSet)
 			{
 				m = ((ImmutableSet) m).BasisSet;
 			}
@@ -326,7 +321,7 @@ namespace Spring.Collections
 		public override sealed ISet Minus(ISet setOne)
 		{
 			ISet m = this;
-			while (m is ImmutableSet) 
+			while (m is ImmutableSet)
 			{
 				m = ((ImmutableSet) m).BasisSet;
 			}
@@ -346,7 +341,7 @@ namespace Spring.Collections
 		public override sealed ISet ExclusiveOr(ISet setOne)
 		{
 			ISet m = this;
-			while (m is ImmutableSet) 
+			while (m is ImmutableSet)
 			{
 				m = ((ImmutableSet) m).BasisSet;
 			}

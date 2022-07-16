@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Collections.Specialized;
 using System.Configuration;
 using Spring.Util;
@@ -109,7 +108,7 @@ namespace Spring.Objects.Factory.Config
                     InitVariables();
                 }
                 return CollectionUtils.Contains(variables.AllKeys, name);
-            }            
+            }
         }
 
         /// <summary>
@@ -131,15 +130,15 @@ namespace Spring.Objects.Factory.Config
                     InitVariables();
                 }
                 return variables.Get(name);
-            }            
+            }
         }
 
         /// <summary>
-        /// Initializes properties based on the specified 
+        /// Initializes properties based on the specified
         /// property file locations.
         /// </summary>
         protected virtual void InitVariables()
-        {            
+        {
             foreach (string sectionName in sectionNames)
             {
                 object section = ConfigurationUtils.GetSection(sectionName);

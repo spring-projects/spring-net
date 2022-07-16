@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
 using AopAlliance.Intercept;
@@ -28,7 +27,7 @@ using Spring.Util;
 namespace Spring.Aspects
 {
     /// <summary>
-    /// This is 
+    /// This is
     /// </summary>
     /// <remarks>
     ///
@@ -62,7 +61,7 @@ namespace Spring.Aspects
         /// <remarks>
         /// <p>
         /// Polite implementations would certainly like to invoke
-        /// <see cref="AopAlliance.Intercept.IJoinpoint.Proceed"/>. 
+        /// <see cref="AopAlliance.Intercept.IJoinpoint.Proceed"/>.
         /// </p>
         /// </remarks>
         /// <param name="invocation">

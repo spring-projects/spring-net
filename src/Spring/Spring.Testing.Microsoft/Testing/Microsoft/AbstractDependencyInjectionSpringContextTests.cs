@@ -2,13 +2,13 @@
 
 /*
 /// Copyright 2002-2010 the original author or authors.
-/// 
+///
 /// Licensed under the Apache License, Version 2.0 (the "License");
 /// you may not use this file except in compliance with the License.
 /// You may obtain a copy of the License at
-/// 
+///
 ///      http://www.apache.org/licenses/LICENSE-2.0
-/// 
+///
 /// Unless required by applicable law or agreed to in writing, software
 /// distributed under the License is distributed on an "AS IS" BASIS,
 /// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,8 +18,6 @@
 
 #endregion
 
-using System;
-using System.Collections.Generic;
 using System.Reflection;
 
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -35,7 +33,7 @@ namespace Spring.Testing.Microsoft
     /// Convenient superclass for tests depending on a Spring context.
     /// The test instance itself is populated by Dependency Injection.
     /// </summary>
-    /// 
+    ///
     /// <remarks>
     /// <p>Really for integration testing, not unit testing.
     /// You should <i>not</i> normally use the Spring container
@@ -70,7 +68,7 @@ namespace Spring.Testing.Microsoft
     /// assembly resource URLs. Else, you may see misleading failures when changing
     /// context locations.</p>
     /// </remarks>
-    /// 
+    ///
     /// <author>Rod Johnson</author>
     /// <author>Rob Harrop</author>
     /// <author>Rick Evans</author>
@@ -99,11 +97,11 @@ namespace Spring.Testing.Microsoft
         {}
 
         /// <summary>
-        /// Gets or sets a flag specifying whether to populate protected 
+        /// Gets or sets a flag specifying whether to populate protected
         /// variables of this test case.
         /// </summary>
         /// <value>
-        /// A flag specifying whether to populate protected variables of this test case. 
+        /// A flag specifying whether to populate protected variables of this test case.
         /// Default is <b>false</b>.
         /// </value>
         public bool PopulateProtectedVariables
@@ -126,11 +124,11 @@ namespace Spring.Testing.Microsoft
         }
 
         /// <summary>
-        /// Gets or sets a flag specifying whether or not dependency checking 
+        /// Gets or sets a flag specifying whether or not dependency checking
         /// should be performed for test properties set by Dependency Injection.
         /// </summary>
         /// <value>
-        /// <p>A flag specifying whether or not dependency checking 
+        /// <p>A flag specifying whether or not dependency checking
         /// should be performed for test properties set by Dependency Injection.</p>
         /// <p>The default is <b>true</b>, meaning that tests cannot be run
         /// unless all properties are populated.</p>
@@ -329,7 +327,7 @@ namespace Spring.Testing.Microsoft
         }
 
         /// <summary>
-        /// Subclasses can override this method in order to 
+        /// Subclasses can override this method in order to
         /// add custom test setup logic.
         /// </summary>
         protected virtual void OnTestInitialize()
@@ -352,7 +350,7 @@ namespace Spring.Testing.Microsoft
         }
 
         /// <summary>
-        /// Subclasses can override this method in order to 
+        /// Subclasses can override this method in order to
         /// add custom test teardown logic.
         /// </summary>
         protected virtual void OnTestCleanup()

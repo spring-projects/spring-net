@@ -18,13 +18,6 @@
 
 #endregion
 
-#region Imports
-
-using System;
-using System.Collections.Generic;
-
-#endregion
-
 namespace Spring.Objects.Factory.Config
 {
 	/// <summary>

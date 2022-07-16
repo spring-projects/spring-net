@@ -18,14 +18,12 @@
 
 #endregion
 
-using System;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.Serialization;
 
 namespace Spring.Aop.Framework
 {
-    /// <summary> 
+    /// <summary>
     /// <see cref="Spring.Aop.Framework.IAdvisorChainFactory"/> implementation
     /// that caches advisor chains on a per-advised-method basis.
     /// </summary>
@@ -56,7 +54,7 @@ namespace Spring.Aop.Framework
         /// <param name="targetType">
         /// The <see cref="System.Type"/> of the target object.
         /// </param>
-        /// <returns> 
+        /// <returns>
         /// The list of <see cref="AopAlliance.Intercept.IInterceptor"/> and
         /// <see cref="Spring.Aop.Framework.InterceptorAndDynamicMethodMatcher"/>
         /// instances for the supplied <paramref name="proxy"/>.

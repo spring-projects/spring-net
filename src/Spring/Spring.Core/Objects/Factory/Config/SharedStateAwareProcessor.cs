@@ -18,16 +18,11 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Collections;
 
 using Common.Logging;
 using Spring.Core;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Objects.Factory.Config
 {
@@ -69,7 +64,7 @@ namespace Spring.Objects.Factory.Config
         /// Get/Set the (already ordererd!) list of <see cref="ISharedStateFactory"/> instances.
         /// </summary>
         /// <remarks>
-        /// If this list is not set, the containing object factory will automatically 
+        /// If this list is not set, the containing object factory will automatically
         /// be scanned for <see cref="ISharedStateFactory"/> instances.
         /// </remarks>
         public ISharedStateFactory[] SharedStateFactories
@@ -99,7 +94,7 @@ namespace Spring.Objects.Factory.Config
         }
 
         /// <summary>
-        /// Iterates over configured list of <see cref="ISharedStateFactory"/>s until 
+        /// Iterates over configured list of <see cref="ISharedStateFactory"/>s until
         /// the first provider is found that<br/>
         /// a) true == provider.CanProvideState( instance, name )<br/>
         /// b) null != provider.GetSharedState( instance, name )<br/>

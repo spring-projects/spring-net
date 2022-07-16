@@ -18,9 +18,6 @@
 
 #endregion
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Text;
 
 using Spring.Collections;
@@ -33,11 +30,11 @@ namespace Spring.Transaction.Interceptor
 	/// a number of rollback rules, both positive and negative.
 	/// </summary>
 	/// <remarks>
-	/// If no rules are relevant to the exception, it behaves like the 
+	/// If no rules are relevant to the exception, it behaves like the
 	/// <see cref="Spring.Transaction.Interceptor.DefaultTransactionAttribute"/> class
 	/// (rolling back on runtime exceptions)..
 	/// <p>
-	/// The <see cref="Spring.Transaction.Interceptor.TransactionAttributeEditor"/> 
+	/// The <see cref="Spring.Transaction.Interceptor.TransactionAttributeEditor"/>
 	/// creates objects of this class.
 	/// </p>
 	/// </remarks>

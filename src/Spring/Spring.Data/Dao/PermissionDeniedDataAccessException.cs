@@ -18,17 +18,12 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Runtime.Serialization;
-
-#endregion
 
 namespace Spring.Dao
 {
-	/// <summary> 
-    /// Exception thrown when the underlyingresource denied a permission to 
+	/// <summary>
+    /// Exception thrown when the underlyingresource denied a permission to
     /// access a specific element, such as a specific database table.
 	/// </summary>
 	/// <author>Juergen Hoeller</author>

@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using System.Collections;
 using System.ComponentModel;
 using System.Web;
@@ -32,7 +31,7 @@ using System.Web.UI.WebControls;
 namespace Spring.Web.UI.Controls
 {
 	/// <summary>
-	/// The <see cref="TabularMultiView"/> control allows you to build ASP.NET Web pages that present 
+	/// The <see cref="TabularMultiView"/> control allows you to build ASP.NET Web pages that present
 	/// the user with content arranged in tabular form.
 	/// </summary>
 	/// <author>Erich Eichinger</author>
@@ -158,7 +157,7 @@ namespace Spring.Web.UI.Controls
 		}
 
 		/// <summary>
-		/// Creates TabContainer and MultiView 
+		/// Creates TabContainer and MultiView
 		/// </summary>
 		protected virtual Control CreateContent(TabContainer menu, MultiView body)
 		{

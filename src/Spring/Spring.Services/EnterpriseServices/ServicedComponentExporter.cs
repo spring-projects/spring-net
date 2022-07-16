@@ -18,9 +18,6 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Collections;
 using System.EnterpriseServices;
 using System.Reflection;
@@ -28,8 +25,6 @@ using System.Reflection.Emit;
 using Spring.Core.TypeResolution;
 using Spring.Objects.Factory;
 using Spring.Proxy;
-
-#endregion
 
 namespace Spring.EnterpriseServices
 {
@@ -41,7 +36,7 @@ namespace Spring.EnterpriseServices
     /// <para>
     /// Instances of this class should be used as elements in the Components
     /// list of the <see cref="EnterpriseServicesExporter"/> class, which will
-    /// register them with COM+ Services. For a full description on how to export 
+    /// register them with COM+ Services. For a full description on how to export
     /// and use services with COM+, see the <see cref="EnterpriseServicesExporter"/> reference.
     /// </para>
     /// </remarks>
@@ -178,7 +173,7 @@ namespace Spring.EnterpriseServices
         /// <code>
         /// class MyServicedComponent {
         ///   TargetType target = new TargetType();
-        /// 
+        ///
         ///   void MethodX() {
         ///     target.MethodX();
         ///   }
@@ -186,7 +181,7 @@ namespace Spring.EnterpriseServices
         /// </code>
         /// <br/>
         /// The differences are of course that in the former case, the target lifecycle is entirely managed by Spring, thus avoiding
-        /// issues with ServiceComponent activation/deactivation as well as removing the need for default constructors. 
+        /// issues with ServiceComponent activation/deactivation as well as removing the need for default constructors.
         /// </remarks>
         public Type CreateWrapperType(ModuleBuilder module, Type baseType, Type targetType, bool springManagedLifecycle)
         {
@@ -196,7 +191,7 @@ namespace Spring.EnterpriseServices
             IProxyTypeBuilder proxyBuilder;
             if (springManagedLifecycle)
             {
-                proxyBuilder = new SpringManagedServicedComponentProxyTypeBuilder(module, baseType, this);                
+                proxyBuilder = new SpringManagedServicedComponentProxyTypeBuilder(module, baseType, this);
             }
             else
             {
@@ -331,7 +326,7 @@ namespace Spring.EnterpriseServices
             #region IProxyTypeGenerator Members
 
             /// <summary>
-            /// Generates the IL instructions that pushes 
+            /// Generates the IL instructions that pushes
             /// the target instance on which calls should be delegated to.
             /// </summary>
             /// <param name="il">The IL generator to use.</param>

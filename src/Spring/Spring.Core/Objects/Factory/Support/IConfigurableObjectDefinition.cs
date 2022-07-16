@@ -18,14 +18,7 @@
 
 #endregion
 
-#region Imports
-
-using System;
-using System.Collections.Generic;
-
 using Spring.Objects.Factory.Config;
-
-#endregion
 
 namespace Spring.Objects.Factory.Support
 {
@@ -46,7 +39,7 @@ namespace Spring.Objects.Factory.Support
         /// Return the constructor argument values for this object.
         /// </summary>
         new ConstructorArgumentValues ConstructorArgumentValues { get; set; }
-		
+
         /// <summary>
         /// The method overrides (if any) for this object.
         /// </summary>
@@ -100,7 +93,7 @@ namespace Spring.Objects.Factory.Support
         /// <see cref="System.Type"/> of the object definition (if any).
         /// </summary>
         new string ObjectTypeName { get; set; }
-        
+
         /// <summary>
         /// Return whether this a <b>Singleton</b>, with a single, shared instance
         /// returned on all calls.

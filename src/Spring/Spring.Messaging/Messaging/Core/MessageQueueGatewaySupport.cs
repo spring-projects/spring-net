@@ -18,8 +18,6 @@
 
 #endregion
 
-using System;
-
 using Spring.Objects.Factory;
 
 namespace Spring.Messaging.Core

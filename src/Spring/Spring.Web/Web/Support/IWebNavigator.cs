@@ -22,8 +22,6 @@
 
 #endregion
 
-using System;
-
 namespace Spring.Web.Support
 {
     /// <summary>
@@ -37,7 +35,7 @@ namespace Spring.Web.Support
     public interface IWebNavigator
     {
         /// <summary>
-        /// Determines, whether this navigator or one of its parents can 
+        /// Determines, whether this navigator or one of its parents can
         /// navigate to the destination specified in <paramref name="destination"/>.
         /// </summary>
         /// <param name="destination">the name of the navigation destination</param>

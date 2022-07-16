@@ -20,12 +20,9 @@
 
 #region Imports
 
-using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Drawing;
-using System.IO;
 using System.Net;
 using System.Resources;
 using System.Text.RegularExpressions;
@@ -52,7 +49,7 @@ namespace Spring.Core.TypeConversion
 
         private static readonly object syncRoot = new object();
         private static IDictionary<Type, TypeConverter> converters = new Dictionary<Type, TypeConverter>();
-        
+
         /// <summary>
         /// Registers standard and configured type converters.
         /// </summary>
@@ -73,12 +70,12 @@ namespace Spring.Core.TypeConversion
                 converters[typeof(ICredentials)] = new CredentialConverter();
                 converters[typeof(NetworkCredential)] = new CredentialConverter();
                 converters[typeof(RegistryKey)] = new RegistryKeyConverter();
-        
+
                 // register user-defined type converters
                 ConfigurationUtils.GetSection(TypeConvertersSectionName);
             }
         }
-        
+
         /// <summary>
         /// Returns <see cref="TypeConverter"/> for the specified type.
         /// </summary>
@@ -101,10 +98,10 @@ namespace Spring.Core.TypeConversion
                     converter = TypeDescriptor.GetConverter(type);
                 }
             }
-            
+
             return converter;
         }
-        
+
         /// <summary>
         /// Registers <see cref="TypeConverter"/> for the specified type.
         /// </summary>
@@ -145,7 +142,7 @@ namespace Spring.Core.TypeConversion
         {
             AssertUtils.ArgumentHasText(typeName, "typeName");
             AssertUtils.ArgumentHasText(converterTypeName, "converterTypeName");
-            
+
             try
             {
                 Type type = TypeResolutionUtils.ResolveType(typeName);
@@ -162,6 +159,6 @@ namespace Spring.Core.TypeConversion
                 throw new ArgumentException("Failed to create an instance of the specified type converter.", e);
             }
         }
-        
+
     }
 }

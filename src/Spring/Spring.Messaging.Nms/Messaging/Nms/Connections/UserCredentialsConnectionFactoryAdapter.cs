@@ -17,8 +17,6 @@
  */
 #endregion
 
-using System;
-using System.Threading;
 using Apache.NMS;
 
 namespace Spring.Messaging.Nms.Connections
@@ -36,7 +34,7 @@ namespace Spring.Messaging.Nms.Connections
     /// passing in username and password on every <code>CreateConnection()</code> call.
     /// If the "Username" is empty, this proxy will simply delegate to the standard
     /// <code>CreateConnection()</code> method of the target ConnectionFactory.
-    /// This can be used to keep a UserCredentialsConnectionFactoryAdapter 
+    /// This can be used to keep a UserCredentialsConnectionFactoryAdapter
     /// definition just for the<i> option</i> of implicitly passing in user credentials
     /// if the particular target ConnectionFactory requires it.
     /// </remarks>
@@ -53,7 +51,7 @@ namespace Spring.Messaging.Nms.Connections
 
 
         /// <summary>
-        /// Set user credentials for this proxy and the current thread. 
+        /// Set user credentials for this proxy and the current thread.
         /// The given username and password will be applied to all subsequent
         /// <code>CreateConnection()</code>  calls on this ConnectionFactory proxy.
         /// This will override any statically specified user credentials,
@@ -75,7 +73,7 @@ namespace Spring.Messaging.Nms.Connections
 
 
         private string _userName;
-        
+
         /// <summary>
         /// Set the username that this adapter should use for retrieving Connections.
         /// </summary>

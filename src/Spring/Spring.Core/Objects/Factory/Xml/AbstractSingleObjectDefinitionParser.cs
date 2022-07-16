@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Xml;
 using Spring.Objects.Factory.Support;
 
@@ -141,7 +140,7 @@ namespace Spring.Objects.Factory.Xml
         /// <summary>
         /// Parse the supplied XmlElement and populate the supplied ObjectDefinitionBuilder as required.
         /// </summary>
-        /// <remarks>The default implementation delegates to the <code>DoParse</code> version without 
+        /// <remarks>The default implementation delegates to the <code>DoParse</code> version without
         /// ParameterContext argument.</remarks>
         /// <param name="element">The element.</param>
         /// <param name="parserContext">The parser context.</param>
@@ -152,7 +151,7 @@ namespace Spring.Objects.Factory.Xml
         }
 
         /// <summary>
-        /// Parse the supplied XmlElement and populate the supplied ObjectDefinitionBuilder as required. 
+        /// Parse the supplied XmlElement and populate the supplied ObjectDefinitionBuilder as required.
         /// </summary>
         /// <remarks>The default implementation does nothing.</remarks>
         /// <param name="element">The element.</param>

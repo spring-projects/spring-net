@@ -1,13 +1,13 @@
 #region License
 /*
-* Copyright © 2002-2011 the original author or authors.
-* 
+* Copyright ï¿½ 2002-2011 the original author or authors.
+*
 * Licensed under the Apache License, Version 2.0 (the "License");
 * you may not use this file except in compliance with the License.
 * You may obtain a copy of the License at
-* 
+*
 *      http://www.apache.org/licenses/LICENSE-2.0
-* 
+*
 * Unless required by applicable law or agreed to in writing, software
 * distributed under the License is distributed on an "AS IS" BASIS,
 * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -16,7 +16,6 @@
 */
 #endregion
 
-using System;
 using System.Threading;
 
 namespace Spring.Threading
@@ -25,18 +24,18 @@ namespace Spring.Threading
     /// <p>Base class for counting semaphores based on Semaphore implementation
     /// from Doug Lea.</p>
     /// </summary>
-    /// <remarks> 
-    /// 
-    /// <p>Conceptually, a semaphore 
-    /// maintains a set of permits. Each acquire() blocks if 
+    /// <remarks>
+    ///
+    /// <p>Conceptually, a semaphore
+    /// maintains a set of permits. Each acquire() blocks if
     /// necessary until a permit is available, and then takes it.</p>
-    /// 
-    /// <p>Each release adds a permit. However, no actual permit objects are used; 
-    /// the Semaphore just keeps a count of the number available 
+    ///
+    /// <p>Each release adds a permit. However, no actual permit objects are used;
+    /// the Semaphore just keeps a count of the number available
     /// and acts accordingly.</p>
-    /// 
+    ///
     /// <p>A semaphore initialized to 1 can serve as a mutual exclusion lock. </p>
-    /// 
+    ///
 	/// Used for implementation of a <see cref="Spring.Pool.Support.SimplePool"/>
     /// </remarks>
     /// <author>Doug Lea</author>
@@ -50,40 +49,40 @@ namespace Spring.Threading
 
         /// <summary>
         /// <p>Create a Semaphore with the given initial number of permits.</p>
-        /// <p>Using a seed of 1 makes the semaphore act as a mutual 
+        /// <p>Using a seed of 1 makes the semaphore act as a mutual
         /// exclusion lock.</p>
-        /// 
-        /// <p>Negative seeds are also allowed, 
-        /// in which case no acquires will proceed until the number of 
+        ///
+        /// <p>Negative seeds are also allowed,
+        /// in which case no acquires will proceed until the number of
         /// releases has pushed the number of permits past 0.</p>
         /// </summary>
 		public Semaphore(long initialPermits)
 		{
             nPermits = initialPermits;
 		}
-		
+
         /// <summary>
         /// Release a permit
         /// </summary>
-		public virtual void Release () 
+		public virtual void Release ()
 		{
-			lock (this) 
+			lock (this)
 			{
 				++nPermits;
 			    Monitor.Pulse(this);
 			}
 		}
-		
+
         /// <summary>
         /// Acquire a permit
         /// </summary>
-		public virtual void Acquire () 
+		public virtual void Acquire ()
 		{
-			lock (this) 
+			lock (this)
 			{
-				try 
+				try
 				{
-					while (nPermits <= 0) 
+					while (nPermits <= 0)
 						Monitor.Wait(this);
 					--nPermits;
 				}
@@ -117,7 +116,7 @@ namespace Spring.Threading
                     {
                         double startTime = Utils.CurrentTimeMillis;
                         long waitTime = msecs;
-						
+
                         for (; ; )
                         {
                             Monitor.Wait(this, TimeSpan.FromMilliseconds(waitTime));
@@ -151,7 +150,7 @@ namespace Spring.Threading
         /// But may be more efficient in some semaphore implementations.
         /// </summary>
         /// <exception cref="ArgumentOutOfRangeException">  if n is negative.
-        /// 
+        ///
         /// </exception>
         public virtual void Release(long n)
         {
@@ -159,7 +158,7 @@ namespace Spring.Threading
             {
                 if (n < 0)
                     throw new ArgumentOutOfRangeException("n", n, "Negative argument");
-				
+
                 nPermits += n;
                 for (long i = 0; i < n; ++i)
                     Monitor.Pulse(this);

@@ -18,12 +18,6 @@
 
 #endregion
 
-#region Imports
-
-using System;
-
-#endregion
-
 namespace Spring.Objects.Factory.Xml
 {
     /// <summary>
@@ -37,7 +31,7 @@ namespace Spring.Objects.Factory.Xml
         private string ns;
         private string schemaLocation;
 		private Type schemaLocationAssemblyHint;
-    	
+
         /// <summary>
         /// Creates a new instance of <see cref="NamespaceParserAttribute"/>.
         /// </summary>
@@ -63,7 +57,7 @@ namespace Spring.Objects.Factory.Xml
         /// The default schema location for the configuration parser.
         /// </value>
         /// <remarks>
-		/// If the <see cref="SchemaLocationAssemblyHint"/>  property is set, the <see cref="SchemaLocation"/> will always resolve to an assembly-resource 
+		/// If the <see cref="SchemaLocationAssemblyHint"/>  property is set, the <see cref="SchemaLocation"/> will always resolve to an assembly-resource
 		/// and the set <see cref="SchemaLocation"/> will be interpreted relative to this assembly.
 		/// </remarks>
         public string SchemaLocation
@@ -76,7 +70,7 @@ namespace Spring.Objects.Factory.Xml
     	/// Gets or sets a type from the assembly containing the schema
     	/// </summary>
     	/// <remarks>
-    	/// If this property is set, the <see cref="SchemaLocation"/> will always resolve to an assembly-resource 
+    	/// If this property is set, the <see cref="SchemaLocation"/> will always resolve to an assembly-resource
     	/// and the <see cref="SchemaLocation"/> will be interpreted relative to this assembly.
     	/// </remarks>
     	public Type SchemaLocationAssemblyHint

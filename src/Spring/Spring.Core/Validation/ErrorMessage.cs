@@ -18,15 +18,10 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Xml;
 using System.Xml.Schema;
 using System.Xml.Serialization;
 using Spring.Context;
-
-#endregion
 
 namespace Spring.Validation
 {
@@ -83,7 +78,7 @@ namespace Spring.Validation
         /// <summary>
         /// Gets or sets the message parameters.
         /// </summary>
-        /// <value>The message parameters.</value>   
+        /// <value>The message parameters.</value>
         public object[] Parameters
         {
             get { return parameters; }
@@ -94,16 +89,16 @@ namespace Spring.Validation
         #region IXmlSerializable implementations
 
         /// <summary>
-        /// This property is reserved, apply the 
+        /// This property is reserved, apply the
         /// <see cref="T:System.Xml.Serialization.XmlSchemaProviderAttribute" />
-        /// to the class instead. 
+        /// to the class instead.
         /// </summary>
         /// <returns>
-        /// An <see cref="T:System.Xml.Schema.XmlSchema" /> 
-        /// that describes the XML representation of the object that 
-        /// is produced by the 
+        /// An <see cref="T:System.Xml.Schema.XmlSchema" />
+        /// that describes the XML representation of the object that
+        /// is produced by the
         /// <see cref="M:System.Xml.Serialization.IXmlSerializable.WriteXml(System.Xml.XmlWriter)" />
-        /// method and consumed by the 
+        /// method and consumed by the
         /// <see cref="M:System.Xml.Serialization.IXmlSerializable.ReadXml(System.Xml.XmlReader)" />
         /// method.
         /// </returns>
@@ -117,8 +112,8 @@ namespace Spring.Validation
         /// Generates an object from its XML representation.
         /// </summary>
         /// <param name="reader">
-        /// The <see cref="T:System.Xml.XmlReader"></see> stream 
-        /// from which the object is deserialized. 
+        /// The <see cref="T:System.Xml.XmlReader"></see> stream
+        /// from which the object is deserialized.
         /// </param>
         public virtual void ReadXml(XmlReader reader)
         {
@@ -138,8 +133,8 @@ namespace Spring.Validation
         /// Converts an object into its XML representation.
         /// </summary>
         /// <param name="writer">
-        /// The <see cref="T:System.Xml.XmlWriter"></see> stream 
-        /// to which the object is serialized. 
+        /// The <see cref="T:System.Xml.XmlWriter"></see> stream
+        /// to which the object is serialized.
         /// </param>
         public virtual void WriteXml(XmlWriter writer)
         {
@@ -215,5 +210,5 @@ namespace Spring.Validation
         private object[] parameters;
 
         #endregion
-    } 
+    }
 }

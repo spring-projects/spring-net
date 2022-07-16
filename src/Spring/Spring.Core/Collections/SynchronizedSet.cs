@@ -1,9 +1,9 @@
-/* Copyright © 2002-2011 by Aidant Systems, Inc., and by Jason Smith. */
+/* Copyright ï¿½ 2002-2011 by Aidant Systems, Inc., and by Jason Smith. */
 
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,12 +20,7 @@
 
 #endregion
 
-#region Imports 
-
-using System;
 using System.Collections;
-
-#endregion
 
 namespace Spring.Collections
 {
@@ -98,7 +93,7 @@ namespace Spring.Collections
 		/// </returns>
 		public override sealed bool AddAll(ICollection collection)
 		{
-			if(collection == null) 
+			if(collection == null)
 			{
 				return false;
 			}
@@ -152,7 +147,7 @@ namespace Spring.Collections
 		/// </returns>
 		public override sealed bool ContainsAll(ICollection collection)
 		{
-			if(collection == null) 
+			if(collection == null)
 			{
 				return false;
 			}
@@ -319,7 +314,7 @@ namespace Spring.Collections
 		}
 
 		/// <summary>
-		/// Returns a clone of the <see cref="Spring.Collections.ISet"/> instance.  
+		/// Returns a clone of the <see cref="Spring.Collections.ISet"/> instance.
 		/// </summary>
 		/// <returns>A clone of this object.</returns>
 		public override object Clone()

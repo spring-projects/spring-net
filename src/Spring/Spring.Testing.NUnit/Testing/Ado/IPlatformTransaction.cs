@@ -1,5 +1,3 @@
-using System;
-
 namespace Spring.Testing.Ado
 {
     /// <summary>

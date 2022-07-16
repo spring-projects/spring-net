@@ -18,8 +18,6 @@
 
 #endregion
 
-
-using System;
 using System.Data;
 using Apache.NMS;
 using Common.Logging;
@@ -32,7 +30,7 @@ namespace Spring.Messaging.Nms.Connections
 {
     /// <summary>
     /// A <see cref="AbstractPlatformTransactionManager"/> implementation
-    /// for a single NMS <code>ConnectionFactory</code>. Binds a 
+    /// for a single NMS <code>ConnectionFactory</code>. Binds a
     /// Connection/Session pair from the specified ConnecctionFactory to the thread,
     /// potentially allowing for one thread-bound Session per ConnectionFactory.
     /// </summary>
@@ -40,7 +38,7 @@ namespace Spring.Messaging.Nms.Connections
     /// <para>
     /// Application code is required to retrieve the transactional Session via
     /// <see cref="ConnectionFactoryUtils.GetTransactionalSession"/>.  Spring's
-    /// <see cref="NmsTemplate"/> will autodetect a thread-bound Session and 
+    /// <see cref="NmsTemplate"/> will autodetect a thread-bound Session and
     /// automatically participate in it.
     /// </para>
     /// <para>
@@ -68,7 +66,7 @@ namespace Spring.Messaging.Nms.Connections
     /// </remarks>
     /// <author>Juergen Hoeller</author>
     /// <author>Mark Pollack (.NET)</author>
-    public class NmsTransactionManager : AbstractPlatformTransactionManager, 
+    public class NmsTransactionManager : AbstractPlatformTransactionManager,
         IResourceTransactionManager, IInitializingObject
     {
 
@@ -76,7 +74,7 @@ namespace Spring.Messaging.Nms.Connections
 
         private static readonly ILog LOG = LogManager.GetLogger(typeof(NmsTransactionManager));
 
-        #endregion 
+        #endregion
 
         private IConnectionFactory connectionFactory;
 
@@ -84,7 +82,7 @@ namespace Spring.Messaging.Nms.Connections
         /// Initializes a new instance of the <see cref="NmsTransactionManager"/> class.
         /// </summary>
         /// <remarks>
-        /// The ConnectionFactory has to be set before using the instance. 
+        /// The ConnectionFactory has to be set before using the instance.
         /// This constructor can be used to prepare a NmsTemplate via a ApplicationContext,
         /// typically setting the ConnectionFactory via ConnectionFactory property.
         /// <para>
@@ -209,7 +207,7 @@ namespace Spring.Messaging.Nms.Connections
                     txObject.ResourceHolder.TimeoutInSeconds = timeout;
                 }
                 TransactionSynchronizationManager.BindResource(ConnectionFactory, txObject.ResourceHolder);
-                
+
 
 
             } catch (NMSException ex)
@@ -231,7 +229,7 @@ namespace Spring.Messaging.Nms.Connections
                 }
                 throw new CannotCreateTransactionException("Could not create NMS Transaction", ex);
             }
-               
+
         }
 
         /// <summary>
@@ -296,7 +294,7 @@ namespace Spring.Messaging.Nms.Connections
                 //See https://issues.apache.org/activemq/browse/AMQNET-93
             }
             catch (NMSException ex)
-            {                
+            {
                 throw new TransactionSystemException("Could not commit NMS transaction.", ex);
             }
         }
@@ -318,7 +316,7 @@ namespace Spring.Messaging.Nms.Connections
                 {
                     LOG.Debug("Rolling back NMS transaction on Session [" + session + "]");
                 }
-                session.Rollback();              
+                session.Rollback();
             }
             catch (NMSException ex)
             {

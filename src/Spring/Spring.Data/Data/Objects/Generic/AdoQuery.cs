@@ -1,14 +1,14 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
- * 
+ * Copyright ï¿½ 2002-2011 the original author or authors.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,14 +18,9 @@
 
 #endregion
 
-#region Imports
-
-using System.Collections.Generic;
 using Spring.Dao.Support.Generic;
 using Spring.Data.Common;
 using Spring.Data.Generic;
-
-#endregion
 
 namespace Spring.Data.Objects.Generic
 {
@@ -97,7 +92,7 @@ namespace Spring.Data.Objects.Generic
         /// <param name="inParams">The parameters for the query.</param>
         /// <param name="outParams">The returned output parameters.</param>
         /// <returns></returns>
-        public IList<T> QueryByNamedParam<T>(System.Collections.IDictionary inParams, 
+        public IList<T> QueryByNamedParam<T>(System.Collections.IDictionary inParams,
                                              System.Collections.IDictionary outParams)
 	    {
             return QueryByNamedParam<T>(inParams, outParams, null);
@@ -111,8 +106,8 @@ namespace Spring.Data.Objects.Generic
         /// <param name="outParams">The out params.</param>
         /// <param name="callingContext">The calling context.</param>
         /// <returns></returns>
-        public IList<T> QueryByNamedParam<T>(System.Collections.IDictionary inParams, 
-                                             System.Collections.IDictionary outParams, 
+        public IList<T> QueryByNamedParam<T>(System.Collections.IDictionary inParams,
+                                             System.Collections.IDictionary outParams,
                                              System.Collections.IDictionary callingContext)
         {
             ValidateNamedParameters(inParams);
@@ -138,9 +133,9 @@ namespace Spring.Data.Objects.Generic
             return DataAccessUtils.RequiredUniqueResultSet(results);
         }
 
-        
+
         protected abstract IRowMapper<T> NewRowMapper<T>(System.Collections.IDictionary inParams, System.Collections.IDictionary callingContext);
-	    
+
 		#endregion
 
 	}

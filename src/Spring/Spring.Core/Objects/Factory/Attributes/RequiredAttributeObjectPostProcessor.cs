@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,6 @@
 
 #endregion
 
-
-using System;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Text;
 
@@ -68,12 +65,12 @@ namespace Spring.Objects.Factory.Attributes
         /// </summary>
         /// <remarks>
         /// The default required attribute type is the Spring-provided <see cref="RequiredAttribute"/> attribute.
-        /// This setter property exists so that developers can provide their own 
+        /// This setter property exists so that developers can provide their own
         /// (non-Spring-specific) annotation type to indicate that a property value is required.
         /// </remarks>
         /// <value>The type of the required attribute.</value>
         public Type RequiredAttributeType
-        {            
+        {
             set
             {
                 AssertUtils.ArgumentNotNull(value, "RequiredAttributeType", "RequiredAttributeType property must not be null");

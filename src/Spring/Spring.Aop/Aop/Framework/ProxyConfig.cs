@@ -1,5 +1,5 @@
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-using System;
 using System.Runtime.Serialization;
 using System.Text;
 
@@ -29,7 +28,7 @@ namespace Spring.Aop.Framework
 	/// </summary>
 	/// <remarks>
 	/// <p>
-	/// Note that it is no longer possible to configure subclasses to 
+	/// Note that it is no longer possible to configure subclasses to
 	/// expose the <see cref="AopAlliance.Intercept.IMethodInvocation"/>.
 	/// Interceptors should normally manage their own thread locals if they
 	/// need to make resources available to advised objects. If it is
@@ -102,7 +101,7 @@ namespace Spring.Aop.Framework
 		}
 
         /// <summary>
-        /// Is target type attributes, method attributes, method's return type attributes 
+        /// Is target type attributes, method attributes, method's return type attributes
         /// and method's parameter attributes to be proxied in addition
         /// to any interfaces declared on the proxied <see cref="System.Type"/>?
         /// </summary>
@@ -169,7 +168,7 @@ namespace Spring.Aop.Framework
 		/// <see cref="Spring.Aop.Framework.IAopProxyFactory"/> implementation
 		/// could return an <see cref="Spring.Aop.Framework.IAopProxy"/>
 		/// using remoting proxies, <c>Reflection.Emit</c> or a code generation
-		/// strategy. 
+		/// strategy.
 		/// </p>
 		/// </remarks>
 		public virtual IAopProxyFactory AopProxyFactory

@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using Spring.Objects.Factory.Config;
 
 namespace Spring.Objects.Factory.Support
@@ -33,7 +32,7 @@ namespace Spring.Objects.Factory.Support
     public interface IAutowireCandidateResolver
     {
         /// <summary>
-        /// Determines whether the given object definition qualifies as an 
+        /// Determines whether the given object definition qualifies as an
         /// autowire candidate for the given dependency.
         /// </summary>
         /// <param name="odHolder">The object definition including object name and aliases.</param>

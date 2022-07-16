@@ -18,14 +18,13 @@
 
 #endregion
 
-using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
 
 namespace Spring.Aop.Framework.DynamicProxy
 {
     /// <summary>
-    /// <see cref="Spring.Proxy.IProxyMethodBuilder"/> implementation 
+    /// <see cref="Spring.Proxy.IProxyMethodBuilder"/> implementation
     /// that delegates method calls to target object.
     /// </summary>
     /// <author>Aleksandar Seovic</author>
@@ -49,10 +48,10 @@ namespace Spring.Aop.Framework.DynamicProxy
         /// implemented explicitly; otherwise <see langword="false"/>.
         /// </param>
         /// <param name="targetMethods">
-        /// The dictionary to cache the list of target 
+        /// The dictionary to cache the list of target
         /// <see cref="System.Reflection.MethodInfo"/>s.
         /// </param>
-        public TargetAopProxyMethodBuilder(TypeBuilder typeBuilder, 
+        public TargetAopProxyMethodBuilder(TypeBuilder typeBuilder,
             IAopProxyTypeGenerator aopProxyGenerator, bool explicitImplementation, IDictionary<string, MethodInfo> targetMethods)
             : base(typeBuilder, aopProxyGenerator, explicitImplementation, targetMethods)
         {
@@ -74,7 +73,7 @@ namespace Spring.Aop.Framework.DynamicProxy
         }
 
         /// <summary>
-        /// Generates the IL instructions that pushes 
+        /// Generates the IL instructions that pushes
         /// the target instance on which calls should be delegated to.
         /// </summary>
         /// <param name="il">The IL generator to use.</param>

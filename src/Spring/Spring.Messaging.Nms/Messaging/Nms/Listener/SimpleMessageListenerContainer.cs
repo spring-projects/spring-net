@@ -18,8 +18,6 @@
 
 #endregion
 
-using System;
-using System.Threading;
 using Common.Logging;
 using Spring.Collections;
 using Spring.Messaging.Nms.Core;
@@ -69,7 +67,7 @@ namespace Spring.Messaging.Nms.Listener
         private TimeSpan recoveryInterval = new TimeSpan(0, 0, 0, 5, 0);
 
         private TimeSpan maxRecoveryTime = new TimeSpan(0, 0, 10, 0, 0);
-            
+
 
         #endregion
 
@@ -140,7 +138,7 @@ namespace Spring.Messaging.Nms.Listener
         #endregion
 
         /// <summary>
-        /// Call base class for valdation and then check that if the subscription is durable that the number of 
+        /// Call base class for valdation and then check that if the subscription is durable that the number of
         /// concurrent consumers is equal to one.
         /// </summary>
         protected override void ValidateConfiguration()
@@ -251,9 +249,9 @@ namespace Spring.Messaging.Nms.Listener
                 if (totalTryTime > maxRecoveryTime)
                 {
                     logger.Info("Could not refresh Connection after " + totalTryTime  + ".  Stopping reconnection attempts.");
-                    throw new RecoveryTimeExceededException("Could not recover after " + totalTryTime);                                       
+                    throw new RecoveryTimeExceededException("Could not recover after " + totalTryTime);
                 }
-                
+
                 DateTime startTime = DateTime.Now;
                 SleepInBetweenRecoveryAttempts();
                 TimeSpan sleepTimeSpan = DateTime.Now - startTime;
@@ -275,7 +273,7 @@ namespace Spring.Messaging.Nms.Listener
         /// <exception cref="NMSException">in case of setup failure.</exception>
         protected virtual void InitializeConsumers()
         {
-            // Register Sessions and MessageConsumers            
+            // Register Sessions and MessageConsumers
             lock (consumersMonitor)
             {
                 if (this.consumers == null)
@@ -309,8 +307,8 @@ namespace Spring.Messaging.Nms.Listener
                 destination = ResolveDestinationName(session, DestinationName);
             }
             IMessageConsumer consumer = CreateConsumer(session, destination);
-            
-			
+
+
 	        SimpleMessageListener listener = new SimpleMessageListener(this, session);
             // put in explicit registration with 'new' for compilation on .NET 1.1
             consumer.Listener += listener.OnMessage;

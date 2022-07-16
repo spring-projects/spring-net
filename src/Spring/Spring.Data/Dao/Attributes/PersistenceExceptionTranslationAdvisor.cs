@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using AopAlliance.Aop;
 using Spring.Aop;
 using Spring.Aop.Support;

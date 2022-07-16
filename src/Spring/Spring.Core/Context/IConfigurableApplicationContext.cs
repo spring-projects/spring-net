@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,11 +18,7 @@
 
 #endregion
 
-#region Imports
-
 using Spring.Objects.Factory.Config;
-
-#endregion
 
 namespace Spring.Context
 {
@@ -67,7 +63,7 @@ namespace Spring.Context
         /// Can be used to access specific functionality of the factory.
         /// </p>
         /// <note type="caution">
-        /// This is just guaranteed to return an instance that is not 
+        /// This is just guaranteed to return an instance that is not
         /// <see langword="null"/> <i>after</i> the context has been refreshed
         /// at least once.
         /// </note>

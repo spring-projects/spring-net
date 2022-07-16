@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using System.Xml;
 using Spring.Aop.Framework.AutoProxy;
 using Spring.Objects.Factory.Config;
@@ -51,7 +50,7 @@ namespace Spring.Aop.Config
         /// The type of the APC that handles advisors with object role <see cref="ObjectRole.ROLE_INFRASTRUCTURE"/>.
         /// </summary>
         private static readonly Type InfrastructureAutoProxyCreatorType = typeof(InfrastructureAdvisorAutoProxyCreator);
-       
+
         /// <summary>
         /// Registers the internal auto proxy creator if necessary.
         /// </summary>

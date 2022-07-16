@@ -1,14 +1,14 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
- * 
+ * Copyright ï¿½ 2002-2011 the original author or authors.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,12 +18,7 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Reflection;
-
-#endregion
 
 namespace Spring.Data.Common
 {
@@ -31,7 +26,7 @@ namespace Spring.Data.Common
     /// Provides minimal database metadata information to support the
     /// functionality in Spring.NET ADO.NET Framework.
     /// </summary>
-    /// 
+    ///
     /// <author>Mark Pollack (.NET)</author>
     public interface IDbMetadata
     {
@@ -109,7 +104,7 @@ namespace Spring.Data.Common
         /// <summary>
         /// Does the driver require the use of the parameter prefix when
         /// specifying the name of the parameter in the Command's
-        /// Parameter collection.  
+        /// Parameter collection.
         /// </summary>
         /// <remarks>If true, then commamd.Parameters["@parameterName"] is
         /// used, otherwise, command.Parameters["parameterName"].
@@ -119,10 +114,10 @@ namespace Spring.Data.Common
 
         /// <summary>
         /// Gets a value indicating whether the Provider requires
-        /// the use of a named prefix in the SQL string. 
+        /// the use of a named prefix in the SQL string.
         /// </summary>
         /// <remarks>
-        /// The OLE DB/ODBC .NET Provider does not support named parameters for 
+        /// The OLE DB/ODBC .NET Provider does not support named parameters for
         /// passing parameters to an SQL Statement or a stored procedure called
         /// by an IDbCommand when CommandType is set to Text.
         /// </remarks>
@@ -135,10 +130,10 @@ namespace Spring.Data.Common
         /// For providers that allow you to choose between binding parameters
         /// to a command by name (true) or by position (false).
         /// </summary>
-        bool BindByName { 
+        bool BindByName {
             get;
             //TODO will go away when make all of this fully configuration driven.
-            set; 
+            set;
         }
 
         /// <summary>

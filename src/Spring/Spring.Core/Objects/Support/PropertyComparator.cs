@@ -18,16 +18,11 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Collections;
 using System.Globalization;
 using Common.Logging;
 using Spring.Core;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Objects.Support
 {

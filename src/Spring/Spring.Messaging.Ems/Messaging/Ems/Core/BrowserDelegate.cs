@@ -1,4 +1,4 @@
- 
+
 
 #region License
 
@@ -21,12 +21,11 @@
 #endregion
 
 using Spring.Messaging.Ems.Common;
-using TIBCO.EMS;
 
 namespace Spring.Messaging.Ems.Core
 {
     /// <summary>
     /// Delegate callback for browsing the messages in an EMS queue.
     /// </summary>
-    public delegate object BrowserDelegate(ISession session, QueueBrowser browser);   
+    public delegate object BrowserDelegate(ISession session, QueueBrowser browser);
 }

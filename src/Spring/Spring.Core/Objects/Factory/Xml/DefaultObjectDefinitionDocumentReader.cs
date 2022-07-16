@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-using System;
 using System.Globalization;
-using System.IO;
 using System.Xml;
 using Common.Logging;
 using Spring.Core.IO;
@@ -26,7 +24,7 @@ using Spring.Objects.Factory.Support;
 namespace Spring.Objects.Factory.Xml
 {
     /// <summary>
-    /// XML resource reader. 
+    /// XML resource reader.
     /// </summary>
     /// <remarks>
     /// <p>
@@ -40,7 +38,7 @@ namespace Spring.Objects.Factory.Xml
     public class DefaultObjectDefinitionDocumentReader : IObjectDefinitionDocumentReader
     {
         /// <summary>
-        /// The shared <see cref="Common.Logging.ILog"/> instance for this class (and derived classes). 
+        /// The shared <see cref="Common.Logging.ILog"/> instance for this class (and derived classes).
         /// </summary>
         protected static readonly ILog log =
             LogManager.GetLogger(typeof(DefaultObjectDefinitionDocumentReader));
@@ -107,7 +105,7 @@ namespace Spring.Objects.Factory.Xml
         }
 
         /// <summary>
-        /// Parses object definitions starting at the given <see cref="XmlElement"/> 
+        /// Parses object definitions starting at the given <see cref="XmlElement"/>
         /// using the passed <see cref="ObjectDefinitionParserHelper"/>.
         /// </summary>
         /// <param name="root">The root element to start parsing from.</param>
@@ -172,7 +170,7 @@ namespace Spring.Objects.Factory.Xml
         /// </summary>
         protected virtual void ProcessAlias(XmlElement element)
         {
-            this.ParseAlias(element, this.ReaderContext.Registry);    
+            this.ParseAlias(element, this.ReaderContext.Registry);
         }
 
         /// <summary>

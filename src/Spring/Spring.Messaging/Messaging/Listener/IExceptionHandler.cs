@@ -18,8 +18,6 @@
 
 #endregion
 
-using System;
-
 #if NETSTANDARD
 using Experimental.System.Messaging;
 #else
@@ -35,10 +33,10 @@ namespace Spring.Messaging.Listener
     /// <remarks>
     /// A non-transactional receive will remove the message from the queue.  Non-transactional
     /// receivers do not suffer from poison messages since there is no redelivery by MSMQ.
-    /// Typical actions to perform are to log the message or place it in another queue.  
+    /// Typical actions to perform are to log the message or place it in another queue.
     /// If placed in another queue, another message listener container can be used to
     /// process the message later, assuming the root cause of the original exception is
-    /// transient in nature. 
+    /// transient in nature.
     /// </remarks>
     public interface IExceptionHandler
     {

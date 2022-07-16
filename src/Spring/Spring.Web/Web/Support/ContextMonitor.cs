@@ -18,9 +18,6 @@
 
 #endregion
 
-using System;
-using System.Collections.Generic;
-using System.IO;
 using System.Web;
 
 using Spring.Context;
@@ -31,12 +28,12 @@ using Spring.Objects.Factory.Support;
 namespace Spring.Web.Support
 {
     /// <summary>
-    /// <see cref="IHttpHandler"/> implementation that allows users to monitor state 
+    /// <see cref="IHttpHandler"/> implementation that allows users to monitor state
     /// of the Spring.NET web application context.
     /// </summary>
     /// <remarks>
     /// <p>
-    /// 
+    ///
     /// </p>
     /// </remarks>
     /// <author>Aleksandar Seovic</author>

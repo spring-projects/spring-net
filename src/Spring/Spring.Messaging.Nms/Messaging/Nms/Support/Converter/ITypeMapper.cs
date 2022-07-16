@@ -1,4 +1,4 @@
- 
+
 
 #region License
 
@@ -19,8 +19,6 @@
  */
 
 #endregion
-
-using System;
 
 namespace Spring.Messaging.Nms.Support.Converter
 {

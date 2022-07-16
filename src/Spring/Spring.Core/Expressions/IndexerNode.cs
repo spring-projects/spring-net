@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,7 @@
 
 #endregion
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.Serialization;
 using Spring.Core;
@@ -57,7 +55,7 @@ namespace Spring.Expressions
             : base(info, context)
         {
         }
-        
+
         /// <summary>
         /// Returns node's value for the given context.
         /// </summary>
@@ -132,7 +130,7 @@ namespace Spring.Expressions
             {
                 throw new NullValueInNestedPathException("Cannot set the value of the indexer because the context for its resolution is null.");
             }
-            
+
             try
             {
                 if (context is Array)
@@ -176,7 +174,7 @@ namespace Spring.Expressions
             {
                 throw new InvalidPropertyException( evalContext.RootContextType,this.ToString(),"Invalid argument.",e );
             }
-            
+
         }
 
         /// <summary>

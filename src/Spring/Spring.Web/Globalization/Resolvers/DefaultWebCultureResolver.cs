@@ -18,9 +18,7 @@
 
 #endregion
 
-using System;
 using System.Globalization;
-using System.Threading;
 using System.Web;
 using Spring.Util;
 
@@ -33,7 +31,7 @@ namespace Spring.Globalization.Resolvers
     public class DefaultWebCultureResolver : DefaultCultureResolver
     {
         /// <summary>
-        /// Returns default culture. If <see cref="DefaultCultureResolver.DefaultCulture"/> property is not set, 
+        /// Returns default culture. If <see cref="DefaultCultureResolver.DefaultCulture"/> property is not set,
         /// it tries to get culture from the request headers
         /// and falls back to a current thread's culture if no headers are available.
         /// </summary>
@@ -62,10 +60,10 @@ namespace Spring.Globalization.Resolvers
         {
             HttpContext context = HttpContext.Current;
             if (context != null && context.Request != null && ArrayUtils.HasLength(context.Request.UserLanguages))
-            {                
+            {
                 return context.Request.UserLanguages[0];
             }
-            return null;    
+            return null;
         }
 
         /// <summary>

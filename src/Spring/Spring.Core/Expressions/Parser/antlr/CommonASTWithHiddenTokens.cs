@@ -1,5 +1,3 @@
-using System;
-
 using AST		= Spring.Expressions.Parser.antlr.collections.AST;
 
 namespace Spring.Expressions.Parser.antlr
@@ -28,15 +26,15 @@ namespace Spring.Expressions.Parser.antlr
 		new public static readonly CommonASTWithHiddenTokens.CommonASTWithHiddenTokensCreator Creator = new CommonASTWithHiddenTokensCreator();
 
 		protected internal IHiddenStreamToken hiddenBefore, hiddenAfter; // references to hidden tokens
-		
+
 		public CommonASTWithHiddenTokens() : base()
 		{
 		}
-		
+
 		public CommonASTWithHiddenTokens(IToken tok) : base(tok)
 		{
 		}
-		
+
 		[Obsolete("Deprecated since version 2.7.2. Use ASTFactory.dup() instead.", false)]
 		protected CommonASTWithHiddenTokens(CommonASTWithHiddenTokens another) : base(another)
 		{
@@ -48,12 +46,12 @@ namespace Spring.Expressions.Parser.antlr
 		{
 			return hiddenAfter;
 		}
-		
+
 		public virtual IHiddenStreamToken getHiddenBefore()
 		{
 			return hiddenBefore;
 		}
-		
+
 		override public void initialize(collections.AST t)
 		{
 			hiddenBefore = ((CommonASTWithHiddenTokens) t).getHiddenBefore();
@@ -87,9 +85,9 @@ namespace Spring.Expressions.Parser.antlr
 			/// </summary>
 			public override string ASTNodeTypeName
 			{
-				get 
-				{ 
-					return typeof(antlr.CommonASTWithHiddenTokens).FullName;; 
+				get
+				{
+					return typeof(antlr.CommonASTWithHiddenTokens).FullName;;
 				}
 			}
 

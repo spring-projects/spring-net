@@ -18,14 +18,12 @@
 
 #endregion
 
-using System;
-
 using Spring.Expressions;
 
 namespace Spring.Globalization
 {
 	/// <summary>
-	/// Holds mapping between control property and it's value 
+	/// Holds mapping between control property and it's value
 	/// as read from the resource file.
 	/// </summary>
     /// <author>Aleksandar Seovic</author>

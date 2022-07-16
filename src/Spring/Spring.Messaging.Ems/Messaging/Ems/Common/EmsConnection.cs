@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2010 the original author or authors.
+ * Copyright ï¿½ 2002-2010 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,12 +19,11 @@
 #endregion
 
 using Common.Logging;
-using TIBCO.EMS;
 
 namespace Spring.Messaging.Ems.Common
 {
     /// <summary>
-    /// A Connection object is a client's active connection to TIBCO EMS Server. 
+    /// A Connection object is a client's active connection to TIBCO EMS Server.
     /// </summary>
     public class EmsConnection : IConnection
     {
@@ -138,7 +137,7 @@ namespace Spring.Messaging.Ems.Common
         /// </summary>
         public void Close()
         {
-            nativeConnection.Close();            
+            nativeConnection.Close();
         }
 
         /// <summary>

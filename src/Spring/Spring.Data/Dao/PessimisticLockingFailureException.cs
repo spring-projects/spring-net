@@ -18,20 +18,15 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Runtime.Serialization;
-
-#endregion
 
 namespace Spring.Dao
 {
-	/// <summary> 
+	/// <summary>
 	/// Exception thrown on a pessimistic locking violation.
 	/// </summary>
 	/// <remarks>
-	/// <para>Serves as a superclass for more specific exceptions, like 
+	/// <para>Serves as a superclass for more specific exceptions, like
 	/// CannotAcquireLockException and DeadlockLoserDataAccessException
 	/// </para>
 	/// <para>

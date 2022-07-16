@@ -1,4 +1,3 @@
-using System;
 using IOException = System.IO.IOException;
 
 namespace Spring.Expressions.Parser.antlr
@@ -17,7 +16,7 @@ namespace Spring.Expressions.Parser.antlr
 	//
 	// With many thanks to Eric V. Smith from the ANTLR list.
 	//
-	
+
 	/*
 	* Wrap an IOException in a CharStreamException
 	*/
@@ -25,7 +24,7 @@ namespace Spring.Expressions.Parser.antlr
 	public class CharStreamIOException : CharStreamException
 	{
 		public IOException io;
-		
+
 		public CharStreamIOException(IOException io) : base(io.Message)
 		{
 			this.io = io;

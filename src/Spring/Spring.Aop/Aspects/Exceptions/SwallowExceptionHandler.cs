@@ -18,8 +18,6 @@
 
 #endregion
 
-using System.Collections.Generic;
-
 namespace Spring.Aspects.Exceptions
 {
     /// <summary>

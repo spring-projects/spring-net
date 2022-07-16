@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using Spring.Aop.Support;
 using Spring.Caching;
 using Spring.Context;
@@ -77,8 +76,8 @@ namespace Spring.Aspects.Cache
         }
 
         /// <summary>
-        /// Returns <c>true</c> if either <see cref="CacheResultAttribute"/> or 
-        /// <see cref="CacheResultItemsAttribute"/> is applied to the 
+        /// Returns <c>true</c> if either <see cref="CacheResultAttribute"/> or
+        /// <see cref="CacheResultItemsAttribute"/> is applied to the
         /// <paramref name="method"/>.
         /// </summary>
         /// <param name="method">
@@ -88,8 +87,8 @@ namespace Spring.Aspects.Cache
         /// Type of target object.
         /// </param>
         /// <returns>
-        /// <c>true</c> if either <see cref="CacheResultAttribute"/> or 
-        /// <see cref="CacheResultItemsAttribute"/> is applied to the 
+        /// <c>true</c> if either <see cref="CacheResultAttribute"/> or
+        /// <see cref="CacheResultItemsAttribute"/> is applied to the
         /// <paramref name="method"/>; <c>false</c> otherwise.
         /// </returns>
         public override bool Matches(System.Reflection.MethodInfo method, Type targetType)

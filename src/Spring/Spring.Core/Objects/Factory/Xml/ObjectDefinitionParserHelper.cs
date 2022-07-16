@@ -18,8 +18,6 @@
 
 #endregion
 
-using System;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Xml;
 
@@ -407,8 +405,8 @@ namespace Spring.Objects.Factory.Xml
         /// </remarks>
         protected virtual ObjectDefinitionHolder CreateObjectDefinitionHolder(
             XmlElement element,
-            IConfigurableObjectDefinition definition, 
-            string objectName, 
+            IConfigurableObjectDefinition definition,
+            string objectName,
             IReadOnlyList<string> aliases)
         {
             return new ObjectDefinitionHolder(definition, objectName, aliases);

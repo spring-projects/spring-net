@@ -18,8 +18,6 @@
 
 #endregion
 
-using System;
-
 namespace Spring.DataBinding
 {
 	/// <summary>
@@ -38,7 +36,7 @@ namespace Spring.DataBinding
         /// Specifies that value from the data model should be bound to control property.
         /// </summary>
         TargetToSource = 0x0002,
-        
+
         /// <summary>
         /// Specifies that binding is bidirectional.
         /// </summary>

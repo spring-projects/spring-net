@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,14 +19,13 @@
 #endregion
 
 #if !NETSTANDARD
-using System;
 using System.Runtime.CompilerServices;
 using System.Security;
 
 namespace Spring.Util
 {
     /// <summary>
-    /// Utility class to be used from within this assembly for executing security critical code 
+    /// Utility class to be used from within this assembly for executing security critical code
     /// NEVER EVER MAKE THIS PUBLIC!
     /// </summary>
     /// <author>Erich Eichinger</author>

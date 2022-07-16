@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +18,8 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Collections;
 using Spring.Core.TypeConversion;
-
-#endregion
 
 namespace Spring.Expressions.Processors
 {
@@ -73,13 +68,13 @@ namespace Spring.Expressions.Processors
             else if (args.Length > 1)
             {
                 throw new ArgumentException("Only a single argument can be specified for a convert() processor.");
-            }        
-    
+            }
+
             ArrayList result = new ArrayList();
             foreach(object val in source)
             {
                 object newVal = TypeConversionUtils.ConvertValueIfNecessary(targetType, val, null);
-                result.Add(newVal);                
+                result.Add(newVal);
             }
 
             return result.ToArray(targetType);

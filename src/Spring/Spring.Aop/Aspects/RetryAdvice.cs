@@ -18,11 +18,7 @@
 
 #endregion
 
-using System;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
-using System.Threading;
-
 using AopAlliance.Intercept;
 
 using Common.Logging;
@@ -48,14 +44,14 @@ namespace Spring.Aspects
         ///The type of the callback that is called for delaying retries.
         ///</summary>
         public delegate void SleepHandler(TimeSpan duration);
- 
+
         private static readonly ILog log;
         private static readonly TimeSpanConverter timeSpanConverter;
 
         static RetryAdvice()
         {
             log = LogManager.GetLogger(typeof(RetryAdvice));
-            timeSpanConverter = new TimeSpanConverter();            
+            timeSpanConverter = new TimeSpanConverter();
         }
 
         #region Fields
@@ -206,7 +202,7 @@ namespace Spring.Aspects
                 sleepHandler(handler.DelayTimeSpan);
             }
             else
-            {                
+            {
                 try
                 {
                     IExpression expression = Expression.Parse(handler.DelayRateExpression);
@@ -294,9 +290,9 @@ namespace Spring.Aspects
             RetryExceptionHandler handler = new RetryExceptionHandler(parsedAdviceExpression.ExceptionNames);
             handler.ConstraintExpressionText = parsedAdviceExpression.ConstraintExpression;
             handler.ActionExpressionText = parsedAdviceExpression.AdviceExpression;
-            
+
             Match match = GetMatchForActionExpression(parsedAdviceExpression.ActionExpressionText, delayRegex);
-            
+
             if (match.Success)
             {
                 handler.MaximumRetryCount = int.Parse(match.Groups[1].Value.Trim());

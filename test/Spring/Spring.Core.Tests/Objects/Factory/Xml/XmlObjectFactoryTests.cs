@@ -16,7 +16,6 @@
 
 using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Data;
 using System.Globalization;
 using System.IO;
@@ -34,8 +33,6 @@ using FakeItEasy;
 using NUnit.Framework;
 
 using Spring.Core.IO;
-using Spring.Core.TypeResolution;
-using Spring.Expressions;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 using Spring.Util;
@@ -1830,7 +1827,7 @@ namespace Spring.Objects.Factory.Xml
         [Test]
         public void TestExpressionAttribute()
         {
-            TypeRegistry.RegisterType("WebMethod", typeof(WebMethodAttribute));
+            Spring.Core.TypeResolution.TypeRegistry.RegisterType("WebMethod", typeof(WebMethodAttribute));
 
             IResource resource = new ReadOnlyXmlTestResource("expressions.xml", GetType());
             XmlObjectFactory xof = new XmlObjectFactory(resource);
@@ -1838,8 +1835,8 @@ namespace Spring.Objects.Factory.Xml
             ExpressionTestObject eto = (ExpressionTestObject) xof.GetObject("to1");
             Assert.AreEqual(new DateTime(1974, 8, 24).ToString("m"), eto.SomeString);
             Assert.AreEqual(new DateTime(2004, 8, 14), eto.SomeDate);
-            Assert.IsInstanceOf(typeof(IExpression), eto.ExpressionOne);
-            Assert.IsInstanceOf(typeof(IExpression), eto.ExpressionTwo);
+            Assert.IsInstanceOf(typeof(Spring.Expressions.IExpression), eto.ExpressionOne);
+            Assert.IsInstanceOf(typeof(Spring.Expressions.IExpression), eto.ExpressionTwo);
             Assert.AreEqual(DateTime.Today, eto.ExpressionOne.GetValue());
             Assert.AreEqual(String.Empty, eto.ExpressionTwo.GetValue());
             Assert.IsInstanceOf(typeof(WebMethodAttribute), eto.SomeDictionary["method1"]);
@@ -1851,7 +1848,7 @@ namespace Spring.Objects.Factory.Xml
         [Test]
         public void TestExpressionElement()
         {
-            TypeRegistry.RegisterType("WebMethod", typeof(WebMethodAttribute));
+            Spring.Core.TypeResolution.TypeRegistry.RegisterType("WebMethod", typeof(WebMethodAttribute));
 
             IResource resource = new ReadOnlyXmlTestResource("expressions.xml", GetType());
             XmlObjectFactory xof = new XmlObjectFactory(resource);
@@ -1859,8 +1856,8 @@ namespace Spring.Objects.Factory.Xml
             ExpressionTestObject eto = (ExpressionTestObject)xof.GetObject("to2");
             Assert.AreEqual(new DateTime(1974, 8, 24).ToString("m"), eto.SomeString);
             Assert.AreEqual(new DateTime(2004, 8, 14), eto.SomeDate);
-            Assert.IsInstanceOf(typeof(IExpression), eto.ExpressionOne);
-            Assert.IsInstanceOf(typeof(IExpression), eto.ExpressionTwo);
+            Assert.IsInstanceOf(typeof(Spring.Expressions.IExpression), eto.ExpressionOne);
+            Assert.IsInstanceOf(typeof(Spring.Expressions.IExpression), eto.ExpressionTwo);
             Assert.AreEqual(DateTime.Today, eto.ExpressionOne.GetValue());
             Assert.AreEqual(String.Empty, eto.ExpressionTwo.GetValue());
             Assert.IsInstanceOf(typeof(WebMethodAttribute), eto.SomeDictionary["method1"]);

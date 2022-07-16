@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using System.Collections;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -99,12 +98,12 @@ namespace Spring.Web.Services
         /// The name of the object in the factory.
         /// </summary>
         private string objectName;
-        
+
         /// <summary>
         /// The owning factory.
         /// </summary>
         private IObjectFactory objectFactory;
-        
+
         /// <summary>
         /// The generated web service wrapper type.
         /// </summary>
@@ -167,7 +166,7 @@ namespace Spring.Web.Services
         #region Properties
 
         /// <summary>
-        /// Gets or Sets the Web Services Interoperability (WSI) specification 
+        /// Gets or Sets the Web Services Interoperability (WSI) specification
         /// to which the Web Service claims to conform.
         /// </summary>
         /// <remarks>
@@ -228,7 +227,7 @@ namespace Spring.Web.Services
         /// </value>
         public string Name
         {
-            get 
+            get
             {
                 if (_name == null)
                 {
@@ -255,7 +254,7 @@ namespace Spring.Web.Services
         /// Gets or sets the list of interfaces whose methods should be exposed as web services.
         /// </summary>
         /// <remarks>
-        /// If not set, all the interfaces implemented or inherited 
+        /// If not set, all the interfaces implemented or inherited
         /// by the target type will be used.
         /// </remarks>
         /// <value>The interfaces.</value>
@@ -266,7 +265,7 @@ namespace Spring.Web.Services
         }
 
         /// <summary>
-        /// Gets or sets a list of custom attributes 
+        /// Gets or sets a list of custom attributes
         /// that should be applied to a proxy class.
         /// </summary>
         public IList TypeAttributes
@@ -276,12 +275,12 @@ namespace Spring.Web.Services
         }
 
         /// <summary>
-        /// Gets or sets a dictionary of custom attributes 
+        /// Gets or sets a dictionary of custom attributes
         /// that should be applied to web service members.
         /// </summary>
         /// <remarks>
-        /// Dictionary key is an expression that members can be matched against. 
-        /// Value is a list of attributes that should be applied 
+        /// Dictionary key is an expression that members can be matched against.
+        /// Value is a list of attributes that should be applied
         /// to each member that matches expression.
         /// </remarks>
         public IDictionary MemberAttributes
@@ -357,7 +356,7 @@ namespace Spring.Web.Services
         public virtual void AfterPropertiesSet()
         {
             ValidateConfiguration();
-            GenerateProxy();            
+            GenerateProxy();
         }
 
         #endregion
@@ -457,7 +456,7 @@ namespace Spring.Web.Services
 
             private static CustomAttributeBuilder CreateWebServiceAttribute(string description, string name, string ns)
             {
-                ReflectionUtils.CustomAttributeBuilderBuilder cabb = 
+                ReflectionUtils.CustomAttributeBuilderBuilder cabb =
                     new ReflectionUtils.CustomAttributeBuilderBuilder(typeof(WebServiceAttribute));
                 if (StringUtils.HasText(description))
                 {
@@ -482,7 +481,7 @@ namespace Spring.Web.Services
             /// Implements constructors for the proxy class.
             /// </summary>
             /// <remarks>
-            /// This implementation generates an empty noop default constructor 
+            /// This implementation generates an empty noop default constructor
             /// </remarks>
             /// <param name="builder">
             /// The <see cref="System.Type"/> builder to use.
@@ -520,7 +519,7 @@ namespace Spring.Web.Services
                         // override existing WebServiceAttribute
                         containsWebServiceAttribute = true;
                         attrs[i] = webServiceAttribute;
-                    } 
+                    }
                     else if (IsAttributeMatchingType(attrs[i], typeof(WebServiceBindingAttribute)))
                     {
                         containsWebServiceBindingAttribute = true;

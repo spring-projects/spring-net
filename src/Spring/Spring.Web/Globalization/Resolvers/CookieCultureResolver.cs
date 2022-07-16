@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Globalization;
 using System.Web;
 
@@ -36,7 +35,7 @@ namespace Spring.Globalization.Resolvers
         /// Resolves the culture from the request.
         /// </summary>
         /// <remarks>
-        /// If the culture cookie doesn't exist, this method will return 
+        /// If the culture cookie doesn't exist, this method will return
         /// the value of the 'Accept-Language' request header, or if no
         /// headers are specified, the culture of the current server thread.
         /// </remarks>

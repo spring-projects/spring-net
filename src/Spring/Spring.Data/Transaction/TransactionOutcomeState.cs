@@ -2,12 +2,6 @@
 
 #endregion
 
-#region Imports
-
-
-
-#endregion
-
 namespace Spring.Transaction
 {
 	/// <summary>

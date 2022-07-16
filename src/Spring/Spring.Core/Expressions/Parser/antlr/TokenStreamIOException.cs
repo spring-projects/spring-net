@@ -1,6 +1,5 @@
-using System;
 using IOException = System.IO.IOException;
-	
+
 namespace Spring.Expressions.Parser.antlr
 {
 	/*ANTLR Translator Generator

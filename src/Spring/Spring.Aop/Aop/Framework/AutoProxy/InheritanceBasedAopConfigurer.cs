@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Runtime.Serialization;
 
 using AopAlliance.Aop;
@@ -32,8 +30,8 @@ using Spring.Core;
 namespace Spring.Aop.Framework.AutoProxy
 {
     /// <summary>
-    /// <see cref="IObjectFactoryPostProcessor"/> implementation that replaces a group of objects 
-    /// with a 'true' inheritance based AOP mechanism that delegates 
+    /// <see cref="IObjectFactoryPostProcessor"/> implementation that replaces a group of objects
+    /// with a 'true' inheritance based AOP mechanism that delegates
     /// to the given interceptors before invoking the object itself.
     /// </summary>
     /// <author>Bruno Baia</author>
@@ -50,7 +48,7 @@ namespace Spring.Aop.Framework.AutoProxy
         private IAdvisorAdapterRegistry advisorAdapterRegistry = GlobalAdvisorAdapterRegistry.Instance;
 
         /// <summary>
-        /// Set the names of the objects in IList fashioned way 
+        /// Set the names of the objects in IList fashioned way
         /// that should automatically get intercepted.
         /// </summary>
         /// <remarks>
@@ -62,19 +60,19 @@ namespace Spring.Aop.Framework.AutoProxy
             set { objectNames = value; }
         }
 
-        /// <summary> 
-        /// Sets the common interceptors, a list of <see cref="AopAlliance.Aop.IAdvice"/>, 
+        /// <summary>
+        /// Sets the common interceptors, a list of <see cref="AopAlliance.Aop.IAdvice"/>,
         /// <see cref="Spring.Aop.IAdvisor"/> and introduction object names.
         /// </summary>
         /// <remarks>
         /// <para>
-        /// If this property isn't set, there will be zero common interceptors. 
+        /// If this property isn't set, there will be zero common interceptors.
         /// This is perfectly valid, if "specific" interceptors such as
         /// matching Advisors are all we want.
         /// </para>
         /// </remarks>
         /// <value>
-        /// The list of <see cref="AopAlliance.Aop.IAdvice"/>, 
+        /// The list of <see cref="AopAlliance.Aop.IAdvice"/>,
         /// <see cref="Spring.Aop.IAdvisor"/> and introduction object names.
         /// </value>
         /// <seealso cref="AopAlliance.Aop.IAdvice"/>
@@ -85,7 +83,7 @@ namespace Spring.Aop.Framework.AutoProxy
         }
 
         /// <summary>
-        /// Is target type attributes, method attributes, method's return type attributes 
+        /// Is target type attributes, method attributes, method's return type attributes
         /// and method's parameter attributes to be proxied in addition
         /// to any interfaces declared on the proxied <see cref="System.Type"/>?
         /// </summary>
@@ -99,7 +97,7 @@ namespace Spring.Aop.Framework.AutoProxy
         /// Gets or sets a value indicating whether inherited members should be proxied.
         /// </summary>
         /// <value>
-        /// <see langword="true"/> if inherited members should be proxied; 
+        /// <see langword="true"/> if inherited members should be proxied;
         /// otherwise, <see langword="false"/>.
         /// </value>
         public bool ProxyDeclaredMembersOnly
@@ -112,7 +110,7 @@ namespace Spring.Aop.Framework.AutoProxy
         /// Gets or sets a value indicating whether interfaces members should be proxied.
         /// </summary>
         /// <value>
-        /// <see langword="true"/> if interfaces members should be proxied; 
+        /// <see langword="true"/> if interfaces members should be proxied;
         /// otherwise, <see langword="false"/>.
         /// </value>
         public bool ProxyInterfaces
@@ -301,14 +299,14 @@ namespace Spring.Aop.Framework.AutoProxy
                 _targetType = targetType;
             }
 
-            
+
             /// <inheritdoc />
             private InheritanceBasedAopTargetSource(SerializationInfo info, StreamingContext context)
             {
                 var type = info.GetString("TargetType");
                 _targetType = type != null ? Type.GetType(type) : null;
             }
-        
+
             /// <inheritdoc />
             public void GetObjectData(SerializationInfo info, StreamingContext context)
             {

@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +18,8 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Collections;
 using System.ComponentModel;
-
-#endregion
 
 namespace Spring.Objects.Factory.Config
 {
@@ -117,26 +112,26 @@ namespace Spring.Objects.Factory.Config
 	///			private string _userName;
 	///			private string _password;
 	///			private string _host;
-	/// 
+	///
 	///			public string Host
 	///			{
 	///				get { return _host; }
 	///				set { _host = value; }
 	///			}
-	/// 
+	///
 	///		 	public string UserName
 	///			{
 	///				get { return _userName; }
 	///				set { _userName = value; }
 	///			}
-	/// 
+	///
 	///			public string Password
 	///			{
 	///				get { return _password; }
 	///				set { _password = value; }
 	///			}
 	///		}
-	/// 
+	///
 	///		public sealed class MailSettingsConverter : TypeConverter
 	///		{
 	///			public override bool CanConvertFrom(ITypeDescriptorContext context, Type sourceType)
@@ -147,11 +142,11 @@ namespace Spring.Objects.Factory.Config
 	/// 			}
 	/// 			return base.CanConvertFrom(context, sourceType);
 	///			}
-	/// 
+	///
 	/// 		public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
 	/// 		{
 	/// 			string text = value as string;
-	/// 			if(text != null) 
+	/// 			if(text != null)
 	/// 			{
 	/// 				MailSettings mailSettings = new MailSettings();
 	/// 				string[] tokens = text.Split(',');
@@ -167,21 +162,21 @@ namespace Spring.Objects.Factory.Config
 	///				return base.ConvertFrom(context, culture, value);
 	///			}
 	///		}
-	///		
+	///
 	///		// a very naieve class that uses the MailSettings class...
 	///		public sealed class ExceptionLogger
 	///		{
 	///			private MailSettings _mailSettings;
-	///			
+	///
 	///			public MailSettings MailSettings {
 	///			{
 	///				set { _mailSettings = value; }
 	///			}
-	///			
+	///
 	///			public void Log(object value)
 	///			{
 	///				Exception ex = value as Exception;
-	///				if(ex != null) 
+	///				if(ex != null)
 	///				{
 	///					// use _mailSettings instance...
 	///				}

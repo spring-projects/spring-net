@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-using System;
 using System.Collections.Concurrent;
 using System.Configuration;
 using System.Reflection;
@@ -30,13 +29,13 @@ namespace Spring.Util
     {
         private static readonly ConcurrentDictionary<string, object> cachedSections =
             new ConcurrentDictionary<string, object>();
-        
+
         /// <summary>
         /// Parses the configuration section.
         /// </summary>
         /// <remarks>
         /// <p>
-        /// Primary purpose of this method is to allow us to parse and 
+        /// Primary purpose of this method is to allow us to parse and
         /// load configuration sections using the same API regardless
         /// of the .NET framework version.
         /// </p>
@@ -80,7 +79,7 @@ namespace Spring.Util
         /// </summary>
         /// <remarks>
         /// <p>
-        /// Primary purpose of this method is to allow us to parse and 
+        /// Primary purpose of this method is to allow us to parse and
         /// load configuration sections using the same API regardless
         /// of the .NET framework version.
         /// </p>

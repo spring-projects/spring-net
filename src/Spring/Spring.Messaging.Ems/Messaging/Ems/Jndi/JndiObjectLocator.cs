@@ -18,14 +18,12 @@
 
 #endregion
 
-using System;
-using Spring.Objects.Factory;
 using Spring.Util;
 
 namespace Spring.Messaging.Ems.Jndi
 {
     /// <summary>
-    /// Convenient superclass for JNDI-based service locators, 
+    /// Convenient superclass for JNDI-based service locators,
     /// providing configurable lookup of a specific JNDI resource.
     /// </summary>
     /// <remarks>
@@ -57,7 +55,7 @@ namespace Spring.Messaging.Ems.Jndi
         }
 
         /// <summary>
-        /// Gets or sets the type that the located JNDI object is supposed 
+        /// Gets or sets the type that the located JNDI object is supposed
         /// to be assignable to, if any.
         /// </summary>
         /// <value>The expected type.</value>

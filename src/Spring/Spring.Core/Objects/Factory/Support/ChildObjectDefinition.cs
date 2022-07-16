@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-using System;
 using System.Text;
 using Spring.Objects.Factory.Config;
 using Spring.Util;

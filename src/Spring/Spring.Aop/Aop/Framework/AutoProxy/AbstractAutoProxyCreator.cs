@@ -14,12 +14,8 @@
  * limitations under the License.
  */
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Runtime.Remoting;
 
 using AopAlliance.Aop;
 
@@ -227,7 +223,7 @@ namespace Spring.Aop.Framework.AutoProxy
 #if NETSTANDARD
             var isTransparentProxy = false;
 #else
-            var isTransparentProxy = RemotingServices.IsTransparentProxy(obj);
+            var isTransparentProxy = System.Runtime.Remoting.RemotingServices.IsTransparentProxy(obj);
 #endif
 
             Type objectType = isTransparentProxy

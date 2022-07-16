@@ -18,8 +18,6 @@
 
 #endregion
 
-
-using System;
 using Spring.Transaction;
 using Spring.Transaction.Support;
 

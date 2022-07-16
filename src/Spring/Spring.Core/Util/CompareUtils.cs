@@ -20,8 +20,6 @@
 
 #region Imports
 
-using System;
-
 #endregion
 
 namespace Spring.Util
@@ -36,7 +34,7 @@ namespace Spring.Util
         /// <param name="first">First object.</param>
         /// <param name="second">Second object.</param>
         /// <returns>
-        /// 0, if objects are equal; 
+        /// 0, if objects are equal;
         /// less than zero, if the first object is smaller than the second one;
         /// greater than zero, if the first object is greater than the second one.</returns>
         public static int Compare(object first, object second)

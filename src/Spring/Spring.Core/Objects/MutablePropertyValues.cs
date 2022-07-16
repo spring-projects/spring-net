@@ -14,9 +14,7 @@
  * limitations under the License.
  */
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Text;
 using Spring.Util;
@@ -182,7 +180,7 @@ namespace Spring.Objects
                 }
             }
         }
-        
+
         /// <summary>
         /// Add all property values from the given
         /// <see cref="System.Collections.IDictionary"/>.
@@ -270,7 +268,7 @@ namespace Spring.Objects
             {
                 return null;
             }
-            
+
             string propertyNameLowered = propertyName.ToLower(CultureInfo.CurrentCulture);
             for (var i = 0; i < propertyValuesList.Count; i++)
             {

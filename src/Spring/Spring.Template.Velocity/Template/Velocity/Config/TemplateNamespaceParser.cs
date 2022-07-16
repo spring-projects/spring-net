@@ -20,9 +20,7 @@
 
 #region Imports
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Xml;
 
 using NVelocity.Runtime;
@@ -39,7 +37,7 @@ using Spring.Util;
 namespace Spring.Template.Velocity.Config {
     /// <summary>
     /// Implementation of the custom configuration parser for template configurations
-    /// based on 
+    /// based on
     /// <see cref="ObjectsNamespaceParser"/>
     /// </summary>
     /// <author>Erez Mazor</author>
@@ -90,7 +88,7 @@ namespace Spring.Template.Velocity.Config {
         }
 
         /// <summary>
-        /// Parses the object definition for the engine object, configures a single NVelocity template engine based 
+        /// Parses the object definition for the engine object, configures a single NVelocity template engine based
         /// on the element definitions.
         /// </summary>
         /// <param name="element">the root element defining the velocity engine</param>
@@ -226,7 +224,7 @@ namespace Spring.Template.Velocity.Config {
         /// <param name="properties">the properties used to initialize the velocity engine</param>
         private void AppendFileLoaderProperties(XmlNodeList elements, IDictionary<string, object> properties) {
             IList<string> paths = new List<string>(elements.Count);
-            foreach (XmlElement element in elements) 
+            foreach (XmlElement element in elements)
             {
                 paths.Add(GetAttributeValue(element, VelocityConstants.Path));
             }
@@ -252,7 +250,7 @@ namespace Spring.Template.Velocity.Config {
 
         /// <summary>
         /// Creates a spring resource loader by setting the ResourceLoaderPaths of the
-        /// engine factory (the resource loader itself will be created internally either as 
+        /// engine factory (the resource loader itself will be created internally either as
         /// spring or as file resource loader based on the value of prefer-file-system-access
         /// attribute).
         /// </summary>
@@ -268,7 +266,7 @@ namespace Spring.Template.Velocity.Config {
         }
 
         /// <summary>
-        /// Create a custom resource loader from an nv:custom element 
+        /// Create a custom resource loader from an nv:custom element
         /// generates the 4 required nvelocity props for a resource loader (name, description, class and path).
         /// </summary>
         /// <param name="element">the nv:custom xml definition element</param>
@@ -285,7 +283,7 @@ namespace Spring.Template.Velocity.Config {
         }
 
         /// <summary>
-        /// Parses the nvelocity properties map using <code>ObjectNamespaceParserHelper</code> 
+        /// Parses the nvelocity properties map using <code>ObjectNamespaceParserHelper</code>
         /// and appends it to the properties dictionary
         /// </summary>
         /// <param name="element">root element of the map element</param>
@@ -351,7 +349,7 @@ namespace Spring.Template.Velocity.Config {
         }
     }
 
- 
+
 
     #region Element & Attribute Name Constants
 
@@ -445,12 +443,12 @@ namespace Spring.Template.Velocity.Config {
         public const string PropertyVelocityProperties = "VelocityProperties";
 
         /// <summary>
-        /// resource.loader.cache property of the resource loader configuration 
+        /// resource.loader.cache property of the resource loader configuration
         /// </summary>
         public const string PropertyResourceLoaderCaching = "resource.loader.cache";
 
         /// <summary>
-        /// resource.loader.modificationCheckInterval property of the resource loader configuration 
+        /// resource.loader.modificationCheckInterval property of the resource loader configuration
         /// </summary>
         public const string PropertyResourceLoaderModificationCheckInterval = "resource.loader.modificationCheckInterval";
 

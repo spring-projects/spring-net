@@ -14,10 +14,8 @@
  * limitations under the License.
  */
 
-using System;
 using System.Collections;
 using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 
@@ -30,7 +28,6 @@ using Spring.Objects.Factory.Config;
 using Spring.Threading;
 using Spring.Util;
 using System.Threading;
-using System.Linq;
 using System.Runtime.Serialization;
 
 namespace Spring.Objects.Factory.Support
@@ -139,7 +136,7 @@ namespace Spring.Objects.Factory.Support
             singletonsInCreation = new OrderedDictionary(comparer);
             prototypesInCreation = new LogicalThreadContextSetVariable();
         }
-        
+
         [OnDeserializing]
         private void OnDeserializing(StreamingContext c)
         {
@@ -200,7 +197,7 @@ namespace Spring.Objects.Factory.Support
         /// Returns, whether this object factory instance contains <see cref="IDestructionAwareObjectPostProcessor"/> objects.
         /// </summary>
         protected bool HasDestructionAwareObjectPostProcessors => hasDestructionAwareObjectPostProcessors;
-        
+
         /// <summary>
         /// Check whether this factory's bean creation phase already started,
         /// i.e. whether any bean has been marked as created in the meantime.
@@ -500,15 +497,15 @@ namespace Spring.Objects.Factory.Support
             {
                 // handle aliasing...
                 string canonicalName = (string) aliasMap[objectName];
-                return canonicalName ?? objectName;   
+                return canonicalName ?? objectName;
             }
 
             return objectName;
         }
 
         /// <summary>
-        /// Ensures, that the given name is prefixed with <see cref="ObjectFactoryUtils.FactoryObjectPrefix"/> 
-        /// if it incidentially already starts with this prefix. This avoids troubles when dereferencing 
+        /// Ensures, that the given name is prefixed with <see cref="ObjectFactoryUtils.FactoryObjectPrefix"/>
+        /// if it incidentially already starts with this prefix. This avoids troubles when dereferencing
         /// the object name during <see cref="ObjectFactoryUtils.TransformedObjectName"/>
         /// </summary>
         protected string OriginalObjectName(string name)
@@ -781,7 +778,7 @@ namespace Spring.Objects.Factory.Support
                 return null;
             }
         }
-        
+
         /// <summary>
         /// Mark the specified bean as already created (or about to be created).
         /// </summary>
@@ -808,9 +805,9 @@ namespace Spring.Objects.Factory.Support
                 }
             }
         }
-        
+
         /// <summary>
-        /// Perform appropriate cleanup of cached metadata after bean creation failed. 
+        /// Perform appropriate cleanup of cached metadata after bean creation failed.
         /// </summary>
         /// <param name="objectName">The name of the object</param>
         protected void CleanupAfterObjectCreationFailure(string objectName)
@@ -1402,7 +1399,7 @@ namespace Spring.Objects.Factory.Support
 
         /// <summary>
         /// Determines the <see cref="System.Type"/> of the object defined
-        /// by the supplied object <paramref name="definition"/>. 
+        /// by the supplied object <paramref name="definition"/>.
         /// </summary>
         /// <remarks>
         /// <p>
@@ -1420,7 +1417,7 @@ namespace Spring.Objects.Factory.Support
         /// </param>
         /// <param name="definition">
         /// The <see cref="Spring.Objects.Factory.Support.RootObjectDefinition"/>
-        /// that the <see cref="System.Type"/> is to be determined for. 
+        /// that the <see cref="System.Type"/> is to be determined for.
         /// </param>
         /// <returns>
         /// The <see cref="System.Type"/> of the object defined by the supplied
@@ -1566,7 +1563,7 @@ namespace Spring.Objects.Factory.Support
                 */
             }
         }
-        
+
         /// <summary>
         /// Remove the merged bean definition for the specified bean,
         /// recreating it on next access.
@@ -1576,7 +1573,7 @@ namespace Spring.Objects.Factory.Support
         {
             mergedObjectDefinitions.TryRemove(objectName, out _);
         }
-        
+
         /// <summary>
         /// Clear the merged object definition cache, removing entries for objects
         /// which are not considered eligible for full metadata caching yet.
@@ -1599,7 +1596,7 @@ namespace Spring.Objects.Factory.Support
         }
 
         /// <summary>
-        /// Gets the temporary object that is placed 
+        /// Gets the temporary object that is placed
         /// into the singleton cache during object resolution.
         /// </summary>
         protected object TemporarySingletonPlaceHolder => CurrentlyInCreation;
@@ -1631,7 +1628,7 @@ namespace Spring.Objects.Factory.Support
         private bool hasInstantiationAwareObjectPostProcessors;
 
         /// <summary>
-        /// Indicates whether any IDestructionAwareBeanPostProcessors have been registered 
+        /// Indicates whether any IDestructionAwareBeanPostProcessors have been registered
         /// </summary>
         private bool hasDestructionAwareObjectPostProcessors;
 
@@ -1641,7 +1638,7 @@ namespace Spring.Objects.Factory.Support
         private ConcurrentDictionary<string, Lazy<object>> singletonLocks;
 
         /// <summary>
-        /// Set of registered singletons, containing the instance names in registration order 
+        /// Set of registered singletons, containing the instance names in registration order
         /// </summary>
         private HashSet<string> registeredSingletons = new HashSet<string>();
 
@@ -1693,7 +1690,7 @@ namespace Spring.Objects.Factory.Support
         /// <summary>
         /// Is this object a singleton?
         /// </summary>
-        /// <see cref="Spring.Objects.Factory.IObjectFactory.IsSingleton"/> 
+        /// <see cref="Spring.Objects.Factory.IObjectFactory.IsSingleton"/>
         public bool IsSingleton(string name)
         {
             string objectName = TransformedObjectName(name);
@@ -1772,7 +1769,7 @@ namespace Spring.Objects.Factory.Support
             IObjectFactory parentFactory = ParentObjectFactory;
             if (parentFactory != null && !ContainsObjectDefinition(objectName))
             {
-                // No object definition found in this factory -> delegate to parent   
+                // No object definition found in this factory -> delegate to parent
                 return parentFactory.IsPrototype(OriginalObjectName(name));
             }
 
@@ -1802,7 +1799,7 @@ namespace Spring.Objects.Factory.Support
         /// Does this object factory or one of its parent factories contain an object with the given name?
         /// </summary>
         /// <remarks>
-        /// This method scans the object factory hierarchy starting with the current factory instance upwards. 
+        /// This method scans the object factory hierarchy starting with the current factory instance upwards.
         /// Use <see cref="ContainsLocalObject"/> if you want to explicitely check just this object factory instance.
         /// </remarks>
         /// <see cref="Spring.Objects.Factory.IObjectFactory.ContainsObject"/>.
@@ -2064,7 +2061,7 @@ namespace Spring.Objects.Factory.Support
         }
 
         /// <summary>
-        /// Return an instance (possibly shared or independent) of the given object name, 
+        /// Return an instance (possibly shared or independent) of the given object name,
         /// optionally injecting dependencies.
         /// </summary>
         /// <param name="name">The name of the object to return.</param>
@@ -2102,7 +2099,7 @@ namespace Spring.Objects.Factory.Support
             const int indent = 3;
             bool hasErrors = false;
             var isDebugEnabled = log.IsDebugEnabled;
-            
+
             try
             {
                 string objectName = TransformedObjectName(name);
@@ -2118,7 +2115,7 @@ namespace Spring.Objects.Factory.Support
                 // those are cases, where singleton cache can be used
                 if (arguments == null && !suppressConfigure)
                 {
-                    // eagerly check singleton cache for manually registered singletons...                       
+                    // eagerly check singleton cache for manually registered singletons...
                     object sharedInstance = GetSingleton(objectName);
                     if (sharedInstance != null)
                     {
@@ -2226,7 +2223,7 @@ namespace Spring.Objects.Factory.Support
                 }
 
                 CleanupAfterObjectCreationFailure(name);
-                
+
                 hasErrors = true;
                 if (log.IsErrorEnabled)
                 {
@@ -2655,7 +2652,7 @@ namespace Spring.Objects.Factory.Support
             }
         }
         /// <summary>
-        /// Tries to find a cached object for the specified name. 
+        /// Tries to find a cached object for the specified name.
         /// </summary>
         /// <param name="objectName">Teh object name to look for.</param>
         /// <returns>The cached object if found, <see langword="null"/> otherwise.</returns>
@@ -2709,7 +2706,7 @@ namespace Spring.Objects.Factory.Support
         {
             return singletonLocks.GetOrAdd(objectName, key => new Lazy<object>(() => new object())).Value;
         }
-        
+
         [Serializable]
         private class LogicalThreadContextSetVariable : IDisposable
         {
@@ -2735,16 +2732,16 @@ namespace Spring.Objects.Factory.Support
         }
 
         /// <summary>
-        /// Makes a distinction between sort order and object identity. 
+        /// Makes a distinction between sort order and object identity.
         /// This is important when used with <see cref="ISet"/>, since most
         /// implementations assume Order == Identity
         /// </summary>
         [Serializable]
         private class ObjectOrderComparator : OrderComparator
         {
-            public static readonly ObjectOrderComparator ObjectOrderComparatorInstance = new ObjectOrderComparator(); 
+            public static readonly ObjectOrderComparator ObjectOrderComparatorInstance = new ObjectOrderComparator();
             /// <summary>
-            /// Handle the case when both objects have equal sort order priority. By default returns 0, 
+            /// Handle the case when both objects have equal sort order priority. By default returns 0,
             /// but may be overriden for handling special cases.
             /// </summary>
             /// <param name="o1">The first object to compare.</param>

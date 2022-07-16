@@ -18,18 +18,13 @@
 
 #endregion
 
-#region Imports
-
 using System;
 using System.Collections;
 using System.Diagnostics;
 using System.Reflection;
-using System.Threading;
 using NUnit.Framework;
 using Spring.Context.Support;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Reflection.Dynamic
 {
@@ -94,7 +89,7 @@ namespace Spring.Reflection.Dynamic
         [Test]
         public void CanCreateWithRestrictedPermissions()
         {
-            SecurityTemplate.MediumTrustInvoke(new ThreadStart(CanCreateWithRestrictedPermissionsImpl));
+            SecurityTemplate.MediumTrustInvoke(new System.Threading.ThreadStart(CanCreateWithRestrictedPermissionsImpl));
         }
 
         private void CanCreateWithRestrictedPermissionsImpl()
@@ -107,7 +102,7 @@ namespace Spring.Reflection.Dynamic
         [Test]
         public void CanCreatePrivateMethodButThrowsOnInvoke()
         {
-            SecurityTemplate.MediumTrustInvoke(new ThreadStart(CanCreatePrivateMethodButThrowsOnInvokeImpl));
+            SecurityTemplate.MediumTrustInvoke(new System.Threading.ThreadStart(CanCreatePrivateMethodButThrowsOnInvokeImpl));
         }
 
         private void CanCreatePrivateMethodButThrowsOnInvokeImpl()
@@ -200,13 +195,13 @@ namespace Spring.Reflection.Dynamic
             Assert.IsNull(dm.Invoke(null, null)); // this is ok
             try
             {
-                dm.Invoke(null); // this is not ok 
+                dm.Invoke(null); // this is not ok
                 Assert.Fail();
             }
             catch (ArgumentException) { }
             try
             {
-                dm.Invoke(null, null, null); // this is not ok 
+                dm.Invoke(null, null, null); // this is not ok
                 Assert.Fail();
             }
             catch (ArgumentException) { }

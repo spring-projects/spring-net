@@ -18,18 +18,12 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Globalization;
 using System.Reflection;
 
 using Spring.Core;
 using Spring.Core.TypeResolution;
-
-#endregion
 
 namespace Spring.Objects.Support
 {

@@ -1,9 +1,9 @@
-/* Copyright © 2002-2011 by Aidant Systems, Inc., and by Jason Smith. */
+/* Copyright ï¿½ 2002-2011 by Aidant Systems, Inc., and by Jason Smith. */
 
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,12 +20,7 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Collections;
-
-#endregion
 
 namespace Spring.Collections
 {
@@ -36,7 +31,7 @@ namespace Spring.Collections
 	/// <p>
 	/// This interface models the mathematical
 	/// <see cref="Spring.Collections.ISet"/> abstraction. The order of
-	/// elements in a set is dependant on (a)the data-structure implementation, and 
+	/// elements in a set is dependant on (a)the data-structure implementation, and
 	/// (b)the implementation of the various
 	/// <see cref="Spring.Collections.ISet"/> methods, and thus is not
 	/// guaranteed.
@@ -111,7 +106,7 @@ namespace Spring.Collections
 	{
 		/// <summary>
 		/// Performs a "union" of the two sets, where all the elements
-		/// in both sets are present. 
+		/// in both sets are present.
 		/// </summary>
 		/// <remarks>
 		/// <p>

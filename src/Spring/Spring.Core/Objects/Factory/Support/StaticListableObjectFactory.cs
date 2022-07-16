@@ -1,12 +1,12 @@
 /*
  * Copyright © 2002-2011 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -14,10 +14,7 @@
  * limitations under the License.
  */
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
-
 using Spring.Objects.Factory.Config;
 using Spring.Util;
 
@@ -395,14 +392,14 @@ namespace Spring.Objects.Factory.Support
         /// always return independent instances?
         /// </summary>
         /// <remarks>This method returning false does not clearly indicate a singleton object.
-        /// It indicated non-independent instances, which may correspond to a scoped object as 
-        /// well.  use the IsSingleton property to explicitly check for a shared 
+        /// It indicated non-independent instances, which may correspond to a scoped object as
+        /// well.  use the IsSingleton property to explicitly check for a shared
         /// singleton instance.
         /// <para>Translates aliases back to the corresponding canonical object name.  Will ask the
         /// parent factory if the object can not be found in this factory instance.
         /// </para>
         /// </remarks>
-        /// 
+        ///
         /// <param name="name">The name of the object to query</param>
         /// <returns>
         /// 	<c>true</c> if the specified object name will always deliver independent instances; otherwise, <c>false</c>.
@@ -548,12 +545,12 @@ namespace Spring.Objects.Factory.Support
         /// </summary>
         /// <param name="includeAncestors">to include parent factories in result</param>
         /// <returns>
-        /// The names of all objects defined in this factory, if <code>includeAncestors</code> is <code>true</code> includes all 
+        /// The names of all objects defined in this factory, if <code>includeAncestors</code> is <code>true</code> includes all
         /// objects defined in parent factories, or an empty array if none are defined.
         /// </returns>
         public IReadOnlyList<string> GetObjectDefinitionNames(bool includeAncestors)
         {
-            throw new NotSupportedException("StaticListableObjectFactory does not contain object definitions.");            
+            throw new NotSupportedException("StaticListableObjectFactory does not contain object definitions.");
         }
 
         /// <summary>
@@ -919,7 +916,7 @@ namespace Spring.Objects.Factory.Support
         {
             Dictionary<string, T> collector = new Dictionary<string, T>();
             DoGetObjectsOfType(typeof(T), includeFactoryObjects, includePrototypes, collector);
-            return collector; 
+            return collector;
         }
 
         /// <summary>

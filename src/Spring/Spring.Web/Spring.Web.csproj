@@ -1,11 +1,14 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <TargetFramework>$(TargetFullFrameworkVersion)</TargetFramework>
     <Description>Interfaces and classes that provide web application support in Spring.Net</Description>
   </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Spring.Core\Spring.Core.csproj" />
   </ItemGroup>
+
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -14,4 +17,9 @@
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Web.Services" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Using Remove="System.Net.Http" />
+  </ItemGroup>
+
 </Project>

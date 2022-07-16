@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Transactions;
 using Common.Logging;
 using Spring.Transaction;
@@ -42,9 +41,9 @@ namespace Spring.Messaging.Listener
     /// Database and messaging operations will commit or rollback together.
     /// </para>
     /// <para>
-    /// If you only want local message based transactions use the 
+    /// If you only want local message based transactions use the
     /// <see cref="TransactionalMessageListenerContainer"/>.  With some simple programming
-    /// you may also achieve 'exactly once' processing using the 
+    /// you may also achieve 'exactly once' processing using the
     /// <see cref="TransactionalMessageListenerContainer"/>.
     /// </para>
     /// <para>
@@ -201,7 +200,7 @@ namespace Spring.Messaging.Listener
         }
 
         /// <summary>
-        /// Handles the distributed transaction listener exception by calling the 
+        /// Handles the distributed transaction listener exception by calling the
         /// <see cref="IDistributedTransactionExceptionHandler"/> if not null.
         /// </summary>
         /// <param name="exception">The exception.</param>

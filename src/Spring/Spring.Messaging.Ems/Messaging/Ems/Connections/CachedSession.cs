@@ -20,7 +20,6 @@
 
 using System.Collections;
 using Spring.Messaging.Ems.Common;
-using TIBCO.EMS;
 using Common.Logging;
 using Spring.Collections;
 using Spring.Util;
@@ -166,7 +165,7 @@ namespace Spring.Messaging.Ems.Connections
                 {
                     ((IMessageConsumer) dictionaryEntry.Value).Close();
                     ToRemove.Add(key);
-                }                
+                }
             }
             foreach (ConsumerCacheKey key in ToRemove)
             {
@@ -216,7 +215,7 @@ namespace Spring.Messaging.Ems.Connections
         }
 
         /// <summary>
-        /// Creates the consumer, potentially returning a cached instance. 
+        /// Creates the consumer, potentially returning a cached instance.
         /// </summary>
         /// <param name="destination">The destination.</param>
         /// <returns>A message consumer</returns>
@@ -227,7 +226,7 @@ namespace Spring.Messaging.Ems.Connections
 
 
         /// <summary>
-        /// Creates the consumer, potentially returning a cached instance. 
+        /// Creates the consumer, potentially returning a cached instance.
         /// </summary>
         /// <param name="destination">The destination.</param>
         /// <param name="selector">The selector.</param>
@@ -497,13 +496,13 @@ namespace Spring.Messaging.Ems.Connections
         public void Recover()
         {
             this.transactionOpen = true;
-            target.Recover();            
+            target.Recover();
         }
 
         public void Run()
         {
             this.transactionOpen = true;
-            target.Run();            
+            target.Run();
         }
 
         public void Unsubscribe(string name)
@@ -576,7 +575,7 @@ namespace Spring.Messaging.Ems.Connections
 
         public bool IsClosed
         {
-            get { 
+            get {
                 this.transactionOpen = true;
                 return target.IsClosed;
             }

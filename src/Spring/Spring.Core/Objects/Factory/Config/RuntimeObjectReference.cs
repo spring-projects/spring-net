@@ -18,12 +18,7 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Globalization;
-
-#endregion
 
 namespace Spring.Objects.Factory.Config
 {
@@ -126,9 +121,9 @@ namespace Spring.Objects.Factory.Config
         private bool _isToParent;
 
         #endregion
-        
+
         #region Equality Members
-        
+
         /// <summary>
         /// Determines whether the specified RuntimeObjectReference is equal to the current RuntimeObjectReference.
         /// </summary>
@@ -149,7 +144,7 @@ namespace Spring.Objects.Factory.Config
             if (obj.GetType() != this.GetType()) return false;
             return Equals((RuntimeObjectReference)obj);
         }
-        
+
         /// <summary>
         /// Serves as a hash function for RuntimeObjectReference.
         /// </summary>
@@ -161,7 +156,7 @@ namespace Spring.Objects.Factory.Config
                 return (_objectName.GetHashCode() * 397) ^ _isToParent.GetHashCode();
             }
         }
-        
+
         #endregion
     }
 }

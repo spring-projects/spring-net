@@ -18,13 +18,8 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
-
-#endregion
 
 namespace Spring.Objects.Factory.Xml
 {
@@ -318,7 +313,7 @@ namespace Spring.Objects.Factory.Xml
 		/// </p>
 		/// </remarks>
 		public const string PropertyElement = "property";
-        
+
         /// <summary>
         /// A qualifier definition used for fine grained autowiring
         /// </summary>
@@ -468,7 +463,7 @@ namespace Spring.Objects.Factory.Xml
         /// </p>
         /// </remarks>
         public const string ValueAttribute = "value";
-        
+
         /// <summary>
         /// Contains delimiters that should be used to split delimited string values.
         /// </summary>
@@ -478,7 +473,7 @@ namespace Spring.Objects.Factory.Xml
         /// </p>
         /// </remarks>
         public const string DelimitersAttribute = "delimiters";
-        
+
 	    /// <summary>
 		/// A reference to another objects.
 		/// </summary>
@@ -499,7 +494,7 @@ namespace Spring.Objects.Factory.Xml
         /// </p>
         /// </remarks>
         public const string ExpressionAttribute = "expression";
-        
+
 	    /// <summary>
 		/// A map entry can be an inner object, ref, collection, or value.
 		/// </summary>
@@ -517,7 +512,7 @@ namespace Spring.Objects.Factory.Xml
 		/// <p>
 		/// The property may be a string, or may be converted to the
 		/// required <see cref="System.Type"/> using the
-		/// <see cref="System.ComponentModel.TypeConverter"/> 
+		/// <see cref="System.ComponentModel.TypeConverter"/>
 		/// machinery. This makes it possible for application developers to
 		/// write custom <see cref="System.ComponentModel.TypeConverter"/>
 		/// implementations that can convert strings to objects.
@@ -533,7 +528,7 @@ namespace Spring.Objects.Factory.Xml
         /// Contains a string representation of an expression.
         /// </summary>
         public const string ExpressionElement = "expression";
-        
+
 	    /// <summary>
 		/// Denotes <see langword="null"/>  value.
 		/// </summary>
@@ -702,7 +697,7 @@ namespace Spring.Objects.Factory.Xml
 		/// </summary>
 		/// <remarks>
 		/// <p>
-		/// If this method is not overloaded, there's no need to use arg-type 
+		/// If this method is not overloaded, there's no need to use arg-type
 		/// subelements.
 		/// </p>
 		/// <p>
@@ -729,7 +724,7 @@ namespace Spring.Objects.Factory.Xml
 		/// Subelement of <c>replaced-method</c> identifying an argument for a
 		/// replaced method in the event of method overloading.
 		/// </summary>
-		/// <seealso cref="Spring.Objects.Factory.Xml.ObjectDefinitionConstants.ReplacedMethodReplacerNameAttribute"/> 
+		/// <seealso cref="Spring.Objects.Factory.Xml.ObjectDefinitionConstants.ReplacedMethodReplacerNameAttribute"/>
 		public const string ReplacedMethodArgumentTypeElement = "arg-type";
 
 		/// <summary>
@@ -755,7 +750,7 @@ namespace Spring.Objects.Factory.Xml
 		/// </list>
 		/// </p>
 		/// </remarks>
-		/// <seealso cref="Spring.Objects.Factory.Xml.ObjectDefinitionConstants.ReplacedMethodArgumentTypeElement"/> 
+		/// <seealso cref="Spring.Objects.Factory.Xml.ObjectDefinitionConstants.ReplacedMethodArgumentTypeElement"/>
 		public const string ReplacedMethodArgumentTypeMatchAttribute = "match";
 
 		/// <summary>

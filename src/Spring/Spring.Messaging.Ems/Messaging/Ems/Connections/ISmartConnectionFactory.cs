@@ -1,4 +1,4 @@
- 
+
 
 #region License
 
@@ -21,12 +21,11 @@
 #endregion
 
 using Spring.Messaging.Ems.Common;
-using TIBCO.EMS;
 
 namespace Spring.Messaging.Ems.Connections
 {
     /// <summary>
-    /// Extension of the <code>IConnectionFactory</code> interface, 
+    /// Extension of the <code>IConnectionFactory</code> interface,
     /// indicating how to release Connections obtained from it.
     /// </summary>
     /// <author>Juergen Hoeller</author>

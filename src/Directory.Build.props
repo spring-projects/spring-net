@@ -17,13 +17,13 @@
     <Company>SpringSource</Company>
     <Copyright>Copyright 2002-2021 Spring.NET Framework Team.</Copyright>
     <Trademark>Apache License, Version 2.0</Trademark>
-    
+
     <CommonLoggingVersion>3.4.1</CommonLoggingVersion>
 
     <Authors>SpringSource</Authors>
-	<PackageIcon>SpringSource_Leaves32x32.png</PackageIcon>
+    <PackageIcon>SpringSource_Leaves32x32.png</PackageIcon>
     <PackageIconUrl>https://springframework.net/images/SpringSource_Leaves32x32.png</PackageIconUrl>
-	<PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
+    <PackageLicenseExpression>Apache-2.0</PackageLicenseExpression>
     <PackageProjectUrl>https://www.springframework.net/</PackageProjectUrl>
     <PackageTags>Library</PackageTags>
 
@@ -45,27 +45,29 @@
     <LangVersion>latest</LangVersion>
     <TargetFullFrameworkVersion>net462</TargetFullFrameworkVersion>
 
+    <ImplicitUsings>enable</ImplicitUsings>
+
   </PropertyGroup>
-  
+
   <ItemGroup Condition="'$(SourceLinkEnabled)' != 'false'">
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.0.0" PrivateAssets="All"/>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
   </ItemGroup>
-  
+
   <ItemGroup>
-    <PackageReference Include="ConfigureAwaitChecker.Analyzer" Version="4.0.0" PrivateAssets="All" />
+    <PackageReference Include="ConfigureAwaitChecker.Analyzer" Version="5.0.0.1" PrivateAssets="All"/>
   </ItemGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-	<DebugType>Full</DebugType>
+    <DebugType>Full</DebugType>
     <DefineConstants>$(DefineConstants);DEBUG_DYNAMIC;</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
     <DefineConstants>TRACE;$(DefineConstants)</DefineConstants>
   </PropertyGroup>
-  
+
   <ItemGroup>
     <None Include="..\..\SpringSource_Leaves32x32.png" Pack="true" Visible="false" PackagePath=""/>
-  </ItemGroup>  
+  </ItemGroup>
 
 </Project>

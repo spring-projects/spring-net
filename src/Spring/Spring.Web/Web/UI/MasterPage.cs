@@ -20,9 +20,7 @@
 
 #region Imports
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Web.UI;
 using Spring.Collections;
 using Spring.Validation;
@@ -41,7 +39,7 @@ using Spring.Web.Support;
 namespace Spring.Web.UI
 {
     #region ASP.NET 2.0 Spring Master Page Implementation
-    
+
     /// <summary>
     /// Spring.NET Master Page implementation for ASP.NET 2.0
     /// </summary>
@@ -61,7 +59,7 @@ namespace Spring.Web.UI
         #endregion
 
         #region Lifecycle methods
-        
+
         /// <summary>
         /// Initialize a new MasterPage instance.
         /// </summary>
@@ -76,11 +74,11 @@ namespace Spring.Web.UI
         protected override void OnInit(EventArgs e)
         {
             InitializeMessageSource();
-            
+
             base.OnInit(e);
 
             // initialize controls
-            OnInitializeControls(EventArgs.Empty);            
+            OnInitializeControls(EventArgs.Empty);
         }
 
         /// <summary>
@@ -304,7 +302,7 @@ namespace Spring.Web.UI
         /// In ASP.NET 1.1, this method loads local resources from the web application assembly.
         /// </para>
         /// <para>
-        /// However, in ASP.NET 2.0, local resources are compiled into the dynamic assembly, 
+        /// However, in ASP.NET 2.0, local resources are compiled into the dynamic assembly,
         /// so we need to find that assembly instead and load the resources from it.
         /// </para>
         /// </remarks>
@@ -424,15 +422,15 @@ namespace Spring.Web.UI
         /// <see cref="Args"/> is an easy way to pass additional parameters into the expression
         /// <example>
         /// // config:
-        /// 
+        ///
         /// &lt;property Name=&quot;Results&quot;&gt;
         ///   &lt;dictionary&gt;
         ///   		&lt;entry key=&quot;ok_clicked&quot; value=&quot;redirect:~/ShowResult.aspx?result=%{Args['result']}&quot; /&gt;
         ///   &lt;/dictionary&gt;
         /// &lt;/property&gt;
-        /// 
+        ///
         /// // code:
-        /// 
+        ///
         /// void OnOkClicked(object sender, EventArgs e)
         /// {
         ///   Args[&quot;result&quot;] = txtUserInput.Text;
@@ -474,9 +472,9 @@ namespace Spring.Web.UI
 
 
         /// <summary>
-        /// Returns a redirect url string that points to the 
+        /// Returns a redirect url string that points to the
         /// <see cref="Spring.Web.Support.Result.TargetPage"/> defined by this
-        /// result evaluated using this Page for expression 
+        /// result evaluated using this Page for expression
         /// </summary>
         /// <param name="resultName">Name of the result.</param>
         /// <returns>A redirect url string.</returns>
@@ -486,9 +484,9 @@ namespace Spring.Web.UI
         }
 
         /// <summary>
-        /// Returns a redirect url string that points to the 
+        /// Returns a redirect url string that points to the
         /// <see cref="Spring.Web.Support.Result.TargetPage"/> defined by this
-        /// result evaluated using this Page for expression 
+        /// result evaluated using this Page for expression
         /// </summary>
         /// <param name="resultName">Name of the result.</param>
         /// <param name="context">The context to use for evaluating the SpEL expression in the Result</param>
@@ -578,7 +576,7 @@ namespace Spring.Web.UI
         #region Spring Page support
 
         /// <summary>
-        /// Overrides Page property to return <see cref="Spring.Web.UI.Page"/> 
+        /// Overrides Page property to return <see cref="Spring.Web.UI.Page"/>
         /// instead of <see cref="System.Web.UI.Page"/>.
         /// </summary>
         [Browsable(false)]
@@ -589,7 +587,7 @@ namespace Spring.Web.UI
         }
 
         #endregion
-    
+
         #region Dependency Injection Support
 
         /// <summary>

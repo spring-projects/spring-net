@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-using System;
-using System.Collections.Generic;
 using NHibernate;
 using NHibernate.Type;
 using Spring.Aop.Framework;

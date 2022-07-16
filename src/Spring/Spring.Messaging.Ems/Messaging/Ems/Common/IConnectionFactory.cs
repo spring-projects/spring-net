@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2010 the original author or authors.
+ * Copyright ï¿½ 2002-2010 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,15 +18,12 @@
 
 #endregion
 
-using System;
-using System.IO;
 using System.Runtime.Serialization;
-using TIBCO.EMS;
 
 namespace Spring.Messaging.Ems.Common
 {
     /// <summary>
-    /// An interface containing all methods and properties on the TIBCO.EMS.ConnectionFactory class.    
+    /// An interface containing all methods and properties on the TIBCO.EMS.ConnectionFactory class.
     /// Refer to the TIBCO EMS API documentation for more information.
     /// </summary>
     /// <remarks>
@@ -56,7 +53,7 @@ namespace Spring.Messaging.Ems.Common
         IConnection CreateConnection(string userName, string password);
 
         /// <summary>
-        /// Gets the certificate store info object associated with this connection factory. 
+        /// Gets the certificate store info object associated with this connection factory.
         /// </summary>
         /// <value>The certificate store.</value>
         object CertificateStore { get; }
@@ -110,7 +107,7 @@ namespace Spring.Messaging.Ems.Common
         int ConnAttemptCount { set; }
 
         /// <summary>
-        /// Sets delay between connection attempts 
+        /// Sets delay between connection attempts
         /// </summary>
         /// <value>The delay between connection attempts.</value>
         int ConnAttemptDelay { set; }
@@ -122,7 +119,7 @@ namespace Spring.Messaging.Ems.Common
         int ConnAttemptTimeout { set; }
 
         /// <summary>
-        /// Sets the custom host name verifier. Set to null to remove custom host name verifier. 
+        /// Sets the custom host name verifier. Set to null to remove custom host name verifier.
         /// </summary>
         /// <value>The host name verifier.</value>
         EMSSSLHostNameVerifier HostNameVerifier { set; }
@@ -144,15 +141,15 @@ namespace Spring.Messaging.Ems.Common
         /// </summary>
         /// <value><c>true</c> to enable multicast; <c>false</c> to disable.</value>
         bool MulticastEnabled { set; }
-        
+
         int ReconnAttemptCount { set; }
-        
+
         int ReconnAttemptDelay { set; }
-        
+
         int ReconnAttemptTimeout { set; }
-        
+
         string ServerUrl { set; }
-        
+
         bool SSLAuthOnly { set; }
 
         string SSLProxyAuthUsername { set; get; }
@@ -160,11 +157,11 @@ namespace Spring.Messaging.Ems.Common
         string SSLProxyAuthPassword { set; get; }
 
         bool SSLTrace { set; }
-        
+
         string TargetHostName { set; }
-        
+
         string UserName { set; }
-        
+
         string UserPassword { set; }
 
         string ToString();

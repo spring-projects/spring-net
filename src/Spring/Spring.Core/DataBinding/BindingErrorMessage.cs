@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +18,8 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using Spring.Util;
 using Spring.Validation;
-
-#endregion
 
 namespace Spring.DataBinding
 {
@@ -61,8 +56,8 @@ namespace Spring.DataBinding
         /// Generates an object from its XML representation.
         /// </summary>
         /// <param name="reader">
-        /// The <see cref="T:System.Xml.XmlReader"></see> stream 
-        /// from which the object is deserialized. 
+        /// The <see cref="T:System.Xml.XmlReader"></see> stream
+        /// from which the object is deserialized.
         /// </param>
         public override void ReadXml(System.Xml.XmlReader reader)
         {
@@ -74,8 +69,8 @@ namespace Spring.DataBinding
         /// Converts an object into its XML representation.
         /// </summary>
         /// <param name="writer">
-        /// The <see cref="T:System.Xml.XmlWriter"></see> stream 
-        /// to which the object is serialized. 
+        /// The <see cref="T:System.Xml.XmlWriter"></see> stream
+        /// to which the object is serialized.
         /// </param>
         public override void WriteXml(System.Xml.XmlWriter writer)
         {
@@ -93,7 +88,7 @@ namespace Spring.DataBinding
         public override bool Equals(object obj)
         {
             BindingErrorMessage other = obj as BindingErrorMessage;
-            return (other != null) 
+            return (other != null)
                 && (this.BindingId == other.BindingId)
                 && (base.Equals(obj));
         }

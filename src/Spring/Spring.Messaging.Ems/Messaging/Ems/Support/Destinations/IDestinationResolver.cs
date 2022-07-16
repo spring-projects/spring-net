@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2010 the original author or authors.
+ * Copyright ï¿½ 2002-2010 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,7 +19,6 @@
 #endregion
 
 using Spring.Messaging.Ems.Common;
-using TIBCO.EMS;
 
 namespace Spring.Messaging.Ems.Support.Destinations
 {
@@ -30,7 +29,7 @@ namespace Spring.Messaging.Ems.Support.Destinations
     /// destination names from simple Strings to actual
     /// Destination implementation instances.
     /// </para>
-    /// 
+    ///
     /// <para>The default DestinationResolver implementation used by
     /// EmsTemplate instances is the
     /// DynamicDestinationResolver class. Consider using the
@@ -54,6 +53,6 @@ namespace Spring.Messaging.Ems.Support.Destinations
         /// </returns>
         /// <throws>EMSException if resolution failed </throws>
         Destination ResolveDestinationName(ISession session, string destinationName, bool pubSubDomain);
-	
+
     }
 }

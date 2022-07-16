@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using Spring.Core;
 
 namespace Spring.Objects

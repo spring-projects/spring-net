@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2010 the original author or authors.
+ * Copyright ï¿½ 2002-2010 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,7 @@
 
 #endregion
 
-using System;
 using System.ComponentModel;
-using TIBCO.EMS;
 
 namespace Spring.Messaging.Ems.Common
 {
@@ -74,7 +72,7 @@ namespace Spring.Messaging.Ems.Common
         /// <value><c>true</c> if the connection is closed; otherwise, <c>false</c>.</value>
         bool IsClosed { get; }
 
-        /// <summary>        
+        /// <summary>
         /// Gets a value indicating whether the connection communicates with a secure protocol
         /// </summary>
         /// <value><c>true</c> if the connection communicates with a secure protocol; otherwise, <c>false</c>.</value>
@@ -88,7 +86,7 @@ namespace Spring.Messaging.Ems.Common
         ConnectionMetaData MetaData { get; }
 
         /// <summary>
-        /// Closes the connection and reclaims resources. 
+        /// Closes the connection and reclaims resources.
         /// </summary>
         void Close();
 
@@ -99,7 +97,7 @@ namespace Spring.Messaging.Ems.Common
         /// <param name="acknowledgeMode">Indicates whether and how the consumer is to acknowledge received messages.
         /// This version of CreateSession accepts an integer value associated with the acknowledge mode described by a Session member and should only be used for backward compatibility.
         /// This parameter is ignored if the session is transacted.</param>
-        /// <returns>A newly created session.</returns>         
+        /// <returns>A newly created session.</returns>
         ISession CreateSession(bool transacted, int acknowledgeMode);
 
         /// <summary>
@@ -108,25 +106,25 @@ namespace Spring.Messaging.Ems.Common
         /// <param name="transacted">if set to <c>true</c> [transacted].</param>
         /// <param name="acknowledgeMode">The acknowledge mode.
         /// When true, the new session has transaction semantics.
-        /// Indicates whether and how the consumer is to acknowledge received messages. 
-        /// Legal values are listed under SessionMode. 
-        /// This parameter is ignored if the session is transacted. 
+        /// Indicates whether and how the consumer is to acknowledge received messages.
+        /// Legal values are listed under SessionMode.
+        /// This parameter is ignored if the session is transacted.
         /// </param>
         /// <returns>A newly created session.</returns>
         ISession CreateSession(bool transacted, SessionMode acknowledgeMode);
 
         /// <summary>
-        /// Starts (or restarts) a connection's delivery of incoming messages. 
+        /// Starts (or restarts) a connection's delivery of incoming messages.
         /// </summary>
         void Start();
 
         /// <summary>
-        /// Temporarily stops a connection's delivery of incoming messages. 
+        /// Temporarily stops a connection's delivery of incoming messages.
         /// </summary>
         void Stop();
 
         /// <summary>
-        /// A String representation of the connection object 
+        /// A String representation of the connection object
         /// </summary>
         /// <returns>
         /// A <see cref="System.String"/> that represents this instance.

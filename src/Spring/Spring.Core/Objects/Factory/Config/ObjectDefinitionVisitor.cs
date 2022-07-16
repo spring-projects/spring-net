@@ -18,17 +18,11 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 
 using Spring.Collections;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Objects.Factory.Config
 {
@@ -64,7 +58,7 @@ namespace Spring.Objects.Factory.Config
         /// </summary>
         /// <remarks>Subclasses should override the <code>ResolveStringValue</code> method</remarks>
         protected ObjectDefinitionVisitor()
-        {           
+        {
         }
 
         /// <summary>
@@ -87,7 +81,7 @@ namespace Spring.Objects.Factory.Config
         }
 
         /// <summary>
-        /// Visits the ObjectDefinition property ObjectTypeName, replacing string values using 
+        /// Visits the ObjectDefinition property ObjectTypeName, replacing string values using
         /// the specified IVariableSource.
         /// </summary>
         /// <param name="objectDefinition">The object definition.</param>
@@ -241,11 +235,11 @@ namespace Spring.Objects.Factory.Config
         }
 
         /// <summary>
-        /// Visits the ManagedList property ElementTypeName and 
+        /// Visits the ManagedList property ElementTypeName and
         /// calls <see cref="ResolveValue"/> for list element.
         /// </summary>
         protected virtual void VisitManagedList(ManagedList listVal)
-        {            
+        {
             string elementTypeName = listVal.ElementTypeName;
             if (elementTypeName != null)
             {
@@ -268,7 +262,7 @@ namespace Spring.Objects.Factory.Config
         }
 
         /// <summary>
-        /// Visits the ManagedSet property ElementTypeName and 
+        /// Visits the ManagedSet property ElementTypeName and
         /// calls <see cref="ResolveValue"/> for list element.
         /// </summary>
         protected virtual void VisitManagedSet(ManagedSet setVal)
@@ -296,7 +290,7 @@ namespace Spring.Objects.Factory.Config
         }
 
         /// <summary>
-        /// Visits the ManagedSet properties KeyTypeName and ValueTypeName and 
+        /// Visits the ManagedSet properties KeyTypeName and ValueTypeName and
         /// calls <see cref="ResolveValue"/> for dictionary's value element.
         /// </summary>
         protected virtual void VisitManagedDictionary(ManagedDictionary dictVal)
@@ -334,9 +328,9 @@ namespace Spring.Objects.Factory.Config
                     mods[entry.Key] = newValue;
                 }*/
 
-                object key = entry.Key;                
+                object key = entry.Key;
                 object newKey = ResolveValue(key);
-                object oldValue = entry.Value;                
+                object oldValue = entry.Value;
                 object newValue = ResolveValue(oldValue);
 
                 if (!ObjectUtils.NullSafeEquals(newValue, oldValue) || key != newKey)

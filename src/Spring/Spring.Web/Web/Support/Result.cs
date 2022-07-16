@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using System.Collections;
 using System.Text;
 using System.Web;
@@ -193,7 +192,7 @@ namespace Spring.Web.Support
         /// </summary>
         /// <remarks>
         /// <p>
-        /// This is the (relative) path to the target page. 
+        /// This is the (relative) path to the target page.
         /// </p>
         /// </remarks>
         /// <example>
@@ -257,7 +256,7 @@ namespace Spring.Web.Support
             switch (Mode)
             {
                 case ResultMode.Redirect:
-                case ResultMode.RedirectNoAbort:                    
+                case ResultMode.RedirectNoAbort:
                     DoRedirect( context );
                     break;
                 case ResultMode.Transfer:
@@ -325,7 +324,7 @@ namespace Spring.Web.Support
         }
 
         /// <summary>
-        /// Returns a redirect url string that points to the 
+        /// Returns a redirect url string that points to the
         /// <see cref="Spring.Web.Support.Result.TargetPage"/> defined by this
         /// result.
         /// </summary>
@@ -366,7 +365,7 @@ namespace Spring.Web.Support
                 char separator = '?';
                 foreach (DictionaryEntry entry in resolvedParameters)
                 {
-                    url.Append( separator );                    
+                    url.Append( separator );
                     url = BuildUrlParameter( url, entry.Key.ToString(), entry.Value.ToString() );
                     separator = '&';
                 }

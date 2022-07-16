@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,8 @@
 
 #endregion
 
-#region Imports
-
 using System.Globalization;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Objects.Support
 {
@@ -60,7 +56,7 @@ namespace Spring.Objects.Support
         /// This is an <see langword="abstract"/> class, and as such exposes no public constructors.
         /// </p>
         /// </remarks>
-        protected AbstractEventHandlerValue (object source, string methodName) 
+        protected AbstractEventHandlerValue (object source, string methodName)
         {
             _source = source;
             _methodName = methodName;
@@ -73,13 +69,13 @@ namespace Spring.Objects.Support
         /// of a <see cref="Spring.Objects.Factory.Config.RuntimeObjectReference"/>
         /// value).
         /// </summary>
-        public virtual object Source 
+        public virtual object Source
         {
-            get 
+            get
             {
                 return _source;
             }
-            set 
+            set
             {
                 _source = value;
             }
@@ -88,13 +84,13 @@ namespace Spring.Objects.Support
         /// <summary>
         /// The name of the method that is going to handle the event.
         /// </summary>
-        public virtual string MethodName 
+        public virtual string MethodName
         {
-            get 
+            get
             {
                 return _methodName;
             }
-            set 
+            set
             {
                 _methodName = StringUtils.HasText (value) ? value.Trim () : string.Empty;
             }
@@ -103,13 +99,13 @@ namespace Spring.Objects.Support
         /// <summary>
         /// The name of the event that is being wired up.
         /// </summary>
-        public virtual string EventName 
+        public virtual string EventName
         {
-            get 
+            get
             {
                 return _eventName;
             }
-            set 
+            set
             {
                 _eventName = StringUtils.HasText (value) ? value.Trim () : string.Empty;
             }

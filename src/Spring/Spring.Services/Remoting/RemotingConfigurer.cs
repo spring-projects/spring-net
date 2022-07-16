@@ -18,17 +18,12 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Runtime.Remoting;
 
 using Common.Logging;
 using Spring.Core;
 using Spring.Core.IO;
 using Spring.Objects.Factory.Config;
-
-#endregion
 
 namespace Spring.Remoting
 {
@@ -66,7 +61,7 @@ namespace Spring.Remoting
         /// Gets or sets the name of the remoting configuration file.
         /// </summary>
         /// <remarks>
-        /// If filename is <see langword="null"/> or not set, 
+        /// If filename is <see langword="null"/> or not set,
         /// current AppDomain's configuration file will be used.
         /// </remarks>
         public IResource Filename
@@ -99,7 +94,7 @@ namespace Spring.Remoting
             get { return _ensureSecurity; }
             set { _ensureSecurity = value; }
         }
-        
+
         #endregion
 
         #region IObjectFactoryPostProcessor Members
@@ -117,13 +112,13 @@ namespace Spring.Remoting
             string filename = null;
             if (UseConfigFile)
             {
-                filename = (Filename == null) 
-                    ? AppDomain.CurrentDomain.SetupInformation.ConfigurationFile 
+                filename = (Filename == null)
+                    ? AppDomain.CurrentDomain.SetupInformation.ConfigurationFile
                     : Filename.File.FullName;
             }
 
             RemotingConfiguration.Configure(filename, EnsureSecurity);
-            
+
             #region Instrumentation
 
             if (log.IsDebugEnabled)
@@ -146,7 +141,7 @@ namespace Spring.Remoting
         #region IOrdered Members
 
         /// <summary>
-        /// Return the order value of this object, 
+        /// Return the order value of this object,
         /// where a higher value means greater in terms of sorting.
         /// </summary>
         public int Order

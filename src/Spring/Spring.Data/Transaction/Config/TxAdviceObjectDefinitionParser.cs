@@ -18,12 +18,8 @@
 
 #endregion
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Data;
 using System.Xml;
-using Spring.Collections;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Xml;
@@ -81,7 +77,7 @@ namespace Spring.Transaction.Config
             else
             {
                 //Assume attibutes source
-                ObjectDefinitionBuilder txAttributeSourceBuilder = 
+                ObjectDefinitionBuilder txAttributeSourceBuilder =
                     parserContext.ParserHelper.CreateRootObjectDefinitionBuilder(typeof (AttributesTransactionAttributeSource));
 
                 builder.AddPropertyValue(TxNamespaceUtils.TRANSACTION_ATTRIBUTE_SOURCE,
@@ -98,7 +94,7 @@ namespace Spring.Transaction.Config
             {
                 string name = GetAttributeValue(methodElement, "name");
                 TypedStringValue nameHolder = new TypedStringValue(name);
-                
+
                 RuleBasedTransactionAttribute attribute = new RuleBasedTransactionAttribute();
                 string propagation = GetAttributeValue(methodElement, PROPAGATION);
                 string isolation = GetAttributeValue(methodElement, ISOLATION);

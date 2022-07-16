@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using Common.Logging;
 using Spring.Objects.Factory;
 using Apache.NMS;
@@ -42,7 +41,7 @@ namespace Spring.Messaging.Nms.Core
         private readonly ILog logger = LogManager.GetLogger(typeof(NmsGatewaySupport));
 
         #endregion
-        
+
         private NmsTemplate nmsTemplate;
 
 
@@ -112,7 +111,7 @@ namespace Spring.Messaging.Nms.Core
         /// </summary>
         protected virtual void InitGateway()
         {
-            
+
         }
     }
 }

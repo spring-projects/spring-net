@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,6 @@
 
 #region Imports
 
-using System;
-using System.Collections.Generic;
 using System.Reflection;
 
 using Common.Logging;
@@ -94,7 +92,7 @@ namespace Spring.Aspects.Cache
         }
 
         /// <summary>
-        /// Prepares variables for expression evaluation by packaging all 
+        /// Prepares variables for expression evaluation by packaging all
         /// method arguments into a dictionary, keyed by argument name.
         /// </summary>
         /// <param name="method">
@@ -142,7 +140,7 @@ namespace Spring.Aspects.Cache
         /// <exception cref="System.InvalidOperationException">
         /// If the SpEL expression could not be successfuly resolved to a boolean.
         /// </exception>
-        protected static bool EvalCondition(string condition, 
+        protected static bool EvalCondition(string condition,
             IExpression conditionExpression, object context, IDictionary<string, object> variables)
         {
             if (conditionExpression == null)
@@ -159,7 +157,7 @@ namespace Spring.Aspects.Cache
                 else
                 {
                     throw new InvalidOperationException(String.Format(
-                        "The SpEL expression '{0}' could not be successfuly resolved to a boolean.", 
+                        "The SpEL expression '{0}' could not be successfuly resolved to a boolean.",
                         condition));
                 }
             }

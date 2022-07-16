@@ -21,7 +21,6 @@
 using System.Collections;
 using Common.Logging;
 using Spring.Objects.Factory;
-using TIBCO.EMS;
 
 namespace Spring.Messaging.Ems.Jndi
 {

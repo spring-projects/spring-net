@@ -18,11 +18,7 @@
 
 #endregion
 
-#region Imports
-
 using Spring.Objects.Factory.Xml;
-
-#endregion
 
 namespace Spring.ServiceModel.Config
 {

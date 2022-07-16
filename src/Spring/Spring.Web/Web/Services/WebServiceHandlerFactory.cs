@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using System.Reflection;
 using System.Security.Permissions;
 using System.Web;
@@ -75,7 +74,7 @@ namespace Spring.Web.Services
 
             IConfigurableApplicationContext appContext =
                 WebApplicationContext.GetContext(url) as IConfigurableApplicationContext;
-            
+
             if (appContext == null)
             {
                 throw new InvalidOperationException(
@@ -114,7 +113,7 @@ namespace Spring.Web.Services
                 if (wsAttribute.Length == 0)
                 {
                     serviceType = null;
-                }  
+                }
 #endif
             }
 
@@ -122,16 +121,16 @@ namespace Spring.Web.Services
             {
                 serviceType = WebServiceParser.GetCompiledType(url, context);
             }
-			
+
 
 #if !MONO_2_0
             return (IHttpHandler) CoreGetHandler.Invoke(this, new object[] {serviceType, context, context.Request, context.Response});
-#else		
+#else
 
 			// find if the BuildManager already contains a cached value of the service type
 			var buildCacheField = typeof(BuildManager).GetField("buildCache", BindingFlags.Static | BindingFlags.NonPublic);
 			var buildCache = (IDictionary)buildCacheField.GetValue(null);
-			
+
 			if(!buildCache.Contains(appRelativeVirtualPath))
 			{
 				// create new fake BuildManagerCacheItem wich represent the target type
@@ -139,13 +138,13 @@ namespace Spring.Web.Services
 				var cacheItemCtor = buildManagerCacheItemType.GetConstructor(new Type[]{typeof(Assembly), typeof(BuildProvider), typeof(CompilerResults)});
 				var buildProvider = new FakeBuildProvider(serviceType);
 				var cacheItem = cacheItemCtor.Invoke(new object[]{serviceType.Assembly, buildProvider, null });
-					
+
 				// store it in the BuildManager
 				buildCache [appRelativeVirtualPath] = cacheItem;
 			}
-			
+
 			// now that the target type is in the cache, let the default process continue
-			return base.GetHandler(context, requestType, url, path);			
+			return base.GetHandler(context, requestType, url, path);
 #endif
         }
     }
@@ -156,36 +155,36 @@ namespace Spring.Web.Services
 		// Define an internal member for the compiler type.
 	    protected CompilerType _compilerType = null;
 		private Type _type;
-		
+
 	    public FakeBuildProvider(Type type)
 	    {
 			_type = type;
 	        _compilerType = GetDefaultCompilerTypeForLanguage("C#");
 	    }
-	
-	    // Return the internal CompilerType member 
+
+	    // Return the internal CompilerType member
 	    // defined in this implementation.
 	    public override CompilerType CodeCompilerType
 	    {
 	        get { return _compilerType; }
 	    }
-	
+
 	    // Define the build provider implementation of the GenerateCode method.
 	    public override void GenerateCode(AssemblyBuilder assemBuilder)
 	    {
-	        
+
 	    }
-	
+
 	    public override System.Type GetGeneratedType(CompilerResults results)
 	    {
 	        return _type;
 	    }
-		
+
 		public override string GetCustomString (System.CodeDom.Compiler.CompilerResults results)
 		{
 			return "No source code";
 		}
-		
+
 		public override BuildProviderResultFlags GetResultFlags (System.CodeDom.Compiler.CompilerResults results)
 		{
 			return BuildProviderResultFlags.Default;

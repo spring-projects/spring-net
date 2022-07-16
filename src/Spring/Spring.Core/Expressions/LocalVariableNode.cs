@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Collections;
 using System.Runtime.Serialization;
 
@@ -32,7 +31,7 @@ namespace Spring.Expressions
     public class LocalVariableNode : BaseNode
     {
         //internal const string LOCAL_VARIABLES = "__locals";
-     
+
         /// <summary>
         /// Create a new instance
         /// </summary>
@@ -47,7 +46,7 @@ namespace Spring.Expressions
             : base(info, context)
         {
         }
-        
+
         /// <summary>
         /// Returns value of the local variable represented by this node.
         /// </summary>

@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Transactions;
 using IsolationLevel=System.Data.IsolationLevel;
 
@@ -93,7 +92,7 @@ namespace Spring.Transaction.Interceptor
         /// <inheritdoc />
         public TransactionScopeAsyncFlowOption AsyncFlowOption => targetAttribute.AsyncFlowOption;
 
-        /// <summary> 
+        /// <summary>
         /// Return a description of this transaction attribute.
         /// </summary>
         /// <remarks>

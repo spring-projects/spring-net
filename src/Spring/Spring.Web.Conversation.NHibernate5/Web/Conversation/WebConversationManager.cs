@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -17,10 +17,6 @@
  */
 
 #endregion
-
-using System;
-using System.Collections.Generic;
-using System.Threading;
 
 using Common.Logging;
 using NHibernate;
@@ -61,7 +57,7 @@ namespace Spring.Web.Conversation
         #region IConversationManager Members
 
         /// <summary>
-        /// <see cref="IConversationManager"/> 
+        /// <see cref="IConversationManager"/>
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
@@ -116,7 +112,7 @@ namespace Spring.Web.Conversation
             }
             this.Close(this.SessionFactory, this.conversations.Values);
         }
-        
+
         /// <summary>
         /// <see cref="IConversationManager"/>
         /// </summary>
@@ -211,7 +207,7 @@ namespace Spring.Web.Conversation
                 }
             }
         }
-        
+
         /// <summary>
         /// <see cref="IConversationManager"/>
         /// </summary>
@@ -225,7 +221,7 @@ namespace Spring.Web.Conversation
 
         private String sessionFactoryName;
         /// <summary>
-        /// "SessionFactory" name in the current context. 
+        /// "SessionFactory" name in the current context.
         /// This approach is required to support serialization.
         /// </summary>
         public String SessionFactoryName

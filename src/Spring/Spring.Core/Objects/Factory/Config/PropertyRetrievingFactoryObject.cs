@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,17 +18,12 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Reflection;
 using System.Text;
 
 using Spring.Core;
 using Spring.Core.TypeResolution;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Objects.Factory.Config
 {
@@ -220,7 +215,7 @@ namespace Spring.Objects.Factory.Config
 				}
 				else
 				{
-					// $£%#@! a nested static property... recurse to the end property
+					// $ï¿½%#@! a nested static property... recurse to the end property
 					string property = TargetProperty;
 					int propertyIndex = property.IndexOf(".");
 					string startProperty = property.Substring(0, propertyIndex);
@@ -270,7 +265,7 @@ namespace Spring.Objects.Factory.Config
 			{
 				if (Arguments.Length == 0 && target != null)
 				{
-					// using object wrapper supports nested property lookup...               
+					// using object wrapper supports nested property lookup...
 					instance = _targetObjectWrapper.GetPropertyValue(_targetProperty);
 				}
 				else

@@ -18,9 +18,6 @@
 
 #endregion
 
-
-using System;
-using System.Threading;
 using Common.Logging;
 using Spring.Objects.Factory;
 
@@ -37,7 +34,7 @@ namespace Spring.Messaging.Listener
     /// For a concrete listener programming model, check out the
     /// <see cref="AbstractMessageListenerContainer"/> subclass. For a concrete listener
     /// invoker mechanism, check out the <see cref="NonTransactionalMessageListenerContainer"/>,
-    /// <see cref="TransactionalMessageListenerContainer"/>, or 
+    /// <see cref="TransactionalMessageListenerContainer"/>, or
     /// <see cref="DistributedTxMessageListenerContainer"/> classes.
     /// </para>
     /// </remarks>
@@ -88,7 +85,7 @@ namespace Spring.Messaging.Listener
 
 
         /// <summary>
-        /// Gets a value indicating whether this Container is running, 
+        /// Gets a value indicating whether this Container is running,
         /// that is whether it has been started and not stopped yet.
         /// </summary>
         /// <value><c>true</c> if running; otherwise, <c>false</c>.</value>
@@ -156,7 +153,7 @@ namespace Spring.Messaging.Listener
         /// Initializes this container.  Calls the abstract method <see cref="DoInitialize"/> to
         /// initialize the listening infrastructure (i.e. subclasses will typically
         /// resolve a MessageQueue instance from a MessageQueueObjectName) and then calls
-        /// the abstract method DoStart if the property <see cref="AutoStartup"/> is set to true,  
+        /// the abstract method DoStart if the property <see cref="AutoStartup"/> is set to true,
         /// </summary>
         public virtual void Initialize()
         {
@@ -174,7 +171,7 @@ namespace Spring.Messaging.Listener
         }
 
         /// <summary>
-        /// Sets the container state to inactive and not running, calls template method 
+        /// Sets the container state to inactive and not running, calls template method
         /// <see cref="DoShutdown"/>
         /// </summary>
         public virtual void Shutdown()
@@ -234,7 +231,7 @@ namespace Spring.Messaging.Listener
         /// </summary>
         /// <remarks>
         /// This implementation always returns <code>true</code>; the default 'running'
-        /// state is purely determined by <see cref="Start"/> and <see cref="Stop"/> 
+        /// state is purely determined by <see cref="Start"/> and <see cref="Stop"/>
         /// <para>
         /// Subclasses may override this method to check against temporary
         /// conditions that prevent listeners from actually running. In other words,

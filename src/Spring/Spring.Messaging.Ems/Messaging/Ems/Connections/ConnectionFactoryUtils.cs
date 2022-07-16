@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2010 the original author or authors.
+ * Copyright ï¿½ 2002-2010 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +18,11 @@
 
 #endregion
 
-using System;
 using Common.Logging;
 using Spring.Messaging.Ems.Common;
 using Spring.Messaging.Ems.Support;
 using Spring.Transaction.Support;
 using Spring.Util;
-using TIBCO.EMS;
 
 namespace Spring.Messaging.Ems.Connections
 {
@@ -45,7 +43,7 @@ namespace Spring.Messaging.Ems.Connections
         /// Releases the given connection, stopping it (if necessary) and eventually closing it.
         /// </summary>
         /// <remarks>Checks <see cref="ISmartConnectionFactory.ShouldStop"/>, if available.
-        /// This is essentially a more sophisticated version of 
+        /// This is essentially a more sophisticated version of
         /// <see cref="EmsUtils.CloseConnection(IConnection, bool)"/>
         /// </remarks>
         /// <param name="connection">The connection to release. (if this is <code>null</code>, the call will be ignored)</param>
@@ -279,7 +277,7 @@ namespace Spring.Messaging.Ems.Connections
 
             public virtual ISession CreateSession(IConnection con)
             {
-                return con.CreateSession(synchedLocalTransactionAllowed, Session.SESSION_TRANSACTED);                
+                return con.CreateSession(synchedLocalTransactionAllowed, Session.SESSION_TRANSACTED);
             }
 
             public bool SynchedLocalTransactionAllowed
@@ -335,7 +333,7 @@ namespace Spring.Messaging.Ems.Connections
             /// committing right after the main transaction.
             /// Returns whether to allow for synchronizing a local EMS transaction
             /// </summary>
-            /// 
+            ///
             bool SynchedLocalTransactionAllowed { get; }
         }
 

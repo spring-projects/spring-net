@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using Common.Logging;
 using Spring.Messaging.Nms.Core;
 using Spring.Objects.Factory;
@@ -42,9 +41,9 @@ namespace Spring.Messaging.Nms.Support
         private readonly ILog logger = LogManager.GetLogger(typeof(NmsAccessor));
 
         #endregion
-        
+
         #region Fields
-        
+
         private IConnectionFactory connectionFactory;
 
         private AcknowledgementMode sessionAcknowledgeMode = AcknowledgementMode.AutoAcknowledge;
@@ -101,12 +100,12 @@ namespace Spring.Messaging.Nms.Support
         /// <remarks>
         /// <para>Setting this flag to "true" will use a short local NMS transaction
         /// when running outside of a managed transaction, and a synchronized local
-        /// NMS transaction in case of a managed transaction being present. 
+        /// NMS transaction in case of a managed transaction being present.
         /// The latter has the effect of a local NMS
         /// transaction being managed alongside the main transaction (which might
         /// be a native ADO.NET transaction), with the NMS transaction committing
         /// right after the main transaction.
-        /// </para> 
+        /// </para>
         /// </remarks>
         public bool SessionTransacted
         {
@@ -124,8 +123,8 @@ namespace Spring.Messaging.Nms.Support
         }
 
         #endregion
-        
-        
+
+
         /// <summary>
         /// Verify that ConnectionFactory property has been set.
         /// </summary>

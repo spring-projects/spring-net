@@ -1,7 +1,26 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+#endregion
+#region License
+
+/*
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,15 +37,10 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Text.RegularExpressions;
 
 using Spring.Expressions;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Validation
 {
@@ -100,7 +114,7 @@ namespace Spring.Validation
         }
 
         /// <summary>
-        /// Gets or sets a value indicating whether to do a partial match instead of a full match.  
+        /// Gets or sets a value indicating whether to do a partial match instead of a full match.
         /// Default is false.
         /// </summary>
         public bool AllowPartialMatching
@@ -113,7 +127,7 @@ namespace Spring.Validation
         /// The <see cref="RegexOptions"/> for the regular expression evaluation.
         /// </summary>
         /// <value>The regular expression evaluation options.</value>
-        /// <seealso cref="RegexOptions"/> 
+        /// <seealso cref="RegexOptions"/>
         public RegexOptions Options
         {
             get { return options; }
@@ -161,7 +175,7 @@ namespace Spring.Validation
             else
             {
                 return match.Success && match.Index == 0 && match.Length == text.Length;
-            }            
+            }
         }
     }
 }

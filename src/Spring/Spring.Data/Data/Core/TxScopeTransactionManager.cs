@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-using System;
 using System.Transactions;
 using Spring.Data.Support;
 using Spring.Objects.Factory;
@@ -169,7 +168,7 @@ namespace Spring.Data.Core
             TransactionScopeOption txScopeOption = CreateTransactionScopeOptions(definition);
             TransactionOptions txOptions = CreateTransactionOptions(definition);
             txObject.TxScopeAdapter.CreateTransactionScope(
-                txScopeOption, 
+                txScopeOption,
                 txOptions,
                 definition.AsyncFlowOption);
         }
@@ -237,7 +236,7 @@ namespace Spring.Data.Core
 
         /// <summary>
         /// The transaction resource object that encapsulates the state and functionality
-        /// contained in TransactionScope and Transaction.Current via the ITransactionScopeAdapter 
+        /// contained in TransactionScope and Transaction.Current via the ITransactionScopeAdapter
         /// property.
         /// </summary>
         public class PromotableTxScopeTransactionObject : ISmartTransactionObject

@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,15 +18,10 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Runtime.Serialization;
 
 using Spring.Util;
 using Spring.Core.TypeResolution;
-
-#endregion
 
 namespace Spring.Objects.Factory.Config
 {
@@ -106,7 +101,7 @@ namespace Spring.Objects.Factory.Config
         /// The unresolved type to convert to.
         /// </param>
         /// <exception cref="System.ArgumentNullException">
-        /// If the supplied <paramref name="targetTypeName"/> is a 
+        /// If the supplied <paramref name="targetTypeName"/> is a
         /// <see langword="null"/> or an empty string.
         /// </exception>
         public TypedStringValue(string value, string targetTypeName)
@@ -123,7 +118,7 @@ namespace Spring.Objects.Factory.Config
         }
 
         /// <summary>
-        /// The value that is to be converted. 
+        /// The value that is to be converted.
         /// </summary>
         /// <remarks>
         /// <p>
@@ -182,10 +177,10 @@ namespace Spring.Objects.Factory.Config
                     return targetType as string;
                 }
             }
-            set 
-            { 
+            set
+            {
                 AssertUtils.ArgumentHasText(value, "TargetTypeName");
-                targetType = value; 
+                targetType = value;
             }
         }
 
@@ -203,7 +198,7 @@ namespace Spring.Objects.Factory.Config
         /// <summary>
         /// Determine the type to convert to, resolving it from a specified type name if necessary.
         /// </summary>
-        /// <returns>The resolved type to convert to.</returns>    
+        /// <returns>The resolved type to convert to.</returns>
         public Type ResolveTargetType()
         {
             if (this.targetType == null)

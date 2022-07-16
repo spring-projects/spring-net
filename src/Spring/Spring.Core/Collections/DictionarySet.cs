@@ -16,7 +16,6 @@
  * limitations under the License.
  */
 
-using System;
 using System.Collections;
 
 namespace Spring.Collections

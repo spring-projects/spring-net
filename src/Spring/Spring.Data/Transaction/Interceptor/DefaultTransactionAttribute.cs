@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-using System;
 using Spring.Transaction.Support;
 
 namespace Spring.Transaction.Interceptor
 {
-    /// <summary> 
+    /// <summary>
     /// Transaction attribute approach to rolling back on all exceptions, no other
     /// exceptions by default.
     /// </summary>
@@ -75,7 +74,7 @@ namespace Spring.Transaction.Interceptor
             return (true);
         }
 
-        /// <summary> 
+        /// <summary>
         /// Return a description of this transaction attribute.
         /// </summary>
         /// <remarks>

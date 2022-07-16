@@ -1,14 +1,14 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
- * 
+ * Copyright ï¿½ 2002-2011 the original author or authors.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,12 +18,7 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Data;
-
-#endregion
 
 namespace Spring.Data.Support
 {
@@ -36,9 +31,9 @@ namespace Spring.Data.Support
 	{
 		#region Fields
 
-	    protected IDataReader dataReader; 
+	    protected IDataReader dataReader;
 	    private bool alreadyDisposed = false;
-	    
+
 		#endregion
 
 		#region Constructor (s)
@@ -49,7 +44,7 @@ namespace Spring.Data.Support
 		{
 
 		}
-	    	    
+
 	    /// <summary>
 	    /// Initializes a new instance of the <see cref="NullMappingDataReader"/> class.
 	    /// </summary>
@@ -152,7 +147,7 @@ namespace Spring.Data.Support
         {
             Dispose(true);
             GC.SuppressFinalize(true);
-        }	   	  
+        }
 
         #endregion
 
@@ -178,9 +173,9 @@ namespace Spring.Data.Support
             }
         }
 
-        
+
         /// <summary>
-        /// Gets the <see cref="Object"/> with the specified name.  
+        /// Gets the <see cref="Object"/> with the specified name.
         /// Returns null if value equals DBNull.Value
         /// </summary>
         /// <value></value>
@@ -193,7 +188,7 @@ namespace Spring.Data.Support
             }
         }
 
-        
+
         /// <summary>
         /// Gets the <see cref="Object"/> with the specified i.
         /// Returns null if value equals DBNull.Value
@@ -203,7 +198,7 @@ namespace Spring.Data.Support
         {
             get
             {
-                
+
                 return dataReader.IsDBNull(i) ? null : dataReader[i];
             }
         }
@@ -323,7 +318,7 @@ namespace Spring.Data.Support
 
         public virtual long GetChars(int i, long fieldoffset, char[] buffer, int bufferoffset, int length)
         {
-             return dataReader.IsDBNull(i) ? 0 : dataReader.GetChars(i, fieldoffset, buffer, bufferoffset, length);         
+             return dataReader.IsDBNull(i) ? 0 : dataReader.GetChars(i, fieldoffset, buffer, bufferoffset, length);
         }
 
         public virtual string GetString(int i)

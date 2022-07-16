@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Globalization;
 
 using Spring.Objects.Factory.Config;
@@ -58,7 +57,7 @@ namespace Spring.Objects.Factory.Support
         /// The <see cref="Spring.Objects.MutablePropertyValues"/> to be applied to
         /// a new instance of the object.
         /// </param>
-        public ChildWebObjectDefinition(string parentName, Type type, ConstructorArgumentValues arguments, MutablePropertyValues properties) 
+        public ChildWebObjectDefinition(string parentName, Type type, ConstructorArgumentValues arguments, MutablePropertyValues properties)
             : base(parentName, type, arguments, properties)
         {}
 
@@ -77,7 +76,7 @@ namespace Spring.Objects.Factory.Support
         /// The <see cref="Spring.Objects.MutablePropertyValues"/> to be applied to
         /// a new instance of the object.
         /// </param>
-        public ChildWebObjectDefinition(string parentName, string typeName, ConstructorArgumentValues arguments, MutablePropertyValues properties) 
+        public ChildWebObjectDefinition(string parentName, string typeName, ConstructorArgumentValues arguments, MutablePropertyValues properties)
             : base(parentName, typeName, arguments, properties)
         {}
 

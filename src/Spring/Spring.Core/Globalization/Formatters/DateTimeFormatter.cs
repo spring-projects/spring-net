@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Globalization;
 
 using Spring.Util;
@@ -32,7 +31,7 @@ namespace Spring.Globalization.Formatters
 	/// <remarks>
 	/// <para>
 	/// <c>DateTimeFormatter</c> uses properties of the
-	/// <see cref="DateTimeFormatInfo"/> to format and parse <see cref="DateTime"/> values. 
+	/// <see cref="DateTimeFormatInfo"/> to format and parse <see cref="DateTime"/> values.
 	/// </para>
 	/// <para>
 	/// If you use one of the constructors that accept culture as a parameter

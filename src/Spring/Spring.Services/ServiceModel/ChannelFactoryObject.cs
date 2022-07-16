@@ -18,20 +18,14 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.ServiceModel;
 
 using Spring.Objects.Factory;
 
-
-#endregion
-
 namespace Spring.ServiceModel
 {
     /// <summary>
-    /// <see cref="IFactoryObject"/> that creates a channel that is used by clients 
+    /// <see cref="IFactoryObject"/> that creates a channel that is used by clients
     /// to send messages to a specified endpoint address.
     /// </summary>
     /// <typeparam name="T">The type of channel produced by the channel factory.</typeparam>

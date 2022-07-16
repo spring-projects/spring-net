@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using System.Web;
 using Spring.Context;
 using Spring.Context.Support;
@@ -35,7 +34,7 @@ namespace Spring.Web.Support
     /// SimpleHandlerFactory is used to wrap any arbitrary <see cref="IHttpHandlerFactory"/> to make it "Spring-aware".
     /// </summary>
     /// <remarks>
-    /// By default, an instance of <see cref="System.Web.UI.SimpleHandlerFactory"/> is used as underlying factory.    
+    /// By default, an instance of <see cref="System.Web.UI.SimpleHandlerFactory"/> is used as underlying factory.
     /// </remarks>
     /// <author>Erich Eichinger</author>
 #endif

@@ -14,7 +14,6 @@
 * limitations under the License.
 */
 
-using System.Threading.Tasks;
 using Quartz;
 using Spring.Objects;
 

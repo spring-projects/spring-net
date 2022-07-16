@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using Common.Logging;
 using Spring.Util;
 using Apache.NMS;
@@ -87,7 +86,7 @@ namespace Spring.Messaging.Nms.Support
                 }
             }
         }
-        
+
         /// <summary> Close the given NMS Session and ignore any thrown exception.
 		/// This is useful for typical <code>finally</code> blocks in manual NMS code.
 		/// </summary>
@@ -112,7 +111,7 @@ namespace Spring.Messaging.Nms.Support
                 }
             }
         }
-        
+
         /// <summary> Close the given NMS MessageProducer and ignore any thrown exception.
 		/// This is useful for typical <code>finally</code> blocks in manual NMS code.
 		/// </summary>
@@ -198,11 +197,11 @@ namespace Spring.Messaging.Nms.Support
         public static void CommitIfNecessary(ISession session)
         {
 		    AssertUtils.ArgumentNotNull(session, "ISession must not be null");
-			
+
 			session.Commit();
 
 			// TODO Investigate
-			
+
 //		    try {
 //			    session.Commit();
 //		    }
@@ -238,6 +237,6 @@ namespace Spring.Messaging.Nms.Support
 //			    // Ignore -> can only happen in case of a JTA transaction.
 //		    }
 	    }
-        
+
     }
 }

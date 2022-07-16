@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,19 +18,13 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Globalization;
 
 using Spring.Core;
 using Spring.Core.TypeConversion;
 using Spring.Core.TypeResolution;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Objects.Factory.Config
 {
@@ -63,7 +57,7 @@ namespace Spring.Objects.Factory.Config
 
 
         /// <summary>
-        /// Gets or sets the unresolved name for the <see cref="System.Type"/> 
+        /// Gets or sets the unresolved name for the <see cref="System.Type"/>
         /// of the elements of this managed list.
         /// </summary>
         /// <value>The unresolved name for the type of the elements of this managed list.</value>
@@ -159,7 +153,7 @@ namespace Spring.Objects.Factory.Config
         /// <summary>
         /// Merges the current value set with that of the supplied object.
         /// </summary>
-        /// <remarks>The supplied object is considered the parent, and values in the 
+        /// <remarks>The supplied object is considered the parent, and values in the
         /// callee's value set must override those of the supplied object.
         /// </remarks>
         /// <param name="parent">The parent object to merge with</param>

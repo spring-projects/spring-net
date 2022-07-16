@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Xml;
 using Spring.Aop.Config;
 using Spring.Objects.Factory.Config;
@@ -60,7 +59,7 @@ namespace Spring.Transaction.Config
         protected override AbstractObjectDefinition ParseInternal(XmlElement element, ParserContext parserContext)
         {
             ConfigureAutoProxyCreator(parserContext, element);
-           
+
             //Create the TransactionAttributeSource
             RootObjectDefinition sourceDef = new RootObjectDefinition(typeof(AttributesTransactionAttributeSource));
             sourceDef.Role = ObjectRole.ROLE_INFRASTRUCTURE;
@@ -78,7 +77,7 @@ namespace Spring.Transaction.Config
             advisorDef.Role = ObjectRole.ROLE_INFRASTRUCTURE;
             advisorDef.PropertyValues.Add("transactionAttributeSource", new RuntimeObjectReference(sourceName));
             advisorDef.PropertyValues.Add("adviceObjectName", interceptorName);
-            
+
             if (element.HasAttribute(ORDER))
             {
                 advisorDef.PropertyValues.Add(ORDER, GetAttributeValue(element, ORDER));
@@ -92,8 +91,8 @@ namespace Spring.Transaction.Config
             string transactionManagerName = GetAttributeValue(element, TxNamespaceUtils.TRANSACTION_MANAGER_ATTRIBUTE);
             interceptorDefinition.PropertyValues.Add(TxNamespaceUtils.TRANSACTION_MANAGER_PROPERTY,
                                           new RuntimeObjectReference(transactionManagerName));
-            
-            
+
+
         }
 
         /// <summary>

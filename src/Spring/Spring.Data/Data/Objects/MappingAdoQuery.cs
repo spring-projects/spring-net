@@ -1,14 +1,14 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
- * 
+ * Copyright ï¿½ 2002-2011 the original author or authors.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,19 +18,15 @@
 
 #endregion
 
-#region Imports
-
 using System.Collections;
 using System.Data;
 using Spring.Data.Common;
-
-#endregion
 
 namespace Spring.Data.Objects
 {
 	/// <summary>
     /// Reusable query in which concrete subclasses must implement the
-    /// MapRow method to map each row of a single result set into an 
+    /// MapRow method to map each row of a single result set into an
     /// object.
 	/// </summary>
 	/// <remarks>
@@ -49,10 +45,10 @@ namespace Spring.Data.Objects
 		{
 
 		}
-	    
+
         public MappingAdoQuery(IDbProvider dbProvider, string sql) : base(dbProvider, sql)
         {
-	        
+
         }
 
 		#endregion
@@ -66,7 +62,7 @@ namespace Spring.Data.Objects
         }
 
         protected abstract object MapRow(IDataReader reader, int num);
-	    
+
 		#endregion
 
 

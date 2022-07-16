@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 
-using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Reflection;
 using Common.Logging;
 using Spring.Collections;
@@ -26,12 +23,10 @@ using Spring.Core.TypeResolution;
 using Spring.Objects.Factory.Config;
 using Spring.Util;
 
-using System.Linq;
-
 namespace Spring.Objects.Factory.Support
 {
     /// <summary>
-    /// Helper class for resolving constructors and factory methods.  
+    /// Helper class for resolving constructors and factory methods.
     /// Performs constructor resolution through argument matching.
     /// </summary>
     /// <remarks>
@@ -69,7 +64,7 @@ namespace Spring.Objects.Factory.Support
         }
 
         /// <summary>
-        /// "autowire constructor" (with constructor arguments by type) behavior.  
+        /// "autowire constructor" (with constructor arguments by type) behavior.
         /// Also applied if explicit constructor argument values are specified,
         /// matching all remaining arguments with objects from the object factory.
         /// </summary>
@@ -150,7 +145,7 @@ namespace Spring.Objects.Factory.Support
                 wrapper = new ObjectWrapper();
                 minNrOfArgs = ResolveConstructorArguments(objectName, rod, wrapper, cargs, resolvedValues);
             }
-            // Take specified constructors, if any.            
+            // Take specified constructors, if any.
             ConstructorInfo[] candidates = chosenConstructors ?? AutowireUtils.GetConstructors(rod, 0);
             AutowireUtils.SortConstructors(candidates);
             int minTypeDiffWeight = int.MaxValue;
@@ -182,11 +177,11 @@ namespace Spring.Objects.Factory.Support
                     //need to check for null as indicator of no ctor arg match instead of using exceptions for flow
                     //control as in the Java implementation
                     args = CreateArgumentArray(
-                        objectName, 
-                        rod, 
-                        resolvedValues, 
-                        wrapper, 
-                        paramTypes, 
+                        objectName,
+                        rod,
+                        resolvedValues,
+                        wrapper,
+                        paramTypes,
                         candidate,
                         autowiring,
                         out var unsatisfiedDependencyExceptionData);
@@ -375,18 +370,18 @@ namespace Spring.Objects.Factory.Support
         /// information for use in throwing a UnsatisfiedDependencyException by the caller.  This avoids using
         /// exceptions for flow control as in the original implementation.</remarks>
         private ArgumentsHolder CreateArgumentArray(
-            string objectName, 
+            string objectName,
             RootObjectDefinition rod,
-            ConstructorArgumentValues resolvedValues, 
-            ObjectWrapper wrapper, 
-            Type[] paramTypes, 
-            MethodBase methodOrCtorInfo, 
-            bool autowiring, 
+            ConstructorArgumentValues resolvedValues,
+            ObjectWrapper wrapper,
+            Type[] paramTypes,
+            MethodBase methodOrCtorInfo,
+            bool autowiring,
             out UnsatisfiedDependencyExceptionData unsatisfiedDependencyExceptionData)
         {
             string GetMethodType()
             {
-                return methodOrCtorInfo is ConstructorInfo ? "constructor" : "factory method";                
+                return methodOrCtorInfo is ConstructorInfo ? "constructor" : "factory method";
             }
 
             unsatisfiedDependencyExceptionData = null;
@@ -408,7 +403,7 @@ namespace Spring.Objects.Factory.Support
                 string parameterName = argTypes[paramIndex].Name;
                 // If we couldn't find a direct match and are not supposed to autowire,
                 // let's try the next generic, untyped argument value as fallback:
-                // it could match after type conversion (for example, String -> int).               
+                // it could match after type conversion (for example, String -> int).
                 ConstructorArgumentValues.ValueHolder valueHolder = null;
                 if (resolvedValues.GetNamedArgumentValue(parameterName) != null)
                 {
@@ -495,7 +490,7 @@ namespace Spring.Objects.Factory.Support
 
         private object ResolveAutoWiredArgument(
             MethodParameter methodParameter,
-            string objectName, 
+            string objectName,
             List<string> autowiredObjectNames)
         {
             return autowireFactory.ResolveDependency(
@@ -550,7 +545,7 @@ namespace Spring.Objects.Factory.Support
                     if (index < 0)
                     {
                         throw new ObjectCreationException(
-                            definition.ResourceDescription, 
+                            definition.ResourceDescription,
                             objectName,
                             $"Invalid constructor argument index: {index}");
                     }
@@ -663,7 +658,7 @@ namespace Spring.Objects.Factory.Support
                 }
                 return new ArgumentsHolder(args);
             }
-            
+
             public static ArgumentsHolder Create(int size)
             {
                 if (size == 0)

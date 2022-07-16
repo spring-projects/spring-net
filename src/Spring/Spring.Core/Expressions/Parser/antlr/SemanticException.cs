@@ -1,5 +1,3 @@
-using System;
-	
 namespace Spring.Expressions.Parser.antlr
 {
 	/*ANTLR Translator Generator
@@ -23,12 +21,12 @@ namespace Spring.Expressions.Parser.antlr
 		public SemanticException(string s) : base(s)
 		{
 		}
-		
+
 		[Obsolete("Replaced by SemanticException(string, string, int, int) since version 2.7.2.6", false)]
 		public SemanticException(String s, String fileName, int line) :
 					this(s, fileName, line, -1)
 		{
-			
+
 		}
 
 		public SemanticException(string s, string fileName, int line, int column) :

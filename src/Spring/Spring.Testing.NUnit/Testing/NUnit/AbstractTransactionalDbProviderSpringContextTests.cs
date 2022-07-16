@@ -1,4 +1,3 @@
-using System;
 using System.Data;
 using Spring.Data.Common;
 using Spring.Data.Core;
@@ -113,12 +112,12 @@ namespace Spring.Testing.NUnit
         /// <returns>The number of rows in the table</returns>
         protected int CountRowsInTable(String tableName)
         {
-            return (int) adoTemplate.ExecuteScalar(CommandType.Text, "SELECT COUNT(0) FROM " + tableName); 
+            return (int) adoTemplate.ExecuteScalar(CommandType.Text, "SELECT COUNT(0) FROM " + tableName);
 
         }
 
         /// <summary>
-        /// Execute the given SQL script using 
+        /// Execute the given SQL script using
         /// <see cref="SimpleAdoTestUtils.ExecuteSqlScript(Spring.Data.IAdoOperations,Spring.Core.IO.IResourceLoader,string,bool,System.Text.RegularExpressions.Regex[])"/>
         /// </summary>
         /// <param name="scriptResourcePath"></param>

@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using Spring.Util;
 
 namespace Spring.Aop.Support
@@ -51,12 +50,12 @@ namespace Spring.Aop.Support
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AttributeTypeFilter"/> class for the
-        /// given attribute type. 
+        /// given attribute type.
         /// </summary>
         /// <param name="attributeType">Type of the attribute to look for.</param>
         public AttributeTypeFilter(Type attributeType) : this(attributeType, false)
         {
-            
+
         }
 
         /// <summary>
@@ -94,13 +93,13 @@ namespace Spring.Aop.Support
         {
             if (checkInherited)
             {
-                return AttributeUtils.FindAttribute(type, attributeType) != null;                
+                return AttributeUtils.FindAttribute(type, attributeType) != null;
             }
             else
             {
                 object[] atts = type.GetCustomAttributes(attributeType, false);
                 return ArrayUtils.HasLength(atts);
-            }                    
+            }
         }
 
 

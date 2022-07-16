@@ -1,24 +1,34 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;$(TargetFullFrameworkVersion)</TargetFrameworks>
     <Description>Interfaces and classes that provide NHibernate 5 support in Spring.Net</Description>
     <RootNamespace>Spring.Data.NHibernate</RootNamespace>
     <NoWarn>0618</NoWarn>
   </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\Spring.Aop\Spring.Aop.csproj" />
     <ProjectReference Include="..\Spring.Core\Spring.Core.csproj" />
     <ProjectReference Include="..\Spring.Data\Spring.Data.csproj" />
   </ItemGroup>
+
   <ItemGroup>
     <PackageReference Include="NHibernate" Version="5.3.5" />
   </ItemGroup>
+
   <ItemGroup Condition=" '$(TargetFramework)' == '$(TargetFullFrameworkVersion)' ">
     <Reference Include="System.Configuration" />
     <Reference Include="System.Transactions" />
     <Reference Include="System.Web" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Using Remove="System.Net.Http" />
+  </ItemGroup>
+
   <ItemGroup>
     <Compile Remove="Data\NHibernate\Support\OpenSessionInViewModule.cs" Condition=" '$(TargetFramework)' != '$(TargetFullFrameworkVersion)'" />
   </ItemGroup>
+
 </Project>

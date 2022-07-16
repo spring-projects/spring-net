@@ -18,8 +18,6 @@
 
 #endregion
 
-using System;
-
 #if NETSTANDARD
 using Experimental.System.Messaging;
 #else
@@ -29,11 +27,11 @@ using System.Messaging;
 namespace Spring.Messaging.Listener
 {
     /// <summary>
-    /// The exception handler within a transactional context.  
+    /// The exception handler within a transactional context.
     /// </summary>
     /// <remarks>
-    /// The return value indicates to the invoker (typically a 
-    /// <see cref="TransactionalMessageListenerContainer"/>) whether the 
+    /// The return value indicates to the invoker (typically a
+    /// <see cref="TransactionalMessageListenerContainer"/>) whether the
     /// MessageTransaction that is associated with the delivery of this message
     /// should be rolled back (placing the message back on the transactional queue
     /// for redelivery) or commited (removing the message from the transactional queue)

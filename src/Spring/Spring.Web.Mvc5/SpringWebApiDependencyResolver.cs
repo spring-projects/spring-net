@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web.Http.Dependencies;
+﻿using System.Web.Http.Dependencies;
 
 using Spring.Context;
 using Spring.Context.Support;
@@ -34,7 +31,7 @@ namespace Spring.Web.Mvc
         }
 
         /// <summary>
-        /// 
+        ///
         /// </summary>
         /// <returns>The initialized <see cref="IDependencyScope"/> instance.</returns>
         /// <exception cref="NotImplementedException"></exception>

@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,13 +18,8 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using Common.Logging;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Objects.Factory.Config
 {
@@ -38,7 +33,7 @@ namespace Spring.Objects.Factory.Config
 	/// instances for common topics (such as the 'DAL', 'BLL', etc). The
 	/// <see cref="LogFactoryObject.LogName"/>
 	/// property determines the name of the
-    /// <a href="http://netcommon.sourceforge.net/">Common.Logging</a> logger.  
+    /// <a href="http://netcommon.sourceforge.net/">Common.Logging</a> logger.
 	/// </p>
 	/// </remarks>
 	/// <author>Rick Evans</author>

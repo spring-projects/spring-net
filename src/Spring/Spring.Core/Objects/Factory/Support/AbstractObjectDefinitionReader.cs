@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,14 +18,9 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using Common.Logging;
 using Spring.Core.IO;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Objects.Factory.Support
 {
@@ -208,10 +203,10 @@ namespace Spring.Objects.Factory.Support
         /// <summary>
         /// Loads the object definitions from the specified resource location.
         /// </summary>
-        /// <param name="location">The resource location, to be loaded with the 
+        /// <param name="location">The resource location, to be loaded with the
         /// IResourceLoader location .</param>
         /// <returns>
-        /// The number of object definitions found        
+        /// The number of object definitions found
         /// </returns>
         public int LoadObjectDefinitions(string location)
 	    {
@@ -245,7 +240,7 @@ namespace Spring.Objects.Factory.Support
 	    /// <param name="locations">The the resource locations to be loaded with the
 	    /// IResourceLoader of this object definition reader.</param>
 	    /// <returns>
-	    /// The number of object definitions found        
+	    /// The number of object definitions found
 	    /// </returns>
 	    public int LoadObjectDefinitions(string[] locations)
 	    {

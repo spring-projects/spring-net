@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,19 +18,13 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Collections;
 using System.Collections.Specialized;
-using System.IO;
 using System.Resources;
 
 using Spring.Core.IO;
 using Spring.Objects.Factory.Config;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Objects.Factory.Support
 {
@@ -270,10 +264,10 @@ namespace Spring.Objects.Factory.Support
         }
 
         /// <summary>
-        /// Registers object definitions contained in an <see cref="System.Collections.Specialized.NameValueCollection"/> 
+        /// Registers object definitions contained in an <see cref="System.Collections.Specialized.NameValueCollection"/>
         /// using all property keys ( i.e. not filtering by prefix )
         /// </summary>
-        /// <param name="nameValueCollection">The <see cref="System.Collections.Specialized.NameValueCollection"/> containing 
+        /// <param name="nameValueCollection">The <see cref="System.Collections.Specialized.NameValueCollection"/> containing
         /// object definitions.
         /// </param>
         /// <exception cref="Spring.Objects.ObjectsException">

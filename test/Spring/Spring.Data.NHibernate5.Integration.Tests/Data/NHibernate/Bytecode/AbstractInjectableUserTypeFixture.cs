@@ -1,5 +1,3 @@
-using log4net.Config;
-
 using NHibernate;
 using NHibernate.Bytecode;
 using NHibernate.Cfg;

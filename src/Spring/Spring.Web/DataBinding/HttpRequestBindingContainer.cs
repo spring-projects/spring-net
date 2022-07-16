@@ -1,6 +1,4 @@
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Reflection;
 
@@ -15,7 +13,7 @@ namespace Spring.DataBinding
     /// Binds agroup of HTTP request multi-valued items to the data model.
     /// </summary>
     /// <remarks>
-    /// Due to the fact, that browsers don't send the values of unchecked checkboxes, you 
+    /// Due to the fact, that browsers don't send the values of unchecked checkboxes, you
     /// can't use <see cref="HttpRequestListBindingContainer"/> for binding to checkboxes.
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
@@ -24,7 +22,7 @@ namespace Spring.DataBinding
         private string[] requestParams;
         private ConstructorInfo itemCtor;
         private IExpression targetExpression;
-        
+
         /// <summary>
         /// Creates a new instance of <see cref="HttpRequestListBindingContainer"/>.
         /// </summary>
@@ -114,7 +112,7 @@ namespace Spring.DataBinding
                     {
                         vars[paramName] = parameters.GetValues(paramName)[i];
                     }
-                    
+
                     object targetItem;
                     bool addToList;
                     if (i < targetList.Count)
@@ -127,12 +125,12 @@ namespace Spring.DataBinding
                         targetItem = itemCtor.Invoke(ObjectUtils.EmptyObjects);
                         addToList = true;
                     }
-                    
+
                     foreach (IBinding binding in Bindings)
                     {
                         binding.BindSourceToTarget(null, targetItem, validationErrors, vars);
                     }
-                    
+
                     if (addToList)
                     {
                         targetList.Add(targetItem);

@@ -18,14 +18,13 @@
 
 #endregion
 
-using System;
 using System.Data;
 using Spring.Util;
 
 namespace Spring.Transaction.Interceptor
 {
 	/// <summary>
-	/// Type converter for <see cref="Spring.Transaction.Interceptor.ITransactionAttribute"/> 
+	/// Type converter for <see cref="Spring.Transaction.Interceptor.ITransactionAttribute"/>
 	/// objects.
 	/// </summary>
 	/// <remarks>
@@ -93,7 +92,7 @@ namespace Spring.Transaction.Interceptor
 					} else
 					{
 						throw new ArgumentException("Illegal transaction attribute token: [" + token + "]");
-					}		
+					}
 				}
 				_attribute = attribute;
 			}

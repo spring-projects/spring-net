@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using Spring.Context;
 
 namespace Spring.Validation
@@ -20,7 +19,7 @@ namespace Spring.Validation
         /// </remarks>
         /// <value><see lang="true"/> if this instance is empty.</value>
         bool IsEmpty { get; }
-        
+
         /// <summary>
         /// Gets the list of all error providers.
         /// </summary>

@@ -18,8 +18,6 @@
 
 #endregion
 
-using System;
-
 #if NETSTANDARD
 using Experimental.System.Messaging;
 #else

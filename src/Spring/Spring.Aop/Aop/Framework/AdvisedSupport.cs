@@ -18,8 +18,6 @@
 
 #endregion
 
-using System;
-using System.Collections.Generic;
 using System.Reflection;
 using System.Runtime.Serialization;
 using System.Text;
@@ -60,19 +58,19 @@ namespace Spring.Aop.Framework
         /// <remarks>
         /// <p>
         /// If an <see cref="AopAlliance.Intercept.IInterceptor"/> is added, it
-        /// will be wrapped in an advice before being added to this list. 
+        /// will be wrapped in an advice before being added to this list.
         /// </p>
         /// </remarks>
         private List<IAdvisor> _advisors = new List<IAdvisor>();
 
-        /// <summary> 
+        /// <summary>
         /// Array updated on changes to the advisors list, which is easier to
         /// manipulate internally
         /// </summary>
         private volatile IAdvisor[] _advisorsArray = new IAdvisor[] { };
 
-        /// <summary> 
-        /// List of introductions. 
+        /// <summary>
+        /// List of introductions.
         /// </summary>
         private List<IIntroductionAdvisor> _introductions = new List<IIntroductionAdvisor>();
 
@@ -114,7 +112,7 @@ namespace Spring.Aop.Framework
         private IAdvisorChainFactory advisorChainFactory;
 
         /// <summary>
-        /// If no explicit interfaces are specified, interfaces will be automatically determined 
+        /// If no explicit interfaces are specified, interfaces will be automatically determined
         /// from the target type
         /// </summary>
         private bool autoDetectInterfaces;
@@ -137,7 +135,7 @@ namespace Spring.Aop.Framework
         /// </summary>
         /// <param name="interfaces">The interfaces that are to be proxied.</param>
         /// <exception cref="Spring.Aop.Framework.AopConfigException">
-        /// If this 
+        /// If this
         /// </exception>
         public AdvisedSupport(Type[] interfaces)
             : this()
@@ -513,7 +511,7 @@ namespace Spring.Aop.Framework
             AddAdvisor(position, new DefaultPointcutAdvisor(advice));
         }
 
-        /// <summary> 
+        /// <summary>
         /// Return the index (0 based) of the supplied
         /// <see cref="Spring.Aop.IAdvisor"/> in the interceptor
         /// (advice) chain for this proxy.
@@ -534,7 +532,7 @@ namespace Spring.Aop.Framework
             }
         }
 
-        /// <summary> 
+        /// <summary>
         /// Return the index (0 based) of the supplied
         /// <see cref="Spring.Aop.IIntroductionAdvisor"/> in the introductions
         /// for this proxy.
@@ -775,7 +773,7 @@ namespace Spring.Aop.Framework
         }
 
         /// <summary>
-        /// Adds the advisors from the supplied <paramref name="advisors"/> 
+        /// Adds the advisors from the supplied <paramref name="advisors"/>
         /// to the list of <see cref="Spring.Aop.Framework.IAdvised.Advisors"/>.
         /// </summary>
         /// <param name="advisors">
@@ -905,7 +903,7 @@ namespace Spring.Aop.Framework
             }
         }
 
-        /// <summary> 
+        /// <summary>
         /// Replaces the <paramref name="oldAdvisor"/> with the
         /// <paramref name="newAdvisor"/>.
         /// </summary>
@@ -976,7 +974,7 @@ namespace Spring.Aop.Framework
             buffer.Append("targetSource=[" + this.m_targetSource + "];\n");
             buffer.Append("advisorChainFactory=" + this.advisorChainFactory + ";\n");
             buffer.Append(base.ToString());
-            return buffer.ToString();            
+            return buffer.ToString();
         }
 
         /// <summary>
@@ -990,7 +988,7 @@ namespace Spring.Aop.Framework
         }
 
         /// <summary>
-        /// If no explicit interfaces are specified, interfaces will be automatically determined 
+        /// If no explicit interfaces are specified, interfaces will be automatically determined
         /// from the target type on proxy creation. Defaults to true
         /// </summary>
         public bool AutoDetectInterfaces
@@ -1157,7 +1155,7 @@ namespace Spring.Aop.Framework
             return false;
         }
 
-        /// <summary> 
+        /// <summary>
         /// Return the index (0 based) of the supplied
         /// <see cref="AopAlliance.Aop.IAdvice"/> in the interceptor
         /// (advice) chain for this proxy.
@@ -1185,7 +1183,7 @@ namespace Spring.Aop.Framework
             }
         }
 
-        /// <summary> 
+        /// <summary>
         /// Return the index (0 based) of the supplied
         /// <see cref="AopAlliance.Aop.IAdvice"/> in the interceptor
         /// (advice) chain for this proxy.
@@ -1222,7 +1220,7 @@ namespace Spring.Aop.Framework
             return -1;
         }
 
-        /// <summary> 
+        /// <summary>
         /// Return the index (0 based) of the supplied
         /// <see cref="Spring.Aop.IAdvisor"/> in the interceptor
         /// (advice) chain for this proxy.
@@ -1243,7 +1241,7 @@ namespace Spring.Aop.Framework
             return this._advisors != null ? this._advisors.IndexOf(advisor) : -1;
         }
 
-        /// <summary> 
+        /// <summary>
         /// Return the index (0 based) of the supplied
         /// <see cref="Spring.Aop.IIntroductionAdvisor"/> in the introductions
         /// for this proxy.
@@ -1427,7 +1425,7 @@ namespace Spring.Aop.Framework
             }
         }
 
-        /// <summary> 
+        /// <summary>
         /// Creates an AOP proxy using this instance's configuration data.
         /// </summary>
         /// <remarks>
@@ -1443,7 +1441,7 @@ namespace Spring.Aop.Framework
         {
             lock (this.SyncRoot)
             {
-                if (this.autoDetectInterfaces && CountNonIntroductionInterfaces() == 0 
+                if (this.autoDetectInterfaces && CountNonIntroductionInterfaces() == 0
 //                    && !this.ProxyTargetType
                     )
                 {

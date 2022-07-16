@@ -1,14 +1,14 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
- * 
+ * Copyright ï¿½ 2002-2011 the original author or authors.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -18,11 +18,7 @@
 
 #endregion
 
-#region Imports
-
 using System.Data;
-
-#endregion
 
 namespace Spring.Data
 {
@@ -39,16 +35,16 @@ namespace Spring.Data
 	/// place.
 	/// </p>
 	/// <p>Alternatively, consider subclassing MappingSqlQuery from the Spring.Data.Object
-	/// namespace:  Instead of working with separate AdoTemplate and RowMapper objects, 
+	/// namespace:  Instead of working with separate AdoTemplate and RowMapper objects,
 	/// you can have executable query objects (containing row-mapping logic) there.
 	/// </p>
 	/// </remarks>
 	/// <author>Mark Pollack (.NET)</author>
-	public interface IRowMapper 
+	public interface IRowMapper
 	{
 	    /// <summary>
 	    /// Implementations must implement this method to map each row of data in the
-	    /// result set (DataReader).  This method should not call Next() on the 
+	    /// result set (DataReader).  This method should not call Next() on the
 	    /// DataReader; it should only extract the values of the current row.
 	    /// </summary>
 	    /// <param name="reader">The IDataReader to map (pre-initialized for the current row)</param>

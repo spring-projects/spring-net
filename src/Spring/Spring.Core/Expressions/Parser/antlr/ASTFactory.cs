@@ -1,4 +1,3 @@
-using System;
 using System.Collections;
 
 using Assembly			= System.Reflection.Assembly;
@@ -14,7 +13,7 @@ namespace Spring.Expressions.Parser.antlr
 	*
 	* $Id:$
 	*/
-	
+
 	//
 	// ANTLR C# Code Generator by Micheal Jordan
 	//                            Kunle Odutola       : kunle UNDERSCORE odutola AT hotmail DOT com
@@ -35,7 +34,7 @@ namespace Spring.Expressions.Parser.antlr
 	/// </summary>
 	/// <remarks>
 	/// <para>
-	/// We use delegation to share code (and have only one 
+	/// We use delegation to share code (and have only one
 	/// bit of code to maintain) rather than subclassing
 	/// or superclassing (forces AST support code to be
 	/// loaded even when you don't want to do AST stuff).
@@ -69,9 +68,9 @@ namespace Spring.Expressions.Parser.antlr
 		/// </param>
 		public ASTFactory(string nodeTypeName)
 			: this( loadNodeTypeObject(nodeTypeName) )
-		{	
+		{
 		}
-		
+
 		/// <summary>
 		/// Constructs an <c>ASTFactory</c> and use the specified AST node type
 		/// as the default.
@@ -89,7 +88,7 @@ namespace Spring.Expressions.Parser.antlr
 			typename2creator_[typeof(antlr.CommonASTWithHiddenTokens).FullName]	= CommonASTWithHiddenTokens.Creator;
 
 		}
-		
+
 		//---------------------------------------------------------------------
 		// DATA MEMBERS
 		//---------------------------------------------------------------------
@@ -120,14 +119,14 @@ namespace Spring.Expressions.Parser.antlr
 		/// the specified Token type.
 		/// </summary>
 		/// <remarks>
-		/// This method is useful for situations that ANTLR cannot oridinarily deal 
-		/// with (i.e., when you  create a token based upon a nonliteral token symbol 
-		/// like #[LT(1)].  This is a runtime value and ANTLR cannot determine the token 
+		/// This method is useful for situations that ANTLR cannot oridinarily deal
+		/// with (i.e., when you  create a token based upon a nonliteral token symbol
+		/// like #[LT(1)].  This is a runtime value and ANTLR cannot determine the token
 		/// type (and hence the AST) statically.
 		/// </remarks>
 		/// <param name="tokenType">Token type to override.</param>
 		/// <param name="NodeTypeName">
-		///		Fully qualified AST typename (or null to specify 
+		///		Fully qualified AST typename (or null to specify
 		///		the factory's default AST type).
 		/// </param>
 		public void setTokenTypeASTNodeType(int tokenType, string NodeTypeName)
@@ -195,7 +194,7 @@ namespace Spring.Expressions.Parser.antlr
 		/// <summary>
 		/// Pre-expands the internal list of TokenTypeID-to-ASTNodeType mappings
 		/// to the specified size.
-		/// This is primarily a convenience method that can be used to prevent 
+		/// This is primarily a convenience method that can be used to prevent
 		/// unnecessary and costly re-org of the mappings list.
 		/// </summary>
 		/// <param name="NodeType">Maximum Token Type ID.</param>
@@ -257,7 +256,7 @@ namespace Spring.Expressions.Parser.antlr
 				currentAST.advanceChildToEnd();
 			}
 		}
-		
+
 		/// <summary>
 		/// Creates a new uninitialized AST node. Since a specific AST Node Type
 		/// wasn't indicated, the new AST node is created using the current default
@@ -267,7 +266,7 @@ namespace Spring.Expressions.Parser.antlr
 		public virtual AST create()
 		{
 			AST newNode;
-			
+
 			if (defaultCreator_ == null)
 				newNode = createFromNodeTypeObject(defaultASTNodeTypeObject_);
 			else
@@ -275,10 +274,10 @@ namespace Spring.Expressions.Parser.antlr
 
 			return newNode;
 		}
-		
+
 		/// <summary>
 		/// Creates and initializes a new AST node using the specified Token Type ID.
-		/// The <see cref="System.Type"/> used for creating this new AST node is 
+		/// The <see cref="System.Type"/> used for creating this new AST node is
 		/// determined by the following:
 		/// <list type="bullet">
 		///		<item>the current TokenTypeID-to-ASTNodeType mapping (if any) or,</item>
@@ -293,10 +292,10 @@ namespace Spring.Expressions.Parser.antlr
 			newNode.initialize(type, "");
 			return newNode;
 		}
-		
+
 		/// <summary>
 		/// Creates and initializes a new AST node using the specified Token Type ID.
-		/// The <see cref="System.Type"/> used for creating this new AST node is 
+		/// The <see cref="System.Type"/> used for creating this new AST node is
 		/// determined by the following:
 		/// <list type="bullet">
 		///		<item>the current TokenTypeID-to-ASTNodeType mapping (if any) or,</item>
@@ -312,11 +311,11 @@ namespace Spring.Expressions.Parser.antlr
 			newNode.initialize(type, txt);
 			return newNode;
 		}
-		
+
 		/// <summary>
 		/// Creates a new AST node using the specified AST Node Type name. Once created,
 		/// the new AST node is initialized with the specified Token type ID and string.
-		/// The <see cref="System.Type"/> used for creating this new AST node is 
+		/// The <see cref="System.Type"/> used for creating this new AST node is
 		/// determined solely by <c>ASTNodeTypeName</c>.
 		/// The AST Node type must have a default/parameterless constructor.
 		/// </summary>
@@ -330,7 +329,7 @@ namespace Spring.Expressions.Parser.antlr
 			newNode.initialize(type, txt);
 			return newNode;
 		}
-		
+
 		/// <summary>
 		/// Creates a new AST node using the specified AST Node Type name.
 		/// </summary>
@@ -340,8 +339,8 @@ namespace Spring.Expressions.Parser.antlr
 		///	</param>
 		/// <returns>A newly created and initialized AST node object.</returns>
 		/// <remarks>
-		/// Once created, the new AST node is initialized with the specified Token 
-		/// instance. The <see cref="System.Type"/> used for creating this new AST 
+		/// Once created, the new AST node is initialized with the specified Token
+		/// instance. The <see cref="System.Type"/> used for creating this new AST
 		/// node is  determined solely by <c>ASTNodeTypeName</c>.
 		/// <para>The AST Node type must have a default/parameterless constructor.</para>
 		/// </remarks>
@@ -351,11 +350,11 @@ namespace Spring.Expressions.Parser.antlr
 			newNode.initialize(tok);
 			return newNode;
 		}
-		
+
 		/// <summary>
 		/// Creates and initializes a new AST node using the specified AST Node instance.
 		/// the new AST node is initialized with the specified Token type ID and string.
-		/// The <see cref="System.Type"/> used for creating this new AST node is 
+		/// The <see cref="System.Type"/> used for creating this new AST node is
 		/// determined solely by <c>aNode</c>.
 		/// The AST Node type must have a default/parameterless constructor.
 		/// </summary>
@@ -368,16 +367,16 @@ namespace Spring.Expressions.Parser.antlr
 			if (aNode == null)
 				newNode = null;
 			else
-			{			
+			{
 				newNode = createFromAST(aNode);
 				newNode.initialize(aNode);
 			}
 			return newNode;
 		}
-		
+
 		/// <summary>
 		/// Creates and initializes a new AST node using the specified Token instance.
-		/// The <see cref="System.Type"/> used for creating this new AST node is 
+		/// The <see cref="System.Type"/> used for creating this new AST node is
 		/// determined by the following:
 		/// <list type="bullet">
 		///		<item>the current TokenTypeID-to-ASTNodeType mapping (if any) or,</item>
@@ -399,7 +398,7 @@ namespace Spring.Expressions.Parser.antlr
 			}
 			return newNode;
 		}
-		
+
 		/// <summary>
 		/// Returns a copy of the specified AST Node instance. The copy is obtained by
 		/// using the <see cref="ICloneable"/> method Clone().
@@ -416,7 +415,7 @@ namespace Spring.Expressions.Parser.antlr
 			dup_edNode.initialize(t);
 			return dup_edNode;
 		}
-		
+
 		/// <summary>
 		/// Duplicate AST Node tree rooted at specified AST node and all of it's siblings.
 		/// </summary>
@@ -435,7 +434,7 @@ namespace Spring.Expressions.Parser.antlr
 			}
 			return result;
 		}
-		
+
 		/// <summary>
 		/// Duplicate AST Node tree rooted at specified AST node. Ignore it's siblings.
 		/// </summary>
@@ -451,7 +450,7 @@ namespace Spring.Expressions.Parser.antlr
 			}
 			return result;
 		}
-		
+
 		/// <summary>
 		/// Make a tree from a list of nodes.  The first element in the
 		/// array is the root.  If the root is null, then the tree is
@@ -500,7 +499,7 @@ namespace Spring.Expressions.Parser.antlr
 			}
 			return root;
 		}
-		
+
 		/// <summary>
 		/// Make a tree from a list of nodes, where the nodes are contained
 		/// in an ASTArray object.
@@ -511,7 +510,7 @@ namespace Spring.Expressions.Parser.antlr
 		{
 			return make(nodes.array);
 		}
-		
+
 		/// <summary>
 		/// Make an AST the root of current AST.
 		/// </summary>
@@ -548,7 +547,7 @@ namespace Spring.Expressions.Parser.antlr
 			}
 			defaultASTNodeTypeObject_ = loadNodeTypeObject(t);
 		}
-		
+
 		/// <summary>
 		/// To change where error messages go, can subclass/override this method
 		/// and then setASTFactory in Parser and TreeParser.  This method removes

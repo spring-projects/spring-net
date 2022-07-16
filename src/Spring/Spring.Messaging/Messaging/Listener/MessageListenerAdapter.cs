@@ -18,7 +18,6 @@
 
 #endregion
 
-using System.Collections.Generic;
 using Common.Logging;
 using Spring.Context;
 using Spring.Expressions;
@@ -37,7 +36,7 @@ namespace Spring.Messaging.Listener
 {
     /// <summary>
     /// Message listener adapter that delegates the handling of messages to target
-    /// listener methods via reflection <see cref="DynamicReflectionManager"/>, 
+    /// listener methods via reflection <see cref="DynamicReflectionManager"/>,
     /// with flexible message type conversion.
     /// Allows listener methods to operate on message content types, completely
     /// independent from the MSMQ API.
@@ -48,8 +47,8 @@ namespace Spring.Messaging.Listener
     /// being passed into the target handler method, to let the target method
     /// operate on message content types such as String or business object instead of
     /// <see cref="Message"/>. Message type conversion is delegated to a Spring
-    /// <see cref="IMessageConverter"/>  By default, an <see cref="XmlMessageConverter"/> 
-    /// with TargetType set to System.String is used.  If you do not want such automatic 
+    /// <see cref="IMessageConverter"/>  By default, an <see cref="XmlMessageConverter"/>
+    /// with TargetType set to System.String is used.  If you do not want such automatic
     /// message conversion taking place, then be sure to set the
     /// MessageConverter property to null.
     /// </para>
@@ -57,7 +56,7 @@ namespace Spring.Messaging.Listener
     /// If a target handler method returns a non-null object (for example, with a
     /// message content type such as <code>String</code>), it will get
     /// wrapped in a MSMQ <code>Message</code> and sent to the response destination
-    /// (either using the MSMQ Message.ResponseQueue property or 
+    /// (either using the MSMQ Message.ResponseQueue property or
     /// <see cref="DefaultResponseQueue"/>) specified default response queue
     /// destination).
     /// </para>
@@ -85,7 +84,7 @@ namespace Spring.Messaging.Listener
     /// </example>
     /// <para>If your <see cref="IMessageConverter"/> implementation will return multiple object
     /// types, overloading the handler method is perfectly acceptible, the most specific matching
-    /// method will be used.  A method with an object signature would be consider a 
+    /// method will be used.  A method with an object signature would be consider a
     /// 'catch-all' method
     /// </para>
     /// <example>
@@ -96,7 +95,7 @@ namespace Spring.Messaging.Listener
     ///   void DoWork(InvoiceRequest invoiceRequest);
     ///   void DoWork(object obj);
     /// }
-    /// </example>   
+    /// </example>
     /// <para>
     /// The last example shows how to send a message to the ResponseQueue for those
     /// methods that do not return void.
@@ -193,7 +192,7 @@ namespace Spring.Messaging.Listener
         public string DefaultHandlerMethod
         {
             get { return defaultHandlerMethod; }
-            set { 
+            set {
                 defaultHandlerMethod = value;
                 ProcessingExpression = Expression.Parse(defaultHandlerMethod + "(#convertedObject)");
             }
@@ -326,7 +325,7 @@ namespace Spring.Messaging.Listener
         /// result objects, which will be wrapped in a response message and sent to a
         /// response destination.
         /// <para>
-        /// Alternatively, specify a "DefaultResponseQueueName" 
+        /// Alternatively, specify a "DefaultResponseQueueName"
         /// to be dynamically resolved via the MessageQueueFactory.
         /// </para>
         /// </summary>
@@ -404,8 +403,8 @@ namespace Spring.Messaging.Listener
             string methodName = GetHandlerMethodName(message, convertedMessage);
             object[] listenerArguments = BuildListenerArguments(convertedMessage);
             object result = InvokeListenerMethod(methodName, listenerArguments);
-            
-            
+
+
             //Invoke message handler method and get result.
             //object result = processingExpression.GetValue(handlerObject, vars);
             if (result != null)
@@ -442,7 +441,7 @@ namespace Spring.Messaging.Listener
         /// method having a corresponding single argument of the array's type declared.</p>
         /// <p>This can be overridden to treat special message content such as arrays
         /// differently, for example passing in each element of the message array
-        /// as distinct method argument.</p>        
+        /// as distinct method argument.</p>
         /// </remarks>
         /// <param name="convertedMessage">The converted message.</param>
         /// <returns>the array of arguments to be passed into the
@@ -454,7 +453,7 @@ namespace Spring.Messaging.Listener
         }
 
         /// <summary>
-        /// Invokes the specified listener method.  This default implementation can only handle invoking a 
+        /// Invokes the specified listener method.  This default implementation can only handle invoking a
         /// single argument method.
         /// </summary>
         /// <param name="methodName">Name of the listener method.</param>
@@ -468,7 +467,7 @@ namespace Spring.Messaging.Listener
             if (methodName.CompareTo(DefaultHandlerMethod) != 0)
             {
                 //This is just to handle the case of overriding GetHandlerMethodName in a subclass and nothing else.
-                return ExpressionEvaluator.GetValue(handlerObject, methodName + "(#convertedObject)", vars);                
+                return ExpressionEvaluator.GetValue(handlerObject, methodName + "(#convertedObject)", vars);
             }
             // the normal case of using the cached expression.
             return processingExpression.GetValue(handlerObject, vars);
@@ -523,7 +522,7 @@ namespace Spring.Messaging.Listener
         /// <param name="response">The outgoing message about to be sent.</param>
         protected virtual void SendResponse(MessageQueue destination, Message response)
         {
-            //Will send with appropriate transaction semantics 
+            //Will send with appropriate transaction semantics
             if (logger.IsDebugEnabled)
             {
                 logger.Debug("Sending response message to path = [" + destination.Path + "]");
@@ -543,7 +542,7 @@ namespace Spring.Messaging.Listener
             if (converter != null)
             {
                 // This is the default Message converter registered in QueueUtils.RegisterDefaultMessageConverter
-                // and used by MessageQueueTemplate and the MessageListenerAdapter if no other Message converage is 
+                // and used by MessageQueueTemplate and the MessageListenerAdapter if no other Message converage is
                 // set via the property MessageConverteryObjectName.
                 if (messageConverterObjectName.Equals("__XmlMessageConverter__"))
                 {

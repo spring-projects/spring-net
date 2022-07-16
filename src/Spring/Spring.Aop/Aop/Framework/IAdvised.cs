@@ -18,9 +18,6 @@
 
 #endregion
 
-using System;
-using System.Collections.Generic;
-
 using AopAlliance.Aop;
 
 using Spring.Proxy;
@@ -83,7 +80,7 @@ namespace Spring.Aop.Framework
         bool ProxyTargetType { get; }
 
         /// <summary>
-        /// Is target type attributes, method attributes, method's return type attributes 
+        /// Is target type attributes, method attributes, method's return type attributes
         /// and method's parameter attributes to be proxied in addition
         /// to any interfaces declared on the proxied <see cref="System.Type"/>?
         /// </summary>
@@ -184,7 +181,7 @@ namespace Spring.Aop.Framework
         /// <remarks>
         /// <p>
         /// Please be aware that Spring.NET's AOP implementation only supports
-        /// method advice (as encapsulated by the 
+        /// method advice (as encapsulated by the
         /// <see cref="AopAlliance.Intercept.IMethodInterceptor"/> interface).
         /// </p>
         /// </remarks>
@@ -202,7 +199,7 @@ namespace Spring.Aop.Framework
         /// <remarks>
         /// <p>
         /// Please be aware that Spring.NET's AOP implementation only supports
-        /// method advice (as encapsulated by the 
+        /// method advice (as encapsulated by the
         /// <see cref="AopAlliance.Intercept.IMethodInterceptor"/> interface).
         /// </p>
         /// </remarks>
@@ -234,7 +231,7 @@ namespace Spring.Aop.Framework
         bool IsInterfaceProxied(Type intf);
 
         /// <summary>
-        /// Adds the advisors from the supplied <paramref name="advisors"/> 
+        /// Adds the advisors from the supplied <paramref name="advisors"/>
         /// to the list of <see cref="Spring.Aop.Framework.IAdvised.Advisors"/>.
         /// </summary>
         /// <param name="advisors">
@@ -308,7 +305,7 @@ namespace Spring.Aop.Framework
         /// </exception>
         void AddIntroduction(int index, IIntroductionAdvisor introductionAdvisor);
 
-        /// <summary> 
+        /// <summary>
         /// Return the index (0 based) of the supplied
         /// <see cref="Spring.Aop.IAdvisor"/> in the interceptor
         /// (advice) chain for this proxy.
@@ -330,7 +327,7 @@ namespace Spring.Aop.Framework
         /// </returns>
         int IndexOf(IAdvisor advisor);
 
-        /// <summary> 
+        /// <summary>
         /// Return the index (0 based) of the supplied
         /// <see cref="Spring.Aop.IIntroductionAdvisor"/> in the introductions
         /// for this proxy.
@@ -458,7 +455,7 @@ namespace Spring.Aop.Framework
         /// </exception>
         void ReplaceIntroduction(int index, IIntroductionAdvisor introduction);
 
-        /// <summary> 
+        /// <summary>
         /// Replaces the <paramref name="oldAdvisor"/> with the
         /// <paramref name="newAdvisor"/>.
         /// </summary>

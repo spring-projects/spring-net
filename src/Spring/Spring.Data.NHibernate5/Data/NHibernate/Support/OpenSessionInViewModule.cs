@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Web;
 
 namespace Spring.Data.NHibernate.Support
@@ -39,7 +38,7 @@ namespace Spring.Data.NHibernate.Support
         /// </summary>
         public OpenSessionInViewModule() : base("appSettings", typeof(OpenSessionInViewModule), false)
         {
-            
+
         }
 
         /// <summary>

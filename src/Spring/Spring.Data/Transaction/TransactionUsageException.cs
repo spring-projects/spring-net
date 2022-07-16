@@ -18,13 +18,12 @@
 
 #endregion
 
-using System;
 using System.Runtime.Serialization;
 
 namespace Spring.Transaction
 {
-	/// <summary> 
-	/// Superclass for exceptions caused by inappropriate usage of 
+	/// <summary>
+	/// Superclass for exceptions caused by inappropriate usage of
 	/// a <a href="http://www.springframework.net/">Spring.NET</a> transaction API.
 	/// </summary>
 	/// <author>Juergen Hoeller</author>

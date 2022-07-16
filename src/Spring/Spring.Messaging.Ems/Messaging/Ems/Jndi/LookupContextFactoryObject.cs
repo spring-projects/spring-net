@@ -18,9 +18,7 @@
 
 #endregion
 
-using System;
 using Spring.Objects.Factory;
-using TIBCO.EMS;
 
 namespace Spring.Messaging.Ems.Jndi
 {

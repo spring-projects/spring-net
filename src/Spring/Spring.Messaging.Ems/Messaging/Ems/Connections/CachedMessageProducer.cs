@@ -19,7 +19,6 @@
 #endregion
 
 using Spring.Messaging.Ems.Common;
-using TIBCO.EMS;
 
 namespace Spring.Messaging.Ems.Connections
 {
@@ -37,7 +36,7 @@ namespace Spring.Messaging.Ems.Connections
 
         private object originalDisableMessageTimestamp;
 
-        private MessageDeliveryMode deliveryMode; 
+        private MessageDeliveryMode deliveryMode;
 
         private int priority;
 

@@ -18,7 +18,6 @@
 
 #endregion
 
-using System.Collections.Generic;
 using System.Web.UI;
 
 namespace Spring.Web.UI.Validation

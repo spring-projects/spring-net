@@ -18,8 +18,6 @@
 
 #endregion
 
-using System;
-using System.Collections.Generic;
 using System.Xml;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
@@ -87,13 +85,13 @@ namespace Spring.Objects.Factory.Xml
 
         protected override ObjectDefinitionHolder CreateObjectDefinitionHolder(
             XmlElement element,
-            IConfigurableObjectDefinition definition, 
-            string objectName, 
+            IConfigurableObjectDefinition definition,
+            string objectName,
             IReadOnlyList<string> aliasesArray)
         {
             if (definition is IWebObjectDefinition webDefinition)
             {
-                if (definition.IsSingleton 
+                if (definition.IsSingleton
                     && element.HasAttribute(ObjectDefinitionConstants.ScopeAttribute))
                 {
                     webDefinition.Scope = GetScope(element.GetAttribute(ObjectDefinitionConstants.ScopeAttribute));
@@ -108,7 +106,7 @@ namespace Spring.Objects.Factory.Xml
 
 //                string typeName = element.GetAttribute(ObjectDefinitionConstants.TypeAttribute);
                 string typeName = definition.ObjectTypeName;
-                if (typeName != null 
+                if (typeName != null
                     && (typeName.EndsWith(".ascx") || typeName.EndsWith(".master")))
                 {
                     definition.IsAbstract = true;
@@ -125,7 +123,7 @@ namespace Spring.Objects.Factory.Xml
         /// <remarks>
         /// <p>
         /// If the supplied <paramref name="value"/> is invalid
-        /// (i.e. it does not resolve to one of the 
+        /// (i.e. it does not resolve to one of the
         /// <see cref="Spring.Objects.Factory.Support.ObjectScope"/> values),
         /// then the return value of this method call will be
         /// <see cref="Spring.Objects.Factory.Support.ObjectScope.Default"/>;

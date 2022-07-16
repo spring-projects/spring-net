@@ -1,11 +1,8 @@
-using System;
 using System.Collections;
-using System.IO;
 using System.Text;
 using System.Xml;
 using System.Xml.Serialization;
 using Spring.Messaging.Ems.Common;
-using TIBCO.EMS;
 
 namespace Spring.Messaging.Ems.Support.Converter
 {
@@ -113,7 +110,7 @@ namespace Spring.Messaging.Ems.Support.Converter
             } catch (Exception e)
             {
                 throw new MessageConversionException("Can't convert object of type " + objectToConvert.GetType(), e);
-            }            
+            }
             return xmlString;
         }
 

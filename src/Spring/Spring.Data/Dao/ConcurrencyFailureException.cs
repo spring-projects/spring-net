@@ -18,16 +18,11 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Runtime.Serialization;
-
-#endregion
 
 namespace Spring.Dao
 {
-    /// <summary> 
+    /// <summary>
     /// Exception thrown on concurrency failure. This exception should be
     /// sublassed to indicate the type of failure - optimistic locking,
     /// failure to acquire lock, etc.

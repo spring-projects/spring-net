@@ -18,7 +18,6 @@
 
 #region Imports
 
-using System;
 using System.Collections;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -32,7 +31,7 @@ using Spring.Util;
 namespace Spring.Web.Support
 {
     /// <summary>
-    /// This strategy enhances a ControlCollection's type by 
+    /// This strategy enhances a ControlCollection's type by
     /// dynamically implementing ISupportsWebDependencyInjection on this type
     /// </summary>
     /// <author>Erich Eichinger</author>
@@ -58,7 +57,7 @@ namespace Spring.Web.Support
         private static readonly Hashtable s_interceptedCollectionTypeCache = new Hashtable();
 
         /// <summary>
-        /// Intercepts the given <see cref="ControlCollection"/> by dynamically deriving 
+        /// Intercepts the given <see cref="ControlCollection"/> by dynamically deriving
         /// the original type and let it implement <see cref="ISupportsWebDependencyInjection"/>.
         /// </summary>
         /// <param name="defaultApplicationContext">the ApplicationContext to be set on the collection instance.</param>

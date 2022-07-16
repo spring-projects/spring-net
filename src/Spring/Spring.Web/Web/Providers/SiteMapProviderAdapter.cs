@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using System.Collections.Specialized;
 using System.Security.Permissions;
 using System.Web;
@@ -35,9 +34,9 @@ namespace Spring.Web.Providers
     /// </summary>
     /// <remarks>
     /// <p>
-    /// Configuration for this provider <b>requires</b> <c>providerId</c> element set in web.config file, 
-    /// as the Id of wrapped provider (defined in the Spring context).  
-    /// </p>    
+    /// Configuration for this provider <b>requires</b> <c>providerId</c> element set in web.config file,
+    /// as the Id of wrapped provider (defined in the Spring context).
+    /// </p>
     /// </remarks>
     /// <author>Damjan Tomic</author>
     [AspNetHostingPermission(SecurityAction.LinkDemand, Level = AspNetHostingPermissionLevel.Minimal)]
@@ -59,7 +58,7 @@ namespace Spring.Web.Providers
         ///Initializes the provider.
         ///</summary>
         ///
-        ///<param name="config">A collection of the name/value pairs representing the provider-specific 
+        ///<param name="config">A collection of the name/value pairs representing the provider-specific
         /// attributes specified in the configuration for this provider.
         /// The <c>providerId</c> attribute may be used to override the name being used for looking up an object definition.
         /// </param>
@@ -69,10 +68,10 @@ namespace Spring.Web.Providers
         ///<exception cref="T:System.ArgumentException">The <paramref name="name"/> has a length of zero or providerId attribute is not set.</exception>
         public override void Initialize(string name, NameValueCollection config)
         {
-            if (config == null) throw new ArgumentNullException("config");                        
-            
-            string providerId = config["providerId"];            
-            if (String.IsNullOrEmpty(providerId)) 
+            if (config == null) throw new ArgumentNullException("config");
+
+            string providerId = config["providerId"];
+            if (String.IsNullOrEmpty(providerId))
                 providerId = name;
             config.Remove("providerId");
 
@@ -100,7 +99,7 @@ namespace Spring.Web.Providers
         ///<returns>
         ///A brief, friendly description suitable for display in administrative tools or other UIs.
         ///</returns>
-        ///        
+        ///
         public override string Description
         {
             get { return this.wrappedProvider.Description; }
@@ -115,7 +114,7 @@ namespace Spring.Web.Providers
         ///</summary>
         ///
         ///<returns>
-        ///A <see cref="T:System.Web.SiteMapNode"></see> that represents the currently requested page; otherwise, null, if no corresponding <see cref="T:System.Web.SiteMapNode"></see> can be found in the <see cref="T:System.Web.SiteMapNode"></see> or if the page context is null. 
+        ///A <see cref="T:System.Web.SiteMapNode"></see> that represents the currently requested page; otherwise, null, if no corresponding <see cref="T:System.Web.SiteMapNode"></see> can be found in the <see cref="T:System.Web.SiteMapNode"></see> or if the page context is null.
         ///</returns>
         ///
         ///<param name="context">The <see cref="T:System.Web.HttpContext"></see> used to match node information with the URL of the requested page.</param>
@@ -252,7 +251,7 @@ namespace Spring.Web.Providers
         ///</summary>
         ///<exception cref="NotSupportedException"></exception>
         ///<returns>
-        ///A <see cref="T:System.Web.SiteMapNode"></see> that represents the root node of the set of nodes that the current provider manages. 
+        ///A <see cref="T:System.Web.SiteMapNode"></see> that represents the root node of the set of nodes that the current provider manages.
         ///</returns>
         ///
         protected override SiteMapNode GetRootNodeCore()
@@ -261,7 +260,7 @@ namespace Spring.Web.Providers
         }
 
         ///<summary>
-        ///Provides a method that site map providers can override to perform an optimized retrieval of one or more levels of parent and ancestor nodes, relative to the specified <see cref="T:System.Web.SiteMapNode"></see> object. 
+        ///Provides a method that site map providers can override to perform an optimized retrieval of one or more levels of parent and ancestor nodes, relative to the specified <see cref="T:System.Web.SiteMapNode"></see> object.
         ///</summary>
         ///
         ///<param name="upLevel">The number of ancestor <see cref="T:System.Web.SiteMapNode"></see> generations to fetch. 0 indicates no ancestor nodes are retrieved and -1 indicates that all ancestors might be retrieved and cached.</param>
@@ -270,11 +269,11 @@ namespace Spring.Web.Providers
         ///<exception cref="T:System.ArgumentNullException">node is null.</exception>
         public override void HintAncestorNodes(SiteMapNode node, int upLevel)
         {
-            this.wrappedProvider.HintAncestorNodes(node, upLevel);            
+            this.wrappedProvider.HintAncestorNodes(node, upLevel);
         }
 
         ///<summary>
-        ///Provides a method that site map providers can override to perform an optimized retrieval of nodes found in the proximity of the specified node. 
+        ///Provides a method that site map providers can override to perform an optimized retrieval of nodes found in the proximity of the specified node.
         ///</summary>
         ///
         ///<param name="upLevel">The number of ancestor <see cref="T:System.Web.SiteMapNode"></see> generations to fetch. 0 indicates no ancestor nodes are retrieved and -1 indicates that all ancestors (and their descendant nodes to the level of node) might be retrieved and cached.</param>
@@ -355,7 +354,7 @@ namespace Spring.Web.Providers
         public override SiteMapNode RootNode
         {
             get { return this.wrappedProvider.RootNode; }
-        }                
+        }
 
         #endregion
 

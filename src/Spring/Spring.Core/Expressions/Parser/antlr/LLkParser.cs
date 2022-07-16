@@ -1,5 +1,3 @@
-using System;
-	
 namespace Spring.Expressions.Parser.antlr
 {
 	/*ANTLR Translator Generator
@@ -26,7 +24,7 @@ namespace Spring.Expressions.Parser.antlr
 	public class LLkParser : Parser
 	{
 		internal int k;
-		
+
 		public LLkParser(int k_)
 		{
 			k = k_;
@@ -79,7 +77,7 @@ namespace Spring.Expressions.Parser.antlr
 				if ( LT(i)!=null ) {
 					Console.Out.Write("LA(" + i + ")==" + LT(i).getText());
 				}
-				else 
+				else
 				{
 					Console.Out.Write("LA(" + i + ")==ull");
 				}

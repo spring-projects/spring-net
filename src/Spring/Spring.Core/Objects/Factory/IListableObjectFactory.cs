@@ -18,13 +18,6 @@
 
 #endregion
 
-#region Imports
-
-using System;
-using System.Collections.Generic;
-
-#endregion
-
 namespace Spring.Objects.Factory
 {
 	/// <summary>
@@ -101,7 +94,7 @@ namespace Spring.Objects.Factory
         /// </summary>
         /// <param name="includeAncestors">to include parent factories in result</param>
         /// <returns>
-        /// The names of all objects defined in this factory, if <code>includeAncestors</code> is <code>true</code> includes all 
+        /// The names of all objects defined in this factory, if <code>includeAncestors</code> is <code>true</code> includes all
         /// objects defined in parent factories, or an empty array if none are defined.
         /// </returns>
         IReadOnlyList<string> GetObjectDefinitionNames(bool includeAncestors);
@@ -258,7 +251,7 @@ namespace Spring.Objects.Factory
 		/// If the objects could not be created.
 		/// </exception>
 		IReadOnlyDictionary<string, object> GetObjectsOfType(Type type);
-		
+
         /// <summary>
 		/// Return the object instances that match the given object
 		/// <see cref="System.Type"/> (including subclasses), judging from either object

@@ -18,18 +18,12 @@
 
 #endregion
 
-#region Imports
-
-using System;
-using System.Collections.Generic;
 using System.Text.RegularExpressions;
 
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Xml;
 using Spring.Objects.Support;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Objects.Factory.Support
 {
@@ -64,7 +58,7 @@ namespace Spring.Objects.Factory.Support
         /// <p>
         /// This is a convenience method that registers the
         /// <see cref="Spring.Objects.Factory.Config.ObjectDefinitionHolder.ObjectDefinition"/>
-        /// of the supplied <paramref name="objectDefinition"/> under the 
+        /// of the supplied <paramref name="objectDefinition"/> under the
         /// <see cref="Spring.Objects.Factory.Config.ObjectDefinitionHolder.ObjectName"/>
         /// property value of said <paramref name="objectDefinition"/>. If the
         /// supplied <paramref name="objectDefinition"/> has any

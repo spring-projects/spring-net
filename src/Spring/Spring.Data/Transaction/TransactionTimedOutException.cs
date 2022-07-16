@@ -1,4 +1,3 @@
-using System;
 using System.Runtime.Serialization;
 
 namespace Spring.Transaction
@@ -14,7 +13,7 @@ namespace Spring.Transaction
         /// </summary>
         public TransactionTimedOutException() : base()
         {
-            
+
         }
         /// <summary>
         /// Creates a new instance of the

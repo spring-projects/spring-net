@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Collections;
 
 namespace Spring.Caching
@@ -30,7 +29,7 @@ namespace Spring.Caching
     /// <remarks>
     /// <p>
     /// This attribute allows application developers to specify that each item
-    /// from the collection returned by the method should be cached, 
+    /// from the collection returned by the method should be cached,
     /// but it will not do any caching by itself.
     /// </p>
     /// <p>

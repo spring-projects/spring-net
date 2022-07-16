@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2010 the original author or authors.
+ * Copyright ï¿½ 2002-2010 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,9 @@
 
 #endregion
 
-using System;
 using System.Collections;
-using System.IO;
 using System.Runtime.Serialization;
 using Spring.Objects.Factory;
-using TIBCO.EMS;
 
 namespace Spring.Messaging.Ems.Common
 {
@@ -33,7 +30,7 @@ namespace Spring.Messaging.Ems.Common
         private string sslProxyAuthUsername;
         private string sslProxyAuthPassword;
 
-        private string sslProxyHost; 
+        private string sslProxyHost;
         private int sslProxyPort;
 
         public EmsConnectionFactory()
@@ -42,7 +39,7 @@ namespace Spring.Messaging.Ems.Common
         }
 
         public EmsConnectionFactory(string serverUrl) : this(serverUrl, null, null)
-        {            
+        {
         }
 
         public EmsConnectionFactory(string serverUrl, string clientId) : this(serverUrl, clientId, null)
@@ -242,7 +239,7 @@ namespace Spring.Messaging.Ems.Common
 
         public string UserPassword
         {
-            set { nativeConnectionFactory.SetUserPassword(value); } 
+            set { nativeConnectionFactory.SetUserPassword(value); }
         }
 
         public FactoryLoadBalanceMetric Metric
@@ -261,7 +258,7 @@ namespace Spring.Messaging.Ems.Common
         #region Implementation of IInitializingObject
 
         public void AfterPropertiesSet() {
-        
+
             if (this.sslProxyAuthUsername != null && sslProxyAuthPassword != null)
             {
                 nativeConnectionFactory.SetSSLProxyAuth(this.sslProxyAuthUsername, this.sslProxyAuthPassword);

@@ -18,8 +18,6 @@
 
 #endregion
 
-using System;
-using System.Threading;
 using Common.Logging;
 
 #if NETSTANDARD
@@ -32,7 +30,7 @@ namespace Spring.Messaging.Listener
 {
     /// <summary>
     /// Base class for listener container implementations which are based on Peeking for messages on
-    /// a MessageQueue.  Peeking is the only resource efficient approach that can be used in 
+    /// a MessageQueue.  Peeking is the only resource efficient approach that can be used in
     /// order to have MessageQueue receipt in conjunction with transactions, either local MSMQ transactions,
     /// local ADO.NET based transactions, or DTC transactions.  See SimpleMessageListenerContainer for
     /// an implementation based on a synchronous receives and you do not require transactional support.
@@ -41,9 +39,9 @@ namespace Spring.Messaging.Listener
     /// The number of threads that will be created for processing messages after the Peek occurs
     /// is set via the property MaxConcurrentListeners.  Each processing thread will continue to listen
     /// for messages up until the the timeout value specified by ListenerTimeLimit or until
-    /// there are no more messages on the queue (which ver comes first).  
+    /// there are no more messages on the queue (which ver comes first).
     /// <para>
-    /// The default value of 
+    /// The default value of
     /// ListenerTimeLimit is TimeSpan.Zero, meaning that only one attempt to recieve a message from the
     /// queue will be performed by each listener thread.
     /// </para>
@@ -82,8 +80,8 @@ namespace Spring.Messaging.Listener
         #region Properties
 
         /// <summary>
-        /// Gets or sets the listener time limit to continuously receive messages. 
-        /// The value is specified in milliseconds.  The default value is TimeSpan.Zero, 
+        /// Gets or sets the listener time limit to continuously receive messages.
+        /// The value is specified in milliseconds.  The default value is TimeSpan.Zero,
         /// indicating to only perform one Receive operation per Peek trigger.
         /// </summary>
         /// <value>The listener time limit in millis.</value>
@@ -239,7 +237,7 @@ namespace Spring.Messaging.Listener
 
                 int numberOfListenersToSchedule = 0;
 
-                // lock also prevents listeners that are about to exit from invoking 
+                // lock also prevents listeners that are about to exit from invoking
                 // StartPeeking while new listeners are being scheduled.
                 lock (activeListenerMonitor)
                 {
@@ -273,7 +271,7 @@ namespace Spring.Messaging.Listener
             {
                 switch ((int) mex.MessageQueueErrorCode)
                 {
-                    case -1073741536: // = 0xc0000120 "STATUS_CANCELLED". 
+                    case -1073741536: // = 0xc0000120 "STATUS_CANCELLED".
                         LOG.Info("Asynchronous Peek Thread sent STATUS_CANCELLED.");
                         break;
                     default:
@@ -302,7 +300,7 @@ namespace Spring.Messaging.Listener
         /// Execute the listener for a message received from the given queue
         /// wrapping the entire operation in an external transaction if demanded.
         /// </summary>
-        /// <param name="state">The DefaultMessageQueue upon which the call to receive should be 
+        /// <param name="state">The DefaultMessageQueue upon which the call to receive should be
         /// called.</param>
         protected virtual void ReceiveAndExecute(object state)
         {
@@ -425,7 +423,7 @@ namespace Spring.Messaging.Listener
 
 
         /// <summary>
-        /// Configures the initial peek thread, setting it to be a background thread.  
+        /// Configures the initial peek thread, setting it to be a background thread.
         /// Can be overridden in subclasses.
         /// </summary>
         /// <param name="thread">The peek thread.</param>
@@ -447,9 +445,9 @@ namespace Spring.Messaging.Listener
 
         /// <summary>
         /// Template method that gets called right before a new message is received, i.e.
-        /// messageQueue.Receive().  
+        /// messageQueue.Receive().
         /// </summary>
-        /// <remarks>It allows subclasses to modify the state of the MessageQueue 
+        /// <remarks>It allows subclasses to modify the state of the MessageQueue
         /// before receiving which maybe required when using remote queues</remarks>
         /// <param name="messageQueue"></param>
         protected virtual void BeforeMessageReceived(MessageQueue messageQueue)

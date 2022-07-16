@@ -1,4 +1,3 @@
-using System;
 using Spring.Context;
 using Spring.Globalization;
 
@@ -19,7 +18,7 @@ namespace Spring.DataBinding
 		/// </summary>
 		string UniqueID { get; }
 		/// <summary>
-		/// Return the <see cref="IApplicationContext"/> where <see cref="IFormatter"/> 
+		/// Return the <see cref="IApplicationContext"/> where <see cref="IFormatter"/>
 		/// instances should be optained from.
 		/// </summary>
 		IApplicationContext ApplicationContext { get; }

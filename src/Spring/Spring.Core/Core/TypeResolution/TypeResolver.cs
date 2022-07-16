@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using System.Reflection;
 
 using Spring.Util;
@@ -42,7 +41,7 @@ namespace Spring.Core.TypeResolution
         /// <see cref="System.Type"/> instance.
         /// </summary>
         /// <param name="typeName">
-        /// The unresolved (possibly partially assembly qualified) name 
+        /// The unresolved (possibly partially assembly qualified) name
         /// of a <see cref="System.Type"/>.
         /// </param>
         /// <returns>
@@ -125,7 +124,7 @@ namespace Spring.Core.TypeResolution
 
         /// <summary>
         /// Uses <see cref="M:System.AppDomain.CurrentDomain.GetAssemblies()"/>
-        /// to load the attendant <see cref="System.Type"/> referred to by 
+        /// to load the attendant <see cref="System.Type"/> referred to by
         /// the <paramref name="typeInfo"/> parameter.
         /// </summary>
         /// <param name="typeInfo">
@@ -150,7 +149,7 @@ namespace Spring.Core.TypeResolution
         }
 
         /// <summary>
-        /// Creates a new <see cref="TypeLoadException"/> instance 
+        /// Creates a new <see cref="TypeLoadException"/> instance
         /// from the given <paramref name="typeName"/>
         /// </summary>
         protected static TypeLoadException BuildTypeLoadException(string typeName)
@@ -160,7 +159,7 @@ namespace Spring.Core.TypeResolution
 
         /// <summary>
         /// Creates a new <see cref="TypeLoadException"/> instance
-        /// from the given <paramref name="typeName"/> with the given inner <see cref="Exception"/> 
+        /// from the given <paramref name="typeName"/> with the given inner <see cref="Exception"/>
         /// </summary>
         protected static TypeLoadException BuildTypeLoadException(string typeName, Exception ex)
         {

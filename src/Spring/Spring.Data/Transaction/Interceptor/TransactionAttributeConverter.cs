@@ -18,15 +18,13 @@
 
 #endregion
 
-
-using System;
 using System.ComponentModel;
 using System.Globalization;
 
 namespace Spring.Transaction.Interceptor
 {
     /// <summary>
-    /// Type converter for <see cref="Spring.Transaction.Interceptor.ITransactionAttribute"/> 
+    /// Type converter for <see cref="Spring.Transaction.Interceptor.ITransactionAttribute"/>
     /// objects.
     /// </summary>
     /// <remarks>

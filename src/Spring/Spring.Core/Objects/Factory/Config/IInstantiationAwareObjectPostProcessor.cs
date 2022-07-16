@@ -18,8 +18,6 @@
 
 #endregion
 
-using System;
-using System.Collections.Generic;
 using System.Reflection;
 
 namespace Spring.Objects.Factory.Config {
@@ -39,7 +37,7 @@ namespace Spring.Objects.Factory.Config {
 	/// </para>
 	/// <para>
 	/// This interface is a special purpose interface, mainly for internal use within the framework.
-	/// It is recommended to implement the plain <see cref="IObjectPostProcessor"/> interface as far as 
+	/// It is recommended to implement the plain <see cref="IObjectPostProcessor"/> interface as far as
 	/// possible, or to derive from <see cref="IInstantiationAwareObjectPostProcessor"/> in order to be shielded
 	/// from extension to this interface.
 	/// </para>
@@ -102,7 +100,7 @@ namespace Spring.Objects.Factory.Config {
         /// <param name="objectName">Name of the object.</param>
         /// <returns>true if properties should be set on the object; false if property population
         /// should be skipped.  Normal implementations should return true.  Returning false will also
-        /// prevent any subsequent InstantiationAwareObjectPostProcessor instances from being 
+        /// prevent any subsequent InstantiationAwareObjectPostProcessor instances from being
         /// invoked on this object instance.</returns>
         bool PostProcessAfterInstantiation(object objectInstance, string objectName);
 
@@ -120,10 +118,10 @@ namespace Spring.Objects.Factory.Config {
 	    /// <param name="pvs">The property values that the factory is about to apply (never <code>null</code>).</param>
 	    /// <param name="pis">he relevant property infos for the target object (with ignored
 	    /// dependency types - which the factory handles specifically - already filtered out)</param>
-	    /// <param name="objectInstance">The object instance created, but whose properties have not yet 
+	    /// <param name="objectInstance">The object instance created, but whose properties have not yet
 	    /// been set.</param>
 	    /// <param name="objectName">Name of the object.</param>
-	    /// <returns>The actual property values to apply to the given object (can be the 
+	    /// <returns>The actual property values to apply to the given object (can be the
 	    /// passed-in PropertyValues instances0 or null to skip property population.</returns>
 	    IPropertyValues PostProcessPropertyValues(IPropertyValues pvs, IList<PropertyInfo> pis, object objectInstance, string objectName);
 	}

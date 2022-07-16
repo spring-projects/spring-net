@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,16 +18,11 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Collections.Specialized;
 using System.Globalization;
 using Common.Logging;
 using Spring.Core;
 using Spring.Core.IO;
-
-#endregion
 
 namespace Spring.Objects.Factory.Config
 {
@@ -74,7 +69,7 @@ namespace Spring.Objects.Factory.Config
         : IObjectFactoryPostProcessor, IOrdered
     {
         /// <summary>
-        /// The default configuration section name to use if none is explictly supplied. 
+        /// The default configuration section name to use if none is explictly supplied.
         /// </summary>
         /// <seealso cref="Spring.Objects.Factory.Config.PropertyResourceConfigurer.ConfigSections"/>
         public static readonly string DefaultConfigSectionName = "spring-config";
@@ -259,7 +254,7 @@ namespace Spring.Objects.Factory.Config
         }
 
         /// <summary>
-        /// Loads properties from the configuration sections 
+        /// Loads properties from the configuration sections
         /// specified in <see cref="ConfigSections"/> into <paramref name="properties"/>.
         /// </summary>
         /// <param name="properties">The <see cref="NameValueCollection"/> instance to be filled with properties.</param>

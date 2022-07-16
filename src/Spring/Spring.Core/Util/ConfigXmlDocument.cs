@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,8 +20,6 @@
 
 #region Imports
 
-using System;
-using System.IO;
 using System.Xml;
 
 #endregion
@@ -33,7 +31,7 @@ namespace Spring.Util
     /// about their location in the original XML text document the were read from.
     /// </summary>
     /// <remarks>
-    /// When loading a document, the used <see cref="XmlReader"/> must implement <see cref="IXmlLineInfo"/>. 
+    /// When loading a document, the used <see cref="XmlReader"/> must implement <see cref="IXmlLineInfo"/>.
     /// Typical XmlReader implementations like <see cref="XmlTextReader"/> support this interface.
     /// </remarks>
     /// <author>Erich Eichinger</author>
@@ -79,7 +77,7 @@ namespace Spring.Util
 
         /// <summary>
         /// Get info about the current text position during loading a document.
-        /// Outside loading a document, the properties of <see cref="CurrentTextPosition"/> 
+        /// Outside loading a document, the properties of <see cref="CurrentTextPosition"/>
         /// will always be <c>null</c>.
         /// </summary>
         protected ITextPosition CurrentTextPosition
@@ -88,7 +86,7 @@ namespace Spring.Util
         }
 
         /// <summary>
-        /// Overridden to create a <see cref="ConfigXmlElement"/> retaining the current 
+        /// Overridden to create a <see cref="ConfigXmlElement"/> retaining the current
         /// text position information.
         /// </summary>
         public override XmlElement CreateElement(string prefix, string localName, string namespaceURI)
@@ -97,7 +95,7 @@ namespace Spring.Util
         }
 
         /// <summary>
-        /// Overridden to create a <see cref="ConfigXmlAttribute"/> retaining the current 
+        /// Overridden to create a <see cref="ConfigXmlAttribute"/> retaining the current
         /// text position information.
         /// </summary>
         public override XmlAttribute CreateAttribute(string prefix, string localName, string namespaceURI)
@@ -107,7 +105,7 @@ namespace Spring.Util
 
         /// <summary>
         /// Load the document from the given <see cref="XmlReader"/>.
-        /// Child nodes will store <paramref name="resourceName"/> as their <see cref="ITextPosition.Filename"/> property.        
+        /// Child nodes will store <paramref name="resourceName"/> as their <see cref="ITextPosition.Filename"/> property.
         /// </summary>
         ///<param name="resourceName">the name of the resource</param>
         ///<param name="xml">The XML source </param>
@@ -144,7 +142,7 @@ namespace Spring.Util
 
         /// <summary>
         /// Load the document from the given <see cref="XmlReader"/>.
-        /// Child nodes will store <paramref name="resourceName"/> as their <see cref="ITextPosition.Filename"/> property.        
+        /// Child nodes will store <paramref name="resourceName"/> as their <see cref="ITextPosition.Filename"/> property.
         /// </summary>
         ///<param name="resourceName">the name of the resource</param>
         ///<param name="filePath">The XML source </param>
@@ -165,7 +163,7 @@ namespace Spring.Util
 
         /// <summary>
         /// Load the document from the given <see cref="XmlReader"/>.
-        /// Child nodes will store <paramref name="resourceName"/> as their <see cref="ITextPosition.Filename"/> property.        
+        /// Child nodes will store <paramref name="resourceName"/> as their <see cref="ITextPosition.Filename"/> property.
         /// </summary>
         ///<param name="resourceName">the name of the resource</param>
         ///<param name="stream">The XML source </param>
@@ -184,7 +182,7 @@ namespace Spring.Util
 
         /// <summary>
         /// Load the document from the given <see cref="XmlReader"/>.
-        /// Child nodes will store <paramref name="resourceName"/> as their <see cref="ITextPosition.Filename"/> property.        
+        /// Child nodes will store <paramref name="resourceName"/> as their <see cref="ITextPosition.Filename"/> property.
         /// </summary>
         ///<param name="resourceName">the name of the resource</param>
         ///<param name="reader">The XML source </param>
@@ -203,7 +201,7 @@ namespace Spring.Util
 
         /// <summary>
         /// Load the document from the given <see cref="XmlReader"/>.
-        /// Child nodes will store <paramref name="resourceName"/> as their <see cref="ITextPosition.Filename"/> property.        
+        /// Child nodes will store <paramref name="resourceName"/> as their <see cref="ITextPosition.Filename"/> property.
         /// </summary>
         ///<param name="resourceName">the name of the resource</param>
         ///<param name="reader">The XML source </param>
@@ -222,7 +220,7 @@ namespace Spring.Util
 
         /// <summary>
         /// Load the document from the given <see cref="XmlReader"/>.
-        /// Child nodes will store <c>null</c> as their <see cref="ITextPosition.Filename"/> property.        
+        /// Child nodes will store <c>null</c> as their <see cref="ITextPosition.Filename"/> property.
         /// </summary>
         /// <param name="reader">The XML source </param>
         public override void Load(XmlReader reader)
@@ -240,7 +238,7 @@ namespace Spring.Util
 
         ///<summary>
         ///Creates an <see cref="T:System.Xml.XmlNode"></see> object based on the information in the <see cref="T:System.Xml.XmlReader"></see>. The reader must be positioned on a node or attribute.
-        ///Child nodes will store <paramref name="resourceName"/> as their <see cref="ITextPosition.Filename"/> property.        
+        ///Child nodes will store <paramref name="resourceName"/> as their <see cref="ITextPosition.Filename"/> property.
         ///</summary>
         ///<returns>
         ///The new XmlNode or null if no more nodes exist.
@@ -264,7 +262,7 @@ namespace Spring.Util
 
         ///<summary>
         ///Creates an <see cref="T:System.Xml.XmlNode"></see> object based on the information in the <see cref="T:System.Xml.XmlReader"></see>. The reader must be positioned on a node or attribute.
-        ///Child nodes will store <c>null</c> as their <see cref="ITextPosition.Filename"/> property.        
+        ///Child nodes will store <c>null</c> as their <see cref="ITextPosition.Filename"/> property.
         ///</summary>
         ///<returns>
         ///The new XmlNode or null if no more nodes exist.

@@ -18,9 +18,6 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Collections;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -31,8 +28,6 @@ using Spring.Objects.Factory;
 using Spring.Remoting.Support;
 using Spring.Util;
 
-#endregion
-
 namespace Spring.Remoting
 {
     /// <summary>
@@ -40,8 +35,8 @@ namespace Spring.Remoting
     /// a given url as a Server Activated Object (SAO).
     /// </summary>
     /// <remarks>
-    /// Remoting servers exported by <see cref="SaoExporter"/> always correspond to <see cref="WellKnownObjectMode.Singleton"/>. 
-    /// Objects can be exported either as SingleCall or Singleton by marking the exported object identified by 
+    /// Remoting servers exported by <see cref="SaoExporter"/> always correspond to <see cref="WellKnownObjectMode.Singleton"/>.
+    /// Objects can be exported either as SingleCall or Singleton by marking the exported object identified by
     /// <see name="TargetName"/> as either singleton or prototype.
     /// </remarks>
     /// <author>Aleksandar Seovic</author>
@@ -153,7 +148,7 @@ namespace Spring.Remoting
         /// Gets or sets the list of interfaces whose methods should be exported.
         /// </summary>
         /// <remarks>
-        /// The default value of this property is all the interfaces 
+        /// The default value of this property is all the interfaces
         /// implemented or inherited by the target type.
         /// </remarks>
         /// <value>The interfaces to export.</value>
@@ -180,7 +175,7 @@ namespace Spring.Remoting
         #region IInitializingObject Members
 
         /// <summary>
-        /// Publish the object 
+        /// Publish the object
         /// </summary>
         public void AfterPropertiesSet()
         {
@@ -252,7 +247,7 @@ namespace Spring.Remoting
             Type targetType = this.objectFactory.GetType( targetName );
             if (targetType == null)
             {
-                // perform full object retrieval if type cannot be predicted - this will 
+                // perform full object retrieval if type cannot be predicted - this will
                 // also cause any object creation exceptions to be thrown
                 targetType = this.objectFactory.GetObject(targetName).GetType();
             }
@@ -294,7 +289,7 @@ namespace Spring.Remoting
         #region SaoRemoteObjectProxyTypeBuilder inner class definition
 
         /// <summary>
-        /// Builds a proxy type based on <see cref="BaseRemoteObject"/> to wrap a target object 
+        /// Builds a proxy type based on <see cref="BaseRemoteObject"/> to wrap a target object
         /// that is intended to be remotable.
         /// </summary>
         /// <remarks>
@@ -313,7 +308,7 @@ namespace Spring.Remoting
             #region Constructor(s) / Destructor
 
             /// <summary>
-            /// Creates a new instance of the 
+            /// Creates a new instance of the
             /// <see cref="SaoRemoteObjectProxyTypeBuilder"/> class.
             /// </summary>
             /// <param name="saoExporter">
@@ -333,7 +328,7 @@ namespace Spring.Remoting
             #region IProxyTypeGenerator Members
 
             /// <summary>
-            /// Generates the IL instructions that pushes 
+            /// Generates the IL instructions that pushes
             /// the target instance on which calls should be delegated to.
             /// </summary>
             /// <param name="il">The IL generator to use.</param>

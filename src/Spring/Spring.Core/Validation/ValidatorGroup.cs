@@ -18,7 +18,6 @@
 
 #endregion
 
-using System.Collections.Generic;
 using Spring.Expressions;
 
 namespace Spring.Validation
@@ -32,7 +31,7 @@ namespace Spring.Validation
     /// collection are valid.
     /// </p>
     /// <p>
-    /// <c>ValidationErrors</c> property will return a union of all validation error messages 
+    /// <c>ValidationErrors</c> property will return a union of all validation error messages
     /// for the contained validators.
     /// </p>
     /// </remarks>

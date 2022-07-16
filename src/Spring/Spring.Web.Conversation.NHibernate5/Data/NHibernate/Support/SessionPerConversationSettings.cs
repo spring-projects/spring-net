@@ -18,8 +18,6 @@
 
 #endregion
 
-using System;
-
 using NHibernate;
 
 namespace Spring.Data.NHibernate.Support

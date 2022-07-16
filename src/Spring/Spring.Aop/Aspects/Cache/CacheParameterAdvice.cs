@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,6 @@
 #region Imports
 
 using System.Collections;
-using System.Collections.Generic;
 using System.Reflection;
 
 using Spring.Aop;
@@ -37,11 +36,11 @@ namespace Spring.Aspects.Cache
     /// </summary>
     /// <remarks>
     /// <p>
-    /// This advice can be used to cache the parameter of the method. 
+    /// This advice can be used to cache the parameter of the method.
     /// </p>
     /// <p>
-    /// Information that determines where, how and for how long the return value 
-    /// will be cached are retrieved from the <see cref="CacheParameterAttribute"/>s 
+    /// Information that determines where, how and for how long the return value
+    /// will be cached are retrieved from the <see cref="CacheParameterAttribute"/>s
     /// that are defined on the pointcut.
     /// </p>
     /// <p>

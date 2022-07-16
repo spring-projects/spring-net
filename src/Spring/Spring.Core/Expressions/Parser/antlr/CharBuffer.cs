@@ -1,5 +1,3 @@
-using System;
-
 using TextReader		= System.IO.TextReader;
 using IOException		= System.IO.IOException;
 
@@ -31,7 +29,7 @@ namespace Spring.Expressions.Parser.antlr
 	* character is not done by conume(), but deferred until needed by LA or LT.
 	* <p>
 	*/
-	
+
 	// SAS: Move most functionality into InputBuffer -- just the file-specific
 	//      stuff is in here
 	public class CharBuffer : InputBuffer
@@ -46,13 +44,13 @@ namespace Spring.Expressions.Parser.antlr
 		/// </summary>
 		private char[] buf = new char[BUF_SIZE];
 
-		
+
 		/*Create a character buffer */
 		public CharBuffer(TextReader input_) : base()
-		{ 
+		{
 			input = input_;
 		}
-		
+
 		/*Ensure that the character buffer is sufficiently full */
 		override public void  fill(int amount)
 		{

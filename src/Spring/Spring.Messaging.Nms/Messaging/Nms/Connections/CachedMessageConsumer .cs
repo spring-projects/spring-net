@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using Apache.NMS;
 
 namespace Spring.Messaging.Nms.Connections
@@ -53,7 +52,7 @@ namespace Spring.Messaging.Nms.Connections
         }
 
         /// <summary>
-        /// Register for message events. 
+        /// Register for message events.
         /// </summary>
         public event MessageListener Listener
         {

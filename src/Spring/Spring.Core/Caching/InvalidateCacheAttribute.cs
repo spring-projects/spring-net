@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using Spring.Expressions;
 
 namespace Spring.Caching

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-using System;
 using System.Collections;
 using Common.Logging;
 using Spring.Context;
@@ -28,7 +27,7 @@ namespace Spring.Testing.NUnit
     /// </summary>
     /// <remarks>
     /// <p>Maintains a cache of contexts by key. This has significant performance
-    /// benefit if initializing the context would take time. While initializing a 
+    /// benefit if initializing the context would take time. While initializing a
     /// Spring context itself is very quick, some objects in a context, such as
     /// a LocalSessionFactoryObject for working with NHibernate, may take time to
     /// initialize. Hence it often makes sense to do that initializing once.</p>
@@ -37,7 +36,7 @@ namespace Spring.Testing.NUnit
     /// </remarks>
     /// <author>Rod Johnson</author>
     /// <author>Aleksandar Seovic (.NET)</author>
-    public abstract class AbstractSpringContextTests 
+    public abstract class AbstractSpringContextTests
     {
         /// <summary>
         /// Map of context keys returned by subclasses of this class, to
@@ -103,13 +102,13 @@ namespace Spring.Testing.NUnit
         /// object, potentially affecting future tests.
         /// </remarks>
         /// <param name="locations">Locations </param>
-	    protected void SetDirty(string[] locations) 
+	    protected void SetDirty(string[] locations)
         {
             SetDirty((object)locations);
 	    }
 
         /// <summary>
-        /// Set context with <paramref name="contextKey"/> dirty. This will cause 
+        /// Set context with <paramref name="contextKey"/> dirty. This will cause
         /// it to be reloaded from the cache before the next test case is executed.
         /// </summary>
         /// <remarks>
@@ -117,30 +116,30 @@ namespace Spring.Testing.NUnit
         /// object, potentially affecting future tests.
         /// </remarks>
         /// <param name="contextKey">Locations </param>
-	    protected void SetDirty(object contextKey) 
+	    protected void SetDirty(object contextKey)
         {
 		    String keyString = ContextKeyString(contextKey);
 		    IConfigurableApplicationContext ctx =
 				    (IConfigurableApplicationContext) contextKeyToContextMap[keyString];
 	        contextKeyToContextMap.Remove(keyString);
 
-            if (ctx != null) 
+            if (ctx != null)
             {
 			    ctx.Dispose();
 		    }
 	    }
 
         /// <summary>
-        /// Returns <c>true</c> if context for the specified 
+        /// Returns <c>true</c> if context for the specified
         /// <paramref name="contextKey"/> is cached.
         /// </summary>
         /// <param name="contextKey">Context key to check.</param>
         /// <returns>
-        /// <c>true</c> if context for the specified 
-        /// <paramref name="contextKey"/> is cached, 
+        /// <c>true</c> if context for the specified
+        /// <paramref name="contextKey"/> is cached,
         /// <c>false</c> otherwise.
         /// </returns>
-	    protected bool HasCachedContext(object contextKey) 
+	    protected bool HasCachedContext(object contextKey)
         {
             string keyString = ContextKeyString(contextKey);
             return contextKeyToContextMap.Contains(keyString);
@@ -155,20 +154,20 @@ namespace Spring.Testing.NUnit
         /// </remarks>
         /// <param name="contextKey">Context key to convert.</param>
         /// <returns>
-        /// String representation of the specified <paramref name="contextKey"/>.  Null if 
+        /// String representation of the specified <paramref name="contextKey"/>.  Null if
         /// contextKey is null.
         /// </returns>
-	    protected virtual string ContextKeyString(object contextKey) 
+	    protected virtual string ContextKeyString(object contextKey)
         {
             if (contextKey == null)
             {
                 return null;
             }
-		    if (contextKey is string[]) 
+		    if (contextKey is string[])
             {
                 return StringUtils.CollectionToCommaDelimitedString((string[])contextKey);
 		    }
-		    else 
+		    else
             {
 			    return contextKey.ToString();
 		    }
@@ -179,7 +178,7 @@ namespace Spring.Testing.NUnit
         /// </summary>
         /// <param name="key">Key to use.</param>
         /// <param name="context">Context to cache.</param>
-	    public void AddContext(object key, IConfigurableApplicationContext context) 
+	    public void AddContext(object key, IConfigurableApplicationContext context)
         {
             AssertUtils.ArgumentNotNull(context, "context", "ApplicationContext must not be null");
             string keyString = ContextKeyString(key);
@@ -197,18 +196,18 @@ namespace Spring.Testing.NUnit
         /// </summary>
         /// <param name="key">Context key.</param>
         /// <returns>Spring application context associated with the specified key.</returns>
-	    protected IConfigurableApplicationContext GetContext(object key) 
+	    protected IConfigurableApplicationContext GetContext(object key)
         {
 		    string keyString = ContextKeyString(key);
 		    IConfigurableApplicationContext ctx =
 				    (IConfigurableApplicationContext) contextKeyToContextMap[keyString];
-		    if (ctx == null) 
+		    if (ctx == null)
             {
-			    if (key is string[]) 
+			    if (key is string[])
                 {
 				    ctx = LoadContextLocations((string[]) key);
 			    }
-			    else 
+			    else
                 {
 				    ctx = LoadContext(key);
 			    }
@@ -224,9 +223,9 @@ namespace Spring.Testing.NUnit
 	    /// Loads application context from the specified resource locations.
 	    /// </summary>
 	    /// <param name="locations">Resources to load object definitions from.</param>
-	    protected virtual IConfigurableApplicationContext LoadContextLocations(string[] locations) 
+	    protected virtual IConfigurableApplicationContext LoadContextLocations(string[] locations)
         {
-		    if (logger.IsInfoEnabled) 
+		    if (logger.IsInfoEnabled)
             {
                 logger.Info("Loading config for: " + StringUtils.CollectionToCommaDelimitedString(locations));
 		    }
@@ -237,11 +236,11 @@ namespace Spring.Testing.NUnit
         /// Loads application context based on user-defined key.
         /// </summary>
         /// <remarks>
-        /// Unless overriden by the user, this method will alway throw 
-        /// a <see cref="NotSupportedException"/>. 
+        /// Unless overriden by the user, this method will alway throw
+        /// a <see cref="NotSupportedException"/>.
         /// </remarks>
         /// <param name="key">User-defined key.</param>
-        protected virtual IConfigurableApplicationContext LoadContext(object key) 
+        protected virtual IConfigurableApplicationContext LoadContext(object key)
         {
 		    throw new NotSupportedException("Subclasses may override this");
 	    }

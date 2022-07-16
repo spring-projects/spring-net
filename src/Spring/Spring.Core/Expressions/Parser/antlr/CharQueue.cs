@@ -1,5 +1,3 @@
-using System;
-
 namespace Spring.Expressions.Parser.antlr
 {
 	/*ANTLR Translator Generator
@@ -16,7 +14,7 @@ namespace Spring.Expressions.Parser.antlr
 	//
 	// With many thanks to Eric V. Smith from the ANTLR list.
 	//
-	
+
 	/*A circular buffer object used by CharBuffer */
 	public class CharQueue
 	{
@@ -28,7 +26,7 @@ namespace Spring.Expressions.Parser.antlr
 		private int offset;
 		/*number of tokens in the queue */
 		protected internal int nbrEntries;
-		
+
 		public CharQueue(int minSize)
 		{
 			// Find first power of 2 >= to requested size
@@ -44,13 +42,13 @@ namespace Spring.Expressions.Parser.antlr
 				init(Int32.MaxValue); // wow that's big.
 				return ;
 			}
-			for (size = 2; size < minSize; size *= 2) 
-			{ 
+			for (size = 2; size < minSize; size *= 2)
+			{
 				;
 			}
 			init(size);
 		}
-		
+
 		/*Add token to end of the queue
 		* @param tok The token to add
 		*/
@@ -63,7 +61,7 @@ namespace Spring.Expressions.Parser.antlr
 			buffer[(offset + nbrEntries) & sizeLessOne] = tok;
 			nbrEntries++;
 		}
-		
+
 		/*Fetch a token from the queue by index
 		* @param idx The index of the token to fetch, where zero is the token at the front of the queue
 		*/
@@ -71,7 +69,7 @@ namespace Spring.Expressions.Parser.antlr
 		{
 			return buffer[(offset + idx) & sizeLessOne];
 		}
-		
+
 		/*Expand the token buffer by doubling its capacity */
 		private void  expand()
 		{
@@ -88,7 +86,7 @@ namespace Spring.Expressions.Parser.antlr
 			sizeLessOne = buffer.Length - 1;
 			offset = 0;
 		}
-		
+
 		/*Initialize the queue.
 		* @param size The initial size of the queue
 		*/
@@ -101,7 +99,7 @@ namespace Spring.Expressions.Parser.antlr
 			offset = 0;
 			nbrEntries = 0;
 		}
-		
+
 		/*Clear the queue. Leaving the previous buffer alone.
 		*/
 		public void  reset()
@@ -109,7 +107,7 @@ namespace Spring.Expressions.Parser.antlr
 			offset = 0;
 			nbrEntries = 0;
 		}
-		
+
 		/*Remove char from front of queue */
 		public void  removeFirst()
 		{

@@ -20,8 +20,6 @@
 
 #region Imports
 
-using System;
-using System.IO;
 using System.Xml;
 using System.Xml.Schema;
 using Spring.Core.IO;
@@ -416,7 +414,7 @@ namespace Spring.Objects.Factory.Xml
         /// Creates the <see cref="IObjectDefinitionDocumentReader"/> to use for actually
         /// reading object definitions from an XML document.
         /// </summary>
-        /// <remarks>Default implementation instantiates the specified <see cref="DocumentReaderType"/> 
+        /// <remarks>Default implementation instantiates the specified <see cref="DocumentReaderType"/>
         /// or <see cref="DefaultObjectDefinitionDocumentReader"/> if no reader type is specified.</remarks>
         /// <returns></returns>
         protected virtual IObjectDefinitionDocumentReader CreateObjectDefinitionDocumentReader()
@@ -429,7 +427,7 @@ namespace Spring.Objects.Factory.Xml
         }
 
         /// <summary>
-        /// Creates the <see cref="XmlReaderContext"/> to be passed along 
+        /// Creates the <see cref="XmlReaderContext"/> to be passed along
         /// during the object definition reading process.
         /// </summary>
         /// <param name="resource">The underlying <see cref="IResource"/> that is currently processed.</param>

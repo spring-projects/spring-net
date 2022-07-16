@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using System.Collections;
 using System.Reflection;
 using System.Text;
@@ -293,7 +292,7 @@ namespace Spring.Aop.Framework
 		}
 
         /// <summary>
-        /// Retrieves a new <see cref="AopAlliance.Intercept.IMethodInvocation"/> instance 
+        /// Retrieves a new <see cref="AopAlliance.Intercept.IMethodInvocation"/> instance
         /// for the next Proceed method call.
         /// </summary>
         /// <param name="invocation">
@@ -318,7 +317,7 @@ namespace Spring.Aop.Framework
         protected virtual void AssertJoinpoint()
         {
             AssertUtils.ArgumentNotNull(target, "target");
-//            if (this.method != null 
+//            if (this.method != null
 //                && !this.method.DeclaringType.IsAssignableFrom(target.GetType()))
 //            {
 //                // This means the target type doesn't implement the interface.
@@ -351,9 +350,9 @@ namespace Spring.Aop.Framework
 		/// <remarks>
 		/// <p>
 		/// <note type="implementnotes">
-		/// Does <b>not</b> invoke <see cref="System.Object.ToString()"/> on the 
+		/// Does <b>not</b> invoke <see cref="System.Object.ToString()"/> on the
 		/// <see cref="Spring.Aop.Framework.AbstractMethodInvocation.This"/> target
-		/// object, as that too may be proxied. 
+		/// object, as that too may be proxied.
 		/// </note>
 		/// </p>
 		/// </remarks>

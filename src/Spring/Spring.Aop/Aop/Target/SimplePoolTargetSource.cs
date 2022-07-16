@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using Spring.Objects.Factory;
 using Spring.Pool;
 using Spring.Pool.Support;

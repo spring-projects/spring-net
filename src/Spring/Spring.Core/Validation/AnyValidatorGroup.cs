@@ -18,7 +18,6 @@
 
 #endregion
 
-using System.Collections.Generic;
 using Spring.Expressions;
 
 namespace Spring.Validation
@@ -32,7 +31,7 @@ namespace Spring.Validation
     /// collection are valid.
     /// </p>
     /// <p>
-    /// <c>ValidationErrors</c> property will return a union of all validation error messages 
+    /// <c>ValidationErrors</c> property will return a union of all validation error messages
     /// for the contained validators, but only if this validator is not valid (meaning, when none
     /// of the contained validators are valid).
     /// </p>
@@ -56,20 +55,20 @@ namespace Spring.Validation
         /// Initializes a new instance of the <see cref="AnyValidatorGroup"/> class.
         /// </summary>
         /// <param name="when">The expression that determines if this validator should be evaluated.</param>
-        public AnyValidatorGroup(string when) 
+        public AnyValidatorGroup(string when)
             : base(when)
         {
-            this.FastValidate = true;            
+            this.FastValidate = true;
         }
 
         /// <summary>
         /// Initializes a new instance of the <see cref="AnyValidatorGroup"/> class.
         /// </summary>
         /// <param name="when">The expression that determines if this validator should be evaluated.</param>
-        public AnyValidatorGroup(IExpression when) 
+        public AnyValidatorGroup(IExpression when)
             : base(when)
         {
-            this.FastValidate = true;            
+            this.FastValidate = true;
         }
 
         #endregion

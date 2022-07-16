@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,9 +18,6 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Collections;
 using System.Reflection;
 using System.Reflection.Emit;
@@ -29,8 +26,6 @@ using System.Security;
 using Spring.Util;
 
 using NetDynamicMethod = System.Reflection.Emit.DynamicMethod;
-
-#endregion
 
 namespace Spring.Reflection.Dynamic
 {
@@ -108,7 +103,7 @@ namespace Spring.Reflection.Dynamic
         /// <param name="fieldInfo">the field to create the delegate for</param>
         /// <returns>a delegate that can be used to read the field.</returns>
         /// <remarks>
-        /// If the field's <see cref="FieldInfo.IsLiteral"/> returns true, the returned method 
+        /// If the field's <see cref="FieldInfo.IsLiteral"/> returns true, the returned method
         /// will throw an <see cref="InvalidOperationException"/> when called.
         /// </remarks>
         public static FieldSetterDelegate CreateFieldSetter(FieldInfo fieldInfo)
@@ -128,7 +123,7 @@ namespace Spring.Reflection.Dynamic
         /// <param name="propertyInfo">the property to create the delegate for</param>
         /// <returns>a delegate that can be used to read the property.</returns>
         /// <remarks>
-        /// If the property's <see cref="PropertyInfo.CanRead"/> returns false, the returned method 
+        /// If the property's <see cref="PropertyInfo.CanRead"/> returns false, the returned method
         /// will throw an <see cref="InvalidOperationException"/> when called.
         /// </remarks>
         public static PropertyGetterDelegate CreatePropertyGetter(PropertyInfo propertyInfo)
@@ -149,7 +144,7 @@ namespace Spring.Reflection.Dynamic
         /// <param name="propertyInfo">the property to create the delegate for</param>
         /// <returns>a delegate that can be used to write the property.</returns>
         /// <remarks>
-        /// If the property's <see cref="PropertyInfo.CanWrite"/> returns false, the returned method 
+        /// If the property's <see cref="PropertyInfo.CanWrite"/> returns false, the returned method
         /// will throw an <see cref="InvalidOperationException"/> when called.
         /// </remarks>
         public static PropertySetterDelegate CreatePropertySetter(PropertyInfo propertyInfo)
@@ -204,7 +199,7 @@ namespace Spring.Reflection.Dynamic
         /// Creates a <see cref="System.Reflection.Emit.DynamicMethod"/> instance with the highest possible code access security.
         /// </summary>
         /// <remarks>
-        /// If allowed by security policy, associates the method with the <paramref name="member"/>s declaring type. 
+        /// If allowed by security policy, associates the method with the <paramref name="member"/>s declaring type.
         /// Otherwise associates the dynamic method with <see cref="DynamicReflectionManager"/>.
         /// </remarks>
         [MethodImpl(MethodImplOptions.NoInlining)]
@@ -234,7 +229,7 @@ namespace Spring.Reflection.Dynamic
         }
 
         /* TODO (EE): I am not sure, if "skipVisibility" in "CreateDynamicMethodInternal" may be true all the time or if visibility needs to be calculated like below
-         * 
+         *
                 private static bool IsPublic(MemberInfo member)
                 {
                     if (member == null) return true;
@@ -268,7 +263,7 @@ namespace Spring.Reflection.Dynamic
                                 {
                                     return false;
                                 }
-                                if (member.MemberType == MemberTypes.Method 
+                                if (member.MemberType == MemberTypes.Method
                                     && !IsPublic(((MethodInfo)methodBase).ReturnType))
                                 {
                                     return false;
@@ -277,7 +272,7 @@ namespace Spring.Reflection.Dynamic
                                 {
                                     if (!IsPublic(arg.ParameterType)) return false;
                                 }
-                        
+
                                 return true;
                             }
                         case MemberTypes.NestedType:
@@ -603,7 +598,7 @@ namespace Spring.Reflection.Dynamic
         private static readonly MethodInfo FnConvertArgumentIfNecessary = new ChangeTypeDelegate(ConvertValueTypeArgumentIfNecessary).Method;
 
         /// <summary>
-        /// Converts <paramref name="value"/> to an instance of <paramref name="targetType"/> if necessary to 
+        /// Converts <paramref name="value"/> to an instance of <paramref name="targetType"/> if necessary to
         /// e.g. avoid e.g. double/int cast exceptions.
         /// </summary>
         /// <remarks>
@@ -613,7 +608,7 @@ namespace Spring.Reflection.Dynamic
         /// See about implicit, widening type conversions on <a href="http://social.msdn.microsoft.com/Search/en-US/?query=type conversion tables">MSDN - Type Conversion Tables</a>
         /// </para>
         /// <para>
-        /// Note: <paramref name="targetType"/> is expected to be a value type! 
+        /// Note: <paramref name="targetType"/> is expected to be a value type!
         /// </para>
         /// </remarks>
         public static object ConvertValueTypeArgumentIfNecessary(object value, Type targetType, int argIndex)

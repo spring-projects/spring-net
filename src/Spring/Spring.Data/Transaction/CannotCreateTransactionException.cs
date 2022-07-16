@@ -18,12 +18,11 @@
 
 #endregion
 
-using System;
 using System.Runtime.Serialization;
 
 namespace Spring.Transaction
 {
-	/// <summary> 
+	/// <summary>
 	/// Exception thrown when a transaction can't be created using an
 	/// underlying transaction API such as COM+.
 	/// </summary>

@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Runtime.Serialization;
 using Apache.NMS;
 using Common.Logging;
@@ -36,7 +35,7 @@ namespace Spring.Messaging.Nms.Listener
     /// Inherits basic Connection and Session configuration handling from the
     /// <see cref="NmsAccessor"/> base class.
     /// </summary>
-    /// <remarks> 
+    /// <remarks>
     /// <para>
     /// This class provides basic lifecycle management, in particular management
     /// of a shared Connection. Subclasses are supposed to plug into this
@@ -58,9 +57,9 @@ namespace Spring.Messaging.Nms.Listener
         private String clientId;
 
         private bool autoStartup = true;
-        
+
         private string objectName;
-        
+
         private IConnection sharedConnection;
 
         private bool sharedConnectionStarted = false;
@@ -69,9 +68,9 @@ namespace Spring.Messaging.Nms.Listener
         /// The monitor object to lock on when performing operations on the connection.
         /// </summary>
         protected object sharedConnectionMonitor = new object();
-        
+
         private volatile bool active = false;
-        
+
         private bool running = false;
 
         /// <summary>
@@ -180,7 +179,7 @@ namespace Spring.Messaging.Nms.Listener
 
         /// <summary> Return whether a shared NMS Connection should be maintained
         /// by this listener container base class.
-        /// </summary>     
+        /// </summary>
         /// <seealso cref="SharedConnection"/>
         protected abstract bool SharedConnectionEnabled { get; }
 
@@ -211,7 +210,7 @@ namespace Spring.Messaging.Nms.Listener
                 }
             }
         }
-        
+
         /// <summary>
         /// Call base class method, then <see cref="ValidateConfiguration"/> and then <see cref="Initialize"/>
         /// </summary>
@@ -228,7 +227,7 @@ namespace Spring.Messaging.Nms.Listener
         /// </summary>
         protected virtual void ValidateConfiguration()
         {
-            
+
         }
 
         /// <summary>
@@ -261,7 +260,7 @@ namespace Spring.Messaging.Nms.Listener
                     DoStart();
                 }
 
-                DoInitialize();             
+                DoInitialize();
 
             }
             catch (Exception)

@@ -21,15 +21,12 @@ using System.Runtime.Serialization.Formatters;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Threading;
 using System.Reflection;
-using System.Web;
-using System.Runtime.Remoting;
 
 using AopAlliance.Aop;
 using AopAlliance.Intercept;
 
 using FakeItEasy;
 
-using Spring.Aop.Framework.Adapter;
 using Spring.Aop.Interceptor;
 using Spring.Aop.Support;
 using Spring.Expressions;
@@ -2484,15 +2481,15 @@ namespace Spring.Aop.Framework.DynamicProxy
         public void ThrowsAdvisorIsInvoked()
         {
             // Reacts to HttpException and RemotingException
-            ThrowsAdviceInterceptorTests.MyThrowsHandler th = new ThrowsAdviceInterceptorTests.MyThrowsHandler();
+            var th = new Spring.Aop.Framework.Adapter.ThrowsAdviceInterceptorTests.MyThrowsHandler();
             IAdvisor matchesEchoAdvisor = new EchoPointcutAdvisor(th);
-            ThrowsAdviceInterceptorTests.Echo target = new ThrowsAdviceInterceptorTests.Echo();
+            var target = new Spring.Aop.Framework.Adapter.ThrowsAdviceInterceptorTests.Echo();
             target.A = 16;
             ProxyFactory pf = new ProxyFactory(target);
             pf.AddAdvice(new NopInterceptor());
             pf.AddAdvisor(matchesEchoAdvisor);
             Assert.AreEqual(matchesEchoAdvisor, pf.Advisors[1], "Advisor was added");
-            ThrowsAdviceInterceptorTests.IEcho proxied = (ThrowsAdviceInterceptorTests.IEcho)CreateProxy(pf);
+            var proxied = (Spring.Aop.Framework.Adapter.ThrowsAdviceInterceptorTests.IEcho)CreateProxy(pf);
             Assert.AreEqual(0, th.GetCalls());
             Assert.AreEqual(target.A, proxied.A);
             Assert.AreEqual(0, th.GetCalls());
@@ -2508,13 +2505,13 @@ namespace Spring.Aop.Framework.DynamicProxy
                 Assert.AreEqual(ex, caught);
             }
 
-            ex = new HttpException();
+            ex = new System.Web.HttpException();
             try
             {
                 proxied.EchoException(1, ex);
                 Assert.Fail("Should have thrown HttpException");
             }
-            catch (HttpException caught)
+            catch (System.Web.HttpException caught)
             {
                 Assert.AreEqual(ex, caught);
             }
@@ -2540,14 +2537,14 @@ namespace Spring.Aop.Framework.DynamicProxy
         public void AddThrowsAdviceWithoutAdvisor()
         {
             // Reacts to ServletException and RemoteException
-            ThrowsAdviceInterceptorTests.MyThrowsHandler th = new ThrowsAdviceInterceptorTests.MyThrowsHandler();
+            var th = new Spring.Aop.Framework.Adapter.ThrowsAdviceInterceptorTests.MyThrowsHandler();
 
-            ThrowsAdviceInterceptorTests.Echo target = new ThrowsAdviceInterceptorTests.Echo();
+            var target = new Spring.Aop.Framework.Adapter.ThrowsAdviceInterceptorTests.Echo();
             target.A = 16;
             ProxyFactory pf = new ProxyFactory(target);
             pf.AddAdvice(new NopInterceptor());
             pf.AddAdvice(th);
-            ThrowsAdviceInterceptorTests.IEcho proxied = (ThrowsAdviceInterceptorTests.IEcho)CreateProxy(pf);
+            var proxied = (Spring.Aop.Framework.Adapter.ThrowsAdviceInterceptorTests.IEcho) CreateProxy(pf);
             Assert.AreEqual(0, th.GetCalls());
             Assert.AreEqual(target.A, proxied.A);
             Assert.AreEqual(0, th.GetCalls());
@@ -2564,13 +2561,13 @@ namespace Spring.Aop.Framework.DynamicProxy
             }
 
             // Subclass of RemoteException
-            ex = new RemotingTimeoutException();
+            ex = new System.Runtime.Remoting.RemotingTimeoutException();
             try
             {
                 proxied.EchoException(1, ex);
                 Assert.Fail("Should have thrown RemotingTimeoutException");
             }
-            catch (RemotingTimeoutException caught)
+            catch (System.Runtime.Remoting.RemotingTimeoutException caught)
             {
                 Assert.AreEqual(ex, caught);
             }

@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,17 +18,12 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.Globalization;
 using System.Runtime.Serialization;
 using System.Security.Permissions;
 using System.Text;
 using Spring.Core;
 using Spring.Util;
-
-#endregion
 
 namespace Spring.Objects.Factory
 {
@@ -51,7 +46,7 @@ namespace Spring.Objects.Factory
 		}
 
 		/// <summary>
-		/// Creates a new instance of the 
+		/// Creates a new instance of the
 		/// <see cref="Spring.Objects.Factory.ObjectCreationException"/> class.
 		/// </summary>
 		/// <param name="message">
@@ -63,7 +58,7 @@ namespace Spring.Objects.Factory
 		}
 
 		/// <summary>
-		/// Creates a new instance of the 
+		/// Creates a new instance of the
 		/// <see cref="Spring.Objects.Factory.ObjectCreationException"/> class.
 		/// </summary>
 		/// <param name="message">
@@ -78,7 +73,7 @@ namespace Spring.Objects.Factory
 		}
 
         /// <summary>
-        /// Creates a new instance of the 
+        /// Creates a new instance of the
         /// <see cref="Spring.Objects.Factory.ObjectCreationException"/> class.
         /// </summary>
         /// <param name="message">
@@ -93,7 +88,7 @@ namespace Spring.Objects.Factory
         }
 
 		/// <summary>
-		/// Creates a new instance of the 
+		/// Creates a new instance of the
 		/// <see cref="Spring.Objects.Factory.ObjectCreationException"/> class.
 		/// </summary>
 		/// <param name="message">
@@ -112,7 +107,7 @@ namespace Spring.Objects.Factory
 		}
 
 		/// <summary>
-		/// Creates a new instance of the 
+		/// Creates a new instance of the
 		/// <see cref="Spring.Objects.Factory.ObjectCreationException"/> class.
 		/// </summary>
 		/// <param name="resourceDescription">
@@ -133,7 +128,7 @@ namespace Spring.Objects.Factory
 		}
 
 		/// <summary>
-		/// Creates a new instance of the 
+		/// Creates a new instance of the
 		/// <see cref="Spring.Objects.Factory.ObjectCreationException"/> class.
 		/// </summary>
 		/// <param name="resourceDescription">
@@ -160,7 +155,7 @@ namespace Spring.Objects.Factory
 		}
 
 		/// <summary>
-		/// Creates a new instance of the 
+		/// Creates a new instance of the
 		/// <see cref="Spring.Objects.Factory.ObjectCreationException"/> class.
 		/// </summary>
 		/// <param name="info">
@@ -243,12 +238,12 @@ namespace Spring.Objects.Factory
 			if (StringUtils.IsNullOrEmpty(callStack))
 			{
 				return StringUtils.IsNullOrEmpty(resourceDescription) ?
-					string.Format(						
+					string.Format(
 						"Error creating object with name '{0}' : {1}",
                         objectName,
 						message)
 					:
-					string.Format(						
+					string.Format(
 						"Error creating object with name '{0}' defined in '{1}' : {2}",
                         objectName,
 						resourceDescription,

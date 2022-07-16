@@ -20,10 +20,7 @@
 
 #region Imports
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
-
 using System.ComponentModel;
 using Spring.Util;
 using System.Reflection;
@@ -274,7 +271,7 @@ namespace Spring.Core.TypeConversion
         {
             if (newValue is MarshalByRefObject)
             {
-                //TODO see what type of type checking can be done.  May need to 
+                //TODO see what type of type checking can be done.  May need to
                 //preserve information when proxy was created by SaoServiceExporter.
                 return true;
             }

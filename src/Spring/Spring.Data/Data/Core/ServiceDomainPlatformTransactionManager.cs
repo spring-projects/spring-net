@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,17 +18,11 @@
 
 #endregion
 
-#region Imports
-
-using System;
 using System.EnterpriseServices;
-using System.Threading;
 using Spring.Data.Support;
 using Spring.Objects.Factory;
 using Spring.Transaction;
 using Spring.Transaction.Support;
-
-#endregion
 
 namespace Spring.Data.Core
 {
@@ -91,7 +85,7 @@ namespace Spring.Data.Core
         }
 
         /// <summary>
-        /// Gets or sets a text string that corresponds to the context name under which tracker information is reported. 
+        /// Gets or sets a text string that corresponds to the context name under which tracker information is reported.
         /// </summary>
         /// <value>The name of the tracking component.</value>
         public string TrackingComponentName
@@ -162,7 +156,7 @@ namespace Spring.Data.Core
 
         protected override object DoSuspend(object transaction)
         {
-            // Passing the current transaction object, literally an 'object' as the 'suspended resource', 
+            // Passing the current transaction object, literally an 'object' as the 'suspended resource',
             // even though it is not used just to avoid passing null
             // ServiceDomainPlatformTransactionManager is not binding any resources to the local thread, instead delegating to
             // System.EnterpriseServices to handle thread local resources.
@@ -187,7 +181,7 @@ namespace Spring.Data.Core
             ApplyPropagationBehavior(serviceConfig, definition);
 
             ApplyIsolationLevel(serviceConfig, definition);
-            
+
             // infinite==-1 would cause transactions to be aborted immediately!
             if(definition.TransactionTimeout != Timeout.Infinite)
             {
@@ -200,12 +194,12 @@ namespace Spring.Data.Core
         {
             switch (definition.TransactionIsolationLevel)
             {
-                    
+
                 case System.Data.IsolationLevel.Chaos:
                     if (log.IsInfoEnabled)
                     {
                         log.Info("IsolationLevel Chaos does not have a direct counterpart in EnterpriseServices, using Any");
-                    }   
+                    }
                     serviceConfig.IsolationLevel = TransactionIsolationLevel.Any;
                     break;
                 case System.Data.IsolationLevel.ReadCommitted:
@@ -223,8 +217,8 @@ namespace Spring.Data.Core
                 case System.Data.IsolationLevel.Snapshot:
                     if (log.IsInfoEnabled)
                     {
-                        log.Info("IsolationLevel Snapshot does not have a direct counterpart in EnterpriseServices, using ReadCommitted.  Introduced in SqlServer 2005.  Consider using System.Transactions for transaction management instead."); 
-                    }   
+                        log.Info("IsolationLevel Snapshot does not have a direct counterpart in EnterpriseServices, using ReadCommitted.  Introduced in SqlServer 2005.  Consider using System.Transactions for transaction management instead.");
+                    }
                     serviceConfig.IsolationLevel = TransactionIsolationLevel.ReadCommitted;  //err on the side of consistency
                     break;
                 case System.Data.IsolationLevel.Unspecified:
@@ -284,7 +278,7 @@ namespace Spring.Data.Core
                     else
                     {
                         txObject.ServiceDomainAdapter.SetAbort();
-                    }                                  
+                    }
                 }
                 TransactionStatus serviceDomainTxstatus = txObject.ServiceDomainAdapter.Leave();
                 if (log.IsDebugEnabled)
@@ -299,7 +293,7 @@ namespace Spring.Data.Core
             }
             catch (PlatformNotSupportedException ex)
             {
-                throw new TransactionSystemException("Failure on Commit.  Platform does not support EnterpriseServices 'Services without Components'", ex); 
+                throw new TransactionSystemException("Failure on Commit.  Platform does not support EnterpriseServices 'Services without Components'", ex);
             }
             catch (Exception e)
             {
@@ -344,7 +338,7 @@ namespace Spring.Data.Core
             {
                 throw new TransactionSystemException("Failure on System.Transactions.Transaction.Current.Rollback", ex);
             }
-           
+
         }
 
         protected override bool ShouldCommitOnGlobalRollbackOnly

@@ -18,9 +18,7 @@
 
 #endregion
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using Spring.Util;
 
 namespace Spring.Expressions.Processors
@@ -51,7 +49,7 @@ namespace Spring.Expressions.Processors
                 if (x==y) return 0;
 
                 if (x != null) return ((IComparable) x).CompareTo(y);
-                
+
                 return ((IComparable)y).CompareTo(x)*-1;
             }
         }
@@ -149,11 +147,11 @@ namespace Spring.Expressions.Processors
                 {
                     throw new ArgumentException("compare function must accept 2 arguments");
                 }
-                comparer = new LambdaComparer(fnCompare);                
+                comparer = new LambdaComparer(fnCompare);
             }
             else if (arg is Delegate)
             {
-                comparer = new DelegateComparer((Delegate) arg);                
+                comparer = new DelegateComparer((Delegate) arg);
             }
 
             AssertUtils.ArgumentNotNull(comparer, "comparer", "orderBy(comparer) argument 'comparer' does not evaluate to a supported type");

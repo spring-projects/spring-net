@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Globalization;
 
 using Spring.Util;
@@ -32,7 +31,7 @@ namespace Spring.Globalization.Formatters
 	/// <remarks>
 	/// <para>
 	/// <c>NumberFormatter</c> uses number-related properties of the
-	/// <see cref="NumberFormatInfo"/> to format and parse numbers. 
+	/// <see cref="NumberFormatInfo"/> to format and parse numbers.
 	/// </para>
 	/// <para>
 	/// This formatter works with both integer and decimal numbers and allows
@@ -87,7 +86,7 @@ namespace Spring.Globalization.Formatters
         /// using specified <see cref="NumberFormatInfo"/>.
         /// </summary>
         /// <param name="formatInfo">
-        /// The <see cref="NumberFormatInfo"/> instance that defines how 
+        /// The <see cref="NumberFormatInfo"/> instance that defines how
         /// numbers are formatted and parsed.
         /// </param>
         public NumberFormatter(NumberFormatInfo formatInfo)

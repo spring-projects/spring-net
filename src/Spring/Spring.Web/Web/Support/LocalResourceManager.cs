@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using System.Globalization;
 using System.Reflection;
 using System.Resources;
@@ -37,7 +36,7 @@ using Spring.Util;
 namespace Spring.Web.Support
 {
     /// <summary>
-    /// This ResourceManager implementation swallows <see cref="MissingManifestResourceException"/>s and 
+    /// This ResourceManager implementation swallows <see cref="MissingManifestResourceException"/>s and
     /// simply returns <c>null</c> from <see cref="ResourceManager.GetObject(string,CultureInfo)"/> if no resource is found.
     /// </summary>
     /// <author>Erich Eichinger</author>
@@ -164,7 +163,7 @@ namespace Spring.Web.Support
                 ResourceSet resourceSet = null;
                 if (culture == CultureInfo.InvariantCulture)
                 {
-                    resourceSet = new ResourceSet(_resourceProvider.ResourceReader);                    
+                    resourceSet = new ResourceSet(_resourceProvider.ResourceReader);
                 }
                 return resourceSet;
             }

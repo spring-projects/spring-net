@@ -14,15 +14,13 @@
 * limitations under the License.
 */
 
-using System;
-using System.Threading.Tasks;
 using Common.Logging;
 using Quartz;
 using Quartz.Spi;
 
 namespace Spring.Scheduling.Quartz
 {
-    /// <summary> 
+    /// <summary>
     /// Quartz ThreadPool adapter that delegates to a Spring-managed
     /// TaskExecutor instance, specified on SchedulerFactoryObject.
     /// </summary>
