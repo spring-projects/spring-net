@@ -43,7 +43,7 @@ namespace Spring.Messaging.Nms.Connections
         /// Releases the given connection, stopping it (if necessary) and eventually closing it.
         /// </summary>
         /// <remarks>Checks <see cref="ISmartConnectionFactory.ShouldStop"/>, if available.
-        /// This is essentially a more sophisticated version of
+        /// This is essentially a more sophisticated version of 
         /// <see cref="NmsUtils.CloseConnection(IConnection, bool)"/>
         /// </remarks>
         /// <param name="connection">The connection to release. (if this is <code>null</code>, the call will be ignored)</param>
@@ -74,7 +74,45 @@ namespace Spring.Messaging.Nms.Connections
             } catch (Exception ex)
             {
                 LOG.Debug("Could not close NMS Connection", ex);
+            }           
+        } 
+        
+        /// <summary>
+        /// Releases the given connection, stopping it (if necessary) and eventually closing it.
+        /// </summary>
+        /// <remarks>Checks <see cref="ISmartConnectionFactory.ShouldStop"/>, if available.
+        /// This is essentially a more sophisticated version of 
+        /// <see cref="NmsUtils.CloseConnection(IConnection, bool)"/>
+        /// </remarks>
+        /// <param name="connection">The connection to release. (if this is <code>null</code>, the call will be ignored)</param>
+        /// <param name="cf">The ConnectionFactory that the Connection was obtained from. (may be <code>null</code>)</param>
+        /// <param name="started">whether the Connection might have been started by the application.</param>
+        public static async Task ReleaseConnectionAsync(IConnection connection, IConnectionFactory cf, bool started)
+        {
+            if (connection == null)
+            {
+                return;
             }
+
+            if (started && cf is ISmartConnectionFactory && ((ISmartConnectionFactory)cf).ShouldStop(connection))
+            {
+                try
+                {
+                    await connection.StopAsync().Awaiter();
+                }
+                catch (Exception ex)
+                {
+                    LOG.Debug("Could not stop NMS Connection before closing it", ex);
+
+                }
+            }
+            try
+            {
+                await connection.CloseAsync().Awaiter();
+            } catch (Exception ex)
+            {
+                LOG.Debug("Could not close NMS Connection", ex);
+            }           
         }
 
         /// <summary>
@@ -134,7 +172,7 @@ namespace Spring.Messaging.Nms.Connections
             return
                 DoGetTransactionalSession(cf,
                                           new AnonymousClassResourceFactory(existingCon, cf,
-                                                                            synchedLocalTransactionAllowed), true);
+                                                                            synchedLocalTransactionAllowed), true, true).GetAsyncResult();
         }
 
         /// <summary>
@@ -151,7 +189,7 @@ namespace Spring.Messaging.Nms.Connections
         /// the transactional Session, or <code>null</code> if none found
         /// </returns>
         /// <throws>NMSException in case of NMS failure </throws>
-        public static ISession DoGetTransactionalSession(Object resourceKey, ResourceFactory resourceFactory, bool startConnection)
+        public static async Task<ISession> DoGetTransactionalSession(Object resourceKey, ResourceFactory resourceFactory, bool startConnection, bool sync = false)
         {
             AssertUtils.ArgumentNotNull(resourceKey, "Resource key must not be null");
             AssertUtils.ArgumentNotNull(resourceKey, "ResourceFactory must not be null");
@@ -168,7 +206,8 @@ namespace Spring.Messaging.Nms.Connections
                         IConnection conn = resourceFactory.GetConnection(resourceHolder);
                         if (conn != null)
                         {
-                            conn.Start();
+                            if(sync) conn.Start();
+                            else await conn.StartAsync().Awaiter();
                         }
                     }
                     return rhSession;
@@ -191,14 +230,15 @@ namespace Spring.Messaging.Nms.Connections
                 bool isExistingCon = (con != null);
                 if (!isExistingCon)
                 {
-                    con = resourceFactory.CreateConnection();
+                    con = await resourceFactory.CreateConnectionAsync().Awaiter();
                     resourceHolderToUse.AddConnection(con);
                 }
-                session = resourceFactory.CreateSession(con);
+                session = await resourceFactory.CreateSessionAsync(con).Awaiter();
                 resourceHolderToUse.AddSession(session, con);
                 if (startConnection)
                 {
-                    con.Start();
+                    if (sync) con.Start();
+                    else await con.StartAsync().Awaiter();
                 }
             }
             catch (NMSException)
@@ -207,7 +247,8 @@ namespace Spring.Messaging.Nms.Connections
                 {
                     try
                     {
-                        session.Close();
+                        if (sync) session.Close();
+                        else await session.CloseAsync().Awaiter();
                     }
                     catch (Exception)
                     {
@@ -218,7 +259,8 @@ namespace Spring.Messaging.Nms.Connections
                 {
                     try
                     {
-                        con.Close();
+                        if (sync) con.Close();
+                        else await con.CloseAsync().Awaiter();
                     }
                     catch (Exception)
                     {
@@ -286,6 +328,23 @@ namespace Spring.Messaging.Nms.Connections
                 }
             }
 
+            public Task<IConnection> CreateConnectionAsync()
+            {
+                return cf.CreateConnectionAsync();
+            }
+
+            public async Task<ISession> CreateSessionAsync(IConnection con)
+            {
+                if (synchedLocalTransactionAllowed)
+                {
+                    return await con.CreateSessionAsync(AcknowledgementMode.Transactional).Awaiter();
+                }
+                else
+                {
+                    return await con.CreateSessionAsync(AcknowledgementMode.AutoAcknowledge).Awaiter();
+                }
+            }
+
             public bool SynchedLocalTransactionAllowed
             {
                 get { return synchedLocalTransactionAllowed; }
@@ -330,6 +389,20 @@ namespace Spring.Messaging.Nms.Connections
             /// </returns>
             /// <throws>NMSException if thrown by NMS API methods </throws>
             ISession CreateSession(IConnection con);
+ 
+            /// <summary> Create a new NMS Connection for registration with a MessageResourceHolder.</summary>
+            /// <returns> the new NMS Connection
+            /// </returns>
+            /// <throws>NMSException if thrown by NMS API methods </throws>
+            Task<IConnection> CreateConnectionAsync();
+
+            /// <summary> Create a new NMS ISession for registration with a MessageResourceHolder.</summary>
+            /// <param name="con">the NMS Connection to create a ISession for
+            /// </param>
+            /// <returns> the new NMS Session
+            /// </returns>
+            /// <throws>NMSException if thrown by NMS API methods </throws>
+            Task<ISession> CreateSessionAsync(IConnection con);
 
 
             /// <summary>
@@ -339,7 +412,7 @@ namespace Spring.Messaging.Nms.Connections
             /// committing right after the main transaction.
             /// Returns whether to allow for synchronizing a local NMS transaction
             /// </summary>
-            ///
+            /// 
             bool SynchedLocalTransactionAllowed { get; }
         }
 

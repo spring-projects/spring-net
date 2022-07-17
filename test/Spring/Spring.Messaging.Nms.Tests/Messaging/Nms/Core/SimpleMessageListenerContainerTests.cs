@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -21,7 +21,7 @@
 #region Imports
 
 using System;
-
+using System.Threading.Tasks;
 using Apache.NMS;
 
 using FakeItEasy;
@@ -142,6 +142,7 @@ namespace Spring.Messaging.Nms.Core
 
         internal class SimpleMessageConsumer : IMessageConsumer
         {
+            public string MessageSelector { get; }
             public event MessageListener Listener;
 
             public void SendMessage(IMessage message)
@@ -154,7 +155,17 @@ namespace Spring.Messaging.Nms.Core
                 throw new NotImplementedException();
             }
 
+            public Task<IMessage> ReceiveAsync()
+            {
+                throw new NotImplementedException();
+            }
+
             public IMessage Receive(TimeSpan timeout)
+            {
+                throw new NotImplementedException();
+            }
+
+            public Task<IMessage> ReceiveAsync(TimeSpan timeout)
             {
                 throw new NotImplementedException();
             }
@@ -165,6 +176,11 @@ namespace Spring.Messaging.Nms.Core
             }
 
             public void Close()
+            {
+                throw new NotImplementedException();
+            }
+
+            public Task CloseAsync()
             {
                 throw new NotImplementedException();
             }

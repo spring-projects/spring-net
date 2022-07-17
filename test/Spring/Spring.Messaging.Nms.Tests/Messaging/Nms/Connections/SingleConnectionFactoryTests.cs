@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright Â© 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -200,11 +200,15 @@ namespace Spring.Messaging.Nms.Connections
             ISession txSession = A.Fake<ISession>();
             ISession nonTxSession = A.Fake<ISession>();
             A.CallTo(() => connectionFactory.CreateConnection()).Returns(connection).Once();
+            A.CallTo(() => connectionFactory.CreateConnectionAsync()).Returns(connection).Once();
 
             A.CallTo(() => connection.CreateSession(AcknowledgementMode.Transactional)).Returns(txSession).Once();
+            A.CallTo(() => connection.CreateSessionAsync(AcknowledgementMode.Transactional)).Returns(txSession).Once();
+            
             A.CallTo(() => txSession.Transacted).Returns(true).Twice();
 
             A.CallTo(() => connection.CreateSession(AcknowledgementMode.ClientAcknowledge)).Returns(nonTxSession).Once();
+            A.CallTo(() => connection.CreateSessionAsync(AcknowledgementMode.ClientAcknowledge)).Returns(nonTxSession).Once();
 
             CachingConnectionFactory scf = new CachingConnectionFactory(connectionFactory);
             scf.ReconnectOnException = false;
@@ -227,11 +231,11 @@ namespace Spring.Messaging.Nms.Connections
             con2.Close();
             scf.Dispose();
 
-            A.CallTo(() => txSession.Rollback()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => txSession.RollbackAsync()).MustHaveHappenedOnceExactly();
             A.CallTo(() => txSession.Commit()).MustHaveHappenedOnceExactly();
-            A.CallTo(() => txSession.Close()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => txSession.CloseAsync()).MustHaveHappenedOnceExactly();
 
-            A.CallTo(() => nonTxSession.Close()).MustHaveHappenedOnceExactly();
+            A.CallTo(() => nonTxSession.CloseAsync()).MustHaveHappenedOnceExactly();
             A.CallTo(() => connection.Start()).MustHaveHappenedTwiceExactly();
             A.CallTo(() => connection.Stop()).MustHaveHappenedOnceExactly();
             A.CallTo(() => connection.Close()).MustHaveHappenedOnceExactly();

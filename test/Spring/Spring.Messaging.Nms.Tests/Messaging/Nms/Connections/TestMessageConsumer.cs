@@ -19,12 +19,14 @@
 #endregion
 
 using System;
+using System.Threading.Tasks;
 using Apache.NMS;
 
 namespace Spring.Messaging.Nms.Connections
 {
     public class TestMessageConsumer : IMessageConsumer
     {
+        public string MessageSelector { get; }
         public event MessageListener Listener;
 
         private void InvokeListener(IMessage message)
@@ -38,7 +40,17 @@ namespace Spring.Messaging.Nms.Connections
             throw new NotImplementedException();
         }
 
+        public Task<IMessage> ReceiveAsync()
+        {
+            throw new NotImplementedException();
+        }
+
         public IMessage Receive(TimeSpan timeout)
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task<IMessage> ReceiveAsync(TimeSpan timeout)
         {
             throw new NotImplementedException();
         }
@@ -49,6 +61,11 @@ namespace Spring.Messaging.Nms.Connections
         }
 
         public void Close()
+        {
+            throw new NotImplementedException();
+        }
+
+        public Task CloseAsync()
         {
             throw new NotImplementedException();
         }

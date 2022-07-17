@@ -16,6 +16,7 @@
 
 using Apache.NMS;
 using Common.Logging;
+using Spring.Messaging.Nms.Support;
 using Spring.Util;
 using IQueue=Apache.NMS.IQueue;
 
@@ -35,6 +36,7 @@ namespace Spring.Messaging.Nms.Connections
 
         private readonly ISession target;
         private readonly List<ISession> sessionList;
+        private readonly SemaphoreSlim semaphoreSessionList = new SemaphoreSlim(1,1); 
         private readonly int sessionCacheSize;
         private readonly Dictionary<IDestination, IMessageProducer> cachedProducers = new Dictionary<IDestination, IMessageProducer>();
         private readonly Dictionary<ConsumerCacheKey, IMessageConsumer> cachedConsumers = new Dictionary<ConsumerCacheKey, IMessageConsumer>();
@@ -76,6 +78,11 @@ namespace Spring.Messaging.Nms.Connections
         /// <returns>A message producer, potentially cached.</returns>
         public IMessageProducer CreateProducer()
         {
+            return CreateProducerAsync().GetAsyncResult();
+        }
+
+        public async Task<IMessageProducer> CreateProducerAsync()
+        {
             if (shouldCacheProducers)
             {
                 if (cachedUnspecifiedDestinationMessageProducer != null)
@@ -92,7 +99,7 @@ namespace Spring.Messaging.Nms.Connections
                         Log.Debug("Creating cached MessageProducer for unspecified destination");
                     }
 
-                    cachedUnspecifiedDestinationMessageProducer = target.CreateProducer();
+                    cachedUnspecifiedDestinationMessageProducer = await target.CreateProducerAsync().Awaiter();
 
                 }
                 transactionOpen = true;
@@ -100,7 +107,7 @@ namespace Spring.Messaging.Nms.Connections
             }
             else
             {
-                return target.CreateProducer();
+                return await target.CreateProducerAsync().Awaiter();
             }
         }
 
@@ -110,6 +117,11 @@ namespace Spring.Messaging.Nms.Connections
         /// <param name="destination">The destination.</param>
         /// <returns>A message producer.</returns>
         public IMessageProducer CreateProducer(IDestination destination)
+        {
+            return CreateProducerAsync(destination).GetAsyncResult();
+        }
+
+        public async Task<IMessageProducer> CreateProducerAsync(IDestination destination)
         {
             AssertUtils.ArgumentNotNull(destination,"destination");
 
@@ -124,7 +136,7 @@ namespace Spring.Messaging.Nms.Connections
                 }
                 else
                 {
-                    producer = target.CreateProducer(destination);
+                    producer = await target.CreateProducerAsync(destination).Awaiter();
 
                     if (Log.IsDebugEnabled)
                     {
@@ -139,7 +151,7 @@ namespace Spring.Messaging.Nms.Connections
             }
             else
             {
-                return target.CreateProducer(destination);
+                return await target.CreateProducerAsync(destination).Awaiter();
             }
         }
 
@@ -150,30 +162,40 @@ namespace Spring.Messaging.Nms.Connections
         /// </summary>
         public void Close()
         {
+            CloseAsync().GetAsyncResult();
+        }
+
+        public async Task CloseAsync()
+        {
             if (ccf.IsActive)
             {
                 //don't pass the call to the underlying target.
-                lock (sessionList)
+                await semaphoreSessionList.WaitAsync().Awaiter();
+                try
                 {
                     if (sessionList.Count < sessionCacheSize)
                     {
-                        LogicalClose();
+                        await LogicalClose().Awaiter();
                         // Remain open in the session list.
                         return;
                     }
                 }
+                finally
+                {
+                    semaphoreSessionList.Release();
+                }
             }
             // If we get here, we're supposed to shut down.
-            PhysicalClose();
+            await PhysicalClose().Awaiter();
         }
 
-        private void LogicalClose()
+        private async Task LogicalClose()
         {
             // Preserve rollback-on-close semantics.
             if (transactionOpen && target.Transacted)
             {
                 transactionOpen = false;
-                target.Rollback();
+                await target.RollbackAsync().Awaiter();
             }
 
             // Physically close durable subscribers at time of Session close call.
@@ -183,7 +205,7 @@ namespace Spring.Messaging.Nms.Connections
                 ConsumerCacheKey key = dictionaryEntry.Key;
                 if (key.Subscription != null)
                 {
-                    dictionaryEntry.Value.Close();
+                    await dictionaryEntry.Value.CloseAsync().Awaiter();
                     toRemove.Add(key);
                 }                
             }
@@ -204,7 +226,7 @@ namespace Spring.Messaging.Nms.Connections
             }
         }
 
-        private void PhysicalClose()
+        private async Task PhysicalClose()
         {
             if (Log.IsDebugEnabled)
             {
@@ -216,17 +238,17 @@ namespace Spring.Messaging.Nms.Connections
             {
                 foreach (var entry in cachedProducers)
                 {
-                    entry.Value.Close();
+                    await entry.Value.CloseAsync().Awaiter();
                 }
                 foreach (var entry in cachedConsumers)
                 {
-                    entry.Value.Close();
+                    await entry.Value.CloseAsync().Awaiter();
                 }
             }
             finally
             {
                 // Now actually close the Session.
-                target.Close();
+                await target.CloseAsync().Awaiter();
             }
         }
 
@@ -237,9 +259,13 @@ namespace Spring.Messaging.Nms.Connections
         /// <returns>A message consumer</returns>
         public IMessageConsumer CreateConsumer(IDestination destination)
         {
-            return CreateConsumer(destination, null, false, null);
+            return CreateConsumerInternalAsync(destination, null, false, null, false, false).GetAsyncResult();
         }
 
+        public Task<IMessageConsumer> CreateConsumerAsync(IDestination destination)
+        {
+            return CreateConsumerInternalAsync(destination, null, false, null, false, false);
+        }
 
         /// <summary>
         /// Creates the consumer, potentially returning a cached instance. 
@@ -249,7 +275,12 @@ namespace Spring.Messaging.Nms.Connections
         /// <returns>A message consumer</returns>
         public IMessageConsumer CreateConsumer(IDestination destination, string selector)
         {
-            return CreateConsumer(destination, selector, false, null);
+            return CreateConsumerInternalAsync(destination, selector, false, null, false, false).GetAsyncResult();
+        }
+
+        public Task<IMessageConsumer> CreateConsumerAsync(IDestination destination, string selector)
+        {
+            return CreateConsumerInternalAsync(destination, selector, false, null, false, false);
         }
 
         /// <summary>
@@ -261,7 +292,32 @@ namespace Spring.Messaging.Nms.Connections
         /// <returns>A message consumer.</returns>
         public IMessageConsumer CreateConsumer(IDestination destination, string selector, bool noLocal)
         {
-            return CreateConsumer(destination, selector, noLocal, null);
+            return CreateConsumerInternalAsync(destination, selector, noLocal, null, false, false).GetAsyncResult();
+        }
+
+        public Task<IMessageConsumer> CreateConsumerAsync(IDestination destination, string selector, bool noLocal)
+        {
+            return CreateConsumerInternalAsync(destination, selector, noLocal, null, false, false);
+        }
+
+        public IMessageConsumer CreateDurableConsumer(ITopic destination, string name)
+        {
+            return CreateConsumerInternalAsync(destination, null, false, name, false, true).GetAsyncResult();
+        }
+
+        public Task<IMessageConsumer> CreateDurableConsumerAsync(ITopic destination, string name)
+        {
+            return CreateConsumerInternalAsync(destination, null, false, name, false, true);
+        }
+
+        public IMessageConsumer CreateDurableConsumer(ITopic destination, string name, string selector)
+        {
+            return CreateConsumerInternalAsync(destination, selector, false, name, false, true).GetAsyncResult();
+        }
+
+        public Task<IMessageConsumer> CreateDurableConsumerAsync(ITopic destination, string name, string selector)
+        {
+            return CreateConsumerInternalAsync(destination, selector, false, name, false, true);
         }
 
         /// <summary>
@@ -274,15 +330,52 @@ namespace Spring.Messaging.Nms.Connections
         /// <returns>A message consumer</returns>
         public IMessageConsumer CreateDurableConsumer(ITopic destination, string subscription, string selector, bool noLocal)
         {
-            transactionOpen = true;
-            if (shouldCacheConsumers)
-            {
-                return GetCachedConsumer(destination, selector, noLocal, subscription);
-            }
-            else
-            {
-                return target.CreateDurableConsumer(destination, subscription, selector, noLocal);
-            }
+            return CreateConsumerInternalAsync(destination, selector, noLocal, subscription, false, true).GetAsyncResult();
+        }
+        
+        public Task<IMessageConsumer> CreateDurableConsumerAsync(ITopic destination, string name, string selector, bool noLocal)
+        {
+            return CreateConsumerInternalAsync(destination, selector, noLocal, name, false, true);
+        }
+
+        public IMessageConsumer CreateSharedConsumer(ITopic destination, string name)
+        {
+            return CreateConsumerInternalAsync(destination, null, false, name, true, false).GetAsyncResult();
+        }
+
+        public Task<IMessageConsumer> CreateSharedConsumerAsync(ITopic destination, string name)
+        {
+            return CreateConsumerInternalAsync(destination, null, false, name, true, false);
+        }
+
+        public IMessageConsumer CreateSharedConsumer(ITopic destination, string name, string selector)
+        {
+            return CreateConsumerInternalAsync(destination, selector, false, name, true, false).GetAsyncResult();
+        }
+
+        public Task<IMessageConsumer> CreateSharedConsumerAsync(ITopic destination, string name, string selector)
+        {
+            return CreateConsumerInternalAsync(destination, selector, false, name, true, false);
+        }
+
+        public IMessageConsumer CreateSharedDurableConsumer(ITopic destination, string name)
+        {
+            return CreateConsumerInternalAsync(destination, null, false, name, true, true).GetAsyncResult();
+        }
+
+        public Task<IMessageConsumer> CreateSharedDurableConsumerAsync(ITopic destination, string name)
+        {
+            return CreateConsumerInternalAsync(destination, null, false, name, true, true);
+        }
+
+        public IMessageConsumer CreateSharedDurableConsumer(ITopic destination, string name, string selector)
+        {
+            return CreateConsumerInternalAsync(destination, selector, false, name, true, true).GetAsyncResult();
+        }
+
+        public Task<IMessageConsumer> CreateSharedDurableConsumerAsync(ITopic destination, string name, string selector)
+        {
+            return CreateConsumerInternalAsync(destination, selector, false, name, true, true);
         }
 
         /// <summary>
@@ -295,9 +388,19 @@ namespace Spring.Messaging.Nms.Connections
             {
                 throw new InvalidOperationException("Deleting of durable consumers is not supported when caching of consumers is enabled");
             } 
-            target.DeleteDurableConsumer(durableSubscriptionName);            
+            
+            target.Unsubscribe(durableSubscriptionName); //DeleteDurableConsumer(durableSubscriptionName);            
         }
 
+        public void Unsubscribe(string name)
+        {
+            target.Unsubscribe(name);
+        }
+
+        public Task UnsubscribeAsync(string name)
+        {
+            return target.UnsubscribeAsync(name);
+        }
 
         /// <summary>
         /// Creates the consumer.
@@ -305,24 +408,44 @@ namespace Spring.Messaging.Nms.Connections
         /// <param name="destination">The destination.</param>
         /// <param name="selector">The selector.</param>
         /// <param name="noLocal">if set to <c>true</c> [no local].</param>
-        /// <param name="durableSubscriptionName">The durable subscription name.</param>
+        /// <param name="subscriptionName">The durable or shared subscription name.</param>
         /// <returns></returns>
-        protected IMessageConsumer CreateConsumer(IDestination destination, string selector, bool noLocal, string durableSubscriptionName)
+        protected async Task<IMessageConsumer> CreateConsumerInternalAsync(IDestination destination, string selector, bool noLocal, string subscriptionName, bool shared, bool durable)
         {
             transactionOpen = true;
             if (shouldCacheConsumers)
             {
-                return GetCachedConsumer(destination, selector, noLocal, durableSubscriptionName);
+                return await GetCachedConsumerAsync(destination, selector, noLocal, subscriptionName, shared, durable).Awaiter();
             }
             else
             {
-                return target.CreateConsumer(destination, selector, noLocal);
+                if (shared && durable)
+                {
+                    return await target.CreateSharedDurableConsumerAsync((ITopic) destination, subscriptionName, selector).Awaiter();
+                }
+                else if (shared)
+                {
+                    return await target.CreateSharedConsumerAsync((ITopic) destination, subscriptionName, selector).Awaiter();
+                }
+                else if (durable)
+                {
+                    return await target.CreateDurableConsumerAsync((ITopic) destination, subscriptionName, selector, noLocal).Awaiter();
+                }
+                else
+                {
+                    return await target.CreateConsumerAsync(destination, selector, noLocal).Awaiter();
+                }
             }
         }
 
-        private IMessageConsumer GetCachedConsumer(IDestination destination, string selector, bool noLocal, string durableSubscriptionName)
+        private async Task<IMessageConsumer> GetCachedConsumerAsync(IDestination destination, string selector, bool noLocal, string subscriptionName, bool durable, bool shared)
         {
-            var cacheKey = new ConsumerCacheKey(destination, selector, noLocal, durableSubscriptionName);
+            if ((durable || shared) && subscriptionName == null)
+            {
+                throw new ArgumentException("Durable or shared subscriptions must have a name");
+            }
+
+            var cacheKey = new ConsumerCacheKey(destination, selector, noLocal, subscriptionName, durable, shared);
             if (cachedConsumers.TryGetValue(cacheKey, out var consumer))
             {
                 if (Log.IsDebugEnabled)
@@ -332,23 +455,38 @@ namespace Spring.Messaging.Nms.Connections
             }
             else
             {
-                if (destination is ITopic topic)
+                if (shared && durable)
                 {
-                    consumer = (durableSubscriptionName != null
-                                    ? target.CreateDurableConsumer(topic, durableSubscriptionName, selector, noLocal)
-                                    : target.CreateConsumer(topic, selector, noLocal));
+                    consumer = await target.CreateSharedDurableConsumerAsync((ITopic) destination, subscriptionName, selector).Awaiter();
+                }
+                else if (shared)
+                {
+                    consumer = await target.CreateSharedConsumerAsync((ITopic) destination, subscriptionName, selector).Awaiter();
+                }
+                else if (durable)
+                {
+                    consumer = await target.CreateDurableConsumerAsync((ITopic) destination, subscriptionName, selector, noLocal).Awaiter();
                 }
                 else
                 {
-                    consumer = target.CreateConsumer(destination, selector);
+                    consumer = await target.CreateConsumerAsync(destination, selector, noLocal).Awaiter();
                 }
-                if (Log.IsDebugEnabled)
-                {
-                    Log.Debug("Creating cached NMS MessageConsumer for destination [" + destination + "]: " + consumer);
-                }
-                cachedConsumers[cacheKey] = consumer;
             }
+
+            if (Log.IsDebugEnabled)
+            {
+                Log.Debug("Creating cached NMS MessageConsumer for destination [" + destination + "]: " + consumer);
+            }
+
+            cachedConsumers[cacheKey] = consumer;
+
             return new CachedMessageConsumer(consumer);
+        }
+
+        public Task<IQueueBrowser> CreateBrowserAsync(IQueue queue, string selector)
+        {
+            transactionOpen = true;
+            return target.CreateBrowserAsync(queue, selector);
         }
 
         /// <summary>
@@ -358,8 +496,13 @@ namespace Spring.Messaging.Nms.Connections
         /// <returns></returns>
         public IQueue GetQueue(string name)
         {
+            return GetQueueAsync(name).GetAsyncResult();
+        }
+
+        public async Task<IQueue> GetQueueAsync(string name)
+        {
             transactionOpen = true;
-            return target.GetQueue(name);
+            return await target.GetQueueAsync(name).Awaiter();
         }
 
         /// <summary>
@@ -369,8 +512,13 @@ namespace Spring.Messaging.Nms.Connections
         /// <returns></returns>
         public ITopic GetTopic(string name)
         {
+            return GetTopicAsync(name).GetAsyncResult();
+        }
+
+        public async Task<ITopic> GetTopicAsync(string name)
+        {
             transactionOpen = true;
-            return target.GetTopic(name);
+            return await target.GetTopicAsync(name).Awaiter();
         }
 
         /// <summary>
@@ -383,6 +531,12 @@ namespace Spring.Messaging.Nms.Connections
             return target.CreateTemporaryQueue();
         }
 
+        public async Task<ITemporaryQueue> CreateTemporaryQueueAsync()
+        {
+            transactionOpen = true;
+            return await target.CreateTemporaryQueueAsync().Awaiter();
+        }
+
         /// <summary>
         /// Creates the temporary topic.
         /// </summary>
@@ -391,6 +545,12 @@ namespace Spring.Messaging.Nms.Connections
         {
             transactionOpen = true;
             return target.CreateTemporaryTopic();
+        }
+
+        public async Task<ITemporaryTopic> CreateTemporaryTopicAsync()
+        {
+            transactionOpen = true;
+            return await target.CreateTemporaryTopicAsync().Awaiter();
         }
 
         /// <summary>
@@ -403,6 +563,12 @@ namespace Spring.Messaging.Nms.Connections
             target.DeleteDestination(destination);
         }
 
+        public async Task DeleteDestinationAsync(IDestination destination)
+        {
+            transactionOpen = true;
+            await target.DeleteDestinationAsync(destination).Awaiter();
+        }
+
         /// <summary>
         /// Creates the message.
         /// </summary>
@@ -413,6 +579,12 @@ namespace Spring.Messaging.Nms.Connections
             return target.CreateMessage();
         }
 
+        public async Task<IMessage> CreateMessageAsync()
+        {
+            transactionOpen = true;
+            return await target.CreateMessageAsync().Awaiter();
+        }
+
         /// <summary>
         /// Creates the text message.
         /// </summary>
@@ -421,6 +593,12 @@ namespace Spring.Messaging.Nms.Connections
         {
             transactionOpen = true;
             return target.CreateTextMessage();
+        }
+
+        public async Task<ITextMessage> CreateTextMessageAsync()
+        {
+            transactionOpen = true;
+            return await target.CreateTextMessageAsync().Awaiter();
         }
 
         /// <summary>
@@ -434,6 +612,12 @@ namespace Spring.Messaging.Nms.Connections
             return target.CreateTextMessage(text);
         }
 
+        public async Task<ITextMessage> CreateTextMessageAsync(string text)
+        {
+            transactionOpen = true;
+            return await target.CreateTextMessageAsync(text).Awaiter();
+        }
+
         /// <summary>
         /// Creates the map message.
         /// </summary>
@@ -442,6 +626,12 @@ namespace Spring.Messaging.Nms.Connections
         {
             transactionOpen = true;
             return target.CreateMapMessage();
+        }
+
+        public async Task<IMapMessage> CreateMapMessageAsync()
+        {
+            transactionOpen = true;
+            return await target.CreateMapMessageAsync().Awaiter();
         }
 
         /// <summary>
@@ -455,6 +645,12 @@ namespace Spring.Messaging.Nms.Connections
             return target.CreateObjectMessage(body);
         }
 
+        public async Task<IObjectMessage> CreateObjectMessageAsync(object body)
+        {
+            transactionOpen = true;
+            return await target.CreateObjectMessageAsync(body).Awaiter();
+        }
+
         /// <summary>
         /// Creates the bytes message.
         /// </summary>
@@ -463,6 +659,12 @@ namespace Spring.Messaging.Nms.Connections
         {
             transactionOpen = true;
             return target.CreateBytesMessage();
+        }
+
+        public async Task<IBytesMessage> CreateBytesMessageAsync()
+        {
+            transactionOpen = true;
+            return await target.CreateBytesMessageAsync().Awaiter();
         }
 
         /// <summary>
@@ -476,6 +678,12 @@ namespace Spring.Messaging.Nms.Connections
             return target.CreateBytesMessage(body);
         }
 
+        public async Task<IBytesMessage> CreateBytesMessageAsync(byte[] body)
+        {
+            transactionOpen = true;
+            return await target.CreateBytesMessageAsync(body).Awaiter();
+        }
+
         /// <summary>
         /// Creates the stream message.
         /// </summary>
@@ -486,6 +694,24 @@ namespace Spring.Messaging.Nms.Connections
             return target.CreateStreamMessage();
         }
 
+        public async Task<IStreamMessage> CreateStreamMessageAsync()
+        {
+            transactionOpen = true;
+            return await target.CreateStreamMessageAsync().Awaiter();
+        }
+       
+        public void Acknowledge()
+        {
+            transactionOpen = true;
+            target.Acknowledge();
+        }
+
+        public async Task AcknowledgeAsync()
+        {
+            transactionOpen = true;
+            await target.AcknowledgeAsync().Awaiter();
+        }
+
         /// <summary>
         /// Commits this instance.
         /// </summary>
@@ -493,6 +719,12 @@ namespace Spring.Messaging.Nms.Connections
         {
             transactionOpen = false;
             target.Commit();
+        }
+
+        public async Task CommitAsync()
+        {
+            transactionOpen = false;
+            await target.CommitAsync().Awaiter();
         }
 
         /// <summary>
@@ -506,6 +738,12 @@ namespace Spring.Messaging.Nms.Connections
             transactionOpen = true;
             target.Recover();
         }
+        
+        public async Task RecoverAsync()
+        {
+            transactionOpen = true;
+            await target.RecoverAsync().Awaiter();
+        }
 
         /// <summary>
         /// Rollbacks this instance.
@@ -514,6 +752,12 @@ namespace Spring.Messaging.Nms.Connections
         {
             transactionOpen = false;
             target.Rollback();
+        }
+
+        public async Task RollbackAsync()
+        {
+            transactionOpen = false;
+            await target.RollbackAsync().Awaiter();
         }
 
         /// <summary>
@@ -611,6 +855,12 @@ namespace Spring.Messaging.Nms.Connections
             target.Dispose();
         }
 
+        public async Task<IQueueBrowser> CreateBrowserAsync(IQueue queue)
+        {
+            transactionOpen = true;
+            return await target.CreateBrowserAsync(queue).Awaiter();
+        }
+
         /// <summary>
         /// Creates the queue browser with a specified selector
         /// </summary>
@@ -652,13 +902,17 @@ namespace Spring.Messaging.Nms.Connections
         private readonly string selector;
         private readonly bool noLocal;
         private readonly string subscription;
+        private readonly bool shared;
+        private readonly bool durable;
 
-        public ConsumerCacheKey(IDestination destination, string selector, bool noLocal, string subscription)
+        public ConsumerCacheKey(IDestination destination, string selector, bool noLocal, string subscription, bool durable, bool shared)
         {
             this.destination = destination;
             this.selector = selector;
             this.noLocal = noLocal;
             this.subscription = subscription;
+            this.shared = shared;
+            this.durable = durable;
         }
 
         public string Subscription => subscription;
@@ -670,6 +924,8 @@ namespace Spring.Messaging.Nms.Connections
             if (!ObjectUtils.NullSafeEquals(selector, consumerCacheKey.selector)) return false;
             if (!Equals(noLocal, consumerCacheKey.noLocal)) return false;
             if (!ObjectUtils.NullSafeEquals(subscription, consumerCacheKey.subscription)) return false;
+            if (shared != consumerCacheKey.shared) return false;
+            if (durable != consumerCacheKey.durable) return false;
             return true;
         }
 

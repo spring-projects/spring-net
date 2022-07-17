@@ -34,7 +34,7 @@ namespace Spring.Messaging.Nms.Connections
     /// passing in username and password on every <code>CreateConnection()</code> call.
     /// If the "Username" is empty, this proxy will simply delegate to the standard
     /// <code>CreateConnection()</code> method of the target ConnectionFactory.
-    /// This can be used to keep a UserCredentialsConnectionFactoryAdapter
+    /// This can be used to keep a UserCredentialsConnectionFactoryAdapter 
     /// definition just for the<i> option</i> of implicitly passing in user credentials
     /// if the particular target ConnectionFactory requires it.
     /// </remarks>
@@ -51,7 +51,7 @@ namespace Spring.Messaging.Nms.Connections
 
 
         /// <summary>
-        /// Set user credentials for this proxy and the current thread.
+        /// Set user credentials for this proxy and the current thread. 
         /// The given username and password will be applied to all subsequent
         /// <code>CreateConnection()</code>  calls on this ConnectionFactory proxy.
         /// This will override any statically specified user credentials,
@@ -73,16 +73,20 @@ namespace Spring.Messaging.Nms.Connections
 
 
         private string _userName;
-
+        
         /// <summary>
         /// Set the username that this adapter should use for retrieving Connections.
         /// </summary>
         public string UserName
         {
-            get => _userName;
+            get =>  _userName;
             set => _userName = string.IsNullOrWhiteSpace(value) ? null : value;
         }
 
+        private string UserNameInternal => threadLocalCredentials.Value != null ? threadLocalCredentials.Value.UserName : UserName;
+        private string PasswordInternal => threadLocalCredentials.Value != null ? threadLocalCredentials.Value.Password : Password;
+        
+        
         private string _password;
 
         /// <summary>
@@ -96,13 +100,7 @@ namespace Spring.Messaging.Nms.Connections
 
         public IConnection CreateConnection()
         {
-            var credentialsForCurrentThread = this.threadLocalCredentials.Value;
-            if (credentialsForCurrentThread != null)
-            {
-                return CreateConnectionForSpecificCredentials(credentialsForCurrentThread.UserName, credentialsForCurrentThread.Password);
-            }
-
-            return CreateConnectionForSpecificCredentials(UserName, Password);
+            return CreateConnectionForSpecificCredentials(UserNameInternal, PasswordInternal);
         }
 
         private IConnection CreateConnectionForSpecificCredentials(string userName, string password)
@@ -118,6 +116,56 @@ namespace Spring.Messaging.Nms.Connections
         public IConnection CreateConnection(string userName, string password)
         {
             return _wrappedConnectionFactory.CreateConnection(userName, password);
+        }
+
+        public Task<IConnection> CreateConnectionAsync()
+        {
+            return _wrappedConnectionFactory.CreateConnectionAsync(UserNameInternal, PasswordInternal);
+        }
+
+        public Task<IConnection> CreateConnectionAsync(string userName, string password)
+        {
+            return _wrappedConnectionFactory.CreateConnectionAsync(userName, password);
+        }
+
+        public INMSContext CreateContext()
+        {
+            return _wrappedConnectionFactory.CreateContext(UserNameInternal, PasswordInternal);
+        }
+
+        public INMSContext CreateContext(AcknowledgementMode acknowledgementMode)
+        {
+            return _wrappedConnectionFactory.CreateContext(UserNameInternal, PasswordInternal, acknowledgementMode);
+        }
+
+        public INMSContext CreateContext(string userName, string password)
+        {
+            return _wrappedConnectionFactory.CreateContext(userName, password);
+        }
+
+        public INMSContext CreateContext(string userName, string password, AcknowledgementMode acknowledgementMode)
+        {
+            return _wrappedConnectionFactory.CreateContext(userName, password, acknowledgementMode);
+        }
+
+        public Task<INMSContext> CreateContextAsync()
+        {
+            return _wrappedConnectionFactory.CreateContextAsync(UserNameInternal, PasswordInternal);
+        }
+
+        public Task<INMSContext> CreateContextAsync(AcknowledgementMode acknowledgementMode)
+        {
+            return _wrappedConnectionFactory.CreateContextAsync(UserNameInternal, PasswordInternal, acknowledgementMode);
+        }
+
+        public Task<INMSContext> CreateContextAsync(string userName, string password)
+        {
+            return _wrappedConnectionFactory.CreateContextAsync(userName, password);
+        }
+
+        public Task<INMSContext> CreateContextAsync(string userName, string password, AcknowledgementMode acknowledgementMode)
+        {
+            return _wrappedConnectionFactory.CreateContextAsync(userName, password, acknowledgementMode);
         }
 
         public Uri BrokerUri

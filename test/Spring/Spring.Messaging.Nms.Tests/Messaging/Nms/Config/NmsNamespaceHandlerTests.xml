@@ -5,7 +5,7 @@
 
   <nms:listener-container connection-factory="testConnectionFactory" 
 			destination-resolver="testDestinationResolver" message-converter="testMessageConverter" 
-      auto-startup="false" concurrency="${concurrency}">
+      auto-startup="false" concurrency="4">
     <nms:listener id="listener1" destination="testDestination" ref="testObject1" method="SetName"/>
     <nms:listener id="listener2" destination="testDestination" ref="testObject2" method="SetName" 
                   response-destination="responseDestination"/>
@@ -37,15 +37,15 @@
 
   <object id="testObject3"  type="Spring.Messaging.Nms.Connections.TestMessageListener, Spring.Messaging.Nms.Tests"/>
 
-  <object type="Spring.Objects.Factory.Config.VariablePlaceholderConfigurer, Spring.Core">
-    <property name="VariableSources">
-      <list>
-        <object type="Spring.Objects.Factory.Config.ConfigSectionVariableSource, Spring.Core">
-          <property name="SectionNames" value="NmsConfiguration" />
-        </object>
-      </list>
-    </property>
-  </object>
+<!--  <object type="Spring.Objects.Factory.Config.VariablePlaceholderConfigurer, Spring.Core">-->
+<!--    <property name="VariableSources">-->
+<!--      <list>-->
+<!--        <object type="Spring.Objects.Factory.Config.ConfigSectionVariableSource, Spring.Core">-->
+<!--          <property name="SectionNames" value="NmsConfiguration" />-->
+<!--        </object>-->
+<!--      </list>-->
+<!--    </property>-->
+<!--  </object>-->
 
 </objects>
 

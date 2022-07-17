@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright � 2002-2011 the original author or authors.
+ * Copyright © 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -83,7 +83,7 @@ namespace Spring.Messaging.Nms.Listener
                 {
 			        PubSubDomain = true;
 		        }
-
+                
             }
         }
 
@@ -99,7 +99,7 @@ namespace Spring.Messaging.Nms.Listener
             get
             {
                 return (this.destination is string ? (string) this.destination : null);
-
+	
             }
             set
             {
@@ -123,10 +123,10 @@ namespace Spring.Messaging.Nms.Listener
         /// <summary>
         /// Gets or sets the message listener to register.
         /// </summary>
-        ///
+        /// 
         /// <remarks>
         /// <para>
-        /// This can be either a standard NMS MessageListener object or a
+        /// This can be either a standard NMS MessageListener object or a 
         /// Spring <see cref="ISessionAwareMessageListener"/> object.
         /// </para>
         /// </remarks>
@@ -169,6 +169,11 @@ namespace Spring.Messaging.Nms.Listener
             set { subscriptionDurable = value; }
         }
 
+        
+        public bool SubscriptionShared { get; set; }
+        
+        public string SubscriptionName { get; set; }
+        
 
         /// <summary>
         /// Gets or sets the name of the durable subscription to create.
@@ -179,7 +184,7 @@ namespace Spring.Messaging.Nms.Listener
 	    /// client id. Default is the class name of the specified message listener.
 	    /// <para>Note: Only 1 concurrent consumer (which is the default of this
 	    /// message listener container) is allowed for each durable subscription.
-	    /// </para>
+	    /// </para> 	   
         /// </remarks>
         /// <value>The name of the durable subscription.</value>
         public string DurableSubscriptionName
@@ -298,7 +303,7 @@ namespace Spring.Messaging.Nms.Listener
 
 
         /// <summary>
-        /// Executes the specified listener,
+        /// Executes the specified listener, 
         /// committing or rolling back the transaction afterwards (if necessary).
         /// </summary>
         /// <param name="session">The session to operate on.</param>
@@ -320,7 +325,7 @@ namespace Spring.Messaging.Nms.Listener
         }
 
         /// <summary>
-        /// Executes the specified listener,
+        /// Executes the specified listener, 
         /// committing or rolling back the transaction afterwards (if necessary).
         /// </summary>
         /// <param name="session">The session to operate on.</param>
@@ -413,7 +418,7 @@ namespace Spring.Messaging.Nms.Listener
                 // Actually invoke the message listener
                 if (logger.IsDebugEnabled)
                 {
-                    logger.Debug("Invoking listener with message of type [" + message.GetType() +
+                    logger.Debug("Invoking listener with message of type [" + message.GetType() + 
                                  "] and session [" + sessionToUse + "]");
                 }
                 listener.OnMessage(message, sessionToUse);
@@ -424,7 +429,7 @@ namespace Spring.Messaging.Nms.Listener
                     {
                         // Transacted session created by this container -> commit.
                         NmsUtils.CommitIfNecessary(sessionToUse);
-                    }
+                    }                        
                 }
             } finally
             {
@@ -486,7 +491,7 @@ namespace Spring.Messaging.Nms.Listener
         /// <see cref="NmsAccessor.SessionTransacted"/>
         protected virtual bool IsSessionLocallyTransacted(ISession session)
         {
-            return SessionTransacted;
+            return SessionTransacted;     
         }
 
 
@@ -586,7 +591,7 @@ namespace Spring.Messaging.Nms.Listener
             }
             else if(logger.IsWarnEnabled)
             {
-                logger.Warn("Execution of NMS message listener failed, and no ErrorHandler has been set.", exception);
+                logger.Warn("Execution of NMS message listener failed, and no ErrorHandler has been set.", exception);		
             }
         }
 
@@ -605,7 +610,7 @@ namespace Spring.Messaging.Nms.Listener
         }
 
 
-
+        
         #endregion
 
         /// <summary>
