@@ -1,10 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>$(TargetFullFrameworkVersion)</TargetFramework>
     <RootNamespace>Spring</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Common.Logging" Version="$(CommonLoggingVersion)" />
+    <PackageReference Include="Common.Logging" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Spring.Core">
