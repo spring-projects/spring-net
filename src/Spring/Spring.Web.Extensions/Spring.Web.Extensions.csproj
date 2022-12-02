@@ -3,7 +3,6 @@
   <PropertyGroup>
     <TargetFramework>$(TargetFullFrameworkVersion)</TargetFramework>
     <Description>Interfaces and classes that provide ASP.NET AJAX 1.0 support in Spring.Net</Description>
-    <SignAssembly>True</SignAssembly>
   </PropertyGroup>
 
   <ItemGroup>

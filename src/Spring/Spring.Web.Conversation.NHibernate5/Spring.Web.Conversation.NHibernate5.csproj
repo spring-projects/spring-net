@@ -3,7 +3,6 @@
   <PropertyGroup>
     <TargetFramework>$(TargetFullFrameworkVersion)</TargetFramework>
     <Description>Conversation-Per-Business-Transaction support for Spring.Net using NHibernate</Description>
-    <SignAssembly>True</SignAssembly>
   </PropertyGroup>
 
   <ItemGroup>

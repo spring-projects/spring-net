@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>$(TargetFullFrameworkVersion)</TargetFramework>
-    <SignAssembly>True</SignAssembly>
   </PropertyGroup>
 
   <ItemGroup>

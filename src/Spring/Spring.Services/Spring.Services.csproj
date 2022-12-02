@@ -3,7 +3,6 @@
   <PropertyGroup>
     <TargetFramework>$(TargetFullFrameworkVersion)</TargetFramework>
     <Description>Interfaces and classes that provide portable service abstractions in Spring.Net</Description>
-    <SignAssembly>True</SignAssembly>
   </PropertyGroup>
 
   <ItemGroup>

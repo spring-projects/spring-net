@@ -5,7 +5,6 @@
     <Description>Interfaces and classes that provide NHibernate 5 support in Spring.Net</Description>
     <RootNamespace>Spring.Data.NHibernate</RootNamespace>
     <NoWarn>0618</NoWarn>
-    <SignAssembly>True</SignAssembly>
   </PropertyGroup>
 
   <ItemGroup>

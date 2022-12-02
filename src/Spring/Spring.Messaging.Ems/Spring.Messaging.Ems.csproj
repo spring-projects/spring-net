@@ -2,7 +2,6 @@
   <PropertyGroup>
     <TargetFramework>$(TargetFullFrameworkVersion)</TargetFramework>
     <Description>TIBCO EMS support</Description>
-    <SignAssembly>True</SignAssembly>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DefineConstants>$(DefineConstants);TIBCO_EMS</DefineConstants>

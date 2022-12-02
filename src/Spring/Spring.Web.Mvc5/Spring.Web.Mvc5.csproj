@@ -2,7 +2,6 @@
   <PropertyGroup>
     <TargetFramework>$(TargetFullFrameworkVersion)</TargetFramework>
     <Description>Interfaces and classes that provide ASP.NET MVC5 application support in Spring.Net</Description>
-    <SignAssembly>True</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Spring.Core\Spring.Core.csproj" />

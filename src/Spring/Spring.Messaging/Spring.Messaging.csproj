@@ -2,7 +2,6 @@
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;$(TargetFullFrameworkVersion)</TargetFrameworks>
     <Description>Interfaces and classes that provide MSMQ 3.0 support in Spring.Net</Description>
-    <SignAssembly>True</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="Experimental.System.Messaging.Signed" Version="1.0.0" />

@@ -4,7 +4,6 @@
     <TargetFrameworks>netstandard2.0;$(TargetFullFrameworkVersion)</TargetFrameworks>
     <Description>Core functionality for Spring.Net IoC container</Description>
     <NoWarn>219, 162, 618, 1591</NoWarn>
-    <SignAssembly>True</SignAssembly>
   </PropertyGroup>
 
   <ItemGroup Condition=" '$(TargetFramework)' == '$(TargetFullFrameworkVersion)' ">
