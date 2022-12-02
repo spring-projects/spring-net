@@ -2,6 +2,7 @@
   <PropertyGroup>
     <TargetFrameworks>$(TargetFullFrameworkVersion);netstandard2.0</TargetFrameworks>
     <Description>Spring.NET Intergration with the NVelocity templating Engine</Description>
+    <SignAssembly>True</SignAssembly>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Spring.Core\Spring.Core.csproj" />
