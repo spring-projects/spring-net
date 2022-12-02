@@ -4,14 +4,14 @@
     <Description>Interfaces and classes that provide MSMQ 3.0 support in Spring.Net</Description>
   </PropertyGroup>
   <ItemGroup>
+    <PackageReference Include="Experimental.System.Messaging.Signed" Version="1.0.0" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\Spring.Core\Spring.Core.csproj" />
     <ProjectReference Include="..\Spring.Data\Spring.Data.csproj" />
   </ItemGroup>
   <ItemGroup Condition=" '$(TargetFramework)' == '$(TargetFullFrameworkVersion)' ">
     <Reference Include="System.Messaging" />
     <Reference Include="System.Transactions" />
-  </ItemGroup>
-  <ItemGroup>
-    <PackageReference Include="Experimental.System.Messaging" Version="1.1.0" />
   </ItemGroup>
 </Project>

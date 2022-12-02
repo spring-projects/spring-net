@@ -7,8 +7,8 @@
     <RootNamespace>Spring</RootNamespace>
 
     <AssemblyOriginatorKeyFile>..\..\..\Spring.Net.snk</AssemblyOriginatorKeyFile>
-
     <DelaySign>false</DelaySign>
+    <SignAssembly>True</SignAssembly>
     <Deterministic>true</Deterministic>
 
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
