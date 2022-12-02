@@ -17,12 +17,6 @@
     <CommonLoggingVersion>3.4.1</CommonLoggingVersion>
     <Log4NetVersion>2.0.8</Log4NetVersion>
 
-    <NUnitVersion>3.13.1</NUnitVersion>
-    <NUnitTestAdapterVersion>3.17.0</NUnitTestAdapterVersion>
-    <FakeItEasyVersion>6.2.1</FakeItEasyVersion>
-    <FakeItEasyAnalyzerVersion>6.0.0</FakeItEasyAnalyzerVersion>
-    <MicrosoftTestSDKVersion>16.9.4</MicrosoftTestSDKVersion>
-
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <ComVisible>False</ComVisible>
     <DebugSymbols>True</DebugSymbols>
@@ -30,13 +24,13 @@
 
     <LangVersion>latest</LangVersion>
     <TargetFullFrameworkVersion>net462</TargetFullFrameworkVersion>
-	
-	<IsPackable>false</IsPackable>
+
+    <IsPackable>false</IsPackable>
 
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-	<DebugType>Full</DebugType>
+    <DebugType>Full</DebugType>
     <DefineConstants>DEBUG;TRACE;$(DefineConstants)</DefineConstants>
   </PropertyGroup>
 

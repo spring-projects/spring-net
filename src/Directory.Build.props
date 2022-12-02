@@ -50,11 +50,11 @@
   </PropertyGroup>
 
   <ItemGroup Condition="'$(SourceLinkEnabled)' != 'false'">
-    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All"/>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="ConfigureAwaitChecker.Analyzer" Version="5.0.0.1" PrivateAssets="All"/>
+    <PackageReference Include="ConfigureAwaitChecker.Analyzer" PrivateAssets="All" />
   </ItemGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -67,7 +67,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Include="..\..\SpringSource_Leaves32x32.png" Pack="true" Visible="false" PackagePath=""/>
+    <None Include="..\..\SpringSource_Leaves32x32.png" Pack="true" Visible="false" PackagePath="" />
   </ItemGroup>
 
 </Project>

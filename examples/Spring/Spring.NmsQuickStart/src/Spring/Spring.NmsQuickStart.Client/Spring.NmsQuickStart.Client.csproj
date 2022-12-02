@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>$(TargetFullFrameworkVersion)</TargetFramework>
     <OutputType>WinExe</OutputType>
@@ -7,7 +7,7 @@
     <ProjectReference Include="..\Spring.NmsQuickStart.Common\Spring.NmsQuickStart.Common.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Common.Logging" Version="$(CommonLoggingVersion)" />
+    <PackageReference Include="Common.Logging" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Spring.Core">

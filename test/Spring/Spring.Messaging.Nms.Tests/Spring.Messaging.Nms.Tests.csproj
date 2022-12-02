@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net6.0;$(TargetFullFrameworkVersion)</TargetFrameworks>
   </PropertyGroup>
@@ -10,13 +10,13 @@
     <ProjectReference Include="..\Spring.Core.Tests\Spring.Core.Tests.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="FakeItEasy" Version="$(FakeItEasyVersion)" />
-    <PackageReference Include="FakeItEasy.Analyzer.CSharp" Version="$(FakeItEasyAnalyzerVersion)" PrivateAssets="All" />
-    <PackageReference Include="Apache.NMS" Version="$(ApacheNmsVersion)" />
-    <PackageReference Include="Apache.NMS.ActiveMQ" Version="1.7.2" Condition=" '$(TargetFramework)' == '$(TargetFullFrameworkVersion)' " />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="$(MicrosoftTestSDKVersion)" />
-    <PackageReference Include="NUnit" Version="$(NUnitVersion)" />
-    <PackageReference Include="NUnit3TestAdapter" Version="$(NUnitTestAdapterVersion)" />
+    <PackageReference Include="FakeItEasy" />
+    <PackageReference Include="FakeItEasy.Analyzer.CSharp" PrivateAssets="All" />
+    <PackageReference Include="Apache.NMS" />
+    <PackageReference Include="Apache.NMS.ActiveMQ" Condition=" '$(TargetFramework)' == '$(TargetFullFrameworkVersion)' " />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" />
+    <PackageReference Include="NUnit" />
+    <PackageReference Include="NUnit3TestAdapter" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config">

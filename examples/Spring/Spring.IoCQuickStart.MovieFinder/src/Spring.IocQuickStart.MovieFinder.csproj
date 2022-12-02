@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFramework>$(TargetFullFrameworkVersion)</TargetFramework>
     <RootNamespace>Spring.IocQuickStart</RootNamespace>
@@ -13,8 +13,8 @@
     <EmbeddedResource Include="MovieFinder\*.xml" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Common.Logging" Version="3.4.1" />
-    <PackageReference Include="Common.Logging.Log4Net1215" Version="3.4.1" />
+    <PackageReference Include="Common.Logging" />
+    <PackageReference Include="Common.Logging.Log4Net1215" />
   </ItemGroup>
   <ItemGroup>
     <None Update="movies.txt">

@@ -1,10 +1,10 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>netstandard2.0;$(TargetFullFrameworkVersion)</TargetFrameworks>
     <Description>Interfaces and classes that provide MSMQ 3.0 support in Spring.Net</Description>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Experimental.System.Messaging.Signed" Version="1.0.0" />
+    <PackageReference Include="Experimental.System.Messaging.Signed" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Spring.Core\Spring.Core.csproj" />
