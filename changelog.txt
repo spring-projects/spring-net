@@ -3,6 +3,17 @@ SPRING.NET FRAMEWORK CHANGELOG
 http://www.springframework.net
 
 *****************************************************************************************
+Release Version 3.0.1 Dec 6, 2022
+
+Release Notes - Spring.NET - Version 3.0.1
+
+New Feature Highlights
+
+* Sign assemblies with strong name (#212)
+* Upgrade to NMS 2.0 (#214)
+
+
+*****************************************************************************************
 Release Version 3.0.0 Aug 2, 2021
 
 Release Notes - Spring.NET - Version 3.0.0
