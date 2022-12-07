@@ -11,8 +11,6 @@ jobs:
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v3
-        with:
-          fetch-depth: 0
       - name: Publish
         run: ./build.cmd test publish
         env:

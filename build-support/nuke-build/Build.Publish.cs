@@ -15,8 +15,10 @@ public partial class Build
 
     string TagVersion => GitRepository.Tags.SingleOrDefault(x => x.StartsWith("v"))?[1..];
 
+    bool IsTaggedBuild => !string.IsNullOrWhiteSpace(TagVersion);
+
     Target Publish => _ => _
-        .OnlyWhenDynamic(() => GitRepository.IsOnMainBranch() && !string.IsNullOrWhiteSpace(TagVersion))
+        .OnlyWhenDynamic(() => GitRepository.IsOnMainBranch() && IsTaggedBuild)
         .DependsOn(Pack)
         .Requires(() => NuGetApiKey)
         .Executes(() =>
