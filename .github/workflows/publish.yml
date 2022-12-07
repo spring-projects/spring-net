@@ -1,4 +1,4 @@
-name: Publish
+name: publish
 
 on:
   push:
@@ -14,6 +14,6 @@ jobs:
         with:
           fetch-depth: 0
       - name: Publish
-        run: ./build.sh test publish
+        run: ./build.cmd test publish
         env:
           NuGetApiKey: ${{ secrets.NUGET_API_KEY }}
