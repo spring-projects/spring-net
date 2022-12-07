@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using Nuke.Common;
 using Nuke.Common.CI;
 using Nuke.Common.CI.AppVeyor;
@@ -12,7 +13,7 @@ using Nuke.Common.ProjectModel;
 using Nuke.Common.Tools.DotNet;
 using Nuke.Common.Tools.MSBuild;
 using Nuke.Common.Utilities.Collections;
-
+using Serilog;
 using static Nuke.Common.IO.FileSystemTasks;
 using static Nuke.Common.Tooling.ProcessTasks;
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
@@ -49,6 +50,31 @@ partial class Build : NukeBuild
     AbsolutePath BuildDirectory => RootDirectory / "build";
     AbsolutePath ExamplesDirectory => RootDirectory / "examples";
     AbsolutePath ArtifactsDirectory => RootDirectory / "artifacts";
+
+    string TagVersion => GitRepository.Tags.SingleOrDefault(x => x.StartsWith("v"))?[1..];
+
+    bool IsTaggedBuild => !string.IsNullOrWhiteSpace(TagVersion);
+
+    string VersionSuffix;
+
+    static bool IsRunningOnWindows => RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+
+    protected override void OnBuildInitialized()
+    {
+        VersionSuffix = !IsTaggedBuild
+            ? $"preview-{DateTime.UtcNow:yyyyMMdd-HHmm}"
+            : "";
+
+        if (IsLocalBuild)
+        {
+            VersionSuffix = $"dev-{DateTime.UtcNow:yyyyMMdd-HHmm}";
+        }
+
+        Log.Information("BUILD SETUP");
+        Log.Information("Configuration:\t{Configuration}", Configuration);
+        Log.Information("Version suffix:\t{VersionSuffix}", VersionSuffix);
+        Log.Information("Tagged build:\t{IsTaggedBuild}", IsTaggedBuild);
+    }
 
     Target Clean => _ => _
         .Before(Restore)
@@ -129,11 +155,9 @@ partial class Build : NukeBuild
                 .Where(x => !x.Name.EndsWith(".Tests"));
 
             var version = TagVersion;
-            var suffix = "";
             if (string.IsNullOrWhiteSpace(version))
             {
                 version = ProjectVersion;
-                suffix = "develop-" + DateTime.UtcNow.ToString("yyyyMMddHHmm");
             }
 
             foreach (var project in packTargets)
@@ -141,7 +165,7 @@ partial class Build : NukeBuild
                 DotNetPack(s => s
                     .SetProject(project.Path)
                     .SetVersion(version)
-                    .SetVersionSuffix(suffix)
+                    .SetVersionSuffix(VersionSuffix)
                     .SetConfiguration(Configuration.Release)
                     .EnableNoRestore()
                     .SetOutputDirectory(ArtifactsDirectory)

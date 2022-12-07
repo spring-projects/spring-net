@@ -13,12 +13,8 @@ public partial class Build
     [Parameter] string NuGetSource => "https://api.nuget.org/v3/index.json";
     [Parameter] [Secret] string NuGetApiKey;
 
-    string TagVersion => GitRepository.Tags.SingleOrDefault(x => x.StartsWith("v"))?[1..];
-
-    bool IsTaggedBuild => !string.IsNullOrWhiteSpace(TagVersion);
-
     Target Publish => _ => _
-        .OnlyWhenDynamic(() => GitRepository.IsOnMainBranch() && IsTaggedBuild)
+        .OnlyWhenDynamic(() => IsRunningOnWindows && IsTaggedBuild)
         .DependsOn(Pack)
         .Requires(() => NuGetApiKey)
         .Executes(() =>
