@@ -14,6 +14,7 @@ on:
     paths-ignore:
       - 'doc/**'
       - '*.md'
+      - 'website/**'
 
 jobs:
   build-windows:

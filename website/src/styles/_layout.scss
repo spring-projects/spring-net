@@ -1,0 +1,153 @@
+// Layout
+
+html,
+body {
+  font-family: $fontFamily;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5 {
+  font-family: $fontFamilySpecial;
+}
+
+body,
+.content h1,
+.content h2,
+.content h3,
+.content h4,
+.content h5,
+.content h6 {
+  color: $color;
+}
+
+.main {
+  line-height: 1.7rem;
+  a {
+    color: $linkColor;
+  }
+}
+
+.header {
+  border-bottom: 1px solid $backgroundLight;
+}
+
+.footer {
+  border-top: 1px solid $backgroundLight;
+  .links {
+    max-width: 900px;
+    margin-bottom: 50px;
+    .item {
+      padding: 4px 0;
+      a {
+        color: $color;
+        &:hover {
+          color: $secondaryColor;
+        }
+      }
+    }
+  }
+  .more {
+    font-size: 0.8rem;
+    a {
+      color: $color;
+      &:hover {
+        color: $linkColor;
+        text-decoration: underline;
+      }
+    }
+    .social-links {
+      text-align: right;
+      a.button {
+        color: $colorInverse;
+        padding-left: 0;
+        padding-right: 0;
+        width: 40px;
+        height: 40px;
+        margin: 0 8px;
+        font-size: 22px;
+        &:hover {
+          background-color: $secondaryColor;
+        }
+      }
+    }
+  }
+  .newsletter {
+    max-width: 500px;
+    margin-left: auto;
+    label.checkbox {
+      padding-left: 30px;
+      font-size: 0.9rem;
+      color: $colorLight;
+      input {
+        margin-right: 10px;
+        margin-left: -25px;
+        vertical-align: middle;
+      }
+    }
+  }
+}
+
+.relative {
+  position: relative;
+}
+
+// Hero
+
+.hero {
+  h1 {
+    font-weight: 500;
+    margin-top: 40px;
+  }
+  .description {
+    max-width: 960px;
+    line-height: 2.6rem;
+    font-size: 1.5rem;
+    font-weight: 400;
+  }
+}
+
+// Default Banner
+.default-banner {
+  .extra {
+    background: linear-gradient(90deg, #d7e7e7 50%, #80ea6e 0);
+    height: 40px;
+    overflow: hidden;
+    text-align: center;
+    img {
+      height: 40px;
+    }
+  }
+}
+
+// Videos
+.play {
+  background-color: #6db33f;
+  height: 50px;
+  width: 50px;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  transition: background-color 0.2s;
+  .triangle {
+    margin: auto;
+    top: 50px;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+    border-left: 15px solid #fff;
+  }
+}
+
+@media screen and (min-width: 1408px) {
+  .container:not(.is-max-desktop):not(.is-max-widescreen) {
+    max-width: 800px;
+  }
+}
