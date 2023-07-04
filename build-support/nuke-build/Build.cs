@@ -37,7 +37,7 @@ partial class Build : NukeBuild
     readonly bool BuildEms = false;
 
     [Parameter("Version")]
-    readonly string ProjectVersion = "3.0.1";
+    readonly string ProjectVersion = "3.0.2";
 
     [Solution] readonly Solution Solution;
     [GitRepository] readonly GitRepository GitRepository;
@@ -80,10 +80,10 @@ partial class Build : NukeBuild
         .Before(Restore)
         .Executes(() =>
         {
-            SourceDirectory.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
-            TestsDirectory.GlobDirectories("**/bin", "**/obj").ForEach(DeleteDirectory);
-            EnsureCleanDirectory(ArtifactsDirectory);
-            EnsureCleanDirectory(BuildDirectory);
+            SourceDirectory.GlobDirectories("**/bin", "**/obj").ForEach(x => x.DeleteDirectory());
+            TestsDirectory.GlobDirectories("**/bin", "**/obj").ForEach(x => x.DeleteDirectory());
+            ArtifactsDirectory.CreateOrCleanDirectory();
+            BuildDirectory.CreateOrCleanDirectory();
         });
 
     Target Restore => _ => _
@@ -178,7 +178,7 @@ partial class Build : NukeBuild
         .Executes(() =>
         {
             var binDirectory = RootDirectory / "bin";
-            EnsureCleanDirectory(binDirectory);
+            binDirectory.CreateOrCleanDirectory();
 
             var moduleNames = new[]
             {
@@ -219,7 +219,7 @@ partial class Build : NukeBuild
 
     IEnumerable<Project> GetActiveProjects()
     {
-        var packTargets = Solution.GetProjects("*")
+        var packTargets = Solution.AllProjects
             .Where(x => x.Name != "Spring.Messaging.Ems" || BuildEms)
             .Where(x => !x.Name.Contains("_build"));
         return packTargets;
