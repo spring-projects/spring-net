@@ -6,7 +6,7 @@ THE SPRING.NET FRAMEWORK
 http://www.springframework.net/
 
 
-## 1. INTRODUCTION
+## INTRODUCTION
 
 Spring.NET contains:
 
@@ -45,15 +45,15 @@ Spring.NET contains:
 
 Spring.NET is a port of the Java based Spring Framework. In turn, the Java/J2EE Spring Framework is based on code published in "Expert One-on-One J2EE Design and Development" by Rod Johnson (Wrox, 2002).
 
-## 2. SUPPORTED .NET FRAMEWORK VERSIONS
+## SUPPORTED .NET FRAMEWORK VERSIONS
 
 Spring.NET 3.0.0 supports .NET 4.6.2 and .NET Standard 2.0 and later.
 
-## 3. KNOWN ISSUES
+## KNOWN ISSUES
 
 <none>
 
-## 4. RELEASE INFO
+## RELEASE INFO
 
 Release contents:
 
@@ -76,7 +76,7 @@ Latest info is available at the public website: http://www.springframework.net/
 The Spring Framework is released under the terms of the Apache Software License (see license.txt).
 
 
-## 5. DISTRIBUTION DLLs
+## DISTRIBUTION DLLs
 
 The "bin" directory contains the following distinct dll files for use in applications. Dependencies are those other than on the .NET BCL.
 
@@ -137,7 +137,7 @@ The "bin" directory contains the following distinct dll files for use in applica
     * Dependencies: Spring.Core, NVelocity
 
 
-## 6. WHERE TO START?
+## WHERE TO START?
 
 Documentation can be found in the "docs" directory:
 * The Spring reference documentation
@@ -161,30 +161,14 @@ Documented sample applications can be found in "examples":
 * Quartz Example - Scheduling using Quartz
 * Mvc5QuickStart - Show the configuration of the ASP.NET MVC 5 support
 
-## 7. How to build
+## How to build
 
 VS.NET
 ------
 
-Visual Studio 2019 is required to open and build the solution. The free community version of Visual Studio should suffice.
+Visual Studio 2022 is required to open and build the solution. The free community version of Visual Studio should suffice.
 
-## 8. Support
-
-The user forums at http://forum.springframework.net/ are available for you to submit questions, support requests, and interact with other Spring.NET users.
-
-Bug and issue tracking can be found at https://jira.springsource.org/browse/SPRNET
-
-A Fisheye repository browser is located at https://fisheye.springframework.org/browse/spring-net
-
-To get the sources, fork us on github at https://github.com/SpringSource/spring-net
-
-We are always happy to receive your feedback on the forums. If you think you found a bug, have an improvement suggestion or feature request, please submit a ticket in JIRA (see link above).
-
-A word on bug reports: If at all possible, try to download one of the nightly snapshots at http://www.springframework.net/downloads/nightly/ and see, if this bug has already been fixed. If the problem still persists, don't forget to mention the version of Spring.NET you are using (check the file versions of Spring.NET dlls), the .NET version you are running on and a description how to reproduce the problem.
-Ideally attach some sample code reproducing the problem to the JIRA ticket.
-
-
-## 9. Acknowledgements
+## Acknowledgements
 
 InnovaSys Document X!
 ---------------------
