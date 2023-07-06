@@ -3,6 +3,17 @@ SPRING.NET FRAMEWORK CHANGELOG
 http://www.springframework.net
 
 *****************************************************************************************
+Release Version 3.0.2 Jul 6, 2023
+
+Release Notes - Spring.NET - Version 3.0.2
+
+New Feature Highlights
+
+* Add netstandard2.0 support to Spring.Testing.Microsoft (#237)
+* Upgrade to NUKE 7.0.2 (#238)
+
+
+*****************************************************************************************
 Release Version 3.0.1 Dec 6, 2022
 
 Release Notes - Spring.NET - Version 3.0.1
