@@ -1,4 +1,4 @@
-![Build status](https://img.shields.io/github/workflow/status/spring-projects/spring-net/ci?style=plastic)
+[![Build](https://github.com/spring-projects/spring-net/actions/workflows/ci.yml/badge.svg)](https://github.com/spring-projects/spring-net/actions/workflows/ci.yml)
 
 
 THE SPRING.NET FRAMEWORK
@@ -45,30 +45,27 @@ Spring.NET contains:
 
 Spring.NET is a port of the Java based Spring Framework. In turn, the Java/J2EE Spring Framework is based on code published in "Expert One-on-One J2EE Design and Development" by Rod Johnson (Wrox, 2002).
 
-
 ## 2. SUPPORTED .NET FRAMEWORK VERSIONS
 
-Spring.NET 3.0.0 supports .NET 4.5.2 and .NET Standard 2.0 and later.
+Spring.NET 3.0.0 supports .NET 4.6.2 and .NET Standard 2.0 and later.
 
 ## 3. KNOWN ISSUES
 
 <none>
 
-
 ## 4. RELEASE INFO
 
 Release contents:
 
-* "src" contains the C# source files for the framework
-* "test" contains the C# source files for Spring.NET's test suite
-* "bin" contains various Spring.NET distribution dll files
-* "lib/Net" contains shared third-party libraries needed for building the framework
-* "lib/NHibernate3" contains NHibernate 3.3 dlls
-* "doc" contains reference documentation, MSDN-style API help, and the Spring.NET xsd.
-* "examples" contains sample applications.
-* "build-support" contains additonal applications need to build using NAnt as some convenience
+* `src` contains the C# source files for the framework
+* `test` contains the C# source files for Spring.NET's test suite
+* `bin` contains various Spring.NET distribution dll files
+* `lib/Net` contains shared third-party libraries needed for building the framework
+* `doc` contains reference documentation, MSDN-style API help, and the Spring.NET xsd.
+* `examples` contains sample applications.
+* `build-support` contains additonal applications need to build using NAnt as some convenience
    VS.NET solution files.
-* "dev-support" contains 'developer support' tools and code, such as solution templates for VS.NET
+* `dev-support` contains 'developer support' tools and code, such as solution templates for VS.NET
 
 debug build is done using /DEBUG:full and release build using /DEBUG:pdbonly flags.
 
