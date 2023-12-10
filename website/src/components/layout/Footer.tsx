@@ -93,13 +93,13 @@ const Footer = () => {
                 </div>
                 <div className="social-links column is-3">
                   <a
-                    href="http://forum.springframework.net/"
+                    href="https://github.com/spring-projects/spring-net/discussions/"
                     className="button is-black is-rounded"
                   >
                     <FontAwesomeIcon icon={faMessage} />
                   </a>
                   <a
-                    href="https://jira.springframework.org/secure/BrowseProject.jspa?id=10020"
+                    href="https://github.com/spring-projects/spring-net/issues"
                     className="button is-black is-rounded"
                   >
                     <FontAwesomeIcon icon={faJira} />

@@ -85,37 +85,23 @@ const Navbar = (): JSX.Element => {
                 <a
                   className="navbar-item"
                   target={`_blank`}
-                  href="http://forum.springframework.net/"
+                  href="hhttps://github.com/spring-projects/spring-net/discussions"
                 >
-                  Forum
+                  GitHub Discussions
                 </a>
                 <a
                   className="navbar-item"
                   target={`_blank`}
-                  href="https://jira.springframework.org/secure/BrowseProject.jspa?id=10020"
+                  href="https://github.com/spring-projects/spring-net/issues"
                 >
-                  JIRA Issue Tracking
-                </a>
-                <a
-                  className="navbar-item"
-                  target={`_blank`}
-                  href="https://fisheye.springframework.org/browse/spring-net"
-                >
-                  FishEye Repository Browser
-                </a>
-                <a
-                  className="navbar-item"
-                  target={`_blank`}
-                  href="http://build.springframework.org/browse/SPRNET"
-                >
-                  Continuous Integration
+                  GitHub Issues
                 </a>
                 <a
                   className="navbar-item"
                   target={`_blank`}
                   href="https://github.com/springsource/spring-net/"
                 >
-                  Source Repository (GitHub)
+                  Source Repository
                 </a>
               </div>
             </div>
