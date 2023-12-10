@@ -7,11 +7,6 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-defaults:
-  run:
-    working-directory: website
-
-
 # Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
 permissions:
   contents: read
@@ -36,7 +31,7 @@ jobs:
         uses: actions/configure-pages@v2
 
       - name: Build
-        run: yarn install && yarn build
+        run: ./build.sh website
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v1

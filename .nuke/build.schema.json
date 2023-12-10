@@ -93,11 +93,15 @@
               "Compile",
               "CompileExamples",
               "CompileSolution",
+              "Docs",
+              "DocsReference",
+              "DocsSdk",
               "Pack",
               "PackBinaries",
               "Publish",
               "Restore",
-              "Test"
+              "Test",
+              "Website"
             ]
           }
         },
@@ -117,11 +121,15 @@
               "Compile",
               "CompileExamples",
               "CompileSolution",
+              "Docs",
+              "DocsReference",
+              "DocsSdk",
               "Pack",
               "PackBinaries",
               "Publish",
               "Restore",
-              "Test"
+              "Test",
+              "Website"
             ]
           }
         },

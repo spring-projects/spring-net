@@ -25,7 +25,7 @@ You can download them from [here](http://www.springsource.com/download/community
 Nightly Snapshot Builds
 Nightly snapshot builds are provided for testing and development purposes.
 
-- Download the [nightly snapshot](http://www.springframework.net/downloads/nightly)
+- Download the [nightly snapshot](/downloads/nightly)
 
 ## OLDER RELEASES
 
@@ -71,4 +71,4 @@ Nightly snapshot builds are provided for testing and development purposes.
 **Spring.NET 1.1.2**
 
 - Download it from [Sourceforge](https://sourceforge.net/project/showfiles.php?group_id=106751)
-- See the [changelog](https://springframework.net/changelog.txt), [Breaking Changes](https://springframework.net/BreakingChanges-1.1.txt)
+- See the [changelog](https://github.com/spring-projects/spring-net/blob/main/changelog.txt), [Breaking Changes](https://github.com/spring-projects/spring-net/blob/main/BreakingChanges.txt)

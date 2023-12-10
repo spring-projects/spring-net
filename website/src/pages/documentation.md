@@ -22,7 +22,7 @@ Note: To view HTML Help files on Windows you may need to 'unblock' the file. You
 
 ### Latest Documentation
 
-Reference ( [HTML](http://www.springframework.net/doc-latest/reference/html/index.html) / [PDF](http://www.springframework.net/doc-latest/reference/pdf/spring-net-reference.pdf) / [HTML Help](http://www.springframework.net/doc-latest/reference/htmlhelp/spring-net-reference.chm) )
+Reference ( [HTML](/doc-latest/reference/html/index.html) / [PDF](/doc-latest/reference/pdf/spring-net-reference.pdf) / [HTML Help](/doc-latest/reference/htmlhelp/spring-net-reference.chm) )
 
 ### Release - 1.3.2
 
