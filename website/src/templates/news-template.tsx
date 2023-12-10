@@ -91,28 +91,28 @@ export default BlogTemplate;
 
 // graphQL queries
 export const pageQuery = graphql`
-  query BlogTemplate($id: String!) {
-    posts: allMarkdownRemark(
-      sort: { order: DESC, fields: [frontmatter___publish] }
-      filter: { frontmatter: { templateKey: { eq: "blog-template" } } }
-    ) {
-      edges {
-        node {
-          html
-          frontmatter {
-            title
-            publish(formatString: "MMMM DD, YYYY")
+    query BlogTemplate($id: String!) {
+      posts: allMarkdownRemark(
+        sort: {frontmatter: {publish: DESC}}
+        filter: {frontmatter: {templateKey: {eq: "blog-template"}}}
+      ) {
+        edges {
+          node {
+            html
+            frontmatter {
+              title
+              publish(formatString: "MMMM DD, YYYY")
+            }
           }
         }
       }
-    }
-    page: markdownRemark(id: { eq: $id }) {
-      html
-      frontmatter {
-        title
-        description
-        keywords
+      page: markdownRemark(id: {eq: $id}) {
+        html
+        frontmatter {
+          title
+          description
+          keywords
+        }
       }
     }
-  }
 `;
