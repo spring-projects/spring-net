@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net6.0;$(TargetFullFrameworkVersion)</TargetFrameworks>
+    <TargetFrameworks>net8.0;$(TargetFullFrameworkVersion)</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Spring\Spring.Aop\Spring.Aop.csproj" />
@@ -22,7 +22,7 @@
     <Reference Include="System.Data.OracleClient" />
     <Reference Include="System.Transactions" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net8.0' ">
     <Compile Remove="Data\SQLiteTests.cs" />
     <Compile Remove="Data\OracleAdoTemplateTests.cs" />
   </ItemGroup>

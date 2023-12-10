@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk" ToolsVersion="15.0">
   <PropertyGroup>
-    <TargetFrameworks>net6.0;$(TargetFullFrameworkVersion)</TargetFrameworks>
+    <TargetFrameworks>net8.0;$(TargetFullFrameworkVersion)</TargetFrameworks>
     <NoWarn>$(NoWarn);SYSLIB0011</NoWarn>
   </PropertyGroup>
   <ItemGroup>
@@ -17,7 +17,7 @@
   <ItemGroup Condition=" '$(TargetFramework)' == '$(TargetFullFrameworkVersion)' ">
     <Reference Include="System.Web" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net8.0' ">
     <Compile Remove="Aop\Framework\AutoProxy\AbstractAutoProxyCreatorTests.cs" />
     <Compile Remove="Aop\Framework\Adapter\ThrowsAdviceInterceptorTests.cs" />
     <Compile Remove="Aop\Framework\AutoProxy\AbstractAutoProxyCreatorTests.cs" />

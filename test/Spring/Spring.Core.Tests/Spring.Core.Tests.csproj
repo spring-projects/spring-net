@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net6.0;$(TargetFullFrameworkVersion)</TargetFrameworks>
+    <TargetFrameworks>net8.0;$(TargetFullFrameworkVersion)</TargetFrameworks>
     <NoWarn>$(NoWarn);SYSLIB0001;SYSLIB0003;SYSLIB0011</NoWarn>
     <ProduceReferenceAssembly>false</ProduceReferenceAssembly>
     <GenerateResourceUsePreserializedResources>true</GenerateResourceUsePreserializedResources>
@@ -34,7 +34,7 @@
     <Reference Include="System.Web.Services" />
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net8.0' ">
     <Compile Remove="Context\Attributes\FailAssemblyObjectDefinitionScannerTests.cs" />
     <Compile Remove="Context\Support\ApplicationContextAwareProcessorTests.cs" />
     <Compile Remove="Expressions\ExpressionEvaluatorTests.cs" />

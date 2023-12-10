@@ -18,15 +18,11 @@
 
 #endregion
 
-#region Imports
-
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
 using NUnit.Framework;
 using Spring.Objects;
-
-#endregion
 
 namespace Spring.Util
 {
@@ -83,7 +79,9 @@ namespace Spring.Util
 		/// <returns>true if the object is serializable, otherwise false.</returns>
 		public static bool IsSerializable(object o)
 		{
+#pragma warning disable SYSLIB0050 // Type or member is obsolete
 			return o == null ? true : o.GetType().IsSerializable;
+#pragma warning restore SYSLIB0050
 		}
 
 		/// <summary>

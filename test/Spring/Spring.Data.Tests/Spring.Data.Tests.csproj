@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net6.0;$(TargetFullFrameworkVersion)</TargetFrameworks>
+    <TargetFrameworks>net8.0;$(TargetFullFrameworkVersion)</TargetFrameworks>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
   </PropertyGroup>
   <ItemGroup>
@@ -23,7 +23,7 @@
     <PackageReference Include="NUnit3TestAdapter" />
     <PackageReference Include="System.Data.SqlClient" />
   </ItemGroup>
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net6.0' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net8.0' ">
     <Compile Remove="Data\Core\ServiceDomainTransactionManagerTests.cs" />
   </ItemGroup>
   <ItemGroup>

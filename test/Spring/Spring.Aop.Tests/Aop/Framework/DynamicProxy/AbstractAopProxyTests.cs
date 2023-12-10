@@ -37,6 +37,8 @@ using Spring.Util;
 
 using NUnit.Framework;
 
+#pragma warning disable SYSLIB0050
+
 namespace Spring.Aop.Framework.DynamicProxy
 {
     /// <summary>
