@@ -1,6 +1,6 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net6.0;$(TargetFullFrameworkVersion)</TargetFrameworks>
+    <TargetFrameworks>net8.0;$(TargetFullFrameworkVersion)</TargetFrameworks>
   </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\Spring.Data.Tests\Spring.Data.Tests.csproj" />

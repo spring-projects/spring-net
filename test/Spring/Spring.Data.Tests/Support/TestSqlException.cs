@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  * 
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,12 +18,12 @@
 
 #endregion
 
-#region Imports
-
 using System;
 using System.Runtime.Serialization;
 
-#endregion
+#pragma warning disable CS0672 // Member overrides obsolete member
+#pragma warning disable SYSLIB0050
+#pragma warning disable SYSLIB0051
 
 namespace Spring.Support
 {

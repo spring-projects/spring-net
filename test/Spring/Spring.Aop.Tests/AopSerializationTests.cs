@@ -32,6 +32,8 @@ using Spring.Aop.Framework;
 using Spring.Context;
 using Spring.Objects.Factory;
 
+#pragma warning disable SYSLIB0050
+
 namespace Spring
 {
     /// <summary>
