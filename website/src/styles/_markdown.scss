@@ -1,0 +1,43 @@
+// Markdown overrides
+
+.markdown {
+  h1 {
+    font-size: 3.5rem;
+    font-weight: 500;
+    padding: 1rem 0;
+  }
+  h2 {
+    font-size: 2.3rem;
+    font-weight: 500;
+    padding: 1rem 0;
+    strong {
+      color: $secondaryColor;
+    }
+  }
+  h1 + h2 {
+    padding-top: 0;
+  }
+  a {
+    color: $linkColor;
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+  code {
+    white-space: nowrap;
+    background-color: #fff;
+    border: 1px solid #e1e1e8;
+    color: #009;
+    padding: 2px 6px;
+    font-size: 0.875rem;
+    font-family: Monaco, monospace;
+  }
+  pre code {
+    white-space: pre;
+    background-color: transparent;
+    color: currentColor;
+    font-size: 1em;
+    padding: 0;
+    border: 0 none;
+  }
+}
