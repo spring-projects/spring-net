@@ -63,6 +63,9 @@ const Navbar = (): JSX.Element => {
                 <Link className="navbar-item" to="/examples">
                   Examples/Tutorials
                 </Link>
+                <Link className="navbar-item" to="/license">
+                  License
+                </Link>
               </div>
             </div>
 
