@@ -18,8 +18,6 @@
     <Copyright>Copyright 2002-2021 Spring.NET Framework Team.</Copyright>
     <Trademark>Apache License, Version 2.0</Trademark>
 
-    <CommonLoggingVersion>3.4.1</CommonLoggingVersion>
-
     <Authors>SpringSource</Authors>
     <PackageIcon>SpringSource_Leaves32x32.png</PackageIcon>
     <PackageIconUrl>https://springframework.net/images/SpringSource_Leaves32x32.png</PackageIconUrl>
@@ -48,10 +46,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
 
   </PropertyGroup>
-
-  <ItemGroup Condition="'$(SourceLinkEnabled)' != 'false'">
-    <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="All" />
-  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="ConfigureAwaitChecker.Analyzer" PrivateAssets="All" />

@@ -13,10 +13,6 @@
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
 
-    <ApacheNmsVersion>2.0.0</ApacheNmsVersion>
-    <CommonLoggingVersion>3.4.1</CommonLoggingVersion>
-    <Log4NetVersion>2.0.8</Log4NetVersion>
-
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
     <ComVisible>False</ComVisible>
     <DebugSymbols>True</DebugSymbols>
