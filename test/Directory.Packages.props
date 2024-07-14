@@ -3,20 +3,20 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="Apache.NMS" Version="$(ApacheNmsVersion)" />
+    <PackageVersion Include="Apache.NMS" Version="2.0.0" />
     <PackageVersion Include="Apache.NMS.ActiveMQ" Version="1.7.2" />
-    <PackageVersion Include="BenchmarkDotNet" Version="0.13.2" />
-    <PackageVersion Include="FakeItEasy" Version="7.3.1" />
-    <PackageVersion Include="FakeItEasy.Analyzer.CSharp" Version="6.1.0" />
-    <PackageVersion Include="log4net" Version="2.0.12" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.4.0" />
-    <PackageVersion Include="MSTest.TestAdapter" Version="2.1.2" />
-    <PackageVersion Include="MSTest.TestFramework" Version="2.1.2" />
-    <PackageVersion Include="Newtonsoft.Json" Version="13.0.1" />
-    <PackageVersion Include="NUnit" Version="3.13.3" />
-    <PackageVersion Include="NUnit3TestAdapter" Version="4.3.1" />
+    <PackageVersion Include="BenchmarkDotNet" Version="0.13.12" />
+    <PackageVersion Include="FakeItEasy" Version="8.3.0" />
+    <PackageVersion Include="FakeItEasy.Analyzer.CSharp" Version="6.1.1" />
+    <PackageVersion Include="log4net" Version="2.0.17" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.10.0" />
+    <PackageVersion Include="MSTest.TestAdapter" Version="3.4.3" />
+    <PackageVersion Include="MSTest.TestFramework" Version="3.4.3" />
+    <PackageVersion Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageVersion Include="NUnit" Version="3.14.0" />
+    <PackageVersion Include="NUnit3TestAdapter" Version="4.5.0" />
     <PackageVersion Include="System.Data.SqlClient" Version="4.8.6" />
-    <PackageVersion Include="System.Data.SQLite.Core" Version="1.0.113.7" />
-    <PackageVersion Include="System.Resources.Extensions" Version="5.0.0" />
+    <PackageVersion Include="System.Data.SQLite.Core" Version="1.0.118" />
+    <PackageVersion Include="System.Resources.Extensions" Version="8.0.0" />
   </ItemGroup>
 </Project>

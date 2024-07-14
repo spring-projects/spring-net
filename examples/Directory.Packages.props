@@ -5,11 +5,11 @@
   <ItemGroup>
     <PackageVersion Include="Apache.NMS" Version="2.0.0" />
     <PackageVersion Include="Apache.NMS.ActiveMQ" Version="1.7.2" />
-    <PackageVersion Include="Common.Logging" Version="$(CommonLoggingVersion)" />
+    <PackageVersion Include="Common.Logging" Version="3.4.1" />
     <PackageVersion Include="Common.Logging.Log4Net1213" Version="3.4.1" />
     <PackageVersion Include="Common.Logging.Log4Net1215" Version="3.4.1" />
     <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.4.0" />
-    <PackageVersion Include="NUnit" Version="3.13.3" />
-    <PackageVersion Include="NUnit3TestAdapter" Version="4.3.1" />
+    <PackageVersion Include="NUnit" Version="3.14.0" />
+    <PackageVersion Include="NUnit3TestAdapter" Version="4.5.0" />
   </ItemGroup>
 </Project>

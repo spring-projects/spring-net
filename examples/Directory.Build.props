@@ -17,8 +17,6 @@
     <GenerateAssemblyTitleAttribute>false</GenerateAssemblyTitleAttribute>
     <GenerateAssemblyDescriptionAttribute>false</GenerateAssemblyDescriptionAttribute>
 
-    <CommonLoggingVersion>3.4.1</CommonLoggingVersion>
-
     <Authors>SpringSource</Authors>
     <PackageIconUrl>http://springframework.net/images/SpringSource_Leaves32x32.png</PackageIconUrl>
     <PackageLicenseUrl>http://www.springframework.net/license.html</PackageLicenseUrl>
@@ -27,7 +25,7 @@
 
     <NeutralLanguage>en-US</NeutralLanguage>
     <WarningsAsErrors>True</WarningsAsErrors>
-	<NoWarn>1574,1584,1591</NoWarn>
+    <NoWarn>1574,1584,1591</NoWarn>
 
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/spring-projects/spring-net</RepositoryUrl>
