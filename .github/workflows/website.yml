@@ -2,7 +2,16 @@ name: website
 
 on:
   push:
-    branches: ["main", "website"]
+    branches:
+      - main
+    paths:
+      - 'website/**'
+
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'website/**'
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -40,6 +49,7 @@ jobs:
 
   # Deployment job
   deploy:
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
