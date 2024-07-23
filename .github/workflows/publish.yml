@@ -10,7 +10,7 @@ jobs:
   publish:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
       - name: Publish
         run: ./build.cmd test publish
         env:
