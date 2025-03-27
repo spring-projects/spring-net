@@ -81,7 +81,7 @@ namespace Spring.Objects.Factory.Support
                 {
                     if (s_eventHandlersRegistered) return;
 
-                    if (log.IsDebugEnabled) log.Debug("hooking up event handlers");
+                    if (log.IsDebugEnabled()) log.Debug("hooking up event handlers");
                     VirtualEnvironment.EndRequest += OnEndRequest;
                     VirtualEnvironment.EndSession += OnEndSession;
 

@@ -37,7 +37,7 @@ namespace Spring.Objects.Factory.Xml
     public class DefaultObjectDefinitionDocumentReader : IObjectDefinitionDocumentReader
     {
         /// <summary>
-        /// The shared <see cref="Common.Logging.ILog"/> instance for this class (and derived classes).
+        /// The shared <see cref="ILog"/> instance for this class (and derived classes).
         /// </summary>
         protected static readonly ILog log =
             LogManager.GetLogger(typeof(DefaultObjectDefinitionDocumentReader));
@@ -80,7 +80,7 @@ namespace Spring.Objects.Factory.Xml
 
             this.readerContext = readerContext;
 
-            if (log.IsDebugEnabled)
+            if (log.IsDebugEnabled())
             {
                 log.Debug("Loading object definitions.");
             }
@@ -96,7 +96,7 @@ namespace Spring.Objects.Factory.Xml
 
             PostProcessXml(root);
 
-            if (log.IsDebugEnabled)
+            if (log.IsDebugEnabled())
             {
                 log.Debug(
                     $"Found {readerContext.Registry.ObjectDefinitionCount} <{ObjectDefinitionConstants.ObjectElement}> elements defining objects.");
@@ -187,7 +187,7 @@ namespace Spring.Objects.Factory.Xml
                 }
                 bdHolder = helper.DecorateObjectDefinitionIfRequired(element, bdHolder);
 
-                if (log.IsDebugEnabled)
+                if (log.IsDebugEnabled())
                 {
                     log.Debug(string.Format(CultureInfo.InvariantCulture, "Registering object definition with id '{0}'.", bdHolder.ObjectName));
                 }
@@ -220,7 +220,7 @@ namespace Spring.Objects.Factory.Xml
             string location = resource.GetAttribute(ObjectDefinitionConstants.ImportResourceAttribute);
             try
             {
-                if (log.IsDebugEnabled)
+                if (log.IsDebugEnabled())
                 {
                     log.Debug(string.Format(
                                   CultureInfo.InvariantCulture,

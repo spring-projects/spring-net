@@ -21,6 +21,7 @@
 using System.Collections;
 
 using Spring.Messaging.Ems.Common;
+
 using Spring.Collections;
 using Spring.Util;
 
@@ -229,7 +230,7 @@ namespace Spring.Messaging.Ems.Connections
             }
             if (session != null)
             {
-                if (LOG.IsDebugEnabled)
+                if (LOG.IsDebugEnabled())
                 {
                     LOG.Debug("Found cached Session for mode " + mode + ": "
                               + (session is IDecoratorSession ? ((IDecoratorSession) session).TargetSession : session));
@@ -238,7 +239,7 @@ namespace Spring.Messaging.Ems.Connections
             else
             {
                 ISession targetSession = CreateSession(con, mode);
-                if (LOG.IsDebugEnabled)
+                if (LOG.IsDebugEnabled())
                 {
                     LOG.Debug("Creating cached Session for mode " + mode + ": " + targetSession);
                 }

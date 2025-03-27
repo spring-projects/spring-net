@@ -18,6 +18,7 @@
 
 #endregion
 
+using Microsoft.Extensions.Logging;
 using Spring.Objects;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
@@ -33,7 +34,7 @@ namespace Spring.Context.Attributes
     /// </summary>
     public class ScannedGenericObjectDefinition : GenericObjectDefinition
     {
-        private static readonly ILog Log = LogManager.GetCurrentClassLogger();
+        private static readonly ILog Log = LogManager.GetLogger<ScannedGenericObjectDefinition>();
 
         /// <summary>
         /// Name provided by the Component Attribute
@@ -57,7 +58,10 @@ namespace Spring.Context.Attributes
             ParseScopeAttribute();
             ParseQualifierAttribute();
 
-            Log.Debug(m => m("ComponentName: {0}; {1}", _componentName, ToString()));
+            if (Log.IsDebugEnabled())
+            {
+                Log.LogDebug("ComponentName: {ComponentNAme}; {Name}", _componentName, ToString());
+            }
         }
 
         private void ParseName()

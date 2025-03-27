@@ -269,7 +269,7 @@ namespace Spring.Objects.Factory.Config
                 {
                     #region Instrumentation
 
-                    if (_log.IsDebugEnabled)
+                    if (_log.IsDebugEnabled())
                     {
                         _log.Debug(string.Format(
                                        CultureInfo.InvariantCulture,
@@ -298,7 +298,7 @@ namespace Spring.Objects.Factory.Config
                             {
                                 #region Instrumentation
 
-                                if (_log.IsWarnEnabled)
+                                if (_log.IsWarnEnabled())
                                 {
                                     _log.Warn(errorMessage);
                                 }

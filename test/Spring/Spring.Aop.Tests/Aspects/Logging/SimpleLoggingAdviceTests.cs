@@ -18,11 +18,14 @@
 
 #endregion
 
+using System;
 using System.Reflection;
 
 using AopAlliance.Intercept;
-using FakeItEasy;
 
+using FakeItEasy;
+using FakeItEasy.Configuration;
+using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using Spring.Aop.Framework;
 
@@ -60,14 +63,14 @@ namespace Spring.Aspects.Logging
             SimpleLoggingAdvice loggingAdvice = new SimpleLoggingAdvice(log);
             pf.AddAdvice(loggingAdvice);
 
-            A.CallTo(() => log.IsTraceEnabled).Returns(true);
+            A.CallTo(() => log.IsEnabled(LogLevel.Trace)).Returns(true);
 
             object proxy = pf.GetProxy();
             ITestTarget ptt = (ITestTarget)proxy;
             ptt.DoSomething();
 
-            A.CallTo(() => log.Trace("Entering DoSomething")).MustHaveHappened();
-            A.CallTo(() => log.Trace("Exiting DoSomething")).MustHaveHappened();
+            log.VerifyLogMustHaveHappened(LogLevel.Trace, "Entering DoSomething");
+            log.VerifyLogMustHaveHappened(LogLevel.Trace, "Exiting DoSomething");
         }
 
         [Test]
@@ -79,14 +82,14 @@ namespace Spring.Aspects.Logging
             MethodInfo mi = typeof(string).GetMethod("ToString", Type.EmptyTypes);
             //two additional calls the method are to retrieve the method name on entry/exit...
             A.CallTo(() => methodInvocation.Method).Returns(mi);
-            A.CallTo(() => log.IsTraceEnabled).Returns(true);
+            A.CallTo(() => log.IsEnabled(LogLevel.Trace)).Returns(true);
             A.CallTo(() => methodInvocation.Proceed()).Returns(null);
 
             TestableSimpleLoggingAdvice loggingAdvice = new TestableSimpleLoggingAdvice(true);
             loggingAdvice.CallInvokeUnderLog(methodInvocation, log);
 
-            A.CallTo(() => log.Trace("Entering ToString")).MustHaveHappened();
-            A.CallTo(() => log.Trace("Exiting ToString")).MustHaveHappened();
+            log.VerifyLogMustHaveHappened(LogLevel.Trace, "Entering ToString");
+            log.VerifyLogMustHaveHappened(LogLevel.Trace, "Exiting ToString");
         }
 
         [Test]
@@ -99,8 +102,8 @@ namespace Spring.Aspects.Logging
             //two additional calls the method are to retrieve the method name on entry/exit...
             A.CallTo(() => methodInvocation.Method).Returns(mi);
 
-            A.CallTo(() => log.IsTraceEnabled).Returns(false);
-            A.CallTo(() => log.IsDebugEnabled).Returns(true);
+            A.CallTo(() => log.IsEnabled(LogLevel.Trace)).Returns(false);
+            A.CallTo(() => log.IsEnabled(LogLevel.Debug)).Returns(true);
 
             A.CallTo(() => methodInvocation.Proceed()).Returns(null);
 
@@ -109,8 +112,8 @@ namespace Spring.Aspects.Logging
             Assert.IsTrue(loggingAdvice.CallIsInterceptorEnabled(methodInvocation, log));
             loggingAdvice.CallInvokeUnderLog(methodInvocation, log);
 
-            A.CallTo(() => log.Debug("Entering ToString")).MustHaveHappened();
-            A.CallTo(() => log.Debug("Exiting ToString")).MustHaveHappened();
+            log.VerifyLogMustHaveHappened(LogLevel.Debug, "Entering ToString");
+            log.VerifyLogMustHaveHappened(LogLevel.Debug, "Exiting ToString");
         }
 
         [Test]
@@ -122,7 +125,7 @@ namespace Spring.Aspects.Logging
             MethodInfo mi = typeof(string).GetMethod("ToString", Type.EmptyTypes);
             //two additional calls the method are to retrieve the method name on entry/exit...
             A.CallTo(() => methodInvocation.Method).Returns(mi);
-            A.CallTo(() => log.IsTraceEnabled).Returns(true);
+            A.CallTo(() => log.IsEnabled(LogLevel.Trace)).Returns(true);
 
             Exception e = new ArgumentException("bad value");
             A.CallTo(() => methodInvocation.Proceed()).Throws(e);
@@ -137,8 +140,8 @@ namespace Spring.Aspects.Logging
             {
             }
 
-            A.CallTo(() => log.Trace("Entering ToString")).MustHaveHappened();
-            A.CallTo(() => log.Trace("Exception thrown in ToString, ToString", e)).MustHaveHappened();
+            log.VerifyLogMustHaveHappened(LogLevel.Trace, "Entering ToString");
+            log.VerifyLogMustHaveHappened(LogLevel.Trace, "Exception thrown in ToString, ToString");
         }
 
         [Test]
@@ -154,7 +157,7 @@ namespace Spring.Aspects.Logging
             object[] args = new object[] { "hello", luckyNumbers };
 
             A.CallTo(() => methodInvocation.Arguments).Returns(args);
-            A.CallTo(() => log.IsTraceEnabled).Returns(true);
+            A.CallTo(() => log.IsEnabled(LogLevel.Trace)).Returns(true);
             A.CallTo(() => methodInvocation.Proceed()).Returns(4);
 
             TestableSimpleLoggingAdvice loggingAdvice = new TestableSimpleLoggingAdvice(true);
@@ -164,8 +167,8 @@ namespace Spring.Aspects.Logging
 
             loggingAdvice.CallInvokeUnderLog(methodInvocation, log);
 
-            A.CallTo(() => log.Trace(A<string>.That.StartsWith("Entering Bark"))).MustHaveHappened();
-            A.CallTo(() => log.Trace(A<string>.That.StartsWith("Exiting Bark"))).MustHaveHappened();
+            log.VerifyLogMustHaveHappened(LogLevel.Trace, "Entering Bark");
+            log.VerifyLogMustHaveHappened(LogLevel.Trace, "Exiting Bark");
         }
     }
 
@@ -174,6 +177,47 @@ namespace Spring.Aspects.Logging
         public int Bark(string message, int[] luckyNumbers)
         {
             return 4;
+        }
+    }
+
+    public static class LoggerExtensions
+    {
+        public static void VerifyLogMustHaveHappened(this ILogger logger, LogLevel level, string message)
+        {
+            try
+            {
+                logger.VerifyLog(level, message)
+                    .MustHaveHappened();
+            }
+            catch (Exception e)
+            {
+                throw new ExpectationException($"while verifying a call to log with message: \"{message}\"", e);
+            }
+        }
+
+        public static void VerifyLogMustNotHaveHappened(this ILogger logger, LogLevel level, string message)
+        {
+            try
+            {
+                logger.VerifyLog(level, message)
+                    .MustNotHaveHappened();
+            }
+            catch (Exception e)
+            {
+                throw new ExpectationException($"while verifying a call to log with message: \"{message}\"", e);
+            }
+        }
+
+        public static IVoidArgumentValidationConfiguration VerifyLog(this ILogger logger, LogLevel level,
+            string message)
+        {
+            return A.CallTo(() => logger.Log(
+                level,
+                A<EventId>._,
+                A<object>.That.Matches(e => e.ToString().Contains(message)),
+                A<Exception>._,
+                A<Func<object, Exception, string>>._)
+            );
         }
     }
 }

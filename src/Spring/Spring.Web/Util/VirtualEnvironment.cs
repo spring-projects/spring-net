@@ -259,7 +259,7 @@ namespace Spring.Util
 
                         #region Instrumentation
 
-                        if (log.IsDebugEnabled)
+                        if (log.IsDebugEnabled())
                         {
                             log.Debug("rewriting path from " + currentFileDirectory + " to " + newPath + " results in " + ctx.Request.FilePath);
                         }
@@ -272,7 +272,7 @@ namespace Spring.Util
                 {
                     if (originalPath != null)
                     {
-                        if (log.IsDebugEnabled)
+                        if (log.IsDebugEnabled())
                         {
                             log.Debug("restoring path from " + ctx.Request.FilePath + " back to " + originalPath);
                         }

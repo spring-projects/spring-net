@@ -18,9 +18,12 @@
 
 #endregion
 
+using System;
 using System.Collections;
+using System.IO;
+using System.Linq;
 using System.Text;
-using Common.Logging.Simple;
+using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
 using Spring.Collections;
 using Spring.Core.IO;
@@ -45,7 +48,7 @@ namespace Spring.Objects.Factory.Xml
         public void FixtureSetUp()
         {
             // enable (null appender) logging, to ensure that the logging code is exercised...
-            LogManager.Adapter = new NoOpLoggerFactoryAdapter(); 
+            LogManager.LoggerFactory = NullLoggerFactory.Instance;
             //XmlConfigurator.Configure();
         }
 

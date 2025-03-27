@@ -87,7 +87,7 @@ namespace Spring.Aop.Framework.AutoProxy
                             ObjectCurrentlyInCreationException oce = (ObjectCurrentlyInCreationException)rootEx;
                             if (_objectFactory.IsCurrentlyInCreation(oce.ObjectName))
                             {
-                                if (_log.IsDebugEnabled)
+                                if (_log.IsDebugEnabled())
                                 {
                                     _log.Debug(string.Format("Ignoring currently created advisor '{0}': exception message = {1}",
                                         name, ex.Message));

@@ -95,7 +95,7 @@ namespace Spring.Aspects.Cache
         public void AfterReturning(object returnValue, MethodInfo method, object[] arguments, object target)
         {
             #region Instrumentation
-            bool isLogDebugEnabled = logger.IsDebugEnabled;
+            bool isLogDebugEnabled = logger.IsDebugEnabled();
             #endregion
 
             InvalidateCacheAttribute[] cacheInfoArray = GetInvalidateCacheInfo(method);

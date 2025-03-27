@@ -166,7 +166,7 @@ namespace Spring.Data.Support
                 return dex;
             }
             // Looking for a fallback...
-            if (log.IsDebugEnabled)
+            if (log.IsDebugEnabled())
             {
                 log.Debug("Unable to translate exception with errorCode '" + errorCode + "', will use the fallback translator");
             }
@@ -323,7 +323,7 @@ namespace Spring.Data.Support
         /// <param name="b">if set to <c>true</c> [b].</param>
 	    private void LogTranslation(string task, string sql, string errorCode, Exception exception, bool b)
 	    {
-            if (log.IsDebugEnabled)
+            if (log.IsDebugEnabled())
             {
                 String intro = "Translating";
                 log.Debug(intro + " ADO exception with error code '" + errorCode

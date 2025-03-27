@@ -147,7 +147,7 @@ namespace Spring.Objects.Factory.Xml
                 {
                     #region Instrumentation
 
-                    if (log.IsDebugEnabled)
+                    if (log.IsDebugEnabled())
                     {
                         log.Debug(string.Format("Error while parsing object scope : '{0}' is an invalid value.",
                                                 value), ex);

@@ -18,6 +18,7 @@
 
 #endregion
 
+
 namespace Spring.Objects.Factory.Parsing
 {
     public class FailFastProblemReporter : IProblemReporter

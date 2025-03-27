@@ -68,7 +68,7 @@ namespace Spring.Messaging.Core
                         } else
                         {
                             #region Logging
-                            if (LOG.IsWarnEnabled)
+                            if (LOG.IsWarnEnabled())
                             {
                                 LOG.Warn(
                                     "Path for MessageQueueFactoryObject named [" +

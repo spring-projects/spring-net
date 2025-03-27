@@ -67,7 +67,7 @@ namespace Spring.Transaction.Support
 	{
 	    #region Logging
 
-	    private static readonly Common.Logging.ILog LOG = Common.Logging.LogManager.GetLogger(typeof (TransactionSynchronizationManager));
+	    private static readonly ILog LOG = LogManager.GetLogger(typeof (TransactionSynchronizationManager));
 
 	    #endregion
 
@@ -145,7 +145,7 @@ namespace Spring.Transaction.Support
             }
             object val = resources[key];
 
-            if (val != null && LOG.IsDebugEnabled)
+            if (val != null && LOG.IsDebugEnabled())
             {
                 LOG.Debug("Retrieved value [" + Describe(val) + "] for key [" + Describe(key) + "] bound to thread [" +
                     SystemUtils.ThreadId + "]");
@@ -176,7 +176,7 @@ namespace Spring.Transaction.Support
                         "] bound to thread [" + SystemUtils.ThreadId + "]");
             }
             resources.Add(key, value);
-            if (LOG.IsDebugEnabled)
+            if (LOG.IsDebugEnabled())
             {
                 LOG.Debug("Bound value [" + Describe(value) + "] for key [" + Describe(key) + "] to thread [" +
                     SystemUtils.ThreadId + "]");
@@ -206,7 +206,7 @@ namespace Spring.Transaction.Support
             {
                 LogicalThreadContext.FreeNamedDataSlot(resourcesDataSlotName);
             }
-            if (LOG.IsDebugEnabled)
+            if (LOG.IsDebugEnabled())
             {
                 LOG.Debug("Removed value [" + Describe(val) + "] for key [" + Describe(key) + "] from thread [" +
                     SystemUtils.ThreadId + "]");
@@ -231,7 +231,7 @@ namespace Spring.Transaction.Support
 			{
 				throw new InvalidOperationException( "Cannot activate transaction synchronization - already active" );
 			}
-            if (LOG.IsDebugEnabled)
+            if (LOG.IsDebugEnabled())
             {
                 LOG.Debug("Initializing transaction synchronization");
             }
@@ -254,7 +254,7 @@ namespace Spring.Transaction.Support
 			{
 				throw new InvalidOperationException( "Cannot deactivate transaction synchronization - not active" );
 			}
-            if (LOG.IsDebugEnabled)
+            if (LOG.IsDebugEnabled())
             {
                 LOG.Debug("Clearing transaction synchronization");
             }

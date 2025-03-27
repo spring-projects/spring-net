@@ -33,7 +33,7 @@ namespace Spring.ServiceModel.Activation
     {
         #region Logging
 
-        private static readonly Common.Logging.ILog LOG = Common.Logging.LogManager.GetLogger(typeof(ServiceHostFactoryObject));
+        private static readonly ILog LOG = LogManager.GetLogger(typeof(ServiceHostFactoryObject));
 
         #endregion
 
@@ -183,7 +183,7 @@ namespace Spring.ServiceModel.Activation
 
             #region Instrumentation
 
-            if (LOG.IsInfoEnabled)
+            if (LOG.IsInfoEnabled())
             {
                 LOG.Info(String.Format("The service '{0}' is ready and can now be accessed.", TargetName));
             }

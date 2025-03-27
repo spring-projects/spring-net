@@ -511,7 +511,7 @@ namespace Spring.Transaction.Support
         public ITransactionStatus GetTransaction(ITransactionDefinition definition)
         {
             object transaction = DoGetTransaction();
-            bool debugEnabled = log.IsDebugEnabled;
+            bool debugEnabled = log.IsDebugEnabled();
 
             if (debugEnabled)
             {

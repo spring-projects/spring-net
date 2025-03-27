@@ -49,7 +49,7 @@ namespace Spring.Web.Conversation
                 LOG.Error(message);
                 throw new InvalidOperationException(message);
             }
-            if (LOG.IsDebugEnabled) LOG.Error(String.Format("Creating InnerConversationList for '{0}'", conversationOwner.Id));
+            if (LOG.IsDebugEnabled()) LOG.Error(String.Format("Creating InnerConversationList for '{0}'", conversationOwner.Id));
             this.conversationOwner = conversationOwner;
         }
 
@@ -59,7 +59,7 @@ namespace Spring.Web.Conversation
         /// <param name="itemAdded"></param>
         private void PreAddProcessor(IConversationState itemAdded)
         {
-            if (LOG.IsDebugEnabled) LOG.Debug(String.Format("PreAddProcessor: added={0} into {1}", itemAdded, this.conversationOwner));
+            if (LOG.IsDebugEnabled()) LOG.Debug(String.Format("PreAddProcessor: added={0} into {1}", itemAdded, this.conversationOwner));
             this.ValidateCircularDependency(itemAdded);
             if (itemAdded.ParentConversation != null && itemAdded.ParentConversation != this.conversationOwner)
             {
@@ -73,7 +73,7 @@ namespace Spring.Web.Conversation
         /// </summary>
         private void PostAddProcessor(IConversationState itemAdded)
         {
-            if (LOG.IsDebugEnabled) LOG.Debug(String.Format("PostAddProcessor: added={0} into {1}", itemAdded, this.conversationOwner));
+            if (LOG.IsDebugEnabled()) LOG.Debug(String.Format("PostAddProcessor: added={0} into {1}", itemAdded, this.conversationOwner));
             if (itemAdded.ParentConversation == null)
             {
                 itemAdded.ParentConversation = this.conversationOwner;
@@ -82,7 +82,7 @@ namespace Spring.Web.Conversation
 
         private void ValidateCircularDependency(IConversationState itemAdded)
         {
-            if (LOG.IsDebugEnabled) LOG.Debug(String.Format("Validating Circular Dependency: added={0} into {1}", itemAdded, this.conversationOwner));
+            if (LOG.IsDebugEnabled()) LOG.Debug(String.Format("Validating Circular Dependency: added={0} into {1}", itemAdded, this.conversationOwner));
 
             ICollection<IConversationState> visitedColl = new HashedSet<IConversationState>();
             visitedColl.Add(conversationOwner);

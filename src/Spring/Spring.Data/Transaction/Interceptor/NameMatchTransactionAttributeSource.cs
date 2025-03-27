@@ -157,7 +157,7 @@ namespace Spring.Transaction.Interceptor
 		public void AddTransactionMethod( string methodName, ITransactionAttribute attribute )
         {
             #region Instrumentation
-            if (log.IsDebugEnabled)
+            if (log.IsDebugEnabled())
             {
                 log.Debug("Adding transactional method [" + methodName + "] with attribute [" + attribute + "]");
             }

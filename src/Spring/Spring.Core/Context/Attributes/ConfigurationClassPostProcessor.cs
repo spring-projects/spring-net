@@ -18,6 +18,7 @@
 
 #endregion
 
+using Microsoft.Extensions.Logging;
 using Spring.Core;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Parsing;
@@ -127,7 +128,7 @@ namespace Spring.Context.Attributes
                         Type configClass = objDef.ObjectType;
                         Type enhancedClass = enhancer.Enhance(configClass);
 
-                        Logger.Debug(m => m("Replacing object definition '{0}' existing class '{1}' with enhanced class", name, configClass.FullName));
+                        Logger.LogDebug("Replacing object definition '{Name}' existing class '{FullName}' with enhanced class", name, configClass.FullName);
 
                         ((IConfigurableObjectDefinition)objDef).ObjectType = enhancedClass;
                     }

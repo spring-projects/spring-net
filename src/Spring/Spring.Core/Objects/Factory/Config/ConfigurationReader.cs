@@ -23,10 +23,11 @@ using System.Configuration;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Xml;
+
+
 using Spring.Core.IO;
 using Spring.Core.TypeResolution;
 using Spring.Util;
-using ConfigurationException=Common.Logging.ConfigurationException;
 using ConfigXmlDocument = Spring.Util.ConfigXmlDocument;
 
 namespace Spring.Objects.Factory.Config

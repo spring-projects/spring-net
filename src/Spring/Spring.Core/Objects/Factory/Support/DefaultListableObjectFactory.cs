@@ -362,7 +362,7 @@ namespace Spring.Objects.Factory.Support
                         $"Cannot register object definition [{objectDefinition}] for object '{name}': there's already [{existingDefinition}] bound.");
                 }
 
-                if (log.IsDebugEnabled)
+                if (log.IsDebugEnabled())
                 {
                     log.Debug(
                         $"Overriding object definition for object '{name}': replacing [{existingDefinition}] with [{objectDefinition}].");
@@ -464,7 +464,7 @@ namespace Spring.Objects.Factory.Support
         /// <seealso cref="Spring.Objects.Factory.Config.IConfigurableListableObjectFactory.PreInstantiateSingletons"/>
         public void PreInstantiateSingletons()
         {
-            if (log.IsDebugEnabled)
+            if (log.IsDebugEnabled())
             {
                 log.Debug("Pre-instantiating singletons in factory [" + this + "]");
             }
@@ -992,7 +992,7 @@ namespace Spring.Objects.Factory.Support
                         // ignoring this is ok... it indicates a circular reference when autowiring
                         // constructors; we want to find matches other than the currently
                         // created object itself...
-                        if (log.IsDebugEnabled)
+                        if (log.IsDebugEnabled())
                         {
                             log.Debug(string.Format(
                                 CultureInfo.InvariantCulture,
@@ -1179,7 +1179,7 @@ namespace Spring.Objects.Factory.Support
                         }
 
                         // Probably contains a placeholder; lets ignore it for type matching purposes.
-                        if (log.IsDebugEnabled)
+                        if (log.IsDebugEnabled())
                         {
                             log.Debug("Ignoring object class loading failure for object '" + objectName + "'", ex);
                         }
@@ -1192,7 +1192,7 @@ namespace Spring.Objects.Factory.Support
                         }
 
                         // Probably contains a placeholder; lets ignore it for type matching purposes.
-                        if (log.IsDebugEnabled)
+                        if (log.IsDebugEnabled())
                         {
                             log.Debug("Ignoring unresolvable metadata in object definition '" + objectName + "'", ex);
                         }

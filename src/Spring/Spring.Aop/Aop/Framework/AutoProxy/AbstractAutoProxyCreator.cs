@@ -18,6 +18,8 @@ using System.Collections;
 using System.Reflection;
 
 using AopAlliance.Aop;
+
+
 using Spring.Aop.Framework.Adapter;
 using Spring.Aop.Target;
 using Spring.Collections;
@@ -235,7 +237,7 @@ namespace Spring.Aop.Framework.AutoProxy
 
             if (IsInfrastructureType(objectType, objectName))
             {
-                if (logger.IsDebugEnabled)
+                if (logger.IsDebugEnabled())
                 {
                     logger.Debug(string.Format("Did not attempt to autoproxy infrastructure type [{0}]", objectType));
                 }
@@ -246,7 +248,7 @@ namespace Spring.Aop.Framework.AutoProxy
 
             if (ShouldSkip(objectType, objectName))
             {
-                if (logger.IsDebugEnabled)
+                if (logger.IsDebugEnabled())
                 {
                     logger.Debug(string.Format("Skipping  type [{0}]", objectType));
                 }
@@ -387,7 +389,7 @@ namespace Spring.Aop.Framework.AutoProxy
                     if (ts != null)
                     {
                         // found a match
-                        if (logger.IsInfoEnabled)
+                        if (logger.IsInfoEnabled())
                         {
                             logger.Info(string.Format("TargetSourceCreator [{0} found custom TargetSource for object with objectName '{1}'", tsc, name));
                         }
@@ -509,7 +511,7 @@ namespace Spring.Aop.Framework.AutoProxy
                     }
                 }
             }
-            if (logger.IsInfoEnabled)
+            if (logger.IsInfoEnabled())
             {
                 int nrOfCommonInterceptors = commonInterceptors != null ? commonInterceptors.Count : 0;
                 int nrOfSpecificInterceptors = specificInterceptors != null ? specificInterceptors.Count : 0;
@@ -573,7 +575,7 @@ namespace Spring.Aop.Framework.AutoProxy
 
                 if (IsInfrastructureType(objectType, objectName))
                 {
-                    if (logger.IsDebugEnabled)
+                    if (logger.IsDebugEnabled())
                     {
                         logger.Debug(string.Format("Did not attempt to autoproxy infrastructure type [{0}]", objectType));
                     }
@@ -584,7 +586,7 @@ namespace Spring.Aop.Framework.AutoProxy
 
                 if (ShouldSkip(objectType, objectName))
                 {
-                    if (logger.IsDebugEnabled)
+                    if (logger.IsDebugEnabled())
                     {
                         logger.Debug(string.Format("Skipping  type [{0}]", objectType));
                     }

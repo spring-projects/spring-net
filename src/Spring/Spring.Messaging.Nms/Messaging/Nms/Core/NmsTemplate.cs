@@ -184,7 +184,7 @@ namespace Spring.Messaging.Nms.Core
                     }
                     sessionToUse = sessionToClose;
                 }
-                if (logger.IsDebugEnabled)
+                if (logger.IsDebugEnabled())
                 {
                     logger.Debug("Executing callback on NMS ISession [" + sessionToUse + "]");
                 }
@@ -560,7 +560,7 @@ namespace Spring.Messaging.Nms.Core
                 else {
                     message = messageCreatorDelegate(session);
                 }
-                if (logger.IsDebugEnabled)
+                if (logger.IsDebugEnabled())
                 {
                     logger.Debug("Sending created message [" + message + "]");
                 }

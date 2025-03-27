@@ -174,7 +174,7 @@ namespace Spring.Aspects.Cache
             if (resultInfo != null)
             {
                 #region Instrumentation
-                bool isLogDebugEnabled = logger.IsDebugEnabled;
+                bool isLogDebugEnabled = logger.IsDebugEnabled();
                 #endregion
 
                 AssertUtils.ArgumentNotNull(resultInfo.KeyExpression, "Key",
@@ -266,7 +266,7 @@ namespace Spring.Aspects.Cache
                 ICache cache = GetCache(itemInfo.CacheName);
 
                 #region Instrumentation
-                bool isDebugEnabled = logger.IsDebugEnabled;
+                bool isDebugEnabled = logger.IsDebugEnabled();
                 #endregion
                 foreach (object item in items)
                 {

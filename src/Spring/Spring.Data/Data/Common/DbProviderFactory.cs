@@ -111,7 +111,7 @@ namespace Spring.Data.Common
 
 							if (loader.GetResource(DBPROVIDER_ADDITIONAL_RESOURCE_NAME).Exists)
 							{
-							    if (log.IsDebugEnabled)
+							    if (log.IsDebugEnabled())
 								{
 									log.Debug("Loading additional DbProviders from " + DBPROVIDER_ADDITIONAL_RESOURCE_NAME);
 								}
@@ -124,7 +124,7 @@ namespace Spring.Data.Common
 								ctx = new XmlApplicationContext(DBPROVIDER_CONTEXTNAME, true, new string[] { DBPROVIDER_DEFAULT_RESOURCE_NAME });
 							}
 
-							if (log.IsInfoEnabled)
+							if (log.IsInfoEnabled())
 							{
 								var dbProviderNames = ctx.GetObjectNames<IDbProvider>();
 								log.Info(

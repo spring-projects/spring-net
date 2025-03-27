@@ -204,7 +204,7 @@ namespace Spring.Objects.Support
 				{
 					#region Instrumentation
 
-					if (log.IsDebugEnabled)
+					if (log.IsDebugEnabled())
 					{
 						log.Debug(string.Format(
 							CultureInfo.InvariantCulture,

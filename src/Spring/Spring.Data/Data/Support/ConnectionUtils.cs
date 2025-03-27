@@ -73,7 +73,7 @@ namespace Spring.Data.Support
                     return;
                 }
             }
-            if (LOG.IsDebugEnabled)
+            if (LOG.IsDebugEnabled())
             {
                 LOG.Debug("Disposing of IDbConnection with connection string = [" + dbProvider.ConnectionString + "]");
             }
@@ -129,7 +129,7 @@ namespace Spring.Data.Support
                 conHolder.Requested();
                 if (!conHolder.HasConnection)
                 {
-                    if (LOG.IsDebugEnabled)
+                    if (LOG.IsDebugEnabled())
                     {
                         LOG.Debug("Fetching resumed ADO.NET connection from DbProvider");
                     }
@@ -139,7 +139,7 @@ namespace Spring.Data.Support
             }
 
             // Else we either got no holder or an empty thread-bound holder here.
-            if (LOG.IsDebugEnabled)
+            if (LOG.IsDebugEnabled())
             {
                 LOG.Debug("Fetching Connection from DbProvider");
             }

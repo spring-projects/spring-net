@@ -4,7 +4,7 @@
     <RootNamespace>Spring</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="Common.Logging" />
+    <PackageReference Include="Microsoft.Extensions.Logging" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Spring.Core">

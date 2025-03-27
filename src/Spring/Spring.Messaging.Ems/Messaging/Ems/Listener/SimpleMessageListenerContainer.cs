@@ -194,7 +194,7 @@ namespace Spring.Messaging.Ems.Listener
             // First invoke the user-specific ExceptionListener, if any.
             InvokeExceptionListener(exception);
             // now try to recover the shared Connection and all consumers...
-            if (logger.IsInfoEnabled)
+            if (logger.IsInfoEnabled())
             {
                 logger.Info("Trying to recover from EMS Connection exception: " + exception);
             }
@@ -242,7 +242,7 @@ namespace Spring.Messaging.Ems.Listener
                 }
                 catch (Exception ex)
                 {
-                    if (logger.IsInfoEnabled)
+                    if (logger.IsInfoEnabled())
                     {
                         logger.Info("Could not refresh Connection - retrying in " + recoveryInterval, ex);
                     }

@@ -18,6 +18,8 @@ using System.Runtime.Serialization;
 
 using AopAlliance.Aop;
 using AopAlliance.Intercept;
+
+
 using Spring.Aop.Framework.Adapter;
 using Spring.Aop.Support;
 using Spring.Aop.Target;
@@ -86,7 +88,7 @@ namespace Spring.Aop.Framework
         : AdvisedSupport, IFactoryObject, IObjectFactoryAware
     {
         /// <summary>
-        /// The <see cref="Common.Logging.ILog"/> instance for this class.
+        /// The <see cref="ILog"/> instance for this class.
         /// </summary>
         private static readonly ILog logger = LogManager.GetLogger<ProxyFactoryObject>();
 
@@ -439,7 +441,7 @@ namespace Spring.Aop.Framework
             // in the case of a prototype, we need to give the proxy
             // an independent instance of the configuration...
 
-            if (logger.IsDebugEnabled)
+            if (logger.IsDebugEnabled())
             {
                 logger.Debug("Creating copy of prototype ProxyFactoryObject config: " + this);
             }
@@ -451,7 +453,7 @@ namespace Spring.Aop.Framework
             AdvisedSupport copy = new AdvisedSupport();
             copy.CopyConfigurationFrom(this, targetSource, advisorChain, introductionChain);
 
-            if (logger.IsDebugEnabled)
+            if (logger.IsDebugEnabled())
             {
                 logger.Debug("Using ProxyConfig: " + copy);
             }
@@ -466,7 +468,7 @@ namespace Spring.Aop.Framework
         /// </summary>
         private void Initialize()
         {
-            if (logger.IsDebugEnabled)
+            if (logger.IsDebugEnabled())
             {
                 logger.Debug(string.Format("Initialize: begin configure target, interceptors and introductions for {0}[{1}]", GetType().Name, GetHashCode()));
             }
@@ -474,7 +476,7 @@ namespace Spring.Aop.Framework
             InitializeAdvisorChain();
             InitializeIntroductionChain();
 
-            if (logger.IsDebugEnabled)
+            if (logger.IsDebugEnabled())
             {
                 logger.Debug(string.Format("Initialize: completed configuration for {0}[{1}]: {2}", GetType().Name, GetHashCode(), ToProxyConfigString()));
             }
@@ -520,7 +522,7 @@ namespace Spring.Aop.Framework
                         throw new AopConfigException("Can only use global advisors or interceptors in conjunction with an IListableObjectFactory.");
                     }
 
-                    if (logger.IsDebugEnabled)
+                    if (logger.IsDebugEnabled())
                     {
                         logger.Debug("Adding global advisor '" + name + "'");
                     }
@@ -529,7 +531,7 @@ namespace Spring.Aop.Framework
                 }
                 else
                 {
-                    if (logger.IsDebugEnabled)
+                    if (logger.IsDebugEnabled())
                     {
                         logger.Debug("resolving advisor name " + "'" + name + "'");
                     }
@@ -555,7 +557,7 @@ namespace Spring.Aop.Framework
         {
             if (advice is IAdvisors)
             {
-                if (logger.IsDebugEnabled)
+                if (logger.IsDebugEnabled())
                 {
                     logger.Debug(string.Format("Adding advisor list '{0}'", name));
                 }
@@ -563,7 +565,7 @@ namespace Spring.Aop.Framework
                 IAdvisors advisors = (IAdvisors)advice;
                 foreach (object element in advisors.Advisors)
                 {
-                    if (logger.IsDebugEnabled)
+                    if (logger.IsDebugEnabled())
                     {
                         logger.Debug(string.Format("Adding advisor '{0}' of type {1}", name, element.GetType().FullName));
                     }
@@ -574,7 +576,7 @@ namespace Spring.Aop.Framework
             }
             else
             {
-                if (logger.IsDebugEnabled)
+                if (logger.IsDebugEnabled())
                 {
                     logger.Debug(string.Format("Adding advisor '{0}' of type {1}", name, advice.GetType().FullName));
                 }
@@ -676,7 +678,7 @@ namespace Spring.Aop.Framework
                     throw new AopConfigException("Found null interceptor name value in the InterceptorNames list; check your configuration.");
                 }
 
-                if (logger.IsDebugEnabled)
+                if (logger.IsDebugEnabled())
                 {
                     logger.Debug("Adding introduction '" + name + "'");
                 }
@@ -794,7 +796,7 @@ namespace Spring.Aop.Framework
         {
             if (StringUtils.IsNullOrEmpty(targetName))
             {
-                if (logger.IsDebugEnabled)
+                if (logger.IsDebugEnabled())
                 {
                     logger.Debug("Not Refreshing TargetSource: No target name specified");
                 }
@@ -804,7 +806,7 @@ namespace Spring.Aop.Framework
 
             AssertUtils.ArgumentNotNull(objectFactory, "ObjectFactory");
 
-            if (logger.IsDebugEnabled)
+            if (logger.IsDebugEnabled())
             {
                 logger.Debug("Refreshing TargetSource with name '" + targetName + "'");
             }
@@ -827,7 +829,7 @@ namespace Spring.Aop.Framework
                 if (advisor is PrototypePlaceholder)
                 {
                     PrototypePlaceholder pa = (PrototypePlaceholder)advisor;
-                    if (logger.IsDebugEnabled)
+                    if (logger.IsDebugEnabled())
                     {
                         logger.Debug(string.Format("Refreshing advisor '{0}'", pa.ObjectName));
                     }
@@ -859,7 +861,7 @@ namespace Spring.Aop.Framework
                 if (introduction is PrototypePlaceholder)
                 {
                     PrototypePlaceholder pa = (PrototypePlaceholder)introduction;
-                    if (logger.IsDebugEnabled)
+                    if (logger.IsDebugEnabled())
                     {
                         logger.Debug(string.Format("Refreshing introduction '{0}'", pa.ObjectName));
                     }
@@ -964,7 +966,7 @@ namespace Spring.Aop.Framework
                     {
                         // The target isn't an interceptor.
                         targetName = finalName;
-                        if (logger.IsDebugEnabled)
+                        if (logger.IsDebugEnabled())
                         {
                             logger.Debug(string.Format("Object with name '{0}' concluding interceptor chain is not an advisor class: treating it as a target or TargetSource", finalName));
                         }

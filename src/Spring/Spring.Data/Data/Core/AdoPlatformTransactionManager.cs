@@ -141,7 +141,7 @@ namespace Spring.Data.Core
                 if (txMgrStateObject.ConnectionHolder == null || txMgrStateObject.ConnectionHolder.SynchronizedWithTransaction)
                 {
                     IDbConnection newCon = DbProvider.CreateConnection();
-                    if (log.IsDebugEnabled)
+                    if (log.IsDebugEnabled())
                     {
                         log.Debug("Acquired Connection [" + newCon + ", " + newCon.ConnectionString + "] for ADO.NET transaction");
                     }
@@ -334,7 +334,7 @@ namespace Spring.Data.Core
             }
             IDbConnection con = txMgrStateObject.ConnectionHolder.Connection;
 
-            if (log.IsDebugEnabled)
+            if (log.IsDebugEnabled())
             {
                 log.Debug("Releasing ADO.NET Connection [" + con + ", " + con.ConnectionString + "] after transaction");
             }

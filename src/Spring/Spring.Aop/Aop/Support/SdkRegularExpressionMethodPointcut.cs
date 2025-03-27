@@ -157,7 +157,7 @@ namespace Spring.Aop.Support
 	        Match match = _compiledPatterns[patternIndex].Match(pattern);
 	        bool matched = match.Success;
 
-	        if (_logger.IsDebugEnabled)
+	        if (_logger.IsDebugEnabled())
 	        {
 	            _logger.Debug("Candidate is: '" + pattern + "'; pattern is '" +
 	                          _compiledPatterns[patternIndex].ToString() + "'; matched=" + matched);

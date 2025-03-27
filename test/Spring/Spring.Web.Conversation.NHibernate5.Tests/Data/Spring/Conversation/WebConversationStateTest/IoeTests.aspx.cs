@@ -1,6 +1,7 @@
 using Spring.Web.Conversation;
 using System.Text.RegularExpressions;
 using NHibernate;
+using Spring;
 using Spring.Data.NHibernate.Support;
 using Spring.Objects.Factory;
 

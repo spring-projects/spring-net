@@ -224,7 +224,7 @@ namespace Spring.Testing.NUnit
 	    /// <param name="locations">Resources to load object definitions from.</param>
 	    protected virtual IConfigurableApplicationContext LoadContextLocations(string[] locations)
         {
-		    if (logger.IsInfoEnabled)
+		    if (logger.IsInfoEnabled())
             {
                 logger.Info("Loading config for: " + StringUtils.CollectionToCommaDelimitedString(locations));
 		    }

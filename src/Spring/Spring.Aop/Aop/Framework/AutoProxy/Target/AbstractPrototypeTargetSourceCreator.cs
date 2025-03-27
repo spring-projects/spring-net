@@ -61,14 +61,14 @@ namespace Spring.Aop.Framework.AutoProxy.Target
             {
                 if (!(factory is IObjectDefinitionRegistry))
                 {
-                    if (logger.IsWarnEnabled)
+                    if (logger.IsWarnEnabled())
                         logger.Warn("Cannot do autopooling with a IObjectFactory that doesn't implement IObjectDefinitionRegistry");
                     return null;
                 }
                 IObjectDefinitionRegistry definitionRegistry = (IObjectDefinitionRegistry) factory;
                 RootObjectDefinition definition = (RootObjectDefinition) definitionRegistry.GetObjectDefinition(name);
 
-                if (logger.IsInfoEnabled)
+                if (logger.IsInfoEnabled())
                     logger.Info("Configuring AbstractPrototypeBasedTargetSource...");
 
                 // Infinite cycle will result if we don't use a different factory,

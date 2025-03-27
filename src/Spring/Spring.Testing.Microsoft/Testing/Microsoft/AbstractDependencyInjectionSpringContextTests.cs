@@ -235,7 +235,7 @@ namespace Spring.Testing.Microsoft
             {
                 FieldInfo[] fields =
                     type.GetFields(BindingFlags.DeclaredOnly | BindingFlags.NonPublic | BindingFlags.Instance);
-                if (logger.IsDebugEnabled)
+                if (logger.IsDebugEnabled())
                 {
                     logger.Debug("Found " + fields.Length + " fields on " + type);
                 }
@@ -243,7 +243,7 @@ namespace Spring.Testing.Microsoft
                 for (int i = 0; i < fields.Length; i++)
                 {
                     FieldInfo field = fields[i];
-                    if (logger.IsDebugEnabled)
+                    if (logger.IsDebugEnabled())
                     {
                         logger.Debug("Candidate field: " + field);
                     }
@@ -253,14 +253,14 @@ namespace Spring.Testing.Microsoft
                         if (oldValue == null)
                         {
                             managedVarNames.Add(field.Name);
-                            if (logger.IsDebugEnabled)
+                            if (logger.IsDebugEnabled())
                             {
                                 logger.Debug("Added managed variable '" + field.Name + "'");
                             }
                         }
                         else
                         {
-                            if (logger.IsDebugEnabled)
+                            if (logger.IsDebugEnabled())
                             {
                                 logger.Debug("Rejected managed variable '" + field.Name + "'");
                             }
@@ -295,14 +295,14 @@ namespace Spring.Testing.Microsoft
                         BeforeProtectedVariableInjection(field);
                         obj = this.applicationContext.GetObject(fieldName, field.FieldType);
                         field.SetValue(this, obj);
-                        if (logger.IsDebugEnabled)
+                        if (logger.IsDebugEnabled())
                         {
                             logger.Debug("Populated field: " + field);
                         }
                     }
                     else
                     {
-                        if (logger.IsWarnEnabled)
+                        if (logger.IsWarnEnabled())
                         {
                             logger.Warn("No field with name '" + fieldName + "'");
                         }
@@ -310,7 +310,7 @@ namespace Spring.Testing.Microsoft
                 }
                 catch (NoSuchObjectDefinitionException)
                 {
-                    if (logger.IsWarnEnabled)
+                    if (logger.IsWarnEnabled())
                     {
                         logger.Warn("No object definition with name '" + fieldName + "'");
                     }

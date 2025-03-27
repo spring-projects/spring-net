@@ -66,7 +66,7 @@ namespace Spring.Aop.Target
 		{
 			#region Instrumentation
 
-			if(logger.IsDebugEnabled)
+			if(logger.IsDebugEnabled())
 			{
 				logger.Debug("Creating object pool.");
 			}
@@ -135,7 +135,7 @@ namespace Spring.Aop.Target
 		{
 			#region Instrumentation
 
-			if(logger.IsDebugEnabled)
+			if(logger.IsDebugEnabled())
 			{
 				logger.Debug("Closing pool...");
 			}

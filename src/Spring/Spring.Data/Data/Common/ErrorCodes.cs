@@ -18,6 +18,7 @@
 
 #endregion
 
+
 namespace Spring.Data.Common
 {
     /// <summary>

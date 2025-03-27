@@ -120,7 +120,7 @@ namespace Spring.Context.Support
             // remember creation info for debug output
             this._constructionTimeStamp = DateTime.Now;
             this._constructionUrl = VirtualEnvironment.CurrentVirtualPathAndQuery;
-            if (log.IsDebugEnabled)
+            if (log.IsDebugEnabled())
             {
                 log.Debug("created instance " + this.ToString());
             }
@@ -200,7 +200,7 @@ namespace Spring.Context.Support
             lock (s_webContextCache)
             {
                 ILog s_weblog = LogManager.GetLogger(typeof(WebApplicationContext));
-                if (s_weblog.IsDebugEnabled)
+                if (s_weblog.IsDebugEnabled())
                 {
                     s_weblog.Debug("received ContextRegistry.Cleared event - clearing webContextCache");
                 }
@@ -246,7 +246,7 @@ namespace Spring.Context.Support
             }
 
             ILog s_weblog = LogManager.GetLogger(typeof(WebApplicationContext));
-            bool isLogDebugEnabled = s_weblog.IsDebugEnabled;
+            bool isLogDebugEnabled = s_weblog.IsDebugEnabled();
 
             lock (s_webContextCache)
             {
@@ -312,7 +312,7 @@ namespace Spring.Context.Support
                         }
                         catch (Exception ex)
                         {
-                            if (s_weblog.IsErrorEnabled)
+                            if (s_weblog.IsErrorEnabled())
                             {
                                 s_weblog.Error(string.Format("failed creating context '{0}', Stacktrace:\n{1}", contextName, new StackTrace()), ex);
                             }

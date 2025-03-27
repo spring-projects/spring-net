@@ -355,7 +355,7 @@ namespace Spring.Objects.Factory.Support
 
                         #region Instrumentation
 
-                        if (log.IsDebugEnabled)
+                        if (log.IsDebugEnabled())
                         {
                             log.Debug("Found object name '" + name + "'");
                         }
@@ -375,7 +375,7 @@ namespace Spring.Objects.Factory.Support
 
                         #region Instrumentation
 
-                        if (log.IsDebugEnabled)
+                        if (log.IsDebugEnabled())
                         {
                             log.Debug("Invalid object name and property [" + nameAndProperty + "]");
                         }
@@ -475,7 +475,7 @@ namespace Spring.Objects.Factory.Support
                     }
                 }
             }
-            if (log.IsDebugEnabled)
+            if (log.IsDebugEnabled())
             {
                 log.Debug(pvs.ToString());
             }

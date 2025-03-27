@@ -20,6 +20,8 @@
 
 using System.Text.RegularExpressions;
 using AopAlliance.Intercept;
+
+
 using Spring.Core.TypeConversion;
 using Spring.Expressions;
 
@@ -172,7 +174,7 @@ namespace Spring.Aspects
                         }
                         else
                         {
-                            if (log.IsTraceEnabled)
+                            if (log.IsTraceEnabled())
                             {
                                 log.Trace("Retrying " + invocation.Method.Name);
                             }

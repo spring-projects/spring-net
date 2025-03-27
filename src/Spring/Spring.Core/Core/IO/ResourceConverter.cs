@@ -181,7 +181,7 @@ namespace Spring.Core.IO
 				{
 					#region Instrumentation
 
-					if (_log.IsWarnEnabled)
+					if (_log.IsWarnEnabled())
 					{
 						_log.Warn(string.Format(
 							CultureInfo.InvariantCulture,

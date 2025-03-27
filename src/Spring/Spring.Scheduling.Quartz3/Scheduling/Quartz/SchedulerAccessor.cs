@@ -373,7 +373,7 @@ namespace Spring.Scheduling.Quartz
                     }
                     catch (ObjectAlreadyExistsException ex)
                     {
-                        if (logger.IsDebugEnabled)
+                        if (logger.IsDebugEnabled())
                         {
                             logger.Debug(
                                 $"Unexpectedly found existing trigger, assumably due to cluster race condition: {ex.Message} - can safely be ignored");

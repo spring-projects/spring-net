@@ -19,6 +19,7 @@
 #endregion
 
 using System.Reflection;
+using Microsoft.Extensions.Logging;
 using Spring.Objects.Factory.Support;
 
 namespace Spring.Objects.Factory.Attributes
@@ -46,7 +47,7 @@ namespace Spring.Objects.Factory.Attributes
 			{
 				foreach (var element in elements)
 				{
-					Logger.Debug(m => m("Found injected element on class [" + targetType.Name + "]: " + element));
+					Logger.LogDebug("Found injected element on class [{TargetType}]: {Element}", targetType.Name, element);
 					_injectedElements.Add(element);
 				}
 			}
@@ -70,7 +71,7 @@ namespace Spring.Objects.Factory.Attributes
 			for (var i = 0; i < _injectedElements.Count; i++)
 			{
 				var element = _injectedElements[i];
-				Logger.Debug(m => m("Processing injected method of bean '{0}': {1}", objectName, element));
+				Logger.LogDebug("Processing injected method of bean '{ObjectName}': {Element}", objectName, element);
 				element.Inject(instance, objectName, pvs);
 			}
 		}

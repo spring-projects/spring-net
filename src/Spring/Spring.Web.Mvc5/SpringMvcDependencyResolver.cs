@@ -1,5 +1,6 @@
 using System.Collections.Concurrent;
 using System.Web.Mvc;
+using Microsoft.Extensions.Logging;
 using Spring.Context;
 using Spring.Context.Support;
 
@@ -117,9 +118,9 @@ namespace Spring.Web.Mvc
                 {
                     _nonResolvableTypes.Add(serviceType);
 
-                    if (logger.IsDebugEnabled)
+                    if (logger.IsDebugEnabled())
                     {
-                        logger.DebugFormat("could not find service from Spring container with type: {0}", serviceType);
+                        logger.LogDebug("Could not find service from Spring container with type: {ServiceType}", serviceType);
                     }
                 }
             }

@@ -68,7 +68,7 @@ namespace Spring.Context.Support
 
             Refresh();
 
-            if (log.IsDebugEnabled)
+            if (log.IsDebugEnabled())
             {
                 log.Debug("created instance " + this);
             }

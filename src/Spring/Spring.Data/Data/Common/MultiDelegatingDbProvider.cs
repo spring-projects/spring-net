@@ -275,7 +275,7 @@ namespace Spring.Data.Common
             //Fall back to default if available
             if (defaultDbProvider != null)
             {
-                if (LOG.IsDebugEnabled)
+                if (LOG.IsDebugEnabled())
                 {
                     LOG.Debug("No DbProvider defined in thread local storage, falling back to use DefaultDbProvider.");
                 }

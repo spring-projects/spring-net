@@ -192,7 +192,7 @@ namespace Spring.Messaging.Listener
         {
             if (!Running)
             {
-                if (LOG.IsWarnEnabled)
+                if (LOG.IsWarnEnabled())
                 {
                     LOG.Warn("Not processing recieved message because of the listener container " +
                              "having been stopped in the meantime: " + message);

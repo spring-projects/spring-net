@@ -1,14 +1,14 @@
 using System;
 using System.Collections;
 using System.Threading;
-using Common.Logging;
+using Microsoft.Extensions.Logging;
 using Spring.Messaging.Nms.Core;
 
 namespace Spring.NmsQuickStart.Server.Gateways
 {
     public class MarketDataServiceGateway : NmsGatewaySupport, IMarketDataService
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof (MarketDataServiceGateway));
+        private static readonly ILogger log = LogManager.GetLogger(typeof (MarketDataServiceGateway));
 
         private readonly Random random;
         private TimeSpan sleepTimeInSeconds = new TimeSpan(0,0,0,10,0);

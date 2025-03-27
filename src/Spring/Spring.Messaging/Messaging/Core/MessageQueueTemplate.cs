@@ -23,6 +23,7 @@ using Spring.Messaging.Support.Converters;
 using Spring.Objects.Factory;
 using Spring.Util;
 
+
 #if NETSTANDARD
 using Experimental.System.Messaging;
 #else
@@ -322,7 +323,7 @@ namespace Spring.Messaging.Core
                     {
                         #region Logging
 
-                        if (LOG.IsWarnEnabled)
+                        if (LOG.IsWarnEnabled())
                         {
                             LOG.Warn(
                                 "The ApplicationContext property has not been set, so the MessageQueueMetadataCache can not be automatically generated.  " +
@@ -568,7 +569,7 @@ namespace Spring.Messaging.Core
                 }
             } else
             {
-                if (LOG.IsWarnEnabled)
+                if (LOG.IsWarnEnabled())
                 {
                     LOG.Warn("MetadataCache has not been initialized.  Set the MetadataCache explicitly in standalone usage and/or " +
                              "configure the MessageQueueTemplate in an ApplicationContext.  If deployed in an ApplicationContext by default " +
@@ -598,7 +599,7 @@ namespace Spring.Messaging.Core
         {
             if (transactionToUse != null)
             {
-                if (LOG.IsDebugEnabled)
+                if (LOG.IsDebugEnabled())
                 {
                     LOG.Debug(
                         "Sending messsage using externally managed MessageQueueTransction to transactional queue with path [" + mq.Path + "].");
@@ -634,7 +635,7 @@ namespace Spring.Messaging.Core
             }
             else
             {
-                if (LOG.IsDebugEnabled)
+                if (LOG.IsDebugEnabled())
                 {
                     LOG.Debug("Sending messsage without MSMQ transaction to non-transactional queue with path [" + mq.Path + "].");
                 }

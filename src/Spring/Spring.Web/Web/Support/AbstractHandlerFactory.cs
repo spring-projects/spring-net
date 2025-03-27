@@ -166,7 +166,7 @@ namespace Spring.Web.Support
         /// </returns>
         public virtual IHttpHandler GetHandler(HttpContext context, string requestType, string url, string physicalPath)
         {
-            bool isDebug = Log.IsDebugEnabled;
+            bool isDebug = Log.IsDebugEnabled();
 
             #region Instrumentation
 
@@ -294,7 +294,7 @@ namespace Spring.Web.Support
         protected internal static NamedObjectDefinition FindWebObjectDefinition(string appRelativeVirtualPath, IConfigurableListableObjectFactory objectFactory)
         {
             ILog Log = LogManager.GetLogger(typeof(AbstractHandlerFactory));
-            bool isDebug = Log.IsDebugEnabled;
+            bool isDebug = Log.IsDebugEnabled();
 
             // lookup definition using app-relative url
             if (isDebug)

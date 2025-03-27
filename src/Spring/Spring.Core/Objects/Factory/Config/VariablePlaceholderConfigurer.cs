@@ -298,7 +298,7 @@ namespace Spring.Objects.Factory.Config
                             string resolvedValue = variableSource.ResolveVariable(placeholder);
                             resolvedValue = ParseAndResolveVariables(resolvedValue, visitedPlaceholders);
 
-                            if (logger.IsDebugEnabled)
+                            if (logger.IsDebugEnabled())
                             {
                                 logger.Debug(string.Format(
                                                  CultureInfo.InvariantCulture,

@@ -1,14 +1,14 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
- * 
+ * Copyright ï¿½ 2002-2011 the original author or authors.
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -23,7 +23,7 @@
 using System;
 
 using AopAlliance.Intercept;
-using Common.Logging;
+using Microsoft.Extensions.Logging;
 
 #endregion
 
@@ -37,13 +37,13 @@ namespace Spring.Aspects.Logging
 	{
 		#region Logging
 
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(CommonLoggingAroundAdvice));
+        private static readonly ILogger LOG = LogManager.GetLogger(typeof(CommonLoggingAroundAdvice));
 
 		#endregion
 
 		#region Fields
 
-        private LogLevel _level = LogLevel.All;
+        private LogLevel _level = LogLevel.Trace;
 
 		#endregion
 
@@ -51,7 +51,7 @@ namespace Spring.Aspects.Logging
 
         public LogLevel Level
 		{
-			get { return _level; }	
+			get { return _level; }
 			set { _level = value; }
 		}
 
@@ -75,23 +75,23 @@ namespace Spring.Aspects.Logging
 		{
 			switch(Level)
 			{
-                case LogLevel.All :
+                case LogLevel.Trace :
 				case LogLevel.Debug :
-					if (LOG.IsDebugEnabled) LOG.Debug(String.Format(text, args));
+					if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug(String.Format(text, args));
 					break;
 				case LogLevel.Error :
-                    if (LOG.IsErrorEnabled) LOG.Error(String.Format(text, args));
+                    if (LOG.IsEnabled(LogLevel.Error)) LOG.LogError(String.Format(text, args));
 					break;
-				case LogLevel.Fatal :
-                    if (LOG.IsFatalEnabled) LOG.Fatal(String.Format(text, args));
+				case LogLevel.Critical :
+                    if (LOG.IsEnabled(LogLevel.Critical)) LOG.LogCritical(String.Format(text, args));
 					break;
-				case LogLevel.Info :
-                    if (LOG.IsInfoEnabled) LOG.Info(String.Format(text, args));
+				case LogLevel.Information :
+                    if (LOG.IsEnabled(LogLevel.Information)) LOG.LogInformation(String.Format(text, args));
 					break;
-				case LogLevel.Warn :
-                    if (LOG.IsWarnEnabled) LOG.Warn(String.Format(text, args));
+				case LogLevel.Warning:
+                    if (LOG.IsEnabled(LogLevel.Warning)) LOG.LogWarning(String.Format(text, args));
 					break;
-                case LogLevel.Off:
+                case LogLevel.None:
 				default :
                     break;
 			}

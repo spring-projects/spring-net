@@ -19,6 +19,7 @@
 #endregion
 
 using System.Reflection;
+using Microsoft.Extensions.Logging;
 using Spring.Objects.Factory.Config;
 using Spring.Core;
 
@@ -195,7 +196,7 @@ namespace Spring.Objects.Factory.Attributes
                         Attribute.GetCustomAttribute(methodInfo, initAttributeType) as PostConstructAttribute;
                     if (initAttribute != null && methodInfo.DeclaringType == instanceType)
                     {
-                        logger.Debug(m => m("Found init method on class [{0}]: {1}", instanceType.Name, methodInfo.Name));
+                        logger.LogDebug("Found init method on class [{InstanceType}]: {MethodName}", instanceType.Name, methodInfo.Name);
                         curInitMethods.Add(new LifecycleElement(methodInfo, initAttribute.Order));
                     }
 
@@ -203,8 +204,7 @@ namespace Spring.Objects.Factory.Attributes
                         Attribute.GetCustomAttribute(methodInfo, destroyAttributeType) as PreDestroyAttribute;
                     if (destroyAttribute != null && methodInfo.DeclaringType == instanceType)
                     {
-                        logger.Debug(
-                            m => m("Found destroy method on class [{0}]: {1}", instanceType.Name, methodInfo.Name));
+                        logger.LogDebug("Found destroy method on class [{InstanceType}]: {MethodName}", instanceType.Name, methodInfo.Name);
                         curDestroyMethods.Add(new LifecycleElement(methodInfo, destroyAttribute.Order));
                     }
                 }
@@ -302,7 +302,7 @@ namespace Spring.Objects.Factory.Attributes
 
             public void Invoke(object instance, string objectName)
             {
-                logger.Debug(m => m("Invoking init method on object '" + objectName + "': " + method.Name));
+                logger.LogDebug("Invoking init method on object {ObjectName}: {MethodName}", objectName,  method.Name);
                 method.Invoke(instance, new object[] {});
             }
         }

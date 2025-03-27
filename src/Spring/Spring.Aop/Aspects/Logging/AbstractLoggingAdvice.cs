@@ -204,7 +204,7 @@ namespace Spring.Aspects.Logging
         /// </returns>
         protected virtual bool IsLogEnabled(ILog log)
         {
-            return log.IsTraceEnabled;
+            return log.IsTraceEnabled();
         }
 
         /// <summary>

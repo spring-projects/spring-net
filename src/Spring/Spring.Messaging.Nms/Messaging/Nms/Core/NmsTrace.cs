@@ -108,7 +108,7 @@ namespace Spring.Messaging.Nms.Core
         /// </value>
         public bool IsDebugEnabled
         {
-            get { return log.IsDebugEnabled; }
+            get { return log.IsDebugEnabled(); }
         }
 
         /// <summary>
@@ -119,7 +119,7 @@ namespace Spring.Messaging.Nms.Core
         /// </value>
         public bool IsInfoEnabled
         {
-            get { return log.IsInfoEnabled; }
+            get { return log.IsInfoEnabled(); }
         }
 
         /// <summary>
@@ -130,7 +130,7 @@ namespace Spring.Messaging.Nms.Core
         /// </value>
         public bool IsWarnEnabled
         {
-            get { return log.IsWarnEnabled; }
+            get { return log.IsWarnEnabled(); }
         }
 
         /// <summary>
@@ -141,7 +141,7 @@ namespace Spring.Messaging.Nms.Core
         /// </value>
         public bool IsErrorEnabled
         {
-            get { return log.IsErrorEnabled; }
+            get { return log.IsErrorEnabled(); }
         }
 
         /// <summary>
@@ -152,7 +152,7 @@ namespace Spring.Messaging.Nms.Core
         /// </value>
         public bool IsFatalEnabled
         {
-            get { return log.IsFatalEnabled; }
+            get { return log.IsFatalEnabled(); }
         }
     }
 

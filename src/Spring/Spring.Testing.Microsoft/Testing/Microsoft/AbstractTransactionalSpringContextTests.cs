@@ -304,7 +304,7 @@ namespace Spring.Testing.Microsoft
             ++this.transactionsStarted;
             this.complete = !this.defaultRollback;
 
-            if (logger.IsInfoEnabled)
+            if (logger.IsInfoEnabled())
             {
                 logger.Info("Began transaction (" + this.transactionsStarted + "): transaction manager [" +
                             this.transactionManager + "]; default rollback = " + this.defaultRollback);

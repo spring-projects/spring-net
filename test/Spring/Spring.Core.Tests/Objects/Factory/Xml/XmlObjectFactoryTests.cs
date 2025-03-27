@@ -14,18 +14,19 @@
  * limitations under the License.
  */
 
+using System;
 using System.Collections;
 using System.Data;
 using System.Globalization;
+using System.IO;
 using System.Text;
+using System.Threading;
 #if !NETCOREAPP
 using System.Web.Services;
 #endif
 
-using Common.Logging.Simple;
-
 using FakeItEasy;
-
+using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
 
 using Spring.Core.IO;
@@ -56,7 +57,7 @@ namespace Spring.Objects.Factory.Xml
         {
             // enable (null appender) logging, to ensure that the logging code is exercised...
             //XmlConfigurator.Configure();
-            LogManager.Adapter = new NoOpLoggerFactoryAdapter();
+            LogManager.LoggerFactory = NullLoggerFactory.Instance;
         }
 
         [SetUp]

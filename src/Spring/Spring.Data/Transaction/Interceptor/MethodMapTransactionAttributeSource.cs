@@ -20,6 +20,7 @@
 
 using System.Collections;
 using System.Reflection;
+
 using Spring.Util;
 using Spring.Core.TypeResolution;
 using Spring.Core;
@@ -171,7 +172,7 @@ namespace Spring.Transaction.Interceptor
 				{
                     // No already registered method name, or more specific
                     // method name specification now -> (re-)register method.
-                    if (LOG.IsDebugEnabled && regularMethodName != null)
+                    if (LOG.IsDebugEnabled() && regularMethodName != null)
                     {
                         LOG.Debug("Replacing attribute for transactional method [" + currentMethod + "]: current name '" +
                             name + "' is more specific than '" + regularMethodName + "'");
@@ -181,7 +182,7 @@ namespace Spring.Transaction.Interceptor
 				}
                 else
 				{
-                    if (LOG.IsDebugEnabled && regularMethodName != null)
+                    if (LOG.IsDebugEnabled() && regularMethodName != null)
                     {
                         LOG.Debug("Keeping attribute for transactional method [" + currentMethod + "]: current name '" +
                             name + "' is not more specific than '" + regularMethodName + "'");

@@ -30,7 +30,7 @@ namespace Spring.Messaging.Ems.Jndi
         protected virtual object Lookup(string jndiName)
         {
             object jndiObject = Lookup(jndiName, null);
-            if (logger.IsDebugEnabled)
+            if (logger.IsDebugEnabled())
             {
                 logger.Debug("Located object with JNDI name [" + jndiName + "]");
             }
@@ -50,7 +50,7 @@ namespace Spring.Messaging.Ems.Jndi
                     jndiName, requiredType, (jndiObject != null ? jndiObject.GetType() : null));
             }
 
-            if (logger.IsDebugEnabled)
+            if (logger.IsDebugEnabled())
             {
                 logger.Debug("Located object with JNDI name [" + jndiName + "]");
             }

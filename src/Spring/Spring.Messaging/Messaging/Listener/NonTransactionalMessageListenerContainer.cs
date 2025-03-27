@@ -18,6 +18,7 @@
 
 #endregion
 
+
 #if NETSTANDARD
 using Experimental.System.Messaging;
 #else
@@ -86,7 +87,7 @@ namespace Spring.Messaging.Listener
             {
                 #region Logging
 
-                if (LOG.IsTraceEnabled)
+                if (LOG.IsTraceEnabled())
                 {
                     LOG.Trace("Receiving message with zero timeout for queue = [" + mq.Path + "]");
                 }
@@ -103,7 +104,7 @@ namespace Spring.Messaging.Listener
 
                     #region Logging
 
-                    if (LOG.IsTraceEnabled)
+                    if (LOG.IsTraceEnabled())
                     {
                         LOG.Trace(
                             "MessageQueueErrorCode.IOTimeout: No message available to receive.  May have been processed by another thread.");
@@ -119,7 +120,7 @@ namespace Spring.Messaging.Listener
 
                     #region Logging
 
-                    if (LOG.IsErrorEnabled)
+                    if (LOG.IsErrorEnabled())
                     {
                         LOG.Error("Error receiving message from MessageQueue [" + mq.Path +
                                   "], closing queue and clearing connection cache.");
@@ -140,7 +141,7 @@ namespace Spring.Messaging.Listener
             {
                 #region Logging
 
-                if (LOG.IsTraceEnabled)
+                if (LOG.IsTraceEnabled())
                 {
                     LOG.Trace("Message recieved is null from Queue = [" + mq.Path + "]");
                 }
@@ -154,7 +155,7 @@ namespace Spring.Messaging.Listener
             {
                 #region Logging
 
-                if (LOG.IsDebugEnabled)
+                if (LOG.IsDebugEnabled())
                 {
                     LOG.Debug("Received message [" + message.Id + "] on queue [" + mq.Path + "]");
                 }

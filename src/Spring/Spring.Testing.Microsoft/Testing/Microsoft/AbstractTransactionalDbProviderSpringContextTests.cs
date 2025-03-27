@@ -103,7 +103,7 @@ namespace Spring.Testing.Microsoft
             for (int i = 0; i < names.Length; i++)
             {
                 int rowCount = this.adoTemplate.ExecuteNonQuery(CommandType.Text, "DELETE FROM " + names[i]);
-                if (logger.IsInfoEnabled)
+                if (logger.IsInfoEnabled())
                 {
                     logger.Info("Deleted " + rowCount + " rows from table " + names[i]);
                 }

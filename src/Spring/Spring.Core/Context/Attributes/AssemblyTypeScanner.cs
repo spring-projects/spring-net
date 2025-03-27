@@ -19,6 +19,7 @@
 #endregion
 
 using System.Reflection;
+using Microsoft.Extensions.Logging;
 using Spring.Context.Attributes.TypeFilters;
 using Spring.Util;
 using Spring.Objects.Factory.Xml;
@@ -177,7 +178,10 @@ namespace Spring.Context.Attributes
                 {
                     if (IsCompoundPredicateSatisfiedBy(type))
                     {
-                        Logger.Debug(m => m("Satisfied Type: {0}", type.FullName));
+                        if (Logger.IsDebugEnabled())
+                        {
+                            Logger.LogDebug("Satisfied Type: {FullName}", type.FullName);
+                        }
                         types.Add(type);
                     }
                 }
@@ -249,12 +253,14 @@ namespace Spring.Context.Attributes
 
         private List<string> GetAllAssembliesInPath(string folderPath)
         {
-
             var assemblies = new List<string>();
             assemblies.AddRange(DiscoverAssemblies(folderPath, "*.dll"));
             assemblies.AddRange(DiscoverAssemblies(folderPath, "*.exe"));
 
-            Logger.Debug(m => m("Assemblies to be scanned: {0}", StringUtils.ArrayToCommaDelimitedString(assemblies.ToArray())));
+            if (Logger.IsDebugEnabled())
+            {
+                Logger.LogDebug("Assemblies to be scanned: {AssemblyNames}", StringUtils.ArrayToCommaDelimitedString(assemblies.ToArray()));
+            }
 
             return assemblies;
         }
@@ -274,7 +280,7 @@ namespace Spring.Context.Attributes
                     if (null != loadedAssembly)
                     {
                         string fullname = loadedAssembly.FullName;
-                        Logger.Debug(m => m("Add Assembly: {0}", fullname));
+                        Logger.LogDebug("Add Assembly: {FullName}", fullname);
 
                         assemblies.Add(loadedAssembly);
                     }
@@ -295,7 +301,7 @@ namespace Spring.Context.Attributes
             catch (Exception ex)
             {
                 //log and swallow everything that might go wrong here...
-                Logger.Debug(m => m("Failed to load assembly {0} to inspect for [Configuration] types!", filename), ex);
+                Logger.LogDebug(ex, "Failed to load assembly {FileName} to inspect for [Configuration] types!", filename);
             }
 
             return assembly;
@@ -315,10 +321,12 @@ namespace Spring.Context.Attributes
         /// <returns></returns>
         protected virtual IEnumerable<Assembly> ApplyAssemblyFiltersTo(IEnumerable<Assembly> assemblyCandidates)
         {
-            var filteredAssemblies = assemblyCandidates.Where(IsIncludedAssembly).
-                                                        AsEnumerable();
+            var filteredAssemblies = assemblyCandidates.Where(IsIncludedAssembly).ToList();
 
-            Logger.Debug(m => m("Filtered Assemblies: {0}", StringUtils.ArrayToCommaDelimitedString(filteredAssemblies.ToArray())));
+            if (Logger.IsEnabled(LogLevel.Debug))
+            {
+                Logger.LogDebug("Filtered Assemblies: {0}", StringUtils.ArrayToCommaDelimitedString(filteredAssemblies));
+            }
 
             return filteredAssemblies;
         }
@@ -360,9 +368,9 @@ namespace Spring.Context.Attributes
             {
                 if (include(assembly))
                 {
-                    if (Logger.IsDebugEnabled)
+                    if (Logger.IsDebugEnabled())
                     {
-                        Logger.Debug(m => m("Include Assembly: {0}", assembly.FullName));
+                        Logger.LogDebug("Include Assembly: {FullName}", assembly.FullName);
                     }
                     return true;
                 }
@@ -424,7 +432,7 @@ namespace Spring.Context.Attributes
         {
             IList<string> assemblies = new List<string>();
 
-            IEnumerable<string> files = Directory.GetFiles(folderPath, extension, SearchOption.AllDirectories);
+            string[] files = Directory.GetFiles(folderPath, extension, SearchOption.AllDirectories);
 
             foreach (string file in files)
             {

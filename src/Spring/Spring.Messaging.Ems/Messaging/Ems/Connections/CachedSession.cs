@@ -92,7 +92,7 @@ namespace Spring.Messaging.Ems.Connections
                 {
                     #region Logging
 
-                    if (LOG.IsDebugEnabled)
+                    if (LOG.IsDebugEnabled())
                     {
                         LOG.Debug("Found cached MessageProducer for destination [" + destination + "]");
                     }
@@ -104,7 +104,7 @@ namespace Spring.Messaging.Ems.Connections
                     producer = target.CreateProducer(destination);
                     #region Logging
 
-                    if (LOG.IsDebugEnabled)
+                    if (LOG.IsDebugEnabled())
                     {
                         LOG.Debug("Creating cached MessageProducer for destination [" + destination + "]");
                     }
@@ -176,7 +176,7 @@ namespace Spring.Messaging.Ems.Connections
             {
                 #region Logging
 
-                if (LOG.IsDebugEnabled)
+                if (LOG.IsDebugEnabled())
                 {
                     LOG.Debug("Returning cached Session: " + target);
                 }
@@ -189,7 +189,7 @@ namespace Spring.Messaging.Ems.Connections
 
         private void PhysicalClose()
         {
-            if (LOG.IsDebugEnabled)
+            if (LOG.IsDebugEnabled())
             {
                 LOG.Debug("Closing cached Session: " + this.target);
             }
@@ -307,7 +307,7 @@ namespace Spring.Messaging.Ems.Connections
             IMessageConsumer consumer = (IMessageConsumer)cachedConsumers[cacheKey];
             if (consumer != null)
             {
-                if (LOG.IsDebugEnabled)
+                if (LOG.IsDebugEnabled())
                 {
                     LOG.Debug("Found cached EMS MessageConsumer for destination [" + destination + "]: " + consumer);
                 }
@@ -324,7 +324,7 @@ namespace Spring.Messaging.Ems.Connections
                 {
                     consumer = target.CreateConsumer(destination, selector);
                 }
-                if (LOG.IsDebugEnabled)
+                if (LOG.IsDebugEnabled())
                 {
                     LOG.Debug("Creating cached EMS MessageConsumer for destination [" + destination + "]: " + consumer);
                 }

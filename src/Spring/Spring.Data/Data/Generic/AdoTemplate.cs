@@ -870,7 +870,7 @@ namespace Spring.Data.Generic
                                                 IResultSetExtractor<T> resultSetExtractor)
         {
             AssertUtils.ArgumentNotNull(cmdText, "cmdText", "CommandText must not be null");
-            if (LOG.IsDebugEnabled)
+            if (LOG.IsDebugEnabled())
             {
                 LOG.Debug("Executing CommandText [" + cmdText + "]");
             }
@@ -924,7 +924,7 @@ namespace Spring.Data.Generic
         {
             AssertUtils.ArgumentNotNull(cmdText, "cmdText", "CommandText must not be null");
             AssertUtils.ArgumentNotNull(resultSetExtractorDelegate, "resultSetExtractorDelegate", "Result set extractor delegate must not be null");
-            if (LOG.IsDebugEnabled)
+            if (LOG.IsDebugEnabled())
             {
                 LOG.Debug("Executing CommandText [" + cmdText + "]");
             }

@@ -13,8 +13,8 @@
     <EmbeddedResource Include="MovieFinder\*.xml" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Common.Logging" />
-    <PackageReference Include="Common.Logging.Log4Net1215" />
+    <PackageReference Include="Microsoft.Extensions.Logging" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Log4Net.AspNetCore" />
   </ItemGroup>
   <ItemGroup>
     <None Update="movies.txt">

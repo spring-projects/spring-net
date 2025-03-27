@@ -459,7 +459,7 @@ namespace Spring.Messaging.Ems.Connections
                 }
                 this.target = DoCreateConnection();
                 PrepareConnection(this.target);
-                if (LOG.IsDebugEnabled)
+                if (LOG.IsDebugEnabled())
                 {
                     LOG.Info("Established shared EMS Connection: " + this.target);
                 }
@@ -529,7 +529,7 @@ namespace Spring.Messaging.Ems.Connections
         /// <param name="con">The connection.</param>
         protected virtual void CloseConnection(IConnection con)
         {
-            if (LOG.IsDebugEnabled)
+            if (LOG.IsDebugEnabled())
             {
                 LOG.Debug("Closing shared EMS Connection: " + this.target);
             }

@@ -20,6 +20,7 @@
 
 using System.Collections.Specialized;
 using System.Globalization;
+using Microsoft.Extensions.Logging;
 using Spring.Collections;
 using Spring.Util;
 
@@ -239,8 +240,7 @@ namespace Spring.Objects.Factory.Config
 
 	            if (definition == null)
 	            {
-	                logger.ErrorFormat("'{0}' can't be found in factorys'  '{1}' object definition (includeAncestor {2})",
-	                                   name, factory, includeAncestors);
+	                logger.LogError("{Name} can't be found in factorys' {Factory} object definition (includeAncestor {IncludeAncestor})", name, factory, includeAncestors);
 	                continue;
 	            }
 
@@ -302,7 +302,7 @@ namespace Spring.Objects.Factory.Config
 
 						#region Instrumentation
 
-						if (logger.IsDebugEnabled)
+						if (logger.IsDebugEnabled())
 						{
 							logger.Debug(string.Format(
 								CultureInfo.InvariantCulture,

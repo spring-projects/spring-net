@@ -197,7 +197,7 @@ namespace Spring.Transaction.Support
         /// <param name="exception">The thrown application exception or error.</param>
         private void rollbackOnException( ITransactionStatus status, Exception exception )
         {
-            if (log.IsDebugEnabled)
+            if (log.IsDebugEnabled())
             {
                 log.Debug("Initiating transaction rollback on application exception", exception);
             }

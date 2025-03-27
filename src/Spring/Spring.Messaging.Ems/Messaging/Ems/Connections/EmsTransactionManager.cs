@@ -177,7 +177,7 @@ namespace Spring.Messaging.Ems.Connections
             {
                 con = CreateConnection();
                 session = CreateSession(con);
-                if (LOG.IsDebugEnabled)
+                if (LOG.IsDebugEnabled())
                 {
                     log.Debug("Created EMS transaction on Session [" + session + "] from Connection [" + con + "]");
                 }

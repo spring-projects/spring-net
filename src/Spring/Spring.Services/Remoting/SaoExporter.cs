@@ -47,7 +47,7 @@ namespace Spring.Remoting
     {
         #region Logging
 
-        private static readonly Common.Logging.ILog LOG = Common.Logging.LogManager.GetLogger( typeof( SaoExporter ) );
+        private static readonly ILog LOG = LogManager.GetLogger( typeof( SaoExporter ) );
 
         #endregion
 
@@ -276,7 +276,7 @@ namespace Spring.Remoting
 
             #region Instrumentation
 
-            if (LOG.IsDebugEnabled)
+            if (LOG.IsDebugEnabled())
             {
                 LOG.Debug( String.Format( "Target '{0}' exported as '{1}'.", targetName, objectUri ) );
             }

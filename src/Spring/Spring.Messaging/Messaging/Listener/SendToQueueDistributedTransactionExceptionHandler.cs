@@ -18,6 +18,7 @@
 
 #endregion
 
+
 #if NETSTANDARD
 using Experimental.System.Messaging;
 #else
@@ -125,7 +126,7 @@ namespace Spring.Messaging.Listener
             {
                 #region Logging
 
-                if (LOG.IsInfoEnabled)
+                if (LOG.IsInfoEnabled())
                 {
                     LOG.Info("Sending message with id = [" + message.Id + "] to queue [" + mq.Path + "].");
                 }
@@ -138,7 +139,7 @@ namespace Spring.Messaging.Listener
             {
                 #region Logging
 
-                if (LOG.IsErrorEnabled)
+                if (LOG.IsErrorEnabled())
                 {
                     LOG.Error("Could not send message with id = [" + message.Id + "] to queue [" + mq.Path + "].", e);
                     LOG.Error("Message will not be processed.  Message Body = " + message.Body);

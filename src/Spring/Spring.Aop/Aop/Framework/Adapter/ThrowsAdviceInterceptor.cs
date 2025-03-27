@@ -162,7 +162,7 @@ namespace Spring.Aop.Framework.Adapter
                     {
                         #region Instrumentation
 
-                        if(log.IsDebugEnabled)
+                        if(log.IsDebugEnabled())
                         {
                             log.Debug("Found exception handler method: " + method);
                         }
@@ -263,7 +263,7 @@ namespace Spring.Aop.Framework.Adapter
 
             #region Instrumentation
 
-            if(log.IsDebugEnabled)
+            if(log.IsDebugEnabled())
             {
                 log.Debug("Trying to find handler for exception of type [" + exception.GetType().Name + "].");
             }

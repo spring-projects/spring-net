@@ -106,7 +106,7 @@ namespace Spring.Context.Support
         public static readonly string EventRegistryObjectName = "eventRegistry";
 
         /// <summary>
-        /// The <see cref="Common.Logging.ILog"/> instance for this class.
+        /// The <see cref="ILog"/> instance for this class.
         /// </summary>
         protected readonly ILog log;
 
@@ -238,7 +238,7 @@ namespace Spring.Context.Support
 
             GC.SuppressFinalize(this);
 
-            if (log.IsDebugEnabled)
+            if (log.IsDebugEnabled())
             {
                 log.Debug(string.Format(
                               CultureInfo.InvariantCulture,
@@ -584,7 +584,7 @@ namespace Spring.Context.Support
                 InvokeObjectFactoryPostProcessors(nonOrderedPostProcessors, SafeGetObjectFactory());
             }
 
-            if (log.IsDebugEnabled)
+            if (log.IsDebugEnabled())
             {
                 log.Debug($"processed {factoryProcessorNames.Count} IFactoryObjectPostProcessors defined in application context [{Name}].");
             }
@@ -645,7 +645,7 @@ namespace Spring.Context.Support
                 SafeGetObjectFactory().AddObjectPostProcessor(objectPostProcessor);
             }
 
-            if (log.IsDebugEnabled)
+            if (log.IsDebugEnabled())
             {
                 log.Debug(
                     $"processed {objectProcessors.Count} IObjectPostProcessors defined in application context [{Name}].");
@@ -685,7 +685,7 @@ namespace Spring.Context.Support
                 {
                     _eventRegistry = new EventRegistry();
 
-                    if (log.IsWarnEnabled)
+                    if (log.IsWarnEnabled())
                     {
                         log.Warn(string.Format(
                                      "Found object in context named '{0}' : this name " +
@@ -699,7 +699,7 @@ namespace Spring.Context.Support
             {
                 _eventRegistry = new EventRegistry();
 
-                if (log.IsDebugEnabled)
+                if (log.IsDebugEnabled())
                 {
                     log.Debug(
                         $"No IEventRegistry found with name '{EventRegistryObjectName}' : using default '{EventRegistry}'.");
@@ -762,7 +762,7 @@ namespace Spring.Context.Support
                         }
                     }
 
-                    if (log.IsDebugEnabled)
+                    if (log.IsDebugEnabled())
                     {
                         log.Debug(StringUtils.Surround(
                                       "Using MessageSource [", MessageSource, "]"));
@@ -773,7 +773,7 @@ namespace Spring.Context.Support
                     _messageSource = new DelegatingMessageSource(
                         GetInternalParentMessageSource());
 
-                    if (log.IsWarnEnabled)
+                    if (log.IsWarnEnabled())
                     {
                         log.Warn(string.Format(
                                      "Found object in context named '{0}' : this name " +
@@ -789,7 +789,7 @@ namespace Spring.Context.Support
                     GetInternalParentMessageSource());
                 SafeGetObjectFactory().RegisterSingleton(MessageSourceObjectName, _messageSource);
 
-                if (log.IsDebugEnabled)
+                if (log.IsDebugEnabled())
                 {
                     log.Debug(string.Format(
                                   "No message source found in the current context: using parent context's message source '{0}'.",
@@ -801,7 +801,7 @@ namespace Spring.Context.Support
                 _messageSource = new StaticMessageSource();
                 SafeGetObjectFactory().RegisterSingleton(MessageSourceObjectName, _messageSource);
 
-                if (log.IsDebugEnabled)
+                if (log.IsDebugEnabled())
                 {
                     log.Debug(string.Format(
                                   "No IMessageSource found with name '{0}' : using default '{1}'.",
@@ -856,7 +856,7 @@ namespace Spring.Context.Support
 
                 OnPreRefresh();
 
-                if (log.IsDebugEnabled)
+                if (log.IsDebugEnabled())
                 {
                     log.Debug(string.Format("ApplicationContext Refresh: Refreshing object factory "));
                 }
@@ -865,26 +865,26 @@ namespace Spring.Context.Support
 
                 IConfigurableListableObjectFactory objectFactory = ObjectFactory;
 
-                if (log.IsDebugEnabled)
+                if (log.IsDebugEnabled())
                 {
                     log.Debug(string.Format("ApplicationContext Refresh: Registering well-known processors and objects"));
                 }
 
                 PrepareObjectFactory(objectFactory);
 
-                if (log.IsDebugEnabled)
+                if (log.IsDebugEnabled())
                 {
                     log.Debug(string.Format("ApplicationContext Refresh: Custom post processing object factory"));
                 }
 
                 PostProcessObjectFactory(objectFactory);
 
-                if (log.IsDebugEnabled)
+                if (log.IsDebugEnabled())
                 {
                     log.Debug(string.Format("ApplicationContext Refresh: Post processing object factory using pre-registered processors"));
                 }
 
-                if (log.IsDebugEnabled)
+                if (log.IsDebugEnabled())
                 {
                     log.Debug(string.Format(
                                   CultureInfo.InvariantCulture,
@@ -893,7 +893,7 @@ namespace Spring.Context.Support
                                   Name));
                 }
 
-                if (log.IsDebugEnabled)
+                if (log.IsDebugEnabled())
                 {
                     log.Debug(string.Format("ApplicationContext Refresh: Post processing object factory using defined processors"));
                 }
@@ -908,7 +908,7 @@ namespace Spring.Context.Support
 
                 OnRefresh();
 
-                if (log.IsDebugEnabled)
+                if (log.IsDebugEnabled())
                 {
                     log.Debug(string.Format("ApplicationContext Refresh: Preinstantiating singletons"));
                 }
@@ -917,7 +917,7 @@ namespace Spring.Context.Support
 
                 OnPostRefresh();
 
-                if (log.IsInfoEnabled)
+                if (log.IsInfoEnabled())
                 {
                     log.Info(string.Format("ApplicationContext Refresh: Completed"));
                 }
@@ -2335,7 +2335,7 @@ namespace Spring.Context.Support
         /// <seealso cref="Spring.Context.IApplicationEventPublisher.PublishEvent"/>
         public void PublishEvent(object sender, ApplicationEventArgs e)
         {
-            if (log.IsDebugEnabled)
+            if (log.IsDebugEnabled())
             {
                 log.Debug(string.Format(
                               CultureInfo.InvariantCulture,
@@ -2372,7 +2372,7 @@ namespace Spring.Context.Support
             {
                 if (_objectFactory.ObjectPostProcessorCount < _objectPostProcessorTargetCount)
                 {
-                    if (log.IsInfoEnabled)
+                    if (log.IsInfoEnabled())
                     {
                         log.Info(string.Format(
                                      "Object '{0}' is not eligible for being processed by all " +

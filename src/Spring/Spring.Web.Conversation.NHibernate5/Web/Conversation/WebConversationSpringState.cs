@@ -72,7 +72,7 @@ namespace Spring.Web.Conversation
         /// <returns></returns>
         public void EndConversation()
         {
-            if (LOG.IsDebugEnabled) LOG.Debug(String.Format("End of Conversation '{0}'", this.id));
+            if (LOG.IsDebugEnabled()) LOG.Debug(String.Format("End of Conversation '{0}'", this.id));
 
             IDictionary springSessionScope = (IDictionary)HttpContext.Current.Session[SPRING_SESSSION_SCOPE_KEY];
             if (springSessionScope == null)
@@ -82,12 +82,12 @@ namespace Spring.Web.Conversation
 
             if (springSessionScope.Contains(this.Id))
             {
-                if (LOG.IsDebugEnabled) LOG.Debug(String.Format("EndConversation: Id='{0}' Was Found on 'spring session scope'!", this.id));
+                if (LOG.IsDebugEnabled()) LOG.Debug(String.Format("EndConversation: Id='{0}' Was Found on 'spring session scope'!", this.id));
                 springSessionScope.Remove(this.id);
             }
             else
             {
-                if (LOG.IsDebugEnabled) LOG.Debug(String.Format("EndConversation: Id='{0}' Was NOT Found on 'spring session scope!", this.id));
+                if (LOG.IsDebugEnabled()) LOG.Debug(String.Format("EndConversation: Id='{0}' Was NOT Found on 'spring session scope!", this.id));
             }
 
             List<IConversationState> innerConversationsListTemp = new List<IConversationState>(this.InnerConversations);
@@ -226,11 +226,11 @@ namespace Spring.Web.Conversation
             }
             if (this.ConversationManager != null)
             {
-                if (LOG.IsDebugEnabled) LOG.Debug(String.Format("StartResumeConversation('{0}'): ConversationManager is not null.", this.Id));
+                if (LOG.IsDebugEnabled()) LOG.Debug(String.Format("StartResumeConversation('{0}'): ConversationManager is not null.", this.Id));
                 //if this is the root conversation.
                 if (this.ParentConversation == null)
                 {
-                    if (LOG.IsDebugEnabled) LOG.Debug(String.Format("SetActiveConversation('{0}'): ConversationManager is not null.", this.Id));
+                    if (LOG.IsDebugEnabled()) LOG.Debug(String.Format("SetActiveConversation('{0}'): ConversationManager is not null.", this.Id));
                     //if this is the root conversation.
                     this.ConversationManager.SetActiveConversation(this);
 
@@ -387,7 +387,7 @@ namespace Spring.Web.Conversation
                 {
                     throw new InvalidOperationException(String.Format("Id is different from spring name for this instance.. Currents='{0}', springName='{1}'", this.id, value));
                 }
-                if (LOG.IsDebugEnabled) LOG.Debug(String.Format("Begin of Conversation '{0}'", this.id));
+                if (LOG.IsDebugEnabled()) LOG.Debug(String.Format("Begin of Conversation '{0}'", this.id));
             }
         }
 

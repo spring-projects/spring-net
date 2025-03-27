@@ -21,10 +21,8 @@
 #region Imports
 
 using System;
-using System.Collections;
 
-using Common.Logging;
-
+using Microsoft.Extensions.Logging;
 using Spring.Transaction.Interceptor;
 
 using Spring.Northwind.Dao;
@@ -38,7 +36,7 @@ namespace Spring.Northwind.Service
     {
         #region Fields
 
-        private static readonly ILog log = LogManager.GetLogger(typeof (FulfillmentService));
+        private static readonly ILogger log = LogManager.GetLogger(typeof (FulfillmentService));
 
         private IProductDao productDao;
 

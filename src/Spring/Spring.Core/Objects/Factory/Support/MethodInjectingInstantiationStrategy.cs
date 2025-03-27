@@ -187,7 +187,7 @@ namespace Spring.Objects.Factory.Support
 				{
 					#region Instrumentation
 
-					if (log.IsDebugEnabled)
+					if (log.IsDebugEnabled())
 					{
 						log.Debug(string.Format(CultureInfo.InvariantCulture,
 						                        "Generating a subclass of the [{0}] class for the '{1}' " +

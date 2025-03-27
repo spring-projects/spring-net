@@ -487,7 +487,7 @@ namespace Spring.Data.NHibernate
                 if (config.GetProperty(Environment.ConnectionProvider) != null &&
                     hibernateProperties.ContainsKey(Environment.ConnectionProvider))
                 {
-	                if (log.IsInfoEnabled)
+	                if (log.IsInfoEnabled())
                     {
                         log.Info("Overriding use of Spring's Hibernate Connection Provider with [" +
                                  hibernateProperties[Environment.ConnectionProvider] + "]");
@@ -637,7 +637,7 @@ namespace Spring.Data.NHibernate
 	    {
             if (sessionFactory != null)
             {
-	            if (log.IsInfoEnabled)
+	            if (log.IsInfoEnabled())
                 {
                     log.Info("Closing Hibernate SessionFactory");
                 }
@@ -833,7 +833,7 @@ namespace Spring.Data.NHibernate
 	    /// <param name="sql"></param>
         protected virtual void ExecuteSchemaStatement(IDbCommand cmd, string sql)
         {
-		    if (log.IsDebugEnabled)
+		    if (log.IsDebugEnabled())
             {
 			    log.Debug("Executing schema statement: " + sql);
 		    }
@@ -844,7 +844,7 @@ namespace Spring.Data.NHibernate
 		    }
 		    catch (ADOException ex)
             {
-			    if (log.IsWarnEnabled)
+			    if (log.IsWarnEnabled())
                 {
 				    log.Warn("Unsuccessful schema statement: " + sql, ex);
 			    }

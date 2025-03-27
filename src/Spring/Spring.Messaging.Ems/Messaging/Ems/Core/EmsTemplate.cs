@@ -206,7 +206,7 @@ namespace Spring.Messaging.Ems.Core
                     }
                     sessionToUse = sessionToClose;
                 }
-                if (logger.IsDebugEnabled)
+                if (logger.IsDebugEnabled())
                 {
                     logger.Debug("Executing callback on EMS Session [" + sessionToUse + "]");
                 }
@@ -526,7 +526,7 @@ namespace Spring.Messaging.Ems.Core
                 {
                     #region Logging
 
-                    if (logger.IsDebugEnabled)
+                    if (logger.IsDebugEnabled())
                     {
                         logger.Debug("Found cached MessageProducer for destination [" + destination + "]");
                     }
@@ -539,7 +539,7 @@ namespace Spring.Messaging.Ems.Core
                     emsResources.Producers.Add(destination, producer);
                     #region Logging
 
-                    if (logger.IsDebugEnabled)
+                    if (logger.IsDebugEnabled())
                     {
                         logger.Debug("Created cached MessageProducer for destination [" + destination + "]");
                     }
@@ -685,7 +685,7 @@ namespace Spring.Messaging.Ems.Core
                 else {
                     message = messageCreatorDelegate(session);
                 }
-                if (logger.IsDebugEnabled)
+                if (logger.IsDebugEnabled())
                 {
                     logger.Debug("Sending created message [" + message + "]");
                 }

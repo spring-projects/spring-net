@@ -5,7 +5,6 @@ MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{B1FF7E1F-9BF9-4EB3-B38C-39A0E3EA4D0A}"
 	ProjectSection(SolutionItems) = preProject
 		readme.txt = readme.txt
-		SpringCalculator.snk = SpringCalculator.snk
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Spring.Calculator.Services.2010", "src\Spring.Calculator.Services\Spring.Calculator.Services.csproj", "{D9FB04E5-D636-4EC2-A3AB-FAB1C4F37827}"

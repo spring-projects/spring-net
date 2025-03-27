@@ -146,7 +146,7 @@ namespace Spring.Aop.Target
 			{
 				#region Instrumentation
 
-				if (logger.IsDebugEnabled)
+				if (logger.IsDebugEnabled())
 				{
 					logger.Debug(string.Format(
 						"No target for apartment prototype '{0}' " +
@@ -185,7 +185,7 @@ namespace Spring.Aop.Target
 		{
 			#region Instrumentation
 
-			if (logger.IsDebugEnabled)
+			if (logger.IsDebugEnabled())
 			{
 				logger.Debug("Destroying ThreadLocal bindings");
 			}
@@ -204,7 +204,7 @@ namespace Spring.Aop.Target
 					{
 						#region Instrumentation
 
-						if (logger.IsWarnEnabled)
+						if (logger.IsWarnEnabled())
 						{
 							logger.Warn(string.Format(
 								"Thread-bound target of class '{0}' " +

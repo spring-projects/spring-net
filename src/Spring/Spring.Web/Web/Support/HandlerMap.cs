@@ -66,18 +66,18 @@ namespace Spring.Web.Support
         /// <returns>the object name</returns>
 		public HandlerMapEntry MapPath( string virtualPath )
 		{
-			if(Log.IsDebugEnabled) Log.Debug( string.Format( "looking up mapping for url '{0}'", virtualPath ) );
+			if(Log.IsDebugEnabled()) Log.Debug( string.Format( "looking up mapping for url '{0}'", virtualPath ) );
 			for(int i=0;i<this._internalTable.Count;i++)
 			{
 				HandlerMapEntry handlerMapEntry = (HandlerMapEntry)this._internalTable[i];
 				if ( handlerMapEntry.UrlPattern.IsMatch( virtualPath ) )
 				{
-					if (Log.IsDebugEnabled) Log.Debug(string.Format("found mapping '{0}' for url '{1}'", handlerMapEntry, virtualPath));
+					if (Log.IsDebugEnabled()) Log.Debug(string.Format("found mapping '{0}' for url '{1}'", handlerMapEntry, virtualPath));
 					return handlerMapEntry;
 				}
 			}
 
-			if (Log.IsDebugEnabled) Log.Debug(string.Format("no mapping found for url '{0}'", virtualPath));
+			if (Log.IsDebugEnabled()) Log.Debug(string.Format("no mapping found for url '{0}'", virtualPath));
 			return null;
 		}
 

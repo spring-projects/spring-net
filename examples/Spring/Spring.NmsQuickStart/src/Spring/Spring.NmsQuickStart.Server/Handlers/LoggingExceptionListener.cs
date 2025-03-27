@@ -1,7 +1,7 @@
 
 
 using System;
-using Common.Logging;
+using Microsoft.Extensions.Logging;
 using Spring.Messaging.Nms.Core;
 
 namespace Spring.NmsQuickStart.Server.Handlers
@@ -10,7 +10,7 @@ namespace Spring.NmsQuickStart.Server.Handlers
     {
         #region Logging
 
-        private readonly ILog logger = LogManager.GetLogger(typeof(LoggingExceptionListener));
+        private readonly ILogger logger = LogManager.GetLogger(typeof(LoggingExceptionListener));
 
         #endregion
 
@@ -20,7 +20,7 @@ namespace Spring.NmsQuickStart.Server.Handlers
         /// <param name="exception">The exception.</param>
         public void OnException(Exception exception)
         {
-            logger.Info("********* Caught exception *************", exception);
+            logger.LogInformation(exception, "********* Caught exception *************");
         }
     }
 }

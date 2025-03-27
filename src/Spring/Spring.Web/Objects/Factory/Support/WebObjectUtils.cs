@@ -65,7 +65,7 @@ namespace Spring.Objects.Factory.Support
         /// </exception>
         public static IHttpHandler CreatePageInstance( string pageUrl )
         {
-            if (s_log.IsDebugEnabled)
+            if (s_log.IsDebugEnabled())
             {
                 s_log.Debug( "creating page instance '" + pageUrl + "'" );
             }
@@ -178,19 +178,19 @@ namespace Spring.Objects.Factory.Support
         /// </returns>
         public static Type GetCompiledPageType( string pageUrl )
         {
-            if (s_log.IsDebugEnabled)
+            if (s_log.IsDebugEnabled())
             {
                 s_log.Debug( "getting page type for " + pageUrl );
             }
 
             string rootedVPath = WebUtils.CombineVirtualPaths( VirtualEnvironment.CurrentExecutionFilePath, pageUrl );
-            if (s_log.IsDebugEnabled)
+            if (s_log.IsDebugEnabled())
             {
                 s_log.Debug( "page vpath is " + rootedVPath );
             }
 
             Type pageType = VirtualEnvironment.GetCompiledType(rootedVPath);
-            if (s_log.IsDebugEnabled)
+            if (s_log.IsDebugEnabled())
             {
                 s_log.Debug( string.Format( "got page type '{0}' for vpath '{1}'", pageType.FullName, rootedVPath ) );
             }
@@ -204,7 +204,7 @@ namespace Spring.Objects.Factory.Support
         public static Type GetControlType( string controlName )
         {
             AssertUtils.ArgumentHasText( controlName, "controlName" );
-            if (s_log.IsDebugEnabled)
+            if (s_log.IsDebugEnabled())
             {
                 s_log.Debug( "getting control type for " + controlName );
             }
@@ -217,7 +217,7 @@ namespace Spring.Objects.Factory.Support
 
             string rootedVPath = WebUtils.CombineVirtualPaths( VirtualEnvironment.CurrentExecutionFilePath, controlName );
 
-            if (s_log.IsDebugEnabled)
+            if (s_log.IsDebugEnabled())
             {
                 s_log.Debug( "control vpath is " + rootedVPath );
             }
@@ -237,7 +237,7 @@ namespace Spring.Objects.Factory.Support
                 throw;
             }
 
-            if (s_log.IsDebugEnabled)
+            if (s_log.IsDebugEnabled())
             {
                 s_log.Debug( string.Format( "got control type '{0}' for vpath '{1}'", controlType.FullName, rootedVPath ) );
             }

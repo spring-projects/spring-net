@@ -194,7 +194,7 @@ namespace Spring.Messaging.Nms.Connections
             {
                 con = CreateConnection();
                 session = CreateSession(con);
-                if (LOG.IsDebugEnabled)
+                if (LOG.IsDebugEnabled())
                 {
                     log.Debug("Created NMS transaction on Session [" + session + "] from Connection [" + con + "]");
                 }

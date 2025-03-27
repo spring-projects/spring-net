@@ -403,7 +403,7 @@ namespace Spring.Messaging.Nms.Listener.Adapter
         {
             if (session != null)
             {
-                if (logger.IsDebugEnabled)
+                if (logger.IsDebugEnabled())
                 {
                     logger.Debug("Listener method returned result [" + result +
                                  "] - generating response message for it");
@@ -415,7 +415,7 @@ namespace Spring.Messaging.Nms.Listener.Adapter
             }
             else
             {
-                if (logger.IsDebugEnabled)
+                if (logger.IsDebugEnabled())
                 {
                     logger.Debug("Listener method returned result [" + result +
                                  "]: not generating response message for it because of no NMS ISession given");

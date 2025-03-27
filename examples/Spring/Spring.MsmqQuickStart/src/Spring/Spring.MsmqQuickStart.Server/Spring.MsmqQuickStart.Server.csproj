@@ -20,6 +20,6 @@
     <Content Include="Config\*.xml" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Common.Logging" />
+    <PackageReference Include="Microsoft.Extensions.Logging" />
   </ItemGroup>
 </Project>

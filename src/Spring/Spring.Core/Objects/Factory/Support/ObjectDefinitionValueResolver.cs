@@ -342,7 +342,7 @@ namespace Spring.Objects.Factory.Support
         /// <returns>A reference to another object in the factory.</returns>
         protected virtual object ResolveReference(IObjectDefinition definition, string name, string argumentName, RuntimeObjectReference reference)
         {
-            if (log.IsDebugEnabled)
+            if (log.IsDebugEnabled())
             {
                 log.Debug(
                         string.Format(CultureInfo.InvariantCulture, "Resolving reference from property '{0}' in object '{1}' to object '{2}'.",

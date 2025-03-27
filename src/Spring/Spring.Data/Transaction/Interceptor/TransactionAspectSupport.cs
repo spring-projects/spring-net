@@ -347,7 +347,7 @@ namespace Spring.Transaction.Interceptor
 	            // We need a transaction for this method
 	            #region Instrumentation
 
-	            if (log.IsDebugEnabled)
+	            if (log.IsDebugEnabled())
 	            {
 	                log.Debug("Getting transaction for " + transactionInfo.JoinpointIdentification);
 	            }
@@ -361,7 +361,7 @@ namespace Spring.Transaction.Interceptor
 	            // The TransactionInfo.HasTransaction property will return
 	            // false. We created it only to preserve the integrity of
 	            // the ThreadLocal stack maintained in this class.
-	            if (log.IsDebugEnabled)
+	            if (log.IsDebugEnabled())
 	            {
                     log.Debug("Skipping transactional joinpoint [" + joinpointIdentification +
                               "] because no transaction manager has been configured");
@@ -404,7 +404,7 @@ namespace Spring.Transaction.Interceptor
 			{
                 #region Instrumentation
 
-			    if (log.IsDebugEnabled) 
+			    if (log.IsDebugEnabled()) 
 			    {
                     log.Debug("Completing transaction for [" + transactionInfo.JoinpointIdentification + "]");
 			    }
@@ -434,7 +434,7 @@ namespace Spring.Transaction.Interceptor
 		{
 			if ( transactionInfo != null &&  transactionInfo.HasTransaction )
 			{
-                if (log.IsDebugEnabled)
+                if (log.IsDebugEnabled())
                 {                    
                     log.Debug("Completing transaction for [" + transactionInfo.JoinpointIdentification + "] after exception: " + exception);
                 }

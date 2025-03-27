@@ -503,7 +503,7 @@ namespace Spring.Messaging.Listener
         /// <param name="request">The original request.</param>
         protected virtual void HandleResult(object result, Message request)
         {
-            if (logger.IsDebugEnabled)
+            if (logger.IsDebugEnabled())
             {
                 logger.Debug("Listener method returned result [" + result +
                              "] - generating response message for it");
@@ -522,7 +522,7 @@ namespace Spring.Messaging.Listener
         protected virtual void SendResponse(MessageQueue destination, Message response)
         {
             //Will send with appropriate transaction semantics
-            if (logger.IsDebugEnabled)
+            if (logger.IsDebugEnabled())
             {
                 logger.Debug("Sending response message to path = [" + destination.Path + "]");
             }

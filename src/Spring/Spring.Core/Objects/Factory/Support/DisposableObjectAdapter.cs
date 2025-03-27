@@ -1,4 +1,5 @@
 using System.Reflection;
+using Microsoft.Extensions.Logging;
 using Spring.Objects.Factory.Config;
 using Spring.Util;
 
@@ -126,16 +127,14 @@ namespace Spring.Objects.Factory.Support
 
                     catch (Exception ex)
                     {
-                        logger.ErrorFormat(
-                            string.Format("Error during execution of {0}.PostProcessBeforeDestruction for object {1}",
-                                          processor.GetType().Name, this.objectName), ex);
+                        logger.LogError(ex, "Error during execution of {Type}.PostProcessBeforeDestruction for object {ObjectName}", processor.GetType().Name, this.objectName);
                     }
                 }
             }
 
             if (this.invokeDisposableObject)
             {
-                if (logger.IsDebugEnabled)
+                if (logger.IsDebugEnabled())
                 {
                     logger.Debug("Invoking Dispose() on object with name '" + this.objectName + "'");
                 }
@@ -148,7 +147,7 @@ namespace Spring.Objects.Factory.Support
                 catch (Exception ex)
                 {
                     string msg = "Invocation of Dispose method failed on object with name '" + this.objectName + "'";
-                    if (logger.IsDebugEnabled)
+                    if (logger.IsDebugEnabled())
                     {
                         logger.Warn(msg, ex);
                     }
@@ -216,7 +215,7 @@ namespace Spring.Objects.Factory.Support
             {
                 args[0] = true;
             }
-            if (logger.IsDebugEnabled)
+            if (logger.IsDebugEnabled())
             {
                 logger.Debug("Invoking destroy method '" + this.destroyMethodName +
                              "' on object with name '" + this.objectName + "'");
@@ -230,7 +229,7 @@ namespace Spring.Objects.Factory.Support
             {
                 string msg = "Invocation of destroy method '" + this.destroyMethodName +
                              "' failed on object with name '" + this.objectName + "'";
-                if (logger.IsDebugEnabled)
+                if (logger.IsDebugEnabled())
                 {
                     logger.Warn(msg, ex.InnerException);
                 }

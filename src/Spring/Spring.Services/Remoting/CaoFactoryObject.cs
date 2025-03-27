@@ -34,7 +34,7 @@ namespace Spring.Remoting
     {
         #region Logging
 
-        private static readonly Common.Logging.ILog LOG = Common.Logging.LogManager.GetLogger(typeof(CaoFactoryObject));
+        private static readonly ILog LOG = LogManager.GetLogger(typeof(CaoFactoryObject));
 
         #endregion
 
@@ -134,7 +134,7 @@ namespace Spring.Remoting
 		public object GetObject()
 		{
 		    string url = serviceUrl.TrimEnd('/') + '/' + remoteTargetName;
-            if (LOG.IsDebugEnabled)
+            if (LOG.IsDebugEnabled())
             {
                 LOG.Debug("Accessing CAO object of type ICaoRemoteFactory object at url = [" + url + "]");
             }

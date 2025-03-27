@@ -39,12 +39,6 @@ namespace Spring.Context.Support
     [TestFixture]
     public class HttpApplicationConfigurerTests
     {
-        [OneTimeSetUp]
-        public void SetUpFixture()
-        {
-            LogManager.Adapter = new Common.Logging.Simple.TraceLoggerFactoryAdapter();
-        }
-
         [SetUp]
         public void SetUp()
         {

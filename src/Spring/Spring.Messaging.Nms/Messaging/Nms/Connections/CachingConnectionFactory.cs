@@ -215,7 +215,7 @@ namespace Spring.Messaging.Nms.Connections
 
             if (session != null)
             {
-                if (Log.IsDebugEnabled)
+                if (Log.IsDebugEnabled())
                 {
                     Log.Debug("Found cached Session for mode " + mode + ": "
                               + (session is IDecoratorSession decoratorSession ? decoratorSession.TargetSession : session));
@@ -224,7 +224,7 @@ namespace Spring.Messaging.Nms.Connections
             else
             {
                 ISession targetSession = await con.CreateSessionAsync(mode).Awaiter();
-                if (Log.IsDebugEnabled)
+                if (Log.IsDebugEnabled())
                 {
                     Log.Debug("Creating cached Session for mode " + mode + ": " + targetSession);
                 }

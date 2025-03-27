@@ -338,7 +338,7 @@ namespace Spring.Messaging.Nms.Listener
             if (!AcceptMessagesWhileStopping && !IsRunning)
             {
                 #region Logging
-                if (logger.IsWarnEnabled)
+                if (logger.IsWarnEnabled())
                 {
                     logger.Warn("Rejecting received message because of the listener container " +
                         "having been stopped in the meantime: " + message);
@@ -415,7 +415,7 @@ namespace Spring.Messaging.Nms.Listener
                     sessionToUse = sessionToClose;
                 }
                 // Actually invoke the message listener
-                if (logger.IsDebugEnabled)
+                if (logger.IsDebugEnabled())
                 {
                     logger.Debug("Invoking listener with message of type [" + message.GetType() + 
                                  "] and session [" + sessionToUse + "]");
@@ -524,7 +524,7 @@ namespace Spring.Messaging.Nms.Listener
                 if (session.Transacted && IsSessionLocallyTransacted(session))
                 {
                     // Transacted session created by this container -> rollback
-                    if (logger.IsDebugEnabled)
+                    if (logger.IsDebugEnabled())
                     {
                         logger.Debug("Initiating transaction rollback on application exception");
                     }
@@ -588,7 +588,7 @@ namespace Spring.Messaging.Nms.Listener
             {
                 errorHandler.HandleError(exception);
             }
-            else if(logger.IsWarnEnabled)
+            else if(logger.IsWarnEnabled())
             {
                 logger.Warn("Execution of NMS message listener failed, and no ErrorHandler has been set.", exception);		
             }

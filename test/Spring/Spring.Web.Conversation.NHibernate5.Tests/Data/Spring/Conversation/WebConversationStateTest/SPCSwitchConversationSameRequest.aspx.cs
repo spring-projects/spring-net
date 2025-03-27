@@ -1,6 +1,9 @@
+using System;
+
 using Spring.Web.Conversation;
 using Spring.Entities;
 using NHibernate;
+using Spring;
 
 public partial class SPCSwitchConversationSameRequest : System.Web.UI.Page
 {

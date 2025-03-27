@@ -103,7 +103,7 @@ namespace Spring.Template.Velocity {
                     resourceLoaderPaths[i] = path + "/";
                 }
             }
-            if (log.IsInfoEnabled) {
+            if (log.IsInfoEnabled()) {
                 log.Info(string.Format("SpringResourceLoader for Velocity: using resource loader [{0}] and resource loader paths {1}", resourceLoader, resourceLoaderPaths));
             }
         }
@@ -114,7 +114,7 @@ namespace Spring.Template.Velocity {
         /// <param name="source">the source template name</param>
         /// <returns>a System.IO.Stream representation of the resource</returns>
         public override Stream GetResourceStream(string source) {
-            if (log.IsDebugEnabled) {
+            if (log.IsDebugEnabled()) {
                 log.Debug(string.Format("Looking for Velocity resource with name [{0}]", source));
             }
 
@@ -123,7 +123,7 @@ namespace Spring.Template.Velocity {
                 try {
                     return resource.InputStream;
                 } catch (IOException ex) {
-                    if (log.IsErrorEnabled) {
+                    if (log.IsErrorEnabled()) {
                         log.Error(string.Format("Could not find Velocity resource: {0}", resource), ex);
                     }
                 }
