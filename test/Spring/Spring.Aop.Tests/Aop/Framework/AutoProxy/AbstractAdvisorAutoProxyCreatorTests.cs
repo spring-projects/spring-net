@@ -18,9 +18,7 @@
 
 #endregion
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using AopAlliance.Aop;
 using NUnit.Framework;
 using Spring.Objects.Factory.Config;

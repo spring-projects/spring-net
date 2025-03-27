@@ -1,8 +1,3 @@
-
-
-using System;
-using Common.Logging;
-
 namespace Spring.Messaging.Listener
 {
     public class SimpleHandler

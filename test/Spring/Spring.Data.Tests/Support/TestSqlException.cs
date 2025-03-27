@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Runtime.Serialization;
 
 #pragma warning disable CS0672 // Member overrides obsolete member

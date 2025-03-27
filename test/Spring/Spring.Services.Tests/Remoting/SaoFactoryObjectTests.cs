@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Lifetime;
 using NUnit.Framework;

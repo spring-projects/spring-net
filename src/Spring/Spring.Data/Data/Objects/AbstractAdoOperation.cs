@@ -20,7 +20,6 @@
 
 using System.Collections;
 using System.Data;
-using Common.Logging;
 using Spring.Dao;
 using Spring.Data.Common;
 using Spring.Objects.Factory;

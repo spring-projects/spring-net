@@ -21,7 +21,6 @@
 using System.Collections;
 using System.Globalization;
 using System.Resources;
-using Common.Logging;
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.Expressions;

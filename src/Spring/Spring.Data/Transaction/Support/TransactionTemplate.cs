@@ -18,7 +18,6 @@
 
 #endregion
 
-using Common.Logging;
 using Spring.Objects.Factory;
 
 namespace Spring.Transaction.Support

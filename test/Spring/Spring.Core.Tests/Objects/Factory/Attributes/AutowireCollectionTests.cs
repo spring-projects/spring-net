@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using NUnit.Framework;
 using Spring.Context.Support;
 using Spring.Objects.Factory.Attributes.ByType;

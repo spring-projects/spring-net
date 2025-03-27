@@ -1,5 +1,4 @@
 using System.Data;
-using log4net;
 using Spring.Data.Core;
 
 namespace Spring.Data.NHibernate

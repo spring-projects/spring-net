@@ -1,5 +1,4 @@
 using System.Data;
-using Common.Logging;
 
 namespace Spring.Data.Support
 {

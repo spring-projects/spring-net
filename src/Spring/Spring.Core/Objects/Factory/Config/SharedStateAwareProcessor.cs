@@ -19,8 +19,6 @@
 #endregion
 
 using System.Collections;
-
-using Common.Logging;
 using Spring.Core;
 using Spring.Util;
 

@@ -15,7 +15,6 @@
 */
 
 using System.Reflection;
-using Common.Logging;
 using Spring.Objects.Factory;
 using Spring.Objects.Support;
 

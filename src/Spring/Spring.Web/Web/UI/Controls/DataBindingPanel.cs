@@ -26,9 +26,6 @@ using System.Security.Permissions;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-
-using Common.Logging;
-
 using Spring.Core.TypeResolution;
 using Spring.DataBinding;
 using Spring.Globalization;

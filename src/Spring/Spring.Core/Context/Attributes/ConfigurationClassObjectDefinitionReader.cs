@@ -21,9 +21,6 @@
 #region
 
 using System.Reflection;
-
-using Common.Logging;
-
 using Spring.Core.TypeResolution;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Parsing;

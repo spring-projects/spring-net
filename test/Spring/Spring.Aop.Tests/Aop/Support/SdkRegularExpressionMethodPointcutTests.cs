@@ -19,9 +19,8 @@
 #endregion
 
 #region Imports
-using System;
+
 using System.Text.RegularExpressions;
-using Common.Logging;
 using Common.Logging.Simple;
 using NUnit.Framework;
 using Spring.Util;

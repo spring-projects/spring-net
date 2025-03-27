@@ -1,5 +1,3 @@
-using System;
-
 using Spring.Web.Conversation;
 
 public partial class GetParentObjetFromChild : System.Web.UI.Page

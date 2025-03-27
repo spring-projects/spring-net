@@ -14,12 +14,9 @@
  * limitations under the License.
  */
 
-using System;
-using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Threading;
 using System.Reflection;
 
 using AopAlliance.Aop;

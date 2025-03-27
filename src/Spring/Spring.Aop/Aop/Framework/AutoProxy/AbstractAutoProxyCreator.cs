@@ -18,9 +18,6 @@ using System.Collections;
 using System.Reflection;
 
 using AopAlliance.Aop;
-
-using Common.Logging;
-
 using Spring.Aop.Framework.Adapter;
 using Spring.Aop.Target;
 using Spring.Collections;

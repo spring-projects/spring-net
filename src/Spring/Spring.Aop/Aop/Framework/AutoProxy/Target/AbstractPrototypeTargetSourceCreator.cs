@@ -20,7 +20,6 @@
 
 #region Imports
 
-using Common.Logging;
 using Spring.Aop.Target;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Support;

@@ -19,7 +19,6 @@
 #endregion
 
 using System.Collections;
-using Common.Logging;
 using Spring.Expressions;
 
 namespace Spring.Aspects

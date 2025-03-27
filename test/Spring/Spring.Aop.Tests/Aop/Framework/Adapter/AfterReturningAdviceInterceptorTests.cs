@@ -18,8 +18,6 @@
 
 #endregion
 
-using System;
-
 using AopAlliance.Intercept;
 using FakeItEasy;
 using NUnit.Framework;

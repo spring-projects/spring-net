@@ -20,7 +20,6 @@
 
 using System.Collections;
 using System.Data;
-using Common.Logging;
 
 namespace Spring.Transaction.Support
 {

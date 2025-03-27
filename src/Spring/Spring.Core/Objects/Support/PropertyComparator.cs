@@ -20,7 +20,6 @@
 
 using System.Collections;
 using System.Globalization;
-using Common.Logging;
 using Spring.Core;
 using Spring.Util;
 

@@ -21,7 +21,6 @@
 using System.Collections;
 using System.Web;
 using System.Web.Caching;
-using Common.Logging;
 using Spring.Util;
 
 namespace Spring.Caching

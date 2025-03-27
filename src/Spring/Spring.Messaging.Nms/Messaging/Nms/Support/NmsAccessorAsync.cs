@@ -16,7 +16,6 @@
 //  */
 #endregion
 
-using Common.Logging;
 using Spring.Messaging.Nms.Core;
 using Spring.Objects.Factory;
 using Apache.NMS;

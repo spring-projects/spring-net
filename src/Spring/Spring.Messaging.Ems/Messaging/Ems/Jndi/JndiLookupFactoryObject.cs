@@ -22,7 +22,6 @@ using Spring.Core.TypeResolution;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
 using Spring.Util;
-using Common.Logging;
 
 namespace Spring.Messaging.Ems.Jndi
 {

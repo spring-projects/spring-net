@@ -20,9 +20,6 @@
 
 #region Imports
 
-using System;
-using System.IO;
-
 using NUnit.Framework;
 
 #endregion

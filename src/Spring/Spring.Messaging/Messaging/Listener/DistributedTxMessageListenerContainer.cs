@@ -19,7 +19,6 @@
 #endregion
 
 using System.Transactions;
-using Common.Logging;
 using Spring.Transaction;
 
 #if NETSTANDARD

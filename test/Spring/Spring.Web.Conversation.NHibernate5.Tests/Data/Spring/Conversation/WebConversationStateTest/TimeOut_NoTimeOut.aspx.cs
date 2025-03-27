@@ -1,5 +1,3 @@
-using System;
-
 using Spring.Web.Conversation;
 
 public partial class TimeOut_NoTimeOut : System.Web.UI.Page

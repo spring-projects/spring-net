@@ -21,7 +21,6 @@
 using System.Reflection;
 using System.Text;
 using AopAlliance.Intercept;
-using Common.Logging;
 
 namespace Spring.Aspects.Logging
 {

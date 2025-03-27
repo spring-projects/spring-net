@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using System.Reflection;
 using System.Runtime.Remoting;
 using System.Runtime.Remoting.Messaging;

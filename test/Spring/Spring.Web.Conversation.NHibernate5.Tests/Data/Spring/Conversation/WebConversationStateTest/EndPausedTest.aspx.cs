@@ -1,5 +1,3 @@
-using System;
-
 using Spring.Web.Conversation;
 
 public partial class EndPausedTest : System.Web.UI.Page

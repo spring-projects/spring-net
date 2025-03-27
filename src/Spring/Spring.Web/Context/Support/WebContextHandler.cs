@@ -22,9 +22,6 @@
 
 using System.Web.Configuration;
 using System.Xml;
-
-using Common.Logging;
-
 using Spring.Util;
 
 #endregion

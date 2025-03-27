@@ -19,7 +19,6 @@
 #endregion
 
 using System.Reflection;
-using Common.Logging;
 using Spring.Context.Attributes.TypeFilters;
 using Spring.Util;
 using Spring.Objects.Factory.Xml;

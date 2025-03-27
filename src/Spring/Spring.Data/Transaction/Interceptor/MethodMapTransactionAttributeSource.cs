@@ -20,8 +20,6 @@
 
 using System.Collections;
 using System.Reflection;
-
-using Common.Logging;
 using Spring.Util;
 using Spring.Core.TypeResolution;
 using Spring.Core;

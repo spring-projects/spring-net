@@ -18,10 +18,8 @@
 
 #endregion
 
-using System;
 using System.Diagnostics;
 using System.EnterpriseServices;
-using System.IO;
 using System.Reflection;
 
 /*

@@ -20,8 +20,6 @@
 
 #region Imports
 
-using System;
-
 using Spring.Objects.Support;
 using Spring.Objects.Factory.Config;
 

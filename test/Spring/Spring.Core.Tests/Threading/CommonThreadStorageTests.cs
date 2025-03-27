@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System.Threading;
 using NUnit.Framework;
 
 #endregion

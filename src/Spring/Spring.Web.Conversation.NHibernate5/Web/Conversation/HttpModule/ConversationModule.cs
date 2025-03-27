@@ -20,7 +20,6 @@
 
 using System.Web;
 using System.Web.UI;
-using Common.Logging;
 using Spring.Context;
 
 namespace Spring.Web.Conversation.HttpModule

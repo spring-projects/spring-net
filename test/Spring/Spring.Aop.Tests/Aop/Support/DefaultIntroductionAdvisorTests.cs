@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using AopAlliance.Aop;
 using NUnit.Framework;
 

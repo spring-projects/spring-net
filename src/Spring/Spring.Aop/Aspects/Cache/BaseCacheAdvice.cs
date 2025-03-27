@@ -21,9 +21,6 @@
 #region Imports
 
 using System.Reflection;
-
-using Common.Logging;
-
 using Spring.Caching;
 using Spring.Context;
 using Spring.Expressions;

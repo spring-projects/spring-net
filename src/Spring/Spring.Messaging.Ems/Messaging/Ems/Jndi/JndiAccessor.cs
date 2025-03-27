@@ -19,7 +19,6 @@
 #endregion
 
 using System.Collections;
-using Common.Logging;
 using Spring.Objects.Factory;
 
 namespace Spring.Messaging.Ems.Jndi

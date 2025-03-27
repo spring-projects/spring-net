@@ -21,8 +21,6 @@
 using System.Collections;
 
 using Spring.Messaging.Ems.Common;
-using Common.Logging;
-
 using Spring.Collections;
 using Spring.Util;
 

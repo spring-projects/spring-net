@@ -20,7 +20,6 @@
 
 #region
 
-using System;
 using System.Reflection;
 using Spring.Expressions;
 using Spring.Util;

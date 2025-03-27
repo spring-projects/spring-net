@@ -18,7 +18,6 @@
 
 #endregion
 
-using System.Threading;
 using NUnit.Framework;
 using Spring.Messaging.Nms.Core;
 using Spring.Testing.NUnit;

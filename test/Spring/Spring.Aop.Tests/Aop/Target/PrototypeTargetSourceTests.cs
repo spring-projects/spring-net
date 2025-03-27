@@ -18,9 +18,6 @@
 
 #endregion
 
-using System;
-
-using Common.Logging;
 using Common.Logging.Simple;
 
 using FakeItEasy;

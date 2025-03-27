@@ -21,7 +21,6 @@
 #region Imports
 
 using System.Collections;
-using System.Threading.Tasks;
 using Apache.NMS;
 using FakeItEasy;
 using NUnit.Framework;

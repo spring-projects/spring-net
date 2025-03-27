@@ -1,7 +1,6 @@
 
 
 using System.Messaging;
-using Common.Logging;
 
 namespace Spring.Messaging.Listener
 {

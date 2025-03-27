@@ -19,7 +19,6 @@
 #endregion
 
 using System.Collections;
-using Common.Logging;
 using Spring.Collections;
 using Spring.Messaging.Ems.Common;
 using Spring.Transaction.Support;

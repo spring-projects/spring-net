@@ -21,7 +21,6 @@
 using System.Collections;
 using System.Data;
 using System.Data.Common;
-using Common.Logging;
 using Spring.Dao;
 using Spring.Dao.Support.Generic;
 using Spring.Data.Common;

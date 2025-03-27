@@ -14,8 +14,6 @@
 * limitations under the License.
 */
 
-using System.Collections.Generic;
-using System.Threading.Tasks;
 using NUnit.Framework;
 
 using Quartz;

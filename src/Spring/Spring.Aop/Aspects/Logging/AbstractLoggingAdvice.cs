@@ -21,7 +21,6 @@
 using System.Reflection;
 using System.Runtime.Serialization;
 using AopAlliance.Intercept;
-using Common.Logging;
 using Spring.Aop.Framework;
 
 namespace Spring.Aspects.Logging

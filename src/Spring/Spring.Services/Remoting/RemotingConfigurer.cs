@@ -19,8 +19,6 @@
 #endregion
 
 using System.Runtime.Remoting;
-
-using Common.Logging;
 using Spring.Core;
 using Spring.Core.IO;
 using Spring.Objects.Factory.Config;

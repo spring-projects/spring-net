@@ -1,5 +1,4 @@
 using System.Reflection;
-using Common.Logging;
 using Spring.Expressions;
 using Spring.Messaging.Ems.Common;
 using Spring.Messaging.Ems.Support;

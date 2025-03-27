@@ -1,5 +1,3 @@
-using System;
-
 using Spring.Web.Conversation;
 using NHibernate;
 using Spring.Entities;

@@ -1,6 +1,3 @@
-using System;
-using Common.Logging;
-
 namespace Spring.Data.Objects.Factory.Support
 {
     public class TestForm : Spring.Web.UI.Page

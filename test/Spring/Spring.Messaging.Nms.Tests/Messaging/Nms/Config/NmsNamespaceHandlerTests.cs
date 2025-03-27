@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System.Collections.Generic;
 using Apache.NMS;
 
 using FakeItEasy;

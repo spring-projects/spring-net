@@ -1,5 +1,3 @@
-using System;
-using System.Threading.Tasks;
 using Quartz;
 
 namespace Spring.Scheduling.Quartz.Integration.Tests

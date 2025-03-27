@@ -17,8 +17,6 @@
  */ 
 #endregion
 
-using System;
-using System.Threading;
 using Spring.Pool;
 using NUnit.Framework;
 

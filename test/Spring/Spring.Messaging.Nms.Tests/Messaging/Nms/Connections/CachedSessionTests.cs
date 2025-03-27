@@ -18,7 +18,6 @@
 
 #endregion
 
-using System.Collections.Generic;
 using Apache.NMS;
 using NUnit.Framework;
 

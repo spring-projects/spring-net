@@ -15,7 +15,6 @@
  */
 
 using System.Collections;
-using Common.Logging;
 using Quartz;
 using Quartz.Simpl;
 using Quartz.Xml;

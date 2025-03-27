@@ -18,7 +18,6 @@
 
 #endregion
 
-using Common.Logging;
 using Spring.Dao;
 using Spring.Data.Common;
 

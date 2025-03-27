@@ -2,7 +2,6 @@
 
 using Spring.Messaging.Nms.Core;
 using Apache.NMS;
-using Common.Logging;
 
 namespace Spring.Messaging.Nms.Integration
 {

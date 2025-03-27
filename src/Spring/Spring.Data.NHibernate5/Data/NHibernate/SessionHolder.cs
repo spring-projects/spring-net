@@ -16,7 +16,6 @@
 
 using System.Collections;
 using System.Data;
-using Common.Logging;
 using NHibernate;
 
 using Spring.Transaction.Support;

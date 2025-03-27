@@ -1,8 +1,5 @@
 using System.Collections.Concurrent;
 using System.Web.Mvc;
-
-using Common.Logging;
-
 using Spring.Context;
 using Spring.Context.Support;
 

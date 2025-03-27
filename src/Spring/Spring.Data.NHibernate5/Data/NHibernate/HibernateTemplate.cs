@@ -15,9 +15,6 @@
  */
 
 using System.Collections;
-
-using Common.Logging;
-
 using Spring.Aop.Framework;
 using Spring.Data.Common;
 using Spring.Data.Support;

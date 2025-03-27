@@ -19,7 +19,6 @@
 #endregion
 
 using System.Data;
-using Common.Logging;
 using Spring.Data.Common;
 using Spring.Data.Support;
 using Spring.Objects.Factory;

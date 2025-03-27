@@ -18,7 +18,6 @@
 
 #endregion
 
-using Common.Logging;
 using Spring.Expressions;
 
 namespace Spring.Validation.Actions

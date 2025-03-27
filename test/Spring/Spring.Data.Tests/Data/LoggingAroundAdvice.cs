@@ -1,6 +1,5 @@
 
 using AopAlliance.Intercept;
-using Common.Logging;
 
 namespace Spring.Data
 {

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-using Common.Logging;
 using Spring.Transaction.Support;
 using Spring.Util;
 using Apache.NMS;

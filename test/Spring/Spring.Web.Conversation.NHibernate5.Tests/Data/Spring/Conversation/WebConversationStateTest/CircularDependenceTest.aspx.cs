@@ -1,10 +1,7 @@
-using System;
 using System.Text;
 
 using Spring.Context;
 using Spring.Web.Conversation;
-
-using Common.Logging;
 
 public partial class CircularDependenceTest : System.Web.UI.Page, IApplicationContextAware
 {

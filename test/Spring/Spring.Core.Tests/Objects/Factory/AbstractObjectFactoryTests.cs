@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using NUnit.Framework;
 
 using Spring.Core.IO;
@@ -28,7 +27,6 @@ using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Xml;
 using Spring.Threading;
-using System.Threading;
 using System.Collections;
 
 #endregion

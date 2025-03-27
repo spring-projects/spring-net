@@ -20,7 +20,6 @@
 
 using System.Data;
 using System.Reflection;
-using Common.Logging;
 using Spring.Data.Common;
 
 namespace Spring.Data.Support

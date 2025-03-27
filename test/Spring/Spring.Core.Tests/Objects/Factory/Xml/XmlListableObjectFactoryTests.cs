@@ -20,8 +20,6 @@
 
 #region Imports
 
-using System.Collections.Generic;
-
 using NUnit.Framework;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;

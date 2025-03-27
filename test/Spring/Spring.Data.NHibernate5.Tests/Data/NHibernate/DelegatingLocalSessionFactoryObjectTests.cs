@@ -1,9 +1,6 @@
 ﻿using NUnit.Framework;
 
 using NhCfg = NHibernate.Cfg;
-
-using System.Collections.Generic;
-
 using Spring.Data.Common;
 
 using NHibernate.Dialect;

@@ -18,9 +18,8 @@
 
 #endregion
 
-#region Imports 
+#region Imports
 
-using System;
 using NUnit.Framework;
 using Spring.Context.Support;
 using Spring.Core.IO;

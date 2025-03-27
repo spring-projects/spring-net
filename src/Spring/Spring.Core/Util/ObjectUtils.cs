@@ -21,7 +21,6 @@ using System.Runtime.Remoting;
 #if !NETSTANDARD
 using System.Runtime.Remoting.Proxies;
 #endif
-using Common.Logging;
 
 using Spring.Reflection.Dynamic;
 

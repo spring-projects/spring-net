@@ -22,9 +22,6 @@ using System.Reflection;
 using Spring.Collections;
 using Spring.Core;
 using Spring.Objects.Factory.Config;
-
-using Common.Logging;
-
 using Spring.Objects.Factory.Support;
 using Spring.Util;
 

@@ -21,7 +21,6 @@
 using System.Collections;
 using System.Collections.Specialized;
 using System.Reflection;
-using Common.Logging;
 using Spring.Util;
 
 namespace Spring.Transaction.Interceptor

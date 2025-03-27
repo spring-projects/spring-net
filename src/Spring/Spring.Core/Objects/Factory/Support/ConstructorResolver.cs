@@ -15,7 +15,6 @@
  */
 
 using System.Reflection;
-using Common.Logging;
 using Spring.Collections;
 using Spring.Core;
 using Spring.Core.TypeConversion;

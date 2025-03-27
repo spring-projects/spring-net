@@ -20,8 +20,6 @@
 
 #region Imports
 
-using System;
-using Common.Logging;
 using Common.Logging.Simple;
 using NUnit.Framework;
 

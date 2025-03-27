@@ -17,7 +17,7 @@
 #endregion
 
 #region Imports
-using System;
+
 using System.Runtime.Serialization;
 #endregion
 

@@ -23,9 +23,6 @@ using System.Configuration;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Xml;
-
-using Common.Logging;
-
 using Spring.Core.IO;
 using Spring.Core.TypeResolution;
 using Spring.Util;

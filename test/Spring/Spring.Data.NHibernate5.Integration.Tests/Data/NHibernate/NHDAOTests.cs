@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using NHibernate;
 using NUnit.Framework;
 using Spring.Context;

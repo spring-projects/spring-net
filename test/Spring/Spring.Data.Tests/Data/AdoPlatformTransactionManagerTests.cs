@@ -14,10 +14,7 @@
  * limitations under the License.
  */
 
-using System;
 using System.Data;
-using System.Threading;
-
 using FakeItEasy;
 
 using NUnit.Framework;

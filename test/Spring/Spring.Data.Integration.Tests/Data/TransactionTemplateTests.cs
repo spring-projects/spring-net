@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System;
 using System.Data;
 using NUnit.Framework;
 using Spring.Context;

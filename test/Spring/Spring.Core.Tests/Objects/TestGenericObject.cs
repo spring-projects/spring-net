@@ -20,8 +20,6 @@
 
 #region Imports
 
-using System.Collections.Generic;
-
 #endregion
 
 namespace Spring.Objects

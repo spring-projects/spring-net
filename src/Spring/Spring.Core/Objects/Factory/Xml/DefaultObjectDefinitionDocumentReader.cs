@@ -16,7 +16,6 @@
 
 using System.Globalization;
 using System.Xml;
-using Common.Logging;
 using Spring.Core.IO;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;

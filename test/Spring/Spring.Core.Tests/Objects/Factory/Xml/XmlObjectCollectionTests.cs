@@ -18,12 +18,8 @@
 
 #endregion
 
-using System;
 using System.Collections;
-using System.IO;
-using System.Linq;
 using System.Text;
-using Common.Logging;
 using Common.Logging.Simple;
 using NUnit.Framework;
 using Spring.Collections;

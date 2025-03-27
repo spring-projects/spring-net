@@ -19,7 +19,6 @@
 #endregion
 
 using Apache.NMS;
-using Common.Logging;
 using Spring.Messaging.Nms.Support;
 using Spring.Transaction.Support;
 using Spring.Util;

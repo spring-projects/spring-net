@@ -23,8 +23,6 @@ using Spring.Messaging.Support.Converters;
 using Spring.Objects.Factory;
 using Spring.Util;
 
-using Common.Logging;
-
 #if NETSTANDARD
 using Experimental.System.Messaging;
 #else

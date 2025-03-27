@@ -18,7 +18,6 @@
 
 #endregion
 
-using Common.Logging;
 using NHibernate;
 using Spring.Context;
 using Spring.Context.Support;

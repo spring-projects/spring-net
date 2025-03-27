@@ -18,7 +18,6 @@
 
 #endregion
 
-using Common.Logging;
 using Spring.Objects.Factory;
 using Apache.NMS;
 

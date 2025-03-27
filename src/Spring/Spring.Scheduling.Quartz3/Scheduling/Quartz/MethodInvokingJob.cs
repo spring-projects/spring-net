@@ -15,7 +15,6 @@
 */
 
 using System.Reflection;
-using Common.Logging;
 using Quartz;
 using Spring.Objects.Support;
 
