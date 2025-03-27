@@ -18,7 +18,6 @@
 
 #endregion
 
-using Common.Logging;
 using Spring.Collections;
 using Spring.Messaging.Ems.Common;
 using Spring.Messaging.Ems.Support;

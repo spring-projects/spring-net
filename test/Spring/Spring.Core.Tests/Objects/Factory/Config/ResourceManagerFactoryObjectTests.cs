@@ -16,7 +16,6 @@
  */
 #endregion
 
-using System;
 using System.Resources;
 using NUnit.Framework;
 

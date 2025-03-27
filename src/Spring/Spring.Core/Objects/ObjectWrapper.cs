@@ -17,8 +17,6 @@
 using System.ComponentModel;
 using System.Reflection;
 using System.Text;
-
-using Common.Logging;
 using Spring.Core;
 using Spring.Expressions;
 using Spring.Expressions.Parser.antlr;

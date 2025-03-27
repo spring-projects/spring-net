@@ -20,7 +20,6 @@
 
 using System.Runtime.Serialization;
 using Apache.NMS;
-using Common.Logging;
 using Spring.Context;
 using Spring.Messaging.Nms.Connections;
 using Spring.Messaging.Nms.Support;

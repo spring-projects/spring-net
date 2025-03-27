@@ -20,7 +20,6 @@
 
 using System.Collections.Specialized;
 using System.Globalization;
-using Common.Logging;
 
 namespace Spring.Objects.Factory.Config
 {

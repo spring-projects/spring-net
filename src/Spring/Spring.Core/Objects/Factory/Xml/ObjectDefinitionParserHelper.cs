@@ -20,9 +20,6 @@
 
 using System.Globalization;
 using System.Xml;
-
-using Common.Logging;
-
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 using Spring.Util;

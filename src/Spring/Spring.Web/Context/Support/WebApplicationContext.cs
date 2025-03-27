@@ -24,7 +24,6 @@ using System.Reflection;
 using System.Web;
 using System.Web.Hosting;
 using System.Xml;
-using Common.Logging;
 using Spring.Collections;
 using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Xml;

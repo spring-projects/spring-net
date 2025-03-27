@@ -20,10 +20,7 @@
 
 #region Imports
 
-using System;
 using System.Data;
-using log4net;
-
 using NHibernate;
 using NUnit.Framework;
 using Spring.Context;
@@ -32,11 +29,9 @@ using Spring.Data.Common;
 using Spring.Transaction;
 using Spring.Transaction.Interceptor;
 using System.Transactions;
-using System.Collections.Generic;
 using Spring.Core.IO;
 using NHibernate.Cfg;
 using System.Diagnostics;
-using System.Threading;
 
 #endregion
 

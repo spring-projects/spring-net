@@ -1,4 +1,3 @@
-using System;
 using System.Reflection;
 
 using Spring.Data.NHibernate.Support;

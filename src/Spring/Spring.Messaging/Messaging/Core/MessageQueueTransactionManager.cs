@@ -18,8 +18,6 @@
 
 #endregion
 
-
-using Common.Logging;
 using Spring.Data.Core;
 using Spring.Transaction;
 using Spring.Transaction.Support;

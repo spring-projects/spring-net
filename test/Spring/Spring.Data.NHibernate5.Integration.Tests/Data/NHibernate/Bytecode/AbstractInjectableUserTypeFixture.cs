@@ -5,6 +5,7 @@ using NHibernate.Engine;
 using NHibernate.Tool.hbm2ddl;
 
 using NUnit.Framework;
+using Environment = NHibernate.Cfg.Environment;
 
 namespace Spring.Data.NHibernate.Bytecode
 {

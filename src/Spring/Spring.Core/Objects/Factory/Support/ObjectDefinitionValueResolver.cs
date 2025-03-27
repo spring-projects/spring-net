@@ -17,7 +17,6 @@
 using System.Collections;
 using System.Globalization;
 using System.Runtime.Remoting;
-using Common.Logging;
 using Spring.Core.TypeConversion;
 using Spring.Expressions;
 using Spring.Objects.Factory.Config;

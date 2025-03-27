@@ -1,5 +1,3 @@
-using System;
-
 namespace Spring.Data.NHibernate.Bytecode
 {
     public class Product

@@ -15,7 +15,6 @@
  */
 
 using System.Collections;
-using Common.Logging;
 using NHibernate;
 using NHibernate.Connection;
 using NHibernate.Driver;

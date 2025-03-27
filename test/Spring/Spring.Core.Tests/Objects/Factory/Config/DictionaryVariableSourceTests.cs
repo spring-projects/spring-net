@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections;
 using NUnit.Framework;
 
 namespace Spring.Objects.Factory.Config

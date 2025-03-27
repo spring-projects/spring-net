@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Spring.Data.NHibernate5.NestedTxSuspension.Integration.Tests
+﻿namespace Spring.Data.NHibernate5.NestedTxSuspension.Integration.Tests
 {
     public interface IContainer
     {

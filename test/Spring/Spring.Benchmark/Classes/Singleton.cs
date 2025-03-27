@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace Spring.Benchmark.Classes
+﻿namespace Spring.Benchmark.Classes
 {
     public interface ISingleton1
     {

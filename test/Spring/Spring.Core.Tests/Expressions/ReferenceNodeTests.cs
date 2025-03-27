@@ -18,13 +18,11 @@
 
 #endregion
 
-using System;
 using NUnit.Framework;
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.Core.IO;
 using Spring.Objects.Factory.Xml;
-using System.Collections.Generic;
 using System.Text;
 
 namespace Spring.Expressions

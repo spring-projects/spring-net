@@ -20,17 +20,12 @@
 
 #region Imports
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Globalization;
-using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-
-using Common.Logging;
 using Common.Logging.Simple;
 using NUnit.Framework;
 using Spring.Collections;

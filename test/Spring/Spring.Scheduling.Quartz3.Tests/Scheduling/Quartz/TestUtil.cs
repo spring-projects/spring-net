@@ -14,8 +14,6 @@
 * limitations under the License.
 */
 
-using System;
-
 using Quartz;
 using Quartz.Impl;
 using Quartz.Spi;

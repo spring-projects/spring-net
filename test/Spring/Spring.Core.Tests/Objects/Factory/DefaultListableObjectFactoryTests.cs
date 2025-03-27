@@ -14,11 +14,8 @@
  * limitations under the License.
  */
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
 using System.Reflection;
 using System.Runtime.Serialization;
 using NUnit.Framework;

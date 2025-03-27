@@ -16,7 +16,6 @@
 
 using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
-using Common.Logging;
 using Spring.Util;
 
 namespace Spring.Aop.Support

@@ -1,5 +1,4 @@
-﻿using System.Threading;
-using Apache.NMS;
+﻿using Apache.NMS;
 using FakeItEasy;
 using NUnit.Framework;
 

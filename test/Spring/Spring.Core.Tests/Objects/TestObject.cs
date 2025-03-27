@@ -14,15 +14,12 @@
  * limitations under the License.
  */
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.ComponentModel.Design.Serialization;
 using System.Drawing;
 using System.Globalization;
-using System.IO;
 using System.Text;
 using Spring.Collections;
 using Spring.Context;

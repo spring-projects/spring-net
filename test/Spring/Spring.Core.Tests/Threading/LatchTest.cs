@@ -1,5 +1,3 @@
-using System.Threading;
-
 using NUnit.Framework;
 
 #region Licence

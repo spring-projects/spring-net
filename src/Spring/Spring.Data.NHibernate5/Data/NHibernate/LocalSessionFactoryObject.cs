@@ -17,7 +17,6 @@
 using System.Collections;
 using System.Data;
 using System.Data.Common;
-using Common.Logging;
 using NHibernate;
 using NHibernate.Bytecode;
 using NHibernate.Cfg;

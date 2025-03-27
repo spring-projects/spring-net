@@ -23,7 +23,6 @@ using System.Data;
 using System.Data.Common;
 using System.Globalization;
 using System.Reflection;
-using Common.Logging;
 using Spring.Dao.Support;
 using Spring.Data.Common;
 using Spring.Data.Support;

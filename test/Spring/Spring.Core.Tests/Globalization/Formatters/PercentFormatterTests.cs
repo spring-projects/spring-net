@@ -18,8 +18,6 @@
 
 #endregion
 
-using System;
-
 using NUnit.Framework;
 
 namespace Spring.Globalization.Formatters

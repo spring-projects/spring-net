@@ -23,7 +23,6 @@
 using System.Collections;
 using System.Reflection;
 using AopAlliance.Intercept;
-using Common.Logging;
 using Spring.Util;
 
 #endregion

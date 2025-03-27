@@ -23,8 +23,6 @@
 using System.Configuration;
 using System.Reflection;
 using System.Xml;
-
-using Common.Logging;
 using Spring.Core;
 using Spring.Core.TypeResolution;
 using Spring.Reflection.Dynamic;

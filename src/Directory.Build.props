@@ -48,6 +48,12 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Using Include="Common.Logging" />
+    <Using Include="Common.Logging.ILog" Alias="ILog" />
+    <Using Include="Common.Logging.LogManager" Alias="LogManager" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="ConfigureAwaitChecker.Analyzer" PrivateAssets="All" />
   </ItemGroup>
 

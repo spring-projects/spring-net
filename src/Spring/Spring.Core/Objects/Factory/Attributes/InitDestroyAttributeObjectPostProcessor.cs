@@ -19,9 +19,6 @@
 #endregion
 
 using System.Reflection;
-
-using Common.Logging;
-
 using Spring.Objects.Factory.Config;
 using Spring.Core;
 

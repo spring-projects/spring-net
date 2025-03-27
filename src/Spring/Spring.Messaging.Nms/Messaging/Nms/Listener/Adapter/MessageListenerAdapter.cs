@@ -19,7 +19,6 @@
 #endregion
 
 using System.Reflection;
-using Common.Logging;
 using Spring.Expressions;
 using Spring.Messaging.Nms.Core;
 using Spring.Messaging.Nms.Support;

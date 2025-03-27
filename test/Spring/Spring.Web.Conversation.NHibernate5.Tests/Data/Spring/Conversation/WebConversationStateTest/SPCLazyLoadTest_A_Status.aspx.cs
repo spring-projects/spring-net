@@ -1,8 +1,5 @@
-using System;
-
 using Spring.Web.Conversation;
 using Spring.Entities;
-using Common.Logging;
 using NHibernate;
 
 public partial class SPCLazyLoadTest_A_Status : System.Web.UI.Page

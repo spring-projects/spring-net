@@ -20,7 +20,6 @@
 
 using System.Collections;
 using System.Data;
-using Common.Logging;
 using Spring.Data.Common;
 
 namespace Spring.Data.Support

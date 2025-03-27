@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-using Common.Logging;
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.Core.IO;

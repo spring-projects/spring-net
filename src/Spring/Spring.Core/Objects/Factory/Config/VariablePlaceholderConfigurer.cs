@@ -16,7 +16,6 @@
 
 using System.Collections;
 using System.Globalization;
-using Common.Logging;
 using Spring.Collections;
 using Spring.Core;
 using Spring.Util;

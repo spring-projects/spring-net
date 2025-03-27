@@ -21,9 +21,6 @@
 using System.Data;
 using System.Reflection;
 using System.Text.RegularExpressions;
-
-using Common.Logging;
-
 using Spring.Core.IO;
 using Spring.Dao;
 using Spring.Data;

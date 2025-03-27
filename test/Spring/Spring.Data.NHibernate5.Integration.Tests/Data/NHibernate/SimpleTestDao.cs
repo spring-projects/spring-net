@@ -1,7 +1,5 @@
-using System;
 using NHibernate;
 using Spring.Transaction.Interceptor;
-using System.Threading;
 
 namespace Spring.Data.NHibernate
 {

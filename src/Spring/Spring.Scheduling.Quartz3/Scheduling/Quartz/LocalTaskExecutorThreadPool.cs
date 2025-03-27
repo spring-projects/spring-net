@@ -14,7 +14,6 @@
 * limitations under the License.
 */
 
-using Common.Logging;
 using Quartz;
 using Quartz.Spi;
 

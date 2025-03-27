@@ -20,7 +20,6 @@
 
 using System.Collections;
 using System.Reflection;
-using Common.Logging;
 using Spring.Util;
 
 namespace Spring.Context.Attributes

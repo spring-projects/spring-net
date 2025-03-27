@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using NUnit.Framework;
 
 namespace Spring.Objects.Factory.Support

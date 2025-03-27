@@ -20,7 +20,6 @@
 
 using System.Runtime.Serialization;
 using Spring.Messaging.Ems.Support;
-using Common.Logging;
 using Spring.Messaging.Ems.Core;
 using Spring.Messaging.Ems.Common;
 using Spring.Objects.Factory;

@@ -19,7 +19,6 @@
 #endregion
 
 using Spring.Core.TypeResolution;
-using Common.Logging;
 
 namespace Spring.Context.Attributes.TypeFilters
 {

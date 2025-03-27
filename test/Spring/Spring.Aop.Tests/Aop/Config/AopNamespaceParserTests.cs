@@ -18,8 +18,6 @@
 
 #endregion
 
-using System.Collections.Generic;
-
 using NUnit.Framework;
 
 using Spring.Aop.Framework;

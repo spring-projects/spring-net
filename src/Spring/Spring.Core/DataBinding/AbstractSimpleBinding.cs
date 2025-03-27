@@ -1,5 +1,4 @@
 using System.Reflection;
-using Common.Logging;
 using Spring.Globalization;
 using Spring.Validation;
 

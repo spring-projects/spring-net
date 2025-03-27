@@ -18,9 +18,6 @@ using System.Collections;
 using System.Collections.Concurrent;
 using System.Collections.Specialized;
 using System.ComponentModel;
-
-using Common.Logging;
-
 using Spring.Collections;
 using Spring.Core;
 using Spring.Core.TypeConversion;

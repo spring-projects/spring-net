@@ -19,7 +19,6 @@
 #endregion
 
 using System.Reflection;
-using Common.Logging;
 using Spring.Objects.Factory.Support;
 
 namespace Spring.Objects.Factory.Attributes

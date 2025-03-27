@@ -19,7 +19,6 @@
 #endregion
 
 using System.Collections;
-using Common.Logging;
 using Commons.Collections;
 using NVelocity.App;
 using NVelocity.Exception;

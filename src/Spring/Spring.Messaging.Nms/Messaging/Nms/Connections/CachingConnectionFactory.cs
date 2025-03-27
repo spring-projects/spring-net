@@ -15,7 +15,6 @@
  */
 
 using Apache.NMS;
-using Common.Logging;
 using Spring.Messaging.Nms.Support;
 using Spring.Util;
 

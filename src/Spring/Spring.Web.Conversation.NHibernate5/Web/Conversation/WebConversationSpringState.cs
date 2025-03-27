@@ -20,7 +20,6 @@
 
 using System.Collections;
 using System.Web;
-using Common.Logging;
 using NHibernate;
 using Spring.Context;
 using Spring.Context.Support;

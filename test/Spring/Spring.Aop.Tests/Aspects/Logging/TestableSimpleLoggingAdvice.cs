@@ -19,7 +19,6 @@
 #endregion
 
 using AopAlliance.Intercept;
-using Common.Logging;
 
 namespace Spring.Aspects.Logging
 {

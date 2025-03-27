@@ -18,8 +18,6 @@
 
 #endregion
 
-using System;
-
 using FakeItEasy;
 
 using NUnit.Framework;

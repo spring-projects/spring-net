@@ -22,8 +22,6 @@
 
 using System.Text;
 using System.Collections;
-
-using Common.Logging;
 using Spring.Proxy;
 
 #endregion

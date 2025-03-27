@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2010-2011 the original author or authors.
+ * Copyright ï¿½ 2010-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,7 +20,6 @@
 
 using System.ComponentModel;
 using System.Xml;
-using Common.Logging;
 using Spring.Context.Attributes;
 using Spring.Context.Attributes.TypeFilters;
 using Spring.Objects.Factory.Config;

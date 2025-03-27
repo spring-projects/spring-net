@@ -16,7 +16,6 @@
 //  */
 #endregion
 
-using System.Collections.Generic;
 using BenchmarkDotNet.Attributes;
 using Spring.Collections;
 using Spring.Objects.Factory.Support;

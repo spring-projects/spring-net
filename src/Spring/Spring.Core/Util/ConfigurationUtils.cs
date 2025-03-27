@@ -18,6 +18,7 @@ using System.Collections.Concurrent;
 using System.Configuration;
 using System.Reflection;
 using System.Xml;
+using ConfigurationException = System.Configuration.ConfigurationException;
 
 namespace Spring.Util
 {

@@ -25,7 +25,6 @@ using System.Reflection.Emit;
 using Spring.Objects.Factory.Config;
 using Spring.Util;
 using Spring.Proxy;
-using Common.Logging;
 
 namespace Spring.Context.Attributes
 {

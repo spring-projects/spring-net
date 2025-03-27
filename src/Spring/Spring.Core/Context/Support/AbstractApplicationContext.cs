@@ -16,7 +16,6 @@
 
 using System.Diagnostics;
 using System.Globalization;
-using Common.Logging;
 using Spring.Context.Events;
 using Spring.Core;
 using Spring.Core.IO;

@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using AopAlliance.Intercept;
 
 namespace Spring.Aop.Advice

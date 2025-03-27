@@ -20,7 +20,6 @@
 
 using System.Reflection;
 using System.Web.UI;
-using Common.Logging;
 
 namespace Spring.Web.UI.Controls
 {

@@ -20,8 +20,6 @@
 
 #region Imports
 
-using System;
-using System.IO;
 using System.Net;
 using NUnit.Framework;
 

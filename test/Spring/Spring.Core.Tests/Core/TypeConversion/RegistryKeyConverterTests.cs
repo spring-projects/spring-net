@@ -18,7 +18,6 @@
 
 #endregion
 
-using System;
 using Microsoft.Win32;
 using NUnit.Framework;
 

@@ -18,7 +18,6 @@
 
 #endregion
 
-using Common.Logging;
 using Spring.Core.TypeResolution;
 using Spring.Util;
 using Spring.Objects.Factory.Support;

@@ -18,9 +18,6 @@ using System.Runtime.Serialization;
 
 using AopAlliance.Aop;
 using AopAlliance.Intercept;
-
-using Common.Logging;
-
 using Spring.Aop.Framework.Adapter;
 using Spring.Aop.Support;
 using Spring.Aop.Target;

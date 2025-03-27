@@ -18,11 +18,8 @@
 
 #endregion
 
-using System;
 using System.Collections;
 using System.Collections.Specialized;
-using System.IO;
-
 using FakeItEasy;
 
 using NUnit.Framework;

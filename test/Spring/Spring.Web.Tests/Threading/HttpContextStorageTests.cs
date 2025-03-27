@@ -20,7 +20,6 @@
 
 #region Imports
 
-using System.IO;
 using System.Web;
 using NUnit.Framework;
 

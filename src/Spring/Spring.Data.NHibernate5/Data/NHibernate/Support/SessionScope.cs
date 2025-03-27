@@ -15,8 +15,6 @@
  */
 
 using System.Reflection;
-
-using Common.Logging;
 using NHibernate;
 using Spring.Threading;
 using Spring.Transaction.Support;

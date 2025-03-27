@@ -21,8 +21,6 @@
 using System.Diagnostics;
 using System.Reflection;
 
-using Common.Logging;
-
 namespace Spring.Util
 {
     /// <summary>

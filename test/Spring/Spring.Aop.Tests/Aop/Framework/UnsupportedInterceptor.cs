@@ -1,4 +1,3 @@
-using System;
 using AopAlliance.Intercept;
 
 namespace Spring.Aop.Framework

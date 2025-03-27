@@ -24,7 +24,6 @@ using System.Collections;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.Serialization;
-using Common.Logging;
 using Spring.Core.TypeResolution;
 using Spring.Util;
 

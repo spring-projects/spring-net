@@ -18,7 +18,6 @@
 
 #endregion
 
-using Common.Logging;
 using Spring.Util;
 using IHttpHandler = System.Web.IHttpHandler;
 using HttpException = System.Web.HttpException;

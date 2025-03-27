@@ -19,7 +19,6 @@
 #endregion
 
 using Apache.NMS;
-using Common.Logging;
 
 namespace Spring.Messaging.Nms.Core
 {

@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-using Spring.Objects.Factory.Attributes.ByType;
+﻿using Spring.Objects.Factory.Attributes.ByType;
 
 namespace Spring.Objects.Factory.Attributes.ByType
 {

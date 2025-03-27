@@ -22,7 +22,6 @@
 
 using System.ComponentModel;
 using System.Globalization;
-using Common.Logging;
 using Spring.Util;
 
 #endregion

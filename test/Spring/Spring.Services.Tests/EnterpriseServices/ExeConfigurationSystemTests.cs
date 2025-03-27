@@ -20,7 +20,6 @@
 
 using System.Configuration;
 using System.Configuration.Internal;
-using System.IO;
 using Common.Logging.Configuration;
 using Common.Logging.Simple;
 using NUnit.Framework;

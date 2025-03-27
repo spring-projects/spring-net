@@ -20,8 +20,6 @@
 
 #region Imports
 
-using System;
-
 using FakeItEasy;
 
 using NUnit.Framework;

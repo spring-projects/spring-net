@@ -24,9 +24,6 @@ using System.Collections;
 using System.Collections.Specialized;
 using System.Globalization;
 using System.Xml;
-
-using Common.Logging;
-
 using Spring.Collections;
 using Spring.Core.IO;
 using Spring.Core.TypeResolution;

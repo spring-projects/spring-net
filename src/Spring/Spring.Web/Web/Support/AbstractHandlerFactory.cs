@@ -25,7 +25,6 @@ using System.Security;
 using System.Security.Permissions;
 using System.Web;
 using System.Web.UI;
-using Common.Logging;
 using Spring.Collections;
 using Spring.Context;
 using Spring.Context.Support;

@@ -19,7 +19,6 @@
 #endregion
 
 using System.Globalization;
-using Common.Logging;
 
 namespace Spring.Context.Support
 {

@@ -18,11 +18,9 @@
 
 #endregion
 
-using Common.Logging;
 using NVelocity.Runtime;
 using NVelocity.Runtime.Log;
 using LogLevel=NVelocity.Runtime.Log.LogLevel;
-using LogManager=Common.Logging.LogManager;
 
 namespace Spring.Template.Velocity
 {
