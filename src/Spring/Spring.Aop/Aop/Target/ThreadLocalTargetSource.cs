@@ -148,10 +148,10 @@ namespace Spring.Aop.Target
 
 				if (logger.IsEnabled(LogLevel.Debug))
 				{
-					logger.Debug(string.Format(
-						"No target for apartment prototype '{0}' " +
-						"found in thread: creating one and binding it to thread '#{1}'",
-						TargetObjectName, Thread.CurrentThread.GetHashCode()));
+					logger.LogDebug(string.Format(
+                        "No target for apartment prototype '{0}' " +
+                        "found in thread: creating one and binding it to thread '#{1}'",
+                        TargetObjectName, Thread.CurrentThread.GetHashCode()));
 				}
 
 				#endregion
@@ -187,7 +187,7 @@ namespace Spring.Aop.Target
 
 			if (logger.IsEnabled(LogLevel.Debug))
 			{
-				logger.Debug("Destroying ThreadLocal bindings");
+				logger.LogDebug("Destroying ThreadLocal bindings");
 			}
 
 			#endregion
@@ -205,12 +205,13 @@ namespace Spring.Aop.Target
 						#region Instrumentation
 
 						if (logger.IsEnabled(LogLevel.Warning))
-						{
-							logger.Warn(string.Format(
-								"Thread-bound target of class '{0}' " +
-								"threw exception from it's IDisposable.Dispose() method.",
-								target.GetType()), ex);
-						}
+                        {
+                            string message = string.Format(
+                                "Thread-bound target of class '{0}' " +
+                                "threw exception from it's IDisposable.Dispose() method.",
+                                target.GetType());
+                            logger.LogWarning(ex, message);
+                        }
 
 						#endregion
 					}

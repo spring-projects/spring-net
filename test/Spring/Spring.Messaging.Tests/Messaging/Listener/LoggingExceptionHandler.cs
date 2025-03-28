@@ -1,6 +1,7 @@
 using System;
 using System.Messaging;
 using System.Threading;
+using Microsoft.Extensions.Logging;
 
 namespace Spring.Messaging.Listener
 {
@@ -52,13 +53,13 @@ namespace Spring.Messaging.Listener
                         Thread.Sleep(recoveryTimeSpan);
                         break;
                     default:
-                        LOG.Error("Exception Receiving Message", e);
+                        LOG.LogError(e, "Exception Receiving Message");
                         break;
                 }
             }
             else
             {
-                LOG.Error("got exception", exception);
+                LOG.LogError(exception, "got exception");
             }
         }
 

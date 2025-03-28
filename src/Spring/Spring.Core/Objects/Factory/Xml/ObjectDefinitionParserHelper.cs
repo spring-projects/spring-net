@@ -110,7 +110,7 @@ namespace Spring.Objects.Factory.Xml
 
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.Debug("Loading object definitions...");
+                log.LogDebug("Loading object definitions...");
             }
 
             #endregion
@@ -121,10 +121,9 @@ namespace Spring.Objects.Factory.Xml
 
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.Debug(
-                    string.Format(
-                        "Default lazy init '{0}'.",
-                        ddd.LazyInit));
+                log.LogDebug(string.Format(
+                    "Default lazy init '{0}'.",
+                    ddd.LazyInit));
             }
 
             #endregion
@@ -135,10 +134,9 @@ namespace Spring.Objects.Factory.Xml
 
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.Debug(
-                    string.Format(
-                        "Default dependency check '{0}'.",
-                        ddd.DependencyCheck));
+                log.LogDebug(string.Format(
+                    "Default dependency check '{0}'.",
+                    ddd.DependencyCheck));
             }
 
             #endregion
@@ -149,10 +147,9 @@ namespace Spring.Objects.Factory.Xml
 
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.Debug(
-                    string.Format(
-                        "Default autowire '{0}'.",
-                        ddd.Autowire));
+                log.LogDebug(string.Format(
+                    "Default autowire '{0}'.",
+                    ddd.Autowire));
             }
 
             #endregion
@@ -163,10 +160,9 @@ namespace Spring.Objects.Factory.Xml
 
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.Debug(
-                    string.Format(
-                        "Default merge '{0}'.",
-                        ddd.Merge));
+                log.LogDebug(string.Format(
+                    "Default merge '{0}'.",
+                    ddd.Merge));
             }
 
             #endregion
@@ -177,10 +173,9 @@ namespace Spring.Objects.Factory.Xml
 
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.Debug(
-                    string.Format(
-                        "Default init method '{0}'.",
-                        ddd.InitMethod));
+                log.LogDebug(string.Format(
+                    "Default init method '{0}'.",
+                    ddd.InitMethod));
             }
 
             #endregion
@@ -191,10 +186,9 @@ namespace Spring.Objects.Factory.Xml
 
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.Debug(
-                    string.Format(
-                        "Default destroy method '{0}'.",
-                        ddd.DestroyMethod));
+                log.LogDebug(string.Format(
+                    "Default destroy method '{0}'.",
+                    ddd.DestroyMethod));
             }
 
             #endregion
@@ -205,10 +199,9 @@ namespace Spring.Objects.Factory.Xml
 
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.Debug(
-                    string.Format(
-                        "Default autowire candidates '{0}'.",
-                        ddd.AutowireCandidates));
+                log.LogDebug(string.Format(
+                    "Default autowire candidates '{0}'.",
+                    ddd.AutowireCandidates));
             }
 
             #endregion
@@ -219,10 +212,9 @@ namespace Spring.Objects.Factory.Xml
 
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.Debug(
-                    string.Format(
-                        "Default init method '{0}'.",
-                        ddd.InitMethod));
+                log.LogDebug(string.Format(
+                    "Default init method '{0}'.",
+                    ddd.InitMethod));
             }
 
             #endregion
@@ -233,10 +225,9 @@ namespace Spring.Objects.Factory.Xml
 
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.Debug(
-                    string.Format(
-                        "Default destroy method '{0}'.",
-                        ddd.DestroyMethod));
+                log.LogDebug(string.Format(
+                    "Default destroy method '{0}'.",
+                    ddd.DestroyMethod));
             }
 
             #endregion
@@ -341,7 +332,7 @@ namespace Spring.Objects.Factory.Xml
                     aliases.RemoveAt(0);
                     if (log.IsEnabled(LogLevel.Debug))
                     {
-                        log.Debug(string.Format("No XML 'id' specified using '{0}' as object name and '{1}' as aliases", objectName, string.Join(",", aliases.ToArray())));
+                        log.LogDebug(string.Format("No XML 'id' specified using '{0}' as object name and '{1}' as aliases", objectName, string.Join(",", aliases.ToArray())));
                     }
                 }
             }
@@ -382,9 +373,9 @@ namespace Spring.Objects.Factory.Xml
 
                     if (log.IsEnabled(LogLevel.Debug))
                     {
-                        log.Debug(string.Format(
-                                      "Neither XML '{0}' nor '{1}' specified - using generated object name [{2}]",
-                                      ObjectDefinitionConstants.IdAttribute, ObjectDefinitionConstants.NameAttribute, objectName));
+                        log.LogDebug(string.Format(
+                            "Neither XML '{0}' nor '{1}' specified - using generated object name [{2}]",
+                            ObjectDefinitionConstants.IdAttribute, ObjectDefinitionConstants.NameAttribute, objectName));
                     }
 
                     #endregion

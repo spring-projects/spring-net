@@ -22,6 +22,7 @@
 
 using System.Globalization;
 using System.Reflection;
+using Microsoft.Extensions.Logging;
 
 #endregion
 
@@ -129,10 +130,10 @@ namespace Spring.Core.IO
                 Stream stream = _assembly.GetManifestResourceStream(_resourceName);
                 if (stream == null)
                 {
-                    log.Error("Could not load resource with name = [" + _resourceName +
-                        "] from assembly + " + _assembly);
-                    log.Error("URI specified = [" + this._fullResourceName + "] Spring.NET URI syntax is 'assembly://assemblyName/namespace/resourceName'.");
-                    log.Error("Resource name often has the default namespace prefixed, e.g. 'assembly://MyAssembly/MyNamespace/MyNamespace.MyResource.txt'.");
+                    log.LogError("Could not load resource with name = [" + _resourceName +
+                                 "] from assembly + " + _assembly);
+                    log.LogError("URI specified = [" + this._fullResourceName + "] Spring.NET URI syntax is 'assembly://assemblyName/namespace/resourceName'.");
+                    log.LogError("Resource name often has the default namespace prefixed, e.g. 'assembly://MyAssembly/MyNamespace/MyNamespace.MyResource.txt'.");
                 }
                 return stream;
             }

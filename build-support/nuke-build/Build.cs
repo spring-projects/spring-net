@@ -37,7 +37,7 @@ partial class Build : NukeBuild
     readonly bool BuildEms = false;
 
     [Parameter("Version")]
-    readonly string ProjectVersion = "3.0.2";
+    readonly string ProjectVersion = "3.1.0";
 
     [Solution] readonly Solution Solution;
     [GitRepository] readonly GitRepository GitRepository;

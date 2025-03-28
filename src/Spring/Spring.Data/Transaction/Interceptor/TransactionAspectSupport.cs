@@ -350,7 +350,7 @@ namespace Spring.Transaction.Interceptor
 
 	            if (log.IsEnabled(LogLevel.Debug))
 	            {
-	                log.Debug("Getting transaction for " + transactionInfo.JoinpointIdentification);
+	                log.LogDebug("Getting transaction for " + transactionInfo.JoinpointIdentification);
 	            }
 
 	            #endregion
@@ -364,8 +364,8 @@ namespace Spring.Transaction.Interceptor
 	            // the ThreadLocal stack maintained in this class.
 	            if (log.IsEnabled(LogLevel.Debug))
 	            {
-                    log.Debug("Skipping transactional joinpoint [" + joinpointIdentification +
-                              "] because no transaction manager has been configured");
+                    log.LogDebug("Skipping transactional joinpoint [" + joinpointIdentification +
+                                 "] because no transaction manager has been configured");
 	            }
 	        }
 
@@ -407,7 +407,7 @@ namespace Spring.Transaction.Interceptor
 
 			    if (log.IsEnabled(LogLevel.Debug)) 
 			    {
-                    log.Debug("Completing transaction for [" + transactionInfo.JoinpointIdentification + "]");
+                    log.LogDebug("Completing transaction for [" + transactionInfo.JoinpointIdentification + "]");
 			    }
 
 			    #endregion
@@ -437,7 +437,7 @@ namespace Spring.Transaction.Interceptor
 			{
                 if (log.IsEnabled(LogLevel.Debug))
                 {                    
-                    log.Debug("Completing transaction for [" + transactionInfo.JoinpointIdentification + "] after exception: " + exception);
+                    log.LogDebug("Completing transaction for [" + transactionInfo.JoinpointIdentification + "] after exception: " + exception);
                 }
 
 				if ( transactionInfo.TransactionAttribute.RollbackOn( exception ))
@@ -448,7 +448,7 @@ namespace Spring.Transaction.Interceptor
 					}
 					catch (Exception e)
 					{
-					    log.Error("Application exception overridden by rollback exception", e);
+					    log.LogError(e, "Application exception overridden by rollback exception");
 						throw;
 					}
 				} 
@@ -461,7 +461,7 @@ namespace Spring.Transaction.Interceptor
                         _transactionManager.Commit(transactionInfo.TransactionStatus);
                     } catch (Exception e)
                     {
-                        log.Error("Application exception overriden by commit exception", e);
+                        log.LogError(e, "Application exception overriden by commit exception");
                         throw;
                     }
 

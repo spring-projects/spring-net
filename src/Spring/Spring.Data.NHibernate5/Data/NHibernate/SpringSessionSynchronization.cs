@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+using Microsoft.Extensions.Logging;
 using NHibernate;
 using NHibernate.Engine;
 using Spring.Core;
@@ -133,7 +134,7 @@ namespace Spring.Data.NHibernate
             if (!readOnly)
             {
                 // read-write transaction -> flush the Hibernate Session
-                log.Debug("Flushing Hibernate Session on transaction synchronization");
+                log.LogDebug("Flushing Hibernate Session on transaction synchronization");
                 ISession session = this.sessionHolder.Session;
                 //Further check: only flush when not FlushMode.NEVER
                 if (session.FlushMode != FlushMode.Never)

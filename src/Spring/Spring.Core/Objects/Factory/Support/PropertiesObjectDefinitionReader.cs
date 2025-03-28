@@ -357,7 +357,7 @@ namespace Spring.Objects.Factory.Support
 
                         if (log.IsEnabled(LogLevel.Debug))
                         {
-                            log.Debug("Found object name '" + name + "'");
+                            log.LogDebug("Found object name '" + name + "'");
                         }
 
                         #endregion
@@ -377,7 +377,7 @@ namespace Spring.Objects.Factory.Support
 
                         if (log.IsEnabled(LogLevel.Debug))
                         {
-                            log.Debug("Invalid object name and property [" + nameAndProperty + "]");
+                            log.LogDebug("Invalid object name and property [" + nameAndProperty + "]");
                         }
 
                         #endregion
@@ -477,11 +477,11 @@ namespace Spring.Objects.Factory.Support
             }
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.Debug(pvs.ToString());
+                log.LogDebug(pvs.ToString());
             }
             if (parent == null)
             {
-                log.Debug(this.DefaultParentObject);
+                log.LogDebug(this.DefaultParentObject);
                 parent = this.DefaultParentObject;
             }
             if (typeName == null && parent == null)

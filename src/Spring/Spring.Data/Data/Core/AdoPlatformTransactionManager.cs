@@ -144,7 +144,7 @@ namespace Spring.Data.Core
                     IDbConnection newCon = DbProvider.CreateConnection();
                     if (log.IsEnabled(LogLevel.Debug))
                     {
-                        log.Debug("Acquired Connection [" + newCon + ", " + newCon.ConnectionString + "] for ADO.NET transaction");
+                        log.LogDebug("Acquired Connection [" + newCon + ", " + newCon.ConnectionString + "] for ADO.NET transaction");
                     }
                     newCon.Open();
 
@@ -261,7 +261,7 @@ namespace Spring.Data.Core
             if (status.Debug)
             {
                 IDbConnection conn = txMgrStateObject.ConnectionHolder.Connection;
-                log.Debug("Committing ADO.NET transaction on Connection [" + conn + ", " + conn.ConnectionString + "]");
+                log.LogDebug("Committing ADO.NET transaction on Connection [" + conn + ", " + conn.ConnectionString + "]");
             }
             try
             {
@@ -292,7 +292,7 @@ namespace Spring.Data.Core
             IDbTransaction trans = txMgrStateObject.ConnectionHolder.Transaction;
             if (status.Debug)
             {
-                log.Debug("Rolling back ADO.NET transaction on Connection [" + conn + ", " + conn.ConnectionString + "]" );
+                log.LogDebug("Rolling back ADO.NET transaction on Connection [" + conn + ", " + conn.ConnectionString + "]");
             }
             try
             {
@@ -319,7 +319,7 @@ namespace Spring.Data.Core
             if (status.Debug)
             {
                 IDbConnection conn = txMgrStateObject.ConnectionHolder.Connection;
-                log.Debug("Setting ADO.NET transaction [" + conn + ", " + conn.ConnectionString + "] rollback-only.");
+                log.LogDebug("Setting ADO.NET transaction [" + conn + ", " + conn.ConnectionString + "] rollback-only.");
             }
             txMgrStateObject.SetRollbackOnly();
 
@@ -337,7 +337,7 @@ namespace Spring.Data.Core
 
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.Debug("Releasing ADO.NET Connection [" + con + ", " + con.ConnectionString + "] after transaction");
+                log.LogDebug("Releasing ADO.NET Connection [" + con + ", " + con.ConnectionString + "] after transaction");
             }
 
             ConnectionUtils.DisposeConnection(con, DbProvider);

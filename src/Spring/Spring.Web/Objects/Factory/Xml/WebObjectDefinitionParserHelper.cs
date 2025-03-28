@@ -150,8 +150,9 @@ namespace Spring.Objects.Factory.Xml
 
                     if (log.IsEnabled(LogLevel.Debug))
                     {
-                        log.Debug(string.Format("Error while parsing object scope : '{0}' is an invalid value.",
-                                                value), ex);
+                        string message = string.Format("Error while parsing object scope : '{0}' is an invalid value.",
+                            value);
+                        log.LogDebug(ex, message);
                     }
 
                     #endregion

@@ -18,6 +18,7 @@
 
 #endregion
 
+using Microsoft.Extensions.Logging;
 using Spring.Context;
 using Spring.Messaging.Ems.Common;
 using Spring.Messaging.Ems.Connections;
@@ -277,7 +278,7 @@ namespace Spring.Messaging.Ems.Listener
         /// </summary>
         public virtual void Shutdown()
         {
-            logger.Debug("Shutting down message listener container");
+            logger.LogDebug("Shutting down message listener container");
             bool wasRunning = false;
             lock (this.lifecycleMonitor)
             {
@@ -294,7 +295,7 @@ namespace Spring.Messaging.Ems.Listener
                     StopSharedConnection();
                 } catch (Exception ex)
                 {
-                    logger.Debug("Could not stop EMS Connection on shutdown", ex);
+                    logger.LogDebug(ex, "Could not stop EMS Connection on shutdown");
                 }
             }
 
@@ -409,7 +410,7 @@ namespace Spring.Messaging.Ems.Listener
                 if (sharedConnection == null)
                 {
                     sharedConnection = CreateSharedConnection();
-                    logger.Debug("Established shared EMS Connection");
+                    logger.LogDebug("Established shared EMS Connection");
                 }
             }
         }
@@ -495,7 +496,7 @@ namespace Spring.Messaging.Ems.Listener
                     }
                     catch (Exception ex)
                     {
-                        logger.Warn("Ignoring Connection start exception - assuming already started", ex);
+                        logger.LogWarning(ex, "Ignoring Connection start exception - assuming already started");
                     }
                 }
             }
@@ -518,7 +519,7 @@ namespace Spring.Messaging.Ems.Listener
                     }
                     catch (System.InvalidOperationException ex)
                     {
-                        logger.Warn("Ignoring Connection stop exception - assuming already stopped", ex);
+                        logger.LogWarning(ex, "Ignoring Connection stop exception - assuming already stopped");
                     }
                 }
             }

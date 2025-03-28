@@ -1,4 +1,5 @@
 using System;
+using Microsoft.Extensions.Logging;
 
 namespace Spring.Data.Objects.Factory.Support
 {
@@ -13,7 +14,7 @@ namespace Spring.Data.Objects.Factory.Support
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            _log.Debug("loaded page!");
+            _log.LogDebug("loaded page!");
         }
     }
 }

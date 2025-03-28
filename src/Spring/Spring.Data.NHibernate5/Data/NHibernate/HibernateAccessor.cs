@@ -17,6 +17,7 @@
 using System.Collections;
 using System.Reflection;
 using AopAlliance.Intercept;
+using Microsoft.Extensions.Logging;
 using NHibernate;
 using NHibernate.Impl;
 using NHibernate.Type;
@@ -384,7 +385,7 @@ namespace Spring.Data.NHibernate
             if (TemplateFlushMode == TemplateFlushMode.Eager ||
                 (!existingTransaction && TemplateFlushMode != TemplateFlushMode.Never)) 
             {
-                log.Debug("Eagerly flushing Hibernate session");
+                log.LogDebug("Eagerly flushing Hibernate session");
                 session.Flush();
             }
         }
@@ -467,7 +468,7 @@ namespace Spring.Data.NHibernate
                 }
                 else
                 {
-                    log.Warn("Could not set FetchSize for IQuery.  Expected Implemention to be of type AbstractQueryImpl");
+                    log.LogWarning("Could not set FetchSize for IQuery.  Expected Implemention to be of type AbstractQueryImpl");
                 }
             }
             
@@ -577,7 +578,7 @@ namespace Spring.Data.NHibernate
                 }
                 catch (TypeLoadException e)
                 {
-                    log.Warn("Can't set FetchSize for ICriteria", e);
+                    log.LogWarning(e, "Can't set FetchSize for ICriteria");
                 }
             }
             
@@ -598,7 +599,7 @@ namespace Spring.Data.NHibernate
             }
             catch (TypeLoadException e)
             {
-                log.Warn("CriteriaImpl not available. FetchSize can not be set on ICriteria objects", e);
+                log.LogWarning(e, "CriteriaImpl not available. FetchSize can not be set on ICriteria objects");
             }
 	    }
 

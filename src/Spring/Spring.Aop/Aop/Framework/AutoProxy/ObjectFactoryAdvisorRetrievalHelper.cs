@@ -90,7 +90,7 @@ namespace Spring.Aop.Framework.AutoProxy
                             {
                                 if (_log.IsEnabled(LogLevel.Debug))
                                 {
-                                    _log.Debug(string.Format("Ignoring currently created advisor '{0}': exception message = {1}",
+                                    _log.LogDebug(string.Format("Ignoring currently created advisor '{0}': exception message = {1}",
                                         name, ex.Message));
                                 }
                                 continue;

@@ -189,10 +189,10 @@ namespace Spring.Objects.Factory.Support
 
 					if (log.IsEnabled(LogLevel.Debug))
 					{
-						log.Debug(string.Format(CultureInfo.InvariantCulture,
-						                        "Generating a subclass of the [{0}] class for the '{1}' " +
-						                        	"object definition for the purposes of method injection.",
-						                        definition.ObjectType, objectName));
+						log.LogDebug(string.Format(CultureInfo.InvariantCulture,
+                            "Generating a subclass of the [{0}] class for the '{1}' " +
+                            "object definition for the purposes of method injection.",
+                            definition.ObjectType, objectName));
 					}
 
 					#endregion

@@ -82,7 +82,7 @@ namespace Spring.Objects.Factory.Support
                 {
                     if (s_eventHandlersRegistered) return;
 
-                    if (log.IsEnabled(LogLevel.Debug)) log.Debug("hooking up event handlers");
+                    if (log.IsEnabled(LogLevel.Debug)) log.LogDebug("hooking up event handlers");
                     VirtualEnvironment.EndRequest += OnEndRequest;
                     VirtualEnvironment.EndSession += OnEndSession;
 
@@ -484,7 +484,7 @@ namespace Spring.Objects.Factory.Support
 
             if (items != null)
             {
-                log.Debug("disposing 'request'-scoped item cache");
+                log.LogDebug("disposing 'request'-scoped item cache");
                 ArrayList keys = new ArrayList(items.Keys);
                 for (int i = 0; i < keys.Count; i++)
                 {
@@ -513,7 +513,7 @@ namespace Spring.Objects.Factory.Support
             }
             if (items != null)
             {
-                log.Debug("disposing 'session'-scoped item cache");
+                log.LogDebug("disposing 'session'-scoped item cache");
                 object key = null;
                 try
                 {

@@ -19,6 +19,7 @@
 #endregion
 
 using Apache.NMS;
+using Microsoft.Extensions.Logging;
 using Spring.Messaging.Nms.Support;
 using Spring.Transaction.Support;
 using Spring.Util;
@@ -63,7 +64,7 @@ namespace Spring.Messaging.Nms.Connections
                 }
                 catch (Exception ex)
                 {
-                    LOG.Debug("Could not stop NMS Connection before closing it", ex);
+                    LOG.LogDebug(ex, "Could not stop NMS Connection before closing it");
 
                 }
             }
@@ -72,7 +73,7 @@ namespace Spring.Messaging.Nms.Connections
                 connection.Close();
             } catch (Exception ex)
             {
-                LOG.Debug("Could not close NMS Connection", ex);
+                LOG.LogDebug(ex, "Could not close NMS Connection");
             }           
         } 
         
@@ -101,7 +102,7 @@ namespace Spring.Messaging.Nms.Connections
                 }
                 catch (Exception ex)
                 {
-                    LOG.Debug("Could not stop NMS Connection before closing it", ex);
+                    LOG.LogDebug(ex, "Could not stop NMS Connection before closing it");
 
                 }
             }
@@ -110,7 +111,7 @@ namespace Spring.Messaging.Nms.Connections
                 await connection.CloseAsync().Awaiter();
             } catch (Exception ex)
             {
-                LOG.Debug("Could not close NMS Connection", ex);
+                LOG.LogDebug(ex, "Could not close NMS Connection");
             }           
         }
 

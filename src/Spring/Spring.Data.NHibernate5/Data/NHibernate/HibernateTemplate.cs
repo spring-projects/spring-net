@@ -855,7 +855,7 @@ namespace Spring.Data.NHibernate
             {
                 if (log.IsEnabled(LogLevel.Debug))
                 {
-                    log.Debug("Found thread-bound Session for HibernateTemplate");
+                    log.LogDebug("Found thread-bound Session for HibernateTemplate");
                 }
             }
 
@@ -903,7 +903,7 @@ namespace Spring.Data.NHibernate
                 {
                     if (log.IsEnabled(LogLevel.Debug))
                     {
-                        log.Debug("Not closing pre-bound Hibernate Session after HibernateTemplate");
+                        log.LogDebug("Not closing pre-bound Hibernate Session after HibernateTemplate");
                     }
                     if (previousFlushModeHolder.ModeWasSet)
                     {

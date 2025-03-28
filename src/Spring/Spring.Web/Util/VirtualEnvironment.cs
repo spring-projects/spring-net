@@ -262,7 +262,7 @@ namespace Spring.Util
 
                         if (log.IsEnabled(LogLevel.Debug))
                         {
-                            log.Debug("rewriting path from " + currentFileDirectory + " to " + newPath + " results in " + ctx.Request.FilePath);
+                            log.LogDebug("rewriting path from " + currentFileDirectory + " to " + newPath + " results in " + ctx.Request.FilePath);
                         }
 
                         #endregion
@@ -275,7 +275,7 @@ namespace Spring.Util
                     {
                         if (log.IsEnabled(LogLevel.Debug))
                         {
-                            log.Debug("restoring path from " + ctx.Request.FilePath + " back to " + originalPath);
+                            log.LogDebug("restoring path from " + ctx.Request.FilePath + " back to " + originalPath);
                         }
 
                         ctx.RewritePath(originalPath, rebaseClientPath);

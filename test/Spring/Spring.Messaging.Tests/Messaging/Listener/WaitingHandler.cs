@@ -2,6 +2,7 @@
 
 using System;
 using System.Threading;
+using Microsoft.Extensions.Logging;
 
 namespace Spring.Messaging.Listener
 {
@@ -35,13 +36,13 @@ namespace Spring.Messaging.Listener
 
         public string HandleMessage(string msgTxt)
         {
-            LOG.Debug(String.Format("Received text = [{0}]", msgTxt));
-            LOG.Debug("constructor set state string  = " + stateVariable);
+            LOG.LogDebug(String.Format("Received text = [{0}]", msgTxt));
+            LOG.LogDebug("constructor set state string  = " + stateVariable);
 
             Thread.Sleep(10000);
 
             messageCount++;
-            LOG.Debug("Message listener count = " + messageCount);
+            LOG.LogDebug("Message listener count = " + messageCount);
             return msgTxt + " - processed!";
         }
     }

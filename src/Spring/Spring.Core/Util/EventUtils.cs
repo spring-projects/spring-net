@@ -20,7 +20,7 @@
 
 using System.Diagnostics;
 using System.Reflection;
-
+using Microsoft.Extensions.Logging;
 
 namespace Spring.Util
 {
@@ -154,7 +154,8 @@ namespace Spring.Util
             }
             catch(Exception ex)
             {
-                Log.Warn("Error during raising an event from " + new StackTrace(), ex);
+                string message = "Error during raising an event from " + new StackTrace();
+                Log.LogWarning(ex, message);
                 exceptions.Add(sink, ex);
             }
         }

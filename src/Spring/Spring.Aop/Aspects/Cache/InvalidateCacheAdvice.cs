@@ -117,7 +117,7 @@ namespace Spring.Aspects.Cache
                                 #region Instrumentation
                                 if (isLogDebugEnabled)
                                 {
-                                    logger.Debug(string.Format("Removing objects for keys [{0}] from cache [{1}].", keys, cacheInfo.CacheName));
+                                    logger.LogDebug(string.Format("Removing objects for keys [{0}] from cache [{1}].", keys, cacheInfo.CacheName));
                                 }
                                 #endregion
                                 cache.RemoveAll((ICollection) keys);
@@ -127,7 +127,7 @@ namespace Spring.Aspects.Cache
                                 #region Instrumentation
                                 if (isLogDebugEnabled)
                                 {
-                                    logger.Debug(string.Format("Removing object for key [{0}] from cache [{1}].", keys, cacheInfo.CacheName));
+                                    logger.LogDebug(string.Format("Removing object for key [{0}] from cache [{1}].", keys, cacheInfo.CacheName));
                                 }
                                 #endregion
                                 cache.Remove(keys);
@@ -138,7 +138,7 @@ namespace Spring.Aspects.Cache
                             #region Instrumentation
                             if (isLogDebugEnabled)
                             {
-                                logger.Debug(string.Format("Invalidate cache [{0}].", cacheInfo.CacheName));
+                                logger.LogDebug(string.Format("Invalidate cache [{0}].", cacheInfo.CacheName));
                             }
                             #endregion
                             cache.Clear();

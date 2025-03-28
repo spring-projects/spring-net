@@ -185,7 +185,7 @@ namespace Spring.Aop.Framework.AutoProxy
                 {
                     if (logger.IsEnabled(LogLevel.Information))
                     {
-                        logger.Info($"Candidate advisor [{candidate}] accepted for targetType [{targetType}]");
+                        logger.LogInformation($"Candidate advisor [{candidate}] accepted for targetType [{targetType}]");
                     }
                     eligibleAdvisors.Add(candidate);
                 }
@@ -200,7 +200,7 @@ namespace Spring.Aop.Framework.AutoProxy
                 {
                     if (logger.IsEnabled(LogLevel.Information))
                     {
-                        logger.Info($"Candidate advisor [{candidate}] accepted for targetType [{targetType}]");
+                        logger.LogInformation($"Candidate advisor [{candidate}] accepted for targetType [{targetType}]");
                     }
                     eligibleAdvisors.Add(candidate);
                 }
@@ -208,7 +208,7 @@ namespace Spring.Aop.Framework.AutoProxy
                 {
                     if (logger.IsEnabled(LogLevel.Information))
                     {
-                        logger.Info($"Candidate advisor [{candidate}] rejected for targetType [{targetType}]");
+                        logger.LogInformation($"Candidate advisor [{candidate}] rejected for targetType [{targetType}]");
                     }
                 }
             }

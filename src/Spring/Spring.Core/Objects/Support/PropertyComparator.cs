@@ -121,8 +121,8 @@ namespace Spring.Objects.Support
 
                 if (logger.IsEnabled(LogLevel.Warning))
                 {
-                    logger.Warn("Could not sort objects [" + o1 + "] and [" + o2 + "]",
-                                ex);
+                    string message = "Could not sort objects [" + o1 + "] and [" + o2 + "]";
+                    logger.LogWarning(ex, message);
                 }
 
                 #endregion
@@ -163,7 +163,7 @@ namespace Spring.Objects.Support
                     // if a nested property cannot be read, simply return null...
                     if (logger.IsEnabled(LogLevel.Debug))
                     {
-                        logger.Debug("Could not access property - treating as null for sorting.", ex);
+                        logger.LogDebug(ex, "Could not access property - treating as null for sorting.");
                     }
                 }
             }

@@ -17,6 +17,7 @@
 using Spring.Transaction.Support;
 using Spring.Util;
 using Apache.NMS;
+using Microsoft.Extensions.Logging;
 using Spring.Messaging.Nms.Support;
 
 namespace Spring.Messaging.Nms.Connections
@@ -231,7 +232,7 @@ namespace Spring.Messaging.Nms.Connections
                 }
                 catch (Exception ex)
                 {
-                    logger.Debug("Could not close NMS ISession after transaction", ex);
+                    logger.LogDebug(ex, "Could not close NMS ISession after transaction");
                 }
             }
             foreach (IConnection connection in connections)
@@ -267,7 +268,7 @@ namespace Spring.Messaging.Nms.Connections
                 }
                 catch (Exception ex)
                 {
-                    logger.Debug("Could not close NMS ISession after transaction", ex);
+                    logger.LogDebug(ex, "Could not close NMS ISession after transaction");
                 }
             }
             foreach (IConnection connection in connections)

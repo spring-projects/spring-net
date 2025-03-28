@@ -195,7 +195,7 @@ namespace Spring.Messaging.Nms.Listener
             // now try to recover the shared Connection and all consumers...
             if (logger.IsEnabled(LogLevel.Information))
             {
-                logger.Info("Trying to recover from NMS Connection exception: " + exception);
+                logger.LogInformation("Trying to recover from NMS Connection exception: " + exception);
             }
             try
             {
@@ -206,14 +206,14 @@ namespace Spring.Messaging.Nms.Listener
                 }
                 RefreshConnectionUntilSuccessful();
                 InitializeConsumers();
-                logger.Info("Successfully refreshed NMS Connection");
+                logger.LogInformation("Successfully refreshed NMS Connection");
             } catch (RecoveryTimeExceededException)
             {
                 throw;
             } catch (Exception recoverEx)
             {
-                logger.Debug("Failed to recover NMS Connection", recoverEx);
-                logger.Error("Encountered non-recoverable Exception", exception);
+                logger.LogDebug(recoverEx, "Failed to recover NMS Connection");
+                logger.LogError(exception, "Encountered non-recoverable Exception");
                 throw;
             }
         }
@@ -248,7 +248,7 @@ namespace Spring.Messaging.Nms.Listener
 
                 if (totalTryTime > maxRecoveryTime)
                 {
-                    logger.Info("Could not refresh Connection after " + totalTryTime  + ".  Stopping reconnection attempts.");
+                    logger.LogInformation("Could not refresh Connection after " + totalTryTime  + ".  Stopping reconnection attempts.");
                     throw new RecoveryTimeExceededException("Could not recover after " + totalTryTime);
                 }
 
@@ -325,7 +325,7 @@ namespace Spring.Messaging.Nms.Listener
             {
                 if (consumers != null)
                 {
-                    logger.Debug("Closing NMS MessageConsumers");
+                    logger.LogDebug("Closing NMS MessageConsumers");
                     foreach (IMessageConsumer messageConsumer in consumers)
                     {
                         NmsUtils.CloseMessageConsumer(messageConsumer);
@@ -333,7 +333,7 @@ namespace Spring.Messaging.Nms.Listener
                 }
                 if (sessions != null)
                 {
-                    logger.Debug("Closing NMS Sessions");
+                    logger.LogDebug("Closing NMS Sessions");
                     foreach (ISession session in sessions)
                     {
                         NmsUtils.CloseSession(session);

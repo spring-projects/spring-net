@@ -490,8 +490,8 @@ namespace Spring.Data.NHibernate
                 {
 	                if (log.IsEnabled(LogLevel.Information))
                     {
-                        log.Info("Overriding use of Spring's Hibernate Connection Provider with [" +
-                                 hibernateProperties[Environment.ConnectionProvider] + "]");
+                        log.LogInformation("Overriding use of Spring's Hibernate Connection Provider with [" +
+                                           hibernateProperties[Environment.ConnectionProvider] + "]");
                     }
 
 	                config.Properties.Remove(Environment.ConnectionProvider);
@@ -621,7 +621,7 @@ namespace Spring.Data.NHibernate
             }
 
             // Build SessionFactory instance.
-            log.Info("Building new Hibernate SessionFactory");
+            log.LogInformation("Building new Hibernate SessionFactory");
             configuration = config;
             sessionFactory = NewSessionFactory(config);
 
@@ -640,7 +640,7 @@ namespace Spring.Data.NHibernate
             {
 	            if (log.IsEnabled(LogLevel.Information))
                 {
-                    log.Info("Closing Hibernate SessionFactory");
+                    log.LogInformation("Closing Hibernate SessionFactory");
                 }
 
 	            sessionFactory.Close();
@@ -717,7 +717,7 @@ namespace Spring.Data.NHibernate
         /// </remarks>
         public void DropDatabaseSchema()
         {
-		    log.Info("Dropping database schema for NHibernate SessionFactory");
+		    log.LogInformation("Dropping database schema for NHibernate SessionFactory");
 		    HibernateTemplate hibernateTemplate = new HibernateTemplate(sessionFactory);
                 hibernateTemplate.Execute(
                     new HibernateDelegate(session =>
@@ -747,7 +747,7 @@ namespace Spring.Data.NHibernate
         /// </remarks>
         public void CreateDatabaseSchema()
         {
-		    log.Info("Creating database schema for Hibernate SessionFactory");
+		    log.LogInformation("Creating database schema for Hibernate SessionFactory");
 		    HibernateTemplate hibernateTemplate = new HibernateTemplate(sessionFactory);
 		    hibernateTemplate.Execute(
 			    new HibernateDelegate(session =>
@@ -778,7 +778,7 @@ namespace Spring.Data.NHibernate
         /// </remarks>
 	    public virtual void UpdateDatabaseSchema()
         {
-		    log.Info("Updating database schema for Hibernate SessionFactory");
+		    log.LogInformation("Updating database schema for Hibernate SessionFactory");
 		    HibernateTemplate hibernateTemplate = new HibernateTemplate(sessionFactory);
 		    hibernateTemplate.TemplateFlushMode = TemplateFlushMode.Never;
             hibernateTemplate.Execute(
@@ -836,7 +836,7 @@ namespace Spring.Data.NHibernate
         {
 		    if (log.IsEnabled(LogLevel.Debug))
             {
-			    log.Debug("Executing schema statement: " + sql);
+			    log.LogDebug("Executing schema statement: " + sql);
 		    }
 		    try
             {
@@ -847,8 +847,9 @@ namespace Spring.Data.NHibernate
             {
 			    if (log.IsEnabled(LogLevel.Warning))
                 {
-				    log.Warn("Unsuccessful schema statement: " + sql, ex);
-			    }
+                    string message = "Unsuccessful schema statement: " + sql;
+                    log.LogWarning((Exception) ex, message);
+                }
 		    }
 	    }
 

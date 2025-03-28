@@ -73,7 +73,7 @@ namespace Spring.Objects.Factory.Support
             AssertUtils.ArgumentNotNull(definition, "definition");
             AssertUtils.ArgumentNotNull(factory, "factory");
 
-            if (log.IsEnabled(LogLevel.Trace)) log.Trace(string.Format("instantiating object '{0}'", name));
+            if (log.IsEnabled(LogLevel.Trace)) log.LogTrace(string.Format("instantiating object '{0}'", name));
 
             if (definition.HasMethodOverrides)
             {
@@ -201,7 +201,7 @@ namespace Spring.Objects.Factory.Support
 
                 if (log.IsEnabled(LogLevel.Warning))
                 {
-                    log.Warn(msg, ex.InnerException);
+                    log.LogWarning(ex.InnerException, msg);
                 }
 
                 #endregion

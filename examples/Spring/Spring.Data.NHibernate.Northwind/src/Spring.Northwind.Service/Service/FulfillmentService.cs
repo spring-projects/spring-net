@@ -90,13 +90,13 @@ namespace Spring.Northwind.Service
             {
                 if (order.ShippedDate.HasValue)
                 {
-                    log.Warn("Order with " + order.Id + " has already been shipped, skipping.");
+                    log.LogWarning("Order {OrderId} has already been shipped, skipping.", order.Id);
                     continue;
                 }
 
                 //Validate Order
                 Validate(order);
-                log.Info("Order " + order.Id + " validated, proceeding with shipping..");
+                log.LogInformation("Order {OrderId} validated, proceeding with shipping..", order.Id);
 
                 //Ship with external shipping service
                 ShippingService.ShipOrder(order);

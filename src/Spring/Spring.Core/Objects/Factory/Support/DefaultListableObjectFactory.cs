@@ -365,8 +365,7 @@ namespace Spring.Objects.Factory.Support
 
                 if (log.IsEnabled(LogLevel.Debug))
                 {
-                    log.Debug(
-                        $"Overriding object definition for object '{name}': replacing [{existingDefinition}] with [{objectDefinition}].");
+                    log.LogDebug($"Overriding object definition for object '{name}': replacing [{existingDefinition}] with [{objectDefinition}].");
                 }
                 objectDefinitionMap[name] = objectDefinition;
             }
@@ -467,7 +466,7 @@ namespace Spring.Objects.Factory.Support
         {
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.Debug("Pre-instantiating singletons in factory [" + this + "]");
+                log.LogDebug("Pre-instantiating singletons in factory [" + this + "]");
             }
 
             try
@@ -513,9 +512,7 @@ namespace Spring.Objects.Factory.Support
                 }
                 catch (Exception ex)
                 {
-                    log.Error(
-                        "PreInstantiateSingletons failed but couldn't destroy any already-created singletons.",
-                        ex);
+                    log.LogError(ex, "PreInstantiateSingletons failed but couldn't destroy any already-created singletons.");
                 }
                 throw;
             }
@@ -995,10 +992,11 @@ namespace Spring.Objects.Factory.Support
                         // created object itself...
                         if (log.IsEnabled(LogLevel.Debug))
                         {
-                            log.Debug(string.Format(
+                            string message = string.Format(
                                 CultureInfo.InvariantCulture,
                                 "Ignoring match to currently created object '{0}'.",
-                                objectName), ex);
+                                objectName);
+                            log.LogDebug(ex, message);
                         }
                     }
                     else
@@ -1182,7 +1180,8 @@ namespace Spring.Objects.Factory.Support
                         // Probably contains a placeholder; lets ignore it for type matching purposes.
                         if (log.IsEnabled(LogLevel.Debug))
                         {
-                            log.Debug("Ignoring object class loading failure for object '" + objectName + "'", ex);
+                            string message = "Ignoring object class loading failure for object '" + objectName + "'";
+                            log.LogDebug(ex, message);
                         }
                     }
                     catch (ObjectDefinitionStoreException ex)
@@ -1195,7 +1194,8 @@ namespace Spring.Objects.Factory.Support
                         // Probably contains a placeholder; lets ignore it for type matching purposes.
                         if (log.IsEnabled(LogLevel.Debug))
                         {
-                            log.Debug("Ignoring unresolvable metadata in object definition '" + objectName + "'", ex);
+                            string message = "Ignoring unresolvable metadata in object definition '" + objectName + "'";
+                            log.LogDebug(ex, message);
                         }
                     }
                 }

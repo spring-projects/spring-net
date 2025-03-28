@@ -1,6 +1,7 @@
 
 
 using System;
+using Microsoft.Extensions.Logging;
 
 namespace Spring.Messaging.Listener
 {
@@ -34,14 +35,14 @@ namespace Spring.Messaging.Listener
 
         public string HandleMessage(string msgTxt)
         {
-            LOG.Debug("Received text = [" + msgTxt + "]");
-            LOG.Debug("constructor set state string  = " + stateVariable);
+            LOG.LogDebug("Received text = [" + msgTxt + "]");
+            LOG.LogDebug("constructor set state string  = " + stateVariable);
             if (msgTxt.Contains("Goodbye"))
             {
                 throw new ArgumentException("Don't like saying goodbye!");
             }
             messageCount++;
-            LOG.Debug("Message listener count = " + messageCount);
+            LOG.LogDebug("Message listener count = " + messageCount);
             return msgTxt + " - processed!";
         }
     }

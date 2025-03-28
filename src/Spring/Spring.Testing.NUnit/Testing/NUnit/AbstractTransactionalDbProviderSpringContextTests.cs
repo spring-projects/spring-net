@@ -87,7 +87,7 @@ namespace Spring.Testing.NUnit
                 int rowCount = this.adoTemplate.ExecuteNonQuery(CommandType.Text, "DELETE FROM " + names[i]);
                 if (logger.IsEnabled(LogLevel.Information))
                 {
-                    logger.Info("Deleted " + rowCount + " rows from table " + names[i]);
+                    logger.LogInformation("Deleted " + rowCount + " rows from table " + names[i]);
                 }
             }
             this.zappedTables = true;

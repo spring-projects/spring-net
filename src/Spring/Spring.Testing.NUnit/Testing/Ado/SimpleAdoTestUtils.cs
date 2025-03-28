@@ -21,8 +21,7 @@
 using System.Data;
 using System.Reflection;
 using System.Text.RegularExpressions;
-
-
+using Microsoft.Extensions.Logging;
 using Spring.Core.IO;
 using Spring.Dao;
 using Spring.Data;
@@ -173,7 +172,9 @@ namespace Spring.Testing.Ado
                     {
                         throw;
                     }
-                    Log.Warn(string.Format("SQL statement failed:{0}", statement), dae);
+
+                    string message = string.Format("SQL statement failed:{0}", statement);
+                    Log.LogWarning(dae, message);
                 }
             }
         }

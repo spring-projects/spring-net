@@ -168,7 +168,7 @@ namespace Spring.Data.Core
                 }
                 else
                 {
-                    LOG.Warn("Ignoring assignment of DataReaderWrapperType since it has already been assigned.");
+                    LOG.LogWarning("Ignoring assignment of DataReaderWrapperType since it has already been assigned.");
                 }
 
             }
@@ -368,7 +368,7 @@ namespace Spring.Data.Core
             #region Instrumentation
             if (LOG.IsEnabled(LogLevel.Debug))
             {
-                LOG.Debug("Executing NonQuery " + cmdType + "[" + cmdText + "]");
+                LOG.LogDebug("Executing NonQuery " + cmdType + "[" + cmdText + "]");
             }
             #endregion
 
@@ -407,7 +407,7 @@ namespace Spring.Data.Core
             #region Instrumentation
             if (LOG.IsEnabled(LogLevel.Debug))
             {
-                LOG.Debug("Executing NonQuery.  " + cmdType + "[" + cmdText + "]");
+                LOG.LogDebug("Executing NonQuery.  " + cmdType + "[" + cmdText + "]");
             }
             #endregion
 
@@ -429,7 +429,7 @@ namespace Spring.Data.Core
             #region Instrumentation
             if (LOG.IsEnabled(LogLevel.Debug))
             {
-                LOG.Debug("Executing NonQuery. " + cmdType + "[" + cmdText + "]");
+                LOG.LogDebug("Executing NonQuery. " + cmdType + "[" + cmdText + "]");
             }
             #endregion
 
@@ -522,7 +522,7 @@ namespace Spring.Data.Core
             #region Instrumentation
             if (LOG.IsEnabled(LogLevel.Debug))
             {
-                LOG.Debug("Executing ExecuteScalar. " + cmdType + "[" + cmdText + "]");
+                LOG.LogDebug("Executing ExecuteScalar. " + cmdType + "[" + cmdText + "]");
             }
             #endregion
 
@@ -722,7 +722,7 @@ namespace Spring.Data.Core
 
             if (LOG.IsEnabled(LogLevel.Debug))
             {
-                LOG.Debug("Executing SQL [" + sql + "]");
+                LOG.LogDebug("Executing SQL [" + sql + "]");
             }
 
             return Execute(new QueryCallback(this, cmdType, sql, rse, null));
@@ -773,7 +773,7 @@ namespace Spring.Data.Core
 
             if (LOG.IsEnabled(LogLevel.Debug))
             {
-                LOG.Debug("Executing SQL [" + sql + "]");
+                LOG.LogDebug("Executing SQL [" + sql + "]");
             }
 
             return Execute(new QueryCallback(this, cmdType, sql, resultSetExtractorDelegate, null));
@@ -1139,7 +1139,7 @@ namespace Spring.Data.Core
             #region Instrumentation
             if (LOG.IsEnabled(LogLevel.Debug))
             {
-                LOG.Debug("Executing DataTableFill " + commandType + "[" + sql + "]");
+                LOG.LogDebug("Executing DataTableFill " + commandType + "[" + sql + "]");
             }
             #endregion
 
@@ -1157,7 +1157,7 @@ namespace Spring.Data.Core
             #region Instrumentation
             if (LOG.IsEnabled(LogLevel.Debug))
             {
-                LOG.Debug("Executing DataTableFill " + commandType + "[" + sql + "] with table mapping name " + tableMappingName);
+                LOG.LogDebug("Executing DataTableFill " + commandType + "[" + sql + "] with table mapping name " + tableMappingName);
             }
             #endregion
 
@@ -1478,7 +1478,7 @@ namespace Spring.Data.Core
             #region Instrumentation
             if (LOG.IsEnabled(LogLevel.Debug))
             {
-                LOG.Debug("Executing DataSetFill " + commandType + "[" + sql + "]");
+                LOG.LogDebug("Executing DataSetFill " + commandType + "[" + sql + "]");
             }
             #endregion
 
@@ -1498,7 +1498,7 @@ namespace Spring.Data.Core
             #region Instrumentation
             if (LOG.IsEnabled(LogLevel.Debug))
             {
-                LOG.Debug("Executing DataSetFill " + commandType + "[" + sql + "] with table names " + tableNames);
+                LOG.LogDebug("Executing DataSetFill " + commandType + "[" + sql + "] with table names " + tableNames);
             }
             #endregion
 
@@ -2538,21 +2538,23 @@ namespace Spring.Data.Core
                             //Will only have possibility of run-time type error if using QueryWithCommandCreator
                             if (namedResultSetProcessor == null)
                             {
-                                LOG.Error("NamedResultSetProcessor for result set index " + resultSetIndex +
-                                          ", is not of expected type NamedResultSetProcessor.  Type = " +
-                                          namedResultSetProcessors[resultSetIndex].GetType() +
-                                          "; Skipping processing for this result set.");
+                                LOG.LogError("NamedResultSetProcessor for result set index " + resultSetIndex +
+                                             ", is not of expected type NamedResultSetProcessor.  Type = " +
+                                             namedResultSetProcessors[resultSetIndex].GetType() +
+                                             "; Skipping processing for this result set.");
                                 continue;
                             }
                         }
                         catch (IndexOutOfRangeException e)
                         {
-                            LOG.Error("No NamedResultSetProcessor associated with result set index " + resultSetIndex, e);
+                            string message = "No NamedResultSetProcessor associated with result set index " + resultSetIndex;
+                            LOG.LogError(e, message);
                             continue;
                         }
                         catch (ArgumentOutOfRangeException e)
                         {
-                            LOG.Error("No NamedResultSetProcessor associated with result set index " + resultSetIndex, e);
+                            string message = "No NamedResultSetProcessor associated with result set index " + resultSetIndex;
+                            LOG.LogError(e, message);
                             continue;
                         }
 
@@ -2793,7 +2795,7 @@ namespace Spring.Data.Core
                 Object rowsAffected = command.ExecuteNonQuery();
                 if (LOG.IsEnabled(LogLevel.Debug))
                 {
-                    LOG.Debug("ExecuteNonQuery affected " + rowsAffected + " rows");
+                    LOG.LogDebug("ExecuteNonQuery affected " + rowsAffected + " rows");
                 }
                 return rowsAffected;
             }
@@ -2859,7 +2861,7 @@ namespace Spring.Data.Core
                 Object returnValue = command.ExecuteScalar();
                 if (LOG.IsEnabled(LogLevel.Debug))
                 {
-                    LOG.Debug("ExecuteScalar return value = " + returnValue);
+                    LOG.LogDebug("ExecuteScalar return value = " + returnValue);
                 }
                 return returnValue;
             }

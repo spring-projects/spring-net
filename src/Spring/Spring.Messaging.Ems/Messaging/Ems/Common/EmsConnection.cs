@@ -18,6 +18,7 @@
 
 #endregion
 
+using Microsoft.Extensions.Logging;
 
 namespace Spring.Messaging.Ems.Common
 {
@@ -195,7 +196,7 @@ namespace Spring.Messaging.Ems.Common
             }
             else
             {
-                logger.Error("No exception handler registered with EmsConnection wrapper class.", arg.Exception);
+                logger.LogError((Exception) arg.Exception, "No exception handler registered with EmsConnection wrapper class.");
             }
         }
     }

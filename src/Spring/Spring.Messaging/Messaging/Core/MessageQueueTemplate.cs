@@ -326,10 +326,9 @@ namespace Spring.Messaging.Core
 
                         if (LOG.IsEnabled(LogLevel.Warning))
                         {
-                            LOG.Warn(
-                                "The ApplicationContext property has not been set, so the MessageQueueMetadataCache can not be automatically generated.  " +
-                                "Please explictly set the MessageQueueMetadataCache using the property MetadataCache or set the ApplicationContext property.  " +
-                                "This will only effect the use of MessageQueueTemplate when publishing to remote queues.");
+                            LOG.LogWarning("The ApplicationContext property has not been set, so the MessageQueueMetadataCache can not be automatically generated.  " +
+                                           "Please explictly set the MessageQueueMetadataCache using the property MetadataCache or set the ApplicationContext property.  " +
+                                           "This will only effect the use of MessageQueueTemplate when publishing to remote queues.");
                         }
 
                         #endregion
@@ -572,9 +571,9 @@ namespace Spring.Messaging.Core
             {
                 if (LOG.IsEnabled(LogLevel.Warning))
                 {
-                    LOG.Warn("MetadataCache has not been initialized.  Set the MetadataCache explicitly in standalone usage and/or " +
-                             "configure the MessageQueueTemplate in an ApplicationContext.  If deployed in an ApplicationContext by default " +
-                             "the MetadataCache will automaticaly populated.");
+                    LOG.LogWarning("MetadataCache has not been initialized.  Set the MetadataCache explicitly in standalone usage and/or " +
+                                   "configure the MessageQueueTemplate in an ApplicationContext.  If deployed in an ApplicationContext by default " +
+                                   "the MetadataCache will automaticaly populated.");
                 }
             }
             // Handle assuming these are local queues.
@@ -602,8 +601,7 @@ namespace Spring.Messaging.Core
             {
                 if (LOG.IsEnabled(LogLevel.Debug))
                 {
-                    LOG.Debug(
-                        "Sending messsage using externally managed MessageQueueTransction to transactional queue with path [" + mq.Path + "].");
+                    LOG.LogDebug("Sending messsage using externally managed MessageQueueTransction to transactional queue with path [" + mq.Path + "].");
                 }
                 mq.Send(msg, transactionToUse);
             }
@@ -616,7 +614,7 @@ namespace Spring.Messaging.Core
                          * using a direct format name. In this situation, if you do not specify a
                          * transaction context when sending a message, one is not created for you
                          * and the message will be sent to the dead-letter queue.*/
-                LOG.Warn("Sending message using implicit single-message transaction to transactional queue queue with path [" + mq.Path + "].");
+                LOG.LogWarning("Sending message using implicit single-message transaction to transactional queue queue with path [" + mq.Path + "].");
                 mq.Send(msg, MessageQueueTransactionType.Single);
             }
         }
@@ -631,14 +629,14 @@ namespace Spring.Messaging.Core
         {
             if (transactionToUse != null)
             {
-                LOG.Warn("Thread local message transaction ignored for sending to non-transactional queue with path [" + mq.Path + "].");
+                LOG.LogWarning("Thread local message transaction ignored for sending to non-transactional queue with path [" + mq.Path + "].");
                 mq.Send(msg);
             }
             else
             {
                 if (LOG.IsEnabled(LogLevel.Debug))
                 {
-                    LOG.Debug("Sending messsage without MSMQ transaction to non-transactional queue with path [" + mq.Path + "].");
+                    LOG.LogDebug("Sending messsage without MSMQ transaction to non-transactional queue with path [" + mq.Path + "].");
                 }
                 //Typical case, non TLS transaction, non-tx queue.
                 mq.Send(msg);

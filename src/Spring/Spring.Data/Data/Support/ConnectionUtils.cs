@@ -53,7 +53,7 @@ namespace Spring.Data.Support
             }
             catch (Exception e)
             {
-                LOG.Warn("Could not close connection", e);
+                LOG.LogWarning(e, "Could not close connection");
             }
 
         }
@@ -76,7 +76,7 @@ namespace Spring.Data.Support
             }
             if (LOG.IsEnabled(LogLevel.Debug))
             {
-                LOG.Debug("Disposing of IDbConnection with connection string = [" + dbProvider.ConnectionString + "]");
+                LOG.LogDebug("Disposing of IDbConnection with connection string = [" + dbProvider.ConnectionString + "]");
             }
             conn.Dispose();
         }
@@ -132,7 +132,7 @@ namespace Spring.Data.Support
                 {
                     if (LOG.IsEnabled(LogLevel.Debug))
                     {
-                        LOG.Debug("Fetching resumed ADO.NET connection from DbProvider");
+                        LOG.LogDebug("Fetching resumed ADO.NET connection from DbProvider");
                     }
                     conHolder.Connection = provider.CreateConnection();
                 }
@@ -142,14 +142,14 @@ namespace Spring.Data.Support
             // Else we either got no holder or an empty thread-bound holder here.
             if (LOG.IsEnabled(LogLevel.Debug))
             {
-                LOG.Debug("Fetching Connection from DbProvider");
+                LOG.LogDebug("Fetching Connection from DbProvider");
             }
             IDbConnection conn = provider.CreateConnection();
             conn.Open();
 
             if (TransactionSynchronizationManager.SynchronizationActive)
             {
-                LOG.Debug("Registering transaction synchronization for IDbConnection");
+                LOG.LogDebug("Registering transaction synchronization for IDbConnection");
                 //Use same connection for further ADO.NET actions with the transaction.
                 //Thread-bound object will get removed by manager at transaction completion.
 

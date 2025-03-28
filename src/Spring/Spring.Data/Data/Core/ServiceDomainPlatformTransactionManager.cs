@@ -150,8 +150,8 @@ namespace Spring.Data.Core
             serviceDomainTxObject.ServiceDomainAdapter.Enter(serviceConfig);
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.Debug("Context created. TransactionId = " + ContextUtil.TransactionId
-                          + ", ActivityId = " + ContextUtil.ActivityId);
+                log.LogDebug("Context created. TransactionId = " + ContextUtil.TransactionId
+                                                                 + ", ActivityId = " + ContextUtil.ActivityId);
             }
         }
 
@@ -199,7 +199,7 @@ namespace Spring.Data.Core
                 case System.Data.IsolationLevel.Chaos:
                     if (log.IsEnabled(LogLevel.Information))
                     {
-                        log.Info("IsolationLevel Chaos does not have a direct counterpart in EnterpriseServices, using Any");
+                        log.LogInformation("IsolationLevel Chaos does not have a direct counterpart in EnterpriseServices, using Any");
                     }
                     serviceConfig.IsolationLevel = TransactionIsolationLevel.Any;
                     break;
@@ -218,7 +218,7 @@ namespace Spring.Data.Core
                 case System.Data.IsolationLevel.Snapshot:
                     if (log.IsEnabled(LogLevel.Information))
                     {
-                        log.Info("IsolationLevel Snapshot does not have a direct counterpart in EnterpriseServices, using ReadCommitted.  Introduced in SqlServer 2005.  Consider using System.Transactions for transaction management instead.");
+                        log.LogInformation("IsolationLevel Snapshot does not have a direct counterpart in EnterpriseServices, using ReadCommitted.  Introduced in SqlServer 2005.  Consider using System.Transactions for transaction management instead.");
                     }
                     serviceConfig.IsolationLevel = TransactionIsolationLevel.ReadCommitted;  //err on the side of consistency
                     break;
@@ -254,9 +254,9 @@ namespace Spring.Data.Core
             } else
             {
                 //TODO Should we throw an exception instead?
-                log.Warn("The requested transaction propagation option " +
-                         definition.PropagationBehavior + " is not supported.  " +
-                         "Defaulting to Never(Disabled) ");
+                log.LogWarning("The requested transaction propagation option " +
+                               definition.PropagationBehavior + " is not supported.  " +
+                               "Defaulting to Never(Disabled) ");
             }
         }
 
@@ -284,7 +284,7 @@ namespace Spring.Data.Core
                 TransactionStatus serviceDomainTxstatus = txObject.ServiceDomainAdapter.Leave();
                 if (log.IsEnabled(LogLevel.Debug))
                 {
-                    log.Debug("ServiceDomain Transaction Status upon leaving ServiceDomain = " + serviceDomainTxstatus);
+                    log.LogDebug("ServiceDomain Transaction Status upon leaving ServiceDomain = " + serviceDomainTxstatus);
                 }
                 txObject.TransactionStatus = serviceDomainTxstatus;
                 if (!globalRollbackOnly && serviceDomainTxstatus == TransactionStatus.Aborted)
@@ -329,7 +329,7 @@ namespace Spring.Data.Core
             ServiceDomainTransactionObject txObject = (ServiceDomainTransactionObject)status.Transaction;
             if (status.Debug)
             {
-                log.Debug("Setting transaction rollback-only");
+                log.LogDebug("Setting transaction rollback-only");
             }
             try
             {

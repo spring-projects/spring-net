@@ -184,10 +184,10 @@ namespace Spring.Core.IO
 
 					if (_log.IsEnabled(LogLevel.Warning))
 					{
-						_log.Warn(string.Format(
-							CultureInfo.InvariantCulture,
-							"Could not resolve placeholder '{0}' in resource path " +
-								"'{1}' as an environment variable.", expression, path));
+						_log.LogWarning(string.Format(
+                            CultureInfo.InvariantCulture,
+                            "Could not resolve placeholder '{0}' in resource path " +
+                            "'{1}' as an environment variable.", expression, path));
 					}
 
 					#endregion

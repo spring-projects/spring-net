@@ -171,7 +171,7 @@ namespace Spring.Testing.NUnit
             }
             catch (Exception ex)
             {
-                logger.Error("Setup error", ex);
+                logger.LogError(ex, "Setup error");
                 throw;
             }
         }
@@ -237,7 +237,7 @@ namespace Spring.Testing.NUnit
                     type.GetFields(BindingFlags.DeclaredOnly | BindingFlags.NonPublic | BindingFlags.Instance);
                 if (logger.IsEnabled(LogLevel.Debug))
                 {
-                    logger.Debug("Found " + fields.Length + " fields on " + type);
+                    logger.LogDebug("Found " + fields.Length + " fields on " + type);
                 }
 
                 for (int i = 0; i < fields.Length; i++)
@@ -245,7 +245,7 @@ namespace Spring.Testing.NUnit
                     FieldInfo field = fields[i];
                     if (logger.IsEnabled(LogLevel.Debug))
                     {
-                        logger.Debug("Candidate field: " + field);
+                        logger.LogDebug("Candidate field: " + field);
                     }
                     if (IsProtectedInstanceField(field))
                     {
@@ -255,14 +255,14 @@ namespace Spring.Testing.NUnit
                             managedVarNames.Add(field.Name);
                             if (logger.IsEnabled(LogLevel.Debug))
                             {
-                                logger.Debug("Added managed variable '" + field.Name + "'");
+                                logger.LogDebug("Added managed variable '" + field.Name + "'");
                             }
                         }
                         else
                         {
                             if (logger.IsEnabled(LogLevel.Debug))
                             {
-                                logger.Debug("Rejected managed variable '" + field.Name + "'");
+                                logger.LogDebug("Rejected managed variable '" + field.Name + "'");
                             }
                         }
                     }
@@ -297,14 +297,14 @@ namespace Spring.Testing.NUnit
                         field.SetValue(this, obj);
                         if (logger.IsEnabled(LogLevel.Debug))
                         {
-                            logger.Debug("Populated field: " + field);
+                            logger.LogDebug("Populated field: " + field);
                         }
                     }
                     else
                     {
                         if (logger.IsEnabled(LogLevel.Warning))
                         {
-                            logger.Warn("No field with name '" + fieldName + "'");
+                            logger.LogWarning("No field with name '" + fieldName + "'");
                         }
                     }
                 }
@@ -312,7 +312,7 @@ namespace Spring.Testing.NUnit
                 {
                     if (logger.IsEnabled(LogLevel.Warning))
                     {
-                        logger.Warn("No object definition with name '" + fieldName + "'");
+                        logger.LogWarning("No object definition with name '" + fieldName + "'");
                     }
                 }
             }
@@ -346,7 +346,7 @@ namespace Spring.Testing.NUnit
             }
             catch (Exception ex)
             {
-                logger.Error("OnTearDown error", ex);
+                logger.LogError(ex, "OnTearDown error");
                 throw;
             }
         }

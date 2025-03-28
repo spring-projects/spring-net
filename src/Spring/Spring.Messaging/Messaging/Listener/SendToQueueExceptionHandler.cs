@@ -100,17 +100,17 @@ namespace Spring.Messaging.Listener
                     messageMap[messageId] = messageStats;
                 }
                 messageStats.Count++;
-                LOG.Warn("Message Error Count = [" + messageStats.Count + "] for message id = [" + messageId + "]");
+                LOG.LogWarning("Message Error Count = [" + messageStats.Count + "] for message id = [" + messageId + "]");
 
                 if (messageStats.Count > MaxRetry)
                 {
-                    LOG.Info("Maximum number of redelivery attempts exceeded for message id = [" + messageId + "]");
+                    LOG.LogInformation("Maximum number of redelivery attempts exceeded for message id = [" + messageId + "]");
                     messageMap.Remove(messageId);
                     return SendMessageToQueue(message, messageQueueTransaction);
                 }
                 else
                 {
-                    LOG.Warn("Rolling back delivery of message id [" + messageId + "]");
+                    LOG.LogWarning("Rolling back delivery of message id [" + messageId + "]");
                     return TransactionAction.Rollback;
                 }
             }
@@ -158,7 +158,7 @@ namespace Spring.Messaging.Listener
 
                 if (LOG.IsEnabled(LogLevel.Information))
                 {
-                    LOG.Info("Sending message with id = [" + message.Id + "] to queue [" + mq.Path + "].");
+                    LOG.LogInformation("Sending message with id = [" + message.Id + "] to queue [" + mq.Path + "].");
                 }
 
                 #endregion
@@ -172,8 +172,9 @@ namespace Spring.Messaging.Listener
 
                 if (LOG.IsEnabled(LogLevel.Error))
                 {
-                    LOG.Error("Could not send message with id = [" + message.Id + "] to queue [" + mq.Path + "].",e);
-                    LOG.Error("Message will not be processed.  Message Body = " + message.Body);
+                    string message1 = "Could not send message with id = [" + message.Id + "] to queue [" + mq.Path + "].";
+                    LOG.LogError(e, message1);
+                    LOG.LogError("Message will not be processed.  Message Body = " + message.Body);
                 }
 
                 #endregion

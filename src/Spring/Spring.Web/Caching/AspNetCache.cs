@@ -204,7 +204,7 @@ namespace Spring.Caching
         {
             if (key != null)
             {
-                if (Log.IsEnabled(LogLevel.Debug)) Log.Debug(string.Format("removing item '{0}' from cache '{1}'", key, this._cacheName));
+                if (Log.IsEnabled(LogLevel.Debug)) Log.LogDebug(string.Format("removing item '{0}' from cache '{1}'", key, this._cacheName));
                 _cache.Remove(GenerateKey(key));
             }
         }
@@ -274,7 +274,7 @@ namespace Spring.Caching
             AssertUtils.ArgumentNotNull(key, "key");
             AssertUtils.State( TimeSpan.Zero <= timeToLive, "timeToLive" );
 
-            if (Log.IsEnabled(LogLevel.Debug)) Log.Debug(string.Format("adding item '{0}' to cache '{1}'", key, this._cacheName));
+            if (Log.IsEnabled(LogLevel.Debug)) Log.LogDebug(string.Format("adding item '{0}' to cache '{1}'", key, this._cacheName));
 
             if (TimeSpan.Zero < timeToLive)
             {

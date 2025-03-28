@@ -68,7 +68,7 @@ namespace Spring.Objects.Factory.Support
         {
             if (s_log.IsEnabled(LogLevel.Debug))
             {
-                s_log.Debug( "creating page instance '" + pageUrl + "'" );
+                s_log.LogDebug("creating page instance '" + pageUrl + "'");
             }
 
             IHttpHandler page;
@@ -83,7 +83,7 @@ namespace Spring.Objects.Factory.Support
                 {
                     throw new FileNotFoundException( msg );
                 }
-                s_log.Error( msg, httpEx );
+                s_log.LogError(httpEx, msg);
                 throw new ObjectCreationException( msg, httpEx );
             }
             catch (Exception ex)
@@ -97,7 +97,7 @@ namespace Spring.Objects.Factory.Support
                 }
 
                 string msg = String.Format( "Unable to instantiate page [{0}]", pageUrl );
-                s_log.Error( msg, ex );
+                s_log.LogError(ex, msg);
                 throw new ObjectCreationException( msg, ex );
             }
             return page;
@@ -161,7 +161,7 @@ namespace Spring.Objects.Factory.Support
             catch (Exception ex)
             {
                 string msg = String.Format( "Unable to get page type for url [{0}]", pageUrl );
-                s_log.Error( msg, ex );
+                s_log.LogError(ex, msg);
                 throw new ObjectCreationException( msg, ex );
             }
         }
@@ -181,19 +181,19 @@ namespace Spring.Objects.Factory.Support
         {
             if (s_log.IsEnabled(LogLevel.Debug))
             {
-                s_log.Debug( "getting page type for " + pageUrl );
+                s_log.LogDebug("getting page type for " + pageUrl);
             }
 
             string rootedVPath = WebUtils.CombineVirtualPaths( VirtualEnvironment.CurrentExecutionFilePath, pageUrl );
             if (s_log.IsEnabled(LogLevel.Debug))
             {
-                s_log.Debug( "page vpath is " + rootedVPath );
+                s_log.LogDebug("page vpath is " + rootedVPath);
             }
 
             Type pageType = VirtualEnvironment.GetCompiledType(rootedVPath);
             if (s_log.IsEnabled(LogLevel.Debug))
             {
-                s_log.Debug( string.Format( "got page type '{0}' for vpath '{1}'", pageType.FullName, rootedVPath ) );
+                s_log.LogDebug(string.Format( "got page type '{0}' for vpath '{1}'", pageType.FullName, rootedVPath ));
             }
             return pageType;
         }
@@ -207,7 +207,7 @@ namespace Spring.Objects.Factory.Support
             AssertUtils.ArgumentHasText( controlName, "controlName" );
             if (s_log.IsEnabled(LogLevel.Debug))
             {
-                s_log.Debug( "getting control type for " + controlName );
+                s_log.LogDebug("getting control type for " + controlName);
             }
 
 //            HttpContext ctx = HttpContext.Current;
@@ -220,7 +220,7 @@ namespace Spring.Objects.Factory.Support
 
             if (s_log.IsEnabled(LogLevel.Debug))
             {
-                s_log.Debug( "control vpath is " + rootedVPath );
+                s_log.LogDebug("control vpath is " + rootedVPath);
             }
 
             Type controlType;
@@ -240,7 +240,7 @@ namespace Spring.Objects.Factory.Support
 
             if (s_log.IsEnabled(LogLevel.Debug))
             {
-                s_log.Debug( string.Format( "got control type '{0}' for vpath '{1}'", controlType.FullName, rootedVPath ) );
+                s_log.LogDebug(string.Format( "got control type '{0}' for vpath '{1}'", controlType.FullName, rootedVPath ));
             }
             return controlType;
         }

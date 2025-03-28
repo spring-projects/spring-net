@@ -1,4 +1,5 @@
 using System.Data;
+using Microsoft.Extensions.Logging;
 
 namespace Spring.Data.Support
 {
@@ -65,7 +66,7 @@ namespace Spring.Data.Support
 	            }
                 catch (Exception e)
                 {
-                    LOG.Warn("Could not close IDataRader", e);
+                    LOG.LogWarning(e, "Could not close IDataRader");
                 }
 	        }
         }
@@ -78,7 +79,7 @@ namespace Spring.Data.Support
             }
             catch (Exception e)
             {
-                LOG.Warn("Could not dispose of command", e);
+                LOG.LogWarning(e, "Could not dispose of command");
             }
         }
 

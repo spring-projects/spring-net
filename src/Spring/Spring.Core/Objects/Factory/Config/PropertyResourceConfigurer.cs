@@ -272,9 +272,9 @@ namespace Spring.Objects.Factory.Config
 
                     if (_log.IsEnabled(LogLevel.Debug))
                     {
-                        _log.Debug(string.Format(
-                                       CultureInfo.InvariantCulture,
-                                       "Loading configuration from '{0}'.", resource));
+                        _log.LogDebug(string.Format(
+                            CultureInfo.InvariantCulture,
+                            "Loading configuration from '{0}'.", resource));
                     }
 
                     #endregion
@@ -301,7 +301,7 @@ namespace Spring.Objects.Factory.Config
 
                                 if (_log.IsEnabled(LogLevel.Warning))
                                 {
-                                    _log.Warn(errorMessage);
+                                    _log.LogWarning(errorMessage);
                                 }
 
                                 #endregion

@@ -228,7 +228,7 @@ namespace Spring.Objects.Factory.Support
 
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.Debug("Loaded " + loadCount + " object definitions from location [" + location + "]");
+                log.LogDebug("Loaded " + loadCount + " object definitions from location [" + location + "]");
             }
             return loadCount;
 	    }

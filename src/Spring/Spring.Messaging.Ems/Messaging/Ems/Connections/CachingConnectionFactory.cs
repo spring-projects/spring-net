@@ -232,8 +232,8 @@ namespace Spring.Messaging.Ems.Connections
             {
                 if (LOG.IsEnabled(LogLevel.Debug))
                 {
-                    LOG.Debug("Found cached Session for mode " + mode + ": "
-                              + (session is IDecoratorSession ? ((IDecoratorSession) session).TargetSession : session));
+                    LOG.LogDebug("Found cached Session for mode " + mode + ": "
+                                 + (session is IDecoratorSession ? ((IDecoratorSession) session).TargetSession : session));
                 }
             }
             else
@@ -241,7 +241,7 @@ namespace Spring.Messaging.Ems.Connections
                 ISession targetSession = CreateSession(con, mode);
                 if (LOG.IsEnabled(LogLevel.Debug))
                 {
-                    LOG.Debug("Creating cached Session for mode " + mode + ": " + targetSession);
+                    LOG.LogDebug("Creating cached Session for mode " + mode + ": " + targetSession);
                 }
                 session = GetCachedSessionWrapper(targetSession, sessionList);
             }

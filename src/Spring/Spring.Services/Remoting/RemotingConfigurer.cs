@@ -124,11 +124,11 @@ namespace Spring.Remoting
             {
                 if (filename == null)
                 {
-                    log.Debug("Default remoting infrastructure loaded.");
+                    log.LogDebug("Default remoting infrastructure loaded.");
                 }
                 else
                 {
-                    log.Debug(String.Format("Remoting infrastructure configured using file '{0}'.", filename));
+                    log.LogDebug(String.Format("Remoting infrastructure configured using file '{0}'.", filename));
                 }
             }
 

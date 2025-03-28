@@ -15,6 +15,7 @@
  */
 
 using System.Transactions;
+using Microsoft.Extensions.Logging;
 using Spring.Objects;
 using Spring.Transaction;
 using Spring.Transaction.Interceptor;
@@ -41,7 +42,7 @@ namespace Spring.Data
         [Transaction()]
         public void SaveTwoTestObjects(TestObject to1, TestObject to2)
         {
-            LOG.Debug("TransactionActive = " + TransactionSynchronizationManager.ActualTransactionActive);
+            LOG.LogDebug("TransactionActive = " + TransactionSynchronizationManager.ActualTransactionActive);
         }
 
         [Transaction(TransactionPropagation.Required, IsolationLevel.Unspecified, Timeout = 50,

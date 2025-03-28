@@ -1,4 +1,6 @@
 
+using Microsoft.Extensions.Logging;
+
 namespace Spring.Messaging.Ems.Core
 {
     public class SimpleMessageListener : IMessageListener
@@ -15,14 +17,14 @@ namespace Spring.Messaging.Ems.Core
         public void OnMessage(Message message)
         {           
             messageCount++;
-            LOG.Debug("Message listener count = " + messageCount);
+            LOG.LogDebug("Message listener count = " + messageCount);
             TextMessage textMessage = message as TextMessage;
             if (textMessage != null)
             {
-                LOG.Info("Message Text = " + textMessage.Text);
+                LOG.LogInformation("Message Text = " + textMessage.Text);
             } else
             {
-                LOG.Warn("Can not process message of type " + message.GetType());
+                LOG.LogWarning("Can not process message of type " + message.GetType());
             }
         }
     }

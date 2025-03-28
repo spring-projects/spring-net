@@ -95,7 +95,7 @@ namespace Spring.Messaging.Ems.Connections
 
                     if (LOG.IsEnabled(LogLevel.Debug))
                     {
-                        LOG.Debug("Found cached MessageProducer for destination [" + destination + "]");
+                        LOG.LogDebug("Found cached MessageProducer for destination [" + destination + "]");
                     }
 
                     #endregion
@@ -107,7 +107,7 @@ namespace Spring.Messaging.Ems.Connections
 
                     if (LOG.IsEnabled(LogLevel.Debug))
                     {
-                        LOG.Debug("Creating cached MessageProducer for destination [" + destination + "]");
+                        LOG.LogDebug("Creating cached MessageProducer for destination [" + destination + "]");
                     }
 
                     #endregion
@@ -179,7 +179,7 @@ namespace Spring.Messaging.Ems.Connections
 
                 if (LOG.IsEnabled(LogLevel.Debug))
                 {
-                    LOG.Debug("Returning cached Session: " + target);
+                    LOG.LogDebug("Returning cached Session: " + target);
                 }
 
                 #endregion
@@ -192,7 +192,7 @@ namespace Spring.Messaging.Ems.Connections
         {
             if (LOG.IsEnabled(LogLevel.Debug))
             {
-                LOG.Debug("Closing cached Session: " + this.target);
+                LOG.LogDebug("Closing cached Session: " + this.target);
             }
             // Explicitly close all MessageProducers and MessageConsumers that
             // this Session happens to cache...
@@ -310,7 +310,7 @@ namespace Spring.Messaging.Ems.Connections
             {
                 if (LOG.IsEnabled(LogLevel.Debug))
                 {
-                    LOG.Debug("Found cached EMS MessageConsumer for destination [" + destination + "]: " + consumer);
+                    LOG.LogDebug("Found cached EMS MessageConsumer for destination [" + destination + "]: " + consumer);
                 }
             }
             else
@@ -327,7 +327,7 @@ namespace Spring.Messaging.Ems.Connections
                 }
                 if (LOG.IsEnabled(LogLevel.Debug))
                 {
-                    LOG.Debug("Creating cached EMS MessageConsumer for destination [" + destination + "]: " + consumer);
+                    LOG.LogDebug("Creating cached EMS MessageConsumer for destination [" + destination + "]: " + consumer);
                 }
                 cachedConsumers[cacheKey] = consumer;
             }

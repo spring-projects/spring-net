@@ -104,9 +104,8 @@ namespace Spring.Context.Support
                 IApplicationContext ctx = ContextRegistry.GetContext(contextName);
                 if (Log.IsEnabled(LogLevel.Debug))
                 {
-                    Log.Debug(
-                        string.Format("web context '{0}' already registered - returning existing instance {1}",
-                                      contextName, ctx));
+                    Log.LogDebug(string.Format("web context '{0}' already registered - returning existing instance {1}",
+                        contextName, ctx));
                 }
                 return ctx;
             }

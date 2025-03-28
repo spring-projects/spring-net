@@ -47,10 +47,10 @@ namespace Spring.Web.Conversation
             {
                 String message = "'conversationOwner' can not be null";
 
-                LOG.Error(message);
+                LOG.LogError(message);
                 throw new InvalidOperationException(message);
             }
-            if (LOG.IsEnabled(LogLevel.Debug)) LOG.Error(String.Format("Creating InnerConversationList for '{0}'", conversationOwner.Id));
+            if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogError(String.Format("Creating InnerConversationList for '{0}'", conversationOwner.Id));
             this.conversationOwner = conversationOwner;
         }
 
@@ -60,7 +60,7 @@ namespace Spring.Web.Conversation
         /// <param name="itemAdded"></param>
         private void PreAddProcessor(IConversationState itemAdded)
         {
-            if (LOG.IsEnabled(LogLevel.Debug)) LOG.Debug(String.Format("PreAddProcessor: added={0} into {1}", itemAdded, this.conversationOwner));
+            if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug(String.Format("PreAddProcessor: added={0} into {1}", itemAdded, this.conversationOwner));
             this.ValidateCircularDependency(itemAdded);
             if (itemAdded.ParentConversation != null && itemAdded.ParentConversation != this.conversationOwner)
             {
@@ -74,7 +74,7 @@ namespace Spring.Web.Conversation
         /// </summary>
         private void PostAddProcessor(IConversationState itemAdded)
         {
-            if (LOG.IsEnabled(LogLevel.Debug)) LOG.Debug(String.Format("PostAddProcessor: added={0} into {1}", itemAdded, this.conversationOwner));
+            if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug(String.Format("PostAddProcessor: added={0} into {1}", itemAdded, this.conversationOwner));
             if (itemAdded.ParentConversation == null)
             {
                 itemAdded.ParentConversation = this.conversationOwner;
@@ -83,7 +83,7 @@ namespace Spring.Web.Conversation
 
         private void ValidateCircularDependency(IConversationState itemAdded)
         {
-            if (LOG.IsEnabled(LogLevel.Debug)) LOG.Debug(String.Format("Validating Circular Dependency: added={0} into {1}", itemAdded, this.conversationOwner));
+            if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug(String.Format("Validating Circular Dependency: added={0} into {1}", itemAdded, this.conversationOwner));
 
             ICollection<IConversationState> visitedColl = new HashedSet<IConversationState>();
             visitedColl.Add(conversationOwner);
@@ -105,7 +105,7 @@ namespace Spring.Web.Conversation
                         "ConversationState Circular Dependency detected: " +
                         path + "->" + convItem.Id;
 
-                    LOG.Error(exMsgStr);
+                    LOG.LogError(exMsgStr);
                     throw new InvalidOperationException(exMsgStr);
                 }
 

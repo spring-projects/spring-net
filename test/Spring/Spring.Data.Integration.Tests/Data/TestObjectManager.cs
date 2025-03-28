@@ -21,6 +21,7 @@
 #region Imports
 
 using System.Collections;
+using Microsoft.Extensions.Logging;
 using Spring.Objects;
 using Spring.Transaction.Interceptor;
 using Spring.Transaction.Support;
@@ -66,7 +67,7 @@ namespace Spring.Data
         [Transaction]
         public void SaveTwoTestObjects(TestObject to1, TestObject to2)
         {
-            LOG.Debug("TransactionActive = " + TransactionSynchronizationManager.ActualTransactionActive);
+            LOG.LogDebug("TransactionActive = " + TransactionSynchronizationManager.ActualTransactionActive);
             //Console.WriteLine("TransactionSynchronizationManager.CurrentTransactionIsolationLevel = " +
             //                  TransactionSynchronizationManager.CurrentTransactionIsolationLevel);
             //Console.WriteLine("System.Transactions.Transaction.Current.IsolationLevel = " + System.Transactions.Transaction.Current.IsolationLevel);

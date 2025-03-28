@@ -206,7 +206,7 @@ namespace Spring.Util
         {
             AssertUtils.ArgumentNotNull(constructor, "constructor");
 
-            if (log.IsEnabled(LogLevel.Trace)) log.Trace(string.Format("instantiating type [{0}] using constructor [{1}]", constructor.DeclaringType, constructor));
+            if (log.IsEnabled(LogLevel.Trace)) log.LogTrace(string.Format("instantiating type [{0}] using constructor [{1}]", constructor.DeclaringType, constructor));
 
             if (constructor.DeclaringType.IsInterface)
             {

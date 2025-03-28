@@ -29,9 +29,9 @@ namespace Spring.MsmqQuickStart.Server.Gateways
             while (true)
             {
                 string data = GenerateFakeMarketData();
-                log.Info("Sending market data.");
+                log.LogInformation("Sending market data.");
                 MessageQueueTemplate.ConvertAndSend(data);
-                log.Info("Sleeping " + sleepTimeInSeconds + " seconds before sending more market data.");
+                log.LogInformation("Sleeping {SleepTimeSeconds} seconds before sending more market data.", sleepTimeInSeconds);
                 Thread.Sleep(sleepTimeInSeconds);
             }
         }

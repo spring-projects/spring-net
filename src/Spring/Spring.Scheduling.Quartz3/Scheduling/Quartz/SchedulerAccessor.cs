@@ -15,6 +15,7 @@
  */
 
 using System.Collections;
+using Microsoft.Extensions.Logging;
 using Quartz;
 using Quartz.Simpl;
 using Quartz.Xml;
@@ -305,7 +306,7 @@ namespace Spring.Scheduling.Quartz
                     }
                     catch (TransactionException)
                     {
-                        logger.Error("Job registration exception overridden by rollback exception", ex);
+                        logger.LogError(ex, "Job registration exception overridden by rollback exception");
                         throw;
                     }
                 }
@@ -375,7 +376,7 @@ namespace Spring.Scheduling.Quartz
                     {
                         if (logger.IsEnabled(Microsoft.Extensions.Logging.LogLevel.Debug))
                         {
-                            logger.Debug($"Unexpectedly found existing trigger, assumably due to cluster race condition: {ex.Message} - can safely be ignored");
+                            logger.LogDebug($"Unexpectedly found existing trigger, assumably due to cluster race condition: {ex.Message} - can safely be ignored");
                         }
 
                         if (overwriteExistingJobs)

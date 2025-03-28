@@ -90,7 +90,7 @@ namespace Spring.Messaging.Listener
 
                 if (LOG.IsEnabled(LogLevel.Trace))
                 {
-                    LOG.Trace("Receiving message with zero timeout for queue = [" + mq.Path + "]");
+                    LOG.LogTrace("Receiving message with zero timeout for queue = [" + mq.Path + "]");
                 }
 
                 #endregion
@@ -107,8 +107,7 @@ namespace Spring.Messaging.Listener
 
                     if (LOG.IsEnabled(LogLevel.Trace))
                     {
-                        LOG.Trace(
-                            "MessageQueueErrorCode.IOTimeout: No message available to receive.  May have been processed by another thread.");
+                        LOG.LogTrace("MessageQueueErrorCode.IOTimeout: No message available to receive.  May have been processed by another thread.");
                     }
 
                     #endregion
@@ -123,8 +122,8 @@ namespace Spring.Messaging.Listener
 
                     if (LOG.IsEnabled(LogLevel.Error))
                     {
-                        LOG.Error("Error receiving message from MessageQueue [" + mq.Path +
-                                  "], closing queue and clearing connection cache.");
+                        LOG.LogError("Error receiving message from MessageQueue [" + mq.Path +
+                                     "], closing queue and clearing connection cache.");
                     }
 
                     #endregion
@@ -144,7 +143,7 @@ namespace Spring.Messaging.Listener
 
                 if (LOG.IsEnabled(LogLevel.Trace))
                 {
-                    LOG.Trace("Message recieved is null from Queue = [" + mq.Path + "]");
+                    LOG.LogTrace("Message recieved is null from Queue = [" + mq.Path + "]");
                 }
 
                 #endregion
@@ -158,7 +157,7 @@ namespace Spring.Messaging.Listener
 
                 if (LOG.IsEnabled(LogLevel.Debug))
                 {
-                    LOG.Debug("Received message [" + message.Id + "] on queue [" + mq.Path + "]");
+                    LOG.LogDebug("Received message [" + message.Id + "] on queue [" + mq.Path + "]");
                 }
 
                 #endregion

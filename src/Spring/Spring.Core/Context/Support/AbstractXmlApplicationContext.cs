@@ -148,10 +148,9 @@ namespace Spring.Context.Support
 
                 if (log.IsEnabled(LogLevel.Debug))
                 {
-                    log.Debug(
-                        string.Format(
-                            "Refreshed ObjectFactory for application context '{0}'.",
-                            Name));
+                    log.LogDebug(string.Format(
+                        "Refreshed ObjectFactory for application context '{0}'.",
+                        Name));
                 }
 
                 #endregion

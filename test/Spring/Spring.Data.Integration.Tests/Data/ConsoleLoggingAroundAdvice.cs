@@ -1,4 +1,5 @@
 using AopAlliance.Intercept;
+using Microsoft.Extensions.Logging;
 
 namespace Spring.Data
 {
@@ -7,9 +8,9 @@ namespace Spring.Data
         private static readonly ILog LOG = LogManager.GetLogger(typeof(ConsoleLoggingAroundAdvice));
         public object Invoke(IMethodInvocation invocation)
         {
-            LOG.Debug("Advice executing; calling the advised method [" + invocation.Method.Name + "]");
+            LOG.LogDebug("Advice executing; calling the advised method [" + invocation.Method.Name + "]");
             object returnValue = invocation.Proceed();
-            LOG.Debug("Advice executed; advised method [" + invocation.Method.Name + "] returned " + returnValue);
+            LOG.LogDebug("Advice executed; advised method [" + invocation.Method.Name + "] returned " + returnValue);
             return returnValue;
         }
     }

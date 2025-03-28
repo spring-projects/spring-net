@@ -18,6 +18,7 @@
 
 #endregion
 
+using Microsoft.Extensions.Logging;
 using NVelocity.Runtime;
 using NVelocity.Runtime.Log;
 using LogLevel=NVelocity.Runtime.Log.LogLevel;
@@ -52,16 +53,16 @@ namespace Spring.Template.Velocity
         {
             switch (level) {
                 case LogLevel.Error:
-                    log.Error(message);
+                    log.LogError(message);
                     break;
                 case LogLevel.Warn:
-                    log.Warn(message);
+                    log.LogWarning(message);
                     break;
                 case LogLevel.Info:
-                    log.Info(message);
+                    log.LogInformation(message);
                     break;
                 case LogLevel.Debug:
-                    log.Debug(message);
+                    log.LogDebug(message);
                     break;
             }
         }

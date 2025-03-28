@@ -15,6 +15,7 @@
 */
 
 using System.Reflection;
+using Microsoft.Extensions.Logging;
 using Quartz;
 using Spring.Objects.Support;
 
@@ -60,7 +61,7 @@ namespace Spring.Scheduling.Quartz
             }
             catch (TargetInvocationException ex)
             {
-                logger.Error(errorMessage, ex.GetBaseException());
+                logger.LogError(ex.GetBaseException(), errorMessage);
                 if (ex.GetBaseException() is JobExecutionException)
                 {
                     // -> JobExecutionException, to be logged at info level by Quartz

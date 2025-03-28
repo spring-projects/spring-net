@@ -44,7 +44,7 @@ namespace Spring.NmsQuickStart.Client.Handlers
 
         public void Handle(Hashtable data)
         {
-            log.Info(string.Format("Received market data.  Ticker = {0}, Price = {1}", data["TICKER"], data["PRICE"]));
+            log.LogInformation("Received market data.  Ticker = {Ticker}, Price = {Price}", data["TICKER"], data["PRICE"]);
 
             // forward to controller to update view
             stockController.UpdateMarketData(data);
@@ -54,13 +54,13 @@ namespace Spring.NmsQuickStart.Client.Handlers
 
         public void Handle(TradeResponse tradeResponse)
         {
-            log.Info(string.Format("Received trade resonse.  Ticker = {0}, Price = {1}", tradeResponse.Ticker, tradeResponse.Price));
+            log.LogInformation("Received trade response.  Ticker = {TradeResponseTicker}, Price = {TradeResponsePrice}", tradeResponse.Ticker, tradeResponse.Price);
             stockController.UpdateTrade(tradeResponse);
         }
 
         public void Handle(object catchAllObject)
         {
-            log.Error("could not handle object of type = " + catchAllObject.GetType());
+            log.LogError("could not handle object of type = {ObjectType}", catchAllObject.GetType());
         }
     }
 }

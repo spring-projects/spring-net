@@ -18,6 +18,7 @@
 
 #endregion
 
+using Microsoft.Extensions.Logging;
 using Spring.Core.TypeResolution;
 using Spring.Util;
 using Spring.Objects.Factory.Support;
@@ -65,7 +66,7 @@ namespace Spring.Context.Attributes.TypeFilters
             }
             catch
             {
-                Logger.Error(string.Format("Can't instatiate {0}. Type needs to have a non arg constructor.", expression));
+                Logger.LogError(string.Format("Can't instatiate {0}. Type needs to have a non arg constructor.", expression));
             }
 
             return null;            
@@ -80,7 +81,7 @@ namespace Spring.Context.Attributes.TypeFilters
             }
             catch (Exception)
             {
-                Logger.Error("Can't load type defined in exoression:" + typeToLoad);
+                Logger.LogError("Can't load type defined in exoression:" + typeToLoad);
             }
 
             return null;

@@ -19,6 +19,7 @@
 #endregion
 
 using System.Collections;
+using Microsoft.Extensions.Logging;
 using Spring.Context;
 using Spring.Messaging.Support;
 using Spring.Messaging.Support.Converters;
@@ -148,7 +149,7 @@ namespace Spring.Messaging.Core
                     applicationContext.GetObject(messageConverterObjectName, typeof (IMessageConverter));
                 if (applicationContext.ObjectFactory.GetObjectDefinition(messageConverterObjectName).IsSingleton)
                 {
-                    log.Warn("MessageConverter with name = [" + messageConverterObjectName + "] should be declared with singleton=false.  Using Clone() to create independent instance for thread local storage");
+                    log.LogWarning("MessageConverter with name = [" + messageConverterObjectName + "] should be declared with singleton=false.  Using Clone() to create independent instance for thread local storage");
                     converters.Add(messageConverterObjectName, mc.Clone());
                 }
                 else

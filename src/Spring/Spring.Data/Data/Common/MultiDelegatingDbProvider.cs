@@ -278,7 +278,7 @@ namespace Spring.Data.Common
             {
                 if (LOG.IsEnabled(LogLevel.Debug))
                 {
-                    LOG.Debug("No DbProvider defined in thread local storage, falling back to use DefaultDbProvider.");
+                    LOG.LogDebug("No DbProvider defined in thread local storage, falling back to use DefaultDbProvider.");
                 }
                 return defaultDbProvider;
             }

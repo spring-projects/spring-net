@@ -67,18 +67,16 @@ namespace Spring.IocQuickStart.MovieFinder
 
                 MovieLister lister = (MovieLister) ctx.GetObject("MyMovieLister");
 				Movie[] movies = lister.MoviesDirectedBy("Roberto Benigni");
-				LOG.Debug("Searching for movie...");
+				LOG.LogDebug("Searching for movie...");
 				foreach (Movie movie in movies)
 				{
-                    LOG.Debug(
-						string.Format("Movie Title = '{0}', Director = '{1}'.",
-						              movie.Title, movie.Director));
+                    LOG.LogDebug("Movie Title = '{Title}', Director = '{Director}'.", movie.Title, movie.Director);
 				}
-                LOG.Debug("MovieApp Done.");
+                LOG.LogDebug("MovieApp Done.");
 			}
 			catch (Exception e)
 			{
-				LOG.Error("Movie Finder is broken.", e);
+				LOG.LogError("Movie Finder is broken.", e);
 			}
 			finally
 			{

@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+using Microsoft.Extensions.Logging;
 using NHibernate;
 using NHibernate.Engine;
 using NHibernate.Proxy;
@@ -66,7 +67,7 @@ namespace Spring.Data.NHibernate.Bytecode
             }
             catch (Exception ex)
             {
-                log.Error("Creating a proxy instance failed", ex);
+                log.LogError(ex, "Creating a proxy instance failed");
                 throw new HibernateException("Creating a proxy instance failed", ex);
             }
         }

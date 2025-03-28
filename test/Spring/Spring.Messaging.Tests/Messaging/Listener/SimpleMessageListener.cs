@@ -1,6 +1,7 @@
 
 
 using System.Messaging;
+using Microsoft.Extensions.Logging;
 
 namespace Spring.Messaging.Listener
 {
@@ -31,7 +32,7 @@ namespace Spring.Messaging.Listener
         {
             lastReceivedMessage = message;
             messageCount++;
-            LOG.Debug("Message listener count = " + messageCount);
+            LOG.LogDebug("Message listener count = " + messageCount);
         }
 
         #endregion

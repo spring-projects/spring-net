@@ -123,7 +123,7 @@ namespace Spring.Context.Support
             this._constructionUrl = VirtualEnvironment.CurrentVirtualPathAndQuery;
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.Debug("created instance " + this.ToString());
+                log.LogDebug("created instance " + this.ToString());
             }
         }
 
@@ -169,23 +169,23 @@ namespace Spring.Context.Support
                         typeof(HttpRuntime).GetField("_beforeFirstRequest", BindingFlags.Instance | BindingFlags.NonPublic).
                             GetValue(runtime);
                 }
-                s_weblog.Debug("BeforeFirstRequest:" + beforeFirstRequest);
+                s_weblog.LogDebug("BeforeFirstRequest:" + beforeFirstRequest);
                 if (beforeFirstRequest)
                 {
                     try
                     {
                         string firstRequestPath = HttpRuntime.AppDomainAppVirtualPath.TrimEnd('/') + "/dummy.context";
-                        s_weblog.Info("Forcing first request " + firstRequestPath);
+                        s_weblog.LogInformation("Forcing first request " + firstRequestPath);
                         SafeMethod fnProcessRequestNow = new SafeMethod(typeof(HttpRuntime).GetMethod("ProcessRequestNow", BindingFlags.Static | BindingFlags.NonPublic));
                         SimpleWorkerRequest wr = new SimpleWorkerRequest(firstRequestPath, string.Empty, new StringWriter());
                         fnProcessRequestNow.Invoke(null, new object[] { wr });
                         //                        HttpRuntime.ProcessRequest(
                         //                            wr);
-                        s_weblog.Info("Successfully processed first request!");
+                        s_weblog.LogInformation("Successfully processed first request!");
                     }
                     catch (Exception ex)
                     {
-                        s_weblog.Error("Failed processing first request", ex);
+                        s_weblog.LogError(ex, "Failed processing first request");
                         throw;
                     }
                 }
@@ -203,7 +203,7 @@ namespace Spring.Context.Support
                 ILog s_weblog = LogManager.GetLogger(typeof(WebApplicationContext));
                 if (s_weblog.IsEnabled(LogLevel.Debug))
                 {
-                    s_weblog.Debug("received ContextRegistry.Cleared event - clearing webContextCache");
+                    s_weblog.LogDebug("received ContextRegistry.Cleared event - clearing webContextCache");
                 }
                 s_webContextCache.Clear();
             }
@@ -253,7 +253,7 @@ namespace Spring.Context.Support
             {
                 if (isLogDebugEnabled)
                 {
-                    s_weblog.Debug(string.Format("looking up web context '{0}' in WebContextCache", contextName));
+                    s_weblog.LogDebug(string.Format("looking up web context '{0}' in WebContextCache", contextName));
                 }
                 // first lookup in our own cache
                 IApplicationContext context = (IApplicationContext)s_webContextCache[contextName];
@@ -262,8 +262,7 @@ namespace Spring.Context.Support
                     // found - nothing to do anymore
                     if (isLogDebugEnabled)
                     {
-                        s_weblog.Debug(
-                            string.Format("returning WebContextCache hit '{0}' for vpath '{1}' ", context, contextName));
+                        s_weblog.LogDebug(string.Format("returning WebContextCache hit '{0}' for vpath '{1}' ", context, contextName));
                     }
                     return context;
                 }
@@ -273,7 +272,7 @@ namespace Spring.Context.Support
                 {
                     if (isLogDebugEnabled)
                     {
-                        s_weblog.Debug(string.Format("looking up web context '{0}' in ContextRegistry", contextName));
+                        s_weblog.LogDebug(string.Format("looking up web context '{0}' in ContextRegistry", contextName));
                     }
 
                     if (ContextRegistry.IsContextRegistered(contextName))
@@ -288,10 +287,9 @@ namespace Spring.Context.Support
                         {
                             if (isLogDebugEnabled)
                             {
-                                s_weblog.Debug(
-                                    string.Format(
-                                        "web context for vpath '{0}' not found. Force creation using filepath '{1}'",
-                                        contextName, virtualPath));
+                                s_weblog.LogDebug(string.Format(
+                                    "web context for vpath '{0}' not found. Force creation using filepath '{1}'",
+                                    contextName, virtualPath));
                             }
 
                             // assure context is resolved to the given virtualDirectory
@@ -303,19 +301,20 @@ namespace Spring.Context.Support
                             if (context != null)
                             {
                                 if (isLogDebugEnabled)
-                                    s_weblog.Debug(string.Format("got context '{0}' for vpath '{1}'", context, contextName));
+                                    s_weblog.LogDebug(string.Format("got context '{0}' for vpath '{1}'", context, contextName));
                             }
                             else
                             {
                                 if (isLogDebugEnabled)
-                                    s_weblog.Debug(string.Format("no context defined for vpath '{0}'", contextName));
+                                    s_weblog.LogDebug(string.Format("no context defined for vpath '{0}'", contextName));
                             }
                         }
                         catch (Exception ex)
                         {
                             if (s_weblog.IsEnabled(LogLevel.Error))
                             {
-                                s_weblog.Error(string.Format("failed creating context '{0}', Stacktrace:\n{1}", contextName, new StackTrace()), ex);
+                                string message = string.Format("failed creating context '{0}', Stacktrace:\n{1}", contextName, new StackTrace());
+                                s_weblog.LogError(ex, message);
                             }
 
                             throw;
@@ -328,8 +327,7 @@ namespace Spring.Context.Support
                 s_webContextCache.Add(contextName, context);
                 if (isLogDebugEnabled)
                 {
-                    s_weblog.Debug(
-                        string.Format("added context '{0}' to WebContextCache for vpath '{1}'", context, contextName));
+                    s_weblog.LogDebug(string.Format("added context '{0}' to WebContextCache for vpath '{1}'", context, contextName));
                 }
 
                 if (context != null)
@@ -343,9 +341,8 @@ namespace Spring.Context.Support
                             s_webContextCache.Add(parentContext.Name, parentContext);
                             if (isLogDebugEnabled)
                             {
-                                s_weblog.Debug(
-                                    string.Format("added parent context '{0}' to WebContextCache for vpath '{1}'",
-                                                  parentContext, parentContext.Name));
+                                s_weblog.LogDebug(string.Format("added parent context '{0}' to WebContextCache for vpath '{1}'",
+                                    parentContext, parentContext.Name));
                             }
                         }
                         parentContext = parentContext.ParentContext;

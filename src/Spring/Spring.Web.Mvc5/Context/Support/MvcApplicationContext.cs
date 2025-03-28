@@ -71,7 +71,7 @@ namespace Spring.Context.Support
 
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.Debug("created instance " + this);
+                log.LogDebug("created instance " + this);
             }
         }
 

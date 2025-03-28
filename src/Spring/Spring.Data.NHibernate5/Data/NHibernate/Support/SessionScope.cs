@@ -320,12 +320,12 @@ namespace Spring.Data.NHibernate.Support
                 if (TransactionSynchronizationManager.HasResource(SessionFactory))
                 {
                     // Do not modify the Session: just set the participate flag.
-                    if (isDebugEnabled) log.Debug("Participating in existing Hibernate SessionFactory");
+                    if (isDebugEnabled) log.LogDebug("Participating in existing Hibernate SessionFactory");
                     SetParticipating(true);
                 }
                 else
                 {
-                    if (isDebugEnabled) log.Debug("Opening single Hibernate Session in SessionScope");
+                    if (isDebugEnabled) log.LogDebug("Opening single Hibernate Session in SessionScope");
                     TransactionSynchronizationManager.BindResource(SessionFactory, new LazySessionHolder(this));
                 }
             }
@@ -335,12 +335,12 @@ namespace Spring.Data.NHibernate.Support
                 if (SessionFactoryUtils.IsDeferredCloseActive(SessionFactory))
                 {
                     // Do not modify deferred close: just set the participate flag.
-                    if (isDebugEnabled) log.Debug("Participating in active deferred close mode");
+                    if (isDebugEnabled) log.LogDebug("Participating in active deferred close mode");
                     SetParticipating(true);
                 }
                 else
                 {
-                    if (isDebugEnabled) log.Debug("Initializing deferred close mode");
+                    if (isDebugEnabled) log.LogDebug("Initializing deferred close mode");
                     SessionFactoryUtils.InitDeferredClose(SessionFactory);
                 }
             }
@@ -355,7 +355,7 @@ namespace Spring.Data.NHibernate.Support
         public void Close()
         {
             bool isDebugEnabled = log.IsEnabled(LogLevel.Debug);
-            if (isDebugEnabled) log.Debug("Trying to close SessionScope");
+            if (isDebugEnabled) log.LogDebug("Trying to close SessionScope");
 
             if (IsOpen)
             {
@@ -371,7 +371,7 @@ namespace Spring.Data.NHibernate.Support
             }
             else
             {
-                if (isDebugEnabled) log.Debug("SessionScope is already closed - doing nothing");
+                if (isDebugEnabled) log.LogDebug("SessionScope is already closed - doing nothing");
             }
         }
 
@@ -382,20 +382,20 @@ namespace Spring.Data.NHibernate.Support
                 if (SingleSession)
                 {
                     // single session mode
-                    if (isLogDebugEnabled) log.Debug("Closing single Hibernate Session in SessionScope");
+                    if (isLogDebugEnabled) log.LogDebug("Closing single Hibernate Session in SessionScope");
                     LazySessionHolder holder = (LazySessionHolder)TransactionSynchronizationManager.UnbindResource(SessionFactory);
                     holder.Close();
                 }
                 else
                 {
                     // deferred close mode
-                    if (isLogDebugEnabled) log.Debug("Closing all Hibernate Sessions");
+                    if (isLogDebugEnabled) log.LogDebug("Closing all Hibernate Sessions");
                     SessionFactoryUtils.ProcessDeferredClose(SessionFactory);
                 }
             }
             else
             {
-                if (isLogDebugEnabled) log.Debug("Only participated Hibernate Session - doing nothing");
+                if (isLogDebugEnabled) log.LogDebug("Only participated Hibernate Session - doing nothing");
             }
         }
 
@@ -424,7 +424,7 @@ namespace Spring.Data.NHibernate.Support
             /// </summary>
             public LazySessionHolder(SessionScope owner)
             {
-                if (log.IsEnabled(LogLevel.Debug)) log.Debug("Created LazySessionHolder");
+                if (log.IsEnabled(LogLevel.Debug)) log.LogDebug("Created LazySessionHolder");
                 this.owner = owner;
             }
 
@@ -435,7 +435,7 @@ namespace Spring.Data.NHibernate.Support
             {
                 if (session == null)
                 {
-                    if (log.IsEnabled(LogLevel.Debug)) log.Debug("session instance requested - opening new session");
+                    if (log.IsEnabled(LogLevel.Debug)) log.LogDebug("session instance requested - opening new session");
                     session = owner.DoOpenSession();
                     AddSession(session);
                 }
@@ -453,7 +453,7 @@ namespace Spring.Data.NHibernate.Support
                     session = null;
                     SessionFactoryUtils.CloseSession(tmpSession);
                 }
-                if (log.IsEnabled(LogLevel.Debug)) log.Debug("Closed LazySessionHolder");
+                if (log.IsEnabled(LogLevel.Debug)) log.LogDebug("Closed LazySessionHolder");
             }
         }
     }

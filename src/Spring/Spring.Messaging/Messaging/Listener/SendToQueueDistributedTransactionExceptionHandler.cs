@@ -71,7 +71,7 @@ namespace Spring.Messaging.Listener
                     messageStats = (MessageStats) messageMap[messageId];
                     if (messageStats.Count > MaxRetry)
                     {
-                        LOG.Warn("Message with id = [" + message.Id + "] detected as poison message.");
+                        LOG.LogWarning("Message with id = [" + message.Id + "] detected as poison message.");
                         return true;
                     }
                 }
@@ -109,8 +109,8 @@ namespace Spring.Messaging.Listener
                     messageMap[messageId] = messageStats;
                 }
                 messageStats.Count++;
-                LOG.Warn("Message Error Count = [" + messageStats.Count + "] for message id = [" + messageId +
-                         "]");
+                LOG.LogWarning("Message Error Count = [" + messageStats.Count + "] for message id = [" + messageId +
+                               "]");
             }
         }
 
@@ -129,7 +129,7 @@ namespace Spring.Messaging.Listener
 
                 if (LOG.IsEnabled(LogLevel.Information))
                 {
-                    LOG.Info("Sending message with id = [" + message.Id + "] to queue [" + mq.Path + "].");
+                    LOG.LogInformation("Sending message with id = [" + message.Id + "] to queue [" + mq.Path + "].");
                 }
 
                 #endregion
@@ -142,8 +142,9 @@ namespace Spring.Messaging.Listener
 
                 if (LOG.IsEnabled(LogLevel.Error))
                 {
-                    LOG.Error("Could not send message with id = [" + message.Id + "] to queue [" + mq.Path + "].", e);
-                    LOG.Error("Message will not be processed.  Message Body = " + message.Body);
+                    string message1 = "Could not send message with id = [" + message.Id + "] to queue [" + mq.Path + "].";
+                    LOG.LogError(e, message1);
+                    LOG.LogError("Message will not be processed.  Message Body = " + message.Body);
                 }
 
                 #endregion

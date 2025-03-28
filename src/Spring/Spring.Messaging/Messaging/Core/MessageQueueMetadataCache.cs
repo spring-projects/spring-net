@@ -71,16 +71,15 @@ namespace Spring.Messaging.Core
                             #region Logging
                             if (LOG.IsEnabled(LogLevel.Warning))
                             {
-                                LOG.Warn(
-                                    "Path for MessageQueueFactoryObject named [" +
-                                    mqfo.ObjectName + "] is null, so can't cache its metadata.");
+                                LOG.LogWarning("Path for MessageQueueFactoryObject named [" +
+                                               mqfo.ObjectName + "] is null, so can't cache its metadata.");
                             }
                             #endregion
                         }
                     } else
                     {
                         // This would indicate some bug in GetObjectsOfType
-                        LOG.Error("Unexpected type of " + entry.Value.GetType() + " was given as candidate for caching MessageQueueMetadata.");
+                        LOG.LogError("Unexpected type of " + entry.Value.GetType() + " was given as candidate for caching MessageQueueMetadata.");
                     }
                 }
                 isInitialized = true;

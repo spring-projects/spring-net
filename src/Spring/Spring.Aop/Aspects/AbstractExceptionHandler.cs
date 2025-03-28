@@ -19,6 +19,7 @@
 #endregion
 
 using System.Collections;
+using Microsoft.Extensions.Logging;
 using Spring.Expressions;
 
 namespace Spring.Aspects
@@ -155,11 +156,13 @@ namespace Spring.Aspects
                     canProcess = (bool) expression.GetValue(null, callContextDictionary);
                 } catch (InvalidCastException e)
                 {
-                    log.Warn("Was not able to unbox constraint expression to boolean [" + ConstraintExpressionText + "]", e);
+                    string message = "Was not able to unbox constraint expression to boolean [" + ConstraintExpressionText + "]";
+                    log.LogWarning(e, message);
                     return false;
                 } catch (Exception e)
                 {
-                    log.Warn("Was not able to evaluate constraint expression [" + ConstraintExpressionText + "]",e);
+                    string message = "Was not able to evaluate constraint expression [" + ConstraintExpressionText + "]";
+                    log.LogWarning(e, message);
                     return false;
                 }
                 return canProcess;

@@ -328,15 +328,13 @@ namespace Spring.Web.Services
             {
                 if (ServiceUri != null)
                 {
-                    LOG.Debug(
-                        String.Format("Generated client proxy type [{0}] for web service [{1}]", wrapper.FullName,
-                                      ServiceUri.Description));
+                    LOG.LogDebug(String.Format("Generated client proxy type [{0}] for web service [{1}]", wrapper.FullName,
+                        ServiceUri.Description));
                 }
                 else if (ProxyType != null)
                 {
-                    LOG.Debug(
-                        String.Format("Generated client proxy type [{0}] for web service based on provided proxy type [{1}]", wrapper.FullName,
-                                      ProxyType.FullName));
+                    LOG.LogDebug(String.Format("Generated client proxy type [{0}] for web service based on provided proxy type [{1}]", wrapper.FullName,
+                        ProxyType.FullName));
                 }
             }
 
@@ -738,7 +736,7 @@ namespace Spring.Web.Services
 
                             if (LOG.IsEnabled(LogLevel.Information))
                             {
-                                LOG.Info(String.Format("The binding '{0}', found in the WSDL document located at '{1}', will be use.", binding.Name, this.serviceUri.Description));
+                                LOG.LogInformation(String.Format("The binding '{0}', found in the WSDL document located at '{1}', will be use.", binding.Name, this.serviceUri.Description));
                             }
 
                             #endregion

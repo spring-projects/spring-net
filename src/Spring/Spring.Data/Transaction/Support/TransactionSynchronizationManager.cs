@@ -147,8 +147,8 @@ namespace Spring.Transaction.Support
 
             if (val != null && LOG.IsEnabled(LogLevel.Debug))
             {
-                LOG.Debug("Retrieved value [" + Describe(val) + "] for key [" + Describe(key) + "] bound to thread [" +
-                    SystemUtils.ThreadId + "]");
+                LOG.LogDebug("Retrieved value [" + Describe(val) + "] for key [" + Describe(key) + "] bound to thread [" +
+                             SystemUtils.ThreadId + "]");
             }
             return val;
         }
@@ -178,8 +178,8 @@ namespace Spring.Transaction.Support
             resources.Add(key, value);
             if (LOG.IsEnabled(LogLevel.Debug))
             {
-                LOG.Debug("Bound value [" + Describe(value) + "] for key [" + Describe(key) + "] to thread [" +
-                    SystemUtils.ThreadId + "]");
+                LOG.LogDebug("Bound value [" + Describe(value) + "] for key [" + Describe(key) + "] to thread [" +
+                             SystemUtils.ThreadId + "]");
             }
         }
 
@@ -208,8 +208,8 @@ namespace Spring.Transaction.Support
             }
             if (LOG.IsEnabled(LogLevel.Debug))
             {
-                LOG.Debug("Removed value [" + Describe(val) + "] for key [" + Describe(key) + "] from thread [" +
-                    SystemUtils.ThreadId + "]");
+                LOG.LogDebug("Removed value [" + Describe(val) + "] for key [" + Describe(key) + "] from thread [" +
+                             SystemUtils.ThreadId + "]");
             }
             return val;
         }
@@ -233,7 +233,7 @@ namespace Spring.Transaction.Support
 			}
             if (LOG.IsEnabled(LogLevel.Debug))
             {
-                LOG.Debug("Initializing transaction synchronization");
+                LOG.LogDebug("Initializing transaction synchronization");
             }
             ArrayList syncs = new ArrayList();
             LogicalThreadContext.SetData(syncsDataSlotName, syncs);
@@ -256,7 +256,7 @@ namespace Spring.Transaction.Support
 			}
             if (LOG.IsEnabled(LogLevel.Debug))
             {
-                LOG.Debug("Clearing transaction synchronization");
+                LOG.LogDebug("Clearing transaction synchronization");
             }
             LogicalThreadContext.FreeNamedDataSlot(syncsDataSlotName);
 		}

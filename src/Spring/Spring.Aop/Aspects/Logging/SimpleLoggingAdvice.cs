@@ -420,19 +420,19 @@ namespace Spring.Aspects.Logging
                 case LogLevel.Trace:
                     if (log.IsEnabled(LogLevel.Trace))
                     {
-                        if (e == null) log.Trace(text); else log.LogTrace(e, text);
+                        if (e == null) log.LogTrace(text); else log.LogTrace(e, text);
                     }
                     break;
                 case LogLevel.Debug:
                     if (log.IsEnabled(LogLevel.Debug))
                     {
-                        if (e == null) log.Debug(text); else log.Debug(text, e);
+                        if (e == null) log.LogDebug(text); else log.LogDebug(e, text);
                     }
                     break;
                 case LogLevel.Error:
                     if (log.IsEnabled(LogLevel.Error))
                     {
-                        if (e == null) log.Error(text); else log.Error(text, e);
+                        if (e == null) log.LogError(text); else log.LogError(e, text);
                     }
                     break;
                 case LogLevel.Critical:
@@ -444,13 +444,13 @@ namespace Spring.Aspects.Logging
                 case LogLevel.Information:
                     if (log.IsEnabled(LogLevel.Information))
                     {
-                        if (e == null) log.Info(text); else log.LogInformation(e, text);
+                        if (e == null) log.LogInformation(text); else log.LogInformation(e, text);
                     }
                     break;
                 case LogLevel.Warning:
                     if (log.IsEnabled(LogLevel.Warning))
                     {
-                        if (e == null) log.Warn(text); else log.LogWarning(e, text);
+                        if (e == null) log.LogWarning(text); else log.LogWarning(e, text);
                     }
                     break;
                 case LogLevel.None:

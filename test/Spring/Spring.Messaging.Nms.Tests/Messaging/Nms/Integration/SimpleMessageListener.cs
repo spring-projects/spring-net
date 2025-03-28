@@ -2,6 +2,7 @@
 
 using Spring.Messaging.Nms.Core;
 using Apache.NMS;
+using Microsoft.Extensions.Logging;
 
 namespace Spring.Messaging.Nms.Integration
 {
@@ -32,7 +33,7 @@ namespace Spring.Messaging.Nms.Integration
         {
             lastReceivedMessage = message;
             messageCount++;
-            LOG.Debug("Message listener count = " + messageCount);
+            LOG.LogDebug("Message listener count = " + messageCount);
         }
 
         #endregion

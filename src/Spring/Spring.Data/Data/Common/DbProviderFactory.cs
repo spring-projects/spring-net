@@ -114,7 +114,7 @@ namespace Spring.Data.Common
 							{
 							    if (log.IsEnabled(LogLevel.Debug))
 								{
-									log.Debug("Loading additional DbProviders from " + DBPROVIDER_ADDITIONAL_RESOURCE_NAME);
+									log.LogDebug("Loading additional DbProviders from " + DBPROVIDER_ADDITIONAL_RESOURCE_NAME);
 								}
 
 							    ctx = new XmlApplicationContext(DBPROVIDER_CONTEXTNAME, true, new string[] { DBPROVIDER_DEFAULT_RESOURCE_NAME,
@@ -128,13 +128,13 @@ namespace Spring.Data.Common
 							if (log.IsEnabled(LogLevel.Information))
 							{
 								var dbProviderNames = ctx.GetObjectNames<IDbProvider>();
-								log.Info(
-									$"{dbProviderNames.Count} DbProviders Available. [{StringUtils.CollectionToCommaDelimitedString(dbProviderNames)}]");
+								log.LogInformation($"{dbProviderNames.Count} DbProviders Available. [{StringUtils.CollectionToCommaDelimitedString(dbProviderNames)}]");
 							}
 						}
 						catch (Exception e)
 						{
-							log.Error("Error processing " + DBPROVIDER_DEFAULT_RESOURCE_NAME, e);
+                            string message = "Error processing " + DBPROVIDER_DEFAULT_RESOURCE_NAME;
+                            log.LogError(e, message);
 							throw;
 						}
 					}

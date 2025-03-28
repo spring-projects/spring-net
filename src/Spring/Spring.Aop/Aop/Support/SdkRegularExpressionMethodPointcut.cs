@@ -160,8 +160,8 @@ namespace Spring.Aop.Support
 
 	        if (_logger.IsEnabled(LogLevel.Debug))
 	        {
-	            _logger.Debug("Candidate is: '" + pattern + "'; pattern is '" +
-	                          _compiledPatterns[patternIndex].ToString() + "'; matched=" + matched);
+	            _logger.LogDebug("Candidate is: '" + pattern + "'; pattern is '" +
+                                 _compiledPatterns[patternIndex].ToString() + "'; matched=" + matched);
 	        }
 
 	        return matched;

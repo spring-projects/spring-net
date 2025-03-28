@@ -15,6 +15,7 @@
 */
 
 using System.Reflection;
+using Microsoft.Extensions.Logging;
 using Spring.Objects.Factory;
 using Spring.Objects.Support;
 
@@ -103,12 +104,12 @@ namespace Spring.Scheduling.Quartz
             }
             catch (TargetInvocationException ex)
             {
-                logger.Error(InvocationFailureMessage, ex);
+                logger.LogError(ex, InvocationFailureMessage);
                 // Do not throw exception, else the main loop of the Timer will stop!
             }
             catch (Exception ex)
             {
-                logger.Error(InvocationFailureMessage, ex);
+                logger.LogError(ex, InvocationFailureMessage);
                 // Do not throw exception, else the main loop of the Timer will stop!
             }
 

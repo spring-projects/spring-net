@@ -334,7 +334,7 @@ namespace Spring.Messaging.Nms.Listener.Adapter
             }
             else
             {
-                logger.Debug("No result object given - no result to handle");
+                logger.LogDebug("No result object given - no result to handle");
             }
         }
 
@@ -358,7 +358,7 @@ namespace Spring.Messaging.Nms.Listener.Adapter
         /// <param name="ex">The exception to handle.</param>
         protected virtual void HandleListenerException(Exception ex)
         {
-            logger.Error("Listener execution failed", ex);
+            logger.LogError(ex, "Listener execution failed");
         }
 
         /// <summary>
@@ -406,8 +406,8 @@ namespace Spring.Messaging.Nms.Listener.Adapter
             {
                 if (logger.IsEnabled(LogLevel.Debug))
                 {
-                    logger.Debug("Listener method returned result [" + result +
-                                 "] - generating response message for it");
+                    logger.LogDebug("Listener method returned result [" + result +
+                                    "] - generating response message for it");
                 }
                 IMessage response = BuildMessage(session, result);
                 PostProcessResponse(request, response);
@@ -418,8 +418,8 @@ namespace Spring.Messaging.Nms.Listener.Adapter
             {
                 if (logger.IsEnabled(LogLevel.Debug))
                 {
-                    logger.Debug("Listener method returned result [" + result +
-                                 "]: not generating response message for it because of no NMS ISession given");
+                    logger.LogDebug("Listener method returned result [" + result +
+                                    "]: not generating response message for it because of no NMS ISession given");
                 }
             }
         }

@@ -62,7 +62,7 @@ namespace Spring.Messaging.Nms.Core
         /// <param name="message">The message.</param>
         public void Debug(string message)
         {
-            log.Debug(message);
+            log.LogDebug(message);
         }
 
         /// <summary>
@@ -71,7 +71,7 @@ namespace Spring.Messaging.Nms.Core
         /// <param name="message">The message.</param>
         public void Info(string message)
         {
-            log.Info(message);
+            log.LogInformation(message);
         }
 
         /// <summary>
@@ -80,7 +80,7 @@ namespace Spring.Messaging.Nms.Core
         /// <param name="message">The message.</param>
         public void Warn(string message)
         {
-            log.Warn(message);
+            log.LogWarning(message);
         }
 
         /// <summary>
@@ -89,7 +89,7 @@ namespace Spring.Messaging.Nms.Core
         /// <param name="message">The message.</param>
         public void Error(string message)
         {
-            log.Error(message);
+            log.LogError(message);
         }
 
         /// <summary>
