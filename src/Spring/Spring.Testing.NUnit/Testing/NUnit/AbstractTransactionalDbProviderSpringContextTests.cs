@@ -1,4 +1,5 @@
 using System.Data;
+using Microsoft.Extensions.Logging;
 using Spring.Data.Common;
 using Spring.Data.Core;
 using Spring.Testing.Ado;
@@ -84,7 +85,7 @@ namespace Spring.Testing.NUnit
             for (int i = 0; i < names.Length; i++)
             {
                 int rowCount = this.adoTemplate.ExecuteNonQuery(CommandType.Text, "DELETE FROM " + names[i]);
-                if (logger.IsInfoEnabled)
+                if (logger.IsEnabled(LogLevel.Information))
                 {
                     logger.Info("Deleted " + rowCount + " rows from table " + names[i]);
                 }

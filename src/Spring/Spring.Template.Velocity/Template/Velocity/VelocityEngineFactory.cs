@@ -20,6 +20,7 @@
 
 using System.Collections;
 using Commons.Collections;
+using Microsoft.Extensions.Logging;
 using NVelocity.App;
 using NVelocity.Exception;
 using NVelocity.Runtime;
@@ -203,7 +204,7 @@ namespace Spring.Template.Velocity {
 
             // Load config file if set.
             if (configLocation != null) {
-                if (log.IsInfoEnabled) {
+                if (log.IsEnabled(LogLevel.Information)) {
                     log.Info(string.Format("Loading Velocity config from [{0}]", configLocation));
                 }
                 FillProperties(extendedProperties, configLocation, false);
@@ -303,7 +304,7 @@ namespace Spring.Template.Velocity {
                     extendedProperties.SetProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH,
                         StringUtils.CollectionToCommaDelimitedString(resolvedPaths));
                 } catch (IOException ex) {
-                    if (log.IsDebugEnabled) {
+                    if (log.IsEnabled(LogLevel.Debug)) {
                         log.Error(string.Format("Cannot resolve resource loader path [{0}] to [File]: using SpringResourceLoader",
                             StringUtils.CollectionToCommaDelimitedString(resolvedPaths)), ex);
                     }
@@ -312,7 +313,7 @@ namespace Spring.Template.Velocity {
                 }
             } else {
                 // Always load via SpringResourceLoader (without hot detection of template changes).
-                if (log.IsDebugEnabled) {
+                if (log.IsEnabled(LogLevel.Debug)) {
                     log.Debug("File system access not preferred: using SpringResourceLoader");
                 }
                 InitSpringResourceLoader(velocityEngine, extendedProperties, StringUtils.CollectionToCommaDelimitedString(paths));

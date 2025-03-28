@@ -15,6 +15,7 @@
  */
 
 using Apache.NMS;
+using Microsoft.Extensions.Logging;
 using Spring.Messaging.Nms.Support;
 using Spring.Util;
 using IQueue=Apache.NMS.IQueue;
@@ -86,14 +87,14 @@ namespace Spring.Messaging.Nms.Connections
             {
                 if (cachedUnspecifiedDestinationMessageProducer != null)
                 {
-                    if (Log.IsDebugEnabled)
+                    if (Log.IsEnabled(LogLevel.Debug))
                     {
                         Log.Debug("Found cached MessageProducer for unspecified destination");
                     }
                 }
                 else
                 {
-                    if (Log.IsDebugEnabled)
+                    if (Log.IsEnabled(LogLevel.Debug))
                     {
                         Log.Debug("Creating cached MessageProducer for unspecified destination");
                     }
@@ -128,7 +129,7 @@ namespace Spring.Messaging.Nms.Connections
             {
                 if (cachedProducers.TryGetValue(destination, out var producer))
                 {
-                    if (Log.IsDebugEnabled)
+                    if (Log.IsEnabled(LogLevel.Debug))
                     {
                         Log.Debug("Found cached MessageProducer for destination [" + destination + "]");
                     }
@@ -137,7 +138,7 @@ namespace Spring.Messaging.Nms.Connections
                 {
                     producer = await target.CreateProducerAsync(destination).Awaiter();
 
-                    if (Log.IsDebugEnabled)
+                    if (Log.IsEnabled(LogLevel.Debug))
                     {
                         Log.Debug("Creating cached MessageProducer for destination [" + destination + "]");
                     }
@@ -216,7 +217,7 @@ namespace Spring.Messaging.Nms.Connections
             // Allow for multiple close calls...
             if (!sessionList.Contains(this))
             {
-                if (Log.IsDebugEnabled)
+                if (Log.IsEnabled(LogLevel.Debug))
                 {
                     Log.Debug("Returning cached Session: " + target);
                 }
@@ -227,7 +228,7 @@ namespace Spring.Messaging.Nms.Connections
 
         private async Task PhysicalClose()
         {
-            if (Log.IsDebugEnabled)
+            if (Log.IsEnabled(LogLevel.Debug))
             {
                 Log.Debug("Closing cached Session: " + target);
             }
@@ -447,7 +448,7 @@ namespace Spring.Messaging.Nms.Connections
             var cacheKey = new ConsumerCacheKey(destination, selector, noLocal, subscriptionName, durable, shared);
             if (cachedConsumers.TryGetValue(cacheKey, out var consumer))
             {
-                if (Log.IsDebugEnabled)
+                if (Log.IsEnabled(LogLevel.Debug))
                 {
                     Log.Debug("Found cached NMS MessageConsumer for destination [" + destination + "]: " + consumer);
                 }
@@ -472,7 +473,7 @@ namespace Spring.Messaging.Nms.Connections
                 }
             }
 
-            if (Log.IsDebugEnabled)
+            if (Log.IsEnabled(LogLevel.Debug))
             {
                 Log.Debug("Creating cached NMS MessageConsumer for destination [" + destination + "]: " + consumer);
             }

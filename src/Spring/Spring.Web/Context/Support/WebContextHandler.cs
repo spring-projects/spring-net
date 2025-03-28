@@ -22,6 +22,7 @@
 
 using System.Web.Configuration;
 using System.Xml;
+using Microsoft.Extensions.Logging;
 using Spring.Util;
 
 #endregion
@@ -101,7 +102,7 @@ namespace Spring.Context.Support
             if (ContextRegistry.IsContextRegistered(contextName))
             {
                 IApplicationContext ctx = ContextRegistry.GetContext(contextName);
-                if (Log.IsDebugEnabled)
+                if (Log.IsEnabled(LogLevel.Debug))
                 {
                     Log.Debug(
                         string.Format("web context '{0}' already registered - returning existing instance {1}",

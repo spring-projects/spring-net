@@ -20,9 +20,10 @@
 
 #region Imports
 
+using System;
 using System.Collections;
-using Common.Logging.Simple;
-
+using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using Spring.Aop.Framework;
 using Spring.Objects;
@@ -40,17 +41,55 @@ namespace Spring.Aspects.Exceptions
     public class ExceptionHandlerAspectIntegrationTests
     {
         private ExceptionHandlerAdvice exceptionHandlerAdvice;
-        private CapturingLoggerFactoryAdapter loggerFactoryAdapter;
-        private ILoggerFactoryAdapter originalAdapter;
+        private CapturingLoggerFactory loggerFactory;
+        private ILoggerFactory originalFactory;
         private static bool spelActionExecuted = false;
 
         [SetUp]
         public void Setup()
         {
-            originalAdapter = LogManager.Adapter;
-            loggerFactoryAdapter = new CapturingLoggerFactoryAdapter();
-            LogManager.Adapter = loggerFactoryAdapter;
+            originalFactory = LogManager.LoggerFactory;
+            loggerFactory = new CapturingLoggerFactory();
+            LogManager.LoggerFactory = loggerFactory;
             exceptionHandlerAdvice = new ExceptionHandlerAdvice();
+        }
+
+        public class CapturingLoggerFactory : ILoggerFactory
+        {
+            public List<string> LoggerEvents { get; set; }= [];
+
+
+            public void Dispose()
+            {
+            }
+
+            public ILogger CreateLogger(string categoryName)
+            {
+                return new CapturingLogger(LoggerEvents);
+            }
+
+            public class CapturingLogger(List<string> loggedEvents) : ILogger
+            {
+                public void Log<TState>(LogLevel logLevel, EventId eventId, TState state, Exception exception, Func<TState, Exception, string> formatter)
+                {
+                    var message = formatter(state, exception);
+                    loggedEvents.Add(message);
+                }
+
+                public bool IsEnabled(LogLevel logLevel)
+                {
+                    return true;
+                }
+
+                public IDisposable BeginScope<TState>(TState state)
+                {
+                    return null;
+                }
+            }
+
+            public void AddProvider(ILoggerProvider provider)
+            {
+            }
         }
 
         [TearDown]
@@ -59,8 +98,8 @@ namespace Spring.Aspects.Exceptions
             //            loggerFactoryAdapter.LogMessages.Clear();
 
             //reset so other tests can produce some output if needed.
-            loggerFactoryAdapter.Clear();
-            LogManager.Adapter = originalAdapter;
+            loggerFactory.LoggerEvents.Clear();
+            LogManager.LoggerFactory = originalFactory;
         }
 
         [Test]
@@ -111,9 +150,9 @@ namespace Spring.Aspects.Exceptions
             catch (ArithmeticException)
             {
                 bool found = false;
-                foreach (CapturingLoggerEvent loggerEvent in loggerFactoryAdapter.LoggerEvents)
+                foreach (var loggerEvent in loggerFactory.LoggerEvents)
                 {
-                    if (loggerEvent.RenderedMessage.IndexOf("Hello World") >= 0)
+                    if (loggerEvent.IndexOf("Hello World") >= 0)
                     {
                         found = true;
                     }
@@ -481,15 +520,15 @@ namespace Spring.Aspects.Exceptions
         private void AssertSearchString(string searchString)
         {
             bool found = false;
-            foreach (CapturingLoggerEvent loggerEvent in loggerFactoryAdapter.LoggerEvents)
+            foreach (var loggerEvent in loggerFactory.LoggerEvents)
             {
-                if (loggerEvent.RenderedMessage.IndexOf(searchString) >= 0)
+                if (loggerEvent.IndexOf(searchString) >= 0)
                 {
                     found = true;
                 }
             }
             Assert.IsTrue(found, "did not find logging output [" + searchString + "]  Logging values = "
-                                 + StringUtils.CollectionToCommaDelimitedString(loggerFactoryAdapter.LoggerEvents));
+                                 + StringUtils.CollectionToCommaDelimitedString(loggerFactory.LoggerEvents));
         }
     }
 }

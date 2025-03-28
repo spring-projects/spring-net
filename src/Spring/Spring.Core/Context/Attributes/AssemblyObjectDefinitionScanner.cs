@@ -19,6 +19,7 @@
 #endregion
 
 using System.Reflection;
+using Microsoft.Extensions.Logging;
 using Spring.Objects.Factory.Support;
 using Spring.Stereotype;
 using Spring.Util;
@@ -73,7 +74,7 @@ namespace Spring.Context.Attributes
                 string objectName = ObjectNameGenerator.GenerateObjectName(definition, registry);
                 string fullname = type.FullName;
 
-                Logger.Debug(m => m("Register Type: {0} with object name '{1}'", fullname, objectName));
+                Logger.LogDebug("Register Type: {FullName} with object name {ObjectName}", fullname, objectName);
                 registry.RegisterObjectDefinition(objectName, definition);
             }
         }
@@ -125,7 +126,7 @@ namespace Spring.Context.Attributes
                 }
                 catch (AmbiguousMatchException)
                 {
-                    Logger.Error(m => m("Type {0} has more than one ComponentAttributes assigned to it.", type.FullName));
+                    Logger.LogError("Type {Type} has more than one ComponentAttributes assigned to it.", type.FullName);
                     return false;
                 }
             }

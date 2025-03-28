@@ -26,6 +26,7 @@ using System.Web;
 using System.Web.Caching;
 using System.Web.Compilation;
 using System.Web.SessionState;
+using Microsoft.Extensions.Logging;
 
 #endregion
 
@@ -259,7 +260,7 @@ namespace Spring.Util
 
                         #region Instrumentation
 
-                        if (log.IsDebugEnabled)
+                        if (log.IsEnabled(LogLevel.Debug))
                         {
                             log.Debug("rewriting path from " + currentFileDirectory + " to " + newPath + " results in " + ctx.Request.FilePath);
                         }
@@ -272,7 +273,7 @@ namespace Spring.Util
                 {
                     if (originalPath != null)
                     {
-                        if (log.IsDebugEnabled)
+                        if (log.IsEnabled(LogLevel.Debug))
                         {
                             log.Debug("restoring path from " + ctx.Request.FilePath + " back to " + originalPath);
                         }

@@ -20,6 +20,7 @@
 
 using System.ComponentModel;
 using System.Xml;
+using Microsoft.Extensions.Logging;
 using Spring.Context.Attributes;
 using Spring.Context.Attributes.TypeFilters;
 using Spring.Objects.Factory.Config;
@@ -101,7 +102,7 @@ namespace Spring.Context.Config
 
             foreach (var baseAssembly in baseAssemblies.Split(','))
             {
-                if (Logger.IsDebugEnabled)
+                if (Logger.IsEnabled(LogLevel.Debug))
                     Logger.Debug("Start With Assembly Filter: " + baseAssembly);
 
                 scanner.WithAssemblyFilter(assy => assy.FullName.StartsWith(baseAssembly));
@@ -114,7 +115,7 @@ namespace Spring.Context.Config
             var nameGenerator = CustomTypeFactory.GetNameGenerator(nameGeneratorString);
             if (nameGenerator != null)
             {
-                Logger.Debug(m => m("Use NameTable Generator: {0}", nameGeneratorString));
+                Logger.LogDebug("Use NameTable Generator: {NameGenerator}", nameGeneratorString);
                 scanner.ObjectNameGenerator = nameGenerator;
             }
         }
@@ -126,13 +127,13 @@ namespace Spring.Context.Config
                 if (node.Name.Contains(INCLUDE_FILTER_ELEMENT))
                 {
                     var filter = CreateTypeFilter(node);
-                    Logger.Debug(m => m("Inlude Filter: {0}", filter));
+                    Logger.LogDebug("Include Filter: {Filter}", filter);
                     scanner.WithIncludeFilter(filter);
                 }
                 else if (node.Name.Contains(EXCLUDE_FILTER_ELEMENT))
                 {
                     var filter = CreateTypeFilter(node);
-                    Logger.Debug(m => m("Exclude Filter: {0}", filter));
+                    Logger.LogDebug("Exclude Filter: {Filter}", filter);
                     scanner.WithExcludeFilter(filter);
                 }
             }

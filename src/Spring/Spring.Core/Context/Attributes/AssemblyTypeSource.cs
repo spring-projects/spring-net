@@ -20,6 +20,7 @@
 
 using System.Collections;
 using System.Reflection;
+using Microsoft.Extensions.Logging;
 using Spring.Util;
 
 namespace Spring.Context.Attributes
@@ -63,12 +64,12 @@ namespace Spring.Context.Attributes
             catch (ReflectionTypeLoadException ex)
             {
                 //log and swallow everything that might go wrong here...
-                Logger.Debug(m => m("Failed to get types " +  ex.LoaderExceptions), ex);
+                Logger.LogDebug(ex, "Failed to get types {LoaderExceptions}", ex.LoaderExceptions);
             }
             catch (Exception ex)
             {
                 //log and swallow everything that might go wrong here...
-                Logger.Debug(m => m("Failed to get types "), ex);
+                Logger.LogDebug(ex, "Failed to get types");
             }
 
 

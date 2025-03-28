@@ -22,6 +22,7 @@
 
 using System.Text;
 using System.Collections;
+using Microsoft.Extensions.Logging;
 using Spring.Proxy;
 
 #endregion
@@ -48,7 +49,7 @@ namespace Spring.Aop.Framework.DynamicProxy
     public class CachedAopProxyFactory : DefaultAopProxyFactory
     {
         /// <summary>
-        /// The shared <see cref="Common.Logging.ILog"/> instance for this class.
+        /// The shared <see cref="ILog"/> instance for this class.
         /// </summary>
         private static readonly ILog logger = LogManager.GetLogger(typeof(CachedAopProxyFactory));
 
@@ -101,9 +102,9 @@ namespace Spring.Aop.Framework.DynamicProxy
                 {
                     #region Instrumentation
 
-                    if (logger.IsDebugEnabled)
+                    if (logger.IsEnabled(LogLevel.Debug))
                     {
-                        logger.DebugFormat("AOP proxy type found in cache for '{0}'.", cacheKey);
+                        logger.LogDebug("AOP proxy type found in cache for {CacheKey}", cacheKey);
                     }
 
                     #endregion

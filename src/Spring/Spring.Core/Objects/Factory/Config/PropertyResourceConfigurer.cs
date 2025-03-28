@@ -20,6 +20,7 @@
 
 using System.Collections.Specialized;
 using System.Globalization;
+using Microsoft.Extensions.Logging;
 using Spring.Core;
 using Spring.Core.IO;
 
@@ -269,7 +270,7 @@ namespace Spring.Objects.Factory.Config
                 {
                     #region Instrumentation
 
-                    if (_log.IsDebugEnabled)
+                    if (_log.IsEnabled(LogLevel.Debug))
                     {
                         _log.Debug(string.Format(
                                        CultureInfo.InvariantCulture,
@@ -298,7 +299,7 @@ namespace Spring.Objects.Factory.Config
                             {
                                 #region Instrumentation
 
-                                if (_log.IsWarnEnabled)
+                                if (_log.IsEnabled(LogLevel.Warning))
                                 {
                                     _log.Warn(errorMessage);
                                 }

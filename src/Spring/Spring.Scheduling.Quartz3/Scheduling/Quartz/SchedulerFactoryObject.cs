@@ -16,6 +16,7 @@
 
 using System.Collections;
 using System.Collections.Specialized;
+using Microsoft.Extensions.Logging;
 using Quartz;
 using Quartz.Impl;
 using Quartz.Simpl;
@@ -628,7 +629,7 @@ namespace Spring.Scheduling.Quartz
 
             if (configLocation != null)
             {
-                if (Logger.IsInfoEnabled)
+                if (Logger.IsEnabled(LogLevel.Information))
                 {
                     Logger.Info("Loading Quartz config from [" + configLocation + "]");
                 }
@@ -765,10 +766,9 @@ namespace Spring.Scheduling.Quartz
             }
             else
             {
-                if (Logger.IsInfoEnabled)
+                if (Logger.IsEnabled(LogLevel.Information))
                 {
-                    Logger.InfoFormat("Will start Quartz Scheduler [{0}] in {1} seconds", sched.SchedulerName,
-                        startDelay);
+                    Logger.LogInformation("Will start Quartz Scheduler [{SchedulerName}] in {StartDelaySeconds} seconds", sched.SchedulerName, startDelay);
                 }
 
                 await sched.StartDelayed(startDelay).ConfigureAwait(false);

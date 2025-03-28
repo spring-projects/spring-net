@@ -22,7 +22,7 @@
 
 using System.Collections;
 using System.Reflection;
-
+using Microsoft.Extensions.Logging;
 using Spring.Aop;
 using Spring.Caching;
 
@@ -95,7 +95,7 @@ namespace Spring.Aspects.Cache
         public void AfterReturning(object returnValue, MethodInfo method, object[] arguments, object target)
         {
             #region Instrumentation
-            bool isLogDebugEnabled = logger.IsDebugEnabled;
+            bool isLogDebugEnabled = logger.IsEnabled(LogLevel.Debug);
             #endregion
 
             InvalidateCacheAttribute[] cacheInfoArray = GetInvalidateCacheInfo(method);

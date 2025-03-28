@@ -40,11 +40,6 @@ namespace Spring.Web.Support
         private const string RES_OBJECTS =
             "assembly://Spring.Web.Tests/Spring.Web.Support/ControlInterceptionTests.objects.xml";
 
-				static ControlInterceptionTests()
-				{
-					Common.Logging.LogManager.Adapter = new Common.Logging.Simple.TraceLoggerFactoryAdapter();
-				}
-
         [SetUp]
         public void SetUp()
         {

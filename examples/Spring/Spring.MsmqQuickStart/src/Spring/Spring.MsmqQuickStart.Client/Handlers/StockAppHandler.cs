@@ -1,7 +1,4 @@
-
-
-using System.Collections;
-using Common.Logging;
+using Microsoft.Extensions.Logging;
 using Spring.MsmqQuickStart.Client.UI;
 using Spring.MsmqQuickStart.Common.Data;
 
@@ -11,7 +8,7 @@ namespace Spring.MsmqQuickStart.Client.Handlers
     {
         #region Logging Definition
 
-        private readonly ILog log = LogManager.GetLogger(typeof(StockAppHandler));
+        private readonly ILogger log = LogManager.GetLogger(typeof(StockAppHandler));
 
         #endregion
 

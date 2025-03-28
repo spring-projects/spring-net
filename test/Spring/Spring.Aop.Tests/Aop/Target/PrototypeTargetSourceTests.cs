@@ -18,10 +18,10 @@
 
 #endregion
 
-using Common.Logging.Simple;
+using System;
 
 using FakeItEasy;
-
+using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
 
 using Spring.Objects.Factory;
@@ -44,7 +44,7 @@ namespace Spring.Aop.Target
         public void FixtureSetUp()
         {
             // enable (null appender) logging, just to ensure that the logging code is correct
-            LogManager.Adapter = new NoOpLoggerFactoryAdapter();
+            LogManager.LoggerFactory = NullLoggerFactory.Instance;
         }
 
         /// <summary>

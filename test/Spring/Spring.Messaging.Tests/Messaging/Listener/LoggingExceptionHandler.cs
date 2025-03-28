@@ -1,4 +1,6 @@
+using System;
 using System.Messaging;
+using System.Threading;
 
 namespace Spring.Messaging.Listener
 {

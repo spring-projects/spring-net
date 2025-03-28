@@ -1,6 +1,7 @@
 using Spring.Web.Conversation;
 using Spring.Entities;
 using NHibernate;
+using Spring;
 
 public partial class SPCLazyLoadTest_A_Status : System.Web.UI.Page
 {

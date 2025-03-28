@@ -20,7 +20,8 @@
 
 #region Imports
 
-using Common.Logging.Simple;
+using System;
+using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
 
 #endregion
@@ -41,7 +42,7 @@ namespace Spring.Core.IO
 		public void FixtureSetUp()
 		{
 			// enable (null appender) logging, just to ensure that the logging code is correct
-            LogManager.Adapter = new NoOpLoggerFactoryAdapter();
+            LogManager.LoggerFactory = NullLoggerFactory.Instance;
 		}
 
 		[Test]

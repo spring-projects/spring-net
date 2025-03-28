@@ -20,6 +20,7 @@
 
 using System.Globalization;
 using System.Xml;
+using Microsoft.Extensions.Logging;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 using Spring.Util;
@@ -40,7 +41,7 @@ namespace Spring.Objects.Factory.Xml
         #region Fields
 
         /// <summary>
-        /// The shared <see cref="Common.Logging.ILog"/> instance for this class (and derived classes).
+        /// The shared <see cref="ILog"/> instance for this class (and derived classes).
         /// </summary>
         protected readonly ILog log;
 
@@ -107,7 +108,7 @@ namespace Spring.Objects.Factory.Xml
             DocumentDefaultsDefinition ddd = new DocumentDefaultsDefinition();
             #region Instrumentation
 
-            if (log.IsDebugEnabled)
+            if (log.IsEnabled(LogLevel.Debug))
             {
                 log.Debug("Loading object definitions...");
             }
@@ -118,7 +119,7 @@ namespace Spring.Objects.Factory.Xml
 
             #region Instrumentation
 
-            if (log.IsDebugEnabled)
+            if (log.IsEnabled(LogLevel.Debug))
             {
                 log.Debug(
                     string.Format(
@@ -132,7 +133,7 @@ namespace Spring.Objects.Factory.Xml
 
             #region Instrumentation
 
-            if (log.IsDebugEnabled)
+            if (log.IsEnabled(LogLevel.Debug))
             {
                 log.Debug(
                     string.Format(
@@ -146,7 +147,7 @@ namespace Spring.Objects.Factory.Xml
 
             #region Instrumentation
 
-            if (log.IsDebugEnabled)
+            if (log.IsEnabled(LogLevel.Debug))
             {
                 log.Debug(
                     string.Format(
@@ -160,7 +161,7 @@ namespace Spring.Objects.Factory.Xml
 
             #region Instrumentation
 
-            if (log.IsDebugEnabled)
+            if (log.IsEnabled(LogLevel.Debug))
             {
                 log.Debug(
                     string.Format(
@@ -174,7 +175,7 @@ namespace Spring.Objects.Factory.Xml
 
             #region Instrumentation
 
-            if (log.IsDebugEnabled)
+            if (log.IsEnabled(LogLevel.Debug))
             {
                 log.Debug(
                     string.Format(
@@ -188,7 +189,7 @@ namespace Spring.Objects.Factory.Xml
 
             #region Instrumentation
 
-            if (log.IsDebugEnabled)
+            if (log.IsEnabled(LogLevel.Debug))
             {
                 log.Debug(
                     string.Format(
@@ -202,7 +203,7 @@ namespace Spring.Objects.Factory.Xml
 
             #region Instrumentation
 
-            if (log.IsDebugEnabled)
+            if (log.IsEnabled(LogLevel.Debug))
             {
                 log.Debug(
                     string.Format(
@@ -216,7 +217,7 @@ namespace Spring.Objects.Factory.Xml
 
             #region Instrumentation
 
-            if (log.IsDebugEnabled)
+            if (log.IsEnabled(LogLevel.Debug))
             {
                 log.Debug(
                     string.Format(
@@ -230,7 +231,7 @@ namespace Spring.Objects.Factory.Xml
 
             #region Instrumentation
 
-            if (log.IsDebugEnabled)
+            if (log.IsEnabled(LogLevel.Debug))
             {
                 log.Debug(
                     string.Format(
@@ -338,7 +339,7 @@ namespace Spring.Objects.Factory.Xml
                 {
                     objectName = aliases[0];
                     aliases.RemoveAt(0);
-                    if (log.IsDebugEnabled)
+                    if (log.IsEnabled(LogLevel.Debug))
                     {
                         log.Debug(string.Format("No XML 'id' specified using '{0}' as object name and '{1}' as aliases", objectName, string.Join(",", aliases.ToArray())));
                     }
@@ -379,7 +380,7 @@ namespace Spring.Objects.Factory.Xml
 
                     #region Instrumentation
 
-                    if (log.IsDebugEnabled)
+                    if (log.IsEnabled(LogLevel.Debug))
                     {
                         log.Debug(string.Format(
                                       "Neither XML '{0}' nor '{1}' specified - using generated object name [{2}]",

@@ -23,6 +23,7 @@
 using System.Collections;
 using System.Reflection;
 using AopAlliance.Intercept;
+using Microsoft.Extensions.Logging;
 using Spring.Util;
 
 #endregion
@@ -162,7 +163,7 @@ namespace Spring.Aop.Framework.Adapter
                     {
                         #region Instrumentation
 
-                        if(log.IsDebugEnabled)
+                        if(log.IsEnabled(LogLevel.Debug))
                         {
                             log.Debug("Found exception handler method: " + method);
                         }
@@ -263,7 +264,7 @@ namespace Spring.Aop.Framework.Adapter
 
             #region Instrumentation
 
-            if(log.IsDebugEnabled)
+            if(log.IsEnabled(LogLevel.Debug))
             {
                 log.Debug("Trying to find handler for exception of type [" + exception.GetType().Name + "].");
             }

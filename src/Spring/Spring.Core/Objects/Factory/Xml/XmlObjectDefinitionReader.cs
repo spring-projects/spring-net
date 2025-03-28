@@ -22,6 +22,7 @@
 
 using System.Xml;
 using System.Xml.Schema;
+using Microsoft.Extensions.Logging;
 using Spring.Core.IO;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
@@ -219,7 +220,7 @@ namespace Spring.Objects.Factory.Xml
 
             #region Instrumentation
 
-            if (log.IsDebugEnabled)
+            if (log.IsEnabled(LogLevel.Debug))
             {
                 log.Debug("Loading XML object definitions from " + resource);
             }
@@ -249,7 +250,7 @@ namespace Spring.Objects.Factory.Xml
                     {
                         #region Instrumentation
 
-                        if (log.IsWarnEnabled)
+                        if (log.IsEnabled(LogLevel.Warning))
                         {
                             log.Warn("Could not close stream.", ex);
                         }
@@ -337,7 +338,7 @@ namespace Spring.Objects.Factory.Xml
 
             #region Instrumentation
 
-            if (log.IsDebugEnabled)
+            if (log.IsEnabled(LogLevel.Debug))
             {
                 log.Debug("Using the following XmlReader implementation : " + reader.GetType());
             }
@@ -372,7 +373,7 @@ namespace Spring.Objects.Factory.Xml
             {
                 #region Instrumentation
 
-                if (log.IsWarnEnabled)
+                if (log.IsEnabled(LogLevel.Warning))
                 {
                     log.Warn(
                         "Ignored XML validation warning: " + args.Message,

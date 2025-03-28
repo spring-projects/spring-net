@@ -18,6 +18,7 @@
 
 #endregion
 
+using Microsoft.Extensions.Logging;
 using Spring.Expressions;
 
 namespace Spring.Aspects.Exceptions

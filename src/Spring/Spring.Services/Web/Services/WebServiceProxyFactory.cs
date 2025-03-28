@@ -28,6 +28,7 @@ using System.Web.Services;
 using System.Web.Services.Description;
 using System.Web.Services.Protocols;
 using System.Web.Services.Discovery;
+using Microsoft.Extensions.Logging;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
 using Spring.Proxy;
@@ -55,7 +56,7 @@ namespace Spring.Web.Services
     {
         #region Logging
 
-        private static readonly Common.Logging.ILog LOG = Common.Logging.LogManager.GetLogger(typeof(WebServiceProxyFactory));
+        private static readonly ILog LOG = LogManager.GetLogger(typeof(WebServiceProxyFactory));
 
         #endregion
 
@@ -323,7 +324,7 @@ namespace Spring.Web.Services
 
             #region Instrumentation
 
-            if (LOG.IsDebugEnabled)
+            if (LOG.IsEnabled(LogLevel.Debug))
             {
                 if (ServiceUri != null)
                 {
@@ -430,7 +431,7 @@ namespace Spring.Web.Services
         {
             #region Logging
 
-            private static readonly Common.Logging.ILog LOG = Common.Logging.LogManager.GetLogger(typeof(SoapHttpClientProxyTypeBuilder));
+            private static readonly ILog LOG = LogManager.GetLogger(typeof(SoapHttpClientProxyTypeBuilder));
 
             #endregion
 
@@ -735,7 +736,7 @@ namespace Spring.Web.Services
                         {
                             #region Instrumentation
 
-                            if (LOG.IsInfoEnabled)
+                            if (LOG.IsEnabled(LogLevel.Information))
                             {
                                 LOG.Info(String.Format("The binding '{0}', found in the WSDL document located at '{1}', will be use.", binding.Name, this.serviceUri.Description));
                             }

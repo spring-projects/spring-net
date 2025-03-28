@@ -21,6 +21,7 @@
 using System.Reflection;
 using System.Text;
 using AopAlliance.Intercept;
+using Microsoft.Extensions.Logging;
 
 namespace Spring.Aspects.Logging
 {
@@ -237,44 +238,43 @@ namespace Spring.Aspects.Logging
         {
             switch (LogLevel)
             {
-                case LogLevel.All:
                 case LogLevel.Trace:
-                    if (log.IsTraceEnabled)
+                    if (log.IsEnabled(LogLevel.Trace))
                     {
                         return true;
                     }
                     break;
                 case LogLevel.Debug:
-                    if (log.IsDebugEnabled)
+                    if (log.IsEnabled(LogLevel.Debug))
                     {
                         return true;
                     }
                     break;
                 case LogLevel.Error:
-                    if (log.IsErrorEnabled)
+                    if (log.IsEnabled(LogLevel.Error))
                     {
                         return true;
                     }
                     break;
-                case LogLevel.Fatal:
-                    if (log.IsFatalEnabled)
+                case LogLevel.Critical:
+                    if (log.IsEnabled(LogLevel.Critical))
                     {
                         return true;
                     }
                     break;
-                case LogLevel.Info:
-                    if (log.IsInfoEnabled)
+                case LogLevel.Information:
+                    if (log.IsEnabled(LogLevel.Information))
                     {
                         return true;
                     }
                     break;
-                case LogLevel.Warn:
-                    if (log.IsWarnEnabled)
+                case LogLevel.Warning:
+                    if (log.IsEnabled(LogLevel.Warning))
                     {
                         return true;
                     }
                     break;
-                case LogLevel.Off:
+                case LogLevel.None:
                 default:
                     break;
             }
@@ -417,44 +417,43 @@ namespace Spring.Aspects.Logging
         {
             switch (logLevel)
             {
-                case LogLevel.All:
                 case LogLevel.Trace:
-                    if (log.IsTraceEnabled)
+                    if (log.IsEnabled(LogLevel.Trace))
                     {
-                        if (e == null) log.Trace(text); else log.Trace(text, e);
+                        if (e == null) log.Trace(text); else log.LogTrace(e, text);
                     }
                     break;
                 case LogLevel.Debug:
-                    if (log.IsDebugEnabled)
+                    if (log.IsEnabled(LogLevel.Debug))
                     {
                         if (e == null) log.Debug(text); else log.Debug(text, e);
                     }
                     break;
                 case LogLevel.Error:
-                    if (log.IsErrorEnabled)
+                    if (log.IsEnabled(LogLevel.Error))
                     {
                         if (e == null) log.Error(text); else log.Error(text, e);
                     }
                     break;
-                case LogLevel.Fatal:
-                    if (log.IsFatalEnabled)
+                case LogLevel.Critical:
+                    if (log.IsEnabled(LogLevel.Critical))
                     {
-                        if (e == null) log.Fatal(text); else log.Fatal(text, e);
+                        if (e == null) log.LogCritical(text); else log.LogCritical(e, text);
                     }
                     break;
-                case LogLevel.Info:
-                    if (log.IsInfoEnabled)
+                case LogLevel.Information:
+                    if (log.IsEnabled(LogLevel.Information))
                     {
-                        if (e == null) log.Info(text); else log.Info(text, e);
+                        if (e == null) log.Info(text); else log.LogInformation(e, text);
                     }
                     break;
-                case LogLevel.Warn:
-                    if (log.IsWarnEnabled)
+                case LogLevel.Warning:
+                    if (log.IsEnabled(LogLevel.Warning))
                     {
-                        if (e == null) log.Warn(text); else log.Warn(text, e);
+                        if (e == null) log.Warn(text); else log.LogWarning(e, text);
                     }
                     break;
-                case LogLevel.Off:
+                case LogLevel.None:
                 default:
                     break;
             }

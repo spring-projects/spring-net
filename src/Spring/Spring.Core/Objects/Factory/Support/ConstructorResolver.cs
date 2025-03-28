@@ -15,6 +15,7 @@
  */
 
 using System.Reflection;
+using Microsoft.Extensions.Logging;
 using Spring.Collections;
 using Spring.Core;
 using Spring.Core.TypeConversion;
@@ -90,7 +91,7 @@ namespace Spring.Objects.Factory.Support
             wrapper.WrappedInstance = instantiationStrategy.Instantiate(rod, objectName, objectFactory,
                     constructorInstantiationInfo.ConstructorInfo, constructorInstantiationInfo.ArgInstances);
 
-            if (log.IsDebugEnabled)
+            if (log.IsEnabled(LogLevel.Debug))
             {
                 log.Debug(
                     $"Object '{objectName}' instantiated via constructor [{constructorInstantiationInfo.ConstructorInfo}].");
@@ -346,7 +347,7 @@ namespace Spring.Objects.Factory.Support
                 object objectInstance = instantiationStrategy.Instantiate(definition, name, objectFactory, factoryMethodCandidate, arguments);
                 wrapper.WrappedInstance = objectInstance;
 
-                if (log.IsDebugEnabled)
+                if (log.IsEnabled(LogLevel.Debug))
                 {
                     log.Debug($"Object '{name}' instantiated via factory method [{factoryMethodCandidate}].");
                 }
@@ -470,7 +471,7 @@ namespace Spring.Objects.Factory.Support
                 }
             }
 
-            if (log.IsDebugEnabled && autowiredObjectNames != null)
+            if (log.IsEnabled(LogLevel.Debug) && autowiredObjectNames != null)
             {
                 for (var i = 0; i < autowiredObjectNames.Count; i++)
                 {

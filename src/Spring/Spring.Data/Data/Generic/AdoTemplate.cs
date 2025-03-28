@@ -21,6 +21,7 @@
 using System.Collections;
 using System.Data;
 using System.Data.Common;
+using Microsoft.Extensions.Logging;
 using Spring.Dao;
 using Spring.Dao.Support.Generic;
 using Spring.Data.Common;
@@ -870,7 +871,7 @@ namespace Spring.Data.Generic
                                                 IResultSetExtractor<T> resultSetExtractor)
         {
             AssertUtils.ArgumentNotNull(cmdText, "cmdText", "CommandText must not be null");
-            if (LOG.IsDebugEnabled)
+            if (LOG.IsEnabled(LogLevel.Debug))
             {
                 LOG.Debug("Executing CommandText [" + cmdText + "]");
             }
@@ -924,7 +925,7 @@ namespace Spring.Data.Generic
         {
             AssertUtils.ArgumentNotNull(cmdText, "cmdText", "CommandText must not be null");
             AssertUtils.ArgumentNotNull(resultSetExtractorDelegate, "resultSetExtractorDelegate", "Result set extractor delegate must not be null");
-            if (LOG.IsDebugEnabled)
+            if (LOG.IsEnabled(LogLevel.Debug))
             {
                 LOG.Debug("Executing CommandText [" + cmdText + "]");
             }

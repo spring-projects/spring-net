@@ -18,6 +18,8 @@
 
 #endregion
 
+using Microsoft.Extensions.Logging;
+
 namespace Spring.Objects.Factory.Parsing
 {
     public class FailFastProblemReporter : IProblemReporter
@@ -37,7 +39,7 @@ namespace Spring.Objects.Factory.Parsing
 
         public void Fatal(Problem problem)
         {
-            _logger.Fatal(problem.Message);
+            _logger.LogCritical(problem.Message);
             throw new ObjectDefinitionParsingException(problem);
         }
 

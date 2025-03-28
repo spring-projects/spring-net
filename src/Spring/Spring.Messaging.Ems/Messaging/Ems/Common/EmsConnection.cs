@@ -18,6 +18,7 @@
 
 #endregion
 
+
 namespace Spring.Messaging.Ems.Common
 {
     /// <summary>

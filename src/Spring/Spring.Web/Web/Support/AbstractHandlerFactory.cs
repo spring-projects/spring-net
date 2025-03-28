@@ -25,6 +25,7 @@ using System.Security;
 using System.Security.Permissions;
 using System.Web;
 using System.Web.UI;
+using Microsoft.Extensions.Logging;
 using Spring.Collections;
 using Spring.Context;
 using Spring.Context.Support;
@@ -166,7 +167,7 @@ namespace Spring.Web.Support
         /// </returns>
         public virtual IHttpHandler GetHandler(HttpContext context, string requestType, string url, string physicalPath)
         {
-            bool isDebug = Log.IsDebugEnabled;
+            bool isDebug = Log.IsEnabled(LogLevel.Debug);
 
             #region Instrumentation
 
@@ -294,7 +295,7 @@ namespace Spring.Web.Support
         protected internal static NamedObjectDefinition FindWebObjectDefinition(string appRelativeVirtualPath, IConfigurableListableObjectFactory objectFactory)
         {
             ILog Log = LogManager.GetLogger(typeof(AbstractHandlerFactory));
-            bool isDebug = Log.IsDebugEnabled;
+            bool isDebug = Log.IsEnabled(LogLevel.Debug);
 
             // lookup definition using app-relative url
             if (isDebug)

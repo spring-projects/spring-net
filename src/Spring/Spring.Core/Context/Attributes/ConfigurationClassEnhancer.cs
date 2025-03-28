@@ -21,7 +21,7 @@
 using System.Collections;
 using System.Reflection;
 using System.Reflection.Emit;
-
+using Microsoft.Extensions.Logging;
 using Spring.Objects.Factory.Config;
 using Spring.Util;
 using Spring.Proxy;
@@ -115,12 +115,12 @@ namespace Spring.Context.Attributes
 
                 if (this._configurableListableObjectFactory.IsCurrentlyInCreation(objectName))
                 {
-                    Logger.Debug(m => m("Object '{0}' currently in creation, created one", objectName));
+                    Logger.LogDebug("Object '{ObjectName}' currently in creation, created one", objectName);
 
                     return false;
                 }
 
-                Logger.Debug(m => m("Object '{0}' not in creation, asked the application context for one", objectName)); 
+                Logger.LogDebug("Object '{ObjectName}' not in creation, asked the application context for one", objectName);
 
                 instance = this._configurableListableObjectFactory.GetObject(objectName);
                 return true;

@@ -15,6 +15,7 @@
  */
 
 using Apache.NMS;
+using Microsoft.Extensions.Logging;
 using Spring.Messaging.Nms.Support;
 using Spring.Util;
 
@@ -165,7 +166,7 @@ namespace Spring.Messaging.Nms.Connections
                             }
                             catch (Exception ex)
                             {
-                                Log.Trace("Could not close cached NMS Session", ex);
+                                Log.LogTrace(ex, "Could not close cached NMS Session");
                             }
                         }
                     }
@@ -215,7 +216,7 @@ namespace Spring.Messaging.Nms.Connections
 
             if (session != null)
             {
-                if (Log.IsDebugEnabled)
+                if (Log.IsEnabled(LogLevel.Debug))
                 {
                     Log.Debug("Found cached Session for mode " + mode + ": "
                               + (session is IDecoratorSession decoratorSession ? decoratorSession.TargetSession : session));
@@ -224,7 +225,7 @@ namespace Spring.Messaging.Nms.Connections
             else
             {
                 ISession targetSession = await con.CreateSessionAsync(mode).Awaiter();
-                if (Log.IsDebugEnabled)
+                if (Log.IsEnabled(LogLevel.Debug))
                 {
                     Log.Debug("Creating cached Session for mode " + mode + ": " + targetSession);
                 }

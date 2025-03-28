@@ -18,6 +18,7 @@
 
 #endregion
 
+using Microsoft.Extensions.Logging;
 using Spring.Messaging.Ems.Common;
 using Spring.Messaging.Ems.Core;
 using Spring.Messaging.Ems.Support;
@@ -334,7 +335,7 @@ namespace Spring.Messaging.Ems.Listener
             if (!AcceptMessagesWhileStopping && !IsRunning)
             {
                 #region Logging
-                if (logger.IsWarnEnabled)
+                if (logger.IsEnabled(LogLevel.Warning))
                 {
                     logger.Warn("Rejecting received message because of the listener container " +
                         "having been stopped in the meantime: " + message);
@@ -412,7 +413,7 @@ namespace Spring.Messaging.Ems.Listener
                     sessionToUse = sessionToClose;
                 }
                 // Actually invoke the message listener
-                if (logger.IsDebugEnabled)
+                if (logger.IsEnabled(LogLevel.Debug))
                 {
                     logger.Debug("Invoking listener with message of type [" + message.GetType() +
                                  "] and session [" + sessionToUse + "]");
@@ -521,7 +522,7 @@ namespace Spring.Messaging.Ems.Listener
                 if (session.Transacted && IsSessionLocallyTransacted(session))
                 {
                     // Transacted session created by this container -> rollback
-                    if (logger.IsDebugEnabled)
+                    if (logger.IsEnabled(LogLevel.Debug))
                     {
                         logger.Debug("Initiating transaction rollback on application exception");
                     }
@@ -581,7 +582,7 @@ namespace Spring.Messaging.Ems.Listener
             {
                 errorHandler.HandleError(exception);
             }
-            else if (logger.IsWarnEnabled)
+            else if (logger.IsEnabled(LogLevel.Warning))
             {
                 logger.Warn("Execution of EMS message listener failed, and no ErrorHandler has been set.", exception);
             }

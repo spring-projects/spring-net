@@ -1,3 +1,4 @@
+
 namespace Spring.Messaging.Ems.Core
 {
     public class SimpleMessageListener : IMessageListener

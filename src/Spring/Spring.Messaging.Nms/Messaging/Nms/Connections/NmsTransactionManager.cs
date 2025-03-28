@@ -20,6 +20,7 @@
 
 using System.Data;
 using Apache.NMS;
+using Microsoft.Extensions.Logging;
 using Spring.Messaging.Nms.Core;
 using Spring.Objects.Factory;
 using Spring.Transaction;
@@ -194,7 +195,7 @@ namespace Spring.Messaging.Nms.Connections
             {
                 con = CreateConnection();
                 session = CreateSession(con);
-                if (LOG.IsDebugEnabled)
+                if (LOG.IsEnabled(LogLevel.Debug))
                 {
                     log.Debug("Created NMS transaction on Session [" + session + "] from Connection [" + con + "]");
                 }

@@ -20,6 +20,7 @@
 
 using System.Collections;
 using System.Globalization;
+using Microsoft.Extensions.Logging;
 using Spring.Core;
 using Spring.Util;
 
@@ -118,7 +119,7 @@ namespace Spring.Objects.Support
             {
                 #region Instrumentation
 
-                if (logger.IsWarnEnabled)
+                if (logger.IsEnabled(LogLevel.Warning))
                 {
                     logger.Warn("Could not sort objects [" + o1 + "] and [" + o2 + "]",
                                 ex);
@@ -160,7 +161,7 @@ namespace Spring.Objects.Support
                 catch (ObjectsException ex)
                 {
                     // if a nested property cannot be read, simply return null...
-                    if (logger.IsDebugEnabled)
+                    if (logger.IsEnabled(LogLevel.Debug))
                     {
                         logger.Debug("Could not access property - treating as null for sorting.", ex);
                     }

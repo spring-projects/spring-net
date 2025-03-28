@@ -21,8 +21,7 @@
 #region Imports
 
 using System;
-using Common.Logging;
-using Common.Logging.Log4Net;
+using Microsoft.Extensions.Logging;
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.Objects.Factory.Config;
@@ -46,7 +45,7 @@ namespace Spring.IocQuickStart.MovieFinder
 	{
 	    #region Logging Definition
 
-	    private static readonly ILog LOG = LogManager.GetLogger(typeof(Program));
+	    private static readonly ILogger LOG = LogManager.GetLogger(typeof(Program));
 
 	    #endregion
 
@@ -94,7 +93,7 @@ namespace Spring.IocQuickStart.MovieFinder
 
         private static IApplicationContext CreateContextProgrammatically()
 	    {
-            InitializeCommonLogging();
+            InitializeLogging();
 	        GenericApplicationContext ctx = new GenericApplicationContext();
             
             IObjectDefinitionFactory objectDefinitionFactory = new DefaultObjectDefinitionFactory();
@@ -119,7 +118,7 @@ namespace Spring.IocQuickStart.MovieFinder
 
         private static IApplicationContext CreateContextProgrammaticallyWithAutoWire()
         {
-            InitializeCommonLogging();
+            InitializeLogging();
             GenericApplicationContext ctx = new GenericApplicationContext();
            
             IObjectDefinitionFactory objectDefinitionFactory = new DefaultObjectDefinitionFactory();
@@ -165,11 +164,12 @@ namespace Spring.IocQuickStart.MovieFinder
             return ctx;
         }
 
-        private static void InitializeCommonLogging()
+        private static void InitializeLogging()
         {
-            var properties = new Common.Logging.Configuration.NameValueCollection();
-            properties["configType"] = "INLINE";
-            LogManager.Adapter = new Log4NetLoggerFactoryAdapter(properties);
+            var loggerFactory = LoggerFactory.Create(
+                builder => builder.AddLog4Net());
+
+            LogManager.LoggerFactory = loggerFactory;
         }
         #endregion
 

@@ -20,6 +20,7 @@
 
 using System.Collections;
 using System.Data;
+using Microsoft.Extensions.Logging;
 
 namespace Spring.Transaction.Support
 {
@@ -511,7 +512,7 @@ namespace Spring.Transaction.Support
         public ITransactionStatus GetTransaction(ITransactionDefinition definition)
         {
             object transaction = DoGetTransaction();
-            bool debugEnabled = log.IsDebugEnabled;
+            bool debugEnabled = log.IsEnabled(LogLevel.Debug);
 
             if (debugEnabled)
             {

@@ -7,7 +7,7 @@
     <ProjectReference Include="..\Primes\Primes.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Common.Logging" />
+    <PackageReference Include="Microsoft.Extensions.Logging" />
     <Reference Include="System.Configuration" />
   </ItemGroup>
   <ItemGroup>

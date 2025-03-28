@@ -21,7 +21,7 @@
 using System;
 using System.Collections;
 using System.Windows.Forms;
-using Common.Logging;
+using Microsoft.Extensions.Logging;
 using Spring.Context.Support;
 using Spring.NmsQuickStart.Common.Data;
 
@@ -31,7 +31,7 @@ namespace Spring.NmsQuickStart.Client.UI
     {
         #region Logging Definition
 
-        private static readonly ILog log = LogManager.GetLogger(typeof (StockForm));
+        private static readonly ILogger log = LogManager.GetLogger(typeof (StockForm));
 
         #endregion
 

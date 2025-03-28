@@ -20,15 +20,12 @@
 
 using System.Configuration;
 using System.Configuration.Internal;
-using Common.Logging.Configuration;
-using Common.Logging.Simple;
+using System.IO;
 using NUnit.Framework;
 using Spring.Util;
 
 namespace Spring.EnterpriseServices
 {
-
-
     [TestFixture]
     public class ExeConfigurationSystemTests
     {
@@ -43,9 +40,6 @@ namespace Spring.EnterpriseServices
             {
                 ExeConfigurationSystem ccs = new ExeConfigurationSystem(exePath);
                 prevConfig = ConfigurationUtils.SetConfigurationSystem(ccs, true);
-                LogSetting settings = (LogSetting) ConfigurationManager.GetSection("logging");
-                Assert.AreEqual(typeof (TraceLoggerFactoryAdapter), settings.FactoryAdapterType);
-
                 Assert.AreEqual("from custom config!", ConfigurationManager.AppSettings["key"]);
 
                 Assert.IsNull(ConfigurationManager.GetSection("spring/context"));

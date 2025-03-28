@@ -30,9 +30,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Using Include="Common.Logging" />
-    <Using Include="Common.Logging.ILog" Alias="ILog" />
-    <Using Include="Common.Logging.LogManager" Alias="LogManager" />
+    <Using Include="Microsoft.Extensions.Logging.ILogger" Alias="ILog" />
   </ItemGroup>
 
   <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
@@ -44,5 +42,9 @@
     <Optimize>true</Optimize>
     <DefineConstants>TRACE;$(DefineConstants)</DefineConstants>
   </PropertyGroup>
+  
+  <ItemGroup>
+    <Using Include="Microsoft.Extensions.Logging.ILogger" Alias="ILog" />
+  </ItemGroup>
 
 </Project>

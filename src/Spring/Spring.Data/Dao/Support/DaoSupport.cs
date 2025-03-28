@@ -39,7 +39,7 @@ namespace Spring.Dao.Support
 		#region Constants
 
 		/// <summary>
-		/// The shared <see cref="Common.Logging.ILog"/> instance for this class (and derived classes).
+		/// The shared <see cref="ILog"/> instance for this class (and derived classes).
 		/// </summary>
 		protected static readonly ILog log =
 			LogManager.GetLogger(typeof (DaoSupport));

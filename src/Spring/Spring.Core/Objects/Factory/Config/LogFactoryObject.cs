@@ -24,11 +24,11 @@ namespace Spring.Objects.Factory.Config
 {
 	/// <summary>
 	/// <see cref="Spring.Objects.Factory.IFactoryObject"/> implementation that
-	/// creates instances of the <see cref="Common.Logging.ILog"/> class.
+	/// creates instances of the <see cref="ILog"/> class.
 	/// </summary>
 	/// <remarks>
 	/// <p>
-	/// Typically used for retrieving shared <see cref="Common.Logging.ILog"/>
+	/// Typically used for retrieving shared <see cref="ILog"/>
 	/// instances for common topics (such as the 'DAL', 'BLL', etc). The
 	/// <see cref="LogFactoryObject.LogName"/>
 	/// property determines the name of the
@@ -36,7 +36,7 @@ namespace Spring.Objects.Factory.Config
 	/// </p>
 	/// </remarks>
 	/// <author>Rick Evans</author>
-	/// <seealso cref="Common.Logging.LogManager.GetLogger(string)"/>
+	/// <seealso cref="LogManager.GetLogger(string)"/>
     [Serializable]
     public class LogFactoryObject : IFactoryObject, IInitializingObject
 	{
@@ -57,7 +57,7 @@ namespace Spring.Objects.Factory.Config
 		/// class.
 		/// </summary>
 		/// <param name="logName">
-		/// The name of the <see cref="Common.Logging.ILog"/> instance served up by
+		/// The name of the <see cref="ILog"/> instance served up by
 		/// this factory.
 		/// </param>
 		/// <exception cref="System.ArgumentNullException">
@@ -72,11 +72,11 @@ namespace Spring.Objects.Factory.Config
 		#endregion
 
 		/// <summary>
-		/// The name of the <see cref="Common.Logging.ILog"/> instance served up by
+		/// The name of the <see cref="ILog"/> instance served up by
 		/// this factory.
 		/// </summary>
 		/// <value>
-		/// The name of the <see cref="Common.Logging.ILog"/> instance served up by
+		/// The name of the <see cref="ILog"/> instance served up by
 		/// this factory.
 		/// </value>
 		/// <exception cref="System.ArgumentNullException">

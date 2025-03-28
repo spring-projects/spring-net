@@ -22,6 +22,7 @@
 
 using System.ComponentModel;
 using System.Globalization;
+using Microsoft.Extensions.Logging;
 using Spring.Util;
 
 #endregion
@@ -181,7 +182,7 @@ namespace Spring.Core.IO
 				{
 					#region Instrumentation
 
-					if (_log.IsWarnEnabled)
+					if (_log.IsEnabled(LogLevel.Warning))
 					{
 						_log.Warn(string.Format(
 							CultureInfo.InvariantCulture,

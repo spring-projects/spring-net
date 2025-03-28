@@ -20,6 +20,7 @@
 
 #region Imports
 
+using Microsoft.Extensions.Logging;
 using Spring.Objects.Factory;
 using Spring.Util;
 
@@ -135,7 +136,7 @@ namespace Spring.Aop.Target
 
 				#region Instrumentation
 
-				if (logger.IsDebugEnabled)
+				if (logger.IsEnabled(LogLevel.Debug))
 				{
 					logger.Debug(string.Format(
 						"Getting object with name '{0}' to determine class.",
@@ -159,7 +160,7 @@ namespace Spring.Aop.Target
 		{
 			#region Instrumentation
 
-			if (logger.IsDebugEnabled)
+			if (logger.IsEnabled(LogLevel.Debug))
 			{
 				logger.Debug(string.Format(
 					"Creating new target from object '{0}'.",
@@ -237,7 +238,7 @@ namespace Spring.Aop.Target
         }
 
 		/// <summary>
-		/// The shared <see cref="Common.Logging.ILog"/> instance for this class (and derived classes).
+		/// The shared <see cref="ILog"/> instance for this class (and derived classes).
 		/// </summary>
 		protected readonly ILog logger = LogManager.GetLogger(typeof (AbstractPrototypeTargetSource));
 

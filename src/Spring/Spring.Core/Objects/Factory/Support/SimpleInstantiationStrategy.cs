@@ -20,6 +20,7 @@
 
 using System.Globalization;
 using System.Reflection;
+using Microsoft.Extensions.Logging;
 using Spring.Core.TypeResolution;
 using Spring.Util;
 
@@ -42,7 +43,7 @@ namespace Spring.Objects.Factory.Support
     public class SimpleInstantiationStrategy : IInstantiationStrategy
     {
         /// <summary>
-        /// The shared <see cref="Common.Logging.ILog"/> instance for this class (and derived classes).
+        /// The shared <see cref="ILog"/> instance for this class (and derived classes).
         /// </summary>
         protected static readonly ILog log =
             LogManager.GetLogger(typeof(SimpleInstantiationStrategy));
@@ -72,7 +73,7 @@ namespace Spring.Objects.Factory.Support
             AssertUtils.ArgumentNotNull(definition, "definition");
             AssertUtils.ArgumentNotNull(factory, "factory");
 
-            if (log.IsTraceEnabled) log.Trace(string.Format("instantiating object '{0}'", name));
+            if (log.IsEnabled(LogLevel.Trace)) log.Trace(string.Format("instantiating object '{0}'", name));
 
             if (definition.HasMethodOverrides)
             {
@@ -198,7 +199,7 @@ namespace Spring.Objects.Factory.Support
 
                 #region Instrumentation
 
-                if (log.IsWarnEnabled)
+                if (log.IsEnabled(LogLevel.Warning))
                 {
                     log.Warn(msg, ex.InnerException);
                 }

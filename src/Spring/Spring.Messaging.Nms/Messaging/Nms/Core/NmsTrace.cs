@@ -19,6 +19,7 @@
 #endregion
 
 using Apache.NMS;
+using Microsoft.Extensions.Logging;
 
 namespace Spring.Messaging.Nms.Core
 {
@@ -97,7 +98,7 @@ namespace Spring.Messaging.Nms.Core
         /// <param name="message">The message.</param>
         public void Fatal(string message)
         {
-            log.Fatal(message);
+            log.LogCritical(message);
         }
 
         /// <summary>
@@ -108,7 +109,7 @@ namespace Spring.Messaging.Nms.Core
         /// </value>
         public bool IsDebugEnabled
         {
-            get { return log.IsDebugEnabled; }
+            get { return log.IsEnabled(LogLevel.Debug); }
         }
 
         /// <summary>
@@ -119,7 +120,7 @@ namespace Spring.Messaging.Nms.Core
         /// </value>
         public bool IsInfoEnabled
         {
-            get { return log.IsInfoEnabled; }
+            get { return log.IsEnabled(LogLevel.Information); }
         }
 
         /// <summary>
@@ -130,7 +131,7 @@ namespace Spring.Messaging.Nms.Core
         /// </value>
         public bool IsWarnEnabled
         {
-            get { return log.IsWarnEnabled; }
+            get { return log.IsEnabled(LogLevel.Warning); }
         }
 
         /// <summary>
@@ -141,7 +142,7 @@ namespace Spring.Messaging.Nms.Core
         /// </value>
         public bool IsErrorEnabled
         {
-            get { return log.IsErrorEnabled; }
+            get { return log.IsEnabled(LogLevel.Error); }
         }
 
         /// <summary>
@@ -152,7 +153,7 @@ namespace Spring.Messaging.Nms.Core
         /// </value>
         public bool IsFatalEnabled
         {
-            get { return log.IsFatalEnabled; }
+            get { return log.IsEnabled(LogLevel.Critical); }
         }
     }
 

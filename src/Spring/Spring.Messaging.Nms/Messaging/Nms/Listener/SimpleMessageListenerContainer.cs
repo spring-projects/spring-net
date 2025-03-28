@@ -22,6 +22,7 @@ using Spring.Collections;
 using Spring.Messaging.Nms.Core;
 using Spring.Messaging.Nms.Support;
 using Apache.NMS;
+using Microsoft.Extensions.Logging;
 using Spring.Transaction.Support;
 using Spring.Util;
 
@@ -192,7 +193,7 @@ namespace Spring.Messaging.Nms.Listener
             // First invoke the user-specific ExceptionListener, if any.
             InvokeExceptionListener(exception);
             // now try to recover the shared Connection and all consumers...
-            if (logger.IsInfoEnabled)
+            if (logger.IsEnabled(LogLevel.Information))
             {
                 logger.Info("Trying to recover from NMS Connection exception: " + exception);
             }
@@ -239,9 +240,9 @@ namespace Spring.Messaging.Nms.Listener
                     break;
                 } catch (Exception ex)
                 {
-                    if (logger.IsInfoEnabled)
+                    if (logger.IsEnabled(LogLevel.Information))
                     {
-                        logger.Info("Could not refresh Connection - retrying in " + recoveryInterval, ex);
+                        logger.LogInformation(ex, "Could not refresh Connection - retrying in {RecoveryInterval}", recoveryInterval);
                     }
                 }
 

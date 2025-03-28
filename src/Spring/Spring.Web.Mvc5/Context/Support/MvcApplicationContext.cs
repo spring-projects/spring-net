@@ -18,6 +18,7 @@
 
 #endregion
 
+using Microsoft.Extensions.Logging;
 using Spring.Core.IO;
 
 namespace Spring.Context.Support
@@ -68,7 +69,7 @@ namespace Spring.Context.Support
 
             Refresh();
 
-            if (log.IsDebugEnabled)
+            if (log.IsEnabled(LogLevel.Debug))
             {
                 log.Debug("created instance " + this);
             }

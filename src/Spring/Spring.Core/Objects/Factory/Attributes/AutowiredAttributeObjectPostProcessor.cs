@@ -19,9 +19,12 @@
 #endregion
 
 using System.Reflection;
+using Microsoft.Extensions.Logging;
 using Spring.Collections;
 using Spring.Core;
 using Spring.Objects.Factory.Config;
+
+
 using Spring.Objects.Factory.Support;
 using Spring.Util;
 
@@ -393,13 +396,13 @@ namespace Spring.Objects.Factory.Attributes
                         {
                             if (method.IsStatic)
                             {
-                                logger.Warn(m => m("Autowired annotation is not supported on static methods: " + method.Name));
+                                logger.LogWarning("Autowired annotation is not supported on static methods: {MethodName}", method.Name);
                                 continue;
                             }
 
                             if (method.IsGenericMethod)
                             {
-                                logger.Warn(m => m("Autowired annotation is not supported on generic methods: " + method.Name));
+                                logger.LogWarning("Autowired annotation is not supported on generic methods: {MethodName}", method.Name);
                                 continue;
                             }
 
@@ -439,7 +442,7 @@ namespace Spring.Objects.Factory.Attributes
                 if (!dependsOn.Contains(autowiredObjectName))
                 {
                     dependsOn.Add(autowiredObjectName);
-                    logger.Debug(m => m("Autowiring by type from object name '{0}' to object named '{1}'", objectName, autowiredObjectName));
+                    logger.LogDebug("Autowiring by type from object name '{ObjectName}' to object named '{AutoWiredObjectName}'", objectName, autowiredObjectName);
                 }
             }
             objectDefinition.DependsOn = dependsOn;

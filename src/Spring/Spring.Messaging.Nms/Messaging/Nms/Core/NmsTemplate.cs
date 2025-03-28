@@ -25,6 +25,7 @@ using Spring.Messaging.Nms.Support.Destinations;
 using Spring.Transaction.Support;
 using Spring.Util;
 using Apache.NMS;
+using Microsoft.Extensions.Logging;
 
 namespace Spring.Messaging.Nms.Core
 {
@@ -184,7 +185,7 @@ namespace Spring.Messaging.Nms.Core
                     }
                     sessionToUse = sessionToClose;
                 }
-                if (logger.IsDebugEnabled)
+                if (logger.IsEnabled(LogLevel.Debug))
                 {
                     logger.Debug("Executing callback on NMS ISession [" + sessionToUse + "]");
                 }
@@ -560,7 +561,7 @@ namespace Spring.Messaging.Nms.Core
                 else {
                     message = messageCreatorDelegate(session);
                 }
-                if (logger.IsDebugEnabled)
+                if (logger.IsEnabled(LogLevel.Debug))
                 {
                     logger.Debug("Sending created message [" + message + "]");
                 }

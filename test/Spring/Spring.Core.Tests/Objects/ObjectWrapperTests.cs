@@ -20,13 +20,17 @@
 
 #region Imports
 
+using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Globalization;
+using System.IO;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using Common.Logging.Simple;
+
+using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
 using Spring.Collections;
 using Spring.Core;
@@ -53,8 +57,8 @@ namespace Spring.Objects
 		[OneTimeSetUp]
 		public void FixtureSetUp()
 		{
-			// enable logging (to nowhere), just to exercisee the logging code...
-            LogManager.Adapter = new NoOpLoggerFactoryAdapter();
+			// enable logging (to nowhere), just to exercise the logging code...
+            LogManager.LoggerFactory = NullLoggerFactory.Instance;
 		}
 
 		#region Classes Used During Tests

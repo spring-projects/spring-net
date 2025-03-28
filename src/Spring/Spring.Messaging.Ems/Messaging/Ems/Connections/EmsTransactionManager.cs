@@ -19,6 +19,7 @@
 #endregion
 
 using System.Data;
+using Microsoft.Extensions.Logging;
 using Spring.Messaging.Ems.Common;
 using Spring.Messaging.Ems.Core;
 using Spring.Objects.Factory;
@@ -177,7 +178,7 @@ namespace Spring.Messaging.Ems.Connections
             {
                 con = CreateConnection();
                 session = CreateSession(con);
-                if (LOG.IsDebugEnabled)
+                if (LOG.IsEnabled(LogLevel.Debug))
                 {
                     log.Debug("Created EMS transaction on Session [" + session + "] from Connection [" + con + "]");
                 }

@@ -18,6 +18,7 @@
 
 #endregion
 
+using Microsoft.Extensions.Logging;
 using Spring.Objects;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
@@ -145,7 +146,7 @@ namespace Spring.Context.Support
 
                 #region Instrumentation
 
-                if (log.IsDebugEnabled)
+                if (log.IsEnabled(LogLevel.Debug))
                 {
                     log.Debug(
                         string.Format(

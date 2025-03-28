@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+using Microsoft.Extensions.Logging;
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.Core.IO;
@@ -111,7 +112,7 @@ namespace Spring.Data.Common
 
 							if (loader.GetResource(DBPROVIDER_ADDITIONAL_RESOURCE_NAME).Exists)
 							{
-							    if (log.IsDebugEnabled)
+							    if (log.IsEnabled(LogLevel.Debug))
 								{
 									log.Debug("Loading additional DbProviders from " + DBPROVIDER_ADDITIONAL_RESOURCE_NAME);
 								}
@@ -124,7 +125,7 @@ namespace Spring.Data.Common
 								ctx = new XmlApplicationContext(DBPROVIDER_CONTEXTNAME, true, new string[] { DBPROVIDER_DEFAULT_RESOURCE_NAME });
 							}
 
-							if (log.IsInfoEnabled)
+							if (log.IsEnabled(LogLevel.Information))
 							{
 								var dbProviderNames = ctx.GetObjectNames<IDbProvider>();
 								log.Info(

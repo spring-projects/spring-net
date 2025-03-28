@@ -16,6 +16,7 @@
 
 using System.Collections;
 using System.Globalization;
+using Microsoft.Extensions.Logging;
 using Spring.Collections;
 using Spring.Core;
 using Spring.Util;
@@ -298,7 +299,7 @@ namespace Spring.Objects.Factory.Config
                             string resolvedValue = variableSource.ResolveVariable(placeholder);
                             resolvedValue = ParseAndResolveVariables(resolvedValue, visitedPlaceholders);
 
-                            if (logger.IsDebugEnabled)
+                            if (logger.IsEnabled(LogLevel.Debug))
                             {
                                 logger.Debug(string.Format(
                                                  CultureInfo.InvariantCulture,

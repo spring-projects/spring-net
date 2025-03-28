@@ -42,7 +42,7 @@ namespace Spring.Messaging.Core
     public class DefaultMessageQueueFactory : IMessageQueueFactory, IApplicationContextAware
     {
         /// <summary>
-        /// The <see cref="Common.Logging.ILog"/> instance for this class.
+        /// The <see cref="ILog"/> instance for this class.
         /// </summary>
         private readonly ILog log = LogManager.GetLogger(typeof(DefaultMessageQueueFactory));
 

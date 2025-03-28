@@ -19,7 +19,7 @@
 #endregion
 
 using System.Collections;
-using Common.Logging;
+using Microsoft.Extensions.Logging;
 using Spring.NmsQuickStart.Client.UI;
 using Spring.NmsQuickStart.Common.Data;
 
@@ -29,7 +29,7 @@ namespace Spring.NmsQuickStart.Client.Handlers
     {
         #region Logging Definition
 
-        private readonly ILog log = LogManager.GetLogger(typeof(StockAppHandler));
+        private readonly ILogger log = LogManager.GetLogger(typeof(StockAppHandler));
 
         #endregion
 

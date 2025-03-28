@@ -1,4 +1,5 @@
 using System.Reflection;
+using Microsoft.Extensions.Logging;
 using Spring.Expressions;
 using Spring.Messaging.Ems.Common;
 using Spring.Messaging.Ems.Support;
@@ -381,7 +382,7 @@ namespace Spring.Messaging.Ems.Listener.Adapter
         {
             if (session != null)
             {
-                if (logger.IsDebugEnabled)
+                if (logger.IsEnabled(LogLevel.Debug))
                 {
                     logger.Debug("Listener method returned result [" + result +
                                  "] - generating response message for it");
@@ -393,7 +394,7 @@ namespace Spring.Messaging.Ems.Listener.Adapter
             }
             else
             {
-                if (logger.IsDebugEnabled)
+                if (logger.IsEnabled(LogLevel.Debug))
                 {
                     logger.Debug("Listener method returned result [" + result +
                                  "]: not generating response message for it because of no EMS Session given");

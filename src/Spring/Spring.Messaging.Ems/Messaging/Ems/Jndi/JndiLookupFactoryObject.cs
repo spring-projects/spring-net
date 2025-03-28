@@ -18,6 +18,7 @@
 
 #endregion
 
+using Microsoft.Extensions.Logging;
 using Spring.Core.TypeResolution;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
@@ -129,11 +130,11 @@ namespace Spring.Messaging.Ems.Jndi
             {
                 if (this.defaultObject != null)
                 {
-                    if (logger.IsDebugEnabled)
+                    if (logger.IsEnabled(LogLevel.Debug))
                     {
                         logger.Debug("JNDI lookup failed - returning specified default object instead", ex);
                     }
-                    else if (logger.IsInfoEnabled)
+                    else if (logger.IsEnabled(LogLevel.Information))
                     {
                         logger.Info("JNDI lookup failed - returning specified default object instead: " + ex);
                     }

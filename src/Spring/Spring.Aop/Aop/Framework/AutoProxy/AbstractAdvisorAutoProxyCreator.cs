@@ -18,6 +18,7 @@
 
 #endregion
 
+using Microsoft.Extensions.Logging;
 using Spring.Core;
 using Spring.Objects.Factory;
 using Spring.Objects.Factory.Config;
@@ -182,7 +183,7 @@ namespace Spring.Aop.Framework.AutoProxy
             {
                 if (candidate is IIntroductionAdvisor && AopUtils.CanApply(candidate, targetType, null))
                 {
-                    if (logger.IsInfoEnabled)
+                    if (logger.IsEnabled(LogLevel.Information))
                     {
                         logger.Info($"Candidate advisor [{candidate}] accepted for targetType [{targetType}]");
                     }
@@ -197,7 +198,7 @@ namespace Spring.Aop.Framework.AutoProxy
 
                 if (AopUtils.CanApply(candidate, targetType, null, hasIntroductions))
                 {
-                    if (logger.IsInfoEnabled)
+                    if (logger.IsEnabled(LogLevel.Information))
                     {
                         logger.Info($"Candidate advisor [{candidate}] accepted for targetType [{targetType}]");
                     }
@@ -205,7 +206,7 @@ namespace Spring.Aop.Framework.AutoProxy
                 }
                 else
                 {
-                    if (logger.IsInfoEnabled)
+                    if (logger.IsEnabled(LogLevel.Information))
                     {
                         logger.Info($"Candidate advisor [{candidate}] rejected for targetType [{targetType}]");
                     }
