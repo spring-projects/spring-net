@@ -160,7 +160,7 @@ namespace Spring.Transaction.Interceptor
 	    #region Logging Definition
 
         [NonSerialized]
-	    protected ILog log = LogManager.GetLogger(typeof (TransactionAspectSupport));
+	    protected ILogger log = LogManager.GetLogger(typeof (TransactionAspectSupport));
 
 	    #endregion
 

@@ -10,7 +10,7 @@ namespace Spring.Messaging.Nms.Integration
     {
         #region Logging Definition
 
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(SimpleMessageListener));
+        private static readonly ILogger<SimpleMessageListener> LOG = LogManager.GetLogger<SimpleMessageListener>();
         #endregion
 
         private IMessage lastReceivedMessage;

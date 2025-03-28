@@ -72,7 +72,7 @@ namespace Spring.Testing.NUnit
         /// <summary>
         /// Logger available to subclasses.
         /// </summary>
-        protected readonly ILog logger;
+        protected readonly ILogger logger;
 
         /// <summary>
         /// Default constructor for AbstractSpringContextTests.

@@ -48,16 +48,7 @@ namespace Spring.Aop.Framework.AutoProxy
     /// <author>Erich Eichinger</author>
     public abstract class AbstractAdvisorAutoProxyCreator : AbstractAutoProxyCreator
     {
-        private readonly ILog Log;
         private IAdvisorRetrievalHelper _advisorRetrievalHelper;
-
-        /// <summary>
-        /// Initialize
-        /// </summary>
-        protected AbstractAdvisorAutoProxyCreator()
-        {
-            Log = LogManager.GetLogger(this.GetType());
-        }
 
         /// <summary>
         /// We override this method to ensure that all candidate advisors are materialized

@@ -43,16 +43,6 @@ namespace Spring.Data.Support
 
         #endregion
 
-        #region Constants
-
-        /// <summary>
-        /// The shared log instance for this class (and derived classes).
-        /// </summary>
-        protected static readonly ILog log =
-            LogManager.GetLogger(typeof (AdoTransactionObjectSupport));
-
-        #endregion
-
         #region Properties
 
         public ConnectionHolder ConnectionHolder

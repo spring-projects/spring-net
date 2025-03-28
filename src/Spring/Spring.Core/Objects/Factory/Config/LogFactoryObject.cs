@@ -18,17 +18,18 @@
 
 #endregion
 
+using Microsoft.Extensions.Logging;
 using Spring.Util;
 
 namespace Spring.Objects.Factory.Config
 {
 	/// <summary>
 	/// <see cref="Spring.Objects.Factory.IFactoryObject"/> implementation that
-	/// creates instances of the <see cref="ILog"/> class.
+	/// creates instances of the <see cref="ILogger"/> class.
 	/// </summary>
 	/// <remarks>
 	/// <p>
-	/// Typically used for retrieving shared <see cref="ILog"/>
+	/// Typically used for retrieving shared <see cref="ILogger"/>
 	/// instances for common topics (such as the 'DAL', 'BLL', etc). The
 	/// <see cref="LogFactoryObject.LogName"/>
 	/// property determines the name of the
@@ -57,7 +58,7 @@ namespace Spring.Objects.Factory.Config
 		/// class.
 		/// </summary>
 		/// <param name="logName">
-		/// The name of the <see cref="ILog"/> instance served up by
+		/// The name of the <see cref="ILogger"/> instance served up by
 		/// this factory.
 		/// </param>
 		/// <exception cref="System.ArgumentNullException">
@@ -72,11 +73,11 @@ namespace Spring.Objects.Factory.Config
 		#endregion
 
 		/// <summary>
-		/// The name of the <see cref="ILog"/> instance served up by
+		/// The name of the <see cref="ILogger"/> instance served up by
 		/// this factory.
 		/// </summary>
 		/// <value>
-		/// The name of the <see cref="ILog"/> instance served up by
+		/// The name of the <see cref="ILogger"/> instance served up by
 		/// this factory.
 		/// </value>
 		/// <exception cref="System.ArgumentNullException">
@@ -120,7 +121,7 @@ namespace Spring.Objects.Factory.Config
 		/// <seealso cref="Spring.Objects.Factory.IFactoryObject.ObjectType"/>
 		public Type ObjectType
 		{
-			get { return typeof(ILog); }
+			get { return typeof(ILogger); }
 		}
 
 		/// <summary>
@@ -158,7 +159,7 @@ namespace Spring.Objects.Factory.Config
 			}
 		}
 
-		private ILog log;
+		private ILogger log;
 		private string logName;
 	}
 }

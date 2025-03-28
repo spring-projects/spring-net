@@ -39,7 +39,7 @@ namespace Spring.Messaging.Ems.Connections
     {
         #region Logging Definition
 
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(CachedSession));
+        private static readonly ILogger<CachedSession> LOG = LogManager.GetLogger<CachedSession>();
 
         #endregion
 

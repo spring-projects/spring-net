@@ -20,7 +20,6 @@
 
 using System.Configuration;
 using System.Configuration.Internal;
-using System.IO;
 using NUnit.Framework;
 using Spring.Util;
 

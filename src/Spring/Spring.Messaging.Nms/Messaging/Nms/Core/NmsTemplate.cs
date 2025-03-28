@@ -50,7 +50,7 @@ namespace Spring.Messaging.Nms.Core
     {
         #region Logging
 
-        private readonly ILog logger = LogManager.GetLogger(typeof(NmsTemplate));
+        private readonly ILogger<NmsTemplate> logger = LogManager.GetLogger<NmsTemplate>();
 
 
         #endregion

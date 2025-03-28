@@ -66,7 +66,7 @@ namespace Spring.Context.Support
             }
         }
 
-        private static readonly ILog s_log;
+        private static readonly ILogger s_log;
 
         private static bool s_isInitialized = false;
 

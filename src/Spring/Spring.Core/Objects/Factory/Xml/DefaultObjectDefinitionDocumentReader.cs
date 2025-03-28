@@ -38,10 +38,9 @@ namespace Spring.Objects.Factory.Xml
     public class DefaultObjectDefinitionDocumentReader : IObjectDefinitionDocumentReader
     {
         /// <summary>
-        /// The shared <see cref="ILog"/> instance for this class (and derived classes).
+        /// The shared <see cref="ILogger"/> instance for this class (and derived classes).
         /// </summary>
-        protected static readonly ILog log =
-            LogManager.GetLogger(typeof(DefaultObjectDefinitionDocumentReader));
+        protected static readonly ILogger<DefaultObjectDefinitionDocumentReader> log = LogManager.GetLogger<DefaultObjectDefinitionDocumentReader>();
 
         private XmlReaderContext readerContext;
 

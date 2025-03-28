@@ -30,7 +30,7 @@ namespace Spring.Data
     /// <author>Mark Pollack (.NET)</author>
     public class TestObjectMgr : ITestObjectMgr
     {
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(TestObjectMgr));
+        private static readonly ILogger<TestObjectMgr> LOG = LogManager.GetLogger<TestObjectMgr>();
 
         /// <summary>
         /// Initializes a new instance of the <see cref="TestObjectMgr"/> class.

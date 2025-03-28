@@ -22,6 +22,7 @@
 
 using System.Collections;
 using System.Web;
+using Microsoft.Extensions.Logging;
 using Spring.Objects.Factory.Config;
 using Spring.Util;
 
@@ -35,7 +36,7 @@ namespace Spring.Context.Support
     /// <author>Erich Eichinger</author>
     public class HttpApplicationConfigurer
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(HttpApplicationConfigurer));
+        private static readonly ILogger<HttpApplicationConfigurer> Log = LogManager.GetLogger<HttpApplicationConfigurer>();
 
         #region ModuleDefinitionsTable class
 

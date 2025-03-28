@@ -46,7 +46,7 @@ namespace Spring.Web.UI.Controls
     /// <author>Erich Eichinger</author>
     public class ContentReplacer : Control
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(ContentReplacer));
+        private static readonly ILogger<ContentReplacer> log = LogManager.GetLogger<ContentReplacer>();
 
         private string contentPlaceHolderID;
 

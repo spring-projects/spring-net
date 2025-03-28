@@ -59,7 +59,7 @@ namespace Spring.Web.UI.Controls
         private const string ATTR_MESSAGEID = "MessageId";
         private const string ATTR_ERRORPROVIDERS = "ErrorProviders";
 
-        private static readonly ILog Log = LogManager.GetLogger(typeof(DataBindingPanel));
+        private static readonly ILogger<DataBindingPanel> Log = LogManager.GetLogger<DataBindingPanel>();
 
         private delegate void TraversalAction(IWebDataBound bindingContainer, WebControl wc);
 

@@ -1,4 +1,3 @@
-using System;
 using System.Text;
 using Microsoft.Extensions.Logging;
 using Spring;
@@ -8,7 +7,7 @@ using Spring.Web.Conversation;
 
 public partial class CircularDependenceTest : System.Web.UI.Page, IApplicationContextAware
 {
-    private static readonly ILog LOG = LogManager.GetLogger(typeof(CircularDependenceTest));
+    private static readonly ILogger<CircularDependenceTest> LOG = LogManager.GetLogger<CircularDependenceTest>();
 
     protected void Page_Load(object sender, EventArgs e)
     {

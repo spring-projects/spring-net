@@ -52,16 +52,6 @@ namespace Spring.Data
 	    
 		#endregion
 
-		#region Constants
-
-		/// <summary>
-		/// The shared ILog instance for this class (and derived classes). 
-		/// </summary>
-		protected static readonly ILog log =
-			LogManager.GetLogger(typeof (AdoTemplateTests));
-
-		#endregion
-
 		#region Constructor (s)
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AdoTemplateTests"/> class.

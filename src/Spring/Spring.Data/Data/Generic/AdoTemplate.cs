@@ -41,7 +41,7 @@ namespace Spring.Data.Generic
 
         #region Logging Definition
 
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(AdoTemplate));
+        private static readonly ILogger<AdoTemplate> LOG = LogManager.GetLogger<AdoTemplate>();
 
         #endregion
 

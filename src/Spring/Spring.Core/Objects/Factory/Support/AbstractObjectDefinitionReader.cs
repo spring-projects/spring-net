@@ -39,9 +39,9 @@ namespace Spring.Objects.Factory.Support
 		#region Constants
 
 		/// <summary>
-		/// The <see cref="ILog"/> instance for this class (and derived classes).
+		/// The <see cref="ILogger"/> instance for this class (and derived classes).
 		/// </summary>
-		protected readonly ILog log;
+		protected readonly ILogger log;
 
 		#endregion
 

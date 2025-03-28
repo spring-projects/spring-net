@@ -72,7 +72,7 @@ namespace Spring.Messaging.Nms.Connections
 
         #region Logging Definition
 
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(NmsTransactionManager));
+        private static readonly ILogger<NmsTransactionManager> LOG = LogManager.GetLogger<NmsTransactionManager>();
 
         #endregion
 

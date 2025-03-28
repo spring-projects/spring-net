@@ -34,7 +34,7 @@ namespace Spring.Messaging.Nms.Core
     {
         #region Logging Definition
 
-        private readonly ILog log;
+        private readonly ILogger log;
 
         #endregion
 
@@ -51,7 +51,7 @@ namespace Spring.Messaging.Nms.Core
         /// Initializes a new instance of the <see cref="NmsTrace"/> class.
         /// </summary>
         /// <param name="log">The log instance to use for logging.</param>
-        public NmsTrace(ILog log)
+        public NmsTrace(ILogger log)
         {
             this.log = log;
         }

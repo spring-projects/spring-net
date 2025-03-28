@@ -63,8 +63,7 @@ namespace Spring.Data.Support
     /// </remarks>
     public abstract class TypedDataSetUtils
     {
-        private static readonly ILog LOG = LogManager.GetLogger(typeof (TypedDataSetUtils));
-
+        private static readonly ILogger LOG = LogManager.GetLogger(typeof (TypedDataSetUtils));
 
         /// <summary>
         /// Applies the connection and tx to the provided typed dataset.  The connection and transaction

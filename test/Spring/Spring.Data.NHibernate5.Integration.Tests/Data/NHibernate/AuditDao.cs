@@ -6,8 +6,7 @@ namespace Spring.Data.NHibernate
 {
     public class AuditDao : AdoDaoSupport, IAuditDao
     {
-        protected static readonly ILog logger =
-            LogManager.GetLogger(typeof(AuditDao));
+        protected static readonly ILog logger = LogManager.GetLogger<AuditDao>();
         public void AuditOperation(string operationIdenfitier)
         {
             logger.LogDebug("Executing AUDIT operation.");

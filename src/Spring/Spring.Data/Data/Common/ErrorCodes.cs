@@ -18,7 +18,6 @@
 
 #endregion
 
-
 namespace Spring.Data.Common
 {
     /// <summary>
@@ -56,16 +55,6 @@ namespace Spring.Data.Common
         private string[] cannotSerializeTransactionCodes = new String[0];
 
         // CustomErrorCodesTranslation[] customTranslations;
-        #endregion
-
-        #region Constants
-
-        /// <summary>
-        /// The shared log instance for this class (and derived classes).
-        /// </summary>
-        protected static readonly ILog log =
-            LogManager.GetLogger(typeof (ErrorCodes));
-
         #endregion
 
         #region Constructor (s)

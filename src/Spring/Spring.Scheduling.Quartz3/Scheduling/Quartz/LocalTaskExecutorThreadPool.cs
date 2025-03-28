@@ -41,7 +41,7 @@ namespace Spring.Scheduling.Quartz
         /// <summary>
         /// Logger instance.
         /// </summary>
-        protected ILog Logger { get; }
+        protected ILogger Logger { get; }
 
         /// <inheritdoc />
         public virtual int PoolSize => -1;

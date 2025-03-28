@@ -44,17 +44,6 @@ namespace Spring.Data.NHibernate
 
         #endregion
 
-
-        #region Constants
-
-        /// <summary>
-        /// The shared <see cref="log4net.ILog"/> instance for this class (and derived classes). 
-        /// </summary>
-        protected static readonly ILog log =
-            LogManager.GetLogger(typeof(TemplateTests));
-
-        #endregion
-
         #region Constructor (s)
 
         /// <summary>

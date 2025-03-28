@@ -6,7 +6,7 @@ using Spring;
 
 public partial class SPCLazyLoadTest_A_Status : System.Web.UI.Page
 {
-    private static readonly ILog LOG = LogManager.GetLogger(typeof(SPCLazyLoadTest_A_Status));
+    private static readonly ILogger<SPCLazyLoadTest_A_Status> LOG = LogManager.GetLogger<SPCLazyLoadTest_A_Status>();
 
     private IConversationState conversation;
     public IConversationState Conversation

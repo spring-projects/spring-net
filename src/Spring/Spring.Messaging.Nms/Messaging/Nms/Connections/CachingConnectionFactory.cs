@@ -52,7 +52,7 @@ namespace Spring.Messaging.Nms.Connections
     /// <author>Mark Pollack (.NET)</author>
     public class CachingConnectionFactory : SingleConnectionFactory
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(CachingConnectionFactory));
+        private static readonly ILogger<CachingConnectionFactory> Log = LogManager.GetLogger<CachingConnectionFactory>();
 
         private int sessionCacheSize = 1;
 

@@ -238,9 +238,9 @@ namespace Spring.Aop.Target
         }
 
 		/// <summary>
-		/// The shared <see cref="ILog"/> instance for this class (and derived classes).
+		/// The shared <see cref="ILogger"/> instance for this class (and derived classes).
 		/// </summary>
-		protected readonly ILog logger = LogManager.GetLogger(typeof (AbstractPrototypeTargetSource));
+		protected readonly ILogger<AbstractPrototypeTargetSource> logger = LogManager.GetLogger<AbstractPrototypeTargetSource>();
 
 		private String _targetObjectName;
 		private IObjectFactory _owningObjectFactory;

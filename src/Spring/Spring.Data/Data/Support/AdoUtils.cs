@@ -10,7 +10,7 @@ namespace Spring.Data.Support
     {
         #region Logging
 
-        private static readonly ILog LOG = LogManager.GetLogger(typeof (AdoUtils));
+        private static readonly ILogger LOG = LogManager.GetLogger(typeof (AdoUtils));
 
         #endregion
 

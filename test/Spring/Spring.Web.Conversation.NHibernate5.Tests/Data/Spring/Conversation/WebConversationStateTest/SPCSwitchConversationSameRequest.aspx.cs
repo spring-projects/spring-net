@@ -1,4 +1,3 @@
-using System;
 using Microsoft.Extensions.Logging;
 using Spring.Web.Conversation;
 using Spring.Entities;
@@ -7,7 +6,7 @@ using Spring;
 
 public partial class SPCSwitchConversationSameRequest : System.Web.UI.Page
 {
-    private static readonly ILog LOG = LogManager.GetLogger(typeof(SPCSwitchConversationSameRequest));
+    private static readonly ILogger<SPCSwitchConversationSameRequest> LOG = LogManager.GetLogger<SPCSwitchConversationSameRequest>();
 
     private IConversationState conversationA;
     public IConversationState ConversationA

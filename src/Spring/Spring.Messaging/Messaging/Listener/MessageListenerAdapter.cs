@@ -115,7 +115,7 @@ namespace Spring.Messaging.Listener
     {
         #region Logging
 
-        private static readonly ILog logger = LogManager.GetLogger(typeof (MessageListenerAdapter));
+        private static readonly ILogger logger = LogManager.GetLogger(typeof (MessageListenerAdapter));
 
         #endregion
 

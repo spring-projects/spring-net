@@ -1,6 +1,3 @@
-
-
-using System;
 using Microsoft.Extensions.Logging;
 
 namespace Spring.Messaging.Listener
@@ -9,7 +6,7 @@ namespace Spring.Messaging.Listener
     {
         #region Logging
 
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(SimpleHandler));
+        private static readonly ILogger<SimpleHandler> LOG = LogManager.GetLogger<SimpleHandler>();
 
         #endregion
 

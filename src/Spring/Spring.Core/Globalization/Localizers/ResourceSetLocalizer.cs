@@ -44,7 +44,7 @@ namespace Spring.Globalization.Localizers
     /// <author>Aleksandar Seovic</author>
     public class ResourceSetLocalizer : AbstractLocalizer
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(ResourceSetLocalizer));
+        private static readonly ILogger<ResourceSetLocalizer> log = LogManager.GetLogger<ResourceSetLocalizer>();
 
         private static readonly IList ignoreList =
             new string[] {"$this.DefaultModifiers", "$this.TrayAutoArrange", "$this.TrayLargeIcon"};

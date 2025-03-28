@@ -37,7 +37,7 @@ namespace Spring.Aop.Framework.AutoProxy.Target
         /// <summary>
         /// The logger
         /// </summary>
-        protected readonly ILog logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
+        protected readonly ILogger logger = LogManager.GetLogger(System.Reflection.MethodBase.GetCurrentMethod().DeclaringType);
 
         #region ITargetSourceCreator Members
 

@@ -76,7 +76,7 @@ namespace Spring.Testing.Microsoft
         /// <summary>
         /// Logger available to subclasses.
         /// </summary>
-        protected readonly ILog logger;
+        protected readonly ILogger logger;
 
         /// <summary>
         /// Default constructor for AbstractSpringContextTests.

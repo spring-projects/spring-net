@@ -48,10 +48,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Using Include="Microsoft.Extensions.Logging.ILogger" Alias="ILog" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="ConfigureAwaitChecker.Analyzer" PrivateAssets="All" />
   </ItemGroup>
 

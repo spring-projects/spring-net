@@ -70,7 +70,7 @@ namespace Spring.Util
             }
         }
 
-        protected readonly ILog Log;
+        protected readonly ILogger Log;
 
         /// <summary>
         /// Create a new EventRaiser instance

@@ -129,7 +129,7 @@ namespace Spring.Transaction.Support
         #region Logging Definition
 
         [NonSerialized()]
-        protected readonly ILog log;
+        protected readonly ILogger log;
 
         #endregion
 

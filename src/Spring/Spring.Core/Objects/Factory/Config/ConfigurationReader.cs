@@ -23,8 +23,7 @@ using System.Configuration;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Xml;
-
-
+using Microsoft.Extensions.Logging;
 using Spring.Core.IO;
 using Spring.Core.TypeResolution;
 using Spring.Util;
@@ -52,7 +51,7 @@ namespace Spring.Objects.Factory.Config
         private const string ConfigSectionElement = "section";
         private const string ConfigSectionNameAttribute = "name";
 
-        private static readonly ILog _log = LogManager.GetLogger(typeof(ConfigurationReader));
+        private static readonly ILogger<ConfigurationReader> _log = LogManager.GetLogger<ConfigurationReader>();
 
         /// <summary>
         /// Initializes the type members

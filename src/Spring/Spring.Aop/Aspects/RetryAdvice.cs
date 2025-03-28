@@ -43,7 +43,7 @@ namespace Spring.Aspects
         ///</summary>
         public delegate void SleepHandler(TimeSpan duration);
 
-        private static readonly ILog log;
+        private static readonly ILogger log;
         private static readonly TimeSpanConverter timeSpanConverter;
 
         static RetryAdvice()

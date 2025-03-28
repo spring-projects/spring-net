@@ -36,7 +36,7 @@ namespace Spring.Web.Support
     /// <author>Erich Eichinger</author>
 	public class HandlerMap : IDictionary
 	{
-		private readonly ILog Log = LogManager.GetLogger(typeof(HandlerMap));
+		private readonly ILogger<HandlerMap> Log = LogManager.GetLogger<HandlerMap>();
 
 		private ArrayList _internalTable = new ArrayList();
 

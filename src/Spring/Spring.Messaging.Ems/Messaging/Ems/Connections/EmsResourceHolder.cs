@@ -40,7 +40,7 @@ namespace Spring.Messaging.Ems.Connections
     {
         #region Logging
 
-        private static readonly ILog logger = LogManager.GetLogger(typeof(EmsResourceHolder));
+        private static readonly ILogger<EmsResourceHolder> logger = LogManager.GetLogger<EmsResourceHolder>();
 
         #endregion
 

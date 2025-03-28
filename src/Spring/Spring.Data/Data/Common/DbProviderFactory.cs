@@ -38,7 +38,7 @@ namespace Spring.Data.Common
         /// <summary>
         /// The shared log instance for this class (and derived classes).
         /// </summary>
-        protected static ILog log = LogManager.GetLogger(typeof(DbProviderFactory));
+        protected static ILogger<DbProviderFactory> log = LogManager.GetLogger<DbProviderFactory>();
 
         private static readonly string DBPROVIDER_DEFAULT_RESOURCE_NAME =
             "assembly://" + typeof(DbProviderFactory).Assembly.FullName + "/Spring.Data.Common/dbproviders.xml";

@@ -1,14 +1,11 @@
 using Spring.Web.Conversation;
 using System.Text.RegularExpressions;
 using NHibernate;
-using Spring;
 using Spring.Data.NHibernate.Support;
 using Spring.Objects.Factory;
 
 public partial class IoeTests : System.Web.UI.Page
 {
-    private static readonly ILog LOG = LogManager.GetLogger(typeof(IoeTests));
-
     private IConversationState conversationA;
     public IConversationState ConversationA
     {

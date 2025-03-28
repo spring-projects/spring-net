@@ -50,8 +50,7 @@ namespace Spring.Data.Support
 		/// <summary>
 		/// The shared log instance for this class (and derived classes).
 		/// </summary>
-		protected static readonly ILog log =
-			LogManager.GetLogger(typeof (ErrorCodeExceptionTranslator));
+		protected static readonly ILogger log = LogManager.GetLogger(typeof (ErrorCodeExceptionTranslator));
 
 		#endregion
 

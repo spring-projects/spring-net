@@ -79,7 +79,7 @@ namespace Spring.Template.Velocity
         /// <summary>
         /// Shared logger instance.
         /// </summary>
-        protected static readonly ILog log = LogManager.GetLogger(typeof(SpringResourceLoader));
+        protected static readonly ILogger<SpringResourceLoader> log = LogManager.GetLogger<SpringResourceLoader>();
 
         private IResourceLoader resourceLoader;
 

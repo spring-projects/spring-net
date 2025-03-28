@@ -147,7 +147,7 @@ namespace Spring.Context.Support
 
         static WebApplicationContext()
         {
-            ILog s_weblog = LogManager.GetLogger(typeof(WebApplicationContext));
+            ILogger<WebApplicationContext> s_weblog = LogManager.GetLogger<WebApplicationContext>();
 
             // register for ContextRegistry.Cleared event - we need to discard our cache in this case
             ContextRegistry.Cleared += OnContextRegistryCleared;
@@ -200,7 +200,7 @@ namespace Spring.Context.Support
         {
             lock (s_webContextCache)
             {
-                ILog s_weblog = LogManager.GetLogger(typeof(WebApplicationContext));
+                ILogger<WebApplicationContext> s_weblog = LogManager.GetLogger<WebApplicationContext>();
                 if (s_weblog.IsEnabled(LogLevel.Debug))
                 {
                     s_weblog.LogDebug("received ContextRegistry.Cleared event - clearing webContextCache");
@@ -246,7 +246,7 @@ namespace Spring.Context.Support
                 contextName = DefaultRootContextName;
             }
 
-            ILog s_weblog = LogManager.GetLogger(typeof(WebApplicationContext));
+            ILogger<WebApplicationContext> s_weblog = LogManager.GetLogger<WebApplicationContext>();
             bool isLogDebugEnabled = s_weblog.IsEnabled(LogLevel.Debug);
 
             lock (s_webContextCache)

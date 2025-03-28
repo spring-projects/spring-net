@@ -34,7 +34,7 @@ namespace Spring.Context.Config
     /// </summary>
 	public class ComponentScanObjectDefinitionParser : IObjectDefinitionParser
     {
-        private static readonly ILog Logger = LogManager.GetLogger<ComponentScanObjectDefinitionParser>();
+        private static readonly ILogger<ComponentScanObjectDefinitionParser> Logger = LogManager.GetLogger<ComponentScanObjectDefinitionParser>();
 
         private const string ATTRIBUTE_CONFIG_ATTRIBUTE = "attribute-config";
 

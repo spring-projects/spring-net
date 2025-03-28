@@ -31,7 +31,7 @@ namespace Spring.Objects.Factory.Support
     /// <author>Aleksandar Seovic</author>
     public sealed class WebObjectUtils
     {
-        private static ILog s_log = LogManager.GetLogger( typeof( WebObjectUtils ) );
+        private static ILogger s_log = LogManager.GetLogger( typeof( WebObjectUtils ) );
 
         // CLOVER:OFF
 

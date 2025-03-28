@@ -41,9 +41,9 @@ namespace Spring.Util
     public sealed class ObjectUtils
     {
         /// <summary>
-        /// The <see cref="ILog"/> instance for this class.
+        /// The <see cref="ILogger"/> instance for this class.
         /// </summary>
-        private static readonly ILog log = LogManager.GetLogger(typeof(ObjectUtils));
+        private static readonly ILogger<ObjectUtils> log = LogManager.GetLogger<ObjectUtils>();
 
         /// <summary>
         /// An empty object array.

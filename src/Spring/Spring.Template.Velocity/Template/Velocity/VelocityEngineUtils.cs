@@ -30,12 +30,6 @@ namespace Spring.Template.Velocity{
     /// <author>Erez Mazor</author>
     public class VelocityEngineUtils
     {
-
-        /// <summary>
-        /// Shared logger instance.
-        /// </summary>
-        protected static readonly ILog log = LogManager.GetLogger(typeof(VelocityEngineUtils));
-
         /// <summary>
         /// Merge the specified Velocity template with the given model and write
         /// the result to the given Writer.

@@ -55,7 +55,7 @@ namespace Spring.Messaging.Listener
     {
         #region Logging Definition
 
-        private static readonly ILog LOG = LogManager.GetLogger(typeof (DistributedTxMessageListenerContainer));
+        private static readonly ILogger LOG = LogManager.GetLogger(typeof (DistributedTxMessageListenerContainer));
 
         #endregion
 

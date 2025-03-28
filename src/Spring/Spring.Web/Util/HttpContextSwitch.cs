@@ -21,6 +21,7 @@
 #region Imports
 
 using System.Web;
+using Microsoft.Extensions.Logging;
 
 #endregion
 
@@ -47,7 +48,7 @@ namespace Spring.Util
     public class HttpContextSwitch : IDisposable
     {
         private readonly IDisposable rewriteContext;
-        private static readonly ILog log = LogManager.GetLogger(typeof(HttpContextSwitch));
+        private static readonly ILogger<HttpContextSwitch> log = LogManager.GetLogger<HttpContextSwitch>();
 
         /// <summary>
         /// Performs an immediate call to <see cref="HttpContext.RewritePath(string)"/>

@@ -24,6 +24,7 @@ using System.Collections;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.Serialization;
+using Microsoft.Extensions.Logging;
 using Spring.Core.TypeResolution;
 using Spring.Util;
 
@@ -50,9 +51,9 @@ namespace Spring.Proxy
         #region Fields
 
         /// <summary>
-        /// The shared <see cref="ILog"/> instance for this class (and derived classes).
+        /// The shared <see cref="ILogger"/> instance for this class (and derived classes).
         /// </summary>
-        protected static readonly ILog log = LogManager.GetLogger(typeof(AbstractProxyTypeBuilder));
+        protected static readonly ILogger<AbstractProxyTypeBuilder> log = LogManager.GetLogger<AbstractProxyTypeBuilder>();
 
         private const string DEFAULT_PROXY_TYPE_NAME = "Proxy";
 

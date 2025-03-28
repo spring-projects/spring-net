@@ -32,7 +32,7 @@ namespace Spring.Messaging.Ems.Support
     {
         #region Logging
 
-        private static readonly ILog logger = LogManager.GetLogger(typeof(EmsUtils));
+        private static readonly ILogger<EmsUtils> logger = LogManager.GetLogger<EmsUtils>();
 
         #endregion
 

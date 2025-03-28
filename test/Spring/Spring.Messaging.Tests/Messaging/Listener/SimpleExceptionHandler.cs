@@ -7,7 +7,7 @@ namespace Spring.Messaging.Listener
     {
         #region Logging
 
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(SimpleExceptionHandler));
+        private static readonly ILogger<SimpleExceptionHandler> LOG = LogManager.GetLogger<SimpleExceptionHandler>();
 
         #endregion
 

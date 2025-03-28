@@ -43,9 +43,9 @@ namespace Spring.Messaging.Core
     public class DefaultMessageQueueFactory : IMessageQueueFactory, IApplicationContextAware
     {
         /// <summary>
-        /// The <see cref="ILog"/> instance for this class.
+        /// The <see cref="ILogger"/> instance for this class.
         /// </summary>
-        private readonly ILog log = LogManager.GetLogger(typeof(DefaultMessageQueueFactory));
+        private readonly ILogger<DefaultMessageQueueFactory> log = LogManager.GetLogger<DefaultMessageQueueFactory>();
 
 
         private static readonly string QUEUE_DICTIONARY_SLOTNAME =

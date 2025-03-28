@@ -230,7 +230,7 @@ namespace Spring.Util
 
             #endregion //HttpSessionState Adapter
 
-            private static readonly ILog log = LogManager.GetLogger(typeof (HttpRuntimeEnvironment));
+            private static readonly ILogger log = LogManager.GetLogger(typeof (HttpRuntimeEnvironment));
 
             private class RewriteContext : IDisposable
             {

@@ -34,7 +34,7 @@ namespace Spring.Context.Attributes
         /// <summary>
         /// Logger Instance.
         /// </summary>
-        protected static readonly ILog Logger = LogManager.GetLogger<AssemblyTypeSource>();
+        protected static readonly ILogger<AssemblyTypeSource> Logger = LogManager.GetLogger<AssemblyTypeSource>();
 
         private readonly Assembly _assembly;
 

@@ -109,10 +109,9 @@ namespace Spring.Data.NHibernate
         private IBytecodeProvider bytecodeProvider;
 
 		/// <summary>
-		/// The shared <see cref="ILog"/> instance for this class (and derived classes).
+		/// The shared <see cref="ILogger"/> instance for this class (and derived classes).
 		/// </summary>
-		protected static readonly ILog log =
-			LogManager.GetLogger(typeof (LocalSessionFactoryObject));
+		protected static readonly ILogger<LocalSessionFactoryObject> log = LogManager.GetLogger<LocalSessionFactoryObject>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LocalSessionFactoryObject"/> class.

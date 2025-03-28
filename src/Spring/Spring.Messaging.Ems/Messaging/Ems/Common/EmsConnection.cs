@@ -29,7 +29,7 @@ namespace Spring.Messaging.Ems.Common
     {
         #region Logging
 
-        private readonly ILog logger = LogManager.GetLogger(typeof(EmsConnection));
+        private readonly ILogger<EmsConnection> logger = LogManager.GetLogger<EmsConnection>();
 
         #endregion
 

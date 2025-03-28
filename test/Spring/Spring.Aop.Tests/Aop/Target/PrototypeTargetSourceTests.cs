@@ -18,8 +18,6 @@
 
 #endregion
 
-using System;
-
 using FakeItEasy;
 using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;

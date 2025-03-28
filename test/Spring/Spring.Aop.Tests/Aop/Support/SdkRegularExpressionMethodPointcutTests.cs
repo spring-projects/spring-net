@@ -19,7 +19,7 @@
 #endregion
 
 #region Imports
-using System;
+
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;

@@ -1,11 +1,10 @@
-using System;
 using Microsoft.Extensions.Logging;
 
 namespace Spring.Data.Objects.Factory.Support
 {
     public class TestForm : Spring.Web.UI.Page
     {
-        private ILog _log = LogManager.GetLogger(typeof(TestForm));
+        private ILogger<TestForm> _log = LogManager.GetLogger<TestForm>();
 
         public TestForm()
         {

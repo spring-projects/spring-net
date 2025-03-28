@@ -34,7 +34,7 @@ namespace Spring.Web.Conversation
     {
         #region Logging
 
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(SerializeConversationTestModule));
+        private static readonly ILogger<SerializeConversationTestModule> LOG = LogManager.GetLogger<SerializeConversationTestModule>();
 
         #endregion
 
@@ -202,7 +202,7 @@ namespace Spring.Web.Conversation
     {
         #region Logging
 
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(SerializeConversationTestModule));
+        private static readonly ILogger<SerializeConversationTestModule> LOG = LogManager.GetLogger<SerializeConversationTestModule>();
 
         #endregion
 
