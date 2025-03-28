@@ -103,7 +103,7 @@ namespace Spring.Objects.Factory.Config
     [Serializable]
     public class PropertyOverrideConfigurer : PropertyResourceConfigurer
 	{
-		private static readonly ILog _logger = LogManager.GetLogger(typeof (PropertyOverrideConfigurer));
+		private static readonly ILogger _logger = LogManager.GetLogger(typeof (PropertyOverrideConfigurer));
 
 		/// <summary>
 		/// Apply the given properties to the supplied

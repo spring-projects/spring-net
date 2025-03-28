@@ -37,7 +37,7 @@ namespace Spring.Objects.Factory.Support
     /// <author>Mark Pollack</author>
     public class ConstructorResolver
     {
-        private readonly ILog log = LogManager.GetLogger(typeof(ConstructorResolver));
+        private readonly ILogger log = LogManager.GetLogger(typeof(ConstructorResolver));
 
         private readonly AbstractObjectFactory objectFactory;
 

@@ -36,7 +36,7 @@ namespace Spring.Objects.Factory.Support
     /// <author>Mark Pollack (.NET)</author>
     public class ObjectDefinitionValueResolver
     {
-        private readonly ILog log;
+        private readonly ILogger log;
 
         private readonly AbstractObjectFactory objectFactory;
 

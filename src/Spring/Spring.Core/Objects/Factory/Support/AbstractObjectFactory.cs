@@ -63,9 +63,9 @@ namespace Spring.Objects.Factory.Support
         private static readonly object EmptyObject = new object();
 
         /// <summary>
-        /// The <see cref="ILog"/> instance for this class.
+        /// The <see cref="ILogger"/> instance for this class.
         /// </summary>
-        [NonSerialized] protected ILog log;
+        [NonSerialized] protected ILogger log;
 
         /// <summary>
         /// Cache of singleton objects created by <see cref="IFactoryObject"/>s: FactoryObject name -> product

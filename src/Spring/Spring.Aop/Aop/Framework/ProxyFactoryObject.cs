@@ -87,9 +87,9 @@ namespace Spring.Aop.Framework
         : AdvisedSupport, IFactoryObject, IObjectFactoryAware
     {
         /// <summary>
-        /// The <see cref="ILog"/> instance for this class.
+        /// The <see cref="ILogger"/> instance for this class.
         /// </summary>
-        private static readonly ILog logger = LogManager.GetLogger<ProxyFactoryObject>();
+        private static readonly ILogger logger = LogManager.GetLogger<ProxyFactoryObject>();
 
         /// <summary>
         /// Is the object managed by this factory a singleton or a prototype?

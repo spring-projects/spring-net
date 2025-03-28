@@ -35,7 +35,7 @@ namespace Spring.Web.Support
     {
         private class NoOpInterceptionStrategy : IInterceptionStrategy
         {
-            private static readonly ILog Log = LogManager.GetLogger( typeof( NoOpInterceptionStrategy ) );
+            private static readonly ILogger Log = LogManager.GetLogger( typeof( NoOpInterceptionStrategy ) );
 
             public bool Intercept( IApplicationContext defaultApplicationContext, ControlAccessor ctlAccessor,
                                   ControlCollectionAccessor ctlColAccessor )

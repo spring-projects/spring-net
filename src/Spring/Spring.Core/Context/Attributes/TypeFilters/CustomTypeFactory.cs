@@ -30,7 +30,7 @@ namespace Spring.Context.Attributes.TypeFilters
     /// </summary>
     public static class CustomTypeFactory
     {
-        private static readonly ILog Logger = LogManager.GetLogger(typeof(CustomTypeFactory).FullName);
+        private static readonly ILogger Logger = LogManager.GetLogger(typeof(CustomTypeFactory).FullName);
 
         /// <summary>
         /// Creates a new instance of given type filter type string

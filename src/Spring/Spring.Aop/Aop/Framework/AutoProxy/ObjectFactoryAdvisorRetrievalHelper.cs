@@ -32,7 +32,7 @@ namespace Spring.Aop.Framework.AutoProxy
     /// <author>Erich Eichinger</author>
     public class ObjectFactoryAdvisorRetrievalHelper : IAdvisorRetrievalHelper
     {
-        private readonly ILog _log;
+        private readonly ILogger _log;
         private readonly IConfigurableListableObjectFactory _objectFactory;
         private List<string> _cachedObjectNames;
 

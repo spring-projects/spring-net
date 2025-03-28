@@ -33,7 +33,7 @@ namespace Spring.Context.Attributes
     /// </summary>
     public class ConfigurationClassPostProcessor : IObjectDefinitionRegistryPostProcessor, IOrdered
     {
-        private static readonly ILog Logger = LogManager.GetLogger<ConfigurationClassPostProcessor>();
+        private static readonly ILogger Logger = LogManager.GetLogger<ConfigurationClassPostProcessor>();
 
         private bool _postProcessObjectDefinitionRegistryCalled;
 

@@ -35,7 +35,7 @@ namespace Spring.Messaging.Nms.Connections
     {
         #region Logging
 
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(ConnectionFactoryUtils));
+        private static readonly ILogger LOG = LogManager.GetLogger(typeof(ConnectionFactoryUtils));
 
         #endregion
 

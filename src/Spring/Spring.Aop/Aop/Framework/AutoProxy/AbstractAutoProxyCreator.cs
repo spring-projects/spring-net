@@ -66,7 +66,7 @@ namespace Spring.Aop.Framework.AutoProxy
         /// <summary>
         /// The logger for this class hierarchy.
         /// </summary>
-        protected readonly ILog logger;
+        protected readonly ILogger logger;
 
         /// <summary>
         /// Convenience constant for subclasses: Return value for "do not proxy".

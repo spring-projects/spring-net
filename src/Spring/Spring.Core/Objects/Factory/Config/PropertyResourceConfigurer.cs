@@ -76,7 +76,7 @@ namespace Spring.Objects.Factory.Config
 
         #region Fields
 
-        private readonly ILog _log;
+        private readonly ILogger _log;
 
         private int _order = Int32.MaxValue; // default: same as non-Ordered
         private NameValueCollection _defaultProperties;

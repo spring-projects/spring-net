@@ -136,7 +136,7 @@ namespace Spring.Web.Support
         /// <summary>
         /// Holds the shared logger for all factories.
         /// </summary>
-        protected readonly ILog Log;
+        protected readonly ILogger Log;
 
         /// <summary>
         /// Creates a new instance of the
@@ -294,7 +294,7 @@ namespace Spring.Web.Support
         /// </remarks>
         protected internal static NamedObjectDefinition FindWebObjectDefinition(string appRelativeVirtualPath, IConfigurableListableObjectFactory objectFactory)
         {
-            ILog Log = LogManager.GetLogger(typeof(AbstractHandlerFactory));
+            ILogger Log = LogManager.GetLogger(typeof(AbstractHandlerFactory));
             bool isDebug = Log.IsEnabled(LogLevel.Debug);
 
             // lookup definition using app-relative url

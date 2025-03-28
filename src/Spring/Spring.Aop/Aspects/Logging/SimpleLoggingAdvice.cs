@@ -94,7 +94,7 @@ namespace Spring.Aspects.Logging
         /// Initializes a new instance of the <see cref="SimpleLoggingAdvice"/> class.
         /// </summary>
         /// <param name="defaultLogger">the default logger to use</param>
-        public SimpleLoggingAdvice(ILog defaultLogger)
+        public SimpleLoggingAdvice(ILogger defaultLogger)
             : base(defaultLogger)
         {}
 
@@ -189,7 +189,7 @@ namespace Spring.Aspects.Logging
         /// If any of the interceptors in the chain or the target object itself
         /// throws an exception.
         /// </exception>
-        protected override object InvokeUnderLog(IMethodInvocation invocation, ILog log)
+        protected override object InvokeUnderLog(IMethodInvocation invocation, ILogger log)
         {
             object returnValue = null;
             bool exitThroughException = false;
@@ -234,7 +234,7 @@ namespace Spring.Aspects.Logging
         /// Default is true when the trace level is enabled.  Subclasses may override this
         /// to change the level at which logging occurs, or return true to ignore level
         /// checks.</remarks>
-        protected override bool IsLogEnabled(ILog log)
+        protected override bool IsLogEnabled(ILogger log)
         {
             switch (LogLevel)
             {
@@ -413,7 +413,7 @@ namespace Spring.Aspects.Logging
             }
         }
 
-        private void WriteToLog(LogLevel logLevel, ILog log, string text, Exception e)
+        private void WriteToLog(LogLevel logLevel, ILogger log, string text, Exception e)
         {
             switch (logLevel)
             {

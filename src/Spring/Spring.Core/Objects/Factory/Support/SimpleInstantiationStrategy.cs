@@ -43,10 +43,9 @@ namespace Spring.Objects.Factory.Support
     public class SimpleInstantiationStrategy : IInstantiationStrategy
     {
         /// <summary>
-        /// The shared <see cref="ILog"/> instance for this class (and derived classes).
+        /// The shared <see cref="ILogger"/> instance for this class (and derived classes).
         /// </summary>
-        protected static readonly ILog log =
-            LogManager.GetLogger(typeof(SimpleInstantiationStrategy));
+        protected static readonly ILogger log = LogManager.GetLogger(typeof(SimpleInstantiationStrategy));
 
         /// <summary>
         /// Instantiate an instance of the object described by the supplied

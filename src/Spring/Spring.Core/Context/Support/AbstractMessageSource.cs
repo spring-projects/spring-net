@@ -19,6 +19,7 @@
 #endregion
 
 using System.Globalization;
+using Microsoft.Extensions.Logging;
 
 namespace Spring.Context.Support
 {
@@ -60,7 +61,7 @@ namespace Spring.Context.Support
         /// <summary>
         /// holds the logger instance shared with subclasses.
         /// </summary>
-        protected readonly ILog log;
+        protected readonly ILogger log;
 
         private IMessageSource parentMessageSource;
         private bool useCodeAsDefaultMessage = false;

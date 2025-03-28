@@ -38,7 +38,7 @@ namespace Spring.Data.NHibernate.Support
         /// <summary>
         /// The logging instance.
         /// </summary>        
-        protected readonly ILog log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        protected readonly ILogger log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
 
         private readonly SessionPerConversationScopeSettings settings;
 
@@ -373,7 +373,7 @@ namespace Spring.Data.NHibernate.Support
         /// </remarks>
         private class LazySessionPerConversationHolder : SessionHolder
         {
-            private readonly ILog log = LogManager.GetLogger(typeof(LazySessionPerConversationHolder));
+            private readonly ILogger log = LogManager.GetLogger(typeof(LazySessionPerConversationHolder));
             private SessionPerConversationScope owner;
 
             IConversationState activeConversation;

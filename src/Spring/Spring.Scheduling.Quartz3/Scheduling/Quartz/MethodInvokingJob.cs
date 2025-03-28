@@ -27,7 +27,7 @@ namespace Spring.Scheduling.Quartz
     /// </summary>
     public class MethodInvokingJob : QuartzJobObject
     {
-        private static readonly ILog logger = LogManager.GetLogger(typeof(MethodInvokingJob));
+        private static readonly ILogger logger = LogManager.GetLogger(typeof(MethodInvokingJob));
         private MethodInvoker methodInvoker;
         private string errorMessage;
 

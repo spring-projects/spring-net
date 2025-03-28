@@ -41,7 +41,7 @@ namespace Spring.Scheduling.Quartz
         /// <summary>
         /// Logger instance.
         /// </summary>
-        private readonly ILog logger;
+        private readonly ILogger logger;
 
         private bool overwriteExistingJobs;
 
@@ -237,7 +237,7 @@ namespace Spring.Scheduling.Quartz
         /// <summary>
         /// Logger instance.
         /// </summary>
-        protected ILog Logger => logger;
+        protected ILogger Logger => logger;
 
         /// <summary>
         /// Register jobs and triggers (within a transaction, if possible).

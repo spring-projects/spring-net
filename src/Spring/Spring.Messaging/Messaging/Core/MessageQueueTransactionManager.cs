@@ -60,7 +60,7 @@ namespace Spring.Messaging.Core
 
         #region Logging Definition
 
-        private static readonly ILog LOG = LogManager.GetLogger(typeof (MessageQueueTransactionManager));
+        private static readonly ILogger LOG = LogManager.GetLogger(typeof (MessageQueueTransactionManager));
 
         #endregion
 

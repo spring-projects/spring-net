@@ -20,6 +20,7 @@
 
 using System.Collections;
 using System.Data;
+using Microsoft.Extensions.Logging;
 using Spring.Data.Common;
 
 namespace Spring.Data.Support
@@ -39,8 +40,7 @@ namespace Spring.Data.Support
 		/// <summary>
 		/// The shared log instance for this class (and derived classes).
 		/// </summary>
-		protected static readonly ILog log =
-			LogManager.GetLogger(typeof (ParameterUtils));
+		protected static readonly ILogger log = LogManager.GetLogger(typeof (ParameterUtils));
 
 		#endregion
 

@@ -38,7 +38,7 @@ namespace Spring.Web.Conversation
     public class WebConversationSpringState : IConversationState, IObjectNameAware, IApplicationContextAware
     {
         private const string SPRING_SESSSION_SCOPE_KEY = "spring.objects";
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(WebConversationSpringState));
+        private static readonly ILogger LOG = LogManager.GetLogger(typeof(WebConversationSpringState));
 
         /// <summary>
         /// Default message for "CONVERSATION ALREADY HAS A PARENT" error.

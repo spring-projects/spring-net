@@ -31,7 +31,7 @@ namespace Spring.Web.Conversation.HttpModule
     /// <author>Hailton de Castro</author>
     public class ConversationModule : IHttpModule, IApplicationContextAware
     {
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(ConversationModule));
+        private static readonly ILogger LOG = LogManager.GetLogger(typeof(ConversationModule));
 
         private IList<string> conversationManagerName;
 

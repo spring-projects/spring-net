@@ -18,6 +18,7 @@
 
 #endregion
 
+using Microsoft.Extensions.Logging;
 using Spring.Objects.Factory;
 
 namespace Spring.Dao.Support
@@ -39,10 +40,9 @@ namespace Spring.Dao.Support
 		#region Constants
 
 		/// <summary>
-		/// The shared <see cref="ILog"/> instance for this class (and derived classes).
+		/// The shared <see cref="ILogger"/> instance for this class (and derived classes).
 		/// </summary>
-		protected static readonly ILog log =
-			LogManager.GetLogger(typeof (DaoSupport));
+		protected static readonly ILogger log = LogManager.GetLogger(typeof (DaoSupport));
 
 		#endregion
 

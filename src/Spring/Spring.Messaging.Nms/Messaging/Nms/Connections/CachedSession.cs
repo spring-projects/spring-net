@@ -32,7 +32,7 @@ namespace Spring.Messaging.Nms.Connections
     /// <author>Mark Pollack</author>
     public class CachedSession : IDecoratorSession
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(CachedSession));
+        private static readonly ILogger Log = LogManager.GetLogger(typeof(CachedSession));
 
         private readonly ISession target;
         private readonly List<ISession> sessionList;

@@ -19,7 +19,6 @@
 #endregion
 
 using System.Collections;
-
 using Spring.Core;
 using Spring.Util;
 
@@ -30,8 +29,6 @@ namespace Spring.Objects.Factory.Config
     /// </summary>
     public class SharedStateAwareProcessor : IObjectPostProcessor, IOrdered
     {
-        // holds the logger for this processor instance
-        private readonly ILog Log = LogManager.GetLogger( typeof( SharedStateAwareProcessor ) );
         // holds a list of ISharedStateProvider instances (if any)
         private ISharedStateFactory[] _sharedStateFactories = new ISharedStateFactory[0];
         // holds prio

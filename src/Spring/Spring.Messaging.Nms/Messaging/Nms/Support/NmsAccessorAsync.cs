@@ -31,7 +31,7 @@ namespace Spring.Messaging.Nms.Support
     {
         #region Logging
 
-        private readonly ILog logger = LogManager.GetLogger(typeof(NmsAccessor));
+        private readonly ILogger logger = LogManager.GetLogger(typeof(NmsAccessor));
 
         #endregion
         

@@ -39,16 +39,6 @@ namespace Spring.Data.Common
 
         #endregion
 
-        #region Constants
-
-        /// <summary>
-        /// The shared log instance for this class (and derived classes).
-        /// </summary>
-        protected static readonly ILog log =
-            LogManager.GetLogger(typeof (DbParametersBuilder));
-
-        #endregion
-
         #region Constructor (s)
 
         /// <summary>
@@ -59,10 +49,6 @@ namespace Spring.Data.Common
             this.dbProvider = dbProvider;
             parameterList = new ArrayList();
         }
-
-        #endregion
-
-        #region Properties
 
         #endregion
 

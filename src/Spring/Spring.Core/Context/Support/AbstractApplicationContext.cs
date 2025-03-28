@@ -107,9 +107,9 @@ namespace Spring.Context.Support
         public static readonly string EventRegistryObjectName = "eventRegistry";
 
         /// <summary>
-        /// The <see cref="ILog"/> instance for this class.
+        /// The <see cref="ILogger"/> instance for this class.
         /// </summary>
-        protected readonly ILog log;
+        protected readonly ILogger log;
 
         /// <summary>
         /// The <see cref="Spring.Context.IMessageSource"/> instance we delegate
@@ -2352,7 +2352,7 @@ namespace Spring.Context.Support
 
         private sealed class ObjectPostProcessorChecker : IObjectPostProcessor, IOrdered
         {
-            private static readonly ILog log = LogManager.GetLogger<ObjectPostProcessorChecker>();
+            private static readonly ILogger log = LogManager.GetLogger<ObjectPostProcessorChecker>();
             private int _objectPostProcessorTargetCount;
             private IConfigurableListableObjectFactory _objectFactory;
 

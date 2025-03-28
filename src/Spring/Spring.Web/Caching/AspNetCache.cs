@@ -104,7 +104,7 @@ namespace Spring.Caching
         #region Fields
 
         // logger instance for this class
-        private static readonly ILog Log = LogManager.GetLogger(typeof(AspNetCache));
+        private static readonly ILogger Log = LogManager.GetLogger(typeof(AspNetCache));
         // the concrete cache implementation
         private readonly IRuntimeCache _cache;
         // the (unique!) name of this particular cache instance.

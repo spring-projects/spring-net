@@ -30,9 +30,9 @@ namespace Spring.Data.NHibernate
     public class SpringSessionSynchronization : TransactionSynchronizationAdapter, IOrdered
     {
         /// <summary>
-        /// The <see cref="ILog"/> instance for this class. 
+        /// The <see cref="ILogger"/> instance for this class. 
         /// </summary>
-        private readonly ILog log = LogManager.GetLogger(typeof(SpringSessionSynchronization));
+        private readonly ILogger log = LogManager.GetLogger(typeof(SpringSessionSynchronization));
 
         private readonly SessionHolder sessionHolder;
 

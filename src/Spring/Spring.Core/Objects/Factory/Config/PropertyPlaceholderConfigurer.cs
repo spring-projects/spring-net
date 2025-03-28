@@ -146,7 +146,7 @@ namespace Spring.Objects.Factory.Config
 		public static readonly string DefaultPlaceholderSuffix = "}";
 
 
-		private readonly ILog logger;
+		private readonly ILogger logger;
 
 
 		private bool ignoreUnresolvablePlaceholders = false;

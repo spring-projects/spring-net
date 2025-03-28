@@ -45,9 +45,9 @@ namespace Spring.Data.NHibernate
         private Type criteriaType;
 
 	    /// <summary>
-		/// The <see cref="ILog"/> instance for this class. 
+		/// The <see cref="ILogger"/> instance for this class. 
 		/// </summary>
-		private readonly ILog log = LogManager.GetLogger(typeof (HibernateAccessor));
+		private readonly ILogger log = LogManager.GetLogger(typeof (HibernateAccessor));
 
 	    /// <summary>
 		/// Initializes a new instance of the <see cref="HibernateAccessor"/> class.

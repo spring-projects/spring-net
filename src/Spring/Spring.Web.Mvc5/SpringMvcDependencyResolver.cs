@@ -18,7 +18,7 @@ namespace Spring.Web.Mvc
         /// </summary>
         private IApplicationContext _context;
 
-        private static readonly ILog logger = LogManager.GetLogger(typeof(SpringMvcDependencyResolver));
+        private static readonly ILogger logger = LogManager.GetLogger(typeof(SpringMvcDependencyResolver));
         private readonly ConcurrentBag<Type> _nonResolvableTypes = new ConcurrentBag<Type>();
         private readonly ConcurrentDictionary<Type, string> _resolvedNames = new ConcurrentDictionary<Type, string>();
 

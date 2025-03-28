@@ -38,7 +38,7 @@ namespace Spring.Testing.Ado
     /// <author>Erich Eichinger</author>
     public class SimpleAdoTestUtils
     {
-        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+        private static readonly ILogger Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
         private static readonly RegexOptions REGEX_OPTIONS = RegexOptions.Multiline | RegexOptions.ECMAScript | RegexOptions.Compiled | RegexOptions.CultureInvariant | RegexOptions.IgnoreCase;
 
         /// <summary>

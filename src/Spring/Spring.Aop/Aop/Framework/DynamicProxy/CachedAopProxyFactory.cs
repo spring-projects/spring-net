@@ -49,9 +49,9 @@ namespace Spring.Aop.Framework.DynamicProxy
     public class CachedAopProxyFactory : DefaultAopProxyFactory
     {
         /// <summary>
-        /// The shared <see cref="ILog"/> instance for this class.
+        /// The shared <see cref="ILogger"/> instance for this class.
         /// </summary>
-        private static readonly ILog logger = LogManager.GetLogger(typeof(CachedAopProxyFactory));
+        private static readonly ILogger logger = LogManager.GetLogger(typeof(CachedAopProxyFactory));
 
         private static readonly Hashtable typeCache = new Hashtable();
 

@@ -40,7 +40,7 @@ namespace Spring.Aop.Support
 	public class SdkRegularExpressionMethodPointcut : AbstractRegularExpressionMethodPointcut
 	{
         [NonSerialized]
-		private static readonly ILog _logger = LogManager.GetLogger(typeof(SdkRegularExpressionMethodPointcut));
+		private static readonly ILogger _logger = LogManager.GetLogger(typeof(SdkRegularExpressionMethodPointcut));
 
 		private Regex[] _compiledPatterns = new Regex[0];
         private RegexOptions _defaultOptions = RegexOptions.None;

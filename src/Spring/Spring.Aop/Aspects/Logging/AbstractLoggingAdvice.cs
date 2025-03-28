@@ -42,7 +42,7 @@ namespace Spring.Aspects.Logging
         /// The default <code>ILog</code> instance used to write logging messages.
         /// </summary>
         [NonSerialized]
-        protected ILog defaultLogger;
+        protected ILogger defaultLogger;
 
         /// <summary>
         /// The name of the logger instance to use for obtaining from <see cref="LogManager.GetLogger(string)"/>.
@@ -69,7 +69,7 @@ namespace Spring.Aspects.Logging
         /// <summary>
         /// Creates a new advice instance using the given logger by default.
         /// </summary>
-        protected AbstractLoggingAdvice(ILog defaultLogger)
+        protected AbstractLoggingAdvice(ILogger defaultLogger)
         {
             this.defaultLogger = defaultLogger;
         }
@@ -163,7 +163,7 @@ namespace Spring.Aspects.Logging
         public object Invoke(IMethodInvocation invocation)
         {
             object o = invocation.This;
-            ILog log = GetLoggerForInvocation(invocation);
+            ILogger log = GetLoggerForInvocation(invocation);
             if (IsInterceptorEnabled(invocation, log))
             {
                 return InvokeUnderLog(invocation, log);
@@ -187,7 +187,7 @@ namespace Spring.Aspects.Logging
         /// <returns>
         /// 	<c>true</c> if [is interceptor enabled] [the specified invocation]; otherwise, <c>false</c>.
         /// </returns>
-        protected virtual bool IsInterceptorEnabled(IMethodInvocation invocation, ILog log)
+        protected virtual bool IsInterceptorEnabled(IMethodInvocation invocation, ILogger log)
         {
             return IsLogEnabled(log);
         }
@@ -203,7 +203,7 @@ namespace Spring.Aspects.Logging
         /// <returns>
         /// 	<c>true</c> if log is for a given log level; otherwise, <c>false</c>.
         /// </returns>
-        protected virtual bool IsLogEnabled(ILog log)
+        protected virtual bool IsLogEnabled(ILogger log)
         {
             return log.IsEnabled(LogLevel.Trace);
         }
@@ -230,7 +230,7 @@ namespace Spring.Aspects.Logging
         /// If any of the interceptors in the chain or the target object itself
         /// throws an exception.
         /// </exception>
-        protected abstract object InvokeUnderLog(IMethodInvocation invocation, ILog log);
+        protected abstract object InvokeUnderLog(IMethodInvocation invocation, ILogger log);
 
 
         /// <summary>
@@ -243,7 +243,7 @@ namespace Spring.Aspects.Logging
         /// </remarks>
         /// <param name="invocation">The method invocation being logged.</param>
         /// <returns>The ILog instance to use.</returns>
-        protected virtual ILog GetLoggerForInvocation(IMethodInvocation invocation)
+        protected virtual ILogger GetLoggerForInvocation(IMethodInvocation invocation)
         {
             if (defaultLogger != null)
             {

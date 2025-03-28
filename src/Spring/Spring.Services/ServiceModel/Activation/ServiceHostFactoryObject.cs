@@ -33,7 +33,7 @@ namespace Spring.ServiceModel.Activation
     {
         #region Logging
 
-        private static readonly ILog LOG = LogManager.GetLogger(typeof(ServiceHostFactoryObject));
+        private static readonly ILogger LOG = LogManager.GetLogger(typeof(ServiceHostFactoryObject));
 
         #endregion
 

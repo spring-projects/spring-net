@@ -66,9 +66,9 @@ namespace Spring.Data.NHibernate
     public class HibernateTemplate : HibernateAccessor, IHibernateOperations
     {
         /// <summary>
-        /// The <see cref="ILog"/> instance for this class. 
+        /// The <see cref="ILogger"/> instance for this class. 
         /// </summary>
-        private readonly ILog log = LogManager.GetLogger(typeof (HibernateTemplate));
+        private readonly ILogger log = LogManager.GetLogger(typeof (HibernateTemplate));
 
         private bool checkWriteOperations = true;
 

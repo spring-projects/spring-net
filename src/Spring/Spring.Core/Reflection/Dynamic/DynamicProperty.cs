@@ -19,8 +19,6 @@
 #endregion
 
 using System.Reflection;
-
-
 using Spring.Util;
 
 namespace Spring.Reflection.Dynamic
@@ -93,8 +91,6 @@ namespace Spring.Reflection.Dynamic
     /// </remarks>
     public class SafeProperty : IDynamicProperty
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(SafeProperty));
-
         private readonly PropertyInfo propertyInfo;
 
         #region Cache

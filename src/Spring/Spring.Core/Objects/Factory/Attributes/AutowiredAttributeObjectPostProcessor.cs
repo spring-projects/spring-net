@@ -65,7 +65,7 @@ namespace Spring.Objects.Factory.Attributes
     public class AutowiredAttributeObjectPostProcessor
         : InstantiationAwareObjectPostProcessorAdapter, IMergedObjectDefinitionPostProcessor, IObjectFactoryAware, IOrdered
     {
-        private static readonly ILog logger = LogManager.GetLogger<AutowiredAttributeObjectPostProcessor>();
+        private static readonly ILogger logger = LogManager.GetLogger<AutowiredAttributeObjectPostProcessor>();
 
         private IConfigurableListableObjectFactory objectFactory;
 

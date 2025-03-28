@@ -35,7 +35,7 @@ namespace Spring.Objects.Support
     /// <author>Simon White (.NET)</author>
     public class PropertyComparator : IComparer
     {
-        private static readonly ILog logger
+        private static readonly ILogger logger
             = LogManager.GetLogger(typeof (PropertyComparator));
 
         private ISortDefinition sortDefinition;

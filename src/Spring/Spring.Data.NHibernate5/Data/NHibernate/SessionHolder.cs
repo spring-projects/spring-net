@@ -49,7 +49,7 @@ namespace Spring.Data.NHibernate
 	    //needed to see if we actually assigned the enum value...
         private bool assignedPreviousFlushMode = false;
 
-	    private static readonly ILog log = LogManager.GetLogger(typeof (SessionHolder));
+	    private static readonly ILogger log = LogManager.GetLogger(typeof (SessionHolder));
 
 	    /// <summary>
 	    /// May be used by derived classes to create an empty SessionHolder.

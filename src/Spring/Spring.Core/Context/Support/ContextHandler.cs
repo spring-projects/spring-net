@@ -170,7 +170,7 @@ namespace Spring.Context.Support
 	/// <seealso cref="ContextRegistry"/>
 	public class ContextHandler : IConfigurationSectionHandler
 	{
-		private static readonly ILog Log = LogManager.GetLogger(typeof(ContextHandler));
+		private static readonly ILogger Log = LogManager.GetLogger(typeof(ContextHandler));
 		
 		/// <summary>
 		/// The <see cref="System.Type"/> of <see cref="Spring.Context.IApplicationContext"/>

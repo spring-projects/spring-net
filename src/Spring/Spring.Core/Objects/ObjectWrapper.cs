@@ -49,7 +49,7 @@ namespace Spring.Objects
     [Serializable]
     public class ObjectWrapper : IObjectWrapper
     {
-        private static readonly ILog Log = LogManager.GetLogger(typeof(ObjectWrapper));
+        private static readonly ILogger Log = LogManager.GetLogger(typeof(ObjectWrapper));
 
         /// <summary>The wrapped object.</summary>
         private object wrappedObject;

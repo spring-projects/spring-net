@@ -21,8 +21,7 @@
 #region Imports
 
 using System.Reflection;
-
-
+using Microsoft.Extensions.Logging;
 using Spring.Caching;
 using Spring.Context;
 using Spring.Expressions;
@@ -41,7 +40,7 @@ namespace Spring.Aspects.Cache
         /// <summary>
         /// Shared logger instance
         /// </summary>
-        protected readonly ILog logger;
+        protected readonly ILogger logger;
 
         private IApplicationContext applicationContext;
 

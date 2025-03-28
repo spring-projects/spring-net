@@ -29,7 +29,7 @@ namespace Spring.Data.NHibernate.Bytecode
     /// <author>Erich Eichinger</author>
     public class ProxyFactory : AbstractProxyFactory
     {
-        private static readonly ILog log = LogManager.GetLogger(typeof(ProxyFactory));
+        private static readonly ILogger log = LogManager.GetLogger(typeof(ProxyFactory));
 
         [Serializable]
         private class SerializableProxyFactory : global::Spring.Aop.Framework.ProxyFactory
