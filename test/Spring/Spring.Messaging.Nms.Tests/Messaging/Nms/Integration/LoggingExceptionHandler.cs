@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using Spring.Messaging.Nms.Core;
 
 namespace Spring.Messaging.Nms.Integration
@@ -18,7 +19,7 @@ namespace Spring.Messaging.Nms.Integration
 
         public void OnException(Exception e)
         {
-            LOG.Error("Exception processing message", e);            
+            LOG.LogError(e, "Exception processing message");            
         }
 
         #endregion

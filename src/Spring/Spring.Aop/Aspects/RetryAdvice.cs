@@ -175,7 +175,7 @@ namespace Spring.Aspects
                         {
                             if (log.IsEnabled(LogLevel.Trace))
                             {
-                                log.Trace("Retrying " + invocation.Method.Name);
+                                log.LogTrace("Retrying " + invocation.Method.Name);
                             }
                             callContextDictionary["n"] = numAttempts;
                             Sleep(retryExceptionHandler, callContextDictionary, sleepHandler);
@@ -189,7 +189,7 @@ namespace Spring.Aspects
             } while (numAttempts <= retryExceptionHandler.MaximumRetryCount);
 
 
-            log.Debug("Invoked successfully after " + numAttempts + " attempt(s)");
+            log.LogDebug("Invoked successfully after " + numAttempts + " attempt(s)");
             return returnVal;
         }
 
@@ -212,12 +212,14 @@ namespace Spring.Aspects
                 }
                 catch (InvalidCastException e)
                 {
-                    log.Warn("Was not able to cast expression to decimal [" + handler.DelayRateExpression + "]. Sleeping for 1 second", e);
+                    string message = "Was not able to cast expression to decimal [" + handler.DelayRateExpression + "]. Sleeping for 1 second";
+                    log.LogWarning(e, message);
                     sleepHandler(new TimeSpan(0,0,1));
                 }
                 catch (Exception e)
                 {
-                    log.Warn("Was not able to evaluate rate expression [" + handler.DelayRateExpression + "]. Sleeping for 1 second", e);
+                    string message = "Was not able to evaluate rate expression [" + handler.DelayRateExpression + "]. Sleeping for 1 second";
+                    log.LogWarning(e, message);
                     sleepHandler(new TimeSpan(0,0,1));
                 }
             }
@@ -281,7 +283,7 @@ namespace Spring.Aspects
 
             if (!parsedAdviceExpression.Success)
             {
-                log.Warn("Could not parse retry expression " + retryExpressionString);
+                log.LogWarning("Could not parse retry expression " + retryExpressionString);
                 return null;
             }
 
@@ -302,7 +304,7 @@ namespace Spring.Aspects
                     handler.DelayTimeSpan = (TimeSpan) timeSpanConverter.ConvertFrom(null, null, ts);
                 } catch (Exception)
                 {
-                    log.Warn("Could not parse timespan " + match.Groups[3].Value.Trim());
+                    log.LogWarning("Could not parse timespan " + match.Groups[3].Value.Trim());
                     return null;
                 }
                 return handler;

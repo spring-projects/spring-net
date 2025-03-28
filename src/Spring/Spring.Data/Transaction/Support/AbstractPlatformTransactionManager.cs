@@ -443,8 +443,8 @@ namespace Spring.Transaction.Support
         protected virtual void RegisterAfterCompletionWithExistingTransaction(Object transaction, IList synchronizations)
         {
 
-            log.Debug("Cannot register Spring after-completion synchronization with existing transaction - " +
-                "processing Spring after-completion callbacks immediately, with outcome status 'unknown'");
+            log.LogDebug("Cannot register Spring after-completion synchronization with existing transaction - " +
+                         "processing Spring after-completion callbacks immediately, with outcome status 'unknown'");
             InvokeAfterCompletion(synchronizations, TransactionSynchronizationStatus.Unknown);
         }
 
@@ -516,7 +516,7 @@ namespace Spring.Transaction.Support
 
             if (debugEnabled)
             {
-                log.Debug("Using transaction object [" + transaction + "]");
+                log.LogDebug("Using transaction object [" + transaction + "]");
             }
 
             if (definition == null)
@@ -548,7 +548,7 @@ namespace Spring.Transaction.Support
                 object suspendedResources = Suspend(null);
                 if (debugEnabled)
                 {
-                    log.Debug("Creating new transaction with name [" + definition.Name + "]:" + definition);
+                    log.LogDebug("Creating new transaction with name [" + definition.Name + "]:" + definition);
                 }
                 try
                 {
@@ -610,7 +610,7 @@ namespace Spring.Transaction.Support
             {
                 if (debugEnabled)
                 {
-                    log.Debug("Suspending current transaction");
+                    log.LogDebug("Suspending current transaction");
                 }
                 object suspendedResources = Suspend(transaction);
                 bool newSynchronization = (_transactionSyncState == TransactionSynchronizationState.Always);
@@ -623,8 +623,8 @@ namespace Spring.Transaction.Support
             {
                 if (debugEnabled)
                 {
-                    log.Debug("Suspending current transaction, creating new transaction with name [" +
-                              definition.Name + "]:" + definition);
+                    log.LogDebug("Suspending current transaction, creating new transaction with name [" +
+                                 definition.Name + "]:" + definition);
                 }
                 object suspendedResources = Suspend(transaction);
                 try
@@ -646,10 +646,9 @@ namespace Spring.Transaction.Support
                     }
                     catch (TransactionException resumeEx)
                     {
-                        log.Error(
-                            "Inner transaction begin exception overridden by outer transaction resume exception");
-                        log.Error("Begin Transaction Exception", beginEx);
-                        log.Error("Resume Transaction Exception", resumeEx);
+                        log.LogError("Inner transaction begin exception overridden by outer transaction resume exception");
+                        log.LogError(beginEx, "Begin Transaction Exception");
+                        log.LogError(resumeEx, "Resume Transaction Exception");
                         throw;
                     }
                     throw;
@@ -665,7 +664,7 @@ namespace Spring.Transaction.Support
                 }
                 if (debugEnabled)
                 {
-                    log.Debug("Creating nested transaction with name [" + definition.Name + "]:" + definition);
+                    log.LogDebug("Creating nested transaction with name [" + definition.Name + "]:" + definition);
                 }
 
                 if (UseSavepointForNestedTransaction())
@@ -688,7 +687,7 @@ namespace Spring.Transaction.Support
             // Assumably PROPAGATION_SUPPORTS.
             if (debugEnabled)
             {
-                log.Debug("Participating in existing transaction");
+                log.LogDebug("Participating in existing transaction");
             }
 
             //TODO: this block related to un-ported java feature permitting setting the ValidateExistingTransaction flag
@@ -749,7 +748,7 @@ namespace Spring.Transaction.Support
             {
                 if (defaultStatus.Debug)
                 {
-                    log.Debug("Transaction code has requested rollback");
+                    log.LogDebug("Transaction code has requested rollback");
                 }
                 ProcessRollback(defaultStatus);
                 return;
@@ -758,7 +757,7 @@ namespace Spring.Transaction.Support
             {
                 if (defaultStatus.Debug)
                 {
-                    log.Debug("Global transaction is marked as rollback-only but transactional code requested commit");
+                    log.LogDebug("Global transaction is marked as rollback-only but transactional code requested commit");
                 }
                 ProcessRollback(defaultStatus);
                 // Throw UnexpectedRollbackException only at outermost transaction boundary
@@ -859,7 +858,7 @@ namespace Spring.Transaction.Support
             {
                 if (status.Debug)
                 {
-                    log.Debug("Trigger AfterCommit Synchronization");
+                    log.LogDebug("Trigger AfterCommit Synchronization");
                 }
                 IList synchronizations = TransactionSynchronizationManager.Synchronizations;
                 foreach (ITransactionSynchronization currentTxnSynchronization in synchronizations)
@@ -870,7 +869,7 @@ namespace Spring.Transaction.Support
                     }
                     catch (Exception e)
                     {
-                        log.Error("TransactionSynchronization.AfterCommit thew exception", e);
+                        log.LogError(e, "TransactionSynchronization.AfterCommit thew exception");
                     }
                 }
             }
@@ -923,7 +922,7 @@ namespace Spring.Transaction.Support
                     {
                         if (status.Debug)
                         {
-                            log.Debug("Rolling back transaction to savepoint.");
+                            log.LogDebug("Rolling back transaction to savepoint.");
                         }
                         status.RollbackToHeldSavepoint();
                     }
@@ -931,7 +930,7 @@ namespace Spring.Transaction.Support
                     {
                         if (status.Debug)
                         {
-                            log.Debug("Initiating transaction rollback");
+                            log.LogDebug("Initiating transaction rollback");
                         }
                         DoRollback(status);
                     }
@@ -941,14 +940,14 @@ namespace Spring.Transaction.Support
                         {
                             if (status.Debug)
                             {
-                                log.Debug("Participating transaction failed - marking existing transaction as rollback-only");
+                                log.LogDebug("Participating transaction failed - marking existing transaction as rollback-only");
                             }
                         }
                         DoSetRollbackOnly(status);
                     }
                     else
                     {
-                        log.Debug("Should roll back transaction but cannot - no transaction available.");
+                        log.LogDebug("Should roll back transaction but cannot - no transaction available.");
                     }
                 }
                 catch (Exception)
@@ -1135,7 +1134,7 @@ namespace Spring.Transaction.Support
                 {
                     if (status.Debug)
                     {
-                        log.Debug("Initiating transaction rollback on commit exception.");
+                        log.LogDebug("Initiating transaction rollback on commit exception.");
                     }
                     DoRollback(status);
                 }
@@ -1143,7 +1142,7 @@ namespace Spring.Transaction.Support
                 {
                     if (status.Debug)
                     {
-                        log.Debug("Marking existing transaction as rollback-only after commit exception", exception);
+                        log.LogDebug(exception, "Marking existing transaction as rollback-only after commit exception");
                     }
                     DoSetRollbackOnly(status);
                 }
@@ -1151,7 +1150,7 @@ namespace Spring.Transaction.Support
             catch (Exception)
             {
                 //TODO investigate rollback behavior...
-                log.Error("Commit exception overridden by rollback exception", exception);
+                log.LogError(exception, "Commit exception overridden by rollback exception");
                 TriggerAfterCompletion(status, TransactionSynchronizationStatus.Unknown);
                 throw;
             }
@@ -1184,7 +1183,7 @@ namespace Spring.Transaction.Support
             {
                 if (status.Debug)
                 {
-                    log.Debug("Trigger BeforeCompletion Synchronization");
+                    log.LogDebug("Trigger BeforeCompletion Synchronization");
                 }
                 IList synchronizations = TransactionSynchronizationManager.Synchronizations;
                 foreach (ITransactionSynchronization synchronization in synchronizations)
@@ -1195,7 +1194,7 @@ namespace Spring.Transaction.Support
                     }
                     catch (Exception e)
                     {
-                        log.Error("TransactionSynchronization.BeforeCompletion threw exception", e);
+                        log.LogError(e, "TransactionSynchronization.BeforeCompletion threw exception");
                     }
                 }
             }
@@ -1217,14 +1216,14 @@ namespace Spring.Transaction.Support
                 {
                     if (status.Debug)
                     {
-                        log.Debug("Triggering afterCompletion synchronization");
+                        log.LogDebug("Triggering afterCompletion synchronization");
                     }
                     InvokeAfterCompletion(synchronizations, completionStatus);
                 }
                 else
                 {
                     //TODO investigate parallel of JTA/System.Txs
-                    log.Info("Transaction controlled outside of spring tx manager.");
+                    log.LogInformation("Transaction controlled outside of spring tx manager.");
                     RegisterAfterCompletionWithExistingTransaction(status.Transaction, synchronizations);
                 }
             }
@@ -1240,7 +1239,7 @@ namespace Spring.Transaction.Support
                 }
                 catch (Exception e)
                 {
-                    log.Error("TransactionSynchronization.AfterCompletion threw exception", e);
+                    log.LogError(e, "TransactionSynchronization.AfterCompletion threw exception");
                 }
             }
         }
@@ -1265,7 +1264,7 @@ namespace Spring.Transaction.Support
             {
                 if (status.Debug)
                 {
-                    log.Debug("Resuming suspended transaction");
+                    log.LogDebug("Resuming suspended transaction");
                 }
                 Resume(status.Transaction, status.SuspendedResources);
             }

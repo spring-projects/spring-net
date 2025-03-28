@@ -172,7 +172,7 @@ namespace Spring.Web.Support
             #region Instrumentation
 
             if (isDebug)
-                Log.Debug(string.Format("GetHandler():resolving url '{0}'", url));
+                Log.LogDebug(string.Format("GetHandler():resolving url '{0}'", url));
 
             #endregion
 
@@ -188,7 +188,7 @@ namespace Spring.Web.Support
 
                 if (isDebug)
                 {
-                    Log.Debug(string.Format("GetHandler():resolved url '{0}' from reusable handler cache", url));
+                    Log.LogDebug(string.Format("GetHandler():resolved url '{0}' from reusable handler cache", url));
                 }
 
                 #endregion
@@ -299,7 +299,7 @@ namespace Spring.Web.Support
 
             // lookup definition using app-relative url
             if (isDebug)
-                Log.Debug(string.Format("GetHandler():looking up definition for app-relative url '{0}'", appRelativeVirtualPath));
+                Log.LogDebug(string.Format("GetHandler():looking up definition for app-relative url '{0}'", appRelativeVirtualPath));
             string objectDefinitionName = appRelativeVirtualPath;
             IObjectDefinition pageDefinition = objectFactory.GetObjectDefinition(appRelativeVirtualPath, true);
 
@@ -324,18 +324,18 @@ namespace Spring.Web.Support
                 if (pageDefinition != null)
                 {
                     if (isDebug)
-                        Log.Debug(string.Format("GetHandler():found definition for page-name '{0}'", objectDefinitionName));
+                        Log.LogDebug(string.Format("GetHandler():found definition for page-name '{0}'", objectDefinitionName));
                 }
                 else
                 {
                     if (isDebug)
-                        Log.Debug(string.Format("GetHandler():no definition found for page-name '{0}'", pageName));
+                        Log.LogDebug(string.Format("GetHandler():no definition found for page-name '{0}'", pageName));
                 }
             }
             else
             {
                 if (isDebug)
-                    Log.Debug(string.Format("GetHandler():found definition for page-url '{0}'", appRelativeVirtualPath));
+                    Log.LogDebug(string.Format("GetHandler():found definition for page-url '{0}'", appRelativeVirtualPath));
             }
 
             return (pageDefinition == null) ? (NamedObjectDefinition)null : new NamedObjectDefinition(objectDefinitionName, pageDefinition);

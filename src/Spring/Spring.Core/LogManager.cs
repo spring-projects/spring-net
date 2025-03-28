@@ -32,16 +32,3 @@ public static class LogManager
     public static ILogger GetLogger(Type type) => LoggerFactory?.CreateLogger(type) ?? NullLogger.Instance;
     public static ILogger<T> GetLogger<T>() => LoggerFactory?.CreateLogger<T>() ?? NullLogger<T>.Instance;
 }
-
-// TODO INLINE AND REMOVE
-public static class LoggerExtensions
-{
-    public static void Debug(this ILogger logger, string message) => logger.LogDebug(message);
-    public static void Debug(this ILogger logger, string message, Exception exception) => logger.LogDebug(exception, message);
-    public static void Trace(this ILogger logger, string message) => logger.LogTrace(message);
-    public static void Info(this ILogger logger, string message) => logger.LogInformation(message);
-    public static void Warn(this ILogger logger, string message) => logger.LogWarning(message);
-    public static void Warn(this ILogger logger, string message, Exception exception) => logger.LogWarning(exception, message);
-    public static void Error(this ILogger logger, string message) => logger.LogError(message);
-    public static void Error(this ILogger logger, string message, Exception exception) => logger.LogError(exception, message);
-}

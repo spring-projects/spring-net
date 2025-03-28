@@ -29,9 +29,9 @@ namespace Spring.NmsQuickStart.Server.Gateways
             while (true)
             {
                 IDictionary data = GenerateFakeMarketData();
-                log.Info("Sending market data.");
+                log.LogInformation("Sending market data.");
                 NmsTemplate.ConvertAndSend(data);
-                log.Info("Sleeping " + sleepTimeInSeconds + " seconds before sending more market data.");
+                log.LogInformation("Sleeping {SleepTimeInSeconds} seconds before sending more market data.", sleepTimeInSeconds);
                 Thread.Sleep(sleepTimeInSeconds);
             }
         }

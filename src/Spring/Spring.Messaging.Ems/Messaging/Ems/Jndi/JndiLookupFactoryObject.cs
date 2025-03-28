@@ -132,11 +132,11 @@ namespace Spring.Messaging.Ems.Jndi
                 {
                     if (logger.IsEnabled(LogLevel.Debug))
                     {
-                        logger.Debug("JNDI lookup failed - returning specified default object instead", ex);
+                        logger.LogDebug((Exception) ex, "JNDI lookup failed - returning specified default object instead");
                     }
                     else if (logger.IsEnabled(LogLevel.Information))
                     {
-                        logger.Info("JNDI lookup failed - returning specified default object instead: " + ex);
+                        logger.LogInformation("JNDI lookup failed - returning specified default object instead: " + ex);
                     }
                     return this.defaultObject;
                 }

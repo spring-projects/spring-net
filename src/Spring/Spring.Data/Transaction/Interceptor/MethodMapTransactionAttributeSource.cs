@@ -174,8 +174,8 @@ namespace Spring.Transaction.Interceptor
                     // method name specification now -> (re-)register method.
                     if (LOG.IsEnabled(LogLevel.Debug) && regularMethodName != null)
                     {
-                        LOG.Debug("Replacing attribute for transactional method [" + currentMethod + "]: current name '" +
-                            name + "' is more specific than '" + regularMethodName + "'");
+                        LOG.LogDebug("Replacing attribute for transactional method [" + currentMethod + "]: current name '" +
+                                     name + "' is more specific than '" + regularMethodName + "'");
                     }
 					_nameMap.Add( currentMethod, name );
 					AddTransactionalMethod( currentMethod, transactionAttribute );
@@ -184,8 +184,8 @@ namespace Spring.Transaction.Interceptor
 				{
                     if (LOG.IsEnabled(LogLevel.Debug) && regularMethodName != null)
                     {
-                        LOG.Debug("Keeping attribute for transactional method [" + currentMethod + "]: current name '" +
-                            name + "' is not more specific than '" + regularMethodName + "'");
+                        LOG.LogDebug("Keeping attribute for transactional method [" + currentMethod + "]: current name '" +
+                                     name + "' is not more specific than '" + regularMethodName + "'");
                     }
 				}
 			}

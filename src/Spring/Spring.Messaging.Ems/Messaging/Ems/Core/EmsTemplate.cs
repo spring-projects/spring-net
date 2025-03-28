@@ -209,7 +209,7 @@ namespace Spring.Messaging.Ems.Core
                 }
                 if (logger.IsEnabled(LogLevel.Debug))
                 {
-                    logger.Debug("Executing callback on EMS Session [" + sessionToUse + "]");
+                    logger.LogDebug("Executing callback on EMS Session [" + sessionToUse + "]");
                 }
                 return action(sessionToUse);
             }
@@ -688,7 +688,7 @@ namespace Spring.Messaging.Ems.Core
                 }
                 if (logger.IsEnabled(LogLevel.Debug))
                 {
-                    logger.Debug("Sending created message [" + message + "]");
+                    logger.LogDebug("Sending created message [" + message + "]");
                 }
                 DoSend(producer, message);
 

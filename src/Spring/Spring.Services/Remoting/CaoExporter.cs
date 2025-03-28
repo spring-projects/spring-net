@@ -185,7 +185,7 @@ namespace Spring.Remoting
 
 			if (LOG.IsEnabled(LogLevel.Debug))
 			{
-				LOG.Debug(String.Format("Target '{0}' registered.", targetName));
+				LOG.LogDebug(String.Format("Target '{0}' registered.", targetName));
 			}
 
 			#endregion

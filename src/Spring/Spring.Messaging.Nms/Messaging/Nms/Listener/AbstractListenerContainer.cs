@@ -20,6 +20,7 @@
 
 using System.Runtime.Serialization;
 using Apache.NMS;
+using Microsoft.Extensions.Logging;
 using Spring.Context;
 using Spring.Messaging.Nms.Connections;
 using Spring.Messaging.Nms.Support;
@@ -277,7 +278,7 @@ namespace Spring.Messaging.Nms.Listener
         /// </summary>
         public virtual void Shutdown()
         {
-            logger.Debug("Shutting down message listener container");
+            logger.LogDebug("Shutting down message listener container");
             bool wasRunning = false;
             lock (this.lifecycleMonitor)
             {
@@ -294,7 +295,7 @@ namespace Spring.Messaging.Nms.Listener
                     StopSharedConnection();
                 } catch (Exception ex)
                 {
-                    logger.Debug("Could not stop NMS Connection on shutdown", ex);
+                    logger.LogDebug(ex, "Could not stop NMS Connection on shutdown");
                 }
             }
 
@@ -409,7 +410,7 @@ namespace Spring.Messaging.Nms.Listener
                 if (sharedConnection == null)
                 {
                     sharedConnection = CreateSharedConnection();
-                    logger.Debug("Established shared NMS Connection");
+                    logger.LogDebug("Established shared NMS Connection");
                 }
             }
         }
@@ -495,7 +496,7 @@ namespace Spring.Messaging.Nms.Listener
                     }
                     catch (Exception ex)
                     {
-                        logger.Warn("Ignoring Connection start exception - assuming already started", ex);
+                        logger.LogWarning(ex, "Ignoring Connection start exception - assuming already started");
                     }
                 }
             }
@@ -518,7 +519,7 @@ namespace Spring.Messaging.Nms.Listener
                     }
                     catch (System.InvalidOperationException ex)
                     {
-                        logger.Warn("Ignoring Connection stop exception - assuming already stopped", ex);
+                        logger.LogWarning(ex, "Ignoring Connection stop exception - assuming already stopped");
                     }
                 }
             }

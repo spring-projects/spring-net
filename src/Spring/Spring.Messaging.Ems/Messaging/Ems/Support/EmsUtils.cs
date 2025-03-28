@@ -18,6 +18,7 @@
 
 #endregion
 
+using Microsoft.Extensions.Logging;
 using Spring.Messaging.Ems.Common;
 using Spring.Util;
 
@@ -76,12 +77,12 @@ namespace Spring.Messaging.Ems.Support
                 }
                 catch (EMSException ex)
                 {
-                    logger.Debug("Could not close EMS Connection", ex);
+                    logger.LogDebug((Exception) ex, "Could not close EMS Connection");
                 }
                 catch (Exception ex)
                 {
                     // We don't trust the EMS provider: It might throw another exception.
-                    logger.Debug("Unexpected exception on closing EMS Connection", ex);
+                    logger.LogDebug(ex, "Unexpected exception on closing EMS Connection");
                 }
             }
         }
@@ -101,12 +102,12 @@ namespace Spring.Messaging.Ems.Support
                 }
                 catch (EMSException ex)
                 {
-                    logger.Debug("Could not close EMS Session", ex);
+                    logger.LogDebug((Exception) ex, "Could not close EMS Session");
                 }
                 catch (Exception ex)
                 {
                     // We don't trust the EMS provider: It might throw RuntimeException or Error.
-                    logger.Debug("Unexpected exception on closing EMS Session", ex);
+                    logger.LogDebug(ex, "Unexpected exception on closing EMS Session");
                 }
             }
         }
@@ -126,12 +127,12 @@ namespace Spring.Messaging.Ems.Support
                 }
                 catch (EMSException ex)
                 {
-                    logger.Debug("Could not close EMS MessageProducer", ex);
+                    logger.LogDebug((Exception) ex, "Could not close EMS MessageProducer");
                 }
                 catch (Exception ex)
                 {
                     // We don't trust the provider: It might throw an exception .
-                    logger.Debug("Unexpected exception on closing EMS MessageProducer", ex);
+                    logger.LogDebug(ex, "Unexpected exception on closing EMS MessageProducer");
                 }
             }
         }
@@ -151,12 +152,12 @@ namespace Spring.Messaging.Ems.Support
                 }
                 catch (EMSException ex)
                 {
-                    logger.Debug("Could not close EMS MessageConsumer", ex);
+                    logger.LogDebug((Exception) ex, "Could not close EMS MessageConsumer");
                 }
                 catch (Exception ex)
                 {
                     // We don't trust the EMS provider: It might throw RuntimeException or Error.
-                    logger.Debug("Unexpected exception on closing EMS MessageConsumer", ex);
+                    logger.LogDebug(ex, "Unexpected exception on closing EMS MessageConsumer");
                 }
             }
         }
@@ -251,10 +252,10 @@ namespace Spring.Messaging.Ems.Support
                     browser.Close();
                 } catch (EMSException ex)
                 {
-                    logger.Debug("Could not close EMS QueueBrowser", ex);
+                    logger.LogDebug((Exception) ex, "Could not close EMS QueueBrowser");
                 } catch (Exception ex)
                 {
-                    logger.Debug("Unexpected exception on closing EMS QueueBrowser", ex);
+                    logger.LogDebug(ex, "Unexpected exception on closing EMS QueueBrowser");
                 }
             }
         }
@@ -284,7 +285,7 @@ namespace Spring.Messaging.Ems.Support
                 case Session.SESSION_TRANSACTED:
                     return SessionMode.SessionTransacted;
                 default:
-                    logger.Warn("Integer acknowledgement mode [" + ackMode + "] not valid. Defaulting to SessionMode.AutoAcknowledge");
+                    logger.LogWarning("Integer acknowledgement mode [" + ackMode + "] not valid. Defaulting to SessionMode.AutoAcknowledge");
                     return SessionMode.AutoAcknowledge;
             }
         }

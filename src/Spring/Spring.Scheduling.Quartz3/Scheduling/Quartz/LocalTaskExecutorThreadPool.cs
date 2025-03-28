@@ -14,6 +14,7 @@
 * limitations under the License.
 */
 
+using Microsoft.Extensions.Logging;
 using Quartz;
 using Quartz.Spi;
 
@@ -89,7 +90,7 @@ namespace Spring.Scheduling.Quartz
             }
             catch (TaskRejectedException ex)
             {
-                Logger.Error("Task has been rejected by TaskExecutor", ex);
+                Logger.LogError(ex, "Task has been rejected by TaskExecutor");
                 return false;
             }
         }

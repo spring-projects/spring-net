@@ -89,14 +89,14 @@ namespace Spring.Messaging.Nms.Connections
                 {
                     if (Log.IsEnabled(LogLevel.Debug))
                     {
-                        Log.Debug("Found cached MessageProducer for unspecified destination");
+                        Log.LogDebug("Found cached MessageProducer for unspecified destination");
                     }
                 }
                 else
                 {
                     if (Log.IsEnabled(LogLevel.Debug))
                     {
-                        Log.Debug("Creating cached MessageProducer for unspecified destination");
+                        Log.LogDebug("Creating cached MessageProducer for unspecified destination");
                     }
 
                     cachedUnspecifiedDestinationMessageProducer = await target.CreateProducerAsync().Awaiter();
@@ -131,7 +131,7 @@ namespace Spring.Messaging.Nms.Connections
                 {
                     if (Log.IsEnabled(LogLevel.Debug))
                     {
-                        Log.Debug("Found cached MessageProducer for destination [" + destination + "]");
+                        Log.LogDebug("Found cached MessageProducer for destination [" + destination + "]");
                     }
                 }
                 else
@@ -140,7 +140,7 @@ namespace Spring.Messaging.Nms.Connections
 
                     if (Log.IsEnabled(LogLevel.Debug))
                     {
-                        Log.Debug("Creating cached MessageProducer for destination [" + destination + "]");
+                        Log.LogDebug("Creating cached MessageProducer for destination [" + destination + "]");
                     }
 
                     cachedProducers[destination] = producer;
@@ -219,7 +219,7 @@ namespace Spring.Messaging.Nms.Connections
             {
                 if (Log.IsEnabled(LogLevel.Debug))
                 {
-                    Log.Debug("Returning cached Session: " + target);
+                    Log.LogDebug("Returning cached Session: " + target);
                 }
 
                 sessionList.Add(this); //add to end of linked list.
@@ -230,7 +230,7 @@ namespace Spring.Messaging.Nms.Connections
         {
             if (Log.IsEnabled(LogLevel.Debug))
             {
-                Log.Debug("Closing cached Session: " + target);
+                Log.LogDebug("Closing cached Session: " + target);
             }
             // Explicitly close all MessageProducers and MessageConsumers that
             // this Session happens to cache...
@@ -450,7 +450,7 @@ namespace Spring.Messaging.Nms.Connections
             {
                 if (Log.IsEnabled(LogLevel.Debug))
                 {
-                    Log.Debug("Found cached NMS MessageConsumer for destination [" + destination + "]: " + consumer);
+                    Log.LogDebug("Found cached NMS MessageConsumer for destination [" + destination + "]: " + consumer);
                 }
             }
             else
@@ -475,7 +475,7 @@ namespace Spring.Messaging.Nms.Connections
 
             if (Log.IsEnabled(LogLevel.Debug))
             {
-                Log.Debug("Creating cached NMS MessageConsumer for destination [" + destination + "]: " + consumer);
+                Log.LogDebug("Creating cached NMS MessageConsumer for destination [" + destination + "]: " + consumer);
             }
 
             cachedConsumers[cacheKey] = consumer;

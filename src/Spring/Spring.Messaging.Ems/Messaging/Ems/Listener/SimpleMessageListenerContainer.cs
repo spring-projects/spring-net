@@ -197,7 +197,7 @@ namespace Spring.Messaging.Ems.Listener
             // now try to recover the shared Connection and all consumers...
             if (logger.IsEnabled(LogLevel.Information))
             {
-                logger.Info("Trying to recover from EMS Connection exception: " + exception);
+                logger.LogInformation("Trying to recover from EMS Connection exception: " + exception);
             }
             try
             {
@@ -208,15 +208,15 @@ namespace Spring.Messaging.Ems.Listener
                 }
                 RefreshConnectionUntilSuccessful();
                 InitializeConsumers();
-                logger.Info("Successfully refreshed EMS Connection");
+                logger.LogInformation("Successfully refreshed EMS Connection");
             }
             catch (RecoveryTimeExceededException)
             {
                 throw;
             } catch (EMSException recoverEx)
             {
-                logger.Debug("Failed to recover EMS Connection", recoverEx);
-                logger.Error("Encountered non-recoverable EMSException", exception);
+                logger.LogDebug((Exception) recoverEx, "Failed to recover EMS Connection");
+                logger.LogError((Exception) exception, "Encountered non-recoverable EMSException");
             }
         }
 
@@ -245,13 +245,13 @@ namespace Spring.Messaging.Ems.Listener
                 {
                     if (logger.IsEnabled(LogLevel.Information))
                     {
-                        logger.Info("Could not refresh Connection - retrying in " + recoveryInterval, ex);
+                        logger.LogInformation("Could not refresh Connection - retrying in " + recoveryInterval);
                     }
                 }
 
                 if (totalTryTime > maxRecoveryTime)
                 {
-                    logger.Info("Could not refresh Connection after " + totalTryTime + ".  Stopping reconnection attempts.");
+                    logger.LogInformation("Could not refresh Connection after " + totalTryTime + ".  Stopping reconnection attempts.");
                     throw new RecoveryTimeExceededException("Could not recover after " + totalTryTime);
                 }
 
@@ -326,7 +326,7 @@ namespace Spring.Messaging.Ems.Listener
             {
                 if (consumers != null)
                 {
-                    logger.Debug("Closing EMS MessageConsumers");
+                    logger.LogDebug("Closing EMS MessageConsumers");
                     foreach (IMessageConsumer messageConsumer in consumers)
                     {
                         EmsUtils.CloseMessageConsumer(messageConsumer);
@@ -334,7 +334,7 @@ namespace Spring.Messaging.Ems.Listener
                 }
                 if (sessions != null)
                 {
-                    logger.Debug("Closing EMS Sessions");
+                    logger.LogDebug("Closing EMS Sessions");
                     foreach (ISession session in sessions)
                     {
                         EmsUtils.CloseSession(session);

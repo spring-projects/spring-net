@@ -33,7 +33,7 @@ namespace Spring.Northwind.Service
 
         public void ShipOrder(Order order)
         {
-            log.Info("Shipping order id = " + order.Id);
+            log.LogInformation("Shipping order id = {OrderId} ", order.Id);
         }
     }
 }

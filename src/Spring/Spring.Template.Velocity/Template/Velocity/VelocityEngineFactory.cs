@@ -205,7 +205,7 @@ namespace Spring.Template.Velocity {
             // Load config file if set.
             if (configLocation != null) {
                 if (log.IsEnabled(LogLevel.Information)) {
-                    log.Info(string.Format("Loading Velocity config from [{0}]", configLocation));
+                    log.LogInformation(string.Format("Loading Velocity config from [{0}]", configLocation));
                 }
                 FillProperties(extendedProperties, configLocation, false);
             }
@@ -304,9 +304,11 @@ namespace Spring.Template.Velocity {
                     extendedProperties.SetProperty(RuntimeConstants.FILE_RESOURCE_LOADER_PATH,
                         StringUtils.CollectionToCommaDelimitedString(resolvedPaths));
                 } catch (IOException ex) {
-                    if (log.IsEnabled(LogLevel.Debug)) {
-                        log.Error(string.Format("Cannot resolve resource loader path [{0}] to [File]: using SpringResourceLoader",
-                            StringUtils.CollectionToCommaDelimitedString(resolvedPaths)), ex);
+                    if (log.IsEnabled(LogLevel.Debug))
+                    {
+                        string message = string.Format("Cannot resolve resource loader path [{0}] to [File]: using SpringResourceLoader",
+                            StringUtils.CollectionToCommaDelimitedString(resolvedPaths));
+                        log.LogError(ex, message);
                     }
 
                     InitSpringResourceLoader(velocityEngine, extendedProperties, StringUtils.CollectionToCommaDelimitedString(paths));
@@ -314,7 +316,7 @@ namespace Spring.Template.Velocity {
             } else {
                 // Always load via SpringResourceLoader (without hot detection of template changes).
                 if (log.IsEnabled(LogLevel.Debug)) {
-                    log.Debug("File system access not preferred: using SpringResourceLoader");
+                    log.LogDebug("File system access not preferred: using SpringResourceLoader");
                 }
                 InitSpringResourceLoader(velocityEngine, extendedProperties, StringUtils.CollectionToCommaDelimitedString(paths));
             }

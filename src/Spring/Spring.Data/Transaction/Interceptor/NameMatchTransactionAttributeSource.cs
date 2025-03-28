@@ -160,7 +160,7 @@ namespace Spring.Transaction.Interceptor
             #region Instrumentation
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.Debug("Adding transactional method [" + methodName + "] with attribute [" + attribute + "]");
+                log.LogDebug("Adding transactional method [" + methodName + "] with attribute [" + attribute + "]");
             }
             #endregion
             nameMap.Add( methodName, attribute );

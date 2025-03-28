@@ -345,9 +345,8 @@ namespace Spring.Objects.Factory.Support
         {
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.Debug(
-                        string.Format(CultureInfo.InvariantCulture, "Resolving reference from property '{0}' in object '{1}' to object '{2}'.",
-                                      argumentName, name, reference.ObjectName));
+                log.LogDebug(string.Format(CultureInfo.InvariantCulture, "Resolving reference from property '{0}' in object '{1}' to object '{2}'.",
+                    argumentName, name, reference.ObjectName));
             }
 
             try

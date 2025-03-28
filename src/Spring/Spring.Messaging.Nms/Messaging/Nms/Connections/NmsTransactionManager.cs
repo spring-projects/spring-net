@@ -197,7 +197,7 @@ namespace Spring.Messaging.Nms.Connections
                 session = CreateSession(con);
                 if (LOG.IsEnabled(LogLevel.Debug))
                 {
-                    log.Debug("Created NMS transaction on Session [" + session + "] from Connection [" + con + "]");
+                    log.LogDebug("Created NMS transaction on Session [" + session + "] from Connection [" + con + "]");
                 }
                 txObject.ResourceHolder = new NmsResourceHolder(ConnectionFactory, con, session);
                 txObject.ResourceHolder.SynchronizedWithTransaction = true;
@@ -287,7 +287,7 @@ namespace Spring.Messaging.Nms.Connections
             {
                 if (status.Debug)
                 {
-                    LOG.Debug("Committing NMS transaction on Session [" + session + "]");
+                    LOG.LogDebug("Committing NMS transaction on Session [" + session + "]");
                 }
                 session.Commit();
                 //Note that NMS does not have, TransactionRolledBackException
@@ -314,7 +314,7 @@ namespace Spring.Messaging.Nms.Connections
             {
                 if (status.Debug)
                 {
-                    LOG.Debug("Rolling back NMS transaction on Session [" + session + "]");
+                    LOG.LogDebug("Rolling back NMS transaction on Session [" + session + "]");
                 }
                 session.Rollback();
             }

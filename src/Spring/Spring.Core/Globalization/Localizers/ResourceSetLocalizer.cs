@@ -21,6 +21,7 @@
 using System.Collections;
 using System.Globalization;
 using System.Resources;
+using Microsoft.Extensions.Logging;
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.Expressions;
@@ -75,7 +76,7 @@ namespace Spring.Globalization.Localizers
                     catch (MissingManifestResourceException mmrex)
                     {
                         // ignore but log missing ResourceSet
-                        log.Debug("No ResourceSet available for invariant culture", mmrex);
+                        log.LogDebug(mmrex, "No ResourceSet available for invariant culture");
                     }
 
                     if (invariantResources != null)

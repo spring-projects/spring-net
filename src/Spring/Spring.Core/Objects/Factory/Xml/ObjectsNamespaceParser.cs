@@ -205,7 +205,7 @@ namespace Spring.Objects.Factory.Xml
 
                 if (log.IsEnabled(LogLevel.Debug))
                 {
-                    log.Debug(string.Format(
+                    log.LogDebug(string.Format(
                         CultureInfo.InvariantCulture,
                         "Attempting to import object definitions from '{0}'.", location));
                 }
@@ -313,10 +313,9 @@ namespace Spring.Objects.Factory.Xml
 
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.Debug(
-                    string.Format(
-                        CultureInfo.InvariantCulture,
-                        "Registering object definition with id '{0}'.", holder.ObjectName));
+                log.LogDebug(string.Format(
+                    CultureInfo.InvariantCulture,
+                    "Registering object definition with id '{0}'.", holder.ObjectName));
             }
 
             #endregion
@@ -838,7 +837,7 @@ namespace Spring.Objects.Factory.Xml
                 {
                     if (log.IsEnabled(LogLevel.Warning))
                     {
-                        log.Warn("The 'type' attribute is redundant when the 'name' attribute has been used on a constructor argument element.");
+                        log.LogWarning("The 'type' attribute is redundant when the 'name' attribute has been used on a constructor argument element.");
                     }
                 }
                 arguments.AddNamedArgumentValue(nameAttr, val);
@@ -1467,9 +1466,9 @@ namespace Spring.Objects.Factory.Xml
 
                     if (log.IsEnabled(LogLevel.Debug))
                     {
-                        log.Debug(
-                            string.Format("Error while parsing dependency checking mode : '{0}' is an invalid value.",
-                                          value), ex);
+                        string message = string.Format("Error while parsing dependency checking mode : '{0}' is an invalid value.",
+                            value);
+                        log.LogDebug(ex, message);
                     }
 
                     #endregion
@@ -1509,9 +1508,9 @@ namespace Spring.Objects.Factory.Xml
 
                     if (log.IsEnabled(LogLevel.Debug))
                     {
-                        log.Debug(
-                            string.Format("Error while parsing autowire mode : '{0}' is an invalid value.",
-                                          value), ex);
+                        string message = string.Format("Error while parsing autowire mode : '{0}' is an invalid value.",
+                            value);
+                        log.LogDebug(ex, message);
                     }
 
                     #endregion

@@ -103,7 +103,7 @@ namespace Spring.Context.Config
             foreach (var baseAssembly in baseAssemblies.Split(','))
             {
                 if (Logger.IsEnabled(LogLevel.Debug))
-                    Logger.Debug("Start With Assembly Filter: " + baseAssembly);
+                    Logger.LogDebug("Start With Assembly Filter: " + baseAssembly);
 
                 scanner.WithAssemblyFilter(assy => assy.FullName.StartsWith(baseAssembly));
             }

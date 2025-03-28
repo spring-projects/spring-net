@@ -138,9 +138,9 @@ namespace Spring.Aop.Target
 
 				if (logger.IsEnabled(LogLevel.Debug))
 				{
-					logger.Debug(string.Format(
-						"Getting object with name '{0}' to determine class.",
-						TargetObjectName));
+					logger.LogDebug(string.Format(
+                        "Getting object with name '{0}' to determine class.",
+                        TargetObjectName));
 				}
 
 				#endregion
@@ -162,9 +162,9 @@ namespace Spring.Aop.Target
 
 			if (logger.IsEnabled(LogLevel.Debug))
 			{
-				logger.Debug(string.Format(
-					"Creating new target from object '{0}'.",
-					TargetObjectName));
+				logger.LogDebug(string.Format(
+                    "Creating new target from object '{0}'.",
+                    TargetObjectName));
 			}
 
 			#endregion

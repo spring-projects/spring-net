@@ -207,11 +207,11 @@ namespace Spring.Objects.Support
 
 					if (log.IsEnabled(LogLevel.Debug))
 					{
-						log.Debug(string.Format(
-							CultureInfo.InvariantCulture,
-							"Wiring up this method '{0}' to this event '{1}'",
-							method.Name,
-							theEvent.Name));
+						log.LogDebug(string.Format(
+                            CultureInfo.InvariantCulture,
+                            "Wiring up this method '{0}' to this event '{1}'",
+                            method.Name,
+                            theEvent.Name));
 					}
 
 					#endregion

@@ -18,6 +18,7 @@
 
 using Spring.Util;
 using Apache.NMS;
+using Microsoft.Extensions.Logging;
 
 namespace Spring.Messaging.Nms.Support
 {
@@ -74,12 +75,12 @@ namespace Spring.Messaging.Nms.Support
                 }
                 catch (NMSException ex)
                 {
-                    logger.Debug("Could not close NMS Connection", ex);
+                    logger.LogDebug(ex, "Could not close NMS Connection");
                 }
                 catch (Exception ex)
                 {
                     // We don't trust the NMS provider: It might throw another exception.
-                    logger.Debug("Unexpected exception on closing NMS Connection", ex);
+                    logger.LogDebug(ex, "Unexpected exception on closing NMS Connection");
                 }
             }
         }
@@ -99,12 +100,12 @@ namespace Spring.Messaging.Nms.Support
                 }
                 catch (NMSException ex)
                 {
-                    logger.Debug("Could not close NMS ISession", ex);
+                    logger.LogDebug(ex, "Could not close NMS ISession");
                 }
                 catch (Exception ex)
                 {
                     // We don't trust the NMS provider: It might throw RuntimeException or Error.
-                    logger.Debug("Unexpected exception on closing NMS ISession", ex);
+                    logger.LogDebug(ex, "Unexpected exception on closing NMS ISession");
                 }
             }
         }
@@ -124,12 +125,12 @@ namespace Spring.Messaging.Nms.Support
                 }
                 catch (NMSException ex)
                 {
-                    logger.Debug("Could not close NMS MessageProducer", ex);
+                    logger.LogDebug(ex, "Could not close NMS MessageProducer");
                 }
                 catch (Exception ex)
                 {
                     // We don't trust the NMS provider: It might throw RuntimeException or Error.
-                    logger.Debug("Unexpected exception on closing NMS MessageProducer", ex);
+                    logger.LogDebug(ex, "Unexpected exception on closing NMS MessageProducer");
                 }
             }
         }
@@ -151,12 +152,12 @@ namespace Spring.Messaging.Nms.Support
                 }
                 catch (NMSException ex)
                 {
-                    logger.Debug("Could not close NMS MessageConsumer", ex);
+                    logger.LogDebug(ex, "Could not close NMS MessageConsumer");
                 }
                 catch (Exception ex)
                 {
                     // We don't trust the NMS provider: It might throw RuntimeException or Error.
-                    logger.Debug("Unexpected exception on closing NMS MessageConsumer", ex);
+                    logger.LogDebug(ex, "Unexpected exception on closing NMS MessageConsumer");
                 }
             }
         }

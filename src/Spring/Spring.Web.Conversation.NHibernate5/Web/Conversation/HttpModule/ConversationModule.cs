@@ -75,10 +75,10 @@ namespace Spring.Web.Conversation.HttpModule
 
                 if (HttpContext.Current.Session != null)
                 {
-                    if (LOG.IsEnabled(LogLevel.Debug)) LOG.Debug("context_PreRequestHandlerExecute: Processing HttpContext.Current.Session");
+                    if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug("context_PreRequestHandlerExecute: Processing HttpContext.Current.Session");
                     foreach (String convMngName in this.ConversationManagerNameList)
                     {
-                        if (LOG.IsEnabled(LogLevel.Debug)) LOG.Debug(string.Format("context_PreRequestHandlerExecute: Processing ConversationManager: {0}", convMngName));
+                        if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug(string.Format("context_PreRequestHandlerExecute: Processing ConversationManager: {0}", convMngName));
                         IConversationManager convMng = (IConversationManager)this.applicationContext.GetObject(convMngName);
                         convMng.EndOnTimeOut();
                         convMng.FreeEnded();
@@ -86,7 +86,7 @@ namespace Spring.Web.Conversation.HttpModule
                 }
                 else
                 {
-                    if (LOG.IsEnabled(LogLevel.Debug)) LOG.Debug("context_PreRequestHandlerExecute: no HttpContext.Current.Session found.");
+                    if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug("context_PreRequestHandlerExecute: no HttpContext.Current.Session found.");
                 }
             }
         }
@@ -102,10 +102,10 @@ namespace Spring.Web.Conversation.HttpModule
         /// </remarks>
         void page_Unload(object sender, EventArgs e)
         {
-            if (LOG.IsEnabled(LogLevel.Debug)) LOG.Debug("page_Unload HttpContext.Current.Session is null: " + (HttpContext.Current.Session == null));
+            if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug("page_Unload HttpContext.Current.Session is null: " + (HttpContext.Current.Session == null));
             foreach (String convMngName in this.ConversationManagerNameList)
             {
-                if (LOG.IsEnabled(LogLevel.Debug)) LOG.Debug(string.Format("page_Unload: Processing ConversationManager: {0}", convMngName));
+                if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug(string.Format("page_Unload: Processing ConversationManager: {0}", convMngName));
                 IConversationManager convMng = (IConversationManager)this.applicationContext.GetObject(convMngName);
                 convMng.EndOnTimeOut();
                 convMng.FreeEnded();
@@ -115,12 +115,12 @@ namespace Spring.Web.Conversation.HttpModule
 
         void context_EndRequest(object sender, EventArgs e)
         {
-            if (LOG.IsEnabled(LogLevel.Debug)) LOG.Debug("context_EndRequest HttpContext.Current.Session is null: " + (HttpContext.Current.Session == null));
+            if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug("context_EndRequest HttpContext.Current.Session is null: " + (HttpContext.Current.Session == null));
         }
 
         void context_PostRequestHandlerExecute(object sender, EventArgs e)
         {
-            if (LOG.IsEnabled(LogLevel.Debug)) LOG.Debug("context_PostRequestHandlerExecute HttpContext.Current.Session is null: " + (HttpContext.Current.Session == null));
+            if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug("context_PostRequestHandlerExecute HttpContext.Current.Session is null: " + (HttpContext.Current.Session == null));
             if (HttpContext.Current.Session != null)
             {
             }

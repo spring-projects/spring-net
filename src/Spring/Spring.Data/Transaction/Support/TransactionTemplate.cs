@@ -200,7 +200,7 @@ namespace Spring.Transaction.Support
         {
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.Debug("Initiating transaction rollback on application exception", exception);
+                log.LogDebug(exception, "Initiating transaction rollback on application exception");
             }
             try
             {
@@ -208,7 +208,7 @@ namespace Spring.Transaction.Support
             }
             catch ( Exception ex )
             {
-                log.Error("Application exception overridden by rollback exception", ex);
+                log.LogError(ex, "Application exception overridden by rollback exception");
                 throw;
             }
         }

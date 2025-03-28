@@ -139,7 +139,7 @@ namespace Spring.Aspects.Cache
                             #region Instrumentation
                             if (isLogDebugEnabled)
                             {
-                                logger.Debug(string.Format("Caching parameter for key [{0}] into cache [{1}].", key, paramInfo.CacheName));
+                                logger.LogDebug(string.Format("Caching parameter for key [{0}] into cache [{1}].", key, paramInfo.CacheName));
                             }
                             #endregion
 

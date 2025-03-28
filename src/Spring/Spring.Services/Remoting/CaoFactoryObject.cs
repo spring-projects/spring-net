@@ -137,7 +137,7 @@ namespace Spring.Remoting
 		    string url = serviceUrl.TrimEnd('/') + '/' + remoteTargetName;
             if (LOG.IsEnabled(LogLevel.Debug))
             {
-                LOG.Debug("Accessing CAO object of type ICaoRemoteFactory object at url = [" + url + "]");
+                LOG.LogDebug("Accessing CAO object of type ICaoRemoteFactory object at url = [" + url + "]");
             }
 			ICaoRemoteFactory remoteFactory = (ICaoRemoteFactory) Activator.GetObject(typeof(ICaoRemoteFactory), url);
 

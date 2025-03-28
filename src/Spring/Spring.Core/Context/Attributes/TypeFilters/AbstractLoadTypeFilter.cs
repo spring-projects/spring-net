@@ -18,6 +18,7 @@
 
 #endregion
 
+using Microsoft.Extensions.Logging;
 using Spring.Core.TypeResolution;
 
 namespace Spring.Context.Attributes.TypeFilters
@@ -58,7 +59,7 @@ namespace Spring.Context.Attributes.TypeFilters
             catch (Exception)
             {
                 RequiredType = null;
-                Logger.Error("Can't load type defined in expression:" + typeToLoad);
+                Logger.LogError("Can't load type defined in expression:" + typeToLoad);
             }
         }
 

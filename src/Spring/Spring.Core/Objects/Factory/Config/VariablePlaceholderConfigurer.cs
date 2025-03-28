@@ -301,9 +301,9 @@ namespace Spring.Objects.Factory.Config
 
                             if (logger.IsEnabled(LogLevel.Debug))
                             {
-                                logger.Debug(string.Format(
-                                                 CultureInfo.InvariantCulture,
-                                                 "Resolving placeholder '{0}' to '{1}'.", placeholder, resolvedValue));
+                                logger.LogDebug(string.Format(
+                                    CultureInfo.InvariantCulture,
+                                    "Resolving placeholder '{0}' to '{1}'.", placeholder, resolvedValue));
                             }
 
                             if (resolvedValue == null

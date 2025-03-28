@@ -55,7 +55,7 @@ namespace Spring.NmsQuickStart.Client.UI
             //Instead a hardcoded trade request is created in the controller.
             tradeRequestStatusTextBox.Text = "Request Pending...";
             stockController.SendTradeRequest();            
-            log.Info("Sent trade request.");
+            log.LogInformation("Sent trade request.");
         }
 
         public void UpdateTrade(TradeResponse trade)

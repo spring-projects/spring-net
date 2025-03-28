@@ -180,7 +180,7 @@ namespace Spring.Messaging.Ems.Connections
                 session = CreateSession(con);
                 if (LOG.IsEnabled(LogLevel.Debug))
                 {
-                    log.Debug("Created EMS transaction on Session [" + session + "] from Connection [" + con + "]");
+                    log.LogDebug("Created EMS transaction on Session [" + session + "] from Connection [" + con + "]");
                 }
                 txObject.ResourceHolder = new EmsResourceHolder(ConnectionFactory, con, session);
                 txObject.ResourceHolder.SynchronizedWithTransaction = true;
@@ -270,7 +270,7 @@ namespace Spring.Messaging.Ems.Connections
             {
                 if (status.Debug)
                 {
-                    LOG.Debug("Committing EMS transaction on Session [" + session + "]");
+                    LOG.LogDebug("Committing EMS transaction on Session [" + session + "]");
                 }
                 session.Commit();
             }
@@ -299,7 +299,7 @@ namespace Spring.Messaging.Ems.Connections
             {
                 if (status.Debug)
                 {
-                    LOG.Debug("Rolling back EMS transaction on Session [" + session + "]");
+                    LOG.LogDebug("Rolling back EMS transaction on Session [" + session + "]");
                 }
                 session.Rollback();
             }

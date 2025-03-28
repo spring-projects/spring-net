@@ -21,6 +21,7 @@
 #region Imports
 
 using System.Data;
+using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using Spring.Context;
 using Spring.Context.Support;
@@ -74,11 +75,11 @@ namespace Spring.Data.Support
             catch (BadSqlGrammarException e)
             {
 
-                log.Error("caught correct exception", e);
+                log.LogError(e, "caught correct exception");
             }
             catch (Exception e)
             {
-                log.Error("caught incorrect exception ", e);
+                log.LogError(e, "caught incorrect exception ");
 
                 Assert.Fail("did not throw exception of type BadSqlGrammerException");
             }

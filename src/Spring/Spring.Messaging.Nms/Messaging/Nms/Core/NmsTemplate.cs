@@ -187,7 +187,7 @@ namespace Spring.Messaging.Nms.Core
                 }
                 if (logger.IsEnabled(LogLevel.Debug))
                 {
-                    logger.Debug("Executing callback on NMS ISession [" + sessionToUse + "]");
+                    logger.LogDebug("Executing callback on NMS ISession [" + sessionToUse + "]");
                 }
                 return action.DoInNms(sessionToUse);
             }
@@ -563,7 +563,7 @@ namespace Spring.Messaging.Nms.Core
                 }
                 if (logger.IsEnabled(LogLevel.Debug))
                 {
-                    logger.Debug("Sending created message [" + message + "]");
+                    logger.LogDebug("Sending created message [" + message + "]");
                 }
                 DoSend(producer, message);
 

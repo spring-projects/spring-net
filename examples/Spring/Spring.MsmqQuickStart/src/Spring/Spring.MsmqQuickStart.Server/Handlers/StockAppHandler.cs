@@ -26,7 +26,7 @@ namespace Spring.MsmqQuickStart.Server.Handlers
 
         public TradeResponse Handle(TradeRequest tradeRequest)
         {
-            log.Info("received trade request - sleeping 2s to simulate long-running task");
+            log.LogInformation("received trade request - sleeping 2s to simulate long-running task");
             TradeResponse tradeResponse;
             ArrayList errors = new ArrayList();
             if (creditCheckService.CanExecute(tradeRequest, errors))

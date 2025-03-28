@@ -176,8 +176,8 @@ namespace Spring.Objects.Factory.Config
 
 				if (_logger.IsEnabled(LogLevel.Warning))
 				{
-					_logger.Warn(string.Format(CultureInfo.InvariantCulture,
-						"Cannot find object '{0}' when overriding properties; check configuration.", name));
+					_logger.LogWarning(string.Format(CultureInfo.InvariantCulture,
+                        "Cannot find object '{0}' when overriding properties; check configuration.", name));
 				}
 
 				#endregion
@@ -187,8 +187,8 @@ namespace Spring.Objects.Factory.Config
 
 			if (_logger.IsEnabled(LogLevel.Debug))
 			{
-				_logger.Debug(string.Format(CultureInfo.InvariantCulture,
-				                            "Property '{0}' set to '{1}'.", key, value));
+				_logger.LogDebug(string.Format(CultureInfo.InvariantCulture,
+                    "Property '{0}' set to '{1}'.", key, value));
 			}
 
 			#endregion

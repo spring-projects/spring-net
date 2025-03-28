@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using Spring.Web.Conversation;
 using Spring.Entities;
 using NHibernate;
@@ -22,7 +23,7 @@ public partial class SPCLazyLoadTest_A_Status : System.Web.UI.Page
             SPCMasterEnt sPCMasterEnt = (SPCMasterEnt)this.Session["sPCMasterEnt"];
             foreach (SPCDetailEnt sPCDetailEntItem in sPCMasterEnt.SPCDetailEntList)
             {
-                LOG.Debug(String.Format("Page_Load: sPCDetailEntItem.Description={0}", sPCDetailEntItem.Description));
+                LOG.LogDebug(String.Format("Page_Load: sPCDetailEntItem.Description={0}", sPCDetailEntItem.Description));
             }
             this.Session["messageTest"] = "no lazy error";
         }

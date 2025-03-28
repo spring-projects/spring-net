@@ -80,7 +80,7 @@ namespace Spring.Web.Conversation
         {
             try
             {
-                if (LOG.IsEnabled(LogLevel.Debug)) LOG.Debug("EndOnTimeOut");
+                if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug("EndOnTimeOut");
                 this.MutexEditDic.WaitOne(5000);
                 foreach (String keyItem in this.conversations.Keys)
                 {
@@ -89,7 +89,7 @@ namespace Spring.Web.Conversation
                     {
                         if (DateTime.Now.Subtract(conversationItem.LastAccess).TotalMilliseconds > conversationItem.TimeOut)
                         {
-                            if (LOG.IsEnabled(LogLevel.Debug)) LOG.Debug(String.Format("Timeout for conversation '{0}'", conversationItem.Id));
+                            if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug(String.Format("Timeout for conversation '{0}'", conversationItem.Id));
                             conversationItem.EndConversation();
                         }
                     }
@@ -120,7 +120,7 @@ namespace Spring.Web.Conversation
         {
             try
             {
-                if (LOG.IsEnabled(LogLevel.Debug)) LOG.Debug("EndOnTimeOut");
+                if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug("EndOnTimeOut");
                 this.MutexEditDic.WaitOne(5000);
                 List<IConversationState> removeList = new List<IConversationState>();
                 foreach (String keyItem in this.conversations.Keys)
@@ -128,7 +128,7 @@ namespace Spring.Web.Conversation
                     IConversationState conversationItem = this.conversations[keyItem];
                     if (conversationItem.Ended)
                     {
-                        if (LOG.IsEnabled(LogLevel.Debug)) LOG.Debug(String.Format("FreeEnded: Release conversation '{0}'", conversationItem.Id));
+                        if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug(String.Format("FreeEnded: Release conversation '{0}'", conversationItem.Id));
                         removeList.Add(conversationItem);
                     }
                 }
@@ -140,7 +140,7 @@ namespace Spring.Web.Conversation
 
                 foreach (IConversationState conversationItem in removeList)
                 {
-                    if (LOG.IsEnabled(LogLevel.Debug)) LOG.Debug(String.Format("FreeEnded: Remove conversation '{0}'", conversationItem.Id));
+                    if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug(String.Format("FreeEnded: Remove conversation '{0}'", conversationItem.Id));
                     conversationItem.EndConversation();
                     this.RemoveConversation(conversationItem);
                 }
@@ -184,7 +184,7 @@ namespace Spring.Web.Conversation
         /// <param name="conversation"></param>
         public void SetActiveConversation(IConversationState conversation)
         {
-            if (LOG.IsEnabled(LogLevel.Debug)) LOG.Debug(String.Format("SetActiveConversation('{0}')", conversation.Id));
+            if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug(String.Format("SetActiveConversation('{0}')", conversation.Id));
 
             //Close connection for the last conversation, if it is open.
             if (this.activeConversation != null && this.activeConversation != conversation)
@@ -265,10 +265,10 @@ namespace Spring.Web.Conversation
         /// </summary>
         public override void Dispose()
         {
-            if (LOG.IsEnabled(LogLevel.Debug)) LOG.Debug("Dispose. End all Conversations");
+            if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug("Dispose. End all Conversations");
             foreach (String conversationId in this.conversations.Keys)
             {
-                if (LOG.IsEnabled(LogLevel.Debug)) LOG.Debug(string.Format("Ending Conversation for Conversation Id: {0}", conversationId));
+                if (LOG.IsEnabled(LogLevel.Debug)) LOG.LogDebug(string.Format("Ending Conversation for Conversation Id: {0}", conversationId));
                 this.conversations[conversationId].EndConversation();
             }
 

@@ -93,8 +93,7 @@ namespace Spring.Objects.Factory.Support
 
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.Debug(
-                    $"Object '{objectName}' instantiated via constructor [{constructorInstantiationInfo.ConstructorInfo}].");
+                log.LogDebug($"Object '{objectName}' instantiated via constructor [{constructorInstantiationInfo.ConstructorInfo}].");
             }
 
             return wrapper;
@@ -349,7 +348,7 @@ namespace Spring.Objects.Factory.Support
 
                 if (log.IsEnabled(LogLevel.Debug))
                 {
-                    log.Debug($"Object '{name}' instantiated via factory method [{factoryMethodCandidate}].");
+                    log.LogDebug($"Object '{name}' instantiated via factory method [{factoryMethodCandidate}].");
                 }
 
                 return wrapper;
@@ -476,8 +475,7 @@ namespace Spring.Objects.Factory.Support
                 for (var i = 0; i < autowiredObjectNames.Count; i++)
                 {
                     string autowiredObjectName = autowiredObjectNames[i];
-                    log.Debug(
-                        $"Autowiring by type from object name '{objectName}' via {GetMethodType()} to object named '{autowiredObjectName}'");
+                    log.LogDebug($"Autowiring by type from object name '{objectName}' via {GetMethodType()} to object named '{autowiredObjectName}'");
                 }
             }
 

@@ -239,7 +239,7 @@ namespace Spring.Objects.Factory.Support
             RootObjectDefinition definition = GetMergedObjectDefinition(name, true);
             if (definition != null)
             {
-                log.Debug($"configuring object '{instance}' using definition '{name}'");
+                log.LogDebug($"configuring object '{instance}' using definition '{name}'");
                 ApplyPropertyValues(name, definition, new ObjectWrapper(instance), definition.PropertyValues);
             }
         }
@@ -291,8 +291,8 @@ namespace Spring.Objects.Factory.Support
         {
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.Debug("Invoking IInstantiationAwareObjectPostProcessors before " +
-                          $"the instantiation of '{objectName}'.");
+                log.LogDebug("Invoking IInstantiationAwareObjectPostProcessors before " +
+                             $"the instantiation of '{objectName}'.");
             }
 
             for (var i = 0; i < objectPostProcessors.Count; i++)
@@ -658,19 +658,17 @@ namespace Spring.Objects.Factory.Support
 
                     if (log.IsEnabled(LogLevel.Debug))
                     {
-                        log.Debug(
-                                string.Format(CultureInfo.InvariantCulture,
-                                              "Added autowiring by name from object name '{0}' via " + "property '{1}' to object named '{1}'.", name,
-                                              propertyName));
+                        log.LogDebug(string.Format(CultureInfo.InvariantCulture,
+                            "Added autowiring by name from object name '{0}' via " + "property '{1}' to object named '{1}'.", name,
+                            propertyName));
                     }
                 }
                 else
                 {
                     if (log.IsEnabled(LogLevel.Debug))
                     {
-                        log.Debug(
-                                string.Format(CultureInfo.InvariantCulture,
-                                              "Not autowiring property '{0}' of object '{1}' by name: " + "no matching object found.", propertyName, name));
+                        log.LogDebug(string.Format(CultureInfo.InvariantCulture,
+                            "Not autowiring property '{0}' of object '{1}' by name: " + "no matching object found.", propertyName, name));
                     }
                 }
             }
@@ -714,10 +712,9 @@ namespace Spring.Objects.Factory.Support
 
                     if (log.IsEnabled(LogLevel.Debug))
                     {
-                        log.Debug(
-                                string.Format(CultureInfo.InvariantCulture,
-                                              "Autowiring by type from object name '{0}' via property " + "'{1}' to object named '{2}'.", name,
-                                              propertyName, ObjectUtils.EnumerateFirstElement(matchingObjects.Keys)));
+                        log.LogDebug(string.Format(CultureInfo.InvariantCulture,
+                            "Autowiring by type from object name '{0}' via property " + "'{1}' to object named '{2}'.", name,
+                            propertyName, ObjectUtils.EnumerateFirstElement(matchingObjects.Keys)));
                     }
                 }
                 else if (matchingObjects != null && matchingObjects.Count > 1)
@@ -733,9 +730,8 @@ namespace Spring.Objects.Factory.Support
                 {
                     if (log.IsEnabled(LogLevel.Debug))
                     {
-                        log.Debug(
-                                string.Format(CultureInfo.InvariantCulture, "Not autowiring property '{0}' of object '{1}': no matching object found.",
-                                              propertyName, name));
+                        log.LogDebug(string.Format(CultureInfo.InvariantCulture, "Not autowiring property '{0}' of object '{1}': no matching object found.",
+                            propertyName, name));
                     }
                 }
             }
@@ -847,7 +843,7 @@ namespace Spring.Objects.Factory.Support
             var isDebugEnabled = log.IsEnabled(LogLevel.Debug);
             if (isDebugEnabled)
             {
-                log.Debug($"Creating instance of Object '{name}' with merged definition [{definition}].");
+                log.LogDebug($"Creating instance of Object '{name}' with merged definition [{definition}].");
             }
 
             // Make sure object type is actually resolved at this point.
@@ -892,7 +888,7 @@ namespace Spring.Objects.Factory.Support
                 {
                     if (isDebugEnabled)
                     {
-                        log.Debug($"Eagerly caching object '{name}' to allow for resolving potential circular references");
+                        log.LogDebug($"Eagerly caching object '{name}' to allow for resolving potential circular references");
                     }
                     AddEagerlyCachedSingleton(name, definition, instance);
                     eagerlyCached = true;
@@ -1259,7 +1255,7 @@ namespace Spring.Objects.Factory.Support
             {
                 if (log.IsEnabled(LogLevel.Debug))
                 {
-                    log.Debug(string.Format(CultureInfo.InvariantCulture, "Calling AfterPropertiesSet() on object with name '{0}'.", name));
+                    log.LogDebug(string.Format(CultureInfo.InvariantCulture, "Calling AfterPropertiesSet() on object with name '{0}'.", name));
                 }
 
                 ((IInitializingObject)target).AfterPropertiesSet();
@@ -1268,9 +1264,8 @@ namespace Spring.Objects.Factory.Support
             {
                 if (log.IsEnabled(LogLevel.Debug))
                 {
-                    log.Debug(
-                            string.Format(CultureInfo.InvariantCulture, "Calling custom init method '{0} on object with name '{1}'.",
-                                          definition.InitMethodName, name));
+                    log.LogDebug(string.Format(CultureInfo.InvariantCulture, "Calling custom init method '{0} on object with name '{1}'.",
+                        definition.InitMethodName, name));
                 }
 
                 try
@@ -1328,7 +1323,7 @@ namespace Spring.Objects.Factory.Support
             }
             if (targetMethod == null)
             {
-                log.Error("Couldn't find a method named '" + destroyMethodName + "' on object with name '" + name + "'");
+                log.LogError("Couldn't find a method named '" + destroyMethodName + "' on object with name '" + name + "'");
             }
             else
             {
@@ -1339,7 +1334,8 @@ namespace Spring.Objects.Factory.Support
                 }
                 catch (TargetInvocationException ex)
                 {
-                    log.Error("Couldn't invoke destroy method '" + destroyMethodName + "' of object with name '" + name + "'", ex.GetBaseException());
+                    string message = "Couldn't invoke destroy method '" + destroyMethodName + "' of object with name '" + name + "'";
+                    log.LogError(ex.GetBaseException(), message);
                 }
                 catch (Exception ex)
                 {
@@ -1350,9 +1346,8 @@ namespace Spring.Objects.Factory.Support
 
         private void LogExceptionRaisedByCustomDestroyMethodInvocation(string destroyMethodName, string name, Exception ex)
         {
-            log.Error(
-                    string.Format(CultureInfo.InvariantCulture, "Couldn't invoke destroy method '{0}' of object with name '{1}'.", destroyMethodName, name),
-                    ex);
+            string message = string.Format(CultureInfo.InvariantCulture, "Couldn't invoke destroy method '{0}' of object with name '{1}'.", destroyMethodName, name);
+            log.LogError(ex, message);
         }
 
         /// <summary>
@@ -1631,9 +1626,8 @@ namespace Spring.Objects.Factory.Support
         {
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.Debug(
-                        string.Format(CultureInfo.InvariantCulture, "Resolving reference from property '{0}' in object '{1}' to object '{2}'.",
-                                      argumentName, name, reference.ObjectName));
+                log.LogDebug(string.Format(CultureInfo.InvariantCulture, "Resolving reference from property '{0}' in object '{1}' to object '{2}'.",
+                    argumentName, name, reference.ObjectName));
             }
 
             try
@@ -1759,7 +1753,7 @@ namespace Spring.Objects.Factory.Support
 
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.Debug($"Configuring object using definition '{name}'");
+                log.LogDebug($"Configuring object using definition '{name}'");
             }
 
             PopulateObject(name, definition, wrapper);
@@ -1769,7 +1763,7 @@ namespace Spring.Objects.Factory.Support
             {
                 if (log.IsEnabled(LogLevel.Debug))
                 {
-                    log.Debug($"Setting the name property on the IObjectNameAware object '{name}'.");
+                    log.LogDebug($"Setting the name property on the IObjectNameAware object '{name}'.");
                 }
 
                 ((IObjectNameAware)instance).ObjectName = name;
@@ -1779,8 +1773,7 @@ namespace Spring.Objects.Factory.Support
             {
                 if (log.IsEnabled(LogLevel.Debug))
                 {
-                    log.Debug(
-                        $"Setting the ObjectFactory property on the IObjectFactoryAware object '{name}'.");
+                    log.LogDebug($"Setting the ObjectFactory property on the IObjectFactoryAware object '{name}'.");
                 }
 
                 ((IObjectFactoryAware)instance).ObjectFactory = this;
@@ -1896,7 +1889,7 @@ namespace Spring.Objects.Factory.Support
         {
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.Debug($"Invoking IObjectPostProcessors before initialization of object '{name}'");
+                log.LogDebug($"Invoking IObjectPostProcessors before initialization of object '{name}'");
             }
 
             object result = instance;
@@ -1938,7 +1931,7 @@ namespace Spring.Objects.Factory.Support
         {
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.Debug($"Invoking IObjectPostProcessors after initialization of object '{name}'");
+                log.LogDebug($"Invoking IObjectPostProcessors after initialization of object '{name}'");
             }
 
             object result = instance;

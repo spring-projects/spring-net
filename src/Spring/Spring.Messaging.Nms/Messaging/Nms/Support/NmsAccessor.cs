@@ -138,7 +138,7 @@ namespace Spring.Messaging.Nms.Support
             {
                 if (logger.IsEnabled(LogLevel.Trace))
                 {
-                    logger.Trace("Setting Apache.NMS.Tracer.Trace to default implementation that directs output to Common.Logging");
+                    logger.LogTrace("Setting Apache.NMS.Tracer.Trace to default implementation that directs output to Common.Logging");
                 }
                 Tracer.Trace = new NmsTrace();
             }

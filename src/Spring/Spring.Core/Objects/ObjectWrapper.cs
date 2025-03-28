@@ -17,7 +17,7 @@
 using System.ComponentModel;
 using System.Reflection;
 using System.Text;
-
+using Microsoft.Extensions.Logging;
 using Spring.Core;
 using Spring.Expressions;
 using Spring.Expressions.Parser.antlr;
@@ -312,7 +312,8 @@ namespace Spring.Objects
                 {
                     if (!ignoreUnknown)
                     {
-                        Log.Error($"Failed setting property '{pv.Name}'", ex);
+                        string message = $"Failed setting property '{pv.Name}'";
+                        Log.LogError(ex, message);
                         throw;
                     }
                 }
@@ -320,23 +321,27 @@ namespace Spring.Objects
                 {
                     if (!ignoreUnknown)
                     {
-                        Log.Error($"Failed setting property '{pv.Name}'", ex);
+                        string message = $"Failed setting property '{pv.Name}'";
+                        Log.LogError(ex, message);
                         throw;
                     }
                 }
                 catch (TypeMismatchException ex) // otherwise, just ignore it and continue...
                 {
-                    Log.Error($"Failed setting property '{pv.Name}'", ex);
+                    string message = $"Failed setting property '{pv.Name}'";
+                    Log.LogError(ex, message);
                     propertyAccessExceptions.Add(ex);
                 }
                 catch (MethodInvocationException ex)
                 {
-                    Log.Error($"Failed setting property '{pv.Name}'", ex);
+                    string message = $"Failed setting property '{pv.Name}'";
+                    Log.LogError(ex, message);
                     propertyAccessExceptions.Add(ex);
                 }
                 catch (Exception ex)
                 {
-                    Log.Error($"Failed setting property '{pv.Name}' on instance of type '{WrappedType.FullName}'", ex);
+                    string message = $"Failed setting property '{pv.Name}' on instance of type '{WrappedType.FullName}'";
+                    Log.LogError(ex, message);
                     throw;
                 }
             }

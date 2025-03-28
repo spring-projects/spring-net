@@ -104,7 +104,7 @@ namespace Spring.Messaging.Listener
 
             if (LOG.IsEnabled(LogLevel.Debug))
             {
-                LOG.Debug("Executing DoReceiveAndExecuteUsingTxScopeTransactionManager");
+                LOG.LogDebug("Executing DoReceiveAndExecuteUsingTxScopeTransactionManager");
             }
 
             #endregion Logging
@@ -128,8 +128,7 @@ namespace Spring.Messaging.Listener
 
                     if (LOG.IsEnabled(LogLevel.Trace))
                     {
-                        LOG.Trace(
-                            "MessageQueueErrorCode.IOTimeout: No message available to receive.  May have been processed by another thread.");
+                        LOG.LogTrace("MessageQueueErrorCode.IOTimeout: No message available to receive.  May have been processed by another thread.");
                     }
 
                     #endregion
@@ -155,7 +154,7 @@ namespace Spring.Messaging.Listener
 
                 if (LOG.IsEnabled(LogLevel.Trace))
                 {
-                    LOG.Trace("Message recieved is null from Queue = [" + mq.Path + "]");
+                    LOG.LogTrace("Message recieved is null from Queue = [" + mq.Path + "]");
                 }
 
                 #endregion
@@ -171,7 +170,7 @@ namespace Spring.Messaging.Listener
 
                 if (LOG.IsEnabled(LogLevel.Debug))
                 {
-                    LOG.Debug("Received message [" + message.Id + "] on queue [" + mq.Path + "]");
+                    LOG.LogDebug("Received message [" + message.Id + "] on queue [" + mq.Path + "]");
                 }
 
                 #endregion

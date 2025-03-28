@@ -83,7 +83,7 @@ namespace Spring.Objects.Factory.Xml
 
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.Debug("Loading object definitions.");
+                log.LogDebug("Loading object definitions.");
             }
 
             XmlElement root = doc.DocumentElement;
@@ -99,8 +99,7 @@ namespace Spring.Objects.Factory.Xml
 
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.Debug(
-                    $"Found {readerContext.Registry.ObjectDefinitionCount} <{ObjectDefinitionConstants.ObjectElement}> elements defining objects.");
+                log.LogDebug($"Found {readerContext.Registry.ObjectDefinitionCount} <{ObjectDefinitionConstants.ObjectElement}> elements defining objects.");
             }
         }
 
@@ -190,7 +189,7 @@ namespace Spring.Objects.Factory.Xml
 
                 if (log.IsEnabled(LogLevel.Debug))
                 {
-                    log.Debug(string.Format(CultureInfo.InvariantCulture, "Registering object definition with id '{0}'.", bdHolder.ObjectName));
+                    log.LogDebug(string.Format(CultureInfo.InvariantCulture, "Registering object definition with id '{0}'.", bdHolder.ObjectName));
                 }
 
                 ObjectDefinitionReaderUtils.RegisterObjectDefinition(bdHolder, ReaderContext.Registry);
@@ -223,9 +222,9 @@ namespace Spring.Objects.Factory.Xml
             {
                 if (log.IsEnabled(LogLevel.Debug))
                 {
-                    log.Debug(string.Format(
-                                  CultureInfo.InvariantCulture,
-                                  "Attempting to import object definitions from '{0}'.", location));
+                    log.LogDebug(string.Format(
+                        CultureInfo.InvariantCulture,
+                        "Attempting to import object definitions from '{0}'.", location));
                 }
 
                 IResource importResource = ReaderContext.Resource.CreateRelative(location);

@@ -69,7 +69,7 @@ namespace Spring.Aop.Target
 
 			if(logger.IsEnabled(LogLevel.Debug))
 			{
-				logger.Debug("Creating object pool.");
+				logger.LogDebug("Creating object pool.");
 			}
 
 			#endregion
@@ -138,7 +138,7 @@ namespace Spring.Aop.Target
 
 			if(logger.IsEnabled(LogLevel.Debug))
 			{
-				logger.Debug("Closing pool...");
+				logger.LogDebug("Closing pool...");
 			}
 
 			#endregion

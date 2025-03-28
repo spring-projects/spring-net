@@ -33,7 +33,7 @@ namespace Spring.Objects.Factory.Parsing
 
         public void Error(Problem problem)
         {
-            _logger.Error(problem.Message);
+            _logger.LogError(problem.Message);
             throw new ObjectDefinitionParsingException(problem);
         }
 
@@ -45,7 +45,7 @@ namespace Spring.Objects.Factory.Parsing
 
         public void Warning(Problem problem)
         {
-            _logger.Warn(problem.Message);
+            _logger.LogWarning(problem.Message);
 
         }
 

@@ -16,6 +16,7 @@
 
 using System.Reflection;
 using System.Collections;
+using Microsoft.Extensions.Logging;
 using NUnit.Framework;
 using Spring.Objects;
 using Spring.Objects.Factory;
@@ -112,9 +113,9 @@ namespace Spring.Aop.Target
 
             public virtual void Run ()
             {
-                log.Debug ("getting object");
+                log.LogDebug("getting object");
                 this.mine = (ISideEffectObject) factory.ObjectFactory.GetObject ("apartment");
-                log.Debug (String.Format ("got object; hash code: {0}", this.mine.GetHashCode ()));
+                log.LogDebug(String.Format ("got object; hash code: {0}", this.mine.GetHashCode ()));
                 Assert.AreEqual (ThreadLocalTargetSourceTests.INITIAL_COUNT, mine.Count);
                 mine.doWork ();
                 Assert.AreEqual (ThreadLocalTargetSourceTests.INITIAL_COUNT + 1, mine.Count);
@@ -125,7 +126,7 @@ namespace Spring.Aop.Target
         public virtual void NewThreadHasOwnInstance ()
         {
             ISideEffectObject apartment = (ISideEffectObject) ObjectFactory.GetObject ("apartment");
-            log.Debug (String.Format ("got object; hash code: {0}", apartment.GetHashCode ()));
+            log.LogDebug(String.Format ("got object; hash code: {0}", apartment.GetHashCode ()));
             Assert.AreEqual (INITIAL_COUNT, apartment.Count);
             apartment.doWork ();
             apartment.doWork ();

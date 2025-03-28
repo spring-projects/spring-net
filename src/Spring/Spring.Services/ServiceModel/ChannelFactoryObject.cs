@@ -77,7 +77,7 @@ namespace Spring.ServiceModel
 
             if (Log.IsEnabled(LogLevel.Debug))
             {
-                Log.Debug(String.Format(
+                Log.LogDebug(String.Format(
                     "Creating channel of type '{0}' for the specified endpoint '{1}'...",
                     typeof(T).FullName, this._endpointConfigurationName));
             }

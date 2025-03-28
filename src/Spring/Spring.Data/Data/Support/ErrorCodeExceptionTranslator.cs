@@ -169,7 +169,7 @@ namespace Spring.Data.Support
             // Looking for a fallback...
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.Debug("Unable to translate exception with errorCode '" + errorCode + "', will use the fallback translator");
+                log.LogDebug("Unable to translate exception with errorCode '" + errorCode + "', will use the fallback translator");
             }
             IAdoExceptionTranslator fallback = FallbackTranslator;
             if (fallback != null)
@@ -327,9 +327,9 @@ namespace Spring.Data.Support
             if (log.IsEnabled(LogLevel.Debug))
             {
                 String intro = "Translating";
-                log.Debug(intro + " ADO exception with error code '" + errorCode
-                          + "', message [" + exception.Message +
-                    "]; SQL was [" + sql + "] for task [" + task + "]");
+                log.LogDebug(intro + " ADO exception with error code '" + errorCode
+                             + "', message [" + exception.Message +
+                             "]; SQL was [" + sql + "] for task [" + task + "]");
             }
 	    }
 

@@ -143,11 +143,11 @@ namespace Spring.Testing.NUnit
 
             if (this.transactionManager == null)
             {
-                logger.Info("No transaction manager set: test will NOT run within a transaction");
+                logger.LogInformation("No transaction manager set: test will NOT run within a transaction");
             }
             else if (this.transactionDefinition == null)
             {
-                logger.Info("No transaction definition set: test will NOT run within a transaction");
+                logger.LogInformation("No transaction definition set: test will NOT run within a transaction");
             }
             else
             {
@@ -243,12 +243,12 @@ namespace Spring.Testing.NUnit
                     if (!this.complete)
                     {
                         this.transactionManager.Rollback(this.transactionStatus);
-                        logger.Info("Rolled back transaction after test execution");
+                        logger.LogInformation("Rolled back transaction after test execution");
                     }
                     else
                     {
                         this.transactionManager.Commit(this.transactionStatus);
-                        logger.Info("Committed transaction after test execution");
+                        logger.LogInformation("Committed transaction after test execution");
                     }
                 }
                 finally
@@ -279,8 +279,8 @@ namespace Spring.Testing.NUnit
 
             if (logger.IsEnabled(LogLevel.Information))
             {
-                logger.Info("Began transaction (" + this.transactionsStarted + "): transaction manager [" +
-                            this.transactionManager + "]; default rollback = " + this.defaultRollback);
+                logger.LogInformation("Began transaction (" + this.transactionsStarted + "): transaction manager [" +
+                                      this.transactionManager + "]; default rollback = " + this.defaultRollback);
             }
         }
     }

@@ -222,7 +222,7 @@ namespace Spring.Objects.Factory.Xml
 
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.Debug("Loading XML object definitions from " + resource);
+                log.LogDebug("Loading XML object definitions from " + resource);
             }
 
             #endregion
@@ -252,7 +252,7 @@ namespace Spring.Objects.Factory.Xml
 
                         if (log.IsEnabled(LogLevel.Warning))
                         {
-                            log.Warn("Could not close stream.", ex);
+                            log.LogWarning(ex, "Could not close stream.");
                         }
 
                         #endregion
@@ -340,7 +340,7 @@ namespace Spring.Objects.Factory.Xml
 
             if (log.IsEnabled(LogLevel.Debug))
             {
-                log.Debug("Using the following XmlReader implementation : " + reader.GetType());
+                log.LogDebug("Using the following XmlReader implementation : " + reader.GetType());
             }
             return reader;
 
@@ -375,9 +375,8 @@ namespace Spring.Objects.Factory.Xml
 
                 if (log.IsEnabled(LogLevel.Warning))
                 {
-                    log.Warn(
-                        "Ignored XML validation warning: " + args.Message,
-                        args.Exception);
+                    string message = "Ignored XML validation warning: " + args.Message;
+                    log.LogWarning(args.Exception, message);
                 }
 
                 #endregion

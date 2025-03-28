@@ -413,7 +413,7 @@ namespace Spring.Messaging.Listener
             }
             else
             {
-                logger.Debug("No result object given - no result to handle");
+                logger.LogDebug("No result object given - no result to handle");
             }
         }
 
@@ -506,8 +506,8 @@ namespace Spring.Messaging.Listener
         {
             if (logger.IsEnabled(LogLevel.Debug))
             {
-                logger.Debug("Listener method returned result [" + result +
-                             "] - generating response message for it");
+                logger.LogDebug("Listener method returned result [" + result +
+                                "] - generating response message for it");
             }
             Message response = BuildMessage(result);
             PostProcessResponse(request, response);
@@ -525,7 +525,7 @@ namespace Spring.Messaging.Listener
             //Will send with appropriate transaction semantics
             if (logger.IsEnabled(LogLevel.Debug))
             {
-                logger.Debug("Sending response message to path = [" + destination.Path + "]");
+                logger.LogDebug("Sending response message to path = [" + destination.Path + "]");
             }
             messageQueueTemplate.Send(destination, response);
         }

@@ -454,7 +454,7 @@ namespace Spring.Scheduling.Quartz
         /// </summary>
         public virtual void Dispose()
         {
-            Logger.Info("Shutting down Quartz Scheduler");
+            Logger.LogInformation("Shutting down Quartz Scheduler");
             scheduler.Shutdown(waitForJobsToCompleteOnShutdown).ConfigureAwait(false).GetAwaiter().GetResult();
         }
 
@@ -631,7 +631,7 @@ namespace Spring.Scheduling.Quartz
             {
                 if (Logger.IsEnabled(LogLevel.Information))
                 {
-                    Logger.Info("Loading Quartz config from [" + configLocation + "]");
+                    Logger.LogInformation("Loading Quartz config from [" + configLocation + "]");
                 }
 
                 using (StreamReader sr = new StreamReader(configLocation.InputStream))
@@ -761,7 +761,7 @@ namespace Spring.Scheduling.Quartz
         {
             if (startDelay.TotalSeconds <= 0)
             {
-                Logger.Info("Starting Quartz Scheduler now");
+                Logger.LogInformation("Starting Quartz Scheduler now");
                 await sched.Start().ConfigureAwait(false);
             }
             else

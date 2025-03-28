@@ -282,8 +282,8 @@ namespace Spring.Data.NHibernate
                     (SessionHolder)TransactionSynchronizationManager.GetResource(SessionFactory);
                 if (log.IsEnabled(LogLevel.Debug))
                 {
-                    log.Debug("Found thread-bound Session [" + sessionHolder.Session +
-                        "] for Hibernate transaction");
+                    log.LogDebug("Found thread-bound Session [" + sessionHolder.Session +
+                                 "] for Hibernate transaction");
                 }
                 txObject.SetSessionHolder(sessionHolder, false);
                 if (DbProvider != null)
@@ -359,7 +359,7 @@ namespace Spring.Data.NHibernate
 
                     if (log.IsEnabled(LogLevel.Debug))
                     {
-                        log.Debug("Opened new Session [" + newSession + "] for Hibernate transaction");
+                        log.LogDebug("Opened new Session [" + newSession + "] for Hibernate transaction");
                     }
                     txObject.SetSessionHolder(new SessionHolder(newSession), true);
 
@@ -414,7 +414,7 @@ namespace Spring.Data.NHibernate
                     }
                     if (log.IsEnabled(LogLevel.Debug))
                     {
-                        log.Debug("Exposing Hibernate transaction as ADO transaction [" + con + "]");
+                        log.LogDebug("Exposing Hibernate transaction as ADO transaction [" + con + "]");
                     }
                     TransactionSynchronizationManager.BindResource(DbProvider, conHolder);
                     txObject.ConnectionHolder = conHolder;
@@ -527,8 +527,8 @@ namespace Spring.Data.NHibernate
             HibernateTransactionObject txObject = (HibernateTransactionObject)status.Transaction;
             if (status.Debug)
             {
-                log.Debug("Committing Hibernate transaction on Session [" +
-                    txObject.SessionHolder.Session + "]");
+                log.LogDebug("Committing Hibernate transaction on Session [" +
+                             txObject.SessionHolder.Session + "]");
             }
             try
             {
@@ -570,8 +570,8 @@ namespace Spring.Data.NHibernate
 
             if (status.Debug)
             {
-                log.Debug("Rolling back Hibernate transaction on Session [" +
-                    txObject.SessionHolder.Session + "]");
+                log.LogDebug("Rolling back Hibernate transaction on Session [" +
+                             txObject.SessionHolder.Session + "]");
             }
             try
             {
@@ -619,8 +619,8 @@ namespace Spring.Data.NHibernate
             HibernateTransactionObject txObject = (HibernateTransactionObject)status.Transaction;
             if (status.Debug)
             {
-                log.Debug("Setting Hibernate transaction on Session [" +
-                    txObject.SessionHolder.Session + "] rollback-only");
+                log.LogDebug("Setting Hibernate transaction on Session [" +
+                             txObject.SessionHolder.Session + "] rollback-only");
             }
             txObject.SetRollbackOnly();
         }
@@ -646,12 +646,12 @@ namespace Spring.Data.NHibernate
                 }
                 catch (Exception e)
                 {
-                    log.Warn("Could not extract IDbTransaction from Hibernate AdoTransaction using field name trans.", e);
+                    log.LogWarning(e, "Could not extract IDbTransaction from Hibernate AdoTransaction using field name trans.");
                 }
             }
             else
             {
-                log.Warn("Hibernate ITransaction not of expected type AdoTransaction.  Could not extract IDbTransaction from Hibernate AdoTransaction.");
+                log.LogWarning("Hibernate ITransaction not of expected type AdoTransaction.  Could not extract IDbTransaction from Hibernate AdoTransaction.");
             }
             return adoTransaction;
         }
@@ -731,7 +731,7 @@ namespace Spring.Data.NHibernate
             {
                 if (log.IsEnabled(LogLevel.Debug))
                 {
-                    log.Debug("Closing Hibernate Session [" + session + "] after transaction");
+                    log.LogDebug("Closing Hibernate Session [" + session + "] after transaction");
                 }
                 SessionFactoryUtils.CloseSessionOrRegisterDeferredClose(session, SessionFactory);
             }
@@ -739,7 +739,7 @@ namespace Spring.Data.NHibernate
             {
                 if (log.IsEnabled(LogLevel.Debug))
                 {
-                    log.Debug("Not closing pre-bound Hibernate Session [" + session + "] after transaction");
+                    log.LogDebug("Not closing pre-bound Hibernate Session [" + session + "] after transaction");
                 }
                 if (txObject.SessionHolder.AssignedPreviousFlushMode)
                 {
@@ -938,14 +938,14 @@ namespace Spring.Data.NHibernate
                     // Use the SessionFactory's DataSource for exposing transactions to ADO.NET code.
                     if (log.IsEnabled(LogLevel.Information))
                     {
-                        log.Info("Derived DbProvider [" + sfDbProvider.DbMetadata.ProductName +
-                                "] of Hibernate SessionFactory for HibernateTransactionManager");
+                        log.LogInformation("Derived DbProvider [" + sfDbProvider.DbMetadata.ProductName +
+                                           "] of Hibernate SessionFactory for HibernateTransactionManager");
                     }
                     DbProvider = sfDbProvider;
                 }
                 else
                 {
-                    log.Info("Could not auto detect DbProvider from SessionFactory configuration");
+                    log.LogInformation("Could not auto detect DbProvider from SessionFactory configuration");
                 }
 
             }

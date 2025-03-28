@@ -22,8 +22,7 @@ using System.Collections;
 using System.Reflection;
 
 using AopAlliance.Intercept;
-
-
+using Microsoft.Extensions.Logging;
 using Spring.Util;
 
 namespace Spring.Aspects.Exceptions
@@ -321,7 +320,7 @@ namespace Spring.Aspects.Exceptions
 
             if (!parsedAdviceExpression.Success)
             {
-                log.Warn("Could not parse exception hander statement " + handlerString);
+                log.LogWarning("Could not parse exception hander statement " + handlerString);
                 return null;
             }
 
@@ -450,7 +449,7 @@ namespace Spring.Aspects.Exceptions
             }
             else
             {
-                log.Warn("Could not parse exception hander statement " + parsedAdviceExpression.AdviceExpression);
+                log.LogWarning("Could not parse exception hander statement " + parsedAdviceExpression.AdviceExpression);
             }
             return null;
         }

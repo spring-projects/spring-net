@@ -18,6 +18,7 @@
 
 #endregion
 
+using Microsoft.Extensions.Logging;
 using Spring.Data.Core;
 using Spring.Messaging.Core;
 using Spring.Transaction;
@@ -134,14 +135,14 @@ namespace Spring.Messaging.Listener
         /// <param name="ex">The exception.</param>
         protected void RollbackOnException(ITransactionStatus status, Exception ex)
         {
-            LOG.Debug("Initiating transaction rollback on listener exception", ex);
+            LOG.LogDebug(ex, "Initiating transaction rollback on listener exception");
             try
             {
                 PlatformTransactionManager.Rollback(status);
             }
             catch (Exception ex2)
             {
-                LOG.Error("Listener exception overridden by rollback error", ex2);
+                LOG.LogError(ex2, "Listener exception overridden by rollback error");
                 throw;
             }
         }

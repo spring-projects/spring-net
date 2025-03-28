@@ -19,6 +19,7 @@
 #endregion
 
 using System.Collections;
+using Microsoft.Extensions.Logging;
 using Spring.Collections;
 using Spring.Messaging.Ems.Common;
 using Spring.Transaction.Support;
@@ -264,7 +265,7 @@ namespace Spring.Messaging.Ems.Connections
                 }
                 catch (Exception ex)
                 {
-                    logger.Debug("Could not close EMS Session after transaction", ex);
+                    logger.LogDebug(ex, "Could not close EMS Session after transaction");
                 }
             }
             foreach (IConnection connection in connections)

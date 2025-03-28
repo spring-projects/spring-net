@@ -20,6 +20,7 @@
 
 using System.Collections;
 using System.Data;
+using Microsoft.Extensions.Logging;
 using Spring.Dao;
 using Spring.Data.Common;
 using Spring.Objects.Factory;
@@ -178,7 +179,7 @@ namespace Spring.Data.Objects
         {
             if (!Compiled)
             {
-                log.Debug("ADO operation not compiled before execution - invoking compile");
+                log.LogDebug("ADO operation not compiled before execution - invoking compile");
                 Compile();
             }
         }

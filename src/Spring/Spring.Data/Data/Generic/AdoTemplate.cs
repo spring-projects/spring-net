@@ -873,7 +873,7 @@ namespace Spring.Data.Generic
             AssertUtils.ArgumentNotNull(cmdText, "cmdText", "CommandText must not be null");
             if (LOG.IsEnabled(LogLevel.Debug))
             {
-                LOG.Debug("Executing CommandText [" + cmdText + "]");
+                LOG.LogDebug("Executing CommandText [" + cmdText + "]");
             }
             return Execute<T>(new QueryCallback<T>(this, cmdType, cmdText, resultSetExtractor, null));
         }
@@ -927,7 +927,7 @@ namespace Spring.Data.Generic
             AssertUtils.ArgumentNotNull(resultSetExtractorDelegate, "resultSetExtractorDelegate", "Result set extractor delegate must not be null");
             if (LOG.IsEnabled(LogLevel.Debug))
             {
-                LOG.Debug("Executing CommandText [" + cmdText + "]");
+                LOG.LogDebug("Executing CommandText [" + cmdText + "]");
             }
 
             return Execute<T>(new QueryCallback<T>(this, cmdType, cmdText, resultSetExtractorDelegate, null));
@@ -1501,10 +1501,10 @@ namespace Spring.Data.Generic
                                 //Will have possibility of run-time type error if using QueryWithCommandCreator
                                 if (firstResultSetProcessor == null)
                                 {
-                                    LOG.Error("NamedResultSetProcessor for result set index " + resultSetIndex +
-                                              ", is not of expected type NamedResultSetProcessor<T>.  Type = " +
-                                              namedResultSetProcessors[resultSetIndex].GetType() +
-                                              "; Skipping processing for this result set.");
+                                    LOG.LogError("NamedResultSetProcessor for result set index " + resultSetIndex +
+                                                 ", is not of expected type NamedResultSetProcessor<T>.  Type = " +
+                                                 namedResultSetProcessors[resultSetIndex].GetType() +
+                                                 "; Skipping processing for this result set.");
                                     continue;
                                 }
                             }
@@ -1515,22 +1515,24 @@ namespace Spring.Data.Generic
                                 if (otherResultSetProcessor == null)
                                 {
 
-                                    LOG.Error("NamedResultSetProcessor for result set index " + resultSetIndex +
-                                              ", is not of expected type NamedResultSetProcessor  Type = " +
-                                              namedResultSetProcessors[resultSetIndex].GetType() +
-                                              "; Skipping processing for this result set.");
+                                    LOG.LogError("NamedResultSetProcessor for result set index " + resultSetIndex +
+                                                 ", is not of expected type NamedResultSetProcessor  Type = " +
+                                                 namedResultSetProcessors[resultSetIndex].GetType() +
+                                                 "; Skipping processing for this result set.");
                                     continue;
                                 }
                             }
                         }
                         catch (IndexOutOfRangeException e)
                         {
-                            LOG.Error("No NamedResultSetProcessor associated with result set index " + resultSetIndex, e);
+                            string message = "No NamedResultSetProcessor associated with result set index " + resultSetIndex;
+                            LOG.LogError(e, message);
                             continue;
                         }
                         catch (ArgumentOutOfRangeException e)
                         {
-                            LOG.Error("No NamedResultSetProcessor associated with result set index " + resultSetIndex, e);
+                            string message = "No NamedResultSetProcessor associated with result set index " + resultSetIndex;
+                            LOG.LogError(e, message);
                             continue;
                         }
 
@@ -1601,10 +1603,10 @@ namespace Spring.Data.Generic
                                 if (firstResultSetProcessor == null)
                                 {
 
-                                    LOG.Error("NamedResultSetProcessor for result set index " + resultSetIndex +
-                                              ", is not of expected type NamedResultSetProcessor<T>  Type = " +
-                                              namedResultSetProcessors[resultSetIndex].GetType() +
-                                              "; Skipping processing for this result set.");
+                                    LOG.LogError("NamedResultSetProcessor for result set index " + resultSetIndex +
+                                                 ", is not of expected type NamedResultSetProcessor<T>  Type = " +
+                                                 namedResultSetProcessors[resultSetIndex].GetType() +
+                                                 "; Skipping processing for this result set.");
                                     continue;
                                 }
                             } else if (resultSetIndex == 1)
@@ -1614,10 +1616,10 @@ namespace Spring.Data.Generic
                                 if (secondResultSetProcessor == null)
                                 {
 
-                                    LOG.Error("NamedResultSetProcessor for result set index " + resultSetIndex +
-                                              ", is not of expected type NamedResultSetProcessor<T>  Type = " +
-                                              namedResultSetProcessors[resultSetIndex].GetType() +
-                                              "; Skipping processing for this result set.");
+                                    LOG.LogError("NamedResultSetProcessor for result set index " + resultSetIndex +
+                                                 ", is not of expected type NamedResultSetProcessor<T>  Type = " +
+                                                 namedResultSetProcessors[resultSetIndex].GetType() +
+                                                 "; Skipping processing for this result set.");
                                     continue;
                                 }
                             } else
@@ -1627,10 +1629,10 @@ namespace Spring.Data.Generic
                                 if (otherResultSetProcessor == null)
                                 {
 
-                                    LOG.Error("NamedResultSetProcessor for result set index " + resultSetIndex +
-                                              ", is not of expected type NamedResultSetProcessor  Type = " +
-                                              namedResultSetProcessors[resultSetIndex].GetType() +
-                                              "; Skipping processing for this result set.");
+                                    LOG.LogError("NamedResultSetProcessor for result set index " + resultSetIndex +
+                                                 ", is not of expected type NamedResultSetProcessor  Type = " +
+                                                 namedResultSetProcessors[resultSetIndex].GetType() +
+                                                 "; Skipping processing for this result set.");
                                     continue;
                                 }
                             }
@@ -1638,12 +1640,14 @@ namespace Spring.Data.Generic
                         }
                         catch (IndexOutOfRangeException e)
                         {
-                            LOG.Error("No NamedResultSetProcessor associated with result set index " + resultSetIndex, e);
+                            string message = "No NamedResultSetProcessor associated with result set index " + resultSetIndex;
+                            LOG.LogError(e, message);
                             continue;
                         }
                         catch (ArgumentOutOfRangeException e)
                         {
-                            LOG.Error("No NamedResultSetProcessor associated with result set index " + resultSetIndex, e);
+                            string message = "No NamedResultSetProcessor associated with result set index " + resultSetIndex;
+                            LOG.LogError(e, message);
                             continue;
                         }
 

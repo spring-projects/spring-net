@@ -165,7 +165,7 @@ namespace Spring.Aop.Framework.Adapter
 
                         if(log.IsEnabled(LogLevel.Debug))
                         {
-                            log.Debug("Found exception handler method: " + method);
+                            log.LogDebug("Found exception handler method: " + method);
                         }
 
                         #endregion
@@ -266,7 +266,7 @@ namespace Spring.Aop.Framework.Adapter
 
             if(log.IsEnabled(LogLevel.Debug))
             {
-                log.Debug("Trying to find handler for exception of type [" + exception.GetType().Name + "].");
+                log.LogDebug("Trying to find handler for exception of type [" + exception.GetType().Name + "].");
             }
 
             #endregion

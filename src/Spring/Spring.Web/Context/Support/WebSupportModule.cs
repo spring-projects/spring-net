@@ -100,7 +100,7 @@ namespace Spring.Context.Support
             }
             catch(SecurityException sec)
             {
-                s_log.Warn(string.Format("failed reflecting field HttpContext.HideRequestResponse due to security restrictions {0}", sec));
+                s_log.LogWarning(string.Format("failed reflecting field HttpContext.HideRequestResponse due to security restrictions {0}", sec));
             }
 
             // register additional resource handler
@@ -112,7 +112,7 @@ namespace Spring.Context.Support
             // default to hybrid thread storage implementation
             LogicalThreadContext.SetStorage(new HybridContextStorage());
 
-            s_log.Debug("Set default resource protocol to 'web' and installed HttpContext-aware HybridContextStorage");
+            s_log.LogDebug("Set default resource protocol to 'web' and installed HttpContext-aware HybridContextStorage");
         }
 
         /// <summary>
@@ -122,7 +122,7 @@ namespace Spring.Context.Support
         {
             lock (typeof(WebSupportModule))
             {
-                s_log.Debug("Initializing Application instance");
+                s_log.LogDebug("Initializing Application instance");
                 if (!s_isInitialized)
                 {
                     HttpModuleCollection modules = app.Modules;
@@ -232,14 +232,14 @@ namespace Spring.Context.Support
         {
             if (context.Handler != null)
             {
-                s_log.Debug(string.Format("previous handler is present - configuring handler now using application context '{0}' and name '{1}'", applicationContext, name));
+                s_log.LogDebug(string.Format("previous handler is present - configuring handler now using application context '{0}' and name '{1}'", applicationContext, name));
                 // this is a Server.Execute() or Server.Transfer() request -> configure immediately
                 return ConfigureHandlerNow(handler, applicationContext, name, isContainerManaged);
             }
             else
             {
                 // remember the resolved object definition name for applying it during PreRequestHandlerExecute
-                s_log.Debug(string.Format("no previous handler is present - defer handler configuration using application context '{0}' and name '{1}'", applicationContext, name));
+                s_log.LogDebug(string.Format("no previous handler is present - defer handler configuration using application context '{0}' and name '{1}'", applicationContext, name));
                 SetCurrentHandlerConfiguration(applicationContext, name, isContainerManaged);
                 return handler;
             }
@@ -267,12 +267,12 @@ namespace Spring.Context.Support
         {
             if (isContainerManaged)
             {
-                s_log.Debug(string.Format("configuring managed handler using application context '{0}' and name '{1}'", applicationContext, name));
+                s_log.LogDebug(string.Format("configuring managed handler using application context '{0}' and name '{1}'", applicationContext, name));
                 handler = (IHttpHandler)applicationContext.ObjectFactory.ConfigureObject(handler, name);
             }
             else
             {
-                s_log.Debug(string.Format("configuring unmanaged handler using application context '{0}' and name '{1}'", applicationContext, name));
+                s_log.LogDebug(string.Format("configuring unmanaged handler using application context '{0}' and name '{1}'", applicationContext, name));
                 // at a minimum we'll apply ObjectPostProcessors
                 handler = (IHttpHandler)applicationContext.ObjectFactory.ApplyObjectPostProcessorsBeforeInitialization(handler, name);
                 handler = (IHttpHandler)applicationContext.ObjectFactory.ApplyObjectPostProcessorsAfterInitialization(handler, name);
@@ -295,7 +295,7 @@ namespace Spring.Context.Support
 
         private static void OnCacheItemRemoved(string key, object value, CacheItemRemovedReason reason)
         {
-            s_log.Debug("end session " + key + " because of " + reason);
+            s_log.LogDebug("end session " + key + " because of " + reason);
 
             try
             {
@@ -309,7 +309,7 @@ namespace Spring.Context.Support
                 // are we on a current request?
                 if (HttpContext.Current != null)
                 {
-                    s_log.Error(msg, ex);
+                    s_log.LogError(ex, msg);
                 }
                 else
                 {
@@ -332,7 +332,7 @@ namespace Spring.Context.Support
             object store = ExpressionEvaluator.GetValue(sessionStateModule, "_store");
             if ((store != null) && store.GetType().Name == "InProcSessionStateStore")
             {
-                s_log.Debug("attaching to InProcSessionStateStore");
+                s_log.LogDebug("attaching to InProcSessionStateStore");
                 s_originalCallback = (CacheItemRemovedCallback)ExpressionEvaluator.GetValue(store, "_callback");
                 ExpressionEvaluator.SetValue(store, "_callback", new CacheItemRemovedCallback(OnCacheItemRemoved));
 

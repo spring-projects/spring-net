@@ -337,8 +337,8 @@ namespace Spring.Messaging.Ems.Listener
                 #region Logging
                 if (logger.IsEnabled(LogLevel.Warning))
                 {
-                    logger.Warn("Rejecting received message because of the listener container " +
-                        "having been stopped in the meantime: " + message);
+                    logger.LogWarning("Rejecting received message because of the listener container " +
+                                      "having been stopped in the meantime: " + message);
                 }
                 #endregion
                 RollbackIfNecessary(session);
@@ -415,8 +415,8 @@ namespace Spring.Messaging.Ems.Listener
                 // Actually invoke the message listener
                 if (logger.IsEnabled(LogLevel.Debug))
                 {
-                    logger.Debug("Invoking listener with message of type [" + message.GetType() +
-                                 "] and session [" + sessionToUse + "]");
+                    logger.LogDebug("Invoking listener with message of type [" + message.GetType() +
+                                    "] and session [" + sessionToUse + "]");
                 }
                 listener.OnMessage(message, sessionToUse);
                 // Clean up specially exposed Session, if any
@@ -524,7 +524,7 @@ namespace Spring.Messaging.Ems.Listener
                     // Transacted session created by this container -> rollback
                     if (logger.IsEnabled(LogLevel.Debug))
                     {
-                        logger.Debug("Initiating transaction rollback on application exception");
+                        logger.LogDebug("Initiating transaction rollback on application exception");
                     }
                     EmsUtils.RollbackIfNecessary(session);
                 }
@@ -535,7 +535,7 @@ namespace Spring.Messaging.Ems.Listener
             }
             catch (EMSException)
             {
-                logger.Error("Application exception overriden by rollback exception", ex);
+                logger.LogError(ex, "Application exception overriden by rollback exception");
                 throw;
             }
         }
@@ -572,7 +572,7 @@ namespace Spring.Messaging.Ems.Listener
             {
                 // Rare case: listener thread failed after container shutdown.
                 // Log at debug level, to avoid spamming the shutdown log.
-                logger.Debug("Listener exception after container shutdown", ex);
+                logger.LogDebug(ex, "Listener exception after container shutdown");
             }
         }
 
@@ -584,7 +584,7 @@ namespace Spring.Messaging.Ems.Listener
             }
             else if (logger.IsEnabled(LogLevel.Warning))
             {
-                logger.Warn("Execution of EMS message listener failed, and no ErrorHandler has been set.", exception);
+                logger.LogWarning(exception, "Execution of EMS message listener failed, and no ErrorHandler has been set.");
             }
         }
 

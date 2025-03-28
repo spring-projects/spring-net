@@ -136,7 +136,7 @@ namespace Spring.Objects.Factory.Support
             {
                 if (logger.IsEnabled(LogLevel.Debug))
                 {
-                    logger.Debug("Invoking Dispose() on object with name '" + this.objectName + "'");
+                    logger.LogDebug("Invoking Dispose() on object with name '" + this.objectName + "'");
                 }
                 try
                 {
@@ -149,11 +149,11 @@ namespace Spring.Objects.Factory.Support
                     string msg = "Invocation of Dispose method failed on object with name '" + this.objectName + "'";
                     if (logger.IsEnabled(LogLevel.Debug))
                     {
-                        logger.Warn(msg, ex);
+                        logger.LogWarning(ex, msg);
                     }
                     else
                     {
-                        logger.Warn(msg + ": " + ex);
+                        logger.LogWarning(msg + ": " + ex);
                     }
                 }
             }
@@ -217,8 +217,8 @@ namespace Spring.Objects.Factory.Support
             }
             if (logger.IsEnabled(LogLevel.Debug))
             {
-                logger.Debug("Invoking destroy method '" + this.destroyMethodName +
-                             "' on object with name '" + this.objectName + "'");
+                logger.LogDebug("Invoking destroy method '" + this.destroyMethodName +
+                                "' on object with name '" + this.objectName + "'");
             }
             try
             {
@@ -231,17 +231,18 @@ namespace Spring.Objects.Factory.Support
                              "' failed on object with name '" + this.objectName + "'";
                 if (logger.IsEnabled(LogLevel.Debug))
                 {
-                    logger.Warn(msg, ex.InnerException);
+                    logger.LogWarning(ex.InnerException, msg);
                 }
                 else
                 {
-                    logger.Warn(msg + ": " + ex.InnerException);
+                    logger.LogWarning(msg + ": " + ex.InnerException);
                 }
             }
             catch (Exception ex)
             {
-                logger.Error("Couldn't invoke destroy method '" + this.destroyMethodName +
-                             "' on object with name '" + this.objectName + "'", ex);
+                string message = "Couldn't invoke destroy method '" + this.destroyMethodName +
+                                 "' on object with name '" + this.objectName + "'";
+                logger.LogError(ex, message);
             }
         }
     }

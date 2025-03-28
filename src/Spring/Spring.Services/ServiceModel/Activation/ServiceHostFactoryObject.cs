@@ -185,7 +185,7 @@ namespace Spring.ServiceModel.Activation
 
             if (LOG.IsEnabled(LogLevel.Information))
             {
-                LOG.Info(String.Format("The service '{0}' is ready and can now be accessed.", TargetName));
+                LOG.LogInformation(String.Format("The service '{0}' is ready and can now be accessed.", TargetName));
             }
 
             #endregion

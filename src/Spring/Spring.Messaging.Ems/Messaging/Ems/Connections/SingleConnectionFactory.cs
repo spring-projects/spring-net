@@ -462,7 +462,7 @@ namespace Spring.Messaging.Ems.Connections
                 PrepareConnection(this.target);
                 if (LOG.IsEnabled(LogLevel.Debug))
                 {
-                    LOG.Info("Established shared EMS Connection: " + this.target);
+                    LOG.LogInformation("Established shared EMS Connection: " + this.target);
                 }
                 this.connection = GetSharedConnection(target);
             }
@@ -532,7 +532,7 @@ namespace Spring.Messaging.Ems.Connections
         {
             if (LOG.IsEnabled(LogLevel.Debug))
             {
-                LOG.Debug("Closing shared EMS Connection: " + this.target);
+                LOG.LogDebug("Closing shared EMS Connection: " + this.target);
             }
             try
             {
@@ -549,7 +549,7 @@ namespace Spring.Messaging.Ems.Connections
                 }
             } catch (Exception ex)
             {
-                LOG.Warn("Could not close shared EMS connection.", ex);
+                LOG.LogWarning(ex, "Could not close shared EMS connection.");
             }
         }
 

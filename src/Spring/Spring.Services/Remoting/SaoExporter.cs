@@ -279,7 +279,7 @@ namespace Spring.Remoting
 
             if (LOG.IsEnabled(LogLevel.Debug))
             {
-                LOG.Debug( String.Format( "Target '{0}' exported as '{1}'.", targetName, objectUri ) );
+                LOG.LogDebug(String.Format( "Target '{0}' exported as '{1}'.", targetName, objectUri ));
             }
 
             #endregion

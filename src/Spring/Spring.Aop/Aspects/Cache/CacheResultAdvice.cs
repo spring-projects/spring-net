@@ -199,7 +199,7 @@ namespace Spring.Aspects.Cache
                     #region Instrumentation
                     if (isLogDebugEnabled)
                     {
-                        logger.Debug(String.Format("Object for key [{0}] was of type [{1}] which is not compatible with return type [{2}]. Proceeding...", resultKey, returnValue.GetType(), returnType));
+                        logger.LogDebug(String.Format("Object for key [{0}] was of type [{1}] which is not compatible with return type [{2}]. Proceeding...", resultKey, returnValue.GetType(), returnType));
                     }
                     #endregion
 
@@ -212,7 +212,7 @@ namespace Spring.Aspects.Cache
                     #region Instrumentation
                     if (isLogDebugEnabled)
                     {
-                        logger.Debug(String.Format("Object for key [{0}] was not found in cache [{1}]. Proceeding...", resultKey, resultInfo.CacheName));
+                        logger.LogDebug(String.Format("Object for key [{0}] was not found in cache [{1}]. Proceeding...", resultKey, resultInfo.CacheName));
                     }
                     #endregion
 
@@ -222,7 +222,7 @@ namespace Spring.Aspects.Cache
                         #region Instrumentation
                         if (isLogDebugEnabled)
                         {
-                            logger.Debug(String.Format("Caching object for key [{0}] into cache [{1}].", resultKey, resultInfo.CacheName));
+                            logger.LogDebug(String.Format("Caching object for key [{0}] into cache [{1}].", resultKey, resultInfo.CacheName));
                         }
                         #endregion
                         cache.Insert(resultKey, (returnValue == null) ? NullValue : returnValue, resultInfo.TimeToLiveTimeSpan);
@@ -233,7 +233,7 @@ namespace Spring.Aspects.Cache
                     #region Instrumentation
                     if (isLogDebugEnabled)
                     {
-                        logger.Debug(String.Format("Object for key [{0}] found in cache [{1}]. Aborting invocation...", resultKey, resultInfo.CacheName));
+                        logger.LogDebug(String.Format("Object for key [{0}] found in cache [{1}]. Aborting invocation...", resultKey, resultInfo.CacheName));
                     }
                     #endregion
                 }
@@ -277,7 +277,7 @@ namespace Spring.Aspects.Cache
                         #region Instrumentation
                         if (isDebugEnabled)
                         {
-                            logger.Debug("Caching collection item for key [" + itemKey + "].");
+                            logger.LogDebug("Caching collection item for key [" + itemKey + "].");
                         }
                         #endregion
                         cache.Insert(itemKey, (item == null ? NullValue : item), itemInfo.TimeToLiveTimeSpan);

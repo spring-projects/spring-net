@@ -15,6 +15,7 @@
  */
 
 using System.Transactions;
+using Microsoft.Extensions.Logging;
 using Spring.Data.Support;
 using Spring.Objects.Factory;
 using Spring.Transaction;
@@ -146,7 +147,7 @@ namespace Spring.Data.Core
         {
             if (status.Debug)
             {
-                log.Debug("Setting transaction rollback-only");
+                log.LogDebug("Setting transaction rollback-only");
             }
 
             try

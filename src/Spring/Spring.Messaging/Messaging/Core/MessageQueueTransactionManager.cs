@@ -185,7 +185,7 @@ namespace Spring.Messaging.Core
             {
                 if (LOG.IsEnabled(LogLevel.Debug))
                 {
-                    LOG.Debug("Committing MessageQueueTransaction");
+                    LOG.LogDebug("Committing MessageQueueTransaction");
                 }
                 transaction.Commit();
             }
@@ -210,7 +210,7 @@ namespace Spring.Messaging.Core
             {
                 if (LOG.IsEnabled(LogLevel.Debug))
                 {
-                    LOG.Debug("Committing MessageQueueTransaction");
+                    LOG.LogDebug("Committing MessageQueueTransaction");
                 }
                 transaction.Abort();
             }

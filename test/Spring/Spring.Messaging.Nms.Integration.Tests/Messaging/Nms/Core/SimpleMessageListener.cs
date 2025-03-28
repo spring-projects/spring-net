@@ -19,6 +19,7 @@
 #endregion
 
 using Apache.NMS;
+using Microsoft.Extensions.Logging;
 
 namespace Spring.Messaging.Nms.Core
 {
@@ -38,15 +39,15 @@ namespace Spring.Messaging.Nms.Core
         public void OnMessage(IMessage message)
         {
             messageCount++;
-            LOG.Debug("Message listener count = " + messageCount);
+            LOG.LogDebug("Message listener count = " + messageCount);
             ITextMessage textMessage = message as ITextMessage;
             if (textMessage != null)
             {
-                LOG.Info("Message Text = " + textMessage.Text);
+                LOG.LogInformation("Message Text = " + textMessage.Text);
             }
             else
             {
-                LOG.Warn("Can not process message of type " + message.GetType());
+                LOG.LogWarning("Can not process message of type " + message.GetType());
             }
         }
 

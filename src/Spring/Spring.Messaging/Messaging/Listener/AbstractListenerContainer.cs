@@ -18,6 +18,7 @@
 
 #endregion
 
+using Microsoft.Extensions.Logging;
 using Spring.Objects.Factory;
 
 namespace Spring.Messaging.Listener
@@ -175,7 +176,7 @@ namespace Spring.Messaging.Listener
         /// </summary>
         public virtual void Shutdown()
         {
-            LOG.Debug("Shutting down MessageListenerContainer");
+            LOG.LogDebug("Shutting down MessageListenerContainer");
             lock (lifecycleMonitor)
             {
                 running = false;

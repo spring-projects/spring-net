@@ -24,6 +24,7 @@ using Experimental.System.Messaging;
 #else
 using System.Messaging;
 #endif
+using Microsoft.Extensions.Logging;
 
 namespace Spring.Messaging.Listener
 {
@@ -106,8 +107,8 @@ namespace Spring.Messaging.Listener
                 }
                 else
                 {
-                    LOG.Info("Ignoring resetting of MaxConcurrentListeners.  Using previous value of " +
-                             maxConcurrentListeners);
+                    LOG.LogInformation("Ignoring resetting of MaxConcurrentListeners.  Using previous value of " +
+                                       maxConcurrentListeners);
                 }
             }
         }
@@ -144,10 +145,10 @@ namespace Spring.Messaging.Listener
             CloseQueueHandle(MessageQueue);
             if (dispatcherThread != null)
             {
-                LOG.Debug("Waiting to join dispatcher thread.");
+                LOG.LogDebug("Waiting to join dispatcher thread.");
                 dispatcherThread.Join();
                 dispatcherThread = null;
-                LOG.Debug("Dispatcher thread terminated.");
+                LOG.LogDebug("Dispatcher thread terminated.");
             }
         }
 
@@ -173,10 +174,10 @@ namespace Spring.Messaging.Listener
             CloseQueueHandle(MessageQueue);
             if (dispatcherThread != null)
             {
-                LOG.Debug("Waiting to join dispatcher thread.");
+                LOG.LogDebug("Waiting to join dispatcher thread.");
                 dispatcherThread.Join();
                 dispatcherThread = null;
-                LOG.Debug("Dispatcher thread terminated.");
+                LOG.LogDebug("Dispatcher thread terminated.");
             }
         }
 
@@ -195,7 +196,7 @@ namespace Spring.Messaging.Listener
                 try
                 {
                     IAsyncResult asynchResult = MessageQueue.BeginPeek();
-                    LOG.Debug("Waiting on Peek AsyncWaitHandle");
+                    LOG.LogDebug("Waiting on Peek AsyncWaitHandle");
                     int firedWaitHandle = WaitHandle.WaitAny(new WaitHandle[] {asynchResult.AsyncWaitHandle, stopEvent});
                     if (firedWaitHandle == 0)
                     {
@@ -209,9 +210,9 @@ namespace Spring.Messaging.Listener
                 }
                 catch (Exception ex)
                 {
-                    LOG.Error(
-                        "Exception executing DefaultMessageQueue.BeginPeek.  Reinvoking after recovery interval [" +
-                        RecoveryTimeSpan + "]", ex);
+                    string message = "Exception executing DefaultMessageQueue.BeginPeek.  Reinvoking after recovery interval [" +
+                                     RecoveryTimeSpan + "]";
+                    LOG.LogError(ex, message);
                     Thread.Sleep(RecoveryTimeSpan);
                     StartPeeking();
                 }
@@ -230,7 +231,7 @@ namespace Spring.Messaging.Listener
             bool listenerThreadWillCallStartPeek = false;
             try
             {
-                LOG.Debug("Peek Completed called.");
+                LOG.LogDebug("Peek Completed called.");
 
                 MessageQueue.EndPeek(asyncResult);
 
@@ -243,7 +244,7 @@ namespace Spring.Messaging.Listener
                     numberOfListenersToSchedule = maxConcurrentListeners -
                                                   (activeListenerCount + scheduledListenerCount);
 
-                    LOG.Debug("Submitting " + numberOfListenersToSchedule + " listener work items");
+                    LOG.LogDebug("Submitting " + numberOfListenersToSchedule + " listener work items");
 
                     #region Submit to thread pool up to max number of concurrent listeners
 
@@ -254,11 +255,11 @@ namespace Spring.Messaging.Listener
                         {
                             scheduledListenerCount++;
                             listenerThreadWillCallStartPeek = true;
-                            LOG.Debug("Queued ReceiveAndExecute listener # " + i);
+                            LOG.LogDebug("Queued ReceiveAndExecute listener # " + i);
                         }
                         else
                         {
-                            LOG.Error("Could not submit ReceiveAndExecute work item for listener # " + i);
+                            LOG.LogError("Could not submit ReceiveAndExecute work item for listener # " + i);
                         }
                     }
                     Monitor.PulseAll(activeListenerMonitor);
@@ -271,24 +272,23 @@ namespace Spring.Messaging.Listener
                 switch ((int) mex.MessageQueueErrorCode)
                 {
                     case -1073741536: // = 0xc0000120 "STATUS_CANCELLED".
-                        LOG.Info("Asynchronous Peek Thread sent STATUS_CANCELLED.");
+                        LOG.LogInformation("Asynchronous Peek Thread sent STATUS_CANCELLED.");
                         break;
                     default:
-                        LOG.Error("MessageQueueException Peeking Message", mex);
+                        LOG.LogError(mex, "MessageQueueException Peeking Message");
                         break;
                 }
             }
             catch (Exception e)
             {
-                LOG.Error("Exception Peeking Message", e);
+                LOG.LogError(e, "Exception Peeking Message");
             }
             finally
             {
                 if (listenerThreadWillCallStartPeek == false && Running)
                 {
-                    LOG.Warn(
-                        "Could not queue any listeners onto the thread pool.  Calling BeginPeek again after delay of " +
-                        RecoveryTimeSpan);
+                    LOG.LogWarning("Could not queue any listeners onto the thread pool.  Calling BeginPeek again after delay of " +
+                                   RecoveryTimeSpan);
                     Thread.Sleep(RecoveryTimeSpan);
                     StartPeeking();
                 }
@@ -314,7 +314,7 @@ namespace Spring.Messaging.Listener
 
             try
             {
-                LOG.Debug("Executing ReceiveAndExecute");
+                LOG.LogDebug("Executing ReceiveAndExecute");
 
                 #region Increment Active Listener Count
 
@@ -322,8 +322,8 @@ namespace Spring.Messaging.Listener
                 {
                     activeListenerCount++;
                     scheduledListenerCount--;
-                    LOG.Debug("ActiveListenerCount = " + activeListenerCount);
-                    LOG.Debug("ScheduledListenerCount = " + scheduledListenerCount);
+                    LOG.LogDebug("ActiveListenerCount = " + activeListenerCount);
+                    LOG.LogDebug("ScheduledListenerCount = " + scheduledListenerCount);
                     Monitor.PulseAll(activeListenerMonitor);
                 }
 
@@ -338,45 +338,45 @@ namespace Spring.Messaging.Listener
                     if (ListenerTimeLimit == TimeSpan.Zero)
                     {
                         listenerTimeOut = true;
-                        LOG.Trace("No listener timelimit specified, exiting recieve loop after one iteration.");
+                        LOG.LogTrace("No listener timelimit specified, exiting recieve loop after one iteration.");
                     }
                     else if (DateTime.Now >= expirationTime)
                     {
                         listenerTimeOut = true;
-                        LOG.Trace("Listener timeout, exiting receive loop.");
+                        LOG.LogTrace("Listener timeout, exiting receive loop.");
                     }
                     else
                     {
-                        LOG.Trace("Continuing receive loop.");
+                        LOG.LogTrace("Continuing receive loop.");
                     }
                 }
             }
             catch (Exception ex)
             {
                 messageReceived = false;
-                LOG.Error("Error receiving message from DefaultMessageQueue = [" + mq.Path + "]", ex);
+                string message = "Error receiving message from DefaultMessageQueue = [" + mq.Path + "]";
+                LOG.LogError(ex, message);
             }
             finally
             {
-                LOG.Debug("Exiting ReceiveAndExecute");
+                LOG.LogDebug("Exiting ReceiveAndExecute");
 
                 #region Decrementing Listener Count and call StartPeeking if last listener or there are still messages to process
 
                 lock (activeListenerMonitor)
                 {
                     activeListenerCount--;
-                    LOG.Debug("ActiveListenerCount = " + activeListenerCount);
-                    LOG.Trace("ListenerTimeout = " + listenerTimeOut + ", MessageRecieved = " + messageReceived);
+                    LOG.LogDebug("ActiveListenerCount = " + activeListenerCount);
+                    LOG.LogTrace("ListenerTimeout = " + listenerTimeOut + ", MessageRecieved = " + messageReceived);
                     if (activeListenerCount == 0)
                     {
-                        LOG.Debug("All processing threads ended - calling StartPeek again.");
+                        LOG.LogDebug("All processing threads ended - calling StartPeek again.");
                         //last active worker thread needs to restart the peeking process
                         StartPeeking();
                     }
                     else if (listenerTimeOut && messageReceived)
                     {
-                        LOG.Debug(
-                            "Processing thread ended due to timeout and last recieve operation was successfull, calling StartPeek again.");
+                        LOG.LogDebug("Processing thread ended due to timeout and last recieve operation was successfull, calling StartPeek again.");
                         StartPeeking();
                     }
                     Monitor.PulseAll(activeListenerMonitor);
@@ -408,7 +408,7 @@ namespace Spring.Messaging.Listener
                     {
                         while (activeListenerCount > 0)
                         {
-                            LOG.Debug("Waiting for termination of " + activeListenerCount + " listener threads.");
+                            LOG.LogDebug("Waiting for termination of " + activeListenerCount + " listener threads.");
                             Monitor.Wait(activeListenerMonitor);
                         }
                     }

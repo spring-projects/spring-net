@@ -186,7 +186,7 @@ namespace Spring.Data.NHibernate.Support
                 {
                     if (isDebugEnabled)
                     {
-                        log.Debug($"SessionPerConversationScope is already open for this conversation: Id:'{activeConversation.Id}'.");
+                        log.LogDebug($"SessionPerConversationScope is already open for this conversation: Id:'{activeConversation.Id}'.");
                     }
                 }
             }
@@ -196,7 +196,7 @@ namespace Spring.Data.NHibernate.Support
                 {
                     if (isDebugEnabled)
                     {
-                        log.Debug($"activeConversation with 'session-per-conversation': Id:'{activeConversation.Id}'.");
+                        log.LogDebug($"activeConversation with 'session-per-conversation': Id:'{activeConversation.Id}'.");
                     }
 
                     // single session mode
@@ -205,7 +205,7 @@ namespace Spring.Data.NHibernate.Support
                         // Do not modify the Session: just set the participate flag.
                         if (isDebugEnabled)
                         {
-                            log.Debug("Participating in existing NHibernate SessionFactory IS NOT ALLOWED.");
+                            log.LogDebug("Participating in existing NHibernate SessionFactory IS NOT ALLOWED.");
                         }
                         throw new InvalidOperationException("Participating in existing NHibernate SessionFactory IS NOT ALLOWED.");
                     }
@@ -213,7 +213,7 @@ namespace Spring.Data.NHibernate.Support
                     {
                         if (isDebugEnabled)
                         {
-                            log.Debug("Opening single NHibernate Session in SessionPerConversationScope");
+                            log.LogDebug("Opening single NHibernate Session in SessionPerConversationScope");
                         }
 
                         TransactionSynchronizationManager.BindResource(activeConversation.SessionFactory, new LazySessionPerConversationHolder(this, activeConversation, allManagedConversation));
@@ -226,7 +226,7 @@ namespace Spring.Data.NHibernate.Support
                 {
                     if (isDebugEnabled)
                     {
-                        log.Debug($"activeConversation with NO 'session-per-conversation': Id:'{activeConversation.Id}'.");
+                        log.LogDebug($"activeConversation with NO 'session-per-conversation': Id:'{activeConversation.Id}'.");
                     }
                 }
             }
@@ -250,7 +250,7 @@ namespace Spring.Data.NHibernate.Support
         public void Close(ISessionFactory sessionFactory, ICollection<IConversationState> allManagedConversation)
         {
             bool isDebugEnabled = log.IsEnabled(LogLevel.Debug);
-            if (isDebugEnabled) log.Debug("Trying to close SessionPerConversationScope");
+            if (isDebugEnabled) log.LogDebug("Trying to close SessionPerConversationScope");
 
             if (IsOpen)
             {
@@ -266,14 +266,14 @@ namespace Spring.Data.NHibernate.Support
             }
             else
             {
-                if (isDebugEnabled) log.Debug("No open conversation - doing nothing");
+                if (isDebugEnabled) log.LogDebug("No open conversation - doing nothing");
             }
         }
 
         private void DoClose(ISessionFactory sessionFactory, ICollection<IConversationState> allManagedConversation, bool isLogDebugEnabled)
         {
             // single session mode
-            if (isLogDebugEnabled) log.Debug("DoClose: Closing SessionPerConversationScope");
+            if (isLogDebugEnabled) log.LogDebug("DoClose: Closing SessionPerConversationScope");
             Object holderObj = TransactionSynchronizationManager.UnbindResource(sessionFactory);
             if (holderObj != null)
             {
@@ -301,7 +301,7 @@ namespace Spring.Data.NHibernate.Support
             {
                 if (isLogDebugEnabled)
                 {
-                    log.Warn("DoClose: TransactionSynchronizationManager.UnbindResource(sessionFactory) has no SessionHolder. Should I throw error?");
+                    log.LogWarning("DoClose: TransactionSynchronizationManager.UnbindResource(sessionFactory) has no SessionHolder. Should I throw error?");
                 }
             }
         }
@@ -326,13 +326,13 @@ namespace Spring.Data.NHibernate.Support
                     {
                         if (log.IsEnabled(LogLevel.Debug))
                         {
-                            log.Debug($"DoOpenSession: Conversation has a DbProvider: Id='{conversation.Id}'");
+                            log.LogDebug($"DoOpenSession: Conversation has a DbProvider: Id='{conversation.Id}'");
                         }
                         if (!conversation.RootSessionPerConversation.IsConnected)
                         {
                             if (log.IsEnabled(LogLevel.Debug))
                             {
-                                log.Debug($"DoOpenSession: Conversation is not Connected: Id='{conversation.Id}'");
+                                log.LogDebug($"DoOpenSession: Conversation is not Connected: Id='{conversation.Id}'");
                             }
 
                             DbConnection connection = (DbConnection) conversation.DbProvider.CreateConnection();
@@ -344,7 +344,7 @@ namespace Spring.Data.NHibernate.Support
                         {
                             if (log.IsEnabled(LogLevel.Debug))
                             {
-                                log.Debug($"DoOpenSession: Conversation is already Connected: Id='{conversation.Id}'");
+                                log.LogDebug($"DoOpenSession: Conversation is already Connected: Id='{conversation.Id}'");
                             }
                         }
                     }
@@ -352,7 +352,7 @@ namespace Spring.Data.NHibernate.Support
                     {
                         if (log.IsEnabled(LogLevel.Debug))
                         {
-                            log.Debug($"DoOpenSession: Conversation has NO DbProvider: Id='{conversation.Id}'");
+                            log.LogDebug($"DoOpenSession: Conversation has NO DbProvider: Id='{conversation.Id}'");
                         }
                         conversation.RootSessionPerConversation.Reconnect();
                     }
@@ -386,7 +386,7 @@ namespace Spring.Data.NHibernate.Support
             {
                 if (log.IsEnabled(LogLevel.Debug))
                 {
-                    log.Debug("Created LazyReconnectableSessionHolder");
+                    log.LogDebug("Created LazyReconnectableSessionHolder");
                 }
 
                 this.owner = owner;
@@ -406,7 +406,7 @@ namespace Spring.Data.NHibernate.Support
                 {
                     if (log.IsEnabled(LogLevel.Debug))
                     {
-                        log.Debug("EnsureInitialized: 'session-per-conversation' instance requested - opening new session");
+                        log.LogDebug("EnsureInitialized: 'session-per-conversation' instance requested - opening new session");
                     }
 
                     owner.DoOpenSession(activeConversation);
@@ -426,7 +426,7 @@ namespace Spring.Data.NHibernate.Support
 
                 if (log.IsEnabled(LogLevel.Debug))
                 {
-                    log.Debug("CloseAll LazySessionPerConversationHolder");
+                    log.LogDebug("CloseAll LazySessionPerConversationHolder");
                 }
             }
 
@@ -434,7 +434,7 @@ namespace Spring.Data.NHibernate.Support
             {
                 if (log.IsEnabled(LogLevel.Debug))
                 {
-                    log.Debug($"CloseConversation: Id='{conversation.Id}'");
+                    log.LogDebug($"CloseConversation: Id='{conversation.Id}'");
                 }
 
                 if (conversation.RootSessionPerConversation != null)
@@ -458,7 +458,7 @@ namespace Spring.Data.NHibernate.Support
                 }
                 if (log.IsEnabled(LogLevel.Debug))
                 {
-                    log.Debug("Closed LazySessionPerConversationHolder");
+                    log.LogDebug("Closed LazySessionPerConversationHolder");
                 }
             }
         }

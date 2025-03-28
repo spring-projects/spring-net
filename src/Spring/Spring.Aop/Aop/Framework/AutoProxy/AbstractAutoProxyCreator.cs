@@ -238,7 +238,7 @@ namespace Spring.Aop.Framework.AutoProxy
             {
                 if (logger.IsEnabled(LogLevel.Debug))
                 {
-                    logger.Debug(string.Format("Did not attempt to autoproxy infrastructure type [{0}]", objectType));
+                    logger.LogDebug(string.Format("Did not attempt to autoproxy infrastructure type [{0}]", objectType));
                 }
 
                 nonAdvisedObjects.Add(cacheKey);
@@ -249,7 +249,7 @@ namespace Spring.Aop.Framework.AutoProxy
             {
                 if (logger.IsEnabled(LogLevel.Debug))
                 {
-                    logger.Debug(string.Format("Skipping  type [{0}]", objectType));
+                    logger.LogDebug(string.Format("Skipping  type [{0}]", objectType));
                 }
 
                 nonAdvisedObjects.Add(cacheKey);
@@ -390,7 +390,7 @@ namespace Spring.Aop.Framework.AutoProxy
                         // found a match
                         if (logger.IsEnabled(LogLevel.Information))
                         {
-                            logger.Info(string.Format("TargetSourceCreator [{0} found custom TargetSource for object with objectName '{1}'", tsc, name));
+                            logger.LogInformation(string.Format("TargetSourceCreator [{0} found custom TargetSource for object with objectName '{1}'", tsc, name));
                         }
                         return ts;
                     }
@@ -514,7 +514,7 @@ namespace Spring.Aop.Framework.AutoProxy
             {
                 int nrOfCommonInterceptors = commonInterceptors != null ? commonInterceptors.Count : 0;
                 int nrOfSpecificInterceptors = specificInterceptors != null ? specificInterceptors.Count : 0;
-                logger.Info(string.Format("Creating implicit proxy for object '{0}' with {1} common interceptors and {2} specific interceptors", targetName, nrOfCommonInterceptors, nrOfSpecificInterceptors));
+                logger.LogInformation(string.Format("Creating implicit proxy for object '{0}' with {1} common interceptors and {2} specific interceptors", targetName, nrOfCommonInterceptors, nrOfSpecificInterceptors));
             }
 
 
@@ -576,7 +576,7 @@ namespace Spring.Aop.Framework.AutoProxy
                 {
                     if (logger.IsEnabled(LogLevel.Debug))
                     {
-                        logger.Debug(string.Format("Did not attempt to autoproxy infrastructure type [{0}]", objectType));
+                        logger.LogDebug(string.Format("Did not attempt to autoproxy infrastructure type [{0}]", objectType));
                     }
 
                     nonAdvisedObjects.Add(cacheKey);
@@ -587,7 +587,7 @@ namespace Spring.Aop.Framework.AutoProxy
                 {
                     if (logger.IsEnabled(LogLevel.Debug))
                     {
-                        logger.Debug(string.Format("Skipping  type [{0}]", objectType));
+                        logger.LogDebug(string.Format("Skipping  type [{0}]", objectType));
                     }
 
                     nonAdvisedObjects.Add(cacheKey);

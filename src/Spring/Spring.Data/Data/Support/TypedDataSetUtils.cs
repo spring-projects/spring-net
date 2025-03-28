@@ -20,6 +20,7 @@
 
 using System.Data;
 using System.Reflection;
+using Microsoft.Extensions.Logging;
 using Spring.Data.Common;
 
 namespace Spring.Data.Support
@@ -130,7 +131,7 @@ namespace Spring.Data.Support
             }
             else
             {
-                LOG.Warn("Could not extract IDbDataAdapter from TypedDataset.");
+                LOG.LogWarning("Could not extract IDbDataAdapter from TypedDataset.");
             }
 
 
@@ -146,7 +147,7 @@ namespace Spring.Data.Support
             }
             else
             {
-                LOG.Warn("Could not extract IDbCommand collection from TypedDataset.");
+                LOG.LogWarning("Could not extract IDbCommand collection from TypedDataset.");
             }
         }
 

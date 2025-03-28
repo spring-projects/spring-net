@@ -1,3 +1,4 @@
+using Microsoft.Extensions.Logging;
 using Spring.Expressions;
 
 namespace Spring.Aspects.Exceptions
@@ -36,7 +37,8 @@ namespace Spring.Aspects.Exceptions
             }
             catch (Exception e)
             {
-                log.Warn("Was not able to evaluate action expression [" + ActionExpressionText + "]", e);
+                string message = "Was not able to evaluate action expression [" + ActionExpressionText + "]";
+                log.LogWarning(e, message);
             }
             return null;
         }

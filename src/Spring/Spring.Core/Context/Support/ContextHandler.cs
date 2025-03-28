@@ -264,7 +264,7 @@ namespace Spring.Context.Support
 			}
 	    	
 			#region Instrumentation
-			if (Log.IsEnabled(LogLevel.Debug)) Log.Debug(string.Format("creating context '{0}'", contextName ) );
+			if (Log.IsEnabled(LogLevel.Debug)) Log.LogDebug(string.Format("creating context '{0}'", contextName ));
 			#endregion
 	    	
 	    	IApplicationContext context = null;
@@ -293,7 +293,7 @@ namespace Spring.Context.Support
                 IList<XmlNode> childContexts = GetChildContexts(contextElement);
 				CreateChildContexts(context, configContext, childContexts);
 
-	        	if (Log.IsEnabled(LogLevel.Debug)) Log.Debug( string.Format("context '{0}' created for name '{1}'", context, contextName) );
+	        	if (Log.IsEnabled(LogLevel.Debug)) Log.LogDebug(string.Format("context '{0}' created for name '{1}'", context, contextName));
 	        }
 	        catch (Exception ex)
 	        {

@@ -15,6 +15,7 @@
  */
 
 using System.Collections;
+using Microsoft.Extensions.Logging;
 using NHibernate;
 using NHibernate.Connection;
 using NHibernate.Driver;
@@ -235,7 +236,7 @@ namespace Spring.Data.NHibernate
                     session = sessionHolder.ValidatedSession;
                     if (session != null && !sessionHolder.SynchronizedWithTransaction) 
                     {
-                        log.Debug("Registering Spring transaction synchronization for existing Hibernate Session");
+                        log.LogDebug("Registering Spring transaction synchronization for existing Hibernate Session");
                         TransactionSynchronizationManager.RegisterSynchronization(
                             new SpringSessionSynchronization(sessionHolder, sessionFactory, adoExceptionTranslator, false));
                         sessionHolder.SynchronizedWithTransaction = true;
@@ -270,7 +271,7 @@ namespace Spring.Data.NHibernate
             // Thread object will get removed by synchronization at transaction completion.
             if (TransactionSynchronizationManager.SynchronizationActive) 
             {
-                log.Debug("Registering Spring transaction synchronization for new Hibernate Session");
+                log.LogDebug("Registering Spring transaction synchronization for new Hibernate Session");
                 SessionHolder holderToUse = sessionHolder;
                 if (holderToUse == null) 
                 {
@@ -316,7 +317,7 @@ namespace Spring.Data.NHibernate
         /// <returns>the newly opened session</returns>
         internal static ISession OpenSession(ISessionFactory sessionFactory, IInterceptor entityInterceptor)
         {
-            log.Debug("Opening Hibernate Session");
+            log.LogDebug("Opening Hibernate Session");
             ISession session = (
                                    (entityInterceptor != null)
                                    ? sessionFactory.OpenSession(entityInterceptor) 
@@ -335,18 +336,18 @@ namespace Spring.Data.NHibernate
         {
             if (session != null) 
             {
-                log.Debug("Closing Hibernate Session");
+                log.LogDebug("Closing Hibernate Session");
                 try 
                 {
                     session.Close();
                 }
                 catch (HibernateException ex) 
                 {
-                    log.Error("Could not close Hibernate Session", ex);
+                    log.LogError(ex, "Could not close Hibernate Session");
                 }
                 catch (Exception ex) 
                 {
-                    log.Error("Unexpected exception on closing Hibernate Session", ex);
+                    log.LogError(ex, "Unexpected exception on closing Hibernate Session");
                 }
             }
         }
@@ -394,11 +395,14 @@ namespace Spring.Data.NHibernate
                     "Hibernate operation: " + ex.Message, sqlString, ex.InnerException);
             } catch (Exception e)
             {
-                log.Error("Exception thrown during exception translation. Message = [" + e.Message + "]", e);
-                log.Error("Exception that was attempted to be translated was [" + ex.Message + "]", ex);                
+                string message = "Exception thrown during exception translation. Message = [" + e.Message + "]";
+                log.LogError(e, message);
+                string message1 = "Exception that was attempted to be translated was [" + ex.Message + "]";
+                log.LogError((Exception) ex, message1);                
                 if (ex.InnerException != null)
                 {
-                    log.Error("  Inner Exception was [" + ex.InnerException.Message + "]", ex.InnerException);
+                    string message2 = "  Inner Exception was [" + ex.InnerException.Message + "]";
+                    log.LogError(ex.InnerException, message2);
                 }
                 throw new UncategorizedAdoException(e.Message, "", "", e);
             }
@@ -501,7 +505,7 @@ namespace Spring.Data.NHibernate
             
             if (holderDictionary != null && sessionFactory != null && holderDictionary.Contains(sessionFactory)) 
             {
-                log.Debug("Registering Hibernate Session for deferred close");
+                log.LogDebug("Registering Hibernate Session for deferred close");
                 // Switch Session to FlushMode.NEVER for remaining lifetime.
                 session.FlushMode = FlushMode.Never;
                 Set sessions = (Set) holderDictionary[sessionFactory];
@@ -523,7 +527,7 @@ namespace Spring.Data.NHibernate
         {
             AssertUtils.ArgumentNotNull(sessionFactory, "No SessionFactory specified");
 
-            log.Debug("Initializing deferred close of Hibernate Sessions");
+            log.LogDebug("Initializing deferred close of Hibernate Sessions");
 
             IDictionary holderDictionary = LogicalThreadContext.GetData(DeferredCloseHolderDataSlotName) as IDictionary;
           
@@ -569,7 +573,7 @@ namespace Spring.Data.NHibernate
             {
                 throw new InvalidOperationException("Deferred close not active for SessionFactory [" + sessionFactory + "]");
             }
-            log.Debug("Processing deferred close of Hibernate Sessions");
+            log.LogDebug("Processing deferred close of Hibernate Sessions");
             Set sessions = (Set) holderDictionary[sessionFactory];
             holderDictionary.Remove(sessionFactory);
             foreach (ISession session in sessions)
@@ -687,7 +691,7 @@ namespace Spring.Data.NHibernate
                     }
 	                else
                     {
-                        log.Info("Could not derive IDbProvider from SessionFactory");
+                        log.LogInformation("Could not derive IDbProvider from SessionFactory");
                     }
 	            }
 	            
@@ -710,7 +714,7 @@ namespace Spring.Data.NHibernate
 	        {
                 return new ErrorCodeExceptionTranslator(dbProvider);
 	        }
-	        log.Warn("Using FallbackException Translator.  Could not translate from ISessionFactory to IDbProvider");
+	        log.LogWarning("Using FallbackException Translator.  Could not translate from ISessionFactory to IDbProvider");
             return new FallbackExceptionTranslator();
 	        
 	    }

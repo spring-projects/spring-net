@@ -18,6 +18,7 @@
 
 #endregion
 
+using Microsoft.Extensions.Logging;
 using Spring.Messaging.Ems.Common;
 using Spring.Messaging.Ems.Support;
 using Spring.Transaction.Support;
@@ -63,7 +64,7 @@ namespace Spring.Messaging.Ems.Connections
                 }
                 catch (Exception ex)
                 {
-                    LOG.Debug("Could not stop EMS Connection before closing it", ex);
+                    LOG.LogDebug(ex, "Could not stop EMS Connection before closing it");
 
                 }
             }
@@ -73,7 +74,7 @@ namespace Spring.Messaging.Ems.Connections
             }
             catch (Exception ex)
             {
-                LOG.Debug("Could not close EMS Connection", ex);
+                LOG.LogDebug(ex, "Could not close EMS Connection");
             }
         }
 

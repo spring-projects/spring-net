@@ -22,7 +22,7 @@ namespace Spring.MsmqQuickStart.Client
         {
             try
             {
-                log.Info("Running....");
+                log.LogInformation("Running....");
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
                 using (IApplicationContext ctx = ContextRegistry.GetContext())
@@ -34,13 +34,13 @@ namespace Spring.MsmqQuickStart.Client
             }
             catch (Exception e)
             {
-                log.Error("Spring.MsmqQuickStart.Client is broken.", e);
+                log.LogError(e, "Spring.MsmqQuickStart.Client is broken.");
             }
         }
 
         private static void ThreadException(object sender, ThreadExceptionEventArgs e)
         {
-            log.Error("Uncaught application exception.", e.Exception);
+            log.LogError(e.Exception, "Uncaught application exception.");
             Application.Exit();
         }
     }

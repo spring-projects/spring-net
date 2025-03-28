@@ -1,4 +1,5 @@
 using System.Reflection;
+using Microsoft.Extensions.Logging;
 using Spring.Globalization;
 using Spring.Validation;
 
@@ -132,7 +133,7 @@ namespace Spring.DataBinding
                 }
                 catch (Exception ex)
                 {
-                    log.Warn(string.Format("Failed binding[{0}]:{1}", this.Id, ex));
+                    log.LogWarning(string.Format("Failed binding[{0}]:{1}", this.Id, ex));
                     if (!SetInvalid(validationErrors)) throw;
                 }
             }

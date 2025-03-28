@@ -18,6 +18,7 @@
 
 #endregion
 
+using Microsoft.Extensions.Logging;
 using Spring.Expressions;
 
 namespace Spring.Validation.Actions
@@ -78,7 +79,8 @@ namespace Spring.Validation.Actions
                 }
                 catch (Exception e)
                 {
-                    log.Error("Was not able to evaluate action expression [" + throwsExpression + "]", e);
+                    string message = "Was not able to evaluate action expression [" + throwsExpression + "]";
+                    log.LogError(e, message);
                 }
                 Exception exception = o as Exception;
                 if (exception != null)

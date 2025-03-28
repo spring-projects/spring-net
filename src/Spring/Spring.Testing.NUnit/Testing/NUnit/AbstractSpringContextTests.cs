@@ -227,7 +227,7 @@ namespace Spring.Testing.NUnit
         {
 		    if (logger.IsEnabled(LogLevel.Information))
             {
-                logger.Info("Loading config for: " + StringUtils.CollectionToCommaDelimitedString(locations));
+                logger.LogInformation("Loading config for: " + StringUtils.CollectionToCommaDelimitedString(locations));
 		    }
 		    return new XmlApplicationContext(locations);
 	    }

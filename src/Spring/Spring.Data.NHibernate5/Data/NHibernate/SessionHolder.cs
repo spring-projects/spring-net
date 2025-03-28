@@ -16,6 +16,7 @@
 
 using System.Collections;
 using System.Data;
+using Microsoft.Extensions.Logging;
 using NHibernate;
 
 using Spring.Transaction.Support;
@@ -295,7 +296,7 @@ namespace Spring.Data.NHibernate
             {
                 if (sessionDictionary.ContainsKey(key))
                 {
-                    log.Debug("Overwriting Session in SessionHolder with key = "+ key);
+                    log.LogDebug("Overwriting Session in SessionHolder with key = "+ key);
                 }
 
                 sessionDictionary[key] =  session;

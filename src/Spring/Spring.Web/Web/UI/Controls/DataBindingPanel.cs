@@ -26,8 +26,7 @@ using System.Security.Permissions;
 using System.Web;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-
-
+using Microsoft.Extensions.Logging;
 using Spring.Core.TypeResolution;
 using Spring.DataBinding;
 using Spring.Globalization;
@@ -145,7 +144,7 @@ namespace Spring.Web.UI.Controls
                         string msg =
                             string.Format("Error executing action on control '{0}' of type '{1}'", wc.UniqueID,
                                           wc.GetType().FullName);
-                        Log.Error(msg, ex);
+                        Log.LogError(ex, msg);
                         throw new HttpException(msg, ex);
                     }
                 }
@@ -225,9 +224,8 @@ namespace Spring.Web.UI.Controls
                                 ? relativeControlName + "." + bindingSource
                                 : relativeControlName;
 
-            Log.Debug(
-                string.Format("binding control '{0}' relative to '{1}' using expression '{2}'", controlName,
-                              containerName, bindingSource));
+            Log.LogDebug(string.Format("binding control '{0}' relative to '{1}' using expression '{2}'", controlName,
+                containerName, bindingSource));
 
             //get bindingType if any
             IBinding binding = null;
