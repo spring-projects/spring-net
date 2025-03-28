@@ -20,49 +20,48 @@
 
 using System.Collections;
 
-namespace Spring.Caching
+namespace Spring.Caching;
+
+/// <summary>
+/// This attribute should be used with methods that return an <see cref="ICollection"/>
+/// in order to cache each item separately.
+/// </summary>
+/// <remarks>
+/// <p>
+/// This attribute allows application developers to specify that each item
+/// from the collection returned by the method should be cached,
+/// but it will not do any caching by itself.
+/// </p>
+/// <p>
+/// In order to actually cache the result, an application developer
+/// must apply a <c>Spring.Aspects.Cache.CacheResultAdvice</c> to
+/// all of the members that have this attribute defined.
+/// </p>
+/// </remarks>
+/// <author>Aleksandar Seovic</author>
+[AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = false)]
+[Serializable]
+public sealed class CacheResultItemsAttribute : BaseCacheAttribute
 {
     /// <summary>
-    /// This attribute should be used with methods that return an <see cref="ICollection"/>
-    /// in order to cache each item separately.
+    /// Creates an attribute instance.
     /// </summary>
-    /// <remarks>
-    /// <p>
-    /// This attribute allows application developers to specify that each item
-    /// from the collection returned by the method should be cached,
-    /// but it will not do any caching by itself.
-    /// </p>
-    /// <p>
-    /// In order to actually cache the result, an application developer
-    /// must apply a <c>Spring.Aspects.Cache.CacheResultAdvice</c> to
-    /// all of the members that have this attribute defined.
-    /// </p>
-    /// </remarks>
-    /// <author>Aleksandar Seovic</author>
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true, Inherited = false)]
-    [Serializable]
-    public sealed class CacheResultItemsAttribute : BaseCacheAttribute
+    public CacheResultItemsAttribute()
     {
-        /// <summary>
-        /// Creates an attribute instance.
-        /// </summary>
-        public CacheResultItemsAttribute()
-        {
-        }
+    }
 
-        /// <summary>
-        /// Creates an attribute instance.
-        /// </summary>
-        /// <param name="cacheName">
-        /// The name of the cache to use.
-        /// </param>
-        /// <param name="key">
-        /// An expression string that should be evaluated in order to determine
-        /// the cache key for the item.
-        /// </param>
-        public CacheResultItemsAttribute(string cacheName, string key)
-            : base(cacheName, key)
-        {
-        }
+    /// <summary>
+    /// Creates an attribute instance.
+    /// </summary>
+    /// <param name="cacheName">
+    /// The name of the cache to use.
+    /// </param>
+    /// <param name="key">
+    /// An expression string that should be evaluated in order to determine
+    /// the cache key for the item.
+    /// </param>
+    public CacheResultItemsAttribute(string cacheName, string key)
+        : base(cacheName, key)
+    {
     }
 }

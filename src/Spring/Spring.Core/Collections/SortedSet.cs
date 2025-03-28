@@ -23,61 +23,60 @@
 using System.Collections;
 using Spring.Util;
 
-namespace Spring.Collections
+namespace Spring.Collections;
+
+/// <summary>
+/// Implements an <see cref="Spring.Collections.ISet"/> based on a sorted
+/// tree.
+/// </summary>
+/// <remarks>
+/// <p>
+/// This gives good performance for operations on very large data-sets,
+/// though not as good - asymptotically - as a
+/// <see cref="Spring.Collections.HashedSet"/>. However, iteration occurs
+/// in order.
+/// </p>
+/// <p>
+/// Elements that you put into this type of collection must implement
+/// <see cref="System.IComparable"/>, and they must actually be comparable.
+/// You can't mix <see cref="System.String"/> and
+/// <see cref="System.Int32"/> values, for example.
+/// </p>
+/// <p>
+/// This <see cref="Spring.Collections.ISet"/> implementation does
+/// <b>not</b> support elements that are <see langword="null"/>.
+/// </p>
+/// </remarks>
+/// <seealso cref="Spring.Collections.ISet"/>
+[Serializable]
+public class SortedSet : DictionarySet
 {
-	/// <summary>
-	/// Implements an <see cref="Spring.Collections.ISet"/> based on a sorted
-	/// tree.
-	/// </summary>
-	/// <remarks>
-	/// <p>
-	/// This gives good performance for operations on very large data-sets,
-	/// though not as good - asymptotically - as a
-	/// <see cref="Spring.Collections.HashedSet"/>. However, iteration occurs
-	/// in order.
-	/// </p>
-	/// <p>
-	/// Elements that you put into this type of collection must implement
-	/// <see cref="System.IComparable"/>, and they must actually be comparable.
-	/// You can't mix <see cref="System.String"/> and
-	/// <see cref="System.Int32"/> values, for example.
-	/// </p>
-	/// <p>
-	/// This <see cref="Spring.Collections.ISet"/> implementation does
-	/// <b>not</b> support elements that are <see langword="null"/>.
-	/// </p>
-	/// </remarks>
-	/// <seealso cref="Spring.Collections.ISet"/>
-    [Serializable]
-    public class SortedSet : DictionarySet
-	{
-		/// <summary>
-		/// Creates a new set instance based on a sorted tree.
-		/// </summary>
-		public SortedSet()
-		{
-			InternalDictionary = new SortedList();
-		}
+    /// <summary>
+    /// Creates a new set instance based on a sorted tree.
+    /// </summary>
+    public SortedSet()
+    {
+        InternalDictionary = new SortedList();
+    }
 
-		/// <summary>
-		/// Creates a new set instance based on a sorted tree using <param name="comparer"/> for ordering.
-		/// </summary>
-        public SortedSet(IComparer comparer)
-        {
-            AssertUtils.ArgumentNotNull(comparer, "comparer");
-			InternalDictionary = new SortedList(comparer);
-        }
+    /// <summary>
+    /// Creates a new set instance based on a sorted tree using <param name="comparer"/> for ordering.
+    /// </summary>
+    public SortedSet(IComparer comparer)
+    {
+        AssertUtils.ArgumentNotNull(comparer, "comparer");
+        InternalDictionary = new SortedList(comparer);
+    }
 
-		/// <summary>
-		/// Creates a new set instance based on a sorted tree and initializes
-		/// it based on a collection of elements.
-		/// </summary>
-		/// <param name="initialValues">
-		/// A collection of elements that defines the initial set contents.
-		/// </param>
-		public SortedSet(ICollection initialValues) : this()
-		{
-			this.AddAll(initialValues);
-		}
-	}
+    /// <summary>
+    /// Creates a new set instance based on a sorted tree and initializes
+    /// it based on a collection of elements.
+    /// </summary>
+    /// <param name="initialValues">
+    /// A collection of elements that defines the initial set contents.
+    /// </param>
+    public SortedSet(ICollection initialValues) : this()
+    {
+        this.AddAll(initialValues);
+    }
 }

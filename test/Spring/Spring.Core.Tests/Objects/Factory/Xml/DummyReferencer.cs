@@ -20,45 +20,41 @@
 
 #region Imports
 
-
-
 #endregion
 
-namespace Spring.Objects.Factory.Xml {
+namespace Spring.Objects.Factory.Xml;
 
-	/// <summary>
-	/// Summary description for DummyReferencer.
-    /// </summary>
-    /// <author>Juergen Hoeller</author>
-    /// <author>Rick Evans (.NET)</author>
-	public class DummyReferencer 
+/// <summary>
+/// Summary description for DummyReferencer.
+/// </summary>
+/// <author>Juergen Hoeller</author>
+/// <author>Rick Evans (.NET)</author>
+public class DummyReferencer
+{
+    public ITestObject TestObject1
     {
-
-        public ITestObject TestObject1
+        get
         {
-            get
-            {
-                return testObject1;
-            }
-            set
-            {
-                this.testObject1 = value;
-            }
+            return testObject1;
         }
-
-        public ITestObject TestObject2
+        set
         {
-            get
-            {
-                return testObject2;
-            }
-            set
-            {
-                this.testObject2 = value;
-            }
+            this.testObject1 = value;
         }
-		
-        private ITestObject testObject1;
-        private ITestObject testObject2;
-	}
+    }
+
+    public ITestObject TestObject2
+    {
+        get
+        {
+            return testObject2;
+        }
+        set
+        {
+            this.testObject2 = value;
+        }
+    }
+
+    private ITestObject testObject1;
+    private ITestObject testObject2;
 }

@@ -24,72 +24,76 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Objects.Support
+namespace Spring.Objects.Support;
+
+/// <summary>
+/// Unit tests for the StaticEventHandlerValue class.
+/// </summary>
+/// <author>Rick Evans</author>
+[TestFixture]
+public sealed class StaticEventHandlerValueTests
 {
-	/// <summary>
-	/// Unit tests for the StaticEventHandlerValue class.
-    /// </summary>
-    /// <author>Rick Evans</author>
-	[TestFixture]
-    public sealed class StaticEventHandlerValueTests
+    [Test]
+    public void Instantiation()
     {
-        [Test]
-        public void Instantiation () 
-        {
-            PingSource source = new PingSource ();
-            StaticEventHandlerValue wirer
-                = new StaticEventHandlerValue (source, "OnPing");
-            Assert.IsNotNull (wirer.Source);
-            Assert.AreEqual ("OnPing", wirer.MethodName);
-            Assert.IsTrue (wirer.ToString ().IndexOf (wirer.MethodName) > 0);
-        }
-
-        [Test]
-        public void Wire () 
-        {
-            PingSource source = new PingSource ();
-            StaticEventHandlerValue wirer
-                = new StaticEventHandlerValue (source, "OnPing");
-            wirer.EventName = "Ping";
-            Type sink = typeof (StaticPingListener);
-            wirer.Wire (source, sink);
-            source.OnPing ();
-            Assert.IsTrue (StaticPingListener.GotPing, "The event handler did not get notified when the event was raised.");
-            Assert.AreEqual (1, StaticPingListener.PingCount, "The event handler was not get notified exactly once when the event was raised exactly once.");
-        }
-
-        [Test]
-        public void WireWithInstanceHandler () 
-        {
-            StaticEventHandlerValue wirer = new StaticEventHandlerValue ();
-            wirer.EventName = "Ping";
-            wirer.MethodName = "OnPing";
-            PingSource source = new PingSource ();
-            Assert.Throws<FatalObjectException>(() => wirer.Wire (source, new PingListener ()));
-        }
-	}
-
-    internal class StaticPingListener {
-
-        public static bool OnPing (object sender, PingEventArgs e) {
-            _ping = true;
-            ++_pingCount;
-            return true;
-        }
-
-        public static bool GotPing {
-            get {
-                return _ping;
-            }
-        }
-
-        public static int PingCount {
-            get {
-                return _pingCount;
-            }
-        }
-
-        protected static bool _ping;
-        protected static int _pingCount;
+        PingSource source = new PingSource();
+        StaticEventHandlerValue wirer
+            = new StaticEventHandlerValue(source, "OnPing");
+        Assert.IsNotNull(wirer.Source);
+        Assert.AreEqual("OnPing", wirer.MethodName);
+        Assert.IsTrue(wirer.ToString().IndexOf(wirer.MethodName) > 0);
     }
+
+    [Test]
+    public void Wire()
+    {
+        PingSource source = new PingSource();
+        StaticEventHandlerValue wirer
+            = new StaticEventHandlerValue(source, "OnPing");
+        wirer.EventName = "Ping";
+        Type sink = typeof(StaticPingListener);
+        wirer.Wire(source, sink);
+        source.OnPing();
+        Assert.IsTrue(StaticPingListener.GotPing, "The event handler did not get notified when the event was raised.");
+        Assert.AreEqual(1, StaticPingListener.PingCount, "The event handler was not get notified exactly once when the event was raised exactly once.");
+    }
+
+    [Test]
+    public void WireWithInstanceHandler()
+    {
+        StaticEventHandlerValue wirer = new StaticEventHandlerValue();
+        wirer.EventName = "Ping";
+        wirer.MethodName = "OnPing";
+        PingSource source = new PingSource();
+        Assert.Throws<FatalObjectException>(() => wirer.Wire(source, new PingListener()));
+    }
+}
+
+internal class StaticPingListener
+{
+    public static bool OnPing(object sender, PingEventArgs e)
+    {
+        _ping = true;
+        ++_pingCount;
+        return true;
+    }
+
+    public static bool GotPing
+    {
+        get
+        {
+            return _ping;
+        }
+    }
+
+    public static int PingCount
+    {
+        get
+        {
+            return _pingCount;
+        }
+    }
+
+    protected static bool _ping;
+    protected static int _pingCount;
 }

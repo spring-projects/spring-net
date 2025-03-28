@@ -26,125 +26,125 @@ using Spring.Transaction.Support;
 
 #if NETSTANDARD
 using Experimental.System.Messaging;
+
 #else
 using System.Messaging;
 #endif
 
-namespace Spring.Messaging.Listener
+namespace Spring.Messaging.Listener;
+
+/// <summary>
+/// An implementation of a Peeking based MessageListener container that starts a transaction
+/// before recieving a message.  The <see cref="IPlatformTransactionManager"/> implementation determines
+/// the type of transaction that will be started.  An exception while processing the message will
+/// result in a rollback, otherwise a transaction commit will be performed.
+/// </summary>
+/// <remarks>
+/// The type of transaction that can be started can either be local transaction,
+/// (e.g. <see cref="AdoPlatformTransactionManager"/>, a local messaging transaction
+/// (e.g. <see cref="MessageQueueTransactionManager"/> or a DTC based transaction,
+/// (eg. <see cref="TxScopeTransactionManager"/>.
+/// <para>
+/// Transaction properties can be set using the property <see cref="TransactionDefinition"/>
+/// and the transaction timeout via the property <see cref="TransactionTimeout"/>.
+/// </para>
+/// </remarks>
+public abstract class AbstractTransactionalMessageListenerContainer : AbstractPeekingMessageListenerContainer
 {
+    #region Logging Definition
+
+    private static readonly ILogger LOG = LogManager.GetLogger(typeof(AbstractTransactionalMessageListenerContainer));
+
+    #endregion
+
+    private IPlatformTransactionManager platformTransactionManager;
+
+    private DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
+
     /// <summary>
-    /// An implementation of a Peeking based MessageListener container that starts a transaction
-    /// before recieving a message.  The <see cref="IPlatformTransactionManager"/> implementation determines
-    /// the type of transaction that will be started.  An exception while processing the message will
-    /// result in a rollback, otherwise a transaction commit will be performed.
+    /// Gets or sets the platform transaction manager.
     /// </summary>
-    /// <remarks>
-    /// The type of transaction that can be started can either be local transaction,
-    /// (e.g. <see cref="AdoPlatformTransactionManager"/>, a local messaging transaction
-    /// (e.g. <see cref="MessageQueueTransactionManager"/> or a DTC based transaction,
-    /// (eg. <see cref="TxScopeTransactionManager"/>.
-    /// <para>
-    /// Transaction properties can be set using the property <see cref="TransactionDefinition"/>
-    /// and the transaction timeout via the property <see cref="TransactionTimeout"/>.
-    /// </para>
-    /// </remarks>
-    public abstract class AbstractTransactionalMessageListenerContainer : AbstractPeekingMessageListenerContainer
+    /// <value>The platform transaction manager.</value>
+    public IPlatformTransactionManager PlatformTransactionManager
     {
-        #region Logging Definition
+        get { return platformTransactionManager; }
+        set { platformTransactionManager = value; }
+    }
 
-        private static readonly ILogger LOG = LogManager.GetLogger(typeof (AbstractTransactionalMessageListenerContainer));
+    /// <summary>
+    /// Gets or sets the transaction definition.
+    /// </summary>
+    /// <value>The transaction definition.</value>
+    public DefaultTransactionDefinition TransactionDefinition
+    {
+        get { return transactionDefinition; }
+        set { transactionDefinition = value; }
+    }
 
-        #endregion
+    /// <summary>
+    /// Sets the transaction timeout to use for transactional wrapping, in <b>seconds</b>.
+    /// Default is none, using the transaction manager's default timeout.
+    /// </summary>
+    /// <value>The transaction timeout.</value>
+    public int TransactionTimeout
+    {
+        set { transactionDefinition.TransactionTimeout = value; }
+    }
 
-        private IPlatformTransactionManager platformTransactionManager;
-
-        private DefaultTransactionDefinition transactionDefinition = new DefaultTransactionDefinition();
-
-
-        /// <summary>
-        /// Gets or sets the platform transaction manager.
-        /// </summary>
-        /// <value>The platform transaction manager.</value>
-        public IPlatformTransactionManager PlatformTransactionManager
+    /// <summary>
+    /// Subclasses perform a receive opertion on the message queue and execute the
+    /// message listener
+    /// </summary>
+    /// <param name="mq">The DefaultMessageQueue.</param>
+    /// <returns>
+    /// true if received a message, false otherwise
+    /// </returns>
+    protected override bool DoReceiveAndExecute(MessageQueue mq)
+    {
+        bool messageReceived = false;
+        // Execute receive within transaction.
+        ITransactionStatus status = PlatformTransactionManager.GetTransaction(TransactionDefinition);
+        try
         {
-            get { return platformTransactionManager; }
-            set { platformTransactionManager = value; }
+            messageReceived = DoReceiveAndExecuteUsingPlatformTransactionManager(mq, status);
+        }
+        catch (Exception ex)
+        {
+            RollbackOnException(status, ex);
+            Thread.Sleep(RecoveryTimeSpan);
+            throw;
         }
 
-        /// <summary>
-        /// Gets or sets the transaction definition.
-        /// </summary>
-        /// <value>The transaction definition.</value>
-        public DefaultTransactionDefinition TransactionDefinition
+        //if status has indicated rollback only, will rollback.
+        PlatformTransactionManager.Commit(status);
+        return messageReceived;
+    }
+
+    /// <summary>
+    /// Does the receive and execute using platform transaction manager.
+    /// </summary>
+    /// <param name="mq">The message queue.</param>
+    /// <param name="status">The transactional status.</param>
+    /// <returns>true if should continue peeking, false otherwise.</returns>
+    protected abstract bool DoReceiveAndExecuteUsingPlatformTransactionManager(MessageQueue mq,
+        ITransactionStatus status);
+
+    /// <summary>
+    /// Rollback the transaction on exception.
+    /// </summary>
+    /// <param name="status">The transactional status.</param>
+    /// <param name="ex">The exception.</param>
+    protected void RollbackOnException(ITransactionStatus status, Exception ex)
+    {
+        LOG.LogDebug(ex, "Initiating transaction rollback on listener exception");
+        try
         {
-            get { return transactionDefinition; }
-            set { transactionDefinition = value; }
+            PlatformTransactionManager.Rollback(status);
         }
-
-        /// <summary>
-        /// Sets the transaction timeout to use for transactional wrapping, in <b>seconds</b>.
-        /// Default is none, using the transaction manager's default timeout.
-        /// </summary>
-        /// <value>The transaction timeout.</value>
-        public int TransactionTimeout
+        catch (Exception ex2)
         {
-            set { transactionDefinition.TransactionTimeout = value; }
-        }
-
-        /// <summary>
-        /// Subclasses perform a receive opertion on the message queue and execute the
-        /// message listener
-        /// </summary>
-        /// <param name="mq">The DefaultMessageQueue.</param>
-        /// <returns>
-        /// true if received a message, false otherwise
-        /// </returns>
-        protected override bool DoReceiveAndExecute(MessageQueue mq)
-        {
-            bool messageReceived = false;
-            // Execute receive within transaction.
-            ITransactionStatus status = PlatformTransactionManager.GetTransaction(TransactionDefinition);
-            try
-            {
-                messageReceived = DoReceiveAndExecuteUsingPlatformTransactionManager(mq, status);
-            }
-            catch (Exception ex)
-            {
-                RollbackOnException(status, ex);
-                Thread.Sleep(RecoveryTimeSpan);
-                throw;
-            }
-            //if status has indicated rollback only, will rollback.
-            PlatformTransactionManager.Commit(status);
-            return messageReceived;
-        }
-
-        /// <summary>
-        /// Does the receive and execute using platform transaction manager.
-        /// </summary>
-        /// <param name="mq">The message queue.</param>
-        /// <param name="status">The transactional status.</param>
-        /// <returns>true if should continue peeking, false otherwise.</returns>
-        protected abstract bool DoReceiveAndExecuteUsingPlatformTransactionManager(MessageQueue mq,
-                                                                                   ITransactionStatus status);
-
-        /// <summary>
-        /// Rollback the transaction on exception.
-        /// </summary>
-        /// <param name="status">The transactional status.</param>
-        /// <param name="ex">The exception.</param>
-        protected void RollbackOnException(ITransactionStatus status, Exception ex)
-        {
-            LOG.LogDebug(ex, "Initiating transaction rollback on listener exception");
-            try
-            {
-                PlatformTransactionManager.Rollback(status);
-            }
-            catch (Exception ex2)
-            {
-                LOG.LogError(ex2, "Listener exception overridden by rollback error");
-                throw;
-            }
+            LOG.LogError(ex2, "Listener exception overridden by rollback error");
+            throw;
         }
     }
 }

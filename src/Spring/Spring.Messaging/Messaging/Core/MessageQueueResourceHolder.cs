@@ -20,46 +20,43 @@
 
 using Spring.Transaction.Support;
 
-
 #if NETSTANDARD
 using Experimental.System.Messaging;
+
 #else
 using System.Messaging;
 #endif
 
-namespace Spring.Messaging.Core
+namespace Spring.Messaging.Core;
+
+/// <summary>
+/// MessageQueue resource holder, wrapping a MessageQueueTransaction.
+/// MessageQueueTransactionManager binds instances of this class to the thread.
+/// </summary>
+/// <remarks>
+/// This is an SPI class, not intended to be used by applications.
+/// </remarks>
+/// <author>Mark Pollack</author>
+public class MessageQueueResourceHolder : ResourceHolderSupport
 {
+    private MessageQueueTransaction messageQueueTransaction;
+
     /// <summary>
-    /// MessageQueue resource holder, wrapping a MessageQueueTransaction.
-    /// MessageQueueTransactionManager binds instances of this class to the thread.  
+    /// Initializes a new instance of the <see cref="MessageQueueResourceHolder"/> class.
     /// </summary>
-    /// <remarks>
-    /// This is an SPI class, not intended to be used by applications.
-    /// </remarks>
-    /// <author>Mark Pollack</author>
-    public class MessageQueueResourceHolder : ResourceHolderSupport
+    /// <param name="messageQueueTransaction">The message queue transaction.</param>
+    public MessageQueueResourceHolder(MessageQueueTransaction messageQueueTransaction)
     {
-        private MessageQueueTransaction messageQueueTransaction;
+        this.messageQueueTransaction = messageQueueTransaction;
+    }
 
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MessageQueueResourceHolder"/> class.
-        /// </summary>
-        /// <param name="messageQueueTransaction">The message queue transaction.</param>
-        public MessageQueueResourceHolder(MessageQueueTransaction messageQueueTransaction)
-        {
-            this.messageQueueTransaction = messageQueueTransaction;
-        }
-
-
-        /// <summary>
-        /// Gets or sets the message queue transaction.
-        /// </summary>
-        /// <value>The message queue transaction.</value>
-        public MessageQueueTransaction MessageQueueTransaction
-        {
-            get { return messageQueueTransaction; }
-            set { messageQueueTransaction = value; }
-        }
+    /// <summary>
+    /// Gets or sets the message queue transaction.
+    /// </summary>
+    /// <value>The message queue transaction.</value>
+    public MessageQueueTransaction MessageQueueTransaction
+    {
+        get { return messageQueueTransaction; }
+        set { messageQueueTransaction = value; }
     }
 }

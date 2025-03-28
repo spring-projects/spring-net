@@ -19,128 +19,125 @@
 #endregion
 
 using System.Reflection;
-
 using FakeItEasy;
-
 using NUnit.Framework;
 using Spring.Caching;
 using Spring.Context;
 
-namespace Spring.Aspects.Cache
+namespace Spring.Aspects.Cache;
+
+/// <summary>
+/// Unit tests for the CacheParameterAdvice class.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[TestFixture]
+public sealed class CacheParameterAdviceTests
 {
-    /// <summary>
-    /// Unit tests for the CacheParameterAdvice class.
-    /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    [TestFixture]
-    public sealed class CacheParameterAdviceTests
+    private IApplicationContext mockContext;
+    private CacheParameterAdvice advice;
+    private ICache cache;
+
+    [SetUp]
+    public void SetUp()
     {
-        private IApplicationContext mockContext;
-        private CacheParameterAdvice advice;
-        private ICache cache;
+        mockContext = A.Fake<IApplicationContext>();
 
-        [SetUp]
-        public void SetUp()
-        {
-            mockContext = A.Fake<IApplicationContext>();
+        advice = new CacheParameterAdvice();
+        advice.ApplicationContext = mockContext;
 
-            advice = new CacheParameterAdvice();
-            advice.ApplicationContext = mockContext;
-
-            cache = new NonExpiringCache();
-        }
-
-        [Test]
-        public void TestSimpleParameterCaching()
-        {
-            MethodInfo method = typeof(SimpleCacheParameterTarget).GetMethod("Save");
-            object[] args = new object[] {new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian")};
-
-            ExpectCacheInstanceRetrieval("cache", cache);
-
-            // parameter value should be added to cache
-            advice.AfterReturning(null, method, args, null);
-            Assert.AreEqual(1, cache.Count);
-            Assert.AreEqual(args[0], cache.Get("Nikola Tesla"));
-        }
-
-        [Test]
-        public void TestSimpleWithMethodInfoParameterCaching()
-        {
-            MethodInfo method = typeof(SimpleWithMethodInfoCacheParameterTarget).GetMethod("Save");
-            object[] args = new object[] { new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian") };
-
-            ExpectCacheInstanceRetrieval("cache", cache);
-
-            // parameter value should be added to cache
-            advice.AfterReturning(null, method, args, null);
-            Assert.AreEqual(1, cache.Count);
-            Assert.AreEqual(args[0], cache.Get("Save-Nikola Tesla"));
-        }
-
-        [Test]
-        public void TestMultipleParameterCaching()
-        {
-            MethodInfo method = typeof(MultipleCacheParameterTarget).GetMethod("Save");
-            object[] args = new object[] { new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian") };
-
-            ExpectCacheInstanceRetrieval("cache", cache);
-            ExpectCacheInstanceRetrieval("cache", cache);
-
-            // parameter value should be added to both cache
-            advice.AfterReturning(null, method, args, null);
-            Assert.AreEqual(2, cache.Count);
-            Assert.AreEqual(args[0], cache.Get("Nikola Tesla"));
-            Assert.AreEqual(args[0], cache.Get("Serbian"));
-        }
-
-        [Test]
-        public void TestConditionParameterCaching()
-        {
-            MethodInfo method = typeof(ConditionCacheParameterTarget).GetMethod("Save");
-            object[] args = new object[] { new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian") };
-
-            // parameter value should not be added to cache
-            advice.AfterReturning(null, method, args, null);
-            Assert.AreEqual(0, cache.Count);
-        }
-
-        private void ExpectCacheInstanceRetrieval(string cacheName, ICache cacheToReturn)
-        {
-            A.CallTo(() => mockContext.GetObject(cacheName)).Returns(cacheToReturn).Once();
-        }
+        cache = new NonExpiringCache();
     }
 
-    public interface ICacheParameterTarget
+    [Test]
+    public void TestSimpleParameterCaching()
     {
-        void Save(Inventor inventor);
+        MethodInfo method = typeof(SimpleCacheParameterTarget).GetMethod("Save");
+        object[] args = new object[] { new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian") };
+
+        ExpectCacheInstanceRetrieval("cache", cache);
+
+        // parameter value should be added to cache
+        advice.AfterReturning(null, method, args, null);
+        Assert.AreEqual(1, cache.Count);
+        Assert.AreEqual(args[0], cache.Get("Nikola Tesla"));
     }
 
-    public sealed class SimpleCacheParameterTarget : ICacheParameterTarget
+    [Test]
+    public void TestSimpleWithMethodInfoParameterCaching()
     {
-        public void Save([CacheParameter("cache", "Name")] Inventor inventor)
-        {
-        }
+        MethodInfo method = typeof(SimpleWithMethodInfoCacheParameterTarget).GetMethod("Save");
+        object[] args = new object[] { new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian") };
+
+        ExpectCacheInstanceRetrieval("cache", cache);
+
+        // parameter value should be added to cache
+        advice.AfterReturning(null, method, args, null);
+        Assert.AreEqual(1, cache.Count);
+        Assert.AreEqual(args[0], cache.Get("Save-Nikola Tesla"));
     }
 
-    public sealed class SimpleWithMethodInfoCacheParameterTarget : ICacheParameterTarget
+    [Test]
+    public void TestMultipleParameterCaching()
     {
-        public void Save([CacheParameter("cache", "#Save.Name + '-' + Name")] Inventor inventor)
-        {
-        }
+        MethodInfo method = typeof(MultipleCacheParameterTarget).GetMethod("Save");
+        object[] args = new object[] { new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian") };
+
+        ExpectCacheInstanceRetrieval("cache", cache);
+        ExpectCacheInstanceRetrieval("cache", cache);
+
+        // parameter value should be added to both cache
+        advice.AfterReturning(null, method, args, null);
+        Assert.AreEqual(2, cache.Count);
+        Assert.AreEqual(args[0], cache.Get("Nikola Tesla"));
+        Assert.AreEqual(args[0], cache.Get("Serbian"));
     }
 
-    public sealed class MultipleCacheParameterTarget : ICacheParameterTarget
+    [Test]
+    public void TestConditionParameterCaching()
     {
-        public void Save([CacheParameter("cache", "Name")][CacheParameter("cache", "Nationality")] Inventor inventor)
-        {
-        }
+        MethodInfo method = typeof(ConditionCacheParameterTarget).GetMethod("Save");
+        object[] args = new object[] { new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian") };
+
+        // parameter value should not be added to cache
+        advice.AfterReturning(null, method, args, null);
+        Assert.AreEqual(0, cache.Count);
     }
 
-    public sealed class ConditionCacheParameterTarget : ICacheParameterTarget
+    private void ExpectCacheInstanceRetrieval(string cacheName, ICache cacheToReturn)
     {
-        public void Save([CacheParameter("cache", "Name", Condition = "Nationality == 'French'")] Inventor inventor)
-        {
-        }
+        A.CallTo(() => mockContext.GetObject(cacheName)).Returns(cacheToReturn).Once();
+    }
+}
+
+public interface ICacheParameterTarget
+{
+    void Save(Inventor inventor);
+}
+
+public sealed class SimpleCacheParameterTarget : ICacheParameterTarget
+{
+    public void Save([CacheParameter("cache", "Name")] Inventor inventor)
+    {
+    }
+}
+
+public sealed class SimpleWithMethodInfoCacheParameterTarget : ICacheParameterTarget
+{
+    public void Save([CacheParameter("cache", "#Save.Name + '-' + Name")] Inventor inventor)
+    {
+    }
+}
+
+public sealed class MultipleCacheParameterTarget : ICacheParameterTarget
+{
+    public void Save([CacheParameter("cache", "Name")] [CacheParameter("cache", "Nationality")] Inventor inventor)
+    {
+    }
+}
+
+public sealed class ConditionCacheParameterTarget : ICacheParameterTarget
+{
+    public void Save([CacheParameter("cache", "Name", Condition = "Nationality == 'French'")] Inventor inventor)
+    {
     }
 }

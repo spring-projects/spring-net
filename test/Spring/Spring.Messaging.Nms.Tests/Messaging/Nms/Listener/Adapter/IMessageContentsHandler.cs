@@ -1,5 +1,3 @@
- 
-
 #region License
 
 /*
@@ -22,22 +20,21 @@
 
 using System.Collections;
 
-namespace Spring.Messaging.Nms.Listener.Adapter
+namespace Spring.Messaging.Nms.Listener.Adapter;
+
+/// <summary>
+/// Used in MessageListenerAdapterTests
+/// </summary>
+/// <author>Mark Pollack</author>
+public interface IMessageContentsHandler
 {
-    /// <summary>
-    /// Used in MessageListenerAdapterTests
-    /// </summary>
-    /// <author>Mark Pollack</author>
-    public interface IMessageContentsHandler
-    {
-        void HandleMessage(IDictionary message);
+    void HandleMessage(IDictionary message);
 
-        void HandleMessage(byte[] message);
+    void HandleMessage(byte[] message);
 
-        void HandleMessage(int message);
+    void HandleMessage(int message);
 
-        void HandleMessage(object message);
+    void HandleMessage(object message);
 
-        void HandleMessage(string message);
-    }
+    void HandleMessage(string message);
 }

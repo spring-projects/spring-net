@@ -1,19 +1,17 @@
 using Quartz;
 
-namespace Spring.Scheduling.Quartz.Integration.Tests
+namespace Spring.Scheduling.Quartz.Integration.Tests;
+
+public class TestJob : IJob
 {
-    public class TestJob : IJob
+    public Task Execute(IJobExecutionContext context)
     {
-        public Task Execute(IJobExecutionContext context)
-        {
-            Console.WriteLine("Executing Execute!");
-            return Task.FromResult(true);
-        }
+        Console.WriteLine("Executing Execute!");
+        return Task.FromResult(true);
+    }
 
-        public void DoIt()
-        {
-            Console.WriteLine("Executing DoIt!");
-        }
-
+    public void DoIt()
+    {
+        Console.WriteLine("Executing DoIt!");
     }
 }

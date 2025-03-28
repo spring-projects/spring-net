@@ -20,55 +20,51 @@
 
 using System.Data;
 
-namespace Spring.Objects
+namespace Spring.Objects;
+
+/// <summary>
+/// Test class to help test PropertyPlaceholderConfigurer
+/// </summary>
+public class TestObjectDAO
 {
     /// <summary>
-    /// Test class to help test PropertyPlaceholderConfigurer
+    /// Create an instance of TestObjectDAO
     /// </summary>
-    public class TestObjectDAO
+    public TestObjectDAO()
     {
-        /// <summary>
-        /// Create an instance of TestObjectDAO
-        /// </summary>
-        public TestObjectDAO()
+    }
+
+    private int maxResults = 100;
+
+    private IDbConnection dbConnection;
+
+    /// <summary>
+    /// The database connection property
+    /// </summary>
+    public IDbConnection DbConnection
+    {
+        get
         {
+            return dbConnection;
         }
-
-
-        private int maxResults = 100;
-
-        private IDbConnection dbConnection;
-
-        /// <summary>
-        /// The database connection property
-        /// </summary>
-        public IDbConnection DbConnection
+        set
         {
-            get
-            {
-                return dbConnection;
-            }
-            set
-            {
-                dbConnection = value;
-            }
+            dbConnection = value;
         }
+    }
 
-
-        /// <summary>
-        /// Maximum number of results to return in a query page.
-        /// </summary>
-        public int MaxResults
+    /// <summary>
+    /// Maximum number of results to return in a query page.
+    /// </summary>
+    public int MaxResults
+    {
+        get
         {
-            get
-            {
-                return maxResults;
-            }
-            set
-            {
-                maxResults = value;
-            }
+            return maxResults;
         }
-
+        set
+        {
+            maxResults = value;
+        }
     }
 }

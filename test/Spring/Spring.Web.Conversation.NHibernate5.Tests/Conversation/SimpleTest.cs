@@ -20,15 +20,14 @@
 
 using NUnit.Framework;
 
-namespace Spring.Web.Conversation
+namespace Spring.Web.Conversation;
+
+[TestFixture]
+public class SimpleTest
 {
-    [TestFixture]
-    public class SimpleTest
+    [Test]
+    public void Test()
     {
-        [Test]
-        public void Test()
-        {
-            Assert.AreEqual(2, 1 + 1, "2 == 1 + 1");
-        }
+        Assert.AreEqual(2, 1 + 1, "2 == 1 + 1");
     }
 }

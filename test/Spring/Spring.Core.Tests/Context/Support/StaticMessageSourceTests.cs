@@ -23,61 +23,62 @@ using NUnit.Framework;
 using Spring.Globalization;
 using Spring.Objects;
 
-namespace Spring.Context.Support
+namespace Spring.Context.Support;
+
+/// <summary>
+/// Unit tests for the StaticMessageSource class.
+/// </summary>
+[TestFixture]
+public sealed class StaticMessageSourceTests
 {
-    /// <summary>
-    /// Unit tests for the StaticMessageSource class.
-    /// </summary>
-    [TestFixture]
-    public sealed class StaticMessageSourceTests
+    [OneTimeSetUp]
+    public void TestFixtureSetUp()
     {
-        [OneTimeSetUp]
-        public void TestFixtureSetUp()
-        {
-            CultureTestScope.Set();
-        }
+        CultureTestScope.Set();
+    }
 
-        [OneTimeTearDown]
-        public void TestFixtureTearDown()
-        {
-            CultureTestScope.Reset();
-        }
+    [OneTimeTearDown]
+    public void TestFixtureTearDown()
+    {
+        CultureTestScope.Reset();
+    }
 
-        [Test]
-        [SetUICulture("de-DE")]
-        public void GetMessageDefaultsToCurrentUICulture()
-        {
-            StaticMessageSource msgSource = new StaticMessageSource();
-            msgSource.AddMessage("code", CultureInfo.CurrentUICulture, "{0}");
-            Assert.AreEqual("my message", msgSource.GetMessage("code", "my message"), "message");
+    [Test]
+    [SetUICulture("de-DE")]
+    public void GetMessageDefaultsToCurrentUICulture()
+    {
+        StaticMessageSource msgSource = new StaticMessageSource();
+        msgSource.AddMessage("code", CultureInfo.CurrentUICulture, "{0}");
+        Assert.AreEqual("my message", msgSource.GetMessage("code", "my message"), "message");
 
-            try
-            {
-                msgSource.GetMessage("code", CultureInfo.CurrentCulture);
-                Assert.Fail("message");
-            }
-            catch(NoSuchMessageException)
-            {}
-        }
-
-        [Test]
-        public void GetMessageCode()
+        try
         {
-            StaticMessageSource msgSource = new StaticMessageSource();
-            msgSource.AddMessage("code", CultureInfo.CurrentUICulture, "{0} {1}");
-            Assert.AreEqual("my message",
-                            msgSource.GetMessage("code", CultureInfo.CurrentUICulture, new object[] {"my", "message"}),
-                            "message");
+            msgSource.GetMessage("code", CultureInfo.CurrentCulture);
+            Assert.Fail("message");
         }
-
-        [Test]
-        public void StaticMessageSourceToString()
+        catch (NoSuchMessageException)
         {
-            StaticMessageSource msgSource = new StaticMessageSource();
-            msgSource.AddMessage("code1", CultureInfo.CurrentUICulture, "{0} {1}");
-            Assert.AreEqual("StaticMessageSource : ['code1_" + CultureInfo.CurrentUICulture.Name + "' : '{0} {1}']",
-                            msgSource.ToString());
         }
+    }
+
+    [Test]
+    public void GetMessageCode()
+    {
+        StaticMessageSource msgSource = new StaticMessageSource();
+        msgSource.AddMessage("code", CultureInfo.CurrentUICulture, "{0} {1}");
+        Assert.AreEqual("my message",
+            msgSource.GetMessage("code", CultureInfo.CurrentUICulture, new object[] { "my", "message" }),
+            "message");
+    }
+
+    [Test]
+    public void StaticMessageSourceToString()
+    {
+        StaticMessageSource msgSource = new StaticMessageSource();
+        msgSource.AddMessage("code1", CultureInfo.CurrentUICulture, "{0} {1}");
+        Assert.AreEqual("StaticMessageSource : ['code1_" + CultureInfo.CurrentUICulture.Name + "' : '{0} {1}']",
+            msgSource.ToString());
+    }
 
 #if !NETCOREAPP
         [Test]
@@ -91,92 +92,93 @@ namespace Spring.Context.Support
         }
 #endif
 
-        [Test]
-        public void ApplyResourcesWithNullObject()
+    [Test]
+    public void ApplyResourcesWithNullObject()
+    {
+        TestObject value = new TestObject();
+        StaticMessageSource msgSource = new StaticMessageSource();
+        msgSource.ApplyResources(null, "testObject", CultureInfo.InvariantCulture);
+        Assert.AreEqual(null, value.Name);
+        Assert.AreEqual(0, value.Age);
+    }
+
+    [Test]
+    public void ApplyResourcesWithNullLookupKey()
+    {
+        TestObject value = new TestObject();
+        StaticMessageSource msgSource = new StaticMessageSource();
+
+        try
         {
-            TestObject value = new TestObject();
-            StaticMessageSource msgSource = new StaticMessageSource();
-            msgSource.ApplyResources(null, "testObject", CultureInfo.InvariantCulture);
-            Assert.AreEqual(null, value.Name);
-            Assert.AreEqual(0, value.Age);
+            msgSource.ApplyResources(value, null, CultureInfo.InvariantCulture);
+            Assert.Fail("ArgumentNullException was expected");
+        }
+        catch (ArgumentNullException e)
+        {
+            Assert.IsNotNull(e);
         }
 
-        [Test]
-        public void ApplyResourcesWithNullLookupKey()
-        {
-            TestObject value = new TestObject();
-            StaticMessageSource msgSource = new StaticMessageSource();
+        Assert.AreEqual(null, value.Name);
+        Assert.AreEqual(0, value.Age);
+    }
 
-            try 
-            {
-                msgSource.ApplyResources(value, null, CultureInfo.InvariantCulture);
-                Assert.Fail("ArgumentNullException was expected");
-            } catch (ArgumentNullException e)
-            {
-                Assert.IsNotNull(e);
-            }
-            Assert.AreEqual(null, value.Name);
-            Assert.AreEqual(0, value.Age);
-        }
+    [Test]
+    public void GetResourceObjectWithCodeAndCulture()
+    {
+        TestObject value = new TestObject("Rick", 30);
+        StaticMessageSource msgSource = new StaticMessageSource();
+        msgSource.AddObject("rick", CultureInfo.InstalledUICulture, value);
 
-        [Test]
-        public void GetResourceObjectWithCodeAndCulture()
-        {
-            TestObject value = new TestObject("Rick", 30);
-            StaticMessageSource msgSource = new StaticMessageSource();
-            msgSource.AddObject("rick", CultureInfo.InstalledUICulture, value);
+        TestObject retrieved = (TestObject)
+            msgSource.GetResourceObject("rick", CultureInfo.InstalledUICulture);
+        Assert.IsNotNull(retrieved,
+            "Object previously added to StaticMessageSource was not retrieved " +
+            "when using same lookup code and CultureInfo.");
+        Assert.IsTrue(ReferenceEquals(value, retrieved),
+            "Object returned from StaticMessageSource was not the same one " +
+            "that was previously added (it must be).");
+    }
 
-            TestObject retrieved = (TestObject)
-                                   msgSource.GetResourceObject("rick", CultureInfo.InstalledUICulture);
-            Assert.IsNotNull(retrieved,
-                             "Object previously added to StaticMessageSource was not retrieved " +
-                             "when using same lookup code and CultureInfo.");
-            Assert.IsTrue(ReferenceEquals(value, retrieved),
-                          "Object returned from StaticMessageSource was not the same one " +
-                          "that was previously added (it must be).");
-        }
+    [Test]
+    public void GetResourceObjectWithCode()
+    {
+        TestObject value = new TestObject("Rick", 30);
+        StaticMessageSource msgSource = new StaticMessageSource();
+        msgSource.AddObject("rick", CultureInfo.CurrentUICulture, value);
 
-        [Test]
-        public void GetResourceObjectWithCode()
-        {
-            TestObject value = new TestObject("Rick", 30);
-            StaticMessageSource msgSource = new StaticMessageSource();
-            msgSource.AddObject("rick", CultureInfo.CurrentUICulture, value);
+        TestObject retrieved = (TestObject)
+            msgSource.GetResourceObject("rick");
+        Assert.IsNotNull(retrieved,
+            "Object previously added to StaticMessageSource was not retrieved " +
+            "when using same lookup code.");
+        Assert.IsTrue(ReferenceEquals(value, retrieved),
+            "Object returned from StaticMessageSource was not the same one " +
+            "that was previously added (it must be).");
+    }
 
-            TestObject retrieved = (TestObject)
-                                   msgSource.GetResourceObject("rick");
-            Assert.IsNotNull(retrieved,
-                             "Object previously added to StaticMessageSource was not retrieved " +
-                             "when using same lookup code.");
-            Assert.IsTrue(ReferenceEquals(value, retrieved),
-                          "Object returned from StaticMessageSource was not the same one " +
-                          "that was previously added (it must be).");
-        }
+    [Test]
+    public void GetResourceObjectThatAintPreviouslyBeenAddedDoesntYieldAnything()
+    {
+        StaticMessageSource msgSource = new StaticMessageSource();
+        TestObject retrieved = (TestObject)
+            msgSource.GetResourceObject("rick");
+        Assert.IsNull(retrieved,
+            "Getting 'some (?) weird object out of an empty StaticMessageSource");
+    }
 
-        [Test]
-        public void GetResourceObjectThatAintPreviouslyBeenAddedDoesntYieldAnything()
-        {
-            StaticMessageSource msgSource = new StaticMessageSource();
-            TestObject retrieved = (TestObject)
-                                   msgSource.GetResourceObject("rick");
-            Assert.IsNull(retrieved,
-                          "Getting 'some (?) weird object out of an empty StaticMessageSource");
-        }
+    [Test]
+    public void GetResourceObjectWithCodeAssumesCurrentUICulture()
+    {
+        TestObject value = new TestObject("Rick", 30);
+        StaticMessageSource msgSource = new StaticMessageSource();
+        msgSource.AddObject("rick", CultureInfo.InvariantCulture, value);
 
-        [Test]
-        public void GetResourceObjectWithCodeAssumesCurrentUICulture()
-        {
-            TestObject value = new TestObject("Rick", 30);
-            StaticMessageSource msgSource = new StaticMessageSource();
-            msgSource.AddObject("rick", CultureInfo.InvariantCulture, value);
-
-            // assumes object was previously added using CultureInfo.CurrentUICulture
-            TestObject retrieved = (TestObject)
-                                   msgSource.GetResourceObject("rick");
-            Assert.IsNull(retrieved,
-                          "Object previously added to StaticMessageSource " +
-                          "(using CultureInfo.InvariantCulture) was (wrongly) retrieved " +
-                          "when using same lookup code.");
-        }
+        // assumes object was previously added using CultureInfo.CurrentUICulture
+        TestObject retrieved = (TestObject)
+            msgSource.GetResourceObject("rick");
+        Assert.IsNull(retrieved,
+            "Object previously added to StaticMessageSource " +
+            "(using CultureInfo.InvariantCulture) was (wrongly) retrieved " +
+            "when using same lookup code.");
     }
 }

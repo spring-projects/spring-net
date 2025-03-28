@@ -2,9 +2,9 @@
 <objects xmlns="http://www.springframework.net">
 
 
-  <object id="someMessageSource" name="myMessageSource"
-          type="Spring.Context.Support.StaticMessageSourc, Spring.Core" lazy-init="true">
-  </object>
+    <object id="someMessageSource" name="myMessageSource"
+            type="Spring.Context.Support.StaticMessageSourc, Spring.Core" lazy-init="true">
+    </object>
 
 
 </objects>

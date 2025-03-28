@@ -1,7 +1,6 @@
-namespace Spring.Expressions.Parser.antlr.debug
+namespace Spring.Expressions.Parser.antlr.debug;
+
+public interface NewLineListener : Listener
 {
-    public interface NewLineListener : Listener
-	{
-		void hitNewLine(object source, NewLineEventArgs e);
-	}
+    void hitNewLine(object source, NewLineEventArgs e);
 }

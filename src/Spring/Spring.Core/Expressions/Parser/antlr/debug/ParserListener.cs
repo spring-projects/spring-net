@@ -1,6 +1,5 @@
-namespace Spring.Expressions.Parser.antlr.debug
+namespace Spring.Expressions.Parser.antlr.debug;
+
+public interface ParserListener : SemanticPredicateListener, ParserMatchListener, MessageListener, ParserTokenListener, TraceListener, SyntacticPredicateListener
 {
-    public interface ParserListener : SemanticPredicateListener, ParserMatchListener, MessageListener, ParserTokenListener, TraceListener, SyntacticPredicateListener
-	{
-	}
 }

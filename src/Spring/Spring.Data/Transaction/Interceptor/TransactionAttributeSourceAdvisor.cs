@@ -22,108 +22,108 @@ using System.Reflection;
 using Spring.Aop.Framework;
 using Spring.Aop.Support;
 
-namespace Spring.Transaction.Interceptor
+namespace Spring.Transaction.Interceptor;
+
+/// <summary>
+/// Advisor driven by a <see cref="Spring.Transaction.Interceptor.ITransactionAttributeSource"/>, used to include
+/// a <see cref="Spring.Transaction.Interceptor.TransactionInterceptor"/> for methods that
+/// are transactional.
+/// </summary>
+/// <remarks>
+/// <p>
+/// Because the AOP framework caches advice calculations, this is normally
+/// faster than just letting the <see cref="Spring.Transaction.Interceptor.TransactionInterceptor"/>
+/// run and find out itself that it has no work to do.
+/// </p>
+/// </remarks>
+/// <author>Rod Johnson</author>
+/// <author>Griffin Caprio (.NET)</author>
+[Serializable]
+public class TransactionAttributeSourceAdvisor : StaticMethodMatcherPointcutAdvisor
 {
-	/// <summary>
-	/// Advisor driven by a <see cref="Spring.Transaction.Interceptor.ITransactionAttributeSource"/>, used to include
-	/// a <see cref="Spring.Transaction.Interceptor.TransactionInterceptor"/> for methods that
-	/// are transactional.
-	/// </summary>
-	/// <remarks>
-	/// <p>
-	/// Because the AOP framework caches advice calculations, this is normally
-	/// faster than just letting the <see cref="Spring.Transaction.Interceptor.TransactionInterceptor"/>
-	/// run and find out itself that it has no work to do.
-	/// </p>
-	/// </remarks>
-	/// <author>Rod Johnson</author>
-	/// <author>Griffin Caprio (.NET)</author>
-	[Serializable]
-	public class TransactionAttributeSourceAdvisor : StaticMethodMatcherPointcutAdvisor
-	{
-	    #region Fields
+    #region Fields
 
-	    private ITransactionAttributeSource _transactionAttributeSource;
+    private ITransactionAttributeSource _transactionAttributeSource;
 
-	    #endregion
+    #endregion
 
-	    #region Constructor(s)
+    #region Constructor(s)
 
-	    /// <summary>
-	    /// Initializes a new instance of the <see cref="TransactionAttributeSourceAdvisor"/> class.
-	    /// </summary>
-	    /// <remarks>
-	    /// 	<p>
-	    /// This is an abstract class, and as such has no publicly
-	    /// visible constructors.
-	    /// </p>
-	    /// </remarks>
-	    public TransactionAttributeSourceAdvisor()
-	    {
-	    }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="TransactionAttributeSourceAdvisor"/> class.
+    /// </summary>
+    /// <remarks>
+    /// 	<p>
+    /// This is an abstract class, and as such has no publicly
+    /// visible constructors.
+    /// </p>
+    /// </remarks>
+    public TransactionAttributeSourceAdvisor()
+    {
+    }
 
-	    /// <summary>
-	    /// Creates a new instance of the
-	    /// <see cref="Spring.Transaction.Interceptor.TransactionAttributeSourceAdvisor"/> class.
-	    /// </summary>
-	    /// <param name="transactionInterceptor">
-	    /// The pre-configured transaction interceptor.
-	    /// </param>
-	    public TransactionAttributeSourceAdvisor( TransactionInterceptor transactionInterceptor )
-	        : base( transactionInterceptor )
-	    {
-	        SetTxAttributeSource(transactionInterceptor);
-	    }
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Transaction.Interceptor.TransactionAttributeSourceAdvisor"/> class.
+    /// </summary>
+    /// <param name="transactionInterceptor">
+    /// The pre-configured transaction interceptor.
+    /// </param>
+    public TransactionAttributeSourceAdvisor(TransactionInterceptor transactionInterceptor)
+        : base(transactionInterceptor)
+    {
+        SetTxAttributeSource(transactionInterceptor);
+    }
 
-	    #endregion
+    #endregion
 
-	    #region Properties
+    #region Properties
 
-	    /// <summary>
-	    /// Sets the transaction interceptor.
-	    /// </summary>
-	    /// <value>The transaction interceptor.</value>
-	    public TransactionInterceptor TransactionInterceptor
-	    {
-	        set
-	        {
-	            //TODO refactor
-	            Advice = value;
-	            SetTxAttributeSource(value);
-	        }
-        }
-
-        #endregion
-
-	    #region Methods
-
-        /// <summary>
-        /// Tests the input method to see if it's covered by the advisor.
-        /// </summary>
-        /// <param name="method">The method to match.</param>
-        /// <param name="targetClass">The <see cref="System.Type"/> to match against.</param>
-        /// <returns>
-        /// <b>True</b> if the supplied <paramref name="method"/> is covered by the advisor.
-        /// </returns>
-        public override bool Matches(MethodInfo method, Type targetClass)
+    /// <summary>
+    /// Sets the transaction interceptor.
+    /// </summary>
+    /// <value>The transaction interceptor.</value>
+    public TransactionInterceptor TransactionInterceptor
+    {
+        set
         {
-            return (_transactionAttributeSource.ReturnTransactionAttribute(method, targetClass) != null);
+            //TODO refactor
+            Advice = value;
+            SetTxAttributeSource(value);
+        }
+    }
+
+    #endregion
+
+    #region Methods
+
+    /// <summary>
+    /// Tests the input method to see if it's covered by the advisor.
+    /// </summary>
+    /// <param name="method">The method to match.</param>
+    /// <param name="targetClass">The <see cref="System.Type"/> to match against.</param>
+    /// <returns>
+    /// <b>True</b> if the supplied <paramref name="method"/> is covered by the advisor.
+    /// </returns>
+    public override bool Matches(MethodInfo method, Type targetClass)
+    {
+        return (_transactionAttributeSource.ReturnTransactionAttribute(method, targetClass) != null);
+    }
+
+    /// <summary>
+    /// Sets the tx attribute source.
+    /// </summary>
+    /// <param name="transactionInterceptor">The transaction interceptor.</param>
+    protected void SetTxAttributeSource(TransactionInterceptor transactionInterceptor)
+    {
+        if (transactionInterceptor.TransactionAttributeSource == null)
+        {
+            throw new AopConfigException("Cannot construct a TransactionAttributeSourceAdvisor using a " +
+                                         "TransactionInterceptor that has no TransactionAttributeSource configured.");
         }
 
-        /// <summary>
-        /// Sets the tx attribute source.
-        /// </summary>
-        /// <param name="transactionInterceptor">The transaction interceptor.</param>
-	    protected void SetTxAttributeSource(TransactionInterceptor transactionInterceptor)
-	    {
-	        if (transactionInterceptor.TransactionAttributeSource == null)
-	        {
-	            throw new AopConfigException("Cannot construct a TransactionAttributeSourceAdvisor using a " +
-	                                         "TransactionInterceptor that has no TransactionAttributeSource configured.");
-	        }
-	        _transactionAttributeSource = transactionInterceptor.TransactionAttributeSource;
-	    }
+        _transactionAttributeSource = transactionInterceptor.TransactionAttributeSource;
+    }
 
-	    #endregion
-	}
+    #endregion
 }

@@ -1,21 +1,21 @@
 ﻿<?xml version="1.0" encoding="UTF-8" ?>
 <xsd:schema xmlns="http://www.springframework.net/nvelocity"
-        xmlns:objects="http://www.springframework.net"
-		xmlns:xsd="http://www.w3.org/2001/XMLSchema"
-		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-		xmlns:vs="http://schemas.microsoft.com/Visual-Studio-Intellisense"
-        targetNamespace="http://www.springframework.net/nvelocity"
-        elementFormDefault="qualified"
-        attributeFormDefault="unqualified"
-        vs:friendlyname="Spring.NET NVelocity Templating Framework Configuration"
-        vs:ishtmlschema="false"
-        vs:iscasesensitive="true"
-        vs:requireattributequotes="true"
-        vs:defaultnamespacequalifier=""
-        vs:defaultnsprefix="">
+            xmlns:objects="http://www.springframework.net"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xmlns:vs="http://schemas.microsoft.com/Visual-Studio-Intellisense"
+            targetNamespace="http://www.springframework.net/nvelocity"
+            elementFormDefault="qualified"
+            attributeFormDefault="unqualified"
+            vs:friendlyname="Spring.NET NVelocity Templating Framework Configuration"
+            vs:ishtmlschema="false"
+            vs:iscasesensitive="true"
+            vs:requireattributequotes="true"
+            vs:defaultnamespacequalifier=""
+            vs:defaultnsprefix="">
 
-    <xsd:import namespace="http://www.springframework.net"/>
-    <xsd:import namespace="http://www.springframework.net/tool"/>
+    <xsd:import namespace="http://www.springframework.net" />
+    <xsd:import namespace="http://www.springframework.net/tool" />
 
     <xsd:annotation>
         <xsd:documentation>
@@ -37,7 +37,7 @@
             <xsd:documentation><![CDATA[Defines an NVelocity template configuration]]></xsd:documentation>
         </xsd:annotation>
         <xsd:sequence>
-            <xsd:element name="nvelocity-properties" type="objects:objectMap" minOccurs="0" maxOccurs="1"/>
+            <xsd:element name="nvelocity-properties" type="objects:objectMap" minOccurs="0" maxOccurs="1" />
             <xsd:element name="resource-loader" type="resourceLoader" minOccurs="0" maxOccurs="1" />
         </xsd:sequence>
         <xsd:attribute name="id" type="objects:nonNullString" use="required">
@@ -53,7 +53,7 @@
                     <xsd:documentation><![CDATA[Optional location of a properties file defining the 
                     NVelocity configuration.]]></xsd:documentation>
                 </xsd:annotation>
-                <xsd:restriction base="objects:nonNullString"/>
+                <xsd:restriction base="objects:nonNullString" />
             </xsd:simpleType>
         </xsd:attribute>
         <xsd:attribute name="prefer-file-system-access" use="optional" default="true">
@@ -62,7 +62,7 @@
                     <xsd:documentation><![CDATA[Optional. Instructs the NVelocity engine factory to 
                     attempt use NVelocity's file loader with hot tracking.]]></xsd:documentation>
                 </xsd:annotation>
-                <xsd:restriction base="xsd:boolean"/>
+                <xsd:restriction base="xsd:boolean" />
             </xsd:simpleType>
         </xsd:attribute>
         <xsd:attribute name="override-logging" use="optional" default="true">
@@ -71,7 +71,7 @@
                     <xsd:documentation><![CDATA[Optional. Instructs the NVelocity engine factory to use the provided 
                     spring commons logging based logging system.]]></xsd:documentation>
                 </xsd:annotation>
-                <xsd:restriction base="xsd:boolean"/>
+                <xsd:restriction base="xsd:boolean" />
             </xsd:simpleType>
         </xsd:attribute>
     </xsd:complexType>
@@ -104,7 +104,8 @@
                 <xsd:complexType>
                     <xsd:attribute name="path" type="objects:nonNullString" use="required">
                         <xsd:annotation>
-                            <xsd:documentation><![CDATA[The qualified path where the template files exists.]]></xsd:documentation>
+                            <xsd:documentation>
+                                <![CDATA[The qualified path where the template files exists.]]></xsd:documentation>
                         </xsd:annotation>
                     </xsd:attribute>
                 </xsd:complexType>
@@ -136,17 +137,20 @@
                     </xsd:attribute>
                     <xsd:attribute name="description" type="objects:nonNullString" use="required">
                         <xsd:annotation>
-                            <xsd:documentation><![CDATA[Description (<name>.loader.description property) of the resource loader]]></xsd:documentation>
+                            <xsd:documentation>
+                                <![CDATA[Description (<name>.loader.description property) of the resource loader]]></xsd:documentation>
                         </xsd:annotation>
                     </xsd:attribute>
                     <xsd:attribute name="type" type="objects:nonNullString" use="required">
                         <xsd:annotation>
-                            <xsd:documentation><![CDATA[The type (<name>.resource.loader.class property) of the resource loader]]></xsd:documentation>
+                            <xsd:documentation>
+                                <![CDATA[The type (<name>.resource.loader.class property) of the resource loader]]></xsd:documentation>
                         </xsd:annotation>
                     </xsd:attribute>
                     <xsd:attribute name="path" type="objects:nonNullString" use="required">
                         <xsd:annotation>
-                            <xsd:documentation><![CDATA[The paths (<name>.resource.loader.path property) of the resource loader]]></xsd:documentation>
+                            <xsd:documentation>
+                                <![CDATA[The paths (<name>.resource.loader.path property) of the resource loader]]></xsd:documentation>
                         </xsd:annotation>
                     </xsd:attribute>
                 </xsd:complexType>

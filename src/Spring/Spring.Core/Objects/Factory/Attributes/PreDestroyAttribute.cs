@@ -18,42 +18,39 @@
 
 #endregion
 
-namespace Spring.Objects.Factory.Attributes
+namespace Spring.Objects.Factory.Attributes;
+
+/// <summary>
+/// Defines a method that will be called prior to the destruction of the object instance
+/// </summary>
+[AttributeUsage(AttributeTargets.Method)]
+public class PreDestroyAttribute : Attribute
 {
+    private int _order;
+
     /// <summary>
-    /// Defines a method that will be called prior to the destruction of the object instance
+    /// Initializes a new instance of the PreDestroy attribute with order = 1
     /// </summary>
-    [AttributeUsage(AttributeTargets.Method)]
-    public class PreDestroyAttribute : Attribute
+    public PreDestroyAttribute()
     {
-        private int _order;
+        _order = int.MaxValue;
+    }
 
+    /// <summary>
+    /// Initializes a new instance of the PreDestroy attribute with defined order
+    /// </summary>
+    /// <param name="order">Order in which the PostContruct method is called</param>
+    public PreDestroyAttribute(int order)
+    {
+        _order = order;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the PreDestroy attribute with order = 1
-        /// </summary>
-        public PreDestroyAttribute()
-        {
-            _order = int.MaxValue;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the PreDestroy attribute with defined order
-        /// </summary>
-        /// <param name="order">Order in which the PostContruct method is called</param>
-        public PreDestroyAttribute(int order)
-        {
-            _order = order;
-        }
-
-
-        /// <summary>
-        /// Defined the order in which the PreDestroy methods are called
-        /// </summary>
-        public int Order
-        {
-            get { return _order; }
-            set { _order = value; }
-        }
+    /// <summary>
+    /// Defined the order in which the PreDestroy methods are called
+    /// </summary>
+    public int Order
+    {
+        get { return _order; }
+        set { _order = value; }
     }
 }

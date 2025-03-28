@@ -20,42 +20,40 @@
 
 using System.Data;
 
-namespace Spring.Data
+namespace Spring.Data;
+
+/// <summary>
+/// Lifecycle callback methods that can be registered when
+/// performing Fill operations with AdoTemplate.
+/// </summary>
+/// <remarks>
+/// <p>
+/// The methods let you set various properties and invoke
+/// methods on the DataSet before and after it gets filled by a DataAdapter.
+/// For example, EnforceConstraints, BeginLoadData, and EndLoadData
+/// can be called to optimize the loading of large DataSets with
+/// many related tables.
+/// </p>
+/// <p>Vendors may expose other propriety methods on their DataSet
+/// implementation, downcast to access this specific functionality.
+/// </p>
+/// </remarks>
+/// <author>Mark Pollack (.NET)</author>
+public interface IDataSetFillLifecycleProcessor
 {
-	/// <summary>
-	/// Lifecycle callback methods that can be registered when
-	/// performing Fill operations with AdoTemplate.
-	/// </summary>
-	/// <remarks>
-	/// <p>
-	/// The methods let you set various properties and invoke
-	/// methods on the DataSet before and after it gets filled by a DataAdapter.
-	/// For example, EnforceConstraints, BeginLoadData, and EndLoadData
-	/// can be called to optimize the loading of large DataSets with
-	/// many related tables.
-	/// </p>
-	/// <p>Vendors may expose other propriety methods on their DataSet
-	/// implementation, downcast to access this specific functionality.
-	/// </p>
-	/// </remarks>
-	/// <author>Mark Pollack (.NET)</author>
-	public interface IDataSetFillLifecycleProcessor
-	{
-	    /// <summary>
-	    /// Called before a DataAdapter is used to fill a DataSet
-	    /// the the provided tablename.
-	    /// </summary>
-	    /// <param name="ds">The DataSet to be filled with a DataTable</param>
-	    /// <param name="tableMappingCollection">The table collection to be filled</param>
-        void BeforeFill(DataSet ds, ITableMappingCollection tableMappingCollection);
+    /// <summary>
+    /// Called before a DataAdapter is used to fill a DataSet
+    /// the the provided tablename.
+    /// </summary>
+    /// <param name="ds">The DataSet to be filled with a DataTable</param>
+    /// <param name="tableMappingCollection">The table collection to be filled</param>
+    void BeforeFill(DataSet ds, ITableMappingCollection tableMappingCollection);
 
-        /// <summary>
-        /// Called after a DataAdapter is used to fill a DataSet
-        /// the the provided tablename.
-        /// </summary>
-        /// <param name="ds">The DataSet to be filled with a DataTable</param>
-        /// <param name="tableMappingCollection">The table collection to be filled</param>
-        void AfterFill(DataSet ds, ITableMappingCollection tableMappingCollection);
-
-	}
+    /// <summary>
+    /// Called after a DataAdapter is used to fill a DataSet
+    /// the the provided tablename.
+    /// </summary>
+    /// <param name="ds">The DataSet to be filled with a DataTable</param>
+    /// <param name="tableMappingCollection">The table collection to be filled</param>
+    void AfterFill(DataSet ds, ITableMappingCollection tableMappingCollection);
 }

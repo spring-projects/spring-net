@@ -4,8 +4,8 @@
          xmlns:tx="http://www.springframework.net/tx">
 
 
-  <object id="accountController" type="Spring.Data.NHibernate.AccountController">
-    <property name="AccountManager" ref="accountManager"/>
-  </object>
-  
+    <object id="accountController" type="Spring.Data.NHibernate.AccountController">
+        <property name="AccountManager" ref="accountManager" />
+    </object>
+
 </objects>

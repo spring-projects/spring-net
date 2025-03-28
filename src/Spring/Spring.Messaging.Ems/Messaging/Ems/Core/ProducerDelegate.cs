@@ -1,5 +1,3 @@
- 
-
 #region License
 
 /*
@@ -22,17 +20,15 @@
 
 using Spring.Messaging.Ems.Common;
 
-namespace Spring.Messaging.Ems.Core
-{
-    /// <summary> Perform operations on the given Session and MessageProducer.
-    /// The message producer is not associated with any destination.
-    /// </summary>
-    /// <param name="session">the EMS <code>Session</code> object to use
-    /// </param>
-    /// <param name="producer">the EMS <code>MessageProducer</code> object to use
-    /// </param>
-    /// <returns> a result object from working with the <code>Session</code>, if any (can be <code>null</code>) 
-    /// </returns>
-    public delegate object ProducerDelegate(ISession session, IMessageProducer producer);
+namespace Spring.Messaging.Ems.Core;
 
-}
+/// <summary> Perform operations on the given Session and MessageProducer.
+/// The message producer is not associated with any destination.
+/// </summary>
+/// <param name="session">the EMS <code>Session</code> object to use
+/// </param>
+/// <param name="producer">the EMS <code>MessageProducer</code> object to use
+/// </param>
+/// <returns> a result object from working with the <code>Session</code>, if any (can be <code>null</code>)
+/// </returns>
+public delegate object ProducerDelegate(ISession session, IMessageProducer producer);

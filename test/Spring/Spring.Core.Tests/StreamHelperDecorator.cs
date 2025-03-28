@@ -18,41 +18,40 @@
 
 #endregion
 
-namespace Spring
+namespace Spring;
+
+public delegate void StreamHelperCallback(out Stream stream);
+
+/// <summary>
+/// Helper class for template style Stream usage.
+/// </summary>
+/// <author>Rick Evans</author>
+public class StreamHelperDecorator
 {
-    public delegate void StreamHelperCallback(out Stream stream);
+    private StreamHelperCallback callback;
 
-    /// <summary>
-    /// Helper class for template style Stream usage.
-    /// </summary>
-    /// <author>Rick Evans</author>
-    public class StreamHelperDecorator
+    public StreamHelperDecorator(StreamHelperCallback callback)
     {
-        private StreamHelperCallback callback;
+        this.callback = callback;
+    }
 
-        public StreamHelperDecorator(StreamHelperCallback callback)
+    public void Run()
+    {
+        Stream stream = null;
+        try
         {
-            this.callback = callback;
+            this.callback(out stream);
         }
-
-        public void Run()
+        finally
         {
-            Stream stream = null;
-            try
+            if (stream != null)
             {
-                this.callback(out stream);
-            }
-            finally
-            {
-                if (stream != null)
+                try
                 {
-                    try
-                    {
-                        stream.Close();
-                    }
-                    catch
-                    {
-                    }
+                    stream.Close();
+                }
+                catch
+                {
                 }
             }
         }

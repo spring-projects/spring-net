@@ -7,38 +7,38 @@
          http://www.springframework.net/database http://www.springframework.net/schema/db/spring-database-1.1.xsd
          http://www.springframework.net/tx http://www.springframework.net/schema/tx/spring-tx-1.1.xsd">
 
-  <object name="GrandParentHttpModule" abstract="true">
-    <property name="GrandParentProperty">
-      <list element-type="string">
-        <value>GrandParentValue1</value>
-      </list>
-    </property>
-  </object>
+    <object name="GrandParentHttpModule" abstract="true">
+        <property name="GrandParentProperty">
+            <list element-type="string">
+                <value>GrandParentValue1</value>
+            </list>
+        </property>
+    </object>
 
-  <object name="ParentHttpModule" abstract="true" parent="GrandParentHttpModule">
-    <property name="ParentProperty">
-      <list element-type="string">
-        <value>ParentValue1</value>
-        <value>ParentValue2</value>
-        <value>ParentValue3</value>
-        <value>ParentValue4</value>
-      </list>
-    </property>
-  </object>
+    <object name="ParentHttpModule" abstract="true" parent="GrandParentHttpModule">
+        <property name="ParentProperty">
+            <list element-type="string">
+                <value>ParentValue1</value>
+                <value>ParentValue2</value>
+                <value>ParentValue3</value>
+                <value>ParentValue4</value>
+            </list>
+        </property>
+    </object>
 
-  <object name="HttpApplicationConfigurer" type="Spring.Context.Support.HttpApplicationConfigurer, Spring.Web">
-    <property name="ModuleTemplates">
-      <dictionary>
-        <entry key="DirectoryServicesAuthentication">
-          <object id="theModule" parent="ParentHttpModule">
-            <property name="ParentProperty">
-              <list element-type="string" merge="true">
-                <value>MergedValueToFind</value>
-              </list>
-            </property>
-          </object>
-        </entry>
-      </dictionary>
-    </property>
-  </object>
+    <object name="HttpApplicationConfigurer" type="Spring.Context.Support.HttpApplicationConfigurer, Spring.Web">
+        <property name="ModuleTemplates">
+            <dictionary>
+                <entry key="DirectoryServicesAuthentication">
+                    <object id="theModule" parent="ParentHttpModule">
+                        <property name="ParentProperty">
+                            <list element-type="string" merge="true">
+                                <value>MergedValueToFind</value>
+                            </list>
+                        </property>
+                    </object>
+                </entry>
+            </dictionary>
+        </property>
+    </object>
 </objects>

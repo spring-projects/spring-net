@@ -21,194 +21,193 @@
 using System.Collections;
 using System.Reflection;
 using System.Runtime.Serialization;
-
 using Spring.Core.TypeResolution;
 using Spring.Util;
 using Spring.Reflection.Dynamic;
 
-namespace Spring.Expressions
+namespace Spring.Expressions;
+
+/// <summary>
+/// Represents parsed method node in the navigation expression.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[Serializable]
+public class ConstructorNode : NodeWithArguments
 {
+    private SafeConstructor constructor;
+    private IDictionary namedArgs;
+    private bool isParamArray = false;
+    private Type paramArrayType;
+    private int argumentCount;
+
     /// <summary>
-    /// Represents parsed method node in the navigation expression.
+    /// Create a new instance
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    [Serializable]
-    public class ConstructorNode : NodeWithArguments
+    public ConstructorNode()
     {
-        private SafeConstructor constructor;
-        private IDictionary namedArgs;
-        private bool isParamArray = false;
-        private Type paramArrayType;
-        private int argumentCount;
+    }
 
-        /// <summary>
-        /// Create a new instance
-        /// </summary>
-        public ConstructorNode()
+    /// <summary>
+    /// Create a new instance
+    /// </summary>
+    public ConstructorNode(Type type)
+        : base(type.FullName)
+    {
+    }
+
+    /// <summary>
+    /// Create a new instance from SerializationInfo
+    /// </summary>
+    protected ConstructorNode(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+    }
+
+    /// <summary>
+    /// Creates new instance of the type defined by this node.
+    /// </summary>
+    /// <param name="context">Context to evaluate expressions against.</param>
+    /// <param name="evalContext">Current expression evaluation context.</param>
+    /// <returns>Node's value.</returns>
+    protected override object Get(object context, EvaluationContext evalContext)
+    {
+        object[] argValues = ResolveArguments(evalContext);
+        IDictionary namedArgValues = ResolveNamedArguments(evalContext);
+
+        if (constructor == null)
         {
-        }
-
-        /// <summary>
-        /// Create a new instance
-        /// </summary>
-        public ConstructorNode(Type type)
-            :base(type.FullName)
-        {
-        }
-
-        /// <summary>
-        /// Create a new instance from SerializationInfo
-        /// </summary>
-        protected ConstructorNode(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
-
-        /// <summary>
-        /// Creates new instance of the type defined by this node.
-        /// </summary>
-        /// <param name="context">Context to evaluate expressions against.</param>
-        /// <param name="evalContext">Current expression evaluation context.</param>
-        /// <returns>Node's value.</returns>
-        protected override object Get(object context, EvaluationContext evalContext)
-        {
-            object[] argValues = ResolveArguments(evalContext);
-            IDictionary namedArgValues = ResolveNamedArguments(evalContext);
-
-            if (constructor == null)
+            lock (this)
             {
-                lock(this)
+                if (constructor == null)
                 {
-                    if (constructor == null)
-                    {
-                        constructor = InitializeNode(argValues, namedArgValues);
-                    }
+                    constructor = InitializeNode(argValues, namedArgValues);
+                }
+            }
+        }
+
+        object[] paramValues = (isParamArray ? ReflectionUtils.PackageParamArray(argValues, argumentCount, paramArrayType) : argValues);
+        object instance = constructor.Invoke(paramValues);
+        if (namedArgValues != null)
+        {
+            SetNamedArguments(instance, namedArgValues);
+        }
+
+        return instance;
+    }
+
+    /// <summary>
+    /// Determines the type of object that should be instantiated.
+    /// </summary>
+    /// <param name="typeName">
+    /// The type name to resolve.
+    /// </param>
+    /// <returns>
+    /// The type of object that should be instantiated.
+    /// </returns>
+    /// <exception cref="TypeLoadException">
+    /// If the type cannot be resolved.
+    /// </exception>
+    protected virtual Type GetObjectType(string typeName)
+    {
+        return TypeResolutionUtils.ResolveType(typeName);
+    }
+
+    /// <summary>
+    /// Initializes this node by caching necessary constructor and property info.
+    /// </summary>
+    /// <param name="argValues"></param>
+    /// <param name="namedArgValues"></param>
+    private SafeConstructor InitializeNode(object[] argValues, IDictionary namedArgValues)
+    {
+        SafeConstructor ctor = null;
+        Type objectType = GetObjectType(this.getText().Trim());
+
+        // cache constructor info
+        ConstructorInfo ci = GetBestConstructor(objectType, argValues);
+        if (ci == null)
+        {
+            throw new ArgumentException(
+                String.Format("Constructor for the type [{0}] with a specified " +
+                              "number and types of arguments does not exist.",
+                    objectType.FullName));
+        }
+        else
+        {
+            ParameterInfo[] parameters = ci.GetParameters();
+            if (parameters.Length > 0)
+            {
+                ParameterInfo lastParameter = parameters[parameters.Length - 1];
+                isParamArray = lastParameter.GetCustomAttributes(typeof(ParamArrayAttribute), false).Length > 0;
+                if (isParamArray)
+                {
+                    paramArrayType = lastParameter.ParameterType.GetElementType();
+                    argumentCount = parameters.Length;
                 }
             }
 
-            object[] paramValues = (isParamArray ? ReflectionUtils.PackageParamArray(argValues, argumentCount, paramArrayType) : argValues);
-            object instance = constructor.Invoke(paramValues);
-            if (namedArgValues != null)
-            {
-                SetNamedArguments(instance, namedArgValues);
-            }
-            
-            return instance;
+            ctor = new SafeConstructor(ci);
         }
 
-        /// <summary>
-        /// Determines the type of object that should be instantiated.
-        /// </summary>
-        /// <param name="typeName">
-        /// The type name to resolve.
-        /// </param>
-        /// <returns>
-        /// The type of object that should be instantiated.
-        /// </returns>
-        /// <exception cref="TypeLoadException">
-        /// If the type cannot be resolved.
-        /// </exception>
-        protected virtual Type GetObjectType(string typeName)
+        // cache named args info
+        if (namedArgValues != null)
         {
-            return TypeResolutionUtils.ResolveType(typeName);
-        }
-
-        /// <summary>
-        /// Initializes this node by caching necessary constructor and property info.
-        /// </summary>
-        /// <param name="argValues"></param>
-        /// <param name="namedArgValues"></param>
-        private SafeConstructor InitializeNode(object[] argValues, IDictionary namedArgValues)
-        {
-            SafeConstructor ctor = null;
-            Type objectType = GetObjectType(this.getText().Trim());
-                
-            // cache constructor info
-            ConstructorInfo ci = GetBestConstructor(objectType, argValues);
-            if (ci == null)
-            {
-                throw new ArgumentException(
-                    String.Format("Constructor for the type [{0}] with a specified " +
-                                  "number and types of arguments does not exist.",
-                                  objectType.FullName));
-            }
-            else 
-            {
-                ParameterInfo[] parameters = ci.GetParameters();
-                if (parameters.Length > 0)
-                {
-                    ParameterInfo lastParameter = parameters[parameters.Length - 1];
-                    isParamArray = lastParameter.GetCustomAttributes(typeof(ParamArrayAttribute), false).Length > 0;
-                    if (isParamArray)
-                    {
-                        paramArrayType = lastParameter.ParameterType.GetElementType();
-                        argumentCount = parameters.Length;
-                    }
-                }
-                ctor = new SafeConstructor(ci);
-            }
-                
-            // cache named args info
-            if (namedArgValues != null)
-            {
-                namedArgs = new Hashtable(namedArgValues.Count);
-                foreach (string name in namedArgValues.Keys)
-                {
-                    this.namedArgs[name] = Expression.ParseProperty(name);
-                }
-            }
-
-            return ctor;
-        }
-
-        /// <summary>
-        /// Sets the named arguments (properties).
-        /// </summary>
-        /// <param name="instance">Instance to set property values on.</param>
-        /// <param name="namedArgValues">Argument (property) name to value mappings.</param>
-        private void SetNamedArguments(object instance, IDictionary namedArgValues)
-        {
+            namedArgs = new Hashtable(namedArgValues.Count);
             foreach (string name in namedArgValues.Keys)
             {
-                IExpression property = (IExpression) namedArgs[name];
-                property.SetValue(instance, namedArgValues[name]);
+                this.namedArgs[name] = Expression.ParseProperty(name);
             }
         }
 
-        private static ConstructorInfo GetBestConstructor(Type type, object[] argValues)
+        return ctor;
+    }
+
+    /// <summary>
+    /// Sets the named arguments (properties).
+    /// </summary>
+    /// <param name="instance">Instance to set property values on.</param>
+    /// <param name="namedArgValues">Argument (property) name to value mappings.</param>
+    private void SetNamedArguments(object instance, IDictionary namedArgValues)
+    {
+        foreach (string name in namedArgValues.Keys)
         {
-            IList<ConstructorInfo> candidates = GetCandidateConstructors(type, argValues.Length);
-            if (candidates.Count > 0)
-            {
-                return ReflectionUtils.GetConstructorByArgumentValues(candidates, argValues);
-            }
-            return null;
+            IExpression property = (IExpression) namedArgs[name];
+            property.SetValue(instance, namedArgValues[name]);
+        }
+    }
+
+    private static ConstructorInfo GetBestConstructor(Type type, object[] argValues)
+    {
+        IList<ConstructorInfo> candidates = GetCandidateConstructors(type, argValues.Length);
+        if (candidates.Count > 0)
+        {
+            return ReflectionUtils.GetConstructorByArgumentValues(candidates, argValues);
         }
 
-        private static IList<ConstructorInfo> GetCandidateConstructors(Type type, int argCount)
-        {
-            ConstructorInfo[] ctors = type.GetConstructors(BindingFlags.Instance|BindingFlags.Public|BindingFlags.NonPublic);
-            List<ConstructorInfo> matches = new List<ConstructorInfo>();
+        return null;
+    }
 
-            foreach (ConstructorInfo ctor in ctors)
+    private static IList<ConstructorInfo> GetCandidateConstructors(Type type, int argCount)
+    {
+        ConstructorInfo[] ctors = type.GetConstructors(BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
+        List<ConstructorInfo> matches = new List<ConstructorInfo>();
+
+        foreach (ConstructorInfo ctor in ctors)
+        {
+            ParameterInfo[] parameters = ctor.GetParameters();
+            if (parameters.Length == argCount)
             {
-                ParameterInfo[] parameters = ctor.GetParameters();
-                if (parameters.Length == argCount)
+                matches.Add(ctor);
+            }
+            else if (parameters.Length > 0)
+            {
+                ParameterInfo lastParameter = parameters[parameters.Length - 1];
+                if (lastParameter.GetCustomAttributes(typeof(ParamArrayAttribute), false).Length > 0)
                 {
                     matches.Add(ctor);
                 }
-                else if (parameters.Length > 0)
-                {
-                    ParameterInfo lastParameter = parameters[parameters.Length - 1];
-                    if (lastParameter.GetCustomAttributes(typeof(ParamArrayAttribute), false).Length > 0)
-                    {
-                        matches.Add(ctor);
-                    }
-                }
             }
-
-            return matches;
         }
 
+        return matches;
     }
 }

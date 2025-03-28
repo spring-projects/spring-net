@@ -27,56 +27,55 @@ using System.Web.UI.WebControls;
 
 #endregion
 
-namespace Spring.Web.UI.Controls
+namespace Spring.Web.UI.Controls;
+
+/// <summary>
+/// Represents a control that acts as a container for a group of controls within a <see cref="TabularMultiView"/> control. 
+/// </summary>
+/// <author>Erich Eichinger</author>
+[ToolboxData("<{0}:TabularView runat=\"server\"></{0}:TabularView>")]
+public class TabularView : View
 {
-	/// <summary>
-	/// Represents a control that acts as a container for a group of controls within a <see cref="TabularMultiView"/> control. 
-	/// </summary>
-	/// <author>Erich Eichinger</author>
-	[ToolboxData("<{0}:TabularView runat=\"server\"></{0}:TabularView>")]
-	public class TabularView : View
-	{
-		private static readonly PropertyInfo s_fiActive =
-			typeof(View).GetProperty("Active", BindingFlags.Instance | BindingFlags.NonPublic);
+    private static readonly PropertyInfo s_fiActive =
+        typeof(View).GetProperty("Active", BindingFlags.Instance | BindingFlags.NonPublic);
 
-		/// <summary>
-		/// Indicates if this view is currently active.
-		/// </summary>
-		public bool Active
-		{
-			get { return (bool) s_fiActive.GetValue(this, null); }
-		}
+    /// <summary>
+    /// Indicates if this view is currently active.
+    /// </summary>
+    public bool Active
+    {
+        get { return (bool) s_fiActive.GetValue(this, null); }
+    }
 
-        private string m_TabToolTip;
+    private string m_TabToolTip;
 
-		/// <summary>
-		/// Get or Set the name of the tab item associated with this view.
-		/// </summary>
-		[Description("Name of the tab.")
-			, NotifyParentProperty(true)
-			, DefaultValue("Tab")
-			, Category("Behavior")]
-		public string TabName
-		{
-			get
-			{
-				string str = (string) ViewState["m_TabName"];
-				return str;
-			}
-			set { ViewState["m_TabName"] = value; }
-		}
+    /// <summary>
+    /// Get or Set the name of the tab item associated with this view.
+    /// </summary>
+    [Description("Name of the tab.")
+     , NotifyParentProperty(true)
+     , DefaultValue("Tab")
+     , Category("Behavior")]
+    public string TabName
+    {
+        get
+        {
+            string str = (string) ViewState["m_TabName"];
+            return str;
+        }
+        set { ViewState["m_TabName"] = value; }
+    }
 
-		/// <summary>
-		/// Get or Set the tooltip text of the tab item associated with this view.
-		/// </summary>
-		[Description("Tooltip of the tab.")
-			, NotifyParentProperty(true)
-			, DefaultValue("")
-			, Category("Behavior")]
-		public string TabToolTip
-		{
-			get { return m_TabToolTip; }
-			set { m_TabToolTip = value; }
-		}
-	}
+    /// <summary>
+    /// Get or Set the tooltip text of the tab item associated with this view.
+    /// </summary>
+    [Description("Tooltip of the tab.")
+     , NotifyParentProperty(true)
+     , DefaultValue("")
+     , Category("Behavior")]
+    public string TabToolTip
+    {
+        get { return m_TabToolTip; }
+        set { m_TabToolTip = value; }
+    }
 }

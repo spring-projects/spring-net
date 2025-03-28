@@ -21,59 +21,59 @@
 using System.Runtime.Serialization;
 using Spring.Expressions.Parser.antlr.collections;
 
-namespace Spring.Expressions
+namespace Spring.Expressions;
+
+/// <summary>
+/// Represents parsed assignment node in the navigation expression.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[Serializable]
+public class AssignNode : BaseNode
 {
     /// <summary>
-    /// Represents parsed assignment node in the navigation expression.
+    /// Create a new instance
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    [Serializable]
-    public class AssignNode : BaseNode
+    public AssignNode()
     {
-        /// <summary>
-        /// Create a new instance
-        /// </summary>
-        public AssignNode()
+    }
+
+    /// <summary>
+    /// Create a new instance from SerializationInfo
+    /// </summary>
+    protected AssignNode(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+    }
+
+    /// <summary>
+    /// Assigns value of the right operand to the left one.
+    /// </summary>
+    /// <param name="context">Context to evaluate expressions against.</param>
+    /// <param name="evalContext">Current expression evaluation context.</param>
+    /// <returns>Node's value.</returns>
+    protected override object Get(object context, EvaluationContext evalContext)
+    {
+        AST left = getFirstChild();
+        AST right = left.getNextSibling();
+
+        object result;
+
+        if (right.getFirstChild() is LambdaExpressionNode)
         {
-        }
-
-        /// <summary>
-        /// Create a new instance from SerializationInfo
-        /// </summary>
-        protected AssignNode(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
-
-        /// <summary>
-        /// Assigns value of the right operand to the left one.
-        /// </summary>
-        /// <param name="context">Context to evaluate expressions against.</param>
-        /// <param name="evalContext">Current expression evaluation context.</param>
-        /// <returns>Node's value.</returns>
-        protected override object Get(object context, EvaluationContext evalContext)
-        {
-            AST left = getFirstChild();
-            AST right = left.getNextSibling();
-
-            object result;
-
-            if (right.getFirstChild() is LambdaExpressionNode)
+            if (!(left.getFirstChild() is VariableNode))
             {
-                if (!(left.getFirstChild() is VariableNode))
-                {
-                    throw new ArgumentException("Lambda expression can only be assigned to a global variable.");
-                }
-                result = right.getFirstChild();
-            }
-            else
-            {
-                result = GetValue(((BaseNode)right), context, evalContext);
+                throw new ArgumentException("Lambda expression can only be assigned to a global variable.");
             }
 
-            SetValue(((BaseNode)left), context, evalContext, result );
-
-            return result;
+            result = right.getFirstChild();
         }
+        else
+        {
+            result = GetValue(((BaseNode) right), context, evalContext);
+        }
+
+        SetValue(((BaseNode) left), context, evalContext, result);
+
+        return result;
     }
 }

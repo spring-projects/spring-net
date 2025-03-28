@@ -24,82 +24,79 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Caching
+namespace Spring.Caching;
+
+/// <summary>
+///
+/// </summary>
+/// <author>Erich Eichinger</author>
+[TestFixture]
+public class BaseCacheAttributeTests
 {
-    /// <summary>
-    ///
-    /// </summary>
-    /// <author>Erich Eichinger</author>
-    [TestFixture]
-    public class BaseCacheAttributeTests
+    private BaseCacheAttribute att;
+
+    private class DerivedCacheAttribute : BaseCacheAttribute
     {
-        private BaseCacheAttribute att;
-
-        private class DerivedCacheAttribute : BaseCacheAttribute
+        public DerivedCacheAttribute()
         {
-            public DerivedCacheAttribute()
-            {
-                
-            }
-
-            public DerivedCacheAttribute(string cacheName, string key)
-                : base(cacheName, key)
-            {
-                
-            }
         }
 
-        public string TestProperty
+        public DerivedCacheAttribute(string cacheName, string key)
+            : base(cacheName, key)
         {
-            get { return "OK"; }
         }
+    }
 
-        [SetUp]
-        public void SetUp()
-        {
-            att = new DerivedCacheAttribute();
-        }
+    public string TestProperty
+    {
+        get { return "OK"; }
+    }
 
-        [Test]
-        public void CacheNameIsSet()
-        {
-            att.CacheName = "MyCache";
-            Assert.AreEqual("MyCache", att.CacheName);
-        }
+    [SetUp]
+    public void SetUp()
+    {
+        att = new DerivedCacheAttribute();
+    }
 
-        [Test]
-        public void KeyIsParsed()
-        {
-            att.Key = "TestProperty";
-            string result = att.KeyExpression.GetValue(this) as string;
-            Assert.AreEqual("OK", result);
-        }
+    [Test]
+    public void CacheNameIsSet()
+    {
+        att.CacheName = "MyCache";
+        Assert.AreEqual("MyCache", att.CacheName);
+    }
 
-        [Test]
-        public void ConditionIsParsed()
-        {
-            att.Condition = "TestProperty";
-            string result = att.ConditionExpression.GetValue(this) as string;
-            Assert.AreEqual("OK", result);
-        }
+    [Test]
+    public void KeyIsParsed()
+    {
+        att.Key = "TestProperty";
+        string result = att.KeyExpression.GetValue(this) as string;
+        Assert.AreEqual("OK", result);
+    }
 
-        [Test]
-        public void AllowsForExtendedTimeSpanConverterSyntax()
-        {
-            att.TimeToLive = "5ms";
-            Assert.AreEqual(new TimeSpan(0, 0, 0, 0, 5), att.TimeToLiveTimeSpan);
-        }
+    [Test]
+    public void ConditionIsParsed()
+    {
+        att.Condition = "TestProperty";
+        string result = att.ConditionExpression.GetValue(this) as string;
+        Assert.AreEqual("OK", result);
+    }
 
-        [Test]
-        public void KeyCannotBeEmptyString()
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() => att = new DerivedCacheAttribute("someName", string.Empty));
-        }
+    [Test]
+    public void AllowsForExtendedTimeSpanConverterSyntax()
+    {
+        att.TimeToLive = "5ms";
+        Assert.AreEqual(new TimeSpan(0, 0, 0, 0, 5), att.TimeToLiveTimeSpan);
+    }
 
-        [Test]
-        public void KeyCannotBeNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => att = new DerivedCacheAttribute("someName", null));
-        }
+    [Test]
+    public void KeyCannotBeEmptyString()
+    {
+        Assert.Throws<ArgumentOutOfRangeException>(() => att = new DerivedCacheAttribute("someName", string.Empty));
+    }
+
+    [Test]
+    public void KeyCannotBeNull()
+    {
+        Assert.Throws<ArgumentNullException>(() => att = new DerivedCacheAttribute("someName", null));
     }
 }

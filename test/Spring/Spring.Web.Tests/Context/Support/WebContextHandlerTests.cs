@@ -25,45 +25,42 @@ using NUnit.Framework;
 
 #endregion
 
+namespace Spring.Context.Support;
 
-
-namespace Spring.Context.Support
+public class WebContextHandlerTests
 {
-    public class WebContextHandlerTests
+    [SetUp]
+    public void SetUp()
     {
-        [SetUp]
-        public void SetUp()
-        {
-            ContextRegistry.Clear();
-        }
+        ContextRegistry.Clear();
+    }
 
-        [TearDown]
-        public void TearDown()
-        {
-            ContextRegistry.Clear();
-        }
+    [TearDown]
+    public void TearDown()
+    {
+        ContextRegistry.Clear();
+    }
 
-        [Test]
-        public void should_return_registered_context_with_ContextRegistry()
-        {
-			const string xmlData =
-				@"<context type='Spring.Context.Support.XmlApplicationContext, Spring.Core'>
+    [Test]
+    public void should_return_registered_context_with_ContextRegistry()
+    {
+        const string xmlData =
+            @"<context type='Spring.Context.Support.XmlApplicationContext, Spring.Core'>
 	                <resource uri='assembly://Spring.Web.Tests/Spring.Context.Support/WebContextHandlerTests.xml'/>
                  </context>";
-            GenericApplicationContext expectedContext = new GenericApplicationContext(null, false, null);
-            ContextRegistry.RegisterContext(expectedContext);
-            WebContextHandler webContextHandler = new WebContextHandler();
-            
-            Object actualContext = webContextHandler.Create(null, null, CreateConfigurationElement(xmlData));
+        GenericApplicationContext expectedContext = new GenericApplicationContext(null, false, null);
+        ContextRegistry.RegisterContext(expectedContext);
+        WebContextHandler webContextHandler = new WebContextHandler();
 
-            Assert.AreSame(expectedContext, actualContext);
-        }
+        Object actualContext = webContextHandler.Create(null, null, CreateConfigurationElement(xmlData));
 
-        private XmlNode CreateConfigurationElement(string xmlData)
-        {
-            XmlDocument xmlDoc = new XmlDocument();
-            xmlDoc.Load(new StringReader(xmlData));
-            return xmlDoc.DocumentElement;
-        }
+        Assert.AreSame(expectedContext, actualContext);
+    }
+
+    private XmlNode CreateConfigurationElement(string xmlData)
+    {
+        XmlDocument xmlDoc = new XmlDocument();
+        xmlDoc.Load(new StringReader(xmlData));
+        return xmlDoc.DocumentElement;
     }
 }

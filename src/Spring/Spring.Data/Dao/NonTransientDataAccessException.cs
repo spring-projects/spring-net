@@ -20,48 +20,51 @@
 
 using System.Runtime.Serialization;
 
-namespace Spring.Dao
+namespace Spring.Dao;
+
+/// <summary>
+/// Root of the hierarchy of data access exception that are considered non-transient -
+/// where a retry of the same operation would fail unless the cause of the Exception is
+/// corrected.
+/// </summary>
+/// <author>Thomas Risberg</author>
+/// <author>Mark Pollack (.NET)</author>
+[Serializable]
+public abstract class NonTransientDataAccessException : DataAccessException
 {
     /// <summary>
-    /// Root of the hierarchy of data access exception that are considered non-transient -
-    /// where a retry of the same operation would fail unless the cause of the Exception is
-    /// corrected.
+    /// Creates a new instance of the
+    /// <see cref="Spring.Dao.NonTransientDataAccessException"/> class.
     /// </summary>
-    /// <author>Thomas Risberg</author>
-    /// <author>Mark Pollack (.NET)</author>
-	[Serializable]
-    public abstract class NonTransientDataAccessException : DataAccessException
-	{
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Dao.NonTransientDataAccessException"/> class.
-		/// </summary>
-		public NonTransientDataAccessException() : base("No Exception Message") {}
+    public NonTransientDataAccessException() : base("No Exception Message") { }
 
-		/// <summary>
-		/// Creates a new instance of the
-        /// <see cref="Spring.Dao.NonTransientDataAccessException"/> class.
-		/// </summary>
-		/// <param name="message">
-		/// A message about the exception.
-		/// </param>
-		public NonTransientDataAccessException( string message ) : base( message ) {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Dao.NonTransientDataAccessException"/> class.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    public NonTransientDataAccessException(string message) : base(message) { }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Dao.NonTransientDataAccessException"/> class.
-		/// </summary>
-		/// <param name="message">
-		/// A message about the exception.
-		/// </param>
-		/// <param name="rootCause">
-		/// The root exception (from the underlying data access API, such as ADO.NET).
-		/// </param>
-		public NonTransientDataAccessException( string message, Exception rootCause)
-			: base( message , rootCause ) {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Dao.NonTransientDataAccessException"/> class.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    /// <param name="rootCause">
+    /// The root exception (from the underlying data access API, such as ADO.NET).
+    /// </param>
+    public NonTransientDataAccessException(string message, Exception rootCause)
+        : base(message, rootCause)
+    {
+    }
 
-		/// <inheritdoc />
-        protected NonTransientDataAccessException(
-			SerializationInfo info, StreamingContext context ) : base( info, context ) {}
-	}
+    /// <inheritdoc />
+    protected NonTransientDataAccessException(
+        SerializationInfo info, StreamingContext context) : base(info, context)
+    {
+    }
 }

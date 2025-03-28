@@ -20,83 +20,82 @@ using Quartz.Impl.AdoJobStore;
 using Quartz.Util;
 using Spring.Data.Support;
 
-namespace Spring.Scheduling.Quartz
+namespace Spring.Scheduling.Quartz;
+
+/// <summary>
+/// Subclass of Quartz's JobStoreCMT class that delegates to a Spring-managed
+/// DataSource instead of using a Quartz-managed connection pool. This JobStore
+/// will be used if SchedulerFactoryObject's "dbProvider" property is set.
+///</summary>
+/// <remarks>
+/// <p>Operations performed by this JobStore will properly participate in any
+/// kind of Spring-managed transaction, as it uses Spring's DataSourceUtils
+/// connection handling methods that are aware of a current transaction.</p>
+///
+/// <p>Note that all Quartz Scheduler operations that affect the persistent
+/// job store should usually be performed within active transactions,
+/// as they assume to get proper locks etc.</p>
+/// </remarks>
+/// <author>Juergen Hoeller</author>
+/// <author>Marko Lahma (.NET)</author>
+/// <seealso cref="ConnectionUtils.GetConnection" />
+/// <seealso cref="ConnectionUtils.DisposeConnection" />
+public class LocalDataSourceJobStore : JobStoreCMT
 {
     /// <summary>
-    /// Subclass of Quartz's JobStoreCMT class that delegates to a Spring-managed
-    /// DataSource instead of using a Quartz-managed connection pool. This JobStore
-    /// will be used if SchedulerFactoryObject's "dbProvider" property is set.
-    ///</summary>
-    /// <remarks>
-    /// <p>Operations performed by this JobStore will properly participate in any
-    /// kind of Spring-managed transaction, as it uses Spring's DataSourceUtils
-    /// connection handling methods that are aware of a current transaction.</p>
-    ///
-    /// <p>Note that all Quartz Scheduler operations that affect the persistent
-    /// job store should usually be performed within active transactions,
-    /// as they assume to get proper locks etc.</p>
-    /// </remarks>
-    /// <author>Juergen Hoeller</author>
-    /// <author>Marko Lahma (.NET)</author>
-    /// <seealso cref="ConnectionUtils.GetConnection" />
-    /// <seealso cref="ConnectionUtils.DisposeConnection" />
-    public class LocalDataSourceJobStore : JobStoreCMT
+    /// Name used for the transactional ConnectionProvider for Quartz.
+    /// This provider will delegate to the local Spring-managed DataSource.
+    /// <seealso cref="DBConnectionManager.AddConnectionProvider" />
+    /// <seealso cref="SchedulerFactoryObject.DbProvider" />
+    /// </summary>
+    public const string TxDataSourcePrefix = "springTxDataSource.";
+
+    private Data.Common.IDbProvider dbProvider;
+
+    /// <summary>
+    /// Gets or sets the name of the instance.
+    /// </summary>
+    /// <value>The name of the instance.</value>
+    public override string InstanceName
     {
-        /// <summary>
-        /// Name used for the transactional ConnectionProvider for Quartz.
-        /// This provider will delegate to the local Spring-managed DataSource.
-        /// <seealso cref="DBConnectionManager.AddConnectionProvider" />
-        /// <seealso cref="SchedulerFactoryObject.DbProvider" />
-        /// </summary>
-        public const string TxDataSourcePrefix = "springTxDataSource.";
-
-        private Data.Common.IDbProvider dbProvider;
-
-        /// <summary>
-        /// Gets or sets the name of the instance.
-        /// </summary>
-        /// <value>The name of the instance.</value>
-        public override string InstanceName
+        get => base.InstanceName;
+        set
         {
-            get => base.InstanceName;
-            set
+            // use to catch property setting
+            base.InstanceName = value;
+            DataSource = TxDataSourcePrefix + InstanceName;
+            // Register transactional ConnectionProvider for Quartz.
+            // Absolutely needs thread-bound DataSource to initialize.
+            dbProvider = SchedulerFactoryObject.ConfigTimeDbProvider;
+            if (dbProvider == null)
             {
-                // use to catch property setting
-                base.InstanceName = value;
-                DataSource = TxDataSourcePrefix + InstanceName;
-                // Register transactional ConnectionProvider for Quartz.
-                // Absolutely needs thread-bound DataSource to initialize.
-                dbProvider = SchedulerFactoryObject.ConfigTimeDbProvider;
-                if (dbProvider == null)
-                {
-                    throw new SchedulerConfigException(
-                        "No db provider found for configuration - " +
-                        "'DbProvider' property must be set on SchedulerFactoryObject");
-                }
-
-                DBConnectionManager.Instance.AddConnectionProvider(
-                    TxDataSourcePrefix + InstanceName, new SpringDbProviderAdapter(dbProvider));
+                throw new SchedulerConfigException(
+                    "No db provider found for configuration - " +
+                    "'DbProvider' property must be set on SchedulerFactoryObject");
             }
-        }
 
-        /// <summary>
-        /// Gets the non managed TX connection.
-        /// </summary>
-        /// <returns></returns>
-        protected override ConnectionAndTransactionHolder GetNonManagedTXConnection()
-        {
-            ConnectionTxPair pair = ConnectionUtils.DoGetConnection(dbProvider);
-            return new ConnectionAndTransactionHolder((DbConnection) pair.Connection, (DbTransaction) pair.Transaction);
+            DBConnectionManager.Instance.AddConnectionProvider(
+                TxDataSourcePrefix + InstanceName, new SpringDbProviderAdapter(dbProvider));
         }
+    }
 
-        /// <summary>
-        /// Closes the connection.
-        /// </summary>
-        /// <param name="connectionAndTransactionHolder">The connection and transaction holder.</param>
-        protected override void CloseConnection(ConnectionAndTransactionHolder connectionAndTransactionHolder)
-        {
-            // Will work for transactional and non-transactional connections.
-            ConnectionUtils.DisposeConnection(connectionAndTransactionHolder.Connection, dbProvider);
-        }
+    /// <summary>
+    /// Gets the non managed TX connection.
+    /// </summary>
+    /// <returns></returns>
+    protected override ConnectionAndTransactionHolder GetNonManagedTXConnection()
+    {
+        ConnectionTxPair pair = ConnectionUtils.DoGetConnection(dbProvider);
+        return new ConnectionAndTransactionHolder((DbConnection) pair.Connection, (DbTransaction) pair.Transaction);
+    }
+
+    /// <summary>
+    /// Closes the connection.
+    /// </summary>
+    /// <param name="connectionAndTransactionHolder">The connection and transaction holder.</param>
+    protected override void CloseConnection(ConnectionAndTransactionHolder connectionAndTransactionHolder)
+    {
+        // Will work for transactional and non-transactional connections.
+        ConnectionUtils.DisposeConnection(connectionAndTransactionHolder.Connection, dbProvider);
     }
 }

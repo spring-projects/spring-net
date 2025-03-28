@@ -25,34 +25,33 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Aop.Framework
+namespace Spring.Aop.Framework;
+
+/// <summary>
+/// Unit tests for the ProxyConfig class.
+/// </summary>
+/// <author>Rick Evans</author>
+[TestFixture]
+public sealed class ProxyConfigTests
 {
-	/// <summary>
-	/// Unit tests for the ProxyConfig class.
-	/// </summary>
-	/// <author>Rick Evans</author>
-	[TestFixture]
-	public sealed class ProxyConfigTests
-	{
-		[Test]
-		public void Instantiation()
-		{
+    [Test]
+    public void Instantiation()
+    {
+    }
 
-		}
+    [Category("Performance")]
+    [Test, Explicit]
+    public void InstantiationPerformance()
+    {
+        int iterations = 10000;
 
-        [Category("Performance")]
-        [Test, Explicit]
-        public void InstantiationPerformance()
+        Stopwatch watch = Stopwatch.StartNew();
+        for (int i = 0; i < iterations; i++)
         {
-            int iterations = 10000;
-
-            Stopwatch watch = Stopwatch.StartNew();
-            for (int i = 0; i < iterations; i++)
-            {
-                new ProxyConfig();
-            }
-            watch.Stop();
-            Console.WriteLine("Instantiation time: {0}ms", watch.ElapsedMilliseconds);
+            new ProxyConfig();
         }
-	}
+
+        watch.Stop();
+        Console.WriteLine("Instantiation time: {0}ms", watch.ElapsedMilliseconds);
+    }
 }

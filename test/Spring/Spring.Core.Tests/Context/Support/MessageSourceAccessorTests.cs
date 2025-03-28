@@ -19,111 +19,107 @@
 #endregion
 
 using System.Globalization;
-
 using FakeItEasy;
-
 using NUnit.Framework;
 using Spring.Globalization;
 
-namespace Spring.Context.Support
+namespace Spring.Context.Support;
+
+[TestFixture]
+public class MessageSourceAccessorTests
 {
-    [TestFixture]
-    public class MessageSourceAccessorTests
+    [OneTimeSetUp]
+    public void TestFixtureSetUp()
     {
-        [OneTimeSetUp]
-        public void TestFixtureSetUp()
-        {
-            CultureTestScope.Set();
-        }
+        CultureTestScope.Set();
+    }
 
-        [OneTimeTearDown]
-        public void TestFixtureTearDown()
-        {
-            CultureTestScope.Reset();
-        }
+    [OneTimeTearDown]
+    public void TestFixtureTearDown()
+    {
+        CultureTestScope.Reset();
+    }
 
-        private readonly string MSGCODE = "code1";
-        private readonly CultureInfo MSGCULTURE = new CultureInfo("fr");
-        private readonly object[] MSGARGS = new object[] { "argument1" };
-        private readonly string MSGRESULT = "my message";
+    private readonly string MSGCODE = "code1";
+    private readonly CultureInfo MSGCULTURE = new CultureInfo("fr");
+    private readonly object[] MSGARGS = new object[] { "argument1" };
+    private readonly string MSGRESULT = "my message";
 
+    private IMessageSource mockMsgSource;
+    private IMessageSourceResolvable mockMsgSourceResolvable;
 
-        private IMessageSource mockMsgSource;
-        private IMessageSourceResolvable mockMsgSourceResolvable;
+    [SetUp]
+    public void SetUp()
+    {
+        mockMsgSource = A.Fake<IMessageSource>();
+        mockMsgSourceResolvable = A.Fake<IMessageSourceResolvable>();
+    }
 
-        [SetUp]
-        public void SetUp()
-        {
-            mockMsgSource = A.Fake<IMessageSource>();
-            mockMsgSourceResolvable = A.Fake<IMessageSourceResolvable>();
-        }
+    [TearDown]
+    public void TearDown()
+    {
+    }
 
-        [TearDown]
-        public void TearDown()
-        {
-        }
+    [Test]
+    public void GetMessageCodeCultureArgs()
+    {
+        A.CallTo(() => mockMsgSource.GetMessage(MSGCODE, MSGCULTURE, MSGARGS)).Returns(MSGRESULT);
 
-        [Test]
-        public void GetMessageCodeCultureArgs()
-        {
-            A.CallTo(() => mockMsgSource.GetMessage(MSGCODE, MSGCULTURE, MSGARGS)).Returns(MSGRESULT);
+        MessageSourceAccessor msgSourceAccessor = new MessageSourceAccessor(mockMsgSource);
+        Assert.AreEqual(MSGRESULT, msgSourceAccessor.GetMessage(MSGCODE, MSGCULTURE, MSGARGS));
+    }
 
-            MessageSourceAccessor msgSourceAccessor = new MessageSourceAccessor(mockMsgSource);
-            Assert.AreEqual(MSGRESULT, msgSourceAccessor.GetMessage(MSGCODE, MSGCULTURE, MSGARGS));
-        }
+    [Test]
+    public void GetMessageCodeArgs()
+    {
+        A.CallTo(() => mockMsgSource.GetMessage(MSGCODE, MSGCULTURE, MSGARGS)).Returns(MSGRESULT);
 
-        [Test]
-        public void GetMessageCodeArgs()
-        {
-            A.CallTo(() => mockMsgSource.GetMessage(MSGCODE, MSGCULTURE, MSGARGS)).Returns(MSGRESULT);
+        MessageSourceAccessor msgSourceAccessor = new MessageSourceAccessor(mockMsgSource, MSGCULTURE);
+        Assert.AreEqual(MSGRESULT, msgSourceAccessor.GetMessage(MSGCODE, MSGARGS));
+    }
 
-            MessageSourceAccessor msgSourceAccessor = new MessageSourceAccessor(mockMsgSource, MSGCULTURE);
-            Assert.AreEqual(MSGRESULT, msgSourceAccessor.GetMessage(MSGCODE, MSGARGS));
-        }
+    [Test]
+    public void GetMessageCodeArgsDefaultsToCurrentUICulture()
+    {
+        A.CallTo(() => mockMsgSource.GetMessage(MSGCODE, CultureInfo.CurrentUICulture, MSGARGS)).Returns(MSGRESULT);
 
-        [Test]
-        public void GetMessageCodeArgsDefaultsToCurrentUICulture()
-        {
-            A.CallTo(() => mockMsgSource.GetMessage(MSGCODE, CultureInfo.CurrentUICulture, MSGARGS)).Returns(MSGRESULT);
+        MessageSourceAccessor msgSourceAccessor = new MessageSourceAccessor(mockMsgSource);
+        Assert.AreEqual(MSGRESULT, msgSourceAccessor.GetMessage(MSGCODE, MSGARGS));
+    }
 
-            MessageSourceAccessor msgSourceAccessor = new MessageSourceAccessor(mockMsgSource);
-            Assert.AreEqual(MSGRESULT, msgSourceAccessor.GetMessage(MSGCODE, MSGARGS));
-        }
+    [Test]
+    public void GetMessageCodeCulture()
+    {
+        A.CallTo(() => mockMsgSource.GetMessage(MSGCODE, MSGCULTURE)).Returns(MSGRESULT);
 
-        [Test]
-        public void GetMessageCodeCulture()
-        {
-            A.CallTo(() => mockMsgSource.GetMessage(MSGCODE, MSGCULTURE)).Returns(MSGRESULT);
+        MessageSourceAccessor msgSourceAccessor = new MessageSourceAccessor(mockMsgSource);
+        Assert.AreEqual(MSGRESULT, msgSourceAccessor.GetMessage(MSGCODE, MSGCULTURE));
+    }
 
-            MessageSourceAccessor msgSourceAccessor = new MessageSourceAccessor(mockMsgSource);
-            Assert.AreEqual(MSGRESULT, msgSourceAccessor.GetMessage(MSGCODE, MSGCULTURE));
-        }
+    [Test]
+    public void GetMessageCodeDefaultsToCurrentUICulture()
+    {
+        A.CallTo(() => mockMsgSource.GetMessage(MSGCODE, CultureInfo.CurrentUICulture)).Returns(MSGRESULT);
 
-        [Test]
-        public void GetMessageCodeDefaultsToCurrentUICulture()
-        {
-            A.CallTo(() => mockMsgSource.GetMessage(MSGCODE, CultureInfo.CurrentUICulture)).Returns(MSGRESULT);
+        MessageSourceAccessor msgSourceAccessor = new MessageSourceAccessor(mockMsgSource);
+        Assert.AreEqual(MSGRESULT, msgSourceAccessor.GetMessage(MSGCODE));
+    }
 
-            MessageSourceAccessor msgSourceAccessor = new MessageSourceAccessor(mockMsgSource);
-            Assert.AreEqual(MSGRESULT, msgSourceAccessor.GetMessage(MSGCODE));
-        }
+    [Test]
+    public void GetMessageResolvableCulture()
+    {
+        A.CallTo(() => mockMsgSource.GetMessage(mockMsgSourceResolvable, MSGCULTURE)).Returns(MSGRESULT);
 
-        [Test]
-        public void GetMessageResolvableCulture()
-        {
-            A.CallTo(() => mockMsgSource.GetMessage(mockMsgSourceResolvable, MSGCULTURE)).Returns(MSGRESULT);
+        MessageSourceAccessor msgSourceAccessor = new MessageSourceAccessor(mockMsgSource);
+        Assert.AreEqual(MSGRESULT, msgSourceAccessor.GetMessage(mockMsgSourceResolvable, MSGCULTURE));
+    }
 
-            MessageSourceAccessor msgSourceAccessor = new MessageSourceAccessor(mockMsgSource);
-            Assert.AreEqual(MSGRESULT, msgSourceAccessor.GetMessage(mockMsgSourceResolvable, MSGCULTURE));
-        }
+    [Test]
+    public void GetMessageResolvableDefaultsToCurrentUICulture()
+    {
+        A.CallTo(() => mockMsgSource.GetMessage(mockMsgSourceResolvable, CultureInfo.CurrentUICulture)).Returns(MSGRESULT);
 
-        [Test]
-        public void GetMessageResolvableDefaultsToCurrentUICulture()
-        {
-            A.CallTo(() => mockMsgSource.GetMessage(mockMsgSourceResolvable, CultureInfo.CurrentUICulture)).Returns(MSGRESULT);
-
-            MessageSourceAccessor msgSourceAccessor = new MessageSourceAccessor(mockMsgSource);
-            Assert.AreEqual(MSGRESULT, msgSourceAccessor.GetMessage(mockMsgSourceResolvable));
-        }
+        MessageSourceAccessor msgSourceAccessor = new MessageSourceAccessor(mockMsgSource);
+        Assert.AreEqual(MSGRESULT, msgSourceAccessor.GetMessage(mockMsgSourceResolvable));
     }
 }

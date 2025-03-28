@@ -21,29 +21,28 @@
 using Spring.Objects.Factory.Support;
 using Spring.Util;
 
-namespace Spring.Objects.Factory.Xml
+namespace Spring.Objects.Factory.Xml;
+
+/// <summary>
+/// An <see cref="DefaultObjectDefinitionDocumentReader"/> capable of handling web objects (Pages,Controls).
+/// </summary>
+/// <author>Erich Eichinger</author>
+internal class WebObjectDefinitionDocumentReader : DefaultObjectDefinitionDocumentReader
 {
-    /// <summary>
-    /// An <see cref="DefaultObjectDefinitionDocumentReader"/> capable of handling web objects (Pages,Controls).
-    /// </summary>
-    /// <author>Erich Eichinger</author>
-    internal class WebObjectDefinitionDocumentReader : DefaultObjectDefinitionDocumentReader
+    private readonly IWebObjectNameGenerator webObjectNameGenerator;
+
+    public WebObjectDefinitionDocumentReader(IWebObjectNameGenerator webObjectNameGenerator)
     {
-        private readonly IWebObjectNameGenerator webObjectNameGenerator;
+        AssertUtils.ArgumentNotNull(webObjectNameGenerator, "webObjectNameGenerator");
+        this.webObjectNameGenerator = webObjectNameGenerator;
+    }
 
-        public WebObjectDefinitionDocumentReader(IWebObjectNameGenerator webObjectNameGenerator)
-        {
-            AssertUtils.ArgumentNotNull(webObjectNameGenerator, "webObjectNameGenerator");
-            this.webObjectNameGenerator = webObjectNameGenerator;
-        }
-
-        /// <summary>
-        /// Creates an <see cref="WebObjectDefinitionParserHelper"/> instance for the given 
-        /// <paramref name="readerContext"/> and <paramref name="root"/> element.
-        /// </summary>
-        protected override ObjectDefinitionParserHelper CreateHelper(XmlReaderContext readerContext, System.Xml.XmlElement root)
-        {
-            return new WebObjectDefinitionParserHelper(webObjectNameGenerator, readerContext, root);
-        }
+    /// <summary>
+    /// Creates an <see cref="WebObjectDefinitionParserHelper"/> instance for the given
+    /// <paramref name="readerContext"/> and <paramref name="root"/> element.
+    /// </summary>
+    protected override ObjectDefinitionParserHelper CreateHelper(XmlReaderContext readerContext, System.Xml.XmlElement root)
+    {
+        return new WebObjectDefinitionParserHelper(webObjectNameGenerator, readerContext, root);
     }
 }

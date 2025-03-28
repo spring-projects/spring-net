@@ -23,65 +23,63 @@ using System.Reflection;
 using Microsoft.Extensions.Logging;
 using Spring.Util;
 
-namespace Spring.Context.Attributes
+namespace Spring.Context.Attributes;
+
+/// <summary>
+/// Represents a collection of Types.
+/// </summary>
+[Serializable]
+public class AssemblyTypeSource : IEnumerable<Type>
 {
     /// <summary>
-    /// Represents a collection of Types.
+    /// Logger Instance.
     /// </summary>
-    [Serializable]
-    public class AssemblyTypeSource : IEnumerable<Type>
+    protected static readonly ILogger<AssemblyTypeSource> Logger = LogManager.GetLogger<AssemblyTypeSource>();
+
+    private readonly Assembly _assembly;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="AssemblyTypeSource"/> class.
+    /// </summary>
+    /// <param name="assembly">The assembly.</param>
+    public AssemblyTypeSource(Assembly assembly)
     {
-        /// <summary>
-        /// Logger Instance.
-        /// </summary>
-        protected static readonly ILogger<AssemblyTypeSource> Logger = LogManager.GetLogger<AssemblyTypeSource>();
-
-        private readonly Assembly _assembly;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AssemblyTypeSource"/> class.
-        /// </summary>
-        /// <param name="assembly">The assembly.</param>
-        public AssemblyTypeSource(Assembly assembly)
-        {
-            AssertUtils.ArgumentNotNull(assembly, "assembly");
-            _assembly = assembly;
-        }
-
-        #region IEnumerable<Type> Members
-
-        /// <summary>
-        /// Gets the enumerator.
-        /// </summary>
-        /// <returns></returns>
-        public IEnumerator<Type> GetEnumerator()
-        {
-            Type[] types = new Type[]{};
-            try
-            {
-                types = _assembly.GetTypes();
-            }
-            catch (ReflectionTypeLoadException ex)
-            {
-                //log and swallow everything that might go wrong here...
-                Logger.LogDebug(ex, "Failed to get types {LoaderExceptions}", ex.LoaderExceptions);
-            }
-            catch (Exception ex)
-            {
-                //log and swallow everything that might go wrong here...
-                Logger.LogDebug(ex, "Failed to get types");
-            }
-
-
-            foreach (Type type in types)
-                yield return type;
-        }
-
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            return GetEnumerator();
-        }
-
-        #endregion
+        AssertUtils.ArgumentNotNull(assembly, "assembly");
+        _assembly = assembly;
     }
+
+    #region IEnumerable<Type> Members
+
+    /// <summary>
+    /// Gets the enumerator.
+    /// </summary>
+    /// <returns></returns>
+    public IEnumerator<Type> GetEnumerator()
+    {
+        Type[] types = new Type[] { };
+        try
+        {
+            types = _assembly.GetTypes();
+        }
+        catch (ReflectionTypeLoadException ex)
+        {
+            //log and swallow everything that might go wrong here...
+            Logger.LogDebug(ex, "Failed to get types {LoaderExceptions}", ex.LoaderExceptions);
+        }
+        catch (Exception ex)
+        {
+            //log and swallow everything that might go wrong here...
+            Logger.LogDebug(ex, "Failed to get types");
+        }
+
+        foreach (Type type in types)
+            yield return type;
+    }
+
+    IEnumerator IEnumerable.GetEnumerator()
+    {
+        return GetEnumerator();
+    }
+
+    #endregion
 }

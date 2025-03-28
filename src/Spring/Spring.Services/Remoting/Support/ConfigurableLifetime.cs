@@ -18,71 +18,70 @@
 
 #endregion
 
-namespace Spring.Remoting.Support
+namespace Spring.Remoting.Support;
+
+/// <summary>
+/// Configurable implementation of the <see cref="ILifetime"/> interface.
+/// </summary>
+/// <author>Bruno Baia</author>
+public class ConfigurableLifetime : ILifetime
 {
+    #region Fields
+
+    private bool infinite = true;
+    private TimeSpan initialLeaseTime = TimeSpan.Zero;
+    private TimeSpan renewOnCallTime = TimeSpan.Zero;
+    private TimeSpan sponsorshipTimeout = TimeSpan.Zero;
+
+    #endregion
+
+    #region ILifetime Members
+
     /// <summary>
-    /// Configurable implementation of the <see cref="ILifetime"/> interface.
+    /// Gets or sets a value indicating whether this instance has infinite lifetime.
     /// </summary>
-    /// <author>Bruno Baia</author>
-    public class ConfigurableLifetime : ILifetime
+    /// <value>
+    /// <c>true</c> if this instance has infinite lifetime; otherwise, <c>false</c>.
+    /// </value>
+    public bool Infinite
     {
-        #region Fields
-
-        private bool infinite = true;
-        private TimeSpan initialLeaseTime = TimeSpan.Zero;
-        private TimeSpan renewOnCallTime = TimeSpan.Zero;
-        private TimeSpan sponsorshipTimeout = TimeSpan.Zero;
-
-        #endregion
-
-        #region ILifetime Members
-
-        /// <summary>
-        /// Gets or sets a value indicating whether this instance has infinite lifetime.
-        /// </summary>
-        /// <value>
-        /// <c>true</c> if this instance has infinite lifetime; otherwise, <c>false</c>.
-        /// </value>
-        public bool Infinite
-        {
-            get { return infinite; }
-            set { infinite = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the initial lease time.
-        /// </summary>
-        /// <value>The initial lease time.</value>
-        public TimeSpan InitialLeaseTime
-        {
-            get { return initialLeaseTime; }
-            set { initialLeaseTime = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the amount of time lease
-        /// should be extended for on each call to this object.
-        /// </summary>
-        /// <value>The amount of time lease should be
-        /// extended for on each call to this object.</value>
-        public TimeSpan RenewOnCallTime
-        {
-            get { return renewOnCallTime; }
-            set { renewOnCallTime = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the amount of time lease manager
-        /// will for this object's sponsors to respond.
-        /// </summary>
-        /// <value>The amount of time lease manager will for this object's
-        /// sponsors to respond.</value>
-        public TimeSpan SponsorshipTimeout
-        {
-            get { return sponsorshipTimeout; }
-            set { sponsorshipTimeout = value; }
-        }
-
-        #endregion
+        get { return infinite; }
+        set { infinite = value; }
     }
+
+    /// <summary>
+    /// Gets or sets the initial lease time.
+    /// </summary>
+    /// <value>The initial lease time.</value>
+    public TimeSpan InitialLeaseTime
+    {
+        get { return initialLeaseTime; }
+        set { initialLeaseTime = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets the amount of time lease
+    /// should be extended for on each call to this object.
+    /// </summary>
+    /// <value>The amount of time lease should be
+    /// extended for on each call to this object.</value>
+    public TimeSpan RenewOnCallTime
+    {
+        get { return renewOnCallTime; }
+        set { renewOnCallTime = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets the amount of time lease manager
+    /// will for this object's sponsors to respond.
+    /// </summary>
+    /// <value>The amount of time lease manager will for this object's
+    /// sponsors to respond.</value>
+    public TimeSpan SponsorshipTimeout
+    {
+        get { return sponsorshipTimeout; }
+        set { sponsorshipTimeout = value; }
+    }
+
+    #endregion
 }

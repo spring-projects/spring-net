@@ -22,20 +22,19 @@
 
 #endregion
 
-namespace Spring.Context
+namespace Spring.Context;
+
+/// <summary>
+/// Marks an interface as being an application event listener.
+/// </summary>
+/// <author>Griffin Caprio</author>
+/// <see cref="Spring.Context.IApplicationEventListener"/>
+[AttributeUsage(AttributeTargets.Interface)]
+public sealed class EventListenerAttribute : Attribute
 {
-	/// <summary>
-	/// Marks an interface as being an application event listener.
-	/// </summary>
-	/// <author>Griffin Caprio</author>
-	/// <see cref="Spring.Context.IApplicationEventListener"/>
-	[AttributeUsage(AttributeTargets.Interface)]
-	public sealed class EventListenerAttribute : Attribute
-	{
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Context.EventListenerAttribute"/> class.
-		/// </summary>
-		public EventListenerAttribute() {}
-	}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Context.EventListenerAttribute"/> class.
+    /// </summary>
+    public EventListenerAttribute() { }
 }

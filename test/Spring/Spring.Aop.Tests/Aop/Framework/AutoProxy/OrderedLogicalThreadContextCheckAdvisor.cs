@@ -27,82 +27,78 @@ using Spring.Threading;
 
 #endregion
 
-namespace Spring.Aop.Framework.AutoProxy
+namespace Spring.Aop.Framework.AutoProxy;
+
+/// <summary>
+/// Before advisor that allow us to manipulate ordering to check
+/// that superclass sorting works correctly.
+/// </summary>
+/// <remarks>
+/// It doesn't actually do anything except count
+/// method invocations and check for presence of a value in the
+/// LogicalThreadContext.
+/// </remarks>
+/// <author>Mark Pollack (.NET)</author>
+public class OrderedLogicalThreadContextCheckAdvisor : StaticMethodMatcherPointcutAdvisor, IInitializingObject
 {
-    /// <summary> 
-    /// Before advisor that allow us to manipulate ordering to check
-    /// that superclass sorting works correctly.
-    /// </summary>
-    /// <remarks>
-    /// It doesn't actually do anything except count
-    /// method invocations and check for presence of a value in the 
-    /// LogicalThreadContext.
-    /// </remarks>
-    /// <author>Mark Pollack (.NET)</author>
-    public class OrderedLogicalThreadContextCheckAdvisor : StaticMethodMatcherPointcutAdvisor, IInitializingObject
+    public virtual bool RequireLTCHasValue
     {
-        
-        public virtual bool RequireLTCHasValue
-        {
-            get { return requireLtcHasValue; }
+        get { return requireLtcHasValue; }
 
-            set { requireLtcHasValue = value; }
+        set { requireLtcHasValue = value; }
+    }
+
+    public virtual CountingBeforeAdvice CountingBeforeAdvice
+    {
+        get { return (CountingBeforeAdvice) Advice; }
+    }
+
+    /// <summary> Should we insist on the presence of a transaction attribute or refuse to accept one?</summary>
+    private bool requireLtcHasValue = false;
+
+    public virtual void AfterPropertiesSet()
+    {
+        Advice = new LTCCountingBeforeAdvice(this);
+    }
+
+    public override bool Matches(MethodInfo method, Type targetClass)
+    {
+        return method.Name.StartsWith("set_Age");
+    }
+
+    private class LTCCountingBeforeAdvice : CountingBeforeAdvice
+    {
+        private OrderedLogicalThreadContextCheckAdvisor enclosingInstance;
+
+        public LTCCountingBeforeAdvice(OrderedLogicalThreadContextCheckAdvisor enclosingInstance)
+        {
+            this.enclosingInstance = enclosingInstance;
         }
 
-        public virtual CountingBeforeAdvice CountingBeforeAdvice
+        public OrderedLogicalThreadContextCheckAdvisor EnclosingInstance
         {
-            get { return (CountingBeforeAdvice) Advice; }
+            get { return enclosingInstance; }
         }
 
-        /// <summary> Should we insist on the presence of a transaction attribute or refuse to accept one?</summary>
-        private bool requireLtcHasValue = false;
-
-       
-        public virtual void AfterPropertiesSet()
+        public override void Before(MethodInfo method, object[] args, object target)
         {
-            Advice = new LTCCountingBeforeAdvice(this);           
-        }
-
-        public override bool Matches(MethodInfo method, Type targetClass)
-        {
-            return method.Name.StartsWith("set_Age");
-        }
-
-
-        private class LTCCountingBeforeAdvice : CountingBeforeAdvice
-        {
-            private OrderedLogicalThreadContextCheckAdvisor enclosingInstance;
-
-            public LTCCountingBeforeAdvice(OrderedLogicalThreadContextCheckAdvisor enclosingInstance)
+            // do check for presence of LTC value....
+            if (EnclosingInstance.requireLtcHasValue)
             {
-                this.enclosingInstance = enclosingInstance;
-            }
-
-
-            public OrderedLogicalThreadContextCheckAdvisor EnclosingInstance
-            {
-                get { return enclosingInstance; }
-            }
-
-            public override void Before(MethodInfo method, object[] args, object target)
-            {
-                // do check for presence of LTC value....
-                if (EnclosingInstance.requireLtcHasValue)
+                if (LogicalThreadContext.GetData(LogicalThreadContextAdvice.ORDERING_SLOT) == null)
                 {
-                    if (LogicalThreadContext.GetData(LogicalThreadContextAdvice.ORDERING_SLOT) == null)
-                    {
-                        throw new SystemException("Expected object in LTC ORDERING_SLOT");
-                    }
+                    throw new SystemException("Expected object in LTC ORDERING_SLOT");
                 }
-                else
-                {
-                    if (LogicalThreadContext.GetData(LogicalThreadContextAdvice.ORDERING_SLOT) != null)
-                    {
-                        throw new SystemException("Expected no object in LTC ORDERING_SLOT");
-                    }
-                }
-                base.Before(method, args, target);
             }
+            else
+            {
+                if (LogicalThreadContext.GetData(LogicalThreadContextAdvice.ORDERING_SLOT) != null)
+                {
+                    throw new SystemException("Expected no object in LTC ORDERING_SLOT");
+                }
+            }
+
+            base.Before(method, args, target);
         }
     }
 }

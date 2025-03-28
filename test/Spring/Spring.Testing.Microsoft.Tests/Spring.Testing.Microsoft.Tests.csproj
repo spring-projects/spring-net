@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <TargetFrameworks>net8.0;$(TargetFullFrameworkVersion)</TargetFrameworks>
-  </PropertyGroup>  
+  </PropertyGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\src\Spring\Spring.Core\Spring.Core.csproj" />
     <ProjectReference Include="..\..\..\src\Spring\Spring.Data\Spring.Data.csproj" />
@@ -13,10 +13,10 @@
     <PackageReference Include="Microsoft.NET.Test.Sdk" />
     <PackageReference Include="MSTest.TestAdapter" />
     <PackageReference Include="MSTest.TestFramework" />
-  </ItemGroup>  
+  </ItemGroup>
   <ItemGroup>
     <None Include="app.config" />
     <EmbeddedResource Include="Testing\Microsoft\TestApplicationContext_netcore.xml" Condition=" '$(TargetFramework)' == 'net8.0' " LogicalName="Spring.Testing.Microsoft.TestApplicationContext.xml" />
-    <EmbeddedResource Include="Testing\Microsoft\TestApplicationContext.xml" Condition=" '$(TargetFramework)' == '$(TargetFullFrameworkVersion)' " LogicalName="Spring.Testing.Microsoft.TestApplicationContext.xml" />    
+    <EmbeddedResource Include="Testing\Microsoft\TestApplicationContext.xml" Condition=" '$(TargetFramework)' == '$(TargetFullFrameworkVersion)' " LogicalName="Spring.Testing.Microsoft.TestApplicationContext.xml" />
   </ItemGroup>
 </Project>

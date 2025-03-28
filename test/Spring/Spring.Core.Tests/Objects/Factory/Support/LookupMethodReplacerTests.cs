@@ -19,60 +19,57 @@
 #endregion
 
 using System.Reflection;
-
 using FakeItEasy;
-
 using NUnit.Framework;
 
-namespace Spring.Objects.Factory.Support
+namespace Spring.Objects.Factory.Support;
+
+/// <summary>
+/// Unit tests for the LookupMethodReplacer class.
+/// </summary>
+/// <author>Rick Evans</author>
+[TestFixture]
+public sealed class LookupMethodReplacerTests
 {
-	/// <summary>
-	/// Unit tests for the LookupMethodReplacer class.
-	/// </summary>
-	/// <author>Rick Evans</author>
-	[TestFixture]
-	public sealed class LookupMethodReplacerTests
-	{
-        [SetUp]
-        public void Setup()
-        {
-        }
+    [SetUp]
+    public void Setup()
+    {
+    }
 
-		[Test]
-		public void InstantiationWithNullDefinition()
-		{
-		    IObjectFactory objectFactory = A.Fake<IObjectFactory>();
-            Assert.Throws<ArgumentNullException>(() => new LookupMethodReplacer(null, objectFactory));
-		}
+    [Test]
+    public void InstantiationWithNullDefinition()
+    {
+        IObjectFactory objectFactory = A.Fake<IObjectFactory>();
+        Assert.Throws<ArgumentNullException>(() => new LookupMethodReplacer(null, objectFactory));
+    }
 
-		[Test]
-		public void InstantiationWithNullFactory()
-		{
-		    var configurableObjectDefinition = A.Fake<IConfigurableObjectDefinition>();
-            Assert.Throws<ArgumentNullException>(() => new LookupMethodReplacer(configurableObjectDefinition, null));
-		}
+    [Test]
+    public void InstantiationWithNullFactory()
+    {
+        var configurableObjectDefinition = A.Fake<IConfigurableObjectDefinition>();
+        Assert.Throws<ArgumentNullException>(() => new LookupMethodReplacer(configurableObjectDefinition, null));
+    }
 
-		[Test]
-		public void SunnyDayPath()
-		{
-            var objectFactory = A.Fake<IObjectFactory>();
-            var configurableObjectDefinition = A.Fake<IConfigurableObjectDefinition>();
+    [Test]
+    public void SunnyDayPath()
+    {
+        var objectFactory = A.Fake<IObjectFactory>();
+        var configurableObjectDefinition = A.Fake<IConfigurableObjectDefinition>();
 
-            object expectedLookup = new object();
-			const string LookupObjectName = "foo";
+        object expectedLookup = new object();
+        const string LookupObjectName = "foo";
 
-		    A.CallTo(() => objectFactory.GetObject(LookupObjectName)).Returns(expectedLookup);
+        A.CallTo(() => objectFactory.GetObject(LookupObjectName)).Returns(expectedLookup);
 
-			LookupMethodOverride ovr = new LookupMethodOverride("SunnyDayPath", LookupObjectName);
-			MethodOverrides overrides = new MethodOverrides();
-			overrides.Add(ovr);
-            A.CallTo(() => configurableObjectDefinition.MethodOverrides).Returns(overrides);
+        LookupMethodOverride ovr = new LookupMethodOverride("SunnyDayPath", LookupObjectName);
+        MethodOverrides overrides = new MethodOverrides();
+        overrides.Add(ovr);
+        A.CallTo(() => configurableObjectDefinition.MethodOverrides).Returns(overrides);
 
-            LookupMethodReplacer replacer = new LookupMethodReplacer(configurableObjectDefinition, objectFactory);
-			MethodInfo method = (MethodInfo) MethodBase.GetCurrentMethod();
+        LookupMethodReplacer replacer = new LookupMethodReplacer(configurableObjectDefinition, objectFactory);
+        MethodInfo method = (MethodInfo) MethodBase.GetCurrentMethod();
 
-			object lookup = replacer.Implement(this, method, new object[] {});
-			Assert.AreSame(expectedLookup, lookup);
-		}
-	}
+        object lookup = replacer.Implement(this, method, new object[] { });
+        Assert.AreSame(expectedLookup, lookup);
+    }
 }

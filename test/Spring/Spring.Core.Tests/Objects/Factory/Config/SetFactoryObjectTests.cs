@@ -26,63 +26,62 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Objects.Factory.Config
+namespace Spring.Objects.Factory.Config;
+
+/// <summary>
+/// Unit tests for the SetFactoryObject class.
+/// </summary>
+/// <author>Rick Evans</author>
+[TestFixture]
+public sealed class SetFactoryObjectTests
 {
-	/// <summary>
-	/// Unit tests for the SetFactoryObject class.
-    /// </summary>
-    /// <author>Rick Evans</author>
-	[TestFixture]
-    public sealed class SetFactoryObjectTests
+    [Test]
+    public void SetTargetSetTypeToNonSetType()
     {
-		[Test]
-		public void SetTargetSetTypeToNonSetType()
-		{
-			SetFactoryObject lfo = new SetFactoryObject();
-            Assert.Throws<ArgumentException>(() => lfo.TargetSetType = typeof (ICollection), "The Type passed to the TargetSetType property must implement the 'Spring.Collections.ISet' interface.");
-		}
+        SetFactoryObject lfo = new SetFactoryObject();
+        Assert.Throws<ArgumentException>(() => lfo.TargetSetType = typeof(ICollection), "The Type passed to the TargetSetType property must implement the 'Spring.Collections.ISet' interface.");
+    }
 
-		[Test]
-		public void SetTargetSetTypeToDerivedISetInterfaceType()
-		{
-			SetFactoryObject lfo = new SetFactoryObject();
-            Assert.Throws<ArgumentException>(() => lfo.TargetSetType = typeof (IExtendedSet), "The Type passed to the TargetSetType property cannot be an interface; it must be a concrete class that implements the 'Spring.Collections.ISet' interface.");
-		}
+    [Test]
+    public void SetTargetSetTypeToDerivedISetInterfaceType()
+    {
+        SetFactoryObject lfo = new SetFactoryObject();
+        Assert.Throws<ArgumentException>(() => lfo.TargetSetType = typeof(IExtendedSet), "The Type passed to the TargetSetType property cannot be an interface; it must be a concrete class that implements the 'Spring.Collections.ISet' interface.");
+    }
 
-		[Test]
-		public void SetTargetSetTypeToAbstractISetInterfaceType()
-		{
-			SetFactoryObject lfo = new SetFactoryObject();
-            Assert.Throws<ArgumentException>(() => lfo.TargetSetType = typeof (AbstractSet), "The Type passed to the TargetSetType property cannot be abstract (MustInherit in VisualBasic.NET); it must be a concrete class that implements the 'Spring.Collections.ISet' interface.");
-		}
+    [Test]
+    public void SetTargetSetTypeToAbstractISetInterfaceType()
+    {
+        SetFactoryObject lfo = new SetFactoryObject();
+        Assert.Throws<ArgumentException>(() => lfo.TargetSetType = typeof(AbstractSet), "The Type passed to the TargetSetType property cannot be abstract (MustInherit in VisualBasic.NET); it must be a concrete class that implements the 'Spring.Collections.ISet' interface.");
+    }
 
-		private interface IExtendedSet : ISet
-		{
-		}
+    private interface IExtendedSet : ISet
+    {
+    }
 
-		private abstract class AbstractSet : HybridSet
-		{
-		}
+    private abstract class AbstractSet : HybridSet
+    {
+    }
 
-		[Test]
-		public void SetTargetSetTypeToNull()
-		{
-			SetFactoryObject lfo = new SetFactoryObject();
-            Assert.Throws<ArgumentNullException>(() => lfo.TargetSetType = null);
-		}
+    [Test]
+    public void SetTargetSetTypeToNull()
+    {
+        SetFactoryObject lfo = new SetFactoryObject();
+        Assert.Throws<ArgumentNullException>(() => lfo.TargetSetType = null);
+    }
 
-		[Test]
-		public void GetObjectWithoutSupplyingASourceSet()
-		{
-			SetFactoryObject lfo = new SetFactoryObject();
-			lfo.IsSingleton = false;
-            Assert.Throws<ArgumentException>(() => lfo.GetObject(), "The 'SourceSet' property cannot be null (Nothing in Visual Basic.NET).");
-		}
+    [Test]
+    public void GetObjectWithoutSupplyingASourceSet()
+    {
+        SetFactoryObject lfo = new SetFactoryObject();
+        lfo.IsSingleton = false;
+        Assert.Throws<ArgumentException>(() => lfo.GetObject(), "The 'SourceSet' property cannot be null (Nothing in Visual Basic.NET).");
+    }
 
-		[Test]
-		public void ObjectTypeReallyIsISet()
-		{
-			Assert.AreEqual(typeof (ISet), new SetFactoryObject().ObjectType);
-		}
-	}
+    [Test]
+    public void ObjectTypeReallyIsISet()
+    {
+        Assert.AreEqual(typeof(ISet), new SetFactoryObject().ObjectType);
+    }
 }

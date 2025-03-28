@@ -21,59 +21,58 @@
 using System.ComponentModel;
 using System.Globalization;
 
-namespace Spring.Expressions
+namespace Spring.Expressions;
+
+/// <summary>
+/// Converts string representation of expression into an instance of <see cref="IExpression"/>.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+public class ExpressionConverter : TypeConverter
 {
     /// <summary>
-    /// Converts string representation of expression into an instance of <see cref="IExpression"/>.
+    /// Can we convert from a the sourcetype to a <see cref="IExpression"/>?
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    public class ExpressionConverter : TypeConverter
+    /// <remarks>
+    /// <p>
+    /// Currently only supports conversion from a <see cref="System.String"/> instance.
+    /// </p>
+    /// </remarks>
+    /// <param name="context">
+    /// A <see cref="System.ComponentModel.ITypeDescriptorContext"/>
+    /// that provides a format context.
+    /// </param>
+    /// <param name="sourceType">
+    /// A <see cref="System.Type"/> that represents the
+    /// <see cref="System.Type"/> you want to convert from.
+    /// </param>
+    /// <returns><see langword="true"/> if the conversion is possible.</returns>
+    public override bool CanConvertFrom(
+        ITypeDescriptorContext context, Type sourceType)
     {
-        /// <summary>
-        /// Can we convert from a the sourcetype to a <see cref="IExpression"/>?
-        /// </summary>
-        /// <remarks>
-        /// <p>
-        /// Currently only supports conversion from a <see cref="System.String"/> instance.
-        /// </p>
-        /// </remarks>
-        /// <param name="context">
-        /// A <see cref="System.ComponentModel.ITypeDescriptorContext"/>
-        /// that provides a format context.
-        /// </param>
-        /// <param name="sourceType">
-        /// A <see cref="System.Type"/> that represents the
-        /// <see cref="System.Type"/> you want to convert from.
-        /// </param>
-        /// <returns><see langword="true"/> if the conversion is possible.</returns>
-        public override bool CanConvertFrom(
-            ITypeDescriptorContext context, Type sourceType)
-        {
-            return (sourceType == typeof(string));
-        }
+        return (sourceType == typeof(string));
+    }
 
-        /// <summary>
-        /// Convert from a <see cref="System.String"/> value to an
-        /// <see cref="IExpression"/> instance.
-        /// </summary>
-        /// <param name="context">
-        /// A <see cref="System.ComponentModel.ITypeDescriptorContext"/>
-        /// that provides a format context.
-        /// </param>
-        /// <param name="culture">
-        /// The <see cref="System.Globalization.CultureInfo"/> to use
-        /// as the current culture.
-        /// </param>
-        /// <param name="value">
-        /// The value that is to be converted.
-        /// </param>
-        /// <returns>
-        /// A <see cref="System.String"/> array if successful.
-        /// </returns>
-        public override object ConvertFrom(
-            ITypeDescriptorContext context, CultureInfo culture, object value)
-        {
-            return Expression.Parse(value as string);
-        }
+    /// <summary>
+    /// Convert from a <see cref="System.String"/> value to an
+    /// <see cref="IExpression"/> instance.
+    /// </summary>
+    /// <param name="context">
+    /// A <see cref="System.ComponentModel.ITypeDescriptorContext"/>
+    /// that provides a format context.
+    /// </param>
+    /// <param name="culture">
+    /// The <see cref="System.Globalization.CultureInfo"/> to use
+    /// as the current culture.
+    /// </param>
+    /// <param name="value">
+    /// The value that is to be converted.
+    /// </param>
+    /// <returns>
+    /// A <see cref="System.String"/> array if successful.
+    /// </returns>
+    public override object ConvertFrom(
+        ITypeDescriptorContext context, CultureInfo culture, object value)
+    {
+        return Expression.Parse(value as string);
     }
 }

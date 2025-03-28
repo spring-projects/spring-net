@@ -22,77 +22,76 @@ using Spring.Expressions;
 using Spring.Objects.Factory;
 using System.Runtime.Serialization;
 
-namespace Spring.Context.Support
+namespace Spring.Context.Support;
+
+/// <summary>
+/// Represents a reference to a Spring-managed object.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[Serializable]
+public class ReferenceNode : BaseNode
 {
     /// <summary>
-    /// Represents a reference to a Spring-managed object.
+    /// Create a new instance
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    [Serializable]
-    public class ReferenceNode : BaseNode
+    public ReferenceNode() { }
+
+    /// <summary>
+    /// Create a new instance from SerializationInfo
+    /// </summary>
+    protected ReferenceNode(SerializationInfo info, StreamingContext context)
+        : base(info, context)
     {
-        /// <summary>
-        /// Create a new instance
-        /// </summary>
-        public ReferenceNode() { }
+    }
 
-        /// <summary>
-        /// Create a new instance from SerializationInfo
-        /// </summary>
-        protected ReferenceNode(SerializationInfo info, StreamingContext context)
-            : base(info, context)
+    /// <inheritdoc />
+    /// <summary>
+    /// Returns a value for the integer literal node.
+    /// </summary>
+    /// <param name="context">Context to evaluate expressions against.</param>
+    /// <param name="evalContext">Current expression evaluation context.</param>
+    /// <returns>Node's value.</returns>
+    protected override object Get(object context, EvaluationContext evalContext)
+    {
+        var objectName = ResolveNames(out var contextName);
+
+        var sourceContext = SelectSourceContext(evalContext, contextName);
+
+        return sourceContext.GetObject(objectName);
+    }
+
+    private string ResolveNames(out string contextName)
+    {
+        var hasContextDefined = getNumberOfChildren() == 2;
+
+        if (hasContextDefined)
         {
+            contextName = getFirstChild().getText();
+            return getFirstChild().getNextSibling().getText();
         }
 
-        /// <inheritdoc />
-        /// <summary>
-        /// Returns a value for the integer literal node.
-        /// </summary>
-        /// <param name="context">Context to evaluate expressions against.</param>
-        /// <param name="evalContext">Current expression evaluation context.</param>
-        /// <returns>Node's value.</returns>
-        protected override object Get(object context, EvaluationContext evalContext)
-        {
-            var objectName = ResolveNames(out var contextName);
+        contextName = null;
+        return getFirstChild().getText();
+    }
 
-            var sourceContext = SelectSourceContext(evalContext, contextName);
+    private static IObjectFactory SelectSourceContext(EvaluationContext evalContext, string contextName)
+    {
+        if (contextName != null)
+            return ContextRegistry.GetContext(contextName) ?? throw new ArgumentException($"Context '{contextName}' is not registered.");
 
-            return sourceContext.GetObject(objectName);
-        }
+        if (TryGetFromCurrentContext(evalContext, out var currentObjectFactory))
+            return (IObjectFactory) currentObjectFactory;
 
-        private string ResolveNames(out string contextName)
-        {
-            var hasContextDefined = getNumberOfChildren() == 2;
+        return ContextRegistry.GetContext() ?? throw new ArgumentException("No context registered.");
+    }
 
-            if (hasContextDefined)
-            {
-                contextName = getFirstChild().getText();
-                return getFirstChild().getNextSibling().getText();
-            }
+    private static bool TryGetFromCurrentContext(EvaluationContext evalContext, out object currentObjectFactory)
+    {
+        currentObjectFactory = null;
 
-            contextName = null;
-            return getFirstChild().getText();
-        }
+        if (evalContext.Variables is null)
+            return false;
 
-        private static IObjectFactory SelectSourceContext(EvaluationContext evalContext, string contextName)
-        {
-            if (contextName != null)
-                return ContextRegistry.GetContext(contextName) ?? throw new ArgumentException($"Context '{contextName}' is not registered.");
-
-            if (TryGetFromCurrentContext(evalContext, out var currentObjectFactory))
-                return (IObjectFactory) currentObjectFactory;
-
-            return ContextRegistry.GetContext() ?? throw new ArgumentException("No context registered.");
-        }
-
-        private static bool TryGetFromCurrentContext(EvaluationContext evalContext, out object currentObjectFactory)
-        {
-            currentObjectFactory = null;
-
-            if (evalContext.Variables is null)
-                return false;
-
-            return evalContext.Variables.TryGetValue(Expression.ReservedVariableNames.CurrentObjectFactory, out currentObjectFactory);
-        }
+        return evalContext.Variables.TryGetValue(Expression.ReservedVariableNames.CurrentObjectFactory, out currentObjectFactory);
     }
 }

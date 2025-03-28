@@ -22,111 +22,112 @@ using System.Reflection;
 using System.Web.UI;
 using Microsoft.Extensions.Logging;
 
-namespace Spring.Web.UI.Controls
+namespace Spring.Web.UI.Controls;
+
+/// <summary>
+/// Represents Content control that can be used to populate or override placeholders
+/// anywhere within the page.
+/// </summary>
+/// <remarks>
+/// <para>
+/// Any content defined within this control will override default content
+/// in the matching control specified by <see cref="ContentPlaceHolderID"/> anywhere
+/// within the page.
+/// </para>
+/// <para>
+/// In contrast to <see cref="Content"/> control, ContentReplacer can replace the content of
+/// any control within the current page - it is not limited to replacing ContentPlaceholders on master pages.
+/// </para>
+/// <para>
+/// This technique is useful if you want to group e.g. rendering navigation elements on 1 ascx control, but your
+/// design requires navigation elements to be distributed across different places within the HTML code.
+/// </para>
+/// </remarks>
+/// <author>Erich Eichinger</author>
+public class ContentReplacer : Control
 {
+    private static readonly ILogger<ContentReplacer> log = LogManager.GetLogger<ContentReplacer>();
+
+    private string contentPlaceHolderID;
+
     /// <summary>
-    /// Represents Content control that can be used to populate or override placeholders
-    /// anywhere within the page.
+    /// Specifies the unique id of the control, who's content is to be replaced.
     /// </summary>
-    /// <remarks>
-    /// <para>
-    /// Any content defined within this control will override default content
-    /// in the matching control specified by <see cref="ContentPlaceHolderID"/> anywhere
-    /// within the page.
-    /// </para>
-    /// <para>
-    /// In contrast to <see cref="Content"/> control, ContentReplacer can replace the content of
-    /// any control within the current page - it is not limited to replacing ContentPlaceholders on master pages.
-    /// </para>
-    /// <para>
-    /// This technique is useful if you want to group e.g. rendering navigation elements on 1 ascx control, but your
-    /// design requires navigation elements to be distributed across different places within the HTML code.
-    /// </para>
-    /// </remarks>
-    /// <author>Erich Eichinger</author>
-    public class ContentReplacer : Control
+    public string ContentPlaceHolderID
     {
-        private static readonly ILogger<ContentReplacer> log = LogManager.GetLogger<ContentReplacer>();
+        get { return contentPlaceHolderID; }
+        set { contentPlaceHolderID = value; }
+    }
 
-        private string contentPlaceHolderID;
+    /// <summary>
+    /// Overriden to correctly redirect rendermethod calls.
+    /// </summary>
+    protected override void OnPreRender(EventArgs e)
+    {
+        base.OnPreRender(e);
 
-        /// <summary>
-        /// Specifies the unique id of the control, who's content is to be replaced.
-        /// </summary>
-        public string ContentPlaceHolderID
+        // if our container is not visible, don't replace placeholder's content
+        if (!Visible) return;
+
+        //log.Debug(string.Format("OnPreRender Content['{0}']", this.contentPlaceHolderID));
+        Control ctlRoot = Page.Master != null ? Page.Master : (Control) Page;
+
+        Control ctl = ctlRoot.FindControl(this.contentPlaceHolderID);
+        if (ctl != null)
         {
-            get { return contentPlaceHolderID; }
-            set { contentPlaceHolderID = value; }
-        }
+            log.LogDebug(string.Format("OnPreRender Content['{0}'] found placeholder - replacing RenderMethod", this.contentPlaceHolderID));
 
-        /// <summary>
-        /// Overriden to correctly redirect rendermethod calls.
-        /// </summary>
-        protected override void OnPreRender(EventArgs e)
-        {
-            base.OnPreRender(e);
+            RenderMethod myRenderMethod = GetRenderMethod();
+            //log.Debug(string.Format("OnPreRender Content['{0}'] renderMethod found={1}", this.contentPlaceHolderID,(myRenderMethod != null ? "true" : "false")));
 
-			// if our container is not visible, don't replace placeholder's content
-			if (!Visible) return;
-
-            //log.Debug(string.Format("OnPreRender Content['{0}']", this.contentPlaceHolderID));
-            Control ctlRoot = Page.Master != null ? Page.Master : (Control) Page;
-
-            Control ctl = ctlRoot.FindControl(this.contentPlaceHolderID);
-            if (ctl != null)
+            // prevent content control from rendering itself
+            this.SetRenderMethodDelegate(new RenderMethod(RenderNothing));
+            if (myRenderMethod == null)
             {
-                log.LogDebug(string.Format("OnPreRender Content['{0}'] found placeholder - replacing RenderMethod",this.contentPlaceHolderID));
-
-                RenderMethod myRenderMethod = GetRenderMethod();
-                //log.Debug(string.Format("OnPreRender Content['{0}'] renderMethod found={1}", this.contentPlaceHolderID,(myRenderMethod != null ? "true" : "false")));
-
-                // prevent content control from rendering itself
-                this.SetRenderMethodDelegate(new RenderMethod(RenderNothing));
-                if (myRenderMethod == null)
-                {
-                    myRenderMethod = new RenderMethod(RenderChildControls);
-                }
-                // instead replace placeholder's rendermethod to render this control's content
-                ctl.SetRenderMethodDelegate(myRenderMethod);
+                myRenderMethod = new RenderMethod(RenderChildControls);
             }
-            else
-            {
-                throw new ArgumentException(string.Format("No ContentPlaceHolder with id '{0}' defined on this page.", this.contentPlaceHolderID));
-            }
-        }
 
-        /// <summary>
-        /// Renders child controls
-        /// </summary>
-        private void RenderChildControls(HtmlTextWriter output, Control container)
+            // instead replace placeholder's rendermethod to render this control's content
+            ctl.SetRenderMethodDelegate(myRenderMethod);
+        }
+        else
         {
-            if (this.HasControls())
+            throw new ArgumentException(string.Format("No ContentPlaceHolder with id '{0}' defined on this page.", this.contentPlaceHolderID));
+        }
+    }
+
+    /// <summary>
+    /// Renders child controls
+    /// </summary>
+    private void RenderChildControls(HtmlTextWriter output, Control container)
+    {
+        if (this.HasControls())
+        {
+            foreach (Control ctl in this.Controls)
             {
-                foreach (Control ctl in this.Controls)
-                {
-                    ctl.RenderControl(output);
-                }
+                ctl.RenderControl(output);
             }
         }
+    }
 
-        /// <summary>
-        /// Render nothing.
-        /// </summary>
-        private void RenderNothing(HtmlTextWriter output, Control container)
-        {
-            // do nothing
-        }
+    /// <summary>
+    /// Render nothing.
+    /// </summary>
+    private void RenderNothing(HtmlTextWriter output, Control container)
+    {
+        // do nothing
+    }
 
-        private static readonly PropertyInfo piRareFieldsEnsured =
-            typeof(Control).GetProperty("RareFieldsEnsured", BindingFlags.NonPublic | BindingFlags.Instance);
-        private static readonly FieldInfo fiRenderMethod =
-            typeof(Control).GetNestedType("ControlRareFields",BindingFlags.NonPublic).GetField("RenderMethod");
+    private static readonly PropertyInfo piRareFieldsEnsured =
+        typeof(Control).GetProperty("RareFieldsEnsured", BindingFlags.NonPublic | BindingFlags.Instance);
 
-        private RenderMethod GetRenderMethod()
-        {
-            object o = piRareFieldsEnsured.GetValue(this, null);
-            RenderMethod myRenderMethod = (RenderMethod) fiRenderMethod.GetValue(o);
-            return myRenderMethod;
-        }
+    private static readonly FieldInfo fiRenderMethod =
+        typeof(Control).GetNestedType("ControlRareFields", BindingFlags.NonPublic).GetField("RenderMethod");
+
+    private RenderMethod GetRenderMethod()
+    {
+        object o = piRareFieldsEnsured.GetValue(this, null);
+        RenderMethod myRenderMethod = (RenderMethod) fiRenderMethod.GetValue(o);
+        return myRenderMethod;
     }
 }

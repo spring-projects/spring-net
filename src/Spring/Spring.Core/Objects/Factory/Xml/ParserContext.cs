@@ -21,103 +21,97 @@
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 
-namespace Spring.Objects.Factory.Xml
+namespace Spring.Objects.Factory.Xml;
+
+/// <summary>
+/// Context that gets passed along an object definition parsing process, encapsulating
+/// all relevant configuraiton as well as state.
+/// </summary>
+public class ParserContext
 {
-    /// <summary>
-    /// Context that gets passed along an object definition parsing process, encapsulating
-    /// all relevant configuraiton as well as state.
-    /// </summary>
-    public class ParserContext
-    {
-        private readonly XmlReaderContext readerContext;
+    private readonly XmlReaderContext readerContext;
 
-        private readonly ObjectDefinitionParserHelper parserHelper;
+    private readonly ObjectDefinitionParserHelper parserHelper;
 
-        private readonly IObjectDefinition containingObjectDefinition;
+    private readonly IObjectDefinition containingObjectDefinition;
 
 //        private Stack containingComponents = new Stack();
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ParserContext"/> class.
-        /// </summary>
-        /// <param name="parserHelper">The parser helper.</param>
-        public ParserContext(ObjectDefinitionParserHelper parserHelper)
-        {
-            this.readerContext = parserHelper.ReaderContext;
-            this.parserHelper = parserHelper;
-        }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ParserContext"/> class.
+    /// </summary>
+    /// <param name="parserHelper">The parser helper.</param>
+    public ParserContext(ObjectDefinitionParserHelper parserHelper)
+    {
+        this.readerContext = parserHelper.ReaderContext;
+        this.parserHelper = parserHelper;
+    }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ParserContext"/> class.
+    /// </summary>
+    /// <param name="parserHelper">The parser helper.</param>
+    /// <param name="containingObjectDefinition">The containing object definition.</param>
+    public ParserContext(ObjectDefinitionParserHelper parserHelper, IObjectDefinition containingObjectDefinition)
+    {
+        this.readerContext = parserHelper.ReaderContext;
+        this.parserHelper = parserHelper;
+        this.containingObjectDefinition = containingObjectDefinition;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ParserContext"/> class.
-        /// </summary>
-        /// <param name="parserHelper">The parser helper.</param>
-        /// <param name="containingObjectDefinition">The containing object definition.</param>
-        public ParserContext(ObjectDefinitionParserHelper parserHelper, IObjectDefinition containingObjectDefinition)
-        {
-            this.readerContext = parserHelper.ReaderContext;
-            this.parserHelper = parserHelper;
-            this.containingObjectDefinition = containingObjectDefinition;
-        }
+    /// <summary>
+    /// Gets the reader context.
+    /// </summary>
+    /// <value>The reader context.</value>
+    public XmlReaderContext ReaderContext
+    {
+        get { return readerContext; }
+    }
 
-        /// <summary>
-        /// Gets the reader context.
-        /// </summary>
-        /// <value>The reader context.</value>
-        public XmlReaderContext ReaderContext
-        {
-            get { return readerContext; }
-        }
+    /// <summary>
+    /// Gets the registry.
+    /// </summary>
+    /// <value>The registry.</value>
+    public IObjectDefinitionRegistry Registry
+    {
+        get { return readerContext.Registry; }
+    }
 
-        /// <summary>
-        /// Gets the registry.
-        /// </summary>
-        /// <value>The registry.</value>
-        public IObjectDefinitionRegistry Registry
-        {
-            get { return readerContext.Registry; }
-        }
+    /// <summary>
+    /// Gets the parser helper.
+    /// </summary>
+    /// <value>The parser helper.</value>
+    public ObjectDefinitionParserHelper ParserHelper
+    {
+        get { return parserHelper; }
+    }
 
+    /// <summary>
+    /// Gets the containing object definition.
+    /// </summary>
+    /// <value>The containing object definition.</value>
+    public IObjectDefinition ContainingObjectDefinition
+    {
+        get { return containingObjectDefinition; }
+    }
 
-        /// <summary>
-        /// Gets the parser helper.
-        /// </summary>
-        /// <value>The parser helper.</value>
-        public ObjectDefinitionParserHelper ParserHelper
-        {
-            get { return parserHelper; }
-        }
+    /// <summary>
+    /// Gets a value indicating whether this instance is nested.
+    /// </summary>
+    /// <value><c>true</c> if this instance is nested; otherwise, <c>false</c>.</value>
+    public bool IsNested
+    {
+        get { return containingObjectDefinition != null; }
+    }
 
-
-        /// <summary>
-        /// Gets the containing object definition.
-        /// </summary>
-        /// <value>The containing object definition.</value>
-        public IObjectDefinition ContainingObjectDefinition
-        {
-            get { return containingObjectDefinition; }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether this instance is nested.
-        /// </summary>
-        /// <value><c>true</c> if this instance is nested; otherwise, <c>false</c>.</value>
-        public bool IsNested
-        {
-            get { return containingObjectDefinition != null; }
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether this instance is default lazy init.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if this instance is default lazy init; otherwise, <c>false</c>.
-        /// </value>
-        public bool IsDefaultLazyInit
-        {
-            get { return ObjectDefinitionConstants.TrueValue.Equals(ParserHelper.Defaults.LazyInit); }
-        }
-
-
+    /// <summary>
+    /// Gets a value indicating whether this instance is default lazy init.
+    /// </summary>
+    /// <value>
+    /// 	<c>true</c> if this instance is default lazy init; otherwise, <c>false</c>.
+    /// </value>
+    public bool IsDefaultLazyInit
+    {
+        get { return ObjectDefinitionConstants.TrueValue.Equals(ParserHelper.Defaults.LazyInit); }
     }
 }

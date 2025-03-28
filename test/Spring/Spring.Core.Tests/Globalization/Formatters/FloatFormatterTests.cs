@@ -20,78 +20,77 @@
 
 using NUnit.Framework;
 
-namespace Spring.Globalization.Formatters
+namespace Spring.Globalization.Formatters;
+
+/// <summary>
+/// Unit tests for FloatFormatter class.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+public class FloatFormatterTests
 {
-	/// <summary>
-	/// Unit tests for FloatFormatter class.
-	/// </summary>
-    /// <author>Aleksandar Seovic</author>
-    public class FloatFormatterTests
-	{
-        [Test]
-        public void FormatNullValue()
-        {
-            FloatFormatter fmt = new FloatFormatter();
-            Assert.Throws<ArgumentNullException>(() => fmt.Format(null));
-        }
+    [Test]
+    public void FormatNullValue()
+    {
+        FloatFormatter fmt = new FloatFormatter();
+        Assert.Throws<ArgumentNullException>(() => fmt.Format(null));
+    }
 
-        [Test]
-        public void ParseNullOrEmptyValue()
-        {
-            FloatFormatter fmt = new FloatFormatter();
-            Assert.AreEqual(0, fmt.Parse(null));
-            Assert.IsTrue(fmt.Parse("") is double);
-        }
+    [Test]
+    public void ParseNullOrEmptyValue()
+    {
+        FloatFormatter fmt = new FloatFormatter();
+        Assert.AreEqual(0, fmt.Parse(null));
+        Assert.IsTrue(fmt.Parse("") is double);
+    }
 
-        [Test]
-        public void FormatNonNumber()
-        {
-            FloatFormatter fmt = new FloatFormatter();
-            Assert.Throws<ArgumentException>(() => fmt.Format("not a number"));
-        }
+    [Test]
+    public void FormatNonNumber()
+    {
+        FloatFormatter fmt = new FloatFormatter();
+        Assert.Throws<ArgumentException>(() => fmt.Format("not a number"));
+    }
 
-        [Test]
-        [Platform("Win")]
-        public void FormatUsingDefaults()
-        {
-            FloatFormatter fmt = new FloatFormatter(FloatFormatter.DefaultFormat, "en-US");
-            Assert.AreEqual("1234.00", fmt.Format(1234));
-            Assert.AreEqual("-1234.00", fmt.Format(-1234));
+    [Test]
+    [Platform("Win")]
+    public void FormatUsingDefaults()
+    {
+        FloatFormatter fmt = new FloatFormatter(FloatFormatter.DefaultFormat, "en-US");
+        Assert.AreEqual("1234.00", fmt.Format(1234));
+        Assert.AreEqual("-1234.00", fmt.Format(-1234));
 
-            fmt = new FloatFormatter(FloatFormatter.DefaultFormat, "sr-SP-Latn");
-#if NETFRAMEWORK 
+        fmt = new FloatFormatter(FloatFormatter.DefaultFormat, "sr-SP-Latn");
+#if NETFRAMEWORK
             Assert.AreEqual("1234,00", fmt.Format(1234));
             Assert.AreEqual("-1234,00", fmt.Format(-1234));
 #else
-            Assert.AreEqual("1234,000", fmt.Format(1234));
-            Assert.AreEqual("-1234,000", fmt.Format(-1234));
+        Assert.AreEqual("1234,000", fmt.Format(1234));
+        Assert.AreEqual("-1234,000", fmt.Format(-1234));
 #endif
-        }
+    }
 
-        [Test]
-        public void ParseUsingDefaults()
-        {
-            FloatFormatter fmt = new FloatFormatter(FloatFormatter.DefaultFormat, "en-US");
-            Assert.AreEqual(1234.56, fmt.Parse("1234.56"));
-            Assert.AreEqual(-1234, fmt.Parse("-1234"));
-            Assert.AreEqual(1234.56, fmt.Parse("1.23456e+003"));
-            Assert.AreEqual(-1234, fmt.Parse("-1.234e+003"));
+    [Test]
+    public void ParseUsingDefaults()
+    {
+        FloatFormatter fmt = new FloatFormatter(FloatFormatter.DefaultFormat, "en-US");
+        Assert.AreEqual(1234.56, fmt.Parse("1234.56"));
+        Assert.AreEqual(-1234, fmt.Parse("-1234"));
+        Assert.AreEqual(1234.56, fmt.Parse("1.23456e+003"));
+        Assert.AreEqual(-1234, fmt.Parse("-1.234e+003"));
 
-            fmt = new FloatFormatter(FloatFormatter.DefaultFormat, "sr-SP-Cyrl");
-            Assert.AreEqual(1234.56, fmt.Parse("1234,56"));
-            Assert.AreEqual(-1234, fmt.Parse("-1234"));
-            Assert.AreEqual(1234.56, fmt.Parse("1,23456e+003"));
-            Assert.AreEqual(-1234, fmt.Parse("-1,234e+003"));
-        }
+        fmt = new FloatFormatter(FloatFormatter.DefaultFormat, "sr-SP-Cyrl");
+        Assert.AreEqual(1234.56, fmt.Parse("1234,56"));
+        Assert.AreEqual(-1234, fmt.Parse("-1234"));
+        Assert.AreEqual(1234.56, fmt.Parse("1,23456e+003"));
+        Assert.AreEqual(-1234, fmt.Parse("-1,234e+003"));
+    }
 
-        [Test]
-        public void FormatUsingCustomSettings()
-        {
-            FloatFormatter fmt = new FloatFormatter("{0:e3}", "en-US");
-            Assert.AreEqual("1.234e+003", fmt.Format(1234));
-            Assert.AreEqual("-1.234e+003", fmt.Format(-1234));
-            Assert.AreEqual("1.235e+003", fmt.Format(1234.56));
-            Assert.AreEqual("-1.235e+003", fmt.Format(-1234.56));
-        }
+    [Test]
+    public void FormatUsingCustomSettings()
+    {
+        FloatFormatter fmt = new FloatFormatter("{0:e3}", "en-US");
+        Assert.AreEqual("1.234e+003", fmt.Format(1234));
+        Assert.AreEqual("-1.234e+003", fmt.Format(-1234));
+        Assert.AreEqual("1.235e+003", fmt.Format(1234.56));
+        Assert.AreEqual("-1.235e+003", fmt.Format(-1234.56));
     }
 }

@@ -22,73 +22,69 @@
 
 using System.Collections;
 using System.Reflection.Emit;
-
 using Spring.Proxy;
-
 
 #endregion
 
-namespace Spring.Aop.Framework.DynamicProxy
+namespace Spring.Aop.Framework.DynamicProxy;
+
+/// <summary>
+/// Base class for proxy builders that can be used
+/// to create an AOP proxy for any object.
+/// </summary>
+/// <author>Bruno Baia</author>
+public abstract class AbstractAopProxyTypeBuilder :
+    AbstractProxyTypeBuilder, IAopProxyTypeGenerator
 {
-	/// <summary>
-	/// Base class for proxy builders that can be used
-    /// to create an AOP proxy for any object.
-	/// </summary>
-    /// <author>Bruno Baia</author>
-    public abstract class AbstractAopProxyTypeBuilder :
-        AbstractProxyTypeBuilder, IAopProxyTypeGenerator
+    #region IProxyTypeGenerator Members
+
+    /// <summary>
+    /// Generates the IL instructions that pushes
+    /// the target instance on which calls should be delegated to.
+    /// </summary>
+    /// <param name="il">The IL generator to use.</param>
+    public override void PushTarget(ILGenerator il)
     {
-        #region IProxyTypeGenerator Members
-
-        /// <summary>
-        /// Generates the IL instructions that pushes
-        /// the target instance on which calls should be delegated to.
-        /// </summary>
-        /// <param name="il">The IL generator to use.</param>
-        public override void PushTarget(ILGenerator il)
-        {
-            PushAdvisedProxy(il);
-            il.Emit(OpCodes.Ldfld, References.TargetSourceField);
-            il.EmitCall(OpCodes.Callvirt, References.GetTargetMethod, null);
-        }
-
-        #endregion
-
-        #region IAopProxyTypeGenerator Members
-
-        /// <summary>
-        /// Generates the IL instructions that pushes
-        /// the current <see cref="Spring.Aop.Framework.DynamicProxy.AdvisedProxy"/>
-        /// instance on stack.
-        /// </summary>
-        /// <param name="il">The IL generator to use.</param>
-        public abstract void PushAdvisedProxy(ILGenerator il);
-
-        #endregion
-
-        #region Protected Methods
-
-        /// <inheritdoc />
-        protected override IList GetTypeAttributes(Type type)
-        {
-            IList attrs = base.GetTypeAttributes(type);
-            int i = 0;
-            while (i < attrs.Count)
-            {
-                if (IsAttributeMatchingType(attrs[i], typeof(SerializableAttribute)))
-                {
-                    attrs.RemoveAt(i);
-                }
-                else
-                {
-                    i++;
-                }
-            }
-
-            return attrs;
-        }
-
-
-        #endregion
+        PushAdvisedProxy(il);
+        il.Emit(OpCodes.Ldfld, References.TargetSourceField);
+        il.EmitCall(OpCodes.Callvirt, References.GetTargetMethod, null);
     }
+
+    #endregion
+
+    #region IAopProxyTypeGenerator Members
+
+    /// <summary>
+    /// Generates the IL instructions that pushes
+    /// the current <see cref="Spring.Aop.Framework.DynamicProxy.AdvisedProxy"/>
+    /// instance on stack.
+    /// </summary>
+    /// <param name="il">The IL generator to use.</param>
+    public abstract void PushAdvisedProxy(ILGenerator il);
+
+    #endregion
+
+    #region Protected Methods
+
+    /// <inheritdoc />
+    protected override IList GetTypeAttributes(Type type)
+    {
+        IList attrs = base.GetTypeAttributes(type);
+        int i = 0;
+        while (i < attrs.Count)
+        {
+            if (IsAttributeMatchingType(attrs[i], typeof(SerializableAttribute)))
+            {
+                attrs.RemoveAt(i);
+            }
+            else
+            {
+                i++;
+            }
+        }
+
+        return attrs;
+    }
+
+    #endregion
 }

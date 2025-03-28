@@ -21,23 +21,23 @@
 using AopAlliance.Aop;
 using Spring.Aop.Support;
 
-namespace Spring.Aop.Framework
+namespace Spring.Aop.Framework;
+
+public class IsModifiedMixin : IIsModified, IAdvice
 {
-    public class IsModifiedMixin : IIsModified, IAdvice
-    {
-        private bool isModified = true;
+    private bool isModified = true;
 
-        public virtual bool IsModified
-        {
-            get { return isModified; }
-            set { isModified = value; }
-        }
+    public virtual bool IsModified
+    {
+        get { return isModified; }
+        set { isModified = value; }
     }
+}
 
-    public class IsModifiedAdvisor : DefaultIntroductionAdvisor
+public class IsModifiedAdvisor : DefaultIntroductionAdvisor
+{
+    public IsModifiedAdvisor()
+        : base(new IsModifiedMixin())
     {
-        public IsModifiedAdvisor()
-            : base(new IsModifiedMixin())
-        {}
     }
 }

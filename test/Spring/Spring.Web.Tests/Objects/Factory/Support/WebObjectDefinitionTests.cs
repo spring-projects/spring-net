@@ -21,36 +21,36 @@
 using NUnit.Framework;
 using Spring.Objects.Factory.Config;
 
-namespace Spring.Objects.Factory.Support
-{
-    /// <summary>
-    /// </summary>
-    /// <author>Erich Eichinger</author>
-    [TestFixture]
-    public class WebObjectDefinitionTests
-    {
-        [Test]
-        public void UnderstandsObjectScopeSingleton()
-        {
-            RootWebObjectDefinition rwod = new RootWebObjectDefinition(typeof(object), new ConstructorArgumentValues(), new MutablePropertyValues());
-            rwod.IsSingleton = true;
-            Assert.IsFalse(rwod.IsPage);
-            Assert.IsTrue(rwod.IsSingleton);
-            Assert.IsFalse(rwod.IsPrototype);
-            Assert.AreEqual(ObjectScope.Singleton, ((IWebObjectDefinition)rwod).Scope);
-            Assert.AreEqual(ObjectScope.Application, ((IWebObjectDefinition)rwod).Scope);
-        }
+namespace Spring.Objects.Factory.Support;
 
-        [Test]
-        public void UnderstandsObjectScopePrototype()
-        {
-            RootWebObjectDefinition rwod = new RootWebObjectDefinition(typeof(object), new ConstructorArgumentValues(), new MutablePropertyValues());
-            rwod.IsSingleton = false;
-            Assert.IsFalse(rwod.IsPage);
-            Assert.IsFalse(rwod.IsSingleton);
-            Assert.IsTrue(rwod.IsPrototype);
-            Assert.AreEqual(ObjectScope.Prototype, ((IWebObjectDefinition)rwod).Scope);
-        }
+/// <summary>
+/// </summary>
+/// <author>Erich Eichinger</author>
+[TestFixture]
+public class WebObjectDefinitionTests
+{
+    [Test]
+    public void UnderstandsObjectScopeSingleton()
+    {
+        RootWebObjectDefinition rwod = new RootWebObjectDefinition(typeof(object), new ConstructorArgumentValues(), new MutablePropertyValues());
+        rwod.IsSingleton = true;
+        Assert.IsFalse(rwod.IsPage);
+        Assert.IsTrue(rwod.IsSingleton);
+        Assert.IsFalse(rwod.IsPrototype);
+        Assert.AreEqual(ObjectScope.Singleton, ((IWebObjectDefinition) rwod).Scope);
+        Assert.AreEqual(ObjectScope.Application, ((IWebObjectDefinition) rwod).Scope);
+    }
+
+    [Test]
+    public void UnderstandsObjectScopePrototype()
+    {
+        RootWebObjectDefinition rwod = new RootWebObjectDefinition(typeof(object), new ConstructorArgumentValues(), new MutablePropertyValues());
+        rwod.IsSingleton = false;
+        Assert.IsFalse(rwod.IsPage);
+        Assert.IsFalse(rwod.IsSingleton);
+        Assert.IsTrue(rwod.IsPrototype);
+        Assert.AreEqual(ObjectScope.Prototype, ((IWebObjectDefinition) rwod).Scope);
+    }
 
 //        [Test]
 //        public void UnderstandsObjectScopeForPages()
@@ -61,5 +61,4 @@ namespace Spring.Objects.Factory.Support
 //            Assert.IsTrue(rwod.IsPrototype);
 //            Assert.AreEqual(ObjectScope.Prototype, ((IWebObjectDefinition)rwod).Scope);
 //        }
-    }
 }

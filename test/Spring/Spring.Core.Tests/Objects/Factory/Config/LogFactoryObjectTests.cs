@@ -24,104 +24,103 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Objects.Factory.Config
+namespace Spring.Objects.Factory.Config;
+
+/// <summary>
+/// Unit tests for the LogFactoryObject class.
+/// </summary>
+/// <author>Rick Evans (.NET)</author>
+[TestFixture]
+public sealed class LogFactoryObjectTests
 {
-	/// <summary>
-	/// Unit tests for the LogFactoryObject class.
-	/// </summary>
-	/// <author>Rick Evans (.NET)</author>
-	[TestFixture]
-	public sealed class LogFactoryObjectTests
-	{
-		[Test]
-		public void CheckThatLogNamePropertyMustBeSet()
-		{
-			LogFactoryObject fac = new LogFactoryObject();
-            Assert.Throws<ArgumentException>(() => fac.GetObject());
-		}
+    [Test]
+    public void CheckThatLogNamePropertyMustBeSet()
+    {
+        LogFactoryObject fac = new LogFactoryObject();
+        Assert.Throws<ArgumentException>(() => fac.GetObject());
+    }
 
-		[Test]
-		public void CheckLogNamePropertyWithNullName()
-		{
-			LogFactoryObject fac = new LogFactoryObject();
-            Assert.Throws<ArgumentNullException>(() => fac.LogName = null);
-		}
+    [Test]
+    public void CheckLogNamePropertyWithNullName()
+    {
+        LogFactoryObject fac = new LogFactoryObject();
+        Assert.Throws<ArgumentNullException>(() => fac.LogName = null);
+    }
 
-		[Test]
-		public void CheckLogNamePropertyWithEmptyName()
-		{
-			LogFactoryObject fac = new LogFactoryObject();
-            Assert.Throws<ArgumentNullException>(() => fac.LogName = string.Empty);
-		}
+    [Test]
+    public void CheckLogNamePropertyWithEmptyName()
+    {
+        LogFactoryObject fac = new LogFactoryObject();
+        Assert.Throws<ArgumentNullException>(() => fac.LogName = string.Empty);
+    }
 
-		[Test]
-		public void CheckInstantiationWithNullName()
-		{
-            Assert.Throws<ArgumentNullException>(() => new LogFactoryObject(null));
-		}
+    [Test]
+    public void CheckInstantiationWithNullName()
+    {
+        Assert.Throws<ArgumentNullException>(() => new LogFactoryObject(null));
+    }
 
-		[Test]
-		public void CheckInstantiationWithEmptyName()
-		{
-            Assert.Throws<ArgumentNullException>(() => new LogFactoryObject(string.Empty));
-		}
+    [Test]
+    public void CheckInstantiationWithEmptyName()
+    {
+        Assert.Throws<ArgumentNullException>(() => new LogFactoryObject(string.Empty));
+    }
 
-		[Test]
-		public void CheckLogNamePropertyStripsRedundantWhitespaceFromName()
-		{
-			LogFactoryObject fac = new LogFactoryObject();
-			fac.LogName = "   Foo  ";
-			Assert.AreEqual("Foo", fac.LogName);
-		}
+    [Test]
+    public void CheckLogNamePropertyStripsRedundantWhitespaceFromName()
+    {
+        LogFactoryObject fac = new LogFactoryObject();
+        fac.LogName = "   Foo  ";
+        Assert.AreEqual("Foo", fac.LogName);
+    }
 
-		[Test]
-		public void CheckGetObjectWorksWithValidLogName()
-		{
-			LogFactoryObject fac = new LogFactoryObject();
-			fac.LogName = "Foo";
-			ILog log = fac.GetObject() as ILog;
-			Assert.IsNotNull(log, "Mmm... pulled a null ILog instance from a properly configured LogFactoryObject instance.");
-		}
+    [Test]
+    public void CheckGetObjectWorksWithValidLogName()
+    {
+        LogFactoryObject fac = new LogFactoryObject();
+        fac.LogName = "Foo";
+        ILog log = fac.GetObject() as ILog;
+        Assert.IsNotNull(log, "Mmm... pulled a null ILog instance from a properly configured LogFactoryObject instance.");
+    }
 
-		[Test]
-		public void CheckGetObjectReturnsSharedInstance()
-		{
-			LogFactoryObject fac = new LogFactoryObject();
-			fac.LogName = "Foo";
-			ILog log = fac.GetObject() as ILog;
-			ILog anotherLogInstance = fac.GetObject() as ILog;
-			Assert.IsTrue(log == anotherLogInstance,
-			              "Okay, the LogFactoryObject ain't returning shared instances (it should).");
-		}
+    [Test]
+    public void CheckGetObjectReturnsSharedInstance()
+    {
+        LogFactoryObject fac = new LogFactoryObject();
+        fac.LogName = "Foo";
+        ILog log = fac.GetObject() as ILog;
+        ILog anotherLogInstance = fac.GetObject() as ILog;
+        Assert.IsTrue(log == anotherLogInstance,
+            "Okay, the LogFactoryObject ain't returning shared instances (it should).");
+    }
 
-		[Test]
-		public void CheckAfterPropertiesSetBlowsUpIfNotCorrectlyConfigured()
-		{
-			LogFactoryObject fac = new LogFactoryObject();
-            Assert.Throws<ArgumentException>(() => fac.AfterPropertiesSet(), "The 'LogName' property has not been set.");
-		}
+    [Test]
+    public void CheckAfterPropertiesSetBlowsUpIfNotCorrectlyConfigured()
+    {
+        LogFactoryObject fac = new LogFactoryObject();
+        Assert.Throws<ArgumentException>(() => fac.AfterPropertiesSet(), "The 'LogName' property has not been set.");
+    }
 
-		[Test]
-		public void CheckAfterPropertiesSetPassesIfCorrectlyConfigured()
-		{
-			LogFactoryObject fac = new LogFactoryObject("Bing!");
-			fac.AfterPropertiesSet();
-		}
+    [Test]
+    public void CheckAfterPropertiesSetPassesIfCorrectlyConfigured()
+    {
+        LogFactoryObject fac = new LogFactoryObject("Bing!");
+        fac.AfterPropertiesSet();
+    }
 
-		[Test]
-		public void ItsDefinitelyASingletonYeah()
-		{
-			LogFactoryObject fac = new LogFactoryObject("Bing!");
-			Assert.IsTrue(fac.IsSingleton,
-			              "The LogFactoryObject class must be configured to return shared instances (it currently ain't).");
-		}
+    [Test]
+    public void ItsDefinitelyASingletonYeah()
+    {
+        LogFactoryObject fac = new LogFactoryObject("Bing!");
+        Assert.IsTrue(fac.IsSingleton,
+            "The LogFactoryObject class must be configured to return shared instances (it currently ain't).");
+    }
 
-		[Test]
-		public void ObjectTypePropertyYieldsTheCorrectType()
-		{
-			LogFactoryObject fac = new LogFactoryObject("Bing!");
-			Assert.AreEqual(typeof (ILog), fac.ObjectType,
-			                "Mmm... the LogFactoryObject class ain't giving back ILog types (it must).");
-		}
-	}
+    [Test]
+    public void ObjectTypePropertyYieldsTheCorrectType()
+    {
+        LogFactoryObject fac = new LogFactoryObject("Bing!");
+        Assert.AreEqual(typeof(ILog), fac.ObjectType,
+            "Mmm... the LogFactoryObject class ain't giving back ILog types (it must).");
+    }
 }

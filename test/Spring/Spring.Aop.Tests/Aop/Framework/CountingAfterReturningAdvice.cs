@@ -24,19 +24,18 @@ using System.Reflection;
 
 #endregion
 
-namespace Spring.Aop.Framework
+namespace Spring.Aop.Framework;
+
+/// <summary>
+/// Simple after returning advice example that we can use for counting checks.
+/// </summary>
+/// <author>Rod Johnson</author>
+/// <author>Bruno Baia (.NET)</author>
+[Serializable]
+public class CountingAfterReturningAdvice : MethodCounter, IAfterReturningAdvice
 {
-    /// <summary>
-    /// Simple after returning advice example that we can use for counting checks.
-    /// </summary>
-    /// <author>Rod Johnson</author>
-    /// <author>Bruno Baia (.NET)</author>
-    [Serializable]
-    public class CountingAfterReturningAdvice : MethodCounter, IAfterReturningAdvice
+    public void AfterReturning(object returnValue, MethodInfo method, object[] args, object target)
     {
-        public void AfterReturning(object returnValue, MethodInfo method, object[] args, object target)
-        {
-            Count(method);
-        }
+        Count(method);
     }
 }

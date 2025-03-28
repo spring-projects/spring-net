@@ -15,55 +15,53 @@
  */
 
 using NHibernate.Properties;
-
 using Spring.Objects.Factory;
 
-namespace Spring.Data.NHibernate.Bytecode
+namespace Spring.Data.NHibernate.Bytecode;
+
+/// <summary>
+///
+/// </summary>
+/// <author>Fabio Maulo</author>
+public class ReflectionOptimizer : global::NHibernate.Bytecode.Lightweight.ReflectionOptimizer
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <author>Fabio Maulo</author>
-    public class ReflectionOptimizer : global::NHibernate.Bytecode.Lightweight.ReflectionOptimizer
+    private readonly IListableObjectFactory listableObjectFactory;
+
+    ///<summary>
+    ///</summary>
+    ///<param name="listableObjectFactory"></param>
+    ///<param name="mappedType"></param>
+    ///<param name="getters"></param>
+    ///<param name="setters"></param>
+    public ReflectionOptimizer(IListableObjectFactory listableObjectFactory, Type mappedType, IGetter[] getters,
+        ISetter[] setters)
+        : base(mappedType, getters, setters)
     {
-        private readonly IListableObjectFactory listableObjectFactory;
+        this.listableObjectFactory = listableObjectFactory;
+    }
 
-        ///<summary>
-        ///</summary>
-        ///<param name="listableObjectFactory"></param>
-        ///<param name="mappedType"></param>
-        ///<param name="getters"></param>
-        ///<param name="setters"></param>
-        public ReflectionOptimizer(IListableObjectFactory listableObjectFactory, Type mappedType, IGetter[] getters,
-                                   ISetter[] setters)
-            : base(mappedType, getters, setters)
+    /// <summary>
+    /// Perform instantiation of an instance of the underlying class.
+    /// </summary>
+    /// <returns>The new instance.</returns>
+    public override object CreateInstance()
+    {
+        var namesForType = listableObjectFactory.GetObjectNamesForType(mappedType);
+        if (namesForType.Count > 0)
         {
-            this.listableObjectFactory = listableObjectFactory;
+            return listableObjectFactory.GetObject(namesForType[0], mappedType);
         }
+        else
+        {
+            return base.CreateInstance();
+        }
+    }
 
-        /// <summary>
-        /// Perform instantiation of an instance of the underlying class.
-        /// </summary>
-        /// <returns>The new instance.</returns>
-        public override object CreateInstance()
-        {
-            var namesForType = listableObjectFactory.GetObjectNamesForType(mappedType);
-            if (namesForType.Count > 0)
-            {
-                return listableObjectFactory.GetObject(namesForType[0], mappedType);
-            }
-            else
-            {
-                return base.CreateInstance();
-            }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="type"></param>
-        protected override void ThrowExceptionForNoDefaultCtor(Type type)
-        {
-        }
+    /// <summary>
+    ///
+    /// </summary>
+    /// <param name="type"></param>
+    protected override void ThrowExceptionForNoDefaultCtor(Type type)
+    {
     }
 }

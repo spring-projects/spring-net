@@ -20,47 +20,50 @@
 
 using System.Runtime.Serialization;
 
-namespace Spring.Transaction
+namespace Spring.Transaction;
+
+/// <summary>
+/// Superclass for exceptions caused by inappropriate usage of
+/// a <a href="http://www.springframework.net/">Spring.NET</a> transaction API.
+/// </summary>
+/// <author>Juergen Hoeller</author>
+/// <author>Griffin Caprio (.NET)</author>
+[Serializable]
+public class TransactionUsageException : TransactionException
 {
-	/// <summary>
-	/// Superclass for exceptions caused by inappropriate usage of
-	/// a <a href="http://www.springframework.net/">Spring.NET</a> transaction API.
-	/// </summary>
-	/// <author>Juergen Hoeller</author>
-	/// <author>Griffin Caprio (.NET)</author>
-	[Serializable]
-	public class TransactionUsageException : TransactionException
-	{
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Transaction.TransactionUsageException"/> class.
-		/// </summary>
-		public TransactionUsageException( ) {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Transaction.TransactionUsageException"/> class.
+    /// </summary>
+    public TransactionUsageException() { }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Transaction.TransactionUsageException"/> class.
-		/// </summary>
-		/// <param name="message">
-		/// A message about the exception.
-		/// </param>
-		public TransactionUsageException( String message ) : base(message) {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Transaction.TransactionUsageException"/> class.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    public TransactionUsageException(String message) : base(message) { }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Transaction.TransactionUsageException"/> class.
-		/// </summary>
-		/// <param name="message">
-		/// A message about the exception.
-		/// </param>
-		/// <param name="rootCause">
-		/// The root exception that is being wrapped.
-		/// </param>
-		public TransactionUsageException(string message, Exception rootCause)
-			: base(message, rootCause) {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Transaction.TransactionUsageException"/> class.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    /// <param name="rootCause">
+    /// The root exception that is being wrapped.
+    /// </param>
+    public TransactionUsageException(string message, Exception rootCause)
+        : base(message, rootCause)
+    {
+    }
 
-		/// <inheritdoc />
-		protected TransactionUsageException(
-			SerializationInfo info, StreamingContext context ) : base( info, context ) {}
-	}
+    /// <inheritdoc />
+    protected TransactionUsageException(
+        SerializationInfo info, StreamingContext context) : base(info, context)
+    {
+    }
 }

@@ -20,45 +20,44 @@
 
 using System.Data;
 
-namespace Spring.Data.Support
+namespace Spring.Data.Support;
+
+/// <summary>
+/// A simple holder for the current Connection/Transaction objects
+/// to use within a given AdoTemplate Execute operation.  Used internally.
+/// </summary>
+public class ConnectionTxPair
 {
+    private IDbConnection connection;
+    private IDbTransaction transaction;
+
     /// <summary>
-    /// A simple holder for the current Connection/Transaction objects
-    /// to use within a given AdoTemplate Execute operation.  Used internally.
+    /// Initializes a new instance of the <see cref="ConnectionTxPair"/> class.
     /// </summary>
-    public class ConnectionTxPair
+    /// <param name="connection">The connection.</param>
+    /// <param name="transaction">The transaction.</param>
+    public ConnectionTxPair(IDbConnection connection, IDbTransaction transaction)
     {
-        private IDbConnection connection;
-        private IDbTransaction transaction;
+        this.connection = connection;
+        this.transaction = transaction;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ConnectionTxPair"/> class.
-        /// </summary>
-        /// <param name="connection">The connection.</param>
-        /// <param name="transaction">The transaction.</param>
-        public ConnectionTxPair(IDbConnection connection, IDbTransaction transaction)
-        {
-            this.connection = connection;
-            this.transaction = transaction;
-        }
+    /// <summary>
+    /// Gets the connection.
+    /// </summary>
+    /// <value>The connection.</value>
+    public IDbConnection Connection
+    {
+        get { return connection; }
+        set { connection = value; }
+    }
 
-        /// <summary>
-        /// Gets the connection.
-        /// </summary>
-        /// <value>The connection.</value>
-        public IDbConnection Connection
-        {
-            get { return connection; }
-            set { connection = value; }
-        }
-
-        /// <summary>
-        /// Gets the transaction.
-        /// </summary>
-        /// <value>The transaction.</value>
-        public IDbTransaction Transaction
-        {
-            get { return transaction; }
-        }
+    /// <summary>
+    /// Gets the transaction.
+    /// </summary>
+    /// <value>The transaction.</value>
+    public IDbTransaction Transaction
+    {
+        get { return transaction; }
     }
 }

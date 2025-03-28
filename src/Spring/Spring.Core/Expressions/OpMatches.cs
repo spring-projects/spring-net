@@ -21,56 +21,55 @@
 using System.Runtime.Serialization;
 using System.Text.RegularExpressions;
 
-namespace Spring.Expressions
+namespace Spring.Expressions;
+
+/// <summary>
+/// Represents logical MATCHES operator.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[Serializable]
+public class OpMatches : BinaryOperator
 {
+    private Regex regex;
+
     /// <summary>
-    /// Represents logical MATCHES operator.
+    /// Create a new instance
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    [Serializable]
-    public class OpMatches : BinaryOperator
+    public OpMatches() : base()
     {
-        private Regex regex;
+    }
 
-        /// <summary>
-        /// Create a new instance
-        /// </summary>
-        public OpMatches():base()
-        {
-        }
+    /// <summary>
+    /// Create a new instance from SerializationInfo
+    /// </summary>
+    protected OpMatches(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+    }
 
-        /// <summary>
-        /// Create a new instance from SerializationInfo
-        /// </summary>
-        protected OpMatches(SerializationInfo info, StreamingContext context)
-            : base(info, context)
+    /// <summary>
+    /// Returns a value for the logical MATCHES operator node.
+    /// </summary>
+    /// <param name="context">Context to evaluate expressions against.</param>
+    /// <param name="evalContext">Current expression evaluation context.</param>
+    /// <returns>
+    /// true if the left operand matches the right operand, false otherwise.
+    /// </returns>
+    protected override object Get(object context, EvaluationContext evalContext)
+    {
+        if (regex == null)
         {
-        }
-
-        /// <summary>
-        /// Returns a value for the logical MATCHES operator node.
-        /// </summary>
-        /// <param name="context">Context to evaluate expressions against.</param>
-        /// <param name="evalContext">Current expression evaluation context.</param>
-        /// <returns>
-        /// true if the left operand matches the right operand, false otherwise.
-        /// </returns>
-        protected override object Get(object context, EvaluationContext evalContext)
-        {
-            if (regex == null)
+            lock (this)
             {
-                lock (this)
+                if (regex == null)
                 {
-                    if (regex == null)
-                    {
-                        string pattern = GetRightValue( context, evalContext ) as string;
-                        regex = new Regex(pattern, RegexOptions.Compiled);
-                    }
+                    string pattern = GetRightValue(context, evalContext) as string;
+                    regex = new Regex(pattern, RegexOptions.Compiled);
                 }
             }
-
-            string text = GetLeftValue( context, evalContext ) as string;
-            return regex.IsMatch(text);
         }
+
+        string text = GetLeftValue(context, evalContext) as string;
+        return regex.IsMatch(text);
     }
 }

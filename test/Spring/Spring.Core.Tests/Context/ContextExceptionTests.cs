@@ -21,24 +21,22 @@
 #region Imports
 
 using System.Reflection;
-
 using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Context
+namespace Spring.Context;
+
+/// <summary>
+/// Unit tests for all of the exception classes in the Spring.Context library...
+/// </summary>
+/// <author>Rick Evans</author>
+[TestFixture]
+public sealed class ContextExceptionTests : ExceptionsTest
 {
-    /// <summary>
-    /// Unit tests for all of the exception classes in the Spring.Context library...
-    /// </summary>
-    /// <author>Rick Evans</author>
-    [TestFixture]
-    public sealed class ContextExceptionTests : ExceptionsTest
+    [OneTimeSetUp]
+    public void FixtureSetUp()
     {
-        [OneTimeSetUp]
-        public void FixtureSetUp ()
-        {
-            AssemblyToCheck = Assembly.GetAssembly (typeof (Spring.Context.ApplicationContextException));
-        }
+        AssemblyToCheck = Assembly.GetAssembly(typeof(Spring.Context.ApplicationContextException));
     }
 }

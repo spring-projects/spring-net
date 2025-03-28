@@ -27,84 +27,83 @@ using Spring.Context;
 
 #endregion
 
-namespace Spring.Aspects.Cache
+namespace Spring.Aspects.Cache;
+
+/// <summary>
+/// Convinience advisor implementation that applies <see cref="CacheParameterAdvice"/>
+/// to all the methods that have <see cref="CacheParameterAttribute"/> defined on one or
+/// more of their parameters.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+public class CacheParameterAdvisor : AttributeMatchMethodPointcutAdvisor, IApplicationContextAware
 {
     /// <summary>
-    /// Convinience advisor implementation that applies <see cref="CacheParameterAdvice"/>
-    /// to all the methods that have <see cref="CacheParameterAttribute"/> defined on one or
-    /// more of their parameters.
+    /// Creates new advisor instance.
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    public class CacheParameterAdvisor : AttributeMatchMethodPointcutAdvisor, IApplicationContextAware
+    public CacheParameterAdvisor()
     {
-        /// <summary>
-        /// Creates new advisor instance.
-        /// </summary>
-        public CacheParameterAdvisor()
-        {
-            Advice = new CacheParameterAdvice();
-            Attribute = typeof(CacheParameterAttribute);
-            Inherit = false;
-        }
+        Advice = new CacheParameterAdvice();
+        Attribute = typeof(CacheParameterAttribute);
+        Inherit = false;
+    }
 
-        /// <summary>
-        /// Sets the <see cref="Spring.Context.IApplicationContext"/> that this
-        /// object runs in.
-        /// </summary>
-        /// <remarks>
-        /// <p>
-        /// Normally this call will be used to initialize the object.
-        /// </p>
-        /// <p>
-        /// Invoked after population of normal object properties but before an
-        /// init callback such as
-        /// <see cref="Spring.Objects.Factory.IInitializingObject"/>'s
-        /// <see cref="Spring.Objects.Factory.IInitializingObject.AfterPropertiesSet"/>
-        /// or a custom init-method. Invoked after the setting of any
-        /// <see cref="Spring.Context.IResourceLoaderAware"/>'s
-        /// <see cref="Spring.Context.IResourceLoaderAware.ResourceLoader"/>
-        /// property.
-        /// </p>
-        /// </remarks>
-        /// <exception cref="Spring.Context.ApplicationContextException">
-        /// In the case of application context initialization errors.
-        /// </exception>
-        /// <exception cref="Spring.Objects.ObjectsException">
-        /// If thrown by any application context methods.
-        /// </exception>
-        /// <exception cref="Spring.Objects.Factory.ObjectInitializationException"/>
-        public IApplicationContext ApplicationContext
-        {
-            set { ((IApplicationContextAware)Advice).ApplicationContext = value; }
-        }
+    /// <summary>
+    /// Sets the <see cref="Spring.Context.IApplicationContext"/> that this
+    /// object runs in.
+    /// </summary>
+    /// <remarks>
+    /// <p>
+    /// Normally this call will be used to initialize the object.
+    /// </p>
+    /// <p>
+    /// Invoked after population of normal object properties but before an
+    /// init callback such as
+    /// <see cref="Spring.Objects.Factory.IInitializingObject"/>'s
+    /// <see cref="Spring.Objects.Factory.IInitializingObject.AfterPropertiesSet"/>
+    /// or a custom init-method. Invoked after the setting of any
+    /// <see cref="Spring.Context.IResourceLoaderAware"/>'s
+    /// <see cref="Spring.Context.IResourceLoaderAware.ResourceLoader"/>
+    /// property.
+    /// </p>
+    /// </remarks>
+    /// <exception cref="Spring.Context.ApplicationContextException">
+    /// In the case of application context initialization errors.
+    /// </exception>
+    /// <exception cref="Spring.Objects.ObjectsException">
+    /// If thrown by any application context methods.
+    /// </exception>
+    /// <exception cref="Spring.Objects.Factory.ObjectInitializationException"/>
+    public IApplicationContext ApplicationContext
+    {
+        set { ((IApplicationContextAware) Advice).ApplicationContext = value; }
+    }
 
-        /// <summary>
-        /// Returns <c>true</c> if any of the parameters of the specified <paramref name="method"/>
-        /// has <see cref="CacheParameterAttribute"/> applied.
-        /// </summary>
-        /// <param name="method">
-        /// Method to check.
-        /// </param>
-        /// <param name="targetType">
-        /// Type of target object.
-        /// </param>
-        /// <returns>
-        /// <c>true</c> if any of the parameters of the specified <paramref name="method"/>
-        /// has <see cref="CacheParameterAttribute"/> applied; <c>false</c> otherwise.
-        /// </returns>
-        public override bool Matches(MethodInfo method, Type targetType)
+    /// <summary>
+    /// Returns <c>true</c> if any of the parameters of the specified <paramref name="method"/>
+    /// has <see cref="CacheParameterAttribute"/> applied.
+    /// </summary>
+    /// <param name="method">
+    /// Method to check.
+    /// </param>
+    /// <param name="targetType">
+    /// Type of target object.
+    /// </param>
+    /// <returns>
+    /// <c>true</c> if any of the parameters of the specified <paramref name="method"/>
+    /// has <see cref="CacheParameterAttribute"/> applied; <c>false</c> otherwise.
+    /// </returns>
+    public override bool Matches(MethodInfo method, Type targetType)
+    {
+        ParameterInfo[] parameters = method.GetParameters();
+        for (int i = 0; i < parameters.Length; i++)
         {
-            ParameterInfo[] parameters = method.GetParameters();
-            for (int i = 0; i < parameters.Length; i++)
+            ParameterInfo p = parameters[i];
+            if (p.IsDefined(Attribute, Inherit))
             {
-                ParameterInfo p = parameters[i];
-                if (p.IsDefined(Attribute, Inherit))
-                {
-                    return true;
-                }
+                return true;
             }
-
-            return false;
         }
+
+        return false;
     }
 }

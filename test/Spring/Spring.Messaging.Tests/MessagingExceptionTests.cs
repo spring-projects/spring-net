@@ -21,25 +21,23 @@
 #region Imports
 
 using System.Reflection;
-
 using NUnit.Framework;
 using Spring.Messaging;
 
 #endregion
 
-namespace Spring
+namespace Spring;
+
+/// <summary>
+/// Unit tests for all of the exception classes in the Spring.Data library...
+/// </summary>
+/// <author>Rick Evans</author>
+[TestFixture]
+public sealed class MessagingExceptionTests : ExceptionsTest
 {
-    /// <summary>
-    /// Unit tests for all of the exception classes in the Spring.Data library...
-    /// </summary>
-    /// <author>Rick Evans</author>
-    [TestFixture]
-    public sealed class MessagingExceptionTests : ExceptionsTest
+    [OneTimeSetUp]
+    public void FixtureSetUp()
     {
-        [OneTimeSetUp]
-        public void FixtureSetUp ()
-        {
-            AssemblyToCheck = Assembly.GetAssembly(typeof(MessagingException));
-        }
+        AssemblyToCheck = Assembly.GetAssembly(typeof(MessagingException));
     }
 }

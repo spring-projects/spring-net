@@ -18,32 +18,31 @@
 
 #endregion
 
-namespace Spring.Objects.Factory.Xml
+namespace Spring.Objects.Factory.Xml;
+
+/// <summary>
+/// Summary description for DoubleBooleanConstructorObject.
+/// </summary>
+public class DoubleBooleanConstructorObject
 {
-	/// <summary>
-	/// Summary description for DoubleBooleanConstructorObject.
-	/// </summary>
-	public class DoubleBooleanConstructorObject
-	{
-		private bool boolean1;
-		private bool boolean2;
+    private bool boolean1;
+    private bool boolean2;
 
-		public bool Boolean2
-		{
-			get { return this.boolean2; }
-			set { this.boolean2 = value; }
-		}
+    public bool Boolean2
+    {
+        get { return this.boolean2; }
+        set { this.boolean2 = value; }
+    }
 
-		public bool Boolean1
-		{
-			get { return this.boolean1; }
-			set { this.boolean1 = value; }
-		}
+    public bool Boolean1
+    {
+        get { return this.boolean1; }
+        set { this.boolean1 = value; }
+    }
 
-		public DoubleBooleanConstructorObject(bool b1, bool b2)
-		{
-			this.boolean1 = b1;
-			this.boolean2 = b2;
-		}
-	}
+    public DoubleBooleanConstructorObject(bool b1, bool b2)
+    {
+        this.boolean1 = b1;
+        this.boolean2 = b2;
+    }
 }

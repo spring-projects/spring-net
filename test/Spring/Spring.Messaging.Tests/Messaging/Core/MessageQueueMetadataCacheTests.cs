@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,46 +25,40 @@ using Spring.Testing.NUnit;
 
 #endregion
 
-namespace Spring.Messaging.Core
+namespace Spring.Messaging.Core;
+
+/// <summary>
+/// This class contains tests for MessageQueueTemplate
+/// </summary>
+/// <author>Mark Pollack</author>
+[TestFixture]
+public class MessageQueueMetadataCacheTests : AbstractDependencyInjectionSpringContextTests
 {
-    /// <summary>
-    /// This class contains tests for MessageQueueTemplate
-    /// </summary>
-    /// <author>Mark Pollack</author>
-    [TestFixture]
-    public class MessageQueueMetadataCacheTests : AbstractDependencyInjectionSpringContextTests
+    protected override string[] ConfigLocations
     {
-        protected override string[] ConfigLocations
-        {
-            get { return new string[] {"assembly://Spring.Messaging.Tests/Spring.Messaging.Core/MessageQueueMetadataCacheTests.xml"}; }
-        }
+        get { return new string[] { "assembly://Spring.Messaging.Tests/Spring.Messaging.Core/MessageQueueMetadataCacheTests.xml" }; }
+    }
 
-        [Test]
-        public void InitialzeMessageQueueMetadata()
-        {
-            MessageQueueMetadataCache cache = new MessageQueueMetadataCache(applicationContext);
-            Assert.AreEqual(0, cache.Count);
-            cache.Initialize();
-            Assert.IsTrue(cache.Initalized);
-            Assert.AreEqual(4, cache.Count);
-            MessageQueueMetadata md = cache.Get(@".\Private$\testqueue");
-            cache.Remove(@".\Private$\testqueue");
-            Assert.AreEqual(3, cache.Count);
-            Assert.IsNull(cache.Get(@".\Private$\testqueue"));
+    [Test]
+    public void InitialzeMessageQueueMetadata()
+    {
+        MessageQueueMetadataCache cache = new MessageQueueMetadataCache(applicationContext);
+        Assert.AreEqual(0, cache.Count);
+        cache.Initialize();
+        Assert.IsTrue(cache.Initalized);
+        Assert.AreEqual(4, cache.Count);
+        MessageQueueMetadata md = cache.Get(@".\Private$\testqueue");
+        cache.Remove(@".\Private$\testqueue");
+        Assert.AreEqual(3, cache.Count);
+        Assert.IsNull(cache.Get(@".\Private$\testqueue"));
 
-            string[] paths = new string[]
-                            {
-                                @".\Private$\testtxqueue",
-                                @"FormatName:Direct=TCP:192.168.1.105\Private$\testtxqueue",
-                                @"FormatName:Direct=TCP:192.168.1.105\Private$\testqueue"
-                            };
+        string[] paths = new string[] { @".\Private$\testtxqueue", @"FormatName:Direct=TCP:192.168.1.105\Private$\testtxqueue", @"FormatName:Direct=TCP:192.168.1.105\Private$\testqueue" };
 
-            Assert.That(paths, Is.EquivalentTo(cache.Paths));
-            paths = new string[] {@".\Private$\testtxqueue", @"FormatName:Direct=TCP:192.168.1.105\Private$\testtxqueue"};
-            cache.RemoveAll(paths);
-            Assert.AreEqual(1, cache.Count);
-            cache.Clear();
-            Assert.AreEqual(0, cache.Count);
-        }
+        Assert.That(paths, Is.EquivalentTo(cache.Paths));
+        paths = new string[] { @".\Private$\testtxqueue", @"FormatName:Direct=TCP:192.168.1.105\Private$\testtxqueue" };
+        cache.RemoveAll(paths);
+        Assert.AreEqual(1, cache.Count);
+        cache.Clear();
+        Assert.AreEqual(0, cache.Count);
     }
 }

@@ -20,29 +20,28 @@
 
 using Spring.Objects.Factory.Xml;
 
-namespace Spring.Messaging.Ems.Config
+namespace Spring.Messaging.Ems.Config;
+
+/// <summary>
+/// Namespace parser for the EMS namespace.
+/// </summary>
+/// <author>Mark Fisher</author>
+/// <author>Juergen Hoeller</author>
+/// <author>Mark Pollack (.NET)</author>
+[
+    NamespaceParser(
+        Namespace = "http://www.springframework.net/ems",
+        SchemaLocationAssemblyHint = typeof(EmsNamespaceParser),
+        SchemaLocation = "/Spring.Messaging.Ems.Config/spring-ems-1.3.xsd"
+    )
+]
+public class EmsNamespaceParser : NamespaceParserSupport
 {
     /// <summary>
-    /// Namespace parser for the EMS namespace.
+    /// Register a MessageListenerContainer for the '<code>listener-container</code>' tag.
     /// </summary>
-    /// <author>Mark Fisher</author>
-    /// <author>Juergen Hoeller</author>
-    /// <author>Mark Pollack (.NET)</author>
-    [
-        NamespaceParser(
-            Namespace = "http://www.springframework.net/ems",
-            SchemaLocationAssemblyHint = typeof (EmsNamespaceParser),
-            SchemaLocation = "/Spring.Messaging.Ems.Config/spring-ems-1.3.xsd"
-            )
-    ]
-    public class EmsNamespaceParser : NamespaceParserSupport
+    public override void Init()
     {
-        /// <summary>
-        /// Register a MessageListenerContainer for the '<code>listener-container</code>' tag.
-        /// </summary>
-        public override void Init()
-        {
-            RegisterObjectDefinitionParser("listener-container", new MessageListenerContainerObjectDefinitionParser());
-        }
+        RegisterObjectDefinitionParser("listener-container", new MessageListenerContainerObjectDefinitionParser());
     }
 }

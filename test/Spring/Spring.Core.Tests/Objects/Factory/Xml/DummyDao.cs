@@ -20,24 +20,21 @@
 
 #region Imports
 
-
-
 #endregion
 
-namespace Spring.Objects.Factory.Xml {
+namespace Spring.Objects.Factory.Xml;
 
-	/// <summary>
-	/// Summary description for DummyDao.
+/// <summary>
+/// Summary description for DummyDao.
+/// </summary>
+/// <author>Rod Johnson</author>
+/// <author>Rick Evans (.NET)</author>
+public class DummyDao
+{
+    /// <summary>
+    /// Creates a new instance of the  DummyDao class.
     /// </summary>
-    /// <author>Rod Johnson</author>
-    /// <author>Rick Evans (.NET)</author>
-	public class DummyDao 
+    public DummyDao()
     {
-
-        /// <summary>
-        /// Creates a new instance of the  DummyDao class.
-        /// </summary>
-		public DummyDao () {
-        }
-	}
+    }
 }

@@ -19,91 +19,89 @@
 #endregion
 
 using FakeItEasy;
-
 using NUnit.Framework;
 using Spring.Core.IO;
 using Spring.Util;
 
-namespace Spring.Objects.Factory
+namespace Spring.Objects.Factory;
+
+/// <summary>
+/// Unit tests for the ObjectDefinitionStoreException class.
+/// </summary>
+/// <author>Rick Evans</author>
+[TestFixture]
+public sealed class ObjectDefinitionStoreExceptionTests
 {
-	/// <summary>
-	/// Unit tests for the ObjectDefinitionStoreException class.
-	/// </summary>
-	/// <author>Rick Evans</author>
-	[TestFixture]
-	public sealed class ObjectDefinitionStoreExceptionTests
-	{
-        [SetUp]
-        public void Setup()
-        {
-        }
+    [SetUp]
+    public void Setup()
+    {
+    }
 
-        [Test]
-		public void FromResource()
-		{
-			string expectedName = "bing";
-			string expectedResourceDescription = "mock.resource";
-		    IResource resource = A.Fake<IResource>();
-		    A.CallTo(() => resource.Description).Returns(expectedResourceDescription);
+    [Test]
+    public void FromResource()
+    {
+        string expectedName = "bing";
+        string expectedResourceDescription = "mock.resource";
+        IResource resource = A.Fake<IResource>();
+        A.CallTo(() => resource.Description).Returns(expectedResourceDescription);
 
-			ObjectDefinitionStoreException inex = new ObjectDefinitionStoreException(resource, expectedName, "mmm...");
-			CheckSerialization(inex, expectedName, expectedResourceDescription);
-		}
+        ObjectDefinitionStoreException inex = new ObjectDefinitionStoreException(resource, expectedName, "mmm...");
+        CheckSerialization(inex, expectedName, expectedResourceDescription);
+    }
 
-		[Test]
-		public void FromNullResource()
-		{
-			string expectedName = "bing";
-			string expectedResourceDescription = string.Empty;
-			ObjectDefinitionStoreException inex
-				= new ObjectDefinitionStoreException(
-				(IResource) null, expectedName, "mmm...");
-			CheckSerialization(inex, expectedName,
-				expectedResourceDescription);
-		}
+    [Test]
+    public void FromNullResource()
+    {
+        string expectedName = "bing";
+        string expectedResourceDescription = string.Empty;
+        ObjectDefinitionStoreException inex
+            = new ObjectDefinitionStoreException(
+                (IResource) null, expectedName, "mmm...");
+        CheckSerialization(inex, expectedName,
+            expectedResourceDescription);
+    }
 
-		[Test]
-		public void SerializesWithNoState()
-		{
-			ObjectDefinitionStoreException inex
-				= new ObjectDefinitionStoreException();
-			CheckSerialization(inex, string.Empty, string.Empty);
-		}
+    [Test]
+    public void SerializesWithNoState()
+    {
+        ObjectDefinitionStoreException inex
+            = new ObjectDefinitionStoreException();
+        CheckSerialization(inex, string.Empty, string.Empty);
+    }
 
-		[Test]
-		public void SerializesWithJustExceptionMessage()
-		{
-			string expectedName = string.Empty;
-			string expectedResourceDescription = string.Empty;
-			string expectedMessage = "Woppadoosa";
-			ObjectDefinitionStoreException inex
-				= new ObjectDefinitionStoreException(expectedMessage);
-			CheckSerialization(inex, expectedName,
-				expectedResourceDescription);
-		}
+    [Test]
+    public void SerializesWithJustExceptionMessage()
+    {
+        string expectedName = string.Empty;
+        string expectedResourceDescription = string.Empty;
+        string expectedMessage = "Woppadoosa";
+        ObjectDefinitionStoreException inex
+            = new ObjectDefinitionStoreException(expectedMessage);
+        CheckSerialization(inex, expectedName,
+            expectedResourceDescription);
+    }
 
-		[Test]
-		public void SerializesAllState()
-		{
-			string expectedName = "bing";
-			string expectedResourceDescription = "foo.txt";
-			ObjectDefinitionStoreException inex
-				= new ObjectDefinitionStoreException(
-				expectedResourceDescription, expectedName, "mmm...");
-			CheckSerialization(inex, expectedName,
-				expectedResourceDescription);
-		}
+    [Test]
+    public void SerializesAllState()
+    {
+        string expectedName = "bing";
+        string expectedResourceDescription = "foo.txt";
+        ObjectDefinitionStoreException inex
+            = new ObjectDefinitionStoreException(
+                expectedResourceDescription, expectedName, "mmm...");
+        CheckSerialization(inex, expectedName,
+            expectedResourceDescription);
+    }
 
-		private static void CheckSerialization(
-			ObjectDefinitionStoreException inex, string expectedName,
-			string expectedResourceDescription)
-		{
-			ObjectDefinitionStoreException outex = (ObjectDefinitionStoreException)
-				SerializationTestUtils.SerializeAndDeserialize(inex);
-			Assert.AreEqual(expectedName, outex.ObjectName,
-			                "The 'ObjectName' property was not serialized / deserialized correctly.");
-			Assert.AreEqual(expectedResourceDescription, outex.ResourceDescription,
-				"The 'ResourceDescription' property was not serialized / deserialized correctly.");
-		}
-	}
+    private static void CheckSerialization(
+        ObjectDefinitionStoreException inex, string expectedName,
+        string expectedResourceDescription)
+    {
+        ObjectDefinitionStoreException outex = (ObjectDefinitionStoreException)
+            SerializationTestUtils.SerializeAndDeserialize(inex);
+        Assert.AreEqual(expectedName, outex.ObjectName,
+            "The 'ObjectName' property was not serialized / deserialized correctly.");
+        Assert.AreEqual(expectedResourceDescription, outex.ResourceDescription,
+            "The 'ResourceDescription' property was not serialized / deserialized correctly.");
+    }
 }

@@ -27,34 +27,33 @@ using Spring.Objects.Factory.Xml;
 
 #endregion
 
-namespace Spring.Validation.Validators
+namespace Spring.Validation.Validators;
+
+/// <summary>
+/// ISBNValidatorIntegration integration tests.
+/// </summary>
+/// <author>Goran Milosavljevic</author>
+[TestFixture]
+public class ISBNValidatorIntegrationTests
 {
-    /// <summary>
-    /// ISBNValidatorIntegration integration tests.
-    /// </summary>
-    /// <author>Goran Milosavljevic</author>
-    [TestFixture]
-    public class ISBNValidatorIntegrationTests
+    [Test]
+    public void ISBNValidatorTests()
     {
-        [Test]
-        public void ISBNValidatorTests()
-        {
-            const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
+        const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
             <objects xmlns='http://www.springframework.net' xmlns:v='http://www.springframework.net/validation'>
                 <v:validator id='isbnValidator' test='#this' type='Spring.Validation.Validators.ISBNValidator, Spring.Core'>
                     <v:message id='error.airportCode.dummy' providers='summary' when='false'/>
                 </v:validator>
             </objects>";
-            
-            MemoryStream stream = new MemoryStream(new UTF8Encoding().GetBytes(xml));
-            IResource resource = new InputStreamResource(stream, "isbnValidator");
 
-            XmlObjectFactory objectFactory = new XmlObjectFactory(resource, null);
-            object obj = objectFactory.GetObject("isbnValidator");
-            
-            Assert.IsTrue(obj is IValidator);
-            IValidator validator = obj as IValidator;
-            Assert.IsTrue(validator.Validate("978-1-905158-79-9", new ValidationErrors()));
-        }        
+        MemoryStream stream = new MemoryStream(new UTF8Encoding().GetBytes(xml));
+        IResource resource = new InputStreamResource(stream, "isbnValidator");
+
+        XmlObjectFactory objectFactory = new XmlObjectFactory(resource, null);
+        object obj = objectFactory.GetObject("isbnValidator");
+
+        Assert.IsTrue(obj is IValidator);
+        IValidator validator = obj as IValidator;
+        Assert.IsTrue(validator.Validate("978-1-905158-79-9", new ValidationErrors()));
     }
 }

@@ -21,90 +21,90 @@
 using System.Reflection;
 using Spring.Util;
 
-namespace Spring.Objects.Support
+namespace Spring.Objects.Support;
+
+/// <summary>
+/// Describes an event handler for an object instance.
+/// </summary>
+/// <author>Rick Evans</author>
+public class InstanceEventHandlerValue : AbstractWiringEventHandlerValue
 {
-	/// <summary>
-	/// Describes an event handler for an object instance.
-	/// </summary>
-	/// <author>Rick Evans</author>
-	public class InstanceEventHandlerValue : AbstractWiringEventHandlerValue
-	{
-		#region Constants
+    #region Constants
 
-		private static readonly BindingFlags InstanceMethodFlags =
-			BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic |
-				BindingFlags.IgnoreCase | BindingFlags.Static;
+    private static readonly BindingFlags InstanceMethodFlags =
+        BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic |
+        BindingFlags.IgnoreCase | BindingFlags.Static;
 
-		#endregion
+    #endregion
 
-		#region Constructor (s) / Destructor
+    #region Constructor (s) / Destructor
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Objects.Support.InstanceEventHandlerValue"/> class.
-		/// </summary>
-		public InstanceEventHandlerValue()
-		{
-		}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Objects.Support.InstanceEventHandlerValue"/> class.
+    /// </summary>
+    public InstanceEventHandlerValue()
+    {
+    }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Objects.Support.InstanceEventHandlerValue"/> class.
-		/// </summary>
-		/// <param name="source">
-		/// The object (possibly unresolved) that is exposing the event.
-		/// </param>
-		/// <param name="methodName">
-		/// The name of the method on the handler that is going to handle the event.
-		/// </param>
-		public InstanceEventHandlerValue(object source, string methodName)
-			: base(source, methodName)
-		{
-		}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Objects.Support.InstanceEventHandlerValue"/> class.
+    /// </summary>
+    /// <param name="source">
+    /// The object (possibly unresolved) that is exposing the event.
+    /// </param>
+    /// <param name="methodName">
+    /// The name of the method on the handler that is going to handle the event.
+    /// </param>
+    public InstanceEventHandlerValue(object source, string methodName)
+        : base(source, methodName)
+    {
+    }
 
-		#endregion
+    #endregion
 
-		#region Methods
+    #region Methods
 
-		/// <summary>
-		/// Gets the event handler.
-		/// </summary>
-		/// <param name="instance">
-		/// The instance that is registering for the event notification.
-		/// </param>
-		/// <param name="info">
-		/// Event metadata about the event.
-		/// </param>
-		/// <returns>
-		/// The event handler.
-		/// </returns>
-		protected override Delegate GetHandler(object instance, EventInfo info)
-		{
-			MethodInfo methodMeta = ResolveHandlerMethod(
-				ReflectionUtils.TypeOfOrType(instance),
-				info.EventHandlerType,
-				InstanceEventHandlerValue.InstanceMethodFlags);
-			Delegate callback = null;
-			if (methodMeta.IsStatic)
-			{
-				// case insensitive binding to a static method on an (irrelevant) instance
-				callback = Delegate.CreateDelegate(
-					info.EventHandlerType,
-					methodMeta);
-			}
-			else
-			{
-				// case insensitive binding to an instance method on an instance
-				callback =
-					Delegate.CreateDelegate(
-						info.EventHandlerType,
-						instance,
-						MethodName,
-						true);
-			}
-			return callback;
-		}
+    /// <summary>
+    /// Gets the event handler.
+    /// </summary>
+    /// <param name="instance">
+    /// The instance that is registering for the event notification.
+    /// </param>
+    /// <param name="info">
+    /// Event metadata about the event.
+    /// </param>
+    /// <returns>
+    /// The event handler.
+    /// </returns>
+    protected override Delegate GetHandler(object instance, EventInfo info)
+    {
+        MethodInfo methodMeta = ResolveHandlerMethod(
+            ReflectionUtils.TypeOfOrType(instance),
+            info.EventHandlerType,
+            InstanceEventHandlerValue.InstanceMethodFlags);
+        Delegate callback = null;
+        if (methodMeta.IsStatic)
+        {
+            // case insensitive binding to a static method on an (irrelevant) instance
+            callback = Delegate.CreateDelegate(
+                info.EventHandlerType,
+                methodMeta);
+        }
+        else
+        {
+            // case insensitive binding to an instance method on an instance
+            callback =
+                Delegate.CreateDelegate(
+                    info.EventHandlerType,
+                    instance,
+                    MethodName,
+                    true);
+        }
 
-		#endregion
-	}
+        return callback;
+    }
+
+    #endregion
 }

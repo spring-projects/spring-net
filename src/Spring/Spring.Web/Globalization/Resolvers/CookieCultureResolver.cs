@@ -21,63 +21,62 @@
 using System.Globalization;
 using System.Web;
 
-namespace Spring.Globalization.Resolvers
+namespace Spring.Globalization.Resolvers;
+
+/// <summary>
+/// Culture resolver that uses cookie to store culture information.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+public class CookieCultureResolver : DefaultWebCultureResolver
 {
+    private const string CultureKey = "Spring.UserLocale";
+
     /// <summary>
-    /// Culture resolver that uses cookie to store culture information.
+    /// Resolves the culture from the request.
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    public class CookieCultureResolver : DefaultWebCultureResolver
+    /// <remarks>
+    /// If the culture cookie doesn't exist, this method will return
+    /// the value of the 'Accept-Language' request header, or if no
+    /// headers are specified, the culture of the current server thread.
+    /// </remarks>
+    /// <returns>Culture that should be used to render view.</returns>
+    public override CultureInfo ResolveCulture()
     {
-        private const string CultureKey = "Spring.UserLocale";
+        HttpCookie cookie = HttpContext.Current.Request.Cookies[CultureKey];
 
-        /// <summary>
-        /// Resolves the culture from the request.
-        /// </summary>
-        /// <remarks>
-        /// If the culture cookie doesn't exist, this method will return
-        /// the value of the 'Accept-Language' request header, or if no
-        /// headers are specified, the culture of the current server thread.
-        /// </remarks>
-        /// <returns>Culture that should be used to render view.</returns>
-        public override CultureInfo ResolveCulture()
+        if (cookie != null)
         {
-            HttpCookie cookie = HttpContext.Current.Request.Cookies[CultureKey];
-
-            if (cookie != null)
-            {
-                return base.GetCulture(cookie.Value);
-            }
-            else
-            {
-                return base.GetDefaultLocale();
-            }
+            return base.GetCulture(cookie.Value);
         }
-
-        /// <summary>
-        /// Sets the culture.
-        /// </summary>
-        /// <param name="culture">The new culture or <code>null</code> to clear the culture.</param>
-        public override void SetCulture(CultureInfo culture)
+        else
         {
-            HttpCookie cookie = CreateCookie(culture);
-            HttpContext.Current.Request.Cookies.Set(cookie);
-            HttpContext.Current.Response.Cookies.Add(cookie);
+            return base.GetDefaultLocale();
         }
+    }
 
-        /// <summary>
-        /// Creates cookie for the specified culture.
-        /// </summary>
-        /// <param name="culture">Culture to store in a cookie.</param>
-        /// <returns>Created cookie.</returns>
-        private HttpCookie CreateCookie(CultureInfo culture)
-        {
-            HttpCookie cookie = new HttpCookie(CultureKey);
-            cookie.Domain = HttpContext.Current.Request.Url.Host;
-            cookie.Expires = DateTime.MaxValue;
-            cookie.Value = culture.Name;
+    /// <summary>
+    /// Sets the culture.
+    /// </summary>
+    /// <param name="culture">The new culture or <code>null</code> to clear the culture.</param>
+    public override void SetCulture(CultureInfo culture)
+    {
+        HttpCookie cookie = CreateCookie(culture);
+        HttpContext.Current.Request.Cookies.Set(cookie);
+        HttpContext.Current.Response.Cookies.Add(cookie);
+    }
 
-            return cookie;
-        }
+    /// <summary>
+    /// Creates cookie for the specified culture.
+    /// </summary>
+    /// <param name="culture">Culture to store in a cookie.</param>
+    /// <returns>Created cookie.</returns>
+    private HttpCookie CreateCookie(CultureInfo culture)
+    {
+        HttpCookie cookie = new HttpCookie(CultureKey);
+        cookie.Domain = HttpContext.Current.Request.Url.Host;
+        cookie.Expires = DateTime.MaxValue;
+        cookie.Value = culture.Name;
+
+        return cookie;
     }
 }

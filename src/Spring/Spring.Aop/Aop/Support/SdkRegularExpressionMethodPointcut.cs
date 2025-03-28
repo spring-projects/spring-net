@@ -19,152 +19,150 @@ using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
 using Spring.Util;
 
-namespace Spring.Aop.Support
+namespace Spring.Aop.Support;
+
+/// <summary>
+/// Regular expression based pointcut object.
+/// </summary>
+/// <remarks>
+/// <p>
+/// Uses the regular expression classes from the .NET Base Class Library.
+/// </p>
+/// <p>
+/// The regular expressions must be a match. For example, the
+/// <code>.*Get*</code> pattern will match <c>Com.Mycom.Foo.GetBar()</c>, and
+/// <code>Get.*</code> will not.
+/// </p>
+/// </remarks>
+/// <author>Rod Johnson</author>
+/// <author>Simon White (.NET)</author>
+[Serializable]
+public class SdkRegularExpressionMethodPointcut : AbstractRegularExpressionMethodPointcut
 {
-	/// <summary>
-	/// Regular expression based pointcut object.
-	/// </summary>
-	/// <remarks>
-	/// <p>
-	/// Uses the regular expression classes from the .NET Base Class Library.
-	/// </p>
-	/// <p>
-	/// The regular expressions must be a match. For example, the
-	/// <code>.*Get*</code> pattern will match <c>Com.Mycom.Foo.GetBar()</c>, and
-	/// <code>Get.*</code> will not.
-	/// </p>
-	/// </remarks>
-	/// <author>Rod Johnson</author>
-	/// <author>Simon White (.NET)</author>
-	[Serializable]
-	public class SdkRegularExpressionMethodPointcut : AbstractRegularExpressionMethodPointcut
-	{
-        [NonSerialized]
-		private static readonly ILogger<SdkRegularExpressionMethodPointcut> _logger = LogManager.GetLogger<SdkRegularExpressionMethodPointcut>();
+    [NonSerialized] private static readonly ILogger<SdkRegularExpressionMethodPointcut> _logger = LogManager.GetLogger<SdkRegularExpressionMethodPointcut>();
 
-		private Regex[] _compiledPatterns = new Regex[0];
-        private RegexOptions _defaultOptions = RegexOptions.None;
+    private Regex[] _compiledPatterns = new Regex[0];
+    private RegexOptions _defaultOptions = RegexOptions.None;
 
-	    /// <summary>
-		/// Creates a new instance of the
-		/// <see cref="SdkRegularExpressionMethodPointcut"/> class.
-		/// </summary>
-		public SdkRegularExpressionMethodPointcut()
-		{
-		}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="SdkRegularExpressionMethodPointcut"/> class.
+    /// </summary>
+    public SdkRegularExpressionMethodPointcut()
+    {
+    }
 
-        /// <summary>
-        /// Creates a new instance of the
-        /// <see cref="SdkRegularExpressionMethodPointcut"/> class,
-        /// using the supplied pattern or <paramref name="patterns"/>.
-        /// </summary>
-        /// <param name="patterns">
-        /// The intial pattern value(s) to be matched against.
-        /// </param>
-        public SdkRegularExpressionMethodPointcut(params string[] patterns)
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="SdkRegularExpressionMethodPointcut"/> class,
+    /// using the supplied pattern or <paramref name="patterns"/>.
+    /// </summary>
+    /// <param name="patterns">
+    /// The intial pattern value(s) to be matched against.
+    /// </param>
+    public SdkRegularExpressionMethodPointcut(params string[] patterns)
+    {
+        Patterns = patterns;
+    }
+
+    /// <inheritdoc />
+    protected SdkRegularExpressionMethodPointcut(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+    }
+
+    /// <summary>
+    /// Gets or sets default options that should be used by
+    /// regular expressions that don't have options explicitly set.
+    /// </summary>
+    /// <value>
+    /// Default options that should be used by regular expressions
+    /// that don't have options explicitly set.
+    /// </value>
+    public RegexOptions DefaultOptions
+    {
+        get { return _defaultOptions; }
+        set
         {
-            Patterns = patterns;
+            _defaultOptions = value;
+            InitPatternRepresentation(Patterns);
         }
+    }
 
-	    /// <inheritdoc />
-	    protected SdkRegularExpressionMethodPointcut(SerializationInfo info, StreamingContext context)
-	        : base(info, context)
-	    {
-	    }
+    /// <summary>
+    /// Initializes the regular expression pointcuts.
+    /// </summary>
+    /// <remarks>
+    /// <p>
+    /// Can be invoked multiple times.
+    /// </p>
+    /// <p>
+    /// This method will be invoked from the
+    /// <see cref="AbstractRegularExpressionMethodPointcut.Patterns"/> property,
+    /// and also on deserialization.
+    /// </p>
+    /// </remarks>
+    /// <param name="patterns">
+    /// The patterns to initialize.
+    /// </param>
+    /// <exception cref="System.ArgumentException">
+    /// In the case of an invalid pattern.
+    /// </exception>
+    /// <exception cref="System.ArgumentNullException">
+    /// If the supplied <paramref name="patterns"/> is <see langword="null"/>.
+    /// </exception>
+    protected override void InitPatternRepresentation(object[] patterns)
+    {
+        AssertUtils.ArgumentNotNull(patterns, "patterns");
 
-	    /// <summary>
-	    /// Gets or sets default options that should be used by
-	    /// regular expressions that don't have options explicitly set.
-	    /// </summary>
-	    /// <value>
-	    /// Default options that should be used by regular expressions
-	    /// that don't have options explicitly set.
-	    /// </value>
-	    public RegexOptions DefaultOptions
-	    {
-	        get { return _defaultOptions; }
-	        set
-	        {
-	            _defaultOptions = value;
-	            InitPatternRepresentation(Patterns);
-	        }
-	    }
-
-	    /// <summary>
-	    /// Initializes the regular expression pointcuts.
-	    /// </summary>
-	    /// <remarks>
-	    /// <p>
-	    /// Can be invoked multiple times.
-	    /// </p>
-	    /// <p>
-	    /// This method will be invoked from the
-	    /// <see cref="AbstractRegularExpressionMethodPointcut.Patterns"/> property,
-	    /// and also on deserialization.
-	    /// </p>
-	    /// </remarks>
-	    /// <param name="patterns">
-	    /// The patterns to initialize.
-	    /// </param>
-	    /// <exception cref="System.ArgumentException">
-	    /// In the case of an invalid pattern.
-	    /// </exception>
-	    /// <exception cref="System.ArgumentNullException">
-	    /// If the supplied <paramref name="patterns"/> is <see langword="null"/>.
-	    /// </exception>
-	    protected override void InitPatternRepresentation(object[] patterns)
-	    {
-	        AssertUtils.ArgumentNotNull(patterns, "patterns");
-
-            if (patterns.Length > 0)
+        if (patterns.Length > 0)
+        {
+            _compiledPatterns = new Regex[patterns.Length];
+            for (int i = 0; i < patterns.Length; i++)
             {
-                _compiledPatterns = new Regex[patterns.Length];
-                for (int i = 0; i < patterns.Length; i++)
+                if (patterns[i] == null)
                 {
-                    if (patterns[i] == null)
-                    {
-                        throw new ArgumentNullException(
-                            "Null is not a valid value for an element of the Patterns property.");
-                    }
-                    else if (patterns[i] is Regex)
-                    {
-                        _compiledPatterns[i] = (Regex)patterns[i];
-                    }
-                    else if (patterns[i] is string)
-                    {
-                        _compiledPatterns[i] = new Regex((string)patterns[i], DefaultOptions);
-                    }
-                    else
-                    {
-                        throw new ArgumentException(
-                            "You can only specify a string value or an instance of a Regex class " +
-                            "as an element of the 'Patterns' property.");
-                    }
+                    throw new ArgumentNullException(
+                        "Null is not a valid value for an element of the Patterns property.");
+                }
+                else if (patterns[i] is Regex)
+                {
+                    _compiledPatterns[i] = (Regex) patterns[i];
+                }
+                else if (patterns[i] is string)
+                {
+                    _compiledPatterns[i] = new Regex((string) patterns[i], DefaultOptions);
+                }
+                else
+                {
+                    throw new ArgumentException(
+                        "You can only specify a string value or an instance of a Regex class " +
+                        "as an element of the 'Patterns' property.");
                 }
             }
-	    }
+        }
+    }
 
-	    /// <summary>
-	    /// Does the pattern at the supplied <paramref name="patternIndex"/>
-	    /// match this <paramref name="pattern"/>?
-	    /// </summary>
-	    /// <param name="pattern">The pattern to match</param>
-	    /// <param name="patternIndex">The index of pattern.</param>
-	    /// <returns>
-	    /// <see langword="true"/> if there is a match.
-	    /// </returns>
-	    protected override bool Matches(string pattern, int patternIndex)
-	    {
-	        Match match = _compiledPatterns[patternIndex].Match(pattern);
-	        bool matched = match.Success;
+    /// <summary>
+    /// Does the pattern at the supplied <paramref name="patternIndex"/>
+    /// match this <paramref name="pattern"/>?
+    /// </summary>
+    /// <param name="pattern">The pattern to match</param>
+    /// <param name="patternIndex">The index of pattern.</param>
+    /// <returns>
+    /// <see langword="true"/> if there is a match.
+    /// </returns>
+    protected override bool Matches(string pattern, int patternIndex)
+    {
+        Match match = _compiledPatterns[patternIndex].Match(pattern);
+        bool matched = match.Success;
 
-	        if (_logger.IsEnabled(LogLevel.Debug))
-	        {
-	            _logger.LogDebug("Candidate is: '" + pattern + "'; pattern is '" +
-                                 _compiledPatterns[patternIndex].ToString() + "'; matched=" + matched);
-	        }
+        if (_logger.IsEnabled(LogLevel.Debug))
+        {
+            _logger.LogDebug("Candidate is: '" + pattern + "'; pattern is '" +
+                             _compiledPatterns[patternIndex].ToString() + "'; matched=" + matched);
+        }
 
-	        return matched;
-	    }
-	}
+        return matched;
+    }
 }

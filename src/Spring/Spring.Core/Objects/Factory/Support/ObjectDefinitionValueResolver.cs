@@ -22,353 +22,356 @@ using Spring.Core.TypeConversion;
 using Spring.Expressions;
 using Spring.Objects.Factory.Config;
 
-namespace Spring.Objects.Factory.Support
+namespace Spring.Objects.Factory.Support;
+
+/// <summary>
+/// Helper class for use in object factory implementations,
+/// resolving values contained in object definition objects
+/// into the actual values applied to the target object instance.
+/// </summary>
+/// <remarks>
+/// Used by <see cref="AbstractAutowireCapableObjectFactory"/>.
+/// </remarks>
+/// <author>Juergen Hoeller</author>
+/// <author>Mark Pollack (.NET)</author>
+public class ObjectDefinitionValueResolver
 {
+    private readonly ILogger log;
+
+    private readonly AbstractObjectFactory objectFactory;
+
     /// <summary>
-    /// Helper class for use in object factory implementations,
-    /// resolving values contained in object definition objects
-    /// into the actual values applied to the target object instance.
+    /// Initializes a new instance of the <see cref="ObjectDefinitionValueResolver"/> class.
+    /// </summary>
+    /// <param name="objectFactory">The object factory.</param>
+    public ObjectDefinitionValueResolver(AbstractObjectFactory objectFactory)
+    {
+        log = LogManager.GetLogger(GetType());
+
+        this.objectFactory = objectFactory;
+    }
+
+    /// <summary>
+    /// Given a property value, return a value, resolving any references to other
+    /// objects in the factory if necessary.
     /// </summary>
     /// <remarks>
-    /// Used by <see cref="AbstractAutowireCapableObjectFactory"/>.
+    /// <p>
+    /// The value could be :
+    /// <list type="bullet">
+    /// <item>
+    /// <p>
+    /// An <see cref="Spring.Objects.Factory.Config.IObjectDefinition"/>,
+    /// which leads to the creation of a corresponding new object instance.
+    /// Singleton flags and names of such "inner objects" are always ignored: inner objects
+    /// are anonymous prototypes.
+    /// </p>
+    /// </item>
+    /// <item>
+    /// <p>
+    /// A <see cref="Spring.Objects.Factory.Config.RuntimeObjectReference"/>, which must
+    /// be resolved.
+    /// </p>
+    /// </item>
+    /// <item>
+    /// <p>
+    /// An <see cref="Spring.Objects.Factory.Config.IManagedCollection"/>. This is a
+    /// special placeholder collection that may contain
+    /// <see cref="Spring.Objects.Factory.Config.RuntimeObjectReference"/>s or
+    /// collections that will need to be resolved.
+    /// </p>
+    /// </item>
+    /// <item>
+    /// <p>
+    /// An ordinary object or <see langword="null"/>, in which case it's left alone.
+    /// </p>
+    /// </item>
+    /// </list>
+    /// </p>
     /// </remarks>
-    /// <author>Juergen Hoeller</author>
-    /// <author>Mark Pollack (.NET)</author>
-    public class ObjectDefinitionValueResolver
+    /// <param name="name">
+    /// The name of the object that is having the value of one of its properties resolved.
+    /// </param>
+    /// <param name="definition">
+    /// The definition of the named object.
+    /// </param>
+    /// <param name="argumentName">
+    /// The name of the property the value of which is being resolved.
+    /// </param>
+    /// <param name="argumentValue">
+    /// The value of the property that is being resolved.
+    /// </param>
+    public virtual object ResolveValueIfNecessary(string name, IObjectDefinition definition, string argumentName, object argumentValue)
     {
-        private readonly ILogger log;
+        object resolvedValue = null;
+        resolvedValue = ResolvePropertyValue(name, definition, argumentName, argumentValue);
+        return resolvedValue;
+    }
 
-        private readonly AbstractObjectFactory objectFactory;
+    /// <summary>
+    /// TODO
+    /// </summary>
+    /// <param name="name">
+    /// The name of the object that is having the value of one of its properties resolved.
+    /// </param>
+    /// <param name="definition">
+    /// The definition of the named object.
+    /// </param>
+    /// <param name="argumentName">
+    /// The name of the property the value of which is being resolved.
+    /// </param>
+    /// <param name="argumentValue">
+    /// The value of the property that is being resolved.
+    /// </param>
+    private object ResolvePropertyValue(string name, IObjectDefinition definition, string argumentName, object argumentValue)
+    {
+        object resolvedValue = null;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ObjectDefinitionValueResolver"/> class.
-        /// </summary>
-        /// <param name="objectFactory">The object factory.</param>
-        public ObjectDefinitionValueResolver(AbstractObjectFactory objectFactory)
+        // we must check the argument value to see whether it requires a runtime
+        // reference to another object to be resolved.
+        // if it does, we'll attempt to instantiate the object and set the reference.
+        if (RemotingServices.IsTransparentProxy(argumentValue))
         {
-            log = LogManager.GetLogger(GetType());
+            resolvedValue = argumentValue;
+        }
+        else if (argumentValue is ICustomValueReferenceHolder referenceHolder)
+        {
+            resolvedValue = referenceHolder.Resolve(objectFactory, name, definition, argumentName, referenceHolder);
+        }
+        else if (argumentValue is ObjectDefinitionHolder holder)
+        {
+            // contains an IObjectDefinition with name and aliases...
+            resolvedValue = ResolveInnerObjectDefinition(name, holder.ObjectName, argumentName, holder.ObjectDefinition, definition.IsSingleton);
+        }
+        else if (argumentValue is IObjectDefinition def)
+        {
+            // resolve plain IObjectDefinition, without contained name: use dummy name...
+            resolvedValue = ResolveInnerObjectDefinition(name, "(inner object)", argumentName, def, definition.IsSingleton);
+        }
+        else if (argumentValue is RuntimeObjectReference reference)
+        {
+            resolvedValue = ResolveReference(definition, name, argumentName, reference);
+        }
+        else if (argumentValue is ExpressionHolder expHolder)
+        {
+            object context = null;
+            IDictionary<string, object> variables = null;
 
-            this.objectFactory = objectFactory;
+            if (expHolder.Properties != null)
+            {
+                PropertyValue contextProperty = expHolder.Properties.GetPropertyValue("Context");
+                context = contextProperty == null
+                    ? null
+                    : ResolveValueIfNecessary(name, definition, "Context",
+                        contextProperty.Value);
+                PropertyValue variablesProperty = expHolder.Properties.GetPropertyValue("Variables");
+                object vars = (variablesProperty == null
+                    ? null
+                    : ResolveValueIfNecessary(name, definition, "Variables",
+                        variablesProperty.Value));
+                if (vars is IDictionary<string, object> objects)
+                {
+                    variables = objects;
+                }
+
+                if (vars is IDictionary temp)
+                {
+                    variables = new Dictionary<string, object>(temp.Count);
+                    foreach (DictionaryEntry entry in temp)
+                    {
+                        variables.Add((string) entry.Key, entry.Value);
+                    }
+                }
+                else
+                {
+                    if (vars != null)
+                    {
+                        throw new ArgumentException("'Variables' must resolve to an IDictionary");
+                    }
+                }
+            }
+
+            if (variables == null)
+            {
+                variables = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
+            }
+
+            // add 'this' objectfactory reference to variables
+            variables.Add(Expression.ReservedVariableNames.CurrentObjectFactory, objectFactory);
+
+            resolvedValue = expHolder.Expression.GetValue(context, variables);
+        }
+        else if (argumentValue is IManagedCollection collection)
+        {
+            resolvedValue =
+                collection.Resolve(name, definition, argumentName, ResolveValueIfNecessary);
+        }
+        else if (argumentValue is TypedStringValue tsv)
+        {
+            try
+            {
+                Type resolvedTargetType = ResolveTargetType(tsv);
+                if (resolvedTargetType != null)
+                {
+                    resolvedValue = TypeConversionUtils.ConvertValueIfNecessary(tsv.TargetType, tsv.Value, null);
+                }
+                else
+                {
+                    resolvedValue = tsv.Value;
+                }
+            }
+            catch (Exception ex)
+            {
+                throw new ObjectCreationException(definition.ResourceDescription, name,
+                    "Error converted typed String value for " + argumentName, ex);
+            }
+        }
+        else
+        {
+            // no need to resolve value...
+            resolvedValue = argumentValue;
         }
 
-        /// <summary>
-        /// Given a property value, return a value, resolving any references to other
-        /// objects in the factory if necessary.
-        /// </summary>
-        /// <remarks>
-        /// <p>
-        /// The value could be :
-        /// <list type="bullet">
-        /// <item>
-        /// <p>
-        /// An <see cref="Spring.Objects.Factory.Config.IObjectDefinition"/>,
-        /// which leads to the creation of a corresponding new object instance.
-        /// Singleton flags and names of such "inner objects" are always ignored: inner objects
-        /// are anonymous prototypes.
-        /// </p>
-        /// </item>
-        /// <item>
-        /// <p>
-        /// A <see cref="Spring.Objects.Factory.Config.RuntimeObjectReference"/>, which must
-        /// be resolved.
-        /// </p>
-        /// </item>
-        /// <item>
-        /// <p>
-        /// An <see cref="Spring.Objects.Factory.Config.IManagedCollection"/>. This is a
-        /// special placeholder collection that may contain
-        /// <see cref="Spring.Objects.Factory.Config.RuntimeObjectReference"/>s or
-        /// collections that will need to be resolved.
-        /// </p>
-        /// </item>
-        /// <item>
-        /// <p>
-        /// An ordinary object or <see langword="null"/>, in which case it's left alone.
-        /// </p>
-        /// </item>
-        /// </list>
-        /// </p>
-        /// </remarks>
-        /// <param name="name">
-        /// The name of the object that is having the value of one of its properties resolved.
-        /// </param>
-        /// <param name="definition">
-        /// The definition of the named object.
-        /// </param>
-        /// <param name="argumentName">
-        /// The name of the property the value of which is being resolved.
-        /// </param>
-        /// <param name="argumentValue">
-        /// The value of the property that is being resolved.
-        /// </param>
-        public virtual object ResolveValueIfNecessary(string name, IObjectDefinition definition, string argumentName, object argumentValue)
+        return resolvedValue;
+    }
+
+    /// <summary>
+    /// Resolve the target type of the passed <see cref="TypedStringValue"/>.
+    /// </summary>
+    /// <param name="value">The <see cref="TypedStringValue"/> who's target type is to be resolved</param>
+    /// <returns>The resolved target type, if any. <see lang="null" /> otherwise.</returns>
+    protected virtual Type ResolveTargetType(TypedStringValue value)
+    {
+        if (value.HasTargetType)
         {
-            object resolvedValue = null;
-            resolvedValue = ResolvePropertyValue(name, definition, argumentName, argumentValue);
-            return resolvedValue;
+            return value.TargetType;
         }
 
-        /// <summary>
-        /// TODO
-        /// </summary>
-        /// <param name="name">
-        /// The name of the object that is having the value of one of its properties resolved.
-        /// </param>
-        /// <param name="definition">
-        /// The definition of the named object.
-        /// </param>
-        /// <param name="argumentName">
-        /// The name of the property the value of which is being resolved.
-        /// </param>
-        /// <param name="argumentValue">
-        /// The value of the property that is being resolved.
-        /// </param>
-        private object ResolvePropertyValue(string name, IObjectDefinition definition, string argumentName, object argumentValue)
+        return value.ResolveTargetType();
+    }
+
+    /// <summary>
+    /// Resolves an inner object definition.
+    /// </summary>
+    /// <param name="name">
+    /// The name of the object that surrounds this inner object definition.
+    /// </param>
+    /// <param name="innerObjectName">
+    /// The name of the inner object definition... note: this is a synthetic
+    /// name assigned by the factory (since it makes no sense for inner object
+    /// definitions to have names).
+    /// </param>
+    /// <param name="argumentName">
+    /// The name of the property the value of which is being resolved.
+    /// </param>
+    /// <param name="definition">
+    /// The definition of the inner object that is to be resolved.
+    /// </param>
+    /// <param name="singletonOwner">
+    /// <see langword="true"/> if the owner of the property is a singleton.
+    /// </param>
+    /// <returns>
+    /// The resolved object as defined by the inner object definition.
+    /// </returns>
+    protected virtual object ResolveInnerObjectDefinition(string name, string innerObjectName, string argumentName, IObjectDefinition definition,
+        bool singletonOwner)
+    {
+        RootObjectDefinition mod = objectFactory.GetMergedObjectDefinition(innerObjectName, definition);
+
+        // Check given bean name whether it is unique. If not already unique,
+        // add counter - increasing the counter until the name is unique.
+        String actualInnerObjectName = innerObjectName;
+        if (mod.IsSingleton)
         {
-            object resolvedValue = null;
+            actualInnerObjectName = AdaptInnerObjectName(innerObjectName);
+        }
 
-            // we must check the argument value to see whether it requires a runtime
-            // reference to another object to be resolved.
-            // if it does, we'll attempt to instantiate the object and set the reference.
-            if (RemotingServices.IsTransparentProxy(argumentValue))
-            {
-                resolvedValue = argumentValue;
-            }
-            else if (argumentValue is ICustomValueReferenceHolder referenceHolder)
-            {
-                resolvedValue = referenceHolder.Resolve(objectFactory, name, definition, argumentName, referenceHolder);
-            }
-            else if (argumentValue is ObjectDefinitionHolder holder)
-            {
-                // contains an IObjectDefinition with name and aliases...
-                resolvedValue = ResolveInnerObjectDefinition(name, holder.ObjectName, argumentName, holder.ObjectDefinition, definition.IsSingleton);
-            }
-            else if (argumentValue is IObjectDefinition def)
-            {
-                // resolve plain IObjectDefinition, without contained name: use dummy name...
-                resolvedValue = ResolveInnerObjectDefinition(name, "(inner object)", argumentName, def, definition.IsSingleton);
+        mod.IsSingleton = singletonOwner;
+        object instance;
+        object result;
+        try
+        {
+            //SPRNET-986 ObjectUtils.EmptyObjects -> null
+            instance = objectFactory.InstantiateObject(actualInnerObjectName, mod, null, false, false);
+            result = objectFactory.GetObjectForInstance(instance, actualInnerObjectName, actualInnerObjectName, mod);
+        }
+        catch (ObjectsException ex)
+        {
+            throw ObjectCreationException.GetObjectCreationException(ex, name, argumentName, definition.ResourceDescription, innerObjectName);
+        }
 
-            }
-            else if (argumentValue is RuntimeObjectReference reference)
-            {
-                resolvedValue = ResolveReference(definition, name, argumentName, reference);
-            }
-            else if (argumentValue is ExpressionHolder expHolder)
-            {
-                object context = null;
-                IDictionary<string, object> variables = null;
+        if (singletonOwner && instance is IDisposable)
+        {
+            // keep a reference to the inner object instance, to be able to destroy
+            // it on factory shutdown...
+            objectFactory.DisposableInnerObjects.Add(instance);
+        }
 
-                if (expHolder.Properties != null)
-                {
-                    PropertyValue contextProperty = expHolder.Properties.GetPropertyValue("Context");
-                    context = contextProperty == null
-                                  ? null
-                                  : ResolveValueIfNecessary(name, definition, "Context",
-                                                            contextProperty.Value);
-                    PropertyValue variablesProperty = expHolder.Properties.GetPropertyValue("Variables");
-                    object vars = (variablesProperty == null
-                                       ? null
-                                       : ResolveValueIfNecessary(name, definition, "Variables",
-                                                                 variablesProperty.Value));
-                    if (vars is IDictionary<string, object> objects)
-                    {
-                        variables = objects;
-                    }
-                    if (vars is IDictionary temp)
-                    {
-                        variables = new Dictionary<string, object>(temp.Count);
-                        foreach (DictionaryEntry entry in temp)
-                        {
-                            variables.Add((string) entry.Key, entry.Value);
-                        }
-                    }
-                    else
-                    {
-                        if (vars != null)
-                        {
-                            throw new ArgumentException("'Variables' must resolve to an IDictionary");
-                        }
-                    }
-                }
+        return result;
+    }
 
-                if (variables == null)
-                {
-                    variables = new Dictionary<string, object>(StringComparer.OrdinalIgnoreCase);
-                }
-                // add 'this' objectfactory reference to variables
-                variables.Add(Expression.ReservedVariableNames.CurrentObjectFactory, objectFactory);
+    /// <summary>
+    /// Checks the given bean name whether it is unique. If not already unique,
+    /// a counter is added, increasing the counter until the name is unique.
+    /// </summary>
+    /// <param name="innerObjectName">Original Name of the inner object.</param>
+    /// <returns>The Adapted name for the inner object</returns>
+    private string AdaptInnerObjectName(string innerObjectName)
+    {
+        string actualInnerObjectName = innerObjectName;
+        int counter = 0;
+        while (this.objectFactory.IsObjectNameInUse(actualInnerObjectName))
+        {
+            counter++;
+            actualInnerObjectName = innerObjectName + ObjectFactoryUtils.GeneratedObjectNameSeparator + counter;
+        }
 
-                resolvedValue = expHolder.Expression.GetValue(context, variables);
-            }
-            else if (argumentValue is IManagedCollection collection)
+        return actualInnerObjectName;
+    }
+
+    /// <summary>
+    /// Resolve a reference to another object in the factory.
+    /// </summary>
+    /// <param name="name">
+    /// The name of the object that is having the value of one of its properties resolved.
+    /// </param>
+    /// <param name="definition">
+    /// The definition of the named object.
+    /// </param>
+    /// <param name="argumentName">
+    /// The name of the property the value of which is being resolved.
+    /// </param>
+    /// <param name="reference">
+    /// The runtime reference containing the value of the property.
+    /// </param>
+    /// <returns>A reference to another object in the factory.</returns>
+    protected virtual object ResolveReference(IObjectDefinition definition, string name, string argumentName, RuntimeObjectReference reference)
+    {
+        if (log.IsEnabled(LogLevel.Debug))
+        {
+            log.LogDebug(string.Format(CultureInfo.InvariantCulture, "Resolving reference from property '{0}' in object '{1}' to object '{2}'.",
+                argumentName, name, reference.ObjectName));
+        }
+
+        try
+        {
+            if (reference.IsToParent)
             {
-                resolvedValue =
-                    collection.Resolve(name, definition, argumentName, ResolveValueIfNecessary);
-            }
-            else if (argumentValue is TypedStringValue tsv)
-            {
-                try
-                {
-                    Type resolvedTargetType = ResolveTargetType(tsv);
-                    if (resolvedTargetType != null)
-                    {
-                        resolvedValue = TypeConversionUtils.ConvertValueIfNecessary(tsv.TargetType, tsv.Value, null);
-                    }
-                    else
-                    {
-                        resolvedValue = tsv.Value;
-                    }
-                }
-                catch (Exception ex)
+                if (null == objectFactory.ParentObjectFactory)
                 {
                     throw new ObjectCreationException(definition.ResourceDescription, name,
-                                                      "Error converted typed String value for " + argumentName, ex);
+                        $"Can't resolve reference to '{reference.ObjectName}' in parent factory: " +
+                        "no parent factory available.");
                 }
 
+                return objectFactory.ParentObjectFactory.GetObject(reference.ObjectName);
             }
-            else
-            {
-                // no need to resolve value...
-                resolvedValue = argumentValue;
-            }
-            return resolvedValue;
-        }
 
-        /// <summary>
-        /// Resolve the target type of the passed <see cref="TypedStringValue"/>.
-        /// </summary>
-        /// <param name="value">The <see cref="TypedStringValue"/> who's target type is to be resolved</param>
-        /// <returns>The resolved target type, if any. <see lang="null" /> otherwise.</returns>
-        protected virtual Type ResolveTargetType(TypedStringValue value)
+            return objectFactory.GetObject(reference.ObjectName);
+        }
+        catch (ObjectsException ex)
         {
-            if (value.HasTargetType)
-            {
-			    return value.TargetType;
-            }
-            return value.ResolveTargetType();
+            throw ObjectCreationException.GetObjectCreationException(ex, name, argumentName, definition.ResourceDescription, reference.ObjectName);
         }
-
-        /// <summary>
-        /// Resolves an inner object definition.
-        /// </summary>
-        /// <param name="name">
-        /// The name of the object that surrounds this inner object definition.
-        /// </param>
-        /// <param name="innerObjectName">
-        /// The name of the inner object definition... note: this is a synthetic
-        /// name assigned by the factory (since it makes no sense for inner object
-        /// definitions to have names).
-        /// </param>
-        /// <param name="argumentName">
-        /// The name of the property the value of which is being resolved.
-        /// </param>
-        /// <param name="definition">
-        /// The definition of the inner object that is to be resolved.
-        /// </param>
-        /// <param name="singletonOwner">
-        /// <see langword="true"/> if the owner of the property is a singleton.
-        /// </param>
-        /// <returns>
-        /// The resolved object as defined by the inner object definition.
-        /// </returns>
-        protected virtual object ResolveInnerObjectDefinition(string name, string innerObjectName, string argumentName, IObjectDefinition definition,
-                                                      bool singletonOwner)
-        {
-            RootObjectDefinition mod = objectFactory.GetMergedObjectDefinition(innerObjectName, definition);
-
-            // Check given bean name whether it is unique. If not already unique,
-            // add counter - increasing the counter until the name is unique.
-            String actualInnerObjectName = innerObjectName;
-            if (mod.IsSingleton)
-            {
-                actualInnerObjectName = AdaptInnerObjectName(innerObjectName);
-            }
-
-
-            mod.IsSingleton = singletonOwner;
-            object instance;
-            object result;
-            try
-            {
-                //SPRNET-986 ObjectUtils.EmptyObjects -> null
-                instance = objectFactory.InstantiateObject(actualInnerObjectName, mod, null, false, false);
-                result = objectFactory.GetObjectForInstance(instance, actualInnerObjectName, actualInnerObjectName, mod);
-            }
-            catch (ObjectsException ex)
-            {
-                throw ObjectCreationException.GetObjectCreationException(ex, name, argumentName, definition.ResourceDescription, innerObjectName);
-            }
-            if (singletonOwner && instance is IDisposable)
-            {
-                // keep a reference to the inner object instance, to be able to destroy
-                // it on factory shutdown...
-                objectFactory.DisposableInnerObjects.Add(instance);
-            }
-            return result;
-        }
-
-        /// <summary>
-        /// Checks the given bean name whether it is unique. If not already unique,
-        /// a counter is added, increasing the counter until the name is unique.
-        /// </summary>
-        /// <param name="innerObjectName">Original Name of the inner object.</param>
-        /// <returns>The Adapted name for the inner object</returns>
-        private string AdaptInnerObjectName(string innerObjectName)
-        {
-            string actualInnerObjectName = innerObjectName;
-            int counter = 0;
-            while (this.objectFactory.IsObjectNameInUse(actualInnerObjectName))
-            {
-                counter++;
-                actualInnerObjectName = innerObjectName + ObjectFactoryUtils.GeneratedObjectNameSeparator + counter;
-            }
-            return actualInnerObjectName;
-        }
-
-        /// <summary>
-        /// Resolve a reference to another object in the factory.
-        /// </summary>
-        /// <param name="name">
-        /// The name of the object that is having the value of one of its properties resolved.
-        /// </param>
-        /// <param name="definition">
-        /// The definition of the named object.
-        /// </param>
-        /// <param name="argumentName">
-        /// The name of the property the value of which is being resolved.
-        /// </param>
-        /// <param name="reference">
-        /// The runtime reference containing the value of the property.
-        /// </param>
-        /// <returns>A reference to another object in the factory.</returns>
-        protected virtual object ResolveReference(IObjectDefinition definition, string name, string argumentName, RuntimeObjectReference reference)
-        {
-            if (log.IsEnabled(LogLevel.Debug))
-            {
-                log.LogDebug(string.Format(CultureInfo.InvariantCulture, "Resolving reference from property '{0}' in object '{1}' to object '{2}'.",
-                    argumentName, name, reference.ObjectName));
-            }
-
-            try
-            {
-                if (reference.IsToParent)
-                {
-                    if (null == objectFactory.ParentObjectFactory)
-                    {
-                        throw new ObjectCreationException(definition.ResourceDescription, name,
-                            $"Can't resolve reference to '{reference.ObjectName}' in parent factory: " +
-                            "no parent factory available.");
-                    }
-                    return objectFactory.ParentObjectFactory.GetObject(reference.ObjectName);
-                }
-                return objectFactory.GetObject(reference.ObjectName);
-            }
-            catch (ObjectsException ex)
-            {
-                throw ObjectCreationException.GetObjectCreationException(ex, name, argumentName, definition.ResourceDescription, reference.ObjectName);
-            }
-        }
-
-
     }
 }

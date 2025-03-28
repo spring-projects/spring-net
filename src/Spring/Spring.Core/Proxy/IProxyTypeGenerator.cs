@@ -17,6 +17,7 @@
  */
 
 #endregion
+
 #region License
 
 /*
@@ -39,34 +40,33 @@
 
 using System.Reflection.Emit;
 
-namespace Spring.Proxy
+namespace Spring.Proxy;
+
+/// <summary>
+/// Describes the operations that generates IL instructions
+/// used to build the proxy type.
+/// </summary>
+/// <author>Bruno Baia</author>
+public interface IProxyTypeGenerator
 {
-	/// <summary>
-    /// Describes the operations that generates IL instructions
-    /// used to build the proxy type.
-	/// </summary>
-	/// <author>Bruno Baia</author>
-	public interface IProxyTypeGenerator
-	{
-        // TODO : Why not ?
+    // TODO : Why not ?
 /*
         /// <summary>
         /// Gets the <see cref="TypeBuilder"/> used to build the proxy type.
         /// </summary>
         TypeBuilder ProxyTypeBuilder { get; }
 */
-        /// <summary>
-        /// Generates the IL instructions that pushes
-        /// the proxy instance on stack.
-        /// </summary>
-        /// <param name="il">The IL generator to use.</param>
-        void PushProxy(ILGenerator il);
+    /// <summary>
+    /// Generates the IL instructions that pushes
+    /// the proxy instance on stack.
+    /// </summary>
+    /// <param name="il">The IL generator to use.</param>
+    void PushProxy(ILGenerator il);
 
-        /// <summary>
-        /// Generates the IL instructions that pushes
-        /// the target instance on which calls should be delegated to.
-        /// </summary>
-        /// <param name="il">The IL generator to use.</param>
-        void PushTarget(ILGenerator il);
-	}
+    /// <summary>
+    /// Generates the IL instructions that pushes
+    /// the target instance on which calls should be delegated to.
+    /// </summary>
+    /// <param name="il">The IL generator to use.</param>
+    void PushTarget(ILGenerator il);
 }

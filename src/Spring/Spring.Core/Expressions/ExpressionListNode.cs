@@ -21,47 +21,47 @@
 using System.Runtime.Serialization;
 using Spring.Expressions.Parser.antlr.collections;
 
-namespace Spring.Expressions
+namespace Spring.Expressions;
+
+/// <summary>
+/// Represents parsed expression list node in the navigation expression.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[Serializable]
+public class ExpressionListNode : BaseNode
 {
     /// <summary>
-    /// Represents parsed expression list node in the navigation expression.
+    /// Create a new instance
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    [Serializable]
-    public class ExpressionListNode : BaseNode
+    public ExpressionListNode()
     {
-        /// <summary>
-        /// Create a new instance
-        /// </summary>
-        public ExpressionListNode()
+    }
+
+    /// <summary>
+    /// Create a new instance from SerializationInfo
+    /// </summary>
+    protected ExpressionListNode(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+    }
+
+    /// <summary>
+    /// Returns a result of the last expression in a list.
+    /// </summary>
+    /// <param name="context">Context to evaluate expressions against.</param>
+    /// <param name="evalContext">Current expression evaluation context.</param>
+    /// <returns>Result of the last expression in a list</returns>
+    protected override object Get(object context, EvaluationContext evalContext)
+    {
+        object result = context;
+
+        AST node = this.getFirstChild();
+        while (node != null)
         {
+            result = GetValue(((BaseNode) node), context, evalContext);
+            node = node.getNextSibling();
         }
 
-        /// <summary>
-        /// Create a new instance from SerializationInfo
-        /// </summary>
-        protected ExpressionListNode(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
-
-        /// <summary>
-        /// Returns a result of the last expression in a list.
-        /// </summary>
-        /// <param name="context">Context to evaluate expressions against.</param>
-        /// <param name="evalContext">Current expression evaluation context.</param>
-        /// <returns>Result of the last expression in a list</returns>
-        protected override object Get(object context, EvaluationContext evalContext)
-        {
-            object result = context;
-
-            AST node = this.getFirstChild();
-            while (node != null)
-            {
-                result = GetValue(((BaseNode) node), context, evalContext);
-                node = node.getNextSibling();
-            }
-            return result;
-        }
+        return result;
     }
 }

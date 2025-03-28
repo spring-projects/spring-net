@@ -20,53 +20,56 @@
 
 using System.Runtime.Serialization;
 
-namespace Spring.Dao
+namespace Spring.Dao;
+
+/// <summary>
+/// Exception thrown on failure to complete a transaction in serialized mode due to
+/// update conflicts.
+/// </summary>
+/// <remarks>
+/// <p>
+/// This exception will be thrown either by O/R mapping tools or by custom DAO
+/// implementations.
+/// </p>
+/// </remarks>
+/// <author>Rod Johnson</author>
+/// <author>Griffin Caprio (.NET)</author>
+[Serializable]
+public class CannotSerializeTransactionException : PessimisticLockingFailureException
 {
-	/// <summary>
-	/// Exception thrown on failure to complete a transaction in serialized mode due to
-	/// update conflicts.
-	/// </summary>
-	/// <remarks>
-	/// <p>
-	/// This exception will be thrown either by O/R mapping tools or by custom DAO
-	/// implementations.
-	/// </p>
-	/// </remarks>
-	/// <author>Rod Johnson</author>
-	/// <author>Griffin Caprio (.NET)</author>
-	[Serializable]
-	public class CannotSerializeTransactionException : PessimisticLockingFailureException
-	{
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Dao.CannotSerializeTransactionException"/> class.
-		/// </summary>
-		public CannotSerializeTransactionException() {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Dao.CannotSerializeTransactionException"/> class.
+    /// </summary>
+    public CannotSerializeTransactionException() { }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Dao.CannotSerializeTransactionException"/> class.
-		/// </summary>
-		/// <param name="message">
-		/// A message about the exception.
-		/// </param>
-		public CannotSerializeTransactionException( string message ) : base( message ) {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Dao.CannotSerializeTransactionException"/> class.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    public CannotSerializeTransactionException(string message) : base(message) { }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Dao.CannotSerializeTransactionException"/> class.
-		/// </summary>
-		/// <param name="message">
-		/// A message about the exception.
-		/// </param>
-		/// <param name="rootCause">
-		/// The root exception (from the underlying data access API, such as ADO.NET).
-		/// </param>
-		public CannotSerializeTransactionException( string message, Exception rootCause)
-			: base( message , rootCause ) {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Dao.CannotSerializeTransactionException"/> class.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    /// <param name="rootCause">
+    /// The root exception (from the underlying data access API, such as ADO.NET).
+    /// </param>
+    public CannotSerializeTransactionException(string message, Exception rootCause)
+        : base(message, rootCause)
+    {
+    }
 
-		/// <inheritdoc />
-		protected CannotSerializeTransactionException(
-			SerializationInfo info, StreamingContext context ) : base( info, context ) {}
-	}
+    /// <inheritdoc />
+    protected CannotSerializeTransactionException(
+        SerializationInfo info, StreamingContext context) : base(info, context)
+    {
+    }
 }

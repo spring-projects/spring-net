@@ -22,55 +22,54 @@
 
 #endregion
 
-namespace Spring.Aop.Target
+namespace Spring.Aop.Target;
+
+/// <summary>
+/// <see cref="Spring.Aop.ITargetSource"/> implementation that creates a
+/// new instance of the target object for each request.
+/// </summary>
+/// <remarks>
+/// <p>
+/// Can only be used in an object factory.
+/// </p>
+/// </remarks>
+/// <author>Rod Johnson</author>
+/// <author>Spinazzi Federico (.NET)</author>
+public sealed class PrototypeTargetSource : AbstractPrototypeTargetSource
 {
-	/// <summary>
-	/// <see cref="Spring.Aop.ITargetSource"/> implementation that creates a
-	/// new instance of the target object for each request.
-	/// </summary>
-	/// <remarks>
-	/// <p>
-	/// Can only be used in an object factory.
-	/// </p>
-	/// </remarks>
-	/// <author>Rod Johnson</author>
-	/// <author>Spinazzi Federico (.NET)</author>
-	public sealed class PrototypeTargetSource : AbstractPrototypeTargetSource
-	{
-		/// <summary>
-		/// Returns the target object.
-		/// </summary>
-		/// <returns>The target object.</returns>
-		/// <exception cref="System.Exception">
-		/// If unable to obtain the target object.
-		/// </exception>
-		public override Object GetTarget()
-		{
-			return NewPrototypeInstance();
-		}
+    /// <summary>
+    /// Returns the target object.
+    /// </summary>
+    /// <returns>The target object.</returns>
+    /// <exception cref="System.Exception">
+    /// If unable to obtain the target object.
+    /// </exception>
+    public override Object GetTarget()
+    {
+        return NewPrototypeInstance();
+    }
 
-		/// <summary>
-		/// Releases the target object.
-		/// </summary>
-		/// <remarks>
-		/// <p>
-		/// No-op implementation.
-		/// </p>
-		/// </remarks>
-		/// <param name="target">The target object to release.</param>
-		public override void ReleaseTarget(object target)
-		{
-		}
+    /// <summary>
+    /// Releases the target object.
+    /// </summary>
+    /// <remarks>
+    /// <p>
+    /// No-op implementation.
+    /// </p>
+    /// </remarks>
+    /// <param name="target">The target object to release.</param>
+    public override void ReleaseTarget(object target)
+    {
+    }
 
-		/// <summary>
-		/// Is the target source static?
-		/// </summary>
-		/// <value>
-		/// <see langword="false"/> because this target source is never static.
-		/// </value>
-		public override bool IsStatic
-		{
-			get { return false; }
-		}
-	}
+    /// <summary>
+    /// Is the target source static?
+    /// </summary>
+    /// <value>
+    /// <see langword="false"/> because this target source is never static.
+    /// </value>
+    public override bool IsStatic
+    {
+        get { return false; }
+    }
 }

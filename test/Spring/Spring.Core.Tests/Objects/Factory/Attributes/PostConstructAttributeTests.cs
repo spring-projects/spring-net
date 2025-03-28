@@ -23,156 +23,149 @@ using Spring.Context.Support;
 using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 
-namespace Spring.Objects.Factory.Attributes
+namespace Spring.Objects.Factory.Attributes;
+
+[TestFixture]
+public class PostConstructAttributeTests
 {
-    [TestFixture]
-    public class PostConstructAttributeTests
+    private GenericApplicationContext _applicationContext;
+
+    [SetUp]
+    public void Setup()
     {
-        private GenericApplicationContext _applicationContext;
-       
+        _applicationContext = new GenericApplicationContext();
 
-        [SetUp]
-        public void Setup()
-        {
-            _applicationContext = new GenericApplicationContext();
+        var objDef = new RootObjectDefinition(typeof(InitDestroyAttributeObjectPostProcessor));
+        objDef.Role = ObjectRole.ROLE_INFRASTRUCTURE;
+        _applicationContext.ObjectFactory.RegisterObjectDefinition("InitDestroyAttributeObjectPostProcessor", objDef);
 
-            var objDef = new RootObjectDefinition(typeof (InitDestroyAttributeObjectPostProcessor));
-            objDef.Role = ObjectRole.ROLE_INFRASTRUCTURE;
-            _applicationContext.ObjectFactory.RegisterObjectDefinition("InitDestroyAttributeObjectPostProcessor", objDef);
+        objDef = new RootObjectDefinition(typeof(PostContructTestObject1));
+        _applicationContext.ObjectFactory.RegisterObjectDefinition("PostContructTestObject1", objDef);
 
-            objDef = new RootObjectDefinition(typeof(PostContructTestObject1));
-            _applicationContext.ObjectFactory.RegisterObjectDefinition("PostContructTestObject1", objDef);
+        objDef = new RootObjectDefinition(typeof(PostContructTestObject2));
+        _applicationContext.ObjectFactory.RegisterObjectDefinition("PostContructTestObject2", objDef);
 
-            objDef = new RootObjectDefinition(typeof(PostContructTestObject2));
-            _applicationContext.ObjectFactory.RegisterObjectDefinition("PostContructTestObject2", objDef);
-            
-            objDef = new RootObjectDefinition(typeof(PostContructTestObject3));
-            _applicationContext.ObjectFactory.RegisterObjectDefinition("PostContructTestObject3", objDef);
+        objDef = new RootObjectDefinition(typeof(PostContructTestObject3));
+        _applicationContext.ObjectFactory.RegisterObjectDefinition("PostContructTestObject3", objDef);
 
-            objDef = new RootObjectDefinition(typeof(PostContructTestObject4));
-            objDef.Scope = "prototype";
-            _applicationContext.ObjectFactory.RegisterObjectDefinition("PostContructTestObject4", objDef);
+        objDef = new RootObjectDefinition(typeof(PostContructTestObject4));
+        objDef.Scope = "prototype";
+        _applicationContext.ObjectFactory.RegisterObjectDefinition("PostContructTestObject4", objDef);
 
-            objDef = new RootObjectDefinition(typeof(PostContructTestObject5));
-            _applicationContext.ObjectFactory.RegisterObjectDefinition("PostContructTestObject5", objDef);
+        objDef = new RootObjectDefinition(typeof(PostContructTestObject5));
+        _applicationContext.ObjectFactory.RegisterObjectDefinition("PostContructTestObject5", objDef);
 
-            objDef = new RootObjectDefinition(typeof(PostContructTestObject1));
-            objDef.InitMethodName = "Init1";
-            _applicationContext.ObjectFactory.RegisterObjectDefinition("PostContructTestObject6", objDef);
+        objDef = new RootObjectDefinition(typeof(PostContructTestObject1));
+        objDef.InitMethodName = "Init1";
+        _applicationContext.ObjectFactory.RegisterObjectDefinition("PostContructTestObject6", objDef);
 
-            _applicationContext.Refresh();
-        }
-
-
-        [Test]
-        public void PostContructMethodExecuted()
-        {
-            var testObj = (PostContructTestObject1)_applicationContext.GetObject("PostContructTestObject1");
-
-            Assert.That(testObj.InitCalled, Is.EqualTo(1));
-        }
-
-        [Test]
-        public void ExecutedInCorrectOrder()
-        {
-            var testObj = (PostContructTestObject2)_applicationContext.GetObject("PostContructTestObject2");
-
-            Assert.That(testObj.InitCalled, Is.EqualTo(2), "Two PostContruct methods defined, need to have two method calls.");
-            Assert.That(testObj.CalledAfter, Is.True, "Order of PostConstruct not followed.");
-        }
-
-        [Test]
-        public void NoExceptionIfMethodHasReturnValue()
-        {
-            var testObj = (PostContructTestObject3)_applicationContext.GetObject("PostContructTestObject3");
-
-            Assert.That(testObj.InitCalled, Is.EqualTo(1), "A PostContruct method with return value should run the init method.");
-        }
-
-        [Test]
-        public void WithArgumentMustThrowException()
-        {
-            Assert.That(() => { _applicationContext.GetObject("PostContructTestObject4"); }, Throws.Exception.TypeOf<ObjectCreationException>());
-        }
-
-        [Test]
-        public void AttributeOnbaseTypeMethod()
-        {
-            var testObj = (PostContructTestObject5)_applicationContext.GetObject("PostContructTestObject5");
-
-            Assert.That(testObj.InitCalled, Is.EqualTo(1));
-        }
-
-        [Test]
-        public void SameMethodDefinedInXml()
-        {
-            var testObj = (PostContructTestObject1)_applicationContext.GetObject("PostContructTestObject6");
-
-            Assert.That(testObj.InitCalled, Is.EqualTo(1));
-        }
+        _applicationContext.Refresh();
     }
 
-
-    public class PostContructTestObject1
+    [Test]
+    public void PostContructMethodExecuted()
     {
-        public int InitCalled { get; set; }
+        var testObj = (PostContructTestObject1) _applicationContext.GetObject("PostContructTestObject1");
 
-        [PostConstruct]
-        public void Init1()
-        {
-            InitCalled++;
-        }
+        Assert.That(testObj.InitCalled, Is.EqualTo(1));
     }
 
-    public class PostContructTestObject2
+    [Test]
+    public void ExecutedInCorrectOrder()
     {
-        public int InitCalled { get; set; }
-        public bool Init1Called { get; set; }
-        public bool CalledAfter { get; set; }
+        var testObj = (PostContructTestObject2) _applicationContext.GetObject("PostContructTestObject2");
 
-        [PostConstruct(Order = 1)]
-        public void Init1()
-        {
-            InitCalled++;
-            Init1Called = true;
-        }
-
-        [PostConstruct(Order = 2)]
-        public void Init2()
-        {
-            InitCalled++;
-            if (Init1Called)
-                CalledAfter = true;
-        }
+        Assert.That(testObj.InitCalled, Is.EqualTo(2), "Two PostContruct methods defined, need to have two method calls.");
+        Assert.That(testObj.CalledAfter, Is.True, "Order of PostConstruct not followed.");
     }
 
-    public class PostContructTestObject3
+    [Test]
+    public void NoExceptionIfMethodHasReturnValue()
     {
-        public int InitCalled { get; set; }
+        var testObj = (PostContructTestObject3) _applicationContext.GetObject("PostContructTestObject3");
 
-        [PostConstruct]
-        private bool Init1()
-        {
-            InitCalled++;
-            return true;
-        }
+        Assert.That(testObj.InitCalled, Is.EqualTo(1), "A PostContruct method with return value should run the init method.");
     }
 
-    public class PostContructTestObject4
+    [Test]
+    public void WithArgumentMustThrowException()
     {
-        public int InitCalled { get; set; }
-
-        [PostConstruct]
-        private void Init1(bool enabled)
-        {
-            InitCalled++;
-        }
+        Assert.That(() => { _applicationContext.GetObject("PostContructTestObject4"); }, Throws.Exception.TypeOf<ObjectCreationException>());
     }
 
-    public class PostContructTestObject5 : PostContructTestObject1
+    [Test]
+    public void AttributeOnbaseTypeMethod()
     {
+        var testObj = (PostContructTestObject5) _applicationContext.GetObject("PostContructTestObject5");
 
+        Assert.That(testObj.InitCalled, Is.EqualTo(1));
     }
 
+    [Test]
+    public void SameMethodDefinedInXml()
+    {
+        var testObj = (PostContructTestObject1) _applicationContext.GetObject("PostContructTestObject6");
 
+        Assert.That(testObj.InitCalled, Is.EqualTo(1));
+    }
+}
+
+public class PostContructTestObject1
+{
+    public int InitCalled { get; set; }
+
+    [PostConstruct]
+    public void Init1()
+    {
+        InitCalled++;
+    }
+}
+
+public class PostContructTestObject2
+{
+    public int InitCalled { get; set; }
+    public bool Init1Called { get; set; }
+    public bool CalledAfter { get; set; }
+
+    [PostConstruct(Order = 1)]
+    public void Init1()
+    {
+        InitCalled++;
+        Init1Called = true;
+    }
+
+    [PostConstruct(Order = 2)]
+    public void Init2()
+    {
+        InitCalled++;
+        if (Init1Called)
+            CalledAfter = true;
+    }
+}
+
+public class PostContructTestObject3
+{
+    public int InitCalled { get; set; }
+
+    [PostConstruct]
+    private bool Init1()
+    {
+        InitCalled++;
+        return true;
+    }
+}
+
+public class PostContructTestObject4
+{
+    public int InitCalled { get; set; }
+
+    [PostConstruct]
+    private void Init1(bool enabled)
+    {
+        InitCalled++;
+    }
+}
+
+public class PostContructTestObject5 : PostContructTestObject1
+{
 }

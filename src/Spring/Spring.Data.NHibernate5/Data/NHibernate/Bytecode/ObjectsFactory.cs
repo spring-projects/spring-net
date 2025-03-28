@@ -15,58 +15,55 @@
  */
 
 using NHibernate.Bytecode;
-
 using Spring.Objects.Factory;
 
-namespace Spring.Data.NHibernate.Bytecode
+namespace Spring.Data.NHibernate.Bytecode;
+
+/// <summary>
+///
+/// </summary>
+/// <author>Fabio Maulo</author>
+public class ObjectsFactory : IObjectsFactory
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <author>Fabio Maulo</author>
-    public class ObjectsFactory : IObjectsFactory
+    private readonly IListableObjectFactory listableObjectFactory;
+
+    ///<summary>
+    ///</summary>
+    ///<param name="listableObjectFactory"></param>
+    public ObjectsFactory(IListableObjectFactory listableObjectFactory)
     {
-        private readonly IListableObjectFactory listableObjectFactory;
+        this.listableObjectFactory = listableObjectFactory;
+    }
 
-        ///<summary>
-        ///</summary>
-        ///<param name="listableObjectFactory"></param>
-        public ObjectsFactory(IListableObjectFactory listableObjectFactory)
-		{
-			this.listableObjectFactory = listableObjectFactory;
-		}
+    /// <summary>
+    /// Creates an instance of the specified type.
+    /// </summary>
+    /// <param name="type">The type of object to create.</param>
+    /// <returns>A reference to the created object.</returns>
+    public object CreateInstance(Type type)
+    {
+        var namesForType = listableObjectFactory.GetObjectNamesForType(type);
+        return namesForType.Count > 0 ? listableObjectFactory.GetObject(namesForType[0], type) : Activator.CreateInstance(type);
+    }
 
-        /// <summary>
-        /// Creates an instance of the specified type.
-        /// </summary>
-        /// <param name="type">The type of object to create.</param>
-        /// <returns>A reference to the created object.</returns>
-        public object CreateInstance(Type type)
-		{
-			var namesForType = listableObjectFactory.GetObjectNamesForType(type);
-			return namesForType.Count > 0 ? listableObjectFactory.GetObject(namesForType[0], type) : Activator.CreateInstance(type);
-		}
+    /// <summary>
+    /// Creates an instance of the specified type.
+    /// </summary>
+    /// <param name="type">The type of object to create.</param><param name="nonPublic">true if a public or nonpublic default constructor can match; false if only a public default constructor can match.</param>
+    /// <returns>A reference to the created object </returns>
+    public object CreateInstance(Type type, bool nonPublic)
+    {
+        var namesForType = listableObjectFactory.GetObjectNamesForType(type);
+        return namesForType.Count > 0 ? listableObjectFactory.GetObject(namesForType[0], type) : Activator.CreateInstance(type);
+    }
 
-        /// <summary>
-        /// Creates an instance of the specified type.
-        /// </summary>
-        /// <param name="type">The type of object to create.</param><param name="nonPublic">true if a public or nonpublic default constructor can match; false if only a public default constructor can match.</param>
-        /// <returns>A reference to the created object </returns>
-        public object CreateInstance(Type type, bool nonPublic)
-		{
-			var namesForType = listableObjectFactory.GetObjectNamesForType(type);
-			return namesForType.Count > 0 ? listableObjectFactory.GetObject(namesForType[0], type) : Activator.CreateInstance(type);
-		}
-
-        /// <summary>
-        /// Creates an instance of the specified type using the constructor that best matches the specified parameters.
-        /// </summary>
-        /// <param name="type">The type of object to create.</param><param name="ctorArgs">An array of constructor arguments.</param>
-        /// <returns>A reference to the created object.</returns>
-        public object CreateInstance(Type type, params object[] ctorArgs)
-		{
-			return Activator.CreateInstance(type, ctorArgs);
-		}
-
+    /// <summary>
+    /// Creates an instance of the specified type using the constructor that best matches the specified parameters.
+    /// </summary>
+    /// <param name="type">The type of object to create.</param><param name="ctorArgs">An array of constructor arguments.</param>
+    /// <returns>A reference to the created object.</returns>
+    public object CreateInstance(Type type, params object[] ctorArgs)
+    {
+        return Activator.CreateInstance(type, ctorArgs);
     }
 }

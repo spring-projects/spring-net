@@ -9,12 +9,15 @@ public partial class SPCSwitchConversationSameRequest : System.Web.UI.Page
     private static readonly ILogger<SPCSwitchConversationSameRequest> LOG = LogManager.GetLogger<SPCSwitchConversationSameRequest>();
 
     private IConversationState conversationA;
+
     public IConversationState ConversationA
     {
         get { return conversationA; }
         set { conversationA = value; }
     }
+
     private IConversationState conversationB;
+
     public IConversationState ConversationB
     {
         get { return conversationB; }
@@ -22,6 +25,7 @@ public partial class SPCSwitchConversationSameRequest : System.Web.UI.Page
     }
 
     private ISessionFactory sessionFactory;
+
     public ISessionFactory SessionFactory
     {
         get { return sessionFactory; }

@@ -20,152 +20,150 @@
 
 using System.Reflection;
 using System.Reflection.Emit;
-
 using Spring.Proxy;
 
-namespace Spring.Remoting.Support
+namespace Spring.Remoting.Support;
+
+/// <summary>
+/// Builds a proxy type based on <see cref="BaseRemoteObject"/> to wrap a target object
+/// that is intended to be remotable.
+/// </summary>
+/// <author>Bruno Baia</author>
+internal class RemoteObjectProxyTypeBuilder : CompositionProxyTypeBuilder
 {
+    #region Fields
+
+    private static readonly MethodInfo TimeSpan_FromTicks =
+        typeof(TimeSpan).GetMethod("FromTicks", BindingFlags.Public | BindingFlags.Static);
+
+    private static readonly MethodInfo BaseRemoteObject_IsInfinite =
+        typeof(BaseRemoteObject).GetMethod("set_IsInfinite", BindingFlags.Public | BindingFlags.Instance);
+
+    private static readonly MethodInfo BaseRemoteObject_InitialLeaseTime =
+        typeof(BaseRemoteObject).GetMethod("set_InitialLeaseTime", BindingFlags.Public | BindingFlags.Instance);
+
+    private static readonly MethodInfo BaseRemoteObject_RenewOnCallTime =
+        typeof(BaseRemoteObject).GetMethod("set_RenewOnCallTime", BindingFlags.Public | BindingFlags.Instance);
+
+    private static readonly MethodInfo BaseRemoteObject_SponsorshipTimeout =
+        typeof(BaseRemoteObject).GetMethod("set_SponsorshipTimeout", BindingFlags.Public | BindingFlags.Instance);
+
+    private ILifetime lifetime;
+
+    #endregion
+
+    #region Constructor(s) / Destructor
+
     /// <summary>
-    /// Builds a proxy type based on <see cref="BaseRemoteObject"/> to wrap a target object
-    /// that is intended to be remotable.
+    /// Creates a new instance of the
+    /// <see cref="RemoteObjectProxyTypeBuilder"/> class.
     /// </summary>
-    /// <author>Bruno Baia</author>
-    internal class RemoteObjectProxyTypeBuilder : CompositionProxyTypeBuilder
+    /// <param name="lifetime">
+    /// The lifetime properties to be applied to the target object.
+    /// </param>
+    public RemoteObjectProxyTypeBuilder(ILifetime lifetime)
     {
-        #region Fields
+        this.lifetime = lifetime;
 
-        private static readonly MethodInfo TimeSpan_FromTicks =
-            typeof(TimeSpan).GetMethod("FromTicks", BindingFlags.Public | BindingFlags.Static);
+        Name = "RemoteObjectProxy";
+    }
 
-        private static readonly MethodInfo BaseRemoteObject_IsInfinite =
-            typeof(BaseRemoteObject).GetMethod("set_IsInfinite", BindingFlags.Public | BindingFlags.Instance);
+    #endregion
 
-        private static readonly MethodInfo BaseRemoteObject_InitialLeaseTime =
-            typeof(BaseRemoteObject).GetMethod("set_InitialLeaseTime", BindingFlags.Public | BindingFlags.Instance);
+    #region IProxyTypeBuilder Members
 
-        private static readonly MethodInfo BaseRemoteObject_RenewOnCallTime =
-            typeof(BaseRemoteObject).GetMethod("set_RenewOnCallTime", BindingFlags.Public | BindingFlags.Instance);
-
-        private static readonly MethodInfo BaseRemoteObject_SponsorshipTimeout =
-            typeof(BaseRemoteObject).GetMethod("set_SponsorshipTimeout", BindingFlags.Public | BindingFlags.Instance);
-
-        private ILifetime lifetime;
-
-        #endregion
-
-        #region Constructor(s) / Destructor
-
-        /// <summary>
-        /// Creates a new instance of the
-        /// <see cref="RemoteObjectProxyTypeBuilder"/> class.
-        /// </summary>
-        /// <param name="lifetime">
-        /// The lifetime properties to be applied to the target object.
-        /// </param>
-        public RemoteObjectProxyTypeBuilder(ILifetime lifetime)
+    /// <summary>
+    /// Creates a remotable proxy type based on <see cref="BaseRemoteObject"/>.
+    /// </summary>
+    /// <returns>The generated proxy class.</returns>
+    /// <exception cref="System.ArgumentException">
+    /// If the <see cref="IProxyTypeBuilder.BaseType"/> is not
+    /// an instance of <see cref="BaseRemoteObject"/>.
+    /// </exception>
+    public override Type BuildProxyType()
+    {
+        if (!typeof(BaseRemoteObject).IsAssignableFrom(this.BaseType))
         {
-            this.lifetime = lifetime;
-
-            Name = "RemoteObjectProxy";
+            throw new ArgumentException(
+                "BaseRemoteObject cannot be assigned from BaseType.", "BaseType");
         }
 
-        #endregion
+        return base.BuildProxyType();
+    }
 
-        #region IProxyTypeBuilder Members
+    #endregion
 
-        /// <summary>
-        /// Creates a remotable proxy type based on <see cref="BaseRemoteObject"/>.
-        /// </summary>
-        /// <returns>The generated proxy class.</returns>
-        /// <exception cref="System.ArgumentException">
-        /// If the <see cref="IProxyTypeBuilder.BaseType"/> is not
-        /// an instance of <see cref="BaseRemoteObject"/>.
-        /// </exception>
-        public override Type BuildProxyType()
+    #region Protected Methods
+
+    /// <summary>
+    /// Implements constructors for the proxy class.
+    /// </summary>
+    /// <param name="builder">
+    /// The <see cref="System.Reflection.Emit.TypeBuilder"/> to use.
+    /// </param>
+    protected override void ImplementConstructors(TypeBuilder builder)
+    {
+        MethodAttributes attributes = MethodAttributes.Public |
+                                      MethodAttributes.HideBySig | MethodAttributes.SpecialName |
+                                      MethodAttributes.RTSpecialName;
+        ConstructorBuilder cb = builder.DefineConstructor(attributes,
+            CallingConventions.Standard,
+            new Type[1] { TargetType });
+
+        ILGenerator il = cb.GetILGenerator();
+
+        GenerateRemoteObjectLifetimeInitialization(il);
+
+        PushProxy(il);
+        il.Emit(OpCodes.Ldarg_1);
+        il.Emit(OpCodes.Stfld, targetInstance);
+
+        il.Emit(OpCodes.Ret);
+    }
+
+    /// <summary>
+    /// Generate initialization code for <see cref="BaseRemoteObject"/>'s lifetime properties.
+    /// </summary>
+    /// <param name="il">ILGenerator</param>
+    protected void GenerateRemoteObjectLifetimeInitialization(ILGenerator il)
+    {
+        // Set IsInfinite Property
+        if (this.lifetime.Infinite)
         {
-            if (!typeof(BaseRemoteObject).IsAssignableFrom(this.BaseType))
-            {
-                throw new ArgumentException(
-                    "BaseRemoteObject cannot be assigned from BaseType.", "BaseType");
-            }
-
-            return base.BuildProxyType();
-        }
-
-        #endregion
-
-        #region Protected Methods
-
-        /// <summary>
-        /// Implements constructors for the proxy class.
-        /// </summary>
-        /// <param name="builder">
-        /// The <see cref="System.Reflection.Emit.TypeBuilder"/> to use.
-        /// </param>
-        protected override void ImplementConstructors(TypeBuilder builder)
-        {
-            MethodAttributes attributes = MethodAttributes.Public |
-                MethodAttributes.HideBySig | MethodAttributes.SpecialName |
-                MethodAttributes.RTSpecialName;
-            ConstructorBuilder cb = builder.DefineConstructor(attributes,
-                CallingConventions.Standard,
-                new Type[1] { TargetType });
-
-            ILGenerator il = cb.GetILGenerator();
-
-            GenerateRemoteObjectLifetimeInitialization(il);
-
             PushProxy(il);
-            il.Emit(OpCodes.Ldarg_1);
-            il.Emit(OpCodes.Stfld, targetInstance);
-
-            il.Emit(OpCodes.Ret);
+            il.Emit(OpCodes.Ldc_I4_1); // true
+            il.Emit(OpCodes.Call, BaseRemoteObject_IsInfinite);
         }
-
-        /// <summary>
-        /// Generate initialization code for <see cref="BaseRemoteObject"/>'s lifetime properties.
-        /// </summary>
-        /// <param name="il">ILGenerator</param>
-        protected void GenerateRemoteObjectLifetimeInitialization(ILGenerator il)
+        else
         {
-            // Set IsInfinite Property
-            if (this.lifetime.Infinite)
+            // Set InitialLeaseTime Property
+            if (this.lifetime.InitialLeaseTime != TimeSpan.Zero)
             {
                 PushProxy(il);
-                il.Emit(OpCodes.Ldc_I4_1);	// true
-                il.Emit(OpCodes.Call, BaseRemoteObject_IsInfinite);
+                il.Emit(OpCodes.Ldc_I8, this.lifetime.InitialLeaseTime.Ticks);
+                il.Emit(OpCodes.Call, TimeSpan_FromTicks);
+                il.Emit(OpCodes.Call, BaseRemoteObject_InitialLeaseTime);
             }
-            else
+
+            // Set RenewOnCallTime Property
+            if (this.lifetime.RenewOnCallTime != TimeSpan.Zero)
             {
-                // Set InitialLeaseTime Property
-                if (this.lifetime.InitialLeaseTime != TimeSpan.Zero)
-                {
-                    PushProxy(il);
-                    il.Emit(OpCodes.Ldc_I8, this.lifetime.InitialLeaseTime.Ticks);
-                    il.Emit(OpCodes.Call, TimeSpan_FromTicks);
-                    il.Emit(OpCodes.Call, BaseRemoteObject_InitialLeaseTime);
-                }
+                PushProxy(il);
+                il.Emit(OpCodes.Ldc_I8, this.lifetime.RenewOnCallTime.Ticks);
+                il.Emit(OpCodes.Call, TimeSpan_FromTicks);
+                il.Emit(OpCodes.Call, BaseRemoteObject_RenewOnCallTime);
+            }
 
-                // Set RenewOnCallTime Property
-                if (this.lifetime.RenewOnCallTime != TimeSpan.Zero)
-                {
-                    PushProxy(il);
-                    il.Emit(OpCodes.Ldc_I8, this.lifetime.RenewOnCallTime.Ticks);
-                    il.Emit(OpCodes.Call, TimeSpan_FromTicks);
-                    il.Emit(OpCodes.Call, BaseRemoteObject_RenewOnCallTime);
-                }
-
-                // Set SponsorshipTimeout Property
-                if (this.lifetime.SponsorshipTimeout != TimeSpan.Zero)
-                {
-                    PushProxy(il);
-                    il.Emit(OpCodes.Ldc_I8, this.lifetime.SponsorshipTimeout.Ticks);
-                    il.Emit(OpCodes.Call, TimeSpan_FromTicks);
-                    il.Emit(OpCodes.Call, BaseRemoteObject_SponsorshipTimeout);
-                }
+            // Set SponsorshipTimeout Property
+            if (this.lifetime.SponsorshipTimeout != TimeSpan.Zero)
+            {
+                PushProxy(il);
+                il.Emit(OpCodes.Ldc_I8, this.lifetime.SponsorshipTimeout.Ticks);
+                il.Emit(OpCodes.Call, TimeSpan_FromTicks);
+                il.Emit(OpCodes.Call, BaseRemoteObject_SponsorshipTimeout);
             }
         }
-
-        #endregion
     }
+
+    #endregion
 }

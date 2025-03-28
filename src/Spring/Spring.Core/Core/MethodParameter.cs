@@ -21,149 +21,151 @@
 using System.Reflection;
 using Spring.Util;
 
-namespace Spring.Core
+namespace Spring.Core;
+
+/// <summary>
+/// Helper class that encapsulates the specification of a method parameter, i.e.
+/// a MethodInfo or ConstructorInfo plus a parameter index.
+/// Useful as a specification object to pass along.
+/// </summary>
+/// <author>Juergen Hoeller</author>
+/// <author>Rob Harrop</author>
+/// <author>Mark Pollack (.NET)</author>
+public class MethodParameter
 {
+    private MethodInfo methodInfo;
+
+    private ConstructorInfo constructorInfo;
+
+    private readonly int parameterIndex;
+
+    private Type parameterType;
+
     /// <summary>
-    /// Helper class that encapsulates the specification of a method parameter, i.e.
-    /// a MethodInfo or ConstructorInfo plus a parameter index.
-    /// Useful as a specification object to pass along.
+    /// Initializes a new instance of the <see cref="MethodParameter"/> class for the given
+    /// MethodInfo.
     /// </summary>
-    /// <author>Juergen Hoeller</author>
-    /// <author>Rob Harrop</author>
-    /// <author>Mark Pollack (.NET)</author>
-    public class MethodParameter
+    /// <param name="methodInfo">The MethodInfo to specify a parameter for.</param>
+    /// <param name="parameterIndex">Index of the parameter.</param>
+    public MethodParameter(MethodInfo methodInfo, int parameterIndex)
     {
-        private MethodInfo methodInfo;
+        this.methodInfo = methodInfo;
+        this.parameterIndex = parameterIndex;
+    }
 
-        private ConstructorInfo constructorInfo;
+    /// <summary>
+    /// Initializes a new instance of the <see cref="MethodParameter"/> class.
+    /// </summary>
+    /// <param name="constructorInfo">The ConstructorInfo to specify a parameter for.</param>
+    /// <param name="parameterIndex">Index of the parameter.</param>
+    public MethodParameter(ConstructorInfo constructorInfo, int parameterIndex)
+    {
+        this.constructorInfo = constructorInfo;
+        this.parameterIndex = parameterIndex;
+    }
 
-        private readonly int parameterIndex;
-
-        private Type parameterType;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MethodParameter"/> class for the given
-        /// MethodInfo.
-        /// </summary>
-        /// <param name="methodInfo">The MethodInfo to specify a parameter for.</param>
-        /// <param name="parameterIndex">Index of the parameter.</param>
-        public MethodParameter(MethodInfo methodInfo, int parameterIndex)
+    /// <summary>
+    /// Gets the type of the method/constructor parameter.
+    /// </summary>
+    /// <value>The type of the parameter. (never <code>null</code>)</value>
+    public Type ParameterType
+    {
+        get
         {
-            this.methodInfo = methodInfo;
-            this.parameterIndex = parameterIndex;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MethodParameter"/> class.
-        /// </summary>
-        /// <param name="constructorInfo">The ConstructorInfo to specify a parameter for.</param>
-        /// <param name="parameterIndex">Index of the parameter.</param>
-        public MethodParameter(ConstructorInfo constructorInfo, int parameterIndex)
-        {
-            this.constructorInfo = constructorInfo;
-            this.parameterIndex = parameterIndex;
-        }
-
-        /// <summary>
-        /// Gets the type of the method/constructor parameter.
-        /// </summary>
-        /// <value>The type of the parameter. (never <code>null</code>)</value>
-        public Type ParameterType
-        {
-            get
+            if (this.parameterType == null)
             {
-                if (this.parameterType == null)
-                {
-                    this.parameterType = (this.methodInfo != null
-                                              ? ReflectionUtils.GetParameterTypes(this.methodInfo.GetParameters())[parameterIndex]
-                                              : ReflectionUtils.GetParameterTypes(this.constructorInfo.GetParameters())[parameterIndex]);
-                }
-                return this.parameterType;
+                this.parameterType = (this.methodInfo != null
+                    ? ReflectionUtils.GetParameterTypes(this.methodInfo.GetParameters())[parameterIndex]
+                    : ReflectionUtils.GetParameterTypes(this.constructorInfo.GetParameters())[parameterIndex]);
             }
-        }
 
-        /// <summary>
-        /// Create a new MethodParameter for the given method or donstructor.
-        /// This is a convenience constructor for scenarios where a
-        /// Method or Constructor reference is treated in a generic fashion.
-        /// </summary>
-        /// <param name="methodOrConstructorInfo">The method or constructor to specify a parameter for.</param>
-        /// <param name="parameterIndex">Index of the parameter.</param>
-        /// <returns>the corresponding MethodParameter instance</returns>
-        public static MethodParameter ForMethodOrConstructor(object methodOrConstructorInfo, int parameterIndex)
+            return this.parameterType;
+        }
+    }
+
+    /// <summary>
+    /// Create a new MethodParameter for the given method or donstructor.
+    /// This is a convenience constructor for scenarios where a
+    /// Method or Constructor reference is treated in a generic fashion.
+    /// </summary>
+    /// <param name="methodOrConstructorInfo">The method or constructor to specify a parameter for.</param>
+    /// <param name="parameterIndex">Index of the parameter.</param>
+    /// <returns>the corresponding MethodParameter instance</returns>
+    public static MethodParameter ForMethodOrConstructor(object methodOrConstructorInfo, int parameterIndex)
+    {
+        if (methodOrConstructorInfo is MethodInfo)
         {
-            if (methodOrConstructorInfo is MethodInfo)
-            {
-                return new MethodParameter((MethodInfo) methodOrConstructorInfo, parameterIndex);
-            } else if (methodOrConstructorInfo is ConstructorInfo)
-            {
-                return new MethodParameter((ConstructorInfo) methodOrConstructorInfo, parameterIndex);
-            } else
-            {
-                throw new ArgumentException("Given object [" + methodOrConstructorInfo + "] is nieth a MethodInfo nor a ConstructorInfo");
-            }
+            return new MethodParameter((MethodInfo) methodOrConstructorInfo, parameterIndex);
         }
+        else if (methodOrConstructorInfo is ConstructorInfo)
+        {
+            return new MethodParameter((ConstructorInfo) methodOrConstructorInfo, parameterIndex);
+        }
+        else
+        {
+            throw new ArgumentException("Given object [" + methodOrConstructorInfo + "] is nieth a MethodInfo nor a ConstructorInfo");
+        }
+    }
 
-        /// <summary>
-        /// Parameters the name of the method/constructor parameter.
-        /// </summary>
-        /// <returns>the parameter name.</returns>
-        public string ParameterName()
+    /// <summary>
+    /// Parameters the name of the method/constructor parameter.
+    /// </summary>
+    /// <returns>the parameter name.</returns>
+    public string ParameterName()
+    {
+        if (methodInfo != null)
+        {
+            return methodInfo.GetParameters()[parameterIndex].Name;
+        }
+        else
+        {
+            return constructorInfo.GetParameters()[parameterIndex].Name;
+        }
+    }
+
+    /// <summary>
+    /// Gets the wrapped MethodInfo, if any.  Note Either MethodInfo or ConstructorInfo is available.
+    /// </summary>
+    /// <value>The MethodInfo, or <code>null</code> if none.</value>
+    public MethodInfo MethodInfo
+    {
+        get { return methodInfo; }
+    }
+
+    /// <summary>
+    /// Gets wrapped ConstructorInfo, if any.  Note Either MethodInfo or ConstructorInfo is available.
+    /// </summary>
+    /// <value>The ConstructorInfo, or <code>null</code> if none</value>
+    public ConstructorInfo ConstructorInfo
+    {
+        get { return constructorInfo; }
+    }
+
+    /// <summary>
+    /// Return the annotations associated with the specific method/constructor parameter.
+    /// </summary>
+    public Attribute[] ParameterAttributes
+    {
+        get
         {
             if (methodInfo != null)
-            {
-                return methodInfo.GetParameters()[parameterIndex].Name;
-            } else
-            {
-                return constructorInfo.GetParameters()[parameterIndex].Name;
-            }
+                return Attribute.GetCustomAttributes(methodInfo.GetParameters()[parameterIndex]);
+            else
+                return Attribute.GetCustomAttributes(constructorInfo.GetParameters()[parameterIndex]);
         }
+    }
 
-        /// <summary>
-        /// Gets the wrapped MethodInfo, if any.  Note Either MethodInfo or ConstructorInfo is available.
-        /// </summary>
-        /// <value>The MethodInfo, or <code>null</code> if none.</value>
-        public MethodInfo MethodInfo
+    /// <summary>
+    /// Return the annotations associated with the target method/constructor itself.
+    /// </summary>
+    public Attribute[] MethodAttributes
+    {
+        get
         {
-            get { return methodInfo; }
+            if (methodInfo != null)
+                return Attribute.GetCustomAttributes(methodInfo);
+            else
+                return Attribute.GetCustomAttributes(constructorInfo);
         }
-
-        /// <summary>
-        /// Gets wrapped ConstructorInfo, if any.  Note Either MethodInfo or ConstructorInfo is available.
-        /// </summary>
-        /// <value>The ConstructorInfo, or <code>null</code> if none</value>
-        public ConstructorInfo ConstructorInfo
-        {
-            get { return constructorInfo; }
-        }
-
-        /// <summary>
-        /// Return the annotations associated with the specific method/constructor parameter.
-        /// </summary>
-        public Attribute[] ParameterAttributes
-        {
-            get
-            {
-                if (methodInfo != null)
-                    return Attribute.GetCustomAttributes(methodInfo.GetParameters()[parameterIndex]);
-                else
-                    return Attribute.GetCustomAttributes(constructorInfo.GetParameters()[parameterIndex]);
-            }
-        }
-
-        /// <summary>
-        /// Return the annotations associated with the target method/constructor itself.
-        /// </summary>
-        public Attribute[] MethodAttributes
-        {
-            get
-            {
-                if (methodInfo != null)
-                    return Attribute.GetCustomAttributes(methodInfo);
-                else
-                    return Attribute.GetCustomAttributes(constructorInfo);
-            }
-        }
-
     }
 }

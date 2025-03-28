@@ -21,96 +21,95 @@
 #region Imports
 
 using System.Reflection;
-
 using NUnit.Framework;
 using Spring.Objects;
 
 #endregion
 
-namespace Spring.Core
+namespace Spring.Core;
+
+/// <summary>
+/// Unit tests for the MethodParametersCriteria class.
+/// </summary>
+/// <author>Rick Evans</author>
+/// <author>Bruno Baia</author>
+[TestFixture]
+public sealed class MethodParametersCriteriaTests
 {
-	/// <summary>
-	/// Unit tests for the MethodParametersCriteria class.
-    /// </summary>
-    /// <author>Rick Evans</author>
-    /// <author>Bruno Baia</author>
-	[TestFixture]
-    public sealed class MethodParametersCriteriaTests
+    [Test]
+    public void IsNotSatisfiedWithNull()
     {
-        [Test]
-        public void IsNotSatisfiedWithNull () {
-            MethodParametersCriteria criteria = new MethodParametersCriteria ();
-            Assert.IsFalse (criteria.IsSatisfied (null), "Was satisified with null.");
-        }
+        MethodParametersCriteria criteria = new MethodParametersCriteria();
+        Assert.IsFalse(criteria.IsSatisfied(null), "Was satisified with null.");
+    }
 
-        [Test]
-        public void IsSatisfiedWithNoParametersByDefault () 
-        {
-            MethodParametersCriteria criteria = new MethodParametersCriteria ();
-            MethodInfo method = GetType ().GetMethod ("Foo");
-            Assert.IsTrue (criteria.IsSatisfied (method), "Was not satisified with a method that takes no parameters by default.");
-        }
+    [Test]
+    public void IsSatisfiedWithNoParametersByDefault()
+    {
+        MethodParametersCriteria criteria = new MethodParametersCriteria();
+        MethodInfo method = GetType().GetMethod("Foo");
+        Assert.IsTrue(criteria.IsSatisfied(method), "Was not satisified with a method that takes no parameters by default.");
+    }
 
-	    [Test]
-	    public void IsNotSatisfiedWhenOnlyFinalParamMatches()
-	    {
-            MethodParametersCriteria criteria = new MethodParametersCriteria(
-          new Type[] { typeof(object), typeof(object), typeof(TestObject) });
-            MethodInfo method = GetType().GetMethod("BoJangles");
-            Assert.IsFalse(criteria.IsSatisfied(method), "Was satisified with a method that only matches on the final parameter.");
-	    }
+    [Test]
+    public void IsNotSatisfiedWhenOnlyFinalParamMatches()
+    {
+        MethodParametersCriteria criteria = new MethodParametersCriteria(
+            new Type[] { typeof(object), typeof(object), typeof(TestObject) });
+        MethodInfo method = GetType().GetMethod("BoJangles");
+        Assert.IsFalse(criteria.IsSatisfied(method), "Was satisified with a method that only matches on the final parameter.");
+    }
 
-        [Test]
-        public void IsSatisfied () 
-        {
-            MethodParametersCriteria criteria  = new MethodParametersCriteria (
-                new Type [] {typeof (string), typeof (DBNull), typeof (TestObject)});
-            MethodInfo method = GetType ().GetMethod ("BoJangles");
-            Assert.IsTrue (criteria.IsSatisfied (method), "Was not satisified with a method that takes a whole buncha parameters.");
+    [Test]
+    public void IsSatisfied()
+    {
+        MethodParametersCriteria criteria = new MethodParametersCriteria(
+            new Type[] { typeof(string), typeof(DBNull), typeof(TestObject) });
+        MethodInfo method = GetType().GetMethod("BoJangles");
+        Assert.IsTrue(criteria.IsSatisfied(method), "Was not satisified with a method that takes a whole buncha parameters.");
 
-            method = GetType ().GetMethod ("BadBobbyBoJangles");
-            Assert.IsFalse (criteria.IsSatisfied (method), "Was satisified with a (bad) method that takes a whole buncha parameters.");
-        }
+        method = GetType().GetMethod("BadBobbyBoJangles");
+        Assert.IsFalse(criteria.IsSatisfied(method), "Was satisified with a (bad) method that takes a whole buncha parameters.");
+    }
 
-        [Test]
-        public void IsNotSatisfiedIsPolymorphic () 
-        {
-            // i.e. derived types satisfy the criteria if a base type or interface is
-            // specified as one of the parameter types
-            MethodParametersCriteria criteria
-                = new MethodParametersCriteria (new Type [] {typeof (TestObject)});
-            MethodInfo method = GetType ().GetMethod ("Diddly");
-            Assert.IsFalse(criteria.IsSatisfied (method), "Was not satisified with a method that takes a base class as a parameter.");
-        }
+    [Test]
+    public void IsNotSatisfiedIsPolymorphic()
+    {
+        // i.e. derived types satisfy the criteria if a base type or interface is
+        // specified as one of the parameter types
+        MethodParametersCriteria criteria
+            = new MethodParametersCriteria(new Type[] { typeof(TestObject) });
+        MethodInfo method = GetType().GetMethod("Diddly");
+        Assert.IsFalse(criteria.IsSatisfied(method), "Was not satisified with a method that takes a base class as a parameter.");
+    }
 
-        [Test]
-        public void IsSatisfiedWithParamsParameters()
-        {
-            MethodParametersCriteria criteria = new MethodParametersCriteria(new Type[] { typeof(int), typeof(string[]) });
-            MethodInfo method = GetType().GetMethod("ParamsParameters");
-            Assert.IsTrue(criteria.IsSatisfied(method), "Was not satisified with a method that takes a parameter array ('params') as a parameter.");
-        }
+    [Test]
+    public void IsSatisfiedWithParamsParameters()
+    {
+        MethodParametersCriteria criteria = new MethodParametersCriteria(new Type[] { typeof(int), typeof(string[]) });
+        MethodInfo method = GetType().GetMethod("ParamsParameters");
+        Assert.IsTrue(criteria.IsSatisfied(method), "Was not satisified with a method that takes a parameter array ('params') as a parameter.");
+    }
 
-        // some methods for testing signatures...
-        public void Foo () 
-        {
-        }
+    // some methods for testing signatures...
+    public void Foo()
+    {
+    }
 
-        public DateTime BoJangles (string one, DBNull two, TestObject three) 
-        {
-            return DateTime.Now;
-        }
+    public DateTime BoJangles(string one, DBNull two, TestObject three)
+    {
+        return DateTime.Now;
+    }
 
-        public void BadBobbyBoJangles (string one, DBNull two, string bing) 
-        {
-        }
+    public void BadBobbyBoJangles(string one, DBNull two, string bing)
+    {
+    }
 
-        public void Diddly (ITestObject three) 
-        {
-        }
+    public void Diddly(ITestObject three)
+    {
+    }
 
-        public void ParamsParameters(int foo, params string[] strs)
-        {
-        }
-	}
+    public void ParamsParameters(int foo, params string[] strs)
+    {
+    }
 }

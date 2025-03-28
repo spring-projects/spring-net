@@ -24,51 +24,50 @@ using Spring.Util;
 
 #endregion
 
-namespace Spring.Aop.Support
+namespace Spring.Aop.Support;
+
+/// <summary>
+/// Simple <see cref="Spring.Aop.ITypeFilter"/> implementation that matches
+/// a given <see cref="Type"/>'s <see cref="Type.FullName"/> against <see cref="TypeNamePatterns"/>.
+/// For a list of supported pattern syntax see <see cref="PatternMatchUtils.SimpleMatch(string[],string)"/>.
+/// </summary>
+/// <author>Erich Eichinger</author>
+/// <seealso cref="PatternMatchUtils.SimpleMatch(string[],string)"/>
+public class TypeNameTypeFilter : ITypeFilter
 {
-	/// <summary>
-	/// Simple <see cref="Spring.Aop.ITypeFilter"/> implementation that matches
-	/// a given <see cref="Type"/>'s <see cref="Type.FullName"/> against <see cref="TypeNamePatterns"/>.
-	/// For a list of supported pattern syntax see <see cref="PatternMatchUtils.SimpleMatch(string[],string)"/>.
-	/// </summary>
-    /// <author>Erich Eichinger</author>
+    private string[] _typeNamePatterns;
+
+    ///<summary>
+    /// Returns the list of type name patterns for this filter.
+    ///</summary>
     /// <seealso cref="PatternMatchUtils.SimpleMatch(string[],string)"/>
-    public class TypeNameTypeFilter : ITypeFilter
+    public string[] TypeNamePatterns
     {
-        private string[] _typeNamePatterns;
+        get { return _typeNamePatterns; }
+    }
 
-        ///<summary>
-        /// Returns the list of type name patterns for this filter.
-        ///</summary>
-        /// <seealso cref="PatternMatchUtils.SimpleMatch(string[],string)"/>
-        public string[] TypeNamePatterns
-        {
-            get { return _typeNamePatterns; }
-        }
+    ///<summary>
+    ///Creates a new instance of <see cref="TypeNameTypeFilter"/> using a list of given <paramref name="patterns"/>.
+    ///</summary>
+    ///<param name="patterns">the list patterns to match typenames against. Must not be <c>null</c>.</param>
+    /// <seealso cref="PatternMatchUtils.SimpleMatch(string[],string)"/>
+    public TypeNameTypeFilter(string[] patterns)
+    {
+        AssertUtils.ArgumentNotNull(patterns, "patterns");
+        _typeNamePatterns = patterns;
+    }
 
-        ///<summary>
-        ///Creates a new instance of <see cref="TypeNameTypeFilter"/> using a list of given <paramref name="patterns"/>.
-        ///</summary>
-        ///<param name="patterns">the list patterns to match typenames against. Must not be <c>null</c>.</param>
-        /// <seealso cref="PatternMatchUtils.SimpleMatch(string[],string)"/>
-        public TypeNameTypeFilter(string[] patterns)
-        {
-            AssertUtils.ArgumentNotNull(patterns, "patterns");
-            _typeNamePatterns = patterns;
-        }
-
-	    /// <summary>
-	    /// Does the supplied type's <see cref="Type.FullName"/> match any of the <see cref="TypeNamePatterns"/>?
-	    /// </summary>
-	    /// <param name="type">
-	    /// The candidate <see cref="System.Type"/>.
-	    /// </param>
-	    /// <returns>
-	    /// <see langword="true"/> if the <paramref name="type"/> matches any of the <see cref="TypeNamePatterns"/>.
-	    /// </returns>
-	    public bool Matches(Type type)
-        {
-            return PatternMatchUtils.SimpleMatch(_typeNamePatterns, type.FullName);
-        }
+    /// <summary>
+    /// Does the supplied type's <see cref="Type.FullName"/> match any of the <see cref="TypeNamePatterns"/>?
+    /// </summary>
+    /// <param name="type">
+    /// The candidate <see cref="System.Type"/>.
+    /// </param>
+    /// <returns>
+    /// <see langword="true"/> if the <paramref name="type"/> matches any of the <see cref="TypeNamePatterns"/>.
+    /// </returns>
+    public bool Matches(Type type)
+    {
+        return PatternMatchUtils.SimpleMatch(_typeNamePatterns, type.FullName);
     }
 }

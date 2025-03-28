@@ -25,159 +25,158 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Util
+namespace Spring.Util;
+
+/// <summary>
+/// Unit tests for the DelegateInfo class.
+/// </summary>
+/// <author>Rick Evans</author>
+[TestFixture]
+public sealed class DelegateInfoTests
 {
-	/// <summary>
-	/// Unit tests for the DelegateInfo class.
-	/// </summary>
-	/// <author>Rick Evans</author>
-	[TestFixture]
-	public sealed class DelegateInfoTests
-	{
-		[Test]
-		public void Instantiation()
-		{
-			new DelegateInfo(typeof (EventHandler));
-		}
+    [Test]
+    public void Instantiation()
+    {
+        new DelegateInfo(typeof(EventHandler));
+    }
 
-		[Test]
-		public void InstantiationWithBadType()
-		{
-            Assert.Throws<ArgumentException>(() => new DelegateInfo(typeof (string)));
-		}
+    [Test]
+    public void InstantiationWithBadType()
+    {
+        Assert.Throws<ArgumentException>(() => new DelegateInfo(typeof(string)));
+    }
 
-		[Test]
-		public void IsDelegateWithBadType()
-		{
-			Assert.IsFalse(DelegateInfo.IsDelegate(typeof (string)));
-		}
+    [Test]
+    public void IsDelegateWithBadType()
+    {
+        Assert.IsFalse(DelegateInfo.IsDelegate(typeof(string)));
+    }
 
-		[Test]
-		public void IsDelegateWithNullType()
-		{
-			Assert.IsFalse(DelegateInfo.IsDelegate(null));
-		}
+    [Test]
+    public void IsDelegateWithNullType()
+    {
+        Assert.IsFalse(DelegateInfo.IsDelegate(null));
+    }
 
-		[Test]
-		public void IsDelegate()
-		{
-			Assert.IsTrue(DelegateInfo.IsDelegate(typeof (EventHandler)));
-		}
+    [Test]
+    public void IsDelegate()
+    {
+        Assert.IsTrue(DelegateInfo.IsDelegate(typeof(EventHandler)));
+    }
 
-		[Test]
-		public void GetReturnType()
-		{
-			DelegateInfo del = new DelegateInfo(typeof (EventHandler));
-			Assert.AreEqual(typeof (void), del.GetReturnType());
-		}
+    [Test]
+    public void GetReturnType()
+    {
+        DelegateInfo del = new DelegateInfo(typeof(EventHandler));
+        Assert.AreEqual(typeof(void), del.GetReturnType());
+    }
 
-		[Test]
-		public void GetReturnTypeWithNonVoidReturningDelegate()
-		{
-			DelegateInfo del = new DelegateInfo(typeof (FooHandler));
-			Assert.AreEqual(typeof (string), del.GetReturnType());
-		}
+    [Test]
+    public void GetReturnTypeWithNonVoidReturningDelegate()
+    {
+        DelegateInfo del = new DelegateInfo(typeof(FooHandler));
+        Assert.AreEqual(typeof(string), del.GetReturnType());
+    }
 
-		[Test]
-		public void GetParameterTypesWithNoArgHandler()
-		{
-			DelegateInfo del = new DelegateInfo(typeof (NoParametersHandler));
-			Type[] types = del.GetParameterTypes();
-			Assert.IsNotNull(types);
-			Assert.AreEqual(0, types.Length);
-		}
+    [Test]
+    public void GetParameterTypesWithNoArgHandler()
+    {
+        DelegateInfo del = new DelegateInfo(typeof(NoParametersHandler));
+        Type[] types = del.GetParameterTypes();
+        Assert.IsNotNull(types);
+        Assert.AreEqual(0, types.Length);
+    }
 
-		[Test]
-		public void GetParameterTypes()
-		{
-			DelegateInfo del = new DelegateInfo(typeof (FooHandler));
-			Type[] types = del.GetParameterTypes();
-			Assert.IsNotNull(types);
-			Assert.AreEqual(3, types.Length);
-		}
+    [Test]
+    public void GetParameterTypes()
+    {
+        DelegateInfo del = new DelegateInfo(typeof(FooHandler));
+        Type[] types = del.GetParameterTypes();
+        Assert.IsNotNull(types);
+        Assert.AreEqual(3, types.Length);
+    }
 
-		[Test]
-		public void IsSignatureCompatibleWithBadMethods()
-		{
-			DelegateInfo del = new DelegateInfo(typeof (FooHandler));
+    [Test]
+    public void IsSignatureCompatibleWithBadMethods()
+    {
+        DelegateInfo del = new DelegateInfo(typeof(FooHandler));
 
-			// null method...
-			MethodInfo method = GetType().GetMethod("SeaBass said that? Well, if that guy over there is SeaBass...");
-			Assert.IsFalse(del.IsSignatureCompatible(method));
+        // null method...
+        MethodInfo method = GetType().GetMethod("SeaBass said that? Well, if that guy over there is SeaBass...");
+        Assert.IsFalse(del.IsSignatureCompatible(method));
 
-			// method that doesn;t have the required number of parameters...
-			method = GetType().GetMethod("OddNumberOfParametersForFooHandler");
-			Assert.IsFalse(del.IsSignatureCompatible(method));
+        // method that doesn;t have the required number of parameters...
+        method = GetType().GetMethod("OddNumberOfParametersForFooHandler");
+        Assert.IsFalse(del.IsSignatureCompatible(method));
 
-			// method that doesn't have the required number of parameters...
-			method = GetType().GetMethod("IncompatibleParametersForFooHandler");
-			Assert.IsFalse(del.IsSignatureCompatible(method));
-		}
+        // method that doesn't have the required number of parameters...
+        method = GetType().GetMethod("IncompatibleParametersForFooHandler");
+        Assert.IsFalse(del.IsSignatureCompatible(method));
+    }
 
-		public string OddNumberOfParametersForFooHandler(string bar, int x)
-		{
-			return string.Empty;
-		}
+    public string OddNumberOfParametersForFooHandler(string bar, int x)
+    {
+        return string.Empty;
+    }
 
-		public string IncompatibleParametersForFooHandler(string bar, int x, string nope)
-		{
-			return string.Empty;
-		}
+    public string IncompatibleParametersForFooHandler(string bar, int x, string nope)
+    {
+        return string.Empty;
+    }
 
-		[Test]
-		public void IsSignatureCompatibleWithInnerClassStaticMethod()
-		{
-			DelegateInfo del = new DelegateInfo(typeof (FooHandler));
-			MethodInfo method =
-				typeof (Yossarian).GetMethod(
-					"DoFoo",
-					BindingFlags.Public | BindingFlags.Static);
-			Assert.IsTrue(del.IsSignatureCompatible(method));
-		}
+    [Test]
+    public void IsSignatureCompatibleWithInnerClassStaticMethod()
+    {
+        DelegateInfo del = new DelegateInfo(typeof(FooHandler));
+        MethodInfo method =
+            typeof(Yossarian).GetMethod(
+                "DoFoo",
+                BindingFlags.Public | BindingFlags.Static);
+        Assert.IsTrue(del.IsSignatureCompatible(method));
+    }
 
-		[Test]
-		public void IsSignatureCompatible()
-		{
-			DelegateInfo del = new DelegateInfo(typeof (FooHandler));
-			MethodInfo method = GetType().GetMethod("DoFoo");
-			Assert.IsFalse(del.IsSignatureCompatible(method));
-		}
+    [Test]
+    public void IsSignatureCompatible()
+    {
+        DelegateInfo del = new DelegateInfo(typeof(FooHandler));
+        MethodInfo method = GetType().GetMethod("DoFoo");
+        Assert.IsFalse(del.IsSignatureCompatible(method));
+    }
 
-		[Test]
-		public void IsSignatureCompatibleStaticVersion()
-		{
-			EventInfo evt = typeof (Assembly).GetEvent("ModuleResolve");
+    [Test]
+    public void IsSignatureCompatibleStaticVersion()
+    {
+        EventInfo evt = typeof(Assembly).GetEvent("ModuleResolve");
 
-			MethodInfo rubbishMethod = GetType().GetMethod("MethodSignatureIsCompatibleStatic");
-			Assert.IsFalse(DelegateInfo.IsSignatureCompatible(evt, rubbishMethod));
+        MethodInfo rubbishMethod = GetType().GetMethod("MethodSignatureIsCompatibleStatic");
+        Assert.IsFalse(DelegateInfo.IsSignatureCompatible(evt, rubbishMethod));
 
-			MethodInfo compatibleMethod = typeof (Yossarian).GetMethod("Resolve");
-			Assert.IsTrue(DelegateInfo.IsSignatureCompatible(evt, compatibleMethod));
+        MethodInfo compatibleMethod = typeof(Yossarian).GetMethod("Resolve");
+        Assert.IsTrue(DelegateInfo.IsSignatureCompatible(evt, compatibleMethod));
 
-			Assert.IsFalse(DelegateInfo.IsSignatureCompatible(null, compatibleMethod));
-			Assert.IsFalse(DelegateInfo.IsSignatureCompatible(evt, null));
-		}
+        Assert.IsFalse(DelegateInfo.IsSignatureCompatible(null, compatibleMethod));
+        Assert.IsFalse(DelegateInfo.IsSignatureCompatible(evt, null));
+    }
 
-		private string DoFoo(string bar, int x, EventArgs e)
-		{
-			return bar;
-		}
+    private string DoFoo(string bar, int x, EventArgs e)
+    {
+        return bar;
+    }
 
-		internal sealed class Yossarian
-		{
-			public static string DoFoo(string bar, int x, EventArgs e)
-			{
-				return bar;
-			}
+    internal sealed class Yossarian
+    {
+        public static string DoFoo(string bar, int x, EventArgs e)
+        {
+            return bar;
+        }
 
-			public Module Resolve(object sender, ResolveEventArgs e)
-			{
-				return null;
-			}
-		}
-	}
-
-	internal delegate string FooHandler(string bar, int x, EventArgs e);
-
-	internal delegate void NoParametersHandler();
+        public Module Resolve(object sender, ResolveEventArgs e)
+        {
+            return null;
+        }
+    }
 }
+
+internal delegate string FooHandler(string bar, int x, EventArgs e);
+
+internal delegate void NoParametersHandler();

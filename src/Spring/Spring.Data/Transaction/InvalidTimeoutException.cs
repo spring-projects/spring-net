@@ -20,87 +20,88 @@
 
 using System.Runtime.Serialization;
 
-namespace Spring.Transaction
+namespace Spring.Transaction;
+
+/// <summary>
+/// Exception that gets thrown when an invalid timeout is specified,
+/// for example when the transaction manager implementation doesn't support timeouts.
+/// </summary>
+/// <author>Juergen Hoeller</author>
+/// <author>Griffin Caprio (.NET)</author>
+[Serializable]
+public class InvalidTimeoutException : TransactionUsageException, ISerializable
 {
-	/// <summary>
-	/// Exception that gets thrown when an invalid timeout is specified,
-	/// for example when the transaction manager implementation doesn't support timeouts.
-	/// </summary>
-	/// <author>Juergen Hoeller</author>
-	/// <author>Griffin Caprio (.NET)</author>
-	[Serializable]
-	public class InvalidTimeoutException : TransactionUsageException, ISerializable
-	{
-		/// <summary>
-		/// Invalid timeout value.
-		/// </summary>
-		private int _timeout = -1;
+    /// <summary>
+    /// Invalid timeout value.
+    /// </summary>
+    private int _timeout = -1;
 
-		/// <summary>
-		/// Returns the invalid timeout for this exception.
-		/// </summary>
-		public int Timeout
-		{
-			get
-			{
-				return _timeout;
-			}
-		}
+    /// <summary>
+    /// Returns the invalid timeout for this exception.
+    /// </summary>
+    public int Timeout
+    {
+        get
+        {
+            return _timeout;
+        }
+    }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Transaction.InvalidTimeoutException"/> class
-		/// with the specified message and timeout value.
-		/// </summary>
-		/// <param name="message">
-		/// A message about the exception.
-		/// </param>
-		/// <param name="timeout">The (possibly invalid) timeout value.</param>
-		public InvalidTimeoutException(string message, int timeout):base(message)
-		{
-			_timeout = timeout;
-		}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Transaction.InvalidTimeoutException"/> class
+    /// with the specified message and timeout value.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    /// <param name="timeout">The (possibly invalid) timeout value.</param>
+    public InvalidTimeoutException(string message, int timeout) : base(message)
+    {
+        _timeout = timeout;
+    }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Transaction.InvalidTimeoutException"/> class.
-		/// </summary>
-		public InvalidTimeoutException( ) {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Transaction.InvalidTimeoutException"/> class.
+    /// </summary>
+    public InvalidTimeoutException() { }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Transaction.InvalidTimeoutException"/> class.
-		/// </summary>
-		/// <param name="message">
-		/// A message about the exception.
-		/// </param>
-		public InvalidTimeoutException( String message ) : base(message) {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Transaction.InvalidTimeoutException"/> class.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    public InvalidTimeoutException(String message) : base(message) { }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Transaction.InvalidTimeoutException"/> class.
-		/// </summary>
-		/// <param name="message">
-		/// A message about the exception.
-		/// </param>
-		/// <param name="rootCause">
-		/// The root exception that is being wrapped.
-		/// </param>
-		public InvalidTimeoutException(string message, Exception rootCause)
-			: base(message, rootCause) {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Transaction.InvalidTimeoutException"/> class.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    /// <param name="rootCause">
+    /// The root exception that is being wrapped.
+    /// </param>
+    public InvalidTimeoutException(string message, Exception rootCause)
+        : base(message, rootCause)
+    {
+    }
 
-		/// <inheritdoc />
-		protected InvalidTimeoutException(
-			SerializationInfo info, StreamingContext context ) : base( info, context )
-		{
-			_timeout = info.GetInt32( "timeout" );
-		}
+    /// <inheritdoc />
+    protected InvalidTimeoutException(
+        SerializationInfo info, StreamingContext context) : base(info, context)
+    {
+        _timeout = info.GetInt32("timeout");
+    }
 
-		/// <inheritdoc />
-		public override void GetObjectData(SerializationInfo info, StreamingContext context)
-		{
-			info.AddValue( "timeout", _timeout );
-			base.GetObjectData( info, context );
-		}
-	}
+    /// <inheritdoc />
+    public override void GetObjectData(SerializationInfo info, StreamingContext context)
+    {
+        info.AddValue("timeout", _timeout);
+        base.GetObjectData(info, context);
+    }
 }

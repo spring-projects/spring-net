@@ -20,55 +20,51 @@
 
 using Spring.Core.IO;
 
-namespace Spring.Context.Support
+namespace Spring.Context.Support;
+
+/// <summary>
+/// Encapsulates arguments to the <see cref="Spring.Context.Support.WebApplicationContext"/> class.
+/// </summary>
+public class WebApplicationContextArgs : AbstractXmlApplicationContextArgs
 {
+    private const bool DEFAULT_CASESENSITIVE = false;
+    private const bool DEFAULT_REFRESH = false;
+
     /// <summary>
-    /// Encapsulates arguments to the <see cref="Spring.Context.Support.WebApplicationContext"/> class.
+    /// Initializes a new instance of the WebApplicationContextArgs class.
     /// </summary>
-    public class WebApplicationContextArgs : AbstractXmlApplicationContextArgs
+    public WebApplicationContextArgs()
     {
+        CaseSensitive = DEFAULT_CASESENSITIVE;
+    }
 
-        private const bool DEFAULT_CASESENSITIVE = false;
-        private const bool DEFAULT_REFRESH = false;
+    /// <summary>
+    /// Initializes a new instance of the WebApplicationContextArgs class.
+    /// </summary>
+    /// <param name="name">The name.</param>
+    /// <param name="parentContext">The parent context.</param>
+    /// <param name="configurationLocations">The configuration locations.</param>
+    /// <param name="configurationResources">The configuration resources.</param>
+    public WebApplicationContextArgs(string name, IApplicationContext parentContext, string[] configurationLocations, IResource[] configurationResources)
+        : this(name, parentContext, configurationLocations, configurationResources, DEFAULT_CASESENSITIVE)
+    {
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the WebApplicationContextArgs class.
-        /// </summary>
-        public WebApplicationContextArgs()
-        {
-            CaseSensitive = DEFAULT_CASESENSITIVE;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the WebApplicationContextArgs class.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        /// <param name="parentContext">The parent context.</param>
-        /// <param name="configurationLocations">The configuration locations.</param>
-        /// <param name="configurationResources">The configuration resources.</param>
-        public WebApplicationContextArgs(string name, IApplicationContext parentContext, string[] configurationLocations, IResource[] configurationResources)
-            : this(name, parentContext, configurationLocations, configurationResources, DEFAULT_CASESENSITIVE)
-        { }
-
-
-        /// <summary>
-        /// Initializes a new instance of the WebApplicationContextArgs class.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        /// <param name="parentContext">The parent context.</param>
-        /// <param name="configurationLocations">The configuration locations.</param>
-        /// <param name="configurationResources">The configuration resources.</param>
-        /// <param name="caseSensitive">if set to <c>true</c> [case sensitive].</param>
-        public WebApplicationContextArgs(string name, IApplicationContext parentContext, string[] configurationLocations, IResource[] configurationResources, bool caseSensitive)
-        {
-            Name = name;
-            ParentContext = parentContext;
-            ConfigurationLocations = configurationLocations;
-            ConfigurationResources = configurationResources;
-            CaseSensitive = caseSensitive;
-            Refresh = DEFAULT_REFRESH;
-        }
-
-
+    /// <summary>
+    /// Initializes a new instance of the WebApplicationContextArgs class.
+    /// </summary>
+    /// <param name="name">The name.</param>
+    /// <param name="parentContext">The parent context.</param>
+    /// <param name="configurationLocations">The configuration locations.</param>
+    /// <param name="configurationResources">The configuration resources.</param>
+    /// <param name="caseSensitive">if set to <c>true</c> [case sensitive].</param>
+    public WebApplicationContextArgs(string name, IApplicationContext parentContext, string[] configurationLocations, IResource[] configurationResources, bool caseSensitive)
+    {
+        Name = name;
+        ParentContext = parentContext;
+        ConfigurationLocations = configurationLocations;
+        ConfigurationResources = configurationResources;
+        CaseSensitive = caseSensitive;
+        Refresh = DEFAULT_REFRESH;
     }
 }

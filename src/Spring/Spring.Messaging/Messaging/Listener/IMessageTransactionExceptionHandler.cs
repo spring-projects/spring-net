@@ -20,36 +20,36 @@
 
 #if NETSTANDARD
 using Experimental.System.Messaging;
+
 #else
 using System.Messaging;
 #endif
 
-namespace Spring.Messaging.Listener
+namespace Spring.Messaging.Listener;
+
+/// <summary>
+/// The exception handler within a transactional context.
+/// </summary>
+/// <remarks>
+/// The return value indicates to the invoker (typically a
+/// <see cref="TransactionalMessageListenerContainer"/>) whether the
+/// MessageTransaction that is associated with the delivery of this message
+/// should be rolled back (placing the message back on the transactional queue
+/// for redelivery) or commited (removing the message from the transactional queue)
+/// </remarks>
+/// <author>Mark Pollack</author>
+public interface IMessageTransactionExceptionHandler
 {
     /// <summary>
-    /// The exception handler within a transactional context.
+    /// Called when an exception is thrown during listener processing under the
+    /// scope of a <see cref="MessageQueueTransaction"/>.
     /// </summary>
-    /// <remarks>
-    /// The return value indicates to the invoker (typically a
-    /// <see cref="TransactionalMessageListenerContainer"/>) whether the
-    /// MessageTransaction that is associated with the delivery of this message
-    /// should be rolled back (placing the message back on the transactional queue
-    /// for redelivery) or commited (removing the message from the transactional queue)
-    /// </remarks>
-    /// <author>Mark Pollack</author>
-    public interface IMessageTransactionExceptionHandler
-    {
-        /// <summary>
-        /// Called when an exception is thrown during listener processing under the
-        /// scope of a <see cref="MessageQueueTransaction"/>.
-        /// </summary>
-        /// <param name="exception">The exception.</param>
-        /// <param name="message">The message.</param>
-        /// <param name="messageQueueTransaction">The message queue transaction.</param>
-        /// <returns>An action indicating if the caller should commit or rollback the
-        /// <see cref="MessageQueueTransaction"/>
-        /// </returns>
-        TransactionAction OnException(Exception exception, Message message,
-                                      MessageQueueTransaction messageQueueTransaction);
-    }
+    /// <param name="exception">The exception.</param>
+    /// <param name="message">The message.</param>
+    /// <param name="messageQueueTransaction">The message queue transaction.</param>
+    /// <returns>An action indicating if the caller should commit or rollback the
+    /// <see cref="MessageQueueTransaction"/>
+    /// </returns>
+    TransactionAction OnException(Exception exception, Message message,
+        MessageQueueTransaction messageQueueTransaction);
 }

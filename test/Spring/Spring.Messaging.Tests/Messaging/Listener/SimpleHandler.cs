@@ -1,46 +1,46 @@
 using Microsoft.Extensions.Logging;
 
-namespace Spring.Messaging.Listener
+namespace Spring.Messaging.Listener;
+
+public class SimpleHandler
 {
-    public class SimpleHandler
+    #region Logging
+
+    private static readonly ILogger<SimpleHandler> LOG = LogManager.GetLogger<SimpleHandler>();
+
+    #endregion
+
+    private int messageCount;
+
+    private string stateVariable;
+
+    public SimpleHandler()
     {
-        #region Logging
+        this.stateVariable = "hello";
+    }
 
-        private static readonly ILogger<SimpleHandler> LOG = LogManager.GetLogger<SimpleHandler>();
+    public SimpleHandler(string stateVariable)
+    {
+        this.stateVariable = stateVariable;
+    }
 
-        #endregion
+    public int MessageCount
+    {
+        get { return messageCount; }
+        set { messageCount = value; }
+    }
 
-        private int messageCount;
-
-        private string stateVariable;
-
-        public SimpleHandler()
+    public string HandleMessage(string msgTxt)
+    {
+        LOG.LogDebug("Received text = [" + msgTxt + "]");
+        LOG.LogDebug("constructor set state string  = " + stateVariable);
+        if (msgTxt.Contains("Goodbye"))
         {
-            this.stateVariable = "hello";
-        }
-        public SimpleHandler(string stateVariable)
-        {
-            this.stateVariable = stateVariable;
-        }
-
-
-        public int MessageCount
-        {
-            get { return messageCount; }
-            set { messageCount = value; }
+            throw new ArgumentException("Don't like saying goodbye!");
         }
 
-        public string HandleMessage(string msgTxt)
-        {
-            LOG.LogDebug("Received text = [" + msgTxt + "]");
-            LOG.LogDebug("constructor set state string  = " + stateVariable);
-            if (msgTxt.Contains("Goodbye"))
-            {
-                throw new ArgumentException("Don't like saying goodbye!");
-            }
-            messageCount++;
-            LOG.LogDebug("Message listener count = " + messageCount);
-            return msgTxt + " - processed!";
-        }
+        messageCount++;
+        LOG.LogDebug("Message listener count = " + messageCount);
+        return msgTxt + " - processed!";
     }
 }

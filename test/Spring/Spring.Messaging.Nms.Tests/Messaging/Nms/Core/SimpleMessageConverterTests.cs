@@ -22,145 +22,139 @@
 
 using System.Collections;
 using System.Text;
-
 using Apache.NMS;
 using Apache.NMS.Util;
-
 using FakeItEasy;
-
 using NUnit.Framework;
-
 using Spring.Messaging.Nms.Support.Converter;
 
 #endregion
 
-namespace Spring.Messaging.Nms.Core
+namespace Spring.Messaging.Nms.Core;
+
+/// <summary>
+/// This class contains tests for SimpleMessageConverer
+/// </summary>
+/// <author>Mark Pollack</author>
+[TestFixture]
+public class SimpleMessageConverterTests
 {
-    /// <summary>
-    /// This class contains tests for SimpleMessageConverer
-    /// </summary>
-    /// <author>Mark Pollack</author>
-    [TestFixture]
-    public class SimpleMessageConverterTests
+    private SimpleMessageConverter converter;
+    private ISession session;
+
+    [SetUp]
+    public void Setup()
     {
-        private SimpleMessageConverter converter;
-        private ISession session;
+        session = A.Fake<ISession>();
+        converter = new SimpleMessageConverter();
+    }
 
-        [SetUp]
-        public void Setup()
-        {
-            session = A.Fake<ISession>();
-            converter = new SimpleMessageConverter();
-        }
+    [Test]
+    public void StringConversion()
+    {
+        ITextMessage message = A.Fake<ITextMessage>();
+        string content = "test";
 
-        [Test]
-        public void StringConversion()
-        {
-            ITextMessage message = A.Fake<ITextMessage>();
-            string content = "test";
+        A.CallTo(() => session.CreateTextMessage(content)).Returns(message).Once();
+        A.CallTo(() => message.Text).Returns(content).Once();
 
-            A.CallTo(() => session.CreateTextMessage(content)).Returns(message).Once();
-            A.CallTo(() => message.Text).Returns(content).Once();
+        IMessage msg = converter.ToMessage(content, session);
+        Assert.AreEqual(content, converter.FromMessage(msg));
+    }
 
-            IMessage msg = converter.ToMessage(content, session);
-            Assert.AreEqual(content, converter.FromMessage(msg));
-        }
+    [Test]
+    public void ByteArrayConversion()
+    {
+        IBytesMessage message = A.Fake<IBytesMessage>();
+        ASCIIEncoding encoding = new ASCIIEncoding();
+        byte[] content = encoding.GetBytes("test");
 
-        [Test]
-        public void ByteArrayConversion()
-        {
-            IBytesMessage message = A.Fake<IBytesMessage>();
-            ASCIIEncoding encoding = new ASCIIEncoding();
-            byte[] content =  encoding.GetBytes("test");
+        A.CallTo(() => session.CreateBytesMessage()).Returns(message);
+        A.CallTo(() => message.Content).Returns(content).Once();
 
-            A.CallTo(() => session.CreateBytesMessage()).Returns(message);
-            A.CallTo(() => message.Content).Returns(content).Once();
-            
-            IMessage msg = converter.ToMessage(content, session);
-            Assert.AreEqual(content.Length, ((byte[])converter.FromMessage(msg)).Length);
-            A.CallTo(() => message.Content).WithAnyArguments().MustHaveHappened();
-        }
+        IMessage msg = converter.ToMessage(content, session);
+        Assert.AreEqual(content.Length, ((byte[]) converter.FromMessage(msg)).Length);
+        A.CallTo(() => message.Content).WithAnyArguments().MustHaveHappened();
+    }
 
-        [Test]
-        public void MapConversion()
-        {
-            IMapMessage message = A.Fake<IMapMessage>();
-            IPrimitiveMap primitiveMap = new PrimitiveMap();
-            IDictionary content = new Hashtable();
-            content["key1"] = "value1";
-            content["key2"] = "value2";
+    [Test]
+    public void MapConversion()
+    {
+        IMapMessage message = A.Fake<IMapMessage>();
+        IPrimitiveMap primitiveMap = new PrimitiveMap();
+        IDictionary content = new Hashtable();
+        content["key1"] = "value1";
+        content["key2"] = "value2";
 
-            A.CallTo(() => session.CreateMapMessage()).Returns(message).Once();
-            A.CallTo(() => message.Body).Returns(primitiveMap);
-            //can't seem to mock indexer...
-            
-            IMessage msg = converter.ToMessage(content, session);
-            Assert.AreEqual(content, converter.FromMessage(msg));
-        }
+        A.CallTo(() => session.CreateMapMessage()).Returns(message).Once();
+        A.CallTo(() => message.Body).Returns(primitiveMap);
+        //can't seem to mock indexer...
 
-        [Test]
-        public void Serializable()
-        {
-            IObjectMessage message = A.Fake<IObjectMessage>();
+        IMessage msg = converter.ToMessage(content, session);
+        Assert.AreEqual(content, converter.FromMessage(msg));
+    }
 
-            SerializableWithAttribute content = new SerializableWithAttribute();
+    [Test]
+    public void Serializable()
+    {
+        IObjectMessage message = A.Fake<IObjectMessage>();
 
-            A.CallTo(() => session.CreateObjectMessage(content)).Returns(message).Once();
-            A.CallTo(() => message.Body).Returns(content).Once();
+        SerializableWithAttribute content = new SerializableWithAttribute();
 
-            IMessage msg = converter.ToMessage(content, session);
-            Assert.AreEqual(content, converter.FromMessage(message));
-        }
+        A.CallTo(() => session.CreateObjectMessage(content)).Returns(message).Once();
+        A.CallTo(() => message.Body).Returns(content).Once();
 
-        [Test]
-        public void ToMessageThrowsExceptionIfGivenNullObjectToConvert()
-        {
-            Assert.Throws<MessageConversionException>(() => converter.ToMessage(null, null));
-        }
+        IMessage msg = converter.ToMessage(content, session);
+        Assert.AreEqual(content, converter.FromMessage(message));
+    }
 
-        [Test]
-        public void ToMessageThrowsExceptionIfGivenIncompatibleObjectToConvert()
-        {
-            Assert.Throws<MessageConversionException>(() => converter.ToMessage(new Cafe(), null));
-        }
+    [Test]
+    public void ToMessageThrowsExceptionIfGivenNullObjectToConvert()
+    {
+        Assert.Throws<MessageConversionException>(() => converter.ToMessage(null, null));
+    }
 
-        [Test]
-        public void ToMessageSimplyReturnsMessageAsIsIfSuppliedWithMessage()
-        {
-            IObjectMessage message = A.Fake<IObjectMessage>();
-            IMessage msg = converter.ToMessage(message, session);
-            Assert.AreSame(message, msg);
-        }
+    [Test]
+    public void ToMessageThrowsExceptionIfGivenIncompatibleObjectToConvert()
+    {
+        Assert.Throws<MessageConversionException>(() => converter.ToMessage(new Cafe(), null));
+    }
 
-        [Test]
-        public void FromMessageSimplyReturnsMessageAsIsIfSuppliedWithMessage()
-        {
-            IMessage message = A.Fake<IMessage>();
-            Object msg = converter.FromMessage(message);
-            Assert.AreSame(message, msg);
-        }
+    [Test]
+    public void ToMessageSimplyReturnsMessageAsIsIfSuppliedWithMessage()
+    {
+        IObjectMessage message = A.Fake<IObjectMessage>();
+        IMessage msg = converter.ToMessage(message, session);
+        Assert.AreSame(message, msg);
+    }
 
-        [Test]
-        public void DictionaryConversionWhereMapHasNonStringTypesForKeys()
-        {
-            IMapMessage message = A.Fake<IMapMessage>();
+    [Test]
+    public void FromMessageSimplyReturnsMessageAsIsIfSuppliedWithMessage()
+    {
+        IMessage message = A.Fake<IMessage>();
+        Object msg = converter.FromMessage(message);
+        Assert.AreSame(message, msg);
+    }
 
-            A.CallTo(() => session.CreateMapMessage()).Returns(message);
+    [Test]
+    public void DictionaryConversionWhereMapHasNonStringTypesForKeys()
+    {
+        IMapMessage message = A.Fake<IMapMessage>();
 
-            var content = new Hashtable();
-            content.Add(new Cafe(), "value1");
+        A.CallTo(() => session.CreateMapMessage()).Returns(message);
 
-            Assert.Throws<MessageConversionException>(() => converter.ToMessage(content, session));
-        }
+        var content = new Hashtable();
+        content.Add(new Cafe(), "value1");
 
-        [Serializable]
-        public class SerializableWithAttribute
-        {
-        }
+        Assert.Throws<MessageConversionException>(() => converter.ToMessage(content, session));
+    }
 
-        public class Cafe
-        {
-            
-        }
+    [Serializable]
+    public class SerializableWithAttribute
+    {
+    }
+
+    public class Cafe
+    {
     }
 }

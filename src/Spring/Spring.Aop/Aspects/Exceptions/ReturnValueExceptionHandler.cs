@@ -21,50 +21,47 @@
 using Microsoft.Extensions.Logging;
 using Spring.Expressions;
 
-namespace Spring.Aspects.Exceptions
+namespace Spring.Aspects.Exceptions;
+
+/// <summary>
+/// Evaluates the expression for the return value of the method.
+/// </summary>
+/// <author>Mark Pollack</author>
+public class ReturnValueExceptionHandler : AbstractExceptionHandler
 {
     /// <summary>
-    /// Evaluates the expression for the return value of the method.
+    /// Initializes a new instance of the <see cref="ReturnValueExceptionHandler"/> class.
     /// </summary>
-    /// <author>Mark Pollack</author>
-    public class ReturnValueExceptionHandler : AbstractExceptionHandler
+    public ReturnValueExceptionHandler()
     {
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ReturnValueExceptionHandler"/> class.
-        /// </summary>
-        public ReturnValueExceptionHandler()
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ReturnValueExceptionHandler"/> class.
+    /// </summary>
+    /// <param name="exceptionNames">The exception names.</param>
+    public ReturnValueExceptionHandler(string[] exceptionNames) : base(exceptionNames)
+    {
+    }
+
+    /// <summary>
+    /// Returns the result of evaluating the translation expression.
+    /// </summary>
+    /// <returns>The return value from handling the exception, if not rethrown or a new exception is thrown.</returns>
+    public override object HandleException(IDictionary<string, object> callContextDictionary)
+    {
+        object returnVal = null;
+        try
         {
+            IExpression expression = Expression.Parse(ActionExpressionText);
+            returnVal = expression.GetValue(null, callContextDictionary);
+        }
+        catch (Exception e)
+        {
+            string message = "Was not able to evaluate action expression [" + ActionExpressionText + "]";
+            log.LogWarning(e, message);
         }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ReturnValueExceptionHandler"/> class.
-        /// </summary>
-        /// <param name="exceptionNames">The exception names.</param>
-        public ReturnValueExceptionHandler(string[] exceptionNames) : base(exceptionNames)
-        {
-        }
-
-
-
-        /// <summary>
-        /// Returns the result of evaluating the translation expression.
-        /// </summary>
-        /// <returns>The return value from handling the exception, if not rethrown or a new exception is thrown.</returns>
-        public override object HandleException(IDictionary<string, object> callContextDictionary)
-        {
-            object returnVal = null;
-            try
-            {
-                IExpression expression = Expression.Parse(ActionExpressionText);
-                returnVal = expression.GetValue(null, callContextDictionary);
-            }
-            catch (Exception e)
-            {
-                string message = "Was not able to evaluate action expression [" + ActionExpressionText + "]";
-                log.LogWarning(e, message);
-            }
-            return returnVal;
-        }
+        return returnVal;
     }
 }

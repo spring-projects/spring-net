@@ -3,32 +3,32 @@
          xmlns:db="http://www.springframework.net/database">
 
 
-  <object type="Spring.Objects.Factory.Config.VariablePlaceholderConfigurer, Spring.Core">
-    <property name="VariableSources">
-      <list>
-        <object type="Spring.ProviderNameSource, Spring.Data.Integration.Tests" />
-      </list>
-    </property>
-  </object>
+    <object type="Spring.Objects.Factory.Config.VariablePlaceholderConfigurer, Spring.Core">
+        <property name="VariableSources">
+            <list>
+                <object type="Spring.ProviderNameSource, Spring.Data.Integration.Tests" />
+            </list>
+        </property>
+    </object>
 
-  <db:provider id="DbProvider"
-               provider="${providerName}"
-               connectionString="Data Source=SPRINGQA;Database=Spring;Trusted_Connection=False;User ID=springqa;Password=springqa"/>
+    <db:provider id="DbProvider"
+                 provider="${providerName}"
+                 connectionString="Data Source=SPRINGQA;Database=Spring;Trusted_Connection=False;User ID=springqa;Password=springqa" />
 
-  <object id="adoTemplate" type="Spring.Data.Core.AdoTemplate, Spring.Data">
-    <property name="DbProvider" ref="DbProvider"/>
-  </object>
+    <object id="adoTemplate" type="Spring.Data.Core.AdoTemplate, Spring.Data">
+        <property name="DbProvider" ref="DbProvider" />
+    </object>
 
-  <object id="testObjectDao"
+    <object id="testObjectDao"
             type="Spring.Data.TestObjectDao, Spring.Data.Integration.Tests">
 
-    <property name="AdoTemplate" ref="adoTemplate"/>
-  </object>
+        <property name="AdoTemplate" ref="adoTemplate" />
+    </object>
 
-  <object id="testObjectManager"
+    <object id="testObjectManager"
             type="Spring.Data.TestObjectManager, Spring.Data.Integration.Tests">
 
-    <property name="TestObjectDao" ref="testObjectDao"/>
-  </object>
+        <property name="TestObjectDao" ref="testObjectDao" />
+    </object>
 
 </objects>

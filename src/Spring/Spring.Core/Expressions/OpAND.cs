@@ -21,72 +21,71 @@
 using System.Runtime.Serialization;
 using Spring.Util;
 
-namespace Spring.Expressions
+namespace Spring.Expressions;
+
+/// <summary>
+/// Represents AND operator (both, bitwise and logical).
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[Serializable]
+public class OpAND : BinaryOperator
 {
     /// <summary>
-    /// Represents AND operator (both, bitwise and logical).
+    /// Create a new instance
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    [Serializable]
-    public class OpAND : BinaryOperator
+    public OpAND()
     {
-        /// <summary>
-        /// Create a new instance
-        /// </summary>
-        public OpAND()
-        {
-        }
+    }
 
-        /// <summary>
-        /// Create a new instance
-        /// </summary>
-        public OpAND(BaseNode left, BaseNode right)
-            :base(left, right)
-        {
-        }
+    /// <summary>
+    /// Create a new instance
+    /// </summary>
+    public OpAND(BaseNode left, BaseNode right)
+        : base(left, right)
+    {
+    }
 
-        /// <summary>
-        /// Create a new instance from SerializationInfo
-        /// </summary>
-        protected OpAND(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
-        
-        /// <summary>
-        /// Returns a value for the logical AND operator node.
-        /// </summary>
-        /// <param name="context">Context to evaluate expressions against.</param>
-        /// <param name="evalContext">Current expression evaluation context.</param>
-        /// <returns>Node's value.</returns>
-        protected override object Get(object context, EvaluationContext evalContext)
-        {
-            object l = GetLeftValue(context, evalContext);
+    /// <summary>
+    /// Create a new instance from SerializationInfo
+    /// </summary>
+    protected OpAND(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+    }
 
-            if (NumberUtils.IsInteger(l))
+    /// <summary>
+    /// Returns a value for the logical AND operator node.
+    /// </summary>
+    /// <param name="context">Context to evaluate expressions against.</param>
+    /// <param name="evalContext">Current expression evaluation context.</param>
+    /// <returns>Node's value.</returns>
+    protected override object Get(object context, EvaluationContext evalContext)
+    {
+        object l = GetLeftValue(context, evalContext);
+
+        if (NumberUtils.IsInteger(l))
+        {
+            object r = GetRightValue(context, evalContext);
+            if (NumberUtils.IsInteger(r))
             {
-                object r = GetRightValue(context, evalContext);
-                if (NumberUtils.IsInteger(r))
-                {
-                    return NumberUtils.BitwiseAnd(l, r);
-                }
+                return NumberUtils.BitwiseAnd(l, r);
             }
-            else if (l is Enum)
-            {
-                object r = GetRightValue(context, evalContext);
-                if (l.GetType() == r.GetType())
-                {
-                    Type enumType = l.GetType();
-                    Type integralType = Enum.GetUnderlyingType(enumType);
-                    l = Convert.ChangeType(l, integralType);
-                    r = Convert.ChangeType(r, integralType);
-                    object result = NumberUtils.BitwiseAnd(l, r);
-                    return Enum.ToObject(enumType, result);
-                }
-            }
-
-            return Convert.ToBoolean(l) &&
-                Convert.ToBoolean(GetRightValue(context, evalContext));
         }
+        else if (l is Enum)
+        {
+            object r = GetRightValue(context, evalContext);
+            if (l.GetType() == r.GetType())
+            {
+                Type enumType = l.GetType();
+                Type integralType = Enum.GetUnderlyingType(enumType);
+                l = Convert.ChangeType(l, integralType);
+                r = Convert.ChangeType(r, integralType);
+                object result = NumberUtils.BitwiseAnd(l, r);
+                return Enum.ToObject(enumType, result);
+            }
+        }
+
+        return Convert.ToBoolean(l) &&
+               Convert.ToBoolean(GetRightValue(context, evalContext));
     }
 }

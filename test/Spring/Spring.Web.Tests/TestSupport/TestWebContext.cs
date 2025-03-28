@@ -27,75 +27,74 @@ using Spring.Expressions;
 
 #endregion
 
-namespace Spring.TestSupport
+namespace Spring.TestSupport;
+
+public class TestWebContext : IDisposable
 {
-    public class TestWebContext : IDisposable
+    private readonly TextWriter _out;
+    private readonly HttpWorkerRequest _wr;
+    [ThreadStatic] private static TestWebContext _wc;
+
+    public static void Create(string virtualPath, string page)
     {
-        private readonly TextWriter _out;
-        private readonly HttpWorkerRequest _wr;
-        [ThreadStatic]
-        private static TestWebContext _wc;
+        _wc = new TestWebContext(virtualPath, page);
+    }
 
-        public static void Create(string virtualPath, string page)
+    public static void Release()
+    {
+        if (_wc != null)
         {
-            _wc = new TestWebContext(virtualPath, page);
+            _wc.Dispose();
+        }
+    }
+
+    public TestWebContext(string virtualPath, string page)
+    {
+        _out = new StringWriter();
+        HttpWorkerRequest wr;
+        AppDomain domain = Thread.GetDomain();
+
+        // are we running within a valid AspNet AppDomain?
+        string appPath = (string) domain.GetData(".appPath");
+        if (appPath != null)
+        {
+            wr = new SimpleWorkerRequest(page, string.Empty, _out);
+        }
+        else
+        {
+            appPath = domain.BaseDirectory + "\\";
+            wr = new SimpleWorkerRequest(virtualPath, appPath, page, string.Empty, _out);
         }
 
-        public static void Release()
-        {
-            if (_wc != null)
-            {
-                _wc.Dispose();
-            }
-        }
+        HttpContext ctx = new HttpContext(wr);
+        HttpContext.Current = ctx;
+        HttpBrowserCapabilities browser = new HttpBrowserCapabilities();
+        browser.Capabilities = new CaseInsensitiveHashtable(); //CollectionsUtil.CreateCaseInsensitiveHashtable();
+        browser.Capabilities[string.Empty] = "Test User Agent"; // string.Empty is the key for "user agent"
 
-        public TestWebContext(string virtualPath, string page)
-        {
-            _out = new StringWriter();
-            HttpWorkerRequest wr;
-            AppDomain domain = Thread.GetDomain();
+        // avoids NullReferenceException when accessing HttpRequest.FilePath
+        object virtualPathObject = ExpressionEvaluator.GetValue(null, "T(System.Web.VirtualPath).Create('/')");
+        object cachedPathData = ExpressionEvaluator.GetValue(null, "T(System.Web.CachedPathData).GetRootWebPathData()");
+        ExpressionEvaluator.SetValue(cachedPathData, "_virtualPath", virtualPathObject);
+        ExpressionEvaluator.SetValue(cachedPathData, "_physicalPath", appPath);
 
-            // are we running within a valid AspNet AppDomain?
-            string appPath = (string) domain.GetData(".appPath");
-            if (appPath != null)
-            {
-                wr = new SimpleWorkerRequest(page, string.Empty, _out);
-            }
-            else
-            {
-                appPath = domain.BaseDirectory + "\\";
-                wr = new SimpleWorkerRequest(virtualPath, appPath, page, string.Empty, _out);
-            }
-            HttpContext ctx = new HttpContext(wr);
-            HttpContext.Current = ctx;
-            HttpBrowserCapabilities browser = new HttpBrowserCapabilities();
-            browser.Capabilities = new CaseInsensitiveHashtable(); //CollectionsUtil.CreateCaseInsensitiveHashtable();
-            browser.Capabilities[string.Empty] = "Test User Agent"; // string.Empty is the key for "user agent"
+        ctx.Request.Browser = browser;
+        string filePath = ctx.Request.FilePath;
+        _wr = wr;
+    }
 
-            // avoids NullReferenceException when accessing HttpRequest.FilePath
-            object virtualPathObject = ExpressionEvaluator.GetValue(null, "T(System.Web.VirtualPath).Create('/')");
-            object cachedPathData = ExpressionEvaluator.GetValue(null, "T(System.Web.CachedPathData).GetRootWebPathData()");
-            ExpressionEvaluator.SetValue(cachedPathData, "_virtualPath", virtualPathObject);
-            ExpressionEvaluator.SetValue(cachedPathData, "_physicalPath", appPath);
+    public HttpWorkerRequest HttpWorkerRequest
+    {
+        get { return _wr; }
+    }
 
-            ctx.Request.Browser = browser;
-            string filePath = ctx.Request.FilePath;
-            _wr = wr;
-        }
+    public TextWriter Out
+    {
+        get { return _out; }
+    }
 
-        public HttpWorkerRequest HttpWorkerRequest
-        {
-            get { return _wr; }
-        }
-
-        public TextWriter Out
-        {
-            get { return _out; }
-        }
-
-        public void Dispose()
-        {
-            HttpContext.Current = null;
-        }
+    public void Dispose()
+    {
+        HttpContext.Current = null;
     }
 }

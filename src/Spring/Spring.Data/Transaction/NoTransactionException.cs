@@ -20,48 +20,51 @@
 
 using System.Runtime.Serialization;
 
-namespace Spring.Transaction
+namespace Spring.Transaction;
+
+/// <summary>
+/// Exception thrown when an operation is attempted that relies on an existing
+/// transaction (such as setting rollback status) and there is no existing transaction.
+/// This represents an illegal usage of the transaction API.
+/// </summary>
+/// <author>Rod Johnson</author>
+/// <author>Griffin Caprio (.NET)</author>
+[Serializable]
+public class NoTransactionException : TransactionUsageException
 {
-	/// <summary>
-	/// Exception thrown when an operation is attempted that relies on an existing
-	/// transaction (such as setting rollback status) and there is no existing transaction.
-	/// This represents an illegal usage of the transaction API.
-	/// </summary>
-	/// <author>Rod Johnson</author>
-	/// <author>Griffin Caprio (.NET)</author>
-	[Serializable]
-	public class NoTransactionException : TransactionUsageException
-	{
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Transaction.NoTransactionException"/> class.
-		/// </summary>
-		public NoTransactionException( ) {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Transaction.NoTransactionException"/> class.
+    /// </summary>
+    public NoTransactionException() { }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Transaction.NoTransactionException"/> class.
-		/// </summary>
-		/// <param name="message">
-		/// A message about the exception.
-		/// </param>
-		public NoTransactionException( String message ) : base(message) {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Transaction.NoTransactionException"/> class.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    public NoTransactionException(String message) : base(message) { }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Transaction.NoTransactionException"/> class.
-		/// </summary>
-		/// <param name="message">
-		/// A message about the exception.
-		/// </param>
-		/// <param name="rootCause">
-		/// The root exception that is being wrapped.
-		/// </param>
-		public NoTransactionException(string message, Exception rootCause)
-			: base(message, rootCause) {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Transaction.NoTransactionException"/> class.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    /// <param name="rootCause">
+    /// The root exception that is being wrapped.
+    /// </param>
+    public NoTransactionException(string message, Exception rootCause)
+        : base(message, rootCause)
+    {
+    }
 
-		/// <inheritdoc />
-		protected NoTransactionException(
-			SerializationInfo info, StreamingContext context ) : base( info, context ) {}
-	}
+    /// <inheritdoc />
+    protected NoTransactionException(
+        SerializationInfo info, StreamingContext context) : base(info, context)
+    {
+    }
 }

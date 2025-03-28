@@ -21,75 +21,75 @@
 using System.Runtime.Serialization;
 using Spring.Reflection.Dynamic;
 
-namespace Spring.Expressions
+namespace Spring.Expressions;
+
+/// <summary>
+/// Represents parsed function node.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[Serializable]
+public class FunctionNode : NodeWithArguments
 {
     /// <summary>
-    /// Represents parsed function node.
+    /// Create a new instance
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    [Serializable]
-    public class FunctionNode : NodeWithArguments
+    public FunctionNode()
     {
-        /// <summary>
-        /// Create a new instance
-        /// </summary>
-        public FunctionNode()
+    }
+
+    /// <summary>
+    /// Create a new instance from SerializationInfo
+    /// </summary>
+    protected FunctionNode(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+    }
+
+    /// <summary>
+    /// Evaluates function represented by this node.
+    /// </summary>
+    /// <param name="context">Context to evaluate expressions against.</param>
+    /// <param name="evalContext">Current expression evaluation context.</param>
+    /// <returns>Result of the function evaluation.</returns>
+    protected override object Get(object context, EvaluationContext evalContext)
+    {
+        string name = this.getText();
+
+        object[] argValues = ResolveArguments(evalContext);
+
+        object function = evalContext.Variables[name];
+
+        // delegate?
+        Delegate callback = function as Delegate;
+        if (callback != null)
         {
+            return InvokeDelegate(callback, argValues);
         }
 
-        /// <summary>
-        /// Create a new instance from SerializationInfo
-        /// </summary>
-        protected FunctionNode(SerializationInfo info, StreamingContext context)
-            : base(info, context)
+        // lambda?
+        LambdaExpressionNode lambda = function as LambdaExpressionNode;
+        if (lambda != null)
         {
-        }
-
-        /// <summary>
-        /// Evaluates function represented by this node.
-        /// </summary>
-        /// <param name="context">Context to evaluate expressions against.</param>
-        /// <param name="evalContext">Current expression evaluation context.</param>
-        /// <returns>Result of the function evaluation.</returns>
-        protected override object Get(object context, EvaluationContext evalContext)
-        {
-            string name = this.getText();
-
-            object[] argValues = ResolveArguments(evalContext);
-
-            object function = evalContext.Variables[name];
-
-            // delegate?
-            Delegate callback = function as Delegate;
-            if (callback != null)
+            try
             {
-                return InvokeDelegate(callback, argValues);
+                return GetValueWithArguments(lambda, context, evalContext, argValues);
             }
-
-            // lambda?
-            LambdaExpressionNode lambda = function as LambdaExpressionNode;
-            if (lambda != null)
+            catch (ArgumentMismatchException ame)
             {
-                try
-                {
-                    return GetValueWithArguments(lambda, context, evalContext, argValues);
-                }
-                catch (ArgumentMismatchException ame)
-                {
-                    throw new InvalidOperationException( "Failed executing function " + name + ": " + ame.Message );
-                }
+                throw new InvalidOperationException("Failed executing function " + name + ": " + ame.Message);
             }
-
-            if (function == null)
-            {
-                throw new InvalidOperationException("Function '" + name + "' is not defined.");
-            }
-            throw new InvalidOperationException("Function '" + name + "' is defined but of unknown type.");
         }
 
-        private object InvokeDelegate(Delegate callback, object[] arguments)
+        if (function == null)
         {
-            return new SafeMethod(callback.Method).Invoke(callback.Target, arguments);
+            throw new InvalidOperationException("Function '" + name + "' is not defined.");
         }
+
+        throw new InvalidOperationException("Function '" + name + "' is defined but of unknown type.");
+    }
+
+    private object InvokeDelegate(Delegate callback, object[] arguments)
+    {
+        return new SafeMethod(callback.Method).Invoke(callback.Target, arguments);
     }
 }

@@ -2,13 +2,13 @@
 
 /*
  * Copyright © 2002-2011 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -51,7 +51,6 @@ namespace Spring.Data.NHibernate
         /// </summary>
         public MultipleDbTests()
         {
-
         }
 
         #endregion
@@ -80,8 +79,8 @@ namespace Spring.Data.NHibernate
         [Test]
         public void MultipleDBAccessUsingMultipleSessionScopes()
         {
-            SessionScope scope1 = new SessionScope( (ISessionFactory) ctx["SessionFactory1"], false );
-            SessionScope scope2 = new SessionScope( (ISessionFactory) ctx["SessionFactory2"], false );
+            SessionScope scope1 = new SessionScope((ISessionFactory) ctx["SessionFactory1"], false);
+            SessionScope scope2 = new SessionScope((ISessionFactory) ctx["SessionFactory2"], false);
 
             scope1.Open();
             scope2.Open();
@@ -92,6 +91,5 @@ namespace Spring.Data.NHibernate
             scope1.Close();
             scope2.Close();
         }
-
     }
 }

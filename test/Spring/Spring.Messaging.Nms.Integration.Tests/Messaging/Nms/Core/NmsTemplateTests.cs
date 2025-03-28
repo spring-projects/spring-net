@@ -20,78 +20,75 @@
 
 using Apache.NMS;
 using NUnit.Framework;
-
 using Spring.Testing.NUnit;
 
-namespace Spring.Messaging.Nms.Core
+namespace Spring.Messaging.Nms.Core;
+
+[TestFixture]
+public class NmsTemplateTests : AbstractDependencyInjectionSpringContextTests
 {
-    [TestFixture]
-    public class NmsTemplateTests : AbstractDependencyInjectionSpringContextTests
+    protected IConnectionFactory nmsConnectionFactory;
+
+    protected IConnectionFactory connectionFactory;
+
+    protected NmsTemplate nmsTemplate;
+
+    /// <summary>
+    /// Default constructor for NmsTemplateTests.
+    /// </summary>
+    public NmsTemplateTests()
     {
-        protected IConnectionFactory nmsConnectionFactory;
-
-        protected IConnectionFactory connectionFactory;
-
-        protected NmsTemplate nmsTemplate;
-
-        /// <summary>
-        /// Default constructor for NmsTemplateTests.
-        /// </summary>
-        public NmsTemplateTests()
-        {
-            this.PopulateProtectedVariables = true;
-        }
+        this.PopulateProtectedVariables = true;
+    }
 
 #if NETFRAMEWORK
-        [Test]
-        public void ConnectionThrowException()
-        {
-            var cf = new Apache.NMS.ActiveMQ.ConnectionFactory();
-            cf.BrokerUri = new Uri("tcp://localaaahost:61616");
-            Assert.Throws<NMSConnectionException>(() => cf.CreateConnection());
-        }
+    [Test]
+    public void ConnectionThrowException()
+    {
+        var cf = new Apache.NMS.ActiveMQ.ConnectionFactory();
+        cf.BrokerUri = new Uri("tcp://localaaahost:61616");
+        Assert.Throws<NMSConnectionException>(() => cf.CreateConnection());
+    }
 #endif
 
-        [Test]
-        public void ConvertAndSend()
-        {
-            Assert.NotNull(connectionFactory);
-            Assert.NotNull(nmsTemplate);
+    [Test]
+    public void ConvertAndSend()
+    {
+        Assert.NotNull(connectionFactory);
+        Assert.NotNull(nmsTemplate);
 
-            string msgText = "Hello World";
+        string msgText = "Hello World";
 
-            //Use with destination set at runtime
-            nmsTemplate.ConvertAndSend("APP.TESTING", msgText);
+        //Use with destination set at runtime
+        nmsTemplate.ConvertAndSend("APP.TESTING", msgText);
 
-            AssertRecievedHelloWorldMessage(msgText, nmsTemplate.ReceiveAndConvert("APP.TESTING"));
+        AssertRecievedHelloWorldMessage(msgText, nmsTemplate.ReceiveAndConvert("APP.TESTING"));
 
-            //Now using default destination set via property
-            nmsTemplate.DefaultDestinationName = "APP.TESTING";
-            nmsTemplate.ConvertAndSend(msgText);
-            AssertRecievedHelloWorldMessage(msgText, nmsTemplate.ReceiveAndConvert());
-        }
-
-
-        private void AssertRecievedHelloWorldMessage(string msgText, object message)
-        {
-            Assert.NotNull(message);
-            string text = message as string;
-            Assert.NotNull(text);
-            Assert.AreEqual(msgText, text);
-        }
-
-        #region Overrides of AbstractDependencyInjectionSpringContextTests
-
-        /// <summary>
-        /// Subclasses must implement this property to return the locations of their
-        /// config files. A plain path will be treated as a file system location.
-        /// </summary>
-        /// <value>An array of config locations</value>
-        protected override string[] ConfigLocations
-        {
-            get { return new string[] {"assembly://Spring.Messaging.Nms.Integration.Tests/Spring.Messaging.Nms.Core/NmsTemplateTests.xml"}; }
-        }
-
-        #endregion
+        //Now using default destination set via property
+        nmsTemplate.DefaultDestinationName = "APP.TESTING";
+        nmsTemplate.ConvertAndSend(msgText);
+        AssertRecievedHelloWorldMessage(msgText, nmsTemplate.ReceiveAndConvert());
     }
+
+    private void AssertRecievedHelloWorldMessage(string msgText, object message)
+    {
+        Assert.NotNull(message);
+        string text = message as string;
+        Assert.NotNull(text);
+        Assert.AreEqual(msgText, text);
+    }
+
+    #region Overrides of AbstractDependencyInjectionSpringContextTests
+
+    /// <summary>
+    /// Subclasses must implement this property to return the locations of their
+    /// config files. A plain path will be treated as a file system location.
+    /// </summary>
+    /// <value>An array of config locations</value>
+    protected override string[] ConfigLocations
+    {
+        get { return new string[] { "assembly://Spring.Messaging.Nms.Integration.Tests/Spring.Messaging.Nms.Core/NmsTemplateTests.xml" }; }
+    }
+
+    #endregion
 }

@@ -1,6 +1,7 @@
 #region License
+
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 #endregion
 
 #region Imports
@@ -28,84 +30,84 @@ using Spring.Util;
 
 #endregion
 
-namespace Spring.Web.Support
+namespace Spring.Web.Support;
+
+/// <summary>
+/// Wraps a ControlCollection.Owner control to make it DI aware
+/// </summary>
+/// <author>Erich Eichinger</author>
+internal class SupportsWebDependencyInjectionOwnerProxy : Control, ISupportsWebDependencyInjection
 {
+    // Control Fields and Methods	    
+    private readonly ControlAccessor _targetControl;
+    private IApplicationContext _defaultApplicationContext;
+
     /// <summary>
-    /// Wraps a ControlCollection.Owner control to make it DI aware
+    /// Wraps a control to make it DI aware
     /// </summary>
-    /// <author>Erich Eichinger</author>
-    internal class SupportsWebDependencyInjectionOwnerProxy : Control, ISupportsWebDependencyInjection
+    /// <param name="defaultApplicationContext"></param>
+    /// <param name="targetControl"></param>
+    public SupportsWebDependencyInjectionOwnerProxy(IApplicationContext defaultApplicationContext, Control targetControl)
     {
-        // Control Fields and Methods	    
-        private readonly ControlAccessor _targetControl;
-        private IApplicationContext _defaultApplicationContext;
+        _defaultApplicationContext = defaultApplicationContext;
+        _targetControl = new ControlAccessor(targetControl);
+    }
 
-        /// <summary>
-        /// Wraps a control to make it DI aware
-        /// </summary>
-        /// <param name="defaultApplicationContext"></param>
-        /// <param name="targetControl"></param>
-        public SupportsWebDependencyInjectionOwnerProxy(IApplicationContext defaultApplicationContext, Control targetControl)
-        {
-            _defaultApplicationContext = defaultApplicationContext;
-            _targetControl = new ControlAccessor(targetControl);
-        }
-
-        public IApplicationContext DefaultApplicationContext
-        {
-            get { return this._defaultApplicationContext; }
-            set { this._defaultApplicationContext = value; }
-        }
-
-        /// <summary>
-        /// Performs DI before adding the control to it's parent
-        /// </summary>
-        /// <param name="control"></param>
-        /// <param name="index"></param>
-        protected override void AddedControl(Control control, int index)
-        {
-            // do DI
-            Control configuredControl = WebDependencyInjectionUtils.InjectDependenciesRecursive(_defaultApplicationContext, control);
-            if (configuredControl != control)
-            {
-               _targetControl.SetControlAt( configuredControl, index );                
-            }
-            _targetControl.AddedControl(control, index);
-        }
-
-        /// <summary>
-        /// Delegates call to decorated control
-        /// </summary>
-        /// <param name="control"></param>
-        protected override void RemovedControl(Control control)
-        {
-            _targetControl.RemovedControl(control);
-        }
+    public IApplicationContext DefaultApplicationContext
+    {
+        get { return this._defaultApplicationContext; }
+        set { this._defaultApplicationContext = value; }
     }
 
     /// <summary>
-    /// Wraps a ControlCollection.Owner control implementing INamingContainer to make it DI aware
+    /// Performs DI before adding the control to it's parent
     /// </summary>
-    /// <author>Erich Eichinger</author>
-    internal class NamingContainerSupportsWebDependencyInjectionOwnerProxy : SupportsWebDependencyInjectionOwnerProxy
-        , INamingContainer
+    /// <param name="control"></param>
+    /// <param name="index"></param>
+    protected override void AddedControl(Control control, int index)
     {
-        private static readonly SafeField refOccasionalFields;
-
-        static NamingContainerSupportsWebDependencyInjectionOwnerProxy()
+        // do DI
+        Control configuredControl = WebDependencyInjectionUtils.InjectDependenciesRecursive(_defaultApplicationContext, control);
+        if (configuredControl != control)
         {
-            SafeField fld = null;
-            SecurityCritical.ExecutePrivileged( new PermissionSet(PermissionState.Unrestricted), delegate 
-            {
-                fld = new SafeField(typeof(Control).GetField("_occasionalFields", BindingFlags.Instance | BindingFlags.NonPublic));
-            });
-            refOccasionalFields = fld;
+            _targetControl.SetControlAt(configuredControl, index);
         }
 
-        public NamingContainerSupportsWebDependencyInjectionOwnerProxy(IApplicationContext defaultApplicationContext, Control targetControl) : base(defaultApplicationContext, targetControl)
+        _targetControl.AddedControl(control, index);
+    }
+
+    /// <summary>
+    /// Delegates call to decorated control
+    /// </summary>
+    /// <param name="control"></param>
+    protected override void RemovedControl(Control control)
+    {
+        _targetControl.RemovedControl(control);
+    }
+}
+
+/// <summary>
+/// Wraps a ControlCollection.Owner control implementing INamingContainer to make it DI aware
+/// </summary>
+/// <author>Erich Eichinger</author>
+internal class NamingContainerSupportsWebDependencyInjectionOwnerProxy : SupportsWebDependencyInjectionOwnerProxy
+    , INamingContainer
+{
+    private static readonly SafeField refOccasionalFields;
+
+    static NamingContainerSupportsWebDependencyInjectionOwnerProxy()
+    {
+        SafeField fld = null;
+        SecurityCritical.ExecutePrivileged(new PermissionSet(PermissionState.Unrestricted), delegate
         {
-            object targetOccasionalFields = refOccasionalFields.GetValue(targetControl);
-            refOccasionalFields.SetValue(this, targetOccasionalFields);
-        }
+            fld = new SafeField(typeof(Control).GetField("_occasionalFields", BindingFlags.Instance | BindingFlags.NonPublic));
+        });
+        refOccasionalFields = fld;
+    }
+
+    public NamingContainerSupportsWebDependencyInjectionOwnerProxy(IApplicationContext defaultApplicationContext, Control targetControl) : base(defaultApplicationContext, targetControl)
+    {
+        object targetOccasionalFields = refOccasionalFields.GetValue(targetControl);
+        refOccasionalFields.SetValue(this, targetOccasionalFields);
     }
 }

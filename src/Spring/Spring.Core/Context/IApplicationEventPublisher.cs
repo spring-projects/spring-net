@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,30 +18,29 @@
 
 #endregion
 
-namespace Spring.Context {
+namespace Spring.Context;
 
-	/// <summary>
-	/// Encapsulates event publication functionality.
-	/// </summary>
-	/// <remarks>
-	/// <p>
-	/// Serves as a super-interface for the
-	/// <see cref="Spring.Context.IApplicationContext"/> interface.
-	/// </p>
-	/// </remarks>
-	/// <author>Juergen Hoeller</author>
-    /// <author>Rick Evans (.NET)</author>
-	public interface IApplicationEventPublisher 
-    {
-		/// <summary>
-		/// Publishes an application context event.
-		/// </summary>
-		/// <param name="sender">
-		/// The source of the event. May be <see langword="null"/>.
-		/// </param>
-		/// <param name="e">
-		/// The event that is to be raised.
-		/// </param>
-		void PublishEvent(object sender, ApplicationEventArgs e);
-	}
+/// <summary>
+/// Encapsulates event publication functionality.
+/// </summary>
+/// <remarks>
+/// <p>
+/// Serves as a super-interface for the
+/// <see cref="Spring.Context.IApplicationContext"/> interface.
+/// </p>
+/// </remarks>
+/// <author>Juergen Hoeller</author>
+/// <author>Rick Evans (.NET)</author>
+public interface IApplicationEventPublisher
+{
+    /// <summary>
+    /// Publishes an application context event.
+    /// </summary>
+    /// <param name="sender">
+    /// The source of the event. May be <see langword="null"/>.
+    /// </param>
+    /// <param name="e">
+    /// The event that is to be raised.
+    /// </param>
+    void PublishEvent(object sender, ApplicationEventArgs e);
 }

@@ -20,10 +20,8 @@
 
 using System.Web.Mvc;
 
-namespace Spring.Web.Mvc.Tests.Controllers
-{
-    public class NotInContainerController : Controller
-    {
+namespace Spring.Web.Mvc.Tests.Controllers;
 
-    }
+public class NotInContainerController : Controller
+{
 }

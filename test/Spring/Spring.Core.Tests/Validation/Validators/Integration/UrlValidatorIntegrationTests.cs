@@ -27,32 +27,31 @@ using Spring.Objects.Factory.Xml;
 
 #endregion
 
-namespace Spring.Validation.Validators
+namespace Spring.Validation.Validators;
+
+/// <summary>
+/// UrlValidatorIntegration integration tests.
+/// </summary>
+/// <author>Goran Milosavljevic</author>
+[TestFixture]
+public class UrlValidatorIntegrationTests
 {
-    /// <summary>
-    /// UrlValidatorIntegration integration tests.
-    /// </summary>
-    /// <author>Goran Milosavljevic</author>
-    [TestFixture]
-    public class UrlValidatorIntegrationTests
+    [Test]
+    public void ISBNValidatorTests()
     {
-        [Test]
-        public void ISBNValidatorTests()
-        {
-            const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
+        const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
             <objects xmlns='http://www.springframework.net' xmlns:v='http://www.springframework.net/validation'>
                 <v:validator id='urlValidator' test='#this' type='Spring.Validation.Validators.UrlValidator, Spring.Core'/>
             </objects>";
-            
-            MemoryStream stream = new MemoryStream(new UTF8Encoding().GetBytes(xml));
-            IResource resource = new InputStreamResource(stream, "urlValidator");
 
-            XmlObjectFactory objectFactory = new XmlObjectFactory(resource, null);
-            object obj = objectFactory.GetObject("urlValidator");
-            
-            Assert.IsTrue(obj is IValidator);
-            IValidator validator = obj as IValidator;
-            Assert.IsTrue(validator.Validate("http://www.springframework.net", new ValidationErrors()));
-        }
+        MemoryStream stream = new MemoryStream(new UTF8Encoding().GetBytes(xml));
+        IResource resource = new InputStreamResource(stream, "urlValidator");
+
+        XmlObjectFactory objectFactory = new XmlObjectFactory(resource, null);
+        object obj = objectFactory.GetObject("urlValidator");
+
+        Assert.IsTrue(obj is IValidator);
+        IValidator validator = obj as IValidator;
+        Assert.IsTrue(validator.Validate("http://www.springframework.net", new ValidationErrors()));
     }
 }

@@ -21,77 +21,74 @@
 #region Imports
 
 using NUnit.Framework;
-
 using Spring.Context.Support;
 using Spring.Expressions;
 using Spring.Validation.Actions;
 
 #endregion
 
-namespace Spring.Validation.Validators
+namespace Spring.Validation.Validators;
+
+/// <summary>
+/// Unit tests for the ConditionValidator class.
+/// </summary>
+/// <author>Rick Evans</author>
+[TestFixture]
+public sealed class ConditionValidatorTests
 {
-    /// <summary>
-    /// Unit tests for the ConditionValidator class.
-    /// </summary>
-    /// <author>Rick Evans</author>
-    [TestFixture]
-    public sealed class ConditionValidatorTests
+    [Test]
+    public void StraightTrue()
     {
-        [Test]
-        public void StraightTrue()
-        {
-            ConditionValidator validator = new ConditionValidator();
-            validator.Test = Expression.Parse("true");
-            Assert.IsTrue(validator.Validate(null, new ValidationErrors()));
-        }
+        ConditionValidator validator = new ConditionValidator();
+        validator.Test = Expression.Parse("true");
+        Assert.IsTrue(validator.Validate(null, new ValidationErrors()));
+    }
 
-        [Test]
-        public void StraightFalse()
-        {
-            ConditionValidator validator = new ConditionValidator("false", null);
-            Assert.IsFalse(validator.Validate(null, new ValidationErrors()));
-        }
+    [Test]
+    public void StraightFalse()
+    {
+        ConditionValidator validator = new ConditionValidator("false", null);
+        Assert.IsFalse(validator.Validate(null, new ValidationErrors()));
+    }
 
-        [Test]
-        public void TrueScalarExpression()
-        {
-            Inventor tesla = new Inventor();
-            tesla.Name = "Nikola Tesla";
+    [Test]
+    public void TrueScalarExpression()
+    {
+        Inventor tesla = new Inventor();
+        tesla.Name = "Nikola Tesla";
 
-            ConditionValidator validator = new ConditionValidator(Expression.Parse("Name == 'Nikola Tesla'"), null);
-            Assert.IsTrue(validator.Validate(tesla, new ValidationErrors()));
-        }
+        ConditionValidator validator = new ConditionValidator(Expression.Parse("Name == 'Nikola Tesla'"), null);
+        Assert.IsTrue(validator.Validate(tesla, new ValidationErrors()));
+    }
 
-        [Test]
-        public void FalseScalarExpression()
-        {
-            Inventor tesla = new Inventor();
-            tesla.Name = "Soltan Gris";
+    [Test]
+    public void FalseScalarExpression()
+    {
+        Inventor tesla = new Inventor();
+        tesla.Name = "Soltan Gris";
 
-            ConditionValidator validator = new ConditionValidator(Expression.Parse("Name == 'Nikola Tesla'"), null);
-            validator.Actions = new ErrorMessageAction[] {new ErrorMessageAction("Wrong name", "InventorValidator") };
-            IValidationErrors errors = new ValidationErrors();
-            Assert.IsFalse(validator.Validate(tesla, errors));
-            Assert.IsFalse(errors.IsEmpty);
-            IList<string> namedErrors = errors.GetResolvedErrors("InventorValidator", new NullMessageSource());
-            Assert.AreEqual(1, namedErrors.Count);
-            string error = (string) namedErrors[0];
-            Assert.AreEqual("Wrong name", error);
-        }
+        ConditionValidator validator = new ConditionValidator(Expression.Parse("Name == 'Nikola Tesla'"), null);
+        validator.Actions = new ErrorMessageAction[] { new ErrorMessageAction("Wrong name", "InventorValidator") };
+        IValidationErrors errors = new ValidationErrors();
+        Assert.IsFalse(validator.Validate(tesla, errors));
+        Assert.IsFalse(errors.IsEmpty);
+        IList<string> namedErrors = errors.GetResolvedErrors("InventorValidator", new NullMessageSource());
+        Assert.AreEqual(1, namedErrors.Count);
+        string error = (string) namedErrors[0];
+        Assert.AreEqual("Wrong name", error);
+    }
 
-        [Test]
-        public void WhenValidatorIsNotEvaluatedBecauseWhenExpressionReturnsFalse()
-        {
-            ConditionValidator validator = new ConditionValidator();
-            validator.Test = Expression.Parse("false");
-            validator.When = Expression.Parse("false");
-            IValidationErrors errors = new ValidationErrors();
+    [Test]
+    public void WhenValidatorIsNotEvaluatedBecauseWhenExpressionReturnsFalse()
+    {
+        ConditionValidator validator = new ConditionValidator();
+        validator.Test = Expression.Parse("false");
+        validator.When = Expression.Parse("false");
+        IValidationErrors errors = new ValidationErrors();
 
-            bool valid = validator.Validate(new object(), null, errors);
+        bool valid = validator.Validate(new object(), null, errors);
 
-            Assert.IsTrue(valid, "Validation should succeed when condition validator is not evaluated.");
-            Assert.AreEqual(0, errors.GetErrors("errors").Count);
-        }
-
+        Assert.IsTrue(valid, "Validation should succeed when condition validator is not evaluated.");
+        Assert.AreEqual(0, errors.GetErrors("errors").Count);
     }
 }

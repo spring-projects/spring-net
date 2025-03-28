@@ -49,12 +49,14 @@ namespace Spring.Objects.Factory.Xml
             {
                 if (obj is TestObject)
                 {
-                    ((TestObject)obj).PostProcessed = true;
+                    ((TestObject) obj).PostProcessed = true;
                 }
+
                 if (obj is DummyFactory)
                 {
-                    ((DummyFactory)obj).PostProcessed = true;
+                    ((DummyFactory) obj).PostProcessed = true;
                 }
+
                 return obj;
             }
 
@@ -113,21 +115,21 @@ namespace Spring.Objects.Factory.Xml
         [Test]
         public virtual void FactoryNesting()
         {
-            ITestObject father = (ITestObject)ObjectFactory.GetObject("father");
+            ITestObject father = (ITestObject) ObjectFactory.GetObject("father");
             Assert.IsTrue(father != null, "Object from root context");
 
-            ITestObject rod = (ITestObject)ObjectFactory.GetObject("rod");
+            ITestObject rod = (ITestObject) ObjectFactory.GetObject("rod");
             Assert.IsTrue("Rod".Equals(rod.Name), "Object from child context");
             Assert.IsTrue(rod.Spouse == father, "Object has external reference");
 
-            rod = (ITestObject)parent.GetObject("rod");
+            rod = (ITestObject) parent.GetObject("rod");
             Assert.IsTrue("Roderick".Equals(rod.Name), "Object from root context");
         }
 
         [Test]
         public virtual void FactoryReferences()
         {
-            DummyReferencer dref = (DummyReferencer)ObjectFactory.GetObject("factoryReferencer");
+            DummyReferencer dref = (DummyReferencer) ObjectFactory.GetObject("factoryReferencer");
             Assert.IsTrue(dref.TestObject1 == dref.TestObject2);
         }
 
@@ -135,9 +137,9 @@ namespace Spring.Objects.Factory.Xml
         public virtual void PrototypeReferences()
         {
             // check that not broken by circular reference resolution mechanism
-            DummyReferencer ref1 = (DummyReferencer)ObjectFactory.GetObject("prototypeReferencer");
+            DummyReferencer ref1 = (DummyReferencer) ObjectFactory.GetObject("prototypeReferencer");
             Assert.IsTrue(ref1.TestObject1 != ref1.TestObject2, "Not referencing same Object twice");
-            DummyReferencer ref2 = (DummyReferencer)ObjectFactory.GetObject("prototypeReferencer");
+            DummyReferencer ref2 = (DummyReferencer) ObjectFactory.GetObject("prototypeReferencer");
             Assert.IsTrue(ref1 != ref2, "Not the same referencer");
             Assert.IsTrue(ref2.TestObject1 != ref2.TestObject2, "Not referencing same Object twice");
             Assert.IsTrue(ref1.TestObject1 != ref2.TestObject1, "Not referencing same Object twice");
@@ -148,10 +150,10 @@ namespace Spring.Objects.Factory.Xml
         [Test]
         public virtual void ObjectPostProcessor()
         {
-            TestObject kerry = (TestObject)ObjectFactory.GetObject("kerry");
-            TestObject kathy = (TestObject)ObjectFactory.GetObject("kathy");
-            DummyFactory factory = (DummyFactory)ObjectFactory.GetObject("&singletonFactory");
-            TestObject factoryCreated = (TestObject)ObjectFactory.GetObject("singletonFactory");
+            TestObject kerry = (TestObject) ObjectFactory.GetObject("kerry");
+            TestObject kathy = (TestObject) ObjectFactory.GetObject("kathy");
+            DummyFactory factory = (DummyFactory) ObjectFactory.GetObject("&singletonFactory");
+            TestObject factoryCreated = (TestObject) ObjectFactory.GetObject("singletonFactory");
             Assert.IsTrue(kerry.PostProcessed);
             Assert.IsTrue(kathy.PostProcessed);
             Assert.IsTrue(factory.PostProcessed);
@@ -170,14 +172,14 @@ namespace Spring.Objects.Factory.Xml
         [Test]
         public void CanRetrieveByType_Using_GetObjects_T_Method()
         {
-            var objsByGenericMethod = ((DefaultListableObjectFactory)ObjectFactory).GetObjects<NameIdTestObject>();
+            var objsByGenericMethod = ((DefaultListableObjectFactory) ObjectFactory).GetObjects<NameIdTestObject>();
             Assert.That(objsByGenericMethod.Count, Is.EqualTo(3));
         }
 
         [Test]
         public void CanRetrieveByType_Using_GetObjectsOfType_Method()
         {
-            var objsByOldMethod = ((DefaultListableObjectFactory)ObjectFactory).GetObjectsOfType(typeof(NameIdTestObject));
+            var objsByOldMethod = ((DefaultListableObjectFactory) ObjectFactory).GetObjectsOfType(typeof(NameIdTestObject));
             Assert.That(objsByOldMethod.Count, Is.EqualTo(3));
         }
 
@@ -188,7 +190,6 @@ namespace Spring.Objects.Factory.Xml
             Assert.That(ObjectFactory.GetObject("object2-with-same-id-and-name"), Is.Not.Null);
             Assert.That(ObjectFactory.GetObject("name-id-test-object-name"), Is.Not.Null);
         }
-
     }
 }
 
@@ -196,7 +197,5 @@ namespace Spring.Objects
 {
     public class NameIdTestObject
     {
-
     }
-
 }

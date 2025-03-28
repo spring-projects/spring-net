@@ -1,6 +1,7 @@
 #region License
+
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,6 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 #endregion
 
 #region Imports
@@ -23,22 +25,21 @@ using Spring.Context;
 
 #endregion
 
-namespace Spring.Web.Support
+namespace Spring.Web.Support;
+
+/// <summary>
+/// This strategy replaces the original collection's owner with an intercepting proxy
+/// </summary>
+/// <author>Erich Eichinger</author>
+internal class InterceptControlCollectionOwnerStrategy : IInterceptionStrategy
 {
-    /// <summary>
-    /// This strategy replaces the original collection's owner with an intercepting proxy
-    /// </summary>
-    /// <author>Erich Eichinger</author>
-    internal class InterceptControlCollectionOwnerStrategy : IInterceptionStrategy
+    public bool Intercept(IApplicationContext defaultApplicationContext, ControlAccessor ctlAccessor,
+        ControlCollectionAccessor ctlColAccessor)
     {
-        public bool Intercept(IApplicationContext defaultApplicationContext, ControlAccessor ctlAccessor,
-                              ControlCollectionAccessor ctlColAccessor)
-        {
-            Control target = ctlAccessor.GetTarget();
-            ctlColAccessor.Owner = target is INamingContainer 
-                ? new NamingContainerSupportsWebDependencyInjectionOwnerProxy(defaultApplicationContext, target)
-                : new SupportsWebDependencyInjectionOwnerProxy(defaultApplicationContext, target);
-            return true;
-        }
+        Control target = ctlAccessor.GetTarget();
+        ctlColAccessor.Owner = target is INamingContainer
+            ? new NamingContainerSupportsWebDependencyInjectionOwnerProxy(defaultApplicationContext, target)
+            : new SupportsWebDependencyInjectionOwnerProxy(defaultApplicationContext, target);
+        return true;
     }
 }

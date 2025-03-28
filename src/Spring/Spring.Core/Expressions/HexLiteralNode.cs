@@ -21,60 +21,59 @@
 using System.Globalization;
 using System.Runtime.Serialization;
 
-namespace Spring.Expressions
+namespace Spring.Expressions;
+
+/// <summary>
+/// Represents parsed hexadecimal integer literal node.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[Serializable]
+public class HexLiteralNode : BaseNode
 {
+    private object nodeValue;
+
     /// <summary>
-    /// Represents parsed hexadecimal integer literal node.
+    /// Create a new instance
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    [Serializable]
-    public class HexLiteralNode : BaseNode
+    public HexLiteralNode()
     {
-        private object nodeValue;
+    }
 
-        /// <summary>
-        /// Create a new instance
-        /// </summary>
-        public HexLiteralNode()
-        {
-        }
+    /// <summary>
+    /// Create a new instance from SerializationInfo
+    /// </summary>
+    protected HexLiteralNode(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+    }
 
-        /// <summary>
-        /// Create a new instance from SerializationInfo
-        /// </summary>
-        protected HexLiteralNode(SerializationInfo info, StreamingContext context)
-            : base(info, context)
+    /// <summary>
+    /// Returns a value for the hexadecimal integer literal node.
+    /// </summary>
+    /// <param name="context">Context to evaluate expressions against.</param>
+    /// <param name="evalContext">Current expression evaluation context.</param>
+    /// <returns>Node's value.</returns>
+    protected override object Get(object context, EvaluationContext evalContext)
+    {
+        if (nodeValue == null)
         {
-        }
-
-        /// <summary>
-        /// Returns a value for the hexadecimal integer literal node.
-        /// </summary>
-        /// <param name="context">Context to evaluate expressions against.</param>
-        /// <param name="evalContext">Current expression evaluation context.</param>
-        /// <returns>Node's value.</returns>
-        protected override object Get(object context, EvaluationContext evalContext)
-        {
-            if (nodeValue == null)
+            lock (this)
             {
-                lock (this)
+                if (nodeValue == null)
                 {
-                    if (nodeValue == null)
+                    string n = this.getText();
+                    try
                     {
-                        string n = this.getText();
-                        try
-                        {
-                            nodeValue = Int32.Parse(n.Substring(2), NumberStyles.HexNumber);
-                        }
-                        catch (OverflowException)
-                        {
-                            nodeValue = Int64.Parse(n.Substring(2), NumberStyles.HexNumber);
-                        }
+                        nodeValue = Int32.Parse(n.Substring(2), NumberStyles.HexNumber);
+                    }
+                    catch (OverflowException)
+                    {
+                        nodeValue = Int64.Parse(n.Substring(2), NumberStyles.HexNumber);
                     }
                 }
             }
-
-            return nodeValue;
         }
+
+        return nodeValue;
     }
 }

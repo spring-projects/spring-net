@@ -24,101 +24,99 @@ using AopAlliance.Aop;
 
 #endregion
 
-namespace Spring.Aop.Support
+namespace Spring.Aop.Support;
+
+/// <summary>
+/// Convenient pointcut-driven advisor implementation.
+/// </summary>
+/// <remarks>
+/// <p>
+/// This is the most commonly used <see cref="Spring.Aop.IAdvisor"/> implementation.
+/// It can be used with any pointcut and advice type, except for introductions.
+/// </p>
+/// </remarks>
+/// <author>Rod Johnson</author>
+/// <author>Aleksandar Seovic (.NET)</author>
+[Serializable]
+public class DefaultPointcutAdvisor : AbstractGenericPointcutAdvisor
 {
-	/// <summary>
-	/// Convenient pointcut-driven advisor implementation.
-	/// </summary>
-	/// <remarks>
-	/// <p>
-	/// This is the most commonly used <see cref="Spring.Aop.IAdvisor"/> implementation.
-	/// It can be used with any pointcut and advice type, except for introductions.
-	/// </p>
-	/// </remarks>
-	/// <author>Rod Johnson</author>
-	/// <author>Aleksandar Seovic (.NET)</author>
-	[Serializable]
-    public class DefaultPointcutAdvisor : AbstractGenericPointcutAdvisor
-	{
-		private IPointcut pointcut = TruePointcut.True;
+    private IPointcut pointcut = TruePointcut.True;
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Aop.Support.DefaultPointcutAdvisor"/> class.
-		/// </summary>
-		public DefaultPointcutAdvisor()
-		{
-		}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Aop.Support.DefaultPointcutAdvisor"/> class.
+    /// </summary>
+    public DefaultPointcutAdvisor()
+    {
+    }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Aop.Support.DefaultPointcutAdvisor"/>
-		/// class for the supplied <paramref name="advice"/>,
-		/// </summary>
-		/// <param name="advice">
-		/// The advice to use.
-		/// </param>
-		public DefaultPointcutAdvisor(IAdvice advice)
-			: this(TruePointcut.True, advice)
-		{
-		}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Aop.Support.DefaultPointcutAdvisor"/>
+    /// class for the supplied <paramref name="advice"/>,
+    /// </summary>
+    /// <param name="advice">
+    /// The advice to use.
+    /// </param>
+    public DefaultPointcutAdvisor(IAdvice advice)
+        : this(TruePointcut.True, advice)
+    {
+    }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Aop.Support.DefaultPointcutAdvisor"/>
-		/// class for the supplied <paramref name="advice"/> and
-		/// <paramref name="pointcut"/>.
-		/// </summary>
-		/// <param name="advice">
-		/// The advice to use.
-		/// </param>
-		/// <param name="pointcut">
-		/// The pointcut to use.
-		/// </param>
-		public DefaultPointcutAdvisor(IPointcut pointcut, IAdvice advice)
-		{
-			this.pointcut = pointcut;
-			Advice = advice;
-		}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Aop.Support.DefaultPointcutAdvisor"/>
+    /// class for the supplied <paramref name="advice"/> and
+    /// <paramref name="pointcut"/>.
+    /// </summary>
+    /// <param name="advice">
+    /// The advice to use.
+    /// </param>
+    /// <param name="pointcut">
+    /// The pointcut to use.
+    /// </param>
+    public DefaultPointcutAdvisor(IPointcut pointcut, IAdvice advice)
+    {
+        this.pointcut = pointcut;
+        Advice = advice;
+    }
 
-		/// <summary>
-		/// The <see cref="Spring.Aop.IPointcut"/> that drives this advisor.
-		/// </summary>
-		public override IPointcut Pointcut
-		{
-			get { return pointcut; }
-            set { pointcut = value;}
-		}
+    /// <summary>
+    /// The <see cref="Spring.Aop.IPointcut"/> that drives this advisor.
+    /// </summary>
+    public override IPointcut Pointcut
+    {
+        get { return pointcut; }
+        set { pointcut = value; }
+    }
 
+    ///<summary>
+    /// 2 <see cref="DefaultPointcutAdvisor"/>s are considered equal, if
+    /// a) their pointcuts are equal
+    /// b) their advices are equal
+    ///</summary>
+    public override bool Equals(object obj)
+    {
+        return base.Equals(obj as DefaultPointcutAdvisor);
+    }
 
-        ///<summary>
-        /// 2 <see cref="DefaultPointcutAdvisor"/>s are considered equal, if
-        /// a) their pointcuts are equal
-        /// b) their advices are equal
-        ///</summary>
-        public override bool Equals(object obj)
-        {
-            return base.Equals(obj as DefaultPointcutAdvisor);
-        }
+    /// <summary>
+    /// Calculates a unique hashcode based on advice + pointcut
+    /// </summary>
+    public override int GetHashCode()
+    {
+        return base.GetHashCode();
+    }
 
-        /// <summary>
-        /// Calculates a unique hashcode based on advice + pointcut
-        /// </summary>
-        public override int GetHashCode()
-        {
-            return base.GetHashCode();
-        }
-
-	    /// <summary>
-		/// Returns a <see cref="System.String"/> that represents the current
-		/// <see cref="System.Object"/>.
-		/// </summary>
-		/// <returns>
-		/// A <see cref="System.String"/> representation of this advisor.
-		/// </returns>
-		public override string ToString()
-		{
-			return GetType().Name + ": pointcut=[" + pointcut + "] advice=[" + Advice + "]";
-		}
-	}
+    /// <summary>
+    /// Returns a <see cref="System.String"/> that represents the current
+    /// <see cref="System.Object"/>.
+    /// </summary>
+    /// <returns>
+    /// A <see cref="System.String"/> representation of this advisor.
+    /// </returns>
+    public override string ToString()
+    {
+        return GetType().Name + ": pointcut=[" + pointcut + "] advice=[" + Advice + "]";
+    }
 }

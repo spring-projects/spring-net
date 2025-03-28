@@ -19,9 +19,7 @@
 #endregion
 
 using FakeItEasy;
-
 using NHibernate;
-
 using NUnit.Framework;
 
 namespace Spring.Data.NHibernate.Support
@@ -45,7 +43,6 @@ namespace Spring.Data.NHibernate.Support
         {
             private readonly ISessionFactory sessionFactory;
             private readonly IInterceptor entityInterceptor;
-
 
             public LazyResolvingSessionScopeSettings(ISessionFactory sessionFactory, IInterceptor entityInterceptor)
                 : base() // note, that we're calling default ctor here

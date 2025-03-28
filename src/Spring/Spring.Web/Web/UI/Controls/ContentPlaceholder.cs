@@ -18,20 +18,18 @@
 
 #endregion
 
-namespace Spring.Web.UI.Controls
+namespace Spring.Web.UI.Controls;
+
+/// <summary>
+/// Represents ContentPlaceHolder control that can be used to define placeholders
+/// within the master page.
+/// </summary>
+/// <remarks>
+/// Any content defined within this control will be treated as a default content 
+/// for the placeholder and will be rendered unless the child page overrides it
+/// by defining matching <see cref="Spring.Web.UI.Controls.Content"/> control.
+/// </remarks>
+/// <author>Aleksandar Seovic</author>
+public class ContentPlaceHolder : System.Web.UI.WebControls.ContentPlaceHolder
 {
-    /// <summary>
-    /// Represents ContentPlaceHolder control that can be used to define placeholders
-    /// within the master page.
-    /// </summary>
-    /// <remarks>
-    /// Any content defined within this control will be treated as a default content 
-    /// for the placeholder and will be rendered unless the child page overrides it
-    /// by defining matching <see cref="Spring.Web.UI.Controls.Content"/> control.
-    /// </remarks>
-    /// <author>Aleksandar Seovic</author>
-	public class ContentPlaceHolder : System.Web.UI.WebControls.ContentPlaceHolder
-    {
-        
-    }
 }

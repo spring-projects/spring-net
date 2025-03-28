@@ -3,23 +3,22 @@
 <objects xmlns="http://www.springframework.net">
 
 
+    <object id="parentWithList" type="Spring.Objects.TestObject, Spring.Core.Tests">
+        <property name="SomeGenericStringList">
+            <list element-type="string">
+                <value>Rob Harrop</value>
+                <value>Rod Johnson</value>
+            </list>
+        </property>
+    </object>
 
-  <object id="parentWithList" type="Spring.Objects.TestObject, Spring.Core.Tests">
-    <property name="SomeGenericStringList">
-      <list element-type="string">
-        <value>Rob Harrop</value>
-        <value>Rod Johnson</value>
-      </list>
-    </property>
-  </object>
+    <object id="childWithList" parent="parentWithList">
+        <property name="SomeGenericStringList">
+            <list element-type="string" merge="true">
+                <value>Juergen Hoeller</value>
+            </list>
+        </property>
+    </object>
 
-  <object id="childWithList" parent="parentWithList">
-    <property name="SomeGenericStringList">
-      <list element-type="string" merge="true">
-        <value>Juergen Hoeller</value>
-      </list>
-    </property>
-  </object>
 
-  
 </objects>

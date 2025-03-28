@@ -20,45 +20,44 @@
 
 using System.Runtime.Serialization;
 
-namespace Spring.Messaging.Listener
+namespace Spring.Messaging.Listener;
+
+/// <summary>
+/// Exception to be thrown when the execution of a listener method failed.
+/// </summary>
+/// <author>Juergen Hoeller</author>
+/// <author>Mark Pollack (.NET)</author>
+[Serializable]
+public class ListenerExecutionFailedException : MessagingException
 {
     /// <summary>
-    /// Exception to be thrown when the execution of a listener method failed.
+    /// Initializes a new instance of the <see cref="ListenerExecutionFailedException"/> class.
     /// </summary>
-    /// <author>Juergen Hoeller</author>
-    /// <author>Mark Pollack (.NET)</author>
-    [Serializable]
-    public class ListenerExecutionFailedException : MessagingException
+    public ListenerExecutionFailedException()
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ListenerExecutionFailedException"/> class.
-        /// </summary>
-        public ListenerExecutionFailedException()
-        {
-        }
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ListenerExecutionFailedException"/> class, with the specified message
-        /// </summary>
-        /// <param name="message">The message.</param>
-        public ListenerExecutionFailedException(string message) : base(message)
-        {
-        }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ListenerExecutionFailedException"/> class, with the specified message
+    /// </summary>
+    /// <param name="message">The message.</param>
+    public ListenerExecutionFailedException(string message) : base(message)
+    {
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ListenerExecutionFailedException"/> class, with the specified message
-        /// and root cause exception
-        /// </summary>
-        /// <param name="message">The message.</param>
-        /// <param name="innerException">The inner exception.</param>
-        public ListenerExecutionFailedException(string message, Exception innerException)
-            : base(message, innerException)
-        {
-        }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ListenerExecutionFailedException"/> class, with the specified message
+    /// and root cause exception
+    /// </summary>
+    /// <param name="message">The message.</param>
+    /// <param name="innerException">The inner exception.</param>
+    public ListenerExecutionFailedException(string message, Exception innerException)
+        : base(message, innerException)
+    {
+    }
 
-        /// <inheritdoc />
-        protected ListenerExecutionFailedException(SerializationInfo info, StreamingContext context) : base(info, context)
-        {
-        }
+    /// <inheritdoc />
+    protected ListenerExecutionFailedException(SerializationInfo info, StreamingContext context) : base(info, context)
+    {
     }
 }

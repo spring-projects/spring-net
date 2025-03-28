@@ -19,111 +19,107 @@
 #endregion
 
 using FakeItEasy;
-
 using NUnit.Framework;
-
 using Spring.Transaction;
 using Spring.Transaction.Support;
 
-namespace Spring.Data.Core
+namespace Spring.Data.Core;
+
+/// <summary>
+/// This class contains tests for TxScopeTransactionManager and will directly a real TransactionScope object
+/// but does not access any database
+/// </summary>
+/// <author>Mark Pollack</author>
+[TestFixture]
+public class TxScopeTransactionManagerIntegrationTests
 {
-    /// <summary>
-    /// This class contains tests for TxScopeTransactionManager and will directly a real TransactionScope object
-    /// but does not access any database
-    /// </summary>
-    /// <author>Mark Pollack</author>
-    [TestFixture]
-    public class TxScopeTransactionManagerIntegrationTests
+    [TearDown]
+    public void TearDown()
     {
-        [TearDown]
-        public void TearDown()
-        {
-            Assert.IsTrue(TransactionSynchronizationManager.ResourceDictionary.Count == 0);
-            Assert.IsFalse(TransactionSynchronizationManager.SynchronizationActive);
-            Assert.IsNull(TransactionSynchronizationManager.CurrentTransactionName);
-            Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
-            Assert.AreEqual(System.Data.IsolationLevel.Unspecified, TransactionSynchronizationManager.CurrentTransactionIsolationLevel);
-            Assert.IsFalse(TransactionSynchronizationManager.ActualTransactionActive);
-        }
+        Assert.IsTrue(TransactionSynchronizationManager.ResourceDictionary.Count == 0);
+        Assert.IsFalse(TransactionSynchronizationManager.SynchronizationActive);
+        Assert.IsNull(TransactionSynchronizationManager.CurrentTransactionName);
+        Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
+        Assert.AreEqual(System.Data.IsolationLevel.Unspecified, TransactionSynchronizationManager.CurrentTransactionIsolationLevel);
+        Assert.IsFalse(TransactionSynchronizationManager.ActualTransactionActive);
+    }
 
-        [Test]
-        public void Commit()
-        {
-            TxScopeTransactionManager tm = new TxScopeTransactionManager();
-            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
+    [Test]
+    public void Commit()
+    {
+        TxScopeTransactionManager tm = new TxScopeTransactionManager();
+        tm.TransactionSynchronization = TransactionSynchronizationState.Always;
 
-            TransactionTemplate tt = new TransactionTemplate(tm);
+        TransactionTemplate tt = new TransactionTemplate(tm);
 
-            //tt.Name = "txName";
+        //tt.Name = "txName";
 
-            Assert.AreEqual(TransactionSynchronizationState.Always, tm.TransactionSynchronization);
-            Assert.IsFalse(TransactionSynchronizationManager.SynchronizationActive);
-            Assert.IsNull(TransactionSynchronizationManager.CurrentTransactionName);
-            Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
-            tt.Execute(CommitTxDelegate);
-            Assert.IsFalse(TransactionSynchronizationManager.SynchronizationActive);
-            Assert.IsNull(TransactionSynchronizationManager.CurrentTransactionName);
-            Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
-        }
+        Assert.AreEqual(TransactionSynchronizationState.Always, tm.TransactionSynchronization);
+        Assert.IsFalse(TransactionSynchronizationManager.SynchronizationActive);
+        Assert.IsNull(TransactionSynchronizationManager.CurrentTransactionName);
+        Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
+        tt.Execute(CommitTxDelegate);
+        Assert.IsFalse(TransactionSynchronizationManager.SynchronizationActive);
+        Assert.IsNull(TransactionSynchronizationManager.CurrentTransactionName);
+        Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
+    }
 
-        public object CommitTxDelegate(ITransactionStatus status)
-        {
-            Assert.IsTrue(TransactionSynchronizationManager.SynchronizationActive);
-            Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
+    public object CommitTxDelegate(ITransactionStatus status)
+    {
+        Assert.IsTrue(TransactionSynchronizationManager.SynchronizationActive);
+        Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
 
-            return null;
-        }
+        return null;
+    }
 
-        [Test]
-        public void TransactionInformation()
-        {
-            TxScopeTransactionManager tm = new TxScopeTransactionManager();
-            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
+    [Test]
+    public void TransactionInformation()
+    {
+        TxScopeTransactionManager tm = new TxScopeTransactionManager();
+        tm.TransactionSynchronization = TransactionSynchronizationState.Always;
 
-            TransactionTemplate tt = new TransactionTemplate(tm);
-            tt.TransactionIsolationLevel = System.Data.IsolationLevel.ReadUncommitted;
-            tt.Execute(TransactionInformationTxDelegate);
-        }
+        TransactionTemplate tt = new TransactionTemplate(tm);
+        tt.TransactionIsolationLevel = System.Data.IsolationLevel.ReadUncommitted;
+        tt.Execute(TransactionInformationTxDelegate);
+    }
 
-        public object TransactionInformationTxDelegate(ITransactionStatus status)
-        {
-            Assert.AreEqual(System.Transactions.IsolationLevel.ReadUncommitted,
-                System.Transactions.Transaction.Current.IsolationLevel);
+    public object TransactionInformationTxDelegate(ITransactionStatus status)
+    {
+        Assert.AreEqual(System.Transactions.IsolationLevel.ReadUncommitted,
+            System.Transactions.Transaction.Current.IsolationLevel);
 
-            Assert.AreEqual(System.Data.IsolationLevel.ReadUncommitted,
-                TransactionSynchronizationManager.CurrentTransactionIsolationLevel);
-            return null;
-        }
+        Assert.AreEqual(System.Data.IsolationLevel.ReadUncommitted,
+            TransactionSynchronizationManager.CurrentTransactionIsolationLevel);
+        return null;
+    }
 
+    [Test]
+    public void Rollback()
+    {
+        ITransactionSynchronization sync = A.Fake<ITransactionSynchronization>();
 
-        [Test]
-        public void Rollback()
-        {
-            ITransactionSynchronization sync = A.Fake<ITransactionSynchronization>();
+        TxScopeTransactionManager tm = new TxScopeTransactionManager();
+        tm.TransactionSynchronization = TransactionSynchronizationState.Always;
 
-            TxScopeTransactionManager tm = new TxScopeTransactionManager();
-            tm.TransactionSynchronization = TransactionSynchronizationState.Always;
+        TransactionTemplate tt = new TransactionTemplate(tm);
+        tt.TransactionTimeout = 10;
+        tt.Name = "txName";
 
-            TransactionTemplate tt = new TransactionTemplate(tm);
-            tt.TransactionTimeout = 10;
-            tt.Name = "txName";
+        Assert.IsFalse(TransactionSynchronizationManager.SynchronizationActive);
+        Assert.IsNull(TransactionSynchronizationManager.CurrentTransactionName);
+        Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
+        tt.Execute(status =>
+            {
+                Assert.IsTrue(TransactionSynchronizationManager.SynchronizationActive);
+                TransactionSynchronizationManager.RegisterSynchronization(sync);
+                Assert.AreEqual("txName", TransactionSynchronizationManager.CurrentTransactionName);
+                Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
+                status.SetRollbackOnly();
+                return null;
+            }
+        );
 
-            Assert.IsFalse(TransactionSynchronizationManager.SynchronizationActive);
-            Assert.IsNull(TransactionSynchronizationManager.CurrentTransactionName);
-            Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
-            tt.Execute(status =>
-                {
-                    Assert.IsTrue(TransactionSynchronizationManager.SynchronizationActive);
-                    TransactionSynchronizationManager.RegisterSynchronization(sync);
-                    Assert.AreEqual("txName", TransactionSynchronizationManager.CurrentTransactionName);
-                    Assert.IsFalse(TransactionSynchronizationManager.CurrentTransactionReadOnly);
-                    status.SetRollbackOnly();
-                    return null;
-                }
-            );
-
-            A.CallTo(() => sync.BeforeCompletion()).MustHaveHappenedOnceExactly();
-            A.CallTo(() => sync.AfterCompletion(TransactionSynchronizationStatus.Rolledback)).MustHaveHappenedOnceExactly();
-        }
+        A.CallTo(() => sync.BeforeCompletion()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => sync.AfterCompletion(TransactionSynchronizationStatus.Rolledback)).MustHaveHappenedOnceExactly();
     }
 }

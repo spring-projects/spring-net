@@ -20,21 +20,19 @@
 
 #region Imports
 
-
 #endregion
 
-namespace Spring.Remoting
-{
-    public interface ISimpleCounter
-    {
-        /// <summary>
-        /// Gets or Sets the Counter's value.
-        /// </summary>
-        int Counter { get; set; }
+namespace Spring.Remoting;
 
-        /// <summary>
-        /// Increments the counter by one.
-        /// </summary>
-        void Count();
-    }
+public interface ISimpleCounter
+{
+    /// <summary>
+    /// Gets or Sets the Counter's value.
+    /// </summary>
+    int Counter { get; set; }
+
+    /// <summary>
+    /// Increments the counter by one.
+    /// </summary>
+    void Count();
 }

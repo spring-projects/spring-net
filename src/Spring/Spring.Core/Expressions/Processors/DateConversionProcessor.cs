@@ -20,26 +20,25 @@
 
 using System.Globalization;
 
-namespace Spring.Expressions.Processors
+namespace Spring.Expressions.Processors;
+
+/// <summary>
+/// Converts a string literal to a <see cref="DateTime"/> instance.
+/// </summary>
+/// <author>Erich Eichinger</author>
+public class DateConversionProcessor : IMethodCallProcessor
 {
-    /// <summary>
-    /// Converts a string literal to a <see cref="DateTime"/> instance.
-    /// </summary>
-    /// <author>Erich Eichinger</author>
-    public class DateConversionProcessor : IMethodCallProcessor
+    public object Process(object context, object[] args)
     {
-        public object Process(object context, object[] args)
+        int argc = args != null ? args.Length : 0;
+        switch (argc)
         {
-            int argc = args != null ? args.Length : 0;
-            switch (argc)
-            {
-                case 1:
-                    return DateTime.Parse((string)args[0]);
-                case 2:
-                    return DateTime.ParseExact((string)args[0], (string)args[1], CultureInfo.InvariantCulture);
-                default:
-                    throw new ArgumentException("date(<date> [,<format>]) expects 1 or 2 arguments");
-            }
+            case 1:
+                return DateTime.Parse((string) args[0]);
+            case 2:
+                return DateTime.ParseExact((string) args[0], (string) args[1], CultureInfo.InvariantCulture);
+            default:
+                throw new ArgumentException("date(<date> [,<format>]) expects 1 or 2 arguments");
         }
     }
 }

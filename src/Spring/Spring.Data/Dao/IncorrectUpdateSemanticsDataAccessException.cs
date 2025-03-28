@@ -20,61 +20,64 @@
 
 using System.Runtime.Serialization;
 
-namespace Spring.Dao
+namespace Spring.Dao;
+
+/// <summary>
+/// Data access exception thrown when something unintended appears to have
+/// happened with an update, but the transaction hasn't already been rolled back.
+/// </summary>
+/// <remarks>
+/// <p>
+/// Thrown, for example, when we wanted to update 1 row in an RDBMS but actually
+/// updated 3.
+/// </p>
+/// </remarks>
+/// <author>Rod Johnson</author>
+/// <author>Griffin Caprio (.NET)</author>
+[Serializable]
+public abstract class IncorrectUpdateSemanticsDataAccessException
+    : InvalidDataAccessResourceUsageException
 {
-	/// <summary>
-	/// Data access exception thrown when something unintended appears to have
-	/// happened with an update, but the transaction hasn't already been rolled back.
-	/// </summary>
-	/// <remarks>
-	/// <p>
-	/// Thrown, for example, when we wanted to update 1 row in an RDBMS but actually
-	/// updated 3.
-	/// </p>
-	/// </remarks>
-	/// <author>Rod Johnson</author>
-	/// <author>Griffin Caprio (.NET)</author>
-	[Serializable]
-	public abstract class IncorrectUpdateSemanticsDataAccessException
-		: InvalidDataAccessResourceUsageException
-	{
-		/// <summary>Return whether or not data was updated.</summary>
-		/// <returns>
-		/// <b>True</b> if data was updated (as opposed to being incorrectly
-		/// updated). If this property returns false, there's nothing to roll back.
-		/// </returns>
-		public abstract bool DataWasUpdated { get; }
+    /// <summary>Return whether or not data was updated.</summary>
+    /// <returns>
+    /// <b>True</b> if data was updated (as opposed to being incorrectly
+    /// updated). If this property returns false, there's nothing to roll back.
+    /// </returns>
+    public abstract bool DataWasUpdated { get; }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Dao.IncorrectUpdateSemanticsDataAccessException"/> class.
-		/// </summary>
-		protected IncorrectUpdateSemanticsDataAccessException() {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Dao.IncorrectUpdateSemanticsDataAccessException"/> class.
+    /// </summary>
+    protected IncorrectUpdateSemanticsDataAccessException() { }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Dao.IncorrectUpdateSemanticsDataAccessException"/> class.
-		/// </summary>
-		/// <param name="message">
-		/// A message about the exception.
-		/// </param>
-		protected IncorrectUpdateSemanticsDataAccessException( string message ) : base( message ) {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Dao.IncorrectUpdateSemanticsDataAccessException"/> class.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    protected IncorrectUpdateSemanticsDataAccessException(string message) : base(message) { }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Dao.IncorrectUpdateSemanticsDataAccessException"/> class.
-		/// </summary>
-		/// <param name="message">
-		/// A message about the exception.
-		/// </param>
-		/// <param name="rootCause">
-		/// The root exception (from the underlying data access API, such as ADO.NET).
-		/// </param>
-		protected IncorrectUpdateSemanticsDataAccessException( string message, Exception rootCause)
-			: base( message , rootCause ) {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Dao.IncorrectUpdateSemanticsDataAccessException"/> class.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    /// <param name="rootCause">
+    /// The root exception (from the underlying data access API, such as ADO.NET).
+    /// </param>
+    protected IncorrectUpdateSemanticsDataAccessException(string message, Exception rootCause)
+        : base(message, rootCause)
+    {
+    }
 
-		/// <inheritdoc />
-		protected IncorrectUpdateSemanticsDataAccessException(
-			SerializationInfo info, StreamingContext context ) : base( info, context ) {}
-	}
+    /// <inheritdoc />
+    protected IncorrectUpdateSemanticsDataAccessException(
+        SerializationInfo info, StreamingContext context) : base(info, context)
+    {
+    }
 }

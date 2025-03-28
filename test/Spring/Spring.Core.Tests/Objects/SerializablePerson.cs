@@ -21,56 +21,57 @@
 #region Imports
 
 using System.Runtime.Serialization;
+
 #endregion
 
-namespace Spring.Objects
+namespace Spring.Objects;
+
+/// <summary>
+/// Serializable implementation of the IPerson interface.
+/// </summary>
+/// <author>Rod Johnson</author>
+/// <author>Simon White (.NET)</author>
+[Serializable]
+public class SerializablePerson : TestObject, IPerson, ISerializable
 {
-	/// <summary>
-	/// Serializable implementation of the IPerson interface.
-	/// </summary>
-	/// <author>Rod Johnson</author>
-	/// <author>Simon White (.NET)</author>
-	[Serializable]
-	public class SerializablePerson : TestObject, IPerson, ISerializable
-	{
-		public SerializablePerson()
-		{
-		}
+    public SerializablePerson()
+    {
+    }
 
-		protected SerializablePerson(SerializationInfo info, StreamingContext ctxt)
-		{
-			this.Age = (int) info.GetValue("Age", typeof(int));
-			this.Name = (string) info.GetValue("Name", typeof(string));
-		}
+    protected SerializablePerson(SerializationInfo info, StreamingContext ctxt)
+    {
+        this.Age = (int) info.GetValue("Age", typeof(int));
+        this.Name = (string) info.GetValue("Name", typeof(string));
+    }
 
-		public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
-		{
-			info.AddValue("Age", this.Age);
-			info.AddValue("Name", this.Name);
-		}
+    public void GetObjectData(SerializationInfo info, StreamingContext ctxt)
+    {
+        info.AddValue("Age", this.Age);
+        info.AddValue("Name", this.Name);
+    }
 
-		public int GetAge()
-		{
-			return this.Age;
-		}
+    public int GetAge()
+    {
+        return this.Age;
+    }
 
-		public void SetAge(int age)
-		{
-			this.Age = age;
-		}
+    public void SetAge(int age)
+    {
+        this.Age = age;
+    }
 
-		public string GetName()
-		{
-			return this.Name;
-		}
+    public string GetName()
+    {
+        return this.Name;
+    }
 
-        public object Echo(object obj)
+    public object Echo(object obj)
+    {
+        if (obj is Exception)
         {
-            if (obj is Exception)
-            {
-                throw (Exception)obj;
-            }
-            return obj;
+            throw (Exception) obj;
         }
-	}
+
+        return obj;
+    }
 }

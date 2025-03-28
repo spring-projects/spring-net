@@ -25,50 +25,49 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Core.TypeConversion
+namespace Spring.Core.TypeConversion;
+
+/// <summary>
+/// Unit tests for the StreamConverter class.
+/// </summary>
+/// <author>Rick Evans</author>
+[TestFixture]
+public sealed class StreamConverterTests
 {
-	/// <summary>
-	/// Unit tests for the StreamConverter class.
-	/// </summary>
-	/// <author>Rick Evans</author>
-	[TestFixture]
-	public sealed class StreamConverterTests
-	{
-		[Test]
-		public void CanConvertFrom()
-		{
-			StreamConverter vrt = new StreamConverter();
-			Assert.IsTrue(vrt.CanConvertFrom(typeof (string)),
-			              "Conversion from a string instance must be supported.");
-			Assert.IsFalse(vrt.CanConvertFrom(typeof (int)));
-		}
+    [Test]
+    public void CanConvertFrom()
+    {
+        StreamConverter vrt = new StreamConverter();
+        Assert.IsTrue(vrt.CanConvertFrom(typeof(string)),
+            "Conversion from a string instance must be supported.");
+        Assert.IsFalse(vrt.CanConvertFrom(typeof(int)));
+    }
 
-		[Test]
-		[Explicit] // requires one to be connected to the 'net...
-		public void ConvertFrom()
-		{
-			StreamConverter vrt = new StreamConverter();
-			Stream actual = vrt.ConvertFrom("http://www.springframework.net/") as Stream;
-			Assert.IsNotNull(actual);
-		}
+    [Test]
+    [Explicit] // requires one to be connected to the 'net...
+    public void ConvertFrom()
+    {
+        StreamConverter vrt = new StreamConverter();
+        Stream actual = vrt.ConvertFrom("http://www.springframework.net/") as Stream;
+        Assert.IsNotNull(actual);
+    }
 
-		[Test]
-        [Explicit] // fails if there is a transparent proxy that redirects to error page for non existing URL
-		public void ConvertFromValidButNonExistingStreamResource()
-		{
-            Assert.Throws<WebException>(() => new StreamConverter().ConvertFrom("http://www.aaaabbbbccccddd.com"));
-		}
+    [Test]
+    [Explicit] // fails if there is a transparent proxy that redirects to error page for non existing URL
+    public void ConvertFromValidButNonExistingStreamResource()
+    {
+        Assert.Throws<WebException>(() => new StreamConverter().ConvertFrom("http://www.aaaabbbbccccddd.com"));
+    }
 
-		[Test]
-		public void ConvertFromNullReference()
-		{
-            Assert.Throws<NotSupportedException>(() => new StreamConverter().ConvertFrom(null));
-		}
+    [Test]
+    public void ConvertFromNullReference()
+    {
+        Assert.Throws<NotSupportedException>(() => new StreamConverter().ConvertFrom(null));
+    }
 
-		[Test]
-		public void ConvertFromNonSupportedOptionBails()
-		{
-            Assert.Throws<NotSupportedException>(() => new StreamConverter().ConvertFrom(12));
-		}
-	}
+    [Test]
+    public void ConvertFromNonSupportedOptionBails()
+    {
+        Assert.Throws<NotSupportedException>(() => new StreamConverter().ConvertFrom(12));
+    }
 }

@@ -25,23 +25,22 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.ServiceModel.Config
+namespace Spring.ServiceModel.Config;
+
+/// <summary>
+/// Unit tests for the  <see cref="WcfNamespaceParser"/> class.
+/// </summary>
+/// <author>Bruno Baia</author>
+[TestFixture]
+public class WcfNamespaceParserTests
 {
-    /// <summary>
-    /// Unit tests for the  <see cref="WcfNamespaceParser"/> class.
-    /// </summary>
-    /// <author>Bruno Baia</author>
-    [TestFixture]
-    public class WcfNamespaceParserTests
+    [Test]
+    public void Registered()
     {
-        [Test]
-        public void Registered()
-        {
-            NamespaceParserRegistry.RegisterParser(typeof(WcfNamespaceParser));
-            INamespaceParser namespaceParser = NamespaceParserRegistry.GetParser("http://www.springframework.net/wcf");
-            
-            Assert.IsNotNull(namespaceParser);
-            Assert.IsTrue(namespaceParser is WcfNamespaceParser);
-        }
+        NamespaceParserRegistry.RegisterParser(typeof(WcfNamespaceParser));
+        INamespaceParser namespaceParser = NamespaceParserRegistry.GetParser("http://www.springframework.net/wcf");
+
+        Assert.IsNotNull(namespaceParser);
+        Assert.IsTrue(namespaceParser is WcfNamespaceParser);
     }
 }

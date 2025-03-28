@@ -20,47 +20,50 @@
 
 using System.Runtime.Serialization;
 
-namespace Spring.Dao
+namespace Spring.Dao;
+
+/// <summary>
+/// RDta access exception thrown when a resource fails temporarily and the operation can be
+/// retried.
+/// </summary>
+/// <author>Thomas Risberg</author>
+/// <author>Mark Pollack (.NET)</author>
+[Serializable]
+public class TransientDataAccessResourceException : TransientDataAccessException
 {
     /// <summary>
-    /// RDta access exception thrown when a resource fails temporarily and the operation can be
-    /// retried.
+    /// Creates a new instance of the
+    /// <see cref="Spring.Dao.TransientDataAccessResourceException"/> class.
     /// </summary>
-    /// <author>Thomas Risberg</author>
-    /// <author>Mark Pollack (.NET)</author>
-	[Serializable]
-    public class TransientDataAccessResourceException : TransientDataAccessException
-	{
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Dao.TransientDataAccessResourceException"/> class.
-		/// </summary>
-		public TransientDataAccessResourceException() : base("No Exception Message") {}
+    public TransientDataAccessResourceException() : base("No Exception Message") { }
 
-		/// <summary>
-		/// Creates a new instance of the
-        /// <see cref="Spring.Dao.TransientDataAccessResourceException"/> class.
-		/// </summary>
-		/// <param name="message">
-		/// A message about the exception.
-		/// </param>
-		public TransientDataAccessResourceException( string message ) : base( message ) {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Dao.TransientDataAccessResourceException"/> class.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    public TransientDataAccessResourceException(string message) : base(message) { }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Dao.TransientDataAccessResourceException"/> class.
-		/// </summary>
-		/// <param name="message">
-		/// A message about the exception.
-		/// </param>
-		/// <param name="rootCause">
-		/// The root exception (from the underlying data access API, such as ADO.NET).
-		/// </param>
-		public TransientDataAccessResourceException( string message, Exception rootCause)
-			: base( message , rootCause ) {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Dao.TransientDataAccessResourceException"/> class.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    /// <param name="rootCause">
+    /// The root exception (from the underlying data access API, such as ADO.NET).
+    /// </param>
+    public TransientDataAccessResourceException(string message, Exception rootCause)
+        : base(message, rootCause)
+    {
+    }
 
-		/// <inheritdoc />
-        protected TransientDataAccessResourceException(
-			SerializationInfo info, StreamingContext context ) : base( info, context ) {}
-	}
+    /// <inheritdoc />
+    protected TransientDataAccessResourceException(
+        SerializationInfo info, StreamingContext context) : base(info, context)
+    {
+    }
 }

@@ -22,75 +22,74 @@ using System.Xml;
 using Spring.Objects.Factory.Support;
 using Spring.Util;
 
-namespace Spring.Objects.Factory.Xml
+namespace Spring.Objects.Factory.Xml;
+
+/// <summary>
+/// An <see cref="XmlObjectDefinitionReader"/> capable of handling web object definitions (Pages, Controls)
+/// </summary>
+/// <author>Erich Eichinger</author>
+public class WebObjectDefinitionReader : XmlObjectDefinitionReader, IWebObjectNameGenerator
 {
+    private readonly string contextVirtualPath;
+
     /// <summary>
-    /// An <see cref="XmlObjectDefinitionReader"/> capable of handling web object definitions (Pages, Controls)
+    /// Creates a new instance of the
+    /// <see cref="Spring.Objects.Factory.Xml.XmlObjectDefinitionReader"/> class.
     /// </summary>
-    /// <author>Erich Eichinger</author>
-    public class WebObjectDefinitionReader : XmlObjectDefinitionReader, IWebObjectNameGenerator
+    /// <param name="contextVirtualPath">the (rooted) virtual path to resolve relative virtual paths.</param>
+    /// <param name="registry">
+    /// The <see cref="Spring.Objects.Factory.Support.IObjectDefinitionRegistry"/>
+    /// instance that this reader works on.
+    /// </param>
+    /// <param name="resolver">the <see cref="XmlResolver"/> to use for resolving entities.</param>
+    public WebObjectDefinitionReader(string contextVirtualPath, IObjectDefinitionRegistry registry, XmlResolver resolver)
+        : base(registry, resolver, new WebObjectDefinitionFactory())
     {
-        private readonly string contextVirtualPath;
+        this.contextVirtualPath = contextVirtualPath;
+    }
 
-        /// <summary>
-        /// Creates a new instance of the
-        /// <see cref="Spring.Objects.Factory.Xml.XmlObjectDefinitionReader"/> class.
-        /// </summary>
-        /// <param name="contextVirtualPath">the (rooted) virtual path to resolve relative virtual paths.</param>
-        /// <param name="registry">
-        /// The <see cref="Spring.Objects.Factory.Support.IObjectDefinitionRegistry"/>
-        /// instance that this reader works on.
-        /// </param>
-        /// <param name="resolver">the <see cref="XmlResolver"/> to use for resolving entities.</param>
-        public WebObjectDefinitionReader(string contextVirtualPath, IObjectDefinitionRegistry registry, XmlResolver resolver)
-            : base(registry, resolver, new WebObjectDefinitionFactory())
+    /// <summary>
+    /// Creates the <see cref="IObjectDefinitionDocumentReader"/> to use for actually
+    /// reading object definitions from an XML document.
+    /// </summary>
+    protected override IObjectDefinitionDocumentReader CreateObjectDefinitionDocumentReader()
+    {
+        return new WebObjectDefinitionDocumentReader(this);
+    }
+
+    string IWebObjectNameGenerator.CreatePageDefinitionName(string virtualPath)
+    {
+        return CreatePageDefinitionName(virtualPath);
+    }
+
+    string IWebObjectNameGenerator.CreateControlDefinitionName(string virtualPath)
+    {
+        return CreateControlDefinitionName(virtualPath);
+    }
+
+    /// <summary>
+    /// Create an object definition name for the given control path
+    /// </summary>
+    protected virtual string CreateControlDefinitionName(string virtualPath)
+    {
+        string objectName;
+        objectName = WebObjectUtils.GetControlType(virtualPath).FullName;
+        return objectName;
+    }
+
+    /// <summary>
+    /// Create an object definition name for the given page path
+    /// </summary>
+    protected virtual string CreatePageDefinitionName(string url)
+    {
+        string objectName;
+        objectName = WebUtils.CombineVirtualPaths(VirtualEnvironment.CurrentExecutionFilePath, url);
+        string appPath = VirtualEnvironment.ApplicationVirtualPath;
+        if (objectName.ToLower().StartsWith(appPath.ToLower()))
         {
-            this.contextVirtualPath = contextVirtualPath;
+            objectName = objectName.Substring(appPath.Length - 1);
         }
 
-        /// <summary>
-        /// Creates the <see cref="IObjectDefinitionDocumentReader"/> to use for actually
-        /// reading object definitions from an XML document.
-        /// </summary>
-        protected override IObjectDefinitionDocumentReader CreateObjectDefinitionDocumentReader()
-        {
-            return new WebObjectDefinitionDocumentReader(this);
-        }
-
-        string IWebObjectNameGenerator.CreatePageDefinitionName(string virtualPath)
-        {
-            return CreatePageDefinitionName(virtualPath);
-        }
-
-        string IWebObjectNameGenerator.CreateControlDefinitionName(string virtualPath)
-        {
-            return CreateControlDefinitionName(virtualPath);
-        }
-
-        /// <summary>
-        /// Create an object definition name for the given control path
-        /// </summary>
-        protected virtual string CreateControlDefinitionName(string virtualPath)
-        {
-            string objectName;
-            objectName = WebObjectUtils.GetControlType(virtualPath).FullName;
-            return objectName;
-        }
-
-        /// <summary>
-        /// Create an object definition name for the given page path
-        /// </summary>
-        protected virtual string CreatePageDefinitionName(string url)
-        {
-            string objectName;
-            objectName = WebUtils.CombineVirtualPaths(VirtualEnvironment.CurrentExecutionFilePath, url);
-            string appPath = VirtualEnvironment.ApplicationVirtualPath;
-            if (objectName.ToLower().StartsWith(appPath.ToLower()))
-            {
-                objectName = objectName.Substring(appPath.Length-1);
-            }
-
-            return objectName;
-        }
+        return objectName;
     }
 }

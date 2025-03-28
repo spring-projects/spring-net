@@ -24,40 +24,39 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Collections
+namespace Spring.Collections;
+
+/// <summary>
+/// Unit tests for the SortedSet class.
+/// </summary>
+/// <author>Rick Evans</author>
+[TestFixture]
+public class SortedSetTests : SetTests
 {
-	/// <summary>
-	/// Unit tests for the SortedSet class.
-    /// </summary>
-    /// <author>Rick Evans</author>
-	[TestFixture]
-    public class SortedSetTests : SetTests
+    [OneTimeSetUp]
+    public void Init()
     {
-        [OneTimeSetUp]
-        public void Init () 
-        {
-            SupportsNull = false;
-        }
+        SupportsNull = false;
+    }
 
-        /// <summary>
-        /// The setup logic executed before the execution of each individual test.
-        /// </summary>
-        [SetUp]
-        public override void SetUp () 
-        {
-            Set = new SortedSet ();
-            SetForSetOps = new SortedSet ();
-        }
+    /// <summary>
+    /// The setup logic executed before the execution of each individual test.
+    /// </summary>
+    [SetUp]
+    public override void SetUp()
+    {
+        Set = new SortedSet();
+        SetForSetOps = new SortedSet();
+    }
 
-        [Test]
-        public void IsOrdered () 
+    [Test]
+    public void IsOrdered()
+    {
+        ISet mySet = new SortedSet(new int[] { 2, 4, 5, 1, 3, 0 });
+        int j = 0;
+        foreach (object o in mySet)
         {
-            ISet mySet = new SortedSet (new int [] {2, 4, 5, 1, 3, 0});
-            int j = 0;
-            foreach (object o in mySet) 
-            {
-                Assert.AreEqual (j++, o, "Found element out of order while iterating over SortedSet");
-            }
+            Assert.AreEqual(j++, o, "Found element out of order while iterating over SortedSet");
         }
     }
 }

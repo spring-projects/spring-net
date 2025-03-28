@@ -20,94 +20,93 @@
 
 using System.Reflection;
 using System.Reflection.Emit;
-
 using Spring.Util;
 
-namespace Spring.Aop.Framework.DynamicProxy
+namespace Spring.Aop.Framework.DynamicProxy;
+
+/// <summary>
+/// <see cref="Spring.Proxy.IProxyMethodBuilder"/> implementation
+/// that delegates method calls to the base method.
+/// </summary>
+/// <author>Bruno Baia</author>
+public class BaseAopProxyMethodBuilder : AbstractAopProxyMethodBuilder
 {
     /// <summary>
-    /// <see cref="Spring.Proxy.IProxyMethodBuilder"/> implementation
-    /// that delegates method calls to the base method.
+    /// Creates a new instance of the method builder.
     /// </summary>
-    /// <author>Bruno Baia</author>
-    public class BaseAopProxyMethodBuilder : AbstractAopProxyMethodBuilder
+    /// <param name="typeBuilder">The type builder to use.</param>
+    /// <param name="aopProxyGenerator">
+    /// The <see cref="IAopProxyTypeGenerator"/> implementation to use.
+    /// </param>
+    /// <param name="targetMethods">
+    /// The dictionary to cache the list of target
+    /// <see cref="System.Reflection.MethodInfo"/>s.
+    /// </param>
+    /// <param name="onProxyTargetMethods">
+    /// The dictionary to cache the list of target
+    /// <see cref="System.Reflection.MethodInfo"/>s defined on the proxy.
+    /// </param>
+    public BaseAopProxyMethodBuilder(
+        TypeBuilder typeBuilder, IAopProxyTypeGenerator aopProxyGenerator,
+        IDictionary<string, MethodInfo> targetMethods, IDictionary<string, MethodInfo> onProxyTargetMethods)
+        : base(typeBuilder, aopProxyGenerator, false, targetMethods, onProxyTargetMethods)
     {
-        /// <summary>
-        /// Creates a new instance of the method builder.
-        /// </summary>
-        /// <param name="typeBuilder">The type builder to use.</param>
-        /// <param name="aopProxyGenerator">
-        /// The <see cref="IAopProxyTypeGenerator"/> implementation to use.
-        /// </param>
-        /// <param name="targetMethods">
-        /// The dictionary to cache the list of target
-        /// <see cref="System.Reflection.MethodInfo"/>s.
-        /// </param>
-        /// <param name="onProxyTargetMethods">
-        /// The dictionary to cache the list of target
-        /// <see cref="System.Reflection.MethodInfo"/>s defined on the proxy.
-        /// </param>
-        public BaseAopProxyMethodBuilder(
-            TypeBuilder typeBuilder, IAopProxyTypeGenerator aopProxyGenerator,
-            IDictionary<string, MethodInfo> targetMethods, IDictionary<string, MethodInfo> onProxyTargetMethods)
-            : base(typeBuilder, aopProxyGenerator, false, targetMethods, onProxyTargetMethods)
-        {
-        }
+    }
 
-        /// <summary>
-        /// Create static field that will cache target method when defined on the proxy.
-        /// </summary>
-        /// <param name="il">The IL generator to use.</param>
-        /// <param name="method">The target method.</param>
-        protected override void GenerateOnProxyTargetMethodCacheField(
-            ILGenerator il, MethodInfo method)
+    /// <summary>
+    /// Create static field that will cache target method when defined on the proxy.
+    /// </summary>
+    /// <param name="il">The IL generator to use.</param>
+    /// <param name="method">The target method.</param>
+    protected override void GenerateOnProxyTargetMethodCacheField(
+        ILGenerator il, MethodInfo method)
+    {
+        if (method.IsVirtual && !method.IsFinal)
         {
-            if (method.IsVirtual && !method.IsFinal)
+            string methodId = GenerateMethodCacheFieldId(method);
+
+            // generate proxy method
+            MethodBuilder baseMethod = typeBuilder.DefineMethod("proxy_" + methodId,
+                MethodAttributes.Public | MethodAttributes.HideBySig,
+                CallingConventions.Standard,
+                method.ReturnType, ReflectionUtils.GetParameterTypes(method));
+
+            DefineGenericParameters(baseMethod, method);
+            //DefineParameters(baseMethod, method);
+
+            ILGenerator localIL = baseMethod.GetILGenerator();
+
+            localIL.Emit(OpCodes.Ldarg_0);
+            // setup parameters for call
+            for (int i = 0; i < method.GetParameters().Length; i++)
             {
-                string methodId = GenerateMethodCacheFieldId(method);
-
-                // generate proxy method
-                MethodBuilder baseMethod = typeBuilder.DefineMethod("proxy_" + methodId,
-                    MethodAttributes.Public | MethodAttributes.HideBySig,
-                    CallingConventions.Standard,
-                    method.ReturnType, ReflectionUtils.GetParameterTypes(method));
-
-                DefineGenericParameters(baseMethod, method);
-                //DefineParameters(baseMethod, method);
-
-                ILGenerator localIL = baseMethod.GetILGenerator();
-
-                localIL.Emit(OpCodes.Ldarg_0);
-                // setup parameters for call
-                for (int i = 0; i < method.GetParameters().Length; i++)
-                {
-                    localIL.Emit(OpCodes.Ldarg_S, i + 1);
-                }
-                localIL.EmitCall(OpCodes.Call, method, null);
-                localIL.Emit(OpCodes.Ret);
-
-                // create static field that will cache proxy method
-                onProxyTargetMethods.Add(methodId, method);
-
-                onProxyTargetMethodCacheField = typeBuilder.DefineField(
-                    methodId, typeof(MethodInfo), FieldAttributes.Private | FieldAttributes.Static);
-
-                MakeGenericMethod(il, method, onProxyTargetMethodCacheField, genericOnProxyTargetMethod);
+                localIL.Emit(OpCodes.Ldarg_S, i + 1);
             }
-        }
 
-        /// <summary>
-        /// Calls target method directly.
-        /// </summary>
-        /// <param name="il">The IL generator to use.</param>
-        /// <param name="method">The method to proxy.</param>
-        /// <param name="interfaceMethod">
-        /// The interface definition of the method, if applicable.
-        /// </param>
-        protected override void CallDirectProxiedMethod(
-            ILGenerator il, MethodInfo method, MethodInfo interfaceMethod)
-        {
-            CallDirectBaseMethod(il, method);
+            localIL.EmitCall(OpCodes.Call, method, null);
+            localIL.Emit(OpCodes.Ret);
+
+            // create static field that will cache proxy method
+            onProxyTargetMethods.Add(methodId, method);
+
+            onProxyTargetMethodCacheField = typeBuilder.DefineField(
+                methodId, typeof(MethodInfo), FieldAttributes.Private | FieldAttributes.Static);
+
+            MakeGenericMethod(il, method, onProxyTargetMethodCacheField, genericOnProxyTargetMethod);
         }
+    }
+
+    /// <summary>
+    /// Calls target method directly.
+    /// </summary>
+    /// <param name="il">The IL generator to use.</param>
+    /// <param name="method">The method to proxy.</param>
+    /// <param name="interfaceMethod">
+    /// The interface definition of the method, if applicable.
+    /// </param>
+    protected override void CallDirectProxiedMethod(
+        ILGenerator il, MethodInfo method, MethodInfo interfaceMethod)
+    {
+        CallDirectBaseMethod(il, method);
     }
 }

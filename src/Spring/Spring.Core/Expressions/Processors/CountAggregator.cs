@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,34 +20,34 @@
 
 using System.Collections;
 
-namespace Spring.Expressions.Processors
+namespace Spring.Expressions.Processors;
+
+/// <summary>
+/// Implementation of the count aggregator.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+public class CountAggregator : ICollectionProcessor
 {
     /// <summary>
-    /// Implementation of the count aggregator.
+    /// Returns the number of items in the source collection.
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    public class CountAggregator : ICollectionProcessor
+    /// <param name="source">
+    /// The source collection to process.
+    /// </param>
+    /// <param name="args">
+    /// Ignored.
+    /// </param>
+    /// <returns>
+    /// The number of items in the source collection,
+    /// or zero if the collection is empty or <c>null</c>.
+    /// </returns>
+    public object Process(ICollection source, object[] args)
     {
-        /// <summary>
-        /// Returns the number of items in the source collection.
-        /// </summary>
-        /// <param name="source">
-        /// The source collection to process.
-        /// </param>
-        /// <param name="args">
-        /// Ignored.
-        /// </param>
-        /// <returns>
-        /// The number of items in the source collection, 
-        /// or zero if the collection is empty or <c>null</c>.
-        /// </returns>
-        public object Process(ICollection source, object[] args)
+        if (source == null)
         {
-            if (source == null)
-            {
-                return 0;
-            }
-            return source.Count;
+            return 0;
         }
+
+        return source.Count;
     }
 }

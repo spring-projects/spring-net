@@ -22,76 +22,77 @@ using System.Reflection;
 using Spring.Proxy;
 using Spring.Util;
 
-namespace Spring.Aop.Framework.DynamicProxy
+namespace Spring.Aop.Framework.DynamicProxy;
+
+/// <summary>
+/// Default implementation of the
+/// <see cref="Spring.Aop.Framework.IAopProxyFactory"/> interface,
+/// either creating a decorator-based dynamic proxy or
+/// a composition-based dynamic proxy.
+/// </summary>
+/// <remarks>
+/// <p>
+/// Creates a decorator-base proxy if one the following is true :
+/// - the "ProxyTargetType" property is set
+/// - no interfaces have been specified
+/// </p>
+/// <p>
+/// In general, specify "ProxyTargetType" to enforce a decorator-based proxy,
+/// or specify one or more interfaces to use a composition-based proxy.
+/// </p>
+/// </remarks>
+/// <author>Rod Johnson</author>
+/// <author>Aleksandar Seovic (.NET)</author>
+/// <author>Bruno Baia (.NET)</author>
+/// <author>Erich Eichinger (.NET)</author>
+/// <seealso cref="Spring.Aop.Framework.IAopProxyFactory"/>
+[Serializable]
+public class DefaultAopProxyFactory : AbstractAopProxyFactory
 {
     /// <summary>
-    /// Default implementation of the
-    /// <see cref="Spring.Aop.Framework.IAopProxyFactory"/> interface,
-    /// either creating a decorator-based dynamic proxy or 
-    /// a composition-based dynamic proxy.
+    /// Force transient assemblies to be resolvable by <see cref="Assembly.Load(string)"/>.
     /// </summary>
-    /// <remarks>
-    /// <p>
-    /// Creates a decorator-base proxy if one the following is true :
-    /// - the "ProxyTargetType" property is set
-    /// - no interfaces have been specified
-    /// </p>
-    /// <p>
-    /// In general, specify "ProxyTargetType" to enforce a decorator-based proxy,
-    /// or specify one or more interfaces to use a composition-based proxy.
-    /// </p>
-    /// </remarks>
-    /// <author>Rod Johnson</author>
-    /// <author>Aleksandar Seovic (.NET)</author>
-    /// <author>Bruno Baia (.NET)</author>
-    /// <author>Erich Eichinger (.NET)</author>
-    /// <seealso cref="Spring.Aop.Framework.IAopProxyFactory"/>
-    [Serializable]
-    public class DefaultAopProxyFactory : AbstractAopProxyFactory
+    static DefaultAopProxyFactory()
     {
-        /// <summary>
-        /// Force transient assemblies to be resolvable by <see cref="Assembly.Load(string)"/>.
-        /// </summary>
-        static DefaultAopProxyFactory()
-        {
-            SystemUtils.RegisterLoadedAssemblyResolver();
-        }
+        SystemUtils.RegisterLoadedAssemblyResolver();
+    }
 
-        /// <summary>
-        /// Creates an actual proxy instance based on the supplied <paramref name="advisedSupport"/>
-        /// </summary>
-        /// <param name="advisedSupport"></param>
-        /// <returns></returns>
-        protected override IAopProxy DoCreateAopProxyInstance(AdvisedSupport advisedSupport)
+    /// <summary>
+    /// Creates an actual proxy instance based on the supplied <paramref name="advisedSupport"/>
+    /// </summary>
+    /// <param name="advisedSupport"></param>
+    /// <returns></returns>
+    protected override IAopProxy DoCreateAopProxyInstance(AdvisedSupport advisedSupport)
+    {
+        if (advisedSupport.ProxyType == null)
         {
-            if (advisedSupport.ProxyType == null)
+            IProxyTypeBuilder typeBuilder;
+            if ((advisedSupport.ProxyTargetType) ||
+                (advisedSupport.Interfaces.Count == 0))
             {
-                IProxyTypeBuilder typeBuilder;
-                if ((advisedSupport.ProxyTargetType) ||
-                    (advisedSupport.Interfaces.Count == 0))
-                {
-                    typeBuilder = new DecoratorAopProxyTypeBuilder(advisedSupport);
-                }
-                else
-                {
-                    typeBuilder = new CompositionAopProxyTypeBuilder(advisedSupport);
-                }
-                advisedSupport.ProxyType = BuildProxyType(typeBuilder);
-                advisedSupport.ProxyConstructor = advisedSupport.ProxyType.GetConstructor(new Type[] { typeof(IAdvised) });
+                typeBuilder = new DecoratorAopProxyTypeBuilder(advisedSupport);
             }
-            return (IAopProxy)advisedSupport.ProxyConstructor.Invoke(new object[] { advisedSupport });
+            else
+            {
+                typeBuilder = new CompositionAopProxyTypeBuilder(advisedSupport);
+            }
+
+            advisedSupport.ProxyType = BuildProxyType(typeBuilder);
+            advisedSupport.ProxyConstructor = advisedSupport.ProxyType.GetConstructor(new Type[] { typeof(IAdvised) });
         }
 
-        /// <summary>
-        /// Generates the proxy type.
-        /// </summary>
-        /// <param name="typeBuilder">
-        /// The <see cref="Spring.Proxy.IProxyTypeBuilder"/> to use
-        /// </param>
-        /// <returns>The generated proxy class.</returns>
-        protected virtual Type BuildProxyType(IProxyTypeBuilder typeBuilder)
-        {
-            return typeBuilder.BuildProxyType();
-        }
+        return (IAopProxy) advisedSupport.ProxyConstructor.Invoke(new object[] { advisedSupport });
+    }
+
+    /// <summary>
+    /// Generates the proxy type.
+    /// </summary>
+    /// <param name="typeBuilder">
+    /// The <see cref="Spring.Proxy.IProxyTypeBuilder"/> to use
+    /// </param>
+    /// <returns>The generated proxy class.</returns>
+    protected virtual Type BuildProxyType(IProxyTypeBuilder typeBuilder)
+    {
+        return typeBuilder.BuildProxyType();
     }
 }

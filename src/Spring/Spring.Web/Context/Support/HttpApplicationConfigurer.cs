@@ -28,121 +28,121 @@ using Spring.Util;
 
 #endregion
 
-namespace Spring.Context.Support
+namespace Spring.Context.Support;
+
+/// <summary>
+///
+/// </summary>
+/// <author>Erich Eichinger</author>
+public class HttpApplicationConfigurer
 {
-    /// <summary>
-    ///
-    /// </summary>
-    /// <author>Erich Eichinger</author>
-    public class HttpApplicationConfigurer
+    private static readonly ILogger<HttpApplicationConfigurer> Log = LogManager.GetLogger<HttpApplicationConfigurer>();
+
+    #region ModuleDefinitionsTable class
+
+    private class ModuleDefinitionsTable : Hashtable
     {
-        private static readonly ILogger<HttpApplicationConfigurer> Log = LogManager.GetLogger<HttpApplicationConfigurer>();
-
-        #region ModuleDefinitionsTable class
-
-        private class ModuleDefinitionsTable : Hashtable
+        public void Add(string key, IObjectDefinition value)
         {
-            public void Add(string key, IObjectDefinition value)
+            lock (SyncRoot)
             {
-                lock(SyncRoot)
-                {
-                    base[key] = value;
-                }
+                base[key] = value;
             }
+        }
 
-            public IObjectDefinition this[string key]
+        public IObjectDefinition this[string key]
+        {
+            get
             {
-                get
+                lock (SyncRoot)
                 {
-                    lock (SyncRoot)
-                    {
-                        return (IObjectDefinition) base[key];
-                    }
-                }
-            }
-
-            public override void Add(object key, object value)
-            {
-                AssertUtils.AssertArgumentType(key, "key", typeof(string), "Key must be a string");
-                AssertUtils.AssertArgumentType(value, "value", typeof(IObjectDefinition), "Key must be a string");
-                this.Add((string)key, (IObjectDefinition)value);
-            }
-
-            public override object this[object key]
-            {
-                get
-                {
-                    return this[(string)key];
+                    return (IObjectDefinition) base[key];
                 }
             }
         }
 
-        #endregion
-
-        /// <summary>
-        /// Holds shared application Template
-        /// </summary>
-        private static volatile IObjectDefinition s_applicationDefinition = null;
-        /// <summary>
-        /// Holds shared modules Templates
-        /// </summary>
-        private static readonly ModuleDefinitionsTable s_moduleDefinitions = new ModuleDefinitionsTable();
-
-        /// <summary>
-        /// Gets or Sets the shared application template
-        /// </summary>
-        public IObjectDefinition ApplicationTemplate
+        public override void Add(object key, object value)
         {
-            // no need for lock because of "volatile"
-            get { return s_applicationDefinition; }
-            set { s_applicationDefinition = value; }
+            AssertUtils.AssertArgumentType(key, "key", typeof(string), "Key must be a string");
+            AssertUtils.AssertArgumentType(value, "value", typeof(IObjectDefinition), "Key must be a string");
+            this.Add((string) key, (IObjectDefinition) value);
         }
 
-        /// <summary>
-        /// Gets the dictionary of shared module templates
-        /// </summary>
-        /// <remarks>
-        /// to synchronize access to the dictionary, use <see cref="ICollection.SyncRoot"/> property.
-        /// </remarks>
-        public IDictionary ModuleTemplates
+        public override object this[object key]
         {
-            get { return s_moduleDefinitions; }
-        }
-
-        /// <summary>
-        /// Configures the <see paramref="app"/> instance and its modules.
-        /// </summary>
-        /// <remarks>
-        /// When called, configures <see paramref="app"/> using the <see cref="IApplicationContext"/> instance 
-        /// provided in <paramref name="appContext"/> and the templates available in
-        /// <see cref="ApplicationTemplate"/> and <see cref="ModuleTemplates"/>.
-        /// </remarks>
-        /// <param name="appContext">the application context instance to be used for resolving object references.</param>
-        /// <param name="app">the <see cref="HttpApplication"/> instance to be configured.</param>
-        public static void Configure(IConfigurableApplicationContext appContext, HttpApplication app)
-        {
-            IObjectDefinition applicationDefinition = s_applicationDefinition;
-            if (s_applicationDefinition != null)
-            {                
-                appContext.ObjectFactory.ConfigureObject(app, "ApplicationTemplate", applicationDefinition);
-            }
-            
-            lock(s_moduleDefinitions.SyncRoot)
+            get
             {
-                HttpModuleCollection modules = app.Modules;
-                foreach(DictionaryEntry moduleEntry in s_moduleDefinitions)
+                return this[(string) key];
+            }
+        }
+    }
+
+    #endregion
+
+    /// <summary>
+    /// Holds shared application Template
+    /// </summary>
+    private static volatile IObjectDefinition s_applicationDefinition = null;
+
+    /// <summary>
+    /// Holds shared modules Templates
+    /// </summary>
+    private static readonly ModuleDefinitionsTable s_moduleDefinitions = new ModuleDefinitionsTable();
+
+    /// <summary>
+    /// Gets or Sets the shared application template
+    /// </summary>
+    public IObjectDefinition ApplicationTemplate
+    {
+        // no need for lock because of "volatile"
+        get { return s_applicationDefinition; }
+        set { s_applicationDefinition = value; }
+    }
+
+    /// <summary>
+    /// Gets the dictionary of shared module templates
+    /// </summary>
+    /// <remarks>
+    /// to synchronize access to the dictionary, use <see cref="ICollection.SyncRoot"/> property.
+    /// </remarks>
+    public IDictionary ModuleTemplates
+    {
+        get { return s_moduleDefinitions; }
+    }
+
+    /// <summary>
+    /// Configures the <see paramref="app"/> instance and its modules.
+    /// </summary>
+    /// <remarks>
+    /// When called, configures <see paramref="app"/> using the <see cref="IApplicationContext"/> instance
+    /// provided in <paramref name="appContext"/> and the templates available in
+    /// <see cref="ApplicationTemplate"/> and <see cref="ModuleTemplates"/>.
+    /// </remarks>
+    /// <param name="appContext">the application context instance to be used for resolving object references.</param>
+    /// <param name="app">the <see cref="HttpApplication"/> instance to be configured.</param>
+    public static void Configure(IConfigurableApplicationContext appContext, HttpApplication app)
+    {
+        IObjectDefinition applicationDefinition = s_applicationDefinition;
+        if (s_applicationDefinition != null)
+        {
+            appContext.ObjectFactory.ConfigureObject(app, "ApplicationTemplate", applicationDefinition);
+        }
+
+        lock (s_moduleDefinitions.SyncRoot)
+        {
+            HttpModuleCollection modules = app.Modules;
+            foreach (DictionaryEntry moduleEntry in s_moduleDefinitions)
+            {
+                string moduleName = (string) moduleEntry.Key;
+                IObjectDefinition od = s_moduleDefinitions[moduleName];
+                IHttpModule module = modules[moduleName];
+                if (module != null)
                 {
-					string moduleName = (string) moduleEntry.Key;
-                    IObjectDefinition od = s_moduleDefinitions[moduleName];
-                    IHttpModule module = modules[moduleName];
-                    if (module != null)
-                    {
-                        appContext.ObjectFactory.ConfigureObject(module, moduleName, od);
-                    }
-                    else
-                    {
-                        throw ConfigurationUtils.CreateConfigurationException(string.Format("failed applying module template '{0}' - no matching module found", moduleName));
-                    }
+                    appContext.ObjectFactory.ConfigureObject(module, moduleName, od);
+                }
+                else
+                {
+                    throw ConfigurationUtils.CreateConfigurationException(string.Format("failed applying module template '{0}' - no matching module found", moduleName));
                 }
             }
         }

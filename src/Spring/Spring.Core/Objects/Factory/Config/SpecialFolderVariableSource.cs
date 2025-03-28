@@ -18,51 +18,50 @@
 
 #endregion
 
-namespace Spring.Objects.Factory.Config
+namespace Spring.Objects.Factory.Config;
+
+/// <summary>
+/// Implementation of <see cref="IVariableSource"/> that
+/// resolves variable name against special folders (as defined by
+/// <see cref="Environment.SpecialFolder"/> enumeration).
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[Serializable]
+public class SpecialFolderVariableSource : IVariableSource
 {
     /// <summary>
-    /// Implementation of <see cref="IVariableSource"/> that
-    /// resolves variable name against special folders (as defined by
-    /// <see cref="Environment.SpecialFolder"/> enumeration).
+    /// Before requesting a variable resolution, a client should
+    /// ask, whether the source can resolve a particular variable name.
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    [Serializable]
-    public class SpecialFolderVariableSource : IVariableSource
+    /// <param name="name">the name of the variable to resolve</param>
+    /// <returns><c>true</c> if the variable can be resolved, <c>false</c> otherwise</returns>
+    public bool CanResolveVariable(string name)
     {
-        /// <summary>
-        /// Before requesting a variable resolution, a client should
-        /// ask, whether the source can resolve a particular variable name.
-        /// </summary>
-        /// <param name="name">the name of the variable to resolve</param>
-        /// <returns><c>true</c> if the variable can be resolved, <c>false</c> otherwise</returns>
-        public bool CanResolveVariable(string name)
+        return ResolveVariable(name) != null;
+    }
+
+    /// <summary>
+    /// Resolves specified special folder to its full path.
+    /// </summary>
+    /// <param name="name">
+    /// The name of the special folder to resolve. Should be one of the values
+    /// defined by the <see cref="Environment.SpecialFolder"/> enumeration.
+    /// </param>
+    /// <returns>
+    /// The folder path if able to resolve, <c>null</c> otherwise.
+    /// </returns>
+    public string ResolveVariable(string name)
+    {
+        try
         {
-            return ResolveVariable(name) != null;
+            Environment.SpecialFolder folder =
+                (Environment.SpecialFolder) Enum.Parse(typeof(Environment.SpecialFolder), name, true);
+
+            return Environment.GetFolderPath(folder);
         }
-
-        /// <summary>
-        /// Resolves specified special folder to its full path.
-        /// </summary>
-        /// <param name="name">
-        /// The name of the special folder to resolve. Should be one of the values
-        /// defined by the <see cref="Environment.SpecialFolder"/> enumeration.
-        /// </param>
-        /// <returns>
-        /// The folder path if able to resolve, <c>null</c> otherwise.
-        /// </returns>
-        public string ResolveVariable(string name)
+        catch (Exception)
         {
-            try
-            {
-                Environment.SpecialFolder folder =
-                    (Environment.SpecialFolder) Enum.Parse(typeof (Environment.SpecialFolder), name, true);
-
-                return Environment.GetFolderPath(folder);
-            }
-            catch (Exception)
-            {
-                return null;
-            }
+            return null;
         }
     }
 }

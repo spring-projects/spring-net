@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,29 +20,28 @@
 
 using Apache.NMS;
 
-namespace Spring.Messaging.Nms.Core
+namespace Spring.Messaging.Nms.Core;
+
+/// <summary> Callback for executing any number of operations on a provided
+/// Session
+/// </summary>
+/// <remarks>
+/// <para>To be used with the NmsTemplate.Execute(ISessionCallback)}
+/// method. See <see cref="SessionDelegate"/> for the equivalent callback
+/// that can be used as a (anonymous) delegate.</para>
+/// </remarks>
+/// <author>Mark Pollack</author>
+/// <seealso cref="NmsTemplate.Execute(ISessionCallback,bool)">
+/// </seealso>
+public interface ISessionCallback
 {
-    /// <summary> Callback for executing any number of operations on a provided
-    /// Session
+    /// <summary> Execute any number of operations against the supplied NMS
+    /// Session, possibly returning a result.
     /// </summary>
-    /// <remarks>
-    /// <para>To be used with the NmsTemplate.Execute(ISessionCallback)}
-    /// method. See <see cref="SessionDelegate"/> for the equivalent callback
-    /// that can be used as a (anonymous) delegate.</para>
-    /// </remarks>
-    /// <author>Mark Pollack</author>
-    /// <seealso cref="NmsTemplate.Execute(ISessionCallback,bool)">
-    /// </seealso>
-    public interface ISessionCallback
-    {
-        /// <summary> Execute any number of operations against the supplied NMS
-        /// Session, possibly returning a result.
-        /// </summary>
-        /// <param name="session">the NMS <code>Session</code>
-        /// </param>
-        /// <returns> a result object from working with the <code>Session</code>, if any (so can be <code>null</code>) 
-        /// </returns>
-        /// <throws>NMSException if there is any problem </throws>
-        object DoInNms(ISession session);
-    }
+    /// <param name="session">the NMS <code>Session</code>
+    /// </param>
+    /// <returns> a result object from working with the <code>Session</code>, if any (so can be <code>null</code>)
+    /// </returns>
+    /// <throws>NMSException if there is any problem </throws>
+    object DoInNms(ISession session);
 }

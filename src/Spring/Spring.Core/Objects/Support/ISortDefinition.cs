@@ -18,43 +18,42 @@
 
 #endregion
 
-namespace Spring.Objects.Support
+namespace Spring.Objects.Support;
+
+/// <summary>
+/// Definition for sorting object instances by a property.
+/// </summary>
+/// <author>Juergen Hoeller</author>
+/// <author>Simon White (.NET)</author>
+public interface ISortDefinition
 {
-	/// <summary>
-	/// Definition for sorting object instances by a property.
-	/// </summary>
-	/// <author>Juergen Hoeller</author>
-	/// <author>Simon White (.NET)</author>
-	public interface ISortDefinition
-	{
-		/// <summary>
-		/// The name of the property to sort by.
-		/// </summary>
-		string Property
-		{
-			get;
-		}
+    /// <summary>
+    /// The name of the property to sort by.
+    /// </summary>
+    string Property
+    {
+        get;
+    }
 
-		/// <summary>
-		/// Whether upper and lower case in string values should be ignored.
-		/// </summary>
-		/// <value>
-		/// True if the sorting should be performed in a case-insensitive fashion.
-		/// </value>
-		bool IgnoreCase
-		{
-			get;
-		}
+    /// <summary>
+    /// Whether upper and lower case in string values should be ignored.
+    /// </summary>
+    /// <value>
+    /// True if the sorting should be performed in a case-insensitive fashion.
+    /// </value>
+    bool IgnoreCase
+    {
+        get;
+    }
 
-		/// <summary>
-		/// If the sorting should be ascending or descending.
-		/// </summary>
-		/// <value>
-		/// True if the sorting should be in the ascending order.
-		/// </value>
-		bool Ascending
-		{
-			get;
-		}
-	}
+    /// <summary>
+    /// If the sorting should be ascending or descending.
+    /// </summary>
+    /// <value>
+    /// True if the sorting should be in the ascending order.
+    /// </value>
+    bool Ascending
+    {
+        get;
+    }
 }

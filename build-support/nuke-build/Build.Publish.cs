@@ -3,7 +3,6 @@ using Nuke.Common;
 using Nuke.Common.IO;
 using Nuke.Common.Tooling;
 using Nuke.Common.Tools.DotNet;
-
 using static Nuke.Common.Tools.DotNet.DotNetTasks;
 
 public partial class Build
@@ -39,5 +38,4 @@ public partial class Build
 
     bool PushCompleteOnFailure => true;
     int PushDegreeOfParallelism => 5;
-
 }

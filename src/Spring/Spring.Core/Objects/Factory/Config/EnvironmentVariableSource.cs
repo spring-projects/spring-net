@@ -18,39 +18,38 @@
 
 #endregion
 
-namespace Spring.Objects.Factory.Config
+namespace Spring.Objects.Factory.Config;
+
+/// <summary>
+/// Implementation of <see cref="IVariableSource"/> that
+/// resolves variable name against environment variables.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[Serializable]
+public class EnvironmentVariableSource : IVariableSource
 {
     /// <summary>
-    /// Implementation of <see cref="IVariableSource"/> that
-    /// resolves variable name against environment variables.
+    /// Before requesting a variable resolution, a client should
+    /// ask, whether the source can resolve a particular variable name.
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    [Serializable]
-    public class EnvironmentVariableSource : IVariableSource
+    /// <param name="name">the name of the variable to resolve</param>
+    /// <returns><c>true</c> if the variable can be resolved, <c>false</c> otherwise</returns>
+    public bool CanResolveVariable(string name)
     {
-        /// <summary>
-        /// Before requesting a variable resolution, a client should
-        /// ask, whether the source can resolve a particular variable name.
-        /// </summary>
-        /// <param name="name">the name of the variable to resolve</param>
-        /// <returns><c>true</c> if the variable can be resolved, <c>false</c> otherwise</returns>
-        public bool CanResolveVariable(string name)
-        {
-            return (Environment.GetEnvironmentVariable(name) != null);
-        }
+        return (Environment.GetEnvironmentVariable(name) != null);
+    }
 
-        /// <summary>
-        /// Resolves variable value for the specified variable name.
-        /// </summary>
-        /// <param name="name">
-        /// The name of the variable to resolve.
-        /// </param>
-        /// <returns>
-        /// The variable value if able to resolve, <c>null</c> otherwise.
-        /// </returns>
-        public string ResolveVariable(string name)
-        {
-            return Environment.GetEnvironmentVariable(name);
-        }
+    /// <summary>
+    /// Resolves variable value for the specified variable name.
+    /// </summary>
+    /// <param name="name">
+    /// The name of the variable to resolve.
+    /// </param>
+    /// <returns>
+    /// The variable value if able to resolve, <c>null</c> otherwise.
+    /// </returns>
+    public string ResolveVariable(string name)
+    {
+        return Environment.GetEnvironmentVariable(name);
     }
 }

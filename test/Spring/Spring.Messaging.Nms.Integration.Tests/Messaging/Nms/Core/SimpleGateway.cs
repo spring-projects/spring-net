@@ -21,36 +21,34 @@
 using System.Collections;
 using Apache.NMS;
 
-namespace Spring.Messaging.Nms.Core
-{
-    public class SimpleGateway: NmsGatewaySupport
-    {
-        public void Publish(string ticker, double price)
-        {
-            NmsTemplate.SendWithDelegate("APP.STOCK.MARKETDATA",
-                          delegate(ISession session)
-                          {
-                              IMapMessage message = session.CreateMapMessage();
-                              message.Body.SetString("TICKER", ticker);
-                              message.Body.SetDouble("PRICE", price);
-                              message.NMSPriority = MsgPriority.Normal;
-                              return message;
-                          });
-        }
+namespace Spring.Messaging.Nms.Core;
 
-        public void PublishUsingDict(string ticker, double price)
-        {
-            IDictionary marketData = new Hashtable();
-            marketData.Add("TICKER", ticker);
-            marketData.Add("PRICE", price);
-            NmsTemplate.ConvertAndSendWithDelegate("APP.STOCK.MARKETDATA", marketData,
-                     delegate(IMessage message)
-                     {
-                         message.NMSPriority = MsgPriority.Normal;
-                         message.NMSCorrelationID = new Guid().ToString();
-                         return message;
-                     });
-        }
+public class SimpleGateway : NmsGatewaySupport
+{
+    public void Publish(string ticker, double price)
+    {
+        NmsTemplate.SendWithDelegate("APP.STOCK.MARKETDATA",
+            delegate(ISession session)
+            {
+                IMapMessage message = session.CreateMapMessage();
+                message.Body.SetString("TICKER", ticker);
+                message.Body.SetDouble("PRICE", price);
+                message.NMSPriority = MsgPriority.Normal;
+                return message;
+            });
     }
 
+    public void PublishUsingDict(string ticker, double price)
+    {
+        IDictionary marketData = new Hashtable();
+        marketData.Add("TICKER", ticker);
+        marketData.Add("PRICE", price);
+        NmsTemplate.ConvertAndSendWithDelegate("APP.STOCK.MARKETDATA", marketData,
+            delegate(IMessage message)
+            {
+                message.NMSPriority = MsgPriority.Normal;
+                message.NMSCorrelationID = new Guid().ToString();
+                return message;
+            });
+    }
 }

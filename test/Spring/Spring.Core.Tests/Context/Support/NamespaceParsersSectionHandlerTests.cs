@@ -26,92 +26,91 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Context.Support
+namespace Spring.Context.Support;
+
+/// <summary>
+/// Unit tests for the NamespaceParsersSectionHandler class.
+/// </summary>
+/// <author>Rick Evans</author>
+[TestFixture]
+public sealed class NamespaceParsersSectionHandlerTests
 {
-	/// <summary>
-    /// Unit tests for the NamespaceParsersSectionHandler class.
-	/// </summary>
-	/// <author>Rick Evans</author>
-	[TestFixture]
-    public sealed class NamespaceParsersSectionHandlerTests
-	{
-		[Test]
-		public void ParseSectionSunnyDay()
-		{
-			const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
+    [Test]
+    public void ParseSectionSunnyDay()
+    {
+        const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
 <parsers>
 	<parser namespace='http://schemas.springframework.net/testobject' type='Spring.Context.Support.TestObjectConfigParser, Spring.Core.Tests' schemaLocation='assembly://Spring.Core.Tests/Spring.Context.Support/testobject.xsd'/>
 </parsers>";
 
-			NamespaceParsersSectionHandler handler = new NamespaceParsersSectionHandler();
-			handler.Create(null, null, BuildConfigurationSection(xml));
-		}
+        NamespaceParsersSectionHandler handler = new NamespaceParsersSectionHandler();
+        handler.Create(null, null, BuildConfigurationSection(xml));
+    }
 
-		[Test]
-		public void ParseSectionWithHandlerThatDoesNotImplement_IXmlObjectDefinitionParser()
-		{
-			const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
+    [Test]
+    public void ParseSectionWithHandlerThatDoesNotImplement_IXmlObjectDefinitionParser()
+    {
+        const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
 <parsers>
 	<parser namespace='http://schemas.springframework.net/2' type='Spring.Context.Support.NamespaceParsersSectionHandlerTests, Spring.Core.Tests' schemaLocation='assembly://Spring.Core.Tests/Spring.Context.Support/testobject.xsd'/>
 </parsers>";
 
-			NamespaceParsersSectionHandler handler = new NamespaceParsersSectionHandler();
-            Assert.Throws<ArgumentException>(() => handler.Create(null, null, BuildConfigurationSection(xml)));
-		}
+        NamespaceParsersSectionHandler handler = new NamespaceParsersSectionHandler();
+        Assert.Throws<ArgumentException>(() => handler.Create(null, null, BuildConfigurationSection(xml)));
+    }
 
-		[Test]
-		public void ParseSectionWithBadTypeForHandler()
-		{
-			const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
+    [Test]
+    public void ParseSectionWithBadTypeForHandler()
+    {
+        const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
 <parsers>
 	<parser namespace='http://schemas.springframework.net/2' type='Rubbish' schemaLocation='assembly://Spring.Core.Tests/Spring.Context.Support/testobject.xsd'/>
 </parsers>";
 
-			NamespaceParsersSectionHandler handler = new NamespaceParsersSectionHandler();
-			Assert.Throws<TypeLoadException>(() => handler.Create(null, null, BuildConfigurationSection(xml)));
-		}
+        NamespaceParsersSectionHandler handler = new NamespaceParsersSectionHandler();
+        Assert.Throws<TypeLoadException>(() => handler.Create(null, null, BuildConfigurationSection(xml)));
+    }
 
-		[Test]
-		public void ParseSectionWithNoChildParserNamespaceElements()
-		{
-			const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
+    [Test]
+    public void ParseSectionWithNoChildParserNamespaceElements()
+    {
+        const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
 <parsers>
 	<!-- now't in here -->
 </parsers>";
 
-			NamespaceParsersSectionHandler handler = new NamespaceParsersSectionHandler();
-			handler.Create(null, null, BuildConfigurationSection(xml));
-		}
+        NamespaceParsersSectionHandler handler = new NamespaceParsersSectionHandler();
+        handler.Create(null, null, BuildConfigurationSection(xml));
+    }
 
-		[Test]
-		public void ParseSectionWithEmptyType()
-		{
-			const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
+    [Test]
+    public void ParseSectionWithEmptyType()
+    {
+        const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
 <parsers>
 	<parser namespace='http://schemas.springframework.net/3' type='' schemaLocation='assembly://Spring.Core.Tests/Spring.Context.Support/testobject.xsd'/>
 </parsers>";
 
-			NamespaceParsersSectionHandler handler = new NamespaceParsersSectionHandler();
-			Assert.Throws<ArgumentNullException>(() => handler.Create(null, null, BuildConfigurationSection(xml)));
-		}
+        NamespaceParsersSectionHandler handler = new NamespaceParsersSectionHandler();
+        Assert.Throws<ArgumentNullException>(() => handler.Create(null, null, BuildConfigurationSection(xml)));
+    }
 
-		[Test]
-		public void WithParserElementThatIsMissingTheTypeAttribute()
-		{
-			const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
+    [Test]
+    public void WithParserElementThatIsMissingTheTypeAttribute()
+    {
+        const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
 <parsers>
 	<parser namespace='http://schemas.springframework.net/3'/>
 </parsers>";
 
-			NamespaceParsersSectionHandler handler = new NamespaceParsersSectionHandler();
-            Assert.Throws<ConfigurationErrorsException>(() => handler.Create(null, null, BuildConfigurationSection(xml)));
-		}
+        NamespaceParsersSectionHandler handler = new NamespaceParsersSectionHandler();
+        Assert.Throws<ConfigurationErrorsException>(() => handler.Create(null, null, BuildConfigurationSection(xml)));
+    }
 
-		private static XmlNode BuildConfigurationSection(string xml)
-		{
-			XmlDocument doc = new XmlDocument();
-			doc.LoadXml(xml);
-			return doc.DocumentElement;
-		}
-	}
+    private static XmlNode BuildConfigurationSection(string xml)
+    {
+        XmlDocument doc = new XmlDocument();
+        doc.LoadXml(xml);
+        return doc.DocumentElement;
+    }
 }

@@ -22,21 +22,20 @@
 
 #endregion
 
-namespace Spring.Aop
+namespace Spring.Aop;
+
+/// <summary>
+/// AOP Aspect abstraction, holding a list of <see cref="Spring.Aop.IAdvisor"/>s
+/// </summary>
+/// <seealso cref="IAdvisor"/>
+/// <author>Aleksandar Seovic (.NET)</author>
+public interface IAdvisors
 {
-	/// <summary>
-	/// AOP Aspect abstraction, holding a list of <see cref="Spring.Aop.IAdvisor"/>s
-	/// </summary>
-    /// <seealso cref="IAdvisor"/>
-    /// <author>Aleksandar Seovic (.NET)</author>
-	public interface IAdvisors
-	{
-        /// <summary>
-        /// Gets or sets a list of advisors.
-        /// </summary>
-        /// <value>
-        /// A list of advisors.
-        /// </value>
-		IList<IAdvisor> Advisors { get; set; }
-	}
+    /// <summary>
+    /// Gets or sets a list of advisors.
+    /// </summary>
+    /// <value>
+    /// A list of advisors.
+    /// </value>
+    IList<IAdvisor> Advisors { get; set; }
 }

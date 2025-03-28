@@ -21,118 +21,120 @@
 using Spring.Core.IO;
 using Spring.Util;
 
-namespace Spring.Objects.Factory.Config
+namespace Spring.Objects.Factory.Config;
+
+/// <summary>
+/// Implementation of <see cref="IVariableSource"/> that
+/// resolves variable name against Java-style property file.
+/// </summary>
+/// <seealso cref="Properties"/>
+/// <author>Aleksandar Seovic</author>
+[Serializable]
+public class PropertyFileVariableSource : IVariableSource
 {
+    private IResource[] locations;
+    protected Properties properties;
+    private readonly object objectMonitor = new object();
+    private bool ignoreMissingResources;
+
     /// <summary>
-    /// Implementation of <see cref="IVariableSource"/> that
-    /// resolves variable name against Java-style property file.
+    /// Gets or sets the locations of the property files
+    /// to read properties from.
     /// </summary>
-    /// <seealso cref="Properties"/>
-    /// <author>Aleksandar Seovic</author>
-    [Serializable]
-    public class PropertyFileVariableSource : IVariableSource
+    /// <value>
+    /// The locations of the property files
+    /// to read properties from.
+    /// </value>
+    public IResource[] Locations
     {
-        private IResource[] locations;
-        protected Properties properties;
-        private readonly object objectMonitor = new object();
-        private bool ignoreMissingResources;
+        get { return locations; }
+        set { locations = value; }
+    }
 
-        /// <summary>
-        /// Gets or sets the locations of the property files
-        /// to read properties from.
-        /// </summary>
-        /// <value>
-        /// The locations of the property files
-        /// to read properties from.
-        /// </value>
-        public IResource[] Locations
-        {
-            get { return locations; }
-            set { locations = value; }
-        }
+    /// <summary>
+    /// Convinience property. Gets or sets a single location
+    /// to read properties from.
+    /// </summary>
+    /// <value>
+    /// A location to read properties from.
+    /// </value>
+    public IResource Location
+    {
+        set { locations = new IResource[] { value }; }
+    }
 
-        /// <summary>
-        /// Convinience property. Gets or sets a single location
-        /// to read properties from.
-        /// </summary>
-        /// <value>
-        /// A location to read properties from.
-        /// </value>
-        public IResource Location
-        {
-            set { locations = new IResource[] { value} ;}
-        }
+    /// <summary>
+    /// Sets a value indicating whether to ignore resource locations that do not exist.  This will call
+    /// the <see cref="IResource"/> Exists property.
+    /// </summary>
+    /// <value>
+    /// 	<c>true</c> if one should ignore missing resources; otherwise, <c>false</c>.
+    /// </value>
+    public bool IgnoreMissingResources
+    {
+        set { ignoreMissingResources = value; }
+    }
 
-        /// <summary>
-        /// Sets a value indicating whether to ignore resource locations that do not exist.  This will call
-        /// the <see cref="IResource"/> Exists property.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if one should ignore missing resources; otherwise, <c>false</c>.
-        /// </value>
-        public bool IgnoreMissingResources
+    /// <summary>
+    /// Before requesting a variable resolution, a client should
+    /// ask, whether the source can resolve a particular variable name.
+    /// </summary>
+    /// <param name="name">the name of the variable to resolve</param>
+    /// <returns><c>true</c> if the variable can be resolved, <c>false</c> otherwise</returns>
+    public bool CanResolveVariable(string name)
+    {
+        lock (objectMonitor)
         {
-            set { ignoreMissingResources = value; }
-        }
-
-        /// <summary>
-        /// Before requesting a variable resolution, a client should
-        /// ask, whether the source can resolve a particular variable name.
-        /// </summary>
-        /// <param name="name">the name of the variable to resolve</param>
-        /// <returns><c>true</c> if the variable can be resolved, <c>false</c> otherwise</returns>
-        public bool CanResolveVariable(string name)
-        {
-            lock (objectMonitor)
+            if (properties == null)
             {
-                if (properties == null)
-                {
-                    properties = new Properties();
-                    InitProperties();
-                }
-                return properties.Contains(name);
+                properties = new Properties();
+                InitProperties();
             }
-        }
 
-        /// <summary>
-        /// Resolves variable value for the specified variable name.
-        /// </summary>
-        /// <param name="name">
-        /// The name of the variable to resolve.
-        /// </param>
-        /// <returns>
-        /// The variable value if able to resolve, <c>null</c> otherwise.
-        /// </returns>
-        public string ResolveVariable(string name)
+            return properties.Contains(name);
+        }
+    }
+
+    /// <summary>
+    /// Resolves variable value for the specified variable name.
+    /// </summary>
+    /// <param name="name">
+    /// The name of the variable to resolve.
+    /// </param>
+    /// <returns>
+    /// The variable value if able to resolve, <c>null</c> otherwise.
+    /// </returns>
+    public string ResolveVariable(string name)
+    {
+        lock (objectMonitor)
         {
-            lock (objectMonitor)
+            if (properties == null)
             {
-                if (properties == null)
-                {
-                    properties = new Properties();
-                    InitProperties();
-                }
-                return properties.GetProperty(name);
+                properties = new Properties();
+                InitProperties();
             }
-        }
 
-        /// <summary>
-        /// Initializes properties based on the specified
-        /// property file locations.
-        /// </summary>
-        protected virtual void InitProperties()
+            return properties.GetProperty(name);
+        }
+    }
+
+    /// <summary>
+    /// Initializes properties based on the specified
+    /// property file locations.
+    /// </summary>
+    protected virtual void InitProperties()
+    {
+        foreach (IResource location in locations)
         {
-            foreach (IResource location in locations)
+            bool exists = location.Exists;
+            if (!exists && ignoreMissingResources)
             {
-                bool exists = location.Exists;
-                if (!exists && ignoreMissingResources)
-                {
-                    continue;
-                }
-                using (Stream input = location.InputStream)
-                {
-                    properties.Load(input);
-                }
+                continue;
+            }
+
+            using (Stream input = location.InputStream)
+            {
+                properties.Load(input);
             }
         }
     }

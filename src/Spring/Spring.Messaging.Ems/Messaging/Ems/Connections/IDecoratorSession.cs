@@ -20,23 +20,22 @@
 
 using Spring.Messaging.Ems.Common;
 
-namespace Spring.Messaging.Ems.Connections
+namespace Spring.Messaging.Ems.Connections;
+
+/// <summary>
+/// Subinterface of Session to be implemented by
+/// implementations that wrap an Session to provide added
+/// functionality. Allows access to the the underlying target Session.
+/// </summary>
+/// <author>Mark Pollack</author>
+/// <see cref="ConnectionFactoryUtils.GetTargetSession(ISession)"/>
+/// <see cref="CachingConnectionFactory"/>
+public interface IDecoratorSession : ISession
 {
     /// <summary>
-    /// Subinterface of Session to be implemented by
-    /// implementations that wrap an Session to provide added 
-    /// functionality. Allows access to the the underlying target Session.
+    /// Gets the target session of the decorator.
+    /// This will typically be the native provider Session or a wrapper from a session pool.
     /// </summary>
-    /// <author>Mark Pollack</author>
-    /// <see cref="ConnectionFactoryUtils.GetTargetSession(ISession)"/>
-    /// <see cref="CachingConnectionFactory"/>
-    public interface IDecoratorSession : ISession
-    {
-        /// <summary>
-        /// Gets the target session of the decorator.
-        /// This will typically be the native provider Session or a wrapper from a session pool.
-        /// </summary>
-        /// <value>The underlying session, never null</value>
-        ISession TargetSession { get; }
-    }
+    /// <value>The underlying session, never null</value>
+    ISession TargetSession { get; }
 }

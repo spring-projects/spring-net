@@ -25,30 +25,29 @@ using Spring.Util;
 
 #endregion
 
-namespace Spring.Aop
-{
-	/// <summary>
-	/// Unit tests for the TruePointcut class.
-    /// </summary>
-    /// <author>Rick Evans</author>
-	[TestFixture]
-    public sealed class TruePointcutTests
-    {
-		[Test]
-		public void Deserialization()
-		{
-			IPointcut deserializedVersion
-				= (IPointcut) SerializationTestUtils.SerializeAndDeserialize(
-				TruePointcut.True);
-			Assert.IsTrue(Object.ReferenceEquals(TruePointcut.True, deserializedVersion),
-				"Singleton instance not being deserialized correctly");
-		}
+namespace Spring.Aop;
 
-		[Test]
-		public void IsSerializable()
-		{
-			Assert.IsTrue(SerializationTestUtils.IsSerializable(TruePointcut.True),
-				"TruePointcut must be serializable.");
-		}
-	}
+/// <summary>
+/// Unit tests for the TruePointcut class.
+/// </summary>
+/// <author>Rick Evans</author>
+[TestFixture]
+public sealed class TruePointcutTests
+{
+    [Test]
+    public void Deserialization()
+    {
+        IPointcut deserializedVersion
+            = (IPointcut) SerializationTestUtils.SerializeAndDeserialize(
+                TruePointcut.True);
+        Assert.IsTrue(Object.ReferenceEquals(TruePointcut.True, deserializedVersion),
+            "Singleton instance not being deserialized correctly");
+    }
+
+    [Test]
+    public void IsSerializable()
+    {
+        Assert.IsTrue(SerializationTestUtils.IsSerializable(TruePointcut.True),
+            "TruePointcut must be serializable.");
+    }
 }

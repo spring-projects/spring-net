@@ -20,48 +20,47 @@
 
 using System.Collections;
 
-namespace Spring.Collections
+namespace Spring.Collections;
+
+/// <summary>
+/// Synchronized <see cref="IEnumerator"/> that should be returned by synchronized
+/// collections in order to ensure that the enumeration is thread safe.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+internal class SynchronizedEnumerator : IEnumerator
 {
-    /// <summary>
-    /// Synchronized <see cref="IEnumerator"/> that should be returned by synchronized
-    /// collections in order to ensure that the enumeration is thread safe.
-    /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    internal class SynchronizedEnumerator : IEnumerator
+    protected object syncRoot;
+    protected IEnumerator enumerator;
+
+    public SynchronizedEnumerator(object syncRoot, IEnumerator enumerator)
     {
-        protected object syncRoot;
-        protected IEnumerator enumerator;
+        this.syncRoot = syncRoot;
+        this.enumerator = enumerator;
+    }
 
-        public SynchronizedEnumerator(object syncRoot, IEnumerator enumerator)
+    public bool MoveNext()
+    {
+        lock (syncRoot)
         {
-            this.syncRoot = syncRoot;
-            this.enumerator = enumerator;
+            return enumerator.MoveNext();
         }
+    }
 
-        public bool MoveNext()
+    public void Reset()
+    {
+        lock (syncRoot)
+        {
+            enumerator.Reset();
+        }
+    }
+
+    public object Current
+    {
+        get
         {
             lock (syncRoot)
             {
-                return enumerator.MoveNext();
-            }
-        }
-
-        public void Reset()
-        {
-            lock (syncRoot)
-            {
-                enumerator.Reset();
-            }
-        }
-
-        public object Current
-        {
-            get
-            {
-                lock (syncRoot)
-                {
-                    return enumerator.Current;
-                }
+                return enumerator.Current;
             }
         }
     }

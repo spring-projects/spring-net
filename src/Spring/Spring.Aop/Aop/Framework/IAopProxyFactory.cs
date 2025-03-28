@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,27 +18,26 @@
 
 #endregion
 
-namespace Spring.Aop.Framework
+namespace Spring.Aop.Framework;
+
+/// <summary>
+/// Factory interface for the creation of AOP proxies based on
+/// <see cref="Spring.Aop.Framework.AdvisedSupport"/> configuration
+/// objects.
+/// </summary>
+/// <author>Rod Johnson</author>
+/// <author>Aleksandar Seovic (.NET)</author>
+public interface IAopProxyFactory
 {
-	/// <summary> 
-	/// Factory interface for the creation of AOP proxies based on
-	/// <see cref="Spring.Aop.Framework.AdvisedSupport"/> configuration
-	/// objects.
-	/// </summary>
-	/// <author>Rod Johnson</author>
-	/// <author>Aleksandar Seovic (.NET)</author>
-	public interface IAopProxyFactory
-	{
-		/// <summary>
-		/// Creates an <see cref="Spring.Aop.Framework.IAopProxy"/> for the
-		/// supplied <paramref name="advisedSupport"/> configuration.
-		/// </summary>
-		/// <param name="advisedSupport">The AOP configuration.</param>
-		/// <returns>An <see cref="Spring.Aop.Framework.IAopProxy"/>.</returns>
-		/// <exception cref="AopConfigException">
-		/// If the supplied <paramref name="advisedSupport"/> configuration is
-		/// invalid.
-		/// </exception>
-		IAopProxy CreateAopProxy(AdvisedSupport advisedSupport);
-	}
+    /// <summary>
+    /// Creates an <see cref="Spring.Aop.Framework.IAopProxy"/> for the
+    /// supplied <paramref name="advisedSupport"/> configuration.
+    /// </summary>
+    /// <param name="advisedSupport">The AOP configuration.</param>
+    /// <returns>An <see cref="Spring.Aop.Framework.IAopProxy"/>.</returns>
+    /// <exception cref="AopConfigException">
+    /// If the supplied <paramref name="advisedSupport"/> configuration is
+    /// invalid.
+    /// </exception>
+    IAopProxy CreateAopProxy(AdvisedSupport advisedSupport);
 }

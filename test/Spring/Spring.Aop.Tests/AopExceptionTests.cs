@@ -21,24 +21,22 @@
 #region Imports
 
 using System.Reflection;
-
 using NUnit.Framework;
 
 #endregion
 
-namespace Spring
+namespace Spring;
+
+/// <summary>
+/// Unit tests for all of the exception classes in the Spring.Aop library...
+/// </summary>
+/// <author>Rick Evans</author>
+[TestFixture]
+public sealed class AopExceptionTests : ExceptionsTest
 {
-    /// <summary>
-    /// Unit tests for all of the exception classes in the Spring.Aop library...
-    /// </summary>
-    /// <author>Rick Evans</author>
-    [TestFixture]
-    public sealed class AopExceptionTests : ExceptionsTest
+    [OneTimeSetUp]
+    public void FixtureSetUp()
     {
-        [OneTimeSetUp]
-        public void FixtureSetUp ()
-        {
-            AssemblyToCheck = Assembly.GetAssembly (typeof (Spring.Aop.TruePointcut));
-        }
+        AssemblyToCheck = Assembly.GetAssembly(typeof(Spring.Aop.TruePointcut));
     }
 }

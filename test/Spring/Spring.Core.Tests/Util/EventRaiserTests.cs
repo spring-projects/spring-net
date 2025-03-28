@@ -25,100 +25,99 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Util
+namespace Spring.Util;
+
+/// <summary>
+/// Unit tests for the EventRaiser class.
+/// </summary>
+/// <author>Rick Evans</author>
+[TestFixture]
+public sealed class EventRaiserTests
 {
-	/// <summary>
-	/// Unit tests for the EventRaiser class.
-    /// </summary>
-    /// <author>Rick Evans</author>
-	[TestFixture]
-    public sealed class EventRaiserTests
+    [Test]
+    public void Raise()
     {
-        [Test]
-        public void Raise () 
-        {
-            OneThirstyDude dude = new OneThirstyDude ();
-            Soda bru = new Soda ();
-            bru.Pop += new PopHandler (dude.HandlePop);
-            bru.OnPop ("Iron Brew", new EventRaiser ());
-            Assert.AreEqual ("Iron Brew", dude.Soda);
-        }
+        OneThirstyDude dude = new OneThirstyDude();
+        Soda bru = new Soda();
+        bru.Pop += new PopHandler(dude.HandlePop);
+        bru.OnPop("Iron Brew", new EventRaiser());
+        Assert.AreEqual("Iron Brew", dude.Soda);
+    }
 
-        [Test]
-        public void RaiseWithBadNumberOfArguments () 
-        {
-            OneThirstyDude dude = new OneThirstyDude ();
-            Soda bru = new Soda ();
-            bru.Pop += new PopHandler (dude.HandlePop);
-            Assert.Throws<TargetParameterCountException>(() => bru.OnPopWithBadNumberOfArguments ("Iron Brew", new EventRaiser ()));
-        }
-
-        [Test]
-        public void RaiseWithNullEvent () 
-        {
-            OneThirstyDude dude = new OneThirstyDude ();
-            Soda bru = new Soda ();
-            bru.Pop += new PopHandler (dude.HandlePop);
-            bru.OnPopWithNullEvent ("Iron Brew", new EventRaiser ());
-            Assert.AreEqual (string.Empty, dude.Soda);
-        }
-
-        public void RaiseWithAnEventHandlerThatThrowsAnException () 
-        {
-            OneThirstyDude dude = new OneThirstyDude ();
-            Soda bru = new Soda ();
-            bru.Pop += new PopHandler (dude.HandlePopWithException);
-            Assert.Throws<FormatException>(() => bru.OnPop ("Iron Brew", new EventRaiser ()), "Iron Brew");
-        }
-	}
-
-    internal delegate void PopHandler (object sender, string soda);
-
-    internal sealed class Soda 
+    [Test]
+    public void RaiseWithBadNumberOfArguments()
     {
-        public event PopHandler Pop;
+        OneThirstyDude dude = new OneThirstyDude();
+        Soda bru = new Soda();
+        bru.Pop += new PopHandler(dude.HandlePop);
+        Assert.Throws<TargetParameterCountException>(() => bru.OnPopWithBadNumberOfArguments("Iron Brew", new EventRaiser()));
+    }
 
-        public IEventExceptionsCollector OnPop (string soda, EventRaiser raiser) 
-        {
-            return raiser.Raise (Pop, this, soda);
-        }
+    [Test]
+    public void RaiseWithNullEvent()
+    {
+        OneThirstyDude dude = new OneThirstyDude();
+        Soda bru = new Soda();
+        bru.Pop += new PopHandler(dude.HandlePop);
+        bru.OnPopWithNullEvent("Iron Brew", new EventRaiser());
+        Assert.AreEqual(string.Empty, dude.Soda);
+    }
 
-        public void OnPopWithBadNumberOfArguments (string soda, EventRaiser raiser) 
-        {
-            raiser.Raise (Pop, /*this,*/ soda); // wrong number of args to the event
-        }
+    public void RaiseWithAnEventHandlerThatThrowsAnException()
+    {
+        OneThirstyDude dude = new OneThirstyDude();
+        Soda bru = new Soda();
+        bru.Pop += new PopHandler(dude.HandlePopWithException);
+        Assert.Throws<FormatException>(() => bru.OnPop("Iron Brew", new EventRaiser()), "Iron Brew");
+    }
+}
 
-        public void OnPopWithNullEvent (string soda, EventRaiser raiser) 
+internal delegate void PopHandler(object sender, string soda);
+
+internal sealed class Soda
+{
+    public event PopHandler Pop;
+
+    public IEventExceptionsCollector OnPop(string soda, EventRaiser raiser)
+    {
+        return raiser.Raise(Pop, this, soda);
+    }
+
+    public void OnPopWithBadNumberOfArguments(string soda, EventRaiser raiser)
+    {
+        raiser.Raise(Pop, /*this,*/ soda); // wrong number of args to the event
+    }
+
+    public void OnPopWithNullEvent(string soda, EventRaiser raiser)
+    {
+        raiser.Raise(null, this, soda); // no event...
+    }
+}
+
+internal sealed class OneThirstyDude
+{
+    public void HandlePop(object sender, string soda)
+    {
+        _soda = soda;
+    }
+
+    public void HandlePopWithException(object sender, string soda)
+    {
+        _soda = soda;
+        throw new FormatException(soda);
+    }
+
+    public static void StaticHandlePop(object sender, string soda)
+    {
+    }
+
+    public string Soda
+    {
+        get
         {
-            raiser.Raise (null, this, soda); // no event...
+            return _soda;
         }
     }
 
-    internal sealed class OneThirstyDude 
-    {
-        public void HandlePop (object sender, string soda) 
-        {
-            _soda = soda;
-        }
-
-        public void HandlePopWithException (object sender, string soda) 
-        {
-            _soda = soda;
-            throw new FormatException (soda);
-        }
-
-		public static void StaticHandlePop(object sender, string soda) 
-		{
-		}
-
-        public string Soda 
-        {
-            get 
-            {
-                return _soda;
-            }
-        }
-
-        private string _soda = string.Empty;
-    }
+    private string _soda = string.Empty;
 }

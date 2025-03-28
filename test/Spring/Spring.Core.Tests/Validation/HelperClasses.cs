@@ -22,111 +22,110 @@ using Spring.Objects.Factory.Config;
 using Spring.Objects.Factory.Support;
 using Spring.Validation.Actions;
 
-namespace Spring.Validation
+namespace Spring.Validation;
+
+public abstract class BaseTestValidator : BaseSimpleValidator
 {
-    public abstract class BaseTestValidator : BaseSimpleValidator
+    private bool _wasCalled;
+
+    public bool WasCalled => _wasCalled;
+
+    public override bool Validate(object validationContext, IDictionary<string, object> contextParams,
+        IValidationErrors errors)
     {
-        private bool _wasCalled;
+        _wasCalled = true;
+        return base.Validate(validationContext, contextParams, errors);
+    }
+}
 
-        public bool WasCalled => _wasCalled;
-
-        public override bool Validate(object validationContext, IDictionary<string, object> contextParams,
-            IValidationErrors errors)
-        {
-            _wasCalled = true;
-            return base.Validate(validationContext, contextParams, errors);
-        }
+/// <summary>
+/// Helper classes for validation tests.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+public class TrueValidator : BaseTestValidator
+{
+    public TrueValidator()
+    {
     }
 
     /// <summary>
-    /// Helper classes for validation tests.
+    /// Validates test object.
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    public class TrueValidator : BaseTestValidator
+    /// <param name="objectToValidate">Object to validate.</param>
+    /// <returns><c>True</c> if specified object is valid, <c>False</c> otherwise.</returns>
+    protected override bool Validate(object objectToValidate)
     {
-        public TrueValidator()
-        {
-        }
+        return true;
+    }
+}
 
-        /// <summary>
-        /// Validates test object.
-        /// </summary>
-        /// <param name="objectToValidate">Object to validate.</param>
-        /// <returns><c>True</c> if specified object is valid, <c>False</c> otherwise.</returns>
-        protected override bool Validate(object objectToValidate)
-        {
-            return true;
-        }
+public class FalseValidator : BaseTestValidator
+{
+    public FalseValidator()
+    {
+        Actions.Add(new ErrorMessageAction("error", "errors"));
     }
 
-    public class FalseValidator : BaseTestValidator
+    /// <summary>
+    /// Validates test object.
+    /// </summary>
+    /// <param name="objectToValidate">Object to validate.</param>
+    /// <returns><c>True</c> if specified object is valid, <c>False</c> otherwise.</returns>
+    protected override bool Validate(object objectToValidate)
     {
-        public FalseValidator()
-        {
-            Actions.Add(new ErrorMessageAction("error", "errors"));
-        }
+        return false;
+    }
+}
 
-        /// <summary>
-        /// Validates test object.
-        /// </summary>
-        /// <param name="objectToValidate">Object to validate.</param>
-        /// <returns><c>True</c> if specified object is valid, <c>False</c> otherwise.</returns>
-        protected override bool Validate(object objectToValidate)
-        {
-            return false;
-        }
+public sealed class MockObjectDefinitionRegistry : IObjectDefinitionRegistry
+{
+    private readonly IDictionary<string, IObjectDefinition> objects = new Dictionary<string, IObjectDefinition>();
+
+    public int ObjectDefinitionCount => objects.Count;
+
+    public IReadOnlyList<string> GetObjectDefinitionNames()
+    {
+        return new List<string>(objects.Keys);
     }
 
-    public sealed class MockObjectDefinitionRegistry : IObjectDefinitionRegistry
+    public IReadOnlyList<string> GetObjectDefinitionNames(bool includeAncestor)
     {
-        private readonly IDictionary<string, IObjectDefinition> objects = new Dictionary<string, IObjectDefinition>();
+        return new List<string>(objects.Keys);
+    }
 
-        public int ObjectDefinitionCount => objects.Count;
+    public IList<IObjectDefinition> GetObjectDefinitions()
+    {
+        return new List<IObjectDefinition>(objects.Values);
+    }
 
-        public IReadOnlyList<string> GetObjectDefinitionNames()
-        {
-            return new List<string>(objects.Keys);
-        }
+    public bool ContainsObjectDefinition(string name)
+    {
+        return objects.ContainsKey(name);
+    }
 
-        public IReadOnlyList<string> GetObjectDefinitionNames(bool includeAncestor)
-        {
-            return new List<string>(objects.Keys);
-        }
+    public IObjectDefinition GetObjectDefinition(string name)
+    {
+        objects.TryGetValue(name, out var definition);
+        return definition;
+    }
 
-        public IList<IObjectDefinition> GetObjectDefinitions()
-        {
-            return new List<IObjectDefinition>(objects.Values);
-        }
+    public void RegisterObjectDefinition(string name, IObjectDefinition definition)
+    {
+        objects[name] = definition;
+    }
 
-        public bool ContainsObjectDefinition(string name)
-        {
-            return objects.ContainsKey(name);
-        }
+    public IReadOnlyList<string> GetAliases(string name)
+    {
+        throw new NotImplementedException();
+    }
 
-        public IObjectDefinition GetObjectDefinition(string name)
-        {
-            objects.TryGetValue(name, out var definition);
-            return definition;
-        }
+    public void RegisterAlias(string name, string theAlias)
+    {
+        throw new NotImplementedException();
+    }
 
-        public void RegisterObjectDefinition(string name, IObjectDefinition definition)
-        {
-            objects[name] = definition;
-        }
-
-        public IReadOnlyList<string> GetAliases(string name)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void RegisterAlias(string name, string theAlias)
-        {
-            throw new NotImplementedException();
-        }
-
-        public bool IsObjectNameInUse(string objectName)
-        {
-            return objects[objectName] != null;
-        }
+    public bool IsObjectNameInUse(string objectName)
+    {
+        return objects[objectName] != null;
     }
 }

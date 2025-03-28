@@ -18,55 +18,53 @@
 
 #endregion
 
-namespace Spring.Context.Attributes
+namespace Spring.Context.Attributes;
+
+/// <summary>
+/// objects on which the current object depends. Any objects specified are guaranteed to be
+/// created by the container before this object. Used infrequently in cases where a object
+/// does not explicitly depend on another through properties or constructor arguments,
+/// but rather depends on the side effects of another object's initialization.
+/// <para>Note: This attribute will not be inherited by child object definitions,
+/// hence it needs to be specified per concrete object definition.
+/// </para>
+/// <para>Using <see cref="DependsOnAttribute"/> at the class level has no effect unless component-scanning
+/// is being used. If a <see cref="DependsOnAttribute"/>-attributed class is declared via XML,
+/// <see cref="DependsOnAttribute"/> attribute metadata is ignored, and
+/// &lt;object depends-on="..."/&gt; is respected instead.
+/// </para>
+/// </summary>
+[AttributeUsage(AttributeTargets.Method | AttributeTargets.Class)]
+public class DependsOnAttribute : Attribute
 {
+    private string[] _name;
+
     /// <summary>
-    /// objects on which the current object depends. Any objects specified are guaranteed to be
-    /// created by the container before this object. Used infrequently in cases where a object
-    /// does not explicitly depend on another through properties or constructor arguments,
-    /// but rather depends on the side effects of another object's initialization.
-    /// <para>Note: This attribute will not be inherited by child object definitions,
-    /// hence it needs to be specified per concrete object definition.
-    /// </para>
-    /// <para>Using <see cref="DependsOnAttribute"/> at the class level has no effect unless component-scanning
-    /// is being used. If a <see cref="DependsOnAttribute"/>-attributed class is declared via XML,
-    /// <see cref="DependsOnAttribute"/> attribute metadata is ignored, and
-    /// &lt;object depends-on="..."/&gt; is respected instead.
-    /// </para>
+    /// Initializes a new instance of the DependsOn class.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class)]
-    public class DependsOnAttribute : Attribute
+    public DependsOnAttribute(string name)
+        : this(new[] { name })
     {
-        private string[] _name;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the DependsOn class.
-        /// </summary>
-        public DependsOnAttribute(string name)
-            : this(new[] { name })
+    /// <summary>
+    /// Initializes a new instance of the DependsOn class.
+    /// </summary>
+    public DependsOnAttribute(params string[] name)
+    {
+        _name = name;
+    }
+
+    /// <summary>
+    /// Gets or sets the name.
+    /// </summary>
+    /// <value>The name.</value>
+    public string[] Name
+    {
+        get { return _name; }
+        set
         {
+            _name = value;
         }
-
-        /// <summary>
-        /// Initializes a new instance of the DependsOn class.
-        /// </summary>
-        public DependsOnAttribute(params string[] name)
-        {
-            _name = name;
-        }
-
-        /// <summary>
-        /// Gets or sets the name.
-        /// </summary>
-        /// <value>The name.</value>
-        public string[] Name
-        {
-            get { return _name; }
-            set
-            {
-                _name = value;
-            }
-        }
-
     }
 }

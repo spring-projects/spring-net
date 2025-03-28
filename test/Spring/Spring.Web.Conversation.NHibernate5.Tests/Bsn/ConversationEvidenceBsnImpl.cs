@@ -18,34 +18,33 @@
 
 #endregion
 
-namespace Spring.Bsn
+namespace Spring.Bsn;
+
+/// <summary>
+/// <see cref="IConversationEvidenceBsn"/>
+/// </summary>
+public class ConversationEvidenceBsnImpl : IConversationEvidenceBsn
 {
+    private String uniqueId = "";
+
+    /// <summary>
+    /// Create instance with unique id.
+    /// </summary>
+    public ConversationEvidenceBsnImpl()
+    {
+        uniqueId = Guid.NewGuid().ToString();
+    }
+
+    #region IConversationEvidenceBsn Members
+
     /// <summary>
     /// <see cref="IConversationEvidenceBsn"/>
     /// </summary>
-    public class ConversationEvidenceBsnImpl: IConversationEvidenceBsn
+    /// <returns></returns>
+    public String UniqueId()
     {
-        private String uniqueId = "";
-
-        /// <summary>
-        /// Create instance with unique id.
-        /// </summary>
-        public ConversationEvidenceBsnImpl()
-        {
-            uniqueId = Guid.NewGuid().ToString();
-        }
-
-        #region IConversationEvidenceBsn Members
-
-        /// <summary>
-        /// <see cref="IConversationEvidenceBsn"/>
-        /// </summary>
-        /// <returns></returns>
-        public String UniqueId()
-        {
-            return this.uniqueId;
-        }
-
-        #endregion
+        return this.uniqueId;
     }
+
+    #endregion
 }

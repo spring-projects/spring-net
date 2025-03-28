@@ -25,40 +25,40 @@ using Spring.Web.UI;
 
 #endregion
 
-namespace Spring.Web.Support
+namespace Spring.Web.Support;
+
+/// <summary>
+/// An <see cref="IResult"/> encapsulates concrete navigation logic. Usually executing a
+/// result will invoke <see cref="HttpResponse.Redirect(string)"/> or <see cref="HttpServerUtility.Transfer(string, bool)"/>.
+/// </summary>
+/// <remarks>
+/// For a larger example illustrating the customization of result processing <see cref="ResultFactoryRegistry"/>.
+/// </remarks>
+/// <seealso cref="ResultFactoryRegistry"/>
+/// <seealso cref="IResult"/>
+/// <seealso cref="Result"/>
+/// <seealso cref="DefaultResultWebNavigator"/>
+/// <seealso cref="Page.SetResult(string, object)"/>
+/// <seealso cref="UserControl.SetResult(string, object)"/>
+/// <author>Erich Eichinger</author>
+public interface IResult
 {
     /// <summary>
-    /// An <see cref="IResult"/> encapsulates concrete navigation logic. Usually executing a 
-    /// result will invoke <see cref="HttpResponse.Redirect(string)"/> or <see cref="HttpServerUtility.Transfer(string, bool)"/>.
+    /// Execute the result logic within the given <paramref name="context"/>.
     /// </summary>
+    /// <param name="context">the context to evaluate this request in.</param>
+    void Navigate(object context);
+
+    /// <summary>
+    /// Returns an url representation of the result logic within the given <paramref name="context"/>.
+    /// </summary>
+    /// <param name="context">the context to evaluate this request in.</param>
+    /// <returns>the url corresponding to the result instance.</returns>
     /// <remarks>
-    /// For a larger example illustrating the customization of result processing <see cref="ResultFactoryRegistry"/>.
+    /// The returned url is not necessarily fully qualified nor absolute. Returned urls may be relative to the
+    /// given context.<br/>
+    /// To produce a client-usable url, consider applying e.g. <see cref="System.Web.UI.Control.ResolveUrl"/> or
+    /// <see cref="System.Web.UI.Control.ResolveClientUrl"/> before writing the result url to the response.
     /// </remarks>
-    /// <seealso cref="ResultFactoryRegistry"/>
-    /// <seealso cref="IResult"/>
-    /// <seealso cref="Result"/>
-    /// <seealso cref="DefaultResultWebNavigator"/>
-    /// <seealso cref="Page.SetResult(string, object)"/>
-    /// <seealso cref="UserControl.SetResult(string, object)"/>
-    /// <author>Erich Eichinger</author>
-    public interface IResult
-    {
-        /// <summary>
-        /// Execute the result logic within the given <paramref name="context"/>.
-        /// </summary>
-        /// <param name="context">the context to evaluate this request in.</param>
-        void Navigate( object context );
-        /// <summary>
-        /// Returns an url representation of the result logic within the given <paramref name="context"/>.
-        /// </summary>
-        /// <param name="context">the context to evaluate this request in.</param>
-        /// <returns>the url corresponding to the result instance.</returns>
-        /// <remarks>
-        /// The returned url is not necessarily fully qualified nor absolute. Returned urls may be relative to the
-        /// given context.<br/>
-        /// To produce a client-usable url, consider applying e.g. <see cref="System.Web.UI.Control.ResolveUrl"/> or 
-        /// <see cref="System.Web.UI.Control.ResolveClientUrl"/> before writing the result url to the response.
-        /// </remarks>
-        string GetRedirectUri( object context );
-    }
+    string GetRedirectUri(object context);
 }

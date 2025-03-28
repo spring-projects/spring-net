@@ -20,104 +20,105 @@
 
 using System.Runtime.Serialization;
 
-namespace Spring.Transaction
+namespace Spring.Transaction;
+
+/// <summary>
+/// Exception that represents a transaction failure caused by heuristics.
+/// </summary>
+/// <author>Rod Johnson</author>
+/// <author>Juergen Hoeller</author>
+/// <author>Griffin Caprio (.NET)</author>
+[Serializable]
+public class HeuristicCompletionException : TransactionException, ISerializable
 {
-	/// <summary>
-	/// Exception that represents a transaction failure caused by heuristics.
-	/// </summary>
-	/// <author>Rod Johnson</author>
-	/// <author>Juergen Hoeller</author>
-	/// <author>Griffin Caprio (.NET)</author>
-	[Serializable]
-	public class HeuristicCompletionException : TransactionException, ISerializable
-	{
-		/// <summary>
-		/// The outcome state of the transaction: have some or all resources been committed?
-		/// </summary>
-		private TransactionOutcomeState _outcomeState = TransactionOutcomeState.Unknown;
+    /// <summary>
+    /// The outcome state of the transaction: have some or all resources been committed?
+    /// </summary>
+    private TransactionOutcomeState _outcomeState = TransactionOutcomeState.Unknown;
 
-		/// <summary>
-		/// Returns the transaction's outcome state.
-		/// </summary>
-		public TransactionOutcomeState OutcomeState
-		{
-			get { return _outcomeState; }
-		}
+    /// <summary>
+    /// Returns the transaction's outcome state.
+    /// </summary>
+    public TransactionOutcomeState OutcomeState
+    {
+        get { return _outcomeState; }
+    }
 
-		/// <summary>
-		/// Returns a <see cref="System.String"/> representation of the supplied
-		/// <see cref="Spring.Transaction.TransactionOutcomeState"/>.
-		/// </summary>
-		/// <param name="outcomeState">
-		/// The <see cref="Spring.Transaction.TransactionOutcomeState"/> value that
-		/// is to be stringified.
-		/// </param>
-		/// <returns>A <see cref="System.String"/> representation.</returns>
-		public static string GetStateString( TransactionOutcomeState outcomeState )
-		{
-			return Enum.GetName (typeof (TransactionOutcomeState), outcomeState);
-		}
-		
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Transaction.CannotCreateTransactionException"/> class.
-		/// </summary>
-		public HeuristicCompletionException( ) {}
+    /// <summary>
+    /// Returns a <see cref="System.String"/> representation of the supplied
+    /// <see cref="Spring.Transaction.TransactionOutcomeState"/>.
+    /// </summary>
+    /// <param name="outcomeState">
+    /// The <see cref="Spring.Transaction.TransactionOutcomeState"/> value that
+    /// is to be stringified.
+    /// </param>
+    /// <returns>A <see cref="System.String"/> representation.</returns>
+    public static string GetStateString(TransactionOutcomeState outcomeState)
+    {
+        return Enum.GetName(typeof(TransactionOutcomeState), outcomeState);
+    }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Transaction.CannotCreateTransactionException"/> class.
-		/// </summary>
-		/// <param name="message">
-		/// A message about the exception.
-		/// </param>
-		public HeuristicCompletionException( string message ) : base( message ) {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Transaction.CannotCreateTransactionException"/> class.
+    /// </summary>
+    public HeuristicCompletionException() { }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Transaction.CannotCreateTransactionException"/> class.
-		/// </summary>
-		/// <param name="message">
-		/// A message about the exception.
-		/// </param>
-		/// <param name="rootCause">
-		/// The root exception that is being wrapped.
-		/// </param>
-		public HeuristicCompletionException( string message, Exception rootCause )
-			: base( message, rootCause ) {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Transaction.CannotCreateTransactionException"/> class.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    public HeuristicCompletionException(string message) : base(message) { }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Transaction.CannotCreateTransactionException"/> class
-		/// with the specified <see cref="Spring.Transaction.TransactionOutcomeState"/>
-		/// and inner exception.
-		/// </summary>
-		/// <param name="outcomeState">
-		/// The <see cref="Spring.Transaction.TransactionOutcomeState"/>
-		/// for the transaction.
-		/// </param>
-		/// <param name="innerException">
-		/// The inner exception that is being wrapped.
-		/// </param>
-		public HeuristicCompletionException(
-			TransactionOutcomeState outcomeState, Exception innerException)
-			: base( "Heuristic completion: outcome state is " + GetStateString(outcomeState), innerException )
-		{
-			_outcomeState = outcomeState;
-		}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Transaction.CannotCreateTransactionException"/> class.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    /// <param name="rootCause">
+    /// The root exception that is being wrapped.
+    /// </param>
+    public HeuristicCompletionException(string message, Exception rootCause)
+        : base(message, rootCause)
+    {
+    }
 
-		/// <inheritdoc />
-		protected HeuristicCompletionException( SerializationInfo info, StreamingContext context )
-			: base( info, context ) 
-		{
-			_outcomeState = ( TransactionOutcomeState ) info.GetInt32( "outcomeState" );
-		}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Transaction.CannotCreateTransactionException"/> class
+    /// with the specified <see cref="Spring.Transaction.TransactionOutcomeState"/>
+    /// and inner exception.
+    /// </summary>
+    /// <param name="outcomeState">
+    /// The <see cref="Spring.Transaction.TransactionOutcomeState"/>
+    /// for the transaction.
+    /// </param>
+    /// <param name="innerException">
+    /// The inner exception that is being wrapped.
+    /// </param>
+    public HeuristicCompletionException(
+        TransactionOutcomeState outcomeState, Exception innerException)
+        : base("Heuristic completion: outcome state is " + GetStateString(outcomeState), innerException)
+    {
+        _outcomeState = outcomeState;
+    }
 
-		/// <inheritdoc />
-		public override void GetObjectData(SerializationInfo info, StreamingContext context)
-		{
-			info.AddValue( "outcomeState", _outcomeState );
-			base.GetObjectData (info, context);
-		}
-	}
+    /// <inheritdoc />
+    protected HeuristicCompletionException(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+        _outcomeState = (TransactionOutcomeState) info.GetInt32("outcomeState");
+    }
+
+    /// <inheritdoc />
+    public override void GetObjectData(SerializationInfo info, StreamingContext context)
+    {
+        info.AddValue("outcomeState", _outcomeState);
+        base.GetObjectData(info, context);
+    }
 }

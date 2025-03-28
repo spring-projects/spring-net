@@ -14,59 +14,57 @@
  * limitations under the License.
  */
 
-namespace Spring.Scheduling.Quartz
+namespace Spring.Scheduling.Quartz;
+
+/// <summary>
+/// Simple test task.
+/// </summary>
+/// <author>Juergen Hoeller</author>
+public class TestMethodInvokingTask
 {
+    /// <summary>
+    /// Counter for DoSomething and DoWait calls.
+    /// </summary>
+    public int counter;
+
+    private readonly object lockObject = new object();
 
     /// <summary>
-    /// Simple test task.
+    /// Simple test method.
     /// </summary>
-    /// <author>Juergen Hoeller</author>
-    public class TestMethodInvokingTask
+    public void DoSomething()
     {
-        /// <summary>
-        /// Counter for DoSomething and DoWait calls.
-        /// </summary>
-        public int counter;
-        private readonly object lockObject = new object();
+        counter++;
+    }
 
-        /// <summary>
-        /// Simple test method.
-        /// </summary>
-        public void DoSomething()
+    /// <summary>
+    /// Waits until stop is called.
+    /// </summary>
+    public void DoWait()
+    {
+        counter++;
+        // wait until stop is called
+        lock (lockObject)
         {
-            counter++;
-        }
-
-        /// <summary>
-        /// Waits until stop is called.
-        /// </summary>
-        public void DoWait()
-        {
-            counter++;
-            // wait until stop is called
-            lock (lockObject)
+            try
             {
-                try
-                {
-                    Monitor.Wait(lockObject);
-                }
-                catch (ThreadInterruptedException)
-                {
-                    // fall through
-                }
+                Monitor.Wait(lockObject);
+            }
+            catch (ThreadInterruptedException)
+            {
+                // fall through
             }
         }
+    }
 
-        /// <summary>
-        /// Informs test object that stop should be called.
-        /// </summary>
-        public void Stop()
+    /// <summary>
+    /// Informs test object that stop should be called.
+    /// </summary>
+    public void Stop()
+    {
+        lock (lockObject)
         {
-            lock (lockObject)
-            {
-                Monitor.Pulse(lockObject);
-            }
+            Monitor.Pulse(lockObject);
         }
-
     }
 }

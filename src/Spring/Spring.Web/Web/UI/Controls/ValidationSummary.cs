@@ -24,23 +24,22 @@ using Spring.Web.UI.Validation;
 
 #endregion
 
-namespace Spring.Web.UI.Controls
+namespace Spring.Web.UI.Controls;
+
+/// <summary>
+/// This control should be used instead of standard ValidationSummary control
+/// to display validation errors identified by the Spring.NET validation framework.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+/// <author>Jonathan Allenby</author>
+public class ValidationSummary : AbstractValidationControl
 {
     /// <summary>
-    /// This control should be used instead of standard ValidationSummary control
-    /// to display validation errors identified by the Spring.NET validation framework.
+    /// Create the default <see cref="DivValidationErrorsRenderer"/> 
+    /// for this ValidationControl if none is configured.
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    /// <author>Jonathan Allenby</author>
-    public class ValidationSummary : AbstractValidationControl
+    protected override IValidationErrorsRenderer CreateValidationErrorsRenderer()
     {
-        /// <summary>
-        /// Create the default <see cref="DivValidationErrorsRenderer"/> 
-        /// for this ValidationControl if none is configured.
-        /// </summary>
-        protected override IValidationErrorsRenderer CreateValidationErrorsRenderer()
-        {
-            return new DivValidationErrorsRenderer();
-        }
+        return new DivValidationErrorsRenderer();
     }
 }

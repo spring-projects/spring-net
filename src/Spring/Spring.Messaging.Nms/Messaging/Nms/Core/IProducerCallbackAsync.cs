@@ -1,4 +1,5 @@
 #region License
+
 // /*
 //  * Copyright 2022 the original author or authors.
 //  *
@@ -14,28 +15,27 @@
 //  * See the License for the specific language governing permissions and
 //  * limitations under the License.
 //  */
+
 #endregion
 
 using Apache.NMS;
 
-namespace Spring.Messaging.Nms.Core
+namespace Spring.Messaging.Nms.Core;
+
+/// <summary>
+/// Async version of IProducerCallback
+/// </summary>
+/// <see cref="IProducerCallback"/>
+public interface IProducerCallbackAsync
 {
-    /// <summary>
-    /// Async version of IProducerCallback
+    /// <summary> Perform operations on the given Session and MessageProducer.
+    /// The message producer is not associated with any destination.
     /// </summary>
-    /// <see cref="IProducerCallback"/>
-    public interface IProducerCallbackAsync
-    {
-        /// <summary> Perform operations on the given Session and MessageProducer.
-        /// The message producer is not associated with any destination.
-        /// </summary>
-        /// <param name="session">the NMS <code>Session</code> object to use
-        /// </param>
-        /// <param name="producer">the NMS <code>MessageProducer</code> object to use
-        /// </param>
-        /// <returns> a result object from working with the <code>Session</code>, if any (can be <code>null</code>) 
-        /// </returns>
-        Task<object> DoInNms(ISession session, IMessageProducer producer);
-	
-    }
+    /// <param name="session">the NMS <code>Session</code> object to use
+    /// </param>
+    /// <param name="producer">the NMS <code>MessageProducer</code> object to use
+    /// </param>
+    /// <returns> a result object from working with the <code>Session</code>, if any (can be <code>null</code>)
+    /// </returns>
+    Task<object> DoInNms(ISession session, IMessageProducer producer);
 }

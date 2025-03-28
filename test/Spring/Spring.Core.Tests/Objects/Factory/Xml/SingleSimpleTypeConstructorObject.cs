@@ -1,5 +1,3 @@
-
-
 #region License
 
 /*
@@ -20,67 +18,63 @@
 
 #endregion
 
-namespace Spring.Objects.Factory.Xml
+namespace Spring.Objects.Factory.Xml;
+
+/// <summary>
+/// Simple object used to test object creation via constuctors with
+/// simple types.
+/// </summary>
+/// <author>Jurgen Hoeller</author>
+/// <author>Mark Pollack (.NET)</author>
+public class SingleSimpleTypeConstructorObject
 {
-	/// <summary>
-	/// Simple object used to test object creation via constuctors with
-	/// simple types.
-	/// </summary>
-	/// <author>Jurgen Hoeller</author>
-	/// <author>Mark Pollack (.NET)</author>
-	public class SingleSimpleTypeConstructorObject
-	{
-		private bool singleBoolean;
+    private bool singleBoolean;
 
-		private bool secondBoolean;
+    private bool secondBoolean;
 
-		private string testString;
+    private string testString;
 
-		/// <summary>
-		/// Create an instance using the singleBoolean
-		/// </summary>
-		/// <param name="singleBoolean">true or false</param>
-		public SingleSimpleTypeConstructorObject(bool singleBoolean)
-		{
-			this.singleBoolean = singleBoolean;
-		}
+    /// <summary>
+    /// Create an instance using the singleBoolean
+    /// </summary>
+    /// <param name="singleBoolean">true or false</param>
+    public SingleSimpleTypeConstructorObject(bool singleBoolean)
+    {
+        this.singleBoolean = singleBoolean;
+    }
 
-		/// <summary>
-		/// Create an instance using the second boolean and a string
-		/// </summary>
-		/// <param name="testString">test value</param>
-		/// <param name="secondBoolean">true or false</param>
-		public SingleSimpleTypeConstructorObject(string testString, bool secondBoolean)
-		{
-			this.testString = testString;
-			this.secondBoolean = secondBoolean;
-		}
+    /// <summary>
+    /// Create an instance using the second boolean and a string
+    /// </summary>
+    /// <param name="testString">test value</param>
+    /// <param name="secondBoolean">true or false</param>
+    public SingleSimpleTypeConstructorObject(string testString, bool secondBoolean)
+    {
+        this.testString = testString;
+        this.secondBoolean = secondBoolean;
+    }
 
+    /// <summary>
+    /// Property TestString (string)
+    /// </summary>
+    public string TestString
+    {
+        get { return this.testString; }
+    }
 
-		/// <summary>
-		/// Property TestString (string)
-		/// </summary>
-		public string TestString
-		{
-			get { return this.testString; }
-		}
+    /// <summary>
+    /// Property SecondBoolean (bool)
+    /// </summary>
+    public bool SecondBoolean
+    {
+        get { return this.secondBoolean; }
+    }
 
-		/// <summary>
-		/// Property SecondBoolean (bool)
-		/// </summary>
-		public bool SecondBoolean
-		{
-			get { return this.secondBoolean; }
-		}
-
-		/// <summary>
-		/// Property SingleBoolean (bool)
-		/// </summary>
-		public bool SingleBoolean
-		{
-			get { return this.singleBoolean; }
-		}
-
-
-	}
+    /// <summary>
+    /// Property SingleBoolean (bool)
+    /// </summary>
+    public bool SingleBoolean
+    {
+        get { return this.singleBoolean; }
+    }
 }

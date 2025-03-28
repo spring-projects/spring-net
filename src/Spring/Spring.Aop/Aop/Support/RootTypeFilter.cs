@@ -24,55 +24,54 @@ using Spring.Util;
 
 #endregion
 
-namespace Spring.Aop.Support
+namespace Spring.Aop.Support;
+
+/// <summary>
+/// Simple <see cref="Spring.Aop.ITypeFilter"/> implementation that matches
+/// all classes classes (and any derived subclasses) of a give root
+/// <see cref="System.Type"/>.
+/// </summary>
+/// <author>Rod Johnson</author>
+/// <author>Aleksandar Seovic (.NET)</author>
+[Serializable]
+public class RootTypeFilter : ITypeFilter
 {
-	/// <summary>
-	/// Simple <see cref="Spring.Aop.ITypeFilter"/> implementation that matches
-	/// all classes classes (and any derived subclasses) of a give root
-	/// <see cref="System.Type"/>.
-	/// </summary>
-	/// <author>Rod Johnson</author>
-	/// <author>Aleksandar Seovic (.NET)</author>
-    [Serializable]
-    public class RootTypeFilter : ITypeFilter
-	{
-		private Type _rootType;
+    private Type _rootType;
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="RootTypeFilter"/> for the supplied
-		/// <paramref name="rootType"/>.
-		/// </summary>
-		/// <param name="rootType">The root <see cref="System.Type"/>.</param>
-		/// <exception cref="System.ArgumentNullException">
-		/// If the supplied <paramref name="rootType"/> is <see langword="null"/>.
-		/// </exception>
-		public RootTypeFilter(Type rootType)
-		{
-			AssertUtils.ArgumentNotNull(rootType, "rootType");
-			_rootType = rootType;
-		}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="RootTypeFilter"/> for the supplied
+    /// <paramref name="rootType"/>.
+    /// </summary>
+    /// <param name="rootType">The root <see cref="System.Type"/>.</param>
+    /// <exception cref="System.ArgumentNullException">
+    /// If the supplied <paramref name="rootType"/> is <see langword="null"/>.
+    /// </exception>
+    public RootTypeFilter(Type rootType)
+    {
+        AssertUtils.ArgumentNotNull(rootType, "rootType");
+        _rootType = rootType;
+    }
 
-		/// <summary>
-		/// Should the pointcut apply to the supplied
-		/// <see cref="System.Type"/>?
-		/// </summary>
-		/// <remarks>
-		/// <p>
-		/// Returns <see langword="true"/> if the supplied <paramref name="type"/>
-		/// can be assigned to the root <see cref="System.Type"/>.
-		/// </p>
-		/// </remarks>
-		/// <param name="type">
-		/// The candidate <see cref="System.Type"/>.
-		/// </param>
-		/// <returns>
-		/// <see langword="true"/> if the advice should apply to the supplied
-		/// <paramref name="type"/>
-		/// </returns>
-		public virtual bool Matches(Type type)
-		{
-			return _rootType.IsAssignableFrom(type);
-		}
-	}
+    /// <summary>
+    /// Should the pointcut apply to the supplied
+    /// <see cref="System.Type"/>?
+    /// </summary>
+    /// <remarks>
+    /// <p>
+    /// Returns <see langword="true"/> if the supplied <paramref name="type"/>
+    /// can be assigned to the root <see cref="System.Type"/>.
+    /// </p>
+    /// </remarks>
+    /// <param name="type">
+    /// The candidate <see cref="System.Type"/>.
+    /// </param>
+    /// <returns>
+    /// <see langword="true"/> if the advice should apply to the supplied
+    /// <paramref name="type"/>
+    /// </returns>
+    public virtual bool Matches(Type type)
+    {
+        return _rootType.IsAssignableFrom(type);
+    }
 }

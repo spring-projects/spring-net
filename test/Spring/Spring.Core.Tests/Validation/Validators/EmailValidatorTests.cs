@@ -24,32 +24,31 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Validation.Validators
-{
-    /// <summary>
-    /// Unit tests for the EmailValidator class.
-    /// </summary>
-    /// <author>Goran Milosavljevic</author>
-    [TestFixture]
-    public sealed class EmailValidatorTests
-    {              
-        [Test]
-        public void Validate()
-        {
-            EmailValidator validator = new EmailValidator();
-            Assert.IsTrue(validator.Validate("goran@eu.s4hc.com", new ValidationErrors()));
-            Assert.IsTrue(validator.Validate("goran.milosavljevic@s4hc.com", new ValidationErrors()));
-            Assert.IsTrue(validator.Validate("g.m.m@web_ask.com", new ValidationErrors()));
+namespace Spring.Validation.Validators;
 
-            Assert.IsFalse(validator.Validate("@eu.s4hc.com", new ValidationErrors()));
-            Assert.IsFalse(validator.Validate("g @s4hc.com", new ValidationErrors()));
-            Assert.IsFalse(validator.Validate("g&@s", new ValidationErrors()));
-            Assert.IsFalse(validator.Validate("goran@s", new ValidationErrors()));
-            Assert.IsFalse(validator.Validate("goran@@", new ValidationErrors()));             
-            Assert.IsFalse(validator.Validate("goran@eu s4hc.com", new ValidationErrors()));             
-            Assert.IsTrue(validator.Validate(" ", new ValidationErrors()));
-            Assert.IsTrue(validator.Validate("", new ValidationErrors()));             
-            Assert.IsTrue(validator.Validate(null, new ValidationErrors()));             
-        }
+/// <summary>
+/// Unit tests for the EmailValidator class.
+/// </summary>
+/// <author>Goran Milosavljevic</author>
+[TestFixture]
+public sealed class EmailValidatorTests
+{
+    [Test]
+    public void Validate()
+    {
+        EmailValidator validator = new EmailValidator();
+        Assert.IsTrue(validator.Validate("goran@eu.s4hc.com", new ValidationErrors()));
+        Assert.IsTrue(validator.Validate("goran.milosavljevic@s4hc.com", new ValidationErrors()));
+        Assert.IsTrue(validator.Validate("g.m.m@web_ask.com", new ValidationErrors()));
+
+        Assert.IsFalse(validator.Validate("@eu.s4hc.com", new ValidationErrors()));
+        Assert.IsFalse(validator.Validate("g @s4hc.com", new ValidationErrors()));
+        Assert.IsFalse(validator.Validate("g&@s", new ValidationErrors()));
+        Assert.IsFalse(validator.Validate("goran@s", new ValidationErrors()));
+        Assert.IsFalse(validator.Validate("goran@@", new ValidationErrors()));
+        Assert.IsFalse(validator.Validate("goran@eu s4hc.com", new ValidationErrors()));
+        Assert.IsTrue(validator.Validate(" ", new ValidationErrors()));
+        Assert.IsTrue(validator.Validate("", new ValidationErrors()));
+        Assert.IsTrue(validator.Validate(null, new ValidationErrors()));
     }
 }

@@ -18,64 +18,63 @@
 
 #endregion
 
-namespace Spring.Aop.Support
+namespace Spring.Aop.Support;
+
+/// <summary>
+/// Convenient superclass when one wants to force subclasses to
+/// implement the <see cref="Spring.Aop.IMethodMatcher"/> interface
+/// but subclasses will still want to be pointcuts.
+/// </summary>
+/// <remarks>
+/// <p>
+/// The <see cref="Spring.Aop.Support.StaticMethodMatcherPointcut.TypeFilter"/>
+/// property can be overriden to customize <see cref="System.Type"/> filter
+/// behavior as well.
+/// </p>
+/// </remarks>
+/// <author>Rod Johnson</author>
+/// <author>Aleksandar Seovic (.NET)</author>
+/// <author>Mark Pollack (.NET)</author>
+[Serializable]
+public abstract class StaticMethodMatcherPointcut : StaticMethodMatcher, IPointcut
 {
-	/// <summary>
-	/// Convenient superclass when one wants to force subclasses to
-	/// implement the <see cref="Spring.Aop.IMethodMatcher"/> interface
-	/// but subclasses will still want to be pointcuts.
-	/// </summary>
-	/// <remarks>
-	/// <p>
-	/// The <see cref="Spring.Aop.Support.StaticMethodMatcherPointcut.TypeFilter"/>
-	/// property can be overriden to customize <see cref="System.Type"/> filter
-	/// behavior as well.
-	/// </p>
-	/// </remarks>
-	/// <author>Rod Johnson</author>
-	/// <author>Aleksandar Seovic (.NET)</author>
-	/// <author>Mark Pollack (.NET)</author>
-	[Serializable]
-	public abstract class StaticMethodMatcherPointcut : StaticMethodMatcher, IPointcut
-	{
-	    private ITypeFilter typeFilter = TrueTypeFilter.True;
+    private ITypeFilter typeFilter = TrueTypeFilter.True;
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Aop.Support.AbstractRegularExpressionMethodPointcut"/>
-		/// class.
-		/// </summary>
-		/// <remarks>
-		/// <p>
-		/// This is an abstract class, and as such has no publicly
-		/// visible constructors.
-		/// </p>
-		/// </remarks>
-		protected StaticMethodMatcherPointcut()
-		{
-		}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Aop.Support.AbstractRegularExpressionMethodPointcut"/>
+    /// class.
+    /// </summary>
+    /// <remarks>
+    /// <p>
+    /// This is an abstract class, and as such has no publicly
+    /// visible constructors.
+    /// </p>
+    /// </remarks>
+    protected StaticMethodMatcherPointcut()
+    {
+    }
 
-		/// <summary>
-		/// The <see cref="Spring.Aop.ITypeFilter"/> for this pointcut.
-		/// </summary>
-		/// <value>
-		/// The current <see cref="Spring.Aop.ITypeFilter"/>.
-		/// </value>
-		public virtual ITypeFilter TypeFilter
-		{
-            get { return typeFilter; }
-            set { typeFilter = value;}
-		}
+    /// <summary>
+    /// The <see cref="Spring.Aop.ITypeFilter"/> for this pointcut.
+    /// </summary>
+    /// <value>
+    /// The current <see cref="Spring.Aop.ITypeFilter"/>.
+    /// </value>
+    public virtual ITypeFilter TypeFilter
+    {
+        get { return typeFilter; }
+        set { typeFilter = value; }
+    }
 
-		/// <summary>
-		/// The <see cref="Spring.Aop.IMethodMatcher"/> for this pointcut.
-		/// </summary>
-		/// <value>
-		/// The current <see cref="Spring.Aop.IMethodMatcher"/>.
-		/// </value>
-		public virtual IMethodMatcher MethodMatcher
-		{
-			get { return this; }
-		}
-	}
+    /// <summary>
+    /// The <see cref="Spring.Aop.IMethodMatcher"/> for this pointcut.
+    /// </summary>
+    /// <value>
+    /// The current <see cref="Spring.Aop.IMethodMatcher"/>.
+    /// </value>
+    public virtual IMethodMatcher MethodMatcher
+    {
+        get { return this; }
+    }
 }

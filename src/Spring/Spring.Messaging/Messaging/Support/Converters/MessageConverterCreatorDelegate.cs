@@ -20,11 +20,10 @@
 
 using Spring.Messaging.Core;
 
-namespace Spring.Messaging.Support.Converters
-{
-    /// <summary>
-    /// Delegate for creating IMessageConverter instance.  Used by <see cref="DefaultMessageQueueFactory"/>
-    /// to register a creation function with a given name.
-    /// </summary>
-    public delegate IMessageConverter MessageConverterCreatorDelegate();
-}
+namespace Spring.Messaging.Support.Converters;
+
+/// <summary>
+/// Delegate for creating IMessageConverter instance.  Used by <see cref="DefaultMessageQueueFactory"/>
+/// to register a creation function with a given name.
+/// </summary>
+public delegate IMessageConverter MessageConverterCreatorDelegate();

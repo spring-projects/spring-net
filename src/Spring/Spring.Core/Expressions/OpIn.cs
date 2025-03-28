@@ -21,60 +21,59 @@
 using System.Collections;
 using System.Runtime.Serialization;
 
-namespace Spring.Expressions
+namespace Spring.Expressions;
+
+/// <summary>
+/// Represents logical IN operator.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[Serializable]
+public class OpIn : BinaryOperator
 {
     /// <summary>
-    /// Represents logical IN operator.
+    /// Create a new instance
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    [Serializable]
-    public class OpIn : BinaryOperator
+    public OpIn() : base()
     {
-        /// <summary>
-        /// Create a new instance
-        /// </summary>
-        public OpIn():base()
+    }
+
+    /// <summary>
+    /// Create a new instance from SerializationInfo
+    /// </summary>
+    protected OpIn(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+    }
+
+    /// <summary>
+    /// Returns a value for the logical IN operator node.
+    /// </summary>
+    /// <param name="context">Context to evaluate expressions against.</param>
+    /// <param name="evalContext">Current expression evaluation context.</param>
+    /// <returns>
+    /// true if the left operand is contained within the right operand, false otherwise.
+    /// </returns>
+    protected override object Get(object context, EvaluationContext evalContext)
+    {
+        object left = GetLeftValue(context, evalContext);
+        object right = GetRightValue(context, evalContext);
+
+        if (right == null)
         {
+            return false;
         }
-
-        /// <summary>
-        /// Create a new instance from SerializationInfo
-        /// </summary>
-        protected OpIn(SerializationInfo info, StreamingContext context)
-            : base(info, context)
+        else if (right is IList)
         {
+            return ((IList) right).Contains(left);
         }
-
-        /// <summary>
-        /// Returns a value for the logical IN operator node.
-        /// </summary>
-        /// <param name="context">Context to evaluate expressions against.</param>
-        /// <param name="evalContext">Current expression evaluation context.</param>
-        /// <returns>
-        /// true if the left operand is contained within the right operand, false otherwise.
-        /// </returns>
-        protected override object Get(object context, EvaluationContext evalContext)
+        else if (right is IDictionary)
         {
-            object left = GetLeftValue( context, evalContext );
-            object right = GetRightValue( context, evalContext );
-
-            if (right == null)
-            {
-                return false;
-            }
-            else if (right is IList)
-            {
-                return ((IList) right).Contains(left);
-            }
-            else if (right is IDictionary)
-            {
-                return ((IDictionary) right).Contains(left);
-            }
-            else
-            {
-                throw new ArgumentException(
-                    "Right hand parameter for 'in' operator has to be an instance of IList or IDictionary.");
-            }
+            return ((IDictionary) right).Contains(left);
+        }
+        else
+        {
+            throw new ArgumentException(
+                "Right hand parameter for 'in' operator has to be an instance of IList or IDictionary.");
         }
     }
 }

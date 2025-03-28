@@ -21,76 +21,74 @@
 #region Imports
 
 using System.Reflection;
-
 using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Core
+namespace Spring.Core;
+
+/// <summary>
+/// Unit tests for the MethodGenericArgumentsCountCriteria class.
+/// </summary>
+/// <author>Bruno Baia</author>
+[TestFixture]
+public sealed class MethodGenericArgumentsCountCriteriaTests
 {
-	/// <summary>
-    /// Unit tests for the MethodGenericArgumentsCountCriteria class.
-    /// </summary>
-    /// <author>Bruno Baia</author>
-	[TestFixture]
-    public sealed class MethodGenericArgumentsCountCriteriaTests
+    [Test]
+    public void Instantiation()
     {
-        [Test]
-        public void Instantiation () 
-        {
-            MethodGenericArgumentsCountCriteria criteria = new MethodGenericArgumentsCountCriteria();
-            Assert.AreEqual (0, criteria.ExpectedGenericArgumentCount);
-            criteria = new MethodGenericArgumentsCountCriteria(10);
-            Assert.AreEqual(10, criteria.ExpectedGenericArgumentCount);
-        }
+        MethodGenericArgumentsCountCriteria criteria = new MethodGenericArgumentsCountCriteria();
+        Assert.AreEqual(0, criteria.ExpectedGenericArgumentCount);
+        criteria = new MethodGenericArgumentsCountCriteria(10);
+        Assert.AreEqual(10, criteria.ExpectedGenericArgumentCount);
+    }
 
-        [Test]
-        public void InstantiationBailsWithGenericArgumentCountSetToLessThanZero () 
-        {
-            Assert.Throws<ArgumentOutOfRangeException>(() => new MethodGenericArgumentsCountCriteria(-10));
-        }
+    [Test]
+    public void InstantiationBailsWithGenericArgumentCountSetToLessThanZero()
+    {
+        Assert.Throws<ArgumentOutOfRangeException>(() => new MethodGenericArgumentsCountCriteria(-10));
+    }
 
-        [Test]
-        public void BailsWhenExpectedGenericArgumentCountSetToLessThanZero() 
-        {
-            MethodGenericArgumentsCountCriteria criteria = new MethodGenericArgumentsCountCriteria();
-            Assert.Throws<ArgumentOutOfRangeException>(() => criteria.ExpectedGenericArgumentCount = -12);
-        }
+    [Test]
+    public void BailsWhenExpectedGenericArgumentCountSetToLessThanZero()
+    {
+        MethodGenericArgumentsCountCriteria criteria = new MethodGenericArgumentsCountCriteria();
+        Assert.Throws<ArgumentOutOfRangeException>(() => criteria.ExpectedGenericArgumentCount = -12);
+    }
 
-        [Test]
-        public void IsSatisfied () 
-        {
-            MethodGenericArgumentsCountCriteria criteria = new MethodGenericArgumentsCountCriteria();
-            MethodInfo method = GetType().GetMethod("NoGenericArgument", BindingFlags.Public | BindingFlags.Instance);
-            Assert.IsTrue(criteria.IsSatisfied(method));
+    [Test]
+    public void IsSatisfied()
+    {
+        MethodGenericArgumentsCountCriteria criteria = new MethodGenericArgumentsCountCriteria();
+        MethodInfo method = GetType().GetMethod("NoGenericArgument", BindingFlags.Public | BindingFlags.Instance);
+        Assert.IsTrue(criteria.IsSatisfied(method));
 
-            criteria = new MethodGenericArgumentsCountCriteria(1);
-            method = GetType().GetMethod("OneGenericArgument", BindingFlags.Public | BindingFlags.Instance);
-            Assert.IsTrue (criteria.IsSatisfied (method));
+        criteria = new MethodGenericArgumentsCountCriteria(1);
+        method = GetType().GetMethod("OneGenericArgument", BindingFlags.Public | BindingFlags.Instance);
+        Assert.IsTrue(criteria.IsSatisfied(method));
 
-            criteria = new MethodGenericArgumentsCountCriteria(2);
-            method = GetType().GetMethod("TwoGenericArguments", BindingFlags.Public | BindingFlags.Instance);
-            Assert.IsTrue (criteria.IsSatisfied (method));
-        }
+        criteria = new MethodGenericArgumentsCountCriteria(2);
+        method = GetType().GetMethod("TwoGenericArguments", BindingFlags.Public | BindingFlags.Instance);
+        Assert.IsTrue(criteria.IsSatisfied(method));
+    }
 
-        [Test]
-        public void IsNotSatisfiedWithNull () 
-        {
-            MethodGenericArgumentsCountCriteria criteria = new MethodGenericArgumentsCountCriteria();
-            Assert.IsFalse (criteria.IsSatisfied (null));
-        }
+    [Test]
+    public void IsNotSatisfiedWithNull()
+    {
+        MethodGenericArgumentsCountCriteria criteria = new MethodGenericArgumentsCountCriteria();
+        Assert.IsFalse(criteria.IsSatisfied(null));
+    }
 
-        // some methods for testing signatures...
-        public void NoGenericArgument()
-        {
-        }
+    // some methods for testing signatures...
+    public void NoGenericArgument()
+    {
+    }
 
-        public void OneGenericArgument<T>()
-        {
-        }
+    public void OneGenericArgument<T>()
+    {
+    }
 
-        public void TwoGenericArguments<T,U>()
-        {
-        }
-	}
+    public void TwoGenericArguments<T, U>()
+    {
+    }
 }

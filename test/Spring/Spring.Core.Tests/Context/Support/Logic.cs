@@ -20,28 +20,25 @@
 
 using Spring.Objects.Factory;
 
-namespace Spring.Context.Support
+namespace Spring.Context.Support;
+
+/// <author>Mark Pollack</author>
+public class Logic : IObjectNameAware
 {
-    /// <author>Mark Pollack</author>
-    public class Logic : IObjectNameAware
+    private string objectName;
+    private Assembler assembler;
+
+    public Assembler Assembler
     {
-        
-        private string objectName;
-        private Assembler assembler;
-
-
-        public Assembler Assembler
-        {
-            set { assembler = value; }
-        }
-
-        #region IObjectNameAware Members
-
-        public string ObjectName
-        {
-            set { objectName = value; }
-        }
-
-        #endregion
+        set { assembler = value; }
     }
+
+    #region IObjectNameAware Members
+
+    public string ObjectName
+    {
+        set { objectName = value; }
+    }
+
+    #endregion
 }

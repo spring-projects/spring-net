@@ -20,36 +20,35 @@
 
 using System.Data;
 
-namespace Spring.Data
+namespace Spring.Data;
+
+/// <summary>
+/// Callback to process each row of data in a result set to an object.
+/// </summary>
+/// <remarks>Implementations of this interface perform the actual work
+/// of mapping rows, but don't need worry about managing
+/// ADO.NET resources, such as closing the reader.
+/// <p>
+/// Typically used for AdoTemplate's query methods (with RowMapperResultSetExtractor
+/// adapters).  RowMapper objects are typically stateless and thus
+/// reusable; they are ideal choices for implementing row-mapping logic in a single
+/// place.
+/// </p>
+/// <p>Alternatively, consider subclassing MappingSqlQuery from the Spring.Data.Object
+/// namespace:  Instead of working with separate AdoTemplate and RowMapper objects,
+/// you can have executable query objects (containing row-mapping logic) there.
+/// </p>
+/// </remarks>
+/// <author>Mark Pollack (.NET)</author>
+public interface IRowMapper
 {
-	/// <summary>
-    /// Callback to process each row of data in a result set to an object.
-	/// </summary>
-	/// <remarks>Implementations of this interface perform the actual work
-    /// of mapping rows, but don't need worry about managing
-    /// ADO.NET resources, such as closing the reader.
-	/// <p>
-	/// Typically used for AdoTemplate's query methods (with RowMapperResultSetExtractor
-	/// adapters).  RowMapper objects are typically stateless and thus
-	/// reusable; they are ideal choices for implementing row-mapping logic in a single
-	/// place.
-	/// </p>
-	/// <p>Alternatively, consider subclassing MappingSqlQuery from the Spring.Data.Object
-	/// namespace:  Instead of working with separate AdoTemplate and RowMapper objects,
-	/// you can have executable query objects (containing row-mapping logic) there.
-	/// </p>
-	/// </remarks>
-	/// <author>Mark Pollack (.NET)</author>
-	public interface IRowMapper
-	{
-	    /// <summary>
-	    /// Implementations must implement this method to map each row of data in the
-	    /// result set (DataReader).  This method should not call Next() on the
-	    /// DataReader; it should only extract the values of the current row.
-	    /// </summary>
-	    /// <param name="reader">The IDataReader to map (pre-initialized for the current row)</param>
-	    /// <param name="rowNum">The number of the current row.</param>
-	    /// <returns>The result object for the current row.</returns>
-	    object MapRow(IDataReader reader, int rowNum);
-	}
+    /// <summary>
+    /// Implementations must implement this method to map each row of data in the
+    /// result set (DataReader).  This method should not call Next() on the
+    /// DataReader; it should only extract the values of the current row.
+    /// </summary>
+    /// <param name="reader">The IDataReader to map (pre-initialized for the current row)</param>
+    /// <param name="rowNum">The number of the current row.</param>
+    /// <returns>The result object for the current row.</returns>
+    object MapRow(IDataReader reader, int rowNum);
 }

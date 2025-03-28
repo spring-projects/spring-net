@@ -22,98 +22,97 @@ using NHibernate.Type;
 using Spring.Aop;
 using Spring.Reflection.Dynamic;
 
-namespace Spring.Data.NHibernate.Bytecode
+namespace Spring.Data.NHibernate.Bytecode;
+
+/// <summary>
+///
+/// </summary>
+/// <author>Fabio Maulo</author>
+[Serializable]
+public class LazyInitializer : BasicLazyInitializer, IMethodInterceptor, ITargetSource
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <author>Fabio Maulo</author>
-    [Serializable]
-    public class LazyInitializer : BasicLazyInitializer, IMethodInterceptor, ITargetSource
+    private static readonly MethodInfo exceptionInternalPreserveStackTrace;
+
+    static LazyInitializer()
     {
-        private static readonly MethodInfo exceptionInternalPreserveStackTrace;
-
-        static LazyInitializer()
-        {
-            exceptionInternalPreserveStackTrace = typeof(Exception).GetMethod("InternalPreserveStackTrace", BindingFlags.Instance | BindingFlags.NonPublic);
-        }
-
-        ///<summary>
-        ///</summary>
-        ///<param name="entityName"></param>
-        ///<param name="persistentClass"></param>
-        ///<param name="id"></param>
-        ///<param name="getIdentifierMethod"></param>
-        ///<param name="setIdentifierMethod"></param>
-        ///<param name="componentIdType"></param>
-        ///<param name="session"></param>
-        public LazyInitializer(string entityName, Type persistentClass, object id, MethodInfo getIdentifierMethod,
-            MethodInfo setIdentifierMethod, IAbstractComponentType componentIdType,
-            ISessionImplementor session)
-            : base(
-                entityName,
-                persistentClass,
-                id,
-                getIdentifierMethod,
-                setIdentifierMethod,
-                componentIdType,
-                session,
-                overridesEquals: false
-            )
-        {
-        }
-
-        /// <summary>
-        /// Implement this method to perform extra treatments before and after
-        /// the call to the supplied <paramref name="invocation"/>.
-        /// </summary>
-        /// <remarks>
-        /// <p>
-        /// Polite implementations would certainly like to invoke
-        /// <see cref="AopAlliance.Intercept.IJoinpoint.Proceed"/>. 
-        /// </p>
-        /// </remarks>
-        /// <param name="invocation">
-        /// The method invocation that is being intercepted.
-        /// </param>
-        /// <returns>
-        /// The result of the call to the
-        /// <see cref="AopAlliance.Intercept.IJoinpoint.Proceed"/> method of
-        /// the supplied <paramref name="invocation"/>; this return value may
-        /// well have been intercepted by the interceptor.
-        /// </returns>
-        /// <exception cref="System.Exception">
-        /// If any of the interceptors in the chain or the target object itself
-        /// throws an exception.
-        /// </exception>
-        public object Invoke(IMethodInvocation invocation)
-        {
-            try
-            {
-                MethodInfo methodInfo = invocation.Method;
-                object returnValue = base.Invoke(methodInfo, invocation.Arguments, invocation.Proxy);
-
-                if (returnValue != InvokeImplementation)
-                {
-                    return returnValue;
-                }
-
-                SafeMethod method = new SafeMethod(methodInfo);
-                return method.Invoke(GetImplementation(), invocation.Arguments);
-            }
-            catch (TargetInvocationException ex)
-            {
-                exceptionInternalPreserveStackTrace.Invoke(ex.InnerException, new Object[] { });
-                throw ex.InnerException;
-            }
-        }
-
-        object ITargetSource.GetTarget() => Target;
-
-        void ITargetSource.ReleaseTarget(object target) { }
-
-        Type ITargetSource.TargetType => PersistentClass;
-
-        bool ITargetSource.IsStatic => false;
+        exceptionInternalPreserveStackTrace = typeof(Exception).GetMethod("InternalPreserveStackTrace", BindingFlags.Instance | BindingFlags.NonPublic);
     }
+
+    ///<summary>
+    ///</summary>
+    ///<param name="entityName"></param>
+    ///<param name="persistentClass"></param>
+    ///<param name="id"></param>
+    ///<param name="getIdentifierMethod"></param>
+    ///<param name="setIdentifierMethod"></param>
+    ///<param name="componentIdType"></param>
+    ///<param name="session"></param>
+    public LazyInitializer(string entityName, Type persistentClass, object id, MethodInfo getIdentifierMethod,
+        MethodInfo setIdentifierMethod, IAbstractComponentType componentIdType,
+        ISessionImplementor session)
+        : base(
+            entityName,
+            persistentClass,
+            id,
+            getIdentifierMethod,
+            setIdentifierMethod,
+            componentIdType,
+            session,
+            overridesEquals: false
+        )
+    {
+    }
+
+    /// <summary>
+    /// Implement this method to perform extra treatments before and after
+    /// the call to the supplied <paramref name="invocation"/>.
+    /// </summary>
+    /// <remarks>
+    /// <p>
+    /// Polite implementations would certainly like to invoke
+    /// <see cref="AopAlliance.Intercept.IJoinpoint.Proceed"/>.
+    /// </p>
+    /// </remarks>
+    /// <param name="invocation">
+    /// The method invocation that is being intercepted.
+    /// </param>
+    /// <returns>
+    /// The result of the call to the
+    /// <see cref="AopAlliance.Intercept.IJoinpoint.Proceed"/> method of
+    /// the supplied <paramref name="invocation"/>; this return value may
+    /// well have been intercepted by the interceptor.
+    /// </returns>
+    /// <exception cref="System.Exception">
+    /// If any of the interceptors in the chain or the target object itself
+    /// throws an exception.
+    /// </exception>
+    public object Invoke(IMethodInvocation invocation)
+    {
+        try
+        {
+            MethodInfo methodInfo = invocation.Method;
+            object returnValue = base.Invoke(methodInfo, invocation.Arguments, invocation.Proxy);
+
+            if (returnValue != InvokeImplementation)
+            {
+                return returnValue;
+            }
+
+            SafeMethod method = new SafeMethod(methodInfo);
+            return method.Invoke(GetImplementation(), invocation.Arguments);
+        }
+        catch (TargetInvocationException ex)
+        {
+            exceptionInternalPreserveStackTrace.Invoke(ex.InnerException, new Object[] { });
+            throw ex.InnerException;
+        }
+    }
+
+    object ITargetSource.GetTarget() => Target;
+
+    void ITargetSource.ReleaseTarget(object target) { }
+
+    Type ITargetSource.TargetType => PersistentClass;
+
+    bool ITargetSource.IsStatic => false;
 }

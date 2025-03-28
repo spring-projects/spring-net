@@ -21,57 +21,55 @@
 #region Imports
 
 using System.ComponentModel;
-
 using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Core.TypeConversion
+namespace Spring.Core.TypeConversion;
+
+/// <summary>
+/// Unit tests for the TypeConverterRegistry class.
+/// </summary>
+/// <author>Bruno Baia</author>
+[TestFixture]
+public sealed class TypeConverterRegistryTests
 {
-	/// <summary>
-    /// Unit tests for the TypeConverterRegistry class.
-    /// </summary>
-    /// <author>Bruno Baia</author>
-	[TestFixture]
-    public sealed class TypeConverterRegistryTests
+    [Test]
+    public void GetConverterForEnums()
     {
-        [Test]
-        public void GetConverterForEnums()
-        {
-            TypeConverter converter = TypeConverterRegistry.GetConverter(typeof(DayOfWeek));
-            Assert.IsTrue(converter is EnumConverter);
-        }
+        TypeConverter converter = TypeConverterRegistry.GetConverter(typeof(DayOfWeek));
+        Assert.IsTrue(converter is EnumConverter);
+    }
 
-        [Test]
-        public void GetInternalConverter()
-        {
-            TypeConverter converter = TypeConverterRegistry.GetConverter(typeof(int));
-            Assert.IsTrue(converter is Int32Converter);
-        }
+    [Test]
+    public void GetInternalConverter()
+    {
+        TypeConverter converter = TypeConverterRegistry.GetConverter(typeof(int));
+        Assert.IsTrue(converter is Int32Converter);
+    }
 
-        [Test]
-        public void GetSpringConverter()
-        {
-            TypeConverter converter = TypeConverterRegistry.GetConverter(typeof(string[]));
-            Assert.IsTrue(converter is StringArrayConverter);
-        }
+    [Test]
+    public void GetSpringConverter()
+    {
+        TypeConverter converter = TypeConverterRegistry.GetConverter(typeof(string[]));
+        Assert.IsTrue(converter is StringArrayConverter);
+    }
 
-        [Test]
-        public void RegisterConverter()
-        {
-            TypeConverterRegistry.RegisterConverter("System.DateTime", "System.ComponentModel.DateTimeConverter");
-        }
+    [Test]
+    public void RegisterConverter()
+    {
+        TypeConverterRegistry.RegisterConverter("System.DateTime", "System.ComponentModel.DateTimeConverter");
+    }
 
-        [Test]
-        public void RegisterConverterWithNonResolvableType()
-        {
-            Assert.Throws<TypeLoadException>(() => TypeConverterRegistry.RegisterConverter("Systemm.DateTime", "System.ComponentModel.DateTimeConverter"));
-        }
+    [Test]
+    public void RegisterConverterWithNonResolvableType()
+    {
+        Assert.Throws<TypeLoadException>(() => TypeConverterRegistry.RegisterConverter("Systemm.DateTime", "System.ComponentModel.DateTimeConverter"));
+    }
 
-        [Test]
-        public void RegisterConverterWithNonTypeConverter()
-        {
-            Assert.Throws<ArgumentException>(() => TypeConverterRegistry.RegisterConverter("System.DateTime", "System.DateTime"));
-        }
+    [Test]
+    public void RegisterConverterWithNonTypeConverter()
+    {
+        Assert.Throws<ArgumentException>(() => TypeConverterRegistry.RegisterConverter("System.DateTime", "System.DateTime"));
     }
 }

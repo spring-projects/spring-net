@@ -21,86 +21,82 @@
 #region Imports
 
 using System.Text;
-
 using Apache.NMS;
-
 using FakeItEasy;
-
 using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Messaging.Nms.Listener.Adapter
+namespace Spring.Messaging.Nms.Listener.Adapter;
+
+/// <summary>
+/// This class contains tests for MessageListenerAdapter
+/// </summary>
+/// <author>Mark Pollack</author>
+/// <version>$Id:$</version>
+[TestFixture]
+public class MessageListenerAdapterTests
 {
-    /// <summary>
-    /// This class contains tests for MessageListenerAdapter
-    /// </summary>
-    /// <author>Mark Pollack</author>
-    /// <version>$Id:$</version>
-    [TestFixture]
-    public class MessageListenerAdapterTests
+    private static string TEXT = "I fancy a good cuppa right now";
+
+    [Test]
+    public void MessageContentsHandlerForTextMessage()
     {
-        private static string TEXT = "I fancy a good cuppa right now";
+        int numIterations = 10;
+        ITextMessage message = A.Fake<ITextMessage>();
+        A.CallTo(() => message.Text).Returns(TEXT).NumberOfTimes(numIterations);
+        MessageContentsHandler handler = new MessageContentsHandler();
 
-        [Test]
-        public void MessageContentsHandlerForTextMessage()
+        MessageListenerAdapter adapter = new MessageListenerAdapter(handler);
+        for (int i = 0; i < numIterations; i++)
         {
-            int numIterations = 10;
-            ITextMessage message = A.Fake<ITextMessage>();
-            A.CallTo(() => message.Text).Returns(TEXT).NumberOfTimes(numIterations);
-            MessageContentsHandler handler = new MessageContentsHandler();
-
-            MessageListenerAdapter adapter = new MessageListenerAdapter(handler);
-            for (int i = 0; i < numIterations; i++)
-            {
-                adapter.OnMessage(message);
-            }
-
-            Assert.AreEqual(numIterations, handler.HandledStringCount);
+            adapter.OnMessage(message);
         }
 
-        [Test]
-        public void MessageContentsHandlerForBytesMessage()
+        Assert.AreEqual(numIterations, handler.HandledStringCount);
+    }
+
+    [Test]
+    public void MessageContentsHandlerForBytesMessage()
+    {
+        int numIterations = 10;
+        IBytesMessage message = A.Fake<IBytesMessage>();
+        ASCIIEncoding encoding = new ASCIIEncoding();
+        byte[] content = encoding.GetBytes("test");
+        A.CallTo(() => message.Content).Returns(content).NumberOfTimes(numIterations);
+        MessageContentsHandler handler = new MessageContentsHandler();
+
+        MessageListenerAdapter adapter = new MessageListenerAdapter(handler);
+        for (int i = 0; i < numIterations; i++)
         {
-            int numIterations = 10;
-            IBytesMessage message = A.Fake<IBytesMessage>();
-            ASCIIEncoding encoding = new ASCIIEncoding();
-            byte[] content = encoding.GetBytes("test");
-            A.CallTo(() => message.Content).Returns(content).NumberOfTimes(numIterations);
-            MessageContentsHandler handler = new MessageContentsHandler();
-
-            MessageListenerAdapter adapter = new MessageListenerAdapter(handler);
-            for (int i = 0; i < numIterations; i++)
-            {
-                adapter.OnMessage(message);
-            }
-
-            Assert.AreEqual(numIterations, handler.HandledByteArrayCount);
+            adapter.OnMessage(message);
         }
 
-        [Test]
-        public void MessageContentsHandlerOverloadCalls()
+        Assert.AreEqual(numIterations, handler.HandledByteArrayCount);
+    }
+
+    [Test]
+    public void MessageContentsHandlerOverloadCalls()
+    {
+        int numIterations = 10;
+        IBytesMessage bytesMessage = A.Fake<IBytesMessage>();
+        ASCIIEncoding encoding = new ASCIIEncoding();
+        byte[] content = encoding.GetBytes("test");
+        A.CallTo(() => bytesMessage.Content).Returns(content).NumberOfTimes(numIterations / 2);
+
+        ITextMessage textMessage = A.Fake<ITextMessage>();
+        A.CallTo(() => textMessage.Text).Returns(TEXT).NumberOfTimes(numIterations / 2);
+
+        MessageContentsHandler handler = new MessageContentsHandler();
+
+        MessageListenerAdapter adapter = new MessageListenerAdapter(handler);
+        for (int i = 0; i < numIterations / 2; i++)
         {
-            int numIterations = 10;
-            IBytesMessage bytesMessage = A.Fake<IBytesMessage>();
-            ASCIIEncoding encoding = new ASCIIEncoding();
-            byte[] content = encoding.GetBytes("test");
-            A.CallTo(() => bytesMessage.Content).Returns(content).NumberOfTimes(numIterations / 2);
-
-            ITextMessage textMessage = A.Fake<ITextMessage>();
-            A.CallTo(() => textMessage.Text).Returns(TEXT).NumberOfTimes(numIterations / 2);
-
-            MessageContentsHandler handler = new MessageContentsHandler();
-
-            MessageListenerAdapter adapter = new MessageListenerAdapter(handler);
-            for (int i = 0; i < numIterations / 2; i++)
-            {
-                adapter.OnMessage(textMessage);
-                adapter.OnMessage(bytesMessage);
-            }
-
-            Assert.AreEqual(numIterations / 2, handler.HandledByteArrayCount);
-            Assert.AreEqual(numIterations / 2, handler.HandledStringCount);
+            adapter.OnMessage(textMessage);
+            adapter.OnMessage(bytesMessage);
         }
+
+        Assert.AreEqual(numIterations / 2, handler.HandledByteArrayCount);
+        Assert.AreEqual(numIterations / 2, handler.HandledStringCount);
     }
 }

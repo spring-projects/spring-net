@@ -20,53 +20,52 @@
 
 using System.Runtime.Serialization;
 
-namespace Spring.Transaction
+namespace Spring.Transaction;
+
+/// <summary>
+/// Base class for all transaction exceptions.
+/// </summary>
+/// <author>Rod Johnson</author>
+/// <author>Griffin Caprio (.NET)</author>
+[Serializable]
+public abstract class TransactionException : ApplicationException
 {
     /// <summary>
-    /// Base class for all transaction exceptions.
+    /// Creates a new instance of the TransactionException class.
     /// </summary>
-    /// <author>Rod Johnson</author>
-    /// <author>Griffin Caprio (.NET)</author>
-    [Serializable]
-    public abstract class TransactionException : ApplicationException
+    protected TransactionException()
     {
-        /// <summary>
-        /// Creates a new instance of the TransactionException class.
-        /// </summary>
-        protected TransactionException()
-        {
-        }
+    }
 
-        /// <summary>
-        /// Creates a new instance of the TransactionException class, with the specified message.
-        /// </summary>
-        /// <param name="message">
-        /// A message about the exception.
-        /// </param>
-        protected TransactionException (string message) : base(message)
-        {
-        }
+    /// <summary>
+    /// Creates a new instance of the TransactionException class, with the specified message.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    protected TransactionException(string message) : base(message)
+    {
+    }
 
-        /// <summary>
-        /// Creates a new instance of the TransactionException class with the specified message
-        /// and root cause.
-        /// </summary>
-        /// <param name="message">
-        /// A message about the exception.
-        /// </param>
-        /// <param name="rootCause">
-        /// The root exception that is being wrapped.
-        /// </param>
-        protected TransactionException (string message, Exception rootCause)
-            : base(message, rootCause)
-        {
-        }
+    /// <summary>
+    /// Creates a new instance of the TransactionException class with the specified message
+    /// and root cause.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    /// <param name="rootCause">
+    /// The root exception that is being wrapped.
+    /// </param>
+    protected TransactionException(string message, Exception rootCause)
+        : base(message, rootCause)
+    {
+    }
 
-        /// <inheritdoc />
-        protected TransactionException (
-            SerializationInfo info, StreamingContext context)
-            : base (info, context)
-        {
-        }
+    /// <inheritdoc />
+    protected TransactionException(
+        SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
     }
 }

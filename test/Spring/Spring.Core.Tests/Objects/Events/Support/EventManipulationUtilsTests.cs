@@ -25,124 +25,123 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Objects.Events.Support.Tests
+namespace Spring.Objects.Events.Support.Tests;
+
+/// <summary>
+/// Unit tests for the EventManipulationUtils class.
+/// </summary>
+[TestFixture]
+public sealed class EventManipulationUtilsTests
 {
-	/// <summary>
-	/// Unit tests for the EventManipulationUtils class.
-	/// </summary>
-	[TestFixture]
-	public sealed class EventManipulationUtilsTests
-	{
-		[Test]
-		public void FoundEventHandlers()
-		{
-			Type pubType = typeof (SimpleEventPublisher);
-			EventInfo[] events = pubType.GetEvents();
+    [Test]
+    public void FoundEventHandlers()
+    {
+        Type pubType = typeof(SimpleEventPublisher);
+        EventInfo[] events = pubType.GetEvents();
 
-			foreach (EventInfo currentEvent in events)
-			{
-				Type eventHandlerType = currentEvent.EventHandlerType;
-				MethodInfo invoke = eventHandlerType.GetMethod("Invoke");
-				Assert.IsNotNull(EventManipulationUtils.GetMethodInfoMatchingSignature(invoke, typeof (SimpleEventSubscriber)));
-			}
-		}
+        foreach (EventInfo currentEvent in events)
+        {
+            Type eventHandlerType = currentEvent.EventHandlerType;
+            MethodInfo invoke = eventHandlerType.GetMethod("Invoke");
+            Assert.IsNotNull(EventManipulationUtils.GetMethodInfoMatchingSignature(invoke, typeof(SimpleEventSubscriber)));
+        }
+    }
 
-		[Test]
-		public void FoundSomeEventHandlers()
-		{
-			Type pubType = typeof (SimpleEventPublisher);
-			EventInfo[] events = pubType.GetEvents();
-			foreach (EventInfo currentEvent in events)
-			{
-				Type eventHandlerType = currentEvent.EventHandlerType;
-				MethodInfo invoke = eventHandlerType.GetMethod("Invoke");
-				if (currentEvent.Name == "MyFirstEvent" || currentEvent.Name == "MySecondEvent")
-				{
-					Assert.IsNotNull(EventManipulationUtils.GetMethodInfoMatchingSignature(invoke, typeof (SomeEventSubscriber)));
-				}
-				else
-				{
-					Assert.IsNull(EventManipulationUtils.GetMethodInfoMatchingSignature(invoke, typeof (SomeEventSubscriber)));
-				}
-			}
-		}
+    [Test]
+    public void FoundSomeEventHandlers()
+    {
+        Type pubType = typeof(SimpleEventPublisher);
+        EventInfo[] events = pubType.GetEvents();
+        foreach (EventInfo currentEvent in events)
+        {
+            Type eventHandlerType = currentEvent.EventHandlerType;
+            MethodInfo invoke = eventHandlerType.GetMethod("Invoke");
+            if (currentEvent.Name == "MyFirstEvent" || currentEvent.Name == "MySecondEvent")
+            {
+                Assert.IsNotNull(EventManipulationUtils.GetMethodInfoMatchingSignature(invoke, typeof(SomeEventSubscriber)));
+            }
+            else
+            {
+                Assert.IsNull(EventManipulationUtils.GetMethodInfoMatchingSignature(invoke, typeof(SomeEventSubscriber)));
+            }
+        }
+    }
 
-		[Test]
-		public void FoundNoHandlers()
-		{
-			Type pubType = typeof (SimpleEventPublisher);
-			EventInfo[] events = pubType.GetEvents();
+    [Test]
+    public void FoundNoHandlers()
+    {
+        Type pubType = typeof(SimpleEventPublisher);
+        EventInfo[] events = pubType.GetEvents();
 
-			foreach (EventInfo currentEvent in events)
-			{
-				Type eventHandlerType = currentEvent.EventHandlerType;
-				MethodInfo invoke = eventHandlerType.GetMethod("Invoke");
-				Assert.IsNull(EventManipulationUtils.GetMethodInfoMatchingSignature(invoke, typeof (NoEventSubscriber)));
-			}
-		}
+        foreach (EventInfo currentEvent in events)
+        {
+            Type eventHandlerType = currentEvent.EventHandlerType;
+            MethodInfo invoke = eventHandlerType.GetMethod("Invoke");
+            Assert.IsNull(EventManipulationUtils.GetMethodInfoMatchingSignature(invoke, typeof(NoEventSubscriber)));
+        }
+    }
 
-		#region Helper Classes
+    #region Helper Classes
 
-		internal delegate void Delegate1(object source, string name);
+    internal delegate void Delegate1(object source, string name);
 
-		internal delegate string Delegate2(string name, bool flag);
+    internal delegate string Delegate2(string name, bool flag);
 
-		internal delegate bool Delegate3(string name, bool flag);
+    internal delegate bool Delegate3(string name, bool flag);
 
-		internal class SimpleEventPublisher
-		{
+    internal class SimpleEventPublisher
+    {
 #pragma warning disable 67
-			public event Delegate1 MyFirstEvent;
-			public event Delegate2 MySecondEvent;
-			public event Delegate3 MyThirdEvent;
+        public event Delegate1 MyFirstEvent;
+        public event Delegate2 MySecondEvent;
+        public event Delegate3 MyThirdEvent;
 #pragma warning restore 67
+    }
+
+    internal class SimpleEventSubscriber
+    {
+        public void MyFirstEvent_Handler(object source, string name)
+        {
         }
 
-		internal class SimpleEventSubscriber
-		{
-			public void MyFirstEvent_Handler(object source, string name)
-			{
-			}
+        public string MySecondEvent_Handler(string name, bool flag)
+        {
+            return String.Empty;
+        }
 
-			public string MySecondEvent_Handler(string name, bool flag)
-			{
-				return String.Empty;
-			}
+        public bool MyThirdEvent_Handler(string name, bool flag)
+        {
+            return false;
+        }
+    }
 
-			public bool MyThirdEvent_Handler(string name, bool flag)
-			{
-				return false;
-			}
-		}
+    internal class NoEventSubscriber
+    {
+        public void MyFirstEvent_Handler(object source, string name, bool flag)
+        {
+        }
 
-		internal class NoEventSubscriber
-		{
-			public void MyFirstEvent_Handler(object source, string name, bool flag)
-			{
-			}
+        public void MySecondEvent_Handler(string name, bool flag)
+        {
+        }
 
-			public void MySecondEvent_Handler(string name, bool flag)
-			{
-			}
+        public string MyThirdEvent_Handler(string name)
+        {
+            return String.Empty;
+        }
+    }
 
-			public string MyThirdEvent_Handler(string name)
-			{
-				return String.Empty;
-			}
-		}
+    internal class SomeEventSubscriber
+    {
+        public void MyFirstEvent_Handler(object source, string name)
+        {
+        }
 
-		internal class SomeEventSubscriber
-		{
-			public void MyFirstEvent_Handler(object source, string name)
-			{
-			}
+        public string MySecondEvent_Handler(string name, bool flag)
+        {
+            return String.Empty;
+        }
+    }
 
-			public string MySecondEvent_Handler(string name, bool flag)
-			{
-				return String.Empty;
-			}
-		}
-
-		#endregion
-	}
+    #endregion
 }

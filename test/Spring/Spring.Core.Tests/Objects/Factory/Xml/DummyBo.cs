@@ -20,32 +20,28 @@
 
 #region Imports
 
-
-
 #endregion
 
-namespace Spring.Objects.Factory.Xml {
+namespace Spring.Objects.Factory.Xml;
 
-	/// <summary>
-	/// Summary description for DummyBo.
+/// <summary>
+/// Summary description for DummyBo.
+/// </summary>
+/// <author>Rod Johnson</author>
+/// <author>Rick Evans (.NET)</author>
+public class DummyBo : IDummyBo
+{
+    /// <summary>
+    /// Creates a new instance of the  DummyBo class.
     /// </summary>
-    /// <author>Rod Johnson</author>
-    /// <author>Rick Evans (.NET)</author>
-	public class DummyBo : IDummyBo 
+    public DummyBo(DummyDao dao)
     {
+        this.dao = dao;
+    }
 
-        /// <summary>
-        /// Creates a new instance of the  DummyBo class.
-        /// </summary>
-		public DummyBo (DummyDao dao) {
-            this.dao = dao;
-        }
+    public void DoSomething()
+    {
+    }
 
-        public void DoSomething () 
-        {
-
-        }
-
-        internal DummyDao dao;
-	}
+    internal DummyDao dao;
 }

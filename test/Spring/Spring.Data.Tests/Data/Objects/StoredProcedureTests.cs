@@ -40,58 +40,54 @@
 
 using System.Data;
 using System.Data.SqlClient;
-
 using FakeItEasy;
-
 using NUnit.Framework;
-
 using Spring.Data.Common;
 
-namespace Spring.Data.Objects
+namespace Spring.Data.Objects;
+
+/// <summary>
+/// Tests for StoredProcedure
+/// </summary>
+/// <author>Mark Pollack</author>
+[TestFixture]
+public class StoredProcedureTests : AbstractAdoQueryTests
 {
-    /// <summary>
-    /// Tests for StoredProcedure
-    /// </summary>
-    /// <author>Mark Pollack</author>
-    [TestFixture]
-    public class StoredProcedureTests : AbstractAdoQueryTests
+    [SetUp]
+    public void Setup()
     {
-        [SetUp]
-        public void Setup()
-        {
-            SetUpMocks();
-        }
-
-        [Test]
-        public void NullArg()
-        {
-            SqlParameter sqlParameter1 = new SqlParameter();
-            A.CallTo(() => command.CreateParameter()).Returns(sqlParameter1);
-            A.CallTo(() => provider.CreateParameterNameForCollection("ptest")).Returns("@ptest");
-
-            //Create a real instance of IDbParameters to store the executable parameters
-            //IDbProvider realDbProvider = DbProviderFactory.GetDbProvider("System.Data.SqlClient");
-            //IDbParameters dbParameters = new DbParameters(realDbProvider);
-            //provide the same instance to another call to extract output params
-            A.CallTo(() => command.Parameters).ReturnsLazily(() => new SqlCommand().Parameters).Twice();
-
-            NullArg na = new NullArg(provider);
-            na.Execute(null);
-        }
+        SetUpMocks();
     }
 
-    internal class NullArg : StoredProcedure
+    [Test]
+    public void NullArg()
     {
-        public NullArg(IDbProvider provider)
-            : base(provider, "takes_null")
-        {
-            DeclaredParameters.Add("ptest", DbType.String);
-            Compile();
-        }
+        SqlParameter sqlParameter1 = new SqlParameter();
+        A.CallTo(() => command.CreateParameter()).Returns(sqlParameter1);
+        A.CallTo(() => provider.CreateParameterNameForCollection("ptest")).Returns("@ptest");
 
-        public void Execute(string s)
-        {
-            ExecuteNonQuery(s);
-        }
+        //Create a real instance of IDbParameters to store the executable parameters
+        //IDbProvider realDbProvider = DbProviderFactory.GetDbProvider("System.Data.SqlClient");
+        //IDbParameters dbParameters = new DbParameters(realDbProvider);
+        //provide the same instance to another call to extract output params
+        A.CallTo(() => command.Parameters).ReturnsLazily(() => new SqlCommand().Parameters).Twice();
+
+        NullArg na = new NullArg(provider);
+        na.Execute(null);
+    }
+}
+
+internal class NullArg : StoredProcedure
+{
+    public NullArg(IDbProvider provider)
+        : base(provider, "takes_null")
+    {
+        DeclaredParameters.Add("ptest", DbType.String);
+        Compile();
+    }
+
+    public void Execute(string s)
+    {
+        ExecuteNonQuery(s);
     }
 }

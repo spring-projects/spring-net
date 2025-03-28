@@ -22,62 +22,61 @@ using System.Globalization;
 using System.Web;
 using Spring.Util;
 
-namespace Spring.Globalization.Resolvers
+namespace Spring.Globalization.Resolvers;
+
+/// <summary>
+/// Culture resolver that uses HTTP session to store culture information.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+public class SessionCultureResolver : DefaultWebCultureResolver
 {
+    private const string CultureKey = "Spring.UserLocale";
+
     /// <summary>
-    /// Culture resolver that uses HTTP session to store culture information.
+    /// Resolves the culture from the request.
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    public class SessionCultureResolver : DefaultWebCultureResolver
+    /// <remarks>
+    /// If culture information doesn't exist in the session, it will be created and its value will
+    /// be set to the value of the 'Accept-Language' request header, or if no
+    /// headers are specified to the culture of the current server thread.
+    /// </remarks>
+    /// <returns>Culture that should be used to render view.</returns>
+    public override CultureInfo ResolveCulture()
     {
-        private const string CultureKey = "Spring.UserLocale";
-
-        /// <summary>
-        /// Resolves the culture from the request.
-        /// </summary>
-        /// <remarks>
-        /// If culture information doesn't exist in the session, it will be created and its value will 
-        /// be set to the value of the 'Accept-Language' request header, or if no
-        /// headers are specified to the culture of the current server thread.
-        /// </remarks>
-        /// <returns>Culture that should be used to render view.</returns>
-        public override CultureInfo ResolveCulture()
+        CultureInfo culture = SessionCulture;
+        if (culture != null)
         {
-            CultureInfo culture = SessionCulture;
-            if (culture != null)
-            {
-                return culture;
-            }
-            else
-            {
-                return base.GetDefaultLocale();
-            }
+            return culture;
         }
-
-        /// <summary>
-        /// Sets the culture.
-        /// </summary>
-        /// <param name="culture">The new culture or <code>null</code> to clear the culture.</param>
-        public override void SetCulture(CultureInfo culture)
+        else
         {
-            SessionCulture = culture;
+            return base.GetDefaultLocale();
         }
+    }
 
-        /// <summary>
-        /// Gets/Sets the current session's culture.
-        /// </summary>
-        protected virtual CultureInfo SessionCulture
+    /// <summary>
+    /// Sets the culture.
+    /// </summary>
+    /// <param name="culture">The new culture or <code>null</code> to clear the culture.</param>
+    public override void SetCulture(CultureInfo culture)
+    {
+        SessionCulture = culture;
+    }
+
+    /// <summary>
+    /// Gets/Sets the current session's culture.
+    /// </summary>
+    protected virtual CultureInfo SessionCulture
+    {
+        set
         {
-            set
-            {
-                AssertUtils.ArgumentNotNull(value, "SessionCulture");
-                HttpContext.Current.Session[CultureKey] = value;
-            }
-            get
-            {
-                CultureInfo culture = HttpContext.Current.Session[CultureKey] as CultureInfo;
-                return culture;
-            }
+            AssertUtils.ArgumentNotNull(value, "SessionCulture");
+            HttpContext.Current.Session[CultureKey] = value;
+        }
+        get
+        {
+            CultureInfo culture = HttpContext.Current.Session[CultureKey] as CultureInfo;
+            return culture;
         }
     }
 }

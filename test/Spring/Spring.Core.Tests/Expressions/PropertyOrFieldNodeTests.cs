@@ -21,37 +21,36 @@
 using NUnit.Framework;
 using Spring.Objects;
 
-namespace Spring.Expressions
+namespace Spring.Expressions;
+
+/// <summary>
+/// Tests the behavior of PropertyOrFieldNode expression node
+/// </summary>
+/// <author>Erich Eichinger</author>
+[TestFixture]
+public class PropertyOrFieldNodeTests
 {
-    /// <summary>
-    /// Tests the behavior of PropertyOrFieldNode expression node
-    /// </summary>
-    /// <author>Erich Eichinger</author>
-    [TestFixture]
-    public class PropertyOrFieldNodeTests
+    private class BaseClass
     {
-        private class BaseClass
-        {
-            private ITestObject objectProp;
+        private ITestObject objectProp;
 
-            public string StringProp { get { return "BaseStringProp"; }}
-            public ITestObject ObjectProp { get { return objectProp; } set { objectProp = value; } }
-        }
+        public string StringProp { get { return "BaseStringProp"; } }
+        public ITestObject ObjectProp { get { return objectProp; } set { objectProp = value; } }
+    }
 
-        private class DerivedClass : BaseClass
-        {
-            public new DateTime StringProp { get { return new DateTime(2008,1,1); }}
-        }
+    private class DerivedClass : BaseClass
+    {
+        public new DateTime StringProp { get { return new DateTime(2008, 1, 1); } }
+    }
 
+    [Test]
+    public void UseMostSpecificOverride()
+    {
+        PropertyOrFieldNode pofNode = new PropertyOrFieldNode();
+        pofNode.Text = "StringProp";
 
-        [Test]
-        public void UseMostSpecificOverride()
-        {
-            PropertyOrFieldNode pofNode = new PropertyOrFieldNode();
-            pofNode.Text = "StringProp";
-
-            Assert.AreEqual(new DateTime(2008,1,1), ((IExpression) pofNode).GetValue(new DerivedClass()));
-        }
+        Assert.AreEqual(new DateTime(2008, 1, 1), ((IExpression) pofNode).GetValue(new DerivedClass()));
+    }
 
 #if !NETCOREAPP
         [Test]
@@ -70,5 +69,4 @@ namespace Spring.Expressions
             Assert.AreSame( tpo, ouc.ObjectProp );
         }
 #endif
-    }
 }

@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,66 +18,63 @@
 
 #endregion
 
+namespace Spring.Objects.Factory.Attributes;
 
-namespace Spring.Objects.Factory.Attributes
+/// <summary>
+/// Test object for testing 'required' attribute functionality.
+/// </summary>
+/// <author>Mark Pollack</author>
+public class RequiredTestObject : IObjectNameAware, IObjectFactoryAware
 {
-    /// <summary>
-    /// Test object for testing 'required' attribute functionality.
-    /// </summary>
-    /// <author>Mark Pollack</author>
-    public class RequiredTestObject : IObjectNameAware, IObjectFactoryAware
+    private string name;
+
+    private int age;
+
+    private string favoriteColor;
+
+    private string jobTitle;
+
+    [Required]
+    public int Age
     {
-        private string name;
+        get { return age; }
+        set { age = value; }
+    }
 
-        private int age;
+    [MyRequired]
+    public string Name
+    {
+        get { return name; }
+        set { name = value; }
+    }
 
-        private string favoriteColor; 
+    [Required]
+    public string FavoriteColor
+    {
+        set { favoriteColor = value; }
+    }
 
-        private string jobTitle;
+    public string GetFavoriteColor()
+    {
+        return favoriteColor;
+    }
 
-        [Required]
-        public int Age
-        {
-            get { return age; }
-            set { age = value; }
-        }
+    [Required]
+    public string JobTitle
+    {
+        get { return jobTitle; }
+        set { jobTitle = value; }
+    }
 
-        [MyRequired]
-        public string Name
-        {
-            get { return name; }
-            set { name = value; }
-        }
+    [Required]
+    public string ObjectName
+    {
+        set { }
+    }
 
-
-        [Required]
-        public string FavoriteColor
-        {
-            set { favoriteColor = value; }
-        }
-
-        public string GetFavoriteColor()
-        {
-            return favoriteColor;
-        }
-
-        [Required]
-        public string JobTitle
-        {
-            get { return jobTitle; }
-            set { jobTitle = value; }
-        }
-
-        [Required]
-        public string ObjectName
-        {
-            set { }
-        }
-
-        [Required]
-        public IObjectFactory ObjectFactory
-        {
-            set {  }
-        }
+    [Required]
+    public IObjectFactory ObjectFactory
+    {
+        set { }
     }
 }

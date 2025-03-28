@@ -24,57 +24,57 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Objects.Support
+namespace Spring.Objects.Support;
+
+/// <summary>
+/// Unit tests for the InstanceEventHandlerValue class.
+/// </summary>
+/// <author>Rick Evans</author>
+[TestFixture]
+public sealed class InstanceEventHandlerValueTests
 {
-	/// <summary>
-	/// Unit tests for the InstanceEventHandlerValue class.
-    /// </summary>
-    /// <author>Rick Evans</author>
-	[TestFixture]
-    public sealed class InstanceEventHandlerValueTests
+    [Test]
+    public void Instantiation()
     {
-        [Test]
-        public void Instantiation () 
-        {
-            PingSource source = new PingSource ();
-            StaticEventHandlerValue wirer
-                = new StaticEventHandlerValue (source, "OnPing");
-            Assert.IsNotNull (wirer.Source);
-            Assert.AreEqual ("OnPing", wirer.MethodName);
-            Assert.IsTrue (wirer.ToString ().IndexOf (wirer.MethodName) > 0);
-        }
+        PingSource source = new PingSource();
+        StaticEventHandlerValue wirer
+            = new StaticEventHandlerValue(source, "OnPing");
+        Assert.IsNotNull(wirer.Source);
+        Assert.AreEqual("OnPing", wirer.MethodName);
+        Assert.IsTrue(wirer.ToString().IndexOf(wirer.MethodName) > 0);
+    }
 
-        [Test]
-        public void Wire () {
-            InstanceEventHandlerValue wirer = new InstanceEventHandlerValue ();
-            wirer.EventName = "Ping";
-            wirer.MethodName = "OnPing";
-            PingSource source = new PingSource ();
-            PingListener sink = new PingListener ();
-            wirer.Wire (source, sink);
-            source.OnPing ();
-            Assert.IsTrue (sink.GotPing, "The event handler did not get notified when the event was raised.");
-            Assert.AreEqual (1, sink.PingCount, "The event handler was not get notified exactly once when the event was raised exactly once.");
-        }
+    [Test]
+    public void Wire()
+    {
+        InstanceEventHandlerValue wirer = new InstanceEventHandlerValue();
+        wirer.EventName = "Ping";
+        wirer.MethodName = "OnPing";
+        PingSource source = new PingSource();
+        PingListener sink = new PingListener();
+        wirer.Wire(source, sink);
+        source.OnPing();
+        Assert.IsTrue(sink.GotPing, "The event handler did not get notified when the event was raised.");
+        Assert.AreEqual(1, sink.PingCount, "The event handler was not get notified exactly once when the event was raised exactly once.");
+    }
 
-        [Test]
-        public void WireWithStaticHandler () 
-        {
-            PingSource source = new PingSource ();
-            InstanceEventHandlerValue wirer
-                = new InstanceEventHandlerValue (source, "OnPing");
-            wirer.EventName = "Ping";
-            wirer.Wire (source, typeof (StaticPingListener));
-        }
+    [Test]
+    public void WireWithStaticHandler()
+    {
+        PingSource source = new PingSource();
+        InstanceEventHandlerValue wirer
+            = new InstanceEventHandlerValue(source, "OnPing");
+        wirer.EventName = "Ping";
+        wirer.Wire(source, typeof(StaticPingListener));
+    }
 
-        [Test]
-        public void BailsIfMethodDoesntExist () 
-        {
-            PingSource source = new PingSource ();
-            InstanceEventHandlerValue wirer
-                = new InstanceEventHandlerValue (source, "Roo");
-            wirer.EventName = "Ping";
-            Assert.Throws<FatalObjectException>(() => wirer.Wire (source, typeof (StaticPingListener)));
-        }
-	}
+    [Test]
+    public void BailsIfMethodDoesntExist()
+    {
+        PingSource source = new PingSource();
+        InstanceEventHandlerValue wirer
+            = new InstanceEventHandlerValue(source, "Roo");
+        wirer.EventName = "Ping";
+        Assert.Throws<FatalObjectException>(() => wirer.Wire(source, typeof(StaticPingListener)));
+    }
 }

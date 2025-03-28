@@ -24,58 +24,56 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Threading
+namespace Spring.Threading;
+
+/// <summary>
+///
+/// </summary>
+/// <author>Erich Eichinger</author>
+public class AsyncTestMethod : AsyncTestTask
 {
-    /// <summary>
-    ///
-    /// </summary>
-    /// <author>Erich Eichinger</author>
-    public class AsyncTestMethod : AsyncTestTask
+    public delegate object TestMethod(object[] args);
+
+    private readonly TestMethod callback;
+    private readonly object[] args;
+    private object result;
+
+    private class ThreadStartTestMethodAdapter
     {
-        public delegate object TestMethod(object[] args);
+        private readonly ThreadStart threadStart;
 
-        private readonly TestMethod callback;
-        private readonly object[] args;
-        private object result;
-
-        private class ThreadStartTestMethodAdapter
+        public ThreadStartTestMethodAdapter(ThreadStart threadStart)
         {
-            private readonly ThreadStart threadStart;
-
-            public ThreadStartTestMethodAdapter(ThreadStart threadStart)
-            {
-                Assert.IsNotNull(threadStart);
-                this.threadStart = threadStart;
-            }
-
-            public object Execute(object[] args)
-            {
-                threadStart();
-                return null;
-            }
+            Assert.IsNotNull(threadStart);
+            this.threadStart = threadStart;
         }
 
-        public AsyncTestMethod(int iterations, ThreadStart callback, params object[] args)
-            : this(iterations, new TestMethod(new ThreadStartTestMethodAdapter(callback).Execute), args)
+        public object Execute(object[] args)
         {
+            threadStart();
+            return null;
         }
+    }
 
+    public AsyncTestMethod(int iterations, ThreadStart callback, params object[] args)
+        : this(iterations, new TestMethod(new ThreadStartTestMethodAdapter(callback).Execute), args)
+    {
+    }
 
-        public AsyncTestMethod(int iterations, TestMethod callback, params object[] args) : base(iterations)
-        {
-            Assert.IsNotNull(callback);
-            this.args = args;
-            this.callback = callback;
-        }
+    public AsyncTestMethod(int iterations, TestMethod callback, params object[] args) : base(iterations)
+    {
+        Assert.IsNotNull(callback);
+        this.args = args;
+        this.callback = callback;
+    }
 
-        public override void DoExecute()
-        {
-            result = callback(args);
-        }
+    public override void DoExecute()
+    {
+        result = callback(args);
+    }
 
-        public object Result
-        {
-            get { return result; }
-        }
+    public object Result
+    {
+        get { return result; }
     }
 }

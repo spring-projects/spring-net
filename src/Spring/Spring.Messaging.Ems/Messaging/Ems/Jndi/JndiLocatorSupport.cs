@@ -22,42 +22,38 @@ using Microsoft.Extensions.Logging;
 using Spring.Objects.Factory;
 using Spring.Util;
 
-namespace Spring.Messaging.Ems.Jndi
+namespace Spring.Messaging.Ems.Jndi;
+
+public abstract class JndiLocatorSupport : JndiAccessor
 {
-    public abstract class JndiLocatorSupport : JndiAccessor
+    protected virtual object Lookup(string jndiName)
     {
-
-
-        protected virtual object Lookup(string jndiName)
+        object jndiObject = Lookup(jndiName, null);
+        if (logger.IsEnabled(LogLevel.Debug))
         {
-            object jndiObject = Lookup(jndiName, null);
-            if (logger.IsEnabled(LogLevel.Debug))
-            {
-                logger.LogDebug("Located object with JNDI name [" + jndiName + "]");
-            }
-            return jndiObject;
+            logger.LogDebug("Located object with JNDI name [" + jndiName + "]");
         }
 
-        protected virtual object Lookup(string jndiName, Type requiredType)
+        return jndiObject;
+    }
+
+    protected virtual object Lookup(string jndiName, Type requiredType)
+    {
+        AssertUtils.ArgumentNotNull(jndiName, "jndiName");
+
+        object jndiObject = JndiLookupContext.Lookup(jndiName);
+
+        if (requiredType != null && !ObjectUtils.IsAssignable(requiredType, jndiObject))
         {
-            AssertUtils.ArgumentNotNull(jndiName, "jndiName");
-
-            object jndiObject =  JndiLookupContext.Lookup(jndiName);
-
-
-            if (requiredType != null && !ObjectUtils.IsAssignable(requiredType, jndiObject))
-            {
-                throw new TypeMismatchNamingException(
-                    jndiName, requiredType, (jndiObject != null ? jndiObject.GetType() : null));
-            }
-
-            if (logger.IsEnabled(LogLevel.Debug))
-            {
-                logger.LogDebug("Located object with JNDI name [" + jndiName + "]");
-            }
-            return jndiObject;
+            throw new TypeMismatchNamingException(
+                jndiName, requiredType, (jndiObject != null ? jndiObject.GetType() : null));
         }
 
+        if (logger.IsEnabled(LogLevel.Debug))
+        {
+            logger.LogDebug("Located object with JNDI name [" + jndiName + "]");
+        }
 
+        return jndiObject;
     }
 }

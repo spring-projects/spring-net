@@ -20,23 +20,22 @@
 
 #if NETSTANDARD
 using Experimental.System.Messaging;
+
 #else
 using System.Messaging;
 #endif
 
+namespace Spring.Messaging.Listener;
 
-namespace Spring.Messaging.Listener
+/// <summary>
+/// The callback invoked when a message is received.
+/// </summary>
+/// <author>Mark Pollack</author>
+public interface IMessageListener
 {
     /// <summary>
-    /// The callback invoked when a message is received.
+    /// Called when message is received.
     /// </summary>
-    /// <author>Mark Pollack</author>
-    public interface IMessageListener
-    {
-        /// <summary>
-        /// Called when message is received.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        void OnMessage(Message message);
-    }
+    /// <param name="message">The message.</param>
+    void OnMessage(Message message);
 }

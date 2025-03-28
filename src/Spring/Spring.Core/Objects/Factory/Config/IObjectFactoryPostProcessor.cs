@@ -18,49 +18,48 @@
 
 #endregion
 
-namespace Spring.Objects.Factory.Config
+namespace Spring.Objects.Factory.Config;
+
+/// <summary>
+/// Allows for custom modification of an application context's object
+/// definitions, adapting the object property values of the context's
+/// underlying object factory.
+/// </summary>
+/// <remarks>
+/// <p>
+/// Application contexts can auto-detect
+/// <c>IObjectFactoryPostProcessor</c> objects in their object definitions and
+/// apply them before any other objects get created.
+/// </p>
+/// <p>
+/// Useful for custom config files targeted at system administrators that
+/// override object properties configured in the application context.
+/// </p>
+/// <p>
+/// See PropertyResourceConfigurer and its concrete implementations for
+/// out-of-the-box solutions that address such configuration needs.
+/// </p>
+/// </remarks>
+/// <author>Juergen Hoeller</author>
+/// <author>Rick Evans (.Net)</author>
+public interface IObjectFactoryPostProcessor
 {
-	/// <summary>
-	/// Allows for custom modification of an application context's object
-	/// definitions, adapting the object property values of the context's
-	/// underlying object factory.
+    /// <summary>
+    /// Modify the application context's internal object factory after its
+    /// standard initialization.
     /// </summary>
     /// <remarks>
     /// <p>
-    /// Application contexts can auto-detect
-    /// <c>IObjectFactoryPostProcessor</c> objects in their object definitions and
-    /// apply them before any other objects get created.
-    /// </p>
-    /// <p>
-    /// Useful for custom config files targeted at system administrators that
-    /// override object properties configured in the application context.
-    /// </p>
-    /// <p>
-    /// See PropertyResourceConfigurer and its concrete implementations for
-    /// out-of-the-box solutions that address such configuration needs.
+    /// All object definitions will have been loaded, but no objects will have
+    /// been instantiated yet. This allows for overriding or adding properties
+    /// even to eager-initializing objects.
     /// </p>
     /// </remarks>
-    /// <author>Juergen Hoeller</author>
-    /// <author>Rick Evans (.Net)</author>
-	public interface IObjectFactoryPostProcessor
-    {
-        /// <summary>
-        /// Modify the application context's internal object factory after its
-        /// standard initialization.
-        /// </summary>
-        /// <remarks>
-        /// <p>
-        /// All object definitions will have been loaded, but no objects will have
-        /// been instantiated yet. This allows for overriding or adding properties
-        /// even to eager-initializing objects.
-        /// </p>
-        /// </remarks>
-        /// <param name="factory">
-        /// The object factory used by the application context.
-        /// </param>
-        /// <exception cref="Spring.Objects.ObjectsException">
-        /// In case of errors.
-        /// </exception>
-        void PostProcessObjectFactory (IConfigurableListableObjectFactory factory);
-	}
+    /// <param name="factory">
+    /// The object factory used by the application context.
+    /// </param>
+    /// <exception cref="Spring.Objects.ObjectsException">
+    /// In case of errors.
+    /// </exception>
+    void PostProcessObjectFactory(IConfigurableListableObjectFactory factory);
 }

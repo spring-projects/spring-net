@@ -26,240 +26,233 @@ using System.Text.RegularExpressions;
 
 #endregion
 
-namespace Spring.Core.TypeConversion
+namespace Spring.Core.TypeConversion;
+
+#region Specifier parsers
+
+using TimeSpanNullable = Nullable<TimeSpan>;
+
+/// <summary>
+/// Base parser for <see cref="TimeSpanConverter"/> custom specifiers.
+/// </summary>
+abstract class SpecifierParser
 {
-    #region Specifier parsers
-
-    using TimeSpanNullable = Nullable<TimeSpan>;
+    const RegexOptions ParsingOptions = RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline | RegexOptions.IgnoreCase;
 
     /// <summary>
-    /// Base parser for <see cref="TimeSpanConverter"/> custom specifiers.
+    /// Specifier
     /// </summary>
-    abstract class SpecifierParser
+    public abstract string Specifier { get; }
+
+    /// <summary>
+    /// Convert int value to a Timespan based on the specifier
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public abstract TimeSpan Parse(int value);
+
+    /// <summary>
+    /// Check if the string contains the specifier and
+    /// </summary>
+    /// <param name="value"></param>
+    /// <returns></returns>
+    public TimeSpanNullable Match(string value)
     {
-        const RegexOptions ParsingOptions = RegexOptions.IgnorePatternWhitespace | RegexOptions.Singleline | RegexOptions.IgnoreCase;
+        string regex = @"^(\d+)" + Specifier + "$";
+        Match match = Regex.Match(value, regex, ParsingOptions);
 
-        /// <summary>
-        /// Specifier
-        /// </summary>
-        public abstract string Specifier { get; }
+        if (!match.Success) return new TimeSpanNullable();
 
-        /// <summary>
-        /// Convert int value to a Timespan based on the specifier
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public abstract TimeSpan Parse(int value);
+        return new TimeSpanNullable(Parse(int.Parse(match.Groups[1].Value)));
+    }
+}
 
-        /// <summary>
-        /// Check if the string contains the specifier and
-        /// </summary>
-        /// <param name="value"></param>
-        /// <returns></returns>
-        public TimeSpanNullable Match(string value)
-        {
-            string regex = @"^(\d+)" + Specifier + "$";
-            Match match = Regex.Match(value, regex, ParsingOptions);
-
-            if (!match.Success) return new TimeSpanNullable();
-
-            return new TimeSpanNullable(Parse(int.Parse(match.Groups[1].Value)));
-        }
-
+/// <summary>
+/// Recognize 10d as ten days
+/// </summary>
+class DaySpecifier : SpecifierParser
+{
+    /// <summary>
+    /// Day specifier: d
+    /// </summary>
+    public override string Specifier
+    {
+        get { return "d"; }
     }
 
     /// <summary>
-    /// Recognize 10d as ten days
+    /// Parse value as days
     /// </summary>
-    class DaySpecifier: SpecifierParser
+    /// <param name="value">Timespan in days</param>
+    /// <returns></returns>
+    public override TimeSpan Parse(int value)
     {
-        /// <summary>
-        /// Day specifier: d
-        /// </summary>
-        public override string Specifier
-        {
-            get { return "d"; }
-        }
+        return TimeSpan.FromDays(value);
+    }
+}
 
-        /// <summary>
-        /// Parse value as days
-        /// </summary>
-        /// <param name="value">Timespan in days</param>
-        /// <returns></returns>
-        public override TimeSpan Parse(int value)
-        {
-            return TimeSpan.FromDays(value);
-        }
+/// <summary>
+/// Recognize 10h as ten hours
+/// </summary>
+class HourSpecifier : SpecifierParser
+{
+    /// <summary>
+    /// Hour specifier: h
+    /// </summary>
+    public override string Specifier
+    {
+        get { return "h"; }
     }
 
     /// <summary>
-    /// Recognize 10h as ten hours
+    /// Parse value as hours
     /// </summary>
-    class HourSpecifier : SpecifierParser
+    /// <param name="value">Timespan in hours</param>
+    /// <returns></returns>
+    public override TimeSpan Parse(int value)
     {
-        /// <summary>
-        /// Hour specifier: h
-        /// </summary>
-        public override string Specifier
-        {
-            get { return "h"; }
-        }
+        return TimeSpan.FromHours(value);
+    }
+}
 
-        /// <summary>
-        /// Parse value as hours
-        /// </summary>
-        /// <param name="value">Timespan in hours</param>
-        /// <returns></returns>
-        public override TimeSpan Parse(int value)
-        {
-            return TimeSpan.FromHours(value);
-        }
+/// <summary>
+/// Recognize 10m as ten minutes
+/// </summary>
+class MinuteSpecifier : SpecifierParser
+{
+    /// <summary>
+    /// Minute specifier: m
+    /// </summary>
+    public override string Specifier
+    {
+        get { return "m"; }
     }
 
     /// <summary>
-    /// Recognize 10m as ten minutes
+    /// Parse value as minutes
     /// </summary>
-    class MinuteSpecifier : SpecifierParser
+    /// <param name="value">Timespan in minutes</param>
+    /// <returns></returns>
+    public override TimeSpan Parse(int value)
     {
-        /// <summary>
-        /// Minute specifier: m
-        /// </summary>
-        public override string Specifier
-        {
-            get { return "m"; }
-        }
+        return TimeSpan.FromMinutes(value);
+    }
+}
 
-        /// <summary>
-        /// Parse value as minutes
-        /// </summary>
-        /// <param name="value">Timespan in minutes</param>
-        /// <returns></returns>
-        public override TimeSpan Parse(int value)
-        {
-            return TimeSpan.FromMinutes(value);
-        }
+/// <summary>
+/// Recognize 10s as ten seconds
+/// </summary>
+class SecondSpecifier : SpecifierParser
+{
+    /// <summary>
+    /// Second specifier: s
+    /// </summary>
+    public override string Specifier
+    {
+        get { return "s"; }
     }
 
     /// <summary>
-    /// Recognize 10s as ten seconds
+    /// Parse value as seconds
     /// </summary>
-    class SecondSpecifier : SpecifierParser
+    /// <param name="value">Timespan in seconds</param>
+    /// <returns></returns>
+    public override TimeSpan Parse(int value)
     {
-        /// <summary>
-        /// Second specifier: s
-        /// </summary>
-        public override string Specifier
-        {
-            get { return "s"; }
-        }
+        return TimeSpan.FromSeconds(value);
+    }
+}
 
-        /// <summary>
-        /// Parse value as seconds
-        /// </summary>
-        /// <param name="value">Timespan in seconds</param>
-        /// <returns></returns>
-        public override TimeSpan Parse(int value)
-        {
-            return TimeSpan.FromSeconds(value);
-        }
+/// <summary>
+/// Recognize 10ms as ten milliseconds
+/// </summary>
+class MillisecondSpecifier : SpecifierParser
+{
+    /// <summary>
+    /// Millisecond specifier: ms
+    /// </summary>
+    public override string Specifier
+    {
+        get { return "ms"; }
     }
 
     /// <summary>
-    /// Recognize 10ms as ten milliseconds
+    /// Parse value as milliseconds
     /// </summary>
-    class MillisecondSpecifier : SpecifierParser
+    /// <param name="value">Timespan in milliseconds</param>
+    /// <returns></returns>
+    public override TimeSpan Parse(int value)
     {
-        /// <summary>
-        /// Millisecond specifier: ms
-        /// </summary>
-        public override string Specifier
-        {
-            get { return "ms"; }
-        }
-
-        /// <summary>
-        /// Parse value as milliseconds
-        /// </summary>
-        /// <param name="value">Timespan in milliseconds</param>
-        /// <returns></returns>
-        public override TimeSpan Parse(int value)
-        {
-            return TimeSpan.FromMilliseconds(value);
-        }
+        return TimeSpan.FromMilliseconds(value);
     }
+}
+
+#endregion
+
+/// <summary>
+/// Converter for <see cref="System.TimeSpan"/> instances.
+/// </summary>
+/// <author>Bruno Baia</author>
+/// <author>Roberto Paterlini</author>
+public class TimeSpanConverter : System.ComponentModel.TimeSpanConverter
+{
+    #region Constants
+
+    static readonly SpecifierParser[] Specifiers = { new DaySpecifier(), new HourSpecifier(), new MinuteSpecifier(), new SecondSpecifier(), new MillisecondSpecifier() };
 
     #endregion
 
+    #region Constructor (s) / Destructor
+
     /// <summary>
-    /// Converter for <see cref="System.TimeSpan"/> instances.
+    /// Creates a new instance of the
+    /// <see cref="Spring.Core.TypeConversion.TimeSpanConverter"/> class.
     /// </summary>
-    /// <author>Bruno Baia</author>
-    /// <author>Roberto Paterlini</author>
-    public class TimeSpanConverter : System.ComponentModel.TimeSpanConverter
+    public TimeSpanConverter() { }
+
+    #endregion
+
+    #region Methods
+
+    /// <summary>
+    /// Convert from a string value to a <see cref="System.TimeSpan"/> instance.
+    /// </summary>
+    /// <param name="context">
+    /// A <see cref="System.ComponentModel.ITypeDescriptorContext"/>
+    /// that provides a format context.
+    /// </param>
+    /// <param name="culture">
+    /// The <see cref="System.Globalization.CultureInfo"/> to use
+    /// as the current culture.
+    /// </param>
+    /// <param name="value">
+    /// The value that is to be converted.
+    /// </param>
+    /// <returns>
+    /// A <see cref="System.TimeSpan"/> if successful.
+    /// </returns>
+    public override object ConvertFrom(
+        ITypeDescriptorContext context,
+        CultureInfo culture, object value)
     {
-        #region Constants
-
-        static readonly SpecifierParser[] Specifiers = {
-                                                  new DaySpecifier(),
-                                                  new HourSpecifier(),
-                                                  new MinuteSpecifier(),
-                                                  new SecondSpecifier(),
-                                                  new MillisecondSpecifier()
-                                              };
-
-        #endregion
-
-        #region Constructor (s) / Destructor
-
-        /// <summary>
-        /// Creates a new instance of the
-        /// <see cref="Spring.Core.TypeConversion.TimeSpanConverter"/> class.
-        /// </summary>
-        public TimeSpanConverter() { }
-
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// Convert from a string value to a <see cref="System.TimeSpan"/> instance.
-        /// </summary>
-        /// <param name="context">
-        /// A <see cref="System.ComponentModel.ITypeDescriptorContext"/>
-        /// that provides a format context.
-        /// </param>
-        /// <param name="culture">
-        /// The <see cref="System.Globalization.CultureInfo"/> to use
-        /// as the current culture.
-        /// </param>
-        /// <param name="value">
-        /// The value that is to be converted.
-        /// </param>
-        /// <returns>
-        /// A <see cref="System.TimeSpan"/> if successful.
-        /// </returns>
-        public override object ConvertFrom(
-            ITypeDescriptorContext context,
-            CultureInfo culture, object value)
+        string stringValue = value as string;
+        if (stringValue != null)
         {
-            string stringValue = value as string;
-            if (stringValue!=null)
+            try
             {
-                try
-                {
-                    stringValue = stringValue.Trim();
+                stringValue = stringValue.Trim();
 
-                    foreach (SpecifierParser specifierParser in Specifiers)
-                    {
-                        TimeSpanNullable res = specifierParser.Match(stringValue);
-                        if (res.HasValue) return res.Value;
-                    }
+                foreach (SpecifierParser specifierParser in Specifiers)
+                {
+                    TimeSpanNullable res = specifierParser.Match(stringValue);
+                    if (res.HasValue) return res.Value;
                 }
-                catch { }
             }
-            return base.ConvertFrom(context, culture, value);
+            catch { }
         }
 
-        #endregion
+        return base.ConvertFrom(context, culture, value);
     }
+
+    #endregion
 }

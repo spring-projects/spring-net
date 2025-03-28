@@ -20,124 +20,123 @@
 
 using System.Runtime.Serialization;
 
-namespace Spring.Dao
+namespace Spring.Dao;
+
+/// <summary>
+/// Data access exception thrown when a result was not of the expected size,
+/// for example when expecting a single row but getting 0 or more than 1 rows.
+/// </summary>
+/// <author>Juergen Hoeller</author>
+/// <author>Griffin Caprio (.NET)</author>
+[Serializable]
+public class IncorrectResultSizeDataAccessException : InvalidDataAccessApiUsageException, ISerializable
 {
-	/// <summary>
-	/// Data access exception thrown when a result was not of the expected size,
-	/// for example when expecting a single row but getting 0 or more than 1 rows.
-	/// </summary>
-	/// <author>Juergen Hoeller</author>
-	/// <author>Griffin Caprio (.NET)</author>
-	[Serializable]
-	public class IncorrectResultSizeDataAccessException : InvalidDataAccessApiUsageException, ISerializable
-	{
-		private int _expectedSize;
-		private int _actualSize;
+    private int _expectedSize;
+    private int _actualSize;
 
-		/// <summary>Return the expected result size.</summary>
-		public virtual int ExpectedSize
-		{
-			get
-			{
-				return _expectedSize;
-			}
-		}
-
-		/// <summary>Return the actual result size (or -1 if unknown).</summary>
-		public virtual int ActualSize
-		{
-			get
-			{
-				return _actualSize;
-			}
-		}
-
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Dao.IncorrectResultSizeDataAccessException"/> class.
-		/// </summary>
-		public IncorrectResultSizeDataAccessException() : this( -1, -1 ) {}
-
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Dao.IncorrectResultSizeDataAccessException"/> class.
-		/// </summary>
-		/// <param name="message">
-		/// A message about the exception.
-		/// </param>
-		public IncorrectResultSizeDataAccessException( string message ) : this( message, -1, -1 )
-		{
-		}
-
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Dao.CleanupFailureDataAccessException"/> class.
-		/// </summary>
-		/// <param name="message">
-		/// A message about the exception.
-		/// </param>
-		/// <param name="rootCause">
-		/// The root exception (from the underlying data access API, such as ADO.NET).
-		/// </param>
-		public IncorrectResultSizeDataAccessException( string message, Exception rootCause )
-			: base( message, rootCause )
-		{
-			_expectedSize = -1;
-			_actualSize = -1;
-		}
-
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Dao.CleanupFailureDataAccessException"/> class.
-		/// </summary>
-		/// <param name="expectedSize">The expected result size.</param>
-		/// <param name="actualSize">The actual result size (or -1 if unknown).</param>
-		public IncorrectResultSizeDataAccessException( int expectedSize, int actualSize )
-			: this ( "Incorrect result size: expected " + expectedSize + ", actual " + actualSize, expectedSize, actualSize)
-		{
-		}
-
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Dao.CleanupFailureDataAccessException"/> class.
-		/// </summary>>
-		/// <param name="message">
-		/// A message about the exception.
-		/// </param>
-		/// <param name="expectedSize">The expected result size.</param>
-		/// <param name="actualSize">The actual result size (or -1 if unknown).</param>
-		public IncorrectResultSizeDataAccessException( string message, int expectedSize, int actualSize )
-			: base( message )
-		{
-			this._expectedSize = expectedSize;
-			this._actualSize = actualSize;
-		}
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="IncorrectResultSizeDataAccessException"/> class.
-        /// </summary>
-        /// <param name="message">A message about the exception</param>
-        /// <param name="expectedSize">The expected result size.</param>
-        public IncorrectResultSizeDataAccessException(string message, int expectedSize)
-            : base(message)
+    /// <summary>Return the expected result size.</summary>
+    public virtual int ExpectedSize
+    {
+        get
         {
-            this._expectedSize = expectedSize;
-            this._actualSize = -1;
+            return _expectedSize;
         }
+    }
 
-		/// <inheritdoc />
-		protected IncorrectResultSizeDataAccessException( SerializationInfo info, StreamingContext context ) : base( info, context )
-		{
-			_expectedSize = info.GetInt32( "expectedSize" );
-			_actualSize = info.GetInt32( "actualSize" );
-		}
+    /// <summary>Return the actual result size (or -1 if unknown).</summary>
+    public virtual int ActualSize
+    {
+        get
+        {
+            return _actualSize;
+        }
+    }
 
-		/// <inheritdoc />
-		public override void GetObjectData(SerializationInfo info, StreamingContext context)
-		{
-			info.AddValue( "expectedSize", _expectedSize );
-			info.AddValue( "actualSize", _actualSize );
-			base.GetObjectData( info, context );
-		}
-	}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Dao.IncorrectResultSizeDataAccessException"/> class.
+    /// </summary>
+    public IncorrectResultSizeDataAccessException() : this(-1, -1) { }
+
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Dao.IncorrectResultSizeDataAccessException"/> class.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    public IncorrectResultSizeDataAccessException(string message) : this(message, -1, -1)
+    {
+    }
+
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Dao.CleanupFailureDataAccessException"/> class.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    /// <param name="rootCause">
+    /// The root exception (from the underlying data access API, such as ADO.NET).
+    /// </param>
+    public IncorrectResultSizeDataAccessException(string message, Exception rootCause)
+        : base(message, rootCause)
+    {
+        _expectedSize = -1;
+        _actualSize = -1;
+    }
+
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Dao.CleanupFailureDataAccessException"/> class.
+    /// </summary>
+    /// <param name="expectedSize">The expected result size.</param>
+    /// <param name="actualSize">The actual result size (or -1 if unknown).</param>
+    public IncorrectResultSizeDataAccessException(int expectedSize, int actualSize)
+        : this("Incorrect result size: expected " + expectedSize + ", actual " + actualSize, expectedSize, actualSize)
+    {
+    }
+
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Dao.CleanupFailureDataAccessException"/> class.
+    /// </summary>>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    /// <param name="expectedSize">The expected result size.</param>
+    /// <param name="actualSize">The actual result size (or -1 if unknown).</param>
+    public IncorrectResultSizeDataAccessException(string message, int expectedSize, int actualSize)
+        : base(message)
+    {
+        this._expectedSize = expectedSize;
+        this._actualSize = actualSize;
+    }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="IncorrectResultSizeDataAccessException"/> class.
+    /// </summary>
+    /// <param name="message">A message about the exception</param>
+    /// <param name="expectedSize">The expected result size.</param>
+    public IncorrectResultSizeDataAccessException(string message, int expectedSize)
+        : base(message)
+    {
+        this._expectedSize = expectedSize;
+        this._actualSize = -1;
+    }
+
+    /// <inheritdoc />
+    protected IncorrectResultSizeDataAccessException(SerializationInfo info, StreamingContext context) : base(info, context)
+    {
+        _expectedSize = info.GetInt32("expectedSize");
+        _actualSize = info.GetInt32("actualSize");
+    }
+
+    /// <inheritdoc />
+    public override void GetObjectData(SerializationInfo info, StreamingContext context)
+    {
+        info.AddValue("expectedSize", _expectedSize);
+        info.AddValue("actualSize", _actualSize);
+        base.GetObjectData(info, context);
+    }
 }

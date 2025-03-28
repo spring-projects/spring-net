@@ -18,41 +18,38 @@
 
 #endregion
 
-namespace Spring.Stereotype
+namespace Spring.Stereotype;
+
+/// <summary>
+/// Indicates that an annotated class is a "Repository" (or "DAO").
+/// </summary>
+/// <remarks>
+/// A class with this attribute is eligible for Spring DataAccessException translation.  A class
+/// with the Repository attribute is also clarified as to its role in the overall application
+/// architecture for the purpose of tools, aspects, etc.
+/// <para>
+/// This attribute also serves as a specialization of the ComponentAttribute, allowing implementation
+/// classes to be autodetected in future releases through assembly scanning.
+/// </para>
+/// </remarks>
+/// <author>Rod Johnson</author>
+/// <author>Jueren Hoeller</author>
+/// <author>Mark Pollack (.NET)</author>
+/// <seealso cref="ComponentAttribute"/>
+public class RepositoryAttribute : ComponentAttribute
 {
     /// <summary>
-    /// Indicates that an annotated class is a "Repository" (or "DAO").
+    /// Initializes a new instance of the <see cref="RepositoryAttribute"/> class.
     /// </summary>
-    /// <remarks>
-    /// A class with this attribute is eligible for Spring DataAccessException translation.  A class
-    /// with the Repository attribute is also clarified as to its role in the overall application
-    /// architecture for the purpose of tools, aspects, etc.
-    /// <para>
-    /// This attribute also serves as a specialization of the ComponentAttribute, allowing implementation
-    /// classes to be autodetected in future releases through assembly scanning.
-    /// </para>
-    /// </remarks>
-    /// <author>Rod Johnson</author>
-    /// <author>Jueren Hoeller</author>
-    /// <author>Mark Pollack (.NET)</author>
-    /// <seealso cref="ComponentAttribute"/>   
-    public class RepositoryAttribute : ComponentAttribute
+    public RepositoryAttribute()
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RepositoryAttribute"/> class.
-        /// </summary>
-        public RepositoryAttribute()
-        {
-        }
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RepositoryAttribute"/> class.
-        /// </summary>
-        /// <param name="name">The name of the repository.</param>
-        public RepositoryAttribute(string name) : base(name)
-        {
-        }
-
-
+    /// <summary>
+    /// Initializes a new instance of the <see cref="RepositoryAttribute"/> class.
+    /// </summary>
+    /// <param name="name">The name of the repository.</param>
+    public RepositoryAttribute(string name) : base(name)
+    {
     }
 }

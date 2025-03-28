@@ -3,6 +3,7 @@ using Spring.Web.Conversation;
 public partial class GetParentObjetFromChild : System.Web.UI.Page
 {
     private IConversationState conversation;
+
     public IConversationState Conversation
     {
         get { return conversation; }

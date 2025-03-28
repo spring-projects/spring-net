@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,94 +20,91 @@
 
 #region Imports
 
-
-
 #endregion
 
-namespace Spring.Objects.Factory.Xml
+namespace Spring.Objects.Factory.Xml;
+
+/// <summary>
+/// Test class for Spring.NET's ability to create objects using static
+/// factory methods, rather than constructors.
+/// </summary>
+/// <author>Rod Johnson</author>
+/// <author>Rick Evans (.NET)</author>
+public class FactoryMethods
 {
-	/// <summary>
-	/// Test class for Spring.NET's ability to create objects using static
-	/// factory methods, rather than constructors.
-	/// </summary>
-	/// <author>Rod Johnson</author>
-	/// <author>Rick Evans (.NET)</author>
-	public class FactoryMethods
-	{
-		#region Constructor (s) / Destructor
+    #region Constructor (s) / Destructor
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Objects.Factory.Xml.FactoryMethods"/> class.
-		/// </summary>
-		/// <remarks>
-		/// <p>
-		/// Constructor is private: not for use outside this class, even by the IoC container.
-		/// </p>
-		/// </remarks>
-		private FactoryMethods(TestObject obj, string name, int number)
-		{
-			_object = obj;
-			_name = name;
-			_number = number;
-		}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Objects.Factory.Xml.FactoryMethods"/> class.
+    /// </summary>
+    /// <remarks>
+    /// <p>
+    /// Constructor is private: not for use outside this class, even by the IoC container.
+    /// </p>
+    /// </remarks>
+    private FactoryMethods(TestObject obj, string name, int number)
+    {
+        _object = obj;
+        _name = name;
+        _number = number;
+    }
 
-		#endregion
+    #endregion
 
-		#region Properties
+    #region Properties
 
-		public TestObject Object
-		{
-			get { return _object; }
-		}
+    public TestObject Object
+    {
+        get { return _object; }
+    }
 
-		public string Name
-		{
-			get { return _name; }
-			set { _name = value; }
-		}
+    public string Name
+    {
+        get { return _name; }
+        set { _name = value; }
+    }
 
-		public string Value
-		{
-			get { return _value; }
-			set { _value = value; }
-		}
+    public string Value
+    {
+        get { return _value; }
+        set { _value = value; }
+    }
 
-		public int Number
-		{
-			get { return _number; }
-		}
+    public int Number
+    {
+        get { return _number; }
+    }
 
-		#endregion
+    #endregion
 
-		#region Methods
+    #region Methods
 
-		public static FactoryMethods DefaultInstance()
-		{
-			TestObject obj = new TestObject();
-			obj.Name = "defaultInstance";
-			return new FactoryMethods(obj, "default", 0);
-		}
+    public static FactoryMethods DefaultInstance()
+    {
+        TestObject obj = new TestObject();
+        obj.Name = "defaultInstance";
+        return new FactoryMethods(obj, "default", 0);
+    }
 
-		public static FactoryMethods NewInstance(TestObject obj)
-		{
-			return new FactoryMethods(obj, "default", 0);
-		}
+    public static FactoryMethods NewInstance(TestObject obj)
+    {
+        return new FactoryMethods(obj, "default", 0);
+    }
 
-		public static FactoryMethods NewInstance(TestObject obj, string name, int num)
-		{
-			return new FactoryMethods(obj, name, num);
-		}
+    public static FactoryMethods NewInstance(TestObject obj, string name, int num)
+    {
+        return new FactoryMethods(obj, name, num);
+    }
 
-		#endregion
+    #endregion
 
-		#region Fields
+    #region Fields
 
-		private int _number;
-		private TestObject _object;
-		private string _name = "default";
-		private string _value;
+    private int _number;
+    private TestObject _object;
+    private string _name = "default";
+    private string _value;
 
-		#endregion
-	}
+    #endregion
 }

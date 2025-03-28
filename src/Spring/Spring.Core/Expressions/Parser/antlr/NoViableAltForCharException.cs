@@ -1,65 +1,64 @@
-using StringBuilder				= System.Text.StringBuilder;
+using StringBuilder = System.Text.StringBuilder;
 
-namespace Spring.Expressions.Parser.antlr
+namespace Spring.Expressions.Parser.antlr;
+/*ANTLR Translator Generator
+ * Project led by Terence Parr at http://www.jGuru.com
+ * Software rights: http://www.antlr.org/license.html
+ *
+ * $Id:$
+ */
+
+//
+// ANTLR C# Code Generator by Micheal Jordan
+//                            Kunle Odutola       : kunle UNDERSCORE odutola AT hotmail DOT com
+//                            Anthony Oguntimehin
+//
+// With many thanks to Eric V. Smith from the ANTLR list.
+//
+
+[Serializable]
+public class NoViableAltForCharException : RecognitionException
 {
-	/*ANTLR Translator Generator
-	* Project led by Terence Parr at http://www.jGuru.com
-	* Software rights: http://www.antlr.org/license.html
-	*
-	* $Id:$
-	*/
+    public char foundChar;
 
-	//
-	// ANTLR C# Code Generator by Micheal Jordan
-	//                            Kunle Odutola       : kunle UNDERSCORE odutola AT hotmail DOT com
-	//                            Anthony Oguntimehin
-	//
-	// With many thanks to Eric V. Smith from the ANTLR list.
-	//
+    public NoViableAltForCharException(char c, CharScanner scanner) :
+        base("NoViableAlt", scanner.getFilename(), scanner.getLine(), scanner.getColumn())
+    {
+        foundChar = c;
+    }
 
-	[Serializable]
-	public class NoViableAltForCharException : RecognitionException
-	{
-		public char foundChar;
+    public NoViableAltForCharException(char c, string fileName, int line, int column) :
+        base("NoViableAlt", fileName, line, column)
+    {
+        foundChar = c;
+    }
 
-		public NoViableAltForCharException(char c, CharScanner scanner) :
-					base("NoViableAlt", scanner.getFilename(), scanner.getLine(), scanner.getColumn())
-		{
-			foundChar = c;
-		}
+    /*
+     * Returns a clean error message (no line number/column information)
+     */
+    override public string Message
+    {
+        get
+        {
+            StringBuilder mesg = new StringBuilder("unexpected char: ");
 
-		public NoViableAltForCharException(char c, string fileName, int line, int column) :
-					base("NoViableAlt", fileName, line, column)
-		{
-			foundChar = c;
-		}
+            // I'm trying to mirror a change in the C++ stuff.
+            // But java seems to lack something isprint-ish..
+            // so we do it manually. This is probably too restrictive.
 
-		/*
-		* Returns a clean error message (no line number/column information)
-		*/
-		override public string Message
-		{
-			get
-			{
-				StringBuilder mesg = new StringBuilder("unexpected char: ");
+            if ((foundChar >= ' ') && (foundChar <= '~'))
+            {
+                mesg.Append('\'');
+                mesg.Append(foundChar);
+                mesg.Append('\'');
+            }
+            else
+            {
+                mesg.Append("0x");
+                mesg.Append(((int) foundChar).ToString("X"));
+            }
 
-				// I'm trying to mirror a change in the C++ stuff.
-				// But java seems to lack something isprint-ish..
-				// so we do it manually. This is probably too restrictive.
-
-				if ((foundChar >= ' ') && (foundChar <= '~'))
-				{
-					mesg.Append('\'');
-					mesg.Append(foundChar);
-					mesg.Append('\'');
-				}
-				else
-				{
-					mesg.Append("0x");
-					mesg.Append(((int)foundChar).ToString("X"));
-				}
-				return mesg.ToString();
-			}
-		}
-	}
+            return mesg.ToString();
+        }
+    }
 }

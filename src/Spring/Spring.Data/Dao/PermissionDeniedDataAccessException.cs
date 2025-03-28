@@ -20,47 +20,50 @@
 
 using System.Runtime.Serialization;
 
-namespace Spring.Dao
+namespace Spring.Dao;
+
+/// <summary>
+/// Exception thrown when the underlyingresource denied a permission to
+/// access a specific element, such as a specific database table.
+/// </summary>
+/// <author>Juergen Hoeller</author>
+/// <author>Mark Pollack (.NET)</author>
+[Serializable]
+public class PermissionDeniedDataAccessException : NonTransientDataAccessException
 {
-	/// <summary>
-    /// Exception thrown when the underlyingresource denied a permission to
-    /// access a specific element, such as a specific database table.
-	/// </summary>
-	/// <author>Juergen Hoeller</author>
-	/// <author>Mark Pollack (.NET)</author>
-	[Serializable]
-    public class PermissionDeniedDataAccessException : NonTransientDataAccessException
-	{
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Dao.PermissionDeniedDataAccessException"/> class.
-		/// </summary>
-		public PermissionDeniedDataAccessException() {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Dao.PermissionDeniedDataAccessException"/> class.
+    /// </summary>
+    public PermissionDeniedDataAccessException() { }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Dao.PermissionDeniedDataAccessException"/> class.
-		/// </summary>
-		/// <param name="message">
-		/// A message about the exception.
-		/// </param>
-		public PermissionDeniedDataAccessException( string message ) : base( message ) {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Dao.PermissionDeniedDataAccessException"/> class.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    public PermissionDeniedDataAccessException(string message) : base(message) { }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Dao.PermissionDeniedDataAccessException"/> class.
-		/// </summary>
-		/// <param name="message">
-		/// A message about the exception.
-		/// </param>
-		/// <param name="rootCause">
-		/// The root exception (from the underlying data access API, such as ADO.NET).
-		/// </param>
-		public PermissionDeniedDataAccessException( string message, Exception rootCause)
-			: base( message , rootCause ) {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Dao.PermissionDeniedDataAccessException"/> class.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    /// <param name="rootCause">
+    /// The root exception (from the underlying data access API, such as ADO.NET).
+    /// </param>
+    public PermissionDeniedDataAccessException(string message, Exception rootCause)
+        : base(message, rootCause)
+    {
+    }
 
-		/// <inheritdoc />
-		protected PermissionDeniedDataAccessException(
-			SerializationInfo info, StreamingContext context ) : base( info, context ) {}
-	}
+    /// <inheritdoc />
+    protected PermissionDeniedDataAccessException(
+        SerializationInfo info, StreamingContext context) : base(info, context)
+    {
+    }
 }

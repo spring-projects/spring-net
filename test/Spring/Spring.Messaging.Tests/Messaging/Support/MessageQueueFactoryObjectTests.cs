@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,67 +22,64 @@
 
 using System.Messaging;
 using NUnit.Framework;
-
 using Spring.Testing.NUnit;
 
 #endregion
 
-namespace Spring.Messaging.Support
+namespace Spring.Messaging.Support;
+
+/// <summary>
+/// This class contains tests for the MessageQueueFactory
+/// </summary>
+/// <author>Mark Pollack</author>
+[TestFixture]
+public class MessageQueueFactoryObjectTests : AbstractDependencyInjectionSpringContextTests
 {
-    /// <summary>
-    /// This class contains tests for the MessageQueueFactory
-    /// </summary>
-    /// <author>Mark Pollack</author>
-    [TestFixture]
-    public class MessageQueueFactoryObjectTests : AbstractDependencyInjectionSpringContextTests
+    [Test]
+    public void CheckDefaultConstructorValues()
     {
-        [Test]
-        public void CheckDefaultConstructorValues()
-        {
-            MessageQueueFactoryObject mqFactoryObject = new MessageQueueFactoryObject();
-            MessageQueue queue = mqFactoryObject.GetObject() as MessageQueue;
-            Assert.IsNotNull(queue);
-            Assert.AreEqual(string.Empty, queue.Path);
-            Assert.AreEqual(false, queue.DenySharedReceive);
-            Assert.AreEqual(QueueAccessMode.SendAndReceive, queue.AccessMode);
-            //EnableCache property not on queue.
-        }
+        MessageQueueFactoryObject mqFactoryObject = new MessageQueueFactoryObject();
+        MessageQueue queue = mqFactoryObject.GetObject() as MessageQueue;
+        Assert.IsNotNull(queue);
+        Assert.AreEqual(string.Empty, queue.Path);
+        Assert.AreEqual(false, queue.DenySharedReceive);
+        Assert.AreEqual(QueueAccessMode.SendAndReceive, queue.AccessMode);
+        //EnableCache property not on queue.
+    }
 
-        [Test]
-        public void CheckSimpleProperties()
-        {
-            MessageQueueFactoryObject mqFactoryObject = (MessageQueueFactoryObject) applicationContext["&testqueue"];
-            Assert.AreEqual(@".\Private$\testqueue", mqFactoryObject.Path);
-            Assert.AreEqual(true, mqFactoryObject.DenySharedReceive);
-            Assert.AreEqual(QueueAccessMode.Receive, mqFactoryObject.AccessMode);
-            Assert.AreEqual(true, mqFactoryObject.EnableCache);
-            MessageQueue mq = (MessageQueue) applicationContext["testqueue"];
-            Assert.AreEqual("MyLabel", mq.Label);
-        }
+    [Test]
+    public void CheckSimpleProperties()
+    {
+        MessageQueueFactoryObject mqFactoryObject = (MessageQueueFactoryObject) applicationContext["&testqueue"];
+        Assert.AreEqual(@".\Private$\testqueue", mqFactoryObject.Path);
+        Assert.AreEqual(true, mqFactoryObject.DenySharedReceive);
+        Assert.AreEqual(QueueAccessMode.Receive, mqFactoryObject.AccessMode);
+        Assert.AreEqual(true, mqFactoryObject.EnableCache);
+        MessageQueue mq = (MessageQueue) applicationContext["testqueue"];
+        Assert.AreEqual("MyLabel", mq.Label);
+    }
 
+    [Test]
+    public void CheckGetObjectReturnsNewInstance()
+    {
+        MessageQueueFactoryObject mqFactoryObject = new MessageQueueFactoryObject();
+        MessageQueue queue = mqFactoryObject.GetObject() as MessageQueue;
+        MessageQueue anotherQueue = mqFactoryObject.GetObject() as MessageQueue;
+        Assert.IsFalse(queue == anotherQueue, "Should be returning new instances");
+        Assert.IsFalse(mqFactoryObject.IsSingleton,
+            "The MessageQueueFactoryObject class must be configured to return shared instances.");
+    }
 
-        [Test]
-        public void CheckGetObjectReturnsNewInstance()
-        {
-            MessageQueueFactoryObject mqFactoryObject = new MessageQueueFactoryObject();
-            MessageQueue queue = mqFactoryObject.GetObject() as MessageQueue;
-            MessageQueue anotherQueue = mqFactoryObject.GetObject() as MessageQueue;
-            Assert.IsFalse(queue == anotherQueue, "Should be returning new instances");
-            Assert.IsFalse(mqFactoryObject.IsSingleton,
-                           "The MessageQueueFactoryObject class must be configured to return shared instances.");
-        }
+    [Test]
+    public void ObjectTypePropertyYieldsTheCorrectType()
+    {
+        MessageQueueFactoryObject mqFactoryObject = new MessageQueueFactoryObject();
+        Assert.AreEqual(typeof(MessageQueue), mqFactoryObject.ObjectType,
+            "The MessageQueueFactoryObject class ain't giving back DefaultMessageQueue types (it must).");
+    }
 
-        [Test]
-        public void ObjectTypePropertyYieldsTheCorrectType()
-        {
-            MessageQueueFactoryObject mqFactoryObject = new MessageQueueFactoryObject();
-            Assert.AreEqual(typeof (MessageQueue), mqFactoryObject.ObjectType,
-                            "The MessageQueueFactoryObject class ain't giving back DefaultMessageQueue types (it must).");
-        }
-
-        protected override string[] ConfigLocations
-        {
-            get { return new string[] {"assembly://Spring.Messaging.Tests/Spring.Messaging/queue-context.xml"}; }
-        }
+    protected override string[] ConfigLocations
+    {
+        get { return new string[] { "assembly://Spring.Messaging.Tests/Spring.Messaging/queue-context.xml" }; }
     }
 }

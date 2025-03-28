@@ -22,91 +22,90 @@ using System.Reflection;
 using Microsoft.Extensions.Logging;
 using Spring.Objects.Factory.Support;
 
-namespace Spring.Objects.Factory.Attributes
+namespace Spring.Objects.Factory.Attributes;
+
+/// <summary>
+/// Internal class for managing injection metadata.
+/// Not intended for direct use in applications.
+/// </summary>
+public class InjectionMetadata
 {
-	/// <summary>
-	/// Internal class for managing injection metadata.
-	/// Not intended for direct use in applications.
-	/// </summary>
-	public class InjectionMetadata
-	{
-		private static readonly ILogger<InjectionMetadata> Logger = LogManager.GetLogger<InjectionMetadata>();
+    private static readonly ILogger<InjectionMetadata> Logger = LogManager.GetLogger<InjectionMetadata>();
 
-		private readonly Type targetType;
-		private readonly IList<InjectedElement> _injectedElements;
+    private readonly Type targetType;
+    private readonly IList<InjectedElement> _injectedElements;
 
-		/// <summary>
-		/// </summary>
-		/// <param name="targetType"></param>
-		/// <param name="elements"></param>
-		public InjectionMetadata(Type targetType, IList<InjectedElement> elements)
-		{
-			this.targetType = targetType;
-			_injectedElements = new List<InjectedElement>();
-			if (elements.Count > 0)
-			{
-				foreach (var element in elements)
-				{
-					Logger.LogDebug("Found injected element on class [{TargetType}]: {Element}", targetType.Name, element);
-					_injectedElements.Add(element);
-				}
-			}
-		}
+    /// <summary>
+    /// </summary>
+    /// <param name="targetType"></param>
+    /// <param name="elements"></param>
+    public InjectionMetadata(Type targetType, IList<InjectedElement> elements)
+    {
+        this.targetType = targetType;
+        _injectedElements = new List<InjectedElement>();
+        if (elements.Count > 0)
+        {
+            foreach (var element in elements)
+            {
+                Logger.LogDebug("Found injected element on class [{TargetType}]: {Element}", targetType.Name, element);
+                _injectedElements.Add(element);
+            }
+        }
+    }
 
-		/// <summary>
-		/// </summary>
-		/// <param name="objectDefinition"></param>
-		public void CheckConfigMembers(RootObjectDefinition objectDefinition)
-		{
-		}
+    /// <summary>
+    /// </summary>
+    /// <param name="objectDefinition"></param>
+    public void CheckConfigMembers(RootObjectDefinition objectDefinition)
+    {
+    }
 
-		/// <summary>
-		/// Inject values for members into object instance
-		/// </summary>
-		/// <param name="instance"></param>
-		/// <param name="objectName"></param>
-		/// <param name="pvs"></param>
-		public void Inject(object instance, string objectName, IPropertyValues pvs)
-		{
-			for (var i = 0; i < _injectedElements.Count; i++)
-			{
-				var element = _injectedElements[i];
-				Logger.LogDebug("Processing injected method of bean '{ObjectName}': {Element}", objectName, element);
-				element.Inject(instance, objectName, pvs);
-			}
-		}
+    /// <summary>
+    /// Inject values for members into object instance
+    /// </summary>
+    /// <param name="instance"></param>
+    /// <param name="objectName"></param>
+    /// <param name="pvs"></param>
+    public void Inject(object instance, string objectName, IPropertyValues pvs)
+    {
+        for (var i = 0; i < _injectedElements.Count; i++)
+        {
+            var element = _injectedElements[i];
+            Logger.LogDebug("Processing injected method of bean '{ObjectName}': {Element}", objectName, element);
+            element.Inject(instance, objectName, pvs);
+        }
+    }
 
-		/// <summary>
-		/// Represents an element that needs to be injected
-		/// </summary>
-		public abstract class InjectedElement
-		{
-			/// <summary>
-			/// Instantiates a new inject element
-			/// </summary>
-			/// <param name="member"></param>
-			protected InjectedElement(MemberInfo member)
-			{
-				Member = member;
-			}
+    /// <summary>
+    /// Represents an element that needs to be injected
+    /// </summary>
+    public abstract class InjectedElement
+    {
+        /// <summary>
+        /// Instantiates a new inject element
+        /// </summary>
+        /// <param name="member"></param>
+        protected InjectedElement(MemberInfo member)
+        {
+            Member = member;
+        }
 
-			/// <summary>
-			/// The Property, field, method or constructor info.
-			/// </summary>
-			public MemberInfo Member { get; }
+        /// <summary>
+        /// The Property, field, method or constructor info.
+        /// </summary>
+        public MemberInfo Member { get; }
 
-			/// <summary>
-			/// Ececuted to inject value to associated memeber info
-			/// </summary>
-			/// <param name="target"></param>
-			/// <param name="requestingObjectName"></param>
-			/// <param name="pvs"></param>
-			public abstract void Inject(object target, string requestingObjectName, IPropertyValues pvs);
-		}
+        /// <summary>
+        /// Ececuted to inject value to associated memeber info
+        /// </summary>
+        /// <param name="target"></param>
+        /// <param name="requestingObjectName"></param>
+        /// <param name="pvs"></param>
+        public abstract void Inject(object target, string requestingObjectName, IPropertyValues pvs);
+    }
 
-		public static bool NeedsRefresh(InjectionMetadata metadata, Type type)
-		{
-			return (metadata == null || metadata.targetType != type);
-		}
-	}
+    public static bool NeedsRefresh(InjectionMetadata metadata, Type type)
+    {
+        return (metadata == null || metadata.targetType != type);
+    }
 }

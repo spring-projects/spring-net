@@ -2,14 +2,14 @@
 <objects xmlns="http://www.springframework.net">
 
 
-  <object id="assemblerOne" type="Spring.Context.Support.Assembler, Spring.Core.Tests">
-    <property name="service" ref="service"/>
-    <property name="logic" ref="logicOne"/>
-  </object>
+    <object id="assemblerOne" type="Spring.Context.Support.Assembler, Spring.Core.Tests">
+        <property name="service" ref="service" />
+        <property name="logic" ref="logicOne" />
+    </object>
 
-  
-  <object id="assemblerTwo" type="Spring.Context.Support.Assembler, Spring.Core.Tests">
-    <property name="logic" ref="logicTwo"/>
-  </object>
-  
+
+    <object id="assemblerTwo" type="Spring.Context.Support.Assembler, Spring.Core.Tests">
+        <property name="logic" ref="logicTwo" />
+    </object>
+
 </objects>

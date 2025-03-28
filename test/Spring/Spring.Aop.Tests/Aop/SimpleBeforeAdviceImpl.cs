@@ -1,59 +1,64 @@
 #region License
+
 /*
  * Copyright 2002-2010 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 #endregion
 
 #region Imports
 
-
-
 #endregion
 
-namespace Spring.Aop
+namespace Spring.Aop;
+
+/// <summary>
+///
+/// </summary>
+/// <author>Dmitriy Kopylenko</author>
+/// <author>Simon White (.NET)</author>
+public class SimpleBeforeAdviceImpl : ISimpleBeforeAdvice
 {
-	/// <summary>
-	/// 
-	/// </summary>
-	/// <author>Dmitriy Kopylenko</author>
-	/// <author>Simon White (.NET)</author>
-	public class SimpleBeforeAdviceImpl : ISimpleBeforeAdvice
-	{
-		private int _invocationCounter;
+    private int _invocationCounter;
 
-		#region Properties
-		public int InvocationCounter
-		{
-			get
-			{
-				return _invocationCounter;
-			}
-		}
-		#endregion
+    #region Properties
 
-		#region Constructors
-		public SimpleBeforeAdviceImpl()
-		{
-		}
-		#endregion
+    public int InvocationCounter
+    {
+        get
+        {
+            return _invocationCounter;
+        }
+    }
 
-		#region ISimpleBeforeAdvice Members
-		public void Before()
-		{
-			++_invocationCounter;
-		}
-		#endregion
-	}
+    #endregion
+
+    #region Constructors
+
+    public SimpleBeforeAdviceImpl()
+    {
+    }
+
+    #endregion
+
+    #region ISimpleBeforeAdvice Members
+
+    public void Before()
+    {
+        ++_invocationCounter;
+    }
+
+    #endregion
 }

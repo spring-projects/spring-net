@@ -20,31 +20,31 @@
 
 #if NETSTANDARD
 using Experimental.System.Messaging;
+
 #else
 using System.Messaging;
 #endif
 
-namespace Spring.Messaging.Listener
+namespace Spring.Messaging.Listener;
+
+/// <summary>
+/// Exception handler called when an exception occurs during
+/// non-transactional receive processing.
+/// </summary>
+/// <remarks>
+/// A non-transactional receive will remove the message from the queue.  Non-transactional
+/// receivers do not suffer from poison messages since there is no redelivery by MSMQ.
+/// Typical actions to perform are to log the message or place it in another queue.
+/// If placed in another queue, another message listener container can be used to
+/// process the message later, assuming the root cause of the original exception is
+/// transient in nature.
+/// </remarks>
+public interface IExceptionHandler
 {
     /// <summary>
-    /// Exception handler called when an exception occurs during
-    /// non-transactional receive processing.
+    /// Called when an exception is thrown in listener processing.
     /// </summary>
-    /// <remarks>
-    /// A non-transactional receive will remove the message from the queue.  Non-transactional
-    /// receivers do not suffer from poison messages since there is no redelivery by MSMQ.
-    /// Typical actions to perform are to log the message or place it in another queue.
-    /// If placed in another queue, another message listener container can be used to
-    /// process the message later, assuming the root cause of the original exception is
-    /// transient in nature.
-    /// </remarks>
-    public interface IExceptionHandler
-    {
-        /// <summary>
-        /// Called when an exception is thrown in listener processing.
-        /// </summary>
-        /// <param name="exception">The exception.</param>
-        /// <param name="message">The message.</param>
-        void OnException(Exception exception, Message message);
-    }
+    /// <param name="exception">The exception.</param>
+    /// <param name="message">The message.</param>
+    void OnException(Exception exception, Message message);
 }

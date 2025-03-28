@@ -1,5 +1,3 @@
-
-
 #region License
 
 /*
@@ -20,35 +18,34 @@
 
 #endregion
 
-namespace Spring.Messaging.Nms.Support.Converter
+namespace Spring.Messaging.Nms.Support.Converter;
+
+/// <summary>
+/// Provides a layer of indirection when adding the 'type' of the object as a message property.
+/// </summary>
+/// <author>Mark Pollack</author>
+public interface ITypeMapper
 {
     /// <summary>
-    /// Provides a layer of indirection when adding the 'type' of the object as a message property.
+    /// Gets the name of the field in the message that has type information..
     /// </summary>
-    /// <author>Mark Pollack</author>
-    public interface ITypeMapper
+    /// <value>The name of the type id field.</value>
+    string TypeIdFieldName
     {
-        /// <summary>
-        /// Gets the name of the field in the message that has type information..
-        /// </summary>
-        /// <value>The name of the type id field.</value>
-        string TypeIdFieldName
-        {
-            get;
-        }
-
-        /// <summary>
-        /// Convert from a type to a string.
-        /// </summary>
-        /// <param name="typeOfObjectToConvert">The type of object to convert.</param>
-        /// <returns></returns>
-        string FromType(Type typeOfObjectToConvert);
-
-        /// <summary>
-        /// Convert from a string to a type
-        /// </summary>
-        /// <param name="typeId">The type id.</param>
-        /// <returns></returns>
-        Type ToType(string typeId);
+        get;
     }
+
+    /// <summary>
+    /// Convert from a type to a string.
+    /// </summary>
+    /// <param name="typeOfObjectToConvert">The type of object to convert.</param>
+    /// <returns></returns>
+    string FromType(Type typeOfObjectToConvert);
+
+    /// <summary>
+    /// Convert from a string to a type
+    /// </summary>
+    /// <param name="typeId">The type id.</param>
+    /// <returns></returns>
+    Type ToType(string typeId);
 }

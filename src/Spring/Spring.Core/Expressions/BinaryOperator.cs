@@ -20,70 +20,72 @@
 
 using System.Runtime.Serialization;
 
-namespace Spring.Expressions
+namespace Spring.Expressions;
+
+/// <summary>
+/// Base class for binary operators.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[Serializable]
+public abstract class BinaryOperator : BaseNode
 {
     /// <summary>
-    /// Base class for binary operators.
+    /// Create a new instance
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    [Serializable]
-    public abstract class BinaryOperator : BaseNode
+    protected BinaryOperator()
     {
-        /// <summary>
-        /// Create a new instance
-        /// </summary>
-        protected BinaryOperator()
-        {}
+    }
 
-        /// <summary>
-        /// Create a new instance with the supplied operands
-        /// </summary>
-        /// <param name="left"></param>
-        /// <param name="right"></param>
-        protected BinaryOperator(BaseNode left, BaseNode right)
-        {
-            base.addChild(left);
-            base.addChild(right);
-        }
+    /// <summary>
+    /// Create a new instance with the supplied operands
+    /// </summary>
+    /// <param name="left"></param>
+    /// <param name="right"></param>
+    protected BinaryOperator(BaseNode left, BaseNode right)
+    {
+        base.addChild(left);
+        base.addChild(right);
+    }
 
-        /// <summary>
-        /// Create a new instance from SerializationInfo
-        /// </summary>
-        protected BinaryOperator(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {}
+    /// <summary>
+    /// Create a new instance from SerializationInfo
+    /// </summary>
+    protected BinaryOperator(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+    }
 
-        /// <summary>
-        /// Gets the left operand.
-        /// </summary>
-        /// <value>The left operand.</value>
-        public BaseNode Left
-        {
-            get { return (BaseNode) this.getFirstChild(); }
-        }
+    /// <summary>
+    /// Gets the left operand.
+    /// </summary>
+    /// <value>The left operand.</value>
+    public BaseNode Left
+    {
+        get { return (BaseNode) this.getFirstChild(); }
+    }
 
-        /// <summary>
-        /// Evaluate the left operand
-        /// </summary>
-        protected object GetLeftValue(object context, EvaluationContext evalContext)
-        {
-            return GetValue(Left, context, evalContext);
-        }
-        /// <summary>
-        /// Gets the right operand.
-        /// </summary>
-        /// <value>The right operand.</value>
-        public BaseNode Right
-        {
-            get { return (BaseNode) this.getFirstChild().getNextSibling(); }
-        }
+    /// <summary>
+    /// Evaluate the left operand
+    /// </summary>
+    protected object GetLeftValue(object context, EvaluationContext evalContext)
+    {
+        return GetValue(Left, context, evalContext);
+    }
 
-        /// <summary>
-        /// Evaluate the left operand
-        /// </summary>
-        protected object GetRightValue(object context, EvaluationContext evalContext)
-        {
-            return GetValue(Right, context, evalContext);
-        }
+    /// <summary>
+    /// Gets the right operand.
+    /// </summary>
+    /// <value>The right operand.</value>
+    public BaseNode Right
+    {
+        get { return (BaseNode) this.getFirstChild().getNextSibling(); }
+    }
+
+    /// <summary>
+    /// Evaluate the left operand
+    /// </summary>
+    protected object GetRightValue(object context, EvaluationContext evalContext)
+    {
+        return GetValue(Right, context, evalContext);
     }
 }

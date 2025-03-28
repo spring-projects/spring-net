@@ -21,178 +21,175 @@
 using System.Collections;
 using Spring.Core.TypeResolution;
 
-namespace Spring.Messaging.Ems.Support.Converter
+namespace Spring.Messaging.Ems.Support.Converter;
+
+/// <summary>
+/// Provides a layer of indirection when adding the 'type' of the object as a message property.
+/// </summary>
+public class TypeMapper : ITypeMapper
 {
+    private string defaultNamespace;
+    private string defaultAssemblyName;
+
+    //Generics not used to support both 1.1 and 2.0
+    private IDictionary idTypeMapping;
+    private IDictionary typeIdMapping;
+
+    private string defaultHashtableTypeId = "Hashtable";
+
+    private Type defaultHashtableClass = typeof(Hashtable);
+
     /// <summary>
-    /// Provides a layer of indirection when adding the 'type' of the object as a message property.
+    /// Initializes a new instance of the <see cref="TypeMapper"/>
     /// </summary>
-    public class TypeMapper : ITypeMapper
+    public TypeMapper()
     {
-        private string defaultNamespace;
-        private string defaultAssemblyName;
+        idTypeMapping = new Hashtable();
+        typeIdMapping = new Hashtable();
+    }
 
-        //Generics not used to support both 1.1 and 2.0
-        private IDictionary idTypeMapping;
-        private IDictionary typeIdMapping;
+    /// <summary>
+    /// Gets or sets the id type mapping.
+    /// </summary>
+    /// <value>The id type mapping.</value>
+    public IDictionary IdTypeMapping
+    {
+        get { return idTypeMapping; }
+        set { idTypeMapping = value; }
+    }
 
-        private string defaultHashtableTypeId = "Hashtable";
+    /// <summary>
+    /// Gets the name of the field in the message that has type information..
+    /// </summary>
+    /// <value>The name of the type id field.</value>
+    public string TypeIdFieldName
+    {
+        get { return "__TypeId__"; }
+    }
 
-        private Type defaultHashtableClass = typeof(Hashtable);
+    /// <summary>
+    /// Sets the default hashtable class.
+    /// </summary>
+    /// <value>The default hashtable class.</value>
+    public Type DefaultHashtableClass
+    {
+        set { defaultHashtableClass = value; }
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TypeMapper"/>
-        /// </summary>
-        public TypeMapper()
+    /// <summary>
+    /// Convert from a type to a string.
+    /// </summary>
+    /// <param name="typeOfObjectToConvert">The type of object to convert.</param>
+    /// <returns></returns>
+    public string FromType(Type typeOfObjectToConvert)
+    {
+        if (typeIdMapping.Contains(typeOfObjectToConvert))
         {
-            idTypeMapping = new Hashtable();
-            typeIdMapping = new Hashtable();
+            return typeIdMapping[typeOfObjectToConvert] as string;
+        }
+        else
+        {
+            if (typeof(IDictionary).IsAssignableFrom(typeOfObjectToConvert))
+            {
+                return defaultHashtableTypeId;
+            }
+
+            return typeOfObjectToConvert.Name;
+        }
+    }
+
+    /// <summary>
+    /// Convert from a string to a type
+    /// </summary>
+    /// <param name="typeId">The type id.</param>
+    /// <returns></returns>
+    public Type ToType(string typeId)
+    {
+        if (idTypeMapping.Contains(typeId))
+        {
+            return idTypeMapping[typeId] as Type;
+        }
+        else
+        {
+            if (typeId.Equals(defaultHashtableTypeId))
+            {
+                return defaultHashtableClass;
+            }
+
+            string fullyQualifiedTypeName = defaultNamespace + "." +
+                                            typeId + ", " +
+                                            DefaultAssemblyName;
+            return TypeResolutionUtils.ResolveType(fullyQualifiedTypeName);
+        }
+    }
+
+    /// <summary>
+    /// Gets or sets the default namespace.
+    /// </summary>
+    /// <value>The default namespace.</value>
+    public string DefaultNamespace
+    {
+        get
+        {
+            return defaultNamespace;
+        }
+        set
+        {
+            defaultNamespace = value;
+        }
+    }
+
+    /// <summary>
+    /// Gets or sets the default name of the assembly.
+    /// </summary>
+    /// <value>The default name of the assembly.</value>
+    public string DefaultAssemblyName
+    {
+        get
+        {
+            return defaultAssemblyName;
+        }
+        set
+        {
+            defaultAssemblyName = value;
+        }
+    }
+
+    /// <summary>
+    /// Afters the properties set.
+    /// </summary>
+    public void AfterPropertiesSet()
+    {
+        ValidateIdTypeMapping();
+        if (DefaultAssemblyName != null && DefaultNamespace == null)
+        {
+            throw new ArgumentException("Default Namespace required when DefaultAssemblyName is set.");
         }
 
-
-        /// <summary>
-        /// Gets or sets the id type mapping.
-        /// </summary>
-        /// <value>The id type mapping.</value>
-        public IDictionary IdTypeMapping
+        if (DefaultNamespace != null && DefaultAssemblyName == null)
         {
-            get { return idTypeMapping; }
-            set { idTypeMapping = value; }
+            throw new ArgumentException("Default Assembly Name required when DefaultNamespace is set.");
+        }
+    }
+
+    private void ValidateIdTypeMapping()
+    {
+        IDictionary finalIdTypeMapping = new Hashtable();
+        foreach (DictionaryEntry entry in idTypeMapping)
+        {
+            string id = entry.Key.ToString();
+            Type t = entry.Value as Type;
+            if (t == null)
+            {
+                //convert from string value.
+                string typeName = entry.Value.ToString();
+                t = TypeResolutionUtils.ResolveType(typeName);
+            }
+
+            finalIdTypeMapping.Add(id, t);
+            typeIdMapping.Add(t, id);
         }
 
-        /// <summary>
-        /// Gets the name of the field in the message that has type information..
-        /// </summary>
-        /// <value>The name of the type id field.</value>
-        public string TypeIdFieldName
-        {
-            get { return "__TypeId__"; }
-        }
-
-
-        /// <summary>
-        /// Sets the default hashtable class.
-        /// </summary>
-        /// <value>The default hashtable class.</value>
-        public Type DefaultHashtableClass
-        {
-            set { defaultHashtableClass = value; }
-        }
-
-        /// <summary>
-        /// Convert from a type to a string.
-        /// </summary>
-        /// <param name="typeOfObjectToConvert">The type of object to convert.</param>
-        /// <returns></returns>
-        public string FromType(Type typeOfObjectToConvert)
-        {
-
-            if (typeIdMapping.Contains(typeOfObjectToConvert))
-            {
-                return typeIdMapping[typeOfObjectToConvert] as string;
-            }
-            else
-            {
-                if ( typeof (IDictionary).IsAssignableFrom(typeOfObjectToConvert))
-                {
-                    return defaultHashtableTypeId;
-                }
-                return typeOfObjectToConvert.Name;
-            }
-        }
-
-        /// <summary>
-        /// Convert from a string to a type
-        /// </summary>
-        /// <param name="typeId">The type id.</param>
-        /// <returns></returns>
-        public Type ToType(string typeId)
-        {
-            if (idTypeMapping.Contains(typeId))
-            {
-                return idTypeMapping[typeId] as Type;
-            }
-            else
-            {
-                if (typeId.Equals(defaultHashtableTypeId))
-                {
-                    return defaultHashtableClass;
-                }
-                string fullyQualifiedTypeName = defaultNamespace + "." +
-                                 typeId + ", " +
-                                 DefaultAssemblyName;
-                return TypeResolutionUtils.ResolveType(fullyQualifiedTypeName);
-            }
-
-        }
-
-        /// <summary>
-        /// Gets or sets the default namespace.
-        /// </summary>
-        /// <value>The default namespace.</value>
-        public string DefaultNamespace
-        {
-            get
-            {
-                return defaultNamespace;
-            }
-            set
-            {
-                defaultNamespace = value;
-            }
-
-        }
-
-        /// <summary>
-        /// Gets or sets the default name of the assembly.
-        /// </summary>
-        /// <value>The default name of the assembly.</value>
-        public string DefaultAssemblyName
-        {
-            get
-            {
-                return defaultAssemblyName;
-            }
-            set
-            {
-                defaultAssemblyName = value;
-            }
-        }
-
-        /// <summary>
-        /// Afters the properties set.
-        /// </summary>
-        public void AfterPropertiesSet()
-        {
-            ValidateIdTypeMapping();
-            if (DefaultAssemblyName != null && DefaultNamespace == null)
-            {
-                throw new ArgumentException("Default Namespace required when DefaultAssemblyName is set.");
-            }
-            if (DefaultNamespace != null && DefaultAssemblyName == null)
-            {
-                throw new ArgumentException("Default Assembly Name required when DefaultNamespace is set.");
-            }
-        }
-
-
-        private void ValidateIdTypeMapping()
-        {
-            IDictionary finalIdTypeMapping = new Hashtable();
-            foreach (DictionaryEntry entry in idTypeMapping)
-            {
-                string id = entry.Key.ToString();
-                Type t = entry.Value as Type;
-                if (t == null)
-                {
-                    //convert from string value.
-                    string typeName = entry.Value.ToString();
-                    t = TypeResolutionUtils.ResolveType(typeName);
-                }
-                finalIdTypeMapping.Add(id,t);
-                typeIdMapping.Add(t,id);
-
-            }
-            idTypeMapping = finalIdTypeMapping;
-        }
+        idTypeMapping = finalIdTypeMapping;
     }
 }

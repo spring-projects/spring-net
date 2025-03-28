@@ -1,9 +1,8 @@
-﻿namespace Spring.Data.NHibernate5.NestedTxSuspension.Integration.Tests
-{
-    public interface IService2
-    {
-        void ServiceMethodWithNotSupported();
+﻿namespace Spring.Data.NHibernate5.NestedTxSuspension.Integration.Tests;
 
-        void ServiceMethodWithRequiresNew();
-    }
+public interface IService2
+{
+    void ServiceMethodWithNotSupported();
+
+    void ServiceMethodWithRequiresNew();
 }

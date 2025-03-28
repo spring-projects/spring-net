@@ -21,108 +21,106 @@
 #region Imports
 
 using AopAlliance.Aop;
-
 using Spring.Util;
 
 #endregion
 
-namespace Spring.Aop.Support
+namespace Spring.Aop.Support;
+
+/// <summary>
+/// Convenient class for name-match method pointcuts that hold an Interceptor,
+/// making them an Advisor.
+/// </summary>
+/// <author>Juergen Hoeller</author>
+/// <author>Aleksandar Seovic (.NET)</author>
+/// <author>Mark Pollack (.NET)</author>
+[Serializable]
+public class NameMatchMethodPointcutAdvisor : AbstractGenericPointcutAdvisor
 {
-	/// <summary> 
-	/// Convenient class for name-match method pointcuts that hold an Interceptor,
-	/// making them an Advisor.
-	/// </summary>
-	/// <author>Juergen Hoeller</author>
-	/// <author>Aleksandar Seovic (.NET)</author>
-	/// <author>Mark Pollack (.NET)</author>
-    [Serializable]
-    public class NameMatchMethodPointcutAdvisor : AbstractGenericPointcutAdvisor
-	{
+    private NameMatchMethodPointcut pointcut = new NameMatchMethodPointcut();
 
-        private NameMatchMethodPointcut pointcut = new NameMatchMethodPointcut();
+    #region Constructor(s)
 
-        #region Constructor(s)
-
-        /// <summary>
-		/// Creates a new instance of the
-		/// <see cref="NameMatchMethodPointcutAdvisor"/> class.
-		/// </summary>
-		public NameMatchMethodPointcutAdvisor()
-		{
-		}
-
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="NameMatchMethodPointcutAdvisor"/> class
-		/// for the supplied <paramref name="advice"/>.
-		/// </summary>
-		/// <param name="advice"></param>
-		public NameMatchMethodPointcutAdvisor(IAdvice advice)
-		{
-			Advice = advice;
-        }
-
-        #endregion
-
-
-        #region Properties 
-        /// <summary>
-        /// The <see cref="Spring.Aop.ITypeFilter"/> for this pointcut.
-        /// </summary>
-        /// <remarks>Default is </remarks>
-        /// <value>
-        /// The current <see cref="Spring.Aop.ITypeFilter"/>.
-        /// </value>
-        public ITypeFilter TypeFilter {
-            set
-            {
-                pointcut.TypeFilter = value;
-            }
-        }
-
-	    /// <summary>
-	    /// Convenience property when we have only a single method name
-	    /// to match.
-	    /// </summary>
-	    /// <remarks>
-	    /// <note type="caution">
-	    /// Use either this property or the
-	    /// <see cref="Spring.Aop.Support.NameMatchMethodPointcut.MappedNames"/> property,
-	    /// not both.
-	    /// </note>
-	    /// </remarks>
-	    public string MappedName
-	    {
-            set { pointcut.MappedName = value; }
-	    }
-
-	    /// <summary>
-	    /// Set the method names defining methods to match.
-	    /// </summary>
-	    /// <remarks>
-	    /// <p>
-	    /// Matching will be the union of all these; if any match, the pointcut matches.
-	    /// </p>
-	    /// </remarks>
-	    public string[] MappedNames
-	    {
-	        set { pointcut.MappedNames = value; }
-	    }
-
-		/// <summary>
-		/// The <see cref="Spring.Aop.IPointcut"/> that drives this advisor.
-		/// </summary>
-		public override IPointcut Pointcut
-		{
-            get { return pointcut; }
-            set
-            {
-                AssertUtils.AssertArgumentType(value, "pointcut", typeof(NameMatchMethodPointcut),
-                              "Pointcut most be compatible with type NameMatchMethodPointcut");
-                pointcut = value as NameMatchMethodPointcut;
-            }
-        }
-
-        #endregion
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="NameMatchMethodPointcutAdvisor"/> class.
+    /// </summary>
+    public NameMatchMethodPointcutAdvisor()
+    {
     }
+
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="NameMatchMethodPointcutAdvisor"/> class
+    /// for the supplied <paramref name="advice"/>.
+    /// </summary>
+    /// <param name="advice"></param>
+    public NameMatchMethodPointcutAdvisor(IAdvice advice)
+    {
+        Advice = advice;
+    }
+
+    #endregion
+
+    #region Properties
+
+    /// <summary>
+    /// The <see cref="Spring.Aop.ITypeFilter"/> for this pointcut.
+    /// </summary>
+    /// <remarks>Default is </remarks>
+    /// <value>
+    /// The current <see cref="Spring.Aop.ITypeFilter"/>.
+    /// </value>
+    public ITypeFilter TypeFilter
+    {
+        set
+        {
+            pointcut.TypeFilter = value;
+        }
+    }
+
+    /// <summary>
+    /// Convenience property when we have only a single method name
+    /// to match.
+    /// </summary>
+    /// <remarks>
+    /// <note type="caution">
+    /// Use either this property or the
+    /// <see cref="Spring.Aop.Support.NameMatchMethodPointcut.MappedNames"/> property,
+    /// not both.
+    /// </note>
+    /// </remarks>
+    public string MappedName
+    {
+        set { pointcut.MappedName = value; }
+    }
+
+    /// <summary>
+    /// Set the method names defining methods to match.
+    /// </summary>
+    /// <remarks>
+    /// <p>
+    /// Matching will be the union of all these; if any match, the pointcut matches.
+    /// </p>
+    /// </remarks>
+    public string[] MappedNames
+    {
+        set { pointcut.MappedNames = value; }
+    }
+
+    /// <summary>
+    /// The <see cref="Spring.Aop.IPointcut"/> that drives this advisor.
+    /// </summary>
+    public override IPointcut Pointcut
+    {
+        get { return pointcut; }
+        set
+        {
+            AssertUtils.AssertArgumentType(value, "pointcut", typeof(NameMatchMethodPointcut),
+                "Pointcut most be compatible with type NameMatchMethodPointcut");
+            pointcut = value as NameMatchMethodPointcut;
+        }
+    }
+
+    #endregion
 }

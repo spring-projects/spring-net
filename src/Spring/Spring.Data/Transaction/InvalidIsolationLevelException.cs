@@ -20,49 +20,51 @@
 
 using System.Runtime.Serialization;
 
-namespace Spring.Transaction
+namespace Spring.Transaction;
+
+/// <summary>
+/// Exception that gets thrown when an invalid isolation level is specified,
+/// i.e. an isolation level that the transaction manager implementation
+/// doesn't support.
+/// </summary>
+/// <author>Juergen Hoeller</author>
+/// <author>Griffin Caprio (.NET)</author>
+[Serializable]
+public class InvalidIsolationLevelException : TransactionUsageException
 {
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Transaction.InvalidIsolationLevelException"/> class.
+    /// </summary>
+    public InvalidIsolationLevelException() { }
 
-	/// <summary>
-	/// Exception that gets thrown when an invalid isolation level is specified,
-	/// i.e. an isolation level that the transaction manager implementation
-	/// doesn't support.
-	/// </summary>
-	/// <author>Juergen Hoeller</author>
-	/// <author>Griffin Caprio (.NET)</author>
-	[Serializable]
-	public class InvalidIsolationLevelException : TransactionUsageException
-	{
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Transaction.InvalidIsolationLevelException"/> class.
-		/// </summary>
-		public InvalidIsolationLevelException( ) {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Transaction.InvalidIsolationLevelException"/> class.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    public InvalidIsolationLevelException(String message) : base(message) { }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Transaction.InvalidIsolationLevelException"/> class.
-		/// </summary>
-		/// <param name="message">
-		/// A message about the exception.
-		/// </param>
-		public InvalidIsolationLevelException( String message ) : base(message) {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Transaction.InvalidIsolationLevelException"/> class.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    /// <param name="rootCause">
+    /// The root exception that is being wrapped.
+    /// </param>
+    public InvalidIsolationLevelException(string message, Exception rootCause)
+        : base(message, rootCause)
+    {
+    }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Transaction.InvalidIsolationLevelException"/> class.
-		/// </summary>
-		/// <param name="message">
-		/// A message about the exception.
-		/// </param>
-		/// <param name="rootCause">
-		/// The root exception that is being wrapped.
-		/// </param>
-		public InvalidIsolationLevelException(string message, Exception rootCause)
-			: base(message, rootCause) {}
-
-		/// <inheritdoc />
-		protected InvalidIsolationLevelException(
-			SerializationInfo info, StreamingContext context ) : base( info, context ) {}
-	}
+    /// <inheritdoc />
+    protected InvalidIsolationLevelException(
+        SerializationInfo info, StreamingContext context) : base(info, context)
+    {
+    }
 }

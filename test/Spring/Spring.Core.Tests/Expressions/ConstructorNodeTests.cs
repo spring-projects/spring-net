@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,86 +24,87 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Expressions
+namespace Spring.Expressions;
+
+/// <summary>
+///
+/// </summary>
+/// <author>Erich Eichinger</author>
+[TestFixture]
+public class ConstructorNodeTests
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <author>Erich Eichinger</author>
-    [TestFixture]
-    public class ConstructorNodeTests
+    #region Test Classes
+
+    public class PublicTestClass
     {
-        #region Test Classes
+        public string _s;
+        public int _i;
 
-        public class PublicTestClass
+        public PublicTestClass(string s)
+            : this(s, -1)
         {
-            public string _s;
-            public int _i;
-
-            public PublicTestClass(string s)
-                :this(s, -1)
-            {}
-
-            protected PublicTestClass(string s, int i)
-            {
-                _s = s; _i=i;
-            }
         }
 
-        private class PrivateTestClass : PublicTestClass
+        protected PublicTestClass(string s, int i)
         {
-            private PrivateTestClass(string s, int i)
-                :base(s,i)
-            {
-            }
+            _s = s;
+            _i = i;
         }
+    }
 
-        #endregion Test Classes
-
-        [Test]
-        public void CanCreatePublicInstance()
+    private class PrivateTestClass : PublicTestClass
+    {
+        private PrivateTestClass(string s, int i)
+            : base(s, i)
         {
-            ConstructorNode ctorNode = new ConstructorNode(typeof(PublicTestClass));
-            StringLiteralNode sNode = new StringLiteralNode("theValue");
-            ctorNode.AddArgument(sNode);
-
-            PublicTestClass instance = (PublicTestClass) ((IExpression)ctorNode).GetValue();
-            Assert.AreEqual( sNode.Text, instance._s );
-            Assert.AreEqual( -1, instance._i );
         }
+    }
 
-        [Test]
-        public void CanCreatePublicInstanceWithNonPublicConstructor()
-        {
-            ConstructorNode ctorNode = new ConstructorNode();
-            ctorNode.Text=typeof(PublicTestClass).FullName;
-            StringLiteralNode sNode = new StringLiteralNode();
-            sNode.Text = "theValue2";
-            ctorNode.addChild(sNode);
-            IntLiteralNode iNode = new IntLiteralNode();
-            iNode.Text="2";
-            ctorNode.addChild(iNode);
+    #endregion Test Classes
 
-            PublicTestClass instance = (PublicTestClass) ((IExpression)ctorNode).GetValue();
-            Assert.AreEqual( sNode.Text, instance._s );
-            Assert.AreEqual( 2, instance._i );
-        }
+    [Test]
+    public void CanCreatePublicInstance()
+    {
+        ConstructorNode ctorNode = new ConstructorNode(typeof(PublicTestClass));
+        StringLiteralNode sNode = new StringLiteralNode("theValue");
+        ctorNode.AddArgument(sNode);
 
-        [Test]
-        public void CanCreateNonPublicInstanceWithNonPublicConstructor()
-        {
-            ConstructorNode ctorNode = new ConstructorNode();
-            ctorNode.Text=typeof(PrivateTestClass).FullName;
-            StringLiteralNode sNode = new StringLiteralNode();
-            sNode.Text = "theValue3";
-            ctorNode.addChild(sNode);
-            IntLiteralNode iNode = new IntLiteralNode();
-            iNode.Text="3";
-            ctorNode.addChild(iNode);
+        PublicTestClass instance = (PublicTestClass) ((IExpression) ctorNode).GetValue();
+        Assert.AreEqual(sNode.Text, instance._s);
+        Assert.AreEqual(-1, instance._i);
+    }
 
-            PublicTestClass instance = (PublicTestClass) ((IExpression)ctorNode).GetValue();
-            Assert.AreEqual( sNode.Text, instance._s );
-            Assert.AreEqual( 3, instance._i );
-        }
+    [Test]
+    public void CanCreatePublicInstanceWithNonPublicConstructor()
+    {
+        ConstructorNode ctorNode = new ConstructorNode();
+        ctorNode.Text = typeof(PublicTestClass).FullName;
+        StringLiteralNode sNode = new StringLiteralNode();
+        sNode.Text = "theValue2";
+        ctorNode.addChild(sNode);
+        IntLiteralNode iNode = new IntLiteralNode();
+        iNode.Text = "2";
+        ctorNode.addChild(iNode);
+
+        PublicTestClass instance = (PublicTestClass) ((IExpression) ctorNode).GetValue();
+        Assert.AreEqual(sNode.Text, instance._s);
+        Assert.AreEqual(2, instance._i);
+    }
+
+    [Test]
+    public void CanCreateNonPublicInstanceWithNonPublicConstructor()
+    {
+        ConstructorNode ctorNode = new ConstructorNode();
+        ctorNode.Text = typeof(PrivateTestClass).FullName;
+        StringLiteralNode sNode = new StringLiteralNode();
+        sNode.Text = "theValue3";
+        ctorNode.addChild(sNode);
+        IntLiteralNode iNode = new IntLiteralNode();
+        iNode.Text = "3";
+        ctorNode.addChild(iNode);
+
+        PublicTestClass instance = (PublicTestClass) ((IExpression) ctorNode).GetValue();
+        Assert.AreEqual(sNode.Text, instance._s);
+        Assert.AreEqual(3, instance._i);
     }
 }

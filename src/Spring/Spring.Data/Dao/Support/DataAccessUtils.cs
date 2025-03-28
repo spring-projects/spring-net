@@ -21,60 +21,59 @@
 using System.Collections;
 using Spring.Util;
 
-namespace Spring.Dao.Support
+namespace Spring.Dao.Support;
+
+/// <summary>
+/// Miscellaneous utility methods for DAO implementations.
+/// Useful with any data access technology.
+/// </summary>
+/// <author>Mark Pollack (.NET)</author>
+public class DataAccessUtils
 {
-	/// <summary>
-	/// Miscellaneous utility methods for DAO implementations.
-	/// Useful with any data access technology.
-	/// </summary>
-	/// <author>Mark Pollack (.NET)</author>
-	public class DataAccessUtils
-	{
+    #region Constructor (s)
 
-		#region Constructor (s)
-		/// <summary>
-		/// Initializes a new instance of the <see cref="DataAccessUtils"/> class.
-                /// </summary>
-		public 	DataAccessUtils()
-		{
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DataAccessUtils"/> class.
+    /// </summary>
+    public DataAccessUtils()
+    {
+    }
 
-		}
+    #endregion
 
-		#endregion
+    #region Methods
 
-		#region Methods
-
-	    public static object RequiredUniqueResultSet(IList results)
-	    {
-	        int size = (results != null ? results.Count : 0);
-	        if (size == 0)
-	        {
-	            throw new EmptyResultDataAccessException(1);
-	        }
-	        if ( ! CollectionUtils.HasUniqueObject(results))
-	        {
-	            throw new IncorrectResultSizeDataAccessException(1, size);
-	        }
-	        IEnumerator enumerator = results.GetEnumerator();
-	        enumerator.MoveNext();
-	        return enumerator.Current;
-	    }
-
-        /// <summary>
-        /// Return a translated exception if this is appropriate, or null if the exception could
-        /// not be translated.
-        /// </summary>
-        /// <param name="rawException">The raw exception we may wish to translate.</param>
-        /// <param name="pet">The PersistenceExceptionTranslator to use to perform the translation.</param>
-        /// <returns>A translated exception if translation is possible, or or null if the exception could
-        /// not be translated.</returns>
-        public static DataAccessException TranslateIfNecessary(Exception rawException, IPersistenceExceptionTranslator pet)
+    public static object RequiredUniqueResultSet(IList results)
+    {
+        int size = (results != null ? results.Count : 0);
+        if (size == 0)
         {
-            AssertUtils.ArgumentNotNull(pet, "PersistenceExceptionTranslator must not be null");
-            return pet.TranslateExceptionIfPossible(rawException);
+            throw new EmptyResultDataAccessException(1);
         }
 
-	    #endregion
-	}
+        if (!CollectionUtils.HasUniqueObject(results))
+        {
+            throw new IncorrectResultSizeDataAccessException(1, size);
+        }
 
+        IEnumerator enumerator = results.GetEnumerator();
+        enumerator.MoveNext();
+        return enumerator.Current;
+    }
+
+    /// <summary>
+    /// Return a translated exception if this is appropriate, or null if the exception could
+    /// not be translated.
+    /// </summary>
+    /// <param name="rawException">The raw exception we may wish to translate.</param>
+    /// <param name="pet">The PersistenceExceptionTranslator to use to perform the translation.</param>
+    /// <returns>A translated exception if translation is possible, or or null if the exception could
+    /// not be translated.</returns>
+    public static DataAccessException TranslateIfNecessary(Exception rawException, IPersistenceExceptionTranslator pet)
+    {
+        AssertUtils.ArgumentNotNull(pet, "PersistenceExceptionTranslator must not be null");
+        return pet.TranslateExceptionIfPossible(rawException);
+    }
+
+    #endregion
 }

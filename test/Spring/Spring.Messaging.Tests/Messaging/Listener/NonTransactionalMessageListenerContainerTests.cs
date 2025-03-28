@@ -26,105 +26,101 @@ using Spring.Testing.NUnit;
 
 #endregion
 
-namespace Spring.Messaging.Listener
+namespace Spring.Messaging.Listener;
+
+/// <summary>
+/// This class contains tests for 
+/// </summary>
+/// <author>Mark Pollack</author>
+/// <version>$Id:$</version>
+[TestFixture]
+public class NonTransactionalMessageListenerContainerTests : AbstractDependencyInjectionSpringContextTests
 {
-    /// <summary>
-    /// This class contains tests for 
-    /// </summary>
-    /// <author>Mark Pollack</author>
-    /// <version>$Id:$</version>
-    [TestFixture]
-    public class NonTransactionalMessageListenerContainerTests : AbstractDependencyInjectionSpringContextTests
+    private int waitInMillis = 20000;
+    private NonTransactionalMessageListenerContainer container;
+    private SimpleHandler listener;
+    private SimpleExceptionHandler exceptionHandler;
+
+    [SetUp]
+    public override void SetUp()
     {
+        MessageQueueUtils.RecreateMessageQueue(@".\Private$\testqueue", false);
+        MessageQueueUtils.RecreateMessageQueue(@".\Private$\testresponsequeue", false);
 
-        private int waitInMillis = 20000;
-        private NonTransactionalMessageListenerContainer container;
-        private SimpleHandler listener;
-        private SimpleExceptionHandler exceptionHandler;
+        base.SetUp();
 
-        [SetUp]
-        public override void SetUp()
-        {
-            MessageQueueUtils.RecreateMessageQueue(@".\Private$\testqueue", false);
-            MessageQueueUtils.RecreateMessageQueue(@".\Private$\testresponsequeue", false);
-                   
-            base.SetUp();
+        //Reset the state so that running all tests together will succeed.
+        exceptionHandler.MessageCount = 0;
+        listener.MessageCount = 0;
+    }
 
-            //Reset the state so that running all tests together will succeed.
-            exceptionHandler.MessageCount = 0;
-            listener.MessageCount = 0;
-        }
+    public SimpleExceptionHandler ExceptionHandler
+    {
+        set { exceptionHandler = value; }
+    }
 
-        public SimpleExceptionHandler ExceptionHandler
-        {
-            set { exceptionHandler = value; }
-        }
+    public NonTransactionalMessageListenerContainer Container
+    {
+        get { return container; }
+        set { container = value; }
+    }
 
-        public NonTransactionalMessageListenerContainer Container
-        {
-            get { return container; }
-            set { container = value; }
-        }
+    public SimpleHandler Listener
+    {
+        get { return listener; }
+        set { listener = value; }
+    }
 
-        public SimpleHandler Listener
-        {
-            get { return listener; }
-            set { listener = value; }
-        }
+    [Test]
+    [Ignore("Appveyor problems")]
+    public void SendAndAsyncReceiveWithExceptionHandling()
+    {
+        MessageQueueTemplate q = applicationContext["testQueueTemplate"] as MessageQueueTemplate;
+        Assert.IsNotNull(q);
+        q.ConvertAndSend("Goodbye World 1");
+        Assert.AreEqual(0, listener.MessageCount);
+        container.Start();
+        Thread.Sleep(waitInMillis);
+        Assert.AreEqual(0, listener.MessageCount);
+        Assert.AreEqual(1, exceptionHandler.MessageCount);
+        container.Stop();
+        container.Shutdown();
+        Thread.Sleep(2500);
+    }
 
-        [Test]
-        [Ignore("Appveyor problems")]
-        public void SendAndAsyncReceiveWithExceptionHandling()
-        {
-            MessageQueueTemplate q = applicationContext["testQueueTemplate"] as MessageQueueTemplate;
-            Assert.IsNotNull(q);
-            q.ConvertAndSend("Goodbye World 1");
-            Assert.AreEqual(0, listener.MessageCount);
-            container.Start();
-            Thread.Sleep(waitInMillis);
-            Assert.AreEqual(0, listener.MessageCount);
-            Assert.AreEqual(1, exceptionHandler.MessageCount);
-            container.Stop();
-            container.Shutdown();
-            Thread.Sleep(2500);
-        }
+    [Test]
+    [Ignore("Appveyor problems")]
+    public void SendAndAsyncReceive()
+    {
+        //MessageQueueTemplate q = applicationContext["testQueueTemplate"] as MessageQueueTemplate;
 
-        [Test]
-        [Ignore("Appveyor problems")]
-        public void SendAndAsyncReceive()
-        {
-            
-            //MessageQueueTemplate q = applicationContext["testQueueTemplate"] as MessageQueueTemplate;
-            
-            MessageQueueTemplate q = applicationContext["testRemoteTemplate"] as MessageQueueTemplate;
-            Assert.IsNotNull(q);
-            
-            q.ConvertAndSend("Hello World 1");
-            q.ConvertAndSend("Hello World 2");
-            q.ConvertAndSend("Hello World 3");
-            q.ConvertAndSend("Hello World 4");
-            q.ConvertAndSend("Hello World 5");
+        MessageQueueTemplate q = applicationContext["testRemoteTemplate"] as MessageQueueTemplate;
+        Assert.IsNotNull(q);
 
-            //Reset the state so that running all tests together will succeed.
-            exceptionHandler.MessageCount = 0;
+        q.ConvertAndSend("Hello World 1");
+        q.ConvertAndSend("Hello World 2");
+        q.ConvertAndSend("Hello World 3");
+        q.ConvertAndSend("Hello World 4");
+        q.ConvertAndSend("Hello World 5");
 
-            Assert.AreEqual(0, listener.MessageCount);
+        //Reset the state so that running all tests together will succeed.
+        exceptionHandler.MessageCount = 0;
 
-            container.Start();
+        Assert.AreEqual(0, listener.MessageCount);
 
-            Thread.Sleep(waitInMillis);
-            Assert.AreEqual(5, listener.MessageCount);
-            Assert.AreEqual(0, exceptionHandler.MessageCount);
+        container.Start();
 
-            container.Stop();
-            container.Shutdown();
-            Thread.Sleep(2500);                       
-            
-        }
+        Thread.Sleep(waitInMillis);
+        Assert.AreEqual(5, listener.MessageCount);
+        Assert.AreEqual(0, exceptionHandler.MessageCount);
 
-        protected override string[] ConfigLocations
-        {
-            get { return new string[] { "assembly://Spring.Messaging.Tests/Spring.Messaging.Listener/NonTransactionalMessageListenerContainerTests.xml" }; }
-        }
+        container.Stop();
+        container.Shutdown();
+        Thread.Sleep(2500);
+    }
+
+    protected override string[] ConfigLocations
+    {
+        get { return new string[] { "assembly://Spring.Messaging.Tests/Spring.Messaging.Listener/NonTransactionalMessageListenerContainerTests.xml" }; }
     }
 }

@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,25 +25,24 @@ using System.Reflection.Emit;
 
 #endregion
 
-namespace Spring.Proxy
+namespace Spring.Proxy;
+
+/// <summary>
+/// Defines interface that proxy method builders have to implement.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+/// <author>Bruno Baia</author>
+public interface IProxyMethodBuilder
 {
     /// <summary>
-    /// Defines interface that proxy method builders have to implement.
+    /// Dynamically builds proxy method.
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    /// <author>Bruno Baia</author>
-    public interface IProxyMethodBuilder
-    {
-        /// <summary>
-        /// Dynamically builds proxy method.
-        /// </summary>
-        /// <param name="method">The method to proxy.</param>
-        /// <param name="intfMethod">
-        /// The interface definition of the method, if applicable.
-        /// </param>
-        /// <returns>
-        /// The <see cref="System.Reflection.Emit.MethodBuilder"/> for the proxy method.
-        /// </returns>
-        MethodBuilder BuildProxyMethod(MethodInfo method, MethodInfo intfMethod);
-    }
+    /// <param name="method">The method to proxy.</param>
+    /// <param name="intfMethod">
+    /// The interface definition of the method, if applicable.
+    /// </param>
+    /// <returns>
+    /// The <see cref="System.Reflection.Emit.MethodBuilder"/> for the proxy method.
+    /// </returns>
+    MethodBuilder BuildProxyMethod(MethodInfo method, MethodInfo intfMethod);
 }

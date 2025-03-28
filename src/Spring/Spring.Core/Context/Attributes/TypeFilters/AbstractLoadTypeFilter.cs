@@ -21,47 +21,40 @@
 using Microsoft.Extensions.Logging;
 using Spring.Core.TypeResolution;
 
-namespace Spring.Context.Attributes.TypeFilters
+namespace Spring.Context.Attributes.TypeFilters;
+
+/// <summary>
+/// Abstract Type Filter that provides methods to load a required type from assembly.
+/// </summary>
+public abstract class AbstractLoadTypeFilter : ITypeFilter
 {
+    private static readonly ILogger<AbstractLoadTypeFilter> Logger = LogManager.GetLogger<AbstractLoadTypeFilter>();
+
     /// <summary>
-    /// Abstract Type Filter that provides methods to load a required type from assembly.
+    /// Required Type to compare against provided Type
     /// </summary>
-    public abstract class AbstractLoadTypeFilter : ITypeFilter
+    protected Type RequiredType;
+
+    /// <summary>
+    /// Determine a match based on the given type object.
+    /// </summary>
+    /// <param name="type"></param>
+    /// <returns>true if there is a match; false is there is no match</returns>
+    public abstract bool Match(Type type);
+
+    /// <summary>
+    /// Is loading a Type from a string passed to method in the form [Type.FullName], [Assembly.Name]
+    /// </summary>
+    protected void GetRequiredType(string typeToLoad)
     {
-        private static readonly ILogger<AbstractLoadTypeFilter> Logger = LogManager.GetLogger<AbstractLoadTypeFilter>();
-
-
-        /// <summary>
-        /// Required Type to compare against provided Type
-        /// </summary>
-        protected Type RequiredType;
-
-
-        /// <summary>
-        /// Determine a match based on the given type object.
-        /// </summary>
-        /// <param name="type"></param>
-        /// <returns>true if there is a match; false is there is no match</returns>
-        public abstract bool Match(Type type);
-
-
-        /// <summary>
-        /// Is loading a Type from a string passed to method in the form [Type.FullName], [Assembly.Name]
-        /// </summary>
-        protected void GetRequiredType(string typeToLoad)
+        try
         {
-            try
-            {
-                RequiredType = !string.IsNullOrEmpty(typeToLoad) ?
-                    TypeResolutionUtils.ResolveType(typeToLoad) : 
-                    null;
-            }
-            catch (Exception)
-            {
-                RequiredType = null;
-                Logger.LogError("Can't load type defined in expression:" + typeToLoad);
-            }
+            RequiredType = !string.IsNullOrEmpty(typeToLoad) ? TypeResolutionUtils.ResolveType(typeToLoad) : null;
         }
-
+        catch (Exception)
+        {
+            RequiredType = null;
+            Logger.LogError("Can't load type defined in expression:" + typeToLoad);
+        }
     }
 }

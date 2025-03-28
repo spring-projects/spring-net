@@ -1,5 +1,3 @@
-
-
 #region License
 
 /*
@@ -22,26 +20,24 @@
 
 using Spring.Messaging.Ems.Common;
 
-namespace Spring.Messaging.Ems.Core
+namespace Spring.Messaging.Ems.Core;
+
+/// <summary>
+/// Callback for browsing the messages in an EMS queue.
+/// </summary>
+/// <remarks>
+/// To be used with EmsTemplate's callback methods that take a IBrowserCallback argument
+/// </remarks>
+/// <author>Juergen Hoeller</author>
+/// <author>Mark Pollack (.NET)</author>
+public interface IBrowserCallback
 {
     /// <summary>
-    /// Callback for browsing the messages in an EMS queue.
+    /// Perform operations on the given Session and QueueBrowser
     /// </summary>
-    /// <remarks>
-    /// To be used with EmsTemplate's callback methods that take a IBrowserCallback argument
-    /// </remarks>
-    /// <author>Juergen Hoeller</author>
-    /// <author>Mark Pollack (.NET)</author>
-    public interface IBrowserCallback
-    {
-
-        /// <summary>
-        /// Perform operations on the given Session and QueueBrowser
-        /// </summary>
-        /// <param name="session">The session.</param>
-        /// <param name="browser">The browser.</param>
-        /// <returns>The object from working with the Session and QueueBrowser, may be null</returns>
-        /// <exception cref="EMSException">If there is any problem when accessing EMS API</exception>
-        object DoInEms(ISession session, QueueBrowser browser);
-    }
+    /// <param name="session">The session.</param>
+    /// <param name="browser">The browser.</param>
+    /// <returns>The object from working with the Session and QueueBrowser, may be null</returns>
+    /// <exception cref="EMSException">If there is any problem when accessing EMS API</exception>
+    object DoInEms(ISession session, QueueBrowser browser);
 }

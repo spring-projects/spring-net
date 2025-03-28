@@ -26,117 +26,125 @@ using Spring.Expressions.Processors;
 
 #endregion
 
-namespace Spring.Expressions
+namespace Spring.Expressions;
+
+/// <summary>
+///
+/// </summary>
+/// <author>Erich Eichinger</author>
+[TestFixture]
+public class MethodNodeTests
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <author>Erich Eichinger</author>
-    [TestFixture]
-    public class MethodNodeTests
+    private class MyTestCollectionProcessor : ICollectionProcessor
     {
-        private class MyTestCollectionProcessor : ICollectionProcessor
+        public object Process(ICollection source, object[] args)
         {
-            public object Process(ICollection source, object[] args)
-            {
-                return source;
-            }
+            return source;
         }
-
-        [Test]
-        public void CallCustomCollectionProcessor()
-        {
-            Dictionary<string, object> vars = new Dictionary<string, object>();
-            vars["myCollProc"] = new MyTestCollectionProcessor();
-
-            MethodNode mn = new MethodNode();
-            mn.Text = "myCollProc";
-
-            IExpression exp = mn;
-            int[] input = new int[] {1, 2, 3};
-            Assert.AreSame(input, exp.GetValue(input, vars));
-        }
-
-        [Test, Explicit]
-        public void PerformanceOfMethodEvaluationOnDifferentContextTypes()
-        {
-            MethodNode mn = new MethodNode();
-            mn.Text = "ToString";
-
-            TypeNode nln = new TypeNode();
-            nln.Text = "System.Globalization.CultureInfo";
-
-            PropertyOrFieldNode pn = new PropertyOrFieldNode();
-            pn.Text = "InvariantCulture";
-
-
-            Expression exp = new Expression();
-            exp.addChild(nln);
-            exp.addChild(pn);
-
-            StringLiteralNode sln = new StringLiteralNode();
-            sln.Text = "dummy";
-
-            mn.addChild(sln);
-            mn.addChild(exp);
-
-            IExpression mnExp = mn;
-            Assert.AreEqual("dummy", mnExp.GetValue(0m, null));
-
-            int runs = 10000000;
-
-            StopWatch watch = new StopWatch();
-            using (watch.Start("Duration: {0}"))
-            {
-                for (int i = 0; i < runs; i++)
-                {
-                    mnExp.GetValue(0m, null);
-                }
-            }
-        }
-
-        #region StopWatch
-
-        private class StopWatch
-        {
-            private DateTime _startTime;
-            private TimeSpan _elapsed;
-
-            private class Stopper : IDisposable
-            {
-                private readonly StopWatch _owner;
-                private readonly string _format;
-                public Stopper(StopWatch owner, string format) { _owner = owner; _format = format; }
-                public void Dispose() { _owner.Stop(_format); GC.SuppressFinalize(this); }
-            }
-
-            public IDisposable Start(string outputFormat)
-            {
-                Stopper stopper = new Stopper(this, outputFormat);
-                _startTime = DateTime.Now;
-                return stopper;
-            }
-
-            private void Stop(string outputFormat)
-            {
-                _elapsed = DateTime.Now.Subtract(_startTime);
-                if (outputFormat != null)
-                {
-                    Console.WriteLine(outputFormat, _elapsed);
-                }
-            }
-
-            public DateTime StartTime
-            {
-                get { return _startTime; }
-            }
-
-            public TimeSpan Elapsed
-            {
-                get { return _elapsed; }
-            }
-        }
-
-        #endregion
     }
+
+    [Test]
+    public void CallCustomCollectionProcessor()
+    {
+        Dictionary<string, object> vars = new Dictionary<string, object>();
+        vars["myCollProc"] = new MyTestCollectionProcessor();
+
+        MethodNode mn = new MethodNode();
+        mn.Text = "myCollProc";
+
+        IExpression exp = mn;
+        int[] input = new int[] { 1, 2, 3 };
+        Assert.AreSame(input, exp.GetValue(input, vars));
+    }
+
+    [Test, Explicit]
+    public void PerformanceOfMethodEvaluationOnDifferentContextTypes()
+    {
+        MethodNode mn = new MethodNode();
+        mn.Text = "ToString";
+
+        TypeNode nln = new TypeNode();
+        nln.Text = "System.Globalization.CultureInfo";
+
+        PropertyOrFieldNode pn = new PropertyOrFieldNode();
+        pn.Text = "InvariantCulture";
+
+        Expression exp = new Expression();
+        exp.addChild(nln);
+        exp.addChild(pn);
+
+        StringLiteralNode sln = new StringLiteralNode();
+        sln.Text = "dummy";
+
+        mn.addChild(sln);
+        mn.addChild(exp);
+
+        IExpression mnExp = mn;
+        Assert.AreEqual("dummy", mnExp.GetValue(0m, null));
+
+        int runs = 10000000;
+
+        StopWatch watch = new StopWatch();
+        using (watch.Start("Duration: {0}"))
+        {
+            for (int i = 0; i < runs; i++)
+            {
+                mnExp.GetValue(0m, null);
+            }
+        }
+    }
+
+    #region StopWatch
+
+    private class StopWatch
+    {
+        private DateTime _startTime;
+        private TimeSpan _elapsed;
+
+        private class Stopper : IDisposable
+        {
+            private readonly StopWatch _owner;
+            private readonly string _format;
+
+            public Stopper(StopWatch owner, string format)
+            {
+                _owner = owner;
+                _format = format;
+            }
+
+            public void Dispose()
+            {
+                _owner.Stop(_format);
+                GC.SuppressFinalize(this);
+            }
+        }
+
+        public IDisposable Start(string outputFormat)
+        {
+            Stopper stopper = new Stopper(this, outputFormat);
+            _startTime = DateTime.Now;
+            return stopper;
+        }
+
+        private void Stop(string outputFormat)
+        {
+            _elapsed = DateTime.Now.Subtract(_startTime);
+            if (outputFormat != null)
+            {
+                Console.WriteLine(outputFormat, _elapsed);
+            }
+        }
+
+        public DateTime StartTime
+        {
+            get { return _startTime; }
+        }
+
+        public TimeSpan Elapsed
+        {
+            get { return _elapsed; }
+        }
+    }
+
+    #endregion
 }

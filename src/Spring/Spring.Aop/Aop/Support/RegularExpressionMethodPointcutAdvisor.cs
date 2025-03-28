@@ -25,115 +25,115 @@ using Spring.Util;
 
 #endregion
 
-namespace Spring.Aop.Support
+namespace Spring.Aop.Support;
+
+/// <summary>
+/// Convenient class for regular expression method pointcuts that hold an
+/// <see cref="AopAlliance.Aop.IAdvice"/>, making them an
+/// <see cref="Spring.Aop.IAdvisor"/>.
+/// </summary>
+/// <remarks>
+/// <p>
+/// Configure this class using the <see cref="Pattern"/> and
+/// <see cref="Patterns"/> pass-through properties. These are analogous
+/// to the <see cref="AbstractRegularExpressionMethodPointcut.Pattern"/> and
+/// <see cref="AbstractRegularExpressionMethodPointcut.Pattern"/>s properties of the
+/// <see cref="AbstractRegularExpressionMethodPointcut"/> class.
+/// </p>
+/// <p>
+/// Can delegate to any type of regular expression pointcut. Currently only
+/// pointcuts based on the regular expression classes from the .NET Base
+/// Class Library are supported. The
+/// <see cref="Spring.Aop.Support.DefaultPointcutAdvisor.Pointcut"/>
+/// property must be a subclass of the
+/// <see cref="AbstractRegularExpressionMethodPointcut"/> class.
+/// </p>
+/// <p>
+/// This should not normally be set directly.
+/// </p>
+/// </remarks>
+/// <author>Dmitriy Kopylenko</author>
+/// <author>Rod Johnson</author>
+/// <author>Simon White (.NET)</author>
+/// <author>Mark Pollack (.NET)</author>
+/// <see cref=" SdkRegularExpressionMethodPointcut"/>
+[Serializable]
+public class RegularExpressionMethodPointcutAdvisor : AbstractGenericPointcutAdvisor
 {
+    private AbstractRegularExpressionMethodPointcut pointcut;
+
+    #region Constructors
+
     /// <summary>
-    /// Convenient class for regular expression method pointcuts that hold an
-    /// <see cref="AopAlliance.Aop.IAdvice"/>, making them an
-    /// <see cref="Spring.Aop.IAdvisor"/>.
+    /// Creates a new instance of the <see cref="RegularExpressionMethodPointcutAdvisor"/>
+    /// class.
     /// </summary>
-    /// <remarks>
-    /// <p>
-    /// Configure this class using the <see cref="Pattern"/> and
-    /// <see cref="Patterns"/> pass-through properties. These are analogous
-    /// to the <see cref="AbstractRegularExpressionMethodPointcut.Pattern"/> and
-    /// <see cref="AbstractRegularExpressionMethodPointcut.Pattern"/>s properties of the
-    /// <see cref="AbstractRegularExpressionMethodPointcut"/> class.
-    /// </p>
-    /// <p>
-    /// Can delegate to any type of regular expression pointcut. Currently only
-    /// pointcuts based on the regular expression classes from the .NET Base
-    /// Class Library are supported. The
-    /// <see cref="Spring.Aop.Support.DefaultPointcutAdvisor.Pointcut"/>
-    /// property must be a subclass of the
-    /// <see cref="AbstractRegularExpressionMethodPointcut"/> class.
-    /// </p>
-    /// <p>
-    /// This should not normally be set directly.
-    /// </p>
-    /// </remarks>
-    /// <author>Dmitriy Kopylenko</author>
-    /// <author>Rod Johnson</author>
-    /// <author>Simon White (.NET)</author>
-    /// <author>Mark Pollack (.NET)</author>
-    /// <see cref=" SdkRegularExpressionMethodPointcut"/>
-    [Serializable]
-    public class RegularExpressionMethodPointcutAdvisor : AbstractGenericPointcutAdvisor
+    public RegularExpressionMethodPointcutAdvisor()
     {
-        private AbstractRegularExpressionMethodPointcut pointcut;
+        InitPointcut();
+    }
 
-        #region Constructors
+    /// <summary>
+    /// Creates a new instance of the <see cref="RegularExpressionMethodPointcutAdvisor"/>
+    /// class for the supplied <paramref name="advice"/>.
+    /// </summary><param name="advice">
+    /// The target advice.
+    /// </param>
+    public RegularExpressionMethodPointcutAdvisor(IAdvice advice)
+    {
+        Advice = advice;
+        InitPointcut();
+    }
 
-        /// <summary>
-        /// Creates a new instance of the <see cref="RegularExpressionMethodPointcutAdvisor"/>
-        /// class.
-        /// </summary>
-        public RegularExpressionMethodPointcutAdvisor()
+    #endregion
+
+    #region Properties
+
+    /// <summary>
+    /// A single pattern to be used during method evaluation.
+    /// </summary>
+    public string Pattern
+    {
+        set
         {
-            InitPointcut();
+            AbstractRegularExpressionMethodPointcut armp = (AbstractRegularExpressionMethodPointcut) Pointcut;
+            armp.Pattern = value;
         }
+    }
 
-        /// <summary>
-        /// Creates a new instance of the <see cref="RegularExpressionMethodPointcutAdvisor"/>
-        /// class for the supplied <paramref name="advice"/>.
-        /// </summary><param name="advice">
-        /// The target advice.
-        /// </param>
-        public RegularExpressionMethodPointcutAdvisor(IAdvice advice)
+    /// <summary>
+    /// Multiple patterns to be used during method evaluation.
+    /// </summary>
+    public string[] Patterns
+    {
+        set
         {
-            Advice = advice;
-            InitPointcut();
+            AbstractRegularExpressionMethodPointcut armp = (AbstractRegularExpressionMethodPointcut) Pointcut;
+            armp.Patterns = value;
         }
+    }
 
-        #endregion
-
-        #region Properties
-
-        /// <summary>
-        /// A single pattern to be used during method evaluation.
-        /// </summary>
-        public string Pattern
+    /// <summary>
+    /// The <see cref="Spring.Aop.IPointcut"/> that drives this advisor.
+    /// </summary>
+    public override IPointcut Pointcut
+    {
+        get { return pointcut; }
+        set
         {
-            set
-            {
-                AbstractRegularExpressionMethodPointcut armp = (AbstractRegularExpressionMethodPointcut) Pointcut;
-                armp.Pattern = value;
-            }
+            AssertUtils.AssertArgumentType(value, "pointcut", typeof(AbstractRegularExpressionMethodPointcut),
+                "Pointcut most be compatible with type AbstractRegularExpressionMethodPointuct");
+            pointcut = value as AbstractRegularExpressionMethodPointcut;
         }
+    }
 
-        /// <summary>
-        /// Multiple patterns to be used during method evaluation.
-        /// </summary>
-        public string[] Patterns
-        {
-            set
-            {
-                AbstractRegularExpressionMethodPointcut armp = (AbstractRegularExpressionMethodPointcut) Pointcut;
-                armp.Patterns = value;
-            }
-        }
+    #endregion
 
-        /// <summary>
-        /// The <see cref="Spring.Aop.IPointcut"/> that drives this advisor.
-        /// </summary>
-        public override IPointcut Pointcut
-        {
-            get { return pointcut; }
-            set {
-                AssertUtils.AssertArgumentType(value, "pointcut", typeof(AbstractRegularExpressionMethodPointcut),
-                                              "Pointcut most be compatible with type AbstractRegularExpressionMethodPointuct");
-                pointcut = value as AbstractRegularExpressionMethodPointcut;
-            }
-        }
-
-        #endregion
-
-        /// <summary>
-        /// Initialises the pointcut.
-        /// </summary>
-        protected void InitPointcut()
-        {
-            pointcut = new SdkRegularExpressionMethodPointcut();
-        }
+    /// <summary>
+    /// Initialises the pointcut.
+    /// </summary>
+    protected void InitPointcut()
+    {
+        pointcut = new SdkRegularExpressionMethodPointcut();
     }
 }

@@ -18,30 +18,30 @@
 
 #endregion
 
-namespace Spring.Globalization
+namespace Spring.Globalization;
+
+/// <summary>
+/// Resource cache implementation that doesn't cache resources.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+public class NullResourceCache : AbstractResourceCache
 {
     /// <summary>
-    /// Resource cache implementation that doesn't cache resources.
+    /// Gets the list of resources from cache.
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    public class NullResourceCache : AbstractResourceCache
+    /// <param name="cacheKey">Cache key to use for lookup.</param>
+    /// <returns>Always returns <c>null</c>.</returns>
+    protected override IList<Resource> GetResources(string cacheKey)
     {
-        /// <summary>
-        /// Gets the list of resources from cache.
-        /// </summary>
-        /// <param name="cacheKey">Cache key to use for lookup.</param>
-        /// <returns>Always returns <c>null</c>.</returns>
-        protected override IList<Resource> GetResources(string cacheKey)
-        {
-            return null;
-        }
+        return null;
+    }
 
-        /// <summary>
-        /// Puts the list of resources in the cache.
-        /// </summary>
-        /// <param name="cacheKey">Cache key to use for the specified resources.</param>
-        /// <param name="resources">A list of resources to cache.</param>
-        protected override void PutResources(string cacheKey, IList<Resource> resources)
-        {}
+    /// <summary>
+    /// Puts the list of resources in the cache.
+    /// </summary>
+    /// <param name="cacheKey">Cache key to use for the specified resources.</param>
+    /// <param name="resources">A list of resources to cache.</param>
+    protected override void PutResources(string cacheKey, IList<Resource> resources)
+    {
     }
 }

@@ -18,37 +18,33 @@
 
 #endregion
 
-namespace Spring.Stereotype
+namespace Spring.Stereotype;
+
+/// <summary>
+/// Indicates that an annotated class is a "Service" (e.g. a business service facade).
+/// </summary>
+/// <remarks>
+/// <para>
+/// This attribute also serves as a specialization of the ComponentAttribute, allowing implementation
+/// classes to be autodetected in future releases through assembly scanning.
+/// </para>
+/// </remarks>
+/// <author>Juergen Hoeller</author>
+/// <author>Mark Pollack (.NET)</author>
+public class ServiceAttribute : ComponentAttribute
 {
     /// <summary>
-    /// Indicates that an annotated class is a "Service" (e.g. a business service facade).
+    /// Initializes a new instance of the <see cref="ServiceAttribute"/> class.
     /// </summary>
-    /// <remarks>
-    /// <para>
-    /// This attribute also serves as a specialization of the ComponentAttribute, allowing implementation
-    /// classes to be autodetected in future releases through assembly scanning.
-    /// </para>
-    /// </remarks>
-    /// <author>Juergen Hoeller</author>
-    /// <author>Mark Pollack (.NET)</author>
-    public class ServiceAttribute : ComponentAttribute
+    public ServiceAttribute()
     {
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ServiceAttribute"/> class.
-        /// </summary>
-        public ServiceAttribute()
-        {
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ServiceAttribute"/> class.
-        /// </summary>
-        /// <param name="name">The name.</param>
-        public ServiceAttribute(string name) : base(name)
-        {
-        }
-
-
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ServiceAttribute"/> class.
+    /// </summary>
+    /// <param name="name">The name.</param>
+    public ServiceAttribute(string name) : base(name)
+    {
     }
 }

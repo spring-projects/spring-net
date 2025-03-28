@@ -18,40 +18,39 @@
 
 #endregion
 
-namespace Spring.Objects.Events
+namespace Spring.Objects.Events;
+
+/// <summary>
+/// To be implemented by any object that wishes to receive a reference to
+/// an <see cref="Spring.Objects.Events.IEventRegistry"/>.
+/// </summary>
+/// <remarks>
+/// <p>
+/// This interface only applies to objects that have been instantiated
+/// within the context of an
+/// <see cref="Spring.Context.IApplicationContext"/>. This interface does
+/// not typically need to be implemented by application code, but is rather
+/// used by classes internal to Spring.NET.
+/// </p>
+/// </remarks>
+/// <author>Mark Pollack</author>
+/// <author>Rick Evans</author>
+public interface IEventRegistryAware
 {
-	/// <summary>
-	/// To be implemented by any object that wishes to receive a reference to
-	/// an <see cref="Spring.Objects.Events.IEventRegistry"/>.
-	/// </summary>
-	/// <remarks>
-	/// <p>
-	/// This interface only applies to objects that have been instantiated
-	/// within the context of an
-	/// <see cref="Spring.Context.IApplicationContext"/>. This interface does
-	/// not typically need to be implemented by application code, but is rather
-	/// used by classes internal to Spring.NET.
-	/// </p>
-	/// </remarks>
-	/// <author>Mark Pollack</author>
-	/// <author>Rick Evans</author>
-	public interface IEventRegistryAware
-	{
-		/// <summary>
-		/// Set the <see cref="Spring.Objects.Events.IEventRegistry"/>
-		/// associated with the
-		/// <see cref="Spring.Context.IApplicationContext"/> that created this
-		/// object.
-		/// </summary>
-		/// <remarks>
-		/// <p>
-		/// This property will be set by the relevant
-		/// <see cref="Spring.Context.IApplicationContext"/> after all of this
-		/// object's dependencies have been resolved. This object can use the
-		/// supplied <see cref="Spring.Objects.Events.IEventRegistry"/>
-		/// immediately to publish or subscribe to one or more events.
-		/// </p>
-		/// </remarks>
-		IEventRegistry EventRegistry { set; }
-	}
+    /// <summary>
+    /// Set the <see cref="Spring.Objects.Events.IEventRegistry"/>
+    /// associated with the
+    /// <see cref="Spring.Context.IApplicationContext"/> that created this
+    /// object.
+    /// </summary>
+    /// <remarks>
+    /// <p>
+    /// This property will be set by the relevant
+    /// <see cref="Spring.Context.IApplicationContext"/> after all of this
+    /// object's dependencies have been resolved. This object can use the
+    /// supplied <see cref="Spring.Objects.Events.IEventRegistry"/>
+    /// immediately to publish or subscribe to one or more events.
+    /// </p>
+    /// </remarks>
+    IEventRegistry EventRegistry { set; }
 }

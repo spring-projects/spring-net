@@ -22,18 +22,17 @@
 
 #endregion
 
-namespace Spring.Web.Support
+namespace Spring.Web.Support;
+
+/// <summary>
+/// An extension of <see cref="IWebNavigator"/> that must be implemented by 
+/// navigators that can be part of a hierarchy.
+/// </summary>
+/// <author>Erich Eichinger</author>
+public interface IHierarchicalWebNavigator : IWebNavigator
 {
     /// <summary>
-    /// An extension of <see cref="IWebNavigator"/> that must be implemented by 
-    /// navigators that can be part of a hierarchy.
+    /// If any, get the parent navigator of the current navigator instance. May be null.
     /// </summary>
-    /// <author>Erich Eichinger</author>
-    public interface IHierarchicalWebNavigator : IWebNavigator
-    {
-        /// <summary>
-        /// If any, get the parent navigator of the current navigator instance. May be null.
-        /// </summary>
-        IWebNavigator ParentNavigator { get; }
-    }
+    IWebNavigator ParentNavigator { get; }
 }

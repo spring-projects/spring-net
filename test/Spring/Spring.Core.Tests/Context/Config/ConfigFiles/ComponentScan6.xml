@@ -2,9 +2,9 @@
 <objects xmlns="http://www.springframework.net"
          xmlns:context="http://www.springframework.net/context">
 
-	<context:component-scan base-assemblies="Spring.Core.Tests">
-		<context:include-filter type="regex" expression="ComponentScan.Qualifier.*"/>
-	</context:component-scan>
-  
+    <context:component-scan base-assemblies="Spring.Core.Tests">
+        <context:include-filter type="regex" expression="ComponentScan.Qualifier.*" />
+    </context:component-scan>
+
 </objects>
 

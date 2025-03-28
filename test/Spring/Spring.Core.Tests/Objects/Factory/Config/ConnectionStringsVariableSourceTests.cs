@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,28 +24,27 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Objects.Factory.Config
+namespace Spring.Objects.Factory.Config;
+
+/// <summary>
+/// Unit tests for the ConnectionStringsVariableSource class.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[TestFixture]
+public sealed class ConnectionStringsVariableSourceTests
 {
-	/// <summary>
-    /// Unit tests for the ConnectionStringsVariableSource class.
-    /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    [TestFixture]
-    public sealed class ConnectionStringsVariableSourceTests
+    [Test]
+    public void TestVariablesResolution()
     {
-        [Test]
-        public void TestVariablesResolution()
-        {
-            ConnectionStringsVariableSource vs = new ConnectionStringsVariableSource();
+        ConnectionStringsVariableSource vs = new ConnectionStringsVariableSource();
 
-            // existing vars
-            Assert.AreEqual("mySqlServerConnectionString", vs.ResolveVariable("mySqlDataSource.connectionString"));
-            Assert.AreEqual("System.Data.SqlClient", vs.ResolveVariable("mySqlDataSource.providerName"));
-            Assert.AreEqual("myOracleConnectionString", vs.ResolveVariable("myOracleDataSource.connectionString"));
-            Assert.AreEqual("System.Data.OracleClient", vs.ResolveVariable("myOracleDataSource.providerName"));
+        // existing vars
+        Assert.AreEqual("mySqlServerConnectionString", vs.ResolveVariable("mySqlDataSource.connectionString"));
+        Assert.AreEqual("System.Data.SqlClient", vs.ResolveVariable("mySqlDataSource.providerName"));
+        Assert.AreEqual("myOracleConnectionString", vs.ResolveVariable("myOracleDataSource.connectionString"));
+        Assert.AreEqual("System.Data.OracleClient", vs.ResolveVariable("myOracleDataSource.providerName"));
 
-            // non-existant variable
-            Assert.IsNull(vs.ResolveVariable("dummy"));
-        }
+        // non-existant variable
+        Assert.IsNull(vs.ResolveVariable("dummy"));
     }
 }

@@ -1,7 +1,5 @@
 using NHibernate.Bytecode;
-
 using NUnit.Framework;
-
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.Objects.Factory.Config;
@@ -31,16 +29,15 @@ namespace Spring.Data.NHibernate.Bytecode
 
         private static void Register<TSerivice, TImplementation>(IConfigurableListableObjectFactory confObjFactory)
         {
-            ObjectDefinitionBuilder odb = ObjectDefinitionBuilder.RootObjectDefinition(objectDefinitionFactory, typeof(TImplementation)).
-                SetAutowireMode(AutoWiringMode.Constructor);
-            confObjFactory.RegisterObjectDefinition(typeof (TSerivice).FullName, odb.ObjectDefinition);
+            ObjectDefinitionBuilder odb = ObjectDefinitionBuilder.RootObjectDefinition(objectDefinitionFactory, typeof(TImplementation)).SetAutowireMode(AutoWiringMode.Constructor);
+            confObjFactory.RegisterObjectDefinition(typeof(TSerivice).FullName, odb.ObjectDefinition);
         }
 
         private static void RegisterPrototype<TImplementation>(IConfigurableListableObjectFactory confObjFactory)
-		{
+        {
             ObjectDefinitionBuilder odb = ObjectDefinitionBuilder.RootObjectDefinition(objectDefinitionFactory, typeof(TImplementation))
-				.SetSingleton(false).SetAutowireMode(AutoWiringMode.AutoDetect);
-			confObjFactory.RegisterObjectDefinition(typeof(TImplementation).FullName, odb.ObjectDefinition);
-		}
+                .SetSingleton(false).SetAutowireMode(AutoWiringMode.AutoDetect);
+            confObjFactory.RegisterObjectDefinition(typeof(TImplementation).FullName, odb.ObjectDefinition);
+        }
     }
 }

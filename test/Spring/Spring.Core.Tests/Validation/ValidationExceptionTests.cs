@@ -21,63 +21,62 @@
 using System.Runtime.Serialization.Formatters.Binary;
 using NUnit.Framework;
 
-namespace Spring.Validation
+namespace Spring.Validation;
+
+/// <summary>
+/// Unit tests for the ValidationException class.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[TestFixture]
+public sealed class ValidationExceptionTests
 {
-	/// <summary>
-	/// Unit tests for the ValidationException class.
-	/// </summary>
-	/// <author>Aleksandar Seovic</author>
-	[TestFixture]
-	public sealed class ValidationExceptionTests
-	{
-        [Test]
-        public void InstantiationUsingDefaultConstructor()
-        {
-            ValidationException ex = new ValidationException();
-            Assert.IsNull(ex.ValidationErrors);
-        }
-        
-        [Test]
-		public void InstantiationSupplyingValidationErrors()
-		{
-            ValidationException ex = new ValidationException(new ValidationErrors());
-            Assert.IsTrue(ex.ValidationErrors.IsEmpty);
-		}
+    [Test]
+    public void InstantiationUsingDefaultConstructor()
+    {
+        ValidationException ex = new ValidationException();
+        Assert.IsNull(ex.ValidationErrors);
+    }
 
-        [Test]
-        public void InstantiationSupplyingMessageAndValidationErrors()
-        {
-            ValidationException ex = new ValidationException("my message", new ValidationErrors());
-            Assert.AreEqual("my message", ex.Message);
-            Assert.IsTrue(ex.ValidationErrors.IsEmpty);
-        }
-    
-        [Test]
-        public void InstantiationSupplyingMessageValidationErrorsAndRootCause()
-        {
-            Exception rootCause = new Exception("root cause");
-            ValidationException ex = new ValidationException("my message", rootCause, new ValidationErrors());
-            Assert.AreEqual("my message", ex.Message);
-            Assert.IsTrue(ex.ValidationErrors.IsEmpty);
-            Assert.AreEqual(rootCause, ex.InnerException);
-            Assert.AreEqual("root cause", ex.InnerException.Message);
-        }
+    [Test]
+    public void InstantiationSupplyingValidationErrors()
+    {
+        ValidationException ex = new ValidationException(new ValidationErrors());
+        Assert.IsTrue(ex.ValidationErrors.IsEmpty);
+    }
 
-        [Test]
-        public void TestExceptionSerialization()
-        {
-            MemoryStream buffer = new MemoryStream();
-            BinaryFormatter serializer = new BinaryFormatter();
+    [Test]
+    public void InstantiationSupplyingMessageAndValidationErrors()
+    {
+        ValidationException ex = new ValidationException("my message", new ValidationErrors());
+        Assert.AreEqual("my message", ex.Message);
+        Assert.IsTrue(ex.ValidationErrors.IsEmpty);
+    }
 
-            Exception rootCause = new Exception("root cause");
-            ValidationException e1 = new ValidationException("my message", rootCause, new ValidationErrors());
-            serializer.Serialize(buffer, e1);
-            buffer.Position = 0;
-            ValidationException e2 = (ValidationException)serializer.Deserialize(buffer);
+    [Test]
+    public void InstantiationSupplyingMessageValidationErrorsAndRootCause()
+    {
+        Exception rootCause = new Exception("root cause");
+        ValidationException ex = new ValidationException("my message", rootCause, new ValidationErrors());
+        Assert.AreEqual("my message", ex.Message);
+        Assert.IsTrue(ex.ValidationErrors.IsEmpty);
+        Assert.AreEqual(rootCause, ex.InnerException);
+        Assert.AreEqual("root cause", ex.InnerException.Message);
+    }
 
-            Assert.AreEqual("my message", e2.Message);
-            Assert.IsTrue(e2.ValidationErrors.IsEmpty);
-            Assert.AreEqual("root cause", e2.InnerException.Message);
-        }
-	}
+    [Test]
+    public void TestExceptionSerialization()
+    {
+        MemoryStream buffer = new MemoryStream();
+        BinaryFormatter serializer = new BinaryFormatter();
+
+        Exception rootCause = new Exception("root cause");
+        ValidationException e1 = new ValidationException("my message", rootCause, new ValidationErrors());
+        serializer.Serialize(buffer, e1);
+        buffer.Position = 0;
+        ValidationException e2 = (ValidationException) serializer.Deserialize(buffer);
+
+        Assert.AreEqual("my message", e2.Message);
+        Assert.IsTrue(e2.ValidationErrors.IsEmpty);
+        Assert.AreEqual("root cause", e2.InnerException.Message);
+    }
 }

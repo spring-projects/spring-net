@@ -27,97 +27,97 @@ using System.Text.RegularExpressions;
 
 #endregion
 
-namespace Spring.Core.TypeConversion
+namespace Spring.Core.TypeConversion;
+
+/// <summary>
+/// Converts string representation of a credential for Web client authentication
+/// into an instance of <see cref="System.Net.NetworkCredential"/>.
+/// </summary>
+/// <example>
+/// <p>
+/// Find below some examples of the XML formatted strings that this
+/// converter will sucessfully convert.
+/// </p>
+/// <code escaped="true">
+/// <property name="credentials" value="Spring\bbaia:sprnet"/>
+/// </code>
+/// <code escaped="true">
+/// <property name="credentials" value="bbaia:sprnet"/>
+/// </code>
+/// </example>
+/// <author>Bruno Baia</author>
+public class CredentialConverter : TypeConverter
 {
+    private readonly static Regex credentialRegex = new Regex(
+        @"(((?<domain>[\w_.]+)\\)?)(?<userName>([\w_.]+))((:(?<password>([\w_.]+)))?)",
+        RegexOptions.Compiled);
+
     /// <summary>
-    /// Converts string representation of a credential for Web client authentication 
-    /// into an instance of <see cref="System.Net.NetworkCredential"/>.
+    /// Can we convert from the sourcetype
+    /// to a <see cref="System.Net.NetworkCredential"/> instance ?
     /// </summary>
-    /// <example>
+    /// <remarks>
     /// <p>
-    /// Find below some examples of the XML formatted strings that this
-    /// converter will sucessfully convert.
+    /// Currently only supports conversion from a <see cref="System.String"/> instance.
     /// </p>
-    /// <code escaped="true">
-    /// <property name="credentials" value="Spring\bbaia:sprnet"/>
-    /// </code>
-    /// <code escaped="true">
-    /// <property name="credentials" value="bbaia:sprnet"/>
-    /// </code>
-    /// </example>
-    /// <author>Bruno Baia</author>
-    public class CredentialConverter : TypeConverter
+    /// </remarks>
+    /// <param name="context">
+    /// A <see cref="System.ComponentModel.ITypeDescriptorContext"/>
+    /// that provides a format context.
+    /// </param>
+    /// <param name="sourceType">
+    /// A <see cref="System.Type"/> that represents the
+    /// <see cref="System.Type"/> you want to convert from.
+    /// </param>
+    /// <returns><see langword="true"/> if the conversion is possible.</returns>
+    public override bool CanConvertFrom(
+        ITypeDescriptorContext context, Type sourceType)
     {
-        private readonly static Regex credentialRegex = new Regex(
-            @"(((?<domain>[\w_.]+)\\)?)(?<userName>([\w_.]+))((:(?<password>([\w_.]+)))?)",
-            RegexOptions.Compiled);
+        return (sourceType == typeof(string));
+    }
 
-        /// <summary>
-        /// Can we convert from the sourcetype 
-        /// to a <see cref="System.Net.NetworkCredential"/> instance ?
-        /// </summary>
-        /// <remarks>
-        /// <p>
-        /// Currently only supports conversion from a <see cref="System.String"/> instance.
-        /// </p>
-        /// </remarks>
-        /// <param name="context">
-        /// A <see cref="System.ComponentModel.ITypeDescriptorContext"/>
-        /// that provides a format context.
-        /// </param>
-        /// <param name="sourceType">
-        /// A <see cref="System.Type"/> that represents the
-        /// <see cref="System.Type"/> you want to convert from.
-        /// </param>
-        /// <returns><see langword="true"/> if the conversion is possible.</returns>
-        public override bool CanConvertFrom(
-            ITypeDescriptorContext context, Type sourceType)
+    /// <summary>
+    /// Convert from a <see cref="System.String"/> value to an
+    /// <see cref="System.Net.NetworkCredential"/> instance.
+    /// </summary>
+    /// <param name="context">
+    /// A <see cref="System.ComponentModel.ITypeDescriptorContext"/>
+    /// that provides a format context.
+    /// </param>
+    /// <param name="culture">
+    /// The <see cref="System.Globalization.CultureInfo"/> to use
+    /// as the current culture.
+    /// </param>
+    /// <param name="value">
+    /// The value that is to be converted.
+    /// </param>
+    /// <returns>
+    /// A <see cref="System.Net.NetworkCredential"/> instance if successful.
+    /// </returns>
+    public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
+    {
+        if (value is string)
         {
-            return (sourceType == typeof(string));
-        }
+            string credentials = (string) value;
+            Match m = credentialRegex.Match(credentials);
 
-        /// <summary>
-        /// Convert from a <see cref="System.String"/> value to an
-        /// <see cref="System.Net.NetworkCredential"/> instance.
-        /// </summary>
-        /// <param name="context">
-        /// A <see cref="System.ComponentModel.ITypeDescriptorContext"/>
-        /// that provides a format context.
-        /// </param>
-        /// <param name="culture">
-        /// The <see cref="System.Globalization.CultureInfo"/> to use
-        /// as the current culture.
-        /// </param>
-        /// <param name="value">
-        /// The value that is to be converted.
-        /// </param>
-        /// <returns>
-        /// A <see cref="System.Net.NetworkCredential"/> instance if successful.
-        /// </returns>        
-        public override object ConvertFrom(ITypeDescriptorContext context, CultureInfo culture, object value)
-        {
-            if (value is string)
+            if (!m.Success || m.Value != credentials)
             {
-                string credentials = (string)value;
-                Match m = credentialRegex.Match(credentials);
-
-                if (!m.Success || m.Value != credentials)
-                {
-                    throw new ArgumentException(String.Format("The credential '{0}' is not well-formed.", value));
-                }
-
-                // Get domain
-                string domain = m.Groups["domain"].Value;
-
-                // Get user name
-                string userName = m.Groups["userName"].Value;
-
-                // Get password
-                string password = m.Groups["password"].Value;
-
-                return new NetworkCredential(userName, password, domain);
+                throw new ArgumentException(String.Format("The credential '{0}' is not well-formed.", value));
             }
-            return base.ConvertFrom(context, culture, value);
+
+            // Get domain
+            string domain = m.Groups["domain"].Value;
+
+            // Get user name
+            string userName = m.Groups["userName"].Value;
+
+            // Get password
+            string password = m.Groups["password"].Value;
+
+            return new NetworkCredential(userName, password, domain);
         }
+
+        return base.ConvertFrom(context, culture, value);
     }
 }

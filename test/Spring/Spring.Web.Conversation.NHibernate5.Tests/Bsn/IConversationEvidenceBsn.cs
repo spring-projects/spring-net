@@ -18,18 +18,17 @@
 
 #endregion
 
-namespace Spring.Bsn
+namespace Spring.Bsn;
+
+/// <summary>
+/// Simulates a business infrastructure in order to demonstrate the end of
+/// the conversation.
+/// </summary>
+public interface IConversationEvidenceBsn
 {
     /// <summary>
-    /// Simulates a business infrastructure in order to demonstrate the end of 
-    /// the conversation.
+    /// Return a unique id per instance.
     /// </summary>
-    public interface IConversationEvidenceBsn
-    {
-        /// <summary>
-        /// Return a unique id per instance.
-        /// </summary>
-        /// <returns></returns>
-        String UniqueId();
-    }
+    /// <returns></returns>
+    String UniqueId();
 }

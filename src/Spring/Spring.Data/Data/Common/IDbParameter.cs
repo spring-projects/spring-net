@@ -20,59 +20,53 @@
 
 using System.Data;
 
-namespace Spring.Data.Common
+namespace Spring.Data.Common;
+
+/// <summary>
+/// A parameter interface used by <see cref="IDbParametersBuilder"/>
+/// </summary>
+/// <author>Mark Pollack (.NET)</author>
+public interface IDbParameter
 {
-	/// <summary>
-	/// A parameter interface used by <see cref="IDbParametersBuilder"/>
-	/// </summary>
-	/// <author>Mark Pollack (.NET)</author>
-	public interface IDbParameter
-	{
+    IDbParameter Type(Enum dbType);
 
-	    IDbParameter Type(Enum dbType);
+    IDbParameter Type(Enum dbType, int size);
 
-	    IDbParameter Type(Enum dbType, int size);
+    Enum GetDbType();
 
-	    Enum GetDbType();
+    IDbParameter Direction(ParameterDirection direction);
 
-	    IDbParameter Direction(ParameterDirection direction);
+    ParameterDirection GetDirection();
 
-	    ParameterDirection GetDirection();
+    IDbParameter IsNullable(bool isNullable);
 
-	    IDbParameter IsNullable(bool isNullable);
+    bool GetIsNullable();
 
-	    bool GetIsNullable();
+    IDbParameter Name(string name);
 
-	    IDbParameter Name(string name);
+    string GetName();
 
-	    string GetName();
+    IDbParameter SourceColumn(string sourceColumn);
 
-	    IDbParameter SourceColumn(string sourceColumn);
+    string GetSourceColumn();
 
-	    string GetSourceColumn();
+    IDbParameter SourceVersion(DataRowVersion sourceVersion);
 
-	    IDbParameter SourceVersion(DataRowVersion sourceVersion);
+    DataRowVersion GetSourceVersion();
 
-	    DataRowVersion GetSourceVersion();
+    IDbParameter Value(object val);
 
+    object GetValue();
 
-	    IDbParameter Value(object val);
+    IDbParameter Precision(byte precision);
 
-	    object GetValue();
+    byte GetPrecision();
 
-	    IDbParameter Precision(byte precision);
+    IDbParameter Scale(byte scale);
 
-	    byte GetPrecision();
+    byte GetScale();
 
+    IDbParameter Size(int size);
 
-	    IDbParameter Scale(byte scale);
-
-	    byte GetScale();
-
-
-	    IDbParameter Size(int size);
-
-	    int GetSize();
-
-	}
+    int GetSize();
 }

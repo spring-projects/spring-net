@@ -3,7 +3,6 @@ using NHibernate.Bytecode;
 using NHibernate.Cfg;
 using NHibernate.Engine;
 using NHibernate.Tool.hbm2ddl;
-
 using NUnit.Framework;
 using Environment = NHibernate.Cfg.Environment;
 
@@ -42,9 +41,9 @@ namespace Spring.Data.NHibernate.Bytecode
             Environment.BytecodeProvider = GetBytecodeProvider();
             cfg.Configure();
             cfg.AddResource("uNhAddIns.Adapters.CommonTests.EnhancedBytecodeProvider.Foo.Spechbm.xml",
-                                            typeof(AbstractInjectableUserTypeFixture).Assembly);
+                typeof(AbstractInjectableUserTypeFixture).Assembly);
             new SchemaExport(cfg).Create(false, true);
-            sessions = (ISessionFactoryImplementor)cfg.BuildSessionFactory();
+            sessions = (ISessionFactoryImplementor) cfg.BuildSessionFactory();
         }
 
         [Ignore("Work in progress")]
@@ -55,6 +54,7 @@ namespace Spring.Data.NHibernate.Bytecode
             {
                 sessions.Dispose();
             }
+
             sessions = null;
         }
 
@@ -101,6 +101,5 @@ namespace Spring.Data.NHibernate.Bytecode
                 Assert.IsNull(upperFoo.Description);
             }
         }
-
     }
 }

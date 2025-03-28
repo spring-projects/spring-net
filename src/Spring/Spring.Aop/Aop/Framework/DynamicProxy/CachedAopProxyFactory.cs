@@ -27,184 +27,193 @@ using Spring.Proxy;
 
 #endregion
 
-namespace Spring.Aop.Framework.DynamicProxy
+namespace Spring.Aop.Framework.DynamicProxy;
+
+/// <summary>
+/// Implementation of the <see cref="Spring.Aop.Framework.IAopProxyFactory"/>
+/// interface that caches the AOP proxy <see cref="System.Type"/> instance.
+/// </summary>
+/// <remarks>
+/// <p>
+/// Caches against a key based on :
+/// - the base type
+/// - the target type
+/// - the interfaces to proxy
+/// </p>
+/// </remarks>
+/// <author>Bruno Baia</author>
+/// <author>Erich Eichinger</author>
+/// <seealso cref="Spring.Aop.Framework.DynamicProxy.DefaultAopProxyFactory"/>
+/// <seealso cref="Spring.Aop.Framework.IAopProxyFactory"/>
+[Serializable]
+public class CachedAopProxyFactory : DefaultAopProxyFactory
 {
     /// <summary>
-    /// Implementation of the <see cref="Spring.Aop.Framework.IAopProxyFactory"/>
-    /// interface that caches the AOP proxy <see cref="System.Type"/> instance.
+    /// The shared <see cref="ILogger"/> instance for this class.
     /// </summary>
-    /// <remarks>
-    /// <p>
-    /// Caches against a key based on :
-    /// - the base type
-    /// - the target type
-    /// - the interfaces to proxy
-    /// </p>
-    /// </remarks>
-    /// <author>Bruno Baia</author>
-    /// <author>Erich Eichinger</author>
-    /// <seealso cref="Spring.Aop.Framework.DynamicProxy.DefaultAopProxyFactory"/>
-    /// <seealso cref="Spring.Aop.Framework.IAopProxyFactory"/>
-    [Serializable]
-    public class CachedAopProxyFactory : DefaultAopProxyFactory
+    private static readonly ILogger<CachedAopProxyFactory> logger = LogManager.GetLogger<CachedAopProxyFactory>();
+
+    private static readonly Hashtable typeCache = new Hashtable();
+
+    /// <summary>
+    /// Returns the number of proxy types in the cache
+    /// </summary>
+    public static int CountCachedTypes
     {
-        /// <summary>
-        /// The shared <see cref="ILogger"/> instance for this class.
-        /// </summary>
-        private static readonly ILogger<CachedAopProxyFactory> logger = LogManager.GetLogger<CachedAopProxyFactory>();
+        get { return typeCache.Count; }
+    }
 
-        private static readonly Hashtable typeCache = new Hashtable();
+    /// <summary>
+    /// Clears the type cache
+    /// </summary>
+    public static void ClearCache()
+    {
+        typeCache.Clear();
+    }
 
-        /// <summary>
-        /// Returns the number of proxy types in the cache
-        /// </summary>
-        public static int CountCachedTypes
+    /// <summary>
+    /// Creates a new instance
+    /// </summary>
+    public CachedAopProxyFactory()
+    {
+    }
+
+    /// <summary>
+    /// Generates the proxy type and caches the <see cref="System.Type"/>
+    /// instance against the base type and the interfaces to proxy.
+    /// </summary>
+    /// <param name="typeBuilder">
+    /// The <see cref="Spring.Proxy.IProxyTypeBuilder"/> to use
+    /// </param>
+    /// <returns>The generated or cached proxy class.</returns>
+    protected override Type BuildProxyType(IProxyTypeBuilder typeBuilder)
+    {
+        ProxyTypeCacheKey cacheKey = new ProxyTypeCacheKey(
+            typeBuilder.BaseType, typeBuilder.TargetType, typeBuilder.Interfaces, typeBuilder.ProxyTargetAttributes);
+        Type proxyType = null;
+        lock (typeCache)
         {
-            get { return typeCache.Count; }
+            proxyType = typeCache[cacheKey] as Type;
+            if (proxyType == null)
+            {
+                proxyType = typeBuilder.BuildProxyType();
+                typeCache[cacheKey] = proxyType;
+            }
+            else
+            {
+                #region Instrumentation
+
+                if (logger.IsEnabled(LogLevel.Debug))
+                {
+                    logger.LogDebug("AOP proxy type found in cache for {CacheKey}", cacheKey);
+                }
+
+                #endregion
+            }
         }
 
-        /// <summary>
-        /// Clears the type cache
-        /// </summary>
-        public static void ClearCache()
+        return proxyType;
+    }
+
+    #region ProxyTypeCacheKey inner class implementation
+
+    /// <summary>
+    /// Uniquely identifies a proxytype in the cache
+    /// </summary>
+    private sealed class ProxyTypeCacheKey
+    {
+        private sealed class HashCodeComparer : IComparer<Type>
         {
-            typeCache.Clear();
+            public int Compare(Type x, Type y)
+            {
+                return x.GetHashCode().CompareTo(y.GetHashCode());
+            }
         }
 
-        /// <summary>
-        /// Creates a new instance
-        /// </summary>
-        public CachedAopProxyFactory()
-        {}
+        private static HashCodeComparer interfaceComparer = new HashCodeComparer();
 
-        /// <summary>
-        /// Generates the proxy type and caches the <see cref="System.Type"/>
-        /// instance against the base type and the interfaces to proxy.
-        /// </summary>
-        /// <param name="typeBuilder">
-        /// The <see cref="Spring.Proxy.IProxyTypeBuilder"/> to use
-        /// </param>
-        /// <returns>The generated or cached proxy class.</returns>
-        protected override Type BuildProxyType(IProxyTypeBuilder typeBuilder)
+        private Type baseType;
+        private Type targetType;
+        private List<Type> interfaceTypes;
+        private bool proxyTargetAttributes;
+
+        public ProxyTypeCacheKey(Type baseType, Type targetType, IList<Type> interfaceTypes, bool proxyTargetAttributes)
         {
-            ProxyTypeCacheKey cacheKey = new ProxyTypeCacheKey(
-                typeBuilder.BaseType, typeBuilder.TargetType, typeBuilder.Interfaces, typeBuilder.ProxyTargetAttributes);
-            Type proxyType = null;
-            lock (typeCache)
-            {
-                proxyType = typeCache[cacheKey] as Type;
-                if (proxyType == null)
-                {
-                    proxyType = typeBuilder.BuildProxyType();
-                    typeCache[cacheKey] = proxyType;
-                }
-                else
-                {
-                    #region Instrumentation
-
-                    if (logger.IsEnabled(LogLevel.Debug))
-                    {
-                        logger.LogDebug("AOP proxy type found in cache for {CacheKey}", cacheKey);
-                    }
-
-                    #endregion
-                }
-            }
-            return proxyType;
+            this.baseType = baseType;
+            this.targetType = targetType;
+            this.interfaceTypes = new List<Type>(interfaceTypes);
+            this.interfaceTypes.Sort(interfaceComparer); // sort by GetHashcode()? to have a defined order
+            this.proxyTargetAttributes = proxyTargetAttributes;
         }
 
-        #region ProxyTypeCacheKey inner class implementation
-
-        /// <summary>
-        /// Uniquely identifies a proxytype in the cache
-        /// </summary>
-        private sealed class ProxyTypeCacheKey
+        public override bool Equals(object obj)
         {
-            private sealed class HashCodeComparer : IComparer<Type>
+            if (this == obj)
             {
-                public int Compare(Type x, Type y)
-                {
-                    return x.GetHashCode().CompareTo(y.GetHashCode());
-                }
-            }
-
-            private static HashCodeComparer interfaceComparer = new HashCodeComparer();
-
-            private Type baseType;
-            private Type targetType;
-            private List<Type> interfaceTypes;
-            private bool proxyTargetAttributes;
-
-            public ProxyTypeCacheKey(Type baseType, Type targetType, IList<Type> interfaceTypes, bool proxyTargetAttributes)
-            {
-                this.baseType = baseType;
-                this.targetType = targetType;
-                this.interfaceTypes = new List<Type>(interfaceTypes);
-                this.interfaceTypes.Sort(interfaceComparer); // sort by GetHashcode()? to have a defined order
-                this.proxyTargetAttributes = proxyTargetAttributes;
-            }
-
-            public override bool Equals(object obj)
-            {
-                if (this == obj)
-                {
-                    return true;
-                }
-                ProxyTypeCacheKey proxyTypeCacheKey = obj as ProxyTypeCacheKey;
-                if (proxyTypeCacheKey == null)
-                {
-                    return false;
-                }
-                if (!Equals(targetType, proxyTypeCacheKey.targetType))
-                {
-                    return false;
-                }
-                if (!Equals(baseType, proxyTypeCacheKey.baseType))
-                {
-                    return false;
-                }
-                for (int i = 0; i < interfaceTypes.Count; i++)
-                {
-                    if (!Equals(interfaceTypes[i], proxyTypeCacheKey.interfaceTypes[i]))
-                    {
-                        return false;
-                    }
-                }
-                if (proxyTargetAttributes != proxyTypeCacheKey.proxyTargetAttributes)
-                {
-                    return false;
-                }
                 return true;
             }
 
-            public override int GetHashCode()
+            ProxyTypeCacheKey proxyTypeCacheKey = obj as ProxyTypeCacheKey;
+            if (proxyTypeCacheKey == null)
             {
-                int result = baseType.GetHashCode();
-                result = 29*result + targetType.GetHashCode();
-                for (int i = 0; i < interfaceTypes.Count; i++)
-                {
-                    result = 29 * result + interfaceTypes[i].GetHashCode();
-                }
-                result = 29 * result + proxyTargetAttributes.GetHashCode();
-                return result;
+                return false;
             }
 
-            public override string ToString()
+            if (!Equals(targetType, proxyTypeCacheKey.targetType))
             {
-                StringBuilder buffer = new StringBuilder();
-                buffer.Append("baseType=" + baseType + "; ");
-                buffer.Append("targetType=" + targetType + "; ");
-                buffer.Append("interfaceTypes=[");
-                foreach (Type intf in interfaceTypes)
-                {
-                    buffer.Append(intf + ";");
-                }
-                buffer.Append("]; ");
-                buffer.Append("proxyTargetAttributes=" + proxyTargetAttributes + "; ");
-                return buffer.ToString();
+                return false;
             }
+
+            if (!Equals(baseType, proxyTypeCacheKey.baseType))
+            {
+                return false;
+            }
+
+            for (int i = 0; i < interfaceTypes.Count; i++)
+            {
+                if (!Equals(interfaceTypes[i], proxyTypeCacheKey.interfaceTypes[i]))
+                {
+                    return false;
+                }
+            }
+
+            if (proxyTargetAttributes != proxyTypeCacheKey.proxyTargetAttributes)
+            {
+                return false;
+            }
+
+            return true;
         }
 
-        #endregion
+        public override int GetHashCode()
+        {
+            int result = baseType.GetHashCode();
+            result = 29 * result + targetType.GetHashCode();
+            for (int i = 0; i < interfaceTypes.Count; i++)
+            {
+                result = 29 * result + interfaceTypes[i].GetHashCode();
+            }
+
+            result = 29 * result + proxyTargetAttributes.GetHashCode();
+            return result;
+        }
+
+        public override string ToString()
+        {
+            StringBuilder buffer = new StringBuilder();
+            buffer.Append("baseType=" + baseType + "; ");
+            buffer.Append("targetType=" + targetType + "; ");
+            buffer.Append("interfaceTypes=[");
+            foreach (Type intf in interfaceTypes)
+            {
+                buffer.Append(intf + ";");
+            }
+
+            buffer.Append("]; ");
+            buffer.Append("proxyTargetAttributes=" + proxyTargetAttributes + "; ");
+            return buffer.ToString();
+        }
     }
+
+    #endregion
 }

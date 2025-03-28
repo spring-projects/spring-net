@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -20,33 +20,30 @@
 
 #region Imports
 
-
-
 #endregion
 
-namespace Spring.Objects.Factory.Xml
+namespace Spring.Objects.Factory.Xml;
+
+/// <summary>
+/// Test class for Spring's ability to create objects using static factory methods, rather
+/// than constructors.
+/// </summary>
+/// <author>Rod Johnson</author>
+/// <author>Rick Evans (.NET)</author>
+public class TestObjectCreator
 {
-    /// <summary>
-    /// Test class for Spring's ability to create objects using static factory methods, rather
-    /// than constructors.
-    /// </summary>
-    /// <author>Rod Johnson</author>
-    /// <author>Rick Evans (.NET)</author>
-    public class TestObjectCreator
+    public static TestObject CreateTestObject(string name, int age)
     {
-        public static TestObject CreateTestObject(string name, int age)
-        {
-            return new TestObject(name, age);
-        }
+        return new TestObject(name, age);
+    }
 
-        public static TestObject CreateTestObject()
-        {
-            return new TestObject("Tristan", 2);
-        }
+    public static TestObject CreateTestObject()
+    {
+        return new TestObject("Tristan", 2);
+    }
 
-        public TestObject InstanceCreateTestObject()
-        {
-            return CreateTestObject();
-        }
+    public TestObject InstanceCreateTestObject()
+    {
+        return CreateTestObject();
     }
 }

@@ -18,58 +18,56 @@
 
 #endregion
 
-namespace Spring.Validation
+namespace Spring.Validation;
+
+/// <summary>
+/// An object that can validate application-specific objects.
+/// </summary>
+/// <remarks>
+/// <p>
+/// The primary motivation for this interface is to enable validation to be
+/// decoupled from the (user) interface and placed in business objects.
+/// </p>
+/// <p>
+/// Application developers writing their own custom
+/// <see cref="Spring.Validation.IValidator"/> implementations will
+/// typically not implement this interface directly. In most cases, custom
+/// validators woud be better served deriving from the
+/// <see lang="abstract"/> <see cref="BaseValidator"/> class, with the
+/// custom validation ligic being implemented in an override of the
+/// <see lang="abstract"/>
+/// <see cref="BaseValidator.Validate(object, IValidationErrors)"/>
+/// template method.
+/// </p>
+/// </remarks>
+/// <author>Aleksandar Seovic</author>
+/// <seealso cref="BaseValidator"/>
+public interface IValidator
 {
     /// <summary>
-    /// An object that can validate application-specific objects.
+    /// Validates the specified object.
     /// </summary>
-    /// <remarks>
-    /// <p>
-    /// The primary motivation for this interface is to enable validation to be
-    /// decoupled from the (user) interface and placed in business objects.
-    /// </p>
-    /// <p>
-    /// Application developers writing their own custom
-    /// <see cref="Spring.Validation.IValidator"/> implementations will
-    /// typically not implement this interface directly. In most cases, custom
-    /// validators woud be better served deriving from the
-    /// <see lang="abstract"/> <see cref="BaseValidator"/> class, with the
-    /// custom validation ligic being implemented in an override of the
-    /// <see lang="abstract"/>
-    /// <see cref="BaseValidator.Validate(object, IValidationErrors)"/>
-    /// template method.
-    /// </p>
-    /// </remarks>
-    /// <author>Aleksandar Seovic</author>
-    /// <seealso cref="BaseValidator"/>
-    public interface IValidator
-    {
-        /// <summary>
-        /// Validates the specified object.
-        /// </summary>
-        /// <param name="validationContext">The object to validate.</param>
-        /// <param name="errors">
-        /// The <see cref="ValidationErrors"/> instance to add any error
-        /// messages to in the case of validation failure.
-        /// </param>
-        /// <returns>
-        /// <see lang="true"/> if validation was successful.
-        /// </returns>
-        bool Validate(object validationContext, IValidationErrors errors);
+    /// <param name="validationContext">The object to validate.</param>
+    /// <param name="errors">
+    /// The <see cref="ValidationErrors"/> instance to add any error
+    /// messages to in the case of validation failure.
+    /// </param>
+    /// <returns>
+    /// <see lang="true"/> if validation was successful.
+    /// </returns>
+    bool Validate(object validationContext, IValidationErrors errors);
 
-        /// <summary>
-        /// Validates the specified object.
-        /// </summary>
-        /// <param name="validationContext">The object to validate.</param>
-        /// <param name="contextParams">Additional context parameters.</param>
-        /// <param name="errors">
-        ///   The <see cref="ValidationErrors"/> instance to add any error
-        ///   messages to in the case of validation failure.
-        /// </param>
-        /// <returns>
-        /// <see lang="true"/> if validation was successful.
-        /// </returns>
-        bool Validate(object validationContext, IDictionary<string, object> contextParams, IValidationErrors errors);
-
-    }
+    /// <summary>
+    /// Validates the specified object.
+    /// </summary>
+    /// <param name="validationContext">The object to validate.</param>
+    /// <param name="contextParams">Additional context parameters.</param>
+    /// <param name="errors">
+    ///   The <see cref="ValidationErrors"/> instance to add any error
+    ///   messages to in the case of validation failure.
+    /// </param>
+    /// <returns>
+    /// <see lang="true"/> if validation was successful.
+    /// </returns>
+    bool Validate(object validationContext, IDictionary<string, object> contextParams, IValidationErrors errors);
 }

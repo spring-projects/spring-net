@@ -26,146 +26,145 @@ using Spring.Aop.Support;
 
 #endregion
 
-namespace Spring.Aop.Framework.DynamicProxy
+namespace Spring.Aop.Framework.DynamicProxy;
+
+/// <summary>
+/// Unit tests for the CachedAopProxyFactoryTests class.
+/// </summary>
+/// <author>Bruno Baia</author>
+[TestFixture]
+public sealed class CachedAopProxyFactoryTests : DefaultAopProxyFactoryTests
 {
-	/// <summary>
-    /// Unit tests for the CachedAopProxyFactoryTests class.
-	/// </summary>
-	/// <author>Bruno Baia</author>
-	[TestFixture]
-    public sealed class CachedAopProxyFactoryTests : DefaultAopProxyFactoryTests
-	{
-        protected override IAopProxy CreateAopProxy(ProxyFactory advisedSupport)
-        {
-            //            return (IAopProxy) advisedSupport.GetProxy();
-            IAopProxyFactory apf = new CachedAopProxyFactory();
-            return apf.CreateAopProxy(advisedSupport);
-        }
-
-        [SetUp]
-        public void SetUp()
-        {
-            CachedAopProxyFactory.ClearCache();
-        }
-
-        [Test]
-        public void DoesNotCacheWithDifferentBaseType()
-        {
-            // Decorated-based proxy (BaseType == TargetType)
-            ProxyFactory advisedSupport = new ProxyFactory(new TestObject());
-            advisedSupport.ProxyTargetType = true;
-            CreateAopProxy(advisedSupport);
-
-            // Composition-based proxy (BaseType = BaseCompositionAopProxy)
-            advisedSupport = new ProxyFactory(new TestObject());
-            advisedSupport.ProxyTargetType = false;
-            CreateAopProxy(advisedSupport);
-
-            AssertAopProxyTypeCacheCount(2);
-        }
-
-        [Test]
-        public void DoesNotCacheWithDifferentTargetType()
-        {
-            ProxyFactory advisedSupport = new ProxyFactory(new BadCommand());
-            CreateAopProxy(advisedSupport);
-
-            advisedSupport = new ProxyFactory(new GoodCommand());
-            CreateAopProxy(advisedSupport);
-
-            AssertAopProxyTypeCacheCount(2);
-        }
-
-        [Test]
-        public void DoesNotCacheWithDifferentProxyTargetAttributes()
-        {
-            ProxyFactory advisedSupport = new ProxyFactory(new GoodCommand());
-            advisedSupport.ProxyTargetAttributes = true;
-            CreateAopProxy(advisedSupport);
-
-            advisedSupport = new ProxyFactory(new GoodCommand());
-            advisedSupport.ProxyTargetAttributes = false;
-            CreateAopProxy(advisedSupport);
-
-            AssertAopProxyTypeCacheCount(2);
-        }
-
-        [Test]
-        public void DoesNotCacheWithDifferentInterfaces()
-        {
-            ProxyFactory advisedSupport = new ProxyFactory(new TestObject());
-            CreateAopProxy(advisedSupport);
-
-            advisedSupport = new ProxyFactory(new TestObject());
-            advisedSupport.AddInterface(typeof(IPerson));
-            CreateAopProxy(advisedSupport);
-
-            AssertAopProxyTypeCacheCount(2);
-
-            // Same with Introductions
-            advisedSupport = new ProxyFactory(new TestObject());
-            TimestampIntroductionInterceptor ti = new TimestampIntroductionInterceptor();
-            ti.TimeStamp = new DateTime(666L);
-            IIntroductionAdvisor introduction = new DefaultIntroductionAdvisor(ti, typeof(ITimeStamped));
-            advisedSupport.AddIntroduction(introduction);
-            CreateAopProxy(advisedSupport);
-
-            AssertAopProxyTypeCacheCount(3);
-        }
-
-        [Test]
-        public void DoesCacheWithTwoDecoratorBasedProxy()
-        {
-            ProxyFactory advisedSupport = new ProxyFactory(new TestObject());
-            advisedSupport.ProxyTargetType = true;
-            CreateAopProxy(advisedSupport);
-
-            advisedSupport = new ProxyFactory(new TestObject());
-            advisedSupport.ProxyTargetType = true;
-            CreateAopProxy(advisedSupport);
-
-            AssertAopProxyTypeCacheCount(1);
-        }
-
-        [Test]
-        public void DoesCacheWithTwoCompositionBasedProxy()
-        {
-            ProxyFactory advisedSupport = new ProxyFactory(new TestObject());
-            CreateAopProxy(advisedSupport);
-
-            advisedSupport = new ProxyFactory(new TestObject());
-            CreateAopProxy(advisedSupport);
-
-            AssertAopProxyTypeCacheCount(1);
-        }
-
-        private void AssertAopProxyTypeCacheCount(int count)
-        {
-            Assert.AreEqual(count, CachedAopProxyFactory.CountCachedTypes);
-        }
-
-        #region Helper classes definitions
-
-        public interface ICommand
-        {
-            void Execute();
-        }
-
-        public sealed class BadCommand : ICommand
-        {
-            public void Execute()
-            {
-                throw new NotImplementedException();
-            }
-        }
-
-        public sealed class GoodCommand : ICommand
-        {
-            public void Execute()
-            {
-            }
-        }
-
-        #endregion
+    protected override IAopProxy CreateAopProxy(ProxyFactory advisedSupport)
+    {
+        //            return (IAopProxy) advisedSupport.GetProxy();
+        IAopProxyFactory apf = new CachedAopProxyFactory();
+        return apf.CreateAopProxy(advisedSupport);
     }
+
+    [SetUp]
+    public void SetUp()
+    {
+        CachedAopProxyFactory.ClearCache();
+    }
+
+    [Test]
+    public void DoesNotCacheWithDifferentBaseType()
+    {
+        // Decorated-based proxy (BaseType == TargetType)
+        ProxyFactory advisedSupport = new ProxyFactory(new TestObject());
+        advisedSupport.ProxyTargetType = true;
+        CreateAopProxy(advisedSupport);
+
+        // Composition-based proxy (BaseType = BaseCompositionAopProxy)
+        advisedSupport = new ProxyFactory(new TestObject());
+        advisedSupport.ProxyTargetType = false;
+        CreateAopProxy(advisedSupport);
+
+        AssertAopProxyTypeCacheCount(2);
+    }
+
+    [Test]
+    public void DoesNotCacheWithDifferentTargetType()
+    {
+        ProxyFactory advisedSupport = new ProxyFactory(new BadCommand());
+        CreateAopProxy(advisedSupport);
+
+        advisedSupport = new ProxyFactory(new GoodCommand());
+        CreateAopProxy(advisedSupport);
+
+        AssertAopProxyTypeCacheCount(2);
+    }
+
+    [Test]
+    public void DoesNotCacheWithDifferentProxyTargetAttributes()
+    {
+        ProxyFactory advisedSupport = new ProxyFactory(new GoodCommand());
+        advisedSupport.ProxyTargetAttributes = true;
+        CreateAopProxy(advisedSupport);
+
+        advisedSupport = new ProxyFactory(new GoodCommand());
+        advisedSupport.ProxyTargetAttributes = false;
+        CreateAopProxy(advisedSupport);
+
+        AssertAopProxyTypeCacheCount(2);
+    }
+
+    [Test]
+    public void DoesNotCacheWithDifferentInterfaces()
+    {
+        ProxyFactory advisedSupport = new ProxyFactory(new TestObject());
+        CreateAopProxy(advisedSupport);
+
+        advisedSupport = new ProxyFactory(new TestObject());
+        advisedSupport.AddInterface(typeof(IPerson));
+        CreateAopProxy(advisedSupport);
+
+        AssertAopProxyTypeCacheCount(2);
+
+        // Same with Introductions
+        advisedSupport = new ProxyFactory(new TestObject());
+        TimestampIntroductionInterceptor ti = new TimestampIntroductionInterceptor();
+        ti.TimeStamp = new DateTime(666L);
+        IIntroductionAdvisor introduction = new DefaultIntroductionAdvisor(ti, typeof(ITimeStamped));
+        advisedSupport.AddIntroduction(introduction);
+        CreateAopProxy(advisedSupport);
+
+        AssertAopProxyTypeCacheCount(3);
+    }
+
+    [Test]
+    public void DoesCacheWithTwoDecoratorBasedProxy()
+    {
+        ProxyFactory advisedSupport = new ProxyFactory(new TestObject());
+        advisedSupport.ProxyTargetType = true;
+        CreateAopProxy(advisedSupport);
+
+        advisedSupport = new ProxyFactory(new TestObject());
+        advisedSupport.ProxyTargetType = true;
+        CreateAopProxy(advisedSupport);
+
+        AssertAopProxyTypeCacheCount(1);
+    }
+
+    [Test]
+    public void DoesCacheWithTwoCompositionBasedProxy()
+    {
+        ProxyFactory advisedSupport = new ProxyFactory(new TestObject());
+        CreateAopProxy(advisedSupport);
+
+        advisedSupport = new ProxyFactory(new TestObject());
+        CreateAopProxy(advisedSupport);
+
+        AssertAopProxyTypeCacheCount(1);
+    }
+
+    private void AssertAopProxyTypeCacheCount(int count)
+    {
+        Assert.AreEqual(count, CachedAopProxyFactory.CountCachedTypes);
+    }
+
+    #region Helper classes definitions
+
+    public interface ICommand
+    {
+        void Execute();
+    }
+
+    public sealed class BadCommand : ICommand
+    {
+        public void Execute()
+        {
+            throw new NotImplementedException();
+        }
+    }
+
+    public sealed class GoodCommand : ICommand
+    {
+        public void Execute()
+        {
+        }
+    }
+
+    #endregion
 }

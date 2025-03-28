@@ -22,52 +22,50 @@ using BenchmarkDotNet.Attributes;
 using Spring.Benchmark.Classes;
 using Spring.Context.Support;
 
-namespace Spring.Benchmark
+namespace Spring.Benchmark;
+
+[ClrJob, CoreJob]
+[MemoryDiagnoser]
+public class ContainerBenchmark
 {
-    [ClrJob, CoreJob]
-    [MemoryDiagnoser]
-    public class ContainerBenchmark
+    private XmlApplicationContext container;
+
+    [Params(5_000)] public int Iterations { get; set; }
+
+    [GlobalSetup]
+    public void GlobalSetup()
     {
-        private XmlApplicationContext container;
+        container = new XmlApplicationContext("ContainerBenchmark.xml");
+        container.Refresh();
+    }
 
-        [Params(5_000)]
-        public int Iterations { get; set; }
-
-        [GlobalSetup]
-        public void GlobalSetup()
+    [Benchmark]
+    public bool ResolveTransient()
+    {
+        bool ok = true;
+        for (int i = 0; i < Iterations; i++)
         {
-            container = new XmlApplicationContext("ContainerBenchmark.xml");
-            container.Refresh();
+            var transient1 = (ITransient1) container.GetObject(typeof(ITransient1).FullName);
+            var transient2 = (ITransient2) container.GetObject(typeof(ITransient2).FullName);
+            var transient3 = (ITransient3) container.GetObject(typeof(ITransient3).FullName);
+            ok &= transient1 != null && transient2 != null && transient3 != null;
         }
 
-        [Benchmark]
-        public bool ResolveTransient()
-        {
-            bool ok = true;
-            for (int i = 0; i < Iterations; i++)
-            {
-                var transient1 = (ITransient1) container.GetObject(typeof(ITransient1).FullName);
-                var transient2 = (ITransient2) container.GetObject(typeof(ITransient2).FullName);
-                var transient3 = (ITransient3) container.GetObject(typeof(ITransient3).FullName);
-                ok &= transient1 != null && transient2 != null && transient3 != null;
-            }
+        return ok;
+    }
 
-            return ok;
-        }
-        
-        [Benchmark]
-        public bool ResolveSingleton()
+    [Benchmark]
+    public bool ResolveSingleton()
+    {
+        bool ok = true;
+        for (int i = 0; i < Iterations; i++)
         {
-            bool ok = true;
-            for (int i = 0; i < Iterations; i++)
-            {
-                var transient1 = (ISingleton1) container.GetObject(typeof(ISingleton1).FullName);
-                var transient2 = (ISingleton2) container.GetObject(typeof(ISingleton2).FullName);
-                var transient3 = (ISingleton3) container.GetObject(typeof(ISingleton3).FullName);
-                ok &= transient1 != null && transient2 != null && transient3 != null;
-            }
-
-            return ok;
+            var transient1 = (ISingleton1) container.GetObject(typeof(ISingleton1).FullName);
+            var transient2 = (ISingleton2) container.GetObject(typeof(ISingleton2).FullName);
+            var transient3 = (ISingleton3) container.GetObject(typeof(ISingleton3).FullName);
+            ok &= transient1 != null && transient2 != null && transient3 != null;
         }
+
+        return ok;
     }
 }

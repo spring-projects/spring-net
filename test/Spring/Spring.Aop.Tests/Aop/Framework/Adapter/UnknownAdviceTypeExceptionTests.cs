@@ -20,19 +20,18 @@
 
 using NUnit.Framework;
 
-namespace Spring.Aop.Framework.Adapter
+namespace Spring.Aop.Framework.Adapter;
+
+/// <summary>
+/// Unit tests for the UnknownAdviceTypeException class.
+/// </summary>
+/// <author>Rick Evans</author>
+[TestFixture]
+public sealed class UnknownAdviceTypeExceptionTests
 {
-	/// <summary>
-	/// Unit tests for the UnknownAdviceTypeException class.
-    /// </summary>
-    /// <author>Rick Evans</author>
-	[TestFixture]
-    public sealed class UnknownAdviceTypeExceptionTests
+    [Test]
+    public void InstantiationWithNullAdviceDoesNotThrowAnotherException()
     {
-        [Test]
-        public void InstantiationWithNullAdviceDoesNotThrowAnotherException()
-        {
-            new UnknownAdviceTypeException(null);
-        }
-	}
+        new UnknownAdviceTypeException(null);
+    }
 }

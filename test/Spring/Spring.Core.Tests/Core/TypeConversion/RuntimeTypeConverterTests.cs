@@ -24,60 +24,59 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Core.TypeConversion
+namespace Spring.Core.TypeConversion;
+
+/// <summary>
+/// Unit tests for the RuntimeTypeConverter class.
+/// </summary>
+[TestFixture]
+public class RuntimeTypeConverterTests
 {
-	/// <summary>
-	/// Unit tests for the RuntimeTypeConverter class.
-	/// </summary>
-	[TestFixture]
-    public class RuntimeTypeConverterTests
+    [Test]
+    public void CanConvertFrom()
     {
-        [Test]
-        public void CanConvertFrom ()
-        {
-            RuntimeTypeConverter cnv = new RuntimeTypeConverter ();
-            Assert.IsTrue (cnv.CanConvertFrom (typeof (string)), "Mmm... I can't convert from a string to a Type.");
-            Assert.IsFalse (cnv.CanConvertFrom (GetType ()), "Mmm... managed to convert to a Type from a Type of this test. Boing!");
-        }
+        RuntimeTypeConverter cnv = new RuntimeTypeConverter();
+        Assert.IsTrue(cnv.CanConvertFrom(typeof(string)), "Mmm... I can't convert from a string to a Type.");
+        Assert.IsFalse(cnv.CanConvertFrom(GetType()), "Mmm... managed to convert to a Type from a Type of this test. Boing!");
+    }
 
-        [Test]
-        public void CanConvertTo ()
-        {
-            RuntimeTypeConverter cnv = new RuntimeTypeConverter ();
-            Assert.IsTrue (cnv.CanConvertTo (typeof (Type)), "Mmm... I can't convert to a Type at all.");
-            Assert.IsFalse (cnv.CanConvertTo (typeof (void)), "Mmm... managed to convert to a Type from a bad type. Boing!");
-        }
+    [Test]
+    public void CanConvertTo()
+    {
+        RuntimeTypeConverter cnv = new RuntimeTypeConverter();
+        Assert.IsTrue(cnv.CanConvertTo(typeof(Type)), "Mmm... I can't convert to a Type at all.");
+        Assert.IsFalse(cnv.CanConvertTo(typeof(void)), "Mmm... managed to convert to a Type from a bad type. Boing!");
+    }
 
-        [Test]
-        public void ConvertFromNonSupportedType ()
-        {
-            RuntimeTypeConverter cnv = new RuntimeTypeConverter ();
-            Assert.Throws<NotSupportedException>(() => cnv.ConvertFrom (12));
-        }
+    [Test]
+    public void ConvertFromNonSupportedType()
+    {
+        RuntimeTypeConverter cnv = new RuntimeTypeConverter();
+        Assert.Throws<NotSupportedException>(() => cnv.ConvertFrom(12));
+    }
 
-        [Test]
-        public void ConvertFromString () 
-        {
-            RuntimeTypeConverter cnv = new RuntimeTypeConverter ();
-            object foo = cnv.ConvertFrom ("System.String");
-            Assert.IsNotNull (foo);
-            Assert.AreEqual (GetType().GetType().FullName, foo.GetType ().FullName);
-        }
+    [Test]
+    public void ConvertFromString()
+    {
+        RuntimeTypeConverter cnv = new RuntimeTypeConverter();
+        object foo = cnv.ConvertFrom("System.String");
+        Assert.IsNotNull(foo);
+        Assert.AreEqual(GetType().GetType().FullName, foo.GetType().FullName);
+    }
 
-        [Test]
-        public void ConvertToString () 
-        {
-            RuntimeTypeConverter cnv = new RuntimeTypeConverter ();
-            object foo = cnv.ConvertTo (typeof (string), typeof (string));
-            Assert.IsNotNull (foo);
-            Assert.AreEqual (typeof (string).AssemblyQualifiedName, foo);
-        }
+    [Test]
+    public void ConvertToString()
+    {
+        RuntimeTypeConverter cnv = new RuntimeTypeConverter();
+        object foo = cnv.ConvertTo(typeof(string), typeof(string));
+        Assert.IsNotNull(foo);
+        Assert.AreEqual(typeof(string).AssemblyQualifiedName, foo);
+    }
 
-        [Test]
-        public void ConvertToStringFromNonSupportedType ()
-        {
-            RuntimeTypeConverter cnv = new RuntimeTypeConverter ();
-            Assert.Throws<NotSupportedException>(() => cnv.ConvertTo (typeof (string), GetType ()));
-        }
-	}
+    [Test]
+    public void ConvertToStringFromNonSupportedType()
+    {
+        RuntimeTypeConverter cnv = new RuntimeTypeConverter();
+        Assert.Throws<NotSupportedException>(() => cnv.ConvertTo(typeof(string), GetType()));
+    }
 }

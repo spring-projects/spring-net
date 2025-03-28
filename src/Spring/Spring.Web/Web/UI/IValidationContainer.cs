@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,23 +25,23 @@ using Spring.Validation;
 
 #endregion
 
-namespace Spring.Web.UI
+namespace Spring.Web.UI;
+
+/// <summary>
+/// Abstracts access to properties required for 
+/// handling validation and error rendering
+/// </summary>
+/// <author>Erich Eichinger</author>
+public interface IValidationContainer
 {
     /// <summary>
-    /// Abstracts access to properties required for 
-    /// handling validation and error rendering
+    /// Gets the MessageSource to be used for 
+    /// resolving error ids into messages
     /// </summary>
-    /// <author>Erich Eichinger</author>
-    public interface IValidationContainer
-    {
-        /// <summary>
-        /// Gets the MessageSource to be used for 
-        /// resolving error ids into messages
-        /// </summary>
-        IMessageSource MessageSource { get; }
-        /// <summary>
-        /// Gets the list of validation errors kept by this container.
-        /// </summary>
-        IValidationErrors ValidationErrors { get; } 
-    }
+    IMessageSource MessageSource { get; }
+
+    /// <summary>
+    /// Gets the list of validation errors kept by this container.
+    /// </summary>
+    IValidationErrors ValidationErrors { get; }
 }

@@ -27,32 +27,31 @@ using Spring.Objects.Factory.Xml;
 
 #endregion
 
-namespace Spring.Validation.Validators
+namespace Spring.Validation.Validators;
+
+/// <summary>
+/// EmailValidatorIntegration integration tests.
+/// </summary>
+/// <author>Goran Milosavljevic</author>
+[TestFixture]
+public class EmailValidatorIntegrationTests
 {
-    /// <summary>
-    /// EmailValidatorIntegration integration tests.
-    /// </summary>
-    /// <author>Goran Milosavljevic</author>
-    [TestFixture]
-    public class EmailValidatorIntegrationTests
+    [Test]
+    public void EmailValidatorTests()
     {
-        [Test]
-        public void EmailValidatorTests()
-        {
-            const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
+        const string xml = @"<?xml version='1.0' encoding='UTF-8' ?>
             <objects xmlns='http://www.springframework.net' xmlns:v='http://www.springframework.net/validation'>
                 <v:validator id='emailValidator' test='#this' type='Spring.Validation.Validators.EmailValidator, Spring.Core'/>
             </objects>";
-            
-            MemoryStream stream = new MemoryStream(new UTF8Encoding().GetBytes(xml));
-            IResource resource = new InputStreamResource(stream, "emailValidator");
 
-            XmlObjectFactory objectFactory = new XmlObjectFactory(resource, null);
-            object obj = objectFactory.GetObject("emailValidator");
-            
-            Assert.IsTrue(obj is IValidator);
-            IValidator validator = obj as IValidator;
-            Assert.IsTrue(validator.Validate("goran@goran.com", new ValidationErrors()));
-        }        
+        MemoryStream stream = new MemoryStream(new UTF8Encoding().GetBytes(xml));
+        IResource resource = new InputStreamResource(stream, "emailValidator");
+
+        XmlObjectFactory objectFactory = new XmlObjectFactory(resource, null);
+        object obj = objectFactory.GetObject("emailValidator");
+
+        Assert.IsTrue(obj is IValidator);
+        IValidator validator = obj as IValidator;
+        Assert.IsTrue(validator.Validate("goran@goran.com", new ValidationErrors()));
     }
 }

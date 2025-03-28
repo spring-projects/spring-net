@@ -26,20 +26,19 @@ using Spring.Messaging.Nms.Connections;
 
 #endregion
 
-namespace Spring
+namespace Spring;
+
+/// <summary>
+/// Unit tests for all of the exception classes in the Spring.Data library...
+/// </summary>
+/// <author>Rick Evans</author>
+[TestFixture]
+//[Ignore("Spring inherits from NMS Exceptions which do not ")]
+public sealed class NmsExceptionTests : ExceptionsTest
 {
-    /// <summary>
-    /// Unit tests for all of the exception classes in the Spring.Data library...
-    /// </summary>
-    /// <author>Rick Evans</author>
-    [TestFixture]
-    //[Ignore("Spring inherits from NMS Exceptions which do not ")]
-    public sealed class NmsExceptionTests : ExceptionsTest
+    [OneTimeSetUp]
+    public void FixtureSetUp()
     {
-        [OneTimeSetUp]
-        public void FixtureSetUp()
-        {
-            AssemblyToCheck = Assembly.GetAssembly(typeof (SynchedLocalTransactionFailedException));
-        }
+        AssemblyToCheck = Assembly.GetAssembly(typeof(SynchedLocalTransactionFailedException));
     }
 }

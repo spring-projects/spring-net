@@ -16,38 +16,38 @@ limitations under the License.
 -->
 <objects xmlns="http://www.springframework.net">
 
-  <object name="testObject" type="${objectType}">
-    <property name="Pets">
-      <list element-type="${listElementType}">
-        <value>Gribouille</value>
-        <value>Blutch</value>
-      </list>
-    </property>
-    <property name="PeriodicTable">
-      <dictionary key-type="${dictionaryKeyType}" value-type="${dictionaryValueType}">
-        <entry key="${entryKey}" value="carbon"/>
-        <entry key="O" value="oxygen"/>        
-      </dictionary>
-    </property>
-    <property name="Computers">
-      <set element-type="${setElementType}">
-        <value>mine</value>
-        <value>your</value>
-      </set>
-    </property>
-  </object>
+    <object name="testObject" type="${objectType}">
+        <property name="Pets">
+            <list element-type="${listElementType}">
+                <value>Gribouille</value>
+                <value>Blutch</value>
+            </list>
+        </property>
+        <property name="PeriodicTable">
+            <dictionary key-type="${dictionaryKeyType}" value-type="${dictionaryValueType}">
+                <entry key="${entryKey}" value="carbon" />
+                <entry key="O" value="oxygen" />
+            </dictionary>
+        </property>
+        <property name="Computers">
+            <set element-type="${setElementType}">
+                <value>mine</value>
+                <value>your</value>
+            </set>
+        </property>
+    </object>
 
-  <object type="Spring.Objects.Factory.Config.PropertyPlaceholderConfigurer, Spring.Core">
-    <property name="properties">
-      <name-values>
-        <add key="objectType" value="Spring.Objects.TestObject, Spring.Core.Tests" />
-        <add key="listElementType" value="string" />
-        <add key="dictionaryKeyType" value="string" />
-        <add key="dictionaryValueType" value="string" />
-        <add key="setElementType" value="string" />
-        <add key="entryKey" value="C"/>
-      </name-values>
-    </property>
-  </object>
-  
+    <object type="Spring.Objects.Factory.Config.PropertyPlaceholderConfigurer, Spring.Core">
+        <property name="properties">
+            <name-values>
+                <add key="objectType" value="Spring.Objects.TestObject, Spring.Core.Tests" />
+                <add key="listElementType" value="string" />
+                <add key="dictionaryKeyType" value="string" />
+                <add key="dictionaryValueType" value="string" />
+                <add key="setElementType" value="string" />
+                <add key="entryKey" value="C" />
+            </name-values>
+        </property>
+    </object>
+
 </objects>

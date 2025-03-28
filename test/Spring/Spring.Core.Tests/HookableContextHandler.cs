@@ -26,73 +26,72 @@ using Spring.Context.Support;
 
 #endregion
 
-namespace Spring
+namespace Spring;
+
+/// <summary>
+/// Replace the original context handler with this hookable version for testing ContextRegistry
+/// </summary>
+/// <author>Erich Eichinger</author>
+public class HookableContextHandler : IConfigurationSectionHandler
 {
+    private IConfigurationSectionHandler baseHandler = new ContextHandler();
+
     /// <summary>
-    /// Replace the original context handler with this hookable version for testing ContextRegistry
+    /// May be used to wrap codeblocks within using(new Guard(new CreateContextFromSectionHandler(MyTestSectionHandler))) { ... }
     /// </summary>
-    /// <author>Erich Eichinger</author>
-    public class HookableContextHandler : IConfigurationSectionHandler
+    public class Guard : IDisposable
     {
-        private IConfigurationSectionHandler baseHandler = new ContextHandler();
+        private readonly CreateContextFromSectionHandler _prevInst;
 
         /// <summary>
-        /// May be used to wrap codeblocks within using(new Guard(new CreateContextFromSectionHandler(MyTestSectionHandler))) { ... }
+        /// Initializes a new instance of the <see cref="T:System.Object"></see> class.
         /// </summary>
-        public class Guard : IDisposable
+        public Guard(CreateContextFromSectionHandler sectionHandler)
         {
-            private readonly CreateContextFromSectionHandler _prevInst;
-
-            /// <summary>
-            /// Initializes a new instance of the <see cref="T:System.Object"></see> class.
-            /// </summary>
-            public Guard(CreateContextFromSectionHandler sectionHandler)
-            {
-            	  NUnit.Framework.Assert.IsNotNull(sectionHandler);
-                _prevInst = SetSectionHandler(sectionHandler);
-            }
-
-            public void Dispose()
-            {
-                SetSectionHandler(_prevInst);
-            }
+            NUnit.Framework.Assert.IsNotNull(sectionHandler);
+            _prevInst = SetSectionHandler(sectionHandler);
         }
 
-        public delegate object CreateContextFromSectionHandler(object parent, object configContext, XmlNode section);
-
-        private static CreateContextFromSectionHandler s_callback;
-
-        public static CreateContextFromSectionHandler callback
+        public void Dispose()
         {
-            get { return s_callback; }
+            SetSectionHandler(_prevInst);
         }
+    }
 
-        public static CreateContextFromSectionHandler SetSectionHandler(CreateContextFromSectionHandler sectionHandler)
+    public delegate object CreateContextFromSectionHandler(object parent, object configContext, XmlNode section);
+
+    private static CreateContextFromSectionHandler s_callback;
+
+    public static CreateContextFromSectionHandler callback
+    {
+        get { return s_callback; }
+    }
+
+    public static CreateContextFromSectionHandler SetSectionHandler(CreateContextFromSectionHandler sectionHandler)
+    {
+        CreateContextFromSectionHandler prevInstance = s_callback;
+        s_callback = sectionHandler;
+        return prevInstance;
+    }
+
+    ///<summary>
+    ///Creates a configuration section.
+    ///</summary>
+    ///
+    ///<returns>
+    ///The created section object.
+    ///</returns>
+    ///
+    ///<param name="parent">Parent object.</param>
+    ///<param name="section">Section XML node.</param>
+    ///<param name="configContext">Configuration context object.</param><filterpriority>2</filterpriority>
+    public object Create(object parent, object configContext, XmlNode section)
+    {
+        if (s_callback != null)
         {
-            CreateContextFromSectionHandler prevInstance = s_callback;
-            s_callback = sectionHandler;
-            return prevInstance;
+            return s_callback(parent, configContext, section);
         }
 
-        ///<summary>
-        ///Creates a configuration section.
-        ///</summary>
-        ///
-        ///<returns>
-        ///The created section object.
-        ///</returns>
-        ///
-        ///<param name="parent">Parent object.</param>
-        ///<param name="section">Section XML node.</param>
-        ///<param name="configContext">Configuration context object.</param><filterpriority>2</filterpriority>
-        public object Create(object parent, object configContext, XmlNode section)
-        {        		
-            if (s_callback != null)
-            {
-                return s_callback(parent, configContext, section);
-            }
-
-            return baseHandler.Create(parent, configContext, section);
-        }
+        return baseHandler.Create(parent, configContext, section);
     }
 }

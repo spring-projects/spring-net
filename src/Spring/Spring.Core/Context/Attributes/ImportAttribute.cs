@@ -18,52 +18,50 @@
 
 #endregion
 
-namespace Spring.Context.Attributes
+namespace Spring.Context.Attributes;
+
+/// <summary>
+/// Indicates one or more <see cref="ConfigurationAttribute"/> classes to import.
+///
+/// <para>Provides functionality equivalent to the &lt;import/&gt; element in Spring XML.
+/// Only supported for actual <see cref="ConfigurationAttribute"/>-attributed classes.
+/// </para>
+///
+/// <para>If XML or other non-<see cref="ConfigurationAttribute"/> object definition resources need to be
+/// imported, use <see cref="ImportResourceAttribute"/>
+/// </para>
+/// </summary>
+[AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
+public class ImportAttribute : Attribute
 {
+    private Type[] _types;
+
     /// <summary>
-    /// Indicates one or more <see cref="ConfigurationAttribute"/> classes to import.
-    ///
-    /// <para>Provides functionality equivalent to the &lt;import/&gt; element in Spring XML.
-    /// Only supported for actual <see cref="ConfigurationAttribute"/>-attributed classes.
-    /// </para>
-    ///
-    /// <para>If XML or other non-<see cref="ConfigurationAttribute"/> object definition resources need to be
-    /// imported, use <see cref="ImportResourceAttribute"/>
-    /// </para>
+    /// Initializes a new instance of the Import class.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Class, AllowMultiple = true)]
-    public class ImportAttribute : Attribute
+    public ImportAttribute(Type type) : this(new[] { type })
     {
-        private Type[] _types;
-        
-        /// <summary>
-        /// Initializes a new instance of the Import class.
-        /// </summary>
-        public ImportAttribute(Type type) : this(new []{ type })
-        {
-        }
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the Import class.
-        /// </summary>
-        /// <param name="types"></param>
-        public ImportAttribute(params Type[] types)
-        {
-            _types = types;
-        }
+    /// <summary>
+    /// Initializes a new instance of the Import class.
+    /// </summary>
+    /// <param name="types"></param>
+    public ImportAttribute(params Type[] types)
+    {
+        _types = types;
+    }
 
-        /// <summary>
-        /// The <see cref="ConfigurationAttribute"/> class or classes to import.
-        /// </summary>
-        /// <value>The type.</value>
-        public Type[] Types
+    /// <summary>
+    /// The <see cref="ConfigurationAttribute"/> class or classes to import.
+    /// </summary>
+    /// <value>The type.</value>
+    public Type[] Types
+    {
+        get { return _types; }
+        set
         {
-            get { return _types; }
-            set
-            {
-                _types = value;
-            }
+            _types = value;
         }
-
     }
 }

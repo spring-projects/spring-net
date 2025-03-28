@@ -18,27 +18,26 @@
 
 #endregion
 
-namespace Spring.Messaging.Ems.Common
+namespace Spring.Messaging.Ems.Common;
+
+public class EmsTopicSubscriber : EmsMessageConsumer, ITopicSubscriber
 {
-    public class EmsTopicSubscriber : EmsMessageConsumer, ITopicSubscriber
+    public EmsTopicSubscriber(TopicSubscriber topicSubscriber)
+        : base(topicSubscriber)
     {
-        public EmsTopicSubscriber(TopicSubscriber topicSubscriber)
-            : base(topicSubscriber)
-        {
-        }
-
-        #region Implementation of ITopicSubscriber
-
-        public bool NoLocal
-        {
-            get { return ((TopicSubscriber) nativeMessageConsumer).NoLocal; }
-        }
-
-        public Topic Topic
-        {
-            get { return ((TopicSubscriber) nativeMessageConsumer).Topic; }
-        }
-
-        #endregion
     }
+
+    #region Implementation of ITopicSubscriber
+
+    public bool NoLocal
+    {
+        get { return ((TopicSubscriber) nativeMessageConsumer).NoLocal; }
+    }
+
+    public Topic Topic
+    {
+        get { return ((TopicSubscriber) nativeMessageConsumer).Topic; }
+    }
+
+    #endregion
 }

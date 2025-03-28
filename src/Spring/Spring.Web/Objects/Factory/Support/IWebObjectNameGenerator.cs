@@ -18,14 +18,13 @@
 
 #endregion
 
-namespace Spring.Objects.Factory.Support
+namespace Spring.Objects.Factory.Support;
+
+/// <summary>
+/// </summary>
+/// <author>Erich Eichinger</author>
+internal interface IWebObjectNameGenerator
 {
-    /// <summary>
-    /// </summary>
-    /// <author>Erich Eichinger</author>
-    internal interface IWebObjectNameGenerator
-    {
-        string CreatePageDefinitionName(string virtualPath);
-        string CreateControlDefinitionName(string virtualPath);
-    }
+    string CreatePageDefinitionName(string virtualPath);
+    string CreateControlDefinitionName(string virtualPath);
 }

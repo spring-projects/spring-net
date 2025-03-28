@@ -24,29 +24,28 @@
 
 using System.Web.UI.WebControls;
 
-namespace Spring.Web.UI.Controls
-{
-	/// <summary>
-	/// Provides information about a command raised from a <see cref="TabContainer"/>
-	/// </summary>
-	/// <author>Erich Eichinger</author>
-	public class TabCommandEventArgs : CommandEventArgs
-	{
-		/// <summary>
-		/// Initializes a new instance.
-		/// </summary>
-		/// <param name="commandName">The name of the command raised by a <see cref="TabContainer"/>.</param>
-		/// <param name="tabIndex">The index of the tab that raised this event.</param>
-		public TabCommandEventArgs(string commandName, int tabIndex) : base(commandName, tabIndex)
-		{
-		}
+namespace Spring.Web.UI.Controls;
 
-		/// <summary>
-		/// Returns the index of the tab that raised this command.
-		/// </summary>
-		public int TabIndex
-		{
-			get { return (int) base.CommandArgument; }
-		}
-	}
+/// <summary>
+/// Provides information about a command raised from a <see cref="TabContainer"/>
+/// </summary>
+/// <author>Erich Eichinger</author>
+public class TabCommandEventArgs : CommandEventArgs
+{
+    /// <summary>
+    /// Initializes a new instance.
+    /// </summary>
+    /// <param name="commandName">The name of the command raised by a <see cref="TabContainer"/>.</param>
+    /// <param name="tabIndex">The index of the tab that raised this event.</param>
+    public TabCommandEventArgs(string commandName, int tabIndex) : base(commandName, tabIndex)
+    {
+    }
+
+    /// <summary>
+    /// Returns the index of the tab that raised this command.
+    /// </summary>
+    public int TabIndex
+    {
+        get { return (int) base.CommandArgument; }
+    }
 }

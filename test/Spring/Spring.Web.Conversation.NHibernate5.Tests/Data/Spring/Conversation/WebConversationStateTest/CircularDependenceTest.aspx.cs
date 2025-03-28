@@ -4,15 +4,14 @@ using Spring;
 using Spring.Context;
 using Spring.Web.Conversation;
 
-
 public partial class CircularDependenceTest : System.Web.UI.Page, IApplicationContextAware
 {
     private static readonly ILogger<CircularDependenceTest> LOG = LogManager.GetLogger<CircularDependenceTest>();
 
     protected void Page_Load(object sender, EventArgs e)
     {
-        IConversationState convCircularDependenceTest_A = (IConversationState)this.applicationContext.GetObject("convCircularDependenceTest_A");
-        IConversationState convCircularDependenceTest_A_A_A = (IConversationState)this.applicationContext.GetObject("convCircularDependenceTest_A_A_A");
+        IConversationState convCircularDependenceTest_A = (IConversationState) this.applicationContext.GetObject("convCircularDependenceTest_A");
+        IConversationState convCircularDependenceTest_A_A_A = (IConversationState) this.applicationContext.GetObject("convCircularDependenceTest_A_A_A");
         StringBuilder sbErrors = new StringBuilder();
         try
         {
@@ -37,10 +36,13 @@ public partial class CircularDependenceTest : System.Web.UI.Page, IApplicationCo
     }
 
     #region IApplicationContextAware Members
+
     private IApplicationContext applicationContext;
+
     public IApplicationContext ApplicationContext
     {
         set { this.applicationContext = value; }
     }
+
     #endregion
 }

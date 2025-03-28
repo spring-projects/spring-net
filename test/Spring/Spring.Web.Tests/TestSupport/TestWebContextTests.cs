@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,37 +25,36 @@ using Spring.Globalization;
 
 #endregion
 
-namespace Spring.TestSupport
+namespace Spring.TestSupport;
+
+/// <summary>
+/// The base class for tests to run within a TestWebContext
+/// </summary>
+/// <author>Erich Eichinger</author>
+public abstract class TestWebContextTests
 {
-    /// <summary>
-    /// The base class for tests to run within a TestWebContext
-    /// </summary>
-    /// <author>Erich Eichinger</author>
-    public abstract class TestWebContextTests
+    [SetUp]
+    public void SetUp()
     {
-        [SetUp]
-        public void SetUp()
-        {
-            // ensure, uiCulture and culture are set to different cultures
-            CultureTestScope.Set();
-            TestWebContext.Create("/apppath", "testpage.aspx");
-            DoSetUp();
-        }
+        // ensure, uiCulture and culture are set to different cultures
+        CultureTestScope.Set();
+        TestWebContext.Create("/apppath", "testpage.aspx");
+        DoSetUp();
+    }
 
-        [TearDown]
-        public void TearDown()
-        {
-            DoTearDown();
-            TestWebContext.Release();
-            CultureTestScope.Reset();
-        }
+    [TearDown]
+    public void TearDown()
+    {
+        DoTearDown();
+        TestWebContext.Release();
+        CultureTestScope.Reset();
+    }
 
-        protected virtual void DoSetUp()
-        {            
-        }
+    protected virtual void DoSetUp()
+    {
+    }
 
-        protected void DoTearDown()
-        {
-        }
+    protected void DoTearDown()
+    {
     }
 }

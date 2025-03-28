@@ -21,161 +21,159 @@
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.Serialization;
-
 using Spring.Util;
 
-namespace Spring.Aop.Framework.DynamicProxy
+namespace Spring.Aop.Framework.DynamicProxy;
+
+/// <summary>
+/// Builds an AOP proxy type using composition.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+/// <author>Bruno Baia</author>
+public class CompositionAopProxyTypeBuilder : AbstractAopProxyTypeBuilder
 {
-	/// <summary>
-    /// Builds an AOP proxy type using composition.
-	/// </summary>
-	/// <author>Aleksandar Seovic</author>
-    /// <author>Bruno Baia</author>
-	public class CompositionAopProxyTypeBuilder : AbstractAopProxyTypeBuilder
+    private const string PROXY_TYPE_NAME = "CompositionAopProxy";
+
+    private readonly IAdvised advised;
+
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="CompositionAopProxyTypeBuilder"/> class.
+    /// </summary>
+    /// <param name="advised">The proxy configuration.</param>
+    public CompositionAopProxyTypeBuilder(IAdvised advised)
     {
-	    private const string PROXY_TYPE_NAME = "CompositionAopProxy";
+        this.advised = advised;
 
-        private readonly IAdvised advised;
+        Name = PROXY_TYPE_NAME;
+        BaseType = typeof(BaseCompositionAopProxy);
+        TargetType = advised.TargetSource.TargetType.IsInterface ? typeof(object) : advised.TargetSource.TargetType;
+        Interfaces = GetProxiableInterfaces(advised.Interfaces);
+        ProxyTargetAttributes = advised.ProxyTargetAttributes;
+    }
 
-        /// <summary>
-        /// Creates a new instance of the
-        /// <see cref="CompositionAopProxyTypeBuilder"/> class.
-        /// </summary>
-        /// <param name="advised">The proxy configuration.</param>
-        public CompositionAopProxyTypeBuilder(IAdvised advised)
+    /// <summary>
+    /// Creates the proxy type.
+    /// </summary>
+    /// <returns>The generated proxy type.</returns>
+    public override Type BuildProxyType()
+    {
+        Dictionary<string, MethodInfo> targetMethods = new Dictionary<string, MethodInfo>();
+
+        TypeBuilder typeBuilder = CreateTypeBuilder(Name, BaseType);
+
+        // apply custom attributes to the proxy type.
+        ApplyTypeAttributes(typeBuilder, TargetType);
+
+        if (advised.IsSerializable)
         {
-            this.advised = advised;
-
-            Name = PROXY_TYPE_NAME;
-            BaseType = typeof(BaseCompositionAopProxy);
-            TargetType = advised.TargetSource.TargetType.IsInterface ? typeof(object) : advised.TargetSource.TargetType;
-            Interfaces = GetProxiableInterfaces(advised.Interfaces);
-            ProxyTargetAttributes = advised.ProxyTargetAttributes;
+            typeBuilder.SetCustomAttribute(
+                ReflectionUtils.CreateCustomAttribute(typeof(SerializableAttribute)));
+            ImplementSerializationConstructor(typeBuilder);
         }
 
-        /// <summary>
-        /// Creates the proxy type.
-        /// </summary>
-        /// <returns>The generated proxy type.</returns>
-        public override Type BuildProxyType()
-		{
-			Dictionary<string, MethodInfo> targetMethods = new Dictionary<string, MethodInfo>();
+        // create constructors
+        ImplementConstructors(typeBuilder);
 
-            TypeBuilder typeBuilder = CreateTypeBuilder(Name, BaseType);
-
-            // apply custom attributes to the proxy type.
-            ApplyTypeAttributes(typeBuilder, TargetType);
-
-            if (advised.IsSerializable)
+        // implement interfaces
+        IDictionary<Type, object> interfaceMap = advised.InterfaceMap;
+        foreach (Type intf in Interfaces)
+        {
+            interfaceMap.TryGetValue(intf, out var target);
+            if (target is null)
             {
-                typeBuilder.SetCustomAttribute(
-                    ReflectionUtils.CreateCustomAttribute(typeof(SerializableAttribute)));
-                ImplementSerializationConstructor(typeBuilder);
+                // implement interface
+                ImplementInterface(typeBuilder,
+                    new TargetAopProxyMethodBuilder(typeBuilder, this, false, targetMethods),
+                    intf, TargetType);
             }
-
-			// create constructors
-			ImplementConstructors(typeBuilder);
-
-			// implement interfaces
-            IDictionary<Type, object> interfaceMap = advised.InterfaceMap;
-			foreach (Type intf in Interfaces)
-			{
-				interfaceMap.TryGetValue(intf, out var target);
-				if (target is null)
-				{
-                    // implement interface
-					ImplementInterface(typeBuilder,
-                        new TargetAopProxyMethodBuilder(typeBuilder, this, false, targetMethods),
-                        intf, TargetType);
-				}
-				else if (target is IIntroductionAdvisor)
-				{
-                    // implement introduction
-					ImplementInterface(typeBuilder,
-                        new IntroductionProxyMethodBuilder(typeBuilder, this, targetMethods, advised.IndexOf((IIntroductionAdvisor) target)),
-                        intf, TargetType);
-				}
-			}
-
-			Type proxyType = typeBuilder.CreateTypeInfo();
-
-            // set target method references
-            foreach (KeyValuePair<string, MethodInfo> entry in targetMethods)
-			{
-				FieldInfo field = proxyType.GetField(entry.Key, BindingFlags.NonPublic | BindingFlags.Static);
-				field.SetValue(proxyType, entry.Value);
-			}
-
-			return proxyType;
-		}
-
-        /// <summary>
-        /// Generates the IL instructions that pushes
-        /// the current <see cref="Spring.Aop.Framework.DynamicProxy.AdvisedProxy"/>
-        /// instance on stack.
-        /// </summary>
-        /// <param name="il">The IL generator to use.</param>
-        public override void PushAdvisedProxy(ILGenerator il)
-        {
-            il.Emit(OpCodes.Ldarg_0);
+            else if (target is IIntroductionAdvisor)
+            {
+                // implement introduction
+                ImplementInterface(typeBuilder,
+                    new IntroductionProxyMethodBuilder(typeBuilder, this, targetMethods, advised.IndexOf((IIntroductionAdvisor) target)),
+                    intf, TargetType);
+            }
         }
 
-        /// <summary>
-        /// Implements serialization constructor.
-        /// </summary>
-        /// <param name="typeBuilder">Type builder to use.</param>
-        private void ImplementSerializationConstructor(TypeBuilder typeBuilder)
-        {
-            ConstructorBuilder cb =
-                typeBuilder.DefineConstructor(MethodAttributes.Family,
-                                              CallingConventions.Standard,
-                                              new Type[] { typeof(SerializationInfo), typeof(StreamingContext) });
+        Type proxyType = typeBuilder.CreateTypeInfo();
 
-            ILGenerator il = cb.GetILGenerator();
-            il.Emit(OpCodes.Ldarg_0);
-            il.Emit(OpCodes.Ldarg_1);
-            il.Emit(OpCodes.Ldarg_2);
-            il.Emit(OpCodes.Call, References.BaseCompositionAopProxySerializationConstructor);
-            il.Emit(OpCodes.Ret);
+        // set target method references
+        foreach (KeyValuePair<string, MethodInfo> entry in targetMethods)
+        {
+            FieldInfo field = proxyType.GetField(entry.Key, BindingFlags.NonPublic | BindingFlags.Static);
+            field.SetValue(proxyType, entry.Value);
         }
 
-        /// <summary>
-        /// Implements constructors for the proxy class.
-        /// </summary>
-        /// <remarks>
-        /// <p>
-        /// This implementation calls the base constructor.
-        /// </p>
-        /// </remarks>
-        /// <param name="typeBuilder">
-        /// The <see cref="System.Type"/> builder to use.
-        /// </param>
-        protected override void ImplementConstructors(TypeBuilder typeBuilder)
-        {
-            ConstructorBuilder cb =
-                typeBuilder.DefineConstructor(References.BaseCompositionAopProxyConstructor.Attributes,
-                                              References.BaseCompositionAopProxyConstructor.CallingConvention,
-                                              new Type[] { typeof(IAdvised) });
+        return proxyType;
+    }
 
-            ILGenerator il = cb.GetILGenerator();
-            il.Emit(OpCodes.Ldarg_0);
-            il.Emit(OpCodes.Ldarg_1);
-            il.Emit(OpCodes.Call, References.BaseCompositionAopProxyConstructor);
-            il.Emit(OpCodes.Ret);
-        }
+    /// <summary>
+    /// Generates the IL instructions that pushes
+    /// the current <see cref="Spring.Aop.Framework.DynamicProxy.AdvisedProxy"/>
+    /// instance on stack.
+    /// </summary>
+    /// <param name="il">The IL generator to use.</param>
+    public override void PushAdvisedProxy(ILGenerator il)
+    {
+        il.Emit(OpCodes.Ldarg_0);
+    }
 
-        /// <summary>
-        /// Determines if the specified <paramref name="type"/>
-        /// is one of those generated by this builder.
-        /// </summary>
-        /// <param name="type">The type to check.</param>
-        /// <returns>
-        /// <see langword="true"/> if the type is a composition-based proxy;
-        /// otherwise <see langword="false"/>.
-        /// </returns>
-        public static bool IsCompositionProxy(Type type)
-        {
-            return type.FullName.StartsWith(PROXY_TYPE_NAME);
-        }
+    /// <summary>
+    /// Implements serialization constructor.
+    /// </summary>
+    /// <param name="typeBuilder">Type builder to use.</param>
+    private void ImplementSerializationConstructor(TypeBuilder typeBuilder)
+    {
+        ConstructorBuilder cb =
+            typeBuilder.DefineConstructor(MethodAttributes.Family,
+                CallingConventions.Standard,
+                new Type[] { typeof(SerializationInfo), typeof(StreamingContext) });
+
+        ILGenerator il = cb.GetILGenerator();
+        il.Emit(OpCodes.Ldarg_0);
+        il.Emit(OpCodes.Ldarg_1);
+        il.Emit(OpCodes.Ldarg_2);
+        il.Emit(OpCodes.Call, References.BaseCompositionAopProxySerializationConstructor);
+        il.Emit(OpCodes.Ret);
+    }
+
+    /// <summary>
+    /// Implements constructors for the proxy class.
+    /// </summary>
+    /// <remarks>
+    /// <p>
+    /// This implementation calls the base constructor.
+    /// </p>
+    /// </remarks>
+    /// <param name="typeBuilder">
+    /// The <see cref="System.Type"/> builder to use.
+    /// </param>
+    protected override void ImplementConstructors(TypeBuilder typeBuilder)
+    {
+        ConstructorBuilder cb =
+            typeBuilder.DefineConstructor(References.BaseCompositionAopProxyConstructor.Attributes,
+                References.BaseCompositionAopProxyConstructor.CallingConvention,
+                new Type[] { typeof(IAdvised) });
+
+        ILGenerator il = cb.GetILGenerator();
+        il.Emit(OpCodes.Ldarg_0);
+        il.Emit(OpCodes.Ldarg_1);
+        il.Emit(OpCodes.Call, References.BaseCompositionAopProxyConstructor);
+        il.Emit(OpCodes.Ret);
+    }
+
+    /// <summary>
+    /// Determines if the specified <paramref name="type"/>
+    /// is one of those generated by this builder.
+    /// </summary>
+    /// <param name="type">The type to check.</param>
+    /// <returns>
+    /// <see langword="true"/> if the type is a composition-based proxy;
+    /// otherwise <see langword="false"/>.
+    /// </returns>
+    public static bool IsCompositionProxy(Type type)
+    {
+        return type.FullName.StartsWith(PROXY_TYPE_NAME);
     }
 }

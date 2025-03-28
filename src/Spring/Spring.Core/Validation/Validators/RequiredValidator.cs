@@ -21,116 +21,117 @@
 using Spring.Expressions;
 using Spring.Util;
 
-namespace Spring.Validation
+namespace Spring.Validation;
+
+/// <summary>
+/// Validates that required value is not empty.
+/// </summary>
+/// <remarks>
+/// <p>
+/// This validator uses following rules to determine if target value is valid:
+/// <table>
+///     <tr>
+///         <th>Target <see cref="System.Type"/></th>
+///         <th>Valid Value</th>
+///     </tr>
+///     <tr>
+///         <td>A <see cref="System.String"/>.</td>
+///         <td>Not <see lang="null"/> or an empty string.</td>
+///     </tr>
+///     <tr>
+///         <td>A <see cref="System.DateTime"/>.</td>
+///         <td>Not <see cref="System.DateTime.MinValue"/> and not <see cref="System.DateTime.MaxValue"/>.</td>
+///     </tr>
+///     <tr>
+///         <td>One of the number types.</td>
+///         <td>Not zero.</td>
+///     </tr>
+///     <tr>
+///         <td>A <see cref="System.Char"/>.</td>
+///         <td>Not <see cref="System.Char.MinValue"/> or whitespace.</td>
+///     </tr>
+///     <tr>
+///         <td>Any reference type other than <see cref="System.String"/>.</td>
+///         <td>Not <see lang="null"/>.</td>
+///     </tr>
+/// </table>
+/// </p>
+/// <p>
+/// You cannot use this validator to validate any value types other than the ones
+/// specified in the table above.
+/// </p>
+/// </remarks>
+/// <author>Aleksandar Seovic</author>
+public class RequiredValidator : BaseSimpleValidator
 {
+    #region Constructors
+
     /// <summary>
-    /// Validates that required value is not empty.
+    /// Creates a new instance of the <see cref="RequiredValidator"/> class.
+    /// </summary>
+    public RequiredValidator()
+    {
+    }
+
+    /// <summary>
+    /// Creates a new instance of the <see cref="RequiredValidator"/> class.
+    /// </summary>
+    /// <param name="test">The expression to validate.</param>
+    /// <param name="when">The expression that determines if this validator should be evaluated.</param>
+    public RequiredValidator(string test, string when) : base(test, when)
+    {
+        AssertUtils.ArgumentHasText(test, "test");
+    }
+
+    /// <summary>
+    /// Creates a new instance of the <see cref="RequiredValidator"/> class.
+    /// </summary>
+    /// <param name="test">The expression to validate.</param>
+    /// <param name="when">The expression that determines if this validator should be evaluated.</param>
+    public RequiredValidator(IExpression test, IExpression when) : base(test, when)
+    {
+        AssertUtils.ArgumentNotNull(test, "test");
+    }
+
+    #endregion
+
+    /// <summary>
+    /// Validates the supplied <paramref name="objectToValidate"/>.
     /// </summary>
     /// <remarks>
-    /// <p>
-    /// This validator uses following rules to determine if target value is valid:
-    /// <table>
-    ///     <tr>
-    ///         <th>Target <see cref="System.Type"/></th>
-    ///         <th>Valid Value</th>
-    ///     </tr>
-    ///     <tr>
-    ///         <td>A <see cref="System.String"/>.</td>
-    ///         <td>Not <see lang="null"/> or an empty string.</td>
-    ///     </tr>
-    ///     <tr>
-    ///         <td>A <see cref="System.DateTime"/>.</td>
-    ///         <td>Not <see cref="System.DateTime.MinValue"/> and not <see cref="System.DateTime.MaxValue"/>.</td>
-    ///     </tr>
-    ///     <tr>
-    ///         <td>One of the number types.</td>
-    ///         <td>Not zero.</td>
-    ///     </tr>
-    ///     <tr>
-    ///         <td>A <see cref="System.Char"/>.</td>
-    ///         <td>Not <see cref="System.Char.MinValue"/> or whitespace.</td>
-    ///     </tr>
-    ///     <tr>
-    ///         <td>Any reference type other than <see cref="System.String"/>.</td>
-    ///         <td>Not <see lang="null"/>.</td>
-    ///     </tr>
-    /// </table>
-    /// </p>
-    /// <p>
-    /// You cannot use this validator to validate any value types other than the ones
-    /// specified in the table above.
-    /// </p>
+    /// In the case of the <see cref="Spring.Validation.RequiredValidator"/> class,
+    /// the test should be a variable expression that will be evaluated and the object
+    /// obtained as a result of this evaluation will be tested using the rules described
+    /// in the class overview of the <see cref="Spring.Validation.RequiredValidator"/>
+    /// class.
     /// </remarks>
-    /// <author>Aleksandar Seovic</author>
-    public class RequiredValidator : BaseSimpleValidator
+    /// <param name="objectToValidate">The object to validate.</param>
+    /// <returns>
+    /// <see lang="true"/> if the supplied <paramref name="objectToValidate"/> is valid.
+    /// </returns>
+    protected override bool Validate(object objectToValidate)
     {
-        #region Constructors
-
-        /// <summary>
-        /// Creates a new instance of the <see cref="RequiredValidator"/> class.
-        /// </summary>
-        public RequiredValidator()
-        {}
-
-        /// <summary>
-        /// Creates a new instance of the <see cref="RequiredValidator"/> class.
-        /// </summary>
-        /// <param name="test">The expression to validate.</param>
-        /// <param name="when">The expression that determines if this validator should be evaluated.</param>
-        public RequiredValidator(string test, string when) : base(test, when)
+        if (objectToValidate is String && StringUtils.IsNullOrEmpty((string) objectToValidate))
         {
-            AssertUtils.ArgumentHasText(test, "test");
+            return false;
+        }
+        else if (objectToValidate is DateTime && (((DateTime) objectToValidate) == DateTime.MinValue || ((DateTime) objectToValidate) == DateTime.MaxValue))
+        {
+            return false;
+        }
+        else if (NumberUtils.IsInteger(objectToValidate) && NumberUtils.IsZero(objectToValidate))
+        {
+            return false;
+        }
+        else if (objectToValidate is Char && (((char) objectToValidate) == Char.MinValue || Char.IsWhiteSpace((char) objectToValidate)))
+        {
+            return false;
+        }
+        else if (NumberUtils.IsDecimal(objectToValidate) && NumberUtils.IsZero(objectToValidate))
+        {
+            return false;
         }
 
-        /// <summary>
-        /// Creates a new instance of the <see cref="RequiredValidator"/> class.
-        /// </summary>
-        /// <param name="test">The expression to validate.</param>
-        /// <param name="when">The expression that determines if this validator should be evaluated.</param>
-        public RequiredValidator(IExpression test, IExpression when) : base(test, when)
-        {
-            AssertUtils.ArgumentNotNull(test, "test");
-        }
-
-        #endregion
-
-        /// <summary>
-        /// Validates the supplied <paramref name="objectToValidate"/>.
-        /// </summary>
-        /// <remarks>
-        /// In the case of the <see cref="Spring.Validation.RequiredValidator"/> class,
-        /// the test should be a variable expression that will be evaluated and the object
-        /// obtained as a result of this evaluation will be tested using the rules described
-        /// in the class overview of the <see cref="Spring.Validation.RequiredValidator"/>
-        /// class.
-        /// </remarks>
-        /// <param name="objectToValidate">The object to validate.</param>
-        /// <returns>
-        /// <see lang="true"/> if the supplied <paramref name="objectToValidate"/> is valid.
-        /// </returns>
-        protected override bool Validate(object objectToValidate)
-        {
-            if (objectToValidate is String && StringUtils.IsNullOrEmpty((string) objectToValidate))
-            {
-                return false;
-            }
-            else if (objectToValidate is DateTime && (((DateTime) objectToValidate) == DateTime.MinValue || ((DateTime) objectToValidate) == DateTime.MaxValue))
-            {
-                return false;
-            }
-            else if (NumberUtils.IsInteger(objectToValidate) && NumberUtils.IsZero(objectToValidate))
-            {
-                return false;
-            }
-            else if (objectToValidate is Char && (((char) objectToValidate) == Char.MinValue || Char.IsWhiteSpace((char) objectToValidate)))
-            {
-                return false;
-            }
-            else if (NumberUtils.IsDecimal(objectToValidate) && NumberUtils.IsZero(objectToValidate))
-            {
-                return false;
-            }
-            return objectToValidate != null;
-        }
+        return objectToValidate != null;
     }
 }

@@ -25,7 +25,6 @@ using System.Security.Permissions;
 using System.Web;
 using System.Web.UI;
 using System.Web.Services;
-
 using Spring.Context;
 using Spring.Context.Support;
 using Spring.Util;
@@ -39,72 +38,72 @@ using System.Collections;
 
 #endregion
 
-namespace Spring.Web.Services
+namespace Spring.Web.Services;
+
+/// <summary>
+/// An <see cref="System.Web.IHttpHandlerFactory"/> implementation that
+/// retrieves configured <c>WebService</c> objects from the Spring.NET web
+/// application context.
+/// </summary>
+/// <remarks>
+/// This handler factory uses web service name from the URL, without the extension,
+/// to find web service object in the Spring context.
+/// </remarks>
+/// <author>Aleksandar Seovic</author>
+[PermissionSet(SecurityAction.InheritanceDemand, Unrestricted = true)]
+public class WebServiceHandlerFactory : System.Web.Services.Protocols.WebServiceHandlerFactory, IHttpHandlerFactory
 {
+#if !MONO_2_0
+    private static readonly MethodInfo CoreGetHandler =
+        typeof(System.Web.Services.Protocols.WebServiceHandlerFactory).GetMethod("CoreGetHandler", BindingFlags.NonPublic | BindingFlags.Instance, null,
+            new Type[] { typeof(Type), typeof(HttpContext), typeof(HttpRequest), typeof(HttpResponse) }, null);
+#endif
+
     /// <summary>
-    /// An <see cref="System.Web.IHttpHandlerFactory"/> implementation that
-    /// retrieves configured <c>WebService</c> objects from the Spring.NET web
-    /// application context.
+    /// Retrieves instance of the page from Spring web application context.
     /// </summary>
-    /// <remarks>
-    /// This handler factory uses web service name from the URL, without the extension,
-    /// to find web service object in the Spring context.
-    /// </remarks>
-    /// <author>Aleksandar Seovic</author>
-    [PermissionSet(SecurityAction.InheritanceDemand, Unrestricted=true)]
-    public class WebServiceHandlerFactory : System.Web.Services.Protocols.WebServiceHandlerFactory, IHttpHandlerFactory
+    /// <param name="context">current HttpContext</param>
+    /// <param name="requestType">type of HTTP request (GET, POST, etc.)</param>
+    /// <param name="url">requested page URL</param>
+    /// <param name="path">translated server path for the page</param>
+    /// <returns>instance of the configured page object</returns>
+    IHttpHandler IHttpHandlerFactory.GetHandler(HttpContext context, string requestType, string url, string path)
     {
-		#if !MONO_2_0
-        private static readonly MethodInfo CoreGetHandler =
-            typeof(System.Web.Services.Protocols.WebServiceHandlerFactory).GetMethod("CoreGetHandler", BindingFlags.NonPublic | BindingFlags.Instance, null,
-                                                                                     new Type[] {typeof(Type), typeof(HttpContext), typeof(HttpRequest), typeof(HttpResponse)}, null);
-		#endif
+        new AspNetHostingPermission(AspNetHostingPermissionLevel.Minimal).Demand();
 
-        /// <summary>
-        /// Retrieves instance of the page from Spring web application context.
-        /// </summary>
-        /// <param name="context">current HttpContext</param>
-        /// <param name="requestType">type of HTTP request (GET, POST, etc.)</param>
-        /// <param name="url">requested page URL</param>
-        /// <param name="path">translated server path for the page</param>
-        /// <returns>instance of the configured page object</returns>
-        IHttpHandler IHttpHandlerFactory.GetHandler(HttpContext context, string requestType, string url, string path)
+        IConfigurableApplicationContext appContext =
+            WebApplicationContext.GetContext(url) as IConfigurableApplicationContext;
+
+        if (appContext == null)
         {
-            new AspNetHostingPermission(AspNetHostingPermissionLevel.Minimal).Demand();
+            throw new InvalidOperationException(
+                "Implementations of IApplicationContext must also implement IConfigurableApplicationContext");
+        }
 
-            IConfigurableApplicationContext appContext =
-                WebApplicationContext.GetContext(url) as IConfigurableApplicationContext;
+        string appRelativeVirtualPath = WebUtils.GetAppRelativePath(url);
 
-            if (appContext == null)
-            {
-                throw new InvalidOperationException(
-                    "Implementations of IApplicationContext must also implement IConfigurableApplicationContext");
-            }
+        AbstractHandlerFactory.NamedObjectDefinition nod =
+            AbstractHandlerFactory.FindWebObjectDefinition(appRelativeVirtualPath, appContext.ObjectFactory);
 
-            string appRelativeVirtualPath = WebUtils.GetAppRelativePath(url);
-
-            AbstractHandlerFactory.NamedObjectDefinition nod =
-                AbstractHandlerFactory.FindWebObjectDefinition(appRelativeVirtualPath, appContext.ObjectFactory);
-
-            Type serviceType = null;
-            if (nod != null)
-            {
+        Type serviceType = null;
+        if (nod != null)
+        {
 #if !MONO
-                if (appContext.IsTypeMatch(nod.Name, typeof(WebServiceExporter)))
+            if (appContext.IsTypeMatch(nod.Name, typeof(WebServiceExporter)))
+            {
+                WebServiceExporter wse = (WebServiceExporter) appContext.GetObject(nod.Name);
+                serviceType = wse.GetExportedType();
+            }
+            else
+            {
+                serviceType = appContext.GetType(nod.Name);
+                // check if the type defines a Web Service
+                object[] wsAttribute = serviceType.GetCustomAttributes(typeof(WebServiceAttribute), true);
+                if (wsAttribute.Length == 0)
                 {
-                    WebServiceExporter wse = (WebServiceExporter)appContext.GetObject(nod.Name);
-                    serviceType = wse.GetExportedType();
+                    serviceType = null;
                 }
-                else
-                {
-                    serviceType = appContext.GetType(nod.Name);
-                    // check if the type defines a Web Service
-                    object[] wsAttribute = serviceType.GetCustomAttributes(typeof(WebServiceAttribute), true);
-                    if (wsAttribute.Length == 0)
-                    {
-                        serviceType = null;
-                    }
-                }
+            }
 #else
                 serviceType = appContext.GetType(nod.Name);
 
@@ -115,18 +114,16 @@ namespace Spring.Web.Services
                     serviceType = null;
                 }
 #endif
-            }
+        }
 
-            if (serviceType == null)
-            {
-                serviceType = WebServiceParser.GetCompiledType(url, context);
-            }
-
+        if (serviceType == null)
+        {
+            serviceType = WebServiceParser.GetCompiledType(url, context);
+        }
 
 #if !MONO_2_0
-            return (IHttpHandler) CoreGetHandler.Invoke(this, new object[] {serviceType, context, context.Request, context.Response});
+        return (IHttpHandler) CoreGetHandler.Invoke(this, new object[] { serviceType, context, context.Request, context.Response });
 #else
-
 			// find if the BuildManager already contains a cached value of the service type
 			var buildCacheField = typeof(BuildManager).GetField("buildCache", BindingFlags.Static | BindingFlags.NonPublic);
 			var buildCache = (IDictionary)buildCacheField.GetValue(null);
@@ -146,8 +143,8 @@ namespace Spring.Web.Services
 			// now that the target type is in the cache, let the default process continue
 			return base.GetHandler(context, requestType, url, path);
 #endif
-        }
     }
+}
 
 #if MONO_2_0
 	public class FakeBuildProvider : BuildProvider
@@ -191,4 +188,3 @@ namespace Spring.Web.Services
 		}
 	}
 #endif
-}

@@ -20,23 +20,23 @@
 
 using NUnit.Framework;
 
-namespace Spring.DataBinding
+namespace Spring.DataBinding;
+
+/// <summary>
+/// Test cases for the SimpleExpressionBinding class.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[TestFixture]
+public class SimpleExpressionBindingTests
 {
-    /// <summary>
-    /// Test cases for the SimpleExpressionBinding class.
-    /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    [TestFixture]
-    public class SimpleExpressionBindingTests
+    private class BindToNullable_TestEntity
     {
-        private class BindToNullable_TestEntity
-        {
-            private Nullable<short> sortOrder;
-            public Nullable<short> SortOrder { get { return sortOrder; } set { sortOrder = value; } }
-        }
+        private Nullable<short> sortOrder;
+        public Nullable<short> SortOrder { get { return sortOrder; } set { sortOrder = value; } }
+    }
 
 #if !NETCOREAPP
-        [Test(Description="http://jira.springframework.org/browse/SPRNET-996")]
+        [Test(Description = "http://jira.springframework.org/browse/SPRNET-996")]
         public void BindToNullable()
         {
             System.Web.UI.WebControls.TextBox textBox = new System.Web.UI.WebControls.TextBox();
@@ -47,34 +47,33 @@ namespace Spring.DataBinding
         }
 #endif
 
-        [Test]
-        public void WithNullMessageId()
-        {
-            Assert.Throws<ArgumentNullException>(() => new SimpleExpressionBinding("exp", "exp").SetErrorMessage(null, "errors"));
-        }
+    [Test]
+    public void WithNullMessageId()
+    {
+        Assert.Throws<ArgumentNullException>(() => new SimpleExpressionBinding("exp", "exp").SetErrorMessage(null, "errors"));
+    }
 
-        [Test]
-        public void WithEmptyMessageId()
-        {
-            Assert.Throws<ArgumentNullException>(() => new SimpleExpressionBinding("exp", "exp").SetErrorMessage("", "errors"));
-        }
+    [Test]
+    public void WithEmptyMessageId()
+    {
+        Assert.Throws<ArgumentNullException>(() => new SimpleExpressionBinding("exp", "exp").SetErrorMessage("", "errors"));
+    }
 
-        [Test]
-        public void WithWhitespaceMessageId()
-        {
-            Assert.Throws<ArgumentNullException>(() => new SimpleExpressionBinding("exp", "exp").SetErrorMessage("\t   ", "errors"));
-        }
+    [Test]
+    public void WithWhitespaceMessageId()
+    {
+        Assert.Throws<ArgumentNullException>(() => new SimpleExpressionBinding("exp", "exp").SetErrorMessage("\t   ", "errors"));
+    }
 
-        [Test]
-        public void WithNullProviders()
-        {
-            Assert.Throws<ArgumentException>(() => new SimpleExpressionBinding("exp", "exp").SetErrorMessage("error", null));
-        }
+    [Test]
+    public void WithNullProviders()
+    {
+        Assert.Throws<ArgumentException>(() => new SimpleExpressionBinding("exp", "exp").SetErrorMessage("error", null));
+    }
 
-        [Test]
-        public void WithEmptyProviders()
-        {
-            Assert.Throws<ArgumentException>(() => new SimpleExpressionBinding("exp", "exp").SetErrorMessage("error", new string[0]));
-        }
+    [Test]
+    public void WithEmptyProviders()
+    {
+        Assert.Throws<ArgumentException>(() => new SimpleExpressionBinding("exp", "exp").SetErrorMessage("error", new string[0]));
     }
 }

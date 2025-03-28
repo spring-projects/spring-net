@@ -19,86 +19,83 @@
 #endregion
 
 using NUnit.Framework;
-
 using Spring.Context.Support;
 using Spring.Expressions;
 
-namespace Spring.Validation.Actions
+namespace Spring.Validation.Actions;
+
+/// <summary>
+/// Unit tests for the ErrorMessageAction class.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[TestFixture]
+public class ErrorMessageActionTests
 {
-    /// <summary>
-    /// Unit tests for the ErrorMessageAction class.
-    /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    [TestFixture]
-    public class ErrorMessageActionTests
+    [Test]
+    public void WithNullMesageId()
     {
-        [Test]
-        public void WithNullMesageId()
-        {
-            Assert.Throws<ArgumentNullException>(() => new ErrorMessageAction(null, "errors"));    
-        }
+        Assert.Throws<ArgumentNullException>(() => new ErrorMessageAction(null, "errors"));
+    }
 
-        [Test]
-        public void WithEmptyMesageId()
-        {
-            Assert.Throws<ArgumentNullException>(() => new ErrorMessageAction("", "errors"));    
-        }
+    [Test]
+    public void WithEmptyMesageId()
+    {
+        Assert.Throws<ArgumentNullException>(() => new ErrorMessageAction("", "errors"));
+    }
 
-        [Test]
-        public void WithWhitespaceMesageId()
-        {
-            Assert.Throws<ArgumentNullException>(() => new ErrorMessageAction("\t   ", "errors"));    
-        }
+    [Test]
+    public void WithWhitespaceMesageId()
+    {
+        Assert.Throws<ArgumentNullException>(() => new ErrorMessageAction("\t   ", "errors"));
+    }
 
-        [Test]
-        public void WithNullProviders()
-        {
-            Assert.Throws<ArgumentException>(() => new ErrorMessageAction("error", null));    
-        }
+    [Test]
+    public void WithNullProviders()
+    {
+        Assert.Throws<ArgumentException>(() => new ErrorMessageAction("error", null));
+    }
 
-        [Test]
-        public void WithEmptyProviders()
-        {
-            Assert.Throws<ArgumentException>(() => new ErrorMessageAction("error", new string[0]));    
-        }
+    [Test]
+    public void WithEmptyProviders()
+    {
+        Assert.Throws<ArgumentException>(() => new ErrorMessageAction("error", new string[0]));
+    }
 
-        [Test]
-        public void WhenValid()
-        {
-            Inventor context = new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian");
-            IValidationErrors errors = new ValidationErrors();
-            ErrorMessageAction action = new ErrorMessageAction("error", "errors");
-            
-            action.Execute(true, context, null, errors);
-            Assert.IsTrue(errors.IsEmpty);
-        }
+    [Test]
+    public void WhenValid()
+    {
+        Inventor context = new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian");
+        IValidationErrors errors = new ValidationErrors();
+        ErrorMessageAction action = new ErrorMessageAction("error", "errors");
 
-        [Test]
-        public void WhenInvalid()
-        {
-            Inventor context = new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian");
-            IValidationErrors errors = new ValidationErrors();
+        action.Execute(true, context, null, errors);
+        Assert.IsTrue(errors.IsEmpty);
+    }
 
-            ErrorMessageAction action = new ErrorMessageAction("{0}, {1}", "errors");
-            action.Parameters = new IExpression[] {Expression.Parse("Name"), Expression.Parse("Nationality")};
-            
-            action.Execute(false, context, null, errors);
-            Assert.IsFalse(errors.IsEmpty);
-            Assert.AreEqual(1, errors.GetErrors("errors").Count);
-            Assert.AreEqual(context.Name + ", " + context.Nationality, errors.GetResolvedErrors("errors", new NullMessageSource())[0]);
-        }
+    [Test]
+    public void WhenInvalid()
+    {
+        Inventor context = new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian");
+        IValidationErrors errors = new ValidationErrors();
 
-        [Test]
-        public void WhenActionIsNotExecutedBecauseWhenExpressionReturnsFalse()
-        {
-            Inventor context = new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian");
-            IValidationErrors errors = new ValidationErrors();
+        ErrorMessageAction action = new ErrorMessageAction("{0}, {1}", "errors");
+        action.Parameters = new IExpression[] { Expression.Parse("Name"), Expression.Parse("Nationality") };
 
-            ErrorMessageAction action = new ErrorMessageAction("{0}, {1}", "errors");
-            action.When = Expression.Parse("false");
-            action.Execute(false, context, null, errors);
-            Assert.IsTrue(errors.IsEmpty);
-        }
+        action.Execute(false, context, null, errors);
+        Assert.IsFalse(errors.IsEmpty);
+        Assert.AreEqual(1, errors.GetErrors("errors").Count);
+        Assert.AreEqual(context.Name + ", " + context.Nationality, errors.GetResolvedErrors("errors", new NullMessageSource())[0]);
+    }
 
+    [Test]
+    public void WhenActionIsNotExecutedBecauseWhenExpressionReturnsFalse()
+    {
+        Inventor context = new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian");
+        IValidationErrors errors = new ValidationErrors();
+
+        ErrorMessageAction action = new ErrorMessageAction("{0}, {1}", "errors");
+        action.When = Expression.Parse("false");
+        action.Execute(false, context, null, errors);
+        Assert.IsTrue(errors.IsEmpty);
     }
 }

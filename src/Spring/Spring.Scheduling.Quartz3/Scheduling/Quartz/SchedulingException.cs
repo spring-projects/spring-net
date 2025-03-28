@@ -1,25 +1,24 @@
-namespace Spring.Scheduling.Quartz
+namespace Spring.Scheduling.Quartz;
+
+/// <summary>
+/// Generic scheduling exception.
+/// </summary>
+public class SchedulingException : Exception
 {
     /// <summary>
-    /// Generic scheduling exception.
+    /// Initializes a new instance of the <see cref="SchedulingException"/> class.
     /// </summary>
-    public class SchedulingException : Exception
+    /// <param name="message">The message.</param>
+    public SchedulingException(string message) : base(message)
     {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SchedulingException"/> class.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        public SchedulingException(string message) : base(message)
-        {
-        }
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SchedulingException"/> class.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        /// <param name="ex">The original exception.</param>
-        public SchedulingException(string message, Exception ex) : base(message, ex)
-        {
-        }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="SchedulingException"/> class.
+    /// </summary>
+    /// <param name="message">The message.</param>
+    /// <param name="ex">The original exception.</param>
+    public SchedulingException(string message, Exception ex) : base(message, ex)
+    {
     }
 }

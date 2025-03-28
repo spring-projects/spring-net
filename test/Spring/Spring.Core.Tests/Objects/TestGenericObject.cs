@@ -2,13 +2,13 @@
 
 /*
  * Copyright 2002-2010 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,82 +22,81 @@
 
 #endregion
 
-namespace Spring.Objects
+namespace Spring.Objects;
+
+/// <summary>
+/// Simple test object used for testing generic objects.
+/// </summary>
+/// <author>Bruno Baia</author>
+public class TestGenericObject<T, U>
 {
-	/// <summary>
-	/// Simple test object used for testing generic objects.
-	/// </summary>
-    /// <author>Bruno Baia</author>
-	public class TestGenericObject<T,U>
-	{
-        #region Fields
+    #region Fields
 
-        private int _id = 0;
-        private string _name = string.Empty;
-        private IList<int> _someGenericList = new List<int>();
-        private IDictionary<string, int> _someGenericDictionary = new Dictionary<string, int>();
+    private int _id = 0;
+    private string _name = string.Empty;
+    private IList<int> _someGenericList = new List<int>();
+    private IDictionary<string, int> _someGenericDictionary = new Dictionary<string, int>();
 
-        #endregion
+    #endregion
 
-		#region Properties
+    #region Properties
 
-	    public int ID
-	    {
-	        get { return _id; }
-            set { _id = value; }
-	    }
-
-		public string Name
-		{
-			get { return _name; }
-			set { this._name = value; }
-		}
-
-		public IList<int> SomeGenericList
-		{
-			get { return _someGenericList; }
-			set { this._someGenericList = value; }
-		}
-
-		public IDictionary<string,int> SomeGenericDictionary
-		{
-			get { return _someGenericDictionary; }
-			set { this._someGenericDictionary = value; }
-		}
-
-		#endregion
-
-		#region Constructor (s) / Destructor
-
-		public TestGenericObject()
-		{
-		}
-
-		public TestGenericObject(int id)
-		{
-			this._id = id;
-		}
-
-        public TestGenericObject(int id, string name)
-        {
-            this._id = id;
-            this._name = name;
-        }
-
-		#endregion
-
-        #region Methods
-
-        public static List<V> CreateList<V>()
-        {
-            return new List<V>();
-        }
-
-        public TestGenericObject<V,W> CreateInstance<V,W>()
-        {
-            return new TestGenericObject<V,W>();
-        }
-
-        #endregion
+    public int ID
+    {
+        get { return _id; }
+        set { _id = value; }
     }
+
+    public string Name
+    {
+        get { return _name; }
+        set { this._name = value; }
+    }
+
+    public IList<int> SomeGenericList
+    {
+        get { return _someGenericList; }
+        set { this._someGenericList = value; }
+    }
+
+    public IDictionary<string, int> SomeGenericDictionary
+    {
+        get { return _someGenericDictionary; }
+        set { this._someGenericDictionary = value; }
+    }
+
+    #endregion
+
+    #region Constructor (s) / Destructor
+
+    public TestGenericObject()
+    {
+    }
+
+    public TestGenericObject(int id)
+    {
+        this._id = id;
+    }
+
+    public TestGenericObject(int id, string name)
+    {
+        this._id = id;
+        this._name = name;
+    }
+
+    #endregion
+
+    #region Methods
+
+    public static List<V> CreateList<V>()
+    {
+        return new List<V>();
+    }
+
+    public TestGenericObject<V, W> CreateInstance<V, W>()
+    {
+        return new TestGenericObject<V, W>();
+    }
+
+    #endregion
 }

@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -28,66 +28,70 @@ using Spring.Threading;
 
 #endregion
 
-namespace Spring.Context.Support
+namespace Spring.Context.Support;
+
+/// <summary>
+///
+/// </summary>
+/// <author>Erich Eichinger</author>
+[TestFixture]
+public class WebApplicationContextTests : WebFormTestCase
 {
-    /// <summary>
-    ///
-    /// </summary>
-    /// <author>Erich Eichinger</author>
-    [TestFixture]
-    public class WebApplicationContextTests : WebFormTestCase
+    public WebApplicationContextTests()
+        : base("/Test", "/Spring/Context/Support/WebApplicationContextTests/")
     {
-        public WebApplicationContextTests()
-            : base("/Test", "/Spring/Context/Support/WebApplicationContextTests/")
-        {}
+    }
 
-        [Test]
-        public void CanAccessContextFromNonWebThread()
+    [Test]
+    public void CanAccessContextFromNonWebThread()
+    {
+        Host.Execute(new TestAction(CanAccessContextFromNonWebThreadImpl));
+    }
+
+    public static void CanAccessContextFromNonWebThreadImpl()
+    {
+        IApplicationContext ctx;
+
+        ctx = WebApplicationContext.GetRootContext();
+
+        AsyncTestMethod testMethod = new AsyncTestMethod(1, new AsyncTestMethod.TestMethod(DoBackgroundWork), ctx);
+        testMethod.Start();
+        testMethod.AssertNoException();
+    }
+
+    private static object DoBackgroundWork(object[] args)
+    {
+        IApplicationContext ctx = (IApplicationContext) args[0];
+
+        object o;
+        o = ctx.GetObject("singletonObject");
+        Assert.IsNotNull(o);
+        o = ctx.GetObject("prototypeObject");
+        Assert.IsNotNull(o);
+        o = ctx.GetObject("applicationScopedObject");
+        Assert.IsNotNull(o);
+        try
         {
-            Host.Execute(new TestAction(CanAccessContextFromNonWebThreadImpl));
+            o = ctx.GetObject("requestScopedObject");
+            Assert.IsNotNull(o);
+            Assert.Fail("shouldn't be allowed");
+        }
+        catch (ObjectCreationException oce1)
+        {
+            Assert.IsTrue(-1 < oce1.Message.IndexOf("'request' scoped web singleton object 'requestScopedObject' requires a valid Request"));
         }
 
-        public static void CanAccessContextFromNonWebThreadImpl()
+        try
         {
-            IApplicationContext ctx;
-
-            ctx = WebApplicationContext.GetRootContext();
-
-            AsyncTestMethod testMethod = new AsyncTestMethod(1, new AsyncTestMethod.TestMethod(DoBackgroundWork), ctx);
-            testMethod.Start();
-            testMethod.AssertNoException();
+            o = ctx.GetObject("sessionScopedObject");
+            Assert.IsNotNull(o);
+            Assert.Fail("shouldn't be allowed");
+        }
+        catch (ObjectCreationException oce1)
+        {
+            Assert.IsTrue(-1 < oce1.Message.IndexOf("'session' scoped web singleton object 'sessionScopedObject' requires a valid Session"));
         }
 
-        private static object DoBackgroundWork(object[] args)
-        {
-            IApplicationContext ctx = (IApplicationContext) args[0];
-
-            object o;
-            o = ctx.GetObject("singletonObject"); Assert.IsNotNull(o);
-            o = ctx.GetObject("prototypeObject"); Assert.IsNotNull(o);
-            o = ctx.GetObject("applicationScopedObject"); Assert.IsNotNull(o);
-            try
-            {
-                o = ctx.GetObject("requestScopedObject"); Assert.IsNotNull(o);
-                Assert.Fail("shouldn't be allowed");
-            }
-            catch(ObjectCreationException oce1)
-            {
-                Assert.IsTrue(-1 < oce1.Message.IndexOf("'request' scoped web singleton object 'requestScopedObject' requires a valid Request"));
-            }
-
-            try
-            {
-                o = ctx.GetObject("sessionScopedObject"); Assert.IsNotNull(o);
-                Assert.Fail("shouldn't be allowed");
-            }
-            catch (ObjectCreationException oce1)
-            {
-                Assert.IsTrue(-1 < oce1.Message.IndexOf("'session' scoped web singleton object 'sessionScopedObject' requires a valid Session"));
-            }
-
-            return null;
-        }
-
+        return null;
     }
 }

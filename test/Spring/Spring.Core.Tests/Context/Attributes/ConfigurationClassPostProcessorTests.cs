@@ -22,50 +22,42 @@ using NUnit.Framework;
 using Spring.Context.Support;
 using Spring.Objects.Factory.Support;
 
-namespace Spring.Context.Attributes
+namespace Spring.Context.Attributes;
+
+[TestFixture]
+public class ConfigurationClassPostProcessorTests : AbstractConfigurationClassPostProcessorTests
 {
-    [TestFixture]
-    public class ConfigurationClassPostProcessorTests : AbstractConfigurationClassPostProcessorTests
+    protected override void CreateApplicationContext()
     {
+        GenericApplicationContext ctx = new GenericApplicationContext();
 
-        protected override void CreateApplicationContext()
-        {
-            GenericApplicationContext ctx = new GenericApplicationContext();
+        var configDefinitionBuilder = ObjectDefinitionBuilder.GenericObjectDefinition(typeof(TheConfigurationClass));
+        ctx.RegisterObjectDefinition(configDefinitionBuilder.ObjectDefinition.ObjectTypeName, configDefinitionBuilder.ObjectDefinition);
 
-            var configDefinitionBuilder = ObjectDefinitionBuilder.GenericObjectDefinition(typeof(TheConfigurationClass));
-            ctx.RegisterObjectDefinition(configDefinitionBuilder.ObjectDefinition.ObjectTypeName, configDefinitionBuilder.ObjectDefinition);
+        var postProcessorDefintionBuilder = ObjectDefinitionBuilder.GenericObjectDefinition(typeof(ConfigurationClassPostProcessor));
+        ctx.RegisterObjectDefinition(postProcessorDefintionBuilder.ObjectDefinition.ObjectTypeName, postProcessorDefintionBuilder.ObjectDefinition);
 
-            var postProcessorDefintionBuilder = ObjectDefinitionBuilder.GenericObjectDefinition(typeof(ConfigurationClassPostProcessor));
-            ctx.RegisterObjectDefinition(postProcessorDefintionBuilder.ObjectDefinition.ObjectTypeName, postProcessorDefintionBuilder.ObjectDefinition);
+        Assert.That(ctx.ObjectDefinitionCount, Is.EqualTo(2));
 
-            Assert.That(ctx.ObjectDefinitionCount, Is.EqualTo(2));
+        ctx.Refresh();
 
-            ctx.Refresh();
-
-            _ctx = ctx;
-        }
-
-
-        [Test]
-        public void ShouldAllowConfigurationClassInheritance()
-        {
-            var factory = new DefaultListableObjectFactory();
-            factory.RegisterObjectDefinition("DerivedConfiguration", new GenericObjectDefinition
-                                                                         {
-                                                                             ObjectType = typeof(DerivedConfiguration)
-                                                                         });
-
-            var processor = new ConfigurationClassPostProcessor();
-            
-            processor.PostProcessObjectFactory(factory);
-
-            // we should get singleton instances only
-            TestObject testObject = (TestObject) factory.GetObject("DerivedDefinition");
-            string singletonParent = (string) factory.GetObject("BaseDefinition");
-
-
-            Assert.That(testObject.Value, Is.SameAs(singletonParent));
-        }
+        _ctx = ctx;
     }
 
+    [Test]
+    public void ShouldAllowConfigurationClassInheritance()
+    {
+        var factory = new DefaultListableObjectFactory();
+        factory.RegisterObjectDefinition("DerivedConfiguration", new GenericObjectDefinition { ObjectType = typeof(DerivedConfiguration) });
+
+        var processor = new ConfigurationClassPostProcessor();
+
+        processor.PostProcessObjectFactory(factory);
+
+        // we should get singleton instances only
+        TestObject testObject = (TestObject) factory.GetObject("DerivedDefinition");
+        string singletonParent = (string) factory.GetObject("BaseDefinition");
+
+        Assert.That(testObject.Value, Is.SameAs(singletonParent));
+    }
 }

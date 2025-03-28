@@ -26,18 +26,17 @@ using Spring.Aop;
 
 #endregion
 
-namespace Spring
+namespace Spring;
+
+/// <summary>Test that the AOP assembly is built with the correct DebugAttributes in release and debug builds.
+/// </summary>
+/// <author>Mark Pollack</author>
+[TestFixture]
+public sealed class AopCompilerOptionsTests : CompilerOptionsTests
 {
-    /// <summary>Test that the AOP assembly is built with the correct DebugAttributes in release and debug builds.
-    /// </summary>
-    /// <author>Mark Pollack</author>
-    [TestFixture]
-    public sealed class AopCompilerOptionsTests : CompilerOptionsTests
+    [OneTimeSetUp]
+    public void FixtureSetUp()
     {
-        [OneTimeSetUp]
-        public void FixtureSetUp()
-        {
-            AssemblyToCheck = Assembly.GetAssembly(typeof (TruePointcut));
-        }
+        AssemblyToCheck = Assembly.GetAssembly(typeof(TruePointcut));
     }
 }

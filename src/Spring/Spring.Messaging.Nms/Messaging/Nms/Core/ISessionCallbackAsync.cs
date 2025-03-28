@@ -1,4 +1,5 @@
 #region License
+
 // /*
 //  * Copyright 2022 the original author or authors.
 //  *
@@ -14,28 +15,26 @@
 //  * See the License for the specific language governing permissions and
 //  * limitations under the License.
 //  */
+
 #endregion
 
 using Apache.NMS;
 
-namespace Spring.Messaging.Nms.Core
+namespace Spring.Messaging.Nms.Core;
+
+/// <summary>
+/// Async version of ISessionCallback
+/// </summary>
+/// <see cref="ISessionCallback"/>
+public interface ISessionCallbackAsync
 {
-    /// <summary>
-    /// Async version of ISessionCallback
+    /// <summary> Execute any number of operations against the supplied NMS
+    /// Session, possibly returning a result.
     /// </summary>
-    /// <see cref="ISessionCallback"/>
-    public interface ISessionCallbackAsync
-    {
-        /// <summary> Execute any number of operations against the supplied NMS
-        /// Session, possibly returning a result.
-        /// </summary>
-        /// <param name="session">the NMS <code>Session</code>
-        /// </param>
-        /// <returns> a result object from working with the <code>Session</code>, if any (so can be <code>null</code>) 
-        /// </returns>
-        /// <throws>NMSException if there is any problem </throws>
-        Task<object> DoInNms(ISession session);
-        
-        
-    }
+    /// <param name="session">the NMS <code>Session</code>
+    /// </param>
+    /// <returns> a result object from working with the <code>Session</code>, if any (so can be <code>null</code>) 
+    /// </returns>
+    /// <throws>NMSException if there is any problem </throws>
+    Task<object> DoInNms(ISession session);
 }

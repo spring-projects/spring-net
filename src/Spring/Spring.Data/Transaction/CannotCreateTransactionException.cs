@@ -20,47 +20,50 @@
 
 using System.Runtime.Serialization;
 
-namespace Spring.Transaction
+namespace Spring.Transaction;
+
+/// <summary>
+/// Exception thrown when a transaction can't be created using an
+/// underlying transaction API such as COM+.
+/// </summary>
+/// <author>Rod Johnson</author>
+/// <author>Griffin Caprio (.NET)</author>
+[Serializable]
+public class CannotCreateTransactionException : TransactionException
 {
-	/// <summary>
-	/// Exception thrown when a transaction can't be created using an
-	/// underlying transaction API such as COM+.
-	/// </summary>
-	/// <author>Rod Johnson</author>
-	/// <author>Griffin Caprio (.NET)</author>
-	[Serializable]
-	public class CannotCreateTransactionException : TransactionException
-	{
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Transaction.CannotCreateTransactionException"/> class.
-		/// </summary>
-		public CannotCreateTransactionException() {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Transaction.CannotCreateTransactionException"/> class.
+    /// </summary>
+    public CannotCreateTransactionException() { }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Transaction.CannotCreateTransactionException"/> class.
-		/// </summary>
-		/// <param name="message">
-		/// A message about the exception.
-		/// </param>
-		public CannotCreateTransactionException( string message ) : base( message ) {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Transaction.CannotCreateTransactionException"/> class.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    public CannotCreateTransactionException(string message) : base(message) { }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Transaction.CannotCreateTransactionException"/> class.
-		/// </summary>
-		/// <param name="message">
-		/// A message about the exception.
-		/// </param>
-		/// <param name="rootCause">
-		/// The root exception that is being wrapped.
-		/// </param>
-		public CannotCreateTransactionException( string message, Exception rootCause)
-			: base( message , rootCause ) {}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Transaction.CannotCreateTransactionException"/> class.
+    /// </summary>
+    /// <param name="message">
+    /// A message about the exception.
+    /// </param>
+    /// <param name="rootCause">
+    /// The root exception that is being wrapped.
+    /// </param>
+    public CannotCreateTransactionException(string message, Exception rootCause)
+        : base(message, rootCause)
+    {
+    }
 
-		/// <inheritdoc />
-		protected CannotCreateTransactionException(
-			SerializationInfo info, StreamingContext context ) : base( info, context ) {}
-	}
+    /// <inheritdoc />
+    protected CannotCreateTransactionException(
+        SerializationInfo info, StreamingContext context) : base(info, context)
+    {
+    }
 }

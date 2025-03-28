@@ -20,40 +20,39 @@
 
 using NUnit.Framework;
 
-namespace Spring.Context.Support
+namespace Spring.Context.Support;
+
+/// <summary>
+/// Unit tests for the NullMessageSource class.
+/// </summary>
+/// <author></author>
+[TestFixture]
+public sealed class NullMessageSourceTests
 {
-	/// <summary>
-	/// Unit tests for the NullMessageSource class.
-	/// </summary>
-	/// <author></author>
-	[TestFixture]
-	public sealed class NullMessageSourceTests
-	{
-		[Test]
-		public void CanonicalInstanceIsNotNull()
-		{
-			Assert.IsNotNull(NullMessageSource.Null);
-		}
+    [Test]
+    public void CanonicalInstanceIsNotNull()
+    {
+        Assert.IsNotNull(NullMessageSource.Null);
+    }
 
-		[Test]
-		public void ResolveMessageSpitsbackWhatItWasGiven()
-		{
-			const string expected = "foo";
-			string message = NullMessageSource.Null.GetMessage(expected);
-			Assert.AreEqual(expected, message);
-		}
+    [Test]
+    public void ResolveMessageSpitsbackWhatItWasGiven()
+    {
+        const string expected = "foo";
+        string message = NullMessageSource.Null.GetMessage(expected);
+        Assert.AreEqual(expected, message);
+    }
 
-		[Test]
-		public void ResolveObjectReturnsNull()
-		{
-			object anObject = NullMessageSource.Null.GetResourceObject("");
-			Assert.IsNull(anObject);
-		}
+    [Test]
+    public void ResolveObjectReturnsNull()
+    {
+        object anObject = NullMessageSource.Null.GetResourceObject("");
+        Assert.IsNull(anObject);
+    }
 
-		[Test]
-		public void ApplyResourcesDoesNothing()
-		{
-			NullMessageSource.Null.ApplyResources("", "foo", null);
-		}
-	}
+    [Test]
+    public void ApplyResourcesDoesNothing()
+    {
+        NullMessageSource.Null.ApplyResources("", "foo", null);
+    }
 }

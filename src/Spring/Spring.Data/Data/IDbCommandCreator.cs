@@ -21,23 +21,22 @@
 using System.Data;
 using Spring.Data.Common;
 
-namespace Spring.Data
+namespace Spring.Data;
+
+/// <summary>
+/// One of the central callback interfaces used by the AdoTemplate class
+/// This interface creates a IDbCommand.  Implementations are responsible
+/// for configuring the created command with command type, command text and
+/// any necessary parameters.
+/// </summary>
+/// <author>Mark Pollack (.NET)</author>
+public interface IDbCommandCreator
 {
-	/// <summary>
-	/// One of the central callback interfaces used by the AdoTemplate class
-	/// This interface creates a IDbCommand.  Implementations are responsible
-	/// for configuring the created command with command type, command text and
-	/// any necessary parameters.
-	/// </summary>
-	/// <author>Mark Pollack (.NET)</author>
-	public interface IDbCommandCreator
-	{
-        /// <summary>
-        /// Creates a IDbCommand.
-        /// </summary>
-        /// <param name="dbProvider">The IDbProvider reference that can be used to create the command in a
-        /// provider independent manner.  The provider supplied is the same as used in configuration of AdoTemplate.</param>
-        /// <returns></returns>
-	    IDbCommand CreateDbCommand(IDbProvider dbProvider);
-	}
+    /// <summary>
+    /// Creates a IDbCommand.
+    /// </summary>
+    /// <param name="dbProvider">The IDbProvider reference that can be used to create the command in a
+    /// provider independent manner.  The provider supplied is the same as used in configuration of AdoTemplate.</param>
+    /// <returns></returns>
+    IDbCommand CreateDbCommand(IDbProvider dbProvider);
 }

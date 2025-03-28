@@ -18,51 +18,50 @@
 
 #endregion
 
-namespace Spring.Context
+namespace Spring.Context;
+
+/// <summary>
+/// Encapsulates the data associated with an event raised by an
+/// <see cref="Spring.Context.IApplicationContext"/>.
+/// </summary>
+/// <author>Rod Johnson</author>
+/// <author>Mark Pollack (.NET)</author>
+/// <author>Griffin Caprio (.NET)</author>
+/// <seealso cref="Spring.Context.IApplicationEventListener"/>
+[Serializable]
+public class ApplicationEventArgs : EventArgs
 {
-	/// <summary>
-	/// Encapsulates the data associated with an event raised by an
-	/// <see cref="Spring.Context.IApplicationContext"/>.
-	/// </summary>
-	/// <author>Rod Johnson</author>
-	/// <author>Mark Pollack (.NET)</author>
-	/// <author>Griffin Caprio (.NET)</author>
-	/// <seealso cref="Spring.Context.IApplicationEventListener"/>
-	[Serializable]
-	public class ApplicationEventArgs : EventArgs
-	{
-		private const long TicksAtEpoch = 621355968000000000;
-		private DateTime _timestamp;
+    private const long TicksAtEpoch = 621355968000000000;
+    private DateTime _timestamp;
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="Spring.Context.ApplicationEventArgs"/> class.
-		/// </summary>
-		public ApplicationEventArgs()
-		{
-			_timestamp = DateTime.Now;
-		}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="Spring.Context.ApplicationEventArgs"/> class.
+    /// </summary>
+    public ApplicationEventArgs()
+    {
+        _timestamp = DateTime.Now;
+    }
 
-		/// <summary>
-		/// The date and time when the event occured.
-		/// </summary>
-		/// <value>
-		/// The date and time when the event occured.
-		/// </value>
-		public DateTime TimeStamp
-		{
-			get { return _timestamp; }
-		}
+    /// <summary>
+    /// The date and time when the event occured.
+    /// </summary>
+    /// <value>
+    /// The date and time when the event occured.
+    /// </value>
+    public DateTime TimeStamp
+    {
+        get { return _timestamp; }
+    }
 
-		/// <summary>
-		/// The system time in milliseconds when the event happened.
-		/// </summary>
-		/// <value>
-		/// The system time in milliseconds when the event happened.
-		/// </value>
-		public long EventTimeMilliseconds 
-		{
-			get { return ( _timestamp.Ticks - TicksAtEpoch ) / 10000; }
-		}
-	}
+    /// <summary>
+    /// The system time in milliseconds when the event happened.
+    /// </summary>
+    /// <value>
+    /// The system time in milliseconds when the event happened.
+    /// </value>
+    public long EventTimeMilliseconds
+    {
+        get { return (_timestamp.Ticks - TicksAtEpoch) / 10000; }
+    }
 }

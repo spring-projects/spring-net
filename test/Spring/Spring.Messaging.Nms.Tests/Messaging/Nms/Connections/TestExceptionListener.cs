@@ -20,21 +20,19 @@
 
 using Spring.Messaging.Nms.Core;
 
-namespace Spring.Messaging.Nms.Connections
+namespace Spring.Messaging.Nms.Connections;
+
+public class TestExceptionListener : IExceptionListener
 {
-    public class TestExceptionListener : IExceptionListener
+    private int count = 0;
+
+    public void OnException(Exception exception)
     {
-        private int count = 0;
+        count++;
+    }
 
-        public void OnException(Exception exception)
-        {
-            count++;
-        }
-
-
-        public int Count
-        {
-            get { return count; }
-        }
+    public int Count
+    {
+        get { return count; }
     }
 }

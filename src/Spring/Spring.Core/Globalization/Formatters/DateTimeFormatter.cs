@@ -19,100 +19,100 @@
 #endregion
 
 using System.Globalization;
-
 using Spring.Util;
 
-namespace Spring.Globalization.Formatters
+namespace Spring.Globalization.Formatters;
+
+/// <summary>
+/// Implementation of <see cref="IFormatter"/> that can be used to
+/// format and parse <see cref="DateTime"/> values.
+/// </summary>
+/// <remarks>
+/// <para>
+/// <c>DateTimeFormatter</c> uses properties of the
+/// <see cref="DateTimeFormatInfo"/> to format and parse <see cref="DateTime"/> values.
+/// </para>
+/// <para>
+/// If you use one of the constructors that accept culture as a parameter
+/// to create an instance of <c>DateTimeFormatter</c>, default <c>DateTimeFormatInfo</c>
+/// for the specified culture will be used.
+/// </para>
+/// <para>
+/// You can also use properties exposed by the <c>DateTimeFormatter</c> in order
+/// to override some of the default formatting parameters.
+/// </para>
+/// </remarks>
+/// <author>Aleksandar Seovic</author>
+public class DateTimeFormatter : IFormatter
 {
-	/// <summary>
-	/// Implementation of <see cref="IFormatter"/> that can be used to
-	/// format and parse <see cref="DateTime"/> values.
-	/// </summary>
-	/// <remarks>
-	/// <para>
-	/// <c>DateTimeFormatter</c> uses properties of the
-	/// <see cref="DateTimeFormatInfo"/> to format and parse <see cref="DateTime"/> values.
-	/// </para>
-	/// <para>
-	/// If you use one of the constructors that accept culture as a parameter
-	/// to create an instance of <c>DateTimeFormatter</c>, default <c>DateTimeFormatInfo</c>
-	/// for the specified culture will be used.
-	/// </para>
-	/// <para>
-	/// You can also use properties exposed by the <c>DateTimeFormatter</c> in order
-	/// to override some of the default formatting parameters.
-	/// </para>
-	/// </remarks>
-    /// <author>Aleksandar Seovic</author>
-    public class DateTimeFormatter : IFormatter
-	{
-        private DateTimeFormatInfo formatInfo;
-        private string format;
+    private DateTimeFormatInfo formatInfo;
+    private string format;
 
-        #region Constructors
+    #region Constructors
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DateTimeFormatter"/> class
-        /// using default <see cref="DateTimeFormatInfo"/> for the current thread's culture.
-        /// </summary>
-        /// <param name="format">Date/time format string.</param>
-        public DateTimeFormatter(string format) : this(format, CultureInfo.CurrentCulture)
-        {}
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DateTimeFormatter"/> class
+    /// using default <see cref="DateTimeFormatInfo"/> for the current thread's culture.
+    /// </summary>
+    /// <param name="format">Date/time format string.</param>
+    public DateTimeFormatter(string format) : this(format, CultureInfo.CurrentCulture)
+    {
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="DateTimeFormatter"/> class
-        /// using default <see cref="DateTimeFormatInfo"/> for the specified culture.
-        /// </summary>
-        /// <param name="format">Date/time format string.</param>
-        /// <param name="cultureName">The culture name.</param>
-        public DateTimeFormatter(string format, string cultureName) : this(format, CultureInfo.CreateSpecificCulture(cultureName))
-        {}
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DateTimeFormatter"/> class
+    /// using default <see cref="DateTimeFormatInfo"/> for the specified culture.
+    /// </summary>
+    /// <param name="format">Date/time format string.</param>
+    /// <param name="cultureName">The culture name.</param>
+    public DateTimeFormatter(string format, string cultureName) : this(format, CultureInfo.CreateSpecificCulture(cultureName))
+    {
+    }
 
-        /// <summary>
-	    /// Initializes a new instance of the <see cref="DateTimeFormatter"/> class
-	    /// using default <see cref="DateTimeFormatInfo"/> for the specified culture.
-	    /// </summary>
-	    /// <param name="format">Date/time format string.</param>
-	    /// <param name="culture">The culture.</param>
-	    public DateTimeFormatter(string format, CultureInfo culture)
-	    {
-            this.format = format;
-	        this.formatInfo = culture.DateTimeFormat;
-	    }
+    /// <summary>
+    /// Initializes a new instance of the <see cref="DateTimeFormatter"/> class
+    /// using default <see cref="DateTimeFormatInfo"/> for the specified culture.
+    /// </summary>
+    /// <param name="format">Date/time format string.</param>
+    /// <param name="culture">The culture.</param>
+    public DateTimeFormatter(string format, CultureInfo culture)
+    {
+        this.format = format;
+        this.formatInfo = culture.DateTimeFormat;
+    }
 
-	    #endregion
+    #endregion
 
-	    /// <summary>
-	    /// Formats the specified <see cref="DateTime"/> value.
-	    /// </summary>
-	    /// <param name="value">The value to format.</param>
-	    /// <returns>Formatted <see cref="DateTime"/> value.</returns>
-	    /// <exception cref="ArgumentNullException">If <paramref name="value"/> is <c>null</c>.</exception>
-	    /// <exception cref="ArgumentException">If <paramref name="value"/> is not an instance of <see cref="DateTime"/>.</exception>
-	    public string Format(object value)
-	    {
-            AssertUtils.ArgumentNotNull(value, "value");
-            if (!(value is DateTime))
-            {
-                throw new ArgumentException("DateTimeFormatter can only be used to format instances of [System.DateTime].");
-            }
+    /// <summary>
+    /// Formats the specified <see cref="DateTime"/> value.
+    /// </summary>
+    /// <param name="value">The value to format.</param>
+    /// <returns>Formatted <see cref="DateTime"/> value.</returns>
+    /// <exception cref="ArgumentNullException">If <paramref name="value"/> is <c>null</c>.</exception>
+    /// <exception cref="ArgumentException">If <paramref name="value"/> is not an instance of <see cref="DateTime"/>.</exception>
+    public string Format(object value)
+    {
+        AssertUtils.ArgumentNotNull(value, "value");
+        if (!(value is DateTime))
+        {
+            throw new ArgumentException("DateTimeFormatter can only be used to format instances of [System.DateTime].");
+        }
 
-	        return ((DateTime) value).ToString(format, formatInfo);
-	    }
+        return ((DateTime) value).ToString(format, formatInfo);
+    }
 
-	    /// <summary>
-	    /// Parses the specified value.
-	    /// </summary>
-	    /// <param name="value">The string to parse.</param>
-	    /// <returns>Parsed <see cref="DateTime"/> value.</returns>
-        public object Parse(string value)
-	    {
-            if (!StringUtils.HasText(value))
-            {
-                return DateTime.MinValue;
-            }
+    /// <summary>
+    /// Parses the specified value.
+    /// </summary>
+    /// <param name="value">The string to parse.</param>
+    /// <returns>Parsed <see cref="DateTime"/> value.</returns>
+    public object Parse(string value)
+    {
+        if (!StringUtils.HasText(value))
+        {
+            return DateTime.MinValue;
+        }
 
-            return DateTime.ParseExact(value, format, formatInfo, DateTimeStyles.AllowWhiteSpaces);
-	    }
-	}
+        return DateTime.ParseExact(value, format, formatInfo, DateTimeStyles.AllowWhiteSpaces);
+    }
 }

@@ -20,47 +20,46 @@
 
 using System.Runtime.Serialization;
 
-namespace Spring.Expressions
+namespace Spring.Expressions;
+
+/// <summary>
+/// Represents parsed string literal node.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[Serializable]
+public class StringLiteralNode : BaseNode
 {
     /// <summary>
-    /// Represents parsed string literal node.
+    /// Create a new instance
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    [Serializable]
-    public class StringLiteralNode : BaseNode
+    public StringLiteralNode() : base()
     {
-        /// <summary>
-        /// Create a new instance
-        /// </summary>
-        public StringLiteralNode():base()
-        {
-        }
+    }
 
-        /// <summary>
-        /// Create a new instance
-        /// </summary>
-        public StringLiteralNode(string text):base()
-        {
-            this.Text = text;
-        }
+    /// <summary>
+    /// Create a new instance
+    /// </summary>
+    public StringLiteralNode(string text) : base()
+    {
+        this.Text = text;
+    }
 
-        /// <summary>
-        /// Create a new instance from SerializationInfo
-        /// </summary>
-        protected StringLiteralNode(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
-        
-        /// <summary>
-        /// Returns a value for the string literal node.
-        /// </summary>
-        /// <param name="context">Context to evaluate expressions against.</param>
-        /// <param name="evalContext">Current expression evaluation context.</param>
-        /// <returns>Node's value.</returns>
-        protected override object Get(object context, EvaluationContext evalContext)
-        {
-            return this.getText();
-        }
+    /// <summary>
+    /// Create a new instance from SerializationInfo
+    /// </summary>
+    protected StringLiteralNode(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+    }
+
+    /// <summary>
+    /// Returns a value for the string literal node.
+    /// </summary>
+    /// <param name="context">Context to evaluate expressions against.</param>
+    /// <param name="evalContext">Current expression evaluation context.</param>
+    /// <returns>Node's value.</returns>
+    protected override object Get(object context, EvaluationContext evalContext)
+    {
+        return this.getText();
     }
 }

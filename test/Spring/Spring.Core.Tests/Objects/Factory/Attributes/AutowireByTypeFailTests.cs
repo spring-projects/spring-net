@@ -22,67 +22,66 @@ using NUnit.Framework;
 using Spring.Context.Support;
 using Spring.Objects.Factory.Attributes.ByType;
 
-namespace Spring.Objects.Factory.Attributes
+namespace Spring.Objects.Factory.Attributes;
+
+[TestFixture]
+public class AutowireByTypeFailTests
 {
-    [TestFixture]
-    public class AutowireByTypeFailTests
+    private XmlApplicationContext _applicationContext;
+
+    [SetUp]
+    public void Setup()
     {
-        private XmlApplicationContext _applicationContext;
+        _applicationContext = new XmlApplicationContext(false,
+            "assembly://Spring.Core.Tests/Spring.Objects.Factory.Attributes/ByTypeFailObjects.xml");
+    }
 
-        [SetUp]
-        public void Setup()
+    [Test]
+    public void FailFieldInjectionTooManyObjects()
+    {
+        Exception ex = null;
+        try
         {
-            _applicationContext = new XmlApplicationContext(false,
-                                                            "assembly://Spring.Core.Tests/Spring.Objects.Factory.Attributes/ByTypeFailObjects.xml");
+            var testObj = (AutowireTestFieldNormal) _applicationContext.GetObject("AutowireTestFieldNormal");
         }
+        catch (Exception e) { ex = e; }
 
-        [Test]
-        public void FailFieldInjectionTooManyObjects()
+        Assert.That(ex, Is.Not.Null, "Should throw an exception");
+        Assert.That(ex.Message, Does.Contain("Injection of autowired dependencies failed"));
+    }
+
+    [Test]
+    public void FailPropertyInjectionTooManyObjects()
+    {
+        Exception ex = null;
+        try
         {
-            Exception ex = null;
-            try
-            {
-                var testObj = (AutowireTestFieldNormal)_applicationContext.GetObject("AutowireTestFieldNormal");
-            }
-            catch (Exception e) { ex = e; }
-
-            Assert.That(ex, Is.Not.Null, "Should throw an exception");
-            Assert.That(ex.Message, Does.Contain("Injection of autowired dependencies failed"));
+            var testObj = (AutowireTestPropertyNormal) _applicationContext.GetObject("AutowireTestPropertyNormal");
         }
+        catch (Exception e) { ex = e; }
 
-        [Test]
-        public void FailPropertyInjectionTooManyObjects()
+        Assert.That(ex, Is.Not.Null, "Should throw an exception");
+        Assert.That(ex.Message, Does.Contain("Injection of autowired dependencies failed"));
+    }
+
+    [Test]
+    public void FailMethodInjectionTooManyObjects()
+    {
+        Exception ex = null;
+        try
         {
-            Exception ex = null;
-            try
-            {
-                var testObj = (AutowireTestPropertyNormal)_applicationContext.GetObject("AutowireTestPropertyNormal");
-            }
-            catch (Exception e) { ex = e; }
-
-            Assert.That(ex, Is.Not.Null, "Should throw an exception");
-            Assert.That(ex.Message, Does.Contain("Injection of autowired dependencies failed"));
+            var testObj = (AutowireTestMethodNormal) _applicationContext.GetObject("AutowireTestMethodNormal");
         }
+        catch (Exception e) { ex = e; }
 
-        [Test]
-        public void FailMethodInjectionTooManyObjects()
-        {
-            Exception ex = null;
-            try
-            {
-                var testObj = (AutowireTestMethodNormal)_applicationContext.GetObject("AutowireTestMethodNormal");
-            }
-            catch (Exception e) { ex = e; }
+        Assert.That(ex, Is.Not.Null, "Should throw an exception");
+        Assert.That(ex.Message, Does.Contain("Injection of autowired dependencies failed"));
+    }
 
-            Assert.That(ex, Is.Not.Null, "Should throw an exception");
-            Assert.That(ex.Message, Does.Contain("Injection of autowired dependencies failed"));
-        }
-
-        [Test]
-        public void FailConstructorInjectionTooManyObjects()
-        {
-            var ex = Assert.Throws<UnsatisfiedDependencyException>(() => _applicationContext.GetObject("AutowireTestConstructorNormal"));
-            Assert.That(ex.Message, Does.Contain("Error creating object with name"));
-        }
+    [Test]
+    public void FailConstructorInjectionTooManyObjects()
+    {
+        var ex = Assert.Throws<UnsatisfiedDependencyException>(() => _applicationContext.GetObject("AutowireTestConstructorNormal"));
+        Assert.That(ex.Message, Does.Contain("Error creating object with name"));
     }
 }

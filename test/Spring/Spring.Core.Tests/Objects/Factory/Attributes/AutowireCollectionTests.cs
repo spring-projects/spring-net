@@ -23,83 +23,82 @@ using Spring.Context.Support;
 using Spring.Objects.Factory.Attributes.ByType;
 using Spring.Objects.Factory.Attributes.Collections;
 
-namespace Spring.Objects.Factory.Attributes
+namespace Spring.Objects.Factory.Attributes;
+
+[TestFixture]
+public class AutowireCollectionTests
 {
-    [TestFixture]
-    public class AutowireCollectionTests
+    private XmlApplicationContext _applicationContext;
+
+    [SetUp]
+    public void Setup()
     {
-        private XmlApplicationContext _applicationContext;
+        _applicationContext = new XmlApplicationContext(false,
+            "assembly://Spring.Core.Tests/Spring.Objects.Factory.Attributes/CollectionObjects.xml");
+    }
 
-        [SetUp]
-        public void Setup()
+    [Test]
+    public void InjectIntoList()
+    {
+        var testObj = (AutowireTestList) _applicationContext.GetObject("AutowireTestList");
+        var objectDefinition = _applicationContext.ObjectFactory.GetObjectDefinition("AutowireTestList");
+
+        Assert.That(testObj.foos, Is.Not.Null);
+        Assert.That(testObj.foos.Count, Is.EqualTo(2));
+        Assert.That(objectDefinition.DependsOn.Count, Is.EqualTo(2));
+    }
+
+    [Test]
+    public void InjectIntoSet()
+    {
+        var testObj = (AutowireTestSet) _applicationContext.GetObject("AutowireTestSet");
+        var objectDefinition = _applicationContext.ObjectFactory.GetObjectDefinition("AutowireTestSet");
+
+        Assert.That(testObj.foos, Is.Not.Null);
+        Assert.That(testObj.foos.Count, Is.EqualTo(2));
+        Assert.That(objectDefinition.DependsOn.Count, Is.EqualTo(2));
+    }
+
+    [Test]
+    public void InjectIntoDictionary()
+    {
+        var testObj = (AutowireTestDictionary) _applicationContext.GetObject("AutowireTestDictionary");
+        var objectDefinition = _applicationContext.ObjectFactory.GetObjectDefinition("AutowireTestDictionary");
+
+        Assert.That(testObj.foos, Is.Not.Null);
+        Assert.That(testObj.foos.Count, Is.EqualTo(2));
+        Assert.That(testObj.foos.ContainsKey("HelloFoo"), Is.True);
+        Assert.That(testObj.foos.ContainsKey("CiaoFoo"), Is.True);
+        Assert.That(objectDefinition.DependsOn.Count, Is.EqualTo(2));
+    }
+
+    [Test]
+    public void InjectIntoDictionaryFail()
+    {
+        Exception ex = null;
+
+        try
         {
-            _applicationContext = new XmlApplicationContext(false,
-                                                            "assembly://Spring.Core.Tests/Spring.Objects.Factory.Attributes/CollectionObjects.xml");
+            var testObj = (AutowireTestDictionaryFail) _applicationContext.GetObject("AutowireTestDictionaryFail");
+        }
+        catch (Exception e)
+        {
+            ex = e;
         }
 
-        [Test]
-        public void InjectIntoList()
-        {
-            var testObj = (AutowireTestList)_applicationContext.GetObject("AutowireTestList");
-            var objectDefinition = _applicationContext.ObjectFactory.GetObjectDefinition("AutowireTestList");
+        Assert.That(ex, Is.Not.Null);
+        Assert.That(ex.InnerException.InnerException.Message.Contains("first generic to be a string"), Is.True);
+    }
 
-            Assert.That(testObj.foos, Is.Not.Null);
-            Assert.That(testObj.foos.Count, Is.EqualTo(2));
-            Assert.That(objectDefinition.DependsOn.Count, Is.EqualTo(2));
-        }
+    [Test]
+    public void InjectIntoListWithQualifier()
+    {
+        var testObj = (AutowireTestQualifier) _applicationContext.GetObject("AutowireTestQualifier");
+        var objectDefinition = _applicationContext.ObjectFactory.GetObjectDefinition("AutowireTestQualifier");
 
-        [Test]
-        public void InjectIntoSet()
-        {
-            var testObj = (AutowireTestSet)_applicationContext.GetObject("AutowireTestSet");
-            var objectDefinition = _applicationContext.ObjectFactory.GetObjectDefinition("AutowireTestSet");
-
-            Assert.That(testObj.foos, Is.Not.Null);
-            Assert.That(testObj.foos.Count, Is.EqualTo(2));
-            Assert.That(objectDefinition.DependsOn.Count, Is.EqualTo(2));
-        }
-
-        [Test]
-        public void InjectIntoDictionary()
-        {
-            var testObj = (AutowireTestDictionary)_applicationContext.GetObject("AutowireTestDictionary");
-            var objectDefinition = _applicationContext.ObjectFactory.GetObjectDefinition("AutowireTestDictionary");
-
-            Assert.That(testObj.foos, Is.Not.Null);
-            Assert.That(testObj.foos.Count, Is.EqualTo(2));
-            Assert.That(testObj.foos.ContainsKey("HelloFoo"), Is.True);
-            Assert.That(testObj.foos.ContainsKey("CiaoFoo"), Is.True);
-            Assert.That(objectDefinition.DependsOn.Count, Is.EqualTo(2));
-        }
-
-        [Test]
-        public void InjectIntoDictionaryFail()
-        {
-            Exception ex = null;
-
-            try
-            {
-                var testObj = (AutowireTestDictionaryFail)_applicationContext.GetObject("AutowireTestDictionaryFail");
-            }
-            catch (Exception e)
-            {
-                ex = e;
-            }
-
-            Assert.That(ex, Is.Not.Null);
-            Assert.That(ex.InnerException.InnerException.Message.Contains("first generic to be a string"), Is.True);
-        }
-
-        [Test]
-        public void InjectIntoListWithQualifier()
-        {
-            var testObj = (AutowireTestQualifier)_applicationContext.GetObject("AutowireTestQualifier");
-            var objectDefinition = _applicationContext.ObjectFactory.GetObjectDefinition("AutowireTestQualifier");
-
-            Assert.That(testObj.foos, Is.Not.Null);
-            Assert.That(testObj.foos.Count, Is.EqualTo(1));
-            Assert.That(testObj.foos[0].GetType(), Is.EqualTo(typeof(CiaoFoo)));
-            Assert.That(objectDefinition.DependsOn.Count, Is.EqualTo(1));
-        }
+        Assert.That(testObj.foos, Is.Not.Null);
+        Assert.That(testObj.foos.Count, Is.EqualTo(1));
+        Assert.That(testObj.foos[0].GetType(), Is.EqualTo(typeof(CiaoFoo)));
+        Assert.That(objectDefinition.DependsOn.Count, Is.EqualTo(1));
     }
 }

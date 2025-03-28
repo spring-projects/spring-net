@@ -21,145 +21,145 @@
 using Microsoft.Extensions.Logging;
 using Spring.Util;
 
-namespace Spring.Objects.Factory.Config
+namespace Spring.Objects.Factory.Config;
+
+/// <summary>
+/// <see cref="Spring.Objects.Factory.IFactoryObject"/> implementation that
+/// creates instances of the <see cref="ILogger"/> class.
+/// </summary>
+/// <remarks>
+/// <p>
+/// Typically used for retrieving shared <see cref="ILogger"/>
+/// instances for common topics (such as the 'DAL', 'BLL', etc). The
+/// <see cref="LogFactoryObject.LogName"/>
+/// property determines the name of the
+/// <a href="http://netcommon.sourceforge.net/">Common.Logging</a> logger.
+/// </p>
+/// </remarks>
+/// <author>Rick Evans</author>
+/// <seealso cref="LogManager.GetLogger(string)"/>
+[Serializable]
+public class LogFactoryObject : IFactoryObject, IInitializingObject
 {
-	/// <summary>
-	/// <see cref="Spring.Objects.Factory.IFactoryObject"/> implementation that
-	/// creates instances of the <see cref="ILogger"/> class.
-	/// </summary>
-	/// <remarks>
-	/// <p>
-	/// Typically used for retrieving shared <see cref="ILogger"/>
-	/// instances for common topics (such as the 'DAL', 'BLL', etc). The
-	/// <see cref="LogFactoryObject.LogName"/>
-	/// property determines the name of the
-    /// <a href="http://netcommon.sourceforge.net/">Common.Logging</a> logger.
-	/// </p>
-	/// </remarks>
-	/// <author>Rick Evans</author>
-	/// <seealso cref="LogManager.GetLogger(string)"/>
-    [Serializable]
-    public class LogFactoryObject : IFactoryObject, IInitializingObject
-	{
-		#region Constructor (s) / Destructor
+    #region Constructor (s) / Destructor
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="LogFactoryObject"/>
-		/// class.
-		/// </summary>
-		public LogFactoryObject()
-		{
-		}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="LogFactoryObject"/>
+    /// class.
+    /// </summary>
+    public LogFactoryObject()
+    {
+    }
 
-		/// <summary>
-		/// Creates a new instance of the
-		/// <see cref="LogFactoryObject"/>
-		/// class.
-		/// </summary>
-		/// <param name="logName">
-		/// The name of the <see cref="ILogger"/> instance served up by
-		/// this factory.
-		/// </param>
-		/// <exception cref="System.ArgumentNullException">
-		/// If the supplied <paramref name="logName"/> is
-		/// <see langword="null"/> or contains only whitespace character(s).
-		/// </exception>
-		public LogFactoryObject(string logName)
-		{
-			LogName = logName;
-		}
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="LogFactoryObject"/>
+    /// class.
+    /// </summary>
+    /// <param name="logName">
+    /// The name of the <see cref="ILogger"/> instance served up by
+    /// this factory.
+    /// </param>
+    /// <exception cref="System.ArgumentNullException">
+    /// If the supplied <paramref name="logName"/> is
+    /// <see langword="null"/> or contains only whitespace character(s).
+    /// </exception>
+    public LogFactoryObject(string logName)
+    {
+        LogName = logName;
+    }
 
-		#endregion
+    #endregion
 
-		/// <summary>
-		/// The name of the <see cref="ILogger"/> instance served up by
-		/// this factory.
-		/// </summary>
-		/// <value>
-		/// The name of the <see cref="ILogger"/> instance served up by
-		/// this factory.
-		/// </value>
-		/// <exception cref="System.ArgumentNullException">
-		/// If the <see langword="value"/> supplied to the setter is
-		/// <see langword="null"/> or contains only whitespace character(s).
-		/// </exception>
-		public string LogName
-		{
-			get { return this.logName; }
-			set
-			{
-				AssertUtils.ArgumentHasText(value, "The 'LogName' property must have a value.");
-				this.logName = value.Trim();
-			}
-		}
+    /// <summary>
+    /// The name of the <see cref="ILogger"/> instance served up by
+    /// this factory.
+    /// </summary>
+    /// <value>
+    /// The name of the <see cref="ILogger"/> instance served up by
+    /// this factory.
+    /// </value>
+    /// <exception cref="System.ArgumentNullException">
+    /// If the <see langword="value"/> supplied to the setter is
+    /// <see langword="null"/> or contains only whitespace character(s).
+    /// </exception>
+    public string LogName
+    {
+        get { return this.logName; }
+        set
+        {
+            AssertUtils.ArgumentHasText(value, "The 'LogName' property must have a value.");
+            this.logName = value.Trim();
+        }
+    }
 
-		/// <summary>
-		/// Return an instance (possibly shared or independent) of the object
-		/// managed by this factory.
-		/// </summary>
-		/// <returns>
-		/// An instance (possibly shared or independent) of the object
-		/// managed by this factory.
-		/// </returns>
-		/// <seealso cref="Spring.Objects.Factory.IFactoryObject.GetObject"/>
-		public object GetObject()
-		{
-			if (this.log == null)
-			{
-				ValidateProperties();
-				this.log = LogManager.GetLogger(LogName);
-			}
-			return this.log;
-		}
+    /// <summary>
+    /// Return an instance (possibly shared or independent) of the object
+    /// managed by this factory.
+    /// </summary>
+    /// <returns>
+    /// An instance (possibly shared or independent) of the object
+    /// managed by this factory.
+    /// </returns>
+    /// <seealso cref="Spring.Objects.Factory.IFactoryObject.GetObject"/>
+    public object GetObject()
+    {
+        if (this.log == null)
+        {
+            ValidateProperties();
+            this.log = LogManager.GetLogger(LogName);
+        }
 
-		/// <summary>
-		/// Return the type of object that this
-		/// <see cref="Spring.Objects.Factory.IFactoryObject"/> creates, or
-		/// <cref lang="null"/> if not known in advance.
-		/// </summary>
-		/// <seealso cref="Spring.Objects.Factory.IFactoryObject.ObjectType"/>
-		public Type ObjectType
-		{
-			get { return typeof(ILogger); }
-		}
+        return this.log;
+    }
 
-		/// <summary>
-		/// Is the object managed by this factory a singleton or a prototype?
-		/// </summary>
-		/// <seealso cref="Spring.Objects.Factory.IFactoryObject.IsSingleton"/>
-		public bool IsSingleton
-		{
-			get { return true; }
-		}
+    /// <summary>
+    /// Return the type of object that this
+    /// <see cref="Spring.Objects.Factory.IFactoryObject"/> creates, or
+    /// <cref lang="null"/> if not known in advance.
+    /// </summary>
+    /// <seealso cref="Spring.Objects.Factory.IFactoryObject.ObjectType"/>
+    public Type ObjectType
+    {
+        get { return typeof(ILogger); }
+    }
 
-		/// <summary>
-		/// Invoked by an <see cref="Spring.Objects.Factory.IObjectFactory"/>
-		/// after it has set all object properties supplied
-		/// (and satisfied the
-		/// <see cref="Spring.Objects.Factory.IObjectFactoryAware"/>
-		/// and <see cref="Spring.Context.IApplicationContextAware"/>
-		/// interfaces).
-		/// </summary>
-		/// <exception cref="System.Exception">
-		/// In the event of misconfiguration (such as failure to set an essential
-		/// property) or if initialization fails.
-		/// </exception>
-		/// <seealso cref="Spring.Objects.Factory.IInitializingObject.AfterPropertiesSet"/>
-		public void AfterPropertiesSet()
-		{
-			ValidateProperties();
-		}
+    /// <summary>
+    /// Is the object managed by this factory a singleton or a prototype?
+    /// </summary>
+    /// <seealso cref="Spring.Objects.Factory.IFactoryObject.IsSingleton"/>
+    public bool IsSingleton
+    {
+        get { return true; }
+    }
 
-		private void ValidateProperties()
-		{
-			if (StringUtils.IsNullOrEmpty(LogName))
-			{
-				throw new ArgumentException("The 'LogName' property has not been set.");
-			}
-		}
+    /// <summary>
+    /// Invoked by an <see cref="Spring.Objects.Factory.IObjectFactory"/>
+    /// after it has set all object properties supplied
+    /// (and satisfied the
+    /// <see cref="Spring.Objects.Factory.IObjectFactoryAware"/>
+    /// and <see cref="Spring.Context.IApplicationContextAware"/>
+    /// interfaces).
+    /// </summary>
+    /// <exception cref="System.Exception">
+    /// In the event of misconfiguration (such as failure to set an essential
+    /// property) or if initialization fails.
+    /// </exception>
+    /// <seealso cref="Spring.Objects.Factory.IInitializingObject.AfterPropertiesSet"/>
+    public void AfterPropertiesSet()
+    {
+        ValidateProperties();
+    }
 
-		private ILogger log;
-		private string logName;
-	}
+    private void ValidateProperties()
+    {
+        if (StringUtils.IsNullOrEmpty(LogName))
+        {
+            throw new ArgumentException("The 'LogName' property has not been set.");
+        }
+    }
+
+    private ILogger log;
+    private string logName;
 }

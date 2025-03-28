@@ -18,17 +18,15 @@
 
 #endregion
 
-namespace Spring.Messaging.Ems.Core
-{
+namespace Spring.Messaging.Ems.Core;
 
-    /// <summary>
-    /// Delegate that is used with EmsTemplate's ConvertAndSend method that converts
-    /// an object.
-    /// </summary>
-    /// <remarks>
-    /// It allows for further modification of the message after it has been processed
-    /// by the converter. This is useful for setting of EMS Header and Properties.
-    /// </remarks>
-    /// <author>Mark Pollack</author>
-    public delegate Message MessagePostProcessorDelegate(Message message);
-}
+/// <summary>
+/// Delegate that is used with EmsTemplate's ConvertAndSend method that converts
+/// an object.
+/// </summary>
+/// <remarks>
+/// It allows for further modification of the message after it has been processed
+/// by the converter. This is useful for setting of EMS Header and Properties.
+/// </remarks>
+/// <author>Mark Pollack</author>
+public delegate Message MessagePostProcessorDelegate(Message message);

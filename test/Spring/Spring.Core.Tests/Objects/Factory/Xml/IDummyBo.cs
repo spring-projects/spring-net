@@ -20,20 +20,16 @@
 
 #region Imports
 
-
-
 #endregion
 
-namespace Spring.Objects.Factory.Xml {
+namespace Spring.Objects.Factory.Xml;
 
-	/// <summary>
-	/// A dummy business object interface :D
-    /// </summary>
-    /// <author>Rod Johnson</author>
-    /// <author>Rick Evans (.NET)</author>
-	public interface IDummyBo 
-    {
-
-        void DoSomething ();
-	}
+/// <summary>
+/// A dummy business object interface :D
+/// </summary>
+/// <author>Rod Johnson</author>
+/// <author>Rick Evans (.NET)</author>
+public interface IDummyBo
+{
+    void DoSomething();
 }

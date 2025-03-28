@@ -31,173 +31,173 @@ using Spring.Objects;
 
 #endregion
 
-namespace Spring.Util
+namespace Spring.Util;
+
+/// <summary>
+/// Unit tests for the AssertUtils class.
+/// </summary>
+/// <author>Rick Evans</author>
+[TestFixture]
+public sealed class AssertUtilsTests
 {
-    /// <summary>
-    /// Unit tests for the AssertUtils class.
-    /// </summary>
-    /// <author>Rick Evans</author>
-    [TestFixture]
-    public sealed class AssertUtilsTests
+    [Test]
+    public void IsTrueWithMesssage()
     {
-        [Test]
-        public void IsTrueWithMesssage()
+        Assert.Throws<ArgumentException>(() => AssertUtils.IsTrue(false, "foo"), "foo");
+    }
+
+    [Test]
+    public void IsTrueWithMessageValidExpression()
+    {
+        AssertUtils.IsTrue(true, "foo");
+    }
+
+    [Test]
+    public void IsTrue()
+    {
+        Assert.Throws<ArgumentException>(() => AssertUtils.IsTrue(false), "[Assertion failed] - this expression must be true");
+    }
+
+    [Test]
+    public void IsTrueValidExpression()
+    {
+        AssertUtils.IsTrue(true);
+    }
+
+    [Test]
+    public void StateTrue()
+    {
+        Assert.Throws<InvalidOperationException>(() => AssertUtils.State(false, "foo"));
+    }
+
+    [Test]
+    public void ArgumentNotNull()
+    {
+        Assert.Throws<ArgumentNullException>(() => AssertUtils.ArgumentNotNull(null, "foo"));
+    }
+
+    [Test]
+    public void ArgumentNotNullWithMessage()
+    {
+        Assert.Throws<ArgumentNullException>(() => AssertUtils.ArgumentNotNull(null, "foo", "Bang!"));
+    }
+
+    [Test]
+    public void ArgumentHasTextWithValidText()
+    {
+        AssertUtils.ArgumentHasText("... and no-one's getting fat 'cept Mama Cas!", "foo");
+    }
+
+    [Test]
+    public void ArgumentHasTextWithValidTextAndMessage()
+    {
+        AssertUtils.ArgumentHasText("... and no-one's getting fat 'cept Mama Cas!", "foo", "Bang!");
+    }
+
+    [Test]
+    public void ArgumentHasText()
+    {
+        Assert.Throws<ArgumentNullException>(() => AssertUtils.ArgumentHasText(null, "foo"));
+    }
+
+    [Test]
+    public void ArgumentHasTextWithMessage()
+    {
+        Assert.Throws<ArgumentNullException>(() => AssertUtils.ArgumentHasText(null, "foo", "Bang!"));
+    }
+
+    [Test]
+    public void ArgumentHasLengthArgumentIsNull()
+    {
+        Assert.Throws<ArgumentNullException>(() => AssertUtils.ArgumentHasLength(null, "foo"));
+    }
+
+    [Test]
+    public void ArgumentHasLengthArgumentIsNullWithMessage()
+    {
+        Assert.Throws<ArgumentNullException>(() => AssertUtils.ArgumentHasLength(null, "foo", "Bang!"));
+    }
+
+    [Test]
+    public void ArgumentHasLengthArgumentIsEmpty()
+    {
+        Assert.Throws<ArgumentNullException>(() => AssertUtils.ArgumentHasLength(new byte[0], "foo"));
+    }
+
+    [Test]
+    public void ArgumentHasLengthArgumentIsEmptyWithMessage()
+    {
+        Assert.Throws<ArgumentNullException>(() => AssertUtils.ArgumentHasLength(new byte[0], "foo", "Bang!"));
+    }
+
+    [Test]
+    public void ArgumentHasLengthArgumentHasElements()
+    {
+        AssertUtils.ArgumentHasLength(new byte[1], "foo");
+    }
+
+    [Test]
+    public void ArgumentHasLengthArgumentHasElementsWithMessage()
+    {
+        AssertUtils.ArgumentHasLength(new byte[1], "foo", "Bang!");
+    }
+
+    [Test]
+    public void ArgumentHasElementsArgumentIsNull()
+    {
+        Assert.Throws<ArgumentException>(() => AssertUtils.ArgumentHasElements(null, "foo"));
+    }
+
+    [Test]
+    public void ArgumentHasElementsArgumentIsEmpty()
+    {
+        Assert.Throws<ArgumentException>(() => AssertUtils.ArgumentHasElements(new object[0], "foo"));
+    }
+
+    [Test]
+    public void ArgumentHasElementsArgumentContainsNull()
+    {
+        Assert.Throws<ArgumentException>(() => AssertUtils.ArgumentHasElements(new object[] { new object(), null, new object() }, "foo"));
+    }
+
+    [Test]
+    public void ArgumentHasElementsArgumentContainsNonNullsOnly()
+    {
+        AssertUtils.ArgumentHasElements(new object[] { new object(), new object(), new object() }, "foo");
+    }
+
+    [Test]
+    public void UnderstandsType()
+    {
+        MethodInfo getDescriptionMethod = typeof(ITestObject).GetMethod("GetDescription", new Type[0]);
+        MethodInfo understandsMethod = typeof(AssertUtils).GetMethod("Understands", BindingFlags.Public | BindingFlags.Static, null, new Type[] { typeof(object), typeof(string), typeof(MethodBase) }, null);
+
+        // null target, any type
+        AssertNotUnderstandsType(null, "target", typeof(object), typeof(NotSupportedException), "Target 'target' is null.");
+        // any target, null type
+        AssertNotUnderstandsType(new object(), "target", null, typeof(ArgumentNullException), "Argument 'requiredType' cannot be null.");
+    }
+
+    private void AssertNotUnderstandsType(object target, string targetName, Type requiredType, Type exceptionType, string partialMessage)
+    {
+        try
         {
-            Assert.Throws<ArgumentException>(() => AssertUtils.IsTrue(false, "foo"), "foo");
+            AssertUtils.Understands(target, targetName, requiredType);
+            Assert.Fail();
         }
-
-        [Test]
-        public void IsTrueWithMessageValidExpression()
+        catch (Exception ex)
         {
-            AssertUtils.IsTrue(true, "foo");
-        }
-
-        [Test]
-        public void IsTrue()
-        {
-            Assert.Throws<ArgumentException>(() => AssertUtils.IsTrue(false), "[Assertion failed] - this expression must be true");
-        }
-
-        [Test]
-        public void IsTrueValidExpression()
-        {
-            AssertUtils.IsTrue(true);
-        }
-
-        [Test]
-        public void StateTrue()
-        {
-            Assert.Throws<InvalidOperationException>(() => AssertUtils.State(false, "foo"));
-        }
-
-        [Test]
-        public void ArgumentNotNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => AssertUtils.ArgumentNotNull(null, "foo"));
-        }
-
-        [Test]
-        public void ArgumentNotNullWithMessage()
-        {
-            Assert.Throws<ArgumentNullException>(() => AssertUtils.ArgumentNotNull(null, "foo", "Bang!"));
-        }
-
-        [Test]
-        public void ArgumentHasTextWithValidText()
-        {
-            AssertUtils.ArgumentHasText("... and no-one's getting fat 'cept Mama Cas!", "foo");
-        }
-
-        [Test]
-        public void ArgumentHasTextWithValidTextAndMessage()
-        {
-            AssertUtils.ArgumentHasText("... and no-one's getting fat 'cept Mama Cas!", "foo", "Bang!");
-        }
-
-        [Test]
-        public void ArgumentHasText()
-        {
-            Assert.Throws<ArgumentNullException>(() => AssertUtils.ArgumentHasText(null, "foo"));
-        }
-
-        [Test]
-        public void ArgumentHasTextWithMessage()
-        {
-            Assert.Throws<ArgumentNullException>(() => AssertUtils.ArgumentHasText(null, "foo", "Bang!"));
-        }
-
-        [Test]
-        public void ArgumentHasLengthArgumentIsNull()
-        {
-            Assert.Throws<ArgumentNullException>(() => AssertUtils.ArgumentHasLength(null, "foo"));
-        }
-
-        [Test]
-        public void ArgumentHasLengthArgumentIsNullWithMessage()
-        {
-            Assert.Throws<ArgumentNullException>(() => AssertUtils.ArgumentHasLength(null, "foo", "Bang!"));
-        }
-
-        [Test]
-        public void ArgumentHasLengthArgumentIsEmpty()
-        {
-            Assert.Throws<ArgumentNullException>(() => AssertUtils.ArgumentHasLength(new byte[0], "foo"));
-        }
-
-        [Test]
-        public void ArgumentHasLengthArgumentIsEmptyWithMessage()
-        {
-            Assert.Throws<ArgumentNullException>(() => AssertUtils.ArgumentHasLength(new byte[0], "foo", "Bang!"));
-        }
-
-        [Test]
-        public void ArgumentHasLengthArgumentHasElements()
-        {
-            AssertUtils.ArgumentHasLength(new byte[1], "foo");
-        }
-
-        [Test]
-        public void ArgumentHasLengthArgumentHasElementsWithMessage()
-        {
-            AssertUtils.ArgumentHasLength(new byte[1], "foo", "Bang!");
-        }
-
-        [Test]
-        public void ArgumentHasElementsArgumentIsNull()
-        {
-            Assert.Throws<ArgumentException>(() => AssertUtils.ArgumentHasElements(null, "foo"));
-        }
-
-        [Test]
-        public void ArgumentHasElementsArgumentIsEmpty()
-        {
-            Assert.Throws<ArgumentException>(() => AssertUtils.ArgumentHasElements(new object[0], "foo"));
-        }
-
-        [Test]
-        public void ArgumentHasElementsArgumentContainsNull()
-        {
-            Assert.Throws<ArgumentException>(() => AssertUtils.ArgumentHasElements(new object[] { new object(), null, new object() }, "foo"));
-        }
-
-        [Test]
-        public void ArgumentHasElementsArgumentContainsNonNullsOnly()
-        {
-            AssertUtils.ArgumentHasElements(new object[] { new object(), new object(), new object() }, "foo");
-        }
-
-        [Test]
-        public void UnderstandsType()
-        {
-            MethodInfo getDescriptionMethod = typeof(ITestObject).GetMethod("GetDescription", new Type[0]);
-            MethodInfo understandsMethod = typeof(AssertUtils).GetMethod("Understands", BindingFlags.Public|BindingFlags.Static, null, new Type[] {typeof (object), typeof(string), typeof (MethodBase)}, null);
-
-            // null target, any type
-            AssertNotUnderstandsType(null, "target", typeof(object), typeof(NotSupportedException), "Target 'target' is null.");
-            // any target, null type
-            AssertNotUnderstandsType(new object(), "target", null, typeof(ArgumentNullException), "Argument 'requiredType' cannot be null.");
-        }
-
-        private void AssertNotUnderstandsType(object target, string targetName, Type requiredType, Type exceptionType, string partialMessage)
-        {
-            try
+            if (ex.GetType() != exceptionType)
             {
-                AssertUtils.Understands(target, targetName, requiredType);
-                Assert.Fail();
+                Assert.Fail("Expected Exception of type {0}, but was {1}", exceptionType, ex.GetType());
             }
-            catch(Exception ex)
-            {
-                if (ex.GetType() != exceptionType)
-                {
-                    Assert.Fail("Expected Exception of type {0}, but was {1}", exceptionType, ex.GetType());
-                }
 
-                if (-1 == ex.Message.IndexOf(partialMessage))
-                {
-                    Assert.Fail("Expected Message '{0}', but got '{1}'", partialMessage, ex.Message);
-                }
+            if (-1 == ex.Message.IndexOf(partialMessage))
+            {
+                Assert.Fail("Expected Message '{0}', but got '{1}'", partialMessage, ex.Message);
             }
         }
+    }
 
 #if !NETCOREAPP
         [Test]
@@ -247,7 +247,7 @@ namespace Spring.Util
         {
             private readonly object targetInstance;
 
-            public TestProxy(object targetInstance) 
+            public TestProxy(object targetInstance)
                 : base(typeof(MarshalByRefObject))
             {
                 this.targetInstance = targetInstance;
@@ -272,5 +272,4 @@ namespace Spring.Util
             }
         }
 #endif
-    }
 }

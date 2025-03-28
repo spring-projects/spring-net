@@ -23,172 +23,172 @@ using System.ComponentModel;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
-namespace Spring.Web.UI.Controls
+namespace Spring.Web.UI.Controls;
+
+/// <summary>
+/// Groups radio button controls and returns the value of the selected control
+/// </summary>
+/// <remarks>
+/// This control alows radio buttons to be data-bound to a data model of the page.
+/// </remarks>
+/// <author>Aleksandar Seovic</author>
+[ParseChildren(false)]
+public class RadioButtonGroup : WebControl, IPostBackDataHandler
 {
+    private static readonly object EventSelectionChanged = new object();
+
+    private List<Control> options = new List<Control>();
+
     /// <summary>
-    /// Groups radio button controls and returns the value of the selected control
+    /// Overloaded to track addition of contained <see cref="RadioButton"/> controls.
     /// </summary>
-    /// <remarks>
-    /// This control alows radio buttons to be data-bound to a data model of the page.
-    /// </remarks>
-    /// <author>Aleksandar Seovic</author>
-    [ParseChildren(false)]
-    public class RadioButtonGroup : WebControl, IPostBackDataHandler
+    protected override void AddedControl(Control control, int index)
     {
-        private static readonly object EventSelectionChanged = new object();
-
-        private List<Control> options = new List<Control>();
-
-		/// <summary>
-		/// Overloaded to track addition of contained <see cref="RadioButton"/> controls.
-		/// </summary>
-		protected override void AddedControl(Control control, int index)
-		{
-			if (control is RadioButton)
-			{
-				RadioButton option = (RadioButton)control;
-				option.GroupName = this.ID + "Group";
-				option.AutoPostBack = this.AutoPostBack;
-				if(option.Attributes["value"] == null) option.Attributes["value"] = option.ID;
-				option.Checked = (0 == string.Compare(this.Value, option.Attributes["value"]));
-				options.Add(control);
-			}
-			base.AddedControl (control, index);
-		}
-
-		/// <summary>
-		/// Overloaded to track removal of a RadioButton
-		/// </summary>
-		/// <param name="control"></param>
-		protected override void RemovedControl(Control control)
-		{
-			int index = -1;
-			for(int i=0;i<options.Count;i++)
-			{
-				if (control == options[i]) index = i;
-			}
-			if (index > -1) options.RemoveAt(index);
-
-			base.RemovedControl (control);
-		}
-
-        /// <summary>
-        /// Gets or sets the ID of the selected radio button.
-        /// </summary>
-        /// <value>ID of the selected radio button.</value>
-        public string Value
+        if (control is RadioButton)
         {
-            get { return (string) this.ViewState["value"]; }
-            set
-            {
-                this.ViewState["value"] = value;
-                foreach(RadioButton option in this.options)
-                {
-                    option.Checked = (0==string.Compare(value, option.Attributes["value"]));
-                }
-            }
+            RadioButton option = (RadioButton) control;
+            option.GroupName = this.ID + "Group";
+            option.AutoPostBack = this.AutoPostBack;
+            if (option.Attributes["value"] == null) option.Attributes["value"] = option.ID;
+            option.Checked = (0 == string.Compare(this.Value, option.Attributes["value"]));
+            options.Add(control);
         }
 
-        /// <summary>
-        /// Gets or sets whether form should be posted back on every selection change
-        /// within the radio group.
-        /// </summary>
-        [DefaultValue(false)]
-        public virtual bool AutoPostBack
+        base.AddedControl(control, index);
+    }
+
+    /// <summary>
+    /// Overloaded to track removal of a RadioButton
+    /// </summary>
+    /// <param name="control"></param>
+    protected override void RemovedControl(Control control)
+    {
+        int index = -1;
+        for (int i = 0; i < options.Count; i++)
         {
-            get
-            {
-                object autoPostBack = this.ViewState["AutoPostBack"];
-                if (autoPostBack != null)
-                {
-                    return (bool) autoPostBack;
-                }
-                return false;
-            }
-            set
-            {
-                this.ViewState["AutoPostBack"] = value;
-                foreach(RadioButton option in this.options)
-                {
-                    option.AutoPostBack = value;
-                }
-            }
+            if (control == options[i]) index = i;
         }
 
-		/// <summary>
-		/// Registers the RadioButtonGroup for PostBack.
-		/// </summary>
-        protected override void OnPreRender(EventArgs e)
+        if (index > -1) options.RemoveAt(index);
+
+        base.RemovedControl(control);
+    }
+
+    /// <summary>
+    /// Gets or sets the ID of the selected radio button.
+    /// </summary>
+    /// <value>ID of the selected radio button.</value>
+    public string Value
+    {
+        get { return (string) this.ViewState["value"]; }
+        set
         {
-            base.OnPreRender(e);
-            if (this.Visible)
+            this.ViewState["value"] = value;
+            foreach (RadioButton option in this.options)
             {
-                Page.RegisterRequiresPostBack(this);
+                option.Checked = (0 == string.Compare(value, option.Attributes["value"]));
             }
         }
+    }
 
-        /// <summary>
-        /// Renders only children of this control.
-        /// </summary>
-        /// <param name="writer">HtmlTextWriter to use for rendering.</param>
-        protected override void Render(HtmlTextWriter writer)
+    /// <summary>
+    /// Gets or sets whether form should be posted back on every selection change
+    /// within the radio group.
+    /// </summary>
+    [DefaultValue(false)]
+    public virtual bool AutoPostBack
+    {
+        get
         {
-            this.RenderChildren(writer);
-        }
-
-        #region IPostBackDataHandler Members
-
-        /// <summary>
-        /// Loads postback data into the control.
-        /// </summary>
-        /// <param name="postDataKey">Key that should be used to retrieve data.</param>
-        /// <param name="postCollection">Postback data collection.</param>
-        /// <returns>True if data has changed, false otherwise.</returns>
-        public bool LoadPostData(string postDataKey, NameValueCollection postCollection)
-        {
-            string newValue = postCollection[postDataKey+"Group"];
-
-            if (0 != string.Compare(newValue,this.Value))
+            object autoPostBack = this.ViewState["AutoPostBack"];
+            if (autoPostBack != null)
             {
-                this.ViewState["value"] = newValue;
-                return true;
+                return (bool) autoPostBack;
             }
 
             return false;
         }
-
-        /// <summary>
-        /// Raises SelectionChanged event.
-        /// </summary>
-        public void RaisePostDataChangedEvent()
+        set
         {
-            OnSelectionChanged(EventArgs.Empty);
-        }
-
-        #endregion
-
-        /// <summary>
-        /// Method that is called on postback if selected radio button has changed.
-        /// </summary>
-        /// <param name="e">Empty event argument.</param>
-        protected virtual void OnSelectionChanged(EventArgs e)
-        {
-            EventHandler handler = (EventHandler) base.Events[RadioButtonGroup.EventSelectionChanged];
-            if (handler != null)
+            this.ViewState["AutoPostBack"] = value;
+            foreach (RadioButton option in this.options)
             {
-                handler(this, e);
+                option.AutoPostBack = value;
             }
         }
+    }
 
-        /// <summary>
-        /// Occurs when the value of the radio button group changes between postbacks to the server.
-        /// </summary>
-        public event EventHandler SelectionChanged
+    /// <summary>
+    /// Registers the RadioButtonGroup for PostBack.
+    /// </summary>
+    protected override void OnPreRender(EventArgs e)
+    {
+        base.OnPreRender(e);
+        if (this.Visible)
         {
-            add { base.Events.AddHandler(RadioButtonGroup.EventSelectionChanged, value); }
-            remove { base.Events.RemoveHandler(RadioButtonGroup.EventSelectionChanged, value); }
+            Page.RegisterRequiresPostBack(this);
+        }
+    }
+
+    /// <summary>
+    /// Renders only children of this control.
+    /// </summary>
+    /// <param name="writer">HtmlTextWriter to use for rendering.</param>
+    protected override void Render(HtmlTextWriter writer)
+    {
+        this.RenderChildren(writer);
+    }
+
+    #region IPostBackDataHandler Members
+
+    /// <summary>
+    /// Loads postback data into the control.
+    /// </summary>
+    /// <param name="postDataKey">Key that should be used to retrieve data.</param>
+    /// <param name="postCollection">Postback data collection.</param>
+    /// <returns>True if data has changed, false otherwise.</returns>
+    public bool LoadPostData(string postDataKey, NameValueCollection postCollection)
+    {
+        string newValue = postCollection[postDataKey + "Group"];
+
+        if (0 != string.Compare(newValue, this.Value))
+        {
+            this.ViewState["value"] = newValue;
+            return true;
         }
 
+        return false;
+    }
 
+    /// <summary>
+    /// Raises SelectionChanged event.
+    /// </summary>
+    public void RaisePostDataChangedEvent()
+    {
+        OnSelectionChanged(EventArgs.Empty);
+    }
+
+    #endregion
+
+    /// <summary>
+    /// Method that is called on postback if selected radio button has changed.
+    /// </summary>
+    /// <param name="e">Empty event argument.</param>
+    protected virtual void OnSelectionChanged(EventArgs e)
+    {
+        EventHandler handler = (EventHandler) base.Events[RadioButtonGroup.EventSelectionChanged];
+        if (handler != null)
+        {
+            handler(this, e);
+        }
+    }
+
+    /// <summary>
+    /// Occurs when the value of the radio button group changes between postbacks to the server.
+    /// </summary>
+    public event EventHandler SelectionChanged
+    {
+        add { base.Events.AddHandler(RadioButtonGroup.EventSelectionChanged, value); }
+        remove { base.Events.RemoveHandler(RadioButtonGroup.EventSelectionChanged, value); }
     }
 }

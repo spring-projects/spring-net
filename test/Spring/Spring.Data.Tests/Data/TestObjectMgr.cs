@@ -1,12 +1,12 @@
 /*
  * Copyright � 2002-2011 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -22,36 +22,35 @@ using Spring.Transaction.Interceptor;
 using Spring.Transaction.Support;
 using IsolationLevel = System.Data.IsolationLevel;
 
-namespace Spring.Data
+namespace Spring.Data;
+
+/// <summary>
+/// Group together multiple ITestObjectDao operations.
+/// </summary>
+/// <author>Mark Pollack (.NET)</author>
+public class TestObjectMgr : ITestObjectMgr
 {
+    private static readonly ILogger<TestObjectMgr> LOG = LogManager.GetLogger<TestObjectMgr>();
+
     /// <summary>
-    /// Group together multiple ITestObjectDao operations.
+    /// Initializes a new instance of the <see cref="TestObjectMgr"/> class.
     /// </summary>
-    /// <author>Mark Pollack (.NET)</author>
-    public class TestObjectMgr : ITestObjectMgr
+    public TestObjectMgr()
     {
-        private static readonly ILogger<TestObjectMgr> LOG = LogManager.GetLogger<TestObjectMgr>();
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TestObjectMgr"/> class.
-        /// </summary>
-        public TestObjectMgr()
-        {
-        }
+    [Transaction()]
+    public void SaveTwoTestObjects(TestObject to1, TestObject to2)
+    {
+        LOG.LogDebug("TransactionActive = " + TransactionSynchronizationManager.ActualTransactionActive);
+    }
 
-        [Transaction()]
-        public void SaveTwoTestObjects(TestObject to1, TestObject to2)
-        {
-            LOG.LogDebug("TransactionActive = " + TransactionSynchronizationManager.ActualTransactionActive);
-        }
-
-        [Transaction(TransactionPropagation.Required, IsolationLevel.Unspecified, Timeout = 50,
-            RollbackFor = new Type[] {typeof(ArgumentNullException)},
-            ReadOnly = false,
-            AsyncFlowOption = TransactionScopeAsyncFlowOption.Enabled,
-            NoRollbackFor = new Type[] {typeof(ArithmeticException), typeof(NotSupportedException)})]
-        public void DeleteTwoTestObjects(string name1, string name2)
-        {
-        }
+    [Transaction(TransactionPropagation.Required, IsolationLevel.Unspecified, Timeout = 50,
+        RollbackFor = new Type[] { typeof(ArgumentNullException) },
+        ReadOnly = false,
+        AsyncFlowOption = TransactionScopeAsyncFlowOption.Enabled,
+        NoRollbackFor = new Type[] { typeof(ArithmeticException), typeof(NotSupportedException) })]
+    public void DeleteTwoTestObjects(string name1, string name2)
+    {
     }
 }

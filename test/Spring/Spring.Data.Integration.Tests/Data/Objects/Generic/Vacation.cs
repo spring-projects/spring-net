@@ -18,67 +18,63 @@
 
 #endregion
 
-namespace Spring.Data.Objects.Generic
+namespace Spring.Data.Objects.Generic;
+
+public class Vacation
 {
+    private int id;
+    private string firstName;
+    private string lastName;
+    private int employeeId;
+    private DateTime startDate;
+    private DateTime endDate;
 
-    public class Vacation
+    public int Id
     {
-        private int id;
-        private string firstName;
-        private string lastName;
-        private int employeeId;
-        private DateTime startDate;
-        private DateTime endDate;
+        get { return id; }
+        set { id = value; }
+    }
 
+    public string FirstName
+    {
+        get { return firstName; }
+        set { firstName = value; }
+    }
 
-        public int Id
-        {
-            get { return id; }
-            set { id = value; }
-        }
+    public string LastName
+    {
+        get { return lastName; }
+        set { lastName = value; }
+    }
 
-        public string FirstName
-        {
-            get { return firstName; }
-            set { firstName = value; }
-        }
+    public int EmployeeId
+    {
+        get { return employeeId; }
+        set { employeeId = value; }
+    }
 
-        public string LastName
-        {
-            get { return lastName; }
-            set { lastName = value; }
-        }
+    public DateTime StartDate
+    {
+        get { return startDate; }
+        set { startDate = value; }
+    }
 
-        public int EmployeeId
-        {
-            get { return employeeId; }
-            set { employeeId = value; }
-        }
+    public DateTime EndDate
+    {
+        get { return endDate; }
+        set { endDate = value; }
+    }
 
-        public DateTime StartDate
-        {
-            get { return startDate; }
-            set { startDate = value; }
-        }
+    public override bool Equals(object obj)
+    {
+        if (this == obj) return true;
+        Vacation vacation = obj as Vacation;
+        if (vacation == null) return false;
+        return employeeId == vacation.employeeId && Equals(startDate, vacation.startDate);
+    }
 
-        public DateTime EndDate
-        {
-            get { return endDate; }
-            set { endDate = value; }
-        }
-
-
-        public override bool Equals(object obj)
-        {
-            if (this == obj) return true;
-            Vacation vacation = obj as Vacation;
-            if (vacation == null) return false;
-            return employeeId == vacation.employeeId && Equals(startDate, vacation.startDate);
-        }
-
-        public override int GetHashCode()
-        {
-            return employeeId + 29 * startDate.GetHashCode();
-        }
+    public override int GetHashCode()
+    {
+        return employeeId + 29 * startDate.GetHashCode();
     }
 }

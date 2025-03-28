@@ -9,6 +9,7 @@ public partial class EndPausedTest : System.Web.UI.Page
         get { return convA; }
         set { convA = value; }
     }
+
     private IConversationState convB;
 
     public IConversationState ConvB

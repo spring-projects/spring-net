@@ -24,46 +24,46 @@ using System.Web.UI.WebControls;
 
 #endregion
 
-namespace Spring.Web.UI.Controls
+namespace Spring.Web.UI.Controls;
+
+/// <summary>
+///	Adds the <see cref="SelectedValues"/> property to the framework's <see cref="System.Web.UI.WebControls.CheckBoxList"/> control.
+/// </summary>
+/// <remarks>
+/// When using Spring.Web's DataBinding, you should use this control for easier binding declaration.
+/// </remarks>
+/// <author>Erich Eichinger</author>
+public class CheckBoxList : System.Web.UI.WebControls.CheckBoxList
 {
-	/// <summary>
-	///	Adds the <see cref="SelectedValues"/> property to the framework's <see cref="System.Web.UI.WebControls.CheckBoxList"/> control.
-	/// </summary>
-	/// <remarks>
-	/// When using Spring.Web's DataBinding, you should use this control for easier binding declaration.
-	/// </remarks>
-	/// <author>Erich Eichinger</author>
-	public class CheckBoxList : System.Web.UI.WebControls.CheckBoxList
-	{
-		/// <summary>
-		/// Gets or Sets the list of selected values and checks the <see cref="CheckBox"/>es accordingly
-		/// </summary>
-		public string[] SelectedValues
-		{
-			get
-			{
-				List<string> vals = new List<string>();
-				foreach( ListItem item in this.Items )
-				{
-					if (item.Selected) vals.Add(item.Value);
-				}
-				return vals.ToArray();
-			}
-			set
-			{
-				if (value == null || value.Length == 0)
-				{
-					this.ClearSelection();
-				}
-				else
-				{
-                    List<string> vals = new List<string>();
-                    foreach (ListItem item in this.Items)
-					{
-						item.Selected = (vals.Contains(item.Value));
-					}
-				}
-			}
-		}
-	}
+    /// <summary>
+    /// Gets or Sets the list of selected values and checks the <see cref="CheckBox"/>es accordingly
+    /// </summary>
+    public string[] SelectedValues
+    {
+        get
+        {
+            List<string> vals = new List<string>();
+            foreach (ListItem item in this.Items)
+            {
+                if (item.Selected) vals.Add(item.Value);
+            }
+
+            return vals.ToArray();
+        }
+        set
+        {
+            if (value == null || value.Length == 0)
+            {
+                this.ClearSelection();
+            }
+            else
+            {
+                List<string> vals = new List<string>();
+                foreach (ListItem item in this.Items)
+                {
+                    item.Selected = (vals.Contains(item.Value));
+                }
+            }
+        }
+    }
 }

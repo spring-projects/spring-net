@@ -19,88 +19,82 @@
 #endregion
 
 using NUnit.Framework;
-
 using Spring.Expressions;
 
-namespace Spring.Validation.Actions
+namespace Spring.Validation.Actions;
+
+/// <summary>
+/// Tests for the ExceptionAction class.
+/// </summary>
+/// <author>Mark Pollack</author>
+[TestFixture]
+public class ExceptionActionTests
 {
-    /// <summary>
-    /// Tests for the ExceptionAction class.
-    /// </summary>
-    /// <author>Mark Pollack</author>
-    [TestFixture]
-    public class ExceptionActionTests
+    [Test]
+    public void WhenInvalidThrowDefaultException()
     {
-
-        [Test]
-        public void WhenInvalidThrowDefaultException()
+        Inventor context = new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian");
+        Dictionary<string, object> vars = new Dictionary<string, object>();
+        ExceptionAction action = new ExceptionAction();
+        try
         {
-            Inventor context = new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian");
-            Dictionary<string, object> vars = new Dictionary<string, object>();
-            ExceptionAction action = new ExceptionAction();
-            try
-            {
-                action.Execute(false, context, vars, null);
-                Assert.Fail("Should have thrown exception");
-            }
-            catch (ValidationException)
-            {
-
-            }            
+            action.Execute(false, context, vars, null);
+            Assert.Fail("Should have thrown exception");
         }
-
-        [Test]
-        public void WhenInvalidThrowCustomException()
+        catch (ValidationException)
         {
-            Inventor context = new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian");
-            Dictionary<string, object> vars = new Dictionary<string, object>();
-            ExceptionAction action = new ExceptionAction("new System.InvalidOperationException('invalid')");
-            try
-            {
-                action.Execute(false, context, vars, null);
-                Assert.Fail("Should have thrown exception");
-            }
-            catch (InvalidOperationException e)
-            {
-                Assert.AreEqual("invalid", e.Message);
-            }
         }
+    }
 
-        [Test]
-        public void WhenInvalidThrowCustomExceptionUsingSetter()
+    [Test]
+    public void WhenInvalidThrowCustomException()
+    {
+        Inventor context = new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian");
+        Dictionary<string, object> vars = new Dictionary<string, object>();
+        ExceptionAction action = new ExceptionAction("new System.InvalidOperationException('invalid')");
+        try
         {
-            Inventor context = new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian");
-            Dictionary<string, object> vars = new Dictionary<string, object>();
-            ExceptionAction action = new ExceptionAction();
-            IExpression expression = Expression.Parse("new System.InvalidOperationException('invalid')");
-            action.ThrowsExpression = expression;
-            try
-            {
-                action.Execute(false, context, vars, null);
-                Assert.Fail("Should have thrown exception");
-            }
-            catch (InvalidOperationException e)
-            {
-                Assert.AreEqual("invalid", e.Message);
-            }
+            action.Execute(false, context, vars, null);
+            Assert.Fail("Should have thrown exception");
         }
-
-
-        [Test]
-        public void WhenValid()
+        catch (InvalidOperationException e)
         {
-            Inventor context = new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian");
-            Dictionary<string, object> vars = new Dictionary<string, object>();
-            ExceptionAction action = new ExceptionAction();
-            try
-            {
-                action.Execute(true, context, vars, null);                
-            }
-            catch (Exception)
-            {
-                Assert.Fail("Should not have thrown exception");
-            }   
+            Assert.AreEqual("invalid", e.Message);
         }
+    }
 
+    [Test]
+    public void WhenInvalidThrowCustomExceptionUsingSetter()
+    {
+        Inventor context = new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian");
+        Dictionary<string, object> vars = new Dictionary<string, object>();
+        ExceptionAction action = new ExceptionAction();
+        IExpression expression = Expression.Parse("new System.InvalidOperationException('invalid')");
+        action.ThrowsExpression = expression;
+        try
+        {
+            action.Execute(false, context, vars, null);
+            Assert.Fail("Should have thrown exception");
+        }
+        catch (InvalidOperationException e)
+        {
+            Assert.AreEqual("invalid", e.Message);
+        }
+    }
+
+    [Test]
+    public void WhenValid()
+    {
+        Inventor context = new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian");
+        Dictionary<string, object> vars = new Dictionary<string, object>();
+        ExceptionAction action = new ExceptionAction();
+        try
+        {
+            action.Execute(true, context, vars, null);
+        }
+        catch (Exception)
+        {
+            Assert.Fail("Should not have thrown exception");
+        }
     }
 }

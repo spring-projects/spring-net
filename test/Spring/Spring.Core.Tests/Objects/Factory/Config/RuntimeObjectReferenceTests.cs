@@ -24,22 +24,21 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Objects.Factory.Config
+namespace Spring.Objects.Factory.Config;
+
+/// <summary>
+/// Unit tests for the RuntimeObjectReference class.
+/// </summary>
+/// <author>Rick Evans</author>
+[TestFixture]
+public sealed class RuntimeObjectReferenceTests
 {
-	/// <summary>
-	/// Unit tests for the RuntimeObjectReference class.
-    /// </summary>
-    /// <author>Rick Evans</author>
-	[TestFixture]
-    public sealed class RuntimeObjectReferenceTests
+    [Test]
+    public void InstantiationIsImplictlyNotToParent()
     {
-        [Test]
-        public void InstantiationIsImplictlyNotToParent()
-		{
-			RuntimeObjectReference ror = new RuntimeObjectReference("foo");
-			Assert.IsFalse(ror.IsToParent,
-				"IsToParent property must default to false if not " +
-				"using the explicit variant of the ctor.");
-        }
-	}
+        RuntimeObjectReference ror = new RuntimeObjectReference("foo");
+        Assert.IsFalse(ror.IsToParent,
+            "IsToParent property must default to false if not " +
+            "using the explicit variant of the ctor.");
+    }
 }

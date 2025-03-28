@@ -24,125 +24,127 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Objects.Support
+namespace Spring.Objects.Support;
+
+/// <summary>
+/// Unit tests for the ArgumentConvertingMethodInvoker class.
+/// </summary>
+/// <author>Rick Evans</author>
+[TestFixture]
+public sealed class ArgumentConvertingMethodInvokerTests
 {
-	/// <summary>
-	/// Unit tests for the ArgumentConvertingMethodInvoker class.
-    /// </summary>
-    /// <author>Rick Evans</author>
-	[TestFixture]
-    public sealed class ArgumentConvertingMethodInvokerTests
+    [Test]
+    public void Invoke()
     {
-        [Test]
-        public void Invoke () {
-            ArgumentConvertingMethodInvoker vkr = new ArgumentConvertingMethodInvoker ();
-            vkr.TargetObject = new Voker ();
-            vkr.TargetMethod = "Hi";
-            vkr.Arguments = new object [] {"Rick, Mark, Griffin, Si, Choy, Aleks"};
-            vkr.Prepare ();
-            string actual = vkr.Invoke () as string;
-            Assert.IsNotNull (actual);
-            Assert.AreEqual ("Hi Rick, Mark, Griffin, Si, Choy, Aleks", actual);
-        }
-
-        [Test]
-        public void InvokeWithConversion () 
-        {
-            ArgumentConvertingMethodInvoker vkr = new ArgumentConvertingMethodInvoker ();
-            Voker instance = new Voker ();
-            vkr.TargetObject = instance;
-            vkr.TargetMethod = "HiEverybody";
-            // CSV string should be converted to string []
-            vkr.Arguments = new object [] {"Rick, Mark, Griffin, Federico, Choy, Aleks"};
-            vkr.Prepare ();
-            string actual = vkr.Invoke () as string;
-            Assert.IsNotNull (actual);
-            Assert.AreEqual ("Hi ya'll", actual);
-            Assert.IsNotNull (instance.developers);
-		}
-
-		[Test]
-		public void InvokeAllNamedArgumentsWithConversion () 
-		{
-			ArgumentConvertingMethodInvoker vkr = new ArgumentConvertingMethodInvoker ();
-			Voker instance = new Voker ();
-			vkr.TargetObject = instance;
-			vkr.TargetMethod = "HiEverybody";
-			// CSV string should be converted to string []
-			vkr.AddNamedArgument("nameS", new object [] {"Rick, Mark, Griffin, Federico, Choy, Aleks"});
-			vkr.Prepare ();
-			string actual = vkr.Invoke () as string;
-			Assert.IsNotNull (actual);
-			Assert.AreEqual ("Hi ya'll", actual);
-			Assert.IsNotNull (instance.developers);
-		}
-
-        [Test]
-        public void InvokeWithRegisteredConversion () 
-        {
-            ArgumentConvertingMethodInvoker vkr = new ArgumentConvertingMethodInvoker ();
-            // see if custom registration filters thru...
-            vkr.RegisterCustomConverter (typeof (Voker), new VokerConverter ());
-            vkr.TargetType = typeof (Voker);
-            vkr.TargetMethod = "HiVoker";
-            // arg should be converted to Voker
-            vkr.Arguments = new object [] {"Lebowski"};
-            vkr.Prepare ();
-            string actual = vkr.Invoke () as string;
-            Assert.IsNotNull (actual);
-            Assert.AreEqual ("Hi Lebowski", actual);
-        }
+        ArgumentConvertingMethodInvoker vkr = new ArgumentConvertingMethodInvoker();
+        vkr.TargetObject = new Voker();
+        vkr.TargetMethod = "Hi";
+        vkr.Arguments = new object[] { "Rick, Mark, Griffin, Si, Choy, Aleks" };
+        vkr.Prepare();
+        string actual = vkr.Invoke() as string;
+        Assert.IsNotNull(actual);
+        Assert.AreEqual("Hi Rick, Mark, Griffin, Si, Choy, Aleks", actual);
     }
 
-    public sealed class Voker 
+    [Test]
+    public void InvokeWithConversion()
     {
-        public Voker () : this ("HiroProtagonist") {}
-
-        public Voker (string name) 
-        {
-            this.name = name;
-        }
-
-        public string Hi (string name)
-        {
-            return "Hi " + name;
-        }
-
-        public string HiEverybody (string [] names)
-        {
-            developers = names;
-            return "Hi ya'll";
-        }
-
-        public static string HiVoker (Voker buddy) 
-        {
-            return "Hi " + buddy.name;
-        }
-
-        public string [] developers;
-        public string name;
+        ArgumentConvertingMethodInvoker vkr = new ArgumentConvertingMethodInvoker();
+        Voker instance = new Voker();
+        vkr.TargetObject = instance;
+        vkr.TargetMethod = "HiEverybody";
+        // CSV string should be converted to string []
+        vkr.Arguments = new object[] { "Rick, Mark, Griffin, Federico, Choy, Aleks" };
+        vkr.Prepare();
+        string actual = vkr.Invoke() as string;
+        Assert.IsNotNull(actual);
+        Assert.AreEqual("Hi ya'll", actual);
+        Assert.IsNotNull(instance.developers);
     }
 
-    public sealed class VokerConverter : System.ComponentModel.TypeConverter 
+    [Test]
+    public void InvokeAllNamedArgumentsWithConversion()
     {
-        public override bool CanConvertFrom (
-            System.ComponentModel.ITypeDescriptorContext context, Type sourceType)
+        ArgumentConvertingMethodInvoker vkr = new ArgumentConvertingMethodInvoker();
+        Voker instance = new Voker();
+        vkr.TargetObject = instance;
+        vkr.TargetMethod = "HiEverybody";
+        // CSV string should be converted to string []
+        vkr.AddNamedArgument("nameS", new object[] { "Rick, Mark, Griffin, Federico, Choy, Aleks" });
+        vkr.Prepare();
+        string actual = vkr.Invoke() as string;
+        Assert.IsNotNull(actual);
+        Assert.AreEqual("Hi ya'll", actual);
+        Assert.IsNotNull(instance.developers);
+    }
+
+    [Test]
+    public void InvokeWithRegisteredConversion()
+    {
+        ArgumentConvertingMethodInvoker vkr = new ArgumentConvertingMethodInvoker();
+        // see if custom registration filters thru...
+        vkr.RegisterCustomConverter(typeof(Voker), new VokerConverter());
+        vkr.TargetType = typeof(Voker);
+        vkr.TargetMethod = "HiVoker";
+        // arg should be converted to Voker
+        vkr.Arguments = new object[] { "Lebowski" };
+        vkr.Prepare();
+        string actual = vkr.Invoke() as string;
+        Assert.IsNotNull(actual);
+        Assert.AreEqual("Hi Lebowski", actual);
+    }
+}
+
+public sealed class Voker
+{
+    public Voker() : this("HiroProtagonist") { }
+
+    public Voker(string name)
+    {
+        this.name = name;
+    }
+
+    public string Hi(string name)
+    {
+        return "Hi " + name;
+    }
+
+    public string HiEverybody(string[] names)
+    {
+        developers = names;
+        return "Hi ya'll";
+    }
+
+    public static string HiVoker(Voker buddy)
+    {
+        return "Hi " + buddy.name;
+    }
+
+    public string[] developers;
+    public string name;
+}
+
+public sealed class VokerConverter : System.ComponentModel.TypeConverter
+{
+    public override bool CanConvertFrom(
+        System.ComponentModel.ITypeDescriptorContext context, Type sourceType)
+    {
+        if (sourceType == typeof(string))
         {
-            if (sourceType == typeof (string)) 
-            {
-                return true;
-            }
-            return base.CanConvertFrom (context, sourceType);
+            return true;
         }
 
-        public override object ConvertFrom (
-            System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
+        return base.CanConvertFrom(context, sourceType);
+    }
+
+    public override object ConvertFrom(
+        System.ComponentModel.ITypeDescriptorContext context, System.Globalization.CultureInfo culture, object value)
+    {
+        if (value is string)
         {
-            if (value is string) 
-            {
-                return new Voker (value as string);
-            }
-            return base.ConvertFrom (context, culture, value);
+            return new Voker(value as string);
         }
+
+        return base.ConvertFrom(context, culture, value);
     }
 }

@@ -28,130 +28,131 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Collections
+namespace Spring.Collections;
+
+/// <summary>
+///
+/// </summary>
+/// <author>Erich Eichinger</author>
+[TestFixture]
+public class CaseInsensitiveHashtableTests
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <author>Erich Eichinger</author>
-    [TestFixture]
-    public class CaseInsensitiveHashtableTests
+    private static object SerializeDeserializeObject(object exp)
     {
-        private static object SerializeDeserializeObject(object exp)
+        byte[] data;
+        BinaryFormatter formatter = new BinaryFormatter();
+        using (MemoryStream ms = new MemoryStream())
         {
-            byte[] data;
-            BinaryFormatter formatter = new BinaryFormatter();
-            using (MemoryStream ms = new MemoryStream())
-            {
-                formatter.Serialize(ms, exp);
-                ms.Flush();
-                data = ms.ToArray();
-            }
-
-            using (MemoryStream ms = new MemoryStream(data))
-            {
-                exp = formatter.Deserialize(ms);
-            }
-
-            return exp;
+            formatter.Serialize(ms, exp);
+            ms.Flush();
+            data = ms.ToArray();
         }
 
-        [Test]
-        public void IsSerializable()
+        using (MemoryStream ms = new MemoryStream(data))
         {
-            CaseInsensitiveHashtable storiginal = new CaseInsensitiveHashtable();
-            storiginal.Add("key", "value");
-            CaseInsensitiveHashtable st = (CaseInsensitiveHashtable)SerializeDeserializeObject(storiginal);
-            Assert.AreNotSame(storiginal, st);
-            Assert.AreEqual("value", st["KEY"]);
-            Assert.AreEqual(1, st.Count);
+            exp = formatter.Deserialize(ms);
         }
 
-        [Test]
-        public void AcceptsNonStringKeys()
-        {
-            CaseInsensitiveHashtable st = new CaseInsensitiveHashtable();
+        return exp;
+    }
 
-            object key = new object();
-            st.Add(key, "value");
-            Assert.AreEqual(1, st.Count);            
-            Assert.AreEqual("value", st[key]);
-            Assert.IsNull(st[new object()]);
+    [Test]
+    public void IsSerializable()
+    {
+        CaseInsensitiveHashtable storiginal = new CaseInsensitiveHashtable();
+        storiginal.Add("key", "value");
+        CaseInsensitiveHashtable st = (CaseInsensitiveHashtable) SerializeDeserializeObject(storiginal);
+        Assert.AreNotSame(storiginal, st);
+        Assert.AreEqual("value", st["KEY"]);
+        Assert.AreEqual(1, st.Count);
+    }
+
+    [Test]
+    public void AcceptsNonStringKeys()
+    {
+        CaseInsensitiveHashtable st = new CaseInsensitiveHashtable();
+
+        object key = new object();
+        st.Add(key, "value");
+        Assert.AreEqual(1, st.Count);
+        Assert.AreEqual("value", st[key]);
+        Assert.IsNull(st[new object()]);
+    }
+
+    [Test]
+    public void IgnoresCase()
+    {
+        CaseInsensitiveHashtable st = new CaseInsensitiveHashtable();
+        st.Add("key", "value");
+        Assert.AreEqual("value", st["KEY"]);
+        st["KeY"] = "value2";
+        Assert.AreEqual(1, st.Count);
+        Assert.AreEqual("value2", st["key"]);
+
+        try
+        {
+            st.Add("KEY", "value2");
+            Assert.Fail();
+        }
+        catch (ArgumentException)
+        {
         }
 
-        [Test]
-        public void IgnoresCase()
+        Hashtable ht = new Hashtable();
+        ht.Add("key", "value");
+        ht.Add("KEY", "value");
+        try
         {
-            CaseInsensitiveHashtable st = new CaseInsensitiveHashtable();
-            st.Add("key", "value");
-            Assert.AreEqual("value", st["KEY"]);
-            st["KeY"] = "value2";
-            Assert.AreEqual(1, st.Count);
-            Assert.AreEqual("value2", st["key"]);
+            st = new CaseInsensitiveHashtable(ht, CultureInfo.InvariantCulture);
+            Assert.Fail();
+        }
+        catch (ArgumentException)
+        {
+        }
+    }
 
-            try
+    [Test]
+    public void InitializeFromOtherCopiesValues()
+    {
+        Hashtable ht = new Hashtable();
+        ht["key"] = "value";
+        ht["key2"] = "value2";
+
+        CaseInsensitiveHashtable st = new CaseInsensitiveHashtable(ht, CultureInfo.InvariantCulture);
+        Assert.AreEqual(2, st.Count);
+        ht.Remove("key");
+        Assert.AreEqual(1, ht.Count);
+        Assert.AreEqual(2, st.Count);
+    }
+
+    /// <summary>
+    /// On my NB gives
+    /// Duration: 00:00:11.0937500
+    /// Duration: 00:00:05.3593750
+    /// </summary>
+    [Test, Explicit]
+    public void ComparePerformance()
+    {
+        const int runs = 30000000;
+        StopWatch watch = new StopWatch();
+
+        Hashtable ht = CollectionsUtil.CreateCaseInsensitiveHashtable();
+        for (int i = 0; i < 1000000; i++) ht.Add(Guid.NewGuid().ToString(), "val"); // gen. higher number of elements results in OOM exception????
+        CaseInsensitiveHashtable ciht = new CaseInsensitiveHashtable(ht, CultureInfo.InvariantCulture);
+
+        using (watch.Start("Duration: {0}"))
+        {
+            for (int i = 0; i < runs; i++)
             {
-                st.Add("KEY", "value2");
-                Assert.Fail();
+                object v = ht["somekey"];
             }
-            catch (ArgumentException)
-            { }
-
-            Hashtable ht = new Hashtable();
-            ht.Add("key", "value");
-            ht.Add("KEY", "value");
-            try
-            {
-                st = new CaseInsensitiveHashtable(ht, CultureInfo.InvariantCulture);
-                Assert.Fail();
-            }
-            catch (ArgumentException)
-            { }
         }
 
-        [Test]
-        public void InitializeFromOtherCopiesValues()
+        using (watch.Start("Duration: {0}"))
         {
-            Hashtable ht = new Hashtable();
-            ht["key"] = "value";
-            ht["key2"] = "value2";
-
-            CaseInsensitiveHashtable st = new CaseInsensitiveHashtable(ht, CultureInfo.InvariantCulture);
-            Assert.AreEqual(2, st.Count);
-            ht.Remove("key");
-            Assert.AreEqual(1, ht.Count);
-            Assert.AreEqual(2, st.Count);
-        }
-
-        /// <summary>
-        /// On my NB gives
-        /// Duration: 00:00:11.0937500
-        /// Duration: 00:00:05.3593750
-        /// </summary>
-        [Test, Explicit]
-        public void ComparePerformance()
-        {
-            const int runs = 30000000;
-            StopWatch watch = new StopWatch();
-
-            Hashtable ht = CollectionsUtil.CreateCaseInsensitiveHashtable();
-            for (int i = 0; i < 1000000; i++) ht.Add(Guid.NewGuid().ToString(), "val"); // gen. higher number of elements results in OOM exception????
-            CaseInsensitiveHashtable ciht = new CaseInsensitiveHashtable(ht, CultureInfo.InvariantCulture);
-
-            using (watch.Start("Duration: {0}"))
+            for (int i = 0; i < runs; i++)
             {
-                for (int i = 0; i < runs; i++)
-                {
-                    object v = ht["somekey"];
-                }
-            }
-
-            using (watch.Start("Duration: {0}"))
-            {
-                for (int i = 0; i < runs; i++)
-                {
-                    object v = ciht["somekey"];
-                }
+                object v = ciht["somekey"];
             }
         }
     }

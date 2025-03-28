@@ -1,13 +1,12 @@
-﻿namespace Spring.Objects
-{
-    public class ClassWithProtectedCtor : IOther
-    {
-        protected ClassWithProtectedCtor()
-        {
-        }
+﻿namespace Spring.Objects;
 
-        public void Absquatulate()
-        {                
-        }
+public class ClassWithProtectedCtor : IOther
+{
+    protected ClassWithProtectedCtor()
+    {
+    }
+
+    public void Absquatulate()
+    {
     }
 }

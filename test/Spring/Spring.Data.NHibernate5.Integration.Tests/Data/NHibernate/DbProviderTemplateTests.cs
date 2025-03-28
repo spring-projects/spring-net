@@ -54,7 +54,7 @@ namespace Spring.Data.NHibernate
         [Ignore("Trouble running on Appveyor")]
         public void UserCredentialsDbProvider()
         {
-            ITestObjectDao dao = (ITestObjectDao)ctx["testObjectDaoTransProxy"];
+            ITestObjectDao dao = (ITestObjectDao) ctx["testObjectDaoTransProxy"];
 
             userCredentialsDbProvider.SetCredentialsForCurrentThread("User ID=springqa", "Password=springqa");
             TestObject toGeorge = new TestObject();
@@ -69,9 +69,5 @@ namespace Spring.Data.NHibernate
             toMary.Age = 34;
             dao.Create(toMary);
         }
-
-
-
-
     }
 }

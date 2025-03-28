@@ -18,26 +18,25 @@
 
 #endregion
 
-namespace Spring.Objects.Factory.Xml
+namespace Spring.Objects.Factory.Xml;
+
+/// <summary>
+/// Default implementation of the <see cref="INamespaceParserResolver"/> interface.
+/// Resolves namespace URIs to implementation types based on mappings.
+/// </summary>
+/// <author>Erich Eichinger</author>
+/// <seealso cref="INamespaceParser"/>
+/// <seealso cref="DefaultObjectDefinitionDocumentReader"/>
+internal class DefaultNamespaceHandlerResolver : INamespaceParserResolver
 {
     /// <summary>
-    /// Default implementation of the <see cref="INamespaceParserResolver"/> interface.
-    /// Resolves namespace URIs to implementation types based on mappings.
+    /// Resolve the namespace URI and return the corresponding <see cref="INamespaceParser"/>
+    /// implementation.
     /// </summary>
-    /// <author>Erich Eichinger</author>
-    /// <seealso cref="INamespaceParser"/>
-    /// <seealso cref="DefaultObjectDefinitionDocumentReader"/>
-    internal class DefaultNamespaceHandlerResolver : INamespaceParserResolver
+    /// <param name="namespaceUri">the namespace URI to get the matching parser for.</param>
+    /// <returns>the matching parser or <c>null</c></returns>
+    public INamespaceParser Resolve(string namespaceUri)
     {
-        /// <summary>
-        /// Resolve the namespace URI and return the corresponding <see cref="INamespaceParser"/>
-        /// implementation.
-        /// </summary>
-        /// <param name="namespaceUri">the namespace URI to get the matching parser for.</param>
-        /// <returns>the matching parser or <c>null</c></returns>
-        public INamespaceParser Resolve(string namespaceUri)
-        {
-            return NamespaceParserRegistry.GetParser(namespaceUri);
-        }
+        return NamespaceParserRegistry.GetParser(namespaceUri);
     }
 }

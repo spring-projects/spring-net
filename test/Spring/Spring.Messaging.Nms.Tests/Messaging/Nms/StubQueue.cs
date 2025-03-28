@@ -20,49 +20,47 @@
 
 using Apache.NMS;
 
-namespace Spring.Messaging.Nms
+namespace Spring.Messaging.Nms;
+
+/// <summary>
+///
+/// </summary>
+/// <remarks>
+///
+/// </remarks>
+/// <author>Mark Pollack</author>
+public class StubQueue : IQueue
 {
-    /// <summary>
-    ///
-    /// </summary>
-    /// <remarks>
-    ///
-    /// </remarks>
-    /// <author>Mark Pollack</author>
-    public class StubQueue : IQueue
+    public static string DEFAULT_QUEUE_NAME = "banjo";
+
+    private string queueName = DEFAULT_QUEUE_NAME;
+
+    public string QueueName
     {
-        public static string DEFAULT_QUEUE_NAME = "banjo";
+        get { return queueName; }
+    }
 
+    public DestinationType DestinationType
+    {
+        get { return DestinationType.Queue; }
+    }
 
-	    private string queueName = DEFAULT_QUEUE_NAME;
+    public bool IsTopic
+    {
+        get { return false; }
+    }
 
-        public string QueueName
-        {
-            get { return queueName; }
-        }
+    public bool IsQueue
+    {
+        get { return true; }
+    }
 
-        public DestinationType DestinationType
-        {
-            get { return DestinationType.Queue; }
-        }
+    public bool IsTemporary
+    {
+        get { return false; }
+    }
 
-        public bool IsTopic
-        {
-            get { return false; }
-        }
-
-        public bool IsQueue
-        {
-            get { return true; }
-        }
-
-        public bool IsTemporary
-        {
-            get { return false; }
-        }
-
-        public void Dispose()
-        {
-        }
+    public void Dispose()
+    {
     }
 }

@@ -20,215 +20,216 @@
 
 using Spring.Messaging.Ems.Common;
 
-namespace Spring.Messaging.Ems.Connections
+namespace Spring.Messaging.Ems.Connections;
+
+/// <summary>
+/// MessageProducer decorator that adapts calls to a shared MessageProducer
+/// instance underneath, managing QoS settings locally within the decorator.
+/// </summary>
+/// <author>Juergen Hoeller</author>
+/// <author>Mark Pollack (.NET)</author>
+public class CachedMessageProducer : IMessageProducer
 {
+    private readonly IMessageProducer target;
+
+    private object originalDisableMessageID;
+
+    private object originalDisableMessageTimestamp;
+
+    private MessageDeliveryMode deliveryMode;
+
+    private int priority;
+
+    private long timeToLive;
+
     /// <summary>
-    /// MessageProducer decorator that adapts calls to a shared MessageProducer
-    /// instance underneath, managing QoS settings locally within the decorator.
+    /// Initializes a new instance of the <see cref="CachedMessageProducer"/> class.
     /// </summary>
-    /// <author>Juergen Hoeller</author>
-    /// <author>Mark Pollack (.NET)</author>
-    public class CachedMessageProducer : IMessageProducer
+    /// <param name="target">The target.</param>
+    public CachedMessageProducer(IMessageProducer target)
     {
-        private readonly IMessageProducer target;
+        this.target = target;
+        deliveryMode = target.MsgDeliveryMode;
+        priority = target.Priority;
+        timeToLive = target.TimeToLive;
+    }
 
-        private object originalDisableMessageID;
-
-        private object originalDisableMessageTimestamp;
-
-        private MessageDeliveryMode deliveryMode;
-
-        private int priority;
-
-        private long timeToLive;
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CachedMessageProducer"/> class.
-        /// </summary>
-        /// <param name="target">The target.</param>
-        public CachedMessageProducer(IMessageProducer target)
+    /// <summary>
+    /// Gets or sets a value indicating whether disable setting of the message ID property.
+    /// </summary>
+    /// <value><c>true</c> if disable message ID setting; otherwise, <c>false</c>.</value>
+    public bool DisableMessageID
+    {
+        get
         {
-            this.target = target;
-            deliveryMode = target.MsgDeliveryMode;
-            priority = target.Priority;
-            timeToLive = target.TimeToLive;
+            return target.DisableMessageID;
         }
-
-
-        /// <summary>
-        /// Gets or sets a value indicating whether disable setting of the message ID property.
-        /// </summary>
-        /// <value><c>true</c> if disable message ID setting; otherwise, <c>false</c>.</value>
-        public bool DisableMessageID
+        set
         {
-            get
+            if (originalDisableMessageID == null)
             {
-                return target.DisableMessageID;
+                originalDisableMessageID = target.DisableMessageID;
             }
-            set
+
+            target.DisableMessageID = value;
+        }
+    }
+
+    /// <summary>
+    /// Gets or sets a value indicating whether disable setting the message timestamp property.
+    /// </summary>
+    /// <value>
+    /// 	<c>true</c> if disable message timestamp; otherwise, <c>false</c>.
+    /// </value>
+    public bool DisableMessageTimestamp
+    {
+        get
+        {
+            return target.DisableMessageTimestamp;
+        }
+        set
+        {
+            if (originalDisableMessageTimestamp == null)
             {
-                if (originalDisableMessageID == null)
-                {
-                    originalDisableMessageID = target.DisableMessageID;
-                }
-                target.DisableMessageID = value;
+                originalDisableMessageTimestamp = target.DisableMessageTimestamp;
             }
+
+            target.DisableMessageTimestamp = value;
+        }
+    }
+
+    /// <summary>
+    /// Gets or sets the producer's default delivery mode.
+    /// </summary>
+    /// <value>The message delivery mode for this message producer</value>
+    public int DeliveryMode
+    {
+        get { return (int) this.deliveryMode; }
+        set { this.deliveryMode = (MessageDeliveryMode) value; }
+    }
+
+    /// <summary>
+    /// Gets or sets the MSG delivery mode.
+    /// </summary>
+    /// <value>The MSG delivery mode.</value>
+    public MessageDeliveryMode MsgDeliveryMode
+    {
+        get { return this.deliveryMode; }
+        set { this.deliveryMode = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets the priority of messages sent with this producer.
+    /// </summary>
+    /// <value>The priority.</value>
+    public int Priority
+    {
+        get { return priority; }
+        set { priority = value; }
+    }
+
+    /// <summary>
+    /// Gets or sets the the default length of time in milliseconds from its dispatch time
+    /// that a produced message should be retained by the message system.
+    /// </summary>
+    /// <remarks>Time to live is set to zero by default.</remarks>
+    /// <value>The message time to live in milliseconds; zero is unlimited</value>
+    public long TimeToLive
+    {
+        get { return timeToLive; }
+        set { timeToLive = value; }
+    }
+
+    public Destination Destination
+    {
+        get { return target.Destination; }
+    }
+
+    /// <summary>
+    /// Gets the target MessageProducer, the producer we are 'wrapping'
+    /// </summary>
+    /// <value>The target MessageProducer.</value>
+    public IMessageProducer Target
+    {
+        get { return target; }
+    }
+
+    /// <summary>
+    /// Sends the specified message.
+    /// </summary>
+    /// <param name="message">The message.</param>
+    public void Send(Message message)
+    {
+        target.Send(message, this.deliveryMode, this.priority, this.timeToLive);
+    }
+
+    /// <summary>
+    /// Sends the specified message.
+    /// </summary>
+    /// <param name="message">The message.</param>
+    /// <param name="deliveryMode">The delivery mode.</param>
+    /// <param name="priority">The priority.</param>
+    /// <param name="timeToLive">The time to live.</param>
+    public void Send(Message message, int deliveryMode, int priority, long timeToLive)
+    {
+        target.Send(message, deliveryMode, priority, timeToLive);
+    }
+
+    /// <summary>
+    /// Sends a message to the specified destination.
+    /// </summary>
+    /// <param name="destination">The destination.</param>
+    /// <param name="message">The message.</param>
+    public void Send(Destination destination, Message message)
+    {
+        target.Send(destination, message, this.deliveryMode, this.priority, this.timeToLive);
+    }
+
+    public void Send(Message message, MessageDeliveryMode deliveryMode, int priority, long timeToLive)
+    {
+        target.Send(message, deliveryMode, priority, timeToLive);
+    }
+
+    public void Send(Destination dest, Message message, int deliveryMode, int priority, long timeToLive)
+    {
+        target.Send(dest, message, deliveryMode, priority, timeToLive);
+    }
+
+    public void Send(Destination dest, Message message, MessageDeliveryMode deliveryMode, int priority, long timeToLive)
+    {
+        target.Send(dest, message, deliveryMode, priority, timeToLive);
+    }
+
+    /// <summary>
+    /// Reset properties.
+    /// </summary>
+    public void Close()
+    {
+        // It's a cached MessageProducer... reset properties only.
+        if (originalDisableMessageID != null)
+        {
+            target.DisableMessageID = (bool) originalDisableMessageID;
+            originalDisableMessageID = null;
         }
 
-        /// <summary>
-        /// Gets or sets a value indicating whether disable setting the message timestamp property.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if disable message timestamp; otherwise, <c>false</c>.
-        /// </value>
-        public bool DisableMessageTimestamp
+        if (originalDisableMessageTimestamp != null)
         {
-            get
-            {
-                return target.DisableMessageTimestamp;
-            }
-            set
-            {
-                if (originalDisableMessageTimestamp == null)
-                {
-                    originalDisableMessageTimestamp = target.DisableMessageTimestamp;
-                }
-                target.DisableMessageTimestamp = value;
-            }
+            target.DisableMessageTimestamp = (bool) originalDisableMessageTimestamp;
+            originalDisableMessageTimestamp = null;
         }
+    }
 
-        /// <summary>
-        /// Gets or sets the producer's default delivery mode.
-        /// </summary>
-        /// <value>The message delivery mode for this message producer</value>
-        public int DeliveryMode
-        {
-            get { return (int)this.deliveryMode; }
-            set { this.deliveryMode = (MessageDeliveryMode) value; }
-        }
+    public MessageProducer NativeMessageProducer
+    {
+        get { return target.NativeMessageProducer; }
+    }
 
-        /// <summary>
-        /// Gets or sets the MSG delivery mode.
-        /// </summary>
-        /// <value>The MSG delivery mode.</value>
-        public MessageDeliveryMode MsgDeliveryMode
-        {
-            get { return this.deliveryMode; }
-            set { this.deliveryMode = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets the priority of messages sent with this producer.
-        /// </summary>
-        /// <value>The priority.</value>
-        public int Priority
-        {
-            get { return priority; }
-            set { priority = value;}
-        }
-
-        /// <summary>
-        /// Gets or sets the the default length of time in milliseconds from its dispatch time
-        /// that a produced message should be retained by the message system.
-        /// </summary>
-        /// <remarks>Time to live is set to zero by default.</remarks>
-        /// <value>The message time to live in milliseconds; zero is unlimited</value>
-        public long TimeToLive
-        {
-            get { return timeToLive; }
-            set { timeToLive = value; }
-        }
-
-        public Destination Destination
-        {
-            get { return target.Destination; }
-        }
-
-        /// <summary>
-        /// Gets the target MessageProducer, the producer we are 'wrapping'
-        /// </summary>
-        /// <value>The target MessageProducer.</value>
-        public IMessageProducer Target
-        {
-            get { return target; }
-        }
-
-        /// <summary>
-        /// Sends the specified message.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        public void Send(Message message)
-        {
-            target.Send(message, this.deliveryMode, this.priority, this.timeToLive);
-        }
-
-        /// <summary>
-        /// Sends the specified message.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        /// <param name="deliveryMode">The delivery mode.</param>
-        /// <param name="priority">The priority.</param>
-        /// <param name="timeToLive">The time to live.</param>
-        public void Send(Message message, int deliveryMode, int priority, long timeToLive)
-        {
-            target.Send(message, deliveryMode, priority, timeToLive);
-        }
-
-        /// <summary>
-        /// Sends a message to the specified destination.
-        /// </summary>
-        /// <param name="destination">The destination.</param>
-        /// <param name="message">The message.</param>
-        public void Send(Destination destination, Message message)
-        {
-            target.Send(destination, message, this.deliveryMode, this.priority, this.timeToLive);
-        }
-
-        public void Send(Message message, MessageDeliveryMode deliveryMode, int priority, long timeToLive)
-        {
-            target.Send(message, deliveryMode, priority, timeToLive);
-        }
-
-        public void Send(Destination dest, Message message, int deliveryMode, int priority, long timeToLive)
-        {
-            target.Send(dest, message, deliveryMode, priority, timeToLive);
-        }
-
-        public void Send(Destination dest, Message message, MessageDeliveryMode deliveryMode, int priority, long timeToLive)
-        {
-            target.Send(dest, message, deliveryMode, priority, timeToLive);
-        }
-
-        /// <summary>
-        /// Reset properties.
-        /// </summary>
-        public void Close()
-        {
-            // It's a cached MessageProducer... reset properties only.
-            if (originalDisableMessageID != null)
-            {
-                target.DisableMessageID = (bool) originalDisableMessageID;
-                originalDisableMessageID = null;
-            }
-            if (originalDisableMessageTimestamp != null)
-            {
-                target.DisableMessageTimestamp = (bool) originalDisableMessageTimestamp;
-                originalDisableMessageTimestamp = null;
-            }
-        }
-
-        public MessageProducer NativeMessageProducer
-        {
-            get { return target.NativeMessageProducer; }
-        }
-
-        /// <summary>
-        /// Returns string indicated this is a wrapped MessageProducer
-        /// </summary>
-        /// <returns></returns>
-        public override string ToString()
-        {
-            return "Cached EMS MessageProducer: " + this.target;
-        }
+    /// <summary>
+    /// Returns string indicated this is a wrapped MessageProducer
+    /// </summary>
+    /// <returns></returns>
+    public override string ToString()
+    {
+        return "Cached EMS MessageProducer: " + this.target;
     }
 }

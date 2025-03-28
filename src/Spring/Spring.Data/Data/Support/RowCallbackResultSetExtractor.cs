@@ -21,67 +21,66 @@
 using System.Data;
 using Spring.Util;
 
-namespace Spring.Data.Support
+namespace Spring.Data.Support;
+
+/// <summary>
+/// Adapter to enable use of a IRowCallback inside a ResultSetExtractor.
+/// </summary>
+/// <remarks>We don't use it for navigating since this could lead to unpredictable consequences.</remarks>
+/// <author>Mark Pollack</author>
+public class RowCallbackResultSetExtractor : IResultSetExtractor
 {
+    private IRowCallback rowCallback;
+
+    private RowCallbackDelegate rowCallbackDelegate;
+
     /// <summary>
-    /// Adapter to enable use of a IRowCallback inside a ResultSetExtractor.
+    /// Initializes a new instance of the <see cref="RowCallbackResultSetExtractor"/> class.
     /// </summary>
-    /// <remarks>We don't use it for navigating since this could lead to unpredictable consequences.</remarks>
-    /// <author>Mark Pollack</author>
-    public class RowCallbackResultSetExtractor : IResultSetExtractor
+    /// <param name="rowCallback">The row callback.</param>
+    public RowCallbackResultSetExtractor(IRowCallback rowCallback)
     {
-        private IRowCallback rowCallback;
+        AssertUtils.ArgumentNotNull(rowCallback, "rowCallback");
+        this.rowCallback = rowCallback;
+    }
 
-        private RowCallbackDelegate rowCallbackDelegate;
+    /// <summary>
+    /// Initializes a new instance of the <see cref="RowCallbackResultSetExtractor"/> class.
+    /// </summary>
+    /// <param name="rowCallbackDelegate">The row callback delegate.</param>
+    public RowCallbackResultSetExtractor(RowCallbackDelegate rowCallbackDelegate)
+    {
+        AssertUtils.ArgumentNotNull(rowCallbackDelegate, "rowCallbackDelegate");
+        this.rowCallbackDelegate = rowCallbackDelegate;
+    }
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RowCallbackResultSetExtractor"/> class.
-        /// </summary>
-        /// <param name="rowCallback">The row callback.</param>
-        public RowCallbackResultSetExtractor(IRowCallback rowCallback)
+    /// <summary>
+    /// All rows of the data reader are passed to the IRowCallback
+    /// associated with this class.
+    /// </summary>
+    /// <param name="reader">The IDataReader to extract data from.
+    /// Implementations should not close this: it will be closed
+    /// by the AdoTemplate.</param>
+    /// <returns>
+    /// Null is returned since IRowCallback manages its own state.
+    /// </returns>
+    public object ExtractData(IDataReader reader)
+    {
+        if (rowCallback != null)
         {
-            AssertUtils.ArgumentNotNull(rowCallback, "rowCallback");
-            this.rowCallback = rowCallback;
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RowCallbackResultSetExtractor"/> class.
-        /// </summary>
-        /// <param name="rowCallbackDelegate">The row callback delegate.</param>
-        public RowCallbackResultSetExtractor(RowCallbackDelegate rowCallbackDelegate)
-        {
-            AssertUtils.ArgumentNotNull(rowCallbackDelegate, "rowCallbackDelegate");
-            this.rowCallbackDelegate = rowCallbackDelegate;
-        }
-
-        /// <summary>
-        /// All rows of the data reader are passed to the IRowCallback
-        /// associated with this class.
-        /// </summary>
-        /// <param name="reader">The IDataReader to extract data from.
-        /// Implementations should not close this: it will be closed
-        /// by the AdoTemplate.</param>
-        /// <returns>
-        /// Null is returned since IRowCallback manages its own state.
-        /// </returns>
-        public object ExtractData(IDataReader reader)
-        {
-            if (rowCallback != null)
+            while (reader.Read())
             {
-                while (reader.Read())
-                {
-                    rowCallback.ProcessRow(reader);
-                }
+                rowCallback.ProcessRow(reader);
             }
-            else
-            {
-                while (reader.Read())
-                {
-                    rowCallbackDelegate(reader);
-                }
-            }
-
-            return null;
         }
+        else
+        {
+            while (reader.Read())
+            {
+                rowCallbackDelegate(reader);
+            }
+        }
+
+        return null;
     }
 }

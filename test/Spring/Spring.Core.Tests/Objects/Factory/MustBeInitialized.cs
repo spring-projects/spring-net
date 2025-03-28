@@ -22,45 +22,49 @@
 
 #endregion
 
-namespace Spring.Objects.Factory {
+namespace Spring.Objects.Factory;
 
-	/// <summary>
-	/// Simple test of IObjectFactory initialization.
+/// <summary>
+/// Simple test of IObjectFactory initialization.
+/// </summary>
+/// <author>Rod Johnson</author>
+/// <author>Rick Evans (.NET)</author>
+public class MustBeInitialized : IInitializingObject
+{
+    #region Constructor (s) / Destructor
+
+    /// <summary>
+    /// Creates a new instance of the <see cref="Spring.Objects.Factory.MustBeInitialized"/> class.
     /// </summary>
-    /// <author>Rod Johnson</author>
-    /// <author>Rick Evans (.NET)</author>
-    public class MustBeInitialized : IInitializingObject 
+    public MustBeInitialized() { }
+
+    #endregion
+
+    #region Methods
+
+    public void AfterPropertiesSet()
     {
+        inited = true;
+    }
 
-        #region Constructor (s) / Destructor
-        /// <summary>
-        /// Creates a new instance of the <see cref="Spring.Objects.Factory.MustBeInitialized"/> class.
-        /// </summary>
-        public MustBeInitialized() {}
-        #endregion
-
-        #region Methods
-        public void AfterPropertiesSet () 
+    /// <summary>
+    /// Dummy business method that will fail unless the factory
+    /// managed the object's lifecycle correctly.
+    /// </summary>
+    public virtual void BusinessMethod()
+    {
+        if (!inited)
         {
-            inited = true;
+            throw new SystemException(
+                "Factory didn't call AfterPropertiesSet () on MustBeInitialized object");
         }
+    }
 
-        /// <summary>
-        /// Dummy business method that will fail unless the factory
-        /// managed the object's lifecycle correctly.
-        /// </summary>
-        public virtual void BusinessMethod ()
-        {
-            if (!inited) 
-            {
-                throw new SystemException (
-                    "Factory didn't call AfterPropertiesSet () on MustBeInitialized object");
-            }
-        }
-        #endregion
+    #endregion
 
-        #region Fields
-        private bool inited;
-        #endregion
-	}
+    #region Fields
+
+    private bool inited;
+
+    #endregion
 }

@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <objects
-  xmlns="http://www.springframework.net"
-  xmlns:r="http://www.springframework.net/remoting">
+        xmlns="http://www.springframework.net"
+        xmlns:r="http://www.springframework.net/remoting">
 
     <!-- server -->
-<!--
-    <object id="singletonCounter" type="Spring.Remoting.SimpleCounter, Spring.Services.Tests">
-        <constructor-arg index="0" value="1" />
-    </object>
+    <!--
+        <object id="singletonCounter" type="Spring.Remoting.SimpleCounter, Spring.Services.Tests">
+            <constructor-arg index="0" value="1" />
+        </object>
 
-    <r:saoExporter targetName="singletonCounter" serviceName="RemotedSaoSingletonCounter"/>
--->
+        <r:saoExporter targetName="singletonCounter" serviceName="RemotedSaoSingletonCounter"/>
+    -->
     <!--
 		Old fashion way without remoting config parser...
   <object type="Spring.Remoting.SaoExporter, Spring.Services">
@@ -24,9 +24,11 @@
 
     <r:saoFactory id="remoteSaoSingletonCounter"
                   serviceInterface="Spring.Remoting.ISimpleCounter, Spring.Services.Tests"
-                  serviceUrl="tcp://localhost:8005/RemotedSaoSingletonCounter"/>
+                  serviceUrl="tcp://localhost:8005/RemotedSaoSingletonCounter" />
 
-    <object id="counterClient" type="Spring.Remoting.SaoFactoryObjectTests+SPRNET967_SimpleCounterClient, Spring.Services.Tests" autowire="byType" />
+    <object id="counterClient"
+            type="Spring.Remoting.SaoFactoryObjectTests+SPRNET967_SimpleCounterClient, Spring.Services.Tests"
+            autowire="byType" />
 
     <!--
 		Old fashion way without remoting config parser...

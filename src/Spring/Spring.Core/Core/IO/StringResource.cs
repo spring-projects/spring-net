@@ -21,109 +21,107 @@
 #region Imports
 
 using System.Text;
-
 using Spring.Util;
 
 #endregion
 
-namespace Spring.Core.IO
+namespace Spring.Core.IO;
+
+/// <summary>
+/// A <see cref="IResource"/> adapter implementation encapsulating a simple string.
+/// </summary>
+/// <author>Erich Eichinger</author>
+public class StringResource : AbstractResource
 {
+    #region Fields
+
+    private readonly string _description;
+    private readonly string _content;
+    private readonly Encoding _encoding;
+
+    #endregion
+
     /// <summary>
-    /// A <see cref="IResource"/> adapter implementation encapsulating a simple string.
+    /// Creates a new instance of the <see cref="StringResource"/> class.
     /// </summary>
-    /// <author>Erich Eichinger</author>
-    public class StringResource : AbstractResource
+    public StringResource(string content)
+        : this(content, Encoding.Default, null)
     {
-        #region Fields
+    }
 
-        private readonly string _description;
-        private readonly string _content;
-        private readonly Encoding _encoding;
+    /// <summary>
+    /// Creates a new instance of the <see cref="StringResource"/> class.
+    /// </summary>
+    public StringResource(string content, Encoding encoding)
+        : this(content, encoding, null)
+    {
+    }
 
-        #endregion
+    /// <summary>
+    /// Creates a new instance of the <see cref="StringResource"/> class.
+    /// </summary>
+    public StringResource(string content, Encoding encoding, string description)
+    {
+        AssertUtils.ArgumentNotNull(encoding, "encoding");
 
-        /// <summary>
-        /// Creates a new instance of the <see cref="StringResource"/> class.
-        /// </summary>
-        public StringResource(string content)
-            : this(content, Encoding.Default, null)
-        {            
-        }
+        _content = content == null ? string.Empty : content;
+        _encoding = encoding;
+        _description = description == null ? string.Empty : description;
+    }
 
-        /// <summary>
-        /// Creates a new instance of the <see cref="StringResource"/> class.
-        /// </summary>
-        public StringResource(string content, Encoding encoding)
-            : this(content, encoding, null)
+    /// <summary>
+    /// Get the <see cref="System.IO.Stream"/> to
+    /// for accessing this resource.
+    /// </summary>
+    public override Stream InputStream
+    {
+        get
         {
+            return new MemoryStream(_encoding.GetBytes(_content), false);
         }
+    }
 
-        /// <summary>
-        /// Creates a new instance of the <see cref="StringResource"/> class.
-        /// </summary>
-        public StringResource(string content, Encoding encoding, string description)
-        {
-            AssertUtils.ArgumentNotNull(encoding, "encoding");
+    /// <summary>
+    /// Returns a description for this resource.
+    /// </summary>
+    /// <value>
+    /// A description for this resource.
+    /// </value>
+    /// <seealso cref="Spring.Core.IO.IResource.Description"/>
+    public override string Description
+    {
+        get { return _description; }
+    }
 
-            _content = content==null ? string.Empty : content;
-            _encoding = encoding;
-            _description = description == null ? string.Empty : description;
-        }
+    /// <summary>
+    /// This implementation always returns true
+    /// </summary>
+    public override bool IsOpen
+    {
+        get { return true; }
+    }
 
-        /// <summary>
-        /// Get the <see cref="System.IO.Stream"/> to 
-        /// for accessing this resource.
-        /// </summary>
-        public override Stream InputStream
-        {
-            get
-            {
-                return new MemoryStream(_encoding.GetBytes(_content), false);
-            }
-        }
+    /// <summary>
+    /// This implemementation always returns true
+    /// </summary>
+    public override bool Exists
+    {
+        get { return true; }
+    }
 
-        /// <summary>
-        /// Returns a description for this resource.
-        /// </summary>
-        /// <value>
-        /// A description for this resource.
-        /// </value>
-        /// <seealso cref="Spring.Core.IO.IResource.Description"/>
-        public override string Description
-        {
-            get { return _description; }
-        }
+    /// <summary>
+    /// Gets the encoding used to create a byte stream of the <see cref="Content"/> string.
+    /// </summary>
+    public Encoding Encoding
+    {
+        get { return _encoding; }
+    }
 
-        /// <summary>
-        /// This implementation always returns true
-        /// </summary>
-        public override bool IsOpen
-        {
-            get { return true; }
-        }
-
-        /// <summary>
-        /// This implemementation always returns true
-        /// </summary>
-        public override bool Exists
-        {
-            get { return true; }
-        }
-
-        /// <summary>
-        /// Gets the encoding used to create a byte stream of the <see cref="Content"/> string.
-        /// </summary>
-        public Encoding Encoding
-        {
-            get { return _encoding; }
-        }
-
-        /// <summary>
-        /// Gets the content encapsulated by this <see cref="StringResource"/>.
-        /// </summary>
-        public string Content
-        {
-            get { return _content; }
-        }
+    /// <summary>
+    /// Gets the content encapsulated by this <see cref="StringResource"/>.
+    /// </summary>
+    public string Content
+    {
+        get { return _content; }
     }
 }

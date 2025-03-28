@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,28 +24,27 @@ using System.Web.UI;
 
 #endregion
 
-namespace Spring.Web.UI
+namespace Spring.Web.UI;
+
+/// <summary>
+/// Abstracts storage strategy for storing model instances between requests. 
+/// All storage providers participating in UI model management must implement this interface.
+/// </summary>
+/// <seealso cref="SessionModelPersistenceMedium"/>
+/// <author>Erich Eichinger</author>
+public interface IModelPersistenceMedium
 {
     /// <summary>
-    /// Abstracts storage strategy for storing model instances between requests. 
-    /// All storage providers participating in UI model management must implement this interface.
+    /// Load the model for the specified control context.
     /// </summary>
-    /// <seealso cref="SessionModelPersistenceMedium"/>
-    /// <author>Erich Eichinger</author>
-    public interface IModelPersistenceMedium
-    {
-        /// <summary>
-        /// Load the model for the specified control context.
-        /// </summary>
-        /// <param name="context">the control context.</param>
-        /// <returns>the model for the specified control context.</returns>
-        object LoadFromMedium( Control context );
+    /// <param name="context">the control context.</param>
+    /// <returns>the model for the specified control context.</returns>
+    object LoadFromMedium(Control context);
 
-        /// <summary>
-        /// Save the specified model object.
-        /// </summary>
-        /// <param name="context">the control context.</param>
-        /// <param name="modelToSave">the model to save.</param>
-        void SaveToMedium( Control context, object modelToSave );
-    }
+    /// <summary>
+    /// Save the specified model object.
+    /// </summary>
+    /// <param name="context">the control context.</param>
+    /// <param name="modelToSave">the model to save.</param>
+    void SaveToMedium(Control context, object modelToSave);
 }

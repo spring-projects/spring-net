@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -25,39 +25,38 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Expressions
+namespace Spring.Expressions;
+
+/// <summary>
+///
+/// </summary>
+/// <author>Erich Eichinger</author>
+[TestFixture]
+public class SelectionNodeTests
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    /// <author>Erich Eichinger</author>
-    [TestFixture]
-    public class SelectionNodeTests
+    [Test]
+    public void RespectsLimits()
     {
-        [Test]
-        public void RespectsLimits()
-        {
-            char[] input = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n' };
-            char[] result;
+        char[] input = { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n' };
+        char[] result;
 
-            result = Evaluate("?{ true }", input);
-            Assert.AreEqual(input, result);
-            result = Evaluate("?{ true, 5, 10 }", input);
-            Assert.AreEqual( new char[] { 'f', 'g', 'h', 'i', 'j', 'k' }, result );
-            result = Evaluate("?{ true, 5 }", input);
-            Assert.AreEqual(new char[] { 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n' }, result);
-            result = Evaluate("?{ true, 0, 10 }", input);
-            Assert.AreEqual(new char[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k' }, result);
+        result = Evaluate("?{ true }", input);
+        Assert.AreEqual(input, result);
+        result = Evaluate("?{ true, 5, 10 }", input);
+        Assert.AreEqual(new char[] { 'f', 'g', 'h', 'i', 'j', 'k' }, result);
+        result = Evaluate("?{ true, 5 }", input);
+        Assert.AreEqual(new char[] { 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n' }, result);
+        result = Evaluate("?{ true, 0, 10 }", input);
+        Assert.AreEqual(new char[] { 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k' }, result);
 
-            result = Evaluate("?{ T(System.Convert).ToInt32(#this) % 2 == 0, 1, 3 }", input);
-            Assert.AreEqual(new char[] { 'd', 'f', 'h' }, result);
-        }
+        result = Evaluate("?{ T(System.Convert).ToInt32(#this) % 2 == 0, 1, 3 }", input);
+        Assert.AreEqual(new char[] { 'd', 'f', 'h' }, result);
+    }
 
-        private char[] Evaluate(string expression, char[] input)
-        {
-            IExpression expr = Expression.Parse(expression);
-            ICollection collection = (ICollection)expr.GetValue(input);
-            return (char[]) new ArrayList(collection).ToArray(typeof(char));
-        }
+    private char[] Evaluate(string expression, char[] input)
+    {
+        IExpression expr = Expression.Parse(expression);
+        ICollection collection = (ICollection) expr.GetValue(input);
+        return (char[]) new ArrayList(collection).ToArray(typeof(char));
     }
 }

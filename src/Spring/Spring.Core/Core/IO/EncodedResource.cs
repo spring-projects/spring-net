@@ -21,124 +21,124 @@
 using System.Text;
 using Spring.Util;
 
-namespace Spring.Core.IO
+namespace Spring.Core.IO;
+
+/// <summary>
+/// Holder that combines <see cref="IResource" /> with a specific encoding to be used for reading
+/// from the resource
+/// </summary>
+/// <author>Juergen Hoeller</author>
+/// <author>Erich Eichinger (.NET)</author>
+public class EncodedResource
 {
+    private readonly IResource resource;
+    private readonly Encoding encoding;
+    private readonly bool autoDetectEncoding;
+
     /// <summary>
-    /// Holder that combines <see cref="IResource" /> with a specific encoding to be used for reading
-    /// from the resource
+    /// Create an encoded resource, autodetecting the encoding from the resource stream.
     /// </summary>
-    /// <author>Juergen Hoeller</author>
-    /// <author>Erich Eichinger (.NET)</author>
-    public class EncodedResource
+    /// <param name="resource"></param>
+    public EncodedResource(IResource resource)
+        : this(resource, null, true)
     {
-        private readonly IResource resource;
-        private readonly Encoding encoding;
-        private readonly bool autoDetectEncoding;
+        // noop
+    }
 
-        /// <summary>
-        /// Create an encoded resource, autodetecting the encoding from the resource stream.
-        /// </summary>
-        /// <param name="resource"></param>
-        public EncodedResource(IResource resource)
-            :this(resource, null, true)
+    /// <summary>
+    /// Create an encoded resource, autodetecting the encoding from the resource stream.
+    /// </summary>
+    /// <param name="resource">the resource to read from. Must not be <c>null</c></param>
+    /// <param name="autoDetectEncoding">whether to autoDetect encoding from byte-order marks (<see cref="M:StreamReader(Stream, Encoding, bool)"/>)</param>
+    public EncodedResource(IResource resource, bool autoDetectEncoding)
+        : this(resource, null, autoDetectEncoding)
+    {
+        // noop
+    }
+
+    /// <summary>
+    /// Create an encoded resource using the specified encoding.
+    /// </summary>
+    /// <param name="resource">the resource to read from. Must not be <c>null</c></param>
+    /// <param name="encoding">the encoding to use. If <c>null</c>, encoding will be autodetected.</param>
+    /// <param name="autoDetectEncoding">whether to autoDetect encoding from byte-order marks (<see cref="M:StreamReader(Stream, Encoding, bool)"/>)</param>
+    public EncodedResource(IResource resource, Encoding encoding, bool autoDetectEncoding)
+    {
+        AssertUtils.ArgumentNotNull(resource, "resource");
+        this.resource = resource;
+        this.encoding = encoding;
+        this.autoDetectEncoding = autoDetectEncoding;
+    }
+
+    /// <summary>
+    /// Get the underlying resource
+    /// </summary>
+    public IResource Resource
+    {
+        get { return resource; }
+    }
+
+    /// <summary>
+    /// Get the encoding to use for reading, if any. May be <c>null</c>
+    /// </summary>
+    public Encoding Encoding
+    {
+        get { return encoding; }
+    }
+
+    /// <summary>
+    /// whether to autoDetect encoding from byte-order marks (<see cref="M:StreamReader(Stream, Encoding, bool)"/>)
+    /// </summary>
+    public bool AutoDetectEncoding
+    {
+        get { return autoDetectEncoding; }
+    }
+
+    /// <summary>
+    ///
+    /// </summary>
+    /// <returns></returns>
+    public TextReader OpenReader()
+    {
+        if (this.encoding != null)
         {
-            // noop
+            return new StreamReader(this.resource.InputStream, this.encoding, autoDetectEncoding);
         }
 
-        /// <summary>
-        /// Create an encoded resource, autodetecting the encoding from the resource stream.
-        /// </summary>
-        /// <param name="resource">the resource to read from. Must not be <c>null</c></param>
-        /// <param name="autoDetectEncoding">whether to autoDetect encoding from byte-order marks (<see cref="M:StreamReader(Stream, Encoding, bool)"/>)</param>
-        public EncodedResource(IResource resource, bool autoDetectEncoding)
-            :this(resource, null, autoDetectEncoding)
-        {
-            // noop
-        }
+        return new StreamReader(this.resource.InputStream, autoDetectEncoding);
+    }
 
-        /// <summary>
-        /// Create an encoded resource using the specified encoding.
-        /// </summary>
-        /// <param name="resource">the resource to read from. Must not be <c>null</c></param>
-        /// <param name="encoding">the encoding to use. If <c>null</c>, encoding will be autodetected.</param>
-        /// <param name="autoDetectEncoding">whether to autoDetect encoding from byte-order marks (<see cref="M:StreamReader(Stream, Encoding, bool)"/>)</param>
-        public EncodedResource(IResource resource, Encoding encoding, bool autoDetectEncoding)
-        {
-            AssertUtils.ArgumentNotNull(resource, "resource");
-            this.resource = resource;
-            this.encoding = encoding;
-            this.autoDetectEncoding = autoDetectEncoding;
-        }
+    /// <summary>
+    /// Determine whether <paramref name="obj"/> equals this instance.
+    /// </summary>
+    /// <returns>
+    /// <c>true</c> if obj is an <see cref="EncodedResource"/> and both
+    /// , <see cref="Resource"/> and <see cref="Encoding"/> are equal.
+    /// </returns>
+    public override bool Equals(object obj)
+    {
+        if (obj == this) return true;
+        if (!(obj is EncodedResource)) return false;
 
-        /// <summary>
-        /// Get the underlying resource
-        /// </summary>
-        public IResource Resource
-        {
-            get { return resource; }
-        }
+        EncodedResource other = (EncodedResource) obj;
+        return object.Equals(this.resource, other.resource)
+               && object.Equals(this.encoding, other.encoding);
+    }
 
-        /// <summary>
-        /// Get the encoding to use for reading, if any. May be <c>null</c>
-        /// </summary>
-        public Encoding Encoding
-        {
-            get { return encoding; }
-        }
+    /// <summary>
+    /// Calculate the unique hash code for this instance.
+    /// </summary>
+    /// <returns></returns>
+    public override int GetHashCode()
+    {
+        return this.resource.GetHashCode();
+    }
 
-        /// <summary>
-        /// whether to autoDetect encoding from byte-order marks (<see cref="M:StreamReader(Stream, Encoding, bool)"/>)
-        /// </summary>
-        public bool AutoDetectEncoding
-        {
-            get { return autoDetectEncoding; }
-        }
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <returns></returns>
-        public TextReader OpenReader()
-        {
-            if (this.encoding != null)
-            {
-                return new StreamReader(this.resource.InputStream, this.encoding, autoDetectEncoding);
-            }
-            return new StreamReader(this.resource.InputStream, autoDetectEncoding);
-        }
-
-        /// <summary>
-        /// Determine whether <paramref name="obj"/> equals this instance.
-        /// </summary>
-        /// <returns>
-        /// <c>true</c> if obj is an <see cref="EncodedResource"/> and both
-        /// , <see cref="Resource"/> and <see cref="Encoding"/> are equal.
-        /// </returns>
-        public override bool Equals(object obj)
-        {
-            if (obj == this) return true;
-            if (!(obj is EncodedResource)) return false;
-
-            EncodedResource other = (EncodedResource) obj;
-            return object.Equals(this.resource, other.resource) 
-                && object.Equals(this.encoding, other.encoding);
-        }
-
-        /// <summary>
-        /// Calculate the unique hash code for this instance.
-        /// </summary>
-        /// <returns></returns>
-        public override int GetHashCode()
-        {
-            return this.resource.GetHashCode();
-        }
-
-        /// <summary>
-        /// Get a textual description of the resource.
-        /// </summary>
-        public override string ToString()
-        {
-            return this.resource.ToString();
-        }
+    /// <summary>
+    /// Get a textual description of the resource.
+    /// </summary>
+    public override string ToString()
+    {
+        return this.resource.ToString();
     }
 }

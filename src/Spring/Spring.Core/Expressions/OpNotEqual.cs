@@ -21,64 +21,63 @@
 using System.Runtime.Serialization;
 using Spring.Util;
 
-namespace Spring.Expressions
+namespace Spring.Expressions;
+
+/// <summary>
+/// Represents logical inequality operator.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[Serializable]
+public class OpNotEqual : BinaryOperator
 {
     /// <summary>
-    /// Represents logical inequality operator.
+    /// Create a new instance
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    [Serializable]
-    public class OpNotEqual : BinaryOperator
+    public OpNotEqual() : base()
     {
-        /// <summary>
-        /// Create a new instance
-        /// </summary>
-        public OpNotEqual():base()
+    }
+
+    /// <summary>
+    /// Create a new instance from SerializationInfo
+    /// </summary>
+    protected OpNotEqual(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+    }
+
+    /// <summary>
+    /// Returns a value for the logical inequality operator node.
+    /// </summary>
+    /// <param name="context">Context to evaluate expressions against.</param>
+    /// <param name="evalContext">Current expression evaluation context.</param>
+    /// <returns>Node's value.</returns>
+    protected override object Get(object context, EvaluationContext evalContext)
+    {
+        object leftVal = GetLeftValue(context, evalContext);
+        object rightVal = GetRightValue(context, evalContext);
+
+        if (leftVal == null)
         {
+            return (rightVal != null);
         }
-
-        /// <summary>
-        /// Create a new instance from SerializationInfo
-        /// </summary>
-        protected OpNotEqual(SerializationInfo info, StreamingContext context)
-            : base(info, context)
+        else if (rightVal == null)
         {
+            return true;
         }
-
-        /// <summary>
-        /// Returns a value for the logical inequality operator node.
-        /// </summary>
-        /// <param name="context">Context to evaluate expressions against.</param>
-        /// <param name="evalContext">Current expression evaluation context.</param>
-        /// <returns>Node's value.</returns>
-        protected override object Get(object context, EvaluationContext evalContext)
+        else if (leftVal.GetType() == rightVal.GetType())
         {
-            object leftVal = GetLeftValue( context, evalContext );
-            object rightVal = GetRightValue( context, evalContext );
-
-            if (leftVal == null)
+            if (leftVal is Array)
             {
-                return (rightVal != null);
-            }
-            else if (rightVal == null)
-            {
-                return true;
-            }
-            else if (leftVal.GetType() == rightVal.GetType())
-            {
-                if (leftVal is Array)
-                {
-                    return !ArrayUtils.AreEqual(leftVal as Array, rightVal as Array);
-                }
-                else
-                {
-                    return !leftVal.Equals(rightVal);
-                }
+                return !ArrayUtils.AreEqual(leftVal as Array, rightVal as Array);
             }
             else
             {
-                return CompareUtils.Compare(leftVal, rightVal) != 0;
+                return !leftVal.Equals(rightVal);
             }
+        }
+        else
+        {
+            return CompareUtils.Compare(leftVal, rightVal) != 0;
         }
     }
 }

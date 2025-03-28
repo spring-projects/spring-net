@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -18,26 +18,25 @@
 
 #endregion
 
-namespace Spring.Aop
+namespace Spring.Aop;
+
+/// <summary>
+/// Superinterface for all <see cref="Spring.Aop.IAdvisor"/>s that are
+/// driven by a pointcut.
+/// </summary>
+/// <remarks>
+/// <p>
+/// This covers nearly all advisors except introduction advisors, for which
+/// method-level matching does not apply.
+/// </p>
+/// </remarks>
+/// <author>Rod Johnson</author>
+/// <author>Aleksandar Seovic (.NET)</author>
+/// <seealso cref="Spring.Aop.IIntroductionAdvisor"/>
+public interface IPointcutAdvisor : IAdvisor
 {
-	/// <summary>
-	/// Superinterface for all <see cref="Spring.Aop.IAdvisor"/>s that are
-	/// driven by a pointcut.
-	/// </summary>
-	/// <remarks>
-	/// <p>
-	/// This covers nearly all advisors except introduction advisors, for which
-	/// method-level matching does not apply.
-	/// </p>
-	/// </remarks>
-	/// <author>Rod Johnson</author>
-	/// <author>Aleksandar Seovic (.NET)</author>
-	/// <seealso cref="Spring.Aop.IIntroductionAdvisor"/>
-	public interface IPointcutAdvisor : IAdvisor
-	{
-		/// <summary>
-		/// The <see cref="Spring.Aop.IPointcut"/> that drives this advisor.
-		/// </summary>
-		IPointcut Pointcut { get; }
-	}
+    /// <summary>
+    /// The <see cref="Spring.Aop.IPointcut"/> that drives this advisor.
+    /// </summary>
+    IPointcut Pointcut { get; }
 }

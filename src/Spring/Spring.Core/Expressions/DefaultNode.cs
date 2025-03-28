@@ -20,42 +20,41 @@
 
 using System.Runtime.Serialization;
 
-namespace Spring.Expressions
+namespace Spring.Expressions;
+
+/// <summary>
+/// Represents parsed default node in the navigation expression.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[Serializable]
+public class DefaultNode : BinaryOperator
 {
     /// <summary>
-    /// Represents parsed default node in the navigation expression.
+    /// Create a new instance
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    [Serializable]
-    public class DefaultNode : BinaryOperator
+    public DefaultNode()
     {
-        /// <summary>
-        /// Create a new instance
-        /// </summary>
-        public DefaultNode()
-        {
-        }
+    }
 
-        /// <summary>
-        /// Create a new instance from SerializationInfo
-        /// </summary>
-        protected DefaultNode(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
+    /// <summary>
+    /// Create a new instance from SerializationInfo
+    /// </summary>
+    protected DefaultNode(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+    }
 
-        /// <summary>
-        /// Returns left operand if it is not null, or the right operand if it is.
-        /// </summary>
-        /// <param name="context">Context to evaluate expressions against.</param>
-        /// <param name="evalContext">Current expression evaluation context.</param>
-        /// <returns>Node's value.</returns>
-        protected override object Get(object context, EvaluationContext evalContext)
-        {
-            object leftVal = GetValue(Left, context, evalContext);
-            object rightVal = GetValue(Right, context, evalContext);
+    /// <summary>
+    /// Returns left operand if it is not null, or the right operand if it is.
+    /// </summary>
+    /// <param name="context">Context to evaluate expressions against.</param>
+    /// <param name="evalContext">Current expression evaluation context.</param>
+    /// <returns>Node's value.</returns>
+    protected override object Get(object context, EvaluationContext evalContext)
+    {
+        object leftVal = GetValue(Left, context, evalContext);
+        object rightVal = GetValue(Right, context, evalContext);
 
-            return (leftVal != null ? leftVal : rightVal);
-        }
+        return (leftVal != null ? leftVal : rightVal);
     }
 }

@@ -24,89 +24,88 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Objects.Factory
+namespace Spring.Objects.Factory;
+
+/// <summary>
+/// Unit tests for the AbstractListableObjectFactory class.
+/// </summary>
+/// <author>Rod Johnson</author>
+/// <author>Rick Evans (.NET)</author>
+public abstract class AbstractListableObjectFactoryTests :
+    AbstractObjectFactoryTests
 {
     /// <summary>
-    /// Unit tests for the AbstractListableObjectFactory class.
+    /// Subclasses must initialize this (via the derived ObjectFactory property).
     /// </summary>
-    /// <author>Rod Johnson</author>
-    /// <author>Rick Evans (.NET)</author>
-    public abstract class AbstractListableObjectFactoryTests :
-        AbstractObjectFactoryTests
+    protected internal virtual IListableObjectFactory ListableObjectFactory
     {
-        /// <summary>
-        /// Subclasses must initialize this (via the derived ObjectFactory property).
-        /// </summary>
-        protected internal virtual IListableObjectFactory ListableObjectFactory
+        get
         {
-            get
+            if (!(ObjectFactory is IListableObjectFactory))
             {
-                if (!(ObjectFactory is IListableObjectFactory))
-                {
-                    throw new SystemException("IListableObjectFactory required...");
-                }
-
-                return (IListableObjectFactory) ObjectFactory;
+                throw new SystemException("IListableObjectFactory required...");
             }
-        }
 
-        /// <summary>
-        /// Subclasses can override this.
-        /// </summary>
-        [Test]
-        public virtual void Count()
-        {
-            AssertCount(19);
+            return (IListableObjectFactory) ObjectFactory;
         }
+    }
 
-        protected internal void AssertCount(int count)
-        {
-            var defnames = ListableObjectFactory.GetObjectDefinitionNames(true);
-            Assert.IsTrue(
-                defnames.Count == count,
-                $"We should have {count} objects, not {defnames.Count}.");
-        }
+    /// <summary>
+    /// Subclasses can override this.
+    /// </summary>
+    [Test]
+    public virtual void Count()
+    {
+        AssertCount(19);
+    }
 
-        [Test]
-        public virtual void ObjectCount()
-        {
-            AssertTestObjectCount(12);
-        }
+    protected internal void AssertCount(int count)
+    {
+        var defnames = ListableObjectFactory.GetObjectDefinitionNames(true);
+        Assert.IsTrue(
+            defnames.Count == count,
+            $"We should have {count} objects, not {defnames.Count}.");
+    }
 
-        public virtual void AssertTestObjectCount(int count)
-        {
-            var defnames = ListableObjectFactory.GetObjectNamesForType(typeof(TestObject));
-            Assert.IsTrue(
-                defnames.Count == count,
-                $"We should have {count} objects for class {typeof(TestObject).FullName}, not {defnames.Count}.");
-        }
+    [Test]
+    public virtual void ObjectCount()
+    {
+        AssertTestObjectCount(12);
+    }
 
-        [Test]
-        public virtual void GetDefinitionsForNoSuchClass()
-        {
-            var defnames = ListableObjectFactory.GetObjectNamesForType(typeof(string));
-            Assert.IsTrue(defnames.Count == 0, "No string definitions");
-        }
+    public virtual void AssertTestObjectCount(int count)
+    {
+        var defnames = ListableObjectFactory.GetObjectNamesForType(typeof(TestObject));
+        Assert.IsTrue(
+            defnames.Count == count,
+            $"We should have {count} objects for class {typeof(TestObject).FullName}, not {defnames.Count}.");
+    }
 
-        /// <summary>
-        /// Check that count refers to factory class, not
-        /// object class (we don't know what type factories may return,
-        /// and it may even change over time).
-        /// </summary>
-        [Test]
-        public virtual void GetCountForFactoryClass()
-        {
-            int count = ListableObjectFactory.GetObjectNamesForType(typeof(IFactoryObject)).Count;
-            Assert.IsTrue(
-                count == 2,
-                $"Should have 2 factories, not {count}.");
-        }
+    [Test]
+    public virtual void GetDefinitionsForNoSuchClass()
+    {
+        var defnames = ListableObjectFactory.GetObjectNamesForType(typeof(string));
+        Assert.IsTrue(defnames.Count == 0, "No string definitions");
+    }
 
-        [Test]
-        public virtual void ContainsObjectDefinition()
-        {
-            Assert.IsTrue(ListableObjectFactory.ContainsObjectDefinition("rod"));
-            Assert.IsTrue(ListableObjectFactory.ContainsObjectDefinition("roderick"));
-        }
+    /// <summary>
+    /// Check that count refers to factory class, not
+    /// object class (we don't know what type factories may return,
+    /// and it may even change over time).
+    /// </summary>
+    [Test]
+    public virtual void GetCountForFactoryClass()
+    {
+        int count = ListableObjectFactory.GetObjectNamesForType(typeof(IFactoryObject)).Count;
+        Assert.IsTrue(
+            count == 2,
+            $"Should have 2 factories, not {count}.");
+    }
+
+    [Test]
+    public virtual void ContainsObjectDefinition()
+    {
+        Assert.IsTrue(ListableObjectFactory.ContainsObjectDefinition("rod"));
+        Assert.IsTrue(ListableObjectFactory.ContainsObjectDefinition("roderick"));
     }
 }

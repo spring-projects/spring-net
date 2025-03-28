@@ -26,51 +26,50 @@ using Spring.Util;
 
 #endregion
 
-namespace Spring.Aop
+namespace Spring.Aop;
+
+/// <summary>
+/// Unit tests for the TrueMethodMatcher class.
+/// </summary>
+/// <author>Rick Evans</author>
+[TestFixture]
+public sealed class TrueMethodMatcherTests
 {
-	/// <summary>
-	/// Unit tests for the TrueMethodMatcher class.
-    /// </summary>
-    /// <author>Rick Evans</author>
-	[TestFixture]
-    public sealed class TrueMethodMatcherTests
+    [Test]
+    public void Deserialization()
     {
-		[Test]
-		public void Deserialization()
-		{
-			IMethodMatcher deserializedVersion
-				= (IMethodMatcher) SerializationTestUtils.SerializeAndDeserialize(
-				TrueMethodMatcher.True);
-			Assert.IsTrue(Object.ReferenceEquals(TrueMethodMatcher.True, deserializedVersion),
-				"Singleton instance not being deserialized correctly");
-		}
+        IMethodMatcher deserializedVersion
+            = (IMethodMatcher) SerializationTestUtils.SerializeAndDeserialize(
+                TrueMethodMatcher.True);
+        Assert.IsTrue(Object.ReferenceEquals(TrueMethodMatcher.True, deserializedVersion),
+            "Singleton instance not being deserialized correctly");
+    }
 
-		[Test]
-		public void IsSerializable()
-		{
-			Assert.IsTrue(SerializationTestUtils.IsSerializable(TrueMethodMatcher.True),
-				"TrueMethodMatcher must be serializable.");
-		}
+    [Test]
+    public void IsSerializable()
+    {
+        Assert.IsTrue(SerializationTestUtils.IsSerializable(TrueMethodMatcher.True),
+            "TrueMethodMatcher must be serializable.");
+    }
 
-		[Test]
-		public void AlwaysMatchesEvenOnNullArguments()
-		{
-			Assert.IsTrue(TrueMethodMatcher.True.Matches(null, null),
-				"Must always match (return true).");
-		}
+    [Test]
+    public void AlwaysMatchesEvenOnNullArguments()
+    {
+        Assert.IsTrue(TrueMethodMatcher.True.Matches(null, null),
+            "Must always match (return true).");
+    }
 
-		[Test]
-		public void AlwaysMatches()
-		{
-			Assert.IsTrue(TrueMethodMatcher.True.Matches(
-				(MethodInfo) MethodBase.GetCurrentMethod(), GetType()),
-				"Must always match (return true).");
-		}
+    [Test]
+    public void AlwaysMatches()
+    {
+        Assert.IsTrue(TrueMethodMatcher.True.Matches(
+                (MethodInfo) MethodBase.GetCurrentMethod(), GetType()),
+            "Must always match (return true).");
+    }
 
-		[Test]
-		public void IsRuntime()
-		{
-			Assert.IsFalse(TrueMethodMatcher.True.IsRuntime, "Must NOT be runtime.");
-		}
+    [Test]
+    public void IsRuntime()
+    {
+        Assert.IsFalse(TrueMethodMatcher.True.IsRuntime, "Must NOT be runtime.");
     }
 }

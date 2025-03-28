@@ -24,59 +24,58 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Util
+namespace Spring.Util;
+
+/// <summary>
+/// Unit tests for the ArrayUtils class.
+/// </summary>
+/// <author>Rick Evans</author>
+[TestFixture]
+public sealed class ArrayUtilsTests
 {
-	/// <summary>
-	/// Unit tests for the ArrayUtils class.
-    /// </summary>
-    /// <author>Rick Evans</author>
-	[TestFixture]
-    public sealed class ArrayUtilsTests
+    [Test]
+    public void AreEqual()
     {
-        [Test]
-        public void AreEqual () 
-        {
-            object [] one = new string [] {"Foo", "Bar", "Baz"};
-            object [] two = new string [] {"Foo", "Bar", "Baz"};
-            Assert.IsTrue (ArrayUtils.AreEqual (one, two));
-            object [] three = new string [] {"Foo", "Ben", "Baz"};
-            Assert.IsFalse (ArrayUtils.AreEqual (one, three));
-        }
+        object[] one = new string[] { "Foo", "Bar", "Baz" };
+        object[] two = new string[] { "Foo", "Bar", "Baz" };
+        Assert.IsTrue(ArrayUtils.AreEqual(one, two));
+        object[] three = new string[] { "Foo", "Ben", "Baz" };
+        Assert.IsFalse(ArrayUtils.AreEqual(one, three));
+    }
 
-        [Test]
-        public void AreEqualWithBadArguments () 
-        {
-            Assert.IsTrue (ArrayUtils.AreEqual (null, null));
-            object [] one = new string [] {"Foo", "Bar", "Baz"};
-            object [] two = null;
-            Assert.IsFalse (ArrayUtils.AreEqual (one, two));
-            object [] three = new string [] {"Foo", "Bar"};
-            Assert.IsFalse (ArrayUtils.AreEqual (one, three));
-        }
+    [Test]
+    public void AreEqualWithBadArguments()
+    {
+        Assert.IsTrue(ArrayUtils.AreEqual(null, null));
+        object[] one = new string[] { "Foo", "Bar", "Baz" };
+        object[] two = null;
+        Assert.IsFalse(ArrayUtils.AreEqual(one, two));
+        object[] three = new string[] { "Foo", "Bar" };
+        Assert.IsFalse(ArrayUtils.AreEqual(one, three));
+    }
 
-        [Test]
-        public void HasLengthTests()
-        {
-            Assert.IsFalse(ArrayUtils.HasLength(null));
-            Assert.IsFalse(ArrayUtils.HasLength(new byte[0]));
-            Assert.IsTrue(ArrayUtils.HasLength(new byte[1]));
-        }
+    [Test]
+    public void HasLengthTests()
+    {
+        Assert.IsFalse(ArrayUtils.HasLength(null));
+        Assert.IsFalse(ArrayUtils.HasLength(new byte[0]));
+        Assert.IsTrue(ArrayUtils.HasLength(new byte[1]));
+    }
 
-	    [Test]
-	    public void ConcatsArrays()
-	    {
-	        byte[] array1 = new byte[] { 0, 1, 2, 3};
-            byte[] array2 = new byte[] { 4, 5, 6, 7};
-	        byte[] result = (byte[])ArrayUtils.Concat(array1, array2);
-            Assert.AreEqual( new byte[] { 0,1,2,3,4,5,6,7 }, result );
-	    }
+    [Test]
+    public void ConcatsArrays()
+    {
+        byte[] array1 = new byte[] { 0, 1, 2, 3 };
+        byte[] array2 = new byte[] { 4, 5, 6, 7 };
+        byte[] result = (byte[]) ArrayUtils.Concat(array1, array2);
+        Assert.AreEqual(new byte[] { 0, 1, 2, 3, 4, 5, 6, 7 }, result);
+    }
 
-        [Test]
-	    public void ConcatsNullArrays()
-	    {
-	        byte[] array = new byte[] { 0, 1, 2, 3};
-            Assert.AreEqual(new byte[] { 0, 1, 2, 3 }, ArrayUtils.Concat(array, null));
-            Assert.AreEqual(new byte[] { 0, 1, 2, 3 }, ArrayUtils.Concat(null, array));
-	    }
-	}
+    [Test]
+    public void ConcatsNullArrays()
+    {
+        byte[] array = new byte[] { 0, 1, 2, 3 };
+        Assert.AreEqual(new byte[] { 0, 1, 2, 3 }, ArrayUtils.Concat(array, null));
+        Assert.AreEqual(new byte[] { 0, 1, 2, 3 }, ArrayUtils.Concat(null, array));
+    }
 }

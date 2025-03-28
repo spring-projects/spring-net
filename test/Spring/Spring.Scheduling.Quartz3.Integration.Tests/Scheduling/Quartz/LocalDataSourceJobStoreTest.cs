@@ -26,26 +26,25 @@ using Spring.Context.Support;
 
 #endregion
 
-namespace Spring.Scheduling.Quartz.Integration.Tests
+namespace Spring.Scheduling.Quartz.Integration.Tests;
+
+[TestFixture]
+public class LocalDataSourceJobStoreTest
 {
-    [TestFixture]
-    public class LocalDataSourceJobStoreTest
+    private IApplicationContext ctx;
+
+    [SetUp]
+    public void SetUp()
     {
-        private IApplicationContext ctx;
+        ctx = new XmlApplicationContext(
+            "assembly://Spring.Scheduling.Quartz3.Integration.Tests/Spring.Scheduling.Quartz/LocalDataSourceJobStoreTest.xml");
+    }
 
-        [SetUp]
-        public void SetUp()
-        {
-            ctx = new XmlApplicationContext(
-                "assembly://Spring.Scheduling.Quartz3.Integration.Tests/Spring.Scheduling.Quartz/LocalDataSourceJobStoreTest.xml");
-        }
-
-        [Test]
-        [Explicit("Appveyor problems")]
-        public void TestLocalDataSourceJobStore()
-        {
-            // sleep 20 seconds
-            Thread.Sleep(20000);
-        }
+    [Test]
+    [Explicit("Appveyor problems")]
+    public void TestLocalDataSourceJobStore()
+    {
+        // sleep 20 seconds
+        Thread.Sleep(20000);
     }
 }

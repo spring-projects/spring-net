@@ -20,55 +20,54 @@
 
 using System.Collections;
 
-namespace Spring.Collections
+namespace Spring.Collections;
+
+/// <summary>
+/// Synchronized <see cref="IDictionaryEnumerator"/> that should be returned by synchronized
+/// dictionary implementations in order to ensure that the enumeration is thread safe.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+internal class SynchronizedDictionaryEnumerator : SynchronizedEnumerator, IDictionaryEnumerator
 {
-    /// <summary>
-    /// Synchronized <see cref="IDictionaryEnumerator"/> that should be returned by synchronized
-    /// dictionary implementations in order to ensure that the enumeration is thread safe.
-    /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    internal class SynchronizedDictionaryEnumerator : SynchronizedEnumerator, IDictionaryEnumerator
+    public SynchronizedDictionaryEnumerator(object syncRoot, IDictionaryEnumerator enumerator)
+        : base(syncRoot, enumerator)
     {
-        public SynchronizedDictionaryEnumerator(object syncRoot, IDictionaryEnumerator enumerator)
-            : base(syncRoot, enumerator)
-        {
-        }
+    }
 
-        protected IDictionaryEnumerator Enumerator
-        {
-            get { return (IDictionaryEnumerator) enumerator; }
-        }
+    protected IDictionaryEnumerator Enumerator
+    {
+        get { return (IDictionaryEnumerator) enumerator; }
+    }
 
-        public object Key
+    public object Key
+    {
+        get
         {
-            get
+            lock (syncRoot)
             {
-                lock (syncRoot)
-                {
-                    return Enumerator.Key;
-                }
+                return Enumerator.Key;
             }
         }
+    }
 
-        public object Value
+    public object Value
+    {
+        get
         {
-            get
+            lock (syncRoot)
             {
-                lock (syncRoot)
-                {
-                    return Enumerator.Value;
-                }
+                return Enumerator.Value;
             }
         }
+    }
 
-        public DictionaryEntry Entry
+    public DictionaryEntry Entry
+    {
+        get
         {
-            get
+            lock (syncRoot)
             {
-                lock (syncRoot)
-                {
-                    return Enumerator.Entry;
-                }
+                return Enumerator.Entry;
             }
         }
     }

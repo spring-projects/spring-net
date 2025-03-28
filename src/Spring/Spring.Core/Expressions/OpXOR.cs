@@ -21,61 +21,62 @@
 using System.Runtime.Serialization;
 using Spring.Util;
 
-namespace Spring.Expressions
+namespace Spring.Expressions;
+
+/// <summary>
+/// </summary>
+/// <author>Erich Eichinger</author>
+[Serializable]
+public class OpXOR : BinaryOperator
 {
     /// <summary>
+    /// Create a new instance
     /// </summary>
-    /// <author>Erich Eichinger</author>
-    [Serializable]
-    public class OpXOR : BinaryOperator
+    public OpXOR()
     {
-        /// <summary>
-        /// Create a new instance
-        /// </summary>
-        public OpXOR()
-        { }
+    }
 
-        /// <summary>
-        /// Create a new instance
-        /// </summary>
-        public OpXOR(BaseNode left, BaseNode right)
-            :base(left, right)
+    /// <summary>
+    /// Create a new instance
+    /// </summary>
+    public OpXOR(BaseNode left, BaseNode right)
+        : base(left, right)
+    {
+    }
+
+    /// <summary>
+    /// Create a new instance from SerializationInfo
+    /// </summary>
+    protected OpXOR(SerializationInfo info, StreamingContext context)
+        : base(info, context)
+    {
+    }
+
+    /// <summary>
+    /// Returns a value for the logical AND operator node.
+    /// </summary>
+    /// <param name="context">Context to evaluate expressions against.</param>
+    /// <param name="evalContext">Current expression evaluation context.</param>
+    /// <returns>Node's value.</returns>
+    protected override object Get(object context, EvaluationContext evalContext)
+    {
+        object l = GetLeftValue(context, evalContext);
+        object r = GetRightValue(context, evalContext);
+
+        if (NumberUtils.IsInteger(l) && NumberUtils.IsInteger(r))
         {
+            return NumberUtils.BitwiseXor(l, r);
+        }
+        else if (l is Enum && l.GetType() == r.GetType())
+        {
+            Type enumType = l.GetType();
+            Type integralType = Enum.GetUnderlyingType(enumType);
+            l = Convert.ChangeType(l, integralType);
+            r = Convert.ChangeType(r, integralType);
+            object result = NumberUtils.BitwiseXor(l, r);
+            return Enum.ToObject(enumType, result);
         }
 
-        /// <summary>
-        /// Create a new instance from SerializationInfo
-        /// </summary>
-        protected OpXOR(SerializationInfo info, StreamingContext context)
-            : base(info, context)
-        {
-        }
-
-        /// <summary>
-        /// Returns a value for the logical AND operator node.
-        /// </summary>
-        /// <param name="context">Context to evaluate expressions against.</param>
-        /// <param name="evalContext">Current expression evaluation context.</param>
-        /// <returns>Node's value.</returns>
-        protected override object Get(object context, EvaluationContext evalContext)
-        {
-            object l = GetLeftValue(context, evalContext);
-            object r = GetRightValue(context, evalContext);
-
-            if (NumberUtils.IsInteger(l) && NumberUtils.IsInteger(r))
-            {
-                return NumberUtils.BitwiseXor(l, r);
-            }
-            else if (l is Enum && l.GetType() == r.GetType())
-            {
-                Type enumType = l.GetType();
-                Type integralType = Enum.GetUnderlyingType(enumType);
-                l = Convert.ChangeType(l, integralType);
-                r = Convert.ChangeType(r, integralType);
-                object result = NumberUtils.BitwiseXor(l, r);
-                return Enum.ToObject(enumType, result);
-            }
-            return Convert.ToBoolean(l) ^ Convert.ToBoolean(r);
-        }
+        return Convert.ToBoolean(l) ^ Convert.ToBoolean(r);
     }
 }

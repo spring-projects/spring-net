@@ -18,85 +18,84 @@
 
 #endregion
 
-namespace Spring.Transaction
+namespace Spring.Transaction;
+
+/// <summary>
+/// Enumeration describing <a href="http://www.springframework.net/">Spring.NET's</a>
+/// transaction propagation settings.
+/// </summary>
+/// <author>Griffin Caprio (.NET)</author>
+public enum TransactionPropagation
 {
     /// <summary>
-    /// Enumeration describing <a href="http://www.springframework.net/">Spring.NET's</a>
-    /// transaction propagation settings.
+    /// Support a current transaction, create a new one if none exists.
     /// </summary>
-    /// <author>Griffin Caprio (.NET)</author>
-    public enum TransactionPropagation
-    {
-        /// <summary>
-        /// Support a current transaction, create a new one if none exists.
-        /// </summary>
-        /// <remarks>
-        /// <p>
-        /// Analogous to System.EnterpriseServices.TransactionOption value of the same name.
-        /// This is typically the default setting of a transaction definition.
-        /// </p>
-        /// </remarks>
-        Required,
+    /// <remarks>
+    /// <p>
+    /// Analogous to System.EnterpriseServices.TransactionOption value of the same name.
+    /// This is typically the default setting of a transaction definition.
+    /// </p>
+    /// </remarks>
+    Required,
 
-        /// <summary>
-        /// Support a current transaction, execute non-transactionally if none exists.
-        /// </summary>
-        /// <remarks>
-        /// <p>
-        /// Analogous to System.EnterpriseServices.TransactionOption.Supported.
-        /// </p>
-        /// </remarks>
-        Supports,
+    /// <summary>
+    /// Support a current transaction, execute non-transactionally if none exists.
+    /// </summary>
+    /// <remarks>
+    /// <p>
+    /// Analogous to System.EnterpriseServices.TransactionOption.Supported.
+    /// </p>
+    /// </remarks>
+    Supports,
 
-        /// <summary>
-        /// Support a current transaction, throw an exception if none exists.
-        /// </summary>
-        /// <remarks>
-        /// <p>
-        /// No corresponding System.EnterpriseServices.TransactionOption value.
-        /// </p>
-        /// </remarks>
-        Mandatory,
+    /// <summary>
+    /// Support a current transaction, throw an exception if none exists.
+    /// </summary>
+    /// <remarks>
+    /// <p>
+    /// No corresponding System.EnterpriseServices.TransactionOption value.
+    /// </p>
+    /// </remarks>
+    Mandatory,
 
-        /// <summary>
-        /// Create a new transaction, suspending the current transaction if one exists.
-        /// </summary>
-        /// <remarks>
-        /// <p>
-        /// Analogous to System.EnterpriseServices.TransactionOption value of the same name.
-        /// </p>
-        /// </remarks>
-        RequiresNew,
+    /// <summary>
+    /// Create a new transaction, suspending the current transaction if one exists.
+    /// </summary>
+    /// <remarks>
+    /// <p>
+    /// Analogous to System.EnterpriseServices.TransactionOption value of the same name.
+    /// </p>
+    /// </remarks>
+    RequiresNew,
 
-        /// <summary>
-        /// Execute non-transactionally, suspending the current transaction if one exists.
-        /// </summary>
-        /// <remarks>
-        /// <p>
-        /// Analogous to System.EnterpriseServices.TransactionOption value of the same name.
-        /// </p>
-        /// </remarks>
-        NotSupported,
+    /// <summary>
+    /// Execute non-transactionally, suspending the current transaction if one exists.
+    /// </summary>
+    /// <remarks>
+    /// <p>
+    /// Analogous to System.EnterpriseServices.TransactionOption value of the same name.
+    /// </p>
+    /// </remarks>
+    NotSupported,
 
-        /// <summary>
-        /// Execute non-transactionally, throw an exception if a transaction exists.
-        /// </summary>
-        /// <remarks>
-        /// <p>
-        /// Analogous to System.EnterpriseServices.TransactionOption.Disabled.
-        /// </p>
-        /// </remarks>
-        Never,
+    /// <summary>
+    /// Execute non-transactionally, throw an exception if a transaction exists.
+    /// </summary>
+    /// <remarks>
+    /// <p>
+    /// Analogous to System.EnterpriseServices.TransactionOption.Disabled.
+    /// </p>
+    /// </remarks>
+    Never,
 
-		/// <summary>
-		/// Execute within a nested transaction if a current transaction exists, else
-		/// behave like <see cref="Spring.Transaction.TransactionPropagation.Required"/>. 
-		/// </summary>
-		/// <remarks>
-		/// <p>
-		/// There is no analogous feature in TransactionOption.
-		/// </p>
-		/// </remarks>
-		Nested
-    }
+    /// <summary>
+    /// Execute within a nested transaction if a current transaction exists, else
+    /// behave like <see cref="Spring.Transaction.TransactionPropagation.Required"/>.
+    /// </summary>
+    /// <remarks>
+    /// <p>
+    /// There is no analogous feature in TransactionOption.
+    /// </p>
+    /// </remarks>
+    Nested
 }

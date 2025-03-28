@@ -19,81 +19,78 @@
 #endregion
 
 using NUnit.Framework;
-
 using Spring.Expressions;
 
-namespace Spring.Validation.Actions
+namespace Spring.Validation.Actions;
+
+/// <summary>
+/// Unit tests for the ExpressionAction class.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[TestFixture]
+public class ExpressionActionTests
 {
-    /// <summary>
-    /// Unit tests for the ExpressionAction class.
-    /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    [TestFixture]
-    public class ExpressionActionTests
+    [Test]
+    public void WhenValid()
     {
-        [Test]
-        public void WhenValid()
-        {
-            Inventor context = new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian");
-            Dictionary<string, object> vars = new Dictionary<string, object>();
+        Inventor context = new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian");
+        Dictionary<string, object> vars = new Dictionary<string, object>();
 
-            ExpressionAction action = new ExpressionAction("#result = 'valid'", "#result = 'invalid'");
-            action.Execute(true, context, vars, null);
-            Assert.AreEqual("valid", vars["result"]);
+        ExpressionAction action = new ExpressionAction("#result = 'valid'", "#result = 'invalid'");
+        action.Execute(true, context, vars, null);
+        Assert.AreEqual("valid", vars["result"]);
 
-            action = new ExpressionAction(Expression.Parse("#result = Name"), Expression.Parse("#result = Nationality"));
-            action.Execute(true, context, vars, null);
-            Assert.AreEqual(context.Name, vars["result"]);
+        action = new ExpressionAction(Expression.Parse("#result = Name"), Expression.Parse("#result = Nationality"));
+        action.Execute(true, context, vars, null);
+        Assert.AreEqual(context.Name, vars["result"]);
 
-            action = new ExpressionAction();
-            action.Valid = Expression.Parse("#result = DOB.Year");
-            action.Invalid = Expression.Parse("#result = DOB.Month");
-            action.Execute(true, context, vars, null);
-            Assert.AreEqual(context.DOB.Year, vars["result"]);
+        action = new ExpressionAction();
+        action.Valid = Expression.Parse("#result = DOB.Year");
+        action.Invalid = Expression.Parse("#result = DOB.Month");
+        action.Execute(true, context, vars, null);
+        Assert.AreEqual(context.DOB.Year, vars["result"]);
 
-            vars.Clear();
-            action = new ExpressionAction(null, "#result = 'invalid'");
-            action.Execute(true, context, vars, null);
-            Assert.IsFalse(vars.ContainsKey("result"), "Result should not exist when valid expression is null.");
-        }
+        vars.Clear();
+        action = new ExpressionAction(null, "#result = 'invalid'");
+        action.Execute(true, context, vars, null);
+        Assert.IsFalse(vars.ContainsKey("result"), "Result should not exist when valid expression is null.");
+    }
 
-        [Test]
-        public void WhenInvalid()
-        {
-            Inventor context = new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian");
-            Dictionary<string, object> vars = new Dictionary<string, object>();
+    [Test]
+    public void WhenInvalid()
+    {
+        Inventor context = new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian");
+        Dictionary<string, object> vars = new Dictionary<string, object>();
 
-            ExpressionAction action = new ExpressionAction("#result = 'valid'", "#result = 'invalid'");
-            action.Execute(false, context, vars, null);
-            Assert.AreEqual("invalid", vars["result"]);
+        ExpressionAction action = new ExpressionAction("#result = 'valid'", "#result = 'invalid'");
+        action.Execute(false, context, vars, null);
+        Assert.AreEqual("invalid", vars["result"]);
 
-            action = new ExpressionAction(Expression.Parse("#result = Name"), Expression.Parse("#result = Nationality"));
-            action.Execute(false, context, vars, null);
-            Assert.AreEqual(context.Nationality, vars["result"]);
+        action = new ExpressionAction(Expression.Parse("#result = Name"), Expression.Parse("#result = Nationality"));
+        action.Execute(false, context, vars, null);
+        Assert.AreEqual(context.Nationality, vars["result"]);
 
-            action = new ExpressionAction();
-            action.Valid = Expression.Parse("#result = DOB.Year");
-            action.Invalid = Expression.Parse("#result = DOB.Month");
-            action.Execute(false, context, vars, null);
-            Assert.AreEqual(context.DOB.Month, vars["result"]);
+        action = new ExpressionAction();
+        action.Valid = Expression.Parse("#result = DOB.Year");
+        action.Invalid = Expression.Parse("#result = DOB.Month");
+        action.Execute(false, context, vars, null);
+        Assert.AreEqual(context.DOB.Month, vars["result"]);
 
-            vars.Clear();
-            action = new ExpressionAction("#result = 'valid'", null);
-            action.Execute(false, context, vars, null);
-            Assert.IsFalse(vars.ContainsKey("result"), "Result should not exist when invalid expression is null.");
-        }
+        vars.Clear();
+        action = new ExpressionAction("#result = 'valid'", null);
+        action.Execute(false, context, vars, null);
+        Assert.IsFalse(vars.ContainsKey("result"), "Result should not exist when invalid expression is null.");
+    }
 
-        [Test]
-        public void WhenActionIsNotExecutedBecauseWhenExpressionReturnsFalse()
-        {
-            Inventor context = new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian");
-            Dictionary<string, object> vars = new Dictionary<string, object>();
+    [Test]
+    public void WhenActionIsNotExecutedBecauseWhenExpressionReturnsFalse()
+    {
+        Inventor context = new Inventor("Nikola Tesla", new DateTime(1856, 7, 9), "Serbian");
+        Dictionary<string, object> vars = new Dictionary<string, object>();
 
-            ExpressionAction action = new ExpressionAction("#result = 'valid'", "#result = 'invalid'");
-            action.When = Expression.Parse("false");
-            action.Execute(true, context, vars, null);
-            Assert.IsFalse(vars.ContainsKey("result"));
-        }
-
+        ExpressionAction action = new ExpressionAction("#result = 'valid'", "#result = 'invalid'");
+        action.When = Expression.Parse("false");
+        action.Execute(true, context, vars, null);
+        Assert.IsFalse(vars.ContainsKey("result"));
     }
 }

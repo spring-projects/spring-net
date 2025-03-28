@@ -1,4 +1,3 @@
-
 namespace Spring.Data.NHibernate
 {
     public interface IAccountDebitDao

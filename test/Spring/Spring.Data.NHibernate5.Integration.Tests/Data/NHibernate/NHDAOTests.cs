@@ -2,13 +2,13 @@
 
 /*
  * Copyright © 2002-2011 the original author or authors.
- * 
+ *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
- * 
+ *
  *      http://www.apache.org/licenses/LICENSE-2.0
- * 
+ *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
@@ -31,24 +31,18 @@ using Spring.Data.NHibernate.Support;
 
 namespace Spring.Data.NHibernate
 {
-	[TestFixture]
-	public class NHDAOTests 
-	{
-	    private IApplicationContext ctx;
+    [TestFixture]
+    public class NHDAOTests
+    {
+        private IApplicationContext ctx;
 
-	    [SetUp]
+        [SetUp]
         public void SetUp()
         {
             //BasicConfigurator.Configure();
             string assemblyName = GetType().Assembly.GetName().Name;
             //ctx = new XmlApplicationContext("assembly://" + assemblyName + "/Spring.Data.NHibernate/NHDAOTests.xml");
-            string[] contextFiles = new string[]
-                                        {
-                                            "assembly://" + assemblyName + "/Spring.Data.NHibernate/Controllers.xml",
-                                            "assembly://" + assemblyName + "/Spring.Data.NHibernate/Services.xml",
-                                            "assembly://" + assemblyName + "/Spring.Data.NHibernate/Dao.xml"
-
-        };
+            string[] contextFiles = new string[] { "assembly://" + assemblyName + "/Spring.Data.NHibernate/Controllers.xml", "assembly://" + assemblyName + "/Spring.Data.NHibernate/Services.xml", "assembly://" + assemblyName + "/Spring.Data.NHibernate/Dao.xml" };
             ctx = new XmlApplicationContext(contextFiles);
             ctx.Name = AbstractApplicationContext.DefaultRootContextName;
 
@@ -87,12 +81,13 @@ namespace Spring.Data.NHibernate
             IAccountManager mgr = null;
             try
             {
-                Assert.IsNotNull(ctx,"Application Context is null");
+                Assert.IsNotNull(ctx, "Application Context is null");
                 mgr = ctx["accountManager"] as IAccountManager;
-                Assert.IsNotNull(mgr,"accountManager not of expected type. Type = " + ctx["accountManager"].GetType().ToString());
+                Assert.IsNotNull(mgr, "accountManager not of expected type. Type = " + ctx["accountManager"].GetType().ToString());
                 mgr.DoTransfer(transferAmount, transferAmount);
                 Assert.IsTrue(ContainsNewData(transferAmount));
-            } catch (Exception e)
+            }
+            catch (Exception e)
             {
                 if (mgr.ThrowException)
                 {
@@ -103,16 +98,16 @@ namespace Spring.Data.NHibernate
             }
         }
 
-	    private bool ContainsNewData(float amount)
-	    {
-	        //to be done
-	        return true;
-	    }
+        private bool ContainsNewData(float amount)
+        {
+            //to be done
+            return true;
+        }
 
-	    private bool DoesNotContainNewData(float amount)
-	    {
-	        //to be done
-	        return true;
-	    }
-	}
+        private bool DoesNotContainNewData(float amount)
+        {
+            //to be done
+            return true;
+        }
+    }
 }

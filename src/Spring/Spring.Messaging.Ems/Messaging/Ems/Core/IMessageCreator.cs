@@ -20,23 +20,22 @@
 
 using Spring.Messaging.Ems.Common;
 
-namespace Spring.Messaging.Ems.Core
+namespace Spring.Messaging.Ems.Core;
+
+/// <summary> Creates a EMS message given a Session</summary>
+/// <remarks>
+/// <p>The Session typically is provided by an instance
+/// of the EmsTemplate class.</p>
+/// </remarks>
+/// <author>Mark Pollack</author>
+public interface IMessageCreator
 {
-    /// <summary> Creates a EMS message given a Session</summary>
-    /// <remarks>
-    /// <p>The Session typically is provided by an instance
-    /// of the EmsTemplate class.</p>
-    /// </remarks>
-    /// <author>Mark Pollack</author>
-    public interface IMessageCreator
-    {
-        /// <summary> Create a Message to be sent.</summary>
-        /// <param name="session">the EMS Session to be used to create the
-        /// <code>Message</code> (never <code>null</code>)
-        /// </param>
-        /// <returns> the <code>Message</code> to be sent
-        /// </returns>
-        /// <throws>EMSException if thrown by EMS API methods </throws>
-        Message CreateMessage(ISession session);
-    }
+    /// <summary> Create a Message to be sent.</summary>
+    /// <param name="session">the EMS Session to be used to create the
+    /// <code>Message</code> (never <code>null</code>)
+    /// </param>
+    /// <returns> the <code>Message</code> to be sent
+    /// </returns>
+    /// <throws>EMSException if thrown by EMS API methods </throws>
+    Message CreateMessage(ISession session);
 }

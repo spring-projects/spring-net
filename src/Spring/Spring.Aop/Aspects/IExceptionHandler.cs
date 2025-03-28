@@ -20,76 +20,80 @@
 
 using System.Collections;
 
-namespace Spring.Aspects
+namespace Spring.Aspects;
+
+/// <summary>
+/// Handles a thrown exception providing calling context.
+/// </summary>
+/// <author>Mark Pollack</author>
+public interface IExceptionHandler
 {
     /// <summary>
-    /// Handles a thrown exception providing calling context.
+    /// Determines whether this instance can handle the exception the specified exception.
     /// </summary>
-    /// <author>Mark Pollack</author>
-    public interface IExceptionHandler
+    /// <param name="ex">The exception.</param>
+    /// <param name="callContextDictionary">The call context dictionary.</param>
+    /// <returns>
+    /// 	<c>true</c> if this instance can handle the specified exception; otherwise, <c>false</c>.
+    /// </returns>
+    bool CanHandleException(Exception ex, IDictionary<string, object> callContextDictionary);
+
+    /// <summary>
+    /// Handles the exception.
+    /// </summary>
+    /// <param name="callContextDictionary">The call context dictionary.</param>
+    /// <returns>
+    /// The return value from handling the exception, if not rethrown or a new exception is thrown.
+    /// </returns>
+    object HandleException(IDictionary<string, object> callContextDictionary);
+
+    /// <summary>
+    /// Gets the source exception names.
+    /// </summary>
+    /// <value>The source exception names.</value>
+    IList SourceExceptionNames
     {
-        /// <summary>
-        /// Determines whether this instance can handle the exception the specified exception.
-        /// </summary>
-        /// <param name="ex">The exception.</param>
-        /// <param name="callContextDictionary">The call context dictionary.</param>
-        /// <returns>
-        /// 	<c>true</c> if this instance can handle the specified exception; otherwise, <c>false</c>.
-        /// </returns>
-        bool CanHandleException(Exception ex, IDictionary<string, object> callContextDictionary);
+        get;
+        set;
+    }
 
-        /// <summary>
-        /// Handles the exception.
-        /// </summary>
-        /// <param name="callContextDictionary">The call context dictionary.</param>
-        /// <returns>
-        /// The return value from handling the exception, if not rethrown or a new exception is thrown.
-        /// </returns>
-        object HandleException(IDictionary<string, object> callContextDictionary);
+    /// <summary>
+    /// Gets the source exception types.
+    /// </summary>
+    /// <value>The source exception types.</value>
+    IList SourceExceptionTypes
+    {
+        get;
+        set;
+    }
 
-        /// <summary>
-        /// Gets the source exception names.
-        /// </summary>
-        /// <value>The source exception names.</value>
-        IList SourceExceptionNames
-        {
-            get; set;
-        }
+    /// <summary>
+    /// Gets the translation expression text
+    /// </summary>
+    /// <value>The translation expression text</value>
+    string ActionExpressionText
+    {
+        get;
+        set;
+    }
 
-        /// <summary>
-        /// Gets the source exception types.
-        /// </summary>
-        /// <value>The source exception types.</value>
-        IList SourceExceptionTypes
-        {
-            get; set;
-        }
+    /// <summary>
+    /// Gets or sets the constraint expression text.
+    /// </summary>
+    /// <value>The constraint expression text.</value>
+    string ConstraintExpressionText
+    {
+        get;
+        set;
+    }
 
-        /// <summary>
-        /// Gets the translation expression text
-        /// </summary>
-        /// <value>The translation expression text</value>
-        string ActionExpressionText
-        {
-            get; set;
-        }
-
-        /// <summary>
-        /// Gets or sets the constraint expression text.
-        /// </summary>
-        /// <value>The constraint expression text.</value>
-        string ConstraintExpressionText
-        {
-            get; set;
-        }
-
-        /// <summary>
-        /// Gets a value indicating whether to continue processing.
-        /// </summary>
-        /// <value><c>true</c> if continue processing; otherwise, <c>false</c>.</value>
-        bool ContinueProcessing
-        {
-            get; set;
-        }
+    /// <summary>
+    /// Gets a value indicating whether to continue processing.
+    /// </summary>
+    /// <value><c>true</c> if continue processing; otherwise, <c>false</c>.</value>
+    bool ContinueProcessing
+    {
+        get;
+        set;
     }
 }

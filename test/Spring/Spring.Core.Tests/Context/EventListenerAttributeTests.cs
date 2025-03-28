@@ -20,24 +20,24 @@
 
 using NUnit.Framework;
 
-namespace Spring.Context
+namespace Spring.Context;
+
+[TestFixture]
+public sealed class EventListenerAttributeTests
 {
-	[TestFixture]
-	public sealed class EventListenerAttributeTests
-	{
-		[Test]
-		public void ReadEventListenerAttribute()
-		{
-			Attribute[] attributes = Attribute.GetCustomAttributes(typeof (IApplicationEventListener));
-			bool found = false;
-			foreach (Attribute attribute in attributes)
-			{
-				if (attribute is EventListenerAttribute)
-				{
-					found = true;
-				}
-			}
-			Assert.IsTrue(found, "EventListener Attribute not found");
-		}
-	}
+    [Test]
+    public void ReadEventListenerAttribute()
+    {
+        Attribute[] attributes = Attribute.GetCustomAttributes(typeof(IApplicationEventListener));
+        bool found = false;
+        foreach (Attribute attribute in attributes)
+        {
+            if (attribute is EventListenerAttribute)
+            {
+                found = true;
+            }
+        }
+
+        Assert.IsTrue(found, "EventListener Attribute not found");
+    }
 }

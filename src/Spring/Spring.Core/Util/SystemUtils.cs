@@ -25,90 +25,89 @@ using System.Threading;
 
 #endregion
 
-namespace Spring.Util
+namespace Spring.Util;
+
+/// <summary>
+/// Utility class containing miscellaneous system-level functionality.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+public sealed class SystemUtils
 {
-    /// <summary>
-    /// Utility class containing miscellaneous system-level functionality.
-    /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    public sealed class SystemUtils
+    private static bool assemblyResolverRegistered = false;
+    private static readonly object assemblyResolverLock;
+
+    private static readonly bool isMono;
+
+    static SystemUtils()
     {
-        private static bool assemblyResolverRegistered = false;
-        private static readonly object assemblyResolverLock;
+        isMono = Type.GetType("Mono.Runtime") != null;
+        assemblyResolverLock = new object();
+    }
 
-        private static readonly bool isMono;
-
-        static SystemUtils()
+    /// <summary>
+    /// Registers assembly resolver that iterates over the
+    /// assemblies loaded into the current <see cref="AppDomain"/>
+    /// in order to find an assembly that cannot be resolved.
+    /// </summary>
+    /// <remarks>
+    /// This method has to be called if you need to serialize dynamically
+    /// generated types in transient assemblies, such as Spring AOP proxies,
+    /// because standard .NET serialization engine always tries to load
+    /// assembly from the disk.
+    /// </remarks>
+    public static void RegisterLoadedAssemblyResolver()
+    {
+        if (!assemblyResolverRegistered)
         {
-            isMono = Type.GetType("Mono.Runtime") != null;
-            assemblyResolverLock = new object();
-        }
-
-        /// <summary>
-        /// Registers assembly resolver that iterates over the
-        /// assemblies loaded into the current <see cref="AppDomain"/>
-        /// in order to find an assembly that cannot be resolved.
-        /// </summary>
-        /// <remarks>
-        /// This method has to be called if you need to serialize dynamically
-        /// generated types in transient assemblies, such as Spring AOP proxies,
-        /// because standard .NET serialization engine always tries to load
-        /// assembly from the disk.
-        /// </remarks>
-        public static void RegisterLoadedAssemblyResolver()
-        {
-            if (!assemblyResolverRegistered)
+            lock (assemblyResolverLock)
             {
-                lock (assemblyResolverLock)
-                {
-                    AppDomain.CurrentDomain.AssemblyResolve += LoadedAssemblyResolver;
-                    assemblyResolverRegistered = true;
-                }
+                AppDomain.CurrentDomain.AssemblyResolve += LoadedAssemblyResolver;
+                assemblyResolverRegistered = true;
+            }
+        }
+    }
+
+    private static Assembly LoadedAssemblyResolver(object sender, ResolveEventArgs args)
+    {
+        Assembly[] loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies();
+        foreach (Assembly assembly in loadedAssemblies)
+        {
+            if (assembly.FullName == args.Name)
+            {
+                return assembly;
             }
         }
 
-        private static Assembly LoadedAssemblyResolver(object sender, ResolveEventArgs args)
+        return null;
+    }
+
+    /// <summary>
+    /// Returns true if running on Mono
+    /// </summary>
+    /// <remarks>Tests for the presence of the type Mono.Runtime</remarks>
+    public static bool MonoRuntime
+    {
+        get { return isMono; }
+    }
+
+    /// <summary>
+    /// Gets the thread id for the current thread. Use thread name is available,
+    /// otherwise use CurrentThread.GetHashCode() for .NET 1.0/1.1 and
+    /// CurrentThread.ManagedThreadId otherwise.
+    /// </summary>
+    /// <value>The thread id.</value>
+    public static string ThreadId
+    {
+        get
         {
-            Assembly[] loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies();
-            foreach (Assembly assembly in loadedAssemblies)
+            string name = Thread.CurrentThread.Name;
+            if (StringUtils.HasText(name))
             {
-                if (assembly.FullName == args.Name)
-                {
-                    return assembly;
-                }
+                return name;
             }
-            return null;
-        }
-
-
-        /// <summary>
-        /// Returns true if running on Mono
-        /// </summary>
-        /// <remarks>Tests for the presence of the type Mono.Runtime</remarks>
-        public static bool MonoRuntime
-        {
-            get { return isMono; }
-        }
-
-        /// <summary>
-        /// Gets the thread id for the current thread. Use thread name is available,
-        /// otherwise use CurrentThread.GetHashCode() for .NET 1.0/1.1 and
-        /// CurrentThread.ManagedThreadId otherwise.
-        /// </summary>
-        /// <value>The thread id.</value>
-        public static string ThreadId
-        {
-            get
+            else
             {
-                string name = Thread.CurrentThread.Name;
-                if (StringUtils.HasText(name))
-                {
-                    return name;
-                }
-                else
-                {
-                    return Thread.CurrentThread.ManagedThreadId.ToString();
-                }
+                return Thread.CurrentThread.ManagedThreadId.ToString();
             }
         }
     }

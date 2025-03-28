@@ -21,49 +21,47 @@
 #region Imports
 
 using System.Reflection;
-
 using Spring.Objects;
 using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Core
+namespace Spring.Core;
+
+/// <summary>
+/// Unit tests for the RegularExpressionMethodNameCriteria class.
+/// </summary>
+[TestFixture]
+public class RegularExpressionMethodNameCriteriaTests
 {
-    /// <summary>
-    /// Unit tests for the RegularExpressionMethodNameCriteria class.
-    /// </summary>
-    [TestFixture]
-    public class RegularExpressionMethodNameCriteriaTests
+    [Test]
+    public void IsSatisfied()
     {
-        [Test]
-        public void IsSatisfied () 
-        {
-        	RegularExpressionMethodNameCriteria criteria = new RegularExpressionMethodNameCriteria ("Click");
-            MethodInfo method = typeof(TestObject).GetMethod("OnClick");
-            Assert.IsTrue (criteria.IsSatisfied (method));
-        }
+        RegularExpressionMethodNameCriteria criteria = new RegularExpressionMethodNameCriteria("Click");
+        MethodInfo method = typeof(TestObject).GetMethod("OnClick");
+        Assert.IsTrue(criteria.IsSatisfied(method));
+    }
 
-        [Test]
-        public void IsNotSatisfiedWithGarbage () 
-        {
-        	RegularExpressionMethodNameCriteria criteria = new RegularExpressionMethodNameCriteria ("BingoBango");
-            MethodInfo method = typeof(TestObject).GetMethod("OnClick");
-            Assert.IsFalse (criteria.IsSatisfied (method));
-        }
+    [Test]
+    public void IsNotSatisfiedWithGarbage()
+    {
+        RegularExpressionMethodNameCriteria criteria = new RegularExpressionMethodNameCriteria("BingoBango");
+        MethodInfo method = typeof(TestObject).GetMethod("OnClick");
+        Assert.IsFalse(criteria.IsSatisfied(method));
+    }
 
-        [Test]
-        public void IsNotSatisfiedWithNull () 
-        {
-            RegularExpressionMethodNameCriteria criteria = new RegularExpressionMethodNameCriteria("OnClick");
-            Assert.IsFalse (criteria.IsSatisfied (null));
-        }
+    [Test]
+    public void IsNotSatisfiedWithNull()
+    {
+        RegularExpressionMethodNameCriteria criteria = new RegularExpressionMethodNameCriteria("OnClick");
+        Assert.IsFalse(criteria.IsSatisfied(null));
+    }
 
-        [Test]
-        public void IsSatisfiedWithAnythingByDefault () 
-        {
-        	RegularExpressionMethodNameCriteria criteria = new RegularExpressionMethodNameCriteria ();
-            MethodInfo method = typeof(TestObject).GetMethod("OnClick");
-            Assert.IsTrue (criteria.IsSatisfied (method));
-        }
+    [Test]
+    public void IsSatisfiedWithAnythingByDefault()
+    {
+        RegularExpressionMethodNameCriteria criteria = new RegularExpressionMethodNameCriteria();
+        MethodInfo method = typeof(TestObject).GetMethod("OnClick");
+        Assert.IsTrue(criteria.IsSatisfied(method));
     }
 }

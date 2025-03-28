@@ -18,27 +18,22 @@
 
 #endregion
 
-
 using NUnit.Framework;
 using Spring.Context.Support;
 
-namespace Spring.Context.Attributes
+namespace Spring.Context.Attributes;
+
+[TestFixture]
+public class CodeConfigApplicationContextTests : AbstractConfigurationClassPostProcessorTests
 {
-    [TestFixture]
-    public class CodeConfigApplicationContextTests : AbstractConfigurationClassPostProcessorTests
+    protected override void CreateApplicationContext()
     {
+        GenericApplicationContext ctx = new GenericApplicationContext();
 
-        protected override void CreateApplicationContext()
-        {
-            GenericApplicationContext ctx = new GenericApplicationContext();
+        ctx.ScanAllAssemblies();
 
-            ctx.ScanAllAssemblies();
+        ctx.Refresh();
 
-            ctx.Refresh();
-
-            _ctx = ctx;
-        }
-
+        _ctx = ctx;
     }
-
 }

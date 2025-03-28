@@ -27,17 +27,13 @@ partial class Build : NukeBuild
     ///   - JetBrains Rider            https://nuke.build/rider
     ///   - Microsoft VisualStudio     https://nuke.build/visualstudio
     ///   - Microsoft VSCode           https://nuke.build/vscode
+    public static int Main() => Execute<Build>(x => x.Compile);
 
-    public static int Main () => Execute<Build>(x => x.Compile);
+    [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")] readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
 
-    [Parameter("Configuration to build - Default is 'Debug' (local) or 'Release' (server)")]
-    readonly Configuration Configuration = IsLocalBuild ? Configuration.Debug : Configuration.Release;
+    [Parameter("Build EMS")] readonly bool BuildEms = false;
 
-    [Parameter("Build EMS")]
-    readonly bool BuildEms = false;
-
-    [Parameter("Version")]
-    readonly string ProjectVersion = "3.1.0";
+    [Parameter("Version")] readonly string ProjectVersion = "3.1.0";
 
     [Solution] readonly Solution Solution;
     [GitRepository] readonly GitRepository GitRepository;
@@ -180,35 +176,10 @@ partial class Build : NukeBuild
             var binDirectory = RootDirectory / "bin";
             binDirectory.CreateOrCleanDirectory();
 
-            var moduleNames = new[]
-            {
-                "Common.Logging",
-                "Common.Logging.Core",
-                "Spring.Core",
-                "Spring.Aop",
-                "Spring.Data",
-                "Spring.Data.NHibernate*",
-                "Spring.Web",
-                "Spring.Web.Mvc5",
-                "Spring.Web.Extensions",
-                "Spring.Services",
-                "Spring.Testing.NUnit",
-                "Spring.Testing.Microsoft",
-                "Spring.Messaging.Ems",
-                "Spring.Messaging.Nms",
-                "Spring.Messaging",
-                "Spring.Scheduling.Quartz3",
-                "Spring.Template.Velocity",
-                "Spring.Web.Conversation.NHibernate5",
-            };
+            var moduleNames = new[] { "Common.Logging", "Common.Logging.Core", "Spring.Core", "Spring.Aop", "Spring.Data", "Spring.Data.NHibernate*", "Spring.Web", "Spring.Web.Mvc5", "Spring.Web.Extensions", "Spring.Services", "Spring.Testing.NUnit", "Spring.Testing.Microsoft", "Spring.Messaging.Ems", "Spring.Messaging.Nms", "Spring.Messaging", "Spring.Scheduling.Quartz3", "Spring.Template.Velocity", "Spring.Web.Conversation.NHibernate5", };
 
             var patterns = moduleNames
-                .SelectMany(x => new []
-                {
-                    "**/" + Configuration + "/**/" + x + ".dll",
-                    "**/" + Configuration + "/**/" + x + ".xml",
-                    "**/" + Configuration + "/**/" + x + ".pdb"
-                })
+                .SelectMany(x => new[] { "**/" + Configuration + "/**/" + x + ".dll", "**/" + Configuration + "/**/" + x + ".xml", "**/" + Configuration + "/**/" + x + ".pdb" })
                 .ToArray();
 
             foreach (var file in BuildDirectory.GlobFiles(patterns))

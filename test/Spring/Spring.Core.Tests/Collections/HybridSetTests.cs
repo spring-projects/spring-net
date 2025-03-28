@@ -24,23 +24,22 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Collections
+namespace Spring.Collections;
+
+/// <summary>
+/// Unit tests for the HybridSet class.
+/// </summary>
+/// <author>Rick Evans</author>
+[TestFixture]
+public class HybridSetTests : SetTests
 {
-	/// <summary>
-	/// Unit tests for the HybridSet class.
+    /// <summary>
+    /// The setup logic executed before the execution of each individual test.
     /// </summary>
-    /// <author>Rick Evans</author>
-	[TestFixture]
-    public class HybridSetTests : SetTests
+    [SetUp]
+    public override void SetUp()
     {
-        /// <summary>
-        /// The setup logic executed before the execution of each individual test.
-        /// </summary>
-        [SetUp]
-        public override void SetUp () 
-        {
-            Set = new HybridSet ();
-            SetForSetOps = new HybridSet ();
-        }
+        Set = new HybridSet();
+        SetForSetOps = new HybridSet();
     }
 }

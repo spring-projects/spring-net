@@ -21,70 +21,66 @@
 #region Imports
 
 using NUnit.Framework;
+
 //using NUnit.Framework.SyntaxHelpers;
 
 #endregion
 
-namespace Spring.Collections.Generic
+namespace Spring.Collections.Generic;
+
+/// <summary>
+/// This class contains tests for ReadOnlyDictionary
+/// </summary>
+/// <author>Mark Pollack</author>
+[TestFixture]
+public class ReadOnlyDictionaryTests
 {
-    /// <summary>
-    /// This class contains tests for ReadOnlyDictionary
-    /// </summary>
-    /// <author>Mark Pollack</author>
-    [TestFixture]
-    public class ReadOnlyDictionaryTests
+    private IDictionary<string, int> personDictionary;
+    private IDictionary<string, int> readonlyPersonDictionary;
+
+    [SetUp]
+    public void Setup()
     {
-        private IDictionary<string, int> personDictionary;
-        private IDictionary<string, int> readonlyPersonDictionary;
-
-        [SetUp]
-        public void Setup()
-        {
-            personDictionary = new Dictionary<string, int>();
-            personDictionary.Add("Mark", 38);
-            personDictionary.Add("Daniela", 38);
-            readonlyPersonDictionary = new ReadOnlyDictionary<string, int>(personDictionary);
-
-        }
-
-        [Test]
-        public void TestSunnyDay()
-        {
-
-            Assert.That(readonlyPersonDictionary.IsReadOnly, Is.True);
-            Assert.That(readonlyPersonDictionary.Contains(new KeyValuePair<string, int>("Mark", 38)));
-            Assert.That(readonlyPersonDictionary.ContainsKey("Mark"), Is.True);
-            Assert.That(readonlyPersonDictionary.Count, Is.EqualTo(2));
-        }
-
-        [Test]
-        public void Exceptions()
-        {
-            //updating to nunit 2.5 would be nice to use Assert.That( SomeMethod, Throws.Exception<ArgumentException>());
-            // Execute(delegate {  });
-
-            Execute(() => { readonlyPersonDictionary["Mark"] = 4; });
-            Execute(() => readonlyPersonDictionary.Add("Gabriel", 3));
-            Execute(() => readonlyPersonDictionary.Add(new KeyValuePair<string, int>("Mark", 38)));
-            Execute(() => readonlyPersonDictionary.Clear());
-            Execute(() => readonlyPersonDictionary.Remove("Mark"));
-            Execute(() => readonlyPersonDictionary.Remove(new KeyValuePair<string, int>("Mark", 38)));
-        }
-
-        public void Execute(DoInTryCatch exceptionDelegate)
-        {
-            try
-            {
-                exceptionDelegate.Invoke();
-                Assert.Fail("Should throw NotSupportedException");
-            } catch (NotSupportedException)
-            {
-                
-            }
-        }
-
-        public delegate void DoInTryCatch();
-
-        
+        personDictionary = new Dictionary<string, int>();
+        personDictionary.Add("Mark", 38);
+        personDictionary.Add("Daniela", 38);
+        readonlyPersonDictionary = new ReadOnlyDictionary<string, int>(personDictionary);
     }
+
+    [Test]
+    public void TestSunnyDay()
+    {
+        Assert.That(readonlyPersonDictionary.IsReadOnly, Is.True);
+        Assert.That(readonlyPersonDictionary.Contains(new KeyValuePair<string, int>("Mark", 38)));
+        Assert.That(readonlyPersonDictionary.ContainsKey("Mark"), Is.True);
+        Assert.That(readonlyPersonDictionary.Count, Is.EqualTo(2));
+    }
+
+    [Test]
+    public void Exceptions()
+    {
+        //updating to nunit 2.5 would be nice to use Assert.That( SomeMethod, Throws.Exception<ArgumentException>());
+        // Execute(delegate {  });
+
+        Execute(() => { readonlyPersonDictionary["Mark"] = 4; });
+        Execute(() => readonlyPersonDictionary.Add("Gabriel", 3));
+        Execute(() => readonlyPersonDictionary.Add(new KeyValuePair<string, int>("Mark", 38)));
+        Execute(() => readonlyPersonDictionary.Clear());
+        Execute(() => readonlyPersonDictionary.Remove("Mark"));
+        Execute(() => readonlyPersonDictionary.Remove(new KeyValuePair<string, int>("Mark", 38)));
+    }
+
+    public void Execute(DoInTryCatch exceptionDelegate)
+    {
+        try
+        {
+            exceptionDelegate.Invoke();
+            Assert.Fail("Should throw NotSupportedException");
+        }
+        catch (NotSupportedException)
+        {
+        }
+    }
+
+    public delegate void DoInTryCatch();
 }

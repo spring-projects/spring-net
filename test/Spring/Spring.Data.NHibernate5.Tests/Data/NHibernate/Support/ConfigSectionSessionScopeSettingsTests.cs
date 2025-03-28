@@ -21,10 +21,8 @@
 #region Imports
 
 using FakeItEasy;
-
 using NHibernate;
 using NUnit.Framework;
-
 using Spring.Context.Support;
 using Spring.Objects.Factory.Config;
 
@@ -57,7 +55,7 @@ namespace Spring.Data.NHibernate.Support
             ContextRegistry.Clear();
             ContextRegistry.RegisterContext(appCtx);
 
-            ConfigSectionSessionScopeSettings settings = new ConfigSectionSessionScopeSettings(this.GetType(), (IVariableSource)null);
+            ConfigSectionSessionScopeSettings settings = new ConfigSectionSessionScopeSettings(this.GetType(), (IVariableSource) null);
 
             Assert.AreEqual(expectedSessionFactory, settings.SessionFactory);
             Assert.AreEqual(expectedEntityInterceptor, settings.EntityInterceptor);
@@ -71,7 +69,7 @@ namespace Spring.Data.NHibernate.Support
             string SESSIONFACTORY_OBJECTNAME = "SessionFactory";
             string ENTITYINTERCEPTOR_OBJECTNAME = "EntityInterceptor";
 
-            ISessionFactory expectedSessionFactory =  A.Fake<ISessionFactory>();
+            ISessionFactory expectedSessionFactory = A.Fake<ISessionFactory>();
             IInterceptor expectedEntityInterceptor = A.Fake<IInterceptor>();
             bool expectedSingleSession = false;
             FlushMode expectedDefaultFlushMode = FlushMode.Auto;
@@ -87,19 +85,18 @@ namespace Spring.Data.NHibernate.Support
             // simulate config section
             string thisTypeName = this.GetType().FullName;
             DictionaryVariableSource variableSource = new DictionaryVariableSource()
-                .Add(thisTypeName + ".SessionFactoryObjectName", SESSIONFACTORY_OBJECTNAME)
-                .Add(thisTypeName + ".EntityInterceptorObjectName", ENTITYINTERCEPTOR_OBJECTNAME)
-                .Add(thisTypeName + ".SingleSession", expectedSingleSession.ToString().ToLower() ) // case insensitive!
-                .Add(thisTypeName + ".DefaultFlushMode", expectedDefaultFlushMode.ToString().ToLower() ) // case insensitive!
+                    .Add(thisTypeName + ".SessionFactoryObjectName", SESSIONFACTORY_OBJECTNAME)
+                    .Add(thisTypeName + ".EntityInterceptorObjectName", ENTITYINTERCEPTOR_OBJECTNAME)
+                    .Add(thisTypeName + ".SingleSession", expectedSingleSession.ToString().ToLower()) // case insensitive!
+                    .Add(thisTypeName + ".DefaultFlushMode", expectedDefaultFlushMode.ToString().ToLower()) // case insensitive!
                 ;
-
 
             ConfigSectionSessionScopeSettings settings = new ConfigSectionSessionScopeSettings(this.GetType(), variableSource);
 
-            Assert.AreEqual( expectedSessionFactory, settings.SessionFactory );
-            Assert.AreEqual( expectedEntityInterceptor, settings.EntityInterceptor );
-            Assert.AreEqual( expectedSingleSession, settings.SingleSession );
-            Assert.AreEqual( expectedDefaultFlushMode, settings.DefaultFlushMode );
+            Assert.AreEqual(expectedSessionFactory, settings.SessionFactory);
+            Assert.AreEqual(expectedEntityInterceptor, settings.EntityInterceptor);
+            Assert.AreEqual(expectedSingleSession, settings.SingleSession);
+            Assert.AreEqual(expectedDefaultFlushMode, settings.DefaultFlushMode);
         }
     }
 }

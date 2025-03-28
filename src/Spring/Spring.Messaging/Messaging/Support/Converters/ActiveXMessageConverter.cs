@@ -20,81 +20,80 @@
 
 #if NETSTANDARD
 using Experimental.System.Messaging;
+
 #else
 using System.Messaging;
 #endif
 
-namespace Spring.Messaging.Support.Converters
+namespace Spring.Messaging.Support.Converters;
+
+/// <summary>
+/// An <see cref="IMessageConverter"/> implementation that delegates to an instance of
+/// <see cref="ActiveXMessageFormatter"/> to convert messages.
+/// </summary>
+/// <author>Mark Pollack</author>
+public class ActiveXMessageConverter : IMessageConverter
 {
+    private readonly ActiveXMessageFormatter messageFormatter;
+
     /// <summary>
-    /// An <see cref="IMessageConverter"/> implementation that delegates to an instance of
-    /// <see cref="ActiveXMessageFormatter"/> to convert messages.  
+    /// Initializes a new instance of the <see cref="ActiveXMessageConverter"/> class.
     /// </summary>
-    /// <author>Mark Pollack</author>
-    public class ActiveXMessageConverter : IMessageConverter
+    public ActiveXMessageConverter()
     {
-        private readonly ActiveXMessageFormatter messageFormatter;
-
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ActiveXMessageConverter"/> class.
-        /// </summary>
-        public ActiveXMessageConverter()
-        {
-            messageFormatter = new ActiveXMessageFormatter();
-        }
-
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ActiveXMessageConverter"/> class.
-        /// </summary>
-        /// <param name="messageFormatter">The message formatter.</param>
-        public ActiveXMessageConverter(ActiveXMessageFormatter messageFormatter)
-        {
-            this.messageFormatter = messageFormatter;
-        }
-
-        #region IMessageConverter Members
-
-        /// <summary>
-        /// Convert the given object to a Message.
-        /// </summary>
-        /// <param name="obj">The object to send.</param>
-        /// <returns>Message to send</returns>
-        public Message ToMessage(object obj)
-        {
-            Message m = new Message();
-            m.Body = obj;
-            m.Formatter = messageFormatter;
-            return m;
-        }
-
-        /// <summary>
-        /// Convert the given message to a object.
-        /// </summary>
-        /// <param name="message">The message.</param>
-        /// <returns>the object</returns>
-        public object FromMessage(Message message)
-        {
-            message.Formatter = messageFormatter;
-            return message.Body;
-        }
-
-        #endregion
-
-        #region ICloneable Members
-
-        /// <summary>
-        /// Creates a new object that is a copy of the current instance.
-        /// </summary>
-        /// <returns>
-        /// A new object that is a copy of this instance.
-        /// </returns>
-        public object Clone()
-        {
-            ActiveXMessageConverter mc = new ActiveXMessageConverter(messageFormatter.Clone() as ActiveXMessageFormatter);
-            return mc;
-        }
-
-        #endregion
+        messageFormatter = new ActiveXMessageFormatter();
     }
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="ActiveXMessageConverter"/> class.
+    /// </summary>
+    /// <param name="messageFormatter">The message formatter.</param>
+    public ActiveXMessageConverter(ActiveXMessageFormatter messageFormatter)
+    {
+        this.messageFormatter = messageFormatter;
+    }
+
+    #region IMessageConverter Members
+
+    /// <summary>
+    /// Convert the given object to a Message.
+    /// </summary>
+    /// <param name="obj">The object to send.</param>
+    /// <returns>Message to send</returns>
+    public Message ToMessage(object obj)
+    {
+        Message m = new Message();
+        m.Body = obj;
+        m.Formatter = messageFormatter;
+        return m;
+    }
+
+    /// <summary>
+    /// Convert the given message to a object.
+    /// </summary>
+    /// <param name="message">The message.</param>
+    /// <returns>the object</returns>
+    public object FromMessage(Message message)
+    {
+        message.Formatter = messageFormatter;
+        return message.Body;
+    }
+
+    #endregion
+
+    #region ICloneable Members
+
+    /// <summary>
+    /// Creates a new object that is a copy of the current instance.
+    /// </summary>
+    /// <returns>
+    /// A new object that is a copy of this instance.
+    /// </returns>
+    public object Clone()
+    {
+        ActiveXMessageConverter mc = new ActiveXMessageConverter(messageFormatter.Clone() as ActiveXMessageFormatter);
+        return mc;
+    }
+
+    #endregion
 }

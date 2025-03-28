@@ -1,559 +1,570 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <objects xmlns="http://www.springframework.net">
-	<description>
-		Tests for list and map handling in an XML object definition file.
-	</description>
-	<object id="mapWithStringKeysSpecifiedAsElements" type="Spring.Objects.Factory.Config.DictionaryFactoryObject, Spring.Core">
-		<property name="SourceDictionary">
-			<dictionary>
-				<entry>
-					<key> 
-						<value>rick</value>
-					</key>
-					<value>Rick Evans</value>
-				</entry>
-				<entry>
-					<key>
-						<value>uncleelvis</value>
-					</key>
-					<value>Elvis Orten</value>
-				</entry>
-			</dictionary>
-		</property>
-	</object>
-	<object id="mapWithKeyRefAttributeShortcuts"
-		type="Spring.Objects.Factory.Config.DictionaryFactoryObject, Spring.Core">
-		<property name="SourceDictionary">
-			<dictionary>
-				<entry key-ref="rick">
-					<value>Rick Evans</value>
-				</entry>
-				<entry key-ref="uncleelvis">
-					<value>Elvis Orten</value>
-				</entry>
-			</dictionary>
-		</property>
-	</object>
-	<object id="mapWithNonStringKeys" type="Spring.Objects.Factory.Config.DictionaryFactoryObject, Spring.Core">
-		<property name="SourceDictionary">
-			<dictionary>
-				<entry>
-					<key>
-						<ref local="rick"/>
-					</key>
-					<value>Rick Evans</value>
-				</entry>
-				<entry>
-					<key>
-						<ref local="uncleelvis"/>
-					</key>
-					<value>Elvis Orten</value>
-				</entry>
-			</dictionary>
-		</property>
-	</object>
-	<object id="validEmptyWithDescription" type="Spring.Objects.TestObject, Spring.Core.Tests">
-		<description>
-			I have no properties and I'm happy without them. 
-		</description>
-	</object>
-	<object id="readOnlyDictionary" type="Spring.Objects.TestObject, Spring.Core.Tests">
-		<property name="periodicTable">
-			<dictionary>
-				<entry key="hydrogen">
-					<value>1</value>
-				</entry>
-				<entry key="carbon">
-					<value>12</value>
-				</entry>
-			</dictionary>
-		</property>
-	</object>
-	<object id="readOnlySet" type="Spring.Objects.TestObject, Spring.Core.Tests">
-		<property name="name">
-			<value>Mark</value>
-		</property>
-		<property name="age">
-			<value>35</value>
-		</property>
-		<property name="computers">
-			<set>
-				<value>Dell</value>
-				<value>IBM T41</value>
-			</set>
-		</property>
-	</object>
-	<object id="aleks" type="Spring.Objects.TestObject, Spring.Core.Tests">
-		<property name="name">
-			<value>Aleks</value>
-		</property>
-		<property name="age">
-			<value>30</value>
-		</property>
-		<property name="pets">
-			<list>
-				<value>Nadja</value>
-			</list>
-		</property>
-	</object>
-	<object id="jenny" type="Spring.Objects.TestObject, Spring.Core.Tests">
-		<property name="name">
-			<value>Jenny</value>
-		</property>
-		<property name="age">
-			<value>30</value>
-		</property>
-		<property name="spouse">
-			<ref local="david" />
-		</property>
-	</object>
-	<object id="david" type="Spring.Objects.TestObject, Spring.Core.Tests">
-		<description>
-			Simple object, without any collections.
-		</description>
-		<property name="name">
-			<description>The name of the user</description>
-			<value>David</value>
-		</property>
-		<property name="age">
-			<value>27</value>
-		</property>
-	</object>
-	<object id="rod" type="Spring.Objects.TestObject, Spring.Core.Tests">
-		<property name="name">
-			<value>Rod</value>
-		</property>
-		<property name="age">
-			<value>32</value>
-		</property>
-		<property name="friends">
-			<description>List of Rod's friends</description>
-			<list>
-				<ref local="jenny" />
-				<ref local="david" />
-			</list>
-		</property>
-	</object>
-	<object id="pJenny" type="Spring.Objects.TestObject, Spring.Core.Tests" singleton="false">
-		<property name="name">
-			<value>Jenny</value>
-		</property>
-		<property name="age">
-			<value>30</value>
-		</property>
-		<property name="spouse">
-			<ref local="david" />
-		</property>
-	</object>
-	<object id="pDavid" type="Spring.Objects.TestObject, Spring.Core.Tests" singleton="false">
-		<property name="name">
-			<value>David</value>
-		</property>
-		<property name="age">
-			<value>27</value>
-		</property>
-	</object>
-	<object id="pRod" type="Spring.Objects.TestObject, Spring.Core.Tests" singleton="false">
-		<property name="name">
-			<value>Rod</value>
-		</property>
-		<property name="age">
-			<value>32</value>
-		</property>
-		<property name="friends">
-			<list>
-				<ref local="pJenny" />
-				<ref local="pDavid" />
-			</list>
-		</property>
-	</object>
-	<object id="loner" type="Spring.Objects.TestObject, Spring.Core.Tests">
-		<property name="name">
-			<value>loner</value>
-		</property>
-		<property name="age">
-			<value>26</value>
-		</property>
-		<property name="friends">
-			<list>
-				<ref local="david" />
-			</list>
-		</property>
-	</object>
-	<object id="jumble" type="Spring.Objects.Factory.Xml.MixedCollectionObject, Spring.Core.Tests">
-		<property name="jumble">
-			<list>
-				<ref local="david" />
-				<value>literal</value>
-				<ref local="jenny" />
-				<idref local="rod" />
-			</list>
-		</property>
-	</object>
-	
+    <description>
+        Tests for list and map handling in an XML object definition file.
+    </description>
+    <object id="mapWithStringKeysSpecifiedAsElements"
+            type="Spring.Objects.Factory.Config.DictionaryFactoryObject, Spring.Core">
+        <property name="SourceDictionary">
+            <dictionary>
+                <entry>
+                    <key>
+                        <value>rick</value>
+                    </key>
+                    <value>Rick Evans</value>
+                </entry>
+                <entry>
+                    <key>
+                        <value>uncleelvis</value>
+                    </key>
+                    <value>Elvis Orten</value>
+                </entry>
+            </dictionary>
+        </property>
+    </object>
+    <object id="mapWithKeyRefAttributeShortcuts"
+            type="Spring.Objects.Factory.Config.DictionaryFactoryObject, Spring.Core">
+        <property name="SourceDictionary">
+            <dictionary>
+                <entry key-ref="rick">
+                    <value>Rick Evans</value>
+                </entry>
+                <entry key-ref="uncleelvis">
+                    <value>Elvis Orten</value>
+                </entry>
+            </dictionary>
+        </property>
+    </object>
+    <object id="mapWithNonStringKeys" type="Spring.Objects.Factory.Config.DictionaryFactoryObject, Spring.Core">
+        <property name="SourceDictionary">
+            <dictionary>
+                <entry>
+                    <key>
+                        <ref local="rick" />
+                    </key>
+                    <value>Rick Evans</value>
+                </entry>
+                <entry>
+                    <key>
+                        <ref local="uncleelvis" />
+                    </key>
+                    <value>Elvis Orten</value>
+                </entry>
+            </dictionary>
+        </property>
+    </object>
+    <object id="validEmptyWithDescription" type="Spring.Objects.TestObject, Spring.Core.Tests">
+        <description>
+            I have no properties and I'm happy without them.
+        </description>
+    </object>
+    <object id="readOnlyDictionary" type="Spring.Objects.TestObject, Spring.Core.Tests">
+        <property name="periodicTable">
+            <dictionary>
+                <entry key="hydrogen">
+                    <value>1</value>
+                </entry>
+                <entry key="carbon">
+                    <value>12</value>
+                </entry>
+            </dictionary>
+        </property>
+    </object>
+    <object id="readOnlySet" type="Spring.Objects.TestObject, Spring.Core.Tests">
+        <property name="name">
+            <value>Mark</value>
+        </property>
+        <property name="age">
+            <value>35</value>
+        </property>
+        <property name="computers">
+            <set>
+                <value>Dell</value>
+                <value>IBM T41</value>
+            </set>
+        </property>
+    </object>
+    <object id="aleks" type="Spring.Objects.TestObject, Spring.Core.Tests">
+        <property name="name">
+            <value>Aleks</value>
+        </property>
+        <property name="age">
+            <value>30</value>
+        </property>
+        <property name="pets">
+            <list>
+                <value>Nadja</value>
+            </list>
+        </property>
+    </object>
+    <object id="jenny" type="Spring.Objects.TestObject, Spring.Core.Tests">
+        <property name="name">
+            <value>Jenny</value>
+        </property>
+        <property name="age">
+            <value>30</value>
+        </property>
+        <property name="spouse">
+            <ref local="david" />
+        </property>
+    </object>
+    <object id="david" type="Spring.Objects.TestObject, Spring.Core.Tests">
+        <description>
+            Simple object, without any collections.
+        </description>
+        <property name="name">
+            <description>The name of the user</description>
+            <value>David</value>
+        </property>
+        <property name="age">
+            <value>27</value>
+        </property>
+    </object>
+    <object id="rod" type="Spring.Objects.TestObject, Spring.Core.Tests">
+        <property name="name">
+            <value>Rod</value>
+        </property>
+        <property name="age">
+            <value>32</value>
+        </property>
+        <property name="friends">
+            <description>List of Rod's friends</description>
+            <list>
+                <ref local="jenny" />
+                <ref local="david" />
+            </list>
+        </property>
+    </object>
+    <object id="pJenny" type="Spring.Objects.TestObject, Spring.Core.Tests" singleton="false">
+        <property name="name">
+            <value>Jenny</value>
+        </property>
+        <property name="age">
+            <value>30</value>
+        </property>
+        <property name="spouse">
+            <ref local="david" />
+        </property>
+    </object>
+    <object id="pDavid" type="Spring.Objects.TestObject, Spring.Core.Tests" singleton="false">
+        <property name="name">
+            <value>David</value>
+        </property>
+        <property name="age">
+            <value>27</value>
+        </property>
+    </object>
+    <object id="pRod" type="Spring.Objects.TestObject, Spring.Core.Tests" singleton="false">
+        <property name="name">
+            <value>Rod</value>
+        </property>
+        <property name="age">
+            <value>32</value>
+        </property>
+        <property name="friends">
+            <list>
+                <ref local="pJenny" />
+                <ref local="pDavid" />
+            </list>
+        </property>
+    </object>
+    <object id="loner" type="Spring.Objects.TestObject, Spring.Core.Tests">
+        <property name="name">
+            <value>loner</value>
+        </property>
+        <property name="age">
+            <value>26</value>
+        </property>
+        <property name="friends">
+            <list>
+                <ref local="david" />
+            </list>
+        </property>
+    </object>
+    <object id="jumble" type="Spring.Objects.Factory.Xml.MixedCollectionObject, Spring.Core.Tests">
+        <property name="jumble">
+            <list>
+                <ref local="david" />
+                <value>literal</value>
+                <ref local="jenny" />
+                <idref local="rod" />
+            </list>
+        </property>
+    </object>
 
-	<object id="objectWithIndexer" type="Spring.Objects.TestObject, Spring.Core.Tests">	 
-	    <property name="[0]" value="my string value"/>	    
-	</object>
 
-	
-	<object id="objectWithTypedFriends" type="Spring.Objects.TestObject, Spring.Core.Tests">
-	    <property name="TypedFriends">
-	       <list>
-	            <ref local="david"/>
-	       </list>
-	    </property>
-	</object>
-	
-	<object id="verbose" type="Spring.Objects.TestObject, Spring.Core.Tests">
-		<property name="name">
-			<value>verbose</value>
-		</property>
-	</object>
-	<object id="verbose2" type="Spring.Objects.TestObject, Spring.Core.Tests">
-		<property name="name">
-			<idref local="verbose" />
-		</property>
-	</object>
-	<object id="verbose3" type="Spring.Objects.TestObject, Spring.Core.Tests">
-		<property name="name">
-			<idref object="verbose" />
-		</property>
-	</object>
-	<object id="aliased" type="Spring.Objects.TestObject, Spring.Core.Tests" name="myalias">
-		<property name="name">
-			<value>aliased</value>
-		</property>
-	</object>
-	<object id="multiAliased" type="Spring.Objects.TestObject, Spring.Core.Tests" name="alias1,alias2">
-		<property name="name">
-			<value>aliased</value>
-		</property>
-	</object>
-	<object type="Spring.Objects.TestObject, Spring.Core.Tests" name="aliasWithoutId1,aliasWithoutId2,aliasWithoutId3">
-		<property name="name">
-			<value>aliased</value>
-		</property>
-	</object>
-	<object type="Spring.Objects.TestObject, Spring.Core.Tests">
-		<property name="name">
-			<null />
-		</property>
-	</object>
-	<object id="emptyMap" type="Spring.Objects.Factory.HasMap, Spring.Core.Tests">
-		<property name="map">
-			<dictionary></dictionary>
-		</property>
-	</object>
-	<object id="literalMap" type="Spring.Objects.Factory.HasMap, Spring.Core.Tests">
-		<property name="map">
-			<dictionary>
-				<entry key="foo">
-					<value>bar</value>
-				</entry>
-				<entry key="fi">
-					<value>fum</value>
-				</entry>
-				<entry key="fa">
-					<null />
-				</entry>
-			</dictionary>
-		</property>
-	</object>
-	<object id="mixedMap" type="Spring.Objects.Factory.HasMap, Spring.Core.Tests">
-		<property name="map">
-			<dictionary>
-				<entry key="foo">
-					<value>bar</value>
-				</entry>
-				<entry key="jenny">
-					<ref local="jenny" />
-				</entry>
-				<entry key="david">
-					<idref object="david" />
-				</entry>
-			</dictionary>
-		</property>
-	</object>
-	<object id="pMixedMap" type="Spring.Objects.Factory.HasMap, Spring.Core.Tests" singleton="false">
-		<property name="map">
-			<dictionary>
-				<entry key="foo">
-					<value>bar</value>
-				</entry>
-				<entry key="jenny">
-					<ref local="pJenny" />
-				</entry>
-			</dictionary>
-		</property>
-	</object>
-	<object id="mixedMapWithList" type="Spring.Objects.Factory.HasMap, Spring.Core.Tests">
-		<property name="map">
-			<dictionary>
-				<entry key="foo">
-					<value>bar</value>
-				</entry>
-				<entry key="jenny">
-					<ref local="jenny" />
-				</entry>
-				<entry key="list">
-					<list>
-						<value>zero</value>
-						<dictionary>
-							<entry key="fo">
-								<value>bar</value>
-							</entry>
-							<entry key="jen">
-								<ref local="jenny" />
-							</entry>
-						</dictionary>
-						<list>
-							<ref local="jenny" />
-							<value>ba</value>
-						</list>
-						<null />
-					</list>
-				</entry>
-				<entry key="map">
-					<dictionary>
-						<entry key="foo">
-							<value>bar</value>
-						</entry>
-						<entry key="jenny">
-							<ref local="jenny" />
-						</entry>
-					</dictionary>
-				</entry>
-			</dictionary>
-		</property>
-	</object>
-	<object id="emptySet" type="Spring.Objects.Factory.HasMap, Spring.Core.Tests">
-		<property name="set">
-			<set></set>
-		</property>
-	</object>
-	<object id="set" type="Spring.Objects.Factory.HasMap, Spring.Core.Tests">
-		<property name="set">
-			<set>
-				<value>bar</value>
-				<ref local="jenny" />
-				<null />
-			</set>
-		</property>
-	</object>
-	<object id="emptyValue" type="Spring.Objects.Factory.HasMap, Spring.Core.Tests">
-		<property name="props">
-			<name-values>
-				<add key="foo" value="" />
-			</name-values>
-		</property>
-	</object>
-	<object id="emptyProps" type="Spring.Objects.Factory.HasMap, Spring.Core.Tests">
-		<property name="props">
-			<name-values></name-values>
-		</property>
-	</object>
-	<object id="props" type="Spring.Objects.Factory.HasMap, Spring.Core.Tests">
-		<property name="props">
-			<name-values>
-				<add key="foo" value="bar" />
-				<add key="2" value="TWO" />
-			</name-values>
-		</property>
-	</object>
-	<object id="propsWithSameKey" type="Spring.Objects.Factory.HasMap, Spring.Core.Tests">
-		<property name="props">
-			<name-values>
-				<add key="foo" value="OnE" />
-				<add key="foo" value="tWo" />
-				<add key="bar" value="OnE" />
-				<add key="bar" value="tWo" />
-			</name-values>
-		</property>
-	</object>
-  <object id="delimitedProps" type="Spring.Objects.Factory.HasMap, Spring.Core.Tests">
-    <property name="props">
-      <name-values>
-        <add key="foo" value="bar1,bar2,bar3" delimiters=","/>
-        <add key="days" value="monday,tuesday.wednesday:thursday'friday!saturday|sunday" delimiters=",.:'!|"/>
-      </name-values>
-    </property>
-  </object>
-  <object id="objectArray" type="Spring.Objects.Factory.HasMap, Spring.Core.Tests">
-		<property name="objectArray">
-			<list>
-				<value>one</value>
-				<ref local="jenny" />
-			</list>
-		</property>
-	</object>
-	<object id="classArray" type="Spring.Objects.Factory.HasMap, Spring.Core.Tests">
-		<property name="classArray">
-			<list>
-				<value>System.String</value>
-				<value>System.Exception</value>
-			</list>
-		</property>
-	</object>
-	<object id="listFactory" type="Spring.Objects.Factory.Config.ListFactoryObject, Spring.Core">
-		<property name="SourceList">
-			<list>
-				<value>bar</value>
-				<value>jenny</value>
-			</list>
-		</property>
-		<property name="TargetListType">
-			<value>Spring.Collections.LinkedList</value>
-		</property>
-	</object>
-	<object id="pListFactory" type="Spring.Objects.Factory.Config.ListFactoryObject, Spring.Core">
-		<property name="SourceList">
-			<list>
-				<value>bar</value>
-				<value>jenny</value>
-			</list>
-		</property>
-		<property name="TargetListType">
-			<value>Spring.Collections.LinkedList</value>
-		</property>
-		<property name="IsSingleton">
-			<value>true</value>
-		</property>
-	</object>
-	<object id="setFactory" type="Spring.Objects.Factory.Config.SetFactoryObject, Spring.Core">
-		<property name="SourceSet">
-			<set>
-				<value>bar</value>
-				<value>jenny</value>
-			</set>
-		</property>
-		<property name="TargetSetType">
-			<value>Spring.Collections.HybridSet</value>
-		</property>
-	</object>
-	<object id="pSetFactory" type="Spring.Objects.Factory.Config.SetFactoryObject, Spring.Core">
-		<property name="SourceSet">
-			<set>
-				<value>bar</value>
-				<value>jenny</value>
-			</set>
-		</property>
-		<property name="TargetSetType">
-			<value>Spring.Collections.HybridSet</value>
-		</property>
-		<property name="IsSingleton">
-			<value>true</value>
-		</property>
-	</object>
-	<object id="mapFactory" type="Spring.Objects.Factory.Config.DictionaryFactoryObject, Spring.Core">
-		<property name="SourceDictionary">
-			<dictionary>
-				<entry key="foo">
-					<value>bar</value>
-				</entry>
-				<entry key="jen">
-					<value>jenny</value>
-				</entry>
-			</dictionary>
-		</property>
-		<property name="TargetDictionaryType">
-			<value>System.Collections.Hashtable</value>
-		</property>
-	</object>
-	<object id="pMapFactory" type="Spring.Objects.Factory.Config.DictionaryFactoryObject, Spring.Core">
-		<property name="SourceDictionary">
-			<dictionary>
-				<entry key="foo">
-					<value>bar</value>
-				</entry>
-				<entry key="jen">
-					<value>jenny</value>
-				</entry>
-			</dictionary>
-		</property>
-		<property name="TargetDictionaryType">
-			<value>System.Collections.Hashtable</value>
-		</property>
-		<property name="IsSingleton">
-			<value>true</value>
-		</property>
-	</object>
-	<object id="mapWithEntryValueShortcut" type="Spring.Objects.Factory.Config.DictionaryFactoryObject, Spring.Core">
-		<property name="SourceDictionary">
-			<dictionary>
-				<entry key="rob" value="robert" />
-				<entry key="jen" value="jenny" />
-			</dictionary>
-		</property>
-	</object>
-	<object id="mapWithValueRefAttributeShortcuts" type="Spring.Objects.Factory.Config.DictionaryFactoryObject, Spring.Core">
-		<property name="SourceDictionary">
-			<dictionary>
-				<entry key="rick" value-ref="rick" />
-				<entry key="uncleelvis" value-ref="uncleelvis" />
-			</dictionary>
-		</property>
-	</object>
-	<object id="rick" type="Spring.Objects.TestObject, Spring.Core.Tests">
-		<constructor-arg index="0"><value>Rick Evans</value></constructor-arg>
-		<constructor-arg index="1"><value>30</value></constructor-arg>
-	</object>
-	<object id="uncleelvis" type="Spring.Objects.TestObject, Spring.Core.Tests">
-		<constructor-arg index="0"><value>Uncle Elvis</value></constructor-arg>
-		<constructor-arg index="1"><value>47</value></constructor-arg>
-	</object>
+    <object id="objectWithIndexer" type="Spring.Objects.TestObject, Spring.Core.Tests">
+        <property name="[0]" value="my string value" />
+    </object>
 
-  <!-- Definitions for typed lists/dictionaries and generics -->
-  <object id="nonGenericExpressionHolder" type="Spring.Objects.Factory.Xml.NonGenericExpressionHolder, Spring.Core.Tests">
-    <property name="ExpressionsList">
-      <list element-type="Spring.Expressions.IExpression, Spring.Core">
-        <value>1 + 1</value>
-        <value>date('1974-8-24').Month</value>
-        <value>'Aleksandar Seovic'.ToUpper()</value>
-        <value>DateTime.Today > date('1974-8-24')</value>
-      </list>
-    </property>
-    <property name="ExpressionsDictionary">
-      <dictionary key-type="string" value-type="Spring.Expressions.IExpression, Spring.Core">
-        <entry key="0">
-          <value>1 + 1</value>
-        </entry>
-        <entry key="1">
-          <value>date('1974-8-24').Month</value>
-        </entry>
-        <entry key="2">
-          <value>'Aleksandar Seovic'.ToUpper()</value>
-        </entry>
-        <entry key="3">
-          <value>DateTime.Today > date('1974-8-24')</value>
-        </entry>
-      </dictionary>
-    </property>
-  </object>
-  <object id="genericExpressionHolder" type="Spring.Objects.Factory.Xml.GenericExpressionHolder, Spring.Core.Tests">
-    <property name="ExpressionsList">
-      <list element-type="Spring.Expressions.IExpression, Spring.Core">
-        <value>1 + 1</value>
-        <value>date('1974-8-24').Month</value>
-        <value>'Aleksandar Seovic'.ToUpper()</value>
-        <value>DateTime.Today > date('1974-8-24')</value>
-      </list>
-    </property>
-    <property name="ExpressionsDictionary">
-      <dictionary key-type="string" value-type="Spring.Expressions.IExpression, Spring.Core">
-        <entry key="0">
-          <value>1 + 1</value>
-        </entry>
-        <entry key="1">
-          <value>date('1974-8-24').Month</value>
-        </entry>
-        <entry key="2">
-          <value>'Aleksandar Seovic'.ToUpper()</value>
-        </entry>
-        <entry key="3">
-          <value>DateTime.Today > date('1974-8-24')</value>
-        </entry>
-      </dictionary>
-    </property>
-  </object>
+
+    <object id="objectWithTypedFriends" type="Spring.Objects.TestObject, Spring.Core.Tests">
+        <property name="TypedFriends">
+            <list>
+                <ref local="david" />
+            </list>
+        </property>
+    </object>
+
+    <object id="verbose" type="Spring.Objects.TestObject, Spring.Core.Tests">
+        <property name="name">
+            <value>verbose</value>
+        </property>
+    </object>
+    <object id="verbose2" type="Spring.Objects.TestObject, Spring.Core.Tests">
+        <property name="name">
+            <idref local="verbose" />
+        </property>
+    </object>
+    <object id="verbose3" type="Spring.Objects.TestObject, Spring.Core.Tests">
+        <property name="name">
+            <idref object="verbose" />
+        </property>
+    </object>
+    <object id="aliased" type="Spring.Objects.TestObject, Spring.Core.Tests" name="myalias">
+        <property name="name">
+            <value>aliased</value>
+        </property>
+    </object>
+    <object id="multiAliased" type="Spring.Objects.TestObject, Spring.Core.Tests" name="alias1,alias2">
+        <property name="name">
+            <value>aliased</value>
+        </property>
+    </object>
+    <object type="Spring.Objects.TestObject, Spring.Core.Tests" name="aliasWithoutId1,aliasWithoutId2,aliasWithoutId3">
+        <property name="name">
+            <value>aliased</value>
+        </property>
+    </object>
+    <object type="Spring.Objects.TestObject, Spring.Core.Tests">
+        <property name="name">
+            <null />
+        </property>
+    </object>
+    <object id="emptyMap" type="Spring.Objects.Factory.HasMap, Spring.Core.Tests">
+        <property name="map">
+            <dictionary></dictionary>
+        </property>
+    </object>
+    <object id="literalMap" type="Spring.Objects.Factory.HasMap, Spring.Core.Tests">
+        <property name="map">
+            <dictionary>
+                <entry key="foo">
+                    <value>bar</value>
+                </entry>
+                <entry key="fi">
+                    <value>fum</value>
+                </entry>
+                <entry key="fa">
+                    <null />
+                </entry>
+            </dictionary>
+        </property>
+    </object>
+    <object id="mixedMap" type="Spring.Objects.Factory.HasMap, Spring.Core.Tests">
+        <property name="map">
+            <dictionary>
+                <entry key="foo">
+                    <value>bar</value>
+                </entry>
+                <entry key="jenny">
+                    <ref local="jenny" />
+                </entry>
+                <entry key="david">
+                    <idref object="david" />
+                </entry>
+            </dictionary>
+        </property>
+    </object>
+    <object id="pMixedMap" type="Spring.Objects.Factory.HasMap, Spring.Core.Tests" singleton="false">
+        <property name="map">
+            <dictionary>
+                <entry key="foo">
+                    <value>bar</value>
+                </entry>
+                <entry key="jenny">
+                    <ref local="pJenny" />
+                </entry>
+            </dictionary>
+        </property>
+    </object>
+    <object id="mixedMapWithList" type="Spring.Objects.Factory.HasMap, Spring.Core.Tests">
+        <property name="map">
+            <dictionary>
+                <entry key="foo">
+                    <value>bar</value>
+                </entry>
+                <entry key="jenny">
+                    <ref local="jenny" />
+                </entry>
+                <entry key="list">
+                    <list>
+                        <value>zero</value>
+                        <dictionary>
+                            <entry key="fo">
+                                <value>bar</value>
+                            </entry>
+                            <entry key="jen">
+                                <ref local="jenny" />
+                            </entry>
+                        </dictionary>
+                        <list>
+                            <ref local="jenny" />
+                            <value>ba</value>
+                        </list>
+                        <null />
+                    </list>
+                </entry>
+                <entry key="map">
+                    <dictionary>
+                        <entry key="foo">
+                            <value>bar</value>
+                        </entry>
+                        <entry key="jenny">
+                            <ref local="jenny" />
+                        </entry>
+                    </dictionary>
+                </entry>
+            </dictionary>
+        </property>
+    </object>
+    <object id="emptySet" type="Spring.Objects.Factory.HasMap, Spring.Core.Tests">
+        <property name="set">
+            <set></set>
+        </property>
+    </object>
+    <object id="set" type="Spring.Objects.Factory.HasMap, Spring.Core.Tests">
+        <property name="set">
+            <set>
+                <value>bar</value>
+                <ref local="jenny" />
+                <null />
+            </set>
+        </property>
+    </object>
+    <object id="emptyValue" type="Spring.Objects.Factory.HasMap, Spring.Core.Tests">
+        <property name="props">
+            <name-values>
+                <add key="foo" value="" />
+            </name-values>
+        </property>
+    </object>
+    <object id="emptyProps" type="Spring.Objects.Factory.HasMap, Spring.Core.Tests">
+        <property name="props">
+            <name-values></name-values>
+        </property>
+    </object>
+    <object id="props" type="Spring.Objects.Factory.HasMap, Spring.Core.Tests">
+        <property name="props">
+            <name-values>
+                <add key="foo" value="bar" />
+                <add key="2" value="TWO" />
+            </name-values>
+        </property>
+    </object>
+    <object id="propsWithSameKey" type="Spring.Objects.Factory.HasMap, Spring.Core.Tests">
+        <property name="props">
+            <name-values>
+                <add key="foo" value="OnE" />
+                <add key="foo" value="tWo" />
+                <add key="bar" value="OnE" />
+                <add key="bar" value="tWo" />
+            </name-values>
+        </property>
+    </object>
+    <object id="delimitedProps" type="Spring.Objects.Factory.HasMap, Spring.Core.Tests">
+        <property name="props">
+            <name-values>
+                <add key="foo" value="bar1,bar2,bar3" delimiters="," />
+                <add key="days" value="monday,tuesday.wednesday:thursday'friday!saturday|sunday" delimiters=",.:'!|" />
+            </name-values>
+        </property>
+    </object>
+    <object id="objectArray" type="Spring.Objects.Factory.HasMap, Spring.Core.Tests">
+        <property name="objectArray">
+            <list>
+                <value>one</value>
+                <ref local="jenny" />
+            </list>
+        </property>
+    </object>
+    <object id="classArray" type="Spring.Objects.Factory.HasMap, Spring.Core.Tests">
+        <property name="classArray">
+            <list>
+                <value>System.String</value>
+                <value>System.Exception</value>
+            </list>
+        </property>
+    </object>
+    <object id="listFactory" type="Spring.Objects.Factory.Config.ListFactoryObject, Spring.Core">
+        <property name="SourceList">
+            <list>
+                <value>bar</value>
+                <value>jenny</value>
+            </list>
+        </property>
+        <property name="TargetListType">
+            <value>Spring.Collections.LinkedList</value>
+        </property>
+    </object>
+    <object id="pListFactory" type="Spring.Objects.Factory.Config.ListFactoryObject, Spring.Core">
+        <property name="SourceList">
+            <list>
+                <value>bar</value>
+                <value>jenny</value>
+            </list>
+        </property>
+        <property name="TargetListType">
+            <value>Spring.Collections.LinkedList</value>
+        </property>
+        <property name="IsSingleton">
+            <value>true</value>
+        </property>
+    </object>
+    <object id="setFactory" type="Spring.Objects.Factory.Config.SetFactoryObject, Spring.Core">
+        <property name="SourceSet">
+            <set>
+                <value>bar</value>
+                <value>jenny</value>
+            </set>
+        </property>
+        <property name="TargetSetType">
+            <value>Spring.Collections.HybridSet</value>
+        </property>
+    </object>
+    <object id="pSetFactory" type="Spring.Objects.Factory.Config.SetFactoryObject, Spring.Core">
+        <property name="SourceSet">
+            <set>
+                <value>bar</value>
+                <value>jenny</value>
+            </set>
+        </property>
+        <property name="TargetSetType">
+            <value>Spring.Collections.HybridSet</value>
+        </property>
+        <property name="IsSingleton">
+            <value>true</value>
+        </property>
+    </object>
+    <object id="mapFactory" type="Spring.Objects.Factory.Config.DictionaryFactoryObject, Spring.Core">
+        <property name="SourceDictionary">
+            <dictionary>
+                <entry key="foo">
+                    <value>bar</value>
+                </entry>
+                <entry key="jen">
+                    <value>jenny</value>
+                </entry>
+            </dictionary>
+        </property>
+        <property name="TargetDictionaryType">
+            <value>System.Collections.Hashtable</value>
+        </property>
+    </object>
+    <object id="pMapFactory" type="Spring.Objects.Factory.Config.DictionaryFactoryObject, Spring.Core">
+        <property name="SourceDictionary">
+            <dictionary>
+                <entry key="foo">
+                    <value>bar</value>
+                </entry>
+                <entry key="jen">
+                    <value>jenny</value>
+                </entry>
+            </dictionary>
+        </property>
+        <property name="TargetDictionaryType">
+            <value>System.Collections.Hashtable</value>
+        </property>
+        <property name="IsSingleton">
+            <value>true</value>
+        </property>
+    </object>
+    <object id="mapWithEntryValueShortcut" type="Spring.Objects.Factory.Config.DictionaryFactoryObject, Spring.Core">
+        <property name="SourceDictionary">
+            <dictionary>
+                <entry key="rob" value="robert" />
+                <entry key="jen" value="jenny" />
+            </dictionary>
+        </property>
+    </object>
+    <object id="mapWithValueRefAttributeShortcuts"
+            type="Spring.Objects.Factory.Config.DictionaryFactoryObject, Spring.Core">
+        <property name="SourceDictionary">
+            <dictionary>
+                <entry key="rick" value-ref="rick" />
+                <entry key="uncleelvis" value-ref="uncleelvis" />
+            </dictionary>
+        </property>
+    </object>
+    <object id="rick" type="Spring.Objects.TestObject, Spring.Core.Tests">
+        <constructor-arg index="0">
+            <value>Rick Evans</value>
+        </constructor-arg>
+        <constructor-arg index="1">
+            <value>30</value>
+        </constructor-arg>
+    </object>
+    <object id="uncleelvis" type="Spring.Objects.TestObject, Spring.Core.Tests">
+        <constructor-arg index="0">
+            <value>Uncle Elvis</value>
+        </constructor-arg>
+        <constructor-arg index="1">
+            <value>47</value>
+        </constructor-arg>
+    </object>
+
+    <!-- Definitions for typed lists/dictionaries and generics -->
+    <object id="nonGenericExpressionHolder"
+            type="Spring.Objects.Factory.Xml.NonGenericExpressionHolder, Spring.Core.Tests">
+        <property name="ExpressionsList">
+            <list element-type="Spring.Expressions.IExpression, Spring.Core">
+                <value>1 + 1</value>
+                <value>date('1974-8-24').Month</value>
+                <value>'Aleksandar Seovic'.ToUpper()</value>
+                <value>DateTime.Today > date('1974-8-24')</value>
+            </list>
+        </property>
+        <property name="ExpressionsDictionary">
+            <dictionary key-type="string" value-type="Spring.Expressions.IExpression, Spring.Core">
+                <entry key="0">
+                    <value>1 + 1</value>
+                </entry>
+                <entry key="1">
+                    <value>date('1974-8-24').Month</value>
+                </entry>
+                <entry key="2">
+                    <value>'Aleksandar Seovic'.ToUpper()</value>
+                </entry>
+                <entry key="3">
+                    <value>DateTime.Today > date('1974-8-24')</value>
+                </entry>
+            </dictionary>
+        </property>
+    </object>
+    <object id="genericExpressionHolder" type="Spring.Objects.Factory.Xml.GenericExpressionHolder, Spring.Core.Tests">
+        <property name="ExpressionsList">
+            <list element-type="Spring.Expressions.IExpression, Spring.Core">
+                <value>1 + 1</value>
+                <value>date('1974-8-24').Month</value>
+                <value>'Aleksandar Seovic'.ToUpper()</value>
+                <value>DateTime.Today > date('1974-8-24')</value>
+            </list>
+        </property>
+        <property name="ExpressionsDictionary">
+            <dictionary key-type="string" value-type="Spring.Expressions.IExpression, Spring.Core">
+                <entry key="0">
+                    <value>1 + 1</value>
+                </entry>
+                <entry key="1">
+                    <value>date('1974-8-24').Month</value>
+                </entry>
+                <entry key="2">
+                    <value>'Aleksandar Seovic'.ToUpper()</value>
+                </entry>
+                <entry key="3">
+                    <value>DateTime.Today > date('1974-8-24')</value>
+                </entry>
+            </dictionary>
+        </property>
+    </object>
 </objects>

@@ -19,69 +19,67 @@ using NHibernate.Properties;
 using NHibernate.Type;
 using Spring.Objects.Factory;
 
-namespace Spring.Data.NHibernate.Bytecode
+namespace Spring.Data.NHibernate.Bytecode;
+
+/// <summary>
+/// The Spring for .NET-backed ByteCodeprovider for NHibernate
+/// </summary>
+/// <author>Fabio Maulo</author>
+public class BytecodeProvider : IBytecodeProvider
 {
-    /// <summary>
-    /// The Spring for .NET-backed ByteCodeprovider for NHibernate
-    /// </summary>
-    /// <author>Fabio Maulo</author>
-    public class BytecodeProvider : IBytecodeProvider
+    private readonly IListableObjectFactory listableObjectFactory;
+    private readonly IObjectsFactory objectsFactory;
+    private readonly DefaultCollectionTypeFactory collectionTypefactory;
+    private readonly IProxyFactoryFactory proxyFactoryFactory;
+
+    ///<summary>
+    /// Creates a new bytecode Provider instance using the specified object factory
+    ///</summary>
+    ///<param name="listableObjectFactory"></param>
+    public BytecodeProvider(IListableObjectFactory listableObjectFactory)
     {
-		private readonly IListableObjectFactory listableObjectFactory;
-		private readonly IObjectsFactory objectsFactory;
-		private readonly DefaultCollectionTypeFactory collectionTypefactory;
-        private readonly IProxyFactoryFactory proxyFactoryFactory;
+        this.listableObjectFactory = listableObjectFactory;
+        this.objectsFactory = new ObjectsFactory(listableObjectFactory);
+        this.collectionTypefactory = new DefaultCollectionTypeFactory();
+        this.proxyFactoryFactory = new ProxyFactoryFactory();
+    }
 
-        ///<summary>
-        /// Creates a new bytecode Provider instance using the specified object factory
-        ///</summary>
-        ///<param name="listableObjectFactory"></param>
-        public BytecodeProvider(IListableObjectFactory listableObjectFactory)
-		{
-			this.listableObjectFactory = listableObjectFactory;
-			this.objectsFactory = new ObjectsFactory(listableObjectFactory);
-			this.collectionTypefactory = new DefaultCollectionTypeFactory();
-            this.proxyFactoryFactory = new ProxyFactoryFactory();
-		}
+    /// <summary>
+    /// Retrieve the <see cref="T:NHibernate.Bytecode.IReflectionOptimizer"/> delegate for this provider
+    ///             capable of generating reflection optimization components.
+    /// </summary>
+    /// <param name="clazz">The class to be reflected upon.</param><param name="getters">All property getters to be accessed via reflection.</param><param name="setters">All property setters to be accessed via reflection.</param>
+    /// <returns>The reflection optimization delegate.</returns>
+    public IReflectionOptimizer GetReflectionOptimizer(Type clazz, IGetter[] getters, ISetter[] setters)
+    {
+        return new ReflectionOptimizer(listableObjectFactory, clazz, getters, setters);
+    }
 
-        /// <summary>
-        /// Retrieve the <see cref="T:NHibernate.Bytecode.IReflectionOptimizer"/> delegate for this provider
-        ///             capable of generating reflection optimization components.
-        /// </summary>
-        /// <param name="clazz">The class to be reflected upon.</param><param name="getters">All property getters to be accessed via reflection.</param><param name="setters">All property setters to be accessed via reflection.</param>
-        /// <returns>The reflection optimization delegate.</returns>
-        public IReflectionOptimizer GetReflectionOptimizer(Type clazz, IGetter[] getters, ISetter[] setters)
-		{
-            return new ReflectionOptimizer(listableObjectFactory, clazz, getters, setters);
-		}
+    /// <summary>
+    /// The specific factory for this provider capable of
+    /// generating run-time proxies for lazy-loading purposes.
+    /// </summary>
+    public IProxyFactoryFactory ProxyFactoryFactory
+    {
+        get { return this.proxyFactoryFactory; }
+    }
 
-        /// <summary>
-        /// The specific factory for this provider capable of 
-        /// generating run-time proxies for lazy-loading purposes.
-        /// </summary>
-        public IProxyFactoryFactory ProxyFactoryFactory
-		{
-			get { return this.proxyFactoryFactory; }
-		}
+    /// <summary>
+    /// NHibernate's object instaciator.
+    /// </summary>
+    /// <remarks>
+    /// For entities <see cref="T:NHibernate.Bytecode.IReflectionOptimizer"/> and its implementations.
+    /// </remarks>
+    public IObjectsFactory ObjectsFactory
+    {
+        get { return this.objectsFactory; }
+    }
 
-        /// <summary>
-        /// NHibernate's object instaciator.
-        /// </summary>
-        /// <remarks>
-        /// For entities <see cref="T:NHibernate.Bytecode.IReflectionOptimizer"/> and its implementations.
-        /// </remarks>
-        public IObjectsFactory ObjectsFactory
-		{
-			get { return this.objectsFactory; }
-		}
-
-        /// <summary>
-        /// Instanciator of NHibernate's collections default types.
-        /// </summary>
-        public ICollectionTypeFactory CollectionTypeFactory
-		{
-			get { return this.collectionTypefactory; }
-		}
-
+    /// <summary>
+    /// Instanciator of NHibernate's collections default types.
+    /// </summary>
+    public ICollectionTypeFactory CollectionTypeFactory
+    {
+        get { return this.collectionTypefactory; }
     }
 }

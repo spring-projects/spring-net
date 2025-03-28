@@ -23,7 +23,6 @@
 using System.Reflection;
 using Microsoft.Extensions.Logging;
 using NUnit.Framework;
-
 using Spring.Aop.Support;
 using Spring.Context.Support;
 using Spring.Objects;
@@ -32,194 +31,194 @@ using Spring.Objects.Factory.Xml;
 
 #endregion
 
-namespace Spring.Aop.Framework.AutoProxy
+namespace Spring.Aop.Framework.AutoProxy;
+
+/// <summary>
+/// Tests for auto proxy creation combined with factory object and circular references.
+/// </summary>
+/// <author>Erich Eichinger (.NET)</author>
+[TestFixture]
+public class AdvisorAutoProxyCreatorCircularReferencesTests
 {
-    /// <summary>
-    /// Tests for auto proxy creation combined with factory object and circular references.
-    /// </summary>
-    /// <author>Erich Eichinger (.NET)</author>
-    [TestFixture]
-    public class AdvisorAutoProxyCreatorCircularReferencesTests
+    [Test]
+    public void TestAutoProxyCreation()
     {
-        [Test]
-        public void TestAutoProxyCreation()
-        {
-            XmlApplicationContext context = new XmlApplicationContext(ReadOnlyXmlTestResource.GetFilePath("advisorAutoProxyCreatorCircularReferencesTests.xml", typeof(AdvisorAutoProxyCreatorCircularReferencesTests)));
-            CountingAfterReturningAdvisor countingAdvisor = (CountingAfterReturningAdvisor)context.GetObject("testAdvisor");
+        XmlApplicationContext context = new XmlApplicationContext(ReadOnlyXmlTestResource.GetFilePath("advisorAutoProxyCreatorCircularReferencesTests.xml", typeof(AdvisorAutoProxyCreatorCircularReferencesTests)));
+        CountingAfterReturningAdvisor countingAdvisor = (CountingAfterReturningAdvisor) context.GetObject("testAdvisor");
 
-            // direct deps of AutoProxyCreator are not eligable for proxying
-            Assert.IsFalse(AopUtils.IsAopProxy(context.GetObject("aapc")));
-            Assert.IsFalse(AopUtils.IsAopProxy(countingAdvisor));
+        // direct deps of AutoProxyCreator are not eligable for proxying
+        Assert.IsFalse(AopUtils.IsAopProxy(context.GetObject("aapc")));
+        Assert.IsFalse(AopUtils.IsAopProxy(countingAdvisor));
 
-            TestObjectFactoryObject testObjectFactory = (TestObjectFactoryObject) context.GetObject("&testObjectFactory");
-            Assert.IsFalse(AopUtils.IsAopProxy(testObjectFactory));
+        TestObjectFactoryObject testObjectFactory = (TestObjectFactoryObject) context.GetObject("&testObjectFactory");
+        Assert.IsFalse(AopUtils.IsAopProxy(testObjectFactory));
 
-            Assert.IsFalse(AopUtils.IsAopProxy(context.GetObject("someOtherObject")));
+        Assert.IsFalse(AopUtils.IsAopProxy(context.GetObject("someOtherObject")));
 
-            // this one is completely independent
-            Assert.IsTrue(AopUtils.IsAopProxy(context.GetObject("independentObject")));
+        // this one is completely independent
+        Assert.IsTrue(AopUtils.IsAopProxy(context.GetObject("independentObject")));
 
+        // Asserts SPRNET-1225 - advisor dependencies most not be auto-proxied
+        object testObject = context.GetObject("testObjectFactory");
+        Assert.IsFalse(AopUtils.IsAopProxy(testObject));
 
-            // Asserts SPRNET-1225 - advisor dependencies most not be auto-proxied
-            object testObject = context.GetObject("testObjectFactory");
-            Assert.IsFalse(AopUtils.IsAopProxy(testObject));
+        // Asserts SPRNET-1224 - factory product most be cached
+        context.GetObject("testObjectFactory");
+        testObjectFactory.GetObjectCounter = 0;
+        context.GetObject("testObjectFactory");
+        Assert.AreEqual(0, testObjectFactory.GetObjectCounter);
 
-            // Asserts SPRNET-1224 - factory product most be cached
-            context.GetObject("testObjectFactory");
-            testObjectFactory.GetObjectCounter = 0;
-            context.GetObject("testObjectFactory");
-            Assert.AreEqual(0, testObjectFactory.GetObjectCounter);
+        ICloneable someOtherObject = (ICloneable) context.GetObject("someOtherObject");
+        someOtherObject.Clone();
+        ICloneable independentObject = (ICloneable) context.GetObject("independentObject");
+        independentObject.Clone();
+        Assert.AreEqual(1, countingAdvisor.GetCalls());
+    }
+}
 
-            ICloneable someOtherObject = (ICloneable) context.GetObject("someOtherObject");
-            someOtherObject.Clone();
-            ICloneable independentObject = (ICloneable) context.GetObject("independentObject");
-            independentObject.Clone();
-            Assert.AreEqual(1, countingAdvisor.GetCalls());
-        }
+#region Support Classes
+
+public class TestDefaultAdvisorAutoProxyCreator : DefaultAdvisorAutoProxyCreator, IInitializingObject
+{
+    private readonly ILog _logger;
+
+    public TestDefaultAdvisorAutoProxyCreator()
+    {
+        _logger = LogManager.GetLogger(this.GetType().Name + "#" + GetHashCode());
+        _logger.LogTrace("Created instance");
     }
 
-    #region Support Classes
-
-    public class TestDefaultAdvisorAutoProxyCreator : DefaultAdvisorAutoProxyCreator, IInitializingObject
+    protected override IList<object> GetAdvicesAndAdvisorsForObject(Type targetType, string targetName, ITargetSource customTargetSource)
     {
-        private readonly ILog _logger;
-
-        public TestDefaultAdvisorAutoProxyCreator()
-        {
-            _logger = LogManager.GetLogger(this.GetType().Name + "#" + GetHashCode());
-            _logger.LogTrace("Created instance");
-        }
-
-        protected override IList<object> GetAdvicesAndAdvisorsForObject(Type targetType, string targetName, ITargetSource customTargetSource)
-        {
-            _logger.LogTrace("GetAdvicesAndAdvisorsForObject begin");
-            IList<object> advices = base.GetAdvicesAndAdvisorsForObject(targetType, targetName, customTargetSource);
-            _logger.LogTrace("GetAdvicesAndAdvisorsForObject end");
-            return advices;
-        }
-
-        public override void AfterPropertiesSet()
-        {
-            _logger.LogTrace("AfterPropertiesSet");
-            base.AfterPropertiesSet();
-        }
+        _logger.LogTrace("GetAdvicesAndAdvisorsForObject begin");
+        IList<object> advices = base.GetAdvicesAndAdvisorsForObject(targetType, targetName, customTargetSource);
+        _logger.LogTrace("GetAdvicesAndAdvisorsForObject end");
+        return advices;
     }
 
-    public class CountingAfterReturningAdvisor : StaticMethodMatcherPointcutAdvisor
+    public override void AfterPropertiesSet()
     {
-        private ITestObject testObject;
+        _logger.LogTrace("AfterPropertiesSet");
+        base.AfterPropertiesSet();
+    }
+}
 
-        public ITestObject TestObject
-        {
-            get { return this.testObject; }
-            set { this.testObject = value; }
-        }
+public class CountingAfterReturningAdvisor : StaticMethodMatcherPointcutAdvisor
+{
+    private ITestObject testObject;
 
-        public int GetCalls()
-        {
-            return ((CountingAfterReturningAdvice) base.Advice).GetCalls();
-        }
-
-        public CountingAfterReturningAdvisor()
-        {
-            LogManager.GetLogger(this.GetType()).LogTrace("Created instance #" + this.GetHashCode());
-            base.Advice = new CountingAfterReturningAdvice();
-        }
-
-        public override bool Matches(MethodInfo method, Type targetType)
-        {
-            return true;
-        }
+    public ITestObject TestObject
+    {
+        get { return this.testObject; }
+        set { this.testObject = value; }
     }
 
-    public class SomeOtherObject : ICloneable
+    public int GetCalls()
     {
-        public SomeOtherObject()
-        {
-            LogManager.GetLogger(this.GetType()).LogTrace("Created instance #" + this.GetHashCode());
-        }
-
-        public object Clone()
-        {
-            return this;
-        }
+        return ((CountingAfterReturningAdvice) base.Advice).GetCalls();
     }
 
-    public class IndependentObject : ICloneable
+    public CountingAfterReturningAdvisor()
     {
-        public IndependentObject()
-        {
-            LogManager.GetLogger(this.GetType()).LogTrace("Created instance #" + this.GetHashCode());
-        }
-
-        public object Clone()
-        {
-            return this;
-        }
+        LogManager.GetLogger(this.GetType()).LogTrace("Created instance #" + this.GetHashCode());
+        base.Advice = new CountingAfterReturningAdvice();
     }
-    
-    public class TestObjectFactoryObject : IFactoryObject, IInitializingObject
+
+    public override bool Matches(MethodInfo method, Type targetType)
     {
-        private bool initialized = false;
-        private ITestObject testObject;
-        private SomeOtherObject someOtherObject;
-        private readonly ILog _logger;
+        return true;
+    }
+}
 
-        public int GetObjectCounter = 0;
+public class SomeOtherObject : ICloneable
+{
+    public SomeOtherObject()
+    {
+        LogManager.GetLogger(this.GetType()).LogTrace("Created instance #" + this.GetHashCode());
+    }
 
-        public TestObjectFactoryObject()
+    public object Clone()
+    {
+        return this;
+    }
+}
+
+public class IndependentObject : ICloneable
+{
+    public IndependentObject()
+    {
+        LogManager.GetLogger(this.GetType()).LogTrace("Created instance #" + this.GetHashCode());
+    }
+
+    public object Clone()
+    {
+        return this;
+    }
+}
+
+public class TestObjectFactoryObject : IFactoryObject, IInitializingObject
+{
+    private bool initialized = false;
+    private ITestObject testObject;
+    private SomeOtherObject someOtherObject;
+    private readonly ILog _logger;
+
+    public int GetObjectCounter = 0;
+
+    public TestObjectFactoryObject()
+    {
+        _logger = LogManager.GetLogger(this.GetType().Name + "#" + this.GetHashCode());
+        _logger.LogTrace("Created instance");
+    }
+
+    public SomeOtherObject SomeOtherObject
+    {
+        get { return this.someOtherObject; }
+        set { this.someOtherObject = value; }
+    }
+
+    public object GetObject()
+    {
+        GetObjectCounter++;
+        // return product only, if factory has been fully initialized!
+        if (!initialized)
         {
-            _logger = LogManager.GetLogger(this.GetType().Name + "#" + this.GetHashCode());
-            _logger.LogTrace("Created instance");
+            _logger.LogTrace("GetObject(): not initialized, returning null");
+            return null;
         }
 
-        public SomeOtherObject SomeOtherObject
-        {
-            get { return this.someOtherObject; }
-            set { this.someOtherObject = value; }
-        }
+        _logger.LogTrace("GetObject(): initialized, returning testObject");
+        return testObject;
+    }
 
-        public object GetObject()
+    public Type ObjectType
+    {
+        get
         {
-            GetObjectCounter++;
-            // return product only, if factory has been fully initialized!
+            // return type only if we are ready to deliver our product!
             if (!initialized)
             {
-                _logger.LogTrace("GetObject(): not initialized, returning null");
+                _logger.LogTrace("get_ObjectType(): not initialized, returning null");
                 return null;
             }
-            _logger.LogTrace("GetObject(): initialized, returning testObject");
-            return testObject;
-        }
 
-        public Type ObjectType
-        {
-            get
-            {
-                // return type only if we are ready to deliver our product!
-                if (!initialized)
-                {
-                    _logger.LogTrace("get_ObjectType(): not initialized, returning null");
-                    return null;
-                }
-                _logger.LogTrace("get_ObjectType(): initialized, returning typeof(ITestObject)");
-                return typeof(ITestObject);
-            }
-        }
-
-        public bool IsSingleton
-        {
-            get { return true; }
-        }
-
-        public void AfterPropertiesSet()
-        {
-            _logger.LogTrace("AfterPropertiesSet");
-            Assert.IsNotNull(someOtherObject);
-            testObject = new TestObject();
-            initialized = true;
+            _logger.LogTrace("get_ObjectType(): initialized, returning typeof(ITestObject)");
+            return typeof(ITestObject);
         }
     }
 
-    #endregion
+    public bool IsSingleton
+    {
+        get { return true; }
+    }
+
+    public void AfterPropertiesSet()
+    {
+        _logger.LogTrace("AfterPropertiesSet");
+        Assert.IsNotNull(someOtherObject);
+        testObject = new TestObject();
+        initialized = true;
+    }
 }
+
+#endregion

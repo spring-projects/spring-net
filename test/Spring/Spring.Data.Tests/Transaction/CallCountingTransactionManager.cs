@@ -20,48 +20,45 @@
 
 using Spring.Transaction.Support;
 
-namespace Spring.Transaction
+namespace Spring.Transaction;
+
+/// <summary>
+/// This is a test implementation to count the number of times PlatformTransactionManager methods
+/// have been called.
+/// </summary>
+/// <author>Mark Pollack</author>
+public class CallCountingTransactionManager : AbstractPlatformTransactionManager
 {
-    /// <summary>
-    /// This is a test implementation to count the number of times PlatformTransactionManager methods
-    /// have been called.
-    /// </summary>
-    /// <author>Mark Pollack</author>
-    public class CallCountingTransactionManager : AbstractPlatformTransactionManager
+    public int begun;
+    public int commits;
+    public int rollbacks;
+    public int inflight;
+
+    protected override object DoGetTransaction()
     {
+        return new object();
+    }
 
-        public int begun;
-        public int commits;
-        public int rollbacks;
-        public int inflight;
+    protected override void DoBegin(object transaction, ITransactionDefinition definition)
+    {
+        ++begun;
+        ++inflight;
+    }
 
+    protected override void DoCommit(DefaultTransactionStatus status)
+    {
+        ++commits;
+        --inflight;
+    }
 
-        protected override object DoGetTransaction()
-        {
-            return new object();
-        }
+    protected override void DoRollback(DefaultTransactionStatus status)
+    {
+        ++rollbacks;
+        --inflight;
+    }
 
-        protected override void DoBegin(object transaction, ITransactionDefinition definition)
-        {
-            ++begun;
-            ++inflight;
-        }
-
-        protected override void DoCommit(DefaultTransactionStatus status)
-        {
-            ++commits;
-            --inflight;
-        }
-
-        protected override void DoRollback(DefaultTransactionStatus status)
-        {
-            ++rollbacks;
-            --inflight;
-        }
-
-        public void Clear()
-        {
-            begun = commits = rollbacks = inflight = 0;
-        }
+    public void Clear()
+    {
+        begun = commits = rollbacks = inflight = 0;
     }
 }

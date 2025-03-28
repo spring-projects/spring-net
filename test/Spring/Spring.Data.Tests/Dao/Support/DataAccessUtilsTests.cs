@@ -25,44 +25,42 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Dao.Support
+namespace Spring.Dao.Support;
+
+/// <summary>
+/// This class contains tests for
+/// </summary>
+/// <author>Mark Pollack</author>
+/// <version>$Id:$</version>
+[TestFixture]
+public class DataAccessUtilsTests
 {
-    /// <summary>
-    /// This class contains tests for 
-    /// </summary>
-    /// <author>Mark Pollack</author>
-    /// <version>$Id:$</version>
-    [TestFixture]
-    public class DataAccessUtilsTests
+    [SetUp]
+    public void Setup()
     {
-        [SetUp]
-        public void Setup()
-        {
-        }
-
-        [Test]
-        public void Test()
-        {
-        }
-
-        
     }
 
-    public class MapPersistenceExceptionTranslator : IPersistenceExceptionTranslator
+    [Test]
+    public void Test()
     {
-        #region IPersistenceExceptionTranslator Members
-
-        private IDictionary translations = new Hashtable();
-
-        public void AddTranslation(Exception inException, Exception outException)
-        {
-            this.translations.Add(inException, outException);
-        }
-        public DataAccessException TranslateExceptionIfPossible(Exception ex)
-        {
-            return (DataAccessException)translations[ex];
-        }
-
-        #endregion
     }
+}
+
+public class MapPersistenceExceptionTranslator : IPersistenceExceptionTranslator
+{
+    #region IPersistenceExceptionTranslator Members
+
+    private IDictionary translations = new Hashtable();
+
+    public void AddTranslation(Exception inException, Exception outException)
+    {
+        this.translations.Add(inException, outException);
+    }
+
+    public DataAccessException TranslateExceptionIfPossible(Exception ex)
+    {
+        return (DataAccessException) translations[ex];
+    }
+
+    #endregion
 }

@@ -1,7 +1,7 @@
 #region License
 
 /*
- * Copyright © 2002-2011 the original author or authors.
+ * Copyright ï¿½ 2002-2011 the original author or authors.
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -22,30 +22,29 @@
 
 #endregion
 
-namespace Spring.Web.Support
+namespace Spring.Web.Support;
+
+/// <summary>
+/// This result factory implementation creates <see cref="Result"/> instances from a given string representation.
+/// </summary>
+/// <remarks>
+/// For a larger example illustrating the customization of result processing, <see cref="ResultFactoryRegistry"/>.
+/// </remarks>
+/// <seealso cref="ResultFactoryRegistry"/>
+/// <seealso cref="IResult"/>
+/// <seealso cref="Result"/>
+/// <seealso cref="DefaultResultWebNavigator"/>
+/// <author>Erich Eichinger</author>
+public class DefaultResultFactory : IResultFactory
 {
     /// <summary>
-    /// This result factory implementation creates <see cref="Result"/> instances from a given string representation.
+    /// Create a new <see cref="Result"/> from the specified <paramref name="resultText"/>.
     /// </summary>
-    /// <remarks>
-    /// For a larger example illustrating the customization of result processing, <see cref="ResultFactoryRegistry"/>.
-    /// </remarks>
-    /// <seealso cref="ResultFactoryRegistry"/>
-    /// <seealso cref="IResult"/>
-    /// <seealso cref="Result"/>
-    /// <seealso cref="DefaultResultWebNavigator"/>
-    /// <author>Erich Eichinger</author>
-    public class DefaultResultFactory : IResultFactory
+    /// <param name="resultMode">the result mode.</param>
+    /// <param name="resultText">the string representation of the result.</param>
+    /// <returns>the <see cref="Result"/> instance created from <paramref name="resultText"/>.</returns>
+    public IResult CreateResult(string resultMode, string resultText)
     {
-        /// <summary>
-        /// Create a new <see cref="Result"/> from the specified <paramref name="resultText"/>.
-        /// </summary>
-        /// <param name="resultMode">the result mode.</param>
-        /// <param name="resultText">the string representation of the result.</param>
-        /// <returns>the <see cref="Result"/> instance created from <paramref name="resultText"/>.</returns>
-        public IResult CreateResult(string resultMode, string resultText)
-        {
-            return new Result(resultMode, resultText);
-        }
+        return new Result(resultMode, resultText);
     }
 }

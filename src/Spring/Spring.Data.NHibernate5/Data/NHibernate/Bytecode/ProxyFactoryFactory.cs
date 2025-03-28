@@ -17,42 +17,41 @@
 using NHibernate.Bytecode;
 using NHibernate.Proxy;
 
-namespace Spring.Data.NHibernate.Bytecode
+namespace Spring.Data.NHibernate.Bytecode;
+
+/// <summary>
+/// Creates a Spring for .NET backed <see cref="IProxyFactory"/> instance.
+/// </summary>
+/// <author>Erich Eichinger</author>
+public class ProxyFactoryFactory : IProxyFactoryFactory
 {
     /// <summary>
-    /// Creates a Spring for .NET backed <see cref="IProxyFactory"/> instance.
+    /// Build a proxy factory specifically for handling runtime lazy loading.
     /// </summary>
-    /// <author>Erich Eichinger</author>
-    public class ProxyFactoryFactory : IProxyFactoryFactory
+    /// <returns>The lazy-load proxy factory.</returns>
+    public IProxyFactory BuildProxyFactory()
     {
-        /// <summary>
-        /// Build a proxy factory specifically for handling runtime lazy loading. 
-        /// </summary>
-        /// <returns>The lazy-load proxy factory.</returns>
-        public IProxyFactory BuildProxyFactory()
-        {
-            return new ProxyFactory();
-        }
+        return new ProxyFactory();
+    }
 
-        /// <summary>
-        /// </summary>
-        public bool IsInstrumented(Type entityClass)
-        {
-            return false;
-        }
+    /// <summary>
+    /// </summary>
+    public bool IsInstrumented(Type entityClass)
+    {
+        return false;
+    }
 
-        /// <summary>
-        /// </summary>
-        public bool IsProxy(object entity)
-        {
-            return (entity is INHibernateProxy);
-        }
+    /// <summary>
+    /// </summary>
+    public bool IsProxy(object entity)
+    {
+        return (entity is INHibernateProxy);
+    }
 
-        ///<summary>
-        ///</summary>
-        public IProxyValidator ProxyValidator
-        {
-            get { return new DynProxyTypeValidator(); }
-        }
+    ///<summary>
+    ///</summary>
+    public IProxyValidator ProxyValidator
+    {
+        get { return new DynProxyTypeValidator(); }
     }
 }

@@ -20,159 +20,158 @@
 
 using System.Xml;
 using NUnit.Framework;
-
 using Spring.Core.IO;
 using Spring.Objects.Factory.Support;
 using Spring.Objects.Factory.Xml;
 using Spring.TestSupport;
 
-namespace Spring.Objects.Factory
-{
-    /// <summary>
-    /// </summary>
-    /// <author>Erich Eichinger</author>
-    [TestFixture]
-    public class WebObjectDefinitionReaderTests
-    {
-        public class TestWebObjectDefinitionReader : WebObjectDefinitionReader
-        {
-            public TestWebObjectDefinitionReader(string contextVirtualPath, IObjectDefinitionRegistry registry, XmlResolver resolver) 
-                : base(contextVirtualPath, registry, resolver)
-            {}
-        }
+namespace Spring.Objects.Factory;
 
-        [Test]
-        public void ControlDefinitionsGetMarkedAbstract()
+/// <summary>
+/// </summary>
+/// <author>Erich Eichinger</author>
+[TestFixture]
+public class WebObjectDefinitionReaderTests
+{
+    public class TestWebObjectDefinitionReader : WebObjectDefinitionReader
+    {
+        public TestWebObjectDefinitionReader(string contextVirtualPath, IObjectDefinitionRegistry registry, XmlResolver resolver)
+            : base(contextVirtualPath, registry, resolver)
         {
-            const string CONTEXTPATH = "/ContextPath/";
-            const string xml =
-                @"<?xml version='1.0' encoding='UTF-8' ?>
+        }
+    }
+
+    [Test]
+    public void ControlDefinitionsGetMarkedAbstract()
+    {
+        const string CONTEXTPATH = "/ContextPath/";
+        const string xml =
+            @"<?xml version='1.0' encoding='UTF-8' ?>
 <objects xmlns='http://www.springframework.net'>
     <object type='MyControl.ascx' />
 </objects>";
 
-            WebObjectFactory objectFactory = new WebObjectFactory(CONTEXTPATH, false);
-            TestWebObjectDefinitionReader reader = new TestWebObjectDefinitionReader(objectFactory.ContextPath, objectFactory, new XmlUrlResolver());
+        WebObjectFactory objectFactory = new WebObjectFactory(CONTEXTPATH, false);
+        TestWebObjectDefinitionReader reader = new TestWebObjectDefinitionReader(objectFactory.ContextPath, objectFactory, new XmlUrlResolver());
 
-            using (VirtualEnvironmentMock env = new VirtualEnvironmentMock(CONTEXTPATH + "test.aspx", null, null, CONTEXTPATH, true))
-            {
-                env.VirtualPath2ArtifactsTable[CONTEXTPATH + "MyControl.ascx"] = typeof(Spring.Web.UI.UserControl);
+        using (VirtualEnvironmentMock env = new VirtualEnvironmentMock(CONTEXTPATH + "test.aspx", null, null, CONTEXTPATH, true))
+        {
+            env.VirtualPath2ArtifactsTable[CONTEXTPATH + "MyControl.ascx"] = typeof(Spring.Web.UI.UserControl);
 
-                reader.LoadObjectDefinitions(new StringResource(xml));
-            }
-
-            Assert.IsTrue(objectFactory.ContainsObjectDefinition("Spring.Web.UI.UserControl"));
-            Assert.IsTrue(objectFactory.GetObjectDefinition("Spring.Web.UI.UserControl").IsAbstract);
+            reader.LoadObjectDefinitions(new StringResource(xml));
         }
 
-        [Test]
-        public void ParsesPagePathIntoObjectNameIfNeitherIdNorNameAttributeSpecified()
-        {
-            const string CONTEXTPATH = "/ContextPath/";
+        Assert.IsTrue(objectFactory.ContainsObjectDefinition("Spring.Web.UI.UserControl"));
+        Assert.IsTrue(objectFactory.GetObjectDefinition("Spring.Web.UI.UserControl").IsAbstract);
+    }
 
-            const string xml =
-                @"<?xml version='1.0' encoding='UTF-8' ?>
+    [Test]
+    public void ParsesPagePathIntoObjectNameIfNeitherIdNorNameAttributeSpecified()
+    {
+        const string CONTEXTPATH = "/ContextPath/";
+
+        const string xml =
+            @"<?xml version='1.0' encoding='UTF-8' ?>
 <objects xmlns='http://www.springframework.net'>
     <object type='MyPage.aspx' />
     <object type='~/MyControl.ascx' />
 </objects>";
 
-            WebObjectFactory objectFactory = new WebObjectFactory(CONTEXTPATH, false);
-            TestWebObjectDefinitionReader reader = new TestWebObjectDefinitionReader(objectFactory.ContextPath, objectFactory, new XmlUrlResolver());
+        WebObjectFactory objectFactory = new WebObjectFactory(CONTEXTPATH, false);
+        TestWebObjectDefinitionReader reader = new TestWebObjectDefinitionReader(objectFactory.ContextPath, objectFactory, new XmlUrlResolver());
 
-            using (VirtualEnvironmentMock env = new VirtualEnvironmentMock(CONTEXTPATH + "test.aspx", null, null, CONTEXTPATH, true))
-            {
-                env.VirtualPath2ArtifactsTable[CONTEXTPATH + "MyPage.aspx"] = typeof (Spring.Web.UI.Page);
-                env.VirtualPath2ArtifactsTable[CONTEXTPATH + "MyControl.ascx"] = typeof (Spring.Web.UI.UserControl);
+        using (VirtualEnvironmentMock env = new VirtualEnvironmentMock(CONTEXTPATH + "test.aspx", null, null, CONTEXTPATH, true))
+        {
+            env.VirtualPath2ArtifactsTable[CONTEXTPATH + "MyPage.aspx"] = typeof(Spring.Web.UI.Page);
+            env.VirtualPath2ArtifactsTable[CONTEXTPATH + "MyControl.ascx"] = typeof(Spring.Web.UI.UserControl);
 
-                reader.LoadObjectDefinitions(new StringResource(xml));
-            }
-
-            Assert.IsTrue(objectFactory.ContainsObjectDefinition("/MyPage.aspx"));
-            Assert.AreEqual(typeof(Spring.Web.UI.Page), objectFactory.GetType("/MyPage.aspx"));
-            Assert.IsTrue(objectFactory.ContainsObjectDefinition("Spring.Web.UI.UserControl"));
+            reader.LoadObjectDefinitions(new StringResource(xml));
         }
 
-        [Test]
-        public void DoesNotGenerateObjectNameIfIdAttributeSpecified()
-        {
-            const string CONTEXTPATH = "/ContextPath/";
-            const string xml =
-                @"<?xml version='1.0' encoding='UTF-8' ?>
+        Assert.IsTrue(objectFactory.ContainsObjectDefinition("/MyPage.aspx"));
+        Assert.AreEqual(typeof(Spring.Web.UI.Page), objectFactory.GetType("/MyPage.aspx"));
+        Assert.IsTrue(objectFactory.ContainsObjectDefinition("Spring.Web.UI.UserControl"));
+    }
+
+    [Test]
+    public void DoesNotGenerateObjectNameIfIdAttributeSpecified()
+    {
+        const string CONTEXTPATH = "/ContextPath/";
+        const string xml =
+            @"<?xml version='1.0' encoding='UTF-8' ?>
 <objects xmlns='http://www.springframework.net'>
     <object id='mypage' type='MyPage.aspx' />
     <object id='mycontrol' type='MyControl.ascx' />
 </objects>";
 
-            WebObjectFactory objectFactory = new WebObjectFactory(CONTEXTPATH, false);
-            TestWebObjectDefinitionReader reader = new TestWebObjectDefinitionReader(objectFactory.ContextPath, objectFactory, new XmlUrlResolver());
+        WebObjectFactory objectFactory = new WebObjectFactory(CONTEXTPATH, false);
+        TestWebObjectDefinitionReader reader = new TestWebObjectDefinitionReader(objectFactory.ContextPath, objectFactory, new XmlUrlResolver());
 
-            using (VirtualEnvironmentMock env = new VirtualEnvironmentMock(CONTEXTPATH + "test.aspx", null, null, CONTEXTPATH, true))
-            {
-                env.VirtualPath2ArtifactsTable[CONTEXTPATH + "MyPage.aspx"] = typeof (Spring.Web.UI.Page);
-                env.VirtualPath2ArtifactsTable[CONTEXTPATH + "MyControl.ascx"] = typeof (Spring.Web.UI.UserControl);
+        using (VirtualEnvironmentMock env = new VirtualEnvironmentMock(CONTEXTPATH + "test.aspx", null, null, CONTEXTPATH, true))
+        {
+            env.VirtualPath2ArtifactsTable[CONTEXTPATH + "MyPage.aspx"] = typeof(Spring.Web.UI.Page);
+            env.VirtualPath2ArtifactsTable[CONTEXTPATH + "MyControl.ascx"] = typeof(Spring.Web.UI.UserControl);
 
-                reader.LoadObjectDefinitions(new StringResource(xml));
-            }
-
-            Assert.IsTrue(objectFactory.ContainsObjectDefinition("mypage"));
-            Assert.AreEqual(typeof(Spring.Web.UI.Page), objectFactory.GetType("mypage"));
-            Assert.IsTrue(objectFactory.ContainsObjectDefinition("mycontrol"));
+            reader.LoadObjectDefinitions(new StringResource(xml));
         }
 
-        [Test]
-        public void DoesNotGenerateObjectNameIfNameAttributeSpecified()
-        {
-            const string CONTEXTPATH = "/ContextPath/";
-            const string xml =
-                @"<?xml version='1.0' encoding='UTF-8' ?>
+        Assert.IsTrue(objectFactory.ContainsObjectDefinition("mypage"));
+        Assert.AreEqual(typeof(Spring.Web.UI.Page), objectFactory.GetType("mypage"));
+        Assert.IsTrue(objectFactory.ContainsObjectDefinition("mycontrol"));
+    }
+
+    [Test]
+    public void DoesNotGenerateObjectNameIfNameAttributeSpecified()
+    {
+        const string CONTEXTPATH = "/ContextPath/";
+        const string xml =
+            @"<?xml version='1.0' encoding='UTF-8' ?>
 <objects xmlns='http://www.springframework.net'>
     <object name='mypage' type='MyPage.aspx' />
     <object name='mycontrol' type='MyControl.ascx' />
 </objects>";
 
-            WebObjectFactory objectFactory = new WebObjectFactory(CONTEXTPATH, false);
-            TestWebObjectDefinitionReader reader = new TestWebObjectDefinitionReader(objectFactory.ContextPath, objectFactory, new XmlUrlResolver());
+        WebObjectFactory objectFactory = new WebObjectFactory(CONTEXTPATH, false);
+        TestWebObjectDefinitionReader reader = new TestWebObjectDefinitionReader(objectFactory.ContextPath, objectFactory, new XmlUrlResolver());
 
-            using (VirtualEnvironmentMock env = new VirtualEnvironmentMock(CONTEXTPATH + "test.aspx", null, null, CONTEXTPATH, true))
-            {
-                env.VirtualPath2ArtifactsTable[CONTEXTPATH + "MyPage.aspx"] = typeof(Spring.Web.UI.Page);
-                env.VirtualPath2ArtifactsTable[CONTEXTPATH + "MyControl.ascx"] = typeof(Spring.Web.UI.UserControl);
+        using (VirtualEnvironmentMock env = new VirtualEnvironmentMock(CONTEXTPATH + "test.aspx", null, null, CONTEXTPATH, true))
+        {
+            env.VirtualPath2ArtifactsTable[CONTEXTPATH + "MyPage.aspx"] = typeof(Spring.Web.UI.Page);
+            env.VirtualPath2ArtifactsTable[CONTEXTPATH + "MyControl.ascx"] = typeof(Spring.Web.UI.UserControl);
 
-                reader.LoadObjectDefinitions(new StringResource(xml));
-            }
-
-            Assert.IsTrue(objectFactory.ContainsObjectDefinition("mypage"));
-            Assert.AreEqual(typeof(Spring.Web.UI.Page), objectFactory.GetType("mypage"));
-            Assert.IsTrue(objectFactory.ContainsObjectDefinition("mycontrol"));
+            reader.LoadObjectDefinitions(new StringResource(xml));
         }
 
-        [Test]
-        public void DoesNotGenerateObjectNameIfIdAndNameAttributeSpecified()
-        {
-            const string CONTEXTPATH = "/";
-            const string xml =
-                @"<?xml version='1.0' encoding='UTF-8' ?>
+        Assert.IsTrue(objectFactory.ContainsObjectDefinition("mypage"));
+        Assert.AreEqual(typeof(Spring.Web.UI.Page), objectFactory.GetType("mypage"));
+        Assert.IsTrue(objectFactory.ContainsObjectDefinition("mycontrol"));
+    }
+
+    [Test]
+    public void DoesNotGenerateObjectNameIfIdAndNameAttributeSpecified()
+    {
+        const string CONTEXTPATH = "/";
+        const string xml =
+            @"<?xml version='1.0' encoding='UTF-8' ?>
 <objects xmlns='http://www.springframework.net'>
     <object id='mypage' name='mypageAlias' type='~/MyPage.aspx' />
     <object id='mycontrol' name='mycontrolAlias' type='~/MyControl.ascx' />
 </objects>";
 
-            WebObjectFactory objectFactory = new WebObjectFactory(CONTEXTPATH, false);
-            TestWebObjectDefinitionReader reader = new TestWebObjectDefinitionReader(objectFactory.ContextPath, objectFactory, new XmlUrlResolver());
+        WebObjectFactory objectFactory = new WebObjectFactory(CONTEXTPATH, false);
+        TestWebObjectDefinitionReader reader = new TestWebObjectDefinitionReader(objectFactory.ContextPath, objectFactory, new XmlUrlResolver());
 
-            using (VirtualEnvironmentMock env = new VirtualEnvironmentMock(CONTEXTPATH + "test.aspx", null, null, CONTEXTPATH, true))
-            {
-                env.VirtualPath2ArtifactsTable[CONTEXTPATH + "MyPage.aspx"] = typeof(Spring.Web.UI.Page);
-                env.VirtualPath2ArtifactsTable[CONTEXTPATH + "MyControl.ascx"] = typeof(Spring.Web.UI.UserControl);
+        using (VirtualEnvironmentMock env = new VirtualEnvironmentMock(CONTEXTPATH + "test.aspx", null, null, CONTEXTPATH, true))
+        {
+            env.VirtualPath2ArtifactsTable[CONTEXTPATH + "MyPage.aspx"] = typeof(Spring.Web.UI.Page);
+            env.VirtualPath2ArtifactsTable[CONTEXTPATH + "MyControl.ascx"] = typeof(Spring.Web.UI.UserControl);
 
-                reader.LoadObjectDefinitions(new StringResource(xml));
-            }
-
-            Assert.IsTrue(objectFactory.ContainsObjectDefinition("mypage"));
-            Assert.IsTrue(objectFactory.ContainsObject("mypageAlias"));
-            Assert.IsTrue(objectFactory.ContainsObjectDefinition("mycontrol"));
-            Assert.IsTrue(objectFactory.ContainsObject("mycontrolAlias"));
+            reader.LoadObjectDefinitions(new StringResource(xml));
         }
+
+        Assert.IsTrue(objectFactory.ContainsObjectDefinition("mypage"));
+        Assert.IsTrue(objectFactory.ContainsObject("mypageAlias"));
+        Assert.IsTrue(objectFactory.ContainsObjectDefinition("mycontrol"));
+        Assert.IsTrue(objectFactory.ContainsObject("mycontrolAlias"));
     }
 }

@@ -20,56 +20,55 @@
 
 using System.Transactions;
 
-namespace Spring.Data.Support
+namespace Spring.Data.Support;
+
+/// <summary>
+/// Uses <see cref="TransactionScope"/> and System.Transactions.Transaction.Current to provide
+/// necessary state and operations to TxScopeTransactionManager.
+/// </summary>
+/// <author>Mark Pollack (.NET)</author>
+public class DefaultTransactionScopeAdapter : ITransactionScopeAdapter
 {
-    /// <summary>
-    /// Uses <see cref="TransactionScope"/> and System.Transactions.Transaction.Current to provide
-    /// necessary state and operations to TxScopeTransactionManager.
-    /// </summary>
-    /// <author>Mark Pollack (.NET)</author>
-    public class DefaultTransactionScopeAdapter : ITransactionScopeAdapter
+    private TransactionScope txScope;
+
+    /// <inheritdoc />
+    public void Complete()
     {
-        private TransactionScope txScope;
+        txScope.Complete();
+    }
 
-        /// <inheritdoc />
-        public void Complete()
+    /// <inheritdoc />
+    public void Dispose()
+    {
+        txScope.Dispose();
+    }
+
+    /// <inheritdoc />
+    public bool IsExistingTransaction => System.Transactions.Transaction.Current != null;
+
+    /// <inheritdoc />
+    public bool RollbackOnly
+    {
+        get
         {
-            txScope.Complete();
-        }
-
-        /// <inheritdoc />
-        public void Dispose()
-        {
-            txScope.Dispose();
-        }
-
-        /// <inheritdoc />
-        public bool IsExistingTransaction => System.Transactions.Transaction.Current != null;
-
-        /// <inheritdoc />
-        public bool RollbackOnly
-        {
-            get
+            var transaction = System.Transactions.Transaction.Current;
+            if (transaction != null &&
+                transaction.TransactionInformation != null &&
+                transaction.TransactionInformation.Status == TransactionStatus.Aborted)
             {
-                var transaction = System.Transactions.Transaction.Current;
-                if (transaction != null &&
-                    transaction.TransactionInformation != null &&
-                    transaction.TransactionInformation.Status == TransactionStatus.Aborted)
-                {
-                    return true;
-                }
-
-                return false;
+                return true;
             }
-        }
 
-        /// <inheritdoc />
-        public void CreateTransactionScope(
-            TransactionScopeOption txScopeOption, 
-            TransactionOptions txOptions,
-            TransactionScopeAsyncFlowOption asyncFlowOption)
-        {
-            txScope = new TransactionScope(txScopeOption, txOptions, asyncFlowOption);
+            return false;
         }
+    }
+
+    /// <inheritdoc />
+    public void CreateTransactionScope(
+        TransactionScopeOption txScopeOption,
+        TransactionOptions txOptions,
+        TransactionScopeAsyncFlowOption asyncFlowOption)
+    {
+        txScope = new TransactionScope(txScopeOption, txOptions, asyncFlowOption);
     }
 }

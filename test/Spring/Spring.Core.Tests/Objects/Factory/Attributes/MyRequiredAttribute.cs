@@ -18,15 +18,13 @@
 
 #endregion
 
-namespace Spring.Objects.Factory.Attributes
+namespace Spring.Objects.Factory.Attributes;
+
+/// <summary>
+/// Custom attribute to indicate required setter property
+/// </summary>
+/// <author>Mark Pollack</author>
+[AttributeUsage(AttributeTargets.Property)]
+public class MyRequiredAttribute : Attribute
 {
-    /// <summary>
-    /// Custom attribute to indicate required setter property
-    /// </summary>
-    /// <author>Mark Pollack</author>
-    [AttributeUsage(AttributeTargets.Property)]
-    public class MyRequiredAttribute : Attribute
-    {
-        
-    }
 }

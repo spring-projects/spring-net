@@ -19,21 +19,19 @@
 #endregion
 
 using NUnit.Framework;
-
 using Spring.Objects.Factory.Support;
 
-namespace Spring.Context.Attributes
+namespace Spring.Context.Attributes;
+
+[TestFixture]
+public class ConfigurationClassObjectDefinitionReaderTests
 {
-    [TestFixture]
-    public class ConfigurationClassObjectDefinitionReaderTests
+    [Test]
+    public void ShouldNotTryToResolveAbstractDefinitionsToType()
     {
-        [Test]
-        public void ShouldNotTryToResolveAbstractDefinitionsToType()
-        {
-            GenericObjectDefinition definition = new GenericObjectDefinition();
-            definition.ObjectTypeName = "~/Default.aspx";
-            definition.IsAbstract = true;
-            Assert.That(ConfigurationClassObjectDefinitionReader.CheckConfigurationClassCandidate(definition), Is.False);
-        }
+        GenericObjectDefinition definition = new GenericObjectDefinition();
+        definition.ObjectTypeName = "~/Default.aspx";
+        definition.IsAbstract = true;
+        Assert.That(ConfigurationClassObjectDefinitionReader.CheckConfigurationClassCandidate(definition), Is.False);
     }
 }

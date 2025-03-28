@@ -53,8 +53,8 @@ namespace Spring.Data.NHibernate.Config
         [Ignore("TODO Connects to database")]
         public void ProxyDataAccessAndServiceLayer()
         {
-            Assert.IsFalse(AopUtils.IsAopProxy( ctx["DbProvider"] ));
-            Assert.IsFalse(AopUtils.IsAopProxy( ctx["SessionFactory"]   ));
+            Assert.IsFalse(AopUtils.IsAopProxy(ctx["DbProvider"]));
+            Assert.IsFalse(AopUtils.IsAopProxy(ctx["SessionFactory"]));
             Assert.IsFalse(AopUtils.IsAopProxy(ctx["hibernateTransactionManager"]));
             Assert.IsFalse(AopUtils.IsAopProxy(ctx["transactionManager"]));
             //Assert.IsTrue(AopUtils.IsAopProxy(ctx["testObjectDaoTransProxy"]));
@@ -69,7 +69,7 @@ namespace Spring.Data.NHibernate.Config
             LoggingAroundAdvice caa = ctx["loggingAroundAdvice"] as LoggingAroundAdvice;
             Assert.IsNotNull(caa);
             Assert.AreEqual(0, caa.numInvoked);
-            
+
             ISimpleService simpleService = ctx["SimpleService"] as ISimpleService;
             Assert.IsNotNull(simpleService);
             simpleService.DoWork(new TestObject());
@@ -77,7 +77,5 @@ namespace Spring.Data.NHibernate.Config
             Assert.AreEqual(1, ccm.commits);
             Assert.AreEqual(1, caa.numInvoked);
         }
-
-        
     }
 }

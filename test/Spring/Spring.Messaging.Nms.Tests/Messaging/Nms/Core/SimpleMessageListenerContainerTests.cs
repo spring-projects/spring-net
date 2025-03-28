@@ -21,178 +21,174 @@
 #region Imports
 
 using Apache.NMS;
-
 using FakeItEasy;
-
 using NUnit.Framework;
-
 using Spring.Messaging.Nms.Listener;
 using Spring.Util;
 
 #endregion
 
-namespace Spring.Messaging.Nms.Core
+namespace Spring.Messaging.Nms.Core;
+
+/// <summary>
+/// This class contains tests for SimpleMessageListenerContainer
+/// </summary>
+/// <author>Mark Pollack</author>
+[TestFixture]
+public class SimpleMessageListenerContainerTests
 {
-    /// <summary>
-    /// This class contains tests for SimpleMessageListenerContainer
-    /// </summary>
-    /// <author>Mark Pollack</author>
-    [TestFixture]
-    public class SimpleMessageListenerContainerTests
+    private static string DESTINATION_NAME = "foo";
+    private static StubQueue QUEUE_DESTINATION = new StubQueue();
+    private static string EXCEPTION_MESSAGE = "This.Is.It";
+    private SimpleMessageListenerContainer container;
+
+    [SetUp]
+    public void Setup()
     {
-        private static string DESTINATION_NAME = "foo";
-        private static StubQueue QUEUE_DESTINATION = new StubQueue();
-        private static string EXCEPTION_MESSAGE = "This.Is.It";
-        private SimpleMessageListenerContainer container;
+        container = new SimpleMessageListenerContainer();
+    }
 
-        [SetUp]
-        public void Setup()
+    [Test]
+    public void RegisteredExceptionListenerIsInvokedOnException()
+    {
+        SimpleMessageConsumer messageConsumer = new SimpleMessageConsumer();
+
+        ISession session = A.Fake<ISession>();
+        A.CallTo(() => session.GetQueue(DESTINATION_NAME)).Returns(QUEUE_DESTINATION);
+        A.CallTo(() => session.CreateConsumer(QUEUE_DESTINATION, null)).Returns(messageConsumer);
+        // an exception is thrown, so the rollback logic is being applied here...
+        A.CallTo(() => session.Transacted).Returns(false);
+
+        IConnection connection = A.Fake<IConnection>();
+        connection.ExceptionListener += container.OnException;
+        A.CallTo(() => connection.CreateSession(container.SessionAcknowledgeMode)).Returns(session);
+        connection.Start();
+
+        IConnectionFactory connectionFactory = A.Fake<IConnectionFactory>();
+        A.CallTo(() => connectionFactory.CreateConnection()).Returns(connection);
+
+        NMSException theException = new NMSException(EXCEPTION_MESSAGE);
+
+        IExceptionListener exceptionListener = A.Fake<IExceptionListener>();
+        exceptionListener.OnException(theException);
+
+        IMessage message = A.Fake<IMessage>();
+
+        container.ConnectionFactory = connectionFactory;
+        container.DestinationName = DESTINATION_NAME;
+        container.MessageListener = new BadSessionAwareMessageListener(theException);
+        container.ExceptionListener = exceptionListener;
+        container.AfterPropertiesSet();
+
+        // manually trigger an Exception with the above bad MessageListener...
+        messageConsumer.SendMessage(message);
+    }
+
+    [Test]
+    public void RegisteredErrorHandlerIsInvokedOnException()
+    {
+        SimpleMessageConsumer messageConsumer = new SimpleMessageConsumer();
+
+        ISession session = A.Fake<ISession>();
+        A.CallTo((() => session.GetQueue(DESTINATION_NAME))).Returns(QUEUE_DESTINATION);
+        A.CallTo((() => session.CreateConsumer(QUEUE_DESTINATION, null))).Returns(messageConsumer);
+        // an exception is thrown, so the rollback logic is being applied here...
+        A.CallTo((() => session.Transacted)).Returns(false);
+
+        IConnection connection = A.Fake<IConnection>();
+        connection.ExceptionListener += container.OnException;
+        A.CallTo((() => connection.CreateSession(container.SessionAcknowledgeMode))).Returns(session);
+        connection.Start();
+
+        IConnectionFactory connectionFactory = A.Fake<IConnectionFactory>();
+        A.CallTo((() => connectionFactory.CreateConnection())).Returns(connection);
+
+        IllegalStateException theException = new IllegalStateException(EXCEPTION_MESSAGE);
+
+        IErrorHandler errorHandler = A.Fake<IErrorHandler>();
+        errorHandler.HandleError(theException);
+
+        IMessage message = A.Fake<IMessage>();
+
+        container.ConnectionFactory = connectionFactory;
+        container.DestinationName = DESTINATION_NAME;
+        container.MessageListener = new BadSessionAwareMessageListener(theException);
+        container.ErrorHandler = errorHandler;
+        container.AfterPropertiesSet();
+
+        // manually trigger an Exception with the above bad MessageListener...
+        messageConsumer.SendMessage(message);
+    }
+
+    internal class BadSessionAwareMessageListener : ISessionAwareMessageListener
+    {
+        private NMSException exception;
+
+        public BadSessionAwareMessageListener(NMSException exception)
         {
-            container = new SimpleMessageListenerContainer();
+            this.exception = exception;
         }
 
-        [Test]
-        public void RegisteredExceptionListenerIsInvokedOnException()
+        public void OnMessage(IMessage message, ISession session)
         {
-            SimpleMessageConsumer messageConsumer = new SimpleMessageConsumer();
+            throw exception;
+        }
+    }
 
-            ISession session = A.Fake<ISession>();
-            A.CallTo(() => session.GetQueue(DESTINATION_NAME)).Returns(QUEUE_DESTINATION);
-            A.CallTo(() => session.CreateConsumer(QUEUE_DESTINATION, null)).Returns(messageConsumer);
-            // an exception is thrown, so the rollback logic is being applied here...
-            A.CallTo(() => session.Transacted).Returns(false);
+    internal class SimpleMessageConsumer : IMessageConsumer
+    {
+        public string MessageSelector { get; }
+        public event MessageListener Listener;
 
-            IConnection connection = A.Fake<IConnection>();
-            connection.ExceptionListener += container.OnException;
-            A.CallTo(() => connection.CreateSession(container.SessionAcknowledgeMode)).Returns(session);
-            connection.Start();
-
-            IConnectionFactory connectionFactory = A.Fake<IConnectionFactory>();
-            A.CallTo(() => connectionFactory.CreateConnection()).Returns(connection);
-
-            NMSException theException = new NMSException(EXCEPTION_MESSAGE);
-
-            IExceptionListener exceptionListener = A.Fake<IExceptionListener>();
-            exceptionListener.OnException(theException);
-
-            IMessage message = A.Fake<IMessage>();
-
-            container.ConnectionFactory = connectionFactory;
-            container.DestinationName = DESTINATION_NAME;
-            container.MessageListener = new BadSessionAwareMessageListener(theException);
-            container.ExceptionListener = exceptionListener;
-            container.AfterPropertiesSet();
-
-            // manually trigger an Exception with the above bad MessageListener...
-            messageConsumer.SendMessage(message);
+        public void SendMessage(IMessage message)
+        {
+            Listener(message);
         }
 
-        [Test]
-        public void RegisteredErrorHandlerIsInvokedOnException()
+        public IMessage Receive()
         {
-            SimpleMessageConsumer messageConsumer = new SimpleMessageConsumer();
-
-            ISession session = A.Fake<ISession>();
-            A.CallTo((() => session.GetQueue(DESTINATION_NAME))).Returns(QUEUE_DESTINATION);
-            A.CallTo((() => session.CreateConsumer(QUEUE_DESTINATION, null))).Returns(messageConsumer);
-            // an exception is thrown, so the rollback logic is being applied here...
-            A.CallTo((() => session.Transacted)).Returns(false);
-
-            IConnection connection = A.Fake<IConnection>();
-            connection.ExceptionListener += container.OnException;
-            A.CallTo((() => connection.CreateSession(container.SessionAcknowledgeMode))).Returns(session);
-            connection.Start();
-
-            IConnectionFactory connectionFactory = A.Fake<IConnectionFactory>();
-            A.CallTo((() => connectionFactory.CreateConnection())).Returns(connection);
-
-            IllegalStateException theException = new IllegalStateException(EXCEPTION_MESSAGE);
-
-            IErrorHandler errorHandler = A.Fake<IErrorHandler>();
-            errorHandler.HandleError(theException);
-
-            IMessage message = A.Fake<IMessage>();
-
-            container.ConnectionFactory = connectionFactory;
-            container.DestinationName = DESTINATION_NAME;
-            container.MessageListener = new BadSessionAwareMessageListener(theException);
-            container.ErrorHandler = errorHandler;
-            container.AfterPropertiesSet();
-
-            // manually trigger an Exception with the above bad MessageListener...
-            messageConsumer.SendMessage(message);
+            throw new NotImplementedException();
         }
 
-        internal class BadSessionAwareMessageListener : ISessionAwareMessageListener
+        public Task<IMessage> ReceiveAsync()
         {
-            private NMSException exception;
-
-            public BadSessionAwareMessageListener(NMSException exception)
-            {
-                this.exception = exception;
-            }
-
-            public void OnMessage(IMessage message, ISession session)
-            {
-                throw exception;
-            }
+            throw new NotImplementedException();
         }
 
-        internal class SimpleMessageConsumer : IMessageConsumer
+        public IMessage Receive(TimeSpan timeout)
         {
-            public string MessageSelector { get; }
-            public event MessageListener Listener;
+            throw new NotImplementedException();
+        }
 
-            public void SendMessage(IMessage message)
-            {
-                Listener(message);
-            }
+        public Task<IMessage> ReceiveAsync(TimeSpan timeout)
+        {
+            throw new NotImplementedException();
+        }
 
-            public IMessage Receive()
-            {
-                throw new NotImplementedException();
-            }
+        public IMessage ReceiveNoWait()
+        {
+            throw new NotImplementedException();
+        }
 
-            public Task<IMessage> ReceiveAsync()
-            {
-                throw new NotImplementedException();
-            }
+        public void Close()
+        {
+            throw new NotImplementedException();
+        }
 
-            public IMessage Receive(TimeSpan timeout)
-            {
-                throw new NotImplementedException();
-            }
+        public Task CloseAsync()
+        {
+            throw new NotImplementedException();
+        }
 
-            public Task<IMessage> ReceiveAsync(TimeSpan timeout)
-            {
-                throw new NotImplementedException();
-            }
+        public ConsumerTransformerDelegate ConsumerTransformer
+        {
+            get { throw new NotImplementedException(); }
+            set { throw new NotImplementedException(); }
+        }
 
-            public IMessage ReceiveNoWait()
-            {
-                throw new NotImplementedException();
-            }
-
-            public void Close()
-            {
-                throw new NotImplementedException();
-            }
-
-            public Task CloseAsync()
-            {
-                throw new NotImplementedException();
-            }
-
-            public ConsumerTransformerDelegate ConsumerTransformer
-            {
-                get { throw new NotImplementedException(); }
-                set { throw new NotImplementedException(); }
-            }
-
-            public void Dispose()
-            {
-                throw new NotImplementedException();
-            }
+        public void Dispose()
+        {
+            throw new NotImplementedException();
         }
     }
 }

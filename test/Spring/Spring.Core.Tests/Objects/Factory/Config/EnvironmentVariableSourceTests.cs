@@ -24,28 +24,26 @@ using NUnit.Framework;
 
 #endregion
 
-namespace Spring.Objects.Factory.Config
+namespace Spring.Objects.Factory.Config;
+
+/// <summary>
+/// Unit tests for the EnvironmentVariableSource class.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[TestFixture]
+public sealed class EnvironmentVariableSourceTests
 {
-	/// <summary>
-    /// Unit tests for the EnvironmentVariableSource class.
-    /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    [TestFixture]
-    public sealed class EnvironmentVariableSourceTests
+    [Test]
+    public void TestVariablesResolution()
     {
-        [Test]
-        public void TestVariablesResolution()
-        {
-            EnvironmentVariableSource vs = new EnvironmentVariableSource();
+        EnvironmentVariableSource vs = new EnvironmentVariableSource();
 
-            // existing vars
-            Assert.AreEqual(Environment.GetEnvironmentVariable("path"), vs.ResolveVariable("path"));
-            Assert.AreEqual(Environment.GetEnvironmentVariable("PATH"), vs.ResolveVariable("PATH"));
-            Assert.AreEqual(Environment.GetEnvironmentVariable("ComputerName"), vs.ResolveVariable("computerName"));
+        // existing vars
+        Assert.AreEqual(Environment.GetEnvironmentVariable("path"), vs.ResolveVariable("path"));
+        Assert.AreEqual(Environment.GetEnvironmentVariable("PATH"), vs.ResolveVariable("PATH"));
+        Assert.AreEqual(Environment.GetEnvironmentVariable("ComputerName"), vs.ResolveVariable("computerName"));
 
-            // non-existant variable
-            Assert.IsNull(vs.ResolveVariable("dummy"));
-        }
-
+        // non-existant variable
+        Assert.IsNull(vs.ResolveVariable("dummy"));
     }
 }

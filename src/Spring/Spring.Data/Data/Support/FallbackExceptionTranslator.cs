@@ -20,46 +20,43 @@
 
 using Spring.Dao;
 
-namespace Spring.Data.Support
+namespace Spring.Data.Support;
+
+/// <summary>
+/// Translates all exceptions to an UncategorizedAdoException.
+/// </summary>
+/// <remarks>
+/// This exception translator used when an exception is thrown using the
+/// "primary" implementation of IAdoExceptionTranslator, i.e. AdoExceptionTranslator.
+/// </remarks>
+/// <author>Mark Pollack (.NET)</author>
+public class FallbackExceptionTranslator : IAdoExceptionTranslator
 {
-	/// <summary>
-    /// Translates all exceptions to an UncategorizedAdoException.
+    #region Constructor (s)
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="FallbackExceptionTranslator"/> class.
     /// </summary>
-    /// <remarks>
-    /// This exception translator used when an exception is thrown using the
-	/// "primary" implementation of IAdoExceptionTranslator, i.e. AdoExceptionTranslator.
-    /// </remarks>
-	/// <author>Mark Pollack (.NET)</author>
-	public class FallbackExceptionTranslator : IAdoExceptionTranslator
-	{
+    public FallbackExceptionTranslator()
+    {
+    }
 
+    #endregion
 
-		#region Constructor (s)
-		/// <summary>
-		/// Initializes a new instance of the <see cref="FallbackExceptionTranslator"/> class.
-        /// </summary>
-		public FallbackExceptionTranslator()
-		{
-		}
-
-		#endregion
-
-
-	    /// <summary>
-	    /// Translate the given <see cref="System.SystemException"/> into a generic data access exception.
-	    /// </summary>
-	    /// <param name="task">A readable string describing the task being attempted.</param>
-	    /// <param name="sql">The SQL query or update that caused the problem. May be null.</param>
-	    /// <param name="exception">
-	    /// The <see cref="System.Exception"/> encountered by the ADO.NET implementation.
-	    /// </param>
-	    /// <returns>
-	    /// A <see cref="Spring.Dao.DataAccessException"/> appropriate for the supplied
-	    /// <paramref name="exception"/>.
-	    /// </returns>
-	    public DataAccessException Translate(string task, string sql, Exception exception)
-	    {
-	        return new UncategorizedAdoException(task, sql, "<no error code>", exception);
-	    }
-	}
+    /// <summary>
+    /// Translate the given <see cref="System.SystemException"/> into a generic data access exception.
+    /// </summary>
+    /// <param name="task">A readable string describing the task being attempted.</param>
+    /// <param name="sql">The SQL query or update that caused the problem. May be null.</param>
+    /// <param name="exception">
+    /// The <see cref="System.Exception"/> encountered by the ADO.NET implementation.
+    /// </param>
+    /// <returns>
+    /// A <see cref="Spring.Dao.DataAccessException"/> appropriate for the supplied
+    /// <paramref name="exception"/>.
+    /// </returns>
+    public DataAccessException Translate(string task, string sql, Exception exception)
+    {
+        return new UncategorizedAdoException(task, sql, "<no error code>", exception);
+    }
 }

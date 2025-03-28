@@ -20,32 +20,31 @@
 
 using System.Data;
 
-namespace Spring.Data
+namespace Spring.Data;
+
+/// <summary>
+/// Called by the AdoTemplate class to allow implementations
+/// to set any necessary properties on the DbDataAdapter object.
+/// </summary>
+/// <remarks>
+/// <p>For example, this callback can be used to set the
+/// AcceptChangesDuringFill property, register an event handler
+/// for the FillErrors event, set update batch sizes if your provider
+/// supports such functionality, set the ContinueUpdateOnError property,
+/// or in .NET 2.0 to set the property AcceptChangesDuringUpdate.
+/// </p>
+/// <p>
+/// Downcast to the appropriate subtype to access vendor specific
+/// functionality.</p>
+/// <p>
+/// The DataAdapter SelectCommand will be already be
+/// populated with values for CommandType and Text properties
+/// along with Connection/Transaction properties based on the
+/// calling transaction context.
+/// </p>
+/// </remarks>
+/// <author>Mark Pollack (.NET)</author>
+public interface IDataAdapterSetter
 {
-    /// <summary>
-    /// Called by the AdoTemplate class to allow implementations
-    /// to set any necessary properties on the DbDataAdapter object.
-    /// </summary>
-    /// <remarks>
-    /// <p>For example, this callback can be used to set the
-    /// AcceptChangesDuringFill property, register an event handler
-    /// for the FillErrors event, set update batch sizes if your provider
-    /// supports such functionality, set the ContinueUpdateOnError property,
-    /// or in .NET 2.0 to set the property AcceptChangesDuringUpdate.
-    /// </p>
-    /// <p>
-    /// Downcast to the appropriate subtype to access vendor specific
-    /// functionality.</p>
-    /// <p>
-    /// The DataAdapter SelectCommand will be already be
-    /// populated with values for CommandType and Text properties
-    /// along with Connection/Transaction properties based on the
-    /// calling transaction context.
-    /// </p>
-    /// </remarks>
-	/// <author>Mark Pollack (.NET)</author>
-	public interface IDataAdapterSetter
-	{
-        void SetValues(IDbDataAdapter dataAdapter);
-	}
+    void SetValues(IDbDataAdapter dataAdapter);
 }

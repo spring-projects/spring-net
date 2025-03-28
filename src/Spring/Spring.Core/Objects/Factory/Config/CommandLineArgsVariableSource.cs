@@ -18,130 +18,131 @@
 
 #endregion
 
-namespace Spring.Objects.Factory.Config
+namespace Spring.Objects.Factory.Config;
+
+/// <summary>
+/// Implementation of <see cref="IVariableSource"/> that
+/// resolves variable name against command line arguments.
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+[Serializable]
+public class CommandLineArgsVariableSource : IVariableSource
 {
+    private const string DEFAULT_ARG_PREFIX = "/";
+    private const string DEFAULT_VALUE_SEPARATOR = ":";
+
+    private string argumentPrefix = DEFAULT_ARG_PREFIX;
+    private string valueSeparator = DEFAULT_VALUE_SEPARATOR;
+
+    private string[] commandLineArgs;
+    protected IDictionary<string, string> arguments;
+
+    private object objectMonitor = new object();
+
     /// <summary>
-    /// Implementation of <see cref="IVariableSource"/> that
-    /// resolves variable name against command line arguments.
+    /// Default constructor.
+    /// Initializes command line arguments from the environment.
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    [Serializable]
-    public class CommandLineArgsVariableSource : IVariableSource
+    public CommandLineArgsVariableSource()
     {
-        private const string DEFAULT_ARG_PREFIX = "/";
-        private const string DEFAULT_VALUE_SEPARATOR = ":";
+        this.commandLineArgs = Environment.GetCommandLineArgs();
+    }
 
-        private string argumentPrefix = DEFAULT_ARG_PREFIX;
-        private string valueSeparator = DEFAULT_VALUE_SEPARATOR;
+    /// <summary>
+    /// Constructor that allows arguments to be passed externally.
+    /// Useful for testing.
+    /// </summary>
+    public CommandLineArgsVariableSource(string[] commandLineArgs)
+    {
+        this.commandLineArgs = commandLineArgs;
+    }
 
-        private string[] commandLineArgs;
-        protected IDictionary<string, string> arguments;
+    /// <summary>
+    /// Gets or sets a prefix that should be used to
+    /// identify arguments to extract values from.
+    /// </summary>
+    /// <value>
+    /// A prefix that should be used to identify arguments
+    /// to extract values from. Defaults to slash ("/").
+    /// </value>
+    public string ArgumentPrefix
+    {
+        get { return argumentPrefix; }
+        set { argumentPrefix = value; }
+    }
 
-        private object objectMonitor = new object();
+    /// <summary>
+    /// Gets or sets a character that should be used to
+    /// separate argument name from its value.
+    /// </summary>
+    /// <value>
+    /// A character that should be used to separate argument
+    /// name from its value. Defaults to colon (":").
+    /// </value>
+    public string ValueSeparator
+    {
+        get { return valueSeparator; }
+        set { valueSeparator = value; }
+    }
 
-        /// <summary>
-        /// Default constructor. 
-        /// Initializes command line arguments from the environment.
-        /// </summary>
-        public CommandLineArgsVariableSource()
+    /// <summary>
+    /// Before requesting a variable resolution, a client should
+    /// ask, whether the source can resolve a particular variable name.
+    /// </summary>
+    /// <param name="name">the name of the variable to resolve</param>
+    /// <returns><c>true</c> if the variable can be resolved, <c>false</c> otherwise</returns>
+    public bool CanResolveVariable(string name)
+    {
+        lock (objectMonitor)
         {
-            this.commandLineArgs = Environment.GetCommandLineArgs();
-        }
-
-        /// <summary>
-        /// Constructor that allows arguments to be passed externally.
-        /// Useful for testing.
-        /// </summary>
-        public CommandLineArgsVariableSource(string[] commandLineArgs)
-        {
-            this.commandLineArgs = commandLineArgs;
-        }
-
-        /// <summary>
-        /// Gets or sets a prefix that should be used to 
-        /// identify arguments to extract values from.
-        /// </summary>
-        /// <value>
-        /// A prefix that should be used to identify arguments 
-        /// to extract values from. Defaults to slash ("/").
-        /// </value>
-        public string ArgumentPrefix
-        {
-            get { return argumentPrefix; }
-            set { argumentPrefix = value; }
-        }
-
-        /// <summary>
-        /// Gets or sets a character that should be used to
-        /// separate argument name from its value.
-        /// </summary>
-        /// <value>
-        /// A character that should be used to separate argument 
-        /// name from its value. Defaults to colon (":").
-        /// </value>
-        public string ValueSeparator
-        {
-            get { return valueSeparator; }
-            set { valueSeparator = value; }
-        }
-
-        /// <summary>
-        /// Before requesting a variable resolution, a client should
-        /// ask, whether the source can resolve a particular variable name.
-        /// </summary>
-        /// <param name="name">the name of the variable to resolve</param>
-        /// <returns><c>true</c> if the variable can be resolved, <c>false</c> otherwise</returns>
-        public bool CanResolveVariable(string name)
-        {
-            lock (objectMonitor)
+            if (arguments == null)
             {
-                if (arguments == null)
-                {
-                    InitArguments();
-                }
-                return arguments.ContainsKey(name);
+                InitArguments();
             }
-        }
 
-        /// <summary>
-        /// Resolves variable value for the specified variable name.
-        /// </summary>
-        /// <param name="name">
-        /// The name of the variable to resolve.
-        /// </param>
-        /// <returns>
-        /// The variable value if able to resolve, <c>null</c> otherwise.
-        /// </returns>
-        public string ResolveVariable(string name)
+            return arguments.ContainsKey(name);
+        }
+    }
+
+    /// <summary>
+    /// Resolves variable value for the specified variable name.
+    /// </summary>
+    /// <param name="name">
+    /// The name of the variable to resolve.
+    /// </param>
+    /// <returns>
+    /// The variable value if able to resolve, <c>null</c> otherwise.
+    /// </returns>
+    public string ResolveVariable(string name)
+    {
+        lock (objectMonitor)
         {
-            lock (objectMonitor)
+            if (arguments == null)
             {
-                if (arguments == null)
-                {
-                    InitArguments();
-                }
-                string retValue;
-                arguments.TryGetValue(name, out retValue);
-                return retValue;
+                InitArguments();
             }
+
+            string retValue;
+            arguments.TryGetValue(name, out retValue);
+            return retValue;
         }
+    }
 
-        /// <summary>
-        /// Initializes command line arguments dictionary.
-        /// </summary>
-        protected virtual void InitArguments()
+    /// <summary>
+    /// Initializes command line arguments dictionary.
+    /// </summary>
+    protected virtual void InitArguments()
+    {
+        this.arguments = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+
+        foreach (string arg in commandLineArgs)
         {
-            this.arguments = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
-
-            foreach (string arg in commandLineArgs)
+            int separatorIndex = arg.IndexOf(valueSeparator);
+            if (arg.StartsWith(argumentPrefix) && separatorIndex > argumentPrefix.Length)
             {
-                int separatorIndex = arg.IndexOf(valueSeparator);
-                if (arg.StartsWith(argumentPrefix) && separatorIndex > argumentPrefix.Length)
-                {
-                    string argName = arg.Substring(argumentPrefix.Length, separatorIndex - argumentPrefix.Length);
-                    string argValue = arg.Substring(separatorIndex + valueSeparator.Length);
-                    this.arguments[argName] = argValue;
-                }
+                string argName = arg.Substring(argumentPrefix.Length, separatorIndex - argumentPrefix.Length);
+                string argValue = arg.Substring(separatorIndex + valueSeparator.Length);
+                this.arguments[argName] = argValue;
             }
         }
     }

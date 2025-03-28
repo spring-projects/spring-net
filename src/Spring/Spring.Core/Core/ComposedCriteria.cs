@@ -22,92 +22,92 @@
 
 #endregion
 
-namespace Spring.Core
+namespace Spring.Core;
+
+/// <summary>
+/// A <see cref="Spring.Core.ICriteria"/> implementation that represents
+/// a composed collection of <see cref="Spring.Core.ICriteria"/> instances.
+/// </summary>
+public class ComposedCriteria : ICriteria
 {
+    #region Constructor (s) / Destructor
+
     /// <summary>
-    /// A <see cref="Spring.Core.ICriteria"/> implementation that represents
-    /// a composed collection of <see cref="Spring.Core.ICriteria"/> instances.
+    /// Creates a new instance of the
+    /// <see cref="ComposedCriteria"/> class.
     /// </summary>
-    public class ComposedCriteria : ICriteria
+    public ComposedCriteria() : this(null)
     {
-        #region Constructor (s) / Destructor
-
-        /// <summary>
-        /// Creates a new instance of the
-        /// <see cref="ComposedCriteria"/> class.
-        /// </summary>
-        public ComposedCriteria() : this(null)
-        {
-        }
-
-        /// <summary>
-        /// Creates a new instance of the
-        /// <see cref="ComposedCriteria"/> class.
-        /// </summary>
-        /// <param name="criteria">
-        /// A user-defined (child) criteria that will be composed into this instance.
-        /// </param>
-        public ComposedCriteria(ICriteria criteria)
-        {
-            _criteria = new List<ICriteria>();
-            Add(criteria);
-        }
-
-        #endregion
-
-        #region Methods
-
-        /// <summary>
-        /// Does the supplied <paramref name="datum"/> satisfy the criteria encapsulated by
-        /// this instance?
-        /// </summary>
-        /// <param name="datum">The data to be checked by this criteria instance.</param>
-        /// <returns>
-        /// True if the supplied <paramref name="datum"/> satisfies the criteria encapsulated
-        /// by this instance; false if not or the supplied <paramref name="datum"/> is null.
-        /// </returns>
-        public virtual bool IsSatisfied(object datum)
-        {
-            foreach (ICriteria criteria in _criteria)
-            {
-                if (!criteria.IsSatisfied(datum))
-                {
-                    return false;
-                }
-            }
-            return true;
-        }
-
-        /// <summary>
-        /// Adds the supplied <parameref name="criteria"/> into the criteria
-        /// composed within this instance.
-        /// </summary>
-        /// <param name="criteria">
-        /// The <see cref="Spring.Core.ICriteria"/> to be added.
-        /// </param>
-        public void Add(ICriteria criteria)
-        {
-            if (criteria != null)
-            {
-                _criteria.Add(criteria);
-            }
-        }
-
-        #endregion
-
-        /// <summary>
-        /// The list of <see cref="Spring.Core.ICriteria"/> composing this
-        /// instance.
-        /// </summary>
-        protected IList<ICriteria> Criteria
-        {
-            get { return _criteria; }
-        }
-
-        #region Fields
-
-        private IList<ICriteria> _criteria;
-
-        #endregion
     }
+
+    /// <summary>
+    /// Creates a new instance of the
+    /// <see cref="ComposedCriteria"/> class.
+    /// </summary>
+    /// <param name="criteria">
+    /// A user-defined (child) criteria that will be composed into this instance.
+    /// </param>
+    public ComposedCriteria(ICriteria criteria)
+    {
+        _criteria = new List<ICriteria>();
+        Add(criteria);
+    }
+
+    #endregion
+
+    #region Methods
+
+    /// <summary>
+    /// Does the supplied <paramref name="datum"/> satisfy the criteria encapsulated by
+    /// this instance?
+    /// </summary>
+    /// <param name="datum">The data to be checked by this criteria instance.</param>
+    /// <returns>
+    /// True if the supplied <paramref name="datum"/> satisfies the criteria encapsulated
+    /// by this instance; false if not or the supplied <paramref name="datum"/> is null.
+    /// </returns>
+    public virtual bool IsSatisfied(object datum)
+    {
+        foreach (ICriteria criteria in _criteria)
+        {
+            if (!criteria.IsSatisfied(datum))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /// <summary>
+    /// Adds the supplied <parameref name="criteria"/> into the criteria
+    /// composed within this instance.
+    /// </summary>
+    /// <param name="criteria">
+    /// The <see cref="Spring.Core.ICriteria"/> to be added.
+    /// </param>
+    public void Add(ICriteria criteria)
+    {
+        if (criteria != null)
+        {
+            _criteria.Add(criteria);
+        }
+    }
+
+    #endregion
+
+    /// <summary>
+    /// The list of <see cref="Spring.Core.ICriteria"/> composing this
+    /// instance.
+    /// </summary>
+    protected IList<ICriteria> Criteria
+    {
+        get { return _criteria; }
+    }
+
+    #region Fields
+
+    private IList<ICriteria> _criteria;
+
+    #endregion
 }

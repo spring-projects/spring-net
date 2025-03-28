@@ -21,224 +21,217 @@
 #region Imports
 
 using Apache.NMS;
-
 using FakeItEasy;
-
 using NUnit.Framework;
-
 using Spring.Messaging.Nms.Core;
 
 #endregion
 
-namespace Spring.Messaging.Nms.Connections
+namespace Spring.Messaging.Nms.Connections;
+
+/// <summary>
+/// This class contains tests for the SingleConnectionFactory
+/// </summary>
+/// <author>Mark Pollack</author>
+[TestFixture]
+public class SingleConnectionFactoryTests
 {
-    /// <summary>
-    /// This class contains tests for the SingleConnectionFactory
-    /// </summary>
-    /// <author>Mark Pollack</author>
-    [TestFixture]
-    public class SingleConnectionFactoryTests
+    [Test]
+    public void UsingConnection()
     {
-        [Test]
-        public void UsingConnection()
-        {
-            IConnection connection = A.Fake<IConnection>();
+        IConnection connection = A.Fake<IConnection>();
 
-            SingleConnectionFactory scf = new SingleConnectionFactory(connection);
-            IConnection con1 = scf.CreateConnection();
-            con1.Start();
-            con1.PurgeTempDestinations();
-            con1.Stop(); // should be ignored
-            con1.Close(); // should be ignored
-            IConnection con2 = scf.CreateConnection();
-            con2.Start();
-            con1.PurgeTempDestinations();
-            con2.Stop(); // should be ignored
-            con2.Close(); // should be ignored.
-            scf.Dispose();
+        SingleConnectionFactory scf = new SingleConnectionFactory(connection);
+        IConnection con1 = scf.CreateConnection();
+        con1.Start();
+        con1.PurgeTempDestinations();
+        con1.Stop(); // should be ignored
+        con1.Close(); // should be ignored
+        IConnection con2 = scf.CreateConnection();
+        con2.Start();
+        con1.PurgeTempDestinations();
+        con2.Stop(); // should be ignored
+        con2.Close(); // should be ignored.
+        scf.Dispose();
 
-            A.CallTo(() => connection.Start()).MustHaveHappenedTwiceExactly();
-            A.CallTo(() => connection.PurgeTempDestinations()).MustHaveHappenedTwiceExactly();
-            A.CallTo(() => connection.Stop()).MustHaveHappenedOnceExactly();
-            A.CallTo(() => connection.Close()).MustHaveHappenedOnceExactly();
-        }
+        A.CallTo(() => connection.Start()).MustHaveHappenedTwiceExactly();
+        A.CallTo(() => connection.PurgeTempDestinations()).MustHaveHappenedTwiceExactly();
+        A.CallTo(() => connection.Stop()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => connection.Close()).MustHaveHappenedOnceExactly();
+    }
 
-        [Test]
-        public void UsingConnectionFactory()
-        {
-            IConnectionFactory connectionFactory = A.Fake<IConnectionFactory>();
-            IConnection connection = A.Fake<IConnection>();
+    [Test]
+    public void UsingConnectionFactory()
+    {
+        IConnectionFactory connectionFactory = A.Fake<IConnectionFactory>();
+        IConnection connection = A.Fake<IConnection>();
 
-            A.CallTo(() => connectionFactory.CreateConnection()).Returns(connection).Once();
+        A.CallTo(() => connectionFactory.CreateConnection()).Returns(connection).Once();
 
-            SingleConnectionFactory scf = new SingleConnectionFactory(connectionFactory);
-            IConnection con1 = scf.CreateConnection();
-            con1.Start();
-            con1.Close(); // should be ignored
-            IConnection con2 = scf.CreateConnection();
-            con2.Start();
-            con2.Close(); //should be ignored
-            scf.Dispose(); //should trigger actual close
+        SingleConnectionFactory scf = new SingleConnectionFactory(connectionFactory);
+        IConnection con1 = scf.CreateConnection();
+        con1.Start();
+        con1.Close(); // should be ignored
+        IConnection con2 = scf.CreateConnection();
+        con2.Start();
+        con2.Close(); //should be ignored
+        scf.Dispose(); //should trigger actual close
 
-            A.CallTo(() => connection.Start()).MustHaveHappenedTwiceExactly();
-            A.CallTo(() => connection.Stop()).MustHaveHappenedOnceExactly();
-            A.CallTo(() => connection.Close()).MustHaveHappenedOnceExactly();
-        }
+        A.CallTo(() => connection.Start()).MustHaveHappenedTwiceExactly();
+        A.CallTo(() => connection.Stop()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => connection.Close()).MustHaveHappenedOnceExactly();
+    }
 
-        [Test]
-        public void UsingConnectionFactoryAndClientId()
-        {
-            IConnectionFactory connectionFactory = A.Fake<IConnectionFactory>();
-            IConnection connection = A.Fake<IConnection>();
+    [Test]
+    public void UsingConnectionFactoryAndClientId()
+    {
+        IConnectionFactory connectionFactory = A.Fake<IConnectionFactory>();
+        IConnection connection = A.Fake<IConnection>();
 
-            A.CallTo(() => connectionFactory.CreateConnection()).Returns(connection).Once();
+        A.CallTo(() => connectionFactory.CreateConnection()).Returns(connection).Once();
 
-            SingleConnectionFactory scf = new SingleConnectionFactory(connectionFactory);
-            scf.ClientId = "MyId";
-            IConnection con1 = scf.CreateConnection();
-            con1.Start();
-            con1.Close(); // should be ignored
-            IConnection con2 = scf.CreateConnection();
-            con2.Start();
-            con2.Close(); // should be ignored
-            scf.Dispose(); // should trigger actual close
+        SingleConnectionFactory scf = new SingleConnectionFactory(connectionFactory);
+        scf.ClientId = "MyId";
+        IConnection con1 = scf.CreateConnection();
+        con1.Start();
+        con1.Close(); // should be ignored
+        IConnection con2 = scf.CreateConnection();
+        con2.Start();
+        con2.Close(); // should be ignored
+        scf.Dispose(); // should trigger actual close
 
-            A.CallToSet(() => connection.ClientId).WhenArgumentsMatch(x => x.Get<string>(0) == "MyId").MustHaveHappenedOnceExactly();
-            A.CallTo(() => connection.Start()).MustHaveHappenedTwiceExactly();
-            A.CallTo(() => connection.Stop()).MustHaveHappenedOnceExactly();
-            A.CallTo(() => connection.Close()).MustHaveHappenedOnceExactly();
-        }
+        A.CallToSet(() => connection.ClientId).WhenArgumentsMatch(x => x.Get<string>(0) == "MyId").MustHaveHappenedOnceExactly();
+        A.CallTo(() => connection.Start()).MustHaveHappenedTwiceExactly();
+        A.CallTo(() => connection.Stop()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => connection.Close()).MustHaveHappenedOnceExactly();
+    }
 
+    [Test]
+    public void UsingConnectionFactoryAndExceptionListener()
+    {
+        IConnectionFactory connectionFactory = A.Fake<IConnectionFactory>();
+        IConnection connection = A.Fake<IConnection>();
 
-        [Test]
-        public void UsingConnectionFactoryAndExceptionListener()
-        {
-            IConnectionFactory connectionFactory = A.Fake<IConnectionFactory>();
-            IConnection connection = A.Fake<IConnection>();
+        IExceptionListener listener = new ChainedExceptionListener();
+        A.CallTo(() => connectionFactory.CreateConnection()).Returns(connection).Once();
 
+        SingleConnectionFactory scf = new SingleConnectionFactory(connectionFactory);
+        scf.ExceptionListener = listener;
+        IConnection con1 = scf.CreateConnection();
 
-            IExceptionListener listener = new ChainedExceptionListener();
-            A.CallTo(() => connectionFactory.CreateConnection()).Returns(connection).Once();
+        //can't look at invocation list on event ...grrr.
 
-            SingleConnectionFactory scf = new SingleConnectionFactory(connectionFactory);
-            scf.ExceptionListener = listener;
-            IConnection con1 = scf.CreateConnection();
+        con1.Start();
+        con1.Stop(); // should be ignored
+        con1.Close(); // should be ignored
+        IConnection con2 = scf.CreateConnection();
+        con2.Start();
+        con2.Stop();
+        con2.Close();
+        scf.Dispose();
 
-            //can't look at invocation list on event ...grrr.
+        // TODO
+        //connection.ExceptionListener += listener.OnException;
+        // LastCall.On(connection).IgnoreArguments();
 
-            con1.Start();
-            con1.Stop(); // should be ignored
-            con1.Close(); // should be ignored
-            IConnection con2 = scf.CreateConnection();
-            con2.Start();
-            con2.Stop();
-            con2.Close();
-            scf.Dispose();
+        A.CallTo(() => connection.Start()).MustHaveHappenedTwiceExactly();
+        A.CallTo(() => connection.Stop()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => connection.Close()).MustHaveHappenedOnceExactly();
+    }
 
-            // TODO
-            //connection.ExceptionListener += listener.OnException;
-             // LastCall.On(connection).IgnoreArguments();
+    [Test]
+    public void UsingConnectionFactoryAndReconnectOnException()
+    {
+        IConnectionFactory connectionFactory = A.Fake<IConnectionFactory>();
+        TestConnection con = new TestConnection();
 
+        A.CallTo(() => connectionFactory.CreateConnection()).Returns(con).Twice();
 
-            A.CallTo(() => connection.Start()).MustHaveHappenedTwiceExactly();
-            A.CallTo(() => connection.Stop()).MustHaveHappenedOnceExactly();
-            A.CallTo(() => connection.Close()).MustHaveHappenedOnceExactly();
-        }
+        SingleConnectionFactory scf = new SingleConnectionFactory(connectionFactory);
+        scf.ReconnectOnException = true;
+        IConnection con1 = scf.CreateConnection();
 
-        [Test]
-        public void UsingConnectionFactoryAndReconnectOnException()
-        {
-            IConnectionFactory connectionFactory = A.Fake<IConnectionFactory>();
-            TestConnection con = new TestConnection();
+        con1.Start();
+        con.FireExcpetionEvent(new NMSException(""));
+        IConnection con2 = scf.CreateConnection();
+        con2.Start();
+        scf.Dispose();
 
-            A.CallTo(() => connectionFactory.CreateConnection()).Returns(con).Twice();
+        Assert.AreEqual(2, con.StartCount);
+        Assert.AreEqual(2, con.CloseCount);
+    }
 
-            SingleConnectionFactory scf = new SingleConnectionFactory(connectionFactory);
-            scf.ReconnectOnException = true;
-            IConnection con1 = scf.CreateConnection();
+    [Test]
+    public void UsingConnectionFactoryAndExceptionListenerAndReconnectOnException()
+    {
+        IConnectionFactory connectionFactory = A.Fake<IConnectionFactory>();
+        TestConnection con = new TestConnection();
+        TestExceptionListener listener = new TestExceptionListener();
 
-            con1.Start();
-            con.FireExcpetionEvent(new NMSException(""));
-            IConnection con2 = scf.CreateConnection();
-            con2.Start();
-            scf.Dispose();
+        A.CallTo(() => connectionFactory.CreateConnection()).Returns(con).Twice();
 
-            Assert.AreEqual(2, con.StartCount);
-            Assert.AreEqual(2, con.CloseCount);
-        }
+        SingleConnectionFactory scf = new SingleConnectionFactory(connectionFactory);
+        scf.ExceptionListener = listener;
+        scf.ReconnectOnException = true;
+        IConnection con1 = scf.CreateConnection();
+        //Assert.AreSame(listener, );
+        con1.Start();
+        con.FireExcpetionEvent(new NMSException(""));
+        IConnection con2 = scf.CreateConnection();
+        con2.Start();
+        scf.Dispose();
 
-        [Test]
-        public void UsingConnectionFactoryAndExceptionListenerAndReconnectOnException()
-        {
-            IConnectionFactory connectionFactory = A.Fake<IConnectionFactory>();
-            TestConnection con = new TestConnection();
-            TestExceptionListener listener = new TestExceptionListener();
+        Assert.AreEqual(2, con.StartCount);
+        Assert.AreEqual(2, con.CloseCount);
+        Assert.AreEqual(1, listener.Count);
+    }
 
-            A.CallTo(() => connectionFactory.CreateConnection()).Returns(con).Twice();
+    [Test]
+    public void CachingConnectionFactory()
+    {
+        IConnectionFactory connectionFactory = A.Fake<IConnectionFactory>();
+        IConnection connection = A.Fake<IConnection>();
+        ISession txSession = A.Fake<ISession>();
+        ISession nonTxSession = A.Fake<ISession>();
+        A.CallTo(() => connectionFactory.CreateConnection()).Returns(connection).Once();
+        A.CallTo(() => connectionFactory.CreateConnectionAsync()).Returns(connection).Once();
 
-            SingleConnectionFactory scf = new SingleConnectionFactory(connectionFactory);
-            scf.ExceptionListener = listener;
-            scf.ReconnectOnException = true;
-            IConnection con1 = scf.CreateConnection();
-            //Assert.AreSame(listener, );
-            con1.Start();
-            con.FireExcpetionEvent(new NMSException(""));
-            IConnection con2 = scf.CreateConnection();
-            con2.Start();
-            scf.Dispose();
+        A.CallTo(() => connection.CreateSession(AcknowledgementMode.Transactional)).Returns(txSession).Once();
+        A.CallTo(() => connection.CreateSessionAsync(AcknowledgementMode.Transactional)).Returns(txSession).Once();
 
-            Assert.AreEqual(2, con.StartCount);
-            Assert.AreEqual(2, con.CloseCount);
-            Assert.AreEqual(1, listener.Count);
-        }
+        A.CallTo(() => txSession.Transacted).Returns(true).Twice();
 
-        [Test]
-        public void CachingConnectionFactory()
-        {
-            IConnectionFactory connectionFactory = A.Fake<IConnectionFactory>();
-            IConnection connection = A.Fake<IConnection>();
-            ISession txSession = A.Fake<ISession>();
-            ISession nonTxSession = A.Fake<ISession>();
-            A.CallTo(() => connectionFactory.CreateConnection()).Returns(connection).Once();
-            A.CallTo(() => connectionFactory.CreateConnectionAsync()).Returns(connection).Once();
+        A.CallTo(() => connection.CreateSession(AcknowledgementMode.ClientAcknowledge)).Returns(nonTxSession).Once();
+        A.CallTo(() => connection.CreateSessionAsync(AcknowledgementMode.ClientAcknowledge)).Returns(nonTxSession).Once();
 
-            A.CallTo(() => connection.CreateSession(AcknowledgementMode.Transactional)).Returns(txSession).Once();
-            A.CallTo(() => connection.CreateSessionAsync(AcknowledgementMode.Transactional)).Returns(txSession).Once();
-            
-            A.CallTo(() => txSession.Transacted).Returns(true).Twice();
+        CachingConnectionFactory scf = new CachingConnectionFactory(connectionFactory);
+        scf.ReconnectOnException = false;
 
-            A.CallTo(() => connection.CreateSession(AcknowledgementMode.ClientAcknowledge)).Returns(nonTxSession).Once();
-            A.CallTo(() => connection.CreateSessionAsync(AcknowledgementMode.ClientAcknowledge)).Returns(nonTxSession).Once();
+        IConnection con1 = scf.CreateConnection();
+        ISession session1 = con1.CreateSession(AcknowledgementMode.Transactional);
+        bool b = session1.Transacted;
+        session1.Close(); // should be ignored
+        session1 = con1.CreateSession(AcknowledgementMode.ClientAcknowledge);
+        session1.Close(); // should be ignored
+        con1.Start();
+        con1.Close(); // should be ignored
+        IConnection con2 = scf.CreateConnection();
+        ISession session2 = con2.CreateSession(AcknowledgementMode.ClientAcknowledge);
+        session2.Close(); // should be ignored
+        session2 = con2.CreateSession(AcknowledgementMode.Transactional);
+        session2.Commit();
+        session2.Close(); // should be ignored
+        con2.Start();
+        con2.Close();
+        scf.Dispose();
 
-            CachingConnectionFactory scf = new CachingConnectionFactory(connectionFactory);
-            scf.ReconnectOnException = false;
+        A.CallTo(() => txSession.RollbackAsync()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => txSession.Commit()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => txSession.CloseAsync()).MustHaveHappenedOnceExactly();
 
-            IConnection con1 = scf.CreateConnection();
-            ISession session1 = con1.CreateSession(AcknowledgementMode.Transactional);
-            bool b = session1.Transacted;
-            session1.Close(); // should be ignored
-            session1 = con1.CreateSession(AcknowledgementMode.ClientAcknowledge);
-            session1.Close(); // should be ignored
-            con1.Start();
-            con1.Close(); // should be ignored
-            IConnection con2 = scf.CreateConnection();
-            ISession session2 = con2.CreateSession(AcknowledgementMode.ClientAcknowledge);
-            session2.Close(); // should be ignored
-            session2 = con2.CreateSession(AcknowledgementMode.Transactional);
-            session2.Commit();
-            session2.Close(); // should be ignored
-            con2.Start();
-            con2.Close();
-            scf.Dispose();
-
-            A.CallTo(() => txSession.RollbackAsync()).MustHaveHappenedOnceExactly();
-            A.CallTo(() => txSession.Commit()).MustHaveHappenedOnceExactly();
-            A.CallTo(() => txSession.CloseAsync()).MustHaveHappenedOnceExactly();
-
-            A.CallTo(() => nonTxSession.CloseAsync()).MustHaveHappenedOnceExactly();
-            A.CallTo(() => connection.Start()).MustHaveHappenedTwiceExactly();
-            A.CallTo(() => connection.Stop()).MustHaveHappenedOnceExactly();
-            A.CallTo(() => connection.Close()).MustHaveHappenedOnceExactly();
-        }
+        A.CallTo(() => nonTxSession.CloseAsync()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => connection.Start()).MustHaveHappenedTwiceExactly();
+        A.CallTo(() => connection.Stop()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => connection.Close()).MustHaveHappenedOnceExactly();
     }
 }

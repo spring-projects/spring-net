@@ -23,129 +23,131 @@ using Spring.Util;
 using IHttpHandler = System.Web.IHttpHandler;
 using HttpException = System.Web.HttpException;
 
-namespace Spring.Objects.Factory.Support
+namespace Spring.Objects.Factory.Support;
+
+/// <summary>
+/// Miscellaneous utility methods to support web functionality within Spring.Objects
+/// </summary>
+/// <author>Aleksandar Seovic</author>
+public sealed class WebObjectUtils
 {
+    private static ILogger s_log = LogManager.GetLogger(typeof(WebObjectUtils));
+
+    // CLOVER:OFF
+
     /// <summary>
-    /// Miscellaneous utility methods to support web functionality within Spring.Objects
+    /// Creates a new instance of the <see cref="Spring.Util.WebUtils"/> class.
     /// </summary>
-    /// <author>Aleksandar Seovic</author>
-    public sealed class WebObjectUtils
+    /// <remarks>
+    /// <p>
+    /// This is a utility class, and as such exposes no public constructors.
+    /// </p>
+    /// </remarks>
+    private WebObjectUtils()
     {
-        private static ILogger s_log = LogManager.GetLogger( typeof( WebObjectUtils ) );
+    }
 
-        // CLOVER:OFF
+    // CLOVER:ON
 
-        /// <summary>
-        /// Creates a new instance of the <see cref="Spring.Util.WebUtils"/> class.
-        /// </summary>
-        /// <remarks>
-        /// <p>
-        /// This is a utility class, and as such exposes no public constructors.
-        /// </p>
-        /// </remarks>
-        private WebObjectUtils()
-        { }
-
-        // CLOVER:ON
-
-
-        /// <summary>
-        /// Creates an instance of the ASPX page
-        /// referred to by the supplied <paramref name="pageUrl"/>.
-        /// </summary>
-        /// <param name="pageUrl">
-        /// The URL of the ASPX page.
-        /// </param>
-        /// <returns>Page instance.</returns>
-        /// <exception cref="Spring.Objects.Factory.ObjectCreationException">
-        /// If this method is not called in the scope of an active web session
-        /// (i.e. the implementation this method depends on this code executing
-        /// in the environs of a running web server such as IIS); or if the
-        /// page could not be instantiated (for whatever reason, such as the
-        /// ASPX <paramref name="pageUrl"/> not actually existing).
-        /// </exception>
-        public static IHttpHandler CreatePageInstance( string pageUrl )
+    /// <summary>
+    /// Creates an instance of the ASPX page
+    /// referred to by the supplied <paramref name="pageUrl"/>.
+    /// </summary>
+    /// <param name="pageUrl">
+    /// The URL of the ASPX page.
+    /// </param>
+    /// <returns>Page instance.</returns>
+    /// <exception cref="Spring.Objects.Factory.ObjectCreationException">
+    /// If this method is not called in the scope of an active web session
+    /// (i.e. the implementation this method depends on this code executing
+    /// in the environs of a running web server such as IIS); or if the
+    /// page could not be instantiated (for whatever reason, such as the
+    /// ASPX <paramref name="pageUrl"/> not actually existing).
+    /// </exception>
+    public static IHttpHandler CreatePageInstance(string pageUrl)
+    {
+        if (s_log.IsEnabled(LogLevel.Debug))
         {
-            if (s_log.IsEnabled(LogLevel.Debug))
-            {
-                s_log.LogDebug("creating page instance '" + pageUrl + "'");
-            }
-
-            IHttpHandler page;
-            try
-            {
-                page = CreateHandler( pageUrl );
-            }
-            catch (HttpException httpEx)
-            {
-                string msg = String.Format( "Unable to instantiate page [{0}]: {1}", pageUrl, httpEx.Message );
-                if (httpEx.GetHttpCode() == 404)
-                {
-                    throw new FileNotFoundException( msg );
-                }
-                s_log.LogError(httpEx, msg);
-                throw new ObjectCreationException( msg, httpEx );
-            }
-            catch (Exception ex)
-            {
-                // in case of FileNotFound recreate the exception for clarity
-                FileNotFoundException fnfe = ex as FileNotFoundException;
-                if (fnfe != null)
-                {
-                    string fmsg = String.Format( "Unable to instantiate page [{0}]: The file '{1}' does not exist.", pageUrl, fnfe.Message );
-                    throw new FileNotFoundException( fmsg );
-                }
-
-                string msg = String.Format( "Unable to instantiate page [{0}]", pageUrl );
-                s_log.LogError(ex, msg);
-                throw new ObjectCreationException( msg, ex );
-            }
-            return page;
+            s_log.LogDebug("creating page instance '" + pageUrl + "'");
         }
 
-        /// <summary>
-        /// Creates the raw handler instance without any exception handling
-        /// </summary>
-        /// <param name="pageUrl"></param>
-        /// <returns></returns>
-        internal static IHttpHandler CreateHandler( string pageUrl )
+        IHttpHandler page;
+        try
         {
-            return VirtualEnvironment.CreateInstanceFromVirtualPath(pageUrl, typeof(IHttpHandler)) as IHttpHandler;
+            page = CreateHandler(pageUrl);
+        }
+        catch (HttpException httpEx)
+        {
+            string msg = String.Format("Unable to instantiate page [{0}]: {1}", pageUrl, httpEx.Message);
+            if (httpEx.GetHttpCode() == 404)
+            {
+                throw new FileNotFoundException(msg);
+            }
+
+            s_log.LogError(httpEx, msg);
+            throw new ObjectCreationException(msg, httpEx);
+        }
+        catch (Exception ex)
+        {
+            // in case of FileNotFound recreate the exception for clarity
+            FileNotFoundException fnfe = ex as FileNotFoundException;
+            if (fnfe != null)
+            {
+                string fmsg = String.Format("Unable to instantiate page [{0}]: The file '{1}' does not exist.", pageUrl, fnfe.Message);
+                throw new FileNotFoundException(fmsg);
+            }
+
+            string msg = String.Format("Unable to instantiate page [{0}]", pageUrl);
+            s_log.LogError(ex, msg);
+            throw new ObjectCreationException(msg, ex);
         }
 
-        /// <summary>
-        /// Returns the <see cref="System.Type"/> of the ASPX page
-        /// referred to by the supplied <paramref name="pageUrl"/>.
-        /// </summary>
-        /// <remarks>
-        /// <p>
-        /// As indicated by the exception that can be thrown by this method,
-        /// the ASPX page referred to by the supplied <paramref name="pageUrl"/>
-        /// does have to be instantiated in order to determine its
-        /// see cref="System.Type"/>
-        /// </p>
-        /// </remarks>
-        /// <param name="pageUrl">
-        /// The filename of the ASPX page.
-        /// </param>
-        /// <returns>
-        /// The <see cref="System.Type"/> of the ASPX page
-        /// referred to by the supplied <paramref name="pageUrl"/>.
-        /// </returns>
-        /// <exception cref="System.ArgumentNullException">
-        /// If the supplied <paramref name="pageUrl"/> is <see langword="null"/> or
-        /// contains only whitespace character(s).
-        /// </exception>
-        /// <exception cref="Spring.Objects.Factory.ObjectCreationException">
-        /// If this method is not called in the scope of an active web session
-        /// (i.e. the implementation this method depends on this code executing
-        /// in the environs of a running web server such as IIS); or if the
-        /// page could not be instantiated (for whatever reason, such as the
-        /// ASPX <paramref name="pageUrl"/> not actually existing).
-        /// </exception>
-        public static Type GetPageType( string pageUrl )
-        {
-            AssertUtils.ArgumentHasText( pageUrl, "pageUrl" );
+        return page;
+    }
+
+    /// <summary>
+    /// Creates the raw handler instance without any exception handling
+    /// </summary>
+    /// <param name="pageUrl"></param>
+    /// <returns></returns>
+    internal static IHttpHandler CreateHandler(string pageUrl)
+    {
+        return VirtualEnvironment.CreateInstanceFromVirtualPath(pageUrl, typeof(IHttpHandler)) as IHttpHandler;
+    }
+
+    /// <summary>
+    /// Returns the <see cref="System.Type"/> of the ASPX page
+    /// referred to by the supplied <paramref name="pageUrl"/>.
+    /// </summary>
+    /// <remarks>
+    /// <p>
+    /// As indicated by the exception that can be thrown by this method,
+    /// the ASPX page referred to by the supplied <paramref name="pageUrl"/>
+    /// does have to be instantiated in order to determine its
+    /// see cref="System.Type"/>
+    /// </p>
+    /// </remarks>
+    /// <param name="pageUrl">
+    /// The filename of the ASPX page.
+    /// </param>
+    /// <returns>
+    /// The <see cref="System.Type"/> of the ASPX page
+    /// referred to by the supplied <paramref name="pageUrl"/>.
+    /// </returns>
+    /// <exception cref="System.ArgumentNullException">
+    /// If the supplied <paramref name="pageUrl"/> is <see langword="null"/> or
+    /// contains only whitespace character(s).
+    /// </exception>
+    /// <exception cref="Spring.Objects.Factory.ObjectCreationException">
+    /// If this method is not called in the scope of an active web session
+    /// (i.e. the implementation this method depends on this code executing
+    /// in the environs of a running web server such as IIS); or if the
+    /// page could not be instantiated (for whatever reason, such as the
+    /// ASPX <paramref name="pageUrl"/> not actually existing).
+    /// </exception>
+    public static Type GetPageType(string pageUrl)
+    {
+        AssertUtils.ArgumentHasText(pageUrl, "pageUrl");
 
 //            HttpContext ctx = HttpContext.Current;
 //            if (ctx == null)
@@ -153,62 +155,62 @@ namespace Spring.Objects.Factory.Support
 //                throw new ObjectCreationException( "Unable to get page type. HttpContext is not defined." );
 //            }
 
-            try
-            {
-                Type pageType = GetCompiledPageType( pageUrl );
-                return pageType;
-            }
-            catch (Exception ex)
-            {
-                string msg = String.Format( "Unable to get page type for url [{0}]", pageUrl );
-                s_log.LogError(ex, msg);
-                throw new ObjectCreationException( msg, ex );
-            }
-        }
-
-        /// <summary>
-        /// Calls the underlying ASP.NET infrastructure to obtain the compiled page type
-        /// relative to the current <see cref="System.Web.HttpRequest.CurrentExecutionFilePath"/>.
-        /// </summary>
-        /// <param name="pageUrl">
-        /// The filename of the ASPX page relative to the current <see cref="System.Web.HttpRequest.CurrentExecutionFilePath"/>
-        /// </param>
-        /// <returns>
-        /// The <see cref="System.Type"/> of the ASPX page
-        /// referred to by the supplied <paramref name="pageUrl"/>.
-        /// </returns>
-        public static Type GetCompiledPageType( string pageUrl )
+        try
         {
-            if (s_log.IsEnabled(LogLevel.Debug))
-            {
-                s_log.LogDebug("getting page type for " + pageUrl);
-            }
-
-            string rootedVPath = WebUtils.CombineVirtualPaths( VirtualEnvironment.CurrentExecutionFilePath, pageUrl );
-            if (s_log.IsEnabled(LogLevel.Debug))
-            {
-                s_log.LogDebug("page vpath is " + rootedVPath);
-            }
-
-            Type pageType = VirtualEnvironment.GetCompiledType(rootedVPath);
-            if (s_log.IsEnabled(LogLevel.Debug))
-            {
-                s_log.LogDebug(string.Format( "got page type '{0}' for vpath '{1}'", pageType.FullName, rootedVPath ));
-            }
+            Type pageType = GetCompiledPageType(pageUrl);
             return pageType;
         }
-
-
-        /// <summary>
-        /// Gets the controls type from a given filename
-        /// </summary>
-        public static Type GetControlType( string controlName )
+        catch (Exception ex)
         {
-            AssertUtils.ArgumentHasText( controlName, "controlName" );
-            if (s_log.IsEnabled(LogLevel.Debug))
-            {
-                s_log.LogDebug("getting control type for " + controlName);
-            }
+            string msg = String.Format("Unable to get page type for url [{0}]", pageUrl);
+            s_log.LogError(ex, msg);
+            throw new ObjectCreationException(msg, ex);
+        }
+    }
+
+    /// <summary>
+    /// Calls the underlying ASP.NET infrastructure to obtain the compiled page type
+    /// relative to the current <see cref="System.Web.HttpRequest.CurrentExecutionFilePath"/>.
+    /// </summary>
+    /// <param name="pageUrl">
+    /// The filename of the ASPX page relative to the current <see cref="System.Web.HttpRequest.CurrentExecutionFilePath"/>
+    /// </param>
+    /// <returns>
+    /// The <see cref="System.Type"/> of the ASPX page
+    /// referred to by the supplied <paramref name="pageUrl"/>.
+    /// </returns>
+    public static Type GetCompiledPageType(string pageUrl)
+    {
+        if (s_log.IsEnabled(LogLevel.Debug))
+        {
+            s_log.LogDebug("getting page type for " + pageUrl);
+        }
+
+        string rootedVPath = WebUtils.CombineVirtualPaths(VirtualEnvironment.CurrentExecutionFilePath, pageUrl);
+        if (s_log.IsEnabled(LogLevel.Debug))
+        {
+            s_log.LogDebug("page vpath is " + rootedVPath);
+        }
+
+        Type pageType = VirtualEnvironment.GetCompiledType(rootedVPath);
+        if (s_log.IsEnabled(LogLevel.Debug))
+        {
+            s_log.LogDebug(string.Format("got page type '{0}' for vpath '{1}'", pageType.FullName, rootedVPath));
+        }
+
+        return pageType;
+    }
+
+    /// <summary>
+    /// Gets the controls type from a given filename
+    /// </summary>
+    public static Type GetControlType(string controlName)
+    {
+        AssertUtils.ArgumentHasText(controlName, "controlName");
+        if (s_log.IsEnabled(LogLevel.Debug))
+        {
+            s_log.LogDebug("getting control type for " + controlName);
+        }
 
 //            HttpContext ctx = HttpContext.Current;
 //            if (ctx == null)
@@ -216,33 +218,34 @@ namespace Spring.Objects.Factory.Support
 //                throw new ObjectCreationException( "Unable to get control type. HttpContext is not defined." );
 //            }
 
-            string rootedVPath = WebUtils.CombineVirtualPaths( VirtualEnvironment.CurrentExecutionFilePath, controlName );
+        string rootedVPath = WebUtils.CombineVirtualPaths(VirtualEnvironment.CurrentExecutionFilePath, controlName);
 
-            if (s_log.IsEnabled(LogLevel.Debug))
-            {
-                s_log.LogDebug("control vpath is " + rootedVPath);
-            }
-
-            Type controlType;
-            try
-            {
-                controlType = VirtualEnvironment.GetCompiledType(rootedVPath);
-            }
-            catch (HttpException httpEx)
-            {
-                // for better error-handling suppress 404 HttpExceptions here
-                if (httpEx.GetHttpCode() == 404)
-                {
-                    throw new FileNotFoundException( string.Format( "Control '{0}' does not exist", rootedVPath ) );
-                }
-                throw;
-            }
-
-            if (s_log.IsEnabled(LogLevel.Debug))
-            {
-                s_log.LogDebug(string.Format( "got control type '{0}' for vpath '{1}'", controlType.FullName, rootedVPath ));
-            }
-            return controlType;
+        if (s_log.IsEnabled(LogLevel.Debug))
+        {
+            s_log.LogDebug("control vpath is " + rootedVPath);
         }
+
+        Type controlType;
+        try
+        {
+            controlType = VirtualEnvironment.GetCompiledType(rootedVPath);
+        }
+        catch (HttpException httpEx)
+        {
+            // for better error-handling suppress 404 HttpExceptions here
+            if (httpEx.GetHttpCode() == 404)
+            {
+                throw new FileNotFoundException(string.Format("Control '{0}' does not exist", rootedVPath));
+            }
+
+            throw;
+        }
+
+        if (s_log.IsEnabled(LogLevel.Debug))
+        {
+            s_log.LogDebug(string.Format("got control type '{0}' for vpath '{1}'", controlType.FullName, rootedVPath));
+        }
+
+        return controlType;
     }
 }

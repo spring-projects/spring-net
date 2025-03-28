@@ -26,96 +26,95 @@ using Spring.Objects;
 
 #endregion
 
-namespace Spring.Core
+namespace Spring.Core;
+
+/// <summary>
+/// Unit tests for the default IControlFlow implementation returned by the
+/// ControlFlowFactory class.
+/// </summary>
+/// <author>Rick Evans</author>
+[TestFixture]
+public sealed class ControlFlowFactoryTests
 {
-	/// <summary>
-	/// Unit tests for the default IControlFlow implementation returned by the
-	/// ControlFlowFactory class.
-	/// </summary>
-	/// <author>Rick Evans</author>
-	[TestFixture]
-	public sealed class ControlFlowFactoryTests
-	{
-		[Test]
-		public void CreateControlFlow()
-		{
-			IControlFlow cflow = ControlFlowFactory.CreateControlFlow();
-			Assert.IsNotNull(cflow, "The ControlFlowFactory factory class is returning a " +
-				"null IControlFlow instance (it, obviously, must not)");
-		}
+    [Test]
+    public void CreateControlFlow()
+    {
+        IControlFlow cflow = ControlFlowFactory.CreateControlFlow();
+        Assert.IsNotNull(cflow, "The ControlFlowFactory factory class is returning a " +
+                                "null IControlFlow instance (it, obviously, must not)");
+    }
 
-		[Test]
-		public void CreateControlFlowReturnsDistinctInstance()
-		{
-			IControlFlow cflow1 = ControlFlowFactory.CreateControlFlow();
-			IControlFlow cflow2 = ControlFlowFactory.CreateControlFlow();
-			Assert.IsFalse(Object.ReferenceEquals(cflow1, cflow2), "The ControlFlowFactory " +
-				"factory class is not returning distinct IControlFlow instances (its always " +
-				"the same instance)");
-		}
+    [Test]
+    public void CreateControlFlowReturnsDistinctInstance()
+    {
+        IControlFlow cflow1 = ControlFlowFactory.CreateControlFlow();
+        IControlFlow cflow2 = ControlFlowFactory.CreateControlFlow();
+        Assert.IsFalse(Object.ReferenceEquals(cflow1, cflow2), "The ControlFlowFactory " +
+                                                               "factory class is not returning distinct IControlFlow instances (its always " +
+                                                               "the same instance)");
+    }
 
-		[Test]
-		public void DefaultCflowUnderThisTest()
-		{
-			IControlFlow cflow = ControlFlowFactory.CreateControlFlow();
-			bool isUnder = cflow.Under(GetType());
-			Assert.IsTrue(isUnder, string.Format(
-				"The IControlFlow implementation created by the ControlFlowFactory factory class " +
-					"would appear to have a faulty Under(Type) implementation : [{0}]", cflow.GetType()));
-		}
+    [Test]
+    public void DefaultCflowUnderThisTest()
+    {
+        IControlFlow cflow = ControlFlowFactory.CreateControlFlow();
+        bool isUnder = cflow.Under(GetType());
+        Assert.IsTrue(isUnder, string.Format(
+            "The IControlFlow implementation created by the ControlFlowFactory factory class " +
+            "would appear to have a faulty Under(Type) implementation : [{0}]", cflow.GetType()));
+    }
 
-		[Test]
-		public void DefaultCflowIsNotUnderSomeArbitraryClass()
-		{
-			IControlFlow cflow = ControlFlowFactory.CreateControlFlow();
-			bool isUnder = cflow.Under(typeof (TestObject));
-			Assert.IsFalse(isUnder, string.Format(
-				"The IControlFlow implementation created by the ControlFlowFactory factory class " +
-					"would appear to have a faulty Under(Type) implementation : [{0}]", cflow.GetType()));
-		}
+    [Test]
+    public void DefaultCflowIsNotUnderSomeArbitraryClass()
+    {
+        IControlFlow cflow = ControlFlowFactory.CreateControlFlow();
+        bool isUnder = cflow.Under(typeof(TestObject));
+        Assert.IsFalse(isUnder, string.Format(
+            "The IControlFlow implementation created by the ControlFlowFactory factory class " +
+            "would appear to have a faulty Under(Type) implementation : [{0}]", cflow.GetType()));
+    }
 
-		[Test]
-		public void DefaultCflowUnderThisTestAndTestMethodName()
-		{
-			IControlFlow cflow = ControlFlowFactory.CreateControlFlow();
-			bool isUnder = cflow.Under(GetType(), MethodBase.GetCurrentMethod().Name);
-			Assert.IsTrue(isUnder, string.Format(
-				"The IControlFlow implementation created by the ControlFlowFactory factory class " +
-					"would appear to have a faulty Under(Type,string) implementation : [{0}]",
-				cflow.GetType()));
-		}
+    [Test]
+    public void DefaultCflowUnderThisTestAndTestMethodName()
+    {
+        IControlFlow cflow = ControlFlowFactory.CreateControlFlow();
+        bool isUnder = cflow.Under(GetType(), MethodBase.GetCurrentMethod().Name);
+        Assert.IsTrue(isUnder, string.Format(
+            "The IControlFlow implementation created by the ControlFlowFactory factory class " +
+            "would appear to have a faulty Under(Type,string) implementation : [{0}]",
+            cflow.GetType()));
+    }
 
-		[Test]
-		public void DefaultCflowIsNotUnderThisTestAndSomeRandomMethodName()
-		{
-			IControlFlow cflow = ControlFlowFactory.CreateControlFlow();
-			bool isUnder = cflow.Under(GetType(), "PlayingYouALikeTheFoolYouAre");
-			Assert.IsFalse(isUnder, string.Format(
-				"The IControlFlow implementation created by the ControlFlowFactory factory class " +
-					"would appear to have a faulty Under(Type,string) implementation : [{0}]",
-				cflow.GetType()));
-		}
+    [Test]
+    public void DefaultCflowIsNotUnderThisTestAndSomeRandomMethodName()
+    {
+        IControlFlow cflow = ControlFlowFactory.CreateControlFlow();
+        bool isUnder = cflow.Under(GetType(), "PlayingYouALikeTheFoolYouAre");
+        Assert.IsFalse(isUnder, string.Format(
+            "The IControlFlow implementation created by the ControlFlowFactory factory class " +
+            "would appear to have a faulty Under(Type,string) implementation : [{0}]",
+            cflow.GetType()));
+    }
 
-		[Test]
-		public void DefaultCflowUnderToken()
-		{
-			IControlFlow cflow = ControlFlowFactory.CreateControlFlow();
-			bool isUnder = cflow.UnderToken("Cflow");
-			Assert.IsTrue(isUnder, string.Format(
-				"The IControlFlow implementation created by the ControlFlowFactory factory " +
-					"class would appear to have a faulty UnderToken(string) implementation : [{0}]",
-				cflow.GetType()));
-		}
+    [Test]
+    public void DefaultCflowUnderToken()
+    {
+        IControlFlow cflow = ControlFlowFactory.CreateControlFlow();
+        bool isUnder = cflow.UnderToken("Cflow");
+        Assert.IsTrue(isUnder, string.Format(
+            "The IControlFlow implementation created by the ControlFlowFactory factory " +
+            "class would appear to have a faulty UnderToken(string) implementation : [{0}]",
+            cflow.GetType()));
+    }
 
-		[Test]
-		public void DefaultCflowIsNotUnderSomeArbitraryToken()
-		{
-			IControlFlow cflow = ControlFlowFactory.CreateControlFlow();
-			bool isUnder = cflow.UnderToken("GoatsCheeseAndSoda");
-			Assert.IsFalse(isUnder, string.Format(
-				"The IControlFlow implementation created by the ControlFlowFactory factory class " +
-					"would appear to have a faulty UnderToken(string) implementation : [{0}]",
-				cflow.GetType()));
-		}
-	}
+    [Test]
+    public void DefaultCflowIsNotUnderSomeArbitraryToken()
+    {
+        IControlFlow cflow = ControlFlowFactory.CreateControlFlow();
+        bool isUnder = cflow.UnderToken("GoatsCheeseAndSoda");
+        Assert.IsFalse(isUnder, string.Format(
+            "The IControlFlow implementation created by the ControlFlowFactory factory class " +
+            "would appear to have a faulty UnderToken(string) implementation : [{0}]",
+            cflow.GetType()));
+    }
 }
